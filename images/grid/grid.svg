@@ -23,8 +23,6 @@
   
         <circle id="center_point" class="black" cx="325" cy="325" r="11.25"/>
 
-
-
         <g id="outer_points">
             <circle id="N_outer_point" class="black" cx="325" cy="25" r="25"/>
             <circle id="E_outer_point" class="black" cx="625" cy="325" r="25"/>

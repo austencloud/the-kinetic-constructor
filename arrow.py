@@ -33,8 +33,8 @@ class Arrow(QGraphicsSvgItem):
         self.start_location, self.end_location = self.arrow_positions.get(os.path.basename(svg_file), (None, None))
         self.staff = None
         self.handlers = handlers
+        print(f"Created an Arrow instance with SVG file: {svg_file}")
         
-
         if "_l_" in svg_file:
             self.orientation = "l"
         elif "_r_" in svg_file:
@@ -173,6 +173,7 @@ class Arrow(QGraphicsSvgItem):
         print("staff position:", staff_position)
         infoTracker.update() 
         self.arrowMoved.emit()  # emit the signal when the arrow is dropped
+        self.drag = None
 
     def set_staff(self, staff):
         self.staff = staff

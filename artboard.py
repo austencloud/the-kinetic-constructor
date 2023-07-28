@@ -45,6 +45,7 @@ class Artboard(QGraphicsView):
         }
         return centers.get(quadrant, QPointF(0, 0))
     
+
     def getExpandedQuadrantCenter(self, quadrant):
         # Define the centers of the quadrants
         centers = {
@@ -255,6 +256,11 @@ class Artboard(QGraphicsView):
             for item in self.scene().selectedItems():
                 item.setSelected(False)
             self.dragging = None
+
+        # Add this block of code to print the details of the clicked object
+        if items:
+            print(f"Clicked on an object of type {type(items[0])}")
+            print(f"Object details: {items[0]}")
 
         if event.button() == Qt.LeftButton and not items:
             super().mousePressEvent(event)
