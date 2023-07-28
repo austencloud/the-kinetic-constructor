@@ -2,14 +2,13 @@ from PyQt5.QtWidgets import QApplication, QGraphicsItem, QMenu, QDialog, QFormLa
 from PyQt5.QtGui import QPixmap, QDrag, QImage, QPainter, QPainterPath, QCursor
 from PyQt5.QtCore import Qt, QMimeData, pyqtSignal, QPointF
 from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
-import os
-from PyQt5.QtXml import QDomDocument
-from PyQt5.QtCore import QFile
 
+import os
 
 class Arrow(QGraphicsSvgItem):
     attributesChanged = pyqtSignal()
     arrowMoved = pyqtSignal()  # add this line
+    SVG_SCALE = 10.0
     orientationChanged = pyqtSignal()  # Add this line
 
     def set_orientation(self, orientation):
@@ -33,8 +32,10 @@ class Arrow(QGraphicsSvgItem):
         self.start_location, self.end_location = self.arrow_positions.get(os.path.basename(svg_file), (None, None))
         self.staff = None
         self.handlers = handlers
-        print(f"Created an Arrow instance with SVG file: {svg_file}")
+        self.dragStarted = False
+
         
+
         if "_l_" in svg_file:
             self.orientation = "l"
         elif "_r_" in svg_file:
@@ -55,16 +56,8 @@ class Arrow(QGraphicsSvgItem):
         else:
             raise ValueError(f"Invalid filename: {svg_file}. Filename must contain either 'red' or 'blue'.")
     
-    def get_svg_element(self):
-        # Load the SVG file into a QDomDocument
-        svg_doc = QDomDocument()
-        svg_doc.setContent(QFile(self.svg_file).readAll())
-
-        # Return the root element of the document
-        return svg_doc.documentElement()
-
     def mousePressEvent(self, event):
-        self.dragStartPosition = event.pos()  # Store the position where the mouse button was pressed
+        self.dragStartPosition = event.pos()
         self.dragOffset = event.pos() - self.boundingRect().center()
         if self.in_artboard:
             super().mousePressEvent(event)
@@ -80,19 +73,19 @@ class Arrow(QGraphicsSvgItem):
             self.drag.setMimeData(mime_data)
 
             # Create a QImage to render the SVG to
-            image = QImage(self.boundingRect().size().toSize(), QImage.Format_ARGB32)
+            image = QImage(self.boundingRect().size().toSize() * 8, QImage.Format_ARGB32)
             image.fill(Qt.transparent)  # Fill with transparency to preserve SVG transparency
 
             # Create a QPainter to paint the SVG onto the QImage
             painter = QPainter(image)
             painter.setRenderHint(QPainter.Antialiasing)
 
-            # Create a QSvgRenderer with the SVG file and render it onto the QImage
-            renderer = QSvgRenderer(self.svg_file)
-            if not renderer.isValid():
-                print(f"Failed to load SVG file: {self.svg_file}")
-                return
-            renderer.render(painter)
+            # # Create a QSvgRenderer with the SVG file and render it onto the QImage
+            # renderer = QSvgRenderer(self.svg_file)
+            # if not renderer.isValid():
+            #     print(f"Failed to load SVG file: {self.svg_file}")
+            #     return
+            # renderer.render(painter)
 
             # End the QPainter operation
             painter.end()
@@ -101,18 +94,25 @@ class Arrow(QGraphicsSvgItem):
             pixmap = QPixmap.fromImage(image)
             self.drag.setPixmap(pixmap)
             self.drag.setHotSpot(pixmap.rect().center())
+        self.dragStarted = False
 
-            # Start the drag operation
-            self.drag.exec_(Qt.CopyAction | Qt.MoveAction)
 
     def mouseMoveEvent(self, event):
-        new_pos = self.mapToScene(event.pos()) - self.dragOffset
-        movement = new_pos - self.pos()
-
+        if (event.pos() - self.dragStartPosition).manhattanLength() < QApplication.startDragDistance():
+            return
+        if self.dragging:
+            new_pos = self.mapToScene(event.pos()) - self.dragOffset
+            movement = new_pos - self.dragged_item.pos()  # use self.dragged_item here
         for item in self.scene().selectedItems():
             item.setPos(item.pos() + movement)
         self.infoTracker.checkForChanges()
-
+        if self.in_artboard:
+            print("mouse_pos:", mouse_pos)
+            super().mouseMoveEvent(event)
+        elif not (event.buttons() & Qt.LeftButton):
+            return
+        elif (event.pos() - self.artboard_start_position).manhattanLength() < QApplication.startDragDistance():
+            return
 
         mouse_pos = self.artboard.mapToScene(self.artboard.mapFromGlobal(QCursor.pos()))
         artboard_rect = self.artboard.sceneRect()
@@ -151,13 +151,15 @@ class Arrow(QGraphicsSvgItem):
         new_renderer = QSvgRenderer(new_svg)
 
         if new_renderer.isValid():
-            pixmap = QPixmap(self.boundingRect().size().toSize())
+            pixmap = QPixmap(self.boundingRect().size().toSize() * self.SVG_SCALE)
             painter = QPainter(pixmap)
             new_renderer.render(painter)
             painter.end()
             self.drag.setPixmap(pixmap)
 
-        self.drag.exec_(Qt.CopyAction | Qt.MoveAction)
+        if not self.dragStarted:
+            self.drag.exec_(Qt.CopyAction | Qt.MoveAction)
+            self.dragStarted = True
         
     def mouseReleaseEvent(self, event):
         self.dragging = False 
@@ -173,7 +175,6 @@ class Arrow(QGraphicsSvgItem):
         print("staff position:", staff_position)
         infoTracker.update() 
         self.arrowMoved.emit()  # emit the signal when the arrow is dropped
-        self.drag = None
 
     def set_staff(self, staff):
         self.staff = staff

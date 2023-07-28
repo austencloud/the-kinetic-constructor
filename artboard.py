@@ -45,6 +45,9 @@ class Artboard(QGraphicsView):
         }
         return centers.get(quadrant, QPointF(0, 0))
     
+    def selectAllItems(self):
+        for item in self.scene().items():
+            item.setSelected(True)
 
     def getExpandedQuadrantCenter(self, quadrant):
         # Define the centers of the quadrants
@@ -261,6 +264,7 @@ class Artboard(QGraphicsView):
         if items:
             print(f"Clicked on an object of type {type(items[0])}")
             print(f"Object details: {items[0]}")
+            print(f"Object position: {items[0].pos()}")
 
         if event.button() == Qt.LeftButton and not items:
             super().mousePressEvent(event)
@@ -421,6 +425,8 @@ class Update_Quadrant_Preview(QDrag):
         new_svg = f'images\\arrows\\red\\r\\anti\\red_anti_r_{quadrant}.svg'
 
         new_renderer = QSvgRenderer(new_svg)
+        #delete the old svg from the screen
+        self.arrow_item.setSharedRenderer(new_renderer)
 
         if new_renderer.isValid():
             pixmap = QPixmap(self.pixmap().size())

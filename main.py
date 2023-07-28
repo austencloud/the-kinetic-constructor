@@ -18,6 +18,7 @@ from info_tracker import Info_Tracker
 
 class Main_Window(QWidget):
     ARROW_DIR = 'images\\arrows'
+    SVG_SCALE = 10.0
     SVG_POS_Y = 250
 
     def __init__(self):
@@ -60,6 +61,7 @@ class Main_Window(QWidget):
         self.label = QLabel(self)
         self.artboard = QGraphicsScene()
         self.initWordConstructor(main_layout, self.staff_manager)
+        self.grid = Grid('images\\grid\\grid.svg')
         self.infoTracker = Info_Tracker(self.artboard, self.label, self, self.staff_manager)
         self.scene.changed.connect(self.infoTracker.update)
         self.artboard = Artboard(self.scene, self.grid, self.infoTracker)
@@ -114,6 +116,7 @@ class Main_Window(QWidget):
                 arrow_item = Arrow(svg, self.view, self.infoTracker, self.handlers)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
+                arrow_item.setScale(self.SVG_SCALE)
                 arrow_item.setPos(0, svg_item_count * self.SVG_POS_Y)
                 arrowbox_scene.addItem(arrow_item) 
                 arrow_item.attributesChanged.connect(self.infoTracker.update)
@@ -169,6 +172,7 @@ class Main_Window(QWidget):
         self.updatePositionButton.clicked.connect(lambda: self.handlers.updatePositionInJson(*self.artboard.getCurrentArrowPositions()))
         buttonstack1.addWidget(self.updatePositionButton)
 
+
         self.deleteButton = QPushButton("Delete")
         self.deleteButton.clicked.connect(self.handlers.deleteArrow)
         buttonstack1.addWidget(self.deleteButton)
@@ -200,6 +204,7 @@ class Main_Window(QWidget):
         self.exportAsSVGButton = QPushButton("Export to SVG")
         self.exportAsSVGButton.clicked.connect(self.handlers.exportAsSvg)
         masterbtnlayout.addWidget(self.exportAsSVGButton)
+
 
         self.infoTracker.update()
 
@@ -286,6 +291,7 @@ class Main_Window(QWidget):
                 arrow.set_attributes(combination)
                 arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
+                arrow.setScale(self.SVG_SCALE)
                 # Add the created arrow to the list
                 created_arrows.append(arrow)
                 if optimal_positions:

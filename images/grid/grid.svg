@@ -30,14 +30,7 @@
             <circle id="W_outer_point" class="black" cx="25" cy="325" r="25"/>
         </g>
 
-        <g id="hand_points">
 
-            <circle id="N_hand_point" class="black" cx="325" cy="181.91" r=".45"/>
-            <circle id="E_hand_point" class="black" cx="468.09" cy="325" r=".45"/>
-            <circle id="S_hand_point" class="black" cx="325" cy="468.09" r=".45"/>
-            <circle id="W_hand_point" class="black" cx="181.91" cy="325" r=".45"/>
-
-        </g>
 
         <g id="layer2_points">
 
