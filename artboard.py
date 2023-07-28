@@ -263,8 +263,8 @@ class Artboard(QGraphicsView):
         # Add this block of code to print the details of the clicked object
         if items:
             print(f"Clicked on an object of type {type(items[0])}")
-            print(f"Object details: {items[0]}")
-            print(f"Object position: {items[0].pos()}")
+            print(f"Object center: {items[0].scenePos() + items[0].boundingRect().center()}")
+            print(f"Object svg: {items[0].svg_file}")
 
         if event.button() == Qt.LeftButton and not items:
             super().mousePressEvent(event)

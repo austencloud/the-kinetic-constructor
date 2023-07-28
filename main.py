@@ -18,7 +18,6 @@ from info_tracker import Info_Tracker
 
 class Main_Window(QWidget):
     ARROW_DIR = 'images\\arrows'
-    SVG_SCALE = 10.0
     SVG_POS_Y = 250
 
     def __init__(self):
@@ -116,7 +115,7 @@ class Main_Window(QWidget):
                 arrow_item = Arrow(svg, self.view, self.infoTracker, self.handlers)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
-                arrow_item.setScale(self.SVG_SCALE)
+                arrow_item.setScale(1)
                 arrow_item.setPos(0, svg_item_count * self.SVG_POS_Y)
                 arrowbox_scene.addItem(arrow_item) 
                 arrow_item.attributesChanged.connect(self.infoTracker.update)
@@ -291,44 +290,36 @@ class Main_Window(QWidget):
                 arrow.set_attributes(combination)
                 arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
-                arrow.setScale(self.SVG_SCALE)
+
                 # Add the created arrow to the list
                 created_arrows.append(arrow)
-                if optimal_positions:
-                    optimal_position = optimal_positions.get(f"optimal_{combination['color']}_location")
-                    if optimal_position:
-                        print(f"Setting position for {combination['color']} arrow to optimal position: {optimal_position}")
-                        arrow.setPos(QPointF(optimal_position['x'], optimal_position['y']))
-                    else:
-                        print(f"No optimal position found for {combination['color']} arrow. Setting position to quadrant center.")
-                        arrow.setPos(self.artboard.getQuadrantCenter(combination['quadrant']))
-                else:
-                    print(f"No optimal positions dictionary found. Setting position for {combination['color']} arrow to quadrant center.")
-                    arrow.setPos(self.artboard.getQuadrantCenter(combination['quadrant']))
-
-
-                # Call the update_staff function for the arrow
-                self.update_staff(arrow, staff_manager)
-
-
-
-        for arrow in created_arrows:
-            if optimal_positions is not None:
-                optimal_position = optimal_positions.get(f"optimal_{arrow.get_attributes()['color']}_location")
-                if optimal_position:
-                    print(f"Setting position for {arrow.get_attributes()['color']} arrow to optimal position: {optimal_position}")
-                    arrow.setPos(QPointF(optimal_position['x'], optimal_position['y']))
-                else:
-                    print(f"No optimal position found for {arrow.get_attributes()['color']} arrow. Setting position to quadrant center.")
-                    arrow.setPos(self.artboard.getQuadrantCenter(arrow.get_attributes()['quadrant']))
-            else:
-                print(f"No optimal positions dictionary found. Setting position for {arrow.get_attributes()['color']} arrow to quadrant center.")
-                arrow.setPos(self.artboard.getQuadrantCenter(arrow.get_attributes()['quadrant']))
-
 
         # Add the arrows to the scene
         for arrow in created_arrows:
             self.scene.addItem(arrow)
+
+        for arrow in created_arrows:
+            if optimal_positions:
+                optimal_position = optimal_positions.get(f"optimal_{arrow.get_attributes()['color']}_location")
+                if optimal_position:
+                    print(f"Setting position for {arrow.get_attributes()['color']} arrow to optimal position: {optimal_position}")
+                    # Calculate the position to center the arrow at the optimal position
+                    pos = QPointF(optimal_position['x'], optimal_position['y']) - arrow.boundingRect().center()
+                    arrow.setPos(pos)
+                else:
+                    print(f"No optimal position found for {arrow.get_attributes()['color']} arrow. Setting position to quadrant center.")
+                    # Calculate the position to center the arrow at the quadrant center
+                    pos = self.artboard.getQuadrantCenter(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
+                    arrow.setPos(pos)
+            else:
+                print(f"No optimal positions dictionary found. Setting position for {arrow.get_attributes()['color']} arrow to quadrant center.")
+                # Calculate the position to center the arrow at the quadrant center
+                pos = self.artboard.getQuadrantCenter(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
+                arrow.setPos(pos)
+
+
+                # Call the update_staff function for the arrow
+                self.update_staff(arrow, staff_manager)
 
         for combination in combination_set:
             if all(key in combination for key in ['start_position', 'end_position']):
