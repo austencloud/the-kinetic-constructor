@@ -7,7 +7,6 @@ class Staff:
     CYMK_BLUE = '#2e3192'
     CYMK_RED = '#ed1c24'
 
-
     def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
         self.element_id = element_id
         self.position = position 
@@ -18,6 +17,10 @@ class Staff:
         self.item.setFlag(QGraphicsItem.ItemIsMovable, True)
         self.item.setFlag(QGraphicsItem.ItemIsSelectable, True)
         scene.addItem(self.item)
+
+        #add a "staff" attribute to the item
+        self.item.type = "staff"
+
 
         self.scene = scene
         print("Staff position: ", position)

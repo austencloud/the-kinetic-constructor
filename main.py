@@ -14,9 +14,11 @@ from data import *
 import json
 import random
 from info_tracker import Info_Tracker
-from sequence import SequenceConstructor
-from pictograph import Pictograph
+from sequence import *
+
+
 class Main_Window(QWidget):
+
     ARROW_DIR = 'images\\arrows'
     SVG_POS_Y = 250
 
@@ -99,7 +101,7 @@ class Main_Window(QWidget):
         upper_right_laybout.addLayout(info_layout) 
         self.scene.changed.connect(self.infoTracker.update)
         
-        self.initSequenceConstructor(lower_right_layout)
+        self.initSequenceScene(lower_right_layout)
 
         ### Un-comment this code to enable the assign letter funtion ###
         # self.letterInput = QLineEdit(self)
@@ -112,12 +114,16 @@ class Main_Window(QWidget):
         self.setMinimumSize(2800, 1800)
         self.show()
 
-    def initSequenceConstructor(self, layout):
-        self.sequence_constructor = SequenceConstructor()
-        self.sequence_container = QGraphicsView(self.sequence_constructor)
-        
-        #set the width and height
-        self.sequence_container.setFixedSize(1500, 375)
+    def initSequenceScene(self, layout):
+        self.sequence_scene = Sequence_Scene()  # Create a new Sequence_Scene instance
+        self.sequence_manager = Sequence_Manager(self.sequence_scene)
+        self.sequence_scene.set_manager(self.sequence_manager)  # Set the manager of the sequence container
+        self.sequence_scene.manager = self.sequence_manager  # Set the manager of the sequence scene
+
+        self.sequence_container = QGraphicsView(self.sequence_scene)  # Create a QGraphicsView with the sequence scene
+
+        # Set the width and height
+        self.sequence_container.setFixedSize(1700, 500)
         self.sequence_container.show()
         layout.addWidget(self.sequence_container)
 
@@ -200,7 +206,7 @@ class Main_Window(QWidget):
         buttonstack.addWidget(self.selectAllButton)
 
         add_to_sequence_button = QPushButton("Add to Sequence")
-        add_to_sequence_button.clicked.connect(lambda _: self.add_to_sequence(self.artboard, self.sequence_constructor))
+        add_to_sequence_button.clicked.connect(lambda _: self.sequence_manager.add_to_sequence(self.artboard))
         buttonstack.addWidget(add_to_sequence_button)
 
         self.deleteButton = QPushButton("Delete")
@@ -262,9 +268,6 @@ class Main_Window(QWidget):
         self.selectAllButton.setFixedWidth(button_width)
         add_to_sequence_button.setFixedWidth(button_width)
 
-
-
-
         return masterbtnlayout
 
     def initLetterButtons(self, staff_manager):
@@ -298,27 +301,6 @@ class Main_Window(QWidget):
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Delete:
             self.handlers.deleteArrow()
-
-    def add_to_sequence(self, artboard, sequence_constructor):
-        state = artboard.get_state()
-        pictograph = Pictograph(state)
-        sequence_constructor.add_pictograph(pictograph)
-        artboard.deleteAllItems()
-
-        self.sequence_scene = QGraphicsScene()
-
-        for arrow_state in state['arrows']:
-            arrow = Arrow(arrow_state['svg_file'], self, self.infoTracker, self.handlers)
-            arrow.setPos(arrow_state['position'])
-            arrow.setScale(0.5)  # Scale down the item
-            self.sequence_scene.addItem(arrow)
-
-        # Create a QGraphicsView for the new scene
-        sequence_view = QGraphicsView(self.sequence_scene)
-
-        # Add the new view to the sequence view
-        self.sequence_scene.addWidget(sequence_view)
-
 
     def generatePictograph(self, letter, staff_manager):
         #delete all items
@@ -400,20 +382,16 @@ class Main_Window(QWidget):
         self.position_label.setText(f"Start: {start_position}\nEnd: {end_position}")
 
     def update_staff(self, arrow, staff_manager):
-        # Convert the arrow to a list if it's not already a list
         arrows = [arrow] if not isinstance(arrow, list) else arrow
 
-        # Get the new staff positions from the arrows
         staff_positions = [arrow.end_location.upper() + '_staff_' + arrow.color for arrow in arrows]
 
-        # Show and hide the staffs based on the staff positions
         for element_id, staff in staff_manager.staffs.items():
             if element_id in staff_positions:
                 staff.show()
             else:
                 staff.hide()
 
-        # Check and replace the staves
         self.staff_manager.check_and_replace_staves()
 
 
@@ -425,9 +403,7 @@ class Main_Window(QWidget):
             return {}
 
     def saveLetters(self):
-        # Sort the data alphabetically by keys
         sorted_data = {key: self.letterCombinations[key] for key in sorted(self.letterCombinations)}
-        # Write to file in a pretty format
         with open('letterCombinations.json', 'w') as f:
             json.dump(sorted_data, f, indent=4)
             
@@ -450,7 +426,7 @@ class Main_Window(QWidget):
             self.letterCombinations[letter] = []
         for variation in variations:
             self.letterCombinations[letter].append(variation)
-        self.letterCombinations[letter].sort(key=lambda x: (x[0]['color'], x[1]['color']))  # add this line to sort variations
+        self.letterCombinations[letter].sort(key=lambda x: (x[0]['color'], x[1]['color']))
 
         print(f"Assigned {letter} to the selected combination of arrows and all its variations.")
         self.infoTracker.update()
@@ -459,35 +435,30 @@ class Main_Window(QWidget):
         fileName, _ = QFileDialog.getOpenFileName(self, "Open SVG", "", "SVG files (*.svg)")
         if fileName:
             self.svgWidget.load(fileName)
-
 class Letter:
     def __init__(self, arrow1, arrow2):
         self.arrow1 = arrow1
         self.arrow2 = arrow2
-        self.letter = None  # Add an attribute for the letter
+        self.letter = None
         
     def get_start_location(self):
-        # Get the start positions of the two arrows
         start_location1 = Arrow.get_arrow_start_location(self.arrow1)
         start_location2 = Arrow.get_arrow_start_location(self.arrow2)
         print("start positions: ", start_location1, start_location2)
 
-        # Return the position corresponding to the pair of start positions
         return Arrow.get_position_from_directions(start_location1, start_location2)
         
     def get_end_location(self):
-        # Get the end positions of the two arrows
         end_location1 = Arrow.get_arrow_end_location(self.arrow1)
         end_location2 = Arrow.get_arrow_end_location(self.arrow2)
         print("end positions: ", end_location1, end_location2)
 
-        # Return the position corresponding to the pair of end positions
+
         return Arrow.get_position_from_directions(end_location1, end_location2)
 
     def assign_letter(self, letter):
-        # Check if the start and end positions match the positions for the letter
         if (self.get_start_location(), self.get_end_location()) == letter_positions[letter]:
-            self.letter = letter  # Assign the letter
+            self.letter = letter
             print(f"Assigned {letter} to the letter.")
         else:
             print(f"The start and end positions do not match the positions for {letter}.")
@@ -505,9 +476,9 @@ class Letter:
         for letter, combinations in self.letterCombinations.items():
             combinations = [sorted(combination, key=lambda x: x['color']) for combination in combinations]
             if current_combination in combinations:
-                return letter  # Return the letter if the current combination matches
+                return letter
 
-        return None  # Return None if no match is found
+        return None
 
 app = QApplication(sys.argv)
 ex = Main_Window()
