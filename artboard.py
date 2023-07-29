@@ -16,7 +16,7 @@ class Artboard(QGraphicsView):
 
     def __init__(self, scene: QGraphicsScene, grid, infotracker, staff_manager, parent=None):
         super().__init__(scene, parent)
-        self.setFocusPolicy(Qt.StrongFocus)  # Add this line
+
         self.setAcceptDrops(True)
         self.dragging = None
         self.grid = grid
@@ -26,7 +26,6 @@ class Artboard(QGraphicsView):
         scene.setBackgroundBrush(Qt.white) 
         self.infoTracker = infotracker
         self.renderer = QSvgRenderer()
-        # Connect the signals to the update_staffs method
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
         self.attributesChanged.connect(self.update_staffs_and_check_beta)
     
@@ -65,7 +64,6 @@ class Artboard(QGraphicsView):
         self.info_tracker = info_tracker
     
     def getQuadrantCenter(self, quadrant):
-        # Define the centers of the quadrants
         centers = {
             'ne': QPointF(550, 175),
             'se': QPointF(550, 550),
@@ -79,7 +77,6 @@ class Artboard(QGraphicsView):
             item.setSelected(True)
 
     def getExpandedQuadrantCenter(self, quadrant):
-        # Define the centers of the quadrants
         centers = {
             'ne1': QPointF(525, 175),
             'ne2': QPointF(575, 100),
@@ -168,23 +165,6 @@ class Artboard(QGraphicsView):
         else:
             event.ignore()
 
-        # Check if the shift key is being held down
-        if event.keyboardModifiers() & Qt.ShiftModifier:
-            # Get the current position of the dragged item
-            current_pos = self.dragging.pos()
-
-            # Calculate the movement of the dragged item
-            movement = event.pos() - self.dragStartPosition
-
-            # Constrain the movement to the x-axis or the y-axis
-            if abs(movement.x()) > abs(movement.y()):
-                new_pos = QPointF(current_pos.x() + movement.x(), current_pos.y())
-            else:
-                new_pos = QPointF(current_pos.x(), current_pos.y() + movement.y())
-
-            # Set the new position of the dragged item
-            self.dragging.setPos(new_pos)
-
     def dragLeaveEvent(self, event):
         item = self.itemAt(self.last_known_pos)
         if isinstance(item, Arrow):
@@ -204,11 +184,10 @@ class Artboard(QGraphicsView):
             pos = self.mapToScene(event.pos()) - self.arrow_item.boundingRect().center()
             self.arrow_item.setPos(pos)
 
-            #deselect all other arrows
             for item in self.scene().items():
                 if isinstance(item, Arrow):
                     item.setSelected(False)
-            self.arrow_item.setSelected(True)  # Select the new arrow
+            self.arrow_item.setSelected(True)
 
             if self.arrow_item.pos().y() < self.sceneRect().height() / 2:
                 if self.arrow_item.pos().x() < self.sceneRect().width() / 2:
@@ -223,7 +202,6 @@ class Artboard(QGraphicsView):
 
             base_name = os.path.basename(self.arrow_item.svg_file)
 
-            # Construct the new SVG file path
             if base_name.startswith('red_anti'):
                 new_svg = f'images\\arrows\\red_anti_{self.arrow_item.orientation}_{quadrant}.svg'
             elif base_name.startswith('red_iso'):
@@ -240,19 +218,11 @@ class Artboard(QGraphicsView):
 
             if new_renderer.isValid():
                 self.arrow_item.setSharedRenderer(new_renderer)
-                # Update the arrow's attributes
                 self.arrow_item.svg_file = new_svg
-                # print("new svg file: " + new_svg)
                 self.arrow_item.quadrant = quadrant
-
-                # Update the start and end positions
                 self.arrow_item.update_positions()
-
                 self.arrow_item.attributesChanged.emit()
                 self.arrowMoved.emit()
-
-
-                # Determine the end position of the arrow
                 end_location = self.arrow_item.end_location
 
                 if self.arrow_item.color == "red":
@@ -260,10 +230,7 @@ class Artboard(QGraphicsView):
                 elif self.arrow_item.color == "blue":
                     color = 'blue'
 
-                # Add the correct staff to the scene by calling the staff_manager.show_staff method
                 self.staff_manager.show_staff(end_location + "_staff_" + color)
-
-
             else:
                 print("Failed to load SVG file:", new_svg)
         else:
@@ -289,12 +256,11 @@ class Artboard(QGraphicsView):
                 item.setSelected(False)
             self.dragging = None
 
-        # Add this block of code to print the details of the clicked object
+
         if items:
             print(f"Clicked on an object of type {type(items[0])}")
             print(f"Object top-left position: {items[0].scenePos()}")
             print(f"Object center: {items[0].scenePos() + items[0].boundingRect().center()}")
-            #if the item has an svg_file attribute
             if hasattr(items[0], 'svg_file'):
                 print(f"Object svg: {items[0].svg_file}")
 
@@ -306,23 +272,13 @@ class Artboard(QGraphicsView):
             return
         if self.dragging:
             new_pos = self.mapToScene(event.pos()) - self.dragOffset
-            movement = new_pos - self.dragging.pos()  # Calculate the movement based on the current position
-
-            # Check if the shift key is being held down
-            if event.modifiers() & Qt.ShiftModifier:
-                # Constrain the movement to the x-axis or the y-axis
-                if abs(movement.x()) > abs(movement.y()):
-                    new_pos.setY(self.dragging.pos().y())
-                else:
-                    new_pos.setX(self.dragging.pos().x())
-                movement = new_pos - self.dragging.pos()
+            movement = new_pos - self.dragging.pos()
 
             for item in self.scene().selectedItems():
                 if isinstance(item, Arrow):
                     item.setPos(item.pos() + movement)
 
                 if isinstance(item, Arrow):
-                    # Use the center of the arrow to determine the quadrant
                     center_pos = item.pos() + item.boundingRect().center()
 
                     if center_pos.y() < self.sceneRect().height() / 2:
@@ -350,21 +306,12 @@ class Artboard(QGraphicsView):
                     else:
                         print(f"Unexpected svg_file: {item.svg_file}")
                         new_svg = item.svg_file 
-                    
+                
                     new_renderer = QSvgRenderer(new_svg)
-
                     if new_renderer.isValid():
                         item.setSharedRenderer(new_renderer)
                         item.svg_file = new_svg
-
-                        # Update the start and end positions
                         item.update_positions()
-
-                        item.replacement_arrow_printed = False
-                            #print the qualities of the replacement arrow just once
-                        if item.replacement_arrow_printed == False:
-                            item.replacement_arrow_printed = True
-
                 self.arrowMoved.emit()
 
     def deleteAllArrows(self):
@@ -373,10 +320,9 @@ class Artboard(QGraphicsView):
                 self.scene().removeItem(item)
                 del item
         self.arrowMoved.emit()
-        if self.infoTracker is not None:  # Add this line
+        if self.infoTracker is not None:
             self.infoTracker.update()
 
-        # Hide all staffs
         self.staff_manager.hide_all()
 
     def deleteAllItems(self):
@@ -392,13 +338,13 @@ class Artboard(QGraphicsView):
         key = event.key()
         dx = dy = 0
         if key == Qt.Key_Up:
-            dy = -10
+            dy = -15
         elif key == Qt.Key_Down:
-            dy = 10
+            dy = 15
         elif key == Qt.Key_Left:
-            dx = -10
+            dx = -15
         elif key == Qt.Key_Right:
-            dx = 10
+            dx = 15
         else:
             super().keyPressEvent(event)
             return

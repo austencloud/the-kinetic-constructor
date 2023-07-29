@@ -43,7 +43,6 @@ class Info_Tracker:
         start2_compass = Arrow.get_position_from_locations(start2, start2)
         end2_compass = Arrow.get_position_from_locations(end2, end2)
 
-        # Determine the start position
         if set(start1_compass) == set(start2_compass):
             start_location = "beta"
         elif set(start1_compass) == set(["n", "s"]) or set(start1_compass) == set(["e", "w"]):
@@ -51,7 +50,6 @@ class Info_Tracker:
         else:
             start_location = "gamma"
 
-        # Determine the end position
         if set(end1_compass) == set(end2_compass):
             end_location = "beta"
         elif set(end1_compass) == set(["n", "s"]) or set(end1_compass) == set(["e", "w"]):
