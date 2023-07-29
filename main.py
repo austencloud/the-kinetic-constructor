@@ -30,6 +30,7 @@ class Main_Window(QWidget):
         self.scene = QGraphicsScene()
         self.grid = Grid('images\\grid\\grid.svg')
         self.info_label = QLabel(self)
+        self.word_label = QLabel(self)
         self.staff_manager = StaffManager(self.scene)
         self.infoTracker = Info_Tracker(None, self.info_label, self, self.staff_manager)
         self.artboard = Artboard(self.scene, self.grid, self.infoTracker, self.staff_manager)
@@ -62,7 +63,7 @@ class Main_Window(QWidget):
         right_layout = QVBoxLayout()
         left_layout = QHBoxLayout()
         upper_right_laybout = QHBoxLayout()
-        lower_right_layout = QHBoxLayout()
+        lower_right_layout = QVBoxLayout()
         artboard_layout = QVBoxLayout()
         button_layout = QVBoxLayout()
         info_layout = QVBoxLayout()
@@ -88,15 +89,15 @@ class Main_Window(QWidget):
         arrowbox = self.initArrowBox()
         left_layout.addWidget(arrowbox)
 
-
         # set the buttons and info tracker
-
-
         info_layout.addWidget(self.info_label)
         upper_right_laybout.addLayout(button_layout)
         upper_right_laybout.addLayout(info_layout) 
         self.scene.changed.connect(self.infoTracker.update)
         
+        lower_right_layout.addWidget(self.word_label)
+        self.word_label.setFont(QFont('Helvetica', 20))
+        self.word_label.setText("My word: ")
         self.sequence_manager.initSequenceScene(lower_right_layout, self.sequence_scene)
 
         ### Un-comment this code to enable the assign letter funtion ###

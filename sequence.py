@@ -33,8 +33,6 @@ class Sequence_Manager:
         print("Items in the scene:")
         for item in self.scene.items():
             print(item)
-        
-
 
     def add_to_sequence(self, artboard):
         # Create a QImage to render the scene
