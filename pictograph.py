@@ -9,6 +9,13 @@ class Pictograph(QGraphicsItem):
         self.state = state
         self.image = image
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
+        
+
+    def paint(self, painter: QPainter, option, widget):
+        print("Paint method called")
+        # Render the QImage onto the Pictograph
+        painter.drawImage(QRectF(0, 0, 375, 375), self.image)
+        print("Pictograph painted")
 
     def boundingRect(self):
         # Return the bounding rectangle of the Pictograph
