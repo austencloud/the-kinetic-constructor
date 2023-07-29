@@ -25,22 +25,3 @@ class Pictograph(QGraphicsItem):
         # Emit the clicked signal when the Pictograph is clicked
         event.accept()
 
-class Pictograph_Manager(QObject):
-    def __init__(self, scene):
-        super().__init__()
-        self.scene = scene
-        self.pictographs = []
-
-    def add_pictograph(self, pictograph: Pictograph):
-        print("Adding pictograph")
-        # Find the first section that doesn't have a pictograph
-        for i, section in enumerate(self.scene.beats):
-            if i >= len(self.pictographs):
-                # Set the position of the pictograph to the position of the section
-                pictograph.setPos(section.pos())
-                self.pictographs.append(pictograph)
-                self.scene.addItem(pictograph)
-                break
-        print("Items in the scene:")
-        for item in self.scene.items():
-            print(item)

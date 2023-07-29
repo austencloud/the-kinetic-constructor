@@ -15,7 +15,8 @@ import json
 import random
 from info_tracker import Info_Tracker
 from sequence import *
-
+from buttons import Button_Manager
+from generator import *
 
 class Main_Window(QWidget):
 
@@ -28,14 +29,18 @@ class Main_Window(QWidget):
         svgs_full_paths = []
         self.scene = QGraphicsScene()
         self.grid = Grid('images\\grid\\grid.svg')
-
+        self.position_label = QLabel(self)
         self.info_label = QLabel(self)
         self.staff_manager = StaffManager(self.scene)
         self.infoTracker = Info_Tracker(None, self.info_label, self, self.staff_manager)
         self.artboard = Artboard(self.scene, self.grid, self.infoTracker, self.staff_manager)
-
-
-        self.position_label = QLabel(self)
+        self.artboard_view = self.initArtboard() 
+        self.sequence_scene = Sequence_Scene()  # Create a new Sequence_Scene instance
+        self.sequence_manager = Sequence_Manager(self.sequence_scene)
+        self.handlers = Handlers(self.artboard, self.artboard_view, self.grid, self.artboard, self.infoTracker, self)
+        self.pictograph_generator = Pictograph_Generator(self.staff_manager, self.artboard, self.artboard_view, self.scene, self.infoTracker, self.handlers, self.position_label, self)
+        
+        
         font = QFont()
         font.setPointSize(20)
         self.position_label.setFont(font)
@@ -43,8 +48,8 @@ class Main_Window(QWidget):
         self.position_label.move(10, 10)
 
         self.initUI()
-        self.artboard.arrowMoved.connect(lambda: self.update_position_label)
-        self.staff_manager.positionChanged.connect(self.update_position_label)
+        self.artboard.arrowMoved.connect(lambda: self.infoTracker.update_position_label(self.position_label))
+        self.staff_manager.positionChanged.connect(lambda: self.infoTracker.update_position_label(self.position_label))
 
         self.letterCombinations = self.loadLetters()
         self.grid_renderer = QSvgRenderer('images\\grid\\grid.svg')
@@ -80,11 +85,10 @@ class Main_Window(QWidget):
         self.setLayout(main_layout)
 
         # set the letter buttons
-        letter_buttons_layout = self.initLetterButtons(self.staff_manager)
+        letter_buttons_layout = self.pictograph_generator.initLetterButtons()
         left_layout.addLayout(letter_buttons_layout)
 
         # set the artboard
-        self.artboard_view = self.initArtboard() 
         self.infoTracker.set_artboard(self.artboard)
         artboard_layout.addWidget(self.artboard_view)
 
@@ -94,14 +98,14 @@ class Main_Window(QWidget):
         left_layout.setAlignment(arrowbox, Qt.AlignTop)
 
         # set the buttons and info tracker
-        buttons = self.initButtons() 
+        buttons = Button_Manager.initButtons(self, self.artboard, self.artboard_view, self.grid,self.infoTracker, self.sequence_manager)
         button_layout.addLayout(buttons)
         info_layout.addWidget(self.info_label)
         upper_right_laybout.addLayout(button_layout)
         upper_right_laybout.addLayout(info_layout) 
         self.scene.changed.connect(self.infoTracker.update)
         
-        self.initSequenceScene(lower_right_layout)
+        self.sequence_manager.initSequenceScene(lower_right_layout, self.sequence_scene)
 
         ### Un-comment this code to enable the assign letter funtion ###
         # self.letterInput = QLineEdit(self)
@@ -114,19 +118,6 @@ class Main_Window(QWidget):
         self.setMinimumSize(2800, 1800)
         self.show()
 
-    def initSequenceScene(self, layout):
-        self.sequence_scene = Sequence_Scene()  # Create a new Sequence_Scene instance
-        self.sequence_manager = Sequence_Manager(self.sequence_scene)
-        self.sequence_scene.set_manager(self.sequence_manager)  # Set the manager of the sequence container
-        self.sequence_scene.manager = self.sequence_manager  # Set the manager of the sequence scene
-
-        self.sequence_container = QGraphicsView(self.sequence_scene)  # Create a QGraphicsView with the sequence scene
-
-        # Set the width and height
-        self.sequence_container.setFixedSize(1700, 500)
-        self.sequence_container.show()
-        layout.addWidget(self.sequence_container)
-
     def initArrowBox(self):
         arrow_box = QScrollArea(self)
         arrowbox_scene = QGraphicsScene()
@@ -134,7 +125,6 @@ class Main_Window(QWidget):
             arrowbox_scene.addItem(arrow)  # use arrowbox_scene here
             arrow.attributesChanged.connect(self.infoTracker.update)
             arrow.attributesChanged.connect(lambda: self.update_staff(arrow, self.staff_manager))
-
 
         svgs_full_paths = []
         default_arrows = ['red_anti_r_ne.svg', 'red_iso_r_ne.svg', 'blue_anti_r_sw.svg', 'blue_iso_r_sw.svg']
@@ -146,7 +136,6 @@ class Main_Window(QWidget):
         for i, svg in enumerate(svgs_full_paths):
             file_name = os.path.basename(svg)
             if file_name in default_arrows:
-                self.handlers = Handlers(self.artboard, self.artboard_view, self.grid, self.artboard, self.infoTracker, self)
                 self.artboard.set_handlers(self.handlers)
                 arrow_item = Arrow(svg, self.artboard_view, self.infoTracker, self.handlers)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
@@ -168,232 +157,22 @@ class Main_Window(QWidget):
         return arrow_box
 
     def initArtboard(self):
-        grid_size = 650
         self.artboard.setFixedSize(750, 750)
 
         transform = QTransform()
         self.grid_center = QPointF(self.artboard.frameSize().width() / 2, self.artboard.frameSize().height() / 2)
 
-        transform.translate(self.grid_center.x() - (grid_size / 2), self.grid_center.y() - (grid_size / 2))
-        self.grid.setTransform(transform)
 
         self.artboard.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.artboard.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         self.scene.addItem(self.grid)
 
-
-
         return self.artboard
-
-    def initButtons(self):
-        self.handlers = Handlers(self.artboard, self.artboard_view, self.grid, self.artboard, self.infoTracker, self)
-        self.artboard.set_handlers(self.handlers)
-        masterbtnlayout = QVBoxLayout()
-        buttonlayout = QHBoxLayout()
-        buttonstack = QVBoxLayout()
-        buttonstack.setAlignment(Qt.AlignTop)
-        masterbtnlayout.setAlignment(Qt.AlignTop)
-        buttonlayout.addLayout(buttonstack)
-        masterbtnlayout.addLayout(buttonlayout)
-
-        self.updatePositionButton = QPushButton("Update Position")
-        self.updatePositionButton.clicked.connect(lambda: self.handlers.updatePositionInJson(*self.artboard.getCurrentArrowPositions()))
-        buttonstack.addWidget(self.updatePositionButton)
-
-        self.selectAllButton = QPushButton("Select All")
-        self.selectAllButton.clicked.connect(self.handlers.selectAll)
-        buttonstack.addWidget(self.selectAllButton)
-
-        add_to_sequence_button = QPushButton("Add to Sequence")
-        add_to_sequence_button.clicked.connect(lambda _: self.sequence_manager.add_to_sequence(self.artboard))
-        buttonstack.addWidget(add_to_sequence_button)
-
-        self.deleteButton = QPushButton("Delete")
-        self.deleteButton.clicked.connect(self.handlers.deleteArrow)
-        buttonstack.addWidget(self.deleteButton)
-
-        self.rotateRightButton = QPushButton("Rotate Right")
-        self.rotateRightButton.clicked.connect(lambda: self.handlers.rotateArrow("right"))
-        buttonstack.addWidget(self.rotateRightButton)
-
-        self.rotateLeftButton = QPushButton("Rotate Left")
-        self.rotateLeftButton.clicked.connect(lambda: self.handlers.rotateArrow("left"))
-        buttonstack.addWidget(self.rotateLeftButton)
-
-        self.mirrorButton = QPushButton("Mirror")
-        self.mirrorButton.clicked.connect(lambda: self.handlers.mirrorArrow())
-        buttonstack.addWidget(self.mirrorButton)
-
-        self.bringForward = QPushButton("Bring Forward")
-        self.bringForward.clicked.connect(self.handlers.bringForward)
-        buttonstack.addWidget(self.bringForward)
-
-        self.swapColors = QPushButton("Swap Colors")
-        self.swapColors.clicked.connect(self.handlers.swapColors)
-        buttonstack.addWidget(self.swapColors)
-
-        self.exportAsPNGButton = QPushButton("Export to PNG")
-        self.exportAsPNGButton.clicked.connect(self.handlers.exportAsPng)
-        buttonstack.addWidget(self.exportAsPNGButton)
-
-        self.exportAsSVGButton = QPushButton("Export to SVG")
-        self.exportAsSVGButton.clicked.connect(self.handlers.exportAsSvg)
-        buttonstack.addWidget(self.exportAsSVGButton)
-
-        button_font = QFont('Helvetica', 14)
-        button_width = 200
-
-        self.deleteButton.setFont(button_font)
-        self.rotateRightButton.setFont(button_font)
-        self.rotateLeftButton.setFont(button_font)
-        self.mirrorButton.setFont(button_font)
-        self.bringForward.setFont(button_font)
-        self.swapColors.setFont(button_font)
-        self.exportAsPNGButton.setFont(button_font)
-        self.exportAsSVGButton.setFont(button_font)
-        self.updatePositionButton.setFont(button_font)
-        self.selectAllButton.setFont(button_font)
-        add_to_sequence_button.setFont(button_font)
-
-        self.deleteButton.setFixedWidth(button_width)
-        self.rotateRightButton.setFixedWidth(button_width)
-        self.rotateLeftButton.setFixedWidth(button_width)
-        self.mirrorButton.setFixedWidth(button_width)
-        self.bringForward.setFixedWidth(button_width)
-        self.swapColors.setFixedWidth(button_width)
-        self.exportAsPNGButton.setFixedWidth(button_width)
-        self.exportAsSVGButton.setFixedWidth(button_width)
-        self.updatePositionButton.setFixedWidth(button_width)
-        self.selectAllButton.setFixedWidth(button_width)
-        add_to_sequence_button.setFixedWidth(button_width)
-
-        return masterbtnlayout
-
-    def initLetterButtons(self, staff_manager):
-        # Create a new layout for the Word Constructor's widgets
-        letter_buttons_layout = QVBoxLayout()
-        # Define the rows of letters
-        letter_rows = [
-            ['A', 'B', 'C'],
-            ['D', 'E', 'F'],
-            ['G', 'H', 'I'],
-            ['J', 'K', 'L'],
-            ['M', 'N', 'O'],
-            ['P', 'Q', 'R'],
-            ['S', 'T', 'U', 'V'],
-        ]
-        for row in letter_rows:
-            row_layout = QHBoxLayout()
-            row_layout.setAlignment(Qt.AlignTop)
-            for letter in row:
-                button = QPushButton(letter, self)
-                font = QFont()
-                font.setPointSize(20)
-                button.setFont(font)
-                button.setFixedSize(80, 80)
-                button.clicked.connect(lambda _, l=letter: self.generatePictograph(l, staff_manager))  # pass staff_manager here
-                row_layout.addWidget(button)
-            letter_buttons_layout.addLayout(row_layout)
-        
-        return letter_buttons_layout
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Delete:
             self.handlers.deleteArrow()
-
-    def generatePictograph(self, letter, staff_manager):
-        #delete all items
-        self.artboard.deleteAllItems()
-
-        # Reload the JSON file
-        with open('letterCombinations.json', 'r') as file:
-            self.letterCombinations = json.load(file)
-
-        # Get the list of possible combinations for the letter
-        combinations = self.letterCombinations.get(letter, [])
-        if not combinations:
-            print(f"No combinations found for letter {letter}")
-            return
-
-        # Choose a combination at random
-        combination_set = random.choice(combinations)
-
-        # Create a list to store the created arrows
-        created_arrows = []
-
-        # Find the optimal positions dictionary in combination_set
-        optimal_positions = next((d for d in combination_set if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
-        print(f"Optimal positions: {optimal_positions}")
-
-        for combination in combination_set:
-            # Check if the dictionary has all the keys you need
-            if all(key in combination for key in ['color', 'type', 'rotation', 'quadrant']):
-                svg = f"images/arrows/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}.svg"
-                arrow = Arrow(svg, self.artboard_view, self.infoTracker, self.handlers)
-                arrow.attributesChanged.connect(lambda: self.update_staff(arrow, staff_manager))
-                arrow.set_attributes(combination)
-                arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
-                arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
-
-                # Add the created arrow to the list
-                created_arrows.append(arrow)
-
-        # Add the arrows to the scene
-        for arrow in created_arrows:
-            self.scene.addItem(arrow)
-
-        for arrow in created_arrows:
-            if optimal_positions:
-                optimal_position = optimal_positions.get(f"optimal_{arrow.get_attributes()['color']}_location")
-                if optimal_position:
-                    print(f"Setting position for {arrow.get_attributes()['color']} arrow to optimal position: {optimal_position}")
-                    # Calculate the position to center the arrow at the optimal position
-                    pos = QPointF(optimal_position['x'], optimal_position['y']) - arrow.boundingRect().center()
-                    arrow.setPos(pos)
-                else:
-                    print(f"No optimal position found for {arrow.get_attributes()['color']} arrow. Setting position to quadrant center.")
-                    # Calculate the position to center the arrow at the quadrant center
-                    pos = self.artboard.getQuadrantCenter(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
-                    arrow.setPos(pos)
-            else:
-                print(f"No optimal positions dictionary found. Setting position for {arrow.get_attributes()['color']} arrow to quadrant center.")
-                # Calculate the position to center the arrow at the quadrant center
-                pos = self.artboard.getQuadrantCenter(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
-                arrow.setPos(pos)
-
-                # Call the update_staff function for the arrow
-                self.update_staff(arrow, staff_manager)
-
-        for combination in combination_set:
-            if all(key in combination for key in ['start_position', 'end_position']):
-                #print the start/end position values
-                start_position = combination['start_position']
-                end_position = combination['end_position']
-
-        self.update_position_label()
-        self.staff_manager.remove_non_beta_staves()
-        # Update the info label
-        self.infoTracker.update()
-        self.artboard_view.arrowMoved.emit()
-
-    def update_position_label(self):
-        start_position, end_position = self.infoTracker.get_positions()
-        self.position_label.setText(f"Start: {start_position}\nEnd: {end_position}")
-
-    def update_staff(self, arrow, staff_manager):
-        arrows = [arrow] if not isinstance(arrow, list) else arrow
-
-        staff_positions = [arrow.end_location.upper() + '_staff_' + arrow.color for arrow in arrows]
-
-        for element_id, staff in staff_manager.staffs.items():
-            if element_id in staff_positions:
-                staff.show()
-            else:
-                staff.hide()
-
-        self.staff_manager.check_and_replace_staves()
-
 
     def loadLetters(self):
         try:

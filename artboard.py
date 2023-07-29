@@ -1,14 +1,12 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsItem, QApplication
-from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QPointF
-from arrow import Arrow
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsItem, QApplication, QGraphicsRectItem
+from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QPointF, QTimer
 from PyQt5.QtWidgets import QGraphicsItem, QToolTip
 from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
-import os
 from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor
-from PyQt5.QtSvg import QSvgRenderer
-from PyQt5.QtCore import QTimer, Qt
-from staff import StaffManager, Staff
+from staff import Staff
 from grid import Grid
+from arrow import Arrow
+import os
 
 class Artboard(QGraphicsView):
     arrowMoved = pyqtSignal()
@@ -29,6 +27,22 @@ class Artboard(QGraphicsView):
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
         self.attributesChanged.connect(self.update_staffs_and_check_beta)
     
+    def print_item_types(self):
+        for item in self.scene().items():
+            print(type(item))
+
+    def clear_selection(self):
+        for item in self.scene().selectedItems():
+            item.setSelected(False)
+
+    def get_bounding_box(self):
+        # return all QGraphicsItem objects that represent bounding boxes in the scene
+        bounding_boxes = []
+        for item in self.scene().items():
+            if isinstance(item, QGraphicsRectItem):  # or whatever class represents your bounding boxes
+                bounding_boxes.append(item)
+        return bounding_boxes
+
     def get_state(self):
         state = {
             'arrows': [],
@@ -325,7 +339,7 @@ class Artboard(QGraphicsView):
 
         self.staff_manager.hide_all()
 
-    def deleteAllItems(self):
+    def clear(self):
         for item in self.scene().items():
             if isinstance(item, Arrow) or isinstance(item, Staff):
                 self.scene().removeItem(item)

@@ -15,24 +15,24 @@ class Info_Tracker:
         self.label.setFont(QFont('Helvetica', 14))
         self.label.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
         self.label.setAlignment(Qt.AlignTop)
-        self.letterCombinations = self.loadLetters()
+        self.letterCombinations = self.load_letters()
         self.staff_manager = staff_manager  # Add this line
 
     def start(self):
-        self.previous_state = self.getCurrentState()
+        self.previous_state = self.get_current_state()
 
     def set_artboard(self, artboard):
         self.artboard = artboard
 
-    def getCurrentState(self):
+    def get_current_state(self):
         state = {}
         for item in self.artboard.items():
             if isinstance(item, Arrow):
                 state[item] = item.get_attributes()
         return state
 
-    def checkForChanges(self):
-        current_state = self.getCurrentState()
+    def check_for_changes(self):
+        current_state = self.get_current_state()
         if current_state != self.previous_state:
             self.update()
             self.previous_state = current_state
@@ -82,7 +82,7 @@ class Info_Tracker:
                     arrow_positions[filename] = (start_location, end_location)
         return arrow_positions
     
-    def loadLetters(self):
+    def load_letters(self):
         try:
             with open('letterCombinations.json', 'r') as f:
                 return json.load(f)
@@ -99,7 +99,7 @@ class Info_Tracker:
 
         current_combination = sorted(current_combination, key=lambda x: x['color'])
 
-        self.letterCombinations = self.loadLetters()
+        self.letterCombinations = self.load_letters()
         blue_text = "<h2>Left</h2>"
         red_text = "<h2>Right</h2>"
         letter_text = "<h2>Letter</h2>"
@@ -146,19 +146,27 @@ class Info_Tracker:
         positions = []
         arrow_items = []
         counter = 1
+        start_location_red = None
+        end_location_red = None
+        start_location_blue = None
+        end_location_blue = None
+        color_red = None
+        color_blue = None
         for item in self.artboard.items():
             if isinstance(item, Arrow):
                 arrow_items.append(item)
-        for arrow in arrow_items:
-            if arrow.color == 'red':
-                start_location_red = arrow.start_location
-                end_location_red = arrow.end_location
-                color_red = arrow.color
-                counter += 1
-            else: # arrow.color == 'blue'
-                start_location_blue = arrow.start_location
-                end_location_blue = arrow.end_location
-                color_blue = arrow.color
+
+        if start_location_red is not None and end_location_red is not None and start_location_blue is not None and end_location_blue is not None:
+            for arrow in arrow_items:
+                if arrow.color == 'red':
+                    start_location_red = arrow.start_location
+                    end_location_red = arrow.end_location
+                    color_red = arrow.color
+                    counter += 1
+                else: # arrow.color == 'blue'
+                    start_location_blue = arrow.start_location
+                    end_location_blue = arrow.end_location
+                    color_blue = arrow.color
 
         start_key = (start_location_red, color_red, start_location_blue, color_blue)
         end_key = (end_location_red, color_red, end_location_blue, color_blue)
@@ -173,3 +181,9 @@ class Info_Tracker:
         else:
             print("no positions returned by get_positions")
             return None
+        
+    def update_position_label(self, position_label):
+        self.position_label = position_label
+        start_position, end_position = self.get_positions()
+        self.position_label.setText(f"Start: {start_position}\nEnd: {end_position}")
+
