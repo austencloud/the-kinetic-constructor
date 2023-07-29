@@ -1,16 +1,15 @@
-class Sequence:
-    def __init__(self):
+from PyQt5.QtWidgets import QGraphicsScene
+
+class SequenceConstructor(QGraphicsScene):
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.pictographs = []
 
     def add_pictograph(self, pictograph):
         self.pictographs.append(pictograph)
+        self.addItem(pictograph)
 
-    def get_pictograph(self, index):
-        return self.pictographs[index]
-
-    def update_pictograph(self, index, new_pictograph):
-        self.pictographs[index] = new_pictograph
-
-    def display(self):
-        for i, pictograph in enumerate(self.pictographs):
-            print(f"Pictograph {i}: {pictograph}")
+    def clear(self):
+        for pictograph in self.pictographs:
+            self.removeItem(pictograph)
+        self.pictographs.clear()

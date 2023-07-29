@@ -27,6 +27,8 @@ class Grid(QGraphicsSvgItem):
 
         self.center_point = QPointF(center_x, center_y)
 
+        # add an attribute svg_file to the grid
+        self.svg_file = grid_svg
 
 
     def getCenter(self):

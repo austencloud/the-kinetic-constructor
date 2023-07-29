@@ -8,6 +8,7 @@ from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor
 from PyQt5.QtSvg import QSvgRenderer
 from PyQt5.QtCore import QTimer, Qt
 from staff import StaffManager, Staff
+from grid import Grid
 
 class Artboard(QGraphicsView):
     arrowMoved = pyqtSignal()
@@ -28,6 +29,34 @@ class Artboard(QGraphicsView):
         # Connect the signals to the update_staffs method
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
         self.attributesChanged.connect(self.update_staffs_and_check_beta)
+    
+    def get_state(self):
+        state = {
+            'arrows': [],
+            'staffs': [],
+            'grid': None
+        }
+        for item in self.scene().items():
+            if isinstance(item, Arrow):
+                state['arrows'].append({
+                    'color': item.color,
+                    'position': item.pos(),
+                    'quadrant': item.quadrant,
+                    'rotation': item.rotation,
+                    'svg_file': item.svg_file
+                })
+            elif isinstance(item, Staff):
+                state['staffs'].append({
+                    'position': item.pos(),
+                    'color': item.color,
+                    'svg_file': item.svg_file
+                })
+            elif isinstance(item, Grid):
+                state['grid'] = {
+                    'position': item.pos(),
+                    'svg_file': item.svg_file
+                }
+        return state
     
     def set_handlers(self, handlers):
         self.handlers = handlers

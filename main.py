@@ -14,8 +14,8 @@ from data import *
 import json
 import random
 from info_tracker import Info_Tracker
-
-
+from sequence import SequenceConstructor
+from pictograph import Pictograph
 class Main_Window(QWidget):
     ARROW_DIR = 'images\\arrows'
     SVG_POS_Y = 250
@@ -77,7 +77,12 @@ class Main_Window(QWidget):
         right_layout.addWidget(self.view)
         button_layout = self.initButtons()  
         right_layout.addLayout(button_layout)
-
+        self.sequence_constructor = SequenceConstructor()
+        self.sequence_constructor_view = QGraphicsView(self.sequence_constructor)
+        #set the width and height
+        self.sequence_constructor_view.setFixedSize(1500, 375)
+        self.sequence_constructor_view.show()
+        right_layout.addWidget(self.sequence_constructor_view)
 
 ### Un-comment this code to enable the assign letter funtion ###
         # self.letterInput = QLineEdit(self)
@@ -89,7 +94,7 @@ class Main_Window(QWidget):
 
         right_layout.addWidget(self.label) 
         right_layout.addWidget(self.position_label)
-        self.setMinimumSize(2200, 1400)
+        self.setMinimumSize(2600, 1800)
 
     def initArrowBox(self):
         arrow_box = QScrollArea(self)
@@ -175,6 +180,10 @@ class Main_Window(QWidget):
         self.selectAllButton.clicked.connect(self.handlers.selectAll)
         buttonstack1.addWidget(self.selectAllButton)
 
+        add_to_sequence_button = QPushButton("Add to Sequence")
+        add_to_sequence_button.clicked.connect(lambda _: self.add_to_sequence(self.artboard, self.sequence_constructor))
+        buttonstack1.addWidget(add_to_sequence_button)
+
         self.deleteButton = QPushButton("Delete")
         self.deleteButton.clicked.connect(self.handlers.deleteArrow)
         buttonstack1.addWidget(self.deleteButton)
@@ -232,6 +241,12 @@ class Main_Window(QWidget):
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Delete:
             self.handlers.deleteArrow()
+
+    def add_to_sequence(self, artboard, sequence_constructor):
+        state = artboard.get_state()
+        pictograph = Pictograph(state)
+        sequence_constructor.add_pictograph(pictograph)
+        artboard.deleteAllItems()
 
     def initWordConstructor(self, main_layout, staff_manager):
         # Create a new layout for the Word Constructor's widgets
