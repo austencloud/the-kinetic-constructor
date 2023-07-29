@@ -103,7 +103,7 @@ class Arrow(QGraphicsSvgItem):
             movement = new_pos - self.dragged_item.pos()
         for item in self.scene().selectedItems():
             item.setPos(item.pos() + movement)
-        self.infoTracker.checkForChanges()
+        self.infoTracker.check_for_changes()
         if self.in_artboard:
             print("mouse_pos:", mouse_pos)
             super().mouseMoveEvent(event)

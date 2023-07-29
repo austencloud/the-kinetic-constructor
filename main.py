@@ -29,7 +29,6 @@ class Main_Window(QWidget):
         svgs_full_paths = []
         self.scene = QGraphicsScene()
         self.grid = Grid('images\\grid\\grid.svg')
-        self.position_label = QLabel(self)
         self.info_label = QLabel(self)
         self.staff_manager = StaffManager(self.scene)
         self.infoTracker = Info_Tracker(None, self.info_label, self, self.staff_manager)
@@ -38,18 +37,10 @@ class Main_Window(QWidget):
         self.sequence_scene = Sequence_Scene()  # Create a new Sequence_Scene instance
         self.sequence_manager = Sequence_Manager(self.sequence_scene)
         self.handlers = Handlers(self.artboard, self.artboard_view, self.grid, self.artboard, self.infoTracker, self)
-        self.pictograph_generator = Pictograph_Generator(self.staff_manager, self.artboard, self.artboard_view, self.scene, self.infoTracker, self.handlers, self.position_label, self)
-        
-        
-        font = QFont()
-        font.setPointSize(20)
-        self.position_label.setFont(font)
-        self.position_label.setStyleSheet("font-family: Helvetica")
-        self.position_label.move(10, 10)
-
+        self.pictograph_generator = Pictograph_Generator(self.staff_manager, self.artboard, self.artboard_view, self.scene, self.infoTracker, self.handlers, self)
+        self.button_manager = Button_Manager()
+        self.button_layot = self.button_manager.initButtons(self.artboard, self.artboard_view, self.grid,self.infoTracker, self.sequence_manager)
         self.initUI()
-        self.artboard.arrowMoved.connect(lambda: self.infoTracker.update_position_label(self.position_label))
-        self.staff_manager.positionChanged.connect(lambda: self.infoTracker.update_position_label(self.position_label))
 
         self.letterCombinations = self.loadLetters()
         self.grid_renderer = QSvgRenderer('images\\grid\\grid.svg')
@@ -77,6 +68,7 @@ class Main_Window(QWidget):
         info_layout = QVBoxLayout()
         upper_right_laybout.addLayout(button_layout)
         upper_right_laybout.addLayout(artboard_layout)
+        upper_right_laybout.addLayout(self.button_layot)
         upper_right_laybout.addLayout(info_layout)
         right_layout.addLayout(upper_right_laybout)
         right_layout.addLayout(lower_right_layout)
@@ -95,11 +87,11 @@ class Main_Window(QWidget):
         #set up the arrowbox
         arrowbox = self.initArrowBox()
         left_layout.addWidget(arrowbox)
-        left_layout.setAlignment(arrowbox, Qt.AlignTop)
+
 
         # set the buttons and info tracker
-        buttons = Button_Manager.initButtons(self, self.artboard, self.artboard_view, self.grid,self.infoTracker, self.sequence_manager)
-        button_layout.addLayout(buttons)
+
+
         info_layout.addWidget(self.info_label)
         upper_right_laybout.addLayout(button_layout)
         upper_right_laybout.addLayout(info_layout) 
@@ -114,8 +106,7 @@ class Main_Window(QWidget):
         # self.assignLetterButton.clicked.connect(self.assignLetter)
         # right_layout.addWidget(self)
 
-        right_layout.addWidget(self.position_label)
-        self.setMinimumSize(2800, 1800)
+        self.setMinimumSize(2800, 1400)
         self.show()
 
     def initArrowBox(self):

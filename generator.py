@@ -7,7 +7,7 @@ from arrow import Arrow
 
 
 class Pictograph_Generator():
-    def __init__(self, staff_manager, artboard, artboard_view, scene, infoTracker, handlers, position_label, parent=None):
+    def __init__(self, staff_manager, artboard, artboard_view, scene, infoTracker, handlers, parent=None):
         self.staff_manager = staff_manager
         self.parent = parent
         self.artboard = artboard
@@ -15,7 +15,6 @@ class Pictograph_Generator():
         self.infoTracker = infoTracker
         self.handlers = handlers
         self.scene = scene
-        self.position_label = position_label
 
     def initLetterButtons(self):
         # Create a new layout for the Word Constructor's widgets
@@ -114,7 +113,7 @@ class Pictograph_Generator():
                 start_position = combination['start_position']
                 end_position = combination['end_position']
 
-        self.infoTracker.update_position_label(self.position_label)  # Update this line
+        # self.infoTracker.update_position_label(self.position_label)  # Remove this line
         self.staff_manager.remove_non_beta_staves()
         # Update the info label
         self.infoTracker.update()

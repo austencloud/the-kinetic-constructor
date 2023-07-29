@@ -104,13 +104,16 @@ class Info_Tracker:
         red_text = "<h2>Right</h2>"
         letter_text = "<h2>Letter</h2>"
 
-        if hasattr(self.main_window, 'staff'):
-            self.main_window.staff.update_position(self.arrow.end_location)
-
         for letter, combinations in self.letterCombinations.items():
             combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]  # Ignore the first dictionary which contains optimal positions
             if current_combination in combinations:
                 letter_text += f"<h3 style='font-size: 50px'>{letter}</h3>"
+                start_position, end_position = self.get_positions()
+                letter_text += f"<h4>Start: {start_position}</h4>"
+                letter_text += f"<h4>End: {end_position}</h4>"
+
+        if hasattr(self.main_window, 'staff'):
+            self.main_window.staff.update_position(self.arrow.end_location)
 
         for item in self.artboard.items():
             if isinstance(item, Arrow):
@@ -156,32 +159,32 @@ class Info_Tracker:
             if isinstance(item, Arrow):
                 arrow_items.append(item)
 
-        if start_location_red is not None and end_location_red is not None and start_location_blue is not None and end_location_blue is not None:
-            for arrow in arrow_items:
-                if arrow.color == 'red':
-                    start_location_red = arrow.start_location
-                    end_location_red = arrow.end_location
-                    color_red = arrow.color
-                    counter += 1
-                else: # arrow.color == 'blue'
-                    start_location_blue = arrow.start_location
-                    end_location_blue = arrow.end_location
-                    color_blue = arrow.color
+        for arrow in arrow_items:
+            if arrow.color == 'red':
+                start_location_red = arrow.start_location
+                end_location_red = arrow.end_location
+                color_red = arrow.color
+                counter += 1
+            else: # arrow.color == 'blue'
+                start_location_blue = arrow.start_location
+                end_location_blue = arrow.end_location
+                color_blue = arrow.color
 
-        start_key = (start_location_red, color_red, start_location_blue, color_blue)
-        end_key = (end_location_red, color_red, end_location_blue, color_blue)
-        start_position = positions_map.get(start_key)
-        end_position = positions_map.get(end_key)
-        positions.append(start_position)
-        positions.append(end_position)
-        print(positions)
+        if start_location_red is not None and end_location_red is not None and start_location_blue is not None and end_location_blue is not None:
+            start_key = (start_location_red, color_red, start_location_blue, color_blue)
+            end_key = (end_location_red, color_red, end_location_blue, color_blue)
+            start_position = positions_map.get(start_key)
+            end_position = positions_map.get(end_key)
+            positions.append(start_position)
+            positions.append(end_position)
+            print(positions)
 
         if positions is not None:
             return positions
         else:
             print("no positions returned by get_positions")
             return None
-        
+
     def update_position_label(self, position_label):
         self.position_label = position_label
         start_position, end_position = self.get_positions()
