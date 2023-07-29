@@ -8,7 +8,6 @@ import os
 class Arrow(QGraphicsSvgItem):
     attributesChanged = pyqtSignal()
     arrowMoved = pyqtSignal()  # add this line
-    SVG_SCALE = 10.0
     orientationChanged = pyqtSignal()  # Add this line
 
     def set_orientation(self, orientation):
@@ -73,21 +72,21 @@ class Arrow(QGraphicsSvgItem):
             self.drag.setMimeData(mime_data)
 
             # Create a QImage to render the SVG to
-            image = QImage(self.boundingRect().size().toSize() * 8, QImage.Format_ARGB32)
+            image = QImage(self.boundingRect().size().toSize(), QImage.Format_ARGB32)
             image.fill(Qt.transparent)  # Fill with transparency to preserve SVG transparency
 
             # Create a QPainter to paint the SVG onto the QImage
             painter = QPainter(image)
             painter.setRenderHint(QPainter.Antialiasing)
 
-            # # Create a QSvgRenderer with the SVG file and render it onto the QImage
-            # renderer = QSvgRenderer(self.svg_file)
-            # if not renderer.isValid():
-            #     print(f"Failed to load SVG file: {self.svg_file}")
-            #     return
-            # renderer.render(painter)
+            # Create a QSvgRenderer with the SVG file and render it onto the QImage
+            renderer = QSvgRenderer(self.svg_file)
+            if not renderer.isValid():
+                print(f"Failed to load SVG file: {self.svg_file}")
+                return
+            renderer.render(painter)
 
-            # End the QPainter operation
+
             painter.end()
 
             # Convert the QImage to a QPixmap and set it as the drag pixmap
@@ -96,13 +95,12 @@ class Arrow(QGraphicsSvgItem):
             self.drag.setHotSpot(pixmap.rect().center())
         self.dragStarted = False
 
-
     def mouseMoveEvent(self, event):
         if (event.pos() - self.dragStartPosition).manhattanLength() < QApplication.startDragDistance():
             return
         if self.dragging:
             new_pos = self.mapToScene(event.pos()) - self.dragOffset
-            movement = new_pos - self.dragged_item.pos()  # use self.dragged_item here
+            movement = new_pos - self.dragged_item.pos()
         for item in self.scene().selectedItems():
             item.setPos(item.pos() + movement)
         self.infoTracker.checkForChanges()
@@ -151,7 +149,7 @@ class Arrow(QGraphicsSvgItem):
         new_renderer = QSvgRenderer(new_svg)
 
         if new_renderer.isValid():
-            pixmap = QPixmap(self.boundingRect().size().toSize() * self.SVG_SCALE)
+            pixmap = QPixmap(self.boundingRect().size().toSize())
             painter = QPainter(pixmap)
             new_renderer.render(painter)
             painter.end()

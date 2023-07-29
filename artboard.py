@@ -13,13 +13,13 @@ class Artboard(QGraphicsView):
     arrowMoved = pyqtSignal()
     attributesChanged = pyqtSignal()
 
-    def __init__(self, scene: QGraphicsScene, grid, infotracker, parent=None):
+    def __init__(self, scene: QGraphicsScene, grid, infotracker, staff_manager, parent=None):
         super().__init__(scene, parent)
         self.setFocusPolicy(Qt.StrongFocus)  # Add this line
         self.setAcceptDrops(True)
         self.dragging = None
         self.grid = grid
-        self.staff_manager = StaffManager(scene)
+        self.staff_manager = staff_manager
         self.setDragMode(QGraphicsView.RubberBandDrag)
         self.setInteractive(True)
         scene.setBackgroundBrush(Qt.white) 
@@ -123,7 +123,7 @@ class Artboard(QGraphicsView):
         super().dragEnterEvent(event)
 
     def dragMoveEvent(self, event):
-        self.last_known_pos = event.pos()  # Store the last known position
+        self.last_known_pos = event.pos() 
         if event.mimeData().hasFormat('text/plain'):
             dropped_svg = event.mimeData().text()
             base_name = os.path.basename(dropped_svg)
@@ -135,7 +135,7 @@ class Artboard(QGraphicsView):
                         QToolTip.showText(QCursor.pos(), "Cannot add another arrow of the same color.")
                         return
             event.accept()
-            QToolTip.hideText()  # Hide the tooltip when the event is accepted
+            QToolTip.hideText() 
         else:
             event.ignore()
 
@@ -263,8 +263,11 @@ class Artboard(QGraphicsView):
         # Add this block of code to print the details of the clicked object
         if items:
             print(f"Clicked on an object of type {type(items[0])}")
+            print(f"Object top-left position: {items[0].scenePos()}")
             print(f"Object center: {items[0].scenePos() + items[0].boundingRect().center()}")
-            print(f"Object svg: {items[0].svg_file}")
+            #if the item has an svg_file attribute
+            if hasattr(items[0], 'svg_file'):
+                print(f"Object svg: {items[0].svg_file}")
 
         if event.button() == Qt.LeftButton and not items:
             super().mousePressEvent(event)
@@ -290,13 +293,16 @@ class Artboard(QGraphicsView):
                     item.setPos(item.pos() + movement)
 
                 if isinstance(item, Arrow):
-                    if item.pos().y() < self.sceneRect().height() / 2:
-                        if item.pos().x() < self.sceneRect().width() / 2:
+                    # Use the center of the arrow to determine the quadrant
+                    center_pos = item.pos() + item.boundingRect().center()
+
+                    if center_pos.y() < self.sceneRect().height() / 2:
+                        if center_pos.x() < self.sceneRect().width() / 2:
                             quadrant = 'nw'
                         else:
                             quadrant = 'ne'
                     else:
-                        if item.pos().x() < self.sceneRect().width() / 2:
+                        if center_pos.x() < self.sceneRect().width() / 2:
                             quadrant = 'sw'
                         else:
                             quadrant = 'se'
@@ -330,14 +336,6 @@ class Artboard(QGraphicsView):
                         if item.replacement_arrow_printed == False:
                             item.replacement_arrow_printed = True
 
-                    # else:
-                    #     print("Failed to load SVG file:", new_svg)
-                      # emit the signal after the item's position has been updated
-
-                    staff_position = item.calculate_staff_position()  # Use item instead of self.arrow_item
-                    staff = Staff("staff", self.scene(), staff_position, None, item.svg_file)  # Use item instead of self.arrow_item
-
-                    staff.show()
                 self.arrowMoved.emit()
 
     def deleteAllArrows(self):

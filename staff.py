@@ -11,7 +11,7 @@ class Staff:
     def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
         self.element_id = element_id
         self.position = position 
-        self.renderer = QSvgRenderer(staff_svg_file)  # Create a new QSvgRenderer and load the SVG file
+        self.renderer = QSvgRenderer(staff_svg_file)
         self.item = QGraphicsSvgItem()
         self.item.setSharedRenderer(self.renderer)
         self.item.setElementId(self.element_id)
@@ -20,13 +20,14 @@ class Staff:
         scene.addItem(self.item)
 
         self.scene = scene
-
+        print("Staff position: ", position)
         self.item.setPos(position)
         self.arrow = None
         self.item.setVisible(True)
         rect = self.item.boundingRect()
         self.item.setTransformOriginPoint(rect.width() / 2, rect.height() / 2)
         self.item.setPos(position)
+
         self.svg_file = staff_svg_file
 
     def show(self):

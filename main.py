@@ -28,7 +28,7 @@ class Main_Window(QWidget):
         self.grid = Grid('images\\grid\\grid.svg')
         self.label = QLabel(self)
         self.staff_manager = StaffManager(self.scene)
-        self.artboard = Artboard(self.scene, self.grid, None)
+
 
         self.position_label = QLabel(self)
         font = QFont()
@@ -63,7 +63,7 @@ class Main_Window(QWidget):
         self.grid = Grid('images\\grid\\grid.svg')
         self.infoTracker = Info_Tracker(self.artboard, self.label, self, self.staff_manager)
         self.scene.changed.connect(self.infoTracker.update)
-        self.artboard = Artboard(self.scene, self.grid, self.infoTracker)
+        self.artboard = Artboard(self.scene, self.grid, self.infoTracker, self.staff_manager)
         self.infoTracker.set_artboard(self.artboard)
         self.view = self.initArtboard() 
         arrowbox = self.initArrowBox()
@@ -171,6 +171,9 @@ class Main_Window(QWidget):
         self.updatePositionButton.clicked.connect(lambda: self.handlers.updatePositionInJson(*self.artboard.getCurrentArrowPositions()))
         buttonstack1.addWidget(self.updatePositionButton)
 
+        self.selectAllButton = QPushButton("Select All")
+        self.selectAllButton.clicked.connect(self.handlers.selectAll)
+        buttonstack1.addWidget(self.selectAllButton)
 
         self.deleteButton = QPushButton("Delete")
         self.deleteButton.clicked.connect(self.handlers.deleteArrow)
@@ -316,7 +319,6 @@ class Main_Window(QWidget):
                 # Calculate the position to center the arrow at the quadrant center
                 pos = self.artboard.getQuadrantCenter(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
                 arrow.setPos(pos)
-
 
                 # Call the update_staff function for the arrow
                 self.update_staff(arrow, staff_manager)
