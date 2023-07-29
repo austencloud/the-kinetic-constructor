@@ -7,14 +7,16 @@ from arrow import Arrow
 
 
 class Pictograph_Generator():
-    def __init__(self, staff_manager, artboard, artboard_view, scene, infoTracker, handlers, parent=None):
+    def __init__(self, staff_manager, artboard, artboard_view, scene, info_tracker, handlers, parent=None):
         self.staff_manager = staff_manager
         self.parent = parent
         self.artboard = artboard
         self.artboard_view = artboard_view
-        self.infoTracker = infoTracker
+        self.info_tracker = info_tracker
         self.handlers = handlers
         self.scene = scene
+        self.current_letter = None  # Add this line
+
 
     def initLetterButtons(self):
         # Create a new layout for the Word Constructor's widgets
@@ -58,6 +60,8 @@ class Pictograph_Generator():
             print(f"No combinations found for letter {letter}")
             return
 
+        self.current_letter = letter  # Store the current letter
+
         # Choose a combination at random
         combination_set = random.choice(combinations)
 
@@ -72,7 +76,7 @@ class Pictograph_Generator():
             # Check if the dictionary has all the keys you need
             if all(key in combination for key in ['color', 'type', 'rotation', 'quadrant']):
                 svg = f"images/arrows/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}.svg"
-                arrow = Arrow(svg, self.artboard_view, self.infoTracker, self.handlers)
+                arrow = Arrow(svg, self.artboard_view, self.info_tracker, self.handlers)
                 arrow.attributesChanged.connect(lambda: self.update_staff(arrow, staff_manager))
                 arrow.set_attributes(combination)
                 arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
@@ -113,12 +117,15 @@ class Pictograph_Generator():
                 start_position = combination['start_position']
                 end_position = combination['end_position']
 
-        # self.infoTracker.update_position_label(self.position_label)  # Remove this line
+        # self.info_tracker.update_position_label(self.position_label)  # Remove this line
         self.staff_manager.remove_non_beta_staves()
         # Update the info label
-        self.infoTracker.update()
+        self.info_tracker.update()
         self.artboard_view.arrowMoved.emit()
     
+    def get_current_letter(self):
+        return self.current_letter  # Add this method
+
     def update_staff(self, arrow, staff_manager):
         arrows = [arrow] if not isinstance(arrow, list) else arrow
 

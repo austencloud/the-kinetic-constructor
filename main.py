@@ -32,15 +32,15 @@ class Main_Window(QWidget):
         self.info_label = QLabel(self)
         self.word_label = QLabel(self)
         self.staff_manager = StaffManager(self.scene)
-        self.infoTracker = Info_Tracker(None, self.info_label, self, self.staff_manager)
-        self.artboard = Artboard(self.scene, self.grid, self.infoTracker, self.staff_manager)
+        self.info_tracker = Info_Tracker(None, self.info_label, self, self.staff_manager)
+        self.artboard = Artboard(self.scene, self.grid, self.info_tracker, self.staff_manager)
         self.artboard_view = self.initArtboard() 
         self.sequence_scene = Sequence_Scene()  # Create a new Sequence_Scene instance
-        self.sequence_manager = Sequence_Manager(self.sequence_scene)
-        self.handlers = Handlers(self.artboard, self.artboard_view, self.grid, self.artboard, self.infoTracker, self)
-        self.pictograph_generator = Pictograph_Generator(self.staff_manager, self.artboard, self.artboard_view, self.scene, self.infoTracker, self.handlers, self)
+        self.handlers = Handlers(self.artboard, self.artboard_view, self.grid, self.artboard, self.info_tracker, self)
+        self.pictograph_generator = Pictograph_Generator(self.staff_manager, self.artboard, self.artboard_view, self.scene, self.info_tracker, self.handlers, self)
+        self.sequence_manager = Sequence_Manager(self.sequence_scene, self.pictograph_generator, self, self.info_tracker)
         self.button_manager = Button_Manager()
-        self.button_layot = self.button_manager.initButtons(self.artboard, self.artboard_view, self.grid,self.infoTracker, self.sequence_manager)
+        self.button_layot = self.button_manager.initButtons(self.artboard, self.artboard_view, self.grid,self.info_tracker, self.sequence_manager)
         self.initUI()
 
         self.letters = self.loadLetters()
@@ -82,7 +82,7 @@ class Main_Window(QWidget):
         left_layout.addLayout(letter_buttons_layout)
 
         # set the artboard
-        self.infoTracker.set_artboard(self.artboard)
+        self.info_tracker.set_artboard(self.artboard)
         artboard_layout.addWidget(self.artboard_view)
 
         #set up the arrowbox
@@ -93,12 +93,15 @@ class Main_Window(QWidget):
         info_layout.addWidget(self.info_label)
         upper_right_laybout.addLayout(button_layout)
         upper_right_laybout.addLayout(info_layout) 
-        self.scene.changed.connect(self.infoTracker.update)
+        self.scene.changed.connect(self.info_tracker.update)
         
         lower_right_layout.addWidget(self.word_label)
         self.word_label.setFont(QFont('Helvetica', 20))
         self.word_label.setText("My word: ")
         self.sequence_manager.initSequenceScene(lower_right_layout, self.sequence_scene)
+
+        clear_sequence_button = self.sequence_manager.get_clear_sequence_button()
+        lower_right_layout.addWidget(clear_sequence_button)
 
         ### Un-comment this code to enable the assign letter funtion ###
         # self.letterInput = QLineEdit(self)
@@ -115,7 +118,7 @@ class Main_Window(QWidget):
         arrowbox_scene = QGraphicsScene()
         for arrow in self.arrows:
             arrowbox_scene.addItem(arrow)  # use arrowbox_scene here
-            arrow.attributesChanged.connect(self.infoTracker.update)
+            arrow.attributesChanged.connect(self.info_tracker.update)
             arrow.attributesChanged.connect(lambda: self.update_staff(arrow, self.staff_manager))
 
         svgs_full_paths = []
@@ -129,13 +132,13 @@ class Main_Window(QWidget):
             file_name = os.path.basename(svg)
             if file_name in default_arrows:
                 self.artboard.set_handlers(self.handlers)
-                arrow_item = Arrow(svg, self.artboard_view, self.infoTracker, self.handlers)
+                arrow_item = Arrow(svg, self.artboard_view, self.info_tracker, self.handlers)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
                 arrow_item.setScale(1)
                 arrow_item.setPos(0, svg_item_count * self.SVG_POS_Y)
                 arrowbox_scene.addItem(arrow_item) 
-                arrow_item.attributesChanged.connect(self.infoTracker.update)
+                arrow_item.attributesChanged.connect(self.info_tracker.update)
 
                 svg_item_count += 1
                 self.arrows.append(arrow_item)
@@ -200,7 +203,7 @@ class Main_Window(QWidget):
         self.letters[letter].sort(key=lambda x: (x[0]['color'], x[1]['color']))
 
         print(f"Assigned {letter} to the selected combination of arrows and all its variations.")
-        self.infoTracker.update()
+        self.info_tracker.update()
 
     def loadSvg(self):
         fileName, _ = QFileDialog.getOpenFileName(self, "Open SVG", "", "SVG files (*.svg)")

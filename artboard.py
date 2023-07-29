@@ -12,7 +12,7 @@ class Artboard(QGraphicsView):
     arrowMoved = pyqtSignal()
     attributesChanged = pyqtSignal()
 
-    def __init__(self, scene: QGraphicsScene, grid, infotracker, staff_manager, parent=None):
+    def __init__(self, scene: QGraphicsScene, grid, info_tracker, staff_manager, parent=None):
         super().__init__(scene, parent)
 
         self.setAcceptDrops(True)
@@ -22,7 +22,7 @@ class Artboard(QGraphicsView):
         self.setDragMode(QGraphicsView.RubberBandDrag)
         self.setInteractive(True)
         scene.setBackgroundBrush(Qt.white) 
-        self.infoTracker = infotracker
+        self.info_tracker = info_tracker
         self.renderer = QSvgRenderer()
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
         self.attributesChanged.connect(self.update_staffs_and_check_beta)
@@ -132,8 +132,8 @@ class Artboard(QGraphicsView):
     def remove_non_beta_staves(self):
         self.staff_manager.remove_non_beta_staves()
 
-    def set_infoTracker(self, infotracker):
-        self.infoTracker = infotracker
+    def set_info_tracker(self, info_tracker):
+        self.info_tracker = info_tracker
 
     def get_attributes(self):
         attributes = {}
@@ -192,7 +192,7 @@ class Artboard(QGraphicsView):
             event.accept()
             dropped_svg = event.mimeData().text()
 
-            self.arrow_item = Arrow(dropped_svg, self, self.infoTracker, self.handlers)
+            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.handlers)
             self.arrow_item.setFlag(QGraphicsSvgItem.ItemIsFocusable, True)
             self.scene().addItem(self.arrow_item)
             pos = self.mapToScene(event.pos()) - self.arrow_item.boundingRect().center()
@@ -334,8 +334,8 @@ class Artboard(QGraphicsView):
                 self.scene().removeItem(item)
                 del item
         self.arrowMoved.emit()
-        if self.infoTracker is not None:
-            self.infoTracker.update()
+        if self.info_tracker is not None:
+            self.info_tracker.update()
 
         self.staff_manager.hide_all()
 
@@ -345,8 +345,8 @@ class Artboard(QGraphicsView):
                 self.scene().removeItem(item)
                 del item
         self.arrowMoved.emit()
-        if self.infoTracker is not None:
-            self.infoTracker.update()
+        if self.info_tracker is not None:
+            self.info_tracker.update()
 
     def keyPressEvent(self, event):
         key = event.key()

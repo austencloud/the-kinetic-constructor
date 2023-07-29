@@ -17,13 +17,13 @@ from PyQt5.QtXml import QDomDocument
 class Handlers:
     arrowMoved = pyqtSignal()
 
-    def __init__(self, artboard, view, grid, scene, main_window, infoTracker):
+    def __init__(self, artboard, view, grid, scene, main_window, info_tracker):
         self.artboard = artboard
         self.view = view
         self.grid = grid
         self.scene = scene
         self.main_window = main_window
-        self.infoTracker = infoTracker
+        self.info_tracker = info_tracker
 
     def rotateArrow(self, direction):
         for item in self.scene.get_selected_items():

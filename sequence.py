@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QPushButton
 from PyQt5.QtCore import QRectF
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsItem, QGraphicsView
 from PyQt5.QtCore import Qt, QPointF
@@ -10,7 +10,7 @@ from PyQt5.QtGui import QImage, QPainter
 from staff import Staff
 
 class Sequence_Manager:
-    def __init__(self, scene):
+    def __init__(self, scene, pictograph_generator, main_window, info_tracker):
         self.scene = scene
         self.beats = [QGraphicsRectItem(QRectF(375, 0, 375, 375)) for i in range(4)]
         for i, section in enumerate(self.beats):
@@ -18,6 +18,9 @@ class Sequence_Manager:
             section.setPos(QPointF(i * 375, 0))
 
         self.pictographs = [] 
+        self.pictograph_generator = pictograph_generator
+        self.main_window = main_window
+        self.info_tracker = info_tracker
 
     def add_pictograph(self, pictograph):
         print("Adding pictograph")
@@ -55,6 +58,9 @@ class Sequence_Manager:
         self.add_pictograph(pictograph)
         artboard.clear()
 
+        letter = self.info_tracker.get_current_letter()
+        self.main_window.word_label.setText(self.main_window.word_label.text() + letter)
+
     def add_to_artboard(self, pictograph: Pictograph, artboard: Artboard):
         state = pictograph.state
         artboard.clear()
@@ -78,7 +84,6 @@ class Sequence_Manager:
             grid.setPos(state['grid']['position'])
             artboard.scene().addItem(grid)
 
-
     def initSequenceScene(self, layout, sequence_scene):
         self.sequence_scene = sequence_scene
 
@@ -92,11 +97,22 @@ class Sequence_Manager:
         self.sequence_container.show()
         layout.addWidget(self.sequence_container)
 
+    def get_clear_sequence_button(self):
+        self.clear_button = QPushButton("Clear Sequence")
+        self.clear_button.clicked.connect(self.clear_sequence)
+        return self.clear_button
+
+    def clear_sequence(self):
+        self.pictographs = []
+        for item in self.scene.items():
+            self.scene.removeItem(item)
+        self.main_window.word_label.setText("My word: ")
+
 class Sequence_Scene(QGraphicsScene):
     def __init__(self, manager=None, parent=None):
         super().__init__(parent)
-        self.setSceneRect(0, 0, 4 * 375, 375)  # Add this line
-
+        self.setSceneRect(0, 0, 4 * 375, 375)
 
     def set_manager(self, manager):
         self.manager = manager
+

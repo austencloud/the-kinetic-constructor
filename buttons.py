@@ -8,14 +8,14 @@ class Button_Manager:
         self.button_font = QFont('Helvetica', 14)
         self.button_width = 225
 
-    def initButtons(self, artboard, artboard_view, grid, infoTracker, sequence_manager):
+    def initButtons(self, artboard, artboard_view, grid, info_tracker, sequence_manager):
         self.artboard = artboard
         self.artboard_view = artboard_view
         self.grid = grid
-        self.infoTracker = infoTracker
+        self.info_tracker = info_tracker
         self.sequence_manager = sequence_manager
         
-        self.handlers = Handlers(self.artboard, self.artboard_view, self.grid, self.artboard, self.infoTracker, self)
+        self.handlers = Handlers(self.artboard, self.artboard_view, self.grid, self.artboard, self.info_tracker, self)
         self.artboard.set_handlers(self.handlers)
         masterbtnlayout = QVBoxLayout()
         buttonlayout = QHBoxLayout()

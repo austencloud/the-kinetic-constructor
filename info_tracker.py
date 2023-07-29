@@ -31,6 +31,12 @@ class Info_Tracker:
                 state[item] = item.get_attributes()
         return state
 
+    def get_current_letter(self):
+        if self.letter is not None:
+            return self.letter
+        else:
+            print("No self.letter found")
+
     def check_for_changes(self):
         current_state = self.get_current_state()
         if current_state != self.previous_state:
@@ -111,6 +117,8 @@ class Info_Tracker:
                 start_position, end_position = self.get_positions()
                 letter_text += f"<h4>Start: {start_position}</h4>"
                 letter_text += f"<h4>End: {end_position}</h4>"
+                self.letter = letter  # Update self.letter here
+                break  # Break the loop when a match is found
 
         if hasattr(self.main_window, 'staff'):
             self.main_window.staff.update_position(self.arrow.end_location)
