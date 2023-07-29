@@ -53,7 +53,7 @@ class Handlers:
         self.view.arrowMoved.emit()
     
     def updatePositionInJson(self, red_position, blue_position):
-        with open('letterCombinations.json', 'r') as file:
+        with open('letters.json', 'r') as file:
             data = json.load(file)
         current_attributes = []
         for item in self.artboard.scene().items():
@@ -83,7 +83,7 @@ class Handlers:
                     else:
                         combination_set.append(new_optimal_positions)
                         print(f"Added optimal positions for letter {letter}")
-        with open('letterCombinations.json', 'w') as file:
+        with open('letters.json', 'w') as file:
             json.dump(data, file, indent=4)
 
     def mirrorArrow(self):

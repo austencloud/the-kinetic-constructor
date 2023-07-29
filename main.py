@@ -43,7 +43,7 @@ class Main_Window(QWidget):
         self.button_layot = self.button_manager.initButtons(self.artboard, self.artboard_view, self.grid,self.infoTracker, self.sequence_manager)
         self.initUI()
 
-        self.letterCombinations = self.loadLetters()
+        self.letters = self.loadLetters()
         self.grid_renderer = QSvgRenderer('images\\grid\\grid.svg')
 
         for dirpath, dirnames, filenames in os.walk(self.ARROW_DIR):
@@ -168,14 +168,14 @@ class Main_Window(QWidget):
 
     def loadLetters(self):
         try:
-            with open('letterCombinations.json', 'r') as f:
+            with open('letters.json', 'r') as f:
                 return json.load(f)
         except FileNotFoundError:
             return {}
 
     def saveLetters(self):
-        sorted_data = {key: self.letterCombinations[key] for key in sorted(self.letterCombinations)}
-        with open('letterCombinations.json', 'w') as f:
+        sorted_data = {key: self.letters[key] for key in sorted(self.letters)}
+        with open('letters.json', 'w') as f:
             json.dump(sorted_data, f, indent=4)
             
     def assignLetter(self):
@@ -193,11 +193,11 @@ class Main_Window(QWidget):
         variations = generate_variations(arrow_combination)
         print(f"Generated {len(variations)} variations for the selected combination of arrows.")
         print(f"{variations}")
-        if letter not in self.letterCombinations:
-            self.letterCombinations[letter] = []
+        if letter not in self.letters:
+            self.letters[letter] = []
         for variation in variations:
-            self.letterCombinations[letter].append(variation)
-        self.letterCombinations[letter].sort(key=lambda x: (x[0]['color'], x[1]['color']))
+            self.letters[letter].append(variation)
+        self.letters[letter].sort(key=lambda x: (x[0]['color'], x[1]['color']))
 
         print(f"Assigned {letter} to the selected combination of arrows and all its variations.")
         self.infoTracker.update()
@@ -244,7 +244,7 @@ class Letter:
 
         current_combination = sorted(current_combination, key=lambda x: x['color'])
 
-        for letter, combinations in self.letterCombinations.items():
+        for letter, combinations in self.letters.items():
             combinations = [sorted(combination, key=lambda x: x['color']) for combination in combinations]
             if current_combination in combinations:
                 return letter

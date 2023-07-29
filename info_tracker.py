@@ -15,7 +15,7 @@ class Info_Tracker:
         self.label.setFont(QFont('Helvetica', 14))
         self.label.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
         self.label.setAlignment(Qt.AlignTop)
-        self.letterCombinations = self.load_letters()
+        self.letters = self.load_letters()
         self.staff_manager = staff_manager  # Add this line
 
     def start(self):
@@ -84,7 +84,7 @@ class Info_Tracker:
     
     def load_letters(self):
         try:
-            with open('letterCombinations.json', 'r') as f:
+            with open('letters.json', 'r') as f:
                 return json.load(f)
         except FileNotFoundError:
             return {}
@@ -99,12 +99,12 @@ class Info_Tracker:
 
         current_combination = sorted(current_combination, key=lambda x: x['color'])
 
-        self.letterCombinations = self.load_letters()
+        self.letters = self.load_letters()
         blue_text = "<h2>Left</h2>"
         red_text = "<h2>Right</h2>"
         letter_text = "<h2>Letter</h2>"
 
-        for letter, combinations in self.letterCombinations.items():
+        for letter, combinations in self.letters.items():
             combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]  # Ignore the first dictionary which contains optimal positions
             if current_combination in combinations:
                 letter_text += f"<h3 style='font-size: 50px'>{letter}</h3>"

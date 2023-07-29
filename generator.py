@@ -49,11 +49,11 @@ class Pictograph_Generator():
         self.artboard.clear()
 
         # Reload the JSON file
-        with open('letterCombinations.json', 'r') as file:
-            self.letterCombinations = json.load(file)
+        with open('letters.json', 'r') as file:
+            self.letters = json.load(file)
 
         # Get the list of possible combinations for the letter
-        combinations = self.letterCombinations.get(letter, [])
+        combinations = self.letters.get(letter, [])
         if not combinations:
             print(f"No combinations found for letter {letter}")
             return
