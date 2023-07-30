@@ -290,7 +290,6 @@ class Arrow(QGraphicsSvgItem):
         self.start_location = attributes.get('start_location', self.start_location)
         self.end_location = attributes.get('end_location', self.end_location)
 
-    #fuction to update the start and end points of the arrow in the infotracker
     def update_positions(self):
         # Update the start and end positions
         self.start_location, self.end_location = self.arrow_positions.get(os.path.basename(self.svg_file), (None, None))

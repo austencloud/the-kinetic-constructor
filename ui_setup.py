@@ -45,15 +45,12 @@ class UiSetup(QWidget):
     def initArtboard(self):
         self.grid = Grid('images\\grid\\grid.svg')
         self.artboard = Artboard(self.artboard_scene, self.grid, self.info_tracker, self.staff_manager)
+        self.artboard_view = self.artboard.initArtboard() 
         transform = QTransform()
         self.grid_center = QPointF(self.artboard.frameSize().width() / 2, self.artboard.frameSize().height() / 2)
-        self.artboard.setFixedSize(750, 750)
         grid_size = 650
         transform.translate(self.grid_center.x() - (grid_size / 2), self.grid_center.y() - (grid_size / 2))
         self.grid.setTransform(transform)
-        self.artboard.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.artboard.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.artboard_scene.addItem(self.grid)
 
     def initLetterButtons(self):
         # Create a new layout for the Word Constructor's widgets

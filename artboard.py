@@ -382,6 +382,18 @@ class Artboard(QGraphicsView):
         if self.info_tracker is not None:
             self.info_tracker.update()
 
+    def initArtboard(self):
+        self.setFixedSize(750, 750)
+
+        transform = QTransform()
+        grid_center = QPointF(self.frameSize().width() / 2, self.frameSize().height() / 2)
+
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+        self.artboard_scene.addItem(self.grid)
+
+        return self
 
 class Update_Quadrant_Preview(QDrag):
     def __init__(self, source, arrow_item, *args, **kwargs):
