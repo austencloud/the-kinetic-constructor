@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFileDialog, QFrame, QWidget
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFileDialog, QFrame, QWidget, QLineEdit
 import os
 from arrow import Arrow
 from PyQt5.QtGui import QFont, QTransform
@@ -7,13 +7,14 @@ from handlers import Handlers
 from info_tracker import Info_Tracker
 from generator import Pictograph_Generator
 from staff import Staff_Manager
-
+from letter import Letter_Manager
 
 class UiSetup:
     def __init__(self, main_window):
         self.main_window = main_window
         self.main_window.setMinimumSize(2800, 1400)
         self.main_window.show()
+
         self.arrows = []
         self.artboard_scene = QGraphicsScene()
         self.ARROW_DIR = 'images\\arrows'
@@ -47,7 +48,6 @@ class UiSetup:
         transform.translate(self.grid_center.x() - (grid_size / 2), self.grid_center.y() - (grid_size / 2))
         self.grid.setTransform(transform)
 
-
     def initLetterButtons(self):
         # Create a new layout for the Word Constructor's widgets
         letter_buttons_layout = QVBoxLayout()
@@ -75,7 +75,6 @@ class UiSetup:
             letter_buttons_layout.addLayout(row_layout)
         
         self.left_layout.addLayout(letter_buttons_layout)  # add the layout to left_layout here
-
 
     def initButtons(self):
         button_font = QFont('Helvetica', 14)
@@ -202,15 +201,6 @@ class UiSetup:
         self.info_label = QLabel(self.main_window)
         self.info_tracker = Info_Tracker(None, self.info_label, self, self.staff_manager)
 
-    def connectInfoTracker(self):
-        self.info_layout.addWidget(self.info_label)
-
-        self.artboard_scene.changed.connect(self.info_tracker.update)
-
-    def connectArtboard(self):
-        self.info_tracker.set_artboard(self.artboard)
-        self.artboard_layout.addWidget(self.artboard_view)
-
     def initWordLabel(self):
         self.word_label = QLabel(self.main_window)
         self.lower_right_layout.addWidget(self.word_label)
@@ -220,10 +210,20 @@ class UiSetup:
     def initSequenceScene(self):
         self.sequence_scene = Sequence_Scene()  # Create a new Sequence_Scene instance
         self.sequence_manager = Sequence_Manager(self.sequence_scene, self.pictograph_generator, self, self.info_tracker)
-        self.sequence_manager.initSequenceScene(self.lower_right_layout, self.sequence_scene)
+
+        self.sequence_scene.set_manager(self.sequence_manager)  # Set the manager of the sequence container
+        self.sequence_manager.manager = self.sequence_manager  # Set the manager of the sequence scene
+
+        self.sequence_container = QGraphicsView(self.sequence_scene)  # Create a QGraphicsView with the sequence scene
+
+        # Set the width and height
+        self.sequence_container.setFixedSize(1700, 500)
+        self.sequence_container.show()
+        self.lower_right_layout.addWidget(self.sequence_container)
+
         clear_sequence_button = self.sequence_manager.get_clear_sequence_button()
         self.lower_right_layout.addWidget(clear_sequence_button)
-        
+
     def initHandlers(self):
        self.handlers = Handlers(self.artboard, self.artboard_view, self.grid, self.artboard, self.info_tracker, self)
        self.artboard.set_handlers(self.handlers)
@@ -234,10 +234,20 @@ class UiSetup:
     def initStaffManager(self):
         self.staff_manager = Staff_Manager(self.artboard_scene)
 
-    # def initAssignLetter(self):
-    #     ## Un-comment this code to enable the assign letter funtion ###
-    #     self.letterInput = QLineEdit(self)
-    #     right_layout.addWidget(self.letterInput)
-    #     self.assignLetterButton = QPushButton("Assign Letter", self)
-    #     self.assignLetterButton.clicked.connect(self.assignLetter)
-    #     right_layout.addWidget(self)
+    def connectInfoTracker(self):
+        self.info_layout.addWidget(self.info_label)
+
+        self.artboard_scene.changed.connect(self.info_tracker.update)
+
+    def connectArtboard(self):
+        self.info_tracker.set_artboard(self.artboard)
+        self.artboard_layout.addWidget(self.artboard_view)
+
+
+    def initLetterManager(self):
+        self.letter_manager = Letter_Manager(self.artboard, self.info_tracker)
+        self.letterInput = QLineEdit(self.main_window)
+        self.right_layout.addWidget(self.letterInput)
+        self.assignLetterButton = QPushButton("Assign Letter", self.main_window)
+        self.assignLetterButton.clicked.connect(lambda: self.letter_manager.assignLetter(self.letterInput.text()))
+        self.right_layout.addWidget(self.assignLetterButton)

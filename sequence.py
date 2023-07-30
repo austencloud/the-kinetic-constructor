@@ -84,19 +84,6 @@ class Sequence_Manager:
             grid.setPos(state['grid']['position'])
             artboard.scene().addItem(grid)
 
-    def initSequenceScene(self, layout, sequence_scene):
-        self.sequence_scene = sequence_scene
-
-        self.sequence_scene.set_manager(self)  # Set the manager of the sequence container
-        self.sequence_scene.manager = self  # Set the manager of the sequence scene
-
-        self.sequence_container = QGraphicsView(self.sequence_scene)  # Create a QGraphicsView with the sequence scene
-
-        # Set the width and height
-        self.sequence_container.setFixedSize(1700, 500)
-        self.sequence_container.show()
-        layout.addWidget(self.sequence_container)
-
     def get_clear_sequence_button(self):
         self.clear_button = QPushButton("Clear Sequence")
         self.clear_button.clicked.connect(self.clear_sequence)
