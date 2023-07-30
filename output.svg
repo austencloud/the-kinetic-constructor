@@ -1,9 +1,0 @@
-<svg height="750" viewBox="0 0 750 750" width="750">
- <g stroke-linecap="square" stroke="black" stroke-width="1" stroke-linejoin="bevel" id="red_anti_r_ne.svg" fill-rule="evenodd" fill="none">
-  <g stroke-linecap="square" stroke="#000000" transform="matrix(1,0,0,1,450.5,43)" font-style="normal" stroke-width="1" stroke-linejoin="bevel" font-family="MS Shell Dlg 2" font-size="8" font-weight="400" stroke-opacity="1" fill="none"/>
-  <g stroke="none" transform="matrix(0.999456,0,0,0.997978,450.5,43)" font-style="normal" fill-opacity="1" font-family="MS Shell Dlg 2" font-size="8" font-weight="400" fill="#ed1c24">
-   <path d="M246.11,232.45 C33.77,232.45 33.41,237.82 33.41,30.95 L6.78,58.19 C6.78,58.19 -4.2,47.75 1.79,39.51 C10.33,27.75 42.62,0 42.62,0 C42.62,0 76.4,30.12 83.29,39.51 C89.34,47.75 78.54,58.19 78.54,58.19 L52.93,30.95 C52.93,222.04 44.51,211.72 245.8,211.72 C260.88,211.72 260.88,232.45 246.11,232.45 " vector-effect="none" fill-rule="nonzero"/>
-  </g>
-  <g stroke-linecap="square" stroke="#000000" transform="matrix(1,0,0,1,450.5,43)" font-style="normal" stroke-width="1" stroke-linejoin="bevel" font-family="MS Shell Dlg 2" font-size="8" font-weight="400" stroke-opacity="1" fill="none"/>
- </g>
-</svg>
