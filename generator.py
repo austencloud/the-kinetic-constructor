@@ -7,14 +7,14 @@ from arrow import Arrow
 
 
 class Pictograph_Generator():
-    def __init__(self, staff_manager, artboard, artboard_view, scene, info_tracker, handlers, parent=None):
+    def __init__(self, staff_manager, artboard, artboard_view, artboard_scene, info_tracker, handlers, parent=None):
         self.staff_manager = staff_manager
         self.parent = parent
         self.artboard = artboard
         self.artboard_view = artboard_view
         self.info_tracker = info_tracker
         self.handlers = handlers
-        self.scene = scene
+        self.artboard_scene = artboard_scene
         self.current_letter = None  # Add this line
 
 
@@ -87,7 +87,7 @@ class Pictograph_Generator():
 
         # Add the arrows to the scene
         for arrow in created_arrows:
-            self.scene.addItem(arrow)
+            self.artboard_scene.addItem(arrow)
 
         for arrow in created_arrows:
             if optimal_positions:

@@ -17,16 +17,16 @@ from PyQt5.QtXml import QDomDocument
 class Handlers:
     arrowMoved = pyqtSignal()
 
-    def __init__(self, artboard, view, grid, scene, main_window, info_tracker):
+    def __init__(self, artboard, view, grid, artboard_scene, main_window, info_tracker):
         self.artboard = artboard
         self.view = view
         self.grid = grid
-        self.scene = scene
+        self.artboard_scene = artboard_scene
         self.main_window = main_window
         self.info_tracker = info_tracker
 
     def rotateArrow(self, direction):
-        for item in self.scene.get_selected_items():
+        for item in self.artboard_scene.get_selected_items():
             print(item.get_attributes())
             old_svg = f"images/arrows/{item.color}_{item.type}_{item.rotation}_{item.quadrant}.svg"
             print(old_svg)
@@ -88,7 +88,7 @@ class Handlers:
 
     def mirrorArrow(self):
         self.view.arrowMoved.emit()
-        for item in self.scene.get_selected_items():
+        for item in self.artboard_scene.get_selected_items():
             current_svg = item.svg_file
 
             if item.rotation == "l":
@@ -115,19 +115,19 @@ class Handlers:
         self.view.arrowMoved.emit()
 
     def deleteArrow(self):
-        for item in self.scene.get_selected_items():
+        for item in self.artboard_scene.get_selected_items():
             self.view.scene().removeItem(item)
         self.view.arrowMoved.emit()
         self.view.attributesChanged.emit()
 
     def bringForward(self):
-        for item in self.scene.get_selected_items():
+        for item in self.artboard_scene.get_selected_items():
             z = item.zValue()
             item.setZValue(z + 1)
 
     def swapColors(self):
-        self.scene.select_all_arrows()
-        arrow_items = [item for item in self.scene.get_selected_items() if isinstance(item, Arrow)]
+        self.artboard_scene.select_all_arrows()
+        arrow_items = [item for item in self.artboard_scene.get_selected_items() if isinstance(item, Arrow)]
         if len(arrow_items) >= 1:
             for item in arrow_items:
                 current_svg = item.svg_file
@@ -162,7 +162,7 @@ class Handlers:
             item.setSelected(False)
 
     def exportAsPng(self):
-        selectedItems = self.scene.get_selected_items()
+        selectedItems = self.artboard_scene.get_selected_items()
         image = QImage(self.view.size(), QImage.Format_ARGB32)
         painter = QPainter(image)
 

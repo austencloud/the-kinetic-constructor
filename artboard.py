@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsItem, QAppli
 from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QPointF, QTimer
 from PyQt5.QtWidgets import QGraphicsItem, QToolTip
 from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
-from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor
+from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor, QTransform
 from staff import Staff
 from grid import Grid
 from arrow import Arrow
@@ -14,7 +14,6 @@ class Artboard(QGraphicsView):
 
     def __init__(self, scene: QGraphicsScene, grid, info_tracker, staff_manager, parent=None):
         super().__init__(scene, parent)
-
         self.setAcceptDrops(True)
         self.dragging = None
         self.grid = grid
@@ -380,6 +379,20 @@ class Artboard(QGraphicsView):
             if isinstance(item, Arrow):
                 item.moveBy(dx, dy)
                 self.arrowMoved.emit()
+
+
+    def initArtboard(self):
+        self.setFixedSize(750, 750)
+
+        transform = QTransform()
+        grid_center = QPointF(self.frameSize().width() / 2, self.frameSize().height() / 2)
+
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+        self.scene.addItem(self.grid)
+
+        return self
 
 class Update_Quadrant_Preview(QDrag):
     def __init__(self, source, arrow_item, *args, **kwargs):

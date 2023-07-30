@@ -27,17 +27,17 @@ class Main_Window(QWidget):
         super().__init__() 
         self.arrows = []
         svgs_full_paths = []
-        self.scene = QGraphicsScene()
+        self.artboard_scene = QGraphicsScene()
         self.grid = Grid('images\\grid\\grid.svg')
         self.info_label = QLabel(self)
         self.word_label = QLabel(self)
-        self.staff_manager = StaffManager(self.scene)
+        self.staff_manager = StaffManager(self.artboard_scene)
         self.info_tracker = Info_Tracker(None, self.info_label, self, self.staff_manager)
-        self.artboard = Artboard(self.scene, self.grid, self.info_tracker, self.staff_manager)
-        self.artboard_view = self.initArtboard() 
+        self.artboard = Artboard(self.artboard_scene, self.grid, self.info_tracker, self.staff_manager)
+        self.artboard_view = self.artboard.initArtboard() 
         self.sequence_scene = Sequence_Scene()  # Create a new Sequence_Scene instance
         self.handlers = Handlers(self.artboard, self.artboard_view, self.grid, self.artboard, self.info_tracker, self)
-        self.pictograph_generator = Pictograph_Generator(self.staff_manager, self.artboard, self.artboard_view, self.scene, self.info_tracker, self.handlers, self)
+        self.pictograph_generator = Pictograph_Generator(self.staff_manager, self.artboard, self.artboard_view, self.artboard_scene, self.info_tracker, self.handlers, self)
         self.sequence_manager = Sequence_Manager(self.sequence_scene, self.pictograph_generator, self, self.info_tracker)
         self.button_manager = Button_Manager()
         self.button_layot = self.button_manager.initButtons(self.artboard, self.artboard_view, self.grid,self.info_tracker, self.sequence_manager)
@@ -93,7 +93,7 @@ class Main_Window(QWidget):
         info_layout.addWidget(self.info_label)
         upper_right_laybout.addLayout(button_layout)
         upper_right_laybout.addLayout(info_layout) 
-        self.scene.changed.connect(self.info_tracker.update)
+        self.artboard_scene.changed.connect(self.info_tracker.update)
         
         lower_right_layout.addWidget(self.word_label)
         self.word_label.setFont(QFont('Helvetica', 20))
@@ -161,7 +161,7 @@ class Main_Window(QWidget):
         self.artboard.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.artboard.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
-        self.scene.addItem(self.grid)
+        self.artboard_scene.addItem(self.grid)
 
         return self.artboard
 

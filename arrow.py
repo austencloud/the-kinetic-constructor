@@ -33,8 +33,6 @@ class Arrow(QGraphicsSvgItem):
         self.handlers = handlers
         self.dragStarted = False
 
-        
-
         if "_l_" in svg_file:
             self.orientation = "l"
         elif "_r_" in svg_file:

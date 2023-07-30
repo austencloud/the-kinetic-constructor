@@ -11,7 +11,7 @@ from staff import Staff
 
 class Sequence_Manager:
     def __init__(self, scene, pictograph_generator, main_window, info_tracker):
-        self.scene = scene
+        self.artboard_scene = scene
         self.beats = [QGraphicsRectItem(QRectF(375, 0, 375, 375)) for i in range(4)]
         for i, section in enumerate(self.beats):
             # add a small buffer and update the x position
@@ -30,11 +30,11 @@ class Sequence_Manager:
             if i >= len(self.pictographs):
                 pictograph.setPos(section.pos())
                 self.pictographs.append(pictograph)
-                self.scene.addItem(pictograph)
+                self.artboard_scene.addItem(pictograph)
                 break
 
         print("Items in the scene:")
-        for item in self.scene.items():
+        for item in self.artboard_scene.items():
             print(item)
 
     def add_to_sequence(self, artboard):
@@ -104,8 +104,8 @@ class Sequence_Manager:
 
     def clear_sequence(self):
         self.pictographs = []
-        for item in self.scene.items():
-            self.scene.removeItem(item)
+        for item in self.artboard_scene.items():
+            self.artboard_scene.removeItem(item)
         self.main_window.word_label.setText("My word: ")
 
 class Sequence_Scene(QGraphicsScene):
