@@ -26,8 +26,7 @@ class Handlers:
     def handleKeyPressEvent(self, event):
         if event.key() == Qt.Key_Delete:
             self.deleteArrow()
-            print(f"Key pressed: {event.key()}")
-            
+
     def rotateArrow(self, direction):
         for item in self.artboard_scene.get_selected_items():
             print(item.get_attributes())

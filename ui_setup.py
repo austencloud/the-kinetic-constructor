@@ -15,6 +15,7 @@ class UiSetup(QWidget):
         super().__init__(main_window)
         self.setFocusPolicy(Qt.StrongFocus)
         self.main_window = main_window
+        self.main_window.installEventFilter(self)  # Install the event filter
         self.main_window.setMinimumSize(2800, 1400)
         self.main_window.show()
 
@@ -258,7 +259,7 @@ class UiSetup(QWidget):
         self.handlers.handleKeyPressEvent(event)
 
     def eventFilter(self, source, event):
-        if event.type() == QEvent.KeyPress:  # If the event is a key press event
-            self.keyPressEvent(event)  # Forward the event to the keyPressEvent method
-            return True  # Indicate that the event has been handled
-        return super().eventFilter(source, event)  # For all other events, call the base class method
+        if event.type() == QEvent.KeyPress:
+            self.keyPressEvent(event)
+            return True
+        return super().eventFilter(source, event)
