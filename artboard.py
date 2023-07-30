@@ -90,7 +90,7 @@ class Artboard(QGraphicsView):
     def set_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
     
-    def getQuadrantCenter(self, quadrant):
+    def get_quadrant_center(self, quadrant):
         centers = {
             'ne': QPointF(550, 175),
             'se': QPointF(550, 550),
@@ -99,24 +99,11 @@ class Artboard(QGraphicsView):
         }
         return centers.get(quadrant, QPointF(0, 0))
     
-    def selectAllItems(self):
+    def select_all_items(self):
         for item in self.scene().items():
             item.setSelected(True)
 
-    def getExpandedQuadrantCenter(self, quadrant):
-        centers = {
-            'ne1': QPointF(525, 175),
-            'ne2': QPointF(575, 100),
-            'se1': QPointF(525, 525),
-            'se2': QPointF(575, 600),
-            'sw1': QPointF(175, 525),
-            'sw2': QPointF(150, 600),
-            'nw1': QPointF(175, 175),
-            'nw2': QPointF(150, 100),
-        }
-        return centers.get(quadrant, QPointF(0, 0))
-    
-    def getCurrentArrowPositions(self):
+    def get_current_arrow_positions(self):
         red_position = None
         blue_position = None
 
@@ -341,7 +328,7 @@ class Artboard(QGraphicsView):
                         item.update_positions()
                 self.arrowMoved.emit()
 
-    def deleteAllArrows(self):
+    def delete_all_arrows(self):
         for item in self.scene().items():
             if isinstance(item, Arrow):
                 self.scene().removeItem(item)
@@ -380,7 +367,6 @@ class Artboard(QGraphicsView):
             if isinstance(item, Arrow):
                 item.moveBy(dx, dy)
                 self.arrowMoved.emit()
-
 
     def initArtboard(self):
         self.setFixedSize(750, 750)

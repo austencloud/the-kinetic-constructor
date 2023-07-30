@@ -6,7 +6,7 @@ import os
 import xml.etree.ElementTree as ET
 from upload_manager import UploadManager
 from arrow import Arrow
-from staff import StaffManager
+from staff import Staff_Manager
 import json
 from PyQt5.QtCore import QSize, QRect, QFile, QIODevice
 from PyQt5.QtGui import QTransform

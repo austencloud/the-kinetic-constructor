@@ -10,7 +10,7 @@ from PyQt5.QtGui import QImage, QPainter
 from staff import Staff
 
 class Sequence_Manager:
-    def __init__(self, scene, pictograph_generator, main_window, info_tracker):
+    def __init__(self, scene, pictograph_generator, ui_setup, info_tracker):
         self.artboard_scene = scene
         self.beats = [QGraphicsRectItem(QRectF(375, 0, 375, 375)) for i in range(4)]
         for i, section in enumerate(self.beats):
@@ -19,7 +19,7 @@ class Sequence_Manager:
 
         self.pictographs = [] 
         self.pictograph_generator = pictograph_generator
-        self.main_window = main_window
+        self.ui_setup = ui_setup
         self.info_tracker = info_tracker
 
     def add_pictograph(self, pictograph):
@@ -59,7 +59,7 @@ class Sequence_Manager:
         artboard.clear()
 
         letter = self.info_tracker.get_current_letter()
-        self.main_window.word_label.setText(self.main_window.word_label.text() + letter)
+        self.ui_setup.word_label.setText(self.ui_setup.word_label.text() + letter)
 
     def add_to_artboard(self, pictograph: Pictograph, artboard: Artboard):
         state = pictograph.state
@@ -106,7 +106,7 @@ class Sequence_Manager:
         self.pictographs = []
         for item in self.artboard_scene.items():
             self.artboard_scene.removeItem(item)
-        self.main_window.word_label.setText("My word: ")
+        self.ui_setup.word_label.setText("My word: ")
 
 class Sequence_Scene(QGraphicsScene):
     def __init__(self, manager=None, parent=None):

@@ -49,7 +49,7 @@ class Staff:
     def isVisible(self):
         return self.item.isVisible()
 
-class StaffManager(QObject):
+class Staff_Manager(QObject):
     GRID_OFFSET = 25
     positionChanged = pyqtSignal(str)
 

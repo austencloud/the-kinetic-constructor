@@ -1,153 +1,37 @@
 import os
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QScrollArea, QVBoxLayout, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFileDialog, QFrame
-from PyQt5.QtCore import QPointF, Qt
-from PyQt5.QtGui import QTransform, QFont
+from PyQt5.QtWidgets import QApplication, QWidget, QGraphicsScene, QFileDialog
+from PyQt5.QtCore import QPointF
+from PyQt5.QtGui import QTransform
 from arrow import Arrow
-from artboard import Artboard
-from handlers import Handlers
-from grid import Grid
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtSvg import QSvgRenderer
-from staff import StaffManager
 from data import *
 import json
-import random
-from info_tracker import Info_Tracker
-from sequence import *
-from buttons import Button_Manager
-from generator import *
+from ui_setup import UiSetup
 
 class Main_Window(QWidget):
-    ARROW_DIR = 'images\\arrows'
-    SVG_POS_Y = 250
+
 
     def __init__(self):
         super().__init__() 
-        self.arrows = []
-        svgs_full_paths = []
-        self.artboard_scene = QGraphicsScene()
-        self.grid = Grid('images\\grid\\grid.svg')
-        self.info_label = QLabel(self)
-        self.word_label = QLabel(self)
-        self.staff_manager = StaffManager(self.artboard_scene)
-        self.info_tracker = Info_Tracker(None, self.info_label, self, self.staff_manager)
-        self.artboard = Artboard(self.artboard_scene, self.grid, self.info_tracker, self.staff_manager)
-        self.artboard_view = self.artboard.initArtboard() 
-        self.sequence_scene = Sequence_Scene()  # Create a new Sequence_Scene instance
-        self.handlers = Handlers(self.artboard, self.artboard_view, self.grid, self.artboard, self.info_tracker, self)
-        self.pictograph_generator = Pictograph_Generator(self.staff_manager, self.artboard, self.artboard_view, self.artboard_scene, self.info_tracker, self.handlers, self)
-        self.sequence_manager = Sequence_Manager(self.sequence_scene, self.pictograph_generator, self, self.info_tracker)
-        self.button_manager = Button_Manager()
-        self.button_layot = self.button_manager.initButtons(self.artboard, self.artboard_view, self.grid,self.info_tracker, self.sequence_manager)
-        self.initUI()
-
-        self.letters = self.loadLetters()
-        self.grid_renderer = QSvgRenderer('images\\grid\\grid.svg')
-
-        for dirpath, dirnames, filenames in os.walk(self.ARROW_DIR):
-            svgs_full_paths.extend([os.path.join(dirpath, filename) for filename in filenames if filename.endswith('.svg')])
-
-        transform = QTransform()
-        self.grid_center = QPointF(self.artboard.frameSize().width() / 2, self.artboard.frameSize().height() / 2)
-        grid_size = 650
-        transform.translate(self.grid_center.x() - (grid_size / 2), self.grid_center.y() - (grid_size / 2))
-        self.grid.setTransform(transform)
-
-    def initUI(self):
-        self.setWindowTitle('Sequence Constructor')
-        # initialize all layouts
-        main_layout = QHBoxLayout()
-        right_layout = QVBoxLayout()
-        left_layout = QHBoxLayout()
-        upper_right_laybout = QHBoxLayout()
-        lower_right_layout = QVBoxLayout()
-        artboard_layout = QVBoxLayout()
-        button_layout = QVBoxLayout()
-        info_layout = QVBoxLayout()
-        upper_right_laybout.addLayout(button_layout)
-        upper_right_laybout.addLayout(artboard_layout)
-        upper_right_laybout.addLayout(self.button_layot)
-        upper_right_laybout.addLayout(info_layout)
-        right_layout.addLayout(upper_right_laybout)
-        right_layout.addLayout(lower_right_layout)
-        main_layout.addLayout(left_layout)
-        main_layout.addLayout(right_layout)
-        self.setLayout(main_layout)
-
-        # set the letter buttons
-        letter_buttons_layout = self.pictograph_generator.initLetterButtons()
-        left_layout.addLayout(letter_buttons_layout)
-
-        # set the artboard
-        self.info_tracker.set_artboard(self.artboard)
-        artboard_layout.addWidget(self.artboard_view)
-
-        #set up the arrowbox
-        arrowbox = self.initArrowBox()
-        left_layout.addWidget(arrowbox)
-
-        # set the buttons and info tracker
-        info_layout.addWidget(self.info_label)
-        upper_right_laybout.addLayout(button_layout)
-        upper_right_laybout.addLayout(info_layout) 
-        self.artboard_scene.changed.connect(self.info_tracker.update)
+        self.ui_setup = UiSetup(self)
+        self.ui_setup.initStaffManager()
+        self.ui_setup.initLayouts()
+        self.ui_setup.initInfoTracker()
+        self.ui_setup.initArtboard()
+        self.ui_setup.connectArtboard()
+        self.ui_setup.initHandlers()
+        self.ui_setup.initGenerator()
+        self.ui_setup.initLetterButtons()
+        self.ui_setup.initArrowBox()
+        self.ui_setup.initButtons()
+        self.ui_setup.connectInfoTracker()
+        self.ui_setup.initWordLabel()
+        self.ui_setup.initSequenceScene()
         
-        lower_right_layout.addWidget(self.word_label)
-        self.word_label.setFont(QFont('Helvetica', 20))
-        self.word_label.setText("My word: ")
-        self.sequence_manager.initSequenceScene(lower_right_layout, self.sequence_scene)
+        self.letters = self.loadLetters()
 
-        clear_sequence_button = self.sequence_manager.get_clear_sequence_button()
-        lower_right_layout.addWidget(clear_sequence_button)
-
-        ### Un-comment this code to enable the assign letter funtion ###
-        # self.letterInput = QLineEdit(self)
-        # right_layout.addWidget(self.letterInput)
-        # self.assignLetterButton = QPushButton("Assign Letter", self)
-        # self.assignLetterButton.clicked.connect(self.assignLetter)
-        # right_layout.addWidget(self)
-
-        self.setMinimumSize(2800, 1400)
-        self.show()
-
-    def initArrowBox(self):
-        arrow_box = QScrollArea(self)
-        arrowbox_scene = QGraphicsScene()
-        for arrow in self.arrows:
-            arrowbox_scene.addItem(arrow)  # use arrowbox_scene here
-            arrow.attributesChanged.connect(self.info_tracker.update)
-            arrow.attributesChanged.connect(lambda: self.update_staff(arrow, self.staff_manager))
-
-        svgs_full_paths = []
-        default_arrows = ['red_anti_r_ne.svg', 'red_iso_r_ne.svg', 'blue_anti_r_sw.svg', 'blue_iso_r_sw.svg']
-        svg_item_count = 0
-
-        for dirpath, dirnames, filenames in os.walk(self.ARROW_DIR):
-            svgs_full_paths.extend([os.path.join(dirpath, filename) for filename in filenames if filename.endswith('.svg')])
-
-        for i, svg in enumerate(svgs_full_paths):
-            file_name = os.path.basename(svg)
-            if file_name in default_arrows:
-                self.artboard.set_handlers(self.handlers)
-                arrow_item = Arrow(svg, self.artboard_view, self.info_tracker, self.handlers)
-                arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
-                arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
-                arrow_item.setScale(1)
-                arrow_item.setPos(0, svg_item_count * self.SVG_POS_Y)
-                arrowbox_scene.addItem(arrow_item) 
-                arrow_item.attributesChanged.connect(self.info_tracker.update)
-
-                svg_item_count += 1
-                self.arrows.append(arrow_item)
-
-        view = QGraphicsView(arrowbox_scene)
-        view.setFrameShape(QFrame.NoFrame)
-        arrow_box.setWidget(view)
-        arrow_box.setWidgetResizable(True)
-        arrow_box.setFixedSize(500, 1400)
-
-        return arrow_box
 
     def keyPressEvent(self, event):
         self.handlers.handleKeyPressEvent(event)

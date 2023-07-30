@@ -7,7 +7,7 @@ from arrow import Arrow
 
 
 class Pictograph_Generator():
-    def __init__(self, staff_manager, artboard, artboard_view, artboard_scene, info_tracker, handlers, parent=None):
+    def __init__(self, staff_manager, artboard, artboard_view, artboard_scene, info_tracker, handlers, main_window, parent=None):
         self.staff_manager = staff_manager
         self.parent = parent
         self.artboard = artboard
@@ -16,7 +16,7 @@ class Pictograph_Generator():
         self.handlers = handlers
         self.artboard_scene = artboard_scene
         self.current_letter = None  # Add this line
-
+        self.main_window = main_window
 
     def initLetterButtons(self):
         # Create a new layout for the Word Constructor's widgets
@@ -35,7 +35,7 @@ class Pictograph_Generator():
             row_layout = QHBoxLayout()
             row_layout.setAlignment(Qt.AlignTop)
             for letter in row:
-                button = QPushButton(letter, self.parent)
+                button = QPushButton(letter, self.main_window)
                 font = QFont()
                 font.setPointSize(20)
                 button.setFont(font)
@@ -100,12 +100,12 @@ class Pictograph_Generator():
                 else:
                     print(f"No optimal position found for {arrow.get_attributes()['color']} arrow. Setting position to quadrant center.")
                     # Calculate the position to center the arrow at the quadrant center
-                    pos = self.artboard.getQuadrantCenter(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
+                    pos = self.artboard.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
                     arrow.setPos(pos)
             else:
                 print(f"No optimal positions dictionary found. Setting position for {arrow.get_attributes()['color']} arrow to quadrant center.")
                 # Calculate the position to center the arrow at the quadrant center
-                pos = self.artboard.getQuadrantCenter(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
+                pos = self.artboard.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
                 arrow.setPos(pos)
 
                 # Call the update_staff function for the arrow
