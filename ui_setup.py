@@ -37,9 +37,45 @@ class UiSetup:
         self.main_layout.addLayout(self.right_layout)
         self.main_window.setLayout(self.main_layout)
 
+    def initArtboard(self):
+        self.grid = Grid('images\\grid\\grid.svg')
+        self.artboard = Artboard(self.artboard_scene, self.grid, self.info_tracker, self.staff_manager)
+        self.artboard_view = self.artboard.initArtboard() 
+        transform = QTransform()
+        self.grid_center = QPointF(self.artboard.frameSize().width() / 2, self.artboard.frameSize().height() / 2)
+        grid_size = 650
+        transform.translate(self.grid_center.x() - (grid_size / 2), self.grid_center.y() - (grid_size / 2))
+        self.grid.setTransform(transform)
+
+
     def initLetterButtons(self):
-        letter_buttons_layout = self.pictograph_generator.initLetterButtons()
-        self.left_layout.addLayout(letter_buttons_layout)
+        # Create a new layout for the Word Constructor's widgets
+        letter_buttons_layout = QVBoxLayout()
+        # Define the rows of letters
+        letter_rows = [
+            ['A', 'B', 'C'],
+            ['D', 'E', 'F'],
+            ['G', 'H', 'I'],
+            ['J', 'K', 'L'],
+            ['M', 'N', 'O'],
+            ['P', 'Q', 'R'],
+            ['S', 'T', 'U', 'V'],
+        ]
+        for row in letter_rows:
+            row_layout = QHBoxLayout()
+            row_layout.setAlignment(Qt.AlignTop)
+            for letter in row:
+                button = QPushButton(letter, self.main_window)
+                font = QFont()
+                font.setPointSize(20)
+                button.setFont(font)
+                button.setFixedSize(80, 80)
+                button.clicked.connect(lambda _, l=letter: self.pictograph_generator.generate_pictograph(l, self.staff_manager))  # use self.pictograph_generator here
+                row_layout.addWidget(button)
+            letter_buttons_layout.addLayout(row_layout)
+        
+        self.left_layout.addLayout(letter_buttons_layout)  # add the layout to left_layout here
+
 
     def initButtons(self):
         button_font = QFont('Helvetica', 14)
@@ -170,17 +206,6 @@ class UiSetup:
         self.info_layout.addWidget(self.info_label)
 
         self.artboard_scene.changed.connect(self.info_tracker.update)
-
-
-    def initArtboard(self):
-        self.grid = Grid('images\\grid\\grid.svg')
-        self.artboard = Artboard(self.artboard_scene, self.grid, self.info_tracker, self.staff_manager)
-        self.artboard_view = self.artboard.initArtboard() 
-        transform = QTransform()
-        self.grid_center = QPointF(self.artboard.frameSize().width() / 2, self.artboard.frameSize().height() / 2)
-        grid_size = 650
-        transform.translate(self.grid_center.x() - (grid_size / 2), self.grid_center.y() - (grid_size / 2))
-        self.grid.setTransform(transform)
 
     def connectArtboard(self):
         self.info_tracker.set_artboard(self.artboard)

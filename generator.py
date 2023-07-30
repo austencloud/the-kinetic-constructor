@@ -18,35 +18,7 @@ class Pictograph_Generator():
         self.current_letter = None  # Add this line
         self.main_window = main_window
 
-    def initLetterButtons(self):
-        # Create a new layout for the Word Constructor's widgets
-        letter_buttons_layout = QVBoxLayout()
-        # Define the rows of letters
-        letter_rows = [
-            ['A', 'B', 'C'],
-            ['D', 'E', 'F'],
-            ['G', 'H', 'I'],
-            ['J', 'K', 'L'],
-            ['M', 'N', 'O'],
-            ['P', 'Q', 'R'],
-            ['S', 'T', 'U', 'V'],
-        ]
-        for row in letter_rows:
-            row_layout = QHBoxLayout()
-            row_layout.setAlignment(Qt.AlignTop)
-            for letter in row:
-                button = QPushButton(letter, self.main_window)
-                font = QFont()
-                font.setPointSize(20)
-                button.setFont(font)
-                button.setFixedSize(80, 80)
-                button.clicked.connect(lambda _, l=letter: self.generatePictograph(l, self.staff_manager))  # pass staff_manager here
-                row_layout.addWidget(button)
-            letter_buttons_layout.addLayout(row_layout)
-        
-        return letter_buttons_layout
-
-    def generatePictograph(self, letter, staff_manager):
+    def generate_pictograph(self, letter, staff_manager):
         #delete all items
         self.artboard.clear()
 
@@ -124,7 +96,7 @@ class Pictograph_Generator():
         self.artboard_view.arrowMoved.emit()
     
     def get_current_letter(self):
-        return self.current_letter  # Add this method
+        return self.current_letter
 
     def update_staff(self, arrow, staff_manager):
         arrows = [arrow] if not isinstance(arrow, list) else arrow
