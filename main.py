@@ -19,9 +19,7 @@ class Main_Window(QWidget):
         self.ui_setup.connectInfoTracker()
         self.ui_setup.initWordLabel()
         self.ui_setup.initSequenceScene()
-
-    def keyPressEvent(self, event):
-        self.handlers.handleKeyPressEvent(event)
+        self.ui_setup.setFocus()
 
 app = QApplication(sys.argv)
 ex = Main_Window()

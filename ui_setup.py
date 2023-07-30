@@ -9,8 +9,10 @@ from generator import Pictograph_Generator
 from staff import Staff_Manager
 from letter import Letter_Manager
 
-class UiSetup:
+class UiSetup(QWidget):
     def __init__(self, main_window):
+        super().__init__(main_window)
+
         self.main_window = main_window
         self.main_window.setMinimumSize(2800, 1400)
         self.main_window.show()
@@ -243,7 +245,6 @@ class UiSetup:
         self.info_tracker.set_artboard(self.artboard)
         self.artboard_layout.addWidget(self.artboard_view)
 
-
     def initLetterManager(self):
         self.letter_manager = Letter_Manager(self.artboard, self.info_tracker)
         self.letterInput = QLineEdit(self.main_window)
@@ -251,3 +252,6 @@ class UiSetup:
         self.assignLetterButton = QPushButton("Assign Letter", self.main_window)
         self.assignLetterButton.clicked.connect(lambda: self.letter_manager.assignLetter(self.letterInput.text()))
         self.right_layout.addWidget(self.assignLetterButton)
+
+    def keyPressEvent(self, event):
+        self.handlers.handleKeyPressEvent(event)
