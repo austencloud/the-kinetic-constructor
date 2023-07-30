@@ -38,7 +38,6 @@ class Staff:
         if self.item.scene() is None:
             self.scene.addItem(self.item)
 
-
     def hide(self):
         self.item.setVisible(False)
         if self.item.scene() is not None:
@@ -46,7 +45,6 @@ class Staff:
 
     def set_arrow(self, arrow):
         self.arrow = arrow
-
         
     def isVisible(self):
         return self.item.isVisible()
@@ -89,12 +87,9 @@ class StaffManager(QObject):
 
         self.hide_all()
 
-
-
     def show_all(self):
         for staff in self.staffs.values():
             staff.show()
-    
 
     def hide_all(self):
         for staff in self.staffs.values():
@@ -132,7 +127,6 @@ class StaffManager(QObject):
                     continue 
 
                 self.show_staff(end_location + "_staff_" + color)
-
 
     def check_and_replace_staves(self):
         position_to_direction = {

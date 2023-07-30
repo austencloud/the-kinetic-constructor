@@ -12,8 +12,6 @@ from PyQt5.QtCore import QSize, QRect, QFile, QIODevice
 from PyQt5.QtGui import QTransform
 from PyQt5.QtXml import QDomDocument
 
-
-
 class Handlers:
     arrowMoved = pyqtSignal()
 
@@ -223,7 +221,6 @@ class Handlers:
             print('attributes:', element.attrib)
 
     def compare_svg_paths(file_path_1, file_path_2):
-
         tree_1 = ET.parse(file_path_1)
         root_1 = tree_1.getroot()
 
@@ -243,4 +240,6 @@ class Handlers:
         if path_data_1 == path_data_2:
             print('The SVG paths are identical.')
         else:
+    
             print('The SVG paths are different.')
+

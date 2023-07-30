@@ -12,15 +12,16 @@ class Artboard(QGraphicsView):
     arrowMoved = pyqtSignal()
     attributesChanged = pyqtSignal()
 
-    def __init__(self, scene: QGraphicsScene, grid, info_tracker, staff_manager, parent=None):
-        super().__init__(scene, parent)
+    def __init__(self, artboard_scene, grid, info_tracker, staff_manager, parent=None):
+        super().__init__(artboard_scene, parent)
         self.setAcceptDrops(True)
         self.dragging = None
         self.grid = grid
         self.staff_manager = staff_manager
         self.setDragMode(QGraphicsView.RubberBandDrag)
         self.setInteractive(True)
-        scene.setBackgroundBrush(Qt.white) 
+        self.artboard_scene = artboard_scene
+        self.artboard_scene.setBackgroundBrush(Qt.white) 
         self.info_tracker = info_tracker
         self.renderer = QSvgRenderer()
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
@@ -37,7 +38,7 @@ class Artboard(QGraphicsView):
 
         # Create a new QGraphicsSvgItem for the letter and add it to the scene
         self.letter_item = QGraphicsSvgItem()
-        self.scene().addItem(self.letter_item)
+        self.artboard_scene.addItem(self.letter_item)
 
     def print_item_types(self):
         for item in self.scene().items():
@@ -390,7 +391,7 @@ class Artboard(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
-        self.scene.addItem(self.grid)
+        self.artboard_scene.addItem(self.grid)
 
         return self
 

@@ -1,6 +1,6 @@
 import os
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QScrollArea, QVBoxLayout, QGraphicsScene, QGraphicsView, QPushButton, QGraphicsItem, QLabel, QFileDialog, QCheckBox, QLineEdit, QFrame
+from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QScrollArea, QVBoxLayout, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFileDialog, QFrame
 from PyQt5.QtCore import QPointF, Qt
 from PyQt5.QtGui import QTransform, QFont
 from arrow import Arrow
@@ -19,7 +19,6 @@ from buttons import Button_Manager
 from generator import *
 
 class Main_Window(QWidget):
-
     ARROW_DIR = 'images\\arrows'
     SVG_POS_Y = 250
 
@@ -57,7 +56,6 @@ class Main_Window(QWidget):
 
     def initUI(self):
         self.setWindowTitle('Sequence Constructor')
-
         # initialize all layouts
         main_layout = QHBoxLayout()
         right_layout = QVBoxLayout()
@@ -150,20 +148,6 @@ class Main_Window(QWidget):
         arrow_box.setFixedSize(500, 1400)
 
         return arrow_box
-
-    def initArtboard(self):
-        self.artboard.setFixedSize(750, 750)
-
-        transform = QTransform()
-        self.grid_center = QPointF(self.artboard.frameSize().width() / 2, self.artboard.frameSize().height() / 2)
-
-
-        self.artboard.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.artboard.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-
-        self.artboard_scene.addItem(self.grid)
-
-        return self.artboard
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Delete:
