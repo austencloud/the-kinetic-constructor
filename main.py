@@ -150,8 +150,7 @@ class Main_Window(QWidget):
         return arrow_box
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Delete:
-            self.handlers.deleteArrow()
+        self.handlers.handleKeyPressEvent(event)
 
     def loadLetters(self):
         try:

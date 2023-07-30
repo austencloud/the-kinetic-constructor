@@ -23,6 +23,10 @@ class Handlers:
         self.main_window = main_window
         self.info_tracker = info_tracker
 
+    def handleKeyPressEvent(self, event):
+        if event.key() == Qt.Key_Delete:
+            self.deleteArrow()
+
     def rotateArrow(self, direction):
         for item in self.artboard_scene.get_selected_items():
             print(item.get_attributes())
