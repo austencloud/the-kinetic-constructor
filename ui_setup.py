@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFileDialog, QFrame, QWidget, QLineEdit
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QLineEdit
 import os
 from arrow import Arrow
 from PyQt5.QtGui import QFont, QTransform
@@ -8,11 +8,12 @@ from info_tracker import Info_Tracker
 from generator import Pictograph_Generator
 from staff import Staff_Manager
 from letter import Letter_Manager
+from PyQt5.QtCore import Qt, QPointF, QEvent
 
 class UiSetup(QWidget):
     def __init__(self, main_window):
         super().__init__(main_window)
-
+        self.setFocusPolicy(Qt.StrongFocus)
         self.main_window = main_window
         self.main_window.setMinimumSize(2800, 1400)
         self.main_window.show()
@@ -255,3 +256,9 @@ class UiSetup(QWidget):
 
     def keyPressEvent(self, event):
         self.handlers.handleKeyPressEvent(event)
+
+    def eventFilter(self, source, event):
+        if event.type() == QEvent.KeyPress:  # If the event is a key press event
+            self.keyPressEvent(event)  # Forward the event to the keyPressEvent method
+            return True  # Indicate that the event has been handled
+        return super().eventFilter(source, event)  # For all other events, call the base class method
