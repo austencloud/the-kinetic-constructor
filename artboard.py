@@ -27,6 +27,19 @@ class Artboard(QGraphicsView):
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
         self.attributesChanged.connect(self.update_staffs_and_check_beta)
     
+        # Create a dictionary to store the SVG renderers for each letter
+        self.letter_renderers = {}
+
+        # Load the SVG files for all the letters and store the renderers in the dictionary
+        for letter in 'ABCDEFGHIJKLMNOPQRSTUV':
+            renderer = QSvgRenderer(f'images/letters/{letter}.svg')
+            self.letter_renderers[letter] = renderer
+            print(f'Loaded SVG for letter {letter}')
+
+        # Create a new QGraphicsSvgItem for the letter and add it to the scene
+        self.letter_item = QGraphicsSvgItem()
+        self.scene().addItem(self.letter_item)
+
     def print_item_types(self):
         for item in self.scene().items():
             print(type(item))
