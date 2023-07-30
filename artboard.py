@@ -301,11 +301,16 @@ class Artboard(QGraphicsView):
         return attributes
 
     def create_and_add_arrow(self, event, dropped_svg):
-        self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.handlers)
-        self.arrow_item.setFlag(QGraphicsSvgItem.ItemIsFocusable, True)
-        self.scene().addItem(self.arrow_item)
-        pos = self.mapToScene(event.pos()) - self.arrow_item.boundingRect().center()
-        self.arrow_item.setPos(pos)
+        arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.handlers)
+        arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
+        arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
+        arrow_item.setScale(1)
+        arrow_item.setPos(self.mapToScene(event.pos()))
+        arrow_item.in_artboard = True  # Set in_artboard to True
+        self.artboard_scene.addItem(arrow_item)
+        arrow_item.attributesChanged.connect(self.info_tracker.update)
+        self.arrows.append(arrow_item)
+
 
         for item in self.scene().items():
             if isinstance(item, Arrow):
