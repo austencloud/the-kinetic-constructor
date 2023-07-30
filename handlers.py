@@ -1,16 +1,20 @@
 from PyQt5.QtGui import QImage, QPainter
-from PyQt5.QtCore import Qt, QPointF, pyqtSignal, QBuffer
-from PyQt5.QtSvg import QSvgRenderer, QSvgGenerator, QGraphicsSvgItem
-from PyQt5.QtWidgets import QFileDialog, QGraphicsItem, QStyleOptionGraphicsItem
+from PyQt5.QtCore import Qt, pyqtSignal, QBuffer
+from PyQt5.QtSvg import QSvgRenderer, QSvgGenerator
+from PyQt5.QtWidgets import QStyleOptionGraphicsItem
 import os
 import xml.etree.ElementTree as ET
-from upload_manager import UploadManager
 from arrow import Arrow
-from staff import Staff_Manager
 import json
-from PyQt5.QtCore import QSize, QRect, QFile, QIODevice
-from PyQt5.QtGui import QTransform
+from PyQt5.QtCore import QSize, QRect, QIODevice
 from PyQt5.QtXml import QDomDocument
+from PyQt5.QtGui import QImage, QPainter
+from PyQt5.QtCore import Qt, pyqtSignal, QBuffer, QSize, QRect
+from PyQt5.QtSvg import QSvgRenderer, QSvgGenerator
+from PyQt5.QtXml import QDomDocument
+import os
+import json
+
 
 class Handlers:
     arrowMoved = pyqtSignal()
@@ -23,9 +27,16 @@ class Handlers:
         self.main_window = main_window
         self.info_tracker = info_tracker
 
-    def handleKeyPressEvent(self, event):
-        if event.key() == Qt.Key_Delete:
-            self.deleteArrow()
+        self.keyPressHandler = KeyPressHandler(ArrowManipulator(artboard_scene, self.artboard, view))
+        self.arrowManipulator = ArrowManipulator(artboard_scene, self.artboard, view)
+        self.jsonUpdater = JsonUpdater(artboard_scene)
+        self.exporter = Exporter(view, self.artboard, artboard_scene)
+
+class ArrowManipulator:
+    def __init__(self, artboard_scene, artboard, view):
+        self.artboard_scene = artboard_scene
+        self.view = view
+        self.artboard = artboard
 
     def rotateArrow(self, direction):
         for item in self.artboard_scene.get_selected_items():
@@ -47,46 +58,12 @@ class Handlers:
                 item.svg_file = new_svg
                 item.update_positions()
                 item.update_quadrant()
-                pos = self.artboard.getQuadrantCenter(new_quadrant) - item.boundingRect().center()
+                pos = self.artboard.get_quadrant_center(new_quadrant) - item.boundingRect().center()
                 item.setPos(pos)
             else:
                 print("Failed to load SVG file:", new_svg)
 
         self.view.arrowMoved.emit()
-    
-    def updatePositionInJson(self, red_position, blue_position):
-        with open('letters.json', 'r') as file:
-            data = json.load(file)
-        current_attributes = []
-        for item in self.artboard.scene().items():
-            if isinstance(item, Arrow):
-                current_attributes.append(item.get_attributes())
-        current_attributes = sorted(current_attributes, key=lambda x: x['color'])
-
-        print("Current attributes:", current_attributes)
-
-        for letter, combinations in data.items():
-            for i, combination_set in enumerate(combinations):
-                arrow_attributes = [d for d in combination_set if 'color' in d]
-                combination_attributes = sorted(arrow_attributes, key=lambda x: x['color'])
-
-                if combination_attributes == current_attributes:
-                    new_optimal_red = {'x': red_position.x(), 'y': red_position.y()}
-                    new_optimal_blue = {'x': blue_position.x(), 'y': blue_position.y()}
-                    new_optimal_positions = {
-                        "optimal_red_location": new_optimal_red,
-                        "optimal_blue_location": new_optimal_blue
-                    }
-
-                    optimal_positions = next((d for d in combination_set if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
-                    if optimal_positions is not None:
-                        optimal_positions.update(new_optimal_positions)
-                        print(f"Updated optimal positions for letter {letter}")
-                    else:
-                        combination_set.append(new_optimal_positions)
-                        print(f"Added optimal positions for letter {letter}")
-        with open('letters.json', 'w') as file:
-            json.dump(data, file, indent=4)
 
     def mirrorArrow(self):
         self.view.arrowMoved.emit()
@@ -110,7 +87,7 @@ class Handlers:
                 item.update_positions()
                 item.quadrant = item.quadrant.replace('.svg', '')
                 item.update_quadrant()
-                pos = self.artboard.getQuadrantCenter(item.quadrant) - item.boundingRect().center()
+                pos = self.artboard.get_quadrant_center(item.quadrant) - item.boundingRect().center()
                 item.setPos(pos)
             else:
                 print("Failed to load SVG file:", new_svg)
@@ -162,6 +139,59 @@ class Handlers:
     def deselectAll(self):
         for item in self.artboard.selectedItems():
             item.setSelected(False)
+
+class KeyPressHandler:
+    def __init__(self, arrowHandler):
+        self.arrowHandler = arrowHandler
+
+    def handleKeyPressEvent(self, event):
+        if event.key() == Qt.Key_Delete:
+            self.arrowHandler.deleteArrow()
+
+class JsonUpdater:
+    def __init__(self, artboard_scene):
+        self.artboard_scene = artboard_scene
+
+
+    def updatePositionInJson(self, red_position, blue_position):
+        with open('pictographs.json', 'r') as file:
+            data = json.load(file)
+        current_attributes = []
+        for item in self.artboard.scene().items():
+            if isinstance(item, Arrow):
+                current_attributes.append(item.get_attributes())
+        current_attributes = sorted(current_attributes, key=lambda x: x['color'])
+
+        print("Current attributes:", current_attributes)
+
+        for letter, combinations in data.items():
+            for i, combination_set in enumerate(combinations):
+                arrow_attributes = [d for d in combination_set if 'color' in d]
+                combination_attributes = sorted(arrow_attributes, key=lambda x: x['color'])
+
+                if combination_attributes == current_attributes:
+                    new_optimal_red = {'x': red_position.x(), 'y': red_position.y()}
+                    new_optimal_blue = {'x': blue_position.x(), 'y': blue_position.y()}
+                    new_optimal_positions = {
+                        "optimal_red_location": new_optimal_red,
+                        "optimal_blue_location": new_optimal_blue
+                    }
+
+                    optimal_positions = next((d for d in combination_set if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
+                    if optimal_positions is not None:
+                        optimal_positions.update(new_optimal_positions)
+                        print(f"Updated optimal positions for letter {letter}")
+                    else:
+                        combination_set.append(new_optimal_positions)
+                        print(f"Added optimal positions for letter {letter}")
+        with open('pictographs.json', 'w') as file:
+            json.dump(data, file, indent=4)
+
+class Exporter:
+    def __init__(self, view, artboard, artboard_scene):
+        self.view = view
+        self.artboard_scene = artboard_scene
+        self.artboard = artboard
 
     def exportAsPng(self):
         selectedItems = self.artboard_scene.get_selected_items()
@@ -216,6 +246,8 @@ class Handlers:
         with open('output.svg', 'w') as file:
             file.write(final_svg.toString())
 
+class SvgHandler:
+    @staticmethod
     def parse_svg_file(file_path):
         tree = ET.parse(file_path)
         root = tree.getroot()
@@ -224,6 +256,7 @@ class Handlers:
             print('tag:', element.tag)
             print('attributes:', element.attrib)
 
+    @staticmethod
     def compare_svg_paths(file_path_1, file_path_2):
         tree_1 = ET.parse(file_path_1)
         root_1 = tree_1.getroot()
@@ -244,6 +277,4 @@ class Handlers:
         if path_data_1 == path_data_2:
             print('The SVG paths are identical.')
         else:
-    
             print('The SVG paths are different.')
-

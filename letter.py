@@ -16,14 +16,14 @@ class Letter_Manager():
 
     def loadLetters(self):
         try:
-            with open('letters.json', 'r') as f:
+            with open('pictographs.json', 'r') as f:
                 return json.load(f)
         except FileNotFoundError:
             return {}
 
     def saveLetters(self):
         sorted_data = {key: self.letters[key] for key in sorted(self.letters)}
-        with open('letters.json', 'w') as f:
+        with open('pictographs.json', 'w') as f:
             json.dump(sorted_data, f, indent=4)
 
     def assignLetter(self, letter):

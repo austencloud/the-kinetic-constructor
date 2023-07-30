@@ -90,7 +90,7 @@ class Info_Tracker:
     
     def load_letters(self):
         try:
-            with open('letters.json', 'r') as f:
+            with open('pictographs.json', 'r') as f:
                 return json.load(f)
         except FileNotFoundError:
             return {}
@@ -185,7 +185,7 @@ class Info_Tracker:
             end_position = positions_map.get(end_key)
             positions.append(start_position)
             positions.append(end_position)
-            print(positions)
+
 
         if positions is not None:
             return positions

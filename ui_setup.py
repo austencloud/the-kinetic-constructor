@@ -16,7 +16,7 @@ class UiSetup(QWidget):
         self.setFocusPolicy(Qt.StrongFocus)
         self.main_window = main_window
         self.main_window.installEventFilter(self)  # Install the event filter
-        self.main_window.setMinimumSize(2800, 1400)
+        self.main_window.setMinimumSize(2800, 1500)
         self.main_window.show()
 
         self.arrows = []
@@ -45,12 +45,15 @@ class UiSetup(QWidget):
     def initArtboard(self):
         self.grid = Grid('images\\grid\\grid.svg')
         self.artboard = Artboard(self.artboard_scene, self.grid, self.info_tracker, self.staff_manager)
-        self.artboard_view = self.artboard.initArtboard() 
         transform = QTransform()
         self.grid_center = QPointF(self.artboard.frameSize().width() / 2, self.artboard.frameSize().height() / 2)
+        self.artboard.setFixedSize(750, 750)
         grid_size = 650
         transform.translate(self.grid_center.x() - (grid_size / 2), self.grid_center.y() - (grid_size / 2))
         self.grid.setTransform(transform)
+        self.artboard.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.artboard.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.artboard_scene.addItem(self.grid)
 
     def initLetterButtons(self):
         # Create a new layout for the Word Constructor's widgets
@@ -94,11 +97,11 @@ class UiSetup(QWidget):
         masterbtnlayout.addLayout(buttonlayout)
 
         self.updatePositionButton = QPushButton("Update Position")
-        self.updatePositionButton.clicked.connect(lambda: self.handlers.updatePositionInJson(*self.artboard.get_current_arrow_positions()))
+        self.updatePositionButton.clicked.connect(lambda: self.handlers.jsonUpdater.updatePositionInJson(*self.artboard.get_current_arrow_positions()))
         buttonstack.addWidget(self.updatePositionButton)
 
         self.selectAllButton = QPushButton("Select All")
-        self.selectAllButton.clicked.connect(self.handlers.selectAll)
+        self.selectAllButton.clicked.connect(self.handlers.arrowManipulator.selectAll)
         buttonstack.addWidget(self.selectAllButton)
 
         add_to_sequence_button = QPushButton("Add to Sequence")
@@ -106,35 +109,35 @@ class UiSetup(QWidget):
         buttonstack.addWidget(add_to_sequence_button)
 
         self.deleteButton = QPushButton("Delete")
-        self.deleteButton.clicked.connect(self.handlers.deleteArrow)
+        self.deleteButton.clicked.connect(self.handlers.arrowManipulator.deleteArrow)
         buttonstack.addWidget(self.deleteButton)
 
         self.rotateRightButton = QPushButton("Rotate Right")
-        self.rotateRightButton.clicked.connect(lambda: self.handlers.rotateArrow("right"))
+        self.rotateRightButton.clicked.connect(lambda: self.handlers.arrowManipulator.rotateArrow("right"))
         buttonstack.addWidget(self.rotateRightButton)
 
         self.rotateLeftButton = QPushButton("Rotate Left")
-        self.rotateLeftButton.clicked.connect(lambda: self.handlers.rotateArrow("left"))
+        self.rotateLeftButton.clicked.connect(lambda: self.handlers.arrowManipulator.rotateArrow("left"))
         buttonstack.addWidget(self.rotateLeftButton)
 
         self.mirrorButton = QPushButton("Mirror")
-        self.mirrorButton.clicked.connect(lambda: self.handlers.mirrorArrow())
+        self.mirrorButton.clicked.connect(lambda: self.handlers.arrowManipulator.mirrorArrow())
         buttonstack.addWidget(self.mirrorButton)
 
         self.bringForward = QPushButton("Bring Forward")
-        self.bringForward.clicked.connect(self.handlers.bringForward)
+        self.bringForward.clicked.connect(self.handlers.arrowManipulator.bringForward)
         buttonstack.addWidget(self.bringForward)
 
         self.swapColors = QPushButton("Swap Colors")
-        self.swapColors.clicked.connect(self.handlers.swapColors)
+        self.swapColors.clicked.connect(self.handlers.arrowManipulator.swapColors)
         buttonstack.addWidget(self.swapColors)
 
         self.exportAsPNGButton = QPushButton("Export to PNG")
-        self.exportAsPNGButton.clicked.connect(self.handlers.exportAsPng)
+        self.exportAsPNGButton.clicked.connect(self.handlers.exporter.exportAsPng)
         buttonstack.addWidget(self.exportAsPNGButton)
 
         self.exportAsSVGButton = QPushButton("Export to SVG")
-        self.exportAsSVGButton.clicked.connect(self.handlers.exportAsSvg)
+        self.exportAsSVGButton.clicked.connect(self.handlers.exporter.exportAsSvg)
         buttonstack.addWidget(self.exportAsSVGButton)
 
         self.deleteButton.setFont(button_font)
@@ -238,6 +241,14 @@ class UiSetup(QWidget):
     def initStaffManager(self):
         self.staff_manager = Staff_Manager(self.artboard_scene)
 
+    def initLetterManager(self):
+        self.letter_manager = Letter_Manager(self.artboard, self.info_tracker)
+        self.letterInput = QLineEdit(self.main_window)
+        self.right_layout.addWidget(self.letterInput)
+        self.assignLetterButton = QPushButton("Assign Letter", self.main_window)
+        self.assignLetterButton.clicked.connect(lambda: self.letter_manager.assignLetter(self.letterInput.text()))
+        self.right_layout.addWidget(self.assignLetterButton)
+
     def connectInfoTracker(self):
         self.info_layout.addWidget(self.info_label)
 
@@ -246,14 +257,6 @@ class UiSetup(QWidget):
     def connectArtboard(self):
         self.info_tracker.set_artboard(self.artboard)
         self.artboard_layout.addWidget(self.artboard_view)
-
-    def initLetterManager(self):
-        self.letter_manager = Letter_Manager(self.artboard, self.info_tracker)
-        self.letterInput = QLineEdit(self.main_window)
-        self.right_layout.addWidget(self.letterInput)
-        self.assignLetterButton = QPushButton("Assign Letter", self.main_window)
-        self.assignLetterButton.clicked.connect(lambda: self.letter_manager.assignLetter(self.letterInput.text()))
-        self.right_layout.addWidget(self.assignLetterButton)
 
     def keyPressEvent(self, event):
         self.handlers.handleKeyPressEvent(event)

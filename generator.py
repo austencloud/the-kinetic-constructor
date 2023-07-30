@@ -23,7 +23,7 @@ class Pictograph_Generator():
         self.artboard.clear()
 
         # Reload the JSON file
-        with open('letters.json', 'r') as file:
+        with open('pictographs.json', 'r') as file:
             self.letters = json.load(file)
 
         # Get the list of possible combinations for the letter

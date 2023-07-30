@@ -23,7 +23,6 @@ class Staff:
 
 
         self.scene = scene
-        print("Staff position: ", position)
         self.item.setPos(position)
         self.arrow = None
         self.item.setVisible(True)
