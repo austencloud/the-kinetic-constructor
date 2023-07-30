@@ -34,15 +34,235 @@ class Artboard(QGraphicsView):
         for letter in 'ABCDEFGHIJKLMNOPQRSTUV':
             renderer = QSvgRenderer(f'images/letters/{letter}.svg')
             self.letter_renderers[letter] = renderer
-
+            print(f'Loaded SVG for letter {letter}')
 
         # Create a new QGraphicsSvgItem for the letter and add it to the scene
         self.letter_item = QGraphicsSvgItem()
         self.artboard_scene.addItem(self.letter_item)
 
-    
+    def print_item_types(self):
+        for item in self.scene().items():
+            print(type(item))
 
-### ARTBOARD EVENTS ###
+    def clear_selection(self):
+        for item in self.scene().selectedItems():
+            item.setSelected(False)
+
+    def get_bounding_box(self):
+        # return all QGraphicsItem objects that represent bounding boxes in the scene
+        bounding_boxes = []
+        for item in self.scene().items():
+            if isinstance(item, QGraphicsRectItem):  # or whatever class represents your bounding boxes
+                bounding_boxes.append(item)
+        return bounding_boxes
+
+    def get_state(self):
+        state = {
+            'arrows': [],
+            'staffs': [],
+            'grid': None
+        }
+        for item in self.scene().items():
+            if isinstance(item, Arrow):
+                state['arrows'].append({
+                    'color': item.color,
+                    'position': item.pos(),
+                    'quadrant': item.quadrant,
+                    'rotation': item.rotation,
+                    'svg_file': item.svg_file
+                })
+            elif isinstance(item, Staff):
+                state['staffs'].append({
+                    'position': item.pos(),
+                    'color': item.color,
+                    'svg_file': item.svg_file
+                })
+            elif isinstance(item, Grid):
+                state['grid'] = {
+                    'position': item.pos(),
+                    'svg_file': item.svg_file
+                }
+        return state
+    
+    def set_handlers(self, handlers):
+        self.handlers = handlers
+
+    def set_info_tracker(self, info_tracker):
+        self.info_tracker = info_tracker
+    
+    def getQuadrantCenter(self, quadrant):
+        centers = {
+            'ne': QPointF(550, 175),
+            'se': QPointF(550, 550),
+            'sw': QPointF(175, 550),
+            'nw': QPointF(175, 175),
+        }
+        return centers.get(quadrant, QPointF(0, 0))
+    
+    def selectAllItems(self):
+        for item in self.scene().items():
+            item.setSelected(True)
+
+    def getExpandedQuadrantCenter(self, quadrant):
+        centers = {
+            'ne1': QPointF(525, 175),
+            'ne2': QPointF(575, 100),
+            'se1': QPointF(525, 525),
+            'se2': QPointF(575, 600),
+            'sw1': QPointF(175, 525),
+            'sw2': QPointF(150, 600),
+            'nw1': QPointF(175, 175),
+            'nw2': QPointF(150, 100),
+        }
+        return centers.get(quadrant, QPointF(0, 0))
+    
+    def getCurrentArrowPositions(self):
+        red_position = None
+        blue_position = None
+
+        for item in self.scene().items():
+            if isinstance(item, Arrow):
+                if item.color == 'red':
+                    red_position = item.pos()
+                elif item.color == 'blue':
+                    blue_position = item.pos()
+        print(red_position, blue_position)
+        return red_position, blue_position
+
+    def get_selected_items(self):
+        return self.scene().selectedItems()
+    
+    def select_all_arrows(self):
+        for item in self.scene().items():
+            if isinstance(item, Arrow):
+                item.setSelected(True)
+
+    def update_staffs_and_check_beta(self):
+        self.staff_manager.remove_beta_staves()
+        self.staff_manager.update_staffs(self.scene())
+        self.staff_manager.check_and_replace_staves()
+
+    def remove_non_beta_staves(self):
+        self.staff_manager.remove_non_beta_staves()
+
+    def set_info_tracker(self, info_tracker):
+        self.info_tracker = info_tracker
+
+    def get_attributes(self):
+        attributes = {}
+        base_name = os.path.basename(self.svg_file)
+        parts = base_name.split('_')
+
+        attributes['color'] = parts[0]
+        attributes['type'] = parts[1]
+        attributes['rotation'] = 'Clockwise' if parts[2] == 'r' else 'Anti-clockwise'
+        attributes['quadrant'] = parts[3].split('.')[0]
+
+        return attributes
+    
+    def resizeEvent(self, event):
+        self.setSceneRect(QRectF(self.rect()))
+        super().resizeEvent(event)
+
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasFormat('text/plain'):
+            event.setDropAction(Qt.CopyAction)
+            event.accept()
+        else:
+            event.ignore()
+        item = self.itemAt(event.pos())
+        if isinstance(item, Arrow):
+            item.in_artboard = True
+        super().dragEnterEvent(event)
+
+    def dragMoveEvent(self, event):
+        self.last_known_pos = event.pos() 
+        if event.mimeData().hasFormat('text/plain'):
+            dropped_svg = event.mimeData().text()
+            base_name = os.path.basename(dropped_svg)
+            color, type_, rotation, quadrant = base_name.split('_')[:4]
+            for item in self.scene().items():
+                if isinstance(item, Arrow):
+                    if item.color == color:
+                        event.ignore()
+                        QToolTip.showText(QCursor.pos(), "Cannot add another arrow of the same color.")
+                        return
+            event.accept()
+            QToolTip.hideText() 
+        else:
+            event.ignore()
+
+    def dragLeaveEvent(self, event):
+        item = self.itemAt(self.last_known_pos)
+        if isinstance(item, Arrow):
+            item.in_artboard = False
+        super().dragLeaveEvent(event)
+
+    def dropEvent(self, event):
+        self.setFocus()
+        if event.mimeData().hasFormat('text/plain'):
+            event.setDropAction(Qt.CopyAction)
+            event.accept()
+            dropped_svg = event.mimeData().text()
+
+            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.handlers)
+            self.arrow_item.setFlag(QGraphicsSvgItem.ItemIsFocusable, True)
+            self.scene().addItem(self.arrow_item)
+            pos = self.mapToScene(event.pos()) - self.arrow_item.boundingRect().center()
+            self.arrow_item.setPos(pos)
+
+            for item in self.scene().items():
+                if isinstance(item, Arrow):
+                    item.setSelected(False)
+            self.arrow_item.setSelected(True)
+
+            if self.arrow_item.pos().y() < self.sceneRect().height() / 2:
+                if self.arrow_item.pos().x() < self.sceneRect().width() / 2:
+                    quadrant = 'nw'
+                else:
+                    quadrant = 'ne'
+            else:
+                if self.arrow_item.pos().x() < self.sceneRect().width() / 2:
+                    quadrant = 'sw'
+                else:
+                    quadrant = 'se'
+
+            base_name = os.path.basename(self.arrow_item.svg_file)
+
+            if base_name.startswith('red_anti'):
+                new_svg = f'images\\arrows\\red_anti_{self.arrow_item.orientation}_{quadrant}.svg'
+            elif base_name.startswith('red_iso'):
+                new_svg = f'images\\arrows\\red_iso_{self.arrow_item.orientation}_{quadrant}.svg'
+            elif base_name.startswith('blue_anti'):
+                new_svg = f'images\\arrows\\blue_anti_{self.arrow_item.orientation}_{quadrant}.svg'
+            elif base_name.startswith('blue_iso'):
+                new_svg = f'images\\arrows\\blue_iso_{self.arrow_item.orientation}_{quadrant}.svg'
+            else:
+                print(f"Unexpected svg_file: {self.arrow_item.svg_file}")
+                new_svg = self.arrow_item.svg_file
+
+            new_renderer = QSvgRenderer(new_svg)
+
+            if new_renderer.isValid():
+                self.arrow_item.setSharedRenderer(new_renderer)
+                self.arrow_item.svg_file = new_svg
+                self.arrow_item.quadrant = quadrant
+                self.arrow_item.update_positions()
+                self.arrow_item.attributesChanged.emit()
+                self.arrowMoved.emit()
+                end_location = self.arrow_item.end_location
+
+                if self.arrow_item.color == "red":
+                    color = 'red'
+                elif self.arrow_item.color == "blue":
+                    color = 'blue'
+
+                self.staff_manager.show_staff(end_location + "_staff_" + color)
+            else:
+                print("Failed to load SVG file:", new_svg)
+        else:
+            event.ignore()
+        self.arrowMoved.emit()  
 
     def mousePressEvent(self, event):
         self.dragStartPosition = event.pos()
@@ -121,58 +341,25 @@ class Artboard(QGraphicsView):
                         item.update_positions()
                 self.arrowMoved.emit()
 
-    def resizeEvent(self, event):
-        self.setSceneRect(QRectF(self.rect()))
-        super().resizeEvent(event)
-
-    def dragEnterEvent(self, event):
-        if event.mimeData().hasFormat('text/plain'):
-            event.setDropAction(Qt.CopyAction)
-            event.accept()
-        else:
-            event.ignore()
-        item = self.itemAt(event.pos())
-        if isinstance(item, Arrow):
-            item.in_artboard = True
-        super().dragEnterEvent(event)
-
-    def dragMoveEvent(self, event):
-        self.last_known_pos = event.pos() 
-        if event.mimeData().hasFormat('text/plain'):
-            dropped_svg = event.mimeData().text()
-            base_name = os.path.basename(dropped_svg)
-            color, type_, rotation, quadrant = base_name.split('_')[:4]
-            for item in self.scene().items():
-                if isinstance(item, Arrow):
-                    if item.color == color:
-                        event.ignore()
-                        QToolTip.showText(QCursor.pos(), "Cannot add another arrow of the same color.")
-                        return
-            event.accept()
-            QToolTip.hideText() 
-        else:
-            event.ignore()
-
-    def dragLeaveEvent(self, event):
-        item = self.itemAt(self.last_known_pos)
-        if isinstance(item, Arrow):
-            item.in_artboard = False
-        super().dragLeaveEvent(event)
-    
-    def dropEvent(self, event):
-        self.setFocus()
-        if event.mimeData().hasFormat('text/plain'):
-            event.setDropAction(Qt.CopyAction)
-            event.accept()
-            dropped_svg = event.mimeData().text()
-
-            self.create_and_add_arrow(event, dropped_svg)
-            self.update_arrow_svg()
-
-            self.arrowMoved.emit()
-        else:
-            event.ignore()
+    def deleteAllArrows(self):
+        for item in self.scene().items():
+            if isinstance(item, Arrow):
+                self.scene().removeItem(item)
+                del item
         self.arrowMoved.emit()
+        if self.info_tracker is not None:
+            self.info_tracker.update()
+
+        self.staff_manager.hide_all()
+
+    def clear(self):
+        for item in self.scene().items():
+            if isinstance(item, Arrow) or isinstance(item, Staff):
+                self.scene().removeItem(item)
+                del item
+        self.arrowMoved.emit()
+        if self.info_tracker is not None:
+            self.info_tracker.update()
 
     def keyPressEvent(self, event):
         key = event.key()
@@ -194,198 +381,6 @@ class Artboard(QGraphicsView):
                 item.moveBy(dx, dy)
                 self.arrowMoved.emit()
 
-### HELPER FUNCTIONS ###
-
-    def print_item_types(self):
-        for item in self.scene().items():
-            print(type(item))
-
-    def clear_selection(self):
-        for item in self.scene().selectedItems():
-            item.setSelected(False)
-
-    def get_bounding_box(self):
-        # return all QGraphicsItem objects that represent bounding boxes in the scene
-        bounding_boxes = []
-        for item in self.scene().items():
-            if isinstance(item, QGraphicsRectItem):  # or whatever class represents your bounding boxes
-                bounding_boxes.append(item)
-        return bounding_boxes
-
-    def get_state(self):
-        state = {
-            'arrows': [],
-            'staffs': [],
-            'grid': None
-        }
-        for item in self.scene().items():
-            if isinstance(item, Arrow):
-                state['arrows'].append({
-                    'color': item.color,
-                    'position': item.pos(),
-                    'quadrant': item.quadrant,
-                    'rotation': item.rotation,
-                    'svg_file': item.svg_file
-                })
-            elif isinstance(item, Staff):
-                state['staffs'].append({
-                    'position': item.pos(),
-                    'color': item.color,
-                    'svg_file': item.svg_file
-                })
-            elif isinstance(item, Grid):
-                state['grid'] = {
-                    'position': item.pos(),
-                    'svg_file': item.svg_file
-                }
-        return state
-    
-    def set_handlers(self, handlers):
-        self.handlers = handlers
-
-    def set_info_tracker(self, info_tracker):
-        self.info_tracker = info_tracker
-    
-    def get_quadrant_center(self, quadrant):
-        centers = {
-            'ne': QPointF(550, 175),
-            'se': QPointF(550, 550),
-            'sw': QPointF(175, 550),
-            'nw': QPointF(175, 175),
-        }
-        return centers.get(quadrant, QPointF(0, 0))
-    
-    def select_all_items(self):
-        for item in self.scene().items():
-            item.setSelected(True)
-
-    def get_current_arrow_positions(self):
-        red_position = None
-        blue_position = None
-
-        for item in self.scene().items():
-            if isinstance(item, Arrow):
-                if item.color == 'red':
-                    red_position = item.pos()
-                elif item.color == 'blue':
-                    blue_position = item.pos()
-        print(red_position, blue_position)
-        return red_position, blue_position
-
-    def get_selected_items(self):
-        return self.scene().selectedItems()
-    
-    def select_all_arrows(self):
-        for item in self.scene().items():
-            if isinstance(item, Arrow):
-                item.setSelected(True)
-
-    def update_staffs_and_check_beta(self):
-        self.staff_manager.remove_beta_staves()
-        self.staff_manager.update_staffs(self.scene())
-        self.staff_manager.check_and_replace_staves()
-
-    def remove_non_beta_staves(self):
-        self.staff_manager.remove_non_beta_staves()
-
-    def get_attributes(self):
-        attributes = {}
-        base_name = os.path.basename(self.svg_file)
-        parts = base_name.split('_')
-
-        attributes['color'] = parts[0]
-        attributes['type'] = parts[1]
-        attributes['rotation'] = 'Clockwise' if parts[2] == 'r' else 'Anti-clockwise'
-        attributes['quadrant'] = parts[3].split('.')[0]
-
-        return attributes
-
-    def create_and_add_arrow(self, event, dropped_svg):
-        arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.handlers)
-        arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
-        arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
-        arrow_item.setScale(1)
-        arrow_item.setPos(self.mapToScene(event.pos()))
-        arrow_item.in_artboard = True  # Set in_artboard to True
-        self.artboard_scene.addItem(arrow_item)
-        arrow_item.attributesChanged.connect(self.info_tracker.update)
-        self.arrows.append(arrow_item)
-
-
-        for item in self.scene().items():
-            if isinstance(item, Arrow):
-                item.setSelected(False)
-        self.arrow_item.setSelected(True)
-
-    def update_arrow_svg(self):
-        quadrant = self.get_quadrant_based_on_position(self.arrow_item.pos())
-        base_name = os.path.basename(self.arrow_item.svg_file)
-
-        new_svg = self.get_new_svg_file(base_name, quadrant)
-        new_renderer = QSvgRenderer(new_svg)
-
-        if new_renderer.isValid():
-            self.arrow_item.setSharedRenderer(new_renderer)
-            self.arrow_item.svg_file = new_svg
-            self.arrow_item.quadrant = quadrant
-            self.arrow_item.update_positions()
-            self.arrow_item.attributesChanged.emit()
-            self.arrowMoved.emit()
-            end_location = self.arrow_item.end_location
-
-            if self.arrow_item.color == "red":
-                color = 'red'
-            elif self.arrow_item.color == "blue":
-                color = 'blue'
-
-            self.staff_manager.show_staff(end_location + "_staff_" + color)
-        else:
-            print("Failed to load SVG file:", new_svg)
-
-    def get_quadrant_based_on_position(self, position):
-        if position.y() < self.sceneRect().height() / 2:
-            if position.x() < self.sceneRect().width() / 2:
-                return 'nw'
-            else:
-                return 'ne'
-        else:
-            if position.x() < self.sceneRect().width() / 2:
-                return 'sw'
-            else:
-                return 'se'
-
-    def get_new_svg_file(self, base_name, quadrant):
-        if base_name.startswith('red_anti'):
-            return f'images\\arrows\\red_anti_{self.arrow_item.orientation}_{quadrant}.svg'
-        elif base_name.startswith('red_iso'):
-            return f'images\\arrows\\red_iso_{self.arrow_item.orientation}_{quadrant}.svg'
-        elif base_name.startswith('blue_anti'):
-            return f'images\\arrows\\blue_anti_{self.arrow_item.orientation}_{quadrant}.svg'
-        elif base_name.startswith('blue_iso'):
-            return f'images\\arrows\\blue_iso_{self.arrow_item.orientation}_{quadrant}.svg'
-        else:
-            print(f"Unexpected svg_file: {self.arrow_item.svg_file}")
-            return self.arrow_item.svg_file
-
-    def delete_all_arrows(self):
-        for item in self.scene().items():
-            if isinstance(item, Arrow):
-                self.scene().removeItem(item)
-                del item
-        self.arrowMoved.emit()
-        if self.info_tracker is not None:
-            self.info_tracker.update()
-
-        self.staff_manager.hide_all()
-
-    def clear(self):
-        for item in self.scene().items():
-            if isinstance(item, Arrow) or isinstance(item, Staff):
-                self.scene().removeItem(item)
-                del item
-        self.arrowMoved.emit()
-        if self.info_tracker is not None:
-            self.info_tracker.update()
 
     def initArtboard(self):
         self.setFixedSize(750, 750)
@@ -453,4 +448,3 @@ class Update_Quadrant_Preview(QDrag):
             new_renderer.render(painter)
             painter.end()
             self.setPixmap(pixmap)
-
