@@ -42,129 +42,6 @@ class Artboard(QGraphicsView):
         self.artboard_scene.addItem(self.letter_item)
         self.arrow_manipulator = Arrow_Manipulator(self.artboard_scene, self)
 
-    def print_item_types(self):
-        for item in self.scene().items():
-            print(type(item))
-
-    def clear_selection(self):
-        for item in self.scene().selectedItems():
-            item.setSelected(False)
-
-    def get_bounding_box(self):
-        # return all QGraphicsItem objects that represent bounding boxes in the scene
-        bounding_boxes = []
-        for item in self.scene().items():
-            if isinstance(item, QGraphicsRectItem):  # or whatever class represents your bounding boxes
-                bounding_boxes.append(item)
-        return bounding_boxes
-
-    def get_state(self):
-        state = {
-            'arrows': [],
-            'staffs': [],
-            'grid': None
-        }
-        for item in self.scene().items():
-            if isinstance(item, Arrow):
-                state['arrows'].append({
-                    'color': item.color,
-                    'position': item.pos(),
-                    'quadrant': item.quadrant,
-                    'rotation': item.rotation,
-                    'svg_file': item.svg_file
-                })
-            elif isinstance(item, Staff):
-                state['staffs'].append({
-                    'position': item.pos(),
-                    'color': item.color,
-                    'svg_file': item.svg_file
-                })
-            elif isinstance(item, Grid):
-                state['grid'] = {
-                    'position': item.pos(),
-                    'svg_file': item.svg_file
-                }
-        return state
-    
-    def set_handlers(self, handlers):
-        self.handlers = handlers
-
-    def set_info_tracker(self, info_tracker):
-        self.info_tracker = info_tracker
-    
-    def get_quadrant_center(self, quadrant):
-        centers = {
-            'ne': QPointF(550, 175),
-            'se': QPointF(550, 550),
-            'sw': QPointF(175, 550),
-            'nw': QPointF(175, 175),
-        }
-        return centers.get(quadrant, QPointF(0, 0))
-    
-    def selectAllItems(self):
-        for item in self.scene().items():
-            item.setSelected(True)
-
-    def getExpandedQuadrantCenter(self, quadrant):
-        centers = {
-            'ne1': QPointF(525, 175),
-            'ne2': QPointF(575, 100),
-            'se1': QPointF(525, 525),
-            'se2': QPointF(575, 600),
-            'sw1': QPointF(175, 525),
-            'sw2': QPointF(150, 600),
-            'nw1': QPointF(175, 175),
-            'nw2': QPointF(150, 100),
-        }
-        return centers.get(quadrant, QPointF(0, 0))
-    
-    def getCurrentArrowPositions(self):
-        red_position = None
-        blue_position = None
-
-        for item in self.scene().items():
-            if isinstance(item, Arrow):
-                if item.color == 'red':
-                    red_position = item.pos()
-                elif item.color == 'blue':
-                    blue_position = item.pos()
-        print(red_position, blue_position)
-        return red_position, blue_position
-
-    def get_selected_items(self):
-        return self.scene().selectedItems()
-    
-    def select_all_arrows(self):
-        for item in self.scene().items():
-            if isinstance(item, Arrow):
-                item.setSelected(True)
-
-    def update_staffs_and_check_beta(self):
-        self.staff_manager.remove_beta_staves()
-        self.staff_manager.update_artboard_staffs(self.scene())
-        self.staff_manager.check_and_replace_staves()
-
-    def remove_non_beta_staves(self):
-        self.staff_manager.remove_non_beta_staves()
-
-    def set_info_tracker(self, info_tracker):
-        self.info_tracker = info_tracker
-
-    def get_attributes(self):
-        attributes = {}
-        base_name = os.path.basename(self.svg_file)
-        parts = base_name.split('_')
-
-        attributes['color'] = parts[0]
-        attributes['type'] = parts[1]
-        attributes['rotation'] = 'Clockwise' if parts[2] == 'r' else 'Anti-clockwise'
-        attributes['quadrant'] = parts[3].split('.')[0]
-
-        return attributes
-    
-    def resizeEvent(self, event):
-        self.setSceneRect(QRectF(self.rect()))
-        super().resizeEvent(event)
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
@@ -342,6 +219,131 @@ class Artboard(QGraphicsView):
                         item.svg_file = new_svg
                         item.update_positions()
                 self.arrowMoved.emit()
+
+
+    def print_item_types(self):
+        for item in self.scene().items():
+            print(type(item))
+
+    def clear_selection(self):
+        for item in self.scene().selectedItems():
+            item.setSelected(False)
+
+    def get_bounding_box(self):
+        # return all QGraphicsItem objects that represent bounding boxes in the scene
+        bounding_boxes = []
+        for item in self.scene().items():
+            if isinstance(item, QGraphicsRectItem):  # or whatever class represents your bounding boxes
+                bounding_boxes.append(item)
+        return bounding_boxes
+
+    def get_state(self):
+        state = {
+            'arrows': [],
+            'staffs': [],
+            'grid': None
+        }
+        for item in self.scene().items():
+            if isinstance(item, Arrow):
+                state['arrows'].append({
+                    'color': item.color,
+                    'position': item.pos(),
+                    'quadrant': item.quadrant,
+                    'rotation': item.rotation,
+                    'svg_file': item.svg_file
+                })
+            elif isinstance(item, Staff):
+                state['staffs'].append({
+                    'position': item.pos(),
+                    'color': item.color,
+                    'svg_file': item.svg_file
+                })
+            elif isinstance(item, Grid):
+                state['grid'] = {
+                    'position': item.pos(),
+                    'svg_file': item.svg_file
+                }
+        return state
+    
+    def set_handlers(self, handlers):
+        self.handlers = handlers
+
+    def set_info_tracker(self, info_tracker):
+        self.info_tracker = info_tracker
+    
+    def get_quadrant_center(self, quadrant):
+        centers = {
+            'ne': QPointF(550, 175),
+            'se': QPointF(550, 550),
+            'sw': QPointF(175, 550),
+            'nw': QPointF(175, 175),
+        }
+        return centers.get(quadrant, QPointF(0, 0))
+    
+    def selectAllItems(self):
+        for item in self.scene().items():
+            item.setSelected(True)
+
+    def getExpandedQuadrantCenter(self, quadrant):
+        centers = {
+            'ne1': QPointF(525, 175),
+            'ne2': QPointF(575, 100),
+            'se1': QPointF(525, 525),
+            'se2': QPointF(575, 600),
+            'sw1': QPointF(175, 525),
+            'sw2': QPointF(150, 600),
+            'nw1': QPointF(175, 175),
+            'nw2': QPointF(150, 100),
+        }
+        return centers.get(quadrant, QPointF(0, 0))
+    
+    def getCurrentArrowPositions(self):
+        red_position = None
+        blue_position = None
+
+        for item in self.scene().items():
+            if isinstance(item, Arrow):
+                if item.color == 'red':
+                    red_position = item.pos()
+                elif item.color == 'blue':
+                    blue_position = item.pos()
+        print(red_position, blue_position)
+        return red_position, blue_position
+
+    def get_selected_items(self):
+        return self.scene().selectedItems()
+    
+    def select_all_arrows(self):
+        for item in self.scene().items():
+            if isinstance(item, Arrow):
+                item.setSelected(True)
+
+    def update_staffs_and_check_beta(self):
+        self.staff_manager.remove_beta_staves()
+        self.staff_manager.update_artboard_staffs(self.scene())
+        self.staff_manager.check_and_replace_staves()
+
+    def remove_non_beta_staves(self):
+        self.staff_manager.remove_non_beta_staves()
+
+    def set_info_tracker(self, info_tracker):
+        self.info_tracker = info_tracker
+
+    def get_attributes(self):
+        attributes = {}
+        base_name = os.path.basename(self.svg_file)
+        parts = base_name.split('_')
+
+        attributes['color'] = parts[0]
+        attributes['type'] = parts[1]
+        attributes['rotation'] = 'Clockwise' if parts[2] == 'r' else 'Anti-clockwise'
+        attributes['quadrant'] = parts[3].split('.')[0]
+
+        return attributes
+    
+    def resizeEvent(self, event):
+        self.setSceneRect(QRectF(self.rect()))
+        super().resizeEvent(event)
 
     def deleteAllArrows(self):
         for item in self.scene().items():

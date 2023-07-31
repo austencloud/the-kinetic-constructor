@@ -210,9 +210,10 @@ class UiSetup(QWidget):
                 svg_item_count += 1
                 self.arrows.append(arrow_item)
 
-        view = QGraphicsView(arrowbox_scene)
-        view.setFrameShape(QFrame.NoFrame)
-        arrow_box.setWidget(view)
+        arrowbox_view = QGraphicsView(arrowbox_scene)
+        arrowbox_view.setAcceptDrops(True) 
+        arrowbox_view.setFrameShape(QFrame.NoFrame)
+        arrow_box.setWidget(arrowbox_view)
         arrow_box.setWidgetResizable(True)
         arrow_box.setFixedSize(400, 1200)
 

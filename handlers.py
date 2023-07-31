@@ -1,20 +1,16 @@
-from PyQt5.QtGui import QImage, QPainter
-from PyQt5.QtCore import Qt, pyqtSignal, QBuffer
+from PyQt5.QtGui import QImage, QPainter, QPainterPath
 from PyQt5.QtSvg import QSvgRenderer, QSvgGenerator
 from PyQt5.QtWidgets import QStyleOptionGraphicsItem
+from PyQt5.QtCore import QSize, QRect, QIODevice
+from PyQt5.QtXml import QDomDocument
+from PyQt5.QtCore import Qt, pyqtSignal, QBuffer, QSize, QRect
+from svg.path import parse_path, Line, CubicBezier, QuadraticBezier, Arc, Close
+import os
+import json
 import os
 import xml.etree.ElementTree as ET
 from arrow import Arrow
 import json
-from PyQt5.QtCore import QSize, QRect, QIODevice
-from PyQt5.QtXml import QDomDocument
-from PyQt5.QtGui import QImage, QPainter
-from PyQt5.QtCore import Qt, pyqtSignal, QBuffer, QSize, QRect
-from PyQt5.QtSvg import QSvgRenderer, QSvgGenerator
-from PyQt5.QtXml import QDomDocument
-import os
-import json
-
 
 class Handlers:
     arrowMoved = pyqtSignal()
@@ -32,6 +28,7 @@ class Handlers:
         self.keyPressHandler = Key_Press_Handler(Arrow_Manipulator(artboard_scene, self.artboard))
         self.jsonUpdater = JsonUpdater(artboard_scene)
         self.exporter = Exporter(view, self.artboard, artboard_scene)
+        self.svgHandler = SvgHandler()
 
 class Arrow_Manipulator:
     def __init__(self, artboard_scene, artboard):
@@ -251,9 +248,10 @@ class SvgHandler:
         tree = ET.parse(file_path)
         root = tree.getroot()
 
-        for element in root.iter():
+        for element in root.iter('{http://www.w3.org/2000/svg}path'):
             print('tag:', element.tag)
             print('attributes:', element.attrib)
+            return element.attrib.get('d')
 
     @staticmethod
     def compare_svg_paths(file_path_1, file_path_2):
@@ -277,3 +275,36 @@ class SvgHandler:
             print('The SVG paths are identical.')
         else:
             print('The SVG paths are different.')
+
+    @staticmethod
+    def svg_path_to_qpainterpath(svg_path):
+        qpainter_path = QPainterPath()
+        for segment in svg_path:
+            if isinstance(segment, Line):
+                qpainter_path.lineTo(segment.end.real, segment.end.imag)
+            elif isinstance(segment, CubicBezier):
+                qpainter_path.cubicTo(segment.control1.real, segment.control1.imag,
+                                    segment.control2.real, segment.control2.imag,
+                                    segment.end.real, segment.end.imag)
+            elif isinstance(segment, QuadraticBezier):
+                qpainter_path.quadTo(segment.control.real, segment.control.imag,
+                                    segment.end.real, segment.end.imag)
+            elif isinstance(segment, Arc):
+                # QPainterPath doesn't support arcs, so we need to approximate the arc with cubic beziers
+                # This is a complex task and might require a separate function
+                pass
+            elif isinstance(segment, Close):
+                qpainter_path.closeSubpath()
+        return qpainter_path
+
+    @staticmethod
+    def get_main_element_id(svg_file):
+        tree = ET.parse(svg_file)
+        root = tree.getroot()
+
+        # Get the first element with an 'id' attribute
+        for element in root.iter():
+            if 'id' in element.attrib:
+                return element.attrib['id']
+
+        return None
