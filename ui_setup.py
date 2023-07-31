@@ -17,7 +17,7 @@ class UiSetup(QWidget):
         self.setFocusPolicy(Qt.StrongFocus)
         self.main_window = main_window
         self.main_window.installEventFilter(self)  # This allows the main window to receive key events
-        self.main_window.setMinimumSize(3000, 1500)
+        self.main_window.setMinimumSize(3100, 1500)
         self.main_window.show()
 
         self.arrows = []

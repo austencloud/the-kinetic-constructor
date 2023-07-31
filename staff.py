@@ -32,13 +32,9 @@ class Staff(QGraphicsSvgItem):
 
     def show(self):
         self.setVisible(True)
-        if self.scene is None:
-            self.scene.addItem(self.item)
 
     def hide(self):
         self.setVisible(False)
-        if self.scene is not None:
-            self.scene.removeItem(self)
 
     def set_arrow(self, arrow):
         self.arrow = arrow
@@ -113,17 +109,22 @@ class Staff_Manager(QObject):
 
     def show_staff(self, direction):
         direction = direction.capitalize()
-        staff = self.artboard_staffs[direction]
-        staff.show()
+        staff = self.artboard_staffs.get(direction)
+        if staff:
+            staff.show()
+        else:
+            print(f"No staff found for direction {direction}")
+
 
     def remove_beta_staves(self):
         for beta_staff in self.beta_staves:
-            self.scene.removeItem(beta_staff)
+            if beta_staff.scene() is not None:
+                self.scene.removeItem(beta_staff)
         self.beta_staves = []
 
     def remove_non_beta_staves(self):
         for staff in self.artboard_staffs.values():
-            if staff.isVisible():
+            if staff.isVisible() and staff.scene() is not None:
                 self.scene.removeItem(staff)
                 staff.hide()  # Hide the staff
 
@@ -143,9 +144,9 @@ class Staff_Manager(QObject):
                     continue 
                 
                 new_staff = Artboard_Staff(end_location + "_staff", scene, self.staff_locations[end_location + "_staff"], color, 'images\\staves\\' + end_location + "_staff_" + color + '.svg')
-                self.scene.addItem(new_staff)
+                if new_staff.scene is None:
+                    self.scene.addItem(new_staff)
                 self.artboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
-
 
     
     def check_and_replace_staves(self):
