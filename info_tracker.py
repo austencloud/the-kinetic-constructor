@@ -36,7 +36,7 @@ class Info_Tracker:
             return self.letter
         else:
             print("No self.letter found")
-
+    
     def check_for_changes(self):
         current_state = self.get_current_state()
         if current_state != self.previous_state:

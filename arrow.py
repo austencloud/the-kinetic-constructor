@@ -10,11 +10,12 @@ class Arrow(QGraphicsSvgItem):
     arrowMoved = pyqtSignal()  # add this line
     orientationChanged = pyqtSignal()  # Add this line
 
+
     def set_orientation(self, orientation):
         self.orientation = orientation
         self.orientationChanged.emit() 
 
-    def __init__(self, svg_file, artboard, infoTracker, handlers):
+    def __init__(self, svg_file, artboard, infoTracker, handlers, arrow_manipulator):
         super().__init__(svg_file)
         self.setAcceptDrops(True)
         self.svg_file = svg_file
@@ -32,6 +33,10 @@ class Arrow(QGraphicsSvgItem):
         self.staff = None
         self.handlers = handlers
         self.dragStarted = False
+
+        self.context_menu_options = Context_Menu_Options(self.handlers)
+        self.arrow_manipulator = arrow_manipulator
+
 
         if "_l_" in svg_file:
             self.orientation = "l"
@@ -366,22 +371,23 @@ class Arrow(QGraphicsSvgItem):
         }
 
         return end_positions_staff_positions.get(self.end_location)
-
-    def twoSelectedContextMenuEvent(self, event):
-        menu = QMenu()
-        menu.addAction("Align horizontally", self.align_horizontally)
-        menu.addAction("Align vertically", self.align_vertically)
-        menu.addAction("Move", self.show_move_dialog)  # Add the new option here
-        menu.exec_(event.screenPos())
-
+    
     def contextMenuEvent(self, event):
         if len(self.scene().selectedItems()) == 2:
-            self.twoSelectedContextMenuEvent(event)
+            menu = QMenu()
+            menu.addAction("Align horizontally", self.context_menu_options.align_horizontally)
+            menu.addAction("Align vertically", self.context_menu_options.align_vertically)
+            menu.addAction("Move", self.context_menu_options.show_move_dialog)  # Add the new option here
+            menu.exec_(event.screenPos())
         elif len(self.scene().selectedItems()) == 1:
             menu = QMenu()
-            menu.addAction("Move", self.show_move_dialog)  # Add the new option here
-            menu.addAction("Delete", self.handlers.deleteArrow)
+            menu.addAction("Move", self.context_menu_options.show_move_dialog)  # Add the new option here
+            menu.addAction("Delete", self.arrow_manipulator.delete_arrow)
             menu.exec_(event.screenPos())
+
+class Context_Menu_Options():
+    def __init__(self, handlers):
+        self.handlers = handlers
 
     def show_move_dialog(self):
         dialog = QDialog()
@@ -434,4 +440,4 @@ class Arrow(QGraphicsSvgItem):
         average_x = sum(item.x() for item in items) / len(items)
         for item in items:
             item.setX(average_x)
-            
+

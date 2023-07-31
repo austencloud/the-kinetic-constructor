@@ -27,15 +27,15 @@ class Handlers:
         self.main_window = main_window
         self.info_tracker = info_tracker
 
-        self.keyPressHandler = KeyPressHandler(ArrowManipulator(artboard_scene, self.artboard, view))
-        self.arrowManipulator = ArrowManipulator(artboard_scene, self.artboard, view)
+
+        self.arrowManipulator = Arrow_Manipulator(artboard_scene, self.artboard)
+        self.keyPressHandler = Key_Press_Handler(Arrow_Manipulator(artboard_scene, self.artboard))
         self.jsonUpdater = JsonUpdater(artboard_scene)
         self.exporter = Exporter(view, self.artboard, artboard_scene)
 
-class ArrowManipulator:
-    def __init__(self, artboard_scene, artboard, view):
+class Arrow_Manipulator:
+    def __init__(self, artboard_scene, artboard):
         self.artboard_scene = artboard_scene
-        self.view = view
         self.artboard = artboard
 
     def rotateArrow(self, direction):
@@ -63,10 +63,9 @@ class ArrowManipulator:
             else:
                 print("Failed to load SVG file:", new_svg)
 
-        self.view.arrowMoved.emit()
+        self.artboard.arrowMoved.emit()
 
     def mirrorArrow(self):
-        self.view.arrowMoved.emit()
         for item in self.artboard_scene.get_selected_items():
             current_svg = item.svg_file
 
@@ -91,13 +90,13 @@ class ArrowManipulator:
                 item.setPos(pos)
             else:
                 print("Failed to load SVG file:", new_svg)
-        self.view.arrowMoved.emit()
+        self.artboard.arrowMoved.emit()
 
     def deleteArrow(self):
         for item in self.artboard_scene.get_selected_items():
-            self.view.scene().removeItem(item)
-        self.view.arrowMoved.emit()
-        self.view.attributesChanged.emit()
+            self.artboard.scene().removeItem(item)
+        self.artboard.arrowMoved.emit()
+        self.artboard.attributesChanged.emit()
 
     def bringForward(self):
         for item in self.artboard_scene.get_selected_items():
@@ -130,7 +129,7 @@ class ArrowManipulator:
         else:
             print("Cannot swap colors with no arrows on the artboard.")
             
-        self.view.arrowMoved.emit()
+        self.artboard.arrowMoved.emit()
 
     def selectAll(self):
         for item in self.artboard.items():
@@ -140,7 +139,7 @@ class ArrowManipulator:
         for item in self.artboard.selectedItems():
             item.setSelected(False)
 
-class KeyPressHandler:
+class Key_Press_Handler:
     def __init__(self, arrowHandler):
         self.arrowHandler = arrowHandler
 

@@ -7,6 +7,7 @@ from staff import Staff
 from grid import Grid
 from arrow import Arrow
 import os
+from handlers import Arrow_Manipulator
 
 class Artboard(QGraphicsView):
     arrowMoved = pyqtSignal()
@@ -39,6 +40,7 @@ class Artboard(QGraphicsView):
         # Create a new QGraphicsSvgItem for the letter and add it to the scene
         self.letter_item = QGraphicsSvgItem()
         self.artboard_scene.addItem(self.letter_item)
+        self.arrow_manipulator = Arrow_Manipulator(self.artboard_scene, self)
 
     def print_item_types(self):
         for item in self.scene().items():
@@ -90,7 +92,7 @@ class Artboard(QGraphicsView):
     def set_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
     
-    def getQuadrantCenter(self, quadrant):
+    def get_quadrant_center(self, quadrant):
         centers = {
             'ne': QPointF(550, 175),
             'se': QPointF(550, 550),
@@ -139,7 +141,7 @@ class Artboard(QGraphicsView):
 
     def update_staffs_and_check_beta(self):
         self.staff_manager.remove_beta_staves()
-        self.staff_manager.update_staffs(self.scene())
+        self.staff_manager.update_artboard_staffs(self.scene())
         self.staff_manager.check_and_replace_staves()
 
     def remove_non_beta_staves(self):
@@ -205,7 +207,7 @@ class Artboard(QGraphicsView):
             event.accept()
             dropped_svg = event.mimeData().text()
 
-            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.handlers)
+            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.handlers, self.arrow_manipulator)
             self.arrow_item.setFlag(QGraphicsSvgItem.ItemIsFocusable, True)
             self.scene().addItem(self.arrow_item)
             pos = self.mapToScene(event.pos()) - self.arrow_item.boundingRect().center()

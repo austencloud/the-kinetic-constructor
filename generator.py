@@ -7,7 +7,7 @@ from arrow import Arrow
 
 
 class Pictograph_Generator():
-    def __init__(self, staff_manager, artboard, artboard_view, artboard_scene, info_tracker, handlers, main_window, parent=None):
+    def __init__(self, staff_manager, artboard, artboard_view, artboard_scene, info_tracker, handlers, main_window, arrow_manipulator, parent=None):
         self.staff_manager = staff_manager
         self.parent = parent
         self.artboard = artboard
@@ -17,6 +17,7 @@ class Pictograph_Generator():
         self.artboard_scene = artboard_scene
         self.current_letter = None  # Add this line
         self.main_window = main_window
+        self.arrow_manipulator = arrow_manipulator
 
     def generate_pictograph(self, letter, staff_manager):
         #delete all items
@@ -48,7 +49,7 @@ class Pictograph_Generator():
             # Check if the dictionary has all the keys you need
             if all(key in combination for key in ['color', 'type', 'rotation', 'quadrant']):
                 svg = f"images/arrows/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}.svg"
-                arrow = Arrow(svg, self.artboard_view, self.info_tracker, self.handlers)
+                arrow = Arrow(svg, self.artboard_view, self.info_tracker, self.handlers, self.arrow_manipulator)
                 arrow.attributesChanged.connect(lambda: self.update_staff(arrow, staff_manager))
                 arrow.set_attributes(combination)
                 arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
@@ -103,7 +104,7 @@ class Pictograph_Generator():
 
         staff_positions = [arrow.end_location.upper() + '_staff_' + arrow.color for arrow in arrows]
 
-        for element_id, staff in staff_manager.staffs.items():
+        for element_id, staff in staff_manager.artboard_staffs.items():
             if element_id in staff_positions:
                 staff.show()
             else:
