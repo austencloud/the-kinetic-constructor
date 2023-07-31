@@ -10,7 +10,6 @@ class Arrow(QGraphicsSvgItem):
     arrowMoved = pyqtSignal()  # add this line
     orientationChanged = pyqtSignal()  # Add this line
 
-
     def set_orientation(self, orientation):
         self.orientation = orientation
         self.orientationChanged.emit() 
@@ -36,6 +35,19 @@ class Arrow(QGraphicsSvgItem):
 
         self.context_menu_options = Context_Menu_Options(self.handlers)
         self.arrow_manipulator = arrow_manipulator
+
+        # Create a QSvgRenderer with the SVG file
+        renderer = QSvgRenderer(self.svg_file)
+        if not renderer.isValid():
+            print(f"Failed to load SVG file: {self.svg_file}")
+            return
+
+        # Get the ID of the main element of the SVG file
+        main_element_id = renderer.elementIds()[0]
+
+        # Get the bounding box of the main element
+        self.main_element_box = renderer.boundsOnElement(main_element_id)
+
 
 
         if "_l_" in svg_file:
@@ -183,7 +195,7 @@ class Arrow(QGraphicsSvgItem):
 
     def shape(self):
         path = QPainterPath()
-        path.addRect(self.renderer().boundsOnElement(self.elementId()))
+        path.addRect(self.main_element_box)
         return path
 
     def parse_filename(self):
