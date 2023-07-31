@@ -35,6 +35,18 @@ class Arrow_Manipulator:
         self.artboard_scene = artboard_scene
         self.artboard = artboard
 
+    def artboard_drag_event(self, arrow, event):
+        # This method handles the dragging of an arrow that is already in the artboard.
+        # The logic from the Arrow.mouseMoveEvent method that is specific to arrows in the artboard should be moved here.
+        # The Arrow.mouseMoveEvent method should call this method when an arrow in the artboard is being dragged.
+        pass
+
+    def arrow_box_drag_event(self, arrow, event):
+        # This method handles the dragging of an arrow that is in the arrow box.
+        # The logic from the Arrow.mouseMoveEvent method that is specific to arrows in the arrow box should be moved here.
+        # The Arrow.mouseMoveEvent method should call this method when an arrow in the arrow box is being dragged.
+        pass
+
     def rotateArrow(self, direction):
         for item in self.artboard_scene.get_selected_items():
             print(item.get_attributes())

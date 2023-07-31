@@ -10,7 +10,7 @@ from staff import *
 from letter import Letter_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent
 from handlers import Arrow_Manipulator
-
+from arrowbox import Arrow_Box
 class UiSetup(QWidget):
     def __init__(self, main_window):
         super().__init__(main_window)
@@ -46,7 +46,6 @@ class UiSetup(QWidget):
     def initArtboard(self):
         self.grid = Grid('images\\grid\\grid.svg')
         self.artboard = Artboard(self.artboard_scene, self.grid, self.info_tracker, self.staff_manager)
-        self.artboard_view = self.artboard.initArtboard() 
         transform = QTransform()
         self.grid_center = QPointF(self.artboard.frameSize().width() / 2, self.artboard.frameSize().height() / 2)
         grid_size = 650
@@ -178,14 +177,16 @@ class UiSetup(QWidget):
         self.button_layout.addLayout(masterbtnlayout)
 
     def initArrowBox(self):
-        arrow_box = QScrollArea(self.main_window)
+        arrowbox_frame = QFrame(self.main_window)
+        arrowbox_layout = QVBoxLayout()  # create a layout
+        arrowbox_frame.setLayout(arrowbox_layout)  # set the layout to the frame
+
         arrowbox_scene = QGraphicsScene()
         self.arrow_manipulator = Arrow_Manipulator(self.artboard_scene, self.artboard)
         for arrow in self.arrows:
             arrowbox_scene.addItem(arrow)  # use arrowbox_scene here
             arrow.attributesChanged.connect(self.info_tracker.update)
             arrow.attributesChanged.connect(lambda: self.generator.update_staff(arrow, self.staff_manager))
-
 
         svgs_full_paths = []
         default_arrows = ['red_anti_r_ne.svg', 'red_iso_r_ne.svg', 'blue_anti_r_sw.svg', 'blue_iso_r_sw.svg']
@@ -198,7 +199,7 @@ class UiSetup(QWidget):
             file_name = os.path.basename(svg)
             if file_name in default_arrows:
                 self.artboard.set_handlers(self.handlers)
-                arrow_item = Arrow(svg, self.artboard_view, self.info_tracker, self.handlers, self.arrow_manipulator)
+                arrow_item = Arrow(svg, self.artboard, self.info_tracker, self.handlers, self.arrow_manipulator)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
                 arrow_item.setScale(1)
@@ -210,14 +211,13 @@ class UiSetup(QWidget):
                 svg_item_count += 1
                 self.arrows.append(arrow_item)
 
-        arrowbox_view = QGraphicsView(arrowbox_scene)
-        arrowbox_view.setAcceptDrops(True) 
-        arrowbox_view.setFrameShape(QFrame.NoFrame)
-        arrow_box.setWidget(arrowbox_view)
-        arrow_box.setWidgetResizable(True)
-        arrow_box.setFixedSize(400, 1200)
+        arrowbox = Arrow_Box(arrowbox_scene, self.artboard, self.info_tracker)
+        arrowbox.setAcceptDrops(True) 
+        arrowbox.setFrameShape(QFrame.NoFrame)
+        arrowbox_layout.addWidget(arrowbox)  # add the QGraphicsView to the layout
 
-        self.left_layout.addWidget(arrow_box)
+        arrowbox_frame.setFixedSize(400, 1200)
+        self.left_layout.addWidget(arrowbox_frame)
 
     def initPropBox(self):
         prop_box = QScrollArea(self.main_window)
@@ -270,12 +270,12 @@ class UiSetup(QWidget):
         self.lower_right_layout.addWidget(clear_sequence_button)
 
     def initHandlers(self):
-       self.handlers = Handlers(self.artboard, self.artboard_view, self.grid, self.artboard, self.info_tracker, self)
+       self.handlers = Handlers(self.artboard, self.artboard, self.grid, self.artboard, self.info_tracker, self)
        self.artboard.set_handlers(self.handlers)
 
     def initGenerator(self):
     
-        self.generator = Pictograph_Generator(self.staff_manager, self.artboard, self.artboard_view, self.artboard_scene, self.info_tracker, self.handlers, self.main_window, self, self.arrow_manipulator)
+        self.generator = Pictograph_Generator(self.staff_manager, self.artboard, self.artboard, self.artboard_scene, self.info_tracker, self.handlers, self.main_window, self, self.arrow_manipulator)
 
     def initStaffManager(self):
         self.staff_manager = Staff_Manager(self.artboard_scene)
@@ -295,7 +295,7 @@ class UiSetup(QWidget):
 
     def connectArtboard(self):
         self.info_tracker.set_artboard(self.artboard)
-        self.artboard_layout.addWidget(self.artboard_view)
+        self.artboard_layout.addWidget(self.artboard)
 
     def keyPressEvent(self, event):
         self.handlers.keyPressHandler.handleKeyPressEvent(event)

@@ -2,16 +2,13 @@ from PyQt5.QtWidgets import QApplication, QGraphicsItem, QMenu, QDialog, QFormLa
 from PyQt5.QtGui import QPixmap, QDrag, QImage, QPainter, QPainterPath, QCursor
 from PyQt5.QtCore import Qt, QMimeData, pyqtSignal, QPointF
 from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
+
 import os
 
 class Arrow(QGraphicsSvgItem):
     attributesChanged = pyqtSignal()
-    arrowMoved = pyqtSignal()  # add this line
-    orientationChanged = pyqtSignal()  # Add this line
-
-    def set_orientation(self, orientation):
-        self.orientation = orientation
-        self.orientationChanged.emit() 
+    arrowMoved = pyqtSignal()
+    orientationChanged = pyqtSignal()
 
     def __init__(self, svg_file, artboard, infoTracker, handlers, arrow_manipulator):
         super().__init__(svg_file)
@@ -20,7 +17,6 @@ class Arrow(QGraphicsSvgItem):
         self.in_artboard = False
         self.setFlag(QGraphicsItem.ItemSendsGeometryChanges, True)
         self.setFlag(QGraphicsItem.ItemIsFocusable)
-        self.setFlag(QGraphicsItem.ItemIsMovable)
         self.artboard = artboard
         self.grid = None
         self.dot = None
@@ -35,19 +31,6 @@ class Arrow(QGraphicsSvgItem):
 
         self.context_menu_options = Context_Menu_Options(self.handlers)
         self.arrow_manipulator = arrow_manipulator
-
-        # Create a QSvgRenderer with the SVG file
-        renderer = QSvgRenderer(self.svg_file)
-        if not renderer.isValid():
-            print(f"Failed to load SVG file: {self.svg_file}")
-            return
-
-        # Get the ID of the main element of the SVG file
-        main_element_id = self.handlers.svgHandler.get_main_element_id(self.svg_file)
-
-        # Get the bounding box of the main element
-        self.main_element_box = renderer.boundsOnElement(main_element_id)
-
 
 
         if "_l_" in svg_file:
@@ -69,142 +52,27 @@ class Arrow(QGraphicsSvgItem):
             self.color = 'blue'
         else:
             raise ValueError(f"Invalid filename: {svg_file}. Filename must contain either 'red' or 'blue'.")
-    
-    def mousePressEvent(self, event):
-        self.dragStartPosition = event.pos()
-        self.dragOffset = event.pos() - self.boundingRect().center()
-        if self.in_artboard:
-            super().mousePressEvent(event)
-        elif event.button() == Qt.LeftButton:
-            self.artboard_start_position = event.pos()
 
-            self.drag = QDrag(self)
-            self.dragging = True 
-            self.dragged_item = self  # set dragged_item to self when the drag starts
-            
-            mime_data = QMimeData()
-            mime_data.setText(self.svg_file)
-            self.drag.setMimeData(mime_data)
-
-            # Create a QImage to render the SVG to
-            image = QImage(self.boundingRect().size().toSize(), QImage.Format_ARGB32)
-            image.fill(Qt.transparent)  # Fill with transparency to preserve SVG transparency
-
-            # Create a QPainter to paint the SVG onto the QImage
-            painter = QPainter(image)
-            painter.setRenderHint(QPainter.Antialiasing)
-
-            # Create a QSvgRenderer with the SVG file and render it onto the QImage
-            renderer = QSvgRenderer(self.svg_file)
-            if not renderer.isValid():
-                print(f"Failed to load SVG file: {self.svg_file}")
-                return
-            renderer.render(painter)
-
-            painter.end()
-
-            # Convert the QImage to a QPixmap and set it as the drag pixmap
-            pixmap = QPixmap.fromImage(image)
-            self.drag.setPixmap(pixmap)
-            self.drag.setHotSpot(pixmap.rect().center())
-        super().mousePressEvent(event)  # Call the base class's mousePressEvent in all cases
-        self.dragStarted = False
-
-
-    def mouseMoveEvent(self, event):
-        if (event.pos() - self.dragStartPosition).manhattanLength() < QApplication.startDragDistance():
-            return
-        if self.dragging:
-            new_pos = self.mapToScene(event.pos()) - self.dragOffset
-            movement = new_pos - self.dragged_item.pos()
-            for item in self.scene().selectedItems():
-                item.setPos(item.pos() + movement)
-            self.infoTracker.check_for_changes()
-        if self.in_artboard:
-            print("mouse_pos:", mouse_pos)
-            super().mouseMoveEvent(event)
-        elif not (event.buttons() & Qt.LeftButton):
-            return
-        elif (event.pos() - self.artboard_start_position).manhattanLength() < QApplication.startDragDistance():
-            return
-
-        mouse_pos = self.artboard.mapToScene(self.artboard.mapFromGlobal(QCursor.pos()))
-        artboard_rect = self.artboard.sceneRect()
-
-        if artboard_rect.contains(mouse_pos):
-            print("artboard contains mouse_pos")
-            if mouse_pos.y() < artboard_rect.height() / 2:
-                if mouse_pos.x() < artboard_rect.width() / 2:
-                    quadrant = 'nw'
-                else:
-                    quadrant = 'ne'
-            else:
-                if mouse_pos.x() < artboard_rect.width() / 2:
-                    quadrant = 'sw'
-                else:
-                    quadrant = 'se'
-
-            # print the current quadrant whenever a mouse drags over it
-            print(quadrant)
-            base_name = os.path.basename(self.svg_file)
-
-            if base_name.startswith('red_anti'):
-                new_svg = f'images\\arrows\\red_anti_{self.orientation}_{quadrant}.svg'
-            elif base_name.startswith('red_iso'):
-                new_svg = f'images\\arrows\\red_iso_{self.orientation}_{quadrant}.svg'
-            elif base_name.startswith('blue_anti'):
-                new_svg = f'images\\arrows\\blue_anti_{self.orientation}_{quadrant}.svg'
-            elif base_name.startswith('blue_iso'):
-                new_svg = f'images\\arrows\\blue_iso_{self.orientation}_{quadrant}.svg'
-            else:
-                print(f"Unexpected svg_file: {self.svg_file}")
-                new_svg = self.svg_file
-        else:
-            new_svg = self.svg_file
-
-        new_renderer = QSvgRenderer(new_svg)
-
-        if new_renderer.isValid():
-            pixmap = QPixmap(self.boundingRect().size().toSize())
-            painter = QPainter(pixmap)
-            new_renderer.render(painter)
-            painter.end()
-            self.drag.setPixmap(pixmap)
-
-        if not self.dragStarted:
-            self.drag.exec_(Qt.CopyAction | Qt.MoveAction)
-            self.dragStarted = True
-        
-    def mouseReleaseEvent(self, event):
-        self.dragging = False 
-        self.dragged_item = None 
-        from main import Info_Tracker
-        infoTracker = Info_Tracker()
-        #update all the attributes
-        self.update_positions()
-
-        # Update the staff position based on the new arrow position
-        staff_position = self.get_staff_position()
-        self.staff.setPos(staff_position)  # Assuming the Staff class has a setPos method
-        print("staff position:", staff_position)
-        infoTracker.update() 
-        self.arrowMoved.emit()  # emit the signal when the arrow is dropped
+    ### SETTERS ###
 
     def set_staff(self, staff):
         self.staff = staff
         staff.set_arrow(self)  # Update the staff's arrow attribute
 
-    def shape(self):
-        svg_path = self.handlers.svgHandler.parse_svg_file(self.svg_file)
-        return self.handlers.svgHandler.svg_path_to_qpainterpath(svg_path)
+    def set_attributes(self, attributes):
+        self.color = attributes.get('color', self.color)
+        self.quadrant = attributes.get('quadrant', self.quadrant)
+        self.rotation = attributes.get('rotation', self.rotation)
+        self.type = attributes.get('type', self.type)
+        self.start_location = attributes.get('start_location', self.start_location)
+        self.end_location = attributes.get('end_location', self.end_location)
 
-    def parse_filename(self):
-        # Assuming filenames are in the format 'color_type_r_quadrant.svg'
-        parts = os.path.basename(self.svg_file).split('_')  # use self.svg_file here
-        self.color = parts[0]
-        self.type = parts[1]
-        self.rotation = parts[2]
-        self.quadrant = parts[3].split('.')[0]  # remove the '.svg' part
+    def set_orientation(self, orientation):
+        self.orientation = orientation
+        self.orientationChanged.emit() 
+
+
+    ### GETTERS ###
 
     def get_attributes(self):
         attributes = {
@@ -217,33 +85,6 @@ class Arrow(QGraphicsSvgItem):
         }
         return attributes
     
-    def update_positions(self):
-        # Update the start and end locations
-        self.start_location, self.end_location = self.arrow_positions.get(os.path.basename(self.svg_file), (None, None))
-        self.arrowMoved.emit()  # emit the signal when the arrow is dropped
-
-    def generate_arrow_positions(color):
-        return {
-            f"{color}_anti_l_ne.svg": ("n", "e"),
-            f"{color}_anti_r_ne.svg": ("e", "n"),
-            f"{color}_anti_l_nw.svg": ("w", "n"),
-            f"{color}_anti_r_nw.svg": ("n", "w"),
-            f"{color}_anti_l_se.svg": ("e", "s"),
-            f"{color}_anti_r_se.svg": ("s", "e"),
-            f"{color}_anti_l_sw.svg": ("s", "w"),
-            f"{color}_anti_r_sw.svg": ("w", "s"),
-            f"{color}_iso_l_ne.svg": ("e", "n"),
-            f"{color}_iso_r_ne.svg": ("n", "e"),
-            f"{color}_iso_l_nw.svg": ("n", "w"),
-            f"{color}_iso_r_nw.svg": ("w", "n"),
-            f"{color}_iso_l_se.svg": ("s", "e"),
-            f"{color}_iso_r_se.svg": ("e", "s"),
-            f"{color}_iso_l_sw.svg": ("w", "s"),
-            f"{color}_iso_r_sw.svg": ("s", "w"),
-        }
-    
-    arrow_positions = {**generate_arrow_positions("red"), **generate_arrow_positions("blue")}
-
     def get_arrow_start_position(arrow):
         # Assuming that the 'start_location' attribute of an arrow is a direction
         return arrow.get_attributes().get('start_location')
@@ -276,6 +117,42 @@ class Arrow(QGraphicsSvgItem):
         # Return the position corresponding to the pair of directions
         return location_to_position.get((direction1, direction2))
     
+
+
+    
+
+    
+
+    def get_arrow_locations(color):
+        return {
+            f"{color}_anti_l_ne.svg": ("n", "e"),
+            f"{color}_anti_r_ne.svg": ("e", "n"),
+            f"{color}_anti_l_nw.svg": ("w", "n"),
+            f"{color}_anti_r_nw.svg": ("n", "w"),
+            f"{color}_anti_l_se.svg": ("e", "s"),
+            f"{color}_anti_r_se.svg": ("s", "e"),
+            f"{color}_anti_l_sw.svg": ("s", "w"),
+            f"{color}_anti_r_sw.svg": ("w", "s"),
+            f"{color}_iso_l_ne.svg": ("e", "n"),
+            f"{color}_iso_r_ne.svg": ("n", "e"),
+            f"{color}_iso_l_nw.svg": ("n", "w"),
+            f"{color}_iso_r_nw.svg": ("w", "n"),
+            f"{color}_iso_l_se.svg": ("s", "e"),
+            f"{color}_iso_r_se.svg": ("e", "s"),
+            f"{color}_iso_l_sw.svg": ("w", "s"),
+            f"{color}_iso_r_sw.svg": ("s", "w"),
+        }
+    
+    arrow_positions = {**get_arrow_locations("red"), **get_arrow_locations("blue")}
+
+
+    ### UPDATERS ###
+
+    def update_positions(self):
+        # Update the start and end locations
+        self.start_location, self.end_location = self.arrow_positions.get(os.path.basename(self.svg_file), (None, None))
+        self.arrowMoved.emit()  # emit the signal when the arrow is dropped
+
     def update_quadrant(self):
         # Determine the quadrant based on the start and end positions
         if self.start_location == "n":
@@ -299,15 +176,6 @@ class Arrow(QGraphicsSvgItem):
             else:
                 self.quadrant = "sw"
 
-    def set_attributes(self, attributes):
-        self.color = attributes.get('color', self.color)
-        self.quadrant = attributes.get('quadrant', self.quadrant)
-        self.rotation = attributes.get('rotation', self.rotation)
-        self.type = attributes.get('type', self.type)
-        self.start_location = attributes.get('start_location', self.start_location)
-        self.end_location = attributes.get('end_location', self.end_location)
-
-    #fuction to update the start and end points of the arrow in the infotracker
     def update_positions(self):
         # Update the start and end positions
         self.start_location, self.end_location = self.arrow_positions.get(os.path.basename(self.svg_file), (None, None))
@@ -357,32 +225,21 @@ class Arrow(QGraphicsSvgItem):
                 else: # self.end_location == "s"
                     self.rotation = "r"
 
-    def get_staff_position(self):
-        # Determine the position of the staff based on the position of the arrow
-        # This is just an example, you would need to implement this based on your specific requirements
-        print("getting staff position")
-        if self.end_location == 'n':
-            return 'N'
-        elif self.end_location == 'e':
-            return 'E'
-        elif self.end_location == 's':
-            return 'S'
-        elif self.end_location == 'w':
-            return 'W'
-
     def update_staff_position(self):
         new_staff_position = self.calculate_staff_position()
         self.staff.item.setPos(new_staff_position)
 
+
+
     def calculate_staff_position(self):
-        end_positions_staff_positions = {
+        handpoints = {
             "n": QPointF(325, 181.9),  
             "e": QPointF(468.1, 325),  
             "s": QPointF(325, 468.1),  
             "w": QPointF(181.9, 325),  
         }
 
-        return end_positions_staff_positions.get(self.end_location)
+        return handpoints.get(self.end_location)
     
     def contextMenuEvent(self, event):
         if len(self.scene().selectedItems()) == 2:
@@ -396,6 +253,22 @@ class Arrow(QGraphicsSvgItem):
             menu.addAction("Move", self.context_menu_options.show_move_dialog)  # Add the new option here
             menu.addAction("Delete", self.arrow_manipulator.delete_arrow)
             menu.exec_(event.screenPos())
+
+
+    def shape(self):
+        path = QPainterPath()
+        path.addRect(self.renderer().boundsOnElement(self.elementId()))
+        return path
+
+    def parse_filename(self):
+
+        parts = os.path.basename(self.svg_file).split('_')
+        self.color = parts[0]
+        self.type = parts[1]
+        self.rotation = parts[2]
+        self.quadrant = parts[3].split('.')[0]
+
+
 
 class Context_Menu_Options():
     def __init__(self, handlers):
