@@ -34,7 +34,7 @@ class Artboard(QGraphicsView):
         for letter in 'ABCDEFGHIJKLMNOPQRSTUV':
             renderer = QSvgRenderer(f'images/letters/{letter}.svg')
             self.letter_renderers[letter] = renderer
-            print(f'Loaded SVG for letter {letter}')
+
 
         # Create a new QGraphicsSvgItem for the letter and add it to the scene
         self.letter_item = QGraphicsSvgItem()
