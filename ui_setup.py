@@ -90,7 +90,7 @@ class UiSetup(QWidget):
 
     def initGraphboard(self):
         self.grid = Grid('images\\grid\\grid.svg')
-        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.context_menu_handler, self)
+        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self)
         transform = QTransform()
         self.grid_center = QPointF(self.graphboard.frameSize().width() / 2, self.graphboard.frameSize().height() / 2 - 75)
         grid_size = 650
@@ -244,7 +244,7 @@ class UiSetup(QWidget):
             file_name = os.path.basename(svg_file)
             if file_name in default_arrows:
                 self.graphboard.set_handlers(self.arrow_manipulator)
-                arrow_item = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.context_menu_handler, self.arrow_manipulator)
+                arrow_item = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_manipulator)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
                 arrow_item.setScale(1)

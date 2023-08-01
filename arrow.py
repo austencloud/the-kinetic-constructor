@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QGraphicsItem, QMenu
 from PyQt5.QtGui import QPainterPath
 from PyQt5.QtCore import pyqtSignal, QPointF
 from PyQt5.QtSvg import QGraphicsSvgItem
+from PyQt5.QtWidgets import QMenu, QDialog, QFormLayout, QSpinBox, QDialogButtonBox
 import os
 
 class Arrow(QGraphicsSvgItem):
@@ -9,7 +10,7 @@ class Arrow(QGraphicsSvgItem):
     arrowMoved = pyqtSignal()
     orientationChanged = pyqtSignal()
 
-    def __init__(self, svg_file, graphboard, infoTracker, svg_handler, context_menu_handler, arrow_manipulator):
+    def __init__(self, svg_file, graphboard, infoTracker, svg_handler, arrow_manipulator):
         super().__init__(svg_file)
         self.setAcceptDrops(True)
         self.svg_file = svg_file
@@ -28,7 +29,7 @@ class Arrow(QGraphicsSvgItem):
         self.svg_handler = svg_handler
         self.dragStarted = False
         self.arrow_manipulator = arrow_manipulator
-        self.context_menu_handler = context_menu_handler
+
 
         if "_l_" in svg_file:
             self.orientation = "l"
@@ -150,11 +151,6 @@ class Arrow(QGraphicsSvgItem):
 
     arrow_positions = {**get_arrow_locations("red"), **get_arrow_locations("blue")}
 
-    
-
-    
-
-
 
 
     ### UPDATERS ###
@@ -236,19 +232,70 @@ class Arrow(QGraphicsSvgItem):
         self.staff.item.setPos(new_staff_position)
 
     
-    def contextMenuEvent(self, event):
-        if len(self.scene().selectedItems()) == 2:
-            menu = QMenu()
-            menu.addAction("Align horizontally", self.context_menu_handler.align_horizontally)
-            menu.addAction("Align vertically", self.context_menu_handler.align_vertically)
-            menu.addAction("Move", self.context_menu_handler.show_move_dialog)  # Add the new option here
-            menu.exec_(event.screenPos())
-        elif len(self.scene().selectedItems()) == 1:
-            menu = QMenu()
-            menu.addAction("Move", self.context_menu_handler.show_move_dialog)  # Add the new option here
-            menu.addAction("Delete", self.arrow_manipulator.delete_arrow)
-            menu.exec_(event.screenPos())
+    # def contextMenuEvent(self, event):
+    #     if len(self.scene().selectedItems()) == 2:
+    #         menu = QMenu()
+    #         menu.addAction("Align horizontally", self.align_horizontally)
+    #         menu.addAction("Align vertically", self.align_vertically)
+    #         menu.addAction("Move", self.show_move_dialog)  # Add the new option here
+    #         menu.exec_(event.screenPos())
+    #     elif len(self.scene().selectedItems()) == 1:
+    #         menu = QMenu()
+    #         menu.addAction("Move", self.show_move_dialog)  # Add the new option here
+    #         menu.addAction("Delete", self.arrow_manipulator.delete_arrow)
+    #         menu.exec_(event.screenPos())
 
+    def show_move_dialog(self):
+        dialog = QDialog()
+        layout = QFormLayout()
+
+        # Create the input fields
+        self.up_input = QSpinBox()
+        self.down_input = QSpinBox()
+        self.left_input = QSpinBox()
+        self.right_input = QSpinBox()
+
+        # Add the input fields to the dialog
+        layout.addRow("Up:", self.up_input)
+        layout.addRow("Down:", self.down_input)
+        layout.addRow("Left:", self.left_input)
+        layout.addRow("Right:", self.right_input)
+
+        # Create the buttons
+        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+
+        # Connect the buttons to their slots
+        buttons.accepted.connect(dialog.accept)
+        buttons.rejected.connect(dialog.reject)
+
+        # Add the buttons to the dialog
+        layout.addRow(buttons)
+
+        dialog.setLayout(layout)
+
+        # Show the dialog and wait for the user to click a button
+        result = dialog.exec_()
+
+        # If the user clicked the OK button, move the arrows
+        if result == QDialog.Accepted:
+            self.move_arrows()
+
+    def move_arrows(self):
+        items = self.scene().selectedItems()
+        for item in items:
+            item.moveBy(self.right_input.value() - self.left_input.value(), self.down_input.value() - self.up_input.value())
+
+    def align_horizontally(self):
+        items = self.scene().selectedItems()
+        average_y = sum(item.y() for item in items) / len(items)
+        for item in items:
+            item.setY(average_y)
+
+    def align_vertically(self):
+        items = self.scene().selectedItems()
+        average_x = sum(item.x() for item in items) / len(items)
+        for item in items:
+            item.setX(average_x)
 
     def shape(self):
         path = QPainterPath()

@@ -51,7 +51,7 @@ class Pictograph_Generator():
             # Check if the dictionary has all the keys you need
             if all(key in combination for key in ['color', 'type', 'rotation', 'quadrant']):
                 svg_file = f"images/arrows/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}.svg"
-                arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.context_menu_handler, self.arrow_manipulator)
+                arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.arrow_manipulator)
                 arrow.attributesChanged.connect(lambda: self.update_staff(arrow, staff_manager))
                 arrow.set_attributes(combination)
                 arrow.setFlag(QGraphicsItem.ItemIsMovable, True)

@@ -16,7 +16,7 @@ class Graphboard(QGraphicsView):
     arrowMoved = pyqtSignal()
     attributesChanged = pyqtSignal()
 
-    def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, context_menu_handler, ui_setup, parent=None):
+    def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, ui_setup, parent=None):
         super().__init__(graphboard_scene, parent)
         self.setAcceptDrops(True)
         self.dragging = None
@@ -28,7 +28,6 @@ class Graphboard(QGraphicsView):
         self.graphboard_scene.setBackgroundBrush(Qt.white) 
         self.info_tracker = info_tracker
         self.svg_handler = svg_handler
-        self.context_menu_handler = context_menu_handler
         self.ui_setup = ui_setup
         self.renderer = QSvgRenderer()
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
@@ -164,7 +163,7 @@ class Graphboard(QGraphicsView):
             event.accept()
             dropped_svg = event.mimeData().text()
 
-            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler, self.context_menu_handler, self.arrow_manipulator)
+            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler,  self.arrow_manipulator)
             self.arrow_item.setFlag(QGraphicsSvgItem.ItemIsFocusable, True)
             self.scene().addItem(self.arrow_item)
             pos = self.mapToScene(event.pos()) - self.arrow_item.boundingRect().center()
@@ -186,7 +185,7 @@ class Graphboard(QGraphicsView):
         self.arrowMoved.emit()
 
     def contextMenuEvent(self, event):
-        clicked_item = self.itemAt(event.pos())
+        clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())
         if isinstance(clicked_item, Arrow):
             arrow_menu = QMenu(self)
 
@@ -209,6 +208,7 @@ class Graphboard(QGraphicsView):
             bring_forward_action = QAction('Bring Forward', self)
             bring_forward_action.triggered.connect(self.arrow_manipulator.bringForward)
             arrow_menu.addAction(bring_forward_action)
+            arrow_menu.exec_(event.globalPos())
 
         elif isinstance(clicked_item, Staff):
             staff_menu = QMenu(self)
@@ -224,6 +224,8 @@ class Graphboard(QGraphicsView):
             rotate_left_action = QAction('Rotate Left', self)
             rotate_left_action.triggered.connect(lambda: self.arrow_manipulator.rotateArrow("left"))
             staff_menu.addAction(rotate_left_action)
+            staff_menu.exec_(event.globalPos())
+
         
         else: 
             graphboard_menu = QMenu(self)

@@ -63,7 +63,7 @@ class Arrow_Manipulator:
         self.graphboard.arrowMoved.emit()
 
     def mirrorArrow(self):
-        for item in self.graphboard_scene.get_selected_items():
+        for item in self.graphboard_scene.selectedItems():
             current_svg = item.svg_file
 
             if item.rotation == "l":
@@ -90,7 +90,7 @@ class Arrow_Manipulator:
         self.graphboard.arrowMoved.emit()
 
     def delete_arrow(self):
-        for item in self.graphboard_scene.get_selected_items():
+        for item in self.graphboard_scene.selectedItems():
             self.graphboard.scene().removeItem(item)
         self.graphboard.arrowMoved.emit()
         self.graphboard.attributesChanged.emit()
@@ -102,7 +102,7 @@ class Arrow_Manipulator:
 
     def swapColors(self):
         self.graphboard.select_all_arrows()
-        arrow_items = [item for item in self.graphboard_scene.get_selected_items() if isinstance(item, Arrow)]
+        arrow_items = [item for item in self.graphboard.get_selected_items() if isinstance(item, Arrow)]
         if len(arrow_items) >= 1:
             for item in arrow_items:
                 current_svg = item.svg_file
