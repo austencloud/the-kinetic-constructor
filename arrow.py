@@ -1,8 +1,7 @@
-from PyQt5.QtWidgets import QApplication, QGraphicsItem, QMenu, QDialog, QFormLayout, QSpinBox, QDialogButtonBox
-from PyQt5.QtGui import QPixmap, QDrag, QImage, QPainter, QPainterPath, QCursor
-from PyQt5.QtCore import Qt, QMimeData, pyqtSignal, QPointF
-from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
-
+from PyQt5.QtWidgets import QGraphicsItem, QMenu
+from PyQt5.QtGui import QPainterPath
+from PyQt5.QtCore import pyqtSignal, QPointF
+from PyQt5.QtSvg import QGraphicsSvgItem
 import os
 
 class Arrow(QGraphicsSvgItem):
@@ -10,14 +9,14 @@ class Arrow(QGraphicsSvgItem):
     arrowMoved = pyqtSignal()
     orientationChanged = pyqtSignal()
 
-    def __init__(self, svg_file, artboard, infoTracker, handlers, arrow_manipulator):
+    def __init__(self, svg_file, graphboard, infoTracker, svg_handler, context_menu_handler, arrow_manipulator):
         super().__init__(svg_file)
         self.setAcceptDrops(True)
         self.svg_file = svg_file
-        self.in_artboard = False
+        self.in_graphboard = False
         self.setFlag(QGraphicsItem.ItemSendsGeometryChanges, True)
         self.setFlag(QGraphicsItem.ItemIsFocusable)
-        self.artboard = artboard
+        self.graphboard = graphboard
         self.grid = None
         self.dot = None
         self.dragging = False
@@ -26,12 +25,10 @@ class Arrow(QGraphicsSvgItem):
         self.parse_filename()
         self.start_location, self.end_location = self.arrow_positions.get(os.path.basename(svg_file), (None, None))
         self.staff = None
-        self.handlers = handlers
+        self.svg_handler = svg_handler
         self.dragStarted = False
-
-        self.context_menu_options = Context_Menu_Options(self.handlers)
         self.arrow_manipulator = arrow_manipulator
-
+        self.context_menu_handler = context_menu_handler
 
         if "_l_" in svg_file:
             self.orientation = "l"
@@ -53,6 +50,9 @@ class Arrow(QGraphicsSvgItem):
         else:
             raise ValueError(f"Invalid filename: {svg_file}. Filename must contain either 'red' or 'blue'.")
 
+
+
+
     ### SETTERS ###
 
     def set_staff(self, staff):
@@ -70,6 +70,7 @@ class Arrow(QGraphicsSvgItem):
     def set_orientation(self, orientation):
         self.orientation = orientation
         self.orientationChanged.emit() 
+
 
 
     ### GETTERS ###
@@ -117,12 +118,6 @@ class Arrow(QGraphicsSvgItem):
         # Return the position corresponding to the pair of directions
         return location_to_position.get((direction1, direction2))
     
-
-
-    
-
-    
-
     def get_arrow_locations(color):
         return {
             f"{color}_anti_l_ne.svg": ("n", "e"),
@@ -143,7 +138,23 @@ class Arrow(QGraphicsSvgItem):
             f"{color}_iso_r_sw.svg": ("s", "w"),
         }
     
+    def get_staff_position(self):
+        handpoints = {
+            "n": QPointF(325, 181.9),  
+            "e": QPointF(468.1, 325),  
+            "s": QPointF(325, 468.1),  
+            "w": QPointF(181.9, 325),  
+        }
+
+        return handpoints.get(self.end_location)
+
     arrow_positions = {**get_arrow_locations("red"), **get_arrow_locations("blue")}
+
+    
+
+    
+
+
 
 
     ### UPDATERS ###
@@ -175,11 +186,6 @@ class Arrow(QGraphicsSvgItem):
                 self.quadrant = "nw"
             else:
                 self.quadrant = "sw"
-
-    def update_positions(self):
-        # Update the start and end positions
-        self.start_location, self.end_location = self.arrow_positions.get(os.path.basename(self.svg_file), (None, None))
-        self.arrowMoved.emit()
 
     def update_rotation(self):
         if self.type == "iso":
@@ -226,31 +232,20 @@ class Arrow(QGraphicsSvgItem):
                     self.rotation = "r"
 
     def update_staff_position(self):
-        new_staff_position = self.calculate_staff_position()
+        new_staff_position = self.get_staff_position()
         self.staff.item.setPos(new_staff_position)
 
-
-
-    def calculate_staff_position(self):
-        handpoints = {
-            "n": QPointF(325, 181.9),  
-            "e": QPointF(468.1, 325),  
-            "s": QPointF(325, 468.1),  
-            "w": QPointF(181.9, 325),  
-        }
-
-        return handpoints.get(self.end_location)
     
     def contextMenuEvent(self, event):
         if len(self.scene().selectedItems()) == 2:
             menu = QMenu()
-            menu.addAction("Align horizontally", self.context_menu_options.align_horizontally)
-            menu.addAction("Align vertically", self.context_menu_options.align_vertically)
-            menu.addAction("Move", self.context_menu_options.show_move_dialog)  # Add the new option here
+            menu.addAction("Align horizontally", self.context_menu_handler.align_horizontally)
+            menu.addAction("Align vertically", self.context_menu_handler.align_vertically)
+            menu.addAction("Move", self.context_menu_handler.show_move_dialog)  # Add the new option here
             menu.exec_(event.screenPos())
         elif len(self.scene().selectedItems()) == 1:
             menu = QMenu()
-            menu.addAction("Move", self.context_menu_options.show_move_dialog)  # Add the new option here
+            menu.addAction("Move", self.context_menu_handler.show_move_dialog)  # Add the new option here
             menu.addAction("Delete", self.arrow_manipulator.delete_arrow)
             menu.exec_(event.screenPos())
 
@@ -267,62 +262,3 @@ class Arrow(QGraphicsSvgItem):
         self.type = parts[1]
         self.rotation = parts[2]
         self.quadrant = parts[3].split('.')[0]
-
-
-
-class Context_Menu_Options():
-    def __init__(self, handlers):
-        self.handlers = handlers
-
-    def show_move_dialog(self):
-        dialog = QDialog()
-        layout = QFormLayout()
-
-        # Create the input fields
-        self.up_input = QSpinBox()
-        self.down_input = QSpinBox()
-        self.left_input = QSpinBox()
-        self.right_input = QSpinBox()
-
-        # Add the input fields to the dialog
-        layout.addRow("Up:", self.up_input)
-        layout.addRow("Down:", self.down_input)
-        layout.addRow("Left:", self.left_input)
-        layout.addRow("Right:", self.right_input)
-
-        # Create the buttons
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-
-        # Connect the buttons to their slots
-        buttons.accepted.connect(dialog.accept)
-        buttons.rejected.connect(dialog.reject)
-
-        # Add the buttons to the dialog
-        layout.addRow(buttons)
-
-        dialog.setLayout(layout)
-
-        # Show the dialog and wait for the user to click a button
-        result = dialog.exec_()
-
-        # If the user clicked the OK button, move the arrows
-        if result == QDialog.Accepted:
-            self.move_arrows()
-
-    def move_arrows(self):
-        items = self.scene().selectedItems()
-        for item in items:
-            item.moveBy(self.right_input.value() - self.left_input.value(), self.down_input.value() - self.up_input.value())
-
-    def align_horizontally(self):
-        items = self.scene().selectedItems()
-        average_y = sum(item.y() for item in items) / len(items)
-        for item in items:
-            item.setY(average_y)
-
-    def align_vertically(self):
-        items = self.scene().selectedItems()
-        average_x = sum(item.x() for item in items) / len(items)
-        for item in items:
-            item.setX(average_x)
-

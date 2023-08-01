@@ -7,8 +7,8 @@ import os
 from data import positions_map
 
 class Info_Tracker:
-    def __init__(self, artboard, label, main_window, staff_manager):
-        self.artboard = artboard
+    def __init__(self, graphboard, label, main_window, staff_manager):
+        self.graphboard = graphboard
         self.label = label
         self.previous_state = None 
         self.main_window = main_window
@@ -21,12 +21,12 @@ class Info_Tracker:
     def start(self):
         self.previous_state = self.get_current_state()
 
-    def set_artboard(self, artboard):
-        self.artboard = artboard
+    def set_graphboard(self, graphboard):
+        self.graphboard = graphboard
 
     def get_current_state(self):
         state = {}
-        for item in self.artboard.items():
+        for item in self.graphboard.items():
             if isinstance(item, Arrow):
                 state[item] = item.get_attributes()
         return state
@@ -98,7 +98,7 @@ class Info_Tracker:
     def update(self):
         current_combination = []
 
-        for item in self.artboard.items():
+        for item in self.graphboard.items():
             if isinstance(item, Arrow):
                 attributes = item.get_attributes()
                 current_combination.append(attributes)
@@ -106,52 +106,49 @@ class Info_Tracker:
         current_combination = sorted(current_combination, key=lambda x: x['color'])
 
         self.letters = self.load_letters()
-        blue_text = "<h2>Left</h2>"
-        red_text = "<h2>Right</h2>"
+        
+        blue_text = "<h2 style='color: #0000FF'>Left</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>"
+        red_text = "<h2 style='color: #FF0000'>Right</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>"
+
         letter_text = "<h2>Letter</h2>"
 
         for letter, combinations in self.letters.items():
             combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]  # Ignore the first dictionary which contains optimal positions
             if current_combination in combinations:
-                letter_text += f"<h3 style='font-size: 50px'>{letter}</h3>"
+                letter_text += f"<span style='font-size: 100px; font-weight: bold;'>{letter}</span>"
                 start_position, end_position = self.get_positions()
-                letter_text += f"<h4>Start: {start_position}</h4>"
-                letter_text += f"<h4>End: {end_position}</h4>"
-                self.letter = letter  # Update self.letter here
-                break  # Break the loop when a match is found
+                letter_text += f"<h4>{start_position} → {end_position}</h4>"
+                self.letter = letter 
+                break 
 
         if hasattr(self.main_window, 'staff'):
             self.main_window.staff.update_position(self.arrow.end_location)
 
-        for item in self.artboard.items():
+        for item in self.graphboard.items():
             if isinstance(item, Arrow):
                 attributes = item.get_attributes()
                 current_combination.append(attributes)
                 color = attributes.get('color', 'N/A')
                 rotation = attributes.get('rotation', 'N/A')
-                color_text = f"<font color='{color}'>Color: {color}</font>"
                 if rotation == 'l':
                     rotation = 'Anti-clockwise'
                 else: # rotation == 'r'
                     rotation = 'Clockwise'
                 if color == 'blue':
-                    blue_text += f"{color_text}<br>"
-                    blue_text += f"Quadrant: {attributes.get('quadrant', 'N/A').upper()}<br>"
-                    blue_text += f"Rotation: {rotation}<br>"
-                    blue_text += f"Type: {attributes.get('type', 'N/A').capitalize()}<br>"
-                    blue_text += f"Start: {attributes.get('start_location', 'N/A').capitalize()}<br>"
-                    blue_text += f"End: {attributes.get('end_location', 'N/A').capitalize()}<br>"
-                    blue_text += "<br>"
+                    blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
+                    blue_text = blue_text.replace("Rotation: ", f"Rotation: {rotation}")
+                    blue_text = blue_text.replace("Type: ", f"Type: {attributes.get('type', 'N/A').capitalize()}")
+                    blue_text = blue_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
+                    blue_text = blue_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
                 elif color == 'red':
-                    red_text += f"{color_text}<br>"
-                    red_text += f"Quadrant: {attributes.get('quadrant', 'N/A').upper()}<br>"
-                    red_text += f"Rotation: {rotation}<br>"
-                    red_text += f"Type: {attributes.get('type', 'N/A').capitalize()}<br>"
-                    red_text += f"Start: {attributes.get('start_location', 'N/A').capitalize()}<br>"
-                    red_text += f"End: {attributes.get('end_location', 'N/A').capitalize()}<br>"
-                    red_text += "<br>"
+                    red_text = red_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
+                    red_text = red_text.replace("Rotation: ", f"Rotation: {rotation}")
+                    red_text = red_text.replace("Type: ", f"Type: {attributes.get('type', 'N/A').capitalize()}")
+                    red_text = red_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
+                    red_text = red_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
 
-        self.label.setText("<table><tr><td width=300>" + blue_text + "</td><td width=300>" + red_text + "</td><td width=100>" + letter_text + "</td></tr></table>")
+
+        self.label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr><tr><td width=100>" + letter_text + "</td></tr></table>")
 
     def get_positions(self):
         positions = []
@@ -163,7 +160,7 @@ class Info_Tracker:
         end_location_blue = None
         color_red = None
         color_blue = None
-        for item in self.artboard.items():
+        for item in self.graphboard.items():
             if isinstance(item, Arrow):
                 arrow_items.append(item)
 

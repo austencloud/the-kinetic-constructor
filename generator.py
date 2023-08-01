@@ -4,7 +4,7 @@ from PyQt5.QtGui import QFont
 import json
 import random
 from arrow import Arrow
-
+from handlers import SvgHandler, Context_Menu_Handler
 
 class Pictograph_Generator():
     def __init__(self, staff_manager, artboard, artboard_view, artboard_scene, info_tracker, handlers, main_window, arrow_manipulator, parent=None):
@@ -18,6 +18,8 @@ class Pictograph_Generator():
         self.current_letter = None  # Add this line
         self.main_window = main_window
         self.arrow_manipulator = arrow_manipulator
+        self.svg_handler = SvgHandler()
+        self.context_menu_handler = Context_Menu_Handler(self.artboard_scene)
 
     def generate_pictograph(self, letter, staff_manager):
         #delete all items
@@ -48,8 +50,8 @@ class Pictograph_Generator():
         for combination in combination_set:
             # Check if the dictionary has all the keys you need
             if all(key in combination for key in ['color', 'type', 'rotation', 'quadrant']):
-                svg = f"images/arrows/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}.svg"
-                arrow = Arrow(svg, self.artboard_view, self.info_tracker, self.handlers, self.arrow_manipulator)
+                svg_file = f"images/arrows/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}.svg"
+                arrow = Arrow(svg_file, self.artboard_view, self.info_tracker, self.svg_handler, self.context_menu_handler, self.arrow_manipulator)
                 arrow.attributesChanged.connect(lambda: self.update_staff(arrow, staff_manager))
                 arrow.set_attributes(combination)
                 arrow.setFlag(QGraphicsItem.ItemIsMovable, True)

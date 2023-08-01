@@ -9,21 +9,26 @@ from arrow import Arrow
 import os
 from handlers import Arrow_Manipulator
 
-class Artboard(QGraphicsView):
+
+
+
+class Graphboard(QGraphicsView):
     arrowMoved = pyqtSignal()
     attributesChanged = pyqtSignal()
 
-    def __init__(self, artboard_scene, grid, info_tracker, staff_manager, parent=None):
-        super().__init__(artboard_scene, parent)
+    def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, context_menu_handler, parent=None):
+        super().__init__(graphboard_scene, parent)
         self.setAcceptDrops(True)
         self.dragging = None
         self.grid = grid
         self.staff_manager = staff_manager
         self.setDragMode(QGraphicsView.RubberBandDrag)
         self.setInteractive(True)
-        self.artboard_scene = artboard_scene
-        self.artboard_scene.setBackgroundBrush(Qt.white) 
+        self.graphboard_scene = graphboard_scene
+        self.graphboard_scene.setBackgroundBrush(Qt.white) 
         self.info_tracker = info_tracker
+        self.svg_handler = svg_handler
+        self.context_menu_handler = context_menu_handler
         self.renderer = QSvgRenderer()
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
         self.attributesChanged.connect(self.update_staffs_and_check_beta)
@@ -39,59 +44,45 @@ class Artboard(QGraphicsView):
 
         # Create a new QGraphicsSvgItem for the letter and add it to the scene
         self.letter_item = QGraphicsSvgItem()
-        self.artboard_scene.addItem(self.letter_item)
-        self.arrow_manipulator = Arrow_Manipulator(self.artboard_scene, self)
-        self.initArtboard() 
+        self.graphboard_scene.addItem(self.letter_item)
+        self.arrow_manipulator = Arrow_Manipulator(self.graphboard_scene, self)
+        self.setFixedSize(750, 900)
 
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+        self.graphboard_scene.addItem(self.grid)
+        self.drag = Update_Quadrant_Preview(self, self.dragging)
 
     def mousePressEvent(self, event):
         self.dragStartPosition = event.pos()
         self.setFocus()
         items = self.items(event.pos())
-
-        # Iterate over all items at the clicked position
-        for item in items:
-            if item.flags() & QGraphicsItem.ItemIsMovable:
-                # Create a QImage to render the SVG into
-                image = QImage(item.boundingRect().size().toSize(), QImage.Format_ARGB32)
-                # Create a QPainter to perform the rendering
-                painter = QPainter(image)
-                # Render the SVG into the QImage
-                item.renderer().render(painter, item.boundingRect())
-                # End the QPainter
-                painter.end()
-                # Map the clicked position from the view's coordinate system to the item's coordinate system
-                item_pos = item.mapFromScene(self.mapToScene(event.pos()))
-                # Check if the mapped position is within the item's bounding rect
-                if not item.boundingRect().contains(item_pos):
-                    # The mapped position is outside the item's bounding rect, continue with the next item
-                    continue
-                # Check the transparency of the pixel at the clicked position
-                pixel_color = image.pixelColor(item_pos.toPoint())
-                if pixel_color.alpha() == 0:
-                    # The pixel is transparent, ignore the click event and continue with the next item
-                    event.ignore()
-                    continue
-                # The pixel is not transparent, select the item and break the loop
-                if event.button() == Qt.LeftButton and event.modifiers() == Qt.ControlModifier:
-                    item.setSelected(not item.isSelected())
-                elif not item.isSelected():
-                    for i in self.scene().selectedItems():
-                        i.setSelected(False)
-                    item.setSelected(True)
-                self.dragging = item
-                self.dragOffset = self.mapToScene(event.pos()) - self.dragging.pos()
-                self.drag = Update_Quadrant_Preview(self, self.dragging)
-                break
+        if items and items[0].flags() & QGraphicsItem.ItemIsMovable:
+            if event.button() == Qt.LeftButton and event.modifiers() == Qt.ControlModifier:
+                items[0].setSelected(not items[0].isSelected())
+            elif not items[0].isSelected():
+                for item in self.scene().selectedItems():
+                    item.setSelected(False)
+                items[0].setSelected(True)
+            self.dragging = items[0]
+            self.dragOffset = self.mapToScene(event.pos()) - self.dragging.pos()
+            
         else:
-            # No non-transparent item was found, deselect all items
             for item in self.scene().selectedItems():
                 item.setSelected(False)
             self.dragging = None
 
+
+        if items:
+            print(f"Clicked on an object of type {type(items[0])}")
+            print(f"Object top-left position: {items[0].scenePos()}")
+            print(f"Object center: {items[0].scenePos() + items[0].boundingRect().center()}")
+            if hasattr(items[0], 'svg_file'):
+                print(f"Object svg: {items[0].svg_file}")
+
         if event.button() == Qt.LeftButton and not items:
             super().mousePressEvent(event)
-
 
     def mouseMoveEvent(self, event):
         if (event.pos() - self.dragStartPosition).manhattanLength() < QApplication.startDragDistance():
@@ -107,16 +98,7 @@ class Artboard(QGraphicsView):
                 if isinstance(item, Arrow):
                     center_pos = item.pos() + item.boundingRect().center()
 
-                    if center_pos.y() < self.sceneRect().height() / 2:
-                        if center_pos.x() < self.sceneRect().width() / 2:
-                            quadrant = 'nw'
-                        else:
-                            quadrant = 'ne'
-                    else:
-                        if center_pos.x() < self.sceneRect().width() / 2:
-                            quadrant = 'sw'
-                        else:
-                            quadrant = 'se'
+                    quadrant = self.drag.get_graphboard_quadrants(center_pos)
 
                     item.quadrant = quadrant
                     base_name = os.path.basename(item.svg_file)
@@ -150,7 +132,7 @@ class Artboard(QGraphicsView):
             event.ignore()
         item = self.itemAt(event.pos())
         if isinstance(item, Arrow):
-            item.in_artboard = True
+            item.in_graphboard = True
         super().dragEnterEvent(event)
 
     def dragMoveEvent(self, event):
@@ -173,7 +155,7 @@ class Artboard(QGraphicsView):
     def dragLeaveEvent(self, event):
         item = self.itemAt(self.last_known_pos)
         if isinstance(item, Arrow):
-            item.in_artboard = False
+            item.in_graphboard = False
         super().dragLeaveEvent(event)
 
     def dropEvent(self, event):
@@ -183,7 +165,7 @@ class Artboard(QGraphicsView):
             event.accept()
             dropped_svg = event.mimeData().text()
 
-            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.handlers, self.arrow_manipulator)
+            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler, self.context_menu_handler, self.arrow_manipulator)
             self.arrow_item.setFlag(QGraphicsSvgItem.ItemIsFocusable, True)
             self.scene().addItem(self.arrow_item)
             pos = self.mapToScene(event.pos()) - self.arrow_item.boundingRect().center()
@@ -193,54 +175,15 @@ class Artboard(QGraphicsView):
                 if isinstance(item, Arrow):
                     item.setSelected(False)
             self.arrow_item.setSelected(True)
-
-            if self.arrow_item.pos().y() < self.sceneRect().height() / 2:
-                if self.arrow_item.pos().x() < self.sceneRect().width() / 2:
-                    quadrant = 'nw'
-                else:
-                    quadrant = 'ne'
-            else:
-                if self.arrow_item.pos().x() < self.sceneRect().width() / 2:
-                    quadrant = 'sw'
-                else:
-                    quadrant = 'se'
-
-            base_name = os.path.basename(self.arrow_item.svg_file)
-
-            if base_name.startswith('red_anti'):
-                new_svg = f'images\\arrows\\red_anti_{self.arrow_item.orientation}_{quadrant}.svg'
-            elif base_name.startswith('red_iso'):
-                new_svg = f'images\\arrows\\red_iso_{self.arrow_item.orientation}_{quadrant}.svg'
-            elif base_name.startswith('blue_anti'):
-                new_svg = f'images\\arrows\\blue_anti_{self.arrow_item.orientation}_{quadrant}.svg'
-            elif base_name.startswith('blue_iso'):
-                new_svg = f'images\\arrows\\blue_iso_{self.arrow_item.orientation}_{quadrant}.svg'
-            else:
-                print(f"Unexpected svg_file: {self.arrow_item.svg_file}")
-                new_svg = self.arrow_item.svg_file
-
-            new_renderer = QSvgRenderer(new_svg)
-
-            if new_renderer.isValid():
-                self.arrow_item.setSharedRenderer(new_renderer)
-                self.arrow_item.svg_file = new_svg
-                self.arrow_item.quadrant = quadrant
-                self.arrow_item.update_positions()
-                self.arrow_item.attributesChanged.emit()
-                self.arrowMoved.emit()
-                end_location = self.arrow_item.end_location
-
-                if self.arrow_item.color == "red":
-                    color = 'red'
-                elif self.arrow_item.color == "blue":
-                    color = 'blue'
-
-                self.staff_manager.show_staff(end_location + "_staff_" + color)
-            else:
-                print("Failed to load SVG file:", new_svg)
+            end_location = self.arrow_item.end_location
+            self.staff_manager.show_staff(end_location + "_staff_" + self.arrow_item.color)
         else:
             event.ignore()
-        self.arrowMoved.emit()  
+
+        quadrant = self.drag.get_graphboard_quadrants(self.arrow_item.pos())
+        self.drag.update_arrow_svg(self.arrow_item, quadrant)  # Update the arrow's SVG file
+        self.arrow_item.attributesChanged.emit()
+        self.arrowMoved.emit()
 
     def print_item_types(self):
         for item in self.scene().items():
@@ -341,7 +284,7 @@ class Artboard(QGraphicsView):
 
     def update_staffs_and_check_beta(self):
         self.staff_manager.remove_beta_staves()
-        self.staff_manager.update_artboard_staffs(self.scene())
+        self.staff_manager.update_graphboard_staffs(self.scene())
         self.staff_manager.check_and_replace_staves()
 
     def remove_non_beta_staves(self):
@@ -407,18 +350,7 @@ class Artboard(QGraphicsView):
                 self.arrowMoved.emit()
 
 
-    def initArtboard(self):
-        self.setFixedSize(750, 750)
 
-        transform = QTransform()
-        grid_center = QPointF(self.frameSize().width() / 2, self.frameSize().height() / 2)
-
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-
-        self.artboard_scene.addItem(self.grid)
-
-        return self
 
 class Update_Quadrant_Preview(QDrag):
     def __init__(self, source, arrow_item, *args, **kwargs):
@@ -436,30 +368,9 @@ class Update_Quadrant_Preview(QDrag):
     def updatePixmap(self):
         mouse_pos = self.source().mapFromGlobal(self.source().cursor().pos())
 
-        if mouse_pos.y() < self.source().sceneRect().height() / 2:
-            if mouse_pos.x() < self.source().sceneRect().width() / 2:
-                quadrant = 'nw'
-            else:
-                quadrant = 'ne'
-        else:
-            if mouse_pos.x() < self.source().sceneRect().width() / 2:
-                quadrant = 'sw'
-            else:
-                quadrant = 'se'
+        quadrant, base_name = self.get_graphboard_quadrants(mouse_pos)
+        self.update_arrow_svg(self.arrow_item, quadrant)
 
-        base_name = os.path.basename(self.mimeData().text())
-
-        if base_name.startswith('red_anti'):
-            new_svg = f'images\\arrows\\red\\{self.arrow_item.rotation}\\anti\\red_anti_{self.arrow_item.rotation}_{quadrant}.svg'
-        elif base_name.startswith('red_iso'):
-            new_svg = f'images\\arrows\\red\\{self.arrow_item.rotation}\\iso\\red_iso_{self.arrow_item.rotation}_{quadrant}.svg'
-        elif base_name.startswith('blue_anti'):
-            new_svg = f'images\\arrows\\blue\\{self.arrow_item.rotation}\\anti\\blue_anti_{self.arrow_item.rotation}_{quadrant}.svg'
-        elif base_name.startswith('blue_iso'):
-            new_svg = f'images\\arrows\\blue\\{self.arrow_item.rotation}\\iso\\blue_iso_{self.arrow_item.rotation}_{quadrant}.svg'
-        else:
-            print(f"Unexpected svg_file: {self.arrow_item.svg_file}")
-            new_svg = self.arrow_item.svg_file
 
         new_svg = f'images\\arrows\\red\\r\\anti\\red_anti_r_{quadrant}.svg'
 
@@ -473,3 +384,44 @@ class Update_Quadrant_Preview(QDrag):
             new_renderer.render(painter)
             painter.end()
             self.setPixmap(pixmap)
+
+    def get_graphboard_quadrants(self, mouse_pos):
+        mime_data = self.mimeData()
+        if mime_data is not None:
+            base_name = os.path.basename(mime_data.text())
+        else:
+            base_name = ""
+        if mouse_pos.y() < self.source().sceneRect().height() / 2 - 75:
+            if mouse_pos.x() < self.source().sceneRect().width() / 2:
+                quadrant = 'nw'
+            else:
+                quadrant = 'ne'
+        else:
+            if mouse_pos.x() < self.source().sceneRect().width() / 2:
+                quadrant = 'sw'
+            else:
+                quadrant = 'se'
+
+
+        return quadrant
+    
+    def update_arrow_svg(self, arrow, quadrant):
+        base_name = os.path.basename(arrow.svg_file)
+
+        if base_name.startswith('red_anti'):
+            new_svg = f'images\\arrows\\red_anti_{arrow.rotation}_{quadrant}.svg'
+        elif base_name.startswith('red_iso'):
+            new_svg = f'images\\arrows\\red_iso_{arrow.rotation}_{quadrant}.svg'
+        elif base_name.startswith('blue_anti'):
+            new_svg = f'images\\arrows\\blue_anti_{arrow.rotation}_{quadrant}.svg'
+        elif base_name.startswith('blue_iso'):
+            new_svg = f'images\\arrows\\blue_iso_{arrow.rotation}_{quadrant}.svg'
+        else:
+            print(f"Unexpected svg_file: {arrow.svg_file}")
+            new_svg = arrow.svg_file 
+
+        new_renderer = QSvgRenderer(new_svg)
+        if new_renderer.isValid():
+            arrow.setSharedRenderer(new_renderer)
+            arrow.svg_file = new_svg
+            arrow.update_positions()

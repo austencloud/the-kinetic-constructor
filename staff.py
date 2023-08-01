@@ -42,7 +42,7 @@ class Staff(QGraphicsSvgItem):
     def isVisible(self):
         return super().isVisible()
 
-class Artboard_Staff(Staff):
+class Graphboard_Staff(Staff):
     def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
         super().__init__(element_id, scene, position, color, staff_svg_file, initial_visibility=False)
 
@@ -58,10 +58,10 @@ class PropBox_Staff(Staff):
         super().__init__(element_id, scene, position, color, staff_svg_file)
 
     def mouseReleaseEvent(self, event):
-        # Create a new Artboard_Staff object when the staff is dragged into the artboard
+        # Create a new graphboard_Staff object when the staff is dragged into the graphboard
         # You'll need to replace this with the actual code that implements this behavior
-        if self.is_in_artboard():
-            new_staff = Artboard_Staff(self.element_id, self.scene, self.position, self.color, self.svg_file)
+        if self.is_in_graphboard():
+            new_staff = Graphboard_Staff(self.element_id, self.scene, self.position, self.color, self.svg_file)
             self.scene.addItem(new_staff)
         super().mouseReleaseEvent(event)
 
@@ -90,26 +90,26 @@ class Staff_Manager(QObject):
         }
 
         # Initialize the staffs attribute
-        self.artboard_staffs = {
-            'N_staff_red': Artboard_Staff('N_staff', scene, self.staff_locations['N_staff'], None, 'images\\staves\\N_staff_red.svg'),
-            'E_staff_red': Artboard_Staff('E_staff', scene, self.staff_locations['E_staff'], None, 'images\\staves\\E_staff_red.svg'),
-            'S_staff_red': Artboard_Staff('S_staff', scene, self.staff_locations['S_staff'], None, 'images\\staves\\S_staff_red.svg'),
-            'W_staff_red': Artboard_Staff('W_staff', scene, self.staff_locations['W_staff'], None, 'images\\staves\\W_staff_red.svg'),
-            'N_staff_blue': Artboard_Staff('N_staff', scene, self.staff_locations['N_staff'], None, 'images\\staves\\N_staff_blue.svg'),
-            'E_staff_blue': Artboard_Staff('E_staff', scene, self.staff_locations['E_staff'], None, 'images\\staves\\E_staff_blue.svg'),
-            'S_staff_blue': Artboard_Staff('S_staff', scene, self.staff_locations['S_staff'], None, 'images\\staves\\S_staff_blue.svg'),
-            'W_staff_blue': Artboard_Staff('W_staff', scene, self.staff_locations['W_staff'], None, 'images\\staves\\W_staff_blue.svg')
+        self.graphboard_staffs = {
+            'N_staff_red': Graphboard_Staff('N_staff', scene, self.staff_locations['N_staff'], None, 'images\\staves\\N_staff_red.svg'),
+            'E_staff_red': Graphboard_Staff('E_staff', scene, self.staff_locations['E_staff'], None, 'images\\staves\\E_staff_red.svg'),
+            'S_staff_red': Graphboard_Staff('S_staff', scene, self.staff_locations['S_staff'], None, 'images\\staves\\S_staff_red.svg'),
+            'W_staff_red': Graphboard_Staff('W_staff', scene, self.staff_locations['W_staff'], None, 'images\\staves\\W_staff_red.svg'),
+            'N_staff_blue': Graphboard_Staff('N_staff', scene, self.staff_locations['N_staff'], None, 'images\\staves\\N_staff_blue.svg'),
+            'E_staff_blue': Graphboard_Staff('E_staff', scene, self.staff_locations['E_staff'], None, 'images\\staves\\E_staff_blue.svg'),
+            'S_staff_blue': Graphboard_Staff('S_staff', scene, self.staff_locations['S_staff'], None, 'images\\staves\\S_staff_blue.svg'),
+            'W_staff_blue': Graphboard_Staff('W_staff', scene, self.staff_locations['W_staff'], None, 'images\\staves\\W_staff_blue.svg')
         }
 
-        self.hide_all_artboard_staffs()
+        self.hide_all_graphboard_staffs()
 
-    def hide_all_artboard_staffs(self):
-        for staff in self.artboard_staffs.values():
+    def hide_all_graphboard_staffs(self):
+        for staff in self.graphboard_staffs.values():
             staff.hide()
 
     def show_staff(self, direction):
         direction = direction.capitalize()
-        staff = self.artboard_staffs.get(direction)
+        staff = self.graphboard_staffs.get(direction)
         if staff:
             staff.show()
         else:
@@ -123,14 +123,14 @@ class Staff_Manager(QObject):
         self.beta_staves = []
 
     def remove_non_beta_staves(self):
-        for staff in self.artboard_staffs.values():
+        for staff in self.graphboard_staffs.values():
             if staff.isVisible() and staff.scene is not None:
                 self.scene.removeItem(staff)
                 staff.hide()  # Hide the staff
 
 
-    def update_artboard_staffs(self, scene):
-        self.hide_all_artboard_staffs()
+    def update_graphboard_staffs(self, scene):
+        self.hide_all_graphboard_staffs()
         for arrow in scene.items():
             if isinstance(arrow, Arrow):
                 end_location = arrow.end_location
@@ -143,10 +143,10 @@ class Staff_Manager(QObject):
                     print(f"Unexpected arrow color: {arrow.color}")
                     continue 
                 
-                new_staff = Artboard_Staff(end_location + "_staff", scene, self.staff_locations[end_location + "_staff"], color, 'images\\staves\\' + end_location + "_staff_" + color + '.svg')
+                new_staff = Graphboard_Staff(end_location + "_staff", scene, self.staff_locations[end_location + "_staff"], color, 'images\\staves\\' + end_location + "_staff_" + color + '.svg')
                 if new_staff.scene is None:
                     self.scene.addItem(new_staff)
-                self.artboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
+                self.graphboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
 
     
     def check_and_replace_staves(self):
@@ -157,20 +157,20 @@ class Staff_Manager(QObject):
             (self.staff_locations['W_staff'].x(), self.staff_locations['W_staff'].y()): 'w',
         }
 
-        staff_positions = [(staff.pos().x(), staff.pos().y()) for staff in self.artboard_staffs.values() if staff.isVisible()]
+        staff_positions = [(staff.pos().x(), staff.pos().y()) for staff in self.graphboard_staffs.values() if staff.isVisible()]
 
         for position in set(staff_positions):
             count = staff_positions.count(position)
             if count == 2:
-                staves_to_remove = [staff for staff in self.artboard_staffs.values() if (staff.pos().x(), staff.pos().y()) == position]
+                staves_to_remove = [staff for staff in self.graphboard_staffs.values() if (staff.pos().x(), staff.pos().y()) == position]
                 for staff in staves_to_remove:
                     self.scene.removeItem(staff)
                     staff.hide()
                     self.scene.update()
-                    # Remove the staff from the artboard_staffs dictionary
-                    self.artboard_staffs = {key: value for key, value in self.artboard_staffs.items() if value != staff}
+                    # Remove the staff from the graphboard_staffs dictionary
+                    self.graphboard_staffs = {key: value for key, value in self.graphboard_staffs.items() if value != staff}
                         
-                staff_positions = [(staff.pos().x(), staff.pos().y()) for staff in self.artboard_staffs.values() if staff.isVisible()]
+                staff_positions = [(staff.pos().x(), staff.pos().y()) for staff in self.graphboard_staffs.values() if staff.isVisible()]
 
                 try:
                     direction = position_to_direction[position]

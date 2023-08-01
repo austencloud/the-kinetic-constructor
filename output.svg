@@ -1,0 +1,16 @@
+<svg height="750" viewBox="0 0 750 750" width="750">
+ <g id="blue_iso_r_nw.svg" fill="none" stroke-linecap="square" stroke-width="1" stroke-linejoin="bevel" stroke="black" fill-rule="evenodd">
+  <g transform="matrix(1,0,0,1,113,112.5)" fill="none" stroke-opacity="1" font-size="8" font-weight="400" stroke-linecap="square" font-family="MS Shell Dlg 2" font-style="normal" stroke-width="1" stroke-linejoin="bevel" stroke="#000000"/>
+  <g fill-opacity="1" transform="matrix(1.00146,0,0,0.999001,113,112.5)" fill="#2e3192" font-size="8" font-weight="400" font-family="MS Shell Dlg 2" font-style="normal" stroke="none">
+   <path d="M0,258.32 C0.05,139.41 95.74,31.5 213.81,31.14 L187.34,7.02 C187.34,7.02 197.41,-4.11 205.82,1.66 C215.34,8.13 246.64,40.93 246.64,40.93 C246.64,40.93 220.04,74.11 208.67,83.05 C200.59,89.38 189.76,78.71 189.76,78.71 L215.87,50.93 C126.6,51.21 28.01,124.08 20.84,258.32 C20,274.01 -0.01,274.51 3.55271e-15,258.32 L0,258.32" vector-effect="none" fill-rule="nonzero"/>
+  </g>
+  <g transform="matrix(1,0,0,1,113,112.5)" fill="none" stroke-opacity="1" font-size="8" font-weight="400" stroke-linecap="square" font-family="MS Shell Dlg 2" font-style="normal" stroke-width="1" stroke-linejoin="bevel" stroke="#000000"/>
+ </g>
+ <g id="red_anti_r_se.svg" fill="none" stroke-linecap="square" stroke-width="1" stroke-linejoin="bevel" stroke="black" fill-rule="evenodd">
+  <g transform="matrix(1,0,0,1,402.5,430)" fill="none" stroke-opacity="1" font-size="8" font-weight="400" stroke-linecap="square" font-family="MS Shell Dlg 2" font-style="normal" stroke-width="1" stroke-linejoin="bevel" stroke="#000000"/>
+  <g fill-opacity="1" transform="matrix(0.997978,0,0,0.999456,402.5,430)" fill="#ed1c24" font-size="8" font-weight="400" font-family="MS Shell Dlg 2" font-style="normal" stroke="none">
+   <path d="M0.01,246.11 C0.01,33.77 -5.36,33.41 201.51,33.41 L174.27,6.79 C174.27,6.79 184.71,-4.19 192.95,1.8 C204.71,10.35 232.46,42.64 232.46,42.64 C232.46,42.64 202.34,76.42 192.95,83.31 C184.71,89.36 174.27,78.56 174.27,78.56 L201.51,52.95 C10.42,52.95 20.74,44.53 20.74,245.82 C20.74,260.9 0.01,260.9 0.01,246.13 L0.01,246.11" vector-effect="none" fill-rule="nonzero"/>
+  </g>
+  <g transform="matrix(1,0,0,1,402.5,430)" fill="none" stroke-opacity="1" font-size="8" font-weight="400" stroke-linecap="square" font-family="MS Shell Dlg 2" font-style="normal" stroke-width="1" stroke-linejoin="bevel" stroke="#000000"/>
+ </g>
+</svg>

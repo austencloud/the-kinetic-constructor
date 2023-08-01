@@ -3,7 +3,7 @@ from PyQt5.QtCore import QRectF
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsItem, QGraphicsView
 from PyQt5.QtCore import Qt, QPointF
 from arrow import Arrow
-from artboard import Artboard
+from graphboard import Graphboard
 from grid import Grid
 from pictograph import Pictograph
 from PyQt5.QtGui import QImage, QPainter
@@ -11,7 +11,7 @@ from staff import Staff
 
 class Sequence_Manager:
     def __init__(self, scene, pictograph_generator, ui_setup, info_tracker):
-        self.artboard_scene = scene
+        self.graphboard_scene = scene
         self.beats = [QGraphicsRectItem(QRectF(375, 0, 375, 375)) for i in range(4)]
         for i, section in enumerate(self.beats):
             # add a small buffer and update the x position
@@ -30,40 +30,40 @@ class Sequence_Manager:
             if i >= len(self.pictographs):
                 pictograph.setPos(section.pos())
                 self.pictographs.append(pictograph)
-                self.artboard_scene.addItem(pictograph)
+                self.graphboard_scene.addItem(pictograph)
                 break
 
         print("Items in the scene:")
-        for item in self.artboard_scene.items():
+        for item in self.graphboard_scene.items():
             print(item)
 
-    def add_to_sequence(self, artboard):
+    def add_to_sequence(self, graphboard):
         # Create a QImage to render the scene
-        image = QImage(artboard.sceneRect().size().toSize(), QImage.Format_ARGB32)
+        image = QImage(graphboard.sceneRect().size().toSize(), QImage.Format_ARGB32)
         image.fill(Qt.transparent)
         painter = QPainter(image)
 
-        artboard.print_item_types()
+        graphboard.print_item_types()
 
         # deselect all items
-        artboard.clear_selection()
+        graphboard.clear_selection()
 
         # Render the scene
-        artboard.render(painter)
+        graphboard.render(painter)
         painter.end()
 
         scaled_image = image.scaled(375, 375, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        pictograph = Pictograph(artboard.get_state(), scaled_image)
+        pictograph = Pictograph(graphboard.get_state(), scaled_image)
         print(pictograph.state)
         self.add_pictograph(pictograph)
-        artboard.clear()
+        graphboard.clear()
 
         letter = self.info_tracker.get_current_letter()
         self.ui_setup.word_label.setText(self.ui_setup.word_label.text() + letter)
 
-    def add_to_artboard(self, pictograph: Pictograph, artboard: Artboard):
+    def add_to_graphboard(self, pictograph: Pictograph, graphboard: Graphboard):
         state = pictograph.state
-        artboard.clear()
+        graphboard.clear()
         
         for arrow_state in state['arrows']:
             arrow = Arrow(arrow_state['svg_file'])
@@ -71,18 +71,18 @@ class Sequence_Manager:
             arrow.setRotation(arrow_state['rotation'])
             arrow.color = arrow_state['color']
             arrow.quadrant = arrow_state['quadrant']
-            artboard.scene().addItem(arrow)
+            graphboard.scene().addItem(arrow)
 
         for staff_state in state['staffs']:
             staff = Staff(staff_state['svg_file'])
             staff.setPos(staff_state['position'])
             staff.color = staff_state['color']
-            artboard.scene().addItem(staff)
+            graphboard.scene().addItem(staff)
 
         if state['grid']:
             grid = Grid(state['grid']['svg_file'])
             grid.setPos(state['grid']['position'])
-            artboard.scene().addItem(grid)
+            graphboard.scene().addItem(grid)
 
     def get_clear_sequence_button(self):
         self.clear_button = QPushButton("Clear Sequence")
@@ -91,8 +91,8 @@ class Sequence_Manager:
 
     def clear_sequence(self):
         self.pictographs = []
-        for item in self.artboard_scene.items():
-            self.artboard_scene.removeItem(item)
+        for item in self.graphboard_scene.items():
+            self.graphboard_scene.removeItem(item)
         self.ui_setup.word_label.setText("My word: ")
 
 class Sequence_Scene(QGraphicsScene):

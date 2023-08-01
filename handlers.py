@@ -1,22 +1,22 @@
-from PyQt5.QtGui import QImage, QPainter, QPainterPath
-from PyQt5.QtSvg import QSvgRenderer, QSvgGenerator
-from PyQt5.QtWidgets import QStyleOptionGraphicsItem
-from PyQt5.QtCore import QSize, QRect, QIODevice
-from PyQt5.QtXml import QDomDocument
-from PyQt5.QtCore import Qt, pyqtSignal, QBuffer, QSize, QRect
-from svg.path import parse_path, Line, CubicBezier, QuadraticBezier, Arc, Close
 import os
 import json
 import os
 import xml.etree.ElementTree as ET
-from arrow import Arrow
 import json
+from PyQt5.QtGui import QImage, QPainter, QPainterPath
+from PyQt5.QtSvg import QSvgRenderer, QSvgGenerator
+from PyQt5.QtWidgets import QStyleOptionGraphicsItem, QMenu, QDialog, QFormLayout, QSpinBox, QDialogButtonBox
+from PyQt5.QtCore import QSize, QRect, QIODevice
+from PyQt5.QtXml import QDomDocument
+from PyQt5.QtCore import Qt, pyqtSignal, QBuffer, QSize, QRect
+from svg.path import Line, CubicBezier, QuadraticBezier, Arc, Close
+from arrow import Arrow
 
 class Handlers:
     arrowMoved = pyqtSignal()
 
-    def __init__(self, artboard, view, grid, artboard_scene, main_window, info_tracker):
-        self.artboard = artboard
+    def __init__(self, graphboard, view, grid, artboard_scene, main_window, info_tracker):
+        self.graphboard = graphboard
         self.view = view
         self.grid = grid
         self.artboard_scene = artboard_scene
@@ -24,28 +24,16 @@ class Handlers:
         self.info_tracker = info_tracker
 
 
-        self.arrowManipulator = Arrow_Manipulator(artboard_scene, self.artboard)
-        self.keyPressHandler = Key_Press_Handler(Arrow_Manipulator(artboard_scene, self.artboard))
+        self.arrowManipulator = Arrow_Manipulator(artboard_scene, self.graphboard)
+        self.keyPressHandler = Key_Press_Handler(Arrow_Manipulator(artboard_scene, self.graphboard))
         self.jsonUpdater = JsonUpdater(artboard_scene)
-        self.exporter = Exporter(view, self.artboard, artboard_scene)
+        self.exporter = Exporter(view, self.graphboard, artboard_scene)
         self.svgHandler = SvgHandler()
 
 class Arrow_Manipulator:
-    def __init__(self, artboard_scene, artboard):
+    def __init__(self, artboard_scene, graphboard):
         self.artboard_scene = artboard_scene
-        self.artboard = artboard
-
-    def artboard_drag_event(self, arrow, event):
-        # This method handles the dragging of an arrow that is already in the artboard.
-        # The logic from the Arrow.mouseMoveEvent method that is specific to arrows in the artboard should be moved here.
-        # The Arrow.mouseMoveEvent method should call this method when an arrow in the artboard is being dragged.
-        pass
-
-    def arrow_box_drag_event(self, arrow, event):
-        # This method handles the dragging of an arrow that is in the arrow box.
-        # The logic from the Arrow.mouseMoveEvent method that is specific to arrows in the arrow box should be moved here.
-        # The Arrow.mouseMoveEvent method should call this method when an arrow in the arrow box is being dragged.
-        pass
+        self.graphboard = graphboard
 
     def rotateArrow(self, direction):
         for item in self.artboard_scene.get_selected_items():
@@ -67,12 +55,12 @@ class Arrow_Manipulator:
                 item.svg_file = new_svg
                 item.update_positions()
                 item.update_quadrant()
-                pos = self.artboard.get_quadrant_center(new_quadrant) - item.boundingRect().center()
+                pos = self.graphboard.get_quadrant_center(new_quadrant) - item.boundingRect().center()
                 item.setPos(pos)
             else:
                 print("Failed to load SVG file:", new_svg)
 
-        self.artboard.arrowMoved.emit()
+        self.graphboard.arrowMoved.emit()
 
     def mirrorArrow(self):
         for item in self.artboard_scene.get_selected_items():
@@ -95,17 +83,17 @@ class Arrow_Manipulator:
                 item.update_positions()
                 item.quadrant = item.quadrant.replace('.svg', '')
                 item.update_quadrant()
-                pos = self.artboard.get_quadrant_center(item.quadrant) - item.boundingRect().center()
+                pos = self.graphboard.get_quadrant_center(item.quadrant) - item.boundingRect().center()
                 item.setPos(pos)
             else:
                 print("Failed to load SVG file:", new_svg)
-        self.artboard.arrowMoved.emit()
+        self.graphboard.arrowMoved.emit()
 
-    def deleteArrow(self):
+    def delete_arrow(self):
         for item in self.artboard_scene.get_selected_items():
-            self.artboard.scene().removeItem(item)
-        self.artboard.arrowMoved.emit()
-        self.artboard.attributesChanged.emit()
+            self.graphboard.scene().removeItem(item)
+        self.graphboard.arrowMoved.emit()
+        self.graphboard.attributesChanged.emit()
 
     def bringForward(self):
         for item in self.artboard_scene.get_selected_items():
@@ -136,16 +124,16 @@ class Arrow_Manipulator:
                 else:
                     print("Failed to load SVG file:", new_svg)
         else:
-            print("Cannot swap colors with no arrows on the artboard.")
+            print("Cannot swap colors with no arrows on the graphboard.")
             
-        self.artboard.arrowMoved.emit()
+        self.graphboard.arrowMoved.emit()
 
     def selectAll(self):
-        for item in self.artboard.items():
+        for item in self.graphboard.items():
             item.setSelected(True)
     
     def deselectAll(self):
-        for item in self.artboard.selectedItems():
+        for item in self.graphboard.selectedItems():
             item.setSelected(False)
 
 class Key_Press_Handler:
@@ -154,7 +142,7 @@ class Key_Press_Handler:
 
     def handleKeyPressEvent(self, event):
         if event.key() == Qt.Key_Delete:
-            self.arrowHandler.deleteArrow()
+            self.arrowHandler.delete_arrow()
 
 class JsonUpdater:
     def __init__(self, artboard_scene):
@@ -165,7 +153,7 @@ class JsonUpdater:
         with open('pictographs.json', 'r') as file:
             data = json.load(file)
         current_attributes = []
-        for item in self.artboard.scene().items():
+        for item in self.artboard_scene.items():
             if isinstance(item, Arrow):
                 current_attributes.append(item.get_attributes())
         current_attributes = sorted(current_attributes, key=lambda x: x['color'])
@@ -196,10 +184,10 @@ class JsonUpdater:
             json.dump(data, file, indent=4)
 
 class Exporter:
-    def __init__(self, view, artboard, artboard_scene):
+    def __init__(self, view, graphboard, artboard_scene):
         self.view = view
         self.artboard_scene = artboard_scene
-        self.artboard = artboard
+        self.graphboard = graphboard
 
     def exportAsPng(self):
         selectedItems = self.artboard_scene.get_selected_items()
@@ -225,7 +213,7 @@ class Exporter:
         svg_element.setAttribute('viewBox', '0 0 750 750')
         final_svg.appendChild(svg_element)
 
-        for item in self.artboard.scene().items():
+        for item in self.graphboard.scene().items():
             if isinstance(item, Arrow):
                 buffer = QBuffer()
                 buffer.open(QIODevice.WriteOnly)
@@ -318,5 +306,75 @@ class SvgHandler:
         for element in root.iter():
             if 'id' in element.attrib:
                 return element.attrib['id']
-
         return None
+    
+    @staticmethod
+    def point_in_svg(point, svg_file):
+        svg_path = SvgHandler.parse_svg_file(svg_file)
+        qpainter_path = SvgHandler.svg_path_to_qpainterpath(svg_path)
+        return qpainter_path.contains(point)
+    
+class Context_Menu_Handler:
+    def __init__(self, scene):
+        self.scene = scene
+
+    def create_context_menu(self, event, selected_items):
+        menu = QMenu()
+        if len(selected_items) == 2:
+            menu.addAction("Align horizontally", self.align_horizontally)
+            menu.addAction("Align vertically", self.align_vertically)
+        menu.addAction("Move", self.show_move_dialog)
+        menu.addAction("Delete", self.handlers.delete_arrow)
+        menu.exec_(event.screenPos())
+
+    def show_move_dialog(self):
+        dialog = QDialog()
+        layout = QFormLayout()
+
+        # Create the input fields
+        self.up_input = QSpinBox()
+        self.down_input = QSpinBox()
+        self.left_input = QSpinBox()
+        self.right_input = QSpinBox()
+
+        # Add the input fields to the dialog
+        layout.addRow("Up:", self.up_input)
+        layout.addRow("Down:", self.down_input)
+        layout.addRow("Left:", self.left_input)
+        layout.addRow("Right:", self.right_input)
+
+        # Create the buttons
+        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+
+        # Connect the buttons to their slots
+        buttons.accepted.connect(dialog.accept)
+        buttons.rejected.connect(dialog.reject)
+
+        # Add the buttons to the dialog
+        layout.addRow(buttons)
+
+        dialog.setLayout(layout)
+
+        # Show the dialog and wait for the user to click a button
+        result = dialog.exec_()
+
+        # If the user clicked the OK button, move the arrows
+        if result == QDialog.Accepted:
+            self.move_arrows()
+
+    def move_arrows(self):
+        items = self.scene.selectedItems()
+        for item in items:
+            item.moveBy(self.right_input.value() - self.left_input.value(), self.down_input.value() - self.up_input.value())
+
+    def align_horizontally(self):
+        items = self.scene().selectedItems()
+        average_y = sum(item.y() for item in items) / len(items)
+        for item in items:
+            item.setY(average_y)
+
+    def align_vertically(self):
+        items = self.scene().selectedItems()
+        average_x = sum(item.x() for item in items) / len(items)
+        for item in items:
+            item.setX(average_x)

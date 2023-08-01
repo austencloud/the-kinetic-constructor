@@ -1,7 +1,7 @@
 from PyQt5.QtGui import QPainter, QImage
-from PyQt5.QtCore import QRectF, QObject
+from PyQt5.QtCore import QRectF, Qt
 from PyQt5.QtWidgets import QGraphicsItem
-from PyQt5.QtCore import pyqtSignal
+
 
 class Pictograph(QGraphicsItem):
     def __init__(self, state, image: QImage, parent=None):
@@ -12,9 +12,12 @@ class Pictograph(QGraphicsItem):
         
     def paint(self, painter: QPainter, option, widget):
         print("Paint method called")
+        # Scale the image to fit the rectangle while preserving aspect ratio
+        scaled_image = self.image.scaled(375, 375, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         # Render the QImage onto the Pictograph
-        painter.drawImage(QRectF(0, 0, 375, 375), self.image)
+        painter.drawImage(QRectF(0, 0, scaled_image.width(), scaled_image.height()), scaled_image)
         print("Pictograph painted")
+
 
     def boundingRect(self):
         # Return the bounding rectangle of the Pictograph

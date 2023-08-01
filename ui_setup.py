@@ -9,49 +9,69 @@ from generator import Pictograph_Generator
 from staff import *
 from letter import Letter_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent
-from handlers import Arrow_Manipulator
+from handlers import Arrow_Manipulator, SvgHandler, Context_Menu_Handler
 from arrowbox import Arrow_Box
+from propbox import Prop_Box
+from menus import Menu_Bar
+from graphboard import Graphboard
+
 class UiSetup(QWidget):
     def __init__(self, main_window):
         super().__init__(main_window)
         self.setFocusPolicy(Qt.StrongFocus)
         self.main_window = main_window
         self.main_window.installEventFilter(self)  # This allows the main window to receive key events
-        self.main_window.setMinimumSize(3100, 1500)
+        self.main_window.setMinimumSize(3100, 1600)
         self.main_window.show()
-
+        self.svg_handler = SvgHandler()
+        
         self.arrows = []
-        self.artboard_scene = QGraphicsScene()
+        self.graphboard_scene = QGraphicsScene()
+        
         self.ARROW_DIR = 'images\\arrows'
         self.SVG_POS_Y = 250
+
+    def initMenus(self):
+        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene)
+        self.menu_bar = Menu_Bar()
 
     def initLayouts(self):
         self.main_layout = QHBoxLayout()
         self.right_layout = QVBoxLayout()
         self.left_layout = QHBoxLayout()
-        self.upper_right_layout = QHBoxLayout()
-        self.lower_right_layout = QVBoxLayout()
-        self.artboard_layout = QVBoxLayout()
+        self.top_right_layout = QHBoxLayout() # graphboard, buttons, info
+        self.bottom_right_layout = QVBoxLayout() # Sequence
+        self.lower_top_right_layout = QHBoxLayout() # Word label
+        self.graphboard_layout = QVBoxLayout()
         self.button_layout = QVBoxLayout()
         self.info_layout = QVBoxLayout()
-        self.upper_right_layout.addLayout(self.artboard_layout)
-        self.upper_right_layout.addLayout(self.button_layout)
-        self.upper_right_layout.addLayout(self.info_layout)
-        self.right_layout.addLayout(self.upper_right_layout)
-        self.right_layout.addLayout(self.lower_right_layout)
+        self.word_label_layout = QHBoxLayout()
+
+
+        self.top_right_layout.addLayout(self.graphboard_layout)
+        self.top_right_layout.addLayout(self.button_layout)
+        self.top_right_layout.addLayout(self.info_layout)
+
+        self.lower_top_right_layout.addLayout(self.word_label_layout)
+        self.bottom_right_layout.addLayout(self.lower_top_right_layout)
+
+        self.right_layout.addLayout(self.top_right_layout)
+        self.right_layout.addLayout(self.bottom_right_layout)
+
+
         self.main_layout.addLayout(self.left_layout)
         self.main_layout.addLayout(self.right_layout)
         self.main_window.setLayout(self.main_layout)
 
-    def initArtboard(self):
+    def initGraphboard(self):
         self.grid = Grid('images\\grid\\grid.svg')
-        self.artboard = Artboard(self.artboard_scene, self.grid, self.info_tracker, self.staff_manager)
+        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.context_menu_handler)
         transform = QTransform()
-        self.grid_center = QPointF(self.artboard.frameSize().width() / 2, self.artboard.frameSize().height() / 2)
+        self.grid_center = QPointF(self.graphboard.frameSize().width() / 2, self.graphboard.frameSize().height() / 2 - 75)
         grid_size = 650
         transform.translate(self.grid_center.x() - (grid_size / 2), self.grid_center.y() - (grid_size / 2))
         self.grid.setTransform(transform)
-
+        
     def initLetterButtons(self):
         # Create a new layout for the Word Constructor's widgets
         letter_buttons_layout = QVBoxLayout()
@@ -84,7 +104,7 @@ class UiSetup(QWidget):
         button_font = QFont('Helvetica', 14)
         button_width = 225
     
-        self.artboard.set_handlers(self.handlers)
+        self.graphboard.set_handlers(self.handlers)
         masterbtnlayout = QVBoxLayout()
         buttonlayout = QHBoxLayout()
         buttonstack = QVBoxLayout()
@@ -98,11 +118,11 @@ class UiSetup(QWidget):
         ### ARROW MANIPULATOR BUTTONS ###
 
         self.updatePositionButton = QPushButton("Update Position")
-        self.updatePositionButton.clicked.connect(lambda: self.handlers.jsonUpdater.updatePositionInJson(*self.artboard.get_current_arrow_positions()))
+        self.updatePositionButton.clicked.connect(lambda: self.handlers.jsonUpdater.updatePositionInJson(*self.graphboard.getCurrentArrowPositions()))
         buttonstack.addWidget(self.updatePositionButton)
 
         self.deleteButton = QPushButton("Delete")
-        self.deleteButton.clicked.connect(self.handlers.arrowManipulator.deleteArrow)
+        self.deleteButton.clicked.connect(self.handlers.arrowManipulator.delete_arrow)
         buttonstack.addWidget(self.deleteButton)
 
         self.rotateRightButton = QPushButton("Rotate Right")
@@ -135,7 +155,7 @@ class UiSetup(QWidget):
         ### SEQUENCE BUTTONS ###
 
         add_to_sequence_button = QPushButton("Add to Sequence")
-        add_to_sequence_button.clicked.connect(lambda _: self.sequence_manager.add_to_sequence(self.artboard))
+        add_to_sequence_button.clicked.connect(lambda _: self.sequence_manager.add_to_sequence(self.graphboard))
         buttonstack.addWidget(add_to_sequence_button)
 
         ### EXPORT BUTTONS ###
@@ -182,7 +202,7 @@ class UiSetup(QWidget):
         arrowbox_frame.setLayout(arrowbox_layout)  # set the layout to the frame
 
         arrowbox_scene = QGraphicsScene()
-        self.arrow_manipulator = Arrow_Manipulator(self.artboard_scene, self.artboard)
+        self.arrow_manipulator = Arrow_Manipulator(self.graphboard_scene, self.graphboard)
         for arrow in self.arrows:
             arrowbox_scene.addItem(arrow)  # use arrowbox_scene here
             arrow.attributesChanged.connect(self.info_tracker.update)
@@ -195,11 +215,11 @@ class UiSetup(QWidget):
         for dirpath, dirnames, filenames in os.walk(self.ARROW_DIR):
             svgs_full_paths.extend([os.path.join(dirpath, filename) for filename in filenames if filename.endswith('.svg')])
 
-        for i, svg in enumerate(svgs_full_paths):
-            file_name = os.path.basename(svg)
+        for i, svg_file in enumerate(svgs_full_paths):
+            file_name = os.path.basename(svg_file)
             if file_name in default_arrows:
-                self.artboard.set_handlers(self.handlers)
-                arrow_item = Arrow(svg, self.artboard, self.info_tracker, self.handlers, self.arrow_manipulator)
+                self.graphboard.set_handlers(self.arrow_manipulator)
+                arrow_item = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.context_menu_handler, self.arrow_manipulator)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
                 arrow_item.setScale(1)
@@ -211,36 +231,14 @@ class UiSetup(QWidget):
                 svg_item_count += 1
                 self.arrows.append(arrow_item)
 
-        arrowbox = Arrow_Box(arrowbox_scene, self.artboard, self.info_tracker)
-        arrowbox.setAcceptDrops(True) 
-        arrowbox.setFrameShape(QFrame.NoFrame)
-        arrowbox_layout.addWidget(arrowbox)  # add the QGraphicsView to the layout
+        arrowbox = Arrow_Box(arrowbox_scene, self.graphboard, self.info_tracker, self.svg_handler)
 
+        arrowbox_layout.addWidget(arrowbox) 
         arrowbox_frame.setFixedSize(400, 1200)
         self.left_layout.addWidget(arrowbox_frame)
 
     def initPropBox(self):
-        prop_box = QScrollArea(self.main_window)
-        propbox_scene = QGraphicsScene()
-
-        # Create staff objects and add them to the scene
-        self.red_staff = Artboard_Staff('red_staff', propbox_scene, self.staff_manager.staff_locations['N_staff'], 'red', 'images\\staves\\N_staff_red.svg')
-        self.blue_staff = Artboard_Staff('blue_staff', propbox_scene, self.staff_manager.staff_locations['N_staff'], 'blue', 'images\\staves\\N_staff_blue.svg')
-
-
-        propbox_scene.addItem(self.red_staff)
-        propbox_scene.addItem(self.blue_staff)
-
-        #set locations of the items to show in the propbox's center
-        self.red_staff.setPos(100, 100)
-
-        view = QGraphicsView(propbox_scene)
-        view.setFrameShape(QFrame.NoFrame)
-        prop_box.setWidget(view)
-        prop_box.setWidgetResizable(True)
-        prop_box.setFixedSize(400, 1200)
-
-        self.left_layout.addWidget(prop_box)
+        self.prop_box = Prop_Box(self.main_window, self.staff_manager, self)
 
     def initInfoTracker(self):
         self.info_label = QLabel(self.main_window)
@@ -248,7 +246,7 @@ class UiSetup(QWidget):
 
     def initWordLabel(self):
         self.word_label = QLabel(self.main_window)
-        self.lower_right_layout.addWidget(self.word_label)
+        self.bottom_right_layout.addWidget(self.word_label)
         self.word_label.setFont(QFont('Helvetica', 20))
         self.word_label.setText("My word: ")
 
@@ -264,24 +262,23 @@ class UiSetup(QWidget):
         # Set the width and height
         self.sequence_container.setFixedSize(1700, 500)
         self.sequence_container.show()
-        self.lower_right_layout.addWidget(self.sequence_container)
+        self.bottom_right_layout.addWidget(self.sequence_container)
 
         clear_sequence_button = self.sequence_manager.get_clear_sequence_button()
-        self.lower_right_layout.addWidget(clear_sequence_button)
+        self.bottom_right_layout.addWidget(clear_sequence_button)
 
     def initHandlers(self):
-       self.handlers = Handlers(self.artboard, self.artboard, self.grid, self.artboard, self.info_tracker, self)
-       self.artboard.set_handlers(self.handlers)
+       self.handlers = Handlers(self.graphboard, self.graphboard, self.grid, self.graphboard, self.info_tracker, self)
+       self.graphboard.set_handlers(self.handlers)
 
     def initGenerator(self):
-    
-        self.generator = Pictograph_Generator(self.staff_manager, self.artboard, self.artboard, self.artboard_scene, self.info_tracker, self.handlers, self.main_window, self, self.arrow_manipulator)
+        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard, self.graphboard, self.graphboard_scene, self.info_tracker, self.handlers, self.main_window, self, self.arrow_manipulator)
 
     def initStaffManager(self):
-        self.staff_manager = Staff_Manager(self.artboard_scene)
+        self.staff_manager = Staff_Manager(self.graphboard_scene)
 
     def initLetterManager(self):
-        self.letter_manager = Letter_Manager(self.artboard, self.info_tracker)
+        self.letter_manager = Letter_Manager(self.graphboard, self.info_tracker)
         self.letterInput = QLineEdit(self.main_window)
         self.right_layout.addWidget(self.letterInput)
         self.assignLetterButton = QPushButton("Assign Letter", self.main_window)
@@ -291,11 +288,11 @@ class UiSetup(QWidget):
     def connectInfoTracker(self):
         self.info_layout.addWidget(self.info_label)
 
-        self.artboard_scene.changed.connect(self.info_tracker.update)
+        self.graphboard_scene.changed.connect(self.info_tracker.update)
 
-    def connectArtboard(self):
-        self.info_tracker.set_artboard(self.artboard)
-        self.artboard_layout.addWidget(self.artboard)
+    def connectGraphboard(self):
+        self.info_tracker.set_graphboard(self.graphboard)
+        self.graphboard_layout.addWidget(self.graphboard)
 
     def keyPressEvent(self, event):
         self.handlers.keyPressHandler.handleKeyPressEvent(event)
