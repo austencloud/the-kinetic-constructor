@@ -9,7 +9,7 @@ from generator import Pictograph_Generator
 from staff import *
 from letter import Letter_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent
-from handlers import Arrow_Manipulator, SvgHandler, Context_Menu_Handler
+from handlers import Arrow_Manipulator, SvgHandler, Context_Menu_Handler, Exporter
 from arrowbox import Arrow_Box
 from propbox import Prop_Box
 from menus import Menu_Bar
@@ -21,18 +21,38 @@ class UiSetup(QWidget):
         self.setFocusPolicy(Qt.StrongFocus)
         self.main_window = main_window
         self.main_window.installEventFilter(self)  # This allows the main window to receive key events
-        self.main_window.setMinimumSize(3100, 1600)
+        self.main_window.setMinimumSize(2900, 1600)
         self.main_window.show()
         self.svg_handler = SvgHandler()
-        
         self.arrows = []
         self.graphboard_scene = QGraphicsScene()
-        
         self.ARROW_DIR = 'images\\arrows'
         self.SVG_POS_Y = 250
 
+        self.initStaffManager()
+        self.initLayouts()
+        self.initInfoTracker()
+        self.initMenus()
+        self.initGraphboard()
+
+
+        self.connectGraphboard()
+        self.initHandlers()
+        self.initLetterButtons()
+        self.initArrowBox()
+        self.initGenerator()
+        self.initPropBox()
+        self.initButtons()
+        self.connectInfoTracker()
+        self.initWordLabel()
+        self.initSequenceScene()
+        self.setFocus()
+
+    ### INITIALIZERS ###
+
     def initMenus(self):
-        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene)
+        self.exporter = Exporter()
+        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.handlers, self.sequence_manager, self.arrow_manipulator, self.exporter)
         self.menu_bar = Menu_Bar()
 
     def initLayouts(self):
@@ -146,7 +166,7 @@ class UiSetup(QWidget):
         buttonstack.addWidget(self.swapColors)
 
 
-        ##3 SELECTION BUTTONS ###
+        ### SELECTION BUTTONS ###
 
         self.selectAllButton = QPushButton("Select All")
         self.selectAllButton.clicked.connect(self.handlers.arrowManipulator.selectAll)
@@ -285,6 +305,10 @@ class UiSetup(QWidget):
         self.assignLetterButton.clicked.connect(lambda: self.letter_manager.assignLetter(self.letterInput.text()))
         self.right_layout.addWidget(self.assignLetterButton)
 
+
+### CONNECTORS ###
+
+
     def connectInfoTracker(self):
         self.info_layout.addWidget(self.info_label)
 
@@ -293,6 +317,19 @@ class UiSetup(QWidget):
     def connectGraphboard(self):
         self.info_tracker.set_graphboard(self.graphboard)
         self.graphboard_layout.addWidget(self.graphboard)
+
+
+### GETTERS ###
+
+    def get_sequence_manager(self):
+        if not hasattr(self, 'sequence_manager'):
+            self.sequence_manager = Sequence_Manager(self.sequence_scene, self.generator, self, self.info_tracker)
+            self.sequence_scene.set_manager(self.sequence_manager)  # Set the manager of the sequence container
+            self.sequence_manager.manager = self.sequence_manager  # Set the manager of the sequence scene
+        return self.sequence_manager
+
+
+### EVENTS ###
 
     def keyPressEvent(self, event):
         self.handlers.keyPressHandler.handleKeyPressEvent(event)

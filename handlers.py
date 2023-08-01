@@ -15,28 +15,28 @@ from arrow import Arrow
 class Handlers:
     arrowMoved = pyqtSignal()
 
-    def __init__(self, graphboard, view, grid, artboard_scene, main_window, info_tracker):
+    def __init__(self, graphboard, view, grid, graphboard_scene, main_window, info_tracker):
         self.graphboard = graphboard
         self.view = view
         self.grid = grid
-        self.artboard_scene = artboard_scene
+        self.graphboard_scene = graphboard_scene
         self.main_window = main_window
         self.info_tracker = info_tracker
 
 
-        self.arrowManipulator = Arrow_Manipulator(artboard_scene, self.graphboard)
-        self.keyPressHandler = Key_Press_Handler(Arrow_Manipulator(artboard_scene, self.graphboard))
-        self.jsonUpdater = JsonUpdater(artboard_scene)
-        self.exporter = Exporter(view, self.graphboard, artboard_scene)
+        self.arrowManipulator = Arrow_Manipulator(graphboard_scene, self.graphboard)
+        self.keyPressHandler = Key_Press_Handler(Arrow_Manipulator(graphboard_scene, self.graphboard))
+        self.jsonUpdater = JsonUpdater(graphboard_scene)
+        self.exporter = Exporter(view, self.graphboard, graphboard_scene)
         self.svgHandler = SvgHandler()
 
 class Arrow_Manipulator:
-    def __init__(self, artboard_scene, graphboard):
-        self.artboard_scene = artboard_scene
+    def __init__(self, graphboard_scene, graphboard):
+        self.graphboard_scene = graphboard_scene
         self.graphboard = graphboard
 
     def rotateArrow(self, direction):
-        for item in self.artboard_scene.get_selected_items():
+        for item in self.graphboard_scene.get_selected_items():
             print(item.get_attributes())
             old_svg = f"images/arrows/{item.color}_{item.type}_{item.rotation}_{item.quadrant}.svg"
             print(old_svg)
@@ -63,7 +63,7 @@ class Arrow_Manipulator:
         self.graphboard.arrowMoved.emit()
 
     def mirrorArrow(self):
-        for item in self.artboard_scene.get_selected_items():
+        for item in self.graphboard_scene.get_selected_items():
             current_svg = item.svg_file
 
             if item.rotation == "l":
@@ -90,19 +90,19 @@ class Arrow_Manipulator:
         self.graphboard.arrowMoved.emit()
 
     def delete_arrow(self):
-        for item in self.artboard_scene.get_selected_items():
+        for item in self.graphboard_scene.get_selected_items():
             self.graphboard.scene().removeItem(item)
         self.graphboard.arrowMoved.emit()
         self.graphboard.attributesChanged.emit()
 
     def bringForward(self):
-        for item in self.artboard_scene.get_selected_items():
+        for item in self.graphboard_scene.get_selected_items():
             z = item.zValue()
             item.setZValue(z + 1)
 
     def swapColors(self):
-        self.artboard_scene.select_all_arrows()
-        arrow_items = [item for item in self.artboard_scene.get_selected_items() if isinstance(item, Arrow)]
+        self.graphboard_scene.select_all_arrows()
+        arrow_items = [item for item in self.graphboard_scene.get_selected_items() if isinstance(item, Arrow)]
         if len(arrow_items) >= 1:
             for item in arrow_items:
                 current_svg = item.svg_file
@@ -145,15 +145,15 @@ class Key_Press_Handler:
             self.arrowHandler.delete_arrow()
 
 class JsonUpdater:
-    def __init__(self, artboard_scene):
-        self.artboard_scene = artboard_scene
+    def __init__(self, graphboard_scene):
+        self.graphboard_scene = graphboard_scene
 
 
     def updatePositionInJson(self, red_position, blue_position):
         with open('pictographs.json', 'r') as file:
             data = json.load(file)
         current_attributes = []
-        for item in self.artboard_scene.items():
+        for item in self.graphboard_scene.items():
             if isinstance(item, Arrow):
                 current_attributes.append(item.get_attributes())
         current_attributes = sorted(current_attributes, key=lambda x: x['color'])
@@ -184,20 +184,19 @@ class JsonUpdater:
             json.dump(data, file, indent=4)
 
 class Exporter:
-    def __init__(self, view, graphboard, artboard_scene):
-        self.view = view
-        self.artboard_scene = artboard_scene
+    def __init__(self, graphboard, graphboard_scene):
+        self.graphboard_scene = graphboard_scene
         self.graphboard = graphboard
 
     def exportAsPng(self):
-        selectedItems = self.artboard_scene.get_selected_items()
-        image = QImage(self.view.size(), QImage.Format_ARGB32)
+        selectedItems = self.graphboard_scene.get_selected_items()
+        image = QImage(self.graphboard.size(), QImage.Format_ARGB32)
         painter = QPainter(image)
 
         for item in selectedItems:
             item.setSelected(False)
 
-        self.view.render(painter)
+        self.graphboard.render(painter)
         painter.end()
         image.save("export.png")
 

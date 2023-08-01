@@ -16,7 +16,7 @@ class Info_Tracker:
         self.label.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
         self.label.setAlignment(Qt.AlignTop)
         self.letters = self.load_letters()
-        self.staff_manager = staff_manager  # Add this line
+        self.staff_manager = staff_manager
 
     def start(self):
         self.previous_state = self.get_current_state()
@@ -115,7 +115,7 @@ class Info_Tracker:
         for letter, combinations in self.letters.items():
             combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]  # Ignore the first dictionary which contains optimal positions
             if current_combination in combinations:
-                letter_text += f"<span style='font-size: 100px; font-weight: bold;'>{letter}</span>"
+                letter_text += f"<span style='font-size: 140px; font-weight: bold;'>{letter}</span>"
                 start_position, end_position = self.get_positions()
                 letter_text += f"<h4>{start_position} → {end_position}</h4>"
                 self.letter = letter 

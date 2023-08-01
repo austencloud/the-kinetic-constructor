@@ -7,23 +7,23 @@ from arrow import Arrow
 from handlers import SvgHandler, Context_Menu_Handler
 
 class Pictograph_Generator():
-    def __init__(self, staff_manager, artboard, artboard_view, artboard_scene, info_tracker, handlers, main_window, arrow_manipulator, parent=None):
+    def __init__(self, staff_manager, graphboard, graphboard_view, graphboard_scene, info_tracker, handlers, main_window, arrow_manipulator, parent=None):
         self.staff_manager = staff_manager
         self.parent = parent
-        self.artboard = artboard
-        self.artboard_view = artboard_view
+        self.graphboard = graphboard
+        self.graphboard_view = graphboard_view
         self.info_tracker = info_tracker
         self.handlers = handlers
-        self.artboard_scene = artboard_scene
+        self.graphboard_scene = graphboard_scene
         self.current_letter = None  # Add this line
         self.main_window = main_window
         self.arrow_manipulator = arrow_manipulator
         self.svg_handler = SvgHandler()
-        self.context_menu_handler = Context_Menu_Handler(self.artboard_scene)
+        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene)
 
     def generate_pictograph(self, letter, staff_manager):
         #delete all items
-        self.artboard.clear()
+        self.graphboard.clear()
 
         # Reload the JSON file
         with open('pictographs.json', 'r') as file:
@@ -51,7 +51,7 @@ class Pictograph_Generator():
             # Check if the dictionary has all the keys you need
             if all(key in combination for key in ['color', 'type', 'rotation', 'quadrant']):
                 svg_file = f"images/arrows/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}.svg"
-                arrow = Arrow(svg_file, self.artboard_view, self.info_tracker, self.svg_handler, self.context_menu_handler, self.arrow_manipulator)
+                arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.context_menu_handler, self.arrow_manipulator)
                 arrow.attributesChanged.connect(lambda: self.update_staff(arrow, staff_manager))
                 arrow.set_attributes(combination)
                 arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
@@ -62,7 +62,7 @@ class Pictograph_Generator():
 
         # Add the arrows to the scene
         for arrow in created_arrows:
-            self.artboard_scene.addItem(arrow)
+            self.graphboard_scene.addItem(arrow)
 
         for arrow in created_arrows:
             if optimal_positions:
@@ -75,12 +75,12 @@ class Pictograph_Generator():
                 else:
                     print(f"No optimal position found for {arrow.get_attributes()['color']} arrow. Setting position to quadrant center.")
                     # Calculate the position to center the arrow at the quadrant center
-                    pos = self.artboard.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
+                    pos = self.graphboard.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
                     arrow.setPos(pos)
             else:
                 print(f"No optimal positions dictionary found. Setting position for {arrow.get_attributes()['color']} arrow to quadrant center.")
                 # Calculate the position to center the arrow at the quadrant center
-                pos = self.artboard.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
+                pos = self.graphboard.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
                 arrow.setPos(pos)
 
                 # Call the update_staff function for the arrow
@@ -96,7 +96,7 @@ class Pictograph_Generator():
         self.staff_manager.remove_non_beta_staves()
         # Update the info label
         self.info_tracker.update()
-        self.artboard_view.arrowMoved.emit()
+        self.graphboard_view.arrowMoved.emit()
     
     def get_current_letter(self):
         return self.current_letter
@@ -106,7 +106,7 @@ class Pictograph_Generator():
 
         staff_positions = [arrow.end_location.upper() + '_staff_' + arrow.color for arrow in arrows]
 
-        for element_id, staff in staff_manager.artboard_staffs.items():
+        for element_id, staff in staff_manager.graphboard_staffs.items():
             if element_id in staff_positions:
                 staff.show()
             else:

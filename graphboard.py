@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsItem, QApplication, QGraphicsRectItem
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsItem, QApplication, QGraphicsRectItem, QAction, QMenu
 from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QPointF, QTimer
 from PyQt5.QtWidgets import QGraphicsItem, QToolTip
 from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
@@ -29,6 +29,7 @@ class Graphboard(QGraphicsView):
         self.info_tracker = info_tracker
         self.svg_handler = svg_handler
         self.context_menu_handler = context_menu_handler
+
         self.renderer = QSvgRenderer()
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
         self.attributesChanged.connect(self.update_staffs_and_check_beta)
@@ -52,7 +53,7 @@ class Graphboard(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         self.graphboard_scene.addItem(self.grid)
-        self.drag = Update_Quadrant_Preview(self, self.dragging)
+        self.drag = Quadrant_Preview_Drag(self, self.dragging)
 
     def mousePressEvent(self, event):
         self.dragStartPosition = event.pos()
@@ -122,8 +123,6 @@ class Graphboard(QGraphicsView):
                         item.update_positions()
                 self.arrowMoved.emit()
 
-
-
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
             event.setDropAction(Qt.CopyAction)
@@ -181,9 +180,75 @@ class Graphboard(QGraphicsView):
             event.ignore()
 
         quadrant = self.drag.get_graphboard_quadrants(self.arrow_item.pos())
+        self.arrow_item.quadrant = quadrant
         self.drag.update_arrow_svg(self.arrow_item, quadrant)  # Update the arrow's SVG file
         self.arrow_item.attributesChanged.emit()
         self.arrowMoved.emit()
+
+    def contextMenuEvent(self, event):
+        clicked_item = self.itemAt(event.pos())
+        if isinstance(clicked_item, Arrow):
+            arrow_menu = QMenu(self)
+
+            delete_action = QAction('Delete', self)
+            delete_action.triggered.connect(self.handlers.arrowManipulator.delete_arrow)
+            arrow_menu.addAction(delete_action)
+
+            rotate_right_action = QAction('Rotate Right', self)
+            rotate_right_action.triggered.connect(lambda: self.handlers.arrowManipulator.rotateArrow("right"))
+            arrow_menu.addAction(rotate_right_action)
+
+            rotate_left_action = QAction('Rotate Left', self)
+            rotate_left_action.triggered.connect(lambda: self.handlers.arrowManipulator.rotateArrow("left"))
+            arrow_menu.addAction(rotate_left_action)
+
+            mirror_action = QAction('Mirror', self)
+            mirror_action.triggered.connect(lambda: self.handlers.arrowManipulator.mirrorArrow())
+            arrow_menu.addAction(mirror_action)
+
+            bring_forward_action = QAction('Bring Forward', self)
+            bring_forward_action.triggered.connect(self.handlers.arrowManipulator.bringForward)
+            arrow_menu.addAction(bring_forward_action)
+
+        elif isinstance(clicked_item, Staff):
+            staff_menu = QMenu(self)
+
+            delete_action = QAction('Delete', self)
+            delete_action.triggered.connect(self.handlers.arrowManipulator.delete_arrow)
+            staff_menu.addAction(delete_action)
+
+            rotate_right_action = QAction('Rotate Right', self)
+            rotate_right_action.triggered.connect(lambda: self.handlers.arrowManipulator.rotateArrow("right"))
+            staff_menu.addAction(rotate_right_action)
+
+            rotate_left_action = QAction('Rotate Left', self)
+            rotate_left_action.triggered.connect(lambda: self.handlers.arrowManipulator.rotateArrow("left"))
+            staff_menu.addAction(rotate_left_action)
+        
+        else: 
+            graphboard_menu = QMenu(self)
+
+            swap_colors_action = QAction('Swap Colors', self)
+            swap_colors_action.triggered.connect(self.handlers.arrowManipulator.swapColors)
+            graphboard_menu.addAction(swap_colors_action)
+
+            select_all_action = QAction('Select All', self)
+            select_all_action.triggered.connect(self.handlers.arrowManipulator.selectAll)
+            graphboard_menu.addAction(select_all_action)
+
+            add_to_sequence_action = QAction('Add to Sequence', self)
+            add_to_sequence_action.triggered.connect(lambda _: self.get.add_to_sequence(self.graphboard))
+            graphboard_menu.addAction(add_to_sequence_action)
+
+            export_as_png_action = QAction('Export to PNG', self)
+            export_as_png_action.triggered.connect(self.handlers.exporter.exportAsPng)
+            graphboard_menu.addAction(export_as_png_action)
+
+            export_as_svg_action = QAction('Export to SVG', self)
+            export_as_svg_action.triggered.connect(self.handlers.exporter.exportAsSvg)
+            graphboard_menu.addAction(export_as_svg_action)
+
+            graphboard_menu.exec_(event.globalPos())
 
     def print_item_types(self):
         for item in self.scene().items():
@@ -352,7 +417,7 @@ class Graphboard(QGraphicsView):
 
 
 
-class Update_Quadrant_Preview(QDrag):
+class Quadrant_Preview_Drag(QDrag):
     def __init__(self, source, arrow_item, *args, **kwargs):
         super().__init__(source, *args, **kwargs)
         self.arrow_item = arrow_item
