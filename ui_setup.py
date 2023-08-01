@@ -1,14 +1,14 @@
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QLineEdit
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QLineEdit, QGridLayout
 import os
 from arrow import Arrow
-from PyQt5.QtGui import QFont, QTransform
+from PyQt5.QtGui import QFont, QTransform, QIcon
 from sequence import *
 from handlers import Handlers
 from info_tracker import Info_Tracker
 from generator import Pictograph_Generator
 from staff import *
 from letter import Letter_Manager
-from PyQt5.QtCore import Qt, QPointF, QEvent
+from PyQt5.QtCore import Qt, QPointF, QEvent, QSize
 from handlers import Arrow_Manipulator, SvgHandler, Exporter, JsonUpdater
 from arrowbox import Arrow_Box
 from propbox import Prop_Box
@@ -21,7 +21,7 @@ class UiSetup(QWidget):
         self.setFocusPolicy(Qt.StrongFocus)
         self.main_window = main_window
         self.main_window.installEventFilter(self)  # This allows the main window to receive key events
-        self.main_window.setMinimumSize(2900, 1600)
+        self.main_window.setMinimumSize(2000, 1600)
         self.main_window.show()
         self.svg_handler = SvgHandler()
         self.arrows = []
@@ -63,31 +63,43 @@ class UiSetup(QWidget):
 
     def initLayouts(self):
         self.main_layout = QHBoxLayout()
-        self.right_layout = QVBoxLayout()
+        self.right_layout = QVBoxLayout()  # Change this to QHBoxLayout
         self.left_layout = QHBoxLayout()
-        self.top_right_layout = QHBoxLayout() # graphboard, buttons, info
-        #align the top right layout ot he right
-        self.bottom_right_layout = QVBoxLayout() # Sequence
-        self.lower_top_right_layout = QHBoxLayout() # Word label
+        self.upper_right_layout = QHBoxLayout()  # This will contain graphboard and buttons
+        self.bottom_right_layout = QVBoxLayout()  # Sequence
+        self.lower_top_right_layout = QHBoxLayout()
+        self.lower_top_right_layout.setAlignment(Qt.AlignRight)
+
+        self.objectbox_layout = QVBoxLayout()
+        self.objectbox_layout.setAlignment(Qt.AlignRight)
         self.graphboard_layout = QVBoxLayout()
         self.graphboard_layout.setAlignment(Qt.AlignRight)
-        self.button_layout = QVBoxLayout()
+        self.button_layout = QHBoxLayout()  # Change this to QHBoxLayout
         self.button_layout.setAlignment(Qt.AlignRight)
         self.info_layout = QVBoxLayout()
         self.info_layout.setAlignment(Qt.AlignRight)
         self.word_label_layout = QHBoxLayout()
 
 
-        self.top_right_layout.addLayout(self.graphboard_layout)
-        self.top_right_layout.addLayout(self.button_layout)
-        self.top_right_layout.addLayout(self.info_layout)
+
+        self.upper_right_graphboard_with_panel_layout = QVBoxLayout()
+        self.upper_right_graphboard_with_panel_layout.addLayout(self.graphboard_layout)
+        self.upper_right_graphboard_with_panel_layout.addLayout(self.button_layout)  # Add button_layout after graphboard_layout
+        
+        self.upper_right_layout.addLayout(self.objectbox_layout)
+        self.upper_right_layout.addLayout(self.upper_right_graphboard_with_panel_layout)
+        self.upper_right_layout.addStretch()
+
+        self.objectbox_layout.addStretch()
+        self.objectbox_layout.addStretch()
+
 
         self.lower_top_right_layout.addLayout(self.word_label_layout)
         self.bottom_right_layout.addLayout(self.lower_top_right_layout)
 
-        self.right_layout.addLayout(self.top_right_layout)
-        self.right_layout.addLayout(self.bottom_right_layout)
-
+        self.right_layout.addLayout(self.upper_right_layout)
+        self.upper_right_layout.addLayout(self.info_layout)
+        self.right_layout.addLayout(self.bottom_right_layout)  # Add info_layout to right_layout
 
         self.main_layout.addLayout(self.left_layout)
         self.main_layout.addLayout(self.right_layout)
@@ -132,12 +144,14 @@ class UiSetup(QWidget):
     
     def initButtons(self):
         button_font = QFont('Helvetica', 14)
-        button_width = 225
+        button_width = 60
+        button_height = 60
+        icon_size = QSize(40, 40)
 
         self.graphboard.set_handlers(self.handlers)
         masterbtnlayout = QVBoxLayout()
         buttonlayout = QHBoxLayout()
-        buttonstack = QVBoxLayout()
+        buttonstack = QHBoxLayout()
         buttonstack.setAlignment(Qt.AlignTop)
         masterbtnlayout.setAlignment(Qt.AlignTop)
         buttonlayout.addLayout(buttonstack)
@@ -145,58 +159,63 @@ class UiSetup(QWidget):
 
         ### DEVELOPER FUNCTIONS ###
 
-        self.updatePositionButton = QPushButton("Update Position")
+        self.updatePositionButton = QPushButton(QIcon("images/icons/update_locations.png"), "")
+        self.updatePositionButton.setToolTip("Update Position")
         self.updatePositionButton.clicked.connect(lambda: self.json_updater.updatePositionInJson(*self.graphboard.getCurrentArrowPositions()))
-        buttonstack.addWidget(self.updatePositionButton)
 
         ### ARROW MANIPULATOR BUTTONS ###
 
-        self.deleteButton = QPushButton("Delete")
+        self.deleteButton = QPushButton(QIcon("images/icons/delete.png"), "")
+        self.deleteButton.setToolTip("Delete")
         self.deleteButton.clicked.connect(lambda: self.handlers.arrowManipulator.delete_arrow(self.graphboard_scene.selectedItems()))
-        buttonstack.addWidget(self.deleteButton)
+        
 
-        self.rotateRightButton = QPushButton("Rotate Right")
+        self.rotateRightButton = QPushButton(QIcon("images/icons/rotate-right.png"), "")
+        self.rotateRightButton.setToolTip("Rotate Right")
         self.rotateRightButton.clicked.connect(lambda: self.handlers.arrowManipulator.rotateArrow("right", self.graphboard_scene.selectedItems()))
-        buttonstack.addWidget(self.rotateRightButton)
-
-        self.rotateLeftButton = QPushButton("Rotate Left")
+        self.rotateLeftButton = QPushButton(QIcon("images/icons/rotate-left.png"), "")
+        self.rotateLeftButton.setToolTip("Rotate Left")
         self.rotateLeftButton.clicked.connect(lambda: self.handlers.arrowManipulator.rotateArrow("left", self.graphboard_scene.selectedItems()))
-        buttonstack.addWidget(self.rotateLeftButton)
 
-        self.mirrorButton = QPushButton("Mirror")
+        self.mirrorButton = QPushButton(QIcon("images/icons/mirror.png"), "")
+        self.mirrorButton.setToolTip("Mirror")
         self.mirrorButton.clicked.connect(lambda: self.handlers.arrowManipulator.mirrorArrow(self.graphboard_scene.selectedItems()))
-        buttonstack.addWidget(self.mirrorButton)
 
-        self.bringForward = QPushButton("Bring Forward")
+
+        self.bringForward = QPushButton(QIcon("images/icons/bring_forward.png"), "")
+        self.bringForward.setToolTip("Bring Forward")
         self.bringForward.clicked.connect(lambda: self.handlers.arrowManipulator.bringForward(self.graphboard_scene.selectedItems()))
-        buttonstack.addWidget(self.bringForward)
 
-        self.swapColors = QPushButton("Swap Colors")
+        self.swapColors = QPushButton(QIcon("images/icons/swap.png"), "")
+        self.swapColors.setToolTip("Swap Colors")
         self.swapColors.clicked.connect(lambda: self.handlers.arrowManipulator.swapColors(self.graphboard_scene.selectedItems()))
-        buttonstack.addWidget(self.swapColors)
 
         ### SELECTION BUTTONS ###
 
-        self.selectAllButton = QPushButton("Select All")
+        self.selectAllButton = QPushButton(QIcon("images/icons/select_all.png"), "")
+        self.selectAllButton.setToolTip("Select All")
         self.selectAllButton.clicked.connect(self.handlers.arrowManipulator.selectAll)
-        buttonstack.addWidget(self.selectAllButton)
+
 
         ### SEQUENCE BUTTONS ###
 
-        add_to_sequence_button = QPushButton("Add to Sequence")
+        add_to_sequence_button = QPushButton(QIcon("images/icons/add_to_sequence.png"), "")
+        add_to_sequence_button.setToolTip("Add to Sequence")
         add_to_sequence_button.clicked.connect(lambda _: self.sequence_manager.add_to_sequence(self.graphboard))
-        buttonstack.addWidget(add_to_sequence_button)
+
 
         ### EXPORT BUTTONS ###
 
-        self.exportAsPNGButton = QPushButton("Export to PNG")
+        self.exportAsPNGButton = QPushButton(QIcon("images/icons/export.png"), "")
+        self.exportAsPNGButton.setToolTip("Export to PNG")
         self.exportAsPNGButton.clicked.connect(self.handlers.exporter.exportAsPng)
-        buttonstack.addWidget(self.exportAsPNGButton)
 
-        self.exportAsSVGButton = QPushButton("Export to SVG")
+
+        self.exportAsSVGButton = QPushButton(QIcon("images/icons/export.png"), "")
+        self.exportAsSVGButton.setToolTip("Export to SVG")
         self.exportAsSVGButton.clicked.connect(self.handlers.exporter.exportAsSvg)
-        buttonstack.addWidget(self.exportAsSVGButton)
-        
+
+
         ### STYLING ###
 
         self.deleteButton.setFont(button_font)
@@ -223,12 +242,49 @@ class UiSetup(QWidget):
         self.selectAllButton.setFixedWidth(button_width)
         add_to_sequence_button.setFixedWidth(button_width)
 
+        self.deleteButton.setFixedHeight(button_height)
+        self.rotateRightButton.setFixedHeight(button_height)
+        self.rotateLeftButton.setFixedHeight(button_height)
+        self.mirrorButton.setFixedHeight(button_height)
+        self.bringForward.setFixedHeight(button_height)
+        self.swapColors.setFixedHeight(button_height)
+        self.exportAsPNGButton.setFixedHeight(button_height)
+        self.exportAsSVGButton.setFixedHeight(button_height)
+        self.updatePositionButton.setFixedHeight(button_height)
+        self.selectAllButton.setFixedHeight(button_height)
+        add_to_sequence_button.setFixedHeight(button_height)
+
+        self.deleteButton.setIconSize(icon_size)
+        self.rotateRightButton.setIconSize(icon_size)
+        self.rotateLeftButton.setIconSize(icon_size)
+        self.mirrorButton.setIconSize(icon_size)
+        self.bringForward.setIconSize(icon_size)
+        self.swapColors.setIconSize(icon_size)
+        self.exportAsPNGButton.setIconSize(icon_size)
+        self.exportAsSVGButton.setIconSize(icon_size)
+        self.updatePositionButton.setIconSize(icon_size)
+        self.selectAllButton.setIconSize(icon_size)
+        add_to_sequence_button.setIconSize(icon_size)
+        
+        buttonstack.addWidget(self.deleteButton)
+        buttonstack.addWidget(self.rotateRightButton)
+        buttonstack.addWidget(self.rotateLeftButton)
+        buttonstack.addWidget(self.mirrorButton)
+        buttonstack.addWidget(self.bringForward)
+        buttonstack.addWidget(self.swapColors)
+        buttonstack.addWidget(self.exportAsPNGButton)
+        buttonstack.addWidget(self.exportAsSVGButton)
+        buttonstack.addWidget(self.updatePositionButton)
+        buttonstack.addWidget(self.selectAllButton)
+        buttonstack.addWidget(add_to_sequence_button)
+
+
         self.button_layout.addLayout(masterbtnlayout)
 
     def initArrowBox(self):
         arrowbox_frame = QFrame(self.main_window)
-        arrowbox_layout = QVBoxLayout()  # create a layout
-        arrowbox_frame.setLayout(arrowbox_layout)  # set the layout to the frame
+        objectbox_layout = QGridLayout()  # Change this to QGridLayout
+        arrowbox_frame.setLayout(objectbox_layout)  # set the layout to the frame
 
         arrowbox_scene = QGraphicsScene()
         self.arrow_manipulator = Arrow_Manipulator(self.graphboard_scene, self.graphboard)
@@ -238,11 +294,19 @@ class UiSetup(QWidget):
             arrow.attributesChanged.connect(lambda: self.generator.update_staff(arrow, self.staff_manager))
 
         svgs_full_paths = []
-        default_arrows = ['red_anti_r_ne.svg', 'red_iso_r_ne.svg', 'blue_anti_r_sw.svg', 'blue_iso_r_sw.svg']
+        default_arrows = ['red_iso_r_ne.svg', 'red_anti_r_ne.svg', 'blue_iso_r_sw.svg', 'blue_anti_r_sw.svg']
         svg_item_count = 0
 
         for dirpath, dirnames, filenames in os.walk(self.ARROW_DIR):
             svgs_full_paths.extend([os.path.join(dirpath, filename) for filename in filenames if filename.endswith('.svg')])
+
+        svg_item_count_red_iso = 0
+        svg_item_count_red_anti = 0
+        svg_item_count_blue_iso = 0
+        svg_item_count_blue_anti = 0
+        spacing = 200  # Define the spacing between items
+        y_pos_red = 0  # y position for red arrows
+        y_pos_blue = 200  # y position for blue arrows
 
         for i, svg_file in enumerate(svgs_full_paths):
             file_name = os.path.basename(svg_file)
@@ -251,23 +315,43 @@ class UiSetup(QWidget):
                 arrow_item = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_manipulator)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
-                arrow_item.setScale(1)
-                arrow_item.setPos(0, svg_item_count * self.SVG_POS_Y)
+                arrow_item.setScale(0.75)
+
+                if 'red' in file_name:
+                    if 'iso' in file_name:
+                        arrow_item.setPos(svg_item_count_red_iso * spacing, y_pos_red)  # Set the position of the red iso item
+                        svg_item_count_red_iso += 1
+                    elif 'anti' in file_name:
+                        arrow_item.setPos((svg_item_count_red_anti + 1) * spacing, y_pos_red)  # Set the position of the red anti item
+                        svg_item_count_red_anti += 1
+                elif 'blue' in file_name:
+                    if 'iso' in file_name:
+                        arrow_item.setPos(svg_item_count_blue_iso * spacing, y_pos_blue)  # Set the position of the blue iso item
+                        svg_item_count_blue_iso += 1
+                    elif 'anti' in file_name:
+                        arrow_item.setPos((svg_item_count_blue_anti + 1) * spacing, y_pos_blue)  # Set the position of the blue anti item
+                        svg_item_count_blue_anti += 1
+
                 arrowbox_scene.addItem(arrow_item) 
                 print(self.info_tracker)
                 arrow_item.attributesChanged.connect(self.info_tracker.update)
 
-                svg_item_count += 1
                 self.arrows.append(arrow_item)
+
 
         arrowbox = Arrow_Box(arrowbox_scene, self.graphboard, self.info_tracker, self.svg_handler)
 
-        arrowbox_layout.addWidget(arrowbox) 
-        arrowbox_frame.setFixedSize(400, 1200)
-        self.left_layout.addWidget(arrowbox_frame)
+        objectbox_layout.addWidget(arrowbox) 
+        arrowbox_frame.setFixedSize(500, 500)
+        self.objectbox_layout.addWidget(arrowbox_frame)  # Add arrowbox_frame to upper_right_layout
 
     def initPropBox(self):
-        self.prop_box = Prop_Box(self.main_window, self.staff_manager, self)
+        self.propbox = Prop_Box(self.main_window, self.staff_manager, self)
+        propbox_layout = QVBoxLayout()  # Create a new QVBoxLayout
+        propbox_layout.addWidget(self.propbox.prop_box_frame)  # Add the QFrame object to the layout
+        propbox_frame = QFrame()  # Create a new QFrame
+        propbox_frame.setLayout(propbox_layout)  # Set the layout to the frame
+        self.objectbox_layout.addWidget(propbox_frame)  # Add the frame to the upper_right_layout
 
     def initInfoTracker(self):
         self.info_label = QLabel(self.main_window)

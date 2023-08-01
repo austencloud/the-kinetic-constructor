@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsScene, QScrollArea, QGraphicsView, QFrame
+from PyQt5.QtWidgets import QGraphicsScene, QScrollArea, QGraphicsView, QFrame, QVBoxLayout
 from staff import PropBox_Staff
 
 class Prop_Box:
@@ -6,10 +6,10 @@ class Prop_Box:
         self.main_window = main_window
         self.staff_manager = staff_manager
         self.ui_setup = ui_setup
-        self.initPropBox()
+        self.prop_box_frame = self.initPropBox()
 
     def initPropBox(self):
-        prop_box = QScrollArea(self.main_window)
+        propbox = QFrame(self.main_window)
         propbox_scene = QGraphicsScene()
 
         # Create staff objects and add them to the scene
@@ -24,8 +24,11 @@ class Prop_Box:
 
         view = QGraphicsView(propbox_scene)
         view.setFrameShape(QFrame.NoFrame)
-        prop_box.setWidget(view)
-        prop_box.setWidgetResizable(True)
-        prop_box.setFixedSize(400, 1200)
 
-        self.ui_setup.left_layout.addWidget(prop_box)
+        layout = QVBoxLayout()  # Create a new QVBoxLayout
+        layout.addWidget(view)  # Add the view to the layout
+        propbox.setLayout(layout)  # Set the layout to the propbox
+
+        propbox.setFixedSize(500, 500)
+
+        return propbox  # Return the QFrame object
