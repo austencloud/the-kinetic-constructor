@@ -27,7 +27,7 @@ class Handlers:
         self.arrowManipulator = Arrow_Manipulator(graphboard_scene, self.graphboard)
         self.keyPressHandler = Key_Press_Handler(Arrow_Manipulator(graphboard_scene, self.graphboard))
         self.jsonUpdater = JsonUpdater(graphboard_scene)
-        self.exporter = Exporter(view, self.graphboard, graphboard_scene)
+        self.exporter = Exporter(self.graphboard, graphboard_scene)
         self.svgHandler = SvgHandler()
 
 class Arrow_Manipulator:
@@ -101,7 +101,7 @@ class Arrow_Manipulator:
             item.setZValue(z + 1)
 
     def swapColors(self):
-        self.graphboard_scene.select_all_arrows()
+        self.graphboard.select_all_arrows()
         arrow_items = [item for item in self.graphboard_scene.get_selected_items() if isinstance(item, Arrow)]
         if len(arrow_items) >= 1:
             for item in arrow_items:

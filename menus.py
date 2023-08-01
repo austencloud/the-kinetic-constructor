@@ -6,11 +6,12 @@ from staff import Staff
 
 
 class Context_Menu_Handler:
-    def __init__(self, scene, handlers, sequence_manager, arrow_manipulator):
+    def __init__(self, scene, handlers, sequence_manager, arrow_manipulator, exporter):
         self.scene = scene
         self.handlers = handlers
         self.sequence_manager = sequence_manager
         self.arrow_manipulator = arrow_manipulator
+        self.exporter = exporter
 
 
     def create_context_menu(self, event, selected_items):

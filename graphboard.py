@@ -16,7 +16,7 @@ class Graphboard(QGraphicsView):
     arrowMoved = pyqtSignal()
     attributesChanged = pyqtSignal()
 
-    def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, context_menu_handler, parent=None):
+    def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, context_menu_handler, ui_setup, parent=None):
         super().__init__(graphboard_scene, parent)
         self.setAcceptDrops(True)
         self.dragging = None
@@ -29,7 +29,7 @@ class Graphboard(QGraphicsView):
         self.info_tracker = info_tracker
         self.svg_handler = svg_handler
         self.context_menu_handler = context_menu_handler
-
+        self.ui_setup = ui_setup
         self.renderer = QSvgRenderer()
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
         self.attributesChanged.connect(self.update_staffs_and_check_beta)
@@ -191,53 +191,54 @@ class Graphboard(QGraphicsView):
             arrow_menu = QMenu(self)
 
             delete_action = QAction('Delete', self)
-            delete_action.triggered.connect(self.handlers.arrowManipulator.delete_arrow)
+            delete_action.triggered.connect(self.arrow_manipulator.delete_arrow)
             arrow_menu.addAction(delete_action)
 
             rotate_right_action = QAction('Rotate Right', self)
-            rotate_right_action.triggered.connect(lambda: self.handlers.arrowManipulator.rotateArrow("right"))
+            rotate_right_action.triggered.connect(lambda: self.arrow_manipulator.rotateArrow("right"))
             arrow_menu.addAction(rotate_right_action)
 
             rotate_left_action = QAction('Rotate Left', self)
-            rotate_left_action.triggered.connect(lambda: self.handlers.arrowManipulator.rotateArrow("left"))
+            rotate_left_action.triggered.connect(lambda: self.arrow_manipulator.rotateArrow("left"))
             arrow_menu.addAction(rotate_left_action)
 
             mirror_action = QAction('Mirror', self)
-            mirror_action.triggered.connect(lambda: self.handlers.arrowManipulator.mirrorArrow())
+            mirror_action.triggered.connect(lambda: self.arrow_manipulator.mirrorArrow())
             arrow_menu.addAction(mirror_action)
 
             bring_forward_action = QAction('Bring Forward', self)
-            bring_forward_action.triggered.connect(self.handlers.arrowManipulator.bringForward)
+            bring_forward_action.triggered.connect(self.arrow_manipulator.bringForward)
             arrow_menu.addAction(bring_forward_action)
 
         elif isinstance(clicked_item, Staff):
             staff_menu = QMenu(self)
 
             delete_action = QAction('Delete', self)
-            delete_action.triggered.connect(self.handlers.arrowManipulator.delete_arrow)
+            delete_action.triggered.connect(self.arrow_manipulator.delete_arrow)
             staff_menu.addAction(delete_action)
 
             rotate_right_action = QAction('Rotate Right', self)
-            rotate_right_action.triggered.connect(lambda: self.handlers.arrowManipulator.rotateArrow("right"))
+            rotate_right_action.triggered.connect(lambda: self.arrow_manipulator.rotateArrow("right"))
             staff_menu.addAction(rotate_right_action)
 
             rotate_left_action = QAction('Rotate Left', self)
-            rotate_left_action.triggered.connect(lambda: self.handlers.arrowManipulator.rotateArrow("left"))
+            rotate_left_action.triggered.connect(lambda: self.arrow_manipulator.rotateArrow("left"))
             staff_menu.addAction(rotate_left_action)
         
         else: 
             graphboard_menu = QMenu(self)
 
             swap_colors_action = QAction('Swap Colors', self)
-            swap_colors_action.triggered.connect(self.handlers.arrowManipulator.swapColors)
+            swap_colors_action.triggered.connect(self.arrow_manipulator.swapColors)
             graphboard_menu.addAction(swap_colors_action)
 
             select_all_action = QAction('Select All', self)
-            select_all_action.triggered.connect(self.handlers.arrowManipulator.selectAll)
+            select_all_action.triggered.connect(self.arrow_manipulator.selectAll)
             graphboard_menu.addAction(select_all_action)
 
             add_to_sequence_action = QAction('Add to Sequence', self)
-            add_to_sequence_action.triggered.connect(lambda _: self.get.add_to_sequence(self.graphboard))
+            self.sequence_manager = self.ui_setup.get_sequence_manager()
+            add_to_sequence_action.triggered.connect(lambda _: self.sequence_manager.add_to_sequence(self))
             graphboard_menu.addAction(add_to_sequence_action)
 
             export_as_png_action = QAction('Export to PNG', self)

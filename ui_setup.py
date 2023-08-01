@@ -9,10 +9,10 @@ from generator import Pictograph_Generator
 from staff import *
 from letter import Letter_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent
-from handlers import Arrow_Manipulator, SvgHandler, Context_Menu_Handler, Exporter
+from handlers import Arrow_Manipulator, SvgHandler, Exporter
 from arrowbox import Arrow_Box
 from propbox import Prop_Box
-from menus import Menu_Bar
+from menus import Menu_Bar, Context_Menu_Handler
 from graphboard import Graphboard
 
 class UiSetup(QWidget):
@@ -28,13 +28,18 @@ class UiSetup(QWidget):
         self.graphboard_scene = QGraphicsScene()
         self.ARROW_DIR = 'images\\arrows'
         self.SVG_POS_Y = 250
+        self.context_menu_handler = None
+        self.exporter = None
+        self.handlers = None
+        self.sequence_manager = None
+        self.graphboard = None
+        self.arrow_manipulator = None
 
         self.initStaffManager()
         self.initLayouts()
         self.initInfoTracker()
         self.initMenus()
         self.initGraphboard()
-
 
         self.connectGraphboard()
         self.initHandlers()
@@ -48,10 +53,10 @@ class UiSetup(QWidget):
         self.initSequenceScene()
         self.setFocus()
 
-    ### INITIALIZERS ###
+
 
     def initMenus(self):
-        self.exporter = Exporter()
+        self.exporter = Exporter(self.graphboard, self.graphboard_scene)
         self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.handlers, self.sequence_manager, self.arrow_manipulator, self.exporter)
         self.menu_bar = Menu_Bar()
 
@@ -85,7 +90,7 @@ class UiSetup(QWidget):
 
     def initGraphboard(self):
         self.grid = Grid('images\\grid\\grid.svg')
-        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.context_menu_handler)
+        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.context_menu_handler, self)
         transform = QTransform()
         self.grid_center = QPointF(self.graphboard.frameSize().width() / 2, self.graphboard.frameSize().height() / 2 - 75)
         grid_size = 650
