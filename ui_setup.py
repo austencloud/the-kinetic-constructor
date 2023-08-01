@@ -23,6 +23,8 @@ class UiSetup(QWidget):
         self.main_window.installEventFilter(self)  # This allows the main window to receive key events
         self.main_window.setMinimumSize(2000, 1600)
         self.main_window.show()
+        #set title of main window
+        self.main_window.setWindowTitle("Sequence Generator")
         self.svg_handler = SvgHandler()
         self.arrows = []
         self.graphboard_scene = QGraphicsScene()
@@ -64,44 +66,42 @@ class UiSetup(QWidget):
     def initLayouts(self):
         self.main_layout = QHBoxLayout()
         self.right_layout = QVBoxLayout()  # Change this to QHBoxLayout
-        self.left_layout = QHBoxLayout()
-        self.upper_right_layout = QHBoxLayout()  # This will contain graphboard and buttons
-        self.bottom_right_layout = QVBoxLayout()  # Sequence
-        self.lower_top_right_layout = QHBoxLayout()
-        self.lower_top_right_layout.setAlignment(Qt.AlignRight)
+        self.upper_layout = QHBoxLayout()  # This will contain graphboard and buttons
+        self.lower_layout = QVBoxLayout()  # Sequence
+        self.top_of_lower_layout = QHBoxLayout()
+
 
         self.objectbox_layout = QVBoxLayout()
-        self.objectbox_layout.setAlignment(Qt.AlignRight)
+
         self.graphboard_layout = QVBoxLayout()
-        self.graphboard_layout.setAlignment(Qt.AlignRight)
+
         self.button_layout = QHBoxLayout()  # Change this to QHBoxLayout
-        self.button_layout.setAlignment(Qt.AlignRight)
+
         self.info_layout = QVBoxLayout()
-        self.info_layout.setAlignment(Qt.AlignRight)
+
         self.word_label_layout = QHBoxLayout()
 
 
 
-        self.upper_right_graphboard_with_panel_layout = QVBoxLayout()
-        self.upper_right_graphboard_with_panel_layout.addLayout(self.graphboard_layout)
-        self.upper_right_graphboard_with_panel_layout.addLayout(self.button_layout)  # Add button_layout after graphboard_layout
+        self.upper_graphboard_with_panel_layout = QVBoxLayout()
+        self.upper_graphboard_with_panel_layout.addLayout(self.graphboard_layout)
+        self.upper_graphboard_with_panel_layout.addLayout(self.button_layout)  # Add button_layout after graphboard_layout
         
-        self.upper_right_layout.addLayout(self.objectbox_layout)
-        self.upper_right_layout.addLayout(self.upper_right_graphboard_with_panel_layout)
-        self.upper_right_layout.addStretch()
+        self.upper_layout.addLayout(self.objectbox_layout)
+        self.upper_layout.addLayout(self.upper_graphboard_with_panel_layout)
+        self.upper_layout.addStretch()
 
         self.objectbox_layout.addStretch()
         self.objectbox_layout.addStretch()
 
 
-        self.lower_top_right_layout.addLayout(self.word_label_layout)
-        self.bottom_right_layout.addLayout(self.lower_top_right_layout)
+        self.top_of_lower_layout.addLayout(self.word_label_layout)
+        self.lower_layout.addLayout(self.top_of_lower_layout)
 
-        self.right_layout.addLayout(self.upper_right_layout)
-        self.upper_right_layout.addLayout(self.info_layout)
-        self.right_layout.addLayout(self.bottom_right_layout)  # Add info_layout to right_layout
+        self.right_layout.addLayout(self.upper_layout)
+        self.upper_layout.addLayout(self.info_layout)
+        self.right_layout.addLayout(self.lower_layout)  # Add info_layout to right_layout
 
-        self.main_layout.addLayout(self.left_layout)
         self.main_layout.addLayout(self.right_layout)
         self.main_window.setLayout(self.main_layout)
 
@@ -117,6 +117,9 @@ class UiSetup(QWidget):
     def initLetterButtons(self):
         # Create a new layout for the Word Constructor's widgets
         letter_buttons_layout = QVBoxLayout()
+        letter_buttons_layout.setSpacing(10)  # Set the spacing between rows of buttons
+        letter_buttons_layout.setAlignment(Qt.AlignTop)  # Align the layout to the top
+
         # Define the rows of letters
         letter_rows = [
             ['A', 'B', 'C'],
@@ -129,6 +132,7 @@ class UiSetup(QWidget):
         ]
         for row in letter_rows:
             row_layout = QHBoxLayout()
+            row_layout.setSpacing(10)  # Set the spacing between buttons in a row
             row_layout.setAlignment(Qt.AlignTop)
             for letter in row:
                 button = QPushButton(letter, self.main_window)
@@ -140,8 +144,8 @@ class UiSetup(QWidget):
                 row_layout.addWidget(button)
             letter_buttons_layout.addLayout(row_layout)
         
-        self.left_layout.addLayout(letter_buttons_layout)  # add the layout to left_layout here
-    
+        self.upper_layout.addLayout(letter_buttons_layout)  # add the layout to left_layout here
+
     def initButtons(self):
         button_font = QFont('Helvetica', 14)
         button_width = 60
@@ -343,7 +347,7 @@ class UiSetup(QWidget):
 
         objectbox_layout.addWidget(arrowbox) 
         arrowbox_frame.setFixedSize(500, 500)
-        self.objectbox_layout.addWidget(arrowbox_frame)  # Add arrowbox_frame to upper_right_layout
+        self.objectbox_layout.addWidget(arrowbox_frame)  # Add arrowbox_frame to upper_layout
 
     def initPropBox(self):
         self.propbox = Prop_Box(self.main_window, self.staff_manager, self)
@@ -351,7 +355,7 @@ class UiSetup(QWidget):
         propbox_layout.addWidget(self.propbox.prop_box_frame)  # Add the QFrame object to the layout
         propbox_frame = QFrame()  # Create a new QFrame
         propbox_frame.setLayout(propbox_layout)  # Set the layout to the frame
-        self.objectbox_layout.addWidget(propbox_frame)  # Add the frame to the upper_right_layout
+        self.objectbox_layout.addWidget(propbox_frame)  # Add the frame to the upper_layout
 
     def initInfoTracker(self):
         self.info_label = QLabel(self.main_window)
@@ -359,7 +363,7 @@ class UiSetup(QWidget):
 
     def initWordLabel(self):
         self.word_label = QLabel(self.main_window)
-        self.bottom_right_layout.addWidget(self.word_label)
+        self.lower_layout.addWidget(self.word_label)
         self.word_label.setFont(QFont('Helvetica', 20))
         self.word_label.setText("My word: ")
 
@@ -373,12 +377,12 @@ class UiSetup(QWidget):
         self.sequence_container = QGraphicsView(self.sequence_scene)  # Create a QGraphicsView with the sequence scene
 
         # Set the width and height
-        self.sequence_container.setFixedSize(1700, 500)
+        self.sequence_container.setFixedSize(1960, 500)
         self.sequence_container.show()
-        self.bottom_right_layout.addWidget(self.sequence_container)
+        self.lower_layout.addWidget(self.sequence_container)
 
         clear_sequence_button = self.sequence_manager.get_clear_sequence_button()
-        self.bottom_right_layout.addWidget(clear_sequence_button)
+        self.lower_layout.addWidget(clear_sequence_button)
 
     def initHandlers(self):
        self.handlers = Handlers(self.graphboard, self.graphboard, self.grid, self.graphboard, self.info_tracker, self)

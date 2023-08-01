@@ -1,16 +1,16 @@
-<svg height="750" viewBox="0 0 750 750" width="750">
- <g id="blue_iso_r_nw.svg" fill="none" stroke-linecap="square" stroke-width="1" stroke-linejoin="bevel" stroke="black" fill-rule="evenodd">
-  <g transform="matrix(1,0,0,1,113,112.5)" fill="none" stroke-opacity="1" font-size="8" font-weight="400" stroke-linecap="square" font-family="MS Shell Dlg 2" font-style="normal" stroke-width="1" stroke-linejoin="bevel" stroke="#000000"/>
-  <g fill-opacity="1" transform="matrix(1.00146,0,0,0.999001,113,112.5)" fill="#2e3192" font-size="8" font-weight="400" font-family="MS Shell Dlg 2" font-style="normal" stroke="none">
-   <path d="M0,258.32 C0.05,139.41 95.74,31.5 213.81,31.14 L187.34,7.02 C187.34,7.02 197.41,-4.11 205.82,1.66 C215.34,8.13 246.64,40.93 246.64,40.93 C246.64,40.93 220.04,74.11 208.67,83.05 C200.59,89.38 189.76,78.71 189.76,78.71 L215.87,50.93 C126.6,51.21 28.01,124.08 20.84,258.32 C20,274.01 -0.01,274.51 3.55271e-15,258.32 L0,258.32" vector-effect="none" fill-rule="nonzero"/>
+<svg height="750" width="750" viewBox="0 0 750 750">
+ <g stroke-linejoin="bevel" stroke-width="1" stroke-linecap="square" stroke="black" fill="none" id="red_iso_l_sw.svg" fill-rule="evenodd">
+  <g stroke-linejoin="bevel" font-family="MS Shell Dlg 2" stroke-width="1" font-weight="400" stroke-opacity="1" stroke-linecap="square" stroke="#000000" font-size="8" fill="none" transform="matrix(1,0,0,1,51.5,415)" font-style="normal"/>
+  <g font-family="MS Shell Dlg 2" font-weight="400" stroke="none" font-size="8" fill="#ed1c24" transform="matrix(1.00146,0,0,0.999001,51.5,415)" fill-opacity="1" font-style="normal">
+   <path d="M0,11.95 C0.05,130.86 95.74,238.76 213.81,239.13 L187.34,263.25 C187.34,263.25 197.41,274.38 205.82,268.61 C215.34,262.14 246.64,229.34 246.64,229.34 C246.64,229.34 220.04,196.16 208.67,187.22 C200.59,180.89 189.76,191.56 189.76,191.56 L215.87,219.34 C126.6,219.06 28.01,146.19 20.84,11.95 C20,-3.74 -0.01,-4.24 3.55271e-15,11.95 L0,11.95" vector-effect="none" fill-rule="nonzero"/>
   </g>
-  <g transform="matrix(1,0,0,1,113,112.5)" fill="none" stroke-opacity="1" font-size="8" font-weight="400" stroke-linecap="square" font-family="MS Shell Dlg 2" font-style="normal" stroke-width="1" stroke-linejoin="bevel" stroke="#000000"/>
+  <g stroke-linejoin="bevel" font-family="MS Shell Dlg 2" stroke-width="1" font-weight="400" stroke-opacity="1" stroke-linecap="square" stroke="#000000" font-size="8" fill="none" transform="matrix(1,0,0,1,51.5,415)" font-style="normal"/>
  </g>
- <g id="red_anti_r_se.svg" fill="none" stroke-linecap="square" stroke-width="1" stroke-linejoin="bevel" stroke="black" fill-rule="evenodd">
-  <g transform="matrix(1,0,0,1,402.5,430)" fill="none" stroke-opacity="1" font-size="8" font-weight="400" stroke-linecap="square" font-family="MS Shell Dlg 2" font-style="normal" stroke-width="1" stroke-linejoin="bevel" stroke="#000000"/>
-  <g fill-opacity="1" transform="matrix(0.997978,0,0,0.999456,402.5,430)" fill="#ed1c24" font-size="8" font-weight="400" font-family="MS Shell Dlg 2" font-style="normal" stroke="none">
-   <path d="M0.01,246.11 C0.01,33.77 -5.36,33.41 201.51,33.41 L174.27,6.79 C174.27,6.79 184.71,-4.19 192.95,1.8 C204.71,10.35 232.46,42.64 232.46,42.64 C232.46,42.64 202.34,76.42 192.95,83.31 C184.71,89.36 174.27,78.56 174.27,78.56 L201.51,52.95 C10.42,52.95 20.74,44.53 20.74,245.82 C20.74,260.9 0.01,260.9 0.01,246.13 L0.01,246.11" vector-effect="none" fill-rule="nonzero"/>
+ <g stroke-linejoin="bevel" stroke-width="1" stroke-linecap="square" stroke="black" fill="none" id="blue_iso_r_ne.svg" fill-rule="evenodd">
+  <g stroke-linejoin="bevel" font-family="MS Shell Dlg 2" stroke-width="1" font-weight="400" stroke-opacity="1" stroke-linecap="square" stroke="#000000" font-size="8" fill="none" transform="matrix(1,0,0,1,415,51.5)" font-style="normal"/>
+  <g font-family="MS Shell Dlg 2" font-weight="400" stroke="none" font-size="8" fill="#2e3192" transform="matrix(0.999001,0,0,1.00146,415,51.5)" fill-opacity="1" font-style="normal">
+   <path d="M11.95,0 C130.86,0.05 238.76,95.74 239.13,213.81 L263.25,187.34 C263.25,187.34 274.38,197.41 268.61,205.82 C262.14,215.34 229.34,246.64 229.34,246.64 C229.34,246.64 196.16,220.04 187.22,208.67 C180.89,200.59 191.56,189.76 191.56,189.76 L219.34,215.87 C219.06,126.6 146.19,28.01 11.95,20.84 C-3.73,20.01 -4.23,0 11.95,0 " vector-effect="none" fill-rule="nonzero"/>
   </g>
-  <g transform="matrix(1,0,0,1,402.5,430)" fill="none" stroke-opacity="1" font-size="8" font-weight="400" stroke-linecap="square" font-family="MS Shell Dlg 2" font-style="normal" stroke-width="1" stroke-linejoin="bevel" stroke="#000000"/>
+  <g stroke-linejoin="bevel" font-family="MS Shell Dlg 2" stroke-width="1" font-weight="400" stroke-opacity="1" stroke-linecap="square" stroke="#000000" font-size="8" fill="none" transform="matrix(1,0,0,1,415,51.5)" font-style="normal"/>
  </g>
 </svg>

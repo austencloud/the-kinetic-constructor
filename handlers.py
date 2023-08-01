@@ -53,7 +53,7 @@ class Arrow_Manipulator:
             if new_renderer.isValid():
                 item.setSharedRenderer(new_renderer)
                 item.svg_file = new_svg
-                item.update_positions()
+                item.update_locations()
                 item.update_quadrant()
                 pos = self.graphboard.get_quadrant_center(new_quadrant) - item.boundingRect().center()
                 item.setPos(pos)
