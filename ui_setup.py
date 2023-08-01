@@ -9,7 +9,7 @@ from generator import Pictograph_Generator
 from staff import *
 from letter import Letter_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent
-from handlers import Arrow_Manipulator, SvgHandler, Exporter
+from handlers import Arrow_Manipulator, SvgHandler, Exporter, JsonUpdater
 from arrowbox import Arrow_Box
 from propbox import Prop_Box
 from menus import Menu_Bar, Context_Menu_Handler
@@ -57,6 +57,7 @@ class UiSetup(QWidget):
 
     def initMenus(self):
         self.exporter = Exporter(self.graphboard, self.graphboard_scene)
+        self.json_updater = JsonUpdater(self.graphboard_scene)
         self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.handlers, self.sequence_manager, self.arrow_manipulator, self.exporter)
         self.menu_bar = Menu_Bar()
 
@@ -65,11 +66,15 @@ class UiSetup(QWidget):
         self.right_layout = QVBoxLayout()
         self.left_layout = QHBoxLayout()
         self.top_right_layout = QHBoxLayout() # graphboard, buttons, info
+        #align the top right layout ot he right
         self.bottom_right_layout = QVBoxLayout() # Sequence
         self.lower_top_right_layout = QHBoxLayout() # Word label
         self.graphboard_layout = QVBoxLayout()
+        self.graphboard_layout.setAlignment(Qt.AlignRight)
         self.button_layout = QVBoxLayout()
+        self.button_layout.setAlignment(Qt.AlignRight)
         self.info_layout = QVBoxLayout()
+        self.info_layout.setAlignment(Qt.AlignRight)
         self.word_label_layout = QHBoxLayout()
 
 
@@ -124,52 +129,51 @@ class UiSetup(QWidget):
             letter_buttons_layout.addLayout(row_layout)
         
         self.left_layout.addLayout(letter_buttons_layout)  # add the layout to left_layout here
-
+    
     def initButtons(self):
         button_font = QFont('Helvetica', 14)
         button_width = 225
-    
+
         self.graphboard.set_handlers(self.handlers)
         masterbtnlayout = QVBoxLayout()
         buttonlayout = QHBoxLayout()
         buttonstack = QVBoxLayout()
         buttonstack.setAlignment(Qt.AlignTop)
         masterbtnlayout.setAlignment(Qt.AlignTop)
-            # # make the buttons stay together instea of spreading out to fill the vertical space
-            # buttonlayout.setAlignment(Qt.AlignTop)
         buttonlayout.addLayout(buttonstack)
         masterbtnlayout.addLayout(buttonlayout)
 
-        ### ARROW MANIPULATOR BUTTONS ###
+        ### DEVELOPER FUNCTIONS ###
 
         self.updatePositionButton = QPushButton("Update Position")
-        self.updatePositionButton.clicked.connect(lambda: self.handlers.jsonUpdater.updatePositionInJson(*self.graphboard.getCurrentArrowPositions()))
+        self.updatePositionButton.clicked.connect(lambda: self.json_updater.updatePositionInJson(*self.graphboard.getCurrentArrowPositions()))
         buttonstack.addWidget(self.updatePositionButton)
 
+        ### ARROW MANIPULATOR BUTTONS ###
+
         self.deleteButton = QPushButton("Delete")
-        self.deleteButton.clicked.connect(self.handlers.arrowManipulator.delete_arrow)
+        self.deleteButton.clicked.connect(lambda: self.handlers.arrowManipulator.delete_arrow(self.graphboard_scene.selectedItems()))
         buttonstack.addWidget(self.deleteButton)
 
         self.rotateRightButton = QPushButton("Rotate Right")
-        self.rotateRightButton.clicked.connect(lambda: self.handlers.arrowManipulator.rotateArrow("right"))
+        self.rotateRightButton.clicked.connect(lambda: self.handlers.arrowManipulator.rotateArrow("right", self.graphboard_scene.selectedItems()))
         buttonstack.addWidget(self.rotateRightButton)
 
         self.rotateLeftButton = QPushButton("Rotate Left")
-        self.rotateLeftButton.clicked.connect(lambda: self.handlers.arrowManipulator.rotateArrow("left"))
+        self.rotateLeftButton.clicked.connect(lambda: self.handlers.arrowManipulator.rotateArrow("left", self.graphboard_scene.selectedItems()))
         buttonstack.addWidget(self.rotateLeftButton)
 
         self.mirrorButton = QPushButton("Mirror")
-        self.mirrorButton.clicked.connect(lambda: self.handlers.arrowManipulator.mirrorArrow())
+        self.mirrorButton.clicked.connect(lambda: self.handlers.arrowManipulator.mirrorArrow(self.graphboard_scene.selectedItems()))
         buttonstack.addWidget(self.mirrorButton)
 
         self.bringForward = QPushButton("Bring Forward")
-        self.bringForward.clicked.connect(self.handlers.arrowManipulator.bringForward)
+        self.bringForward.clicked.connect(lambda: self.handlers.arrowManipulator.bringForward(self.graphboard_scene.selectedItems()))
         buttonstack.addWidget(self.bringForward)
 
         self.swapColors = QPushButton("Swap Colors")
-        self.swapColors.clicked.connect(self.handlers.arrowManipulator.swapColors)
+        self.swapColors.clicked.connect(lambda: self.handlers.arrowManipulator.swapColors(self.graphboard_scene.selectedItems()))
         buttonstack.addWidget(self.swapColors)
-
 
         ### SELECTION BUTTONS ###
 
@@ -192,7 +196,7 @@ class UiSetup(QWidget):
         self.exportAsSVGButton = QPushButton("Export to SVG")
         self.exportAsSVGButton.clicked.connect(self.handlers.exporter.exportAsSvg)
         buttonstack.addWidget(self.exportAsSVGButton)
-
+        
         ### STYLING ###
 
         self.deleteButton.setFont(button_font)

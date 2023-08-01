@@ -119,7 +119,7 @@ class Graphboard(QGraphicsView):
                     if new_renderer.isValid():
                         item.setSharedRenderer(new_renderer)
                         item.svg_file = new_svg
-                        item.update_positions()
+                        item.update_locations()
                 self.arrowMoved.emit()
 
     def dragEnterEvent(self, event):
@@ -178,7 +178,9 @@ class Graphboard(QGraphicsView):
         else:
             event.ignore()
 
-        quadrant = self.drag.get_graphboard_quadrants(self.arrow_item.pos())
+        # Adjust the y-coordinate of the arrow's position to account for the new position of the grid
+        adjusted_arrow_pos = self.arrow_item.pos() + QPointF(0, 75)
+        quadrant = self.drag.get_graphboard_quadrants(adjusted_arrow_pos)
         self.arrow_item.quadrant = quadrant
         self.drag.update_arrow_svg(self.arrow_item, quadrant)  # Update the arrow's SVG file
         self.arrow_item.attributesChanged.emit()
@@ -186,27 +188,28 @@ class Graphboard(QGraphicsView):
 
     def contextMenuEvent(self, event):
         clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())
+        selected_items = self.get_selected_items()
         if isinstance(clicked_item, Arrow):
             arrow_menu = QMenu(self)
 
             delete_action = QAction('Delete', self)
-            delete_action.triggered.connect(self.arrow_manipulator.delete_arrow)
+            delete_action.triggered.connect(lambda: self.arrow_manipulator.delete_arrow(selected_items))
             arrow_menu.addAction(delete_action)
 
             rotate_right_action = QAction('Rotate Right', self)
-            rotate_right_action.triggered.connect(lambda: self.arrow_manipulator.rotateArrow("right"))
+            rotate_right_action.triggered.connect(lambda: self.arrow_manipulator.rotateArrow("right", selected_items))
             arrow_menu.addAction(rotate_right_action)
 
             rotate_left_action = QAction('Rotate Left', self)
-            rotate_left_action.triggered.connect(lambda: self.arrow_manipulator.rotateArrow("left"))
+            rotate_left_action.triggered.connect(lambda: self.arrow_manipulator.rotateArrow("left", selected_items))
             arrow_menu.addAction(rotate_left_action)
 
             mirror_action = QAction('Mirror', self)
-            mirror_action.triggered.connect(lambda: self.arrow_manipulator.mirrorArrow())
+            mirror_action.triggered.connect(lambda: self.arrow_manipulator.mirrorArrow(selected_items))
             arrow_menu.addAction(mirror_action)
 
             bring_forward_action = QAction('Bring Forward', self)
-            bring_forward_action.triggered.connect(self.arrow_manipulator.bringForward)
+            bring_forward_action.triggered.connect(lambda: self.arrow_manipulator.bringForward(selected_items))
             arrow_menu.addAction(bring_forward_action)
             arrow_menu.exec_(event.globalPos())
 
@@ -214,24 +217,23 @@ class Graphboard(QGraphicsView):
             staff_menu = QMenu(self)
 
             delete_action = QAction('Delete', self)
-            delete_action.triggered.connect(self.arrow_manipulator.delete_arrow)
+            delete_action.triggered.connect(lambda: self.arrow_manipulator.delete_arrow(selected_items))
             staff_menu.addAction(delete_action)
 
             rotate_right_action = QAction('Rotate Right', self)
-            rotate_right_action.triggered.connect(lambda: self.arrow_manipulator.rotateArrow("right"))
+            rotate_right_action.triggered.connect(lambda: self.arrow_manipulator.rotateArrow("right", selected_items))
             staff_menu.addAction(rotate_right_action)
 
             rotate_left_action = QAction('Rotate Left', self)
-            rotate_left_action.triggered.connect(lambda: self.arrow_manipulator.rotateArrow("left"))
+            rotate_left_action.triggered.connect(lambda: self.arrow_manipulator.rotateArrow("left", selected_items))
             staff_menu.addAction(rotate_left_action)
             staff_menu.exec_(event.globalPos())
 
-        
         else: 
             graphboard_menu = QMenu(self)
 
             swap_colors_action = QAction('Swap Colors', self)
-            swap_colors_action.triggered.connect(self.arrow_manipulator.swapColors)
+            swap_colors_action.triggered.connect(lambda: self.arrow_manipulator.swapColors(self.get_selected_items()))
             graphboard_menu.addAction(swap_colors_action)
 
             select_all_action = QAction('Select All', self)
@@ -335,18 +337,21 @@ class Graphboard(QGraphicsView):
 
         for item in self.scene().items():
             if isinstance(item, Arrow):
+                # Calculate the center of the arrow
+                center = item.pos() + item.boundingRect().center()
                 if item.color == 'red':
-                    red_position = item.pos()
+                    red_position = center
                 elif item.color == 'blue':
-                    blue_position = item.pos()
+                    blue_position = center
         print(red_position, blue_position)
         return red_position, blue_position
 
+
     def get_selected_items(self):
-        return self.scene().selectedItems()
+        return self.graphboard_scene.selectedItems()
     
     def select_all_arrows(self):
-        for item in self.scene().items():
+        for item in self.graphboard_scene.items():
             if isinstance(item, Arrow):
                 item.setSelected(True)
 
@@ -459,7 +464,9 @@ class Quadrant_Preview_Drag(QDrag):
             base_name = os.path.basename(mime_data.text())
         else:
             base_name = ""
-        if mouse_pos.y() < self.source().sceneRect().height() / 2 - 75:
+        # Adjust the y-coordinate of the mouse position to account for the new position of the grid
+        adjusted_mouse_y = mouse_pos.y() + 75
+        if adjusted_mouse_y < self.source().sceneRect().height() / 2:
             if mouse_pos.x() < self.source().sceneRect().width() / 2:
                 quadrant = 'nw'
             else:
@@ -469,9 +476,8 @@ class Quadrant_Preview_Drag(QDrag):
                 quadrant = 'sw'
             else:
                 quadrant = 'se'
-
-
         return quadrant
+
     
     def update_arrow_svg(self, arrow, quadrant):
         base_name = os.path.basename(arrow.svg_file)
@@ -492,4 +498,4 @@ class Quadrant_Preview_Drag(QDrag):
         if new_renderer.isValid():
             arrow.setSharedRenderer(new_renderer)
             arrow.svg_file = new_svg
-            arrow.update_positions()
+            arrow.update_locations()

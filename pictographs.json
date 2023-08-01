@@ -1579,12 +1579,12 @@
             },
             {
                 "optimal_red_location": {
-                    "x": 9.0,
-                    "y": 470.0
+                    "x": 173.0,
+                    "y": 596.0
                 },
                 "optimal_blue_location": {
-                    "x": 61.0,
-                    "y": 422.0
+                    "x": 235.0,
+                    "y": 552.0
                 }
             }
         ],
@@ -1611,12 +1611,12 @@
             },
             {
                 "optimal_red_location": {
-                    "x": 15.0,
-                    "y": 453.0
+                    "x": 149.0,
+                    "y": 605.0
                 },
                 "optimal_blue_location": {
-                    "x": 77.0,
-                    "y": 406.0
+                    "x": 201.0,
+                    "y": 549.0
                 }
             }
         ],
@@ -1741,12 +1741,12 @@
             },
             {
                 "optimal_red_location": {
-                    "x": 563.0,
-                    "y": 595.0
+                    "x": 447.0,
+                    "y": 466.5
                 },
                 "optimal_blue_location": {
-                    "x": 517.0,
-                    "y": 533.0
+                    "x": 401.0,
+                    "y": 404.5
                 }
             }
         ],
@@ -1869,12 +1869,12 @@
             },
             {
                 "optimal_red_location": {
-                    "x": 460.0,
-                    "y": 4.5
+                    "x": 465.0,
+                    "y": 4.0
                 },
                 "optimal_blue_location": {
-                    "x": 420.0,
-                    "y": 66.5
+                    "x": 422.0,
+                    "y": 66.0
                 }
             }
         ],
@@ -1898,16 +1898,6 @@
                 "type": "anti",
                 "start_location": "s",
                 "end_location": "w"
-            },
-            {
-                "optimal_red_location": {
-                    "x": 149.0,
-                    "y": 594.0
-                },
-                "optimal_blue_location": {
-                    "x": 196.0,
-                    "y": 535.0
-                }
             }
         ],
         [

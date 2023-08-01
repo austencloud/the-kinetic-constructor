@@ -155,7 +155,7 @@ class Arrow(QGraphicsSvgItem):
 
     ### UPDATERS ###
 
-    def update_positions(self):
+    def update_locations(self):
         # Update the start and end locations
         self.start_location, self.end_location = self.arrow_positions.get(os.path.basename(self.svg_file), (None, None))
         self.arrowMoved.emit()  # emit the signal when the arrow is dropped

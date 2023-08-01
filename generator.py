@@ -36,7 +36,7 @@ class Pictograph_Generator():
             return
 
         self.current_letter = letter  # Store the current letter
-
+        print(f"Generating {self.current_letter}")
         # Choose a combination at random
         combination_set = random.choice(combinations)
 

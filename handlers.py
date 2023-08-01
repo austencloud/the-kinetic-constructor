@@ -25,7 +25,7 @@ class Handlers:
 
 
         self.arrowManipulator = Arrow_Manipulator(graphboard_scene, self.graphboard)
-        self.keyPressHandler = Key_Press_Handler(Arrow_Manipulator(graphboard_scene, self.graphboard))
+        self.keyPressHandler = Key_Press_Handler(Arrow_Manipulator(graphboard_scene, self.graphboard), self.graphboard)
         self.jsonUpdater = JsonUpdater(graphboard_scene)
         self.exporter = Exporter(self.graphboard, graphboard_scene)
         self.svgHandler = SvgHandler()
@@ -35,8 +35,8 @@ class Arrow_Manipulator:
         self.graphboard_scene = graphboard_scene
         self.graphboard = graphboard
 
-    def rotateArrow(self, direction):
-        for item in self.graphboard_scene.get_selected_items():
+    def rotateArrow(self, direction, items):
+        for item in items:
             print(item.get_attributes())
             old_svg = f"images/arrows/{item.color}_{item.type}_{item.rotation}_{item.quadrant}.svg"
             print(old_svg)
@@ -62,8 +62,8 @@ class Arrow_Manipulator:
 
         self.graphboard.arrowMoved.emit()
 
-    def mirrorArrow(self):
-        for item in self.graphboard_scene.selectedItems():
+    def mirrorArrow(self, items):
+        for item in items:
             current_svg = item.svg_file
 
             if item.rotation == "l":
@@ -89,20 +89,19 @@ class Arrow_Manipulator:
                 print("Failed to load SVG file:", new_svg)
         self.graphboard.arrowMoved.emit()
 
-    def delete_arrow(self):
-        for item in self.graphboard_scene.selectedItems():
+    def delete_arrow(self, items):
+        for item in items:
             self.graphboard.scene().removeItem(item)
         self.graphboard.arrowMoved.emit()
         self.graphboard.attributesChanged.emit()
 
-    def bringForward(self):
-        for item in self.graphboard_scene.get_selected_items():
+    def bringForward(self, items):
+        for item in items:
             z = item.zValue()
             item.setZValue(z + 1)
 
-    def swapColors(self):
-        self.graphboard.select_all_arrows()
-        arrow_items = [item for item in self.graphboard.get_selected_items() if isinstance(item, Arrow)]
+    def swapColors(self, _):
+        arrow_items = [item for item in self.graphboard_scene.items() if isinstance(item, Arrow)]
         if len(arrow_items) >= 1:
             for item in arrow_items:
                 current_svg = item.svg_file
@@ -128,6 +127,7 @@ class Arrow_Manipulator:
             
         self.graphboard.arrowMoved.emit()
 
+
     def selectAll(self):
         for item in self.graphboard.items():
             item.setSelected(True)
@@ -137,17 +137,18 @@ class Arrow_Manipulator:
             item.setSelected(False)
 
 class Key_Press_Handler:
-    def __init__(self, arrowHandler):
+    def __init__(self, arrowHandler, graphboard):
         self.arrowHandler = arrowHandler
+        self.graphboard = graphboard
 
     def handleKeyPressEvent(self, event):
         if event.key() == Qt.Key_Delete:
-            self.arrowHandler.delete_arrow()
+            selected_items = self.graphboard.get_selected_items()
+            self.arrowHandler.delete_arrow(selected_items)
 
 class JsonUpdater:
     def __init__(self, graphboard_scene):
         self.graphboard_scene = graphboard_scene
-
 
     def updatePositionInJson(self, red_position, blue_position):
         with open('pictographs.json', 'r') as file:
@@ -182,6 +183,7 @@ class JsonUpdater:
                         print(f"Added optimal positions for letter {letter}")
         with open('pictographs.json', 'w') as file:
             json.dump(data, file, indent=4)
+
 
 class Exporter:
     def __init__(self, graphboard, graphboard_scene):
