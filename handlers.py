@@ -269,23 +269,14 @@ class Exporter:
                 # Apply transformations and set position
                 parent_transform = item.parentItem().transform() if item.parentItem() else QTransform()
                 transform = parent_transform * item.transform()
-
-                # Adjust transformation based on viewBox
-                viewBox = staff_svg.getroot().get('viewBox')
-                if viewBox is None:
-                    min_x, min_y, width, height = 0, 0, 750, 900  # default viewBox
-                else:
-                    min_x, min_y, width, height = map(float, viewBox.split())
-
-                viewBox_transform = QTransform().scale(1/width, 1/height).translate(-min_x, -min_y)
-                transform = viewBox_transform * transform
-
                 for rect_element in rect_elements:
-                    rect_element.set('transform', f'matrix({transform.m11()}, {transform.m12()}, {transform.m21()}, {transform.m22()}, {transform.dx()}, {transform.dy()})')
+                    position = item.pos()
+                    rect_element.set('transform', f'matrix({transform.m11()}, {transform.m12()}, {transform.m21()}, {transform.m22()}, {position.x()}, {position.y()})')
                     if fill_color is not None:
                         rect_element.set('fill', fill_color)
 
                     svg.append(rect_element)
+
 
 
         with open('output.svg', 'wb') as file:
