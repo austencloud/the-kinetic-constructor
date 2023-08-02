@@ -10,6 +10,7 @@ class Grid(QGraphicsSvgItem):
     def __init__(self, grid_svg):
         super().__init__(grid_svg)
 
+
         self.doc = minidom.parse(grid_svg)
 
         circles = self.doc.getElementsByTagName('circle')

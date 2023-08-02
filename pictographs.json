@@ -3624,6 +3624,16 @@
                 "type": "anti",
                 "start_location": "w",
                 "end_location": "n"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 207.0,
+                    "y": 198.0
+                },
+                "optimal_blue_location": {
+                    "x": 545.0,
+                    "y": 539.0
+                }
             }
         ]
     ],
@@ -6004,6 +6014,16 @@
                 "type": "anti",
                 "start_location": "e",
                 "end_location": "n"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 538.0,
+                    "y": 210.0
+                },
+                "optimal_blue_location": {
+                    "x": 203.0,
+                    "y": 208.0
+                }
             }
         ],
         [

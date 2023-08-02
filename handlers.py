@@ -11,30 +11,53 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from svg.path import Line, CubicBezier, QuadraticBezier, Arc, Close
 from arrow import Arrow
 from staff import Staff
+from grid import Grid
 from lxml import etree
+from copy import deepcopy
 
-class Handlers:
+
+class Arrow_Handler:
     arrowMoved = pyqtSignal()
 
-    def __init__(self, graphboard, view, grid, graphboard_scene, main_window, info_tracker):
-        self.graphboard = graphboard
-        self.view = view
-        self.grid = grid
-        self.graphboard_scene = graphboard_scene
-        self.main_window = main_window
-        self.info_tracker = info_tracker
-
-
-        self.arrowManipulator = Arrow_Manipulator(graphboard_scene, self.graphboard)
-        self.keyPressHandler = Key_Press_Handler(Arrow_Manipulator(graphboard_scene, self.graphboard), self.graphboard)
-        self.jsonUpdater = JsonUpdater(graphboard_scene)
-        self.exporter = Exporter(self.graphboard, graphboard_scene)
-        self.svgHandler = SvgHandler()
-
-class Arrow_Manipulator:
     def __init__(self, graphboard_scene, graphboard):
         self.graphboard_scene = graphboard_scene
         self.graphboard = graphboard
+
+    def move_arrow_quadrant_up(self):
+        self.selected_arrow = self.graphboard.get_selected_items()[0]
+        print(self.selected_arrow)
+        if self.selected_arrow.quadrant == 'se':
+            self.selected_arrow.quadrant = 'ne'
+        elif self.selected_arrow.quadrant == 'sw':
+            self.selected_arrow.quadrant = 'nw'
+        # Update the arrow's position and orientation on the graphboard
+        print(self.selected_arrow.quadrant)
+    def move_arrow_quadrant_left(self):
+        self.selected_arrow = self.graphboard.get_selected_items()[0]
+        if self.selected_arrow.quadrant == 'ne':
+            self.selected_arrow.quadrant = 'nw'
+        elif self.selected_arrow.quadrant == 'se':
+            self.selected_arrow.quadrant = 'sw'
+        # Update the arrow's position and orientation on the graphboard
+        print(self.selected_arrow.quadrant)
+
+    def move_arrow_quadrant_down(self):
+        self.selected_arrow = self.graphboard.get_selected_items()[0]
+        if self.selected_arrow.quadrant == 'ne':
+            self.selected_arrow.quadrant = 'se'
+        elif self.selected_arrow.quadrant == 'nw':
+            self.selected_arrow.quadrant = 'sw'
+        # Update the arrow's position and orientation on the graphboard
+        print(self.selected_arrow.quadrant)
+
+    def move_arrow_quadrant_right(self):
+        self.selected_arrow = self.graphboard.get_selected_items()[0]
+        if self.selected_arrow.quadrant == 'nw':
+            self.selected_arrow.quadrant = 'ne'
+        elif self.selected_arrow.quadrant == 'sw':
+            self.selected_arrow.quadrant = 'se'
+        # Update the arrow's position and orientation on the graphboard
+        print(self.selected_arrow.quadrant)
 
     def rotateArrow(self, direction, items):
         for item in items:
@@ -128,26 +151,51 @@ class Arrow_Manipulator:
             
         self.graphboard.arrowMoved.emit()
 
-
     def selectAll(self):
         for item in self.graphboard.items():
-            item.setSelected(True)
+            #if item is an arrow
+            if isinstance(item, Arrow):
+                item.setSelected(True)
     
     def deselectAll(self):
         for item in self.graphboard.selectedItems():
             item.setSelected(False)
 
-class Key_Press_Handler:
-    def __init__(self, arrowHandler, graphboard):
-        self.arrowHandler = arrowHandler
+    def connect_to_graphboard(self, graphboard):
         self.graphboard = graphboard
+        self.selected_items_len = len(graphboard.get_selected_items())
+        print(f"selected_items_len: {self.selected_items_len}")
+        
+
+
+class Key_Press_Handler:
+    def __init__(self, arrow_handler, graphboard=None):
+        self.arrow_handler = arrow_handler
+        print("Key_Press_Handler init")
 
     def handleKeyPressEvent(self, event):
+        self.selected_items = self.graphboard.get_selected_items()
         if event.key() == Qt.Key_Delete:
-            selected_items = self.graphboard.get_selected_items()
-            self.arrowHandler.delete_arrow(selected_items)
 
-class JsonUpdater:
+            self.arrow_handler.delete_arrow(self.selected_items)
+
+        print(self.selected_items) 
+        if event.key() == Qt.Key_W:
+            self.arrow_handler.move_arrow_quadrant_up()
+            print("W")
+        elif event.key() == Qt.Key_A:
+            self.arrow_handler.move_arrow_quadrant_left()
+        elif event.key() == Qt.Key_S:
+            self.arrow_handler.move_arrow_quadrant_down()
+        elif event.key() == Qt.Key_D:
+            self.arrow_handler.move_arrow_quadrant_right()
+
+    def connect_to_graphboard(self, graphboard):
+        self.graphboard = graphboard
+        print("Key_Press_Handler connected to graphboard")
+
+
+class Json_Handler:
     def __init__(self, graphboard_scene):
         self.graphboard_scene = graphboard_scene
 
@@ -187,9 +235,11 @@ class JsonUpdater:
 
 
 class Exporter:
-    def __init__(self, graphboard, graphboard_scene):
+    def __init__(self, graphboard, graphboard_scene, staff_manager, grid):
         self.graphboard_scene = graphboard_scene
         self.graphboard = graphboard
+        self.staff_manager = staff_manager
+        self.grid = grid
 
     def exportAsPng(self):
         selectedItems = self.graphboard_scene.get_selected_items()
@@ -227,7 +277,6 @@ class Exporter:
 
         return fill_color
 
-
     def exportAsSvg(self):
         print("Exporting")
         svg = etree.Element('svg', nsmap={None: 'http://www.w3.org/2000/svg'})
@@ -235,56 +284,91 @@ class Exporter:
         svg.set('height', '900')
         svg.set('viewBox', '0 0 750 900')
 
-        grid_svg = etree.parse(self.graphboard.grid.svg_file)
-        circle_elements = grid_svg.getroot().findall('.//{http://www.w3.org/2000/svg}circle')
+        # Create groups for staves, arrows, and the grid
+        staves_group = etree.Element('g', id='staves')
+        arrows_group = etree.Element('g', id='arrows')
+        grid_group = etree.Element('g', id='grid')
 
-        for circle_element in circle_elements:
-            svg.append(circle_element)
+        for item in self.graphboard_scene.items():
+            if isinstance(item, Grid):
+                grid_svg = etree.parse(item.svg_file)
+                circle_elements = grid_svg.getroot().findall('.//{http://www.w3.org/2000/svg}circle')
 
+                for circle_element in circle_elements:
+                    # Adjust the cx and cy attributes to move the circle 25 pixels to the right and down
+                    cx = float(circle_element.get('cx')) + 50
+                    cy = float(circle_element.get('cy')) + 50
+                    circle_element.set('cx', str(cx))
+                    circle_element.set('cy', str(cy))
 
-        for item in self.graphboard.scene().items():
-            if isinstance(item, Arrow):
+                    # Append the circle to the grid group
+                    grid_group.append(circle_element)
+
+                print("Finished exporting" + item.svg_file)
+
+            elif isinstance(item, Arrow):
                 arrow_svg = etree.parse(item.svg_file)
                 path_elements = arrow_svg.getroot().findall('.//{http://www.w3.org/2000/svg}path')
-
-                # Get fill color from SVG file
                 fill_color = self.get_fill_color(item.svg_file)
-
-                # Apply transformations and set position
                 transform = item.transform()
+
                 for path_element in path_elements:
                     path_element.set('transform', f'matrix({transform.m11()}, {transform.m12()}, {transform.m21()}, {transform.m22()}, {item.x()}, {item.y()})')
                     if fill_color is not None:
                         path_element.set('fill', fill_color)
 
-                    svg.append(path_element)
+                    # Append the path to the arrows group
+                    arrows_group.append(path_element)
+
+                print("Finished exporting" + item.svg_file)
 
             elif isinstance(item, Staff):
                 staff_svg = etree.parse(item.svg_file)
                 rect_elements = staff_svg.getroot().findall('.//{http://www.w3.org/2000/svg}rect')
-
-                # Get fill color from SVG file
                 fill_color = self.get_fill_color(item.svg_file)
-
-                # Apply transformations and set position
+                position = item.mapToScene(item.pos())  # Convert the position to scene coordinates
                 parent_transform = item.parentItem().transform() if item.parentItem() else QTransform()
                 transform = parent_transform * item.transform()
+
+                # Scale the position to match the SVG's viewBox
+                svg_width = 750
+                svg_height = 900
+                scene_rect = self.graphboard_scene.sceneRect()
+                x_scale = svg_width / scene_rect.width()
+                y_scale = svg_height / scene_rect.height()
+                position.setX(position.x() * x_scale)
+                position.setY(position.y() * y_scale)
+
                 for rect_element in rect_elements:
-                    position = item.pos()
-                    rect_element.set('transform', f'matrix({transform.m11()}, {transform.m12()}, {transform.m21()}, {transform.m22()}, {position.x()}, {position.y()})')
+                    rect_element_copy = deepcopy(rect_element)  # Create a deep copy of the element
+                    rect_element_copy.set('transform', f'matrix({transform.m11()}, {transform.m12()}, {transform.m21()}, {transform.m22()}, {position.x()}, {position.y()})')
                     if fill_color is not None:
-                        rect_element.set('fill', fill_color)
+                        rect_element_copy.set('fill', fill_color)
 
-                    svg.append(rect_element)
+                    # Append the rect to the staves group
+                    staves_group.append(rect_element_copy)
+
+                print("Finished exporting" + item.svg_file)
+
+        # Add comments and append the groups to the SVG root element
+        svg.append(etree.Comment(' STAVES '))
+        svg.append(staves_group)
+        svg.append(etree.Comment(' ARROWS '))
+        svg.append(arrows_group)
+        svg.append(etree.Comment(' GRID '))
+        svg.append(grid_group)
+
+        # Convert the SVG element to a string
+        svg_string = etree.tostring(svg, pretty_print=True).decode()
+
+        # Add blank lines between elements
+        svg_string = svg_string.replace('>\n<', '>\n\n<')
+
+        with open('output.svg', 'w') as file:
+            file.write(svg_string)
 
 
-
-        with open('output.svg', 'wb') as file:
-            file.write(etree.tostring(svg, pretty_print=True))
-        print("Fiished exporting as output.svg")
-
-
-class SvgHandler:
+class Svg_Handler:
     @staticmethod
     def parse_svg_file(file_path):
         tree = ET.parse(file_path)
@@ -352,8 +436,8 @@ class SvgHandler:
     
     @staticmethod
     def point_in_svg(point, svg_file):
-        svg_path = SvgHandler.parse_svg_file(svg_file)
-        qpainter_path = SvgHandler.svg_path_to_qpainterpath(svg_path)
+        svg_path = Svg_Handler.parse_svg_file(svg_file)
+        qpainter_path = Svg_Handler.svg_path_to_qpainterpath(svg_path)
         return qpainter_path.contains(point)
     
 class Context_Menu_Handler:

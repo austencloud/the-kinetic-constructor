@@ -3,13 +3,12 @@ import os
 from arrow import Arrow
 from PyQt5.QtGui import QFont, QTransform, QIcon
 from sequence import *
-from handlers import Handlers
 from info_tracker import Info_Tracker
 from generator import Pictograph_Generator
 from staff import *
 from letter import Letter_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent, QSize
-from handlers import Arrow_Manipulator, SvgHandler, Exporter, JsonUpdater
+from handlers import Arrow_Handler, Svg_Handler, Exporter, Json_Handler, Key_Press_Handler
 from arrowbox import Arrow_Box
 from propbox import Prop_Box
 from menus import Menu_Bar, Context_Menu_Handler
@@ -25,7 +24,7 @@ class UiSetup(QWidget):
         self.main_window.show()
         #set title of main window
         self.main_window.setWindowTitle("Sequence Generator")
-        self.svg_handler = SvgHandler()
+        self.svg_handler = Svg_Handler()
         self.arrows = []
         self.graphboard_scene = QGraphicsScene()
         self.ARROW_DIR = 'images\\arrows'
@@ -35,32 +34,35 @@ class UiSetup(QWidget):
         self.handlers = None
         self.sequence_manager = None
         self.graphboard = None
-        self.arrow_manipulator = None
+        self.arrow_handler = None
 
         self.initStaffManager()
         self.initLayouts()
         self.initInfoTracker()
         self.initMenus()
-        self.initGraphboard()
+        self.initGraphboard()  # Initialize graphboard first
+        self.initGenerator()  # Then initialize generator
+        self.graphboard.setGenerator(self.generator)  # Update graphboard with generator
 
         self.connectGraphboard()
-        self.initHandlers()
-        self.initLetterButtons()
+
+
         self.initArrowBox()
-        self.initGenerator()
+
         self.initPropBox()
         self.initButtons()
         self.connectInfoTracker()
         self.initWordLabel()
         self.initSequenceScene()
+        self.initLetterButtons()  # Move this line down
         self.setFocus()
 
 
-
     def initMenus(self):
-        self.exporter = Exporter(self.graphboard, self.graphboard_scene)
-        self.json_updater = JsonUpdater(self.graphboard_scene)
-        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.handlers, self.sequence_manager, self.arrow_manipulator, self.exporter)
+        self.json_updater = Json_Handler(self.graphboard_scene)
+        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.handlers, self.sequence_manager, self.arrow_handler, self.exporter)
+        self.arrow_handler = Arrow_Handler(self.graphboard_scene, self.graphboard)
+        self.key_press_handler = Key_Press_Handler(self.arrow_handler, None)
         self.menu_bar = Menu_Bar()
 
     def initLayouts(self):
@@ -105,13 +107,24 @@ class UiSetup(QWidget):
         self.main_layout.addLayout(self.right_layout)
         self.main_window.setLayout(self.main_layout)
 
+
     def initGraphboard(self):
         self.grid = Grid('images\\grid\\grid.svg')
-        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self)
+        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
+        # Initialize graphboard without generator
+        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_manager)
+        self.key_press_handler.connect_to_graphboard(self.graphboard)
+        self.arrow_handler.connect_to_graphboard(self.graphboard)
         transform = QTransform()
-        self.grid_center = QPointF(self.graphboard.frameSize().width() / 2, self.graphboard.frameSize().height() / 2 - 75)
-        grid_size = 650
-        transform.translate(self.grid_center.x() - (grid_size / 2), self.grid_center.y() - (grid_size / 2))
+
+        # Get the size of the graphboard
+        graphboard_size = self.graphboard.frameSize()
+
+        # Calculate the position of the grid
+        grid_position = QPointF((graphboard_size.width() - self.grid.boundingRect().width()) / 2,
+                                (graphboard_size.height() - self.grid.boundingRect().height()) / 2 - 75)
+
+        transform.translate(grid_position.x(), grid_position.y())
         self.grid.setTransform(transform)
         
     def initLetterButtons(self):
@@ -171,34 +184,34 @@ class UiSetup(QWidget):
 
         self.deleteButton = QPushButton(QIcon("images/icons/delete.png"), "")
         self.deleteButton.setToolTip("Delete")
-        self.deleteButton.clicked.connect(lambda: self.handlers.arrowManipulator.delete_arrow(self.graphboard_scene.selectedItems()))
+        self.deleteButton.clicked.connect(lambda: self.arrow_handler.delete_arrow(self.graphboard_scene.selectedItems()))
         
 
         self.rotateRightButton = QPushButton(QIcon("images/icons/rotate-right.png"), "")
         self.rotateRightButton.setToolTip("Rotate Right")
-        self.rotateRightButton.clicked.connect(lambda: self.handlers.arrowManipulator.rotateArrow("right", self.graphboard_scene.selectedItems()))
+        self.rotateRightButton.clicked.connect(lambda: self.arrow_handler.rotateArrow("right", self.graphboard_scene.selectedItems()))
         self.rotateLeftButton = QPushButton(QIcon("images/icons/rotate-left.png"), "")
         self.rotateLeftButton.setToolTip("Rotate Left")
-        self.rotateLeftButton.clicked.connect(lambda: self.handlers.arrowManipulator.rotateArrow("left", self.graphboard_scene.selectedItems()))
+        self.rotateLeftButton.clicked.connect(lambda: self.arrow_handler.rotateArrow("left", self.graphboard_scene.selectedItems()))
 
         self.mirrorButton = QPushButton(QIcon("images/icons/mirror.png"), "")
         self.mirrorButton.setToolTip("Mirror")
-        self.mirrorButton.clicked.connect(lambda: self.handlers.arrowManipulator.mirrorArrow(self.graphboard_scene.selectedItems()))
+        self.mirrorButton.clicked.connect(lambda: self.arrow_handler.mirrorArrow(self.graphboard_scene.selectedItems()))
 
 
         self.bringForward = QPushButton(QIcon("images/icons/bring_forward.png"), "")
         self.bringForward.setToolTip("Bring Forward")
-        self.bringForward.clicked.connect(lambda: self.handlers.arrowManipulator.bringForward(self.graphboard_scene.selectedItems()))
+        self.bringForward.clicked.connect(lambda: self.arrow_handler.bringForward(self.graphboard_scene.selectedItems()))
 
         self.swapColors = QPushButton(QIcon("images/icons/swap.png"), "")
         self.swapColors.setToolTip("Swap Colors")
-        self.swapColors.clicked.connect(lambda: self.handlers.arrowManipulator.swapColors(self.graphboard_scene.selectedItems()))
+        self.swapColors.clicked.connect(lambda: self.arrow_handler.swapColors(self.graphboard_scene.selectedItems()))
 
         ### SELECTION BUTTONS ###
 
         self.selectAllButton = QPushButton(QIcon("images/icons/select_all.png"), "")
         self.selectAllButton.setToolTip("Select All")
-        self.selectAllButton.clicked.connect(self.handlers.arrowManipulator.selectAll)
+        self.selectAllButton.clicked.connect(self.arrow_handler.selectAll)
 
 
         ### SEQUENCE BUTTONS ###
@@ -212,12 +225,12 @@ class UiSetup(QWidget):
 
         self.exportAsPNGButton = QPushButton(QIcon("images/icons/export.png"), "")
         self.exportAsPNGButton.setToolTip("Export to PNG")
-        self.exportAsPNGButton.clicked.connect(self.handlers.exporter.exportAsPng)
+        self.exportAsPNGButton.clicked.connect(self.exporter.exportAsPng)
 
 
         self.exportAsSVGButton = QPushButton(QIcon("images/icons/export.png"), "")
         self.exportAsSVGButton.setToolTip("Export to SVG")
-        self.exportAsSVGButton.clicked.connect(self.handlers.exporter.exportAsSvg)
+        self.exportAsSVGButton.clicked.connect(self.exporter.exportAsSvg)
 
 
         ### STYLING ###
@@ -291,7 +304,7 @@ class UiSetup(QWidget):
         arrowbox_frame.setLayout(objectbox_layout)  # set the layout to the frame
 
         arrowbox_scene = QGraphicsScene()
-        self.arrow_manipulator = Arrow_Manipulator(self.graphboard_scene, self.graphboard)
+
         for arrow in self.arrows:
             arrowbox_scene.addItem(arrow)  # use arrowbox_scene here
             arrow.attributesChanged.connect(self.info_tracker.update)
@@ -315,8 +328,8 @@ class UiSetup(QWidget):
         for i, svg_file in enumerate(svgs_full_paths):
             file_name = os.path.basename(svg_file)
             if file_name in default_arrows:
-                self.graphboard.set_handlers(self.arrow_manipulator)
-                arrow_item = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_manipulator)
+                self.graphboard.set_handlers(self.arrow_handler)
+                arrow_item = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
                 arrow_item.setScale(0.75)
@@ -384,12 +397,9 @@ class UiSetup(QWidget):
         clear_sequence_button = self.sequence_manager.get_clear_sequence_button()
         self.lower_layout.addWidget(clear_sequence_button)
 
-    def initHandlers(self):
-       self.handlers = Handlers(self.graphboard, self.graphboard, self.grid, self.graphboard, self.info_tracker, self)
-       self.graphboard.set_handlers(self.handlers)
 
     def initGenerator(self):
-        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard, self.graphboard, self.graphboard_scene, self.info_tracker, self.handlers, self.main_window, self, self.arrow_manipulator)
+        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard, self.graphboard, self.graphboard_scene, self.info_tracker, self.handlers, self.main_window, self, self.arrow_handler)
 
     def initStaffManager(self):
         self.staff_manager = Staff_Manager(self.graphboard_scene)
@@ -429,7 +439,7 @@ class UiSetup(QWidget):
 ### EVENTS ###
 
     def keyPressEvent(self, event):
-        self.handlers.keyPressHandler.handleKeyPressEvent(event)
+        self.key_press_handler.handleKeyPressEvent(event)
 
     def eventFilter(self, source, event):
         if event.type() == QEvent.KeyPress:

@@ -7,8 +7,7 @@ from staff import Staff
 from grid import Grid
 from arrow import Arrow
 import os
-from handlers import Arrow_Manipulator
-
+from handlers import Arrow_Handler, Exporter
 
 
 
@@ -16,7 +15,7 @@ class Graphboard(QGraphicsView):
     arrowMoved = pyqtSignal()
     attributesChanged = pyqtSignal()
 
-    def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, ui_setup, parent=None):
+    def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, ui_setup, generator, sequence_manager, parent=None):
         super().__init__(graphboard_scene, parent)
         self.setAcceptDrops(True)
         self.dragging = None
@@ -28,15 +27,14 @@ class Graphboard(QGraphicsView):
         self.graphboard_scene.setBackgroundBrush(Qt.white) 
         self.info_tracker = info_tracker
         self.svg_handler = svg_handler
+        self.generator = generator
         self.ui_setup = ui_setup
         self.renderer = QSvgRenderer()
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
         self.attributesChanged.connect(self.update_staffs_and_check_beta)
-    
-        # Create a dictionary to store the SVG renderers for each letter
+        self.exporter = Exporter(self, graphboard_scene, self.staff_manager, self.grid)
+        self.sequence_manager = sequence_manager
         self.letter_renderers = {}
-
-        # Load the SVG files for all the letters and store the renderers in the dictionary
         for letter in 'ABCDEFGHIJKLMNOPQRSTUV':
             renderer = QSvgRenderer(f'images/letters/{letter}.svg')
             self.letter_renderers[letter] = renderer
@@ -45,7 +43,7 @@ class Graphboard(QGraphicsView):
         # Create a new QGraphicsSvgItem for the letter and add it to the scene
         self.letter_item = QGraphicsSvgItem()
         self.graphboard_scene.addItem(self.letter_item)
-        self.arrow_manipulator = Arrow_Manipulator(self.graphboard_scene, self)
+        self.arrow_manipulator = Arrow_Handler(self.graphboard_scene, self)
         self.setFixedSize(750, 900)
 
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -53,6 +51,9 @@ class Graphboard(QGraphicsView):
 
         self.graphboard_scene.addItem(self.grid)
         self.drag = Quadrant_Preview_Drag(self, self.dragging)
+
+    def setGenerator(self, generator):
+        self.generator = generator
 
     def mousePressEvent(self, event):
         self.dragStartPosition = event.pos()
@@ -241,19 +242,21 @@ class Graphboard(QGraphicsView):
             graphboard_menu.addAction(select_all_action)
 
             add_to_sequence_action = QAction('Add to Sequence', self)
-            self.sequence_manager = self.ui_setup.get_sequence_manager()
             add_to_sequence_action.triggered.connect(lambda _: self.sequence_manager.add_to_sequence(self))
             graphboard_menu.addAction(add_to_sequence_action)
 
             export_as_png_action = QAction('Export to PNG', self)
-            export_as_png_action.triggered.connect(self.handlers.exporter.exportAsPng)
+            export_as_png_action.triggered.connect(self.exporter.exportAsPng)
             graphboard_menu.addAction(export_as_png_action)
 
             export_as_svg_action = QAction('Export to SVG', self)
-            export_as_svg_action.triggered.connect(self.handlers.exporter.exportAsSvg)
+            export_as_svg_action.triggered.connect(self.exporter.exportAsSvg)
             graphboard_menu.addAction(export_as_svg_action)
 
             graphboard_menu.exec_(event.globalPos())
+
+
+
 
     def print_item_types(self):
         for item in self.scene().items():

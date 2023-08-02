@@ -4,7 +4,7 @@ from PyQt5.QtGui import QFont
 import json
 import random
 from arrow import Arrow
-from handlers import SvgHandler, Context_Menu_Handler
+from handlers import Svg_Handler, Context_Menu_Handler
 
 class Pictograph_Generator():
     def __init__(self, staff_manager, graphboard, graphboard_view, graphboard_scene, info_tracker, handlers, main_window, arrow_manipulator, parent=None):
@@ -18,7 +18,7 @@ class Pictograph_Generator():
         self.current_letter = None  # Add this line
         self.main_window = main_window
         self.arrow_manipulator = arrow_manipulator
-        self.svg_handler = SvgHandler()
+        self.svg_handler = Svg_Handler()
         self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene)
 
     def generate_pictograph(self, letter, staff_manager):
