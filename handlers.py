@@ -31,7 +31,9 @@ class Arrow_Handler:
         elif self.selected_arrow.quadrant == 'sw':
             self.selected_arrow.quadrant = 'nw'
         # Update the arrow's position and orientation on the graphboard
+        self.selected_arrow.update_arrow_position()
         print(self.selected_arrow.quadrant)
+
     def move_arrow_quadrant_left(self):
         self.selected_arrow = self.graphboard.get_selected_items()[0]
         if self.selected_arrow.quadrant == 'ne':
@@ -39,6 +41,7 @@ class Arrow_Handler:
         elif self.selected_arrow.quadrant == 'se':
             self.selected_arrow.quadrant = 'sw'
         # Update the arrow's position and orientation on the graphboard
+        self.selected_arrow.update_arrow_position()
         print(self.selected_arrow.quadrant)
 
     def move_arrow_quadrant_down(self):
@@ -48,6 +51,7 @@ class Arrow_Handler:
         elif self.selected_arrow.quadrant == 'nw':
             self.selected_arrow.quadrant = 'sw'
         # Update the arrow's position and orientation on the graphboard
+        self.selected_arrow.update_arrow_position()
         print(self.selected_arrow.quadrant)
 
     def move_arrow_quadrant_right(self):
@@ -57,6 +61,7 @@ class Arrow_Handler:
         elif self.selected_arrow.quadrant == 'sw':
             self.selected_arrow.quadrant = 'se'
         # Update the arrow's position and orientation on the graphboard
+        self.selected_arrow.update_arrow_position()
         print(self.selected_arrow.quadrant)
 
     def rotateArrow(self, direction, items):

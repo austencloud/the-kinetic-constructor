@@ -4,6 +4,7 @@ from PyQt5.QtCore import pyqtSignal, QPointF
 from PyQt5.QtSvg import QGraphicsSvgItem
 from PyQt5.QtWidgets import QMenu, QDialog, QFormLayout, QSpinBox, QDialogButtonBox
 import os
+import json
 
 class Arrow(QGraphicsSvgItem):
     attributesChanged = pyqtSignal()
@@ -30,6 +31,8 @@ class Arrow(QGraphicsSvgItem):
         self.dragStarted = False
         self.arrow_manipulator = arrow_manipulator
 
+        with open('pictographs.json') as f:
+            self.pictographs = json.load(f)
 
         if "_l_" in svg_file:
             self.orientation = "l"
@@ -67,6 +70,7 @@ class Arrow(QGraphicsSvgItem):
         self.type = attributes.get('type', self.type)
         self.start_location = attributes.get('start_location', self.start_location)
         self.end_location = attributes.get('end_location', self.end_location)
+        self.attributesChanged.emit()  # Emit the signal here
 
     def set_orientation(self, orientation):
         self.orientation = orientation
@@ -182,6 +186,8 @@ class Arrow(QGraphicsSvgItem):
                 self.quadrant = "nw"
             else:
                 self.quadrant = "sw"
+        self.attributesChanged.emit()  # Emit the signal here after updating the quadrant
+
 
     def update_rotation(self):
         if self.type == "iso":
@@ -279,6 +285,33 @@ class Arrow(QGraphicsSvgItem):
         # If the user clicked the OK button, move the arrows
         if result == QDialog.Accepted:
             self.move_arrows()
+
+    def update_arrow_position(self):
+        # Get the current combination of arrows
+        current_combination = (self.get_attributes()['color'], self.get_attributes()['quadrant'], self.get_attributes()['rotation'], self.get_attributes()['type'], self.get_attributes()['start_location'], self.get_attributes()['end_location'])
+
+        optimal_position = None
+
+        # Look up the optimal positions for the current combination
+        for pictograph, combinations in self.pictographs.items():
+            for combination in combinations:
+                if (combination[1]['color'], combination[1]['quadrant'], combination[1]['rotation'], combination[1]['type'], combination[1]['start_location'], combination[1]['end_location']) == current_combination:
+                    if len(combination) > 3:
+                        optimal_position = combination[3]['optimal_' + self.get_attributes()['color'] + '_location']
+                    else:
+                        optimal_position = None  # or some other default value
+                    break
+
+        if optimal_position:
+            # Calculate the position to center the arrow at the optimal position
+            pos = QPointF(optimal_position['x'], optimal_position['y']) - self.boundingRect().center()
+            self.setPos(pos)
+        else:
+            # Calculate the position to center the arrow at the quadrant center
+            pos = self.graphboard.get_quadrant_center(self.get_attributes()['quadrant']) - self.boundingRect().center()
+            self.setPos(pos)
+        self.arrowMoved.emit()
+        self.attributesChanged.emit()
 
     def move_arrows(self):
         items = self.scene().selectedItems()
