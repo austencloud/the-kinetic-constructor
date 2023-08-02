@@ -45,7 +45,7 @@ class Pictograph_Generator():
 
         # Find the optimal positions dictionary in combination_set
         optimal_positions = next((d for d in combination_set if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
-        print(f"Optimal positions: {optimal_positions}")
+
 
         for combination in combination_set:
             # Check if the dictionary has all the keys you need
@@ -73,12 +73,10 @@ class Pictograph_Generator():
                     pos = QPointF(optimal_position['x'], optimal_position['y']) - arrow.boundingRect().center()
                     arrow.setPos(pos)
                 else:
-                    print(f"No optimal position found for {arrow.get_attributes()['color']} arrow. Setting position to quadrant center.")
                     # Calculate the position to center the arrow at the quadrant center
                     pos = self.graphboard.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
                     arrow.setPos(pos)
             else:
-                print(f"No optimal positions dictionary found. Setting position for {arrow.get_attributes()['color']} arrow to quadrant center.")
                 # Calculate the position to center the arrow at the quadrant center
                 pos = self.graphboard.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
                 arrow.setPos(pos)

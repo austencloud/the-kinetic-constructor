@@ -3,14 +3,15 @@ import json
 import os
 import xml.etree.ElementTree as ET
 import json
-from PyQt5.QtGui import QImage, QPainter, QPainterPath
-from PyQt5.QtSvg import QSvgRenderer, QSvgGenerator
-from PyQt5.QtWidgets import QStyleOptionGraphicsItem, QMenu, QDialog, QFormLayout, QSpinBox, QDialogButtonBox
-from PyQt5.QtCore import QSize, QRect, QIODevice
-from PyQt5.QtXml import QDomDocument
-from PyQt5.QtCore import Qt, pyqtSignal, QBuffer, QSize, QRect
+import re
+from PyQt5.QtGui import QImage, QPainter, QPainterPath, QTransform
+from PyQt5.QtSvg import QSvgRenderer
+from PyQt5.QtWidgets import QMenu, QDialog, QFormLayout, QSpinBox, QDialogButtonBox
+from PyQt5.QtCore import Qt, pyqtSignal
 from svg.path import Line, CubicBezier, QuadraticBezier, Arc, Close
 from arrow import Arrow
+from staff import Staff
+from lxml import etree
 
 class Handlers:
     arrowMoved = pyqtSignal()
@@ -205,43 +206,92 @@ class Exporter:
         for item in selectedItems:
             item.setSelected(True)
 
-    def exportAsSvg(self):
-        final_svg = QDomDocument()
+    def get_fill_color(self, svg_file):
+        svg = etree.parse(svg_file)
+        fill_color = None
 
-        svg_element = final_svg.createElement('svg')
-        svg_element.setAttribute('width', '750')
-        svg_element.setAttribute('height', '750')
-        svg_element.setAttribute('viewBox', '0 0 750 750')
-        final_svg.appendChild(svg_element)
+        # Try to get fill color from style element
+        style_element = svg.getroot().find('.//{http://www.w3.org/2000/svg}style')
+        if style_element is not None:
+            style_text = style_element.text
+            color_match = re.search(r'fill:\s*(#[0-9a-fA-F]+)', style_text)
+            if color_match:
+                fill_color = color_match.group(1)
+
+        # If fill color was not found in style element, try to get it from path or rect elements
+        if fill_color is None:
+            for element in svg.getroot().iterfind('.//{http://www.w3.org/2000/svg}*'):
+                if 'fill' in element.attrib:
+                    fill_color = element.attrib['fill']
+                    break
+
+        return fill_color
+
+
+    def exportAsSvg(self):
+        print("Exporting")
+        svg = etree.Element('svg', nsmap={None: 'http://www.w3.org/2000/svg'})
+        svg.set('width', '750')
+        svg.set('height', '900')
+        svg.set('viewBox', '0 0 750 900')
+
+        grid_svg = etree.parse(self.graphboard.grid.svg_file)
+        circle_elements = grid_svg.getroot().findall('.//{http://www.w3.org/2000/svg}circle')
+
+        for circle_element in circle_elements:
+            svg.append(circle_element)
+
 
         for item in self.graphboard.scene().items():
             if isinstance(item, Arrow):
-                buffer = QBuffer()
-                buffer.open(QIODevice.WriteOnly)
+                arrow_svg = etree.parse(item.svg_file)
+                path_elements = arrow_svg.getroot().findall('.//{http://www.w3.org/2000/svg}path')
 
-                generator = QSvgGenerator()
-                generator.setOutputDevice(buffer)
-                generator.setSize(QSize(750, 750))
-                generator.setViewBox(QRect(0, 0, 750, 750))
-                painter = QPainter(generator)
-                painter.translate(item.pos())
-                painter.setTransform(item.transform(), True)
-                item.paint(painter, QStyleOptionGraphicsItem(), None)
-                painter.end()
+                # Get fill color from SVG file
+                fill_color = self.get_fill_color(item.svg_file)
 
-                arrow_svg = QDomDocument()
-                buffer.close()
-                arrow_svg.setContent(buffer.data())
+                # Apply transformations and set position
+                transform = item.transform()
+                for path_element in path_elements:
+                    path_element.set('transform', f'matrix({transform.m11()}, {transform.m12()}, {transform.m21()}, {transform.m22()}, {item.x()}, {item.y()})')
+                    if fill_color is not None:
+                        path_element.set('fill', fill_color)
 
-                g_element = arrow_svg.firstChildElement('svg').firstChildElement('g')
+                    svg.append(path_element)
 
-                g_element.setAttribute('id', os.path.basename(item.svg_file))
+            elif isinstance(item, Staff):
+                staff_svg = etree.parse(item.svg_file)
+                rect_elements = staff_svg.getroot().findall('.//{http://www.w3.org/2000/svg}rect')
 
-                g_element = final_svg.importNode(g_element, True)
-                svg_element.appendChild(g_element)
+                # Get fill color from SVG file
+                fill_color = self.get_fill_color(item.svg_file)
 
-        with open('output.svg', 'w') as file:
-            file.write(final_svg.toString())
+                # Apply transformations and set position
+                parent_transform = item.parentItem().transform() if item.parentItem() else QTransform()
+                transform = parent_transform * item.transform()
+
+                # Adjust transformation based on viewBox
+                viewBox = staff_svg.getroot().get('viewBox')
+                if viewBox is None:
+                    min_x, min_y, width, height = 0, 0, 750, 900  # default viewBox
+                else:
+                    min_x, min_y, width, height = map(float, viewBox.split())
+
+                viewBox_transform = QTransform().scale(1/width, 1/height).translate(-min_x, -min_y)
+                transform = viewBox_transform * transform
+
+                for rect_element in rect_elements:
+                    rect_element.set('transform', f'matrix({transform.m11()}, {transform.m12()}, {transform.m21()}, {transform.m22()}, {transform.dx()}, {transform.dy()})')
+                    if fill_color is not None:
+                        rect_element.set('fill', fill_color)
+
+                    svg.append(rect_element)
+
+
+        with open('output.svg', 'wb') as file:
+            file.write(etree.tostring(svg, pretty_print=True))
+        print("Fiished exporting as output.svg")
+
 
 class SvgHandler:
     @staticmethod
