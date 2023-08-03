@@ -3,23 +3,81 @@ from PyQt5.QtCore import Qt, QPointF
 from PyQt5.QtGui import QFont
 import json
 import random
+import os
 from arrow import Arrow
-from handlers import Svg_Handler, Context_Menu_Handler
-
+from handlers import Svg_Handler
+from lxml import etree
+from menus import Context_Menu_Handler
+from exporter import Exporter
 class Pictograph_Generator():
-    def __init__(self, staff_manager, graphboard, graphboard_view, graphboard_scene, info_tracker, handlers, main_window, arrow_manipulator, parent=None):
+    def __init__(self, staff_manager, graphboard, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, context_menu_handler, grid, parent=None):
         self.staff_manager = staff_manager
         self.parent = parent
         self.graphboard = graphboard
-        self.graphboard_view = graphboard_view
         self.info_tracker = info_tracker
-        self.handlers = handlers
         self.graphboard_scene = graphboard_scene
         self.current_letter = None  # Add this line
         self.main_window = main_window
-        self.arrow_manipulator = arrow_manipulator
+        self.arrow_handler = arrow_handler
         self.svg_handler = Svg_Handler()
-        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene)
+        self.context_menu_handler = context_menu_handler
+        self.exporter = exporter
+        self.grid = grid
+
+    def generate_all_pictographs(self, staff_manager):
+        # Reload the JSON file
+        with open('pictographs.json', 'r') as file:
+            self.letters = json.load(file)
+
+        output_dir = "output\\"
+
+        # Create the output directory if it doesn't exist
+        os.makedirs(output_dir, exist_ok=True)
+
+        # Iterate over all combinations for each letter
+        for letter in self.letters:
+            for combination in letter:
+                # Generate the pictograph for the combination
+                self.generate_pictograph(combination, staff_manager)
+
+                # Find the dictionary in the combination list that contains the 'start_position' and 'end_position' keys
+                positions_dict = next((d for d in combination if 'start_position' in d and 'end_position' in d), None)
+                if positions_dict is None:
+                    continue
+
+                # Get the start and end positions
+                start_position = positions_dict['start_position'].replace('alpha', 'a').replace('beta', 'b').replace('gamma', 'g')
+                end_position = positions_dict['end_position'].replace('alpha', 'a').replace('beta', 'b').replace('gamma', 'g')
+
+                # Check if the current combination has one 'anti' and one 'iso'
+                types = [arrow_dict['type'] for arrow_dict in combination if 'type' in arrow_dict]
+                is_hybrid = types.count('anti') == 1 and types.count('iso') == 1
+
+                # Iterate over the arrow dictionaries in the list
+                for arrow_dict in combination:
+                    # Check if the dictionary has all the keys you need
+                    if all(key in arrow_dict for key in ['color', 'type']):
+                        # Get the color and type of the arrow
+                        color = arrow_dict['color']
+                        arrow_type = arrow_dict['type']
+
+                        # Create the file name
+                        file_name = f"{start_position}_{end_position}"
+                        if arrow_type == 'iso' and is_hybrid:
+                            file_name += f"_{color}-iso"
+                        file_name += ".svg"
+
+                        # Write the SVG to a file
+                        output_file_path = os.path.join(output_dir, file_name)
+                        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
+                        self.exporter.exportAsSvg(output_file_path)
+
+                # Clear the graphboard for the next combination
+                self.graphboard.clear()
+
+
+
+
 
     def generate_pictograph(self, letter, staff_manager):
         #delete all items
@@ -51,7 +109,7 @@ class Pictograph_Generator():
             # Check if the dictionary has all the keys you need
             if all(key in combination for key in ['color', 'type', 'rotation', 'quadrant']):
                 svg_file = f"images/arrows/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}.svg"
-                arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.arrow_manipulator)
+                arrow = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler)
                 arrow.attributesChanged.connect(lambda: self.update_staff(arrow, staff_manager))
                 arrow.set_attributes(combination)
                 arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
@@ -94,7 +152,7 @@ class Pictograph_Generator():
         self.staff_manager.remove_non_beta_staves()
         # Update the info label
         self.info_tracker.update()
-        self.graphboard_view.arrowMoved.emit()
+        self.graphboard.arrowMoved.emit()
     
     def get_current_letter(self):
         return self.current_letter

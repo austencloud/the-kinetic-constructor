@@ -7,8 +7,8 @@ from staff import Staff
 from grid import Grid
 from arrow import Arrow
 import os
-from handlers import Arrow_Handler, Exporter
-
+from handlers import Arrow_Handler
+from exporter import Exporter
 
 
 class Graphboard(QGraphicsView):

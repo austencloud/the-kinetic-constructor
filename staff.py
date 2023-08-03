@@ -154,7 +154,7 @@ class Staff_Manager(QObject):
 
     def remove_beta_staves(self):
         for beta_staff in self.beta_staves:
-            if beta_staff.scene is not None:
+            if beta_staff.scene() is not None:
                 self.scene.removeItem(beta_staff)
         self.beta_staves = []
 
@@ -163,6 +163,7 @@ class Staff_Manager(QObject):
             if staff.isVisible() and staff.scene is not None:
                 self.scene.removeItem(staff)
                 staff.hide()  # Hide the staff
+
 
 
     def update_graphboard_staffs(self, scene):

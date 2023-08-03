@@ -8,11 +8,12 @@ from generator import Pictograph_Generator
 from staff import *
 from letter import Letter_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent, QSize
-from handlers import Arrow_Handler, Svg_Handler, Exporter, Json_Handler, Key_Press_Handler
+from handlers import Arrow_Handler, Svg_Handler, Json_Handler, Key_Press_Handler
 from arrowbox import Arrow_Box
 from propbox import Prop_Box
 from menus import Menu_Bar, Context_Menu_Handler
 from graphboard import Graphboard
+from exporter import Exporter
 
 class UiSetup(QWidget):
     def __init__(self, main_window):
@@ -31,7 +32,7 @@ class UiSetup(QWidget):
         self.SVG_POS_Y = 250
         self.context_menu_handler = None
         self.exporter = None
-        self.handlers = None
+
         self.sequence_manager = None
         self.graphboard = None
         self.arrow_handler = None
@@ -60,7 +61,7 @@ class UiSetup(QWidget):
 
     def initMenus(self):
         self.json_updater = Json_Handler(self.graphboard_scene)
-        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.handlers, self.sequence_manager, self.arrow_handler, self.exporter)
+        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.sequence_manager, self.arrow_handler, self.exporter)
         self.arrow_handler = Arrow_Handler(self.graphboard_scene, self.graphboard, self.staff_manager)
         self.key_press_handler = Key_Press_Handler(self.arrow_handler, None)
         self.menu_bar = Menu_Bar()
@@ -156,7 +157,16 @@ class UiSetup(QWidget):
                 button.clicked.connect(lambda _, l=letter: self.generator.generate_pictograph(l, self.staff_manager))  # use self.generator here
                 row_layout.addWidget(button)
             letter_buttons_layout.addLayout(row_layout)
-        
+
+        # Add a button to generate all letters
+        generate_all_button = QPushButton("Generate All", self.main_window)
+        font = QFont()
+        font.setPointSize(20)
+        generate_all_button.setFont(font)
+        generate_all_button.setFixedSize(300, 80)
+        generate_all_button.clicked.connect(lambda: self.generator.generate_all_pictographs(self.staff_manager))  # replace "/path/to/output/directory" with your desired output directory
+        letter_buttons_layout.addWidget(generate_all_button)
+
         self.upper_layout.addLayout(letter_buttons_layout)  # add the layout to left_layout here
 
     def initButtons(self):
@@ -165,7 +175,6 @@ class UiSetup(QWidget):
         button_height = 60
         icon_size = QSize(40, 40)
 
-        self.graphboard.set_handlers(self.handlers)
         masterbtnlayout = QVBoxLayout()
         buttonlayout = QHBoxLayout()
         buttonstack = QHBoxLayout()
@@ -399,7 +408,7 @@ class UiSetup(QWidget):
 
 
     def initGenerator(self):
-        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard, self.graphboard, self.graphboard_scene, self.info_tracker, self.handlers, self.main_window, self, self.arrow_handler)
+        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.context_menu_handler, self.grid)
 
     def initStaffManager(self):
         self.staff_manager = Staff_Manager(self.graphboard_scene)
