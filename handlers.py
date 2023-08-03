@@ -326,19 +326,19 @@ class Exporter:
                 fill_color = self.get_fill_color(item.svg_file)
                 position = self.staff_manager.get_staff_position(item)
                 print(f"Staff position: {position}")
-                transform = QTransform()
-                transform.translate(position.x(), position.y())
-
 
                 for rect_element in rect_elements:
                     rect_element_copy = deepcopy(rect_element)  # Create a deep copy of the element
-                    rect_element_copy.set('transform', f'matrix({transform.m11()}, {transform.m12()}, {transform.m21()}, {transform.m22()}, {position.x()}, {position.y()})')
+                    rect_element_copy.set('x', str(position.x()))  # Set the 'x' attribute
+                    rect_element_copy.set('y', str(position.y()))  # Set the 'y' attribute
+                    rect_element_copy.set('transform', f'matrix(1.0, 0.0, 0.0, 1.0, 0, 0)')  # Remove the translation from the transformation matrix
                     if fill_color is not None:
                         rect_element_copy.set('fill', fill_color)
 
                     # Append the rect to the staves group
                     staves_group.append(rect_element_copy)
                 print("Finished exporting staff: " + item.svg_file)
+
 
         # Add comments and append the groups to the SVG root element
         svg.append(etree.Comment(' STAVES '))

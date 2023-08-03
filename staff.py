@@ -134,7 +134,7 @@ class Staff_Manager(QObject):
             if graphboard_staff is staff_item:
                 # Return the position of the staff
                 print(f"Found staff {staff_item.element_id} at position {self.staff_locations[staff_name.split('_')[0] + '_staff']}")
-                return self.staff_locations[staff_name.split('_')[0] + '_staff']
+                return self.staff_locations[staff_name.split('_')[0] + '_' + staff_name.split('_')[1]]
             
         # If the input staff_item is not found in the graphboard_staffs dictionary, return None
         return None
