@@ -100,7 +100,7 @@ class Staff_Manager(QObject):
 
         hand_points = {
             'N_hand_point': QPointF(325, 181.9),
-            'E_hand_point': QPointF(468.1, 325.),
+            'E_hand_point': QPointF(468.1, 325),
             'S_hand_point': QPointF(325, 468.1),
             'W_hand_point': QPointF(181.9, 325),
         }
@@ -125,6 +125,19 @@ class Staff_Manager(QObject):
         }
 
         self.hide_all_graphboard_staffs()
+
+    def get_staff_position(self, staff_item):
+        print(f"Getting position for staff {staff_item.element_id}")
+        # Iterate over all the staffs in the graphboard_staffs dictionary
+        for staff_name, graphboard_staff in self.graphboard_staffs.items():
+            # If the current graphboard_staff is the same as the input staff_item
+            if graphboard_staff is staff_item:
+                # Return the position of the staff
+                print(f"Found staff {staff_item.element_id} at position {self.staff_locations[staff_name.split('_')[0] + '_staff']}")
+                return self.staff_locations[staff_name.split('_')[0] + '_staff']
+            
+        # If the input staff_item is not found in the graphboard_staffs dictionary, return None
+        return None
 
     def hide_all_graphboard_staffs(self):
         for staff in self.graphboard_staffs.values():

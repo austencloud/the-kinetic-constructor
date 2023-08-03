@@ -324,18 +324,11 @@ class Exporter:
                 staff_svg = etree.parse(item.svg_file)
                 rect_elements = staff_svg.getroot().findall('.//{http://www.w3.org/2000/svg}rect')
                 fill_color = self.get_fill_color(item.svg_file)
-                position = item.mapToScene(item.pos())  # Convert the position to scene coordinates
-                parent_transform = item.parentItem().transform() if item.parentItem() else QTransform()
-                transform = parent_transform * item.transform()
+                position = self.staff_manager.get_staff_position(item)
+                print(f"Staff position: {position}")
+                transform = QTransform()
+                transform.translate(position.x(), position.y())
 
-                # Scale the position to match the SVG's viewBox
-                svg_width = 750
-                svg_height = 900
-                scene_rect = self.graphboard_scene.sceneRect()
-                x_scale = svg_width / scene_rect.width()
-                y_scale = svg_height / scene_rect.height()
-                position.setX(position.x() * x_scale)
-                position.setY(position.y() * y_scale)
 
                 for rect_element in rect_elements:
                     rect_element_copy = deepcopy(rect_element)  # Create a deep copy of the element
@@ -345,7 +338,6 @@ class Exporter:
 
                     # Append the rect to the staves group
                     staves_group.append(rect_element_copy)
-
                 print("Finished exporting staff: " + item.svg_file)
 
         # Add comments and append the groups to the SVG root element
