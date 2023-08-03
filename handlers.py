@@ -7,7 +7,7 @@ import re
 from PyQt5.QtGui import QImage, QPainter, QPainterPath, QTransform
 from PyQt5.QtSvg import QSvgRenderer
 from PyQt5.QtWidgets import QMenu, QDialog, QFormLayout, QSpinBox, QDialogButtonBox
-from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtCore import Qt, pyqtSignal, QObject
 from svg.path import Line, CubicBezier, QuadraticBezier, Arc, Close
 from arrow import Arrow
 from staff import Staff
@@ -16,12 +16,15 @@ from lxml import etree
 from copy import deepcopy
 
 
-class Arrow_Handler:
+class Arrow_Handler(QObject):
     arrowMoved = pyqtSignal()
+    attributesChanged = pyqtSignal()
 
-    def __init__(self, graphboard_scene, graphboard):
+    def __init__(self, graphboard_scene, graphboard, staff_manager):
+        super().__init__()
         self.graphboard_scene = graphboard_scene
         self.graphboard = graphboard
+        self.staff_manager = staff_manager
 
     def move_arrow_quadrant_up(self):
         self.selected_arrow = self.graphboard.get_selected_items()[0]
@@ -32,7 +35,12 @@ class Arrow_Handler:
             self.selected_arrow.quadrant = 'nw'
         # Update the arrow's position and orientation on the graphboard
         self.selected_arrow.update_arrow_position()
+        # Update the arrow's image
+
         print(self.selected_arrow.quadrant)
+        self.arrowMoved.emit()
+        self.attributesChanged.emit()
+
 
     def move_arrow_quadrant_left(self):
         self.selected_arrow = self.graphboard.get_selected_items()[0]
@@ -118,12 +126,6 @@ class Arrow_Handler:
                 print("Failed to load SVG file:", new_svg)
         self.graphboard.arrowMoved.emit()
 
-    def delete_arrow(self, items):
-        for item in items:
-            self.graphboard.scene().removeItem(item)
-        self.graphboard.arrowMoved.emit()
-        self.graphboard.attributesChanged.emit()
-
     def bringForward(self, items):
         for item in items:
             z = item.zValue()
@@ -170,30 +172,21 @@ class Arrow_Handler:
         self.graphboard = graphboard
         self.selected_items_len = len(graphboard.get_selected_items())
         print(f"selected_items_len: {self.selected_items_len}")
-        
+
+    def delete_arrow(self, items):
+        for item in items:
+            self.graphboard.scene().removeItem(item)
+        self.graphboard.arrowMoved.emit()
+        self.graphboard.attributesChanged.emit()
+
 
 
 class Key_Press_Handler:
-    def __init__(self, arrow_handler, graphboard=None):
-        self.arrow_handler = arrow_handler
+    def __init__(self, arrow, graphboard=None):
+        self.arrow = arrow
         print("Key_Press_Handler init")
 
-    def handleKeyPressEvent(self, event):
-        self.selected_items = self.graphboard.get_selected_items()
-        if event.key() == Qt.Key_Delete:
 
-            self.arrow_handler.delete_arrow(self.selected_items)
-
-        print(self.selected_items) 
-        if event.key() == Qt.Key_W:
-            self.arrow_handler.move_arrow_quadrant_up()
-            print("W")
-        elif event.key() == Qt.Key_A:
-            self.arrow_handler.move_arrow_quadrant_left()
-        elif event.key() == Qt.Key_S:
-            self.arrow_handler.move_arrow_quadrant_down()
-        elif event.key() == Qt.Key_D:
-            self.arrow_handler.move_arrow_quadrant_right()
 
     def connect_to_graphboard(self, graphboard):
         self.graphboard = graphboard
@@ -309,7 +302,7 @@ class Exporter:
                     # Append the circle to the grid group
                     grid_group.append(circle_element)
 
-                print("Finished exporting" + item.svg_file)
+                print("Finished exporting grid: " + item.svg_file)
 
             elif isinstance(item, Arrow):
                 arrow_svg = etree.parse(item.svg_file)
@@ -325,7 +318,7 @@ class Exporter:
                     # Append the path to the arrows group
                     arrows_group.append(path_element)
 
-                print("Finished exporting" + item.svg_file)
+                print("Finished exporting arrow: " + item.svg_file)
 
             elif isinstance(item, Staff):
                 staff_svg = etree.parse(item.svg_file)
@@ -353,7 +346,7 @@ class Exporter:
                     # Append the rect to the staves group
                     staves_group.append(rect_element_copy)
 
-                print("Finished exporting" + item.svg_file)
+                print("Finished exporting staff: " + item.svg_file)
 
         # Add comments and append the groups to the SVG root element
         svg.append(etree.Comment(' STAVES '))
@@ -374,6 +367,9 @@ class Exporter:
 
 
 class Svg_Handler:
+    def __init__(self):
+        self.renderers = {}
+
     @staticmethod
     def parse_svg_file(file_path):
         tree = ET.parse(file_path)
@@ -444,6 +440,11 @@ class Svg_Handler:
         svg_path = Svg_Handler.parse_svg_file(svg_file)
         qpainter_path = Svg_Handler.svg_path_to_qpainterpath(svg_path)
         return qpainter_path.contains(point)
+    
+    def get_renderer(self, filename):
+        if filename not in self.renderers:
+            self.renderers[filename] = QSvgRenderer(filename)
+        return self.renderers[filename]
     
 class Context_Menu_Handler:
     def __init__(self, scene):

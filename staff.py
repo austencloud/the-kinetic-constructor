@@ -4,6 +4,8 @@ from PyQt5.QtWidgets import QGraphicsItem
 from arrow import Arrow
 
 class Staff(QGraphicsSvgItem):
+    attributesChanged = pyqtSignal()  # Define the signal
+
     def __init__(self, element_id, scene, position, color=None, staff_svg_file=None, initial_visibility=True):
         super().__init__()
         self.element_id = element_id
@@ -29,6 +31,27 @@ class Staff(QGraphicsSvgItem):
 
         self.svg_file = staff_svg_file
         self.color = color
+
+        # Connect the signal to the update method
+        self.attributesChanged.connect(self.update_staff)
+
+    def update_attributes(self, new_attributes):
+        # Update the attributes
+        self.element_id = new_attributes.get('element_id', self.element_id)
+        self.position = new_attributes.get('position', self.position)
+        self.svg_file = new_attributes.get('svg_file', self.svg_file)
+        self.color = new_attributes.get('color', self.color)
+
+        # Emit the signal
+        self.attributesChanged.emit()
+
+    def update_staff(self):
+        # Update the staff based on the new attributes
+        self.setElementId(self.element_id)
+        self.setPos(self.position)
+        self.renderer.load(self.svg_file)
+        self.setSharedRenderer(self.renderer)
+        # Add code to update the color if necessary
 
     def show(self):
         self.setVisible(True)

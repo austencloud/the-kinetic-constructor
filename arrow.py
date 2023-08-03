@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QGraphicsItem, QMenu
 from PyQt5.QtGui import QPainterPath
-from PyQt5.QtCore import pyqtSignal, QPointF
+from PyQt5.QtCore import pyqtSignal, QPointF, Qt 
 from PyQt5.QtSvg import QGraphicsSvgItem
 from PyQt5.QtWidgets import QMenu, QDialog, QFormLayout, QSpinBox, QDialogButtonBox
 import os
@@ -30,6 +30,9 @@ class Arrow(QGraphicsSvgItem):
         self.svg_handler = svg_handler
         self.dragStarted = False
         self.arrow_manipulator = arrow_manipulator
+        self.attributesChanged.connect(self.update_arrow_image)
+
+
 
         with open('pictographs.json') as f:
             self.pictographs = json.load(f)
@@ -59,10 +62,6 @@ class Arrow(QGraphicsSvgItem):
 
     ### SETTERS ###
 
-    def set_staff(self, staff):
-        self.staff = staff
-        staff.set_arrow(self)  # Update the staff's arrow attribute
-
     def set_attributes(self, attributes):
         self.color = attributes.get('color', self.color)
         self.quadrant = attributes.get('quadrant', self.quadrant)
@@ -71,6 +70,7 @@ class Arrow(QGraphicsSvgItem):
         self.start_location = attributes.get('start_location', self.start_location)
         self.end_location = attributes.get('end_location', self.end_location)
         self.attributesChanged.emit()  # Emit the signal here
+        self.update_arrow_image() 
 
     def set_orientation(self, orientation):
         self.orientation = orientation
@@ -233,9 +233,6 @@ class Arrow(QGraphicsSvgItem):
                 else: # self.end_location == "s"
                     self.rotation = "r"
 
-    def update_staff_position(self):
-        new_staff_position = self.get_staff_position()
-        self.staff.item.setPos(new_staff_position)
 
     
     # def contextMenuEvent(self, event):
@@ -310,8 +307,21 @@ class Arrow(QGraphicsSvgItem):
             # Calculate the position to center the arrow at the quadrant center
             pos = self.graphboard.get_quadrant_center(self.get_attributes()['quadrant']) - self.boundingRect().center()
             self.setPos(pos)
+
         self.arrowMoved.emit()
         self.attributesChanged.emit()
+
+    def update_arrow_image(self):
+        # Construct the new filename based on the arrow's attributes
+        new_filename = f"images\\arrows\\{self.color}_{self.type}_{self.rotation}_{self.quadrant}.svg"
+        
+        # Check if the file exists
+        if os.path.isfile(new_filename):
+            # Load the new SVG file
+            self.svg_file = new_filename
+            self.setSharedRenderer(self.svg_handler.get_renderer(new_filename))
+        else:
+            print(f"File {new_filename} does not exist")
 
     def move_arrows(self):
         items = self.scene().selectedItems()
@@ -342,3 +352,36 @@ class Arrow(QGraphicsSvgItem):
         self.type = parts[1]
         self.rotation = parts[2]
         self.quadrant = parts[3].split('.')[0]
+
+    def move_quadrant_up(self):
+        if self.quadrant == 'se':
+            self.quadrant = 'ne'
+        elif self.quadrant == 'sw':
+            self.quadrant = 'nw'
+        self.update_arrow_position()
+        self.arrowMoved.emit()
+        self.attributesChanged.emit()
+
+    def move_quadrant_left(self):
+        if self.quadrant == 'ne':
+            self.quadrant = 'nw'
+        elif self.quadrant == 'se':
+            self.quadrant = 'sw'
+        self.update_arrow_position()
+
+    def move_quadrant_down(self):
+        if self.quadrant == 'ne':
+            self.quadrant = 'se'
+        elif self.quadrant == 'nw':
+            self.quadrant = 'sw'
+        self.update_arrow_position()
+
+    def move_quadrant_right(self):
+        if self.quadrant == 'nw':
+            self.quadrant = 'ne'
+        elif self.quadrant == 'sw':
+            self.quadrant = 'se'
+        self.update_arrow_position()
+
+
+

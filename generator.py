@@ -53,7 +53,6 @@ class Pictograph_Generator():
                 svg_file = f"images/arrows/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}.svg"
                 arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.arrow_manipulator)
                 arrow.attributesChanged.connect(lambda: self.update_staff(arrow, staff_manager))
-                arrow.attributesChanged.connect(lambda: self.update_arrow_position(arrow))  # Connect the signal to the slot
                 arrow.set_attributes(combination)
                 arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)

@@ -61,7 +61,7 @@ class UiSetup(QWidget):
     def initMenus(self):
         self.json_updater = Json_Handler(self.graphboard_scene)
         self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.handlers, self.sequence_manager, self.arrow_handler, self.exporter)
-        self.arrow_handler = Arrow_Handler(self.graphboard_scene, self.graphboard)
+        self.arrow_handler = Arrow_Handler(self.graphboard_scene, self.graphboard, self.staff_manager)
         self.key_press_handler = Key_Press_Handler(self.arrow_handler, None)
         self.menu_bar = Menu_Bar()
 
@@ -439,7 +439,23 @@ class UiSetup(QWidget):
 ### EVENTS ###
 
     def keyPressEvent(self, event):
-        self.key_press_handler.handleKeyPressEvent(event)
+        self.selected_items = self.graphboard.get_selected_items()
+        self.arrow = self.selected_items[0]
+
+        if event.key() == Qt.Key_Delete:
+
+            self.arrow_handler.delete_arrow(self.selected_items)
+
+        print(self.selected_items) 
+        if event.key() == Qt.Key_W:
+            self.arrow.move_quadrant_up()
+            print("W")
+        elif event.key() == Qt.Key_A:
+            self.arrow.move_quadrant_left()
+        elif event.key() == Qt.Key_S:
+            self.arrow.move_quadrant_down()
+        elif event.key() == Qt.Key_D:
+            self.arrow.move_quadrant_right()
 
     def eventFilter(self, source, event):
         if event.type() == QEvent.KeyPress:
