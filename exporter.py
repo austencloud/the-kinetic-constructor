@@ -1,7 +1,7 @@
 import re
 from PyQt5.QtGui import QImage, QPainter
 from arrow import Arrow
-from staff import Staff
+from staff import Staff, BetaStaff
 from grid import Grid
 from lxml import etree
 from copy import deepcopy
@@ -13,43 +13,7 @@ class Exporter:
         self.staff_manager = staff_manager
         self.grid = grid
 
-    def exportAsPng(self):
-        selectedItems = self.graphboard_scene.get_selected_items()
-        image = QImage(self.graphboard.size(), QImage.Format_ARGB32)
-        painter = QPainter(image)
-
-        for item in selectedItems:
-            item.setSelected(False)
-
-        self.graphboard.render(painter)
-        painter.end()
-        image.save("export.png")
-
-        for item in selectedItems:
-            item.setSelected(True)
-
-    def get_fill_color(self, svg_file):
-        svg = etree.parse(svg_file)
-        fill_color = None
-
-        # Try to get fill color from style element
-        style_element = svg.getroot().find('.//{http://www.w3.org/2000/svg}style')
-        if style_element is not None:
-            style_text = style_element.text
-            color_match = re.search(r'fill:\s*(#[0-9a-fA-F]+)', style_text)
-            if color_match:
-                fill_color = color_match.group(1)
-
-        # If fill color was not found in style element, try to get it from path or rect elements
-        if fill_color is None:
-            for element in svg.getroot().iterfind('.//{http://www.w3.org/2000/svg}*'):
-                if 'fill' in element.attrib:
-                    fill_color = element.attrib['fill']
-                    break
-
-        return fill_color
-
-    def exportAsSvg(self, output_file_path):
+    def export_to_svg(self, output_file_path):
         try: 
             print("Exporting")
             svg = etree.Element('svg', nsmap={None: 'http://www.w3.org/2000/svg'})
@@ -114,6 +78,25 @@ class Exporter:
                         staves_group.append(rect_element_copy)
                     print("Finished exporting staff: " + item.svg_file)
 
+                elif isinstance(item, BetaStaff):  # Check if the item is a beta staff
+                    staff_svg = etree.parse(item.elementId())
+                    rect_elements = staff_svg.getroot().findall('.//{http://www.w3.org/2000/svg}rect')
+                    fill_color = self.get_fill_color(item.elementId())
+                    position = item.pos()  # Get the position of the beta staff
+
+                    for rect_element in rect_elements:
+                        rect_element_copy = deepcopy(rect_element)  # Create a deep copy of the element
+                        rect_element_copy.set('x', str(position.x()))  # Set the 'x' attribute
+                        rect_element_copy.set('y', str(position.y()))  # Set the 'y' attribute
+                        rect_element_copy.set('transform', f'matrix(1.0, 0.0, 0.0, 1.0, 0, 0)')  # Remove the translation from the transformation matrix
+                        if fill_color is not None:
+                            rect_element_copy.set('fill', fill_color)
+
+                        # Append the rect to the staves group
+                        staves_group.append(rect_element_copy)
+                    print("Finished exporting beta staff: " + item.elementId())
+
+
             # Add comments and append the groups to the SVG root element
             svg.append(etree.Comment(' STAVES '))
             svg.append(staves_group)
@@ -133,3 +116,46 @@ class Exporter:
             print(f"SVG file written at {output_file_path}")
         except Exception as e:
             print(f"An error occurred while exporting the SVG: {e}")      
+
+
+
+
+
+
+
+
+    def export_to_png(self):
+        selectedItems = self.graphboard_scene.get_selected_items()
+        image = QImage(self.graphboard.size(), QImage.Format_ARGB32)
+        painter = QPainter(image)
+
+        for item in selectedItems:
+            item.setSelected(False)
+
+        self.graphboard.render(painter)
+        painter.end()
+        image.save("export.png")
+
+        for item in selectedItems:
+            item.setSelected(True)
+
+    def get_fill_color(self, svg_file):
+        svg = etree.parse(svg_file)
+        fill_color = None
+
+        # Try to get fill color from style element
+        style_element = svg.getroot().find('.//{http://www.w3.org/2000/svg}style')
+        if style_element is not None:
+            style_text = style_element.text
+            color_match = re.search(r'fill:\s*(#[0-9a-fA-F]+)', style_text)
+            if color_match:
+                fill_color = color_match.group(1)
+
+        # If fill color was not found in style element, try to get it from path or rect elements
+        if fill_color is None:
+            for element in svg.getroot().iterfind('.//{http://www.w3.org/2000/svg}*'):
+                if 'fill' in element.attrib:
+                    fill_color = element.attrib['fill']
+                    break
+
+        return fill_color

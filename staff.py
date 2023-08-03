@@ -124,6 +124,13 @@ class Staff_Manager(QObject):
             'W_staff_blue': Graphboard_Staff('W_staff', scene, self.staff_locations['W_staff'], None, 'images\\staves\\W_staff_blue.svg')
         }
 
+        self.beta_staves = [
+            BetaStaff('beta_vertical_w-blue_e-red', scene, self.staff_locations['N_staff'], None, 'images/staves/beta/beta_vertical_w-blue_e-red.svg'),
+            BetaStaff('beta_vertical_w-red_e-blue', scene, self.staff_locations['E_staff'], None, 'images/staves/beta/beta_vertical_w-red_e-blue.svg'),
+            BetaStaff('beta_horizontal_n-red_s_blue', scene, self.staff_locations['S_staff'], None, 'images/staves/beta/beta_horizontal_n-red_s_blue.svg'),
+            BetaStaff('beta_horizontal_n-blue_s-red', scene, self.staff_locations['W_staff'], None, 'images/staves/beta/beta_horizontal_n-blue_s-red.svg')
+        ]
+
         self.hide_all_graphboard_staffs()
 
     def get_staff_position(self, staff_item):
@@ -154,13 +161,15 @@ class Staff_Manager(QObject):
 
     def remove_beta_staves(self):
         for beta_staff in self.beta_staves:
-            if beta_staff.scene() is not None:
+            if beta_staff.scene is not None:
+                ### NOT CAUSING THE ERROR
                 self.scene.removeItem(beta_staff)
         self.beta_staves = []
 
     def remove_non_beta_staves(self):
         for staff in self.graphboard_staffs.values():
             if staff.isVisible() and staff.scene is not None:
+
                 self.scene.removeItem(staff)
                 staff.hide()  # Hide the staff
 
@@ -201,6 +210,7 @@ class Staff_Manager(QObject):
             if count == 2:
                 staves_to_remove = [staff for staff in self.graphboard_staffs.values() if (staff.pos().x(), staff.pos().y()) == position]
                 for staff in staves_to_remove:
+                    ### not causing the error ### 
                     self.scene.removeItem(staff)
                     staff.hide()
                     self.scene.update()
@@ -264,6 +274,18 @@ class Staff_Manager(QObject):
             
             else:
                 continue
+
+
+class BetaStaff(Staff):
+    def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
+        super().__init__(element_id, scene, position, color, staff_svg_file, initial_visibility=False)
+
+    def mouseReleaseEvent(self, event):
+        # Snap the staff to its correct placement and orientation
+        # You'll need to replace this with the actual code that implements this behavior
+        self.setPos(self.correct_position)
+        self.setRotation(self.correct_orientation)
+        super().mouseReleaseEvent(event)
 
 class StaffTracker(QObject):
     positionChanged = pyqtSignal(str)

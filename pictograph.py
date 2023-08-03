@@ -11,12 +11,11 @@ class Pictograph(QGraphicsItem):
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         
     def paint(self, painter: QPainter, option, widget):
-        print("Paint method called")
         # Scale the image to fit the rectangle while preserving aspect ratio
         scaled_image = self.image.scaled(450, 450, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         # Render the QImage onto the Pictograph
         painter.drawImage(QRectF(0, 0, scaled_image.width(), scaled_image.height()), scaled_image)
-        print("Pictograph painted")
+
 
 
     def boundingRect(self):

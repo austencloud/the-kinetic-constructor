@@ -245,19 +245,15 @@ class Graphboard(QGraphicsView):
             add_to_sequence_action.triggered.connect(lambda _: self.sequence_manager.add_to_sequence(self))
             graphboard_menu.addAction(add_to_sequence_action)
 
-            export_as_png_action = QAction('Export to PNG', self)
-            export_as_png_action.triggered.connect(self.exporter.exportAsPng)
-            graphboard_menu.addAction(export_as_png_action)
+            export_to_png_action = QAction('Export to PNG', self)
+            export_to_png_action.triggered.connect(self.exporter.export_to_png)
+            graphboard_menu.addAction(export_to_png_action)
 
-            export_as_svg_action = QAction('Export to SVG', self)
-            export_as_svg_action.triggered.connect(self.exporter.exportAsSvg)
-            graphboard_menu.addAction(export_as_svg_action)
+            export_to_svg_action = QAction('Export to SVG', self)
+            export_to_svg_action.triggered.connect(self.exporter.export_to_svg)
+            graphboard_menu.addAction(export_to_svg_action)
 
             graphboard_menu.exec_(event.globalPos())
-
-    def print_item_types(self):
-        for item in self.scene().items():
-            print(type(item))
 
     def clear_selection(self):
         for item in self.scene().selectedItems():
@@ -358,9 +354,6 @@ class Graphboard(QGraphicsView):
         self.staff_manager.remove_beta_staves()
         self.staff_manager.update_graphboard_staffs(self.scene())
         self.staff_manager.check_and_replace_staves()
-
-    def remove_non_beta_staves(self):
-        self.staff_manager.remove_non_beta_staves()
 
     def set_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
