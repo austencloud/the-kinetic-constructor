@@ -1,7 +1,7 @@
 import re
 from PyQt5.QtGui import QImage, QPainter
 from arrow import Arrow
-from staff import Staff, Beta_Staff_Group
+from staff import Staff, Beta_Staves
 from grid import Grid
 from lxml import etree
 from copy import deepcopy
@@ -78,7 +78,7 @@ class Exporter:
                         staves_group.append(rect_element_copy)
                     print("Finished exporting staff: " + item.svg_file)
 
-                elif isinstance(item, Beta_Staff_Group):  # Check if the item is a beta staff
+                elif isinstance(item, Beta_Staves):  # Check if the item is a beta staff
                     staff_svg = etree.parse(item.elementId())
                     rect_elements = staff_svg.getroot().findall('.//{http://www.w3.org/2000/svg}rect')
                     fill_color = self.get_fill_color(item.elementId())
