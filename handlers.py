@@ -224,7 +224,7 @@ class Json_Handler:
                     optimal_positions = next((d for d in combination_set if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
                     if optimal_positions is not None:
                         optimal_positions.update(new_optimal_positions)
-                        print(f"Updated optimal positions for letter {letter} to {new_optimal_positions}")
+                        print(f"Updated optimal positions for letter {letter}")
                     else:
                         combination_set.append(new_optimal_positions)
                         print(f"Added optimal positions for letter {letter}")
@@ -270,26 +270,6 @@ class Svg_Handler:
         else:
             print('The SVG paths are different.')
 
-    @staticmethod
-    def svg_path_to_qpainterpath(svg_path):
-        qpainter_path = QPainterPath()
-        for segment in svg_path:
-            if isinstance(segment, Line):
-                qpainter_path.lineTo(segment.end.real, segment.end.imag)
-            elif isinstance(segment, CubicBezier):
-                qpainter_path.cubicTo(segment.control1.real, segment.control1.imag,
-                                    segment.control2.real, segment.control2.imag,
-                                    segment.end.real, segment.end.imag)
-            elif isinstance(segment, QuadraticBezier):
-                qpainter_path.quadTo(segment.control.real, segment.control.imag,
-                                    segment.end.real, segment.end.imag)
-            elif isinstance(segment, Arc):
-                # QPainterPath doesn't support arcs, so we need to approximate the arc with cubic beziers
-                # This is a complex task and might require a separate function
-                pass
-            elif isinstance(segment, Close):
-                qpainter_path.closeSubpath()
-        return qpainter_path
 
     @staticmethod
     def get_main_element_id(svg_file):

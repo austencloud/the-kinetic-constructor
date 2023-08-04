@@ -28,16 +28,6 @@ class Arrow_Box(QGraphicsView):
         # If there are any arrows under the mouse, take the topmost one
         if arrows:
             arrow = arrows[0]
-            if self.svg_handler.point_in_svg(event.pos(), arrow.svg_file):
-                self.dragState[arrow] = {
-                    'dragStartPosition': event.pos(),
-                    'dragOffset': event.pos() - arrow.boundingRect().center(),
-                }
-                super().mousePressEvent(event)
-            else:
-                arrow.setSelected(False)
-                event.ignore()
-
             if event.button() == Qt.LeftButton:
                 self.dragOffset = event.pos() - arrow.boundingRect().center()
                 self.artboard_start_position = event.pos()
