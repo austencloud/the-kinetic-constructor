@@ -8,7 +8,7 @@ from generator import Pictograph_Generator
 from staff import *
 from letter import Letter_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent, QSize
-from handlers import Arrow_Handler, Svg_Handler, Json_Handler
+from handlers import Arrow_Handler, Svg_Handler, Json_Handler, Key_Press_Handler
 from arrowbox import Arrow_Box
 from propbox import Prop_Box
 from menus import Menu_Bar, Context_Menu_Handler
@@ -63,6 +63,7 @@ class UiSetup(QWidget):
         self.json_updater = Json_Handler(self.graphboard_scene)
         self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.sequence_manager, self.arrow_handler, self.exporter)
         self.arrow_handler = Arrow_Handler(self.graphboard_scene, self.graphboard, self.staff_manager)
+        self.key_press_handler = Key_Press_Handler(self.arrow_handler, None)
         self.menu_bar = Menu_Bar()
 
     def initLayouts(self):
@@ -113,7 +114,7 @@ class UiSetup(QWidget):
         self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
         # Initialize graphboard without generator
         self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_manager)
-
+        self.key_press_handler.connect_to_graphboard(self.graphboard)
         self.arrow_handler.connect_to_graphboard(self.graphboard)
         transform = QTransform()
 

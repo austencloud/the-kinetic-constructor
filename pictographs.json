@@ -5724,6 +5724,16 @@
                 "type": "anti",
                 "start_location": "s",
                 "end_location": "e"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 540.0,
+                    "y": 530.0
+                },
+                "optimal_blue_location": {
+                    "x": 211.0,
+                    "y": 531.0
+                }
             }
         ],
         [

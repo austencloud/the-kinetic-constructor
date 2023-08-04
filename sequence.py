@@ -43,7 +43,7 @@ class Sequence_Manager:
         image.fill(Qt.transparent)
         painter = QPainter(image)
 
-        graphboard.print_item_types()
+
 
         # deselect all items
         graphboard.clear_selection()

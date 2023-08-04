@@ -77,7 +77,7 @@ class Graphboard_Staff(Staff):
         super().mouseReleaseEvent(event)
 
 
-class Beta_Staves(Staff):
+class Beta_Staff_Group(Staff):
     def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
         super().__init__(element_id, scene, position, color, staff_svg_file, initial_visibility=False)
 
@@ -144,10 +144,10 @@ class Staff_Manager(QObject):
         }
 
         self.beta_staves = [
-            Beta_Staves('beta_vertical_w-blue_e-red', scene, self.staff_locations['N_staff'], None, 'images/staves/beta/beta_vertical_w-blue_e-red.svg'),
-            Beta_Staves('beta_vertical_w-red_e-blue', scene, self.staff_locations['E_staff'], None, 'images/staves/beta/beta_vertical_w-red_e-blue.svg'),
-            Beta_Staves('beta_horizontal_n-red_s_blue', scene, self.staff_locations['S_staff'], None, 'images/staves/beta/beta_horizontal_n-red_s_blue.svg'),
-            Beta_Staves('beta_horizontal_n-blue_s-red', scene, self.staff_locations['W_staff'], None, 'images/staves/beta/beta_horizontal_n-blue_s-red.svg')
+            Beta_Staff_Group('beta_vertical_w-blue_e-red', scene, self.staff_locations['N_staff'], None, 'images/staves/beta/beta_vertical_w-blue_e-red.svg'),
+            Beta_Staff_Group('beta_vertical_w-red_e-blue', scene, self.staff_locations['E_staff'], None, 'images/staves/beta/beta_vertical_w-red_e-blue.svg'),
+            Beta_Staff_Group('beta_horizontal_n-red_s_blue', scene, self.staff_locations['S_staff'], None, 'images/staves/beta/beta_horizontal_n-red_s_blue.svg'),
+            Beta_Staff_Group('beta_horizontal_n-blue_s-red', scene, self.staff_locations['W_staff'], None, 'images/staves/beta/beta_horizontal_n-blue_s-red.svg')
         ]
 
         self.hide_all_graphboard_staffs()
@@ -286,9 +286,10 @@ class Staff_Manager(QObject):
                 else:  # orientation is horizontal
                     adjusted_position = QPointF(position[0] - 0, position[1] - 20)
 
-                # Use the original position instead of the adjusted position
                 beta_svg.setPos(self.staff_locations[direction.capitalize() + "_staff"])
-                beta_svg.setPos(beta_svg.original_position)
+                beta_svg.setPos(adjusted_position)
+
+                self.beta_staves.append(beta_svg)
             
             else:
                 continue
