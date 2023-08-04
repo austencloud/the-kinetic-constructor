@@ -76,6 +76,25 @@ class Graphboard_Staff(Staff):
         self.setRotation(self.correct_orientation)
         super().mouseReleaseEvent(event)
 
+
+class Beta_Staff_Group(Staff):
+    def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
+        super().__init__(element_id, scene, position, color, staff_svg_file, initial_visibility=False)
+
+    def get_adjusted_pos(self):
+        position = self.pos()
+        if self.orientation == 'vertical':
+            return QPointF(position.x() - 20, position.y())
+        else:  # orientation is horizontal
+            return QPointF(position.x(), position.y() - 20)
+
+    def mouseReleaseEvent(self, event):
+        # Snap the staff to its correct placement and orientation
+        # You'll need to replace this with the actual code that implements this behavior
+        self.setPos(self.correct_position)
+        self.setRotation(self.correct_orientation)
+        super().mouseReleaseEvent(event)
+
 class PropBox_Staff(Staff):
     def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
         super().__init__(element_id, scene, position, color, staff_svg_file)
@@ -125,10 +144,10 @@ class Staff_Manager(QObject):
         }
 
         self.beta_staves = [
-            BetaStaff('beta_vertical_w-blue_e-red', scene, self.staff_locations['N_staff'], None, 'images/staves/beta/beta_vertical_w-blue_e-red.svg'),
-            BetaStaff('beta_vertical_w-red_e-blue', scene, self.staff_locations['E_staff'], None, 'images/staves/beta/beta_vertical_w-red_e-blue.svg'),
-            BetaStaff('beta_horizontal_n-red_s_blue', scene, self.staff_locations['S_staff'], None, 'images/staves/beta/beta_horizontal_n-red_s_blue.svg'),
-            BetaStaff('beta_horizontal_n-blue_s-red', scene, self.staff_locations['W_staff'], None, 'images/staves/beta/beta_horizontal_n-blue_s-red.svg')
+            Beta_Staff_Group('beta_vertical_w-blue_e-red', scene, self.staff_locations['N_staff'], None, 'images/staves/beta/beta_vertical_w-blue_e-red.svg'),
+            Beta_Staff_Group('beta_vertical_w-red_e-blue', scene, self.staff_locations['E_staff'], None, 'images/staves/beta/beta_vertical_w-red_e-blue.svg'),
+            Beta_Staff_Group('beta_horizontal_n-red_s_blue', scene, self.staff_locations['S_staff'], None, 'images/staves/beta/beta_horizontal_n-red_s_blue.svg'),
+            Beta_Staff_Group('beta_horizontal_n-blue_s-red', scene, self.staff_locations['W_staff'], None, 'images/staves/beta/beta_horizontal_n-blue_s-red.svg')
         ]
 
         self.hide_all_graphboard_staffs()
@@ -275,17 +294,6 @@ class Staff_Manager(QObject):
             else:
                 continue
 
-
-class BetaStaff(Staff):
-    def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
-        super().__init__(element_id, scene, position, color, staff_svg_file, initial_visibility=False)
-
-    def mouseReleaseEvent(self, event):
-        # Snap the staff to its correct placement and orientation
-        # You'll need to replace this with the actual code that implements this behavior
-        self.setPos(self.correct_position)
-        self.setRotation(self.correct_orientation)
-        super().mouseReleaseEvent(event)
 
 class StaffTracker(QObject):
     positionChanged = pyqtSignal(str)

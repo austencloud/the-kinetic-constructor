@@ -1,7 +1,7 @@
 import re
 from PyQt5.QtGui import QImage, QPainter
 from arrow import Arrow
-from staff import Staff, BetaStaff
+from staff import Staff, Beta_Staff_Group
 from grid import Grid
 from lxml import etree
 from copy import deepcopy
@@ -78,23 +78,23 @@ class Exporter:
                         staves_group.append(rect_element_copy)
                     print("Finished exporting staff: " + item.svg_file)
 
-                elif isinstance(item, BetaStaff):  # Check if the item is a beta staff
+                elif isinstance(item, Beta_Staff_Group):  # Check if the item is a beta staff
                     staff_svg = etree.parse(item.elementId())
                     rect_elements = staff_svg.getroot().findall('.//{http://www.w3.org/2000/svg}rect')
                     fill_color = self.get_fill_color(item.elementId())
-                    position = item.pos()  # Get the position of the beta staff
+                    position = item.get_adjusted_pos()  # Get the adjusted position of the beta staff
 
                     for rect_element in rect_elements:
                         rect_element_copy = deepcopy(rect_element)  # Create a deep copy of the element
-                        rect_element_copy.set('x', str(position.x()))  # Set the 'x' attribute
-                        rect_element_copy.set('y', str(position.y()))  # Set the 'y' attribute
-                        rect_element_copy.set('transform', f'matrix(1.0, 0.0, 0.0, 1.0, 0, 0)')  # Remove the translation from the transformation matrix
+                        # Apply a translation transform to the rect element
+                        rect_element_copy.set('transform', f'translate({position.x()}, {position.y()})')
                         if fill_color is not None:
                             rect_element_copy.set('fill', fill_color)
 
                         # Append the rect to the staves group
                         staves_group.append(rect_element_copy)
                     print("Finished exporting beta staff: " + item.elementId())
+
 
 
             # Add comments and append the groups to the SVG root element

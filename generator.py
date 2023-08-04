@@ -24,10 +24,13 @@ class Pictograph_Generator():
         self.exporter = exporter
         self.grid = grid
 
-        # Load the JSON file
+        self.letters = self.load_json()
+        self.output_dir = "images\\pictographs\\"
+
+    def load_json(self):
         with open('pictographs.json', 'r') as file:
             self.letters = json.load(file)
-        self.output_dir = "images\\pictographs\\"
+        return self.letters
 
     def generate_all_pictographs(self, staff_manager):
         # Create the output directory if it doesn't exist
@@ -90,6 +93,8 @@ class Pictograph_Generator():
         #delete all items
         self.graphboard.clear()
 
+        self.letters = self.load_json()
+
         # Get the list of possible combinations for the letter
         combinations = self.letters.get(letter, [])
         if not combinations:
@@ -98,6 +103,9 @@ class Pictograph_Generator():
 
         self.current_letter = letter  # Store the current letter
         print(f"Generating {self.current_letter}")
+
+
+
         # Choose a combination at random
         combination_set = random.choice(combinations)
 

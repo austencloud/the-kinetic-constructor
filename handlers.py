@@ -224,7 +224,7 @@ class Json_Handler:
                     optimal_positions = next((d for d in combination_set if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
                     if optimal_positions is not None:
                         optimal_positions.update(new_optimal_positions)
-                        print(f"Updated optimal positions for letter {letter}")
+                        print(f"Updated optimal positions for letter {letter} to {new_optimal_positions}")
                     else:
                         combination_set.append(new_optimal_positions)
                         print(f"Added optimal positions for letter {letter}")
