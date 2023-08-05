@@ -254,7 +254,7 @@ class UiSetup(QWidget):
 
         for arrow in self.arrows:
             arrowbox_scene.addItem(arrow)  # use arrowbox_scene here
-            arrow.attributesChanged.connect(self.info_tracker.update)
+
             arrow.attributesChanged.connect(lambda: self.generator.update_staff(arrow, self.staff_manager))
 
         svgs_full_paths = []
@@ -298,7 +298,7 @@ class UiSetup(QWidget):
 
                 arrowbox_scene.addItem(arrow_item) 
                 print(self.info_tracker)
-                arrow_item.attributesChanged.connect(self.info_tracker.update)
+
 
                 self.arrows.append(arrow_item)
 
@@ -365,8 +365,6 @@ class UiSetup(QWidget):
 
     def connectInfoTracker(self):
         self.info_layout.addWidget(self.info_label)
-
-        self.graphboard_scene.changed.connect(self.info_tracker.update)
 
     def connectGraphboard(self):
         self.info_tracker.set_graphboard(self.graphboard)

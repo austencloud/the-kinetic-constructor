@@ -7,6 +7,7 @@ import os
 from data import positions_map
 
 class Info_Tracker:
+    
     def __init__(self, graphboard, label, main_window, staff_manager):
         self.graphboard = graphboard
         self.label = label
@@ -17,6 +18,7 @@ class Info_Tracker:
         self.label.setAlignment(Qt.AlignTop)
         self.letters = self.load_letters()
         self.staff_manager = staff_manager
+
 
     def start(self):
         self.previous_state = self.get_current_state()
@@ -96,6 +98,7 @@ class Info_Tracker:
             return {}
     
     def update(self):
+        print("Updating info tracker")
         current_combination = []
 
         for item in self.graphboard.items():
@@ -120,6 +123,7 @@ class Info_Tracker:
                 letter_text += f"<h4>{start_position} → {end_position}</h4>"
                 self.letter = letter 
                 break 
+
 
         if hasattr(self.main_window, 'staff'):
             self.main_window.staff.update_position(self.arrow.end_location)
@@ -147,9 +151,11 @@ class Info_Tracker:
                     red_text = red_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
                     red_text = red_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
 
-
+        if letter is not None:
+            self.graphboard.update_letter(letter)
         self.label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr><tr><td width=100>" + letter_text + "</td></tr></table>")
 
+        
     def get_positions(self):
         positions = []
         arrow_items = []

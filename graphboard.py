@@ -50,7 +50,7 @@ class Graphboard(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         self.graphboard_scene.addItem(self.grid)
-        self.drag = Quadrant_Preview_Drag(self, self.dragging)
+        self.drag = Quadrant_Preview_Drag(self, self.dragging, self.info_tracker)
 
 
     ### MOUSE EVENTS ###
@@ -95,8 +95,6 @@ class Graphboard(QGraphicsView):
             for item in self.scene().selectedItems():
                 if isinstance(item, Arrow):
                     item.setPos(item.pos() + movement)
-
-                if isinstance(item, Arrow):
                     center_pos = item.pos() + item.boundingRect().center()
 
                     quadrant = self.drag.get_graphboard_quadrants(center_pos)
@@ -121,7 +119,10 @@ class Graphboard(QGraphicsView):
                         item.setSharedRenderer(new_renderer)
                         item.svg_file = new_svg
                         item.update_locations()
+                self.info_tracker.update()
                 self.arrowMoved.emit()
+
+
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
@@ -176,6 +177,7 @@ class Graphboard(QGraphicsView):
             self.arrow_item.setSelected(True)
             end_location = self.arrow_item.end_location
             self.staff_manager.show_staff(end_location + "_staff_" + self.arrow_item.color)
+            self.info_tracker.update()
         else:
             event.ignore()
 
@@ -184,7 +186,7 @@ class Graphboard(QGraphicsView):
         quadrant = self.drag.get_graphboard_quadrants(adjusted_arrow_pos)
         self.arrow_item.quadrant = quadrant
         self.drag.update_arrow_svg(self.arrow_item, quadrant)  # Update the arrow's SVG file
-        self.arrow_item.attributesChanged.emit()
+        self.info_tracker.update()
         self.arrowMoved.emit()
 
 
@@ -403,23 +405,31 @@ class Graphboard(QGraphicsView):
             graphboard_menu.exec_(event.globalPos())
 
 
+    ### OTHER ###
+
     def update_staffs_and_check_beta(self):
         self.staff_manager.remove_beta_staves()
         self.staff_manager.update_graphboard_staffs(self.scene())
         self.staff_manager.check_and_replace_staves()
 
-
-
-    def delete_all_arrows(self):
-        for item in self.scene().items():
-            if isinstance(item, Arrow):
-                self.scene().removeItem(item)
-                del item
-        self.arrowMoved.emit()
-        if self.info_tracker is not None:
-            self.info_tracker.update()
-
-        self.staff_manager.hide_all()
+    def update_letter(self, letter):
+        print(f"Updating letter to {letter}")
+        # Path to the letter's SVG file
+        svg_file = f'images/letters/{letter}.svg'
+        
+        # Create a renderer for the SVG file
+        renderer = QSvgRenderer(svg_file)
+        
+        # Check that the SVG file is valid
+        if not renderer.isValid():
+            print(f"Invalid SVG file: {svg_file}")
+            return
+        
+        # Update the item's renderer
+        self.letter_item.setSharedRenderer(renderer)
+        
+        # Center the item horizontally and place it 750 pixels down
+        self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
 
     def clear(self):
         for item in self.scene().items():
@@ -427,18 +437,17 @@ class Graphboard(QGraphicsView):
                 self.scene().removeItem(item)
                 del item
         self.arrowMoved.emit()
-        if self.info_tracker is not None:
-            self.info_tracker.update()
 
 
 
 
 class Quadrant_Preview_Drag(QDrag):
-    def __init__(self, source, arrow_item, *args, **kwargs):
+    def __init__(self, source, arrow_item, info_tracker, *args, **kwargs):
         super().__init__(source, *args, **kwargs)
         self.arrow_item = arrow_item
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_pixmap)
+        self.info_tracker = info_tracker
 
     def exec_(self, *args, **kwargs):
         self.timer.start(100)
@@ -463,6 +472,8 @@ class Quadrant_Preview_Drag(QDrag):
             new_renderer.render(painter)
             painter.end()
             self.setPixmap(pixmap)
+
+
 
     def get_graphboard_quadrants(self, mouse_pos):
         mime_data = self.mimeData()
@@ -504,3 +515,4 @@ class Quadrant_Preview_Drag(QDrag):
             arrow.setSharedRenderer(new_renderer)
             arrow.svg_file = new_svg
             arrow.update_locations()
+

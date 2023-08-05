@@ -10,8 +10,9 @@ class Arrow(QGraphicsSvgItem):
     attributesChanged = pyqtSignal()
     arrowMoved = pyqtSignal()
     orientationChanged = pyqtSignal()
+    arrowCreated = pyqtSignal()
 
-    def __init__(self, svg_file, graphboard, infoTracker, svg_handler, arrow_manipulator):
+    def __init__(self, svg_file, graphboard, info_tracker, svg_handler, arrow_manipulator):
         super().__init__(svg_file)
         self.setAcceptDrops(True)
         self.svg_file = svg_file
@@ -23,14 +24,18 @@ class Arrow(QGraphicsSvgItem):
         self.dot = None
         self.dragging = False
         self.dragged_item = None
-        self.infoTracker = infoTracker
+        self.info_tracker = info_tracker
         self.parse_filename()
         self.start_location, self.end_location = self.arrow_positions.get(os.path.basename(svg_file), (None, None))
         self.staff = None
         self.svg_handler = svg_handler
         self.dragStarted = False
         self.arrow_manipulator = arrow_manipulator
-        self.attributesChanged.connect(self.update_arrow_image)
+
+        # Assuming `arrow` is an instance of the Arrow class
+        self.arrowCreated.connect(self.info_tracker.update)
+        self.arrowCreated.emit()
+        self.arrowMoved.connect(self.info_tracker.update)
 
 
 
@@ -162,7 +167,6 @@ class Arrow(QGraphicsSvgItem):
     def update_locations(self):
         # Update the start and end locations
         self.start_location, self.end_location = self.arrow_positions.get(os.path.basename(self.svg_file), (None, None))
-        self.arrowMoved.emit()  # emit the signal when the arrow is dropped
 
     def update_quadrant(self):
         # Determine the quadrant based on the start and end positions
@@ -308,7 +312,7 @@ class Arrow(QGraphicsSvgItem):
             pos = self.graphboard.get_quadrant_center(self.get_attributes()['quadrant']) - self.boundingRect().center()
             self.setPos(pos)
 
-        self.arrowMoved.emit()
+
         self.attributesChanged.emit()
 
     def update_arrow_image(self):
@@ -359,7 +363,7 @@ class Arrow(QGraphicsSvgItem):
         elif self.quadrant == 'sw':
             self.quadrant = 'nw'
         self.update_arrow_position()
-        self.arrowMoved.emit()
+
         self.attributesChanged.emit()
 
     def move_quadrant_left(self):
