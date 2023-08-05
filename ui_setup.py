@@ -224,7 +224,7 @@ class UiSetup(QWidget):
         self.selectAllButton = createButton("images/icons/select_all.png", "Select All",
             lambda: self.graphboard.select_all_arrows(), is_lambda=True)
         self.add_to_sequence_button = createButton("images/icons/add_to_sequence.png", "Add to Sequence",
-            lambda: self.sequence_handler.add_to_sequence(self.graphboard_scene.selectedItems()), is_lambda=True)
+            lambda: self.sequence_handler.add_to_sequence(self.graphboard), is_lambda=True)
         
         buttons = [
             self.deleteButton, 

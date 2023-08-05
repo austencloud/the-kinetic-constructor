@@ -38,12 +38,16 @@ class Sequence_Handler():
             print(item)
 
     def add_to_sequence(self, graphboard):
-        # Create a QImage to render the scene
-        image = QImage(graphboard.sceneRect().size().toSize(), QImage.Format_ARGB32)
+        # Get the size of the scene in scene coordinates
+        scene_size = graphboard.sceneRect().size().toSize()
+
+        # Add the height of the letter (assuming it's 200 pixels tall, adjust as necessary)
+        scene_size.setHeight(scene_size.height() + 200)
+
+        # Create the QImage with the adjusted size
+        image = QImage(scene_size, QImage.Format_ARGB32)
         image.fill(Qt.transparent)
         painter = QPainter(image)
-
-
 
         # deselect all items
         graphboard.clear_selection()
