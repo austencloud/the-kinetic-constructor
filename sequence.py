@@ -56,6 +56,7 @@ class Sequence_Handler():
         graphboard.render(painter)
         painter.end()
 
+
         scaled_image = image.scaled(375, 375, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         pictograph = Pictograph(graphboard.get_state(), scaled_image)
         print(pictograph.state)
