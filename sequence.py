@@ -9,7 +9,7 @@ from pictograph import Pictograph
 from PyQt5.QtGui import QImage, QPainter
 from staff import Staff
 
-class Sequence_Manager:
+class Sequence_Handler():
     def __init__(self, scene, pictograph_generator, ui_setup, info_tracker):
         self.graphboard_scene = scene
         self.beats = [QGraphicsRectItem(QRectF(375, 0, 375, 375)) for i in range(4)]

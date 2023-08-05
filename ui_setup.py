@@ -33,7 +33,7 @@ class UiSetup(QWidget):
         self.context_menu_handler = None
         self.exporter = None
 
-        self.sequence_manager = None
+        self.sequence_handler = None
         self.graphboard = None
         self.arrow_handler = None
 
@@ -61,7 +61,7 @@ class UiSetup(QWidget):
 
     def initMenus(self):
         self.json_updater = Json_Handler(self.graphboard_scene)
-        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.sequence_manager, self.arrow_handler, self.exporter)
+        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.sequence_handler, self.arrow_handler, self.exporter)
         self.arrow_handler = Arrow_Handler(self.graphboard_scene, self.graphboard, self.staff_manager)
         self.key_press_handler = Key_Press_Handler(self.arrow_handler, None)
         self.menu_bar = Menu_Bar()
@@ -113,7 +113,7 @@ class UiSetup(QWidget):
         self.grid = Grid('images\\grid\\grid.svg')
         self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
         # Initialize graphboard without generator
-        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_manager)
+        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_handler)
         self.key_press_handler.connect_to_graphboard(self.graphboard)
         self.arrow_handler.connect_to_graphboard(self.graphboard)
         transform = QTransform()
@@ -143,6 +143,13 @@ class UiSetup(QWidget):
             ['M', 'N', 'O'],
             ['P', 'Q', 'R'],
             ['S', 'T', 'U', 'V'],
+            ['W', 'X', 'Y', 'Z'],
+            ['Σ', 'Δ', 'θ', 'Ω'],
+            ['Φ', 'Ψ', 'Λ'],
+            ['W-', 'X-', 'Y-', 'Z-'],
+            ['Σ-', 'Δ-', 'θ-', 'Ω-'],
+            ['Φ-', 'Ψ-', 'Λ-'],
+            ['α', 'β', 'Γ']
         ]
         for row in letter_rows:
             row_layout = QHBoxLayout()
@@ -153,7 +160,7 @@ class UiSetup(QWidget):
                 font = QFont()
                 font.setPointSize(20)
                 button.setFont(font)
-                button.setFixedSize(80, 80)
+                button.setFixedSize(65, 65)
                 button.clicked.connect(lambda _, l=letter: self.generator.generate_pictograph(l, self.staff_manager))  # use self.generator here
                 row_layout.addWidget(button)
             letter_buttons_layout.addLayout(row_layout)
@@ -183,127 +190,58 @@ class UiSetup(QWidget):
         buttonlayout.addLayout(buttonstack)
         masterbtnlayout.addLayout(buttonlayout)
 
-        ### DEVELOPER FUNCTIONS ###
+        def createButton(icon_path, tooltip, on_click, is_lambda=False):
+            button = QPushButton(QIcon(icon_path), "")
+            button.setToolTip(tooltip)
+            button.setFont(button_font)
+            button.setFixedWidth(button_width)
+            button.setFixedHeight(button_height)
+            button.setIconSize(icon_size)
+            if is_lambda:
+                button.clicked.connect(lambda: on_click())
+            else:
+                button.clicked.connect(on_click)
+            return button
 
-        self.updatePositionButton = QPushButton(QIcon("images/icons/update_locations.png"), "")
-        self.updatePositionButton.setToolTip("Update Position")
-        self.updatePositionButton.clicked.connect(lambda: self.json_updater.updatePositionInJson(*self.graphboard.getCurrentArrowPositions()))
-
-        ### ARROW MANIPULATOR BUTTONS ###
-
-        self.deleteButton = QPushButton(QIcon("images/icons/delete.png"), "")
-        self.deleteButton.setToolTip("Delete")
-        self.deleteButton.clicked.connect(lambda: self.arrow_handler.delete_arrow(self.graphboard_scene.selectedItems()))
+        self.updatePositionButton = createButton("images/icons/update_locations.png", "Update Position", 
+            lambda: self.json_updater.updatePositionInJson(*self.graphboard.get_current_arrow_positions()), is_lambda=True)
+        self.deleteButton = createButton("images/icons/delete.png", "Delete",
+            lambda: self.arrow_handler.delete_arrow(self.graphboard_scene.selectedItems()), is_lambda=True)
+        self.rotateRightButton = createButton("images/icons/rotate_right.png", "Rotate Right",
+            lambda: self.arrow_handler.rotate_arrow('right', self.graphboard_scene.selectedItems()), is_lambda=True)        
+        self.rotateLeftButton = createButton("images/icons/rotate_left.png", "Rotate Left",
+            lambda: self.arrow_handler.rotate_arrow('left', self.graphboard_scene.selectedItems()), is_lambda=True)
+        self.mirrorButton = createButton("images/icons/mirror.png", "Mirror",
+            lambda: self.arrow_handler.mirror_arrow(self.graphboard_scene.selectedItems()), is_lambda=True)
+        self.bringForward = createButton("images/icons/bring_forward.png", "Bring Forward",
+            lambda: self.arrow_handler.bring_forward(self.graphboard_scene.selectedItems()), is_lambda=True)
+        self.swapColors = createButton("images/icons/swap.png", "Swap Colors",
+            lambda: self.arrow_handler.swap_colors(self.graphboard_scene.selectedItems()), is_lambda=True)
+        self.export_to_png_button = createButton("images/icons/export.png", "Export to PNG",
+            lambda: self.exporter.export_to_png(), is_lambda=True)
+        self.export_to_svg_button = createButton("images/icons/export.png", "Export to SVG",
+            lambda: self.exporter.export_to_svg('output.svg'), is_lambda=True)
+        self.selectAllButton = createButton("images/icons/select_all.png", "Select All",
+            lambda: self.graphboard.select_all_arrows(), is_lambda=True)
+        self.add_to_sequence_button = createButton("images/icons/add_to_sequence.png", "Add to Sequence",
+            lambda: self.sequence_handler.add_to_sequence(self.graphboard_scene.selectedItems()), is_lambda=True)
         
+        buttons = [
+            self.deleteButton, 
+            self.rotateRightButton,
+            self.rotateLeftButton,
+            self.mirrorButton,
+            self.bringForward,
+            self.swapColors,
+            self.export_to_png_button,
+            self.export_to_svg_button,
+            self.updatePositionButton,
+            self.selectAllButton,
+            self.add_to_sequence_button
+        ]
 
-        self.rotateRightButton = QPushButton(QIcon("images/icons/rotate-right.png"), "")
-        self.rotateRightButton.setToolTip("Rotate Right")
-        self.rotateRightButton.clicked.connect(lambda: self.arrow_handler.rotateArrow("right", self.graphboard_scene.selectedItems()))
-        self.rotateLeftButton = QPushButton(QIcon("images/icons/rotate-left.png"), "")
-        self.rotateLeftButton.setToolTip("Rotate Left")
-        self.rotateLeftButton.clicked.connect(lambda: self.arrow_handler.rotateArrow("left", self.graphboard_scene.selectedItems()))
-
-        self.mirrorButton = QPushButton(QIcon("images/icons/mirror.png"), "")
-        self.mirrorButton.setToolTip("Mirror")
-        self.mirrorButton.clicked.connect(lambda: self.arrow_handler.mirrorArrow(self.graphboard_scene.selectedItems()))
-
-
-        self.bringForward = QPushButton(QIcon("images/icons/bring_forward.png"), "")
-        self.bringForward.setToolTip("Bring Forward")
-        self.bringForward.clicked.connect(lambda: self.arrow_handler.bringForward(self.graphboard_scene.selectedItems()))
-
-        self.swapColors = QPushButton(QIcon("images/icons/swap.png"), "")
-        self.swapColors.setToolTip("Swap Colors")
-        self.swapColors.clicked.connect(lambda: self.arrow_handler.swapColors(self.graphboard_scene.selectedItems()))
-
-        ### SELECTION BUTTONS ###
-
-        self.selectAllButton = QPushButton(QIcon("images/icons/select_all.png"), "")
-        self.selectAllButton.setToolTip("Select All")
-        self.selectAllButton.clicked.connect(self.arrow_handler.selectAll)
-
-
-        ### SEQUENCE BUTTONS ###
-
-        add_to_sequence_button = QPushButton(QIcon("images/icons/add_to_sequence.png"), "")
-        add_to_sequence_button.setToolTip("Add to Sequence")
-        add_to_sequence_button.clicked.connect(lambda _: self.sequence_manager.add_to_sequence(self.graphboard))
-
-
-        ### EXPORT BUTTONS ###
-
-        self.export_to_png_button = QPushButton(QIcon("images/icons/export.png"), "")
-        self.export_to_png_button.setToolTip("Export to PNG")
-        self.export_to_png_button.clicked.connect(self.exporter.export_to_png)
-
-
-        self.export_to_svg_button = QPushButton(QIcon("images/icons/export.png"), "")
-        self.export_to_svg_button.setToolTip("Export to SVG")
-        self.export_to_svg_button.clicked.connect(lambda: self.exporter.export_to_svg('output.svg'))
-
-
-        ### STYLING ###
-
-        self.deleteButton.setFont(button_font)
-        self.rotateRightButton.setFont(button_font)
-        self.rotateLeftButton.setFont(button_font)
-        self.mirrorButton.setFont(button_font)
-        self.bringForward.setFont(button_font)
-        self.swapColors.setFont(button_font)
-        self.export_to_png_button.setFont(button_font)
-        self.export_to_svg_button.setFont(button_font)
-        self.updatePositionButton.setFont(button_font)
-        self.selectAllButton.setFont(button_font)
-        add_to_sequence_button.setFont(button_font)
-
-        self.deleteButton.setFixedWidth(button_width)
-        self.rotateRightButton.setFixedWidth(button_width)
-        self.rotateLeftButton.setFixedWidth(button_width)
-        self.mirrorButton.setFixedWidth(button_width)
-        self.bringForward.setFixedWidth(button_width)
-        self.swapColors.setFixedWidth(button_width)
-        self.export_to_png_button.setFixedWidth(button_width)
-        self.export_to_svg_button.setFixedWidth(button_width)
-        self.updatePositionButton.setFixedWidth(button_width)
-        self.selectAllButton.setFixedWidth(button_width)
-        add_to_sequence_button.setFixedWidth(button_width)
-
-        self.deleteButton.setFixedHeight(button_height)
-        self.rotateRightButton.setFixedHeight(button_height)
-        self.rotateLeftButton.setFixedHeight(button_height)
-        self.mirrorButton.setFixedHeight(button_height)
-        self.bringForward.setFixedHeight(button_height)
-        self.swapColors.setFixedHeight(button_height)
-        self.export_to_png_button.setFixedHeight(button_height)
-        self.export_to_svg_button.setFixedHeight(button_height)
-        self.updatePositionButton.setFixedHeight(button_height)
-        self.selectAllButton.setFixedHeight(button_height)
-        add_to_sequence_button.setFixedHeight(button_height)
-
-        self.deleteButton.setIconSize(icon_size)
-        self.rotateRightButton.setIconSize(icon_size)
-        self.rotateLeftButton.setIconSize(icon_size)
-        self.mirrorButton.setIconSize(icon_size)
-        self.bringForward.setIconSize(icon_size)
-        self.swapColors.setIconSize(icon_size)
-        self.export_to_png_button.setIconSize(icon_size)
-        self.export_to_svg_button.setIconSize(icon_size)
-        self.updatePositionButton.setIconSize(icon_size)
-        self.selectAllButton.setIconSize(icon_size)
-        add_to_sequence_button.setIconSize(icon_size)
-        
-        buttonstack.addWidget(self.deleteButton)
-        buttonstack.addWidget(self.rotateRightButton)
-        buttonstack.addWidget(self.rotateLeftButton)
-        buttonstack.addWidget(self.mirrorButton)
-        buttonstack.addWidget(self.bringForward)
-        buttonstack.addWidget(self.swapColors)
-        buttonstack.addWidget(self.export_to_png_button)
-        buttonstack.addWidget(self.export_to_svg_button)
-        buttonstack.addWidget(self.updatePositionButton)
-        buttonstack.addWidget(self.selectAllButton)
-        buttonstack.addWidget(add_to_sequence_button)
-
+        for button in buttons:
+            buttonstack.addWidget(button)
 
         self.button_layout.addLayout(masterbtnlayout)
 
@@ -391,10 +329,10 @@ class UiSetup(QWidget):
 
     def initSequenceScene(self):
         self.sequence_scene = Sequence_Scene()  # Create a new Sequence_Scene instance
-        self.sequence_manager = Sequence_Manager(self.sequence_scene, self.generator, self, self.info_tracker)
+        self.sequence_handler = Sequence_Handler(self.sequence_scene, self.generator, self, self.info_tracker)
 
-        self.sequence_scene.set_manager(self.sequence_manager)  # Set the manager of the sequence container
-        self.sequence_manager.manager = self.sequence_manager  # Set the manager of the sequence scene
+        self.sequence_scene.set_manager(self.sequence_handler)  # Set the manager of the sequence container
+        self.sequence_handler.manager = self.sequence_handler  # Set the manager of the sequence scene
 
         self.sequence_container = QGraphicsView(self.sequence_scene)  # Create a QGraphicsView with the sequence scene
 
@@ -403,7 +341,7 @@ class UiSetup(QWidget):
         self.sequence_container.show()
         self.lower_layout.addWidget(self.sequence_container)
 
-        clear_sequence_button = self.sequence_manager.get_clear_sequence_button()
+        clear_sequence_button = self.sequence_handler.get_clear_sequence_button()
         self.lower_layout.addWidget(clear_sequence_button)
 
 
@@ -438,11 +376,11 @@ class UiSetup(QWidget):
 ### GETTERS ###
 
     def get_sequence_manager(self):
-        if not hasattr(self, 'sequence_manager'):
-            self.sequence_manager = Sequence_Manager(self.sequence_scene, self.generator, self, self.info_tracker)
-            self.sequence_scene.set_manager(self.sequence_manager)  # Set the manager of the sequence container
-            self.sequence_manager.manager = self.sequence_manager  # Set the manager of the sequence scene
-        return self.sequence_manager
+        if not hasattr(self, 'sequence_handler'):
+            self.sequence_handler = Sequence_Handler(self.sequence_scene, self.generator, self, self.info_tracker)
+            self.sequence_scene.set_manager(self.sequence_handler)  # Set the manager of the sequence container
+            self.sequence_handler.manager = self.sequence_handler  # Set the manager of the sequence scene
+        return self.sequence_handler
 
 
 ### EVENTS ###

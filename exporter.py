@@ -117,13 +117,6 @@ class Exporter:
         except Exception as e:
             print(f"An error occurred while exporting the SVG: {e}")      
 
-
-
-
-
-
-
-
     def export_to_png(self):
         selectedItems = self.graphboard_scene.get_selected_items()
         image = QImage(self.graphboard.size(), QImage.Format_ARGB32)

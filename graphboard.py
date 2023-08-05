@@ -52,8 +52,8 @@ class Graphboard(QGraphicsView):
         self.graphboard_scene.addItem(self.grid)
         self.drag = Quadrant_Preview_Drag(self, self.dragging)
 
-    def setGenerator(self, generator):
-        self.generator = generator
+
+    ### MOUSE EVENTS ###
 
     def mousePressEvent(self, event):
         self.dragStartPosition = event.pos()
@@ -187,85 +187,9 @@ class Graphboard(QGraphicsView):
         self.arrow_item.attributesChanged.emit()
         self.arrowMoved.emit()
 
-    def contextMenuEvent(self, event):
-        clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())
-        selected_items = self.get_selected_items()
-        if isinstance(clicked_item, Arrow):
-            arrow_menu = QMenu(self)
 
-            delete_action = QAction('Delete', self)
-            delete_action.triggered.connect(lambda: self.arrow_handler.delete_arrow(selected_items))
-            arrow_menu.addAction(delete_action)
+    ### GETTERS ###
 
-            rotate_right_action = QAction('Rotate Right', self)
-            rotate_right_action.triggered.connect(lambda: self.arrow_handler.rotateArrow("right", selected_items))
-            arrow_menu.addAction(rotate_right_action)
-
-            rotate_left_action = QAction('Rotate Left', self)
-            rotate_left_action.triggered.connect(lambda: self.arrow_handler.rotateArrow("left", selected_items))
-            arrow_menu.addAction(rotate_left_action)
-
-            mirror_action = QAction('Mirror', self)
-            mirror_action.triggered.connect(lambda: self.arrow_handler.mirrorArrow(selected_items))
-            arrow_menu.addAction(mirror_action)
-
-            bring_forward_action = QAction('Bring Forward', self)
-            bring_forward_action.triggered.connect(lambda: self.arrow_handler.bringForward(selected_items))
-            arrow_menu.addAction(bring_forward_action)
-            arrow_menu.exec_(event.globalPos())
-
-        elif isinstance(clicked_item, Staff):
-            staff_menu = QMenu(self)
-
-            delete_action = QAction('Delete', self)
-            delete_action.triggered.connect(lambda: self.arrow_handler.delete_arrow(selected_items))
-            staff_menu.addAction(delete_action)
-
-            rotate_right_action = QAction('Rotate Right', self)
-            rotate_right_action.triggered.connect(lambda: self.arrow_handler.rotateArrow("right", selected_items))
-            staff_menu.addAction(rotate_right_action)
-
-            rotate_left_action = QAction('Rotate Left', self)
-            rotate_left_action.triggered.connect(lambda: self.arrow_handler.rotateArrow("left", selected_items))
-            staff_menu.addAction(rotate_left_action)
-            staff_menu.exec_(event.globalPos())
-
-        else: 
-            graphboard_menu = QMenu(self)
-
-            swap_colors_action = QAction('Swap Colors', self)
-            swap_colors_action.triggered.connect(lambda: self.arrow_handler.swapColors(self.get_selected_items()))
-            graphboard_menu.addAction(swap_colors_action)
-
-            select_all_action = QAction('Select All', self)
-            select_all_action.triggered.connect(self.arrow_handler.selectAll)
-            graphboard_menu.addAction(select_all_action)
-
-            add_to_sequence_action = QAction('Add to Sequence', self)
-            add_to_sequence_action.triggered.connect(lambda _: self.sequence_manager.add_to_sequence(self))
-            graphboard_menu.addAction(add_to_sequence_action)
-
-            export_to_png_action = QAction('Export to PNG', self)
-            export_to_png_action.triggered.connect(self.exporter.export_to_png)
-            graphboard_menu.addAction(export_to_png_action)
-
-            export_to_svg_action = QAction('Export to SVG', self)
-            export_to_svg_action.triggered.connect(self.exporter.export_to_svg)
-            graphboard_menu.addAction(export_to_svg_action)
-
-            graphboard_menu.exec_(event.globalPos())
-
-    def clear_selection(self):
-        for item in self.scene().selectedItems():
-            item.setSelected(False)
-
-    def get_bounding_box(self):
-        # return all QGraphicsItem objects that represent bounding boxes in the scene
-        bounding_boxes = []
-        for item in self.scene().items():
-            if isinstance(item, QGraphicsRectItem):  # or whatever class represents your bounding boxes
-                bounding_boxes.append(item)
-        return bounding_boxes
 
     def get_state(self):
         state = {
@@ -295,12 +219,6 @@ class Graphboard(QGraphicsView):
                 }
         return state
     
-    def set_handlers(self, handlers):
-        self.handlers = handlers
-
-    def set_info_tracker(self, info_tracker):
-        self.info_tracker = info_tracker
-    
     def get_quadrant_center(self, quadrant):
         centers = {
             'ne': QPointF(550, 175),
@@ -310,11 +228,7 @@ class Graphboard(QGraphicsView):
         }
         return centers.get(quadrant, QPointF(0, 0))
     
-    def selectAllItems(self):
-        for item in self.scene().items():
-            item.setSelected(True)
-
-    def getExpandedQuadrantCenter(self, quadrant):
+    def get_expanded_quadrant_center(self, quadrant):
         centers = {
             'ne1': QPointF(525, 175),
             'ne2': QPointF(575, 100),
@@ -327,7 +241,7 @@ class Graphboard(QGraphicsView):
         }
         return centers.get(quadrant, QPointF(0, 0))
     
-    def getCurrentArrowPositions(self):
+    def get_current_arrow_positions(self):
         red_position = None
         blue_position = None
 
@@ -345,18 +259,13 @@ class Graphboard(QGraphicsView):
     def get_selected_items(self):
         return self.graphboard_scene.selectedItems()
     
-    def select_all_arrows(self):
-        for item in self.graphboard_scene.items():
-            if isinstance(item, Arrow):
-                item.setSelected(True)
-
-    def update_staffs_and_check_beta(self):
-        self.staff_manager.remove_beta_staves()
-        self.staff_manager.update_graphboard_staffs(self.scene())
-        self.staff_manager.check_and_replace_staves()
-
-    def set_info_tracker(self, info_tracker):
-        self.info_tracker = info_tracker
+    def get_bounding_box(self):
+        # return all QGraphicsItem objects that represent bounding boxes in the scene
+        bounding_boxes = []
+        for item in self.scene().items():
+            if isinstance(item, QGraphicsRectItem):  # or whatever class represents your bounding boxes
+                bounding_boxes.append(item)
+        return bounding_boxes
 
     def get_attributes(self):
         attributes = {}
@@ -370,29 +279,40 @@ class Graphboard(QGraphicsView):
 
         return attributes
     
-    def resizeEvent(self, event):
+
+    ### SELECTORS ###
+
+    def select_all_items(self):
+        for item in self.scene().items():
+            item.setSelected(True)
+
+    def select_all_arrows(self):
+        for item in self.graphboard_scene.items():
+            if isinstance(item, Arrow):
+                item.setSelected(True)
+
+    def clear_selection(self):
+        for item in self.scene().selectedItems():
+            item.setSelected(False)
+
+
+    ### INITIALIZERS ###
+
+    def set_handlers(self, handlers):
+        self.handlers = handlers
+
+    def set_info_tracker(self, info_tracker):
+        self.info_tracker = info_tracker
+
+    def setGenerator(self, generator):
+        self.generator = generator
+
+
+    ### EVENTS ###
+
+    def resizeEvent(self, event): # KEEP THIS TO POSITION THE GRID
         self.setSceneRect(QRectF(self.rect()))
         super().resizeEvent(event)
-
-    def deleteAllArrows(self):
-        for item in self.scene().items():
-            if isinstance(item, Arrow):
-                self.scene().removeItem(item)
-                del item
-        self.arrowMoved.emit()
-        if self.info_tracker is not None:
-            self.info_tracker.update()
-
-        self.staff_manager.hide_all()
-
-    def clear(self):
-        for item in self.scene().items():
-            if isinstance(item, Arrow) or isinstance(item, Staff):
-                self.scene().removeItem(item)
-                del item
-        self.arrowMoved.emit()
-        if self.info_tracker is not None:
-            self.info_tracker.update()
 
     def keyPressEvent(self, event):
         key = event.key()
@@ -414,6 +334,102 @@ class Graphboard(QGraphicsView):
                 item.moveBy(dx, dy)
                 self.arrowMoved.emit()
 
+    def contextMenuEvent(self, event):
+        clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())
+        selected_items = self.get_selected_items()
+        if isinstance(clicked_item, Arrow):
+            arrow_menu = QMenu(self)
+
+            delete_action = QAction('Delete', self)
+            delete_action.triggered.connect(lambda: self.arrow_handler.delete_arrow(selected_items))
+            arrow_menu.addAction(delete_action)
+
+            rotate_right_action = QAction('Rotate Right', self)
+            rotate_right_action.triggered.connect(lambda: self.arrow_handler.rotate_arrow("right", selected_items))
+            arrow_menu.addAction(rotate_right_action)
+
+            rotate_left_action = QAction('Rotate Left', self)
+            rotate_left_action.triggered.connect(lambda: self.arrow_handler.rotate_arrow("left", selected_items))
+            arrow_menu.addAction(rotate_left_action)
+
+            mirror_action = QAction('Mirror', self)
+            mirror_action.triggered.connect(lambda: self.arrow_handler.mirror_arrow(selected_items))
+            arrow_menu.addAction(mirror_action)
+
+            bring_forward_action = QAction('Bring Forward', self)
+            bring_forward_action.triggered.connect(lambda: self.arrow_handler.bringForward(selected_items))
+            arrow_menu.addAction(bring_forward_action)
+            arrow_menu.exec_(event.globalPos())
+
+        elif isinstance(clicked_item, Staff):
+            staff_menu = QMenu(self)
+
+            delete_action = QAction('Delete', self)
+            delete_action.triggered.connect(lambda: self.arrow_handler.delete_arrow(selected_items))
+            staff_menu.addAction(delete_action)
+
+            rotate_right_action = QAction('Rotate Right', self)
+            rotate_right_action.triggered.connect(lambda: self.arrow_handler.rotateArrow("right", selected_items))
+            staff_menu.addAction(rotate_right_action)
+
+            rotate_left_action = QAction('Rotate Left', self)
+            rotate_left_action.triggered.connect(lambda: self.arrow_handler.rotateArrow("left", selected_items))
+            staff_menu.addAction(rotate_left_action)
+            staff_menu.exec_(event.globalPos())
+
+        else: 
+            graphboard_menu = QMenu(self)
+
+            swap_colors_action = QAction('Swap Colors', self)
+            swap_colors_action.triggered.connect(lambda: self.arrow_handler.swap_colors(self.get_selected_items()))
+            graphboard_menu.addAction(swap_colors_action)
+
+            select_all_action = QAction('Select All', self)
+            select_all_action.triggered.connect(self.arrow_handler.selectAll)
+            graphboard_menu.addAction(select_all_action)
+
+            add_to_sequence_action = QAction('Add to Sequence', self)
+            add_to_sequence_action.triggered.connect(lambda _: self.sequence_manager.add_to_sequence(self))
+            graphboard_menu.addAction(add_to_sequence_action)
+
+            export_to_png_action = QAction('Export to PNG', self)
+            export_to_png_action.triggered.connect(self.exporter.export_to_png)
+            graphboard_menu.addAction(export_to_png_action)
+
+            export_to_svg_action = QAction('Export to SVG', self)
+            export_to_svg_action.triggered.connect(self.exporter.export_to_svg)
+            graphboard_menu.addAction(export_to_svg_action)
+
+            graphboard_menu.exec_(event.globalPos())
+
+
+    def update_staffs_and_check_beta(self):
+        self.staff_manager.remove_beta_staves()
+        self.staff_manager.update_graphboard_staffs(self.scene())
+        self.staff_manager.check_and_replace_staves()
+
+
+
+    def delete_all_arrows(self):
+        for item in self.scene().items():
+            if isinstance(item, Arrow):
+                self.scene().removeItem(item)
+                del item
+        self.arrowMoved.emit()
+        if self.info_tracker is not None:
+            self.info_tracker.update()
+
+        self.staff_manager.hide_all()
+
+    def clear(self):
+        for item in self.scene().items():
+            if isinstance(item, Arrow) or isinstance(item, Staff):
+                self.scene().removeItem(item)
+                del item
+        self.arrowMoved.emit()
+        if self.info_tracker is not None:
+            self.info_tracker.update()
+
 
 
 
@@ -422,7 +438,7 @@ class Quadrant_Preview_Drag(QDrag):
         super().__init__(source, *args, **kwargs)
         self.arrow_item = arrow_item
         self.timer = QTimer()
-        self.timer.timeout.connect(self.updatePixmap)
+        self.timer.timeout.connect(self.update_pixmap)
 
     def exec_(self, *args, **kwargs):
         self.timer.start(100)
@@ -430,7 +446,7 @@ class Quadrant_Preview_Drag(QDrag):
         self.timer.stop()
         return result
 
-    def updatePixmap(self):
+    def update_pixmap(self):
         mouse_pos = self.source().mapFromGlobal(self.source().cursor().pos())
 
         quadrant, base_name = self.get_graphboard_quadrants(mouse_pos)

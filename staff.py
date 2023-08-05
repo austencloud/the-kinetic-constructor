@@ -53,6 +53,8 @@ class Staff(QGraphicsSvgItem):
         self.setSharedRenderer(self.renderer)
         # Add code to update the color if necessary
 
+
+
     def show(self):
         self.setVisible(True)
 
@@ -132,6 +134,11 @@ class Staff_Manager(QObject):
         ]
 
         self.hide_all_graphboard_staffs()
+        
+    def update_staffs_and_check_beta(self, graphboard):
+        self.remove_beta_staves()
+        self.update_graphboard_staffs(graphboard.scene())
+        self.check_and_replace_staves()
 
     def get_staff_position(self, staff_item):
         print(f"Getting position for staff {staff_item.element_id}")

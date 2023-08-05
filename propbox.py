@@ -21,7 +21,7 @@ class Prop_Box:
 
         #set locations of the items to show in the propbox's center
         self.red_staff.setPos(100, 100)
-
+        
         view = QGraphicsView(propbox_scene)
         view.setFrameShape(QFrame.NoFrame)
 

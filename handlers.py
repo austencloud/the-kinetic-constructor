@@ -72,7 +72,7 @@ class Arrow_Handler(QObject):
         self.selected_arrow.update_arrow_position()
         print(self.selected_arrow.quadrant)
 
-    def rotateArrow(self, direction, items):
+    def rotate_arrow(self, direction, items):
         for item in items:
             print(item.get_attributes())
             old_svg = f"images/arrows/{item.color}_{item.type}_{item.rotation}_{item.quadrant}.svg"
@@ -99,7 +99,7 @@ class Arrow_Handler(QObject):
 
         self.graphboard.arrowMoved.emit()
 
-    def mirrorArrow(self, items):
+    def mirror_arrow(self, items):
         for item in items:
             current_svg = item.svg_file
 
@@ -126,12 +126,12 @@ class Arrow_Handler(QObject):
                 print("Failed to load SVG file:", new_svg)
         self.graphboard.arrowMoved.emit()
 
-    def bringForward(self, items):
+    def bring_forward(self, items):
         for item in items:
             z = item.zValue()
             item.setZValue(z + 1)
 
-    def swapColors(self, _):
+    def swap_colors(self, _):
         arrow_items = [item for item in self.graphboard_scene.items() if isinstance(item, Arrow)]
         if len(arrow_items) >= 1:
             for item in arrow_items:

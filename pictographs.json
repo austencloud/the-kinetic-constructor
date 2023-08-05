@@ -963,12 +963,12 @@
             },
             {
                 "optimal_red_location": {
-                    "x": 515.0,
-                    "y": 524.0
+                    "x": 535.0,
+                    "y": 533.0
                 },
                 "optimal_blue_location": {
-                    "x": 515.0,
-                    "y": 224.0
+                    "x": 533.0,
+                    "y": 222.0
                 }
             }
         ],
@@ -1090,6 +1090,16 @@
                 "type": "anti",
                 "start_location": "e",
                 "end_location": "n"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 538.0,
+                    "y": 214.0
+                },
+                "optimal_blue_location": {
+                    "x": 543.0,
+                    "y": 543.0
+                }
             }
         ],
         [
@@ -3068,6 +3078,16 @@
                 "type": "anti",
                 "start_location": "n",
                 "end_location": "e"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 535.0,
+                    "y": 198.0
+                },
+                "optimal_blue_location": {
+                    "x": 550.0,
+                    "y": 550.0
+                }
             }
         ],
         [
@@ -4000,6 +4020,16 @@
                 "type": "iso",
                 "start_location": "s",
                 "end_location": "e"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 551.0,
+                    "y": 537.0
+                },
+                "optimal_blue_location": {
+                    "x": 208.0,
+                    "y": 208.0
+                }
             }
         ],
         [
@@ -5496,6 +5526,16 @@
                 "type": "anti",
                 "start_location": "s",
                 "end_location": "e"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 544.0,
+                    "y": 538.0
+                },
+                "optimal_blue_location": {
+                    "x": 537.0,
+                    "y": 212.0
+                }
             }
         ],
         [
@@ -5518,6 +5558,16 @@
                 "type": "anti",
                 "start_location": "w",
                 "end_location": "s"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 207.0,
+                    "y": 531.0
+                },
+                "optimal_blue_location": {
+                    "x": 534.0,
+                    "y": 532.0
+                }
             }
         ],
         [
@@ -5540,6 +5590,16 @@
                 "type": "anti",
                 "start_location": "n",
                 "end_location": "w"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 216.0,
+                    "y": 210.0
+                },
+                "optimal_blue_location": {
+                    "x": 208.0,
+                    "y": 534.0
+                }
             }
         ],
         [
@@ -5562,6 +5622,16 @@
                 "type": "anti",
                 "start_location": "e",
                 "end_location": "n"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 539.0,
+                    "y": 217.0
+                },
+                "optimal_blue_location": {
+                    "x": 210.0,
+                    "y": 217.0
+                }
             }
         ],
         [
@@ -5584,6 +5654,16 @@
                 "type": "anti",
                 "start_location": "n",
                 "end_location": "e"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 534.0,
+                    "y": 213.0
+                },
+                "optimal_blue_location": {
+                    "x": 537.0,
+                    "y": 542.0
+                }
             }
         ],
         [
@@ -5628,6 +5708,16 @@
                 "type": "anti",
                 "start_location": "w",
                 "end_location": "n"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 207.0,
+                    "y": 212.0
+                },
+                "optimal_blue_location": {
+                    "x": 539.0,
+                    "y": 218.0
+                }
             }
         ],
         [
@@ -5650,6 +5740,16 @@
                 "type": "anti",
                 "start_location": "e",
                 "end_location": "s"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 552.0,
+                    "y": 540.0
+                },
+                "optimal_blue_location": {
+                    "x": 205.0,
+                    "y": 539.0
+                }
             }
         ],
         [
@@ -5726,6 +5826,16 @@
                 "type": "anti",
                 "start_location": "w",
                 "end_location": "s"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 207.0,
+                    "y": 538.0
+                },
+                "optimal_blue_location": {
+                    "x": 213.0,
+                    "y": 209.0
+                }
             }
         ],
         [
@@ -5748,6 +5858,16 @@
                 "type": "anti",
                 "start_location": "n",
                 "end_location": "w"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 210.0,
+                    "y": 215.0
+                },
+                "optimal_blue_location": {
+                    "x": 534.0,
+                    "y": 224.0
+                }
             }
         ],
         [
@@ -5792,6 +5912,16 @@
                 "type": "anti",
                 "start_location": "w",
                 "end_location": "n"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 211.0,
+                    "y": 214.0
+                },
+                "optimal_blue_location": {
+                    "x": 197.0,
+                    "y": 550.0
+                }
             }
         ],
         [
@@ -5836,6 +5966,16 @@
                 "type": "anti",
                 "start_location": "s",
                 "end_location": "w"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 207.0,
+                    "y": 535.0
+                },
+                "optimal_blue_location": {
+                    "x": 546.0,
+                    "y": 534.0
+                }
             }
         ]
     ],
