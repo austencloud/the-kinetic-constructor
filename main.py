@@ -7,6 +7,7 @@ class Main_Window(QWidget):
         super().__init__() 
         UiSetup(self)
 
+
 app = QApplication(sys.argv)
 ex = Main_Window()
 ex.setFocus()  
