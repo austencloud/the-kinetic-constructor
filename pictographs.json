@@ -1599,12 +1599,12 @@
             },
             {
                 "optimal_red_location": {
-                    "x": 173.0,
-                    "y": 596.0
+                    "x": 142.0,
+                    "y": 584.0
                 },
                 "optimal_blue_location": {
-                    "x": 235.0,
-                    "y": 552.0
+                    "x": 210.0,
+                    "y": 541.0
                 }
             }
         ],
@@ -2650,6 +2650,16 @@
                 "type": "iso",
                 "start_location": "w",
                 "end_location": "s"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 196.0,
+                    "y": 550.0
+                },
+                "optimal_blue_location": {
+                    "x": 550.0,
+                    "y": 550.0
+                }
             }
         ],
         [

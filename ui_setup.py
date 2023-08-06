@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QLineEdit, QGridLayout
 import os
 from arrow import Arrow
-from PyQt5.QtGui import QFont, QTransform, QIcon
+from PyQt5.QtGui import QFont, QTransform, QIcon, QPixmap
 from sequence import *
 from info_tracker import Info_Tracker
 from generator import Pictograph_Generator
@@ -145,25 +145,36 @@ class UiSetup(QWidget):
             ['S', 'T', 'U', 'V'],
             ['W', 'X', 'Y', 'Z'],
             ['Σ', 'Δ', 'θ', 'Ω'],
-            ['Φ', 'Ψ', 'Λ'],
-            ['W-', 'X-', 'Y-', 'Z-'],
-            ['Σ-', 'Δ-', 'θ-', 'Ω-'],
-            ['Φ-', 'Ψ-', 'Λ-'],
-            ['α', 'β', 'Γ']
+            # ['Φ', 'Ψ', 'Λ'],
+            # ['W-', 'X-', 'Y-', 'Z-'],
+            # ['Σ-', 'Δ-', 'θ-', 'Ω-'],
+            # ['Φ-', 'Ψ-', 'Λ-'],
+            # ['α', 'β', 'Γ']
         ]
+        # Iterate through the letter rows and create buttons with icons
         for row in letter_rows:
-            row_layout = QHBoxLayout()
-            row_layout.setSpacing(10)  # Set the spacing between buttons in a row
-            row_layout.setAlignment(Qt.AlignTop)
+            row_layout = QHBoxLayout()  # Create a new horizontal layout for the row
             for letter in row:
-                button = QPushButton(letter, self.main_window)
+                icon_path = f"images/letters/{letter}.svg"
+                renderer = QSvgRenderer(icon_path)  # Create a renderer for the SVG file
+
+                # Create a QPixmap to render the SVG into
+                pixmap = QPixmap(renderer.defaultSize())
+                pixmap.fill(Qt.transparent)
+
+                # Render the SVG into the QPixmap
+                painter = QPainter(pixmap)
+                renderer.render(painter)
+                painter.end()
+
+                button = QPushButton(QIcon(pixmap), "", self.main_window)  # Create a new button
                 font = QFont()
                 font.setPointSize(20)
                 button.setFont(font)
                 button.setFixedSize(65, 65)
                 button.clicked.connect(lambda _, l=letter: self.generator.generate_pictograph(l, self.staff_manager))  # use self.generator here
-                row_layout.addWidget(button)
-            letter_buttons_layout.addLayout(row_layout)
+                row_layout.addWidget(button)  # Add the button to the row layout
+            letter_buttons_layout.addLayout(row_layout)  # Add the row layout to the main layout
 
         # Add a button to generate all letters
         generate_all_button = QPushButton("Generate All", self.main_window)
