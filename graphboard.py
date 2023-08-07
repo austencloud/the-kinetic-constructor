@@ -49,7 +49,7 @@ class Graphboard(QGraphicsView):
         self.arrow_handler = Arrow_Handler(self.graphboard_scene, self, self.staff_manager)
         self.original_width = 750
         self.original_height = 900
-
+        self.resizing = True
         self.setFixedSize(750, 900)
 
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -124,7 +124,13 @@ class Graphboard(QGraphicsView):
             super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
-        
+        if self.is_near_corner(event.pos()):
+            # Change the cursor to a resizing cursor
+            self.setCursor(Qt.SizeFDiagCursor)
+        else:
+            # Restore the original cursor
+            self.setCursor(Qt.ArrowCursor)
+            
         if self.resizing:
             # Get the current mouse position
             x, y = event.pos().x(), event.pos().y()
@@ -225,7 +231,7 @@ class Graphboard(QGraphicsView):
             event.accept()
             dropped_svg = event.mimeData().text()
 
-            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler,  self.arrow_handler)
+            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler,  self.arrow_handler, self.ui_setup)
             self.arrow_item.setFlag(QGraphicsSvgItem.ItemIsFocusable, True)
             self.scene().addItem(self.arrow_item)
             pos = self.mapToScene(event.pos()) - self.arrow_item.boundingRect().center()
