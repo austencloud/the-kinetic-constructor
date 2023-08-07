@@ -47,9 +47,8 @@ class Graphboard(QGraphicsView):
         self.letter_item = QGraphicsSvgItem()
         self.graphboard_scene.addItem(self.letter_item)
         self.arrow_handler = Arrow_Handler(self.graphboard_scene, self, self.staff_manager)
-        self.original_width = 750
-        self.original_height = 900
-        self.resizing = True
+
+        self.resizing = None
         self.setFixedSize(750, 900)
 
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -505,7 +504,7 @@ class Graphboard(QGraphicsView):
 
 
     def is_near_corner(self, pos):
-        sensitivity = 10  # Number of pixels within which the cursor is considered near a corner
+        sensitivity = 20  # Number of pixels within which the cursor is considered near a corner
 
         # Get the coordinates of the cursor
         x, y = pos.x(), pos.y()

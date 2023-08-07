@@ -76,8 +76,9 @@ class Context_Menu_Handler:
 
 
 class Menu_Bar(QMenuBar):
-    def __init__(self):
+    def __init__(self, main_window):
         super().__init__()
+        self.main_window = main_window
         self.file_menu = QMenu('File')
         self.edit_menu = QMenu('Edit')
         self.addMenu(self.file_menu)
@@ -87,6 +88,7 @@ class Menu_Bar(QMenuBar):
 
     #add some stuff to the file menu
     def add_actions_to_file_menu(self):
+        self.file_menu.addAction(QAction('Refresh', self, triggered=self.main_window.refresh_ui))
         self.file_menu.addAction(QAction('New', self))
         self.file_menu.addAction(QAction('Open', self))
         self.file_menu.addAction(QAction('Save', self))

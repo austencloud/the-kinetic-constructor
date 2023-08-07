@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QLineEdit, QGridLayout
+from PyQt5.QtWidgets import QAction, QApplication, QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QLineEdit, QGridLayout
 import os
 from arrow import Arrow
 from PyQt5.QtGui import QFont, QTransform, QIcon, QPixmap
@@ -40,6 +40,7 @@ class UiSetup(QWidget):
         self.graphboard = None
         self.arrow_handler = None
         self.get_screen_resolution()
+        self.initMenuBars()
         self.initStaffManager()
         self.initLayouts()
         self.initInfoTracker()
@@ -57,12 +58,19 @@ class UiSetup(QWidget):
         self.initLetterButtons()  # Move this line down
         self.setFocus()
 
-
+    def initMenuBars(self):
+        self.menu_bar = Menu_Bar(self.main_window)
+        file_menu = self.menu_bar.addMenu('File')
+        refresh_action = QAction('Refresh UI', self.main_window)
+        refresh_action.triggered.connect(self.main_window.refresh_ui)  # Assuming you have a method called refresh_ui
+        file_menu.addAction(refresh_action)
+        self.main_window.setMenuBar(self.menu_bar)
+        
     def initMenus(self):
         self.json_updater = Json_Handler(self.graphboard_scene)
         self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.sequence_handler, self.arrow_handler, self.exporter)
         self.arrow_handler = Arrow_Handler(self.graphboard_scene, self.graphboard, self.staff_manager)
-        self.menu_bar = Menu_Bar()
+
 
     def initLayouts(self):
         self.main_layout = QHBoxLayout()
