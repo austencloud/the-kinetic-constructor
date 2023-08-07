@@ -23,6 +23,7 @@ class Graphboard(QGraphicsView):
         self.staff_manager = staff_manager
         self.setDragMode(QGraphicsView.RubberBandDrag)
         self.setInteractive(True)
+        
         self.graphboard_scene = graphboard_scene
         self.graphboard_scene.setBackgroundBrush(Qt.white) 
         self.info_tracker = info_tracker
@@ -57,17 +58,39 @@ class Graphboard(QGraphicsView):
     ### MOUSE EVENTS ###
 
     def resizeEvent(self, event):
+        # Get the new size of the graphboard
         new_size = event.size()
-        old_size = event.oldSize()
-        scale_factor = new_size.width() / old_size.width() # Assuming width controls the aspect ratio
 
-        # Apply the scaling factor to all contents
-        for item in self.scene().items():
-            item.setScale(scale_factor)
-            
+        # Calculate the aspect ratio
+        aspect_ratio = self.width() / self.height()
+
+        # Calculate the new width and height while maintaining the aspect ratio
+        new_width = min(new_size.width(), new_size.height() * aspect_ratio)
+        new_height = new_width / aspect_ratio
+
+        # Set the new size for the graphboard
+        self.setFixedSize(new_width, new_height)
+
+        # Scale the contents within the graphboard
+        self.scale_contents(new_width, new_height)
+
         super().resizeEvent(event)
 
+    def scale_contents(self, new_width, new_height):
+        # Calculate the scaling factors for width and height
+        scale_factor_width = new_width / self.original_width
+        scale_factor_height = new_height / self.original_height
+
+        # Iterate through all items in the graphboard and scale them
+        for item in self.scene().items():
+            item.setScale(scale_factor_width, scale_factor_height)
+
+        # You can also update the SVG content here if needed
+
+
     def mousePressEvent(self, event):
+        if self.is_near_corner(event.pos()):
+            self.resizing = True
         self.dragStartPosition = event.pos()
         self.setFocus()
         items = self.items(event.pos())
@@ -98,6 +121,23 @@ class Graphboard(QGraphicsView):
             super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
+        
+        if self.resizing:
+            # Get the current mouse position
+            x, y = event.pos().x(), event.pos().y()
+
+            # Calculate the new width and height while maintaining the aspect ratio
+            aspect_ratio = self.original_width / self.original_height
+            new_width = min(x, y * aspect_ratio)
+            new_height = new_width / aspect_ratio
+
+            # Resize the graphboard
+            self.setFixedSize(new_width, new_height)
+
+            # Scale the contents within the graphboard
+            self.scale_contents(new_width, new_height)
+
+            super().mouseMoveEvent(event)
         if (event.pos() - self.dragStartPosition).manhattanLength() < QApplication.startDragDistance():
             return
         if self.dragging:
@@ -452,6 +492,29 @@ class Graphboard(QGraphicsView):
         self.arrowMoved.emit()
 
 
+    def is_near_corner(self, pos):
+        sensitivity = 10  # Number of pixels within which the cursor is considered near a corner
+
+        # Get the coordinates of the cursor
+        x, y = pos.x(), pos.y()
+
+        # Get the width and height of the graphboard
+        width, height = self.width(), self.height()
+
+        # Check if the cursor is near the top-left corner
+        near_top_left = x < sensitivity and y < sensitivity
+
+        # Check if the cursor is near the top-right corner
+        near_top_right = x > width - sensitivity and y < sensitivity
+
+        # Check if the cursor is near the bottom-left corner
+        near_bottom_left = x < sensitivity and y > height - sensitivity
+
+        # Check if the cursor is near the bottom-right corner
+        near_bottom_right = x > width - sensitivity and y > height - sensitivity
+
+        # Return True if the cursor is near any of the corners
+        return near_top_left or near_top_right or near_bottom_left or near_bottom_right
 
 
 class Quadrant_Preview_Drag(QDrag):
