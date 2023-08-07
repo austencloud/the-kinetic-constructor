@@ -23,7 +23,8 @@ class Graphboard(QGraphicsView):
         self.staff_manager = staff_manager
         self.setDragMode(QGraphicsView.RubberBandDrag)
         self.setInteractive(True)
-        
+        self.original_width = 750
+        self.original_height = 900
         self.graphboard_scene = graphboard_scene
         self.graphboard_scene.setBackgroundBrush(Qt.white) 
         self.info_tracker = info_tracker
@@ -46,6 +47,9 @@ class Graphboard(QGraphicsView):
         self.letter_item = QGraphicsSvgItem()
         self.graphboard_scene.addItem(self.letter_item)
         self.arrow_handler = Arrow_Handler(self.graphboard_scene, self, self.staff_manager)
+        self.original_width = 750
+        self.original_height = 900
+
         self.setFixedSize(750, 900)
 
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -75,15 +79,14 @@ class Graphboard(QGraphicsView):
         self.scale_contents(new_width, new_height)
 
         super().resizeEvent(event)
-
+    
     def scale_contents(self, new_width, new_height):
-        # Calculate the scaling factors for width and height
-        scale_factor_width = new_width / self.original_width
-        scale_factor_height = new_height / self.original_height
+        # Calculate the scaling factor based on the width (or height, since you're maintaining the aspect ratio)
+        scale_factor = new_width / self.original_width
 
         # Iterate through all items in the graphboard and scale them
         for item in self.scene().items():
-            item.setScale(scale_factor_width, scale_factor_height)
+            item.setScale(scale_factor)
 
         # You can also update the SVG content here if needed
 
@@ -132,7 +135,7 @@ class Graphboard(QGraphicsView):
             new_height = new_width / aspect_ratio
 
             # Resize the graphboard
-            self.setFixedSize(new_width, new_height)
+            self.setFixedSize(int(new_width), int(new_height))
 
             # Scale the contents within the graphboard
             self.scale_contents(new_width, new_height)
@@ -175,6 +178,9 @@ class Graphboard(QGraphicsView):
                     if old_quadrant != item.quadrant:  # Check if the quadrant has changed
                         self.info_tracker.update()
                         self.arrowMoved.emit()
+
+    def mouseReleaseEvent(self, event):
+        self.resizing = False
 
 
 
@@ -366,7 +372,7 @@ class Graphboard(QGraphicsView):
     ### EVENTS ###
 
     def resizeEvent(self, event): # KEEP THIS TO POSITION THE GRID
-        self.setSceneRect(QRectF(self.rect()))
+
         super().resizeEvent(event)
 
     def keyPressEvent(self, event):

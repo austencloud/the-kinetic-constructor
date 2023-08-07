@@ -109,9 +109,10 @@ class UiSetup(QWidget):
 
     def initGraphboard(self):
         self.grid = Grid('images\\grid\\grid.svg', self.ui_setup)
-        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
         # Initialize graphboard without generator
         self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_handler)
+        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
+
         self.arrow_handler.connect_to_graphboard(self.graphboard)
         transform = QTransform()
 
