@@ -181,16 +181,7 @@ class Arrow_Handler(QObject):
 
 
 
-class Key_Press_Handler:
-    def __init__(self, arrow, graphboard=None):
-        self.arrow = arrow
-        print("Key_Press_Handler init")
 
-
-
-    def connect_to_graphboard(self, graphboard):
-        self.graphboard = graphboard
-        print("Key_Press_Handler connected to graphboard")
 
 
 class Json_Handler:

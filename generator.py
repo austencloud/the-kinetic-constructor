@@ -10,7 +10,7 @@ from lxml import etree
 from menus import Context_Menu_Handler
 from exporter import Exporter
 class Pictograph_Generator():
-    def __init__(self, staff_manager, graphboard, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, context_menu_handler, grid, parent=None):
+    def __init__(self, staff_manager, graphboard, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, context_menu_handler, grid, ui_setup, parent=None):
         self.staff_manager = staff_manager
         self.parent = parent
         self.graphboard = graphboard
@@ -23,7 +23,7 @@ class Pictograph_Generator():
         self.context_menu_handler = context_menu_handler
         self.exporter = exporter
         self.grid = grid
-
+        self.ui_setup = ui_setup
         # Load the JSON file
         with open('pictographs.json', 'r') as file:
             self.letters = json.load(file)
@@ -112,7 +112,7 @@ class Pictograph_Generator():
             # Check if the dictionary has all the keys you need
             if all(key in combination for key in ['color', 'type', 'rotation', 'quadrant']):
                 svg_file = f"images/arrows/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}.svg"
-                arrow = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler)
+                arrow = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler, self.ui_setup)
                 arrow.attributesChanged.connect(lambda: self.update_staff(arrow, staff_manager))
                 arrow.set_attributes(combination)
                 arrow.setFlag(QGraphicsItem.ItemIsMovable, True)

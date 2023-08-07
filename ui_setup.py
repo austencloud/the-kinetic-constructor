@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QLineEdit, QGridLayout
+from PyQt5.QtWidgets import QApplication, QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QLineEdit, QGridLayout
 import os
 from arrow import Arrow
 from PyQt5.QtGui import QFont, QTransform, QIcon, QPixmap
@@ -8,7 +8,7 @@ from generator import Pictograph_Generator
 from staff import *
 from letter import Letter_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent, QSize
-from handlers import Arrow_Handler, Svg_Handler, Json_Handler, Key_Press_Handler
+from handlers import Arrow_Handler, Svg_Handler, Json_Handler 
 from arrowbox import Arrow_Box
 from propbox import Prop_Box
 from menus import Menu_Bar, Context_Menu_Handler
@@ -16,12 +16,15 @@ from graphboard import Graphboard
 from exporter import Exporter
 
 class UiSetup(QWidget):
+    resolution_4k = pyqtSignal()
+    resolution_2400x1600 = pyqtSignal()
+    
     def __init__(self, main_window):
         super().__init__(main_window)
         self.setFocusPolicy(Qt.StrongFocus)
         self.main_window = main_window
         self.main_window.installEventFilter(self)  # This allows the main window to receive key events
-        self.main_window.setMinimumSize(2000, 1600)
+        self.main_window.setMinimumSize(2000, 1400)
         self.main_window.show()
         #set title of main window
         self.main_window.setWindowTitle("Sequence Generator")
@@ -32,10 +35,11 @@ class UiSetup(QWidget):
         self.SVG_POS_Y = 250
         self.context_menu_handler = None
         self.exporter = None
-
+        self.ui_setup = self
         self.sequence_handler = None
         self.graphboard = None
         self.arrow_handler = None
+        self.get_screen_resolution()
 
         self.initStaffManager()
         self.initLayouts()
@@ -63,7 +67,6 @@ class UiSetup(QWidget):
         self.json_updater = Json_Handler(self.graphboard_scene)
         self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.sequence_handler, self.arrow_handler, self.exporter)
         self.arrow_handler = Arrow_Handler(self.graphboard_scene, self.graphboard, self.staff_manager)
-        self.key_press_handler = Key_Press_Handler(self.arrow_handler, None)
         self.menu_bar = Menu_Bar()
 
     def initLayouts(self):
@@ -110,11 +113,10 @@ class UiSetup(QWidget):
 
 
     def initGraphboard(self):
-        self.grid = Grid('images\\grid\\grid.svg')
+        self.grid = Grid('images\\grid\\grid.svg', self.ui_setup)
         self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
         # Initialize graphboard without generator
         self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_handler)
-        self.key_press_handler.connect_to_graphboard(self.graphboard)
         self.arrow_handler.connect_to_graphboard(self.graphboard)
         transform = QTransform()
 
@@ -287,7 +289,7 @@ class UiSetup(QWidget):
             file_name = os.path.basename(svg_file)
             if file_name in default_arrows:
                 self.graphboard.set_handlers(self.arrow_handler)
-                arrow_item = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler)
+                arrow_item = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler, self.ui_setup)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
                 arrow_item.setScale(0.75)
@@ -348,7 +350,10 @@ class UiSetup(QWidget):
         self.sequence_container = QGraphicsView(self.sequence_scene)  # Create a QGraphicsView with the sequence scene
 
         # Set the width and height
-        self.sequence_container.setFixedSize(1960, 500)
+        self.sequence_container.setFixedSize(1960, 300)
+        #disable scrollbars
+        self.sequence_container.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.sequence_container.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.sequence_container.show()
         self.lower_layout.addWidget(self.sequence_container)
 
@@ -357,7 +362,7 @@ class UiSetup(QWidget):
 
 
     def initGenerator(self):
-        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.context_menu_handler, self.grid)
+        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.context_menu_handler, self.grid, self)
 
     def initStaffManager(self):
         self.staff_manager = Staff_Manager(self.graphboard_scene)
@@ -391,6 +396,16 @@ class UiSetup(QWidget):
             self.sequence_handler.manager = self.sequence_handler  # Set the manager of the sequence scene
         return self.sequence_handler
 
+    def get_screen_resolution(self):
+        screen_resolution = QApplication.desktop().screenGeometry()
+        screen_width, screen_height = screen_resolution.width(), screen_resolution.height()
+
+        if screen_width == 3840 and screen_height == 2160:
+            self.resolution_4k.emit()
+            print("4k detected")
+        elif screen_width == 2400 and screen_height == 1600:
+            self.resolution_2400x1600.emit()
+            print("2400x1600 detected")
 
 ### EVENTS ###
 

@@ -7,9 +7,15 @@ class Grid(QGraphicsSvgItem):
     def updateSvgContent(self, svg_content):
         self.setSharedRenderer(svg_content)
 
-    def __init__(self, grid_svg):
+    def __init__(self, grid_svg, ui_setup):
         super().__init__(grid_svg)
 
+
+        ui_setup.resolution_4k.connect(self.scale_for_4k)
+        ui_setup.resolution_2400x1600.connect(self.scale_for_2400x1600)     
+        
+        
+        
 
         self.doc = minidom.parse(grid_svg)
 
@@ -31,6 +37,13 @@ class Grid(QGraphicsSvgItem):
         # add an attribute svg_file to the grid
         self.svg_file = grid_svg
 
+    def scale_for_4k(self):
+        print("scale_for_4k")
+        self.setScale(1.0)
+        
+    def scale_for_2400x1600(self):
+        print("scale_for_2400x1600")
+        self.setScale(0.5)
 
     def getCenter(self):
         return self.mapToScene(self.center_point)

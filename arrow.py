@@ -12,7 +12,7 @@ class Arrow(QGraphicsSvgItem):
     orientationChanged = pyqtSignal()
     arrowCreated = pyqtSignal()
 
-    def __init__(self, svg_file, graphboard, info_tracker, svg_handler, arrow_manipulator):
+    def __init__(self, svg_file, graphboard, info_tracker, svg_handler, arrow_handler, ui_setup):
         super().__init__(svg_file)
         self.setAcceptDrops(True)
         self.svg_file = svg_file
@@ -30,8 +30,9 @@ class Arrow(QGraphicsSvgItem):
         self.staff = None
         self.svg_handler = svg_handler
         self.dragStarted = False
-        self.arrow_manipulator = arrow_manipulator
-
+        self.arrow_handler = arrow_handler
+        ui_setup.resolution_4k.connect(self.scale_for_4k)
+        ui_setup.resolution_2400x1600.connect(self.scale_for_2400x1600)
         # Assuming `arrow` is an instance of the Arrow class
         self.arrowCreated.connect(self.info_tracker.update)
         self.arrowCreated.emit()
@@ -66,6 +67,13 @@ class Arrow(QGraphicsSvgItem):
 
 
     ### SETTERS ###
+
+    def scale_for_4k(self):
+        self.setScale(1.0)
+
+    def scale_for_2400x1600(self):
+        print("Scaling for 2400x1600")
+        self.setScale(0.75)
 
     def set_attributes(self, attributes):
         self.color = attributes.get('color', self.color)
@@ -249,7 +257,7 @@ class Arrow(QGraphicsSvgItem):
     #     elif len(self.scene().selectedItems()) == 1:
     #         menu = QMenu()
     #         menu.addAction("Move", self.show_move_dialog)  # Add the new option here
-    #         menu.addAction("Delete", self.arrow_manipulator.delete_arrow)
+    #         menu.addAction("Delete", self.arrow_handler.delete_arrow)
     #         menu.exec_(event.screenPos())
 
     def show_move_dialog(self):
