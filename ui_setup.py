@@ -24,7 +24,7 @@ class UiSetup(QWidget):
         self.setFocusPolicy(Qt.StrongFocus)
         self.main_window = main_window
         self.main_window.installEventFilter(self)  # This allows the main window to receive key events
-        self.main_window.setMinimumSize(2000, 1400)
+        self.main_window.setMinimumSize(2000, 1500)
         self.main_window.show()
         #set title of main window
         self.main_window.setWindowTitle("Sequence Generator")
@@ -40,7 +40,6 @@ class UiSetup(QWidget):
         self.graphboard = None
         self.arrow_handler = None
         self.get_screen_resolution()
-
         self.initStaffManager()
         self.initLayouts()
         self.initInfoTracker()
@@ -48,12 +47,8 @@ class UiSetup(QWidget):
         self.initGraphboard()  # Initialize graphboard first
         self.initGenerator()  # Then initialize generator
         self.graphboard.setGenerator(self.generator)  # Update graphboard with generator
-
         self.connectGraphboard()
-
-
         self.initArrowBox()
-
         self.initPropBox()
         self.initButtons()
         self.connectInfoTracker()

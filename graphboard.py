@@ -38,7 +38,8 @@ class Graphboard(QGraphicsView):
         for letter in 'ABCDEFGHIJKLMNOPQRSTUV':
             renderer = QSvgRenderer(f'images/letters/{letter}.svg')
             self.letter_renderers[letter] = renderer
-
+        self.setResizeAnchor(QGraphicsView.AnchorViewCenter)
+        self.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
 
         # Create a new QGraphicsSvgItem for the letter and add it to the scene
         self.letter_item = QGraphicsSvgItem()
@@ -54,6 +55,17 @@ class Graphboard(QGraphicsView):
 
 
     ### MOUSE EVENTS ###
+
+    def resizeEvent(self, event):
+        new_size = event.size()
+        old_size = event.oldSize()
+        scale_factor = new_size.width() / old_size.width() # Assuming width controls the aspect ratio
+
+        # Apply the scaling factor to all contents
+        for item in self.scene().items():
+            item.setScale(scale_factor)
+            
+        super().resizeEvent(event)
 
     def mousePressEvent(self, event):
         self.dragStartPosition = event.pos()
@@ -76,9 +88,9 @@ class Graphboard(QGraphicsView):
 
 
         if items:
-            print(f"Clicked on an object of type {type(items[0])}")
-            print(f"Object top-left position: {items[0].scenePos()}")
-            print(f"Object center: {items[0].scenePos() + items[0].boundingRect().center()}")
+            # print(f"Clicked on an object of type {type(items[0])}")
+            # print(f"Object top-left position: {items[0].scenePos()}")
+            # print(f"Object center: {items[0].scenePos() + items[0].boundingRect().center()}")
             if hasattr(items[0], 'svg_file'):
                 print(f"Object svg: {items[0].svg_file}")
 
@@ -94,6 +106,7 @@ class Graphboard(QGraphicsView):
 
             for item in self.scene().selectedItems():
                 if isinstance(item, Arrow):
+                    old_quadrant = item.quadrant  # Store the current quadrant
                     item.setPos(item.pos() + movement)
                     center_pos = item.pos() + item.boundingRect().center()
 
@@ -119,8 +132,9 @@ class Graphboard(QGraphicsView):
                         item.setSharedRenderer(new_renderer)
                         item.svg_file = new_svg
                         item.update_locations()
-                self.info_tracker.update()
-                self.arrowMoved.emit()
+                    if old_quadrant != item.quadrant:  # Check if the quadrant has changed
+                        self.info_tracker.update()
+                        self.arrowMoved.emit()
 
 
 
@@ -177,7 +191,6 @@ class Graphboard(QGraphicsView):
             self.arrow_item.setSelected(True)
             end_location = self.arrow_item.end_location
             self.staff_manager.show_staff(end_location + "_staff_" + self.arrow_item.color)
-            self.info_tracker.update()
         else:
             event.ignore()
 

@@ -4,11 +4,9 @@ from PyQt5.QtSvg import QGraphicsSvgItem
 
 class Grid(QGraphicsSvgItem):
 
-    def updateSvgContent(self, svg_content):
-        self.setSharedRenderer(svg_content)
-
     def __init__(self, grid_svg, ui_setup):
         super().__init__(grid_svg)
+
 
 
         ui_setup.resolution_4k.connect(self.scale_for_4k)
@@ -16,7 +14,6 @@ class Grid(QGraphicsSvgItem):
         
         
         
-
         self.doc = minidom.parse(grid_svg)
 
         circles = self.doc.getElementsByTagName('circle')
@@ -36,6 +33,9 @@ class Grid(QGraphicsSvgItem):
 
         # add an attribute svg_file to the grid
         self.svg_file = grid_svg
+
+    def updateSvgContent(self, svg_content):
+        self.setSharedRenderer(svg_content)
 
     def scale_for_4k(self):
         print("scale_for_4k")
