@@ -103,10 +103,15 @@ class Graphboard(QGraphicsView):
             # Scale the item
             item.setScale(scale_factor)
 
-            # Adjust the position of the item
-            old_pos = item.pos()
-            new_pos = QPointF(old_pos.x() * scale_factor + buffer_top_left, old_pos.y() * scale_factor + buffer_top_left)
-            item.setPos(new_pos)
+            # Adjust the position of the grid to maintain the buffer zones
+            old_grid_pos = self.grid.pos()
+            new_grid_pos = QPointF(old_grid_pos.x() * scale_factor, old_grid_pos.y() * scale_factor)
+            self.grid.setPos(new_grid_pos)
+
+            # Adjust the position of the letter to maintain the buffer zones
+            old_letter_pos = self.letter_item.pos()
+            new_letter_pos = QPointF(old_letter_pos.x() * scale_factor, old_letter_pos.y() * scale_factor)
+            self.letter_item.setPos(new_letter_pos)
 
         # Adjust the position of the grid to maintain the buffer zones
         self.grid.setPos(buffer_top_left, buffer_top_left)
