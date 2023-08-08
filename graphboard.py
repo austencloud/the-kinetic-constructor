@@ -50,6 +50,7 @@ class Graphboard(QGraphicsView):
 
         self.resizing = None
         self.setFixedSize(750, 900)
+        # self.setFixedSize(int(750 * 0.8), int(900 * 0.8))  # Scale down the size by 80%
 
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -83,11 +84,25 @@ class Graphboard(QGraphicsView):
         # Calculate the scaling factor based on the width (or height, since you're maintaining the aspect ratio)
         scale_factor = new_width / self.original_width
 
+        # Calculate the new buffer zones
+        buffer_top_left = 50 * scale_factor
+        buffer_bottom = 250 * scale_factor
+
         # Iterate through all items in the graphboard and scale them
         for item in self.scene().items():
+            # Scale the item
             item.setScale(scale_factor)
 
-        # You can also update the SVG content here if needed
+            # Adjust the position of the item
+            old_pos = item.pos()
+            new_pos = QPointF(old_pos.x() * scale_factor + buffer_top_left, old_pos.y() * scale_factor + buffer_top_left)
+            item.setPos(new_pos)
+
+        # Adjust the position of the grid to maintain the buffer zones
+        self.grid.setPos(buffer_top_left, buffer_top_left)
+
+        # Adjust the position of the letter to maintain the buffer zones
+        self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, self.height() - buffer_bottom)
 
 
     def mousePressEvent(self, event):
@@ -230,7 +245,7 @@ class Graphboard(QGraphicsView):
             event.accept()
             dropped_svg = event.mimeData().text()
 
-            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler,  self.arrow_handler)
+            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler,  self.arrow_handler, self.ui_setup)
             self.arrow_item.setFlag(QGraphicsSvgItem.ItemIsFocusable, True)
             self.scene().addItem(self.arrow_item)
             pos = self.mapToScene(event.pos()) - self.arrow_item.boundingRect().center()
