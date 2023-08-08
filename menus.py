@@ -86,13 +86,19 @@ class Menu_Bar(QMenuBar):
         self.add_actions_to_file_menu()
         self.add_actions_to_edit_menu()
 
+
+
     #add some stuff to the file menu
     def add_actions_to_file_menu(self):
-        self.file_menu.addAction(QAction('Refresh', self, triggered=self.main_window.refresh_ui))
+        refresh_action = QAction('Refresh', self)
+        refresh_action.setShortcut('F5')
+        refresh_action.triggered.connect(self.main_window.refresh_ui)
+        self.file_menu.addAction(refresh_action)
+
+        
         self.file_menu.addAction(QAction('New', self))
-        self.file_menu.addAction(QAction('Open', self))
-        self.file_menu.addAction(QAction('Save', self))
-        self.file_menu.addAction(QAction('Save As', self))
+        self.file_menu.addAction(QAction('Browse Library', self))
+        self.file_menu.addAction(QAction('Save Sequence', self))
         self.file_menu.addAction(QAction('Export', self))
         self.file_menu.addAction(QAction('Quit', self))
 

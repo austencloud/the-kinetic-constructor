@@ -23,22 +23,31 @@ class UiSetup(QWidget):
         super().__init__(main_window)
         self.setFocusPolicy(Qt.StrongFocus)
         self.main_window = main_window
-        self.main_window.installEventFilter(self)  # This allows the main window to receive key events
-        self.main_window.setMinimumSize(2000, 1500)
-        self.main_window.show()
-        #set title of main window
+        self.main_window.installEventFilter(self)
+
         self.main_window.setWindowTitle("Sequence Generator")
+        self.main_window.show()
+        
         self.svg_handler = Svg_Handler()
-        self.arrows = []
         self.graphboard_scene = QGraphicsScene()
+        self.menu_bar = Menu_Bar(self.main_window)
+        
+        self.arrows = []
         self.ARROW_DIR = 'images\\arrows'
         self.SVG_POS_Y = 250
+        
         self.context_menu_handler = None
         self.exporter = None
         self.ui_setup = self
         self.sequence_handler = None
         self.graphboard = None
         self.arrow_handler = None
+
+        self.main_container = QWidget()
+        self.main_container.setMinimumSize(2000, 1500)
+
+        # Set the main container as the central widget of the main window
+        self.main_window.setCentralWidget(self.main_container)
         self.get_screen_resolution()
         self.initMenuBars()
         self.initStaffManager()
@@ -59,7 +68,6 @@ class UiSetup(QWidget):
         self.setFocus()
 
     def initMenuBars(self):
-        self.menu_bar = Menu_Bar(self.main_window)
         file_menu = self.menu_bar.addMenu('File')
         refresh_action = QAction('Refresh UI', self.main_window)
         refresh_action.triggered.connect(self.main_window.refresh_ui)  # Assuming you have a method called refresh_ui
@@ -112,7 +120,7 @@ class UiSetup(QWidget):
         self.right_layout.addLayout(self.lower_layout)  # Add info_layout to right_layout
 
         self.main_layout.addLayout(self.right_layout)
-        self.main_window.setLayout(self.main_layout)
+        self.main_container.setLayout(self.main_layout)
 
 
     def initGraphboard(self):
