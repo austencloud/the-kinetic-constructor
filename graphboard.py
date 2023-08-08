@@ -15,7 +15,7 @@ class Graphboard(QGraphicsView):
     arrowMoved = pyqtSignal()
     attributesChanged = pyqtSignal()
 
-    def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, ui_setup, generator, sequence_manager, parent=None):
+    def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, ui_setup, generator, sequence_manager, graphboard_scale_factor, parent=None):
         super().__init__(graphboard_scene, parent)
         self.setAcceptDrops(True)
         self.dragging = None
@@ -31,6 +31,7 @@ class Graphboard(QGraphicsView):
         self.svg_handler = svg_handler
         self.generator = generator
         self.ui_setup = ui_setup
+        self.graphboard_scale_factor = graphboard_scale_factor
         self.renderer = QSvgRenderer()
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
         self.attributesChanged.connect(self.update_staffs_and_check_beta)
@@ -49,7 +50,7 @@ class Graphboard(QGraphicsView):
         self.arrow_handler = Arrow_Handler(self.graphboard_scene, self, self.staff_manager)
 
         self.resizing = None
-        self.setFixedSize(750, 900)
+        self.setFixedSize(int(750 * graphboard_scale_factor), int(900 * graphboard_scale_factor))
         # self.setFixedSize(int(750 * 0.8), int(900 * 0.8))  # Scale down the size by 80%
 
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -58,7 +59,6 @@ class Graphboard(QGraphicsView):
         self.graphboard_scene.addItem(self.grid)
         self.drag = Quadrant_Preview_Drag(self, self.dragging, self.info_tracker)
 
-
     ### MOUSE EVENTS ###
 
     def resizeEvent(self, event):
@@ -66,7 +66,7 @@ class Graphboard(QGraphicsView):
         new_size = event.size()
 
         # Calculate the aspect ratio
-        aspect_ratio = self.width() / self.height()
+        aspect_ratio = self.original_width / self.original_height
 
         # Calculate the new width and height while maintaining the aspect ratio
         new_width = min(new_size.width(), new_size.height() * aspect_ratio)
@@ -74,11 +74,21 @@ class Graphboard(QGraphicsView):
 
         # Set the new size for the graphboard
         self.setFixedSize(new_width, new_height)
+        print(f"New size: {new_width} x {new_height}")
+
 
         # Scale the contents within the graphboard
         self.scale_contents(new_width, new_height)
 
+        # Set the scene's size to match the new size of the view
+        self.graphboard_scene.setSceneRect(0, 0, new_width, new_height)
+
         super().resizeEvent(event)
+
+    def wheelEvent(self, event):
+        # Do nothing on wheel events
+        pass
+
     
     def scale_contents(self, new_width, new_height):
         # Calculate the scaling factor based on the width (or height, since you're maintaining the aspect ratio)
@@ -103,7 +113,6 @@ class Graphboard(QGraphicsView):
 
         # Adjust the position of the letter to maintain the buffer zones
         self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, self.height() - buffer_bottom)
-
 
     def mousePressEvent(self, event):
         if self.is_near_corner(event.pos()):

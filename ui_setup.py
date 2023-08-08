@@ -124,13 +124,17 @@ class UiSetup(QWidget):
 
 
     def initGraphboard(self):
+        graphboard_scale_factor = 0.5  # Change this to the scale factor you want
+
         self.grid = Grid('images\\grid\\grid.svg', self.ui_setup)
         # Initialize graphboard without generator
-        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_handler)
+        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_handler, graphboard_scale_factor)
         self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
 
         self.arrow_handler.connect_to_graphboard(self.graphboard)
-        transform = QTransform()
+        graphboard_transform = QTransform()
+        graphboard_transform.scale(graphboard_scale_factor, graphboard_scale_factor)
+        self.graphboard.setTransform(graphboard_transform)
 
         # Get the size of the graphboard
         graphboard_size = self.graphboard.frameSize()
@@ -138,9 +142,9 @@ class UiSetup(QWidget):
         # Calculate the position of the grid
         grid_position = QPointF((graphboard_size.width() - self.grid.boundingRect().width()) / 2,
                                 (graphboard_size.height() - self.grid.boundingRect().height()) / 2 - 75)
-
-        transform.translate(grid_position.x(), grid_position.y())
-        self.grid.setTransform(transform)
+        grid_transform = QTransform()
+        grid_transform.translate(grid_position.x(), grid_position.y())
+        self.grid.setTransform(grid_transform)
         
     def initLetterButtons(self):
         # Create a new layout for the Word Constructor's widgets
