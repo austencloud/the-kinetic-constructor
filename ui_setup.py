@@ -32,6 +32,10 @@ class UiSetup(QWidget):
         self.graphboard_scene = QGraphicsScene()
         self.menu_bar = Menu_Bar(self.main_window)
         
+        self.scale_factor = 0.8
+        self.arrowbow_scale_factor = 0.7
+        
+        
         self.arrows = []
         self.ARROW_DIR = 'images\\arrows'
         self.SVG_POS_Y = 250
@@ -124,16 +128,15 @@ class UiSetup(QWidget):
 
 
     def initGraphboard(self):
-        graphboard_scale_factor = 0.75  # Change this to the scale factor you want
 
         self.grid = Grid('images\\grid\\grid.svg', self.ui_setup)
         # Initialize graphboard without generator
-        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_handler, graphboard_scale_factor)
+        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_handler, self.scale_factor)
         self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
 
         self.arrow_handler.connect_to_graphboard(self.graphboard)
         graphboard_transform = QTransform()
-        graphboard_transform.scale(graphboard_scale_factor, graphboard_scale_factor)
+        graphboard_transform.scale(self.scale_factor, self.scale_factor)
         self.graphboard.setTransform(graphboard_transform)
 
 
@@ -299,7 +302,7 @@ class UiSetup(QWidget):
                 arrow_item = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler, self.ui_setup)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
-                arrow_item.setScale(0.75)
+                arrow_item.setScale(self.arrowbow_scale_factor)
 
                 if 'red' in file_name:
                     if 'iso' in file_name:
