@@ -124,7 +124,7 @@ class UiSetup(QWidget):
 
 
     def initGraphboard(self):
-        graphboard_scale_factor = 0.3  # Change this to the scale factor you want
+        graphboard_scale_factor = 0.75  # Change this to the scale factor you want
 
         self.grid = Grid('images\\grid\\grid.svg', self.ui_setup)
         # Initialize graphboard without generator
@@ -136,18 +136,7 @@ class UiSetup(QWidget):
         graphboard_transform.scale(graphboard_scale_factor, graphboard_scale_factor)
         self.graphboard.setTransform(graphboard_transform)
 
-        # Get the size of the graphboard
-        graphboard_size = self.graphboard.frameSize()
 
-        # Calculate the initial position of the grid
-        grid_position = QPointF((graphboard_size.width() - self.grid.boundingRect().width() * graphboard_scale_factor) / 2,
-                                (graphboard_size.height() - self.grid.boundingRect().height() * graphboard_scale_factor) / 2 - 75)
-
-        # Calculate the initial position of the letter
-        letter_position = QPointF((graphboard_size.width() - self.letter_item.boundingRect().width() * graphboard_scale_factor) / 2,
-                                (graphboard_size.height() - self.letter_item.boundingRect().height() * graphboard_scale_factor) / 2 - 75)
-
-                
     def initLetterButtons(self):
         # Create a new layout for the Word Constructor's widgets
         letter_buttons_layout = QVBoxLayout()

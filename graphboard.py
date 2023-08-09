@@ -119,6 +119,14 @@ class Graphboard(QGraphicsView):
         # Adjust the position of the letter to maintain the buffer zones
         self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, self.height() - buffer_bottom)
 
+    def adjust_letter_position(self, scale_factor):
+        # Calculate the new position of the letter
+        new_letter_pos = QPointF((self.width() - self.letter_item.boundingRect().width() * scale_factor) / 2,
+                                (self.height() - self.letter_item.boundingRect().height() * scale_factor) / 2 - 75)
+        # Set the new position of the letter
+        self.letter_item.setPos(new_letter_pos)
+
+
     def mousePressEvent(self, event):
         if self.is_near_corner(event.pos()):
             self.resizing = True
