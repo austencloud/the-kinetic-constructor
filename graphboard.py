@@ -61,72 +61,6 @@ class Graphboard(QGraphicsView):
 
     ### MOUSE EVENTS ###
 
-    def resizeEvent(self, event):
-        # Get the new size of the graphboard
-        new_size = event.size()
-
-        # Calculate the aspect ratio
-        aspect_ratio = self.original_width / self.original_height
-
-        # Calculate the new width and height while maintaining the aspect ratio
-        new_width = min(new_size.width(), new_size.height() * aspect_ratio)
-        new_height = new_width / aspect_ratio
-
-        # Set the new size for the graphboard
-        self.setFixedSize(new_width, new_height)
-        print(f"New size: {new_width} x {new_height}")
-
-
-        # Scale the contents within the graphboard
-        self.scale_contents(new_width, new_height)
-
-        # Set the scene's size to match the new size of the view
-        self.graphboard_scene.setSceneRect(0, 0, new_width, new_height)
-
-        super().resizeEvent(event)
-
-    def wheelEvent(self, event):
-        # Do nothing on wheel events
-        pass
-
-    
-    def scale_contents(self, new_width, new_height):
-        # Calculate the scaling factor based on the width (or height, since you're maintaining the aspect ratio)
-        scale_factor = new_width / self.original_width
-
-        # Calculate the new buffer zones
-        buffer_top_left = 50 * scale_factor
-        buffer_bottom = 250 * scale_factor
-
-        # Iterate through all items in the graphboard and scale them
-        for item in self.scene().items():
-            # Scale the item
-            item.setScale(scale_factor)
-
-            # Adjust the position of the grid to maintain the buffer zones
-            old_grid_pos = self.grid.pos()
-            new_grid_pos = QPointF(old_grid_pos.x() * scale_factor, old_grid_pos.y() * scale_factor)
-            self.grid.setPos(new_grid_pos)
-
-            # Adjust the position of the letter to maintain the buffer zones
-            old_letter_pos = self.letter_item.pos()
-            new_letter_pos = QPointF(old_letter_pos.x() * scale_factor, old_letter_pos.y() * scale_factor)
-            self.letter_item.setPos(new_letter_pos)
-
-        # Adjust the position of the grid to maintain the buffer zones
-        self.grid.setPos(buffer_top_left, buffer_top_left)
-
-        # Adjust the position of the letter to maintain the buffer zones
-        self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, self.height() - buffer_bottom)
-
-    def adjust_letter_position(self, scale_factor):
-        # Calculate the new position of the letter
-        new_letter_pos = QPointF((self.width() - self.letter_item.boundingRect().width() * scale_factor) / 2,
-                                (self.height() - self.letter_item.boundingRect().height() * scale_factor) / 2 - 75)
-        # Set the new position of the letter
-        self.letter_item.setPos(new_letter_pos)
-
-
     def mousePressEvent(self, event):
         if self.is_near_corner(event.pos()):
             self.resizing = True
@@ -223,8 +157,6 @@ class Graphboard(QGraphicsView):
 
     def mouseReleaseEvent(self, event):
         self.resizing = False
-
-
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
@@ -410,12 +342,75 @@ class Graphboard(QGraphicsView):
     def setGenerator(self, generator):
         self.generator = generator
 
+    def scale_contents(self, new_width, new_height):
+        # Calculate the scaling factor based on the width (or height, since you're maintaining the aspect ratio)
+        self.scale_factor = new_width / self.original_width
+
+
+        # Iterate through all items in the graphboard and scale them
+        for item in self.scene().items():
+            # Scale the item
+            item.setScale(self.scale_factor)
+
+            # Adjust the position of the grid to maintain the buffer zones
+            old_grid_pos = self.grid.pos()
+            new_grid_pos = QPointF(old_grid_pos.x() * self.scale_factor, old_grid_pos.y() * self.scale_factor)
+            self.grid.setPos(new_grid_pos)
+
+
+        # Calculate the center position for the grid
+        center_x = (self.width() - self.grid.boundingRect().width() * self.scale_factor) / 2
+        center_y = (self.height() - self.grid.boundingRect().height() * self.scale_factor) / 2
+
+        # Set the position of the grid
+        self.grid.setPos(center_x, center_y)
+
+
+        # Calculate the center position for the letter (horizontal centering)
+        center_x_letter = (self.width() - self.letter_item.boundingRect().width() * self.scale_factor) / 2
+
+        # Calculate the vertical position of the letter, if needed (e.g., relative to the grid)
+        center_y_letter = self.grid.y() + 100  # Adjust this as needed
+
+
+
+    def adjust_letter_position(self, scale_factor):
+        # Calculate the new position of the letter
+        new_letter_pos = QPointF((self.width() - self.letter_item.boundingRect().width() * scale_factor) / 2,
+                                (self.height() - self.letter_item.boundingRect().height() * scale_factor) / 2 - 75)
+        # Set the new position of the letter
+        self.letter_item.setPos(new_letter_pos)
+
 
     ### EVENTS ###
 
-    def resizeEvent(self, event): # KEEP THIS TO POSITION THE GRID
+    def resizeEvent(self, event):
+        # Get the new size of the graphboard
+        new_size = event.size()
+
+        # Calculate the aspect ratio
+        aspect_ratio = self.original_width / self.original_height
+
+        # Calculate the new width and height while maintaining the aspect ratio
+        new_width = min(new_size.width(), new_size.height() * aspect_ratio)
+        new_height = int(new_width / aspect_ratio)  # Cast to integer
+
+        # Set the new size for the graphboard
+        self.setFixedSize(int(new_width), int(new_height))
+        print(f"New size: {new_width} x {new_height}")
+
+
+        # Scale the contents within the graphboard
+        self.scale_contents(new_width, new_height)
+
+        # Set the scene's size to match the new size of the view
+        self.graphboard_scene.setSceneRect(0, 0, new_width, new_height)
 
         super().resizeEvent(event)
+
+    def wheelEvent(self, event):
+        # Do nothing on wheel events
+        pass
 
     def keyPressEvent(self, event):
         key = event.key()
@@ -506,7 +501,7 @@ class Graphboard(QGraphicsView):
             graphboard_menu.exec_(event.globalPos())
 
 
-    ### OTHER ###
+    ### UPDATERS ###
 
     def update_staffs_and_check_beta(self):
         self.staff_manager.remove_beta_staves()
@@ -532,6 +527,9 @@ class Graphboard(QGraphicsView):
         # Center the item horizontally and place it 750 pixels down
         self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
 
+
+    ### HELPERS ###
+
     def clear(self):
         for item in self.scene().items():
             if isinstance(item, Arrow) or isinstance(item, Staff):
@@ -539,29 +537,17 @@ class Graphboard(QGraphicsView):
                 del item
         self.arrowMoved.emit()
 
-
     def is_near_corner(self, pos):
-        sensitivity = 20  # Number of pixels within which the cursor is considered near a corner
+        sensitivity = 20 
 
-        # Get the coordinates of the cursor
         x, y = pos.x(), pos.y()
-
-        # Get the width and height of the graphboard
         width, height = self.width(), self.height()
-
-        # Check if the cursor is near the top-left corner
+        
         near_top_left = x < sensitivity and y < sensitivity
-
-        # Check if the cursor is near the top-right corner
         near_top_right = x > width - sensitivity and y < sensitivity
-
-        # Check if the cursor is near the bottom-left corner
         near_bottom_left = x < sensitivity and y > height - sensitivity
-
-        # Check if the cursor is near the bottom-right corner
         near_bottom_right = x > width - sensitivity and y > height - sensitivity
 
-        # Return True if the cursor is near any of the corners
         return near_top_left or near_top_right or near_bottom_left or near_bottom_right
 
 
@@ -596,8 +582,6 @@ class Quadrant_Preview_Drag(QDrag):
             new_renderer.render(painter)
             painter.end()
             self.setPixmap(pixmap)
-
-
 
     def get_graphboard_quadrants(self, mouse_pos):
         mime_data = self.mimeData()

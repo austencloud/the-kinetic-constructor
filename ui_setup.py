@@ -6,7 +6,7 @@ from sequence import *
 from info_tracker import Info_Tracker
 from generator import Pictograph_Generator
 from staff import *
-from letter import Letter_Manager
+from letter import Letter_Input_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent, QSize
 from handlers import Arrow_Handler, Svg_Handler, Json_Handler 
 from arrowbox import Arrow_Box
@@ -31,8 +31,8 @@ class UiSetup(QWidget):
         self.svg_handler = Svg_Handler()
         self.graphboard_scene = QGraphicsScene()
         self.menu_bar = Menu_Bar(self.main_window)
-        
-        self.scale_factor = 0.8
+        self.staff_manager = Staff_Manager(self.graphboard_scene)
+        self.graphboard_scale_factor = 0.8
         self.arrowbow_scale_factor = 0.7
         
         
@@ -54,7 +54,6 @@ class UiSetup(QWidget):
         self.main_window.setCentralWidget(self.main_container)
         self.get_screen_resolution()
         self.initMenuBars()
-        self.initStaffManager()
         self.initLayouts()
         self.initInfoTracker()
         self.initMenus()
@@ -71,17 +70,6 @@ class UiSetup(QWidget):
         self.initLetterButtons()  # Move this line down
         self.setFocus()
 
-    def initMenuBars(self):
-        file_menu = self.menu_bar.addMenu('File')
-        refresh_action = QAction('Refresh UI', self.main_window)
-        refresh_action.triggered.connect(self.main_window.refresh_ui)  # Assuming you have a method called refresh_ui
-        file_menu.addAction(refresh_action)
-        self.main_window.setMenuBar(self.menu_bar)
-        
-    def initMenus(self):
-        self.json_updater = Json_Handler(self.graphboard_scene)
-        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.sequence_handler, self.arrow_handler, self.exporter)
-        self.arrow_handler = Arrow_Handler(self.graphboard_scene, self.graphboard, self.staff_manager)
 
 
     def initLayouts(self):
@@ -126,19 +114,21 @@ class UiSetup(QWidget):
         self.main_layout.addLayout(self.right_layout)
         self.main_container.setLayout(self.main_layout)
 
+    ### MENUES ###
 
-    def initGraphboard(self):
+    def initMenuBars(self):
+        file_menu = self.menu_bar.addMenu('File')
+        refresh_action = QAction('Refresh UI', self.main_window)
+        refresh_action.triggered.connect(self.main_window.refresh_ui)  # Assuming you have a method called refresh_ui
+        file_menu.addAction(refresh_action)
+        self.main_window.setMenuBar(self.menu_bar)
+        
+    def initMenus(self):
+        self.json_updater = Json_Handler(self.graphboard_scene)
+        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.sequence_handler, self.arrow_handler, self.exporter)
+        self.arrow_handler = Arrow_Handler(self.graphboard_scene, self.graphboard, self.staff_manager)
 
-        self.grid = Grid('images\\grid\\grid.svg', self.ui_setup)
-        # Initialize graphboard without generator
-        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_handler, self.scale_factor)
-        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
-
-        self.arrow_handler.connect_to_graphboard(self.graphboard)
-        graphboard_transform = QTransform()
-        graphboard_transform.scale(self.scale_factor, self.scale_factor)
-        self.graphboard.setTransform(graphboard_transform)
-
+    ### BUTTONS ###
 
     def initLetterButtons(self):
         # Create a new layout for the Word Constructor's widgets
@@ -268,6 +258,21 @@ class UiSetup(QWidget):
 
         self.button_layout.addLayout(masterbtnlayout)
 
+    ### LABELS ###
+
+    def initInfoTracker(self):
+        self.info_label = QLabel(self.main_window)
+        self.info_tracker = Info_Tracker(None, self.info_label, self, self.staff_manager)
+
+    def initWordLabel(self):
+        self.word_label = QLabel(self.main_window)
+        self.lower_layout.addWidget(self.word_label)
+        self.word_label.setFont(QFont('Helvetica', 20))
+        self.word_label.setText("My word: ")
+
+
+    ### BOXES ###
+
     def initArrowBox(self):
         arrowbox_frame = QFrame(self.main_window)
         objectbox_layout = QGridLayout()  # Change this to QGridLayout
@@ -340,15 +345,17 @@ class UiSetup(QWidget):
         propbox_frame.setLayout(propbox_layout)  # Set the layout to the frame
         self.objectbox_layout.addWidget(propbox_frame)  # Add the frame to the upper_layout
 
-    def initInfoTracker(self):
-        self.info_label = QLabel(self.main_window)
-        self.info_tracker = Info_Tracker(None, self.info_label, self, self.staff_manager)
+    def initGraphboard(self):
 
-    def initWordLabel(self):
-        self.word_label = QLabel(self.main_window)
-        self.lower_layout.addWidget(self.word_label)
-        self.word_label.setFont(QFont('Helvetica', 20))
-        self.word_label.setText("My word: ")
+        self.grid = Grid('images\\grid\\grid.svg', self.ui_setup)
+        # Initialize graphboard without generator
+        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_handler, self.graphboard_scale_factor)
+        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
+
+        self.arrow_handler.connect_to_graphboard(self.graphboard)
+        graphboard_transform = QTransform()
+        graphboard_transform.scale(self.graphboard_scale_factor, self.graphboard_scale_factor)
+        self.graphboard.setTransform(graphboard_transform)
 
     def initSequenceScene(self):
         self.sequence_scene = Sequence_Scene()  # Create a new Sequence_Scene instance
@@ -370,15 +377,13 @@ class UiSetup(QWidget):
         clear_sequence_button = self.sequence_handler.get_clear_sequence_button()
         self.lower_layout.addWidget(clear_sequence_button)
 
+    ### MANAGERS ###
 
     def initGenerator(self):
         self.generator = Pictograph_Generator(self.staff_manager, self.graphboard, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.context_menu_handler, self.grid, self)
 
-    def initStaffManager(self):
-        self.staff_manager = Staff_Manager(self.graphboard_scene)
-
-    def initLetterManager(self):
-        self.letter_manager = Letter_Manager(self.graphboard, self.info_tracker)
+    def initLetterInputManager(self):
+        self.letter_manager = Letter_Input_Manager(self.graphboard, self.info_tracker)
         self.letterInput = QLineEdit(self.main_window)
         self.right_layout.addWidget(self.letterInput)
         self.assignLetterButton = QPushButton("Assign Letter", self.main_window)
@@ -386,8 +391,7 @@ class UiSetup(QWidget):
         self.right_layout.addWidget(self.assignLetterButton)
 
 
-### CONNECTORS ###
-
+    ### CONNECTORS ###
 
     def connectInfoTracker(self):
         self.info_layout.addWidget(self.info_label)
@@ -396,8 +400,7 @@ class UiSetup(QWidget):
         self.info_tracker.set_graphboard(self.graphboard)
         self.graphboard_layout.addWidget(self.graphboard)
 
-
-### GETTERS ###
+    ### GETTERS ###
 
     def get_sequence_manager(self):
         if not hasattr(self, 'sequence_handler'):
@@ -417,7 +420,8 @@ class UiSetup(QWidget):
             self.resolution_2400x1600.emit()
             print("2400x1600 detected")
 
-### EVENTS ###
+
+    ### EVENTS ###
 
     def keyPressEvent(self, event):
         self.selected_items = self.graphboard.get_selected_items()
