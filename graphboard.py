@@ -405,6 +405,10 @@ class Graphboard(QGraphicsView):
         # Scale the contents within the graphboard
         self.scale_contents(new_width, new_height)
 
+        #print location of center of grid
+        print(self.grid.pos())
+        
+        
         # Set the scene's size to match the new size of the view
         self.graphboard_scene.setSceneRect(0, 0, new_width, new_height)
 

@@ -18,7 +18,7 @@ class Info_Tracker:
         self.label.setAlignment(Qt.AlignTop)
         self.letters = self.load_letters()
         self.staff_manager = staff_manager
-
+        self.previous_letter = None
 
     def set_graphboard(self, graphboard):
         self.graphboard = graphboard
@@ -71,13 +71,19 @@ class Info_Tracker:
 
         positions_text = ""
 
+        valid_letter = None
+
         for letter, combinations in self.letters.items():
-            combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]  # Ignore the first dictionary which contains optimal positions
+            combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]
             if current_combination in combinations:
                 start_position, end_position = self.get_positions()
                 positions_text += f"<h4>{start_position} → {end_position}</h4>"
-                self.letter = letter 
+                valid_letter = letter 
                 break 
+
+        if valid_letter != self.previous_letter:
+            self.graphboard.update_letter(valid_letter if valid_letter else None)
+            self.previous_letter = valid_letter
 
 
         if hasattr(self.main_window, 'staff'):
@@ -106,8 +112,10 @@ class Info_Tracker:
                     red_text = red_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
                     red_text = red_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
 
-        if letter is not None:
+        if letter != self.previous_letter:
             self.graphboard.update_letter(letter)
+            self.previous_letter = letter
+
         self.label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr><tr><td width=100>" + positions_text + "</td></tr></table>")
 
 

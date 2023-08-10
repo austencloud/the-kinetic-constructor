@@ -32,7 +32,7 @@ class UiSetup(QWidget):
         self.graphboard_scene = QGraphicsScene()
         self.menu_bar = Menu_Bar(self.main_window)
         self.staff_manager = Staff_Manager(self.graphboard_scene)
-        self.graphboard_scale_factor = 0.8
+        self.graphboard_scale_factor = 1
         self.arrowbow_scale_factor = 0.7
         
         
@@ -52,14 +52,14 @@ class UiSetup(QWidget):
 
         # Set the main container as the central widget of the main window
         self.main_window.setCentralWidget(self.main_container)
-        self.get_screen_resolution()
+
         self.initMenuBars()
         self.initLayouts()
         self.initInfoTracker()
         self.initMenus()
         self.initGraphboard()  # Initialize graphboard first
         self.initGenerator()  # Then initialize generator
-        self.graphboard.setGenerator(self.generator)  # Update graphboard with generator
+        self.graphboard.set_generator(self.generator)  # Update graphboard with generator
         self.connectGraphboard()
         self.initArrowBox()
         self.initPropBox()
@@ -410,16 +410,7 @@ class UiSetup(QWidget):
             self.sequence_handler.manager = self.sequence_handler  # Set the manager of the sequence scene
         return self.sequence_handler
 
-    def get_screen_resolution(self):
-        screen_resolution = QApplication.desktop().screenGeometry()
-        screen_width, screen_height = screen_resolution.width(), screen_resolution.height()
 
-        if screen_width == 3840 and screen_height == 2160:
-            self.resolution_4k.emit()
-            print("4k detected")
-        elif screen_width == 2400 and screen_height == 1600:
-            self.resolution_2400x1600.emit()
-            print("2400x1600 detected")
 
 
     ### EVENTS ###
