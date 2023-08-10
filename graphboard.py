@@ -21,7 +21,8 @@ class Graphboard(QGraphicsView):
         self.dragging = None
         self.grid = grid
         self.staff_manager = staff_manager
-        self.setDragMode(QGraphicsView.RubberBandDrag)
+        self.setDragMode(QGraphicsView.NoDrag)
+
         self.setInteractive(True)
         self.original_width = 750
         self.original_height = 900
@@ -339,9 +340,12 @@ class Graphboard(QGraphicsView):
     def set_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
 
-    def setGenerator(self, generator):
+    def set_generator(self, generator):
         self.generator = generator
 
+    
+    ### GRAPHBOARD MANIPULATORS ###
+    
     def scale_contents(self, new_width, new_height):
         # Calculate the scaling factor based on the width (or height, since you're maintaining the aspect ratio)
         self.scale_factor = new_width / self.original_width
@@ -371,8 +375,6 @@ class Graphboard(QGraphicsView):
 
         # Calculate the vertical position of the letter, if needed (e.g., relative to the grid)
         center_y_letter = self.grid.y() + 100  # Adjust this as needed
-
-
 
     def adjust_letter_position(self, scale_factor):
         # Calculate the new position of the letter

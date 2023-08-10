@@ -273,6 +273,19 @@ class UiSetup(QWidget):
 
     ### BOXES ###
 
+
+    def initGraphboard(self):
+
+        self.grid = Grid('images\\grid\\grid.svg', self.ui_setup)
+        # Initialize graphboard without generator
+        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_handler, self.graphboard_scale_factor)
+        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
+
+        self.arrow_handler.connect_to_graphboard(self.graphboard)
+        graphboard_transform = QTransform()
+        graphboard_transform.scale(self.graphboard_scale_factor, self.graphboard_scale_factor)
+        self.graphboard.setTransform(graphboard_transform)
+
     def initArrowBox(self):
         arrowbox_frame = QFrame(self.main_window)
         objectbox_layout = QGridLayout()  # Change this to QGridLayout
@@ -344,18 +357,6 @@ class UiSetup(QWidget):
         propbox_frame = QFrame()  # Create a new QFrame
         propbox_frame.setLayout(propbox_layout)  # Set the layout to the frame
         self.objectbox_layout.addWidget(propbox_frame)  # Add the frame to the upper_layout
-
-    def initGraphboard(self):
-
-        self.grid = Grid('images\\grid\\grid.svg', self.ui_setup)
-        # Initialize graphboard without generator
-        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_handler, self.graphboard_scale_factor)
-        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
-
-        self.arrow_handler.connect_to_graphboard(self.graphboard)
-        graphboard_transform = QTransform()
-        graphboard_transform.scale(self.graphboard_scale_factor, self.graphboard_scale_factor)
-        self.graphboard.setTransform(graphboard_transform)
 
     def initSequenceScene(self):
         self.sequence_scene = Sequence_Scene()  # Create a new Sequence_Scene instance
