@@ -15,11 +15,11 @@ class Graphboard(QGraphicsView):
     arrowMoved = pyqtSignal()
     attributesChanged = pyqtSignal()
 
-    def __init__(self, graphboard_scene, info_tracker, staff_manager, svg_handler, ui_setup, generator, sequence_manager, parent=None):
+    def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, ui_setup, generator, sequence_manager, parent=None):
         super().__init__(graphboard_scene, parent)
-        self.grid = Grid('images\\grid\\grid.svg', self)
         self.setAcceptDrops(True)
         self.dragging = None
+        self.grid = grid
         self.staff_manager = staff_manager
         self.setDragMode(QGraphicsView.RubberBandDrag)
         self.setInteractive(True)
@@ -32,13 +32,14 @@ class Graphboard(QGraphicsView):
         self.renderer = QSvgRenderer()
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
         self.attributesChanged.connect(self.update_staffs_and_check_beta)
-        self.exporter = Exporter(self, graphboard_scene, self.staff_manager)
+        self.exporter = Exporter(self, graphboard_scene, self.staff_manager, self.grid)
         self.sequence_manager = sequence_manager
         self.letter_renderers = {}
         for letter in 'ABCDEFGHIJKLMNOPQRSTUV':
             renderer = QSvgRenderer(f'images/letters/{letter}.svg')
             self.letter_renderers[letter] = renderer
-
+        self.setResizeAnchor(QGraphicsView.AnchorViewCenter)
+        self.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
 
         # Create a new QGraphicsSvgItem for the letter and add it to the scene
         self.letter_item = QGraphicsSvgItem()
@@ -51,26 +52,22 @@ class Graphboard(QGraphicsView):
 
         self.graphboard_scene.addItem(self.grid)
         self.drag = Quadrant_Preview_Drag(self, self.dragging, self.info_tracker)
-
-        self.position_grid()
-
-    def position_grid(self):
-        transform = QTransform()
-        graphboard_size = self.frameSize()
-        print(graphboard_size)
         
-        grid_position = QPointF((graphboard_size.width() - self.grid.boundingRect().width()) / 2,
-                                (graphboard_size.height() - self.grid.boundingRect().height()) / 2 - 75)
-        
-        transform.translate(grid_position.x(), grid_position.y())
-        self.grid.setTransform(transform)
-
 
     ### MOUSE EVENTS ###
 
+    def resizeEvent(self, event):
+        new_size = event.size()
+        old_size = event.oldSize()
+        scale_factor = new_size.width() / old_size.width() # Assuming width controls the aspect ratio
+
+        # Apply the scaling factor to all contents
+        for item in self.scene().items():
+            item.setScale(scale_factor)
+            
+        super().resizeEvent(event)
+
     def mousePressEvent(self, event):
-        if self.is_near_corner(event.pos()):
-            self.resizing = True
         self.dragStartPosition = event.pos()
         self.setFocus()
         items = self.items(event.pos())
@@ -90,20 +87,17 @@ class Graphboard(QGraphicsView):
             self.dragging = None
 
 
+        if items:
+            # print(f"Clicked on an object of type {type(items[0])}")
+            # print(f"Object top-left position: {items[0].scenePos()}")
+            # print(f"Object center: {items[0].scenePos() + items[0].boundingRect().center()}")
+            if hasattr(items[0], 'svg_file'):
+                print(f"Object svg: {items[0].svg_file}")
+
         if event.button() == Qt.LeftButton and not items:
             super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
-        if self.is_near_corner(event.pos()):
-            # Change the cursor to a resizing cursor
-            self.setCursor(Qt.SizeFDiagCursor)
-        else:
-            # Restore the original cursor
-            self.setCursor(Qt.ArrowCursor)
-            
-
-
-            super().mouseMoveEvent(event)
         if (event.pos() - self.dragStartPosition).manhattanLength() < QApplication.startDragDistance():
             return
         if self.dragging:
@@ -142,8 +136,7 @@ class Graphboard(QGraphicsView):
                         self.info_tracker.update()
                         self.arrowMoved.emit()
 
-    def mouseReleaseEvent(self, event):
-        self.resizing = False
+
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
@@ -326,16 +319,15 @@ class Graphboard(QGraphicsView):
     def set_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
 
-    def set_generator(self, generator):
+    def setGenerator(self, generator):
         self.generator = generator
-        
 
-    
-    ### EVENT HANDLERS ###
 
-    def wheelEvent(self, event):
-        # Do nothing on wheel events
-        pass
+    ### EVENTS ###
+
+    def resizeEvent(self, event): # KEEP THIS TO POSITION THE GRID
+        self.setSceneRect(QRectF(self.rect()))
+        super().resizeEvent(event)
 
     def keyPressEvent(self, event):
         key = event.key()
@@ -426,51 +418,40 @@ class Graphboard(QGraphicsView):
             graphboard_menu.exec_(event.globalPos())
 
 
-    ### UPDATERS ###
+    ### OTHER ###
 
     def update_staffs_and_check_beta(self):
         self.staff_manager.remove_beta_staves()
         self.staff_manager.update_graphboard_staffs(self.scene())
         self.staff_manager.check_and_replace_staves()
-        
+
     def update_letter(self, letter):
-        if letter is not None:
-            print(f"Updating letter to {letter}")
-        else: 
-            return
-        letter_svg_path = f'images/letters/{letter}.svg'
-        renderer = QSvgRenderer(letter_svg_path)
-
+        print(f"Updating letter to {letter}")
+        # Path to the letter's SVG file
+        svg_file = f'images/letters/{letter}.svg'
+        
+        # Create a renderer for the SVG file
+        renderer = QSvgRenderer(svg_file)
+        
+        # Check that the SVG file is valid
         if not renderer.isValid():
-            print(f"Invalid SVG file: {letter_svg_path}")
+            print(f"Invalid SVG file: {svg_file}")
             return
-
+        
+        # Update the item's renderer
         self.letter_item.setSharedRenderer(renderer)
+        
+        # Center the item horizontally and place it 750 pixels down
         self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
-
-    ### HELPERS ###
 
     def clear(self):
         for item in self.scene().items():
             if isinstance(item, Arrow) or isinstance(item, Staff):
-                #check to see if item is in the scene
-                if item.scene is not None:
-                    self.scene().removeItem(item)
-                    del item
+                self.scene().removeItem(item)
+                del item
         self.arrowMoved.emit()
 
-    def is_near_corner(self, pos):
-        sensitivity = 20 
 
-        x, y = pos.x(), pos.y()
-        width, height = self.width(), self.height()
-        
-        near_top_left = x < sensitivity and y < sensitivity
-        near_top_right = x > width - sensitivity and y < sensitivity
-        near_bottom_left = x < sensitivity and y > height - sensitivity
-        near_bottom_right = x > width - sensitivity and y > height - sensitivity
-
-        return near_top_left or near_top_right or near_bottom_left or near_bottom_right
 
 
 class Quadrant_Preview_Drag(QDrag):

@@ -7,12 +7,12 @@ from lxml import etree
 from copy import deepcopy
 
 class Exporter:
-    def __init__(self, graphboard, graphboard_scene, staff_manager):
+    def __init__(self, graphboard, graphboard_scene, staff_manager, grid):
         self.graphboard_scene = graphboard_scene
         self.graphboard = graphboard
         self.staff_manager = staff_manager
+        self.grid = grid
 
-        print(graphboard)
     def export_to_svg(self, output_file_path):
         try: 
             print("Exporting")
@@ -118,7 +118,7 @@ class Exporter:
             print(f"An error occurred while exporting the SVG: {e}")      
 
     def export_to_png(self):
-        selectedItems = self.graphboard_scene.selectedItems()
+        selectedItems = self.graphboard_scene.get_selected_items()
         image = QImage(self.graphboard.size(), QImage.Format_ARGB32)
         painter = QPainter(image)
 

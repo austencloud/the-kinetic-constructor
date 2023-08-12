@@ -3,7 +3,7 @@ from data import *
 import json
 
 
-class Letter_Input_Manager():
+class Letter_Manager():
     def __init__(self, artboard, info_tracker):
         self.artboard = artboard
         self.info_tracker = info_tracker
