@@ -39,7 +39,6 @@ class UiSetup(QWidget):
         self.sequence_handler = None
         self.graphboard = None
         self.arrow_handler = None
-        self.get_screen_resolution()
         self.initStaffManager()
         self.initLayouts()
         self.initInfoTracker()
@@ -305,7 +304,7 @@ class UiSetup(QWidget):
                         svg_item_count_blue_anti += 1
 
                 arrowbox_scene.addItem(arrow_item) 
-                print(self.info_tracker)
+
 
 
                 self.arrows.append(arrow_item)
@@ -391,16 +390,7 @@ class UiSetup(QWidget):
             self.sequence_handler.manager = self.sequence_handler  # Set the manager of the sequence scene
         return self.sequence_handler
 
-    def get_screen_resolution(self):
-        screen_resolution = QApplication.desktop().screenGeometry()
-        screen_width, screen_height = screen_resolution.width(), screen_resolution.height()
 
-        if screen_width == 3840 and screen_height == 2160:
-            self.resolution_4k.emit()
-            print("4k detected")
-        elif screen_width == 2400 and screen_height == 1600:
-            self.resolution_2400x1600.emit()
-            print("2400x1600 detected")
 
 ### EVENTS ###
 

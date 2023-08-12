@@ -418,7 +418,7 @@ class Graphboard(QGraphicsView):
             graphboard_menu.exec_(event.globalPos())
 
 
-    ### OTHER ###
+    ### UPDATERS ###
 
     def update_staffs_and_check_beta(self):
         self.staff_manager.remove_beta_staves()
@@ -426,23 +426,22 @@ class Graphboard(QGraphicsView):
         self.staff_manager.check_and_replace_staves()
 
     def update_letter(self, letter):
-        print(f"Updating letter to {letter}")
-        # Path to the letter's SVG file
-        svg_file = f'images/letters/{letter}.svg'
-        
-        # Create a renderer for the SVG file
-        renderer = QSvgRenderer(svg_file)
-        
-        # Check that the SVG file is valid
-        if not renderer.isValid():
-            print(f"Invalid SVG file: {svg_file}")
-            return
-        
-        # Update the item's renderer
-        self.letter_item.setSharedRenderer(renderer)
-        
-        # Center the item horizontally and place it 750 pixels down
-        self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
+        if letter is not None:
+            print(f"Updating letter to {letter}")
+
+            svg_file = f'images/letters/{letter}.svg' 
+
+            renderer = QSvgRenderer(svg_file)
+            
+
+            if not renderer.isValid():
+                print(f"Invalid SVG file: {svg_file}")
+                return
+            
+
+            self.letter_item.setSharedRenderer(renderer)
+
+            self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
 
     def clear(self):
         for item in self.scene().items():
