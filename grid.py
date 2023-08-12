@@ -7,13 +7,6 @@ class Grid(QGraphicsSvgItem):
     def __init__(self, grid_svg, ui_setup):
         super().__init__(grid_svg)
 
-
-
-        ui_setup.resolution_4k.connect(self.scale_for_4k)
-        ui_setup.resolution_2400x1600.connect(self.scale_for_2400x1600)     
-        
-        
-        
         self.doc = minidom.parse(grid_svg)
 
         circles = self.doc.getElementsByTagName('circle')

@@ -15,50 +15,56 @@ class Graphboard(QGraphicsView):
     arrowMoved = pyqtSignal()
     attributesChanged = pyqtSignal()
 
-    def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, ui_setup, generator, sequence_manager, graphboard_scale_factor, parent=None):
+    def __init__(self, graphboard_scene, info_tracker, staff_manager, svg_handler, ui_setup, generator, sequence_manager, parent=None):
         super().__init__(graphboard_scene, parent)
+        self.grid = Grid('images\\grid\\grid.svg', self)
         self.setAcceptDrops(True)
         self.dragging = None
-        self.grid = grid
         self.staff_manager = staff_manager
-        self.setDragMode(QGraphicsView.NoDrag)
-
+        self.setDragMode(QGraphicsView.RubberBandDrag)
         self.setInteractive(True)
-        self.original_width = 750
-        self.original_height = 900
         self.graphboard_scene = graphboard_scene
         self.graphboard_scene.setBackgroundBrush(Qt.white) 
         self.info_tracker = info_tracker
         self.svg_handler = svg_handler
         self.generator = generator
         self.ui_setup = ui_setup
-        self.graphboard_scale_factor = graphboard_scale_factor
         self.renderer = QSvgRenderer()
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
         self.attributesChanged.connect(self.update_staffs_and_check_beta)
-        self.exporter = Exporter(self, graphboard_scene, self.staff_manager, self.grid)
+        self.exporter = Exporter(self, graphboard_scene, self.staff_manager)
         self.sequence_manager = sequence_manager
         self.letter_renderers = {}
         for letter in 'ABCDEFGHIJKLMNOPQRSTUV':
             renderer = QSvgRenderer(f'images/letters/{letter}.svg')
             self.letter_renderers[letter] = renderer
-        self.setResizeAnchor(QGraphicsView.AnchorViewCenter)
-        self.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
+
 
         # Create a new QGraphicsSvgItem for the letter and add it to the scene
         self.letter_item = QGraphicsSvgItem()
         self.graphboard_scene.addItem(self.letter_item)
         self.arrow_handler = Arrow_Handler(self.graphboard_scene, self, self.staff_manager)
-
-        self.resizing = None
-        self.setFixedSize(int(750 * graphboard_scale_factor), int(900 * graphboard_scale_factor))
-        # self.setFixedSize(int(750 * 0.8), int(900 * 0.8))  # Scale down the size by 80%
+        self.setFixedSize(750, 900)
 
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         self.graphboard_scene.addItem(self.grid)
         self.drag = Quadrant_Preview_Drag(self, self.dragging, self.info_tracker)
+
+        self.position_grid()
+
+    def position_grid(self):
+        transform = QTransform()
+        graphboard_size = self.frameSize()
+        print(graphboard_size)
+        
+        grid_position = QPointF((graphboard_size.width() - self.grid.boundingRect().width()) / 2,
+                                (graphboard_size.height() - self.grid.boundingRect().height()) / 2 - 75)
+        
+        transform.translate(grid_position.x(), grid_position.y())
+        self.grid.setTransform(transform)
+
 
     ### MOUSE EVENTS ###
 
@@ -84,13 +90,6 @@ class Graphboard(QGraphicsView):
             self.dragging = None
 
 
-        if items:
-            # print(f"Clicked on an object of type {type(items[0])}")
-            # print(f"Object top-left position: {items[0].scenePos()}")
-            # print(f"Object center: {items[0].scenePos() + items[0].boundingRect().center()}")
-            if hasattr(items[0], 'svg_file'):
-                print(f"Object svg: {items[0].svg_file}")
-
         if event.button() == Qt.LeftButton and not items:
             super().mousePressEvent(event)
 
@@ -102,20 +101,7 @@ class Graphboard(QGraphicsView):
             # Restore the original cursor
             self.setCursor(Qt.ArrowCursor)
             
-        if self.resizing:
-            # Get the current mouse position
-            x, y = event.pos().x(), event.pos().y()
 
-            # Calculate the new width and height while maintaining the aspect ratio
-            aspect_ratio = self.original_width / self.original_height
-            new_width = min(x, y * aspect_ratio)
-            new_height = new_width / aspect_ratio
-
-            # Resize the graphboard
-            self.setFixedSize(int(new_width), int(new_height))
-
-            # Scale the contents within the graphboard
-            self.scale_contents(new_width, new_height)
 
             super().mouseMoveEvent(event)
         if (event.pos() - self.dragStartPosition).manhattanLength() < QApplication.startDragDistance():
@@ -342,77 +328,10 @@ class Graphboard(QGraphicsView):
 
     def set_generator(self, generator):
         self.generator = generator
+        
 
     
-    ### GRAPHBOARD MANIPULATORS ###
-    
-    def scale_contents(self, new_width, new_height):
-        # Calculate the scaling factor based on the width (or height, since you're maintaining the aspect ratio)
-        self.scale_factor = new_width / self.original_width
-
-
-        # Iterate through all items in the graphboard and scale them
-        for item in self.scene().items():
-            # Scale the item
-            item.setScale(self.scale_factor)
-
-            # Adjust the position of the grid to maintain the buffer zones
-            old_grid_pos = self.grid.pos()
-            new_grid_pos = QPointF(old_grid_pos.x() * self.scale_factor, old_grid_pos.y() * self.scale_factor)
-            self.grid.setPos(new_grid_pos)
-
-
-        # Calculate the center position for the grid
-        center_x = (self.width() - self.grid.boundingRect().width() * self.scale_factor) / 2
-        center_y = (self.height() - self.grid.boundingRect().height() * self.scale_factor) / 2
-
-        # Set the position of the grid
-        self.grid.setPos(center_x, center_y)
-
-
-        # Calculate the center position for the letter (horizontal centering)
-        center_x_letter = (self.width() - self.letter_item.boundingRect().width() * self.scale_factor) / 2
-
-        # Calculate the vertical position of the letter, if needed (e.g., relative to the grid)
-        center_y_letter = self.grid.y() + 100  # Adjust this as needed
-
-    def adjust_letter_position(self, scale_factor):
-        # Calculate the new position of the letter
-        new_letter_pos = QPointF((self.width() - self.letter_item.boundingRect().width() * scale_factor) / 2,
-                                (self.height() - self.letter_item.boundingRect().height() * scale_factor) / 2 - 75)
-        # Set the new position of the letter
-        self.letter_item.setPos(new_letter_pos)
-
-
-    ### EVENTS ###
-
-    def resizeEvent(self, event):
-        # Get the new size of the graphboard
-        new_size = event.size()
-
-        # Calculate the aspect ratio
-        aspect_ratio = self.original_width / self.original_height
-
-        # Calculate the new width and height while maintaining the aspect ratio
-        new_width = min(new_size.width(), new_size.height() * aspect_ratio)
-        new_height = int(new_width / aspect_ratio)  # Cast to integer
-
-        # Set the new size for the graphboard
-        self.setFixedSize(int(new_width), int(new_height))
-        print(f"New size: {new_width} x {new_height}")
-
-
-        # Scale the contents within the graphboard
-        self.scale_contents(new_width, new_height)
-
-        #print location of center of grid
-        print(self.grid.pos())
-        
-        
-        # Set the scene's size to match the new size of the view
-        self.graphboard_scene.setSceneRect(0, 0, new_width, new_height)
-
-        super().resizeEvent(event)
+    ### EVENT HANDLERS ###
 
     def wheelEvent(self, event):
         # Do nothing on wheel events
@@ -513,34 +432,31 @@ class Graphboard(QGraphicsView):
         self.staff_manager.remove_beta_staves()
         self.staff_manager.update_graphboard_staffs(self.scene())
         self.staff_manager.check_and_replace_staves()
-
+        
     def update_letter(self, letter):
-        print(f"Updating letter to {letter}")
-        # Path to the letter's SVG file
-        svg_file = f'images/letters/{letter}.svg'
-        
-        # Create a renderer for the SVG file
-        renderer = QSvgRenderer(svg_file)
-        
-        # Check that the SVG file is valid
-        if not renderer.isValid():
-            print(f"Invalid SVG file: {svg_file}")
+        if letter is not None:
+            print(f"Updating letter to {letter}")
+        else: 
             return
-        
-        # Update the item's renderer
-        self.letter_item.setSharedRenderer(renderer)
-        
-        # Center the item horizontally and place it 750 pixels down
-        self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
+        letter_svg_path = f'images/letters/{letter}.svg'
+        renderer = QSvgRenderer(letter_svg_path)
 
+        if not renderer.isValid():
+            print(f"Invalid SVG file: {letter_svg_path}")
+            return
+
+        self.letter_item.setSharedRenderer(renderer)
+        self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
 
     ### HELPERS ###
 
     def clear(self):
         for item in self.scene().items():
             if isinstance(item, Arrow) or isinstance(item, Staff):
-                self.scene().removeItem(item)
-                del item
+                #check to see if item is in the scene
+                if item.scene is not None:
+                    self.scene().removeItem(item)
+                    del item
         self.arrowMoved.emit()
 
     def is_near_corner(self, pos):
@@ -588,6 +504,8 @@ class Quadrant_Preview_Drag(QDrag):
             new_renderer.render(painter)
             painter.end()
             self.setPixmap(pixmap)
+
+
 
     def get_graphboard_quadrants(self, mouse_pos):
         mime_data = self.mimeData()

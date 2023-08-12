@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QAction, QApplication, QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QLineEdit, QGridLayout
+from PyQt5.QtWidgets import QAction, QDesktopWidget, QApplication, QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QLineEdit, QGridLayout
 import os
 from arrow import Arrow
 from PyQt5.QtGui import QFont, QTransform, QIcon, QPixmap
@@ -16,8 +16,6 @@ from graphboard import Graphboard
 from exporter import Exporter
 
 class UiSetup(QWidget):
-    resolution_4k = pyqtSignal()
-    resolution_2400x1600 = pyqtSignal()
     
     def __init__(self, main_window):
         super().__init__(main_window)
@@ -27,6 +25,16 @@ class UiSetup(QWidget):
 
         self.main_window.setWindowTitle("Sequence Generator")
         self.main_window.show()
+        
+                # Get the screen resolution
+        screen_resolution = QDesktopWidget().screenGeometry()
+        screen_height = screen_resolution.height()
+
+        # Set the maximum height of the window
+        main_window.setMaximumHeight(screen_height)
+
+        # Move the window to the top-left corner (0, 0)
+        main_window.move(0, 0)
         
         self.svg_handler = Svg_Handler()
         self.graphboard_scene = QGraphicsScene()
@@ -48,7 +56,7 @@ class UiSetup(QWidget):
         self.arrow_handler = None
 
         self.main_container = QWidget()
-        self.main_container.setMinimumSize(2000, 1500)
+        self.main_container.setMinimumSize(2000, 1400)
 
         # Set the main container as the central widget of the main window
         self.main_window.setCentralWidget(self.main_container)
@@ -81,20 +89,22 @@ class UiSetup(QWidget):
 
 
         self.objectbox_layout = QVBoxLayout()
-
-        self.graphboard_layout = QVBoxLayout()
-
         self.button_layout = QHBoxLayout()  # Change this to QHBoxLayout
-
         self.info_layout = QVBoxLayout()
-
         self.word_label_layout = QHBoxLayout()
 
-
+        self.graphboard_layout = QVBoxLayout()
+        self.graphboard_layout.addWidget(self.graphboard)
+        self.graphboard_layout.setStretch(0, 0)  # Set no stretch on the widget
+        self.graphboard_layout.setContentsMargins(0, 0, 0, 0)
+        self.graphboard_layout.setSpacing(0)
 
         self.upper_graphboard_with_panel_layout = QVBoxLayout()
         self.upper_graphboard_with_panel_layout.addLayout(self.graphboard_layout)
         self.upper_graphboard_with_panel_layout.addLayout(self.button_layout)  # Add button_layout after graphboard_layout
+
+
+                
         
         self.upper_layout.addLayout(self.objectbox_layout)
         self.upper_layout.addLayout(self.upper_graphboard_with_panel_layout)
@@ -275,16 +285,14 @@ class UiSetup(QWidget):
 
 
     def initGraphboard(self):
-
-        self.grid = Grid('images\\grid\\grid.svg', self.ui_setup)
+        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager)
         # Initialize graphboard without generator
-        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_handler, self.graphboard_scale_factor)
-        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
-
+        self.graphboard = Graphboard(self.graphboard_scene, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_handler)
         self.arrow_handler.connect_to_graphboard(self.graphboard)
-        graphboard_transform = QTransform()
-        graphboard_transform.scale(self.graphboard_scale_factor, self.graphboard_scale_factor)
-        self.graphboard.setTransform(graphboard_transform)
+        
+        
+
+    
 
     def initArrowBox(self):
         arrowbox_frame = QFrame(self.main_window)
@@ -293,10 +301,7 @@ class UiSetup(QWidget):
 
         arrowbox_scene = QGraphicsScene()
 
-        for arrow in self.arrows:
-            arrowbox_scene.addItem(arrow)  # use arrowbox_scene here
 
-            arrow.attributesChanged.connect(lambda: self.generator.update_staff(arrow, self.staff_manager))
 
         svgs_full_paths = []
         default_arrows = ['red_iso_r_ne.svg', 'red_anti_r_ne.svg', 'blue_iso_r_sw.svg', 'blue_anti_r_sw.svg']
@@ -338,7 +343,7 @@ class UiSetup(QWidget):
                         svg_item_count_blue_anti += 1
 
                 arrowbox_scene.addItem(arrow_item) 
-                print(self.info_tracker)
+
 
 
                 self.arrows.append(arrow_item)
@@ -381,7 +386,7 @@ class UiSetup(QWidget):
     ### MANAGERS ###
 
     def initGenerator(self):
-        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.context_menu_handler, self.grid, self)
+        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.context_menu_handler, self)
 
     def initLetterInputManager(self):
         self.letter_manager = Letter_Input_Manager(self.graphboard, self.info_tracker)

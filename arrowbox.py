@@ -144,4 +144,3 @@ class Arrow_Box(QGraphicsView):
             self.staff.setPos(staff_position)  # Assuming the Staff class has a setPos method
             print("staff position:", staff_position)
             infoTracker.update() 
-            self.arrowMoved.emit()  # emit the signal when the arrow is dropped

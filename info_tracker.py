@@ -54,36 +54,45 @@ class Info_Tracker:
             return {}
     
     def update(self):
-        print("Updating info tracker")
-        current_combination = []
 
+        current_combination = []
+        valid_letter = None
+        self.letter = None
+        
         for item in self.graphboard.items():
             if isinstance(item, Arrow):
                 attributes = item.get_attributes()
                 current_combination.append(attributes)
 
         current_combination = sorted(current_combination, key=lambda x: x['color'])
-
         self.letters = self.load_letters()
+
         
         blue_text = "<h2 style='color: #0000FF'>Left</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>"
         red_text = "<h2 style='color: #FF0000'>Right</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>"
 
         positions_text = ""
 
-        valid_letter = None
-
         for letter, combinations in self.letters.items():
-            combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]
+            combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]  # Ignore the first dictionary which contains optimal positions
             if current_combination in combinations:
                 start_position, end_position = self.get_positions()
                 positions_text += f"<h4>{start_position} → {end_position}</h4>"
-                valid_letter = letter 
+                self.letter = letter 
                 break 
 
-        if valid_letter != self.previous_letter:
-            self.graphboard.update_letter(valid_letter if valid_letter else None)
+        if self.letter is not None and self.letter != self.previous_letter:
+            self.graphboard.update_letter(self.letter)
+            self.previous_letter = self.letter
+
+        # Update the letter only if a valid letter is found
+        if valid_letter is not None and valid_letter != self.previous_letter:
+            self.graphboard.update_letter(valid_letter)
             self.previous_letter = valid_letter
+        # If no valid letter is found, update with a placeholder or empty string
+        else:
+            self.graphboard.update_letter(None)
+
 
 
         if hasattr(self.main_window, 'staff'):
@@ -203,3 +212,9 @@ class Info_Tracker:
         else:
             print("no positions returned by get_positions")
             return None
+
+
+    def update_position_label(self, position_label):
+        self.position_label = position_label
+        start_position, end_position = self.get_positions()
+        self.position_label.setText(f"Start: {start_position}\nEnd: {end_position}")

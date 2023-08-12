@@ -8,7 +8,6 @@ import json
 
 class Arrow(QGraphicsSvgItem):
     attributesChanged = pyqtSignal()
-    arrowMoved = pyqtSignal()
     orientationChanged = pyqtSignal()
     arrowCreated = pyqtSignal()
 
@@ -31,12 +30,6 @@ class Arrow(QGraphicsSvgItem):
         self.svg_handler = svg_handler
         self.dragStarted = False
         self.arrow_handler = arrow_handler
-        ui_setup.resolution_4k.connect(self.scale_for_4k)
-        ui_setup.resolution_2400x1600.connect(self.scale_for_2400x1600)
-        # Assuming `arrow` is an instance of the Arrow class
-        self.arrowCreated.connect(self.info_tracker.update)
-        self.arrowCreated.emit()
-        self.arrowMoved.connect(self.info_tracker.update)
 
 
 

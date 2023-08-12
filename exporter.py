@@ -7,11 +7,11 @@ from lxml import etree
 from copy import deepcopy
 
 class Exporter:
-    def __init__(self, graphboard, graphboard_scene, staff_manager, grid):
+    def __init__(self, graphboard, graphboard_scene, staff_manager):
         self.graphboard_scene = graphboard_scene
         self.graphboard = graphboard
         self.staff_manager = staff_manager
-        self.grid = grid
+
         print(graphboard)
     def export_to_svg(self, output_file_path):
         try: 

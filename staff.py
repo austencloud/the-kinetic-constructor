@@ -15,7 +15,11 @@ class Staff(QGraphicsSvgItem):
         self.setElementId(self.element_id)
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
-        scene.addItem(self)
+
+        # if the staff isn't already in the scene, add it
+        if not self.scene():
+            scene.addItem(self)
+
         self.setVisible(initial_visibility)
 
         # Add a "staff" attribute to the item

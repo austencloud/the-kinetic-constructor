@@ -6773,7 +6773,7 @@
             },
             {
                 "color": "red",
-                "quadrant": "ws",
+                "quadrant": "sw",
                 "rotation": "l",
                 "type": "iso",
                 "start_location": "w",
@@ -6817,7 +6817,7 @@
             },
             {
                 "color": "red",
-                "quadrant": "en",
+                "quadrant": "ne",
                 "rotation": "l",
                 "type": "iso",
                 "start_location": "e",
@@ -6861,7 +6861,7 @@
             },
             {
                 "color": "red",
-                "quadrant": "wn",
+                "quadrant": "nw",
                 "rotation": "r",
                 "type": "iso",
                 "start_location": "w",
@@ -6905,7 +6905,7 @@
             },
             {
                 "color": "red",
-                "quadrant": "es",
+                "quadrant": "se",
                 "rotation": "r",
                 "type": "iso",
                 "start_location": "e",
@@ -6941,7 +6941,7 @@
             },
             {
                 "color": "blue",
-                "quadrant": "ws",
+                "quadrant": "sw",
                 "rotation": "l",
                 "type": "iso",
                 "start_location": "w",
@@ -6985,7 +6985,7 @@
             },
             {
                 "color": "blue",
-                "quadrant": "en",
+                "quadrant": "ne",
                 "rotation": "l",
                 "type": "iso",
                 "start_location": "e",
@@ -7029,7 +7029,7 @@
             },
             {
                 "color": "blue",
-                "quadrant": "wn",
+                "quadrant": "nw",
                 "rotation": "r",
                 "type": "iso",
                 "start_location": "w",
@@ -7073,7 +7073,7 @@
             },
             {
                 "color": "blue",
-                "quadrant": "es",
+                "quadrant": "se",
                 "rotation": "r",
                 "type": "iso",
                 "start_location": "e",
@@ -7127,7 +7127,7 @@
             },
             {
                 "color": "red",
-                "quadrant": "ws",
+                "quadrant": "sw",
                 "rotation": "r",
                 "type": "anti",
                 "start_location": "w",
@@ -7171,7 +7171,7 @@
             },
             {
                 "color": "red",
-                "quadrant": "en",
+                "quadrant": "ne",
                 "rotation": "r",
                 "type": "anti",
                 "start_location": "e",
@@ -7215,7 +7215,7 @@
             },
             {
                 "color": "red",
-                "quadrant": "wn",
+                "quadrant": "nw",
                 "rotation": "l",
                 "type": "anti",
                 "start_location": "w",
@@ -7259,7 +7259,7 @@
             },
             {
                 "color": "red",
-                "quadrant": "es",
+                "quadrant": "se",
                 "rotation": "l",
                 "type": "anti",
                 "start_location": "e",
@@ -7295,7 +7295,7 @@
             },
             {
                 "color": "blue",
-                "quadrant": "ws",
+                "quadrant": "sw",
                 "rotation": "r",
                 "type": "anti",
                 "start_location": "w",
@@ -7339,7 +7339,7 @@
             },
             {
                 "color": "blue",
-                "quadrant": "en",
+                "quadrant": "ne",
                 "rotation": "r",
                 "type": "anti",
                 "start_location": "e",
@@ -7383,7 +7383,7 @@
             },
             {
                 "color": "blue",
-                "quadrant": "wn",
+                "quadrant": "nw",
                 "rotation": "l",
                 "type": "anti",
                 "start_location": "w",
@@ -7427,7 +7427,7 @@
             },
             {
                 "color": "blue",
-                "quadrant": "es",
+                "quadrant": "se",
                 "rotation": "l",
                 "type": "anti",
                 "start_location": "e",

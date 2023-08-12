@@ -10,7 +10,7 @@ from lxml import etree
 from menus import Context_Menu_Handler
 from exporter import Exporter
 class Pictograph_Generator():
-    def __init__(self, staff_manager, graphboard, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, context_menu_handler, grid, ui_setup, parent=None):
+    def __init__(self, staff_manager, graphboard, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, context_menu_handler, ui_setup, parent=None):
         self.staff_manager = staff_manager
         self.parent = parent
         self.graphboard = graphboard
@@ -22,7 +22,6 @@ class Pictograph_Generator():
         self.svg_handler = Svg_Handler()
         self.context_menu_handler = context_menu_handler
         self.exporter = exporter
-        self.grid = grid
         self.ui_setup = ui_setup
         # Load the JSON file
         with open('pictographs.json', 'r') as file:
@@ -74,7 +73,7 @@ class Pictograph_Generator():
 
                         # Write the SVG to a file
                         output_file_path = os.path.join(self.output_dir, file_name)
-                        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
+                        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager)
                         print(output_file_path)
                         self.exporter.export_to_svg(output_file_path)
 
