@@ -1,13 +1,17 @@
-from PyQt5.QtCore import QPointF, pyqtSignal, QObject
+from PyQt5.QtCore import QPointF, pyqtSignal, Qt, QObject
 from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
-from PyQt5.QtWidgets import QGraphicsItem
+from PyQt5.QtWidgets import QGraphicsItem, QApplication
 from arrow import Arrow
+from lxml import etree
+from settings import Settings
+
 
 class Staff(QGraphicsSvgItem):
     attributesChanged = pyqtSignal()  # Define the signal
 
     def __init__(self, element_id, scene, position, color=None, staff_svg_file=None, initial_visibility=True):
         super().__init__()
+
         self.element_id = element_id
         self.position = position 
         self.renderer = QSvgRenderer(staff_svg_file)
@@ -15,10 +19,15 @@ class Staff(QGraphicsSvgItem):
         self.setElementId(self.element_id)
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
+    
 
-        # if the staff isn't already in the scene, add it
-        if not self.scene():
+        # if the staff isn't already in the scene, add it. Handle errors for QGraphicsScene::addItem: item has already been added to this scene
+        if self.scene() is None:
             scene.addItem(self)
+        elif self.scene():
+            #do nothing
+            pass
+        
 
         self.setVisible(initial_visibility)
 
@@ -32,13 +41,40 @@ class Staff(QGraphicsSvgItem):
         rect = self.boundingRect()
         self.setTransformOriginPoint(rect.width() / 2, rect.height() / 2)
         self.setPos(position)
-
+        self.is_in_propbox = True
+        self.is_in_graphboard = False
         self.svg_file = staff_svg_file
         self.color = color
 
         # Connect the signal to the update method
         self.attributesChanged.connect(self.update_staff)
+    
+    def mousePressEvent(self, event):
+        # If the staff is in the prop box, initiate the drag operation
+        if self.is_in_propbox:
+            self.setCursor(Qt.ClosedHandCursor)
+            self.drag_start_position = event.pos()
+        super().mousePressEvent(event)
 
+
+    def mouseReleaseEvent(self, event):
+        # If the staff is on the graph board
+        if self.is_in_graphboard:
+            # Get the current mouse position
+            mouse_position = event.scenePos()
+
+            # Get the nearest staff location from the Staff_Handler
+            nearest_location = self.staff_manager.get_nearest_staff_location(mouse_position)
+
+            # Set the staff's position to the nearest location
+            self.setPos(nearest_location)
+        super().mouseReleaseEvent(event)
+        
+    def mouseReleaseEvent(self, event):
+        # Handle mouse release event (snapping functionality will be implemented here later)
+        self.setCursor(Qt.ArrowCursor)
+        super().mouseReleaseEvent(event)
+        
     def update_attributes(self, new_attributes):
         # Update the attributes
         self.element_id = new_attributes.get('element_id', self.element_id)
@@ -57,7 +93,11 @@ class Staff(QGraphicsSvgItem):
         self.setSharedRenderer(self.renderer)
         # Add code to update the color if necessary
 
-
+    def get_width(self):
+        return self.boundingRect().width()
+    
+    def get_height(self):
+        return self.boundingRect().height()
 
     def show(self):
         self.setVisible(True)
@@ -66,7 +106,7 @@ class Staff(QGraphicsSvgItem):
         self.setVisible(False)
 
     def set_arrow(self, arrow):
-        self.arrow = arrow
+        self.arrow = arrow  
         
     def isVisible(self):
         return super().isVisible()
@@ -94,28 +134,73 @@ class PropBox_Staff(Staff):
             self.scene.addItem(new_staff)
         super().mouseReleaseEvent(event)
 
-class Staff_Manager(QObject):
-    GRID_OFFSET = 25
+class Staff_Handler(QObject):
     positionChanged = pyqtSignal(str)
 
-    def __init__(self, scene):
+    def __init__(self, scene, grid, graphboard, staff):
         super().__init__()  # Initialize the QObject
         self.scene = scene
         self.beta_staves = []
         self.previous_position = None
+        self.grid = grid
+        self.graphboard = graphboard
+        self.staff = staff
 
+    def init_staves(self, scene):
+        STAFF_WIDTH = 25
+        STAFF_LENGTH = 250
+        
+        scale = self.grid.scale()
+        GRID_WIDTH = self.grid.get_width()
+        GRAPHBOARD_WIDTH = self.graphboard.width()
+        self.GRID_PADDING = (GRAPHBOARD_WIDTH - GRID_WIDTH) / 2
+        self.GRID_V_OFFSET = (self.graphboard.height() - self.graphboard.width()) / 2
+        print("Grid width:", GRID_WIDTH)
+        print("Graphboard width:", GRAPHBOARD_WIDTH)
+        print(f"GRID_PADDING: {self.GRID_PADDING}")
+
+        N_hand_point_coordinates = self.grid.get_circle_coordinates("N_hand_point")
+        E_hand_point_coordinates = self.grid.get_circle_coordinates("E_hand_point")
+        S_hand_point_coordinates = self.grid.get_circle_coordinates("S_hand_point")
+        W_hand_point_coordinates = self.grid.get_circle_coordinates("W_hand_point")
+        
+
+        #print the x value of the N_hand_point
+        N_hand_point_x, N_hand_point_y = N_hand_point_coordinates
+        E_hand_point_x, E_hand_point_y = E_hand_point_coordinates
+        S_hand_point_x, S_hand_point_y = S_hand_point_coordinates
+        W_hand_point_x, W_hand_point_y = W_hand_point_coordinates
+
+        #scale the x and y coordinates
+        N_hand_point_x = N_hand_point_x * self.grid.scale()
+        N_hand_point_y = N_hand_point_y * self.grid.scale()
+        E_hand_point_x = E_hand_point_x * self.grid.scale()
+        E_hand_point_y = E_hand_point_y * self.grid.scale()
+        S_hand_point_x = S_hand_point_x * self.grid.scale()
+        S_hand_point_y = S_hand_point_y * self.grid.scale()
+        W_hand_point_x = W_hand_point_x * self.grid.scale()
+        W_hand_point_y = W_hand_point_y * self.grid.scale()
+        
+
+        print("Vertical offset:", self.GRID_V_OFFSET)
+        print("N_hand_point_y:", N_hand_point_y)
+
+        # These handpoints are being set according to the grid's coordinates, not the graphboard scene coordinates
         hand_points = {
-            'N_hand_point': QPointF(325, 181.9),
-            'E_hand_point': QPointF(468.1, 325),
-            'S_hand_point': QPointF(325, 468.1),
-            'W_hand_point': QPointF(181.9, 325),
+            'N_hand_point': QPointF(N_hand_point_x, N_hand_point_y),
+            'E_hand_point': QPointF(E_hand_point_x, E_hand_point_y),
+            'S_hand_point': QPointF(S_hand_point_x, S_hand_point_y),
+            'W_hand_point': QPointF(W_hand_point_x, W_hand_point_y)
         }
 
+        print("N_hand_point:", hand_points['N_hand_point'])
+
+
         self.staff_locations = {
-            'N_staff': QPointF(hand_points['N_hand_point'].x() + self.GRID_OFFSET + 12.5, hand_points['N_hand_point'].y() + self.GRID_OFFSET - 100),
-            'E_staff': QPointF(hand_points['E_hand_point'].x() + self.GRID_OFFSET - 100, hand_points['E_hand_point'].y() + self.GRID_OFFSET + 12.5),
-            'S_staff': QPointF(hand_points['S_hand_point'].x() + self.GRID_OFFSET + 12.5, hand_points['S_hand_point'].y() + self.GRID_OFFSET - 100),
-            'W_staff': QPointF(hand_points['W_hand_point'].x() + self.GRID_OFFSET - 100, hand_points['W_hand_point'].y() + self.GRID_OFFSET + 12.5),
+            'N_staff': QPointF(N_hand_point_x + self.GRID_PADDING - (STAFF_WIDTH / 2), N_hand_point_y + self.GRID_PADDING - (STAFF_LENGTH / 2)),
+            'E_staff': QPointF(E_hand_point_x + self.GRID_PADDING - (STAFF_LENGTH / 2), E_hand_point_y + self.GRID_PADDING - (STAFF_WIDTH / 2)),
+            'S_staff': QPointF(S_hand_point_x + self.GRID_PADDING - (STAFF_WIDTH / 2), S_hand_point_y + self.GRID_PADDING - (STAFF_LENGTH / 2)),
+            'W_staff': QPointF(W_hand_point_x + self.GRID_PADDING - (STAFF_LENGTH / 2), W_hand_point_y + self.GRID_PADDING - (STAFF_WIDTH / 2))
         }
 
         # Initialize the staffs attribute
@@ -129,17 +214,26 @@ class Staff_Manager(QObject):
             'S_staff_blue': Graphboard_Staff('S_staff', scene, self.staff_locations['S_staff'], None, 'images\\staves\\S_staff_blue.svg'),
             'W_staff_blue': Graphboard_Staff('W_staff', scene, self.staff_locations['W_staff'], None, 'images\\staves\\W_staff_blue.svg')
         }
-
+        
         self.beta_staves = [
             BetaStaff('beta_vertical_w-blue_e-red', scene, self.staff_locations['N_staff'], None, 'images/staves/beta/beta_vertical_w-blue_e-red.svg'),
             BetaStaff('beta_vertical_w-red_e-blue', scene, self.staff_locations['E_staff'], None, 'images/staves/beta/beta_vertical_w-red_e-blue.svg'),
             BetaStaff('beta_horizontal_n-red_s_blue', scene, self.staff_locations['S_staff'], None, 'images/staves/beta/beta_horizontal_n-red_s_blue.svg'),
             BetaStaff('beta_horizontal_n-blue_s-red', scene, self.staff_locations['W_staff'], None, 'images/staves/beta/beta_horizontal_n-blue_s-red.svg')
         ]
-
+        
         self.hide_all_graphboard_staffs()
         
+    def connect_to_graphboard(self, graphboard):
+        self.graphboard = graphboard
 
+    #get the coordinates of the cy item in the grid.svg file
+    def get_grid_cy(self):
+        grid_svg = etree.parse('images\\grid\\grid.svg')
+        cy = grid_svg.xpath('//circle/@cy')
+        cy = float(cy[0])
+        return cy
+    
     def get_staff_position(self, staff_item):
         print(f"Getting position for staff {staff_item.element_id}")
         # Iterate over all the staffs in the graphboard_staffs dictionary
@@ -152,6 +246,17 @@ class Staff_Manager(QObject):
             
         # If the input staff_item is not found in the graphboard_staffs dictionary, return None
         return None
+
+    def get_nearest_staff_location(self, mouse_position):
+        # Find the nearest staff location based on the current mouse position
+        nearest_location = None
+        min_distance = float('inf')
+        for location, position in self.staff_locations.items():
+            distance = (mouse_position - position).manhattanLength()
+            if distance < min_distance:
+                min_distance = distance
+                nearest_location = position
+        return nearest_location
 
     def hide_all_graphboard_staffs(self):
         for staff in self.graphboard_staffs.values():
@@ -286,7 +391,8 @@ class Staff_Manager(QObject):
 class BetaStaff(Staff):
     def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
         super().__init__(element_id, scene, position, color, staff_svg_file, initial_visibility=False)
-
+        #make item unselectable
+        self.setFlag(QGraphicsItem.ItemIsSelectable, False)
     def mouseReleaseEvent(self, event):
         # Snap the staff to its correct placement and orientation
         # You'll need to replace this with the actual code that implements this behavior
@@ -305,3 +411,23 @@ class StaffTracker(QObject):
         self.position = new_position
         self.positionChanged.emit(self.get_position_name())
 
+
+
+    def mousePressEvent(self, event):
+        # Handle mouse press event for drag-and-drop
+        self.setCursor(Qt.ClosedHandCursor)
+        self.drag_start_position = event.pos()
+        super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        # Handle mouse move event for dragging
+        if not (event.buttons() & Qt.LeftButton):
+            return
+        if (event.pos() - self.drag_start_position).manhattanLength() < QApplication.startDragDistance():
+            return
+        self.setPos(self.mapToScene(event.pos() - self.drag_start_position))
+
+    def mouseReleaseEvent(self, event):
+        # Handle mouse release event (snapping functionality will be implemented here later)
+        self.setCursor(Qt.ArrowCursor)
+        super().mouseReleaseEvent(event)

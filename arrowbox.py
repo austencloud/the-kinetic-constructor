@@ -5,8 +5,9 @@ from PyQt5.QtCore import Qt, QMimeData, pyqtSignal, QPointF
 from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
 from arrow import Arrow
 import os
+from settings import Settings
 
-
+SCALE_FACTOR = Settings.SCALE_FACTOR
 class Arrow_Box(QGraphicsView):
     def __init__(self, arrowbox_scene, artboard, info_tracker, svg_handler, parent=None):
         super().__init__(arrowbox_scene, parent)
@@ -17,6 +18,9 @@ class Arrow_Box(QGraphicsView):
         self.arrowbox_scene = arrowbox_scene
         self.info_tracker = info_tracker
         self.svg_handler = svg_handler
+         
+        #set the scale to 0.8
+        self.scale(SCALE_FACTOR, SCALE_FACTOR)
 
     def mousePressEvent(self, event):
         # Convert the mouse event position to scene coordinates
@@ -55,6 +59,10 @@ class Arrow_Box(QGraphicsView):
                 painter.end()
 
                 pixmap = QPixmap.fromImage(image)
+                scaled_size = pixmap.size() * SCALE_FACTOR
+                pixmap = pixmap.scaled(scaled_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+
+                
                 self.drag.setPixmap(pixmap)
                 self.drag.setHotSpot(pixmap.rect().center())
             self.dragStarted = False
