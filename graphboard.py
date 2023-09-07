@@ -9,7 +9,9 @@ from arrow import Arrow
 import os
 from handlers import Arrow_Handler
 from exporter import Exporter
+from settings import Settings
 
+SCALE_FACTOR = Settings.SCALE_FACTOR
 
 class Graphboard(QGraphicsView):
     arrowMoved = pyqtSignal()
@@ -42,7 +44,7 @@ class Graphboard(QGraphicsView):
         self.letter_item = QGraphicsSvgItem()
         self.graphboard_scene.addItem(self.letter_item)
         self.arrow_handler = Arrow_Handler(self.graphboard_scene, self, self.staff_manager)
-        self.setFixedSize(750, 900)
+        self.setFixedSize(int(750 * SCALE_FACTOR), int(900 * SCALE_FACTOR))
 
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -178,6 +180,9 @@ class Graphboard(QGraphicsView):
 
 
     ### GETTERS ###
+
+    def get_width(self):
+        return self.width()
 
     def get_state(self):
         state = {

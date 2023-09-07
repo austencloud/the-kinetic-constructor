@@ -11,6 +11,7 @@ class Prop_Box:
     def initPropBox(self):
         propbox = QFrame(self.main_window)
         propbox_scene = QGraphicsScene()
+        self.staff_manager.init_staves(propbox_scene)
 
         # Create staff objects and add them to the scene
         self.red_staff = PropBox_Staff('red_staff', propbox_scene, self.staff_manager.staff_locations['N_staff'], 'red', 'images\\staves\\N_staff_red.svg')

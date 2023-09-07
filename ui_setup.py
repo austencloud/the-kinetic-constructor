@@ -14,6 +14,9 @@ from propbox import Prop_Box
 from menus import Menu_Bar, Context_Menu_Handler
 from graphboard import Graphboard
 from exporter import Exporter
+from settings import Settings
+
+SCALE_FACTOR = Settings.SCALE_FACTOR
 
 class UiSetup(QWidget):
     def __init__(self, main_window):
@@ -21,14 +24,14 @@ class UiSetup(QWidget):
         self.setFocusPolicy(Qt.StrongFocus)
         self.main_window = main_window
         self.main_window.installEventFilter(self)
-        self.main_window.setMinimumSize(2000, 1600)
+        self.main_window.setMinimumSize(int(2000 * SCALE_FACTOR), int(1600 * SCALE_FACTOR))
         self.main_window.show()
         self.main_window.setWindowTitle("Sequence Generator")
         self.svg_handler = Svg_Handler()
         self.arrows = []
         self.graphboard_scene = QGraphicsScene()
         self.ARROW_DIR = 'images\\arrows'
-        self.SVG_POS_Y = 250
+        self.SVG_POS_Y = int(250 * SCALE_FACTOR)
         self.context_menu_handler = None
         self.exporter = None
 
@@ -45,6 +48,9 @@ class UiSetup(QWidget):
         self.graphboard.setGenerator(self.generator)
         self.connectGraphboard()
         self.initArrowBox()
+        self.staff_manager.connect_grid(self.grid)
+        self.staff_manager.connect_graphboard(self.graphboard)
+
         self.initPropBox()
         self.initButtons()
         self.connectInfoTracker()
@@ -52,7 +58,6 @@ class UiSetup(QWidget):
         self.initSequenceScene()
         self.initLetterButtons()
         self.setFocus()
-
 
     def initMenus(self):
         self.json_updater = Json_Handler(self.graphboard_scene)
@@ -91,9 +96,10 @@ class UiSetup(QWidget):
 
         self.main_window.setLayout(self.main_layout)
 
-
     def initGraphboard(self):
         self.grid = Grid('images\\grid\\grid.svg')
+        #set the size of the grid to SCALE_FACTOR 
+        self.grid.setScale(SCALE_FACTOR)
         self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
         self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_handler)
         self.key_press_handler.connect_to_graphboard(self.graphboard)
@@ -102,11 +108,11 @@ class UiSetup(QWidget):
         graphboard_size = self.graphboard.frameSize()
 
         grid_position = QPointF((graphboard_size.width() - self.grid.boundingRect().width()) / 2,
-                                (graphboard_size.height() - self.grid.boundingRect().height()) / 2 - 75)
+                                (graphboard_size.height() - self.grid.boundingRect().height()) / 2 - (75 * SCALE_FACTOR))
 
         transform.translate(grid_position.x(), grid_position.y())
         self.grid.setTransform(transform)
-        
+         
     def initLetterButtons(self):
         letter_buttons_layout = QVBoxLayout()
         letter_buttons_layout.setSpacing(10)  # Set the spacing between rows of buttons
@@ -229,9 +235,7 @@ class UiSetup(QWidget):
         arrowbox_frame = QFrame(self.main_window)
         objectbox_layout = QGridLayout()
         arrowbox_frame.setLayout(objectbox_layout) 
-
         arrowbox_scene = QGraphicsScene()
-
         for arrow in self.arrows:
             arrow.attributesChanged.connect(lambda: self.generator.update_staff(arrow, self.staff_manager))
 
@@ -246,9 +250,9 @@ class UiSetup(QWidget):
         svg_item_count_red_anti = 0
         svg_item_count_blue_iso = 0
         svg_item_count_blue_anti = 0
-        spacing = 200
+        spacing = 200 * SCALE_FACTOR
         y_pos_red = 0
-        y_pos_blue = 200  
+        y_pos_blue = 200 * SCALE_FACTOR
 
         for i, svg_file in enumerate(svgs_full_paths):
             file_name = os.path.basename(svg_file)
@@ -279,7 +283,7 @@ class UiSetup(QWidget):
                 self.arrows.append(arrow_item)
         arrowbox = Arrow_Box(arrowbox_scene, self.graphboard, self.info_tracker, self.svg_handler)
         objectbox_layout.addWidget(arrowbox) 
-        arrowbox_frame.setFixedSize(500, 500)
+        arrowbox_frame.setFixedSize(int(500 * SCALE_FACTOR), int(500 * SCALE_FACTOR))
         self.objectbox_layout.addWidget(arrowbox_frame)
 
     def initPropBox(self):

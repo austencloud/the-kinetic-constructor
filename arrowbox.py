@@ -5,55 +5,47 @@ from PyQt5.QtCore import Qt, QMimeData, pyqtSignal, QPointF
 from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
 from arrow import Arrow
 import os
+from settings import Settings
 
+SCALE_FACTOR = Settings.SCALE_FACTOR
 
 class Arrow_Box(QGraphicsView):
     def __init__(self, arrowbox_scene, artboard, info_tracker, svg_handler, parent=None):
         super().__init__(arrowbox_scene, parent)
         self.setAcceptDrops(True)
         self.setFrameShape(QFrame.NoFrame)
-        self.dragState = {}  # Store the state of drag operations
+        self.dragState = {} 
         self.artboard = artboard
         self.arrowbox_scene = arrowbox_scene
         self.info_tracker = info_tracker
         self.svg_handler = svg_handler
+        self.scale(SCALE_FACTOR, SCALE_FACTOR)
 
     def mousePressEvent(self, event):
-        # Convert the mouse event position to scene coordinates
         scenePos = self.mapToScene(event.pos())
-        # Get all items at the scene position
         items = self.scene().items(scenePos)
-        # Filter out items that are not Arrow instances
         arrows = [item for item in items if isinstance(item, Arrow)]
-        # If there are any arrows under the mouse, take the topmost one
         if arrows:
             arrow = arrows[0]
             if event.button() == Qt.LeftButton:
                 self.dragOffset = event.pos() - arrow.boundingRect().center()
                 self.artboard_start_position = event.pos()
-
                 self.drag = QDrag(self)
                 self.dragging = True 
                 self.dragged_item = arrow
-                
                 mime_data = QMimeData()
                 mime_data.setText(arrow.svg_file)
                 self.drag.setMimeData(mime_data)
-
                 image = QImage(arrow.boundingRect().size().toSize(), QImage.Format_ARGB32)
-                image.fill(Qt.transparent)  # Fill with transparency to preserve SVG transparency
-
+                image.fill(Qt.transparent)
                 painter = QPainter(image)
                 painter.setRenderHint(QPainter.Antialiasing)
-
                 renderer = QSvgRenderer(arrow.svg_file)
                 if not renderer.isValid():
                     print(f"Failed to load SVG file: {self.svg_file}")
                     return
                 renderer.render(painter)
-
                 painter.end()
-
                 pixmap = QPixmap.fromImage(image)
                 self.drag.setPixmap(pixmap)
                 self.drag.setHotSpot(pixmap.rect().center())
@@ -63,13 +55,9 @@ class Arrow_Box(QGraphicsView):
 
 
     def mouseMoveEvent(self, event):
-        # Convert the mouse event position to scene coordinates
         scenePos = self.mapToScene(event.pos())
-        # Get all items at the scene position
         items = self.scene().items(scenePos)
-        # Filter out items that are not Arrow instances
         arrows = [item for item in items if isinstance(item, Arrow)]
-        # If there are any arrows under the mouse, take the topmost one
         if arrows:
             arrow = arrows[0]
             if arrow in self.dragState:
@@ -106,8 +94,6 @@ class Arrow_Box(QGraphicsView):
                     else:
                         quadrant = 'se'
 
-                # print the current quadrant whenever a mouse drags over it
-                print(quadrant)
                 base_name = os.path.basename(self.svg_file)
 
                 if base_name.startswith('red_anti'):
@@ -135,13 +121,11 @@ class Arrow_Box(QGraphicsView):
             self.dragged_item = None 
             from main import Info_Tracker
             infoTracker = Info_Tracker()
-            #update all the attributes
-            self.update_positions()
 
-            # Update the staff position based on the new arrow position
+            self.update_positions()
             arrow.end_location = arrow.end_location.capitalize()
             staff_position = arrow.end_location
-            self.staff.setPos(staff_position)  # Assuming the Staff class has a setPos method
+            self.staff.setPos(staff_position)
             print("staff position:", staff_position)
             infoTracker.update() 
-            self.arrowMoved.emit()  # emit the signal when the arrow is dropped
+            self.arrowMoved.emit()

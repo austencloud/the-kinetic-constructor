@@ -8,14 +8,16 @@ from grid import Grid
 from pictograph import Pictograph
 from PyQt5.QtGui import QImage, QPainter
 from staff import Staff
+from settings import Settings
 
+SCALE_FACTOR = Settings.SCALE_FACTOR
 class Sequence_Handler():
     def __init__(self, scene, pictograph_generator, ui_setup, info_tracker):
         self.graphboard_scene = scene
-        self.beats = [QGraphicsRectItem(QRectF(375, 0, 375, 375)) for i in range(4)]
+        self.beats = [QGraphicsRectItem(QRectF(int(375 * SCALE_FACTOR), 0, int(375 * SCALE_FACTOR), int(375 * SCALE_FACTOR))) for i in range(4)]
         for i, section in enumerate(self.beats):
-            # add a small buffer and update the x position
-            section.setPos(QPointF(i * 375, 0))
+
+            section.setPos(QPointF(i * int(375 * SCALE_FACTOR), 0))
 
         self.pictographs = [] 
         self.pictograph_generator = pictograph_generator
@@ -42,7 +44,7 @@ class Sequence_Handler():
         scene_size = graphboard.sceneRect().size().toSize()
 
         # Add the height of the letter (assuming it's 200 pixels tall, adjust as necessary)
-        scene_size.setHeight(scene_size.height() + 200)
+        scene_size.setHeight(scene_size.height() + int(200 * SCALE_FACTOR))
 
         # Create the QImage with the adjusted size
         image = QImage(scene_size, QImage.Format_ARGB32)
@@ -57,7 +59,7 @@ class Sequence_Handler():
         painter.end()
 
 
-        scaled_image = image.scaled(375, 375, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        scaled_image = image.scaled(int(375 * SCALE_FACTOR), int(375 * SCALE_FACTOR), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         pictograph = Pictograph(graphboard.get_state(), scaled_image)
         print(pictograph.state)
         self.add_pictograph(pictograph)

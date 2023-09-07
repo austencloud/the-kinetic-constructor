@@ -1,39 +1,46 @@
-from PyQt5.QtCore import QPointF
-from xml.dom import minidom
+from xml.etree import ElementTree as ET
 from PyQt5.QtSvg import QGraphicsSvgItem
+from settings import Settings
+
 
 class Grid(QGraphicsSvgItem):
-
-    def updateSvgContent(self, svg_content):
-        self.setSharedRenderer(svg_content)
-
-    def __init__(self, grid_svg):
-        super().__init__(grid_svg)
+    def __init__(self, grid_svg_path):
+        super().__init__(grid_svg_path)
+        # Store the path to the SVG file
+        self.svg_file = grid_svg_path
 
 
-        self.doc = minidom.parse(grid_svg)
+    def get_circle_coordinates(self, circle_id):
+        # Read the content of the SVG file
+        with open(self.svg_file, 'r') as svg_file:
+            svg_content = svg_file.read()
 
-        circles = self.doc.getElementsByTagName('circle')
+        root = ET.fromstring(svg_content)
+        namespace = '{http://www.w3.org/2000/svg}'
+        circle_element = root.find(f".//{namespace}circle[@id='{circle_id}']")
+        if circle_element is not None:
+            cx = float(circle_element.attrib['cx'])
+            cy = float(circle_element.attrib['cy'])
+            return cx, cy
+        else:
+            return None
 
-        center_point_circle = None
-        for circle in circles:
-            if circle.getAttribute('id') == "center_point":
-                center_point_circle = circle
-                break
-        if center_point_circle is None:
-            raise ValueError("No circle with id 'center_point' found in SVG file")
+    def get_circle_radius(self, circle_id):
+        # Read the content of the SVG file
+        with open(self.svg_file, 'r') as svg_file:
+            svg_content = svg_file.read()
 
-        center_x = float(center_point_circle.getAttribute('cx'))
-        center_y = float(center_point_circle.getAttribute('cy'))
+        root = ET.fromstring(svg_content)
+        namespace = '{http://www.w3.org/2000/svg}'
+        circle_element = root.find(f".//{namespace}circle[@id='{circle_id}']")
+        if circle_element is not None:
+            r = float(circle_element.attrib['r'])
+            return r
+        else:
+            return None
 
-        self.center_point = QPointF(center_x, center_y)
-
-        # add an attribute svg_file to the grid
-        self.svg_file = grid_svg
-
-
-    def getCenter(self):
-        return self.mapToScene(self.center_point)
+    def get_width(self):
+        return self.boundingRect().width() * self.scale()
 
     def mousePressEvent(self, event):
         pass
