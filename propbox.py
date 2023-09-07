@@ -16,8 +16,8 @@ class Prop_Box:
         self.red_staff = PropBox_Staff('red_staff', propbox_scene, self.staff_manager.staff_locations['N_staff'], 'red', 'images\\staves\\N_staff_red.svg')
         self.blue_staff = PropBox_Staff('blue_staff', propbox_scene, self.staff_manager.staff_locations['N_staff'], 'blue', 'images\\staves\\N_staff_blue.svg')
 
-        propbox_scene.addItem(self.red_staff)
-        propbox_scene.addItem(self.blue_staff)
+        # propbox_scene.addItem(self.red_staff)
+        # propbox_scene.addItem(self.blue_staff)
 
         #set locations of the items to show in the propbox's center
         self.red_staff.setPos(100, 100)

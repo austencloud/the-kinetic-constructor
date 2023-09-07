@@ -53,8 +53,6 @@ class Staff(QGraphicsSvgItem):
         self.setSharedRenderer(self.renderer)
         # Add code to update the color if necessary
 
-
-
     def show(self):
         self.setVisible(True)
 

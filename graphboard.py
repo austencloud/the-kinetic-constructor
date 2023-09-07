@@ -39,8 +39,6 @@ class Graphboard(QGraphicsView):
             renderer = QSvgRenderer(f'images/letters/{letter}.svg')
             self.letter_renderers[letter] = renderer
 
-
-        # Create a new QGraphicsSvgItem for the letter and add it to the scene
         self.letter_item = QGraphicsSvgItem()
         self.graphboard_scene.addItem(self.letter_item)
         self.arrow_handler = Arrow_Handler(self.graphboard_scene, self, self.staff_manager)
@@ -73,14 +71,6 @@ class Graphboard(QGraphicsView):
             for item in self.scene().selectedItems():
                 item.setSelected(False)
             self.dragging = None
-
-
-        if items:
-            print(f"Clicked on an object of type {type(items[0])}")
-            print(f"Object top-left position: {items[0].scenePos()}")
-            print(f"Object center: {items[0].scenePos() + items[0].boundingRect().center()}")
-            if hasattr(items[0], 'svg_file'):
-                print(f"Object svg: {items[0].svg_file}")
 
         if event.button() == Qt.LeftButton and not items:
             super().mousePressEvent(event)
@@ -121,8 +111,6 @@ class Graphboard(QGraphicsView):
                         item.update_locations()
                 self.info_tracker.update()
                 self.arrowMoved.emit()
-
-
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
@@ -181,17 +169,15 @@ class Graphboard(QGraphicsView):
         else:
             event.ignore()
 
-        # Adjust the y-coordinate of the arrow's position to account for the new position of the grid
         adjusted_arrow_pos = self.arrow_item.pos() + QPointF(0, 75)
         quadrant = self.drag.get_graphboard_quadrants(adjusted_arrow_pos)
         self.arrow_item.quadrant = quadrant
-        self.drag.update_arrow_svg(self.arrow_item, quadrant)  # Update the arrow's SVG file
+        self.drag.update_arrow_svg(self.arrow_item, quadrant) 
         self.info_tracker.update()
         self.arrowMoved.emit()
 
 
     ### GETTERS ###
-
 
     def get_state(self):
         state = {
@@ -249,7 +235,6 @@ class Graphboard(QGraphicsView):
 
         for item in self.scene().items():
             if isinstance(item, Arrow):
-                # Calculate the center of the arrow
                 center = item.pos() + item.boundingRect().center()
                 if item.color == 'red':
                     red_position = center
@@ -262,10 +247,9 @@ class Graphboard(QGraphicsView):
         return self.graphboard_scene.selectedItems()
     
     def get_bounding_box(self):
-        # return all QGraphicsItem objects that represent bounding boxes in the scene
         bounding_boxes = []
         for item in self.scene().items():
-            if isinstance(item, QGraphicsRectItem):  # or whatever class represents your bounding boxes
+            if isinstance(item, QGraphicsRectItem):
                 bounding_boxes.append(item)
         return bounding_boxes
 
@@ -316,7 +300,7 @@ class Graphboard(QGraphicsView):
         self.setSceneRect(QRectF(self.rect()))
         super().resizeEvent(event)
 
-    def keyPressEvent(self, event):
+    def fkeyPressEvent(self, event):
         key = event.key()
         dx = dy = 0
         if key == Qt.Key_Up:
@@ -413,22 +397,12 @@ class Graphboard(QGraphicsView):
         self.staff_manager.check_and_replace_staves()
 
     def update_letter(self, letter):
-        print(f"Updating letter to {letter}")
-        # Path to the letter's SVG file
         svg_file = f'images/letters/{letter}.svg'
-        
-        # Create a renderer for the SVG file
         renderer = QSvgRenderer(svg_file)
-        
-        # Check that the SVG file is valid
         if not renderer.isValid():
             print(f"Invalid SVG file: {svg_file}")
             return
-        
-        # Update the item's renderer
         self.letter_item.setSharedRenderer(renderer)
-        
-        # Center the item horizontally and place it 750 pixels down
         self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
 
     def clear(self):
@@ -437,9 +411,6 @@ class Graphboard(QGraphicsView):
                 self.scene().removeItem(item)
                 del item
         self.arrowMoved.emit()
-
-
-
 
 class Quadrant_Preview_Drag(QDrag):
     def __init__(self, source, arrow_item, info_tracker, *args, **kwargs):
@@ -461,9 +432,7 @@ class Quadrant_Preview_Drag(QDrag):
         quadrant, base_name = self.get_graphboard_quadrants(mouse_pos)
         self.update_arrow_svg(self.arrow_item, quadrant)
         new_svg = f'images\\arrows\\red\\r\\anti\\red_anti_r_{quadrant}.svg'
-
         new_renderer = QSvgRenderer(new_svg)
-        #delete the old svg from the screen
         self.arrow_item.setSharedRenderer(new_renderer)
 
         if new_renderer.isValid():
@@ -481,7 +450,6 @@ class Quadrant_Preview_Drag(QDrag):
             base_name = os.path.basename(mime_data.text())
         else:
             base_name = ""
-        # Adjust the y-coordinate of the mouse position to account for the new position of the grid
         adjusted_mouse_y = mouse_pos.y() + 75
         if adjusted_mouse_y < self.source().sceneRect().height() / 2:
             if mouse_pos.x() < self.source().sceneRect().width() / 2:

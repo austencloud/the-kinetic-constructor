@@ -98,7 +98,6 @@ class Info_Tracker:
             return {}
     
     def update(self):
-        print("Updating info tracker")
         current_combination = []
 
         for item in self.graphboard.items():

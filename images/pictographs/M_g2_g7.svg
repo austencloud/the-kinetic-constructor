@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="750" height="900" viewBox="0 0 750 900">
+  <!-- STAVES -->
+  <g id="staves"><rect id="N_staff" fill="#2e3192" x="362.5" y="106.9" width="25" height="250" rx="9.9" ry="9.9" transform="matrix(1.0, 0.0, 0.0, 1.0, 0, 0)"/>
+
+<rect id="W_staff" fill="#ed1c24" x="106.9" y="362.5" width="250" height="25" rx="9.9" ry="9.9" transform="matrix(1.0, 0.0, 0.0, 1.0, 0, 0)"/>
+
+</g>
+  <!-- ARROWS -->
+  <g id="arrows"/>
+  <!-- GRID -->
+  <g id="grid"><circle id="center_point" class="black" cx="375.0" cy="375.0" r="11.25"/>
+        <circle id="N_outer_point" class="black" cx="375.0" cy="75.0" r="25"/>
+            <circle id="E_outer_point" class="black" cx="675.0" cy="375.0" r="25"/>
+            <circle id="S_outer_point" class="black" cx="375.0" cy="675.0" r="25"/>
+            <circle id="W_outer_point" class="black" cx="75.0" cy="375.0" r="25"/>
+        <circle id="NE_layer2_point" class="black" cx="518.0899999999999" cy="231.91" r="8.75"/>
+            <circle id="SE_layer2_point" class="black" cx="518.0899999999999" cy="518.0899999999999" r="8.75"/>
+            <circle id="SW_layer2_point" class="black" cx="231.91" cy="518.0899999999999" r="8.75"/>
+            <circle id="NW_layer2_point" class="black" cx="231.91" cy="231.91" r="8.75"/>
+        <circle id="N_hand_point" class="cls-1" cx="375.0" cy="231.91" r="4.25"/>
+            <circle id="E_hand_point" class="cls-1" cx="518.0899999999999" cy="375.0" r="4.25"/>
+            <circle id="S_hand_point" class="cls-1" cx="375.0" cy="518.0899999999999" r="4.25"/>
+            <circle id="W_hand_point" class="cls-1" cx="231.91" cy="375.0" r="4.25"/>
+      </g>
+
+</svg>
