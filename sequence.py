@@ -12,10 +12,10 @@ from staff import Staff
 class Sequence_Handler():
     def __init__(self, scene, pictograph_generator, ui_setup, info_tracker):
         self.graphboard_scene = scene
-        self.beats = [QGraphicsRectItem(QRectF(200, 0, 200, 200)) for i in range(8)]
+        self.beats = [QGraphicsRectItem(QRectF(375, 0, 375, 375)) for i in range(4)]
         for i, section in enumerate(self.beats):
             # add a small buffer and update the x position
-            section.setPos(QPointF(i * 200, 0))
+            section.setPos(QPointF(i * 375, 0))
 
         self.pictographs = [] 
         self.pictograph_generator = pictograph_generator
@@ -57,7 +57,7 @@ class Sequence_Handler():
         painter.end()
 
 
-        scaled_image = image.scaled(200, 200, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        scaled_image = image.scaled(375, 375, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         pictograph = Pictograph(graphboard.get_state(), scaled_image)
         print(pictograph.state)
         self.add_pictograph(pictograph)
@@ -103,7 +103,7 @@ class Sequence_Handler():
 class Sequence_Scene(QGraphicsScene):
     def __init__(self, manager=None, parent=None):
         super().__init__(parent)
-        self.setSceneRect(0, 0, 4 * 200, 200)
+        self.setSceneRect(0, 0, 4 * 375, 375)
 
     def set_manager(self, manager):
         self.manager = manager

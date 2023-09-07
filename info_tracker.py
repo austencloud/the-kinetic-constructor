@@ -18,11 +18,55 @@ class Info_Tracker:
         self.label.setAlignment(Qt.AlignTop)
         self.letters = self.load_letters()
         self.staff_manager = staff_manager
-        self.previous_letter = None
+
+
+    def start(self):
+        self.previous_state = self.get_current_state()
 
     def set_graphboard(self, graphboard):
         self.graphboard = graphboard
 
+    def get_current_state(self):
+        state = {}
+        for item in self.graphboard.items():
+            if isinstance(item, Arrow):
+                state[item] = item.get_attributes()
+        return state
+
+    def get_current_letter(self):
+        if self.letter is not None:
+            return self.letter
+        else:
+            print("No self.letter found")
+    
+    def check_for_changes(self):
+        current_state = self.get_current_state()
+        if current_state != self.previous_state:
+            self.update()
+            self.previous_state = current_state
+    
+    def get_positional_relationship(self, start1, end1, start2, end2):
+        start1_compass = Arrow.get_position_from_locations(start1, start1)
+        end1_compass = Arrow.get_position_from_locations(end1, end1)
+        start2_compass = Arrow.get_position_from_locations(start2, start2)
+        end2_compass = Arrow.get_position_from_locations(end2, end2)
+
+        if set(start1_compass) == set(start2_compass):
+            start_location = "beta"
+        elif set(start1_compass) == set(["n", "s"]) or set(start1_compass) == set(["e", "w"]):
+            start_location = "alpha"
+        else:
+            start_location = "gamma"
+
+        if set(end1_compass) == set(end2_compass):
+            end_location = "beta"
+        elif set(end1_compass) == set(["n", "s"]) or set(end1_compass) == set(["e", "w"]):
+            end_location = "alpha"
+        else:
+            end_location = "gamma"
+
+        return start_location + " to " + end_location
+            
     def generate_arrow_positions():
         arrow_positions = {}
         from main import Main_Window
@@ -54,45 +98,31 @@ class Info_Tracker:
             return {}
     
     def update(self):
-
+        print("Updating info tracker")
         current_combination = []
-        valid_letter = None
-        self.letter = None
-        
+
         for item in self.graphboard.items():
             if isinstance(item, Arrow):
                 attributes = item.get_attributes()
                 current_combination.append(attributes)
 
         current_combination = sorted(current_combination, key=lambda x: x['color'])
-        self.letters = self.load_letters()
 
+        self.letters = self.load_letters()
         
         blue_text = "<h2 style='color: #0000FF'>Left</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>"
         red_text = "<h2 style='color: #FF0000'>Right</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>"
 
-        positions_text = ""
+        letter_text = "<h2>Letter</h2>"
 
         for letter, combinations in self.letters.items():
             combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]  # Ignore the first dictionary which contains optimal positions
             if current_combination in combinations:
+                letter_text += f"<span style='font-size: 140px; font-weight: bold;'>{letter}</span>"
                 start_position, end_position = self.get_positions()
-                positions_text += f"<h4>{start_position} → {end_position}</h4>"
+                letter_text += f"<h4>{start_position} → {end_position}</h4>"
                 self.letter = letter 
                 break 
-
-        if self.letter is not None and self.letter != self.previous_letter:
-            self.graphboard.update_letter(self.letter)
-            self.previous_letter = self.letter
-
-        # Update the letter only if a valid letter is found
-        if valid_letter is not None and valid_letter != self.previous_letter:
-            self.graphboard.update_letter(valid_letter)
-            self.previous_letter = valid_letter
-        # If no valid letter is found, update with a placeholder or empty string
-        else:
-            self.graphboard.update_letter(None)
-
 
 
         if hasattr(self.main_window, 'staff'):
@@ -121,58 +151,11 @@ class Info_Tracker:
                     red_text = red_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
                     red_text = red_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
 
-        if letter != self.previous_letter:
+        if letter is not None:
             self.graphboard.update_letter(letter)
-            self.previous_letter = letter
+        self.label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr><tr><td width=100>" + letter_text + "</td></tr></table>")
 
-        self.label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr><tr><td width=100>" + positions_text + "</td></tr></table>")
-
-
-
-### SETTERS ###
-
-
-
-
-### GETTERS ###
-
-
-    def get_current_state(self):
-        state = {}
-        for item in self.graphboard.items():
-            if isinstance(item, Arrow):
-                state[item] = item.get_attributes()
-        return state
-
-    def get_current_letter(self):
-        if self.letter is not None:
-            return self.letter
-        else:
-            print("No self.letter found")
-    
-    def get_positional_relationship(self, start1, end1, start2, end2):
-        start1_compass = Arrow.get_position_from_locations(start1, start1)
-        end1_compass = Arrow.get_position_from_locations(end1, end1)
-        start2_compass = Arrow.get_position_from_locations(start2, start2)
-        end2_compass = Arrow.get_position_from_locations(end2, end2)
-
-        if set(start1_compass) == set(start2_compass):
-            start_location = "beta"
-        elif set(start1_compass) == set(["n", "s"]) or set(start1_compass) == set(["e", "w"]):
-            start_location = "alpha"
-        else:
-            start_location = "gamma"
-
-        if set(end1_compass) == set(end2_compass):
-            end_location = "beta"
-        elif set(end1_compass) == set(["n", "s"]) or set(end1_compass) == set(["e", "w"]):
-            end_location = "alpha"
-        else:
-            end_location = "gamma"
-
-        return start_location + " to " + end_location
-            
-      
+        
     def get_positions(self):
         positions = []
         arrow_items = []
@@ -213,8 +196,8 @@ class Info_Tracker:
             print("no positions returned by get_positions")
             return None
 
-
     def update_position_label(self, position_label):
         self.position_label = position_label
         start_position, end_position = self.get_positions()
         self.position_label.setText(f"Start: {start_position}\nEnd: {end_position}")
+

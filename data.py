@@ -1,8 +1,5 @@
 
 letter_positions = {
-    
-    ### TYPE 1 ###
-    
     "A": ("alpha", "alpha"),
     "B": ("alpha", "alpha"),
     "C": ("alpha", "alpha"),
@@ -25,9 +22,6 @@ letter_positions = {
     "T": ("gamma", "gamma"),
     "U": ("gamma", "gamma"),
     "V": ("gamma", "gamma"),
-   
-   ### TYPE 2 ###
-    
     "W": ("gamma", "alpha"),
     "X": ("gamma", "alpha"),
     "Y": ("gamma", "beta"),
@@ -36,9 +30,9 @@ letter_positions = {
     "Δ": ("alpha", "gamma"),
     "θ": ("beta", "gamma"),
     "Ω": ("beta", "gamma"),
-    
-    ### TYPE 3 ###
-    
+    "Φ": ("beta", "alpha"),
+    "Ψ": ("alpha", "beta"),
+    "Λ": ("gamma", "gamma"),
     "W-": ("gamma", "alpha"),
     "X-": ("gamma", "alpha"),
     "Y-": ("gamma", "beta"),
@@ -47,21 +41,9 @@ letter_positions = {
     "Δ-": ("beta", "gamma"),
     "θ-": ("alpha", "gamma"),
     "Ω-": ("alpha", "gamma"),
-    
-    ### TYPE 4 ###
-    
-    "Φ": ("beta", "alpha"),
-    "Ψ": ("alpha", "beta"),
-    "Λ": ("gamma", "gamma"),
-    
-    ### TYPE 5 ###
-    
     "Φ-": ("alpha", "alpha"),
     "Ψ-": ("beta", "beta"),
     "Λ-": ("gamma", "gamma"),
-    
-    ### TYPE 6 ###
-    
     "α": ("alpha", "alpha"),
     "β": ("beta", "beta"),
     "Γ": ("gamma", "gamma"),

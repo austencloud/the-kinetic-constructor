@@ -5,12 +5,11 @@ from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
 from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor, QTransform, QImage
 from staff import Staff
 from grid import Grid
-from arrow import Arrow, Arrow_Handler
+from arrow import Arrow
 import os
+from handlers import Arrow_Handler
 from exporter import Exporter
-from settings import Settings
 
-SCALE_FACTOR = Settings.SCALE_FACTOR
 
 class Graphboard(QGraphicsView):
     arrowMoved = pyqtSignal()
@@ -39,69 +38,22 @@ class Graphboard(QGraphicsView):
         for letter in 'ABCDEFGHIJKLMNOPQRSTUV':
             renderer = QSvgRenderer(f'images/letters/{letter}.svg')
             self.letter_renderers[letter] = renderer
-        self.setResizeAnchor(QGraphicsView.AnchorViewCenter)
-        self.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
+
 
         # Create a new QGraphicsSvgItem for the letter and add it to the scene
         self.letter_item = QGraphicsSvgItem()
         self.graphboard_scene.addItem(self.letter_item)
         self.arrow_handler = Arrow_Handler(self.graphboard_scene, self, self.staff_manager)
-        self.setFixedSize(int(750 * SCALE_FACTOR), int(900 * SCALE_FACTOR))
-
-        
-        #print the dimensions of the graphboard
-        
+        self.setFixedSize(750, 900)
 
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         self.graphboard_scene.addItem(self.grid)
-        self.position_grid()
-
-        #print the dimensions of graphbaord scene
-        #set the position of the grid
         self.drag = Quadrant_Preview_Drag(self, self.dragging, self.info_tracker)
-            
 
-    def position_grid(self):
-        # Scale factor from settings
-        scale_factor = SCALE_FACTOR  # Assuming SCALE_FACTOR is accessible
 
-        # Graphboard size
-        graphboard_width = self.frameSize().width() * scale_factor
-        print("Graphboard width: ", graphboard_width)
-        graphboard_height = self.frameSize().height() * scale_factor
-        print("Graphboard height: ", graphboard_height)
-        
-        # Grid size
-        grid_width = self.grid.boundingRect().width() * scale_factor
-        
-        grid_height = self.grid.boundingRect().height() * scale_factor
-        print("Grid height: ", grid_height)
-        
-        # Calculate the buffer values
-        buffer_left_right = (graphboard_width - grid_width) / 2
-        print("Buffer left/right: ", buffer_left_right)
-        buffer_top = buffer_left_right  # Same buffer for top as left/right
-
-        # Set the position of the grid
-        grid_position = QPointF(buffer_left_right, buffer_top)
-        print("Grid position: ", grid_position)
-        self.grid.setPos(grid_position)
-        
-        
     ### MOUSE EVENTS ###
-
-    def resizeEvent(self, event):
-        new_size = event.size()
-        old_size = event.oldSize()
-        scale_factor = new_size.width() / old_size.width() # Assuming width controls the aspect ratio
-
-        # Apply the scaling factor to all contents
-        for item in self.scene().items():
-            item.setScale(scale_factor)
-            
-        super().resizeEvent(event)
 
     def mousePressEvent(self, event):
         self.dragStartPosition = event.pos()
@@ -124,9 +76,9 @@ class Graphboard(QGraphicsView):
 
 
         if items:
-            # print(f"Clicked on an object of type {type(items[0])}")
-            # print(f"Object top-left position: {items[0].scenePos()}")
-            # print(f"Object center: {items[0].scenePos() + items[0].boundingRect().center()}")
+            print(f"Clicked on an object of type {type(items[0])}")
+            print(f"Object top-left position: {items[0].scenePos()}")
+            print(f"Object center: {items[0].scenePos() + items[0].boundingRect().center()}")
             if hasattr(items[0], 'svg_file'):
                 print(f"Object svg: {items[0].svg_file}")
 
@@ -142,7 +94,6 @@ class Graphboard(QGraphicsView):
 
             for item in self.scene().selectedItems():
                 if isinstance(item, Arrow):
-                    old_quadrant = item.quadrant  # Store the current quadrant
                     item.setPos(item.pos() + movement)
                     center_pos = item.pos() + item.boundingRect().center()
 
@@ -168,9 +119,10 @@ class Graphboard(QGraphicsView):
                         item.setSharedRenderer(new_renderer)
                         item.svg_file = new_svg
                         item.update_locations()
-                    if old_quadrant != item.quadrant:  # Check if the quadrant has changed
-                        self.info_tracker.update()
-                        self.arrowMoved.emit()
+                self.info_tracker.update()
+                self.arrowMoved.emit()
+
+
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
@@ -213,7 +165,7 @@ class Graphboard(QGraphicsView):
             event.accept()
             dropped_svg = event.mimeData().text()
 
-            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler,  self.arrow_handler, self.ui_setup)
+            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler,  self.arrow_handler)
             self.arrow_item.setFlag(QGraphicsSvgItem.ItemIsFocusable, True)
             self.scene().addItem(self.arrow_item)
             pos = self.mapToScene(event.pos()) - self.arrow_item.boundingRect().center()
@@ -225,6 +177,7 @@ class Graphboard(QGraphicsView):
             self.arrow_item.setSelected(True)
             end_location = self.arrow_item.end_location
             self.staff_manager.show_staff(end_location + "_staff_" + self.arrow_item.color)
+            self.info_tracker.update()
         else:
             event.ignore()
 
@@ -264,7 +217,7 @@ class Graphboard(QGraphicsView):
             elif isinstance(item, Grid):
                 state['grid'] = {
                     'position': item.pos(),
-                    'svg_file': item.svg_file_path
+                    'svg_file': item.svg_file
                 }
         return state
     
@@ -329,7 +282,6 @@ class Graphboard(QGraphicsView):
         return attributes
     
 
-
     ### SELECTORS ###
 
     def select_all_items(self):
@@ -354,7 +306,7 @@ class Graphboard(QGraphicsView):
     def set_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
 
-    def set_generator(self, generator):
+    def setGenerator(self, generator):
         self.generator = generator
 
 
@@ -453,7 +405,7 @@ class Graphboard(QGraphicsView):
             graphboard_menu.exec_(event.globalPos())
 
 
-    ### UPDATERS ###
+    ### OTHER ###
 
     def update_staffs_and_check_beta(self):
         self.staff_manager.remove_beta_staves()
@@ -461,22 +413,23 @@ class Graphboard(QGraphicsView):
         self.staff_manager.check_and_replace_staves()
 
     def update_letter(self, letter):
-        if letter is not None:
-            print(f"Updating letter to {letter}")
-
-            svg_file = f'images/letters/{letter}.svg' 
-
-            renderer = QSvgRenderer(svg_file)
-            
-
-            if not renderer.isValid():
-                print(f"Invalid SVG file: {svg_file}")
-                return
-            
-
-            self.letter_item.setSharedRenderer(renderer)
-
-            self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 600)
+        print(f"Updating letter to {letter}")
+        # Path to the letter's SVG file
+        svg_file = f'images/letters/{letter}.svg'
+        
+        # Create a renderer for the SVG file
+        renderer = QSvgRenderer(svg_file)
+        
+        # Check that the SVG file is valid
+        if not renderer.isValid():
+            print(f"Invalid SVG file: {svg_file}")
+            return
+        
+        # Update the item's renderer
+        self.letter_item.setSharedRenderer(renderer)
+        
+        # Center the item horizontally and place it 750 pixels down
+        self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
 
     def clear(self):
         for item in self.scene().items():
@@ -484,6 +437,8 @@ class Graphboard(QGraphicsView):
                 self.scene().removeItem(item)
                 del item
         self.arrowMoved.emit()
+
+
 
 
 class Quadrant_Preview_Drag(QDrag):
@@ -518,6 +473,8 @@ class Quadrant_Preview_Drag(QDrag):
             painter.end()
             self.setPixmap(pixmap)
 
+
+
     def get_graphboard_quadrants(self, mouse_pos):
         mime_data = self.mimeData()
         if mime_data is not None:
@@ -525,7 +482,7 @@ class Quadrant_Preview_Drag(QDrag):
         else:
             base_name = ""
         # Adjust the y-coordinate of the mouse position to account for the new position of the grid
-        adjusted_mouse_y = mouse_pos.y() + (self.source().sceneRect().height() - self.source().sceneRect().width()) / 2 
+        adjusted_mouse_y = mouse_pos.y() + 75
         if adjusted_mouse_y < self.source().sceneRect().height() / 2:
             if mouse_pos.x() < self.source().sceneRect().width() / 2:
                 quadrant = 'nw'

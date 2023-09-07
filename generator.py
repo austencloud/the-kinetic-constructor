@@ -10,7 +10,7 @@ from lxml import etree
 from menus import Context_Menu_Handler
 from exporter import Exporter
 class Pictograph_Generator():
-    def __init__(self, staff_manager, graphboard, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, context_menu_handler, ui_setup, parent=None):
+    def __init__(self, staff_manager, graphboard, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, context_menu_handler, grid, parent=None):
         self.staff_manager = staff_manager
         self.parent = parent
         self.graphboard = graphboard
@@ -22,7 +22,8 @@ class Pictograph_Generator():
         self.svg_handler = Svg_Handler()
         self.context_menu_handler = context_menu_handler
         self.exporter = exporter
-        self.ui_setup = ui_setup
+        self.grid = grid
+
         # Load the JSON file
         with open('pictographs.json', 'r') as file:
             self.letters = json.load(file)
@@ -73,7 +74,7 @@ class Pictograph_Generator():
 
                         # Write the SVG to a file
                         output_file_path = os.path.join(self.output_dir, file_name)
-                        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager)
+                        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
                         print(output_file_path)
                         self.exporter.export_to_svg(output_file_path)
 
@@ -111,7 +112,7 @@ class Pictograph_Generator():
             # Check if the dictionary has all the keys you need
             if all(key in combination for key in ['color', 'type', 'rotation', 'quadrant']):
                 svg_file = f"images/arrows/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}.svg"
-                arrow = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler, self.ui_setup)
+                arrow = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler)
                 arrow.attributesChanged.connect(lambda: self.update_staff(arrow, staff_manager))
                 arrow.set_attributes(combination)
                 arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
