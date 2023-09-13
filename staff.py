@@ -7,7 +7,7 @@ from settings import Settings
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
 class Staff(QGraphicsSvgItem):
-    attributesChanged = pyqtSignal()  # Define the signal
+    attributesChanged = pyqtSignal()
 
     def __init__(self, element_id, scene, position, color=None, staff_svg_file=None, initial_visibility=True):
         super().__init__()

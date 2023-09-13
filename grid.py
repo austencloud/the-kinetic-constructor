@@ -6,12 +6,10 @@ from settings import Settings
 class Grid(QGraphicsSvgItem):
     def __init__(self, grid_svg_path):
         super().__init__(grid_svg_path)
-        # Store the path to the SVG file
         self.svg_file = grid_svg_path
 
 
     def get_circle_coordinates(self, circle_id):
-        # Read the content of the SVG file
         with open(self.svg_file, 'r') as svg_file:
             svg_content = svg_file.read()
 
@@ -26,7 +24,6 @@ class Grid(QGraphicsSvgItem):
             return None
 
     def get_circle_radius(self, circle_id):
-        # Read the content of the SVG file
         with open(self.svg_file, 'r') as svg_file:
             svg_content = svg_file.read()
 
