@@ -75,8 +75,7 @@ class Arrow(QGraphicsSvgItem):
         self.type = attributes.get('type', self.type)
         self.start_location = attributes.get('start_location', self.start_location)
         self.end_location = attributes.get('end_location', self.end_location)
-        self.attributesChanged.emit()  # Emit the signal here
-        print("[Debug] Signal emitted:", "self.attributesChanged.emit()  # Emit the signal here")
+
         self.update_arrow_image() 
 
     def set_orientation(self, orientation):

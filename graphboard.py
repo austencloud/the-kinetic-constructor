@@ -53,7 +53,7 @@ class Graphboard(QGraphicsView):
 
         self.graphboard_scene.addItem(self.grid)
         self.drag = Quadrant_Preview_Drag(self, self.dragging, self.info_tracker)
-    
+
 
     ### MOUSE EVENTS ###
 
@@ -406,6 +406,7 @@ class Graphboard(QGraphicsView):
         self.staff_manager.update_graphboard_staffs(self.scene())
         self.staff_manager.check_and_replace_staves()
 
+
     def update_letter(self, letter):
         print(letter)
         if letter is not None and letter != 'None':
@@ -418,7 +419,11 @@ class Graphboard(QGraphicsView):
             self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
         else :
             self.letter_item.setSharedRenderer(None)
-               
+            
+    def clear_letter(self):
+        self.letter_item.setSharedRenderer(None)
+        
+    
     def clear(self):
         for item in self.scene().items():
             if isinstance(item, Arrow) or isinstance(item, Staff):

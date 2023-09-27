@@ -58,6 +58,7 @@ class UiSetup(QWidget):
         self.initSequenceScene()
         self.initLetterButtons()
         self.setFocus()
+        self.info_tracker.set_initialized(True)  # Set the initialization status to True
 
     def initMenus(self):
         self.json_updater = Json_Handler(self.graphboard_scene)

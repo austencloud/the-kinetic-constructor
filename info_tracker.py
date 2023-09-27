@@ -18,6 +18,10 @@ class Info_Tracker:
         self.label.setAlignment(Qt.AlignTop)
         self.letters = self.load_letters()
         self.staff_manager = staff_manager
+        self.is_initialized = False  # Add this flag to indicate initialization status
+
+    def set_initialized(self, status):
+        self.is_initialized = status
 
 
     def start(self):
@@ -105,6 +109,8 @@ class Info_Tracker:
             return {}
     
     def update(self):
+        if not self.is_initialized:
+            return
         current_combination = []
 
         for item in self.graphboard.items():
@@ -160,7 +166,6 @@ class Info_Tracker:
         self.graphboard.update_letter(letter)
         self.label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr></table>")
 
-        
     def get_positions(self):
         positions = []
         arrow_items = []
