@@ -118,7 +118,6 @@ class Info_Tracker:
         
         blue_text = "<h2 style='color: #0000FF'>Left</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>"
         red_text = "<h2 style='color: #FF0000'>Right</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>"
-
         letter_text = "<h2>Letter</h2>"
 
         for letter, combinations in self.letters.items():
@@ -159,7 +158,7 @@ class Info_Tracker:
 
 
         self.graphboard.update_letter(letter)
-        self.label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr><tr><td width=100>" + letter_text + "</td></tr></table>")
+        self.label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr></table>")
 
         
     def get_positions(self):

@@ -53,7 +53,7 @@ class Graphboard(QGraphicsView):
 
         self.graphboard_scene.addItem(self.grid)
         self.drag = Quadrant_Preview_Drag(self, self.dragging, self.info_tracker)
-
+    
 
     ### MOUSE EVENTS ###
 
@@ -418,7 +418,7 @@ class Graphboard(QGraphicsView):
             self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
         else :
             self.letter_item.setSharedRenderer(None)
-            
+               
     def clear(self):
         for item in self.scene().items():
             if isinstance(item, Arrow) or isinstance(item, Staff):
