@@ -33,7 +33,9 @@ class Graphboard(QGraphicsView):
         self.ui_setup = ui_setup
         self.renderer = QSvgRenderer()
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
+        print("[Debug] Signal connected:", "self.arrowMoved.connect(self.update_staffs_and_check_beta)")
         self.attributesChanged.connect(self.update_staffs_and_check_beta)
+        print("[Debug] Signal connected:", "self.attributesChanged.connect(self.update_staffs_and_check_beta)")
         self.exporter = Exporter(self, graphboard_scene, self.staff_manager, self.grid)
         self.sequence_manager = sequence_manager
         self.letter_renderers = {}
@@ -113,6 +115,7 @@ class Graphboard(QGraphicsView):
                         item.update_locations()
                 self.info_tracker.update()
                 self.arrowMoved.emit()
+    print("[Debug] Signal emitted:", "self.arrowMoved.emit()")
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
@@ -177,6 +180,7 @@ class Graphboard(QGraphicsView):
         self.drag.update_arrow_svg(self.arrow_item, quadrant) 
         self.info_tracker.update()
         self.arrowMoved.emit()
+    print("[Debug] Signal emitted:", "self.arrowMoved.emit()")
 
 
     ### GETTERS ###
@@ -324,6 +328,7 @@ class Graphboard(QGraphicsView):
             if isinstance(item, Arrow):
                 item.moveBy(dx, dy)
                 self.arrowMoved.emit()
+    print("[Debug] Signal emitted:", "self.arrowMoved.emit()")
 
     def contextMenuEvent(self, event):
         clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())
@@ -402,20 +407,25 @@ class Graphboard(QGraphicsView):
         self.staff_manager.check_and_replace_staves()
 
     def update_letter(self, letter):
-        svg_file = f'images/letters/{letter}.svg'
-        renderer = QSvgRenderer(svg_file)
-        if not renderer.isValid():
-            print(f"Invalid SVG file: {svg_file}")
-            return
-        self.letter_item.setSharedRenderer(renderer)
-        self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
-
+        print(letter)
+        if letter is not None and letter != 'None':
+            svg_file = f'images/letters/{letter}.svg'
+            renderer = QSvgRenderer(svg_file)
+            if not renderer.isValid():
+                print(f"Invalid SVG file: {svg_file}")
+                return
+            self.letter_item.setSharedRenderer(renderer)
+            self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
+        else :
+            self.letter_item.setSharedRenderer(None)
+            
     def clear(self):
         for item in self.scene().items():
             if isinstance(item, Arrow) or isinstance(item, Staff):
                 self.scene().removeItem(item)
                 del item
         self.arrowMoved.emit()
+    print("[Debug] Signal emitted:", "self.arrowMoved.emit()")
 
 class Quadrant_Preview_Drag(QDrag):
     def __init__(self, source, arrow_item, info_tracker, *args, **kwargs):

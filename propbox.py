@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QGraphicsScene, QScrollArea, QGraphicsView, QFrame, QVBoxLayout
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QFrame, QVBoxLayout
 from staff import PropBox_Staff
-
+from PyQt5.QtCore import Qt
 class Prop_Box:
     def __init__(self, main_window, staff_manager, ui_setup):
         self.main_window = main_window
@@ -13,6 +13,7 @@ class Prop_Box:
         propbox_scene = QGraphicsScene()
         self.staff_manager.init_staves(propbox_scene)
 
+
         # Create staff objects and add them to the scene
         self.red_staff = PropBox_Staff('red_staff', propbox_scene, self.staff_manager.staff_locations['N_staff'], 'red', 'images\\staves\\N_staff_red.svg')
         self.blue_staff = PropBox_Staff('blue_staff', propbox_scene, self.staff_manager.staff_locations['N_staff'], 'blue', 'images\\staves\\N_staff_blue.svg')
@@ -24,6 +25,8 @@ class Prop_Box:
         self.red_staff.setPos(100, 100)
         
         view = QGraphicsView(propbox_scene)
+        view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         view.setFrameShape(QFrame.NoFrame)
 
         layout = QVBoxLayout()  # Create a new QVBoxLayout

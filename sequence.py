@@ -9,6 +9,7 @@ from pictograph import Pictograph
 from PyQt5.QtGui import QImage, QPainter
 from staff import Staff
 from settings import Settings
+from graphboard import Graphboard
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
 class Sequence_Handler():
@@ -71,6 +72,7 @@ class Sequence_Handler():
     def add_to_graphboard(self, pictograph: Pictograph, graphboard: Graphboard):
         state = pictograph.state
         graphboard.clear()
+
         
         for arrow_state in state['arrows']:
             arrow = Arrow(arrow_state['svg_file'])
@@ -101,6 +103,8 @@ class Sequence_Handler():
         for item in self.graphboard_scene.items():
             self.graphboard_scene.removeItem(item)
         self.ui_setup.word_label.setText("My word: ")
+        self.ui_setup.info_tracker.label.setText("")  # Clear the label
+
 
 class Sequence_Scene(QGraphicsScene):
     def __init__(self, manager=None, parent=None):

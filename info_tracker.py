@@ -28,10 +28,17 @@ class Info_Tracker:
 
     def get_current_state(self):
         state = {}
+        arrow_count = 0  # Count the number of Arrow instances
         for item in self.graphboard.items():
             if isinstance(item, Arrow):
-                state[item] = item.get_attributes()
-        return state
+                arrow_count += 1
+                # existing code for capturing the state
+        
+        if arrow_count == 0:
+            return None  # No arrows on the board
+        else:
+            return state
+
 
     def get_current_letter(self):
         if self.letter is not None:
@@ -150,8 +157,8 @@ class Info_Tracker:
                     red_text = red_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
                     red_text = red_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
 
-        if letter is not None:
-            self.graphboard.update_letter(letter)
+
+        self.graphboard.update_letter(letter)
         self.label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr><tr><td width=100>" + letter_text + "</td></tr></table>")
 
         

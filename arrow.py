@@ -36,6 +36,7 @@ class Arrow(QGraphicsSvgItem):
         self.arrowCreated.connect(self.info_tracker.update)
         self.arrowCreated.emit()
         self.arrowMoved.connect(self.info_tracker.update)
+        print("[Debug] Signal connected:", "self.arrowMoved.connect(self.info_tracker.update)")
 
 
 
@@ -75,6 +76,7 @@ class Arrow(QGraphicsSvgItem):
         self.start_location = attributes.get('start_location', self.start_location)
         self.end_location = attributes.get('end_location', self.end_location)
         self.attributesChanged.emit()  # Emit the signal here
+        print("[Debug] Signal emitted:", "self.attributesChanged.emit()  # Emit the signal here")
         self.update_arrow_image() 
 
     def set_orientation(self, orientation):
@@ -191,6 +193,7 @@ class Arrow(QGraphicsSvgItem):
             else:
                 self.quadrant = "sw"
         self.attributesChanged.emit()  # Emit the signal here after updating the quadrant
+    print("[Debug] Signal emitted:", "self.attributesChanged.emit()  # Emit the signal here after updating the quadrant")
 
 
     def update_rotation(self):
@@ -314,6 +317,7 @@ class Arrow(QGraphicsSvgItem):
 
 
         self.attributesChanged.emit()
+    print("[Debug] Signal emitted:", "self.attributesChanged.emit()")
 
     def update_arrow_image(self):
         # Construct the new filename based on the arrow's attributes
@@ -365,6 +369,7 @@ class Arrow(QGraphicsSvgItem):
         self.update_arrow_position()
 
         self.attributesChanged.emit()
+    print("[Debug] Signal emitted:", "self.attributesChanged.emit()")
 
     def move_quadrant_left(self):
         if self.quadrant == 'ne':
