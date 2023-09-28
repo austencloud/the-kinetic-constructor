@@ -239,7 +239,6 @@ class UiSetup(QWidget):
         arrowbox_scene = QGraphicsScene()
         for arrow in self.arrows:
             arrow.attributesChanged.connect(lambda: self.generator.update_staff(arrow, self.staff_manager))
-            print("[Debug] Signal connected:", "arrow.attributesChanged.connect(lambda: self.generator.update_staff(arrow, self.staff_manager))")
 
         svgs_full_paths = []
         default_arrows = ['red_iso_r_ne.svg', 'red_anti_r_ne.svg', 'blue_iso_r_sw.svg', 'blue_anti_r_sw.svg']

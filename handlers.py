@@ -39,9 +39,7 @@ class Arrow_Handler(QObject):
 
         print(self.selected_arrow.quadrant)
         self.arrowMoved.emit()
-        print("[Debug] Signal emitted:", "self.arrowMoved.emit()")
         self.attributesChanged.emit()
-        print("[Debug] Signal emitted:", "self.attributesChanged.emit()")
 
 
     def move_arrow_quadrant_left(self):
@@ -100,7 +98,6 @@ class Arrow_Handler(QObject):
                 print("Failed to load SVG file:", new_svg)
 
         self.graphboard.arrowMoved.emit()
-    print("[Debug] Signal emitted:", "self.graphboard.arrowMoved.emit()")
 
     def mirror_arrow(self, items):
         for item in items:
@@ -128,7 +125,6 @@ class Arrow_Handler(QObject):
             else:
                 print("Failed to load SVG file:", new_svg)
         self.graphboard.arrowMoved.emit()
-    print("[Debug] Signal emitted:", "self.graphboard.arrowMoved.emit()")
 
     def bring_forward(self, items):
         for item in items:
@@ -161,7 +157,6 @@ class Arrow_Handler(QObject):
             print("Cannot swap colors with no arrows on the graphboard.")
             
         self.graphboard.arrowMoved.emit()
-    print("[Debug] Signal emitted:", "self.graphboard.arrowMoved.emit()")
 
     def selectAll(self):
         for item in self.graphboard.items():
@@ -182,9 +177,7 @@ class Arrow_Handler(QObject):
         for item in items:
             self.graphboard.scene().removeItem(item)
         self.graphboard.arrowMoved.emit()
-        print("[Debug] delete_arrow arrowMoved emitted:", "self.graphboard.arrowMoved.emit()")
         self.graphboard.attributesChanged.emit()
-        print("[Debug] delete_arrow attributesChanged emitted:", "self.graphboard.attributesChanged.emit()")
         self.graphboard.info_tracker.update()  # Add this line to update the info tracker
 
 

@@ -33,9 +33,7 @@ class Graphboard(QGraphicsView):
         self.ui_setup = ui_setup
         self.renderer = QSvgRenderer()
         self.arrowMoved.connect(self.update_staffs_and_check_beta)
-        print("[Debug] Signal connected:", "self.arrowMoved.connect(self.update_staffs_and_check_beta)")
         self.attributesChanged.connect(self.update_staffs_and_check_beta)
-        print("[Debug] Signal connected:", "self.attributesChanged.connect(self.update_staffs_and_check_beta)")
         self.exporter = Exporter(self, graphboard_scene, self.staff_manager, self.grid)
         self.sequence_manager = sequence_manager
         self.letter_renderers = {}
@@ -115,7 +113,6 @@ class Graphboard(QGraphicsView):
                         item.update_locations()
                 self.info_tracker.update()
                 self.arrowMoved.emit()
-    print("[Debug] Signal emitted:", "self.arrowMoved.emit()")
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
@@ -181,7 +178,7 @@ class Graphboard(QGraphicsView):
         self.drag.update_arrow_svg(self.arrow_item, quadrant) 
         self.info_tracker.update()
         self.arrowMoved.emit()
-    print("[Debug] Signal emitted:", "self.arrowMoved.emit()")
+
 
 
     ### GETTERS ###
@@ -329,7 +326,6 @@ class Graphboard(QGraphicsView):
             if isinstance(item, Arrow):
                 item.moveBy(dx, dy)
                 self.arrowMoved.emit()
-    print("[Debug] Signal emitted:", "self.arrowMoved.emit()")
 
     def contextMenuEvent(self, event):
         clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())
@@ -436,7 +432,6 @@ class Graphboard(QGraphicsView):
                 self.scene().removeItem(item)
                 del item
         self.arrowMoved.emit()
-    print("[Debug] Signal emitted:", "self.arrowMoved.emit()")
 
 class Quadrant_Preview_Drag(QDrag):
     def __init__(self, source, arrow_item, info_tracker, *args, **kwargs):

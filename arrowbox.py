@@ -129,4 +129,3 @@ class Arrow_Box(QGraphicsView):
             print("staff position:", staff_position)
             infoTracker.update() 
             self.arrowMoved.emit()
-    print("[Debug] Signal emitted:", "self.arrowMoved.emit()")

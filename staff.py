@@ -31,7 +31,6 @@ class Staff(QGraphicsSvgItem):
         self.svg_file = staff_svg_file
         self.color = color
         self.attributesChanged.connect(self.update_staff)
-    print("[Debug] Signal connected:", "self.attributesChanged.connect(self.update_staff)")
         
 
     def update_attributes(self, new_attributes):
@@ -40,7 +39,6 @@ class Staff(QGraphicsSvgItem):
         self.svg_file = new_attributes.get('svg_file', self.svg_file)
         self.color = new_attributes.get('color', self.color)
         self.attributesChanged.emit()
-    print("[Debug] Signal emitted:", "self.attributesChanged.emit()")
 
     def update_staff(self):
         self.setElementId(self.element_id)

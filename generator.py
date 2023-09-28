@@ -114,7 +114,6 @@ class Pictograph_Generator():
                 svg_file = f"images/arrows/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}.svg"
                 arrow = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler)
                 arrow.attributesChanged.connect(lambda: self.update_staff(arrow, staff_manager))
-                print("[Debug] Signal connected:", "arrow.attributesChanged.connect(lambda: self.update_staff(arrow, staff_manager))")
                 arrow.set_attributes(combination)
                 arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
@@ -149,7 +148,6 @@ class Pictograph_Generator():
         # Update the info label
         self.info_tracker.update()
         self.graphboard.arrowMoved.emit()
-    print("[Debug] Signal emitted:", "self.graphboard.arrowMoved.emit()")
     
     def get_current_letter(self):
         return self.current_letter
