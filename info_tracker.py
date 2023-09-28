@@ -134,7 +134,13 @@ class Info_Tracker:
                 letter_text += f"<h4>{start_position} → {end_position}</h4>"
                 self.letter = letter 
                 break 
-
+        else:
+            self.letter = None
+            letter_text += "<span style='font-size: 140px; font-weight: bold;'></span>"
+            try:
+                self.graphboard.update_letter(None)  # This should remove the letter from the graphboard
+            except Exception as e:
+                print(f"An error occurred while updating the letter: {e}")    
 
         if hasattr(self.main_window, 'staff'):
             self.main_window.staff.update_position(self.arrow.end_location)

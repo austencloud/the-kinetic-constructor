@@ -182,9 +182,10 @@ class Arrow_Handler(QObject):
         for item in items:
             self.graphboard.scene().removeItem(item)
         self.graphboard.arrowMoved.emit()
-        print("[Debug] Signal emitted:", "self.graphboard.arrowMoved.emit()")
+        print("[Debug] delete_arrow arrowMoved emitted:", "self.graphboard.arrowMoved.emit()")
         self.graphboard.attributesChanged.emit()
-        print("[Debug] Signal emitted:", "self.graphboard.attributesChanged.emit()")
+        print("[Debug] delete_arrow attributesChanged emitted:", "self.graphboard.attributesChanged.emit()")
+        self.graphboard.info_tracker.update()  # Add this line to update the info tracker
 
 
 

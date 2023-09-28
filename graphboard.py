@@ -159,6 +159,7 @@ class Graphboard(QGraphicsView):
             dropped_svg = event.mimeData().text()
 
             self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler,  self.arrow_handler)
+
             self.arrow_item.setFlag(QGraphicsSvgItem.ItemIsFocusable, True)
             self.scene().addItem(self.arrow_item)
             pos = self.mapToScene(event.pos()) - self.arrow_item.boundingRect().center()
@@ -409,21 +410,26 @@ class Graphboard(QGraphicsView):
 
     def update_letter(self, letter):
         print(letter)
+        if self.letter_item is None:
+            print("self.letter_item is None")
+            return
         if letter is not None and letter != 'None':
             svg_file = f'images/letters/{letter}.svg'
+            #Print svg file
+            print(svg_file)
             renderer = QSvgRenderer(svg_file)
             if not renderer.isValid():
                 print(f"Invalid SVG file: {svg_file}")
                 return
             self.letter_item.setSharedRenderer(renderer)
-            self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
-        else :
-            self.letter_item.setSharedRenderer(None)
             
-    def clear_letter(self):
-        self.letter_item.setSharedRenderer(None)
-        
-    
+        self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
+        #print coordinates of letter
+        print(self.letter_item.pos())
+            
+            
+
+
     def clear(self):
         for item in self.scene().items():
             if isinstance(item, Arrow) or isinstance(item, Staff):
