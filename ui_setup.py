@@ -36,20 +36,23 @@ class UiSetup(QWidget):
         self.exporter = None
 
         self.sequence_handler = None
-        self.graphboard = None
-        self.arrow_handler = None
+        self.graphboard_view = None
+
 
         self.initStaffManager()
         self.initLayouts()
+        self.arrow_handler = Arrow_Handler(self.graphboard_view, self.staff_manager)
+
         self.initInfoTracker()
         self.initMenus()
         self.initGraphboard() 
+        
         self.initGenerator() 
-        self.graphboard.setGenerator(self.generator)
+        self.graphboard_view.setGenerator(self.generator)
         self.connectGraphboard()
         self.initArrowBox()
         self.staff_manager.connect_grid(self.grid)
-        self.staff_manager.connect_graphboard(self.graphboard)
+        self.staff_manager.connect_graphboard(self.graphboard_view)
 
         self.initPropBox()
         self.initButtons()
@@ -63,7 +66,7 @@ class UiSetup(QWidget):
     def initMenus(self):
         self.json_updater = Json_Handler(self.graphboard_scene)
         self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.sequence_handler, self.arrow_handler, self.exporter)
-        self.arrow_handler = Arrow_Handler(self.graphboard_scene, self.graphboard, self.staff_manager)
+        self.arrow_handler.connect_graphboard_scene(self.graphboard_scene)
         self.key_press_handler = Key_Press_Handler(self.arrow_handler, None)
         self.menu_bar = Menu_Bar()
 
@@ -101,12 +104,12 @@ class UiSetup(QWidget):
         self.grid = Grid('images\\grid\\grid.svg')
         #set the size of the grid to SCALE_FACTOR 
         self.grid.setScale(SCALE_FACTOR)
-        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
-        self.graphboard = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self, None, self.sequence_handler)
-        self.key_press_handler.connect_to_graphboard(self.graphboard)
-        self.arrow_handler.connect_to_graphboard(self.graphboard)
+        self.exporter = Exporter(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
+        self.graphboard_view = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.arrow_handler, self, None, self.sequence_handler)
+        self.key_press_handler.connect_to_graphboard(self.graphboard_view)
+        self.arrow_handler.connect_to_graphboard(self.graphboard_view)
         transform = QTransform()
-        graphboard_size = self.graphboard.frameSize()
+        graphboard_size = self.graphboard_view.frameSize()
 
         grid_position = QPointF((graphboard_size.width() - self.grid.boundingRect().width()) / 2,
                                 (graphboard_size.height() - self.grid.boundingRect().height()) / 2 - (75 * SCALE_FACTOR))
@@ -209,9 +212,9 @@ class UiSetup(QWidget):
         self.export_to_svg_button = createButton("images/icons/export.png", "Export to SVG",
             lambda: self.exporter.export_to_svg('output.svg'), is_lambda=True)
         self.selectAllButton = createButton("images/icons/select_all.png", "Select All",
-            lambda: self.graphboard.select_all_arrows(), is_lambda=True)
+            lambda: self.graphboard_view.select_all_arrows(), is_lambda=True)
         self.add_to_sequence_button = createButton("images/icons/add_to_sequence.png", "Add to Sequence",
-            lambda: self.sequence_handler.add_to_sequence(self.graphboard), is_lambda=True)
+            lambda: self.sequence_handler.add_to_sequence(self.graphboard_view), is_lambda=True)
         
         buttons = [
             self.deleteButton, 
@@ -258,8 +261,8 @@ class UiSetup(QWidget):
         for i, svg_file in enumerate(svgs_full_paths):
             file_name = os.path.basename(svg_file)
             if file_name in default_arrows:
-                self.graphboard.set_handlers(self.arrow_handler)
-                arrow_item = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler)
+                self.graphboard_view.set_handlers(self.arrow_handler)
+                arrow_item = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.arrow_handler)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
                 arrow_item.setScale(0.75)
@@ -282,7 +285,7 @@ class UiSetup(QWidget):
 
 
                 self.arrows.append(arrow_item)
-        arrowbox = Arrow_Box(arrowbox_scene, self.graphboard, self.info_tracker, self.svg_handler)
+        arrowbox = Arrow_Box(arrowbox_scene, self.graphboard_view, self.info_tracker, self.svg_handler)
         objectbox_layout.addWidget(arrowbox) 
         arrowbox_frame.setFixedSize(int(500 * SCALE_FACTOR), int(500 * SCALE_FACTOR))
         self.objectbox_layout.addWidget(arrowbox_frame)
@@ -297,7 +300,7 @@ class UiSetup(QWidget):
 
     def initInfoTracker(self):
         self.info_label = QLabel(self.main_window)
-        self.info_tracker = Info_Tracker(None, self.info_label, self, self.staff_manager)
+        self.info_tracker = Info_Tracker(None, self.info_label, self, self.staff_manager, self.arrow_handler)
 
     def initWordLabel(self):
         self.word_label = QLabel(self.main_window)
@@ -317,13 +320,13 @@ class UiSetup(QWidget):
         self.lower_layout.addWidget(clear_sequence_button)
 
     def initGenerator(self):
-        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.context_menu_handler, self.grid)
+        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard_view, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.context_menu_handler, self.grid)
 
     def initStaffManager(self):
         self.staff_manager = Staff_Manager(self.graphboard_scene)
 
     def initLetterManager(self):
-        self.letter_manager = Letter_Manager(self.graphboard, self.info_tracker)
+        self.letter_manager = Letter_Manager(self.graphboard_view, self.info_tracker)
         self.letterInput = QLineEdit(self.main_window)
         self.right_layout.addWidget(self.letterInput)
         self.assignLetterButton = QPushButton("Assign Letter", self.main_window)
@@ -336,8 +339,8 @@ class UiSetup(QWidget):
         self.info_layout.addWidget(self.info_label)
 
     def connectGraphboard(self):
-        self.info_tracker.set_graphboard(self.graphboard)
-        self.graphboard_layout.addWidget(self.graphboard)
+        self.info_tracker.set_graphboard(self.graphboard_view)
+        self.graphboard_layout.addWidget(self.graphboard_view)
 
 
 ### GETTERS ###
@@ -352,7 +355,7 @@ class UiSetup(QWidget):
 ### EVENTS ###
 
     def keyPressEvent(self, event):
-        self.selected_items = self.graphboard.get_selected_items()
+        self.selected_items = self.graphboard_view.get_selected_items()
         self.arrow = self.selected_items[0]
 
         if event.key() == Qt.Key_Delete:

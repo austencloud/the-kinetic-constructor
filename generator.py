@@ -52,7 +52,6 @@ class Pictograph_Generator():
                 types = [arrow_dict['type'] for arrow_dict in combination if 'type' in arrow_dict]
                 is_hybrid = types.count('anti') == 1 and types.count('iso') == 1
 
-                # print(combination)
 
                 # Iterate over the arrow dictionaries in the list
                 for arrow_dict in combination:

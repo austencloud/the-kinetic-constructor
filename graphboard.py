@@ -17,7 +17,7 @@ class Graphboard(QGraphicsView):
     arrowMoved = pyqtSignal()
     attributesChanged = pyqtSignal()
 
-    def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, ui_setup, generator, sequence_manager, parent=None):
+    def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, arrow_hanndler, ui_setup, generator, sequence_manager, parent=None):
         super().__init__(graphboard_scene, parent)
         self.setAcceptDrops(True)
         self.dragging = None
@@ -43,7 +43,8 @@ class Graphboard(QGraphicsView):
 
         self.letter_item = QGraphicsSvgItem()
         self.graphboard_scene.addItem(self.letter_item)
-        self.arrow_handler = Arrow_Handler(self.graphboard_scene, self, self.staff_manager)
+        self.arrow_handler = arrow_hanndler
+        self.arrow_handler.connect_graphboard_scene(self.graphboard_scene)
         self.setFixedSize(int(750 * SCALE_FACTOR), int(900 * SCALE_FACTOR))
 
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -113,6 +114,7 @@ class Graphboard(QGraphicsView):
                         item.update_locations()
                 self.info_tracker.update()
                 self.arrowMoved.emit()
+    print("[Debug] Signal emitted:", "self.arrowMoved.emit()")
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
@@ -405,25 +407,28 @@ class Graphboard(QGraphicsView):
 
 
     def update_letter(self, letter):
-        print(letter)
-        if self.letter_item is None:
+        print("Updating letter to: " + str(letter))
+        if letter is None or letter is 'None':
             print("self.letter_item is None")
-            return
-        if letter is not None and letter != 'None':
-            svg_file = f'images/letters/{letter}.svg'
-            #Print svg file
-            print(svg_file)
+            svg_file = f'images/letters/blank.svg'
             renderer = QSvgRenderer(svg_file)
             if not renderer.isValid():
                 print(f"Invalid SVG file: {svg_file}")
                 return
             self.letter_item.setSharedRenderer(renderer)
-            
+
+        if letter is not None and letter != 'None':
+            svg_file = f'images/letters/{letter}.svg'
+            renderer = QSvgRenderer(svg_file)
+            if not renderer.isValid():
+                print(f"Invalid SVG file: {svg_file}")
+                return
+            self.letter_item.setSharedRenderer(renderer)
+
         self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
-        #print coordinates of letter
         print(self.letter_item.pos())
-            
-            
+
+                
 
 
     def clear(self):
