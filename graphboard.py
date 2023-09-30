@@ -114,7 +114,6 @@ class Graphboard(QGraphicsView):
                         item.update_locations()
                 self.info_tracker.update()
                 self.arrowMoved.emit()
-    print("[Debug] Signal emitted:", "self.arrowMoved.emit()")
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
@@ -426,7 +425,6 @@ class Graphboard(QGraphicsView):
             self.letter_item.setSharedRenderer(renderer)
 
         self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
-        print(self.letter_item.pos())
 
                 
 

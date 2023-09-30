@@ -8,8 +8,7 @@ import os
 from data import positions_map
 from staff import Staff
 class Info_Tracker:
-    arrowDeleted = pyqtSignal()  # New signal to indicate an arrow has been deleted
-
+    attributesChanged = pyqtSignal()  # New signal to indicate an arrow has been deleted
     
     def __init__(self, graphboard, label, main_window, staff_manager, arrow_handler):
         self.graphboard = graphboard
@@ -21,14 +20,13 @@ class Info_Tracker:
         self.label.setAlignment(Qt.AlignTop)
         self.letters = self.load_letters()
         self.staff_manager = staff_manager
-        self.is_initialized = False  # Add this flag to indicate initialization status
+        self.is_initialized = True  # Add this flag to indicate initialization status
         # Inside your Info_Tracker class or wherever you're initializing Arrow_Handler
         self.arrow_handler = arrow_handler
-        self.arrow_handler.arrowDeleted.connect(self.update)  # Assuming `update` is the method that updates the letter
+        self.arrow_handler.attributesChanged.connect(self.update)  # Assuming `update` is the method that updates the letter
 
     def set_initialized(self, status):
         self.is_initialized = status
-
 
     def start(self):
         self.previous_state = self.get_current_state()
@@ -116,6 +114,7 @@ class Info_Tracker:
         
     def update(self):
         print("update method called")
+        print(f"is_initialized: {self.is_initialized}")  # Add this line
         if not self.is_initialized:
             return
         current_combination = []
