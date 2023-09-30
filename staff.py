@@ -8,7 +8,6 @@ from constants import STAFF_WIDTH, STAFF_LENGTH, RED, BLUE
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
 class Staff(QGraphicsSvgItem):
-    attributesChanged = pyqtSignal()
 
     def __init__(self, element_id, scene, position, color=None, staff_svg_file=None, initial_visibility=True):
         super().__init__()
@@ -31,7 +30,7 @@ class Staff(QGraphicsSvgItem):
         self.setPos(position)
         self.svg_file = staff_svg_file
         self.color = color
-        self.attributesChanged.connect(self.update_staff)
+
         self.is_static = False
         
     def update_attributes(self, new_attributes):
@@ -39,7 +38,6 @@ class Staff(QGraphicsSvgItem):
         self.position = new_attributes.get('position', self.position)
         self.svg_file = new_attributes.get('svg_file', self.svg_file)
         self.color = new_attributes.get('color', self.color)
-        self.attributesChanged.emit()
 
     def update_staff(self):
         self.setElementId(self.element_id)
@@ -78,61 +76,82 @@ class PropBox_Staff(Staff):
 class Staff_Manager(QObject):
     positionChanged = pyqtSignal(str)
 
-    def __init__(self, scene):
+    def __init__(self, graphboard_scene):
         super().__init__()
-        self.scene = scene
+        self.graphboard_scene = graphboard_scene
         self.beta_staves = []
         self.previous_position = None
-        
+
+
+
     ### INITIALIZERS ###
 
-    def init_staves(self, scene):
-        scale, hand_points = self.init_hand_points()
-        self.init_staff_locations(hand_points)
-        self.init_graphboard_staffs(scene)
-        self.init_beta_staves(scene)
-        self.hide_all_graphboard_staffs()
-
-    def init_hand_points(self):
+    def init_graphboard_staffs(self, graphboard_scene):
+        
+        # Determine the handpoints of the grid
         scale = self.grid.scale()
         GRID_WIDTH = self.grid.get_width()
         GRAPHBOARD_WIDTH = self.graphboard.get_width()
         self.GRID_PADDING = (GRAPHBOARD_WIDTH - GRID_WIDTH) / 2
         self.GRID_V_OFFSET = (self.graphboard.height() - self.graphboard.width()) / 2
 
-        hand_points = {}
+        graphboard_handpoints = {}
         for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
             x, y = self.grid.get_circle_coordinates(point_name)
             scaled_x = x * scale + self.GRID_PADDING
             scaled_y = y * scale + self.GRID_V_OFFSET
-            hand_points[point_name] = QPointF(scaled_x, scaled_y)
-        return scale, hand_points
+            graphboard_handpoints[point_name] = QPointF(scaled_x, scaled_y)
 
-    def init_staff_locations(self, hand_points):
+
+        # Set the locations of the staffs according to the handpoints
         self.staff_locations = {
-            'N_staff': hand_points['N_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH),
-            'E_staff': hand_points['E_hand_point'] + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2 - STAFF_WIDTH),
-            'S_staff': hand_points['S_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH),
-            'W_staff': hand_points['W_hand_point'] + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2 - STAFF_WIDTH)
+            'N_staff': graphboard_handpoints['N_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH),
+            'E_staff': graphboard_handpoints['E_hand_point'] + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2 - STAFF_WIDTH),
+            'S_staff': graphboard_handpoints['S_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH),
+            'W_staff': graphboard_handpoints['W_hand_point'] + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2 - STAFF_WIDTH)
         }
 
-    def init_graphboard_staffs(self, scene):
+        # Initialize the graphboard staffs
         self.graphboard_staffs = {}
         for direction in ['N', 'E', 'S', 'W']:
             for color in [RED, BLUE]:
+                if color == RED:
+                    color = 'red'
+                else: # color == BLUE
+                    color = 'blue'
                 staff_key = f"{direction}_staff_{color}"
                 svg_file = f'images\\\\staves\\\\{direction}_staff_{color}.svg'
                 self.graphboard_staffs[staff_key] = Graphboard_Staff(
-                    f'{direction}_staff', scene, self.staff_locations[f'{direction}_staff'], color, svg_file
+                    f'{direction}_staff', graphboard_scene, self.staff_locations[f'{direction}_staff'], color, svg_file
                 )
-
-    def init_beta_staves(self, scene):
+             
+             
+        # Initialize the beta staves     
         self.beta_staves = [
-            Beta_Staff('beta_vertical_w-blue_e-red', scene, self.staff_locations['N_staff'], None, 'images/staves/beta/beta_vertical_w-blue_e-red.svg'),
-            Beta_Staff('beta_vertical_w-red_e-blue', scene, self.staff_locations['E_staff'], None, 'images/staves/beta/beta_vertical_w-red_e-blue.svg'),
-            Beta_Staff('beta_horizontal_n-red_s_blue', scene, self.staff_locations['S_staff'], None, 'images/staves/beta/beta_horizontal_n-red_s_blue.svg'),
-            Beta_Staff('beta_horizontal_n-blue_s-red', scene, self.staff_locations['W_staff'], None, 'images/staves/beta/beta_horizontal_n-blue_s-red.svg')
+            Beta_Staff('beta_vertical_w-blue_e-red', graphboard_scene, self.staff_locations['N_staff'], None, 'images/staves/beta/beta_vertical_w-blue_e-red.svg'),
+            Beta_Staff('beta_vertical_w-red_e-blue', graphboard_scene, self.staff_locations['E_staff'], None, 'images/staves/beta/beta_vertical_w-red_e-blue.svg'),
+            Beta_Staff('beta_horizontal_n-red_s_blue', graphboard_scene, self.staff_locations['S_staff'], None, 'images/staves/beta/beta_horizontal_n-red_s_blue.svg'),
+            Beta_Staff('beta_horizontal_n-blue_s-red', graphboard_scene, self.staff_locations['W_staff'], None, 'images/staves/beta/beta_horizontal_n-blue_s-red.svg')
         ]
+
+        self.hide_all_graphboard_staffs()
+
+    def init_propbox_staffs(self, propbox_scene):
+        self.propbox_staff_locations = {
+            'N_staff': QPointF(100, 100),
+            'E_staff': QPointF(100, 100),
+            'S_staff': QPointF(100, 100),
+            'W_staff': QPointF(100, 100)
+        }
+        
+        self.propbox_staffs = {}
+        self.red_staff = PropBox_Staff('red_staff', propbox_scene, self.propbox_staff_locations['N_staff'], 'red', 'images\\staves\\N_staff_red.svg')
+        self.blue_staff = PropBox_Staff('blue_staff', propbox_scene, self.propbox_staff_locations['N_staff'], 'blue', 'images\\staves\\N_staff_blue.svg')
+        self.propbox_staffs['red_staff'] = self.red_staff
+        self.propbox_staffs['blue_staff'] = self.blue_staff
+
+
+
 
     ### CONNECTORS ###
 
@@ -141,6 +160,9 @@ class Staff_Manager(QObject):
 
     def connect_graphboard(self, graphboard):
         self.graphboard = graphboard
+
+    def connect_propbox(self, propbox):
+        self.propbox = propbox
 
     ### GETTERES ###
 
@@ -165,9 +187,16 @@ class Staff_Manager(QObject):
 
     ### UPDATERS ###
 
+    def update_staffs_and_check_beta(self):
+        self.update_graphboard_staffs(self.graphboard.scene())
+        self.check_and_replace_staves()
+
     def hide_all_graphboard_staffs(self):
         for staff in self.graphboard_staffs.values():
-            staff.hide()
+            # remove the staff from the scene
+            if staff.scene is not None:
+                self.graphboard_scene.removeItem(staff)
+
             
     def show_staff(self, direction):
         direction = direction.capitalize()
@@ -176,14 +205,6 @@ class Staff_Manager(QObject):
             staff.show()
         else:
             print(f"No staff found for direction {direction}")
-
-    def remove_beta_staves(self):
-        for beta_staff in self.beta_staves:
-            if beta_staff.scene is not None:
-                ### NOT CAUSING THE ERROR
-                # if item's scene is not different from this scene, remove the item
-                self.scene.removeItem(beta_staff)
-        self.beta_staves = []
 
     def remove_non_beta_staves(self):
         for staff in self.graphboard_staffs.values():
@@ -205,9 +226,9 @@ class Staff_Manager(QObject):
                 staves_to_remove = [staff for staff in self.graphboard_staffs.values() if (staff.pos().x(), staff.pos().y()) == position]
                 for staff in staves_to_remove:
                     ### not causing the error ### 
-                    self.scene.removeItem(staff)
+                    self.graphboard_scene.removeItem(staff)
                     staff.hide()
-                    self.scene.update()
+                    self.graphboard_scene.update()
                     # Remove the staff from the graphboard_staffs dictionary
                     self.graphboard_staffs = {key: value for key, value in self.graphboard_staffs.items() if value != staff}
                         
@@ -219,7 +240,7 @@ class Staff_Manager(QObject):
                     print(f"Error when getting direction: {e}")
                     continue
 
-                arrows = [arrow for arrow in self.scene.items() if isinstance(arrow, Arrow) and arrow.end_location == direction]
+                arrows = [arrow for arrow in self.graphboard_scene.items() if isinstance(arrow, Arrow) and arrow.end_location == direction]
 
                 if len(arrows) != 2:
                     continue 
@@ -254,7 +275,7 @@ class Staff_Manager(QObject):
                         beta_svg_file = 'images/staves/beta/beta_horizontal_n-blue_s-red.svg'
 
                 beta_svg = QGraphicsSvgItem(beta_svg_file)
-                self.scene.addItem(beta_svg)
+                self.graphboard_scene.addItem(beta_svg)
 
                 if orientation == 'vertical':
                     adjusted_position = QPointF(position[0] - 20, position[1] - 0)
@@ -270,7 +291,17 @@ class Staff_Manager(QObject):
                 continue
 
     def update_graphboard_staffs(self, scene):
+        
+        # First remove all beta staves from the scene
+        for beta_staff in self.beta_staves:
+            if beta_staff.scene is not None:
+                self.graphboard_scene.removeItem(beta_staff)
+        self.beta_staves = []
+        
+        # Then remove all graphboard staves from the scene
         self.hide_all_graphboard_staffs()
+        
+        # Then add the graphboard staves back to the scene
         for arrow in scene.items():
             if isinstance(arrow, Arrow):
                 end_location = arrow.end_location

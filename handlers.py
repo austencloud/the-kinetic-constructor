@@ -17,8 +17,8 @@ from copy import deepcopy
 
 
 class Arrow_Handler(QObject):
-    arrowMoved = pyqtSignal()
-    attributesChanged = pyqtSignal()
+
+
     arrowDeleted = pyqtSignal()  # New signal to indicate an arrow has been deleted
 
 
@@ -45,8 +45,8 @@ class Arrow_Handler(QObject):
         # Update the arrow's image
 
         print(self.selected_arrow.quadrant)
-        self.arrowMoved.emit()
-        self.attributesChanged.emit()
+
+
 
 
     def move_arrow_quadrant_left(self):
@@ -104,7 +104,7 @@ class Arrow_Handler(QObject):
             else:
                 print("Failed to load SVG file:", new_svg)
 
-        self.graphboard_view.arrowMoved.emit()
+
 
     def mirror_arrow(self, items):
         for item in items:
@@ -131,7 +131,6 @@ class Arrow_Handler(QObject):
                 item.setPos(pos)
             else:
                 print("Failed to load SVG file:", new_svg)
-        self.graphboard_view.arrowMoved.emit()
 
     def bring_forward(self, items):
         for item in items:
@@ -163,7 +162,6 @@ class Arrow_Handler(QObject):
         else:
             print("Cannot swap colors with no arrows on the graphboard_view.")
             
-        self.graphboard_view.arrowMoved.emit()
 
     def selectAll(self):
         for item in self.graphboard_view.items():

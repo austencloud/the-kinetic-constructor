@@ -83,8 +83,6 @@ class Pictograph_Generator():
 
 
 
-
-
     def generate_pictograph(self, letter, staff_manager):
         #delete all items
         self.graphboard.clear()
@@ -97,6 +95,7 @@ class Pictograph_Generator():
 
         self.current_letter = letter  # Store the current letter
         print(f"Generating {self.current_letter}")
+        self.graphboard.set_current_letter(self.current_letter)
         # Choose a combination at random
         combination_set = random.choice(combinations)
 
@@ -112,7 +111,7 @@ class Pictograph_Generator():
             if all(key in combination for key in ['color', 'type', 'rotation', 'quadrant']):
                 svg_file = f"images/arrows/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}.svg"
                 arrow = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler)
-                arrow.attributesChanged.connect(lambda: self.update_staff(arrow, staff_manager))
+
                 arrow.set_attributes(combination)
                 arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
@@ -146,8 +145,8 @@ class Pictograph_Generator():
 
         # Update the info label
         self.info_tracker.update()
-        self.graphboard.arrowMoved.emit()
-    
+        self.staff_manager.update_staffs_and_check_beta()
+
     def get_current_letter(self):
         return self.current_letter
 

@@ -7,10 +7,8 @@ import os
 import json
 
 class Arrow(QGraphicsSvgItem):
-    attributesChanged = pyqtSignal()
-    arrowMoved = pyqtSignal()
     orientationChanged = pyqtSignal()
-    arrowCreated = pyqtSignal()
+
 
     def __init__(self, svg_file, graphboard, info_tracker, svg_handler, arrow_manipulator):
         super().__init__(svg_file)
@@ -33,9 +31,7 @@ class Arrow(QGraphicsSvgItem):
         self.arrow_manipulator = arrow_manipulator
 
         # Assuming `arrow` is an instance of the Arrow class
-        self.arrowCreated.connect(self.info_tracker.update)
-        self.arrowCreated.emit()
-        self.arrowMoved.connect(self.info_tracker.update)
+
 
 
 
@@ -190,7 +186,6 @@ class Arrow(QGraphicsSvgItem):
                 self.quadrant = "nw"
             else:
                 self.quadrant = "sw"
-        self.attributesChanged.emit()  # Emit the signal here after updating the quadrant
 
 
     def update_rotation(self):
@@ -313,7 +308,7 @@ class Arrow(QGraphicsSvgItem):
             self.setPos(pos)
 
 
-        self.attributesChanged.emit()
+
 
     def update_arrow_image(self):
         # Construct the new filename based on the arrow's attributes
@@ -364,7 +359,6 @@ class Arrow(QGraphicsSvgItem):
             self.quadrant = 'nw'
         self.update_arrow_position()
 
-        self.attributesChanged.emit()
 
     def move_quadrant_left(self):
         if self.quadrant == 'ne':

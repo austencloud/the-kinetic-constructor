@@ -10,7 +10,7 @@ from letter import Letter_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent, QSize
 from handlers import Arrow_Handler, Svg_Handler, Json_Handler, Key_Press_Handler
 from arrowbox import Arrow_Box
-from propbox import Prop_Box
+from propbox import PropBox_Scene
 from menus import Menu_Bar, Context_Menu_Handler
 from graphboard import Graphboard
 from exporter import Exporter
@@ -51,10 +51,14 @@ class UiSetup(QWidget):
         self.graphboard_view.setGenerator(self.generator)
         self.connectGraphboard()
         self.initArrowBox()
+        self.initPropBox()
+        
         self.staff_manager.connect_grid(self.grid)
         self.staff_manager.connect_graphboard(self.graphboard_view)
-
-        self.initPropBox()
+        self.staff_manager.connect_propbox(self.propbox_scene)
+        self.staff_manager.init_graphboard_staffs(self.graphboard_scene)
+        self.staff_manager.init_propbox_staffs(self.propbox_scene)
+        
         self.initButtons()
         self.connectInfoTracker()
         self.initWordLabel()
@@ -240,8 +244,6 @@ class UiSetup(QWidget):
         objectbox_layout = QGridLayout()
         arrowbox_frame.setLayout(objectbox_layout) 
         arrowbox_scene = QGraphicsScene()
-        for arrow in self.arrows:
-            arrow.attributesChanged.connect(lambda: self.generator.update_staff(arrow, self.staff_manager))
 
         svgs_full_paths = []
         default_arrows = ['red_iso_r_ne.svg', 'red_anti_r_ne.svg', 'blue_iso_r_sw.svg', 'blue_anti_r_sw.svg']
@@ -291,9 +293,9 @@ class UiSetup(QWidget):
         self.objectbox_layout.addWidget(arrowbox_frame)
 
     def initPropBox(self):
-        self.propbox = Prop_Box(self.main_window, self.staff_manager, self)
+        self.propbox_scene = PropBox_Scene(self.main_window, self.staff_manager, self)
         propbox_layout = QVBoxLayout()
-        propbox_layout.addWidget(self.propbox.prop_box_frame)
+        propbox_layout.addWidget(self.propbox_scene.propbox_frame)
         propbox_frame = QFrame() 
         propbox_frame.setLayout(propbox_layout)
         self.objectbox_layout.addWidget(propbox_frame)

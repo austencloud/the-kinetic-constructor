@@ -14,8 +14,6 @@ from settings import Settings
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
 class Graphboard(QGraphicsView):
-    arrowMoved = pyqtSignal()
-    attributesChanged = pyqtSignal()
 
     def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, arrow_hanndler, ui_setup, generator, sequence_manager, parent=None):
         super().__init__(graphboard_scene, parent)
@@ -32,8 +30,7 @@ class Graphboard(QGraphicsView):
         self.generator = generator
         self.ui_setup = ui_setup
         self.renderer = QSvgRenderer()
-        self.arrowMoved.connect(self.update_staffs_and_check_beta)
-        self.attributesChanged.connect(self.update_staffs_and_check_beta)
+
         self.exporter = Exporter(self, graphboard_scene, self.staff_manager, self.grid)
         self.sequence_manager = sequence_manager
         self.letter_renderers = {}
@@ -52,7 +49,6 @@ class Graphboard(QGraphicsView):
 
         self.graphboard_scene.addItem(self.grid)
         self.drag = Quadrant_Preview_Drag(self, self.dragging, self.info_tracker)
-
 
     ### MOUSE EVENTS ###
 
@@ -113,7 +109,6 @@ class Graphboard(QGraphicsView):
                         item.svg_file = new_svg
                         item.update_locations()
                 self.info_tracker.update()
-                self.arrowMoved.emit()
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
@@ -178,8 +173,6 @@ class Graphboard(QGraphicsView):
         self.arrow_item.quadrant = quadrant
         self.drag.update_arrow_svg(self.arrow_item, quadrant) 
         self.info_tracker.update()
-        self.arrowMoved.emit()
-
 
 
     ### GETTERS ###
@@ -326,7 +319,6 @@ class Graphboard(QGraphicsView):
         for item in self.scene().selectedItems():
             if isinstance(item, Arrow):
                 item.moveBy(dx, dy)
-                self.arrowMoved.emit()
 
     def contextMenuEvent(self, event):
         clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())
@@ -399,16 +391,12 @@ class Graphboard(QGraphicsView):
 
     ### OTHER ###
 
-    def update_staffs_and_check_beta(self):
-        self.staff_manager.remove_beta_staves()
-        self.staff_manager.update_graphboard_staffs(self.scene())
-        self.staff_manager.check_and_replace_staves()
 
 
-    def update_letter(self, letter):
-        print("Updating letter to: " + str(letter))
+
+    def set_current_letter(self, letter):
+        print(f"Updating letter to {letter}")
         if letter is None or letter is 'None':
-            print("self.letter_item is None")
             svg_file = f'images/letters/blank.svg'
             renderer = QSvgRenderer(svg_file)
             if not renderer.isValid():
@@ -426,15 +414,13 @@ class Graphboard(QGraphicsView):
 
         self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
 
-                
-
 
     def clear(self):
         for item in self.scene().items():
             if isinstance(item, Arrow) or isinstance(item, Staff):
                 self.scene().removeItem(item)
                 del item
-        self.arrowMoved.emit()
+
 
 class Quadrant_Preview_Drag(QDrag):
     def __init__(self, source, arrow_item, info_tracker, *args, **kwargs):
@@ -465,8 +451,6 @@ class Quadrant_Preview_Drag(QDrag):
             new_renderer.render(painter)
             painter.end()
             self.setPixmap(pixmap)
-
-
 
     def get_graphboard_quadrants(self, mouse_pos):
         mime_data = self.mimeData()

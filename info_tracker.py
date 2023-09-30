@@ -8,8 +8,7 @@ import os
 from data import positions_map
 from staff import Staff
 class Info_Tracker:
-    attributesChanged = pyqtSignal()  # New signal to indicate an arrow has been deleted
-    
+
     def __init__(self, graphboard, label, main_window, staff_manager, arrow_handler):
         self.graphboard = graphboard
         self.label = label
@@ -23,7 +22,6 @@ class Info_Tracker:
         self.is_initialized = True  # Add this flag to indicate initialization status
         # Inside your Info_Tracker class or wherever you're initializing Arrow_Handler
         self.arrow_handler = arrow_handler
-        self.arrow_handler.attributesChanged.connect(self.update)  # Assuming `update` is the method that updates the letter
 
     def set_initialized(self, status):
         self.is_initialized = status
@@ -54,12 +52,7 @@ class Info_Tracker:
         else:
             print("No self.letter found")
     
-    def check_for_changes(self):
-        current_state = self.get_current_state()
-        if current_state != self.previous_state:
-            self.update()
-            self.previous_state = current_state
-    
+
     def get_positional_relationship(self, start1, end1, start2, end2):
         start1_compass = Arrow.get_position_from_locations(start1, start1)
         end1_compass = Arrow.get_position_from_locations(end1, end1)
@@ -113,8 +106,6 @@ class Info_Tracker:
             return {}
         
     def update(self):
-        print("update method called")
-        print(f"is_initialized: {self.is_initialized}")  # Add this line
         if not self.is_initialized:
             return
         current_combination = []
@@ -151,9 +142,7 @@ class Info_Tracker:
         else:
             self.letter = None
 
-        self.graphboard.update_letter(self.letter)  # Update the letter on the graphboard
 
-        # ... (rest of the code remains the same, including updating blue_text and red_text)
         self.label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr></table>")
     
     def get_positions(self):
