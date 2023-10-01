@@ -1,38 +1,24 @@
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QFrame, QVBoxLayout
 from staff import PropBox_Staff
 from PyQt5.QtCore import Qt
-class Prop_Box:
+class PropBox_Scene(QGraphicsScene):
     def __init__(self, main_window, staff_manager, ui_setup):
+        super().__init__()
         self.main_window = main_window
         self.staff_manager = staff_manager
         self.ui_setup = ui_setup
-        self.prop_box_frame = self.initPropBox()
+        self.propbox_frame = self.init_propbox_frame()
 
-    def initPropBox(self):
-        propbox = QFrame(self.main_window)
-        propbox_scene = QGraphicsScene()
-        self.staff_manager.init_staves(propbox_scene)
-
-
-        # Create staff objects and add them to the scene
-        self.red_staff = PropBox_Staff('red_staff', propbox_scene, self.staff_manager.staff_locations['N_staff'], 'red', 'images\\staves\\N_staff_red.svg')
-        self.blue_staff = PropBox_Staff('blue_staff', propbox_scene, self.staff_manager.staff_locations['N_staff'], 'blue', 'images\\staves\\N_staff_blue.svg')
-
-        # propbox_scene.addItem(self.red_staff)
-        # propbox_scene.addItem(self.blue_staff)
-
-        #set locations of the items to show in the propbox's center
-        self.red_staff.setPos(100, 100)
-        
-        view = QGraphicsView(propbox_scene)
-        view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        view.setFrameShape(QFrame.NoFrame)
-
+    def init_propbox_frame(self):
+        propbox_frame = QFrame(self.main_window)
+        propbox_view = QGraphicsView(self)
+        propbox_view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        propbox_view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        propbox_view.setFrameShape(QFrame.NoFrame)
         layout = QVBoxLayout()  # Create a new QVBoxLayout
-        layout.addWidget(view)  # Add the view to the layout
-        propbox.setLayout(layout)  # Set the layout to the propbox
+        layout.addWidget(propbox_view)  # Add the view to the layout
+        
+        propbox_frame.setLayout(layout)  # Set the layout to the propbox
+        propbox_frame.setFixedSize(500, 500)
 
-        propbox.setFixedSize(500, 500)
-
-        return propbox  # Return the QFrame object
+        return propbox_frame  # Return the QFrame object

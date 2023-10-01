@@ -17,58 +17,65 @@ from copy import deepcopy
 
 
 class Arrow_Handler(QObject):
-    arrowMoved = pyqtSignal()
-    attributesChanged = pyqtSignal()
 
-    def __init__(self, graphboard_scene, graphboard, staff_manager):
+
+    arrowDeleted = pyqtSignal()  # New signal to indicate an arrow has been deleted
+
+
+    def __init__(self, graphboard_view, staff_manager):
         super().__init__()
-        self.graphboard_scene = graphboard_scene
-        self.graphboard = graphboard
+        self.graphboard_view = graphboard_view
         self.staff_manager = staff_manager
 
+    def connect_graphboard_scene(self, graphboard_scene):
+        self.graphboard_scene = graphboard_scene
+
+    def connect_graphboard_view(self, graphboard_view):
+        self.graphboard_view = graphboard_view
+
     def move_arrow_quadrant_up(self):
-        self.selected_arrow = self.graphboard.get_selected_items()[0]
+        self.selected_arrow = self.graphboard_view.get_selected_items()[0]
         print(self.selected_arrow)
         if self.selected_arrow.quadrant == 'se':
             self.selected_arrow.quadrant = 'ne'
         elif self.selected_arrow.quadrant == 'sw':
             self.selected_arrow.quadrant = 'nw'
-        # Update the arrow's position and orientation on the graphboard
+        # Update the arrow's position and orientation on the graphboard_view
         self.selected_arrow.update_arrow_position()
         # Update the arrow's image
 
         print(self.selected_arrow.quadrant)
-        self.arrowMoved.emit()
-        self.attributesChanged.emit()
+
+
 
 
     def move_arrow_quadrant_left(self):
-        self.selected_arrow = self.graphboard.get_selected_items()[0]
+        self.selected_arrow = self.graphboard_view.get_selected_items()[0]
         if self.selected_arrow.quadrant == 'ne':
             self.selected_arrow.quadrant = 'nw'
         elif self.selected_arrow.quadrant == 'se':
             self.selected_arrow.quadrant = 'sw'
-        # Update the arrow's position and orientation on the graphboard
+        # Update the arrow's position and orientation on the graphboard_view
         self.selected_arrow.update_arrow_position()
         print(self.selected_arrow.quadrant)
 
     def move_arrow_quadrant_down(self):
-        self.selected_arrow = self.graphboard.get_selected_items()[0]
+        self.selected_arrow = self.graphboard_view.get_selected_items()[0]
         if self.selected_arrow.quadrant == 'ne':
             self.selected_arrow.quadrant = 'se'
         elif self.selected_arrow.quadrant == 'nw':
             self.selected_arrow.quadrant = 'sw'
-        # Update the arrow's position and orientation on the graphboard
+        # Update the arrow's position and orientation on the graphboard_view
         self.selected_arrow.update_arrow_position()
         print(self.selected_arrow.quadrant)
 
     def move_arrow_quadrant_right(self):
-        self.selected_arrow = self.graphboard.get_selected_items()[0]
+        self.selected_arrow = self.graphboard_view.get_selected_items()[0]
         if self.selected_arrow.quadrant == 'nw':
             self.selected_arrow.quadrant = 'ne'
         elif self.selected_arrow.quadrant == 'sw':
             self.selected_arrow.quadrant = 'se'
-        # Update the arrow's position and orientation on the graphboard
+        # Update the arrow's position and orientation on the graphboard_view
         self.selected_arrow.update_arrow_position()
         print(self.selected_arrow.quadrant)
 
@@ -92,12 +99,12 @@ class Arrow_Handler(QObject):
                 item.svg_file = new_svg
                 item.update_locations()
                 item.update_quadrant()
-                pos = self.graphboard.get_quadrant_center(new_quadrant) - item.boundingRect().center()
+                pos = self.graphboard_view.get_quadrant_center(new_quadrant) - item.boundingRect().center()
                 item.setPos(pos)
             else:
                 print("Failed to load SVG file:", new_svg)
 
-        self.graphboard.arrowMoved.emit()
+
 
     def mirror_arrow(self, items):
         for item in items:
@@ -120,11 +127,10 @@ class Arrow_Handler(QObject):
                 item.update_locations()
                 item.quadrant = item.quadrant.replace('.svg', '')
                 item.update_quadrant()
-                pos = self.graphboard.get_quadrant_center(item.quadrant) - item.boundingRect().center()
+                pos = self.graphboard_view.get_quadrant_center(item.quadrant) - item.boundingRect().center()
                 item.setPos(pos)
             else:
                 print("Failed to load SVG file:", new_svg)
-        self.graphboard.arrowMoved.emit()
 
     def bring_forward(self, items):
         for item in items:
@@ -154,40 +160,43 @@ class Arrow_Handler(QObject):
                 else:
                     print("Failed to load SVG file:", new_svg)
         else:
-            print("Cannot swap colors with no arrows on the graphboard.")
+            print("Cannot swap colors with no arrows on the graphboard_view.")
             
-        self.graphboard.arrowMoved.emit()
 
     def selectAll(self):
-        for item in self.graphboard.items():
+        for item in self.graphboard_view.items():
             #if item is an arrow
             if isinstance(item, Arrow):
                 item.setSelected(True)
     
     def deselectAll(self):
-        for item in self.graphboard.selectedItems():
+        for item in self.graphboard_view.selectedItems():
             item.setSelected(False)
 
-    def connect_to_graphboard(self, graphboard):
-        self.graphboard = graphboard
-        self.selected_items_len = len(graphboard.get_selected_items())
+    def connect_to_graphboard(self, graphboard_view):
+        self.graphboard_view = graphboard_view
+        self.selected_items_len = len(graphboard_view.get_selected_items())
 
 
     def delete_arrow(self, items):
         for item in items:
-            self.graphboard.scene().removeItem(item)
-        self.graphboard.arrowMoved.emit()
-        self.graphboard.attributesChanged.emit()
-        self.graphboard.info_tracker.update()  # Add this line to update the info tracker
-
-
+            if isinstance(item, Arrow):
+                # Find the corresponding staff and set it to static
+                end_location = item.end_location  # Assuming this gives the end position of the arrow
+                staff = self.staff_manager.find_staff_by_position(end_location)  # Assuming you'll implement this method
+                if staff:
+                    staff.set_static(True)
+            self.graphboard_view.scene().removeItem(item)
+        
+        self.arrowDeleted.emit()  # Emit the signal to update the letter
+        print("Deleted arrow(s)")
 
 class Key_Press_Handler:
-    def __init__(self, arrow, graphboard=None):
+    def __init__(self, arrow, graphboard_view=None):
         self.arrow = arrow
 
-    def connect_to_graphboard(self, graphboard):
-        self.graphboard = graphboard
+    def connect_to_graphboard(self, graphboard_view):
+        self.graphboard_view = graphboard_view
 
 class Json_Handler:
     def __init__(self, graphboard_scene):
