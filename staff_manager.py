@@ -1,78 +1,9 @@
 from PyQt5.QtCore import QPointF, pyqtSignal, QObject
-from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
-from PyQt5.QtWidgets import QGraphicsItem
+from PyQt5.QtSvg import QGraphicsSvgItem
 from arrow import Arrow
-from settings import Settings
 from constants import STAFF_WIDTH, STAFF_LENGTH, RED, BLUE
+from staff import Graphboard_Staff, PropBox_Staff, Staff, Beta_Staff
 
-SCALE_FACTOR = Settings.SCALE_FACTOR
-
-class Staff(QGraphicsSvgItem):
-
-    def __init__(self, element_id, scene, position, color=None, staff_svg_file=None, initial_visibility=True):
-        super().__init__()
-        self.element_id = element_id
-        self.position = position 
-        self.renderer = QSvgRenderer(staff_svg_file)
-        self.setSharedRenderer(self.renderer)
-        self.setElementId(self.element_id)
-        self.setFlag(QGraphicsItem.ItemIsMovable, True)
-        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
-        scene.addItem(self)
-        self.setVisible(initial_visibility)
-        self.type = "staff"
-        self.scene = scene
-        self.setPos(position)
-        self.arrow = None
-        self.setVisible(True)
-        rect = self.boundingRect()
-        self.setTransformOriginPoint(rect.width() / 2, rect.height() / 2)
-        self.setPos(position)
-        self.svg_file = staff_svg_file
-        self.color = color
-
-        self.is_static = False
-        
-    def update_attributes(self, new_attributes):
-        self.element_id = new_attributes.get('element_id', self.element_id)
-        self.position = new_attributes.get('position', self.position)
-        self.svg_file = new_attributes.get('svg_file', self.svg_file)
-        self.color = new_attributes.get('color', self.color)
-
-    def update_staff(self):
-        self.setElementId(self.element_id)
-        self.setPos(self.position)
-        self.renderer.load(self.svg_file)
-        self.setSharedRenderer(self.renderer)
-
-    def set_static(self, is_static):
-        self.is_static = is_static
-
-
-    def show(self):
-        self.setVisible(True)
-
-    def hide(self):
-        self.setVisible(False)
-
-    def set_arrow(self, arrow):
-        self.arrow = arrow
-        
-    def isVisible(self):
-        return super().isVisible()
-
-class Graphboard_Staff(Staff):
-    def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
-        super().__init__(element_id, scene, position, color, staff_svg_file, initial_visibility=False)
-
-class Beta_Staff(Staff):
-    def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
-        super().__init__(element_id, scene, position, color, staff_svg_file, initial_visibility=False)
-
-class PropBox_Staff(Staff):
-    def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
-        super().__init__(element_id, scene, position, color, staff_svg_file)
-        
 class Staff_Manager(QObject):
     positionChanged = pyqtSignal(str)
 
@@ -89,9 +20,9 @@ class Staff_Manager(QObject):
         # Determine the handpoints of the grid
         scale = self.grid.scale()
         GRID_WIDTH = self.grid.get_width()
-        GRAPHBOARD_WIDTH = self.graphboard.get_width()
+        GRAPHBOARD_WIDTH = self.graphboard_view.get_width()
         self.GRID_PADDING = (GRAPHBOARD_WIDTH - GRID_WIDTH) / 2
-        self.GRID_V_OFFSET = (self.graphboard.height() - self.graphboard.width()) / 2
+        self.GRID_V_OFFSET = (self.graphboard_view.height() - self.graphboard_view.width()) / 2
 
         graphboard_handpoints = {}
         for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
@@ -132,7 +63,7 @@ class Staff_Manager(QObject):
             Beta_Staff('beta_horizontal_n-blue_s-red', graphboard_scene, self.staff_locations['W_staff'], None, 'images/staves/beta/beta_horizontal_n-blue_s-red.svg')
         ]
 
-        self.hide_all_graphboard_staffs()
+        self.hide_all_staffs()
 
     def init_propbox_staffs(self, propbox_scene):
         self.propbox_staff_locations = {
@@ -153,8 +84,8 @@ class Staff_Manager(QObject):
     def connect_grid(self, grid):
         self.grid = grid
 
-    def connect_graphboard(self, graphboard):
-        self.graphboard = graphboard
+    def connect_graphboard(self, graphboard_view):
+        self.graphboard_view = graphboard_view
 
     def connect_propbox(self, propbox):
         self.propbox = propbox
@@ -182,16 +113,34 @@ class Staff_Manager(QObject):
 
     ### UPDATERS ###
 
-    def update_staffs_and_check_beta(self):
-        self.update_graphboard_staffs(self.graphboard.scene())
-        self.check_and_replace_staves()
+    def update_staffs(self, arrows = []):
+        print("Arrows: " + str(arrows))
+        
+        # Get the staff locations
+        staff_positions = [arrow.end_location.upper() + '_staff_' + arrow.color for arrow in arrows]
+        
+        for element_id, staff in self.graphboard_staffs.items():
+            if element_id in staff_positions:
+                staff.show()
+                print(f"Showing staff {element_id}")
+            else:
+                staff.hide()
+                
+                
+        self.update_graphboard_staffs(self.graphboard_view.scene())
+        staff_positions = [(staff.pos().x(), staff.pos().y()) for staff in self.graphboard_staffs.values() if staff.isVisible()]
+        self.remove_and_replace_staves(staff_positions)
         self.track_visible_staves()  # Track the number of visible staves here
 
-    def hide_all_graphboard_staffs(self):
+    def hide_all_staffs(self):
         for staff in self.graphboard_staffs.values():
             if staff.scene == self.graphboard_scene:
                 staff.hide()
-        self.track_visible_staves()  # Track the number of visible staves here
+        # First remove all beta staves from the scene
+        for beta_staff in self.beta_staves:
+            if beta_staff.scene is not None:
+                beta_staff.hide()
+        self.beta_staves = []
 
     def show_staff(self, direction):
         direction = direction.capitalize()
@@ -201,20 +150,14 @@ class Staff_Manager(QObject):
         else:
             print(f"No staff found for direction {direction}")
 
-    def update_staff_visibility(self, arrows=[]):
-        if not isinstance(arrows, list):
-            arrows = [arrows]  # Convert single Arrow object to list
-        
-        staff_positions = [arrow.end_location.upper() + '_staff_' + arrow.color for arrow in arrows]
-        
-        for element_id, staff in self.graphboard_staffs.items():
-            if element_id in staff_positions:
-                staff.show()
-            else:
-                staff.hide()
-        
-        self.check_and_replace_staves()
-        
+    def hide_staff(self, direction):
+        direction = direction.capitalize()
+        staff = self.graphboard_staffs.get(direction)
+        if staff:
+            staff.hide()
+        else:
+            print(f"No staff found for direction {direction}")
+
     def remove_non_beta_staves(self):
         for staff in self.graphboard_staffs.values():
             if staff.isVisible() and staff.scene is not None:
@@ -300,14 +243,7 @@ class Staff_Manager(QObject):
                 continue
 
     def update_graphboard_staffs(self, scene):
-        # First remove all beta staves from the scene
-        for beta_staff in self.beta_staves:
-            if beta_staff.scene is not None:
-                beta_staff.hide()
-        self.beta_staves = []
-        
-        # Then remove all graphboard staves from the scene
-        self.hide_all_graphboard_staffs()
+        self.hide_all_staffs()
         
         # Create a set to keep track of the current staff keys
         current_staff_keys = set()
@@ -345,17 +281,13 @@ class Staff_Manager(QObject):
                     )
                     self.graphboard_staffs[staff_key] = new_staff  # Add the new staff to the dictionary
         
-
         # Remove staves that are no longer needed
         for staff_key in list(self.graphboard_staffs.keys()):
             if staff_key not in current_staff_keys:
                 staff_to_remove = self.graphboard_staffs.pop(staff_key)
                 if staff_to_remove.scene == self.graphboard_scene:  # Check if the staff belongs to the scene
+                    print(f"Removing staff {staff_to_remove.element_id}_{staff_to_remove.color}")
                     staff_to_remove.hide()
-
-    def check_and_replace_staves(self):
-        staff_positions = [(staff.pos().x(), staff.pos().y()) for staff in self.graphboard_staffs.values() if staff.isVisible()]
-        self.remove_and_replace_staves(staff_positions)
 
     def track_visible_staves(self):
         visible_count = 0

@@ -15,6 +15,7 @@ from menus import Menu_Bar, Context_Menu_Handler
 from graphboard import Graphboard
 from exporter import Exporter
 from settings import Settings
+from staff_manager import Staff_Manager
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
@@ -198,7 +199,7 @@ class UiSetup(QWidget):
             return button
 
         self.updatePositionButton = createButton("images/icons/update_locations.png", "Update Position", 
-            lambda: self.json_updater.updatePositionInJson(*self.graphboard.get_current_arrow_positions()), is_lambda=True)
+            lambda: self.json_updater.updatePositionInJson(*self.graphboard_view.get_current_arrow_positions()), is_lambda=True)
         self.deleteButton = createButton("images/icons/delete.png", "Delete",
             lambda: self.arrow_handler.delete_arrow(self.graphboard_scene.selectedItems()), is_lambda=True)
         self.rotateRightButton = createButton("images/icons/rotate_right.png", "Rotate Right",
@@ -295,8 +296,8 @@ class UiSetup(QWidget):
     def initPropBox(self):
         self.propbox_scene = PropBox_Scene(self.main_window, self.staff_manager, self)
         propbox_layout = QVBoxLayout()
-        propbox_layout.addWidget(self.propbox_scene.propbox_frame)
         propbox_frame = QFrame() 
+        propbox_layout.addWidget(self.propbox_scene.propbox_frame)
         propbox_frame.setLayout(propbox_layout)
         self.objectbox_layout.addWidget(propbox_frame)
 

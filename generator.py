@@ -105,7 +105,6 @@ class Pictograph_Generator():
         # Find the optimal positions dictionary in combination_set
         optimal_positions = next((d for d in combination_set if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
 
-
         for combination in combination_set:
             # Check if the dictionary has all the keys you need
             if all(key in combination for key in ['color', 'type', 'rotation', 'quadrant']):
@@ -127,7 +126,6 @@ class Pictograph_Generator():
             if optimal_positions:
                 optimal_position = optimal_positions.get(f"optimal_{arrow.get_attributes()['color']}_location")
                 if optimal_position:
-                    # print(f"Setting position for {arrow.get_attributes()['color']} arrow to optimal position: {optimal_position}")
                     # Calculate the position to center the arrow at the optimal position
                     pos = QPointF(optimal_position['x'], optimal_position['y']) - arrow.boundingRect().center()
                     arrow.setPos(pos)
@@ -141,24 +139,11 @@ class Pictograph_Generator():
                 arrow.setPos(pos)
 
                 # Call the update_staff function for the arrow
-                self.update_staff(arrow, staff_manager)
-
+        self.staff_manager.update_staffs(created_arrows)  # created_arrows should be a list
         # Update the info label
         self.info_tracker.update()
-        self.staff_manager.update_staffs_and_check_beta()
 
     def get_current_letter(self):
         return self.current_letter
 
-    def update_staff(self, arrow, staff_manager):
-        arrows = [arrow] if not isinstance(arrow, list) else arrow
 
-        staff_positions = [arrow.end_location.upper() + '_staff_' + arrow.color for arrow in arrows]
-
-        for element_id, staff in staff_manager.graphboard_staffs.items():
-            if element_id in staff_positions:
-                staff.show()
-            else:
-                staff.hide()
-
-        self.staff_manager.check_and_replace_staves()

@@ -11,8 +11,6 @@ class PropBox_Scene(QGraphicsScene):
 
     def init_propbox_frame(self):
         propbox_frame = QFrame(self.main_window)
-
-
         propbox_view = QGraphicsView(self)
         propbox_view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         propbox_view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
