@@ -43,18 +43,19 @@ class Staff_Manager(QObject):
         # Initialize the graphboard staffs
         self.graphboard_staffs = {}
         for direction in ['N', 'E', 'S', 'W']:
-            for color in [RED, BLUE]:
-                if color == RED:
-                    color = 'red'
-                else: # color == BLUE
-                    color = 'blue'
+            for color in ['red', 'blue']:
                 staff_key = f"{direction}_staff_{color}"
-                svg_file = f'images\\\\staves\\\\{direction}_staff_{color}.svg'
                 self.graphboard_staffs[staff_key] = Graphboard_Staff(
-                    f'{direction}_staff', graphboard_scene, self.staff_locations[f'{direction}_staff'], color, svg_file
+                    f"{direction}_staff",
+                    self.graphboard_scene,
+                    self.staff_locations[f"{direction}_staff"],
+                    color,
+                    f'images\\staves\\{direction}_staff_{color}.svg'
                 )
-             
-             
+                self.graphboard_staffs[staff_key].hide()
+
+ 
+ 
         # Initialize the beta staves     
         self.beta_staves = [
             Beta_Staff('beta_vertical_w-blue_e-red', graphboard_scene, self.staff_locations['N_staff'], None, 'images/staves/beta/beta_vertical_w-blue_e-red.svg'),
@@ -63,7 +64,6 @@ class Staff_Manager(QObject):
             Beta_Staff('beta_horizontal_n-blue_s-red', graphboard_scene, self.staff_locations['W_staff'], None, 'images/staves/beta/beta_horizontal_n-blue_s-red.svg')
         ]
 
-        self.hide_all_staffs()
 
     def init_propbox_staffs(self, propbox_scene):
         self.propbox_staff_locations = {
@@ -114,8 +114,9 @@ class Staff_Manager(QObject):
     ### UPDATERS ###
 
     def update_staffs(self, arrows = []):
+        print("=== Entering update_staffs ===")
         print("Arrows: " + str(arrows))
-        
+            
         # Get the staff locations
         staff_positions = [arrow.end_location.upper() + '_staff_' + arrow.color for arrow in arrows]
         
@@ -125,14 +126,46 @@ class Staff_Manager(QObject):
                 print(f"Showing staff {element_id}")
             else:
                 staff.hide()
+                    
                 
-                
-        self.update_graphboard_staffs(self.graphboard_view.scene())
+        self.update_graphboard_staffs(self.graphboard_scene)
         staff_positions = [(staff.pos().x(), staff.pos().y()) for staff in self.graphboard_staffs.values() if staff.isVisible()]
         self.remove_and_replace_staves(staff_positions)
         self.track_visible_staves()  # Track the number of visible staves here
+        print("=== Exiting update_staffs ===")
+
+    def update_graphboard_staffs(self, scene):
+        print("=== Entering update_graphboard_staffs ===")
+        self.hide_all_staffs()
+        new_staff_keys = set()
+
+        for arrow in scene.items():
+            if not isinstance(arrow, Arrow):
+                continue
+
+            end_location = arrow.end_location.capitalize()
+            color = arrow.color.lower() if arrow.color in ['#ed1c24', 'red', '#2e3192', 'blue'] else None
+
+            if color is None:
+                print(f"Unexpected arrow color: {arrow.color}")
+                continue
+
+            staff_key = f"{end_location}_staff_{color}"
+            new_staff_keys.add(staff_key)
+
+            print(f"Staff key: {staff_key}")  # Debug
+
+            staff = self.graphboard_staffs.get(staff_key)
+            print(staff)
+            staff.show()
+            #set the staff coordinates
+            staff.setPos(self.staff_locations[end_location + "_staff"])
+            
+                
+        print("=== Exiting update_graphboard_staffs ===")
 
     def hide_all_staffs(self):
+        print("=== Entering hide_all_staffs ===")
         for staff in self.graphboard_staffs.values():
             if staff.scene == self.graphboard_scene:
                 staff.hide()
@@ -141,22 +174,27 @@ class Staff_Manager(QObject):
             if beta_staff.scene is not None:
                 beta_staff.hide()
         self.beta_staves = []
+        print("=== Exiting hide_all_staffs ===")    
 
-    def show_staff(self, direction):
-        direction = direction.capitalize()
-        staff = self.graphboard_staffs.get(direction)
+    def show_staff(self, end_location):
+        print(end_location)
+        direction = end_location.capitalize()
+        #print the length of the graphboard_staffs dictionary
+        
+        staff = self.graphboard_staffs.get(end_location)
         if staff:
             staff.show()
         else:
-            print(f"No staff found for direction {direction}")
+            print(f"No staff found for end_location {end_location}")
 
-    def hide_staff(self, direction):
-        direction = direction.capitalize()
-        staff = self.graphboard_staffs.get(direction)
+    def hide_staff(self, end_location):
+        print(f"=== Hiding Staff: {self.element_id} ===")
+        end_location = end_location.capitalize()
+        staff = self.graphboard_staffs.get(end_location)
         if staff:
             staff.hide()
         else:
-            print(f"No staff found for direction {direction}")
+            print(f"No staff found for end_location {end_location}")
 
     def remove_non_beta_staves(self):
         for staff in self.graphboard_staffs.values():
@@ -241,53 +279,6 @@ class Staff_Manager(QObject):
             
             else:
                 continue
-
-    def update_graphboard_staffs(self, scene):
-        self.hide_all_staffs()
-        
-        # Create a set to keep track of the current staff keys
-        current_staff_keys = set()
-        
-        # Then add or update the graphboard staves
-        for arrow in scene.items():
-            if isinstance(arrow, Arrow):
-                end_location = arrow.end_location.capitalize()
-                color = arrow.color.lower() if arrow.color in ['#ed1c24', 'red', '#2e3192', 'blue'] else None
-                if color is None:
-                    print(f"Unexpected arrow color: {arrow.color}")
-                    continue
-                
-                staff_key = f"{end_location}_staff_{color}"
-                current_staff_keys.add(staff_key)
-                
-                if staff_key in self.graphboard_staffs:
-                    # Update existing staff
-                    existing_staff = self.graphboard_staffs[staff_key]
-                    existing_staff.update_attributes({
-                        'element_id': f"{end_location}_staff",
-                        'position': self.staff_locations[f"{end_location}_staff"],
-                        'svg_file': f'images\\staves\\{end_location}_staff_{color}.svg',
-                        'color': color
-                    })
-                    existing_staff.update_staff()
-                else:
-                    # Create new staff
-                    new_staff = Graphboard_Staff(
-                        f"{end_location}_staff", 
-                        scene, 
-                        self.staff_locations[f"{end_location}_staff"], 
-                        color, 
-                        f'images\\staves\\{end_location}_staff_{color}.svg'
-                    )
-                    self.graphboard_staffs[staff_key] = new_staff  # Add the new staff to the dictionary
-        
-        # Remove staves that are no longer needed
-        for staff_key in list(self.graphboard_staffs.keys()):
-            if staff_key not in current_staff_keys:
-                staff_to_remove = self.graphboard_staffs.pop(staff_key)
-                if staff_to_remove.scene == self.graphboard_scene:  # Check if the staff belongs to the scene
-                    print(f"Removing staff {staff_to_remove.element_id}_{staff_to_remove.color}")
-                    staff_to_remove.hide()
 
     def track_visible_staves(self):
         visible_count = 0

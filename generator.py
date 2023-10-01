@@ -137,6 +137,7 @@ class Pictograph_Generator():
                 # Calculate the position to center the arrow at the quadrant center
                 pos = self.graphboard.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
                 arrow.setPos(pos)
+            self.staff_manager.show_staff(arrow.end_location)  # Call the show_staffs function for the arrow
 
                 # Call the update_staff function for the arrow
         self.staff_manager.update_staffs(created_arrows)  # created_arrows should be a list

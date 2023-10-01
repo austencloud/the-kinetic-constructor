@@ -39,15 +39,8 @@ class Staff(QGraphicsSvgItem):
         self.svg_file = new_attributes.get('svg_file', self.svg_file)
         self.color = new_attributes.get('color', self.color)
 
-    def update_staff(self):
-        self.setElementId(self.element_id)
-        self.setPos(self.position)
-        self.renderer.load(self.svg_file)
-        self.setSharedRenderer(self.renderer)
-
     def set_static(self, is_static):
         self.is_static = is_static
-
 
     def show(self):
         self.setVisible(True)
@@ -64,6 +57,7 @@ class Staff(QGraphicsSvgItem):
 class Graphboard_Staff(Staff):
     def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
         super().__init__(element_id, scene, position, color, staff_svg_file, initial_visibility=False)
+        print(f"=== Creating Graphboard_Staff: {element_id} ===")
 
 class Beta_Staff(Staff):
     def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
