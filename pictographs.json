@@ -73,7 +73,9 @@
                 "optimal_blue_location": {
                     "x": 546.5,
                     "y": 213.5
-                }
+                },
+                "x": "546.5",
+                "y": "213.5"
             }
         ],
         [
@@ -793,7 +795,9 @@
                 "optimal_blue_location": {
                     "x": 534.0,
                     "y": 525.0
-                }
+                },
+                "x": "534.0",
+                "y": "525.0"
             }
         ],
         [
@@ -935,9 +939,11 @@
                     "y": 212.0
                 },
                 "optimal_blue_location": {
-                    "x": 205.0,
-                    "y": 212.0
-                }
+                    "x": 229.0,
+                    "y": 214.0
+                },
+                "x": "229.0",
+                "y": "214.0"
             }
         ],
         [
@@ -969,7 +975,9 @@
                 "optimal_blue_location": {
                     "x": 533.0,
                     "y": 222.0
-                }
+                },
+                "x": "533.0",
+                "y": "222.0"
             }
         ],
         [
@@ -1023,7 +1031,9 @@
                 "optimal_blue_location": {
                     "x": 216.0,
                     "y": 517.0
-                }
+                },
+                "x": "216.0",
+                "y": "517.0"
             }
         ],
         [
@@ -1099,7 +1109,9 @@
                 "optimal_blue_location": {
                     "x": 543.0,
                     "y": 543.0
-                }
+                },
+                "x": "543.0",
+                "y": "543.0"
             }
         ],
         [
@@ -1509,7 +1521,9 @@
                 "optimal_blue_location": {
                     "x": 194.0,
                     "y": 194.0
-                }
+                },
+                "x": "141.0",
+                "y": "139.0"
             }
         ],
         [
@@ -1663,12 +1677,12 @@
             },
             {
                 "optimal_red_location": {
-                    "x": 584.0,
-                    "y": 125.0
+                    "x": 581.0,
+                    "y": 144.0
                 },
                 "optimal_blue_location": {
-                    "x": 539.0,
-                    "y": 178.0
+                    "x": 542.0,
+                    "y": 207.0
                 }
             }
         ],
@@ -1918,6 +1932,16 @@
                 "type": "anti",
                 "start_location": "s",
                 "end_location": "w"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 132.0,
+                    "y": 624.0
+                },
+                "optimal_blue_location": {
+                    "x": 175.0,
+                    "y": 550.0
+                }
             }
         ],
         [
@@ -2009,12 +2033,12 @@
             },
             {
                 "optimal_red_location": {
-                    "x": 163.0,
-                    "y": 586.0
+                    "x": 169.5,
+                    "y": 591.5
                 },
                 "optimal_blue_location": {
-                    "x": 206.0,
-                    "y": 539.0
+                    "x": 207.5,
+                    "y": 548.5
                 }
             }
         ],
@@ -2105,12 +2129,12 @@
             },
             {
                 "optimal_red_location": {
-                    "x": 590.0,
-                    "y": 540.0
+                    "x": 600.0,
+                    "y": 567.0
                 },
                 "optimal_blue_location": {
-                    "x": 521.0,
-                    "y": 530.0
+                    "x": 547.0,
+                    "y": 531.0
                 }
             }
         ],
@@ -3582,28 +3606,6 @@
                 "type": "anti",
                 "start_location": "e",
                 "end_location": "n"
-            }
-        ],
-        [
-            {
-                "start_position": "gamma7",
-                "end_position": "gamma2"
-            },
-            {
-                "color": "blue",
-                "quadrant": "nw",
-                "rotation": "l",
-                "type": "anti",
-                "start_location": "w",
-                "end_location": "n"
-            },
-            {
-                "color": "red",
-                "quadrant": "se",
-                "rotation": "r",
-                "type": "anti",
-                "start_location": "s",
-                "end_location": "e"
             }
         ],
         [
@@ -6754,6 +6756,1421 @@
                 "type": "anti",
                 "start_location": "e",
                 "end_location": "s"
+            }
+        ]
+    ],
+    "W": [
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "se",
+                "rotation": "l",
+                "type": "iso",
+                "start_location": "s",
+                "end_location": "e"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "sw",
+                "rotation": "l",
+                "type": "iso",
+                "start_location": "w",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "nw",
+                "rotation": "l",
+                "type": "iso",
+                "start_location": "n",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "ne",
+                "rotation": "l",
+                "type": "iso",
+                "start_location": "e",
+                "end_location": "n"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "ne",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "n",
+                "end_location": "e"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "nw",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "w",
+                "end_location": "n"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "sw",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "s",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "se",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "e",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "se",
+                "rotation": "l",
+                "type": "iso",
+                "start_location": "s",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "sw",
+                "rotation": "l",
+                "type": "iso",
+                "start_location": "w",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n",
+                "end_location": "n"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "nw",
+                "rotation": "l",
+                "type": "iso",
+                "start_location": "n",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "ne",
+                "rotation": "l",
+                "type": "iso",
+                "start_location": "e",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "ne",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "n",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "nw",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "w",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "sw",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "s",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "se",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "e",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n",
+                "end_location": "n"
+            }
+        ]
+    ],
+    "X": [
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "se",
+                "rotation": "r",
+                "type": "anti",
+                "start_location": "s",
+                "end_location": "e"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "sw",
+                "rotation": "r",
+                "type": "anti",
+                "start_location": "w",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "nw",
+                "rotation": "r",
+                "type": "anti",
+                "start_location": "n",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "ne",
+                "rotation": "r",
+                "type": "anti",
+                "start_location": "e",
+                "end_location": "n"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "ne",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "n",
+                "end_location": "e"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "nw",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "w",
+                "end_location": "n"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "sw",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "s",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "se",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "e",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "se",
+                "rotation": "r",
+                "type": "anti",
+                "start_location": "s",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "sw",
+                "rotation": "r",
+                "type": "anti",
+                "start_location": "w",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n",
+                "end_location": "n"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "nw",
+                "rotation": "r",
+                "type": "anti",
+                "start_location": "n",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "ne",
+                "rotation": "r",
+                "type": "anti",
+                "start_location": "e",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "ne",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "n",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "nw",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "w",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "sw",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "s",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "se",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "e",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n",
+                "end_location": "n"
+            }
+        ]
+    ],
+    "Y": [
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "se",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "e",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "sw",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "s",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "nw",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "w",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n",
+                "end_location": "n"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "ne",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "n",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "ne",
+                "rotation": "l",
+                "type": "iso",
+                "start_location": "e",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n",
+                "end_location": "n"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "sw",
+                "rotation": "l",
+                "type": "iso",
+                "start_location": "w",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "nw",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "n",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "se",
+                "rotation": "l",
+                "type": "iso",
+                "start_location": "s",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "se",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "e",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "sw",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "s",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "nw",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "w",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n",
+                "end_location": "n"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "ne",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "n",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "ne",
+                "rotation": "l",
+                "type": "iso",
+                "start_location": "e",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n",
+                "end_location": "n"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "sw",
+                "rotation": "l",
+                "type": "iso",
+                "start_location": "w",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "nw",
+                "rotation": "r",
+                "type": "iso",
+                "start_location": "n",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "se",
+                "rotation": "l",
+                "type": "iso",
+                "start_location": "s",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
+            }
+        ]
+    ],
+    "Z": [
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "se",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "e",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "sw",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "s",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "nw",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "w",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n",
+                "end_location": "n"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "ne",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "n",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "ne",
+                "rotation": "r",
+                "type": "anti",
+                "start_location": "e",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "sw",
+                "rotation": "r",
+                "type": "anti",
+                "start_location": "w",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "nw",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "n",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "se",
+                "rotation": "r",
+                "type": "anti",
+                "start_location": "s",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "se",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "e",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "sw",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "s",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "nw",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "w",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n",
+                "end_location": "n"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "ne",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "n",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "quadrant": "ne",
+                "rotation": "r",
+                "type": "anti",
+                "start_location": "e",
+                "end_location": "n"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "n",
+                "end_location": "n"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "quadrant": "sw",
+                "rotation": "r",
+                "type": "anti",
+                "start_location": "w",
+                "end_location": "s"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "s",
+                "end_location": "s"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "quadrant": "nw",
+                "rotation": "l",
+                "type": "anti",
+                "start_location": "n",
+                "end_location": "w"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "w",
+                "end_location": "w"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "quadrant": "se",
+                "rotation": "r",
+                "type": "anti",
+                "start_location": "s",
+                "end_location": "e"
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation": "None",
+                "type": "static",
+                "start_location": "e",
+                "end_location": "e"
             }
         ]
     ]

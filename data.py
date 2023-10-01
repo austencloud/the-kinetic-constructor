@@ -127,4 +127,3 @@ def generate_variations(arrow_combination):
         reflected_versions.extend([vertical_reflected_version, horizontal_reflected_version])
 
     return rotated_versions + reflected_versions
-

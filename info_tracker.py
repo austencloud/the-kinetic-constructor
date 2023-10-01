@@ -1,15 +1,14 @@
 from arrow import Arrow
-from handlers import Arrow_Handler
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtGui import QFont
-from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtCore import Qt
 import json
 import os
 from data import positions_map
-from staff import Staff
-class Info_Tracker:
 
-    def __init__(self, graphboard, label, main_window, staff_manager, arrow_handler):
+class Info_Tracker:
+    
+    def __init__(self, graphboard, label, main_window, staff_manager):
         self.graphboard = graphboard
         self.label = label
         self.previous_state = None 
@@ -19,12 +18,11 @@ class Info_Tracker:
         self.label.setAlignment(Qt.AlignTop)
         self.letters = self.load_letters()
         self.staff_manager = staff_manager
-        self.is_initialized = True  # Add this flag to indicate initialization status
-        # Inside your Info_Tracker class or wherever you're initializing Arrow_Handler
-        self.arrow_handler = arrow_handler
+        self.is_initialized = False  # Add this flag to indicate initialization status
 
     def set_initialized(self, status):
         self.is_initialized = status
+
 
     def start(self):
         self.previous_state = self.get_current_state()
@@ -52,7 +50,12 @@ class Info_Tracker:
         else:
             print("No self.letter found")
     
-
+    def check_for_changes(self):
+        current_state = self.get_current_state()
+        if current_state != self.previous_state:
+            self.update()
+            self.previous_state = current_state
+    
     def get_positional_relationship(self, start1, end1, start2, end2):
         start1_compass = Arrow.get_position_from_locations(start1, start1)
         end1_compass = Arrow.get_position_from_locations(end1, end1)
@@ -104,47 +107,71 @@ class Info_Tracker:
                 return json.load(f)
         except FileNotFoundError:
             return {}
-        
+    
     def update(self):
         if not self.is_initialized:
             return
         current_combination = []
-        arrow_count = 0  # Count the number of Arrow instances
-        staff_count = 0  # Count the number of Staff instances
 
         for item in self.graphboard.items():
             if isinstance(item, Arrow):
-                arrow_count += 1
                 attributes = item.get_attributes()
                 current_combination.append(attributes)
-            elif isinstance(item, Staff):  # Assuming Staff is the class name for staves
-                staff_count += 1
 
         current_combination = sorted(current_combination, key=lambda x: x['color'])
 
         self.letters = self.load_letters()
-
+        
         blue_text = "<h2 style='color: #0000FF'>Left</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>"
         red_text = "<h2 style='color: #FF0000'>Right</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>"
         letter_text = "<h2>Letter</h2>"
 
-        if arrow_count >= 1 and staff_count >= 2:  # At least one arrow and two staves are needed
-            for letter, combinations in self.letters.items():
-                combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]
-                if current_combination in combinations:
-                    letter_text += f"<span style='font-size: 140px; font-weight: bold;'>{letter}</span>"
-                    start_position, end_position = self.get_positions()
-                    letter_text += f"<h4>{start_position} → {end_position}</h4>"
-                    self.letter = letter
-                    break
-            else:
-                self.letter = None
+        for letter, combinations in self.letters.items():
+            combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]  # Ignore the first dictionary which contains optimal positions
+            if current_combination in combinations:
+                letter_text += f"<span style='font-size: 140px; font-weight: bold;'>{letter}</span>"
+                start_position, end_position = self.get_positions()
+                letter_text += f"<h4>{start_position} → {end_position}</h4>"
+                self.letter = letter 
+                break 
         else:
             self.letter = None
+            letter_text += "<span style='font-size: 140px; font-weight: bold;'></span>"
+            try:
+                self.graphboard.update_letter(None)  # This should remove the letter from the graphboard
+            except Exception as e:
+                print(f"An error occurred while updating the letter: {e}")    
+
+        if hasattr(self.main_window, 'staff'):
+            self.main_window.staff.update_position(self.arrow.end_location)
+
+        for item in self.graphboard.items():
+            if isinstance(item, Arrow):
+                attributes = item.get_attributes()
+                current_combination.append(attributes)
+                color = attributes.get('color', 'N/A')
+                rotation = attributes.get('rotation', 'N/A')
+                if rotation == 'l':
+                    rotation = 'Anti-clockwise'
+                else: # rotation == 'r'
+                    rotation = 'Clockwise'
+                if color == 'blue':
+                    blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
+                    blue_text = blue_text.replace("Rotation: ", f"Rotation: {rotation}")
+                    blue_text = blue_text.replace("Type: ", f"Type: {attributes.get('type', 'N/A').capitalize()}")
+                    blue_text = blue_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
+                    blue_text = blue_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
+                elif color == 'red':
+                    red_text = red_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
+                    red_text = red_text.replace("Rotation: ", f"Rotation: {rotation}")
+                    red_text = red_text.replace("Type: ", f"Type: {attributes.get('type', 'N/A').capitalize()}")
+                    red_text = red_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
+                    red_text = red_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
 
 
+        self.graphboard.update_letter(letter)
         self.label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr></table>")
-    
+
     def get_positions(self):
         positions = []
         arrow_items = []

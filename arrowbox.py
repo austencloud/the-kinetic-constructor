@@ -128,3 +128,4 @@ class Arrow_Box(QGraphicsView):
             self.staff.setPos(staff_position)
             print("staff position:", staff_position)
             infoTracker.update() 
+            self.arrowMoved.emit()
