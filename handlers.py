@@ -17,15 +17,15 @@ from copy import deepcopy
 
 
 class Arrow_Handler(QObject):
-
-
     arrowDeleted = pyqtSignal()  # New signal to indicate an arrow has been deleted
-
-
     def __init__(self, graphboard_view, staff_manager):
         super().__init__()
         self.graphboard_view = graphboard_view
         self.staff_manager = staff_manager
+
+
+    def connect_info_tracker(self, info_tracker):
+        self.info_tracker = info_tracker
 
     def connect_graphboard_scene(self, graphboard_scene):
         self.graphboard_scene = graphboard_scene
@@ -179,17 +179,24 @@ class Arrow_Handler(QObject):
 
 
     def delete_arrow(self, items):
-        for item in items:
-            if isinstance(item, Arrow):
-                # Find the corresponding staff and set it to static
-                end_location = item.end_location  # Assuming this gives the end position of the arrow
-                staff = self.staff_manager.find_staff_by_position(end_location)  # Assuming you'll implement this method
-                if staff:
-                    staff.set_static(True)
-            self.graphboard_view.scene().removeItem(item)
+        if len(items) != 0:
+            if len(items) == 1:
+                for item in items:
+                    self.graphboard_view.scene().removeItem(item)
+                    print("Item deleted")
+            elif len(items) > 1:
+                for item in items:
+                    self.graphboard_view.scene().removeItem(item)
+                    print("Items deleted")
+            current_letter = self.info_tracker.determine_current_letter()
+            if current_letter:
+                self.graphboard_view.update_letter(current_letter)
+            elif not current_letter:
+                self.graphboard_view.update_letter(None)
+            self.info_tracker.update()
+        else:
+            print("No items selected")
         
-        self.arrowDeleted.emit()  # Emit the signal to update the letter
-        print("Deleted arrow(s)")
 
 class Key_Press_Handler:
     def __init__(self, arrow, graphboard_view=None):

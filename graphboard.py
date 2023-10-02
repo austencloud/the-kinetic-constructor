@@ -410,6 +410,8 @@ class Graphboard(QGraphicsView):
 
         self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
 
+
+
     def clear(self):
         for arrow in self.scene().items():
             if isinstance(arrow, Arrow) or isinstance(arrow, Staff):

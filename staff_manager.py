@@ -143,6 +143,14 @@ class Staff_Manager(QObject):
                 # Update the scene
                 self.graphboard_scene.update()
 
+    def find_staff_by_position(self, end_location):
+        end_location = end_location.capitalize()
+        for staff_key, staff in self.graphboard_staffs.items():
+            if staff.isVisible():
+                staff_end_location = staff_key.split("_")[0]
+                if staff_end_location == end_location:
+                    return staff  
+        return None 
 
     def track_visible_staffs(self):
         visible_count = 0

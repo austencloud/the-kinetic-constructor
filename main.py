@@ -11,3 +11,4 @@ app = QApplication(sys.argv)
 ex = Main_Window()
 ex.setFocus()  
 sys.exit(app.exec_())
+

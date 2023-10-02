@@ -91,6 +91,7 @@ class Pictograph_Generator():
         combinations = self.letters.get(letter, [])
         if not combinations:
             print(f"No combinations found for letter {letter}")
+            self.graphboard.update_letter(None)
             return
 
         self.current_letter = letter  # Store the current letter

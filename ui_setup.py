@@ -45,6 +45,7 @@ class UiSetup(QWidget):
         self.arrow_handler = Arrow_Handler(self.graphboard_view, self.staff_manager)
 
         self.initInfoTracker()
+        self.arrow_handler.connect_info_tracker(self.info_tracker)
         self.initMenus()
         self.initGraphboardView() 
         
@@ -66,7 +67,6 @@ class UiSetup(QWidget):
         self.initSequenceScene()
         self.initLetterButtons()
         self.setFocus()
-        self.info_tracker.set_initialized(True)  # Set the initialization status to True
 
     def initMenus(self):
         self.json_updater = Json_Handler(self.graphboard_scene)
@@ -169,7 +169,6 @@ class UiSetup(QWidget):
         generate_all_button.setFixedSize(300, 80)
         generate_all_button.clicked.connect(lambda: self.generator.generate_all_pictographs(self.staff_manager))
         letter_buttons_layout.addWidget(generate_all_button)
-
         self.upper_layout.addLayout(letter_buttons_layout)
 
     def initButtons(self):
@@ -303,7 +302,7 @@ class UiSetup(QWidget):
 
     def initInfoTracker(self):
         self.info_label = QLabel(self.main_window)
-        self.info_tracker = Info_Tracker(None, self.info_label, self, self.staff_manager, self.arrow_handler)
+        self.info_tracker = Info_Tracker(None, self.info_label, self, self.staff_manager)
 
     def initWordLabel(self):
         self.word_label = QLabel(self.main_window)
@@ -359,7 +358,12 @@ class UiSetup(QWidget):
 
     def keyPressEvent(self, event):
         self.selected_items = self.graphboard_view.get_selected_items()
-        self.arrow = self.selected_items[0]
+        
+        try:
+            self.arrow = self.selected_items[0]
+        except IndexError:
+            self.arrow = None
+            
 
         if event.key() == Qt.Key_Delete:
 
