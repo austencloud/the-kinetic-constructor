@@ -95,7 +95,7 @@ class Pictograph_Generator():
 
         self.current_letter = letter  # Store the current letter
         print(f"Generating {self.current_letter}")
-        self.graphboard.set_current_letter(self.current_letter)
+        self.graphboard.update_letter(self.current_letter)
         # Choose a combination at random
         combination_set = random.choice(combinations)
 
@@ -121,7 +121,7 @@ class Pictograph_Generator():
         # Add the arrows to the scene
         for arrow in created_arrows:
             self.graphboard_scene.addItem(arrow)
-
+            
         for arrow in created_arrows:
             if optimal_positions:
                 optimal_position = optimal_positions.get(f"optimal_{arrow.get_attributes()['color']}_location")
@@ -137,14 +137,24 @@ class Pictograph_Generator():
                 # Calculate the position to center the arrow at the quadrant center
                 pos = self.graphboard.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
                 arrow.setPos(pos)
-            self.staff_manager.show_staff(arrow.end_location)  # Call the show_staffs function for the arrow
 
-                # Call the update_staff function for the arrow
-        self.staff_manager.update_staffs(created_arrows)  # created_arrows should be a list
-        # Update the info label
+        self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
+        # created_arrows should be a list
         self.info_tracker.update()
 
     def get_current_letter(self):
         return self.current_letter
 
 
+    def update_staff(self, arrow, staff_manager):
+        arrows = [arrow] if not isinstance(arrow, list) else arrow
+
+        staff_positions = [arrow.end_location.upper() + '_staff_' + arrow.color for arrow in arrows]
+
+        for element_id, staff in staff_manager.graphboard_staffs.items():
+            if element_id in staff_positions:
+                staff.show()
+            else:
+                staff.hide()
+
+        self.staff_manager.check_and_replace_staves()

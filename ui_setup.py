@@ -46,13 +46,13 @@ class UiSetup(QWidget):
 
         self.initInfoTracker()
         self.initMenus()
-        self.initGraphboard() 
+        self.initGraphboardView() 
         
         self.initGenerator() 
         self.graphboard_view.setGenerator(self.generator)
         self.connectGraphboard()
         self.initArrowBox()
-        self.initPropBox()
+        self.initPropBoxScene()
         
         self.staff_manager.connect_grid(self.grid)
         self.staff_manager.connect_graphboard(self.graphboard_view)
@@ -105,7 +105,7 @@ class UiSetup(QWidget):
 
         self.main_window.setLayout(self.main_layout)
 
-    def initGraphboard(self):
+    def initGraphboardView(self):
         self.grid = Grid('images\\grid\\grid.svg')
         #set the size of the grid to SCALE_FACTOR 
         self.grid.setScale(SCALE_FACTOR)
@@ -293,7 +293,7 @@ class UiSetup(QWidget):
         arrowbox_frame.setFixedSize(int(500 * SCALE_FACTOR), int(500 * SCALE_FACTOR))
         self.objectbox_layout.addWidget(arrowbox_frame)
 
-    def initPropBox(self):
+    def initPropBoxScene(self):
         self.propbox_scene = PropBox_Scene(self.main_window, self.staff_manager, self)
         propbox_layout = QVBoxLayout()
         propbox_frame = QFrame() 

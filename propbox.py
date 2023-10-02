@@ -1,5 +1,4 @@
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QFrame, QVBoxLayout
-from staff import PropBox_Staff
 from PyQt5.QtCore import Qt
 class PropBox_Scene(QGraphicsScene):
     def __init__(self, main_window, staff_manager, ui_setup):

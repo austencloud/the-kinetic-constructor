@@ -816,6 +816,16 @@
                 "type": "iso",
                 "start_location": "w",
                 "end_location": "n"
+            },
+            {
+                "optimal_red_location": {
+                    "x": 188.0,
+                    "y": 183.0
+                },
+                "optimal_blue_location": {
+                    "x": 184.0,
+                    "y": 565.0
+                }
             }
         ],
         [

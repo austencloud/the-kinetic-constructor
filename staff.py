@@ -8,8 +8,7 @@ from constants import STAFF_WIDTH, STAFF_LENGTH, RED, BLUE
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
 class Staff(QGraphicsSvgItem):
-
-    def __init__(self, element_id, scene, position, color=None, staff_svg_file=None, initial_visibility=True):
+    def __init__(self, element_id, scene, position, axis, color=None, staff_svg_file=None, initial_visibility=True):
         super().__init__()
         self.element_id = element_id
         self.position = position 
@@ -28,7 +27,7 @@ class Staff(QGraphicsSvgItem):
         self.setPos(position)
         self.svg_file = staff_svg_file
         self.color = color
-
+        self.axis = axis
         self.is_static = False
         
     def update_attributes(self, new_attributes):
@@ -40,9 +39,6 @@ class Staff(QGraphicsSvgItem):
     def set_static(self, is_static):
         self.is_static = is_static
 
-    def show(self):
-        self.setVisible(True)
-
     def hide(self):
         self.setVisible(False)
 
@@ -52,16 +48,3 @@ class Staff(QGraphicsSvgItem):
     def isVisible(self):
         return super().isVisible()
 
-class Graphboard_Staff(Staff):
-    def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
-        super().__init__(element_id, scene, position, color, staff_svg_file, initial_visibility=False)
-        print(f"=== Creating Graphboard_Staff: {element_id} ===")
-
-class Beta_Staff(Staff):
-    def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
-        super().__init__(element_id, scene, position, color, staff_svg_file, initial_visibility=False)
-
-class PropBox_Staff(Staff):
-    def __init__(self, element_id, scene, position, color=None, staff_svg_file=None):
-        super().__init__(element_id, scene, position, color, staff_svg_file)
-   
