@@ -68,6 +68,7 @@ class Sequence_Handler():
 
         letter = self.info_tracker.get_current_letter()
         self.ui_setup.word_label.setText(self.ui_setup.word_label.text() + letter)
+  
 
     def add_to_graphboard(self, pictograph: Pictograph, graphboard: Graphboard):
         state = pictograph.state

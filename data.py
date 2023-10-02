@@ -80,6 +80,15 @@ positions_map = {
     ('w', 'red', 'n', 'blue'): 'gamma8',
 }
 
+letter_types = {
+    'Type 1': ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V'],
+    'Type 2': ['W', 'X', 'Y', 'Z', 'Σ', 'Δ', 'θ', 'Ω'],
+    'Type 3': ['W-', "X-", 'Y-', 'Z-', 'Σ-', 'Δ-', 'θ-', 'Ω-'],
+    'Type 4': ['Φ', 'Ψ', 'Λ'],
+    'Type 5': ['Φ-', 'Ψ-', 'Λ-'],
+    'Type 6': ['α', 'β', 'Γ'],
+}
+
 
 def calculate_quadrant(start_position, end_position):
     if start_position == "n" and end_position == "e" or start_position == "e" and end_position == "n":

@@ -2,8 +2,11 @@
 <svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 650">
   <defs>
     <style>
-      black {
+      .black {
         fill: #231f20;
+      }
+      .transparent {
+        fill: transparent;
       }
     </style>
   </defs>
@@ -17,10 +20,10 @@
             <circle id="W_outer_point" class="black" cx="25" cy="325" r="25"/>
         </g>
         <g id="layer2_points">
-            <circle id="NE_layer2_point" class="black" cx="468.09" cy="181.91" r="8.75"/>
-            <circle id="SE_layer2_point" class="black" cx="468.09" cy="468.09" r="8.75"/>
-            <circle id="SW_layer2_point" class="black" cx="181.91" cy="468.09" r="8.75"/>
-            <circle id="NW_layer2_point" class="black" cx="181.91" cy="181.91" r="8.75"/>
+            <circle id="NE_layer2_point" class="transparent" cx="468.09" cy="181.91" r="8.75"/>
+            <circle id="SE_layer2_point" class="transparent" cx="468.09" cy="468.09" r="8.75"/>
+            <circle id="SW_layer2_point" class="transparent" cx="181.91" cy="468.09" r="8.75"/>
+            <circle id="NW_layer2_point" class="transparent" cx="181.91" cy="181.91" r="8.75"/>
         </g>
         <g id="handpoints">
             <circle id="N_hand_point" class="cls-1" cx="325" cy="181.91" r="4.25"/>

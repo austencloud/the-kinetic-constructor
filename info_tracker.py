@@ -4,7 +4,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 import json
 import os
-from data import positions_map
+from data import positions_map, letter_types
 
 class Info_Tracker:
     
@@ -52,21 +52,26 @@ class Info_Tracker:
         for item in self.graphboard.items():
             if isinstance(item, Arrow):
                 attributes = item.get_attributes()
-                # Sort the dictionary by its keys
                 sorted_attributes = {k: attributes[k] for k in sorted(attributes.keys())}
                 current_combination.append(sorted_attributes)
-        # Sort the list of dictionaries by the 'color' key
         current_combination = sorted(current_combination, key=lambda x: x['color'])
+        
+        current_type = None  # Initialize current_type to None
         
         for letter, combinations in self.letters.items():
             combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]
             if current_combination in combinations:
                 self.letter = letter
-                return letter
+                for type, letters in letter_types.items():  # Determine the type if a letter is found
+                    if self.letter in letters:
+                        current_type = type
+                        break
+                return self.letter, current_type  # Return both values here
+        
         self.letter = None  # Set to None if no match is found
-        return None
 
-            
+        return self.letter, current_type  # Always return two values
+
     def get_positional_relationship(self, start1, end1, start2, end2):
         start1_compass = Arrow.get_position_from_locations(start1, start1)
         end1_compass = Arrow.get_position_from_locations(end1, end1)
@@ -133,16 +138,27 @@ class Info_Tracker:
         print(f"current_combination: {current_combination}")
         self.letters = self.load_letters()
         
+        # Determine the current letter and its type
+        self.letter, current_type = self.determine_current_letter()
+        
+        # Update the letter_text based on the type, not the letter itself
+        letter_text = "<h2>Type</h2>"
+        
+        if current_type is not None:
+            letter_text += f"<span style='font-size: 140px; font-weight: bold;'>{current_type}</span>"
+        else:
+            letter_text += "<span style='font-size: 140px; font-weight: bold;'>Unknown</span>"
+        
+
         blue_text = "<h2 style='color: #0000FF'>Left</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"
         red_text = "<h2 style='color: #FF0000'>Right</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"
-
-        letter_text = "<h2>Letter</h2>"
+        letter_text = ""
 
         for letter, combinations in self.letters.items():
             combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]  # Ignore the first dictionary which contains optimal positions
             
             if current_combination in combinations:
-                letter_text += f"<span style='font-size: 140px; font-weight: bold;'>{letter}</span>"
+                letter_text += f"<span style='font-size: 40px; font-weight: bold;'>{current_type}</span>"
                 start_position, end_position = self.get_positions()
                 letter_text += f"<h4>{start_position} → {end_position}</h4>"
                 self.letter = letter 
