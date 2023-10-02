@@ -78,25 +78,6 @@ class Exporter:
                         staves_group.append(rect_element_copy)
                     print("Finished exporting staff: " + item.svg_file)
 
-                elif isinstance(item, Beta_Staff):  # Check if the item is a beta staff
-                    staff_svg = etree.parse(item.elementId())
-                    rect_elements = staff_svg.getroot().findall('.//{http://www.w3.org/2000/svg}rect')
-                    fill_color = self.get_fill_color(item.elementId())
-                    position = item.pos()  # Get the position of the beta staff
-
-                    for rect_element in rect_elements:
-                        rect_element_copy = deepcopy(rect_element)  # Create a deep copy of the element
-                        rect_element_copy.set('x', str(position.x()))  # Set the 'x' attribute
-                        rect_element_copy.set('y', str(position.y()))  # Set the 'y' attribute
-                        rect_element_copy.set('transform', f'matrix(1.0, 0.0, 0.0, 1.0, 0, 0)')  # Remove the translation from the transformation matrix
-                        if fill_color is not None:
-                            rect_element_copy.set('fill', fill_color)
-
-                        # Append the rect to the staves group
-                        staves_group.append(rect_element_copy)
-                    print("Finished exporting beta staff: " + item.elementId())
-
-
             # Add comments and append the groups to the SVG root element
             svg.append(etree.Comment(' STAVES '))
             svg.append(staves_group)
