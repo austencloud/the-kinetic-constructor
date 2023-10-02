@@ -136,9 +136,8 @@ class Pictograph_Generator():
                     pos = QPointF(optimal_position['x'], optimal_position['y']) - arrow.boundingRect().center()
                     arrow.setPos(pos)
                 else:
-                    # Calculate the position to center the arrow at the quadrant center
-                    pos = self.graphboard.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
-                    arrow.setPos(pos)
+                    if arrow.get_attributes()['quadrant'] != "None":
+                        pos = self.graphboard.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
             else:
                 # Calculate the position to center the arrow at the quadrant center
                 pos = self.graphboard.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()

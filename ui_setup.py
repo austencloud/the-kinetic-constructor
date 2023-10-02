@@ -246,7 +246,7 @@ class UiSetup(QWidget):
         arrowbox_scene = QGraphicsScene()
 
         svgs_full_paths = []
-        default_arrows = ['red_pro_r_ne.svg', 'red_anti_r_ne.svg', 'blue_pro_r_sw.svg', 'blue_anti_r_sw.svg']
+        default_arrows = ['red_pro_r_ne_0.svg', 'red_anti_r_ne_0.svg', 'blue_pro_r_sw_0.svg', 'blue_anti_r_sw_0.svg']
         svg_item_count = 0
 
         for dirpath, dirnames, filenames in os.walk(self.ARROW_DIR):

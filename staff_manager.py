@@ -98,7 +98,7 @@ class Staff_Manager(QObject):
                     elif arrow.color == "#2e3192" or arrow.color == 'blue':
                         color = 'blue'
                     else:
-                        print(f"Unexpected arrow color: {arrow.color}")
+                        print(f"update_graphboard_staffs -- Unexpected arrow color: {arrow.color}")
                         continue 
                     
                     new_staff = Staff(end_location + "_staff",

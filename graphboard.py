@@ -98,7 +98,7 @@ class Graphboard(QGraphicsView):
                         elif base_name.startswith('blue_pro'):
                             new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_pro_{arrow.rotation}_{new_quadrant}.svg'
                         else:
-                            print(f"Unexpected svg_file: {arrow.svg_file}")
+                            print(f"graphboard_view.mouseMoveEvent -- Unexpected svg_file: {arrow.svg_file}")
                             new_svg = arrow.svg_file 
 
                         new_renderer = QSvgRenderer(new_svg)
@@ -482,7 +482,7 @@ class Quadrant_Preview_Drag(QDrag):
         elif base_name.startswith('blue_pro'):
             new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_pro_{arrow.rotation}_{quadrant}.svg'
         else:
-            print(f"Unexpected svg_file: {arrow.svg_file}")
+            print(f"update_arrow_svg -- Unexpected svg_file: {arrow.svg_file}")
             new_svg = arrow.svg_file 
 
         new_renderer = QSvgRenderer(new_svg)

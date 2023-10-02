@@ -117,7 +117,7 @@ class Arrow_Handler(QObject):
                 new_svg = current_svg.replace("_r_", "_l_").replace("\\r\\", "\\l\\")
                 item.rotation = "l"
             else:
-                print("Unexpected svg_file:", current_svg)
+                print("mirror_arrow -- Unexpected svg_file:", current_svg)
                 continue
 
             new_renderer = QSvgRenderer(new_svg)
@@ -149,7 +149,7 @@ class Arrow_Handler(QObject):
                 elif color == "blue":
                     new_color = "red"
                 else:
-                    print("Unexpected color:", color)
+                    print("swap_colors - Unexpected color:", color)
                     continue
                 new_svg = current_svg.replace(color, new_color)
                 new_renderer = QSvgRenderer(new_svg)

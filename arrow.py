@@ -26,10 +26,12 @@ class Arrow(QGraphicsSvgItem):
         self.parse_filename()
         self.start_location, self.end_location = self.arrow_positions.get(os.path.basename(svg_file), (None, None))
         self.staff = None
+        self.quadrant = None
         self.svg_handler = svg_handler
         self.dragStarted = False
         self.arrow_manipulator = arrow_manipulator
         self.type = type
+        self.turns = 0
         # Assuming `arrow` is an instance of the Arrow class
 
         with open('pictographs.json') as f:
@@ -53,7 +55,10 @@ class Arrow(QGraphicsSvgItem):
         elif 'blue' in svg_file:
             self.color = 'blue'
         else:
-            raise ValueError(f"Invalid filename: {svg_file}. Filename must contain either 'red' or 'blue'.")
+            if svg_file == "images/arrows/blank.svg":
+                self.color = None
+            else:
+                raise ValueError(f"Invalid filename: {svg_file}. Filename must contain either 'red' or 'blue'.")
 
 
 
@@ -61,6 +66,8 @@ class Arrow(QGraphicsSvgItem):
     ### SETTERS ###
 
     def set_attributes(self, attributes):
+        print(f"Attributes passed: {attributes}")  # Debug print
+
         self.color = attributes.get('color', self.color)
         self.quadrant = self.svg_file.split('_')[-1]
         self.quadrant = attributes.get('quadrant', self.quadrant)
@@ -81,13 +88,15 @@ class Arrow(QGraphicsSvgItem):
     def get_attributes(self):
         attributes = {
             'color': self.color,
-            'quadrant': self.quadrant,
+            'quadrant': self.quadrant if self.quadrant is not None else "None",
             'rotation': self.rotation,
             'type': self.type,
             'start_location': self.start_location,
             'end_location': self.end_location,
+            'turns': self.turns
         }
         return attributes
+
     
     def get_arrow_start_position(arrow):
         # Assuming that the 'start_location' attribute of an arrow is a direction
@@ -281,7 +290,8 @@ class Arrow(QGraphicsSvgItem):
 
     def update_arrow_position(self):
         # Get the current combination of arrows
-        current_combination = (self.get_attributes()['color'], self.get_attributes()['quadrant'], self.get_attributes()['rotation'], self.get_attributes()['type'], self.get_attributes()['start_location'], self.get_attributes()['end_location'])
+        
+        current_combination = (self.get_attributes()['color'], self.get_attributes()['quadrant'], self.get_attributes()['rotation'], self.get_attributes()['type'], self.get_attributes()['start_location'], self.get_attributes()['end_location'], self.get_attributes()['turns'])
 
         optimal_position = None
 
@@ -303,8 +313,6 @@ class Arrow(QGraphicsSvgItem):
             # Calculate the position to center the arrow at the quadrant center
             pos = self.graphboard.get_quadrant_center(self.get_attributes()['quadrant']) - self.boundingRect().center()
             self.setPos(pos)
-
-
 
 
     def update_arrow_image(self):
