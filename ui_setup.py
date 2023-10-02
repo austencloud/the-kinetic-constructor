@@ -361,23 +361,25 @@ class UiSetup(QWidget):
         self.selected_items = self.graphboard_view.get_selected_items()
         
         try:
-            self.arrow = self.selected_items[0]
+            self.selected_item = self.selected_items[0]
         except IndexError:
-            self.arrow = None
-            
+            self.selected_item = None
 
         if event.key() == Qt.Key_Delete:
+            if isinstance(self.selected_item, Arrow):
+                self.arrow_handler.delete_arrow(self.selected_items)
+            elif isinstance(self.selected_item, Staff):
+                self.arrow_handler.delete_staff(self.selected_items)  # Call delete_staff here
 
-            self.arrow_handler.delete_arrow(self.selected_items)
-
-        if event.key() == Qt.Key_W:
-            self.arrow.move_quadrant_up()
-        elif event.key() == Qt.Key_A:
-            self.arrow.move_quadrant_left()
-        elif event.key() == Qt.Key_S:
-            self.arrow.move_quadrant_down()
-        elif event.key() == Qt.Key_D:
-            self.arrow.move_quadrant_right()
+        elif self.selected_item and isinstance(self.selected_item, Arrow):
+            if event.key() == Qt.Key_W:
+                self.selected_item.move_quadrant_up()
+            elif event.key() == Qt.Key_A:
+                self.selected_item.move_quadrant_left()
+            elif event.key() == Qt.Key_S:
+                self.selected_item.move_quadrant_down()
+            elif event.key() == Qt.Key_D:
+                self.selected_item.move_quadrant_right()
 
     def eventFilter(self, source, event):
         if event.type() == QEvent.KeyPress:

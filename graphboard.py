@@ -200,7 +200,7 @@ class Graphboard(QGraphicsView):
             self.drag.update_arrow_svg(self.arrow_item, quadrant)
             self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
 
-            current_letter = self.info_tracker.determine_current_letter()
+            current_letter, current_type = self.info_tracker.determine_current_letter_and_type()
 
             # Debug: Print current letter
             print(f"Current letter: {current_letter}")
@@ -391,7 +391,7 @@ class Graphboard(QGraphicsView):
             staff_menu = QMenu(self)
 
             delete_action = QAction('Delete', self)
-            delete_action.triggered.connect(lambda: self.arrow_handler.delete_arrow(selected_items))
+            delete_action.triggered.connect(lambda: self.arrow_handler.delete_staff(selected_items))
             staff_menu.addAction(delete_action)
 
             rotate_right_action = QAction('Rotate Right', self)

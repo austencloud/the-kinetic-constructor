@@ -179,6 +179,16 @@ class Arrow_Handler(QObject):
         self.graphboard_view = graphboard_view
         self.selected_items_len = len(graphboard_view.get_selected_items())
 
+    def delete_staff(self, staffs):
+        if staffs:
+            for staff in staffs:
+                staff.hide()
+                self.graphboard_view.scene().removeItem(staff)
+                print(f"{staff.color} staffs deleted")
+                self.info_tracker.update()
+                self.graphboard_view.update_letter(self.info_tracker.determine_current_letter_and_type()[0])
+        else:
+            print("No staffs selected")
 
     def delete_arrow(self, arrows):
         if len(arrows) != 0:
@@ -192,7 +202,7 @@ class Arrow_Handler(QObject):
                 print(f"{arrow.color} arrow deleted")
             
             # Update the current letter and the board
-            current_letter = self.info_tracker.determine_current_letter()
+            current_letter, type = self.info_tracker.determine_current_letter_and_type()
             if current_letter:
                 self.graphboard_view.update_letter(current_letter)
             elif not current_letter:
@@ -211,7 +221,7 @@ class Arrow_Handler(QObject):
                     }
             # Final update to the info tracker
             self.info_tracker.update()
-            letter, type = self.info_tracker.determine_current_letter()
+            letter, type = self.info_tracker.determine_current_letter_and_type()
             self.graphboard_view.update_letter(letter)
             
         else:

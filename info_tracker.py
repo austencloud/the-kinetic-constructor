@@ -56,7 +56,7 @@ class Info_Tracker:
 
         
 
-    def determine_current_letter(self):
+    def determine_current_letter_and_type(self):
         current_combination = []
         for item in self.graphboard.items():
             if isinstance(item, Arrow):
@@ -145,12 +145,9 @@ class Info_Tracker:
                 current_combination.append(attributes)
 
         current_combination = sorted(current_combination, key=lambda x: x['color'])
-        print(f"All combinations: {self.letters}")
-
-        print(f"current_combination: {current_combination}")
         self.letters = self.load_letters()
 
-        self.letter, current_type = self.determine_current_letter()
+        self.letter, current_type = self.determine_current_letter_and_type()
 
         blue_text = "<h2 style='color: #0000FF'>Left</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"
         red_text = "<h2 style='color: #FF0000'>Right</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"
@@ -199,8 +196,27 @@ class Info_Tracker:
             red_text = red_text.replace("End: ", f"End: {self.remaining_staff['red']['end']}")
             red_text = red_text.replace("Turns: ", f"Turns: {self.remaining_staff['red']['turns']}")
 
-        # Existing code for determining the current letter and its type
-        # ...
+        # Determine the current letter and its type
+        self.letter, current_type = self.determine_current_letter_and_type()
+        
+        # Update the letter_text based on the type, not the letter itself
+        letter_text = ""
+        
+        for letter, combinations in self.letters.items():
+            combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]  # Ignore the first dictionary which contains optimal positions
+        
+            if current_combination in combinations:
+                    letter_text += f"<span style='font-size: 40px; font-weight: bold;'>{current_type}</span>"
+                    start_position, end_position = self.get_positions()
+                    letter_text += f"<h4>{start_position} → {end_position}</h4>"
+                    self.letter = letter 
+                    break  
+                
+        else:  # This will execute if the for loop completes without a 'break'
+            print("No letter found")
+            self.letter = None
+            self.graphboard.update_letter(None)   
+
 
         if self.letter is not None:
             self.graphboard.update_letter(self.letter)

@@ -65,7 +65,7 @@ class Sequence_Handler():
         print(pictograph.state)
         self.add_pictograph(pictograph)
         graphboard.clear()
-
+        graphboard.update_letter(None)
         letter = self.info_tracker.get_current_letter()
         self.ui_setup.word_label.setText(self.ui_setup.word_label.text() + letter)
   
