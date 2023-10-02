@@ -1,4 +1,5 @@
 from arrow import Arrow
+from staff import Staff
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
@@ -18,7 +19,7 @@ class Info_Tracker:
         self.label.setAlignment(Qt.AlignTop)
         self.letters = self.load_letters()
         self.staff_manager = staff_manager
-
+        self.remaining_staff = {}
 
     def start(self):
         self.previous_state = self.get_current_state()
@@ -47,13 +48,23 @@ class Info_Tracker:
             self.update()
             self.previous_state = current_state
 
+    def check_for_remaining_staff(self, color):
+        for item in self.graphboard.items():
+            if isinstance(item, Staff) and item.color == color:  # Assuming you have a Staff class
+                return item
+        return None
+
+        
+
     def determine_current_letter(self):
         current_combination = []
         for item in self.graphboard.items():
             if isinstance(item, Arrow):
                 attributes = item.get_attributes()
+                # Sort the dictionary by its keys
                 sorted_attributes = {k: attributes[k] for k in sorted(attributes.keys())}
                 current_combination.append(sorted_attributes)
+        # Sort the list of dictionaries by the 'color' key
         current_combination = sorted(current_combination, key=lambda x: x['color'])
         
         current_type = None  # Initialize current_type to None
@@ -126,6 +137,7 @@ class Info_Tracker:
     
     def update(self):
         current_combination = []
+        self.remaining_staff = {}  # Initialize an empty dictionary to store remaining staff info
 
         for item in self.graphboard.items():
             if isinstance(item, Arrow):
@@ -137,55 +149,23 @@ class Info_Tracker:
 
         print(f"current_combination: {current_combination}")
         self.letters = self.load_letters()
-        
-        # Determine the current letter and its type
+
         self.letter, current_type = self.determine_current_letter()
-        
-        # Update the letter_text based on the type, not the letter itself
-        letter_text = "<h2>Type</h2>"
-        
-        if current_type is not None:
-            letter_text += f"<span style='font-size: 140px; font-weight: bold;'>{current_type}</span>"
-        else:
-            letter_text += "<span style='font-size: 140px; font-weight: bold;'>Unknown</span>"
-        
 
         blue_text = "<h2 style='color: #0000FF'>Left</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"
         red_text = "<h2 style='color: #FF0000'>Right</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"
         letter_text = ""
 
-        for letter, combinations in self.letters.items():
-            combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]  # Ignore the first dictionary which contains optimal positions
-            
-            if current_combination in combinations:
-                letter_text += f"<span style='font-size: 40px; font-weight: bold;'>{current_type}</span>"
-                start_position, end_position = self.get_positions()
-                letter_text += f"<h4>{start_position} → {end_position}</h4>"
-                self.letter = letter 
-                break  
-        else:  # This will execute if the for loop completes without a 'break'
-            print("No letter found")
-            self.letter = None
-            self.graphboard.update_letter(None)   
-
-
-        if hasattr(self.main_window, 'staff'):
-            self.main_window.staff.update_position(self.arrow.end_location)
+        no_blue_arrows = True
+        no_red_arrows = True
 
         for item in self.graphboard.items():
             if isinstance(item, Arrow):
                 attributes = item.get_attributes()
-                current_combination.append(attributes)
                 color = attributes.get('color', 'N/A')
                 rotation_direction = attributes.get('rotation_direction', 'N/A')
-                end_location = attributes.get('end_location', 'N/A')
-                if end_location is None:
-                    break
-                if rotation_direction == 'l':
-                    rotation_direction = 'Anti-clockwise'
-                else: # rotation_direction == 'r'
-                    rotation_direction = 'Clockwise'
                 if color == 'blue':
+                    no_blue_arrows = False
                     blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
                     blue_text = blue_text.replace("Rotation: ", f"Rotation: {rotation_direction}")
                     blue_text = blue_text.replace("Type: ", f"Type: {attributes.get('type', 'N/A').capitalize()}")
@@ -193,6 +173,7 @@ class Info_Tracker:
                     blue_text = blue_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
                     blue_text = blue_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
                 elif color == 'red':
+                    no_red_arrows = False
                     red_text = red_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
                     red_text = red_text.replace("Rotation: ", f"Rotation: {rotation_direction}")
                     red_text = red_text.replace("Type: ", f"Type: {attributes.get('type', 'N/A').capitalize()}")
@@ -200,11 +181,35 @@ class Info_Tracker:
                     red_text = red_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
                     red_text = red_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
 
+        if no_blue_arrows and 'blue' in self.remaining_staff:
+            # Update blue_text here based on self.remaining_staff['blue']
+            blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {self.remaining_staff['blue']['quadrant'].upper()}")
+            blue_text = blue_text.replace("Rotation: ", f"Rotation: {self.remaining_staff['blue']['rotation']}")
+            blue_text = blue_text.replace("Type: ", f"Type: {self.remaining_staff['blue']['type']}")
+            blue_text = blue_text.replace("Start: ", f"Start: {self.remaining_staff['blue']['start']}")
+            blue_text = blue_text.replace("End: ", f"End: {self.remaining_staff['blue']['end']}")
+            blue_text = blue_text.replace("Turns: ", f"Turns: {self.remaining_staff['blue']['turns']}")
+
+        if no_red_arrows and 'red' in self.remaining_staff:
+            # Update red_text here based on self.remaining_staff['red']
+            red_text = red_text.replace("Quadrant: ", f"Quadrant: {self.remaining_staff['red']['quadrant'].upper()}")
+            red_text = red_text.replace("Rotation: ", f"Rotation: {self.remaining_staff['red']['rotation']}")
+            red_text = red_text.replace("Type: ", f"Type: {self.remaining_staff['red']['type']}")
+            red_text = red_text.replace("Start: ", f"Start: {self.remaining_staff['red']['start']}")
+            red_text = red_text.replace("End: ", f"End: {self.remaining_staff['red']['end']}")
+            red_text = red_text.replace("Turns: ", f"Turns: {self.remaining_staff['red']['turns']}")
+
+        # Existing code for determining the current letter and its type
+        # ...
+
         if self.letter is not None:
-            self.graphboard.update_letter(letter)
+            self.graphboard.update_letter(self.letter)
+
         self.label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr><tr><td width=100>" + letter_text + "</td></tr></table>")
 
-        
+        # Clear the remaining staff info
+        self.remaining_staff = {}
+
     def get_positions(self):
         positions = []
         arrow_items = []

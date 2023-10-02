@@ -107,7 +107,7 @@ class Pictograph_Generator():
         optimal_positions = next((d for d in combination_set if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
 
         for combination in combination_set:
-            print(f"Setting attributes for arrow with combination: {combination}")
+
             # Check if the dictionary has all the keys you need
             if all(key in combination for key in ['color', 'type', 'rotation_direction', 'quadrant', 'turns']):
                 if combination['type'] == 'static':
@@ -116,14 +116,12 @@ class Pictograph_Generator():
                 elif combination['type'] == 'anti' or combination['type'] == 'pro':
                     svg_file = f"images/arrows/shift/{combination['type']}/{combination['color']}_{combination['type']}_{combination['rotation_direction']}_{combination['quadrant']}_{combination['turns']}.svg"
                     arrow = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler, combination['type'])
-
                     arrow.set_attributes(combination)
                     arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
                     arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
-
                 # Add the created arrow to the list
                 created_arrows.append(arrow)
-        print("created_arrows:", created_arrows)
+
         
         # Add the arrows to the scene
         for arrow in created_arrows:

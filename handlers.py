@@ -22,6 +22,7 @@ class Arrow_Handler(QObject):
         super().__init__()
         self.graphboard_view = graphboard_view
         self.staff_manager = staff_manager
+        self.remaining_staff = {}
 
 
     def connect_info_tracker(self, info_tracker):
@@ -131,6 +132,7 @@ class Arrow_Handler(QObject):
                 item.setPos(pos)
             else:
                 print("Failed to load SVG file:", new_svg)
+        self.info_tracker.update()
 
     def bring_forward(self, items):
         for item in items:
@@ -178,25 +180,44 @@ class Arrow_Handler(QObject):
         self.selected_items_len = len(graphboard_view.get_selected_items())
 
 
-    def delete_arrow(self, items):
-        if len(items) != 0:
-            if len(items) == 1:
-                for item in items:
-                    self.graphboard_view.scene().removeItem(item)
-                    print("Item deleted")
-            elif len(items) > 1:
-                for item in items:
-                    self.graphboard_view.scene().removeItem(item)
-                    print("Items deleted")
+    def delete_arrow(self, arrows):
+        if len(arrows) != 0:
+            # Store the colors of the arrows being deleted
+            deleted_colors = [arrow.color for arrow in arrows]
+            deleted_end_locations = [arrow.end_location for arrow in arrows]
+            
+            # Remove arrow from the scene
+            for arrow in arrows:
+                self.graphboard_view.scene().removeItem(arrow)
+                print(f"{arrow.color} arrow deleted")
+            
+            # Update the current letter and the board
             current_letter = self.info_tracker.determine_current_letter()
             if current_letter:
                 self.graphboard_view.update_letter(current_letter)
             elif not current_letter:
                 self.graphboard_view.update_letter(None)
+            
+            for color in deleted_colors:
+                remaining_staff = self.info_tracker.check_for_remaining_staff(color)
+                if remaining_staff:
+                    self.info_tracker.remaining_staff[color] = {
+                        'quadrant': 'None',
+                        'rotation': 'None',
+                        'type': 'static',
+                        'start_location': deleted_end_locations[0],  # Changed to dot notation
+                        'end_location': deleted_end_locations[0],    # Changed to dot notation
+                        'turns': 0
+                    }
+            # Final update to the info tracker
             self.info_tracker.update()
+            letter, type = self.info_tracker.determine_current_letter()
+            self.graphboard_view.update_letter(letter)
+            
         else:
             print("No items selected")
-        
+
+            
 
 class Key_Press_Handler:
     def __init__(self, arrow, graphboard_view=None):
