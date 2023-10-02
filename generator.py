@@ -48,9 +48,9 @@ class Pictograph_Generator():
                 start_position = positions_dict['start_position'].replace('alpha', 'a').replace('beta', 'b').replace('gamma', 'g')
                 end_position = positions_dict['end_position'].replace('alpha', 'a').replace('beta', 'b').replace('gamma', 'g')
 
-                # Check if the current combination has one 'anti' and one 'iso'
+                # Check if the current combination has one 'anti' and one 'pro'
                 types = [arrow_dict['type'] for arrow_dict in combination if 'type' in arrow_dict]
-                is_hybrid = types.count('anti') == 1 and types.count('iso') == 1
+                is_hybrid = types.count('anti') == 1 and types.count('pro') == 1
 
 
                 # Iterate over the arrow dictionaries in the list
@@ -64,10 +64,10 @@ class Pictograph_Generator():
 
                         # Create the file name
                         file_name = f"{letter}_{start_position}_{end_position}"
-                        if type == 'iso' and is_hybrid and color == 'red':
-                            file_name += f"_r-iso_l-anti"
+                        if type == 'pro' and is_hybrid and color == 'red':
+                            file_name += f"_r-pro_l-anti"
                         elif type == 'anti' and is_hybrid and color == 'red':
-                            file_name += f"_r-anti_l-iso"
+                            file_name += f"_r-anti_l-pro"
                         file_name += ".svg"
 
 
@@ -109,12 +109,16 @@ class Pictograph_Generator():
         for combination in combination_set:
             # Check if the dictionary has all the keys you need
             if all(key in combination for key in ['color', 'type', 'rotation', 'quadrant']):
-                svg_file = f"images/arrows/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}.svg"
-                arrow = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler)
+                if combination['type'] == 'static':
+                    svg_file = f"images/arrows/blank.svg"
+                    arrow = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler, combination['type'])
+                elif combination['type'] == 'anti' or combination['type'] == 'pro':
+                    svg_file = f"images/arrows/shift/{combination['type']}/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}.svg"
+                    arrow = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler, combination['type'])
 
-                arrow.set_attributes(combination)
-                arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
-                arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
+                    arrow.set_attributes(combination)
+                    arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
+                    arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
                 # Add the created arrow to the list
                 created_arrows.append(arrow)
@@ -124,6 +128,7 @@ class Pictograph_Generator():
             self.graphboard_scene.addItem(arrow)
             
         for arrow in created_arrows:
+            arrow.set_attributes
             if optimal_positions:
                 optimal_position = optimal_positions.get(f"optimal_{arrow.get_attributes()['color']}_location")
                 if optimal_position:

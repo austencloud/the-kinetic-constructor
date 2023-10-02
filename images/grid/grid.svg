@@ -22,10 +22,12 @@
             <circle id="SW_layer2_point" class="black" cx="181.91" cy="468.09" r="8.75"/>
             <circle id="NW_layer2_point" class="black" cx="181.91" cy="181.91" r="8.75"/>
         </g>
+        <g id="handpoints">
             <circle id="N_hand_point" class="cls-1" cx="325" cy="181.91" r="4.25"/>
             <circle id="E_hand_point" class="cls-1" cx="468.09" cy="325" r="4.25"/>
             <circle id="S_hand_point" class="cls-1" cx="325" cy="468.09" r="4.25"/>
             <circle id="W_hand_point" class="cls-1" cx="181.91" cy="325" r="4.25"/>
+        </g>
       </g>
 
   </g>

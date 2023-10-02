@@ -91,24 +91,25 @@ class Staff_Manager(QObject):
         for arrow in scene.items():
             if isinstance(arrow, Arrow):
                 end_location = arrow.end_location
-                end_location = end_location.capitalize()
-                if arrow.color == "#ed1c24" or arrow.color == 'red':
-                    color = 'red'
-                elif arrow.color == "#2e3192" or arrow.color == 'blue':
-                    color = 'blue'
-                else:
-                    print(f"Unexpected arrow color: {arrow.color}")
-                    continue 
-                
-                new_staff = Staff(end_location + "_staff",
-                                scene,
-                                self.staff_locations[end_location + "_staff"],
-                                'vertical' if end_location in ['N', 'S'] else 'horizontal',  # Add this line
-                                color,
-                                'images\\staves\\' + end_location + "_staff_" + color + '.svg')
-                if new_staff.scene is None:
-                    self.scene.addItem(new_staff)
-                self.graphboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
+                if end_location:
+                    end_location = end_location.capitalize()
+                    if arrow.color == "#ed1c24" or arrow.color == 'red':
+                        color = 'red'
+                    elif arrow.color == "#2e3192" or arrow.color == 'blue':
+                        color = 'blue'
+                    else:
+                        print(f"Unexpected arrow color: {arrow.color}")
+                        continue 
+                    
+                    new_staff = Staff(end_location + "_staff",
+                                    scene,
+                                    self.staff_locations[end_location + "_staff"],
+                                    'vertical' if end_location in ['N', 'S'] else 'horizontal',  # Add this line
+                                    color,
+                                    'images\\staves\\' + end_location + "_staff_" + color + '.svg')
+                    if new_staff.scene is None:
+                        self.scene.addItem(new_staff)
+                    self.graphboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
         self.check_and_replace_staffs()
         
     def hide_all_graphboard_staffs(self):

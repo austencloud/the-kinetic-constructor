@@ -99,7 +99,7 @@ class Info_Tracker:
                             start_location, end_location = ("n", "s")
                         else:  # rotation == "r"
                             end_location, start_location = ("n", "s")
-                    else:  # arrow_type == "iso"
+                    else:  # arrow_type == "pro"
                         if rotation == "l":
                             start_location, end_location = ("n", "s")
                         else:  # rotation == "r"
@@ -153,6 +153,9 @@ class Info_Tracker:
                 current_combination.append(attributes)
                 color = attributes.get('color', 'N/A')
                 rotation = attributes.get('rotation', 'N/A')
+                end_location = attributes.get('end_location', 'N/A')
+                if end_location is None:
+                    break
                 if rotation == 'l':
                     rotation = 'Anti-clockwise'
                 else: # rotation == 'r'

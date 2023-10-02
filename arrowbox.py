@@ -98,12 +98,12 @@ class Arrow_Box(QGraphicsView):
 
                 if base_name.startswith('red_anti'):
                     new_svg = f'images\\arrows\\red_anti_{self.orientation}_{quadrant}.svg'
-                elif base_name.startswith('red_iso'):
-                    new_svg = f'images\\arrows\\red_iso_{self.orientation}_{quadrant}.svg'
+                elif base_name.startswith('red_pro'):
+                    new_svg = f'images\\arrows\\red_pro_{self.orientation}_{quadrant}.svg'
                 elif base_name.startswith('blue_anti'):
                     new_svg = f'images\\arrows\\blue_anti_{self.orientation}_{quadrant}.svg'
-                elif base_name.startswith('blue_iso'):
-                    new_svg = f'images\\arrows\\blue_iso_{self.orientation}_{quadrant}.svg'
+                elif base_name.startswith('blue_pro'):
+                    new_svg = f'images\\arrows\\blue_pro_{self.orientation}_{quadrant}.svg'
                 else:
                     print(f"Unexpected svg_file: {self.svg_file}")
                     

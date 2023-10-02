@@ -90,13 +90,13 @@ class Graphboard(QGraphicsView):
                         base_name = os.path.basename(arrow.svg_file)
 
                         if base_name.startswith('red_anti'):
-                            new_svg = f'images\\arrows\\red_anti_{arrow.rotation}_{new_quadrant}.svg'
-                        elif base_name.startswith('red_iso'):
-                            new_svg = f'images\\arrows\\red_iso_{arrow.rotation}_{new_quadrant}.svg'
+                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_anti_{arrow.rotation}_{new_quadrant}.svg'
+                        elif base_name.startswith('red_pro'):
+                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_pro_{arrow.rotation}_{new_quadrant}.svg'
                         elif base_name.startswith('blue_anti'):
-                            new_svg = f'images\\arrows\\blue_anti_{arrow.rotation}_{new_quadrant}.svg'
-                        elif base_name.startswith('blue_iso'):
-                            new_svg = f'images\\arrows\\blue_iso_{arrow.rotation}_{new_quadrant}.svg'
+                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_anti_{arrow.rotation}_{new_quadrant}.svg'
+                        elif base_name.startswith('blue_pro'):
+                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_pro_{arrow.rotation}_{new_quadrant}.svg'
                         else:
                             print(f"Unexpected svg_file: {arrow.svg_file}")
                             new_svg = arrow.svg_file 
@@ -150,8 +150,10 @@ class Graphboard(QGraphicsView):
             event.setDropAction(Qt.CopyAction)
             event.accept()
             dropped_svg = event.mimeData().text()
+            arrow_type = dropped_svg.split('_')[1]
 
-            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler,  self.arrow_handler)
+            print(f"dropped_svg: {dropped_svg}")
+            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler, self.arrow_handler, arrow_type)
 
             self.arrow_item.setFlag(QGraphicsSvgItem.ItemIsFocusable, True)
             self.scene().addItem(self.arrow_item)
@@ -163,7 +165,6 @@ class Graphboard(QGraphicsView):
                     arrow.setSelected(False)
             self.arrow_item.setSelected(True)
             end_location = self.arrow_item.end_location
-            self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
             self.info_tracker.update()
         else:
             event.ignore()
@@ -172,6 +173,7 @@ class Graphboard(QGraphicsView):
         quadrant = self.drag.get_graphboard_quadrants(adjusted_arrow_pos)
         self.arrow_item.quadrant = quadrant
         self.drag.update_arrow_svg(self.arrow_item, quadrant) 
+        self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
         self.info_tracker.update()
 
 
@@ -472,13 +474,13 @@ class Quadrant_Preview_Drag(QDrag):
         base_name = os.path.basename(arrow.svg_file)
 
         if base_name.startswith('red_anti'):
-            new_svg = f'images\\arrows\\red_anti_{arrow.rotation}_{quadrant}.svg'
-        elif base_name.startswith('red_iso'):
-            new_svg = f'images\\arrows\\red_iso_{arrow.rotation}_{quadrant}.svg'
+            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_anti_{arrow.rotation}_{quadrant}.svg'
+        elif base_name.startswith('red_pro'):
+            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_pro_{arrow.rotation}_{quadrant}.svg'
         elif base_name.startswith('blue_anti'):
-            new_svg = f'images\\arrows\\blue_anti_{arrow.rotation}_{quadrant}.svg'
-        elif base_name.startswith('blue_iso'):
-            new_svg = f'images\\arrows\\blue_iso_{arrow.rotation}_{quadrant}.svg'
+            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_anti_{arrow.rotation}_{quadrant}.svg'
+        elif base_name.startswith('blue_pro'):
+            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_pro_{arrow.rotation}_{quadrant}.svg'
         else:
             print(f"Unexpected svg_file: {arrow.svg_file}")
             new_svg = arrow.svg_file 

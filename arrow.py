@@ -10,7 +10,7 @@ class Arrow(QGraphicsSvgItem):
     orientationChanged = pyqtSignal()
 
 
-    def __init__(self, svg_file, graphboard, info_tracker, svg_handler, arrow_manipulator):
+    def __init__(self, svg_file, graphboard, info_tracker, svg_handler, arrow_manipulator, type):
         super().__init__(svg_file)
         self.setAcceptDrops(True)
         self.svg_file = svg_file
@@ -29,11 +29,8 @@ class Arrow(QGraphicsSvgItem):
         self.svg_handler = svg_handler
         self.dragStarted = False
         self.arrow_manipulator = arrow_manipulator
-
+        self.type = type
         # Assuming `arrow` is an instance of the Arrow class
-
-
-
 
         with open('pictographs.json') as f:
             self.pictographs = json.load(f)
@@ -65,12 +62,12 @@ class Arrow(QGraphicsSvgItem):
 
     def set_attributes(self, attributes):
         self.color = attributes.get('color', self.color)
+        self.quadrant = self.svg_file.split('_')[-1]
         self.quadrant = attributes.get('quadrant', self.quadrant)
         self.rotation = attributes.get('rotation', self.rotation)
         self.type = attributes.get('type', self.type)
         self.start_location = attributes.get('start_location', self.start_location)
         self.end_location = attributes.get('end_location', self.end_location)
-
         self.update_arrow_image() 
 
     def set_orientation(self, orientation):
@@ -134,14 +131,14 @@ class Arrow(QGraphicsSvgItem):
             f"{color}_anti_r_se.svg": ("s", "e"),
             f"{color}_anti_l_sw.svg": ("s", "w"),
             f"{color}_anti_r_sw.svg": ("w", "s"),
-            f"{color}_iso_l_ne.svg": ("e", "n"),
-            f"{color}_iso_r_ne.svg": ("n", "e"),
-            f"{color}_iso_l_nw.svg": ("n", "w"),
-            f"{color}_iso_r_nw.svg": ("w", "n"),
-            f"{color}_iso_l_se.svg": ("s", "e"),
-            f"{color}_iso_r_se.svg": ("e", "s"),
-            f"{color}_iso_l_sw.svg": ("w", "s"),
-            f"{color}_iso_r_sw.svg": ("s", "w"),
+            f"{color}_pro_l_ne.svg": ("e", "n"),
+            f"{color}_pro_r_ne.svg": ("n", "e"),
+            f"{color}_pro_l_nw.svg": ("n", "w"),
+            f"{color}_pro_r_nw.svg": ("w", "n"),
+            f"{color}_pro_l_se.svg": ("s", "e"),
+            f"{color}_pro_r_se.svg": ("e", "s"),
+            f"{color}_pro_l_sw.svg": ("w", "s"),
+            f"{color}_pro_r_sw.svg": ("s", "w"),
         }
     
     def get_staff_position(self):
@@ -189,7 +186,7 @@ class Arrow(QGraphicsSvgItem):
 
 
     def update_rotation(self):
-        if self.type == "iso":
+        if self.type == "pro":
             if self.start_location == "n":
                 if self.end_location == "e":
                     self.rotation = "r"
@@ -312,7 +309,7 @@ class Arrow(QGraphicsSvgItem):
 
     def update_arrow_image(self):
         # Construct the new filename based on the arrow's attributes
-        new_filename = f"images\\arrows\\{self.color}_{self.type}_{self.rotation}_{self.quadrant}.svg"
+        new_filename = f"images\\arrows\\shift\\{self.type}\\{self.color}_{self.type}_{self.rotation}_{self.quadrant}.svg"
         
         # Check if the file exists
         if os.path.isfile(new_filename):
@@ -345,12 +342,15 @@ class Arrow(QGraphicsSvgItem):
         return path
 
     def parse_filename(self):
-
-        parts = os.path.basename(self.svg_file).split('_')
-        self.color = parts[0]
-        self.type = parts[1]
-        self.rotation = parts[2]
-        self.quadrant = parts[3].split('.')[0]
+        if self.type == 'static':
+            self.rotation = None
+            self.quadrant = None
+        elif self.type == 'anti' or self.type == 'pro':        
+            parts = os.path.basename(self.svg_file).split('_')
+            self.color = parts[0]
+            self.type = parts[1]
+            self.rotation = parts[2]
+            self.quadrant = parts[3].split('.')[0]
 
     def move_quadrant_up(self):
         if self.quadrant == 'se':

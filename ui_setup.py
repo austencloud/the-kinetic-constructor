@@ -246,15 +246,15 @@ class UiSetup(QWidget):
         arrowbox_scene = QGraphicsScene()
 
         svgs_full_paths = []
-        default_arrows = ['red_iso_r_ne.svg', 'red_anti_r_ne.svg', 'blue_iso_r_sw.svg', 'blue_anti_r_sw.svg']
+        default_arrows = ['red_pro_r_ne.svg', 'red_anti_r_ne.svg', 'blue_pro_r_sw.svg', 'blue_anti_r_sw.svg']
         svg_item_count = 0
 
         for dirpath, dirnames, filenames in os.walk(self.ARROW_DIR):
             svgs_full_paths.extend([os.path.join(dirpath, filename) for filename in filenames if filename.endswith('.svg')])
 
-        svg_item_count_red_iso = 0
+        svg_item_count_red_pro = 0
         svg_item_count_red_anti = 0
-        svg_item_count_blue_iso = 0
+        svg_item_count_blue_pro = 0
         svg_item_count_blue_anti = 0
         spacing = 200 * SCALE_FACTOR
         y_pos_red = 0
@@ -263,23 +263,24 @@ class UiSetup(QWidget):
         for i, svg_file in enumerate(svgs_full_paths):
             file_name = os.path.basename(svg_file)
             if file_name in default_arrows:
+                arrow_type = file_name.split('_')[1]
                 self.graphboard_view.set_handlers(self.arrow_handler)
-                arrow_item = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.arrow_handler)
+                arrow_item = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.arrow_handler, arrow_type)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
                 arrow_item.setScale(0.75)
 
                 if 'red' in file_name:
-                    if 'iso' in file_name:
-                        arrow_item.setPos(svg_item_count_red_iso * spacing, y_pos_red) # Red Iso
-                        svg_item_count_red_iso += 1
+                    if 'pro' in file_name:
+                        arrow_item.setPos(svg_item_count_red_pro * spacing, y_pos_red) # Red pro
+                        svg_item_count_red_pro += 1
                     elif 'anti' in file_name:
                         arrow_item.setPos((svg_item_count_red_anti + 1) * spacing, y_pos_red) # Red Anti
                         svg_item_count_red_anti += 1
                 elif 'blue' in file_name:
-                    if 'iso' in file_name:
-                        arrow_item.setPos(svg_item_count_blue_iso * spacing, y_pos_blue) # Blue Iso
-                        svg_item_count_blue_iso += 1
+                    if 'pro' in file_name:
+                        arrow_item.setPos(svg_item_count_blue_pro * spacing, y_pos_blue) # Blue pro
+                        svg_item_count_blue_pro += 1
                     elif 'anti' in file_name:
                         arrow_item.setPos((svg_item_count_blue_anti + 1) * spacing, y_pos_blue) # Blue Anti
                         svg_item_count_blue_anti += 1
