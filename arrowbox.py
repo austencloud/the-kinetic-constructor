@@ -93,22 +93,20 @@ class Arrow_Box(QGraphicsView):
                         quadrant = 'sw'
                     else:
                         quadrant = 'se'
+                if hasattr(self, 'svg_file'):
+                    base_name = os.path.basename(self.svg_file)
 
-                base_name = os.path.basename(self.svg_file)
-
-                if base_name.startswith('red_anti'):
-                    new_svg = f'images\\arrows\\shift\\anti\\red_anti_{self.orientation}_{quadrant}_0.svg'
-                elif base_name.startswith('red_pro'):
-                    new_svg = f'images\\arrows\\shift\\pro\\red_pro_{self.orientation}_{quadrant}_0.svg'
-                elif base_name.startswith('blue_anti'):
-                    new_svg = f'images\\arrows\\shift\\anti\\blue_anti_{self.orientation}_{quadrant}_0.svg'
-                elif base_name.startswith('blue_pro'):
-                    new_svg = f'images\\arrows\\shift\\pro\\blue_pro_{self.orientation}_{quadrant}_0.svg'
-                else:
-                    print(f"Unexpected svg_file: {self.svg_file}")
-                    
-            else:
-                new_svg = arrow.svg_file
+                    if base_name.startswith('red_anti'):
+                        new_svg = f'images\\arrows\\shift\\anti\\red_anti_{self.orientation}_{quadrant}_0.svg'
+                    elif base_name.startswith('red_pro'):
+                        new_svg = f'images\\arrows\\shift\\pro\\red_pro_{self.orientation}_{quadrant}_0.svg'
+                    elif base_name.startswith('blue_anti'):
+                        new_svg = f'images\\arrows\\shift\\anti\\blue_anti_{self.orientation}_{quadrant}_0.svg'
+                    elif base_name.startswith('blue_pro'):
+                        new_svg = f'images\\arrows\\shift\\pro\\blue_pro_{self.orientation}_{quadrant}_0.svg'
+                    else:
+                        print(f"Unexpected svg_file: {self.svg_file}")
+                        
 
             self.drag.exec_(Qt.CopyAction | Qt.MoveAction)
             self.dragStarted = True

@@ -90,13 +90,13 @@ class Graphboard(QGraphicsView):
                         base_name = os.path.basename(arrow.svg_file)
 
                         if base_name.startswith('red_anti'):
-                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_anti_{arrow.arrow_rotation}_{new_quadrant}_{arrow.turns}.svg'
+                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_anti_{arrow.rotation_direction}_{new_quadrant}_{arrow.turns}.svg'
                         elif base_name.startswith('red_pro'):
-                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_pro_{arrow.arrow_rotation}_{new_quadrant}_{arrow.turns}.svg'
+                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_pro_{arrow.rotation_direction}_{new_quadrant}_{arrow.turns}.svg'
                         elif base_name.startswith('blue_anti'):
-                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_anti_{arrow.arrow_rotation}_{new_quadrant}_{arrow.turns}.svg'
+                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_anti_{arrow.rotation_direction}_{new_quadrant}_{arrow.turns}.svg'
                         elif base_name.startswith('blue_pro'):
-                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_pro_{arrow.arrow_rotation}_{new_quadrant}_{arrow.turns}.svg'
+                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_pro_{arrow.rotation_direction}_{new_quadrant}_{arrow.turns}.svg'
                         else:
                             print(f"graphboard_view.mouseMoveEvent -- Unexpected svg_file: {arrow.svg_file}")
                             new_svg = arrow.svg_file 
@@ -108,7 +108,7 @@ class Graphboard(QGraphicsView):
                             print(f"Updated svg_file to {new_svg}")
                             arrow.update_locations()
                         self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
-                    self.info_tracker.update()
+                        self.info_tracker.update()
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
@@ -126,7 +126,7 @@ class Graphboard(QGraphicsView):
         if event.mimeData().hasFormat('text/plain'):
             dropped_svg = event.mimeData().text()
             base_name = os.path.basename(dropped_svg)
-            color, type, rotation, quadrant, turns = base_name.split('_')[:5]
+            color, type, rotation_direction, quadrant, turns = base_name.split('_')[:5]
 
             for arrow in self.scene().items():
                 if isinstance(arrow, Arrow):
@@ -153,11 +153,34 @@ class Graphboard(QGraphicsView):
             dropped_svg = event.mimeData().text()
             arrow_type = dropped_svg.split('_')[1]
 
-            print(f"dropped_svg: {dropped_svg}")
+            print(f"dropped_svg: {dropped_svg}")  # Debug: Print dropped SVG
+
             self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler, self.arrow_handler, arrow_type)
             
-            self.arrow_item.set_attributes(self.arrow_item.get_attributes())
-            self.arrow_item.setFlag(QGraphicsSvgItem.ItemIsFocusable, True)
+            # Extract attributes from the SVG file name
+            attributes_from_file = dropped_svg.split('\\')[-1].split('_')
+            self.arrow_item.color = attributes_from_file[0]
+            self.arrow_item.type = attributes_from_file[1]
+            self.arrow_item.rotation_direction = attributes_from_file[2]
+            self.arrow_item.quadrant = attributes_from_file[3]
+            self.arrow_item.turns = attributes_from_file[-1].replace('.svg', '')
+
+            # Set start_location and end_location based on the SVG file name
+            start_end_tuple = self.arrow_item.get_arrow_start_end_locations(dropped_svg)
+            if start_end_tuple is not None:
+                self.arrow_item.start_location, self.arrow_item.end_location = start_end_tuple
+            else:
+                print("Warning: Could not determine start and end locations.")
+
+            # Convert turns to integer
+            self.arrow_item.turns = int(attributes_from_file[-1].replace('.svg', ''))
+
+            # Sort the attributes by key
+            sorted_attributes = {k: self.arrow_item.get_attributes()[k] for k in sorted(self.arrow_item.get_attributes())}
+
+            # Debug: Print attributes before any update
+            print(f"Arrow attributes before update: {sorted_attributes}")
+
             self.scene().addItem(self.arrow_item)
             pos = self.mapToScene(event.pos()) - self.arrow_item.boundingRect().center()
             self.arrow_item.setPos(pos)
@@ -166,18 +189,30 @@ class Graphboard(QGraphicsView):
                 if isinstance(arrow, Arrow):
                     arrow.setSelected(False)
             self.arrow_item.setSelected(True)
-            end_location = self.arrow_item.end_location
+
+            adjusted_arrow_pos = self.arrow_item.pos() + QPointF(0, 75)
+            quadrant = self.drag.get_graphboard_quadrants(adjusted_arrow_pos)
+
+            # Debug: Print quadrant after drop
+            print(f"Quadrant after drop: {quadrant}")
+
+            self.arrow_item.quadrant = quadrant
+            self.drag.update_arrow_svg(self.arrow_item, quadrant)
+            self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
+
+            current_letter = self.info_tracker.determine_current_letter()
+
+            # Debug: Print current letter
+            print(f"Current letter: {current_letter}")
+
+            self.update_letter(current_letter)
+            self.info_tracker.check_for_changes()
+
+            # Call this only once after all updates
             self.info_tracker.update()
+
         else:
             event.ignore()
-
-        adjusted_arrow_pos = self.arrow_item.pos() + QPointF(0, 75)
-        quadrant = self.drag.get_graphboard_quadrants(adjusted_arrow_pos)
-        self.arrow_item.quadrant = quadrant
-        self.drag.update_arrow_svg(self.arrow_item, quadrant) 
-        self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
-        self.info_tracker.update()
-
 
 
     ### GETTERS ###
@@ -197,7 +232,7 @@ class Graphboard(QGraphicsView):
                     'color': arrow.color,
                     'position': arrow.pos(),
                     'quadrant': arrow.quadrant,
-                    'rotation': arrow.rotation,
+                    'rotation_direction': arrow.rotation_direction,
                     'svg_file': arrow.svg_file
                 })
             elif isinstance(arrow, Staff):
@@ -266,7 +301,7 @@ class Graphboard(QGraphicsView):
 
         attributes['color'] = parts[0]
         attributes['type'] = parts[1]
-        attributes['rotation'] = 'Clockwise' if parts[2] == 'r' else 'Anti-clockwise'
+        attributes['rotation_direction'] = 'Clockwise' if parts[2] == 'r' else 'Anti-clockwise'
         attributes['quadrant'] = parts[3].split('.')[0]
 
         return attributes
@@ -414,8 +449,6 @@ class Graphboard(QGraphicsView):
 
         self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
 
-
-
     def clear(self):
         for arrow in self.scene().items():
             if isinstance(arrow, Arrow) or isinstance(arrow, Staff):
@@ -476,13 +509,13 @@ class Quadrant_Preview_Drag(QDrag):
         base_name = os.path.basename(arrow.svg_file)
 
         if base_name.startswith('red_anti'):
-            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_anti_{arrow.rotation}_{quadrant}_{arrow.turns}.svg'
+            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_anti_{arrow.rotation_direction}_{quadrant}_{arrow.turns}.svg'
         elif base_name.startswith('red_pro'):
-            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_pro_{arrow.rotation}_{quadrant}_{arrow.turns}.svg'
+            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_pro_{arrow.rotation_direction}_{quadrant}_{arrow.turns}.svg'
         elif base_name.startswith('blue_anti'):
-            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_anti_{arrow.rotation}_{quadrant}_{arrow.turns}.svg'
+            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_anti_{arrow.rotation_direction}_{quadrant}_{arrow.turns}.svg'
         elif base_name.startswith('blue_pro'):
-            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_pro_{arrow.rotation}_{quadrant}_{arrow.turns}.svg'
+            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_pro_{arrow.rotation_direction}_{quadrant}_{arrow.turns}.svg'
         else:
             print(f"update_arrow_svg -- Unexpected svg_file: {arrow.svg_file}")
             new_svg = arrow.svg_file 

@@ -57,7 +57,7 @@ class Pictograph_Generator():
                 for arrow_dict in combination:
                     print("iterating over arrow_dict in combination")
                     # Check if the dictionary has all the keys you need
-                    if all(key in arrow_dict for key in ['color', 'type', 'rotation', 'quadrant']):
+                    if all(key in arrow_dict for key in ['color', 'type', 'rotation_direction', 'quadrant']):
                         # Get the color and type of the arrow
                         color = arrow_dict['color']
                         type = arrow_dict['type']
@@ -107,13 +107,14 @@ class Pictograph_Generator():
         optimal_positions = next((d for d in combination_set if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
 
         for combination in combination_set:
+            print(f"Setting attributes for arrow with combination: {combination}")
             # Check if the dictionary has all the keys you need
-            if all(key in combination for key in ['color', 'type', 'rotation', 'quadrant', 'turns']):
+            if all(key in combination for key in ['color', 'type', 'rotation_direction', 'quadrant', 'turns']):
                 if combination['type'] == 'static':
                     svg_file = f"images/arrows/blank.svg"
                     arrow = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler, combination['type'])
                 elif combination['type'] == 'anti' or combination['type'] == 'pro':
-                    svg_file = f"images/arrows/shift/{combination['type']}/{combination['color']}_{combination['type']}_{combination['rotation']}_{combination['quadrant']}_{combination['turns']}.svg"
+                    svg_file = f"images/arrows/shift/{combination['type']}/{combination['color']}_{combination['type']}_{combination['rotation_direction']}_{combination['quadrant']}_{combination['turns']}.svg"
                     arrow = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler, combination['type'])
 
                     arrow.set_attributes(combination)
@@ -122,13 +123,13 @@ class Pictograph_Generator():
 
                 # Add the created arrow to the list
                 created_arrows.append(arrow)
-
+        print("created_arrows:", created_arrows)
+        
         # Add the arrows to the scene
         for arrow in created_arrows:
             self.graphboard_scene.addItem(arrow)
             
         for arrow in created_arrows:
-            arrow.set_attributes(combination)  # Assuming 'combination' is what you want to pass
             if optimal_positions:
                 optimal_position = optimal_positions.get(f"optimal_{arrow.get_attributes()['color']}_location")
                 if optimal_position:

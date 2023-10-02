@@ -87,10 +87,14 @@ class Staff_Manager(QObject):
     ### UPDATERS ###
 
     def update_graphboard_staffs(self, scene):
+        print("update_graphboard_staffs")
         self.hide_all_graphboard_staffs()
+        
         for arrow in scene.items():
             if isinstance(arrow, Arrow):
+                # print(f"update_graphboard_staffs -- arrow: {arrow}")
                 end_location = arrow.end_location
+                print(f"update_graphboard_staffs -- end_location: {end_location}")
                 if end_location:
                     end_location = end_location.capitalize()
                     if arrow.color == "#ed1c24" or arrow.color == 'red':
@@ -111,6 +115,7 @@ class Staff_Manager(QObject):
                         self.scene.addItem(new_staff)
                     self.graphboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
         self.check_and_replace_staffs()
+        
         
     def hide_all_graphboard_staffs(self):
         for staff in self.graphboard_staffs.values():

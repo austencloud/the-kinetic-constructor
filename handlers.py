@@ -82,7 +82,7 @@ class Arrow_Handler(QObject):
     def rotate_arrow(self, direction, items):
         for item in items:
             print(item.get_attributes())
-            old_svg = f"images/arrows/{item.color}_{item.type}_{item.rotation}_{item.quadrant}_{item.turns}.svg"
+            old_svg = f"images/arrows/{item.color}_{item.type}_{item.rotation_direction}_{item.quadrant}_{item.turns}.svg"
             print(old_svg)
             quadrants = ['ne', 'se', 'sw', 'nw']
             current_quadrant_index = quadrants.index(item.quadrant)
@@ -110,12 +110,12 @@ class Arrow_Handler(QObject):
         for item in items:
             current_svg = item.svg_file
 
-            if item.rotation == "l":
+            if item.rotation_direction == "l":
                 new_svg = current_svg.replace("_l_", "_r_").replace("\\l\\", "\\r\\")
-                item.rotation = "r"
-            elif item.rotation == "r":
+                item.rotation_direction = "r"
+            elif item.rotation_direction == "r":
                 new_svg = current_svg.replace("_r_", "_l_").replace("\\r\\", "\\l\\")
-                item.rotation = "l"
+                item.rotation_direction = "l"
             else:
                 print("mirror_arrow -- Unexpected svg_file:", current_svg)
                 continue

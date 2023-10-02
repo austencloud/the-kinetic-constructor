@@ -41,16 +41,21 @@ class Info_Tracker:
     
     def check_for_changes(self):
         current_state = self.get_current_state()
+        print(f"Previous State: {self.previous_state}, Current State: {self.get_current_state}")
+
         if current_state != self.previous_state:
             self.update()
             self.previous_state = current_state
-            
+
     def determine_current_letter(self):
         current_combination = []
         for item in self.graphboard.items():
             if isinstance(item, Arrow):
                 attributes = item.get_attributes()
-                current_combination.append(attributes)
+                # Sort the dictionary by its keys
+                sorted_attributes = {k: attributes[k] for k in sorted(attributes.keys())}
+                current_combination.append(sorted_attributes)
+        # Sort the list of dictionaries by the 'color' key
         current_combination = sorted(current_combination, key=lambda x: x['color'])
         
         for letter, combinations in self.letters.items():
@@ -92,17 +97,17 @@ class Info_Tracker:
                 if filename.endswith('.svg'):
                     parts = filename.split('_')
                     arrow_type = parts[1]
-                    rotation = parts[2]
+                    rotation_direction = parts[2]
                     quadrant = parts[3].split('.')[0]
                     if arrow_type == "anti":
-                        if rotation == "l":
+                        if rotation_direction == "l":
                             start_location, end_location = ("n", "s")
-                        else:  # rotation == "r"
+                        else:  # rotation_direction == "r"
                             end_location, start_location = ("n", "s")
                     else:  # arrow_type == "pro"
-                        if rotation == "l":
+                        if rotation_direction == "l":
                             start_location, end_location = ("n", "s")
-                        else:  # rotation == "r"
+                        else:  # rotation_direction == "r"
                             end_location, start_location = ("n", "s")
                     arrow_positions[filename] = (start_location, end_location)
         return arrow_positions
@@ -123,16 +128,19 @@ class Info_Tracker:
                 current_combination.append(attributes)
 
         current_combination = sorted(current_combination, key=lambda x: x['color'])
+        print(f"All combinations: {self.letters}")
 
+        print(f"current_combination: {current_combination}")
         self.letters = self.load_letters()
         
-        blue_text = "<h2 style='color: #0000FF'>Left</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>"
-        red_text = "<h2 style='color: #FF0000'>Right</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>"
+        blue_text = "<h2 style='color: #0000FF'>Left</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"
+        red_text = "<h2 style='color: #FF0000'>Right</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"
 
         letter_text = "<h2>Letter</h2>"
 
         for letter, combinations in self.letters.items():
             combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]  # Ignore the first dictionary which contains optimal positions
+            
             if current_combination in combinations:
                 letter_text += f"<span style='font-size: 140px; font-weight: bold;'>{letter}</span>"
                 start_position, end_position = self.get_positions()
@@ -140,8 +148,9 @@ class Info_Tracker:
                 self.letter = letter 
                 break  
         else:  # This will execute if the for loop completes without a 'break'
+            print("No letter found")
             self.letter = None
-            self.graphboard.update_letter(None)     
+            self.graphboard.update_letter(None)   
 
 
         if hasattr(self.main_window, 'staff'):
@@ -152,26 +161,28 @@ class Info_Tracker:
                 attributes = item.get_attributes()
                 current_combination.append(attributes)
                 color = attributes.get('color', 'N/A')
-                rotation = attributes.get('rotation', 'N/A')
+                rotation_direction = attributes.get('rotation_direction', 'N/A')
                 end_location = attributes.get('end_location', 'N/A')
                 if end_location is None:
                     break
-                if rotation == 'l':
-                    rotation = 'Anti-clockwise'
-                else: # rotation == 'r'
-                    rotation = 'Clockwise'
+                if rotation_direction == 'l':
+                    rotation_direction = 'Anti-clockwise'
+                else: # rotation_direction == 'r'
+                    rotation_direction = 'Clockwise'
                 if color == 'blue':
                     blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
-                    blue_text = blue_text.replace("Rotation: ", f"Rotation: {rotation}")
+                    blue_text = blue_text.replace("Rotation: ", f"Rotation: {rotation_direction}")
                     blue_text = blue_text.replace("Type: ", f"Type: {attributes.get('type', 'N/A').capitalize()}")
                     blue_text = blue_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
                     blue_text = blue_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
+                    blue_text = blue_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
                 elif color == 'red':
                     red_text = red_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
-                    red_text = red_text.replace("Rotation: ", f"Rotation: {rotation}")
+                    red_text = red_text.replace("Rotation: ", f"Rotation: {rotation_direction}")
                     red_text = red_text.replace("Type: ", f"Type: {attributes.get('type', 'N/A').capitalize()}")
                     red_text = red_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
                     red_text = red_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
+                    red_text = red_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
 
         if self.letter is not None:
             self.graphboard.update_letter(letter)
