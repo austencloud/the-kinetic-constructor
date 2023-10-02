@@ -33,7 +33,8 @@ class Arrow(QGraphicsSvgItem):
         self.type = type
         self.turns = 0
         # Assuming `arrow` is an instance of the Arrow class
-
+        self.rotation_direction = self.update_rotation_direction(self.type)
+        print(self.rotation_direction)
         with open('pictographs.json') as f:
             self.pictographs = json.load(f)
 
@@ -61,17 +62,14 @@ class Arrow(QGraphicsSvgItem):
                 raise ValueError(f"Invalid filename: {svg_file}. Filename must contain either 'red' or 'blue'.")
 
 
-
-
     ### SETTERS ###
 
     def set_attributes(self, attributes):
-        print(f"Attributes passed: {attributes}")  # Debug print
-
         self.color = attributes.get('color', self.color)
-        self.quadrant = self.svg_file.split('_')[-1]
+        self.quadrant = self.svg_file.split('_')[3]
         self.quadrant = attributes.get('quadrant', self.quadrant)
-        self.rotation = attributes.get('rotation', self.rotation)
+        self.rotation_direction = self.svg_file.split('_')[2]
+        self.arrow_turns = self.svg_file.split('_')[-1].replace('.svg', '')
         self.type = attributes.get('type', self.type)
         self.start_location = attributes.get('start_location', self.start_location)
         self.end_location = attributes.get('end_location', self.end_location)
@@ -81,15 +79,14 @@ class Arrow(QGraphicsSvgItem):
         self.orientation = orientation
         self.orientationChanged.emit() 
 
-
-
     ### GETTERS ###
 
     def get_attributes(self):
+        self.svg_file = f"images/arrows/shift/{self.type}/{self.color}_{self.type}_{self.rotation_direction}_{self.quadrant}_{self.turns}.svg"
         attributes = {
             'color': self.color,
             'quadrant': self.quadrant if self.quadrant is not None else "None",
-            'rotation': self.rotation,
+            'rotation_direction': self.rotation_direction,
             'type': self.type,
             'start_location': self.start_location,
             'end_location': self.end_location,
@@ -162,8 +159,6 @@ class Arrow(QGraphicsSvgItem):
 
     arrow_positions = {**get_arrow_locations("red"), **get_arrow_locations("blue")}
 
-
-
     ### UPDATERS ###
 
     def update_locations(self):
@@ -194,50 +189,50 @@ class Arrow(QGraphicsSvgItem):
                 self.quadrant = "sw"
 
 
-    def update_rotation(self):
+    def update_rotation_direction(self, type):
         if self.type == "pro":
             if self.start_location == "n":
                 if self.end_location == "e":
-                    self.rotation = "r"
+                    self.rotation_direction = "r"
                 else: # self.end_location == "w"
-                    self.rotation = "l"
+                    self.rotation_direction = "l"
             elif self.start_location == "s":
                 if self.end_location == "e":
-                    self.rotation = "l"
+                    self.rotation_direction = "l"
                 else: # self.end_location == "w"
-                    self.rotation = "r"
+                    self.rotation_direction = "r"
             elif self.start_location == "e":
                 if self.end_location == "n":
-                    self.rotation = "l"
+                    self.rotation_direction = "l"
                 else: # self.end_location == "s"
-                    self.rotation = "r"
+                    self.rotation_direction = "r"
             elif self.start_location == "w":
                 if self.end_location == "n":
-                    self.rotation = "r"
+                    self.rotation_direction = "r"
                 else:  # self.end_location == "s"
-                    self.rotation = "l"
+                    self.rotation_direction = "l"
         else:  # self.type == "anti"
             if self.start_location == "n":
                 if self.end_location == "e":
-                    self.rotation = "l"
+                    self.rotation_direction = "l"
                 else: # self.end_location == "w"
-                    self.rotation = "r"
+                    self.rotation_direction = "r"
             elif self.start_location == "s":
                 if self.end_location == "e":
-                    self.rotation = "r"
+                    self.rotation_direction = "r"
                 else: # self.end_location == "w"
-                    self.rotation = "l"
+                    self.rotation_direction = "l"
             elif self.start_location == "e":
                 if self.end_location == "n":
-                    self.rotation = "r"
+                    self.rotation_direction = "r"
                 else: # self.end_location == "s"
-                    self.rotation = "l"
+                    self.rotation_direction = "l"
             elif self.start_location == "w":
                 if self.end_location == "n":
-                    self.rotation = "l"
+                    self.rotation_direction = "l"
                 else: # self.end_location == "s"
-                    self.rotation = "r"
-
+                    self.rotation_direction = "r"
+        return self.rotation_direction
 
     
     # def contextMenuEvent(self, event):
@@ -290,7 +285,6 @@ class Arrow(QGraphicsSvgItem):
 
     def update_arrow_position(self):
         # Get the current combination of arrows
-        
         current_combination = (self.get_attributes()['color'], self.get_attributes()['quadrant'], self.get_attributes()['rotation'], self.get_attributes()['type'], self.get_attributes()['start_location'], self.get_attributes()['end_location'], self.get_attributes()['turns'])
 
         optimal_position = None
@@ -317,7 +311,7 @@ class Arrow(QGraphicsSvgItem):
 
     def update_arrow_image(self):
         # Construct the new filename based on the arrow's attributes
-        new_filename = f"images\\arrows\\shift\\{self.type}\\{self.color}_{self.type}_{self.rotation}_{self.quadrant}.svg"
+        new_filename = f"images\\arrows\\shift\\{self.type}\\{self.color}_{self.type}_{self.rotation_direction}_{self.quadrant}_{self.turns}.svg"
         
         # Check if the file exists
         if os.path.isfile(new_filename):
@@ -325,6 +319,7 @@ class Arrow(QGraphicsSvgItem):
             self.svg_file = new_filename
             self.setSharedRenderer(self.svg_handler.get_renderer(new_filename))
         else:
+
             print(f"File {new_filename} does not exist")
 
     def move_arrows(self):
@@ -351,13 +346,13 @@ class Arrow(QGraphicsSvgItem):
 
     def parse_filename(self):
         if self.type == 'static':
-            self.rotation = None
+            self.rotation_direction = None
             self.quadrant = None
         elif self.type == 'anti' or self.type == 'pro':        
             parts = os.path.basename(self.svg_file).split('_')
             self.color = parts[0]
             self.type = parts[1]
-            self.rotation = parts[2]
+            self.rotation_direction = parts[2]
             self.quadrant = parts[3].split('.')[0]
 
     def move_quadrant_up(self):

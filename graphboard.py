@@ -90,13 +90,13 @@ class Graphboard(QGraphicsView):
                         base_name = os.path.basename(arrow.svg_file)
 
                         if base_name.startswith('red_anti'):
-                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_anti_{arrow.rotation}_{new_quadrant}.svg'
+                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_anti_{arrow.arrow_rotation}_{new_quadrant}_{arrow.turns}.svg'
                         elif base_name.startswith('red_pro'):
-                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_pro_{arrow.rotation}_{new_quadrant}.svg'
+                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_pro_{arrow.arrow_rotation}_{new_quadrant}_{arrow.turns}.svg'
                         elif base_name.startswith('blue_anti'):
-                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_anti_{arrow.rotation}_{new_quadrant}.svg'
+                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_anti_{arrow.arrow_rotation}_{new_quadrant}_{arrow.turns}.svg'
                         elif base_name.startswith('blue_pro'):
-                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_pro_{arrow.rotation}_{new_quadrant}.svg'
+                            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_pro_{arrow.arrow_rotation}_{new_quadrant}_{arrow.turns}.svg'
                         else:
                             print(f"graphboard_view.mouseMoveEvent -- Unexpected svg_file: {arrow.svg_file}")
                             new_svg = arrow.svg_file 
@@ -126,7 +126,8 @@ class Graphboard(QGraphicsView):
         if event.mimeData().hasFormat('text/plain'):
             dropped_svg = event.mimeData().text()
             base_name = os.path.basename(dropped_svg)
-            color, type_, rotation, quadrant = base_name.split('_')[:4]
+            color, type, rotation, quadrant, turns = base_name.split('_')[:5]
+
             for arrow in self.scene().items():
                 if isinstance(arrow, Arrow):
                     if arrow.color == color:
@@ -154,7 +155,8 @@ class Graphboard(QGraphicsView):
 
             print(f"dropped_svg: {dropped_svg}")
             self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler, self.arrow_handler, arrow_type)
-
+            
+            self.arrow_item.set_attributes(self.arrow_item.get_attributes())
             self.arrow_item.setFlag(QGraphicsSvgItem.ItemIsFocusable, True)
             self.scene().addItem(self.arrow_item)
             pos = self.mapToScene(event.pos()) - self.arrow_item.boundingRect().center()
@@ -474,13 +476,13 @@ class Quadrant_Preview_Drag(QDrag):
         base_name = os.path.basename(arrow.svg_file)
 
         if base_name.startswith('red_anti'):
-            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_anti_{arrow.rotation}_{quadrant}.svg'
+            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_anti_{arrow.rotation}_{quadrant}_{arrow.turns}.svg'
         elif base_name.startswith('red_pro'):
-            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_pro_{arrow.rotation}_{quadrant}.svg'
+            new_svg = f'images\\arrows\\shift\\{arrow.type}\\red_pro_{arrow.rotation}_{quadrant}_{arrow.turns}.svg'
         elif base_name.startswith('blue_anti'):
-            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_anti_{arrow.rotation}_{quadrant}.svg'
+            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_anti_{arrow.rotation}_{quadrant}_{arrow.turns}.svg'
         elif base_name.startswith('blue_pro'):
-            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_pro_{arrow.rotation}_{quadrant}.svg'
+            new_svg = f'images\\arrows\\shift\\{arrow.type}\\blue_pro_{arrow.rotation}_{quadrant}_{arrow.turns}.svg'
         else:
             print(f"update_arrow_svg -- Unexpected svg_file: {arrow.svg_file}")
             new_svg = arrow.svg_file 

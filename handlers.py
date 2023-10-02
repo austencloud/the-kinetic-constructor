@@ -82,7 +82,7 @@ class Arrow_Handler(QObject):
     def rotate_arrow(self, direction, items):
         for item in items:
             print(item.get_attributes())
-            old_svg = f"images/arrows/{item.color}_{item.type}_{item.rotation}_{item.quadrant}.svg"
+            old_svg = f"images/arrows/{item.color}_{item.type}_{item.rotation}_{item.quadrant}_{item.turns}.svg"
             print(old_svg)
             quadrants = ['ne', 'se', 'sw', 'nw']
             current_quadrant_index = quadrants.index(item.quadrant)

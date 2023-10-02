@@ -121,7 +121,7 @@ class Info_Tracker:
             if isinstance(item, Arrow):
                 attributes = item.get_attributes()
                 current_combination.append(attributes)
-        print("current_combination:", current_combination)
+
         current_combination = sorted(current_combination, key=lambda x: x['color'])
 
         self.letters = self.load_letters()
