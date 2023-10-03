@@ -67,7 +67,7 @@ class Info_Tracker:
         # Sort the list of dictionaries by the 'color' key
         current_combination = sorted(current_combination, key=lambda x: x['color'])
         
-        current_type = None  # Initialize current_type to None
+        letter_type = None  # Initialize current_type to None
         
         for letter, combinations in self.letters.items():
             combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]
@@ -81,7 +81,7 @@ class Info_Tracker:
         
         self.letter = None  # Set to None if no match is found
 
-        return self.letter, current_type  # Always return two values
+        return self.letter, letter_type  # Always return two values
 
     def get_positional_relationship(self, start1, end1, start2, end2):
         start1_compass = Arrow.get_position_from_locations(start1, start1)
@@ -112,15 +112,15 @@ class Info_Tracker:
             for filename in filenames:
                 if filename.endswith('.svg'):
                     parts = filename.split('_')
-                    arrow_type = parts[1]
+                    motion_type = parts[1]
                     rotation_direction = parts[2]
                     quadrant = parts[3].split('.')[0]
-                    if arrow_type == "anti":
+                    if motion_type == "anti":
                         if rotation_direction == "l":
                             start_location, end_location = ("n", "s")
                         else:  # rotation_direction == "r"
                             end_location, start_location = ("n", "s")
-                    else:  # arrow_type == "pro"
+                    else:  # motion_type == "pro"
                         if rotation_direction == "l":
                             start_location, end_location = ("n", "s")
                         else:  # rotation_direction == "r"
@@ -147,7 +147,7 @@ class Info_Tracker:
         current_combination = sorted(current_combination, key=lambda x: x['color'])
         self.letters = self.load_letters()
 
-        self.letter, current_type = self.determine_current_letter_and_type()
+        self.letter, current_letter_type = self.determine_current_letter_and_type()
 
         blue_text = "<h2 style='color: #0000FF'>Left</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"
         red_text = "<h2 style='color: #FF0000'>Right</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"
@@ -160,20 +160,21 @@ class Info_Tracker:
             if isinstance(item, Arrow):
                 attributes = item.get_attributes()
                 color = attributes.get('color', 'N/A')
-                rotation_direction = attributes.get('rotation_direction', 'N/A')
+                
+
                 if color == 'blue':
                     no_blue_arrows = False
                     blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
-                    blue_text = blue_text.replace("Rotation: ", f"Rotation: {rotation_direction}")
-                    blue_text = blue_text.replace("Type: ", f"Type: {attributes.get('type', 'N/A').capitalize()}")
+                    blue_text = blue_text.replace("Rotation: ", f"Rotation: {item.rotation_direction.capitalize()}")
+                    blue_text = blue_text.replace("Type: ", f"Type: {attributes.get('motion_type', 'N/A').capitalize()}")
                     blue_text = blue_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
                     blue_text = blue_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
                     blue_text = blue_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
                 elif color == 'red':
                     no_red_arrows = False
                     red_text = red_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
-                    red_text = red_text.replace("Rotation: ", f"Rotation: {rotation_direction}")
-                    red_text = red_text.replace("Type: ", f"Type: {attributes.get('type', 'N/A').capitalize()}")
+                    red_text = red_text.replace("Rotation: ", f"Rotation: {attributes.get('rotation_direction').capitalize()}")
+                    red_text = red_text.replace("Type: ", f"Type: {attributes.get('motion_type', 'N/A').capitalize()}")
                     red_text = red_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
                     red_text = red_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
                     red_text = red_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
@@ -182,7 +183,7 @@ class Info_Tracker:
             # Update blue_text here based on self.remaining_staff['blue']
             blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {self.remaining_staff['blue']['quadrant'].upper()}")
             blue_text = blue_text.replace("Rotation: ", f"Rotation: {self.remaining_staff['blue']['rotation']}")
-            blue_text = blue_text.replace("Type: ", f"Type: {self.remaining_staff['blue']['type']}")
+            blue_text = blue_text.replace("Type: ", f"Type: {self.remaining_staff['blue']['motion_type']}")
             blue_text = blue_text.replace("Start: ", f"Start: {self.remaining_staff['blue']['start']}")
             blue_text = blue_text.replace("End: ", f"End: {self.remaining_staff['blue']['end']}")
             blue_text = blue_text.replace("Turns: ", f"Turns: {self.remaining_staff['blue']['turns']}")
@@ -191,13 +192,13 @@ class Info_Tracker:
             # Update red_text here based on self.remaining_staff['red']
             red_text = red_text.replace("Quadrant: ", f"Quadrant: {self.remaining_staff['red']['quadrant'].upper()}")
             red_text = red_text.replace("Rotation: ", f"Rotation: {self.remaining_staff['red']['rotation']}")
-            red_text = red_text.replace("Type: ", f"Type: {self.remaining_staff['red']['type']}")
+            red_text = red_text.replace("Type: ", f"Type: {self.remaining_staff['red']['motion_type']}")
             red_text = red_text.replace("Start: ", f"Start: {self.remaining_staff['red']['start']}")
             red_text = red_text.replace("End: ", f"End: {self.remaining_staff['red']['end']}")
             red_text = red_text.replace("Turns: ", f"Turns: {self.remaining_staff['red']['turns']}")
 
         # Determine the current letter and its type
-        self.letter, current_type = self.determine_current_letter_and_type()
+        self.letter, current_letter_type = self.determine_current_letter_and_type()
         
         # Update the letter_text based on the type, not the letter itself
         letter_text = ""
@@ -206,7 +207,7 @@ class Info_Tracker:
             combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]  # Ignore the first dictionary which contains optimal positions
         
             if current_combination in combinations:
-                    letter_text += f"<span style='font-size: 40px; font-weight: bold;'>{current_type}</span>"
+                    letter_text += f"<span style='font-size: 40px; font-weight: bold;'>{current_letter_type}</span>"
                     start_position, end_position = self.get_positions()
                     letter_text += f"<h4>{start_position} → {end_position}</h4>"
                     self.letter = letter 

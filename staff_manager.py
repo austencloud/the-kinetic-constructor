@@ -112,7 +112,7 @@ class Staff_Manager(QObject):
                                     color,
                                     'images\\staves\\' + end_location + "_staff_" + color + '.svg')
                     if new_staff.scene is None:
-                        self.scene.addItem(new_staff)
+                        self.graphboard_scene.addItem(new_staff)
                     self.graphboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
         self.check_and_replace_staffs()
         

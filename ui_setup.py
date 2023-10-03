@@ -263,9 +263,9 @@ class UiSetup(QWidget):
         for i, svg_file in enumerate(svgs_full_paths):
             file_name = os.path.basename(svg_file)
             if file_name in default_arrows:
-                arrow_type = file_name.split('_')[1]
+                motion_type = file_name.split('_')[1]
                 self.graphboard_view.set_handlers(self.arrow_handler)
-                arrow_item = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.arrow_handler, arrow_type)
+                arrow_item = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.arrow_handler, motion_type, self.staff_manager)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
                 arrow_item.setScale(0.75)
@@ -373,14 +373,18 @@ class UiSetup(QWidget):
 
         elif self.selected_item and isinstance(self.selected_item, Arrow):
             if event.key() == Qt.Key_W:
-                self.selected_item.move_quadrant_up()
+                self.arrow_handler.move_arrow_quadrant_wasd('up')
             elif event.key() == Qt.Key_A:
-                self.selected_item.move_quadrant_left()
+                self.arrow_handler.move_arrow_quadrant_wasd('left')
             elif event.key() == Qt.Key_S:
-                self.selected_item.move_quadrant_down()
+                self.arrow_handler.move_arrow_quadrant_wasd('down')
             elif event.key() == Qt.Key_D:
-                self.selected_item.move_quadrant_right()
-
+                self.arrow_handler.move_arrow_quadrant_wasd('right')
+            elif event.key() == Qt.Key_E:
+                self.arrow_handler.mirror_arrow(self.selected_items)
+            elif event.key() == Qt.Key_Q:
+                self.arrow_handler.swap_motion_type(self.selected_items)
+ 
     def eventFilter(self, source, event):
         if event.type() == QEvent.KeyPress:
             self.keyPressEvent(event)

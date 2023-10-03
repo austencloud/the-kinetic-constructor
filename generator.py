@@ -10,10 +10,10 @@ from lxml import etree
 from menus import Context_Menu_Handler
 from exporter import Exporter
 class Pictograph_Generator():
-    def __init__(self, staff_manager, graphboard, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, context_menu_handler, grid, parent=None):
+    def __init__(self, staff_manager, graphboard_view, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, context_menu_handler, grid, parent=None):
         self.staff_manager = staff_manager
         self.parent = parent
-        self.graphboard = graphboard
+        self.graphboard_view = graphboard_view
         self.info_tracker = info_tracker
         self.graphboard_scene = graphboard_scene
         self.current_letter = None  # Add this line
@@ -49,55 +49,55 @@ class Pictograph_Generator():
                 end_position = positions_dict['end_position'].replace('alpha', 'a').replace('beta', 'b').replace('gamma', 'g')
 
                 # Check if the current combination has one 'anti' and one 'pro'
-                types = [arrow_dict['type'] for arrow_dict in combination if 'type' in arrow_dict]
-                is_hybrid = types.count('anti') == 1 and types.count('pro') == 1
+                motion_types = [arrow_dict['motion_type'] for arrow_dict in combination if 'motion_type' in arrow_dict]
+                is_hybrid = motion_types.count('anti') == 1 and motion_types.count('pro') == 1
 
 
                 # Iterate over the arrow dictionaries in the list
                 for arrow_dict in combination:
                     print("iterating over arrow_dict in combination")
                     # Check if the dictionary has all the keys you need
-                    if all(key in arrow_dict for key in ['color', 'type', 'rotation_direction', 'quadrant']):
-                        # Get the color and type of the arrow
+                    if all(key in arrow_dict for key in ['color', 'motion_type', 'rotation_direction', 'quadrant']):
+                        # Get the color and motion_type of the arrow
                         color = arrow_dict['color']
-                        type = arrow_dict['type']
+                        motion_type = arrow_dict['motion_type']
 
                         # Create the file name
                         file_name = f"{letter}_{start_position}_{end_position}"
-                        if type == 'pro' and is_hybrid and color == 'red':
+                        if motion_type == 'pro' and is_hybrid and color == 'red':
                             file_name += f"_r-pro_l-anti"
-                        elif type == 'anti' and is_hybrid and color == 'red':
+                        elif motion_type == 'anti' and is_hybrid and color == 'red':
                             file_name += f"_r-anti_l-pro"
                         file_name += ".svg"
 
 
                         # Write the SVG to a file
                         output_file_path = os.path.join(self.output_dir, file_name)
-                        self.exporter = Exporter(self.graphboard, self.graphboard_scene, self.staff_manager, self.grid)
+                        self.exporter = Exporter(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
                         print(output_file_path)
                         self.exporter.export_to_svg(output_file_path)
 
                 
                 # Clear the graphboard for the next combination
-                self.graphboard.clear()
+                self.graphboard_view.clear()
 
 
 
     def generate_pictograph(self, letter, staff_manager):
         #delete all items
-        self.graphboard.clear()
+        self.graphboard_view.clear()
 
         # Get the list of possible combinations for the letter
         combinations = self.letters.get(letter, [])
         if not combinations:
             print(f"No combinations found for letter {letter}")
-            self.graphboard.update_letter(None)
+            self.graphboard_view.update_letter(None)
             self.info_tracker.update()
             return
 
         self.current_letter = letter  # Store the current letter
         print(f"Generating {self.current_letter}")
-        self.graphboard.update_letter(self.current_letter)
+        self.graphboard_view.update_letter(self.current_letter)
         # Choose a combination at random
         combination_set = random.choice(combinations)
 
@@ -110,13 +110,13 @@ class Pictograph_Generator():
         for combination in combination_set:
 
             # Check if the dictionary has all the keys you need
-            if all(key in combination for key in ['color', 'type', 'rotation_direction', 'quadrant', 'turns']):
-                if combination['type'] == 'static':
+            if all(key in combination for key in ['color', 'motion_type', 'rotation_direction', 'quadrant', 'turns']):
+                if combination['motion_type'] == 'static':
                     svg_file = f"images/arrows/blank.svg"
-                    arrow = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler, combination['type'])
-                elif combination['type'] == 'anti' or combination['type'] == 'pro':
-                    svg_file = f"images/arrows/shift/{combination['type']}/{combination['color']}_{combination['type']}_{combination['rotation_direction']}_{combination['quadrant']}_{combination['turns']}.svg"
-                    arrow = Arrow(svg_file, self.graphboard, self.info_tracker, self.svg_handler, self.arrow_handler, combination['type'])
+                    arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.arrow_handler, combination['motion_type'], self.staff_manager)
+                elif combination['motion_type'] == 'anti' or combination['motion_type'] == 'pro':
+                    svg_file = f"images/arrows/shift/{combination['motion_type']}/{combination['color']}_{combination['motion_type']}_{combination['rotation_direction']}_{combination['quadrant']}_{combination['turns']}.svg"
+                    arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.arrow_handler, combination['motion_type'], self.staff_manager)
                     arrow.set_attributes(combination)
                     arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
                     arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
@@ -137,10 +137,10 @@ class Pictograph_Generator():
                     arrow.setPos(pos)
                 else:
                     if arrow.get_attributes()['quadrant'] != "None":
-                        pos = self.graphboard.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
+                        pos = self.graphboard_view.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
             else:
                 # Calculate the position to center the arrow at the quadrant center
-                pos = self.graphboard.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
+                pos = self.graphboard_view.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
                 arrow.setPos(pos)
 
         self.staff_manager.update_graphboard_staffs(self.graphboard_scene)

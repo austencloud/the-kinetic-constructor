@@ -10,27 +10,28 @@ class Arrow(QGraphicsSvgItem):
     orientationChanged = pyqtSignal()
 
 
-    def __init__(self, svg_file, graphboard, info_tracker, svg_handler, arrow_manipulator, type):
+    def __init__(self, svg_file, graphboard_view, info_tracker, svg_handler, arrow_manipulator, motion_type, staff_manager):
         super().__init__(svg_file)
         self.setAcceptDrops(True)
         self.svg_file = svg_file
         self.in_graphboard = False
         self.setFlag(QGraphicsItem.ItemSendsGeometryChanges, True)
         self.setFlag(QGraphicsItem.ItemIsFocusable)
-        self.graphboard = graphboard
+        self.graphboard_view = graphboard_view
         self.grid = None
         self.dot = None
         self.dragging = False
         self.dragged_item = None
         self.info_tracker = info_tracker
+        self.motion_type = motion_type
         self.parse_filename()
-
+        self.staff_manager = staff_manager
         self.staff = None
         self.quadrant = None
         self.svg_handler = svg_handler
         self.dragStarted = False
         self.arrow_manipulator = arrow_manipulator
-        self.type = type
+
         self.turns = 0
         # Assuming `arrow` is an instance of the Arrow class
 
@@ -85,6 +86,7 @@ class Arrow(QGraphicsSvgItem):
             f"{color}_pro_l_sw_0.svg": ("w", "s"),
             f"{color}_pro_r_sw_0.svg": ("s", "w"),
         }
+        return self.arrow_start_end_locations
 
     ### SETTERS ###
 
@@ -94,7 +96,7 @@ class Arrow(QGraphicsSvgItem):
         self.quadrant = attributes.get('quadrant', self.quadrant)
         self.rotation_direction = self.svg_file.split('_')[2]
         self.arrow_turns = self.svg_file.split('_')[-1].replace('.svg', '')
-        self.type = attributes.get('type', self.type)
+        self.motion_type = attributes.get('motion_type', self.motion_type)
         self.start_location = attributes.get('start_location', self.start_location)
         self.end_location = attributes.get('end_location', self.end_location)
         self.update_arrow_image() 
@@ -106,12 +108,12 @@ class Arrow(QGraphicsSvgItem):
     ### GETTERS ###
 
     def get_attributes(self):
-        self.svg_file = f"images/arrows/shift/{self.type}/{self.color}_{self.type}_{self.rotation_direction}_{self.quadrant}_{self.turns}.svg"
+        self.svg_file = f"images/arrows/shift/{self.motion_type}/{self.color}_{self.motion_type}_{self.rotation_direction}_{self.quadrant}_{self.turns}.svg"
         attributes = {
             'color': self.color,
             'quadrant': self.quadrant if self.quadrant is not None else "None",
             'rotation_direction': self.rotation_direction,
-            'type': self.type,
+            'motion_type': self.motion_type,
             'start_location': self.start_location,
             'end_location': self.end_location,
             'turns': self.turns
@@ -231,14 +233,14 @@ class Arrow(QGraphicsSvgItem):
 
     def update_arrow_position(self):
         # Get the current combination of arrows
-        current_combination = (self.get_attributes()['color'], self.get_attributes()['quadrant'], self.get_attributes()['rotation_direction'], self.get_attributes()['type'], self.get_attributes()['start_location'], self.get_attributes()['end_location'], self.get_attributes()['turns'])
+        current_combination = (self.get_attributes()['color'], self.get_attributes()['quadrant'], self.get_attributes()['rotation_direction'], self.get_attributes()['motion_type'], self.get_attributes()['start_location'], self.get_attributes()['end_location'], self.get_attributes()['turns'])
 
         optimal_position = None
 
         # Look up the optimal positions for the current combination
         for pictograph, combinations in self.pictographs.items():
             for combination in combinations:
-                if (combination[1]['color'], combination[1]['quadrant'], combination[1]['rotation_direction'], combination[1]['type'], combination[1]['start_location'], combination[1]['end_location']) == current_combination:
+                if (combination[1]['color'], combination[1]['quadrant'], combination[1]['rotation_direction'], combination[1]['motion_type'], combination[1]['start_location'], combination[1]['end_location']) == current_combination:
                     if len(combination) > 3:
                         optimal_position = combination[3]['optimal_' + self.get_attributes()['color'] + '_location']
                     else:
@@ -251,13 +253,13 @@ class Arrow(QGraphicsSvgItem):
             self.setPos(pos)
         else:
             # Calculate the position to center the arrow at the quadrant center
-            pos = self.graphboard.get_quadrant_center(self.get_attributes()['quadrant']) - self.boundingRect().center()
+            pos = self.graphboard_view.get_quadrant_center(self.get_attributes()['quadrant']) - self.boundingRect().center()
             self.setPos(pos)
 
 
     def update_arrow_image(self):
         # Construct the new filename based on the arrow's attributes
-        new_filename = f"images\\arrows\\shift\\{self.type}\\{self.color}_{self.type}_{self.rotation_direction}_{self.quadrant}_{self.turns}.svg"
+        new_filename = f"images\\arrows\\shift\\{self.motion_type}\\{self.color}_{self.motion_type}_{self.rotation_direction}_{self.quadrant}_{self.turns}.svg"
 
         # Check if the file exists
         if os.path.isfile(new_filename):
@@ -285,50 +287,20 @@ class Arrow(QGraphicsSvgItem):
         for item in items:
             item.setX(average_x)
 
-    def shape(self):
-        path = QPainterPath()
-        path.addRect(self.renderer().boundsOnElement(self.elementId()))
-        return path
+
 
     def parse_filename(self):
-        if self.type == 'static':
+        if self.motion_type == 'static':
             self.rotation_direction = None
             self.quadrant = None
-        elif self.type == 'anti' or self.type == 'pro':        
+        elif self.motion_type == 'anti' or self.motion_type == 'pro':        
             parts = os.path.basename(self.svg_file).split('_')
             self.color = parts[0]
-            self.type = parts[1]
+            self.motion_type = parts[1]
             self.rotation_direction = parts[2]
             self.quadrant = parts[3].split('.')[0]
 
-    def move_quadrant_up(self):
-        if self.quadrant == 'se':
-            self.quadrant = 'ne'
-        elif self.quadrant == 'sw':
-            self.quadrant = 'nw'
-        self.update_arrow_position()
 
-
-    def move_quadrant_left(self):
-        if self.quadrant == 'ne':
-            self.quadrant = 'nw'
-        elif self.quadrant == 'se':
-            self.quadrant = 'sw'
-        self.update_arrow_position()
-
-    def move_quadrant_down(self):
-        if self.quadrant == 'ne':
-            self.quadrant = 'se'
-        elif self.quadrant == 'nw':
-            self.quadrant = 'sw'
-        self.update_arrow_position()
-
-    def move_quadrant_right(self):
-        if self.quadrant == 'nw':
-            self.quadrant = 'ne'
-        elif self.quadrant == 'sw':
-            self.quadrant = 'se'
-        self.update_arrow_position()
 
 
 

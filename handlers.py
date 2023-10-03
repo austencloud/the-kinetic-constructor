@@ -34,118 +34,154 @@ class Arrow_Handler(QObject):
     def connect_graphboard_view(self, graphboard_view):
         self.graphboard_view = graphboard_view
 
-    def move_arrow_quadrant_up(self):
+    def move_arrow_quadrant_wasd(self, direction):
         self.selected_arrow = self.graphboard_view.get_selected_items()[0]
-        print(self.selected_arrow)
-        if self.selected_arrow.quadrant == 'se':
-            self.selected_arrow.quadrant = 'ne'
-        elif self.selected_arrow.quadrant == 'sw':
-            self.selected_arrow.quadrant = 'nw'
-        # Update the arrow's position and orientation on the graphboard_view
-        self.selected_arrow.update_arrow_position()
-        # Update the arrow's image
+        current_quadrant = self.selected_arrow.quadrant
 
+        quadrant_mapping = {
+            'up': {'se': 'ne', 'sw': 'nw'},
+            'left': {'ne': 'nw', 'se': 'sw'},
+            'down': {'ne': 'se', 'nw': 'sw'},
+            'right': {'nw': 'ne', 'sw': 'se'}
+        }
+
+        new_quadrant = quadrant_mapping.get(direction, {}).get(current_quadrant, current_quadrant)
+        self.selected_arrow.quadrant = new_quadrant
+
+        self.selected_arrow.update_arrow_image()
+        self.selected_arrow.update_arrow_position()
+
+        self.arrow_start_end_locations = self.selected_arrow.get_arrow_start_end_locations(self.selected_arrow.svg_file)
+        self.selected_arrow.start_location, self.selected_arrow.end_location = self.arrow_start_end_locations.get(os.path.basename(self.selected_arrow.svg_file), (None, None))
+
+        self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
+        self.info_tracker.update()
         print(self.selected_arrow.quadrant)
 
+    def swap_motion_type(self, arrows):
+        if not isinstance(arrows, list):
+            arrows = [arrows]  # Make sure arrows is a list
 
+        for arrow in arrows:
+            current_svg = arrow.svg_file
+            folder, base_name = os.path.split(current_svg)
+            color, motion_type, rotation, quadrant, turns = base_name.split('_')[:5]
 
+            # Determine the new motion type and folder
+            if motion_type == "anti":
+                new_motion_type = "pro"
+                new_folder = folder.replace("anti", "pro")
+            elif motion_type == "pro":
+                new_motion_type = "anti"
+                new_folder = folder.replace("pro", "anti")
+            elif motion_type == "static":
+                new_motion_type = "dash"
+                new_folder = folder.replace("static", "dash")
+            elif motion_type == "dash":
+                new_motion_type = "static"
+                new_folder = folder.replace("dash", "static")
+            else:
+                print(f"Unknown motion type: {motion_type}")
+                continue
 
-    def move_arrow_quadrant_left(self):
-        self.selected_arrow = self.graphboard_view.get_selected_items()[0]
-        if self.selected_arrow.quadrant == 'ne':
-            self.selected_arrow.quadrant = 'nw'
-        elif self.selected_arrow.quadrant == 'se':
-            self.selected_arrow.quadrant = 'sw'
-        # Update the arrow's position and orientation on the graphboard_view
-        self.selected_arrow.update_arrow_position()
-        print(self.selected_arrow.quadrant)
+            # Swap the rotation direction
+            if rotation == "l":
+                new_rotation = "r"
+            elif rotation == "r":
+                new_rotation = "l"
+            else:
+                print(f"Unknown rotation direction: {rotation}")
+                continue
 
-    def move_arrow_quadrant_down(self):
-        self.selected_arrow = self.graphboard_view.get_selected_items()[0]
-        if self.selected_arrow.quadrant == 'ne':
-            self.selected_arrow.quadrant = 'se'
-        elif self.selected_arrow.quadrant == 'nw':
-            self.selected_arrow.quadrant = 'sw'
-        # Update the arrow's position and orientation on the graphboard_view
-        self.selected_arrow.update_arrow_position()
-        print(self.selected_arrow.quadrant)
+            # Create the new SVG file name
+            new_svg = os.path.join(new_folder, base_name.replace(f"{motion_type}_{rotation}_", f"{new_motion_type}_{new_rotation}_"))
 
-    def move_arrow_quadrant_right(self):
-        self.selected_arrow = self.graphboard_view.get_selected_items()[0]
-        if self.selected_arrow.quadrant == 'nw':
-            self.selected_arrow.quadrant = 'ne'
-        elif self.selected_arrow.quadrant == 'sw':
-            self.selected_arrow.quadrant = 'se'
-        # Update the arrow's position and orientation on the graphboard_view
-        self.selected_arrow.update_arrow_position()
-        print(self.selected_arrow.quadrant)
+            # Create a new renderer
+            new_renderer = QSvgRenderer(new_svg)
 
-    def rotate_arrow(self, direction, items):
-        for item in items:
-            print(item.get_attributes())
-            old_svg = f"images/arrows/{item.color}_{item.type}_{item.rotation_direction}_{item.quadrant}_{item.turns}.svg"
+            if new_renderer.isValid():
+                # Update the arrow's renderer and attributes
+                arrow.setSharedRenderer(new_renderer)
+                arrow.svg_file = new_svg
+                arrow.motion_type = new_motion_type
+                arrow.rotation_direction = new_rotation  # Update the rotation direction
+
+                # Update the arrow's position and orientation on the graphboard_view
+                arrow.update_arrow_position()
+            else:
+                print(f"Failed to load SVG file: {new_svg}")
+
+        # Update the info tracker and the graphboard_view
+        self.info_tracker.update()
+        self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
+        self.graphboard_view.update_letter(self.info_tracker.determine_current_letter_and_type()[0])
+
+    def rotate_arrow(self, direction, arrows):
+        for arrow in arrows:
+            print(arrow.get_attributes())
+            old_svg = f"images/arrows/{arrow.color}_{arrow.motion_type}_{arrow.rotation_direction}_{arrow.quadrant}_{arrow.turns}.svg"
             print(old_svg)
             quadrants = ['ne', 'se', 'sw', 'nw']
-            current_quadrant_index = quadrants.index(item.quadrant)
+            current_quadrant_index = quadrants.index(arrow.quadrant)
             if direction == "right":
                 new_quadrant_index = (current_quadrant_index + 1) % 4
             else:  # direction == "left"
                 new_quadrant_index = (current_quadrant_index - 1) % 4
             new_quadrant = quadrants[new_quadrant_index]
-            new_svg = item.svg_file.replace(item.quadrant, new_quadrant)
+            new_svg = arrow.svg_file.replace(arrow.quadrant, new_quadrant)
 
             new_renderer = QSvgRenderer(new_svg)
             if new_renderer.isValid():
-                item.setSharedRenderer(new_renderer)
-                item.svg_file = new_svg
-                item.update_locations()
-                item.update_quadrant()
-                pos = self.graphboard_view.get_quadrant_center(new_quadrant) - item.boundingRect().center()
-                item.setPos(pos)
+                arrow.setSharedRenderer(new_renderer)
+                arrow.svg_file = new_svg
+                arrow.update_locations()
+                arrow.update_quadrant()
+                pos = self.graphboard_view.get_quadrant_center(new_quadrant) - arrow.boundingRect().center()
+                arrow.setPos(pos)
             else:
                 print("Failed to load SVG file:", new_svg)
 
+    def mirror_arrow(self, arrows):
+        for arrow in arrows:
+            current_svg = arrow.svg_file
 
-
-    def mirror_arrow(self, items):
-        for item in items:
-            current_svg = item.svg_file
-
-            if item.rotation_direction == "l":
+            if arrow.rotation_direction == "l":
                 new_svg = current_svg.replace("_l_", "_r_").replace("\\l\\", "\\r\\")
-                item.rotation_direction = "r"
-            elif item.rotation_direction == "r":
+                arrow.rotation_direction = "r"
+            elif arrow.rotation_direction == "r":
                 new_svg = current_svg.replace("_r_", "_l_").replace("\\r\\", "\\l\\")
-                item.rotation_direction = "l"
+                arrow.rotation_direction = "l"
             else:
                 print("mirror_arrow -- Unexpected svg_file:", current_svg)
                 continue
 
             new_renderer = QSvgRenderer(new_svg)
             if new_renderer.isValid():
-                item.setSharedRenderer(new_renderer)
-                item.svg_file = new_svg
-                item.update_locations()
-                item.quadrant = item.quadrant.replace('.svg', '')
-                item.update_quadrant()
-                pos = self.graphboard_view.get_quadrant_center(item.quadrant) - item.boundingRect().center()
-                item.setPos(pos)
+                arrow.setSharedRenderer(new_renderer)
+                arrow.svg_file = new_svg
+                arrow.update_locations()
+                arrow.quadrant = arrow.quadrant.replace('.svg', '')
+                arrow.update_quadrant()
+                pos = self.graphboard_view.get_quadrant_center(arrow.quadrant) - arrow.boundingRect().center()
+                arrow.setPos(pos)
             else:
                 print("Failed to load SVG file:", new_svg)
         self.info_tracker.update()
-
+        self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
+        self.graphboard_view.update_letter(self.info_tracker.determine_current_letter_and_type()[0])
+        
     def bring_forward(self, items):
         for item in items:
             z = item.zValue()
             item.setZValue(z + 1)
 
     def swap_colors(self, _):
-        arrow_items = [item for item in self.graphboard_scene.items() if isinstance(item, Arrow)]
-        if len(arrow_items) >= 1:
-            for item in arrow_items:
-                current_svg = item.svg_file
+        arrows = [item for item in self.graphboard_scene.items() if isinstance(item, Arrow)]
+        if len(arrows) >= 1:
+            for arrow in arrows:
+                current_svg = arrow.svg_file
                 base_name = os.path.basename(current_svg)
-                color, type_, rotation, quadrant = base_name.split('_')[:4]
+                color, motion_type, rotation, quadrant = base_name.split('_')[:4]
                 if color == "red":
                     new_color = "blue"
                 elif color == "blue":
@@ -156,15 +192,14 @@ class Arrow_Handler(QObject):
                 new_svg = current_svg.replace(color, new_color)
                 new_renderer = QSvgRenderer(new_svg)
                 if new_renderer.isValid():
-                    item.setSharedRenderer(new_renderer)
-                    item.svg_file = new_svg
-                    item.color = new_color
+                    arrow.setSharedRenderer(new_renderer)
+                    arrow.svg_file = new_svg
+                    arrow.color = new_color
                 else:
                     print("Failed to load SVG file:", new_svg)
         else:
             print("Cannot swap colors with no arrows on the graphboard_view.")
             
-
     def selectAll(self):
         for item in self.graphboard_view.items():
             #if item is an arrow
@@ -184,7 +219,7 @@ class Arrow_Handler(QObject):
             for staff in staffs:
                 staff.hide()
                 self.graphboard_view.scene().removeItem(staff)
-                print(f"{staff.color} staffs deleted")
+                print(f"{staff.color} staff deleted")
                 self.info_tracker.update()
                 self.graphboard_view.update_letter(self.info_tracker.determine_current_letter_and_type()[0])
         else:
@@ -227,7 +262,7 @@ class Arrow_Handler(QObject):
         else:
             print("No items selected")
 
-            
+         
 
 class Key_Press_Handler:
     def __init__(self, arrow, graphboard_view=None):
