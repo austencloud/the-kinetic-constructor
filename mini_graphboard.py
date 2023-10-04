@@ -42,7 +42,7 @@ class Mini_Graphboard_View(Graphboard_View):
         )
         
         self.info_tracker = Info_Tracker(self, None, self.staff_manager)
-        
+        self.setFixedSize(int(750), int(900))
         self.mini_graphboard_scene = QGraphicsScene()
         self.mini_graphboard_scene.setSceneRect(0, 0, 650, 650)
         self.setScene(self.mini_graphboard_scene)  # Set the scene
@@ -65,6 +65,8 @@ class Mini_Graphboard_View(Graphboard_View):
         self.mini_grid.setTransform(transform)
         #show the grid
         self.mini_graphboard_scene.addItem(self.mini_grid)
+
+
 
     def mousePressEvent(self, event):
         pass
@@ -119,7 +121,7 @@ class Mini_Graphboard_View(Graphboard_View):
 
         # Update the staffs
         self.mini_staff_manager.connect_grid(self.mini_grid)
-        self.mini_staff_manager.init_mini_graphboard_staffs(self.mini_graphboard_scene)
+        self.mini_staff_manager.init_mini_graphboard_staffs(self)
         self.mini_staff_manager.update_graphboard_staffs(self.mini_graphboard_scene)
         print(f"Mini graphboard View Dimensions: {self.width()} x {self.height()}")
         print(f"Mini graphboard Scene Rect: {self.mini_graphboard_scene.sceneRect()}")

@@ -71,6 +71,10 @@ class Staff_Manager(QObject):
         GRID_WIDTH = self.grid.get_width()
         GRAPHBOARD_WIDTH = graphboard_view.width()
         GRAPHBOARD_HEIGHT = graphboard_view.height()
+        print(f"GRID_WIDTH: {GRID_WIDTH}")
+        print(f"GRAPHBOARD_WIDTH: {GRAPHBOARD_WIDTH}")
+        print(f"GRAPHBOARD_HEIGHT: {GRAPHBOARD_HEIGHT}")
+        
         
         self.GRID_PADDING = (GRAPHBOARD_WIDTH - GRID_WIDTH) / 2
         self.GRID_V_OFFSET = (GRAPHBOARD_HEIGHT - GRAPHBOARD_WIDTH) / 2
