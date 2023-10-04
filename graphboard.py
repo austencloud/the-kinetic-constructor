@@ -461,8 +461,8 @@ class Graphboard_View(QGraphicsView):
                 del arrow
 
 
-class Mini_Graphboard(Graphboard_View):
-    def __init__
+# class Mini_Graphboard(Graphboard_View):
+#     def __init__
 
 class Quadrant_Preview_Drag(QDrag):
     def __init__(self, source, arrow_item, info_tracker, *args, **kwargs):
