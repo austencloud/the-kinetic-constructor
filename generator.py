@@ -81,8 +81,6 @@ class Pictograph_Generator():
                 # Clear the graphboard for the next combination
                 self.graphboard_view.clear()
 
-
-
     def generate_pictograph(self, letter, staff_manager):
         #delete all items
         self.graphboard_view.clear()

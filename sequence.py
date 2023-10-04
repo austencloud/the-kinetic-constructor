@@ -3,13 +3,13 @@ from PyQt5.QtCore import QRectF
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsItem, QGraphicsView
 from PyQt5.QtCore import Qt, QPointF
 from arrow import Arrow
-from graphboard import Graphboard
+from graphboard import Graphboard_View
 from grid import Grid
 from pictograph import Pictograph
 from PyQt5.QtGui import QImage, QPainter
 from staff import Staff
 from settings import Settings
-from graphboard import Graphboard
+from graphboard import Graphboard_View
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
 class Sequence_Handler():
@@ -70,9 +70,9 @@ class Sequence_Handler():
         self.ui_setup.word_label.setText(self.ui_setup.word_label.text() + letter)
   
 
-    def add_to_graphboard(self, pictograph: Pictograph, graphboard: Graphboard):
+    def add_to_graphboard(self, pictograph: Pictograph, graphboard_view: Graphboard_View):
         state = pictograph.state
-        graphboard.clear()
+        graphboard_view.clear()
 
         
         for arrow_state in state['arrows']:
@@ -81,18 +81,18 @@ class Sequence_Handler():
             arrow.setRotation(arrow_state['rotation'])
             arrow.color = arrow_state['color']
             arrow.quadrant = arrow_state['quadrant']
-            graphboard.scene().addItem(arrow)
+            graphboard_view.scene().addItem(arrow)
 
         for staff_state in state['staffs']:
             staff = Staff(staff_state['svg_file'])
             staff.setPos(staff_state['position'])
             staff.color = staff_state['color']
-            graphboard.scene().addItem(staff)
+            graphboard_view.scene().addItem(staff)
 
         if state['grid']:
             grid = Grid(state['grid']['svg_file'])
             grid.setPos(state['grid']['position'])
-            graphboard.scene().addItem(grid)
+            graphboard_view.scene().addItem(grid)
 
     def get_clear_sequence_button(self):
         self.clear_button = QPushButton("Clear Sequence")

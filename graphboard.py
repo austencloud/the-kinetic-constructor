@@ -13,7 +13,7 @@ from settings import Settings
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
-class Graphboard(QGraphicsView):
+class Graphboard_View(QGraphicsView):
     def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, arrow_hanndler, ui_setup, generator, sequence_manager, parent=None):
         super().__init__(graphboard_scene, parent)
         self.setAcceptDrops(True)
@@ -166,8 +166,10 @@ class Graphboard(QGraphicsView):
             self.arrow_item.turns = attributes_from_file[-1].replace('.svg', '')
 
             # Set start_location and end_location based on the SVG file name
-            start_end_tuple = self.arrow_item.get_arrow_start_end_locations(dropped_svg)
-            if start_end_tuple is not None:
+            base_name = os.path.basename(dropped_svg)
+            start_end_tuple = self.arrow_item.arrow_start_end_locations.get(base_name, (None, None))
+            print(f"start_end_tuple: {start_end_tuple}")
+            if start_end_tuple != (None, None):
                 self.arrow_item.start_location, self.arrow_item.end_location = start_end_tuple
             else:
                 print("Warning: Could not determine start and end locations.")
@@ -455,6 +457,9 @@ class Graphboard(QGraphicsView):
                 self.scene().removeItem(arrow)
                 del arrow
 
+
+# class Mini_Graphboard(Graphboard_View):
+    
 
 class Quadrant_Preview_Drag(QDrag):
     def __init__(self, source, arrow_item, info_tracker, *args, **kwargs):

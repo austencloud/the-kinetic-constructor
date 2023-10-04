@@ -9,7 +9,7 @@ from settings import Settings
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
-class Arrow_Box(QGraphicsView):
+class ArrowBox_View(QGraphicsView):
     def __init__(self, arrowbox_scene, artboard, info_tracker, svg_handler, parent=None):
         super().__init__(arrowbox_scene, parent)
         self.setAcceptDrops(True)

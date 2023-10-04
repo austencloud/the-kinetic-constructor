@@ -62,13 +62,13 @@ class Arrow(QGraphicsSvgItem):
             else:
                 raise ValueError(f"Invalid filename: {svg_file}. Filename must contain either 'red' or 'blue'.")
 
-        self.get_arrow_start_end_locations(self.svg_file)
+        self.arrow_start_end_locations = self.get_arrow_start_end_locations(self.svg_file)
         self.start_location, self.end_location = self.arrow_start_end_locations.get(os.path.basename(svg_file), (None, None))
 
     def get_arrow_start_end_locations(self, svg_file):
         base_name = os.path.basename(svg_file)  
         color = base_name.split('_')[0] 
-        self.arrow_start_end_locations = {
+        arrow_start_end_locations = {
             f"{color}_anti_l_ne_0.svg": ("n", "e"),
             f"{color}_anti_r_ne_0.svg": ("e", "n"),
             f"{color}_anti_l_nw_0.svg": ("w", "n"),
@@ -86,7 +86,8 @@ class Arrow(QGraphicsSvgItem):
             f"{color}_pro_l_sw_0.svg": ("w", "s"),
             f"{color}_pro_r_sw_0.svg": ("s", "w"),
         }
-        return self.arrow_start_end_locations
+        return arrow_start_end_locations
+    
 
     ### SETTERS ###
 

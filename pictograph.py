@@ -16,8 +16,6 @@ class Pictograph(QGraphicsItem):
         # Render the QImage onto the Pictograph
         painter.drawImage(QRectF(0, 0, scaled_image.width(), scaled_image.height()), scaled_image)
 
-
-
     def boundingRect(self):
         # Return the bounding rectangle of the Pictograph
         return QRectF(0, 0, 375, 375)

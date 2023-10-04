@@ -9,10 +9,10 @@ from staff import *
 from letter import Letter_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent, QSize
 from handlers import Arrow_Handler, Svg_Handler, Json_Handler, Key_Press_Handler
-from arrowbox import Arrow_Box
-from propbox import PropBox_Scene
+from arrowbox import ArrowBox_View
+from propbox import PropBox_View
 from menus import Menu_Bar, Context_Menu_Handler
-from graphboard import Graphboard
+from graphboard import Graphboard_View
 from exporter import Exporter
 from settings import Settings
 from staff_manager import Staff_Manager
@@ -35,7 +35,6 @@ class UiSetup(QWidget):
         self.SVG_POS_Y = int(250 * SCALE_FACTOR)
         self.context_menu_handler = None
         self.exporter = None
-
         self.sequence_handler = None
         self.graphboard_view = None
 
@@ -53,11 +52,12 @@ class UiSetup(QWidget):
         self.graphboard_view.setGenerator(self.generator)
         self.connectGraphboard()
         self.initArrowBox()
-        self.initPropBoxScene()
+        self.initPropBoxView()
         
+        self.propbox_scene = self.propbox_view.propbox_scene
         self.staff_manager.connect_grid(self.grid)
         self.staff_manager.connect_graphboard(self.graphboard_view)
-        self.staff_manager.connect_propbox(self.propbox_scene)
+        self.staff_manager.connect_propbox(self.propbox_view)
         self.staff_manager.init_graphboard_staffs(self.graphboard_scene)
         self.staff_manager.init_propbox_staffs(self.propbox_scene)
         
@@ -110,7 +110,7 @@ class UiSetup(QWidget):
         #set the size of the grid to SCALE_FACTOR 
         self.grid.setScale(SCALE_FACTOR)
         self.exporter = Exporter(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
-        self.graphboard_view = Graphboard(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.arrow_handler, self, None, self.sequence_handler)
+        self.graphboard_view = Graphboard_View(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.arrow_handler, self, None, self.sequence_handler)
         self.key_press_handler.connect_to_graphboard(self.graphboard_view)
         self.arrow_handler.connect_to_graphboard(self.graphboard_view)
         transform = QTransform()
@@ -288,16 +288,16 @@ class UiSetup(QWidget):
 
 
                 self.arrows.append(arrow_item)
-        arrowbox = Arrow_Box(arrowbox_scene, self.graphboard_view, self.info_tracker, self.svg_handler)
+        arrowbox = ArrowBox_View(arrowbox_scene, self.graphboard_view, self.info_tracker, self.svg_handler)
         objectbox_layout.addWidget(arrowbox) 
         arrowbox_frame.setFixedSize(int(500 * SCALE_FACTOR), int(500 * SCALE_FACTOR))
         self.objectbox_layout.addWidget(arrowbox_frame)
 
-    def initPropBoxScene(self):
-        self.propbox_scene = PropBox_Scene(self.main_window, self.staff_manager, self)
+    def initPropBoxView(self):
+        self.propbox_view = PropBox_View(self.main_window, self.staff_manager, self)
         propbox_layout = QVBoxLayout()
         propbox_frame = QFrame() 
-        propbox_layout.addWidget(self.propbox_scene.propbox_frame)
+        propbox_layout.addWidget(self.propbox_view.propbox_frame)
         propbox_frame.setLayout(propbox_layout)
         self.objectbox_layout.addWidget(propbox_frame)
 
@@ -384,7 +384,8 @@ class UiSetup(QWidget):
                 self.arrow_handler.mirror_arrow(self.selected_items)
             elif event.key() == Qt.Key_Q:
                 self.arrow_handler.swap_motion_type(self.selected_items)
- 
+            elif event.key() == Qt.Key_F:
+                self.sequence_handler.add_to_sequence(self.graphboard_view)
     def eventFilter(self, source, event):
         if event.type() == QEvent.KeyPress:
             self.keyPressEvent(event)
