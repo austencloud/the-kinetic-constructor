@@ -12,9 +12,10 @@ from exporter import Exporter
 from settings import Settings
 from info_tracker import Info_Tracker
 from graphboard import Graphboard_View
-
-class Mini_Graphboard(Graphboard_View):
+from staff_manager import Staff_Manager
+class Mini_Graphboard_View(Graphboard_View):
     def __init__(self,
+                graphboard_scene,
                 grid,
                 info_tracker,
                 staff_manager,
@@ -27,7 +28,7 @@ class Mini_Graphboard(Graphboard_View):
                 **kwargs):
         
         super().__init__(
-            graphboard_scene=None, 
+            graphboard_scene, 
             grid=grid, 
             info_tracker=info_tracker, 
             staff_manager=staff_manager, 
@@ -46,8 +47,12 @@ class Mini_Graphboard(Graphboard_View):
         self.setScene(self.mini_graphboard_scene)  # Set the scene
         self.mini_grid = Grid("images/grid/grid.svg")
         self.init_grid()
+        self.mini_staff_manager = Staff_Manager(self.mini_graphboard_scene)  # Initialize a new Staff_Manager for the mini graphboard
 
-
+    def scale_down(self):
+        scale_factor = 0.5  # 50%
+        self.setTransform(QTransform().scale(scale_factor, scale_factor))
+        
     def init_grid(self):
         self.mini_grid.setScale(1)
 
@@ -72,7 +77,6 @@ class Mini_Graphboard(Graphboard_View):
 
     def populate_with_combination(self, combination):
         # Create a list to store the created arrows
-        print("Combination")
         created_arrows = []
 
         # Find the optimal positions dictionary in combination
@@ -112,10 +116,14 @@ class Mini_Graphboard(Graphboard_View):
                 pos = self.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
                 arrow.setPos(pos)
 
-        # # Update the staffs
-        # self.staff_manager.update_graphboard_staffs(self.mini_graphboard_scene)
+        # Update the staffs
+        self.mini_staff_manager.connect_grid(self.mini_grid)
+        self.mini_staff_manager.init_graphboard_staffs(self.mini_graphboard_scene)
+        self.mini_staff_manager.update_graphboard_staffs(self.mini_graphboard_scene)
 
-        # # Update any trackers or other state
-        # self.info_tracker.update()
-
+        # # # Update any trackers or other state
+        # # self.info_tracker.update()
+        # self.scale_down()
+        
+        
 

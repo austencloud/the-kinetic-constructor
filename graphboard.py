@@ -12,6 +12,7 @@ from exporter import Exporter
 from settings import Settings
 from info_tracker import Info_Tracker
 
+
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
 class Graphboard_View(QGraphicsView):
@@ -47,7 +48,10 @@ class Graphboard_View(QGraphicsView):
             renderer = QSvgRenderer(f'images/letters/{letter}.svg')
             self.letter_renderers[letter] = renderer
         self.letter_item = QGraphicsSvgItem()
-        if self.graphboard_scene is not None:
+        from mini_graphboard import Mini_Graphboard_View
+        if self.isinstance(self.graphboard_scene, Mini_Graphboard_View):
+            self.graphboard_scene.setBackgroundBrush(Qt.transparent)
+        elif self.graphboard_scene is not None:
             self.graphboard_scene.setBackgroundBrush(Qt.white) 
             self.graphboard_scene.addItem(self.letter_item)
             self.graphboard_scene.addItem(self.grid)

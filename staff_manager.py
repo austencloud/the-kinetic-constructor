@@ -17,13 +17,16 @@ class Staff_Manager(QObject):
 
     ### INITIALIZERS ###
 
-    def init_graphboard_staffs(self, graphboard_scene):
+    def init_graphboard_staffs(self, graphboard_view):
         # Calculate scaling and padding factors for the grid
         scale = self.grid.scale()
+
         GRID_WIDTH = self.grid.get_width()
-        GRAPHBOARD_WIDTH = self.graphboard_view.get_width()
+        GRAPHBOARD_WIDTH = graphboard_view.width()
+        GRAPHBOARD_HEIGHT = graphboard_view.height()
+        
         self.GRID_PADDING = (GRAPHBOARD_WIDTH - GRID_WIDTH) / 2
-        self.GRID_V_OFFSET = (self.graphboard_view.height() - self.graphboard_view.width()) / 2
+        self.GRID_V_OFFSET = (GRAPHBOARD_HEIGHT - GRAPHBOARD_WIDTH) / 2
 
         # Calculate the handpoints on the graphboard based on the grid
         graphboard_handpoints = {}
@@ -111,7 +114,7 @@ class Staff_Manager(QObject):
                                     'vertical' if end_location in ['N', 'S'] else 'horizontal',  # Add this line
                                     color,
                                     'images\\staves\\' + end_location + "_staff_" + color + '.svg')
-                    if new_staff.scene is None:
+                    if new_staff.scene is not self.graphboard_scene:
                         self.graphboard_scene.addItem(new_staff)
                     self.graphboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
         self.check_and_replace_staffs()

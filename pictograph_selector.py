@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QGridLayout, QLabel, QGraphicsScene
-from mini_graphboard import Mini_Graphboard
+from mini_graphboard import Mini_Graphboard_View
 from grid import Grid
 
 class Pictograph_Selector(QDialog):
@@ -20,7 +20,8 @@ class Pictograph_Selector(QDialog):
         row = 0
         col = 0
         for i, combination in enumerate(combinations):
-            mini_graphboard = Mini_Graphboard(main_grid,
+            mini_graphboard = Mini_Graphboard_View(main_graphboard_scene,
+                                              main_grid,
                                               info_tracker,
                                               staff_manager,
                                               svg_handler,

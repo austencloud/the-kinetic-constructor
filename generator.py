@@ -123,7 +123,8 @@ class Pictograph_Generator():
         
         # Add the arrows to the scene
         for arrow in created_arrows:
-            self.graphboard_scene.addItem(arrow)
+            if arrow.scene is not self.graphboard_scene:
+                self.graphboard_scene.addItem(arrow)
             
         for arrow in created_arrows:
             if optimal_positions:

@@ -60,7 +60,7 @@ class UiSetup(QWidget):
         self.staff_manager.connect_grid(self.grid)
         self.staff_manager.connect_graphboard(self.graphboard_view)
         self.staff_manager.connect_propbox(self.propbox_view)
-        self.staff_manager.init_graphboard_staffs(self.graphboard_scene)
+        self.staff_manager.init_graphboard_staffs(self.graphboard_view)
         self.staff_manager.init_propbox_staffs(self.propbox_scene)
         
         self.initButtons()

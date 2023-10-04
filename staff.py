@@ -15,7 +15,6 @@ class Staff(QGraphicsSvgItem):
         self.renderer = QSvgRenderer(staff_svg_file)
         self.setSharedRenderer(self.renderer)
         self.setElementId(self.element_id)
-        print(scene)
         scene.addItem(self)
         self.setVisible(initial_visibility)
         self.scene = scene
