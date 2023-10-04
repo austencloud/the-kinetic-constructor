@@ -12,7 +12,7 @@ from settings import Settings
 from graphboard import Graphboard_View
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
-class Sequence_Handler():
+class Sequence_Manager():
     def __init__(self, scene, pictograph_generator, ui_setup, info_tracker):
         self.graphboard_scene = scene
         self.beats = [QGraphicsRectItem(QRectF(int(375 * SCALE_FACTOR), 0, int(375 * SCALE_FACTOR), int(375 * SCALE_FACTOR))) for i in range(4)]

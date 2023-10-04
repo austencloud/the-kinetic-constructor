@@ -16,7 +16,7 @@ from graphboard import Graphboard_View
 from exporter import Exporter
 from settings import Settings
 from staff_manager import Staff_Manager
-from pictograph import Pictograph_Selector
+from pictograph_selector import Pictograph_Selector
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
@@ -37,7 +37,7 @@ class UiSetup(QWidget):
         self.SVG_POS_Y = int(250 * SCALE_FACTOR)
         self.context_menu_handler = None
         self.exporter = None
-        self.sequence_handler = None
+        self.sequence_manager = None
         self.graphboard_view = None
 
 
@@ -72,7 +72,7 @@ class UiSetup(QWidget):
 
     def initMenus(self):
         self.json_updater = Json_Handler(self.graphboard_scene)
-        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.sequence_handler, self.arrow_handler, self.exporter)
+        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.sequence_manager, self.arrow_handler, self.exporter)
         self.arrow_handler.connect_graphboard_scene(self.graphboard_scene)
         self.key_press_handler = Key_Press_Handler(self.arrow_handler, None)
         self.menu_bar = Menu_Bar()
@@ -112,7 +112,7 @@ class UiSetup(QWidget):
         #set the size of the grid to SCALE_FACTOR 
         self.grid.setScale(SCALE_FACTOR)
         self.exporter = Exporter(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
-        self.graphboard_view = Graphboard_View(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.arrow_handler, self, None, self.sequence_handler)
+        self.graphboard_view = Graphboard_View(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.arrow_handler, self, None, self.sequence_manager)
         self.key_press_handler.connect_to_graphboard(self.graphboard_view)
         self.arrow_handler.connect_to_graphboard(self.graphboard_view)
         transform = QTransform()
@@ -160,7 +160,7 @@ class UiSetup(QWidget):
                 font.setPointSize(20)
                 button.setFont(font)
                 button.setFixedSize(65, 65)
-                button.clicked.connect(lambda _, l=letter: self.showPictographSelector(l))
+                button.clicked.connect(lambda _, l=letter: self.show_pictograph_selector(l))
                 row_layout.addWidget(button)
             letter_buttons_layout.addLayout(row_layout)
 
@@ -173,7 +173,7 @@ class UiSetup(QWidget):
         letter_buttons_layout.addWidget(generate_all_button)
         self.upper_layout.addLayout(letter_buttons_layout)
 
-    def showPictographSelector(self, letter):
+    def show_pictograph_selector(self, letter):
         # Fetch all possible combinations for the clicked letter
         # Assuming self.generator.letters is the dictionary containing all combinations
         combinations = self.generator.letters.get(letter, [])
@@ -183,7 +183,7 @@ class UiSetup(QWidget):
             return
         
         # Create and show the Pictograph_Selector dialog
-        dialog = Pictograph_Selector(combinations, letter, self.graphboard_view)
+        dialog = Pictograph_Selector(combinations, letter, self.graphboard_view, self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.arrow_handler, self, self.generator, self.sequence_manager)
         result = dialog.exec_()
         
         if result == QDialog.Accepted:
@@ -237,7 +237,7 @@ class UiSetup(QWidget):
         self.selectAllButton = createButton("images/icons/select_all.png", "Select All",
             lambda: self.graphboard_view.select_all_arrows(), is_lambda=True)
         self.add_to_sequence_button = createButton("images/icons/add_to_sequence.png", "Add to Sequence",
-            lambda: self.sequence_handler.add_to_sequence(self.graphboard_view), is_lambda=True)
+            lambda: self.sequence_manager.add_to_sequence(self.graphboard_view), is_lambda=True)
         
         buttons = [
             self.deleteButton, 
@@ -322,7 +322,7 @@ class UiSetup(QWidget):
 
     def initInfoTracker(self):
         self.info_label = QLabel(self.main_window)
-        self.info_tracker = Info_Tracker(None, self.info_label, self, self.staff_manager)
+        self.info_tracker = Info_Tracker(None, self.info_label, self.staff_manager)
 
     def initWordLabel(self):
         self.word_label = QLabel(self.main_window)
@@ -332,13 +332,13 @@ class UiSetup(QWidget):
 
     def initSequenceScene(self):
         self.sequence_scene = Sequence_Scene() 
-        self.sequence_handler = Sequence_Handler(self.sequence_scene, self.generator, self, self.info_tracker)
-        self.sequence_scene.set_manager(self.sequence_handler)
+        self.sequence_manager = Sequence_Manager(self.sequence_scene, self.generator, self, self.info_tracker)
+        self.sequence_scene.set_manager(self.sequence_manager)
         self.sequence_container = QGraphicsView(self.sequence_scene)
         self.sequence_container.setFixedSize(1960, 500)
         self.sequence_container.show()
         self.lower_layout.addWidget(self.sequence_container)
-        clear_sequence_button = self.sequence_handler.get_clear_sequence_button()
+        clear_sequence_button = self.sequence_manager.get_clear_sequence_button()
         self.lower_layout.addWidget(clear_sequence_button)
 
     def initGenerator(self):
@@ -361,17 +361,16 @@ class UiSetup(QWidget):
         self.info_layout.addWidget(self.info_label)
 
     def connectGraphboard(self):
-        self.info_tracker.set_graphboard(self.graphboard_view)
+        self.info_tracker.set_graphboard_view(self.graphboard_view)
         self.graphboard_layout.addWidget(self.graphboard_view)
 
 
 ### GETTERS ###
 
     def get_sequence_manager(self):
-        if not hasattr(self, 'sequence_handler'):
-            self.sequence_handler = Sequence_Handler(self.sequence_scene, self.generator, self, self.info_tracker)
-            self.sequence_scene.set_manager(self.sequence_handler)
-        return self.sequence_handler
+        if not hasattr(self, 'sequence_manager'):
+            self.sequence_scene.set_manager(self.sequence_manager)
+        return self.sequence_manager
 
 
 ### EVENTS ###
@@ -404,7 +403,7 @@ class UiSetup(QWidget):
             elif event.key() == Qt.Key_Q:
                 self.arrow_handler.swap_motion_type(self.selected_items)
             elif event.key() == Qt.Key_F:
-                self.sequence_handler.add_to_sequence(self.graphboard_view)
+                self.sequence_manager.add_to_sequence(self.graphboard_view)
     def eventFilter(self, source, event):
         if event.type() == QEvent.KeyPress:
             self.keyPressEvent(event)

@@ -10,6 +10,7 @@ import os
 from handlers import Arrow_Handler
 from exporter import Exporter
 from settings import Settings
+from info_tracker import Info_Tracker
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
@@ -461,8 +462,7 @@ class Graphboard_View(QGraphicsView):
                 del arrow
 
 
-# class Mini_Graphboard(Graphboard_View):
-#     def __init__
+
 
 class Quadrant_Preview_Drag(QDrag):
     def __init__(self, source, arrow_item, info_tracker, *args, **kwargs):
