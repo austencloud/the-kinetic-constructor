@@ -14,31 +14,72 @@ from info_tracker import Info_Tracker
 from graphboard import Graphboard_View
 
 class Mini_Graphboard(Graphboard_View):
-    def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, arrow_hanndler, ui_setup, generator, sequence_manager, *args, **kwargs):
-        super().__init__(graphboard_scene, grid, info_tracker, staff_manager, svg_handler, arrow_hanndler, ui_setup, generator, sequence_manager, *args, **kwargs)
+    def __init__(self,
+                grid,
+                info_tracker,
+                staff_manager,
+                svg_handler,
+                arrow_handler,
+                ui_setup,
+                generator,
+                sequence_manager,
+                *args,
+                **kwargs):
+        
+        super().__init__(
+            graphboard_scene=None, 
+            grid=grid, 
+            info_tracker=info_tracker, 
+            staff_manager=staff_manager, 
+            svg_handler=svg_handler, 
+            arrow_handler=arrow_handler, 
+            ui_setup=ui_setup, 
+            generator=generator, 
+            sequence_manager=sequence_manager, 
+            parent=None, 
+            **kwargs
+        )
+        
         self.info_tracker = Info_Tracker(self, None, self.staff_manager)
+        
+        self.mini_graphboard_scene = QGraphicsScene()
+        self.setScene(self.mini_graphboard_scene)  # Set the scene
+        self.mini_grid = Grid("images/grid/grid.svg")
+        self.init_grid()
+
 
     def init_grid(self):
-        self.grid.setScale(1)
+        self.mini_grid.setScale(1)
 
-        grid_position = QPointF((self.width() - self.grid.boundingRect().width()) / 2,
-                                (self.height() - self.grid.boundingRect().height()) / 2 - (75 * 1))
+        mini_grid_position = QPointF((self.width() - self.mini_grid.boundingRect().width()) / 2,
+                                (self.height() - self.mini_grid.boundingRect().height()) / 2 - (75 * 1))
 
         transform = QTransform()
-        transform.translate(grid_position.x(), grid_position.y())
-        self.grid.setTransform(transform)
+        transform.translate(mini_grid_position.x(), mini_grid_position.y())
+        self.mini_grid.setTransform(transform)
+        #show the grid
+        self.mini_graphboard_scene.addItem(self.mini_grid)
+
+    def mousePressEvent(self, event):
+        pass
+    
+    def mouseMoveEvent(self, event):
+        pass
+    
+    def mouseReleaseEvent(self, event):
+        pass
+    
 
     def populate_with_combination(self, combination):
-
-
         # Create a list to store the created arrows
+        print("Combination")
         created_arrows = []
 
         # Find the optimal positions dictionary in combination
         optimal_positions = next((d for d in combination if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
-
+ 
         for arrow_dict in combination:
-            # Check if the dictionary has all the keys you need
+            # Check if the dictionary has all the keys you need         
             if all(key in arrow_dict for key in ['color', 'motion_type', 'rotation_direction', 'quadrant', 'turns']):
                 if arrow_dict['motion_type'] == 'static':
                     svg_file = f"images/arrows/blank.svg"
@@ -55,7 +96,7 @@ class Mini_Graphboard(Graphboard_View):
 
         # Add the arrows to the scene
         for arrow in created_arrows:
-            self.graphboard_scene.addItem(arrow)
+            self.mini_graphboard_scene.addItem(arrow)
 
         # Position the arrows
         for arrow in created_arrows:
@@ -72,7 +113,9 @@ class Mini_Graphboard(Graphboard_View):
                 arrow.setPos(pos)
 
         # # Update the staffs
-        # self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
+        # self.staff_manager.update_graphboard_staffs(self.mini_graphboard_scene)
 
         # # Update any trackers or other state
         # self.info_tracker.update()
+
+

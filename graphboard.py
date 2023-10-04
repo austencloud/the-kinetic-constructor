@@ -15,7 +15,18 @@ from info_tracker import Info_Tracker
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
 class Graphboard_View(QGraphicsView):
-    def __init__(self, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, arrow_hanndler, ui_setup, generator, sequence_manager, parent=None):
+    def __init__(self,
+                 graphboard_scene,
+                 grid,
+                 info_tracker,
+                 staff_manager,
+                 svg_handler,
+                 arrow_handler,
+                 ui_setup,
+                 generator,
+                 sequence_manager,
+                 parent=None):
+        
         super().__init__(graphboard_scene, parent)
         self.setAcceptDrops(True)
         self.dragging = None
@@ -23,7 +34,7 @@ class Graphboard_View(QGraphicsView):
         self.staff_manager = staff_manager
         self.setInteractive(True)
         self.graphboard_scene = graphboard_scene
-        self.graphboard_scene.setBackgroundBrush(Qt.white) 
+
         self.info_tracker = info_tracker
         self.svg_handler = svg_handler
         self.generator = generator
@@ -36,15 +47,18 @@ class Graphboard_View(QGraphicsView):
             renderer = QSvgRenderer(f'images/letters/{letter}.svg')
             self.letter_renderers[letter] = renderer
         self.letter_item = QGraphicsSvgItem()
-        self.graphboard_scene.addItem(self.letter_item)
-        self.arrow_handler = arrow_hanndler
+        if self.graphboard_scene is not None:
+            self.graphboard_scene.setBackgroundBrush(Qt.white) 
+            self.graphboard_scene.addItem(self.letter_item)
+            self.graphboard_scene.addItem(self.grid)
+        self.arrow_handler = arrow_handler
         self.arrow_handler.connect_graphboard_scene(self.graphboard_scene)
         self.setFixedSize(int(750 * SCALE_FACTOR), int(900 * SCALE_FACTOR))
 
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
-        self.graphboard_scene.addItem(self.grid)
+
         self.drag = Quadrant_Preview_Drag(self, self.dragging, self.info_tracker)
 
     ### MOUSE EVENTS ###

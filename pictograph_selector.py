@@ -3,7 +3,7 @@ from mini_graphboard import Mini_Graphboard
 from grid import Grid
 
 class Pictograph_Selector(QDialog):
-    def __init__(self, combinations, letter, graphboard_view, graphboard_scene, grid, info_tracker, staff_manager, svg_handler, arrow_handler, ui_setup, generator, sequence_manager, parent=None):
+    def __init__(self, combinations, letter, graphboard_view, main_graphboard_scene, main_grid, info_tracker, staff_manager, svg_handler, arrow_handler, ui_setup, generator, sequence_manager, parent=None):
         super().__init__(parent)
         self.setWindowTitle(f"{letter} Variations:")
         
@@ -20,12 +20,15 @@ class Pictograph_Selector(QDialog):
         row = 0
         col = 0
         for i, combination in enumerate(combinations):
-
-            mini_graphboard_scene = QGraphicsScene()
-            mini_grid = Grid("images/grid.svg")
-
-                
-            mini_graphboard = Mini_Graphboard(mini_graphboard_scene, mini_grid, info_tracker, staff_manager, svg_handler, arrow_handler, ui_setup, generator, sequence_manager)
+            mini_graphboard = Mini_Graphboard(main_grid,
+                                              info_tracker,
+                                              staff_manager,
+                                              svg_handler,
+                                              arrow_handler,
+                                              ui_setup,
+                                              generator,
+                                              sequence_manager)
+            
             mini_graphboard.populate_with_combination(combination)
             grid_layout.addWidget(mini_graphboard, row, col)
                     
