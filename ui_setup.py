@@ -33,6 +33,7 @@ class UiSetup(QWidget):
         self.svg_handler = Svg_Handler()
         self.arrows = []
         self.graphboard_scene = QGraphicsScene()
+        self.graphboard_scene.setSceneRect(0, 0, 650, 650)
         self.ARROW_DIR = 'images\\arrows'
         self.SVG_POS_Y = int(250 * SCALE_FACTOR)
         self.context_menu_handler = None

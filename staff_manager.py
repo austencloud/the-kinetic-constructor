@@ -17,6 +17,53 @@ class Staff_Manager(QObject):
 
     ### INITIALIZERS ###
 
+    
+    def init_mini_graphboard_staffs(self, graphboard_view):
+        # Calculate scaling and padding factors for the grid
+        scale = self.grid.scale()
+
+        MINI_GRID_WIDTH = self.grid.get_width()
+        MINI_GRAPHBOARD_WIDTH = graphboard_view.width()
+        MINI_GRAPHBOARD_HEIGHT = graphboard_view.height()
+        
+        print(f"MINI_GRID_WIDTH: {MINI_GRID_WIDTH}")
+        print(f"MINI_GRAPHBOARD_WIDTH: {MINI_GRAPHBOARD_WIDTH}")
+        print(f"MINI_GRAPHBOARD_HEIGHT: {MINI_GRAPHBOARD_HEIGHT}")
+        
+        self.GRID_PADDING = (MINI_GRAPHBOARD_WIDTH - MINI_GRID_WIDTH) / 2 
+        self.GRID_V_OFFSET = (MINI_GRAPHBOARD_HEIGHT - MINI_GRAPHBOARD_WIDTH) / 2 
+
+        # Calculate the handpoints on the graphboard based on the grid
+        graphboard_handpoints = {}
+        for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
+            x, y = self.grid.get_circle_coordinates(point_name)
+            scaled_x = x * scale + self.GRID_PADDING
+            scaled_y = y * scale + self.GRID_V_OFFSET
+            graphboard_handpoints[point_name] = QPointF(scaled_x, scaled_y)
+            print(f"graphboard_handpoints[{point_name}]: {graphboard_handpoints[point_name]}")
+        # Initialize the staff locations based on the handpoints
+        self.staff_locations = {
+            'N_staff': graphboard_handpoints['N_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH),
+            'E_staff': graphboard_handpoints['E_hand_point'] + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2 - STAFF_WIDTH),
+            'S_staff': graphboard_handpoints['S_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH),
+            'W_staff': graphboard_handpoints['W_hand_point'] + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2 - STAFF_WIDTH)
+        }
+
+        # Create and hide the staffs for each direction and color
+        self.graphboard_staffs = {}
+        for end_location in ['N', 'E', 'S', 'W']:
+            for color in ['red', 'blue']:
+                staff_key = f"{end_location}_staff_{color}"
+                self.graphboard_staffs[staff_key] = Staff(
+                    f"{end_location}_staff",
+                    self.graphboard_scene,
+                    self.staff_locations[f"{end_location}_staff"],
+                    'vertical' if end_location in ['N', 'S'] else 'horizontal',
+                    color,
+                    f'images\\staves\\{end_location}_staff_{color}.svg',
+                )
+
+
     def init_graphboard_staffs(self, graphboard_view):
         # Calculate scaling and padding factors for the grid
         scale = self.grid.scale()
@@ -53,13 +100,12 @@ class Staff_Manager(QObject):
                     f"{end_location}_staff",
                     self.graphboard_scene,
                     self.staff_locations[f"{end_location}_staff"],
-                    'vertical' if end_location in ['N', 'S'] else 'horizontal',  # Add this line
+                    'vertical' if end_location in ['N', 'S'] else 'horizontal',
                     color,
                     f'images\\staves\\{end_location}_staff_{color}.svg',
                 )
                 self.graphboard_staffs[staff_key].hide()
-                
-                
+
     def init_propbox_staffs(self, propbox_view):
         # Define initial locations for propbox staffs
         self.propbox_staff_locations = {

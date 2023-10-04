@@ -44,6 +44,7 @@ class Mini_Graphboard_View(Graphboard_View):
         self.info_tracker = Info_Tracker(self, None, self.staff_manager)
         
         self.mini_graphboard_scene = QGraphicsScene()
+        self.mini_graphboard_scene.setSceneRect(0, 0, 650, 650)
         self.setScene(self.mini_graphboard_scene)  # Set the scene
         self.mini_grid = Grid("images/grid/grid.svg")
         self.init_grid()
@@ -118,9 +119,10 @@ class Mini_Graphboard_View(Graphboard_View):
 
         # Update the staffs
         self.mini_staff_manager.connect_grid(self.mini_grid)
-        self.mini_staff_manager.init_graphboard_staffs(self.mini_graphboard_scene)
+        self.mini_staff_manager.init_mini_graphboard_staffs(self.mini_graphboard_scene)
         self.mini_staff_manager.update_graphboard_staffs(self.mini_graphboard_scene)
-
+        print(f"Mini graphboard View Dimensions: {self.width()} x {self.height()}")
+        print(f"Mini graphboard Scene Rect: {self.mini_graphboard_scene.sceneRect()}")
         # # # Update any trackers or other state
         # # self.info_tracker.update()
         # self.scale_down()
