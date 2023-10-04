@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QLineEdit, QGridLayout
+from PyQt5.QtWidgets import QDialog, QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QLineEdit, QGridLayout
 import os
 from arrow import Arrow
 from PyQt5.QtGui import QFont, QTransform, QIcon, QPixmap
@@ -16,10 +16,12 @@ from graphboard import Graphboard_View
 from exporter import Exporter
 from settings import Settings
 from staff_manager import Staff_Manager
+from pictograph import Pictograph_Selector
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
 class UiSetup(QWidget):
+
     def __init__(self, main_window):
         super().__init__(main_window)
         self.setFocusPolicy(Qt.StrongFocus)
@@ -158,7 +160,7 @@ class UiSetup(QWidget):
                 font.setPointSize(20)
                 button.setFont(font)
                 button.setFixedSize(65, 65)
-                button.clicked.connect(lambda _, l=letter: self.generator.generate_pictograph(l, self.staff_manager))
+                button.clicked.connect(lambda _, l=letter: self.showPictographSelector(l))
                 row_layout.addWidget(button)
             letter_buttons_layout.addLayout(row_layout)
 
@@ -170,6 +172,23 @@ class UiSetup(QWidget):
         generate_all_button.clicked.connect(lambda: self.generator.generate_all_pictographs(self.staff_manager))
         letter_buttons_layout.addWidget(generate_all_button)
         self.upper_layout.addLayout(letter_buttons_layout)
+
+    def showPictographSelector(self, letter):
+        # Fetch all possible combinations for the clicked letter
+        # Assuming self.generator.letters is the dictionary containing all combinations
+        combinations = self.generator.letters.get(letter, [])
+        
+        if not combinations:
+            print(f"No combinations found for letter {letter}")
+            return
+        
+        # Create and show the Pictograph_Selector dialog
+        dialog = Pictograph_Selector(combinations, letter, self.graphboard_view)
+        result = dialog.exec_()
+        
+        if result == QDialog.Accepted:
+            # TODO: Handle the selected pictograph
+            pass
 
     def initButtons(self):
         button_font = QFont('Helvetica', 14)
@@ -391,3 +410,4 @@ class UiSetup(QWidget):
             self.keyPressEvent(event)
             return True
         return super().eventFilter(source, event)
+    

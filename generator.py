@@ -16,7 +16,7 @@ class Pictograph_Generator():
         self.graphboard_view = graphboard_view
         self.info_tracker = info_tracker
         self.graphboard_scene = graphboard_scene
-        self.current_letter = None  # Add this line
+        self.current_letter = None
         self.main_window = main_window
         self.arrow_handler = arrow_handler
         self.svg_handler = Svg_Handler()
@@ -37,7 +37,7 @@ class Pictograph_Generator():
         for letter, combinations in self.letters.items():
             for combination in combinations:
                 # Generate the pictograph for the combination
-                self.generate_pictograph(letter, staff_manager)
+                self.generate_random_pictograph(letter, staff_manager)
 
                 # Find the dictionary in the combination list that contains the 'start_position' and 'end_position' keys
                 positions_dict = next((d for d in combination if 'start_position' in d and 'end_position' in d), None)
@@ -81,8 +81,7 @@ class Pictograph_Generator():
                 # Clear the graphboard for the next combination
                 self.graphboard_view.clear()
 
-    def generate_pictograph(self, letter, staff_manager):
-        #delete all items
+    def generate_random_pictograph(self, letter, staff_manager):
         self.graphboard_view.clear()
 
         # Get the list of possible combinations for the letter
@@ -147,7 +146,6 @@ class Pictograph_Generator():
 
     def get_current_letter(self):
         return self.current_letter
-
 
     def update_staff(self, arrow, staff_manager):
         arrows = [arrow] if not isinstance(arrow, list) else arrow

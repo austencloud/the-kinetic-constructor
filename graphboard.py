@@ -222,6 +222,9 @@ class Graphboard_View(QGraphicsView):
     def get_width(self):
         return self.width()
 
+    def get_height(self):
+        return self.height()
+
     def get_state(self):
         state = {
             'arrows': [],
@@ -458,8 +461,8 @@ class Graphboard_View(QGraphicsView):
                 del arrow
 
 
-# class Mini_Graphboard(Graphboard_View):
-    
+class Mini_Graphboard(Graphboard_View):
+    def __init__
 
 class Quadrant_Preview_Drag(QDrag):
     def __init__(self, source, arrow_item, info_tracker, *args, **kwargs):
