@@ -13,6 +13,8 @@ from settings import Settings
 from info_tracker import Info_Tracker
 from graphboard import Graphboard_View
 from staff_manager import Staff_Manager
+
+PICTOGRAPH_SCALE = 0.5
 class Mini_Graphboard_View(Graphboard_View):
     def __init__(self,
                 graphboard_scene,
@@ -47,16 +49,24 @@ class Mini_Graphboard_View(Graphboard_View):
         self.mini_graphboard_scene.setSceneRect(0, 0, 650, 650)
         self.setScene(self.mini_graphboard_scene)  # Set the scene
         self.mini_grid = Grid("images/grid/grid.svg")
-        self.init_grid()
+
         self.mini_staff_manager = Staff_Manager(self.mini_graphboard_scene)  # Initialize a new Staff_Manager for the mini graphboard
 
     def scale_down(self):
-        scale_factor = 0.5  # 50%
+        scale_factor = PICTOGRAPH_SCALE  # 50%
+        
+        # Apply scaling
         self.setTransform(QTransform().scale(scale_factor, scale_factor))
         
-    def init_grid(self):
-        self.mini_grid.setScale(1)
+        # Calculate the offset needed to center the entire group
+        offset_x = (self.width() - self.mini_grid.boundingRect().width() * scale_factor) / 2
+        offset_y = (self.height() - self.mini_grid.boundingRect().height() * scale_factor) / 2
+        
+        # Apply the translation to all items in the scene
+        for item in self.mini_graphboard_scene.items():
+            item.setPos(item.pos() + QPointF(offset_x, offset_y))
 
+    def init_grid(self):
         mini_grid_position = QPointF((self.width() - self.mini_grid.boundingRect().width()) / 2,
                                 (self.height() - self.mini_grid.boundingRect().height()) / 2 - (75 * 1))
 
@@ -77,6 +87,20 @@ class Mini_Graphboard_View(Graphboard_View):
     def mouseReleaseEvent(self, event):
         pass
     
+
+    def apply_grid_translation_to_items(self):
+        # Get the translation values from the grid's transform
+        grid_transform = self.mini_grid.transform()
+        dx = grid_transform.dx()
+        dy = grid_transform.dy()
+
+        # Apply the same translation to all arrows and staves
+        for item in self.mini_graphboard_scene.items():
+            if isinstance(item, Arrow) or isinstance(item, Staff):
+                item_transform = QTransform()
+                item_transform.translate(dx, dy)
+                item.setTransform(item_transform)
+
 
     def populate_with_combination(self, combination):
         # Create a list to store the created arrows
@@ -100,24 +124,38 @@ class Mini_Graphboard_View(Graphboard_View):
 
                 # Add the created arrow to the list
                 created_arrows.append(arrow)
+                # Get the translation values from the grid's transform
+                grid_transform = self.mini_grid.transform()
+                dx = grid_transform.dx()
+                dy = grid_transform.dy()
 
-        # Add the arrows to the scene
-        for arrow in created_arrows:
-            self.mini_graphboard_scene.addItem(arrow)
+                for arrow in created_arrows:    
+                    # Create a new transform for the arrow
+                    arrow_transform = QTransform()
+                    arrow_transform.translate(dx, dy)  # Apply the same translation as the grid
+                    arrow.setTransform(arrow_transform)
 
-        # Position the arrows
-        for arrow in created_arrows:
-            if optimal_positions:
-                optimal_position = optimal_positions.get(f"optimal_{arrow.get_attributes()['color']}_location")
-                if optimal_position:
-                    pos = QPointF(optimal_position['x'], optimal_position['y']) - arrow.boundingRect().center()
-                    arrow.setPos(pos)
+
+                # Add the arrows to the scene
+                for arrow in created_arrows:
+                    self.mini_graphboard_scene.addItem(arrow)
+
+
+                    
+            # Position the arrows
+            for arrow in created_arrows:
+                if optimal_positions:
+                    optimal_position = optimal_positions.get(f"optimal_{arrow.get_attributes()['color']}_location")
+                    if optimal_position:
+                        pos = QPointF(optimal_position['x'], optimal_position['y']) - arrow.boundingRect().center()
+                        arrow.setPos(pos)
+                    else:
+                        if arrow.get_attributes()['quadrant'] != "None":
+                            pos = self.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
+                            arrow.setPos(pos)
                 else:
-                    if arrow.get_attributes()['quadrant'] != "None":
-                        pos = self.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
-            else:
-                pos = self.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
-                arrow.setPos(pos)
+                    pos = self.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
+                    arrow.setPos(pos)
 
         # Update the staffs
         self.mini_staff_manager.connect_grid(self.mini_grid)
@@ -127,7 +165,9 @@ class Mini_Graphboard_View(Graphboard_View):
         print(f"Mini graphboard Scene Rect: {self.mini_graphboard_scene.sceneRect()}")
         # # # Update any trackers or other state
         # # self.info_tracker.update()
-        # self.scale_down()
-        
-        
+
+        self.setFixedSize(int(750 * PICTOGRAPH_SCALE), int(900 * PICTOGRAPH_SCALE))
+        self.scale_down()
+        self.init_grid()
+        self.apply_grid_translation_to_items()
 

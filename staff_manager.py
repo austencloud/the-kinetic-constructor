@@ -1,9 +1,10 @@
-from PyQt5.QtCore import QPointF, pyqtSignal, QObject
+from PyQt5.QtCore import QPointF, pyqtSignal, QObject, Qt
 from PyQt5.QtSvg import QGraphicsSvgItem
 from arrow import Arrow
 from constants import STAFF_WIDTH, STAFF_LENGTH, RED, BLUE
 from staff import Staff
 
+from PyQt5.QtGui import QPen, QBrush, QColor
 
 class Staff_Manager(QObject):
 
@@ -17,7 +18,6 @@ class Staff_Manager(QObject):
 
     ### INITIALIZERS ###
 
-    
     def init_mini_graphboard_staffs(self, graphboard_view):
         # Calculate scaling and padding factors for the grid
         scale = self.grid.scale()
@@ -30,17 +30,28 @@ class Staff_Manager(QObject):
         print(f"MINI_GRAPHBOARD_WIDTH: {MINI_GRAPHBOARD_WIDTH}")
         print(f"MINI_GRAPHBOARD_HEIGHT: {MINI_GRAPHBOARD_HEIGHT}")
         
-        self.GRID_PADDING = (MINI_GRAPHBOARD_WIDTH - MINI_GRID_WIDTH) / 2 
-        self.GRID_V_OFFSET = (MINI_GRAPHBOARD_HEIGHT - MINI_GRAPHBOARD_WIDTH) / 2 
+        self.GRID_PADDING = (MINI_GRAPHBOARD_WIDTH * scale - MINI_GRID_WIDTH * scale) / 2
+        self.GRID_V_OFFSET = (MINI_GRAPHBOARD_HEIGHT * scale - MINI_GRAPHBOARD_WIDTH * scale) / 2 
 
         # Calculate the handpoints on the graphboard based on the grid
         graphboard_handpoints = {}
         for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
+            
+            cx, cy = self.grid.get_circle_coordinates(point_name)
+            print(f"Raw cx: {cx}, Raw cy: {cy}")
+
             x, y = self.grid.get_circle_coordinates(point_name)
             scaled_x = x * scale + self.GRID_PADDING
             scaled_y = y * scale + self.GRID_V_OFFSET
             graphboard_handpoints[point_name] = QPointF(scaled_x, scaled_y)
-            print(f"graphboard_handpoints[{point_name}]: {graphboard_handpoints[point_name]}")
+            print(f"Scaled and Offset handpoint for {point_name}: {graphboard_handpoints[point_name]}")
+
+            #draw a red dot at each handpoint using qpen and brush
+            pen = QPen(Qt.red)
+            brush = QBrush(Qt.red)
+            self.graphboard_scene.addEllipse(graphboard_handpoints[point_name].x(), graphboard_handpoints[point_name].y(), 10, 10, pen, brush)
+
+
         # Initialize the staff locations based on the handpoints
         self.staff_locations = {
             'N_staff': graphboard_handpoints['N_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH),
@@ -62,6 +73,7 @@ class Staff_Manager(QObject):
                     color,
                     f'images\\staves\\{end_location}_staff_{color}.svg',
                 )
+
 
 
     def init_graphboard_staffs(self, graphboard_view):

@@ -62,9 +62,6 @@ class Graphboard_View(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
-        print(f"Graphboard_View.__init__ -- self.width(): {self.width()}")
-        print(f"Graphboard_View.__init__ -- self.height(): {self.height()}")
-        print(f"Graphboard_View.__init__ -- self.sceneRect(): {self.graphboard_scene.sceneRect()}")
         self.drag = Quadrant_Preview_Drag(self, self.dragging, self.info_tracker)
 
     ### MOUSE EVENTS ###
