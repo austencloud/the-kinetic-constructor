@@ -18,40 +18,38 @@ class Staff_Manager(QObject):
 
     ### INITIALIZERS ###
 
-    def init_mini_graphboard_staffs(self, graphboard_view):
+    def init_mini_graphboard_staffs(self, mini_graphboard_view, mini_grid):
         # Calculate scaling and padding factors for the grid
-        scale = self.grid.scale()
+        # Get the mini_grid's transformation matrix
+        self.mini_grid = mini_grid
+        self.mini_graphboard_view = mini_graphboard_view
+        mini_grid_transform = self.mini_grid.transform()
+        dx = mini_grid_transform.dx()
+        dy = mini_grid_transform.dy()
+        
+        scale = 0.5
+ 
+        MINI_GRID_WIDTH = self.mini_grid.get_width()
+        MINI_GRAPHBOARD_WIDTH = mini_graphboard_view.width()
+        MINI_GRAPHBOARD_HEIGHT = mini_graphboard_view.height()
 
-        MINI_GRID_WIDTH = self.grid.get_width()
-        MINI_GRAPHBOARD_WIDTH = graphboard_view.width()
-        MINI_GRAPHBOARD_HEIGHT = graphboard_view.height()
-        
-        print(f"MINI_GRID_WIDTH: {MINI_GRID_WIDTH}")
-        print(f"MINI_GRAPHBOARD_WIDTH: {MINI_GRAPHBOARD_WIDTH}")
-        print(f"MINI_GRAPHBOARD_HEIGHT: {MINI_GRAPHBOARD_HEIGHT}")
-        
-        self.GRID_PADDING = (MINI_GRAPHBOARD_WIDTH * scale - MINI_GRID_WIDTH * scale) / 2
-        self.GRID_V_OFFSET = (MINI_GRAPHBOARD_HEIGHT * scale - MINI_GRAPHBOARD_WIDTH * scale) / 2 
+        self.MINI_GRID_PADDING = ((MINI_GRAPHBOARD_WIDTH * scale) - (MINI_GRID_WIDTH * scale)) / 2
+        self.MINI_GRID_V_OFFSET = (MINI_GRAPHBOARD_HEIGHT * scale - MINI_GRAPHBOARD_WIDTH * scale) / 2 
+
 
         # Calculate the handpoints on the graphboard based on the grid
         graphboard_handpoints = {}
         for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
             
-            cx, cy = self.grid.get_circle_coordinates(point_name)
-            print(f"Raw cx: {cx}, Raw cy: {cy}")
 
-            x, y = self.grid.get_circle_coordinates(point_name)
-            scaled_x = x * scale + self.GRID_PADDING
-            scaled_y = y * scale + self.GRID_V_OFFSET
+            cx, cy = self.mini_grid.get_circle_coordinates(point_name)
+
+
+            scaled_x = cx * scale
+            scaled_y = cy * scale
             graphboard_handpoints[point_name] = QPointF(scaled_x, scaled_y)
-            print(f"Scaled and Offset handpoint for {point_name}: {graphboard_handpoints[point_name]}")
 
-            #draw a red dot at each handpoint using qpen and brush
-            pen = QPen(Qt.red)
-            brush = QBrush(Qt.red)
-            self.graphboard_scene.addEllipse(graphboard_handpoints[point_name].x(), graphboard_handpoints[point_name].y(), 10, 10, pen, brush)
-
-
+            
         # Initialize the staff locations based on the handpoints
         self.staff_locations = {
             'N_staff': graphboard_handpoints['N_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH),
@@ -75,18 +73,13 @@ class Staff_Manager(QObject):
                 )
 
 
-
-    def init_graphboard_staffs(self, graphboard_view):
+    def init_graphboard_staffs(self, mini_graphboard_view):
         # Calculate scaling and padding factors for the grid
         scale = self.grid.scale()
 
         GRID_WIDTH = self.grid.get_width()
-        GRAPHBOARD_WIDTH = graphboard_view.width()
-        GRAPHBOARD_HEIGHT = graphboard_view.height()
-        print(f"GRID_WIDTH: {GRID_WIDTH}")
-        print(f"GRAPHBOARD_WIDTH: {GRAPHBOARD_WIDTH}")
-        print(f"GRAPHBOARD_HEIGHT: {GRAPHBOARD_HEIGHT}")
-        
+        GRAPHBOARD_WIDTH = mini_graphboard_view.width()
+        GRAPHBOARD_HEIGHT = mini_graphboard_view.height()
         
         self.GRID_PADDING = (GRAPHBOARD_WIDTH - GRID_WIDTH) / 2
         self.GRID_V_OFFSET = (GRAPHBOARD_HEIGHT - GRAPHBOARD_WIDTH) / 2
@@ -143,8 +136,8 @@ class Staff_Manager(QObject):
     def connect_grid(self, grid):
         self.grid = grid
 
-    def connect_graphboard(self, graphboard_view):
-        self.graphboard_view = graphboard_view
+    def connect_graphboard(self, mini_graphboard_view):
+        self.mini_graphboard_view = mini_graphboard_view
 
     def connect_propbox(self, propbox_view):
         self.propbox_view = propbox_view

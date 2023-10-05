@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 325 325">
+  <defs>
+    <style>
+      .center_point {
+        fill: #231f20;
+      }
+      .outer_points {
+        fill: #231f20;
+      }
+      .layer2_points {
+        fill: transparent;
+      }
+      .hand_points {
+        fill: #ff0000;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer 1">
+    <g>
+        <circle id="center_point" class="center_point" cx="162.5" cy="162.5" r="5.62"/>
+
+      <g id="outer_points">
+        <circle id="N_outer_point" class="outer_points" cx="162.5" cy="12.5" r="12.5"/>
+        <circle id="E_outer_point" class="outer_points" cx="312.5" cy="162.5" r="12.5"/>
+        <circle id="S_outer_point" class="outer_points" cx="162.5" cy="312.5" r="12.5"/>
+        <circle id="W_outer_point" class="outer_points" cx="12.5" cy="162.5" r="12.5"/>
+      </g>  
+
+      <g id="hand_points">
+        <circle id="N_hand_point" class="hand_points" cx="162.5" cy="90.96" r="1.87"/>
+        <circle id="E_hand_point" class="hand_points" cx="234.04" cy="162.5" r="1.87"/>
+        <circle id="S_hand_point" class="hand_points" cx="162.5" cy="234.04" r="1.87"/>
+        <circle id="W_hand_point" class="hand_points" cx="90.96" cy="162.5" r="1.87"/>
+      </g>
+
+
+      <g id="layer2_points">
+        <circle id="NE_layer2_point" class="layer2_points" cx="234.04" cy="90.96" r="4.38"/>
+        <circle id="SE_layer2_point" class="layer2_points" cx="234.04" cy="234.04" r="4.38"/>
+        <circle id="SW_layer2_point" class="layer2_points" cx="90.96" cy="234.04" r="4.38"/>
+        <circle id="NW_layer2_point" class="layer2_points" cx="90.96" cy="90.96" r="4.37"/>
+      </g>
+
+
+    </g>
+  </g>
+</svg>

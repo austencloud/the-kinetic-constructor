@@ -7,7 +7,7 @@ from staff import Staff
 from grid import Grid
 from arrow import Arrow
 import os
-from handlers import Arrow_Handler
+from arrow_manager import Arrow_Manager
 from exporter import Exporter
 from settings import Settings
 from info_tracker import Info_Tracker
@@ -123,7 +123,6 @@ class Graphboard_View(QGraphicsView):
                         if new_renderer.isValid():
                             arrow.setSharedRenderer(new_renderer)
                             arrow.svg_file = new_svg
-                            print(f"Updated svg_file to {new_svg}")
                             arrow.update_locations()
                         self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
                         self.info_tracker.update()
@@ -171,8 +170,6 @@ class Graphboard_View(QGraphicsView):
             dropped_svg = event.mimeData().text()
             motion_type = dropped_svg.split('_')[1]
 
-            print(f"dropped_svg: {dropped_svg}")  # Debug: Print dropped SVG
-
             self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler, self.arrow_handler, motion_type, self.staff_manager)
             
             # Extract attributes from the SVG file name
@@ -186,7 +183,6 @@ class Graphboard_View(QGraphicsView):
             # Set start_location and end_location based on the SVG file name
             base_name = os.path.basename(dropped_svg)
             start_end_tuple = self.arrow_item.arrow_start_end_locations.get(base_name, (None, None))
-            print(f"start_end_tuple: {start_end_tuple}")
             if start_end_tuple != (None, None):
                 self.arrow_item.start_location, self.arrow_item.end_location = start_end_tuple
             else:
@@ -194,12 +190,6 @@ class Graphboard_View(QGraphicsView):
 
             # Convert turns to integer
             self.arrow_item.turns = int(attributes_from_file[-1].replace('.svg', ''))
-
-            # Sort the attributes by key
-            sorted_attributes = {k: self.arrow_item.get_attributes()[k] for k in sorted(self.arrow_item.get_attributes())}
-
-            # Debug: Print attributes before any update
-            print(f"Arrow attributes before update: {sorted_attributes}")
 
             self.scene().addItem(self.arrow_item)
             pos = self.mapToScene(event.pos()) - self.arrow_item.boundingRect().center()
@@ -213,8 +203,6 @@ class Graphboard_View(QGraphicsView):
             adjusted_arrow_pos = self.arrow_item.pos() + QPointF(0, 75)
             quadrant = self.drag.get_graphboard_quadrants(adjusted_arrow_pos)
 
-            # Debug: Print quadrant after drop
-            print(f"Quadrant after drop: {quadrant}")
 
             self.arrow_item.quadrant = quadrant
             self.drag.update_arrow_svg(self.arrow_item, quadrant)

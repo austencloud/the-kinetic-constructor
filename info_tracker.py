@@ -41,7 +41,6 @@ class Info_Tracker:
     
     def check_for_changes(self):
         current_state = self.get_current_state()
-        print(f"Previous State: {self.previous_state}, Current State: {self.get_current_state}")
 
         if current_state != self.previous_state:
             self.update()
@@ -211,7 +210,6 @@ class Info_Tracker:
                     break  
                 
         else:  # This will execute if the for loop completes without a 'break'
-            print("No letter found")
             self.letter = None
             self.graphboard_view.update_letter(None)   
 

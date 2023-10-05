@@ -13,24 +13,28 @@
   <g id="Layer_1-2" data-name="Layer 1">
     <g id="Grid">
         <circle id="center_point" class="black" cx="325" cy="325" r="11.25"/>
+
         <g id="outer_points">
             <circle id="N_outer_point" class="black" cx="325" cy="25" r="25"/>
             <circle id="E_outer_point" class="black" cx="625" cy="325" r="25"/>
             <circle id="S_outer_point" class="black" cx="325" cy="625" r="25"/>
             <circle id="W_outer_point" class="black" cx="25" cy="325" r="25"/>
         </g>
+
+        <g id="hand_points">
+            <circle id="N_hand_point" class="cls-1" cx="325" cy="181.91" r="4.25"/>
+            <circle id="E_hand_point" class="cls-1" cx="468.09" cy="325" r="4.25"/>
+            <circle id="S_hand_point" class="cls-1" cx="325" cy="468.09" r="4.25"/>
+            <circle id="W_hand_point" class="cls-1" cx="181.91" cy="325" r="4.25"/>
+        </g>
+
         <g id="layer2_points">
             <circle id="NE_layer2_point" class="transparent" cx="468.09" cy="181.91" r="8.75"/>
             <circle id="SE_layer2_point" class="transparent" cx="468.09" cy="468.09" r="8.75"/>
             <circle id="SW_layer2_point" class="transparent" cx="181.91" cy="468.09" r="8.75"/>
             <circle id="NW_layer2_point" class="transparent" cx="181.91" cy="181.91" r="8.75"/>
         </g>
-        <g id="handpoints">
-            <circle id="N_hand_point" class="cls-1" cx="325" cy="181.91" r="4.25"/>
-            <circle id="E_hand_point" class="cls-1" cx="468.09" cy="325" r="4.25"/>
-            <circle id="S_hand_point" class="cls-1" cx="325" cy="468.09" r="4.25"/>
-            <circle id="W_hand_point" class="cls-1" cx="181.91" cy="325" r="4.25"/>
-        </g>
+
       </g>
 
   </g>

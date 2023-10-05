@@ -8,7 +8,8 @@ from generator import Pictograph_Generator
 from staff import *
 from letter import Letter_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent, QSize
-from handlers import Arrow_Handler, Svg_Handler, Json_Handler, Key_Press_Handler
+from handlers import Svg_Handler, Json_Handler, Key_Press_Handler
+from arrow_manager import Arrow_Manager
 from arrowbox import ArrowBox_View
 from propbox import PropBox_View
 from menus import Menu_Bar, Context_Menu_Handler
@@ -16,7 +17,7 @@ from graphboard import Graphboard_View
 from exporter import Exporter
 from settings import Settings
 from staff_manager import Staff_Manager
-from pictograph_selector import Pictograph_Selector
+from pictograph_selector import Selection_Dialog
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
@@ -44,10 +45,10 @@ class UiSetup(QWidget):
 
         self.initStaffManager()
         self.initLayouts()
-        self.arrow_handler = Arrow_Handler(self.graphboard_view, self.staff_manager)
+        self.arrow_manager = Arrow_Manager(self.graphboard_view, self.staff_manager)
 
         self.initInfoTracker()
-        self.arrow_handler.connect_info_tracker(self.info_tracker)
+        self.arrow_manager.connect_info_tracker(self.info_tracker)
         self.initMenus()
         self.initGraphboardView() 
         
@@ -73,9 +74,9 @@ class UiSetup(QWidget):
 
     def initMenus(self):
         self.json_updater = Json_Handler(self.graphboard_scene)
-        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.sequence_manager, self.arrow_handler, self.exporter)
-        self.arrow_handler.connect_graphboard_scene(self.graphboard_scene)
-        self.key_press_handler = Key_Press_Handler(self.arrow_handler, None)
+        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.sequence_manager, self.arrow_manager, self.exporter)
+        self.arrow_manager.connect_graphboard_scene(self.graphboard_scene)
+        self.key_press_handler = Key_Press_Handler(self.arrow_manager, None)
         self.menu_bar = Menu_Bar()
 
     def initLayouts(self):
@@ -113,9 +114,9 @@ class UiSetup(QWidget):
         #set the size of the grid to SCALE_FACTOR 
         self.grid.setScale(SCALE_FACTOR)
         self.exporter = Exporter(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
-        self.graphboard_view = Graphboard_View(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.arrow_handler, self, None, self.sequence_manager)
+        self.graphboard_view = Graphboard_View(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.arrow_manager, self, None, self.sequence_manager)
         self.key_press_handler.connect_to_graphboard(self.graphboard_view)
-        self.arrow_handler.connect_to_graphboard(self.graphboard_view)
+        self.arrow_manager.connect_to_graphboard(self.graphboard_view)
         transform = QTransform()
         graphboard_size = self.graphboard_view.frameSize()
 
@@ -184,7 +185,7 @@ class UiSetup(QWidget):
             return
         
         # Create and show the Pictograph_Selector dialog
-        dialog = Pictograph_Selector(combinations, letter, self.graphboard_view, self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.arrow_handler, self, self.generator, self.sequence_manager)
+        dialog = Selection_Dialog(combinations, letter, self)
         result = dialog.exec_()
         
         if result == QDialog.Accepted:
@@ -220,17 +221,17 @@ class UiSetup(QWidget):
         self.updatePositionButton = createButton("images/icons/update_locations.png", "Update Position", 
             lambda: self.json_updater.updatePositionInJson(*self.graphboard_view.get_current_arrow_positions()), is_lambda=True)
         self.deleteButton = createButton("images/icons/delete.png", "Delete",
-            lambda: self.arrow_handler.delete_arrow(self.graphboard_scene.selectedItems()), is_lambda=True)
+            lambda: self.arrow_manager.delete_arrow(self.graphboard_scene.selectedItems()), is_lambda=True)
         self.rotateRightButton = createButton("images/icons/rotate_right.png", "Rotate Right",
-            lambda: self.arrow_handler.rotate_arrow('right', self.graphboard_scene.selectedItems()), is_lambda=True)        
+            lambda: self.arrow_manager.rotate_arrow('right', self.graphboard_scene.selectedItems()), is_lambda=True)        
         self.rotateLeftButton = createButton("images/icons/rotate_left.png", "Rotate Left",
-            lambda: self.arrow_handler.rotate_arrow('left', self.graphboard_scene.selectedItems()), is_lambda=True)
+            lambda: self.arrow_manager.rotate_arrow('left', self.graphboard_scene.selectedItems()), is_lambda=True)
         self.mirrorButton = createButton("images/icons/mirror.png", "Mirror",
-            lambda: self.arrow_handler.mirror_arrow(self.graphboard_scene.selectedItems()), is_lambda=True)
+            lambda: self.arrow_manager.mirror_arrow(self.graphboard_scene.selectedItems()), is_lambda=True)
         self.bringForward = createButton("images/icons/bring_forward.png", "Bring Forward",
-            lambda: self.arrow_handler.bring_forward(self.graphboard_scene.selectedItems()), is_lambda=True)
+            lambda: self.arrow_manager.bring_forward(self.graphboard_scene.selectedItems()), is_lambda=True)
         self.swapColors = createButton("images/icons/swap.png", "Swap Colors",
-            lambda: self.arrow_handler.swap_colors(self.graphboard_scene.selectedItems()), is_lambda=True)
+            lambda: self.arrow_manager.swap_colors(self.graphboard_scene.selectedItems()), is_lambda=True)
         self.export_to_png_button = createButton("images/icons/export.png", "Export to PNG",
             lambda: self.exporter.export_to_png(), is_lambda=True)
         self.export_to_svg_button = createButton("images/icons/export.png", "Export to SVG",
@@ -284,8 +285,8 @@ class UiSetup(QWidget):
             file_name = os.path.basename(svg_file)
             if file_name in default_arrows:
                 motion_type = file_name.split('_')[1]
-                self.graphboard_view.set_handlers(self.arrow_handler)
-                arrow_item = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.arrow_handler, motion_type, self.staff_manager)
+                self.graphboard_view.set_handlers(self.arrow_manager)
+                arrow_item = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.arrow_manager, motion_type, self.staff_manager)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
                 arrow_item.setScale(0.75)
@@ -386,23 +387,23 @@ class UiSetup(QWidget):
 
         if event.key() == Qt.Key_Delete:
             if isinstance(self.selected_item, Arrow):
-                self.arrow_handler.delete_arrow(self.selected_items)
+                self.arrow_manager.delete_arrow(self.selected_items)
             elif isinstance(self.selected_item, Staff):
-                self.arrow_handler.delete_staff(self.selected_items)  # Call delete_staff here
+                self.arrow_manager.delete_staff(self.selected_items)  # Call delete_staff here
 
         elif self.selected_item and isinstance(self.selected_item, Arrow):
             if event.key() == Qt.Key_W:
-                self.arrow_handler.move_arrow_quadrant_wasd('up')
+                self.arrow_manager.move_arrow_quadrant_wasd('up')
             elif event.key() == Qt.Key_A:
-                self.arrow_handler.move_arrow_quadrant_wasd('left')
+                self.arrow_manager.move_arrow_quadrant_wasd('left')
             elif event.key() == Qt.Key_S:
-                self.arrow_handler.move_arrow_quadrant_wasd('down')
+                self.arrow_manager.move_arrow_quadrant_wasd('down')
             elif event.key() == Qt.Key_D:
-                self.arrow_handler.move_arrow_quadrant_wasd('right')
+                self.arrow_manager.move_arrow_quadrant_wasd('right')
             elif event.key() == Qt.Key_E:
-                self.arrow_handler.mirror_arrow(self.selected_items)
+                self.arrow_manager.mirror_arrow(self.selected_items)
             elif event.key() == Qt.Key_Q:
-                self.arrow_handler.swap_motion_type(self.selected_items)
+                self.arrow_manager.swap_motion_type(self.selected_items)
             elif event.key() == Qt.Key_F:
                 self.sequence_manager.add_to_sequence(self.graphboard_view)
     def eventFilter(self, source, event):
