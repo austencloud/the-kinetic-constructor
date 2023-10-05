@@ -1,10 +1,10 @@
 from PyQt5.QtCore import QPointF, pyqtSignal, QObject, Qt
 from PyQt5.QtSvg import QGraphicsSvgItem
 from arrow import Arrow
-from constants import STAFF_WIDTH, STAFF_LENGTH, RED, BLUE
+from constants import STAFF_WIDTH, STAFF_LENGTH, RED, BLUE, MINI_STAFF_LENGTH, MINI_STAFF_WIDTH
 from staff import Staff
+from PyQt5.QtGui import QTransform
 
-from PyQt5.QtGui import QPen, QBrush, QColor
 
 class Staff_Manager(QObject):
 
@@ -16,7 +16,11 @@ class Staff_Manager(QObject):
         self.beta_staves = []  # List to hold beta staves
         self.previous_position = None  # Store the previous position of staffs
 
-    ### INITIALIZERS ###
+
+
+
+
+    ### MINI_GRAPHBOARD ###
 
     def init_mini_graphboard_staffs(self, mini_graphboard_view, mini_grid):
         # Calculate scaling and padding factors for the grid
@@ -28,35 +32,37 @@ class Staff_Manager(QObject):
         dy = mini_grid_transform.dy()
         
         scale = 0.5
+        
  
         MINI_GRID_WIDTH = self.mini_grid.get_width()
         MINI_GRAPHBOARD_WIDTH = mini_graphboard_view.width()
         MINI_GRAPHBOARD_HEIGHT = mini_graphboard_view.height()
 
         self.MINI_GRID_PADDING = ((MINI_GRAPHBOARD_WIDTH * scale) - (MINI_GRID_WIDTH * scale)) / 2
-        self.MINI_GRID_V_OFFSET = (MINI_GRAPHBOARD_HEIGHT * scale - MINI_GRAPHBOARD_WIDTH * scale) / 2 
+        self.MINI_GRID_V_OFFSET = (MINI_GRAPHBOARD_HEIGHT * scale - MINI_GRID_WIDTH * scale) / 2 
 
+        VERTICAL_BUFFER = (mini_graphboard_view.height() - mini_graphboard_view.width()) / 2
 
+        print("VERTICAL BUFFER: ", VERTICAL_BUFFER)
+        
         # Calculate the handpoints on the graphboard based on the grid
         graphboard_handpoints = {}
         for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
-            
-
             cx, cy = self.mini_grid.get_circle_coordinates(point_name)
+            graphboard_handpoints[point_name] = QPointF(cx, cy)
 
 
-            scaled_x = cx * scale
-            scaled_y = cy * scale
-            graphboard_handpoints[point_name] = QPointF(scaled_x, scaled_y)
 
-            
         # Initialize the staff locations based on the handpoints
         self.staff_locations = {
-            'N_staff': graphboard_handpoints['N_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH),
-            'E_staff': graphboard_handpoints['E_hand_point'] + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2 - STAFF_WIDTH),
-            'S_staff': graphboard_handpoints['S_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH),
-            'W_staff': graphboard_handpoints['W_hand_point'] + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2 - STAFF_WIDTH)
+            'N_staff': graphboard_handpoints['N_hand_point'] + QPointF(-MINI_STAFF_WIDTH, -MINI_STAFF_LENGTH - VERTICAL_BUFFER),
+            'E_staff': graphboard_handpoints['E_hand_point'] + QPointF(-MINI_STAFF_LENGTH, - MINI_STAFF_WIDTH - VERTICAL_BUFFER),
+            'S_staff': graphboard_handpoints['S_hand_point'] + QPointF(-MINI_STAFF_WIDTH, -MINI_STAFF_LENGTH - VERTICAL_BUFFER),
+            'W_staff': graphboard_handpoints['W_hand_point'] + QPointF(-MINI_STAFF_LENGTH, -MINI_STAFF_WIDTH - VERTICAL_BUFFER)
         }
+
+        # access the N staff key in staff locations
+        print(self.staff_locations['N_staff'])
 
         # Create and hide the staffs for each direction and color
         self.graphboard_staffs = {}
@@ -71,7 +77,72 @@ class Staff_Manager(QObject):
                     color,
                     f'images\\staves\\{end_location}_staff_{color}.svg',
                 )
+                # Scale down the staff
+                self.graphboard_staffs[staff_key].setScale(0.5)
 
+    def update_mini_graphboard_staffs(self, scene):
+
+        self.hide_all_graphboard_staffs()
+        
+        for arrow in scene.items():
+            if isinstance(arrow, Arrow):
+                # print(f"update_graphboard_staffs -- arrow: {arrow}")
+                end_location = arrow.end_location
+
+                if end_location:
+                    end_location = end_location.capitalize()
+                    if arrow.color == "#ed1c24" or arrow.color == 'red':
+                        color = 'red'
+                    elif arrow.color == "#2e3192" or arrow.color == 'blue':
+                        color = 'blue'
+                    else:
+
+                        continue 
+                    
+                    new_staff = Staff(end_location + "_staff",
+                                    scene,
+                                    self.staff_locations[end_location + "_staff"],
+                                    'vertical' if end_location in ['N', 'S'] else 'horizontal',  # Add this line
+                                    color,
+                                    'images\\staves\\' + end_location + "_staff_" + color + '.svg')
+                    
+                                    # Scale down the new staff
+                    new_staff.setScale(0.5)
+                        
+                    if new_staff.scene is not self.graphboard_scene:
+                        self.graphboard_scene.addItem(new_staff)
+                    self.graphboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
+        self.check_and_replace_mini_staffs()
+        
+
+    def check_and_replace_mini_staffs(self):
+        staff_positions = [(staff.pos().x(), staff.pos().y()) for staff in self.graphboard_staffs.values() if staff.isVisible()]
+
+        for position in set(staff_positions):
+            count = staff_positions.count(position)
+            if count == 2:  # Two staffs are overlapping
+                overlapping_staffs = [staff for staff in self.graphboard_staffs.values() if (staff.pos().x(), staff.pos().y()) == position]
+
+                # Assuming the first staff's end_location can be used to determine orientation for both
+                axis = overlapping_staffs[0].axis  # Replace with actual attribute if different
+
+                if axis == 'vertical':  # Vertical staffs
+                    # Move one staff 10px to the left and the other 10px to the right
+                    overlapping_staffs[0].setPos(position[0] - 10, position[1])
+                    overlapping_staffs[1].setPos(position[0] + 10, position[1])
+                else:  # Horizontal staffs
+                    # Move one staff 10px up and the other 10px down
+                    overlapping_staffs[0].setPos(position[0], position[1] - 10)
+                    overlapping_staffs[1].setPos(position[0], position[1] + 10)
+
+                # Update the scene
+                self.graphboard_scene.update()
+
+
+
+
+
+    ### MAIN GRAPHBOARD ###
 
     def init_graphboard_staffs(self, mini_graphboard_view):
         # Calculate scaling and padding factors for the grid
@@ -114,6 +185,8 @@ class Staff_Manager(QObject):
                     f'images\\staves\\{end_location}_staff_{color}.svg',
                 )
                 self.graphboard_staffs[staff_key].hide()
+
+    ### PROP BOX ###
 
     def init_propbox_staffs(self, propbox_view):
         # Define initial locations for propbox staffs
@@ -169,6 +242,7 @@ class Staff_Manager(QObject):
                                     'vertical' if end_location in ['N', 'S'] else 'horizontal',  # Add this line
                                     color,
                                     'images\\staves\\' + end_location + "_staff_" + color + '.svg')
+                
                     if new_staff.scene is not self.graphboard_scene:
                         self.graphboard_scene.addItem(new_staff)
                     self.graphboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary

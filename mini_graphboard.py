@@ -112,6 +112,11 @@ class Mini_Graphboard_View(QGraphicsView):
                     
             # Position the arrows
             for arrow in created_arrows:
+                arrow_transform = QTransform()
+                arrow_transform.translate(dx, dy)
+                arrow_transform.scale(PICTOGRAPH_SCALE, PICTOGRAPH_SCALE)
+                arrow.setTransform(arrow_transform)
+            
                 if optimal_positions:
                     optimal_position = optimal_positions.get(f"optimal_{arrow.get_attributes()['color']}_location")
                     if optimal_position:
@@ -119,22 +124,21 @@ class Mini_Graphboard_View(QGraphicsView):
                         arrow.setPos(pos)
                     else:
                         if arrow.get_attributes()['quadrant'] != "None":
-                            pos = self.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
+                            pos = self.get_quadrant_center(arrow.get_attributes()['quadrant'])
                             arrow.setPos(pos)
                 else:
-                    #resize the arrows
-                    
-                    pos = self.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
+                    pos = self.get_quadrant_center(arrow.get_attributes()['quadrant'])
                     arrow.setPos(pos)
 
         # Update the staffs
         self.staff_manager.connect_grid(self.mini_grid)
+        self.init_grid()
         self.staff_manager.init_mini_graphboard_staffs(self, self.mini_grid)
-        self.staff_manager.update_graphboard_staffs(self.mini_graphboard_scene)
+        self.staff_manager.update_mini_graphboard_staffs(self.mini_graphboard_scene)
 
         # # # Update any trackers or other state
         # # self.info_tracker.update()
 
         self.setFixedSize(int(750 * PICTOGRAPH_SCALE), int(900 * PICTOGRAPH_SCALE))
-        self.scale_down()
-        self.init_grid()
+
+
