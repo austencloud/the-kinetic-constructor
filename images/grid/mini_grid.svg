@@ -9,10 +9,10 @@
         fill: #231f20;
       }
       .layer2_points {
-        fill: transparent;
+        fill: #000000;
       }
       .hand_points {
-        fill: #ff0000;
+        fill: #000000;
       }
     </style>
   </defs>

@@ -5,7 +5,6 @@ from constants import STAFF_WIDTH, STAFF_LENGTH, RED, BLUE, MINI_STAFF_LENGTH, M
 from staff import Staff
 from PyQt5.QtGui import QTransform
 
-
 class Staff_Manager(QObject):
 
     positionChanged = pyqtSignal(str)
@@ -15,7 +14,6 @@ class Staff_Manager(QObject):
         self.graphboard_scene = graphboard_scene  # Scene where the staffs will be drawn
         self.beta_staves = []  # List to hold beta staves
         self.previous_position = None  # Store the previous position of staffs
-
 
 
 
@@ -30,20 +28,9 @@ class Staff_Manager(QObject):
         mini_grid_transform = self.mini_grid.transform()
         dx = mini_grid_transform.dx()
         dy = mini_grid_transform.dy()
-        
-        scale = 0.5
-        
- 
-        MINI_GRID_WIDTH = self.mini_grid.get_width()
-        MINI_GRAPHBOARD_WIDTH = mini_graphboard_view.width()
-        MINI_GRAPHBOARD_HEIGHT = mini_graphboard_view.height()
-
-        self.MINI_GRID_PADDING = ((MINI_GRAPHBOARD_WIDTH * scale) - (MINI_GRID_WIDTH * scale)) / 2
-        self.MINI_GRID_V_OFFSET = (MINI_GRAPHBOARD_HEIGHT * scale - MINI_GRID_WIDTH * scale) / 2 
 
         VERTICAL_BUFFER = (mini_graphboard_view.height() - mini_graphboard_view.width()) / 2
 
-        print("VERTICAL BUFFER: ", VERTICAL_BUFFER)
         
         # Calculate the handpoints on the graphboard based on the grid
         graphboard_handpoints = {}
@@ -61,8 +48,6 @@ class Staff_Manager(QObject):
             'W_staff': graphboard_handpoints['W_hand_point'] + QPointF(-MINI_STAFF_LENGTH, -MINI_STAFF_WIDTH - VERTICAL_BUFFER)
         }
 
-        # access the N staff key in staff locations
-        print(self.staff_locations['N_staff'])
 
         # Create and hide the staffs for each direction and color
         self.graphboard_staffs = {}
@@ -113,8 +98,7 @@ class Staff_Manager(QObject):
                         self.graphboard_scene.addItem(new_staff)
                     self.graphboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
         self.check_and_replace_mini_staffs()
-        
-
+    
     def check_and_replace_mini_staffs(self):
         staff_positions = [(staff.pos().x(), staff.pos().y()) for staff in self.graphboard_staffs.values() if staff.isVisible()]
 
@@ -137,9 +121,6 @@ class Staff_Manager(QObject):
 
                 # Update the scene
                 self.graphboard_scene.update()
-
-
-
 
 
     ### MAIN GRAPHBOARD ###
@@ -248,7 +229,6 @@ class Staff_Manager(QObject):
                     self.graphboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
         self.check_and_replace_staffs()
         
-        
     def hide_all_graphboard_staffs(self):
         for staff in self.graphboard_staffs.values():
             staff.hide()
@@ -295,4 +275,4 @@ class Staff_Manager(QObject):
         for staff in self.graphboard_staffs.values():
             if staff.isVisible():
                 visible_count += 1
-        print(f"Number of visible staves on the graphboard: {visible_count}")
+        # print(f"Number of visible staves on the graphboard: {visible_count}")

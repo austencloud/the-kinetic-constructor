@@ -70,16 +70,6 @@
                 "start_location": "s",
                 "motion_type": "pro",
                 "turns": 0
-            },
-            {
-                "optimal_blue_location": {
-                    "x": 546.5,
-                    "y": 213.5
-                },
-                "optimal_red_location": {
-                    "x": 205.5,
-                    "y": 539.5
-                }
             }
         ],
         [

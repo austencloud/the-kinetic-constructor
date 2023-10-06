@@ -31,23 +31,12 @@ class Mini_Graphboard_View(QGraphicsView):
         self.arrow_manager = Arrow_Manager(self, self.staff_manager)
         self.info_tracker = Info_Tracker(self, None, self.staff_manager)
         
-    def scale_down(self):
-        scale_factor = PICTOGRAPH_SCALE  # 50%
+        self.staff_manager.connect_grid(self.mini_grid)
+        self.init_grid()
+        self.staff_manager.init_mini_graphboard_staffs(self, self.mini_grid)
+        self.VERTICAL_BUFFER = (self.height() - self.width()) / 2
         
-        # Apply scaling
-        for item in self.mini_graphboard_scene.items():
-            if item is not self.mini_grid:
-                item.setScale(scale_factor)
-        # Calculate the offset needed to center the entire group
-        offset_x = (self.width() - self.mini_grid.boundingRect().width() * scale_factor) / 2
-        offset_y = (self.height() - self.mini_grid.boundingRect().height() * scale_factor) / 2
         
-        # Apply the translation to all items in the scene
-        for item in self.mini_graphboard_scene.items():
-            item.setPos(item.pos() + QPointF(offset_x, offset_y))
-                
-
-
     def init_grid(self):
         self.PADDING = self.width() - self.mini_grid.boundingRect().width()
         mini_grid_position = QPointF((self.mini_grid.get_width() - self.mini_grid.boundingRect().width()) / 2,
@@ -60,19 +49,32 @@ class Mini_Graphboard_View(QGraphicsView):
         self.mini_graphboard_scene.addItem(self.mini_grid)
 
         pass
-
+    
     def get_quadrant_center(self, quadrant):
+        # Calculate the layer 2 points on the graphboard based on the grid
+        graphboard_layer2_points = {}
+        for point_name in ['NE_layer2_point', 'SE_layer2_point', 'SW_layer2_point', 'NW_layer2_point']:
+            cx, cy = self.mini_grid.get_circle_coordinates(point_name)
+            graphboard_layer2_points[point_name] = QPointF(cx, cy - self.VERTICAL_BUFFER)  # Subtract VERTICAL_BUFFER from y-coordinate
+            print(f"{point_name}: {graphboard_layer2_points[point_name]}")
+
+        # Map the quadrants to the corresponding layer 2 points
         centers = {
-            'ne': QPointF(550 * PICTOGRAPH_SCALE, 175 * PICTOGRAPH_SCALE),
-            'se': QPointF(550 * PICTOGRAPH_SCALE, 550 * PICTOGRAPH_SCALE),
-            'sw': QPointF(175 * PICTOGRAPH_SCALE, 550 * PICTOGRAPH_SCALE),
-            'nw': QPointF(175 * PICTOGRAPH_SCALE, 175 * PICTOGRAPH_SCALE),
+            'ne': graphboard_layer2_points['NE_layer2_point'],
+            'se': graphboard_layer2_points['SE_layer2_point'],
+            'sw': graphboard_layer2_points['SW_layer2_point'],
+            'nw': graphboard_layer2_points['NW_layer2_point']
         }
-        return centers.get(quadrant, QPointF(0, 0))
+
+        return centers.get(quadrant, QPointF(0, 0 - self.VERTICAL_BUFFER))  # Subtract VERTICAL_BUFFER from default y-coordinate
 
 
 
-    def populate_with_combination(self, combination):
+
+
+    def add_arrows_to_mini_graphboard(self, combination):
+        DISTANCE = 20 # This is the distance between the arrows and the center of the quadrant
+        
         # Create a list to store the created arrows
         created_arrows = []
 
@@ -94,51 +96,60 @@ class Mini_Graphboard_View(QGraphicsView):
 
                 # Add the created arrow to the list
                 created_arrows.append(arrow)
-                # Get the translation values from the grid's transform
-                grid_transform = self.mini_grid.transform()
-                dx = grid_transform.dx()
-                dy = grid_transform.dy()
-
-                for arrow in created_arrows:    
-                    # Create a new transform for the arrow
-                    arrow_transform = QTransform()
-                    arrow_transform.translate(dx, dy)  # Apply the same translation as the grid
-                    arrow.setTransform(arrow_transform)
-
 
                 # Add the arrows to the scene
                 for arrow in created_arrows:
-                    self.mini_graphboard_scene.addItem(arrow)
-                    
-            # Position the arrows
-            for arrow in created_arrows:
-                arrow_transform = QTransform()
-                arrow_transform.translate(dx, dy)
-                arrow_transform.scale(PICTOGRAPH_SCALE, PICTOGRAPH_SCALE)
-                arrow.setTransform(arrow_transform)
-            
-                if optimal_positions:
-                    optimal_position = optimal_positions.get(f"optimal_{arrow.get_attributes()['color']}_location")
-                    if optimal_position:
-                        pos = QPointF(optimal_position['x']*PICTOGRAPH_SCALE, optimal_position['y'])*PICTOGRAPH_SCALE - arrow.boundingRect().center()
-                        arrow.setPos(pos)
-                    else:
-                        if arrow.get_attributes()['quadrant'] != "None":
-                            pos = self.get_quadrant_center(arrow.get_attributes()['quadrant'])
-                            arrow.setPos(pos)
-                else:
-                    pos = self.get_quadrant_center(arrow.get_attributes()['quadrant'])
+                    if arrow not in self.mini_graphboard_scene.items():
+                        self.mini_graphboard_scene.addItem(arrow)
+        # Position the arrows
+        for arrow in created_arrows:
+            arrow_transform = QTransform()
+            arrow_transform.scale(PICTOGRAPH_SCALE, PICTOGRAPH_SCALE)
+            arrow.setTransform(arrow_transform)
+            BUFFER = (self.width() - self.mini_grid.boundingRect().width()) / 2
+
+            # Calculate the center of the bounding rectangle
+            center = arrow.boundingRect().center()
+
+            if optimal_positions:
+                optimal_position = optimal_positions.get(f"optimal_{arrow.get_attributes()['color']}_location")
+                if optimal_position:
+                    # Adjust the position based on the center
+                    pos = QPointF(optimal_position['x'] * PICTOGRAPH_SCALE - BUFFER, optimal_position['y'] * PICTOGRAPH_SCALE - BUFFER) - center * PICTOGRAPH_SCALE
                     arrow.setPos(pos)
+                else:
+                    if arrow.get_attributes()['quadrant'] != "None":
+                        pos = self.get_quadrant_center(arrow.get_attributes()['quadrant']) - center * PICTOGRAPH_SCALE
+                        # Move the arrow away from the center by 20 points
+                        if arrow.get_attributes()['quadrant'] == 'ne':
+                            pos += QPointF(DISTANCE, -DISTANCE)
+                        elif arrow.get_attributes()['quadrant'] == 'se':
+                            pos += QPointF(DISTANCE, DISTANCE)
+                        elif arrow.get_attributes()['quadrant'] == 'sw':
+                            pos += QPointF(-DISTANCE, DISTANCE)
+                        elif arrow.get_attributes()['quadrant'] == 'nw':
+                            pos += QPointF(-DISTANCE, -DISTANCE)
+                        arrow.setPos(pos)
+            else:
+                pos = self.get_quadrant_center(arrow.get_attributes()['quadrant']) - center * PICTOGRAPH_SCALE
+                # Move the arrow away from the center by 20 points
+                if arrow.get_attributes()['quadrant'] == 'ne':
+                    pos += QPointF(DISTANCE, -DISTANCE)
+                elif arrow.get_attributes()['quadrant'] == 'se':
+                    pos += QPointF(DISTANCE, DISTANCE)
+                elif arrow.get_attributes()['quadrant'] == 'sw':
+                    pos += QPointF(-DISTANCE, DISTANCE)
+                elif arrow.get_attributes()['quadrant'] == 'nw':
+                    pos += QPointF(-DISTANCE, -DISTANCE)
+                arrow.setPos(pos)
+                #print a red dot at each quadrat center
+                self.mini_graphboard_scene.addEllipse(self.get_quadrant_center(arrow.get_attributes()['quadrant']).x() - 5, self.get_quadrant_center(arrow.get_attributes()['quadrant']).y() - 5, 10, 10, QPen(Qt.red), QBrush(Qt.red))
+
 
         # Update the staffs
-        self.staff_manager.connect_grid(self.mini_grid)
-        self.init_grid()
-        self.staff_manager.init_mini_graphboard_staffs(self, self.mini_grid)
+
         self.staff_manager.update_mini_graphboard_staffs(self.mini_graphboard_scene)
 
         # # # Update any trackers or other state
         # # self.info_tracker.update()
-
-        self.setFixedSize(int(750 * PICTOGRAPH_SCALE), int(900 * PICTOGRAPH_SCALE))
-
 

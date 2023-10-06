@@ -17,9 +17,8 @@ class Selection_Dialog(QDialog):
         row = 0
         col = 0
         for i, combination in enumerate(combinations):
-            
             mini_graphboard = Mini_Graphboard_View()
-            mini_graphboard.populate_with_combination(combination)
+            mini_graphboard.add_arrows_to_mini_graphboard(combination)
             grid_layout.addWidget(mini_graphboard, row, col)
                     
             col += 1
@@ -29,7 +28,6 @@ class Selection_Dialog(QDialog):
         
         layout.addLayout(grid_layout)
         self.setLayout(layout)
-
 
     def select_pictograph(self):
         # TODO: Logic to get the selected pictograph and close the dialog
