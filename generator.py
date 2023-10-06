@@ -37,7 +37,7 @@ class Pictograph_Generator():
         for letter, combinations in self.letters.items():
             for combination in combinations:
                 # Generate the pictograph for the combination
-                self.generate_random_pictograph(letter, staff_manager)
+                self.open_selection_window(letter, staff_manager)
 
                 # Find the dictionary in the combination list that contains the 'start_position' and 'end_position' keys
                 positions_dict = next((d for d in combination if 'start_position' in d and 'end_position' in d), None)
@@ -81,7 +81,12 @@ class Pictograph_Generator():
                 # Clear the graphboard for the next combination
                 self.graphboard_view.clear()
 
-    def generate_random_pictograph(self, letter, staff_manager):
+    def open_selection_window(self, letter, staff_manager):
+        # Load the JSON file
+        with open('pictographs.json', 'r') as file:
+            self.letters = json.load(file)
+        self.output_dir = "images\\pictographs\\"
+
         self.graphboard_view.clear()
 
         # Get the list of possible combinations for the letter

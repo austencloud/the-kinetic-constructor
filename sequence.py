@@ -26,8 +26,6 @@ class Sequence_Manager():
         self.info_tracker = info_tracker
 
     def add_pictograph(self, pictograph):
-        print("Adding pictograph")
-
         # Find the first section that doesn't have a pictograph
         for i, section in enumerate(self.beats):
             if i >= len(self.pictographs):
@@ -35,10 +33,6 @@ class Sequence_Manager():
                 self.pictographs.append(pictograph)
                 self.graphboard_scene.addItem(pictograph)
                 break
-
-        print("Items in the scene:")
-        for item in self.graphboard_scene.items():
-            print(item)
 
     def add_to_sequence(self, graphboard):
         # Get the size of the scene in scene coordinates

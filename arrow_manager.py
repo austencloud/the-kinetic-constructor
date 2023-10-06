@@ -89,9 +89,7 @@ class Arrow_Manager(QObject):
                 new_rotation = "r"
             elif rotation == "r":
                 new_rotation = "l"
-            else:
-                print(f"Unknown rotation direction: {rotation}")
-                continue
+
 
             # Create the new SVG file name
             new_svg = os.path.join(new_folder, base_name.replace(f"{motion_type}_{rotation}_", f"{new_motion_type}_{new_rotation}_"))
@@ -118,9 +116,7 @@ class Arrow_Manager(QObject):
 
     def rotate_arrow(self, direction, arrows):
         for arrow in arrows:
-            print(arrow.get_attributes())
             old_svg = f"images/arrows/{arrow.color}_{arrow.motion_type}_{arrow.rotation_direction}_{arrow.quadrant}_{arrow.turns}.svg"
-            print(old_svg)
             quadrants = ['ne', 'se', 'sw', 'nw']
             current_quadrant_index = quadrants.index(arrow.quadrant)
             if direction == "right":

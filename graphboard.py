@@ -26,23 +26,24 @@ class Graphboard_View(QGraphicsView):
                  ui_setup,
                  generator,
                  sequence_manager,
+                 exporter,
                  parent=None):
         
         super().__init__(graphboard_scene, parent)
         self.setAcceptDrops(True)
+        self.setInteractive(True)
         self.dragging = None
         self.grid = grid
-        self.staff_manager = staff_manager
-        self.setInteractive(True)
         self.graphboard_scene = graphboard_scene
-
+        self.staff_manager = staff_manager
         self.info_tracker = info_tracker
         self.svg_handler = svg_handler
         self.generator = generator
         self.ui_setup = ui_setup
-        self.renderer = QSvgRenderer()
-        self.exporter = Exporter(self, graphboard_scene, self.staff_manager, self.grid)
         self.sequence_manager = sequence_manager
+        
+        self.renderer = QSvgRenderer()
+        self.exporter = exporter
         self.letter_renderers = {}
         for letter in 'ABCDEFGHIJKLMNOPQRSTUV':
             renderer = QSvgRenderer(f'images/letters/{letter}.svg')
@@ -210,9 +211,6 @@ class Graphboard_View(QGraphicsView):
 
             current_letter, current_letter_type = self.info_tracker.determine_current_letter_and_type()
 
-            # Debug: Print current letter
-            print(f"Current letter: {current_letter}")
-
             self.update_letter(current_letter)
             self.info_tracker.check_for_changes()
 
@@ -265,19 +263,6 @@ class Graphboard_View(QGraphicsView):
             'se': QPointF(550, 550),
             'sw': QPointF(175, 550),
             'nw': QPointF(175, 175),
-        }
-        return centers.get(quadrant, QPointF(0, 0))
-    
-    def get_expanded_quadrant_center(self, quadrant):
-        centers = {
-            'ne1': QPointF(525, 175),
-            'ne2': QPointF(575, 100),
-            'se1': QPointF(525, 525),
-            'se2': QPointF(575, 600),
-            'sw1': QPointF(175, 525),
-            'sw2': QPointF(150, 600),
-            'nw1': QPointF(175, 175),
-            'nw2': QPointF(150, 100),
         }
         return centers.get(quadrant, QPointF(0, 0))
     
@@ -334,7 +319,7 @@ class Graphboard_View(QGraphicsView):
             arrow.setSelected(False)
 
 
-    ### INITIALIZERS ###
+    ### SETTERS ###
 
     def set_handlers(self, handlers):
         self.handlers = handlers
@@ -342,7 +327,7 @@ class Graphboard_View(QGraphicsView):
     def set_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
 
-    def setGenerator(self, generator):
+    def set_generator(self, generator):
         self.generator = generator
 
 

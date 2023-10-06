@@ -14,6 +14,7 @@ from graphboard import Graphboard_View
 from staff_manager import Staff_Manager
 from arrow_manager import Arrow_Manager
 from handlers import Svg_Handler
+from json_manager import Json_Manager
 
 
 PICTOGRAPH_SCALE = 0.5
@@ -30,11 +31,11 @@ class Mini_Graphboard_View(QGraphicsView):
         self.staff_manager = Staff_Manager(self.mini_graphboard_scene)
         self.arrow_manager = Arrow_Manager(self, self.staff_manager)
         self.info_tracker = Info_Tracker(self, None, self.staff_manager)
-        
+        self.json_manager = Json_Manager(self.mini_graphboard_scene)
         self.staff_manager.connect_grid(self.mini_grid)
         self.init_grid()
         self.staff_manager.init_mini_graphboard_staffs(self, self.mini_grid)
-        self.VERTICAL_BUFFER = (self.height() - self.width()) / 2
+        self.VERTICAL_OFFSET = (self.height() - self.width()) / 2
         
         
     def init_grid(self):
@@ -55,8 +56,7 @@ class Mini_Graphboard_View(QGraphicsView):
         graphboard_layer2_points = {}
         for point_name in ['NE_layer2_point', 'SE_layer2_point', 'SW_layer2_point', 'NW_layer2_point']:
             cx, cy = self.mini_grid.get_circle_coordinates(point_name)
-            graphboard_layer2_points[point_name] = QPointF(cx, cy - self.VERTICAL_BUFFER)  # Subtract VERTICAL_BUFFER from y-coordinate
-            print(f"{point_name}: {graphboard_layer2_points[point_name]}")
+            graphboard_layer2_points[point_name] = QPointF(cx, cy - self.VERTICAL_OFFSET)  # Subtract VERTICAL_OFFSET from y-coordinate
 
         # Map the quadrants to the corresponding layer 2 points
         centers = {
@@ -66,7 +66,7 @@ class Mini_Graphboard_View(QGraphicsView):
             'nw': graphboard_layer2_points['NW_layer2_point']
         }
 
-        return centers.get(quadrant, QPointF(0, 0 - self.VERTICAL_BUFFER))  # Subtract VERTICAL_BUFFER from default y-coordinate
+        return centers.get(quadrant, QPointF(0, 0 - self.VERTICAL_OFFSET))  # Subtract VERTICAL_OFFSET from default y-coordinate
 
 
 
@@ -116,20 +116,8 @@ class Mini_Graphboard_View(QGraphicsView):
                 if optimal_position:
                     # Adjust the position based on the center
                     pos = QPointF(optimal_position['x'] * PICTOGRAPH_SCALE - BUFFER, optimal_position['y'] * PICTOGRAPH_SCALE - BUFFER) - center * PICTOGRAPH_SCALE
-                    arrow.setPos(pos)
-                else:
-                    if arrow.get_attributes()['quadrant'] != "None":
-                        pos = self.get_quadrant_center(arrow.get_attributes()['quadrant']) - center * PICTOGRAPH_SCALE
-                        # Move the arrow away from the center by 20 points
-                        if arrow.get_attributes()['quadrant'] == 'ne':
-                            pos += QPointF(DISTANCE, -DISTANCE)
-                        elif arrow.get_attributes()['quadrant'] == 'se':
-                            pos += QPointF(DISTANCE, DISTANCE)
-                        elif arrow.get_attributes()['quadrant'] == 'sw':
-                            pos += QPointF(-DISTANCE, DISTANCE)
-                        elif arrow.get_attributes()['quadrant'] == 'nw':
-                            pos += QPointF(-DISTANCE, -DISTANCE)
-                        arrow.setPos(pos)
+                    new_pos = pos + QPointF(0, -self.VERTICAL_OFFSET)
+                    arrow.setPos(new_pos)
             else:
                 pos = self.get_quadrant_center(arrow.get_attributes()['quadrant']) - center * PICTOGRAPH_SCALE
                 # Move the arrow away from the center by 20 points
@@ -142,14 +130,37 @@ class Mini_Graphboard_View(QGraphicsView):
                 elif arrow.get_attributes()['quadrant'] == 'nw':
                     pos += QPointF(-DISTANCE, -DISTANCE)
                 arrow.setPos(pos)
-                #print a red dot at each quadrat center
-                self.mini_graphboard_scene.addEllipse(self.get_quadrant_center(arrow.get_attributes()['quadrant']).x() - 5, self.get_quadrant_center(arrow.get_attributes()['quadrant']).y() - 5, 10, 10, QPen(Qt.red), QBrush(Qt.red))
-
-
         # Update the staffs
-
         self.staff_manager.update_mini_graphboard_staffs(self.mini_graphboard_scene)
-
         # # # Update any trackers or other state
         # # self.info_tracker.update()
+        
+    def save_optimal_positions(self):
+        BUFFER = (self.width() - self.mini_grid.boundingRect().width()) / 2
+        MAIN_GRAPHBOARD_BUFFER = 50
+        MAIN_GRAPHOARD_V_OFFSET = 75
+        
+        for item in self.mini_graphboard_scene.items():
+            if isinstance(item, Arrow):
+                pos = item.pos() + item.boundingRect().center() * PICTOGRAPH_SCALE
+                # Reverse the scaling
+                pos = pos / PICTOGRAPH_SCALE
+                # Reverse the vertical buffer
+                pos.setY(pos.y() + MAIN_GRAPHOARD_V_OFFSET)
+                # Reverse the buffer
+                pos = pos + QPointF(MAIN_GRAPHBOARD_BUFFER, MAIN_GRAPHBOARD_BUFFER)
+                if item.get_attributes()['color'] == 'red':
+                    red_position = pos
+                elif item.get_attributes()['color'] == 'blue':
+                    blue_position = pos
+        self.json_manager.update_optimal_locations_in_json(red_position, blue_position)
+
+
+        
+    def contextMenuEvent(self, event):
+        contextMenu = QMenu(self)
+        saveOptimalAction = QAction("Save Optimal Positions", self)
+        saveOptimalAction.triggered.connect(self.save_optimal_positions)
+        contextMenu.addAction(saveOptimalAction)
+        contextMenu.exec_(event.globalPos())
 

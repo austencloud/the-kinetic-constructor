@@ -8,7 +8,8 @@ from generator import Pictograph_Generator
 from staff import *
 from letter import Letter_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent, QSize
-from handlers import Svg_Handler, Json_Handler, Key_Press_Handler
+from handlers import Svg_Handler
+from json_manager import Json_Manager
 from arrow_manager import Arrow_Manager
 from arrowbox import ArrowBox_View
 from propbox import PropBox_View
@@ -53,7 +54,7 @@ class UiSetup(QWidget):
         self.initGraphboardView() 
         
         self.initGenerator() 
-        self.graphboard_view.setGenerator(self.generator)
+        self.graphboard_view.set_generator(self.generator)
         self.connectGraphboard()
         self.initArrowBox()
         self.initPropBoxView()
@@ -73,10 +74,9 @@ class UiSetup(QWidget):
         self.setFocus()
 
     def initMenus(self):
-        self.json_updater = Json_Handler(self.graphboard_scene)
+        self.json_updater = Json_Manager(self.graphboard_scene)
         self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.sequence_manager, self.arrow_manager, self.exporter)
         self.arrow_manager.connect_graphboard_scene(self.graphboard_scene)
-        self.key_press_handler = Key_Press_Handler(self.arrow_manager, None)
         self.menu_bar = Menu_Bar()
 
     def initLayouts(self):
@@ -114,8 +114,7 @@ class UiSetup(QWidget):
         #set the size of the grid to SCALE_FACTOR 
         self.grid.setScale(SCALE_FACTOR)
         self.exporter = Exporter(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
-        self.graphboard_view = Graphboard_View(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.arrow_manager, self, None, self.sequence_manager)
-        self.key_press_handler.connect_to_graphboard(self.graphboard_view)
+        self.graphboard_view = Graphboard_View(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.arrow_manager, self, None, self.sequence_manager, self.exporter)
         self.arrow_manager.connect_to_graphboard(self.graphboard_view)
         transform = QTransform()
         graphboard_size = self.graphboard_view.frameSize()
