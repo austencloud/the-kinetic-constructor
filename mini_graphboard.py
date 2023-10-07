@@ -3,18 +3,18 @@ from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QPointF, QTimer
 from PyQt5.QtWidgets import QGraphicsItem, QToolTip
 from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
 from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor, QTransform, QImage, QPen, QBrush
-from staff import Staff
+from objects.staff import Staff
 from grid import Grid
-from arrow import Arrow
+from objects.arrow import Arrow
 import os
 from exporter import Exporter
 from settings import Settings
 from info_tracker import Info_Tracker
 from graphboard import Graphboard_View
-from staff_manager import Staff_Manager
-from arrow_manager import Arrow_Manager
-from handlers import Svg_Handler
-from json_manager import Json_Manager
+from managers.staff_manager import Staff_Manager
+from managers.arrow_manager import Arrow_Manager
+from managers.svg_manager import Svg_Manager
+from managers.json_manager import Json_Manager
 
 
 PICTOGRAPH_SCALE = 0.5
@@ -27,7 +27,7 @@ class Mini_Graphboard_View(QGraphicsView):
         self.setScene(self.mini_graphboard_scene)  # Set the scene
         
         self.mini_grid = Grid("images/grid/mini_grid.svg")
-        self.svg_handler = Svg_Handler()
+        self.svg_manager = Svg_Manager()
         self.staff_manager = Staff_Manager(self.mini_graphboard_scene)
         self.arrow_manager = Arrow_Manager(self, self.staff_manager)
         self.info_tracker = Info_Tracker(self, None, self.staff_manager)
@@ -85,11 +85,11 @@ class Mini_Graphboard_View(QGraphicsView):
             # Check if the dictionary has all the keys you need         
             if all(key in arrow_dict for key in ['color', 'motion_type', 'rotation_direction', 'quadrant', 'turns']):
                 if arrow_dict['motion_type'] == 'static':
-                    svg_file = f"images/arrows/blank.svg"
+                    svg_file = None
                 else:
                     svg_file = f"images/arrows/shift/{arrow_dict['motion_type']}/{arrow_dict['color']}_{arrow_dict['motion_type']}_{arrow_dict['rotation_direction']}_{arrow_dict['quadrant']}_{arrow_dict['turns']}.svg"
 
-                arrow = Arrow(svg_file, self, self.info_tracker, self.svg_handler, self.arrow_manager, arrow_dict['motion_type'], self.staff_manager)
+                arrow = Arrow(svg_file, self, self.info_tracker, self.svg_manager, self.arrow_manager, arrow_dict['motion_type'], self.staff_manager)
                 arrow.set_attributes(arrow_dict)
                 arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)

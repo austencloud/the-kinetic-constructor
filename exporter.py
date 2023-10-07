@@ -1,7 +1,7 @@
 import re
 from PyQt5.QtGui import QImage, QPainter
-from arrow import Arrow
-from staff import Staff
+from objects.arrow import Arrow
+from objects.staff import Staff
 from grid import Grid
 from lxml import etree
 from copy import deepcopy

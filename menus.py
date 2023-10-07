@@ -1,8 +1,8 @@
 
 
 from PyQt5.QtWidgets import QMenu, QMenuBar, QAction, QDialog, QFormLayout, QSpinBox, QDialogButtonBox
-from arrow import Arrow
-from staff import Staff
+from objects.arrow import Arrow
+from objects.staff import Staff
 
 
 class Context_Menu_Handler:

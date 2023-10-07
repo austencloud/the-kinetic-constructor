@@ -1,23 +1,23 @@
 from PyQt5.QtWidgets import QDialog, QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QLineEdit, QGridLayout
 import os
-from arrow import Arrow
+from objects.arrow import Arrow
 from PyQt5.QtGui import QFont, QTransform, QIcon, QPixmap
 from sequence import *
 from info_tracker import Info_Tracker
 from generator import Pictograph_Generator
-from staff import *
+from objects.staff import *
 from letter import Letter_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent, QSize
-from handlers import Svg_Handler
-from json_manager import Json_Manager
-from arrow_manager import Arrow_Manager
+from managers.svg_manager import Svg_Manager
+from managers.json_manager import Json_Manager
+from managers.arrow_manager import Arrow_Manager
 from arrowbox import ArrowBox_View
 from propbox import PropBox_View
 from menus import Menu_Bar, Context_Menu_Handler
 from graphboard import Graphboard_View
 from exporter import Exporter
 from settings import Settings
-from staff_manager import Staff_Manager
+from managers.staff_manager import Staff_Manager
 from pictograph_selector import Selection_Dialog
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
@@ -32,7 +32,7 @@ class UiSetup(QWidget):
         self.main_window.setMinimumSize(int(2000 * SCALE_FACTOR), int(1600 * SCALE_FACTOR))
         self.main_window.show()
         self.main_window.setWindowTitle("Sequence Generator")
-        self.svg_handler = Svg_Handler()
+        self.svg_manager = Svg_Manager()
         self.arrows = []
         self.graphboard_scene = QGraphicsScene()
         self.graphboard_scene.setSceneRect(0, 0, 650, 650)
@@ -114,7 +114,7 @@ class UiSetup(QWidget):
         #set the size of the grid to SCALE_FACTOR 
         self.grid.setScale(SCALE_FACTOR)
         self.exporter = Exporter(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
-        self.graphboard_view = Graphboard_View(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_handler, self.arrow_manager, self, None, self.sequence_manager, self.exporter)
+        self.graphboard_view = Graphboard_View(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_manager, self.arrow_manager, self, None, self.sequence_manager, self.exporter)
         self.arrow_manager.connect_to_graphboard(self.graphboard_view)
         transform = QTransform()
         graphboard_size = self.graphboard_view.frameSize()
@@ -285,7 +285,7 @@ class UiSetup(QWidget):
             if file_name in default_arrows:
                 motion_type = file_name.split('_')[1]
                 self.graphboard_view.set_handlers(self.arrow_manager)
-                arrow_item = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.arrow_manager, motion_type, self.staff_manager)
+                arrow_item = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_manager, motion_type, self.staff_manager)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
                 arrow_item.setScale(0.75)
@@ -308,7 +308,7 @@ class UiSetup(QWidget):
 
 
                 self.arrows.append(arrow_item)
-        arrowbox = ArrowBox_View(arrowbox_scene, self.graphboard_view, self.info_tracker, self.svg_handler)
+        arrowbox = ArrowBox_View(arrowbox_scene, self.graphboard_view, self.info_tracker, self.svg_manager)
         objectbox_layout.addWidget(arrowbox) 
         arrowbox_frame.setFixedSize(int(500 * SCALE_FACTOR), int(500 * SCALE_FACTOR))
         self.objectbox_layout.addWidget(arrowbox_frame)

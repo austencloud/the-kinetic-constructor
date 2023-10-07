@@ -1,8 +1,8 @@
 from PyQt5.QtCore import QPointF, pyqtSignal, QObject, Qt
 from PyQt5.QtSvg import QGraphicsSvgItem
-from arrow import Arrow
+from objects.arrow import Arrow
 from constants import STAFF_WIDTH, STAFF_LENGTH, RED, BLUE, MINI_STAFF_LENGTH, MINI_STAFF_WIDTH
-from staff import Staff
+from objects.staff import Staff
 from PyQt5.QtGui import QTransform
 
 class Staff_Manager(QObject):

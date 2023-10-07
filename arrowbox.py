@@ -3,14 +3,14 @@ from PyQt5.QtWidgets import QApplication, QGraphicsItem, QMenu, QDialog, QFormLa
 from PyQt5.QtGui import QPixmap, QDrag, QImage, QPainter, QPainterPath, QCursor
 from PyQt5.QtCore import Qt, QMimeData, pyqtSignal, QPointF
 from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
-from arrow import Arrow
+from objects.arrow import Arrow
 import os
 from settings import Settings
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
 class ArrowBox_View(QGraphicsView):
-    def __init__(self, arrowbox_scene, artboard, info_tracker, svg_handler, parent=None):
+    def __init__(self, arrowbox_scene, artboard, info_tracker, svg_manager, parent=None):
         super().__init__(arrowbox_scene, parent)
         self.setAcceptDrops(True)
         self.setFrameShape(QFrame.NoFrame)
@@ -18,7 +18,7 @@ class ArrowBox_View(QGraphicsView):
         self.artboard = artboard
         self.arrowbox_scene = arrowbox_scene
         self.info_tracker = info_tracker
-        self.svg_handler = svg_handler
+        self.svg_manager = svg_manager
         self.scale(SCALE_FACTOR, SCALE_FACTOR)
 
     def mousePressEvent(self, event):

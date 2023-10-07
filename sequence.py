@@ -2,12 +2,12 @@ from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QPushButton
 from PyQt5.QtCore import QRectF
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsItem, QGraphicsView
 from PyQt5.QtCore import Qt, QPointF
-from arrow import Arrow
+from objects.arrow import Arrow
 from graphboard import Graphboard_View
 from grid import Grid
 from pictograph import Pictograph
 from PyQt5.QtGui import QImage, QPainter
-from staff import Staff
+from objects.staff import Staff
 from settings import Settings
 from graphboard import Graphboard_View
 

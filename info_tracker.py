@@ -1,5 +1,5 @@
-from arrow import Arrow
-from staff import Staff
+from objects.arrow import Arrow
+from objects.staff import Staff
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt

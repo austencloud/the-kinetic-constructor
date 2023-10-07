@@ -10,7 +10,7 @@ class Arrow(QGraphicsSvgItem):
     orientationChanged = pyqtSignal()
 
 
-    def __init__(self, svg_file, graphboard_view, info_tracker, svg_handler, arrow_manipulator, motion_type, staff_manager):
+    def __init__(self, svg_file, graphboard_view, info_tracker, svg_manager, arrow_manipulator, motion_type, staff_manager):
         super().__init__(svg_file)
         self.setAcceptDrops(True)
         self.svg_file = svg_file
@@ -28,7 +28,7 @@ class Arrow(QGraphicsSvgItem):
         self.staff_manager = staff_manager
         self.staff = None
         self.quadrant = None
-        self.svg_handler = svg_handler
+        self.svg_manager = svg_manager
         self.dragStarted = False
         self.arrow_manipulator = arrow_manipulator
         self.color = None
@@ -174,43 +174,6 @@ class Arrow(QGraphicsSvgItem):
         # Update the start and end locations
         self.start_location, self.end_location = self.arrow_start_end_locations.get(os.path.basename(self.svg_file), (None, None))
 
-    def update_quadrant(self):
-        # Determine the quadrant based on the start and end positions
-        if self.start_location == "n":
-            if self.end_location == "e":
-                self.quadrant = "ne"
-            else:  # self.end_location == "w"
-                self.quadrant = "nw"
-        elif self.start_location == "s":
-            if self.end_location == "e":
-                self.quadrant = "se"
-            else:  # self.end_location == "w"
-                self.quadrant = "sw"
-        elif self.start_location == "e":
-            if self.end_location == "n":
-                self.quadrant = "ne"
-            else:
-                self.quadrant = "se"
-        elif self.start_location == "w":
-            if self.end_location == "n":
-                self.quadrant = "nw"
-            else:
-                self.quadrant = "sw"
-
-
-     # def contextMenuEvent(self, event):
-    #     if len(self.scene().selectedItems()) == 2:
-    #         menu = QMenu()
-    #         menu.addAction("Align horizontally", self.align_horizontally)
-    #         menu.addAction("Align vertically", self.align_vertically)
-    #         menu.addAction("Move", self.show_move_dialog)  # Add the new option here
-    #         menu.exec_(event.screenPos())
-    #     elif len(self.scene().selectedItems()) == 1:
-    #         menu = QMenu()
-    #         menu.addAction("Move", self.show_move_dialog)  # Add the new option here
-    #         menu.addAction("Delete", self.arrow_manipulator.delete_arrow)
-    #         menu.exec_(event.screenPos())
-
     def show_move_dialog(self):
         dialog = QDialog()
         layout = QFormLayout()
@@ -281,7 +244,7 @@ class Arrow(QGraphicsSvgItem):
             if os.path.isfile(new_filename):
                 # Load the new SVG file
                 self.svg_file = new_filename
-                self.setSharedRenderer(self.svg_handler.get_renderer(new_filename))
+                self.setSharedRenderer(self.svg_manager.get_renderer(new_filename))
             else:
                 print(f"File {new_filename} does not exist")
 

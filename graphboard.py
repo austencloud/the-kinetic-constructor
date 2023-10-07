@@ -3,11 +3,11 @@ from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QPointF, QTimer
 from PyQt5.QtWidgets import QGraphicsItem, QToolTip
 from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
 from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor, QTransform, QImage
-from staff import Staff
+from objects.staff import Staff
 from grid import Grid
-from arrow import Arrow
+from objects.arrow import Arrow
 import os
-from arrow_manager import Arrow_Manager
+from managers.arrow_manager import Arrow_Manager
 from exporter import Exporter
 from settings import Settings
 from info_tracker import Info_Tracker
@@ -21,7 +21,7 @@ class Graphboard_View(QGraphicsView):
                  grid,
                  info_tracker,
                  staff_manager,
-                 svg_handler,
+                 svg_manager,
                  arrow_manager,
                  ui_setup,
                  generator,
@@ -37,7 +37,7 @@ class Graphboard_View(QGraphicsView):
         self.graphboard_scene = graphboard_scene
         self.staff_manager = staff_manager
         self.info_tracker = info_tracker
-        self.svg_handler = svg_handler
+        self.svg_manager = svg_manager
         self.generator = generator
         self.ui_setup = ui_setup
         self.sequence_manager = sequence_manager
@@ -171,7 +171,7 @@ class Graphboard_View(QGraphicsView):
             dropped_svg = event.mimeData().text()
             motion_type = dropped_svg.split('_')[1]
 
-            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_handler, self.arrow_manager, motion_type, self.staff_manager)
+            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_manager, self.arrow_manager, motion_type, self.staff_manager)
             
             # Extract attributes from the SVG file name
             attributes_from_file = dropped_svg.split('\\')[-1].split('_')

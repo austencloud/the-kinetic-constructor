@@ -4,8 +4,8 @@ from PyQt5.QtGui import QFont
 import json
 import random
 import os
-from arrow import Arrow
-from handlers import Svg_Handler
+from objects.arrow import Arrow
+from managers.svg_manager import Svg_Manager
 from lxml import etree
 from menus import Context_Menu_Handler
 from exporter import Exporter
@@ -19,7 +19,7 @@ class Pictograph_Generator():
         self.current_letter = None
         self.main_window = main_window
         self.arrow_handler = arrow_handler
-        self.svg_handler = Svg_Handler()
+        self.svg_manager = Svg_Manager()
         self.context_menu_handler = context_menu_handler
         self.exporter = exporter
         self.grid = grid
@@ -115,10 +115,10 @@ class Pictograph_Generator():
             if all(key in combination for key in ['color', 'motion_type', 'rotation_direction', 'quadrant', 'turns']):
                 if combination['motion_type'] == 'static':
                     svg_file = f"images/arrows/blank.svg"
-                    arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.arrow_handler, combination['motion_type'], self.staff_manager)
+                    arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_handler, combination['motion_type'], self.staff_manager)
                 elif combination['motion_type'] == 'anti' or combination['motion_type'] == 'pro':
                     svg_file = f"images/arrows/shift/{combination['motion_type']}/{combination['color']}_{combination['motion_type']}_{combination['rotation_direction']}_{combination['quadrant']}_{combination['turns']}.svg"
-                    arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_handler, self.arrow_handler, combination['motion_type'], self.staff_manager)
+                    arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_handler, combination['motion_type'], self.staff_manager)
                     arrow.set_attributes(combination)
                     arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
                     arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)

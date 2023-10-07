@@ -1,4 +1,4 @@
-from arrow import Arrow
+from objects.arrow import Arrow
 from data import *
 import json
 

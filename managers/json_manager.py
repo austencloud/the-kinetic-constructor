@@ -1,6 +1,6 @@
 import json
 import os
-from arrow import Arrow
+from objects.arrow import Arrow
 
 
 class Mini_Json_Manager:

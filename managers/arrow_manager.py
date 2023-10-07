@@ -2,7 +2,7 @@ import os
 from PyQt5.QtSvg import QSvgRenderer
 from PyQt5.QtWidgets import QGraphicsItem
 from PyQt5.QtCore import pyqtSignal, QObject
-from arrow import Arrow
+from objects.arrow import Arrow
 class Arrow_Manager(QObject):
 
     def __init__(self, graphboard_view, staff_manager):
@@ -222,12 +222,12 @@ class Arrow_Manager(QObject):
         for arrow in selected_items:
             if isinstance(arrow, Arrow):
                 # Create a ghost arrow with the same attributes
-                ghost_arrow = Arrow(None, arrow.graphboard_view, arrow.info_tracker, arrow.svg_handler, self, 'static', arrow.staff_manager)
+                ghost_arrow = Arrow(None, arrow.graphboard_view, arrow.info_tracker, arrow.svg_manager, self, 'static', arrow.staff_manager)
 
                 attributes = {
                     'color': arrow.color,
-                    'quadrant': None,
-                    'rotation_direction': None,
+                    'quadrant': 'None',
+                    'rotation_direction': 'None',
                     'motion_type': "static",
                     'start_location': arrow.end_location,
                     'end_location': arrow.end_location,
