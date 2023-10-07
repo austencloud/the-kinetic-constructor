@@ -31,11 +31,27 @@ class Arrow(QGraphicsSvgItem):
         self.svg_handler = svg_handler
         self.dragStarted = False
         self.arrow_manipulator = arrow_manipulator
-
+        self.color = None
+        self.start_location = None
+        self.end_location = None
         self.turns = 0
         # Assuming `arrow` is an instance of the Arrow class
 
+        if svg_file is not None:
+            self.set_attributes_from_svg(svg_file)
+            
+            if 'red' in svg_file:
+                self.color = 'red'
+            elif 'blue' in svg_file:
+                self.color = 'blue'
+            else:
+                if svg_file == "images/arrows/blank.svg":
+                    self.color = None
+                else:
+                    raise ValueError(f"Invalid filename: {svg_file}. Filename must contain either 'red' or 'blue'.")
 
+
+    def set_attributes_from_svg(self, svg_file):
         with open('pictographs.json') as f:
             self.pictographs = json.load(f)
 
@@ -52,18 +68,11 @@ class Arrow(QGraphicsSvgItem):
             self.setFlag(QGraphicsSvgItem.ItemIsSelectable, True)
             self.setTransformOriginPoint(self.boundingRect().center())
 
-        if 'red' in svg_file:
-            self.color = 'red'
-        elif 'blue' in svg_file:
-            self.color = 'blue'
-        else:
-            if svg_file == "images/arrows/blank.svg":
-                self.color = None
-            else:
-                raise ValueError(f"Invalid filename: {svg_file}. Filename must contain either 'red' or 'blue'.")
+
 
         self.arrow_start_end_locations = self.get_arrow_start_end_locations(self.svg_file)
         self.start_location, self.end_location = self.arrow_start_end_locations.get(os.path.basename(svg_file), (None, None))
+
 
     def get_arrow_start_end_locations(self, svg_file):
         base_name = os.path.basename(svg_file)  
@@ -93,19 +102,22 @@ class Arrow(QGraphicsSvgItem):
 
     def set_attributes(self, attributes):
         self.color = attributes.get('color', self.color)
-        self.quadrant = self.svg_file.split('_')[3]
         self.quadrant = attributes.get('quadrant', self.quadrant)
-        self.rotation_direction = self.svg_file.split('_')[2]
-        self.arrow_turns = self.svg_file.split('_')[-1].replace('.svg', '')
+        self.rotation_direction = attributes.get('rotation_direction', self.rotation_direction)
+        self.turns = attributes.get('turns', self.turns)
         self.motion_type = attributes.get('motion_type', self.motion_type)
         self.start_location = attributes.get('start_location', self.start_location)
         self.end_location = attributes.get('end_location', self.end_location)
         self.update_arrow_image() 
 
+
     def set_orientation(self, orientation):
         self.orientation = orientation
         self.orientationChanged.emit() 
 
+    def set_staff(self, staff):
+        self.staff = staff
+        
     ### GETTERS ###
 
     def get_attributes(self):
@@ -121,6 +133,8 @@ class Arrow(QGraphicsSvgItem):
         }
         return attributes
 
+    def get_staff(self):
+        return self.staff
     
     def get_arrow_start_position(arrow):
         # Assuming that the 'start_location' attribute of an arrow is a direction
@@ -300,7 +314,6 @@ class Arrow(QGraphicsSvgItem):
             self.motion_type = parts[1]
             self.rotation_direction = parts[2]
             self.quadrant = parts[3].split('.')[0]
-
 
 
 

@@ -45,4 +45,9 @@ class Staff(QGraphicsSvgItem):
         
     def isVisible(self):
         return super().isVisible()
+    
+    def set_arrow(self, arrow):
+        self.arrow = arrow
 
+    def get_arrow(self):
+        return self.arrow

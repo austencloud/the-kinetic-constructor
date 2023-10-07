@@ -1,23 +1,10 @@
 import os
-import json
-import os
-import xml.etree.ElementTree as ET
-import json
-import re
-from PyQt5.QtGui import QImage, QPainter, QPainterPath, QTransform
 from PyQt5.QtSvg import QSvgRenderer
-from PyQt5.QtWidgets import QMenu, QDialog, QFormLayout, QSpinBox, QDialogButtonBox
-from PyQt5.QtCore import Qt, pyqtSignal, QObject
-from svg.path import Line, CubicBezier, QuadraticBezier, Arc, Close
+from PyQt5.QtWidgets import QGraphicsItem
+from PyQt5.QtCore import pyqtSignal, QObject
 from arrow import Arrow
-from staff import Staff
-from grid import Grid
-from lxml import etree
-from copy import deepcopy
-
-
 class Arrow_Manager(QObject):
-    arrowDeleted = pyqtSignal()  # New signal to indicate an arrow has been deleted
+
     def __init__(self, graphboard_view, staff_manager):
         super().__init__()
         self.graphboard_view = graphboard_view
@@ -74,12 +61,12 @@ class Arrow_Manager(QObject):
             elif motion_type == "pro":
                 new_motion_type = "anti"
                 new_folder = folder.replace("pro", "anti")
-            elif motion_type == "static":
+            elif motion_type == "ghost":
                 new_motion_type = "dash"
-                new_folder = folder.replace("static", "dash")
+                new_folder = folder.replace("ghost", "dash")
             elif motion_type == "dash":
-                new_motion_type = "static"
-                new_folder = folder.replace("dash", "static")
+                new_motion_type = "ghost"
+                new_folder = folder.replace("dash", "ghost")
             else:
                 print(f"Unknown motion type: {motion_type}")
                 continue
@@ -213,49 +200,57 @@ class Arrow_Manager(QObject):
     def delete_staff(self, staffs):
         if staffs:
             for staff in staffs:
+                # Step 1: Identify and remove associated ghost arrows
+                ghost_arrow = staff.get_arrow()  # Assuming you have a method that returns the associated ghost arrow
+                if ghost_arrow:
+                    self.graphboard_view.scene().removeItem(ghost_arrow)
+                    print(f"Ghost arrow for {staff.color} staff deleted")
+                
+                # Remove the staff
                 staff.hide()
                 self.graphboard_view.scene().removeItem(staff)
                 print(f"{staff.color} staff deleted")
+                
+                # Step 3: Update the info tracker
+                
                 self.info_tracker.update()
                 self.graphboard_view.update_letter(self.info_tracker.determine_current_letter_and_type()[0])
         else:
             print("No staffs selected")
 
-    def delete_arrow(self, arrows):
-        if len(arrows) != 0:
-            # Store the colors of the arrows being deleted
-            deleted_colors = [arrow.color for arrow in arrows]
-            deleted_end_locations = [arrow.end_location for arrow in arrows]
-            
-            # Remove arrow from the scene
-            for arrow in arrows:
-                self.graphboard_view.scene().removeItem(arrow)
-                print(f"{arrow.color} arrow deleted")
-            
-            # Update the current letter and the board
-            current_letter, type = self.info_tracker.determine_current_letter_and_type()
-            if current_letter:
-                self.graphboard_view.update_letter(current_letter)
-            elif not current_letter:
-                self.graphboard_view.update_letter(None)
-            
-            for color in deleted_colors:
-                remaining_staff = self.info_tracker.check_for_remaining_staff(color)
-                if remaining_staff:
-                    self.info_tracker.remaining_staff[color] = {
-                        'quadrant': 'None',
-                        'rotation': 'None',
-                        'type': 'static',
-                        'start_location': deleted_end_locations[0],  # Changed to dot notation
-                        'end_location': deleted_end_locations[0],    # Changed to dot notation
-                        'turns': 0
-                    }
-            # Final update to the info tracker
-            self.info_tracker.update()
-            letter, type = self.info_tracker.determine_current_letter_and_type()
-            self.graphboard_view.update_letter(letter)
-            
+    def delete_arrow(self, selected_items):
+        for arrow in selected_items:
+            if isinstance(arrow, Arrow):
+                # Create a ghost arrow with the same attributes
+                ghost_arrow = Arrow(None, arrow.graphboard_view, arrow.info_tracker, arrow.svg_handler, self, 'static', arrow.staff_manager)
+
+                attributes = {
+                    'color': arrow.color,
+                    'quadrant': None,
+                    'rotation_direction': None,
+                    'motion_type': "static",
+                    'start_location': arrow.end_location,
+                    'end_location': arrow.end_location,
+                    'turns': arrow.turns
+                }
+
+                ghost_arrow.set_attributes(attributes)
+
+                # ghost_arrow.setVisible(False)  # Make it invisible
+
+                # Associate the ghost arrow with the staff
+                staff = arrow.get_staff()
+                staff.set_arrow(ghost_arrow)
+                
+                # Add the ghost arrow to the scene (it won't be visible)
+                self.graphboard_scene.addItem(ghost_arrow)
+                
+                # Remove the original arrow
+                self.graphboard_scene.removeItem(arrow)
+                self.info_tracker.update()
         else:
             print("No items selected")
+            
+
 
          

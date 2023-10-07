@@ -7270,5 +7270,1548 @@
                 "turns": 0
             }
         ]
+    ],
+    "W": [
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "se",
+                "rotation_direction": "l",
+                "start_location": "s",
+                "type": "pro",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "sw",
+                "rotation_direction": "l",
+                "start_location": "w",
+                "type": "pro",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "nw",
+                "rotation_direction": "l",
+                "start_location": "n",
+                "type": "pro",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "n",
+                "quadrant": "ne",
+                "rotation_direction": "l",
+                "start_location": "e",
+                "type": "pro",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "ne",
+                "rotation_direction": "r",
+                "start_location": "n",
+                "type": "pro",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "n",
+                "quadrant": "nw",
+                "rotation_direction": "r",
+                "start_location": "w",
+                "type": "pro",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "sw",
+                "rotation_direction": "r",
+                "start_location": "s",
+                "type": "pro",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "se",
+                "rotation_direction": "r",
+                "start_location": "e",
+                "type": "pro",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "se",
+                "rotation_direction": "l",
+                "start_location": "s",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "sw",
+                "rotation_direction": "l",
+                "start_location": "w",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "n",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "nw",
+                "rotation_direction": "l",
+                "start_location": "n",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "ne",
+                "rotation_direction": "l",
+                "start_location": "e",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "ne",
+                "rotation_direction": "r",
+                "start_location": "n",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "nw",
+                "rotation_direction": "r",
+                "start_location": "w",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "sw",
+                "rotation_direction": "r",
+                "start_location": "s",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "se",
+                "rotation_direction": "r",
+                "start_location": "e",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "n",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            }
+        ]
+    ],
+    "X": [
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "se",
+                "rotation_direction": "r",
+                "start_location": "s",
+                "type": "anti",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "sw",
+                "rotation_direction": "r",
+                "start_location": "w",
+                "type": "anti",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "nw",
+                "rotation_direction": "r",
+                "start_location": "n",
+                "type": "anti",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "n",
+                "quadrant": "ne",
+                "rotation_direction": "r",
+                "start_location": "e",
+                "type": "anti",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "ne",
+                "rotation_direction": "l",
+                "start_location": "n",
+                "type": "anti",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "n",
+                "quadrant": "nw",
+                "rotation_direction": "l",
+                "start_location": "w",
+                "type": "anti",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "sw",
+                "rotation_direction": "l",
+                "start_location": "s",
+                "type": "anti",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "se",
+                "rotation_direction": "l",
+                "start_location": "e",
+                "type": "anti",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "se",
+                "rotation_direction": "r",
+                "start_location": "s",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "sw",
+                "rotation_direction": "r",
+                "start_location": "w",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "n",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "nw",
+                "rotation_direction": "r",
+                "start_location": "n",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "ne",
+                "rotation_direction": "r",
+                "start_location": "e",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "ne",
+                "rotation_direction": "l",
+                "start_location": "n",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "alpha1"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "nw",
+                "rotation_direction": "l",
+                "start_location": "w",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "alpha4"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "sw",
+                "rotation_direction": "l",
+                "start_location": "s",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "se",
+                "rotation_direction": "l",
+                "start_location": "e",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "n",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            }
+        ]
+    ],
+    "Y": [
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "se",
+                "rotation_direction": "r",
+                "start_location": "e",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "sw",
+                "rotation_direction": "r",
+                "start_location": "s",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "nw",
+                "rotation_direction": "r",
+                "start_location": "w",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "n",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "ne",
+                "rotation_direction": "r",
+                "start_location": "n",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "ne",
+                "rotation_direction": "l",
+                "start_location": "e",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "n",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "sw",
+                "rotation_direction": "l",
+                "start_location": "w",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "nw",
+                "rotation_direction": "r",
+                "start_location": "n",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "se",
+                "rotation_direction": "l",
+                "start_location": "s",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "se",
+                "rotation_direction": "r",
+                "start_location": "e",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "sw",
+                "rotation_direction": "r",
+                "start_location": "s",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "nw",
+                "rotation_direction": "r",
+                "start_location": "w",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "n",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "ne",
+                "rotation_direction": "r",
+                "start_location": "n",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "ne",
+                "rotation_direction": "l",
+                "start_location": "e",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "n",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "sw",
+                "rotation_direction": "l",
+                "start_location": "w",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "nw",
+                "rotation_direction": "r",
+                "start_location": "n",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "se",
+                "rotation_direction": "l",
+                "start_location": "s",
+                "type": "pro",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            }
+        ]
+    ],
+    "Z": [
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "se",
+                "rotation_direction": "l",
+                "start_location": "e",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "sw",
+                "rotation_direction": "l",
+                "start_location": "s",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "nw",
+                "rotation_direction": "l",
+                "start_location": "w",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "n",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "ne",
+                "rotation_direction": "l",
+                "start_location": "n",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "ne",
+                "rotation_direction": "r",
+                "start_location": "e",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "sw",
+                "rotation_direction": "r",
+                "start_location": "w",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "nw",
+                "rotation_direction": "l",
+                "start_location": "n",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "se",
+                "rotation_direction": "r",
+                "start_location": "s",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma6",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "se",
+                "rotation_direction": "l",
+                "start_location": "e",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma7",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "sw",
+                "rotation_direction": "l",
+                "start_location": "s",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma8",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "nw",
+                "rotation_direction": "l",
+                "start_location": "w",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "n",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "ne",
+                "rotation_direction": "l",
+                "start_location": "n",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma2",
+                "end_position": "beta1"
+            },
+            {
+                "color": "blue",
+                "end_location": "n",
+                "quadrant": "ne",
+                "rotation_direction": "r",
+                "start_location": "e",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "n",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "n",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "beta3"
+            },
+            {
+                "color": "blue",
+                "end_location": "s",
+                "quadrant": "sw",
+                "rotation_direction": "r",
+                "start_location": "w",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "s",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "s",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "beta4"
+            },
+            {
+                "color": "blue",
+                "end_location": "w",
+                "quadrant": "nw",
+                "rotation_direction": "l",
+                "start_location": "n",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "w",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "w",
+                "type": "static",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "beta2"
+            },
+            {
+                "color": "blue",
+                "end_location": "e",
+                "quadrant": "se",
+                "rotation_direction": "r",
+                "start_location": "s",
+                "type": "anti",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "end_location": "e",
+                "quadrant": "None",
+                "rotation_direction": "None",
+                "start_location": "e",
+                "type": "static",
+                "turns": 0
+            }
+        ]
     ]
 }

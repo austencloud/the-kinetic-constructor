@@ -33,6 +33,14 @@ class Info_Tracker:
                 state[item] = item.get_attributes()
         return state
 
+    def get_current_staff_state(self):
+        staff_state = {}
+        for item in self.graphboard_view.items():
+            if isinstance(item, Staff):
+                staff_state[item] = item.get_attributes()  # Assuming Staff has a get_attributes method
+        return staff_state
+
+
     def get_current_letter(self):
         if self.letter is not None:
             return self.letter
@@ -78,6 +86,8 @@ class Info_Tracker:
         self.letter = None  # Set to None if no match is found
 
         return self.letter, letter_type  # Always return two values
+
+
 
     def get_positional_relationship(self, start1, end1, start2, end2):
         start1_compass = Arrow.get_position_from_locations(start1, start1)
@@ -131,6 +141,10 @@ class Info_Tracker:
         except FileNotFoundError:
             return {}
     
+    def update_from_arrow_manager(self, remaining_staff):
+        self.remaining_staff = remaining_staff
+        self.update()  # Assuming update() refreshes the display    
+    
     def update(self):
         current_combination = []
         self.remaining_staff = {}  # Initialize an empty dictionary to store remaining staff info
@@ -156,42 +170,43 @@ class Info_Tracker:
             if isinstance(item, Arrow):
                 attributes = item.get_attributes()
                 color = attributes.get('color', 'N/A')
-                
+                if not item.isVisible():
+                    attributes['motion_type'] = 'static'
 
-                if color == 'blue':
-                    no_blue_arrows = False
-                    blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
-                    blue_text = blue_text.replace("Rotation: ", f"Rotation: {item.rotation_direction.capitalize()}")
-                    blue_text = blue_text.replace("Type: ", f"Type: {attributes.get('motion_type', 'N/A').capitalize()}")
-                    blue_text = blue_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
-                    blue_text = blue_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
-                    blue_text = blue_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
-                elif color == 'red':
-                    no_red_arrows = False
-                    red_text = red_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
-                    red_text = red_text.replace("Rotation: ", f"Rotation: {attributes.get('rotation_direction').capitalize()}")
-                    red_text = red_text.replace("Type: ", f"Type: {attributes.get('motion_type', 'N/A').capitalize()}")
-                    red_text = red_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
-                    red_text = red_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
-                    red_text = red_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
-
-        if no_blue_arrows and 'blue' in self.remaining_staff:
-            # Update blue_text here based on self.remaining_staff['blue']
-            blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {self.remaining_staff['blue']['quadrant'].upper()}")
-            blue_text = blue_text.replace("Rotation: ", f"Rotation: {self.remaining_staff['blue']['rotation']}")
-            blue_text = blue_text.replace("Type: ", f"Type: {self.remaining_staff['blue']['motion_type']}")
-            blue_text = blue_text.replace("Start: ", f"Start: {self.remaining_staff['blue']['start']}")
-            blue_text = blue_text.replace("End: ", f"End: {self.remaining_staff['blue']['end']}")
-            blue_text = blue_text.replace("Turns: ", f"Turns: {self.remaining_staff['blue']['turns']}")
-
-        if no_red_arrows and 'red' in self.remaining_staff:
-            # Update red_text here based on self.remaining_staff['red']
-            red_text = red_text.replace("Quadrant: ", f"Quadrant: {self.remaining_staff['red']['quadrant'].upper()}")
-            red_text = red_text.replace("Rotation: ", f"Rotation: {self.remaining_staff['red']['rotation']}")
-            red_text = red_text.replace("Type: ", f"Type: {self.remaining_staff['red']['motion_type']}")
-            red_text = red_text.replace("Start: ", f"Start: {self.remaining_staff['red']['start']}")
-            red_text = red_text.replace("End: ", f"End: {self.remaining_staff['red']['end']}")
-            red_text = red_text.replace("Turns: ", f"Turns: {self.remaining_staff['red']['turns']}")
+                if attributes['motion_type'] == 'pro' or attributes['motion_type'] == 'anti':
+                    if color == 'blue':
+                        no_blue_arrows = False
+                        blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
+                        blue_text = blue_text.replace("Rotation: ", f"Rotation: {item.rotation_direction.capitalize()}")
+                        blue_text = blue_text.replace("Type: ", f"Type: {attributes.get('motion_type', 'N/A').capitalize()}")
+                        blue_text = blue_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
+                        blue_text = blue_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
+                        blue_text = blue_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
+                    elif color == 'red':
+                        no_red_arrows = False
+                        red_text = red_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
+                        red_text = red_text.replace("Rotation: ", f"Rotation: {attributes.get('rotation_direction').capitalize()}")
+                        red_text = red_text.replace("Type: ", f"Type: {attributes.get('motion_type', 'N/A').capitalize()}")
+                        red_text = red_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
+                        red_text = red_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
+                        red_text = red_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
+                elif attributes['motion_type'] == 'static':
+                    if color == 'blue':
+                        no_blue_arrows = False
+                        blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant')}")
+                        blue_text = blue_text.replace("Rotation: ", f"Rotation: {item.rotation_direction}")
+                        blue_text = blue_text.replace("Type: ", f"Type: {attributes.get('motion_type', 'N/A').capitalize()}")
+                        blue_text = blue_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
+                        blue_text = blue_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
+                        blue_text = blue_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
+                    elif color == 'red':
+                        no_red_arrows = False
+                        red_text = red_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant')}")
+                        red_text = red_text.replace("Rotation: ", f"Rotation: {attributes.get('rotation_direction')}")
+                        red_text = red_text.replace("Type: ", f"Type: {attributes.get('motion_type', 'N/A').capitalize()}")
+                        red_text = red_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
+                        red_text = red_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
+                        red_text = red_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
 
         # Determine the current letter and its type
         self.letter, current_letter_type = self.determine_current_letter_and_type()
@@ -219,8 +234,25 @@ class Info_Tracker:
 
         self.label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr><tr><td width=100>" + letter_text + "</td></tr></table>")
 
-        # Clear the remaining staff info
+        # Initialize an empty dictionary to store remaining staff info
         self.remaining_staff = {}
+
+               
+        if no_blue_arrows and 'blue' in self.remaining_staff:
+            blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {self.remaining_staff['blue']['quadrant'].upper()}")
+            blue_text = blue_text.replace("Rotation: ", f"Rotation: {self.remaining_staff['blue']['rotation'].upper()}")
+            blue_text = blue_text.replace("Motion: ", f"Motion: {self.remaining_staff['blue']['motion_type'].upper()}")
+            blue_text = blue_text.replace("Start: ", f"Start: {self.remaining_staff['blue']['start'].upper()}")
+            blue_text = blue_text.replace("End: ", f"End: {self.remaining_staff['blue']['end'].upper()}")
+            blue_text = blue_text.replace("Turns: ", f"Turns: {self.remaining_staff['blue']['turns']}")
+
+        if no_red_arrows and 'red' in self.remaining_staff:
+            red_text = red_text.replace("Quadrant: ", f"Quadrant: {self.remaining_staff['red']['quadrant'].upper()}")
+            red_text = red_text.replace("Rotation: ", f"Rotation: {self.remaining_staff['red']['rotation'].upper()}")
+            red_text = red_text.replace("Motion: ", f"Motion: {self.remaining_staff['red']['motion_type'].upper()}")
+            red_text = red_text.replace("Start: ", f"Start: {self.remaining_staff['red']['start'].upper()}")
+            red_text = red_text.replace("End: ", f"End: {self.remaining_staff['red']['end'].upper()}")
+            red_text = red_text.replace("Turns: ", f"Turns: {self.remaining_staff['red']['turns']}")
 
     def get_positions(self):
         positions = []

@@ -220,13 +220,17 @@ class Staff_Manager(QObject):
                     new_staff = Staff(end_location + "_staff",
                                     scene,
                                     self.staff_locations[end_location + "_staff"],
-                                    'vertical' if end_location in ['N', 'S'] else 'horizontal',  # Add this line
+                                    'vertical' if end_location in ['N', 'S'] else 'horizontal',
                                     color,
                                     'images\\staves\\' + end_location + "_staff_" + color + '.svg')
-                
+
+                    new_staff.set_arrow(arrow)
+                    arrow.set_staff(new_staff)
+
                     if new_staff.scene is not self.graphboard_scene:
                         self.graphboard_scene.addItem(new_staff)
                     self.graphboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
+
         self.check_and_replace_staffs()
         
     def hide_all_graphboard_staffs(self):
