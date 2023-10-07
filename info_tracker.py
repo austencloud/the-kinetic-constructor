@@ -157,7 +157,7 @@ class Info_Tracker:
         current_combination = sorted(current_combination, key=lambda x: x['color'])
         self.letters = self.load_letters()
 
-        self.letter, current_letter_type = self.determine_current_letter_and_type()
+
 
         blue_text = "<h2 style='color: #0000FF'>Left</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"
         red_text = "<h2 style='color: #FF0000'>Right</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"

@@ -273,17 +273,17 @@ class Arrow(QGraphicsSvgItem):
 
 
     def update_arrow_image(self):
-        # Construct the new filename based on the arrow's attributes
-        new_filename = f"images\\arrows\\shift\\{self.motion_type}\\{self.color}_{self.motion_type}_{self.rotation_direction}_{self.quadrant}_{self.turns}.svg"
+        if self.motion_type != 'static':
+            # Construct the new filename based on the arrow's attributes
+            new_filename = f"images\\arrows\\shift\\{self.motion_type}\\{self.color}_{self.motion_type}_{self.rotation_direction}_{self.quadrant}_{self.turns}.svg"
 
-        # Check if the file exists
-        if os.path.isfile(new_filename):
-            # Load the new SVG file
-            self.svg_file = new_filename
-            self.setSharedRenderer(self.svg_handler.get_renderer(new_filename))
-        else:
-
-            print(f"File {new_filename} does not exist")
+            # Check if the file exists
+            if os.path.isfile(new_filename):
+                # Load the new SVG file
+                self.svg_file = new_filename
+                self.setSharedRenderer(self.svg_handler.get_renderer(new_filename))
+            else:
+                print(f"File {new_filename} does not exist")
 
     def move_arrows(self):
         items = self.scene().selectedItems()
