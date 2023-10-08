@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QDialog, QVBoxLayout, QGridLayout, QLabel, QGraphics
 from mini_graphboard import Mini_Graphboard_View
 from objects.grid import Grid
 
-class Selection_Dialog(QDialog):
+class Pictograph_Selector(QDialog):
     def __init__(self, combinations, letter, parent=None):
         super().__init__(parent)
         self.setWindowTitle(f"{letter} Variations:")
@@ -33,3 +33,4 @@ class Selection_Dialog(QDialog):
         # TODO: Logic to get the selected pictograph and close the dialog
         self.accept()
         
+

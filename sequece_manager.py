@@ -1,29 +1,26 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QPushButton
-from PyQt5.QtCore import QRectF
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsItem, QGraphicsView
-from PyQt5.QtCore import Qt, QPointF
-from objects.arrow import Arrow
-from graphboard import Graphboard_View
-from objects.grid import Grid
-from pictograph import Pictograph
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QPushButton, QGraphicsView
+from PyQt5.QtCore import QRectF, Qt, QPointF
 from PyQt5.QtGui import QImage, QPainter
+from objects.arrow import Arrow
 from objects.staff import Staff
-from settings import Settings
+from objects.grid import Grid
 from graphboard import Graphboard_View
+from pictograph import Pictograph
+from settings import Settings
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
 class Sequence_Manager():
-    def __init__(self, scene, pictograph_generator, ui_setup, info_tracker):
-        self.graphboard_scene = scene
-        self.beats = [QGraphicsRectItem(QRectF(int(375 * SCALE_FACTOR), 0, int(375 * SCALE_FACTOR), int(375 * SCALE_FACTOR))) for i in range(4)]
-        for i, section in enumerate(self.beats):
-
-            section.setPos(QPointF(i * int(375 * SCALE_FACTOR), 0))
-
+    def __init__(self, sequence_scene, pictograph_generator, ui_setup, info_tracker):
         self.pictographs = [] 
         self.pictograph_generator = pictograph_generator
         self.ui_setup = ui_setup
         self.info_tracker = info_tracker
+        self.sequence_scene = sequence_scene
+        self.beats = [QGraphicsRectItem(QRectF(int(375 * SCALE_FACTOR), 0, int(375 * SCALE_FACTOR), int(375 * SCALE_FACTOR))) for i in range(4)]
+        
+        for i, section in enumerate(self.beats):
+            section.setPos(QPointF(i * int(375 * SCALE_FACTOR), 0))
+
 
     def add_pictograph(self, pictograph):
         # Find the first section that doesn't have a pictograph
@@ -31,11 +28,11 @@ class Sequence_Manager():
             if i >= len(self.pictographs):
                 pictograph.setPos(section.pos())
                 self.pictographs.append(pictograph)
-                self.graphboard_scene.addItem(pictograph)
+                self.sequence_scene.addItem(pictograph)
                 break
 
     def add_to_sequence(self, graphboard):
-        # Get the size of the scene in scene coordinates
+        # Get the size of the sequence_scene in sequence_scene coordinates
         scene_size = graphboard.sceneRect().size().toSize()
 
         # Add the height of the letter (assuming it's 200 pixels tall, adjust as necessary)
@@ -49,10 +46,9 @@ class Sequence_Manager():
         # deselect all items
         graphboard.clear_selection()
 
-        # Render the scene
+        # Render the sequence_scene
         graphboard.render(painter)
         painter.end()
-
 
         scaled_image = image.scaled(int(375 * SCALE_FACTOR), int(375 * SCALE_FACTOR), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         pictograph = Pictograph(graphboard.get_state(), scaled_image)
@@ -62,12 +58,12 @@ class Sequence_Manager():
         graphboard.update_letter(None)
         letter = self.info_tracker.get_current_letter()
         self.ui_setup.word_label.setText(self.ui_setup.word_label.text() + letter)
-  
+        self.sequence_scene.update()
+
 
     def add_to_graphboard(self, pictograph: Pictograph, graphboard_view: Graphboard_View):
         state = pictograph.state
         graphboard_view.clear()
-
         
         for arrow_state in state['arrows']:
             arrow = Arrow(arrow_state['svg_file'])
@@ -95,15 +91,17 @@ class Sequence_Manager():
 
     def clear_sequence(self):
         self.pictographs = []
-        for item in self.graphboard_scene.items():
-            self.graphboard_scene.removeItem(item)
+        for item in self.sequence_scene.items():
+            self.sequence_scene.removeItem(item)
         self.ui_setup.word_label.setText("My word: ")
         self.ui_setup.info_tracker.label.setText("")  # Clear the label
+        
+
 class Sequence_Scene(QGraphicsScene):
     def __init__(self, manager=None, parent=None):
         super().__init__(parent)
         self.setSceneRect(0, 0, 4 * 375, 375)
 
-    def set_manager(self, manager):
+    def connect_manager(self, manager):
         self.manager = manager
 

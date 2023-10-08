@@ -16,10 +16,10 @@ class PropBox_View(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setFrameShape(QFrame.NoFrame)
-        layout = QVBoxLayout()  # Create a new QVBoxLayout
-        layout.addWidget(self)  # Add the view to the layout
+        layout = QVBoxLayout()
+        layout.addWidget(self)
         
-        propbox_frame.setLayout(layout)  # Set the layout to the propbox
+        propbox_frame.setLayout(layout)
         propbox_frame.setFixedSize(500, 500)
 
-        return propbox_frame  # Return the QFrame object
+        return propbox_frame

@@ -1,9 +1,6 @@
 
 
 from PyQt5.QtWidgets import QMenu, QMenuBar, QAction, QDialog, QFormLayout, QSpinBox, QDialogButtonBox
-from objects.arrow import Arrow
-from objects.staff import Staff
-
 
 class Context_Menu_Manager:
     def __init__(self, scene, sequence_manager, arrow_manipulator, exporter):
@@ -73,7 +70,6 @@ class Context_Menu_Manager:
         average_x = sum(item.x() for item in items) / len(items)
         for item in items:
             item.setX(average_x)
-
 
 class Menu_Bar(QMenuBar):
     def __init__(self):

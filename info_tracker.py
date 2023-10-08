@@ -19,11 +19,10 @@ class Info_Tracker:
         self.staff_manager = staff_manager
         self.remaining_staff = {}
 
-    def start(self):
-        self.previous_state = self.get_current_state()
-
-    def set_graphboard_view(self, graphboard_view):
+    def connect_graphboard_view(self, graphboard_view):
         self.graphboard_view = graphboard_view
+
+    ### GETTERS ###
 
     def get_current_state(self):
         state = {}
@@ -39,12 +38,36 @@ class Info_Tracker:
                 staff_state[item] = item.get_attributes()
         return staff_state
 
-
     def get_current_letter(self):
         if self.letter is not None:
             return self.letter
         else:
             print("No self.letter found")
+    
+    def get_positional_relationship(self, start1, end1, start2, end2):
+        start1_compass = Arrow.get_position_from_locations(start1, start1)
+        end1_compass = Arrow.get_position_from_locations(end1, end1)
+        start2_compass = Arrow.get_position_from_locations(start2, start2)
+        end2_compass = Arrow.get_position_from_locations(end2, end2)
+
+        if set(start1_compass) == set(start2_compass):
+            start_location = "beta"
+        elif set(start1_compass) == set(["n", "s"]) or set(start1_compass) == set(["e", "w"]):
+            start_location = "alpha"
+        else:
+            start_location = "gamma"
+
+        if set(end1_compass) == set(end2_compass):
+            end_location = "beta"
+        elif set(end1_compass) == set(["n", "s"]) or set(end1_compass) == set(["e", "w"]):
+            end_location = "alpha"
+        else:
+            end_location = "gamma"
+
+        return start_location + " to " + end_location
+            
+    
+    
     
     def check_for_changes(self):
         current_state = self.get_current_state()
@@ -88,28 +111,6 @@ class Info_Tracker:
 
 
 
-    def get_positional_relationship(self, start1, end1, start2, end2):
-        start1_compass = Arrow.get_position_from_locations(start1, start1)
-        end1_compass = Arrow.get_position_from_locations(end1, end1)
-        start2_compass = Arrow.get_position_from_locations(start2, start2)
-        end2_compass = Arrow.get_position_from_locations(end2, end2)
-
-        if set(start1_compass) == set(start2_compass):
-            start_location = "beta"
-        elif set(start1_compass) == set(["n", "s"]) or set(start1_compass) == set(["e", "w"]):
-            start_location = "alpha"
-        else:
-            start_location = "gamma"
-
-        if set(end1_compass) == set(end2_compass):
-            end_location = "beta"
-        elif set(end1_compass) == set(["n", "s"]) or set(end1_compass) == set(["e", "w"]):
-            end_location = "alpha"
-        else:
-            end_location = "gamma"
-
-        return start_location + " to " + end_location
-            
     def generate_arrow_positions():
         arrow_positions = {}
         from main import Main_Window

@@ -1,16 +1,14 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsItem, QApplication, QGraphicsRectItem, QAction, QMenu
-from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QPointF, QTimer
+import os
+from PyQt5.QtWidgets import QGraphicsView, QGraphicsItem, QApplication, QGraphicsRectItem, QAction, QMenu
+from PyQt5.QtCore import Qt, QRectF, QPointF, QTimer
 from PyQt5.QtWidgets import QGraphicsItem, QToolTip
 from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
-from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor, QTransform, QImage
+from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor
 from objects.staff import Staff
 from objects.grid import Grid
 from objects.arrow import Arrow
-import os
-from managers.arrow_manager import Arrow_Manager
-from exporter import Exporter
 from settings import Settings
-from info_tracker import Info_Tracker
+
 
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
@@ -446,10 +444,10 @@ class Graphboard_View(QGraphicsView):
         self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
 
     def clear(self):
-        for arrow in self.scene().items():
-            if isinstance(arrow, Arrow) or isinstance(arrow, Staff):
-                self.scene().removeItem(arrow)
-                del arrow
+        for item in self.scene().items():
+            if isinstance(item, Arrow) or isinstance(item, Staff):
+                self.scene().removeItem(item)
+                del item
 
 
 

@@ -1,21 +1,17 @@
 import os
-
 from PyQt5.QtWidgets import QDialog, QHBoxLayout, QVBoxLayout, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QGridLayout, QPushButton
 from PyQt5.QtGui import QFont, QTransform, QIcon, QPixmap, QPainter
 from PyQt5.QtCore import Qt, QPointF, QEvent, QSize
 from PyQt5.QtSvg import QSvgRenderer
-
 from objects.arrow import Arrow
 from objects.staff import Staff
 from objects.grid import Grid
-
 from managers.arrow_manager import Arrow_Manager
 from managers.staff_manager import Staff_Manager
 from managers.svg_manager import Svg_Manager
 from managers.json_manager import Json_Manager
-
 from generator import Pictograph_Generator
-from sequence import Sequence_Manager, Sequence_Scene
+from sequece_manager import Sequence_Manager, Sequence_Scene
 from info_tracker import Info_Tracker
 from menus import Menu_Bar, Context_Menu_Manager
 from graphboard import Graphboard_View
@@ -23,8 +19,7 @@ from arrowbox import ArrowBox_View
 from propbox import PropBox_View
 from exporter import Exporter
 from settings import Settings
-from pictograph_selector import Selection_Dialog
-
+from pictograph_selector import Pictograph_Selector
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
@@ -50,7 +45,7 @@ class UiSetup(QWidget):
         self.graphboard_view = None
 
 
-        self.initStaffManager()
+        self.init_staff_manager()
         self.initLayouts()
         self.arrow_manager = Arrow_Manager(self.graphboard_view, self.staff_manager)
 
@@ -59,7 +54,7 @@ class UiSetup(QWidget):
         self.initMenus()
         self.initGraphboardView() 
         
-        self.initGenerator() 
+        self.init_generator() 
         self.connectGraphboard()
         self.initArrowBox()
         self.initPropBoxView()
@@ -181,23 +176,6 @@ class UiSetup(QWidget):
         generate_all_button.clicked.connect(lambda: self.generator.generate_all_pictographs(self.staff_manager))
         letter_buttons_layout.addWidget(generate_all_button)
         self.upper_layout.addLayout(letter_buttons_layout)
-
-    def show_pictograph_selector(self, letter):
-        # Fetch all possible combinations for the clicked letter
-        # Assuming self.generator.letters is the dictionary containing all combinations
-        combinations = self.generator.letters.get(letter, [])
-        
-        if not combinations:
-            print(f"No combinations found for letter {letter}")
-            return
-        
-        # Create and show the Pictograph_Selector dialog
-        dialog = Selection_Dialog(combinations, letter, self)
-        result = dialog.exec_()
-        
-        if result == QDialog.Accepted:
-            # TODO: Handle the selected pictograph
-            pass
 
     def initButtons(self):
         button_font = QFont('Helvetica', 14)
@@ -340,9 +318,10 @@ class UiSetup(QWidget):
         self.word_label.setText("My word: ")
 
     def initSequenceScene(self):
-        self.sequence_scene = Sequence_Scene() 
+
+        self.sequence_scene = Sequence_Scene()
         self.sequence_manager = Sequence_Manager(self.sequence_scene, self.generator, self, self.info_tracker)
-        self.sequence_scene.set_manager(self.sequence_manager)
+        self.sequence_scene.connect_manager(self.sequence_manager)
         self.sequence_container = QGraphicsView(self.sequence_scene)
         self.sequence_container.setFixedSize(1960, 500)
         self.sequence_container.show()
@@ -350,10 +329,10 @@ class UiSetup(QWidget):
         clear_sequence_button = self.sequence_manager.get_clear_sequence_button()
         self.lower_layout.addWidget(clear_sequence_button)
 
-    def initGenerator(self):
+    def init_generator(self):
         self.generator = Pictograph_Generator(self.staff_manager, self.graphboard_view, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.Context_Menu_Manager, self.grid)
 
-    def initStaffManager(self):
+    def init_staff_manager(self):
         self.staff_manager = Staff_Manager(self.graphboard_scene)
 
 
@@ -363,7 +342,7 @@ class UiSetup(QWidget):
         self.info_layout.addWidget(self.info_label)
 
     def connectGraphboard(self):
-        self.info_tracker.set_graphboard_view(self.graphboard_view)
+        self.info_tracker.connect_graphboard_view(self.graphboard_view)
         self.graphboard_layout.addWidget(self.graphboard_view)
 
 
@@ -376,6 +355,23 @@ class UiSetup(QWidget):
 
 
 ### EVENTS ###
+
+    def show_pictograph_selector(self, letter):
+        # Fetch all possible combinations for the clicked letter
+        # Assuming self.generator.letters is the dictionary containing all combinations
+        combinations = self.generator.letters.get(letter, [])
+        
+        if not combinations:
+            print(f"No combinations found for letter {letter}")
+            return
+        
+        # Create and show the Pictograph_Selector dialog
+        dialog = Pictograph_Selector(combinations, letter, self)
+        result = dialog.exec_()
+        
+        if result == QDialog.Accepted:
+            # TODO: Handle the selected pictograph
+            pass
 
     def keyPressEvent(self, event):
         self.selected_items = self.graphboard_view.get_selected_items()
@@ -406,6 +402,7 @@ class UiSetup(QWidget):
                 self.arrow_manager.swap_motion_type(self.selected_items)
             elif event.key() == Qt.Key_F:
                 self.sequence_manager.add_to_sequence(self.graphboard_view)
+    
     def eventFilter(self, source, event):
         if event.type() == QEvent.KeyPress:
             self.keyPressEvent(event)
