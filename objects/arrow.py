@@ -54,24 +54,25 @@ class Arrow(QGraphicsSvgItem):
     def set_attributes_from_svg(self, svg_file):
         with open('pictographs.json') as f:
             self.pictographs = json.load(f)
+            
+        if svg_file is not None:
+            if "_l_" in svg_file:
+                self.orientation = "l"
+            elif "_r_" in svg_file:
+                self.orientation = "r"
+            else:
+                print("Unexpected svg_file:", svg_file)
+                self.orientation = "r"
 
-        if "_l_" in svg_file:
-            self.orientation = "l"
-        elif "_r_" in svg_file:
-            self.orientation = "r"
-        else:
-            print("Unexpected svg_file:", svg_file)
-            self.orientation = "r"
-
-        if "grid" not in svg_file:
-            self.setFlag(QGraphicsSvgItem.ItemIsMovable, True)
-            self.setFlag(QGraphicsSvgItem.ItemIsSelectable, True)
-            self.setTransformOriginPoint(self.boundingRect().center())
+            if "grid" not in svg_file:
+                self.setFlag(QGraphicsSvgItem.ItemIsMovable, True)
+                self.setFlag(QGraphicsSvgItem.ItemIsSelectable, True)
+                self.setTransformOriginPoint(self.boundingRect().center())
 
 
 
-        self.arrow_start_end_locations = self.get_arrow_start_end_locations(self.svg_file)
-        self.start_location, self.end_location = self.arrow_start_end_locations.get(os.path.basename(svg_file), (None, None))
+            self.arrow_start_end_locations = self.get_arrow_start_end_locations(self.svg_file)
+            self.start_location, self.end_location = self.arrow_start_end_locations.get(os.path.basename(svg_file), (None, None))
 
 
     def get_arrow_start_end_locations(self, svg_file):
