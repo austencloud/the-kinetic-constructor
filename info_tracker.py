@@ -210,6 +210,8 @@ class Info_Tracker:
             red_text = red_text.replace("End: ", f"End: {self.remaining_staff['red']['end'].upper()}")
             red_text = red_text.replace("Turns: ", f"Turns: {self.remaining_staff['red']['turns']}")
 
+        self.staff_manager.update_graphboard_staffs(self.graphboard_view.scene())
+
     def get_positions(self):
         positions = []
         arrow_items = []

@@ -7,7 +7,7 @@ from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor
 from objects.staff import Staff
 from objects.grid import Grid
 from objects.arrow import Arrow
-from settings import Settings
+from settings import Settings, Graphboard_Constants
 
 
 
@@ -40,12 +40,12 @@ class Graphboard_View(QGraphicsView):
         self.ui_setup = ui_setup
         self.sequence_manager = sequence_manager
         
-        self.renderer = QSvgRenderer()
+
+        self.constants = Graphboard_Constants(self)
         self.exporter = exporter
         self.letter_renderers = {}
         for letter in 'ABCDEFGHIJKLMNOPQRSTUV':
-            renderer = QSvgRenderer(f'images/letters/{letter}.svg')
-            self.letter_renderers[letter] = renderer
+             self.letter_renderers[letter] = QSvgRenderer(f'images/letters/{letter}.svg')
         self.letter_item = QGraphicsSvgItem()
         from views.mini_graphboard_view import Mini_Graphboard_View
         if isinstance(self, Mini_Graphboard_View):
@@ -56,8 +56,8 @@ class Graphboard_View(QGraphicsView):
             self.graphboard_scene.addItem(self.grid)
         self.arrow_manager = arrow_manager
         self.arrow_manager.connect_graphboard_scene(self.graphboard_scene)
-        self.setFixedSize(int(750 * SCALE_FACTOR), int(900 * SCALE_FACTOR))
-
+        self.setFixedSize(int(750), int(900))
+        self.VERTICAL_OFFSET = self.constants.VERTICAL_OFFSET
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
@@ -66,7 +66,7 @@ class Graphboard_View(QGraphicsView):
     ### MOUSE EVENTS ###
 
     def mousePressEvent(self, event):
-        self.dragStartPosition = event.pos()
+        self.drag_start_position = event.pos()
         self.setFocus()
         items = self.items(event.pos())
         if items and items[0].flags() & QGraphicsItem.ItemIsMovable:
@@ -80,16 +80,13 @@ class Graphboard_View(QGraphicsView):
             self.dragOffset = self.mapToScene(event.pos()) - self.dragging.pos()
             
         else:
-            for arrow in self.scene().selectedItems():
-                arrow.setSelected(False)
+            self.clear_selection()
             self.dragging = None
 
         if event.button() == Qt.LeftButton and not items:
             super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
-        if (event.pos() - self.dragStartPosition).manhattanLength() < QApplication.startDragDistance():
-            return
         if self.dragging:
             new_pos = self.mapToScene(event.pos()) - self.dragOffset
             movement = new_pos - self.dragging.pos()
@@ -97,131 +94,46 @@ class Graphboard_View(QGraphicsView):
             for arrow in self.scene().selectedItems():
                 if isinstance(arrow, Arrow):
                     arrow.setPos(arrow.pos() + movement)
-                    center_pos = arrow.pos() + arrow.boundingRect().center()
-
-                    new_quadrant = self.drag.get_graphboard_quadrants(center_pos)
-
-                    # Check if the quadrant has changed
-                    if arrow.quadrant != new_quadrant:
-                        arrow.quadrant = new_quadrant  # Update the quadrant
-                        base_name = os.path.basename(arrow.svg_file)
-
-                        if base_name.startswith('red_anti'):
-                            new_svg = f'images\\arrows\\shift\\{arrow.motion_type}\\red_anti_{arrow.rotation_direction}_{new_quadrant}_{arrow.turns}.svg'
-                        elif base_name.startswith('red_pro'):
-                            new_svg = f'images\\arrows\\shift\\{arrow.motion_type}\\red_pro_{arrow.rotation_direction}_{new_quadrant}_{arrow.turns}.svg'
-                        elif base_name.startswith('blue_anti'):
-                            new_svg = f'images\\arrows\\shift\\{arrow.motion_type}\\blue_anti_{arrow.rotation_direction}_{new_quadrant}_{arrow.turns}.svg'
-                        elif base_name.startswith('blue_pro'):
-                            new_svg = f'images\\arrows\\shift\\{arrow.motion_type}\\blue_pro_{arrow.rotation_direction}_{new_quadrant}_{arrow.turns}.svg'
-                        else:
-                            print(f"graphboard_view.mouseMoveEvent -- Unexpected svg_file: {arrow.svg_file}")
-                            new_svg = arrow.svg_file 
-
-                        arrow_renderer = QSvgRenderer(new_svg)
-                        if arrow_renderer.isValid():
-                            arrow.setSharedRenderer(arrow_renderer)
-                            arrow.svg_file = new_svg
-                            if arrow.motion_type == 'pro' or arrow.motion_type == 'anti':
-                                arrow.set_attributes_from_filename()
-                            
+                    new_quadrant = self.drag.get_graphboard_quadrants(arrow.get_center_position())
                     
-
-                        self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
+                    if arrow.quadrant != new_quadrant:
+                        arrow.update_arrow_for_new_quadrant(new_quadrant)
                         self.info_tracker.update()
 
-    def dragEnterEvent(self, event):
-        if event.mimeData().hasFormat('text/plain'):
-            event.setDropAction(Qt.CopyAction)
-            event.accept()
-        else:
-            event.ignore()
-        arrow = self.itemAt(event.pos())
-        if isinstance(arrow, Arrow):
-            arrow.in_graphboard = True
-        super().dragEnterEvent(event)
-
     def dragMoveEvent(self, event):
-        self.last_known_pos = event.pos() 
-        if event.mimeData().hasFormat('text/plain'):
-            dropped_svg = event.mimeData().text()
-            base_name = os.path.basename(dropped_svg)
-            color, motion_type, rotation_direction, quadrant, turns = base_name.split('_')[:5]
+        dropped_svg = event.mimeData().text()
+        base_name = os.path.basename(dropped_svg)
+        color = base_name.split('_')[0]
 
-            for arrow in self.scene().items():
-                if isinstance(arrow, Arrow):
-                    if arrow.color == color:
-                        event.ignore()
-                        QToolTip.showText(QCursor.pos(), "Cannot add another arrow of the same color.")
-                        return
-            event.accept()
-            QToolTip.hideText() 
-        else:
-            event.ignore()
-
-    def dragLeaveEvent(self, event):
-        arrow = self.itemAt(self.last_known_pos)
-        if isinstance(arrow, Arrow):
-            arrow.in_graphboard = False
-        super().dragLeaveEvent(event)
+        for arrow in self.scene().items():
+            if isinstance(arrow, Arrow):
+                if arrow.color == color:
+                    event.ignore()
+                    QToolTip.showText(QCursor.pos(), "Cannot add two motions of the same color.")
+                    return
+        event.accept()
+        QToolTip.hideText() 
 
     def dropEvent(self, event):
         self.setFocus()
-        if event.mimeData().hasFormat('text/plain'):
-            event.setDropAction(Qt.CopyAction)
-            event.accept()
-            dropped_svg = event.mimeData().text()
-            motion_type = dropped_svg.split('_')[1]
+        event.setDropAction(Qt.CopyAction)
+        event.accept()
+        
+        dropped_arrow_svg = event.mimeData().text()
+        self.arrow = Arrow(dropped_arrow_svg, self, self.info_tracker, self.svg_manager, self.arrow_manager, None, self.staff_manager, None)
+        self.scene().addItem(self.arrow)
+        pos = self.mapToScene(event.pos()) - self.arrow.boundingRect().center()
+        self.arrow.setPos(pos)
 
-            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_manager, self.arrow_manager, motion_type, self.staff_manager, None)
-            
-            # Extract attributes from the SVG file name
-            attributes_from_file = dropped_svg.split('\\')[-1].split('_')
-            self.arrow_item.color = attributes_from_file[0]
-            self.arrow_item.motion_type = attributes_from_file[1]
-            self.arrow_item.rotation_direction = attributes_from_file[2]
-            self.arrow_item.quadrant = attributes_from_file[3]
-            self.arrow_item.turns = attributes_from_file[-1].replace('.svg', '')
+        self.clear_selection()
+        self.arrow.setSelected(True)
 
-            # Set start_location and end_location based on the SVG file name
-            base_name = os.path.basename(dropped_svg)
-            start_end_tuple = self.arrow_item.arrow_start_end_locations.get(base_name, (None, None))
-            if start_end_tuple != (None, None):
-                self.arrow_item.start_location, self.arrow_item.end_location = start_end_tuple
-            else:
-                print("Warning: Could not determine start and end locations.")
+        adjusted_arrow_pos = self.arrow.pos() + self.arrow.boundingRect().center()
+        quadrant = self.drag.get_graphboard_quadrants(adjusted_arrow_pos)
+        self.drag.update_arrow_svg(self.arrow, quadrant)
+        self.arrow.update_attributes()
 
-            # Convert turns to integer
-            self.arrow_item.turns = int(attributes_from_file[-1].replace('.svg', ''))
-
-            self.scene().addItem(self.arrow_item)
-            pos = self.mapToScene(event.pos()) - self.arrow_item.boundingRect().center()
-            self.arrow_item.setPos(pos)
-
-            for arrow in self.scene().items():
-                if isinstance(arrow, Arrow):
-                    arrow.setSelected(False)
-            self.arrow_item.setSelected(True)
-
-            adjusted_arrow_pos = self.arrow_item.pos() + QPointF(0, 75)
-            quadrant = self.drag.get_graphboard_quadrants(adjusted_arrow_pos)
-
-
-            self.arrow_item.quadrant = quadrant
-            self.drag.update_arrow_svg(self.arrow_item, quadrant)
-            self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
-
-            current_letter, current_letter_type = self.info_tracker.determine_current_letter_and_type()
-
-            self.update_letter(current_letter)
-            self.info_tracker.check_for_changes()
-
-            # Call this only once after all updates
-            self.info_tracker.update()
-
-        else:
-            event.ignore()
-
+        self.info_tracker.update()
 
     ### GETTERS ###
 
@@ -328,6 +240,7 @@ class Graphboard_View(QGraphicsView):
     def clear_selection(self):
         for arrow in self.scene().selectedItems():
             arrow.setSelected(False)
+
 
 
     ### SETTERS ###
@@ -461,9 +374,9 @@ class Graphboard_View(QGraphicsView):
                 del item
 
 class Quadrant_Preview_Drag(QDrag):
-    def __init__(self, source, arrow_item, info_tracker, *args, **kwargs):
+    def __init__(self, source, arrow, info_tracker, *args, **kwargs):
         super().__init__(source, *args, **kwargs)
-        self.arrow_item = arrow_item
+        self.arrow = arrow
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_pixmap)
         self.info_tracker = info_tracker
@@ -478,10 +391,10 @@ class Quadrant_Preview_Drag(QDrag):
         mouse_pos = self.source().mapFromGlobal(self.source().cursor().pos())
 
         quadrant, base_name = self.get_graphboard_quadrants(mouse_pos)
-        self.update_arrow_svg(self.arrow_item, quadrant)
+        self.update_arrow_svg(self.arrow, quadrant)
         new_svg = f'images\\arrows\\red\\r\\anti\\red_anti_r_{quadrant}.svg'
         arrow_renderer = QSvgRenderer(new_svg)
-        self.arrow_item.setSharedRenderer(arrow_renderer)
+        self.arrow.setSharedRenderer(arrow_renderer)
 
         if arrow_renderer.isValid():
             pixmap = QPixmap(self.pixmap().size())

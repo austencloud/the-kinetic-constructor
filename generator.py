@@ -1,7 +1,5 @@
 from PyQt5.QtWidgets import QGraphicsItem
 from PyQt5.QtCore import QPointF
-
-import json
 import random
 import os
 from objects.arrow import Arrow
@@ -23,7 +21,7 @@ class Pictograph_Generator():
         self.exporter = exporter
         self.grid = grid
         self.json_manager = json_manager
-        
+        self.output_dir = "images\\pictographs\\"
         self.letters = self.json_manager.load_all_letters()
 
     # Load the JSON file
@@ -36,9 +34,6 @@ class Pictograph_Generator():
         # Iterate over all combinations for each letter
         for letter, combinations in self.letters.items():
             for combination in combinations:
-                # Generate the pictograph for the combination
-                self.open_selection_window(letter)
-
                 # Find the dictionary in the combination list that contains the 'start_position' and 'end_position' keys
                 positions_dict = next((d for d in combination if 'start_position' in d and 'end_position' in d), None)
                 if positions_dict is None:
@@ -115,8 +110,7 @@ class Pictograph_Generator():
                     arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_handler, combination['motion_type'], self.staff_manager)
                 elif combination['motion_type'] == 'anti' or combination['motion_type'] == 'pro':
                     svg_file = f"images/arrows/shift/{combination['motion_type']}/{combination['color']}_{combination['motion_type']}_{combination['rotation_direction']}_{combination['quadrant']}_{combination['turns']}.svg"
-                    arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_handler, combination['motion_type'], self.staff_manager)
-                    arrow.set_attributes(combination)
+                    arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_handler, combination['motion_type'], self.staff_manager, None)
                     arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
                     arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
                 # Add the created arrow to the list

@@ -1,5 +1,6 @@
 import re
 from PyQt5.QtGui import QImage, QPainter
+from PyQt5.QtCore import QPointF
 from objects.arrow import Arrow
 from objects.staff import Staff
 from objects.grid import Grid
@@ -111,6 +112,18 @@ class Exporter:
 
         for item in selectedItems:
             item.setSelected(True)
+
+    def get_staff_position(self, staff):
+        staff_svg = etree.parse(staff.svg_file)
+        rect_elements = staff_svg.getroot().findall('.//{http://www.w3.org/2000/svg}rect')
+        position = None
+
+        for rect_element in rect_elements:
+            if 'x' in rect_element.attrib and 'y' in rect_element.attrib:
+                position = QPointF(float(rect_element.attrib['x']), float(rect_element.attrib['y']))
+                break
+
+        return position
 
     def get_fill_color(self, svg_file):
         svg = etree.parse(svg_file)

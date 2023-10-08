@@ -191,9 +191,7 @@ class Arrow_Manager(QObject):
             if isinstance(item, Arrow):
                 item.setSelected(True)
     
-    def deselectAll(self):
-        for item in self.graphboard_view.selectedItems():
-            item.setSelected(False)
+
 
 
     def delete_staff(self, staffs):
