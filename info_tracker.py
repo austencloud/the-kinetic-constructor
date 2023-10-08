@@ -27,31 +27,17 @@ class Info_Tracker:
 
     ### GETTERS ###
 
-    def get_current_state(self):
-        state = {}
-        for item in self.graphboard_view.items():
-            if isinstance(item, Arrow):
-                state[item] = item.get_attributes()
-        return state
-
-    def get_current_staff_state(self):
-        staff_state = {}
-        for item in self.graphboard_view.items():
-            if isinstance(item, Staff):
-                staff_state[item] = item.get_attributes()
-        return staff_state
-
     def get_current_letter(self):
         if self.letter is not None:
             return self.letter
         else:
             print("No self.letter found")
     
-    
-    
     def check_for_changes(self):
-        current_state = self.get_current_state()
-
+        current_state = {}
+        for item in self.graphboard_view.items():
+            if isinstance(item, Arrow):
+                current_state[item] = item.get_attributes()
         if current_state != self.previous_state:
             self.update()
             self.previous_state = current_state
@@ -67,14 +53,11 @@ class Info_Tracker:
         for item in self.graphboard_view.items():
             if isinstance(item, Arrow):
                 attributes = item.get_attributes()
-                # Sort the dictionary by its keys
                 sorted_attributes = {k: attributes[k] for k in sorted(attributes.keys())}
                 current_combination.append(sorted_attributes)
         # Sort the list of dictionaries by the 'color' key
         current_combination = sorted(current_combination, key=lambda x: x['color'])
-        
-        letter_type = None  # Initialize current_type to None
-        
+        letter_type = None
         for letter, combinations in self.letters.items():
             combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]
             if current_combination in combinations:
@@ -84,7 +67,6 @@ class Info_Tracker:
                         current_type = type
                         break
                 return self.letter, current_type  # Return both values here
-        
         self.letter = None  # Set to None if no match is found
 
         return self.letter, letter_type  # Always return two values
@@ -136,7 +118,6 @@ class Info_Tracker:
 
         current_combination = sorted(current_combination, key=lambda x: x['color'])
         self.letters = self.load_letters()
-
 
 
         blue_text = "<h2 style='color: #0000FF'>Left</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"

@@ -56,7 +56,8 @@ class Sequence_Manager(QObject):
         graphboard.clear()
         graphboard.update_letter(None)
         letter = self.info_tracker.get_current_letter()
-        self.ui_setup.word_label.setText(self.ui_setup.word_label.text() + letter)
+        if letter:
+            self.ui_setup.word_label.setText(self.ui_setup.word_label.text() + letter)
         self.sequence_scene.update()
 
 

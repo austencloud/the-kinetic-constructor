@@ -63,71 +63,66 @@ class Mini_Graphboard_View(QGraphicsView):
         return centers.get(quadrant, QPointF(0, 0 - self.VERTICAL_OFFSET))  # Subtract VERTICAL_OFFSET from default y-coordinate
 
 
-
-
-
     def add_arrows_to_mini_graphboard(self, combination):
-        DISTANCE = 20 # This is the distance between the arrows and the center of the quadrant
-        
-        # Create a list to store the created arrows
+        DISTANCE = 20
         created_arrows = []
-
-        # Find the optimal positions dictionary in combination
-        optimal_positions = next((d for d in combination if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
- 
+        optimal_locations = next((d for d in combination if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
         for arrow_dict in combination:
             # Check if the dictionary has all the keys you need         
             if all(key in arrow_dict for key in ['color', 'motion_type', 'rotation_direction', 'quadrant', 'turns']):
-                if arrow_dict['motion_type'] == 'static':
-                    svg_file = None
-                else:
+                
+                if arrow_dict['motion_type'] == 'pro' or arrow_dict['motion_type'] == 'anti':
                     svg_file = f"images/arrows/shift/{arrow_dict['motion_type']}/{arrow_dict['color']}_{arrow_dict['motion_type']}_{arrow_dict['rotation_direction']}_{arrow_dict['quadrant']}_{arrow_dict['turns']}.svg"
+                    arrow = Arrow(svg_file, self, self.info_tracker, self.svg_manager, self.arrow_manager, arrow_dict['motion_type'], self.staff_manager, arrow_dict)
+                    arrow.update_attributes()
+                    arrow.setFlag(QGraphicsItem.ItemIsMovable, False)
+                    arrow.setFlag(QGraphicsItem.ItemIsSelectable, False)
 
-                arrow = Arrow(svg_file, self, self.info_tracker, self.svg_manager, self.arrow_manager, arrow_dict['motion_type'], self.staff_manager)
-                arrow.set_attributes(arrow_dict)
-                arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
-                arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
+                    # Add the created arrow to the list
+                    created_arrows.append(arrow)
 
-                # Add the created arrow to the list
-                created_arrows.append(arrow)
+                    # Position the arrows
+                    for arrow in created_arrows:
+                        arrow_transform = QTransform()
+                        arrow_transform.scale(PICTOGRAPH_SCALE, PICTOGRAPH_SCALE)
+                        arrow.setTransform(arrow_transform)
+                        BUFFER = (self.width() - self.mini_grid.boundingRect().width()) / 2
+
+                        # Calculate the center of the bounding rectangle
+                        center = arrow.boundingRect().center()
+
+                        if optimal_locations:
+                            optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
+                            if optimal_location:
+                                # Adjust the position based on the center
+                                pos = QPointF(optimal_location['x'] * PICTOGRAPH_SCALE - BUFFER, optimal_location['y'] * PICTOGRAPH_SCALE - BUFFER) - center * PICTOGRAPH_SCALE
+                                new_pos = pos + QPointF(0, -self.VERTICAL_OFFSET)
+                                arrow.setPos(new_pos)
+                        else:
+                            pos = self.get_quadrant_center(arrow.quadrant) - center * PICTOGRAPH_SCALE
+                            if arrow.quadrant == 'ne':
+                                pos += QPointF(DISTANCE, -DISTANCE)
+                            elif arrow.quadrant == 'se':
+                                pos += QPointF(DISTANCE, DISTANCE)
+                            elif arrow.quadrant == 'sw':
+                                pos += QPointF(-DISTANCE, DISTANCE)
+                            elif arrow.quadrant == 'nw':
+                                pos += QPointF(-DISTANCE, -DISTANCE)
+                            arrow.setPos(pos)
+                            
+                elif arrow_dict['motion_type'] == 'static':
+                    svg_file = None
+                    arrow = Arrow(None, self, self.info_tracker, self.svg_manager, self.arrow_manager, 'static', self.staff_manager, arrow_dict)
 
                 # Add the arrows to the scene
+            
                 for arrow in created_arrows:
                     if arrow not in self.mini_graphboard_scene.items():
                         self.mini_graphboard_scene.addItem(arrow)
-        # Position the arrows
-        for arrow in created_arrows:
-            arrow_transform = QTransform()
-            arrow_transform.scale(PICTOGRAPH_SCALE, PICTOGRAPH_SCALE)
-            arrow.setTransform(arrow_transform)
-            BUFFER = (self.width() - self.mini_grid.boundingRect().width()) / 2
-
-            # Calculate the center of the bounding rectangle
-            center = arrow.boundingRect().center()
-
-            if optimal_positions:
-                optimal_position = optimal_positions.get(f"optimal_{arrow.get_attributes()['color']}_location")
-                if optimal_position:
-                    # Adjust the position based on the center
-                    pos = QPointF(optimal_position['x'] * PICTOGRAPH_SCALE - BUFFER, optimal_position['y'] * PICTOGRAPH_SCALE - BUFFER) - center * PICTOGRAPH_SCALE
-                    new_pos = pos + QPointF(0, -self.VERTICAL_OFFSET)
-                    arrow.setPos(new_pos)
-            else:
-                pos = self.get_quadrant_center(arrow.get_attributes()['quadrant']) - center * PICTOGRAPH_SCALE
-                # Move the arrow away from the center by 20 points
-                if arrow.get_attributes()['quadrant'] == 'ne':
-                    pos += QPointF(DISTANCE, -DISTANCE)
-                elif arrow.get_attributes()['quadrant'] == 'se':
-                    pos += QPointF(DISTANCE, DISTANCE)
-                elif arrow.get_attributes()['quadrant'] == 'sw':
-                    pos += QPointF(-DISTANCE, DISTANCE)
-                elif arrow.get_attributes()['quadrant'] == 'nw':
-                    pos += QPointF(-DISTANCE, -DISTANCE)
-                arrow.setPos(pos)
-        # Update the staffs
+                            
+                    
         self.staff_manager.update_mini_graphboard_staffs(self.mini_graphboard_scene)
-        # # # Update any trackers or other state
-        # # self.info_tracker.update()
+
         
     def save_optimal_positions(self):
         BUFFER = (self.width() - self.mini_grid.boundingRect().width()) / 2

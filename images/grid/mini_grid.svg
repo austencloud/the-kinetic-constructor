@@ -8,8 +8,9 @@
       .outer_points {
         fill: #231f20;
       }
+      
       .layer2_points {
-        fill: #000000;
+        fill: transparent;
       }
       .hand_points {
         fill: #000000;

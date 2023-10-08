@@ -118,11 +118,15 @@ class Graphboard_View(QGraphicsView):
                             print(f"graphboard_view.mouseMoveEvent -- Unexpected svg_file: {arrow.svg_file}")
                             new_svg = arrow.svg_file 
 
-                        new_renderer = QSvgRenderer(new_svg)
-                        if new_renderer.isValid():
-                            arrow.setSharedRenderer(new_renderer)
+                        arrow_renderer = QSvgRenderer(new_svg)
+                        if arrow_renderer.isValid():
+                            arrow.setSharedRenderer(arrow_renderer)
                             arrow.svg_file = new_svg
-                            arrow.update_locations()
+                            if arrow.motion_type == 'pro' or arrow.motion_type == 'anti':
+                                arrow.set_attributes_from_filename()
+                            
+                    
+
                         self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
                         self.info_tracker.update()
 
@@ -169,7 +173,7 @@ class Graphboard_View(QGraphicsView):
             dropped_svg = event.mimeData().text()
             motion_type = dropped_svg.split('_')[1]
 
-            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_manager, self.arrow_manager, motion_type, self.staff_manager)
+            self.arrow_item = Arrow(dropped_svg, self, self.info_tracker, self.svg_manager, self.arrow_manager, motion_type, self.staff_manager, None)
             
             # Extract attributes from the SVG file name
             attributes_from_file = dropped_svg.split('\\')[-1].split('_')
@@ -220,6 +224,7 @@ class Graphboard_View(QGraphicsView):
 
 
     ### GETTERS ###
+
 
     def get_state(self):
         state = {
@@ -475,13 +480,13 @@ class Quadrant_Preview_Drag(QDrag):
         quadrant, base_name = self.get_graphboard_quadrants(mouse_pos)
         self.update_arrow_svg(self.arrow_item, quadrant)
         new_svg = f'images\\arrows\\red\\r\\anti\\red_anti_r_{quadrant}.svg'
-        new_renderer = QSvgRenderer(new_svg)
-        self.arrow_item.setSharedRenderer(new_renderer)
+        arrow_renderer = QSvgRenderer(new_svg)
+        self.arrow_item.setSharedRenderer(arrow_renderer)
 
-        if new_renderer.isValid():
+        if arrow_renderer.isValid():
             pixmap = QPixmap(self.pixmap().size())
             painter = QPainter(pixmap)
-            new_renderer.render(painter)
+            arrow_renderer.render(painter)
             painter.end()
             self.setPixmap(pixmap)
 
@@ -519,9 +524,13 @@ class Quadrant_Preview_Drag(QDrag):
             print(f"update_arrow_svg -- Unexpected svg_file: {arrow.svg_file}")
             new_svg = arrow.svg_file 
 
-        new_renderer = QSvgRenderer(new_svg)
-        if new_renderer.isValid():
-            arrow.setSharedRenderer(new_renderer)
+        arrow_renderer = QSvgRenderer(new_svg)
+        if arrow_renderer.isValid():
+            arrow.setSharedRenderer(arrow_renderer)
             arrow.svg_file = new_svg
-            arrow.update_locations()
+        if arrow.motion_type == 'pro' or arrow.motion_type == 'anti':
+            arrow.set_attributes_from_filename()
+            arrow.quadrant = self.get_graphboard_quadrants(arrow.pos() + arrow.boundingRect().center())
+            pos = self.source().get_quadrant_center(quadrant) - arrow.boundingRect().center()
+            arrow.setPos(pos)
 

@@ -28,12 +28,7 @@ class Staff(QGraphicsSvgItem):
         #make them selectable
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
-        
-    def update_attributes(self, new_attributes):
-        self.element_id = new_attributes.get('element_id', self.element_id)
-        self.position = new_attributes.get('position', self.position)
-        self.svg_file = new_attributes.get('svg_file', self.svg_file)
-        self.color = new_attributes.get('color', self.color)
+
 
     def hide(self):
         self.setVisible(False)

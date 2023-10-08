@@ -66,7 +66,6 @@ class Staff_Manager(QObject):
         
         for arrow in scene.items():
             if isinstance(arrow, Arrow):
-                # print(f"update_graphboard_staffs -- arrow: {arrow}")
                 end_location = arrow.end_location
 
                 if end_location:
@@ -220,8 +219,8 @@ class Staff_Manager(QObject):
                                     color,
                                     'images\\staves\\' + end_location + "_staff_" + color + '.svg')
 
-                    new_staff.set_arrow(arrow)
-                    arrow.set_staff(new_staff)
+                    new_staff.arrow = arrow
+                    arrow.staff = new_staff
 
                     if new_staff.scene is not self.graphboard_scene:
                         self.graphboard_scene.addItem(new_staff)

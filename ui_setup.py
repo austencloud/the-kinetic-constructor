@@ -269,7 +269,7 @@ class UiSetup(QWidget):
             file_name = os.path.basename(svg_file)
             if file_name in default_arrows:
                 motion_type = file_name.split('_')[1]
-                arrow_item = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_manager, motion_type, self.staff_manager)
+                arrow_item = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_manager, motion_type, self.staff_manager, None)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
                 arrow_item.setScale(0.75)

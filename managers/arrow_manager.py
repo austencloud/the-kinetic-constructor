@@ -3,6 +3,7 @@ from PyQt5.QtSvg import QSvgRenderer
 from PyQt5.QtWidgets import QGraphicsItem
 from PyQt5.QtCore import pyqtSignal, QObject
 from objects.arrow import Arrow
+from data import ARROW_START_END_LOCATIONS
 class Arrow_Manager(QObject):
 
     def __init__(self, graphboard_view, staff_manager):
@@ -40,13 +41,10 @@ class Arrow_Manager(QObject):
 
         self.selected_arrow.update_arrow_image()
         self.selected_arrow.update_arrow_position()
-
-        self.arrow_start_end_locations = self.selected_arrow.get_arrow_start_end_locations(self.selected_arrow.svg_file)
-        self.selected_arrow.start_location, self.selected_arrow.end_location = self.arrow_start_end_locations.get(os.path.basename(self.selected_arrow.svg_file), (None, None))
-
+        self.selected_arrow.update_attributes()
         self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
         self.info_tracker.update()
-        print(self.selected_arrow.quadrant)
+
 
     def swap_motion_type(self, arrows):
         if not isinstance(arrows, list):
@@ -64,12 +62,12 @@ class Arrow_Manager(QObject):
             elif motion_type == "pro":
                 new_motion_type = "anti"
                 new_folder = folder.replace("pro", "anti")
-            elif motion_type == "ghost":
-                new_motion_type = "dash"
-                new_folder = folder.replace("ghost", "dash")
-            elif motion_type == "dash":
-                new_motion_type = "ghost"
-                new_folder = folder.replace("dash", "ghost")
+            # elif motion_type == "static":
+            #     new_motion_type = "dash"
+            #     new_folder = folder.replace("static", "dash")
+            # elif motion_type == "dash":
+            #     new_motion_type = "static"
+            #     new_folder = folder.replace("dash", "static")
             else:
                 print(f"Unknown motion type: {motion_type}")
                 continue
@@ -119,7 +117,7 @@ class Arrow_Manager(QObject):
             if new_renderer.isValid():
                 arrow.setSharedRenderer(new_renderer)
                 arrow.svg_file = new_svg
-                arrow.update_locations()
+                arrow.set_shift_attributes()
                 arrow.update_quadrant()
                 pos = self.graphboard_view.get_quadrant_center(new_quadrant) - arrow.boundingRect().center()
                 arrow.setPos(pos)
@@ -132,10 +130,8 @@ class Arrow_Manager(QObject):
 
             if arrow.rotation_direction == "l":
                 new_svg = current_svg.replace("_l_", "_r_").replace("\\l\\", "\\r\\")
-                arrow.rotation_direction = "r"
             elif arrow.rotation_direction == "r":
                 new_svg = current_svg.replace("_r_", "_l_").replace("\\r\\", "\\l\\")
-                arrow.rotation_direction = "l"
             else:
                 print("mirror_arrow -- Unexpected svg_file:", current_svg)
                 continue
@@ -144,9 +140,8 @@ class Arrow_Manager(QObject):
             if new_renderer.isValid():
                 arrow.setSharedRenderer(new_renderer)
                 arrow.svg_file = new_svg
-                arrow.update_locations()
                 arrow.quadrant = arrow.quadrant.replace('.svg', '')
-
+                arrow.update_attributes()
                 pos = self.graphboard_view.get_quadrant_center(arrow.quadrant) - arrow.boundingRect().center()
                 arrow.setPos(pos)
             else:
@@ -225,32 +220,14 @@ class Arrow_Manager(QObject):
         else:
             print("No staffs selected")
 
-    def delete_arrow(self, arrows):
-        # if arrows is not a list, make it a list
-        if not isinstance(arrows, list):
-            arrows = [arrows]
-        for arrow in arrows:
+    def delete_arrow(self, deleted_arrows):
+        if not isinstance(deleted_arrows, list):
+            deleted_arrows = [deleted_arrows]
+        for arrow in deleted_arrows:
             if isinstance(arrow, Arrow):
-                # Create a ghost arrow with the same attributes
-                ghost_arrow = Arrow(None, arrow.graphboard_view, arrow.info_tracker, arrow.svg_manager, self, 'static', arrow.staff_manager)
-
-                # Manually set the ghost arrow's attributes
-                ghost_arrow.color = arrow.color
-                ghost_arrow.quadrant = 'None'
-                ghost_arrow.rotation_direction = 'None'
-                ghost_arrow.motion_type = "static"
-                ghost_arrow.start_location = arrow.end_location
-                ghost_arrow.end_location = arrow.end_location
-                ghost_arrow.turns = arrow.turns
-
-                # Associate the ghost arrow with the staff
-                staff = arrow.get_staff()
-                staff.set_arrow(ghost_arrow)
-                
-                # Add the ghost arrow to the scene (it won't be visible)
+                ghost_arrow = Arrow(None, arrow.graphboard_view, arrow.info_tracker, arrow.svg_manager, self, 'static', arrow.staff_manager, None)
+                ghost_arrow.set_static_attributes_from_deleted_arrow(arrow)
                 self.graphboard_scene.addItem(ghost_arrow)
-                
-                # Remove the original arrow
                 self.graphboard_scene.removeItem(arrow)
                 self.info_tracker.update()
         else:

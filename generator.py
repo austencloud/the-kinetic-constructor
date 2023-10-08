@@ -132,17 +132,17 @@ class Pictograph_Generator():
             
         for arrow in created_arrows:
             if optimal_positions:
-                optimal_position = optimal_positions.get(f"optimal_{arrow.get_attributes()['color']}_location")
+                optimal_position = optimal_positions.get(f"optimal_{arrow.color}_location")
                 if optimal_position:
                     # Calculate the position to center the arrow at the optimal position
                     pos = QPointF(optimal_position['x'], optimal_position['y']) - arrow.boundingRect().center()
                     arrow.setPos(pos)
                 else:
-                    if arrow.get_attributes()['quadrant'] != "None":
-                        pos = self.graphboard_view.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
+                    if arrow.quadrant != "None":
+                        pos = self.graphboard_view.get_quadrant_center(arrow.quadrant) - arrow.boundingRect().center()
             else:
                 # Calculate the position to center the arrow at the quadrant center
-                pos = self.graphboard_view.get_quadrant_center(arrow.get_attributes()['quadrant']) - arrow.boundingRect().center()
+                pos = self.graphboard_view.get_quadrant_center(arrow.quadrant) - arrow.boundingRect().center()
                 arrow.setPos(pos)
 
         self.staff_manager.update_graphboard_staffs(self.graphboard_scene)

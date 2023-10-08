@@ -90,9 +90,10 @@ class ArrowBox_View(QGraphicsView):
                         print(f"Unexpected svg_file: {self.svg_file}")
                         
 
+
             self.drag.exec_(Qt.CopyAction | Qt.MoveAction)
             self.dragStarted = True
-            
+        
     def mouseReleaseEvent(self, event):
         arrow = self.itemAt(event.pos())
         if arrow is not None and arrow in self.drag_state:
