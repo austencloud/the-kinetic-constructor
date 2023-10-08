@@ -1,16 +1,10 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsItem, QApplication, QGraphicsRectItem, QAction, QMenu
-from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QPointF, QTimer
-from PyQt5.QtWidgets import QGraphicsItem, QToolTip
-from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
-from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor, QTransform, QImage, QPen, QBrush
-from objects.staff import Staff
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsItem, QAction, QMenu
+from PyQt5.QtCore import QPointF
+from PyQt5.QtWidgets import QGraphicsItem
+from PyQt5.QtGui import QTransform
 from objects.grid import Grid
 from objects.arrow import Arrow
-import os
-from exporter import Exporter
-from settings import Settings
 from info_tracker import Info_Tracker
-from graphboard import Graphboard_View
 from managers.staff_manager import Staff_Manager
 from managers.arrow_manager import Arrow_Manager
 from managers.svg_manager import Svg_Manager

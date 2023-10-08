@@ -1,16 +1,15 @@
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QPushButton, QGraphicsItem
-from PyQt5.QtCore import Qt, QPointF
-from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QGraphicsItem
+from PyQt5.QtCore import QPointF
+
 import json
 import random
 import os
 from objects.arrow import Arrow
 from managers.svg_manager import Svg_Manager
-from lxml import etree
-from menus import Context_Menu_Handler
+
 from exporter import Exporter
 class Pictograph_Generator():
-    def __init__(self, staff_manager, graphboard_view, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, context_menu_handler, grid, parent=None):
+    def __init__(self, staff_manager, graphboard_view, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, context_menu_manager, grid, parent=None):
         self.staff_manager = staff_manager
         self.parent = parent
         self.graphboard_view = graphboard_view
@@ -20,7 +19,7 @@ class Pictograph_Generator():
         self.main_window = main_window
         self.arrow_handler = arrow_handler
         self.svg_manager = Svg_Manager()
-        self.context_menu_handler = context_menu_handler
+        self.context_menu_manager = context_menu_manager
         self.exporter = exporter
         self.grid = grid
 

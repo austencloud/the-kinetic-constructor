@@ -1,9 +1,7 @@
-from PyQt5.QtCore import QPointF, pyqtSignal, QObject
 from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
 from PyQt5.QtWidgets import QGraphicsItem
-from objects.arrow import Arrow
 from settings import Settings
-from constants import STAFF_WIDTH, STAFF_LENGTH, RED, BLUE
+
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
 

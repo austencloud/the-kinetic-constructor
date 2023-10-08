@@ -99,8 +99,6 @@ class Sequence_Manager():
             self.graphboard_scene.removeItem(item)
         self.ui_setup.word_label.setText("My word: ")
         self.ui_setup.info_tracker.label.setText("")  # Clear the label
-
-
 class Sequence_Scene(QGraphicsScene):
     def __init__(self, manager=None, parent=None):
         super().__init__(parent)

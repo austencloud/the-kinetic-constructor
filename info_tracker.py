@@ -1,6 +1,5 @@
 from objects.arrow import Arrow
 from objects.staff import Staff
-from PyQt5.QtWidgets import QLabel
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 import json
@@ -37,7 +36,7 @@ class Info_Tracker:
         staff_state = {}
         for item in self.graphboard_view.items():
             if isinstance(item, Staff):
-                staff_state[item] = item.get_attributes()  # Assuming Staff has a get_attributes method
+                staff_state[item] = item.get_attributes()
         return staff_state
 
 

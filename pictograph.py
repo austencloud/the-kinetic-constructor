@@ -10,16 +10,12 @@ class Pictograph(QGraphicsItem):
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         
     def paint(self, painter: QPainter, option, widget):
-        # Scale the image to fit the rectangle while preserving aspect ratio
         scaled_image = self.image.scaled(450, 450, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        # Render the QImage onto the Pictograph
         painter.drawImage(QRectF(0, 0, scaled_image.width(), scaled_image.height()), scaled_image)
 
     def boundingRect(self):
-        # Return the bounding rectangle of the Pictograph
         return QRectF(0, 0, 375, 375)
 
     def mousePressEvent(self, event):
-        # Emit the clicked signal when the Pictograph is clicked
         event.accept()
 

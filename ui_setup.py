@@ -1,23 +1,30 @@
-from PyQt5.QtWidgets import QDialog, QHBoxLayout, QVBoxLayout, QScrollArea, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QLineEdit, QGridLayout
 import os
-from objects.arrow import Arrow
-from PyQt5.QtGui import QFont, QTransform, QIcon, QPixmap
-from sequence import *
-from info_tracker import Info_Tracker
-from generator import Pictograph_Generator
-from objects.staff import *
+
+from PyQt5.QtWidgets import QDialog, QHBoxLayout, QVBoxLayout, QGraphicsScene, QGraphicsView, QGraphicsItem, QLabel, QFrame, QWidget, QGridLayout, QPushButton
+from PyQt5.QtGui import QFont, QTransform, QIcon, QPixmap, QPainter
 from PyQt5.QtCore import Qt, QPointF, QEvent, QSize
+from PyQt5.QtSvg import QSvgRenderer
+
+from objects.arrow import Arrow
+from objects.staff import Staff
+from objects.grid import Grid
+
+from managers.arrow_manager import Arrow_Manager
+from managers.staff_manager import Staff_Manager
 from managers.svg_manager import Svg_Manager
 from managers.json_manager import Json_Manager
-from managers.arrow_manager import Arrow_Manager
+
+from generator import Pictograph_Generator
+from sequence import Sequence_Manager, Sequence_Scene
+from info_tracker import Info_Tracker
+from menus import Menu_Bar, Context_Menu_Manager
+from graphboard import Graphboard_View
 from arrowbox import ArrowBox_View
 from propbox import PropBox_View
-from menus import Menu_Bar, Context_Menu_Handler
-from graphboard import Graphboard_View
 from exporter import Exporter
 from settings import Settings
-from managers.staff_manager import Staff_Manager
 from pictograph_selector import Selection_Dialog
+
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
@@ -37,7 +44,7 @@ class UiSetup(QWidget):
         self.graphboard_scene.setSceneRect(0, 0, 650, 650)
         self.ARROW_DIR = 'images\\arrows'
         self.SVG_POS_Y = int(250 * SCALE_FACTOR)
-        self.context_menu_handler = None
+        self.Context_Menu_Manager = None
         self.exporter = None
         self.sequence_manager = None
         self.graphboard_view = None
@@ -48,12 +55,11 @@ class UiSetup(QWidget):
         self.arrow_manager = Arrow_Manager(self.graphboard_view, self.staff_manager)
 
         self.initInfoTracker()
-        self.arrow_manager.connect_info_tracker(self.info_tracker)
+
         self.initMenus()
         self.initGraphboardView() 
         
         self.initGenerator() 
-        self.graphboard_view.set_generator(self.generator)
         self.connectGraphboard()
         self.initArrowBox()
         self.initPropBoxView()
@@ -72,9 +78,12 @@ class UiSetup(QWidget):
         self.initLetterButtons()
         self.setFocus()
 
+        self.arrow_manager.connect_info_tracker(self.info_tracker)
+        self.graphboard_view.connect_generator(self.generator)
+
     def initMenus(self):
         self.json_updater = Json_Manager(self.graphboard_scene)
-        self.context_menu_handler = Context_Menu_Handler(self.graphboard_scene, self.sequence_manager, self.arrow_manager, self.exporter)
+        self.Context_Menu_Manager = Context_Menu_Manager(self.graphboard_scene, self.sequence_manager, self.arrow_manager, self.exporter)
         self.arrow_manager.connect_graphboard_scene(self.graphboard_scene)
         self.menu_bar = Menu_Bar()
 
@@ -342,7 +351,7 @@ class UiSetup(QWidget):
         self.lower_layout.addWidget(clear_sequence_button)
 
     def initGenerator(self):
-        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard_view, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.context_menu_handler, self.grid)
+        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard_view, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.Context_Menu_Manager, self.grid)
 
     def initStaffManager(self):
         self.staff_manager = Staff_Manager(self.graphboard_scene)

@@ -5,7 +5,7 @@ from objects.arrow import Arrow
 from objects.staff import Staff
 
 
-class Context_Menu_Handler:
+class Context_Menu_Manager:
     def __init__(self, scene, sequence_manager, arrow_manipulator, exporter):
         self.scene = scene
         self.sequence_manager = sequence_manager

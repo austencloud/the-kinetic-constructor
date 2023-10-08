@@ -327,7 +327,7 @@ class Graphboard_View(QGraphicsView):
     def set_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
 
-    def set_generator(self, generator):
+    def connect_generator(self, generator):
         self.generator = generator
 
 
