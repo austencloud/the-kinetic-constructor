@@ -90,8 +90,8 @@ class Mini_Graphboard_View(QGraphicsView):
         svg_file = f"images/arrows/shift/{arrow_dict['motion_type']}/{arrow_dict['color']}_{arrow_dict['motion_type']}_{arrow_dict['rotation_direction']}_{arrow_dict['quadrant']}_{arrow_dict['turns']}.svg"
         arrow = Arrow(svg_file, self, self.info_tracker, self.svg_manager, self.arrow_manager, arrow_dict['motion_type'], self.staff_manager, arrow_dict)
         arrow.update_attributes()
-        arrow.setFlag(QGraphicsItem.ItemIsMovable, False)
-        arrow.setFlag(QGraphicsItem.ItemIsSelectable, False)
+        arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
+        arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
         created_arrows.append(arrow)
 
         for arrow in created_arrows:
@@ -122,12 +122,6 @@ class Mini_Graphboard_View(QGraphicsView):
                     pos += QPointF(-DISTANCE, -DISTANCE)
                 arrow.setPos(pos)
                 
-
-    
-    
-    
-    
-    
     
     def save_optimal_positions(self):
         BUFFER = (self.width() - self.mini_grid.boundingRect().width()) / 2

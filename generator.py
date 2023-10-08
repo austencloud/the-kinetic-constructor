@@ -9,7 +9,7 @@ from managers.svg_manager import Svg_Manager
 
 from exporter import Exporter
 class Pictograph_Generator():
-    def __init__(self, staff_manager, graphboard_view, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, context_menu_manager, grid, parent=None):
+    def __init__(self, staff_manager, graphboard_view, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, context_menu_manager, json_manager, grid, parent=None):
         self.staff_manager = staff_manager
         self.parent = parent
         self.graphboard_view = graphboard_view
@@ -22,11 +22,12 @@ class Pictograph_Generator():
         self.context_menu_manager = context_menu_manager
         self.exporter = exporter
         self.grid = grid
+        self.json_manager = json_manager
+        
+        self.letters = self.json_manager.load_all_letters()
 
-        # Load the JSON file
-        with open('pictographs.json', 'r') as file:
-            self.letters = json.load(file)
-        self.output_dir = "images\\pictographs\\"
+    # Load the JSON file
+
 
     def generate_all_pictographs(self, staff_manager):
         # Create the output directory if it doesn't exist
@@ -36,7 +37,7 @@ class Pictograph_Generator():
         for letter, combinations in self.letters.items():
             for combination in combinations:
                 # Generate the pictograph for the combination
-                self.open_selection_window(letter, staff_manager)
+                self.open_selection_window(letter)
 
                 # Find the dictionary in the combination list that contains the 'start_position' and 'end_position' keys
                 positions_dict = next((d for d in combination if 'start_position' in d and 'end_position' in d), None)
@@ -80,10 +81,7 @@ class Pictograph_Generator():
                 # Clear the graphboard for the next combination
                 self.graphboard_view.clear()
 
-    def open_selection_window(self, letter, staff_manager):
-        # Load the JSON file
-        with open('pictographs.json', 'r') as file:
-            self.letters = json.load(file)
+    def open_selection_window(self, letter):
         self.output_dir = "images\\pictographs\\"
 
         self.graphboard_view.clear()

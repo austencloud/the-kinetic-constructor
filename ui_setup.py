@@ -39,7 +39,7 @@ class UiSetup(QWidget):
         self.graphboard_scene.setSceneRect(0, 0, 650, 650)
         self.ARROW_DIR = 'images\\arrows'
         self.SVG_POS_Y = int(250 * SCALE_FACTOR)
-        self.Context_Menu_Manager = None
+        self.context_menu_manager = None
         self.exporter = None
         self.sequence_manager = None
         self.graphboard_view = None
@@ -48,12 +48,9 @@ class UiSetup(QWidget):
         self.init_staff_manager()
         self.initLayouts()
         self.arrow_manager = Arrow_Manager(self.graphboard_view, self.staff_manager)
-
         self.initInfoTracker()
-
         self.initMenus()
         self.initGraphboardView() 
-        
         self.init_generator() 
         self.connectGraphboard()
         self.initArrowBox()
@@ -76,8 +73,8 @@ class UiSetup(QWidget):
         self.graphboard_view.connect_generator(self.generator)
 
     def initMenus(self):
-        self.json_updater = Json_Manager(self.graphboard_scene)
-        self.Context_Menu_Manager = Context_Menu_Manager(self.graphboard_scene, self.sequence_manager, self.arrow_manager, self.exporter)
+        self.json_manager = Json_Manager(self.graphboard_scene)
+        self.context_menu_manager = Context_Menu_Manager(self.graphboard_scene, self.sequence_manager, self.arrow_manager, self.exporter)
         self.arrow_manager.connect_graphboard_scene(self.graphboard_scene)
         self.menu_bar = Menu_Bar()
 
@@ -203,7 +200,7 @@ class UiSetup(QWidget):
             return button
 
         self.updatePositionButton = createButton("images/icons/update_locations.png", "Update Position", 
-            lambda: self.json_updater.update_optimal_locations_in_json(*self.graphboard_view.get_current_arrow_positions()), is_lambda=True)
+            lambda: self.json_manager.update_optimal_locations_in_json(*self.graphboard_view.get_current_arrow_positions()), is_lambda=True)
         self.deleteButton = createButton("images/icons/delete.png", "Delete",
             lambda: self.arrow_manager.delete_arrow(self.graphboard_scene.selectedItems()), is_lambda=True)
         self.rotateRightButton = createButton("images/icons/rotate_right.png", "Rotate Right",
@@ -333,7 +330,7 @@ class UiSetup(QWidget):
         self.lower_layout.addWidget(clear_sequence_button)
 
     def init_generator(self):
-        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard_view, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.Context_Menu_Manager, self.grid)
+        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard_view, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.context_menu_manager, self.json_manager, self.grid)
 
     def init_staff_manager(self):
         self.staff_manager = Staff_Manager(self.graphboard_scene)

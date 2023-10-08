@@ -48,17 +48,7 @@ class Arrow(QGraphicsSvgItem):
             self.set_attributes_from_dict(self.dict)
         elif self.svg_file: 
             self.set_attributes_from_filename()
-
-    def set_static_attributes_from_deleted_arrow(self, deleted_arrow):
-        self.color = deleted_arrow.color
-        self.motion_type = 'static'
-        self.rotation_direction = 'None'
-        self.quadrant = 'None'
-        self.start_location = deleted_arrow.end_location
-        self.end_location = deleted_arrow.end_location
-        self.turns = 0
-        self.staff = deleted_arrow.staff
-        self.staff.arrow = self
+        self.set_start_end_locations()
         
     def set_attributes_from_dict(self, arrow_dict):
         self.color = arrow_dict['color']
@@ -73,12 +63,23 @@ class Arrow(QGraphicsSvgItem):
         parts = os.path.basename(self.svg_file).split('_')
         self.color, self.motion_type, self.rotation_direction, self.quadrant, self.turns = parts[:5]
         self.turns = int(self.turns.split('.')[0])
-        
+
+    def set_start_end_locations(self):
         self.arrow_start_end_locations = {
             f"{self.color}_{key}": value for key, value in self.ARROW_START_END_LOCATIONS.items()
         }
-        
         self.start_location, self.end_location = self.arrow_start_end_locations.get(os.path.basename(self.svg_file), (None, None))
+
+    def set_static_attributes_from_deleted_arrow(self, deleted_arrow):
+        self.color = deleted_arrow.color
+        self.motion_type = 'static'
+        self.rotation_direction = 'None'
+        self.quadrant = 'None'
+        self.start_location = deleted_arrow.end_location
+        self.end_location = deleted_arrow.end_location
+        self.turns = 0
+        self.staff = deleted_arrow.staff
+        self.staff.arrow = self
 
     def get_attributes(self):
         self.svg_file = f"images/arrows/shift/{self.motion_type}/{self.color}_{self.motion_type}_{self.rotation_direction}_{self.quadrant}_{self.turns}.svg"
