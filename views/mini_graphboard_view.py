@@ -67,63 +67,68 @@ class Mini_Graphboard_View(QGraphicsView):
         DISTANCE = 20
         created_arrows = []
         optimal_locations = next((d for d in combination if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
-        for arrow_dict in combination:
-            # Check if the dictionary has all the keys you need         
+        for arrow_dict in combination:     
             if all(key in arrow_dict for key in ['color', 'motion_type', 'rotation_direction', 'quadrant', 'turns']):
                 
                 if arrow_dict['motion_type'] == 'pro' or arrow_dict['motion_type'] == 'anti':
-                    svg_file = f"images/arrows/shift/{arrow_dict['motion_type']}/{arrow_dict['color']}_{arrow_dict['motion_type']}_{arrow_dict['rotation_direction']}_{arrow_dict['quadrant']}_{arrow_dict['turns']}.svg"
-                    arrow = Arrow(svg_file, self, self.info_tracker, self.svg_manager, self.arrow_manager, arrow_dict['motion_type'], self.staff_manager, arrow_dict)
-                    arrow.update_attributes()
-                    arrow.setFlag(QGraphicsItem.ItemIsMovable, False)
-                    arrow.setFlag(QGraphicsItem.ItemIsSelectable, False)
-
-                    # Add the created arrow to the list
-                    created_arrows.append(arrow)
-
-                    # Position the arrows
-                    for arrow in created_arrows:
-                        arrow_transform = QTransform()
-                        arrow_transform.scale(PICTOGRAPH_SCALE, PICTOGRAPH_SCALE)
-                        arrow.setTransform(arrow_transform)
-                        BUFFER = (self.width() - self.mini_grid.boundingRect().width()) / 2
-
-                        # Calculate the center of the bounding rectangle
-                        center = arrow.boundingRect().center()
-
-                        if optimal_locations:
-                            optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
-                            if optimal_location:
-                                # Adjust the position based on the center
-                                pos = QPointF(optimal_location['x'] * PICTOGRAPH_SCALE - BUFFER, optimal_location['y'] * PICTOGRAPH_SCALE - BUFFER) - center * PICTOGRAPH_SCALE
-                                new_pos = pos + QPointF(0, -self.VERTICAL_OFFSET)
-                                arrow.setPos(new_pos)
-                        else:
-                            pos = self.get_quadrant_center(arrow.quadrant) - center * PICTOGRAPH_SCALE
-                            if arrow.quadrant == 'ne':
-                                pos += QPointF(DISTANCE, -DISTANCE)
-                            elif arrow.quadrant == 'se':
-                                pos += QPointF(DISTANCE, DISTANCE)
-                            elif arrow.quadrant == 'sw':
-                                pos += QPointF(-DISTANCE, DISTANCE)
-                            elif arrow.quadrant == 'nw':
-                                pos += QPointF(-DISTANCE, -DISTANCE)
-                            arrow.setPos(pos)
+                    self.place_shift_arrows(DISTANCE, created_arrows, optimal_locations, arrow_dict)
                             
                 elif arrow_dict['motion_type'] == 'static':
-                    svg_file = None
-                    arrow = Arrow(None, self, self.info_tracker, self.svg_manager, self.arrow_manager, 'static', self.staff_manager, arrow_dict)
+                    self.place_ghost_arrows(created_arrows, arrow_dict)
 
-                # Add the arrows to the scene
-            
-                for arrow in created_arrows:
-                    if arrow not in self.mini_graphboard_scene.items():
-                        self.mini_graphboard_scene.addItem(arrow)
-                            
-                    
+
+        for arrow in created_arrows:
+            if arrow not in self.mini_graphboard_scene.items():
+                self.mini_graphboard_scene.addItem(arrow)                    
         self.staff_manager.update_mini_graphboard_staffs(self.mini_graphboard_scene)
 
-        
+    def place_ghost_arrows(self, created_arrows, arrow_dict):
+        ghost_arrow = Arrow(None, self, self.info_tracker, self.svg_manager, self.arrow_manager, 'static', self.staff_manager, arrow_dict)
+        created_arrows.append(ghost_arrow)
+
+    def place_shift_arrows(self, DISTANCE, created_arrows, optimal_locations, arrow_dict):
+        svg_file = f"images/arrows/shift/{arrow_dict['motion_type']}/{arrow_dict['color']}_{arrow_dict['motion_type']}_{arrow_dict['rotation_direction']}_{arrow_dict['quadrant']}_{arrow_dict['turns']}.svg"
+        arrow = Arrow(svg_file, self, self.info_tracker, self.svg_manager, self.arrow_manager, arrow_dict['motion_type'], self.staff_manager, arrow_dict)
+        arrow.update_attributes()
+        arrow.setFlag(QGraphicsItem.ItemIsMovable, False)
+        arrow.setFlag(QGraphicsItem.ItemIsSelectable, False)
+        created_arrows.append(arrow)
+
+        for arrow in created_arrows:
+            arrow_transform = QTransform()
+            arrow_transform.scale(PICTOGRAPH_SCALE, PICTOGRAPH_SCALE)
+            arrow.setTransform(arrow_transform)
+            BUFFER = (self.width() - self.mini_grid.boundingRect().width()) / 2
+
+                        # Calculate the center of the bounding rectangle
+            center = arrow.boundingRect().center()
+
+            if optimal_locations:
+                optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
+                if optimal_location:
+                                # Adjust the position based on the center
+                    pos = QPointF(optimal_location['x'] * PICTOGRAPH_SCALE - BUFFER, optimal_location['y'] * PICTOGRAPH_SCALE - BUFFER) - center * PICTOGRAPH_SCALE
+                    new_pos = pos + QPointF(0, -self.VERTICAL_OFFSET)
+                    arrow.setPos(new_pos)
+            else:
+                pos = self.get_quadrant_center(arrow.quadrant) - center * PICTOGRAPH_SCALE
+                if arrow.quadrant == 'ne':
+                    pos += QPointF(DISTANCE, -DISTANCE)
+                elif arrow.quadrant == 'se':
+                    pos += QPointF(DISTANCE, DISTANCE)
+                elif arrow.quadrant == 'sw':
+                    pos += QPointF(-DISTANCE, DISTANCE)
+                elif arrow.quadrant == 'nw':
+                    pos += QPointF(-DISTANCE, -DISTANCE)
+                arrow.setPos(pos)
+                
+
+    
+    
+    
+    
+    
+    
     def save_optimal_positions(self):
         BUFFER = (self.width() - self.mini_grid.boundingRect().width()) / 2
         MAIN_GRAPHBOARD_BUFFER = 50

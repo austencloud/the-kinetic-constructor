@@ -8440,10 +8440,11 @@
             },
             {
                 "color": "red",
-                "motion_type": "anti",
+                "motion_type": "static",
                 "rotation_direction": "None",
                 "quadrant": "None",
                 "start_location": "n",
+                "end_location": "n",
                 "turns": 0
             }
         ],
