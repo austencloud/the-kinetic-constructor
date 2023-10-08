@@ -91,7 +91,6 @@ class Exporter:
 
             # Add blank lines between elements
             svg_string = svg_string.replace('>\n<', '>\n\n<')
-
             with open(output_file_path, 'w') as file:
                 file.write(svg_string)
             print(f"SVG file written at {output_file_path}")

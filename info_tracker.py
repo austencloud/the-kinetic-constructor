@@ -7,13 +7,14 @@ import os
 from data import positions_map, letter_types
 
 class Info_Tracker:
-    def __init__(self, graphboard_view, label, staff_manager):
+    def __init__(self, graphboard_view, label, staff_manager, json_manager):
         self.remaining_staff = {}
         self.previous_state = None 
         self.graphboard_view = graphboard_view
         self.staff_manager = staff_manager
         self.label = label
-        self.letters = self.load_letters()    
+        self.json_manager = json_manager
+        self.letters = self.json_manager.load_all_letters()    
 
         if self.label:
             self.label.setFont(QFont('Helvetica', 14))
@@ -96,13 +97,7 @@ class Info_Tracker:
                     arrow_positions[filename] = (start_location, end_location)
         return arrow_positions
     
-    def load_letters(self):
-        try:
-            with open('pictographs.json', 'r') as f:
-                return json.load(f)
-        except FileNotFoundError:
-            return {}
-    
+   
     def update_from_arrow_manager(self, remaining_staff):
         self.remaining_staff = remaining_staff
         self.update()  # Assuming update() refreshes the display    
@@ -117,7 +112,7 @@ class Info_Tracker:
                 current_combination.append(attributes)
 
         current_combination = sorted(current_combination, key=lambda x: x['color'])
-        self.letters = self.load_letters()
+        self.letters = self.json_manager.load_all_letters()
 
 
         blue_text = "<h2 style='color: #0000FF'>Left</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"

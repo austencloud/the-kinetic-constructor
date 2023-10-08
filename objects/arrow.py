@@ -29,9 +29,6 @@ class Arrow(QGraphicsSvgItem):
         
         self.staff = None
         self.previous_arrow = None
-        
-        with open('pictographs.json') as f:
-            self.pictographs = json.load(f)
             
         self.setAcceptDrops(True)
         self.setFlag(QGraphicsItem.ItemSendsGeometryChanges, True)

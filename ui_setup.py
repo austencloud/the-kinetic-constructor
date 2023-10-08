@@ -48,6 +48,7 @@ class UiSetup(QWidget):
         self.init_staff_manager()
         self.initLayouts()
         self.arrow_manager = Arrow_Manager(self.graphboard_view, self.staff_manager)
+        self.json_manager = Json_Manager(self.graphboard_scene)
         self.initInfoTracker()
         self.initMenus()
         self.initGraphboardView() 
@@ -73,7 +74,7 @@ class UiSetup(QWidget):
         self.graphboard_view.connect_generator(self.generator)
 
     def initMenus(self):
-        self.json_manager = Json_Manager(self.graphboard_scene)
+
         self.context_menu_manager = Context_Menu_Manager(self.graphboard_scene, self.sequence_manager, self.arrow_manager, self.exporter)
         self.arrow_manager.connect_graphboard_scene(self.graphboard_scene)
         self.menu_bar = Menu_Bar()
@@ -306,7 +307,7 @@ class UiSetup(QWidget):
 
     def initInfoTracker(self):
         self.info_label = QLabel(self.main_window)
-        self.info_tracker = Info_Tracker(None, self.info_label, self.staff_manager)
+        self.info_tracker = Info_Tracker(None, self.info_label, self.staff_manager, self.json_manager)
 
     def initWordLabel(self):
         self.word_label = QLabel(self.main_window)

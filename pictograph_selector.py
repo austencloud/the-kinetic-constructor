@@ -10,14 +10,12 @@ class Pictograph_Selector(QDialog):
         
         layout = QVBoxLayout()
         grid_layout = QGridLayout()
-        
         letter_label = QLabel(f"{letter} Variations:")
         letter_label.setAlignment(Qt.AlignCenter)
         font = QFont()
         font.setPointSize(20)
         letter_label.setFont(font)
         layout.addWidget(letter_label)
-
         
         row = 0
         col = 0

@@ -16,7 +16,8 @@ class Json_Manager(QObject):
                 filepath = os.path.join(directory, filename)
                 with open(filepath, 'r') as file:
                     letter_data = json.load(file)
-                    letters[filename.replace('.json', '')] = letter_data
+                    letter_key = filename.replace('.json', '')
+                    letters[letter_key] = letter_data[letter_key]
         return letters
 
     def update_individual_json(self, letter, updated_data, directory):
