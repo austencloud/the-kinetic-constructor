@@ -6,7 +6,6 @@ from sequence import *
 from info_tracker import Info_Tracker
 from generator import Pictograph_Generator
 from objects.staff import *
-from letter import Letter_Manager
 from PyQt5.QtCore import Qt, QPointF, QEvent, QSize
 from managers.svg_manager import Svg_Manager
 from managers.json_manager import Json_Manager
@@ -348,13 +347,6 @@ class UiSetup(QWidget):
     def initStaffManager(self):
         self.staff_manager = Staff_Manager(self.graphboard_scene)
 
-    def initLetterManager(self):
-        self.letter_manager = Letter_Manager(self.graphboard_view, self.info_tracker)
-        self.letterInput = QLineEdit(self.main_window)
-        self.right_layout.addWidget(self.letterInput)
-        self.assignLetterButton = QPushButton("Assign Letter", self.main_window)
-        self.assignLetterButton.clicked.connect(lambda: self.letter_manager.assignLetter(self.letterInput.text()))
-        self.right_layout.addWidget(self.assignLetterButton)
 
 ### CONNECTORS ###
 

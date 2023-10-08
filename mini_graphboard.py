@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QGraphicsItem, QToolTip
 from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
 from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor, QTransform, QImage, QPen, QBrush
 from objects.staff import Staff
-from grid import Grid
+from objects.grid import Grid
 from objects.arrow import Arrow
 import os
 from exporter import Exporter

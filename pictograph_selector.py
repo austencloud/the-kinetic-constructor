@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QGridLayout, QLabel, QGraphicsScene
 from mini_graphboard import Mini_Graphboard_View
-from grid import Grid
+from objects.grid import Grid
 
 class Selection_Dialog(QDialog):
     def __init__(self, combinations, letter, parent=None):

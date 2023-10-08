@@ -11,7 +11,7 @@ from PyQt5.QtCore import Qt, pyqtSignal, QObject
 from svg.path import Line, CubicBezier, QuadraticBezier, Arc, Close
 from objects.arrow import Arrow
 from objects.staff import Staff
-from grid import Grid
+from objects.grid import Grid
 from lxml import etree
 from copy import deepcopy
 

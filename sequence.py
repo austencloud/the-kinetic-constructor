@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QGraphicsScene, QGraphicsItem, QGraphicsView
 from PyQt5.QtCore import Qt, QPointF
 from objects.arrow import Arrow
 from graphboard import Graphboard_View
-from grid import Grid
+from objects.grid import Grid
 from pictograph import Pictograph
 from PyQt5.QtGui import QImage, QPainter
 from objects.staff import Staff
