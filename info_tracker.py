@@ -47,29 +47,6 @@ class Info_Tracker:
         else:
             print("No self.letter found")
     
-    def get_positional_relationship(self, start1, end1, start2, end2):
-        start1_compass = Arrow.get_position_from_locations(start1, start1)
-        end1_compass = Arrow.get_position_from_locations(end1, end1)
-        start2_compass = Arrow.get_position_from_locations(start2, start2)
-        end2_compass = Arrow.get_position_from_locations(end2, end2)
-
-        if set(start1_compass) == set(start2_compass):
-            start_location = "beta"
-        elif set(start1_compass) == set(["n", "s"]) or set(start1_compass) == set(["e", "w"]):
-            start_location = "alpha"
-        else:
-            start_location = "gamma"
-
-        if set(end1_compass) == set(end2_compass):
-            end_location = "beta"
-        elif set(end1_compass) == set(["n", "s"]) or set(end1_compass) == set(["e", "w"]):
-            end_location = "alpha"
-        else:
-            end_location = "gamma"
-
-        return start_location + " to " + end_location
-            
-    
     
     
     def check_for_changes(self):

@@ -1,4 +1,6 @@
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QGridLayout, QLabel
+from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtGui import QFont, QColor
 from views.mini_graphboard_view import Mini_Graphboard_View
 
 class Pictograph_Selector(QDialog):
@@ -9,9 +11,13 @@ class Pictograph_Selector(QDialog):
         layout = QVBoxLayout()
         grid_layout = QGridLayout()
         
-        # Create a QLabel for the chosen letter
         letter_label = QLabel(f"{letter} Variations:")
+        letter_label.setAlignment(Qt.AlignCenter)
+        font = QFont()
+        font.setPointSize(20)
+        letter_label.setFont(font)
         layout.addWidget(letter_label)
+
         
         row = 0
         col = 0

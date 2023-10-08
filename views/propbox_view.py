@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QFrame, QVBoxLayout
+from PyQt5.QtWidgets import QGraphicsView, QFrame, QVBoxLayout
 from PyQt5.QtCore import Qt
 
 class PropBox_View(QGraphicsView):

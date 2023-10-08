@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QGraphicsView, QFrame
-from PyQt5.QtWidgets import QApplication, QGraphicsItem, QMenu, QDialog, QFormLayout, QSpinBox, QDialogButtonBox
-from PyQt5.QtGui import QPixmap, QDrag, QImage, QPainter, QPainterPath, QCursor
-from PyQt5.QtCore import Qt, QMimeData, pyqtSignal, QPointF
-from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtGui import QPixmap, QDrag, QImage, QPainter, QCursor
+from PyQt5.QtCore import Qt, QMimeData
+from PyQt5.QtSvg import QSvgRenderer
 from objects.arrow import Arrow
 import os
 from settings import Settings
@@ -10,16 +10,18 @@ from settings import Settings
 SCALE_FACTOR = Settings.SCALE_FACTOR
 
 class ArrowBox_View(QGraphicsView):
-    def __init__(self, arrowbox_scene, artboard, info_tracker, svg_manager, parent=None):
+    def __init__(self, arrowbox_scene, graphboard_view, info_tracker, svg_manager, parent=None):
         super().__init__(arrowbox_scene, parent)
-        self.setAcceptDrops(True)
-        self.setFrameShape(QFrame.NoFrame)
-        self.dragState = {} 
-        self.artboard = artboard
+        self.drag_state = {} 
+        self.graphboard_view = graphboard_view
         self.arrowbox_scene = arrowbox_scene
         self.info_tracker = info_tracker
         self.svg_manager = svg_manager
+        self.setAcceptDrops(True)
+        self.setFrameShape(QFrame.NoFrame)
         self.scale(SCALE_FACTOR, SCALE_FACTOR)
+
+    ### MOUSE EVENTS ###
 
     def mousePressEvent(self, event):
         scenePos = self.mapToScene(event.pos())
@@ -53,43 +55,23 @@ class ArrowBox_View(QGraphicsView):
         else:
             event.ignore()
 
-
     def mouseMoveEvent(self, event):
         scenePos = self.mapToScene(event.pos())
         items = self.scene().items(scenePos)
         arrows = [item for item in items if isinstance(item, Arrow)]
         if arrows:
-            arrow = arrows[0]
-            if arrow in self.dragState:
-                state = self.dragState[arrow]
-                if (event.pos() - state['dragStartPosition']).manhattanLength() < QApplication.startDragDistance():
-                    return
-                if self.dragging:
-                    new_pos = self.mapToScene(event.pos()) - self.dragOffset
-                    movement = new_pos - self.dragged_item.pos()
-                for arrow in self.arrowbox_scene.selectedItems():
-                    arrow.setPos(arrow.pos() + movement)
-                self.info_tracker.check_for_changes()
-                if arrow.in_artboard:
-                    print("mouse_pos:", mouse_pos)
-                    super().mouseMoveEvent(event)
-                elif not (event.buttons() & Qt.LeftButton):
-                    return
-                elif (event.pos() - self.artboard_start_position).manhattanLength() < QApplication.startDragDistance():
-                    return
+            mouse_pos = self.graphboard_view.mapToScene(self.graphboard_view.mapFromGlobal(QCursor.pos()))
+            graphboard_view_rect = self.graphboard_view.sceneRect()
 
-            mouse_pos = self.artboard.mapToScene(self.artboard.mapFromGlobal(QCursor.pos()))
-            artboard_rect = self.artboard.sceneRect()
-
-            if artboard_rect.contains(mouse_pos):
-                print("artboard contains mouse_pos")
-                if mouse_pos.y() < artboard_rect.height() / 2:
-                    if mouse_pos.x() < artboard_rect.width() / 2:
+            if graphboard_view_rect.contains(mouse_pos):
+                print("graphboard_view contains mouse_pos")
+                if mouse_pos.y() < graphboard_view_rect.height() / 2:
+                    if mouse_pos.x() < graphboard_view_rect.width() / 2:
                         quadrant = 'nw'
                     else:
                         quadrant = 'ne'
                 else:
-                    if mouse_pos.x() < artboard_rect.width() / 2:
+                    if mouse_pos.x() < graphboard_view_rect.width() / 2:
                         quadrant = 'sw'
                     else:
                         quadrant = 'se'
@@ -113,16 +95,8 @@ class ArrowBox_View(QGraphicsView):
             
     def mouseReleaseEvent(self, event):
         arrow = self.itemAt(event.pos())
-        if arrow is not None and arrow in self.dragState:
-            del self.dragState[arrow]
+        if arrow is not None and arrow in self.drag_state:
+            del self.drag_state[arrow]
             self.dragging = False 
             self.dragged_item = None 
-            from main import Info_Tracker
-            infoTracker = Info_Tracker()
 
-            self.update_positions()
-            arrow.end_location = arrow.end_location.capitalize()
-            staff_position = arrow.end_location
-            self.staff.setPos(staff_position)
-            print("staff position:", staff_position)
-            infoTracker.update() 

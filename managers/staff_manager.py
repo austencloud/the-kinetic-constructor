@@ -1,9 +1,8 @@
-from PyQt5.QtCore import QPointF, pyqtSignal, QObject, Qt
-from PyQt5.QtSvg import QGraphicsSvgItem
+from PyQt5.QtCore import QPointF, pyqtSignal, QObject
 from objects.arrow import Arrow
-from constants import STAFF_WIDTH, STAFF_LENGTH, RED, BLUE, MINI_STAFF_LENGTH, MINI_STAFF_WIDTH
+from settings import STAFF_WIDTH, STAFF_LENGTH, MINI_STAFF_WIDTH, MINI_STAFF_LENGTH
 from objects.staff import Staff
-from PyQt5.QtGui import QTransform
+
 
 class Staff_Manager(QObject):
 
@@ -14,9 +13,6 @@ class Staff_Manager(QObject):
         self.graphboard_scene = graphboard_scene  # Scene where the staffs will be drawn
         self.beta_staves = []  # List to hold beta staves
         self.previous_position = None  # Store the previous position of staffs
-
-
-
 
     ### MINI_GRAPHBOARD ###
 
@@ -66,7 +62,6 @@ class Staff_Manager(QObject):
                 self.graphboard_staffs[staff_key].setScale(0.5)
 
     def update_mini_graphboard_staffs(self, scene):
-
         self.hide_all_graphboard_staffs()
         
         for arrow in scene.items():
@@ -112,8 +107,8 @@ class Staff_Manager(QObject):
 
                 if axis == 'vertical':  # Vertical staffs
                     # Move one staff 10px to the left and the other 10px to the right
-                    overlapping_staffs[0].setPos(position[0] - 10, position[1])
-                    overlapping_staffs[1].setPos(position[0] + 10, position[1])
+                    overlapping_staffs[0].setPos(position[0] + 10, position[1])
+                    overlapping_staffs[1].setPos(position[0] - 10, position[1])
                 else:  # Horizontal staffs
                     # Move one staff 10px up and the other 10px down
                     overlapping_staffs[0].setPos(position[0], position[1] - 10)
@@ -122,16 +117,15 @@ class Staff_Manager(QObject):
                 # Update the scene
                 self.graphboard_scene.update()
 
-
     ### MAIN GRAPHBOARD ###
 
-    def init_graphboard_staffs(self, mini_graphboard_view):
+    def init_graphboard_staffs(self, graphboard_view):
         # Calculate scaling and padding factors for the grid
         scale = self.grid.scale()
 
         GRID_WIDTH = self.grid.get_width()
-        GRAPHBOARD_WIDTH = mini_graphboard_view.width()
-        GRAPHBOARD_HEIGHT = mini_graphboard_view.height()
+        GRAPHBOARD_WIDTH = graphboard_view.width()
+        GRAPHBOARD_HEIGHT = graphboard_view.height()
         
         self.GRID_PADDING = (GRAPHBOARD_WIDTH - GRID_WIDTH) / 2
         self.GRID_V_OFFSET = (GRAPHBOARD_HEIGHT - GRAPHBOARD_WIDTH) / 2
@@ -190,16 +184,18 @@ class Staff_Manager(QObject):
     def connect_grid(self, grid):
         self.grid = grid
 
-    def connect_graphboard(self, mini_graphboard_view):
+    def connect_mini_graphboard_view(self, mini_graphboard_view):
         self.mini_graphboard_view = mini_graphboard_view
 
-    def connect_propbox(self, propbox_view):
+    def connect_graphboard_view(self, graphboard_view):
+        self.graphboard_view = graphboard_view
+
+    def connect_propbox_view(self, propbox_view):
         self.propbox_view = propbox_view
 
     ### UPDATERS ###
 
     def update_graphboard_staffs(self, scene):
-
         self.hide_all_graphboard_staffs()
         
         for arrow in scene.items():
@@ -231,52 +227,26 @@ class Staff_Manager(QObject):
                         self.graphboard_scene.addItem(new_staff)
                     self.graphboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
 
-        self.check_and_replace_staffs()
+        self.check_replace_beta_staffs()
         
     def hide_all_graphboard_staffs(self):
         for staff in self.graphboard_staffs.values():
             staff.hide()
 
-    def remove_non_beta_staffs(self):
-        for staff in self.graphboard_staffs.values():
-            if staff.isVisible() and staff.scene is not None:
-                staff.hide()  # Hide the staff
-
-    def check_and_replace_staffs(self):
+    def check_replace_beta_staffs(self):
         staff_positions = [(staff.pos().x(), staff.pos().y()) for staff in self.graphboard_staffs.values() if staff.isVisible()]
 
         for position in set(staff_positions):
             count = staff_positions.count(position)
-            if count == 2:  # Two staffs are overlapping
+            if count == 2: # Two staffs are overlapping
                 overlapping_staffs = [staff for staff in self.graphboard_staffs.values() if (staff.pos().x(), staff.pos().y()) == position]
-
-                # Assuming the first staff's end_location can be used to determine orientation for both
-                axis = overlapping_staffs[0].axis  # Replace with actual attribute if different
-
-                if axis == 'vertical':  # Vertical staffs
-                    # Move one staff 10px to the left and the other 10px to the right
-                    overlapping_staffs[0].setPos(position[0] - 20, position[1])
-                    overlapping_staffs[1].setPos(position[0] + 20, position[1])
-                else:  # Horizontal staffs
-                    # Move one staff 10px up and the other 10px down
+                axis = overlapping_staffs[0].axis  
+                if axis == 'vertical': 
+                    overlapping_staffs[0].setPos(position[0] + 20, position[1])
+                    overlapping_staffs[1].setPos(position[0] - 20, position[1])
+                else: 
                     overlapping_staffs[0].setPos(position[0], position[1] - 20)
                     overlapping_staffs[1].setPos(position[0], position[1] + 20)
 
-                # Update the scene
                 self.graphboard_scene.update()
 
-    def find_staff_by_position(self, end_location):
-        end_location = end_location.capitalize()
-        for staff_key, staff in self.graphboard_staffs.items():
-            if staff.isVisible():
-                staff_end_location = staff_key.split("_")[0]
-                if staff_end_location == end_location:
-                    return staff  
-        return None 
-
-    def track_visible_staffs(self):
-        visible_count = 0
-        for staff in self.graphboard_staffs.values():
-            if staff.isVisible():
-                visible_count += 1
-        # print(f"Number of visible staves on the graphboard: {visible_count}")

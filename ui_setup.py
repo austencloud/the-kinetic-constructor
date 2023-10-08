@@ -11,7 +11,7 @@ from managers.staff_manager import Staff_Manager
 from managers.svg_manager import Svg_Manager
 from managers.json_manager import Json_Manager
 from generator import Pictograph_Generator
-from managers.sequece_manager import Sequence_Manager
+from managers.sequence_manager import Sequence_Manager
 from info_tracker import Info_Tracker
 from menus import Menu_Bar, Context_Menu_Manager
 from views.graphboard_view import Graphboard_View
@@ -60,8 +60,8 @@ class UiSetup(QWidget):
         self.initPropBoxView()
         
         self.staff_manager.connect_grid(self.grid)
-        self.staff_manager.connect_graphboard(self.graphboard_view)
-        self.staff_manager.connect_propbox(self.propbox_view)
+        self.staff_manager.connect_graphboard_view(self.graphboard_view)
+        self.staff_manager.connect_propbox_view(self.propbox_view)
         self.staff_manager.init_graphboard_staffs(self.graphboard_view)
         self.staff_manager.init_propbox_staffs(self.propbox_scene)
         

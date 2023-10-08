@@ -163,4 +163,4 @@ class Pictograph_Generator():
             else:
                 staff.hide()
 
-        self.staff_manager.check_and_replace_staves()
+        self.staff_manager.check_replace_beta_staffs()

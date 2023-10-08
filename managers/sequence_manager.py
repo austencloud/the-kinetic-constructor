@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QGraphicsRectItem, QPushButton
-from PyQt5.QtCore import QRectF, Qt, QPointF
+from PyQt5.QtCore import QRectF, Qt, QPointF,  QObject
 from PyQt5.QtGui import QImage, QPainter
 from objects.arrow import Arrow
 from objects.staff import Staff
@@ -9,7 +9,7 @@ from pictograph import Pictograph
 from settings import Settings
 
 SCALE_FACTOR = Settings.SCALE_FACTOR
-class Sequence_Manager():
+class Sequence_Manager(QObject):
     def __init__(self, sequence_scene, pictograph_generator, ui_setup, info_tracker):
         self.pictographs = [] 
         self.pictograph_generator = pictograph_generator
@@ -52,7 +52,6 @@ class Sequence_Manager():
 
         scaled_image = image.scaled(int(375 * SCALE_FACTOR), int(375 * SCALE_FACTOR), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         pictograph = Pictograph(graphboard.get_state(), scaled_image)
-        print(pictograph.state)
         self.add_pictograph(pictograph)
         graphboard.clear()
         graphboard.update_letter(None)

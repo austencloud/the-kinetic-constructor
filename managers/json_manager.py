@@ -1,9 +1,8 @@
 import json
-import os
 from objects.arrow import Arrow
+from PyQt5.QtCore import QObject
 
-
-class Mini_Json_Manager:
+class Mini_Json_Manager(QObject):
     def __init__(self, mini_graphboard_scene):
         self.mini_graphboard_scene = mini_graphboard_scene
         

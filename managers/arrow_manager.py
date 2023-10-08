@@ -11,6 +11,7 @@ class Arrow_Manager(QObject):
         self.staff_manager = staff_manager
         self.remaining_staff = {}
 
+    ### CONNECTORS ###
 
     def connect_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
@@ -18,8 +19,10 @@ class Arrow_Manager(QObject):
     def connect_graphboard_scene(self, graphboard_scene):
         self.graphboard_scene = graphboard_scene
 
-    def connect_graphboard_view(self, graphboard_view):
+    def connect_to_graphboard(self, graphboard_view):
         self.graphboard_view = graphboard_view
+
+    ### ARROW MANIUPLATION ###
 
     def move_arrow_quadrant_wasd(self, direction):
         self.selected_arrow = self.graphboard_view.get_selected_items()[0]
@@ -185,6 +188,8 @@ class Arrow_Manager(QObject):
         self.info_tracker.update()
         self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
         
+    ### SELECTION ###    
+    
     def selectAll(self):
         for item in self.graphboard_view.items():
             #if item is an arrow
@@ -195,9 +200,6 @@ class Arrow_Manager(QObject):
         for item in self.graphboard_view.selectedItems():
             item.setSelected(False)
 
-    def connect_to_graphboard(self, graphboard_view):
-        self.graphboard_view = graphboard_view
-        self.selected_items_len = len(graphboard_view.get_selected_items())
 
     def delete_staff(self, staffs):
         if staffs:
@@ -224,7 +226,7 @@ class Arrow_Manager(QObject):
             print("No staffs selected")
 
     def delete_arrow(self, arrows):
-        #if arrows is not a list, make it a list
+        # if arrows is not a list, make it a list
         if not isinstance(arrows, list):
             arrows = [arrows]
         for arrow in arrows:
@@ -232,19 +234,14 @@ class Arrow_Manager(QObject):
                 # Create a ghost arrow with the same attributes
                 ghost_arrow = Arrow(None, arrow.graphboard_view, arrow.info_tracker, arrow.svg_manager, self, 'static', arrow.staff_manager)
 
-                attributes = {
-                    'color': arrow.color,
-                    'quadrant': 'None',
-                    'rotation_direction': 'None',
-                    'motion_type': "static",
-                    'start_location': arrow.end_location,
-                    'end_location': arrow.end_location,
-                    'turns': arrow.turns
-                }
-
-                ghost_arrow.set_attributes(attributes)
-
-                # ghost_arrow.setVisible(False)  # Make it invisible
+                # Manually set the ghost arrow's attributes
+                ghost_arrow.color = arrow.color
+                ghost_arrow.quadrant = 'None'
+                ghost_arrow.rotation_direction = 'None'
+                ghost_arrow.motion_type = "static"
+                ghost_arrow.start_location = arrow.end_location
+                ghost_arrow.end_location = arrow.end_location
+                ghost_arrow.turns = arrow.turns
 
                 # Associate the ghost arrow with the staff
                 staff = arrow.get_staff()
@@ -258,7 +255,5 @@ class Arrow_Manager(QObject):
                 self.info_tracker.update()
         else:
             print("No items selected")
+
             
-
-
-         

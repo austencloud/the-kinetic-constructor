@@ -10,50 +10,6 @@ class Context_Menu_Manager:
         self.exporter = exporter
 
 
-    def create_context_menu(self, event, selected_items):
-        menu = QMenu()
-        if len(selected_items) == 2:
-            menu.addAction("Align horizontally", self.align_horizontally)
-            menu.addAction("Align vertically", self.align_vertically)
-        menu.addAction("Move", self.show_move_dialog)
-        menu.addAction("Delete", self.handlers.delete_arrow)
-        menu.exec_(event.screenPos())
-
-    def show_move_dialog(self):
-        dialog = QDialog()
-        layout = QFormLayout()
-
-        # Create the input fields
-        self.up_input = QSpinBox()
-        self.down_input = QSpinBox()
-        self.left_input = QSpinBox()
-        self.right_input = QSpinBox()
-
-        # Add the input fields to the dialog
-        layout.addRow("Up:", self.up_input)
-        layout.addRow("Down:", self.down_input)
-        layout.addRow("Left:", self.left_input)
-        layout.addRow("Right:", self.right_input)
-
-        # Create the buttons
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-
-        # Connect the buttons to their slots
-        buttons.accepted.connect(dialog.accept)
-        buttons.rejected.connect(dialog.reject)
-
-        # Add the buttons to the dialog
-        layout.addRow(buttons)
-
-        dialog.setLayout(layout)
-
-        # Show the dialog and wait for the user to click a button
-        result = dialog.exec_()
-
-        # If the user clicked the OK button, move the arrows
-        if result == QDialog.Accepted:
-            self.move_arrows()
-
     def move_arrows(self):
         items = self.scene().selectedItems()
         for item in items:
