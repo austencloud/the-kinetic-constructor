@@ -23,7 +23,7 @@ class Mini_Graphboard_View(QGraphicsView):
         self.mini_grid = Grid("images/grid/mini_grid.svg")
         self.svg_manager = Svg_Manager()
         self.staff_manager = Staff_Manager(self.mini_graphboard_scene)
-        self.arrow_manager = Arrow_Manager(self, self.staff_manager)
+        self.arrow_manager = Arrow_Manager(None, self, self.staff_manager)
         self.json_manager = Json_Manager(self.mini_graphboard_scene)
         self.info_tracker = Info_Tracker(self, None, self.staff_manager, self.json_manager)
         self.staff_manager.connect_grid(self.mini_grid)

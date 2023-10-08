@@ -39,8 +39,7 @@ class Graphboard_View(QGraphicsView):
         self.generator = generator
         self.ui_setup = ui_setup
         self.sequence_manager = sequence_manager
-        
-
+        self.arrow_manager = arrow_manager
         self.constants = Graphboard_Constants(self)
         self.exporter = exporter
         self.letter_renderers = {}
@@ -54,51 +53,17 @@ class Graphboard_View(QGraphicsView):
             self.graphboard_scene.setBackgroundBrush(Qt.white) 
             self.graphboard_scene.addItem(self.letter_item)
             self.graphboard_scene.addItem(self.grid)
-        self.arrow_manager = arrow_manager
+
         self.arrow_manager.connect_graphboard_scene(self.graphboard_scene)
         self.setFixedSize(int(750), int(900))
         self.VERTICAL_OFFSET = self.constants.VERTICAL_OFFSET
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
-        self.drag = Quadrant_Preview_Drag(self, self.dragging, self.info_tracker)
 
+        (self, self.info_tracker)
+        
     ### MOUSE EVENTS ###
-
-    def mousePressEvent(self, event):
-        self.drag_start_position = event.pos()
-        self.setFocus()
-        items = self.items(event.pos())
-        if items and items[0].flags() & QGraphicsItem.ItemIsMovable:
-            if event.button() == Qt.LeftButton and event.modifiers() == Qt.ControlModifier:
-                items[0].setSelected(not items[0].isSelected())
-            elif not items[0].isSelected():
-                for arrow in self.scene().selectedItems():
-                    arrow.setSelected(False)
-                items[0].setSelected(True)
-            self.dragging = items[0]
-            self.dragOffset = self.mapToScene(event.pos()) - self.dragging.pos()
-            
-        else:
-            self.clear_selection()
-            self.dragging = None
-
-        if event.button() == Qt.LeftButton and not items:
-            super().mousePressEvent(event)
-
-    def mouseMoveEvent(self, event):
-        if self.dragging:
-            new_pos = self.mapToScene(event.pos()) - self.dragOffset
-            movement = new_pos - self.dragging.pos()
-
-            for arrow in self.scene().selectedItems():
-                if isinstance(arrow, Arrow):
-                    arrow.setPos(arrow.pos() + movement)
-                    new_quadrant = self.drag.get_graphboard_quadrants(arrow.get_center_position())
-                    
-                    if arrow.quadrant != new_quadrant:
-                        arrow.update_arrow_for_new_quadrant(new_quadrant)
-                        self.info_tracker.update()
 
     def dragMoveEvent(self, event):
         dropped_svg = event.mimeData().text()
@@ -129,14 +94,13 @@ class Graphboard_View(QGraphicsView):
         self.arrow.setSelected(True)
 
         adjusted_arrow_pos = self.arrow.pos() + self.arrow.boundingRect().center()
-        quadrant = self.drag.get_graphboard_quadrants(adjusted_arrow_pos)
-        self.drag.update_arrow_svg(self.arrow, quadrant)
+        quadrant = self.get_graphboard_quadrants(adjusted_arrow_pos)
+        self.arrow.update_arrow_for_new_quadrant(quadrant)
         self.arrow.update_attributes()
 
         self.info_tracker.update()
 
     ### GETTERS ###
-
 
     def get_state(self):
         state = {
@@ -225,6 +189,31 @@ class Graphboard_View(QGraphicsView):
 
         return attributes
     
+    def get_graphboard_quadrants(self, mouse_pos):
+        adjusted_mouse_y = mouse_pos.y() + 75
+        if adjusted_mouse_y < self.sceneRect().height() / 2:
+            if mouse_pos.x() < self.sceneRect().width() / 2:
+                quadrant = 'nw'
+            else:
+                quadrant = 'ne'
+        else:
+            if mouse_pos.x() < self.sceneRect().width() / 2:
+                quadrant = 'sw'
+            else:
+                quadrant = 'se'
+        return quadrant
+
+    def show_bounding_box(self, item):
+        bounding_box = item.boundingRect()
+        bounding_box_item = QGraphicsRectItem(bounding_box)
+        bounding_box_item.setPos(item.pos())
+        self.scene().addItem(bounding_box_item)
+
+        # Create a timer to remove the bounding box after 1 second
+        timer = QTimer()
+        timer.setSingleShot(True)
+        timer.timeout.connect(lambda: self.scene().removeItem(bounding_box_item))
+        timer.start(1000)
 
     ### SELECTION ###
 
@@ -242,16 +231,13 @@ class Graphboard_View(QGraphicsView):
             arrow.setSelected(False)
 
 
-
     ### SETTERS ###
-
 
     def set_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
 
     def connect_generator(self, generator):
         self.generator = generator
-
 
     ### EVENTS ###
 
@@ -373,77 +359,12 @@ class Graphboard_View(QGraphicsView):
                 self.scene().removeItem(item)
                 del item
 
-class Quadrant_Preview_Drag(QDrag):
-    def __init__(self, source, arrow, info_tracker, *args, **kwargs):
-        super().__init__(source, *args, **kwargs)
-        self.arrow = arrow
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.update_pixmap)
-        self.info_tracker = info_tracker
-
-    def exec_(self, *args, **kwargs):
-        self.timer.start(100)
-        result = super().exec_(*args, **kwargs)
-        self.timer.stop()
-        return result
-
-    def update_pixmap(self):
-        mouse_pos = self.source().mapFromGlobal(self.source().cursor().pos())
-
-        quadrant, base_name = self.get_graphboard_quadrants(mouse_pos)
-        self.update_arrow_svg(self.arrow, quadrant)
-        new_svg = f'images\\arrows\\red\\r\\anti\\red_anti_r_{quadrant}.svg'
-        arrow_renderer = QSvgRenderer(new_svg)
-        self.arrow.setSharedRenderer(arrow_renderer)
-
-        if arrow_renderer.isValid():
-            pixmap = QPixmap(self.pixmap().size())
-            painter = QPainter(pixmap)
-            arrow_renderer.render(painter)
-            painter.end()
-            self.setPixmap(pixmap)
-
-    def get_graphboard_quadrants(self, mouse_pos):
-        mime_data = self.mimeData()
-        if mime_data is not None:
-            base_name = os.path.basename(mime_data.text())
-        else:
-            base_name = ""
-        adjusted_mouse_y = mouse_pos.y() + 75
-        if adjusted_mouse_y < self.source().sceneRect().height() / 2:
-            if mouse_pos.x() < self.source().sceneRect().width() / 2:
-                quadrant = 'nw'
-            else:
-                quadrant = 'ne'
-        else:
-            if mouse_pos.x() < self.source().sceneRect().width() / 2:
-                quadrant = 'sw'
-            else:
-                quadrant = 'se'
-        return quadrant
- 
-    def update_arrow_svg(self, arrow, quadrant):
-        base_name = os.path.basename(arrow.svg_file)
-
-        if base_name.startswith('red_anti'):
-            new_svg = f'images\\arrows\\shift\\{arrow.motion_type}\\red_anti_{arrow.rotation_direction}_{quadrant}_{arrow.turns}.svg'
-        elif base_name.startswith('red_pro'):
-            new_svg = f'images\\arrows\\shift\\{arrow.motion_type}\\red_pro_{arrow.rotation_direction}_{quadrant}_{arrow.turns}.svg'
-        elif base_name.startswith('blue_anti'):
-            new_svg = f'images\\arrows\\shift\\{arrow.motion_type}\\blue_anti_{arrow.rotation_direction}_{quadrant}_{arrow.turns}.svg'
-        elif base_name.startswith('blue_pro'):
-            new_svg = f'images\\arrows\\shift\\{arrow.motion_type}\\blue_pro_{arrow.rotation_direction}_{quadrant}_{arrow.turns}.svg'
-        else:
-            print(f"update_arrow_svg -- Unexpected svg_file: {arrow.svg_file}")
-            new_svg = arrow.svg_file 
-
-        arrow_renderer = QSvgRenderer(new_svg)
-        if arrow_renderer.isValid():
-            arrow.setSharedRenderer(arrow_renderer)
-            arrow.svg_file = new_svg
-        if arrow.motion_type == 'pro' or arrow.motion_type == 'anti':
-            arrow.set_attributes_from_filename()
-            arrow.quadrant = self.get_graphboard_quadrants(arrow.pos() + arrow.boundingRect().center())
-            pos = self.source().get_quadrant_center(quadrant) - arrow.boundingRect().center()
-            arrow.setPos(pos)
+    def toggle_item_selection(self, event, item):
+        if event.button() == Qt.LeftButton and event.modifiers() == Qt.ControlModifier:
+            item.setSelected(not item.isSelected())
+            # show bounding box
+            self.show_bounding_box(item)
+        elif not item.isSelected():
+            self.clear_selection()
+            item.setSelected(True)
 

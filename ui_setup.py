@@ -47,7 +47,7 @@ class UiSetup(QWidget):
 
         self.init_staff_manager()
         self.initLayouts()
-        self.arrow_manager = Arrow_Manager(self.graphboard_view, self.staff_manager)
+        self.arrow_manager = Arrow_Manager(None, self.graphboard_view, self.staff_manager)
         self.json_manager = Json_Manager(self.graphboard_scene)
         self.initInfoTracker()
         self.initMenus()
@@ -376,8 +376,6 @@ class UiSetup(QWidget):
 
     def keyPressEvent(self, event):
         self.selected_items = self.graphboard_view.get_selected_items()
-        
-        
         
         try:
             self.selected_item = self.selected_items[0]

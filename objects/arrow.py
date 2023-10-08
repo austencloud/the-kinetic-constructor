@@ -1,7 +1,9 @@
 import os
 from PyQt5.QtWidgets import QGraphicsItem
 from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
+from PyQt5.QtCore import Qt, QPointF, QTimer
 from data import ARROW_START_END_LOCATIONS
+from PyQt5.QtGui import QPixmap, QPainter
 
 class Arrow(QGraphicsSvgItem):
     def __init__(self, svg_file, graphboard_view, info_tracker, svg_manager, arrow_manager, motion_type, staff_manager, dict):
@@ -18,10 +20,12 @@ class Arrow(QGraphicsSvgItem):
         self.staff_manager = staff_manager
         self.svg_manager = svg_manager
         self.arrow_manager = arrow_manager
+        self.arrow_manager.connect_arrow(self)
         
         # Flags
         self.in_graphboard = False
-        
+        self.drag_offset = QPointF(0, 0)  # Initialize drag_offset
+
         # Other
         self.staff = None
         self.previous_arrow = None
@@ -34,7 +38,34 @@ class Arrow(QGraphicsSvgItem):
         self.setFlag(QGraphicsSvgItem.ItemIsSelectable, True)
         self.setTransformOriginPoint(self.boundingRect().center())
 
+
+
         self.update_attributes()
+
+    def mousePressEvent(self, event):
+        self.setSelected(True)  # Add this line
+        self.arrow_manager.prepare_dragging(event)
+        self.drag_start_pos = self.pos()  # Store the initial position of the arrow
+        self.drag_offset = event.pos() - self.boundingRect().topLeft()
+
+
+    def mouseMoveEvent(self, event):
+        self.setSelected(True)  # Add this line
+        if event.buttons() == Qt.LeftButton:
+            new_pos = self.mapToScene(event.pos()) - self.drag_offset
+            self.setPos(new_pos)  # Directly set the new position
+
+            new_quadrant = self.graphboard_view.get_graphboard_quadrants(new_pos)  
+            if self.quadrant != new_quadrant:
+                self.update_arrow_for_new_quadrant(new_quadrant)
+                self.info_tracker.update()
+
+
+    def mouseReleaseEvent(self, event):
+        if hasattr(self, 'future_position'):
+            self.setPos(self.future_position)  # Set the position when mouse is released
+            del self.future_position  # Delete the attribute for future use
+
 
     ### ATTRIBUTES ###
 
@@ -115,7 +146,6 @@ class Arrow(QGraphicsSvgItem):
         self.renderer = QSvgRenderer(svg_file)
         if self.renderer.isValid():
             self.setSharedRenderer(self.renderer)
-
 
 
     ### UPDATERS ###

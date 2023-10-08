@@ -1,18 +1,31 @@
 import os
 from PyQt5.QtSvg import QSvgRenderer
 from PyQt5.QtWidgets import QGraphicsItem
-from PyQt5.QtCore import pyqtSignal, QObject
+from PyQt5.QtCore import  QObject
 from objects.arrow import Arrow
 from data import ARROW_START_END_LOCATIONS
-class Arrow_Manager(QObject):
+from PyQt5.QtCore import QTimer, QPointF
+from PyQt5.QtGui import QPixmap, QPainter
+from PyQt5.QtWidgets import QGraphicsItem
+from PyQt5.QtGui import QDrag
 
-    def __init__(self, graphboard_view, staff_manager):
+class Arrow_Manager(QObject):
+    def __init__(self, arrow, graphboard_view, staff_manager):
         super().__init__()
         self.graphboard_view = graphboard_view
         self.staff_manager = staff_manager
         self.remaining_staff = {}
+        self.dragging_arrow = None
+        self.drag_offset = QPointF(0, 0)  
+        self.timer = QTimer()
+        
+        self.timer.timeout.connect(self.update_pixmap)
+        
 
     ### CONNECTORS ###
+
+    def connect_arrow(self, arrow):
+        self.arrow = arrow
 
     def connect_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
@@ -44,7 +57,6 @@ class Arrow_Manager(QObject):
         self.selected_arrow.update_attributes()
         self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
         self.info_tracker.update()
-
 
     def swap_motion_type(self, arrows):
         if not isinstance(arrows, list):
@@ -190,9 +202,6 @@ class Arrow_Manager(QObject):
             #if item is an arrow
             if isinstance(item, Arrow):
                 item.setSelected(True)
-    
-
-
 
     def delete_staff(self, staffs):
         if staffs:
@@ -231,4 +240,53 @@ class Arrow_Manager(QObject):
         else:
             print("No items selected")
 
+    def prepare_dragging(self, event):
+        self.drag_start_position = event.pos()
+        self.graphboard_view.setFocus()
+        draggable_items = [item for item in self.graphboard_view.items(event.pos().toPoint()) if item.flags() & QGraphicsItem.ItemIsMovable]
+
+        if draggable_items:
+            item = draggable_items[0]
+            self.graphboard_view.toggle_item_selection(event, item)
+            self.dragging_arrow = item
+            self.drag_offset = self.graphboard_view.mapToScene(event.pos().toPoint()) - self.dragging_arrow.pos()
+        else:
+            self.graphboard_view.clear_selection()
+            self.dragging_arrow = None
+
+        return self.dragging_arrow, self.drag_offset
+
+    def exec_(self, *args, **kwargs):
+        self.timer.start(100)
+        drag = QDrag(self.graphboard_view)
+        result = drag.exec_(*args, **kwargs)
+        self.timer.stop()
+        return result
+
+    def update_pixmap(self):
+        if self.dragging_arrow:
+            # Update arrow position based on new mouse position
+            new_pos = self.dragging_arrow.pos()
             
+            new_quadrant = self.graphboard_view.get_graphboard_quadrants(new_pos) 
+            
+            # Update arrow quadrant if necessary
+            if self.dragging_arrow.quadrant != new_quadrant:
+                self.dragging_arrow.update_arrow_for_new_quadrant(new_quadrant)
+                self.info_tracker.update()  # Assuming info_tracker is accessible
+
+        new_svg = f'images\\arrows\\red\\r\\anti\\red_anti_r_{new_quadrant}.svg'
+        arrow_renderer = QSvgRenderer(new_svg)
+        self.dragging_arrow.setSharedRenderer(arrow_renderer)
+
+        if arrow_renderer.isValid():
+            pixmap = QPixmap(self.dragging_arrow.pixmap().size())
+            painter = QPainter(pixmap)
+            arrow_renderer.render(painter)
+            painter.end()
+            self.dragging_arrow.setPixmap(pixmap)
+
+
+
+
+
