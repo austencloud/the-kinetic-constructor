@@ -8,16 +8,19 @@ from data import positions_map, letter_types
 
 class Info_Tracker:
     def __init__(self, graphboard_view, label, staff_manager):
-        self.graphboard_view = graphboard_view
-        self.label = label
+        self.remaining_staff = {}
         self.previous_state = None 
+        self.graphboard_view = graphboard_view
+        self.staff_manager = staff_manager
+        self.label = label
+        self.letters = self.load_letters()    
+
         if self.label:
             self.label.setFont(QFont('Helvetica', 14))
             self.label.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
             self.label.setAlignment(Qt.AlignTop)
-        self.letters = self.load_letters()
-        self.staff_manager = staff_manager
-        self.remaining_staff = {}
+
+
 
     def connect_graphboard_view(self, graphboard_view):
         self.graphboard_view = graphboard_view

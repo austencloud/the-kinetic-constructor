@@ -47,7 +47,7 @@ class Graphboard_View(QGraphicsView):
             renderer = QSvgRenderer(f'images/letters/{letter}.svg')
             self.letter_renderers[letter] = renderer
         self.letter_item = QGraphicsSvgItem()
-        from mini_graphboard import Mini_Graphboard_View
+        from views.mini_graphboard_view import Mini_Graphboard_View
         if isinstance(self, Mini_Graphboard_View):
             self.graphboard_scene.setBackgroundBrush(Qt.transparent)
         elif self.graphboard_scene is not None:
@@ -281,6 +281,20 @@ class Graphboard_View(QGraphicsView):
     def get_selected_items(self):
         return self.graphboard_scene.selectedItems()
     
+    def get_selected_arrows(self):
+        selected_arrows = []
+        for item in self.graphboard_scene.items():
+            if isinstance(item, Arrow):
+                selected_arrows.append(item)
+        return selected_arrows
+    
+    def get_selected_staffs(self):
+        selected_staffs = []
+        for item in self.graphboard_scene.items():
+            if isinstance(item, Staff):
+                selected_staffs.append(item)
+        return selected_staffs
+    
     def get_bounding_box(self):
         bounding_boxes = []
         for arrow in self.scene().items():
@@ -301,11 +315,11 @@ class Graphboard_View(QGraphicsView):
         return attributes
     
 
-    ### SELECTORS ###
+    ### SELECTION ###
 
     def select_all_items(self):
-        for arrow in self.scene().items():
-            arrow.setSelected(True)
+        for item in self.scene().items():
+            item.setSelected(True)
 
     def select_all_arrows(self):
         for arrow in self.graphboard_scene.items():
@@ -319,8 +333,6 @@ class Graphboard_View(QGraphicsView):
 
     ### SETTERS ###
 
-    def set_handlers(self, handlers):
-        self.handlers = handlers
 
     def set_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
@@ -448,9 +460,6 @@ class Graphboard_View(QGraphicsView):
             if isinstance(item, Arrow) or isinstance(item, Staff):
                 self.scene().removeItem(item)
                 del item
-
-
-
 
 class Quadrant_Preview_Drag(QDrag):
     def __init__(self, source, arrow_item, info_tracker, *args, **kwargs):

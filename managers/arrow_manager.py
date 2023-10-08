@@ -99,7 +99,6 @@ class Arrow_Manager(QObject):
         # Update the info tracker and the graphboard_view
         self.info_tracker.update()
         self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
-        self.graphboard_view.update_letter(self.info_tracker.determine_current_letter_and_type()[0])
 
     def rotate_arrow(self, direction, arrows):
         for arrow in arrows:
@@ -144,14 +143,14 @@ class Arrow_Manager(QObject):
                 arrow.svg_file = new_svg
                 arrow.update_locations()
                 arrow.quadrant = arrow.quadrant.replace('.svg', '')
-                arrow.update_quadrant()
+
                 pos = self.graphboard_view.get_quadrant_center(arrow.quadrant) - arrow.boundingRect().center()
                 arrow.setPos(pos)
             else:
                 print("Failed to load SVG file:", new_svg)
+                
         self.info_tracker.update()
         self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
-        self.graphboard_view.update_letter(self.info_tracker.determine_current_letter_and_type()[0])
         
     def bring_forward(self, items):
         for item in items:
@@ -183,6 +182,9 @@ class Arrow_Manager(QObject):
         else:
             print("Cannot swap colors with no arrows on the graphboard_view.")
             
+        self.info_tracker.update()
+        self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
+        
     def selectAll(self):
         for item in self.graphboard_view.items():
             #if item is an arrow
@@ -199,6 +201,9 @@ class Arrow_Manager(QObject):
 
     def delete_staff(self, staffs):
         if staffs:
+            # if staffs is not a list, make it a list
+            if not isinstance(staffs, list):
+                staffs = [staffs]
             for staff in staffs:
                 # Step 1: Identify and remove associated ghost arrows
                 ghost_arrow = staff.get_arrow()  # Assuming you have a method that returns the associated ghost arrow
@@ -218,8 +223,11 @@ class Arrow_Manager(QObject):
         else:
             print("No staffs selected")
 
-    def delete_arrow(self, selected_items):
-        for arrow in selected_items:
+    def delete_arrow(self, arrows):
+        #if arrows is not a list, make it a list
+        if not isinstance(arrows, list):
+            arrows = [arrows]
+        for arrow in arrows:
             if isinstance(arrow, Arrow):
                 # Create a ghost arrow with the same attributes
                 ghost_arrow = Arrow(None, arrow.graphboard_view, arrow.info_tracker, arrow.svg_manager, self, 'static', arrow.staff_manager)

@@ -11,12 +11,12 @@ from managers.staff_manager import Staff_Manager
 from managers.svg_manager import Svg_Manager
 from managers.json_manager import Json_Manager
 from generator import Pictograph_Generator
-from sequece_manager import Sequence_Manager, Sequence_Scene
+from managers.sequece_manager import Sequence_Manager
 from info_tracker import Info_Tracker
 from menus import Menu_Bar, Context_Menu_Manager
-from graphboard import Graphboard_View
-from arrowbox import ArrowBox_View
-from propbox import PropBox_View
+from views.graphboard_view import Graphboard_View
+from views.arrowbox_view import ArrowBox_View
+from views.propbox_view import PropBox_View
 from exporter import Exporter
 from settings import Settings
 from pictograph_selector import Pictograph_Selector
@@ -59,7 +59,6 @@ class UiSetup(QWidget):
         self.initArrowBox()
         self.initPropBoxView()
         
-        self.propbox_scene = self.propbox_view.propbox_scene
         self.staff_manager.connect_grid(self.grid)
         self.staff_manager.connect_graphboard(self.graphboard_view)
         self.staff_manager.connect_propbox(self.propbox_view)
@@ -204,7 +203,7 @@ class UiSetup(QWidget):
             return button
 
         self.updatePositionButton = createButton("images/icons/update_locations.png", "Update Position", 
-            lambda: self.json_updater.updatePositionInJson(*self.graphboard_view.get_current_arrow_positions()), is_lambda=True)
+            lambda: self.json_updater.update_optimal_locations_in_json(*self.graphboard_view.get_current_arrow_positions()), is_lambda=True)
         self.deleteButton = createButton("images/icons/delete.png", "Delete",
             lambda: self.arrow_manager.delete_arrow(self.graphboard_scene.selectedItems()), is_lambda=True)
         self.rotateRightButton = createButton("images/icons/rotate_right.png", "Rotate Right",
@@ -222,7 +221,7 @@ class UiSetup(QWidget):
         self.export_to_svg_button = createButton("images/icons/export.png", "Export to SVG",
             lambda: self.exporter.export_to_svg('output.svg'), is_lambda=True)
         self.selectAllButton = createButton("images/icons/select_all.png", "Select All",
-            lambda: self.graphboard_view.select_all_arrows(), is_lambda=True)
+            lambda: self.graphboard_view.select_all_items(), is_lambda=True)
         self.add_to_sequence_button = createButton("images/icons/add_to_sequence.png", "Add to Sequence",
             lambda: self.sequence_manager.add_to_sequence(self.graphboard_view), is_lambda=True)
         
@@ -270,7 +269,6 @@ class UiSetup(QWidget):
             file_name = os.path.basename(svg_file)
             if file_name in default_arrows:
                 motion_type = file_name.split('_')[1]
-                self.graphboard_view.set_handlers(self.arrow_manager)
                 arrow_item = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_manager, motion_type, self.staff_manager)
                 arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
                 arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
@@ -306,6 +304,8 @@ class UiSetup(QWidget):
         propbox_layout.addWidget(self.propbox_view.propbox_frame)
         propbox_frame.setLayout(propbox_layout)
         self.objectbox_layout.addWidget(propbox_frame)
+        self.propbox_scene = QGraphicsScene()
+        self.propbox_view.setScene(self.propbox_scene)
 
     def initInfoTracker(self):
         self.info_label = QLabel(self.main_window)
@@ -317,11 +317,14 @@ class UiSetup(QWidget):
         self.word_label.setFont(QFont('Helvetica', 20))
         self.word_label.setText("My word: ")
 
+
+
     def initSequenceScene(self):
 
-        self.sequence_scene = Sequence_Scene()
+        self.sequence_scene = QGraphicsScene()
+        self.sequence_scene.setSceneRect(0, 0, 4 * 375, 375)
         self.sequence_manager = Sequence_Manager(self.sequence_scene, self.generator, self, self.info_tracker)
-        self.sequence_scene.connect_manager(self.sequence_manager)
+        self.sequence_scene.manager = self.sequence_manager
         self.sequence_container = QGraphicsView(self.sequence_scene)
         self.sequence_container.setFixedSize(1960, 500)
         self.sequence_container.show()
@@ -376,16 +379,19 @@ class UiSetup(QWidget):
     def keyPressEvent(self, event):
         self.selected_items = self.graphboard_view.get_selected_items()
         
+        
+        
         try:
             self.selected_item = self.selected_items[0]
         except IndexError:
             self.selected_item = None
 
         if event.key() == Qt.Key_Delete:
-            if isinstance(self.selected_item, Arrow):
-                self.arrow_manager.delete_arrow(self.selected_items)
-            elif isinstance(self.selected_item, Staff):
-                self.arrow_manager.delete_staff(self.selected_items)  # Call delete_staff here
+            for item in self.selected_items:
+                if isinstance(item, Arrow):
+                    self.arrow_manager.delete_arrow(item)
+                elif isinstance(item, Staff):
+                    self.arrow_manager.delete_staff(item)  # Call delete_staff here
 
         elif self.selected_item and isinstance(self.selected_item, Arrow):
             if event.key() == Qt.Key_W:

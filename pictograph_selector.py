@@ -1,6 +1,5 @@
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QGridLayout, QLabel, QGraphicsScene
-from mini_graphboard import Mini_Graphboard_View
-from objects.grid import Grid
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QGridLayout, QLabel
+from views.mini_graphboard_view import Mini_Graphboard_View
 
 class Pictograph_Selector(QDialog):
     def __init__(self, combinations, letter, parent=None):

@@ -1,10 +1,10 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QPushButton, QGraphicsView
+from PyQt5.QtWidgets import QGraphicsRectItem, QPushButton
 from PyQt5.QtCore import QRectF, Qt, QPointF
 from PyQt5.QtGui import QImage, QPainter
 from objects.arrow import Arrow
 from objects.staff import Staff
 from objects.grid import Grid
-from graphboard import Graphboard_View
+from views.graphboard_view import Graphboard_View
 from pictograph import Pictograph
 from settings import Settings
 
@@ -96,12 +96,4 @@ class Sequence_Manager():
         self.ui_setup.word_label.setText("My word: ")
         self.ui_setup.info_tracker.label.setText("")  # Clear the label
         
-
-class Sequence_Scene(QGraphicsScene):
-    def __init__(self, manager=None, parent=None):
-        super().__init__(parent)
-        self.setSceneRect(0, 0, 4 * 375, 375)
-
-    def connect_manager(self, manager):
-        self.manager = manager
 
