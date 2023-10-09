@@ -65,6 +65,26 @@ class Graphboard_View(QGraphicsView):
         
     ### MOUSE EVENTS ###
 
+    def mousePressEvent(self, event):
+        self.setFocus()
+        items = self.items(event.pos())
+        if items and items[0].flags() & QGraphicsItem.ItemIsMovable:
+            if event.button() == Qt.LeftButton and event.modifiers() == Qt.ControlModifier:
+                items[0].setSelected(not items[0].isSelected())
+            elif not items[0].isSelected():
+                self.clear_selection()
+                items[0].setSelected(True)
+        else:
+            self.clear_selection()
+        super().mousePressEvent(event)
+        
+        # Check if any item got selected after calling the parent class's method
+        if items and not items[0].isSelected():
+            items[0].setSelected(True)
+
+
+
+
     def dragMoveEvent(self, event):
         dropped_svg = event.mimeData().text()
         base_name = os.path.basename(dropped_svg)
@@ -203,18 +223,6 @@ class Graphboard_View(QGraphicsView):
                 quadrant = 'se'
         return quadrant
 
-    def show_bounding_box(self, item):
-        bounding_box = item.boundingRect()
-        bounding_box_item = QGraphicsRectItem(bounding_box)
-        bounding_box_item.setPos(item.pos())
-        self.scene().addItem(bounding_box_item)
-
-        # Create a timer to remove the bounding box after 1 second
-        timer = QTimer()
-        timer.setSingleShot(True)
-        timer.timeout.connect(lambda: self.scene().removeItem(bounding_box_item))
-        timer.start(1000)
-
     ### SELECTION ###
 
     def select_all_items(self):
@@ -342,9 +350,3 @@ class Graphboard_View(QGraphicsView):
     def toggle_item_selection(self, event, item):
         if event.button() == Qt.LeftButton and event.modifiers() == Qt.ControlModifier:
             item.setSelected(not item.isSelected())
-            # show bounding box
-            self.show_bounding_box(item)
-        elif not item.isSelected():
-            self.clear_selection()
-            item.setSelected(True)
-
