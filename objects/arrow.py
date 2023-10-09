@@ -43,11 +43,19 @@ class Arrow(QGraphicsSvgItem):
         self.update_attributes()
 
     def mousePressEvent(self, event):
-        self.setSelected(True)  # Add this line
+        if event.modifiers() == Qt.ControlModifier:
+            # Ctrl key is pressed; add to selection
+            self.setSelected(not self.isSelected())
+        else:
+            # Ctrl key is not pressed; clear other selections
+            for item in self.scene().selectedItems():
+                if item is not self:
+                    item.setSelected(False)
+            self.setSelected(True)
+        
         self.arrow_manager.prepare_dragging(event)
         self.drag_start_pos = self.pos()  # Store the initial position of the arrow
         self.drag_offset = event.pos() - self.boundingRect().topLeft()
-
 
     def mouseMoveEvent(self, event):
         self.setSelected(True)  # Add this line
@@ -59,7 +67,6 @@ class Arrow(QGraphicsSvgItem):
             if self.quadrant != new_quadrant:
                 self.update_arrow_for_new_quadrant(new_quadrant)
                 self.info_tracker.update()
-
 
     def mouseReleaseEvent(self, event):
         if hasattr(self, 'future_position'):

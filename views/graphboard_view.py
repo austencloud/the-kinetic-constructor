@@ -7,7 +7,7 @@ from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor
 from objects.staff import Staff
 from objects.grid import Grid
 from objects.arrow import Arrow
-from settings import Settings, Graphboard_Constants
+from settings import *
 
 
 
@@ -40,7 +40,7 @@ class Graphboard_View(QGraphicsView):
         self.ui_setup = ui_setup
         self.sequence_manager = sequence_manager
         self.arrow_manager = arrow_manager
-        self.constants = Graphboard_Constants(self)
+
         self.exporter = exporter
         self.letter_renderers = {}
         for letter in 'ABCDEFGHIJKLMNOPQRSTUV':
@@ -55,8 +55,8 @@ class Graphboard_View(QGraphicsView):
             self.graphboard_scene.addItem(self.grid)
 
         self.arrow_manager.connect_graphboard_scene(self.graphboard_scene)
-        self.setFixedSize(int(750), int(900))
-        self.VERTICAL_OFFSET = self.constants.VERTICAL_OFFSET
+        self.setFixedSize(GRAPHBOARD_WIDTH, GRAPHBOARD_HEIGHT)
+        self.VERTICAL_OFFSET = VERTICAL_OFFSET
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
@@ -108,25 +108,25 @@ class Graphboard_View(QGraphicsView):
             'staffs': [],
             'grid': None
         }
-        for arrow in self.scene().items():
-            if isinstance(arrow, Arrow):
+        for item in self.scene().items():
+            if isinstance(item, Arrow):
                 state['arrows'].append({
-                    'color': arrow.color,
-                    'position': arrow.pos(),
-                    'quadrant': arrow.quadrant,
-                    'rotation_direction': arrow.rotation_direction,
-                    'svg_file': arrow.svg_file
+                    'color': item.color,
+                    'position': item.pos(),
+                    'quadrant': item.quadrant,
+                    'rotation_direction': item.rotation_direction,
+                    'svg_file': item.svg_file
                 })
-            elif isinstance(arrow, Staff):
+            elif isinstance(item, Staff):
                 state['staffs'].append({
-                    'position': arrow.pos(),
-                    'color': arrow.color,
-                    'svg_file': arrow.svg_file
+                    'position': item.pos(),
+                    'color': item.color,
+                    'svg_file': item.svg_file
                 })
-            elif isinstance(arrow, Grid):
+            elif isinstance(item, Grid):
                 state['grid'] = {
-                    'position': arrow.pos(),
-                    'svg_file': arrow.svg_file
+                    'position': item.pos(),
+                    'svg_file': item.svg_file
                 }
         return state
     
@@ -230,7 +230,6 @@ class Graphboard_View(QGraphicsView):
         for arrow in self.scene().selectedItems():
             arrow.setSelected(False)
 
-
     ### SETTERS ###
 
     def set_info_tracker(self, info_tracker):
@@ -244,25 +243,6 @@ class Graphboard_View(QGraphicsView):
     def resizeEvent(self, event): # KEEP THIS TO POSITION THE GRID
         self.setSceneRect(QRectF(self.rect()))
         super().resizeEvent(event)
-
-    def fkeyPressEvent(self, event):
-        key = event.key()
-        dx = dy = 0
-        if key == Qt.Key_Up:
-            dy = -15
-        elif key == Qt.Key_Down:
-            dy = 15
-        elif key == Qt.Key_Left:
-            dx = -15
-        elif key == Qt.Key_Right:
-            dx = 15
-        else:
-            super().keyPressEvent(event)
-            return
-
-        for arrow in self.scene().selectedItems():
-            if isinstance(arrow, Arrow):
-                arrow.moveBy(dx, dy)
 
     def contextMenuEvent(self, event):
         clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())
@@ -351,7 +331,7 @@ class Graphboard_View(QGraphicsView):
                 return
             self.letter_item.setSharedRenderer(renderer)
 
-        self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, 750)
+        self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, GRAPHBOARD_WIDTH)
 
     def clear(self):
         for item in self.scene().items():
