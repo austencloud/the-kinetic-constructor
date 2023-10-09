@@ -38,8 +38,6 @@ class Arrow(QGraphicsSvgItem):
         self.setFlag(QGraphicsSvgItem.ItemIsSelectable, True)
         self.setTransformOriginPoint(self.boundingRect().center())
 
-
-
         self.update_attributes()
 
     def mousePressEvent(self, event):
@@ -63,7 +61,6 @@ class Arrow(QGraphicsSvgItem):
         if hasattr(self, 'future_position'):
             self.setPos(self.future_position)  # Set the position when mouse is released
             del self.future_position  # Delete the attribute for future use
-
 
     ### ATTRIBUTES ###
 

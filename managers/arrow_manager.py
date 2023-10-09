@@ -247,7 +247,6 @@ class Arrow_Manager(QObject):
 
         if draggable_items:
             item = draggable_items[0]
-            self.graphboard_view.toggle_item_selection(event, item)
             self.dragging_arrow = item
             self.drag_offset = self.graphboard_view.mapToScene(event.pos().toPoint()) - self.dragging_arrow.pos()
         else:

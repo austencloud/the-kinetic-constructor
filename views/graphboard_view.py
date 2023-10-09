@@ -347,6 +347,3 @@ class Graphboard_View(QGraphicsView):
                 self.scene().removeItem(item)
                 del item
 
-    def toggle_item_selection(self, event, item):
-        if event.button() == Qt.LeftButton and event.modifiers() == Qt.ControlModifier:
-            item.setSelected(not item.isSelected())
