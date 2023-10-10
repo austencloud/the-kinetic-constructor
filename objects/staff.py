@@ -1,9 +1,7 @@
 from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
 from PyQt5.QtWidgets import QGraphicsItem
-from settings import Settings
 
 
-SCALE_FACTOR = Settings.SCALE_FACTOR
 
 class Staff(QGraphicsSvgItem):
     def __init__(self, element_id, scene, position, axis, color=None, staff_svg_file=None, initial_visibility=True):

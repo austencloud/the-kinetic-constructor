@@ -1,0 +1,52 @@
+{
+    "θ": [
+        [
+            {
+                "end_position": "gamma1",
+                "start_position": "alpha2"
+            },
+            {
+                "color": "blue",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "w",
+                "end_location": "w",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "pro",
+                "rotation_direction": "l",
+                "quadrant": "ne",
+                "start_location": "e",
+                "end_location": "n",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "end_position": "gamma2",
+                "start_position": "alpha3"
+            },
+            {
+                "color": "blue",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "n",
+                "end_location": "n",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "pro",
+                "rotation_direction": "l",
+                "quadrant": "se",
+                "start_location": "s",
+                "end_location": "e",
+                "turns": 0
+            }
+        ]
+    ]
+}

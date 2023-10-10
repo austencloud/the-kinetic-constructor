@@ -9,10 +9,6 @@ from objects.grid import Grid
 from objects.arrow import Arrow
 from settings import *
 
-
-
-SCALE_FACTOR = Settings.SCALE_FACTOR
-
 class Graphboard_View(QGraphicsView):
     def __init__(self,
                  graphboard_scene,

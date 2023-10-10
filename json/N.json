@@ -2,30 +2,6 @@
     "N": [
         [
             {
-                "start_position": "gamma7",
-                "end_position": "gamma2"
-            },
-            {
-                "color": "blue",
-                "motion_type": "anti",
-                "rotation_direction": "l",
-                "quadrant": "nw",
-                "start_location": "w",
-                "end_location": "n",
-                "turns": 0
-            },
-            {
-                "color": "red",
-                "motion_type": "anti",
-                "rotation_direction": "r",
-                "quadrant": "se",
-                "start_location": "s",
-                "end_location": "e",
-                "turns": 0
-            }
-        ],
-        [
-            {
                 "start_position": "gamma5",
                 "end_position": "gamma4"
             },
@@ -152,33 +128,6 @@
         ],
         [
             {
-                "start_position": "gamma1",
-                "end_position": "gamma6"
-            },
-            {
-                "color": "blue",
-                "motion_type": "anti",
-                "rotation_direction": "r",
-                "quadrant": "sw",
-                "start_location": "w",
-                "end_location": "s",
-                "turns": 0
-            },
-            {
-                "color": "red",
-                "motion_type": "anti",
-                "rotation_direction": "l",
-                "quadrant": "ne",
-                "start_location": "n",
-                "end_location": "e",
-                "turns": 0
-            },
-            {
-                "motion_type": "static"
-            }
-        ],
-        [
-            {
                 "start_position": "gamma2",
                 "end_position": "gamma7"
             },
@@ -198,6 +147,33 @@
                 "quadrant": "se",
                 "start_location": "e",
                 "end_location": "s",
+                "turns": 0
+            },
+            {
+                "motion_type": "static"
+            }
+        ],
+        [
+            {
+                "start_position": "gamma1",
+                "end_position": "gamma6"
+            },
+            {
+                "color": "blue",
+                "motion_type": "anti",
+                "rotation_direction": "r",
+                "quadrant": "sw",
+                "start_location": "w",
+                "end_location": "s",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "anti",
+                "rotation_direction": "l",
+                "quadrant": "ne",
+                "start_location": "n",
+                "end_location": "e",
                 "turns": 0
             },
             {

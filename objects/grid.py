@@ -1,6 +1,5 @@
 from xml.etree import ElementTree as ET
 from PyQt5.QtSvg import QGraphicsSvgItem
-from settings import Settings
 
 
 class Grid(QGraphicsSvgItem):

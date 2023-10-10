@@ -1,0 +1,18 @@
+positions_map = {
+    ('n', 'red', 's', 'blue'): 'alpha1',
+    ('e', 'red', 'w', 'blue'): 'alpha2',
+    ('s', 'red', 'n', 'blue'): 'alpha3',
+    ('w', 'red', 'e', 'blue'): 'alpha4',
+    ('n', 'red', 'n', 'blue'): 'beta1',
+    ('e', 'red', 'e', 'blue'): 'beta2',
+    ('s', 'red', 's', 'blue'): 'beta3',
+    ('w', 'red', 'w', 'blue'): 'beta4',
+    ('n', 'red', 'w', 'blue'): 'gamma1',
+    ('e', 'red', 'n', 'blue'): 'gamma2',
+    ('s', 'red', 'e', 'blue'): 'gamma3',
+    ('w', 'red', 's', 'blue'): 'gamma4',
+    ('n', 'red', 'e', 'blue'): 'gamma5',
+    ('e', 'red', 's', 'blue'): 'gamma6',
+    ('s', 'red', 'w', 'blue'): 'gamma7',
+    ('w', 'red', 'n', 'blue'): 'gamma8',
+}

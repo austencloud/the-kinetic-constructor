@@ -5,9 +5,8 @@ from PyQt5.QtCore import Qt, QMimeData
 from PyQt5.QtSvg import QSvgRenderer
 from objects.arrow import Arrow
 import os
-from settings import Settings
 
-SCALE_FACTOR = Settings.SCALE_FACTOR
+
 
 class ArrowBox_View(QGraphicsView):
     def __init__(self, arrowbox_scene, graphboard_view, info_tracker, svg_manager, parent=None):
@@ -19,7 +18,7 @@ class ArrowBox_View(QGraphicsView):
         self.svg_manager = svg_manager
         self.setAcceptDrops(True)
         self.setFrameShape(QFrame.NoFrame)
-        self.scale(SCALE_FACTOR, SCALE_FACTOR)
+
 
     ### MOUSE EVENTS ###
 

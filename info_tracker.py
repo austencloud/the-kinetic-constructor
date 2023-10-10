@@ -1,10 +1,8 @@
 from objects.arrow import Arrow
-from objects.staff import Staff
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
-import json
-import os
-from data import positions_map, letter_types
+from data.positions_map import positions_map
+from data.letter_types import letter_types
 
 class Info_Tracker:
     def __init__(self, graphboard_view, label, staff_manager, json_manager):

@@ -18,10 +18,8 @@ from views.graphboard_view import Graphboard_View
 from views.arrowbox_view import ArrowBox_View
 from views.propbox_view import PropBox_View
 from exporter import Exporter
-from settings import Settings
 from pictograph_selector import Pictograph_Selector
 
-SCALE_FACTOR = Settings.SCALE_FACTOR
 
 class UiSetup(QWidget):
 
@@ -30,7 +28,7 @@ class UiSetup(QWidget):
         self.setFocusPolicy(Qt.StrongFocus)
         self.main_window = main_window
         self.main_window.installEventFilter(self)
-        self.main_window.setMinimumSize(int(2000 * SCALE_FACTOR), int(1600 * SCALE_FACTOR))
+        self.main_window.setMinimumSize(int(2000), int(1600))
         self.main_window.show()
         self.main_window.setWindowTitle("Sequence Generator")
         self.svg_manager = Svg_Manager()
@@ -38,7 +36,7 @@ class UiSetup(QWidget):
         self.graphboard_scene = QGraphicsScene()
         self.graphboard_scene.setSceneRect(0, 0, 650, 650)
         self.ARROW_DIR = 'images\\arrows'
-        self.SVG_POS_Y = int(250 * SCALE_FACTOR)
+        self.SVG_POS_Y = int(250)
         self.context_menu_manager = None
         self.exporter = None
         self.sequence_manager = None
@@ -111,8 +109,6 @@ class UiSetup(QWidget):
 
     def initGraphboardView(self):
         self.grid = Grid('images\\grid\\grid.svg')
-        #set the size of the grid to SCALE_FACTOR 
-        self.grid.setScale(SCALE_FACTOR)
         self.exporter = Exporter(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
         self.graphboard_view = Graphboard_View(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_manager, self.arrow_manager, self, None, self.sequence_manager, self.exporter)
         self.arrow_manager.connect_to_graphboard(self.graphboard_view)
@@ -120,7 +116,7 @@ class UiSetup(QWidget):
         graphboard_size = self.graphboard_view.frameSize()
 
         grid_position = QPointF((graphboard_size.width() - self.grid.boundingRect().width()) / 2,
-                                (graphboard_size.height() - self.grid.boundingRect().height()) / 2 - (75 * SCALE_FACTOR))
+                                (graphboard_size.height() - self.grid.boundingRect().height()) / 2 - (75))
 
         transform.translate(grid_position.x(), grid_position.y())
         self.grid.setTransform(transform)
@@ -259,9 +255,9 @@ class UiSetup(QWidget):
         svg_item_count_red_anti = 0
         svg_item_count_blue_pro = 0
         svg_item_count_blue_anti = 0
-        spacing = 200 * SCALE_FACTOR
+        spacing = 200
         y_pos_red = 0
-        y_pos_blue = 200 * SCALE_FACTOR
+        y_pos_blue = 200
 
         for i, svg_file in enumerate(svgs_full_paths):
             file_name = os.path.basename(svg_file)
@@ -292,7 +288,7 @@ class UiSetup(QWidget):
                 self.arrows.append(arrow_item)
         arrowbox = ArrowBox_View(arrowbox_scene, self.graphboard_view, self.info_tracker, self.svg_manager)
         objectbox_layout.addWidget(arrowbox) 
-        arrowbox_frame.setFixedSize(int(500 * SCALE_FACTOR), int(500 * SCALE_FACTOR))
+        arrowbox_frame.setFixedSize(int(500), int(500))
         self.objectbox_layout.addWidget(arrowbox_frame)
 
     def initPropBoxView(self):

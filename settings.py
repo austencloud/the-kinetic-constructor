@@ -1,8 +1,6 @@
-class Settings():
-    SCALE_FACTOR = 1
-    Second_Screen = False
-    
 
+
+    
 STAFF_WIDTH = 25
 STAFF_LENGTH = 250
 

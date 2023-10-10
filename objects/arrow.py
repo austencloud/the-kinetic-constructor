@@ -2,7 +2,7 @@ import os
 from PyQt5.QtWidgets import QGraphicsItem
 from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
 from PyQt5.QtCore import Qt, QPointF, QTimer
-from data import ARROW_START_END_LOCATIONS
+from data.ARROW_START_END_LOCATIONS import ARROW_START_END_LOCATIONS
 from PyQt5.QtGui import QPixmap, QPainter
 
 class Arrow(QGraphicsSvgItem):
