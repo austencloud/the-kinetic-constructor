@@ -115,7 +115,6 @@ class Arrow_Manager(QObject):
 
     def rotate_arrow(self, direction, arrows):
         for arrow in arrows:
-            old_svg = f"images/arrows/{arrow.color}_{arrow.motion_type}_{arrow.rotation_direction}_{arrow.quadrant}_{arrow.turns}.svg"
             quadrants = ['ne', 'se', 'sw', 'nw']
             current_quadrant_index = quadrants.index(arrow.quadrant)
             if direction == "right":
@@ -129,7 +128,7 @@ class Arrow_Manager(QObject):
             if new_renderer.isValid():
                 arrow.setSharedRenderer(new_renderer)
                 arrow.svg_file = new_svg
-                arrow.set_attributes_from_filename()
+                arrow.update_attributes()
                 pos = self.graphboard_view.get_quadrant_center(new_quadrant) - arrow.boundingRect().center()
                 arrow.setPos(pos)
                 self.info_tracker.update()
@@ -171,24 +170,25 @@ class Arrow_Manager(QObject):
         arrows = [item for item in self.graphboard_scene.items() if isinstance(item, Arrow)]
         if len(arrows) >= 1:
             for arrow in arrows:
-                current_svg = arrow.svg_file
-                base_name = os.path.basename(current_svg)
-                color, motion_type, rotation, quadrant = base_name.split('_')[:4]
-                if color == "red":
+                if arrow.color == "red":
                     new_color = "blue"
-                elif color == "blue":
+                elif arrow.color == "blue":
                     new_color = "red"
                 else:
-                    print("swap_colors - Unexpected color:", color)
+                    print("swap_colors - Unexpected color:", arrow.color)
                     continue
-                new_svg = current_svg.replace(color, new_color)
-                new_renderer = QSvgRenderer(new_svg)
-                if new_renderer.isValid():
-                    arrow.setSharedRenderer(new_renderer)
-                    arrow.svg_file = new_svg
+                if arrow.motion_type == "pro" or arrow.motion_type == "anti":
+                    new_svg = arrow.svg_file.replace(arrow.color, new_color)
+                    new_renderer = QSvgRenderer(new_svg)
+                    if new_renderer.isValid():
+                        arrow.setSharedRenderer(new_renderer)
+                        arrow.svg_file = new_svg
+                        arrow.color = new_color
+                    else:
+                        print("Failed to load SVG file:", new_svg)
+                elif arrow.motion_type == "static":
                     arrow.color = new_color
-                else:
-                    print("Failed to load SVG file:", new_svg)
+
         else:
             print("Cannot swap colors with no arrows on the graphboard_view.")
             

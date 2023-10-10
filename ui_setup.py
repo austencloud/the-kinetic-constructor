@@ -205,15 +205,9 @@ class UiSetup(QWidget):
         self.rotateLeftButton = createButton("images/icons/rotate_left.png", "Rotate Left",
             lambda: self.arrow_manager.rotate_arrow('left', self.graphboard_scene.selectedItems()), is_lambda=True)
         self.mirrorButton = createButton("images/icons/mirror.png", "Mirror",
-            lambda: self.arrow_manager.mirror_arrow(self.graphboard_scene.selectedItems()), is_lambda=True)
-        self.bringForward = createButton("images/icons/bring_forward.png", "Bring Forward",
             lambda: self.arrow_manager.bring_forward(self.graphboard_scene.selectedItems()), is_lambda=True)
         self.swapColors = createButton("images/icons/swap.png", "Swap Colors",
             lambda: self.arrow_manager.swap_colors(self.graphboard_scene.selectedItems()), is_lambda=True)
-        self.export_to_png_button = createButton("images/icons/export.png", "Export to PNG",
-            lambda: self.exporter.export_to_png(), is_lambda=True)
-        self.export_to_svg_button = createButton("images/icons/export.png", "Export to SVG",
-            lambda: self.exporter.export_to_svg('output.svg'), is_lambda=True)
         self.selectAllButton = createButton("images/icons/select_all.png", "Select All",
             lambda: self.graphboard_view.select_all_items(), is_lambda=True)
         self.add_to_sequence_button = createButton("images/icons/add_to_sequence.png", "Add to Sequence",
@@ -224,10 +218,7 @@ class UiSetup(QWidget):
             self.rotateRightButton,
             self.rotateLeftButton,
             self.mirrorButton,
-            self.bringForward,
             self.swapColors,
-            self.export_to_png_button,
-            self.export_to_svg_button,
             self.updatePositionButton,
             self.selectAllButton,
             self.add_to_sequence_button

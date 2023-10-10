@@ -2,8 +2,8 @@
     "α": [
         [
             {
-                "end_position": "alpha1",
-                "start_position": "alpha1"
+                "start_position": "alpha1",
+                "end_position": "alpha1"
             },
             {
                 "color": "blue",
@@ -26,8 +26,8 @@
         ],
         [
             {
-                "end_position": "alpha2",
-                "start_position": "alpha2"
+                "start_position": "alpha2",
+                "end_position": "alpha2"
             },
             {
                 "color": "blue",
@@ -50,8 +50,8 @@
         ],
         [
             {
-                "end_position": "alpha3",
-                "start_position": "alpha3"
+                "start_position": "alpha3",
+                "end_position": "alpha3"
             },
             {
                 "color": "blue",
@@ -74,8 +74,8 @@
         ],
         [
             {
-                "end_position": "alpha4",
-                "start_position": "alpha4"
+                "start_position": "alpha4",
+                "end_position": "alpha4"
             },
             {
                 "color": "blue",

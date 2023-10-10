@@ -2,97 +2,97 @@
     "β": [
         [
             {
-                "end_position": "beta1",
-                "start_position": "beta1"
+                "start_position": "beta1",
+                "end_position": "beta1"
             },
             {
                 "color": "blue",
-                "end_location": "n",
                 "motion_type": "static",
-                "quadrant": "None",
                 "rotation_direction": "None",
+                "quadrant": "None",
                 "start_location": "n",
-                "turns": 0
-            },
-            {
-                "color": "red",
                 "end_location": "n",
+                "turns": 0
+            },
+            {
+                "color": "red",
                 "motion_type": "static",
-                "quadrant": "None",
                 "rotation_direction": "None",
+                "quadrant": "None",
                 "start_location": "n",
+                "end_location": "n",
                 "turns": 0
             }
         ],
         [
             {
-                "end_position": "beta2",
-                "start_position": "beta2"
+                "start_position": "beta2",
+                "end_position": "beta2"
             },
             {
                 "color": "blue",
-                "end_location": "e",
                 "motion_type": "static",
-                "quadrant": "None",
                 "rotation_direction": "None",
+                "quadrant": "None",
                 "start_location": "e",
-                "turns": 0
-            },
-            {
-                "color": "red",
                 "end_location": "e",
+                "turns": 0
+            },
+            {
+                "color": "red",
                 "motion_type": "static",
-                "quadrant": "None",
                 "rotation_direction": "None",
+                "quadrant": "None",
                 "start_location": "e",
+                "end_location": "e",
                 "turns": 0
             }
         ],
         [
             {
-                "end_position": "beta3",
-                "start_position": "beta3"
+                "start_position": "beta3",
+                "end_position": "beta3"
             },
             {
                 "color": "blue",
-                "end_location": "s",
                 "motion_type": "static",
-                "quadrant": "None",
                 "rotation_direction": "None",
+                "quadrant": "None",
                 "start_location": "s",
+                "end_location": "s",
                 "turns": 0
             },
             {
                 "color": "red",
-                "end_location": "s",
                 "motion_type": "static",
-                "quadrant": "None",
                 "rotation_direction": "None",
+                "quadrant": "None",
                 "start_location": "s",
+                "end_location": "s",
                 "turns": 0
             }
         ],
         [
             {
-                "end_position": "beta4",
-                "start_position": "beta4"
+                "start_position": "beta4",
+                "end_position": "beta4"
             },
             {
                 "color": "blue",
-                "end_location": "w",
                 "motion_type": "static",
-                "quadrant": "None",
                 "rotation_direction": "None",
+                "quadrant": "None",
                 "start_location": "w",
+                "end_location": "w",
                 "turns": 0
             },
             {
                 "color": "red",
-                "end_location": "w",
                 "motion_type": "static",
-                "quadrant": "None",
                 "rotation_direction": "None",
+                "quadrant": "None",
                 "start_location": "w",
+                "end_location": "w",
                 "turns": 0
             }
         ]
