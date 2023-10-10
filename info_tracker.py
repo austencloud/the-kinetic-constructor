@@ -21,8 +21,6 @@ class Info_Tracker:
             self.label.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
             self.label.setAlignment(Qt.AlignTop)
 
-
-
     def connect_graphboard_view(self, graphboard_view):
         self.graphboard_view = graphboard_view
 
@@ -34,21 +32,6 @@ class Info_Tracker:
         else:
             print("No self.letter found")
     
-    def check_for_changes(self):
-        current_state = {}
-        for item in self.graphboard_view.items():
-            if isinstance(item, Arrow):
-                current_state[item] = item.get_attributes()
-        if current_state != self.previous_state:
-            self.update()
-            self.previous_state = current_state
-
-    def check_for_remaining_staff(self, color):
-        for item in self.graphboard_view.items():
-            if isinstance(item, Staff) and item.color == color:  # Assuming you have a Staff class
-                return item
-        return None
-
     def determine_current_letter_and_type(self):
         current_combination = []
         for item in self.graphboard_view.items():
@@ -71,37 +54,7 @@ class Info_Tracker:
         self.letter = None  # Set to None if no match is found
 
         return self.letter, letter_type  # Always return two values
-
-
-
-    def generate_arrow_positions():
-        arrow_positions = {}
-        from main import Main_Window
-        for dirpath, dirnames, filenames in os.walk(Main_Window.ARROW_DIR):
-            for filename in filenames:
-                if filename.endswith('.svg'):
-                    parts = filename.split('_')
-                    motion_type = parts[1]
-                    rotation_direction = parts[2]
-                    quadrant = parts[3].split('.')[0]
-                    if motion_type == "anti":
-                        if rotation_direction == "l":
-                            start_location, end_location = ("n", "s")
-                        else:  # rotation_direction == "r"
-                            end_location, start_location = ("n", "s")
-                    else:  # motion_type == "pro"
-                        if rotation_direction == "l":
-                            start_location, end_location = ("n", "s")
-                        else:  # rotation_direction == "r"
-                            end_location, start_location = ("n", "s")
-                    arrow_positions[filename] = (start_location, end_location)
-        return arrow_positions
-    
    
-    def update_from_arrow_manager(self, remaining_staff):
-        self.remaining_staff = remaining_staff
-        self.update()  # Assuming update() refreshes the display    
-    
     def update(self):
         current_combination = []
         self.remaining_staff = {}  # Initialize an empty dictionary to store remaining staff info
@@ -122,47 +75,25 @@ class Info_Tracker:
         no_blue_arrows = True
         no_red_arrows = True
 
-        for item in self.graphboard_view.items():
-            if isinstance(item, Arrow):
-                attributes = item.get_attributes()
-                color = attributes.get('color', 'N/A')
-                if not item.isVisible():
-                    attributes['motion_type'] = 'static'
+        for arrow in [item for item in self.graphboard_view.items() if isinstance(item, Arrow)]:
+            arrow.set_attributes_from_filename()
 
-                if attributes['motion_type'] == 'pro' or attributes['motion_type'] == 'anti':
-                    if color == 'blue':
-                        no_blue_arrows = False
-                        blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
-                        blue_text = blue_text.replace("Rotation: ", f"Rotation: {item.rotation_direction.capitalize()}")
-                        blue_text = blue_text.replace("Type: ", f"Type: {attributes.get('motion_type', 'N/A').capitalize()}")
-                        blue_text = blue_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
-                        blue_text = blue_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
-                        blue_text = blue_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
-                    elif color == 'red':
-                        no_red_arrows = False
-                        red_text = red_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant').upper()}")
-                        red_text = red_text.replace("Rotation: ", f"Rotation: {attributes.get('rotation_direction').capitalize()}")
-                        red_text = red_text.replace("Type: ", f"Type: {attributes.get('motion_type', 'N/A').capitalize()}")
-                        red_text = red_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
-                        red_text = red_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
-                        red_text = red_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
-                elif attributes['motion_type'] == 'static':
-                    if color == 'blue':
-                        no_blue_arrows = False
-                        blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant')}")
-                        blue_text = blue_text.replace("Rotation: ", f"Rotation: {item.rotation_direction}")
-                        blue_text = blue_text.replace("Type: ", f"Type: {attributes.get('motion_type', 'N/A').capitalize()}")
-                        blue_text = blue_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
-                        blue_text = blue_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
-                        blue_text = blue_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
-                    elif color == 'red':
-                        no_red_arrows = False
-                        red_text = red_text.replace("Quadrant: ", f"Quadrant: {attributes.get('quadrant')}")
-                        red_text = red_text.replace("Rotation: ", f"Rotation: {attributes.get('rotation_direction')}")
-                        red_text = red_text.replace("Type: ", f"Type: {attributes.get('motion_type', 'N/A').capitalize()}")
-                        red_text = red_text.replace("Start: ", f"Start: {attributes.get('start_location', 'N/A').capitalize()}")
-                        red_text = red_text.replace("End: ", f"End: {attributes.get('end_location', 'N/A').capitalize()}")
-                        red_text = red_text.replace("Turns: ", f"Turns: {attributes.get('turns', 'N/A')}")
+            if arrow.color == 'blue':
+                no_blue_arrows = False
+                blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {arrow.quadrant.upper()}")
+                blue_text = blue_text.replace("Rotation: ", f"Rotation: {arrow.rotation_direction.capitalize()}")
+                blue_text = blue_text.replace("Type: ", f"Type: {arrow.motion_type.capitalize()}")
+                blue_text = blue_text.replace("Start: ", f"Start: {arrow.start_location.capitalize()}")
+                blue_text = blue_text.replace("End: ", f"End: {arrow.end_location.capitalize()}")
+                blue_text = blue_text.replace("Turns: ", f"Turns: {arrow.turns}")
+            elif arrow.color == 'red':
+                no_red_arrows = False
+                red_text = red_text.replace("Quadrant: ", f"Quadrant: {arrow.quadrant.upper()}")
+                red_text = red_text.replace("Rotation: ", f"Rotation: {arrow.rotation_direction.capitalize()}")
+                red_text = red_text.replace("Type: ", f"Type: {arrow.motion_type.capitalize()}")
+                red_text = red_text.replace("Start: ", f"Start: {arrow.start_location.capitalize()}")
+                red_text = red_text.replace("End: ", f"End: {arrow.end_location.capitalize()}")
+                red_text = red_text.replace("Turns: ", f"Turns: {arrow.turns}")
 
         # Determine the current letter and its type
         self.letter, current_letter_type = self.determine_current_letter_and_type()
@@ -175,8 +106,8 @@ class Info_Tracker:
         
             if current_combination in combinations:
                     letter_text += f"<span style='font-size: 40px; font-weight: bold;'>{current_letter_type}</span>"
-                    start_position, end_position = self.get_positions()
-                    letter_text += f"<h4>{start_position} → {end_position}</h4>"
+                    start_location, end_location = self.get_start_end_locations()
+                    letter_text += f"<h4>{start_location} → {end_location}</h4>"
                     self.letter = letter 
                     break  
                 
@@ -201,7 +132,6 @@ class Info_Tracker:
             blue_text = blue_text.replace("Start: ", f"Start: {self.remaining_staff['blue']['start'].upper()}")
             blue_text = blue_text.replace("End: ", f"End: {self.remaining_staff['blue']['end'].upper()}")
             blue_text = blue_text.replace("Turns: ", f"Turns: {self.remaining_staff['blue']['turns']}")
-
         if no_red_arrows and 'red' in self.remaining_staff:
             red_text = red_text.replace("Quadrant: ", f"Quadrant: {self.remaining_staff['red']['quadrant'].upper()}")
             red_text = red_text.replace("Rotation: ", f"Rotation: {self.remaining_staff['red']['rotation'].upper()}")
@@ -212,7 +142,7 @@ class Info_Tracker:
 
         self.staff_manager.update_graphboard_staffs(self.graphboard_view.scene())
 
-    def get_positions(self):
+    def get_start_end_locations(self):
         positions = []
         arrow_items = []
         counter = 1
@@ -240,20 +170,15 @@ class Info_Tracker:
         if start_location_red is not None and end_location_red is not None and start_location_blue is not None and end_location_blue is not None:
             start_key = (start_location_red, color_red, start_location_blue, color_blue)
             end_key = (end_location_red, color_red, end_location_blue, color_blue)
-            start_position = positions_map.get(start_key)
-            end_position = positions_map.get(end_key)
-            positions.append(start_position)
-            positions.append(end_position)
+            start_location = positions_map.get(start_key)
+            end_location = positions_map.get(end_key)
+            positions.append(start_location)
+            positions.append(end_location)
 
 
         if positions is not None:
             return positions
         else:
-            print("no positions returned by get_positions")
+            print("no positions returned by get_start_end_locations")
             return None
-
-    def update_position_label(self, position_label):
-        self.position_label = position_label
-        start_position, end_position = self.get_positions()
-        self.position_label.setText(f"Start: {start_position}\nEnd: {end_position}")
 

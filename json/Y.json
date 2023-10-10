@@ -3,7 +3,7 @@
         [
             {
                 "end_position": "beta3",
-                "start_position": "gamma6"
+                "start_position": "gamma3"
             },
             {
                 "color": "blue",
@@ -27,7 +27,7 @@
         [
             {
                 "end_position": "beta4",
-                "start_position": "gamma7"
+                "start_position": "gamma4"
             },
             {
                 "color": "blue",
@@ -51,7 +51,7 @@
         [
             {
                 "end_position": "beta1",
-                "start_position": "gamma8"
+                "start_position": "gamma1"
             },
             {
                 "color": "blue",
@@ -69,6 +69,54 @@
                 "quadrant": "None",
                 "start_location": "n",
                 "end_location": "n",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "end_position": "beta2",
+                "start_position": "gamma2"
+            },
+            {
+                "color": "blue",
+                "motion_type": "pro",
+                "rotation_direction": "r",
+                "quadrant": "ne",
+                "start_location": "n",
+                "end_location": "e",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "e",
+                "end_location": "e",
+                "turns": 0
+            }
+        ], 
+        [
+            {
+                "end_position": "beta3",
+                "start_position": "gamma6"
+            },
+            {
+                "color": "blue",
+                "motion_type": "pro",
+                "rotation_direction": "l",
+                "quadrant": "sw",
+                "start_location": "w",
+                "end_location": "s",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "s",
+                "end_location": "s",
                 "turns": 0
             }
         ],
@@ -80,9 +128,9 @@
             {
                 "color": "blue",
                 "motion_type": "pro",
-                "rotation_direction": "r",
-                "quadrant": "ne",
-                "start_location": "n",
+                "rotation_direction": "l",
+                "quadrant": "se",
+                "start_location": "s",
                 "end_location": "e",
                 "turns": 0
             },
@@ -99,39 +147,15 @@
         [
             {
                 "end_position": "beta1",
-                "start_position": "gamma2"
-            },
-            {
-                "color": "blue",
-                "motion_type": "pro",
-                "rotation_direction": "l",
-                "quadrant": "ne",
-                "start_location": "e",
-                "end_location": "n",
-                "turns": 0
-            },
-            {
-                "color": "red",
-                "motion_type": "static",
-                "rotation_direction": "None",
-                "quadrant": "None",
-                "start_location": "n",
-                "end_location": "n",
-                "turns": 0
-            }
-        ],
-        [
-            {
-                "end_position": "beta3",
                 "start_position": "gamma4"
             },
             {
                 "color": "blue",
                 "motion_type": "pro",
                 "rotation_direction": "l",
-                "quadrant": "sw",
-                "start_location": "w",
-                "end_location": "s",
+                "quadrant": "ne",
+                "start_location": "e",
+                "end_location": "n",
                 "turns": 0
             },
             {
@@ -139,20 +163,20 @@
                 "motion_type": "static",
                 "rotation_direction": "None",
                 "quadrant": "None",
-                "start_location": "s",
-                "end_location": "s",
+                "start_location": "n",
+                "end_location": "n",
                 "turns": 0
             }
         ],
         [
             {
                 "end_position": "beta4",
-                "start_position": "gamma1"
+                "start_position": "gamma3"
             },
             {
                 "color": "blue",
                 "motion_type": "pro",
-                "rotation_direction": "r",
+                "rotation_direction": "l",
                 "quadrant": "nw",
                 "start_location": "n",
                 "end_location": "w",
@@ -170,35 +194,11 @@
         ],
         [
             {
-                "end_position": "beta2",
+                "end_position": "beta3",
                 "start_position": "gamma3"
             },
             {
-                "color": "blue",
-                "motion_type": "pro",
-                "rotation_direction": "l",
-                "quadrant": "se",
-                "start_location": "s",
-                "end_location": "e",
-                "turns": 0
-            },
-            {
                 "color": "red",
-                "motion_type": "static",
-                "rotation_direction": "None",
-                "quadrant": "None",
-                "start_location": "e",
-                "end_location": "e",
-                "turns": 0
-            }
-        ],
-        [
-            {
-                "end_position": "beta3",
-                "start_position": "gamma6"
-            },
-            {
-                "color": "blue",
                 "motion_type": "pro",
                 "rotation_direction": "r",
                 "quadrant": "se",
@@ -207,7 +207,7 @@
                 "turns": 0
             },
             {
-                "color": "red",
+                "color": "blue",
                 "motion_type": "static",
                 "rotation_direction": "None",
                 "quadrant": "None",
@@ -219,10 +219,10 @@
         [
             {
                 "end_position": "beta4",
-                "start_position": "gamma7"
+                "start_position": "gamma4"
             },
             {
-                "color": "blue",
+                "color": "red",
                 "motion_type": "pro",
                 "rotation_direction": "r",
                 "quadrant": "sw",
@@ -231,7 +231,7 @@
                 "turns": 0
             },
             {
-                "color": "red",
+                "color": "blue",
                 "motion_type": "static",
                 "rotation_direction": "None",
                 "quadrant": "None",
@@ -243,10 +243,10 @@
         [
             {
                 "end_position": "beta1",
-                "start_position": "gamma8"
+                "start_position": "gamma1"
             },
             {
-                "color": "blue",
+                "color": "red",
                 "motion_type": "pro",
                 "rotation_direction": "r",
                 "quadrant": "nw",
@@ -255,12 +255,60 @@
                 "turns": 0
             },
             {
-                "color": "red",
+                "color": "blue",
                 "motion_type": "static",
                 "rotation_direction": "None",
                 "quadrant": "None",
                 "start_location": "n",
                 "end_location": "n",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "end_position": "beta2",
+                "start_position": "gamma2"
+            },
+            {
+                "color": "red",
+                "motion_type": "pro",
+                "rotation_direction": "r",
+                "quadrant": "ne",
+                "start_location": "n",
+                "end_location": "e",
+                "turns": 0
+            },
+            {
+                "color": "blue",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "e",
+                "end_location": "e",
+                "turns": 0
+            }
+        ], 
+        [
+            {
+                "end_position": "beta3",
+                "start_position": "gamma6"
+            },
+            {
+                "color": "red",
+                "motion_type": "pro",
+                "rotation_direction": "l",
+                "quadrant": "sw",
+                "start_location": "w",
+                "end_location": "s",
+                "turns": 0
+            },
+            {
+                "color": "blue",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "s",
+                "end_location": "s",
                 "turns": 0
             }
         ],
@@ -270,16 +318,16 @@
                 "start_position": "gamma5"
             },
             {
-                "color": "blue",
+                "color": "red",
                 "motion_type": "pro",
-                "rotation_direction": "r",
-                "quadrant": "ne",
-                "start_location": "n",
+                "rotation_direction": "l",
+                "quadrant": "se",
+                "start_location": "s",
                 "end_location": "e",
                 "turns": 0
             },
             {
-                "color": "red",
+                "color": "blue",
                 "motion_type": "static",
                 "rotation_direction": "None",
                 "quadrant": "None",
@@ -291,10 +339,10 @@
         [
             {
                 "end_position": "beta1",
-                "start_position": "gamma2"
+                "start_position": "gamma4"
             },
             {
-                "color": "blue",
+                "color": "red",
                 "motion_type": "pro",
                 "rotation_direction": "l",
                 "quadrant": "ne",
@@ -303,7 +351,7 @@
                 "turns": 0
             },
             {
-                "color": "red",
+                "color": "blue",
                 "motion_type": "static",
                 "rotation_direction": "None",
                 "quadrant": "None",
@@ -314,73 +362,25 @@
         ],
         [
             {
-                "end_position": "beta3",
-                "start_position": "gamma4"
-            },
-            {
-                "color": "blue",
-                "motion_type": "pro",
-                "rotation_direction": "l",
-                "quadrant": "sw",
-                "start_location": "w",
-                "end_location": "s",
-                "turns": 0
+                "end_position": "beta4",
+                "start_position": "gamma3"
             },
             {
                 "color": "red",
-                "motion_type": "static",
-                "rotation_direction": "None",
-                "quadrant": "None",
-                "start_location": "s",
-                "end_location": "s",
-                "turns": 0
-            }
-        ],
-        [
-            {
-                "end_position": "beta4",
-                "start_position": "gamma1"
-            },
-            {
-                "color": "blue",
                 "motion_type": "pro",
-                "rotation_direction": "r",
+                "rotation_direction": "l",
                 "quadrant": "nw",
                 "start_location": "n",
                 "end_location": "w",
                 "turns": 0
             },
             {
-                "color": "red",
+                "color": "blue",
                 "motion_type": "static",
                 "rotation_direction": "None",
                 "quadrant": "None",
                 "start_location": "w",
                 "end_location": "w",
-                "turns": 0
-            }
-        ],
-        [
-            {
-                "end_position": "beta2",
-                "start_position": "gamma3"
-            },
-            {
-                "color": "blue",
-                "motion_type": "pro",
-                "rotation_direction": "l",
-                "quadrant": "se",
-                "start_location": "s",
-                "end_location": "e",
-                "turns": 0
-            },
-            {
-                "color": "red",
-                "motion_type": "static",
-                "rotation_direction": "None",
-                "quadrant": "None",
-                "start_location": "e",
-                "end_location": "e",
                 "turns": 0
             }
         ]

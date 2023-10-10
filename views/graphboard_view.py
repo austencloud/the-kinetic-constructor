@@ -106,6 +106,7 @@ class Graphboard_View(QGraphicsView):
         
         dropped_arrow_svg = event.mimeData().text()
         self.arrow = Arrow(dropped_arrow_svg, self, self.info_tracker, self.svg_manager, self.arrow_manager, None, self.staff_manager, None)
+        self.arrow.set_attributes_from_filename()
         self.scene().addItem(self.arrow)
         pos = self.mapToScene(event.pos()) - self.arrow.boundingRect().center()
         self.arrow.setPos(pos)

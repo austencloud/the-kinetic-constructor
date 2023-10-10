@@ -84,6 +84,7 @@ class Mini_Graphboard_View(QGraphicsView):
 
     def place_ghost_arrows(self, created_arrows, arrow_dict):
         ghost_arrow = Arrow(None, self, self.info_tracker, self.svg_manager, self.arrow_manager, 'static', self.staff_manager, arrow_dict)
+        ghost_arrow.update_attributes()
         created_arrows.append(ghost_arrow)
 
     def place_shift_arrows(self, DISTANCE, created_arrows, optimal_locations, arrow_dict):

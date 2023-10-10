@@ -8,6 +8,7 @@ from PyQt5.QtCore import QTimer, QPointF
 from PyQt5.QtGui import QPixmap, QPainter
 from PyQt5.QtWidgets import QGraphicsItem
 from PyQt5.QtGui import QDrag
+from views.graphboard_view import Graphboard_View
 
 class Arrow_Manager(QObject):
     def __init__(self, arrow, graphboard_view, staff_manager):
@@ -21,7 +22,6 @@ class Arrow_Manager(QObject):
         
         self.timer.timeout.connect(self.update_pixmap)
         
-
     ### CONNECTORS ###
 
     def connect_arrow(self, arrow):
@@ -129,10 +129,10 @@ class Arrow_Manager(QObject):
             if new_renderer.isValid():
                 arrow.setSharedRenderer(new_renderer)
                 arrow.svg_file = new_svg
-                arrow.set_shift_attributes()
-                arrow.update_quadrant()
+                arrow.set_attributes_from_filename()
                 pos = self.graphboard_view.get_quadrant_center(new_quadrant) - arrow.boundingRect().center()
                 arrow.setPos(pos)
+                self.info_tracker.update()
             else:
                 print("Failed to load SVG file:", new_svg)
 
@@ -241,19 +241,21 @@ class Arrow_Manager(QObject):
             print("No items selected")
 
     def prepare_dragging(self, event):
-        self.drag_start_position = event.pos()
-        self.graphboard_view.setFocus()
-        draggable_items = [item for item in self.graphboard_view.items(event.pos().toPoint()) if item.flags() & QGraphicsItem.ItemIsMovable]
+        #if the graphboard is an instance of Graphboard_View
+        if isinstance(self.graphboard_view, Graphboard_View):
+            self.drag_start_position = event.pos()
+            self.graphboard_view.setFocus()
+            draggable_items = [item for item in self.graphboard_view.items(event.pos().toPoint()) if item.flags() & QGraphicsItem.ItemIsMovable]
 
-        if draggable_items:
-            item = draggable_items[0]
-            self.dragging_arrow = item
-            self.drag_offset = self.graphboard_view.mapToScene(event.pos().toPoint()) - self.dragging_arrow.pos()
-        else:
-            self.graphboard_view.clear_selection()
-            self.dragging_arrow = None
+            if draggable_items:
+                item = draggable_items[0]
+                self.dragging_arrow = item
+                self.drag_offset = self.graphboard_view.mapToScene(event.pos().toPoint()) - self.dragging_arrow.pos()
+            else:
+                self.graphboard_view.clear_selection()
+                self.dragging_arrow = None
 
-        return self.dragging_arrow, self.drag_offset
+            return self.dragging_arrow, self.drag_offset
 
     def exec_(self, *args, **kwargs):
         self.timer.start(100)

@@ -249,3 +249,10 @@ class Staff_Manager(QObject):
 
                 self.graphboard_scene.update()
 
+    ### GETTERS ###
+
+    def has_staff_of_color(self, color):
+        for staff in self.graphboard_staffs.values():
+            if staff.color == color and staff.isVisible():
+                return True
+        return False

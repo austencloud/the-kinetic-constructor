@@ -27,7 +27,7 @@ class Staff(QGraphicsSvgItem):
         self.axis = axis
         #make them selectable
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
-        self.setFlag(QGraphicsItem.ItemIsMovable, True)
+
 
 
     def hide(self):

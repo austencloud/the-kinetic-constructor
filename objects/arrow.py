@@ -11,11 +11,11 @@ class Arrow(QGraphicsSvgItem):
         
         # Connectors
         self.graphboard_view = graphboard_view
-        self.svg_file = svg_file
         self.info_tracker = info_tracker
         self.dict = dict
-        self.motion_type = motion_type
-
+        self.svg_file = svg_file
+        self.svg_manager = svg_manager
+        
         # Managers
         self.staff_manager = staff_manager
         self.svg_manager = svg_manager
@@ -38,7 +38,8 @@ class Arrow(QGraphicsSvgItem):
         self.setFlag(QGraphicsSvgItem.ItemIsSelectable, True)
         self.setTransformOriginPoint(self.boundingRect().center())
 
-        self.update_attributes()
+        if motion_type != 'static':
+            self.update_attributes()
 
     def mousePressEvent(self, event):
         
@@ -49,13 +50,15 @@ class Arrow(QGraphicsSvgItem):
     def mouseMoveEvent(self, event):
         self.setSelected(True)  # Add this line
         if event.buttons() == Qt.LeftButton:
-            new_pos = self.mapToScene(event.pos()) - self.drag_offset
-            self.setPos(new_pos)  # Directly set the new position
+            from views.graphboard_view import Graphboard_View
+            if isinstance(self.graphboard_view, Graphboard_View):
+                new_pos = self.mapToScene(event.pos()) - self.drag_offset
+                self.setPos(new_pos)  # Directly set the new position
 
-            new_quadrant = self.graphboard_view.get_graphboard_quadrants(new_pos)  
-            if self.quadrant != new_quadrant:
-                self.update_arrow_for_new_quadrant(new_quadrant)
-                self.info_tracker.update()
+                new_quadrant = self.graphboard_view.get_graphboard_quadrants(new_pos)  
+                if self.quadrant != new_quadrant:
+                    self.update_arrow_for_new_quadrant(new_quadrant)
+                    self.info_tracker.update()
 
     def mouseReleaseEvent(self, event):
         if hasattr(self, 'future_position'):
