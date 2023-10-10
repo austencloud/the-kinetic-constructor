@@ -107,37 +107,16 @@ class Info_Tracker:
                     start_location, end_location = self.get_start_end_locations()
                     letter_text += f"<h4>{start_location} → {end_location}</h4>"
                     self.letter = letter 
-                    break  
+                    break
                 
-        else:  # This will execute if the for loop completes without a 'break'
+        else:  # Letter isn't in the combinations
             self.letter = None
             self.graphboard_view.update_letter(None)   
-
 
         if self.letter is not None:
             self.graphboard_view.update_letter(self.letter)
 
         self.label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr><tr><td width=100>" + letter_text + "</td></tr></table>")
-
-        # Initialize an empty dictionary to store remaining staff info
-        self.remaining_staff = {}
-
-               
-        if no_blue_arrows and 'blue' in self.remaining_staff:
-            blue_text = blue_text.replace("Quadrant: ", f"Quadrant: {self.remaining_staff['blue']['quadrant'].upper()}")
-            blue_text = blue_text.replace("Rotation: ", f"Rotation: {self.remaining_staff['blue']['rotation'].upper()}")
-            blue_text = blue_text.replace("Motion: ", f"Motion: {self.remaining_staff['blue']['motion_type'].upper()}")
-            blue_text = blue_text.replace("Start: ", f"Start: {self.remaining_staff['blue']['start'].upper()}")
-            blue_text = blue_text.replace("End: ", f"End: {self.remaining_staff['blue']['end'].upper()}")
-            blue_text = blue_text.replace("Turns: ", f"Turns: {self.remaining_staff['blue']['turns']}")
-        if no_red_arrows and 'red' in self.remaining_staff:
-            red_text = red_text.replace("Quadrant: ", f"Quadrant: {self.remaining_staff['red']['quadrant'].upper()}")
-            red_text = red_text.replace("Rotation: ", f"Rotation: {self.remaining_staff['red']['rotation'].upper()}")
-            red_text = red_text.replace("Motion: ", f"Motion: {self.remaining_staff['red']['motion_type'].upper()}")
-            red_text = red_text.replace("Start: ", f"Start: {self.remaining_staff['red']['start'].upper()}")
-            red_text = red_text.replace("End: ", f"End: {self.remaining_staff['red']['end'].upper()}")
-            red_text = red_text.replace("Turns: ", f"Turns: {self.remaining_staff['red']['turns']}")
-
         self.staff_manager.update_graphboard_staffs(self.graphboard_view.scene())
 
     def get_start_end_locations(self):

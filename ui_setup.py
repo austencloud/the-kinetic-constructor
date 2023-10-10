@@ -205,7 +205,7 @@ class UiSetup(QWidget):
         self.rotateLeftButton = createButton("images/icons/rotate_left.png", "Rotate Left",
             lambda: self.arrow_manager.rotate_arrow('left', self.graphboard_scene.selectedItems()), is_lambda=True)
         self.mirrorButton = createButton("images/icons/mirror.png", "Mirror",
-            lambda: self.arrow_manager.bring_forward(self.graphboard_scene.selectedItems()), is_lambda=True)
+            lambda: self.arrow_manager.mirror_arrow(self.graphboard_scene.selectedItems()), is_lambda=True)
         self.swapColors = createButton("images/icons/swap.png", "Swap Colors",
             lambda: self.arrow_manager.swap_colors(self.graphboard_scene.selectedItems()), is_lambda=True)
         self.selectAllButton = createButton("images/icons/select_all.png", "Select All",

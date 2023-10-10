@@ -146,8 +146,8 @@
         ],
         [
             {
-                "start_position": "gamma2",
-                "end_position": "beta2"
+                "start_position": "beta1",
+                "end_position": "gamma5"
             },
             {
                 "color": "blue",
@@ -170,8 +170,8 @@
         ],
         [
             {
-                "start_position": "gamma3",
-                "end_position": "beta3"
+                "start_position": "gamma8",
+                "end_position": "beta4"
             },
             {
                 "color": "blue",
@@ -198,20 +198,20 @@
                 "end_position": "beta3"
             },
             {
-                "color": "red",
-                "motion_type": "anti",
-                "rotation_direction": "l",
-                "quadrant": "se",
-                "start_location": "e",
-                "end_location": "s",
-                "turns": 0
-            },
-            {
                 "color": "blue",
                 "motion_type": "static",
                 "rotation_direction": "None",
                 "quadrant": "None",
                 "start_location": "s",
+                "end_location": "s",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "anti",
+                "rotation_direction": "l",
+                "quadrant": "se",
+                "start_location": "e",
                 "end_location": "s",
                 "turns": 0
             }
@@ -222,20 +222,20 @@
                 "end_position": "beta4"
             },
             {
-                "color": "red",
-                "motion_type": "anti",
-                "rotation_direction": "l",
-                "quadrant": "sw",
-                "start_location": "s",
-                "end_location": "w",
-                "turns": 0
-            },
-            {
                 "color": "blue",
                 "motion_type": "static",
                 "rotation_direction": "None",
                 "quadrant": "None",
                 "start_location": "w",
+                "end_location": "w",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "anti",
+                "rotation_direction": "l",
+                "quadrant": "sw",
+                "start_location": "s",
                 "end_location": "w",
                 "turns": 0
             }
@@ -246,20 +246,20 @@
                 "end_position": "beta1"
             },
             {
-                "color": "red",
-                "motion_type": "anti",
-                "rotation_direction": "l",
-                "quadrant": "nw",
-                "start_location": "w",
-                "end_location": "n",
-                "turns": 0
-            },
-            {
                 "color": "blue",
                 "motion_type": "static",
                 "rotation_direction": "None",
                 "quadrant": "None",
                 "start_location": "n",
+                "end_location": "n",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "anti",
+                "rotation_direction": "l",
+                "quadrant": "nw",
+                "start_location": "w",
                 "end_location": "n",
                 "turns": 0
             }
@@ -270,20 +270,20 @@
                 "end_position": "beta2"
             },
             {
-                "color": "red",
-                "motion_type": "anti",
-                "rotation_direction": "l",
-                "quadrant": "ne",
-                "start_location": "n",
-                "end_location": "e",
-                "turns": 0
-            },
-            {
                 "color": "blue",
                 "motion_type": "static",
                 "rotation_direction": "None",
                 "quadrant": "None",
                 "start_location": "e",
+                "end_location": "e",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "anti",
+                "rotation_direction": "l",
+                "quadrant": "ne",
+                "start_location": "n",
                 "end_location": "e",
                 "turns": 0
             }
@@ -294,20 +294,20 @@
                 "end_position": "beta3"
             },
             {
-                "color": "red",
-                "motion_type": "anti",
-                "rotation_direction": "r",
-                "quadrant": "sw",
-                "start_location": "w",
-                "end_location": "s",
-                "turns": 0
-            },
-            {
                 "color": "blue",
                 "motion_type": "static",
                 "rotation_direction": "None",
                 "quadrant": "None",
                 "start_location": "s",
+                "end_location": "s",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "anti",
+                "rotation_direction": "r",
+                "quadrant": "sw",
+                "start_location": "w",
                 "end_location": "s",
                 "turns": 0
             }
@@ -318,15 +318,6 @@
                 "end_position": "beta2"
             },
             {
-                "color": "red",
-                "motion_type": "anti",
-                "rotation_direction": "r",
-                "quadrant": "se",
-                "start_location": "s",
-                "end_location": "e",
-                "turns": 0
-            },
-            {
                 "color": "blue",
                 "motion_type": "static",
                 "rotation_direction": "None",
@@ -334,21 +325,21 @@
                 "start_location": "e",
                 "end_location": "e",
                 "turns": 0
-            }
-        ],
-        [
-            {
-                "start_position": "gamma2",
-                "end_position": "beta1"
             },
             {
                 "color": "red",
                 "motion_type": "anti",
                 "rotation_direction": "r",
-                "quadrant": "ne",
-                "start_location": "n",
+                "quadrant": "se",
+                "start_location": "s",
                 "end_location": "e",
                 "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "beta1",
+                "end_position": "gamma2"
             },
             {
                 "color": "blue",
@@ -356,6 +347,15 @@
                 "rotation_direction": "None",
                 "quadrant": "None",
                 "start_location": "n",
+                "end_location": "n",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "anti",
+                "rotation_direction": "r",
+                "quadrant": "ne",
+                "start_location": "e",
                 "end_location": "n",
                 "turns": 0
             }
@@ -366,20 +366,20 @@
                 "end_position": "beta4"
             },
             {
-                "color": "red",
-                "motion_type": "anti",
-                "rotation_direction": "r",
-                "quadrant": "nw",
-                "start_location": "n",
-                "end_location": "w",
-                "turns": 0
-            },
-            {
                 "color": "blue",
                 "motion_type": "static",
                 "rotation_direction": "None",
                 "quadrant": "None",
                 "start_location": "w",
+                "end_location": "w",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "anti",
+                "rotation_direction": "r",
+                "quadrant": "nw",
+                "start_location": "n",
                 "end_location": "w",
                 "turns": 0
             }
