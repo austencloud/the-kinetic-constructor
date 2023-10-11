@@ -24,6 +24,9 @@ class Pictograph_Generator():
         self.output_dir = "images\\pictographs\\"
         self.letters = self.json_manager.load_all_letters()
 
+    # Load the JSON file
+
+
     def generate_all_pictographs(self, staff_manager):
         # Create the output directory if it doesn't exist
         os.makedirs(self.output_dir, exist_ok=True)

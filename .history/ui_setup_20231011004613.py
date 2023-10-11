@@ -73,6 +73,7 @@ class UiSetup(QWidget):
     def initMenus(self):
 
         self.arrow_manager.connect_graphboard_scene(self.graphboard_scene)
+        self.menu_bar = Menu_Bar()
 
     def initLayouts(self):
         self.main_layout = QHBoxLayout()

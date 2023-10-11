@@ -127,7 +127,6 @@ class Arrow(QGraphicsSvgItem):
     def update_arrow_for_new_quadrant(self, new_quadrant):
         self.quadrant = new_quadrant
 
-        # Inline the logic for generating the new SVG path
         base_name = os.path.basename(self.svg_file)
         color, motion_type = base_name.split("_", 2)[:2]
         if motion_type in ["pro", "anti"] and color in ["red", "blue"]:

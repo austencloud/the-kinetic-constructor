@@ -23,9 +23,7 @@ class Json_Manager(QObject):
     def update_individual_json(self, letter, updated_data, directory):
         filepath = os.path.join(directory, f"{letter}.json")
         with open(filepath, 'w') as file:
-            # Wrap the updated data in a dictionary with the letter as the key
-            json.dump({letter: updated_data}, file, indent=4)
-
+            json.dump(updated_data, file, indent=4)
 
     def update_optimal_locations_in_json(self, red_position, blue_position):
         current_attributes = []

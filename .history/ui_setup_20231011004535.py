@@ -13,6 +13,7 @@ from managers.json_manager import Json_Manager
 from generator import Pictograph_Generator
 from managers.sequence_manager import Sequence_Manager
 from info_tracker import Info_Tracker
+from context_menu_manager import Menu_Bar, Context_Menu_Manager
 from views.graphboard_view import Graphboard_View
 from views.arrowbox_view import ArrowBox_View
 from views.propbox_view import PropBox_View
@@ -72,7 +73,9 @@ class UiSetup(QWidget):
 
     def initMenus(self):
 
+        self.context_menu_manager = Context_Menu_Manager(self.graphboard_scene, self.sequence_manager, self.arrow_manager, self.exporter)
         self.arrow_manager.connect_graphboard_scene(self.graphboard_scene)
+        self.menu_bar = Menu_Bar()
 
     def initLayouts(self):
         self.main_layout = QHBoxLayout()
