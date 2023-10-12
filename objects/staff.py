@@ -4,16 +4,16 @@ from PyQt5.QtWidgets import QGraphicsItem
 
 
 class Staff(QGraphicsSvgItem):
-    def __init__(self, element_id, scene, position, axis, color=None, staff_svg_file=None, initial_visibility=True):
+    def __init__(self, element_id, graphboard_scene, position, axis, color=None, staff_svg_file=None, initial_visibility=True):
         super().__init__()
         self.element_id = element_id
         self.position = position 
         self.renderer = QSvgRenderer(staff_svg_file)
         self.setSharedRenderer(self.renderer)
         self.setElementId(self.element_id)
-        scene.addItem(self)
+        graphboard_scene.addItem(self)
         self.setVisible(initial_visibility)
-        self.scene = scene
+        self.scene = graphboard_scene
         self.setPos(position)
         self.arrow = None
         self.setVisible(True)
@@ -23,9 +23,8 @@ class Staff(QGraphicsSvgItem):
         self.svg_file = staff_svg_file
         self.color = color
         self.axis = axis
-        #make them selectable
-        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
+        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
 
     def hide(self):
