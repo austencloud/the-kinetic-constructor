@@ -29,10 +29,10 @@
         </g>
 
         <g id="layer2_points">
-            <circle id="NE_layer2_point" class="black" cx="468.09" cy="181.91" r="8.75"/>
-            <circle id="SE_layer2_point" class="black" cx="468.09" cy="468.09" r="8.75"/>
-            <circle id="SW_layer2_point" class="black" cx="181.91" cy="468.09" r="8.75"/>
-            <circle id="NW_layer2_point" class="black" cx="181.91" cy="181.91" r="8.75"/>
+            <circle id="NE_layer2_point" class="transparent" cx="468.09" cy="181.91" r="8.75"/>
+            <circle id="SE_layer2_point" class="transparent" cx="468.09" cy="468.09" r="8.75"/>
+            <circle id="SW_layer2_point" class="transparent" cx="181.91" cy="468.09" r="8.75"/>
+            <circle id="NW_layer2_point" class="transparent" cx="181.91" cy="181.91" r="8.75"/>
         </g>
 
       </g>

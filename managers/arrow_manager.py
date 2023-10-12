@@ -58,7 +58,7 @@ class Arrow_Manager(QObject):
 
         self.update_arrow_image(self.selected_arrow)
         self.arrow.update_attributes()
-        self.update_arrow_position(self.selected_arrow)
+        self.set_optimal_arrow_pos(self.selected_arrow, self.graphboard_view.get_arrows())
         self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
         self.info_tracker.update()
 
@@ -91,7 +91,7 @@ class Arrow_Manager(QObject):
                 arrow.svg_file = new_svg
                 arrow.motion_type = new_motion_type
                 arrow.rotation_direction = new_rotation_direction 
-                self.update_arrow_position(arrow)
+                self.set_optimal_arrow_pos(arrow, self.graphboard_view.get_arrows())
             else:
                 print(f"Failed to load SVG file: {new_svg}")
 
@@ -138,7 +138,7 @@ class Arrow_Manager(QObject):
                 arrow.svg_file = new_svg
                 arrow.quadrant = arrow.quadrant.replace('.svg', '')
                 arrow.update_attributes()
-                self.update_arrow_position(arrow)
+                self.set_optimal_arrow_pos(arrow, self.graphboard_view.get_arrows())
             else:
                 print("Failed to load SVG file:", new_svg)
                 
@@ -181,37 +181,89 @@ class Arrow_Manager(QObject):
         
         ### UPDATERS ###
         
-    def update_arrow_position(self, arrow, letter=None):
-        combinations = self.letters.get(letter, [])
-        if not combinations:
-            print(f"No combinations found for letter {letter}")
-            self.graphboard_view.update_letter(None)
-            self.info_tracker.update()
-            return
-        self.current_letter = letter
-        print(f"Updating positions for {self.current_letter}")
-        combination_set = random.choice(combinations)
-        current_arrows = []
-        optimal_positions = next((d for d in combination_set if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
-        for arrow in current_arrows:
-            if optimal_positions:
-                optimal_position = optimal_positions.get(f"optimal_{arrow.color}_location")
-                if optimal_position:
-                    pos = QPointF(optimal_position['x'], optimal_position['y']) - arrow.boundingRect().center()
-                    arrow.setPos(pos)
-            else:
-                pos = self.graphboard_view.get_quadrant_center(arrow.quadrant) - arrow.boundingRect().center()
-                if arrow.quadrant == 'ne':
-                    pos += QPointF(ARROW_ADJUSTMENT_DISTANCE, -ARROW_ADJUSTMENT_DISTANCE)
-                elif arrow.quadrant == 'se':
-                    pos += QPointF(ARROW_ADJUSTMENT_DISTANCE, ARROW_ADJUSTMENT_DISTANCE)
-                elif arrow.quadrant == 'sw':
-                    pos += QPointF(-ARROW_ADJUSTMENT_DISTANCE, ARROW_ADJUSTMENT_DISTANCE)
-                elif arrow.quadrant == 'nw':
-                    pos += QPointF(-ARROW_ADJUSTMENT_DISTANCE, -ARROW_ADJUSTMENT_DISTANCE)
-                    
-                arrow.setPos(pos + QPointF(GRID_PADDING, GRID_PADDING))
+    def update_arrow_position(self, arrow, graphboard_view):
+        current_arrows = graphboard_view.get_arrows()
+        letter = self.info_tracker.determine_current_letter_and_type()[0]
+        if letter is not None:
+            self.set_optimal_arrow_pos(arrow, current_arrows)
+        elif letter is None:
+            self.set_default_arrow_pos(arrow)
+        
+    def find_optimal_locations(self, current_state, combinations):
+        for inner_list in combinations:
+            if self.compare_states(current_state, inner_list):
+                optimal_locations = next((d for d in inner_list if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
+                if optimal_locations:
+                    return optimal_locations
+        return None
+    
+    def compare_states(self, current_state, candidate_state):
+        # Convert candidate_state to a format similar to current_state for easier comparison
+        candidate_state_dict = {
+            'arrows': [],
+            'staffs': [],
+            'grid': None
+        }
+        
+        for entry in candidate_state:
+            if 'color' in entry and 'motion_type' in entry:
+                candidate_state_dict['arrows'].append({
+                    'color': entry['color'],
+                    'quadrant': entry['quadrant'],
+                    'rotation_direction': entry['rotation_direction'],
+                    # Add other attributes as needed
+                })
+            elif 'motion_type' in entry and entry['motion_type'] == 'static':
+                candidate_state_dict['staffs'].append({
+                    # Add attributes as needed
+                })
+            # Add conditions for grid if needed
 
+        # Now compare the two states
+        if len(current_state['arrows']) != len(candidate_state_dict['arrows']):
+            return False
+        
+        for arrow in current_state['arrows']:
+            matching_arrows = [candidate_arrow for candidate_arrow in candidate_state_dict['arrows']
+                            if all(arrow.get(key) == candidate_arrow.get(key) for key in ['color', 'quadrant', 'rotation_direction'])]
+            if not matching_arrows:
+                return False
+
+        return True
+
+    
+    def set_optimal_arrow_pos(self, arrow, current_arrows):
+        current_state = arrow.graphboard_view.get_state()  # Implement this function to get the current state
+        current_letter = self.info_tracker.determine_current_letter_and_type()[0]
+        if current_letter is not None:
+            combinations = self.letters[current_letter]  # Assuming json_data contains your JSON data
+            for arrow in current_arrows:
+                optimal_locations = self.find_optimal_locations(current_state, combinations)
+                if optimal_locations:
+                    optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
+                    if optimal_location:
+                        pos = QPointF(optimal_location['x'], optimal_location['y']) - arrow.boundingRect().center()
+                        arrow.setPos(pos)  
+                    else:
+                        self.set_default_arrow_pos(arrow)
+                else:
+                    self.set_default_arrow_pos(arrow)
+        else:
+            self.set_default_arrow_pos(arrow)
+
+    def set_default_arrow_pos(self, arrow):
+        pos = self.graphboard_view.get_quadrant_center(arrow.quadrant) - arrow.boundingRect().center()
+        if arrow.quadrant == 'ne':
+            pos += QPointF(ARROW_ADJUSTMENT_DISTANCE, -ARROW_ADJUSTMENT_DISTANCE)
+        elif arrow.quadrant == 'se':
+            pos += QPointF(ARROW_ADJUSTMENT_DISTANCE, ARROW_ADJUSTMENT_DISTANCE)
+        elif arrow.quadrant == 'sw':
+            pos += QPointF(-ARROW_ADJUSTMENT_DISTANCE, ARROW_ADJUSTMENT_DISTANCE)
+        elif arrow.quadrant == 'nw':
+            pos += QPointF(-ARROW_ADJUSTMENT_DISTANCE, -ARROW_ADJUSTMENT_DISTANCE)
+            
+        arrow.setPos(pos + QPointF(GRID_PADDING, GRID_PADDING))
+        
     def update_arrow_image(self, arrow):
         if arrow.motion_type == 'pro' or arrow.motion_type == 'anti':
             new_filename = f"images\\arrows\\shift\\{arrow.motion_type}\\{arrow.color}_{arrow.motion_type}_{arrow.rotation_direction}_{arrow.quadrant}_{arrow.turns}.svg"

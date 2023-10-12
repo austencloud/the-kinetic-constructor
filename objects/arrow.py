@@ -69,7 +69,8 @@ class Arrow(QGraphicsSvgItem):
         if hasattr(self, 'future_position'):
             self.setPos(self.future_position)  # Set the position when mouse is released
             del self.future_position  # Delete the attribute for future use
-        self.arrow_manager.update_arrow_position(self)
+        # if the graphboard view is an instance of Graphboard_View
+        self.arrow_manager.update_arrow_position(self, self.graphboard_view)
         
     ### ATTRIBUTES ###
 

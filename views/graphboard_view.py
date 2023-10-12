@@ -112,7 +112,7 @@ class Graphboard_View(QGraphicsView):
         quadrant = self.get_graphboard_quadrants(self.arrow.pos() + self.arrow.boundingRect().center())
         self.arrow.update_arrow_for_new_quadrant(quadrant)
         self.arrow.update_attributes()
-        self.arrow.arrow_manager.update_arrow_position(self.arrow)
+        self.arrow.arrow_manager.update_arrow_position(self.arrow, self)
         self.info_tracker.update()
 
     ### GETTERS ###
@@ -225,6 +225,14 @@ class Graphboard_View(QGraphicsView):
         attributes['quadrant'] = parts[3].split('.')[0]
 
         return attributes
+    
+    def get_arrows(self):
+        # return the current arrows on the graphboard as an array
+        current_arrows = []
+        for arrow in self.scene().items():
+            if isinstance(arrow, Arrow):
+                current_arrows.append(arrow)
+        return current_arrows
     
 
     ### SELECTION ###
