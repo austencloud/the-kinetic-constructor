@@ -4,10 +4,9 @@ import random
 import os
 from objects.arrow import Arrow
 from managers.svg_manager import Svg_Manager
-
 from exporter import Exporter
 class Pictograph_Generator():
-    def __init__(self, staff_manager, graphboard_view, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, context_menu_manager, json_manager, grid, parent=None):
+    def __init__(self, staff_manager, graphboard_view, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, json_manager, grid, parent=None):
         self.staff_manager = staff_manager
         self.parent = parent
         self.graphboard_view = graphboard_view
@@ -17,7 +16,6 @@ class Pictograph_Generator():
         self.main_window = main_window
         self.arrow_handler = arrow_handler
         self.svg_manager = Svg_Manager()
-        self.context_menu_manager = context_menu_manager
         self.exporter = exporter
         self.grid = grid
         self.json_manager = json_manager
@@ -25,36 +23,27 @@ class Pictograph_Generator():
         self.letters = self.json_manager.load_all_letters()
 
     def generate_all_pictographs(self, staff_manager):
-        # Create the output directory if it doesn't exist
         os.makedirs(self.output_dir, exist_ok=True)
 
-        # Iterate over all combinations for each letter
         for letter, combinations in self.letters.items():
             for combination in combinations:
-                # Find the dictionary in the combination list that contains the 'start_position' and 'end_position' keys
                 positions_dict = next((d for d in combination if 'start_position' in d and 'end_position' in d), None)
                 if positions_dict is None:
                     continue
 
-                # Get the start and end positions
                 start_position = positions_dict['start_position'].replace('alpha', 'a').replace('beta', 'b').replace('gamma', 'g')
                 end_position = positions_dict['end_position'].replace('alpha', 'a').replace('beta', 'b').replace('gamma', 'g')
 
-                # Check if the current combination has one 'anti' and one 'pro'
                 motion_types = [arrow_dict['motion_type'] for arrow_dict in combination if 'motion_type' in arrow_dict]
                 is_hybrid = motion_types.count('anti') == 1 and motion_types.count('pro') == 1
 
 
-                # Iterate over the arrow dictionaries in the list
                 for arrow_dict in combination:
                     print("iterating over arrow_dict in combination")
-                    # Check if the dictionary has all the keys you need
                     if all(key in arrow_dict for key in ['color', 'motion_type', 'rotation_direction', 'quadrant']):
-                        # Get the color and motion_type of the arrow
                         color = arrow_dict['color']
                         motion_type = arrow_dict['motion_type']
 
-                        # Create the file name
                         file_name = f"{letter}_{start_position}_{end_position}"
                         if motion_type == 'pro' and is_hybrid and color == 'red':
                             file_name += f"_r-pro_l-anti"
@@ -62,8 +51,6 @@ class Pictograph_Generator():
                             file_name += f"_r-anti_l-pro"
                         file_name += ".svg"
 
-
-                        # Write the SVG to a file
                         output_file_path = os.path.join(self.output_dir, file_name)
                         self.exporter = Exporter(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
                         print(output_file_path)
@@ -75,32 +62,23 @@ class Pictograph_Generator():
 
     def open_selection_window(self, letter):
         self.output_dir = "images\\pictographs\\"
-
         self.graphboard_view.clear()
-
-        # Get the list of possible combinations for the letter
+        
         combinations = self.letters.get(letter, [])
         if not combinations:
             print(f"No combinations found for letter {letter}")
             self.graphboard_view.update_letter(None)
             self.info_tracker.update()
             return
-
-        self.current_letter = letter  # Store the current letter
+        self.current_letter = letter
         print(f"Generating {self.current_letter}")
         self.graphboard_view.update_letter(self.current_letter)
-        # Choose a combination at random
+        
         combination_set = random.choice(combinations)
-
-        # Create a list to store the created arrows
         created_arrows = []
-
-        # Find the optimal positions dictionary in combination_set
+        
         optimal_positions = next((d for d in combination_set if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
-
         for combination in combination_set:
-
-            # Check if the dictionary has all the keys you need
             if all(key in combination for key in ['color', 'motion_type', 'rotation_direction', 'quadrant', 'turns']):
                 if combination['motion_type'] == 'static':
                     svg_file = f"images/arrows/blank.svg"
@@ -110,7 +88,6 @@ class Pictograph_Generator():
                     arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_handler, combination['motion_type'], self.staff_manager, None)
                     arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
                     arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
-                # Add the created arrow to the list
                 created_arrows.append(arrow)
 
         

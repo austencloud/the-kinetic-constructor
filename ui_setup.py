@@ -35,8 +35,6 @@ class UiSetup(QWidget):
         self.graphboard_scene = QGraphicsScene()
         self.graphboard_scene.setSceneRect(0, 0, 650, 650)
         self.ARROW_DIR = 'images\\arrows'
-        self.SVG_POS_Y = int(250)
-        self.context_menu_manager = None
         self.exporter = None
         self.sequence_manager = None
         self.graphboard_view = None
@@ -107,7 +105,7 @@ class UiSetup(QWidget):
     def initGraphboardView(self):
         self.grid = Grid('images\\grid\\grid.svg')
         self.exporter = Exporter(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
-        self.graphboard_view = Graphboard_View(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_manager, self.arrow_manager, self, None, self.sequence_manager, self.exporter)
+        self.graphboard_view = Graphboard_View(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_manager, self.arrow_manager, self, None, self.sequence_manager, self.exporter, self.json_manager)
         self.arrow_manager.connect_to_graphboard(self.graphboard_view)
         transform = QTransform()
         graphboard_size = self.graphboard_view.frameSize()
@@ -315,7 +313,7 @@ class UiSetup(QWidget):
         self.lower_layout.addWidget(clear_sequence_button)
 
     def init_generator(self):
-        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard_view, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.context_menu_manager, self.json_manager, self.grid)
+        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard_view, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.json_manager, self.grid)
 
     def init_staff_manager(self):
         self.staff_manager = Staff_Manager(self.graphboard_scene)
@@ -351,7 +349,7 @@ class UiSetup(QWidget):
             return
         
         # Create and show the Pictograph_Selector dialog
-        dialog = Pictograph_Selector(combinations, letter, self)
+        dialog = Pictograph_Selector(combinations, letter, self.graphboard_view, self)
         result = dialog.exec_()
         
         if result == QDialog.Accepted:
@@ -370,18 +368,19 @@ class UiSetup(QWidget):
             for item in self.selected_items:
                 if isinstance(item, Arrow):
                     self.arrow_manager.delete_arrow(item)
+                    self.arrow_manager.delete_staff(item.staff)
                 elif isinstance(item, Staff):
-                    self.arrow_manager.delete_staff(item)  # Call delete_staff here
+                    self.arrow_manager.delete_staff(item)
 
         elif self.selected_item and isinstance(self.selected_item, Arrow):
             if event.key() == Qt.Key_W:
-                self.arrow_manager.move_arrow_quadrant_wasd('up')
+                self.arrow_manager.move_arrow_quadrant_wasd('up', self.selected_item)
             elif event.key() == Qt.Key_A:
-                self.arrow_manager.move_arrow_quadrant_wasd('left')
+                self.arrow_manager.move_arrow_quadrant_wasd('left', self.selected_item)
             elif event.key() == Qt.Key_S:
-                self.arrow_manager.move_arrow_quadrant_wasd('down')
+                self.arrow_manager.move_arrow_quadrant_wasd('down', self.selected_item)
             elif event.key() == Qt.Key_D:
-                self.arrow_manager.move_arrow_quadrant_wasd('right')
+                self.arrow_manager.move_arrow_quadrant_wasd('right', self.selected_item)
             elif event.key() == Qt.Key_E:
                 self.arrow_manager.mirror_arrow(self.selected_items)
             elif event.key() == Qt.Key_Q:

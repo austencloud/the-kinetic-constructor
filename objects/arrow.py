@@ -4,7 +4,7 @@ from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
 from PyQt5.QtCore import Qt, QPointF, QTimer
 from data.ARROW_START_END_LOCATIONS import ARROW_START_END_LOCATIONS
 from PyQt5.QtGui import QPixmap, QPainter
-
+from settings import GRID_PADDING, ARROW_ADJUSTMENT_DISTANCE
 class Arrow(QGraphicsSvgItem):
     def __init__(self, svg_file, graphboard_view, info_tracker, svg_manager, arrow_manager, motion_type, staff_manager, dict):
         super().__init__(svg_file)
@@ -24,11 +24,12 @@ class Arrow(QGraphicsSvgItem):
         
         # Flags
         self.in_graphboard = False
-        self.drag_offset = QPointF(0, 0)  # Initialize drag_offset
+        self.drag_offset = QPointF(0, 0)
 
         # Other
         self.staff = None
         self.previous_arrow = None
+        self.center = self.boundingRect().center()
         
         self.renderer = QSvgRenderer(self.svg_file)    
         self.setAcceptDrops(True)
@@ -41,30 +42,35 @@ class Arrow(QGraphicsSvgItem):
         if motion_type != 'static':
             self.update_attributes()
 
+    ### MOUSE EVENTS ###
+
     def mousePressEvent(self, event):
-        
         self.arrow_manager.prepare_dragging(event)
         self.drag_start_pos = self.pos()  # Store the initial position of the arrow
         self.drag_offset = event.pos() - self.boundingRect().topLeft()
 
     def mouseMoveEvent(self, event):
-        self.setSelected(True)  # Add this line
+        self.setSelected(True) 
         if event.buttons() == Qt.LeftButton:
             from views.graphboard_view import Graphboard_View
+            from views.mini_graphboard_view import Mini_Graphboard_View
             if isinstance(self.graphboard_view, Graphboard_View):
                 new_pos = self.mapToScene(event.pos()) - self.drag_offset
-                self.setPos(new_pos)  # Directly set the new position
-
-                new_quadrant = self.graphboard_view.get_graphboard_quadrants(new_pos)  
+                self.setPos(new_pos)
+                new_quadrant = self.graphboard_view.get_graphboard_quadrants(new_pos + self.center)  
                 if self.quadrant != new_quadrant:
                     self.update_arrow_for_new_quadrant(new_quadrant)
                     self.info_tracker.update()
+            elif isinstance(self.graphboard_view, Mini_Graphboard_View):
+                new_pos = self.mapToScene(event.pos()) - self.drag_offset / 2
+                self.setPos(new_pos)
 
     def mouseReleaseEvent(self, event):
         if hasattr(self, 'future_position'):
             self.setPos(self.future_position)  # Set the position when mouse is released
             del self.future_position  # Delete the attribute for future use
-
+        self.arrow_manager.update_arrow_position(self)
+        
     ### ATTRIBUTES ###
 
     def update_attributes(self):
@@ -106,6 +112,14 @@ class Arrow(QGraphicsSvgItem):
         self.staff = deleted_arrow.staff
         self.staff.arrow = self
 
+    def set_svg_file_from_attributes(self):
+        if self.motion_type in ["pro", "anti"] and self.color in ["red", "blue"]:
+            self.svg_file = f"images/arrows/shift/{self.motion_type}/{self.color}_{self.motion_type}_{self.rotation_direction}_{self.quadrant}_{self.turns}.svg"
+        elif self.motion_type == 'static':
+            self.svg_file = None
+   
+
+   
     ### GETTERS ###
 
     def get_attributes(self):
@@ -125,12 +139,9 @@ class Arrow(QGraphicsSvgItem):
         return self.pos() + self.boundingRect().center()
 
     def update_arrow_for_new_quadrant(self, new_quadrant):
-        self.quadrant = new_quadrant
-
-        base_name = os.path.basename(self.svg_file)
-        color, motion_type = base_name.split("_", 2)[:2]
-        if motion_type in ["pro", "anti"] and color in ["red", "blue"]:
-            new_svg_file = f'images\\arrows\\shift\\{self.motion_type}\\{color}_{motion_type}_{self.rotation_direction}_{new_quadrant}_{self.turns}.svg'
+        new_quadrant
+        if self.motion_type in ["pro", "anti"] and self.color in ["red", "blue"]:
+            new_svg_file = f'images\\arrows\\shift\\{self.motion_type}\\{self.color}_{self.motion_type}_{self.rotation_direction}_{new_quadrant}_{self.turns}.svg'
         else:
             print(f"Unexpected svg_file: {self.svg_file}")
             new_svg_file = self.svg_file
@@ -145,17 +156,3 @@ class Arrow(QGraphicsSvgItem):
             self.setSharedRenderer(self.renderer)
 
 
-    ### UPDATERS ###
-
-    def update_arrow_position(self):
-        pos = self.graphboard_view.get_quadrant_center(self.get_attributes()['quadrant']) - self.boundingRect().center()
-        self.setPos(pos)
-
-    def update_arrow_image(self):
-        if self.motion_type == 'pro' or self.motion_type == 'anti':
-            new_filename = f"images\\arrows\\shift\\{self.motion_type}\\{self.color}_{self.motion_type}_{self.rotation_direction}_{self.quadrant}_{self.turns}.svg"
-            if os.path.isfile(new_filename):
-                self.svg_file = new_filename
-                self.setSharedRenderer(self.svg_manager.get_renderer(new_filename))
-            else:
-                print(f"File {new_filename} does not exist")

@@ -10,16 +10,14 @@ from managers.arrow_manager import Arrow_Manager
 from managers.svg_manager import Svg_Manager
 from managers.json_manager import Json_Manager
 
-
 PICTOGRAPH_SCALE = 0.5
 class Mini_Graphboard_View(QGraphicsView):
-    def __init__(self):
+    def __init__(self, main_graphboard_view):
         super().__init__()
         self.setFixedSize(int(750 * PICTOGRAPH_SCALE), int(900 * PICTOGRAPH_SCALE))
         self.mini_graphboard_scene = QGraphicsScene()
         self.mini_graphboard_scene.setSceneRect(0, 0, 650 * PICTOGRAPH_SCALE, 650 * PICTOGRAPH_SCALE)
         self.setScene(self.mini_graphboard_scene)  # Set the scene
-        
         self.mini_grid = Grid("images/grid/mini_grid.svg")
         self.svg_manager = Svg_Manager()
         self.staff_manager = Staff_Manager(self.mini_graphboard_scene)
@@ -30,7 +28,7 @@ class Mini_Graphboard_View(QGraphicsView):
         self.init_grid()
         self.staff_manager.init_mini_graphboard_staffs(self, self.mini_grid)
         self.VERTICAL_OFFSET = (self.height() - self.width()) / 2
-        
+        self.main_graphboard_view = main_graphboard_view
         
     def init_grid(self):
         self.PADDING = self.width() - self.mini_grid.boundingRect().width()
@@ -75,7 +73,6 @@ class Mini_Graphboard_View(QGraphicsView):
                             
                 elif arrow_dict['motion_type'] == 'static':
                     self.place_ghost_arrows(created_arrows, arrow_dict)
-
 
         for arrow in created_arrows:
             if arrow not in self.mini_graphboard_scene.items():
@@ -122,12 +119,11 @@ class Mini_Graphboard_View(QGraphicsView):
                 elif arrow.quadrant == 'nw':
                     pos += QPointF(-DISTANCE, -DISTANCE)
                 arrow.setPos(pos)
-                
+
     
     def save_optimal_positions(self):
-        BUFFER = (self.width() - self.mini_grid.boundingRect().width()) / 2
-        MAIN_GRAPHBOARD_BUFFER = 50
-        MAIN_GRAPHOARD_V_OFFSET = 75
+        MAIN_GRAPHBOARD_BUFFER = (self.main_graphboard_view.width() - self.main_graphboard_view.grid.boundingRect().width()) / 2
+        MAIN_GRAPHBOARD_V_OFFSET = (self.main_graphboard_view.height() - self.main_graphboard_view.width()) / 2
         
         for item in self.mini_graphboard_scene.items():
             if isinstance(item, Arrow):
@@ -135,7 +131,7 @@ class Mini_Graphboard_View(QGraphicsView):
                 # Reverse the scaling
                 pos = pos / PICTOGRAPH_SCALE
                 # Reverse the vertical buffer
-                pos.setY(pos.y() + MAIN_GRAPHOARD_V_OFFSET)
+                pos.setY(pos.y() + MAIN_GRAPHBOARD_V_OFFSET)
                 # Reverse the buffer
                 pos = pos + QPointF(MAIN_GRAPHBOARD_BUFFER, MAIN_GRAPHBOARD_BUFFER)
                 if item.get_attributes()['color'] == 'red':
@@ -143,8 +139,6 @@ class Mini_Graphboard_View(QGraphicsView):
                 elif item.get_attributes()['color'] == 'blue':
                     blue_position = pos
         self.json_manager.update_optimal_locations_in_json(red_position, blue_position)
-
-
         
     def contextMenuEvent(self, event):
         contextMenu = QMenu(self)

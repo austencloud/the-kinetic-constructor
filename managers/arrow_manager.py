@@ -1,4 +1,5 @@
 import os
+import random
 from PyQt5.QtSvg import QSvgRenderer
 from PyQt5.QtWidgets import QGraphicsItem
 from PyQt5.QtCore import  QObject
@@ -9,7 +10,8 @@ from PyQt5.QtGui import QPixmap, QPainter
 from PyQt5.QtWidgets import QGraphicsItem
 from PyQt5.QtGui import QDrag
 from views.graphboard_view import Graphboard_View
-
+from managers.json_manager import Json_Manager
+from settings import GRID_PADDING, ARROW_ADJUSTMENT_DISTANCE
 class Arrow_Manager(QObject):
     def __init__(self, arrow, graphboard_view, staff_manager):
         super().__init__()
@@ -19,7 +21,9 @@ class Arrow_Manager(QObject):
         self.dragging_arrow = None
         self.drag_offset = QPointF(0, 0)  
         self.timer = QTimer()
-        
+        self.json_manager = Json_Manager(None)
+        self.letters = self.json_manager.load_all_letters()
+
         self.timer.timeout.connect(self.update_pixmap)
         
     ### CONNECTORS ###
@@ -38,8 +42,8 @@ class Arrow_Manager(QObject):
 
     ### ARROW MANIUPLATION ###
 
-    def move_arrow_quadrant_wasd(self, direction):
-        self.selected_arrow = self.graphboard_view.get_selected_items()[0]
+    def move_arrow_quadrant_wasd(self, direction, arrow):
+        self.selected_arrow = arrow
         current_quadrant = self.selected_arrow.quadrant
 
         quadrant_mapping = {
@@ -52,66 +56,47 @@ class Arrow_Manager(QObject):
         new_quadrant = quadrant_mapping.get(direction, {}).get(current_quadrant, current_quadrant)
         self.selected_arrow.quadrant = new_quadrant
 
-        self.selected_arrow.update_arrow_image()
-        self.selected_arrow.update_arrow_position()
-        self.selected_arrow.update_attributes()
+        self.update_arrow_image(self.selected_arrow)
+        self.arrow.update_attributes()
+        self.update_arrow_position(self.selected_arrow)
         self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
         self.info_tracker.update()
 
     def swap_motion_type(self, arrows):
         if not isinstance(arrows, list):
-            arrows = [arrows]  # Make sure arrows is a list
+            arrows = [arrows]  
 
         for arrow in arrows:
             current_svg = arrow.svg_file
             folder, base_name = os.path.split(current_svg)
-            color, motion_type, rotation, quadrant, turns = base_name.split('_')[:5]
 
-            # Determine the new motion type and folder
-            if motion_type == "anti":
+            if arrow.motion_type == "anti":
                 new_motion_type = "pro"
                 new_folder = folder.replace("anti", "pro")
-            elif motion_type == "pro":
+            elif arrow.motion_type == "pro":
                 new_motion_type = "anti"
                 new_folder = folder.replace("pro", "anti")
-            # elif motion_type == "static":
-            #     new_motion_type = "dash"
-            #     new_folder = folder.replace("static", "dash")
-            # elif motion_type == "dash":
-            #     new_motion_type = "static"
-            #     new_folder = folder.replace("dash", "static")
             else:
-                print(f"Unknown motion type: {motion_type}")
+                print(f"Unknown motion type: {self.motion_type}")
                 continue
 
-            # Swap the rotation direction
-            if rotation == "l":
-                new_rotation = "r"
-            elif rotation == "r":
-                new_rotation = "l"
-
-
-            # Create the new SVG file name
-            new_svg = os.path.join(new_folder, base_name.replace(f"{motion_type}_{rotation}_", f"{new_motion_type}_{new_rotation}_"))
-
-            # Create a new renderer
+            if arrow.rotation_direction == "l":
+                new_rotation_direction = "r"
+            elif arrow.rotation_direction == "r":
+                new_rotation_direction = "l"
+            new_svg = os.path.join(new_folder, base_name.replace(f"{arrow.motion_type}_{arrow.rotation_direction}_", f"{new_motion_type}_{new_rotation_direction}_"))
             new_renderer = QSvgRenderer(new_svg)
-
             if new_renderer.isValid():
-                # Update the arrow's renderer and attributes
                 arrow.setSharedRenderer(new_renderer)
                 arrow.svg_file = new_svg
                 arrow.motion_type = new_motion_type
-                arrow.rotation_direction = new_rotation  # Update the rotation direction
-
-                # Update the arrow's position and orientation on the graphboard_view
-                arrow.update_arrow_position()
+                arrow.rotation_direction = new_rotation_direction 
+                self.update_arrow_position(arrow)
             else:
                 print(f"Failed to load SVG file: {new_svg}")
 
         # Update the info tracker and the graphboard_view
         self.info_tracker.update()
-        self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
 
     def rotate_arrow(self, direction, arrows):
         for arrow in arrows:
@@ -153,8 +138,7 @@ class Arrow_Manager(QObject):
                 arrow.svg_file = new_svg
                 arrow.quadrant = arrow.quadrant.replace('.svg', '')
                 arrow.update_attributes()
-                pos = self.graphboard_view.get_quadrant_center(arrow.quadrant) - arrow.boundingRect().center()
-                arrow.setPos(pos)
+                self.update_arrow_position(arrow)
             else:
                 print("Failed to load SVG file:", new_svg)
                 
@@ -195,11 +179,52 @@ class Arrow_Manager(QObject):
         self.info_tracker.update()
         self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
         
+        ### UPDATERS ###
+        
+    def update_arrow_position(self, arrow, letter=None):
+        combinations = self.letters.get(letter, [])
+        if not combinations:
+            print(f"No combinations found for letter {letter}")
+            self.graphboard_view.update_letter(None)
+            self.info_tracker.update()
+            return
+        self.current_letter = letter
+        print(f"Updating positions for {self.current_letter}")
+        combination_set = random.choice(combinations)
+        current_arrows = []
+        optimal_positions = next((d for d in combination_set if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
+        for arrow in current_arrows:
+            if optimal_positions:
+                optimal_position = optimal_positions.get(f"optimal_{arrow.color}_location")
+                if optimal_position:
+                    pos = QPointF(optimal_position['x'], optimal_position['y']) - arrow.boundingRect().center()
+                    arrow.setPos(pos)
+            else:
+                pos = self.graphboard_view.get_quadrant_center(arrow.quadrant) - arrow.boundingRect().center()
+                if arrow.quadrant == 'ne':
+                    pos += QPointF(ARROW_ADJUSTMENT_DISTANCE, -ARROW_ADJUSTMENT_DISTANCE)
+                elif arrow.quadrant == 'se':
+                    pos += QPointF(ARROW_ADJUSTMENT_DISTANCE, ARROW_ADJUSTMENT_DISTANCE)
+                elif arrow.quadrant == 'sw':
+                    pos += QPointF(-ARROW_ADJUSTMENT_DISTANCE, ARROW_ADJUSTMENT_DISTANCE)
+                elif arrow.quadrant == 'nw':
+                    pos += QPointF(-ARROW_ADJUSTMENT_DISTANCE, -ARROW_ADJUSTMENT_DISTANCE)
+                    
+                arrow.setPos(pos + QPointF(GRID_PADDING, GRID_PADDING))
+
+    def update_arrow_image(self, arrow):
+        if arrow.motion_type == 'pro' or arrow.motion_type == 'anti':
+            new_filename = f"images\\arrows\\shift\\{arrow.motion_type}\\{arrow.color}_{arrow.motion_type}_{arrow.rotation_direction}_{arrow.quadrant}_{arrow.turns}.svg"
+            if os.path.isfile(new_filename):
+                arrow.svg_file = new_filename
+                arrow.setSharedRenderer(arrow.svg_manager.get_renderer(new_filename))
+            else:
+                print(f"File {new_filename} does not exist")
+        
     ### SELECTION ###    
     
-    def selectAll(self):
+    def select_all_arrows(self):
         for item in self.graphboard_view.items():
-            #if item is an arrow
             if isinstance(item, Arrow):
                 item.setSelected(True)
 
@@ -209,18 +234,14 @@ class Arrow_Manager(QObject):
             if not isinstance(staffs, list):
                 staffs = [staffs]
             for staff in staffs:
-                # Step 1: Identify and remove associated ghost arrows
-                ghost_arrow = staff.get_arrow()  # Assuming you have a method that returns the associated ghost arrow
+                ghost_arrow = staff.get_arrow()
                 if ghost_arrow:
                     self.graphboard_view.scene().removeItem(ghost_arrow)
                     print(f"Ghost arrow for {staff.color} staff deleted")
-                
-                # Remove the staff
+            
                 staff.hide()
                 self.graphboard_view.scene().removeItem(staff)
                 print(f"{staff.color} staff deleted")
-                
-                # Step 3: Update the info tracker
                 
                 self.info_tracker.update()
                 self.graphboard_view.update_letter(self.info_tracker.determine_current_letter_and_type()[0])
@@ -241,7 +262,6 @@ class Arrow_Manager(QObject):
             print("No items selected")
 
     def prepare_dragging(self, event):
-        #if the graphboard is an instance of Graphboard_View
         if isinstance(self.graphboard_view, Graphboard_View):
             self.drag_start_position = event.pos()
             self.graphboard_view.setFocus()
@@ -266,12 +286,9 @@ class Arrow_Manager(QObject):
 
     def update_pixmap(self):
         if self.dragging_arrow:
-            # Update arrow position based on new mouse position
             new_pos = self.dragging_arrow.pos()
-            
             new_quadrant = self.graphboard_view.get_graphboard_quadrants(new_pos) 
             
-            # Update arrow quadrant if necessary
             if self.dragging_arrow.quadrant != new_quadrant:
                 self.dragging_arrow.update_arrow_for_new_quadrant(new_quadrant)
                 self.info_tracker.update()  # Assuming info_tracker is accessible

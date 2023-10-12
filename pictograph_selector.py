@@ -4,7 +4,7 @@ from PyQt5.QtGui import QFont, QColor
 from views.mini_graphboard_view import Mini_Graphboard_View
 
 class Pictograph_Selector(QDialog):
-    def __init__(self, combinations, letter, parent=None):
+    def __init__(self, combinations, letter, main_graphboard_view, parent=None):
         super().__init__(parent)
         self.setWindowTitle(f"{letter} Variations:")
         
@@ -17,10 +17,11 @@ class Pictograph_Selector(QDialog):
         letter_label.setFont(font)
         layout.addWidget(letter_label)
         
+        
         row = 0
         col = 0
         for i, combination in enumerate(combinations):
-            mini_graphboard = Mini_Graphboard_View()
+            mini_graphboard = Mini_Graphboard_View(main_graphboard_view)
             mini_graphboard.add_arrows_to_mini_graphboard(combination)
             grid_layout.addWidget(mini_graphboard, row, col)
                     

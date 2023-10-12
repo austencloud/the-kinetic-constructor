@@ -8,7 +8,7 @@ from objects.staff import Staff
 from objects.grid import Grid
 from objects.arrow import Arrow
 from settings import *
-
+from managers.graphboard_manager import Graphboard_Manager
 class Graphboard_View(QGraphicsView):
     def __init__(self,
                  graphboard_scene,
@@ -21,6 +21,7 @@ class Graphboard_View(QGraphicsView):
                  generator,
                  sequence_manager,
                  exporter,
+                 json_manager,
                  parent=None):
         
         super().__init__(graphboard_scene, parent)
@@ -36,9 +37,12 @@ class Graphboard_View(QGraphicsView):
         self.ui_setup = ui_setup
         self.sequence_manager = sequence_manager
         self.arrow_manager = arrow_manager
-
         self.exporter = exporter
+        self.json_manager = json_manager
         self.letter_renderers = {}
+        
+        self.letters = self.json_manager.load_all_letters()
+
         for letter in 'ABCDEFGHIJKLMNOPQRSTUV':
              self.letter_renderers[letter] = QSvgRenderer(f'images/letters/{letter}.svg')
         self.letter_item = QGraphicsSvgItem()
@@ -52,7 +56,6 @@ class Graphboard_View(QGraphicsView):
 
         self.arrow_manager.connect_graphboard_scene(self.graphboard_scene)
         self.setFixedSize(GRAPHBOARD_WIDTH, GRAPHBOARD_HEIGHT)
-        self.VERTICAL_OFFSET = VERTICAL_OFFSET
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
@@ -78,9 +81,6 @@ class Graphboard_View(QGraphicsView):
         if items and not items[0].isSelected():
             items[0].setSelected(True)
 
-
-
-
     def dragMoveEvent(self, event):
         dropped_svg = event.mimeData().text()
         base_name = os.path.basename(dropped_svg)
@@ -99,25 +99,37 @@ class Graphboard_View(QGraphicsView):
         self.setFocus()
         event.setDropAction(Qt.CopyAction)
         event.accept()
-        
         dropped_arrow_svg = event.mimeData().text()
         self.arrow = Arrow(dropped_arrow_svg, self, self.info_tracker, self.svg_manager, self.arrow_manager, None, self.staff_manager, None)
-        self.arrow.set_attributes_from_filename()
+        
         self.scene().addItem(self.arrow)
         pos = self.mapToScene(event.pos()) - self.arrow.boundingRect().center()
         self.arrow.setPos(pos)
-
+        
         self.clear_selection()
         self.arrow.setSelected(True)
-
-        adjusted_arrow_pos = self.arrow.pos() + self.arrow.boundingRect().center()
-        quadrant = self.get_graphboard_quadrants(adjusted_arrow_pos)
+        
+        quadrant = self.get_graphboard_quadrants(self.arrow.pos() + self.arrow.boundingRect().center())
         self.arrow.update_arrow_for_new_quadrant(quadrant)
         self.arrow.update_attributes()
-
+        self.arrow.arrow_manager.update_arrow_position(self.arrow)
         self.info_tracker.update()
 
     ### GETTERS ###
+
+    def get_graphboard_quadrants(self, mouse_pos):
+        adjusted_mouse_y = mouse_pos.y() + VERTICAL_OFFSET
+        if adjusted_mouse_y < self.sceneRect().height() / 2:
+            if mouse_pos.x() < self.sceneRect().width() / 2:
+                quadrant = 'nw'
+            else:
+                quadrant = 'ne'
+        else:
+            if mouse_pos.x() < self.sceneRect().width() / 2:
+                quadrant = 'sw'
+            else:
+                quadrant = 'se'
+        return quadrant
 
     def get_state(self):
         state = {
@@ -148,14 +160,22 @@ class Graphboard_View(QGraphicsView):
         return state
     
     def get_quadrant_center(self, quadrant):
+        # Calculate the layer 2 points on the graphboard based on the grid
+        graphboard_layer2_points = {}
+        for point_name in ['NE_layer2_point', 'SE_layer2_point', 'SW_layer2_point', 'NW_layer2_point']:
+            cx, cy = self.grid.get_circle_coordinates(point_name)
+            graphboard_layer2_points[point_name] = QPointF(cx, cy)  # Subtract VERTICAL_OFFSET from y-coordinate
+
+        # Map the quadrants to the corresponding layer 2 points
         centers = {
-            'ne': QPointF(550, 175),
-            'se': QPointF(550, 550),
-            'sw': QPointF(175, 550),
-            'nw': QPointF(175, 175),
+            'ne': graphboard_layer2_points['NE_layer2_point'],
+            'se': graphboard_layer2_points['SE_layer2_point'],
+            'sw': graphboard_layer2_points['SW_layer2_point'],
+            'nw': graphboard_layer2_points['NW_layer2_point']
         }
-        return centers.get(quadrant, QPointF(0, 0))
-    
+
+        return centers.get(quadrant, QPointF(0, 0))  # Subtract VERTICAL_OFFSET from default y-coordinate
+
     def get_current_arrow_positions(self):
         red_position = None
         blue_position = None
@@ -206,19 +226,6 @@ class Graphboard_View(QGraphicsView):
 
         return attributes
     
-    def get_graphboard_quadrants(self, mouse_pos):
-        adjusted_mouse_y = mouse_pos.y() + 75
-        if adjusted_mouse_y < self.sceneRect().height() / 2:
-            if mouse_pos.x() < self.sceneRect().width() / 2:
-                quadrant = 'nw'
-            else:
-                quadrant = 'ne'
-        else:
-            if mouse_pos.x() < self.sceneRect().width() / 2:
-                quadrant = 'sw'
-            else:
-                quadrant = 'se'
-        return quadrant
 
     ### SELECTION ###
 
@@ -284,11 +291,11 @@ class Graphboard_View(QGraphicsView):
             staff_menu.addAction(delete_action)
 
             rotate_right_action = QAction('Rotate Right', self)
-            rotate_right_action.triggered.connect(lambda: self.arrow_manager.rotateArrow("right", selected_items))
+            rotate_right_action.triggered.connect(lambda: self.arrow_manager.rotate_arrow("right", selected_items))
             staff_menu.addAction(rotate_right_action)
 
             rotate_left_action = QAction('Rotate Left', self)
-            rotate_left_action.triggered.connect(lambda: self.arrow_manager.rotateArrow("left", selected_items))
+            rotate_left_action.triggered.connect(lambda: self.arrow_manager.rotate_arrow("left", selected_items))
             staff_menu.addAction(rotate_left_action)
             staff_menu.exec_(event.globalPos())
 
@@ -300,7 +307,7 @@ class Graphboard_View(QGraphicsView):
             graphboard_menu.addAction(swap_colors_action)
 
             select_all_action = QAction('Select All', self)
-            select_all_action.triggered.connect(self.arrow_manager.selectAll)
+            select_all_action.triggered.connect(self.arrow_manager.select_all_arrows)
             graphboard_menu.addAction(select_all_action)
 
             add_to_sequence_action = QAction('Add to Sequence', self)
