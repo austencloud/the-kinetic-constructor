@@ -24,9 +24,6 @@
                 "turns": 0
             },
             {
-                "motion_type": "static"
-            },
-            {
                 "optimal_blue_location": {
                     "x": 206.0,
                     "y": 539.0
@@ -59,9 +56,6 @@
                 "start_location": "w",
                 "end_location": "n",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             },
             {
                 "optimal_blue_location": {
@@ -98,9 +92,6 @@
                 "turns": 0
             },
             {
-                "motion_type": "static"
-            },
-            {
                 "optimal_blue_location": {
                     "x": 533.0,
                     "y": 204.0
@@ -133,9 +124,6 @@
                 "start_location": "e",
                 "end_location": "s",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             },
             {
                 "optimal_blue_location": {
@@ -172,9 +160,6 @@
                 "turns": 0
             },
             {
-                "motion_type": "static"
-            },
-            {
                 "optimal_blue_location": {
                     "x": 218.0,
                     "y": 199.0
@@ -207,9 +192,6 @@
                 "start_location": "s",
                 "end_location": "e",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             },
             {
                 "optimal_blue_location": {
@@ -246,9 +228,6 @@
                 "turns": 0
             },
             {
-                "motion_type": "static"
-            },
-            {
                 "optimal_blue_location": {
                     "x": 199.0,
                     "y": 519.0
@@ -281,9 +260,6 @@
                 "start_location": "e",
                 "end_location": "n",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             },
             {
                 "optimal_blue_location": {
@@ -320,9 +296,6 @@
                 "turns": 0
             },
             {
-                "motion_type": "static"
-            },
-            {
                 "optimal_blue_location": {
                     "x": 163.0,
                     "y": 570.0
@@ -355,9 +328,6 @@
                 "start_location": "n",
                 "end_location": "w",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             },
             {
                 "optimal_blue_location": {
@@ -394,9 +364,6 @@
                 "turns": 0
             },
             {
-                "motion_type": "static"
-            },
-            {
                 "optimal_blue_location": {
                     "x": 583.0,
                     "y": 182.0
@@ -429,9 +396,6 @@
                 "start_location": "s",
                 "end_location": "e",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             },
             {
                 "optimal_blue_location": {
@@ -468,9 +432,6 @@
                 "turns": 0
             },
             {
-                "motion_type": "static"
-            },
-            {
                 "optimal_blue_location": {
                     "x": 150.0,
                     "y": 156.0
@@ -503,9 +464,6 @@
                 "start_location": "e",
                 "end_location": "s",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             },
             {
                 "optimal_blue_location": {
@@ -542,9 +500,6 @@
                 "turns": 0
             },
             {
-                "motion_type": "static"
-            },
-            {
                 "optimal_blue_location": {
                     "x": 172.0,
                     "y": 583.0
@@ -577,9 +532,6 @@
                 "start_location": "n",
                 "end_location": "e",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             },
             {
                 "optimal_blue_location": {

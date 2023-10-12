@@ -190,9 +190,6 @@
                 "start_location": "w",
                 "end_location": "s",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [
@@ -217,9 +214,6 @@
                 "start_location": "e",
                 "end_location": "s",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [
@@ -268,9 +262,6 @@
                 "start_location": "w",
                 "end_location": "n",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [
@@ -319,9 +310,6 @@
                 "start_location": "e",
                 "end_location": "n",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [

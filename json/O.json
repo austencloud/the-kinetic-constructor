@@ -238,9 +238,6 @@
                 "start_location": "n",
                 "end_location": "w",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [
@@ -289,9 +286,6 @@
                 "start_location": "s",
                 "end_location": "e",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [

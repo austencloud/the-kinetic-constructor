@@ -45,7 +45,6 @@ class UiSetup(QWidget):
         self.arrow_manager = Arrow_Manager(None, self.graphboard_view, self.staff_manager)
         self.json_manager = Json_Manager(self.graphboard_scene)
         self.initInfoTracker()
-        self.initMenus()
         self.initGraphboardView() 
         self.init_generator() 
         self.connectGraphboard()
@@ -67,10 +66,6 @@ class UiSetup(QWidget):
 
         self.arrow_manager.connect_info_tracker(self.info_tracker)
         self.graphboard_view.connect_generator(self.generator)
-
-    def initMenus(self):
-
-        self.arrow_manager.connect_graphboard_scene(self.graphboard_scene)
 
     def initLayouts(self):
         self.main_layout = QHBoxLayout()
@@ -364,7 +359,14 @@ class UiSetup(QWidget):
         except IndexError:
             self.selected_item = None
 
-        if event.key() == Qt.Key_Delete:
+        if event.modifiers() == Qt.ControlModifier and event.key() == Qt.Key_Delete:
+            for item in self.selected_items:
+                if isinstance(item, Arrow):
+                    self.arrow_manager.delete_arrow(item)
+                elif isinstance(item, Staff):
+                    self.arrow_manager.delete_staff(item)
+
+        elif event.key() == Qt.Key_Delete:
             for item in self.selected_items:
                 if isinstance(item, Arrow):
                     self.arrow_manager.delete_arrow(item)

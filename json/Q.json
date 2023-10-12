@@ -24,9 +24,6 @@
                 "turns": 0
             },
             {
-                "motion_type": "static"
-            },
-            {
                 "optimal_blue_location": {
                     "x": 574.5,
                     "y": 618.5
@@ -59,9 +56,6 @@
                 "start_location": "w",
                 "end_location": "s",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             },
             {
                 "optimal_blue_location": {
@@ -98,9 +92,6 @@
                 "turns": 0
             },
             {
-                "motion_type": "static"
-            },
-            {
                 "optimal_blue_location": {
                     "x": 205.0,
                     "y": 214.0
@@ -133,9 +124,6 @@
                 "start_location": "e",
                 "end_location": "n",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             },
             {
                 "optimal_blue_location": {
@@ -172,9 +160,6 @@
                 "turns": 0
             },
             {
-                "motion_type": "static"
-            },
-            {
                 "optimal_blue_location": {
                     "x": 527.0,
                     "y": 223.0
@@ -207,9 +192,6 @@
                 "start_location": "s",
                 "end_location": "w",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             },
             {
                 "optimal_blue_location": {
@@ -246,9 +228,6 @@
                 "turns": 0
             },
             {
-                "motion_type": "static"
-            },
-            {
                 "optimal_blue_location": {
                     "x": 217.5,
                     "y": 221.5
@@ -281,9 +260,6 @@
                 "start_location": "e",
                 "end_location": "s",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             },
             {
                 "optimal_blue_location": {

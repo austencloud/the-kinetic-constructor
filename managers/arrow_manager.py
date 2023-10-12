@@ -34,11 +34,11 @@ class Arrow_Manager(QObject):
     def connect_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
 
-    def connect_graphboard_scene(self, graphboard_scene):
-        self.graphboard_scene = graphboard_scene
+
 
     def connect_to_graphboard(self, graphboard_view):
         self.graphboard_view = graphboard_view
+        self.graphboard_scene = graphboard_view.scene()
 
     ### ARROW MANIUPLATION ###
 
@@ -58,8 +58,7 @@ class Arrow_Manager(QObject):
 
         self.update_arrow_image(self.selected_arrow)
         self.arrow.update_attributes()
-        self.set_optimal_arrow_pos(self.selected_arrow, self.graphboard_view.get_arrows())
-        self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
+        self.set_optimal_arrow_pos(self.graphboard_view.get_arrows())
         self.info_tracker.update()
 
     def swap_motion_type(self, arrows):
@@ -91,7 +90,7 @@ class Arrow_Manager(QObject):
                 arrow.svg_file = new_svg
                 arrow.motion_type = new_motion_type
                 arrow.rotation_direction = new_rotation_direction 
-                self.set_optimal_arrow_pos(arrow, self.graphboard_view.get_arrows())
+                self.set_optimal_arrow_pos(self.graphboard_view.get_arrows())
             else:
                 print(f"Failed to load SVG file: {new_svg}")
 
@@ -114,8 +113,7 @@ class Arrow_Manager(QObject):
                 arrow.setSharedRenderer(new_renderer)
                 arrow.svg_file = new_svg
                 arrow.update_attributes()
-                pos = self.graphboard_view.get_quadrant_center(new_quadrant) - arrow.boundingRect().center()
-                arrow.setPos(pos)
+                self.update_arrow_position(arrow, self.graphboard_view)
                 self.info_tracker.update()
             else:
                 print("Failed to load SVG file:", new_svg)
@@ -138,7 +136,7 @@ class Arrow_Manager(QObject):
                 arrow.svg_file = new_svg
                 arrow.quadrant = arrow.quadrant.replace('.svg', '')
                 arrow.update_attributes()
-                self.set_optimal_arrow_pos(arrow, self.graphboard_view.get_arrows())
+                self.set_optimal_arrow_pos(self.graphboard_view.get_arrows())
             else:
                 print("Failed to load SVG file:", new_svg)
                 
@@ -185,7 +183,7 @@ class Arrow_Manager(QObject):
         current_arrows = graphboard_view.get_arrows()
         letter = self.info_tracker.determine_current_letter_and_type()[0]
         if letter is not None:
-            self.set_optimal_arrow_pos(arrow, current_arrows)
+            self.set_optimal_arrow_pos(current_arrows)
         elif letter is None:
             self.set_default_arrow_pos(arrow)
         
@@ -231,9 +229,8 @@ class Arrow_Manager(QObject):
 
         return True
 
-    
-    def set_optimal_arrow_pos(self, arrow, current_arrows):
-        current_state = arrow.graphboard_view.get_state()  # Implement this function to get the current state
+    def set_optimal_arrow_pos(self, current_arrows):
+        current_state = self.graphboard_view.get_state()  # Implement this function to get the current state
         current_letter = self.info_tracker.determine_current_letter_and_type()[0]
         if current_letter is not None:
             combinations = self.letters[current_letter]  # Assuming json_data contains your JSON data
@@ -249,7 +246,8 @@ class Arrow_Manager(QObject):
                 else:
                     self.set_default_arrow_pos(arrow)
         else:
-            self.set_default_arrow_pos(arrow)
+            for arrow in current_arrows:
+                self.set_default_arrow_pos(arrow)
 
     def set_default_arrow_pos(self, arrow):
         pos = self.graphboard_view.get_quadrant_center(arrow.quadrant) - arrow.boundingRect().center()
@@ -355,8 +353,3 @@ class Arrow_Manager(QObject):
             arrow_renderer.render(painter)
             painter.end()
             self.dragging_arrow.setPixmap(pixmap)
-
-
-
-
-

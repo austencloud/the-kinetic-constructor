@@ -54,7 +54,6 @@ class Graphboard_View(QGraphicsView):
             self.graphboard_scene.addItem(self.letter_item)
             self.graphboard_scene.addItem(self.grid)
 
-        self.arrow_manager.connect_graphboard_scene(self.graphboard_scene)
         self.setFixedSize(GRAPHBOARD_WIDTH, GRAPHBOARD_HEIGHT)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)

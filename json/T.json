@@ -22,9 +22,6 @@
                 "start_location": "s",
                 "end_location": "e",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [
@@ -49,9 +46,6 @@
                 "start_location": "w",
                 "end_location": "s",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [
@@ -76,9 +70,6 @@
                 "start_location": "n",
                 "end_location": "w",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [
@@ -103,9 +94,6 @@
                 "start_location": "e",
                 "end_location": "n",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [
@@ -130,9 +118,6 @@
                 "start_location": "n",
                 "end_location": "e",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [
@@ -181,9 +166,6 @@
                 "start_location": "w",
                 "end_location": "n",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [
@@ -208,9 +190,6 @@
                 "start_location": "e",
                 "end_location": "s",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [
@@ -235,9 +214,6 @@
                 "start_location": "e",
                 "end_location": "n",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [
@@ -286,9 +262,6 @@
                 "start_location": "w",
                 "end_location": "s",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [
@@ -313,9 +286,6 @@
                 "start_location": "n",
                 "end_location": "w",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [
@@ -364,9 +334,6 @@
                 "start_location": "w",
                 "end_location": "n",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ],
         [
@@ -415,9 +382,6 @@
                 "start_location": "s",
                 "end_location": "w",
                 "turns": 0
-            },
-            {
-                "motion_type": "static"
             }
         ]
     ]
