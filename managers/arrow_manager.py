@@ -179,21 +179,23 @@ class Arrow_Manager(QObject):
         
         ### UPDATERS ###
         
-    def update_arrow_position(self, arrow, graphboard_view):
+    def update_arrow_position(self, graphboard_view):
         current_arrows = graphboard_view.get_arrows()
         letter = self.info_tracker.determine_current_letter_and_type()[0]
         if letter is not None:
             self.set_optimal_arrow_pos(current_arrows)
-        elif letter is None:
-            self.set_default_arrow_pos(arrow)
-        
+        else:
+            for arrow in current_arrows:
+                self.set_default_arrow_pos(arrow)
+
     def find_optimal_locations(self, current_state, combinations):
+        matching_combinations = []
         for inner_list in combinations:
             if self.compare_states(current_state, inner_list):
                 optimal_locations = next((d for d in inner_list if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
                 if optimal_locations:
-                    return optimal_locations
-        return None
+                    matching_combinations.append(optimal_locations)
+        return matching_combinations
     
     def compare_states(self, current_state, candidate_state):
         # Convert candidate_state to a format similar to current_state for easier comparison
@@ -207,14 +209,13 @@ class Arrow_Manager(QObject):
             if 'color' in entry and 'motion_type' in entry:
                 candidate_state_dict['arrows'].append({
                     'color': entry['color'],
-                    'quadrant': entry['quadrant'],
+                    'motion_type': entry['motion_type'],
                     'rotation_direction': entry['rotation_direction'],
-                    # Add other attributes as needed
+                    'quadrant': entry['quadrant'],
+                    'turns': entry['turns']
+
                 })
-            elif 'motion_type' in entry and entry['motion_type'] == 'static':
-                candidate_state_dict['staffs'].append({
-                    # Add attributes as needed
-                })
+
             # Add conditions for grid if needed
 
         # Now compare the two states
@@ -223,31 +224,31 @@ class Arrow_Manager(QObject):
         
         for arrow in current_state['arrows']:
             matching_arrows = [candidate_arrow for candidate_arrow in candidate_state_dict['arrows']
-                            if all(arrow.get(key) == candidate_arrow.get(key) for key in ['color', 'quadrant', 'rotation_direction'])]
+                            if all(arrow.get(key) == candidate_arrow.get(key) for key in ['color', 'motion_type', 'quadrant', 'rotation_direction'])]
             if not matching_arrows:
                 return False
 
         return True
 
     def set_optimal_arrow_pos(self, current_arrows):
-        current_state = self.graphboard_view.get_state()  # Implement this function to get the current state
+        current_state = self.graphboard_view.get_state()
         current_letter = self.info_tracker.determine_current_letter_and_type()[0]
         if current_letter is not None:
-            combinations = self.letters[current_letter]  # Assuming json_data contains your JSON data
-            for arrow in current_arrows:
-                optimal_locations = self.find_optimal_locations(current_state, combinations)
-                if optimal_locations:
+            combinations = self.letters[current_letter]
+            optimal_locations = self.find_optimal_locations(current_state, combinations)
+            if optimal_locations:
+                for arrow in current_arrows:
                     optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
                     if optimal_location:
                         pos = QPointF(optimal_location['x'], optimal_location['y']) - arrow.boundingRect().center()
-                        arrow.setPos(pos)  
-                    else:
-                        self.set_default_arrow_pos(arrow)
-                else:
+                        arrow.setPos(pos)
+            else:
+                for arrow in current_arrows:
                     self.set_default_arrow_pos(arrow)
         else:
             for arrow in current_arrows:
                 self.set_default_arrow_pos(arrow)
+
 
     def set_default_arrow_pos(self, arrow):
         pos = self.graphboard_view.get_quadrant_center(arrow.quadrant) - arrow.boundingRect().center()

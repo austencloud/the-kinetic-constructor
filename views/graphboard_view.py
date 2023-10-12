@@ -111,7 +111,7 @@ class Graphboard_View(QGraphicsView):
         quadrant = self.get_graphboard_quadrants(self.arrow.pos() + self.arrow.boundingRect().center())
         self.arrow.update_arrow_for_new_quadrant(quadrant)
         self.arrow.update_attributes()
-        self.arrow.arrow_manager.update_arrow_position(self.arrow, self)
+        self.arrow.arrow_manager.update_arrow_position(self)
         self.info_tracker.update()
 
     ### GETTERS ###
