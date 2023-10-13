@@ -24,6 +24,7 @@ class Mini_Graphboard_View(QGraphicsView):
         self.arrow_manager = Arrow_Manager(None, self, self.staff_manager)
         self.json_manager = Json_Manager(self.mini_graphboard_scene)
         self.info_tracker = Info_Tracker(self, None, self.staff_manager, self.json_manager)
+        self.arrow_manager.connect_info_tracker(self.info_tracker)
         self.staff_manager.connect_grid(self.mini_grid)
         self.init_grid()
         self.staff_manager.init_mini_graphboard_staffs(self, self.mini_grid)
@@ -43,6 +44,23 @@ class Mini_Graphboard_View(QGraphicsView):
 
         pass
     
+    def get_graphboard_state(self):
+        state = {
+            'arrows': [],
+        }
+        for item in self.scene().items():
+            if isinstance(item, Arrow):
+                state['arrows'].append({
+                    'color': item.color,
+                    'motion_type': item.motion_type,
+                    'rotation_direction': item.rotation_direction,
+                    'quadrant': item.quadrant,
+                    'start_location': item.start_location,
+                    'end_location': item.end_location,
+                    'turns': item.turns,
+                })
+        return state
+    
     def get_quadrant_center(self, quadrant):
         # Calculate the layer 2 points on the graphboard based on the grid
         graphboard_layer2_points = {}
@@ -60,6 +78,13 @@ class Mini_Graphboard_View(QGraphicsView):
 
         return centers.get(quadrant, QPointF(0, 0 - self.VERTICAL_OFFSET))  # Subtract VERTICAL_OFFSET from default y-coordinate
 
+    def get_arrows(self):
+        # return the current arrows on the graphboard as an array
+        current_arrows = []
+        for arrow in self.scene().items():
+            if isinstance(arrow, Arrow):
+                current_arrows.append(arrow)
+        return current_arrows
 
     def add_arrows_to_mini_graphboard(self, combination):
         DISTANCE = 20

@@ -8,7 +8,7 @@ from objects.staff import Staff
 from objects.grid import Grid
 from objects.arrow import Arrow
 from settings import *
-from managers.graphboard_manager import Graphboard_Manager
+
 
 class Graphboard_View(QGraphicsView):
     def __init__(self,
@@ -100,16 +100,16 @@ class Graphboard_View(QGraphicsView):
         event.setDropAction(Qt.CopyAction)
         event.accept()
         dropped_arrow_svg = event.mimeData().text()
-        self.arrow = Arrow(dropped_arrow_svg, self, self.info_tracker, self.svg_manager, self.arrow_manager, None, self.staff_manager, None)
+        dropped_arrow_svg_motion_type = dropped_arrow_svg.split('_')[1]
+        
+        self.arrow = Arrow(dropped_arrow_svg, self, self.info_tracker, self.svg_manager, self.arrow_manager, dropped_arrow_svg_motion_type, self.staff_manager, None)
         
         self.scene().addItem(self.arrow)
-        pos = self.mapToScene(event.pos()) - self.arrow.boundingRect().center()
-        self.arrow.setPos(pos)
-        
+        self.mouse_pos = self.mapToScene(event.pos())
         self.clear_selection()
         self.arrow.setSelected(True)
         
-        quadrant = self.get_graphboard_quadrants(self.arrow.pos() + self.arrow.boundingRect().center())
+        quadrant = self.get_graphboard_quadrants(self.mouse_pos + self.arrow.boundingRect().center())
         self.arrow.update_arrow_for_new_quadrant(quadrant)
         self.arrow.update_attributes()
         self.arrow.arrow_manager.update_arrow_position(self)
@@ -131,7 +131,7 @@ class Graphboard_View(QGraphicsView):
                 quadrant = 'se'
         return quadrant
 
-    def get_state(self):
+    def get_graphboard_state(self):
         state = {
             'arrows': [],
         }
@@ -139,8 +139,12 @@ class Graphboard_View(QGraphicsView):
             if isinstance(item, Arrow):
                 state['arrows'].append({
                     'color': item.color,
-                    'quadrant': item.quadrant,
+                    'motion_type': item.motion_type,
                     'rotation_direction': item.rotation_direction,
+                    'quadrant': item.quadrant,
+                    'start_location': item.start_location,
+                    'end_location': item.end_location,
+                    'turns': item.turns,
                 })
         return state
     

@@ -15,6 +15,7 @@ class Arrow(QGraphicsSvgItem):
         self.dict = dict
         self.svg_file = svg_file
         self.svg_manager = svg_manager
+        self.motion_type = motion_type
         
         # Managers
         self.staff_manager = staff_manager
@@ -70,7 +71,9 @@ class Arrow(QGraphicsSvgItem):
             self.setPos(self.future_position)  # Set the position when mouse is released
             del self.future_position  # Delete the attribute for future use
         # if the graphboard view is an instance of Graphboard_View
-        self.arrow_manager.update_arrow_position(self.graphboard_view)
+        from views.graphboard_view import Graphboard_View
+        if isinstance(self.graphboard_view, Graphboard_View):
+            self.arrow_manager.update_arrow_position(self.graphboard_view)
         
     ### ATTRIBUTES ###
 
@@ -118,9 +121,7 @@ class Arrow(QGraphicsSvgItem):
             self.svg_file = f"images/arrows/shift/{self.motion_type}/{self.color}_{self.motion_type}_{self.rotation_direction}_{self.quadrant}_{self.turns}.svg"
         elif self.motion_type == 'static':
             self.svg_file = None
-   
 
-   
     ### GETTERS ###
 
     def get_attributes(self):
@@ -139,8 +140,8 @@ class Arrow(QGraphicsSvgItem):
     def get_center_position(self):
         return self.pos() + self.boundingRect().center()
 
+
     def update_arrow_for_new_quadrant(self, new_quadrant):
-        new_quadrant
         if self.motion_type in ["pro", "anti"] and self.color in ["red", "blue"]:
             new_svg_file = f'images\\arrows\\shift\\{self.motion_type}\\{self.color}_{self.motion_type}_{self.rotation_direction}_{new_quadrant}_{self.turns}.svg'
         else:

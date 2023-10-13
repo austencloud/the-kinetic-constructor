@@ -40,8 +40,8 @@ class Arrow_Manager(QObject):
 
     ### ARROW MANIUPLATION ###
 
-    def move_arrow_quadrant_wasd(self, direction, arrow):
-        self.selected_arrow = arrow
+    def move_arrow_quadrant_wasd(self, direction, selected_arrow):
+        self.selected_arrow = selected_arrow
         current_quadrant = self.selected_arrow.quadrant
 
         quadrant_mapping = {
@@ -51,11 +51,13 @@ class Arrow_Manager(QObject):
             'right': {'nw': 'ne', 'sw': 'se'}
         }
 
+        
+
         new_quadrant = quadrant_mapping.get(direction, {}).get(current_quadrant, current_quadrant)
         self.selected_arrow.quadrant = new_quadrant
 
         self.update_arrow_image(self.selected_arrow)
-        self.arrow.update_attributes()
+        self.selected_arrow.update_attributes()
         self.update_arrow_position(self.graphboard_view)
         self.info_tracker.update()
 
@@ -139,7 +141,7 @@ class Arrow_Manager(QObject):
                 print("Failed to load SVG file:", new_svg)
                 
         self.info_tracker.update()
-        self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
+
         
     def bring_forward(self, items):
         for item in items:
@@ -200,7 +202,7 @@ class Arrow_Manager(QObject):
                     'motion_type': entry['motion_type'],
                     'rotation_direction': entry['rotation_direction'],
                     'quadrant': entry['quadrant'],
-                    'turns': entry.get('turns', 0)  # Added default value
+                    'turns': entry.get('turns', 0) 
                 })
 
         # Now compare the two states
@@ -215,19 +217,19 @@ class Arrow_Manager(QObject):
 
         return True
 
-    def find_optimal_locations(self, current_state, combinations):
-        for inner_list in combinations:
-            if self.compare_states(current_state, inner_list):
-                return next((d for d in inner_list if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
+    def find_optimal_locations(self, current_state, matching_letters):
+        for variations in matching_letters:
+            if self.compare_states(current_state, variations):
+                return next((d for d in variations if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
         return None
 
 
     def set_optimal_arrow_pos(self, current_arrows):
-        current_state = self.graphboard_view.get_state()
+        current_state = self.graphboard_view.get_graphboard_state()
         current_letter = self.info_tracker.determine_current_letter_and_type()[0]
         if current_letter is not None:
-            combinations = self.letters[current_letter]
-            optimal_locations = self.find_optimal_locations(current_state, combinations)
+            matching_letters = self.letters[current_letter]
+            optimal_locations = self.find_optimal_locations(current_state, matching_letters)
             for arrow in current_arrows:
                 if optimal_locations:
                     optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
