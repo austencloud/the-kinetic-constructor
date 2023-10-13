@@ -9,6 +9,7 @@ from objects.grid import Grid
 from objects.arrow import Arrow
 from settings import *
 from managers.graphboard_manager import Graphboard_Manager
+
 class Graphboard_View(QGraphicsView):
     def __init__(self,
                  graphboard_scene,
@@ -133,29 +134,14 @@ class Graphboard_View(QGraphicsView):
     def get_state(self):
         state = {
             'arrows': [],
-            'staffs': [],
-            'grid': None
         }
         for item in self.scene().items():
             if isinstance(item, Arrow):
                 state['arrows'].append({
                     'color': item.color,
-                    'position': item.pos(),
                     'quadrant': item.quadrant,
                     'rotation_direction': item.rotation_direction,
-                    'svg_file': item.svg_file
                 })
-            elif isinstance(item, Staff):
-                state['staffs'].append({
-                    'position': item.pos(),
-                    'color': item.color,
-                    'svg_file': item.svg_file
-                })
-            elif isinstance(item, Grid):
-                state['grid'] = {
-                    'position': item.pos(),
-                    'svg_file': item.svg_file
-                }
         return state
     
     def get_quadrant_center(self, quadrant):

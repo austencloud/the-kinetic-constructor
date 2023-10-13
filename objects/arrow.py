@@ -40,7 +40,7 @@ class Arrow(QGraphicsSvgItem):
         self.setTransformOriginPoint(self.boundingRect().center())
 
         if motion_type != 'static':
-            self.update_attributes()
+            self.set_attributes_from_filename()
 
     ### MOUSE EVENTS ###
 
@@ -77,7 +77,7 @@ class Arrow(QGraphicsSvgItem):
     def update_attributes(self):
         if self.dict:
             self.set_attributes_from_dict(self.dict)
-        elif self.svg_file: 
+        if self.svg_file: 
             self.set_attributes_from_filename()
         if self.motion_type == 'pro' or self.motion_type == 'anti':
             self.set_start_end_locations()
