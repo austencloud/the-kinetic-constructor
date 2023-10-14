@@ -224,6 +224,8 @@ class Arrow_Manager(QObject):
 
 
     def set_optimal_arrow_pos(self, current_arrows):
+        VERTICAL_OFFSET = (GRAPHBOARD_HEIGHT - GRAPHBOARD_WIDTH) / 2
+        
         current_state = self.graphboard_view.get_graphboard_state()
         current_letter = self.info_tracker.determine_current_letter_and_type()[0]
         if current_letter is not None:
@@ -233,16 +235,18 @@ class Arrow_Manager(QObject):
                 if optimal_locations:
                     optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
                     if optimal_location:
-                        pos = QPointF(optimal_location['x']*GRAPHBOARD_SCALE, optimal_location['y']*GRAPHBOARD_SCALE) - arrow.center
-                        arrow.setPos(pos)
+                        pos = QPointF(optimal_location['x'] * GRAPHBOARD_SCALE + GRID_PADDING, optimal_location['y'] * GRAPHBOARD_SCALE + GRID_PADDING) - arrow.center
+                        new_pos = pos + QPointF(-GRID_PADDING, -GRID_PADDING)
+                        arrow.setPos(new_pos)
                 else:
                     self.set_default_arrow_pos(arrow)
 
 
     def set_default_arrow_pos(self, arrow):
         quadrant_center = self.graphboard_view.get_quadrant_center(arrow.quadrant)
+        
         pos = (quadrant_center * GRAPHBOARD_SCALE) - arrow.center
-
+        
         if arrow.quadrant == 'ne':
             pos += QPointF(ARROW_ADJUSTMENT_DISTANCE, -ARROW_ADJUSTMENT_DISTANCE)
         elif arrow.quadrant == 'se':
@@ -252,7 +256,7 @@ class Arrow_Manager(QObject):
         elif arrow.quadrant == 'nw':
             pos += QPointF(-ARROW_ADJUSTMENT_DISTANCE, -ARROW_ADJUSTMENT_DISTANCE)
             
-        arrow.setPos(pos + QPointF(0, 0))
+        arrow.setPos(pos + QPointF(GRID_PADDING, GRID_PADDING))
         
         
      
