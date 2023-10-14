@@ -87,7 +87,7 @@ class Mini_Graphboard_View(QGraphicsView):
         return current_arrows
 
     def add_arrows_to_mini_graphboard(self, combination):
-        DISTANCE = 20
+        DISTANCE = 15
         created_arrows = []
         optimal_locations = next((d for d in combination if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
         for arrow_dict in combination:     

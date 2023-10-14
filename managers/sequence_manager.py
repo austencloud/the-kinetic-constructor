@@ -50,7 +50,7 @@ class Sequence_Manager(QObject):
         painter.end()
 
         scaled_image = image.scaled(375, 375, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        pictograph = Pictograph(graphboard.get_state(), scaled_image)
+        pictograph = Pictograph(graphboard.get_graphboard_state(), scaled_image)
         self.add_pictograph(pictograph)
         graphboard.clear()
         graphboard.update_letter(None)

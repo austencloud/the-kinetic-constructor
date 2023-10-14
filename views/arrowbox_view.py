@@ -89,8 +89,7 @@ class ArrowBox_View(QGraphicsView):
                         print(f"Unexpected svg_file: {self.svg_file}")
                         
 
-        #if the item clicked is an arrow
-        if self.dragging:
+        if isinstance(self.dragged_item, Arrow):
             self.drag.exec_(Qt.CopyAction | Qt.MoveAction)
             self.dragStarted = True
         

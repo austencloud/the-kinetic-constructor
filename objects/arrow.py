@@ -4,7 +4,7 @@ from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
 from PyQt5.QtCore import Qt, QPointF, QTimer
 from data.ARROW_START_END_LOCATIONS import ARROW_START_END_LOCATIONS
 from PyQt5.QtGui import QPixmap, QPainter
-from settings import GRID_PADDING, ARROW_ADJUSTMENT_DISTANCE
+from settings import *
 class Arrow(QGraphicsSvgItem):
     def __init__(self, svg_file, graphboard_view, info_tracker, svg_manager, arrow_manager, motion_type, staff_manager, dict):
         super().__init__(svg_file)

@@ -55,7 +55,7 @@ class Graphboard_View(QGraphicsView):
             self.graphboard_scene.addItem(self.letter_item)
             self.graphboard_scene.addItem(self.grid)
 
-        self.setFixedSize(GRAPHBOARD_WIDTH, GRAPHBOARD_HEIGHT)
+        self.setFixedSize(int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
@@ -103,7 +103,7 @@ class Graphboard_View(QGraphicsView):
         dropped_arrow_svg_motion_type = dropped_arrow_svg.split('_')[1]
         
         self.arrow = Arrow(dropped_arrow_svg, self, self.info_tracker, self.svg_manager, self.arrow_manager, dropped_arrow_svg_motion_type, self.staff_manager, None)
-        
+        self.arrow.setScale(GRAPHBOARD_SCALE)
         self.scene().addItem(self.arrow)
         self.mouse_pos = self.mapToScene(event.pos())
         self.clear_selection()
@@ -149,13 +149,12 @@ class Graphboard_View(QGraphicsView):
         return state
     
     def get_quadrant_center(self, quadrant):
-        # Calculate the layer 2 points on the graphboard based on the grid
         graphboard_layer2_points = {}
         for point_name in ['NE_layer2_point', 'SE_layer2_point', 'SW_layer2_point', 'NW_layer2_point']:
             cx, cy = self.grid.get_circle_coordinates(point_name)
-            graphboard_layer2_points[point_name] = QPointF(cx, cy)  # Subtract VERTICAL_OFFSET from y-coordinate
+            graphboard_layer2_points[point_name] = QPointF(cx, cy) 
 
-        # Map the quadrants to the corresponding layer 2 points
+
         centers = {
             'ne': graphboard_layer2_points['NE_layer2_point'],
             'se': graphboard_layer2_points['SE_layer2_point'],
@@ -163,7 +162,7 @@ class Graphboard_View(QGraphicsView):
             'nw': graphboard_layer2_points['NW_layer2_point']
         }
 
-        return centers.get(quadrant, QPointF(0, 0))  # Subtract VERTICAL_OFFSET from default y-coordinate
+        return centers.get(quadrant, QPointF(0, 0))
 
     def get_current_arrow_positions(self):
         red_position = None
@@ -340,7 +339,8 @@ class Graphboard_View(QGraphicsView):
                 return
             self.letter_item.setSharedRenderer(renderer)
 
-        self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width() / 2, GRAPHBOARD_WIDTH)
+        self.letter_item.setScale(GRAPHBOARD_SCALE)
+        self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width()*GRAPHBOARD_SCALE / 2, GRAPHBOARD_WIDTH)
 
     def clear(self):
         for item in self.scene().items():

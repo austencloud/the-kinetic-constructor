@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QPointF, pyqtSignal, QObject
 from objects.arrow import Arrow
-from settings import STAFF_WIDTH, STAFF_LENGTH, MINI_STAFF_WIDTH, MINI_STAFF_LENGTH
+from settings import *
 from objects.staff import Staff
 
 
@@ -139,11 +139,19 @@ class Staff_Manager(QObject):
 
         # Initialize the staff locations based on the handpoints
         self.staff_locations = {
-            'N_staff': graphboard_handpoints['N_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH),
-            'E_staff': graphboard_handpoints['E_hand_point'] + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2 - STAFF_WIDTH),
-            'S_staff': graphboard_handpoints['S_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH),
-            'W_staff': graphboard_handpoints['W_hand_point'] + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2 - STAFF_WIDTH)
+            'N_staff': graphboard_handpoints['N_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH*GRAPHBOARD_SCALE),
+            'E_staff': graphboard_handpoints['E_hand_point'] + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2 - STAFF_WIDTH*GRAPHBOARD_SCALE),
+            'S_staff': graphboard_handpoints['S_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH*GRAPHBOARD_SCALE),
+            'W_staff': graphboard_handpoints['W_hand_point'] + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2 - STAFF_WIDTH*GRAPHBOARD_SCALE)
         }
+
+        #put a red dot at each hand point
+        for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
+            x, y = self.grid.get_circle_coordinates(point_name)
+            scaled_x = x * scale + self.GRID_PADDING
+            scaled_y = y * scale + self.GRID_V_OFFSET
+            self.grid.add_red_dot(scaled_x, scaled_y)
+            
 
         # Create and hide the staffs for each direction and color
         self.graphboard_staffs = {}
@@ -194,10 +202,10 @@ class Staff_Manager(QObject):
 
     ### UPDATERS ###
 
-    def update_graphboard_staffs(self, scene):
+    def update_graphboard_staffs(self, graphboard_scene):
         self.hide_all_graphboard_staffs()
         
-        for arrow in scene.items():
+        for arrow in graphboard_scene.items():
             if isinstance(arrow, Arrow):
                 # print(f"update_graphboard_staffs -- arrow: {arrow}")
                 end_location = arrow.end_location
@@ -213,26 +221,29 @@ class Staff_Manager(QObject):
                         continue 
                     
                     new_staff = Staff(end_location + "_staff",
-                                    scene,
+                                    graphboard_scene,
                                     self.staff_locations[end_location + "_staff"],
                                     'vertical' if end_location in ['N', 'S'] else 'horizontal',
                                     color,
                                     'images\\staves\\' + end_location + "_staff_" + color + '.svg')
 
                     new_staff.arrow = arrow
+                    new_staff.setScale(arrow.scale())
                     arrow.staff = new_staff
 
                     if new_staff.scene is not self.graphboard_scene:
                         self.graphboard_scene.addItem(new_staff)
                     self.graphboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
 
-        self.check_replace_beta_staffs()
+        self.check_replace_beta_staffs(graphboard_scene)
         
     def hide_all_graphboard_staffs(self):
         for staff in self.graphboard_staffs.values():
             staff.hide()
 
-    def check_replace_beta_staffs(self):
+    def check_replace_beta_staffs(self, graphboard_scene):
+        arrows = [arrow for arrow in graphboard_scene.items() if isinstance(arrow, Arrow)]
+        print(f"check_replace_beta_staffs -- arrows: {arrows}")
         staff_positions = [(staff.pos().x(), staff.pos().y()) for staff in self.graphboard_staffs.values() if staff.isVisible()]
 
         for position in set(staff_positions):
@@ -241,11 +252,11 @@ class Staff_Manager(QObject):
                 overlapping_staffs = [staff for staff in self.graphboard_staffs.values() if (staff.pos().x(), staff.pos().y()) == position]
                 axis = overlapping_staffs[0].axis  
                 if axis == 'vertical': 
-                    overlapping_staffs[0].setPos(position[0] + 20, position[1])
-                    overlapping_staffs[1].setPos(position[0] - 20, position[1])
+                    overlapping_staffs[0].setPos(position[0] + 20 * GRAPHBOARD_SCALE, position[1])
+                    overlapping_staffs[1].setPos(position[0] - 20 * GRAPHBOARD_SCALE, position[1])
                 else: 
-                    overlapping_staffs[0].setPos(position[0], position[1] - 20)
-                    overlapping_staffs[1].setPos(position[0], position[1] + 20)
+                    overlapping_staffs[0].setPos(position[0], position[1] - 20 * GRAPHBOARD_SCALE)
+                    overlapping_staffs[1].setPos(position[0], position[1] + 20 * GRAPHBOARD_SCALE)
 
                 self.graphboard_scene.update()
 

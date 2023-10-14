@@ -34,6 +34,22 @@ class Grid(QGraphicsSvgItem):
         else:
             return None
 
+    def add_red_dot(self, x, y):
+        with open(self.svg_file, 'r') as svg_file:
+            svg_content = svg_file.read()
+
+        root = ET.fromstring(svg_content)
+        namespace = '{http://www.w3.org/2000/svg}'
+        red_dot = ET.Element(f"{namespace}circle")
+        red_dot.attrib['cx'] = str(x)
+        red_dot.attrib['cy'] = str(y)
+        red_dot.attrib['r'] = '5'
+        red_dot.attrib['fill'] = 'red'
+        red_dot.attrib['stroke'] = 'black'
+        red_dot.attrib['stroke-width'] = '1'
+        root.append(red_dot)
+        return ET.tostring(root)
+
     def get_width(self):
         return self.boundingRect().width() * self.scale()
 

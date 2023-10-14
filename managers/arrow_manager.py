@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QGraphicsItem
 from PyQt5.QtGui import QDrag
 from views.graphboard_view import Graphboard_View
 from managers.json_manager import Json_Manager
-from settings import GRID_PADDING, ARROW_ADJUSTMENT_DISTANCE
+from settings import *
 class Arrow_Manager(QObject):
     def __init__(self, arrow, graphboard_view, staff_manager):
         super().__init__()
@@ -234,13 +234,13 @@ class Arrow_Manager(QObject):
                 if optimal_locations:
                     optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
                     if optimal_location:
-                        pos = QPointF(optimal_location['x'], optimal_location['y']) - arrow.boundingRect().center()
+                        pos = QPointF(optimal_location['x'], optimal_location['y']) - arrow.boundingRect().center()*GRAPHBOARD_SCALE
                         arrow.setPos(pos)
                 else:
                     self.set_default_arrow_pos(arrow)
 
     def set_default_arrow_pos(self, arrow):
-        pos = self.graphboard_view.get_quadrant_center(arrow.quadrant) - arrow.boundingRect().center()
+        pos = self.graphboard_view.get_quadrant_center(arrow.quadrant) - arrow.boundingRect().center()*GRAPHBOARD_SCALE
         if arrow.quadrant == 'ne':
             pos += QPointF(ARROW_ADJUSTMENT_DISTANCE, -ARROW_ADJUSTMENT_DISTANCE)
         elif arrow.quadrant == 'se':

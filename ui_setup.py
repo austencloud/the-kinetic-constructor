@@ -18,7 +18,7 @@ from views.arrowbox_view import ArrowBox_View
 from views.propbox_view import PropBox_View
 from exporter import Exporter
 from pictograph_selector import Pictograph_Selector
-
+from settings import *
 
 class UiSetup(QWidget):
 
@@ -33,7 +33,7 @@ class UiSetup(QWidget):
         self.svg_manager = Svg_Manager()
         self.arrows = []
         self.graphboard_scene = QGraphicsScene()
-        self.graphboard_scene.setSceneRect(0, 0, 650, 650)
+        self.graphboard_scene.setSceneRect(0, 0, GRID_WIDTH * GRAPHBOARD_SCALE, GRID_WIDTH * GRAPHBOARD_SCALE)
         self.ARROW_DIR = 'images\\arrows'
         self.exporter = None
         self.sequence_manager = None
@@ -99,14 +99,15 @@ class UiSetup(QWidget):
 
     def initGraphboardView(self):
         self.grid = Grid('images\\grid\\grid.svg')
+        self.grid.setScale(GRAPHBOARD_SCALE)
         self.exporter = Exporter(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
         self.graphboard_view = Graphboard_View(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_manager, self.arrow_manager, self, None, self.sequence_manager, self.exporter, self.json_manager)
         self.arrow_manager.connect_to_graphboard(self.graphboard_view)
         transform = QTransform()
         graphboard_size = self.graphboard_view.frameSize()
 
-        grid_position = QPointF((graphboard_size.width() - self.grid.boundingRect().width()) / 2,
-                                (graphboard_size.height() - self.grid.boundingRect().height()) / 2 - (75))
+        grid_position = QPointF((graphboard_size.width() - self.grid.boundingRect().width() * GRAPHBOARD_SCALE) / 2,
+                                (graphboard_size.height() - self.grid.boundingRect().height() * GRAPHBOARD_SCALE) / 2 - (VERTICAL_OFFSET))
 
         transform.translate(grid_position.x(), grid_position.y())
         self.grid.setTransform(transform)
