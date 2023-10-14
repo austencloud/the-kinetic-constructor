@@ -33,7 +33,7 @@ class UiSetup(QWidget):
         self.svg_manager = Svg_Manager()
         self.arrows = []
         self.graphboard_scene = QGraphicsScene()
-        self.graphboard_scene.setSceneRect(0, 0, GRID_WIDTH * GRAPHBOARD_SCALE, GRID_WIDTH * GRAPHBOARD_SCALE)
+        self.graphboard_scene.setSceneRect(0, 0, GRID_WIDTH, GRID_WIDTH)
         self.ARROW_DIR = 'images\\arrows'
         self.exporter = None
         self.sequence_manager = None

@@ -76,7 +76,7 @@ class Mini_Graphboard_View(QGraphicsView):
             'nw': graphboard_layer2_points['NW_layer2_point']
         }
 
-        return centers.get(quadrant, QPointF(0, 0 - self.VERTICAL_OFFSET))  # Subtract VERTICAL_OFFSET from default y-coordinate
+        return centers.get(quadrant, QPointF(0, 0))  # Subtract VERTICAL_OFFSET from default y-coordinate
 
     def get_arrows(self):
         # return the current arrows on the graphboard as an array

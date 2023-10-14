@@ -33,7 +33,6 @@ class Exporter:
                     circle_elements = grid_svg.getroot().findall('.//{http://www.w3.org/2000/svg}circle')
 
                     for circle_element in circle_elements:
-                        # Adjust the cx and cy attributes to move the circle 25 pixels to the right and down
                         cx = float(circle_element.get('cx')) + 50
                         cy = float(circle_element.get('cy')) + 50
                         circle_element.set('cx', str(cx))

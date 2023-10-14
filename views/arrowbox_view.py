@@ -92,6 +92,9 @@ class ArrowBox_View(QGraphicsView):
         if isinstance(self.dragged_item, Arrow):
             self.drag.exec_(Qt.CopyAction | Qt.MoveAction)
             self.dragStarted = True
+        else:
+            event.ignore()
+        
         
     def mouseReleaseEvent(self, event):
         arrow = self.itemAt(event.pos())

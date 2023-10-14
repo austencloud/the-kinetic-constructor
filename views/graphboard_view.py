@@ -41,7 +41,7 @@ class Graphboard_View(QGraphicsView):
         self.exporter = exporter
         self.json_manager = json_manager
         self.letter_renderers = {}
-        
+        self.VERTICAL_OFFSET = (self.height() - self.width()) / 2
         self.letters = self.json_manager.load_all_letters()
 
         for letter in 'ABCDEFGHIJKLMNOPQRSTUV':
@@ -112,10 +112,14 @@ class Graphboard_View(QGraphicsView):
         quadrant = self.get_graphboard_quadrants(self.mouse_pos + self.arrow.boundingRect().center())
         self.arrow.update_arrow_for_new_quadrant(quadrant)
         self.arrow.update_attributes()
-        self.arrow.arrow_manager.update_arrow_position(self)
+        for arrow in self.scene().items():
+            if isinstance(arrow, Arrow):
+                arrow.arrow_manager.update_arrow_position(self)
         self.info_tracker.update()
 
     ### GETTERS ###
+
+
 
     def get_graphboard_quadrants(self, mouse_pos):
         adjusted_mouse_y = mouse_pos.y() + VERTICAL_OFFSET
@@ -149,12 +153,13 @@ class Graphboard_View(QGraphicsView):
         return state
     
     def get_quadrant_center(self, quadrant):
+        # Calculate the layer 2 points on the graphboard based on the grid
         graphboard_layer2_points = {}
         for point_name in ['NE_layer2_point', 'SE_layer2_point', 'SW_layer2_point', 'NW_layer2_point']:
             cx, cy = self.grid.get_circle_coordinates(point_name)
-            graphboard_layer2_points[point_name] = QPointF(cx, cy) 
+            graphboard_layer2_points[point_name] = QPointF(cx, cy)  # Subtract VERTICAL_OFFSET from y-coordinate
 
-
+        # Map the quadrants to the corresponding layer 2 points
         centers = {
             'ne': graphboard_layer2_points['NE_layer2_point'],
             'se': graphboard_layer2_points['SE_layer2_point'],
@@ -162,7 +167,7 @@ class Graphboard_View(QGraphicsView):
             'nw': graphboard_layer2_points['NW_layer2_point']
         }
 
-        return centers.get(quadrant, QPointF(0, 0))
+        return centers.get(quadrant, QPointF(0, 0))  # Subtract VERTICAL_OFFSET from default y-coordinate
 
     def get_current_arrow_positions(self):
         red_position = None
@@ -222,7 +227,6 @@ class Graphboard_View(QGraphicsView):
                 current_arrows.append(arrow)
         return current_arrows
     
-
     ### SELECTION ###
 
     def select_all_items(self):

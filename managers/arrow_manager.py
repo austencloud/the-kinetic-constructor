@@ -4,8 +4,7 @@ from PyQt5.QtSvg import QSvgRenderer
 from PyQt5.QtWidgets import QGraphicsItem
 from PyQt5.QtCore import  QObject
 from objects.arrow import Arrow
-from data import ARROW_START_END_LOCATIONS
-from PyQt5.QtCore import QTimer, QPointF
+from PyQt5.QtCore import QTimer, QPointF, QRectF
 from PyQt5.QtGui import QPixmap, QPainter
 from PyQt5.QtWidgets import QGraphicsItem
 from PyQt5.QtGui import QDrag
@@ -234,13 +233,16 @@ class Arrow_Manager(QObject):
                 if optimal_locations:
                     optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
                     if optimal_location:
-                        pos = QPointF(optimal_location['x'], optimal_location['y']) - arrow.boundingRect().center()*GRAPHBOARD_SCALE
+                        pos = QPointF(optimal_location['x']*GRAPHBOARD_SCALE, optimal_location['y']*GRAPHBOARD_SCALE) - arrow.center
                         arrow.setPos(pos)
                 else:
                     self.set_default_arrow_pos(arrow)
 
+
     def set_default_arrow_pos(self, arrow):
-        pos = self.graphboard_view.get_quadrant_center(arrow.quadrant) - arrow.boundingRect().center()*GRAPHBOARD_SCALE
+        quadrant_center = self.graphboard_view.get_quadrant_center(arrow.quadrant)
+        pos = (quadrant_center * GRAPHBOARD_SCALE) - arrow.center
+
         if arrow.quadrant == 'ne':
             pos += QPointF(ARROW_ADJUSTMENT_DISTANCE, -ARROW_ADJUSTMENT_DISTANCE)
         elif arrow.quadrant == 'se':
@@ -250,8 +252,10 @@ class Arrow_Manager(QObject):
         elif arrow.quadrant == 'nw':
             pos += QPointF(-ARROW_ADJUSTMENT_DISTANCE, -ARROW_ADJUSTMENT_DISTANCE)
             
-        arrow.setPos(pos + QPointF(GRID_PADDING, GRID_PADDING))
+        arrow.setPos(pos + QPointF(0, 0))
         
+        
+     
     def update_arrow_image(self, arrow):
         if arrow.motion_type == 'pro' or arrow.motion_type == 'anti':
             new_filename = f"images\\arrows\\shift\\{arrow.motion_type}\\{arrow.color}_{arrow.motion_type}_{arrow.rotation_direction}_{arrow.quadrant}_{arrow.turns}.svg"
@@ -295,6 +299,7 @@ class Arrow_Manager(QObject):
             if isinstance(arrow, Arrow):
                 ghost_arrow = Arrow(None, arrow.graphboard_view, arrow.info_tracker, arrow.svg_manager, self, 'static', arrow.staff_manager, None)
                 ghost_arrow.set_static_attributes_from_deleted_arrow(arrow)
+                ghost_arrow.setScale(GRAPHBOARD_SCALE)
                 self.graphboard_scene.addItem(ghost_arrow)
                 self.graphboard_scene.removeItem(arrow)
                 self.info_tracker.update()

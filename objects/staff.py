@@ -28,7 +28,6 @@ class Staff(QGraphicsSvgItem):
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
 
-
     def hide(self):
         self.setVisible(False)
 
