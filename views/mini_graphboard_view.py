@@ -16,7 +16,7 @@ class Mini_Graphboard_View(QGraphicsView):
         super().__init__()
         self.setFixedSize(int(DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE), int(DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE))
         self.mini_graphboard_scene = QGraphicsScene()
-        self.mini_graphboard_scene.setSceneRect(0, 0, GRID_WIDTH, GRID_WIDTH)
+        self.mini_graphboard_scene.setSceneRect(0, 0, SELECTION_GRID_WIDTH, SELECTION_GRID_WIDTH)
         self.setScene(self.mini_graphboard_scene)  # Set the scene
         self.mini_grid = Grid("images/grid/grid.svg")
         self.mini_grid.setScale(PICTOGRAPH_SCALE)
@@ -27,15 +27,17 @@ class Mini_Graphboard_View(QGraphicsView):
         self.info_tracker = Info_Tracker(self, None, self.staff_manager, self.json_manager)
         self.arrow_manager.connect_info_tracker(self.info_tracker)
         self.staff_manager.connect_grid(self.mini_grid)
+        
+        self.VERTICAL_OFFSET = (self.height() - self.width()) / 2
         self.init_grid()
         self.staff_manager.init_mini_graphboard_staffs(self, self.mini_grid)
-        self.VERTICAL_OFFSET = (self.height() - self.width()) / 2
+        
         self.main_graphboard_view = main_graphboard_view
         
     def init_grid(self):
-        self.PADDING = self.width() - self.mini_grid.boundingRect().width()
+        self.PADDING = self.width() - self.mini_grid.boundingRect().width() * PICTOGRAPH_SCALE
         mini_grid_position = QPointF(0,
-                                (self.height() - self.mini_grid.boundingRect().height()) / 2 - (self.height() - self.mini_grid.boundingRect().height()) + self.PADDING / 2)
+                                -self.VERTICAL_OFFSET)
 
         transform = QTransform()
         transform.translate(mini_grid_position.x(), mini_grid_position.y())
@@ -88,7 +90,7 @@ class Mini_Graphboard_View(QGraphicsView):
         return current_arrows
 
     def add_arrows_to_mini_graphboard(self, combination):
-        DISTANCE = 15
+        DISTANCE = 40 * PICTOGRAPH_SCALE
         created_arrows = []
         optimal_locations = next((d for d in combination if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
         for arrow_dict in combination:     

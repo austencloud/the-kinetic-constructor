@@ -38,10 +38,10 @@ class Staff_Manager(QObject):
 
         # Initialize the staff locations based on the handpoints
         self.staff_locations = {
-            'N_staff': graphboard_handpoints['N_hand_point'] + QPointF(-MINI_STAFF_WIDTH, -MINI_STAFF_LENGTH - VERTICAL_BUFFER),
-            'E_staff': graphboard_handpoints['E_hand_point'] + QPointF(-MINI_STAFF_LENGTH, - MINI_STAFF_WIDTH - VERTICAL_BUFFER),
-            'S_staff': graphboard_handpoints['S_hand_point'] + QPointF(-MINI_STAFF_WIDTH, -MINI_STAFF_LENGTH - VERTICAL_BUFFER),
-            'W_staff': graphboard_handpoints['W_hand_point'] + QPointF(-MINI_STAFF_LENGTH, -MINI_STAFF_WIDTH - VERTICAL_BUFFER)
+            'N_staff': graphboard_handpoints['N_hand_point'] * PICTOGRAPH_SCALE + QPointF(-MINI_STAFF_WIDTH, -MINI_STAFF_LENGTH - VERTICAL_BUFFER),
+            'E_staff': graphboard_handpoints['E_hand_point'] * PICTOGRAPH_SCALE + QPointF(-MINI_STAFF_LENGTH, - MINI_STAFF_WIDTH - VERTICAL_BUFFER),
+            'S_staff': graphboard_handpoints['S_hand_point'] * PICTOGRAPH_SCALE + QPointF(-MINI_STAFF_WIDTH, -MINI_STAFF_LENGTH - VERTICAL_BUFFER),
+            'W_staff': graphboard_handpoints['W_hand_point'] * PICTOGRAPH_SCALE + QPointF(-MINI_STAFF_LENGTH, -MINI_STAFF_WIDTH - VERTICAL_BUFFER)
         }
 
 
@@ -59,7 +59,7 @@ class Staff_Manager(QObject):
                     f'images\\staves\\{end_location}_staff_{color}.svg',
                 )
                 # Scale down the staff
-                self.graphboard_staffs[staff_key].setScale(0.5)
+                self.graphboard_staffs[staff_key].setScale(PICTOGRAPH_SCALE)
 
     def update_mini_graphboard_staffs(self, scene):
         self.hide_all_graphboard_staffs()
@@ -86,7 +86,7 @@ class Staff_Manager(QObject):
                                     'images\\staves\\' + end_location + "_staff_" + color + '.svg')
                     
                                     # Scale down the new staff
-                    new_staff.setScale(0.5)
+                    new_staff.setScale(PICTOGRAPH_SCALE)
                         
                     if new_staff.scene is not self.graphboard_scene:
                         self.graphboard_scene.addItem(new_staff)
@@ -106,12 +106,12 @@ class Staff_Manager(QObject):
 
                 if axis == 'vertical':  # Vertical staffs
                     # Move one staff 10px to the left and the other 10px to the right
-                    overlapping_staffs[0].setPos(position[0] + 10, position[1])
-                    overlapping_staffs[1].setPos(position[0] - 10, position[1])
+                    overlapping_staffs[0].setPos(position[0] + 20*PICTOGRAPH_SCALE, position[1])
+                    overlapping_staffs[1].setPos(position[0] - 20*PICTOGRAPH_SCALE, position[1])
                 else:  # Horizontal staffs
                     # Move one staff 10px up and the other 10px down
-                    overlapping_staffs[0].setPos(position[0], position[1] - 10)
-                    overlapping_staffs[1].setPos(position[0], position[1] + 10)
+                    overlapping_staffs[0].setPos(position[0], position[1] - 20*PICTOGRAPH_SCALE)
+                    overlapping_staffs[1].setPos(position[0], position[1] + 20*PICTOGRAPH_SCALE)
 
                 # Update the scene
                 self.graphboard_scene.update()
