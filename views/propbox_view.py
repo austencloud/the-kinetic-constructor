@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QGraphicsView, QFrame, QVBoxLayout
 from PyQt5.QtCore import Qt
+from settings import *
 
 class PropBox_View(QGraphicsView):
     def __init__(self, main_window, staff_manager, ui_setup):
@@ -8,6 +9,7 @@ class PropBox_View(QGraphicsView):
         self.staff_manager = staff_manager
         self.ui_setup = ui_setup
         self.propbox_frame = self.init_propbox_frame()
+        
 
     def init_propbox_frame(self):
         propbox_frame = QFrame(self.main_window)
@@ -18,6 +20,6 @@ class PropBox_View(QGraphicsView):
         layout.addWidget(self)
         
         propbox_frame.setLayout(layout)
-        propbox_frame.setFixedSize(500, 500)
+        propbox_frame.setFixedSize(int(500 * GRAPHBOARD_SCALE), int(500 * GRAPHBOARD_SCALE))
 
         return propbox_frame

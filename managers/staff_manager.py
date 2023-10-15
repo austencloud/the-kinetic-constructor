@@ -47,19 +47,6 @@ class Staff_Manager(QObject):
 
         # Create and hide the staffs for each direction and color
         self.graphboard_staffs = {}
-        for end_location in ['N', 'E', 'S', 'W']:
-            for color in ['red', 'blue']:
-                staff_key = f"{end_location}_staff_{color}"
-                self.graphboard_staffs[staff_key] = Staff(
-                    f"{end_location}_staff",
-                    self.graphboard_scene,
-                    self.staff_locations[f"{end_location}_staff"],
-                    'vertical' if end_location in ['N', 'S'] else 'horizontal',
-                    color,
-                    f'images\\staves\\{end_location}_staff_{color}.svg',
-                )
-                # Scale down the staff
-                self.graphboard_staffs[staff_key].setScale(PICTOGRAPH_SCALE)
 
     def update_mini_graphboard_staffs(self, scene):
         self.hide_all_graphboard_staffs()

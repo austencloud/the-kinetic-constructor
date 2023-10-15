@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QGridLayout, QLabel
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QFont, QColor
-from views.mini_graphboard_view import Mini_Graphboard_View
+from views.pictograph_view import Pictograph_View
 
 class Pictograph_Selector(QDialog):
     def __init__(self, combinations, letter, main_graphboard_view, parent=None):
@@ -21,9 +21,9 @@ class Pictograph_Selector(QDialog):
         row = 0
         col = 0
         for i, combination in enumerate(combinations):
-            mini_graphboard = Mini_Graphboard_View(main_graphboard_view)
-            mini_graphboard.add_arrows_to_mini_graphboard(combination)
-            grid_layout.addWidget(mini_graphboard, row, col)
+            pictograph = Pictograph_View(main_graphboard_view)
+            pictograph.add_arrows_to_mini_graphboard(combination)
+            grid_layout.addWidget(pictograph, row, col)
                     
             col += 1
             if col >= 4:

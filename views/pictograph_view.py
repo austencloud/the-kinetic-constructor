@@ -11,7 +11,7 @@ from managers.svg_manager import Svg_Manager
 from managers.json_manager import Json_Manager
 from settings import *
 
-class Mini_Graphboard_View(QGraphicsView):
+class Pictograph_View(QGraphicsView):
     def __init__(self, main_graphboard_view):
         super().__init__()
         self.setFixedSize(int(DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE), int(DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE))

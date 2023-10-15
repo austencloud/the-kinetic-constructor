@@ -53,7 +53,7 @@ class Arrow(QGraphicsSvgItem):
         self.setSelected(True) 
         if event.buttons() == Qt.LeftButton:
             from views.graphboard_view import Graphboard_View
-            from views.mini_graphboard_view import Mini_Graphboard_View
+            from views.pictograph_view import Pictograph_View
             if isinstance(self.graphboard_view, Graphboard_View):
                 new_pos = self.mapToScene(event.pos()) - self.drag_offset
                 self.setPos(new_pos)
@@ -61,7 +61,7 @@ class Arrow(QGraphicsSvgItem):
                 if self.quadrant != new_quadrant:
                     self.update_arrow_for_new_quadrant(new_quadrant)
                     self.info_tracker.update()
-            elif isinstance(self.graphboard_view, Mini_Graphboard_View):
+            elif isinstance(self.graphboard_view, Pictograph_View):
                 new_pos = self.mapToScene(event.pos()) - self.drag_offset / 2
                 self.setPos(new_pos)
 

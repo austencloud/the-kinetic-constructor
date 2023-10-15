@@ -29,6 +29,7 @@ class Graphboard_View(QGraphicsView):
         self.setInteractive(True)
         self.dragging = None
         self.grid = grid
+        self.grid.setScale(GRAPHBOARD_SCALE)
         self.graphboard_scene = graphboard_scene
         self.staff_manager = staff_manager
         self.info_tracker = info_tracker
@@ -46,8 +47,8 @@ class Graphboard_View(QGraphicsView):
         for letter in 'ABCDEFGHIJKLMNOPQRSTUV':
              self.letter_renderers[letter] = QSvgRenderer(f'images/letters/{letter}.svg')
         self.letter_item = QGraphicsSvgItem()
-        from views.mini_graphboard_view import Mini_Graphboard_View
-        if isinstance(self, Mini_Graphboard_View):
+        from views.pictograph_view import Pictograph_View
+        if isinstance(self, Pictograph_View):
             self.graphboard_scene.setBackgroundBrush(Qt.transparent)
         elif self.graphboard_scene is not None:
             self.graphboard_scene.setBackgroundBrush(Qt.white) 

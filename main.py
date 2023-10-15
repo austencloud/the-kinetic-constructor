@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget
-from ui_setup import UiSetup
+from init.ui_setup import UiSetup
 
 class Main_Window(QWidget):
     def __init__(self):
