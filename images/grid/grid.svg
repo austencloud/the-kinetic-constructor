@@ -4,28 +4,28 @@
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 650 650"
 	 style="enable-background:new 0 0 650 650;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#231F20;}
+	.black{fill:#231F20;}
 </style>
 <g id="Layer_1-2">
 	<g id="Grid">
-		<circle id="center_point" class="st0" cx="325" cy="325" r="11.2"/>
+		<circle id="center_point" class="black" cx="325" cy="325" r="11.2"/>
 		<g id="outer_points">
-			<circle id="N_outer_point" class="st0" cx="325" cy="25" r="25"/>
-			<circle id="E_outer_point" class="st0" cx="625" cy="325" r="25"/>
-			<circle id="S_outer_point" class="st0" cx="325" cy="625" r="25"/>
-			<circle id="W_outer_point" class="st0" cx="25" cy="325" r="25"/>
+			<circle id="N_outer_point" class="black" cx="325" cy="25" r="25"/>
+			<circle id="E_outer_point" class="black" cx="625" cy="325" r="25"/>
+			<circle id="S_outer_point" class="black" cx="325" cy="625" r="25"/>
+			<circle id="W_outer_point" class="black" cx="25" cy="325" r="25"/>
 		</g>
 		<g id="hand_points">
-			<circle id="N_hand_point" class="st0" cx="325" cy="181.9" r="4.2"/>
-			<circle id="E_hand_point" class="st0" cx="468.1" cy="325" r="4.2"/>
-			<circle id="S_hand_point" class="st0" cx="325" cy="468.1" r="4.2"/>
-			<circle id="W_hand_point" class="st0" cx="181.9" cy="325" r="4.2"/>
+			<circle id="N_hand_point" class="black" cx="325" cy="181.9" r="4.2"/>
+			<circle id="E_hand_point" class="black" cx="468.1" cy="325" r="4.2"/>
+			<circle id="S_hand_point" class="black" cx="325" cy="468.1" r="4.2"/>
+			<circle id="W_hand_point" class="black" cx="181.9" cy="325" r="4.2"/>
 		</g>
 		<g id="layer2_points">
-			<circle id="NE_layer2_point" class="st0" cx="468.1" cy="181.9" r="8.8"/>
-			<circle id="SE_layer2_point" class="st0" cx="468.1" cy="468.1" r="8.8"/>
-			<circle id="SW_layer2_point" class="st0" cx="181.9" cy="468.1" r="8.8"/>
-			<circle id="NW_layer2_point" class="st0" cx="181.9" cy="181.9" r="8.8"/>
+			<circle id="NE_layer2_point" class="black" cx="468.1" cy="181.9" r="8.8"/>
+			<circle id="SE_layer2_point" class="black" cx="468.1" cy="468.1" r="8.8"/>
+			<circle id="SW_layer2_point" class="black" cx="181.9" cy="468.1" r="8.8"/>
+			<circle id="NW_layer2_point" class="black" cx="181.9" cy="181.9" r="8.8"/>
 		</g>
 	</g>
 </g>

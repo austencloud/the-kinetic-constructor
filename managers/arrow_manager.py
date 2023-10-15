@@ -23,7 +23,7 @@ class Arrow_Manager(QObject):
         self.json_manager = Json_Manager(None)
         self.letters = self.json_manager.load_all_letters()
 
-        self.timer.timeout.connect(self.update_pixmap)
+
         
     ### CONNECTORS ###
 
@@ -49,8 +49,6 @@ class Arrow_Manager(QObject):
             'down': {'ne': 'se', 'nw': 'sw'},
             'right': {'nw': 'ne', 'sw': 'se'}
         }
-
-        
 
         new_quadrant = quadrant_mapping.get(direction, {}).get(current_quadrant, current_quadrant)
         self.selected_arrow.quadrant = new_quadrant
@@ -310,45 +308,9 @@ class Arrow_Manager(QObject):
         else:
             print("No items selected")
 
-    def prepare_dragging(self, event):
-        if isinstance(self.graphboard_view, Graphboard_View):
-            self.drag_start_position = event.pos()
-            self.graphboard_view.setFocus()
-            draggable_items = [item for item in self.graphboard_view.items(event.pos().toPoint()) if item.flags() & QGraphicsItem.ItemIsMovable]
-
-            if draggable_items:
-                item = draggable_items[0]
-                self.dragging_arrow = item
-                self.drag_offset = self.graphboard_view.mapToScene(event.pos().toPoint()) - self.dragging_arrow.pos()
-            else:
-                self.graphboard_view.clear_selection()
-                self.dragging_arrow = None
-
-            return self.dragging_arrow, self.drag_offset
-
     def exec_(self, *args, **kwargs):
         self.timer.start(100)
         drag = QDrag(self.graphboard_view)
         result = drag.exec_(*args, **kwargs)
         self.timer.stop()
         return result
-
-    def update_pixmap(self):
-        if self.dragging_arrow:
-            new_pos = self.dragging_arrow.pos()
-            new_quadrant = self.graphboard_view.get_graphboard_quadrants(new_pos) 
-            
-            if self.dragging_arrow.quadrant != new_quadrant:
-                self.dragging_arrow.update_arrow_for_new_quadrant(new_quadrant)
-                self.info_tracker.update()  # Assuming info_tracker is accessible
-
-        new_svg = f'images\\arrows\\red\\r\\anti\\red_anti_r_{new_quadrant}.svg'
-        arrow_renderer = QSvgRenderer(new_svg)
-        self.dragging_arrow.setSharedRenderer(arrow_renderer)
-
-        if arrow_renderer.isValid():
-            pixmap = QPixmap(self.dragging_arrow.pixmap().size())
-            painter = QPainter(pixmap)
-            arrow_renderer.render(painter)
-            painter.end()
-            self.dragging_arrow.setPixmap(pixmap)

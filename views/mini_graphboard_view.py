@@ -9,16 +9,17 @@ from managers.staff_manager import Staff_Manager
 from managers.arrow_manager import Arrow_Manager
 from managers.svg_manager import Svg_Manager
 from managers.json_manager import Json_Manager
+from settings import *
 
-PICTOGRAPH_SCALE = 0.5
 class Mini_Graphboard_View(QGraphicsView):
     def __init__(self, main_graphboard_view):
         super().__init__()
-        self.setFixedSize(int(750 * PICTOGRAPH_SCALE), int(900 * PICTOGRAPH_SCALE))
+        self.setFixedSize(int(DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE), int(DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE))
         self.mini_graphboard_scene = QGraphicsScene()
-        self.mini_graphboard_scene.setSceneRect(0, 0, 650 * PICTOGRAPH_SCALE, 650 * PICTOGRAPH_SCALE)
+        self.mini_graphboard_scene.setSceneRect(0, 0, GRID_WIDTH, GRID_WIDTH)
         self.setScene(self.mini_graphboard_scene)  # Set the scene
-        self.mini_grid = Grid("images/grid/mini_grid.svg")
+        self.mini_grid = Grid("images/grid/grid.svg")
+        self.mini_grid.setScale(PICTOGRAPH_SCALE)
         self.svg_manager = Svg_Manager()
         self.staff_manager = Staff_Manager(self.mini_graphboard_scene)
         self.arrow_manager = Arrow_Manager(None, self, self.staff_manager)
@@ -33,7 +34,7 @@ class Mini_Graphboard_View(QGraphicsView):
         
     def init_grid(self):
         self.PADDING = self.width() - self.mini_grid.boundingRect().width()
-        mini_grid_position = QPointF((self.mini_grid.get_width() - self.mini_grid.boundingRect().width()) / 2,
+        mini_grid_position = QPointF(0,
                                 (self.height() - self.mini_grid.boundingRect().height()) / 2 - (self.height() - self.mini_grid.boundingRect().height()) + self.PADDING / 2)
 
         transform = QTransform()
@@ -66,7 +67,7 @@ class Mini_Graphboard_View(QGraphicsView):
         graphboard_layer2_points = {}
         for point_name in ['NE_layer2_point', 'SE_layer2_point', 'SW_layer2_point', 'NW_layer2_point']:
             cx, cy = self.mini_grid.get_circle_coordinates(point_name)
-            graphboard_layer2_points[point_name] = QPointF(cx, cy - self.VERTICAL_OFFSET)  # Subtract VERTICAL_OFFSET from y-coordinate
+            graphboard_layer2_points[point_name] = QPointF(cx, cy)  # Subtract VERTICAL_OFFSET from y-coordinate
 
         # Map the quadrants to the corresponding layer 2 points
         centers = {
@@ -121,7 +122,7 @@ class Mini_Graphboard_View(QGraphicsView):
             arrow_transform = QTransform()
             arrow_transform.scale(PICTOGRAPH_SCALE, PICTOGRAPH_SCALE)
             arrow.setTransform(arrow_transform)
-            BUFFER = (self.width() - self.mini_grid.boundingRect().width()) / 2
+            GRID_PADDING = (self.width() - self.mini_grid.boundingRect().width() * PICTOGRAPH_SCALE) / 2
 
                         # Calculate the center of the bounding rectangle
             center = arrow.boundingRect().center()
@@ -130,11 +131,13 @@ class Mini_Graphboard_View(QGraphicsView):
                 optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
                 if optimal_location:
                                 # Adjust the position based on the center
-                    pos = QPointF(optimal_location['x'] * PICTOGRAPH_SCALE - BUFFER, optimal_location['y'] * PICTOGRAPH_SCALE - BUFFER) - center * PICTOGRAPH_SCALE
+                    pos = QPointF(optimal_location['x'] * PICTOGRAPH_SCALE - GRID_PADDING, optimal_location['y'] * PICTOGRAPH_SCALE - GRID_PADDING) - center * PICTOGRAPH_SCALE
                     new_pos = pos + QPointF(0, -self.VERTICAL_OFFSET)
                     arrow.setPos(new_pos)
             else:
-                pos = self.get_quadrant_center(arrow.quadrant) - center * PICTOGRAPH_SCALE
+                quadrant_center = self.get_quadrant_center(arrow.quadrant)
+                pos = (quadrant_center * PICTOGRAPH_SCALE)
+                pos = (pos + QPointF(0, -self.VERTICAL_OFFSET)) - arrow.center * PICTOGRAPH_SCALE
                 if arrow.quadrant == 'ne':
                     pos += QPointF(DISTANCE, -DISTANCE)
                 elif arrow.quadrant == 'se':

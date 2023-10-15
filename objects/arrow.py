@@ -46,7 +46,6 @@ class Arrow(QGraphicsSvgItem):
     ### MOUSE EVENTS ###
 
     def mousePressEvent(self, event):
-        self.arrow_manager.prepare_dragging(event)
         self.drag_start_pos = self.pos()  # Store the initial position of the arrow
         self.drag_offset = event.pos() - self.boundingRect().topLeft()
 

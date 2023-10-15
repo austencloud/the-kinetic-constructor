@@ -45,6 +45,11 @@ class UiSetup(QWidget):
         self.arrow_manager = Arrow_Manager(None, self.graphboard_view, self.staff_manager)
         self.json_manager = Json_Manager(self.graphboard_scene)
         self.initInfoTracker()
+        
+        self.grid = Grid('images\\grid\\grid.svg')
+        self.grid.setScale(GRAPHBOARD_SCALE)
+        self.exporter = Exporter(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
+        
         self.initGraphboardView() 
         self.init_generator() 
         self.connectGraphboard()
@@ -98,19 +103,9 @@ class UiSetup(QWidget):
         self.main_window.setLayout(self.main_layout)
 
     def initGraphboardView(self):
-        self.grid = Grid('images\\grid\\grid.svg')
-        self.grid.setScale(GRAPHBOARD_SCALE)
-        self.exporter = Exporter(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
         self.graphboard_view = Graphboard_View(self.graphboard_scene, self.grid, self.info_tracker, self.staff_manager, self.svg_manager, self.arrow_manager, self, None, self.sequence_manager, self.exporter, self.json_manager)
         self.arrow_manager.connect_to_graphboard(self.graphboard_view)
-        transform = QTransform()
-        graphboard_size = self.graphboard_view.frameSize()
 
-        grid_position = QPointF((graphboard_size.width() - self.grid.boundingRect().width() * GRAPHBOARD_SCALE) / 2,
-                                (graphboard_size.height() - self.grid.boundingRect().height() * GRAPHBOARD_SCALE) / 2 - (VERTICAL_OFFSET))
-
-        transform.translate(grid_position.x(), grid_position.y())
-        self.grid.setTransform(transform)
          
     def initLetterButtons(self):
         letter_buttons_layout = QVBoxLayout()

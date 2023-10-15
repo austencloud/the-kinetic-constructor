@@ -3,12 +3,11 @@ from PyQt5.QtWidgets import QGraphicsView, QGraphicsItem, QApplication, QGraphic
 from PyQt5.QtCore import Qt, QRectF, QPointF, QTimer
 from PyQt5.QtWidgets import QGraphicsItem, QToolTip
 from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
-from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor
+from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor, QTransform
 from objects.staff import Staff
 from objects.grid import Grid
 from objects.arrow import Arrow
 from settings import *
-
 
 class Graphboard_View(QGraphicsView):
     def __init__(self,
@@ -58,11 +57,20 @@ class Graphboard_View(QGraphicsView):
         self.setFixedSize(int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-
-
-        (self, self.info_tracker)
         
     ### MOUSE EVENTS ###
+
+        self.init_grid()
+
+    def init_grid(self):
+        transform = QTransform()
+        graphboard_size = self.frameSize()
+
+        grid_position = QPointF((graphboard_size.width() - self.grid.boundingRect().width() * GRAPHBOARD_SCALE) / 2,
+                                (graphboard_size.height() - self.grid.boundingRect().height() * GRAPHBOARD_SCALE) / 2 - (VERTICAL_OFFSET))
+
+        transform.translate(grid_position.x(), grid_position.y())
+        self.grid.setTransform(transform)
 
     def mousePressEvent(self, event):
         self.setFocus()
@@ -109,7 +117,7 @@ class Graphboard_View(QGraphicsView):
         self.clear_selection()
         self.arrow.setSelected(True)
         
-        quadrant = self.get_graphboard_quadrants(self.mouse_pos + self.arrow.boundingRect().center())
+        quadrant = self.get_graphboard_quadrants(self.mouse_pos)
         self.arrow.update_arrow_for_new_quadrant(quadrant)
         self.arrow.update_attributes()
         for arrow in self.scene().items():
@@ -118,8 +126,6 @@ class Graphboard_View(QGraphicsView):
         self.info_tracker.update()
 
     ### GETTERS ###
-
-
 
     def get_graphboard_quadrants(self, mouse_pos):
         adjusted_mouse_y = mouse_pos.y() + VERTICAL_OFFSET
