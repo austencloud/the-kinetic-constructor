@@ -3,7 +3,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 from data.positions_map import positions_map
 from data.letter_types import letter_types
-
+from settings import GRAPHBOARD_SCALE
 class Info_Tracker:
     def __init__(self, graphboard_view, label, staff_manager, json_manager):
         self.remaining_staff = {}
@@ -15,7 +15,7 @@ class Info_Tracker:
         self.letters = self.json_manager.load_all_letters()    
 
         if self.label:
-            self.label.setFont(QFont('Helvetica', 14))
+            self.label.setFont(QFont('Helvetica', int(16 * GRAPHBOARD_SCALE)))
             self.label.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
             self.label.setAlignment(Qt.AlignTop)
 
@@ -25,6 +25,7 @@ class Info_Tracker:
     ### GETTERS ###
 
     def get_current_letter(self):
+        self.letter = self.determine_current_letter_and_type()[0]
         if self.letter is not None:
             return self.letter
         else:

@@ -213,6 +213,7 @@ class Staff_Manager(QObject):
 
                         new_staff.setScale(arrow.scale())  # assuming you need to set scale
                         arrow.staff = new_staff
+                        arrow.staff.arrow = arrow
 
                         if new_staff.scene is not self.graphboard_scene:
                             self.graphboard_scene.addItem(new_staff)

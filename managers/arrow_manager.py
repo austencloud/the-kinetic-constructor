@@ -300,6 +300,7 @@ class Arrow_Manager(QObject):
         for arrow in deleted_arrows:
             if isinstance(arrow, Arrow):
                 ghost_arrow = Arrow(None, arrow.graphboard_view, arrow.info_tracker, arrow.svg_manager, self, 'static', arrow.staff_manager, None)
+                ghost_arrow.is_ghost = True
                 ghost_arrow.set_static_attributes_from_deleted_arrow(arrow)
                 ghost_arrow.setScale(GRAPHBOARD_SCALE)
                 self.graphboard_scene.addItem(ghost_arrow)

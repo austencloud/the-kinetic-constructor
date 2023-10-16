@@ -15,7 +15,6 @@ class Init_Layout():
             'right': QVBoxLayout(),
             'upper': QHBoxLayout(),
             'lower': QVBoxLayout(),
-            'top_of_lower': QHBoxLayout(),
             'objectbox': QVBoxLayout(),
             'graphboard': QVBoxLayout(),
             'button': QHBoxLayout(),
@@ -33,9 +32,10 @@ class Init_Layout():
         self.layouts['upper'].addLayout(self.layouts['objectbox'])
         self.layouts['upper'].addLayout(self.layouts['graphboard_with_button_panel'])
         self.layouts['upper'].addLayout(self.layouts['info'])
-
-        self.layouts['right'].addLayout(self.layouts['upper'])
+        
         self.layouts['right'].addLayout(self.layouts['lower'])
+        self.layouts['right'].addLayout(self.layouts['upper'])
+
 
         self.layouts['main'].addLayout(self.layouts['right'])
 

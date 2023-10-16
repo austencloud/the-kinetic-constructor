@@ -26,7 +26,8 @@ class Arrow(QGraphicsSvgItem):
         # Flags
         self.in_graphboard = False
         self.drag_offset = QPointF(0, 0)
-
+        self.is_ghost = False
+        
         # Other
         self.staff = None
         self.previous_arrow = None
