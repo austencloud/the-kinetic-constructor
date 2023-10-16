@@ -86,19 +86,19 @@ class Staff_Manager(QObject):
         for position in set(staff_positions):
             count = staff_positions.count(position)
             if count == 2:  # Two staffs are overlapping
-                overlapping_staffs = [staff for staff in self.graphboard_staffs.values() if (staff.pos().x(), staff.pos().y()) == position]
+                beta_staffs = [staff for staff in self.graphboard_staffs.values() if (staff.pos().x(), staff.pos().y()) == position]
 
                 # Assuming the first staff's end_location can be used to determine orientation for both
-                axis = overlapping_staffs[0].axis  # Replace with actual attribute if different
+                axis = beta_staffs[0].axis  # Replace with actual attribute if different
 
                 if axis == 'vertical':  # Vertical staffs
                     # Move one staff 10px to the left and the other 10px to the right
-                    overlapping_staffs[0].setPos(position[0] + 20*PICTOGRAPH_SCALE, position[1])
-                    overlapping_staffs[1].setPos(position[0] - 20*PICTOGRAPH_SCALE, position[1])
+                    beta_staffs[0].setPos(position[0] + 20*PICTOGRAPH_SCALE, position[1])
+                    beta_staffs[1].setPos(position[0] - 20*PICTOGRAPH_SCALE, position[1])
                 else:  # Horizontal staffs
                     # Move one staff 10px up and the other 10px down
-                    overlapping_staffs[0].setPos(position[0], position[1] - 20*PICTOGRAPH_SCALE)
-                    overlapping_staffs[1].setPos(position[0], position[1] + 20*PICTOGRAPH_SCALE)
+                    beta_staffs[0].setPos(position[0], position[1] - 20*PICTOGRAPH_SCALE)
+                    beta_staffs[1].setPos(position[0], position[1] + 20*PICTOGRAPH_SCALE)
 
                 # Update the scene
                 self.graphboard_scene.update()
@@ -244,23 +244,102 @@ class Staff_Manager(QObject):
         self.graphboard_staffs.clear() 
 
     def check_replace_beta_staffs(self, graphboard_scene):
-        arrows = [arrow for arrow in graphboard_scene.items() if isinstance(arrow, Arrow)]
-        print(f"check_replace_beta_staffs -- arrows: {arrows}")
-        staff_positions = [(staff.pos().x(), staff.pos().y()) for staff in self.graphboard_staffs.values() if staff.isVisible()]
+        # First, we retrieve the current state of the graphboard.
+        graphboard_state = self.graphboard_view.get_graphboard_state()
 
-        for position in set(staff_positions):
-            count = staff_positions.count(position)
-            if count == 2: # Two staffs are overlapping
-                overlapping_staffs = [staff for staff in self.graphboard_staffs.values() if (staff.pos().x(), staff.pos().y()) == position]
-                axis = overlapping_staffs[0].axis  
-                if axis == 'vertical': 
-                    overlapping_staffs[0].setPos(position[0] + 20 * GRAPHBOARD_SCALE, position[1])
-                    overlapping_staffs[1].setPos(position[0] - 20 * GRAPHBOARD_SCALE, position[1])
-                else: 
-                    overlapping_staffs[0].setPos(position[0], position[1] - 20 * GRAPHBOARD_SCALE)
-                    overlapping_staffs[1].setPos(position[0], position[1] + 20 * GRAPHBOARD_SCALE)
+        # if there are two staves in the scene, we need to check if they have the same location, determined by the end position of their arrow.
+        if len(self.graphboard_staffs) == 2:
+            # Convert the dict_items to a list so they are subscriptable
+            staffs_list = list(self.graphboard_staffs.items())
 
-                self.graphboard_scene.update()
+            # Now you can access the items by index
+            if staffs_list[0][1].arrow.end_location == staffs_list[1][1].arrow.end_location:
+                # If the two staves have the same location, we need to reposition them.
+                self.reposition_staffs(graphboard_scene, graphboard_state)
+
+
+        # We need to identify the arrows and their corresponding staffs that need repositioning.
+
+
+    def reposition_staffs(self, graphboard_scene, graphboard_state):
+        
+    
+        shifts = {} 
+        
+        for arrow_state in graphboard_state['arrows']:
+            # Determine the direction of the shift based on the arrow's properties.
+            shift_direction = None
+            if arrow_state['motion_type'] in ['pro', 'anti']:
+                if arrow_state['end_location'] in ['n', 's']:
+                    shift_direction = 'right' if arrow_state['start_location'] == 'e' else 'left'
+                elif arrow_state['end_location'] in ['e', 'w']:
+                    shift_direction = 'down' if arrow_state['start_location'] == 's' else 'up'
+
+            # Record the shift if one was determined.
+            if shift_direction:
+                shifts[arrow_state['color']] = shift_direction
+            
+        for arrow_state in graphboard_state['arrows']:
+            # For each staff, we check if its corresponding arrow is the one we're analyzing.
+            for staff in self.graphboard_staffs.values():
+                if staff.arrow.color == arrow_state['color']:
+                    current_staff = staff
+                    break  # We found the corresponding staff, so we can stop this loop.
+            
+            if arrow_state['motion_type'] == 'pro' or arrow_state['motion_type'] == 'anti':
+                if arrow_state['end_location'] == 'n' or arrow_state['end_location'] == 's':
+                    if arrow_state['start_location'] == 'e':
+                        new_position = current_staff.pos() + QPointF(20 * GRAPHBOARD_SCALE, 0)
+                    elif arrow_state['start_location'] == 'w':
+                        new_position = current_staff.pos() - QPointF(20 * GRAPHBOARD_SCALE, 0)
+                elif arrow_state['end_location'] == 'e' or arrow_state['end_location'] == 'w':
+                    if arrow_state['start_location'] == 'n':
+                        new_position = current_staff.pos() - QPointF(0, 20 * GRAPHBOARD_SCALE)
+                    elif arrow_state['start_location'] == 's':
+                        new_position = current_staff.pos() + QPointF(0, 20 * GRAPHBOARD_SCALE)
+            
+                if new_position:
+                    current_staff.setPos(new_position)
+                        
+
+            # Handling static arrows.
+            if arrow_state['motion_type'] == 'static' and arrow_state['end_location'] in ['n', 's', 'e', 'w']:
+                other_staff_translation_direction = None
+
+                for other_arrow_state in graphboard_state['arrows']:
+                    if other_arrow_state['motion_type'] in ['pro', 'anti'] and other_arrow_state['end_location'] == arrow_state['end_location']:
+                        other_staff_translation_direction = shifts.get(other_arrow_state['color'])
+
+                if other_staff_translation_direction:
+                    opposite_movement = self.get_opposite_movement(other_staff_translation_direction)
+
+
+                        # Based on the opposite movement, we adjust the position of the static staff.
+                    if opposite_movement == 'left':
+                        new_position = current_staff.pos() - QPointF(20 * GRAPHBOARD_SCALE, 0)
+                    elif opposite_movement == 'right':
+                        new_position = current_staff.pos() + QPointF(20 * GRAPHBOARD_SCALE, 0)
+                    elif opposite_movement == 'up':
+                        new_position = current_staff.pos() - QPointF(0, 20 * GRAPHBOARD_SCALE)
+                    elif opposite_movement == 'down':
+                        new_position = current_staff.pos() + QPointF(0, 20 * GRAPHBOARD_SCALE)
+
+                    if new_position:
+                        current_staff.setPos(new_position)
+                    
+        # After going through all arrows and making the necessary adjustments, we update the scene.
+        graphboard_scene.update()
+
+    def get_opposite_movement(self, movement):
+        # This method returns the opposite movement. For example, if a dynamic staff moves left, the static one should move right.
+        if movement == 'left':
+            return 'right'
+        elif movement == 'right':
+            return 'left'
+        elif movement == 'up':
+            return 'down'
+        elif movement == 'down':
+            return 'up'
 
     def get_staff_position(self, staff):
         return staff.pos()

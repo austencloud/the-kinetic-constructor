@@ -43,8 +43,8 @@
                 "motion_type": "pro",
                 "rotation_direction": "l",
                 "quadrant": "nw",
-                "start_location": "nw",
-                "end_location": "e",
+                "start_location": "n",
+                "end_location": "w",
                 "turns": 0
             }
         ],

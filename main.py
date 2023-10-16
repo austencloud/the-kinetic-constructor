@@ -16,7 +16,7 @@ class Main_Window(QWidget):
 
     def initUI(self):
         screen = QDesktopWidget().screenGeometry()
-        self.move(-screen.width() + 900, 300)
+        self.move(-screen.width() + 900, 0)
         
 app = QApplication(sys.argv)
 ex = Main_Window()

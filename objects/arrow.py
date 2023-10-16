@@ -48,7 +48,8 @@ class Arrow(QGraphicsSvgItem):
 
     def mousePressEvent(self, event):
         self.drag_start_pos = self.pos()  # Store the initial position of the arrow
-        self.drag_offset = event.pos() - self.boundingRect().topLeft()
+        self.drag_offset = event.pos()
+
 
     def mouseMoveEvent(self, event):
         self.setSelected(True) 
@@ -56,7 +57,12 @@ class Arrow(QGraphicsSvgItem):
             from views.graphboard_view import Graphboard_View
             from views.pictograph_view import Pictograph_View
             if isinstance(self.graphboard_view, Graphboard_View):
-                new_pos = self.mapToScene(event.pos()) - self.drag_offset
+                new_pos = self.mapToScene(event.pos()) - self.boundingRect().center()
+                # get the value of the event within the arrow's bounding rect
+
+                # if the event is within the arrow's bounding rect
+
+            
                 self.setPos(new_pos)
                 new_quadrant = self.graphboard_view.get_graphboard_quadrants(new_pos + self.center)  
                 if self.quadrant != new_quadrant:
@@ -139,7 +145,6 @@ class Arrow(QGraphicsSvgItem):
 
     def get_center_position(self):
         return self.pos() + self.boundingRect().center()
-
 
     def update_arrow_for_new_quadrant(self, new_quadrant):
         if self.motion_type in ["pro", "anti"] and self.color in ["red", "blue"]:
