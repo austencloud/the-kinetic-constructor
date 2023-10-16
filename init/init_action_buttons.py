@@ -2,30 +2,27 @@
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QSize, Qt
-
+from settings import GRAPHBOARD_SCALE
 class Init_Action_Buttons:
     def __init__(self, ui_setup, main_window):
         self.init_action_buttons(ui_setup, main_window)
         
     def init_action_buttons(self, ui_setup, main_window):
         button_font = QFont('Helvetica', 14)
-        button_width = 60
-        button_height = 60
-        icon_size = QSize(40, 40)
+        button_width = 80 * GRAPHBOARD_SCALE
+        button_height = 80 * GRAPHBOARD_SCALE
+        icon_size = QSize(int(60 * GRAPHBOARD_SCALE), int(60 * GRAPHBOARD_SCALE))
         masterbtnlayout = QVBoxLayout()
-        buttonlayout = QHBoxLayout()
-        buttonstack = QHBoxLayout()
-        buttonstack.setAlignment(Qt.AlignTop)
-        masterbtnlayout.setAlignment(Qt.AlignTop)
-        buttonlayout.addLayout(buttonstack)
-        masterbtnlayout.addLayout(buttonlayout)
+        button_layout = QVBoxLayout()
+
+        masterbtnlayout.addLayout(button_layout)
 
         def createButton(icon_path, tooltip, on_click, is_lambda=False):
             button = QPushButton(QIcon(icon_path), "")
             button.setToolTip(tooltip)
             button.setFont(button_font)
-            button.setFixedWidth(button_width)
-            button.setFixedHeight(button_height)
+            button.setFixedWidth(int(button_width))
+            button.setFixedHeight(int(button_height))
             button.setIconSize(icon_size)
             if is_lambda:
                 button.clicked.connect(lambda: on_click())
@@ -62,6 +59,6 @@ class Init_Action_Buttons:
         ]
 
         for button in buttons:
-            buttonstack.addWidget(button)
+            button_layout.addWidget(button)
 
         main_window.button_layout.addLayout(masterbtnlayout)

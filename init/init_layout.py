@@ -16,10 +16,12 @@ class Init_Layout():
         main_window.button_layout = QHBoxLayout()  
         main_window.info_layout = QVBoxLayout()
         main_window.word_label_layout = QHBoxLayout()
-        main_window.graphboard_with_button_panel_layout = QVBoxLayout()
+        main_window.graphboard_with_button_panel_layout = QHBoxLayout()
         
         main_window.graphboard_with_button_panel_layout.addLayout(main_window.graphboard_layout)
         main_window.graphboard_with_button_panel_layout.addLayout(main_window.button_layout)  
+        main_window.graphboard_with_button_panel_layout.setStretch(0, 1)
+        
         
         main_window.upper_layout.addLayout(main_window.objectbox_layout)
         main_window.upper_layout.addLayout(main_window.graphboard_with_button_panel_layout)
