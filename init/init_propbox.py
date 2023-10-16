@@ -21,7 +21,7 @@ class Init_PropBox():
         propbox_view.setFrameShape(QFrame.NoFrame)
 
         propbox_layout.addWidget(propbox_view)
-        propbox_frame.setFixedSize(int(500 * GRAPHBOARD_SCALE), int(500 * GRAPHBOARD_SCALE))
+        propbox_frame.setFixedSize(int(500 * GRAPHBOARD_SCALE), int(400 * GRAPHBOARD_SCALE))
         main_window.objectbox_layout.addWidget(propbox_frame)
 
         ui_setup.propbox_view = propbox_view

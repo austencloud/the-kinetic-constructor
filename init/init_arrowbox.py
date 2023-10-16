@@ -61,5 +61,5 @@ class Init_ArrowBox:
         ui_setup.arrows.append(arrow_item)
         
         objectbox_layout.addWidget(arrowbox_view) 
-        arrowbox_frame.setFixedSize(int(500 * GRAPHBOARD_SCALE), int(500 * GRAPHBOARD_SCALE))
+        arrowbox_frame.setFixedSize(int(500 * GRAPHBOARD_SCALE), int(600 * GRAPHBOARD_SCALE))
         main_window.objectbox_layout.addWidget(arrowbox_frame)

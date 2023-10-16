@@ -11,6 +11,7 @@ import os
 class ArrowBox_View(QGraphicsView):
     def __init__(self, arrowbox_scene, graphboard_view, info_tracker, svg_manager, parent=None):
         super().__init__(arrowbox_scene, parent)
+        self.drag = None
         self.drag_state = {} 
         self.graphboard_view = graphboard_view
         self.arrowbox_scene = arrowbox_scene
@@ -89,12 +90,13 @@ class ArrowBox_View(QGraphicsView):
                         print(f"Unexpected svg_file: {self.svg_file}")
                         
 
-        if isinstance(self.dragged_item, Arrow):
-            self.drag.exec_(Qt.CopyAction | Qt.MoveAction)
-            self.dragStarted = True
-        else:
+        try:
+            # Assuming self.drag is the QDrag object
+            if self.drag is not None:
+                # Execute the drag and drop operation
+                self.drag.exec_(Qt.CopyAction | Qt.MoveAction)
+        except RuntimeError as e:
             event.ignore()
-        
         
     def mouseReleaseEvent(self, event):
         arrow = self.itemAt(event.pos())

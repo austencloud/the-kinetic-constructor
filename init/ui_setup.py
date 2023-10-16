@@ -20,7 +20,6 @@ from pictograph_selector import Pictograph_Selector
 from init.init_letter_buttons import Init_Letter_Buttons
 from init.init_action_buttons import Init_Action_Buttons
 from init.init_arrowbox import Init_ArrowBox
-from init.init_main_window import Init_Main_Window
 from init.init_layout import Init_Layout
 from init.init_propbox import Init_PropBox
 from init.init_sequence_scene import Init_Sequence_Scene
@@ -32,6 +31,7 @@ class UiSetup(QWidget):
         super().__init__(main_window)
         self.setFocusPolicy(Qt.StrongFocus)
         
+
         
         self.main_window = main_window
         self.arrows = []
@@ -39,8 +39,6 @@ class UiSetup(QWidget):
         self.exporter = None
         self.sequence_manager = None
         self.graphboard_view = None
-        
-        Init_Main_Window(self, self.main_window)
 
         self.graphboard_scene = QGraphicsScene()
         self.svg_manager = Svg_Manager()
@@ -78,7 +76,7 @@ class UiSetup(QWidget):
 
         self.arrow_manager.connect_info_tracker(self.info_tracker)
         self.graphboard_view.connect_generator(self.generator)
-
+        self.main_window.installEventFilter(self)
 
 
 
