@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout
 
-class Layout_Manager():
-    def __init__(self, main_window):
-        self.main_window = main_window
+class Init_Layout():
+    def __init__(self, ui_setup, main_window):
+        self.init_layout(ui_setup, main_window)
     
     def init_layout(self, ui_setup, main_window):
         main_window.main_layout = QHBoxLayout()
