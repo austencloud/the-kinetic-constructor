@@ -5,15 +5,17 @@ from settings import *
 from objects.arrow import Arrow
 from views.arrowbox_view import ArrowBox_View
 
-class Init_Arrow_Box: 
+class Init_ArrowBox: 
     def __init__(self, ui_setup, main_window):
-        self.init_arrow_box(ui_setup, main_window)
+        self.init_arrowbox_view(ui_setup, main_window)
     
-    def init_arrow_box(self, ui_setup, main_window):
+    def init_arrowbox_view(self, ui_setup, main_window):
+        arrowbox_scene = QGraphicsScene()
+        arrowbox_view = ArrowBox_View(arrowbox_scene, ui_setup.graphboard_view, ui_setup.info_tracker, ui_setup.svg_manager)
         arrowbox_frame = QFrame(main_window)
         objectbox_layout = QGridLayout()
         arrowbox_frame.setLayout(objectbox_layout) 
-        arrowbox_scene = QGraphicsScene()
+
 
         svgs_full_paths = []
         default_arrows = ['red_pro_r_ne_0.svg', 'red_anti_r_ne_0.svg', 'blue_pro_r_sw_0.svg', 'blue_anti_r_sw_0.svg']
@@ -56,8 +58,8 @@ class Init_Arrow_Box:
                 arrowbox_scene.addItem(arrow_item) 
 
 
-                ui_setup.arrows.append(arrow_item)
-        arrowbox = ArrowBox_View(arrowbox_scene, ui_setup.graphboard_view, ui_setup.info_tracker, ui_setup.svg_manager)
-        objectbox_layout.addWidget(arrowbox) 
+        ui_setup.arrows.append(arrow_item)
+        
+        objectbox_layout.addWidget(arrowbox_view) 
         arrowbox_frame.setFixedSize(int(500 * GRAPHBOARD_SCALE), int(500 * GRAPHBOARD_SCALE))
-        ui_setup.main_window.objectbox_layout.addWidget(arrowbox_frame)
+        main_window.objectbox_layout.addWidget(arrowbox_frame)

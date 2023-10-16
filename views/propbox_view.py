@@ -8,18 +8,4 @@ class PropBox_View(QGraphicsView):
         self.main_window = main_window
         self.staff_manager = staff_manager
         self.ui_setup = ui_setup
-        self.propbox_frame = self.init_propbox_frame()
-        
 
-    def init_propbox_frame(self):
-        propbox_frame = QFrame(self.main_window)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setFrameShape(QFrame.NoFrame)
-        layout = QVBoxLayout()
-        layout.addWidget(self)
-        
-        propbox_frame.setLayout(layout)
-        propbox_frame.setFixedSize(int(500 * GRAPHBOARD_SCALE), int(500 * GRAPHBOARD_SCALE))
-
-        return propbox_frame

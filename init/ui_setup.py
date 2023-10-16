@@ -19,7 +19,7 @@ from exporter import Exporter
 from pictograph_selector import Pictograph_Selector
 from init.init_letter_buttons import Init_Letter_Buttons
 from init.init_action_buttons import Init_Action_Buttons
-from init.init_arrow_box import Init_Arrow_Box
+from init.init_arrowbox import Init_ArrowBox
 from init.init_main_window import Init_Main_Window
 from init.init_layout import Init_Layout
 from init.init_propbox import Init_PropBox
@@ -59,7 +59,7 @@ class UiSetup(QWidget):
         self.arrow_manager.connect_to_graphboard(self.graphboard_view)
         self.info_tracker.connect_graphboard_view(self.graphboard_view)
         
-        Init_Arrow_Box(self, main_window)
+        Init_ArrowBox(self, main_window)
         Init_PropBox(self, main_window, self.staff_manager)
         
         self.staff_manager.connect_grid(self.grid)
