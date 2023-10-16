@@ -132,22 +132,8 @@ class Staff_Manager(QObject):
             'W_staff': graphboard_handpoints['W_hand_point'] + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2 - STAFF_WIDTH*GRAPHBOARD_SCALE)
         }
 
-        
-
         # Create and hide the staffs for each direction and color
         self.graphboard_staffs = {}
-        for end_location in ['N', 'E', 'S', 'W']:
-            for color in ['red', 'blue']:
-                staff_key = f"{end_location}_staff_{color}"
-                self.graphboard_staffs[staff_key] = Staff(
-                    f"{end_location}_staff",
-                    self.graphboard_scene,
-                    self.staff_locations[f"{end_location}_staff"],
-                    'vertical' if end_location in ['N', 'S'] else 'horizontal',
-                    color,
-                    f'images\\staves\\{end_location}_staff_{color}.svg',
-                )
-                self.graphboard_staffs[staff_key].hide()
 
     ### PROP BOX ###
 
@@ -184,43 +170,77 @@ class Staff_Manager(QObject):
     ### UPDATERS ###
 
     def update_graphboard_staffs(self, graphboard_scene):
-        self.hide_all_graphboard_staffs()
+        # First, let's properly remove all existing staffs from both the scene and the dictionary
+        for staff in self.graphboard_staffs.values():
+            if staff.scene == self.graphboard_scene:  # Ensure the staff is in the scene
+                self.graphboard_scene.removeItem(staff)  # Remove it from the scene
+                # Here, you may want to implement any other cleanup for the staff object
+
+        self.graphboard_staffs.clear()  # Clear the dictionary after cleaning up the staff objects
+
+            
+        # A dictionary to track staffs that have been updated in this cycle
+        updated_staffs = {}
         
         for arrow in graphboard_scene.items():
             if isinstance(arrow, Arrow):
-                # print(f"update_graphboard_staffs -- arrow: {arrow}")
                 end_location = arrow.end_location
 
                 if end_location:
                     end_location = end_location.capitalize()
-                    if arrow.color == "#ed1c24" or arrow.color == 'red':
+                    color = ''
+                    if arrow.color in ["#ed1c24", 'red']:
                         color = 'red'
-                    elif arrow.color == "#2e3192" or arrow.color == 'blue':
+                    elif arrow.color in ["#2e3192", 'blue']:
                         color = 'blue'
                     else:
+                        continue
 
-                        continue 
-                    
-                    new_staff = Staff(end_location + "_staff",
-                                    graphboard_scene,
-                                    self.staff_locations[end_location + "_staff"],
-                                    'vertical' if end_location in ['N', 'S'] else 'horizontal',
-                                    color,
-                                    'images\\staves\\' + end_location + "_staff_" + color + '.svg')
+                    staff_key = end_location + "_staff_" + color
+                    if staff_key in self.graphboard_staffs:
+                        # Staff already exists, just update its position and make it visible
+                        staff = self.graphboard_staffs[staff_key]
+                        staff.setPos(self.staff_locations[end_location + "_staff"])  # update position
+                        staff.show()
+                    else:
+                        # Create new staff
+                        new_staff = Staff(end_location + "_staff",
+                                        graphboard_scene,
+                                        self.staff_locations[end_location + "_staff"],
+                                        'vertical' if end_location in ['N', 'S'] else 'horizontal',
+                                        color,
+                                        'images\\staves\\' + end_location + "_staff_" + color + '.svg')
 
-                    new_staff.arrow = arrow
-                    new_staff.setScale(arrow.scale())
-                    arrow.staff = new_staff
+                        new_staff.setScale(arrow.scale())  # assuming you need to set scale
+                        arrow.staff = new_staff
 
-                    if new_staff.scene is not self.graphboard_scene:
-                        self.graphboard_scene.addItem(new_staff)
-                    self.graphboard_staffs[end_location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
+                        if new_staff.scene is not self.graphboard_scene:
+                            self.graphboard_scene.addItem(new_staff)
+                        self.graphboard_staffs[staff_key] = new_staff
+                        staff = new_staff
+
+                    updated_staffs[staff_key] = staff  # Store the staff that has been updated
+
+        # Remove any staffs that weren't updated in this cycle (no longer needed)
+        staff_keys_to_remove = set(self.graphboard_staffs.keys()) - set(updated_staffs.keys())
+        for key in staff_keys_to_remove:
+            staff = self.graphboard_staffs.pop(key)
+            # Remove the staff from the scene if you're sure you don't need it anymore
+            self.graphboard_scene.removeItem(staff)
 
         self.check_replace_beta_staffs(graphboard_scene)
+
         
     def hide_all_graphboard_staffs(self):
-        for staff in self.graphboard_staffs.values():
-            staff.hide()
+        print(self.graphboard_scene.items())
+        # Checking and hiding all staff items in the scene.
+        for item in self.graphboard_scene.items():  # Iterating directly over all scene items.
+            if isinstance(item, Staff):  # Checking if the current item is a Staff instance.
+                item.hide()  # Hiding the staff item.
+                # No need to delete staff here, as you might lose references you need. Just hide them.
+
+        # Clear the dictionary after all staffs are processed.
+        self.graphboard_staffs.clear() 
 
     def check_replace_beta_staffs(self, graphboard_scene):
         arrows = [arrow for arrow in graphboard_scene.items() if isinstance(arrow, Arrow)]
