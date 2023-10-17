@@ -6,7 +6,7 @@ from objects.staff import Staff
 from objects.grid import Grid
 from views.graphboard_view import Graphboard_View
 from pictograph import Pictograph
-from settings import GRAPHBOARD_HEIGHT, GRAPHBOARD_WIDTH, LETTER_PANEL_HEIGHT, DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, PICTOGRAPH_SCALE
+from settings import DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, PICTOGRAPH_SCALE
 
 class Sequence_Manager(QObject):
     def __init__(self, sequence_scene, pictograph_generator, ui_setup, info_tracker):

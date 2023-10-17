@@ -2,7 +2,8 @@ from PyQt5.QtCore import QPointF, pyqtSignal, QObject
 from objects.arrow import Arrow
 from settings import *
 from objects.staff import Staff
-
+from managers.json_manager import Json_Manager
+import math
 
 class Staff_Manager(QObject):
 
@@ -13,6 +14,36 @@ class Staff_Manager(QObject):
         self.graphboard_scene = graphboard_scene  # Scene where the staffs will be drawn
         self.beta_staves = []  # List to hold beta staves
         self.previous_position = None  # Store the previous position of staffs
+        json_manager = Json_Manager(graphboard_scene)
+        self.letters = json_manager.load_all_letters()
+
+        
+
+    def connect_info_tracker(self, info_tracker):
+        self.info_tracker = info_tracker
+
+    def create_staff(self, end_location, scene, color):
+        # Construct the file path for the staff image
+        image_file = f'images\\staves\\{end_location}_staff_{color}.svg'
+
+        # Create a new staff object
+        new_staff = Staff(
+            f'{end_location}_staff',
+            scene,
+            self.staff_locations[f'{end_location}_staff'],
+            'vertical' if end_location in ['N', 'S'] else 'horizontal',
+            color,
+            image_file
+        )
+
+        new_staff.staff_manager = self
+
+
+        # Add the staff to the scene if it's not already there
+        if new_staff.scene is not self.graphboard_scene:
+            self.graphboard_scene.addItem(new_staff)
+
+        return new_staff
 
     ### MINI_GRAPHBOARD ###
 
@@ -64,16 +95,12 @@ class Staff_Manager(QObject):
                     else:
 
                         continue 
-                    
-                    new_staff = Staff(end_location + "_staff",
-                                    scene,
-                                    self.staff_locations[end_location + "_staff"],
-                                    'vertical' if end_location in ['N', 'S'] else 'horizontal',  # Add this line
-                                    color,
-                                    'images\\staves\\' + end_location + "_staff_" + color + '.svg')
-                    
-                                    # Scale down the new staff
+                
+                    new_staff = self.create_staff(end_location, scene, color)
                     new_staff.setScale(PICTOGRAPH_SCALE)
+                    arrow.staff = new_staff
+                    new_staff.arrow = arrow
+                    self.arrow_manager = new_staff.arrow.arrow_manager
                         
                     if new_staff.scene is not self.graphboard_scene:
                         self.graphboard_scene.addItem(new_staff)
@@ -93,12 +120,12 @@ class Staff_Manager(QObject):
 
                 if axis == 'vertical':  # Vertical staffs
                     # Move one staff 10px to the left and the other 10px to the right
-                    beta_staffs[0].setPos(position[0] + 20*PICTOGRAPH_SCALE, position[1])
-                    beta_staffs[1].setPos(position[0] - 20*PICTOGRAPH_SCALE, position[1])
+                    beta_staffs[0].setPos(position[0] + BETA_STAFF_REPOSITION_OFFSET*PICTOGRAPH_SCALE, position[1])
+                    beta_staffs[1].setPos(position[0] - BETA_STAFF_REPOSITION_OFFSET*PICTOGRAPH_SCALE, position[1])
                 else:  # Horizontal staffs
                     # Move one staff 10px up and the other 10px down
-                    beta_staffs[0].setPos(position[0], position[1] - 20*PICTOGRAPH_SCALE)
-                    beta_staffs[1].setPos(position[0], position[1] + 20*PICTOGRAPH_SCALE)
+                    beta_staffs[0].setPos(position[0], position[1] - BETA_STAFF_REPOSITION_OFFSET*PICTOGRAPH_SCALE)
+                    beta_staffs[1].setPos(position[0], position[1] + BETA_STAFF_REPOSITION_OFFSET*PICTOGRAPH_SCALE)
 
                 # Update the scene
                 self.graphboard_scene.update()
@@ -170,16 +197,11 @@ class Staff_Manager(QObject):
     ### UPDATERS ###
 
     def update_graphboard_staffs(self, graphboard_scene):
-        # First, let's properly remove all existing staffs from both the scene and the dictionary
         for staff in self.graphboard_staffs.values():
-            if staff.scene == self.graphboard_scene:  # Ensure the staff is in the scene
-                self.graphboard_scene.removeItem(staff)  # Remove it from the scene
-                # Here, you may want to implement any other cleanup for the staff object
+            if staff.scene == self.graphboard_scene: 
+                self.graphboard_scene.removeItem(staff) 
+        self.graphboard_staffs.clear() 
 
-        self.graphboard_staffs.clear()  # Clear the dictionary after cleaning up the staff objects
-
-            
-        # A dictionary to track staffs that have been updated in this cycle
         updated_staffs = {}
         
         for arrow in graphboard_scene.items():
@@ -197,36 +219,30 @@ class Staff_Manager(QObject):
                         continue
 
                     staff_key = end_location + "_staff_" + color
+                    
                     if staff_key in self.graphboard_staffs:
-                        # Staff already exists, just update its position and make it visible
                         staff = self.graphboard_staffs[staff_key]
-                        staff.setPos(self.staff_locations[end_location + "_staff"])  # update position
+                        staff.setPos(self.staff_locations[end_location + "_staff"])  
                         staff.show()
+                        
                     else:
-                        # Create new staff
-                        new_staff = Staff(end_location + "_staff",
-                                        graphboard_scene,
-                                        self.staff_locations[end_location + "_staff"],
-                                        'vertical' if end_location in ['N', 'S'] else 'horizontal',
-                                        color,
-                                        'images\\staves\\' + end_location + "_staff_" + color + '.svg')
-
-                        new_staff.setScale(arrow.scale())  # assuming you need to set scale
+                        new_staff = self.create_staff(end_location, graphboard_scene, color)
+                        new_staff.setScale(arrow.scale())
                         arrow.staff = new_staff
                         arrow.staff.arrow = arrow
+                        self.arrow_manager = new_staff.arrow.arrow_manager
 
                         if new_staff.scene is not self.graphboard_scene:
                             self.graphboard_scene.addItem(new_staff)
                         self.graphboard_staffs[staff_key] = new_staff
                         staff = new_staff
 
-                    updated_staffs[staff_key] = staff  # Store the staff that has been updated
+                    updated_staffs[staff_key] = staff
 
-        # Remove any staffs that weren't updated in this cycle (no longer needed)
         staff_keys_to_remove = set(self.graphboard_staffs.keys()) - set(updated_staffs.keys())
+        
         for key in staff_keys_to_remove:
             staff = self.graphboard_staffs.pop(key)
-            # Remove the staff from the scene if you're sure you don't need it anymore
             self.graphboard_scene.removeItem(staff)
 
         self.check_replace_beta_staffs(graphboard_scene)
@@ -234,104 +250,182 @@ class Staff_Manager(QObject):
         
     def hide_all_graphboard_staffs(self):
         print(self.graphboard_scene.items())
-        # Checking and hiding all staff items in the scene.
-        for item in self.graphboard_scene.items():  # Iterating directly over all scene items.
-            if isinstance(item, Staff):  # Checking if the current item is a Staff instance.
-                item.hide()  # Hiding the staff item.
-                # No need to delete staff here, as you might lose references you need. Just hide them.
+        for item in self.graphboard_scene.items():
+            if isinstance(item, Staff):
+                item.hide()
 
-        # Clear the dictionary after all staffs are processed.
+
         self.graphboard_staffs.clear() 
 
     def check_replace_beta_staffs(self, graphboard_scene):
-        # First, we retrieve the current state of the graphboard.
         graphboard_state = self.graphboard_view.get_graphboard_state()
-
-        # if there are two staves in the scene, we need to check if they have the same location, determined by the end position of their arrow.
         if len(self.graphboard_staffs) == 2:
-            # Convert the dict_items to a list so they are subscriptable
             staffs_list = list(self.graphboard_staffs.items())
-
-            # Now you can access the items by index
             if staffs_list[0][1].arrow.end_location == staffs_list[1][1].arrow.end_location:
-                # If the two staves have the same location, we need to reposition them.
                 self.reposition_staffs(graphboard_scene, graphboard_state)
+                
 
+    def get_distance_from_center(self, position):
+        """Calculate the Euclidean distance from the center point."""
+        center_point = QPointF(GRAPHBOARD_WIDTH / 2, GRAPHBOARD_WIDTH / 2)  # Assuming this is the center point of your coordinate system
+        # Extract the coordinates from the dictionaries
+        x_position = position.get('x', 0.0)
+        y_position = position.get('y', 0.0)
+        center_x = center_point.x()
+        center_y = center_point.y()
 
-        # We need to identify the arrows and their corresponding staffs that need repositioning.
-
-
-    def reposition_staffs(self, graphboard_scene, graphboard_state):
-        
+        # Calculate the distance
+        distance = math.sqrt((x_position - center_x) ** 2 + (y_position - center_y) ** 2)
+        return distance
     
-        shifts = {} 
-        
-        for arrow_state in graphboard_state['arrows']:
-            # Determine the direction of the shift based on the arrow's properties.
-            shift_direction = None
-            if arrow_state['motion_type'] in ['pro', 'anti']:
-                if arrow_state['end_location'] in ['n', 's']:
-                    shift_direction = 'right' if arrow_state['start_location'] == 'e' else 'left'
-                elif arrow_state['end_location'] in ['e', 'w']:
-                    shift_direction = 'down' if arrow_state['start_location'] == 's' else 'up'
+    def get_optimal_staff_positions(self, arrow):
+        """
+        Retrieve the optimal staff positions for a given arrow based on its color and the current state.
+        This method assumes that 'self.letters' and 'self.graphboard_view' are accessible within this class.
+        """
+        current_state = self.graphboard_view.get_graphboard_state()
+        current_letter = self.info_tracker.determine_current_letter_and_type()[0]
 
-            # Record the shift if one was determined.
-            if shift_direction:
-                shifts[arrow_state['color']] = shift_direction
+        if current_letter is not None:
+            matching_letters = self.letters[current_letter]
+            optimal_location = self.find_optimal_staff_locations(current_state, matching_letters, arrow)
+
+            if optimal_location:
+                return optimal_location
+
+        return None  # Return None if there are no optimal positions
+
+    def find_optimal_staff_locations(self, current_state, matching_letters, arrow):
+        """
+        Find the optimal staff locations based on the current state and the matching letters.
+        This is similar to 'find_optimal_locations' but specific for staff positioning.
+        """
+        for variations in matching_letters:
+            if self.arrow_manager.compare_states(current_state, variations):
+                # Search for the dictionary entry containing the optimal locations
+                optimal_entry = next((d for d in variations if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
+
+                if optimal_entry:
+                    # If the entry is found, return the optimal location for the specific arrow
+                    color_key = f"optimal_{arrow['color']}_location"
+                    return optimal_entry.get(color_key)
+
+        return None 
+
+    def reposition_beta_to_beta(self, graphboard_scene, arrows):
+        """Reposition staffs when arrows have the same start location."""
+        if len(arrows) != 2:
+            return  # We're only handling cases where there are exactly two arrows
+
+        arrow1, arrow2 = arrows
+        same_motion = arrow1['motion_type'] == arrow2['motion_type'] in ['pro', 'anti']
+
+        if same_motion:
+            # Determine which arrow is further from the center based on optimal positions
+            optimal_position1 = self.get_optimal_staff_positions(arrow1)
+            optimal_position2 = self.get_optimal_staff_positions(arrow2)
+
+            distance1 = self.get_distance_from_center(optimal_position1)
+            distance2 = self.get_distance_from_center(optimal_position2)
+
+            further_arrow = arrow1 if distance1 > distance2 else arrow2
+            closer_arrow = arrow2 if distance1 > distance2 else arrow1
+
+            # Get the corresponding staffs for the arrows
+            further_staff = self.graphboard_staffs[further_arrow['end_location'].capitalize() + '_staff_' + further_arrow['color']]
+            closer_staff = self.graphboard_staffs[closer_arrow['end_location'].capitalize() + '_staff_' + closer_arrow['color']]
+
+            # Translate the further staff in the direction of its arrow's start location by BETA_STAFF_REPOSITION_OFFSET
+            direction = self.determine_translation_direction(further_arrow)
+            new_position = self.calculate_new_position(further_staff.pos(), direction)
+            further_staff.setPos(new_position)
             
-        for arrow_state in graphboard_state['arrows']:
-            # For each staff, we check if its corresponding arrow is the one we're analyzing.
-            for staff in self.graphboard_staffs.values():
-                if staff.arrow.color == arrow_state['color']:
-                    current_staff = staff
-                    break  # We found the corresponding staff, so we can stop this loop.
+            #Translate the closer staff in the opposite direction of the further staff
+            opposite_direction = self.get_opposite_direction(direction)
+            new_position = self.calculate_new_position(closer_staff.pos(), opposite_direction)
+            closer_staff.setPos(new_position)
             
-            if arrow_state['motion_type'] == 'pro' or arrow_state['motion_type'] == 'anti':
-                if arrow_state['end_location'] == 'n' or arrow_state['end_location'] == 's':
-                    if arrow_state['start_location'] == 'e':
-                        new_position = current_staff.pos() + QPointF(20 * GRAPHBOARD_SCALE, 0)
-                    elif arrow_state['start_location'] == 'w':
-                        new_position = current_staff.pos() - QPointF(20 * GRAPHBOARD_SCALE, 0)
-                elif arrow_state['end_location'] == 'e' or arrow_state['end_location'] == 'w':
-                    if arrow_state['start_location'] == 'n':
-                        new_position = current_staff.pos() - QPointF(0, 20 * GRAPHBOARD_SCALE)
-                    elif arrow_state['start_location'] == 's':
-                        new_position = current_staff.pos() + QPointF(0, 20 * GRAPHBOARD_SCALE)
-            
-                if new_position:
-                    current_staff.setPos(new_position)
-                        
 
-            # Handling static arrows.
-            if arrow_state['motion_type'] == 'static' and arrow_state['end_location'] in ['n', 's', 'e', 'w']:
-                other_staff_translation_direction = None
+        else:  # hybrid scenario: one 'pro' and one 'anti'
+            pro_arrow = arrow1 if arrow1['motion_type'] == 'pro' else arrow2
+            anti_arrow = arrow2 if arrow1['motion_type'] == 'pro' else arrow1
 
-                for other_arrow_state in graphboard_state['arrows']:
-                    if other_arrow_state['motion_type'] in ['pro', 'anti'] and other_arrow_state['end_location'] == arrow_state['end_location']:
-                        other_staff_translation_direction = shifts.get(other_arrow_state['color'])
+            pro_staff = self.graphboard_staffs[pro_arrow['end_location'].capitalize() + '_staff_' + pro_arrow['color']]
+            anti_staff = self.graphboard_staffs[anti_arrow['end_location'].capitalize() + '_staff_' + anti_arrow['color']]
 
-                if other_staff_translation_direction:
-                    opposite_movement = self.get_opposite_movement(other_staff_translation_direction)
+            # Translate the pro staff in the direction of its arrow's start location by BETA_STAFF_REPOSITION_OFFSET
+            direction = self.determine_translation_direction(pro_arrow)
+            pro_new_position = self.calculate_new_position(pro_staff.pos(), direction)
+            pro_staff.setPos(pro_new_position)
+
+            # Translate the anti staff in the opposite direction of its arrow's start location by BETA_STAFF_REPOSITION_OFFSET
+            opposite_direction = self.get_opposite_direction(direction)
+            anti_new_position = self.calculate_new_position(anti_staff.pos(), opposite_direction)
+            anti_staff.setPos(anti_new_position)
 
 
-                        # Based on the opposite movement, we adjust the position of the static staff.
-                    if opposite_movement == 'left':
-                        new_position = current_staff.pos() - QPointF(20 * GRAPHBOARD_SCALE, 0)
-                    elif opposite_movement == 'right':
-                        new_position = current_staff.pos() + QPointF(20 * GRAPHBOARD_SCALE, 0)
-                    elif opposite_movement == 'up':
-                        new_position = current_staff.pos() - QPointF(0, 20 * GRAPHBOARD_SCALE)
-                    elif opposite_movement == 'down':
-                        new_position = current_staff.pos() + QPointF(0, 20 * GRAPHBOARD_SCALE)
-
-                    if new_position:
-                        current_staff.setPos(new_position)
-                    
-        # After going through all arrows and making the necessary adjustments, we update the scene.
         graphboard_scene.update()
 
-    def get_opposite_movement(self, movement):
-        # This method returns the opposite movement. For example, if a dynamic staff moves left, the static one should move right.
+
+    def determine_translation_direction(self, arrow_state):
+        """Determine the translation direction based on the arrow's state."""
+        if arrow_state['motion_type'] in ['pro', 'anti']:
+            if arrow_state['end_location'] in ['n', 's']:
+                return RIGHT if arrow_state['start_location'] == 'e' else LEFT
+            elif arrow_state['end_location'] in ['e', 'w']:
+                return DOWN if arrow_state['start_location'] == 's' else UP
+        return None
+
+    def calculate_new_position(self, current_position, direction):
+        """Calculate the new position based on the direction."""
+        offset = QPointF(BETA_STAFF_REPOSITION_OFFSET * GRAPHBOARD_SCALE, 0) if direction in [LEFT, RIGHT] else QPointF(0, BETA_STAFF_REPOSITION_OFFSET * GRAPHBOARD_SCALE)
+        if direction in [RIGHT, DOWN]:
+            return current_position + offset
+        else:
+            return current_position - offset
+
+    def reposition_staffs(self, graphboard_scene, graphboard_state):
+        shifts = {} 
+
+
+    # First, we group the arrows based on their start locations.
+        arrows_grouped_by_start = {}
+        for arrow in graphboard_state['arrows']:
+            start_location = arrow['start_location']
+            if start_location in arrows_grouped_by_start:
+                arrows_grouped_by_start[start_location].append(arrow)
+            else:
+                arrows_grouped_by_start[start_location] = [arrow]
+
+        # Dictionary to keep track of processed staffs to ensure they are not moved more than once.
+        processed_staffs = set()
+
+        # Iterate over the groups of arrows.
+        for start_location, arrows in arrows_grouped_by_start.items():
+            if len(arrows) > 1:
+                # Special handling for multiple arrows from the same start location.
+                self.reposition_beta_to_beta(graphboard_scene, arrows)
+            else:
+                # For single arrows, determine the necessary shift based on its state.
+                for arrow in arrows:  # Though 'arrows' here is a list, it contains one item in this context.
+                    direction = self.determine_translation_direction(arrow)
+                    if direction:
+                        shifts[arrow['color']] = direction  # Record the required shift.
+
+        # Now apply the shifts. This part is outside the above loop, so it runs after all shifts are determined.
+        for arrow_state in graphboard_state['arrows']:
+            current_staff = next((staff for staff in self.graphboard_staffs.values() if staff.arrow.color == arrow_state['color']), None)
+            if current_staff and current_staff not in processed_staffs:
+                direction = shifts.get(arrow_state['color'])
+                if direction:
+                    new_position = self.calculate_new_position(current_staff.pos(), direction)
+                    current_staff.setPos(new_position)
+                    processed_staffs.add(current_staff)  # Mark this staff as processed.
+
+        # After all shifts have been applied, update the scene.
+        graphboard_scene.update()
+
+    def get_opposite_direction(self, movement):
         if movement == 'left':
             return 'right'
         elif movement == 'right':

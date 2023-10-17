@@ -56,6 +56,7 @@ class UiSetup(QWidget):
         self.generator = Pictograph_Generator(self.staff_manager, self.graphboard_view, self.graphboard_scene, self.info_tracker, self.main_window, self, self.exporter, self.json_manager, self.grid)
         self.arrow_manager.connect_to_graphboard(self.graphboard_view)
         self.info_tracker.connect_graphboard_view(self.graphboard_view)
+        self.staff_manager.connect_info_tracker(self.info_tracker)
         
         Init_ArrowBox(self, main_window)
         Init_PropBox(self, main_window, self.staff_manager)
