@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsItem, QAction, QMenu
-from PyQt5.QtCore import QPointF
-from PyQt5.QtWidgets import QGraphicsItem
-from PyQt5.QtGui import QTransform
+from PyQt5.QtCore import QPointF, Qt
+from PyQt5.QtWidgets import QGraphicsItem, QFrame
+from PyQt5.QtGui import QTransform, QPainter
 from objects.grid import Grid
 from objects.arrow import Arrow
 from info_tracker import Info_Tracker
@@ -9,41 +9,46 @@ from managers.staff_manager import Staff_Manager
 from managers.arrow_manager import Arrow_Manager
 from managers.svg_manager import Svg_Manager
 from managers.json_manager import Json_Manager
-from settings import *
+from settings import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, SELECTION_GRID_WIDTH, PICTOGRAPH_SCALE
 
 class Pictograph_View(QGraphicsView):
-    def __init__(self, main_graphboard_view):
+    def __init__(self, graphboard_view):
         super().__init__()
-        self.setFixedSize(int(DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE), int(DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE))
-        self.mini_graphboard_scene = QGraphicsScene()
-        self.mini_graphboard_scene.setSceneRect(0, 0, SELECTION_GRID_WIDTH, SELECTION_GRID_WIDTH)
-        self.setScene(self.mini_graphboard_scene)  # Set the scene
-        self.mini_grid = Grid("images/grid/grid.svg")
-        self.mini_grid.setScale(PICTOGRAPH_SCALE)
+        self.setFixedSize(PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT)
+
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setFrameStyle(QFrame.NoFrame) 
+        
+        self.pictograph_scene = QGraphicsScene()
+        self.pictograph_scene.setSceneRect(0, 0, PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT)
+        self.setScene(self.pictograph_scene)  # Set the scene
+        self.grid = Grid("images/grid/grid.svg")
+        self.grid.setScale(PICTOGRAPH_SCALE)
+        self.PADDING = (self.width() - self.grid.boundingRect().width() * PICTOGRAPH_SCALE) / 2
+
         self.svg_manager = Svg_Manager()
-        self.staff_manager = Staff_Manager(self.mini_graphboard_scene)
+        self.staff_manager = Staff_Manager(self.pictograph_scene)
         self.arrow_manager = Arrow_Manager(None, self, self.staff_manager)
-        self.json_manager = Json_Manager(self.mini_graphboard_scene)
+        self.json_manager = Json_Manager(self.pictograph_scene)
         self.info_tracker = Info_Tracker(self, None, self.staff_manager, self.json_manager)
         self.arrow_manager.connect_info_tracker(self.info_tracker)
-        self.staff_manager.connect_grid(self.mini_grid)
-        
-        self.VERTICAL_OFFSET = (self.height() - self.width()) / 2
+        self.staff_manager.connect_grid(self.grid)
         self.init_grid()
-        self.staff_manager.init_mini_graphboard_staffs(self, self.mini_grid)
+        self.staff_manager.init_mini_graphboard_staffs(self, self.grid)
         
-        self.main_graphboard_view = main_graphboard_view
+        self.graphboard_view = graphboard_view
+        self.PADDING = (self.width() - self.grid.boundingRect().width() * PICTOGRAPH_SCALE) / 2
+        
         
     def init_grid(self):
-        self.PADDING = self.width() - self.mini_grid.boundingRect().width() * PICTOGRAPH_SCALE
-        mini_grid_position = QPointF(0,
-                                -self.VERTICAL_OFFSET)
 
+        grid_position = QPointF(self.PADDING, self.PADDING)
         transform = QTransform()
-        transform.translate(mini_grid_position.x(), mini_grid_position.y())
-        self.mini_grid.setTransform(transform)
+        transform.translate(grid_position.x(), grid_position.y())
+        self.grid.setTransform(transform)
         #show the grid
-        self.mini_graphboard_scene.addItem(self.mini_grid)
+        self.pictograph_scene.addItem(self.grid)
 
         pass
     
@@ -68,7 +73,7 @@ class Pictograph_View(QGraphicsView):
         # Calculate the layer 2 points on the graphboard based on the grid
         graphboard_layer2_points = {}
         for point_name in ['NE_layer2_point', 'SE_layer2_point', 'SW_layer2_point', 'NW_layer2_point']:
-            cx, cy = self.mini_grid.get_circle_coordinates(point_name)
+            cx, cy = self.grid.get_circle_coordinates(point_name)
             graphboard_layer2_points[point_name] = QPointF(cx, cy)  # Subtract VERTICAL_OFFSET from y-coordinate
 
         # Map the quadrants to the corresponding layer 2 points
@@ -89,7 +94,7 @@ class Pictograph_View(QGraphicsView):
                 current_arrows.append(arrow)
         return current_arrows
 
-    def add_arrows_to_mini_graphboard(self, combination):
+    def populate_pictograph(self, combination):
         DISTANCE = 40 * PICTOGRAPH_SCALE
         created_arrows = []
         optimal_locations = next((d for d in combination if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
@@ -103,9 +108,9 @@ class Pictograph_View(QGraphicsView):
                     self.place_ghost_arrows(created_arrows, arrow_dict)
 
         for arrow in created_arrows:
-            if arrow not in self.mini_graphboard_scene.items():
-                self.mini_graphboard_scene.addItem(arrow)                    
-        self.staff_manager.update_mini_graphboard_staffs(self.mini_graphboard_scene)
+            if arrow not in self.pictograph_scene.items():
+                self.pictograph_scene.addItem(arrow)                    
+        self.staff_manager.update_mini_graphboard_staffs(self.pictograph_scene)
 
     def place_ghost_arrows(self, created_arrows, arrow_dict):
         ghost_arrow = Arrow(None, self, self.info_tracker, self.svg_manager, self.arrow_manager, 'static', self.staff_manager, arrow_dict)
@@ -124,7 +129,7 @@ class Pictograph_View(QGraphicsView):
             arrow_transform = QTransform()
             arrow_transform.scale(PICTOGRAPH_SCALE, PICTOGRAPH_SCALE)
             arrow.setTransform(arrow_transform)
-            GRID_PADDING = (self.width() - self.mini_grid.boundingRect().width() * PICTOGRAPH_SCALE) / 2
+            GRID_PADDING = (self.width() - self.grid.boundingRect().width() * PICTOGRAPH_SCALE) / 2
 
                         # Calculate the center of the bounding rectangle
             center = arrow.boundingRect().center()
@@ -133,13 +138,13 @@ class Pictograph_View(QGraphicsView):
                 optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
                 if optimal_location:
                                 # Adjust the position based on the center
-                    pos = QPointF(optimal_location['x'] * PICTOGRAPH_SCALE - GRID_PADDING, optimal_location['y'] * PICTOGRAPH_SCALE - GRID_PADDING) - center * PICTOGRAPH_SCALE
-                    new_pos = pos + QPointF(0, -self.VERTICAL_OFFSET)
+                    pos = QPointF(optimal_location['x'] * PICTOGRAPH_SCALE, optimal_location['y'] * PICTOGRAPH_SCALE) - center * PICTOGRAPH_SCALE
+                    new_pos = pos + QPointF(0, 0)
                     arrow.setPos(new_pos)
             else:
                 quadrant_center = self.get_quadrant_center(arrow.quadrant)
                 pos = (quadrant_center * PICTOGRAPH_SCALE)
-                pos = (pos + QPointF(0, -self.VERTICAL_OFFSET)) - arrow.center * PICTOGRAPH_SCALE
+                pos = (pos + QPointF(0, 0)) - arrow.center * PICTOGRAPH_SCALE
                 if arrow.quadrant == 'ne':
                     pos += QPointF(DISTANCE, -DISTANCE)
                 elif arrow.quadrant == 'se':
@@ -148,14 +153,14 @@ class Pictograph_View(QGraphicsView):
                     pos += QPointF(-DISTANCE, DISTANCE)
                 elif arrow.quadrant == 'nw':
                     pos += QPointF(-DISTANCE, -DISTANCE)
-                arrow.setPos(pos)
+                arrow.setPos(pos + QPointF(self.PADDING, self.PADDING))
 
     
     def save_optimal_positions(self):
-        MAIN_GRAPHBOARD_BUFFER = (self.main_graphboard_view.width() - self.main_graphboard_view.grid.boundingRect().width()) / 2
-        MAIN_GRAPHBOARD_V_OFFSET = (self.main_graphboard_view.height() - self.main_graphboard_view.width()) / 2
+        MAIN_GRAPHBOARD_BUFFER = (self.graphboard_view.width() - self.graphboard_view.grid.boundingRect().width()) / 2
+        MAIN_GRAPHBOARD_V_OFFSET = (self.graphboard_view.height() - self.graphboard_view.width()) / 2
         
-        for item in self.mini_graphboard_scene.items():
+        for item in self.pictograph_scene.items():
             if isinstance(item, Arrow):
                 pos = item.pos() + item.boundingRect().center() * PICTOGRAPH_SCALE
                 # Reverse the scaling

@@ -22,7 +22,7 @@ class Pictograph_Selector(QDialog):
         col = 0
         for i, combination in enumerate(combinations):
             pictograph = Pictograph_View(main_graphboard_view)
-            pictograph.add_arrows_to_mini_graphboard(combination)
+            pictograph.populate_pictograph(combination)
             grid_layout.addWidget(pictograph, row, col)
                     
             col += 1

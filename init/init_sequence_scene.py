@@ -7,7 +7,7 @@ class Init_Sequence_Scene:
     
     def init_sequence_scene(self, ui_setup):
         ui_setup.sequence_scene = QGraphicsScene()
-        ui_setup.sequence_scene.setSceneRect(0, 0, ui_setup.main_window.width(), 1.5 * GRAPHBOARD_HEIGHT)
+        ui_setup.sequence_scene.setSceneRect(0, 0, ui_setup.main_window.width(), 1 * GRAPHBOARD_HEIGHT)
         ui_setup.sequence_manager = Sequence_Manager(ui_setup.sequence_scene, ui_setup.generator, ui_setup, ui_setup.info_tracker)
         ui_setup.sequence_scene.manager = ui_setup.sequence_manager
         ui_setup.sequence_container = QGraphicsView(ui_setup.sequence_scene)

@@ -1,7 +1,7 @@
 import os
 from PyQt5.QtWidgets import QGraphicsView, QGraphicsItem, QApplication, QGraphicsRectItem, QAction, QMenu
 from PyQt5.QtCore import Qt, QRectF, QPointF, QTimer
-from PyQt5.QtWidgets import QGraphicsItem, QToolTip
+from PyQt5.QtWidgets import QGraphicsItem, QToolTip, QFrame
 from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
 from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor, QTransform
 from objects.staff import Staff
@@ -56,6 +56,8 @@ class Graphboard_View(QGraphicsView):
             self.graphboard_scene.addItem(self.grid)
 
         self.setFixedSize(int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
+        self.scene().setSceneRect(0, 0, int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
+        self.setFrameStyle(QFrame.NoFrame)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         

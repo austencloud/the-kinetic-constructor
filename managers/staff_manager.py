@@ -15,15 +15,27 @@ class Staff_Manager(QObject):
         self.beta_staves = []  # List to hold beta staves
         self.previous_position = None  # Store the previous position of staffs
         json_manager = Json_Manager(graphboard_scene)
-        self.letters = json_manager.load_all_letters()
-
-        
+        self.letters = json_manager.load_all_letters() 
 
     def connect_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
 
-    def create_staff(self, end_location, scene, color):
-        # Construct the file path for the staff image
+    def create_staff(self, end_location, scene, color, context):
+        
+        """
+        Create a staff for the specified end location, color, and context.
+
+        Parameters:
+            end_location (str): The end location of the staff ('N', 'S', 'E', 'W').
+            scene (QGraphicsScene): The scene where the staff will be added.
+            color (str): The color of the staff ('red', 'blue').
+            context (str): The context in which the staff is being created ('main', 'mini').
+
+        Returns:
+            Staff: The newly created staff object.
+        """
+
+        # Construct the file path for the staff image based on the context
         image_file = f'images\\staves\\{end_location}_staff_{color}.svg'
 
         # Create a new staff object
@@ -36,14 +48,23 @@ class Staff_Manager(QObject):
             image_file
         )
 
-        new_staff.staff_manager = self
+        new_staff.staff_manager = self  # Set the staff manager reference
 
+        # Depending on the context, you might set different properties or add additional behavior
+        if context == 'mini':
+            # Set properties specific to the mini graphboard, such as scaling or position adjustments
+            new_staff.setScale(PICTOGRAPH_SCALE)  # Example of setting a different scale for the mini context
+        elif context == 'main':
+            new_staff.setScale(GRAPHBOARD_SCALE)  # Example of setting a different scale for the main context
+            # Set properties specific to the main graphboard
+            # (if there are any specific properties or behaviors, they should be set here)
 
         # Add the staff to the scene if it's not already there
-        if new_staff.scene is not self.graphboard_scene:
-            self.graphboard_scene.addItem(new_staff)
+        if new_staff.scene is not scene:
+            scene.addItem(new_staff)
 
         return new_staff
+
 
     ### MINI_GRAPHBOARD ###
 
@@ -56,7 +77,6 @@ class Staff_Manager(QObject):
         dx = mini_grid_transform.dx()
         dy = mini_grid_transform.dy()
 
-        VERTICAL_BUFFER = (mini_graphboard_view.height() - mini_graphboard_view.width()) / 2
 
         
         # Calculate the handpoints on the graphboard based on the grid
@@ -69,10 +89,10 @@ class Staff_Manager(QObject):
 
         # Initialize the staff locations based on the handpoints
         self.staff_locations = {
-            'N_staff': graphboard_handpoints['N_hand_point'] * PICTOGRAPH_SCALE + QPointF(-MINI_STAFF_WIDTH, -MINI_STAFF_LENGTH - VERTICAL_BUFFER),
-            'E_staff': graphboard_handpoints['E_hand_point'] * PICTOGRAPH_SCALE + QPointF(-MINI_STAFF_LENGTH, - MINI_STAFF_WIDTH - VERTICAL_BUFFER),
-            'S_staff': graphboard_handpoints['S_hand_point'] * PICTOGRAPH_SCALE + QPointF(-MINI_STAFF_WIDTH, -MINI_STAFF_LENGTH - VERTICAL_BUFFER),
-            'W_staff': graphboard_handpoints['W_hand_point'] * PICTOGRAPH_SCALE + QPointF(-MINI_STAFF_LENGTH, -MINI_STAFF_WIDTH - VERTICAL_BUFFER)
+            'N_staff': graphboard_handpoints['N_hand_point'] * PICTOGRAPH_SCALE + QPointF(-MINI_STAFF_WIDTH + PICTOGRAPH_GRID_PADDING, -MINI_STAFF_LENGTH + PICTOGRAPH_GRID_PADDING),
+            'E_staff': graphboard_handpoints['E_hand_point'] * PICTOGRAPH_SCALE + QPointF(-MINI_STAFF_LENGTH + PICTOGRAPH_GRID_PADDING, - MINI_STAFF_WIDTH + PICTOGRAPH_GRID_PADDING),
+            'S_staff': graphboard_handpoints['S_hand_point'] * PICTOGRAPH_SCALE + QPointF(-MINI_STAFF_WIDTH + PICTOGRAPH_GRID_PADDING, -MINI_STAFF_LENGTH + PICTOGRAPH_GRID_PADDING),
+            'W_staff': graphboard_handpoints['W_hand_point'] * PICTOGRAPH_SCALE + QPointF(-MINI_STAFF_LENGTH + PICTOGRAPH_GRID_PADDING, -MINI_STAFF_WIDTH + PICTOGRAPH_GRID_PADDING)
         }
 
 
@@ -96,7 +116,7 @@ class Staff_Manager(QObject):
 
                         continue 
                 
-                    new_staff = self.create_staff(end_location, scene, color)
+                    new_staff = self.create_staff(end_location, scene, color, 'mini')
                     new_staff.setScale(PICTOGRAPH_SCALE)
                     arrow.staff = new_staff
                     new_staff.arrow = arrow
@@ -140,14 +160,14 @@ class Staff_Manager(QObject):
         GRAPHBOARD_WIDTH = graphboard_view.width()
         GRAPHBOARD_HEIGHT = graphboard_view.height()
         
-        self.GRID_PADDING = (GRAPHBOARD_WIDTH - GRID_WIDTH) / 2
+        self.PICTOGRAPH_GRID_PADDING = (GRAPHBOARD_WIDTH - GRID_WIDTH) / 2
         self.GRID_V_OFFSET = (GRAPHBOARD_HEIGHT - GRAPHBOARD_WIDTH) / 2
 
         # Calculate the handpoints on the graphboard based on the grid
         graphboard_handpoints = {}
         for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
             x, y = self.grid.get_circle_coordinates(point_name)
-            scaled_x = x * scale + self.GRID_PADDING
+            scaled_x = x * scale + self.PICTOGRAPH_GRID_PADDING
             scaled_y = y * scale + self.GRID_V_OFFSET
             graphboard_handpoints[point_name] = QPointF(scaled_x, scaled_y)
 
@@ -226,7 +246,7 @@ class Staff_Manager(QObject):
                         staff.show()
                         
                     else:
-                        new_staff = self.create_staff(end_location, graphboard_scene, color)
+                        new_staff = self.create_staff(end_location, graphboard_scene, color, 'main')
                         new_staff.setScale(arrow.scale())
                         arrow.staff = new_staff
                         arrow.staff.arrow = arrow
@@ -249,7 +269,6 @@ class Staff_Manager(QObject):
 
         
     def hide_all_graphboard_staffs(self):
-        print(self.graphboard_scene.items())
         for item in self.graphboard_scene.items():
             if isinstance(item, Staff):
                 item.hide()
@@ -262,8 +281,7 @@ class Staff_Manager(QObject):
         if len(self.graphboard_staffs) == 2:
             staffs_list = list(self.graphboard_staffs.items())
             if staffs_list[0][1].arrow.end_location == staffs_list[1][1].arrow.end_location:
-                self.reposition_staffs(graphboard_scene, graphboard_state)
-                
+                self.reposition_staffs(graphboard_scene, graphboard_state)     
 
     def get_distance_from_center(self, position):
         """Calculate the Euclidean distance from the center point."""
@@ -320,7 +338,7 @@ class Staff_Manager(QObject):
         arrow1, arrow2 = arrows
         same_motion = arrow1['motion_type'] == arrow2['motion_type'] in ['pro', 'anti']
 
-        if same_motion:
+        if same_motion: # Letter "G" or "H"
             # Determine which arrow is further from the center based on optimal positions
             optimal_position1 = self.get_optimal_staff_positions(arrow1)
             optimal_position2 = self.get_optimal_staff_positions(arrow2)
@@ -346,7 +364,7 @@ class Staff_Manager(QObject):
             closer_staff.setPos(new_position)
             
 
-        else:  # hybrid scenario: one 'pro' and one 'anti'
+        else:  # hybrid scenario: one 'pro' and one 'anti' - Letter "I"
             pro_arrow = arrow1 if arrow1['motion_type'] == 'pro' else arrow2
             anti_arrow = arrow2 if arrow1['motion_type'] == 'pro' else arrow1
 
@@ -363,9 +381,7 @@ class Staff_Manager(QObject):
             anti_new_position = self.calculate_new_position(anti_staff.pos(), opposite_direction)
             anti_staff.setPos(anti_new_position)
 
-
         graphboard_scene.update()
-
 
     def determine_translation_direction(self, arrow_state):
         """Determine the translation direction based on the arrow's state."""

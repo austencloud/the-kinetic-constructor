@@ -6,7 +6,6 @@ from PyQt5.QtWidgets import QGraphicsItem
 class Staff(QGraphicsSvgItem):
     def __init__(self, element_id, scene, position, axis, color=None, staff_svg_file=None, initial_visibility=True):
         super().__init__()
-        print("staff created: " + element_id)
         self.element_id = element_id
         self.position = position 
         self.renderer = QSvgRenderer(staff_svg_file)
