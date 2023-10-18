@@ -15,7 +15,7 @@ class Info_Tracker:
         self.letters = self.json_manager.load_all_letters()    
 
         if self.label:
-            font = QFont('Helvetica', int(16 * GRAPHBOARD_SCALE))
+            font = QFont('Helvetica', int(24 * GRAPHBOARD_SCALE))
             self.label.setFont(font)
             self.label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse | Qt.TextInteractionFlag.TextSelectableByKeyboard)
             self.label.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -101,9 +101,11 @@ class Info_Tracker:
         
         for letter, combinations in self.letters.items():
             combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]  # Ignore the first dictionary which contains optimal positions
+
+            font = int(60 * GRAPHBOARD_SCALE)
         
             if current_combination in combinations:
-                    letter_text += f"<span style='font-size: 40px; font-weight: bold;'>{current_letter_type}</span>"
+                    letter_text += f"<span style='font-size: {font}px; font-weight: bold;'>{current_letter_type}</span>"
                     start_location, end_location = self.get_start_end_locations()
                     letter_text += f"<h4>{start_location} → {end_location}</h4>"
                     self.letter = letter 
