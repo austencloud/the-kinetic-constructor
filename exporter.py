@@ -1,6 +1,6 @@
 import re
-from PyQt5.QtGui import QImage, QPainter
-from PyQt5.QtCore import QPointF
+from PyQt6.QtGui import QImage, QPainter
+from PyQt6.QtCore import QPointF
 from objects.arrow import Arrow
 from objects.staff import Staff
 from objects.grid import Grid

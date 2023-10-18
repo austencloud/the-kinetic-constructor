@@ -1,13 +1,17 @@
 import os
-from PyQt5.QtWidgets import QGraphicsView, QGraphicsItem, QApplication, QGraphicsRectItem, QAction, QMenu
-from PyQt5.QtCore import Qt, QRectF, QPointF, QTimer
-from PyQt5.QtWidgets import QGraphicsItem, QToolTip, QFrame
-from PyQt5.QtSvg import QSvgRenderer, QGraphicsSvgItem
-from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor, QTransform
+from PyQt6.QtWidgets import QGraphicsView, QGraphicsItem, QApplication, QGraphicsRectItem, QMenu
+from PyQt6.QtWidgets import QGraphicsItem, QToolTip, QFrame
+from PyQt6.QtSvg import QSvgRenderer
+from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+from PyQt6.QtGui import QDrag, QPixmap, QPainter, QCursor, QTransform, QAction, QColor
+from PyQt6.QtCore import QPointF, Qt, QRectF, QEvent
 from objects.staff import Staff
 from objects.grid import Grid
 from objects.arrow import Arrow
 from settings import *
+
+#import the missing modules
+
 
 class Graphboard_View(QGraphicsView):
     def __init__(self,
@@ -49,17 +53,17 @@ class Graphboard_View(QGraphicsView):
         self.letter_item = QGraphicsSvgItem()
         from views.pictograph_view import Pictograph_View
         if isinstance(self, Pictograph_View):
-            self.graphboard_scene.setBackgroundBrush(Qt.transparent)
+            self.graphboard_scene.setBackgroundBrush(QColor(Qt.GlobalColor.transparent))
         elif self.graphboard_scene is not None:
-            self.graphboard_scene.setBackgroundBrush(Qt.white) 
+            self.graphboard_scene.setBackgroundBrush(QColor(Qt.GlobalColor.white))
             self.graphboard_scene.addItem(self.letter_item)
             self.graphboard_scene.addItem(self.grid)
 
         self.setFixedSize(int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
         self.scene().setSceneRect(0, 0, int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
-        self.setFrameStyle(QFrame.NoFrame)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setFrameStyle(QFrame.Shape.NoFrame)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         
     ### MOUSE EVENTS ###
 

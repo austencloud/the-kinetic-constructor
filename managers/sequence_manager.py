@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QGraphicsRectItem, QPushButton
-from PyQt5.QtCore import QRectF, Qt, QPointF,  QObject
-from PyQt5.QtGui import QImage, QPainter
+from PyQt6.QtWidgets import QGraphicsRectItem, QPushButton
+from PyQt6.QtCore import QRectF, Qt, QPointF,  QObject
+from PyQt6.QtGui import QImage, QPainter
 from objects.arrow import Arrow
 from objects.staff import Staff
 from objects.grid import Grid
@@ -9,10 +9,10 @@ from pictograph import Pictograph
 from settings import DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, PICTOGRAPH_SCALE
 
 class Sequence_Manager(QObject):
-    def __init__(self, sequence_scene, pictograph_generator, ui_setup, info_tracker):
+    def __init__(self, sequence_scene, pictograph_generator, main_widget, info_tracker):
         self.pictographs = [] 
         self.pictograph_generator = pictograph_generator
-        self.ui_setup = ui_setup
+        self.main_widget = main_widget   
         self.info_tracker = info_tracker
         self.sequence_scene = sequence_scene
         self.beats = [QGraphicsRectItem(QRectF(0, 0, DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE, DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE)) for i in range(4)]
@@ -53,7 +53,7 @@ class Sequence_Manager(QObject):
         graphboard.update_letter(None)
         letter = self.info_tracker.get_current_letter()
         if letter:
-            self.ui_setup.word_label.setText(self.ui_setup.word_label.text() + letter)
+            self.main_widget.word_label.setText(self.main_widget.word_label.text() + letter)
         self.sequence_scene.update()
 
 
@@ -89,7 +89,7 @@ class Sequence_Manager(QObject):
         self.pictographs = []
         for item in self.sequence_scene.items():
             self.sequence_scene.removeItem(item)
-        self.ui_setup.word_label.setText("My word: ")
-        self.ui_setup.info_tracker.label.setText("")  # Clear the label
+        self.main_widget.word_label.setText("My word: ")
+        self.main_widget.info_tracker.label.setText("")  # Clear the label
         
 

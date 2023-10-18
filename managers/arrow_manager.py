@@ -1,13 +1,13 @@
 import os
 import random
-from PyQt5.QtSvg import QSvgRenderer
-from PyQt5.QtWidgets import QGraphicsItem
-from PyQt5.QtCore import  QObject
+from PyQt6.QtSvg import QSvgRenderer
+from PyQt6.QtWidgets import QGraphicsItem
+from PyQt6.QtCore import  QObject
 from objects.arrow import Arrow
-from PyQt5.QtCore import QTimer, QPointF, QRectF
-from PyQt5.QtGui import QPixmap, QPainter
-from PyQt5.QtWidgets import QGraphicsItem
-from PyQt5.QtGui import QDrag
+from PyQt6.QtCore import QTimer, QPointF, QRectF
+from PyQt6.QtGui import QPixmap, QPainter
+from PyQt6.QtWidgets import QGraphicsItem
+from PyQt6.QtGui import QDrag
 from views.graphboard_view import Graphboard_View
 from managers.json_manager import Json_Manager
 from settings import *

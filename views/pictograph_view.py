@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsItem, QAction, QMenu
-from PyQt5.QtCore import QPointF, Qt
-from PyQt5.QtWidgets import QGraphicsItem, QFrame
-from PyQt5.QtGui import QTransform, QPainter
+from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsItem, QMenu
+from PyQt6.QtCore import QPointF, Qt
+from PyQt6.QtWidgets import QGraphicsItem, QFrame
+from PyQt6.QtGui import QTransform, QPainter, QAction
 from objects.grid import Grid
 from objects.arrow import Arrow
 from info_tracker import Info_Tracker
@@ -9,24 +9,20 @@ from managers.staff_manager import Staff_Manager
 from managers.arrow_manager import Arrow_Manager
 from managers.svg_manager import Svg_Manager
 from managers.json_manager import Json_Manager
-from settings import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, SELECTION_GRID_WIDTH, PICTOGRAPH_SCALE
+from settings import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, SELECTION_GRID_WIDTH, PICTOGRAPH_SCALE, PICTOGRAPH_GRID_PADDING
 
 class Pictograph_View(QGraphicsView):
     def __init__(self, graphboard_view):
         super().__init__()
         self.setFixedSize(PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT)
-
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setFrameStyle(QFrame.NoFrame) 
-        
         self.pictograph_scene = QGraphicsScene()
         self.pictograph_scene.setSceneRect(0, 0, PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT)
         self.setScene(self.pictograph_scene)  # Set the scene
         self.grid = Grid("images/grid/grid.svg")
         self.grid.setScale(PICTOGRAPH_SCALE)
-        self.PADDING = (self.width() - self.grid.boundingRect().width() * PICTOGRAPH_SCALE) / 2
-
         self.svg_manager = Svg_Manager()
         self.staff_manager = Staff_Manager(self.pictograph_scene)
         self.arrow_manager = Arrow_Manager(None, self, self.staff_manager)
@@ -35,15 +31,12 @@ class Pictograph_View(QGraphicsView):
         self.arrow_manager.connect_info_tracker(self.info_tracker)
         self.staff_manager.connect_grid(self.grid)
         self.init_grid()
-        self.staff_manager.init_mini_graphboard_staffs(self, self.grid)
-        
+        self.staff_manager.init_pictograph_staffs(self, self.grid)
         self.graphboard_view = graphboard_view
-        self.PADDING = (self.width() - self.grid.boundingRect().width() * PICTOGRAPH_SCALE) / 2
-        
+
         
     def init_grid(self):
-
-        grid_position = QPointF(self.PADDING, self.PADDING)
+        grid_position = QPointF(PICTOGRAPH_GRID_PADDING, PICTOGRAPH_GRID_PADDING)
         transform = QTransform()
         transform.translate(grid_position.x(), grid_position.y())
         self.grid.setTransform(transform)
@@ -110,7 +103,7 @@ class Pictograph_View(QGraphicsView):
         for arrow in created_arrows:
             if arrow not in self.pictograph_scene.items():
                 self.pictograph_scene.addItem(arrow)                    
-        self.staff_manager.update_mini_graphboard_staffs(self.pictograph_scene)
+        self.staff_manager.update_pictograph_staffs(self.pictograph_scene)
 
     def place_ghost_arrows(self, created_arrows, arrow_dict):
         ghost_arrow = Arrow(None, self, self.info_tracker, self.svg_manager, self.arrow_manager, 'static', self.staff_manager, arrow_dict)
@@ -153,9 +146,8 @@ class Pictograph_View(QGraphicsView):
                     pos += QPointF(-DISTANCE, DISTANCE)
                 elif arrow.quadrant == 'nw':
                     pos += QPointF(-DISTANCE, -DISTANCE)
-                arrow.setPos(pos + QPointF(self.PADDING, self.PADDING))
+                arrow.setPos(pos + QPointF(PICTOGRAPH_GRID_PADDING, PICTOGRAPH_GRID_PADDING))
 
-    
     def save_optimal_positions(self):
         MAIN_GRAPHBOARD_BUFFER = (self.graphboard_view.width() - self.graphboard_view.grid.boundingRect().width()) / 2
         MAIN_GRAPHBOARD_V_OFFSET = (self.graphboard_view.height() - self.graphboard_view.width()) / 2

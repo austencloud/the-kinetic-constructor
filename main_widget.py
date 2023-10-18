@@ -1,7 +1,7 @@
 import os
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QGraphicsScene, QGraphicsView, QLabel, QFrame, QWidget
-from PyQt5.QtGui import QFont
-from PyQt5.QtCore import Qt, QEvent
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QGraphicsScene, QGraphicsView, QLabel, QFrame, QWidget
+from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt, QEvent
 from objects.arrow import Arrow
 from objects.staff import Staff
 from objects.grid import Grid
@@ -25,17 +25,15 @@ from init.init_propbox import Init_PropBox
 from init.init_sequence_scene import Init_Sequence_Scene
 from settings import *
 
-class UiSetup(QWidget):
-
+class Main_Widget(QWidget):
     def __init__(self, main_window):
         super().__init__(main_window)
-        self.setFocusPolicy(Qt.StrongFocus)
-        
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         
         self.main_window = main_window
         self.arrows = []
-        self.ui_setup = self
+        self.main_widget = self
         self.exporter = None
         self.sequence_manager = None
         self.graphboard_view = None
@@ -154,10 +152,9 @@ class UiSetup(QWidget):
                 self.arrow_manager.swap_motion_type(self.selected_items)
             elif event.key() == Qt.Key_F:
                 self.sequence_manager.add_to_sequence(self.graphboard_view)
-    
+
     def eventFilter(self, source, event):
-        if event.type() == QEvent.KeyPress:
+        if event.type() == QEvent.Type.KeyPress:  # Adjusted to the new enumeration access method
             self.keyPressEvent(event)
             return True
         return super().eventFilter(source, event)
-    

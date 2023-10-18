@@ -1,7 +1,7 @@
 import json
 import os
 from objects.arrow import Arrow
-from PyQt5.QtCore import QObject
+from PyQt6.QtCore import QObject
 
 class Json_Manager(QObject):
     def __init__(self, scene):

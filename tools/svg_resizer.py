@@ -1,9 +1,10 @@
 import sys
 import os
-from PyQt5.QtWidgets import QApplication, QMainWindow, QSlider, QLabel, QVBoxLayout, QWidget, QPushButton, QFileDialog, QLineEdit, QFrame, QStackedWidget, QHBoxLayout, QListWidget, QListWidgetItem
-from PyQt5.QtSvg import QSvgWidget, QSvgRenderer
-from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtGui import QIcon, QPixmap, QPainter
+from PyQt6.QtWidgets import QApplication, QMainWindow, QSlider, QLabel, QVBoxLayout, QWidget, QPushButton, QFileDialog, QLineEdit, QFrame, QStackedWidget, QHBoxLayout, QListWidget, QListWidgetItem
+from PyQt6.QtSvg import QSvgRenderer
+from PyQt6.QtSvgWidgets import QGraphicsSvgItem, QSvgWidget
+from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtGui import QIcon, QPixmap, QPainter
 from bs4 import BeautifulSoup
 from xml.dom import minidom
 
@@ -72,9 +73,9 @@ class SVGResizer(QMainWindow):
         layout.addWidget(save_button)
 
         # Set Layout
-        central_widget = QWidget()
-        central_widget.setLayout(layout)
-        self.setCentralWidget(central_widget)
+        main_widget = QWidget()
+        main_widget.setLayout(layout)
+        self.setCentralWidget(main_widget)
 
         # Show Window
         self.show()

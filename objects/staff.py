@@ -1,6 +1,6 @@
-from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
-from PyQt5.QtWidgets import QGraphicsItem
-
+from PyQt6.QtSvg import QSvgRenderer
+from PyQt6.QtWidgets import QGraphicsItem
+from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
 
 class Staff(QGraphicsSvgItem):
@@ -24,7 +24,7 @@ class Staff(QGraphicsSvgItem):
         self.color = color
         self.axis = axis
         #make them selectable
-        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
 
 
     def hide(self):

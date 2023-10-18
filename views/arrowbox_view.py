@@ -1,8 +1,8 @@
-from PyQt5.QtWidgets import QGraphicsView, QFrame
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtGui import QPixmap, QDrag, QImage, QPainter, QCursor
-from PyQt5.QtCore import Qt, QMimeData
-from PyQt5.QtSvg import QSvgRenderer
+from PyQt6.QtWidgets import QGraphicsView, QFrame
+from PyQt6.QtWidgets import QApplication
+from PyQt6.QtGui import QPixmap, QDrag, QImage, QPainter, QCursor
+from PyQt6.QtCore import Qt, QMimeData
+from PyQt6.QtSvg import QSvgRenderer
 from objects.arrow import Arrow
 import os
 
@@ -18,7 +18,7 @@ class ArrowBox_View(QGraphicsView):
         self.info_tracker = info_tracker
         self.svg_manager = svg_manager
         self.setAcceptDrops(True)
-        self.setFrameShape(QFrame.NoFrame)
+        self.setFrameShape(QFrame.Shape.NoFrame)
 
 
     ### MOUSE EVENTS ###

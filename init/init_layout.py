@@ -1,8 +1,8 @@
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout
+from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout
 
 class Init_Layout():
-    def __init__(self, ui_setup, main_window):
-        self.ui_setup = ui_setup
+    def __init__(self, main_widget, main_window):
+        self.main_widget = main_widget
         self.main_window = main_window
         self.init_layouts()
         self.configure_layouts()
@@ -40,7 +40,7 @@ class Init_Layout():
         self.layouts['main'].addLayout(self.layouts['right'])
 
         self.main_window.setLayout(self.layouts['main'])
-        self.layouts['graphboard'].addWidget(self.ui_setup.graphboard_view)
+        self.layouts['graphboard'].addWidget(self.main_widget.graphboard_view)
 
     def assign_layouts_to_window(self):
         # Assign layouts to the main window properties.

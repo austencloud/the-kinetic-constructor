@@ -4,10 +4,10 @@ import os
 import xml.etree.ElementTree as ET
 import json
 import re
-from PyQt5.QtGui import QImage, QPainter, QPainterPath, QTransform
-from PyQt5.QtSvg import QSvgRenderer
-from PyQt5.QtWidgets import QMenu, QDialog, QFormLayout, QSpinBox, QDialogButtonBox
-from PyQt5.QtCore import Qt, pyqtSignal, QObject
+from PyQt6.QtGui import QImage, QPainter, QPainterPath, QTransform
+from PyQt6.QtSvg import QSvgRenderer
+from PyQt6.QtWidgets import QMenu, QDialog, QFormLayout, QSpinBox, QDialogButtonBox
+from PyQt6.QtCore import Qt, pyqtSignal, QObject
 from svg.path import Line, CubicBezier, QuadraticBezier, Arc, Close
 from objects.arrow import Arrow
 from objects.staff import Staff

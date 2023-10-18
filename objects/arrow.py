@@ -1,9 +1,10 @@
 import os
-from PyQt5.QtWidgets import QGraphicsItem
-from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
-from PyQt5.QtCore import Qt, QPointF, QTimer
+from PyQt6.QtWidgets import QGraphicsItem
+from PyQt6.QtSvg import QSvgRenderer
+from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+from PyQt6.QtCore import Qt, QPointF, QTimer
 from data.ARROW_START_END_LOCATIONS import ARROW_START_END_LOCATIONS
-from PyQt5.QtGui import QPixmap, QPainter
+from PyQt6.QtGui import QPixmap, QPainter
 from settings import *
 class Arrow(QGraphicsSvgItem):
     def __init__(self, svg_file, graphboard_view, info_tracker, svg_manager, arrow_manager, motion_type, staff_manager, dict):
@@ -35,10 +36,10 @@ class Arrow(QGraphicsSvgItem):
         
         self.renderer = QSvgRenderer(self.svg_file)    
         self.setAcceptDrops(True)
-        self.setFlag(QGraphicsItem.ItemSendsGeometryChanges, True)
-        self.setFlag(QGraphicsItem.ItemIsFocusable)
-        self.setFlag(QGraphicsSvgItem.ItemIsMovable, True)
-        self.setFlag(QGraphicsSvgItem.ItemIsSelectable, True)
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges)
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsFocusable)
+        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
+        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, True)
         self.setTransformOriginPoint(self.boundingRect().center())
 
         if motion_type != 'static':

@@ -1,6 +1,6 @@
 from objects.arrow import Arrow
-from PyQt5.QtGui import QFont
-from PyQt5.QtCore import Qt
+from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt
 from data.positions_map import positions_map
 from data.letter_types import letter_types
 from settings import GRAPHBOARD_SCALE
@@ -15,9 +15,10 @@ class Info_Tracker:
         self.letters = self.json_manager.load_all_letters()    
 
         if self.label:
-            self.label.setFont(QFont('Helvetica', int(16 * GRAPHBOARD_SCALE)))
-            self.label.setTextInteractionFlags(Qt.TextSelectableByMouse | Qt.TextSelectableByKeyboard)
-            self.label.setAlignment(Qt.AlignTop)
+            font = QFont('Helvetica', int(16 * GRAPHBOARD_SCALE))
+            self.label.setFont(font)
+            self.label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse | Qt.TextInteractionFlag.TextSelectableByKeyboard)
+            self.label.setAlignment(Qt.AlignmentFlag.AlignTop)
 
     def connect_graphboard_view(self, graphboard_view):
         self.graphboard_view = graphboard_view

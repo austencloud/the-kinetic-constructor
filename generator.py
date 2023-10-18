@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QGraphicsItem
-from PyQt5.QtCore import QPointF
+from PyQt6.QtWidgets import QGraphicsItem
+from PyQt6.QtCore import QPointF
 import random
 import os
 from objects.arrow import Arrow

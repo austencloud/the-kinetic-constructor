@@ -1,17 +1,17 @@
 #import 
 import os
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsItem, QFrame, QGridLayout
+from PyQt6.QtWidgets import QGraphicsScene, QGraphicsItem, QFrame, QGridLayout
 from settings import *
 from objects.arrow import Arrow
 from views.arrowbox_view import ArrowBox_View
 
 class Init_ArrowBox: 
-    def __init__(self, ui_setup, main_window):
-        self.init_arrowbox_view(ui_setup, main_window)
+    def __init__(self, main_widget, main_window):
+        self.init_arrowbox_view(main_widget, main_window)
     
-    def init_arrowbox_view(self, ui_setup, main_window):
+    def init_arrowbox_view(self, main_widget, main_window):
         arrowbox_scene = QGraphicsScene()
-        arrowbox_view = ArrowBox_View(arrowbox_scene, ui_setup.graphboard_view, ui_setup.info_tracker, ui_setup.svg_manager)
+        arrowbox_view = ArrowBox_View(arrowbox_scene, main_widget.graphboard_view, main_widget.info_tracker, main_widget.svg_manager)
         arrowbox_frame = QFrame(main_window)
         objectbox_layout = QGridLayout()
         arrowbox_frame.setLayout(objectbox_layout) 
@@ -36,9 +36,9 @@ class Init_ArrowBox:
             file_name = os.path.basename(svg_file)
             if file_name in default_arrows:
                 motion_type = file_name.split('_')[1]
-                arrow_item = Arrow(svg_file, ui_setup.graphboard_view, ui_setup.info_tracker, ui_setup.svg_manager, ui_setup.arrow_manager, motion_type, ui_setup.staff_manager, None)
-                arrow_item.setFlag(QGraphicsItem.ItemIsMovable, True)
-                arrow_item.setFlag(QGraphicsItem.ItemIsSelectable, True)
+                arrow_item = Arrow(svg_file, main_widget.graphboard_view, main_widget.info_tracker, main_widget.svg_manager, main_widget.arrow_manager, motion_type, main_widget.staff_manager, None)
+                arrow_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
+                arrow_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
                 arrow_item.setScale(GRAPHBOARD_SCALE * 0.75)
 
                 if 'red' in file_name:
@@ -58,7 +58,7 @@ class Init_ArrowBox:
                 arrowbox_scene.addItem(arrow_item) 
 
 
-        ui_setup.arrows.append(arrow_item)
+        main_widget.arrows.append(arrow_item)
         
         objectbox_layout.addWidget(arrowbox_view) 
         arrowbox_frame.setFixedSize(int(500 * GRAPHBOARD_SCALE), int(600 * GRAPHBOARD_SCALE))
