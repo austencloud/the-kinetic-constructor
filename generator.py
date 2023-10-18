@@ -6,12 +6,12 @@ from objects.arrow import Arrow
 from managers.svg_manager import Svg_Manager
 from exporter import Exporter
 class Pictograph_Generator():
-    def __init__(self, staff_manager, graphboard_view, graphboard_scene, info_tracker, main_window, arrow_handler, exporter, json_manager, grid, parent=None):
+    def __init__(self, staff_manager, graphboard_view, info_tracker, main_window, arrow_handler, exporter, json_manager, grid, parent=None):
         self.staff_manager = staff_manager
         self.parent = parent
         self.graphboard_view = graphboard_view
         self.info_tracker = info_tracker
-        self.graphboard_scene = graphboard_scene
+        self.graphboard_scene = graphboard_view.scene()
         self.current_letter = None
         self.main_window = main_window
         self.arrow_handler = arrow_handler

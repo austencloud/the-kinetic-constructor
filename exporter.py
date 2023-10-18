@@ -8,9 +8,9 @@ from lxml import etree
 from copy import deepcopy
 
 class Exporter:
-    def __init__(self, graphboard, graphboard_scene, staff_manager, grid):
-        self.graphboard_scene = graphboard_scene
-        self.graphboard = graphboard
+    def __init__(self, graphboard_view, staff_manager, grid):
+        self.graphboard_scene = graphboard_view.scene()
+        self.graphboard_view = graphboard_view
         self.staff_manager = staff_manager
         self.grid = grid
 
@@ -99,13 +99,13 @@ class Exporter:
 
     def export_to_png(self):
         selectedItems = self.graphboard_scene.get_selected_items()
-        image = QImage(self.graphboard.size(), QImage.Format_ARGB32)
+        image = QImage(self.graphboard_view.size(), QImage.Format_ARGB32)
         painter = QPainter(image)
 
         for item in selectedItems:
             item.setSelected(False)
 
-        self.graphboard.render(painter)
+        self.graphboard_view.render(painter)
         painter.end()
         image.save("export.png")
 

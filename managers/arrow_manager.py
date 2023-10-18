@@ -12,16 +12,13 @@ from views.graphboard_view import Graphboard_View
 from managers.json_manager import Json_Manager
 from settings import *
 class Arrow_Manager(QObject):
-    def __init__(self, arrow, graphboard_view, staff_manager):
+    def __init__(self, main_widget):
         super().__init__()
-        self.graphboard_view = graphboard_view
-        self.staff_manager = staff_manager
         self.remaining_staff = {}
         self.dragging_arrow = None
         self.drag_offset = QPointF(0, 0)  
         self.timer = QTimer()
-        self.json_manager = Json_Manager(None)
-        self.letters = self.json_manager.load_all_letters()
+        self.letters = main_widget.letters
 
 
     ### CONNECTORS ###
@@ -171,7 +168,6 @@ class Arrow_Manager(QObject):
             print("Cannot swap colors with no arrows on the graphboard_view.")
             
         self.info_tracker.update()
-        self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
         
         ### UPDATERS ###
         

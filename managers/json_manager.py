@@ -4,9 +4,8 @@ from objects.arrow import Arrow
 from PyQt6.QtCore import QObject
 
 class Json_Manager(QObject):
-    def __init__(self, scene):
+    def connect_scene(self, scene):
         self.scene = scene
-        self.letters = self.load_all_letters()
 
     def load_all_letters(self):
         directory = 'json\\'

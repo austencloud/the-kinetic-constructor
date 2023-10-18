@@ -12,29 +12,29 @@ from managers.json_manager import Json_Manager
 from settings import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, PICTOGRAPH_SCALE, PICTOGRAPH_GRID_PADDING
 
 class Pictograph_View(QGraphicsView):
-    def __init__(self, graphboard_view):
+    def __init__(self, main_widget):
         super().__init__()
         self.setFixedSize(PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setFrameStyle(QFrame.Shape.NoFrame) 
-        
+        self.main_widget = main_widget
         self.pictograph_scene = QGraphicsScene()
         self.pictograph_scene.setSceneRect(0, 0, PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT)
         self.setScene(self.pictograph_scene)  # Set the scene
         self.grid = Grid("images/grid/grid.svg")
         self.grid.setScale(PICTOGRAPH_SCALE)
         self.svg_manager = Svg_Manager()
-        self.staff_manager = Staff_Manager()
+        self.staff_manager = Staff_Manager(self.main_widget)
         self.staff_manager.connect_pictograph_view(self)
-        self.arrow_manager = Arrow_Manager(None, self, self.staff_manager)
+        self.arrow_manager = Arrow_Manager(self.main_widget)
         self.json_manager = Json_Manager(self.pictograph_scene)
         self.info_tracker = Info_Tracker(self, None, self.staff_manager, self.json_manager)
         self.arrow_manager.connect_info_tracker(self.info_tracker)
         self.staff_manager.connect_grid(self.grid)
         self.init_grid()
         self.staff_manager.init_pictograph_staffs(self, self.grid)
-        self.graphboard_view = graphboard_view
+        self.graphboard_view = main_widget.graphboard_view
 
         
     def init_grid(self):

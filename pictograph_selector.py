@@ -4,8 +4,8 @@ from PyQt6.QtGui import QFont, QColor
 from views.pictograph_view import Pictograph_View
 
 class Pictograph_Selector(QDialog):
-    def __init__(self, combinations, letter, main_graphboard_view, parent=None):
-        super().__init__(parent)
+    def __init__(self, combinations, letter, main_widget):
+        super().__init__(main_widget)
         self.setWindowTitle(f"{letter} Variations:")
         
         layout = QVBoxLayout()
@@ -21,7 +21,7 @@ class Pictograph_Selector(QDialog):
         row = 0
         col = 0
         for i, combination in enumerate(combinations):
-            pictograph = Pictograph_View(main_graphboard_view)
+            pictograph = Pictograph_View(main_widget)
             pictograph.populate_pictograph(combination)
             grid_layout.addWidget(pictograph, row, col)
                     

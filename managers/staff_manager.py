@@ -6,15 +6,13 @@ from managers.json_manager import Json_Manager
 import math
 
 class Staff_Manager(QObject):
-
     positionChanged = pyqtSignal(str)
 
-    def __init__(self):
+    def __init__(self, main_widget):
         super().__init__()
         self.beta_staves = []  # List to hold beta staves
         self.previous_position = None  # Store the previous position of staffs
-        self.json_manager = Json_Manager(None)
-        self.letters = self.json_manager.load_all_letters() 
+        self.letters = main_widget.json_manager.load_all_letters() 
 
     def connect_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
@@ -201,13 +199,12 @@ class Staff_Manager(QObject):
     def connect_pictograph_view(self, pictograph_view):
         self.pictograph_view = pictograph_view
         self.scene = pictograph_view.pictograph_scene
-        self.json_manager.scene = self.scene
-        
 
+        
     def connect_graphboard_view(self, graphboard_view):
         self.graphboard_view = graphboard_view
-        self.scene = graphboard_view.graphboard_scene
-        self.json_manager.scene = self.scene
+        self.scene = graphboard_view.scene()
+
 
     def connect_propbox_view(self, propbox_view):
         self.propbox_view = propbox_view

@@ -1,5 +1,5 @@
 import os
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsItem, QGraphicsRectItem, QMenu
+from PyQt6.QtWidgets import QGraphicsView, QGraphicsItem, QGraphicsRectItem, QMenu, QGraphicsScene
 from PyQt6.QtWidgets import QGraphicsItem, QToolTip, QFrame
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
@@ -14,31 +14,27 @@ from settings import *
 
 class Graphboard_View(QGraphicsView):
     def __init__(self,
-                 graphboard_scene,
                  grid,
-                 info_tracker,
-                 staff_manager,
                  svg_manager,
                  arrow_manager,
-                 ui_setup,
+                 main_widget,
                  generator,
                  sequence_manager,
                  exporter,
                  json_manager,
                  parent=None):
         
-        super().__init__(graphboard_scene, parent)
+        super().__init__(parent)
         self.setAcceptDrops(True)
         self.setInteractive(True)
         self.dragging = None
         self.grid = grid
         self.grid.setScale(GRAPHBOARD_SCALE)
-        self.graphboard_scene = graphboard_scene
-        self.staff_manager = staff_manager
-        self.info_tracker = info_tracker
+        self.graphboard_scene = QGraphicsScene()
+        self.setScene(self.graphboard_scene)
         self.svg_manager = svg_manager
         self.generator = generator
-        self.ui_setup = ui_setup
+        self.main_widget = main_widget
         self.sequence_manager = sequence_manager
         self.arrow_manager = arrow_manager
         self.exporter = exporter
@@ -260,12 +256,14 @@ class Graphboard_View(QGraphicsView):
 
     ### SETTERS ###
 
-    def set_info_tracker(self, info_tracker):
+    def connect_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
 
     def connect_generator(self, generator):
         self.generator = generator
 
+    def connect_staff_manager(self, staff_manager):
+        self.staff_manager = staff_manager
     ### EVENTS ###
 
     def resizeEvent(self, event): # KEEP THIS TO POSITION THE GRID
