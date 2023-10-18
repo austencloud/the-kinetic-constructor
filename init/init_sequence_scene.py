@@ -1,5 +1,6 @@
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView
+from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QLabel
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QFont
 from managers.sequence_manager import Sequence_Manager
 from settings import GRAPHBOARD_HEIGHT, GRAPHBOARD_WIDTH
 class Init_Sequence_Scene:
@@ -21,6 +22,10 @@ class Init_Sequence_Scene:
         
         sequence_view.show()
         
+        main_widget.word_label = QLabel(main_widget.main_window)
+        main_widget.main_window.lower_layout.addWidget(main_widget.word_label)
+        main_widget.word_label.setFont(QFont('Helvetica', 20))
+        main_widget.word_label.setText("My word: ")
         
         main_window.lower_layout.addWidget(sequence_view)
         clear_sequence_button = sequence_manager.get_clear_sequence_button()

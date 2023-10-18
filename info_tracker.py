@@ -101,11 +101,9 @@ class Info_Tracker:
         
         for letter, combinations in self.letters.items():
             combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]  # Ignore the first dictionary which contains optimal positions
-
-            font = int(60 * GRAPHBOARD_SCALE)
-        
+            current_letter_type_font = int(60 * GRAPHBOARD_SCALE)
             if current_combination in combinations:
-                    letter_text += f"<span style='font-size: {font}px; font-weight: bold;'>{current_letter_type}</span>"
+                    letter_text += f"<span style='font-size: {current_letter_type_font}px; font-weight: bold;'>{current_letter_type}</span>"
                     start_location, end_location = self.get_start_end_locations()
                     letter_text += f"<h4>{start_location} → {end_location}</h4>"
                     self.letter = letter 

@@ -27,16 +27,16 @@ class Init_Layout():
         # Configure the hierarchy and properties of layouts.
         self.layouts['graphboard_with_button_panel'].addLayout(self.layouts['graphboard'])
         self.layouts['graphboard_with_button_panel'].addLayout(self.layouts['button'])
-        self.layouts['graphboard_with_button_panel'].setStretch(0, 1)
+        self.layouts['graphboard_with_button_panel'].setStretchFactor(self.layouts['graphboard'], 3)
+        self.layouts['graphboard_with_button_panel'].setStretchFactor(self.layouts['button'], 1)
 
         self.layouts['upper'].addLayout(self.layouts['objectbox'])
         self.layouts['upper'].addLayout(self.layouts['graphboard_with_button_panel'])
         self.layouts['upper'].addLayout(self.layouts['info'])
         
         self.layouts['right'].addLayout(self.layouts['lower'])
+        
         self.layouts['right'].addLayout(self.layouts['upper'])
-
-
         self.layouts['main'].addLayout(self.layouts['right'])
 
         self.main_widget.setLayout(self.layouts['main'])

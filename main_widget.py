@@ -23,6 +23,7 @@ from init.init_arrowbox import Init_ArrowBox
 from init.init_layout import Init_Layout
 from init.init_propbox import Init_PropBox
 from init.init_sequence_scene import Init_Sequence_Scene
+from key_bindings import Key_Bindings
 from settings import *
 
 class Main_Widget(QWidget):
@@ -38,6 +39,7 @@ class Main_Widget(QWidget):
         self.sequence_manager = None
         self.graphboard_view = None
 
+        self.key_bindings = Key_Bindings()
         self.graphboard_scene = QGraphicsScene()
         self.svg_manager = Svg_Manager()
         self.staff_manager = Staff_Manager(self.graphboard_scene)
@@ -67,7 +69,6 @@ class Main_Widget(QWidget):
         
         Init_Action_Buttons(self, self.main_window)
         self.connect_info_tracker()
-        self.init_word_label()
         Init_Sequence_Scene(self)
         Init_Letter_Buttons(self, self.main_window)
 
@@ -77,23 +78,10 @@ class Main_Widget(QWidget):
         self.graphboard_view.connect_generator(self.generator)
         self.main_window.installEventFilter(self)
 
-
-
-
-    def init_word_label(self):
-        self.word_label = QLabel(self.main_window)
-        self.main_window.lower_layout.addWidget(self.word_label)
-        self.word_label.setFont(QFont('Helvetica', 20))
-        self.word_label.setText("My word: ")
-
-
-
-
 ### CONNECTORS ###
 
     def connect_info_tracker(self):
         self.main_window.info_layout.addWidget(self.info_label)
-
 
 ### EVENTS ###
 
@@ -114,47 +102,9 @@ class Main_Widget(QWidget):
             # TODO: Handle the selected pictograph
             pass
 
-    def keyPressEvent(self, event):
-        self.selected_items = self.graphboard_view.get_selected_items()
-        
-        try:
-            self.selected_item = self.selected_items[0]
-        except IndexError:
-            self.selected_item = None
-
-        if event.modifiers() == Qt.KeyboardModifier.ControlModifier and event.key() == Qt.Key.Key_Delete:
-            for item in self.selected_items:
-                if isinstance(item, Arrow):
-                    self.arrow_manager.delete_arrow(item)
-                elif isinstance(item, Staff):
-                    self.arrow_manager.delete_staff(item)
-
-        elif event.key() == Qt.Key.Key_Delete:
-            for item in self.selected_items:
-                if isinstance(item, Arrow):
-                    self.arrow_manager.delete_arrow(item)
-                    self.arrow_manager.delete_staff(item.staff)
-                elif isinstance(item, Staff):
-                    self.arrow_manager.delete_staff(item)
-
-        elif self.selected_item and isinstance(self.selected_item, Arrow):
-            if event.key() == Qt.Key.Key_W:
-                self.arrow_manager.move_arrow_quadrant_wasd('up', self.selected_item)
-            elif event.key() == Qt.Key.Key_A:
-                self.arrow_manager.move_arrow_quadrant_wasd('left', self.selected_item)
-            elif event.key() == Qt.Key.Key_S:
-                self.arrow_manager.move_arrow_quadrant_wasd('down', self.selected_item)
-            elif event.key() == Qt.Key.Key_D:
-                self.arrow_manager.move_arrow_quadrant_wasd('right', self.selected_item)
-            elif event.key() == Qt.Key.Key_E:
-                self.arrow_manager.mirror_arrow(self.selected_items)
-            elif event.key() == Qt.Key.Key_Q:
-                self.arrow_manager.swap_motion_type(self.selected_items)
-            elif event.key() == Qt.Key.Key_F:
-                self.sequence_manager.add_to_sequence(self.graphboard_view)
 
     def eventFilter(self, source, event):
         if event.type() == QEvent.Type.KeyPress:  # Adjusted to the new enumeration access method
-            self.keyPressEvent(event)
+            self.key_bindings.keyPressEvent(event, self.graphboard_view)
             return True
         return super().eventFilter(source, event)
