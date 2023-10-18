@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsItem, QMenu
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtWidgets import QGraphicsItem, QFrame
-from PyQt6.QtGui import QTransform, QPainter, QAction
+from PyQt6.QtGui import QTransform, QAction
 from objects.grid import Grid
 from objects.arrow import Arrow
 from info_tracker import Info_Tracker
@@ -25,7 +25,8 @@ class Pictograph_View(QGraphicsView):
         self.grid = Grid("images/grid/grid.svg")
         self.grid.setScale(PICTOGRAPH_SCALE)
         self.svg_manager = Svg_Manager()
-        self.staff_manager = Staff_Manager(self.pictograph_scene)
+        self.staff_manager = Staff_Manager()
+        self.staff_manager.connect_pictograph_view(self)
         self.arrow_manager = Arrow_Manager(None, self, self.staff_manager)
         self.json_manager = Json_Manager(self.pictograph_scene)
         self.info_tracker = Info_Tracker(self, None, self.staff_manager, self.json_manager)

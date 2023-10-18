@@ -7,7 +7,8 @@ class Init_Layout():
         self.init_layouts()
         self.configure_layouts()
         self.assign_layouts_to_window()
-
+        
+        
     def init_layouts(self):
         # Initialize all layouts and store them in a dictionary for easy access and management.
         self.layouts = {
@@ -41,6 +42,9 @@ class Init_Layout():
 
         self.main_widget.setLayout(self.layouts['main'])
         self.layouts['graphboard'].addWidget(self.main_widget.graphboard_view)
+        
+        self.layouts['objectbox'].addWidget(self.main_widget.arrowbox_view.arrowbox_frame)
+        self.layouts['objectbox'].addWidget(self.main_widget.propbox_view.propbox_frame)
 
     def assign_layouts_to_window(self):
         # Assign layouts to the main window properties.

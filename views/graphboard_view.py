@@ -1,12 +1,11 @@
 import os
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsItem, QApplication, QGraphicsRectItem, QMenu
+from PyQt6.QtWidgets import QGraphicsView, QGraphicsItem, QGraphicsRectItem, QMenu
 from PyQt6.QtWidgets import QGraphicsItem, QToolTip, QFrame
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtGui import QDrag, QPixmap, QPainter, QCursor, QTransform, QAction, QColor
-from PyQt6.QtCore import QPointF, Qt, QRectF, QEvent
+from PyQt6.QtGui import QCursor, QTransform, QAction, QColor
+from PyQt6.QtCore import QPointF, Qt, QRectF
 from objects.staff import Staff
-from objects.grid import Grid
 from objects.arrow import Arrow
 from settings import *
 
