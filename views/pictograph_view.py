@@ -9,15 +9,16 @@ from managers.staff_manager import Staff_Manager
 from managers.arrow_manager import Arrow_Manager
 from managers.svg_manager import Svg_Manager
 from managers.json_manager import Json_Manager
-from settings import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, SELECTION_GRID_WIDTH, PICTOGRAPH_SCALE, PICTOGRAPH_GRID_PADDING
+from settings import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, PICTOGRAPH_SCALE, PICTOGRAPH_GRID_PADDING
 
 class Pictograph_View(QGraphicsView):
     def __init__(self, graphboard_view):
         super().__init__()
         self.setFixedSize(PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setFrameStyle(QFrame.NoFrame) 
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setFrameStyle(QFrame.Shape.NoFrame) 
+        
         self.pictograph_scene = QGraphicsScene()
         self.pictograph_scene.setSceneRect(0, 0, PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT)
         self.setScene(self.pictograph_scene)  # Set the scene
@@ -114,8 +115,8 @@ class Pictograph_View(QGraphicsView):
         svg_file = f"images/arrows/shift/{arrow_dict['motion_type']}/{arrow_dict['color']}_{arrow_dict['motion_type']}_{arrow_dict['rotation_direction']}_{arrow_dict['quadrant']}_{arrow_dict['turns']}.svg"
         arrow = Arrow(svg_file, self, self.info_tracker, self.svg_manager, self.arrow_manager, arrow_dict['motion_type'], self.staff_manager, arrow_dict)
         arrow.update_attributes()
-        arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
-        arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
+        arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
+        arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
         created_arrows.append(arrow)
 
         for arrow in created_arrows:

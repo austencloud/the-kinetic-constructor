@@ -54,7 +54,7 @@ class Arrow(QGraphicsSvgItem):
 
     def mouseMoveEvent(self, event):
         self.setSelected(True) 
-        if event.buttons() == Qt.LeftButton:
+        if event.buttons() == Qt.MouseButton.LeftButton:
             from views.graphboard_view import Graphboard_View
             from views.pictograph_view import Pictograph_View
             if isinstance(self.graphboard_view, Graphboard_View):

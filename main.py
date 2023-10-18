@@ -18,7 +18,7 @@ class Main_Window(QMainWindow):
 
     def initUI(self):
         screen = QApplication.primaryScreen().geometry()
-        self.move(-screen.width() + 900, 0)
+        self.move(-(screen.width() + 500), 100)
         
 app = QApplication(sys.argv)
 ex = Main_Window()

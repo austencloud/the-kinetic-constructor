@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QGraphicsRectItem, QPushButton
 from PyQt6.QtCore import QRectF, Qt, QPointF,  QObject
-from PyQt6.QtGui import QImage, QPainter
+from PyQt6.QtGui import QImage, QPainter, QColor
 from objects.arrow import Arrow
 from objects.staff import Staff
 from objects.grid import Grid
@@ -35,8 +35,8 @@ class Sequence_Manager(QObject):
         scene_size = graphboard.sceneRect().size().toSize()
 
         # Create the QImage with the adjusted size
-        image = QImage(scene_size, QImage.Format_ARGB32)
-        image.fill(Qt.transparent)
+        image = QImage(scene_size, QImage.Format.Format_ARGB32)
+        image.fill(QColor(Qt.GlobalColor.transparent))
         painter = QPainter(image)
 
 
@@ -46,7 +46,7 @@ class Sequence_Manager(QObject):
         graphboard.render(painter)
         painter.end()
 
-        scaled_image = image.scaled(int(DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE), int(DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        scaled_image = image.scaled(int(DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE), int(DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         pictograph = Pictograph(graphboard.get_graphboard_state(), scaled_image)
         self.add_pictograph(pictograph)
         graphboard.clear()

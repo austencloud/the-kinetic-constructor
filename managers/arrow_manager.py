@@ -24,7 +24,6 @@ class Arrow_Manager(QObject):
         self.letters = self.json_manager.load_all_letters()
 
 
-        
     ### CONNECTORS ###
 
     def connect_arrow(self, arrow):
@@ -222,7 +221,6 @@ class Arrow_Manager(QObject):
 
 
     def set_optimal_arrow_pos(self, current_arrows):
-
         current_state = self.graphboard_view.get_graphboard_state()
         current_letter = self.info_tracker.determine_current_letter_and_type()[0]
         if current_letter is not None:
@@ -233,8 +231,8 @@ class Arrow_Manager(QObject):
                     optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
                     if optimal_location:
                         GRID_PADDING = (self.graphboard_view.width() - self.graphboard_view.grid.boundingRect().width() * GRAPHBOARD_SCALE) / 2
-                        pos = QPointF(optimal_location['x'] * GRAPHBOARD_SCALE, optimal_location['y'] * GRAPHBOARD_SCALE) - arrow.center * GRAPHBOARD_SCALE
-                        arrow.setPos(pos + QPointF(0, 0))
+                        pos = QPointF(optimal_location['x'] * GRAPHBOARD_SCALE, optimal_location['y'] * GRAPHBOARD_SCALE)
+                        arrow.setPos(pos - QPointF(arrow.boundingRect().width()/2, arrow.boundingRect().height()/2))
                 else:
                     self.set_default_arrow_pos(arrow)
 
@@ -253,7 +251,7 @@ class Arrow_Manager(QObject):
         elif arrow.quadrant == 'nw':
             pos += QPointF(-ARROW_ADJUSTMENT_DISTANCE, -ARROW_ADJUSTMENT_DISTANCE)
             
-        arrow.setPos(pos + QPointF(GRID_PADDING, GRID_PADDING))
+        arrow.setPos(pos + QPointF(GRAPHBOARD_GRID_PADDING,GRAPHBOARD_GRID_PADDING))
         
         
      

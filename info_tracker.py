@@ -29,8 +29,6 @@ class Info_Tracker:
         self.letter = self.determine_current_letter_and_type()[0]
         if self.letter is not None:
             return self.letter
-        else:
-            print("No self.letter found")
     
     def determine_current_letter_and_type(self):
         current_combination = []

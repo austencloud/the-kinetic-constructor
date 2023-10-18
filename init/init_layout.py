@@ -39,7 +39,7 @@ class Init_Layout():
 
         self.layouts['main'].addLayout(self.layouts['right'])
 
-        self.main_window.setLayout(self.layouts['main'])
+        self.main_widget.setLayout(self.layouts['main'])
         self.layouts['graphboard'].addWidget(self.main_widget.graphboard_view)
 
     def assign_layouts_to_window(self):

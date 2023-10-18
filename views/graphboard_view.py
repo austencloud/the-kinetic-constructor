@@ -82,8 +82,8 @@ class Graphboard_View(QGraphicsView):
     def mousePressEvent(self, event):
         self.setFocus()
         items = self.items(event.pos())
-        if items and items[0].flags() & QGraphicsItem.ItemIsMovable:
-            if event.button() == Qt.LeftButton and event.modifiers() == Qt.ControlModifier:
+        if items and items[0].flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable:
+            if event.button() == Qt.MouseButton.LeftButton and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
                 items[0].setSelected(not items[0].isSelected())
             elif not items[0].isSelected():
                 self.clear_selection()
@@ -112,7 +112,7 @@ class Graphboard_View(QGraphicsView):
 
     def dropEvent(self, event):
         self.setFocus()
-        event.setDropAction(Qt.CopyAction)
+        event.setDropAction(Qt.DropAction.CopyAction)
         event.accept()
         dropped_arrow_svg = event.mimeData().text()
         dropped_arrow_svg_motion_type = dropped_arrow_svg.split('_')[1]
@@ -120,7 +120,10 @@ class Graphboard_View(QGraphicsView):
         self.arrow = Arrow(dropped_arrow_svg, self, self.info_tracker, self.svg_manager, self.arrow_manager, dropped_arrow_svg_motion_type, self.staff_manager, None)
         self.arrow.setScale(GRAPHBOARD_SCALE)
         self.scene().addItem(self.arrow)
-        self.mouse_pos = self.mapToScene(event.pos())
+        
+        # Use position() instead of pos()
+        self.mouse_pos = self.mapToScene(event.position().toPoint())  # Convert QPointF to QPoint if necessary
+        
         self.clear_selection()
         self.arrow.setSelected(True)
         
@@ -131,6 +134,7 @@ class Graphboard_View(QGraphicsView):
             if isinstance(arrow, Arrow):
                 arrow.arrow_manager.update_arrow_position(self)
         self.info_tracker.update()
+
 
     ### GETTERS ###
 
@@ -335,7 +339,7 @@ class Graphboard_View(QGraphicsView):
             export_to_svg_action.triggered.connect(self.exporter.export_to_svg)
             graphboard_menu.addAction(export_to_svg_action)
 
-            graphboard_menu.exec_(event.globalPos())
+            graphboard_menu.exec(event.globalPos())
 
     ### OTHER ###
 

@@ -1,11 +1,9 @@
 from PyQt6.QtWidgets import QGraphicsView, QFrame
-from PyQt6.QtWidgets import QApplication
-from PyQt6.QtGui import QPixmap, QDrag, QImage, QPainter, QCursor
-from PyQt6.QtCore import Qt, QMimeData
+from PyQt6.QtGui import QPixmap, QDrag, QImage, QPainter, QCursor, QColor
+from PyQt6.QtCore import Qt, QMimeData, QPointF
 from PyQt6.QtSvg import QSvgRenderer
 from objects.arrow import Arrow
 import os
-
 
 
 class ArrowBox_View(QGraphicsView):
@@ -29,8 +27,8 @@ class ArrowBox_View(QGraphicsView):
         arrows = [item for item in items if isinstance(item, Arrow)]
         if arrows:
             arrow = arrows[0]
-            if event.button() == Qt.LeftButton:
-                self.dragOffset = event.pos() - arrow.boundingRect().center()
+            if event.button() == Qt.MouseButton.LeftButton:
+                self.dragOffset = QPointF(event.pos()) - arrow.boundingRect().center()
                 self.artboard_start_position = event.pos()
                 self.drag = QDrag(self)
                 self.dragging = True 
@@ -38,10 +36,10 @@ class ArrowBox_View(QGraphicsView):
                 mime_data = QMimeData()
                 mime_data.setText(arrow.svg_file)
                 self.drag.setMimeData(mime_data)
-                image = QImage(arrow.boundingRect().size().toSize(), QImage.Format_ARGB32)
-                image.fill(Qt.transparent)
+                image = QImage(arrow.boundingRect().size().toSize(), QImage.Format.Format_ARGB32)
+                image.fill(QColor(Qt.GlobalColor.transparent))
                 painter = QPainter(image)
-                painter.setRenderHint(QPainter.Antialiasing)
+                painter.setRenderHint(QPainter.RenderHint.Antialiasing)
                 renderer = QSvgRenderer(arrow.svg_file)
                 if not renderer.isValid():
                     print(f"Failed to load SVG file: {self.svg_file}")
@@ -94,7 +92,7 @@ class ArrowBox_View(QGraphicsView):
             # Assuming self.drag is the QDrag object
             if self.drag is not None:
                 # Execute the drag and drop operation
-                self.drag.exec_(Qt.CopyAction | Qt.MoveAction)
+                self.drag.exec(Qt.DropAction.CopyAction | Qt.DropAction.MoveAction)
         except RuntimeError as e:
             event.ignore()
         

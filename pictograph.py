@@ -7,10 +7,10 @@ class Pictograph(QGraphicsItem):
         super().__init__(parent)
         self.state = state
         self.image = image
-        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
         
     def paint(self, painter: QPainter, option, widget):
-        scaled_image = self.image.scaled(int(DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE), int(DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        scaled_image = self.image.scaled(int(DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE), int(DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         painter.drawImage(QRectF(0, 0, scaled_image.width(), scaled_image.height()), scaled_image)
 
     def boundingRect(self):

@@ -11,7 +11,7 @@ class Pictograph_Selector(QDialog):
         layout = QVBoxLayout()
         grid_layout = QGridLayout()
         letter_label = QLabel(f"{letter} Variations:")
-        letter_label.setAlignment(Qt.AlignCenter)
+        letter_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         font = QFont()
         font.setPointSize(20)
         letter_label.setFont(font)

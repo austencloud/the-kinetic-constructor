@@ -108,9 +108,9 @@ class Main_Widget(QWidget):
         
         # Create and show the Pictograph_Selector dialog
         dialog = Pictograph_Selector(combinations, letter, self.graphboard_view, self)
-        result = dialog.exec_()
+        result = dialog.exec()
         
-        if result == QDialog.Accepted:
+        if result == QDialog.accepted:
             # TODO: Handle the selected pictograph
             pass
 
@@ -122,14 +122,14 @@ class Main_Widget(QWidget):
         except IndexError:
             self.selected_item = None
 
-        if event.modifiers() == Qt.ControlModifier and event.key() == Qt.Key_Delete:
+        if event.modifiers() == Qt.KeyboardModifier.ControlModifier and event.key() == Qt.Key.Key_Delete:
             for item in self.selected_items:
                 if isinstance(item, Arrow):
                     self.arrow_manager.delete_arrow(item)
                 elif isinstance(item, Staff):
                     self.arrow_manager.delete_staff(item)
 
-        elif event.key() == Qt.Key_Delete:
+        elif event.key() == Qt.Key.Key_Delete:
             for item in self.selected_items:
                 if isinstance(item, Arrow):
                     self.arrow_manager.delete_arrow(item)
@@ -138,19 +138,19 @@ class Main_Widget(QWidget):
                     self.arrow_manager.delete_staff(item)
 
         elif self.selected_item and isinstance(self.selected_item, Arrow):
-            if event.key() == Qt.Key_W:
+            if event.key() == Qt.Key.Key_W:
                 self.arrow_manager.move_arrow_quadrant_wasd('up', self.selected_item)
-            elif event.key() == Qt.Key_A:
+            elif event.key() == Qt.Key.Key_A:
                 self.arrow_manager.move_arrow_quadrant_wasd('left', self.selected_item)
-            elif event.key() == Qt.Key_S:
+            elif event.key() == Qt.Key.Key_S:
                 self.arrow_manager.move_arrow_quadrant_wasd('down', self.selected_item)
-            elif event.key() == Qt.Key_D:
+            elif event.key() == Qt.Key.Key_D:
                 self.arrow_manager.move_arrow_quadrant_wasd('right', self.selected_item)
-            elif event.key() == Qt.Key_E:
+            elif event.key() == Qt.Key.Key_E:
                 self.arrow_manager.mirror_arrow(self.selected_items)
-            elif event.key() == Qt.Key_Q:
+            elif event.key() == Qt.Key.Key_Q:
                 self.arrow_manager.swap_motion_type(self.selected_items)
-            elif event.key() == Qt.Key_F:
+            elif event.key() == Qt.Key.Key_F:
                 self.sequence_manager.add_to_sequence(self.graphboard_view)
 
     def eventFilter(self, source, event):
