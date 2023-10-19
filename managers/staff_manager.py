@@ -13,6 +13,7 @@ class Staff_Manager(QObject):
         self.beta_staves = []  # List to hold beta staves
         self.previous_position = None  # Store the previous position of staffs
         self.letters = main_widget.json_manager.load_all_letters() 
+        self.grid = main_widget.grid
 
     def connect_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
@@ -26,7 +27,7 @@ class Staff_Manager(QObject):
             end_location (str): The end location of the staff ('N', 'S', 'E', 'W').
             scene (QGraphicsScene): The scene where the staff will be added.
             color (str): The color of the staff ('red', 'blue').
-            context (str): The context in which the staff is being created ('main', 'mini').
+            context (str): The context in which the staff is being created ('pictograph', 'graphboard').
 
         Returns:
             Staff: The newly created staff object.
@@ -180,18 +181,16 @@ class Staff_Manager(QObject):
         
         # Define initial locations for propbox staffs
         self.propbox_staff_locations = {
-            'N_staff': QPointF(100, 100),
-            'E_staff': QPointF(100, 100),
+            'N_staff': QPointF(50, 100),
+            'E_staff': QPointF(100, 50),
             'S_staff': QPointF(100, 100),
             'W_staff': QPointF(100, 100)
         }
         
         # Create red and blue staffs in the propbox
         self.propbox_staffs = {}
-        self.red_staff = Staff('red_staff', propbox_scene, self.propbox_staff_locations['N_staff'], 'red', 'images/staves/N_staff_red.svg')
-        self.blue_staff = Staff('blue_staff', propbox_scene, self.propbox_staff_locations['N_staff'], 'blue', 'images/staves/N_staff_blue.svg')
-        propbox_scene.addItem(self.red_staff)
-        propbox_scene.addItem(self.blue_staff)
+        self.red_staff = Staff('red_staff', propbox_scene, self.propbox_staff_locations['N_staff']*GRAPHBOARD_SCALE, 'red', 'images/staves/N_staff_red.svg')
+        self.blue_staff = Staff('blue_staff', propbox_scene, self.propbox_staff_locations['N_staff']*GRAPHBOARD_SCALE, 'blue', 'images/staves/N_staff_blue.svg')
         self.propbox_staffs['red_staff'] = self.red_staff
         self.propbox_staffs['blue_staff'] = self.blue_staff
 

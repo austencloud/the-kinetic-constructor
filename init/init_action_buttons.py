@@ -2,18 +2,17 @@ from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import QSize
 from settings import GRAPHBOARD_SCALE
-
-class Init_Action_Buttons:
+from PyQt6.QtWidgets import QVBoxLayout
+class Action_Buttons:
     def __init__(self, main_widget):
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
-        self.init_action_buttons()
-        
-    def init_action_buttons(self):
+
         button_font = QFont('Helvetica', 14)
         button_size = int(80 * GRAPHBOARD_SCALE)
         icon_size = QSize(int(60 * GRAPHBOARD_SCALE), int(60 * GRAPHBOARD_SCALE))
-
+        self.action_button_layout = QVBoxLayout()
+        
         # Configuration for each button
         buttons_config = [
             ("images/icons/update_locations.png", "Update Position", 
@@ -34,8 +33,6 @@ class Init_Action_Buttons:
              lambda: self.main_widget.sequence_view.add_to_sequence(self.main_widget.graphboard_view))
         ]
 
-
-
         # Function to create a configured button
         def create_configured_button(icon_path, tooltip, on_click):
             button = QPushButton(QIcon(icon_path), "")
@@ -49,5 +46,6 @@ class Init_Action_Buttons:
         # Create and add buttons to the layout
         for icon, tooltip, action in buttons_config:
             button = create_configured_button(icon, tooltip, action)
-            self.main_window.button_layout.addWidget(button)
+            self.action_button_layout.addWidget(button)
+            self.main_window.action_buttons_layout = self.action_button_layout
 

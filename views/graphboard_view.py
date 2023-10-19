@@ -8,7 +8,7 @@ from PyQt6.QtCore import QPointF, Qt, QRectF
 from objects.staff import Staff
 from objects.arrow import Arrow
 from settings import *
-
+from managers.staff_manager import Staff_Manager
 #import the missing modules
 
 
@@ -18,18 +18,21 @@ class Graphboard_View(QGraphicsView):
         self.setAcceptDrops(True)
         self.setInteractive(True)
         self.dragging = None
-
-        self.grid.setScale(GRAPHBOARD_SCALE)
+        self.letter_renderers = {}
         self.graphboard_scene = QGraphicsScene()
         self.setScene(self.graphboard_scene)
         
-        self.grid = main_widget.grid
+
+        
         self.main_widget = main_widget
+        self.grid = main_widget.grid
         self.svg_manager = main_widget.svg_manager
         self.arrow_manager = main_widget.arrow_manager
         self.exporter = main_widget.exporter
         self.letters = main_widget.letters
-        self.letter_renderers = {}
+        self.staff_manager = main_widget.staff_manager
+        
+        self.grid.setScale(GRAPHBOARD_SCALE)
         
         self.VERTICAL_OFFSET = (self.height() - self.width()) / 2
         
@@ -50,10 +53,11 @@ class Graphboard_View(QGraphicsView):
         self.setFrameStyle(QFrame.Shape.NoFrame)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        
-    ### MOUSE EVENTS ###
-
         self.init_grid()
+
+        self.main_widget.graphboard_scene = self.graphboard_scene
+
+
 
     def init_grid(self):
         transform = QTransform()

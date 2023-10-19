@@ -6,11 +6,8 @@ from PyQt6.QtSvg import QSvgRenderer
 from settings import GRAPHBOARD_SCALE
 
 
-class Init_Letter_Buttons():
+class Letter_Buttons():
     def __init__(self, main_widget, main_window):
-        self.init_letter_buttons(main_widget, main_window)
-
-    def init_letter_buttons(self, main_widget, main_window):
         letter_buttons_layout = QVBoxLayout()
         letter_buttons_layout.setSpacing(int(10* GRAPHBOARD_SCALE))  # Set the spacing between rows of buttons
         letter_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignTop)  # Align the layout to the top
@@ -58,4 +55,4 @@ class Init_Letter_Buttons():
         generate_all_button.setFixedSize(int(300*GRAPHBOARD_SCALE), int(80*GRAPHBOARD_SCALE))
         generate_all_button.clicked.connect(lambda: main_widget.generator.generate_all_pictographs(main_window.staff_manager))
         letter_buttons_layout.addWidget(generate_all_button)
-        main_window.upper_layout.addLayout(letter_buttons_layout)
+        main_window.letter_buttons_layout = letter_buttons_layout
