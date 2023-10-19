@@ -30,9 +30,9 @@ class Sequence_Manager(QObject):
                 self.sequence_scene.addItem(pictograph)
                 break
 
-    def add_to_sequence(self, graphboard):
+    def add_to_sequence(self, graphboard_view):
         # Get the size of the sequence_scene in sequence_scene coordinates
-        scene_size = graphboard.sceneRect().size().toSize()
+        scene_size = graphboard_view.sceneRect().size().toSize()
 
         # Create the QImage with the adjusted size
         image = QImage(scene_size, QImage.Format.Format_ARGB32)
@@ -40,17 +40,17 @@ class Sequence_Manager(QObject):
         painter = QPainter(image)
 
 
-        graphboard.clear_selection()
+        graphboard_view.clear_selection()
 
         # Render the sequence_scene
-        graphboard.render(painter)
+        graphboard_view.render(painter)
         painter.end()
 
         scaled_image = image.scaled(int(DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE), int(DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
-        pictograph = Pictograph(graphboard.get_graphboard_state(), scaled_image)
+        pictograph = Pictograph(graphboard_view.get_graphboard_state(), scaled_image)
         self.add_pictograph(pictograph)
-        graphboard.clear()
-        graphboard.update_letter(None)
+        graphboard_view.clear()
+        graphboard_view.update_letter(None)
         letter = self.info_tracker.get_current_letter()
         if letter:
             self.main_widget.word_label.setText(self.main_widget.word_label.text() + letter)
