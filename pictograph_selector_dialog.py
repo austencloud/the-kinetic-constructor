@@ -4,21 +4,28 @@ from PyQt6.QtGui import QFont
 from views.pictograph_view import Pictograph_View
 
 class Pictograph_Selector_Dialog(QDialog):
-    def __init__(self, main_widget):
+    def __init__(self, main_widget, letter):
         super().__init__(main_widget)
         self.main_widget = main_widget
         letters = main_widget.letters
         self.letters = letters
-    
+        self.show_dialog(letter)
+        
     def show_dialog(self, letter):
         combinations = self.letters.get(letter, [])
         if not combinations:
             print(f"No combinations found for letter {letter}")
             return
 
+
         self.setWindowTitle(f"{letter} Variations:")
         layout = QVBoxLayout()
         grid_layout = QGridLayout()
+                # Clear the previous widgets from the layout before adding new ones
+        self.clear_layout(layout)  # Clear the main layout
+        self.clear_layout(grid_layout)  # Clear the grid layout if it's reused
+
+        
         letter_label = QLabel(f"{letter} Variations:")
         letter_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         font = QFont()
@@ -41,6 +48,16 @@ class Pictograph_Selector_Dialog(QDialog):
         layout.addLayout(grid_layout)
         self.setLayout(layout)
         self.show()
+
+    def clear_layout(self, layout):
+        if layout is not None:
+            while layout.count():
+                item = layout.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    widget.deleteLater()
+                else:
+                    self.clear_layout(item.layout())
 
     def select_pictograph(self):
         result = self.exec()

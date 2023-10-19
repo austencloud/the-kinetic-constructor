@@ -42,7 +42,7 @@ class Main_Widget(QWidget):
         self.pictograph_generator = Pictograph_Generator(self)
         self.sequence_view = Sequence_View(self)
         self.optionboard_view = Optionboard_View(self)
-        self.pictograph_selector_dialog = Pictograph_Selector_Dialog(self)
+
         self.letter_buttons = Letter_Buttons(self, main_window)
         self.action_buttons = Action_Buttons(self)
         self.layout_initializer = Init_Layout(self, main_window)

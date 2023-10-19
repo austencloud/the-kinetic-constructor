@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QIcon, QPainter, QFont, QColor
 from PyQt6.QtSvg import QSvgRenderer
 from settings import GRAPHBOARD_SCALE
-
+from pictograph_selector_dialog import Pictograph_Selector_Dialog
 
 class Letter_Buttons():
     def __init__(self, main_widget, main_window):
@@ -44,7 +44,7 @@ class Letter_Buttons():
                 font.setPointSize(int(20*GRAPHBOARD_SCALE))
                 button.setFont(font)
                 button.setFixedSize(int(65 * GRAPHBOARD_SCALE), int(65 * GRAPHBOARD_SCALE))
-                button.clicked.connect(lambda _, l=letter: main_widget.pictograph_selector_dialog.show_dialog(l))
+                button.clicked.connect(lambda _, l=letter: Pictograph_Selector_Dialog(main_widget, l))
                 row_layout.addWidget(button)
             letter_buttons_layout.addLayout(row_layout)
 
