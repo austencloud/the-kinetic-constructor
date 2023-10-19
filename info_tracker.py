@@ -1,24 +1,25 @@
 from objects.arrow import Arrow
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QLabel
 from data.positions_map import positions_map
 from data.letter_types import letter_types
 from settings import GRAPHBOARD_SCALE
 class Info_Tracker:
-    def __init__(self, graphboard_view, label, staff_manager, json_manager):
+    def __init__(self, main_widget):
         self.remaining_staff = {}
         self.previous_state = None 
-        self.graphboard_view = graphboard_view
-        self.staff_manager = staff_manager
-        self.label = label
-        self.json_manager = json_manager
-        self.letters = self.json_manager.load_all_letters()    
-
-        if self.label:
+        self.graphboard_view = main_widget.graphboard_view
+        self.staff_manager = main_widget.staff_manager
+        self.letters = main_widget.letters
+        self.main_window = main_widget.main_window
+        self.info_label = QLabel(self.main_window)
+        
+        if self.info_label:
             font = QFont('Helvetica', int(24 * GRAPHBOARD_SCALE))
-            self.label.setFont(font)
-            self.label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse | Qt.TextInteractionFlag.TextSelectableByKeyboard)
-            self.label.setAlignment(Qt.AlignmentFlag.AlignTop)
+            self.info_label.setFont(font)
+            self.info_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse | Qt.TextInteractionFlag.TextSelectableByKeyboard)
+            self.info_label.setAlignment(Qt.AlignmentFlag.AlignTop)
 
     def connect_graphboard_view(self, graphboard_view):
         self.graphboard_view = graphboard_view
@@ -63,8 +64,6 @@ class Info_Tracker:
                 current_combination.append(attributes)
 
         current_combination = sorted(current_combination, key=lambda x: x['color'])
-        self.letters = self.json_manager.load_all_letters()
-
 
         blue_text = "<h2 style='color: #0000FF'>Left</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"
         red_text = "<h2 style='color: #FF0000'>Right</h2>Quadrant: <br>Rotation: <br>Type: <br>Start: <br>End: <br>Turns: <br>"
@@ -116,7 +115,7 @@ class Info_Tracker:
         if self.letter is not None:
             self.graphboard_view.update_letter(self.letter)
 
-        self.label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr><tr><td width=100>" + letter_text + "</td></tr></table>")
+        self.info_label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr><tr><td width=100>" + letter_text + "</td></tr></table>")
         self.staff_manager.update_graphboard_staffs(self.graphboard_view.scene())
 
     def get_start_end_locations(self):

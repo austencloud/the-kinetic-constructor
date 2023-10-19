@@ -18,10 +18,11 @@ class Init_Layout():
             'lower': QVBoxLayout(),
             'objectbox': QVBoxLayout(),
             'graphboard': QVBoxLayout(),
-            'button': QHBoxLayout(),
+            'button': QVBoxLayout(),
             'info': QVBoxLayout(),
             'word': QHBoxLayout(),
             'graphboard_with_button_panel': QHBoxLayout(),
+            'action_buttons': QVBoxLayout(),
         }
 
     def configure_layouts(self):
@@ -45,6 +46,9 @@ class Init_Layout():
         
         self.layouts['objectbox'].addWidget(self.main_widget.arrowbox_view.arrowbox_frame)
         self.layouts['objectbox'].addWidget(self.main_widget.propbox_view.propbox_frame)
+
+        self.layouts['button'].addLayout(self.layouts['action_buttons'])
+
 
     def assign_layouts_to_window(self):
         # Assign layouts to the main window properties.

@@ -29,7 +29,7 @@ class Pictograph_View(QGraphicsView):
         self.staff_manager.connect_pictograph_view(self)
         self.arrow_manager = Arrow_Manager(self.main_widget)
         self.json_manager = Json_Manager(self.pictograph_scene)
-        self.info_tracker = Info_Tracker(self, None, self.staff_manager, self.json_manager)
+        self.info_tracker = Info_Tracker(self.main_widget)
         self.arrow_manager.connect_info_tracker(self.info_tracker)
         self.staff_manager.connect_grid(self.grid)
         self.init_grid()

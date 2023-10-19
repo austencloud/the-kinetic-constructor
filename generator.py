@@ -6,21 +6,21 @@ from objects.arrow import Arrow
 from managers.svg_manager import Svg_Manager
 from exporter import Exporter
 class Pictograph_Generator():
-    def __init__(self, staff_manager, graphboard_view, info_tracker, main_window, arrow_handler, exporter, json_manager, grid, parent=None):
-        self.staff_manager = staff_manager
-        self.parent = parent
-        self.graphboard_view = graphboard_view
-        self.info_tracker = info_tracker
-        self.graphboard_scene = graphboard_view.scene()
-        self.current_letter = None
-        self.main_window = main_window
-        self.arrow_handler = arrow_handler
-        self.svg_manager = Svg_Manager()
-        self.exporter = exporter
-        self.grid = grid
-        self.json_manager = json_manager
+    def __init__(self, main_widget):
+        
+        self.staff_manager = main_widget.staff_manager
+        self.graphboard_view = main_widget.graphboard_view
+        self.info_tracker = main_widget.info_tracker
+        self.graphboard_scene = self.graphboard_view.scene()
+        self.main_window = main_widget.main_window
+        self.arrow_manager = main_widget.arrow_manager
+        self.exporter = main_widget.exporter
+        self.svg_manager = main_widget.svg_manager
+        self.grid = main_widget.grid
+
         self.output_dir = "images\\pictographs\\"
-        self.letters = self.json_manager.load_all_letters()
+        self.current_letter = None
+        self.letters = main_widget.letters
 
 
         
@@ -84,10 +84,10 @@ class Pictograph_Generator():
             if all(key in combination for key in ['color', 'motion_type', 'rotation_direction', 'quadrant', 'turns']):
                 if combination['motion_type'] == 'static':
                     svg_file = f"images/arrows/blank.svg"
-                    arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_handler, combination['motion_type'], self.staff_manager)
+                    arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_manager, combination['motion_type'], self.staff_manager)
                 elif combination['motion_type'] == 'anti' or combination['motion_type'] == 'pro':
                     svg_file = f"images/arrows/shift/{combination['motion_type']}/{combination['color']}_{combination['motion_type']}_{combination['rotation_direction']}_{combination['quadrant']}_{combination['turns']}.svg"
-                    arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_handler, combination['motion_type'], self.staff_manager, None)
+                    arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_manager, combination['motion_type'], self.staff_manager, None)
                     arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
                     arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
                 created_arrows.append(arrow)

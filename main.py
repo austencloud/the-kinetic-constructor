@@ -6,6 +6,7 @@ from settings import MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT
 class Main_Window(QMainWindow):
     def __init__(self):
         super().__init__() 
+        self.screen = QApplication.primaryScreen().geometry()
         self.init_main_window()
         self.initUI()
         
@@ -17,9 +18,12 @@ class Main_Window(QMainWindow):
         self.setWindowTitle("Sequence Generator")
 
     def initUI(self):
-        screen = QApplication.primaryScreen().geometry()
-        self.move(-(screen.width() + 500), 100)
-        
+
+        self.move(-(self.screen.width() + 500), 100)
+
+
+    
+    
 app = QApplication(sys.argv)
 ex = Main_Window()
 ex.setFocus()  

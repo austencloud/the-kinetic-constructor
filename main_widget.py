@@ -7,6 +7,7 @@ from managers.svg_manager import Svg_Manager
 from managers.json_manager import Json_Manager
 from views.graphboard_view import Graphboard_View
 from views.arrowbox_view import ArrowBox_View
+from views.sequence_view import Sequence_View
 from generator import Pictograph_Generator
 from info_tracker import Info_Tracker
 from exporter import Exporter
@@ -14,7 +15,6 @@ from pictograph_selector import Pictograph_Selector
 from init.init_letter_buttons import Init_Letter_Buttons
 from init.init_action_buttons import Init_Action_Buttons
 from init.init_layout import Init_Layout
-from init.init_sequence_scene import Init_Sequence_Scene
 from init.key_bindings import Key_Bindings
 from views.propbox_view import PropBox_View
 
@@ -39,16 +39,14 @@ class Main_Widget(QWidget):
         self.graphboard_view = Graphboard_View(self.grid, self.svg_manager, self.arrow_manager, self, None, self.sequence_manager, self.exporter, self.json_manager)
         self.staff_manager = Staff_Manager(self)
         self.exporter = Exporter(self.graphboard_view, self.staff_manager, self.grid)
-
-        self.info_label = QLabel(self.main_window)
-        self.info_tracker = Info_Tracker(None, self.info_label, self.staff_manager, self.json_manager)
-        self.propbox_view = PropBox_View(self.main_window, self.staff_manager, self)
+        self.info_tracker = Info_Tracker(self)
+        self.propbox_view = PropBox_View(self)
         self.arrowbox_view = ArrowBox_View(self)
-        self.generator = Pictograph_Generator(self.staff_manager, self.graphboard_view, self.info_tracker, self.main_window, self, self.exporter, self.json_manager, self.grid)
+        self.generator = Pictograph_Generator(self)
+        
         self.arrow_manager.connect_to_graphboard(self.graphboard_view)
         self.info_tracker.connect_graphboard_view(self.graphboard_view)
         self.staff_manager.connect_info_tracker(self.info_tracker)
-
         self.staff_manager.connect_grid(self.grid)
         self.staff_manager.connect_graphboard_view(self.graphboard_view)
         self.staff_manager.connect_propbox_view(self.propbox_view)
@@ -59,9 +57,9 @@ class Main_Widget(QWidget):
         self.graphboard_view.connect_staff_manager(self.staff_manager)
 
         Init_Layout(self, self.main_window)
-        Init_Action_Buttons(self, self.main_window)
+        Init_Action_Buttons(self)
         self.connect_info_tracker()
-        Init_Sequence_Scene(self)
+        self.sequence_view = Sequence_View(self)
         Init_Letter_Buttons(self, self.main_window)
 
         self.setFocus()
@@ -73,7 +71,7 @@ class Main_Widget(QWidget):
 ### CONNECTORS ###
 
     def connect_info_tracker(self):
-        self.main_window.info_layout.addWidget(self.info_label)
+        self.main_window.info_layout.addWidget(self.info_tracker.info_label)
 
 ### EVENTS ###
 
