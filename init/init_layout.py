@@ -10,8 +10,9 @@ class Init_Layout():
         self.main_window = main_window
         self.init_layouts()
         self.configure_layouts()
+        self.add_black_border_to_widgets()
         self.assign_layouts_to_window()
-        
+    
         
     def init_layouts(self):
         # Initialize all layouts and store them in a dictionary for easy access and management.
@@ -61,11 +62,12 @@ class Init_Layout():
         self.layouts['lower'].addWidget(self.main_widget.clear_sequence_button)        
         
         self.layouts['upper'].addLayout(self.layouts['letter_buttons'])
+        self.layouts['info'].addWidget(self.main_widget.info_tracker.info_label)   
         
         self.main_widget.setLayout(self.layouts['main'])
         
-        
-        # Style the widgets to add the border
+
+    def add_black_border_to_widgets(self):
         self.style_widget(self.main_widget.graphboard_view)
         self.style_widget(self.main_widget.arrowbox_view.arrowbox_frame)
         self.style_widget(self.main_widget.propbox_view.propbox_frame)
@@ -75,20 +77,13 @@ class Init_Layout():
         
 
     def assign_layouts_to_window(self):
-        # Assign layouts to the main window properties.
         for layout_name, layout in self.layouts.items():
             setattr(self.main_window, f"{layout_name}_layout", layout)
             
-
         
     def style_widget(self, widget):
-        # Set the frame style to a box with a border
         widget.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
-        
-        # Set the border width
         widget.setLineWidth(1)
-        
-        # Set the border color
         palette = widget.palette()
         palette.setColor(QPalette.ColorRole.WindowText, QColor("black"))  # Change "black" to any color you prefer for the border
         widget.setPalette(palette)

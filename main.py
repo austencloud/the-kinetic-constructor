@@ -13,12 +13,12 @@ class Main_Window(QMainWindow):
     def init_main_window(self):
         self.setMinimumSize(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT)
         self.main_widget = Main_Widget(self)
+        self.installEventFilter(self.main_widget)
         self.setCentralWidget(self.main_widget)
         self.show()
         self.setWindowTitle("Sequence Generator")
 
     def initUI(self):
-
         self.move(-(self.screen.width() + 500), 100)
 
 

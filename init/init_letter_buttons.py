@@ -47,7 +47,7 @@ class Init_Letter_Buttons():
                 font.setPointSize(int(20*GRAPHBOARD_SCALE))
                 button.setFont(font)
                 button.setFixedSize(int(65 * GRAPHBOARD_SCALE), int(65 * GRAPHBOARD_SCALE))
-                button.clicked.connect(lambda _, l=letter: main_widget.show_pictograph_selector(l))
+                button.clicked.connect(lambda _, l=letter: main_widget.pictograph_selector_dialog.show_dialog(l))
                 row_layout.addWidget(button)
             letter_buttons_layout.addLayout(row_layout)
 

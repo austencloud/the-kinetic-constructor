@@ -28,7 +28,7 @@ class Arrow_Manager(QObject):
     def connect_info_tracker(self, info_tracker):
         self.info_tracker = info_tracker
 
-    def connect_to_graphboard(self, graphboard_view):
+    def connect_to_graphboard_view(self, graphboard_view):
         self.graphboard_view = graphboard_view
         self.graphboard_scene = graphboard_view.scene()
 
