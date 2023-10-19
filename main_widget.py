@@ -35,7 +35,7 @@ class Main_Widget(QWidget):
         self.svg_manager = Svg_Manager()
         self.arrow_manager = Arrow_Manager(self)
 
-        self.grid = Grid('images\\grid\\grid.svg')
+        self.grid = Grid('images/grid/grid.svg')
         self.graphboard_view = Graphboard_View(self.grid, self.svg_manager, self.arrow_manager, self, None, self.sequence_manager, self.exporter, self.json_manager)
         self.staff_manager = Staff_Manager(self)
         self.exporter = Exporter(self.graphboard_view, self.staff_manager, self.grid)
