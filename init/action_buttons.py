@@ -3,6 +3,7 @@ from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import QSize
 from settings import GRAPHBOARD_SCALE
 from PyQt6.QtWidgets import QVBoxLayout
+
 class Action_Buttons:
     def __init__(self, main_widget):
         self.main_widget = main_widget
@@ -11,7 +12,7 @@ class Action_Buttons:
         button_font = QFont('Helvetica', 14)
         button_size = int(80 * GRAPHBOARD_SCALE)
         icon_size = QSize(int(60 * GRAPHBOARD_SCALE), int(60 * GRAPHBOARD_SCALE))
-        self.action_button_layout = QVBoxLayout()
+        self.action_buttons_layout = QVBoxLayout()
         
         # Configuration for each button
         buttons_config = [
@@ -46,6 +47,7 @@ class Action_Buttons:
         # Create and add buttons to the layout
         for icon, tooltip, action in buttons_config:
             button = create_configured_button(icon, tooltip, action)
-            self.action_button_layout.addWidget(button)
-            self.main_window.action_buttons_layout = self.action_button_layout
+            self.action_buttons_layout.addWidget(button)
+            
+        self.main_window.action_buttons_layout = self.action_buttons_layout
 

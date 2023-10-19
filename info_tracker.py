@@ -6,10 +6,10 @@ from data.positions_map import positions_map
 from data.letter_types import letter_types
 from settings import GRAPHBOARD_SCALE
 class Info_Tracker:
-    def __init__(self, main_widget):
+    def __init__(self, main_widget, graphboard_view):
         self.remaining_staff = {}
         self.previous_state = None 
-        self.graphboard_view = main_widget.graphboard_view
+        self.graphboard_view = graphboard_view
         self.staff_manager = main_widget.staff_manager
         self.letters = main_widget.letters
         self.main_window = main_widget.main_window
@@ -20,7 +20,7 @@ class Info_Tracker:
             self.info_label.setFont(font)
             self.info_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse | Qt.TextInteractionFlag.TextSelectableByKeyboard)
             self.info_label.setAlignment(Qt.AlignmentFlag.AlignTop)
-
+            self.info_label.setFixedWidth(int(350 * GRAPHBOARD_SCALE))
     def connect_graphboard_view(self, graphboard_view):
         self.graphboard_view = graphboard_view
 

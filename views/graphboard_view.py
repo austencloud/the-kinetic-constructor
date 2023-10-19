@@ -22,8 +22,6 @@ class Graphboard_View(QGraphicsView):
         self.graphboard_scene = QGraphicsScene()
         self.setScene(self.graphboard_scene)
         
-
-        
         self.main_widget = main_widget
         self.grid = main_widget.grid
         self.svg_manager = main_widget.svg_manager

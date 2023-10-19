@@ -7,10 +7,11 @@ from settings import GRAPHBOARD_SCALE
 from pictograph_selector_dialog import Pictograph_Selector_Dialog
 
 class Letter_Buttons():
-    def __init__(self, main_widget, main_window):
-        letter_buttons_layout = QVBoxLayout()
-        letter_buttons_layout.setSpacing(int(10* GRAPHBOARD_SCALE))  # Set the spacing between rows of buttons
-        letter_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignTop)  # Align the layout to the top
+    def __init__(self, main_widget):
+        self.main_window = main_widget.main_window
+        self.letter_buttons_layout = QVBoxLayout()
+        self.letter_buttons_layout.setSpacing(int(10* GRAPHBOARD_SCALE))  # Set the spacing between rows of buttons
+        self.letter_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignTop)  # Align the layout to the top
         letter_rows = [
             ['A', 'B', 'C'],
             ['D', 'E', 'F'],
@@ -39,20 +40,19 @@ class Letter_Buttons():
                 painter = QPainter(pixmap)
                 renderer.render(painter)
                 painter.end()
-                button = QPushButton(QIcon(pixmap), "", main_window)
+                button = QPushButton(QIcon(pixmap), "", self.main_window)
                 font = QFont()
                 font.setPointSize(int(20*GRAPHBOARD_SCALE))
                 button.setFont(font)
                 button.setFixedSize(int(65 * GRAPHBOARD_SCALE), int(65 * GRAPHBOARD_SCALE))
                 button.clicked.connect(lambda _, l=letter: Pictograph_Selector_Dialog(main_widget, l))
                 row_layout.addWidget(button)
-            letter_buttons_layout.addLayout(row_layout)
+            self.letter_buttons_layout.addLayout(row_layout)
 
-        generate_all_button = QPushButton("Generate All", main_window)
+        generate_all_button = QPushButton("Generate All", self.main_window)
         font = QFont()
         font.setPointSize(int(20 * GRAPHBOARD_SCALE))
         generate_all_button.setFont(font)
         generate_all_button.setFixedSize(int(300*GRAPHBOARD_SCALE), int(80*GRAPHBOARD_SCALE))
-        generate_all_button.clicked.connect(lambda: main_widget.generator.generate_all_pictographs(main_window.staff_manager))
-        letter_buttons_layout.addWidget(generate_all_button)
-        main_window.letter_buttons_layout = letter_buttons_layout
+        generate_all_button.clicked.connect(lambda: main_widget.generator.generate_all_pictographs(self.main_window.staff_manager))
+        self.letter_buttons_layout.addWidget(generate_all_button)

@@ -6,11 +6,11 @@ from objects.arrow import Arrow
 
 from exporter import Exporter
 class Pictograph_Generator():
-    def __init__(self, main_widget):
+    def __init__(self, main_widget, graphboard_view, info_tracker):
         
         self.staff_manager = main_widget.staff_manager
-        self.graphboard_view = main_widget.graphboard_view
-        self.info_tracker = main_widget.info_tracker
+        self.graphboard_view = graphboard_view
+        self.info_tracker = info_tracker
         self.main_window = main_widget.main_window
         self.arrow_manager = main_widget.arrow_manager
         self.exporter = main_widget.exporter

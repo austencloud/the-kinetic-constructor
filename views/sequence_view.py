@@ -17,7 +17,11 @@ class Sequence_View(QGraphicsView):
         super().__init__()
         main_window = main_widget.main_window
         sequence_scene = QGraphicsScene()
-        sequence_scene.setSceneRect(0, 0, main_window.width(), 1 * GRAPHBOARD_HEIGHT * 2)
+        
+        # get the width of the editor layout from main_window
+        main_widget.graph_editor_widget.width()
+
+        sequence_scene.setSceneRect(0, 0, GRAPHBOARD_HEIGHT * 2, GRAPHBOARD_HEIGHT * 2)
 
         self.setFixedSize(int(sequence_scene.sceneRect().width()), int(sequence_scene.sceneRect().height()))
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -38,13 +42,14 @@ class Sequence_View(QGraphicsView):
         
 
         self.pictographs = [] 
-        self.pictograph_generator = main_widget.pictograph_generator
-        self.info_tracker = main_widget.info_tracker
+        self.pictograph_generator = main_widget.graph_editor_widget.pictograph_generator
+        self.info_tracker = main_widget.graph_editor_widget.info_tracker
         self.sequence_scene = sequence_scene
         self.beats = [QGraphicsRectItem(QRectF(0, 0, DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE, DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE)) for i in range(4)]
         
         for i, section in enumerate(self.beats):
             section.setPos(QPointF(i * DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE, 0))
+
 
 
     def add_pictograph(self, pictograph):

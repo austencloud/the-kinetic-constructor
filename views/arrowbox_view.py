@@ -9,11 +9,12 @@ from settings import *
 
 
 class ArrowBox_View(QGraphicsView):
-    def __init__(self, main_widget):
+    def __init__(self, main_widget, graphboard_view, info_tracker):
         super().__init__()
+        self.info_tracker = info_tracker
         self.drag = None
         self.drag_state = {} 
-        self.graphboard_view = main_widget.graphboard_view
+        self.graphboard_view = graphboard_view
         self.setAcceptDrops(True)
         self.setFrameShape(QFrame.Shape.NoFrame)
         self.main_widget = main_widget
@@ -137,7 +138,7 @@ class ArrowBox_View(QGraphicsView):
         if file_name in default_arrows:
             
             motion_type = file_name.split('_')[1]
-            arrow_item = Arrow(svg_file, self.main_widget.graphboard_view, self.main_widget.info_tracker, self.main_widget.svg_manager, self.main_widget.arrow_manager, motion_type, self.main_widget.staff_manager, None)
+            arrow_item = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.main_widget.svg_manager, self.main_widget.arrow_manager, motion_type, self.main_widget.staff_manager, None)
             arrow_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
             arrow_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
             arrow_item.setScale(GRAPHBOARD_SCALE * 0.75)
