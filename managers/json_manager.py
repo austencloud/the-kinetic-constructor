@@ -8,7 +8,7 @@ class Json_Manager(QObject):
         self.scene = scene
 
     def load_all_letters(self):
-        directory = 'json\\'
+        directory = 'json'
         letters = {}
         for filename in os.listdir(directory):
             if filename.endswith('.json'):
@@ -61,4 +61,4 @@ class Json_Manager(QObject):
 
         # Update individual JSON files for each updated letter
         for letter in updated_letters:
-            self.update_individual_json(letter, self.letters[letter], 'json\\')  # Update the specific JSON file
+            self.update_individual_json(letter, self.letters[letter], 'json')  # Update the specific JSON file

@@ -16,13 +16,11 @@ class Pictograph_Generator():
         self.exporter = main_widget.exporter
         self.svg_manager = main_widget.svg_manager
         self.grid = main_widget.grid
-        
         self.graphboard_scene = self.graphboard_view.scene()
-        
-        self.output_dir = "images\\pictographs\\"
+        self.output_dir = "images/pictographs"
         self.current_letter = None
         self.letters = main_widget.letters
-        
+
     def generate_all_pictographs(self, staff_manager):
         os.makedirs(self.output_dir, exist_ok=True)
 
@@ -62,7 +60,7 @@ class Pictograph_Generator():
                 self.graphboard_view.clear()
 
     def open_selection_window(self, letter):
-        self.output_dir = "images\\pictographs\\"
+        self.output_dir = "images/pictographs"
         self.graphboard_view.clear()
         
         combinations = self.letters.get(letter, [])

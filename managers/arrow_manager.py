@@ -252,7 +252,7 @@ class Arrow_Manager(QObject):
      
     def update_arrow_image(self, arrow):
         if arrow.motion_type == 'pro' or arrow.motion_type == 'anti':
-            new_filename = f"images\\arrows\\shift\\{arrow.motion_type}\\{arrow.color}_{arrow.motion_type}_{arrow.rotation_direction}_{arrow.quadrant}_{arrow.turns}.svg"
+            new_filename = f"images/arrows/shift/{arrow.motion_type}/{arrow.color}_{arrow.motion_type}_{arrow.rotation_direction}_{arrow.quadrant}_{arrow.turns}.svg"
             if os.path.isfile(new_filename):
                 arrow.svg_file = new_filename
                 arrow.setSharedRenderer(arrow.svg_manager.get_renderer(new_filename))

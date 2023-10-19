@@ -148,7 +148,7 @@ class Arrow(QGraphicsSvgItem):
 
     def update_arrow_for_new_quadrant(self, new_quadrant):
         if self.motion_type in ["pro", "anti"] and self.color in ["red", "blue"]:
-            new_svg_file = f'images\\arrows\\shift\\{self.motion_type}\\{self.color}_{self.motion_type}_{self.rotation_direction}_{new_quadrant}_{self.turns}.svg'
+            new_svg_file = f'images/arrows/shift/{self.motion_type}/{self.color}_{self.motion_type}_{self.rotation_direction}_{new_quadrant}_{self.turns}.svg'
         else:
             print(f"Unexpected svg_file: {self.svg_file}")
             new_svg_file = self.svg_file
