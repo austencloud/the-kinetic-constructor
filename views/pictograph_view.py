@@ -9,7 +9,7 @@ from managers.staff_manager import Staff_Manager
 from managers.arrow_manager import Arrow_Manager
 from managers.svg_manager import Svg_Manager
 from managers.json_manager import Json_Manager
-from settings import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, PICTOGRAPH_SCALE, PICTOGRAPH_GRID_PADDING
+from settings import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, PICTOGRAPH_SCALE, PICTOGRAPH_GRID_PADDING
 
 class Pictograph_View(QGraphicsView):
     def __init__(self, main_widget):

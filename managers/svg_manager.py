@@ -1,19 +1,7 @@
-import os
-import json
-import os
+
 import xml.etree.ElementTree as ET
-import json
-import re
-from PyQt6.QtGui import QImage, QPainter, QPainterPath, QTransform
 from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtWidgets import QMenu, QDialog, QFormLayout, QSpinBox, QDialogButtonBox
-from PyQt6.QtCore import Qt, pyqtSignal, QObject
-from svg.path import Line, CubicBezier, QuadraticBezier, Arc, Close
-from objects.arrow import Arrow
-from objects.staff import Staff
-from objects.grid import Grid
-from lxml import etree
-from copy import deepcopy
+
 
 class Svg_Manager():
     def __init__(self):

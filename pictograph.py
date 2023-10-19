@@ -1,6 +1,6 @@
 from PyQt6.QtGui import QPainter, QImage
 from PyQt6.QtCore import QRectF, Qt
-from PyQt6.QtWidgets import QDialog, QGraphicsView, QGraphicsScene, QVBoxLayout, QPushButton, QGraphicsItem, QGridLayout, QLabel
+from PyQt6.QtWidgets import QGraphicsItem
 from settings import DEFAULT_GRAPHBOARD_HEIGHT, DEFAULT_GRAPHBOARD_WIDTH, PICTOGRAPH_SCALE
 class Pictograph(QGraphicsItem):
     def __init__(self, state, image: QImage, parent=None):

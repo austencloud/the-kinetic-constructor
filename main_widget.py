@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QDialog, QGraphicsScene, QLabel, QWidget
+from PyQt6.QtWidgets import QDialog, QWidget
 from PyQt6.QtCore import Qt, QEvent
 from objects.grid import Grid
 from managers.arrow_manager import Arrow_Manager

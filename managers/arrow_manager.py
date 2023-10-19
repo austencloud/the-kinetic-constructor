@@ -8,8 +8,7 @@ from PyQt6.QtCore import QTimer, QPointF, QRectF
 from PyQt6.QtGui import QPixmap, QPainter
 from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtGui import QDrag
-from views.graphboard_view import Graphboard_View
-from managers.json_manager import Json_Manager
+
 from settings import *
 class Arrow_Manager(QObject):
     def __init__(self, main_widget):

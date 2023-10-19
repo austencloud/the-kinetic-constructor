@@ -1,14 +1,11 @@
-from PyQt6.QtWidgets import QGraphicsView, QFrame, QGraphicsScene
+import os
+from PyQt6.QtWidgets import QGraphicsView, QFrame, QGraphicsScene, QGraphicsItem, QFrame, QGridLayout
 from PyQt6.QtGui import QPixmap, QDrag, QImage, QPainter, QCursor, QColor
 from PyQt6.QtCore import Qt, QMimeData, QPointF
 from PyQt6.QtSvg import QSvgRenderer
 from objects.arrow import Arrow
-import os
-#import 
-import os
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsItem, QFrame, QGridLayout
 from settings import *
-from objects.arrow import Arrow
+
 
 
 class ArrowBox_View(QGraphicsView):

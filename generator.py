@@ -3,7 +3,7 @@ from PyQt6.QtCore import QPointF
 import random
 import os
 from objects.arrow import Arrow
-from managers.svg_manager import Svg_Manager
+
 from exporter import Exporter
 class Pictograph_Generator():
     def __init__(self, main_widget):
@@ -11,18 +11,17 @@ class Pictograph_Generator():
         self.staff_manager = main_widget.staff_manager
         self.graphboard_view = main_widget.graphboard_view
         self.info_tracker = main_widget.info_tracker
-        self.graphboard_scene = self.graphboard_view.scene()
         self.main_window = main_widget.main_window
         self.arrow_manager = main_widget.arrow_manager
         self.exporter = main_widget.exporter
         self.svg_manager = main_widget.svg_manager
         self.grid = main_widget.grid
-
+        
+        self.graphboard_scene = self.graphboard_view.scene()
+        
         self.output_dir = "images\\pictographs\\"
         self.current_letter = None
         self.letters = main_widget.letters
-
-
         
     def generate_all_pictographs(self, staff_manager):
         os.makedirs(self.output_dir, exist_ok=True)

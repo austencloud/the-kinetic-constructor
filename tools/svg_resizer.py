@@ -1,12 +1,11 @@
 import sys
 import os
-from PyQt6.QtWidgets import QApplication, QMainWindow, QSlider, QLabel, QVBoxLayout, QWidget, QPushButton, QFileDialog, QLineEdit, QFrame, QStackedWidget, QHBoxLayout, QListWidget, QListWidgetItem
+from PyQt6.QtWidgets import QApplication, QMainWindow, QSlider, QVBoxLayout, QWidget, QPushButton, QFileDialog, QLineEdit, QStackedWidget, QHBoxLayout, QListWidget, QListWidgetItem
 from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem, QSvgWidget
+from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QIcon, QPixmap, QPainter
 from bs4 import BeautifulSoup
-from xml.dom import minidom
 
 class SVGResizer(QMainWindow):
     def __init__(self):

@@ -2,9 +2,8 @@ import os
 from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtCore import Qt, QPointF, QTimer
+from PyQt6.QtCore import Qt, QPointF
 from data.ARROW_START_END_LOCATIONS import ARROW_START_END_LOCATIONS
-from PyQt6.QtGui import QPixmap, QPainter
 from settings import *
 class Arrow(QGraphicsSvgItem):
     def __init__(self, svg_file, graphboard_view, info_tracker, svg_manager, arrow_manager, motion_type, staff_manager, dict):

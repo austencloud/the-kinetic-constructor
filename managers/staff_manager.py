@@ -2,7 +2,7 @@ from PyQt6.QtCore import QPointF, pyqtSignal, QObject
 from objects.arrow import Arrow
 from settings import *
 from objects.staff import Staff
-from managers.json_manager import Json_Manager
+
 import math
 
 class Staff_Manager(QObject):

@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QVBoxLayout, QPushButton
+from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import QSize
 from settings import GRAPHBOARD_SCALE
