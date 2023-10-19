@@ -8,7 +8,8 @@ from managers.json_manager import Json_Manager
 from views.graphboard_view import Graphboard_View
 from views.arrowbox_view import ArrowBox_View
 from views.sequence_view import Sequence_View
-from generator import Pictograph_Generator
+from views.optionboard_view import Optionboard_View
+from pictograph_generator import Pictograph_Generator
 from info_tracker import Info_Tracker
 from exporter import Exporter
 from pictograph_selector import Pictograph_Selector
@@ -26,7 +27,6 @@ class Main_Widget(QWidget):
         self.arrows = []
         self.main_widget = self
         self.exporter = None
-        self.sequence_manager = None
         self.graphboard_view = None
         self.main_window = main_window
         self.key_bindings = Key_Bindings()
@@ -36,13 +36,15 @@ class Main_Widget(QWidget):
         self.arrow_manager = Arrow_Manager(self)
 
         self.grid = Grid('images/grid/grid.svg')
-        self.graphboard_view = Graphboard_View(self.grid, self.svg_manager, self.arrow_manager, self, None, self.sequence_manager, self.exporter, self.json_manager)
+        self.graphboard_view = Graphboard_View(self)
         self.staff_manager = Staff_Manager(self)
-        self.exporter = Exporter(self.graphboard_view, self.staff_manager, self.grid)
+        self.exporter = Exporter(self)
         self.info_tracker = Info_Tracker(self)
         self.propbox_view = PropBox_View(self)
         self.arrowbox_view = ArrowBox_View(self)
-        self.generator = Pictograph_Generator(self)
+        self.pictograph_generator = Pictograph_Generator(self)
+        self.sequence_view = Sequence_View(self)
+        self.optionboard_view = Optionboard_View(self)
         
         self.arrow_manager.connect_to_graphboard(self.graphboard_view)
         self.info_tracker.connect_graphboard_view(self.graphboard_view)
@@ -51,21 +53,24 @@ class Main_Widget(QWidget):
         self.staff_manager.connect_graphboard_view(self.graphboard_view)
         self.staff_manager.connect_propbox_view(self.propbox_view)
         self.staff_manager.init_graphboard_staffs(self.graphboard_view)
-        self.staff_manager.init_propbox_staffs(self.propbox_scene)
+        self.staff_manager.init_propbox_staffs(self.propbox_view)
         
         self.graphboard_view.connect_info_tracker(self.info_tracker)
         self.graphboard_view.connect_staff_manager(self.staff_manager)
 
+
+
         Init_Layout(self, self.main_window)
+        Init_Letter_Buttons(self, self.main_window)
         Init_Action_Buttons(self)
         self.connect_info_tracker()
-        self.sequence_view = Sequence_View(self)
-        Init_Letter_Buttons(self, self.main_window)
+
+
 
         self.setFocus()
 
         self.arrow_manager.connect_info_tracker(self.info_tracker)
-        self.graphboard_view.connect_generator(self.generator)
+        self.graphboard_view.connect_generator(self.pictograph_generator)
         self.main_window.installEventFilter(self)
 
 ### CONNECTORS ###
@@ -76,7 +81,7 @@ class Main_Widget(QWidget):
 ### EVENTS ###
 
     def show_pictograph_selector(self, letter):
-        combinations = self.generator.letters.get(letter, [])
+        combinations = self.pictograph_generator.letters.get(letter, [])
         
         if not combinations:
             print(f"No combinations found for letter {letter}")

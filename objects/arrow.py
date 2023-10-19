@@ -58,11 +58,6 @@ class Arrow(QGraphicsSvgItem):
             from views.pictograph_view import Pictograph_View
             if isinstance(self.graphboard_view, Graphboard_View):
                 new_pos = self.mapToScene(event.pos()) - self.boundingRect().center()
-                # get the value of the event within the arrow's bounding rect
-
-                # if the event is within the arrow's bounding rect
-
-            
                 self.setPos(new_pos)
                 new_quadrant = self.graphboard_view.get_graphboard_quadrants(new_pos + self.center)  
                 if self.quadrant != new_quadrant:
@@ -74,9 +69,8 @@ class Arrow(QGraphicsSvgItem):
 
     def mouseReleaseEvent(self, event):
         if hasattr(self, 'future_position'):
-            self.setPos(self.future_position)  # Set the position when mouse is released
-            del self.future_position  # Delete the attribute for future use
-        # if the graphboard view is an instance of Graphboard_View
+            self.setPos(self.future_position)
+            del self.future_position
         from views.graphboard_view import Graphboard_View
         if isinstance(self.graphboard_view, Graphboard_View):
             self.arrow_manager.update_arrow_position(self.graphboard_view)

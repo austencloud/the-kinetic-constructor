@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt
 class Key_Bindings:
     def keyPressEvent(self, event, graphboard_view):
         arrow_manager = graphboard_view.arrow_manager
-        sequence_manager = graphboard_view.sequence_manager
+        sequence_view = graphboard_view.main_widget.sequence_view
         selected_items = graphboard_view.get_selected_items()
         
         try:
@@ -42,4 +42,4 @@ class Key_Bindings:
             elif event.key() == Qt.Key.Key_Q:
                 arrow_manager.swap_motion_type(selected_items)
             elif event.key() == Qt.Key.Key_F:
-                sequence_manager.add_to_sequence(graphboard_view)
+                sequence_view.add_to_sequence(graphboard_view)

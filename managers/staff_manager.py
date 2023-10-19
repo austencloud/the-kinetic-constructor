@@ -176,6 +176,8 @@ class Staff_Manager(QObject):
     ### PROP BOX ###
 
     def init_propbox_staffs(self, propbox_view):
+        propbox_scene = propbox_view.scene()
+        
         # Define initial locations for propbox staffs
         self.propbox_staff_locations = {
             'N_staff': QPointF(100, 100),
@@ -186,8 +188,10 @@ class Staff_Manager(QObject):
         
         # Create red and blue staffs in the propbox
         self.propbox_staffs = {}
-        self.red_staff = Staff('red_staff', propbox_view, self.propbox_staff_locations['N_staff'], 'red', 'images/staves/N_staff_red.svg')
-        self.blue_staff = Staff('blue_staff', propbox_view, self.propbox_staff_locations['N_staff'], 'blue', 'images/staves/N_staff_blue.svg')
+        self.red_staff = Staff('red_staff', propbox_scene, self.propbox_staff_locations['N_staff'], 'red', 'images/staves/N_staff_red.svg')
+        self.blue_staff = Staff('blue_staff', propbox_scene, self.propbox_staff_locations['N_staff'], 'blue', 'images/staves/N_staff_blue.svg')
+        propbox_scene.addItem(self.red_staff)
+        propbox_scene.addItem(self.blue_staff)
         self.propbox_staffs['red_staff'] = self.red_staff
         self.propbox_staffs['blue_staff'] = self.blue_staff
 

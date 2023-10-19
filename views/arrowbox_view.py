@@ -41,7 +41,7 @@ class ArrowBox_View(QGraphicsView):
                 mime_data = QMimeData()
                 mime_data.setText(arrow.svg_file)
                 self.drag.setMimeData(mime_data)
-                image = QImage(arrow.boundingRect().size().toSize(), QImage.Format.Format_ARGB32)
+                image = QImage(arrow.boundingRect().size().toSize() * GRAPHBOARD_SCALE, QImage.Format.Format_ARGB32)
                 image.fill(QColor(Qt.GlobalColor.transparent))
                 painter = QPainter(image)
                 painter.setRenderHint(QPainter.RenderHint.Antialiasing)

@@ -31,7 +31,7 @@ class Init_Action_Buttons:
             ("images/icons/select_all.png", "Select All", 
              lambda: self.main_widget.graphboard_view.select_all_items()),
             ("images/icons/add_to_sequence.png", "Add to Sequence", 
-             lambda: self.main_widget.sequence_manager.add_to_sequence(self.main_widget.graphboard_view))
+             lambda: self.main_widget.sequence_view.add_to_sequence(self.main_widget.graphboard_view))
         ]
 
 

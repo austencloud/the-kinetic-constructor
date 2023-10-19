@@ -8,11 +8,12 @@ from lxml import etree
 from copy import deepcopy
 
 class Exporter:
-    def __init__(self, graphboard_view, staff_manager, grid):
-        self.graphboard_scene = graphboard_view.scene()
-        self.graphboard_view = graphboard_view
-        self.staff_manager = staff_manager
-        self.grid = grid
+    def __init__(self, main_widget):
+        
+        self.graphboard_view = main_widget.graphboard_view
+        self.graphboard_scene = self.graphboard_view.scene()
+        self.staff_manager = main_widget.staff_manager
+        self.grid = main_widget.grid
 
     def export_to_svg(self, output_file_path):
         try: 

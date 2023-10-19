@@ -13,36 +13,23 @@ from settings import *
 
 
 class Graphboard_View(QGraphicsView):
-    def __init__(self,
-                 grid,
-                 svg_manager,
-                 arrow_manager,
-                 main_widget,
-                 generator,
-                 sequence_manager,
-                 exporter,
-                 json_manager,
-                 parent=None):
+    def __init__(self, main_widget, parent=None):
         
         super().__init__(parent)
         self.setAcceptDrops(True)
         self.setInteractive(True)
         self.dragging = None
-        self.grid = grid
+        self.grid = main_widget.grid
         self.grid.setScale(GRAPHBOARD_SCALE)
         self.graphboard_scene = QGraphicsScene()
         self.setScene(self.graphboard_scene)
-        self.svg_manager = svg_manager
-        self.generator = generator
         self.main_widget = main_widget
-        self.sequence_manager = sequence_manager
-        self.arrow_manager = arrow_manager
-        self.exporter = exporter
-        self.json_manager = json_manager
+        self.svg_manager = main_widget.svg_manager
+        self.arrow_manager = main_widget.arrow_manager
+        self.exporter = main_widget.exporter
         self.letter_renderers = {}
         self.VERTICAL_OFFSET = (self.height() - self.width()) / 2
-        self.letters = self.json_manager.load_all_letters()
-
+        self.letters = main_widget.letters
         for letter in 'ABCDEFGHIJKLMNOPQRSTUV':
              self.letter_renderers[letter] = QSvgRenderer(f'images/letters/{letter}.svg')
         self.letter_item = QGraphicsSvgItem()
