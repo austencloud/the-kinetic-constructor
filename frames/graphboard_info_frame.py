@@ -9,17 +9,16 @@ from settings import GRAPHBOARD_SCALE
 
 class Graphboard_Info_Frame(QFrame):
 
-    def __init__(self, main_widget, view):
+    def __init__(self, main_widget, graphboard_view):
         super().__init__()
-
-        self.setup_variables(main_widget, view)
+        self.setup_variables(main_widget, graphboard_view)
         self.setup_ui_elements()
 
-    def setup_variables(self, main_widget, view):
-        self.view = view
+    def setup_variables(self, main_widget, graphboard_view):
+        self.graphboard_view = graphboard_view
         self.remaining_staff = {}
         self.previous_state = None
-        self.staff_manager = main_widget.staff_manager
+        self.staff_manager = graphboard_view.staff_manager
         self.letters = main_widget.letters
         self.main_window = main_widget.main_window
 
@@ -89,8 +88,8 @@ class Graphboard_Info_Frame(QFrame):
             # Handle cases where the letter or type is not identified
             self.type_position_label.setText("")
             
-    def connect_view(self, view):
-        self.view = view
+    def connect_view(self, graphboard_view):
+        self.graphboard_view = graphboard_view
 
     def get_current_letter(self):
         self.letter = self.determine_current_letter_and_type()[0]
@@ -99,7 +98,7 @@ class Graphboard_Info_Frame(QFrame):
     
     def determine_current_letter_and_type(self):
         current_combination = []
-        for item in self.view.items():
+        for item in self.graphboard_view.items():
             if isinstance(item, Arrow):
                 attributes = item.get_attributes()
                 sorted_attributes = {k: attributes[k] for k in sorted(attributes.keys())}
@@ -132,7 +131,7 @@ class Graphboard_Info_Frame(QFrame):
         red_text = ""
 
         # Process the arrows and construct detailed information
-        for arrow in [item for item in self.view.items() if isinstance(item, Arrow)]:
+        for arrow in [item for item in self.graphboard_view.items() if isinstance(item, Arrow)]:
             
             if not arrow.is_ghost:
                 arrow.set_attributes_from_filename()  # Ensure the attributes are up-to-date
@@ -162,12 +161,12 @@ class Graphboard_Info_Frame(QFrame):
         # Now that you have new type, letter, and position information, you can update the relevant label.
         self.update_type_and_position_info()
 
-        # Inform the graphboard view about the current letter
-        self.view.update_letter(self.determine_current_letter_and_type()[0])
+        # Inform the graphboard graphboard_view about the current letter
+        self.graphboard_view.update_letter(self.determine_current_letter_and_type()[0])
 
 
         # Update the staffs on the graphboard based on the new state
-        self.staff_manager.update_graphboard_staffs(self.view.scene())
+        self.staff_manager.update_staffs(self.graphboard_view.scene())
 
     @staticmethod
     def clear_layout(layout):
@@ -198,7 +197,7 @@ class Graphboard_Info_Frame(QFrame):
         end_location_blue = None
         color_red = None
         color_blue = None
-        for item in self.view.items():
+        for item in self.graphboard_view.items():
             if isinstance(item, Arrow):
                 arrow_items.append(item)
 

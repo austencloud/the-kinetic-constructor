@@ -13,8 +13,6 @@ class Layout_Manager():
     def configure_layouts(self):
         self.configure_main_layout()
         self.init_sequence_layout()
-        self.init_action_buttons_layout()
-        self.init_letter_buttons_layout()
         self.add_black_border_to_widgets()
         
     def init_layouts(self):
@@ -63,7 +61,7 @@ class Layout_Manager():
         self.add_black_border(self.main_widget.graph_editor_widget.info_frame)
         self.add_black_border(self.main_widget.optionboard_view)
         self.add_black_border(self.main_widget.graph_editor_widget.action_buttons_frame)
-        self.add_black_border(self.main_widget.graph_editor_widget.letter_buttons_frame)
+        self.add_black_border(self.main_widget.letter_buttons_frame)
         self.add_black_border(self.main_widget.graph_editor_widget.graphboard_view)
         self.add_black_border(self.main_widget.graph_editor_widget.propbox_view)
         
@@ -86,8 +84,3 @@ class Layout_Manager():
             print(f"Widget {type(widget).__name__} does not support setFrameStyle.")
 
         
-    def init_action_buttons_layout(self):
-        self.main_window.graphboard_and_buttons_layout.addLayout(self.main_widget.graph_editor_widget.action_buttons_frame.action_buttons_layout)
-        
-    def init_letter_buttons_layout(self):
-        self.main_window.sequence_layout.addLayout(self.main_widget.graph_editor_widget.letter_buttons_frame.letter_buttons_layout) 

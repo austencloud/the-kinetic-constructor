@@ -3,12 +3,11 @@ from PyQt6.QtCore import QPointF
 import random
 import os
 from objects.arrow import Arrow
-
 from managers.export_manager import Export_Manager
+from managers.staff_managers.pictograph_staff_manager import Pictograph_Staff_Manager
 class Pictograph_Generator():
     def __init__(self, main_widget, graphboard_view, info_frame):
-        
-        self.staff_manager = main_widget.staff_manager
+        self.staff_manager = graphboard_view.staff_manager
         self.graphboard_view = graphboard_view
         self.info_frame = info_frame
         self.main_window = main_widget.main_window

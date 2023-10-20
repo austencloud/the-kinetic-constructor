@@ -137,7 +137,7 @@ class ArrowBox_View(QGraphicsView):
         if file_name in default_arrows:
             
             motion_type = file_name.split('_')[1]
-            arrow_item = Arrow(svg_file, self.graphboard_view, self.info_frame, self.main_widget.svg_manager, self.main_widget.arrow_manager, motion_type, self.main_widget.staff_manager, None)
+            arrow_item = Arrow(svg_file, self.graphboard_view, self.info_frame, self.main_widget.svg_manager, self.main_widget.arrow_manager, motion_type, self.graphboard_view.staff_manager, None)
             arrow_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
             arrow_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
             arrow_item.setScale(GRAPHBOARD_SCALE * 0.75)

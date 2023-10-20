@@ -34,12 +34,11 @@ class Graph_Editor_Widget(QWidget):
         
         # Create and add contents to the graph_editor_frame_layout
         self.graphboard_view = Graphboard_View(main_widget, self)
-        self.export_manager = Export_Manager(main_widget.staff_manager, main_widget.grid, self.graphboard_view)
+        self.export_manager = Export_Manager(self.graphboard_view.staff_manager, main_widget.grid, self.graphboard_view)
         self.info_frame = Graphboard_Info_Frame(main_widget, self.graphboard_view)
         self.propbox_view = PropBox_View(main_widget)
         self.arrowbox_view = ArrowBox_View(main_widget, self.graphboard_view, self.info_frame)
         self.pictograph_generator = Pictograph_Generator(main_widget, self.graphboard_view, self.info_frame)
-        self.letter_buttons_frame = Letter_Buttons_Frame(main_widget)
         self.action_buttons_frame = Action_Buttons_Frame(main_widget)
         
         # Add widgets to the object box layout.

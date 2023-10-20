@@ -59,3 +59,5 @@ class Letter_Buttons_Frame(QFrame):
                 row_layout.addWidget(button)
             self.letter_buttons_layout.addLayout(row_layout)
             self.letter_buttons_layout.addStretch(1)  # Add a stretch to the bottom of the layout
+        
+        self.main_window.sequence_layout.addLayout(self.letter_buttons_layout) 

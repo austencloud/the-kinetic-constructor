@@ -1,16 +1,15 @@
-from PyQt6.QtWidgets import QGraphicsView
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QGraphicsView, QGraphicsScene
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QGraphicsItem
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QGraphicsView, QGraphicsScene, QGraphicsView
+from PyQt6.QtCore import Qt, QPointF
 from settings import GRAPHBOARD_SCALE
-
-
-
+from objects.staff import Staff
+from managers.staff_managers.propbox_staff_manager import PropBox_Staff_Manager
 
 class PropBox_View(QGraphicsView):
     def __init__(self, main_widget):
         super().__init__()
         self.main_window = main_widget.main_window
-        self.staff_manager = main_widget.staff_manager
+        self.staff_manager = PropBox_Staff_Manager(main_widget)
         self.main_widget = main_widget
                 
         self.propbox_scene = QGraphicsScene()
@@ -29,7 +28,4 @@ class PropBox_View(QGraphicsView):
         self.propbox_layout.addWidget(self)
         
         self.setFixedSize(int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE))
-
-
-        
 

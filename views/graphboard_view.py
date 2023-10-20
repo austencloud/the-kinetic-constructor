@@ -8,7 +8,7 @@ from PyQt6.QtCore import QPointF, Qt, QRectF
 from objects.staff import Staff
 from objects.arrow import Arrow
 from settings import *
-from managers.staff_manager import Staff_Manager
+from managers.staff_managers.graphboard_staff_manager import Graphboard_Staff_Manager
 
 
 
@@ -28,7 +28,7 @@ class Graphboard_View(QGraphicsView):
         self.arrow_manager = main_widget.arrow_manager
         self.export_manager = main_widget.export_manager
         self.letters = main_widget.letters
-        self.staff_manager = main_widget.staff_manager
+        self.staff_manager = Graphboard_Staff_Manager(main_widget, self.graphboard_scene)
         
         self.grid.setScale(GRAPHBOARD_SCALE)
         self.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))

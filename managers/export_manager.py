@@ -23,8 +23,8 @@ class Export_Manager:
             svg.set('height', '900')
             svg.set('viewBox', '0 0 750 900')
 
-            # Create groups for staves, arrows, and the grid
-            staves_group = etree.Element('g', id='staves')
+            # Create groups for staffs, arrows, and the grid
+            staffs_group = etree.Element('g', id='staffs')
             arrows_group = etree.Element('g', id='arrows')
             grid_group = etree.Element('g', id='grid')
 
@@ -75,13 +75,13 @@ class Export_Manager:
                         if fill_color is not None:
                             rect_element_copy.set('fill', fill_color)
 
-                        # Append the rect to the staves group
-                        staves_group.append(rect_element_copy)
+                        # Append the rect to the staffs group
+                        staffs_group.append(rect_element_copy)
                     print("Finished exporting staff: " + item.svg_file)
 
             # Add comments and append the groups to the SVG root element
-            svg.append(etree.Comment(' STAVES '))
-            svg.append(staves_group)
+            svg.append(etree.Comment(' staffs '))
+            svg.append(staffs_group)
             svg.append(etree.Comment(' ARROWS '))
             svg.append(arrows_group)
             svg.append(etree.Comment(' GRID '))
