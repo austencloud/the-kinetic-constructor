@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt, QPointF
-from data.ARROW_START_END_LOCATIONS import ARROW_START_END_LOCATIONS
+from data.arrow_start_end_locations import arrow_start_end_locatios
 from settings import *
 class Arrow(QGraphicsSvgItem):
     def __init__(self, svg_file, graphboard_view, info_tracker, svg_manager, arrow_manager, motion_type, staff_manager, dict):
@@ -54,7 +54,7 @@ class Arrow(QGraphicsSvgItem):
     def mouseMoveEvent(self, event):
         self.setSelected(True) 
         if event.buttons() == Qt.MouseButton.LeftButton:
-            from graph_editor.graphboard_view import Graphboard_View
+            from views.graphboard_view import Graphboard_View
             from views.pictograph_view import Pictograph_View
             if isinstance(self.graphboard_view, Graphboard_View):
                 new_pos = self.mapToScene(event.pos()) - self.boundingRect().center()
@@ -71,7 +71,7 @@ class Arrow(QGraphicsSvgItem):
         if hasattr(self, 'future_position'):
             self.setPos(self.future_position)
             del self.future_position
-        from graph_editor.graphboard_view import Graphboard_View
+        from views.graphboard_view import Graphboard_View
         if isinstance(self.graphboard_view, Graphboard_View):
             self.arrow_manager.update_arrow_position(self.graphboard_view)
         
@@ -101,7 +101,7 @@ class Arrow(QGraphicsSvgItem):
 
     def set_start_end_locations(self):
         self.arrow_start_end_locations = {
-            f"{self.color}_{key}": value for key, value in ARROW_START_END_LOCATIONS.items()
+            f"{self.color}_{key}": value for key, value in arrow_start_end_locatios.items()
         }
         self.start_location, self.end_location = self.arrow_start_end_locations.get(os.path.basename(self.svg_file), (None, None))
 

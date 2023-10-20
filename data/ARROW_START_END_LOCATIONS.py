@@ -1,4 +1,4 @@
-ARROW_START_END_LOCATIONS = {
+arrow_start_end_locatios = {
     "anti_l_ne_0.svg": ("n", "e"),
     "anti_l_se_0.svg": ("e", "s"),
     "anti_l_sw_0.svg": ("s", "w"),

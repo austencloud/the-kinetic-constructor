@@ -50,5 +50,4 @@ class Action_Buttons_Frame(QFrame):
             button = create_configured_button(icon, tooltip, action)
             self.action_buttons_layout.addWidget(button)
             
-        self.main_window.action_buttons_layout = self.action_buttons_layout # passes the layout to the main window
-
+        self.setLayout(self.action_buttons_layout)

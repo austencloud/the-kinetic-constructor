@@ -24,7 +24,7 @@ class Graph_Editor_Widget(QWidget):
         self.graph_editor_frame.setPalette(palette)
 
         # Create a main horizontal layout for the graph_editor_frame
-        frame_layout = QHBoxLayout(self.graph_editor_frame)
+        graph_editor_frame_layout = QHBoxLayout(self.graph_editor_frame)
 
         # Create individual vertical layouts
         objectbox_layout = QVBoxLayout()  # For arrowbox and propbox
@@ -32,7 +32,7 @@ class Graph_Editor_Widget(QWidget):
         action_buttons_layout = QVBoxLayout()  # For action buttons
         info_tracker_layout = QVBoxLayout()  # For the info tracker
         
-        # Create and add contents to the frame_layout
+        # Create and add contents to the graph_editor_frame_layout
         self.graphboard_view = Graphboard_View(main_widget, self)
         self.export_manager = Export_Manager(main_widget.staff_manager, main_widget.grid, self.graphboard_view)
         self.info_manager = Info_Manager(main_widget, self.graphboard_view)
@@ -50,17 +50,18 @@ class Graph_Editor_Widget(QWidget):
         graphboard_layout.addWidget(self.graphboard_view)
 
         # Add the action buttons frame to its layout
-        action_buttons_layout.addWidget(self.action_buttons_frame)  # self.action_buttons_frame is an instance of Action_Buttons_Frame
+        action_buttons_layout.addWidget(self.action_buttons_frame)  # self.action_buttons_frame is an instance of Action_Buttons_Frameself.
 
         # Add the info tracker to its layout
         info_tracker_layout.addWidget(self.info_manager.info_label)
 
         # Add the individual vertical layouts to the main horizontal layout
-        frame_layout.addLayout(objectbox_layout)
-        frame_layout.addLayout(graphboard_layout)
-        frame_layout.addLayout(action_buttons_layout)
-        frame_layout.addLayout(info_tracker_layout)
+        graph_editor_frame_layout.addLayout(objectbox_layout)
+        graph_editor_frame_layout.addLayout(graphboard_layout)
+        graph_editor_frame_layout.addLayout(action_buttons_layout)
+        graph_editor_frame_layout.addLayout(info_tracker_layout)
 
-        self.graph_editor_frame.setLayout(frame_layout)  # This line is crucial.
+        self.graph_editor_frame.setLayout(graph_editor_frame_layout)  # This line is crucial.
+        
         self.main_window.graph_editor_layout.addWidget(self.graph_editor_frame)
 
