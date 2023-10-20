@@ -6,11 +6,11 @@ from objects.arrow import Arrow
 
 from managers.export_manager import Export_Manager
 class Pictograph_Generator():
-    def __init__(self, main_widget, graphboard_view, info_tracker):
+    def __init__(self, main_widget, graphboard_view, info_frame):
         
         self.staff_manager = main_widget.staff_manager
         self.graphboard_view = graphboard_view
-        self.info_tracker = info_tracker
+        self.info_frame = info_frame
         self.main_window = main_widget.main_window
         self.arrow_manager = main_widget.arrow_manager
         self.export_manager = main_widget.export_manager
@@ -67,7 +67,7 @@ class Pictograph_Generator():
         if not combinations:
             print(f"No combinations found for letter {letter}")
             self.graphboard_view.update_letter(None)
-            self.info_tracker.update()
+            self.info_frame.update()
             return
         self.current_letter = letter
         print(f"Generating {self.current_letter}")
@@ -81,10 +81,10 @@ class Pictograph_Generator():
             if all(key in combination for key in ['color', 'motion_type', 'rotation_direction', 'quadrant', 'turns']):
                 if combination['motion_type'] == 'static':
                     svg_file = f"images/arrows/blank.svg"
-                    arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_manager, combination['motion_type'], self.staff_manager)
+                    arrow = Arrow(svg_file, self.graphboard_view, self.info_frame, self.svg_manager, self.arrow_manager, combination['motion_type'], self.staff_manager)
                 elif combination['motion_type'] == 'anti' or combination['motion_type'] == 'pro':
                     svg_file = f"images/arrows/shift/{combination['motion_type']}/{combination['color']}_{combination['motion_type']}_{combination['rotation_direction']}_{combination['quadrant']}_{combination['turns']}.svg"
-                    arrow = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.svg_manager, self.arrow_manager, combination['motion_type'], self.staff_manager, None)
+                    arrow = Arrow(svg_file, self.graphboard_view, self.info_frame, self.svg_manager, self.arrow_manager, combination['motion_type'], self.staff_manager, None)
                     arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
                     arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)
                 created_arrows.append(arrow)
@@ -112,7 +112,7 @@ class Pictograph_Generator():
 
         self.staff_manager.update_graphboard_staffs(self.graphboard_scene)
         # created_arrows should be a list
-        self.info_tracker.update()
+        self.info_frame.update()
 
     def get_current_letter(self):
         return self.current_letter

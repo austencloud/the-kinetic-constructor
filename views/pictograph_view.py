@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QGraphicsItem, QFrame
 from PyQt6.QtGui import QTransform, QAction
 from objects.grid import Grid
 from objects.arrow import Arrow
-from managers.info_manager import Info_Manager
+from frames.graphboard_info_frame import Graphboard_Info_Frame
 from managers.staff_manager import Staff_Manager
 from managers.arrow_manager import Arrow_Manager
 from managers.svg_manager import Svg_Manager
@@ -29,8 +29,8 @@ class Pictograph_View(QGraphicsView):
         self.staff_manager.connect_pictograph_view(self)
         self.arrow_manager = Arrow_Manager(self.main_widget)
         self.json_manager = Json_Manager(self.pictograph_scene)
-        self.info_manager = Info_Manager(self.main_widget, self)
-        self.arrow_manager.connect_info_tracker(self.info_manager)
+        self.info_frame = Graphboard_Info_Frame(self.main_widget, self)
+        self.arrow_manager.connect_info_frame(self.info_frame)
         self.staff_manager.connect_grid(self.grid)
         self.init_grid()
         self.staff_manager.init_pictograph_staffs(self, self.grid)
@@ -108,13 +108,13 @@ class Pictograph_View(QGraphicsView):
         self.staff_manager.update_pictograph_staffs(self.pictograph_scene)
 
     def place_ghost_arrows(self, created_arrows, arrow_dict):
-        ghost_arrow = Arrow(None, self, self.info_manager, self.svg_manager, self.arrow_manager, 'static', self.staff_manager, arrow_dict)
+        ghost_arrow = Arrow(None, self, self.info_frame, self.svg_manager, self.arrow_manager, 'static', self.staff_manager, arrow_dict)
         ghost_arrow.update_attributes()
         created_arrows.append(ghost_arrow)
 
     def place_shift_arrows(self, DISTANCE, created_arrows, optimal_locations, arrow_dict):
         svg_file = f"images/arrows/shift/{arrow_dict['motion_type']}/{arrow_dict['color']}_{arrow_dict['motion_type']}_{arrow_dict['rotation_direction']}_{arrow_dict['quadrant']}_{arrow_dict['turns']}.svg"
-        arrow = Arrow(svg_file, self, self.info_manager, self.svg_manager, self.arrow_manager, arrow_dict['motion_type'], self.staff_manager, arrow_dict)
+        arrow = Arrow(svg_file, self, self.info_frame, self.svg_manager, self.arrow_manager, arrow_dict['motion_type'], self.staff_manager, arrow_dict)
         arrow.update_attributes()
         arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
         arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)

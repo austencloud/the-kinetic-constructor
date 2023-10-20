@@ -27,7 +27,6 @@ class Layout_Manager():
             'sequence': QHBoxLayout(),
             'objectbox': QVBoxLayout(),
             'graphboard': QVBoxLayout(),
-            'info': QVBoxLayout(),
             'word': QHBoxLayout(),
             'graphboard_and_buttons': QHBoxLayout(),
             'optionboard': QHBoxLayout(),
@@ -61,7 +60,7 @@ class Layout_Manager():
         self.add_black_border(self.main_widget.graph_editor_widget.graphboard_view)
         self.add_black_border(self.main_widget.sequence_view)
         self.add_black_border(self.main_widget.word_label)
-        self.add_black_border(self.main_widget.graph_editor_widget.info_manager.info_label)
+        self.add_black_border(self.main_widget.graph_editor_widget.info_frame)
         self.add_black_border(self.main_widget.optionboard_view)
         self.add_black_border(self.main_widget.graph_editor_widget.action_buttons_frame)
         self.add_black_border(self.main_widget.graph_editor_widget.letter_buttons_frame)

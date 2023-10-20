@@ -6,12 +6,12 @@ from PyQt6.QtCore import Qt, QPointF
 from data.arrow_start_end_locations import arrow_start_end_locatios
 from settings import *
 class Arrow(QGraphicsSvgItem):
-    def __init__(self, svg_file, graphboard_view, info_tracker, svg_manager, arrow_manager, motion_type, staff_manager, dict):
+    def __init__(self, svg_file, graphboard_view, info_frame, svg_manager, arrow_manager, motion_type, staff_manager, dict):
         super().__init__(svg_file)
         
         # Connectors
         self.graphboard_view = graphboard_view
-        self.info_tracker = info_tracker
+        self.info_frame = info_frame
         self.dict = dict
         self.svg_file = svg_file
         self.svg_manager = svg_manager
@@ -62,7 +62,7 @@ class Arrow(QGraphicsSvgItem):
                 new_quadrant = self.graphboard_view.get_graphboard_quadrants(new_pos + self.center)  
                 if self.quadrant != new_quadrant:
                     self.update_arrow_for_new_quadrant(new_quadrant)
-                    self.info_tracker.update()
+                    self.info_frame.update()
             elif isinstance(self.graphboard_view, Pictograph_View):
                 new_pos = self.mapToScene(event.pos()) - self.drag_offset / 2
                 self.setPos(new_pos)

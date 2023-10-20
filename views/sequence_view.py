@@ -43,7 +43,7 @@ class Sequence_View(QGraphicsView):
 
         self.pictographs = [] 
         self.pictograph_generator = main_widget.graph_editor_widget.pictograph_generator
-        self.info_manager = main_widget.graph_editor_widget.info_manager
+        self.info_frame = main_widget.graph_editor_widget.info_frame
         self.sequence_scene = sequence_scene
         self.beats = [QGraphicsRectItem(QRectF(0, 0, DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE, DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE)) for i in range(4)]
         
@@ -82,7 +82,7 @@ class Sequence_View(QGraphicsView):
         self.add_pictograph(pictograph)
         graphboard_view.clear()
         graphboard_view.update_letter(None)
-        letter = self.info_manager.get_current_letter()
+        letter = self.info_frame.get_current_letter()
         if letter:
             self.main_widget.word_label.setText(self.main_widget.word_label.text() + letter)
         self.sequence_scene.update()
@@ -117,6 +117,6 @@ class Sequence_View(QGraphicsView):
         for item in self.sequence_scene.items():
             self.sequence_scene.removeItem(item)
         self.main_widget.word_label.setText("My word: ")
-        self.main_widget.info_manager.label.setText("")  # Clear the label
+        self.main_widget.info_frame.label.setText("")  # Clear the label
         
 

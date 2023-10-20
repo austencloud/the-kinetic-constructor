@@ -27,7 +27,9 @@ class PropBox_View(QGraphicsView):
         self.propbox_layout = QVBoxLayout()
         self.propbox_frame.setLayout(self.propbox_layout)
         self.propbox_layout.addWidget(self)
-        self.propbox_frame.setFixedSize(int(500 * GRAPHBOARD_SCALE), int(400 * GRAPHBOARD_SCALE))
+        
+        self.setFixedSize(int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE))
+
 
         
 

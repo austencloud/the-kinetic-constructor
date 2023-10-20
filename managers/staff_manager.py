@@ -15,8 +15,8 @@ class Staff_Manager(QObject):
         self.letters = main_widget.json_manager.load_all_letters() 
         self.grid = main_widget.grid
 
-    def connect_info_tracker(self, info_tracker):
-        self.info_tracker = info_tracker
+    def connect_info_frame(self, info_frame):
+        self.info_frame = info_frame
 
     def create_staff(self, end_location, scene, color, context):
         
@@ -300,7 +300,7 @@ class Staff_Manager(QObject):
         This method assumes that 'self.letters' and 'self.graphboard_view' are accessible within this class.
         """
         current_state = self.graphboard_view.get_graphboard_state()
-        current_letter = self.info_tracker.determine_current_letter_and_type()[0]
+        current_letter = self.info_frame.determine_current_letter_and_type()[0]
 
         if current_letter is not None:
             matching_letters = self.letters[current_letter]

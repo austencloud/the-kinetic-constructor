@@ -11,9 +11,11 @@ class Letter_Buttons_Frame(QFrame):
         super().__init__()
         self.main_window = main_widget.main_window
         self.letter_buttons_layout = QVBoxLayout()
-        self.letter_buttons_layout.setSpacing(int(10* GRAPHBOARD_SCALE))  # Set the spacing between rows of buttons
+        self.letter_buttons_layout.addStretch(1)  # Add a stretch to the top of the layout
+        self.letter_buttons_layout.setSpacing(int(20* GRAPHBOARD_SCALE))  # Set the spacing between rows of buttons
         self.letter_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignTop)  # Align the layout to the top
         letter_rows = [
+            # Type 1 - Dual-Shift
             ['A', 'B', 'C'],
             ['D', 'E', 'F'],
             ['G', 'H', 'I'],
@@ -21,12 +23,21 @@ class Letter_Buttons_Frame(QFrame):
             ['M', 'N', 'O'],
             ['P', 'Q', 'R'],
             ['S', 'T', 'U', 'V'],
-            ['W', 'X', 'Y', 'Z'],
-            ['Σ', 'Δ', 'θ', 'Ω'],
-            ['Φ', 'Ψ', 'Λ'],
-            ['W-', 'X-', 'Y-', 'Z-'],
-            ['Σ-', 'Δ-', 'θ-', 'Ω-'],
-            ['Φ-', 'Ψ-', 'Λ-'],
+            # Type 2 - Shift
+            ['W', 'X'],
+            ['Y', 'Z'],
+            ['Σ', 'Δ'],
+            ['θ', 'Ω'],
+            # Type 3 - Cross-Shift
+            # ['W-', 'X-'],
+            # ['Y-', 'Z-'],
+            # ['Σ-', 'Δ-'],
+            # ['θ-', 'Ω-'],
+            # Type 4 - Dash
+            # ['Φ', 'Ψ', 'Λ'],
+            # Type 5 - Dual-Dash
+            # ['Φ-', 'Ψ-', 'Λ-'],
+            # Type 6 - Static
             ['α', 'β', 'Γ']
         ]
 
@@ -45,15 +56,8 @@ class Letter_Buttons_Frame(QFrame):
                 font = QFont()
                 font.setPointSize(int(20*GRAPHBOARD_SCALE))
                 button.setFont(font)
-                button.setFixedSize(int(90 * GRAPHBOARD_SCALE), int(90 * GRAPHBOARD_SCALE))
+                button.setFixedSize(int(120 * GRAPHBOARD_SCALE), int(120 * GRAPHBOARD_SCALE))
                 button.clicked.connect(lambda _, l=letter: Pictograph_Selector_Dialog(main_widget, l))
                 row_layout.addWidget(button)
             self.letter_buttons_layout.addLayout(row_layout)
-
-        generate_all_button = QPushButton("Generate All", self.main_window)
-        font = QFont()
-        font.setPointSize(int(20 * GRAPHBOARD_SCALE))
-        generate_all_button.setFont(font)
-        generate_all_button.setFixedSize(int(300*GRAPHBOARD_SCALE), int(80*GRAPHBOARD_SCALE))
-        generate_all_button.clicked.connect(lambda: main_widget.generator.generate_all_pictographs(self.main_window.staff_manager))
-        self.letter_buttons_layout.addWidget(generate_all_button)
+            self.letter_buttons_layout.addStretch(1)  # Add a stretch to the bottom of the layout

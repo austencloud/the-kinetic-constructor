@@ -25,8 +25,8 @@ class Arrow_Manager(QObject):
     def connect_arrow(self, arrow):
         self.arrow = arrow
 
-    def connect_info_tracker(self, info_tracker):
-        self.info_tracker = info_tracker
+    def connect_info_frame(self, info_frame):
+        self.info_frame = info_frame
 
     def connect_to_graphboard_view(self, graphboard_view):
         self.graphboard_view = graphboard_view
@@ -51,7 +51,7 @@ class Arrow_Manager(QObject):
         self.update_arrow_image(self.selected_arrow)
         self.selected_arrow.update_attributes()
         self.update_arrow_position(self.graphboard_view)
-        self.info_tracker.update()
+        self.info_frame.update()
 
     def swap_motion_type(self, arrows):
         if not isinstance(arrows, list):
@@ -86,8 +86,43 @@ class Arrow_Manager(QObject):
             else:
                 print(f"Failed to load SVG file: {new_svg}")
 
-        # Update the info tracker and the graphboard_view
-        self.info_tracker.update()
+        # Update the info frame and the graphboard_view
+        self.info_frame.update()
+
+    def rotate_staff(self, staffs, direction):
+        if not isinstance(staffs, list):
+            staffs = [staffs]
+        for staff in staffs:
+            if direction == "right":
+                if staff.arrow.end_location == "n" and staff.arrow.start_location == "n":
+                    staff.arrow.end_location = "e"
+                    staff.arrow.start_location = "e"
+                elif staff.arrow.end_location == "e" and staff.arrow.start_location == "e":
+                    staff.arrow.end_location = "s"
+                    staff.arrow.start_location = "s"
+                elif staff.arrow.end_location == "s" and staff.arrow.start_location == "s":
+                    staff.arrow.end_location = "w"
+                    staff.arrow.start_location = "w"
+                elif staff.arrow.end_location == "w" and staff.arrow.start_location == "w":
+                    staff.arrow.end_location = "n"
+                    staff.arrow.start_location = "n"
+            elif direction == "left":
+                if staff.arrow.end_location == "n" and staff.arrow.start_location == "n":
+                    staff.arrow.end_location = "w"
+                    staff.arrow.start_location = "w"
+                elif staff.arrow.end_location == "w" and staff.arrow.start_location == "w":
+                    staff.arrow.end_location = "s"
+                    staff.arrow.start_location = "s"
+                elif staff.arrow.end_location == "s" and staff.arrow.start_location == "s":
+                    staff.arrow.end_location = "e"
+                    staff.arrow.start_location = "e"
+                elif staff.arrow.end_location == "e" and staff.arrow.start_location == "e":
+                    staff.arrow.end_location = "n"
+                    staff.arrow.start_location = "n"
+    
+            staff.update_attributes()
+            self.update_arrow_position(self.graphboard_view)
+            self.info_frame.update()
 
     def rotate_arrow(self, direction, arrows):
         for arrow in arrows:
@@ -106,7 +141,7 @@ class Arrow_Manager(QObject):
                 arrow.svg_file = new_svg
                 arrow.update_attributes()
                 self.update_arrow_position(self.graphboard_view)
-                self.info_tracker.update()
+                self.info_frame.update()
             else:
                 print("Failed to load SVG file:", new_svg)
 
@@ -132,7 +167,7 @@ class Arrow_Manager(QObject):
             else:
                 print("Failed to load SVG file:", new_svg)
                 
-        self.info_tracker.update()
+        self.info_frame.update()
 
         
     def bring_forward(self, items):
@@ -166,13 +201,13 @@ class Arrow_Manager(QObject):
         else:
             print("Cannot swap colors with no arrows on the graphboard_view.")
             
-        self.info_tracker.update()
+        self.info_frame.update()
         
         ### UPDATERS ###
         
     def update_arrow_position(self, graphboard_view):
         current_arrows = graphboard_view.get_arrows()
-        letter = self.info_tracker.determine_current_letter_and_type()[0]
+        letter = self.info_frame.determine_current_letter_and_type()[0]
         if letter is not None:
             self.set_optimal_arrow_pos(current_arrows)
         else:
@@ -217,7 +252,7 @@ class Arrow_Manager(QObject):
 
     def set_optimal_arrow_pos(self, current_arrows):
         current_state = self.graphboard_view.get_graphboard_state()
-        current_letter = self.info_tracker.determine_current_letter_and_type()[0]
+        current_letter = self.info_frame.determine_current_letter_and_type()[0]
         if current_letter is not None:
             matching_letters = self.letters[current_letter]
             optimal_locations = self.find_optimal_locations(current_state, matching_letters)
@@ -281,8 +316,8 @@ class Arrow_Manager(QObject):
                 self.graphboard_view.scene().removeItem(staff)
                 print(f"{staff.color} staff deleted")
                 
-                self.info_tracker.update()
-                self.graphboard_view.update_letter(self.info_tracker.determine_current_letter_and_type()[0])
+                self.info_frame.update()
+                self.graphboard_view.update_letter(self.info_frame.determine_current_letter_and_type()[0])
         else:
             print("No staffs selected")
 
@@ -291,13 +326,13 @@ class Arrow_Manager(QObject):
             deleted_arrows = [deleted_arrows]
         for arrow in deleted_arrows:
             if isinstance(arrow, Arrow):
-                ghost_arrow = Arrow(None, arrow.graphboard_view, arrow.info_tracker, arrow.svg_manager, self, 'static', arrow.staff_manager, None)
+                ghost_arrow = Arrow(None, arrow.graphboard_view, arrow.info_frame, arrow.svg_manager, self, 'static', arrow.staff_manager, None)
                 ghost_arrow.is_ghost = True
                 ghost_arrow.set_static_attributes_from_deleted_arrow(arrow)
                 ghost_arrow.setScale(GRAPHBOARD_SCALE)
                 self.graphboard_scene.addItem(ghost_arrow)
                 self.graphboard_scene.removeItem(arrow)
-                self.info_tracker.update()
+                self.info_frame.update()
         else:
             print("No items selected")
 

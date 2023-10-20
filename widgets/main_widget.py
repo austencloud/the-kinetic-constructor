@@ -31,7 +31,7 @@ class Main_Widget(QWidget):
         self.sequence_view = Sequence_View(self)
         
         self.graphboard_view = self.graph_editor_widget.graphboard_view
-        self.info_manager = self.graph_editor_widget.info_manager
+        self.info_frame = self.graph_editor_widget.info_frame
         
         self.layout_manager.configure_layouts()
         self.init_staffs()
@@ -42,15 +42,15 @@ class Main_Widget(QWidget):
         self.staff_manager.init_propbox_staffs(self.graph_editor_widget.propbox_view)
 
     def connect_objects(self):
-        self.info_manager.connect_graphboard_view(self.graph_editor_widget.graphboard_view)
-        self.staff_manager.connect_info_tracker(self.graph_editor_widget.info_manager)
+        self.info_frame.connect_graphboard_view(self.graph_editor_widget.graphboard_view)
+        self.staff_manager.connect_info_frame(self.graph_editor_widget.info_frame)
         self.staff_manager.connect_grid(self.grid)
         self.staff_manager.connect_graphboard_view(self.graph_editor_widget.graphboard_view)
         self.staff_manager.connect_propbox_view(self.graph_editor_widget.propbox_view)
-        self.graphboard_view.connect_info_tracker(self.graph_editor_widget.info_manager)
+        self.graphboard_view.connect_info_frame(self.graph_editor_widget.info_frame)
         self.graphboard_view.connect_staff_manager(self.staff_manager)
         self.graphboard_view.connect_generator(self.graph_editor_widget.pictograph_generator)
-        self.arrow_manager.connect_info_tracker(self.graph_editor_widget.info_manager)
+        self.arrow_manager.connect_info_frame(self.graph_editor_widget.info_frame)
         self.arrow_manager.connect_to_graphboard_view(self.graph_editor_widget.graphboard_view)
 
 ### EVENTS ###

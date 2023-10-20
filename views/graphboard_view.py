@@ -105,7 +105,7 @@ class Graphboard_View(QGraphicsView):
         dropped_arrow_svg = event.mimeData().text()
         dropped_arrow_svg_motion_type = dropped_arrow_svg.split('_')[1]
         
-        self.arrow = Arrow(dropped_arrow_svg, self, self.info_tracker, self.svg_manager, self.arrow_manager, dropped_arrow_svg_motion_type, self.staff_manager, None)
+        self.arrow = Arrow(dropped_arrow_svg, self, self.info_frame, self.svg_manager, self.arrow_manager, dropped_arrow_svg_motion_type, self.staff_manager, None)
         self.arrow.setScale(GRAPHBOARD_SCALE)
         self.scene().addItem(self.arrow)
         
@@ -121,7 +121,7 @@ class Graphboard_View(QGraphicsView):
         for arrow in self.scene().items():
             if isinstance(arrow, Arrow):
                 arrow.arrow_manager.update_arrow_position(self)
-        self.info_tracker.update()
+        self.info_frame.update()
 
 
     ### GETTERS ###
@@ -249,8 +249,8 @@ class Graphboard_View(QGraphicsView):
 
     ### SETTERS ###
 
-    def connect_info_tracker(self, info_tracker):
-        self.info_tracker = info_tracker
+    def connect_info_frame(self, info_frame):
+        self.info_frame = info_frame
 
     def connect_generator(self, generator):
         self.generator = generator

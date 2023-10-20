@@ -9,9 +9,9 @@ from settings import *
 
 
 class ArrowBox_View(QGraphicsView):
-    def __init__(self, main_widget, graphboard_view, info_tracker):
+    def __init__(self, main_widget, graphboard_view, info_frame):
         super().__init__()
-        self.info_tracker = info_tracker
+        self.info_frame = info_frame
         self.drag = None
         self.drag_state = {} 
         self.graphboard_view = graphboard_view
@@ -23,7 +23,8 @@ class ArrowBox_View(QGraphicsView):
         self.setScene(self.arrowbox_scene)
         self.configure_arrowbox_frame()
         self.populate_arrows()
-        self.finalize_arrowbox_configuration()
+        self.objectbox_layout.addWidget(self)
+        self.setFixedSize(int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE))
 
     ### MOUSE EVENTS ###
 
@@ -95,9 +96,7 @@ class ArrowBox_View(QGraphicsView):
                         
 
         try:
-            # Assuming self.drag is the QDrag object
             if self.drag is not None:
-                # Execute the drag and drop operation
                 self.drag.exec(Qt.DropAction.CopyAction | Qt.DropAction.MoveAction)
         except RuntimeError as e:
             event.ignore()
@@ -138,7 +137,7 @@ class ArrowBox_View(QGraphicsView):
         if file_name in default_arrows:
             
             motion_type = file_name.split('_')[1]
-            arrow_item = Arrow(svg_file, self.graphboard_view, self.info_tracker, self.main_widget.svg_manager, self.main_widget.arrow_manager, motion_type, self.main_widget.staff_manager, None)
+            arrow_item = Arrow(svg_file, self.graphboard_view, self.info_frame, self.main_widget.svg_manager, self.main_widget.arrow_manager, motion_type, self.main_widget.staff_manager, None)
             arrow_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
             arrow_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
             arrow_item.setScale(GRAPHBOARD_SCALE * 0.75)
@@ -159,9 +158,3 @@ class ArrowBox_View(QGraphicsView):
                     svg_item_count_blue_anti += 1
             self.arrowbox_scene.addItem(arrow_item) 
             self.main_widget.arrows.append(arrow_item)
-
-    def finalize_arrowbox_configuration(self):
-        self.objectbox_layout.addWidget(self)
-        self.arrowbox_frame.setFixedSize(int(500 * GRAPHBOARD_SCALE), int(600 * GRAPHBOARD_SCALE))
-        self.arrowbox_frame = self.arrowbox_frame
-
