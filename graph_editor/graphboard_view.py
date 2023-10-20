@@ -1,5 +1,5 @@
 import os
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsItem, QGraphicsRectItem, QMenu, QGraphicsScene
+from PyQt6.QtWidgets import QGraphicsView, QGraphicsItem, QGraphicsRectItem, QMenu, QGraphicsScene, QSizePolicy
 from PyQt6.QtWidgets import QGraphicsItem, QToolTip, QFrame
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
@@ -9,12 +9,12 @@ from objects.staff import Staff
 from objects.arrow import Arrow
 from settings import *
 from managers.staff_manager import Staff_Manager
-#import the missing modules
+
 
 
 class Graphboard_View(QGraphicsView):
-    def __init__(self, main_widget):
-        super().__init__()
+    def __init__(self, main_widget, graph_editor_widget):
+        super().__init__(graph_editor_widget)
         self.setAcceptDrops(True)
         self.setInteractive(True)
         self.dragging = None
@@ -31,7 +31,7 @@ class Graphboard_View(QGraphicsView):
         self.staff_manager = main_widget.staff_manager
         
         self.grid.setScale(GRAPHBOARD_SCALE)
-        
+        self.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
         self.VERTICAL_OFFSET = (self.height() - self.width()) / 2
         
 

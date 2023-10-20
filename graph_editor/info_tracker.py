@@ -5,11 +5,12 @@ from PyQt6.QtWidgets import QLabel
 from data.positions_map import positions_map
 from data.letter_types import letter_types
 from settings import GRAPHBOARD_SCALE
+
 class Info_Tracker:
-    def __init__(self, main_widget, graphboard_view):
+    def __init__(self, main_widget, view):
         self.remaining_staff = {}
         self.previous_state = None 
-        self.graphboard_view = graphboard_view
+        self.view = view
         self.staff_manager = main_widget.staff_manager
         self.letters = main_widget.letters
         self.main_window = main_widget.main_window
@@ -21,8 +22,8 @@ class Info_Tracker:
             self.info_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse | Qt.TextInteractionFlag.TextSelectableByKeyboard)
             self.info_label.setAlignment(Qt.AlignmentFlag.AlignTop)
             self.info_label.setFixedWidth(int(350 * GRAPHBOARD_SCALE))
-    def connect_graphboard_view(self, graphboard_view):
-        self.graphboard_view = graphboard_view
+    def connect_graphboard_view(self, view):
+        self.view = view
 
     ### GETTERS ###
 
@@ -33,7 +34,7 @@ class Info_Tracker:
     
     def determine_current_letter_and_type(self):
         current_combination = []
-        for item in self.graphboard_view.items():
+        for item in self.view.items():
             if isinstance(item, Arrow):
                 attributes = item.get_attributes()
                 sorted_attributes = {k: attributes[k] for k in sorted(attributes.keys())}
@@ -58,7 +59,7 @@ class Info_Tracker:
         current_combination = []
         self.remaining_staff = {}  # Initialize an empty dictionary to store remaining staff info
 
-        for item in self.graphboard_view.items():
+        for item in self.view.items():
             if isinstance(item, Arrow):
                 attributes = item.get_attributes()
                 current_combination.append(attributes)
@@ -72,7 +73,7 @@ class Info_Tracker:
         no_blue_arrows = True
         no_red_arrows = True
 
-        for arrow in [item for item in self.graphboard_view.items() if isinstance(item, Arrow)]:
+        for arrow in [item for item in self.view.items() if isinstance(item, Arrow)]:
             arrow.set_attributes_from_filename()
 
             if arrow.color == 'blue':
@@ -110,13 +111,13 @@ class Info_Tracker:
                 
         else:  # Letter isn't in the combinations
             self.letter = None
-            self.graphboard_view.update_letter(None)   
+            self.view.update_letter(None)   
 
         if self.letter is not None:
-            self.graphboard_view.update_letter(self.letter)
+            self.view.update_letter(self.letter)
 
         self.info_label.setText("<table><tr><td width=300>" + blue_text + "</td></tr><tr><td width=300>" + red_text + "</td></tr><tr><td width=100>" + letter_text + "</td></tr></table>")
-        self.staff_manager.update_graphboard_staffs(self.graphboard_view.scene())
+        self.staff_manager.update_graphboard_staffs(self.view.scene())
 
     def get_start_end_locations(self):
         positions = []
@@ -128,7 +129,7 @@ class Info_Tracker:
         end_location_blue = None
         color_red = None
         color_blue = None
-        for item in self.graphboard_view.items():
+        for item in self.view.items():
             if isinstance(item, Arrow):
                 arrow_items.append(item)
 

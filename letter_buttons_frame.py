@@ -1,13 +1,14 @@
 #import the necessary things
-from PyQt6.QtWidgets import QPushButton, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QPushButton, QVBoxLayout, QHBoxLayout, QFrame
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QIcon, QPainter, QFont, QColor
 from PyQt6.QtSvg import QSvgRenderer
 from settings import GRAPHBOARD_SCALE
 from pictograph_selector_dialog import Pictograph_Selector_Dialog
 
-class Letter_Buttons():
+class Letter_Buttons_Frame(QFrame):
     def __init__(self, main_widget):
+        super().__init__()
         self.main_window = main_widget.main_window
         self.letter_buttons_layout = QVBoxLayout()
         self.letter_buttons_layout.setSpacing(int(10* GRAPHBOARD_SCALE))  # Set the spacing between rows of buttons
@@ -22,10 +23,10 @@ class Letter_Buttons():
             ['S', 'T', 'U', 'V'],
             ['W', 'X', 'Y', 'Z'],
             ['Σ', 'Δ', 'θ', 'Ω'],
-            # ['Φ', 'Ψ', 'Λ'],
-            # ['W-', 'X-', 'Y-', 'Z-'],
-            # ['Σ-', 'Δ-', 'θ-', 'Ω-'],
-            # ['Φ-', 'Ψ-', 'Λ-'],
+            ['Φ', 'Ψ', 'Λ'],
+            ['W-', 'X-', 'Y-', 'Z-'],
+            ['Σ-', 'Δ-', 'θ-', 'Ω-'],
+            ['Φ-', 'Ψ-', 'Λ-'],
             ['α', 'β', 'Γ']
         ]
 
@@ -44,7 +45,7 @@ class Letter_Buttons():
                 font = QFont()
                 font.setPointSize(int(20*GRAPHBOARD_SCALE))
                 button.setFont(font)
-                button.setFixedSize(int(65 * GRAPHBOARD_SCALE), int(65 * GRAPHBOARD_SCALE))
+                button.setFixedSize(int(90 * GRAPHBOARD_SCALE), int(90 * GRAPHBOARD_SCALE))
                 button.clicked.connect(lambda _, l=letter: Pictograph_Selector_Dialog(main_widget, l))
                 row_layout.addWidget(button)
             self.letter_buttons_layout.addLayout(row_layout)

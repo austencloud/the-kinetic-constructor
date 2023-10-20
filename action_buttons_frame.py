@@ -1,11 +1,12 @@
-from PyQt6.QtWidgets import QPushButton
+from PyQt6.QtWidgets import QPushButton, QFrame
 from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import QSize
 from settings import GRAPHBOARD_SCALE
 from PyQt6.QtWidgets import QVBoxLayout
 
-class Action_Buttons:
+class Action_Buttons_Frame(QFrame):
     def __init__(self, main_widget):
+        super().__init__()
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
 
@@ -49,5 +50,5 @@ class Action_Buttons:
             button = create_configured_button(icon, tooltip, action)
             self.action_buttons_layout.addWidget(button)
             
-        self.main_window.action_buttons_layout = self.action_buttons_layout
+        self.main_window.action_buttons_layout = self.action_buttons_layout # passes the layout to the main window
 

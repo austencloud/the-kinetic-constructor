@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QGraphicsItem, QFrame
 from PyQt6.QtGui import QTransform, QAction
 from objects.grid import Grid
 from objects.arrow import Arrow
-from info_tracker import Info_Tracker
+from graph_editor.info_tracker import Info_Tracker
 from managers.staff_manager import Staff_Manager
 from managers.arrow_manager import Arrow_Manager
 from managers.svg_manager import Svg_Manager
@@ -29,12 +29,12 @@ class Pictograph_View(QGraphicsView):
         self.staff_manager.connect_pictograph_view(self)
         self.arrow_manager = Arrow_Manager(self.main_widget)
         self.json_manager = Json_Manager(self.pictograph_scene)
-        self.info_tracker = Info_Tracker(self.main_widget)
+        self.info_tracker = Info_Tracker(self.main_widget, self)
         self.arrow_manager.connect_info_tracker(self.info_tracker)
         self.staff_manager.connect_grid(self.grid)
         self.init_grid()
         self.staff_manager.init_pictograph_staffs(self, self.grid)
-        self.graphboard_view = main_widget.graphboard_view
+        self.graphboard_view = main_widget.graph_editor_widget.graphboard_view
 
         
     def init_grid(self):
@@ -69,7 +69,7 @@ class Pictograph_View(QGraphicsView):
         graphboard_layer2_points = {}
         for point_name in ['NE_layer2_point', 'SE_layer2_point', 'SW_layer2_point', 'NW_layer2_point']:
             cx, cy = self.grid.get_circle_coordinates(point_name)
-            graphboard_layer2_points[point_name] = QPointF(cx, cy)  # Subtract VERTICAL_OFFSET from y-coordinate
+            graphboard_layer2_points[point_name] = QPointF(cx, cy)
 
         # Map the quadrants to the corresponding layer 2 points
         centers = {
@@ -79,7 +79,7 @@ class Pictograph_View(QGraphicsView):
             'nw': graphboard_layer2_points['NW_layer2_point']
         }
 
-        return centers.get(quadrant, QPointF(0, 0))  # Subtract VERTICAL_OFFSET from default y-coordinate
+        return centers.get(quadrant, QPointF(0, 0))
 
     def get_arrows(self):
         # return the current arrows on the graphboard as an array
@@ -174,5 +174,5 @@ class Pictograph_View(QGraphicsView):
         saveOptimalAction = QAction("Save Optimal Positions", self)
         saveOptimalAction.triggered.connect(self.save_optimal_positions)
         contextMenu.addAction(saveOptimalAction)
-        contextMenu.exec_(event.globalPos())
+        contextMenu.exec(event.globalPos())
 

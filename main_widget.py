@@ -5,18 +5,10 @@ from managers.arrow_manager import Arrow_Manager
 from managers.staff_manager import Staff_Manager
 from managers.svg_manager import Svg_Manager
 from managers.json_manager import Json_Manager
-from views.graphboard_view import Graphboard_View
-from views.arrowbox_view import ArrowBox_View
 from views.sequence_view import Sequence_View
 from views.optionboard_view import Optionboard_View
-from pictograph_generator import Pictograph_Generator
-from info_tracker import Info_Tracker
-from exporter import Exporter
-from init.letter_buttons import Letter_Buttons
-from init.action_buttons import Action_Buttons
 from managers.layout_manager import Layout_Manager
-from init.key_bindings import Key_Bindings
-from views.propbox_view import PropBox_View
+from key_bindings import Key_Bindings
 from graph_editor_widget import Graph_Editor_Widget
 class Main_Widget(QWidget):
     def __init__(self, main_window):
@@ -33,15 +25,15 @@ class Main_Widget(QWidget):
         self.key_bindings = Key_Bindings()
         self.svg_manager = Svg_Manager()
         self.arrow_manager = Arrow_Manager(self)
+        
+        self.graph_editor_widget = Graph_Editor_Widget(self)      
 
-        self.graph_editor_widget = Graph_Editor_Widget(self) 
+
+        
         
         self.optionboard_view = Optionboard_View(self)
-        self.letter_buttons = Letter_Buttons(self)
-        self.action_buttons = Action_Buttons(self)
         self.sequence_view = Sequence_View(self)
         self.layout_manager.configure_layouts()
-        
         self.init_staffs()
         self.connect_objects()
 
@@ -66,6 +58,6 @@ class Main_Widget(QWidget):
 
     def eventFilter(self, source, event):
         if event.type() == QEvent.Type.KeyPress:
-            self.key_bindings.keyPressEvent(event, self.graphboard_view)
+            self.key_bindings.keyPressEvent(event, self.graph_editor_widget.graphboard_view)
             return True
         return super().eventFilter(source, event)
