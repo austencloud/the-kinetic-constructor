@@ -71,7 +71,7 @@ class Arrow(QGraphicsSvgItem):
         if hasattr(self, 'future_position'):
             self.setPos(self.future_position)
             del self.future_position
-        from views.graphboard_view import Graphboard_View
+        from graph_editor.graphboard_view import Graphboard_View
         if isinstance(self.graphboard_view, Graphboard_View):
             self.arrow_manager.update_arrow_position(self.graphboard_view)
         
