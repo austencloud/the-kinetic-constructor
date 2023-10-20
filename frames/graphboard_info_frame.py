@@ -6,84 +6,69 @@ from data.positions_map import positions_map
 from data.letter_types import letter_types
 from settings import GRAPHBOARD_SCALE
 
+
 class Graphboard_Info_Frame(QFrame):
+
     def __init__(self, main_widget, view):
         super().__init__()
-        self.remaining_staff = {}
-        self.previous_state = None 
+
+        self.setup_variables(main_widget, view)
+        self.setup_ui_elements()
+
+    def setup_variables(self, main_widget, view):
         self.view = view
+        self.remaining_staff = {}
+        self.previous_state = None
         self.staff_manager = main_widget.staff_manager
         self.letters = main_widget.letters
         self.main_window = main_widget.main_window
 
-
-        # Initialize the labels with the 'Left' and 'Right' text
-        self.blue_details_label = QLabel("Left")
-        self.blue_details_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-        self.blue_details_label.setStyleSheet("color: blue; font-size: 25px; font-weight: bold;")
-        
-        self.red_details_label = QLabel("Right")
-        self.red_details_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-        self.red_details_label.setStyleSheet("color: red; font-size: 25px; font-weight: bold;")
-
-        self.type_position_label = QLabel()
-        self.type_position_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-
-        # Initialize the grid layout
-        self.grid_layout = QGridLayout()
-        # Set fixed spacing in pixels between the items in your layouts.
-        self.grid_layout.setVerticalSpacing(10)  # for example, 10 pixels between rows.
-        # Assuming you want the vertical space distribution ratio to be 1:3:2
-
-
-        # Create a separate layout for headers
-        header_layout = QHBoxLayout()
-        header_layout.addWidget(self.blue_details_label)
-        header_layout.addWidget(self.red_details_label)
-        header_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins: left, top, right, bottom
-
-        # Create a separate layout for content (arrow details)
-        self.content_layout = QHBoxLayout()
-        self.content_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins: left, top, right, bottom
-
-        # Initialize the type and position layout and labels
-        self.type_position_layout = QHBoxLayout()
-        self.type_position_layout.addWidget(self.type_position_label)
-        self.type_position_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins: left, top, right, bottom
-        # Configure the layout properties for the type and position section
-        
-
-
-        # Create a widget to hold the type and position layout, and set its properties
-        type_position_widget = QWidget()
-        type_position_widget.setLayout(self.type_position_layout)
-        type_position_widget.setFixedHeight(int(240 * GRAPHBOARD_SCALE))  # Or another value that suits the design
-
-        # Instead of directly adding layouts, we will add them to QWidgets and then add these widgets to the grid
-        # Create a widget to hold the header layout
-        header_widget = QWidget()
-        header_widget.setLayout(header_layout)
-        header_widget.setFixedHeight(int(120 * GRAPHBOARD_SCALE))
-        #remove the padding on the top
-
-        
-        # Create a widget to hold the content layout
-        content_widget = QWidget()
-        content_widget.setLayout(self.content_layout)
-
-        # Adjust the grid layout to add widgets instead of layouts
-        # The row stretches ensure that the header takes only the space it needs, and the rest goes to content
-        self.grid_layout.addWidget(header_widget, 0, 0)  # Add the header widget
-        self.grid_layout.addWidget(content_widget, 1, 0)  # Add the content widget
-        self.grid_layout.addWidget(type_position_widget, 2, 0)  # Add to the third row (index 2) and first column (index 0)
-
-        self.grid_layout.setRowStretch(0, 0)  # Do not stretch the header row; let it determine its size based on content
-        self.grid_layout.setRowStretch(1, 1)  # Allow the content row to take up the remaining space
-
-        # Setup the main layout
+    def setup_ui_elements(self):
+        self.setup_labels()
+        self.setup_layouts()
         self.setLayout(self.grid_layout)
         self.setFixedWidth(int(900 * GRAPHBOARD_SCALE))
         self.setFixedHeight(int(900 * GRAPHBOARD_SCALE))
+
+    def setup_labels(self):
+        self.blue_details_label = self.create_label("Left", "blue")
+        self.red_details_label = self.create_label("Right", "red")
+        self.type_position_label = self.create_label()
+
+    def create_label(self, text="", color=None):
+        label = QLabel(text)
+        label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        if color:
+            label.setStyleSheet(f"color: {color}; font-size: 25px; font-weight: bold;")
+        return label
+
+    def setup_layouts(self):
+        self.grid_layout = QGridLayout()
+        self.grid_layout.setVerticalSpacing(10)
+
+        header_layout = self.create_horizontal_layout([self.blue_details_label, self.red_details_label])
+        self.content_layout = self.create_horizontal_layout()
+        type_position_layout = self.create_horizontal_layout([self.type_position_label])
+
+        self.add_widgets_to_grid([header_layout, self.content_layout, type_position_layout])
+
+    def create_horizontal_layout(self, widgets=[]):
+        layout = QHBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        for widget in widgets:
+            layout.addWidget(widget)
+        return layout
+
+    def add_widgets_to_grid(self, layouts):
+        for idx, layout in enumerate(layouts):
+            widget = QWidget()
+            widget.setLayout(layout)
+            if idx == 0:
+                widget.setFixedHeight(int(120 * GRAPHBOARD_SCALE))
+            elif idx == 2:
+                widget.setFixedHeight(int(240 * GRAPHBOARD_SCALE))
+            self.grid_layout.addWidget(widget, idx, 0)
+            self.grid_layout.setRowStretch(idx, 0 if idx == 0 else 1)
         
     def update_type_and_position_info(self):
         # Determine the current letter and its type
@@ -104,10 +89,8 @@ class Graphboard_Info_Frame(QFrame):
             # Handle cases where the letter or type is not identified
             self.type_position_label.setText("")
             
-    def connect_graphboard_view(self, view):
+    def connect_view(self, view):
         self.view = view
-
-    ### GETTERS ###
 
     def get_current_letter(self):
         self.letter = self.determine_current_letter_and_type()[0]

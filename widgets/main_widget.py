@@ -42,7 +42,7 @@ class Main_Widget(QWidget):
         self.staff_manager.init_propbox_staffs(self.graph_editor_widget.propbox_view)
 
     def connect_objects(self):
-        self.info_frame.connect_graphboard_view(self.graph_editor_widget.graphboard_view)
+        self.info_frame.connect_view(self.graph_editor_widget.graphboard_view)
         self.staff_manager.connect_info_frame(self.graph_editor_widget.info_frame)
         self.staff_manager.connect_grid(self.grid)
         self.staff_manager.connect_graphboard_view(self.graph_editor_widget.graphboard_view)

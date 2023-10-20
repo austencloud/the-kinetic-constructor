@@ -11,9 +11,10 @@ class Action_Buttons_Frame(QFrame):
         self.main_window = main_widget.main_window
 
         button_font = QFont('Helvetica', 14)
-        button_size = int(80 * GRAPHBOARD_SCALE)
-        icon_size = QSize(int(60 * GRAPHBOARD_SCALE), int(60 * GRAPHBOARD_SCALE))
+        button_size = int(100 * GRAPHBOARD_SCALE)
+        icon_size = QSize(int(80 * GRAPHBOARD_SCALE), int(70 * GRAPHBOARD_SCALE))
         self.action_buttons_layout = QVBoxLayout()
+        self.action_buttons_layout.setSpacing(3)
         
         # Configuration for each button
         buttons_config = [

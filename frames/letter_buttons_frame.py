@@ -24,10 +24,8 @@ class Letter_Buttons_Frame(QFrame):
             ['P', 'Q', 'R'],
             ['S', 'T', 'U', 'V'],
             # Type 2 - Shift
-            ['W', 'X'],
-            ['Y', 'Z'],
-            ['Σ', 'Δ'],
-            ['θ', 'Ω'],
+            ['W', 'X', 'Y', 'Z'],
+            ['Σ', 'Δ', 'θ', 'Ω'],
             # Type 3 - Cross-Shift
             # ['W-', 'X-'],
             # ['Y-', 'Z-'],
