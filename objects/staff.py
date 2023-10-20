@@ -3,7 +3,8 @@ from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor
-from settings import GRAPHBOARD_SCALE
+from settings import GRAPHBOARD_SCALE, PICTOGRAPH_SCALE
+
 class Staff(QGraphicsSvgItem):
     def __init__(self, scene, xy_location, axis, color, location=None, context=None):
         super().__init__()
@@ -12,7 +13,6 @@ class Staff(QGraphicsSvgItem):
         self.renderer = QSvgRenderer(image_file)
         self.setSharedRenderer(self.renderer)
         scene.addItem(self)
-        self.scene = scene
         self.arrow = None
         self.setVisible(True)
         rect = self.boundingRect()
@@ -25,8 +25,14 @@ class Staff(QGraphicsSvgItem):
         self.color = color
         self.context = context
         self.setScale(GRAPHBOARD_SCALE)
-        #make them selectable
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
+
+        if context == 'pictograph':
+            self.setScale(PICTOGRAPH_SCALE)  
+        elif context == 'graphboard':
+            self.setScale(GRAPHBOARD_SCALE)  
+        elif context == 'propbox':
+            self.setScale(GRAPHBOARD_SCALE * 0.75)
 
     def mousePressEvent(self, event):
         self.setCursor(Qt.CursorShape.ClosedHandCursor)
@@ -41,11 +47,7 @@ class Staff(QGraphicsSvgItem):
         self.setCursor(Qt.CursorShape.ArrowCursor)
         # Add your snapping logic here
         super().mouseReleaseEvent(event)
-        
-    def set_element(self, element_id, color):
-        self.setElementId(element_id)
-        self.color = color
-        # Add any other attributes you want to change        
+    
 
     def set_element(self, element_id, color):
         self.setElementId(element_id)

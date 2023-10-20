@@ -55,7 +55,7 @@ class Pictograph_Staff_Manager(Staff_Manager):
 
                         continue 
                 
-                    new_staff = self.create_staff(location, scene, color, 'mini')
+                    new_staff = self.create_staff(location, scene, color, 'pictograph')
                     new_staff.setScale(PICTOGRAPH_SCALE)
                     arrow.staff = new_staff
                     new_staff.arrow = arrow
@@ -63,7 +63,8 @@ class Pictograph_Staff_Manager(Staff_Manager):
                         
                     if new_staff.scene is not self.scene:
                         self.scene.addItem(new_staff)
-                    self.staffs_on_board[location + "_staff_" + color] = new_staff  # Add the new staff to the dictionary
+                    self.staffs_on_board[location + "_staff_" + color] = new_staff  #
+                    
         self.check_and_replace_pictograph_staffs()
     
     def check_and_replace_pictograph_staffs(self):

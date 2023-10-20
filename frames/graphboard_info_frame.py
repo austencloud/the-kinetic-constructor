@@ -166,7 +166,7 @@ class Graphboard_Info_Frame(QFrame):
 
 
         # Update the staffs on the graphboard based on the new state
-        self.staff_manager.update_staffs(self.graphboard_view.scene())
+        self.staff_manager.update_graphboard_staffs(self.graphboard_view.scene())
 
     @staticmethod
     def clear_layout(layout):

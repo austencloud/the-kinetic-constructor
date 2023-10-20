@@ -19,7 +19,6 @@ class Staff_Manager(QObject):
         self.info_frame = info_frame
 
     def create_staff(self, location, scene, color, context):
-        
         new_staff = Staff(
             scene,
             self.staff_xy_locations[f'{location}'],
@@ -27,17 +26,6 @@ class Staff_Manager(QObject):
             location,
             context
         )
-
-        new_staff.staff_manager = self 
-
-        if context == 'pictograph':
-            new_staff.setScale(PICTOGRAPH_SCALE)  
-        elif context == 'graphboard':
-            new_staff.setScale(GRAPHBOARD_SCALE)  
-
-        if new_staff.scene is not scene:
-            scene.addItem(new_staff)
-
         return new_staff
 
     def connect_grid(self, grid):
@@ -47,56 +35,6 @@ class Staff_Manager(QObject):
         self.graphboard_view = graphboard_view
         self.scene = graphboard_view.scene()
 
-    def update_staffs(self, scene):
-        for staff in self.staffs_on_board.values():
-            if staff.scene == self.scene: 
-                self.scene.removeItem(staff) 
-        self.staffs_on_board.clear() 
-
-        updated_staffs = {}
-        
-        for arrow in scene.items():
-            if isinstance(arrow, Arrow):
-                location = arrow.end_location
-
-                if location:
-                    location = location.capitalize()
-                    color = ''
-                    if arrow.color in ["#ed1c24", 'red']:
-                        color = 'red'
-                    elif arrow.color in ["#2e3192", 'blue']:
-                        color = 'blue'
-                    else:
-                        continue
-
-                    staff_key = location + "_staff_" + color
-                    
-                    if staff_key in self.staffs_on_board:
-                        staff = self.staffs_on_board[staff_key]
-                        staff.setPos(self.staff_xy_locations[location + "_staff"])  
-                        staff.show()
-                        
-                    else:
-                        new_staff = self.create_staff(location, scene, color, 'main')
-                        new_staff.setScale(arrow.scale())
-                        arrow.staff = new_staff
-                        arrow.staff.arrow = arrow
-                        self.arrow_manager = new_staff.arrow.arrow_manager
-
-                        if new_staff.scene is not self.scene:
-                            self.scene.addItem(new_staff)
-                        self.staffs_on_board[staff_key] = new_staff
-                        staff = new_staff
-
-                    updated_staffs[staff_key] = staff
-
-        staff_keys_to_remove = set(self.staffs_on_board.keys()) - set(updated_staffs.keys())
-        
-        for key in staff_keys_to_remove:
-            staff = self.staffs_on_board.pop(key)
-            self.scene.removeItem(staff)
-
-        self.check_replace_beta_staffs(scene)
         
     def hide_all_staffs(self):
         for item in self.scene.items():
