@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QFrame
 from PyQt6.QtGui import QPalette, QColor
-from graph_editor_widget import Graph_Editor_Widget
+from widgets.graph_editor_widget import Graph_Editor_Widget
 
 class Layout_Manager():
     def __init__(self, main_widget):
@@ -61,9 +61,9 @@ class Layout_Manager():
         self.add_black_border(self.main_widget.graph_editor_widget.graphboard_view)
         self.add_black_border(self.main_widget.sequence_view)
         self.add_black_border(self.main_widget.word_label)
-        self.add_black_border(self.main_widget.graph_editor_widget.info_tracker.info_label)
+        self.add_black_border(self.main_widget.graph_editor_widget.info_manager.info_label)
         self.add_black_border(self.main_widget.optionboard_view)
-        self.add_black_border(self.main_widget.graph_editor_widget.action_buttons)
+        self.add_black_border(self.main_widget.graph_editor_widget.action_buttons_frame)
         self.add_black_border(self.main_widget.graph_editor_widget.letter_buttons_frame)
         self.add_black_border(self.main_widget.graph_editor_widget.graphboard_view)
         self.add_black_border(self.main_widget.graph_editor_widget.propbox_view)
@@ -88,7 +88,7 @@ class Layout_Manager():
 
         
     def init_action_buttons_layout(self):
-        self.main_window.graphboard_and_buttons_layout.addLayout(self.main_widget.graph_editor_widget.action_buttons.action_buttons_layout)
+        self.main_window.graphboard_and_buttons_layout.addLayout(self.main_widget.graph_editor_widget.action_buttons_frame.action_buttons_layout)
         
     def init_letter_buttons_layout(self):
         self.main_window.sequence_layout.addLayout(self.main_widget.graph_editor_widget.letter_buttons_frame.letter_buttons_layout) 

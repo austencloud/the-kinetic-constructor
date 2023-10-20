@@ -17,7 +17,10 @@ class Optionboard_View(QGraphicsView):
         # self.setScene(self.optionboard_scene)  # Set the scene
         self.grid_widget = QWidget()
         self.optionboard_grid_layout = QGridLayout()
+        #set the margins between grid items to 0
+        self.optionboard_grid_layout.setSpacing(0)
         self.grid_widget.setLayout(self.optionboard_grid_layout)
+        
 
         # Populate the grid layout with pictographs (placeholder buttons for now)
         self.populate_pictographs()
@@ -33,23 +36,19 @@ class Optionboard_View(QGraphicsView):
         self.scroll_area.setWidgetResizable(True)  # Ensure the widget resizes inside the scroll area
         self.scroll_area.setWidget(self.grid_widget)
 
-        # Create a main layout and add the scroll area to it
         self.main_layout = QVBoxLayout()
         self.main_layout.addWidget(self.scroll_area)
 
-        # Set the main layout on a container widget
         self.container_widget = QWidget()
         self.container_widget.setLayout(self.main_layout)
-        #set the size
         self.container_widget.setFixedSize(600, 800)
 
-        # Set the QGraphicsScene and add the container widget to it
+
         self.optionboard_scene = QGraphicsScene()
         self.optionboard_scene.addWidget(self.container_widget)
 
         self.setScene(self.optionboard_scene)
         self.setFixedSize(int(self.optionboard_scene.sceneRect().width()), int(self.optionboard_scene.sceneRect().height()))
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)  # Enable the vertical scrollbar
 
         self.show()
 

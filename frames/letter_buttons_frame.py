@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QIcon, QPainter, QFont, QColor
 from PyQt6.QtSvg import QSvgRenderer
 from settings import GRAPHBOARD_SCALE
-from pictograph_selector_dialog import Pictograph_Selector_Dialog
+from dialog.pictograph_selector_dialog import Pictograph_Selector_Dialog
 
 class Letter_Buttons_Frame(QFrame):
     def __init__(self, main_widget):

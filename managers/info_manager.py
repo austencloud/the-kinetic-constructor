@@ -1,13 +1,14 @@
 from objects.arrow import Arrow
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QLabel
+from PyQt6.QtWidgets import QLabel, QFrame
 from data.positions_map import positions_map
 from data.letter_types import letter_types
 from settings import GRAPHBOARD_SCALE
 
-class Info_Tracker:
+class Info_Manager():
     def __init__(self, main_widget, view):
+        super().__init__()
         self.remaining_staff = {}
         self.previous_state = None 
         self.view = view

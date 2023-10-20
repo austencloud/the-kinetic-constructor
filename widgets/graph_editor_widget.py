@@ -1,14 +1,14 @@
 from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout
-from graph_editor.graphboard_view import Graphboard_View
-from graph_editor.arrowbox_view import ArrowBox_View
-from pictograph_generator import Pictograph_Generator
-from graph_editor.propbox_view import PropBox_View
-from graph_editor.info_tracker import Info_Tracker
-from exporter import Exporter
+from views.graphboard_view import Graphboard_View
+from views.arrowbox_view import ArrowBox_View
+from tools.pictograph_generator import Pictograph_Generator
+from views.propbox_view import PropBox_View
+from managers.info_manager import Info_Manager
+from managers.export_manager import Export_Manager
 from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
-from letter_buttons_frame import Letter_Buttons_Frame
-from action_buttons_frame import Action_Buttons_Frame
+from frames.letter_buttons_frame import Letter_Buttons_Frame
+from frames.action_buttons_frame import Action_Buttons_Frame
 class Graph_Editor_Widget(QWidget):
     def __init__(self, main_widget):
         super().__init__()
@@ -34,13 +34,13 @@ class Graph_Editor_Widget(QWidget):
         
         # Create and add contents to the frame_layout
         self.graphboard_view = Graphboard_View(main_widget, self)
-        self.exporter = Exporter(main_widget.staff_manager, main_widget.grid, self.graphboard_view)
-        self.info_tracker = Info_Tracker(main_widget, self.graphboard_view)
+        self.export_manager = Export_Manager(main_widget.staff_manager, main_widget.grid, self.graphboard_view)
+        self.info_manager = Info_Manager(main_widget, self.graphboard_view)
         self.propbox_view = PropBox_View(main_widget)
-        self.arrowbox_view = ArrowBox_View(main_widget, self.graphboard_view, self.info_tracker)
-        self.pictograph_generator = Pictograph_Generator(main_widget, self.graphboard_view, self.info_tracker)
+        self.arrowbox_view = ArrowBox_View(main_widget, self.graphboard_view, self.info_manager)
+        self.pictograph_generator = Pictograph_Generator(main_widget, self.graphboard_view, self.info_manager)
         self.letter_buttons_frame = Letter_Buttons_Frame(main_widget)
-        self.action_buttons = Action_Buttons_Frame(main_widget)
+        self.action_buttons_frame = Action_Buttons_Frame(main_widget)
         
         # Add widgets to the object box layout.
         objectbox_layout.addWidget(self.arrowbox_view)
@@ -50,10 +50,10 @@ class Graph_Editor_Widget(QWidget):
         graphboard_layout.addWidget(self.graphboard_view)
 
         # Add the action buttons frame to its layout
-        action_buttons_layout.addWidget(self.action_buttons)  # self.action_buttons is an instance of Action_Buttons_Frame
+        action_buttons_layout.addWidget(self.action_buttons_frame)  # self.action_buttons_frame is an instance of Action_Buttons_Frame
 
         # Add the info tracker to its layout
-        info_tracker_layout.addWidget(self.info_tracker.info_label)
+        info_tracker_layout.addWidget(self.info_manager.info_label)
 
         # Add the individual vertical layouts to the main horizontal layout
         frame_layout.addLayout(objectbox_layout)

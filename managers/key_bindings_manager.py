@@ -2,7 +2,7 @@ from objects.arrow import Arrow
 from objects.staff import Staff
 from PyQt6.QtCore import Qt
 
-class Key_Bindings:
+class Key_Bindings_Manager:
     def keyPressEvent(self, event, graphboard_view):
         arrow_manager = graphboard_view.arrow_manager
         sequence_view = graphboard_view.main_widget.sequence_view

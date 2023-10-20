@@ -26,7 +26,7 @@ class Graphboard_View(QGraphicsView):
         self.grid = main_widget.grid
         self.svg_manager = main_widget.svg_manager
         self.arrow_manager = main_widget.arrow_manager
-        self.exporter = main_widget.exporter
+        self.export_manager = main_widget.export_manager
         self.letters = main_widget.letters
         self.staff_manager = main_widget.staff_manager
         
@@ -322,11 +322,11 @@ class Graphboard_View(QGraphicsView):
             graphboard_menu.addAction(add_to_sequence_action)
 
             export_to_png_action = QAction('Export to PNG', self)
-            export_to_png_action.triggered.connect(self.exporter.export_to_png)
+            export_to_png_action.triggered.connect(self.export_manager.export_to_png)
             graphboard_menu.addAction(export_to_png_action)
 
             export_to_svg_action = QAction('Export to SVG', self)
-            export_to_svg_action.triggered.connect(self.exporter.export_to_svg)
+            export_to_svg_action.triggered.connect(self.export_manager.export_to_svg)
             graphboard_menu.addAction(export_to_svg_action)
 
             graphboard_menu.exec(event.globalPos())

@@ -7,7 +7,7 @@ from objects.grid import Grid
 from lxml import etree
 from copy import deepcopy
 
-class Exporter:
+class Export_Manager:
     def __init__(self, staff_manager, grid, graphboard_view):
         
         self.graphboard_view = graphboard_view

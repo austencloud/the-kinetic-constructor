@@ -4,7 +4,7 @@ import random
 import os
 from objects.arrow import Arrow
 
-from exporter import Exporter
+from managers.export_manager import Export_Manager
 class Pictograph_Generator():
     def __init__(self, main_widget, graphboard_view, info_tracker):
         
@@ -13,7 +13,7 @@ class Pictograph_Generator():
         self.info_tracker = info_tracker
         self.main_window = main_widget.main_window
         self.arrow_manager = main_widget.arrow_manager
-        self.exporter = main_widget.exporter
+        self.export_manager = main_widget.export_manager
         self.svg_manager = main_widget.svg_manager
         self.grid = main_widget.grid
         self.graphboard_scene = self.graphboard_view.scene()
@@ -51,9 +51,9 @@ class Pictograph_Generator():
                         file_name += ".svg"
 
                         output_file_path = os.path.join(self.output_dir, file_name)
-                        self.exporter = Exporter(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
+                        self.export_manager = Export_Manager(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
                         print(output_file_path)
-                        self.exporter.export_to_svg(output_file_path)
+                        self.export_manager.export_to_svg(output_file_path)
 
                 
                 # Clear the graphboard for the next combination
