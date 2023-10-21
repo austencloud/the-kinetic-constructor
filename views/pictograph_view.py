@@ -47,7 +47,7 @@ class Pictograph_View(QGraphicsView):
 
         pass
     
-    def get_graphboard_state(self):
+    def get_state(self):
         state = {
             'arrows': [],
         }

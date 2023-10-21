@@ -18,22 +18,24 @@ class PropBox_Staff_Manager(Staff_Manager):
         
         # Define initial locations for propbox staffs
         self.propbox_staff_locations = {
-            'N_staff': QPointF(50, 100),
-            'E_staff': QPointF(100, 50),
-            'S_staff': QPointF(100, 100),
-            'W_staff': QPointF(100, 100)
+            'N': QPointF(50, 100),
+            'E': QPointF(100, 50),
+            'S': QPointF(100, 100),
+            'W': QPointF(100, 100)
         }
         
         # Create red and blue staffs in the propbox
         self.propbox_staffs = {}
-        red_staff = Staff(propbox_scene, QPointF(50, 100), 'vertical', 'red')
-        blue_staff = Staff(propbox_scene, QPointF(100, 50), 'vertical', 'blue')
+        red_staff = Staff(propbox_scene, self.propbox_staff_locations['N'], 'vertical', 'red')
+        blue_staff = Staff(propbox_scene, self.propbox_staff_locations['E'], 'horizontal', 'blue')
+        
 
         red_staff.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
         blue_staff.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
 
         self.propbox_staffs['red_staff'] = red_staff
         self.propbox_staffs['blue_staff'] = blue_staff
+    
         
     def connect_propbox_view(self, propbox_view):
         self.propbox_view = propbox_view

@@ -9,7 +9,7 @@ from objects.staff import Staff
 from objects.arrow import Arrow
 from settings import *
 from managers.staff_managers.graphboard_staff_manager import Graphboard_Staff_Manager
-
+from managers.info_manager  import Info_Manager
 
 
 class Graphboard_View(QGraphicsView):
@@ -17,18 +17,22 @@ class Graphboard_View(QGraphicsView):
         super().__init__(graph_editor_widget)
         self.setAcceptDrops(True)
         self.setInteractive(True)
+        
         self.dragging = None
         self.letter_renderers = {}
+
         self.graphboard_scene = QGraphicsScene()
+        self.graphboard_info_manager = Info_Manager(main_widget, self)
+
+        self.staff_manager = Graphboard_Staff_Manager(main_widget, self.graphboard_scene)
         self.setScene(self.graphboard_scene)
-        
+
         self.main_widget = main_widget
         self.grid = main_widget.grid
         self.svg_manager = main_widget.svg_manager
         self.arrow_manager = main_widget.arrow_manager
         self.export_manager = main_widget.export_manager
         self.letters = main_widget.letters
-        self.staff_manager = Graphboard_Staff_Manager(main_widget, self.graphboard_scene)
         
         self.grid.setScale(GRAPHBOARD_SCALE)
         self.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
@@ -140,7 +144,7 @@ class Graphboard_View(QGraphicsView):
                 quadrant = 'se'
         return quadrant
 
-    def get_graphboard_state(self):
+    def get_state(self):
         state = {
             'arrows': [],
         }

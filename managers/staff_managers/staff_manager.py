@@ -14,9 +14,10 @@ class Staff_Manager(QObject):
         self.previous_position = None  # Store the previous position of staffs
         self.letters = main_widget.letters
         self.grid = main_widget.grid
-
-    def connect_info_frame(self, info_frame):
-        self.info_frame = info_frame
+        self.arrow_manager = main_widget.arrow_manager
+        
+    def connect_info_manager(self, info_manager):
+        self.info_manager = info_manager
 
     def create_staff(self, location, scene, color, context):
         new_staff = Staff(
@@ -44,11 +45,12 @@ class Staff_Manager(QObject):
         self.staffs_on_board.clear() 
 
     def check_replace_beta_staffs(self, scene):
-        graphboard_state = self.graphboard_view.get_graphboard_state()
+        view = scene.views()[0]
+        board_state = view.get_state()
         if len(self.staffs_on_board) == 2:
             staffs_list = list(self.staffs_on_board.items())
             if staffs_list[0][1].arrow.end_location == staffs_list[1][1].arrow.end_location:
-                self.reposition_staffs(scene, graphboard_state)     
+                self.reposition_staffs(scene, board_state)     
 
     def get_distance_from_center(self, position):
         """Calculate the Euclidean distance from the center point."""
@@ -63,13 +65,13 @@ class Staff_Manager(QObject):
         distance = math.sqrt((x_position - center_x) ** 2 + (y_position - center_y) ** 2)
         return distance
     
-    def get_optimal_staff_positions(self, arrow):
+    def get_optimal_staff_positions(self, arrow, view):
         """
         Retrieve the optimal staff positions for a given arrow based on its color and the current state.
         This method assumes that 'self.letters' and 'self.graphboard_view' are accessible within this class.
         """
-        current_state = self.graphboard_view.get_graphboard_state()
-        current_letter = self.info_frame.determine_current_letter_and_type()[0]
+        current_state = view.get_state()
+        current_letter = self.info_manager.determine_current_letter_and_type()[0]
 
         if current_letter is not None:
             matching_letters = self.letters[current_letter]
@@ -98,6 +100,7 @@ class Staff_Manager(QObject):
         return None 
 
     def reposition_beta_to_beta(self, scene, arrows):
+        view = scene.views()[0]
         """Reposition staffs when arrows have the same start location."""
         if len(arrows) != 2:
             return  # We're only handling cases where there are exactly two arrows
@@ -107,8 +110,8 @@ class Staff_Manager(QObject):
 
         if same_motion: # Letter "G" or "H"
             # Determine which arrow is further from the center based on optimal positions
-            optimal_position1 = self.get_optimal_staff_positions(arrow1)
-            optimal_position2 = self.get_optimal_staff_positions(arrow2)
+            optimal_position1 = self.get_optimal_staff_positions(arrow1, view)
+            optimal_position2 = self.get_optimal_staff_positions(arrow2, view)
 
             distance1 = self.get_distance_from_center(optimal_position1)
             distance2 = self.get_distance_from_center(optimal_position2)
@@ -135,8 +138,8 @@ class Staff_Manager(QObject):
             pro_arrow = arrow1 if arrow1['motion_type'] == 'pro' else arrow2
             anti_arrow = arrow2 if arrow1['motion_type'] == 'pro' else arrow1
 
-            pro_staff = self.staffs_on_board[pro_arrow['location'].capitalize() + '_staff_' + pro_arrow['color']]
-            anti_staff = self.staffs_on_board[anti_arrow['location'].capitalize() + '_staff_' + anti_arrow['color']]
+            pro_staff = self.staffs_on_board[pro_arrow['end_location'].capitalize() + '_staff_' + pro_arrow['color']]
+            anti_staff = self.staffs_on_board[anti_arrow['end_location'].capitalize() + '_staff_' + anti_arrow['color']]
 
             # Translate the pro staff in the direction of its arrow's start location by BETA_STAFF_REPOSITION_OFFSET
             direction = self.determine_translation_direction(pro_arrow)

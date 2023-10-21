@@ -5,6 +5,7 @@ from tools.pictograph_generator import Pictograph_Generator
 from views.propbox_view import PropBox_View
 from frames.graphboard_info_frame import Graphboard_Info_Frame
 from managers.export_manager import Export_Manager
+from managers.info_manager import Info_Manager
 from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
 from frames.letter_buttons_frame import Letter_Buttons_Frame

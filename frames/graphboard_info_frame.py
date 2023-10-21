@@ -3,7 +3,7 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout, QHBoxLayout, QGridLayout, QWidget
 from data.positions_map import positions_map
-from data.letter_types import letter_types
+
 from settings import GRAPHBOARD_SCALE
 
 
@@ -71,7 +71,7 @@ class Graphboard_Info_Frame(QFrame):
         
     def update_type_and_position_info(self):
         # Determine the current letter and its type
-        current_letter, current_letter_type = self.determine_current_letter_and_type()
+        current_letter, current_letter_type = self.graphboard_view.graphboard_info_manager.determine_current_letter_and_type()
 
         # Check if the letter and type were successfully retrieved
         if current_letter and current_letter_type:
@@ -92,32 +92,10 @@ class Graphboard_Info_Frame(QFrame):
         self.graphboard_view = graphboard_view
 
     def get_current_letter(self):
-        self.letter = self.determine_current_letter_and_type()[0]
+        self.letter = self.graphboard_view.graphboard_info_manager.determine_current_letter_and_type()[0]
         if self.letter is not None:
             return self.letter
     
-    def determine_current_letter_and_type(self):
-        current_combination = []
-        for item in self.graphboard_view.items():
-            if isinstance(item, Arrow):
-                attributes = item.get_attributes()
-                sorted_attributes = {k: attributes[k] for k in sorted(attributes.keys())}
-                current_combination.append(sorted_attributes)
-        # Sort the list of dictionaries by the 'color' key
-        current_combination = sorted(current_combination, key=lambda x: x['color'])
-        letter_type = None
-        for letter, combinations in self.letters.items():
-            combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]
-            if current_combination in combinations:
-                self.letter = letter
-                for type, letters in letter_types.items():  # Determine the type if a letter is found
-                    if self.letter in letters:
-                        current_type = type
-                        break
-                return self.letter, current_type  # Return both values here
-        self.letter = None  # Set to None if no match is found
-
-        return self.letter, letter_type  # Always return two values
    
     def update(self):
         self.remaining_staff = {}  # Reset the remaining staff info
@@ -162,7 +140,7 @@ class Graphboard_Info_Frame(QFrame):
         self.update_type_and_position_info()
 
         # Inform the graphboard graphboard_view about the current letter
-        self.graphboard_view.update_letter(self.determine_current_letter_and_type()[0])
+        self.graphboard_view.update_letter(self.graphboard_view.graphboard_info_manager.determine_current_letter_and_type()[0])
 
 
         # Update the staffs on the graphboard based on the new state

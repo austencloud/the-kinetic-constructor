@@ -6,6 +6,7 @@ from PyQt6.QtCore import QPointF
 from settings import GRAPHBOARD_SCALE, STAFF_LENGTH, STAFF_WIDTH
 from objects.staff import Staff
 from objects.arrow import Arrow
+from settings import GRAPHBOARD_SCALE
 class Graphboard_Staff_Manager(Staff_Manager):
     def __init__(self, main_widget, scene):
         super().__init__(main_widget)
@@ -30,28 +31,24 @@ class Graphboard_Staff_Manager(Staff_Manager):
         for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
             x, y = self.grid.get_circle_coordinates(point_name)
             scaled_x = x * scale + self.PICTOGRAPH_GRID_PADDING
-            scaled_y = y * scale + self.GRID_V_OFFSET
+            scaled_y = y * scale + self.PICTOGRAPH_GRID_PADDING
             graphboard_handpoints[point_name] = QPointF(scaled_x, scaled_y)
 
         # Initialize the staff locations based on the handpoints
         self.staff_xy_locations = {
-            'N': graphboard_handpoints['N_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH*GRAPHBOARD_SCALE),
-            'E': graphboard_handpoints['E_hand_point'] + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2 - STAFF_WIDTH*GRAPHBOARD_SCALE),
-            'S': graphboard_handpoints['S_hand_point'] + QPointF(-STAFF_WIDTH / 2, -STAFF_LENGTH / 2 - STAFF_WIDTH*GRAPHBOARD_SCALE),
-            'W': graphboard_handpoints['W_hand_point'] + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2 - STAFF_WIDTH*GRAPHBOARD_SCALE)
+            'N': graphboard_handpoints['N_hand_point'] + QPointF(0, 0),
+            'E': graphboard_handpoints['E_hand_point'] + QPointF(0, 0),
+            'S': graphboard_handpoints['S_hand_point'] + QPointF(0, 0),
+            'W': graphboard_handpoints['W_hand_point'] + QPointF(0, 0)
         }
 
         # Create and hide the staffs for each direction and color
         self.staffs_on_board = {}
         
-
-    
-
     def update_graphboard_staffs(self, scene):
-        for staff in self.staffs_on_board.values():
-            if staff.scene == self.scene: 
-                self.scene.removeItem(staff) 
-        self.staffs_on_board.clear() 
+        for staff in scene.items():
+            if isinstance(staff, Staff):
+                scene.removeItem(staff)
 
         updated_staffs = {}
         
@@ -71,18 +68,12 @@ class Graphboard_Staff_Manager(Staff_Manager):
 
                     staff_key = location + "_staff_" + color
                     
-                    if staff_key in self.staffs_on_board:
-                        staff = self.staffs_on_board[staff_key]
-                        staff.setPos(self.staff_xy_locations[location + "_staff"])  
-                        staff.show()
-                        
-                    else:
-                        new_staff = self.create_staff(location, scene, color, 'graphboard')
-                        new_staff.setScale(arrow.scale())
-                        arrow.staff = new_staff
-                        arrow.staff.arrow = arrow
-                        self.staffs_on_board[staff_key] = new_staff
-                        staff = new_staff
+                    new_staff = self.create_staff(location, scene, color, 'graphboard')
+                    new_staff.setScale(arrow.scale())
+                    arrow.staff = new_staff
+                    arrow.staff.arrow = arrow
+                    self.staffs_on_board[staff_key] = new_staff
+                    staff = new_staff
 
                     updated_staffs[staff_key] = staff
 

@@ -4,9 +4,9 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor
 from settings import GRAPHBOARD_SCALE, PICTOGRAPH_SCALE
-
+from settings import STAFF_WIDTH, STAFF_LENGTH
 class Staff(QGraphicsSvgItem):
-    def __init__(self, scene, xy_location, axis, color, location=None, context=None):
+    def __init__(self, scene, xy_location, color, location=None, context=None):
         super().__init__()
         image_file = f'images/staffs/staff.svg'
         self.xy_location = xy_location 
@@ -15,32 +15,47 @@ class Staff(QGraphicsSvgItem):
         scene.addItem(self)
         self.arrow = None
         self.setVisible(True)
-        rect = self.boundingRect()
-        self.setTransformOriginPoint(rect.width() / 2, rect.height() / 2)
-        self.setPos(xy_location.x(), xy_location.y())
+
+        #after rotating, make sure the transform origin posint is set to the center
+        self.setTransformOriginPoint(0, 0)
         self.svg_file = image_file
-        self.color = color
-        self.axis = axis
+        self.set_color(color)
         self.location = location
+        
+        if context == 'graphboard':
+            if location == 'N' or location == 'S':
+                self.axis = 'vertical'
+                self.setRotation(90)
+                self.setPos(self.xy_location.x() + (STAFF_WIDTH/2) * GRAPHBOARD_SCALE, self.xy_location.y() - (STAFF_LENGTH/2) * GRAPHBOARD_SCALE)
+            elif location == 'E' or location == 'W':
+                self.axis = 'horizontal'
+                self.setPos(self.xy_location.x() - (STAFF_LENGTH/2) * GRAPHBOARD_SCALE, self.xy_location.y() - (STAFF_WIDTH/2) * GRAPHBOARD_SCALE)
+        elif context == 'pictograph':
+            if location == 'N' or location == 'S':
+                self.axis = 'vertical'
+                self.setRotation(90)
+            elif location == 'E' or location == 'W':
+                self.axis = 'horizontal'
+        
+        
         self.color = color
         self.context = context
-        self.setScale(GRAPHBOARD_SCALE)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
+
 
         if context == 'pictograph':
             self.setScale(PICTOGRAPH_SCALE)  
-        elif context == 'graphboard':
-            self.setScale(GRAPHBOARD_SCALE)  
-        elif context == 'propbox':
-            self.setScale(GRAPHBOARD_SCALE * 0.75)
+        else:
+            self.setScale(GRAPHBOARD_SCALE)
+
 
     def mousePressEvent(self, event):
         self.setCursor(Qt.CursorShape.ClosedHandCursor)
         super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.MouseButtons.LeftButton:
-            self.setPos(event.scenePos() - self.boundingRect().center())
+        if event.buttons() == Qt.MouseButton.LeftButton:
+            self.setPos(event.scenePos())
         super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
@@ -55,9 +70,35 @@ class Staff(QGraphicsSvgItem):
         if color:
             self.set_color(color)
 
-    def set_color(self, color):
-        color = QColor(color)
-        self.setBrush(color)
+
+    def set_color(self, new_color):
+        # Map the color names to their corresponding hex values
+        color_map = {
+            "red": "#ed1c24",
+            "blue": "#2E3192"
+        }
+
+        # Get the hex value for the color name, if it exists in the map
+        hex_color = color_map.get(new_color, new_color)
+
+        # Read the SVG file into a string
+        with open(self.svg_file, 'r') as f:
+            svg_data = f.read()
+
+        # Colors you want to replace
+        old_colors = ["#ed1c24", "#2E3192"]
+
+        # Replace the colors
+        for old_color in old_colors:
+            svg_data = svg_data.replace(old_color, hex_color)
+
+        # Reload the SVG renderer
+        self.renderer.load(svg_data.encode('utf-8'))
+
+        # Update the color attribute
+        self.color = hex_color
+
+
 
     def hide(self):
         self.setVisible(False)

@@ -30,7 +30,7 @@ class Pictograph_Staff_Manager(Staff_Manager):
             graphboard_handpoints[point_name] = QPointF(cx, cy)
 
         self.staff_xy_locations = {
-            'N': graphboard_handpoints['N_hand_point'] * PICTOGRAPH_SCALE + QPointF(-STAFF_WIDTH/2 + PICTOGRAPH_GRID_PADDING, -STAFF_LENGTH/2 + PICTOGRAPH_GRID_PADDING),
+            'N': QPointF(0,0),
             'E': graphboard_handpoints['E_hand_point'] * PICTOGRAPH_SCALE + QPointF(-STAFF_LENGTH/2 + PICTOGRAPH_GRID_PADDING, - STAFF_WIDTH/2 + PICTOGRAPH_GRID_PADDING),
             'S': graphboard_handpoints['S_hand_point'] * PICTOGRAPH_SCALE + QPointF(-STAFF_WIDTH/2 + PICTOGRAPH_GRID_PADDING, -STAFF_LENGTH/2 + PICTOGRAPH_GRID_PADDING),
             'W': graphboard_handpoints['W_hand_point'] * PICTOGRAPH_SCALE + QPointF(-STAFF_LENGTH/2 + PICTOGRAPH_GRID_PADDING, -STAFF_WIDTH/2 + PICTOGRAPH_GRID_PADDING)
@@ -60,33 +60,8 @@ class Pictograph_Staff_Manager(Staff_Manager):
                     arrow.staff = new_staff
                     new_staff.arrow = arrow
                     self.arrow_manager = new_staff.arrow.arrow_manager
-                        
-                    if new_staff.scene is not self.scene:
-                        self.scene.addItem(new_staff)
                     self.staffs_on_board[location + "_staff_" + color] = new_staff  #
                     
-        self.check_and_replace_pictograph_staffs()
+        self.check_replace_beta_staffs(self.scene)
     
-    def check_and_replace_pictograph_staffs(self):
-        staff_positions = [(staff.pos().x(), staff.pos().y()) for staff in self.staffs_on_board.values() if staff.isVisible()]
-
-        for position in set(staff_positions):
-            count = staff_positions.count(position)
-            if count == 2:  # Two staffs are overlapping
-                beta_staffs = [staff for staff in self.staffs_on_board.values() if (staff.pos().x(), staff.pos().y()) == position]
-
-                # Assuming the first staff's location can be used to determine orientation for both
-                axis = beta_staffs[0].axis  # Replace with actual attribute if different
-
-                if axis == 'vertical':  # Vertical staffs
-                    # Move one staff 10px to the left and the other 10px to the right
-                    beta_staffs[0].setPos(position[0] + BETA_STAFF_REPOSITION_OFFSET*PICTOGRAPH_SCALE, position[1])
-                    beta_staffs[1].setPos(position[0] - BETA_STAFF_REPOSITION_OFFSET*PICTOGRAPH_SCALE, position[1])
-                else:  # Horizontal staffs
-                    # Move one staff 10px up and the other 10px down
-                    beta_staffs[0].setPos(position[0], position[1] - BETA_STAFF_REPOSITION_OFFSET*PICTOGRAPH_SCALE)
-                    beta_staffs[1].setPos(position[0], position[1] + BETA_STAFF_REPOSITION_OFFSET*PICTOGRAPH_SCALE)
-
-                # Update the scene
-                self.scene.update()
 
