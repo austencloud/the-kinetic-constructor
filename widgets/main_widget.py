@@ -44,7 +44,7 @@ class Main_Widget(QWidget):
 
     def connect_objects(self):
         self.info_frame.connect_view(self.graph_editor_widget.graphboard_view)
-        self.graphboard_view.staff_manager.connect_info_manager(self.graphboard_view.graphboard_info_manager)
+        self.graphboard_view.staff_manager.connect_info_manager(self.graphboard_view.info_manager)
         self.graphboard_view.staff_manager.connect_grid(self.grid)
         self.graphboard_view.staff_manager.connect_graphboard_view(self.graph_editor_widget.graphboard_view)
         self.propbox_view.staff_manager.connect_propbox_view(self.graph_editor_widget.propbox_view)

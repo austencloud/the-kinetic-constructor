@@ -53,9 +53,7 @@ class Staff_Manager(QObject):
                 self.reposition_staffs(scene, board_state)     
 
     def get_distance_from_center(self, position):
-        """Calculate the Euclidean distance from the center point."""
         center_point = QPointF(GRAPHBOARD_WIDTH / 2, GRAPHBOARD_WIDTH / 2)  # Assuming this is the center point of your coordinate system
-        # Extract the coordinates from the dictionaries
         x_position = position.get('x', 0.0)
         y_position = position.get('y', 0.0)
         center_x = center_point.x()
@@ -65,28 +63,21 @@ class Staff_Manager(QObject):
         distance = math.sqrt((x_position - center_x) ** 2 + (y_position - center_y) ** 2)
         return distance
     
-    def get_optimal_staff_positions(self, arrow, view):
-        """
-        Retrieve the optimal staff positions for a given arrow based on its color and the current state.
-        This method assumes that 'self.letters' and 'self.graphboard_view' are accessible within this class.
-        """
+    def get_optimal_arrow_location(self, arrow, view):
         current_state = view.get_state()
-        current_letter = self.info_manager.determine_current_letter_and_type()[0]
+        current_letter = view.info_manager.determine_current_letter_and_type()[0]
 
         if current_letter is not None:
             matching_letters = self.letters[current_letter]
-            optimal_location = self.find_optimal_staff_locations(current_state, matching_letters, arrow)
+            optimal_location = self.find_optimal_arrow_location(current_state, matching_letters, arrow)
 
             if optimal_location:
                 return optimal_location
 
         return None  # Return None if there are no optimal positions
 
-    def find_optimal_staff_locations(self, current_state, matching_letters, arrow):
-        """
-        Find the optimal staff locations based on the current state and the matching letters.
-        This is similar to 'find_optimal_locations' but specific for staff positioning.
-        """
+    def find_optimal_arrow_location(self, current_state, matching_letters, arrow):
+
         for variations in matching_letters:
             if self.arrow_manager.compare_states(current_state, variations):
                 # Search for the dictionary entry containing the optimal locations
@@ -101,7 +92,6 @@ class Staff_Manager(QObject):
 
     def reposition_beta_to_beta(self, scene, arrows):
         view = scene.views()[0]
-        """Reposition staffs when arrows have the same start location."""
         if len(arrows) != 2:
             return  # We're only handling cases where there are exactly two arrows
 
@@ -110,8 +100,8 @@ class Staff_Manager(QObject):
 
         if same_motion: # Letter "G" or "H"
             # Determine which arrow is further from the center based on optimal positions
-            optimal_position1 = self.get_optimal_staff_positions(arrow1, view)
-            optimal_position2 = self.get_optimal_staff_positions(arrow2, view)
+            optimal_position1 = self.get_optimal_arrow_location(arrow1, view)
+            optimal_position2 = self.get_optimal_arrow_location(arrow2, view)
 
             distance1 = self.get_distance_from_center(optimal_position1)
             distance2 = self.get_distance_from_center(optimal_position2)
@@ -154,7 +144,7 @@ class Staff_Manager(QObject):
         scene.update()
 
     def determine_translation_direction(self, arrow_state):
-        """Determine the translation direction based on the arrow's state."""
+        """Determine the translation direction based on the arrow's board_state."""
         if arrow_state['motion_type'] in ['pro', 'anti']:
             if arrow_state['end_location'] in ['n', 's']:
                 return RIGHT if arrow_state['start_location'] == 'e' else LEFT
@@ -170,13 +160,12 @@ class Staff_Manager(QObject):
         else:
             return current_position - offset
 
-    def reposition_staffs(self, scene, graphboard_state):
-        shifts = {} 
-
+    def reposition_staffs(self, scene, board_state):
+        translations = {} 
 
     # First, we group the arrows based on their start locations.
         arrows_grouped_by_start = {}
-        for arrow in graphboard_state['arrows']:
+        for arrow in board_state['arrows']:
             start_location = arrow['start_location']
             if start_location in arrows_grouped_by_start:
                 arrows_grouped_by_start[start_location].append(arrow)
@@ -191,24 +180,63 @@ class Staff_Manager(QObject):
             if len(arrows) > 1:
                 # Special handling for multiple arrows from the same start location.
                 self.reposition_beta_to_beta(scene, arrows)
-            else:
-                # For single arrows, determine the necessary shift based on its state.
-                for arrow in arrows:  # Though 'arrows' here is a list, it contains one item in this context.
-                    direction = self.determine_translation_direction(arrow)
-                    if direction:
-                        shifts[arrow['color']] = direction  # Record the required shift.
 
-        # Now apply the shifts. This part is outside the above loop, so it runs after all shifts are determined.
-        for arrow_state in graphboard_state['arrows']:
+        
+
+
+        # LETTERS Y AND Z - GAMMA TO BETA
+        pro_or_anti_arrows = [arrow for arrow in board_state['arrows'] if arrow['motion_type'] in ['pro', 'anti']]
+        static_arrows = [arrow for arrow in board_state['arrows'] if arrow['motion_type'] == 'static']
+
+        if len(pro_or_anti_arrows) == 1 and len(static_arrows) == 1:
+            pro_or_anti_arrow = pro_or_anti_arrows[0]
+            static_arrow = static_arrows[0]
+
+            # Calculate the direction for the "pro"/"anti" arrow's staff
+            direction = self.determine_translation_direction(pro_or_anti_arrow)
+            if direction:
+                # Move the "pro"/"anti" arrow's staff
+                pro_or_anti_staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == pro_or_anti_arrow['color']), None)
+                if pro_or_anti_staff:
+                    new_position = self.calculate_new_position(pro_or_anti_staff.pos(), direction)
+                    pro_or_anti_staff.setPos(new_position)
+
+                # Move the "static" arrow's staff in the opposite direction
+                opposite_direction = self.get_opposite_direction(direction)
+                static_staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == static_arrow['color']), None)
+                if static_staff:
+                    new_position = self.calculate_new_position(static_staff.pos(), opposite_direction)
+                    static_staff.setPos(new_position)
+
+        # Special handling for alpha to beta case
+        converging_arrows = [arrow for arrow in board_state['arrows'] if arrow['motion_type'] not in ['static']]
+        if len(converging_arrows) == 2:
+            end_locations = [arrow['end_location'] for arrow in converging_arrows]
+            start_locations = [arrow['start_location'] for arrow in converging_arrows]
+            
+            if end_locations[0] == end_locations[1] and start_locations[0] != start_locations[1]:  # Both arrows are converging on the same location but starting from different locations
+                for arrow in converging_arrows:
+                    # Determine the direction for each arrow's staff
+                    direction = self.determine_translation_direction(arrow)
+                    
+                    if direction:
+                        # Move the arrow's staff
+                        staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow['color']), None)
+                        if staff:
+                            new_position = self.calculate_new_position(staff.pos(), direction)
+                            staff.setPos(new_position)
+
+        # Now apply the translations. This part is outside the above loop, so it runs after all translations are determined.
+        for arrow_state in board_state['arrows']:
             current_staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow_state['color']), None)
             if current_staff and current_staff not in processed_staffs:
-                direction = shifts.get(arrow_state['color'])
+                direction = translations.get(arrow_state['color'])
                 if direction:
                     new_position = self.calculate_new_position(current_staff.pos(), direction)
                     current_staff.setPos(new_position)
                     processed_staffs.add(current_staff)  # Mark this staff as processed.
 
-        # After all shifts have been applied, update the scene.
+        # After all translations have been applied, update the scene.
         scene.update()
 
     def get_opposite_direction(self, movement):

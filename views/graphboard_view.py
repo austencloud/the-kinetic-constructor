@@ -22,7 +22,7 @@ class Graphboard_View(QGraphicsView):
         self.letter_renderers = {}
 
         self.graphboard_scene = QGraphicsScene()
-        self.graphboard_info_manager = Info_Manager(main_widget, self)
+        self.info_manager = Info_Manager(main_widget, self)
 
         self.staff_manager = Graphboard_Staff_Manager(main_widget, self.graphboard_scene)
         self.setScene(self.graphboard_scene)

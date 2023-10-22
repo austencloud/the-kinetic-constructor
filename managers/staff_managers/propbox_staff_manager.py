@@ -26,8 +26,8 @@ class PropBox_Staff_Manager(Staff_Manager):
         
         # Create red and blue staffs in the propbox
         self.propbox_staffs = {}
-        red_staff = Staff(propbox_scene, self.propbox_staff_locations['N'], 'vertical', 'red')
-        blue_staff = Staff(propbox_scene, self.propbox_staff_locations['E'], 'horizontal', 'blue')
+        red_staff = Staff(propbox_scene, self.propbox_staff_locations['N'], 'red', 'N', 'propbox')
+        blue_staff = Staff(propbox_scene, self.propbox_staff_locations['E'], 'blue', 'E', 'propbox')
         
 
         red_staff.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)

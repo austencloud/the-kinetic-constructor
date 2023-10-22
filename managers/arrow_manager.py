@@ -207,7 +207,7 @@ class Arrow_Manager(QObject):
         
     def update_arrow_position(self, graphboard_view):
         current_arrows = graphboard_view.get_arrows()
-        letter = self.graphboard_view.graphboard_info_manager.determine_current_letter_and_type()[0]
+        letter = self.graphboard_view.info_manager.determine_current_letter_and_type()[0]
         if letter is not None:
             self.set_optimal_arrow_pos(current_arrows)
         else:
@@ -252,7 +252,7 @@ class Arrow_Manager(QObject):
 
     def set_optimal_arrow_pos(self, current_arrows):
         current_state = self.graphboard_view.get_state()
-        current_letter = self.graphboard_view.graphboard_info_manager.determine_current_letter_and_type()[0]
+        current_letter = self.graphboard_view.info_manager.determine_current_letter_and_type()[0]
         if current_letter is not None:
             matching_letters = self.letters[current_letter]
             optimal_locations = self.find_optimal_locations(current_state, matching_letters)
@@ -317,7 +317,7 @@ class Arrow_Manager(QObject):
                 print(f"{staff.color} staff deleted")
                 
                 self.info_frame.update()
-                self.graphboard_view.update_letter(self.graphboard_view.graphboard_info_manager.determine_current_letter_and_type()[0])
+                self.graphboard_view.update_letter(self.graphboard_view.info_manager.determine_current_letter_and_type()[0])
         else:
             print("No staffs selected")
 

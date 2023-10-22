@@ -71,7 +71,7 @@ class Graphboard_Info_Frame(QFrame):
         
     def update_type_and_position_info(self):
         # Determine the current letter and its type
-        current_letter, current_letter_type = self.graphboard_view.graphboard_info_manager.determine_current_letter_and_type()
+        current_letter, current_letter_type = self.graphboard_view.info_manager.determine_current_letter_and_type()
 
         # Check if the letter and type were successfully retrieved
         if current_letter and current_letter_type:
@@ -92,7 +92,7 @@ class Graphboard_Info_Frame(QFrame):
         self.graphboard_view = graphboard_view
 
     def get_current_letter(self):
-        self.letter = self.graphboard_view.graphboard_info_manager.determine_current_letter_and_type()[0]
+        self.letter = self.graphboard_view.info_manager.determine_current_letter_and_type()[0]
         if self.letter is not None:
             return self.letter
     
@@ -140,7 +140,7 @@ class Graphboard_Info_Frame(QFrame):
         self.update_type_and_position_info()
 
         # Inform the graphboard graphboard_view about the current letter
-        self.graphboard_view.update_letter(self.graphboard_view.graphboard_info_manager.determine_current_letter_and_type()[0])
+        self.graphboard_view.update_letter(self.graphboard_view.info_manager.determine_current_letter_and_type()[0])
 
 
         # Update the staffs on the graphboard based on the new state

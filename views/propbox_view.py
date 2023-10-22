@@ -16,6 +16,7 @@ class PropBox_View(QGraphicsView):
         self.setScene(self.propbox_scene)
 
         self.setFixedSize(int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE))
+        self.setSceneRect(0, 0, int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE))
 
         self.propbox_layout = QVBoxLayout()
         self.propbox_frame.setLayout(self.propbox_layout)

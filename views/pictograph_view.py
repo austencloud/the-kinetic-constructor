@@ -9,6 +9,7 @@ from managers.staff_managers.pictograph_staff_manager import Pictograph_Staff_Ma
 from managers.arrow_manager import Arrow_Manager
 from managers.svg_manager import Svg_Manager
 from managers.json_manager import Json_Manager
+from managers.info_manager import Info_Manager
 from settings import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, PICTOGRAPH_SCALE, PICTOGRAPH_GRID_PADDING
 
 class Pictograph_View(QGraphicsView):
@@ -18,6 +19,7 @@ class Pictograph_View(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setFrameStyle(QFrame.Shape.NoFrame) 
+        self.setDragMode(QGraphicsView.DragMode.NoDrag)
         self.main_widget = main_widget
         self.pictograph_scene = QGraphicsScene()
         self.pictograph_scene.setSceneRect(0, 0, PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT)
@@ -26,6 +28,7 @@ class Pictograph_View(QGraphicsView):
         self.grid.setScale(PICTOGRAPH_SCALE)
         self.scene = self.pictograph_scene
         self.svg_manager = Svg_Manager()
+        self.info_manager = Info_Manager(main_widget, self)
         self.staff_manager = Pictograph_Staff_Manager(self.main_widget, self.scene)
         self.staff_manager.connect_pictograph_view(self)
         self.arrow_manager = Arrow_Manager(self.main_widget)
@@ -37,6 +40,21 @@ class Pictograph_View(QGraphicsView):
         self.staff_manager.init_pictograph_staffs(self, self.grid)
         self.graphboard_view = main_widget.graph_editor_widget.graphboard_view
 
+    def mouseMoveEvent(self, event):
+        # Call the parent class's mouseMoveEvent to maintain its original behavior
+        super().mouseMoveEvent(event)
+
+        # Loop through all selected items and adjust their positions if necessary
+        for item in self.scene.selectedItems():
+            if item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable:
+                rect = item.sceneBoundingRect()
+                sceneRect = self.sceneRect()
+
+                # Check if the item is out of scene bounds and adjust its position
+                if not sceneRect.contains(rect):
+                    item_x = min(sceneRect.right(), max(rect.left(), sceneRect.left()))
+                    item_y = min(sceneRect.bottom(), max(rect.top(), sceneRect.top()))
+                    item.setPos(QPointF(item_x, item_y))
         
     def init_grid(self):
         grid_position = QPointF(PICTOGRAPH_GRID_PADDING, PICTOGRAPH_GRID_PADDING)
