@@ -3,10 +3,9 @@
     ### GRAPHBOARD ###
 from managers.staff_managers.staff_manager import Staff_Manager
 from PyQt6.QtCore import QPointF
-from settings import GRAPHBOARD_SCALE, STAFF_LENGTH, STAFF_WIDTH
 from objects.staff import Staff
 from objects.arrow import Arrow
-from settings import GRAPHBOARD_SCALE
+from settings import GRAPHBOARD_GRID_PADDING
 class Graphboard_Staff_Manager(Staff_Manager):
     def __init__(self, main_widget, scene):
         super().__init__(main_widget)
@@ -19,27 +18,25 @@ class Graphboard_Staff_Manager(Staff_Manager):
         # Calculate scaling and padding factors for the grid
         scale = self.grid.scale()
 
-        GRID_WIDTH = self.grid.get_width()
         GRAPHBOARD_WIDTH = graphboard_view.width()
         GRAPHBOARD_HEIGHT = graphboard_view.height()
         
-        self.PICTOGRAPH_GRID_PADDING = (GRAPHBOARD_WIDTH - GRID_WIDTH) / 2
         self.GRID_V_OFFSET = (GRAPHBOARD_HEIGHT - GRAPHBOARD_WIDTH) / 2
 
         # Calculate the handpoints on the graphboard based on the grid
-        graphboard_handpoints = {}
+        grid_handpoints = {}
         for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
             x, y = self.grid.get_circle_coordinates(point_name)
-            scaled_x = x * scale + self.PICTOGRAPH_GRID_PADDING
-            scaled_y = y * scale + self.PICTOGRAPH_GRID_PADDING
-            graphboard_handpoints[point_name] = QPointF(scaled_x, scaled_y)
+            scaled_x = x * scale + GRAPHBOARD_GRID_PADDING
+            scaled_y = y * scale + GRAPHBOARD_GRID_PADDING
+            grid_handpoints[point_name] = QPointF(scaled_x, scaled_y)
 
-        # Initialize the staff locations based on the handpoints
+        # Initialize the staff locations based on the grid handpoints
         self.staff_xy_locations = {
-            'N': graphboard_handpoints['N_hand_point'] + QPointF(0, 0),
-            'E': graphboard_handpoints['E_hand_point'] + QPointF(0, 0),
-            'S': graphboard_handpoints['S_hand_point'] + QPointF(0, 0),
-            'W': graphboard_handpoints['W_hand_point'] + QPointF(0, 0)
+            'N': grid_handpoints['N_hand_point'],
+            'E': grid_handpoints['E_hand_point'],
+            'S': grid_handpoints['S_hand_point'],
+            'W': grid_handpoints['W_hand_point']
         }
 
         # Create and hide the staffs for each direction and color

@@ -24,8 +24,9 @@ class Pictograph_View(QGraphicsView):
         self.setScene(self.pictograph_scene)  # Set the scene
         self.grid = Grid("images/grid/grid.svg")
         self.grid.setScale(PICTOGRAPH_SCALE)
+        self.scene = self.pictograph_scene
         self.svg_manager = Svg_Manager()
-        self.staff_manager = Pictograph_Staff_Manager(self.main_widget, self.scene())
+        self.staff_manager = Pictograph_Staff_Manager(self.main_widget, self.scene)
         self.staff_manager.connect_pictograph_view(self)
         self.arrow_manager = Arrow_Manager(self.main_widget)
         self.json_manager = Json_Manager(self.pictograph_scene)
@@ -51,7 +52,7 @@ class Pictograph_View(QGraphicsView):
         state = {
             'arrows': [],
         }
-        for item in self.scene().items():
+        for item in self.scene.items():
             if isinstance(item, Arrow):
                 state['arrows'].append({
                     'color': item.color,

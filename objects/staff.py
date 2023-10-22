@@ -34,10 +34,12 @@ class Staff(QGraphicsSvgItem):
             if location == 'N' or location == 'S':
                 self.axis = 'vertical'
                 self.setRotation(90)
+                self.setPos(self.xy_location.x() + (STAFF_WIDTH/2) * PICTOGRAPH_SCALE, self.xy_location.y() - (STAFF_LENGTH/2) * PICTOGRAPH_SCALE)
             elif location == 'E' or location == 'W':
                 self.axis = 'horizontal'
-        
-        
+                self.setPos(self.xy_location.x(), self.xy_location.y())
+                self.setPos(self.xy_location.x() - (STAFF_LENGTH/2) * PICTOGRAPH_SCALE, self.xy_location.y() - (STAFF_WIDTH/2) * PICTOGRAPH_SCALE)
+
         self.color = color
         self.context = context
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)

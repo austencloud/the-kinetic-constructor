@@ -23,17 +23,21 @@ class Pictograph_Staff_Manager(Staff_Manager):
     def init_pictograph_staffs(self, pictograph_view, pictograph):
         self.pictograph = pictograph
         self.pictograph_view = pictograph_view
+        scale = self.grid.scale()
 
-        graphboard_handpoints = {}
+        # Calculate the handpoints on the graphboard based on the grid
+        grid_handpoints = {}
         for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
-            cx, cy = self.grid.get_circle_coordinates(point_name)
-            graphboard_handpoints[point_name] = QPointF(cx, cy)
+            x, y = self.grid.get_circle_coordinates(point_name)
+            scaled_x = x * scale + PICTOGRAPH_GRID_PADDING
+            scaled_y = y * scale + PICTOGRAPH_GRID_PADDING
+            grid_handpoints[point_name] = QPointF(scaled_x, scaled_y)
 
         self.staff_xy_locations = {
-            'N': QPointF(0,0),
-            'E': graphboard_handpoints['E_hand_point'] * PICTOGRAPH_SCALE + QPointF(-STAFF_LENGTH/2 + PICTOGRAPH_GRID_PADDING, - STAFF_WIDTH/2 + PICTOGRAPH_GRID_PADDING),
-            'S': graphboard_handpoints['S_hand_point'] * PICTOGRAPH_SCALE + QPointF(-STAFF_WIDTH/2 + PICTOGRAPH_GRID_PADDING, -STAFF_LENGTH/2 + PICTOGRAPH_GRID_PADDING),
-            'W': graphboard_handpoints['W_hand_point'] * PICTOGRAPH_SCALE + QPointF(-STAFF_LENGTH/2 + PICTOGRAPH_GRID_PADDING, -STAFF_WIDTH/2 + PICTOGRAPH_GRID_PADDING)
+            'N': grid_handpoints['N_hand_point'] ,
+            'E': grid_handpoints['E_hand_point'] ,
+            'S': grid_handpoints['S_hand_point'] ,
+            'W': grid_handpoints['W_hand_point']  
         }
 
         self.staffs_on_board = {}
