@@ -91,7 +91,7 @@ class Staff_Manager(QObject):
 
         return None 
 
-    def reposition_beta_to_beta(self, scene, arrows):
+    def reposition_beta_to_beta(self, scene, arrows, scale):
         view = scene.views()[0]
         if len(arrows) != 2:
             return  # We're only handling cases where there are exactly two arrows
@@ -116,12 +116,12 @@ class Staff_Manager(QObject):
 
             # Translate the further staff in the direction of its arrow's start location by BETA_STAFF_REPOSITION_OFFSET
             direction = self.determine_translation_direction(further_arrow)
-            new_position = self.calculate_new_position(further_staff.pos(), direction)
+            new_position = self.calculate_new_position(further_staff.pos(), direction, scale)
             further_staff.setPos(new_position)
             
             #Translate the closer staff in the opposite direction of the further staff
             opposite_direction = self.get_opposite_direction(direction)
-            new_position = self.calculate_new_position(closer_staff.pos(), opposite_direction)
+            new_position = self.calculate_new_position(closer_staff.pos(), opposite_direction, scale)
             closer_staff.setPos(new_position)
             
 
@@ -134,12 +134,12 @@ class Staff_Manager(QObject):
 
             # Translate the pro staff in the direction of its arrow's start location by BETA_STAFF_REPOSITION_OFFSET
             direction = self.determine_translation_direction(pro_arrow)
-            pro_new_position = self.calculate_new_position(pro_staff.pos(), direction)
+            pro_new_position = self.calculate_new_position(pro_staff.pos(), direction, scale)
             pro_staff.setPos(pro_new_position)
 
             # Translate the anti staff in the opposite direction of its arrow's start location by BETA_STAFF_REPOSITION_OFFSET
             opposite_direction = self.get_opposite_direction(direction)
-            anti_new_position = self.calculate_new_position(anti_staff.pos(), opposite_direction)
+            anti_new_position = self.calculate_new_position(anti_staff.pos(), opposite_direction, scale)
             anti_staff.setPos(anti_new_position)
 
         scene.update()
@@ -153,50 +153,54 @@ class Staff_Manager(QObject):
                 return DOWN if arrow_state['start_location'] == 's' else UP
         return None
 
-    def calculate_new_position(self, current_position, direction):
+    def calculate_new_position(self, current_position, direction, scale):
         """Calculate the new position based on the direction."""
-        offset = QPointF(BETA_STAFF_REPOSITION_OFFSET * GRAPHBOARD_SCALE, 0) if direction in [LEFT, RIGHT] else QPointF(0, BETA_STAFF_REPOSITION_OFFSET * GRAPHBOARD_SCALE)
+        offset = QPointF(BETA_STAFF_REPOSITION_OFFSET * scale, 0) if direction in [LEFT, RIGHT] else QPointF(0, BETA_STAFF_REPOSITION_OFFSET * scale)
         if direction in [RIGHT, DOWN]:
             return current_position + offset
         else:
             return current_position - offset
 
-    def reposition_static_beta_staffs(self, static_arrows):
+    def reposition_static_beta_staffs(self, static_arrows, scale):
         for arrow in static_arrows:
             staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow['color']), None)
             if staff:
                 if staff.location in ['N', 'S']:
                     if arrow['color'] == 'red':
                         # Move the staff to the right
-                        new_position = self.calculate_new_position(staff.pos(), 'right')
+                        new_position = self.calculate_new_position(staff.pos(), 'right', scale)
                         staff.setPos(new_position)
                     elif arrow['color'] == 'blue':
                         # Move the staff to the left
-                        new_position = self.calculate_new_position(staff.pos(), 'left')
+                        new_position = self.calculate_new_position(staff.pos(), 'left', scale)
                         staff.setPos(new_position)
                 elif staff.location == 'E':
                     if arrow['color'] == 'red' and arrow['end_location'] == 'e':
                         # Move this staff up
-                        new_position = self.calculate_new_position(staff.pos(), 'up')
+                        new_position = self.calculate_new_position(staff.pos(), 'up', scale)
                         staff.setPos(new_position)
                         # Find the other staff and move it down
                         other_staff = next((s for s in self.staffs_on_board.values() if s.location == 'E' and s != staff), None)
                         if other_staff:
-                            new_position = self.calculate_new_position(other_staff.pos(), 'down')
+                            new_position = self.calculate_new_position(other_staff.pos(), 'down', scale)
                             other_staff.setPos(new_position)
                 elif staff.location == 'W':
                     if arrow['color'] == 'blue' and arrow['end_location'] == 'w':
                         # Move this staff up
-                        new_position = self.calculate_new_position(staff.pos(), 'up')
+                        new_position = self.calculate_new_position(staff.pos(), 'up', scale)
                         staff.setPos(new_position)
                         # Find the other staff and move it down
                         other_staff = next((s for s in self.staffs_on_board.values() if s.location == 'W' and s != staff), None)
                         if other_staff:
-                            new_position = self.calculate_new_position(other_staff.pos(), 'down')
+                            new_position = self.calculate_new_position(other_staff.pos(), 'down', scale)
                             other_staff.setPos(new_position)
 
 
     def reposition_staffs(self, scene, board_state):
+        
+        # if the scene is graphboard, scale is GRAPHBOARD_SCALE, else PICTOGRAPH_SCALE
+        scale = GRAPHBOARD_SCALE if scene == self.graphboard_view.scene() else PICTOGRAPH_SCALE
+        
         translations = {} 
 
     # First, we group the arrows based on their start locations.
@@ -219,14 +223,14 @@ class Staff_Manager(QObject):
                 
                 # Special handling for multiple arrows from the same start location.
                 if not same_start_end:
-                    self.reposition_beta_to_beta(scene, arrows)
+                    self.reposition_beta_to_beta(scene, arrows, scale)
 
         # LETTERS Y AND Z - GAMMA TO BETA
         pro_or_anti_arrows = [arrow for arrow in board_state['arrows'] if arrow['motion_type'] in ['pro', 'anti']]
         static_arrows = [arrow for arrow in board_state['arrows'] if arrow['motion_type'] == 'static']
 
         if len(static_arrows) > 1:
-            self.reposition_static_beta_staffs(static_arrows)
+            self.reposition_static_beta_staffs(static_arrows, scale)
                 
         if len(pro_or_anti_arrows) == 1 and len(static_arrows) == 1:
             pro_or_anti_arrow = pro_or_anti_arrows[0]
@@ -238,14 +242,14 @@ class Staff_Manager(QObject):
                 # Move the "pro"/"anti" arrow's staff
                 pro_or_anti_staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == pro_or_anti_arrow['color']), None)
                 if pro_or_anti_staff:
-                    new_position = self.calculate_new_position(pro_or_anti_staff.pos(), direction)
+                    new_position = self.calculate_new_position(pro_or_anti_staff.pos(), direction, scale)
                     pro_or_anti_staff.setPos(new_position)
 
                 # Move the "static" arrow's staff in the opposite direction
                 opposite_direction = self.get_opposite_direction(direction)
                 static_staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == static_arrow['color']), None)
                 if static_staff:
-                    new_position = self.calculate_new_position(static_staff.pos(), opposite_direction)
+                    new_position = self.calculate_new_position(static_staff.pos(), opposite_direction, scale)
                     static_staff.setPos(new_position)
 
         # Special handling for alpha to beta case
@@ -263,7 +267,7 @@ class Staff_Manager(QObject):
                         # Move the arrow's staff
                         staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow['color']), None)
                         if staff:
-                            new_position = self.calculate_new_position(staff.pos(), direction)
+                            new_position = self.calculate_new_position(staff.pos(), direction, scale)
                             staff.setPos(new_position)
 
         # Now apply the translations. This part is outside the above loop, so it runs after all translations are determined.
