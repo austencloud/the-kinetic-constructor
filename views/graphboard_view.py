@@ -322,15 +322,15 @@ class Graphboard_View(QGraphicsView):
             graphboard_menu.addAction(select_all_action)
 
             add_to_sequence_action = QAction('Add to Sequence', self)
-            add_to_sequence_action.triggered.connect(lambda _: self.sequence_manager.add_to_sequence(self))
+            add_to_sequence_action.triggered.connect(lambda _: self.main_widget.sequence_manager.add_to_sequence(self))
             graphboard_menu.addAction(add_to_sequence_action)
 
             export_to_png_action = QAction('Export to PNG', self)
-            export_to_png_action.triggered.connect(self.export_manager.export_to_png)
+            export_to_png_action.triggered.connect(self.main_widget.graph_editor_widget.export_manager.export_to_png)
             graphboard_menu.addAction(export_to_png_action)
 
             export_to_svg_action = QAction('Export to SVG', self)
-            export_to_svg_action.triggered.connect(self.export_manager.export_to_svg)
+            export_to_svg_action.triggered.connect(self.main_widget.graph_editor_widget.export_manager.export_to_svg)
             graphboard_menu.addAction(export_to_svg_action)
 
             graphboard_menu.exec(event.globalPos())

@@ -54,6 +54,7 @@ class Staff_Manager(QObject):
 
     def get_distance_from_center(self, position):
         center_point = QPointF(GRAPHBOARD_WIDTH / 2, GRAPHBOARD_WIDTH / 2)  # Assuming this is the center point of your coordinate system
+
         x_position = position.get('x', 0.0)
         y_position = position.get('y', 0.0)
         center_x = center_point.x()
@@ -160,6 +161,41 @@ class Staff_Manager(QObject):
         else:
             return current_position - offset
 
+    def reposition_static_beta_staffs(self, static_arrows):
+        for arrow in static_arrows:
+            staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow['color']), None)
+            if staff:
+                if staff.location in ['N', 'S']:
+                    if arrow['color'] == 'red':
+                        # Move the staff to the right
+                        new_position = self.calculate_new_position(staff.pos(), 'right')
+                        staff.setPos(new_position)
+                    elif arrow['color'] == 'blue':
+                        # Move the staff to the left
+                        new_position = self.calculate_new_position(staff.pos(), 'left')
+                        staff.setPos(new_position)
+                elif staff.location == 'E':
+                    if arrow['color'] == 'red' and arrow['end_location'] == 'e':
+                        # Move this staff up
+                        new_position = self.calculate_new_position(staff.pos(), 'up')
+                        staff.setPos(new_position)
+                        # Find the other staff and move it down
+                        other_staff = next((s for s in self.staffs_on_board.values() if s.location == 'E' and s != staff), None)
+                        if other_staff:
+                            new_position = self.calculate_new_position(other_staff.pos(), 'down')
+                            other_staff.setPos(new_position)
+                elif staff.location == 'W':
+                    if arrow['color'] == 'blue' and arrow['end_location'] == 'w':
+                        # Move this staff up
+                        new_position = self.calculate_new_position(staff.pos(), 'up')
+                        staff.setPos(new_position)
+                        # Find the other staff and move it down
+                        other_staff = next((s for s in self.staffs_on_board.values() if s.location == 'W' and s != staff), None)
+                        if other_staff:
+                            new_position = self.calculate_new_position(other_staff.pos(), 'down')
+                            other_staff.setPos(new_position)
+
+
     def reposition_staffs(self, scene, board_state):
         translations = {} 
 
@@ -178,16 +214,20 @@ class Staff_Manager(QObject):
         # Iterate over the groups of arrows.
         for start_location, arrows in arrows_grouped_by_start.items():
             if len(arrows) > 1:
+                # Check if all arrows have the same start and end locations
+                same_start_end = all(arrow['start_location'] == arrow['end_location'] for arrow in arrows)
+                
                 # Special handling for multiple arrows from the same start location.
-                self.reposition_beta_to_beta(scene, arrows)
-
-        
-
+                if not same_start_end:
+                    self.reposition_beta_to_beta(scene, arrows)
 
         # LETTERS Y AND Z - GAMMA TO BETA
         pro_or_anti_arrows = [arrow for arrow in board_state['arrows'] if arrow['motion_type'] in ['pro', 'anti']]
         static_arrows = [arrow for arrow in board_state['arrows'] if arrow['motion_type'] == 'static']
 
+        if len(static_arrows) > 1:
+            self.reposition_static_beta_staffs(static_arrows)
+                
         if len(pro_or_anti_arrows) == 1 and len(static_arrows) == 1:
             pro_or_anti_arrow = pro_or_anti_arrows[0]
             static_arrow = static_arrows[0]

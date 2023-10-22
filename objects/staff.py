@@ -80,53 +80,20 @@ class Staff(QGraphicsSvgItem):
         super().mouseReleaseEvent(event)
     
 
-    def set_element(self, element_id, color):
-        self.setElementId(element_id)
-        self.color = color
-        if color:
-            self.set_color(color)
-
-
     def set_color(self, new_color):
-        # Map the color names to their corresponding hex values
         color_map = {
             "red": "#ed1c24",
             "blue": "#2E3192"
         }
-
-        # Get the hex value for the color name, if it exists in the map
         hex_color = color_map.get(new_color, new_color)
-
-        # Read the SVG file into a string
         with open(self.svg_file, 'r') as f:
             svg_data = f.read()
-
-        # Colors you want to replace
+            
         old_colors = ["#ed1c24", "#2E3192"]
-
-        # Replace the colors
         for old_color in old_colors:
             svg_data = svg_data.replace(old_color, hex_color)
-
-        # Reload the SVG renderer
+            
         self.renderer.load(svg_data.encode('utf-8'))
-
-        # Update the color attribute
         self.color = hex_color
 
 
-
-    def hide(self):
-        self.setVisible(False)
-
-    def set_arrow(self, arrow):
-        self.arrow = arrow
-        
-    def isVisible(self):
-        return super().isVisible()
-    
-    def set_arrow(self, arrow):
-        self.arrow = arrow
-
-    def get_arrow(self):
-        return self.arrow
