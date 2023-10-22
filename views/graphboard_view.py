@@ -72,7 +72,7 @@ class Graphboard_View(QGraphicsView):
         self.graphboard_scene.addItem(self.letter_item)
 
 
-
+    # define a mouse over event where if the user's mouse is above an object, the cursor changes to an open hand
 
     def mousePressEvent(self, event):
         self.setFocus()

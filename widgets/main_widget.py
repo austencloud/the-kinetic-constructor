@@ -8,9 +8,9 @@ from views.sequence_view import Sequence_View
 from views.optionboard_view import Optionboard_View
 from managers.layout_manager import Layout_Manager
 from managers.key_bindings_manager import Key_Bindings_Manager
-from managers.info_manager import Info_Manager
 from widgets.graph_editor_widget import Graph_Editor_Widget
 from frames.letter_buttons_frame import Letter_Buttons_Frame
+
 class Main_Widget(QWidget):
     def __init__(self, main_window):
         super().__init__(main_window)
@@ -18,6 +18,7 @@ class Main_Widget(QWidget):
         self.arrows = []
         self.export_manager = None
         self.main_window = main_window
+        
         self.layout_manager = Layout_Manager(self)
         self.json_manager = Json_Manager()
         self.letters = self.json_manager.load_all_letters()

@@ -59,6 +59,7 @@ class Staff(QGraphicsSvgItem):
             self.setScale(GRAPHBOARD_SCALE)
 
 
+        
     def mousePressEvent(self, event):
         self.setCursor(Qt.CursorShape.ClosedHandCursor)
         super().mousePressEvent(event)
