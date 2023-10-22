@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 
 class Key_Bindings_Manager:
     def keyPressEvent(self, event, graphboard_view):
-        arrow_manager = graphboard_view.arrow_manager
+        arrow_manager = graphboard_view.main_widget.arrow_manager
         sequence_view = graphboard_view.main_widget.sequence_view
         selected_items = graphboard_view.get_selected_items()
         

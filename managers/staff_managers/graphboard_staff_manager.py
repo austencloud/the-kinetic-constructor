@@ -78,6 +78,6 @@ class Graphboard_Staff_Manager(Staff_Manager):
         
         for key in staff_keys_to_remove:
             staff = self.staffs_on_board.pop(key)
-            
+    
 
         self.check_replace_beta_staffs(scene)

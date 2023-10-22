@@ -110,8 +110,6 @@ class Sequence_View(QGraphicsView):
             grid.setPos(state['grid']['position'])
             graphboard_view.scene().addItem(grid)
 
-
-
     def clear_sequence(self):
         self.pictographs = []
         for item in self.sequence_scene.items():
