@@ -1,7 +1,7 @@
 
 import xml.etree.ElementTree as ET
 from PyQt6.QtSvg import QSvgRenderer
-
+import re
 
 class Svg_Manager():
     def __init__(self):
@@ -110,3 +110,33 @@ class Svg_Manager():
 
         return rotated_versions + reflected_versions
 
+
+
+    @staticmethod
+    def set_svg_color(svg_file, new_color):
+        color_map = {
+            "red": "#ed1c24",
+            "blue": "#2e3192"
+        }
+        hex_color = color_map.get(new_color)
+
+        # Read the SVG file
+        with open(svg_file, 'r') as f:
+            svg_data = f.read()
+
+        # Find the color inside the <style> tag using regular expression
+        style_tag_pattern = re.compile(r'<style>.*?fill:\s*(#[a-fA-F0-9]{6});.*?</style>', re.DOTALL)
+        match = style_tag_pattern.search(svg_data)
+
+        if match:
+            old_color = match.group(1)
+            # Replace the old color with the new color
+            svg_data = svg_data.replace(old_color, hex_color)
+
+        # Return the modified SVG data
+        return svg_data.encode('utf-8')
+    
+    def get_string_of_svg_file_contents(self, svg_file):
+        with open(svg_file, 'r') as f:
+            svg_data = f.read()
+        return svg_data

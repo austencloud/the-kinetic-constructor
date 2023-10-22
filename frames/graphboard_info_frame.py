@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout, QHBoxLayout, QGridLayou
 from data.positions_map import positions_map
 
 from settings import GRAPHBOARD_SCALE
-
+from data.start_end_location_mapping import start_end_location_mapping
 
 class Graphboard_Info_Frame(QFrame):
 
@@ -117,11 +117,14 @@ class Graphboard_Info_Frame(QFrame):
             # Update the respective attribute dictionaries
             attributes_dict = blue_attributes if arrow.color == 'blue' else red_attributes if arrow.color == 'red' else None
 
-            if attributes_dict is not None:
-                attributes_dict['Type'] = arrow.motion_type.capitalize()
-                attributes_dict['Start'] = arrow.start_location.capitalize()
-                attributes_dict['End'] = arrow.end_location.capitalize()
-                attributes_dict['Turns'] = str(arrow.turns)
+
+
+    # Use the dictionary to update arrow locations
+            if arrow.quadrant in start_end_location_mapping:
+                if arrow.rotation_direction in start_end_location_mapping[arrow.quadrant]:
+                    if arrow.motion_type in start_end_location_mapping[arrow.quadrant][arrow.rotation_direction]:
+                        arrow.start_location, arrow.end_location = start_end_location_mapping[arrow.quadrant][arrow.rotation_direction][arrow.motion_type]
+
 
         # Construct information strings ensuring the values (not keys) are bold and aligned
         blue_info_label = self.construct_info_string_label(blue_attributes)

@@ -89,7 +89,7 @@ class Sequence_View(QGraphicsView):
 
     def add_to_graphboard(self, pictograph: Pictograph, graphboard_view: Graphboard_View):
         state = pictograph.state
-        graphboard_view.clear()
+        graphboard_view.clear_graphboard()
         
         for arrow_state in state['arrows']:
             arrow = Arrow(arrow_state['svg_file'])

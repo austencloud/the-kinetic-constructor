@@ -40,8 +40,10 @@ class ArrowBox_View(QGraphicsView):
                 self.drag = QDrag(self)
                 self.dragging = True 
                 self.dragged_item = arrow
+                self.dragged_arrow_color = arrow.color  # Store the color
                 mime_data = QMimeData()
                 mime_data.setText(arrow.svg_file)
+                mime_data.setData("color", arrow.color.encode())  # Pass the color
                 self.drag.setMimeData(mime_data)
                 image = QImage(arrow.boundingRect().size().toSize() * GRAPHBOARD_SCALE, QImage.Format.Format_ARGB32)
                 image.fill(QColor(Qt.GlobalColor.transparent))
@@ -61,40 +63,6 @@ class ArrowBox_View(QGraphicsView):
             event.ignore()
 
     def mouseMoveEvent(self, event):
-        scenePos = self.mapToScene(event.pos())
-        items = self.scene().items(scenePos)
-        arrows = [item for item in items if isinstance(item, Arrow)]
-        if arrows:
-            mouse_pos = self.graphboard_view.mapToScene(self.graphboard_view.mapFromGlobal(QCursor.pos()))
-            graphboard_view_rect = self.graphboard_view.sceneRect()
-
-            if graphboard_view_rect.contains(mouse_pos):
-                print("graphboard_view contains mouse_pos")
-                if mouse_pos.y() < graphboard_view_rect.height() / 2:
-                    if mouse_pos.x() < graphboard_view_rect.width() / 2:
-                        quadrant = 'nw'
-                    else:
-                        quadrant = 'ne'
-                else:
-                    if mouse_pos.x() < graphboard_view_rect.width() / 2:
-                        quadrant = 'sw'
-                    else:
-                        quadrant = 'se'
-                if hasattr(self, 'svg_file'):
-                    base_name = os.path.basename(self.svg_file)
-
-                    if base_name.startswith('red_anti'):
-                        new_svg = f'images/arrows/shift/anti/red_anti_{self.orientation}_{quadrant}_0.svg'
-                    elif base_name.startswith('red_pro'):
-                        new_svg = f'images/arrows/shift/pro/red_pro_{self.orientation}_{quadrant}_0.svg'
-                    elif base_name.startswith('blue_anti'):
-                        new_svg = f'images/arrows/shift/anti/blue_anti_{self.orientation}_{quadrant}_0.svg'
-                    elif base_name.startswith('blue_pro'):
-                        new_svg = f'images/arrows/shift/pro/blue_pro_{self.orientation}_{quadrant}_0.svg'
-                    else:
-                        print(f"Unexpected svg_file: {self.svg_file}")
-                        
-
         try:
             if self.drag is not None:
                 self.drag.exec(Qt.DropAction.CopyAction | Qt.DropAction.MoveAction)
@@ -115,46 +83,19 @@ class ArrowBox_View(QGraphicsView):
 
     def populate_arrows(self):
         svgs_full_paths = []
-        default_arrows = ['red_pro_r_ne_0.svg', 'red_anti_r_ne_0.svg', 'blue_pro_r_sw_0.svg', 'blue_anti_r_sw_0.svg']
 
         for dirpath, dirnames, filenames in os.walk(ARROW_DIR):
             svgs_full_paths.extend([os.path.join(dirpath, filename) for filename in filenames if filename.endswith('.svg')])
 
         for svg_file in svgs_full_paths:
-            self.create_and_configure_arrow(svg_file, default_arrows)
+            self.create_and_configure_arrow(svg_file)
 
-    def create_and_configure_arrow(self, svg_file, default_arrows):
+    def create_and_configure_arrow(self, svg_file):
         file_name = os.path.basename(svg_file)
-        
-        svg_item_count_red_pro = 0
-        svg_item_count_red_anti = 0
-        svg_item_count_blue_pro = 0
-        svg_item_count_blue_anti = 0
-        spacing = 200 * GRAPHBOARD_SCALE
-        y_pos_red = 0
-        y_pos_blue = 200 * GRAPHBOARD_SCALE
-        
-        if file_name in default_arrows:
-            
-            motion_type = file_name.split('_')[1]
-            arrow_item = Arrow(svg_file, self.graphboard_view, self.info_frame, self.main_widget.svg_manager, self.main_widget.arrow_manager, motion_type, self.graphboard_view.staff_manager, None)
-            arrow_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
-            arrow_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
-            arrow_item.setScale(GRAPHBOARD_SCALE * 0.75)
-
-            if 'red' in file_name:
-                if 'pro' in file_name:
-                    arrow_item.setPos(svg_item_count_red_pro * spacing, y_pos_red) # Red pro
-                    svg_item_count_red_pro += 1
-                elif 'anti' in file_name:
-                    arrow_item.setPos((svg_item_count_red_anti + 1) * spacing, y_pos_red) # Red Anti
-                    svg_item_count_red_anti += 1
-            elif 'blue' in file_name:
-                if 'pro' in file_name:
-                    arrow_item.setPos(svg_item_count_blue_pro * spacing, y_pos_blue) # Blue pro
-                    svg_item_count_blue_pro += 1
-                elif 'anti' in file_name:
-                    arrow_item.setPos((svg_item_count_blue_anti + 1) * spacing, y_pos_blue) # Blue Anti
-                    svg_item_count_blue_anti += 1
-            self.arrowbox_scene.addItem(arrow_item) 
-            self.main_widget.arrows.append(arrow_item)
+        motion_type = file_name.split('_')[0]
+        arrow_item = Arrow(svg_file, self.graphboard_view, self.info_frame, self.main_widget.svg_manager, self.main_widget.arrow_manager, motion_type, self.graphboard_view.staff_manager, "red", None, "r", None, 0)
+        arrow_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
+        arrow_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
+        arrow_item.setScale(GRAPHBOARD_SCALE * 0.75)
+        self.arrowbox_scene.addItem(arrow_item) 
+        self.main_widget.arrows.append(arrow_item)

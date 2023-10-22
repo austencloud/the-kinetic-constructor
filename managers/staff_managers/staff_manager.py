@@ -197,7 +197,6 @@ class Staff_Manager(QObject):
 
 
     def reposition_staffs(self, scene, board_state):
-        
         # if the scene is graphboard, scale is GRAPHBOARD_SCALE, else PICTOGRAPH_SCALE
         scale = GRAPHBOARD_SCALE if scene == self.graphboard_view.scene() else PICTOGRAPH_SCALE
         

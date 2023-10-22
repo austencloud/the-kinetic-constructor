@@ -19,6 +19,16 @@ class Arrow_Manager(QObject):
         self.timer = QTimer()
         self.letters = main_widget.letters
 
+    def create_arrow(self, base_type, color, rotation_direction, is_mirrored, turns):
+        # Create an Arrow object with the given attributes
+        svg_file = f"shift/{base_type}/{base_type}_{turns}.svg"
+        arrow = Arrow(svg_file, ...)
+        arrow.color = color
+        arrow.rotation_direction = rotation_direction
+        arrow.is_mirrored = is_mirrored
+        arrow.update_appearance()
+        return arrow
+
 
     ### CONNECTORS ###
 
@@ -48,7 +58,7 @@ class Arrow_Manager(QObject):
         new_quadrant = quadrant_mapping.get(direction, {}).get(current_quadrant, current_quadrant)
         self.selected_arrow.quadrant = new_quadrant
 
-        self.update_arrow_image(self.selected_arrow)
+
         self.selected_arrow.update_attributes()
         self.update_arrow_position(self.graphboard_view)
         self.info_frame.update()
@@ -58,15 +68,10 @@ class Arrow_Manager(QObject):
             arrows = [arrows]  
 
         for arrow in arrows:
-            current_svg = arrow.svg_file
-            folder, base_name = os.path.split(current_svg)
-
             if arrow.motion_type == "anti":
                 new_motion_type = "pro"
-                new_folder = folder.replace("anti", "pro")
             elif arrow.motion_type == "pro":
                 new_motion_type = "anti"
-                new_folder = folder.replace("pro", "anti")
             else:
                 print(f"Unknown motion type: {self.motion_type}")
                 continue
@@ -75,54 +80,14 @@ class Arrow_Manager(QObject):
                 new_rotation_direction = "r"
             elif arrow.rotation_direction == "r":
                 new_rotation_direction = "l"
-            new_svg = os.path.join(new_folder, base_name.replace(f"{arrow.motion_type}_{arrow.rotation_direction}_", f"{new_motion_type}_{new_rotation_direction}_"))
-            new_renderer = QSvgRenderer(new_svg)
-            if new_renderer.isValid():
-                arrow.setSharedRenderer(new_renderer)
-                arrow.svg_file = new_svg
-                arrow.motion_type = new_motion_type
-                arrow.rotation_direction = new_rotation_direction 
-                self.update_arrow_position(self.graphboard_view)
-            else:
-                print(f"Failed to load SVG file: {new_svg}")
+                
+            arrow.motion_type = new_motion_type
+            arrow.rotation_direction = new_rotation_direction 
+            self.update_arrow_position(self.graphboard_view)
 
         # Update the info frame and the graphboard_view
         self.info_frame.update()
 
-    def rotate_staff(self, staffs, direction):
-        if not isinstance(staffs, list):
-            staffs = [staffs]
-        for staff in staffs:
-            if direction == "right":
-                if staff.arrow.end_location == "n" and staff.arrow.start_location == "n":
-                    staff.arrow.end_location = "e"
-                    staff.arrow.start_location = "e"
-                elif staff.arrow.end_location == "e" and staff.arrow.start_location == "e":
-                    staff.arrow.end_location = "s"
-                    staff.arrow.start_location = "s"
-                elif staff.arrow.end_location == "s" and staff.arrow.start_location == "s":
-                    staff.arrow.end_location = "w"
-                    staff.arrow.start_location = "w"
-                elif staff.arrow.end_location == "w" and staff.arrow.start_location == "w":
-                    staff.arrow.end_location = "n"
-                    staff.arrow.start_location = "n"
-            elif direction == "left":
-                if staff.arrow.end_location == "n" and staff.arrow.start_location == "n":
-                    staff.arrow.end_location = "w"
-                    staff.arrow.start_location = "w"
-                elif staff.arrow.end_location == "w" and staff.arrow.start_location == "w":
-                    staff.arrow.end_location = "s"
-                    staff.arrow.start_location = "s"
-                elif staff.arrow.end_location == "s" and staff.arrow.start_location == "s":
-                    staff.arrow.end_location = "e"
-                    staff.arrow.start_location = "e"
-                elif staff.arrow.end_location == "e" and staff.arrow.start_location == "e":
-                    staff.arrow.end_location = "n"
-                    staff.arrow.start_location = "n"
-    
-            staff.update_attributes()
-            self.update_arrow_position(self.graphboard_view)
-            self.info_frame.update()
 
     def rotate_arrow(self, direction, arrows):
         for arrow in arrows:
@@ -285,15 +250,7 @@ class Arrow_Manager(QObject):
         
         
      
-    def update_arrow_image(self, arrow):
-        if arrow.motion_type == 'pro' or arrow.motion_type == 'anti':
-            new_filename = f"images/arrows/shift/{arrow.motion_type}/{arrow.color}_{arrow.motion_type}_{arrow.rotation_direction}_{arrow.quadrant}_{arrow.turns}.svg"
-            if os.path.isfile(new_filename):
-                arrow.svg_file = new_filename
-                arrow.setSharedRenderer(arrow.svg_manager.get_renderer(new_filename))
-            else:
-                print(f"File {new_filename} does not exist")
-        
+      
     ### SELECTION ###    
     
     def select_all_arrows(self):
@@ -326,7 +283,7 @@ class Arrow_Manager(QObject):
             deleted_arrows = [deleted_arrows]
         for arrow in deleted_arrows:
             if isinstance(arrow, Arrow):
-                ghost_arrow = Arrow(None, arrow.graphboard_view, arrow.info_frame, arrow.svg_manager, self, 'static', arrow.staff_manager, None)
+                ghost_arrow = Arrow(None, arrow.view, arrow.info_frame, arrow.svg_manager, self, 'static', arrow.staff_manager, None)
                 ghost_arrow.is_ghost = True
                 ghost_arrow.set_static_attributes_from_deleted_arrow(arrow)
                 ghost_arrow.setScale(GRAPHBOARD_SCALE)

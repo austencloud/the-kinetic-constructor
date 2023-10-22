@@ -23,7 +23,7 @@ class Graphboard_View(QGraphicsView):
         self.init_grid()
         self.init_letter_renderers()
 
-    # Initialization Methods
+    # INIT #
     
     def init_ui(self):
         self.setAcceptDrops(True)
@@ -72,7 +72,7 @@ class Graphboard_View(QGraphicsView):
         self.graphboard_scene.addItem(self.letter_item)
 
 
-    # define a mouse over event where if the user's mouse is above an object, the cursor changes to an open hand
+    ### EVENTS ###
 
     def mousePressEvent(self, event):
         self.setFocus()
@@ -109,26 +109,49 @@ class Graphboard_View(QGraphicsView):
         self.setFocus()
         event.setDropAction(Qt.DropAction.CopyAction)
         event.accept()
-        dropped_arrow_svg = event.mimeData().text()
-        dropped_arrow_svg_motion_type = dropped_arrow_svg.split('_')[1]
+        dropped_arrow_svg_path = event.mimeData().text()
+        dropped_arrow_color = event.mimeData().data("color").data().decode()  # Retrieve the color
+        parts = os.path.basename(dropped_arrow_svg_path).split('_')
+        dropped_arrow_svg_motion_type = parts[0]
+        dropped_arrow_turns = parts[1].split('.')[0]
+        self.mouse_pos = self.mapToScene(event.position().toPoint()) 
+        quadrant = self.get_graphboard_quadrants(self.mouse_pos)
         
-        self.arrow = Arrow(dropped_arrow_svg, self, self.info_frame, self.main_widget.svg_manager, self.main_widget.arrow_manager, dropped_arrow_svg_motion_type, self.staff_manager, None)
+        self.arrow = Arrow(dropped_arrow_svg_path, 
+                        self, 
+                        self.info_frame, 
+                        self.main_widget.svg_manager, 
+                        self.main_widget.arrow_manager, 
+                        dropped_arrow_svg_motion_type, 
+                        self.staff_manager,
+                        dropped_arrow_color,  # Use the color
+                        quadrant, 
+                        None,
+                        dropped_arrow_turns,
+                        None)
+                
         self.arrow.setScale(GRAPHBOARD_SCALE)
         self.scene().addItem(self.arrow)
-        
-        # Use position() instead of pos()
-        self.mouse_pos = self.mapToScene(event.position().toPoint())  # Convert QPointF to QPoint if necessary
         
         self.clear_selection()
         self.arrow.setSelected(True)
         
-        quadrant = self.get_graphboard_quadrants(self.mouse_pos)
         self.arrow.update_arrow_for_new_quadrant(quadrant)
         self.arrow.update_attributes()
         for arrow in self.scene().items():
             if isinstance(arrow, Arrow):
                 arrow.arrow_manager.update_arrow_position(self)
         self.info_frame.update()
+
+    def contextMenuEvent(self, event):
+        clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())
+        selected_items = self.get_selected_items()
+        if isinstance(clicked_item, Arrow):
+            self.context_menu_handler.create_arrow_menu(selected_items, event)
+        elif isinstance(clicked_item, Staff):
+            self.context_menu_handler.create_staff_menu(selected_items, event)
+        else:
+            self.context_menu_handler.create_graphboard_menu(event)
 
 
     ### GETTERS ###
@@ -212,7 +235,7 @@ class Graphboard_View(QGraphicsView):
 
         attributes['color'] = parts[0]
         attributes['type'] = parts[1]
-        attributes['rotation_direction'] = 'Clockwise' if parts[2] == 'r' else 'Anti-clockwise'
+        attributes['rotation_direction'] = parts[2]
         attributes['quadrant'] = parts[3].split('.')[0]
 
         return attributes
@@ -240,6 +263,12 @@ class Graphboard_View(QGraphicsView):
         for arrow in self.scene().selectedItems():
             arrow.setSelected(False)
 
+    def clear_graphboard(self):
+        for item in self.scene().items():
+            if isinstance(item, Arrow) or isinstance(item, Staff):
+                self.scene().removeItem(item)
+                del item
+
     ### SETTERS ###
 
     def connect_info_frame(self, info_frame):
@@ -250,19 +279,6 @@ class Graphboard_View(QGraphicsView):
 
     def connect_staff_manager(self, staff_manager):
         self.staff_manager = staff_manager
-
-    ### EVENTS ###
-
-
-    def contextMenuEvent(self, event):
-        clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())
-        selected_items = self.get_selected_items()
-        if isinstance(clicked_item, Arrow):
-            self.context_menu_handler.create_arrow_menu(selected_items, event)
-        elif isinstance(clicked_item, Staff):
-            self.context_menu_handler.create_staff_menu(selected_items, event)
-        else:
-            self.context_menu_handler.create_graphboard_menu(event)
 
     ### OTHER ###
 
@@ -285,10 +301,4 @@ class Graphboard_View(QGraphicsView):
 
         self.letter_item.setScale(GRAPHBOARD_SCALE)
         self.letter_item.setPos(self.width() / 2 - self.letter_item.boundingRect().width()*GRAPHBOARD_SCALE / 2, GRAPHBOARD_WIDTH)
-
-    def clear(self):
-        for item in self.scene().items():
-            if isinstance(item, Arrow) or isinstance(item, Staff):
-                self.scene().removeItem(item)
-                del item
 
