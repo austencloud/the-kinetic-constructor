@@ -4,9 +4,7 @@ from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt, QPointF, QByteArray
-from PyQt6.QtGui import QTransform
 from data.start_end_location_mapping import start_end_location_mapping
-from settings import *
 class Arrow(QGraphicsSvgItem):
     def __init__(self, 
                  svg_file, 

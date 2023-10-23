@@ -1,16 +1,16 @@
 # Import Optimization
 import os
-from PyQt6.QtCore import QPointF, Qt, QRectF
-from PyQt6.QtGui import QCursor, QTransform, QColor
+from PyQt6.QtCore import QPointF, Qt
+from PyQt6.QtGui import QCursor, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsItem, QGraphicsRectItem, QMenu, QGraphicsScene, QSizePolicy, QToolTip, QFrame
+from PyQt6.QtWidgets import QGraphicsView, QGraphicsItem, QGraphicsRectItem, QGraphicsScene, QSizePolicy, QToolTip, QFrame
 
 # Local Imports
 from objects.staff import Staff
 from objects.arrow import Arrow
-from settings import *
-from managers.staff_managers.graphboard_staff_manager import GraphboardStaffManager
+from constants import GRAPHBOARD_SCALE, GRAPHBOARD_WIDTH, GRAPHBOARD_HEIGHT, VERTICAL_OFFSET
+from managers.staff_management.graphboard_staff_manager import GraphboardStaffManager
 from managers.info_manager import InfoManager
 from managers.context_menu_manager import ContextMenuManager
 

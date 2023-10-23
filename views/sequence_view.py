@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QLabel
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from settings import GRAPHBOARD_HEIGHT
 from PyQt6.QtWidgets import QGraphicsRectItem, QPushButton
 from PyQt6.QtCore import QRectF, Qt, QPointF
 from PyQt6.QtGui import QImage, QPainter, QColor
@@ -10,7 +9,7 @@ from objects.staff import Staff
 from objects.grid import Grid
 from views.graphboard_view import GraphboardView
 from objects.pictograph import Pictograph
-from settings import DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, PICTOGRAPH_SCALE
+from constants import DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, PICTOGRAPH_SCALE, GRAPHBOARD_HEIGHT
 
 class SequenceView(QGraphicsView):
     def __init__(self, main_widget):

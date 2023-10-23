@@ -5,12 +5,12 @@ from PyQt6.QtGui import QTransform, QAction
 from objects.grid import Grid
 from objects.arrow import Arrow
 from frames.graphboard_info_frame import GraphboardInfoFrame
-from managers.staff_managers.pictograph_staff_manager import PictographStaffManager
-from managers.arrow_manager import ArrowManager
+from managers.staff_management.pictograph_staff_manager import PictographStaffManager
+from managers.arrow_management.arrow_manager import ArrowManager
 from managers.svg_manager import SvgManager
 from managers.json_manager import JsonManager
 from managers.info_manager import InfoManager
-from settings import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, PICTOGRAPH_SCALE, PICTOGRAPH_GRID_PADDING
+from constants import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, PICTOGRAPH_SCALE, PICTOGRAPH_GRID_PADDING
 
 class PictographView(QGraphicsView):
     def __init__(self, main_widget):
@@ -34,7 +34,7 @@ class PictographView(QGraphicsView):
         self.arrow_manager = ArrowManager(self.main_widget)
         self.json_manager = JsonManager(self.pictograph_scene)
         self.info_frame = GraphboardInfoFrame(self.main_widget, self)
-        self.arrow_manager.connect_info_frame(self.info_frame)
+        self.arrow_manager.info_frame = self.info_frame
         self.staff_manager.connect_grid(self.grid)
         self.init_grid()
         self.staff_manager.init_pictograph_staffs(self, self.grid)

@@ -4,7 +4,6 @@ import random
 import os
 from objects.arrow import Arrow
 from managers.export_manager import ExportManager
-from managers.staff_managers.pictograph_staff_manager import PictographStaffManager
 class Pictograph_Generator():
     def __init__(self, main_widget, graphboard_view, info_frame):
         self.staff_manager = graphboard_view.staff_manager

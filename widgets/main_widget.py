@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import QEvent
 from objects.grid import Grid
-from managers.arrow_manager import ArrowManager
+from managers.arrow_management.arrow_manager import ArrowManager
 from managers.svg_manager import SvgManager
 from managers.json_manager import JsonManager
 from views.sequence_view import SequenceView
@@ -45,12 +45,12 @@ class MainWidget(QWidget):
 
     def connect_objects(self):
         self.info_frame.connect_view(self.graph_editor_widget.graphboard_view)
-        self.graphboard_view.staff_manager.connect_info_manager(self.graphboard_view.info_manager)
-        self.graphboard_view.staff_manager.connect_grid(self.grid)
-        self.graphboard_view.staff_manager.connect_graphboard_view(self.graph_editor_widget.graphboard_view)
-        self.propbox_view.staff_manager.connect_propbox_view(self.graph_editor_widget.propbox_view)
-        self.graphboard_view.connect_info_frame(self.graph_editor_widget.info_frame)
-        self.graphboard_view.connect_generator(self.graph_editor_widget.pictograph_generator)
+        self.graphboard_view.staff_manager.info_manager = self.graphboard_view.info_manager
+        self.graphboard_view.staff_manager.grid = self.grid
+        self.graphboard_view.staff_manager.graphboard_view = self.graph_editor_widget.graphboard_view
+        self.propbox_view.staff_manager.propbox_view = self.graph_editor_widget.propbox_view
+        self.graphboard_view.info_frame = self.graph_editor_widget.info_frame
+        self.graphboard_view.generator = self.graph_editor_widget.pictograph_generator
         self.arrow_manager.info_frame = self.graph_editor_widget.info_frame
         self.arrow_manager.graphboard_view = self.graph_editor_widget.graphboard_view
         self.arrow_manager.graphboard_scene = self.graph_editor_widget.graphboard_view.graphboard_scene

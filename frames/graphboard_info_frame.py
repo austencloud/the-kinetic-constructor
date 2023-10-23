@@ -1,10 +1,9 @@
 from objects.arrow import Arrow
-from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout, QHBoxLayout, QGridLayout, QWidget
+from PyQt6.QtWidgets import QLabel, QFrame, QHBoxLayout, QGridLayout, QWidget
 from data.positions_map import positions_map
 
-from settings import GRAPHBOARD_SCALE
+from constants import GRAPHBOARD_SCALE
 from data.start_end_location_mapping import start_end_location_mapping
 
 class GraphboardInfoFrame(QFrame):

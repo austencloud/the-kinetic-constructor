@@ -1,11 +1,12 @@
 
 
     ### GRAPHBOARD ###
-from managers.staff_managers.staff_manager import StaffManager
+from managers.staff_management.staff_manager import StaffManager
 from PyQt6.QtCore import QPointF
 from objects.staff import Staff
 from objects.arrow import Arrow
-from settings import GRAPHBOARD_GRID_PADDING
+from constants import GRAPHBOARD_GRID_PADDING
+
 class GraphboardStaffManager(StaffManager):
     def __init__(self, main_widget, scene):
         super().__init__(main_widget)
@@ -13,6 +14,7 @@ class GraphboardStaffManager(StaffManager):
         self.staffs_on_board = {}
         self.staff_xy_locations = {}
         self.graphboard_view = None
+        self.grid = main_widget.grid
     
     def init_graphboard_staffs(self, graphboard_view):
         # Calculate scaling and padding factors for the grid

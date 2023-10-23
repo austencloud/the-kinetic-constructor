@@ -4,7 +4,7 @@ from PyQt6.QtGui import QPixmap, QDrag, QImage, QPainter, QCursor, QColor
 from PyQt6.QtCore import Qt, QMimeData, QPointF
 from PyQt6.QtSvg import QSvgRenderer
 from objects.arrow import Arrow
-from settings import *
+from constants import ARROW_DIR, GRAPHBOARD_SCALE
 
 
 

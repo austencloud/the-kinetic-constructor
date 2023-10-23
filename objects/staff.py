@@ -3,8 +3,7 @@ from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor
-from settings import GRAPHBOARD_SCALE, PICTOGRAPH_SCALE
-from settings import STAFF_WIDTH, STAFF_LENGTH
+from constants import GRAPHBOARD_SCALE, PICTOGRAPH_SCALE, STAFF_WIDTH, STAFF_LENGTH
 class Staff(QGraphicsSvgItem):
     def __init__(self, scene, xy_location, color, location=None, context=None):
         super().__init__()

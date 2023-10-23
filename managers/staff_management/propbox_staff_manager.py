@@ -3,7 +3,7 @@ from PyQt5.QtCore import QPointF
 from objects.staff import Staff
 from PyQt5.QtWidgets import QGraphicsItem
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from managers.staff_managers.staff_manager import StaffManager
+from managers.staff_management.staff_manager import StaffManager
 
 class PropboxStaffManager(StaffManager):
     def __init__(self, main_widget):

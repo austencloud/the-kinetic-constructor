@@ -1,16 +1,12 @@
 from PyQt6.QtCore import QPointF, pyqtSignal, QObject
-from objects.arrow import Arrow
-from settings import *
+from constants import GRAPHBOARD_WIDTH, GRAPHBOARD_SCALE, PICTOGRAPH_SCALE, BETA_STAFF_REPOSITION_OFFSET, RIGHT, LEFT, UP, DOWN
 from objects.staff import Staff
-from PyQt6.QtWidgets import QGraphicsItem
 import math
 
 class StaffManager(QObject):
-    positionChanged = pyqtSignal(str)
-
     def __init__(self, main_widget):
         super().__init__()
-        self.bets_staffs = []  # List to hold beta staffs
+ 
         self.previous_position = None  # Store the previous position of staffs
         self.letters = main_widget.letters
         self.grid = main_widget.grid

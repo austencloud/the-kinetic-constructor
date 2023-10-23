@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QPushButton, QFrame
 from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import QSize
-from settings import GRAPHBOARD_SCALE
+from constants import GRAPHBOARD_SCALE
 from PyQt6.QtWidgets import QVBoxLayout
 
 class ActionButtonsFrame(QFrame):
@@ -21,15 +21,15 @@ class ActionButtonsFrame(QFrame):
             ("images/icons/update_locations.png", "Update Position", 
              lambda: self.main_widget.json_manager.update_optimal_locations_in_json(*self.main_widget.graphboard_view.get_current_arrow_positions())),
             ("images/icons/delete.png", "Delete", 
-             lambda: self.main_widget.arrow_manager.delete_arrow(self.main_widget.graphboard_scene.selectedItems())),
+             lambda: self.main_widget.arrow_manager.arrow_selector.delete_arrow(self.main_widget.graphboard_scene.selectedItems())),
             ("images/icons/rotate_right.png", "Rotate Right", 
-             lambda: self.main_widget.arrow_manager.rotate_arrow('right', self.main_widget.graphboard_scene.selectedItems())),
+             lambda: self.main_widget.arrow_manager.arrow_manipulator.rotate_arrow('right', self.main_widget.graphboard_scene.selectedItems())),
             ("images/icons/rotate_left.png", "Rotate Left", 
-             lambda: self.main_widget.arrow_manager.rotate_arrow('left', self.main_widget.graphboard_scene.selectedItems())),
+             lambda: self.main_widget.arrow_manager.arrow_manipulator.rotate_arrow('left', self.main_widget.graphboard_scene.selectedItems())),
             ("images/icons/mirror.png", "Mirror", 
-             lambda: self.main_widget.arrow_manager.mirror_arrow(self.main_widget.graphboard_scene.selectedItems())),
+             lambda: self.main_widget.arrow_manager.arrow_manipulator.mirror_arrow(self.main_widget.graphboard_scene.selectedItems())),
             ("images/icons/swap.png", "Swap Colors", 
-             lambda: self.main_widget.arrow_manager.swap_colors(self.main_widget.graphboard_scene.selectedItems())),
+             lambda: self.main_widget.arrow_manager.arrow_manipulator.swap_colors(self.main_widget.graphboard_scene.selectedItems())),
             ("images/icons/select_all.png", "Select All", 
              lambda: self.main_widget.graphboard_view.select_all_items()),
             ("images/icons/add_to_sequence.png", "Add to Sequence", 
