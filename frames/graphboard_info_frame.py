@@ -110,8 +110,7 @@ class GraphboardInfoFrame(QFrame):
         # Process the arrows and construct detailed information
         for arrow in [item for item in self.graphboard_view.items() if isinstance(item, Arrow)]:
             
-            if not arrow.is_ghost:
-                arrow.set_attributes_from_filename()  # Ensure the attributes are up-to-date
+
 
             # Update the respective attribute dictionaries
             attributes_dict = blue_attributes if arrow.color == 'blue' else red_attributes if arrow.color == 'red' else None

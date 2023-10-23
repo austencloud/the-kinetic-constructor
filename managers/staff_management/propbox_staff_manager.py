@@ -35,7 +35,3 @@ class PropboxStaffManager(StaffManager):
 
         self.propbox_staffs['red_staff'] = red_staff
         self.propbox_staffs['blue_staff'] = blue_staff
-    
-        
-    def connect_propbox_view(self, propbox_view):
-        self.propbox_view = propbox_view

@@ -54,7 +54,9 @@ class GraphboardView(QGraphicsView):
         self.staff_manager = GraphboardStaffManager(main_widget, self.graphboard_scene)
         self.export_manager = ExportManager(self.staff_manager, self.grid, self)
         self.context_menu_manager = GraphboardContextMenuManager(self)
-
+        self.arrow_manager = main_widget.arrow_manager
+        self.arrow_manager.graphboard_view = self
+        self.arrow_factory = self.arrow_manager.arrow_factory
 
     def init_grid(self):
         transform = QTransform()
@@ -118,33 +120,32 @@ class GraphboardView(QGraphicsView):
         parts = os.path.basename(dropped_arrow_svg_path).split('_')
         dropped_arrow_svg_motion_type = parts[0]
         dropped_arrow_turns = parts[1].split('.')[0]
+        dropped_arrow_rotation_direction = 'r'
         self.mouse_pos = self.mapToScene(event.position().toPoint()) 
         quadrant = self.get_graphboard_quadrants(self.mouse_pos)
         
-        self.arrow = Arrow(dropped_arrow_svg_path, 
-                        self, 
-                        self.info_frame, 
-                        self.main_widget.svg_manager, 
-                        self.main_widget.arrow_manager, 
-                        dropped_arrow_svg_motion_type, 
-                        self.staff_manager,
-                        dropped_arrow_color,  # Use the color
-                        quadrant, 
-                        None,
-                        dropped_arrow_turns,
-                        None)
+        dropped_arrow = {
+            'color': dropped_arrow_color,
+            'motion_type': dropped_arrow_svg_motion_type,
+            'rotation_direction': dropped_arrow_rotation_direction,
+            'quadrant': quadrant,
+            'start_location': None,
+            'end_location': None,
+            'turns': dropped_arrow_turns
+        }
+        
+        self.arrow = self.arrow_factory.create_arrow(self, dropped_arrow)
                 
         self.arrow.setScale(GRAPHBOARD_SCALE)
         self.scene().addItem(self.arrow)
         
         self.clear_selection()
         self.arrow.setSelected(True)
-        
 
-        self.arrow.update_attributes()
         for arrow in self.scene().items():
             if isinstance(arrow, Arrow):
                 arrow.arrow_manager.arrow_positioner.update_arrow_position(self)
+                
         self.info_frame.update()
 
     def contextMenuEvent(self, event):

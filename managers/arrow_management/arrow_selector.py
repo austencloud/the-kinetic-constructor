@@ -10,7 +10,7 @@ class ArrowSelector:
             if isinstance(item, Arrow):
                 item.setSelected(True)
 
-    def delete_staff(self, staffs):
+    def delete_ghost_arrow_and_staff(self, staffs):
         if staffs:
             # if staffs is not a list, make it a list
             if not isinstance(staffs, list):
@@ -35,12 +35,27 @@ class ArrowSelector:
             deleted_arrows = [deleted_arrows]
         for arrow in deleted_arrows:
             if isinstance(arrow, Arrow):
-                ghost_arrow = Arrow(None, arrow.view, arrow.info_frame, arrow.svg_manager, self.arrow_manager, 'static', arrow.staff_manager, arrow.color, None, None, 0, None)
+                deleted_arrow_attributes = arrow.attributes.get_attributes()
+                ghost_attributes_dict = {
+                                'color': deleted_arrow_attributes['color'],
+                                'motion_type': 'static',
+                                'rotation_direction': 'None',
+                                'quadrant': 'None',
+                                'start_location': deleted_arrow_attributes['end_location'],
+                                'end_location': deleted_arrow_attributes['end_location'],
+                                'turns': 0
+                }
+                
+                ghost_arrow = self.arrow_manager.arrow_factory.create_arrow(self.arrow_manager.graphboard_view, ghost_attributes_dict)
                 ghost_arrow.is_ghost = True
-                ghost_arrow.set_static_attributes_from_deleted_arrow(arrow)
                 ghost_arrow.setScale(GRAPHBOARD_SCALE)
-                self.arrow_manager.graphboard_scene.addItem(ghost_arrow)
-                self.arrow_manager.graphboard_scene.removeItem(arrow)
+                ghost_arrow.staff = arrow.staff  
+                ghost_arrow.staff.arrow = ghost_arrow
+                
+                graphboard_scene = self.arrow_manager.graphboard_view.scene()
+                graphboard_scene.addItem(ghost_arrow)
+                graphboard_scene.removeItem(arrow)
+                
                 self.arrow_manager.info_frame.update()
         else:
             print("No items selected")

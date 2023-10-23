@@ -14,7 +14,7 @@ class InfoManager():
         current_combination = []
         for item in self.view.items():
             if isinstance(item, Arrow):
-                attributes = item.get_attributes()
+                attributes = item.attributes.get_attributes()
                 sorted_attributes = {k: attributes[k] for k in sorted(attributes.keys())}
                 current_combination.append(sorted_attributes)
         # Sort the list of dictionaries by the 'color' key

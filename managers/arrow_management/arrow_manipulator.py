@@ -1,3 +1,6 @@
+import re
+import os
+from PyQt6.QtCore import QByteArray
 from PyQt6.QtSvg import QSvgRenderer
 from objects.arrow import Arrow
 class ArrowManipulator:
@@ -15,7 +18,18 @@ class ArrowManipulator:
         current_quadrant = self.selected_arrow.quadrant
         new_quadrant = wasd_quadrant_mapping.get(direction, {}).get(current_quadrant, current_quadrant)
         self.selected_arrow.quadrant = new_quadrant
-        self.selected_arrow.update_attributes()
+        
+        updated_arrow = {
+            'color': self.selected_arrow.color,
+            'motion_type': self.selected_arrow.motion_type,
+            'quadrant': new_quadrant,
+            'rotation_direction': self.selected_arrow.rotation_direction,
+            'start_location': self.selected_arrow.start_location,
+            'end_location': self.selected_arrow.end_location,
+            'turns': self.selected_arrow.turns
+        }
+        
+        self.selected_arrow.attributes.update(updated_arrow)
         self.arrow_manager.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard_view)
         self.arrow_manager.info_frame.update()
 
@@ -41,13 +55,38 @@ class ArrowManipulator:
             else:
                 print("Failed to load SVG file:", new_svg)
 
+
+
     def mirror_arrow(self, arrows):
         for arrow in arrows:
             if arrow.is_mirrored:
                 arrow.is_mirrored = False
             else:
                 arrow.is_mirrored = True
-            arrow.mirror()
+
+            svg_file_path = os.path.join(arrow.svg_file)
+            with open(svg_file_path, 'r') as f:
+                svg_data = f.read()
+                pattern = re.compile(r'(transform=")([^"]+)(")')
+                match = pattern.search(svg_data)
+                if match:
+                    # Modify existing transform attribute
+                    original_transform = match.group(2)
+                    width = arrow.boundingRect().width()
+                    new_transform = f'scale(-1, 1)'
+                    new_svg_data = pattern.sub(f'\\1{new_transform}\\3', svg_data)
+                else:
+                    # Add a new transform attribute
+                    width = arrow.boundingRect().width()
+                    new_transform = f'scale(-1, 1) translate({width}, 0) rotate(90)'
+                    new_svg_data = svg_data.replace('<path id="anti_0"', f'<path transform="{new_transform}" id="anti_0"')
+
+                byte_array = QByteArray(new_svg_data.encode())
+                arrow.renderer.load(byte_array)
+
+            arrow.rotation_direction = 'l' if arrow.rotation_direction == 'r' else 'r'
+            arrow.attributes.update()
+
 
     def swap_motion_type(self, arrows):
         if not isinstance(arrows, list):
@@ -67,7 +106,7 @@ class ArrowManipulator:
             if new_renderer.isValid():
                 arrow.setSharedRenderer(new_renderer)
                 arrow.svg_file = new_svg
-                arrow.update_color()
+                arrow.attributes.update_color()
 
             if arrow.rotation_direction == "l":
                 new_rotation_direction = "r"
@@ -76,7 +115,7 @@ class ArrowManipulator:
 
             arrow.motion_type = new_motion_type
             arrow.rotation_direction = new_rotation_direction
-            arrow.update_appearance()
+            arrow.attributes.update_appearance()
             self.arrow_manager.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard_view)
             
         self.arrow_manager.info_frame.update()

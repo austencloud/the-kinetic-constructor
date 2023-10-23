@@ -9,7 +9,7 @@ from constants import ARROW_DIR, GRAPHBOARD_SCALE
 
 
 class ArrowBoxView(QGraphicsView):
-    def __init__(self, main_widget, graphboard_view, info_frame):
+    def __init__(self, main_widget, graphboard_view, info_frame, arrow_manager):
         super().__init__()
         self.info_frame = info_frame
         self.drag = None
@@ -22,9 +22,11 @@ class ArrowBoxView(QGraphicsView):
         self.arrowbox_scene = QGraphicsScene()
         self.setScene(self.arrowbox_scene)
         self.configure_arrowbox_frame()
+        self.arrow_manager = arrow_manager
         self.populate_arrows()
         self.objectbox_layout.addWidget(self)
         self.setFixedSize(int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE))
+
 
     ### MOUSE EVENTS ###
 
@@ -88,14 +90,36 @@ class ArrowBoxView(QGraphicsView):
             svgs_full_paths.extend([os.path.join(dirpath, filename) for filename in filenames if filename.endswith('.svg')])
 
         for svg_file in svgs_full_paths:
-            self.create_and_configure_arrow(svg_file)
+            self.populate_arrows(svg_file)
 
-    def create_and_configure_arrow(self, svg_file):
-        file_name = os.path.basename(svg_file)
-        motion_type = file_name.split('_')[0]
-        arrow_item = Arrow(svg_file, self.graphboard_view, self.info_frame, self.main_widget.svg_manager, self.main_widget.arrow_manager, motion_type, self.graphboard_view.staff_manager, "red", None, "r", None, 0)
-        arrow_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
-        arrow_item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
-        arrow_item.setScale(GRAPHBOARD_SCALE * 0.75)
-        self.arrowbox_scene.addItem(arrow_item) 
-        self.main_widget.arrows.append(arrow_item)
+    def populate_arrows(self):
+        arrow1 = {
+            'color': 'red',
+            'motion_type': 'pro',
+            'rotation_direction': 'r',
+            'quadrant': 'ne',
+            'start_location': None,
+            'end_location': None,
+            'turns': 0
+        }
+        arrow2 = {
+            'color': 'blue',
+            'motion_type': 'anti',
+            'rotation_direction': 'r',
+            'quadrant': 'ne',
+            'start_location': None,
+            'end_location': None,
+            'turns': 0
+        }
+        
+        red_iso_arrow = self.arrow_manager.arrow_factory.create_arrow(self, arrow1)
+        blue_anti_arrow = self.arrow_manager.arrow_factory.create_arrow(self, arrow2)
+        
+        arrows = [red_iso_arrow, blue_anti_arrow]
+        
+        for arrow in arrows:
+            arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
+            arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
+            arrow.setScale(GRAPHBOARD_SCALE * 0.75)
+            self.arrowbox_scene.addItem(arrow) 
+            self.main_widget.arrows.append(arrow)

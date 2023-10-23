@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout
 from views.graphboard_view import GraphboardView
 from views.arrowbox_view import ArrowBoxView
-from tools.pictograph_generator import Pictograph_Generator
+from tools.pictograph_generator import PictographGenerator
 from views.propbox_view import PropBoxView
 from frames.graphboard_info_frame import GraphboardInfoFrame
 from managers.export_manager import ExportManager
@@ -26,30 +26,24 @@ class GraphEditorWidget(QWidget):
         graph_editor_frame_layout = QHBoxLayout(self.graph_editor_frame)
 
         # Create individual vertical layouts
-        objectbox_layout = QVBoxLayout()  # For arrowbox and propbox
-        graphboard_layout = QVBoxLayout()  # For the graph board view
-        action_buttons_layout = QVBoxLayout()  # For action buttons
-        info_frame_layout = QVBoxLayout()  # For the info frame
+        objectbox_layout = QVBoxLayout() 
+        graphboard_layout = QVBoxLayout()  
+        action_buttons_layout = QVBoxLayout()  
+        info_frame_layout = QVBoxLayout() 
         
         # Create and add contents to the graph_editor_frame_layout
         self.graphboard_view = GraphboardView(main_widget, self)
         self.info_frame = GraphboardInfoFrame(main_widget, self.graphboard_view)
         self.propbox_view = PropBoxView(main_widget)
-        self.arrowbox_view = ArrowBoxView(main_widget, self.graphboard_view, self.info_frame)
-        self.pictograph_generator = Pictograph_Generator(main_widget, self.graphboard_view, self.info_frame)
+        self.arrowbox_view = ArrowBoxView(main_widget, self.graphboard_view, self.info_frame, self.main_widget.arrow_manager)
+        self.pictograph_generator = PictographGenerator(main_widget, self.graphboard_view, self.info_frame)
         self.action_buttons_frame = ActionButtonsFrame(main_widget)
         
-        # Add widgets to the object box layout.
+        # Add widgets to their layouts
         objectbox_layout.addWidget(self.arrowbox_view)
         objectbox_layout.addWidget(self.propbox_view)
-
-        # Add the graph board view to its layout
         graphboard_layout.addWidget(self.graphboard_view)
-
-        # Add the action buttons frame to its layout
         action_buttons_layout.addWidget(self.action_buttons_frame)  # self.action_buttons_frame is an instance of Action_Buttons_Frameself.
-
-        # Add the info frame to its layout
         info_frame_layout.addWidget(self.info_frame)
 
         # Add the individual vertical layouts to the main horizontal layout
@@ -58,7 +52,7 @@ class GraphEditorWidget(QWidget):
         graph_editor_frame_layout.addLayout(action_buttons_layout)
         graph_editor_frame_layout.addLayout(info_frame_layout)
 
-        self.graph_editor_frame.setLayout(graph_editor_frame_layout)  # This line is crucial.
-        
+        # Add the graph_editor_frame to the main_window's graph_editor_layout
+        self.graph_editor_frame.setLayout(graph_editor_frame_layout)
         self.main_window.graph_editor_layout.addWidget(self.graph_editor_frame)
 

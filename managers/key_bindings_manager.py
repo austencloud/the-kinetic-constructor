@@ -16,7 +16,7 @@ class KeyBindingsManager:
         if event.modifiers() == Qt.KeyboardModifier.ControlModifier and event.key() == Qt.Key.Key_Delete:
             for item in selected_items:
                 if isinstance(item, Arrow):
-                    arrow_manager.delete_arrow(item)
+                    arrow_manager.arrow_selector.delete_arrow(item)
                 elif isinstance(item, Staff):
                     arrow_manager.delete_staff(item)
 

@@ -127,14 +127,13 @@ class PictographView(QGraphicsView):
         self.staff_manager.update_pictograph_staffs(self.pictograph_scene)
 
     def place_ghost_arrows(self, created_arrows, arrow_dict):
-        ghost_arrow = Arrow(None, self, self.info_frame, self.svg_manager, self.arrow_manager, 'static', self.staff_manager, arrow_dict['color'], arrow_dict['quadrant'], arrow_dict['rotation_direction'], arrow_dict['turns'], arrow_dict)
-        ghost_arrow.update_attributes()
+        ghost_arrow = self.arrow_manager.arrow_factory.create_arrow(self, arrow_dict)
+
         created_arrows.append(ghost_arrow)
 
     def place_shift_arrows(self, DISTANCE, created_arrows, optimal_locations, arrow_dict):
-        svg_file = f"images/arrows/shift/{arrow_dict['motion_type']}_{arrow_dict['turns']}.svg"
-        arrow = Arrow(svg_file, self, self.info_frame, self.svg_manager, self.arrow_manager, arrow_dict['motion_type'], self.staff_manager, arrow_dict['color'], arrow_dict['quadrant'], arrow_dict['rotation_direction'], arrow_dict['turns'], arrow_dict)
-        arrow.update_attributes()
+        arrow = self.arrow_manager.arrow_factory.create_arrow(self, arrow_dict)
+        arrow.attributes.update(arrow_dict)
         arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
         arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
         created_arrows.append(arrow)
