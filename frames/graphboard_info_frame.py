@@ -7,7 +7,7 @@ from data.positions_map import positions_map
 from settings import GRAPHBOARD_SCALE
 from data.start_end_location_mapping import start_end_location_mapping
 
-class Graphboard_Info_Frame(QFrame):
+class GraphboardInfoFrame(QFrame):
 
     def __init__(self, main_widget, graphboard_view):
         super().__init__()

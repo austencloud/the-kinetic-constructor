@@ -4,15 +4,15 @@ from PyQt6.QtWidgets import QGraphicsItem, QFrame
 from PyQt6.QtGui import QTransform, QAction
 from objects.grid import Grid
 from objects.arrow import Arrow
-from frames.graphboard_info_frame import Graphboard_Info_Frame
-from managers.staff_managers.pictograph_staff_manager import Pictograph_Staff_Manager
-from managers.arrow_manager import Arrow_Manager
-from managers.svg_manager import Svg_Manager
-from managers.json_manager import Json_Manager
-from managers.info_manager import Info_Manager
+from frames.graphboard_info_frame import GraphboardInfoFrame
+from managers.staff_managers.pictograph_staff_manager import PictographStaffManager
+from managers.arrow_manager import ArrowManager
+from managers.svg_manager import SvgManager
+from managers.json_manager import JsonManager
+from managers.info_manager import InfoManager
 from settings import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, PICTOGRAPH_SCALE, PICTOGRAPH_GRID_PADDING
 
-class Pictograph_View(QGraphicsView):
+class PictographView(QGraphicsView):
     def __init__(self, main_widget):
         super().__init__()
         self.setFixedSize(PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT)
@@ -27,13 +27,13 @@ class Pictograph_View(QGraphicsView):
         self.grid = Grid("images/grid/grid.svg")
         self.grid.setScale(PICTOGRAPH_SCALE)
         self.scene = self.pictograph_scene
-        self.svg_manager = Svg_Manager()
-        self.info_manager = Info_Manager(main_widget, self)
-        self.staff_manager = Pictograph_Staff_Manager(self.main_widget, self.scene)
+        self.svg_manager = SvgManager()
+        self.info_manager = InfoManager(main_widget, self)
+        self.staff_manager = PictographStaffManager(self.main_widget, self.scene)
         self.staff_manager.connect_pictograph_view(self)
-        self.arrow_manager = Arrow_Manager(self.main_widget)
-        self.json_manager = Json_Manager(self.pictograph_scene)
-        self.info_frame = Graphboard_Info_Frame(self.main_widget, self)
+        self.arrow_manager = ArrowManager(self.main_widget)
+        self.json_manager = JsonManager(self.pictograph_scene)
+        self.info_frame = GraphboardInfoFrame(self.main_widget, self)
         self.arrow_manager.connect_info_frame(self.info_frame)
         self.staff_manager.connect_grid(self.grid)
         self.init_grid()

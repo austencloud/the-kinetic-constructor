@@ -8,11 +8,11 @@ from PyQt6.QtGui import QImage, QPainter, QColor
 from objects.arrow import Arrow
 from objects.staff import Staff
 from objects.grid import Grid
-from views.graphboard_view import Graphboard_View
+from views.graphboard_view import GraphboardView
 from objects.pictograph import Pictograph
 from settings import DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, PICTOGRAPH_SCALE
 
-class Sequence_View(QGraphicsView):
+class SequenceView(QGraphicsView):
     def __init__(self, main_widget):
         super().__init__()
         main_window = main_widget.main_window
@@ -87,7 +87,7 @@ class Sequence_View(QGraphicsView):
             self.main_widget.word_label.setText(self.main_widget.word_label.text() + letter)
         self.sequence_scene.update()
 
-    def add_to_graphboard(self, pictograph: Pictograph, graphboard_view: Graphboard_View):
+    def add_to_graphboard(self, pictograph: Pictograph, graphboard_view: GraphboardView):
         state = pictograph.state
         graphboard_view.clear_graphboard()
         

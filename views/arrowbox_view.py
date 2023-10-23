@@ -8,7 +8,7 @@ from settings import *
 
 
 
-class ArrowBox_View(QGraphicsView):
+class ArrowBoxView(QGraphicsView):
     def __init__(self, main_widget, graphboard_view, info_frame):
         super().__init__()
         self.info_frame = info_frame

@@ -1,14 +1,14 @@
 from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout
-from views.graphboard_view import Graphboard_View
-from views.arrowbox_view import ArrowBox_View
+from views.graphboard_view import GraphboardView
+from views.arrowbox_view import ArrowBoxView
 from tools.pictograph_generator import Pictograph_Generator
-from views.propbox_view import PropBox_View
-from frames.graphboard_info_frame import Graphboard_Info_Frame
-from managers.export_manager import Export_Manager
+from views.propbox_view import PropBoxView
+from frames.graphboard_info_frame import GraphboardInfoFrame
+from managers.export_manager import ExportManager
 from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
-from frames.action_buttons_frame import Action_Buttons_Frame
-class Graph_Editor_Widget(QWidget):
+from frames.action_buttons_frame import ActionButtonsFrame
+class GraphEditorWidget(QWidget):
     def __init__(self, main_widget):
         super().__init__()
         self.main_widget = main_widget
@@ -32,13 +32,13 @@ class Graph_Editor_Widget(QWidget):
         info_frame_layout = QVBoxLayout()  # For the info frame
         
         # Create and add contents to the graph_editor_frame_layout
-        self.graphboard_view = Graphboard_View(main_widget, self)
-        self.export_manager = Export_Manager(self.graphboard_view.staff_manager, main_widget.grid, self.graphboard_view)
-        self.info_frame = Graphboard_Info_Frame(main_widget, self.graphboard_view)
-        self.propbox_view = PropBox_View(main_widget)
-        self.arrowbox_view = ArrowBox_View(main_widget, self.graphboard_view, self.info_frame)
+        self.graphboard_view = GraphboardView(main_widget, self)
+        self.export_manager = ExportManager(self.graphboard_view.staff_manager, main_widget.grid, self.graphboard_view)
+        self.info_frame = GraphboardInfoFrame(main_widget, self.graphboard_view)
+        self.propbox_view = PropBoxView(main_widget)
+        self.arrowbox_view = ArrowBoxView(main_widget, self.graphboard_view, self.info_frame)
         self.pictograph_generator = Pictograph_Generator(main_widget, self.graphboard_view, self.info_frame)
-        self.action_buttons_frame = Action_Buttons_Frame(main_widget)
+        self.action_buttons_frame = ActionButtonsFrame(main_widget)
         
         # Add widgets to the object box layout.
         objectbox_layout.addWidget(self.arrowbox_view)

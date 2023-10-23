@@ -1,12 +1,12 @@
 
 
     ### GRAPHBOARD ###
-from managers.staff_managers.staff_manager import Staff_Manager
+from managers.staff_managers.staff_manager import StaffManager
 from PyQt6.QtCore import QPointF
 from objects.staff import Staff
 from objects.arrow import Arrow
 from settings import GRAPHBOARD_GRID_PADDING
-class Graphboard_Staff_Manager(Staff_Manager):
+class GraphboardStaffManager(StaffManager):
     def __init__(self, main_widget, scene):
         super().__init__(main_widget)
         self.scene = scene

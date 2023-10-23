@@ -4,7 +4,7 @@ from PyQt6.QtSvg import QSvgRenderer
 import re
 from xml.dom import minidom
 
-class Svg_Manager():
+class SvgManager():
     def __init__(self):
         self.renderers = {}
 
@@ -55,8 +55,8 @@ class Svg_Manager():
     
     @staticmethod
     def point_in_svg(point, svg_file):
-        svg_path = Svg_Manager.parse_svg_file(svg_file)
-        qpainter_path = Svg_Manager.svg_path_to_qpainterpath(svg_path)
+        svg_path = SvgManager.parse_svg_file(svg_file)
+        qpainter_path = SvgManager.svg_path_to_qpainterpath(svg_path)
         return qpainter_path.contains(point)
     
     def get_renderer(self, filename):

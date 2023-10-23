@@ -5,7 +5,7 @@ from objects.staff import Staff
 from PyQt6.QtWidgets import QGraphicsItem
 import math
 
-class Staff_Manager(QObject):
+class StaffManager(QObject):
     positionChanged = pyqtSignal(str)
 
     def __init__(self, main_widget):

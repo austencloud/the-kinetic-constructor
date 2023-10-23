@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QAction
 
-class Context_Menu_Manager():
+class ContextMenuManager():
     def __init__(self, parent):
         self.parent = parent
         self.main_widget = self.parent.main_widget

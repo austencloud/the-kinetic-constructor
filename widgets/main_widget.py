@@ -1,17 +1,17 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import QEvent
 from objects.grid import Grid
-from managers.arrow_manager import Arrow_Manager
-from managers.svg_manager import Svg_Manager
-from managers.json_manager import Json_Manager
-from views.sequence_view import Sequence_View
-from views.optionboard_view import Optionboard_View
-from managers.layout_manager import Layout_Manager
-from managers.key_bindings_manager import Key_Bindings_Manager
-from widgets.graph_editor_widget import Graph_Editor_Widget
-from frames.letter_buttons_frame import Letter_Buttons_Frame
+from managers.arrow_manager import ArrowManager
+from managers.svg_manager import SvgManager
+from managers.json_manager import JsonManager
+from views.sequence_view import SequenceView
+from views.optionboard_view import OptionboardView
+from managers.layout_manager import LayoutManager
+from managers.key_bindings_manager import KeyBindingsManager
+from widgets.graph_editor_widget import GraphEditorWidget
+from frames.letter_buttons_frame import LetterButtonsFrame
 
-class Main_Widget(QWidget):
+class MainWidget(QWidget):
     def __init__(self, main_window):
         super().__init__(main_window)
         self.main_widget = self
@@ -19,17 +19,17 @@ class Main_Widget(QWidget):
         self.export_manager = None
         self.main_window = main_window
         
-        self.layout_manager = Layout_Manager(self)
-        self.json_manager = Json_Manager()
+        self.layout_manager = LayoutManager(self)
+        self.json_manager = JsonManager()
         self.letters = self.json_manager.load_all_letters()
         self.grid = Grid('images/grid/grid.svg')
-        self.key_bindings_manager = Key_Bindings_Manager()
-        self.svg_manager = Svg_Manager()
-        self.arrow_manager = Arrow_Manager(self)
-        self.graph_editor_widget = Graph_Editor_Widget(self)  
-        self.optionboard_view = Optionboard_View(self)
-        self.sequence_view = Sequence_View(self)
-        self.letter_buttons_frame = Letter_Buttons_Frame(self)  
+        self.key_bindings_manager = KeyBindingsManager()
+        self.svg_manager = SvgManager()
+        self.arrow_manager = ArrowManager(self)
+        self.graph_editor_widget = GraphEditorWidget(self)  
+        self.optionboard_view = OptionboardView(self)
+        self.sequence_view = SequenceView(self)
+        self.letter_buttons_frame = LetterButtonsFrame(self)  
 
         self.graphboard_view = self.graph_editor_widget.graphboard_view
         self.info_frame = self.graph_editor_widget.info_frame
@@ -51,8 +51,9 @@ class Main_Widget(QWidget):
         self.propbox_view.staff_manager.connect_propbox_view(self.graph_editor_widget.propbox_view)
         self.graphboard_view.connect_info_frame(self.graph_editor_widget.info_frame)
         self.graphboard_view.connect_generator(self.graph_editor_widget.pictograph_generator)
-        self.arrow_manager.connect_info_frame(self.graph_editor_widget.info_frame)
-        self.arrow_manager.connect_to_graphboard_view(self.graph_editor_widget.graphboard_view)
+        self.arrow_manager.info_frame = self.graph_editor_widget.info_frame
+        self.arrow_manager.graphboard_view = self.graph_editor_widget.graphboard_view
+        self.arrow_manager.graphboard_scene = self.graph_editor_widget.graphboard_view.graphboard_scene
 
 ### EVENTS ###
 

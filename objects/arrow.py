@@ -39,7 +39,7 @@ class Arrow(QGraphicsSvgItem):
         self.staff_manager = staff_manager
         self.svg_manager = svg_manager
         self.arrow_manager = arrow_manager
-        self.arrow_manager.connect_arrow(self)
+        self.arrow_manager.arrow = self
         
         # Flags
         self.in_graphboard = False
@@ -77,16 +77,16 @@ class Arrow(QGraphicsSvgItem):
     def mouseMoveEvent(self, event):
         self.setSelected(True) 
         if event.buttons() == Qt.MouseButton.LeftButton:
-            from views.graphboard_view import Graphboard_View
-            from views.pictograph_view import Pictograph_View
-            if isinstance(self.view, Graphboard_View):
+            from views.graphboard_view import GraphboardView
+            from views.pictograph_view import PictographView
+            if isinstance(self.view, GraphboardView):
                 new_pos = self.mapToScene(event.pos()) - self.boundingRect().center()
                 self.setPos(new_pos)
                 new_quadrant = self.view.get_graphboard_quadrants(new_pos + self.center)  
                 if self.quadrant != new_quadrant:
                     self.update_arrow_for_new_quadrant(new_quadrant)
                     self.info_frame.update()
-            elif isinstance(self.view, Pictograph_View):
+            elif isinstance(self.view, PictographView):
                 new_pos = self.mapToScene(event.pos()) - self.drag_offset / 2
                 self.setPos(new_pos)
 
@@ -94,9 +94,9 @@ class Arrow(QGraphicsSvgItem):
         if hasattr(self, 'future_position'):
             self.setPos(self.future_position)
             del self.future_position
-        from views.graphboard_view import Graphboard_View
-        if isinstance(self.view, Graphboard_View):
-            self.arrow_manager.update_arrow_position(self.view)
+        from views.graphboard_view import GraphboardView
+        if isinstance(self.view, GraphboardView):
+            self.arrow_manager.arrow_positioner.update_arrow_position(self.view)
         
     ### ATTRIBUTES ###
 

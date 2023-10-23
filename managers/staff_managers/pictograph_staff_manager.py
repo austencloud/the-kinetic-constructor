@@ -1,9 +1,9 @@
 from PyQt6.QtCore import QPointF
 from settings import PICTOGRAPH_GRID_PADDING, PICTOGRAPH_SCALE, STAFF_LENGTH, STAFF_WIDTH, BETA_STAFF_REPOSITION_OFFSET
 from objects.arrow import Arrow
-from managers.staff_managers.staff_manager import Staff_Manager
+from managers.staff_managers.staff_manager import StaffManager
 
-class Pictograph_Staff_Manager(Staff_Manager):
+class PictographStaffManager(StaffManager):
     def __init__(self, main_widget, scene):
         super().__init__(main_widget)
         self.scene = scene

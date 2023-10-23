@@ -4,7 +4,7 @@ from PyQt6.QtCore import QSize
 from settings import GRAPHBOARD_SCALE
 from PyQt6.QtWidgets import QVBoxLayout
 
-class Action_Buttons_Frame(QFrame):
+class ActionButtonsFrame(QFrame):
     def __init__(self, main_widget):
         super().__init__()
         self.main_widget = main_widget

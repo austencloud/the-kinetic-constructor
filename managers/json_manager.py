@@ -3,7 +3,7 @@ import os
 from objects.arrow import Arrow
 from PyQt6.QtCore import QObject
 
-class Json_Manager(QObject):
+class JsonManager(QObject):
     def connect_scene(self, scene):
         self.scene = scene
 

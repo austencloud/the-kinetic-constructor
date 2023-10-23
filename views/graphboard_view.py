@@ -10,11 +10,11 @@ from PyQt6.QtWidgets import QGraphicsView, QGraphicsItem, QGraphicsRectItem, QMe
 from objects.staff import Staff
 from objects.arrow import Arrow
 from settings import *
-from managers.staff_managers.graphboard_staff_manager import Graphboard_Staff_Manager
-from managers.info_manager import Info_Manager
-from managers.context_menu_manager import Context_Menu_Manager
+from managers.staff_managers.graphboard_staff_manager import GraphboardStaffManager
+from managers.info_manager import InfoManager
+from managers.context_menu_manager import ContextMenuManager
 
-class Graphboard_View(QGraphicsView):
+class GraphboardView(QGraphicsView):
     def __init__(self, main_widget, graph_editor_widget):
         super().__init__(graph_editor_widget)
         self.init_ui()
@@ -48,9 +48,9 @@ class Graphboard_View(QGraphicsView):
         self.graphboard_scene.addItem(self.grid)
 
     def init_managers(self, main_widget):
-        self.info_manager = Info_Manager(main_widget, self)
-        self.context_menu_handler = Context_Menu_Manager(self)
-        self.staff_manager = Graphboard_Staff_Manager(main_widget, self.graphboard_scene)
+        self.info_manager = InfoManager(main_widget, self)
+        self.context_menu_handler = ContextMenuManager(self)
+        self.staff_manager = GraphboardStaffManager(main_widget, self.graphboard_scene)
 
     def init_grid(self):
         transform = QTransform()
@@ -140,7 +140,7 @@ class Graphboard_View(QGraphicsView):
         self.arrow.update_attributes()
         for arrow in self.scene().items():
             if isinstance(arrow, Arrow):
-                arrow.arrow_manager.update_arrow_position(self)
+                arrow.arrow_manager.arrow_positioner.update_arrow_position(self)
         self.info_frame.update()
 
     def contextMenuEvent(self, event):

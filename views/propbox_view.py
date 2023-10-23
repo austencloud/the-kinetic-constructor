@@ -1,14 +1,14 @@
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QGraphicsView, QGraphicsScene, QGraphicsView
 from PyQt6.QtCore import Qt, QPointF
 from settings import GRAPHBOARD_SCALE
-from managers.staff_managers.propbox_staff_manager import PropBox_Staff_Manager
+from managers.staff_managers.propbox_staff_manager import PropboxStaffManager
 from PyQt6.QtGui import QTransform
 from objects.grid import Grid
-class PropBox_View(QGraphicsView):
+class PropBoxView(QGraphicsView):
     def __init__(self, main_widget):
         super().__init__()
         self.main_window = main_widget.main_window
-        self.staff_manager = PropBox_Staff_Manager(main_widget)
+        self.staff_manager = PropboxStaffManager(main_widget)
         self.main_widget = main_widget
          
         self.propbox_scene = QGraphicsScene()

@@ -4,9 +4,9 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QIcon, QPainter, QFont, QColor
 from PyQt6.QtSvg import QSvgRenderer
 from settings import GRAPHBOARD_SCALE
-from dialog.pictograph_selector_dialog import Pictograph_Selector_Dialog
+from dialog.pictograph_selector_dialog import PictographSelectorDialog
 
-class Letter_Buttons_Frame(QFrame):
+class LetterButtonsFrame(QFrame):
     def __init__(self, main_widget):
         super().__init__()
         self.main_window = main_widget.main_window
@@ -55,7 +55,7 @@ class Letter_Buttons_Frame(QFrame):
                 font.setPointSize(int(20*GRAPHBOARD_SCALE))
                 button.setFont(font)
                 button.setFixedSize(int(120 * GRAPHBOARD_SCALE), int(120 * GRAPHBOARD_SCALE))
-                button.clicked.connect(lambda _, l=letter: Pictograph_Selector_Dialog(main_widget, l))
+                button.clicked.connect(lambda _, l=letter: PictographSelectorDialog(main_widget, l))
                 row_layout.addWidget(button)
             self.letter_buttons_layout.addLayout(row_layout)
             self.letter_buttons_layout.addStretch(1)  # Add a stretch to the bottom of the layout

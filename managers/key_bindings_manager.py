@@ -2,7 +2,7 @@ from objects.arrow import Arrow
 from objects.staff import Staff
 from PyQt6.QtCore import Qt
 
-class Key_Bindings_Manager:
+class KeyBindingsManager:
     def keyPressEvent(self, event, graphboard_view):
         arrow_manager = graphboard_view.main_widget.arrow_manager
         sequence_view = graphboard_view.main_widget.sequence_view
@@ -30,16 +30,16 @@ class Key_Bindings_Manager:
 
         elif selected_item and isinstance(selected_item, Arrow):
             if event.key() == Qt.Key.Key_W:
-                arrow_manager.move_arrow_quadrant_wasd('up', selected_item)
+                arrow_manager.arrow_manipulator.move_arrow_quadrant_wasd('up', selected_item)
             elif event.key() == Qt.Key.Key_A:
-                arrow_manager.move_arrow_quadrant_wasd('left', selected_item)
+                arrow_manager.arrow_manipulator.move_arrow_quadrant_wasd('left', selected_item)
             elif event.key() == Qt.Key.Key_S:
-                arrow_manager.move_arrow_quadrant_wasd('down', selected_item)
+                arrow_manager.arrow_manipulator.move_arrow_quadrant_wasd('down', selected_item)
             elif event.key() == Qt.Key.Key_D:
-                arrow_manager.move_arrow_quadrant_wasd('right', selected_item)
+                arrow_manager.arrow_manipulator.move_arrow_quadrant_wasd('right', selected_item)
             elif event.key() == Qt.Key.Key_E:
-                arrow_manager.mirror_arrow(selected_items)
+                arrow_manager.arrow_manipulator.mirror_arrow(selected_items)
             elif event.key() == Qt.Key.Key_Q:
-                arrow_manager.swap_motion_type(selected_items)
+                arrow_manager.arrow_manipulator.swap_motion_type(selected_items)
             elif event.key() == Qt.Key.Key_F:
-                sequence_view.add_to_sequence(graphboard_view)
+                sequence_view.arrow_manipulator.add_to_sequence(graphboard_view)
