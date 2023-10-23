@@ -2,12 +2,13 @@ import os
 import random
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsItem
-from PyQt6.QtCore import  QObject
+from PyQt6.QtCore import  QObject, QByteArray
 from objects.arrow import Arrow
 from PyQt6.QtCore import QTimer, QPointF, QRectF
 from PyQt6.QtGui import QPixmap, QPainter
 from PyQt6.QtWidgets import QGraphicsItem
-from PyQt6.QtGui import QDrag
+from PyQt6.QtGui import QDrag, QTransform
+
 
 from settings import *
 class Arrow_Manager(QObject):
@@ -18,6 +19,7 @@ class Arrow_Manager(QObject):
         self.drag_offset = QPointF(0, 0)  
         self.timer = QTimer()
         self.letters = main_widget.letters
+        self.main_widget = main_widget
 
     def create_arrow(self, base_type, color, rotation_direction, is_mirrored, turns):
         # Create an Arrow object with the given attributes
@@ -57,8 +59,6 @@ class Arrow_Manager(QObject):
 
         new_quadrant = quadrant_mapping.get(direction, {}).get(current_quadrant, current_quadrant)
         self.selected_arrow.quadrant = new_quadrant
-
-
         self.selected_arrow.update_attributes()
         self.update_arrow_position(self.graphboard_view)
         self.info_frame.update()
@@ -75,14 +75,26 @@ class Arrow_Manager(QObject):
             else:
                 print(f"Unknown motion type: {self.motion_type}")
                 continue
-
+            
+            # swap out instances of pro and anti with each other in the arrow svg file
+            new_svg = arrow.svg_file.replace(arrow.motion_type, new_motion_type)
+            new_renderer = QSvgRenderer(new_svg)
+            if new_renderer.isValid():
+                arrow.setSharedRenderer(new_renderer)
+                arrow.svg_file = new_svg
+                arrow.update_color()
+            
+            
             if arrow.rotation_direction == "l":
                 new_rotation_direction = "r"
             elif arrow.rotation_direction == "r":
                 new_rotation_direction = "l"
-                
+            
+    
+            
             arrow.motion_type = new_motion_type
             arrow.rotation_direction = new_rotation_direction 
+            arrow.update_appearance()
             self.update_arrow_position(self.graphboard_view)
 
         # Update the info frame and the graphboard_view
@@ -110,29 +122,14 @@ class Arrow_Manager(QObject):
             else:
                 print("Failed to load SVG file:", new_svg)
 
+
     def mirror_arrow(self, arrows):
         for arrow in arrows:
-            current_svg = arrow.svg_file
-
-            if arrow.rotation_direction == "l":
-                new_svg = current_svg.replace("_l_", "_r_").replace("\\l\\", "\\r\\")
-            elif arrow.rotation_direction == "r":
-                new_svg = current_svg.replace("_r_", "_l_").replace("\\r\\", "\\l\\")
+            if arrow.is_mirrored:
+                arrow.is_mirrored = False
             else:
-                print("mirror_arrow -- Unexpected svg_file:", current_svg)
-                continue
-
-            new_renderer = QSvgRenderer(new_svg)
-            if new_renderer.isValid():
-                arrow.setSharedRenderer(new_renderer)
-                arrow.svg_file = new_svg
-                arrow.quadrant = arrow.quadrant.replace('.svg', '')
-                arrow.update_attributes()
-                self.update_arrow_position(self.graphboard_view)
-            else:
-                print("Failed to load SVG file:", new_svg)
-                
-        self.info_frame.update()
+                arrow.is_mirrored = True
+            arrow.mirror()
 
         
     def bring_forward(self, items):
@@ -264,7 +261,7 @@ class Arrow_Manager(QObject):
             if not isinstance(staffs, list):
                 staffs = [staffs]
             for staff in staffs:
-                ghost_arrow = staff.get_arrow()
+                ghost_arrow = staff.arrow
                 if ghost_arrow:
                     self.graphboard_view.scene().removeItem(ghost_arrow)
                     print(f"Ghost arrow for {staff.color} staff deleted")
@@ -283,7 +280,7 @@ class Arrow_Manager(QObject):
             deleted_arrows = [deleted_arrows]
         for arrow in deleted_arrows:
             if isinstance(arrow, Arrow):
-                ghost_arrow = Arrow(None, arrow.view, arrow.info_frame, arrow.svg_manager, self, 'static', arrow.staff_manager, None)
+                ghost_arrow = Arrow(None, arrow.view, arrow.info_frame, arrow.svg_manager, self, 'static', arrow.staff_manager, arrow.color, None, None, 0, None)
                 ghost_arrow.is_ghost = True
                 ghost_arrow.set_static_attributes_from_deleted_arrow(arrow)
                 ghost_arrow.setScale(GRAPHBOARD_SCALE)

@@ -15,6 +15,7 @@ class Staff_Manager(QObject):
         self.letters = main_widget.letters
         self.grid = main_widget.grid
         self.arrow_manager = main_widget.arrow_manager
+        self.graphboard_view = None
         
     def connect_info_manager(self, info_manager):
         self.info_manager = info_manager
@@ -198,7 +199,10 @@ class Staff_Manager(QObject):
 
     def reposition_staffs(self, scene, board_state):
         # if the scene is graphboard, scale is GRAPHBOARD_SCALE, else PICTOGRAPH_SCALE
-        scale = GRAPHBOARD_SCALE if scene == self.graphboard_view.scene() else PICTOGRAPH_SCALE
+        if self.graphboard_view:
+            scale = GRAPHBOARD_SCALE 
+        else: 
+            scale = PICTOGRAPH_SCALE
         
         translations = {} 
 

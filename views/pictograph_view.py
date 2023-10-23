@@ -127,7 +127,7 @@ class Pictograph_View(QGraphicsView):
         self.staff_manager.update_pictograph_staffs(self.pictograph_scene)
 
     def place_ghost_arrows(self, created_arrows, arrow_dict):
-        ghost_arrow = Arrow(None, self, self.info_frame, self.svg_manager, self.arrow_manager, 'static', self.staff_manager, arrow_dict)
+        ghost_arrow = Arrow(None, self, self.info_frame, self.svg_manager, self.arrow_manager, 'static', self.staff_manager, arrow_dict['color'], arrow_dict['quadrant'], arrow_dict['rotation_direction'], arrow_dict['turns'], arrow_dict)
         ghost_arrow.update_attributes()
         created_arrows.append(ghost_arrow)
 

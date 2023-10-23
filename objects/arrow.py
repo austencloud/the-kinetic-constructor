@@ -1,8 +1,9 @@
 import os
+import re
 from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtCore import Qt, QPointF
+from PyQt6.QtCore import Qt, QPointF, QByteArray
 from PyQt6.QtGui import QTransform
 from data.start_end_location_mapping import start_end_location_mapping
 from settings import *
@@ -63,7 +64,8 @@ class Arrow(QGraphicsSvgItem):
         self.rotation_direction = 'r'  # default rotation
         self.is_mirrored = False  # default mirror state
 
-        self.update_appearance()
+        if self.motion_type != 'static':
+            self.update_appearance()
 
     ### MOUSE EVENTS ###
 
@@ -98,6 +100,15 @@ class Arrow(QGraphicsSvgItem):
         
     ### ATTRIBUTES ###
 
+    def update_arrow_for_new_quadrant(self, new_quadrant):
+        if new_quadrant in start_end_location_mapping:
+            if self.rotation_direction in start_end_location_mapping[new_quadrant]:
+                if self.motion_type in start_end_location_mapping[new_quadrant][self.rotation_direction]:
+                    self.quadrant = new_quadrant
+                    self.start_location, self.end_location = start_end_location_mapping[self.quadrant][self.rotation_direction][self.motion_type]
+                    self.update_appearance()
+
+
     def update_attributes(self):
         if self.dict:
             self.set_attributes_from_dict(self.dict)
@@ -118,7 +129,7 @@ class Arrow(QGraphicsSvgItem):
 
     def set_attributes_from_filename(self):
         parts = os.path.basename(self.svg_file).split('_')
-        self.motion_type, self.turns = parts[:5]
+        self.motion_type, self.turns = parts[:2]
         self.turns = int(self.turns.split('.')[0])
 
     def set_start_end_locations(self):
@@ -144,7 +155,6 @@ class Arrow(QGraphicsSvgItem):
     ### GETTERS ###
 
     def get_attributes(self):
-        self.svg_file = f"images/arrows/shift/{self.motion_type}_{self.turns}.svg"
         attributes = {
             'color': self.color,
             'quadrant': self.quadrant,
@@ -159,16 +169,7 @@ class Arrow(QGraphicsSvgItem):
     def get_center_position(self):
         return self.pos() + self.boundingRect().center()
 
-    def update_arrow_for_new_quadrant(self, new_quadrant):
-        if self.motion_type in ["pro", "anti"] and self.color in ["red", "blue"]:
-            new_svg_file = f'images/arrows/shift/{self.motion_type}_{self.turns}.svg'
-        else:
-            print(f"Unexpected svg_file: {self.svg_file}")
-            new_svg_file = self.svg_file
 
-        self.svg_file = new_svg_file
-        self.update_attributes()
-        self.set_svg_renderer(self.svg_file)
 
     def set_svg_renderer(self, svg_file):
         self.renderer = QSvgRenderer(svg_file)
@@ -179,30 +180,46 @@ class Arrow(QGraphicsSvgItem):
     def update_appearance(self):
         self.update_color()
         self.update_rotation()
-        self.update_mirror()
+
 
         
     def update_color(self):
-        new_svg_data = self.svg_manager.set_svg_color(self.svg_file, self.color)
-        self.renderer.load(new_svg_data)
-        self.setSharedRenderer(self.renderer)
+        if self.motion_type in ["pro", "anti"]:
+            new_svg_data = self.svg_manager.set_svg_color(self.svg_file, self.color)
+            self.renderer.load(new_svg_data)
+            self.setSharedRenderer(self.renderer)
             
     def update_rotation(self):
-        # Rotate the arrow based on self.rotation_direction
-        if self.rotation_direction == 'r':
-            # Apply clockwise rotation
-            self.setRotation(self.rotation() + 90)
-        else:
-            # Apply anti-clockwise rotation
-            self.setRotation(self.rotation() - 90)
+        quadrant_to_angle = {
+            "ne": 0,
+            "se": 90,
+            "sw": 180,
+            "nw": 270
+        }
+        angle = quadrant_to_angle.get(self.quadrant, 0)
 
+        self.setRotation(angle)
     
-    def update_mirror(self):
-        # Mirror the arrow if self.is_mirrored is True
-        if self.is_mirrored:
-            # Apply mirroring using QTransform
-            transform = QTransform(-1, 0, 0, 1, 0, 0)
-            self.setTransform(transform)
-        else:
-            # Reset to original state
-            self.setTransform(QTransform())
+    def mirror(self):
+        svg_file_path = os.path.join(self.svg_file)
+        with open(svg_file_path, 'r') as f:
+            svg_data = f.read()
+        new_svg_data = self.mirror_svg_data(svg_data)  # Assuming svg_manager is accessible here
+        byte_array = QByteArray(new_svg_data.encode())
+        self.renderer.load(byte_array)
+
+        self.rotation_direction = 'l' if self.rotation_direction == 'r' else 'r'
+
+
+        self.update_appearance()
+
+    def mirror_svg_data(self, svg_data):
+        # Find the transform attribute of the path with id "blue_pro_r_ne"
+        pattern = re.compile(r'(transform=")([^"]+)(")')
+        match = pattern.search(svg_data)
+        if match:
+            original_transform = match.group(2)
+            width = self.boundingRect().width()  # Replace with the actual width of the image if it's not 270
+            new_transform = f'scale(-1, 1) translate({width}, 0) rotate(90) {original_transform}'
+            svg_data = pattern.sub(f'\\1{new_transform}\\3', svg_data)
+        return svg_data

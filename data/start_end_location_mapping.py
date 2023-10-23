@@ -4,12 +4,12 @@ start_end_location_mapping = {
         'l': {'anti': ('n', 'e'), 'pro': ('e', 'n')}
     },
     'nw': {
-        'r': {'anti': ('w', 'n'), 'pro': ('n', 'w')},
-        'l': {'anti': ('n', 'w'), 'pro': ('w', 'n')}
+        'r': {'anti': ('n', 'w'), 'pro': ('w', 'n')},
+        'l': {'anti': ('w', 'n'), 'pro': ('n', 'w')}
     },
     'se': {
-        'r': {'anti': ('e', 's'), 'pro': ('s', 'e')},
-        'l': {'anti': ('s', 'e'), 'pro': ('e', 's')}
+        'r': {'anti': ('s', 'e'), 'pro': ('e', 's')},
+        'l': {'anti': ('e', 's'), 'pro': ('s', 'e')}
     },
     'sw': {
         'r': {'anti': ('w', 's'), 'pro': ('s', 'w')},

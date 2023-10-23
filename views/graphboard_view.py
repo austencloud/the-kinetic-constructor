@@ -136,7 +136,7 @@ class Graphboard_View(QGraphicsView):
         self.clear_selection()
         self.arrow.setSelected(True)
         
-        self.arrow.update_arrow_for_new_quadrant(quadrant)
+
         self.arrow.update_attributes()
         for arrow in self.scene().items():
             if isinstance(arrow, Arrow):
