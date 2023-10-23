@@ -9,10 +9,12 @@ from PyQt6.QtWidgets import QGraphicsView, QGraphicsItem, QGraphicsRectItem, QGr
 # Local Imports
 from objects.staff import Staff
 from objects.arrow import Arrow
+from objects.grid import Grid
 from constants import GRAPHBOARD_SCALE, GRAPHBOARD_WIDTH, GRAPHBOARD_HEIGHT, VERTICAL_OFFSET
 from managers.staff_management.graphboard_staff_manager import GraphboardStaffManager
 from managers.info_manager import InfoManager
-from managers.context_menu_manager import ContextMenuManager
+from managers.context_menu_manager import GraphboardContextMenuManager
+from managers.export_manager import ExportManager
 
 class GraphboardView(QGraphicsView):
     def __init__(self, main_widget, graph_editor_widget):
@@ -39,7 +41,7 @@ class GraphboardView(QGraphicsView):
         self.graphboard_scene = QGraphicsScene()
         self.setScene(self.graphboard_scene)
         self.main_widget = main_widget
-        self.grid = main_widget.grid
+        self.grid = Grid('images/grid/grid.svg')
         self.grid.setScale(GRAPHBOARD_SCALE)
         self.scene().setSceneRect(0, 0, int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
         self.VERTICAL_OFFSET = (self.height() - self.width()) / 2
@@ -49,8 +51,10 @@ class GraphboardView(QGraphicsView):
 
     def init_managers(self, main_widget):
         self.info_manager = InfoManager(main_widget, self)
-        self.context_menu_handler = ContextMenuManager(self)
         self.staff_manager = GraphboardStaffManager(main_widget, self.graphboard_scene)
+        self.export_manager = ExportManager(self.staff_manager, self.grid, self)
+        self.context_menu_manager = GraphboardContextMenuManager(self)
+
 
     def init_grid(self):
         transform = QTransform()
@@ -147,11 +151,11 @@ class GraphboardView(QGraphicsView):
         clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())
         selected_items = self.get_selected_items()
         if isinstance(clicked_item, Arrow):
-            self.context_menu_handler.create_arrow_menu(selected_items, event)
+            self.context_menu_manager.create_arrow_menu(selected_items, event)
         elif isinstance(clicked_item, Staff):
-            self.context_menu_handler.create_staff_menu(selected_items, event)
+            self.context_menu_manager.create_staff_menu(selected_items, event)
         else:
-            self.context_menu_handler.create_graphboard_menu(event)
+            self.context_menu_manager.create_graphboard_menu(event)
 
 
     ### GETTERS ###

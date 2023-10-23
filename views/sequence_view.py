@@ -14,7 +14,6 @@ from constants import DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, PICTO
 class SequenceView(QGraphicsView):
     def __init__(self, main_widget):
         super().__init__()
-        main_window = main_widget.main_window
         sequence_scene = QGraphicsScene()
         
         # get the width of the editor layout from main_window

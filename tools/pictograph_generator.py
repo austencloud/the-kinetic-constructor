@@ -13,7 +13,7 @@ class Pictograph_Generator():
         self.arrow_manager = main_widget.arrow_manager
         self.export_manager = main_widget.export_manager
         self.svg_manager = main_widget.svg_manager
-        self.grid = main_widget.grid
+        self.grid = graphboard_view.grid
         self.graphboard_scene = self.graphboard_view.scene()
         self.output_dir = "images/pictographs"
         self.current_letter = None

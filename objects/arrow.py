@@ -6,25 +6,17 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt, QPointF, QByteArray
 from data.start_end_location_mapping import start_end_location_mapping
 class Arrow(QGraphicsSvgItem):
-    def __init__(self, 
-                 svg_file, 
-                 view, 
-                 info_frame, 
-                 svg_manager, 
-                 arrow_manager, 
-                 motion_type, 
-                 staff_manager, 
-                 color,
-                 quadrant,
-                 rotation_direction,
-                 turns,
-                 dict):
+    def __init__(self, svg_file, view, info_frame, svg_manager, arrow_manager, motion_type, staff_manager, color, quadrant, rotation_direction, turns, arrow_dict):
         super().__init__(svg_file)
-        
-        # Connectors
+        self.initialize_attributes(svg_file, view, info_frame, svg_manager, arrow_manager, motion_type, staff_manager, color, quadrant, rotation_direction, turns, arrow_dict)
+        self.set_flags()
+        self.set_renderer()
+        self.update_appearance()
+
+    def initialize_attributes(self, svg_file, view, info_frame, svg_manager, arrow_manager, motion_type, staff_manager, color, quadrant, rotation_direction, turns, arrow_dict):
         self.view = view
         self.info_frame = info_frame
-        self.dict = dict
+        self.dict = arrow_dict
         self.svg_file = svg_file
         self.svg_manager = svg_manager
         self.motion_type = motion_type
@@ -32,24 +24,17 @@ class Arrow(QGraphicsSvgItem):
         self.quadrant = quadrant
         self.rotation_direction = rotation_direction
         self.turns = turns
-        
-        # Managers
         self.staff_manager = staff_manager
-        self.svg_manager = svg_manager
         self.arrow_manager = arrow_manager
         self.arrow_manager.arrow = self
-        
-        # Flags
         self.in_graphboard = False
         self.drag_offset = QPointF(0, 0)
         self.is_ghost = False
-        
-        # Other
         self.staff = None
         self.previous_arrow = None
         self.center = self.boundingRect().center()
-        
-        self.renderer = QSvgRenderer(self.svg_file)    
+
+    def set_flags(self):
         self.setAcceptDrops(True)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsFocusable)
@@ -57,20 +42,15 @@ class Arrow(QGraphicsSvgItem):
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, True)
         self.setTransformOriginPoint(self.boundingRect().center())
 
-        self.svg_renderer = QSvgRenderer(svg_file)
-        
-        self.rotation_direction = 'r'  # default rotation
-        self.is_mirrored = False  # default mirror state
-
-        if self.motion_type != 'static':
-            self.update_appearance()
+    def set_renderer(self):
+        self.renderer = QSvgRenderer(self.svg_file)
+        self.setSharedRenderer(self.renderer)
 
     ### MOUSE EVENTS ###
 
     def mousePressEvent(self, event):
         self.drag_start_pos = self.pos()  # Store the initial position of the arrow
         self.drag_offset = event.pos()
-
 
     def mouseMoveEvent(self, event):
         self.setSelected(True) 
@@ -150,6 +130,9 @@ class Arrow(QGraphicsSvgItem):
         elif self.motion_type == 'static':
             self.svg_file = None
 
+
+
+
     ### GETTERS ###
 
     def get_attributes(self):
@@ -169,17 +152,9 @@ class Arrow(QGraphicsSvgItem):
 
 
 
-    def set_svg_renderer(self, svg_file):
-        self.renderer = QSvgRenderer(svg_file)
-        if self.renderer.isValid():
-            self.setSharedRenderer(self.renderer)
-
-
     def update_appearance(self):
         self.update_color()
         self.update_rotation()
-
-
         
     def update_color(self):
         if self.motion_type in ["pro", "anti"]:

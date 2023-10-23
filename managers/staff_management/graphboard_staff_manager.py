@@ -5,7 +5,7 @@ from managers.staff_management.staff_manager import StaffManager
 from PyQt6.QtCore import QPointF
 from objects.staff import Staff
 from objects.arrow import Arrow
-from constants import GRAPHBOARD_GRID_PADDING
+from constants import GRAPHBOARD_GRID_PADDING, GRAPHBOARD_SCALE
 
 class GraphboardStaffManager(StaffManager):
     def __init__(self, main_widget, scene):
@@ -14,11 +14,10 @@ class GraphboardStaffManager(StaffManager):
         self.staffs_on_board = {}
         self.staff_xy_locations = {}
         self.graphboard_view = None
-        self.grid = main_widget.grid
     
     def init_graphboard_staffs(self, graphboard_view):
         # Calculate scaling and padding factors for the grid
-        scale = self.grid.scale()
+        scale = GRAPHBOARD_SCALE
 
         GRAPHBOARD_WIDTH = graphboard_view.width()
         GRAPHBOARD_HEIGHT = graphboard_view.height()
@@ -28,7 +27,7 @@ class GraphboardStaffManager(StaffManager):
         # Calculate the handpoints on the graphboard based on the grid
         grid_handpoints = {}
         for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
-            x, y = self.grid.get_circle_coordinates(point_name)
+            x, y = graphboard_view.grid.get_circle_coordinates(point_name)
             scaled_x = x * scale + GRAPHBOARD_GRID_PADDING
             scaled_y = y * scale + GRAPHBOARD_GRID_PADDING
             grid_handpoints[point_name] = QPointF(scaled_x, scaled_y)
