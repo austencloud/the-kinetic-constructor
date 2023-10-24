@@ -3,6 +3,7 @@ import os
 from PyQt6.QtCore import QByteArray
 from PyQt6.QtSvg import QSvgRenderer
 from objects.arrow import Arrow
+from PyQt6.QtGui import QTransform
 class ArrowManipulator:
     def __init__(self, arrow_manager):
         self.arrow_manager = arrow_manager
@@ -56,37 +57,28 @@ class ArrowManipulator:
                 print("Failed to load SVG file:", new_svg)
 
 
-
     def mirror_arrow(self, arrows):
         for arrow in arrows:
+            # Step 1: Store the position of the arrow in the scene
+            original_pos = arrow.pos()
+
+            # Step 2: Apply transformations
             if arrow.is_mirrored:
                 arrow.is_mirrored = False
+                arrow.setTransform(QTransform())
             else:
                 arrow.is_mirrored = True
+                arrow.setTransform(QTransform.fromScale(-1, 1))
 
-            svg_file_path = os.path.join(arrow.svg_file)
-            with open(svg_file_path, 'r') as f:
-                svg_data = f.read()
-                pattern = re.compile(r'(transform=")([^"]+)(")')
-                match = pattern.search(svg_data)
-                if match:
-                    # Modify existing transform attribute
-                    original_transform = match.group(2)
-                    width = arrow.boundingRect().width()
-                    new_transform = f'scale(-1, 1)'
-                    new_svg_data = pattern.sub(f'\\1{new_transform}\\3', svg_data)
-                else:
-                    # Add a new transform attribute
-                    width = arrow.boundingRect().width()
-                    new_transform = f'scale(-1, 1) translate({width}, 0) rotate(90)'
-                    new_svg_data = svg_data.replace('<path id="anti_0"', f'<path transform="{new_transform}" id="anti_0"')
+            # Step 3: Calculate the offset
+            offset = original_pos - arrow.pos()
 
-                byte_array = QByteArray(new_svg_data.encode())
-                arrow.renderer.load(byte_array)
+            # Step 4: Reposition the arrow
+            arrow.setPos(arrow.pos() + offset)
 
-            arrow.rotation_direction = 'l' if arrow.rotation_direction == 'r' else 'r'
-            arrow.attributes.update()
-
+            # Update the arrow's appearance and position according to your logic
+            self.arrow_manager.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard_view)
+            arrow.update_appearance()
 
     def swap_motion_type(self, arrows):
         if not isinstance(arrows, list):
@@ -106,7 +98,6 @@ class ArrowManipulator:
             if new_renderer.isValid():
                 arrow.setSharedRenderer(new_renderer)
                 arrow.svg_file = new_svg
-                arrow.attributes.update_color()
 
             if arrow.rotation_direction == "l":
                 new_rotation_direction = "r"
@@ -115,7 +106,7 @@ class ArrowManipulator:
 
             arrow.motion_type = new_motion_type
             arrow.rotation_direction = new_rotation_direction
-            arrow.attributes.update_appearance()
+            arrow.update_appearance()
             self.arrow_manager.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard_view)
             
         self.arrow_manager.info_frame.update()

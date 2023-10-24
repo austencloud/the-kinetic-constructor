@@ -137,12 +137,11 @@ class GraphboardView(QGraphicsView):
         self.arrow = self.arrow_factory.create_arrow(self, dropped_arrow)
                 
         self.arrow.setScale(GRAPHBOARD_SCALE)
-        self.scene().addItem(self.arrow)
-        
+        self.graphboard_scene.addItem(self.arrow)
         self.clear_selection()
         self.arrow.setSelected(True)
 
-        for arrow in self.scene().items():
+        for arrow in self.graphboard_scene.items():
             if isinstance(arrow, Arrow):
                 arrow.arrow_manager.arrow_positioner.update_arrow_position(self)
                 
@@ -162,17 +161,21 @@ class GraphboardView(QGraphicsView):
     ### GETTERS ###
 
     def get_graphboard_quadrants(self, mouse_pos):
+        scene_H_center = self.sceneRect().width() / 2
+        scene_V_center = self.sceneRect().height() / 2
         adjusted_mouse_y = mouse_pos.y() + VERTICAL_OFFSET
-        if adjusted_mouse_y < self.sceneRect().height() / 2:
-            if mouse_pos.x() < self.sceneRect().width() / 2:
+        
+        if adjusted_mouse_y < scene_V_center: 
+            if mouse_pos.x() < scene_H_center:
                 quadrant = 'nw'
             else:
                 quadrant = 'ne'
         else:
-            if mouse_pos.x() < self.sceneRect().width() / 2:
+            if mouse_pos.x() < scene_H_center:
                 quadrant = 'sw'
             else:
                 quadrant = 'se'
+                
         return quadrant
 
     def get_state(self):

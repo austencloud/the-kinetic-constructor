@@ -1,10 +1,10 @@
-import os
-import re
 from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtCore import Qt, QPointF, QByteArray
+from PyQt6.QtCore import Qt, QPointF
 from managers.arrow_management.arrow_attributes import ArrowAttributes
+from data.start_end_location_mapping import start_end_location_mapping
+
 class Arrow(QGraphicsSvgItem):
     def __init__(self, svg_file, view, arrow_dict):
         super().__init__(svg_file)
@@ -68,7 +68,7 @@ class Arrow(QGraphicsSvgItem):
                 self.setPos(new_pos)
                 new_quadrant = self.view.get_graphboard_quadrants(new_pos + self.center)  
                 if self.quadrant != new_quadrant:
-                    self.attributes.update_arrow_for_new_quadrant(new_quadrant)
+                    self.update_appearance()
                     self.info_frame.update()
             elif isinstance(self.view, PictographView):
                 new_pos = self.mapToScene(event.pos()) - self.drag_offset / 2
@@ -81,6 +81,39 @@ class Arrow(QGraphicsSvgItem):
         from views.graphboard_view import GraphboardView
         if isinstance(self.view, GraphboardView):
             self.arrow_manager.arrow_positioner.update_arrow_position(self.view)
+    
+
+    # UPDATE APPEARANCE          
         
+    def update_appearance(self):
+        self.update_color()
+        self.update_rotation()
+        
+    def update_color(self):
+        if self.motion_type in ["pro", "anti"]:
+            new_svg_data = self.svg_manager.set_svg_color(self.svg_file, self.color)
+            self.renderer.load(new_svg_data)
+            self.setSharedRenderer(self.renderer)
+            
+    def update_rotation(self):
+        r_quadrant_to_angle = {
+            "ne": 0,
+            "se": 90,
+            "sw": 180,
+            "nw": 270
+        }
+        
+        l_quadrant_to_angle = {
+            "ne": 0,
+            "se": 270,
+            "sw": 180,
+            "nw": 90
+        }
 
-
+        if self.rotation_direction == "r":
+            angle = r_quadrant_to_angle.get(self.quadrant, 0)
+        else:
+            angle = l_quadrant_to_angle.get(self.quadrant, 0)
+        self.setRotation(angle)
+    
+    

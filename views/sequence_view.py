@@ -78,7 +78,7 @@ class SequenceView(QGraphicsView):
         scaled_image = image.scaled(int(DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE), int(DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         pictograph = Pictograph(graphboard_view.get_state(), scaled_image)
         self.add_pictograph(pictograph)
-        graphboard_view.clear()
+        graphboard_view.clear_graphboard()
         graphboard_view.update_letter(None)
         letter = self.info_frame.get_current_letter()
         if letter:

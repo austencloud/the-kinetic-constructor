@@ -114,7 +114,7 @@ class ArrowBoxView(QGraphicsView):
         
         red_iso_arrow = self.arrow_manager.arrow_factory.create_arrow(self, arrow1)
         blue_anti_arrow = self.arrow_manager.arrow_factory.create_arrow(self, arrow2)
-        
+
         arrows = [red_iso_arrow, blue_anti_arrow]
         
         for arrow in arrows:
@@ -123,3 +123,7 @@ class ArrowBoxView(QGraphicsView):
             arrow.setScale(GRAPHBOARD_SCALE * 0.75)
             self.arrowbox_scene.addItem(arrow) 
             self.main_widget.arrows.append(arrow)
+
+        #set positions
+        red_iso_arrow.setPos(100, 50)
+        blue_anti_arrow.setPos(50, 50)

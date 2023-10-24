@@ -23,8 +23,8 @@ class KeyBindingsManager:
         elif event.key() == Qt.Key.Key_Delete:
             for item in selected_items:
                 if isinstance(item, Arrow):
-                    arrow_manager.delete_arrow(item)
-                    arrow_manager.delete_staff(item.staff)
+                    arrow_manager.arrow_selector.delete_arrow(item)
+                    arrow_manager.arrow_selector.delete_staff(item.staff)
                 elif isinstance(item, Staff):
                     arrow_manager.delete_staff(item)
 
@@ -42,4 +42,4 @@ class KeyBindingsManager:
             elif event.key() == Qt.Key.Key_Q:
                 arrow_manager.arrow_manipulator.swap_motion_type(selected_items)
             elif event.key() == Qt.Key.Key_F:
-                sequence_view.arrow_manipulator.add_to_sequence(graphboard_view)
+                sequence_view.add_to_sequence(graphboard_view)

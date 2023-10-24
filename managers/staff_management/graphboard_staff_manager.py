@@ -18,18 +18,14 @@ class GraphboardStaffManager(StaffManager):
     def init_graphboard_staffs(self, graphboard_view):
         # Calculate scaling and padding factors for the grid
         scale = GRAPHBOARD_SCALE
-
-        GRAPHBOARD_WIDTH = graphboard_view.width()
-        GRAPHBOARD_HEIGHT = graphboard_view.height()
+        padding = GRAPHBOARD_GRID_PADDING
         
-        self.GRID_V_OFFSET = (GRAPHBOARD_HEIGHT - GRAPHBOARD_WIDTH) / 2
-
         # Calculate the handpoints on the graphboard based on the grid
         grid_handpoints = {}
         for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
             x, y = graphboard_view.grid.get_circle_coordinates(point_name)
-            scaled_x = x * scale + GRAPHBOARD_GRID_PADDING
-            scaled_y = y * scale + GRAPHBOARD_GRID_PADDING
+            scaled_x = x * scale + padding
+            scaled_y = y * scale + padding
             grid_handpoints[point_name] = QPointF(scaled_x, scaled_y)
 
         # Initialize the staff locations based on the grid handpoints

@@ -24,9 +24,8 @@ class ArrowPositioner:
                 if optimal_locations:
                     optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
                     if optimal_location:
-                        GRID_PADDING = (self.arrow_manager.graphboard_view.width() - self.arrow_manager.graphboard_view.grid.boundingRect().width() * GRAPHBOARD_SCALE) / 2
                         pos = QPointF(optimal_location['x'] * GRAPHBOARD_SCALE, optimal_location['y'] * GRAPHBOARD_SCALE)
-                        arrow.setPos(pos - QPointF(arrow.boundingRect().width()/2, arrow.boundingRect().height()/2))
+                        arrow.setPos(pos - QPointF(arrow.boundingRect().width()*GRAPHBOARD_SCALE/2, arrow.boundingRect().height()*GRAPHBOARD_SCALE/2))
                 else:
                     self.set_default_arrow_pos(arrow)
 

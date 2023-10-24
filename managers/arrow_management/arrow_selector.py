@@ -10,13 +10,13 @@ class ArrowSelector:
             if isinstance(item, Arrow):
                 item.setSelected(True)
 
-    def delete_ghost_arrow_and_staff(self, staffs):
+    def delete_staff(self, staffs):
         if staffs:
             # if staffs is not a list, make it a list
             if not isinstance(staffs, list):
                 staffs = [staffs]
             for staff in staffs:
-                ghost_arrow = staff.arrow
+                ghost_arrow = staff.arrow if staff.arrow.is_ghost else None
                 if ghost_arrow:
                     self.arrow_manager.graphboard_view.scene().removeItem(ghost_arrow)
                     print(f"Ghost arrow for {staff.color} staff deleted")
