@@ -8,5 +8,12 @@ class StaffFactory:
         staff = Staff(scene, staff_dict)
         return staff
 
-
+''' 
+staff_dict = {
+            "color": "red",
+            "location": "e",
+            "layer": 1,
+        }
+        
+'''
 

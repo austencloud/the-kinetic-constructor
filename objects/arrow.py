@@ -2,24 +2,26 @@ from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt, QPointF
-from managers.arrow_management.arrow_attributes import ArrowAttributes
-from data.start_end_location_mapping import start_end_location_mapping
-from constants import GRAPHBOARD_SCALE
+
 class Arrow(QGraphicsSvgItem):
-    def __init__(self, view, dict):
-        
-        if dict['motion_type'] in ["pro", "anti"]:
-            self.svg_file = f"images/arrows/shift/{dict['motion_type']}_{dict['turns']}.svg"
-            self.is_shift = True
-        elif dict['motion_type'] in ["static"]:
-            self.svg_file = f"images/arrows/{dict['motion_type']}_blank.svg"
-            self.is_static = True
-
-
+    def __init__(self, view, attr_dict):
+        self.svg_file = self.get_svg_file(attr_dict)
         super().__init__(self.svg_file)
-        self.initialize_svg_renderer()
-        self.initialize_app_attributes(view, dict)
+        
+        self.initialize_svg_renderer(self.svg_file)
+        self.initialize_app_attributes(view, attr_dict)
         self.initialize_graphics_flags()
+
+    def get_svg_file(self, attr_dict):
+        motion_type = attr_dict['motion_type']
+        turns = attr_dict.get('turns', None)
+        
+        if motion_type in ["pro", "anti"]:
+            self.is_shift = True
+            return f"images/arrows/shift/{motion_type}_{turns}.svg"
+        elif motion_type in ["static"]:
+            self.is_static = True
+            return f"images/arrows/{motion_type}_blank.svg"
 
     def initialize_app_attributes(self, view, dict):
         self.view = view
@@ -41,16 +43,22 @@ class Arrow(QGraphicsSvgItem):
         self.update_appearance()
 
     def initialize_graphics_flags(self):
-        self.setAcceptDrops(True)
-        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges)
-        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsFocusable)
-        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
-        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, True)
+        flags = [
+            QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges,
+            QGraphicsItem.GraphicsItemFlag.ItemIsFocusable,
+            QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable,
+            QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable
+        ]
+        
+        for flag in flags:
+            self.setFlag(flag, True)
+        
         self.setTransformOriginPoint(self.center)
 
-    def initialize_svg_renderer(self):
-        if self.is_shift:
-            self.renderer = QSvgRenderer(self.svg_file)
+
+    def initialize_svg_renderer(self, svg_file):
+        if getattr(self, 'is_shift', False):
+            self.renderer = QSvgRenderer(svg_file)
             self.setSharedRenderer(self.renderer)
 
     ### MOUSE EVENTS ###
@@ -97,40 +105,26 @@ class Arrow(QGraphicsSvgItem):
             self.setSharedRenderer(self.renderer)
             
     def update_rotation(self):
-        if self.motion_type == 'pro':
-            r_quadrant_to_angle = {
-                "ne": 0,
-                "se": 90,
-                "sw": 180,
-                "nw": 270
-            }
-            
-            l_quadrant_to_angle = {
-                "ne": 0,
-                "se": 270,
-                "sw": 180,
-                "nw": 90
-            }
-
-        elif self.motion_type == 'anti':
-            r_quadrant_to_angle = {
-                "ne": 0,
-                "se": 90,
-                "sw": 180,
-                "nw": 270
-            }
-            
-            l_quadrant_to_angle = {
-                "ne": 0,
-                "se": 90,
-                "sw": 180,
-                "nw": 270
-            }
-            
-        if self.rotation_direction == "r":
-            angle = r_quadrant_to_angle.get(self.quadrant, 0)
-        else:
-            angle = l_quadrant_to_angle.get(self.quadrant, 0)
+        angle = self.get_rotation_angle()
         self.setRotation(angle)
-    
-    
+
+    def get_rotation_angle(self):
+        quadrant_to_angle = self.get_quadrant_to_angle_map()
+        return quadrant_to_angle.get(self.quadrant, 0)
+
+    def get_quadrant_to_angle_map(self):
+        if self.motion_type == 'pro':
+            return {
+                "r": {"ne": 0, "se": 90, "sw": 180, "nw": 270},
+                "l": {"ne": 0, "se": 90, "sw": 180, "nw": 270}
+            }.get(self.rotation_direction, {})
+        elif self.motion_type == 'anti':
+            return {
+                "r": {"ne": 0, "se": 90, "sw": 180, "nw": 270},
+                "l": {"ne": 0, "se": 90, "sw": 180, "nw": 270}
+            }.get(self.rotation_direction, {})
+        elif self.motion_type == 'static':
+            return {
+                "r": {"ne": 0, "se": 0, "sw": 0, "nw": 0},
+                "l": {"ne": 0, "se": 0, "sw": 0, "nw": 0}
+            }.get(self.rotation_direction, {})

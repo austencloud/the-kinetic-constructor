@@ -7,7 +7,6 @@ import math
 class StaffManager(QObject):
     def __init__(self, main_widget):
         super().__init__()
- 
         self.previous_position = None  # Store the previous position of staffs
         self.letters = main_widget.letters
         self.arrow_manager = main_widget.arrow_manager

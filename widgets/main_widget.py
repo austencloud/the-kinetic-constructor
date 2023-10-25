@@ -7,6 +7,7 @@ from managers.json_manager import JsonManager
 from views.sequence_view import SequenceView
 from views.optionboard_view import OptionboardView
 from managers.layout_manager import LayoutManager
+from managers.staff_management.staff_manager import StaffManager
 from managers.key_bindings_manager import KeyBindingsManager
 from widgets.graph_editor_widget import GraphEditorWidget
 from frames.letter_buttons_frame import LetterButtonsFrame

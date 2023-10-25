@@ -69,12 +69,8 @@ class GraphboardInfoFrame(QFrame):
             self.grid_layout.setRowStretch(idx, 0 if idx == 0 else 1)
         
     def update_type_and_position_info(self):
-        # Determine the current letter and its type
         current_letter, current_letter_type = self.graphboard_view.info_manager.determine_current_letter_and_type()
-
-        # Check if the letter and type were successfully retrieved
         if current_letter and current_letter_type:
-            # Determine the start and end positions based on the current state
             start_end_positions = self.get_start_end_locations()
             if start_end_positions:
                 start_position, end_position = start_end_positions

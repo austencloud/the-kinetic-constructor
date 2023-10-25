@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt
 from constants import GRAPHBOARD_SCALE, PICTOGRAPH_SCALE, STAFF_WIDTH, STAFF_LENGTH, COLOR_MAP
-
+from managers.staff_management.staff_attributes import StaffAttributes
 ''' 
 staff_dict = {
             "color": "red",
@@ -22,6 +22,7 @@ class Staff(QGraphicsSvgItem):
         self.initialize_app_attributes(scene)
 
     def initialize_dict_attributes(self, staff_dict):
+        self.attributes = StaffAttributes(self, staff_dict)
         self.color = staff_dict.get('color')
         self.location = staff_dict.get('location')
         self.layer = staff_dict.get('layer')

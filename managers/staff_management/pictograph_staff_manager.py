@@ -13,6 +13,7 @@ class PictographStaffManager(StaffManager):
         self.pictograph_view = None
         self.arrow_manager = None
 
+        
     def connect_pictograph_view(self, pictograph_view):
         self.pictograph_view = pictograph_view
         self.scene = pictograph_view.pictograph_scene
@@ -50,7 +51,7 @@ class PictographStaffManager(StaffManager):
                 location = arrow.end_location
 
                 if location:
-                    location = location.capitalize()
+
                     if arrow.color == "#ed1c24" or arrow.color == 'red':
                         color = 'red'
                     elif arrow.color == "#2e3192" or arrow.color == 'blue':
@@ -59,7 +60,14 @@ class PictographStaffManager(StaffManager):
 
                         continue 
                 
-                    new_staff = self.staff_factory.create_staff(location, scene, color, 'pictograph')
+                    new_staff = {
+                        'color': color,
+                        'location': location,
+                        'layer': 1,
+                    }
+
+                    new_staff = self.staff_factory.create_staff(scene, new_staff)
+                    
                     new_staff.setScale(PICTOGRAPH_SCALE)
                     arrow.staff = new_staff
                     new_staff.arrow = arrow

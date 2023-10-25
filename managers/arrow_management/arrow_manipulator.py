@@ -8,12 +8,13 @@ class ArrowManipulator:
     def __init__(self, arrow_manager):
         self.arrow_manager = arrow_manager
 
-    def finalize_manipulation(self, selected_arrow, updated_arrow):
-        selected_arrow.attributes.update_attributes_from_dict(selected_arrow, updated_arrow)
+    def finalize_manipulation(self, selected_arrow, updated_arrow_dict):
+        selected_arrow.attributes.update_attributes_from_dict(selected_arrow, updated_arrow_dict)
         self.arrow_manager.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard_view)
         selected_arrow.update_appearance()
         self.arrow_manager.info_frame.update()
         selected_arrow.staff.update()
+        selected_arrow.view.info_manager.update()
 
     def move_arrow_quadrant_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {
@@ -28,7 +29,7 @@ class ArrowManipulator:
         selected_arrow.quadrant = new_quadrant
         new_start_location, new_end_location = selected_arrow.attributes.get_start_end_locations(selected_arrow.motion_type, selected_arrow.rotation_direction, new_quadrant)
         
-        updated_arrow = {
+        updated_arrow_dict = {
             'color': selected_arrow.color,
             'motion_type': selected_arrow.motion_type,
             'quadrant': new_quadrant,
@@ -38,8 +39,8 @@ class ArrowManipulator:
             'turns': selected_arrow.turns
         }
         
-        self.finalize_manipulation(selected_arrow, updated_arrow)
-
+        self.finalize_manipulation(selected_arrow, updated_arrow_dict)
+        
 
     def rotate_arrow(self, direction, arrows):
         for arrow in arrows:
@@ -49,7 +50,7 @@ class ArrowManipulator:
             new_quadrant = quadrants[new_quadrant_index]
             new_start_location, new_end_location = arrow.attributes.get_start_end_locations(arrow.motion_type, arrow.rotation_direction, new_quadrant)
             
-            updated_arrow = {
+            updated_arrow_dict = {
                 'color': arrow.color,
                 'motion_type': arrow.motion_type,
                 'quadrant': new_quadrant,
@@ -59,7 +60,7 @@ class ArrowManipulator:
                 'turns': arrow.turns
                 }
 
-        self.finalize_manipulation(arrow, updated_arrow)
+        self.finalize_manipulation(arrow, updated_arrow_dict)
 
 
 
@@ -109,16 +110,16 @@ class ArrowManipulator:
                 'turns': arrow.turns
             }
 
-            new_arrow = self.arrow_manager.arrow_factory.create_arrow(self.arrow_manager.graphboard_view, new_arrow_dict)
-            new_arrow.update_appearance()
+            arrow.svg_file = f"images/arrows/shift/{new_motion_type}_{arrow.turns}.svg"
+            arrow.initialize_svg_renderer(arrow.svg_file)
             
-            self.arrow_manager.graphboard_view.graphboard_scene.removeItem(arrow)
-            self.arrow_manager.graphboard_view.graphboard_scene.addItem(new_arrow)
+            arrow.attributes.update_attributes_from_dict(arrow, new_arrow_dict)
             
-
-            new_arrow.view.info_manager.update()
+            arrow.update_appearance()
             
-        self.arrow_manager.info_frame.update()
+            arrow.view.info_manager.update()
+    
+            self.arrow_manager.info_frame.update()
         
     def swap_colors(self, _):
         arrows = [item for item in self.graphboard_scene.items() if isinstance(item, Arrow)]

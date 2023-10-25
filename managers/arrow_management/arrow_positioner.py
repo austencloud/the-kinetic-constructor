@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QPointF
+from PyQt6.QtCore import QPointF
 from constants import GRAPHBOARD_SCALE, ARROW_ADJUSTMENT_DISTANCE, GRAPHBOARD_GRID_PADDING
 
 class ArrowPositioner:
@@ -25,7 +25,15 @@ class ArrowPositioner:
                     optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
                     if optimal_location:
                         pos = QPointF(optimal_location['x'] * GRAPHBOARD_SCALE, optimal_location['y'] * GRAPHBOARD_SCALE)
-                        arrow.setPos(pos - QPointF((arrow.boundingRect().width()*GRAPHBOARD_SCALE)/2, (arrow.boundingRect().height()*GRAPHBOARD_SCALE)/2))
+
+                        new_x = pos.x() - (arrow.boundingRect().width()) / 2
+                        new_y = pos.y() - (arrow.boundingRect().height()) / 2
+
+                        # Create a new QPointF object
+                        new_pos = QPointF(new_x, new_y)
+
+                        # Set the new position
+                        arrow.setPos(new_pos)
                 else:
                     self.set_default_arrow_pos(arrow)
 

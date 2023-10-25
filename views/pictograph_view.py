@@ -39,7 +39,8 @@ class PictographView(QGraphicsView):
         self.init_grid()
         self.staff_manager.init_pictograph_staffs(self, self.grid)
         self.graphboard_view = main_widget.graph_editor_widget.graphboard_view
-
+        self.view_scale = PICTOGRAPH_SCALE
+        
     def mouseMoveEvent(self, event):
         # Call the parent class's mouseMoveEvent to maintain its original behavior
         super().mouseMoveEvent(event)
@@ -133,7 +134,7 @@ class PictographView(QGraphicsView):
 
     def place_shift_arrows(self, DISTANCE, created_arrows, optimal_locations, arrow_dict):
         arrow = self.arrow_manager.arrow_factory.create_arrow(self, arrow_dict)
-        arrow.attributes.update(arrow_dict)
+
         arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
         arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
         created_arrows.append(arrow)
