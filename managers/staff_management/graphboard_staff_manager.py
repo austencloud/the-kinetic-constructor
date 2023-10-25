@@ -51,8 +51,7 @@ class GraphboardStaffManager(StaffManager):
                 location = arrow.end_location
 
                 if location:
-                    location = location.capitalize()
-                    color = ''
+
                     if arrow.color in ["#ed1c24", 'red']:
                         color = 'red'
                     elif arrow.color in ["#2e3192", 'blue']:
@@ -60,12 +59,17 @@ class GraphboardStaffManager(StaffManager):
                     else:
                         continue
 
-                    staff_key = location + "_staff_" + color
+
+                    new_staff = {
+                        'color': color,
+                        'location': location,
+                        'layer': 1
+                    }
                     
-                    new_staff = self.create_staff(location, scene, color, 'graphboard')
-                    new_staff.setScale(arrow.scale())
+                    new_staff = self.staff_factory.create_staff(scene, new_staff)
                     arrow.staff = new_staff
-                    arrow.staff.arrow = arrow
+                    new_staff.arrow = arrow
+                    staff_key = location + "_staff_" + color
                     self.staffs_on_board[staff_key] = new_staff
                     staff = new_staff
 

@@ -25,7 +25,7 @@ class ArrowPositioner:
                     optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
                     if optimal_location:
                         pos = QPointF(optimal_location['x'] * GRAPHBOARD_SCALE, optimal_location['y'] * GRAPHBOARD_SCALE)
-                        arrow.setPos(pos - QPointF(arrow.boundingRect().width()*GRAPHBOARD_SCALE/2, arrow.boundingRect().height()*GRAPHBOARD_SCALE/2))
+                        arrow.setPos(pos - QPointF((arrow.boundingRect().width()*GRAPHBOARD_SCALE)/2, (arrow.boundingRect().height()*GRAPHBOARD_SCALE)/2))
                 else:
                     self.set_default_arrow_pos(arrow)
 

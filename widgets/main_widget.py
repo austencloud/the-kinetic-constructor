@@ -53,8 +53,8 @@ class MainWidget(QWidget):
         self.arrow_manager.info_frame = self.graph_editor_widget.info_frame
         self.arrow_manager.graphboard_view = self.graph_editor_widget.graphboard_view
         self.arrow_manager.arrow_manipulator.graphboard_scene = self.graph_editor_widget.graphboard_view.graphboard_scene
-        self.graph_editor_widget.graphboard_view.context_menu_manager.sequence_view = self
-
+        self.graph_editor_widget.graphboard_view.context_menu_manager.sequence_view = self.sequence_view
+        self.graphboard_view.info_manager.connect_widgets_and_managers()
 
 ### EVENTS ###
 

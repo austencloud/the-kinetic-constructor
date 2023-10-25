@@ -1,20 +1,34 @@
 from data.letter_types import letter_types
 from objects.arrow import Arrow
 
-class InfoManager():
+class GraphboardInfoManager():
     def __init__(self, main_widget, view):
         self.main_widget = main_widget
         self.letters = main_widget.letters
         self.view = view
+
+
+    def connect_widgets_and_managers(self):
+        self.graph_editor_widget = self.main_widget.graph_editor_widget
+        self.info_frame = self.graph_editor_widget.info_frame
+        self.staff_manager = self.view.staff_manager
+        self.arrow_manager = self.main_widget.arrow_manager
+        self.arrow_positioner = self.arrow_manager.arrow_positioner
+        
+    def update(self):
+        self.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard_view)
+        self.info_frame.update_type_and_position_info()
+        self.view.update_letter(self.determine_current_letter_and_type()[0])
+        self.staff_manager.update_graphboard_staffs(self.view.scene())
 
     def connect_view(self, view):
         self.view = view
         
     def determine_current_letter_and_type(self):
         current_combination = []
-        for item in self.view.items():
-            if isinstance(item, Arrow):
-                attributes = item.attributes.get_attributes()
+        for arrow in self.view.items():
+            if isinstance(arrow, Arrow):
+                attributes = arrow.attributes.get_attributes(arrow)
                 sorted_attributes = {k: attributes[k] for k in sorted(attributes.keys())}
                 current_combination.append(sorted_attributes)
         # Sort the list of dictionaries by the 'color' key

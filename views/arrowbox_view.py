@@ -17,12 +17,15 @@ class ArrowBoxView(QGraphicsView):
         self.graphboard_view = graphboard_view
         self.setAcceptDrops(True)
         self.setFrameShape(QFrame.Shape.NoFrame)
-        self.main_widget = main_widget
-        self.main_window = main_widget.main_window
         self.arrowbox_scene = QGraphicsScene()
         self.setScene(self.arrowbox_scene)
-        self.configure_arrowbox_frame()
+        self.main_widget = main_widget
+        self.main_window = main_widget.main_window
         self.arrow_manager = arrow_manager
+        self.arrow_factory = self.arrow_manager.arrow_factory
+        
+        self.configure_arrowbox_frame()
+        self.view_scale = GRAPHBOARD_SCALE * 0.75
         self.populate_arrows()
         self.objectbox_layout.addWidget(self)
         self.setFixedSize(int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE))
@@ -93,6 +96,7 @@ class ArrowBoxView(QGraphicsView):
             self.populate_arrows(svg_file)
 
     def populate_arrows(self):
+        
         arrow1 = {
             'color': 'red',
             'motion_type': 'pro',
@@ -102,6 +106,7 @@ class ArrowBoxView(QGraphicsView):
             'end_location': None,
             'turns': 0
         }
+        
         arrow2 = {
             'color': 'blue',
             'motion_type': 'anti',
@@ -112,15 +117,14 @@ class ArrowBoxView(QGraphicsView):
             'turns': 0
         }
         
-        red_iso_arrow = self.arrow_manager.arrow_factory.create_arrow(self, arrow1)
-        blue_anti_arrow = self.arrow_manager.arrow_factory.create_arrow(self, arrow2)
-
+        red_iso_arrow = self.arrow_factory.create_arrow(self, arrow1)
+        blue_anti_arrow = self.arrow_factory.create_arrow(self, arrow2)
+        
         arrows = [red_iso_arrow, blue_anti_arrow]
         
         for arrow in arrows:
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
-            arrow.setScale(GRAPHBOARD_SCALE * 0.75)
             self.arrowbox_scene.addItem(arrow) 
             self.main_widget.arrows.append(arrow)
 

@@ -59,7 +59,7 @@ class PictographStaffManager(StaffManager):
 
                         continue 
                 
-                    new_staff = self.create_staff(location, scene, color, 'pictograph')
+                    new_staff = self.staff_factory.create_staff(location, scene, color, 'pictograph')
                     new_staff.setScale(PICTOGRAPH_SCALE)
                     arrow.staff = new_staff
                     new_staff.arrow = arrow

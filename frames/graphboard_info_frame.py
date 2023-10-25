@@ -97,38 +97,23 @@ class GraphboardInfoFrame(QFrame):
     
    
     def update(self):
-        self.remaining_staff = {}  # Reset the remaining staff info
-
-        # Create placeholders for arrow attributes to ensure alignment
+        self.remaining_staff = {}
         blue_attributes = {}
         red_attributes = {}
-
-        # Now, we can construct the initial text for the labels since we have initialized the attributes.
         blue_text = ""
         red_text = ""
-
-        # Process the arrows and construct detailed information
+        
         for arrow in [item for item in self.graphboard_view.items() if isinstance(item, Arrow)]:
-            
-
-
-            # Update the respective attribute dictionaries
             attributes_dict = blue_attributes if arrow.color == 'blue' else red_attributes if arrow.color == 'red' else None
 
-
-
-    # Use the dictionary to update arrow locations
             if arrow.quadrant in start_end_location_mapping:
                 if arrow.rotation_direction in start_end_location_mapping[arrow.quadrant]:
                     if arrow.motion_type in start_end_location_mapping[arrow.quadrant][arrow.rotation_direction]:
                         arrow.start_location, arrow.end_location = start_end_location_mapping[arrow.quadrant][arrow.rotation_direction][arrow.motion_type]
 
-
-        # Construct information strings ensuring the values (not keys) are bold and aligned
         blue_info_label = self.construct_info_string_label(blue_attributes)
         red_info_label = self.construct_info_string_label(red_attributes)
 
-        # Append arrow information to the section text
         blue_text += blue_info_label.text()
         red_text += red_info_label.text()
 
@@ -137,15 +122,7 @@ class GraphboardInfoFrame(QFrame):
         self.content_layout.addWidget(blue_info_label)
         self.content_layout.addWidget(red_info_label)
 
-        # Now that you have new type, letter, and position information, you can update the relevant label.
-        self.update_type_and_position_info()
 
-        # Inform the graphboard graphboard_view about the current letter
-        self.graphboard_view.update_letter(self.graphboard_view.info_manager.determine_current_letter_and_type()[0])
-
-
-        # Update the staffs on the graphboard based on the new state
-        self.staff_manager.update_graphboard_staffs(self.graphboard_view.scene())
 
     @staticmethod
     def clear_layout(layout):

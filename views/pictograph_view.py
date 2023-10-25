@@ -9,7 +9,7 @@ from managers.staff_management.pictograph_staff_manager import PictographStaffMa
 from managers.arrow_management.arrow_manager import ArrowManager
 from managers.svg_manager import SvgManager
 from managers.json_manager import JsonManager
-from managers.info_manager import InfoManager
+from managers.info_manager import GraphboardInfoManager
 from constants import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, PICTOGRAPH_SCALE, PICTOGRAPH_GRID_PADDING
 
 class PictographView(QGraphicsView):
@@ -28,7 +28,7 @@ class PictographView(QGraphicsView):
         self.grid.setScale(PICTOGRAPH_SCALE)
         self.scene = self.pictograph_scene
         self.svg_manager = SvgManager()
-        self.info_manager = InfoManager(main_widget, self)
+        self.info_manager = GraphboardInfoManager(main_widget, self)
         self.staff_manager = PictographStaffManager(self.main_widget, self.scene)
         self.staff_manager.connect_pictograph_view(self)
         self.arrow_manager = ArrowManager(self.main_widget)

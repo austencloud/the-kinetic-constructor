@@ -119,7 +119,7 @@ class SvgManager():
             "red": "#ED1C24",
             "blue": "#2E3192"
         }
-        hex_color = color_map.get(new_color)
+        new_hex_color = color_map.get(new_color)
 
         # Read the SVG file
         with open(svg_file, 'r') as f:
@@ -132,7 +132,7 @@ class SvgManager():
         if match:
             old_color = match.group(1)
             # Replace the old color with the new color
-            svg_data = svg_data.replace(old_color, hex_color)
+            svg_data = svg_data.replace(old_color, new_hex_color)
 
         # Return the modified SVG data
         return svg_data.encode('utf-8')

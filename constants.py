@@ -39,3 +39,7 @@ RIGHT = 'right'
 UP = 'up'
 DOWN = 'down'
 
+COLOR_MAP = {
+    "red": "#ed1c24",
+    "blue": "#2E3192"
+}

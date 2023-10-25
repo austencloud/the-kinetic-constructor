@@ -1,6 +1,7 @@
 from PyQt6.QtCore import QPointF, pyqtSignal, QObject
 from constants import GRAPHBOARD_WIDTH, GRAPHBOARD_SCALE, PICTOGRAPH_SCALE, BETA_STAFF_REPOSITION_OFFSET, RIGHT, LEFT, UP, DOWN
 from objects.staff import Staff
+from managers.staff_management.staff_factory import StaffFactory
 import math
 
 class StaffManager(QObject):
@@ -11,20 +12,10 @@ class StaffManager(QObject):
         self.letters = main_widget.letters
         self.arrow_manager = main_widget.arrow_manager
         self.graphboard_view = None
+        self.staff_factory = StaffFactory(self)
         
     def connect_info_manager(self, info_manager):
         self.info_manager = info_manager
-
-    def create_staff(self, location, scene, color, context):
-        new_staff = Staff(
-            scene,
-            self.staff_xy_locations[f'{location}'],
-            color,
-            location,
-            context
-        )
-        return new_staff
-
 
     def connect_graphboard_view(self, graphboard_view):
         self.graphboard_view = graphboard_view

@@ -12,7 +12,7 @@ from objects.arrow import Arrow
 from objects.grid import Grid
 from constants import GRAPHBOARD_SCALE, GRAPHBOARD_WIDTH, GRAPHBOARD_HEIGHT, VERTICAL_OFFSET
 from managers.staff_management.graphboard_staff_manager import GraphboardStaffManager
-from managers.info_manager import InfoManager
+from managers.info_manager import GraphboardInfoManager
 from managers.context_menu_manager import GraphboardContextMenuManager
 from managers.export_manager import ExportManager
 
@@ -45,19 +45,19 @@ class GraphboardView(QGraphicsView):
         self.grid.setScale(GRAPHBOARD_SCALE)
         self.scene().setSceneRect(0, 0, int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
         self.VERTICAL_OFFSET = (self.height() - self.width()) / 2
-
+        self.view_scale = GRAPHBOARD_SCALE
         # Add the grid and letter item to the scene
         self.graphboard_scene.addItem(self.grid)
 
     def init_managers(self, main_widget):
-        self.info_manager = InfoManager(main_widget, self)
+        self.info_manager = GraphboardInfoManager(main_widget, self)
         self.staff_manager = GraphboardStaffManager(main_widget, self.graphboard_scene)
         self.export_manager = ExportManager(self.staff_manager, self.grid, self)
         self.context_menu_manager = GraphboardContextMenuManager(self)
         self.arrow_manager = main_widget.arrow_manager
         self.arrow_manager.graphboard_view = self
         self.arrow_factory = self.arrow_manager.arrow_factory
-
+        self.staff_factory = self.staff_manager.staff_factory
     def init_grid(self):
         transform = QTransform()
         graphboard_size = self.frameSize()
@@ -122,30 +122,43 @@ class GraphboardView(QGraphicsView):
         dropped_arrow_turns = parts[1].split('.')[0]
         dropped_arrow_rotation_direction = 'r'
         self.mouse_pos = self.mapToScene(event.position().toPoint()) 
-        quadrant = self.get_graphboard_quadrants(self.mouse_pos)
+        dropped_arrow_quadrant = self.get_graphboard_quadrants(self.mouse_pos)
+        dropped_arrow_start_location, dropped_arrow_end_location = self.arrow_manager.arrow_attributes.get_start_end_locations(dropped_arrow_svg_motion_type, dropped_arrow_rotation_direction, dropped_arrow_quadrant)
         
         dropped_arrow = {
             'color': dropped_arrow_color,
             'motion_type': dropped_arrow_svg_motion_type,
             'rotation_direction': dropped_arrow_rotation_direction,
-            'quadrant': quadrant,
-            'start_location': None,
-            'end_location': None,
+            'quadrant': dropped_arrow_quadrant,
+            'start_location': dropped_arrow_start_location,
+            'end_location': dropped_arrow_end_location,
             'turns': dropped_arrow_turns
         }
         
-        self.arrow = self.arrow_factory.create_arrow(self, dropped_arrow)
-                
-        self.arrow.setScale(GRAPHBOARD_SCALE)
-        self.graphboard_scene.addItem(self.arrow)
+        dropped_staff = {
+            'color': dropped_arrow_color,
+            'location': dropped_arrow_end_location,
+            'layer': 1
+        } 
+        
+        
+        arrow = self.arrow_factory.create_arrow(self, dropped_arrow)
+        staff = self.staff_factory.create_staff(self.graphboard_scene, dropped_staff)
+          
+        arrow.setScale(GRAPHBOARD_SCALE)
+        staff.setScale(GRAPHBOARD_SCALE)
+        
+        self.graphboard_scene.addItem(arrow)
+
+        
         self.clear_selection()
-        self.arrow.setSelected(True)
+        arrow.setSelected(True)
 
         for arrow in self.graphboard_scene.items():
             if isinstance(arrow, Arrow):
                 arrow.arrow_manager.arrow_positioner.update_arrow_position(self)
                 
-        self.info_frame.update()
+        self.info_manager.update()
 
     def contextMenuEvent(self, event):
         clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())

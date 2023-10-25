@@ -22,6 +22,8 @@ class PropBoxView(QGraphicsView):
         self.propbox_layout.addWidget(self)
         self.setFrameStyle(QFrame.Shape.NoFrame)
 
+        self.view_scale = GRAPHBOARD_SCALE * 0.75
+        
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setFrameShape(QFrame.Shape.NoFrame)
