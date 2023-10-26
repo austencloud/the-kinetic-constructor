@@ -8,9 +8,9 @@ class ArrowAttributes:
     
     def __init__(self, arrow, arrow_dict = None):
         if arrow_dict:
-            self.update_attributes_from_dict(arrow, arrow_dict)
+            self.update_attributes(arrow, arrow_dict)
 
-    def update_attributes_from_dict(self, arrow, arrow_dict):
+    def update_attributes(self, arrow, arrow_dict):
         for attr in self.ARROW_ATTRIBUTES:
             value = arrow_dict.get(attr)
             if attr == 'turns':

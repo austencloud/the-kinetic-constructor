@@ -30,7 +30,7 @@ class Arrow(QGraphicsSvgItem):
         self.svg_manager = self.main_widget.svg_manager
         self.arrow_manager = self.main_widget.arrow_manager
         self.attributes = self.arrow_manager.arrow_attributes
-        self.attributes.update_attributes_from_dict(self, dict)
+        self.attributes.update_attributes(self, dict)
         self.arrow_manager.arrow = self
         self.in_graphboard = False
         self.drag_offset = QPointF(0, 0)

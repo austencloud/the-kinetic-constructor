@@ -40,7 +40,7 @@ class MainWidget(QWidget):
         self.connect_objects()
 
     def init_staffs(self):
-        self.graphboard_view.staff_manager.init_graphboard_staffs(self.graph_editor_widget.graphboard_view)
+        self.graphboard_view.staff_manager.init_handpoints(self.graph_editor_widget.graphboard_view)
         self.propbox_view.staff_manager.init_propbox_staffs(self.graph_editor_widget.propbox_view)
 
     def connect_objects(self):

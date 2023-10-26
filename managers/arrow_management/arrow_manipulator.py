@@ -1,19 +1,16 @@
-import re
-import os
-from PyQt6.QtCore import QByteArray
 from PyQt6.QtSvg import QSvgRenderer
-from objects.arrow import Arrow
 from PyQt6.QtGui import QTransform
+from objects.arrow import Arrow
+
 class ArrowManipulator:
     def __init__(self, arrow_manager):
         self.arrow_manager = arrow_manager
 
     def finalize_manipulation(self, selected_arrow, updated_arrow_dict):
-        selected_arrow.attributes.update_attributes_from_dict(selected_arrow, updated_arrow_dict)
+        selected_arrow.attributes.update_attributes(selected_arrow, updated_arrow_dict)
         self.arrow_manager.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard_view)
         selected_arrow.update_appearance()
         self.arrow_manager.info_frame.update()
-        selected_arrow.staff.update()
         selected_arrow.view.info_manager.update()
 
     def move_arrow_quadrant_wasd(self, direction, selected_arrow):
@@ -43,24 +40,25 @@ class ArrowManipulator:
         
 
     def rotate_arrow(self, direction, arrows):
-        for arrow in arrows:
-            quadrants = ['ne', 'se', 'sw', 'nw']
-            current_quadrant_index = quadrants.index(arrow.quadrant)
-            new_quadrant_index = (current_quadrant_index + 1) % 4 if direction == "right" else (current_quadrant_index - 1) % 4
-            new_quadrant = quadrants[new_quadrant_index]
-            new_start_location, new_end_location = arrow.attributes.get_start_end_locations(arrow.motion_type, arrow.rotation_direction, new_quadrant)
-            
-            updated_arrow_dict = {
-                'color': arrow.color,
-                'motion_type': arrow.motion_type,
-                'quadrant': new_quadrant,
-                'rotation_direction': arrow.rotation_direction,
-                'start_location': new_start_location,
-                'end_location': new_end_location,
-                'turns': arrow.turns
-                }
+        if arrows:
+            for arrow in arrows:
+                quadrants = ['ne', 'se', 'sw', 'nw']
+                current_quadrant_index = quadrants.index(arrow.quadrant)
+                new_quadrant_index = (current_quadrant_index + 1) % 4 if direction == "right" else (current_quadrant_index - 1) % 4
+                new_quadrant = quadrants[new_quadrant_index]
+                new_start_location, new_end_location = arrow.attributes.get_start_end_locations(arrow.motion_type, arrow.rotation_direction, new_quadrant)
+                
+                updated_arrow_dict = {
+                    'color': arrow.color,
+                    'motion_type': arrow.motion_type,
+                    'quadrant': new_quadrant,
+                    'rotation_direction': arrow.rotation_direction,
+                    'start_location': new_start_location,
+                    'end_location': new_end_location,
+                    'turns': arrow.turns
+                    }
 
-        self.finalize_manipulation(arrow, updated_arrow_dict)
+            self.finalize_manipulation(arrow, updated_arrow_dict)
 
 
 
@@ -97,23 +95,22 @@ class ArrowManipulator:
             elif arrow.rotation_direction == "r":
                 new_rotation_direction = "l"
 
-            new_end_location = arrow.start_location
-            new_start_location = arrow.end_location
+
             
             new_arrow_dict = {
                 'color': arrow.color,
                 'motion_type': new_motion_type,
                 'quadrant': arrow.quadrant,
                 'rotation_direction': new_rotation_direction,
-                'start_location': new_end_location,
-                'end_location': new_start_location,
+                'start_location': arrow.start_location,
+                'end_location': arrow.end_location,
                 'turns': arrow.turns
             }
 
             arrow.svg_file = f"images/arrows/shift/{new_motion_type}_{arrow.turns}.svg"
             arrow.initialize_svg_renderer(arrow.svg_file)
             
-            arrow.attributes.update_attributes_from_dict(arrow, new_arrow_dict)
+            arrow.attributes.update_attributes(arrow, new_arrow_dict)
             
             arrow.update_appearance()
             

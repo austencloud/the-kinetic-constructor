@@ -48,7 +48,7 @@ class Staff(QGraphicsSvgItem):
         
         self.setScale(self.view.view_scale)
         self.set_color(self.color)
-        scene.addItem(self)
+
 
 
     def get_staff_center(self, scale):

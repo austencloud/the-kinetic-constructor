@@ -120,7 +120,12 @@ class GraphboardView(QGraphicsView):
         parts = os.path.basename(dropped_arrow_svg_path).split('_')
         dropped_arrow_svg_motion_type = parts[0]
         dropped_arrow_turns = parts[1].split('.')[0]
-        dropped_arrow_rotation_direction = 'r'
+        
+        if dropped_arrow_svg_motion_type == 'pro':
+            dropped_arrow_rotation_direction = 'r'
+        elif dropped_arrow_svg_motion_type == 'anti':
+            dropped_arrow_rotation_direction = 'l'
+            
         self.mouse_pos = self.mapToScene(event.position().toPoint()) 
         dropped_arrow_quadrant = self.get_graphboard_quadrants(self.mouse_pos)
         dropped_arrow_start_location, dropped_arrow_end_location = self.arrow_manager.arrow_attributes.get_start_end_locations(dropped_arrow_svg_motion_type, dropped_arrow_rotation_direction, dropped_arrow_quadrant)
@@ -142,22 +147,45 @@ class GraphboardView(QGraphicsView):
         } 
         
         
-        arrow = self.arrow_factory.create_arrow(self, dropped_arrow)
-        staff = self.staff_factory.create_staff(self.graphboard_scene, dropped_staff)
+        # Check for existing arrows and staffs of the same color
+        existing_arrows = [item for item in self.graphboard_scene.items() if isinstance(item, Arrow) and item.color == dropped_arrow_color]
+        existing_staffs = [item for item in self.graphboard_scene.items() if isinstance(item, Staff) and item.color == dropped_arrow_color]
+
+        # Case 1: No existing staff or arrow of the same color
+        if not existing_arrows and not existing_staffs:
+            arrow = self.arrow_factory.create_arrow(self, dropped_arrow)
+            staff = self.staff_factory.create_staff(self.graphboard_scene, dropped_staff)
+            self.graphboard_scene.addItem(arrow)
+            self.graphboard_scene.addItem(staff)
+
+        # Case 2: Existing staff of the same color but is static
+        elif existing_staffs and existing_staffs[0].type == 'static':
+            existing_staff = existing_staffs[0]
+            dropped_staff_attributes = self.staff_manager.staff_attributes.get_attributes(dropped_staff)
+            existing_staff.attributes.update_attributes(existing_staff, dropped_staff_attributes)  # Update the staff's attributes
+            existing_staff.setPos(self.staff_xy_locations[dropped_arrow_end_location])  # Update staff position
+            arrow = self.arrow_factory.create_arrow(self, dropped_arrow)
+            self.graphboard_scene.addItem(arrow)
+
+        # Case 3: Both existing staff and arrow of the same color
+        elif existing_arrows and existing_staffs:
+            event.ignore()
+            QToolTip.showText(QCursor.pos(), "Cannot add two motions of the same color.")
+            return
           
         arrow.setScale(GRAPHBOARD_SCALE)
-        staff.setScale(GRAPHBOARD_SCALE)
-        
-        self.graphboard_scene.addItem(arrow)
-
-        
+        staff.setScale(GRAPHBOARD_SCALE)     
         self.clear_selection()
         arrow.setSelected(True)
 
         for arrow in self.graphboard_scene.items():
             if isinstance(arrow, Arrow):
                 arrow.arrow_manager.arrow_positioner.update_arrow_position(self)
-                
+        
+        for staff in self.graphboard_scene.items():
+            if isinstance(staff, Staff):
+                staff.setPos(self.staff_manager.staff_xy_locations[staff.location])
+        
         self.info_manager.update()
 
     def contextMenuEvent(self, event):

@@ -5,10 +5,6 @@ class ArrowSelector:
     def __init__(self, arrow_manager):
         self.arrow_manager = arrow_manager
 
-    def select_all_arrows(self):
-        for item in self.arrow_manager.graphboard_view.items():
-            if isinstance(item, Arrow):
-                item.setSelected(True)
 
     def delete_staff(self, staffs):
         if staffs:
@@ -36,6 +32,7 @@ class ArrowSelector:
         for arrow in deleted_arrows:
             if isinstance(arrow, Arrow):
                 deleted_arrow_attributes = arrow.attributes.get_attributes(arrow)
+                
                 ghost_attributes_dict = {
                                 'color': deleted_arrow_attributes['color'],
                                 'motion_type': 'static',

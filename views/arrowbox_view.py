@@ -102,18 +102,18 @@ class ArrowBoxView(QGraphicsView):
             'motion_type': 'pro',
             'rotation_direction': 'r',
             'quadrant': 'ne',
-            'start_location': None,
-            'end_location': None,
+            'start_location': 'n',
+            'end_location': 'e',
             'turns': 0
         }
         
         arrow2 = {
             'color': 'blue',
             'motion_type': 'anti',
-            'rotation_direction': 'r',
+            'rotation_direction': 'l',
             'quadrant': 'ne',
-            'start_location': None,
-            'end_location': None,
+            'start_location': 'n',
+            'end_location': 'e',
             'turns': 0
         }
         

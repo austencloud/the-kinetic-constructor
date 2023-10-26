@@ -2,7 +2,7 @@ from PyQt6.QtCore import QPointF
 from constants import PICTOGRAPH_GRID_PADDING, PICTOGRAPH_SCALE
 from objects.arrow import Arrow
 from managers.staff_management.staff_manager import StaffManager
-
+from objects.staff import Staff
 class PictographStaffManager(StaffManager):
     def __init__(self, main_widget, scene):
         super().__init__(main_widget)
@@ -13,7 +13,6 @@ class PictographStaffManager(StaffManager):
         self.pictograph_view = None
         self.arrow_manager = None
 
-        
     def connect_pictograph_view(self, pictograph_view):
         self.pictograph_view = pictograph_view
         self.scene = pictograph_view.pictograph_scene
@@ -44,7 +43,12 @@ class PictographStaffManager(StaffManager):
         self.staffs_on_board = {}
 
     def update_pictograph_staffs(self, scene):
-        self.hide_all_staffs()
+        
+        for item in self.scene.items():
+            if isinstance(item, Staff):
+                item.hide()
+
+        self.staffs_on_board.clear() 
         
         for arrow in scene.items():
             if isinstance(arrow, Arrow):

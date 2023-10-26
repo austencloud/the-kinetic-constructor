@@ -11,31 +11,37 @@ class GraphboardContextMenuManager():
         self.export_manager = self.graphboard_view.export_manager
 
 
+    def create_menu_with_actions(self, parent, actions, event):
+        menu = QMenu(parent)
+        for label, func in actions:
+            action = QAction(label, parent)
+            action.triggered.connect(func)
+            menu.addAction(action)
+        menu.exec(event.globalPos())
+
     def create_arrow_menu(self, selected_items, event):
-        arrow_menu = QMenu(self.parent)
-        self.add_action(arrow_menu, 'Delete', lambda: self.arrow_selector.delete_arrow(selected_items))
-        self.add_action(arrow_menu, 'Rotate Right', lambda: self.arrow_manipulator.rotate_arrow("right", selected_items))
-        self.add_action(arrow_menu, 'Rotate Left', lambda: self.arrow_manipulator.rotate_arrow("left", selected_items))
-        self.add_action(arrow_menu, 'Mirror', lambda: self.arrow_manipulator.mirror_arrow(selected_items))
-        arrow_menu.exec_(event.globalPos())
+        actions = [
+            ('Delete', lambda: self.arrow_selector.delete_arrow(selected_items)),
+            ('Rotate Right', lambda: self.arrow_manipulator.rotate_arrow("right", selected_items)),
+            ('Rotate Left', lambda: self.arrow_manipulator.rotate_arrow("left", selected_items)),
+            ('Mirror', lambda: self.arrow_manipulator.mirror_arrow(selected_items))
+        ]
+        self.create_menu_with_actions(self.graphboard_view, actions, event)
 
     def create_staff_menu(self, selected_items, event):
-        staff_menu = QMenu(self.parent)
-        self.add_action(staff_menu, 'Delete', lambda: self.arrow_selector.delete_staff(selected_items))
-        self.add_action(staff_menu, 'Rotate Right', lambda: self.arrow_manipulator.rotate_arrow("right", selected_items))
-        self.add_action(staff_menu, 'Rotate Left', lambda: self.arrow_manipulator.rotate_arrow("left", selected_items))
-        staff_menu.exec_(event.globalPos())
+        actions = [
+            ('Delete', lambda: self.arrow_selector.delete_staff(selected_items)),
+            ('Rotate Right', lambda: self.arrow_manipulator.rotate_arrow("right", selected_items)),
+            ('Rotate Left', lambda: self.arrow_manipulator.rotate_arrow("left", selected_items))
+        ]
+        self.create_menu_with_actions(self.graphboard_view, actions, event)
 
     def create_graphboard_menu(self, event):
-        graphboard_menu = QMenu(self.graphboard_view)
-        self.add_action(graphboard_menu, 'Swap Colors', lambda: self.arrow_manipulator.swap_colors(self.graphboard_view.get_selected_items()))
-        self.add_action(graphboard_menu, 'Select All', self.arrow_manager.select_all_arrows)
-        self.add_action(graphboard_menu, 'Add to Sequence', lambda _: self.sequence_view.add_to_sequence(self.graphboard_view))
-        self.add_action(graphboard_menu, 'Export to PNG', self.export_manager.export_to_png)
-        self.add_action(graphboard_menu, 'Export to SVG', self.export_manager.export_to_svg)
-        graphboard_menu.exec(event.globalPos())
-
-    def add_action(self, menu, label, func):
-        action = QAction(label, self.graphboard_view)
-        action.triggered.connect(func)
-        menu.addAction(action)
+        actions = [
+            ('Swap Colors', lambda: self.arrow_manipulator.swap_colors(self.graphboard_view.get_selected_items())),
+            ('Select All', self.graphboard_view.select_all_arrows),
+            ('Add to Sequence', lambda _: self.sequence_view.add_to_sequence(self.graphboard_view)),
+            ('Export to PNG', self.export_manager.export_to_png),
+            ('Export to SVG', self.export_manager.export_to_svg)
+        ]
+        self.create_menu_with_actions(self.graphboard_view, actions, event)

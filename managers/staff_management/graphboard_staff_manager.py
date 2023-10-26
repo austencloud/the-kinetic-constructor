@@ -15,7 +15,7 @@ class GraphboardStaffManager(StaffManager):
         self.staff_xy_locations = {}
         self.graphboard_view = None
     
-    def init_graphboard_staffs(self, graphboard_view):
+    def init_handpoints(self, graphboard_view):
         # Calculate scaling and padding factors for the grid
         scale = GRAPHBOARD_SCALE
         padding = GRAPHBOARD_GRID_PADDING
@@ -30,10 +30,10 @@ class GraphboardStaffManager(StaffManager):
 
         # Initialize the staff locations based on the grid handpoints
         self.staff_xy_locations = {
-            'N': grid_handpoints['N_hand_point'],
-            'E': grid_handpoints['E_hand_point'],
-            'S': grid_handpoints['S_hand_point'],
-            'W': grid_handpoints['W_hand_point']
+            'n': grid_handpoints['N_hand_point'],
+            'e': grid_handpoints['E_hand_point'],
+            's': grid_handpoints['S_hand_point'],
+            'w': grid_handpoints['W_hand_point']
         }
 
         # Create and hide the staffs for each direction and color
@@ -66,9 +66,7 @@ class GraphboardStaffManager(StaffManager):
                         'layer': 1
                     }
                     
-                    new_staff = self.staff_factory.create_staff(scene, new_staff)
-                    arrow.staff = new_staff
-                    new_staff.arrow = arrow
+
                     staff_key = location + "_staff_" + color
                     self.staffs_on_board[staff_key] = new_staff
                     staff = new_staff
@@ -81,4 +79,4 @@ class GraphboardStaffManager(StaffManager):
             staff = self.staffs_on_board.pop(key)
     
 
-        self.check_replace_beta_staffs(scene)
+        self.staff_positioner.check_replace_beta_staffs(scene)
