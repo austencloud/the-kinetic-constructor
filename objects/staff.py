@@ -56,12 +56,11 @@ class Staff(QGraphicsSvgItem):
         elif self.axis == 'horizontal':
             return QPointF(-(STAFF_LENGTH/2) * scale, -(STAFF_WIDTH / 2) * scale)
 
-    def update_appearance(self, staff_dict):
-        location = staff_dict['location']
-        
+    def update_appearance(self):
+
         self.set_color(self.color)
         self.set_rotation()
-        self.set_location(location)
+        self.set_location(self.location)
 
 
 
@@ -79,9 +78,16 @@ class Staff(QGraphicsSvgItem):
     def set_color(self, new_color):
         hex_color = COLOR_MAP.get(new_color, new_color)
         with open(self.svg_file, 'r') as f:
-            svg_data = f.read().replace("#ed1c24", hex_color).replace("#2E3192", hex_color)
+            svg_data = f.read().replace("#ED1C24", hex_color).replace("#2E3192", hex_color)
         self.renderer.load(svg_data.encode('utf-8'))
+        
+        if not self.renderer.isValid():
+            print("Renderer is not valid. SVG data might be incorrect.")
+        
+        self.setSharedRenderer(self.renderer)  # Re-attach the renderer
         self.color = hex_color
+        self.scene.update()  # Force a redraw
+
 
     def rotate_staff(self):
         if self.axis == 'vertical':

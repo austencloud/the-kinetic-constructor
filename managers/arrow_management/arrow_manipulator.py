@@ -128,6 +128,7 @@ class ArrowManipulator:
         arrows = [item for item in self.graphboard_scene.items() if isinstance(item, Arrow)]
         if len(arrows) >= 1:
             for arrow in arrows:
+                print(f"Before swap: Arrow color: {arrow.color}, Staff color: {arrow.staff.color}")
                 if arrow.color == "red":
                     new_color = "blue"
                 elif arrow.color == "blue":
@@ -136,15 +137,8 @@ class ArrowManipulator:
                     print("swap_colors - Unexpected color:", arrow.color)
                     continue
 
-                if arrow.motion_type in ["pro", "anti"]:
-                    new_svg = arrow.svg_file.replace(arrow.color, new_color)
-                    new_renderer = QSvgRenderer(new_svg)
-
-                    if new_renderer.isValid():
-                        arrow.setSharedRenderer(new_renderer)
-                        arrow.svg_file = new_svg
-                        arrow.color = new_color
-                    else:
-                        print("Failed to load SVG file:", new_svg)
-                elif arrow.motion_type == "static":
-                    arrow.color = new_color
+                arrow.color = new_color
+                arrow.staff.color = new_color
+                arrow.update_appearance()
+                arrow.staff.update_appearance()
+                print(f"After swap: Arrow color: {arrow.color}, Staff color: {arrow.staff.color}")

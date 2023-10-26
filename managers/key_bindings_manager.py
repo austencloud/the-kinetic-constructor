@@ -30,7 +30,7 @@ class KeyBindingsManager:
                         arrow_selector.delete_arrow(item)
                         arrow_selector.delete_staff(item.staff)
                     elif isinstance(item, Staff):
-                        arrow_manager.delete_staff(item)
+                        item.view.staff_manager.delete_staff(item)
 
             elif selected_item and isinstance(selected_item, Arrow):
                 if event.key() == Qt.Key.Key_W:
