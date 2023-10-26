@@ -176,6 +176,9 @@ class GraphboardView(QGraphicsView):
         self.clear_selection()
         arrow.setSelected(True)
 
+        arrow.staff = staff
+        staff.arrow = arrow
+
         for arrow in self.graphboard_scene.items():
             if isinstance(arrow, Arrow):
                 arrow.arrow_manager.arrow_positioner.update_arrow_position(self)

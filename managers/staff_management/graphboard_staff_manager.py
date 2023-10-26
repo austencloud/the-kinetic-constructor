@@ -2,7 +2,7 @@ from managers.staff_management.staff_manager import StaffManager
 from PyQt6.QtCore import QPointF
 from objects.staff import Staff
 from objects.arrow import Arrow
-from constants import GRAPHBOARD_GRID_PADDING, GRAPHBOARD_SCALE
+from constants import GRAPHBOARD_GRID_PADDING, GRAPHBOARD_SCALE, STAFF_LENGTH, STAFF_WIDTH
 
 class GraphboardStaffManager(StaffManager):
     def __init__(self, main_widget, scene):
@@ -15,6 +15,8 @@ class GraphboardStaffManager(StaffManager):
     def init_handpoints(self, graphboard_view):
         scale = GRAPHBOARD_SCALE
         padding = GRAPHBOARD_GRID_PADDING
+        GRAPHBOARD_STAFF_WIDTH = STAFF_WIDTH * GRAPHBOARD_SCALE
+        GRAPHBOARD_STAFF_LENGTH = STAFF_LENGTH * GRAPHBOARD_SCALE
         
         grid_handpoints = {}
         for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
@@ -24,10 +26,10 @@ class GraphboardStaffManager(StaffManager):
             grid_handpoints[point_name] = QPointF(scaled_x, scaled_y)
 
         self.staff_xy_locations = {
-            'n': grid_handpoints['N_hand_point'],
-            'e': grid_handpoints['E_hand_point'],
-            's': grid_handpoints['S_hand_point'],
-            'w': grid_handpoints['W_hand_point']
+            'n': grid_handpoints['N_hand_point'] + QPointF(GRAPHBOARD_STAFF_WIDTH/2, -GRAPHBOARD_STAFF_LENGTH/2),
+            'e': grid_handpoints['E_hand_point'] + QPointF(-GRAPHBOARD_STAFF_LENGTH/2, - GRAPHBOARD_STAFF_WIDTH/2),
+            's': grid_handpoints['S_hand_point'] + QPointF(GRAPHBOARD_STAFF_WIDTH/2, -GRAPHBOARD_STAFF_LENGTH/2),
+            'w': grid_handpoints['W_hand_point'] + QPointF(-GRAPHBOARD_STAFF_LENGTH/2, - GRAPHBOARD_STAFF_WIDTH/2)
         }
 
         self.staffs_on_board = {}
