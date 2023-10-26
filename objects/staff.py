@@ -2,7 +2,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt, QPointF
-from constants import GRAPHBOARD_SCALE, PICTOGRAPH_SCALE, STAFF_WIDTH, STAFF_LENGTH, COLOR_MAP
+from constants import STAFF_WIDTH, STAFF_LENGTH, COLOR_MAP, HORIZONTAL, VERTICAL, NORTH, SOUTH, EAST, WEST
 from managers.staff_management.staff_attributes import StaffAttributes
 ''' 
 staff_dict = {
@@ -12,6 +12,8 @@ staff_dict = {
         }
         
 '''
+
+
 class Staff(QGraphicsSvgItem):
     def __init__(self, scene, staff_dict):
         super().__init__()
@@ -23,37 +25,37 @@ class Staff(QGraphicsSvgItem):
         self.initialize_app_attributes()
 
     def initialize_dict_attributes(self, staff_dict):
+        """Initialize attributes from the given dictionary."""
         self.attributes = StaffAttributes(self, staff_dict)
         self.color = staff_dict.get('color')
         self.location = staff_dict.get('location')
         self.layer = staff_dict.get('layer')
-        
         self.set_axis(staff_dict)
         self.set_rotation()
 
     def set_axis(self, staff_dict):
+        """Set the axis based on the staff dictionary."""
         axis_switch = {
-            1: {'horizontal': ['w', 'e'], 'vertical': ['n', 's']},
-            2: {'horizontal': ['n', 's'], 'vertical': ['w', 'e']}
+            1: {HORIZONTAL: [WEST, EAST], VERTICAL: [NORTH, SOUTH]},
+            2: {HORIZONTAL: [NORTH, SOUTH], VERTICAL: [WEST, EAST]}
         }
-
         self.axis = next(
             axis for axis, locations in axis_switch.get(self.layer, {}).items()
             if staff_dict.get('location') in locations
         )
 
     def initialize_app_attributes(self):
+        """Initialize application-specific attributes."""
         self.renderer = QSvgRenderer(self.svg_file)
         self.setSharedRenderer(self.renderer)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
-        
         self.setScale(self.view.view_scale)
         self.set_color(self.color)
 
     def get_staff_center(self, scale):
-        if self.axis == 'vertical':
+        if self.axis == VERTICAL:
             return QPointF((STAFF_WIDTH/2) * scale, -(STAFF_LENGTH / 2) * scale)
-        elif self.axis == 'horizontal':
+        elif self.axis == HORIZONTAL:
             return QPointF(-(STAFF_LENGTH/2) * scale, -(STAFF_WIDTH / 2) * scale)
 
     def update_appearance(self):
@@ -67,12 +69,12 @@ class Staff(QGraphicsSvgItem):
 
     def set_location(self, location):
         if self.layer == 1:
-            if location == 'n' or location == 's':
-                self.axis = 'vertical'      
+            if location == NORTH or location == SOUTH:
+                self.axis = VERTICAL      
                 self.setPos(self.staff_manager.staff_xy_locations[location])
                 self.setRotation(90)
-            elif location == 'e' or location == 'w':
-                self.axis == 'horizontal'
+            elif location == EAST or location == WEST:
+                self.axis == HORIZONTAL
                 self.setRotation(0)
 
     def set_color(self, new_color):
@@ -90,14 +92,14 @@ class Staff(QGraphicsSvgItem):
 
 
     def rotate_staff(self):
-        if self.axis == 'vertical':
-            self.axis = 'horizontal'
+        if self.axis == VERTICAL:
+            self.axis = HORIZONTAL
         else:
-            self.axis = 'vertical'
+            self.axis = VERTICAL
         self.set_rotation()
         
     def set_rotation(self):
-        if self.axis == 'vertical':
+        if self.axis == VERTICAL:
             self.current_position = self.pos()
             self.setRotation(90)
         else:

@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout
-from views.graphboard_view import GraphboardView
+from views.graphboard.graphboard_view import GraphboardView
 from views.arrowbox_view import ArrowBoxView
 from tools.pictograph_generator import PictographGenerator
 from views.propbox_view import PropBoxView

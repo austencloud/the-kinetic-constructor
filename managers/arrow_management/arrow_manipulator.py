@@ -12,6 +12,7 @@ class ArrowManipulator:
         selected_arrow.update_appearance()
         self.arrow_manager.info_frame.update()
         selected_arrow.view.info_manager.update()
+        selected_arrow.staff.setPos(selected_arrow.view.staff_manager.staff_xy_locations[selected_arrow.staff.location])
 
     def move_arrow_quadrant_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {
@@ -43,7 +44,7 @@ class ArrowManipulator:
         }
 
         self.finalize_manipulation(selected_arrow, updated_arrow_dict, updated_staff_dict)
-        selected_arrow.staff.setPos(selected_arrow.view.staff_manager.staff_xy_locations[selected_arrow.staff.location])
+
 
     def rotate_arrow(self, direction, arrows):
         if arrows:
@@ -64,9 +65,13 @@ class ArrowManipulator:
                     'turns': arrow.turns
                     }
 
-            self.finalize_manipulation(arrow, updated_arrow_dict)
+                updated_staff_dict = {
+                    'color': arrow.color,
+                    'location': new_end_location,
+                    'layer': 1
+                }
 
-
+            self.finalize_manipulation(arrow, updated_arrow_dict, updated_staff_dict)
 
     def mirror_arrow(self, arrows):
         for arrow in arrows:

@@ -32,15 +32,31 @@ PICTOGRAPH_GRID_PADDING = ((PICTOGRAPH_WIDTH - PICTOGRAPH_GRID_WIDTH) / 2)
 
 BETA_OFFSET = 20
 
-RED = '#ed1c24'
-BLUE = '#2e3192'
+RED = '#ED1C24'
+BLUE = '#2E3192'
 LEFT = 'left'
 RIGHT = 'right'
 UP = 'up'
 DOWN = 'down'
 
+STATIC = 'static'
+PRO = 'pro'
+ANTI = 'anti'
+
+HORIZONTAL = 'horizontal'
+VERTICAL = 'vertical'
+NORTH = 'n'
+SOUTH = 's'
+EAST = 'e'
+WEST = 'w'
+
+NORTHWEST = 'nw'
+NORTHEAST = 'ne'
+SOUTHWEST = 'sw'
+SOUTHEAST = 'se'
+
 
 COLOR_MAP = {
-    "red": "#ed1c24",
+    "red": "#ED1C24",
     "blue": "#2E3192"
 }
