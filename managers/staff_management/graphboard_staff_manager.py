@@ -35,41 +35,15 @@ class GraphboardStaffManager(StaffManager):
         self.staffs_on_board = {}
         
     def update_graphboard_staffs(self, scene):
-
-        updated_staffs = {}
-        
         for arrow in scene.items():
             if isinstance(arrow, Arrow):
                 location = arrow.end_location
-
-                if location:
-
-                    if arrow.color in ["#ed1c24", 'red']:
-                        color = 'red'
-                    elif arrow.color in ["#2e3192", 'blue']:
-                        color = 'blue'
-                    else:
-                        continue
-
-
-                    new_staff_dict = {
-                        'color': color,
-                        'location': location,
-                        'layer': 1
-                    }
-                    
-                    new_staff = self.staff_factory.create_staff(scene, new_staff_dict)
-
-                    staff_key = location + "_staff_" + color
-                    self.staffs_on_board[staff_key] = new_staff
-                    staff = new_staff
-
-                    updated_staffs[staff_key] = staff
-
-        staff_keys_to_remove = set(self.staffs_on_board.keys()) - set(updated_staffs.keys())
-        
-        for key in staff_keys_to_remove:
-            staff = self.staffs_on_board.pop(key)
-    
-
+                
+                new_staff_dict = {
+                    'color': arrow.color,
+                    'location': location,
+                    'layer': 1
+                }
+                arrow.staff.attributes.update_attributes(arrow.staff, new_staff_dict)
+                arrow.staff.update_appearance(new_staff_dict)
         self.staff_positioner.check_replace_beta_staffs(scene)

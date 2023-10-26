@@ -6,7 +6,7 @@ class ArrowManipulator:
     def __init__(self, arrow_manager):
         self.arrow_manager = arrow_manager
 
-    def finalize_manipulation(self, selected_arrow, updated_arrow_dict):
+    def finalize_manipulation(self, selected_arrow, updated_arrow_dict, updated_staff_dict):
         selected_arrow.attributes.update_attributes(selected_arrow, updated_arrow_dict)
         self.arrow_manager.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard_view)
         selected_arrow.update_appearance()
@@ -36,8 +36,14 @@ class ArrowManipulator:
             'turns': selected_arrow.turns
         }
         
-        self.finalize_manipulation(selected_arrow, updated_arrow_dict)
-        
+        updated_staff_dict = {
+            'color': selected_arrow.color,
+            'location': new_end_location,
+            'layer': 1
+        }
+
+        self.finalize_manipulation(selected_arrow, updated_arrow_dict, updated_staff_dict)
+        selected_arrow.staff.setPos(selected_arrow.view.staff_manager.staff_xy_locations[selected_arrow.staff.location])
 
     def rotate_arrow(self, direction, arrows):
         if arrows:
