@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout
 from views.graphboard.graphboard_view import GraphboardView
 from views.arrowbox_view import ArrowBoxView
 from tools.pictograph_generator import PictographGenerator
-from views.propbox_view import PropBoxView
+from views.propbox.propbox_view import PropBoxView
 from frames.graphboard_info_frame import GraphboardInfoFrame
 from managers.export_manager import ExportManager
 from PyQt6.QtWidgets import QVBoxLayout

@@ -107,6 +107,7 @@ class Staff(QGraphicsSvgItem):
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.MouseButton.LeftButton:
-            x_offset, y_offset = self.get_staff_center(self.view.view_scale)
+            offset = self.get_staff_center(self.view.view_scale)
+            x_offset, y_offset = offset.x(), offset.y()
             self.setPos(event.scenePos().x() + x_offset, event.scenePos().y() + y_offset)
         super().mouseMoveEvent(event)
