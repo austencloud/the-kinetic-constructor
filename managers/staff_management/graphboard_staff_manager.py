@@ -1,6 +1,3 @@
-
-
-    ### GRAPHBOARD ###
 from managers.staff_management.staff_manager import StaffManager
 from PyQt6.QtCore import QPointF
 from objects.staff import Staff
@@ -16,11 +13,9 @@ class GraphboardStaffManager(StaffManager):
         self.graphboard_view = None
     
     def init_handpoints(self, graphboard_view):
-        # Calculate scaling and padding factors for the grid
         scale = GRAPHBOARD_SCALE
         padding = GRAPHBOARD_GRID_PADDING
         
-        # Calculate the handpoints on the graphboard based on the grid
         grid_handpoints = {}
         for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
             x, y = graphboard_view.grid.get_circle_coordinates(point_name)
@@ -28,7 +23,6 @@ class GraphboardStaffManager(StaffManager):
             scaled_y = y * scale + padding
             grid_handpoints[point_name] = QPointF(scaled_x, scaled_y)
 
-        # Initialize the staff locations based on the grid handpoints
         self.staff_xy_locations = {
             'n': grid_handpoints['N_hand_point'],
             'e': grid_handpoints['E_hand_point'],
@@ -36,13 +30,9 @@ class GraphboardStaffManager(StaffManager):
             'w': grid_handpoints['W_hand_point']
         }
 
-        # Create and hide the staffs for each direction and color
         self.staffs_on_board = {}
         
     def update_graphboard_staffs(self, scene):
-        for staff in scene.items():
-            if isinstance(staff, Staff):
-                scene.removeItem(staff)
 
         updated_staffs = {}
         
@@ -60,12 +50,13 @@ class GraphboardStaffManager(StaffManager):
                         continue
 
 
-                    new_staff = {
+                    new_staff_dict = {
                         'color': color,
                         'location': location,
                         'layer': 1
                     }
                     
+                    new_staff = self.staff_factory.create_staff(scene, new_staff_dict)
 
                     staff_key = location + "_staff_" + color
                     self.staffs_on_board[staff_key] = new_staff

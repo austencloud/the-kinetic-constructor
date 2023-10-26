@@ -1,12 +1,10 @@
-# Import Optimization
+
 import os
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtGui import QCursor, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtWidgets import QGraphicsView, QGraphicsItem, QGraphicsRectItem, QGraphicsScene, QSizePolicy, QToolTip, QFrame
-
-# Local Imports
 from objects.staff import Staff
 from objects.arrow import Arrow
 from objects.grid import Grid
@@ -58,6 +56,7 @@ class GraphboardView(QGraphicsView):
         self.arrow_manager.graphboard_view = self
         self.arrow_factory = self.arrow_manager.arrow_factory
         self.staff_factory = self.staff_manager.staff_factory
+        
     def init_grid(self):
         transform = QTransform()
         graphboard_size = self.frameSize()
@@ -145,7 +144,6 @@ class GraphboardView(QGraphicsView):
             'location': dropped_arrow_end_location,
             'layer': 1
         } 
-        
         
         # Check for existing arrows and staffs of the same color
         existing_arrows = [item for item in self.graphboard_scene.items() if isinstance(item, Arrow) and item.color == dropped_arrow_color]

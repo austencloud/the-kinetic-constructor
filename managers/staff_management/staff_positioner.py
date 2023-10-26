@@ -1,21 +1,148 @@
 
 from PyQt5.QtCore import QPointF
 import math
-from constants import GRAPHBOARD_WIDTH, GRAPHBOARD_SCALE, PICTOGRAPH_SCALE, BETA_STAFF_REPOSITION_OFFSET, LEFT, RIGHT, UP, DOWN
+from constants import GRAPHBOARD_WIDTH, GRAPHBOARD_SCALE, PICTOGRAPH_SCALE, LEFT, RIGHT, UP, DOWN, BETA_OFFSET
 
 class StaffPositioner:
     def __init__(self, staff_manager):
         self.staff_manager = staff_manager
-  
 
-### BETA REPOSITION LOGIC ###
+    ### REPOSITIONERS ###
         
+    def reposition_staffs(self, scene, board_state):
+        view = scene.views()[0]
+        scale = GRAPHBOARD_SCALE if view else PICTOGRAPH_SCALE
+        processed_staffs = set()
+        translations = {}
+
+        def move_staff(staff, direction):
+            new_position = self.calculate_new_position(staff.pos(), direction, scale)
+            staff.setPos(new_position)
+
+        arrows_grouped_by_start = {}
+        for arrow in board_state['arrows']:
+            arrows_grouped_by_start.setdefault(arrow['start_location'], []).append(arrow)
+
+        pro_or_anti_arrows = [arrow for arrow in board_state['arrows'] if arrow['motion_type'] in ['pro', 'anti']]
+        static_arrows = [arrow for arrow in board_state['arrows'] if arrow['motion_type'] == 'static']
+
+        # STATIC BETA
+        if len(static_arrows) > 1:
+            self.reposition_static_beta(static_arrows, scale)
+
+        # BETA → BETA - G, H, I
+        for start_location, arrows in arrows_grouped_by_start.items():
+            if len(arrows) > 1 and not all(arrow['start_location'] == arrow['end_location'] for arrow in arrows):
+                self.reposition_beta_to_beta(scene, arrows, scale)
+                
+
+        # GAMMA → BETA - Y, Z
+        if len(pro_or_anti_arrows) == 1 and len(static_arrows) == 1:
+            self.reposition_gammma_to_beta(move_staff, pro_or_anti_arrows, static_arrows)
+
+        # ALPHA → BETA - D, E, F
+        converging_arrows = [arrow for arrow in board_state['arrows'] if arrow['motion_type'] not in ['static']]
+        if len(converging_arrows) == 2:
+            self.reposition_alpha_to_beta(move_staff, converging_arrows)
+
+        # Apply translations
+        for arrow_state in board_state['arrows']:
+            current_staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow_state['color']), None)
+            if current_staff and current_staff not in processed_staffs:
+                direction = translations.get(arrow_state['color'])
+                if direction:
+                    move_staff(current_staff, direction)
+                    processed_staffs.add(current_staff)
+
+        scene.update()
+
+    def reposition_beta_to_beta(self, scene, arrows, scale):
+        view = scene.views()[0]
+        if len(arrows) != 2:
+            return 
+
+        arrow1, arrow2 = arrows
+        same_motion = arrow1['motion_type'] == arrow2['motion_type'] in ['pro', 'anti']
+
+        if same_motion:
+            self.reposition_G_and_H(scale, view, arrow1, arrow2)
+            
+        else: 
+            self.reposition_I(scale, arrow1, arrow2)
+
+        scene.update()
+        
+    def reposition_I(self, scale, arrow1, arrow2):
+        pro_arrow = arrow1 if arrow1['motion_type'] == 'pro' else arrow2
+        anti_arrow = arrow2 if arrow1['motion_type'] == 'pro' else arrow1
+
+        self.set_staff_position_based_on_arrow(pro_arrow, scale)
+        self.set_staff_position_based_on_arrow(anti_arrow, scale)
+
+    def reposition_G_and_H(self, scale, view, arrow1, arrow2):
+        optimal_position1 = self.get_optimal_arrow_location(arrow1, view)
+        optimal_position2 = self.get_optimal_arrow_location(arrow2, view)
+
+        distance1 = self.get_distance_from_center(optimal_position1)
+        distance2 = self.get_distance_from_center(optimal_position2)
+
+        further_arrow = arrow1 if distance1 > distance2 else arrow2
+
+        self.set_staff_position_based_on_arrow(further_arrow, scale)
+        self.set_staff_position_based_on_arrow(arrow1 if further_arrow == arrow2 else arrow2, scale)
+
+    def reposition_static_beta(self, static_arrows, scale):
+        for arrow in static_arrows:
+            staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow['color']), None)
+            if not staff:
+                continue
+
+            end_location = arrow.get('end_location', '')
+
+            beta_reposition_map = {
+                ('N', 'red'): 'right',
+                ('N', 'blue'): 'left',
+                ('S', 'red'): 'right',
+                ('S', 'blue'): 'left',
+                ('E', 'red'): ('up', 'down') if end_location == 'e' else None,
+                ('W', 'blue'): ('up', 'down') if end_location == 'w' else None,
+            }
+
+            action = beta_reposition_map.get((staff.location, arrow['color']), None)
+            
+            if action:
+                if isinstance(action, str):
+                    self.move_staff(staff, action, scale)
+                elif isinstance(action, tuple):
+                    self.move_staff(staff, action[0], scale)
+                    other_staff = next((s for s in self.staff_manager.staffs_on_board.values() if s.location == staff.location and s != staff), None)
+                    if other_staff:
+                        self.move_staff(other_staff, action[1], scale)
+
+    def reposition_alpha_to_beta(self, move_staff, converging_arrows):
+        end_locations = [arrow['end_location'] for arrow in converging_arrows]
+        start_locations = [arrow['start_location'] for arrow in converging_arrows]
+        if end_locations[0] == end_locations[1] and start_locations[0] != start_locations[1]:
+            for arrow in converging_arrows:
+                direction = self.determine_translation_direction(arrow)
+                if direction:
+                    move_staff(next(staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow['color']), direction)
+
+    def reposition_gammma_to_beta(self, move_staff, pro_or_anti_arrows, static_arrows):
+        pro_or_anti_arrow, static_arrow = pro_or_anti_arrows[0], static_arrows[0]
+        direction = self.determine_translation_direction(pro_or_anti_arrow)
+        if direction:
+            move_staff(next(staff for staff in self.staffs_on_board.values() if staff.arrow.color == pro_or_anti_arrow['color']), direction)
+            move_staff(next(staff for staff in self.staffs_on_board.values() if staff.arrow.color == static_arrow['color']), self.get_opposite_direction(direction))
+
+    ### HELPERS ### 
+
     def check_replace_beta_staffs(self, scene):
         view = scene.views()[0]
         board_state = view.get_state()
         if len(self.staff_manager.staffs_on_board) == 2:
             staffs_list = list(self.staff_manager.staffs_on_board.items())
-            if staffs_list[0][1]['location'] == staffs_list[1][1]['location']:
+            if staffs_list[0][1].location == staffs_list[1][1].location:
                 self.reposition_staffs(scene, board_state)     
 
     def get_distance_from_center(self, position):
@@ -55,95 +182,11 @@ class StaffPositioner:
 
         return None 
 
-    def reposition_beta_to_beta(self, scene, arrows, scale):
-        view = scene.views()[0]
-        if len(arrows) != 2:
-            return 
-
-        arrow1, arrow2 = arrows
-        same_motion = arrow1['motion_type'] == arrow2['motion_type'] in ['pro', 'anti']
-
-        if same_motion:
-            self.reposition_G_and_H(scale, view, arrow1, arrow2)
-            
-        else: 
-            self.reposition_I(scale, arrow1, arrow2)
-
-        scene.update()
-        
-    def reposition_I(self, scale, arrow1, arrow2):
-        pro_arrow = arrow1 if arrow1['motion_type'] == 'pro' else arrow2
-        anti_arrow = arrow2 if arrow1['motion_type'] == 'pro' else arrow1
-
-        pro_staff = self.staff_manager.staffs_on_board[pro_arrow['end_location'] + '_staff_' + pro_arrow['color']]
-        anti_staff = self.staff_manager.staffs_on_board[anti_arrow['end_location'] + '_staff_' + anti_arrow['color']]
-
-        # Translate the pro staff in the direction of its arrow's start location by BETA_STAFF_REPOSITION_OFFSET
-        direction = self.determine_translation_direction(pro_arrow)
-        pro_new_position = self.calculate_new_position(pro_staff.pos(), direction, scale)
-        pro_staff.setPos(pro_new_position)
-
-        # Translate the anti staff in the opposite direction of its arrow's start location by BETA_STAFF_REPOSITION_OFFSET
-        opposite_direction = self.get_opposite_direction(direction)
-        anti_new_position = self.calculate_new_position(anti_staff.pos(), opposite_direction, scale)
-        anti_staff.setPos(anti_new_position)
-
-    def reposition_G_and_H(self, scale, view, arrow1, arrow2):
-        optimal_position1 = self.get_optimal_arrow_location(arrow1, view)
-        optimal_position2 = self.get_optimal_arrow_location(arrow2, view)
-
-        distance1 = self.get_distance_from_center(optimal_position1)
-        distance2 = self.get_distance_from_center(optimal_position2)
-
-        further_arrow = arrow1 if distance1 > distance2 else arrow2
-        closer_arrow = arrow2 if distance1 > distance2 else arrow1
-
-        further_staff = self.staffs_on_board[further_arrow['end_location'] + '_staff_' + further_arrow['color']]
-        closer_staff = self.staffs_on_board[closer_arrow['end_location'] + '_staff_' + closer_arrow['color']]
-
-            # Translate the further staff in the direction of its arrow's start location by BETA_STAFF_REPOSITION_OFFSET
-        direction = self.determine_translation_direction(further_arrow)
-        new_position = self.calculate_new_position(further_staff.pos(), direction, scale)
-        further_staff.setPos(new_position)
-            
-            #Translate the closer staff in the opposite direction of the further staff
-        opposite_direction = self.get_opposite_direction(direction)
-        new_position = self.calculate_new_position(closer_staff.pos(), opposite_direction, scale)
-        closer_staff.setPos(new_position)
-
-    def reposition_static_beta(self, static_arrows, scale):
-        def move_staff(staff, direction):
-            new_position = self.calculate_new_position(staff.pos(), direction, scale)
-            staff.setPos(new_position)
-
-        for arrow in static_arrows:
-            staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow['color']), None)
-            if not staff:
-                continue
-
-            location = staff.location
-            color = arrow['color']
-            end_location = arrow.get('end_location', '')
-
-            action_map = {
-                ('N', 'red'): 'right',
-                ('N', 'blue'): 'left',
-                ('S', 'red'): 'right',
-                ('S', 'blue'): 'left',
-                ('E', 'red'): ('up', 'down') if end_location == 'e' else None,
-                ('W', 'blue'): ('up', 'down') if end_location == 'w' else None,
-            }
-
-            action = action_map.get((location, color), None)
-
-            if action:
-                if isinstance(action, str):
-                    move_staff(staff, action)
-                elif isinstance(action, tuple):
-                    move_staff(staff, action[0])
-                    other_staff = next((s for s in self.staffs_on_board.values() if s.location == location and s != staff), None)
-                    if other_staff:
-                        move_staff(other_staff, action[1])
+    def set_staff_position_based_on_arrow(self, arrow, scale):
+        staff = self.staff_manager.staffs_on_board[arrow['end_location'] + '_staff_' + arrow['color']]
+        direction = self.determine_translation_direction(arrow)
+        new_position = self.calculate_new_position(staff.pos(), direction, scale)
+        staff.setPos(new_position)
 
     def determine_translation_direction(self, arrow_state):
         """Determine the translation direction based on the arrow's board_state."""
@@ -156,68 +199,11 @@ class StaffPositioner:
 
     def calculate_new_position(self, current_position, direction, scale):
         """Calculate the new position based on the direction."""
-        offset = QPointF(BETA_STAFF_REPOSITION_OFFSET * scale, 0) if direction in [LEFT, RIGHT] else QPointF(0, BETA_STAFF_REPOSITION_OFFSET * scale)
+        offset = QPointF(BETA_OFFSET * scale, 0) if direction in [LEFT, RIGHT] else QPointF(0, BETA_OFFSET * scale)
         if direction in [RIGHT, DOWN]:
             return current_position + offset
         else:
             return current_position - offset
-
-    def reposition_staffs(self, scene, board_state):
-        view = scene.views()[0]
-        scale = GRAPHBOARD_SCALE if view else PICTOGRAPH_SCALE
-        processed_staffs = set()
-        translations = {}
-
-        def move_staff(staff, direction):
-            new_position = self.calculate_new_position(staff.pos(), direction, scale)
-            staff.setPos(new_position)
-
-        arrows_grouped_by_start = {}
-        for arrow in board_state['arrows']:
-            arrows_grouped_by_start.setdefault(arrow['start_location'], []).append(arrow)
-
-        pro_or_anti_arrows = [arrow for arrow in board_state['arrows'] if arrow['motion_type'] in ['pro', 'anti']]
-        static_arrows = [arrow for arrow in board_state['arrows'] if arrow['motion_type'] == 'static']
-
-        # STATIC BETA
-        if len(static_arrows) > 1:
-            self.reposition_static_beta(static_arrows, scale)
-
-        # BETA → BETA - G, H, I
-        for start_location, arrows in arrows_grouped_by_start.items():
-            if len(arrows) > 1 and not all(arrow['start_location'] == arrow['end_location'] for arrow in arrows):
-                self.reposition_beta_to_beta(scene, arrows, scale)
-                
-
-        # GAMMA → BETA - Y, Z
-        if len(pro_or_anti_arrows) == 1 and len(static_arrows) == 1:
-            pro_or_anti_arrow, static_arrow = pro_or_anti_arrows[0], static_arrows[0]
-            direction = self.determine_translation_direction(pro_or_anti_arrow)
-            if direction:
-                move_staff(next(staff for staff in self.staffs_on_board.values() if staff.arrow.color == pro_or_anti_arrow['color']), direction)
-                move_staff(next(staff for staff in self.staffs_on_board.values() if staff.arrow.color == static_arrow['color']), self.get_opposite_direction(direction))
-
-        # ALPHA → BETA - D, E, F
-        converging_arrows = [arrow for arrow in board_state['arrows'] if arrow['motion_type'] not in ['static']]
-        if len(converging_arrows) == 2:
-            end_locations = [arrow['end_location'] for arrow in converging_arrows]
-            start_locations = [arrow['start_location'] for arrow in converging_arrows]
-            if end_locations[0] == end_locations[1] and start_locations[0] != start_locations[1]:
-                for arrow in converging_arrows:
-                    direction = self.determine_translation_direction(arrow)
-                    if direction:
-                        move_staff(next(staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow['color']), direction)
-
-        # Apply translations
-        for arrow_state in board_state['arrows']:
-            current_staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow_state['color']), None)
-            if current_staff and current_staff not in processed_staffs:
-                direction = translations.get(arrow_state['color'])
-                if direction:
-                    move_staff(current_staff, direction)
-                    processed_staffs.add(current_staff)
-
-        scene.update()
 
     def get_opposite_direction(self, movement):
         if movement == 'left':
@@ -229,5 +215,3 @@ class StaffPositioner:
         elif movement == 'down':
             return 'up'
 
-    def get_staff_position(self, staff):
-        return staff.pos()

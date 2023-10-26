@@ -64,7 +64,7 @@ class ExportManager:
                     staff_svg = etree.parse(item.svg_file)
                     rect_elements = staff_svg.getroot().findall('.//{http://www.w3.org/2000/svg}rect')
                     fill_color = self.get_fill_color(item.svg_file)
-                    position = self.staff_manager.get_staff_position(item)
+                    position = item.pos()
                     print(f"Staff position: {position}")
 
                     for rect_element in rect_elements:

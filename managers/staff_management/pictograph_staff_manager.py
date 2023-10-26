@@ -78,6 +78,6 @@ class PictographStaffManager(StaffManager):
                     self.arrow_manager = new_staff.arrow.arrow_manager
                     self.staffs_on_board[location + "_staff_" + color] = new_staff  #
                     
-        self.check_replace_beta_staffs(self.scene)
+        self.staff_positioner.check_replace_beta_staffs(self.scene)
     
 
