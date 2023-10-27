@@ -8,7 +8,7 @@ from objects.arrow.arrow import Arrow
 from objects.staff.staff import Staff
 from objects.grid import Grid
 from graph_editor.graphboard.graphboard_view import GraphboardView
-from objects.pictograph import Pictograph
+from objects.pictograph.pictograph_image import PictographImage
 from constants import DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, PICTOGRAPH_SCALE, GRAPHBOARD_HEIGHT
 
 class SequenceView(QGraphicsView):
@@ -76,7 +76,7 @@ class SequenceView(QGraphicsView):
         painter.end()
 
         scaled_image = image.scaled(int(DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE), int(DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
-        pictograph = Pictograph(graphboard_view.get_state(), scaled_image)
+        pictograph = PictographImage(graphboard_view.get_state(), scaled_image)
         self.add_pictograph(pictograph)
         graphboard_view.clear_graphboard()
         graphboard_view.update_letter(None)
@@ -85,7 +85,7 @@ class SequenceView(QGraphicsView):
             self.main_widget.word_label.setText(self.main_widget.word_label.text() + letter)
         self.sequence_scene.update()
 
-    def add_to_graphboard(self, pictograph: Pictograph, graphboard_view: GraphboardView):
+    def add_to_graphboard(self, pictograph: PictographImage, graphboard_view: GraphboardView):
         state = pictograph.state
         graphboard_view.clear_graphboard()
         

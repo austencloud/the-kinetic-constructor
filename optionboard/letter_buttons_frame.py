@@ -4,7 +4,8 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QIcon, QPainter, QFont, QColor
 from PyQt6.QtSvg import QSvgRenderer
 from constants import GRAPHBOARD_SCALE
-from widgets.pictograph_selector_dialog import PictographSelectorDialog
+from utilities.pictograph_selector_dialog import PictographSelectorDialog
+from data.letter_types import letter_types
 
 class LetterButtonsFrame(QFrame):
     def __init__(self, main_widget):
@@ -42,7 +43,11 @@ class LetterButtonsFrame(QFrame):
         for row in letter_rows:
             row_layout = QHBoxLayout()
             for letter in row:
-                icon_path = f"images/letters/{letter}.svg"
+                
+                for letter_type in letter_types:
+                    if letter in letter_types[letter_type]:
+                        break
+                icon_path = f"images/letters/{letter_type}/{letter}.svg"
                 renderer = QSvgRenderer(icon_path)
 
                 pixmap = QPixmap(renderer.defaultSize())    

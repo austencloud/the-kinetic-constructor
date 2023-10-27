@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QGridLayout, QLabel
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from views.pictograph.pictograph_view import PictographView
+from objects.pictograph.pictograph_view import PictographView
 
 class PictographSelectorDialog(QDialog):
     def __init__(self, main_widget, letter):

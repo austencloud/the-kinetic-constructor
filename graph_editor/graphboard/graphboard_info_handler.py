@@ -32,6 +32,7 @@ class GraphboardInfoHandler():
                 sorted_attributes = {k: attributes[k] for k in sorted(attributes.keys())}
                 current_combination.append(sorted_attributes)
         # Sort the list of dictionaries by the 'color' key
+        
         current_combination = sorted(current_combination, key=lambda x: x['color'])
         letter_type = None
         for letter, combinations in self.letters.items():

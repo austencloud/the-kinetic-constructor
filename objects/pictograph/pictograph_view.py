@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QGraphicsItem, QFrame
 from PyQt6.QtGui import QTransform, QAction
 from objects.grid import Grid
 from objects.arrow.arrow import Arrow
-from views.pictograph.pictograph_staff_handler import PictographStaffHandler
+from objects.pictograph.pictograph_staff_handler import PictographStaffHandler
 from objects.arrow.arrow_manager import ArrowManager
 from utilities.json_handler import JsonHandler
 from graph_editor.graphboard.graphboard_info_handler import GraphboardInfoHandler
