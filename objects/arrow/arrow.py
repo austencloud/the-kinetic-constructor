@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt, QPointF
-
+import re
 class Arrow(QGraphicsSvgItem):
     def __init__(self, view, attr_dict):
         self.svg_file = self.get_svg_file(attr_dict)
@@ -27,7 +27,6 @@ class Arrow(QGraphicsSvgItem):
         self.view = view
         self.info_frame = view.info_frame
         self.main_widget = view.main_widget
-        self.svg_manager = self.main_widget.svg_manager
         self.arrow_manager = self.main_widget.arrow_manager
         self.attributes = self.arrow_manager.arrow_attributes
         self.attributes.update_attributes(self, dict)
@@ -70,8 +69,8 @@ class Arrow(QGraphicsSvgItem):
     def mouseMoveEvent(self, event):
         self.setSelected(True) 
         if event.buttons() == Qt.MouseButton.LeftButton:
-            from views.graphboard.graphboard_view import GraphboardView
-            from views.pictograph_view import PictographView
+            from graph_editor.graphboard.graphboard_view import GraphboardView
+            from views.pictograph.pictograph_view import PictographView
             if isinstance(self.view, GraphboardView):
                 new_pos = self.mapToScene(event.pos()) - self.boundingRect().center()
                 self.setPos(new_pos)
@@ -88,7 +87,7 @@ class Arrow(QGraphicsSvgItem):
         if hasattr(self, 'future_position'):
             self.setPos(self.future_position)
             del self.future_position
-        from views.graphboard.graphboard_view import GraphboardView
+        from graph_editor.graphboard.graphboard_view import GraphboardView
         if isinstance(self.view, GraphboardView):
             self.arrow_manager.arrow_positioner.update_arrow_position(self.view)
     
@@ -97,10 +96,29 @@ class Arrow(QGraphicsSvgItem):
     def update_appearance(self):
         self.update_color()
         self.update_rotation()
+     
+    def set_svg_color(self, svg_file, new_color):
+        color_map = {
+            "red": "#ED1C24",
+            "blue": "#2E3192"
+        }
+        new_hex_color = color_map.get(new_color)
+
+        with open(svg_file, 'r') as f:
+            svg_data = f.read()
+
+        style_tag_pattern = re.compile(r'\.st0{fill\s*:\s*(#[a-fA-F0-9]{6})\s*;}', re.DOTALL)
+        match = style_tag_pattern.search(svg_data)
+
+        if match:
+            old_color = match.group(1)
+            svg_data = svg_data.replace(old_color, new_hex_color)
+        return svg_data.encode('utf-8')     
         
     def update_color(self):
         if self.motion_type in ["pro", "anti"]:
-            new_svg_data = self.svg_manager.set_svg_color(self.svg_file, self.color)
+            new_svg_data = self.set_svg_color(self.svg_file, self.color)
+            
             self.renderer.load(new_svg_data)
             self.setSharedRenderer(self.renderer)
             

@@ -1,4 +1,4 @@
-class PictographVariationsGenerator:
+class JsonVariationsGenerator:
     def __init__(self):
         self.quadrant_mapping = {}
         for start in ['n', 's']:

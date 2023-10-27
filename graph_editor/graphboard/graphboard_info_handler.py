@@ -1,7 +1,7 @@
 from data.letter_types import letter_types
 from objects.arrow.arrow import Arrow
 
-class GraphboardInfoManager():
+class GraphboardInfoHandler():
     def __init__(self, main_widget, view):
         self.main_widget = main_widget
         self.letters = main_widget.letters

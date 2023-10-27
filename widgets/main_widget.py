@@ -1,13 +1,12 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import QEvent
 from objects.arrow.arrow_manager import ArrowManager
-from managers.svg_manager import SvgManager
-from managers.json_manager import JsonManager
+from utilities.json_handler import JsonHandler
 from views.sequence_view import SequenceView
 from views.optionboard_view import OptionboardView
-from managers.layout_manager import LayoutManager
-from managers.key_bindings_manager import KeyBindingsManager
-from widgets.graph_editor_widget import GraphEditorWidget
+from utilities.layout_manager import LayoutManager
+from utilities.key_bindings_handler import KeyBindingsHandler
+from graph_editor.graph_editor_widget import GraphEditorWidget
 from frames.letter_buttons_frame import LetterButtonsFrame
 
 class MainWidget(QWidget):
@@ -19,10 +18,9 @@ class MainWidget(QWidget):
         self.main_window = main_window
         
         self.layout_manager = LayoutManager(self)
-        self.json_manager = JsonManager()
+        self.json_manager = JsonHandler()
         self.letters = self.json_manager.load_all_letters()
-        self.key_bindings_manager = KeyBindingsManager()
-        self.svg_manager = SvgManager()
+        self.key_bindings_manager = KeyBindingsHandler()
         self.arrow_manager = ArrowManager(self)
         self.graph_editor_widget = GraphEditorWidget(self)  
         self.optionboard_view = OptionboardView(self)

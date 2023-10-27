@@ -7,7 +7,7 @@ from PyQt6.QtGui import QImage, QPainter, QColor
 from objects.arrow.arrow import Arrow
 from objects.staff.staff import Staff
 from objects.grid import Grid
-from views.graphboard.graphboard_view import GraphboardView
+from graph_editor.graphboard.graphboard_view import GraphboardView
 from objects.pictograph import Pictograph
 from constants import DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, PICTOGRAPH_SCALE, GRAPHBOARD_HEIGHT
 

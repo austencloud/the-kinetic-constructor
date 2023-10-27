@@ -4,12 +4,10 @@ from PyQt6.QtWidgets import QGraphicsItem, QFrame
 from PyQt6.QtGui import QTransform, QAction
 from objects.grid import Grid
 from objects.arrow.arrow import Arrow
-from frames.graphboard_info_frame import GraphboardInfoFrame
 from views.pictograph.pictograph_staff_handler import PictographStaffHandler
 from objects.arrow.arrow_manager import ArrowManager
-from managers.svg_manager import SvgManager
-from managers.json_manager import JsonManager
-from managers.info_manager import GraphboardInfoManager
+from utilities.json_handler import JsonHandler
+from graph_editor.graphboard.graphboard_info_handler import GraphboardInfoHandler
 from constants import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, PICTOGRAPH_SCALE, PICTOGRAPH_GRID_PADDING
 
 class PictographView(QGraphicsView):
@@ -27,14 +25,11 @@ class PictographView(QGraphicsView):
         self.grid = Grid("images/grid/grid.svg")
         self.grid.setScale(PICTOGRAPH_SCALE)
         self.scene = self.pictograph_scene
-        self.svg_manager = SvgManager()
-        self.info_manager = GraphboardInfoManager(main_widget, self)
+        self.info_manager = GraphboardInfoHandler(main_widget, self)
         self.staff_manager = PictographStaffHandler(self.main_widget, self.scene)
         self.staff_manager.connect_pictograph_view(self)
         self.arrow_manager = ArrowManager(self.main_widget)
-        self.json_manager = JsonManager(self.pictograph_scene)
-        self.info_frame = GraphboardInfoFrame(self.main_widget, self)
-        self.arrow_manager.info_frame = self.info_frame
+        self.json_manager = JsonHandler(self.pictograph_scene)
         self.staff_manager.connect_grid(self.grid)
         self.init_grid()
         self.staff_manager.init_pictograph_staffs(self, self.grid)

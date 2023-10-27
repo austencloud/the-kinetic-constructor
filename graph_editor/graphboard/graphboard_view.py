@@ -9,10 +9,10 @@ from objects.staff.staff import Staff
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from constants import GRAPHBOARD_SCALE, GRAPHBOARD_WIDTH, GRAPHBOARD_HEIGHT, VERTICAL_OFFSET, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST, STATIC, PRO, ANTI
-from views.graphboard.graphboard_staff_handler import GraphboardStaffHandler
-from managers.info_manager import GraphboardInfoManager
-from managers.context_menu_manager import GraphboardContextMenuManager
-from managers.export_manager import ExportManager
+from graph_editor.graphboard.graphboard_staff_handler import GraphboardStaffHandler
+from graph_editor.graphboard.graphboard_info_handler import GraphboardInfoHandler
+from graph_editor.graphboard.graphboard_context_menu_handler import GraphboardContextMenuHandler
+from utilities.export_handler import ExportHandler
 
 class GraphboardView(QGraphicsView):
     def __init__(self, main_widget, graph_editor_widget):
@@ -48,10 +48,10 @@ class GraphboardView(QGraphicsView):
         self.graphboard_scene.addItem(self.grid)
 
     def init_managers(self, main_widget):
-        self.info_manager = GraphboardInfoManager(main_widget, self)
+        self.info_manager = GraphboardInfoHandler(main_widget, self)
         self.staff_manager = GraphboardStaffHandler(main_widget, self.graphboard_scene)
-        self.export_manager = ExportManager(self.staff_manager, self.grid, self)
-        self.context_menu_manager = GraphboardContextMenuManager(self)
+        self.export_manager = ExportHandler(self.staff_manager, self.grid, self)
+        self.context_menu_manager = GraphboardContextMenuHandler(self)
         self.arrow_manager = main_widget.arrow_manager
         self.arrow_manager.graphboard_view = self
         self.arrow_factory = self.arrow_manager.arrow_factory

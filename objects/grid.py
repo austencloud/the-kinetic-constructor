@@ -7,9 +7,6 @@ class Grid(QGraphicsSvgItem):
         super().__init__(grid_svg_path)
         self.svg_file = grid_svg_path
 
-
-        
-
     def get_circle_coordinates(self, circle_id):
         with open(self.svg_file, 'r') as svg_file:
             svg_content = svg_file.read()

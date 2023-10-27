@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QFrame
 from PyQt6.QtGui import QPalette, QColor
-from widgets.graph_editor_widget import GraphEditorWidget
+
 
 class LayoutManager():
     def __init__(self, main_widget):

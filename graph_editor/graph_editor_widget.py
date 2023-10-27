@@ -1,13 +1,13 @@
 from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout
-from views.graphboard.graphboard_view import GraphboardView
-from views.arrowbox_view import ArrowBoxView
-from tools.pictograph_generator import PictographGenerator
-from views.propbox.propbox_view import PropBoxView
-from frames.graphboard_info_frame import GraphboardInfoFrame
-from managers.export_manager import ExportManager
+from graph_editor.graphboard.graphboard_view import GraphboardView
+from graph_editor.arrowbox_view import ArrowBoxView
+from utilities.pictograph_generator import PictographGenerator
+from graph_editor.propbox.propbox_view import PropBoxView
+from graph_editor.info_frame import InfoFrame
 from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
-from frames.action_buttons_frame import ActionButtonsFrame
+from graph_editor.action_buttons_frame import ActionButtonsFrame
+
 class GraphEditorWidget(QWidget):
     def __init__(self, main_widget):
         super().__init__()
@@ -33,7 +33,7 @@ class GraphEditorWidget(QWidget):
         
         # Create and add contents to the graph_editor_frame_layout
         self.graphboard_view = GraphboardView(main_widget, self)
-        self.info_frame = GraphboardInfoFrame(main_widget, self.graphboard_view)
+        self.info_frame = InfoFrame(main_widget, self.graphboard_view)
         self.propbox_view = PropBoxView(main_widget)
         self.arrowbox_view = ArrowBoxView(main_widget, self.graphboard_view, self.info_frame, self.main_widget.arrow_manager)
         self.pictograph_generator = PictographGenerator(main_widget, self.graphboard_view, self.info_frame)

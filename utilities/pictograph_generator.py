@@ -3,7 +3,7 @@ from PyQt6.QtCore import QPointF
 import random
 import os
 from objects.arrow.arrow import Arrow
-from managers.export_manager import ExportManager
+from utilities.export_handler import ExportHandler
 class PictographGenerator():
     def __init__(self, main_widget, graphboard_view, info_frame):
         self.staff_manager = graphboard_view.staff_manager
@@ -12,7 +12,6 @@ class PictographGenerator():
         self.main_window = main_widget.main_window
         self.arrow_manager = main_widget.arrow_manager
         self.export_manager = main_widget.export_manager
-        self.svg_manager = main_widget.svg_manager
         self.grid = graphboard_view.grid
         self.graphboard_scene = self.graphboard_view.scene()
         self.output_dir = "images/pictographs"
@@ -49,7 +48,7 @@ class PictographGenerator():
                         file_name += ".svg"
 
                         output_file_path = os.path.join(self.output_dir, file_name)
-                        self.export_manager = ExportManager(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
+                        self.export_manager = ExportHandler(self.graphboard_view, self.graphboard_scene, self.staff_manager, self.grid)
                         print(output_file_path)
                         self.export_manager.export_to_svg(output_file_path)
 

@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QAction
 
-class GraphboardContextMenuManager():
+class GraphboardContextMenuHandler():
     def __init__(self, graphboard_view):
         self.graphboard_view = graphboard_view
         self.main_widget = self.graphboard_view.main_widget
