@@ -69,7 +69,7 @@ class Arrow(QGraphicsSvgItem):
     def mouseMoveEvent(self, event):
         self.setSelected(True) 
         if event.buttons() == Qt.MouseButton.LeftButton:
-            from graph_editor.graphboard.graphboard_view import GraphboardView
+            from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
             from objects.pictograph.pictograph_view import PictographView
             if isinstance(self.view, GraphboardView):
                 new_pos = self.mapToScene(event.pos()) - self.boundingRect().center()
@@ -87,7 +87,7 @@ class Arrow(QGraphicsSvgItem):
         if hasattr(self, 'future_position'):
             self.setPos(self.future_position)
             del self.future_position
-        from graph_editor.graphboard.graphboard_view import GraphboardView
+        from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
         if isinstance(self.view, GraphboardView):
             self.arrow_manager.arrow_positioner.update_arrow_position(self.view)
     

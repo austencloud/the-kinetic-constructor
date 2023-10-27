@@ -7,7 +7,7 @@ from objects.arrow.arrow import Arrow
 from objects.pictograph.pictograph_staff_handler import PictographStaffHandler
 from objects.arrow.arrow_manager import ArrowManager
 from utilities.json_handler import JsonHandler
-from graph_editor.graphboard.graphboard_info_handler import GraphboardInfoHandler
+from widgets.graph_editor.graphboard.graphboard_info_handler import GraphboardInfoHandler
 from constants import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, PICTOGRAPH_SCALE, PICTOGRAPH_GRID_PADDING
 
 class PictographView(QGraphicsView):

@@ -7,7 +7,7 @@ from PyQt6.QtGui import QImage, QPainter, QColor
 from objects.arrow.arrow import Arrow
 from objects.staff.staff import Staff
 from objects.grid import Grid
-from graph_editor.graphboard.graphboard_view import GraphboardView
+from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
 from objects.pictograph.pictograph_image import PictographImage
 from constants import DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT, PICTOGRAPH_SCALE, GRAPHBOARD_HEIGHT
 
@@ -16,9 +16,6 @@ class SequenceView(QGraphicsView):
         super().__init__()
         sequence_scene = QGraphicsScene()
         
-        # get the width of the editor layout from main_window
-        main_widget.graph_editor_widget.width()
-
         sequence_scene.setSceneRect(0, 0, GRAPHBOARD_HEIGHT * 2, GRAPHBOARD_HEIGHT * 2)
 
         self.setFixedSize(int(sequence_scene.sceneRect().width()), int(sequence_scene.sceneRect().height()))
@@ -40,8 +37,6 @@ class SequenceView(QGraphicsView):
         
 
         self.pictographs = [] 
-        self.pictograph_generator = main_widget.graph_editor_widget.pictograph_generator
-        self.info_frame = main_widget.graph_editor_widget.info_frame
         self.sequence_scene = sequence_scene
         self.beats = [QGraphicsRectItem(QRectF(0, 0, DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE, DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE)) for i in range(4)]
         
@@ -80,7 +75,7 @@ class SequenceView(QGraphicsView):
         self.add_pictograph(pictograph)
         graphboard_view.clear_graphboard()
         graphboard_view.update_letter(None)
-        letter = self.info_frame.get_current_letter()
+        letter = self.info_manager.determine_current_letter_and_type()[0]
         if letter:
             self.main_widget.word_label.setText(self.main_widget.word_label.text() + letter)
         self.sequence_scene.update()

@@ -9,7 +9,9 @@ class GraphboardContextMenuHandler():
         self.arrow_manipulator = self.arrow_manager.arrow_manipulator
         self.arrow_selector = self.arrow_manager.arrow_selector
         self.export_manager = self.graphboard_view.export_manager
-
+        self.staff_manager = self.graphboard_view.staff_manager
+        self.staff_selector = self.staff_manager.staff_selector
+        self.sequence_view = self.main_widget.sequence_view
 
     def create_menu_with_actions(self, parent, actions, event):
         menu = QMenu(parent)
@@ -30,7 +32,7 @@ class GraphboardContextMenuHandler():
 
     def create_staff_menu(self, selected_items, event):
         actions = [
-            ('Delete', lambda: self.arrow_selector.delete_staff(selected_items)),
+            ('Delete', lambda: self.staff_selector.delete_staff(selected_items)),
             ('Rotate Right', lambda: self.arrow_manipulator.rotate_arrow("right", selected_items)),
             ('Rotate Left', lambda: self.arrow_manipulator.rotate_arrow("left", selected_items))
         ]

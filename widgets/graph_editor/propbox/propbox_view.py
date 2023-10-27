@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QGraphicsView, QGraphicsScene, QGraphicsView
 from PyQt6.QtCore import Qt
 from constants import GRAPHBOARD_SCALE
-from graph_editor.propbox.propbox_staff_handler import PropboxStaffHandler
+from widgets.graph_editor.propbox.propbox_staff_handler import PropboxStaffHandler
 
 class PropBoxView(QGraphicsView):
     def __init__(self, main_widget):

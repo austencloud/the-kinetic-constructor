@@ -9,9 +9,9 @@ from objects.staff.staff import Staff
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from constants import GRAPHBOARD_SCALE, GRAPHBOARD_WIDTH, GRAPHBOARD_HEIGHT, VERTICAL_OFFSET, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST, STATIC, PRO, ANTI
-from graph_editor.graphboard.graphboard_staff_handler import GraphboardStaffHandler
-from graph_editor.graphboard.graphboard_info_handler import GraphboardInfoHandler
-from graph_editor.graphboard.graphboard_context_menu_handler import GraphboardContextMenuHandler
+from widgets.graph_editor.graphboard.graphboard_staff_handler import GraphboardStaffHandler
+from widgets.graph_editor.graphboard.graphboard_info_handler import GraphboardInfoHandler
+from widgets.graph_editor.graphboard.graphboard_context_menu_handler import GraphboardContextMenuHandler
 from utilities.export_handler import ExportHandler
 from data.letter_types import letter_types
 class GraphboardView(QGraphicsView):
