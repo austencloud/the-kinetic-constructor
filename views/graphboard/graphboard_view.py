@@ -4,12 +4,12 @@ from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtGui import QCursor, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsItem, QGraphicsRectItem, QGraphicsScene, QSizePolicy, QToolTip, QFrame
-from objects.staff import Staff
-from objects.arrow import Arrow
+from PyQt6.QtWidgets import QGraphicsView, QGraphicsItem, QGraphicsScene, QSizePolicy, QToolTip, QFrame
+from objects.staff.staff import Staff
+from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from constants import GRAPHBOARD_SCALE, GRAPHBOARD_WIDTH, GRAPHBOARD_HEIGHT, VERTICAL_OFFSET, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST, STATIC, PRO, ANTI
-from views.graphboard.graphboard_staff_manager import GraphboardStaffManager
+from views.graphboard.graphboard_staff_handler import GraphboardStaffHandler
 from managers.info_manager import GraphboardInfoManager
 from managers.context_menu_manager import GraphboardContextMenuManager
 from managers.export_manager import ExportManager
@@ -49,7 +49,7 @@ class GraphboardView(QGraphicsView):
 
     def init_managers(self, main_widget):
         self.info_manager = GraphboardInfoManager(main_widget, self)
-        self.staff_manager = GraphboardStaffManager(main_widget, self.graphboard_scene)
+        self.staff_manager = GraphboardStaffHandler(main_widget, self.graphboard_scene)
         self.export_manager = ExportManager(self.staff_manager, self.grid, self)
         self.context_menu_manager = GraphboardContextMenuManager(self)
         self.arrow_manager = main_widget.arrow_manager
@@ -111,6 +111,7 @@ class GraphboardView(QGraphicsView):
         QToolTip.hideText() 
 
     def dropEvent(self, event):
+        arrow = None
         self.setFocus()
         event.setDropAction(Qt.DropAction.CopyAction)
         event.accept()
@@ -272,25 +273,6 @@ class GraphboardView(QGraphicsView):
     def get_selected_items(self):
         return self.graphboard_scene.selectedItems()
     
-    def get_bounding_box(self):
-        bounding_boxes = []
-        for arrow in self.scene().items():
-            if isinstance(arrow, QGraphicsRectItem):
-                bounding_boxes.append(arrow)
-        return bounding_boxes
-
-    def get_attributes(self):
-        attributes = {}
-        base_name = os.path.basename(self.svg_file)
-        parts = base_name.split('_')
-
-        attributes['color'] = parts[0]
-        attributes['type'] = parts[1]
-        attributes['rotation_direction'] = parts[2]
-        attributes['quadrant'] = parts[3].split('.')[0]
-
-        return attributes
-    
     def get_arrows(self):
         # return the current arrows on the graphboard as an array
         current_arrows = []
@@ -320,16 +302,6 @@ class GraphboardView(QGraphicsView):
                 self.scene().removeItem(item)
                 del item
 
-    ### SETTERS ###
-
-    def connect_info_frame(self, info_frame):
-        self.info_frame = info_frame
-
-    def connect_generator(self, generator):
-        self.generator = generator
-
-    def connect_staff_manager(self, staff_manager):
-        self.staff_manager = staff_manager
 
     ### OTHER ###
 

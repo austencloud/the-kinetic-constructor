@@ -171,7 +171,6 @@ class StaffPositioner:
         return None  # Return None if there are no optimal positions
 
     def find_optimal_arrow_location(self, current_state, matching_letters, arrow):
-
         for variations in matching_letters:
             if self.arrow_manager.arrow_state_comparator.compare_states(current_state, variations):
                 optimal_entry = next((d for d in variations if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)

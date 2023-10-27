@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtCore import QPointF
 import random
 import os
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from managers.export_manager import ExportManager
 class PictographGenerator():
     def __init__(self, main_widget, graphboard_view, info_frame):

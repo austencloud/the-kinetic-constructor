@@ -1,5 +1,5 @@
 from data.letter_types import letter_types
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 
 class GraphboardInfoManager():
     def __init__(self, main_widget, view):

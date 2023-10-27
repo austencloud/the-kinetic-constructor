@@ -1,6 +1,5 @@
-from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtGui import QTransform
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 
 class ArrowManipulator:
     def __init__(self, arrow_manager):

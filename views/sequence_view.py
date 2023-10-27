@@ -4,8 +4,8 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QGraphicsRectItem, QPushButton
 from PyQt6.QtCore import QRectF, Qt, QPointF
 from PyQt6.QtGui import QImage, QPainter, QColor
-from objects.arrow import Arrow
-from objects.staff import Staff
+from objects.arrow.arrow import Arrow
+from objects.staff.staff import Staff
 from objects.grid import Grid
 from views.graphboard.graphboard_view import GraphboardView
 from objects.pictograph import Pictograph

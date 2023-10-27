@@ -1,4 +1,4 @@
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QLabel, QFrame, QHBoxLayout, QGridLayout, QWidget
 from data.positions_map import positions_map

@@ -1,11 +1,11 @@
 
 from PyQt6.QtCore import QPointF
-from objects.staff import Staff
+from objects.staff.staff import Staff
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from managers.staff_management.staff_manager import StaffManager
+from objects.staff.staff_manager import StaffManager
 
 
-class PropboxStaffManager(StaffManager):
+class PropboxStaffHandler(StaffManager):
     def __init__(self, main_widget):
         super().__init__(main_widget)
         self.propbox_view = None

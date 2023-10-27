@@ -1,4 +1,4 @@
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 
 class ArrowFactory:
     def __init__(self, arrow_manager):

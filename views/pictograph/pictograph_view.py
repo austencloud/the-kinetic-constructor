@@ -3,10 +3,10 @@ from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtWidgets import QGraphicsItem, QFrame
 from PyQt6.QtGui import QTransform, QAction
 from objects.grid import Grid
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from frames.graphboard_info_frame import GraphboardInfoFrame
-from managers.staff_management.pictograph_staff_manager import PictographStaffManager
-from managers.arrow_management.arrow_manager import ArrowManager
+from views.pictograph.pictograph_staff_handler import PictographStaffHandler
+from objects.arrow.arrow_manager import ArrowManager
 from managers.svg_manager import SvgManager
 from managers.json_manager import JsonManager
 from managers.info_manager import GraphboardInfoManager
@@ -29,7 +29,7 @@ class PictographView(QGraphicsView):
         self.scene = self.pictograph_scene
         self.svg_manager = SvgManager()
         self.info_manager = GraphboardInfoManager(main_widget, self)
-        self.staff_manager = PictographStaffManager(self.main_widget, self.scene)
+        self.staff_manager = PictographStaffHandler(self.main_widget, self.scene)
         self.staff_manager.connect_pictograph_view(self)
         self.arrow_manager = ArrowManager(self.main_widget)
         self.json_manager = JsonManager(self.pictograph_scene)

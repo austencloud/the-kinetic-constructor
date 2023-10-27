@@ -1,4 +1,4 @@
-from objects.staff import Staff
+from objects.staff.staff import Staff
 
 class StaffFactory:
     def __init__(self, staff_manager):

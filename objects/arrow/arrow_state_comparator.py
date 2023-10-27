@@ -4,7 +4,6 @@ class ArrowStateComparator:
         self.arrow_manager = arrow_manager
 
     def compare_states(self, current_state, candidate_state):
-        # Convert candidate_state to a format similar to current_state for easier comparison
         candidate_state_dict = {
             'arrows': []
         }
@@ -19,7 +18,6 @@ class ArrowStateComparator:
                     'turns': entry.get('turns', 0)
                 })
 
-        # Now compare the two states
         if len(current_state['arrows']) != len(candidate_state_dict['arrows']):
             return False
 

@@ -1,6 +1,6 @@
 import json
 import os
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from PyQt6.QtCore import QObject
 
 class JsonManager(QObject):

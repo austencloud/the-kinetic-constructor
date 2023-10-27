@@ -1,9 +1,10 @@
 from PyQt6.QtCore import QPointF
 from constants import PICTOGRAPH_GRID_PADDING, PICTOGRAPH_SCALE
-from objects.arrow import Arrow
-from managers.staff_management.staff_manager import StaffManager
-from objects.staff import Staff
-class PictographStaffManager(StaffManager):
+from objects.arrow.arrow import Arrow
+from objects.staff.staff_manager import StaffManager
+from objects.staff.staff import Staff
+
+class PictographStaffHandler(StaffManager):
     def __init__(self, main_widget, scene):
         super().__init__(main_widget)
         self.scene = scene

@@ -1,5 +1,5 @@
-from objects.arrow import Arrow
-from objects.staff import Staff
+from objects.arrow.arrow import Arrow
+from objects.staff.staff import Staff
 from PyQt6.QtCore import Qt
 
 class KeyBindingsManager:

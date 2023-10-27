@@ -1,4 +1,4 @@
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from constants import GRAPHBOARD_SCALE
 
 class ArrowSelector:
