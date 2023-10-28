@@ -1,6 +1,6 @@
 import os
 from PyQt6.QtWidgets import QGraphicsView, QFrame, QGraphicsScene, QGraphicsItem, QFrame, QGridLayout
-from PyQt6.QtGui import QPixmap, QDrag, QImage, QPainter, QCursor, QColor
+from PyQt6.QtGui import QPixmap, QDrag, QPainter,  QTransform
 from PyQt6.QtCore import Qt, QMimeData, QPointF
 from PyQt6.QtSvg import QSvgRenderer
 from objects.arrow.arrow import Arrow
@@ -28,7 +28,7 @@ class ArrowBoxView(QGraphicsView):
         self.populate_arrows()
         self.objectbox_layout.addWidget(self)
         self.setFixedSize(int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE))
-
+        self.current_quadrant = None
 
     ### MOUSE EVENTS ###
     def mousePressEvent(self, event):
@@ -50,19 +50,21 @@ class ArrowBoxView(QGraphicsView):
                 mime_data.setText(arrow.svg_file)
                 mime_data.setData("color", arrow.color.encode())  # Pass the color
                 self.drag.setMimeData(mime_data)
-
-                renderer = QSvgRenderer(arrow.svg_file)
+                self.current_quadrant = None  # Initialize to None
+                new_svg_data = self.dragged_arrow.set_svg_color(self.dragged_arrow.svg_file, self.dragged_arrow.color)
+                renderer = QSvgRenderer(new_svg_data)
                 scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE  # Scale the pixmap
+                
                 pixmap = QPixmap(scaled_size)
                 pixmap.fill(Qt.GlobalColor.transparent)
                 painter = QPainter(pixmap)
                 with painter as painter:
                     renderer.render(painter)
-
-
+                    
                 self.drag.setPixmap(pixmap)
                 self.drag.setHotSpot(pixmap.rect().center())
-                
+
+
             self.dragStarted = False
         else:
             event.ignore()
@@ -71,10 +73,37 @@ class ArrowBoxView(QGraphicsView):
     def mouseMoveEvent(self, event):
         try:
             if self.drag is not None:
+                # Get the current quadrant
+                new_quadrant = self.graphboard_view.get_graphboard_quadrants(self.mapToScene(event.pos()))
+
+                # Update the pixmap rotation if the quadrant has changed
+                if new_quadrant != self.current_quadrant:
+                    self.current_quadrant = new_quadrant  # Update the current quadrant
+
+                    # Create a QPixmap for the drag preview
+                    renderer = QSvgRenderer(self.dragged_arrow.svg_file)
+                    scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE  # Scale the pixmap
+                    pixmap = QPixmap(scaled_size)
+                    pixmap.fill(Qt.GlobalColor.transparent)
+                    painter = QPainter(pixmap)
+                    with painter as painter:
+                        renderer.render(painter)
+
+                    angle = self.dragged_arrow.get_rotation_angle()
+                    
+                    # Apply rotation to the pixmap
+                    transform = QTransform().rotate(angle)
+                    rotated_pixmap = self.drag.pixmap().transformed(transform)
+                    
+                    # Update the drag's pixmap
+                    self.drag.setPixmap(rotated_pixmap)
+                    self.drag.setHotSpot(rotated_pixmap.rect().center())
+
                 self.drag.exec(Qt.DropAction.CopyAction | Qt.DropAction.MoveAction)
+                
         except RuntimeError as e:
             event.ignore()
-        
+
     def mouseReleaseEvent(self, event):
         arrow = self.itemAt(event.pos())
         if arrow is not None and arrow in self.drag_state:

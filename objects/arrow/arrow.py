@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt, QPointF
+from PyQt6.QtGui import QTransform
 import re
 class Arrow(QGraphicsSvgItem):
     def __init__(self, view, attr_dict):
@@ -74,6 +75,7 @@ class Arrow(QGraphicsSvgItem):
             if isinstance(self.view, GraphboardView):
                 new_pos = self.mapToScene(event.pos()) - self.boundingRect().center()
                 self.setPos(new_pos)
+                
                 new_quadrant = self.view.get_graphboard_quadrants(new_pos + self.center)  
                 if self.quadrant != new_quadrant:
                     self.quadrant = new_quadrant
