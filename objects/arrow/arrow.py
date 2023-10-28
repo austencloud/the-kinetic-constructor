@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtCore import Qt, QPointF
-from PyQt6.QtGui import QTransform
+from PyQt6.QtCore import QPointF, Qt
+from objects.arrow.arrow_mouse_events import ArrowMouseEvents
 import re
 class Arrow(QGraphicsSvgItem):
     def __init__(self, view, attr_dict):
@@ -39,8 +39,10 @@ class Arrow(QGraphicsSvgItem):
         self.is_mirrored = False
         self.previous_arrow = None
         self.center = self.boundingRect().center()
+        self.mouse_events = ArrowMouseEvents(self)
         self.setScale(view.view_scale)
         self.update_appearance()
+
 
     def initialize_graphics_flags(self):
         flags = [
@@ -61,50 +63,32 @@ class Arrow(QGraphicsSvgItem):
             self.renderer = QSvgRenderer(svg_file)
             self.setSharedRenderer(self.renderer)
 
+
     ### MOUSE EVENTS ###
 
-    def mousePressEvent(self, event):
-        self.drag_start_pos = self.pos()  # Store the initial position of the arrow
-        self.drag_offset = event.pos()
+    def mousePressEvent(self, arrow, event):
+        arrow.drag_start_pos = arrow.pos()
+        arrow.drag_offset = event.pos()
 
-    def mouseMoveEvent(self, event):
-        self.setSelected(True) 
+    def mouseMoveEvent(self, arrow, event):
+        arrow.setSelected(True)
         if event.buttons() == Qt.MouseButton.LeftButton:
             from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
             from objects.pictograph.pictograph_view import PictographView
-            if isinstance(self.view, GraphboardView):
-                new_pos = self.mapToScene(event.pos()) - self.boundingRect().center()
-                self.setPos(new_pos)
-                
-                new_quadrant = self.view.get_graphboard_quadrants(new_pos + self.center)  
-                if self.quadrant != new_quadrant:
-                    self.quadrant = new_quadrant
-                    self.update_appearance()
-                    self.info_frame.update()
-                    self.start_location, self.end_location = self.attributes.get_start_end_locations(self.motion_type, self.rotation_direction, self.quadrant)
-                    
-                    updated_staff_dict = {
-                        'color': self.color,
-                        'location': self.end_location,
-                        'layer': 1
-                    }
-                    
-                    self.staff.attributes.update_attributes(self.staff, updated_staff_dict)
-                    self.staff.update_appearance()
-                    self.staff.setPos(self.view.staff_manager.staff_xy_locations[self.staff.location])
-                    
-            elif isinstance(self.view, PictographView):
-                new_pos = self.mapToScene(event.pos()) - self.drag_offset / 2
-                self.setPos(new_pos)
+            if isinstance(arrow.view, GraphboardView):
+                self.mouse_events.handle_graphboard_view(arrow, event)
+            elif isinstance(arrow.view, PictographView):
+                self.mouse_events.handle_pictograph_view(arrow, event)
 
-    def mouseReleaseEvent(self, event):
-        if hasattr(self, 'future_position'):
-            self.setPos(self.future_position)
-            del self.future_position
+    def mouseReleaseEvent(self, arrow, event):
+        if hasattr(arrow, 'future_position'):
+            arrow.setPos(arrow.future_position)
+            del arrow.future_position
         from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
-        if isinstance(self.view, GraphboardView):
-            self.arrow_manager.arrow_positioner.update_arrow_position(self.view)
-    
+        if isinstance(arrow.view, GraphboardView):
+            arrow.arrow_manager.arrow_positioner.update_arrow_position(arrow.view)
+
+
     # UPDATE APPEARANCE          
         
     def update_appearance(self):
@@ -137,12 +121,12 @@ class Arrow(QGraphicsSvgItem):
             self.setSharedRenderer(self.renderer)
             
     def update_rotation(self):
-        angle = self.get_rotation_angle()
+        angle = self.get_rotation_angle(self.quadrant)
         self.setRotation(angle)
 
-    def get_rotation_angle(self):
+    def get_rotation_angle(self, quadrant):
         quadrant_to_angle = self.get_quadrant_to_angle_map()
-        return quadrant_to_angle.get(self.quadrant, 0)
+        return quadrant_to_angle.get(quadrant, 0)
 
     def get_quadrant_to_angle_map(self):
         if self.motion_type == 'pro':

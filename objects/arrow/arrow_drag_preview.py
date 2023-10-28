@@ -1,14 +1,20 @@
-from PyQt6.QtWidgets import QGraphicsItem
-from PyQt6.QtGui import QPixmap, QPainter
-from PyQt6.QtCore import QRectF
-
-class ArrowDragPreview(QGraphicsItem):
+from PyQt6.QtWidgets import QWidget, QLabel
+from PyQt6.QtCore import Qt
+from constants import GRAPHBOARD_SCALE
+class ArrowDragPreview(QWidget):
     def __init__(self, pixmap):
         super().__init__()
-        self.pixmap = pixmap
+        # Debugging: Set a background color to check visibility
+        self.setStyleSheet("background-color: transparent;")
+        
+        self.label = QLabel(self)
+        self.label.setPixmap(pixmap)
+        self.label.setFixedHeight(pixmap.height())
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.center = pixmap.rect().center() * GRAPHBOARD_SCALE
 
-    def paint(self, painter, option, widget):
-        painter.drawPixmap(0, 0, self.pixmap)
 
-    def boundingRect(self):
-        return QRectF(self.pixmap.rect())
+    def setPixmap(self, pixmap):
+        self.label.setPixmap(pixmap)
+

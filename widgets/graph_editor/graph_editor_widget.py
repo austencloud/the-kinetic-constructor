@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout
 from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
-from widgets.graph_editor.arrowbox_view import ArrowBoxView
+from widgets.graph_editor.arrowbox.arrowbox_view import ArrowBoxView
 
 from widgets.graph_editor.propbox.propbox_view import PropBoxView
 from widgets.graph_editor.info_frame import InfoFrame

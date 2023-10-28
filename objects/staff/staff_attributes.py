@@ -11,3 +11,11 @@ class StaffAttributes:
 
     def get_attributes(self, staff):
         return {attr: getattr(staff, attr) for attr in self.STAFF_ATTRIBUTES}
+    
+    def create_staff_dict(self, color, location, layer):
+        staff_dict = {
+            'color': color,
+            'location': location,
+            'layer': layer
+        }
+        return staff_dict

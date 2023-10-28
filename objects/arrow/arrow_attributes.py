@@ -24,3 +24,16 @@ class ArrowAttributes:
     def get_attributes(self, arrow):
         return {attr: getattr(arrow, attr) for attr in self.ARROW_ATTRIBUTES}
 
+    def create_arrow_dict(self, color, motion_type, rotation_direction, quadrant, start_location, end_location, turns):
+        if start_location is None and end_location is None:
+            start_location, end_location = self.view.arrow_manager.arrow_attributes.get_start_end_locations(motion_type, rotation_direction, quadrant)
+        arrow_dict = {
+            'color': color,
+            'motion_type': motion_type,
+            'rotation_direction': rotation_direction,
+            'quadrant': quadrant,
+            'start_location': start_location,
+            'end_location': end_location,
+            'turns': turns
+        }
+        return arrow_dict
