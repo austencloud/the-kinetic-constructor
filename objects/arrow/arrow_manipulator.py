@@ -11,6 +11,8 @@ class ArrowManipulator:
         selected_arrow.update_appearance()
         self.arrow_manager.info_frame.update()
         selected_arrow.view.info_manager.update()
+        selected_arrow.staff.attributes.update_attributes(selected_arrow.staff, updated_staff_dict)
+        selected_arrow.staff.update_appearance()
         selected_arrow.staff.setPos(selected_arrow.view.staff_manager.staff_xy_locations[selected_arrow.staff.location])
 
     def move_arrow_quadrant_wasd(self, direction, selected_arrow):

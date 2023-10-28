@@ -79,6 +79,18 @@ class Arrow(QGraphicsSvgItem):
                     self.quadrant = new_quadrant
                     self.update_appearance()
                     self.info_frame.update()
+                    self.start_location, self.end_location = self.attributes.get_start_end_locations(self.motion_type, self.rotation_direction, self.quadrant)
+                    
+                    updated_staff_dict = {
+                        'color': self.color,
+                        'location': self.end_location,
+                        'layer': 1
+                    }
+                    
+                    self.staff.attributes.update_attributes(self.staff, updated_staff_dict)
+                    self.staff.update_appearance()
+                    self.staff.setPos(self.view.staff_manager.staff_xy_locations[self.staff.location])
+                    
             elif isinstance(self.view, PictographView):
                 new_pos = self.mapToScene(event.pos()) - self.drag_offset / 2
                 self.setPos(new_pos)

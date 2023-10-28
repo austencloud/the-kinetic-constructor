@@ -29,6 +29,8 @@ class GraphboardView(QGraphicsView):
         self.setAcceptDrops(True)
         self.setInteractive(True)
         self.dragging = None
+        self.temp_arrow = None
+        self.temp_staff = None
         self.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
         self.setFixedSize(int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -100,10 +102,14 @@ class GraphboardView(QGraphicsView):
             items[0].setSelected(True)
 
     def dragMoveEvent(self, event):
+        current_quadrant = self.get_graphboard_quadrants(self.mapToScene(event.position().toPoint()))  # Changed event.pos() to event.position()
+
         dropped_svg = event.mimeData().text()
         base_name = os.path.basename(dropped_svg)
-        color = base_name.split('_')[0]
-
+        motion_type = base_name.split('_')[0]
+        turns = base_name.split('_')[1].split('.')[0]
+        rotation_direction = 'r' if motion_type == PRO else 'l'
+        color = event.mimeData().data("color").data().decode()  # Retrieve the color
         for arrow in self.scene().items():
             if isinstance(arrow, Arrow):
                 if arrow.color == color:
@@ -112,6 +118,52 @@ class GraphboardView(QGraphicsView):
                     return
         event.accept()
         QToolTip.hideText() 
+        
+        temp_arrow_dict = {
+            'color': color,
+            'motion_type': motion_type,
+            'rotation_direction': rotation_direction,
+            'quadrant': current_quadrant,
+            'start_location': None,
+            'end_location': None,
+            'turns': turns
+        }
+        
+        if self.temp_arrow is None:
+            self.temp_arrow = self.arrow_factory.create_arrow(self, temp_arrow_dict)
+            self.temp_arrow.color = event.mimeData().data("color").data().decode() 
+            self.temp_arrow.start_location, self.temp_arrow.end_location = self.temp_arrow.attributes.get_start_end_locations(motion_type, rotation_direction, current_quadrant)
+           
+            temp_staff_dict = {
+                'color': color,
+                'location': self.temp_arrow.end_location,
+                'layer': 1
+            } 
+        
+
+            self.temp_staff = self.staff_factory.create_staff(self.graphboard_scene, temp_staff_dict)
+            self.graphboard_scene.addItem(self.temp_staff)
+            
+    
+        # Update the temporary arrow and staff
+        self.update_dragged_arrow_and_staff(current_quadrant, self.temp_arrow, self.temp_staff)
+
+    # Update the temporary arrow and staff
+    def update_dragged_arrow_and_staff(self, current_quadrant, temp_arrow, temp_staff):
+        temp_arrow.quadrant = current_quadrant  # Update the quadrant of the temporary arrow
+        temp_arrow.update_rotation()  # Update the rotation based on the new quadrant
+        temp_arrow.update_appearance()  # Update the appearance based on the new quadrant
+        # Update the staff's position based on the new end location of the temporary arrow
+        temp_arrow.start_location, temp_arrow.end_location = temp_arrow.attributes.get_start_end_locations(
+            temp_arrow.motion_type, temp_arrow.rotation_direction, current_quadrant)
+        temp_staff_dict = {
+            'color': temp_arrow.color,
+            'location': temp_arrow.end_location,
+            'layer': 1
+        }
+        temp_staff.attributes.update_attributes(temp_staff, temp_staff_dict)
+        temp_staff.update_appearance()
+        temp_staff.setPos(self.staff_manager.staff_xy_locations[temp_staff_dict['location']])
 
     def dropEvent(self, event):
         arrow = None
@@ -160,6 +212,7 @@ class GraphboardView(QGraphicsView):
             self.graphboard_scene.addItem(arrow)
             self.graphboard_scene.addItem(staff)
 
+
         # Case 2: Existing staff of the same color but is static
         elif existing_staffs and existing_staffs[0].type == STATIC:
             existing_staff = existing_staffs[0]
@@ -184,6 +237,8 @@ class GraphboardView(QGraphicsView):
             arrow.staff = staff
             staff.arrow = arrow
 
+            self.graphboard_scene.removeItem(self.temp_staff)
+            
             for arrow in self.graphboard_scene.items():
                 if isinstance(arrow, Arrow):
                     arrow.arrow_manager.arrow_positioner.update_arrow_position(self)

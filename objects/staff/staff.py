@@ -13,7 +13,6 @@ staff_dict = {
         
 '''
 
-
 class Staff(QGraphicsSvgItem):
     def __init__(self, scene, staff_dict):
         super().__init__()
@@ -31,7 +30,7 @@ class Staff(QGraphicsSvgItem):
         self.location = staff_dict.get('location')
         self.layer = staff_dict.get('layer')
         self.set_axis(staff_dict)
-        self.set_rotation()
+        self.set_rotation_from_axis()
 
     def set_axis(self, staff_dict):
         """Set the axis based on the staff dictionary."""
@@ -39,10 +38,13 @@ class Staff(QGraphicsSvgItem):
             1: {HORIZONTAL: [WEST, EAST], VERTICAL: [NORTH, SOUTH]},
             2: {HORIZONTAL: [NORTH, SOUTH], VERTICAL: [WEST, EAST]}
         }
-        self.axis = next(
-            axis for axis, locations in axis_switch.get(self.layer, {}).items()
-            if staff_dict.get('location') in locations
-        )
+        try:
+            self.axis = next(
+                axis for axis, locations in axis_switch.get(self.layer, {}).items()
+                if staff_dict.get('location') in locations
+            )
+        except StopIteration:
+            self.axis = HORIZONTAL
 
     def initialize_app_attributes(self):
         """Initialize application-specific attributes."""
@@ -59,23 +61,16 @@ class Staff(QGraphicsSvgItem):
             return QPointF(-(STAFF_LENGTH/2) * scale, -(STAFF_WIDTH / 2) * scale)
 
     def update_appearance(self):
-
         self.set_color(self.color)
-        self.set_rotation()
-        self.set_location(self.location)
+        self.set_axis_from_location(self.location)
+        self.set_rotation_from_axis()
 
-
-
-
-    def set_location(self, location):
+    def set_axis_from_location(self, location):
         if self.layer == 1:
-            if location == NORTH or location == SOUTH:
-                self.axis = VERTICAL      
-                self.setPos(self.staff_manager.staff_xy_locations[location])
-                self.setRotation(90)
-            elif location == EAST or location == WEST:
-                self.axis == HORIZONTAL
-                self.setRotation(0)
+            self.axis = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
+        elif self.layer == 2:
+            self.axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
+        self.setPos(self.staff_manager.staff_xy_locations[location])
 
     def set_color(self, new_color):
         hex_color = COLOR_MAP.get(new_color, new_color)
@@ -90,15 +85,14 @@ class Staff(QGraphicsSvgItem):
         self.color = hex_color
         self.scene.update()  # Force a redraw
 
-
-    def rotate_staff(self):
+    def swap_axis(self):
         if self.axis == VERTICAL:
             self.axis = HORIZONTAL
         else:
             self.axis = VERTICAL
-        self.set_rotation()
+        self.set_rotation_from_axis()
         
-    def set_rotation(self):
+    def set_rotation_from_axis(self):
         if self.axis == VERTICAL:
             self.current_position = self.pos()
             self.setRotation(90)

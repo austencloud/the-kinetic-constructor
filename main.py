@@ -7,7 +7,7 @@ class Main_Window(QMainWindow):
         super().__init__() 
         self.screen = QApplication.primaryScreen().geometry()
         self.init_main_window()
-        self.initUI()
+        self.init_ui()
         
     def init_main_window(self):
         self.setMinimumSize(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT)
@@ -17,7 +17,7 @@ class Main_Window(QMainWindow):
         self.show()
         self.setWindowTitle("Sequence Generator")
 
-    def initUI(self):
+    def init_ui(self):
         self.move(-(self.screen.width() + 500), 100)
  
 app = QApplication(sys.argv)

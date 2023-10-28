@@ -10,6 +10,8 @@ class KeyBindingsHandler:
         arrow_manipulator = arrow_manager.arrow_manipulator
         arrow_selector = arrow_manager.arrow_selector
         selected_items = graphboard_view.get_selected_items()
+        staff_manager = graphboard_view.staff_manager
+        staff_selector = staff_manager.staff_selector
         
         if len(selected_items) >= 1:
             try:
@@ -28,9 +30,9 @@ class KeyBindingsHandler:
                 for item in selected_items:
                     if isinstance(item, Arrow):
                         arrow_selector.delete_arrow(item)
-                        arrow_selector.delete_staff(item.staff)
+                        staff_selector.delete_staff(item.staff)
                     elif isinstance(item, Staff):
-                        item.view.staff_manager.delete_staff(item)
+                        item.view.staff_manager.staff_selector.delete_staff(item)
 
             elif selected_item and isinstance(selected_item, Arrow):
                 if event.key() == Qt.Key.Key_W:

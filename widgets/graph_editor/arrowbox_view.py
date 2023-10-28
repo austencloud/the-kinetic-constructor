@@ -23,7 +23,6 @@ class ArrowBoxView(QGraphicsView):
         self.main_window = main_widget.main_window
         self.arrow_manager = arrow_manager
         self.arrow_factory = self.arrow_manager.arrow_factory
-        
         self.configure_arrowbox_frame()
         self.view_scale = GRAPHBOARD_SCALE * 0.75
         self.populate_arrows()
@@ -32,7 +31,6 @@ class ArrowBoxView(QGraphicsView):
 
 
     ### MOUSE EVENTS ###
-
     def mousePressEvent(self, event):
         scenePos = self.mapToScene(event.pos())
         items = self.scene().items(scenePos)
@@ -44,28 +42,31 @@ class ArrowBoxView(QGraphicsView):
                 self.artboard_start_position = event.pos()
                 self.drag = QDrag(self)
                 self.dragging = True 
-                self.dragged_item = arrow
+                self.dragged_arrow = arrow
+                self.graphboard_view.dragged_arrow = self.dragged_arrow
+                self.dragged_arrow_scale = GRAPHBOARD_SCALE
                 self.dragged_arrow_color = arrow.color  # Store the color
                 mime_data = QMimeData()
                 mime_data.setText(arrow.svg_file)
                 mime_data.setData("color", arrow.color.encode())  # Pass the color
                 self.drag.setMimeData(mime_data)
-                image = QImage(arrow.boundingRect().size().toSize() * GRAPHBOARD_SCALE, QImage.Format.Format_ARGB32)
-                image.fill(QColor(Qt.GlobalColor.transparent))
-                painter = QPainter(image)
-                painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+
                 renderer = QSvgRenderer(arrow.svg_file)
-                if not renderer.isValid():
-                    print(f"Failed to load SVG file: {self.svg_file}")
-                    return
-                renderer.render(painter)
-                painter.end()
-                pixmap = QPixmap.fromImage(image)
+                scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE  # Scale the pixmap
+                pixmap = QPixmap(scaled_size)
+                pixmap.fill(Qt.GlobalColor.transparent)
+                painter = QPainter(pixmap)
+                with painter as painter:
+                    renderer.render(painter)
+
+
                 self.drag.setPixmap(pixmap)
                 self.drag.setHotSpot(pixmap.rect().center())
+                
             self.dragStarted = False
         else:
             event.ignore()
+
 
     def mouseMoveEvent(self, event):
         try:
@@ -79,8 +80,10 @@ class ArrowBoxView(QGraphicsView):
         if arrow is not None and arrow in self.drag_state:
             del self.drag_state[arrow]
             self.dragging = False 
-            self.dragged_item = None 
-
+            self.dragged_arrow = None 
+            self.graphboard_view.temp_arrow = None
+            self.graphboard_view.temp_staff = None
+            
     def configure_arrowbox_frame(self):
         self.arrowbox_frame = QFrame(self.main_window)
         self.objectbox_layout = QGridLayout()

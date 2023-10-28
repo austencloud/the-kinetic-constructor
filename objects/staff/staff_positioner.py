@@ -56,41 +56,6 @@ class StaffPositioner:
 
         scene.update()
 
-    def reposition_beta_to_beta(self, scene, arrows, scale):
-        view = scene.views()[0]
-        if len(arrows) != 2:
-            return 
-
-        arrow1, arrow2 = arrows
-        same_motion = arrow1['motion_type'] == arrow2['motion_type'] in ['pro', 'anti']
-
-        if same_motion:
-            self.reposition_G_and_H(scale, view, arrow1, arrow2)
-            
-        else: 
-            self.reposition_I(scale, arrow1, arrow2)
-
-        scene.update()
-        
-    def reposition_I(self, scale, arrow1, arrow2):
-        pro_arrow = arrow1 if arrow1['motion_type'] == 'pro' else arrow2
-        anti_arrow = arrow2 if arrow1['motion_type'] == 'pro' else arrow1
-
-        self.set_staff_position_based_on_arrow(pro_arrow, scale)
-        self.set_staff_position_based_on_arrow(anti_arrow, scale)
-
-    def reposition_G_and_H(self, scale, view, arrow1, arrow2):
-        optimal_position1 = self.get_optimal_arrow_location(arrow1, view)
-        optimal_position2 = self.get_optimal_arrow_location(arrow2, view)
-
-        distance1 = self.get_distance_from_center(optimal_position1)
-        distance2 = self.get_distance_from_center(optimal_position2)
-
-        further_arrow = arrow1 if distance1 > distance2 else arrow2
-
-        self.set_staff_position_based_on_arrow(further_arrow, scale)
-        self.set_staff_position_based_on_arrow(arrow1 if further_arrow == arrow2 else arrow2, scale)
-
     def reposition_static_beta(self, static_arrows, scale):
         for arrow in static_arrows:
             staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow['color']), None)
@@ -128,12 +93,48 @@ class StaffPositioner:
                 if direction:
                     move_staff(next(staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow['color']), direction)
 
+    def reposition_beta_to_beta(self, scene, arrows, scale):
+        view = scene.views()[0]
+        if len(arrows) != 2:
+            return 
+
+        arrow1, arrow2 = arrows
+        same_motion = arrow1['motion_type'] == arrow2['motion_type'] in ['pro', 'anti']
+
+        if same_motion:
+            self.reposition_G_and_H(scale, view, arrow1, arrow2)
+            
+        else: 
+            self.reposition_I(scale, arrow1, arrow2)
+
+        scene.update()
+
     def reposition_gammma_to_beta(self, move_staff, pro_or_anti_arrows, static_arrows):
         pro_or_anti_arrow, static_arrow = pro_or_anti_arrows[0], static_arrows[0]
         direction = self.determine_translation_direction(pro_or_anti_arrow)
         if direction:
             move_staff(next(staff for staff in self.staffs_on_board.values() if staff.arrow.color == pro_or_anti_arrow['color']), direction)
             move_staff(next(staff for staff in self.staffs_on_board.values() if staff.arrow.color == static_arrow['color']), self.get_opposite_direction(direction))
+
+    def reposition_G_and_H(self, scale, view, arrow1, arrow2):
+        optimal_position1 = self.get_optimal_arrow_location(arrow1, view)
+        optimal_position2 = self.get_optimal_arrow_location(arrow2, view)
+
+        distance1 = self.get_distance_from_center(optimal_position1)
+        distance2 = self.get_distance_from_center(optimal_position2)
+
+        further_arrow = arrow1 if distance1 > distance2 else arrow2
+
+        self.set_staff_position_based_on_arrow(further_arrow, scale)
+        self.set_staff_position_based_on_arrow(arrow1 if further_arrow == arrow2 else arrow2, scale)
+        
+    def reposition_I(self, scale, arrow1, arrow2):
+        pro_arrow = arrow1 if arrow1['motion_type'] == 'pro' else arrow2
+        anti_arrow = arrow2 if arrow1['motion_type'] == 'pro' else arrow1
+
+        self.set_staff_position_based_on_arrow(pro_arrow, scale)
+        self.set_staff_position_based_on_arrow(anti_arrow, scale)
+
 
     ### HELPERS ### 
 
@@ -214,3 +215,8 @@ class StaffPositioner:
         elif movement == 'down':
             return 'up'
 
+    ### UPDATERS ###
+
+    def update_staff_position_based_on_quadrant(self, staff, quadrant):
+        new_position = self.calculate_new_position_based_on_quadrant(staff, quadrant)
+        staff.setPos(new_position)
