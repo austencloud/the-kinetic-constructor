@@ -55,3 +55,10 @@ class GraphEditorWidget(QWidget):
         self.graph_editor_frame.setLayout(graph_editor_frame_layout)
         self.main_window.graph_editor_layout.addWidget(self.graph_editor_frame)
 
+        self.setMouseTracking(True)  # Enable mouse tracking
+
+    def mouseMoveEvent(self, event):
+        global dragged_arrow
+        if dragged_arrow:
+            # Update the drag preview position based on global mouse position
+            self.arrowbox_view.mouse_events.update_drag_preview(self.arrowbox_view, event)

@@ -1,20 +1,28 @@
 
 from PyQt6.QtGui import QPixmap, QPainter,  QTransform, QCursor
-from PyQt6.QtCore import Qt, QMimeData, QPointF
+from PyQt6.QtCore import Qt, QPointF, QPoint
 from PyQt6.QtSvg import QSvgRenderer
-from objects.arrow.arrow import Arrow
-from constants import GRAPHBOARD_SCALE, ARROWBOX_SCALE
+from PyQt6.QtWidgets import QApplication
+from constants import GRAPHBOARD_SCALE
 from objects.arrow.arrow_drag_preview import ArrowDragPreview
+import sys
+
 
 
 class ArrowBoxMouseEvents():
+    dragged_arrow = None
+    
     def __init__(self, arrowbox_view):
         self.arrowbox_view = arrowbox_view
 
+
     def initialize_drag(self, view, arrow, event):
         print("initialize_drag called")
-      
-        view.drag_offset = QPointF(arrow.boundingRect().center() * arrow.scale())
+    
+        global dragged_arrow  # Declare that we're using the global variable
+        dragged_arrow = arrow
+    
+        self.arrow = arrow
         view.artboard_start_position = event.pos()
         view.dragging = True
         view.dragged_arrow = arrow
@@ -32,25 +40,22 @@ class ArrowBoxMouseEvents():
         painter = QPainter(pixmap)
         with painter as painter:
             renderer.render(painter)
-        
-        # Debugging: Check the size of the pixmap
-        print(f"Pixmap size: {pixmap.size()}")
 
-        # Convert global cursor position to local coordinates
-        local_pos = view.mapFromGlobal(QCursor.pos())
-        # Debugging: Check the local position
-        print(f"Local position should be: {local_pos}")
-        
         view.drag_preview = ArrowDragPreview(pixmap)
-        view.drag_preview.setParent(view)
+        view.drag_preview.setParent(QApplication.instance().activeWindow())
         view.drag_preview.show()
-        # Use local_pos to set the position of your drag preview
-        view.drag_preview.move(local_pos - view.drag_offset.toPoint())
-        view.drag_started = False
 
+        main_window = view.window()
+        local_pos = view.mapTo(main_window, event.pos())
+
+        # Move the drag preview to the local cursor position
+        view.drag_preview.move(local_pos - (self.arrow.center*GRAPHBOARD_SCALE).toPoint())
+
+    
     def update_drag_preview(self, view, event):
         over_graphboard = view.graphboard_view.rect().contains(view.graphboard_view.mapFromGlobal(view.mapToGlobal(event.pos())))
         new_quadrant = view.graphboard_view.get_graphboard_quadrants(view.graphboard_view.mapToScene(event.pos())) if over_graphboard else view.current_quadrant
+        
         if over_graphboard:
             if new_quadrant != view.current_quadrant:
                 view.current_quadrant = new_quadrant
@@ -63,12 +68,16 @@ class ArrowBoxMouseEvents():
                     renderer.render(painter)
 
                 angle = view.dragged_arrow.get_rotation_angle(new_quadrant)
-                
                 transform = QTransform().rotate(angle)
                 rotated_pixmap = view.drag_preview.label.pixmap().transformed(transform)
-
-                # Update the drag's pixmap
                 view.drag_preview.setPixmap(rotated_pixmap)
+                
+        main_window = view.window()
+        local_pos = view.mapTo(main_window, event.pos())
+
+        # Move the drag preview
+        view.drag_preview.move(local_pos - (self.arrow.center*GRAPHBOARD_SCALE).toPoint())
+
             
     def handle_mouse_release(self, view, event):
         arrow = view.itemAt(event.pos())

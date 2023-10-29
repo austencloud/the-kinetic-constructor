@@ -90,14 +90,17 @@ class GraphboardView(QGraphicsView):
     ### EVENTS ###
 
     def mousePressEvent(self, event):
-        self.mouse_events.mousePressEvent(self, event)
-        
+        self.mouse_events.handle_mouse_press(event)
+        super().mousePressEvent(event)
+
     def dragMoveEvent(self, event):
-        self.mouse_events.dragMoveEvent(self, event)
-        
+        current_quadrant = self.mouse_events.get_current_quadrant(event)
+        temp_arrow_dict = self.mouse_events.create_temp_arrow_dict(event, current_quadrant)
+        self.mouse_events.update_temp_arrow_and_staff(current_quadrant, temp_arrow_dict)
+        self.mouse_events.update_drag_preview(current_quadrant)
+
     def dropEvent(self, event):
-        self.mouse_events.dropEvent(self, event)
-        
+        self.mouse_events.handle_drop_event(event)
 
 
     def contextMenuEvent(self, event):

@@ -34,7 +34,7 @@ class ArrowBoxView(QGraphicsView):
         self.arrowbox_frame.setLayout(self.objectbox_layout)
 
     def populate_arrows(self):
-        
+
         arrow1 = {
             'color': 'red',
             'motion_type': 'pro',
@@ -81,8 +81,6 @@ class ArrowBoxView(QGraphicsView):
 
     def mouseMoveEvent(self, event):
         if self.drag_preview is not None:
-            local_pos = self.mapFromGlobal(QCursor.pos())
-            self.drag_preview.move(local_pos - self.drag_offset.toPoint())
             self.mouse_events.update_drag_preview(self, event)
 
     def mouseReleaseEvent(self, event):

@@ -22,11 +22,12 @@ class MainWidget(QWidget):
         self.letters = self.json_manager.load_all_letters()
         self.key_bindings_manager = KeyBindingsHandler()
         self.arrow_manager = ArrowManager(self)
+        
         self.sequence_view = SequenceView(self)
         self.graph_editor_widget = GraphEditorWidget(self)  
         self.optionboard_view = OptionboardView(self)
+        
         self.letter_buttons_frame = LetterButtonsFrame(self)  
-
         self.graphboard_view = self.graph_editor_widget.graphboard_view
         self.info_frame = self.graph_editor_widget.info_frame
         self.propbox_view = self.graph_editor_widget.propbox_view

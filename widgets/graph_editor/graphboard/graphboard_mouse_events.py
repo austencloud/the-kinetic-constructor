@@ -13,42 +13,38 @@ from constants import GRAPHBOARD_SCALE, STATIC, PRO, ANTI
 class GraphboardMouseEvents():
     def __init__(self, graphboard_view):
         self.view = graphboard_view
-    
-    def mousePressEvent(self, event):
+
+
+    ### MOUSE PRESS ###
+
+    def handle_mouse_press(self, event):
         self.view.setFocus()
         items = self.view.items(event.pos())
+        self.select_or_deselect_items(event, items)
+        if not items or not items[0].isSelected():
+            self.view.clear_selection(items)
+
+    def select_or_deselect_items(self, event, items):
         if items and items[0].flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable:
             if event.button() == Qt.MouseButton.LeftButton and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
                 items[0].setSelected(not items[0].isSelected())
             elif not items[0].isSelected():
                 self.view.clear_selection()
                 items[0].setSelected(True)
-        else:
-            self.view.clear_selection()
-        super().mousePressEvent(event)
-        
-        # Check if any item got selected after calling the parent class's method
-        if items and not items[0].isSelected():
-            items[0].setSelected(True)
 
-    def dragMoveEvent(self, event):
-        current_quadrant = self.view.get_graphboard_quadrants(self.view.mapToScene(event.position().toPoint()))  # Changed event.pos() to event.position()
 
+    ### DRAG MOVE ###
+
+    def get_current_quadrant(self, event):
+        return self.view.get_graphboard_quadrants(self.view.mapToScene(event.position().toPoint()))
+
+    def create_temp_arrow_dict(self, event, current_quadrant):
         dropped_svg = event.mimeData().text()
         base_name = os.path.basename(dropped_svg)
         motion_type = base_name.split('_')[0]
         turns = base_name.split('_')[1].split('.')[0]
         rotation_direction = 'r' if motion_type == PRO else 'l'
-        color = event.mimeData().data("color").data().decode()  # Retrieve the color
-        for arrow in self.view.scene().items():
-            if isinstance(arrow, Arrow):
-                if arrow.color == color:
-                    event.ignore()
-                    QToolTip.showText(QCursor.pos(), "Cannot add two motions of the same color.")
-                    return
-        event.accept()
-        QToolTip.hideText() 
-        
+        color = event.mimeData().data("color").data().decode()
         temp_arrow_dict = {
             'color': color,
             'motion_type': motion_type,
@@ -58,127 +54,139 @@ class GraphboardMouseEvents():
             'end_location': None,
             'turns': turns
         }
-        
+        return temp_arrow_dict
+
+    def update_temp_arrow_and_staff(self, current_quadrant, temp_arrow_dict):
         if self.view.temp_arrow is None:
             self.view.temp_arrow = self.view.arrow_factory.create_arrow(self.view, temp_arrow_dict)
-            self.view.temp_arrow.color = event.mimeData().data("color").data().decode() 
-            self.view.temp_arrow.start_location, self.view.temp_arrow.end_location = self.view.temp_arrow.attributes.get_start_end_locations(motion_type, rotation_direction, current_quadrant)
-           
+            self.view.temp_arrow.color = temp_arrow_dict['color']
+            self.view.temp_arrow.start_location, self.view.temp_arrow.end_location = self.view.temp_arrow.attributes.get_start_end_locations(
+                temp_arrow_dict['motion_type'], temp_arrow_dict['rotation_direction'], current_quadrant)
+
             temp_staff_dict = {
-                'color': color,
+                'color': temp_arrow_dict['color'],
                 'location': self.view.temp_arrow.end_location,
                 'layer': 1
-            } 
-        
-
+            }
             self.view.temp_staff = self.view.staff_factory.create_staff(self.view.graphboard_scene, temp_staff_dict)
             self.view.graphboard_scene.addItem(self.view.temp_staff)
-            
-    
-        # Update the temporary arrow and staff
+
         self.view.update_dragged_arrow_and_staff(current_quadrant, self.view.temp_arrow, self.view.temp_staff)
 
-        # Update the pixmap based on the new quadrant
+    def update_drag_preview(self, current_quadrant):
         new_svg_data = self.view.temp_arrow.set_svg_color(self.view.temp_arrow.svg_file, self.view.temp_arrow.color)
         renderer = QSvgRenderer(new_svg_data)
-        scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE  # Scale the pixmap
+        scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE
         pixmap = QPixmap(scaled_size)
         pixmap.fill(Qt.GlobalColor.transparent)
         painter = QPainter(pixmap)
         with painter as painter:
             renderer.render(painter)
-        
-        # Apply rotation to the pixmap
+
         angle = self.view.temp_arrow.get_rotation_angle(current_quadrant)
         transform = QTransform().rotate(angle)
         rotated_pixmap = pixmap.transformed(transform)
-        
+
         if self.view.drag_preview is not None:
-            # Update the drag's pixmap
             self.view.drag_preview.setPixmap(rotated_pixmap)
             self.view.drag_preview.setHotSpot(rotated_pixmap.rect().center())
 
-    def update_dragged_arrow_and_staff(self, current_quadrant, temp_arrow, temp_staff):
-        temp_arrow.quadrant = current_quadrant
-        temp_arrow.update_rotation()
-        temp_arrow.update_appearance()
-        temp_arrow.start_location, temp_arrow.end_location = temp_arrow.attributes.get_start_end_locations(
-            temp_arrow.motion_type, temp_arrow.rotation_direction, current_quadrant)
-        temp_staff_dict = {
-            'color': temp_arrow.color,
-            'location': temp_arrow.end_location,
-            'layer': 1
-        }
-        temp_staff.attributes.update_attributes(temp_staff, temp_staff_dict)
-        temp_staff.update_appearance()
-        temp_staff.setPos(self.view.staff_manager.staff_xy_locations[temp_staff_dict['location']])
 
-    def dropEvent(self, event):
-        arrow = None
+    ### DROP ###
+
+    def handle_drop_event(self, event):
         self.view.setFocus()
         event.setDropAction(Qt.DropAction.CopyAction)
         event.accept()
+
+        dropped_data = self.extract_dropped_data(event)
+        dropped_arrow_dict, dropped_staff_dict = self.create_dropped_dicts(dropped_data)
+
+        arrow, staff = self.handle_existing_items(dropped_data, dropped_arrow_dict, dropped_staff_dict)
+
+        if arrow:
+            self.finalize_drop(arrow, staff)
+
+    def extract_dropped_data(self, event):
         dropped_arrow_svg_path = event.mimeData().text()
-        dropped_arrow_color = event.mimeData().data("color").data().decode()  # Retrieve the color
+        dropped_arrow_color = event.mimeData().data("color").data().decode()
         parts = os.path.basename(dropped_arrow_svg_path).split('_')
         dropped_arrow_svg_motion_type = parts[0]
         dropped_arrow_turns = parts[1].split('.')[0]
-        
+
         if dropped_arrow_svg_motion_type == PRO:
             dropped_arrow_rotation_direction = 'r'
         elif dropped_arrow_svg_motion_type == ANTI:
             dropped_arrow_rotation_direction = 'l'
-            
-        self.view.mouse_pos = self.view.mapToScene(event.position().toPoint()) 
-        dropped_arrow_quadrant = self.view.get_graphboard_quadrants(self.view.mouse_pos)
-        dropped_arrow_start_location, dropped_arrow_end_location = self.view.arrow_manager.arrow_attributes.get_start_end_locations(dropped_arrow_svg_motion_type, dropped_arrow_rotation_direction, dropped_arrow_quadrant)
-        
-        # Create the dropped arrow/staff dictionaries
-        dropped_arrow_dict = self.view.arrow_manager.arrow_attributes.create_arrow_dict(dropped_arrow_color, dropped_arrow_svg_motion_type, dropped_arrow_rotation_direction, dropped_arrow_quadrant, dropped_arrow_start_location, dropped_arrow_end_location, dropped_arrow_turns)
-        dropped_staff_dict = self.view.staff_manager.staff_attributes.create_staff_dict(dropped_arrow_color, dropped_arrow_end_location, 1)
-        
-        # Check for existing arrows and staffs of the same color
-        existing_arrows = [item for item in self.view.graphboard_scene.items() if isinstance(item, Arrow) and item.color == dropped_arrow_color]
-        existing_staffs = [item for item in self.view.graphboard_scene.items() if isinstance(item, Staff) and item.color == dropped_arrow_color]
 
-        # Case 1: No existing staff or arrow of the same color
+        self.view.mouse_pos = self.view.mapToScene(event.position().toPoint())
+        dropped_arrow_quadrant = self.view.get_graphboard_quadrants(self.view.mouse_pos)
+        dropped_arrow_start_location, dropped_arrow_end_location = self.view.arrow_manager.arrow_attributes.get_start_end_locations(
+            dropped_arrow_svg_motion_type, dropped_arrow_rotation_direction, dropped_arrow_quadrant)
+
+        return {
+            'color': dropped_arrow_color,
+            'motion_type': dropped_arrow_svg_motion_type,
+            'rotation_direction': dropped_arrow_rotation_direction,
+            'quadrant': dropped_arrow_quadrant,
+            'start_location': dropped_arrow_start_location,
+            'end_location': dropped_arrow_end_location,
+            'turns': dropped_arrow_turns
+        }
+
+    def create_dropped_dicts(self, dropped_data):
+        dropped_arrow_dict = self.view.arrow_manager.arrow_attributes.create_arrow_dict(
+            dropped_data['color'], dropped_data['motion_type'], dropped_data['rotation_direction'],
+            dropped_data['quadrant'], dropped_data['start_location'], dropped_data['end_location'],
+            dropped_data['turns'])
+        dropped_staff_dict = self.view.staff_manager.staff_attributes.create_staff_dict(
+            dropped_data['color'], dropped_data['end_location'], 1)
+        return dropped_arrow_dict, dropped_staff_dict
+
+    def handle_existing_items(self, dropped_data, dropped_arrow_dict, dropped_staff_dict):
+        existing_arrows = [item for item in self.view.graphboard_scene.items() if
+                           isinstance(item, Arrow) and item.color == dropped_data['color']]
+        existing_staffs = [item for item in self.view.graphboard_scene.items() if
+                           isinstance(item, Staff) and item.color == dropped_data['color']]
+        arrow = None
+        staff = None
+
         if not existing_arrows and not existing_staffs:
             arrow = self.view.arrow_factory.create_arrow(self.view, dropped_arrow_dict)
             staff = self.view.staff_factory.create_staff(self.view.graphboard_scene, dropped_staff_dict)
             self.view.graphboard_scene.addItem(arrow)
             self.view.graphboard_scene.addItem(staff)
 
-        # Case 2: Existing staff of the same color but is static
         elif existing_staffs and existing_staffs[0].type == STATIC:
             existing_staff = existing_staffs[0]
-            existing_staff.attributes.update_attributes(existing_staff, dropped_staff_dict)  # Update the staff's attributes
-            existing_staff.setPos(self.view.staff_xy_locations[dropped_arrow_end_location])  # Update staff position
+            existing_staff.attributes.update_attributes(existing_staff, dropped_staff_dict)
+            existing_staff.setPos(self.view.staff_xy_locations[dropped_data['end_location']])
             arrow = self.view.arrow_factory.create_arrow(self.view, dropped_arrow_dict)
             self.view.graphboard_scene.addItem(arrow)
 
-        # Case 3: Both existing staff and arrow of the same color
         elif existing_arrows and existing_staffs:
-            event.ignore()
             QToolTip.showText(QCursor.pos(), "Cannot add two motions of the same color.")
-            return
-        
-        if arrow: 
-            arrow.setScale(GRAPHBOARD_SCALE)
-            staff.setScale(GRAPHBOARD_SCALE)     
-            self.view.clear_selection()
-            arrow.setSelected(True)
+            return arrow, staff
 
-            arrow.staff = staff
-            staff.arrow = arrow
+        return arrow, staff
 
-            self.view.graphboard_scene.removeItem(self.view.temp_staff)
-            
-            for arrow in self.view.graphboard_scene.items():
-                if isinstance(arrow, Arrow):
-                    arrow.arrow_manager.arrow_positioner.update_arrow_position(self.view)
-            
-            for staff in self.view.graphboard_scene.items():
-                if isinstance(staff, Staff):
-                    staff.setPos(self.view.staff_manager.staff_xy_locations[staff.location])
-            
-            self.view.info_manager.update()
+    def finalize_drop(self, arrow, staff):
+        arrow.setScale(GRAPHBOARD_SCALE)
+        staff.setScale(GRAPHBOARD_SCALE)
+        self.view.clear_selection()
+        arrow.setSelected(True)
+
+        arrow.staff = staff
+        staff.arrow = arrow
+
+        self.view.graphboard_scene.removeItem(self.view.temp_staff)
+
+        for arrow in self.view.graphboard_scene.items():
+            if isinstance(arrow, Arrow):
+                arrow.arrow_manager.arrow_positioner.update_arrow_position(self.view)
+
+        for staff in self.view.graphboard_scene.items():
+            if isinstance(staff, Staff):
+                staff.setPos(self.view.staff_manager.staff_xy_locations[staff.location])
+
+        self.view.info_manager.update()
