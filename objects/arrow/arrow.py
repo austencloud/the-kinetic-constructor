@@ -121,26 +121,26 @@ class Arrow(QGraphicsSvgItem):
             self.setSharedRenderer(self.renderer)
             
     def update_rotation(self):
-        angle = self.get_rotation_angle(self.quadrant)
+        angle = self.get_rotation_angle(self.quadrant, self.motion_type, self.rotation_direction)
         self.setRotation(angle)
 
-    def get_rotation_angle(self, quadrant):
-        quadrant_to_angle = self.get_quadrant_to_angle_map()
+    def get_rotation_angle(self, quadrant, motion_type, rotation_direction):
+        quadrant_to_angle = self.get_quadrant_to_angle_map(motion_type, rotation_direction)
         return quadrant_to_angle.get(quadrant, 0)
 
-    def get_quadrant_to_angle_map(self):
-        if self.motion_type == 'pro':
+    def get_quadrant_to_angle_map(self, motion_type, rotation_direction):
+        if motion_type == 'pro':
             return {
                 "r": {"ne": 0, "se": 90, "sw": 180, "nw": 270},
                 "l": {"ne": 0, "se": 90, "sw": 180, "nw": 270}
-            }.get(self.rotation_direction, {})
-        elif self.motion_type == 'anti':
+            }.get(rotation_direction, {})
+        elif motion_type == 'anti':
             return {
                 "r": {"ne": 0, "se": 90, "sw": 180, "nw": 270},
                 "l": {"ne": 0, "se": 90, "sw": 180, "nw": 270}
-            }.get(self.rotation_direction, {})
-        elif self.motion_type == 'static':
+            }.get(rotation_direction, {})
+        elif motion_type == 'static':
             return {
                 "r": {"ne": 0, "se": 0, "sw": 0, "nw": 0},
                 "l": {"ne": 0, "se": 0, "sw": 0, "nw": 0}
-            }.get(self.rotation_direction, {})
+            }.get(rotation_direction, {})

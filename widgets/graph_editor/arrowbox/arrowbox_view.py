@@ -34,7 +34,7 @@ class ArrowBoxView(QGraphicsView):
         self.arrowbox_frame.setLayout(self.objectbox_layout)
 
     def populate_arrows(self):
-
+        
         arrow1 = {
             'color': 'red',
             'motion_type': 'pro',

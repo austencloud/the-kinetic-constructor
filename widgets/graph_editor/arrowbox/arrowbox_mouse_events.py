@@ -11,7 +11,8 @@ import sys
 
 class ArrowBoxMouseEvents():
     dragged_arrow = None
-    
+    current_rotation_angle = 0  # Add this line to keep track of the current rotation angle
+
     def __init__(self, arrowbox_view):
         self.arrowbox_view = arrowbox_view
 
@@ -19,16 +20,10 @@ class ArrowBoxMouseEvents():
     def initialize_drag(self, view, arrow, event):
         print("initialize_drag called")
     
-        global dragged_arrow  # Declare that we're using the global variable
-        dragged_arrow = arrow
-    
         self.arrow = arrow
         view.artboard_start_position = event.pos()
-        view.dragging = True
         view.dragged_arrow = arrow
         view.graphboard_view.dragged_arrow = view.dragged_arrow
-        view.dragged_arrow_scale = GRAPHBOARD_SCALE
-        view.dragged_arrow_color = arrow.color
         view.current_quadrant = None
 
         # Create pixmap for drag preview
@@ -41,7 +36,7 @@ class ArrowBoxMouseEvents():
         with painter as painter:
             renderer.render(painter)
 
-        view.drag_preview = ArrowDragPreview(pixmap)
+        view.drag_preview = ArrowDragPreview(pixmap, self.arrow)
         view.drag_preview.setParent(QApplication.instance().activeWindow())
         view.drag_preview.show()
 
@@ -53,10 +48,13 @@ class ArrowBoxMouseEvents():
 
     
     def update_drag_preview(self, view, event):
-        over_graphboard = view.graphboard_view.rect().contains(view.graphboard_view.mapFromGlobal(view.mapToGlobal(event.pos())))
-        new_quadrant = view.graphboard_view.get_graphboard_quadrants(view.graphboard_view.mapToScene(event.pos())) if over_graphboard else view.current_quadrant
-        
+        pos_in_main_window = view.mapTo(view.window(), event.pos())
+        local_pos_in_graphboard = view.graphboard_view.mapFrom(view.window(), pos_in_main_window)
+        over_graphboard = view.graphboard_view.rect().contains(local_pos_in_graphboard)
+
         if over_graphboard:
+            new_quadrant = view.graphboard_view.get_graphboard_quadrants(view.graphboard_view.mapToScene(local_pos_in_graphboard))
+            
             if new_quadrant != view.current_quadrant:
                 view.current_quadrant = new_quadrant
                 renderer = QSvgRenderer(view.dragged_arrow.svg_file)
@@ -67,9 +65,15 @@ class ArrowBoxMouseEvents():
                 with painter as painter:
                     renderer.render(painter)
 
-                angle = view.dragged_arrow.get_rotation_angle(new_quadrant)
-                transform = QTransform().rotate(angle)
-                rotated_pixmap = view.drag_preview.label.pixmap().transformed(transform)
+                angle = view.dragged_arrow.get_rotation_angle(new_quadrant, view.drag_preview.motion_type, view.drag_preview.rotation_direction)
+
+                unrotate_transform = QTransform().rotate(-self.current_rotation_angle)
+                unrotated_pixmap = view.drag_preview.label.pixmap().transformed(unrotate_transform)
+
+                rotate_transform = QTransform().rotate(angle)
+                rotated_pixmap = unrotated_pixmap.transformed(rotate_transform)
+
+                self.current_rotation_angle = angle
                 view.drag_preview.setPixmap(rotated_pixmap)
                 
         main_window = view.window()
@@ -83,11 +87,11 @@ class ArrowBoxMouseEvents():
         arrow = view.itemAt(event.pos())
         if arrow is not None and arrow in view.drag_state:
             del view.drag_state[arrow]
-            view.dragging = False
             view.dragged_arrow = None
             view.graphboard_view.temp_arrow = None
             view.graphboard_view.temp_staff = None
         if view.drag_preview is not None:
             view.drag_preview.close()
             view.drag_preview = None
+        self.current_rotation_angle = 0
 
