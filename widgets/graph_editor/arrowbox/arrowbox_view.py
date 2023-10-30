@@ -76,7 +76,8 @@ class ArrowBoxView(QGraphicsView):
         scenePos = self.mapToScene(event.pos())
         items = self.scene().items(scenePos)
         arrows = [item for item in items if isinstance(item, Arrow)]
-        self.dragged_item = arrows[0]
+        if arrows:
+            self.dragged_item = arrows[0]
         if arrows and event.button() == Qt.MouseButton.LeftButton:
             self.mouse_events.initialize_drag(self, self.dragged_item, event)
             self.dragging = True
@@ -85,10 +86,7 @@ class ArrowBoxView(QGraphicsView):
 
 
     def mouseMoveEvent(self, event):
-        if self.mouse_events.drag_preview is not None:
-            self.mouse_events.update_drag_preview(self, event)
-            if self.dragging: 
-                self.graphboard_view.dragMoveEvent(event, self.dragged_item)
+        self.mouse_events.handle_mouse_move(self, event)
 
     def mouseReleaseEvent(self, event):
         self.mouse_events.handle_mouse_release(self, event)

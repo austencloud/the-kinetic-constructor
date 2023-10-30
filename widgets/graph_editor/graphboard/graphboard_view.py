@@ -89,11 +89,9 @@ class GraphboardView(QGraphicsView):
         self.mouse_events.handle_mouse_press(event)
         super().mousePressEvent(event)
 
-    def dragMoveEvent(self, event, dragged_arrow):
-        if dragged_arrow.in_graphboard == True:
-            current_quadrant = self.mouse_events.get_current_quadrant(event)
-            self.mouse_events.update_temp_staff(dragged_arrow)
-
+    def dragMoveEvent(self, event, drag_preview):
+        if drag_preview.in_graphboard == True:
+            self.mouse_events.update_temp_staff(drag_preview)
 
     def dropEvent(self, event):
         self.mouse_events.handle_drop_event(event)

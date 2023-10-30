@@ -16,6 +16,7 @@ class GraphboardMouseEvents():
         self.scene = self.view.scene()
         self.staff_manager = self.view.staff_manager
         self.staff_factory = self.staff_manager.staff_factory
+        self.temp_staff = None
         
     ### MOUSE PRESS ###
 
@@ -40,19 +41,21 @@ class GraphboardMouseEvents():
     def get_current_quadrant(self, event):
         return self.view.get_graphboard_quadrants(self.view.mapToScene(event.position().toPoint()))
 
-    def update_temp_staff(self, dragged_arrow):
+    def update_temp_staff(self, drag_preview):
+        for temp_staff in self.scene.items():
+            if isinstance(temp_staff, Staff) and temp_staff.color == drag_preview.color:
+                self.scene.removeItem(temp_staff)
+
         temp_staff_dict = {
-            'color': dragged_arrow.color,
-            'location': dragged_arrow.end_location,
+            'color': drag_preview.color,
+            'location': drag_preview.end_location,
             'layer': 1
         }
+        
         self.temp_staff = self.staff_factory.create_staff(self.view.graphboard_scene, temp_staff_dict)
         self.view.temp_staff = self.temp_staff
         self.scene.addItem(self.temp_staff)
-        self.temp_staff.setPos(self.staff_manager.staff_xy_locations[dragged_arrow.end_location])
-        self.temp_staff.is_temporary = True
-
-
+        self.temp_staff.setPos(self.staff_manager.staff_xy_locations[drag_preview.end_location])
 
 
     ### DROP ###

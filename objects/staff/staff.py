@@ -82,7 +82,7 @@ class Staff(QGraphicsSvgItem):
             print("Renderer is not valid. SVG data might be incorrect.")
         
         self.setSharedRenderer(self.renderer)  # Re-attach the renderer
-        self.color = hex_color
+        self.color = new_color
         self.scene.update()  # Force a redraw
 
     def swap_axis(self):
