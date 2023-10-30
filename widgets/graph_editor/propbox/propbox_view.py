@@ -7,7 +7,7 @@ class PropBoxView(QGraphicsView):
     def __init__(self, main_widget):
         super().__init__()
         self.main_window = main_widget.main_window
-        self.staff_manager = PropboxStaffHandler(main_widget)
+        self.staff_handler = PropboxStaffHandler(main_widget)
         self.main_widget = main_widget
          
         self.propbox_scene = QGraphicsScene()

@@ -28,7 +28,8 @@ class Arrow(QGraphicsSvgItem):
     def initialize_app_attributes(self, view, dict):
         if view is not None:
             self.view = view
-            self.info_frame = view.info_frame
+            if self.view.info_frame is not None:
+                self.info_frame = view.info_frame
             self.main_widget = view.main_widget
             self.arrow_manager = self.main_widget.arrow_manager
             self.arrow_manager.arrow = self

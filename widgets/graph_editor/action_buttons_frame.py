@@ -19,7 +19,7 @@ class ActionButtonsFrame(QFrame):
         # Configuration for each button
         buttons_config = [
             ("images/icons/update_locations.png", "Update Position", 
-             lambda: self.main_widget.json_manager.update_optimal_locations_in_json(*self.main_widget.graphboard_view.get_current_arrow_positions())),
+             lambda: self.main_widget.json_handler.update_optimal_locations_in_json(*self.main_widget.graphboard_view.get_current_arrow_positions())),
             ("images/icons/delete.png", "Delete", 
              lambda: self.main_widget.arrow_manager.arrow_selector.delete_arrow(self.main_widget.graphboard_scene.selectedItems())),
             ("images/icons/rotate_right.png", "Rotate Right", 

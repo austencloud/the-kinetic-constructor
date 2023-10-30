@@ -18,8 +18,8 @@ class MainWidget(QWidget):
         self.main_window = main_window
         
         self.layout_manager = LayoutManager(self)
-        self.json_manager = JsonHandler()
-        self.letters = self.json_manager.load_all_letters()
+        self.json_handler = JsonHandler()
+        self.letters = self.json_handler.load_all_letters()
         self.key_bindings_manager = KeyBindingsHandler()
         self.arrow_manager = ArrowManager(self)
         
@@ -39,15 +39,15 @@ class MainWidget(QWidget):
         self.connect_objects()
 
     def init_staffs(self):
-        self.graphboard_view.staff_manager.init_handpoints(self.graph_editor_widget.graphboard_view)
-        self.propbox_view.staff_manager.init_propbox_staffs(self.graph_editor_widget.propbox_view)
+        self.graphboard_view.staff_handler.init_handpoints(self.graph_editor_widget.graphboard_view)
+        self.propbox_view.staff_handler.init_propbox_staffs(self.graph_editor_widget.propbox_view)
 
     def connect_objects(self):
         self.info_frame.connect_view(self.graph_editor_widget.graphboard_view)
-        self.graphboard_view.staff_manager.info_manager = self.graphboard_view.info_manager
-        self.graphboard_view.staff_manager.grid = self.graphboard_view.grid
-        self.graphboard_view.staff_manager.graphboard_view = self.graph_editor_widget.graphboard_view
-        self.propbox_view.staff_manager.propbox_view = self.graph_editor_widget.propbox_view
+        self.graphboard_view.staff_handler.info_handler = self.graphboard_view.info_handler
+        self.graphboard_view.staff_handler.grid = self.graphboard_view.grid
+        self.graphboard_view.staff_handler.graphboard_view = self.graph_editor_widget.graphboard_view
+        self.propbox_view.staff_handler.propbox_view = self.graph_editor_widget.propbox_view
         self.graphboard_view.info_frame = self.graph_editor_widget.info_frame
         self.graphboard_view.generator = self.pictograph_generator
         self.arrow_manager.info_frame = self.graph_editor_widget.info_frame
@@ -55,8 +55,8 @@ class MainWidget(QWidget):
         self.arrow_manager.arrow_manipulator.graphboard_scene = self.graph_editor_widget.graphboard_view.graphboard_scene
         self.graph_editor_widget.graphboard_view.context_menu_manager.sequence_view = self.sequence_view
         self.sequence_view.pictograph_generator = self.pictograph_generator
-        self.sequence_view.info_manager = self.graphboard_view.info_manager
-        self.graphboard_view.info_manager.connect_widgets_and_managers()
+        self.sequence_view.info_handler = self.graphboard_view.info_handler
+        self.graphboard_view.info_handler.connect_widgets_and_managers()
 
 
 ### EVENTS ###

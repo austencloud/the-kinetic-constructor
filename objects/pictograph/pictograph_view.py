@@ -25,16 +25,17 @@ class PictographView(QGraphicsView):
         self.grid = Grid("images/grid/grid.svg")
         self.grid.setScale(PICTOGRAPH_SCALE)
         self.scene = self.pictograph_scene
-        self.info_manager = GraphboardInfoHandler(main_widget, self)
-        self.staff_manager = PictographStaffHandler(self.main_widget, self.scene)
-        self.staff_manager.connect_pictograph_view(self)
+        self.info_handler = GraphboardInfoHandler(main_widget, self)
+        self.staff_handler = PictographStaffHandler(self.main_widget, self.scene)
+        self.staff_handler.connect_pictograph_view(self)
         self.arrow_manager = ArrowManager(self.main_widget)
-        self.json_manager = JsonHandler(self.pictograph_scene)
-        self.staff_manager.connect_grid(self.grid)
+        self.json_handler = JsonHandler(self.pictograph_scene)
+        self.staff_handler.connect_grid(self.grid)
         self.init_grid()
-        self.staff_manager.init_pictograph_staffs(self, self.grid)
+        self.staff_handler.init_pictograph_staffs(self, self.grid)
         self.graphboard_view = main_widget.graph_editor_widget.graphboard_view
         self.view_scale = PICTOGRAPH_SCALE
+        self.info_frame = None
         
     def mouseMoveEvent(self, event):
         # Call the parent class's mouseMoveEvent to maintain its original behavior
@@ -120,7 +121,7 @@ class PictographView(QGraphicsView):
         for arrow in created_arrows:
             if arrow not in self.pictograph_scene.items():
                 self.pictograph_scene.addItem(arrow)                    
-        self.staff_manager.update_pictograph_staffs(self.pictograph_scene)
+        self.staff_handler.update_pictograph_staffs(self.pictograph_scene)
 
     def place_ghost_arrows(self, created_arrows, arrow_dict):
         ghost_arrow = self.arrow_manager.arrow_factory.create_arrow(self, arrow_dict)
@@ -181,7 +182,7 @@ class PictographView(QGraphicsView):
                     red_position = pos
                 elif item.get_attributes()['color'] == 'blue':
                     blue_position = pos
-        self.json_manager.update_optimal_locations_in_json(red_position, blue_position)
+        self.json_handler.update_optimal_locations_in_json(red_position, blue_position)
         
     def contextMenuEvent(self, event):
         contextMenu = QMenu(self)

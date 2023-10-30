@@ -75,7 +75,7 @@ class SequenceView(QGraphicsView):
         self.add_pictograph(pictograph)
         graphboard_view.clear_graphboard()
         graphboard_view.update_letter(None)
-        letter = self.info_manager.determine_current_letter_and_type()[0]
+        letter = self.info_handler.determine_current_letter_and_type()[0]
         if letter:
             self.main_widget.word_label.setText(self.main_widget.word_label.text() + letter)
         self.sequence_scene.update()

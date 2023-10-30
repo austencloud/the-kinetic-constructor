@@ -17,7 +17,7 @@ class InfoFrame(QFrame):
         self.graphboard_view = graphboard_view
         self.remaining_staff = {}
         self.previous_state = None
-        self.staff_manager = graphboard_view.staff_manager
+        self.staff_handler = graphboard_view.staff_handler
         self.letters = main_widget.letters
         self.main_window = main_widget.main_window
 
@@ -69,7 +69,7 @@ class InfoFrame(QFrame):
             self.grid_layout.setRowStretch(idx, 0 if idx == 0 else 1)
         
     def update_type_and_position_info(self):
-        current_letter, current_letter_type = self.graphboard_view.info_manager.determine_current_letter_and_type()
+        current_letter, current_letter_type = self.graphboard_view.info_handler.determine_current_letter_and_type()
         if current_letter and current_letter_type:
             start_end_positions = self.get_start_end_locations()
             if start_end_positions:
@@ -87,7 +87,7 @@ class InfoFrame(QFrame):
         self.graphboard_view = graphboard_view
 
     def get_current_letter(self):
-        self.letter = self.graphboard_view.info_manager.determine_current_letter_and_type()[0]
+        self.letter = self.graphboard_view.info_handler.determine_current_letter_and_type()[0]
         if self.letter is not None:
             return self.letter
     

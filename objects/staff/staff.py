@@ -20,7 +20,7 @@ class Staff(QGraphicsSvgItem):
         self.scene = scene
         self.arrow = None
         self.view = scene.views()[0]
-        self.staff_manager = self.view.staff_manager
+        self.staff_handler = self.view.staff_handler
         self.initialize_dict_attributes(staff_dict)
         self.initialize_app_attributes()
 
@@ -71,7 +71,7 @@ class Staff(QGraphicsSvgItem):
             self.axis = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
         elif self.layer == 2:
             self.axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
-        self.setPos(self.staff_manager.staff_xy_locations[location])
+        self.setPos(self.staff_handler.staff_xy_locations[location])
 
     def set_color(self, new_color):
         hex_color = COLOR_MAP.get(new_color, new_color)

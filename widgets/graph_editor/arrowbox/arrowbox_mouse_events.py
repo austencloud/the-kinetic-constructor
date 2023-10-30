@@ -17,7 +17,7 @@ class ArrowBoxMouseEvents():
         self.arrowbox_view = arrowbox_view
         self.graphboard_view = arrowbox_view.graphboard_view
         self.graphboard_scene = self.graphboard_view.scene()
-        self.staff_factory = self.graphboard_view.staff_manager.staff_factory
+        self.staff_factory = self.graphboard_view.staff_handler.staff_factory
 
     def initialize_drag(self, view, arrow, event):
         self.setup_dragging(arrow)

@@ -4,9 +4,10 @@ import math
 from constants import GRAPHBOARD_WIDTH, GRAPHBOARD_SCALE, PICTOGRAPH_SCALE, LEFT, RIGHT, UP, DOWN, BETA_OFFSET
 
 class StaffPositioner:
-    def __init__(self, staff_manager):
-        self.staff_manager = staff_manager
-
+    def __init__(self, staff_handler):
+        self.staff_handler = staff_handler
+        self.letters = staff_handler.main_widget.letters
+        
     ### REPOSITIONERS ###
         
     def reposition_staffs(self, scene, board_state):
@@ -80,7 +81,7 @@ class StaffPositioner:
                     self.move_staff(staff, action, scale)
                 elif isinstance(action, tuple):
                     self.move_staff(staff, action[0], scale)
-                    other_staff = next((s for s in self.staff_manager.staffs_on_board.values() if s.location == staff.location and s != staff), None)
+                    other_staff = next((s for s in self.staff_handler.staffs_on_board.values() if s.location == staff.location and s != staff), None)
                     if other_staff:
                         self.move_staff(other_staff, action[1], scale)
 
@@ -141,8 +142,8 @@ class StaffPositioner:
     def check_replace_beta_staffs(self, scene):
         view = scene.views()[0]
         board_state = view.get_state()
-        if len(self.staff_manager.staffs_on_board) == 2:
-            staffs_list = list(self.staff_manager.staffs_on_board.items())
+        if len(self.staff_handler.staffs_on_board) == 2:
+            staffs_list = list(self.staff_handler.staffs_on_board.items())
             if staffs_list[0][1].location == staffs_list[1][1].location:
                 self.reposition_staffs(scene, board_state)     
 
@@ -160,7 +161,7 @@ class StaffPositioner:
     
     def get_optimal_arrow_location(self, arrow, view):
         current_state = view.get_state()
-        current_letter = view.info_manager.determine_current_letter_and_type()[0]
+        current_letter = view.info_handler.determine_current_letter_and_type()[0]
 
         if current_letter is not None:
             matching_letters = self.letters[current_letter]
@@ -183,7 +184,7 @@ class StaffPositioner:
         return None 
 
     def set_staff_position_based_on_arrow(self, arrow, scale):
-        staff = self.staff_manager.staffs_on_board[arrow['end_location'] + '_staff_' + arrow['color']]
+        staff = self.staff_handler.staffs_on_board[arrow['end_location'] + '_staff_' + arrow['color']]
         direction = self.determine_translation_direction(arrow)
         new_position = self.calculate_new_position(staff.pos(), direction, scale)
         staff.setPos(new_position)

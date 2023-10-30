@@ -7,7 +7,7 @@ class ArrowPositioner:
 
     def update_arrow_position(self, graphboard_view):
         current_arrows = graphboard_view.get_arrows()
-        letter = self.arrow_manager.graphboard_view.info_manager.determine_current_letter_and_type()[0]
+        letter = self.arrow_manager.graphboard_view.info_handler.determine_current_letter_and_type()[0]
         if letter is not None:
             self.set_optimal_arrow_pos(current_arrows)
         else:
@@ -16,7 +16,7 @@ class ArrowPositioner:
 
     def set_optimal_arrow_pos(self, current_arrows):
         current_state = self.arrow_manager.graphboard_view.get_state()
-        current_letter = self.arrow_manager.graphboard_view.info_manager.determine_current_letter_and_type()[0]
+        current_letter = self.arrow_manager.graphboard_view.info_handler.determine_current_letter_and_type()[0]
         if current_letter is not None:
             matching_letters = self.arrow_manager.letters[current_letter]
             optimal_locations = self.arrow_manager.arrow_state_comparator.find_optimal_locations(current_state, matching_letters)

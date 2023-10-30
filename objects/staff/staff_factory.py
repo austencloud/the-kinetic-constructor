@@ -1,8 +1,8 @@
 from objects.staff.staff import Staff
 
 class StaffFactory:
-    def __init__(self, staff_manager):
-        self.staff_manager = staff_manager
+    def __init__(self, staff_handler):
+        self.staff_handler = staff_handler
 
     def create_staff(self, scene, staff_dict):
         staff = Staff(scene, staff_dict)

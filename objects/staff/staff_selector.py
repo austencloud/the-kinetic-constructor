@@ -1,8 +1,8 @@
 
 class StaffSelector: 
-    def __init__(self, staff_manager):
-        self.staff_manager = staff_manager
-        self.arrow_manager = staff_manager.main_widget.arrow_manager
+    def __init__(self, staff_handler):
+        self.staff_handler = staff_handler
+        self.arrow_manager = staff_handler.main_widget.arrow_manager
        
     def delete_staff(self, staffs):
         if staffs:
@@ -23,6 +23,6 @@ class StaffSelector:
                 print(f"{staff.color} staff deleted")
 
                 self.arrow_manager.info_frame.update()
-                self.arrow_manager.graphboard_view.update_letter(self.arrow_manager.graphboard_view.info_manager.determine_current_letter_and_type()[0])
+                self.arrow_manager.graphboard_view.update_letter(self.arrow_manager.graphboard_view.info_handler.determine_current_letter_and_type()[0])
         else:
             print("No staffs selected")

@@ -3,7 +3,8 @@ from objects.staff.staff_factory import StaffFactory
 from objects.staff.staff_positioner import StaffPositioner
 from objects.staff.staff_manipulator import StaffManipulator
 from objects.staff.staff_selector import StaffSelector
-class StaffManager(QObject):
+
+class StaffHandler(QObject):
     def __init__(self, main_widget):
         super().__init__()
         self.main_widget = main_widget

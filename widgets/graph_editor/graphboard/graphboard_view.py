@@ -27,6 +27,7 @@ class GraphboardView(QGraphicsView):
     def init_ui(self):
         self.setAcceptDrops(True)
         self.setInteractive(True)
+        self.is_graphboard = True
         self.dragging = None
         self.temp_arrow = None
         self.temp_staff = None
@@ -50,15 +51,15 @@ class GraphboardView(QGraphicsView):
         self.graphboard_scene.addItem(self.grid)
 
     def init_managers(self, main_widget):
-        self.info_manager = GraphboardInfoHandler(main_widget, self)
-        self.staff_manager = GraphboardStaffHandler(main_widget, self.graphboard_scene)
-        self.export_manager = ExportHandler(self.staff_manager, self.grid, self)
+        self.info_handler = GraphboardInfoHandler(main_widget, self)
+        self.staff_handler = GraphboardStaffHandler(main_widget, self.graphboard_scene)
+        self.export_manager = ExportHandler(self.staff_handler, self.grid, self)
         self.context_menu_manager = GraphboardContextMenuHandler(self)
         self.mouse_events = GraphboardMouseEvents(self)
         self.arrow_manager = main_widget.arrow_manager
         self.arrow_manager.graphboard_view = self
         self.arrow_factory = self.arrow_manager.arrow_factory
-        self.staff_factory = self.staff_manager.staff_factory
+        self.staff_factory = self.staff_handler.staff_factory
         
     def init_grid(self):
         transform = QTransform()
@@ -212,7 +213,7 @@ class GraphboardView(QGraphicsView):
     ### OTHER ###
 
     def update_letter(self, letter):
-        letter = self.info_manager.determine_current_letter_and_type()[0]
+        letter = self.info_handler.determine_current_letter_and_type()[0]
         if letter is None or letter == 'None':
             svg_file = f'images/letters/blank.svg'
             renderer = QSvgRenderer(svg_file)

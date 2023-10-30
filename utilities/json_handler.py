@@ -10,13 +10,14 @@ class JsonHandler(QObject):
     def load_all_letters(self):
         directory = 'json'
         letters = {}
-        for filename in os.listdir(directory):
-            if filename.endswith('.json'):
-                filepath = os.path.join(directory, filename)
-                with open(filepath, 'r',  encoding='utf-8') as file:
-                    letter_data = json.load(file)
-                    letter_key = filename.replace('.json', '')
-                    letters[letter_key] = letter_data[letter_key]
+        for root, dirs, files in os.walk(directory):
+            for filename in files:
+                if filename.endswith('.json'):
+                    filepath = os.path.join(root, filename)
+                    with open(filepath, 'r',  encoding='utf-8') as file:
+                        letter_data = json.load(file)
+                        letter_key = filename.replace('.json', '')
+                        letters[letter_key] = letter_data[letter_key]
         return letters
 
     def update_individual_json(self, letter, updated_data, directory):

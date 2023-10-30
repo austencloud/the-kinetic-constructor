@@ -12,6 +12,7 @@ class ArrowMouseEvents():
             arrow.quadrant = new_quadrant
             arrow.update_appearance()
             arrow.info_frame.update()
+            arrow.view.info_handler.update()
             arrow.start_location, arrow.end_location = arrow.attributes.get_start_end_locations(arrow.motion_type, arrow.rotation_direction, arrow.quadrant)
             self.update_staff_attributes(arrow)
 
@@ -27,5 +28,5 @@ class ArrowMouseEvents():
         }
         arrow.staff.attributes.update_attributes(arrow.staff, updated_staff_dict)
         arrow.staff.update_appearance()
-        arrow.staff.setPos(arrow.view.staff_manager.staff_xy_locations[arrow.staff.location])
+        arrow.staff.setPos(arrow.view.staff_handler.staff_xy_locations[arrow.staff.location])
 

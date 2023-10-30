@@ -12,9 +12,9 @@ class GraphboardMouseEvents():
     def __init__(self, graphboard_view):
         self.graphboard_view = graphboard_view
         self.graphboard_scene = self.graphboard_view.scene()
-        self.staff_manager = self.graphboard_view.staff_manager
+        self.staff_handler = self.graphboard_view.staff_handler
         self.arrow_factory = self.graphboard_view.main_widget.arrow_manager.arrow_factory
-        self.staff_factory = self.staff_manager.staff_factory
+        self.staff_factory = self.staff_handler.staff_factory
         self.temp_staff = None
 
     ### MOUSE PRESS ###
@@ -41,7 +41,6 @@ class GraphboardMouseEvents():
         return self.graphboard_view.get_graphboard_quadrants(self.graphboard_view.mapToScene(event.position().toPoint()))
 
     def update_temp_staff(self, drag_preview):
-        
         if self.graphboard_view.temp_staff:
             self.prev_staff_state = {
                 'color': self.graphboard_view.temp_staff.color,
@@ -64,7 +63,7 @@ class GraphboardMouseEvents():
         self.temp_staff = self.staff_factory.create_staff(self.graphboard_view.graphboard_scene, temp_staff_dict)
         self.graphboard_view.temp_staff = self.temp_staff
         self.graphboard_scene.addItem(self.temp_staff)
-        self.temp_staff.setPos(self.staff_manager.staff_xy_locations[drag_preview.end_location])
+        self.temp_staff.setPos(self.staff_handler.staff_xy_locations[drag_preview.end_location])
 
 
     ### DROP ###
@@ -114,8 +113,8 @@ class GraphboardMouseEvents():
 
         for item in self.graphboard_view.graphboard_scene.items():
             if isinstance(item, Staff):
-                item.setPos(self.graphboard_view.staff_manager.staff_xy_locations[item.location])
+                item.setPos(self.graphboard_view.staff_handler.staff_xy_locations[item.location])
 
-        self.graphboard_view.info_manager.update()
+        self.graphboard_view.info_handler.update()
 
 
