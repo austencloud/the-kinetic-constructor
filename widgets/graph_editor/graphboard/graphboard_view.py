@@ -1,7 +1,3 @@
-
-import os
-import typing
-from PyQt6 import QtGui
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtGui import QTransform
 from PyQt6.QtSvg import QSvgRenderer
@@ -93,11 +89,11 @@ class GraphboardView(QGraphicsView):
         self.mouse_events.handle_mouse_press(event)
         super().mousePressEvent(event)
 
-    def dragMoveEvent(self, event):
-        current_quadrant = self.mouse_events.get_current_quadrant(event)
-        temp_arrow_dict = self.mouse_events.create_temp_arrow_dict(event, current_quadrant)
-        self.mouse_events.update_temp_arrow_and_staff(current_quadrant, temp_arrow_dict)
-        self.mouse_events.update_drag_preview(current_quadrant)
+    def dragMoveEvent(self, event, dragged_arrow):
+        if dragged_arrow.in_graphboard == True:
+            current_quadrant = self.mouse_events.get_current_quadrant(event)
+            self.mouse_events.update_temp_staff(dragged_arrow)
+
 
     def dropEvent(self, event):
         self.mouse_events.handle_drop_event(event)

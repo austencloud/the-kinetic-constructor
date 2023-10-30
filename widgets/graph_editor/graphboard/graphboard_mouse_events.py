@@ -13,8 +13,10 @@ from constants import GRAPHBOARD_SCALE, STATIC, PRO, ANTI
 class GraphboardMouseEvents():
     def __init__(self, graphboard_view):
         self.view = graphboard_view
-
-
+        self.scene = self.view.scene()
+        self.staff_manager = self.view.staff_manager
+        self.staff_factory = self.staff_manager.staff_factory
+        
     ### MOUSE PRESS ###
 
     def handle_mouse_press(self, event):
@@ -38,61 +40,19 @@ class GraphboardMouseEvents():
     def get_current_quadrant(self, event):
         return self.view.get_graphboard_quadrants(self.view.mapToScene(event.position().toPoint()))
 
-    def create_temp_arrow_dict(self, event, current_quadrant):
-        dropped_svg = event.mimeData().text()
-        base_name = os.path.basename(dropped_svg)
-        motion_type = base_name.split('_')[0]
-        turns = base_name.split('_')[1].split('.')[0]
-        rotation_direction = 'r' if motion_type == PRO else 'l'
-        color = event.mimeData().data("color").data().decode()
-        temp_arrow_dict = {
-            'color': color,
-            'motion_type': motion_type,
-            'rotation_direction': rotation_direction,
-            'quadrant': current_quadrant,
-            'start_location': None,
-            'end_location': None,
-            'turns': turns
+    def update_temp_staff(self, dragged_arrow):
+        temp_staff_dict = {
+            'color': dragged_arrow.color,
+            'location': dragged_arrow.end_location,
+            'layer': 1
         }
-        return temp_arrow_dict
-
-    def update_temp_arrow_and_staff(self, current_quadrant, temp_arrow_dict):
-        if self.view.temp_arrow is None:
-            self.view.temp_arrow = self.view.arrow_factory.create_arrow(self.view, temp_arrow_dict)
-            self.view.temp_arrow.color = temp_arrow_dict['color']
-            self.view.temp_arrow.start_location, self.view.temp_arrow.end_location = self.view.temp_arrow.attributes.get_start_end_locations(
-                temp_arrow_dict['motion_type'], temp_arrow_dict['rotation_direction'], current_quadrant)
-
-            temp_staff_dict = {
-                'color': temp_arrow_dict['color'],
-                'location': self.view.temp_arrow.end_location,
-                'layer': 1
-            }
-            self.view.temp_staff = self.view.staff_factory.create_staff(self.view.graphboard_scene, temp_staff_dict)
-            self.view.graphboard_scene.addItem(self.view.temp_staff)
-            self.view.temp_staff.setPos(self.view.staff_xy_locations[self.view.temp_arrow.end_location])
-            self.view.temp_staff.is_temporary = True
+        self.temp_staff = self.staff_factory.create_staff(self.view.graphboard_scene, temp_staff_dict)
+        self.view.temp_staff = self.temp_staff
+        self.scene.addItem(self.temp_staff)
+        self.temp_staff.setPos(self.staff_manager.staff_xy_locations[dragged_arrow.end_location])
+        self.temp_staff.is_temporary = True
 
 
-        self.view.update_dragged_arrow_and_staff(current_quadrant, self.view.temp_arrow, self.view.temp_staff)
-
-    def update_drag_preview(self, current_quadrant):
-        new_svg_data = self.view.temp_arrow.set_svg_color(self.view.temp_arrow.svg_file, self.view.temp_arrow.color)
-        renderer = QSvgRenderer(new_svg_data)
-        scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE
-        pixmap = QPixmap(scaled_size)
-        pixmap.fill(Qt.GlobalColor.transparent)
-        painter = QPainter(pixmap)
-        with painter as painter:
-            renderer.render(painter)
-
-        angle = self.view.temp_arrow.get_rotation_angle(current_quadrant)
-        transform = QTransform().rotate(angle)
-        rotated_pixmap = pixmap.transformed(transform)
-
-        if self.view.drag_preview is not None:
-            self.view.drag_preview.setPixmap(rotated_pixmap)
-            self.view.drag_preview.setHotSpot(rotated_pixmap.rect().center())
 
 
     ### DROP ###

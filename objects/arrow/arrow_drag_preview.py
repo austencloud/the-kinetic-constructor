@@ -1,22 +1,35 @@
 from PyQt6.QtWidgets import QWidget, QLabel
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPixmap, QPainter
+from PyQt6.QtSvg import QSvgRenderer
 from constants import GRAPHBOARD_SCALE
 class ArrowDragPreview(QWidget):
-    def __init__(self, pixmap, arrow):
+    def __init__(self, arrow):
         super().__init__()
-        # Debugging: Set a background color to check visibility
-        self.setStyleSheet("background-color: transparent;")
+
+        pixmap = self.create_pixmap(arrow)
         
         self.label = QLabel(self)
         self.label.setPixmap(pixmap)
         self.label.setFixedHeight(pixmap.height())
+        self.label.setPixmap(pixmap)
+        
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        
         self.center = pixmap.rect().center() * GRAPHBOARD_SCALE
 
         self.rotation_direction = arrow.rotation_direction
         self.motion_type = arrow.motion_type
         
-    def setPixmap(self, pixmap):
-        self.label.setPixmap(pixmap)
 
+    def create_pixmap(self, dragged_arrow):
+        new_svg_data = dragged_arrow.set_svg_color(dragged_arrow.svg_file, dragged_arrow.color)
+        renderer = QSvgRenderer(new_svg_data)
+        scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE
+        pixmap = QPixmap(scaled_size)
+        pixmap.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(pixmap)
+        with painter as painter:
+            renderer.render(painter)
+        return pixmap

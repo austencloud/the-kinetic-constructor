@@ -1,3 +1,5 @@
+import typing
+from PyQt6 import QtGui
 from PyQt6.QtWidgets import QGraphicsView, QFrame, QGraphicsScene, QGraphicsItem, QFrame, QGridLayout
 from constants import GRAPHBOARD_SCALE, ARROWBOX_SCALE
 from widgets.graph_editor.arrowbox.arrowbox_mouse_events import ArrowBoxMouseEvents
@@ -74,14 +76,20 @@ class ArrowBoxView(QGraphicsView):
         scenePos = self.mapToScene(event.pos())
         items = self.scene().items(scenePos)
         arrows = [item for item in items if isinstance(item, Arrow)]
+        self.dragged_item = arrows[0]
         if arrows and event.button() == Qt.MouseButton.LeftButton:
-            self.mouse_events.initialize_drag(self, arrows[0], event)
+            self.mouse_events.initialize_drag(self, self.dragged_item, event)
+            self.dragging = True
         else:
             event.ignore()
 
+
     def mouseMoveEvent(self, event):
-        if self.drag_preview is not None:
+        if self.mouse_events.drag_preview is not None:
             self.mouse_events.update_drag_preview(self, event)
+            if self.dragging: 
+                self.graphboard_view.dragMoveEvent(event, self.dragged_item)
 
     def mouseReleaseEvent(self, event):
         self.mouse_events.handle_mouse_release(self, event)
+        self.dragging = False
