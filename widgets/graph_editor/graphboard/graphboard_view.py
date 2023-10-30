@@ -93,8 +93,7 @@ class GraphboardView(QGraphicsView):
         if drag_preview.in_graphboard == True:
             self.mouse_events.update_temp_staff(drag_preview)
 
-    def dropEvent(self, event):
-        self.mouse_events.handle_drop_event(event)
+
 
 
     def contextMenuEvent(self, event):

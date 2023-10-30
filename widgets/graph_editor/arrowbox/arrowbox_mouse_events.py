@@ -23,6 +23,8 @@ class ArrowBoxMouseEvents():
         self.dragged_arrow = arrow
         self.graphboard_view.dragged_arrow = self.dragged_arrow
 
+        attr_dict = arrow.attributes.get_attributes(arrow)
+
         # Create pixmap for drag preview
         self.drag_preview = ArrowDragPreview(self.arrow)
         self.drag_preview.setParent(QApplication.instance().activeWindow())
@@ -85,15 +87,12 @@ class ArrowBoxMouseEvents():
             self.graphboard_view.dragMoveEvent(event, self.drag_preview)
         
             
-    def handle_mouse_release(self, view, event):
-        arrow = view.itemAt(event.pos())
-        if arrow is not None and arrow in view.drag_state:
-            del view.drag_state[arrow]
-            self.dragged_arrow = None
-            self.graphboard_view.temp_arrow = None
-            self.graphboard_view.temp_staff = None
-        if self.drag_preview is not None:
-            self.drag_preview.close()
-            self.drag_preview = None
+    def handle_mouse_release(self, view, event, drag_preview):
+        pos_in_main_window = view.mapTo(view.window(), event.pos())
+        local_pos_in_graphboard = self.graphboard_view.mapFrom(view.window(), pos_in_main_window)
+        over_graphboard = self.graphboard_view.rect().contains(local_pos_in_graphboard)
+        
         self.current_rotation_angle = 0
-
+        
+        if over_graphboard:
+            self.graphboard_view.mouse_events.handle_drop_event(event, self.drag_preview)

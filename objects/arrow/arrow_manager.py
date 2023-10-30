@@ -5,7 +5,6 @@ from objects.arrow.arrow_selector import ArrowSelector
 from objects.arrow.arrow_factory import ArrowFactory
 from objects.arrow.arrow_state_comparator import ArrowStateComparator
 from objects.arrow.arrow_attributes import ArrowAttributes
-
 class ArrowManager(QObject):
     def __init__(self, main_widget):
         super().__init__()
@@ -20,7 +19,8 @@ class ArrowManager(QObject):
         self.arrow_manipulator = ArrowManipulator(self)
         self.arrow_positioner = ArrowPositioner(self)
         self.arrow_selector = ArrowSelector(self)
+        self.arrow_attributes = ArrowAttributes(self)
         self.arrow_factory = ArrowFactory(self)
         self.arrow_state_comparator = ArrowStateComparator(self)
-        self.arrow_attributes = ArrowAttributes(self)
+        
 

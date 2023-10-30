@@ -3,6 +3,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
 from objects.arrow.arrow_mouse_events import ArrowMouseEvents
+from objects.arrow.arrow_attributes import ArrowAttributes
 import re
 class Arrow(QGraphicsSvgItem):
     def __init__(self, view, attr_dict):
@@ -25,24 +26,25 @@ class Arrow(QGraphicsSvgItem):
             return f"images/arrows/{motion_type}_blank.svg"
 
     def initialize_app_attributes(self, view, dict):
-        self.view = view
-        self.info_frame = view.info_frame
-        self.main_widget = view.main_widget
-        self.arrow_manager = self.main_widget.arrow_manager
-        self.attributes = self.arrow_manager.arrow_attributes
-        self.attributes.update_attributes(self, dict)
-        self.arrow_manager.arrow = self
-        self.in_graphboard = False
-        self.drag_offset = QPointF(0, 0)
-        self.is_ghost = False
-        self.staff = None
-        self.is_mirrored = False
-        self.previous_arrow = None
-        self.center = self.boundingRect().center()
-        self.mouse_events = ArrowMouseEvents(self)
-        self.setScale(view.view_scale)
+        if view is not None:
+            self.view = view
+            self.info_frame = view.info_frame
+            self.main_widget = view.main_widget
+            self.arrow_manager = self.main_widget.arrow_manager
+            self.arrow_manager.arrow = self
+            self.in_graphboard = False
+            self.drag_offset = QPointF(0, 0)
+            self.is_ghost = False
+            self.staff = None
+            self.is_mirrored = False
+            self.previous_arrow = None
+            self.mouse_events = ArrowMouseEvents(self)
+            self.setScale(view.view_scale)
+           
+        self.attributes = self.main_widget.arrow_manager.arrow_attributes
+        self.attributes.update_attributes(self, dict)  
         self.update_appearance()
-
+        self.center = self.boundingRect().center()
 
     def initialize_graphics_flags(self):
         flags = [
