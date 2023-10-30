@@ -23,7 +23,7 @@ class Arrow(QGraphicsSvgItem):
             return f"images/arrows/shift/{motion_type}_{turns}.svg"
         elif motion_type in ["static"]:
             self.is_static = True
-            return f"images/arrows/{motion_type}_blank.svg"
+            return None
 
     def initialize_app_attributes(self, view, dict):
         if view is not None:
@@ -68,28 +68,27 @@ class Arrow(QGraphicsSvgItem):
 
     ### MOUSE EVENTS ###
 
-    def mousePressEvent(self, arrow, event):
-        arrow.drag_start_pos = arrow.pos()
-        arrow.drag_offset = event.pos()
+    def mousePressEvent(self, event):
+        self.drag_start_pos = self.pos()
+        self.drag_offset = event.pos()
 
-    def mouseMoveEvent(self, arrow, event):
-        arrow.setSelected(True)
+    def mouseMoveEvent(self, event):
+        self.setSelected(True)
         if event.buttons() == Qt.MouseButton.LeftButton:
             from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
             from objects.pictograph.pictograph_view import PictographView
-            if isinstance(arrow.view, GraphboardView):
-                self.mouse_events.handle_graphboard_view(arrow, event)
-            elif isinstance(arrow.view, PictographView):
-                self.mouse_events.handle_pictograph_view(arrow, event)
+            if isinstance(self.view, GraphboardView):
+                self.mouse_events.handle_graphboard_view(self, event)
+            elif isinstance(self.view, PictographView):
+                self.mouse_events.handle_pictograph_view(self, event)
 
-    def mouseReleaseEvent(self, arrow, event):
-        if hasattr(arrow, 'future_position'):
-            arrow.setPos(arrow.future_position)
-            del arrow.future_position
+    def mouseReleaseEvent(self, event):
+        if hasattr(self, 'future_position'):
+            self.setPos(self.future_position)
+            del self.future_position
         from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
-        if isinstance(arrow.view, GraphboardView):
-            arrow.arrow_manager.arrow_positioner.update_arrow_position(arrow.view)
-
+        if isinstance(self.view, GraphboardView):
+            self.arrow_manager.arrow_positioner.update_arrow_position(self.view)
 
     # UPDATE APPEARANCE          
         

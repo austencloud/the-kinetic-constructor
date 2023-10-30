@@ -24,8 +24,10 @@ class ArrowDragPreview(QWidget):
         self.quadrant = arrow.quadrant
         self.rotation_direction = arrow.rotation_direction
         self.turns = arrow.turns
+
         
         self.in_graphboard = False
+        self.has_entered_graphboard_once = False
 
     def create_pixmap(self, dragged_arrow):
         new_svg_data = dragged_arrow.set_svg_color(dragged_arrow.svg_file, dragged_arrow.color)

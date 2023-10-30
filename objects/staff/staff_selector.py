@@ -10,13 +10,16 @@ class StaffSelector:
             if not isinstance(staffs, list):
                 staffs = [staffs]
             for staff in staffs:
-                ghost_arrow = staff.arrow if staff.arrow.is_ghost else None
-                if ghost_arrow:
-                    self.arrow_manager.graphboard_view.scene().removeItem(ghost_arrow)
-                    print(f"Ghost arrow for {staff.color} staff deleted")
+                if staff.arrow:
+                    ghost_arrow = staff.arrow if staff.arrow.is_ghost else None
+                    if ghost_arrow:
+                        self.arrow_manager.graphboard_view.scene().removeItem(ghost_arrow)
+                        print(f"Ghost arrow for {staff.color} staff deleted")
 
-                staff.hide()
+                
                 self.arrow_manager.graphboard_view.scene().removeItem(staff)
+                self.arrow_manager.graphboard_view.scene().removeItem(staff.arrow)
+                
                 print(f"{staff.color} staff deleted")
 
                 self.arrow_manager.info_frame.update()
