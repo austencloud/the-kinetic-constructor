@@ -22,7 +22,7 @@ class GraphboardMouseEvents():
         items = self.view.items(event.pos())
         self.select_or_deselect_items(event, items)
         if not items or not items[0].isSelected():
-            self.view.clear_selection(items)
+            self.view.clear_selection()
 
     def select_or_deselect_items(self, event, items):
         if items and items[0].flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable:
@@ -70,6 +70,9 @@ class GraphboardMouseEvents():
             }
             self.view.temp_staff = self.view.staff_factory.create_staff(self.view.graphboard_scene, temp_staff_dict)
             self.view.graphboard_scene.addItem(self.view.temp_staff)
+            self.view.temp_staff.setPos(self.view.staff_xy_locations[self.view.temp_arrow.end_location])
+            self.view.temp_staff.is_temporary = True
+
 
         self.view.update_dragged_arrow_and_staff(current_quadrant, self.view.temp_arrow, self.view.temp_staff)
 
