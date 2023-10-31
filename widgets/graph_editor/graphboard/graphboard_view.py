@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import QGraphicsView, QGraphicsScene, QSizePolicy, QFrame
 from objects.staff.staff import Staff
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
-from constants import GRAPHBOARD_SCALE, GRAPHBOARD_WIDTH, GRAPHBOARD_HEIGHT, VERTICAL_OFFSET, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST
+from resources.constants import GRAPHBOARD_SCALE, GRAPHBOARD_WIDTH, GRAPHBOARD_HEIGHT, VERTICAL_OFFSET, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST
 from widgets.graph_editor.graphboard.graphboard_staff_handler import GraphboardStaffHandler
 from widgets.graph_editor.graphboard.graphboard_info_handler import GraphboardInfoHandler
 from widgets.graph_editor.graphboard.graphboard_context_menu_handler import GraphboardContextMenuHandler

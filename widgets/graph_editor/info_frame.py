@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QLabel, QFrame, QHBoxLayout, QGridLayout, QWidget
 from data.positions_map import positions_map
 
-from constants import GRAPHBOARD_SCALE
+from resources.constants import GRAPHBOARD_SCALE
 from data.start_end_location_mapping import start_end_location_mapping
 
 class InfoFrame(QFrame):

@@ -8,66 +8,65 @@ from objects.pictograph.pictograph_staff_handler import PictographStaffHandler
 from objects.arrow.arrow_manager import ArrowManager
 from utilities.json_handler import JsonHandler
 from widgets.graph_editor.graphboard.graphboard_info_handler import GraphboardInfoHandler
-from constants import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, PICTOGRAPH_SCALE, PICTOGRAPH_GRID_PADDING
+from resources.constants import PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT, PICTOGRAPH_SCALE, PICTOGRAPH_GRID_PADDING
 
 class PictographView(QGraphicsView):
     def __init__(self, main_widget):
         super().__init__()
+        self.setup_view()
+        self.main_widget = main_widget
+        self.pictograph_scene = QGraphicsScene()
+        self.setScene(self.pictograph_scene)
+        self.init_grid()
+        self.init_handlers_and_managers()
+        self.staff_handler.init_pictograph_staffs(self, self.grid)
+        self.info_frame = None
+        self.view_scale = PICTOGRAPH_SCALE
+        
+    def setup_view(self):
         self.setFixedSize(PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setFrameStyle(QFrame.Shape.NoFrame) 
+        self.setFrameStyle(QFrame.Shape.NoFrame)
         self.setDragMode(QGraphicsView.DragMode.NoDrag)
-        self.main_widget = main_widget
-        self.pictograph_scene = QGraphicsScene()
-        self.pictograph_scene.setSceneRect(0, 0, PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT)
-        self.setScene(self.pictograph_scene)  # Set the scene
-        self.grid = Grid("resources/images/grid/grid.svg")
-        self.grid.setScale(PICTOGRAPH_SCALE)
-        self.scene = self.pictograph_scene
-        self.info_handler = GraphboardInfoHandler(main_widget, self)
-        self.staff_handler = PictographStaffHandler(self.main_widget, self.scene)
-        self.staff_handler.connect_pictograph_view(self)
+
+    def init_handlers_and_managers(self):
+        self.info_handler = GraphboardInfoHandler(self.main_widget, self)
+        self.staff_handler = PictographStaffHandler(self.main_widget, self.pictograph_scene)
         self.arrow_manager = ArrowManager(self.main_widget)
         self.json_handler = JsonHandler(self.pictograph_scene)
+        self.staff_handler.connect_pictograph_view(self)
         self.staff_handler.connect_grid(self.grid)
-        self.init_grid()
-        self.staff_handler.init_pictograph_staffs(self, self.grid)
-        self.graphboard_view = main_widget.graph_editor_widget.graphboard_view
-        self.view_scale = PICTOGRAPH_SCALE
-        self.info_frame = None
+
+    def init_grid(self):
+        self.grid = Grid("resources/images/grid/grid.svg")
+        self.grid.setScale(PICTOGRAPH_SCALE)
+        self.pictograph_scene.addItem(self.grid)
         
     def mouseMoveEvent(self, event):
-        # Call the parent class's mouseMoveEvent to maintain its original behavior
         super().mouseMoveEvent(event)
+        self.adjust_item_positions()
 
-        # Loop through all selected items and adjust their positions if necessary
-        for item in self.scene.selectedItems():
+    def adjust_item_positions(self):
+        for item in self.pictograph_scene.selectedItems():
             if item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable:
-                rect = item.sceneBoundingRect()
-                sceneRect = self.sceneRect()
+                self.keep_item_within_bounds(item)
 
-                # Check if the item is out of scene bounds and adjust its position
-                if not sceneRect.contains(rect):
-                    item_x = min(sceneRect.right(), max(rect.left(), sceneRect.left()))
-                    item_y = min(sceneRect.bottom(), max(rect.top(), sceneRect.top()))
-                    item.setPos(QPointF(item_x, item_y))
+    def keep_item_within_bounds(self, item):
+        rect = item.sceneBoundingRect()
+        sceneRect = self.pictograph_sceneRect()
+        if not sceneRect.contains(rect):
+            item_x = min(sceneRect.right(), max(rect.left(), sceneRect.left()))
+            item_y = min(sceneRect.bottom(), max(rect.top(), sceneRect.top()))
+            item.setPos(QPointF(item_x, item_y))
         
-    def init_grid(self):
-        grid_position = QPointF(PICTOGRAPH_GRID_PADDING, PICTOGRAPH_GRID_PADDING)
-        transform = QTransform()
-        transform.translate(grid_position.x(), grid_position.y())
-        self.grid.setTransform(transform)
-        #show the grid
-        self.pictograph_scene.addItem(self.grid)
 
-        pass
     
     def get_state(self):
         state = {
             'arrows': [],
         }
-        for item in self.scene.items():
+        for item in self.pictograph_scene.items():
             if isinstance(item, Arrow):
                 state['arrows'].append({
                     'color': item.color,
@@ -100,7 +99,7 @@ class PictographView(QGraphicsView):
     def get_arrows(self):
         # return the current arrows on the graphboard as an array
         current_arrows = []
-        for arrow in self.scene().items():
+        for arrow in self.pictograph_scene().items():
             if isinstance(arrow, Arrow):
                 current_arrows.append(arrow)
         return current_arrows
@@ -185,4 +184,3 @@ class PictographView(QGraphicsView):
         saveOptimalAction.triggered.connect(self.save_optimal_positions)
         contextMenu.addAction(saveOptimalAction)
         contextMenu.exec(event.globalPos())
-

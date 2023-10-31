@@ -1,7 +1,7 @@
 
 from PyQt5.QtCore import QPointF
 import math
-from constants import GRAPHBOARD_WIDTH, GRAPHBOARD_SCALE, PICTOGRAPH_SCALE, LEFT, RIGHT, UP, DOWN, BETA_OFFSET
+from resources.constants import GRAPHBOARD_WIDTH, GRAPHBOARD_SCALE, PICTOGRAPH_SCALE, LEFT, RIGHT, UP, DOWN, BETA_OFFSET
 
 class StaffPositioner:
     def __init__(self, staff_handler):

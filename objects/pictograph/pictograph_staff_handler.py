@@ -1,5 +1,5 @@
 from PyQt6.QtCore import QPointF
-from constants import PICTOGRAPH_GRID_PADDING, PICTOGRAPH_SCALE
+from resources.constants import PICTOGRAPH_GRID_PADDING, PICTOGRAPH_SCALE
 from objects.arrow.arrow import Arrow
 from objects.staff.staff_handler import StaffHandler
 from objects.staff.staff import Staff

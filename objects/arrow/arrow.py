@@ -115,6 +115,11 @@ class Arrow(QGraphicsSvgItem):
             svg_data = svg_data.replace(old_color, new_hex_color)
         return svg_data.encode('utf-8')     
         
+    def get_svg_data(self, svg_file):
+        with open(svg_file, 'r') as f:
+            svg_data = f.read()
+        return svg_data.encode('utf-8')
+        
     def update_color(self):
         if self.motion_type in ["pro", "anti"]:
             new_svg_data = self.set_svg_color(self.svg_file, self.color)

@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QPushButton, QFrame
 from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import QSize
-from constants import GRAPHBOARD_SCALE
+from resources.constants import GRAPHBOARD_SCALE
 from PyQt6.QtWidgets import QVBoxLayout
 
 class ActionButtonsFrame(QFrame):

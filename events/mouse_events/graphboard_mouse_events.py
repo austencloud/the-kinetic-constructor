@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QGraphicsItem, QToolTip
 from objects.staff.staff import Staff
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
-from constants import STATIC
+from resources.constants import STATIC
 
 
 class GraphboardMouseEvents():
@@ -92,7 +92,6 @@ class GraphboardMouseEvents():
         new_arrow = self.arrow_factory.create_arrow(self.graphboard_view, new_arrow_dict)
         new_staff = self.staff_factory.create_staff(self.graphboard_scene, new_staff_dict)
 
-        #make the arrow movable
         new_arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
         self.graphboard_view.clear_selection()
         
@@ -105,7 +104,6 @@ class GraphboardMouseEvents():
         self.graphboard_scene.addItem(new_staff)
 
         self.graphboard_scene.removeItem(self.graphboard_view.temp_staff)
-        
         self.graphboard_view.update_letter(self.info_handler.determine_current_letter_and_type()[0])
 
         drag_preview.hide()

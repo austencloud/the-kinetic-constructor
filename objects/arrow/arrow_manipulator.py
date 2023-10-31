@@ -1,20 +1,25 @@
 from PyQt6.QtGui import QTransform
 from objects.arrow.arrow import Arrow
+import xml.etree.ElementTree as ET
+from PyQt6.QtSvg import QSvgRenderer
+from PyQt6.QtCore import QByteArray
 
 class ArrowManipulator:
     def __init__(self, arrow_manager):
         self.arrow_manager = arrow_manager
 
-    def finalize_manipulation(self, selected_arrow, updated_arrow_dict, updated_staff_dict):
-        selected_arrow.attributes.update_attributes(selected_arrow, updated_arrow_dict)
-        self.arrow_manager.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard_view)
-        selected_arrow.update_appearance()
-        self.arrow_manager.info_frame.update()
-        selected_arrow.view.info_handler.update()
-        selected_arrow.staff.attributes.update_attributes(selected_arrow.staff, updated_staff_dict)
-        selected_arrow.staff.update_appearance()
-        selected_arrow.staff.setPos(selected_arrow.view.staff_handler.staff_xy_locations[selected_arrow.staff.location])
+    def update_arrow_and_staff(self, arrow, arrow_dict, staff_dict):
+        arrow.attributes.update_attributes(arrow, arrow_dict)
+        arrow.staff.attributes.update_attributes(arrow.staff, staff_dict)
+        arrow.staff.setPos(arrow.view.staff_handler.staff_xy_locations[arrow.staff.location])
 
+    def finalize_manipulation(self, arrow):
+        self.arrow_manager.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard_view)
+        arrow.update_appearance()
+        self.arrow_manager.info_frame.update()
+        arrow.view.info_handler.update()
+        arrow.staff.update_appearance()
+        
     def move_arrow_quadrant_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {
             'up': {'se': 'ne', 'sw': 'nw'},
@@ -44,15 +49,15 @@ class ArrowManipulator:
             'layer': 1
         }
 
-        self.finalize_manipulation(selected_arrow, updated_arrow_dict, updated_staff_dict)
+        self.update_arrow_and_staff(selected_arrow, updated_arrow_dict, updated_staff_dict)
+        self.finalize_manipulation(selected_arrow)
 
-
-    def rotate_arrow(self, direction, arrows):
+    def rotate_arrow(self, rotation_direction, arrows):
         if arrows:
             for arrow in arrows:
                 quadrants = ['ne', 'se', 'sw', 'nw']
                 current_quadrant_index = quadrants.index(arrow.quadrant)
-                new_quadrant_index = (current_quadrant_index + 1) % 4 if direction == "right" else (current_quadrant_index - 1) % 4
+                new_quadrant_index = (current_quadrant_index + 1) % 4 if rotation_direction == "right" else (current_quadrant_index - 1) % 4
                 new_quadrant = quadrants[new_quadrant_index]
                 new_start_location, new_end_location = arrow.attributes.get_start_end_locations(arrow.motion_type, arrow.rotation_direction, new_quadrant)
                 
@@ -72,22 +77,72 @@ class ArrowManipulator:
                     'layer': 1
                 }
 
-            self.finalize_manipulation(arrow, updated_arrow_dict, updated_staff_dict)
+            self.update_arrow_and_staff(arrow, updated_arrow_dict, updated_staff_dict)
+            self.finalize_manipulation(arrow)
+
+    def mirror_svg(self, svg_data, color):  # Assuming red as the default color
+        root = ET.fromstring(svg_data)
+        for elem in root.iter('{http://www.w3.org/2000/svg}path'):
+            # Update the color
+            elem.attrib['fill'] = color
+
+            # Update the transform attribute for mirroring and repositioning
+            transform_str = 'translate(137.5, 137.5) scale(-1, 1) translate(-137.5, -137.5) rotate(270)'
+            if 'transform' in elem.attrib:
+                elem.attrib['transform'] += ' ' + transform_str
+            else:
+                elem.attrib['transform'] = transform_str
+                    
+        return ET.tostring(root).decode('utf-8')
+
 
     def mirror_arrow(self, arrows):
         for arrow in arrows:
-            original_pos = arrow.pos()
-            if arrow.is_mirrored:
+            if arrow.is_mirrored == True: 
                 arrow.is_mirrored = False
-                arrow.setTransform(QTransform())
-            else:
+                original_svg_data = arrow.get_svg_data(arrow.svg_file)
+                arrow.renderer.load(QByteArray(original_svg_data))  # No need to encode
+            elif arrow.is_mirrored == False: 
                 arrow.is_mirrored = True
-                arrow.setTransform(QTransform.fromScale(-1, 1))
+                original_svg_data = arrow.get_svg_data(arrow.svg_file)
+                mirrored_svg_data = self.mirror_svg(original_svg_data, color=arrow.color)
+                mirrored_svg_data = mirrored_svg_data.replace('ns0:', '').replace(':ns0', '')
 
-            offset = original_pos - arrow.pos()
-            arrow.setPos(arrow.pos() + offset)
-            self.arrow_manager.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard_view)
+                # Create a new renderer
+                new_renderer = QSvgRenderer()
+                new_renderer.load(QByteArray(mirrored_svg_data.encode('utf-8')))
+
+                # Set the new renderer to the arrow and make it the shared renderer
+                arrow.renderer = new_renderer
+                arrow.setSharedRenderer(new_renderer)
+                        
+            if arrow.rotation_direction == "l":
+                new_rotation_direction = "r"
+            elif arrow.rotation_direction == "r":
+                new_rotation_direction = "l"
+
+            
+            # swap the values for arrow.start_location and arrow.end_location
+            old_start_location = arrow.start_location
+            old_end_location = arrow.end_location
+            arrow.start_location = old_end_location
+            arrow.end_location = old_start_location
+            
             arrow.update_appearance()
+            
+            new_arrow = {
+                'color': arrow.color,
+                'motion_type': arrow.motion_type,
+                'quadrant': arrow.quadrant,
+                'rotation_direction': new_rotation_direction,
+                'start_location': arrow.start_location,
+                'end_location': arrow.end_location,
+                'turns': arrow.turns
+            }
+            
+            arrow.attributes.update_attributes(arrow, new_arrow)
+            self.finalize_manipulation(arrow)
+            self.arrow_manager.arrow_positioner.update_arrow_position(arrow.view)
 
     def swap_motion_type(self, arrows):
         if not isinstance(arrows, list):
@@ -106,8 +161,6 @@ class ArrowManipulator:
                 new_rotation_direction = "r"
             elif arrow.rotation_direction == "r":
                 new_rotation_direction = "l"
-
-
             
             new_arrow_dict = {
                 'color': arrow.color,
@@ -119,18 +172,26 @@ class ArrowManipulator:
                 'turns': arrow.turns
             }
 
+            staff_dict = {
+                'color': arrow.color,
+                'location': arrow.end_location,
+                'layer': 1
+            }
+
             arrow.svg_file = f"resources/images/arrows/shift/{new_motion_type}_{arrow.turns}.svg"
             arrow.initialize_svg_renderer(arrow.svg_file)
             
+            self.update_arrow_and_staff(arrow, new_arrow_dict, staff_dict)
+            self.finalize_manipulation(arrow)
+
             arrow.attributes.update_attributes(arrow, new_arrow_dict)
-            
             arrow.update_appearance()
-            
+        
             arrow.view.info_handler.update()
     
             self.arrow_manager.info_frame.update()
         
-    def swap_colors(self, _):
+    def swap_colors(self):
         arrows = [item for item in self.graphboard_scene.items() if isinstance(item, Arrow)]
         if len(arrows) >= 1:
             for arrow in arrows:
@@ -148,3 +209,4 @@ class ArrowManipulator:
                 arrow.update_appearance()
                 arrow.staff.update_appearance()
                 print(f"After swap: Arrow color: {arrow.color}, Staff color: {arrow.staff.color}")
+                self.finalize_manipulation(arrow)

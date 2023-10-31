@@ -1,5 +1,5 @@
 from objects.arrow.arrow import Arrow
-from constants import GRAPHBOARD_SCALE
+from resources.constants import GRAPHBOARD_SCALE
 
 class ArrowSelector:
     def __init__(self, arrow_manager):

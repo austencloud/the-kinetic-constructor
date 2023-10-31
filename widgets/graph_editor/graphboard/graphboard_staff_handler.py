@@ -1,7 +1,7 @@
 from objects.staff.staff_handler import StaffHandler
 from PyQt6.QtCore import QPointF
 from objects.arrow.arrow import Arrow
-from constants import GRAPHBOARD_GRID_PADDING, GRAPHBOARD_SCALE, STAFF_LENGTH, STAFF_WIDTH
+from resources.constants import GRAPHBOARD_GRID_PADDING, GRAPHBOARD_SCALE, STAFF_LENGTH, STAFF_WIDTH
 
 class GraphboardStaffHandler(StaffHandler):
     def __init__(self, main_widget, scene):

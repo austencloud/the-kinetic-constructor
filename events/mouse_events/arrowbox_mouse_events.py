@@ -3,7 +3,7 @@ from PyQt6.QtGui import QPixmap, QPainter,  QTransform
 from PyQt6.QtCore import Qt
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QApplication
-from constants import GRAPHBOARD_SCALE
+from resources.constants import GRAPHBOARD_SCALE
 from objects.arrow.arrow_drag_preview import ArrowDragPreview
 from objects.arrow.arrow import Arrow
 #import QGraphicsItem

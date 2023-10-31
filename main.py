@@ -1,7 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from widgets.main_widget import MainWidget
-from constants import MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT
+from resources.constants import MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT
 class Main_Window(QMainWindow):
     def __init__(self):
         super().__init__() 
@@ -15,7 +15,7 @@ class Main_Window(QMainWindow):
         self.installEventFilter(self.main_widget)
         self.setCentralWidget(self.main_widget)
         self.show()
-        self.setWindowTitle("Sequence Generator")
+        self.setWindowTitle("Sequence Constructor")
 
     def init_ui(self):
         self.move(-(self.screen.width() + 500), 100)

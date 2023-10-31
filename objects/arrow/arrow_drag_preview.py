@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QWidget, QLabel
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QPainter
 from PyQt6.QtSvg import QSvgRenderer
-from constants import GRAPHBOARD_SCALE
+from resources.constants import GRAPHBOARD_SCALE
 
 class ArrowDragPreview(QWidget):
     def __init__(self, arrow):

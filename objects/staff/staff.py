@@ -2,7 +2,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt, QPointF
-from constants import STAFF_WIDTH, STAFF_LENGTH, COLOR_MAP, HORIZONTAL, VERTICAL, NORTH, SOUTH, EAST, WEST
+from resources.constants import STAFF_WIDTH, STAFF_LENGTH, COLOR_MAP, HORIZONTAL, VERTICAL, NORTH, SOUTH, EAST, WEST
 from objects.staff.staff_attributes import StaffAttributes
 ''' 
 staff_dict = {

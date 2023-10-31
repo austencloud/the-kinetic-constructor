@@ -1,7 +1,7 @@
 import typing
 from PyQt6 import QtGui
 from PyQt6.QtWidgets import QGraphicsView, QFrame, QGraphicsScene, QGraphicsItem, QFrame, QGridLayout
-from constants import GRAPHBOARD_SCALE, ARROWBOX_SCALE
+from resources.constants import GRAPHBOARD_SCALE, ARROWBOX_SCALE
 from events.mouse_events.arrowbox_mouse_events import ArrowBoxMouseEvents
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QCursor
@@ -13,6 +13,7 @@ class ArrowBoxView(QGraphicsView):
         self.info_frame = info_frame
         self.drag_preview = None
         self.drag_state = {} 
+        self.dragging = False
         self.graphboard_view = graphboard_view
         self.setAcceptDrops(True)
         self.setFrameShape(QFrame.Shape.NoFrame)

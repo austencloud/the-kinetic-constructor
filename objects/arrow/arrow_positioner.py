@@ -1,5 +1,5 @@
 from PyQt6.QtCore import QPointF
-from constants import GRAPHBOARD_SCALE, ARROW_ADJUSTMENT_DISTANCE, GRAPHBOARD_GRID_PADDING
+from resources.constants import GRAPHBOARD_SCALE, ARROW_ADJUSTMENT_DISTANCE, GRAPHBOARD_GRID_PADDING
 
 class ArrowPositioner:
     def __init__(self, arrow_manager):
