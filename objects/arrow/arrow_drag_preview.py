@@ -40,3 +40,11 @@ class ArrowDragPreview(QWidget):
             renderer.render(painter)
         return pixmap
     
+    def get_attr(self):
+        return {
+            'color': self.color,
+            'motion_type': self.motion_type,
+            'quadrant': self.quadrant,
+            'rotation_direction': self.rotation_direction,
+            'turns': self.turns
+        }

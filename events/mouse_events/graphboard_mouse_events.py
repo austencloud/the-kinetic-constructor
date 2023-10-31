@@ -52,8 +52,6 @@ class GraphboardMouseEvents():
             if isinstance(temp_staff, Staff) and temp_staff.color == drag_preview.color:
                 self.graphboard_scene.removeItem(temp_staff)
 
-
-
         temp_staff_dict = {
             'color': drag_preview.color,
             'location': drag_preview.end_location,

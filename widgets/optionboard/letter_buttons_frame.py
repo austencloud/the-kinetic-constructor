@@ -47,7 +47,7 @@ class LetterButtonsFrame(QFrame):
                 for letter_type in letter_types:
                     if letter in letter_types[letter_type]:
                         break
-                icon_path = f"images/letters/{letter_type}/{letter}.svg"
+                icon_path = f"resources/images/letters/{letter_type}/{letter}.svg"
                 renderer = QSvgRenderer(icon_path)
 
                 pixmap = QPixmap(renderer.defaultSize())    

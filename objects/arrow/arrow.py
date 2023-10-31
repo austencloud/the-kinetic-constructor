@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
-from objects.arrow.arrow_mouse_events import ArrowMouseEvents
+from events.mouse_events.arrow_mouse_events import ArrowMouseEvents
 from objects.arrow.arrow_attributes import ArrowAttributes
 import re
 class Arrow(QGraphicsSvgItem):
@@ -20,7 +20,7 @@ class Arrow(QGraphicsSvgItem):
         
         if motion_type in ["pro", "anti"]:
             self.is_shift = True
-            return f"images/arrows/shift/{motion_type}_{turns}.svg"
+            return f"resources/images/arrows/shift/{motion_type}_{turns}.svg"
         elif motion_type in ["static"]:
             self.is_static = True
             return None
@@ -41,7 +41,7 @@ class Arrow(QGraphicsSvgItem):
             self.previous_arrow = None
             self.mouse_events = ArrowMouseEvents(self)
             self.setScale(view.view_scale)
-           
+            
         self.attributes = self.main_widget.arrow_manager.arrow_attributes
         self.attributes.update_attributes(self, dict)  
         self.update_appearance()

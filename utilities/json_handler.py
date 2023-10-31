@@ -8,7 +8,7 @@ class JsonHandler(QObject):
         self.scene = scene
 
     def load_all_letters(self):
-        directory = 'json'
+        directory = 'resources/json'
         letters = {}
         for root, dirs, files in os.walk(directory):
             for filename in files:
@@ -33,7 +33,7 @@ class JsonHandler(QObject):
 
         for item in self.scene.items():
             if isinstance(item, Arrow):
-                current_attributes.append(item.get_attributes())
+                current_attributes.append(item.get_attr())
         current_attributes = sorted(current_attributes, key=lambda x: x['color'])
 
         for letter, combinations in self.letters.items():

@@ -92,7 +92,7 @@ class StaffPositioner:
             for arrow in converging_arrows:
                 direction = self.determine_translation_direction(arrow)
                 if direction:
-                    move_staff(next(staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow['color']), direction)
+                    move_staff(next(staff for staff in self.staff_handler.staffs_on_board.values() if staff.arrow.color == arrow['color']), direction)
 
     def reposition_beta_to_beta(self, scene, arrows, scale):
         view = scene.views()[0]
@@ -165,20 +165,20 @@ class StaffPositioner:
 
         if current_letter is not None:
             matching_letters = self.letters[current_letter]
-            optimal_location = self.find_optimal_arrow_location(current_state, matching_letters, arrow)
+            optimal_location = self.find_optimal_arrow_location(current_state, view, matching_letters, arrow)
 
             if optimal_location:
                 return optimal_location
 
         return None  # Return None if there are no optimal positions
 
-    def find_optimal_arrow_location(self, current_state, matching_letters, arrow):
+    def find_optimal_arrow_location(self, current_state, view, matching_letters, arrow_dict):
         for variations in matching_letters:
-            if self.arrow_manager.arrow_state_comparator.compare_states(current_state, variations):
+            if view.main_widget.arrow_manager.arrow_state_comparator.compare_states(current_state, variations):
                 optimal_entry = next((d for d in variations if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
 
                 if optimal_entry:
-                    color_key = f"optimal_{arrow['color']}_location"
+                    color_key = f"optimal_{arrow_dict['color']}_location"
                     return optimal_entry.get(color_key)
 
         return None 

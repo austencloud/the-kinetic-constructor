@@ -10,7 +10,7 @@ from constants import GRAPHBOARD_SCALE, GRAPHBOARD_WIDTH, GRAPHBOARD_HEIGHT, VER
 from widgets.graph_editor.graphboard.graphboard_staff_handler import GraphboardStaffHandler
 from widgets.graph_editor.graphboard.graphboard_info_handler import GraphboardInfoHandler
 from widgets.graph_editor.graphboard.graphboard_context_menu_handler import GraphboardContextMenuHandler
-from widgets.graph_editor.graphboard.graphboard_mouse_events import GraphboardMouseEvents
+from events.mouse_events.graphboard_mouse_events import GraphboardMouseEvents
 from utilities.export_handler import ExportHandler
 from data.letter_types import letter_types
 class GraphboardView(QGraphicsView):
@@ -28,7 +28,6 @@ class GraphboardView(QGraphicsView):
         self.setAcceptDrops(True)
         self.setInteractive(True)
         self.is_graphboard = True
-        self.dragging = None
         self.temp_arrow = None
         self.temp_staff = None
         self.drag_preview = None
@@ -42,7 +41,7 @@ class GraphboardView(QGraphicsView):
         self.graphboard_scene = QGraphicsScene()
         self.setScene(self.graphboard_scene)
         self.main_widget = main_widget
-        self.grid = Grid('images/grid/grid.svg')
+        self.grid = Grid('resources/images/grid/grid.svg')
         self.grid.setScale(GRAPHBOARD_SCALE)
         self.scene().setSceneRect(0, 0, int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
         self.VERTICAL_OFFSET = (self.height() - self.width()) / 2
@@ -77,7 +76,7 @@ class GraphboardView(QGraphicsView):
             for letter_type, letters in letter_types.items():
                 if letter in letters:
                     break
-            self.letter_renderers[letter] = QSvgRenderer(f'images/letters/{letter_type}/{letter}.svg')
+            self.letter_renderers[letter] = QSvgRenderer(f'resources/images/letters/{letter_type}/{letter}.svg')
         self.letter_item = QGraphicsSvgItem()
 
         self.main_widget.graphboard_scene = self.graphboard_scene
@@ -215,7 +214,7 @@ class GraphboardView(QGraphicsView):
     def update_letter(self, letter):
         letter = self.info_handler.determine_current_letter_and_type()[0]
         if letter is None or letter == 'None':
-            svg_file = f'images/letters/blank.svg'
+            svg_file = f'resources/images/letters/blank.svg'
             renderer = QSvgRenderer(svg_file)
             if not renderer.isValid():
                 print(f"Invalid SVG file: {svg_file}")
@@ -226,7 +225,7 @@ class GraphboardView(QGraphicsView):
             for letter_type, letters in letter_types.items():
                 if letter in letters:
                     break
-            svg_file = f'images/letters/{letter_type}/{letter}.svg'
+            svg_file = f'resources/images/letters/{letter_type}/{letter}.svg'
             renderer = QSvgRenderer(svg_file)
             if not renderer.isValid():
                 print(f"Invalid SVG file: {svg_file}")

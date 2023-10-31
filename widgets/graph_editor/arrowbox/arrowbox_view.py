@@ -2,7 +2,7 @@ import typing
 from PyQt6 import QtGui
 from PyQt6.QtWidgets import QGraphicsView, QFrame, QGraphicsScene, QGraphicsItem, QFrame, QGridLayout
 from constants import GRAPHBOARD_SCALE, ARROWBOX_SCALE
-from widgets.graph_editor.arrowbox.arrowbox_mouse_events import ArrowBoxMouseEvents
+from events.mouse_events.arrowbox_mouse_events import ArrowBoxMouseEvents
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QCursor
 from objects.arrow.arrow import Arrow

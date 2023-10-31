@@ -13,7 +13,7 @@ class ArrowSelector:
             deleted_arrows = [deleted_arrows]
         for arrow in deleted_arrows:
             if isinstance(arrow, Arrow):
-                deleted_arrow_attributes = arrow.attributes.get_attributes(arrow)
+                deleted_arrow_attributes = arrow.attributes.get_attr(arrow)
                 
                 ghost_attributes_dict = {
                                 'color': deleted_arrow_attributes['color'],

@@ -5,7 +5,7 @@ from utilities.json_handler import JsonHandler
 from widgets.sequence.sequence_view import SequenceView
 from widgets.optionboard.optionboard_view import OptionboardView
 from utilities.layout_manager import LayoutManager
-from utilities.key_bindings_handler import KeyBindingsHandler
+from events.key_event_handler import KeyEventHandler
 from widgets.graph_editor.graph_editor_widget import GraphEditorWidget
 from widgets.optionboard.letter_buttons_frame import LetterButtonsFrame
 from utilities.pictograph_generator import PictographGenerator
@@ -20,7 +20,7 @@ class MainWidget(QWidget):
         self.layout_manager = LayoutManager(self)
         self.json_handler = JsonHandler()
         self.letters = self.json_handler.load_all_letters()
-        self.key_bindings_manager = KeyBindingsHandler()
+        self.key_bindings_manager = KeyEventHandler()
         self.arrow_manager = ArrowManager(self)
         
         self.sequence_view = SequenceView(self)

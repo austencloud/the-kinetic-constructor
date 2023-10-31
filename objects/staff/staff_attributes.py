@@ -9,7 +9,7 @@ class StaffAttributes:
             value = staff_dict.get(attr)
             setattr(staff, attr, value)
 
-    def get_attributes(self, staff):
+    def get_attr(self, staff):
         return {attr: getattr(staff, attr) for attr in self.STAFF_ATTRIBUTES}
     
     def create_staff_dict(self, color, location, layer):

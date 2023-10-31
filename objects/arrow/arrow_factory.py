@@ -9,6 +9,6 @@ class ArrowFactory:
         return arrow
 
     def clone_arrow(self, arrow):
-        arrow_dict = arrow.attributes.get_attributes(arrow)
+        arrow_dict = arrow.attributes.get_attr(arrow)
         clone_arrow = self.create_arrow(self.arrow_manager.graphboard_view, arrow_dict)
         return clone_arrow

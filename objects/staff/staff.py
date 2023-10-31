@@ -16,7 +16,7 @@ staff_dict = {
 class Staff(QGraphicsSvgItem):
     def __init__(self, scene, staff_dict):
         super().__init__()
-        self.svg_file = 'images/staffs/staff.svg'
+        self.svg_file = 'resources/images/staffs/staff.svg'
         self.scene = scene
         self.arrow = None
         self.view = scene.views()[0]

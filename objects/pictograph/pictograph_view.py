@@ -22,7 +22,7 @@ class PictographView(QGraphicsView):
         self.pictograph_scene = QGraphicsScene()
         self.pictograph_scene.setSceneRect(0, 0, PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT)
         self.setScene(self.pictograph_scene)  # Set the scene
-        self.grid = Grid("images/grid/grid.svg")
+        self.grid = Grid("resources/images/grid/grid.svg")
         self.grid.setScale(PICTOGRAPH_SCALE)
         self.scene = self.pictograph_scene
         self.info_handler = GraphboardInfoHandler(main_widget, self)
@@ -136,25 +136,20 @@ class PictographView(QGraphicsView):
         created_arrows.append(arrow)
 
         for arrow in created_arrows:
-            arrow_transform = QTransform()
-            arrow_transform.scale(PICTOGRAPH_SCALE, PICTOGRAPH_SCALE)
-            arrow.setTransform(arrow_transform)
-            GRID_PADDING = (self.width() - self.grid.boundingRect().width() * PICTOGRAPH_SCALE) / 2
-
-                        # Calculate the center of the bounding rectangle
+            # Calculate the center of the bounding rectangle
             center = arrow.boundingRect().center()
 
             if optimal_locations:
                 optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
                 if optimal_location:
-                                # Adjust the position based on the center
+                    # Adjust the position based on the center
                     pos = QPointF(optimal_location['x'] * PICTOGRAPH_SCALE, optimal_location['y'] * PICTOGRAPH_SCALE) - center * PICTOGRAPH_SCALE
                     new_pos = pos + QPointF(0, 0)
                     arrow.setPos(new_pos)
             else:
                 quadrant_center = self.get_quadrant_center(arrow.quadrant)
                 pos = (quadrant_center * PICTOGRAPH_SCALE)
-                pos = (pos + QPointF(0, 0)) - arrow.center * PICTOGRAPH_SCALE
+                pos = (pos + QPointF(0, 0)) - (arrow.center * PICTOGRAPH_SCALE)
                 if arrow.quadrant == 'ne':
                     pos += QPointF(DISTANCE, -DISTANCE)
                 elif arrow.quadrant == 'se':
@@ -178,9 +173,9 @@ class PictographView(QGraphicsView):
                 pos.setY(pos.y() + MAIN_GRAPHBOARD_V_OFFSET)
                 # Reverse the buffer
                 pos = pos + QPointF(MAIN_GRAPHBOARD_BUFFER, MAIN_GRAPHBOARD_BUFFER)
-                if item.get_attributes()['color'] == 'red':
+                if item.get_attr()['color'] == 'red':
                     red_position = pos
-                elif item.get_attributes()['color'] == 'blue':
+                elif item.get_attr()['color'] == 'blue':
                     blue_position = pos
         self.json_handler.update_optimal_locations_in_json(red_position, blue_position)
         
