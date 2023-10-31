@@ -33,7 +33,7 @@ class JsonHandler(QObject):
 
         for item in self.scene.items():
             if isinstance(item, Arrow):
-                current_attributes.append(item.get_attr())
+                current_attributes.append(item.get_attributes())
         current_attributes = sorted(current_attributes, key=lambda x: x['color'])
 
         for letter, combinations in self.letters.items():

@@ -77,10 +77,10 @@ class PictographGenerator():
         for combination in combination_set:
             if all(key in combination for key in ['color', 'motion_type', 'rotation_direction', 'quadrant', 'turns']):
                 if combination['motion_type'] == 'static':
-                    svg_file = f"images/arrows/blank.svg"
+                    svg_file = f"resources/images/arrows/blank.svg"
                     arrow = Arrow(svg_file, self.graphboard_view, self.info_frame, self.svg_manager, self.arrow_manager, combination['motion_type'], self.staff_handler)
                 elif combination['motion_type'] == 'anti' or combination['motion_type'] == 'pro':
-                    svg_file = f"images/arrows/shift/{combination['motion_type']}/{combination['color']}_{combination['motion_type']}_{combination['rotation_direction']}_{combination['quadrant']}_{combination['turns']}.svg"
+                    svg_file = f"resources/images/arrows/shift/{combination['motion_type']}/{combination['color']}_{combination['motion_type']}_{combination['rotation_direction']}_{combination['quadrant']}_{combination['turns']}.svg"
                     arrow = Arrow(svg_file, self.graphboard_view, self.info_frame, self.svg_manager, self.arrow_manager, combination['motion_type'], self.staff_handler, None)
                     arrow.setFlag(QGraphicsItem.ItemIsMovable, True)
                     arrow.setFlag(QGraphicsItem.ItemIsSelectable, True)

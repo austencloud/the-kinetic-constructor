@@ -21,7 +21,7 @@ class ArrowAttributes:
         return start_end_location_mapping.get(
             quadrant, {}).get(rotation_direction, {}).get(motion_type, (None, None))
 
-    def get_attr(self, arrow):
+    def get_attributes(self, arrow):
         return {attr: getattr(arrow, attr) for attr in self.ARROW_ATTRIBUTES}
 
     def create_arrow_dict(self, color, motion_type, rotation_direction, quadrant, start_location, end_location, turns):

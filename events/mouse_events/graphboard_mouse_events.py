@@ -15,6 +15,7 @@ class GraphboardMouseEvents():
         self.staff_handler = self.graphboard_view.staff_handler
         self.arrow_factory = self.graphboard_view.main_widget.arrow_manager.arrow_factory
         self.staff_factory = self.staff_handler.staff_factory
+        self.info_handler = self.graphboard_view.info_handler
         self.temp_staff = None
 
     ### MOUSE PRESS ###
@@ -62,11 +63,13 @@ class GraphboardMouseEvents():
         self.graphboard_view.temp_staff = self.temp_staff
         self.graphboard_scene.addItem(self.temp_staff)
         self.temp_staff.setPos(self.staff_handler.staff_xy_locations[drag_preview.end_location])
-
+        self.drag_preview = drag_preview
+        self.graphboard_view.update_letter(self.info_handler.determine_current_letter_and_type()[0])
 
     ### DROP ###
 
     def handle_drop_event(self, event, drag_preview):
+        self.arrowbox_view.dragging = False
         self.graphboard_view.setFocus()
         event.accept()
 
@@ -103,6 +106,8 @@ class GraphboardMouseEvents():
 
         self.graphboard_scene.removeItem(self.graphboard_view.temp_staff)
         
+        self.graphboard_view.update_letter(self.info_handler.determine_current_letter_and_type()[0])
+
         drag_preview.hide()
         
         for item in self.graphboard_view.graphboard_scene.items():

@@ -10,6 +10,8 @@ class GraphboardInfoHandler():
 
     def connect_widgets_and_managers(self):
         self.graph_editor_widget = self.main_widget.graph_editor_widget
+        self.graphboard_view = self.graph_editor_widget.graphboard_view
+        self.graphboard_mouse_events = self.graphboard_view.mouse_events
         self.info_frame = self.graph_editor_widget.info_frame
         self.staff_handler = self.view.staff_handler
         self.arrow_manager = self.main_widget.arrow_manager
@@ -30,14 +32,14 @@ class GraphboardInfoHandler():
 
         # Check if an arrow is being dragged and add its attributes to the current_combination list
         if arrowbox_view.dragging == True:
-            drag_attr = arrowbox_view.drag_preview.get_attr()
+            drag_attr = self.graphboard_mouse_events.drag_preview.get_attributes()
             sorted_drag_attr = {k: drag_attr[k] for k in sorted(drag_attr.keys())}
             current_combination.append(sorted_drag_attr)
 
         # Add attributes of arrows already in the scene to the current_combination list
         for arrow in self.view.items():
             if isinstance(arrow, Arrow):
-                attributes = arrow.attributes.get_attr(arrow)
+                attributes = arrow.attributes.get_attributes(arrow)
                 sorted_attributes = {k: attributes[k] for k in sorted(attributes.keys())}
                 current_combination.append(sorted_attributes)
 

@@ -8,6 +8,7 @@ class ArrowDragPreview(QWidget):
     def __init__(self, arrow):
         super().__init__()
 
+        self.arrow = arrow
         pixmap = self.create_pixmap(arrow)
         
         self.label = QLabel(self)
@@ -40,11 +41,15 @@ class ArrowDragPreview(QWidget):
             renderer.render(painter)
         return pixmap
     
-    def get_attr(self):
+    def get_attributes(self):
+        start_location, end_location = self.arrow.attributes.get_start_end_locations(self.motion_type, self.rotation_direction, self.quadrant)
+        
         return {
             'color': self.color,
             'motion_type': self.motion_type,
             'quadrant': self.quadrant,
             'rotation_direction': self.rotation_direction,
+            'start_location': start_location,
+            'end_location': end_location,
             'turns': self.turns
         }

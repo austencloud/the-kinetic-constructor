@@ -119,7 +119,7 @@ class ArrowManipulator:
                 'turns': arrow.turns
             }
 
-            arrow.svg_file = f"images/arrows/shift/{new_motion_type}_{arrow.turns}.svg"
+            arrow.svg_file = f"resources/images/arrows/shift/{new_motion_type}_{arrow.turns}.svg"
             arrow.initialize_svg_renderer(arrow.svg_file)
             
             arrow.attributes.update_attributes(arrow, new_arrow_dict)

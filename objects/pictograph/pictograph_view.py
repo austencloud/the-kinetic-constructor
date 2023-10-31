@@ -173,9 +173,9 @@ class PictographView(QGraphicsView):
                 pos.setY(pos.y() + MAIN_GRAPHBOARD_V_OFFSET)
                 # Reverse the buffer
                 pos = pos + QPointF(MAIN_GRAPHBOARD_BUFFER, MAIN_GRAPHBOARD_BUFFER)
-                if item.get_attr()['color'] == 'red':
+                if item.get_attributes()['color'] == 'red':
                     red_position = pos
-                elif item.get_attr()['color'] == 'blue':
+                elif item.get_attributes()['color'] == 'blue':
                     blue_position = pos
         self.json_handler.update_optimal_locations_in_json(red_position, blue_position)
         

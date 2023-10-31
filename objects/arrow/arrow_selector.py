@@ -13,7 +13,7 @@ class ArrowSelector:
             deleted_arrows = [deleted_arrows]
         for arrow in deleted_arrows:
             if isinstance(arrow, Arrow):
-                deleted_arrow_attributes = arrow.attributes.get_attr(arrow)
+                deleted_arrow_attributes = arrow.attributes.get_attributes(arrow)
                 
                 ghost_attributes_dict = {
                                 'color': deleted_arrow_attributes['color'],
@@ -28,8 +28,8 @@ class ArrowSelector:
                 ghost_arrow = self.arrow_manager.arrow_factory.create_arrow(self.arrow_manager.graphboard_view, ghost_attributes_dict)
                 ghost_arrow.is_ghost = True
                 ghost_arrow.setScale(GRAPHBOARD_SCALE)
-                ghost_arrow.staff = arrow.staff  
-                ghost_arrow.staff.arrow = ghost_arrow
+                ghost_arrow.staff = arrow.staff
+                arrow.staff.arrow = ghost_arrow
                 
                 graphboard_scene = self.arrow_manager.graphboard_view.scene()
                 graphboard_scene.addItem(ghost_arrow)
