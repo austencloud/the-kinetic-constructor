@@ -28,6 +28,10 @@ class DragPreview(QWidget):
         self.rotation_direction = arrow.rotation_direction
         self.turns = arrow.turns
 
+        self.start_location, self.end_location = arrow.attributes.get_start_end_locations(
+            self.motion_type, self.rotation_direction, self.quadrant
+        )
+
         self.in_graphboard = False
         self.has_entered_graphboard_once = False
         self.current_rotation_angle = 0

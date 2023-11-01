@@ -55,10 +55,23 @@ class DragManager:
             self.update_arrow_drag_preview(view, event)
             self.graphboard_view.dragMoveEvent(event, self.drag_preview)
 
+            if self.has_entered_graphboard_once:
+                new_arrow_dict = self.create_new_arrow_dict()
+                self.invisible_arrow.arrow_manager.arrow_attributes.update_attributes(self.invisible_arrow, new_arrow_dict)  # Implement a method to update arrow's properties
+                board_state = self.graphboard_view.get_state()
+                self.staff_handler.staff_positioner.reposition_staffs(self.graphboard_scene, board_state)
+                self.info_handler.update()
+
     def handle_drag_inside_graphboard(self, view, event):
         if not self.drag_preview:
             return
-        self.has_entered_graphboard_once = True
+
+        if not self.has_entered_graphboard_once:
+            self.has_entered_graphboard_once = True
+
+            new_arrow_dict = self.create_new_arrow_dict()
+            self.invisible_arrow = self.create_and_add_arrow(new_arrow_dict)
+            self.invisible_arrow.setVisible(False)
 
         local_pos_in_graphboard = self.get_local_pos_in_graphboard(view, event)
         new_quadrant = self.graphboard_view.get_graphboard_quadrants(

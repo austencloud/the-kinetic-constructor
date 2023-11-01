@@ -40,10 +40,10 @@ class GraphboardContextMenuHandler():
 
     def create_graphboard_menu(self, event):
         actions = [
-            ('Swap Colors', lambda: self.arrow_manipulator.swap_colors(self.graphboard_view.get_selected_items())),
+            ('Swap Colors', lambda: self.arrow_manipulator.swap_colors()),
             ('Select All', self.graphboard_view.select_all_arrows),
             ('Add to Sequence', lambda _: self.sequence_view.add_to_sequence(self.graphboard_view)),
             ('Export to PNG', self.export_manager.export_to_png),
-            ('Export to SVG', self.export_manager.export_to_svg)
+            ('Export to SVG', lambda: self.export_manager.export_to_svg('output.svg'))
         ]
         self.create_menu_with_actions(self.graphboard_view, actions, event)

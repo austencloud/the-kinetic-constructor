@@ -99,8 +99,8 @@ class ExportHandler:
             print(f"An error occurred while exporting the SVG: {e}")      
 
     def export_to_png(self):
-        selectedItems = self.graphboard_scene.get_selected_items()
-        image = QImage(self.graphboard_view.size(), QImage.Format_ARGB32)
+        selectedItems = self.graphboard_view.get_selected_items()
+        image = QImage(self.graphboard_view.size(), QImage.Format.Format_ARGB32)
         painter = QPainter(image)
 
         for item in selectedItems:
