@@ -8,7 +8,6 @@ class PictographStaffHandler(StaffHandler):
     def __init__(self, main_widget, scene):
         super().__init__(main_widget)
         self.scene = scene
-        self.staffs_on_board = {}
         self.staff_xy_locations = {}
         self.pictograph = None
         self.pictograph_view = None
@@ -41,7 +40,6 @@ class PictographStaffHandler(StaffHandler):
             'W': grid_handpoints['W_hand_point']  
         }
 
-        self.staffs_on_board = {}
 
     def update_pictograph_staffs(self, scene):
         
@@ -49,8 +47,7 @@ class PictographStaffHandler(StaffHandler):
             if isinstance(item, Staff):
                 item.hide()
 
-        self.staffs_on_board.clear() 
-        
+
         for arrow in scene.items():
             if isinstance(arrow, Arrow):
                 location = arrow.end_location
@@ -77,7 +74,7 @@ class PictographStaffHandler(StaffHandler):
                     arrow.staff = new_staff
                     new_staff.arrow = arrow
                     self.arrow_manager = new_staff.arrow.arrow_manager
-                    self.staffs_on_board[location + "_staff_" + color] = new_staff  #
+
                     
         self.staff_positioner.check_replace_beta_staffs(self.scene)
     

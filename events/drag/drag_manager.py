@@ -57,9 +57,13 @@ class DragManager:
 
             if self.has_entered_graphboard_once:
                 new_arrow_dict = self.create_new_arrow_dict()
-                self.invisible_arrow.arrow_manager.arrow_attributes.update_attributes(self.invisible_arrow, new_arrow_dict)  # Implement a method to update arrow's properties
+                self.invisible_arrow.arrow_manager.arrow_attributes.update_attributes(
+                    self.invisible_arrow, new_arrow_dict
+                )  # Implement a method to update arrow's properties
                 board_state = self.graphboard_view.get_state()
-                self.staff_handler.staff_positioner.reposition_staffs(self.graphboard_scene, board_state)
+                self.staff_handler.staff_positioner.reposition_staffs(
+                    self.graphboard_scene, board_state
+                )
                 self.info_handler.update()
 
     def handle_drag_inside_graphboard(self, view, event):
@@ -84,8 +88,7 @@ class DragManager:
     def handle_mouse_release(self, view, event, drag_preview):
         if not hasattr(self, "drag_preview"):
             return
-        
-        
+
         self.handle_drop_event(event)
         self.reset_drag_state()
 
@@ -159,15 +162,18 @@ class DragManager:
     def create_and_add_staff(self, staff_dict):
         new_staff = self.staff_factory.create_staff(self.graphboard_scene, staff_dict)
         self.graphboard_scene.addItem(new_staff)
+
+        for staff in self.staff_handler.staffs_on_board:
+            if staff.color == new_staff.color:
+                self.staff_handler.staffs_on_board.remove(staff)
+
+        self.staff_handler.staffs_on_board.append(new_staff)
+
         return new_staff
 
     def link_arrow_and_staff(self, arrow, staff):
         arrow.staff = staff
         staff.arrow = arrow
-
-    def update_staffs_on_board_key(self, new_staff):
-        new_staff_key = f"{new_staff.location}_staff_{new_staff.color}"
-        self.staff_handler.staffs_on_board[new_staff_key] = new_staff
 
     def get_current_quadrant(self, event):
         return self.graphboard_view.get_graphboard_quadrants(
@@ -244,11 +250,9 @@ class DragManager:
     ### DROP EVENT HANDLING ###
 
     def handle_drop_event(self, event):
-        
-        
         if not self.dragging:
             return
-        
+
         if self.has_entered_graphboard_once:
             self.set_focus_and_accept_event(event)
             new_arrow_dict = self.create_new_arrow_dict()
@@ -261,7 +265,6 @@ class DragManager:
             new_arrow.setSelected(True)
 
             self.link_arrow_and_staff(new_arrow, new_staff)
-            self.update_staffs_on_board_key(new_staff)
 
         self.cleanup_and_update_scene()
         self.update_info_handler()

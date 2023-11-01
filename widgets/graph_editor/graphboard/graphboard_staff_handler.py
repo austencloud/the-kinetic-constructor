@@ -7,7 +7,7 @@ class GraphboardStaffHandler(StaffHandler):
     def __init__(self, main_widget, scene):
         super().__init__(main_widget)
         self.scene = scene
-        self.staffs_on_board = {}
+        self.staffs_on_board = []
         self.staff_xy_locations = {}
         self.graphboard_view = None
     
@@ -31,7 +31,7 @@ class GraphboardStaffHandler(StaffHandler):
             'w': grid_handpoints['W_hand_point'] + QPointF(-GRAPHBOARD_STAFF_LENGTH/2, - GRAPHBOARD_STAFF_WIDTH/2)
         }
 
-        self.staffs_on_board = {}
+        self.staffs_on_board = []
         
     def update_graphboard_staffs(self, scene):
         for arrow in scene.items():
@@ -49,13 +49,3 @@ class GraphboardStaffHandler(StaffHandler):
                 
         self.staff_positioner.check_replace_beta_staffs(scene)
         
-    def update_staff_key(self, staff):
-        new_location = staff.location
-        new_color = staff.color
-        new_key = f"{new_location}_staff_{new_color}"
-
-        for old_key, existing_staff in self.staffs_on_board.items():
-            if existing_staff == staff:
-                if old_key != new_key:
-                    self.staffs_on_board[new_key] = self.staffs_on_board.pop(old_key)
-                break

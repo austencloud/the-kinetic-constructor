@@ -10,6 +10,7 @@ from resources.constants import (
     DOWN,
     BETA_OFFSET,
 )
+from objects.staff.staff import Staff
 
 
 class StaffPositioner:
@@ -22,9 +23,17 @@ class StaffPositioner:
     def check_replace_beta_staffs(self, scene):
         view = scene.views()[0]
         board_state = view.get_state()
-        if len(self.staff_handler.staffs_on_board) == 2:
-            staffs_list = list(self.staff_handler.staffs_on_board.items())
-            if staffs_list[0][1].location == staffs_list[1][1].location:
+
+        # check the graphbaord_view to see how many staves are on board, save it as staffs_on_board
+        staffs_on_board = []
+        self.graphboard_view = self.staff_handler.main_widget.graphboard_view
+        scene_items = self.graphboard_view.graphboard_scene.items()
+        for item in scene_items:
+            if isinstance(item, Staff):
+                staffs_on_board.append(item)
+
+        if len(staffs_on_board) == 2:
+            if staffs_on_board[0].location == staffs_on_board[1].location:
                 self.reposition_staffs(scene, board_state)
 
     def reposition_staffs(self, scene, board_state):
@@ -72,7 +81,9 @@ class StaffPositioner:
             if arrow["motion_type"] not in ["static"]
         ]
         if len(converging_arrows) == 2:
-            if converging_arrows[0].get("start_location") != converging_arrows[1].get("start_location"):
+            if converging_arrows[0].get("start_location") != converging_arrows[1].get(
+                "start_location"
+            ):
                 self.reposition_alpha_to_beta(move_staff, converging_arrows)
 
         scene.update()
@@ -82,7 +93,7 @@ class StaffPositioner:
             staff = next(
                 (
                     staff
-                    for staff in self.staffs_on_board.values()
+                    for staff in self.staffs_on_board
                     if staff.arrow.color == arrow["color"]
                 ),
                 None,
@@ -111,7 +122,7 @@ class StaffPositioner:
                     other_staff = next(
                         (
                             s
-                            for s in self.staff_handler.staffs_on_board.values()
+                            for s in self.staff_handler.staffs_on_board
                             if s.location == staff.location and s != staff
                         ),
                         None,
@@ -132,7 +143,7 @@ class StaffPositioner:
                     move_staff(
                         next(
                             staff
-                            for staff in self.staff_handler.staffs_on_board.values()
+                            for staff in self.staff_handler.staffs_on_board
                             if staff.arrow.color == arrow["color"]
                         ),
                         direction,
@@ -144,7 +155,9 @@ class StaffPositioner:
             return
 
         arrow1, arrow2 = arrows
-        same_motion_type = arrow1["motion_type"] == arrow2["motion_type"] in ["pro", "anti"]
+        same_motion_type = (
+            arrow1["motion_type"] == arrow2["motion_type"] in ["pro", "anti"]
+        )
 
         if same_motion_type:
             self.reposition_G_and_H(scale, view, arrow1, arrow2)
@@ -168,19 +181,23 @@ class StaffPositioner:
 
         further_staff = next(
             staff
-            for staff in self.staff_handler.staffs_on_board.values()
+            for staff in self.staff_handler.staffs_on_board
             if staff.arrow.color == further_arrow["color"]
         )
-        new_position_further = self.calculate_new_position(further_staff.pos(), further_direction, scale)
+        new_position_further = self.calculate_new_position(
+            further_staff.pos(), further_direction, scale
+        )
         further_staff.setPos(new_position_further)
 
         other_direction = self.get_opposite_direction(further_direction)
         other_staff = next(
             staff
-            for staff in self.staff_handler.staffs_on_board.values()
+            for staff in self.staff_handler.staffs_on_board
             if staff.arrow.color == other_arrow["color"]
         )
-        new_position_other = self.calculate_new_position(other_staff.pos(), other_direction, scale)
+        new_position_other = self.calculate_new_position(
+            other_staff.pos(), other_direction, scale
+        )
         other_staff.setPos(new_position_other)
 
     def reposition_I(self, scale, arrow1, arrow2):
@@ -190,7 +207,7 @@ class StaffPositioner:
         pro_staff = next(
             (
                 staff
-                for staff in self.staff_handler.staffs_on_board.values()
+                for staff in self.staff_handler.staffs_on_board
                 if staff.arrow.color == pro_arrow["color"]
             ),
             None,
@@ -198,7 +215,7 @@ class StaffPositioner:
         anti_staff = next(
             (
                 staff
-                for staff in self.staff_handler.staffs_on_board.values()
+                for staff in self.staff_handler.staffs_on_board
                 if staff.arrow.color == anti_arrow["color"]
             ),
             None,
@@ -206,8 +223,12 @@ class StaffPositioner:
 
         if pro_staff and anti_staff:
             # Determine the direction to move the staffs based on the pro arrow's start and end locations
-            pro_staff_translation_direction = self.determine_translation_direction(pro_arrow)
-            anti_staff_translation_direction = self.get_opposite_direction(pro_staff_translation_direction)
+            pro_staff_translation_direction = self.determine_translation_direction(
+                pro_arrow
+            )
+            anti_staff_translation_direction = self.get_opposite_direction(
+                pro_staff_translation_direction
+            )
 
             # Move the staff corresponding to the pro arrow closer
             new_position_pro = self.calculate_new_position(
@@ -230,7 +251,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.staff_handler.staffs_on_board.values()
+                    for staff in self.staff_handler.staffs_on_board
                     if staff.arrow.color == pro_or_anti_arrow["color"]
                 ),
                 direction,
@@ -238,7 +259,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.staff_handler.staffs_on_board.values()
+                    for staff in self.staff_handler.staffs_on_board
                     if staff.arrow.color == static_arrow["color"]
                 ),
                 self.get_opposite_direction(direction),
@@ -303,7 +324,7 @@ class StaffPositioner:
         staff = next(
             (
                 staff
-                for staff in self.staff_handler.staffs_on_board.values()
+                for staff in self.staff_handler.staffs_on_board
                 if staff.arrow.color == arrow["color"]
                 and staff.location == arrow["end_location"]
             ),

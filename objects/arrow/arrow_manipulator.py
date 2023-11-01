@@ -17,7 +17,6 @@ class ArrowManipulator:
         staff.setPos(arrow.view.staff_handler.staff_xy_locations[staff.location])
 
     def finalize_manipulation(self, arrow):
-        self.graphboard_staff_handler.update_staff_key(arrow.staff)
         self.arrow_manager.arrow_positioner.update_arrow_position(
             self.arrow_manager.graphboard_view
         )

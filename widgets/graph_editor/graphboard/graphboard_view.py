@@ -48,6 +48,7 @@ class GraphboardView(QGraphicsView):
         self.temp_arrow = None
         self.temp_staff = None
         self.drag_preview = None
+
         self.setSizePolicy(
             QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         )
