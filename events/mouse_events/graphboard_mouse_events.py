@@ -103,6 +103,11 @@ class GraphboardMouseEvents():
         self.graphboard_scene.addItem(new_arrow)
         self.graphboard_scene.addItem(new_staff)
 
+        new_staff_key = f"{new_staff.location}_staff_{new_staff.color}"
+
+        self.staff_handler.staffs_on_board[new_staff_key] = new_staff
+
+
         self.graphboard_scene.removeItem(self.graphboard_view.temp_staff)
         self.graphboard_view.update_letter(self.info_handler.determine_current_letter_and_type()[0])
 

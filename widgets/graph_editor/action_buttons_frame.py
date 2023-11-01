@@ -29,7 +29,7 @@ class ActionButtonsFrame(QFrame):
             (icons_path + "mirror.png", "Mirror",
                 lambda: self.main_widget.arrow_manager.arrow_manipulator.mirror_arrow(self.main_widget.graphboard_scene.selectedItems())),
             (icons_path + "swap.png", "Swap Colors",
-                lambda: self.main_widget.arrow_manager.arrow_manipulator.swap_colors(self.main_widget.graphboard_scene.selectedItems())),
+                lambda: self.main_widget.arrow_manager.arrow_manipulator.swap_colors()),
             (icons_path + "select_all.png", "Select All",
                 lambda: self.main_widget.graphboard_view.select_all_items()),
             (icons_path + "add_to_sequence.png", "Add to Sequence",

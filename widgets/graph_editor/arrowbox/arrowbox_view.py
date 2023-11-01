@@ -90,5 +90,6 @@ class ArrowBoxView(QGraphicsView):
         self.mouse_events.handle_mouse_move(self, event)
 
     def mouseReleaseEvent(self, event):
-        self.mouse_events.handle_mouse_release(self, event, self.drag_preview)
-        self.dragging = False
+        if self.dragging:
+            self.mouse_events.handle_mouse_release(self, event, self.drag_preview)
+            self.dragging = False
