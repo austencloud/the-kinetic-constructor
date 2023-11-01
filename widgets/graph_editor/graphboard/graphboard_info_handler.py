@@ -1,22 +1,22 @@
 from data.letter_types import letter_types
 from objects.arrow.arrow import Arrow
 
-class GraphboardInfoHandler():
+
+class GraphboardInfoHandler:
     def __init__(self, main_widget, view):
         self.main_widget = main_widget
         self.letters = main_widget.letters
         self.view = view
 
-
     def connect_widgets_and_managers(self):
         self.graph_editor_widget = self.main_widget.graph_editor_widget
         self.graphboard_view = self.graph_editor_widget.graphboard_view
-        self.graphboard_mouse_events = self.graphboard_view.mouse_events
+        self.graphboard_drag_manager = self.graphboard_view.drag_manager
         self.info_frame = self.graph_editor_widget.info_frame
         self.staff_handler = self.view.staff_handler
         self.arrow_manager = self.main_widget.arrow_manager
         self.arrow_positioner = self.arrow_manager.arrow_positioner
-        
+
     def update(self):
         self.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard_view)
         self.info_frame.update_type_and_position_info()
@@ -25,14 +25,14 @@ class GraphboardInfoHandler():
 
     def connect_view(self, view):
         self.view = view
-        
+
     def determine_current_letter_and_type(self):
         current_combination = []
         arrowbox_view = self.main_widget.graph_editor_widget.arrowbox_view
 
         # Check if an arrow is being dragged and add its attributes to the current_combination list
         if arrowbox_view.dragging == True:
-            drag_attr = self.graphboard_mouse_events.drag_preview.get_attributes()
+            drag_attr = self.graphboard_drag_manager.drag_preview.get_attributes()
             sorted_drag_attr = {k: drag_attr[k] for k in sorted(drag_attr.keys())}
             current_combination.append(sorted_drag_attr)
 
@@ -40,18 +40,28 @@ class GraphboardInfoHandler():
         for arrow in self.view.items():
             if isinstance(arrow, Arrow):
                 attributes = arrow.attributes.get_attributes(arrow)
-                sorted_attributes = {k: attributes[k] for k in sorted(attributes.keys())}
+                sorted_attributes = {
+                    k: attributes[k] for k in sorted(attributes.keys())
+                }
                 current_combination.append(sorted_attributes)
 
         # Sort the list of dictionaries by the 'color' key
-        current_combination = sorted(current_combination, key=lambda x: x['color'])
+        current_combination = sorted(current_combination, key=lambda x: x["color"])
 
         letter_type = None
         for letter, combinations in self.letters.items():
-            combinations = [sorted([x for x in combination if 'color' in x], key=lambda x: x['color']) for combination in combinations]
+            combinations = [
+                sorted(
+                    [x for x in combination if "color" in x], key=lambda x: x["color"]
+                )
+                for combination in combinations
+            ]
             if current_combination in combinations:
                 self.letter = letter
-                for type, letters in letter_types.items():  # Determine the type if a letter is found
+                for (
+                    type,
+                    letters,
+                ) in letter_types.items():  # Determine the type if a letter is found
                     if self.letter in letters:
                         current_type = type
                         break

@@ -2,22 +2,28 @@ from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
-from events.mouse_events.arrow_mouse_events import ArrowMouseEvents
+from events.drag.drag_manager import DragManager
 from objects.arrow.arrow_attributes import ArrowAttributes
 import re
+
+
 class Arrow(QGraphicsSvgItem):
     def __init__(self, view, attr_dict):
         self.svg_file = self.get_svg_file(attr_dict)
         super().__init__(self.svg_file)
-        
+
         self.initialize_svg_renderer(self.svg_file)
         self.initialize_app_attributes(view, attr_dict)
         self.initialize_graphics_flags()
 
+
+    def select(self):
+        self.setSelected(True)
+
     def get_svg_file(self, attr_dict):
-        motion_type = attr_dict['motion_type']
-        turns = attr_dict.get('turns', None)
-        
+        motion_type = attr_dict["motion_type"]
+        turns = attr_dict.get("turns", None)
+
         if motion_type in ["pro", "anti"]:
             self.is_shift = True
             return f"resources/images/arrows/shift/{motion_type}_{turns}.svg"
@@ -39,11 +45,11 @@ class Arrow(QGraphicsSvgItem):
             self.staff = None
             self.is_mirrored = False
             self.previous_arrow = None
-            self.mouse_events = ArrowMouseEvents(self)
+            self.drag_manager = self.main_widget.drag_manager
             self.setScale(view.view_scale)
-            
+
         self.attributes = self.main_widget.arrow_manager.arrow_attributes
-        self.attributes.update_attributes(self, dict)  
+        self.attributes.update_attributes(self, dict)
         self.update_appearance()
         self.center = self.boundingRect().center()
 
@@ -52,20 +58,18 @@ class Arrow(QGraphicsSvgItem):
             QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges,
             QGraphicsItem.GraphicsItemFlag.ItemIsFocusable,
             QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable,
-            QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable
+            QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable,
         ]
-        
+
         for flag in flags:
             self.setFlag(flag, True)
-        
+
         self.setTransformOriginPoint(self.center)
 
-
     def initialize_svg_renderer(self, svg_file):
-        if getattr(self, 'is_shift', False):
+        if getattr(self, "is_shift", False):
             self.renderer = QSvgRenderer(svg_file)
             self.setSharedRenderer(self.renderer)
-
 
     ### MOUSE EVENTS ###
 
@@ -78,78 +82,83 @@ class Arrow(QGraphicsSvgItem):
         if event.buttons() == Qt.MouseButton.LeftButton:
             from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
             from objects.pictograph.pictograph_view import PictographView
+
             if isinstance(self.view, GraphboardView):
-                self.mouse_events.handle_graphboard_view(self, event)
+                self.drag_manager.handle_graphboard_view_drag(self, event)
             elif isinstance(self.view, PictographView):
-                self.mouse_events.handle_pictograph_view(self, event)
+                self.drag_manager.handle_pictograph_view_drag(self, event)
 
     def mouseReleaseEvent(self, event):
-        if hasattr(self, 'future_position'):
+        if hasattr(self, "future_position"):
             self.setPos(self.future_position)
             del self.future_position
         from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
+
         if isinstance(self.view, GraphboardView):
             self.arrow_manager.arrow_positioner.update_arrow_position(self.view)
 
-    # UPDATE APPEARANCE          
-        
+    # UPDATE APPEARANCE
+
     def update_appearance(self):
         self.update_color()
         self.update_rotation()
-     
+
     def set_svg_color(self, svg_file, new_color):
-        color_map = {
-            "red": "#ED1C24",
-            "blue": "#2E3192"
-        }
+        color_map = {"red": "#ED1C24", "blue": "#2E3192"}
         new_hex_color = color_map.get(new_color)
 
-        with open(svg_file, 'r') as f:
+        with open(svg_file, "r") as f:
             svg_data = f.read()
 
-        style_tag_pattern = re.compile(r'\.st0{fill\s*:\s*(#[a-fA-F0-9]{6})\s*;}', re.DOTALL)
+        style_tag_pattern = re.compile(
+            r"\.st0{fill\s*:\s*(#[a-fA-F0-9]{6})\s*;}", re.DOTALL
+        )
         match = style_tag_pattern.search(svg_data)
 
         if match:
             old_color = match.group(1)
             svg_data = svg_data.replace(old_color, new_hex_color)
-        return svg_data.encode('utf-8')     
-        
+        return svg_data.encode("utf-8")
+
     def get_svg_data(self, svg_file):
-        with open(svg_file, 'r') as f:
+        with open(svg_file, "r") as f:
             svg_data = f.read()
-        return svg_data.encode('utf-8')
-        
+        return svg_data.encode("utf-8")
+
     def update_color(self):
         if self.motion_type in ["pro", "anti"]:
             new_svg_data = self.set_svg_color(self.svg_file, self.color)
-            
+
             self.renderer.load(new_svg_data)
             self.setSharedRenderer(self.renderer)
-            
+
     def update_rotation(self):
-        angle = self.get_rotation_angle(self.quadrant, self.motion_type, self.rotation_direction)
+        angle = self.get_rotation_angle(
+            self.quadrant, self.motion_type, self.rotation_direction
+        )
         self.setRotation(angle)
 
     def get_rotation_angle(self, quadrant, motion_type, rotation_direction):
-        quadrant_to_angle = self.get_quadrant_to_angle_map(motion_type, rotation_direction)
+        quadrant_to_angle = self.get_quadrant_to_angle_map(
+            motion_type, rotation_direction
+        )
         return quadrant_to_angle.get(quadrant, 0)
 
     def get_quadrant_to_angle_map(self, motion_type, rotation_direction):
-        if motion_type == 'pro':
+        if motion_type == "pro":
             return {
                 "r": {"ne": 0, "se": 90, "sw": 180, "nw": 270},
-                "l": {"ne": 270, "se": 180, "sw": 90, "nw": 0}
+                "l": {"ne": 270, "se": 180, "sw": 90, "nw": 0},
             }.get(rotation_direction, {})
-        elif motion_type == 'anti':
+        elif motion_type == "anti":
             return {
                 "r": {"ne": 270, "se": 180, "sw": 90, "nw": 0},
-                "l": {"ne": 0, "se": 90, "sw": 180, "nw": 270}
+                "l": {"ne": 0, "se": 90, "sw": 180, "nw": 270},
             }.get(rotation_direction, {})
-        elif motion_type == 'static':
+        elif motion_type == "static":
             return {
                 "r": {"ne": 0, "se": 0, "sw": 0, "nw": 0},
-                "l": {"ne": 0, "se": 0, "sw": 0, "nw": 0}
+                "l": {"ne": 0, "se": 0, "sw": 0, "nw": 0},
             }.get(rotation_direction, {})
 
     def mirror_self(self):

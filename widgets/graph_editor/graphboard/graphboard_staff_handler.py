@@ -44,7 +44,7 @@ class GraphboardStaffHandler(StaffHandler):
                     'layer': 1
                 }
                 
-                arrow.staff.attributes.update_attributes(arrow.staff, new_staff_dict)
+                arrow.staff.attributes.update_attributes_from_dict(arrow.staff, new_staff_dict)
                 arrow.staff.update_appearance()
                 
         self.staff_positioner.check_replace_beta_staffs(scene)

@@ -13,7 +13,7 @@ class ArrowManipulator:
     def update_arrow_and_staff(self, arrow, arrow_dict, staff_dict):
         staff = arrow.staff
         arrow.attributes.update_attributes(arrow, arrow_dict)
-        staff.attributes.update_attributes(staff, staff_dict)
+        staff.attributes.update_attributes_from_dict(staff, staff_dict)
         staff.setPos(arrow.view.staff_handler.staff_xy_locations[staff.location])
 
     def finalize_manipulation(self, arrow):
@@ -210,8 +210,6 @@ class ArrowManipulator:
         
         if len(arrows) >= 1:
             for arrow in arrows:
-                print(f"Before swap: Arrow color: {arrow.color}, Staff color: {arrow.staff.color}")
-                
                 if arrow.color == "red":
                     new_color = "blue"
                 elif arrow.color == "blue":
@@ -225,5 +223,4 @@ class ArrowManipulator:
                 
                 arrow.update_appearance()
                 arrow.staff.update_appearance()
-                print(f"After swap: Arrow color: {arrow.color}, Staff color: {arrow.staff.color}")
                 self.finalize_manipulation(arrow)

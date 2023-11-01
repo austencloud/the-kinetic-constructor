@@ -215,7 +215,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.staffs_on_board.values()
+                    for staff in self.staff_handler.staffs_on_board.values()
                     if staff.arrow.color == pro_or_anti_arrow["color"]
                 ),
                 direction,
@@ -223,7 +223,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.staffs_on_board.values()
+                    for staff in self.staff_handler.staffs_on_board.values()
                     if staff.arrow.color == static_arrow["color"]
                 ),
                 self.get_opposite_direction(direction),
