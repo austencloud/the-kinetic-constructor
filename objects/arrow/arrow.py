@@ -139,11 +139,11 @@ class Arrow(QGraphicsSvgItem):
         if motion_type == 'pro':
             return {
                 "r": {"ne": 0, "se": 90, "sw": 180, "nw": 270},
-                "l": {"ne": 0, "se": 90, "sw": 180, "nw": 270}
+                "l": {"ne": 270, "se": 180, "sw": 90, "nw": 0}
             }.get(rotation_direction, {})
         elif motion_type == 'anti':
             return {
-                "r": {"ne": 0, "se": 90, "sw": 180, "nw": 270},
+                "r": {"ne": 270, "se": 180, "sw": 90, "nw": 0},
                 "l": {"ne": 0, "se": 90, "sw": 180, "nw": 270}
             }.get(rotation_direction, {})
         elif motion_type == 'static':
@@ -151,3 +151,7 @@ class Arrow(QGraphicsSvgItem):
                 "r": {"ne": 0, "se": 0, "sw": 0, "nw": 0},
                 "l": {"ne": 0, "se": 0, "sw": 0, "nw": 0}
             }.get(rotation_direction, {})
+
+    def mirror_self(self):
+        self.is_mirrored = not self.is_mirrored
+        self.setScale(-self.scale())

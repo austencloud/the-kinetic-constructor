@@ -38,9 +38,10 @@ class ArrowBoxMouseEvents():
         self.move_drag_preview_to_cursor(view, event)
 
     def move_drag_preview_to_cursor(self, view, event):
-        main_window = view.window()
-        local_pos = view.mapTo(main_window, event.pos())
-        self.drag_preview.move(local_pos - (self.arrow.center * GRAPHBOARD_SCALE).toPoint())
+        if hasattr(self, 'drag_preview'):  # Add this line to check if 'drag_preview' exists
+            main_window = view.window()
+            local_pos = view.mapTo(main_window, event.pos())
+            self.drag_preview.move(local_pos - (self.arrow.center * GRAPHBOARD_SCALE).toPoint())
 
     def update_arrow_drag_preview(self, view, event):
         over_graphboard = self.is_over_graphboard(view, event)

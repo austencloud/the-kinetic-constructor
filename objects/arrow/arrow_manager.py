@@ -8,11 +8,6 @@ from objects.arrow.arrow_attributes import ArrowAttributes
 class ArrowManager(QObject):
     def __init__(self, main_widget):
         super().__init__()
-        self.remaining_staff = {}
-        self.dragging_arrow = None
-        self.drag_offset = QPointF(0, 0)
-        self.timer = QTimer()
-        self.letters = main_widget.letters
         self.main_widget = main_widget
 
         # Initialize the helper classes

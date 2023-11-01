@@ -4,6 +4,7 @@ from resources.constants import GRAPHBOARD_SCALE, ARROW_ADJUSTMENT_DISTANCE, GRA
 class ArrowPositioner:
     def __init__(self, arrow_manager):
         self.arrow_manager = arrow_manager
+        self.letters = self.arrow_manager.main_widget.letters
 
     def update_arrow_position(self, graphboard_view):
         current_arrows = graphboard_view.get_arrows()
@@ -18,7 +19,7 @@ class ArrowPositioner:
         current_state = self.arrow_manager.graphboard_view.get_state()
         current_letter = self.arrow_manager.graphboard_view.info_handler.determine_current_letter_and_type()[0]
         if current_letter is not None:
-            matching_letters = self.arrow_manager.letters[current_letter]
+            matching_letters = self.letters[current_letter]
             optimal_locations = self.arrow_manager.arrow_state_comparator.find_optimal_locations(current_state, matching_letters)
             for arrow in current_arrows:
                 if optimal_locations:
