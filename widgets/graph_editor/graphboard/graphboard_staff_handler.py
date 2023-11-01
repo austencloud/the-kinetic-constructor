@@ -54,7 +54,6 @@ class GraphboardStaffHandler(StaffHandler):
         new_color = staff.color
         new_key = f"{new_location}_staff_{new_color}"
 
-        # Find the old key and update it
         for old_key, existing_staff in self.staffs_on_board.items():
             if existing_staff == staff:
                 if old_key != new_key:
