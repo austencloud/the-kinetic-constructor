@@ -6,6 +6,7 @@ from resources.constants import GRAPHBOARD_SCALE
 from objects.arrow.arrow_drag_preview import ArrowDragPreview
 from objects.arrow.arrow import Arrow
 from objects.staff.staff import Staff
+
 # import QGraphicsItem
 from PyQt6.QtWidgets import QGraphicsItem
 
@@ -22,8 +23,10 @@ class ArrowBoxMouseEvents:
         self.dragging = False
 
     def initialize_drag(self, view, arrow, event):
+        if not self.is_click_on_arrow(view, event):
+            return
+        self.graphboard_view.mouse_events.arrow_dragged = True  # Set the flag
         self.setup_dragging(arrow)
-        self.create_and_show_drag_preview(view, event)
 
     def setup_dragging(self, arrow):
         self.dragging = True
@@ -32,22 +35,28 @@ class ArrowBoxMouseEvents:
         self.dragged_arrow = arrow
         self.graphboard_view.dragged_arrow = self.dragged_arrow
 
-    def create_and_show_drag_preview(self, view, event):
-        self.drag_preview = ArrowDragPreview(self.arrow)
+    def create_and_show_drag_preview(self, view, event, arrow):
+        self.drag_preview = ArrowDragPreview(arrow)
         self.drag_preview.setParent(QApplication.instance().activeWindow())
         self.drag_preview.show()
         self.has_entered_graphboard_once = False
-        self.move_drag_preview_to_cursor(view, event)
+        self.arrowbox_view.dragging = True
+        self.move_drag_preview_to_cursor(view, event, arrow)
 
-    def move_drag_preview_to_cursor(self, view, event):
+    def move_drag_preview_to_cursor(self, view, event, arrow):
         if hasattr(
             self, "drag_preview"
         ):  # Add this line to check if 'drag_preview' exists
             main_window = view.window()
             local_pos = view.mapTo(main_window, event.pos())
-            self.drag_preview.move(
-                local_pos - (self.arrow.center * GRAPHBOARD_SCALE).toPoint()
-            )
+            if self.drag_preview is not None:
+                self.drag_preview.move(
+                    local_pos - (arrow.center * GRAPHBOARD_SCALE).toPoint()
+                )
+
+    def is_click_on_arrow(self, view, event):
+        items = view.items(event.pos())
+        return any(isinstance(item, Arrow) for item in items)
 
     def update_arrow_drag_preview(self, view, event):
         over_graphboard = self.is_over_graphboard(view, event)
@@ -55,7 +64,7 @@ class ArrowBoxMouseEvents:
         if over_graphboard:
             self.handle_drag_inside_graphboard(view, event)
 
-        self.move_drag_preview_to_cursor(view, event)
+        self.move_drag_preview_to_cursor(view, event, self.arrow)
 
     def is_over_graphboard(self, view, event):
         pos_in_main_window = view.mapTo(view.window(), event.pos())
@@ -65,7 +74,7 @@ class ArrowBoxMouseEvents:
         return self.graphboard_view.rect().contains(local_pos_in_graphboard)
 
     def handle_drag_inside_graphboard(self, view, event):
-        if self.dragging:
+        if self.drag_preview is not None:
             if self.has_entered_graphboard_once is False:
                 self.has_entered_graphboard_once = True
 
@@ -78,7 +87,8 @@ class ArrowBoxMouseEvents:
             for arrow in self.graphboard_scene.items():
                 if isinstance(arrow, Arrow) and arrow.color == self.dragged_arrow.color:
                     self.graphboard_scene.removeItem(arrow)
-            self.update_drag_preview(new_quadrant)
+            if self.drag_preview is not None:
+                self.update_drag_preview(new_quadrant)
 
     def update_drag_preview(self, new_quadrant):
         self.drag_preview.in_graphboard = True
@@ -124,63 +134,76 @@ class ArrowBoxMouseEvents:
 
     def handle_mouse_move(self, view, event):
         self.update_arrow_drag_preview(view, event)
-        if hasattr(self, "dragging") and self.dragging:
+        if self.drag_preview is not None:
             self.graphboard_view.dragMoveEvent(event, self.drag_preview)
 
     def handle_mouse_release(self, view, event, drag_preview):
         if hasattr(self, "drag_preview"):
             self.reset_on_mouse_release(view, event)
-            self.drag_preview.hide()
 
         over_graphboard = self.is_over_graphboard(view, event)
-        if hasattr(self, "has_entered_graphboard_once") and self.has_entered_graphboard_once and self.dragging:
-            if not over_graphboard and self.has_entered_graphboard_once:
-                # Create an arrow at the most recent position when it was in the graphboard
-                new_arrow_dict = {
-                    "color": self.drag_preview.color,
-                    "motion_type": self.drag_preview.motion_type,
-                    "rotation_direction": self.drag_preview.rotation_direction,
-                    "quadrant": self.drag_preview.quadrant,
-                    "start_location": self.drag_preview.start_location,
-                    "end_location": self.drag_preview.end_location,
-                    "turns": self.drag_preview.turns,
-                }
 
-                new_arrow = self.graphboard_view.arrow_factory.create_arrow(
-                    self.graphboard_view, new_arrow_dict
-                )
+        if (
+            self.dragging
+        ):
+            if not over_graphboard:
+                
+                if self.has_entered_graphboard_once:
+                    # Create an arrow at the most recent position when it was in the graphboard
+                    new_arrow_dict = {
+                        "color": self.drag_preview.color,
+                        "motion_type": self.drag_preview.motion_type,
+                        "rotation_direction": self.drag_preview.rotation_direction,
+                        "quadrant": self.drag_preview.quadrant,
+                        "start_location": self.drag_preview.start_location,
+                        "end_location": self.drag_preview.end_location,
+                        "turns": self.drag_preview.turns,
+                    }
 
-                new_arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
-                self.graphboard_view.clear_selection()
+                    new_arrow = self.graphboard_view.arrow_factory.create_arrow(
+                        self.graphboard_view, new_arrow_dict
+                    )
 
-                new_arrow.setSelected(True)
-                # find the staff on the graphboard of a matching color and set arrow.staff to that staff
-                for item in self.graphboard_scene.items():
-                    if isinstance(item, Arrow):
-                        if item.color == new_arrow.color:
-                            new_arrow.staff = item.staff
-                            item.staff.arrow = new_arrow
-                            break
+                    new_arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
+                    self.graphboard_view.clear_selection()
 
-                self.graphboard_scene.addItem(new_arrow)
+                    new_arrow.setSelected(True)
+                    # find the staff on the graphboard of a matching color and set arrow.staff to that staff
+                    for item in self.graphboard_scene.items():
+                        if isinstance(item, Arrow):
+                            if item.color == new_arrow.color:
+                                new_arrow.staff = item.staff
+                                item.staff.arrow = new_arrow
+                                break
 
-                # find the staff of the smae color on the arrowbox and set arrow.staff to that staff
-                for item in self.arrowbox_view.arrowbox_scene.items():
-                    if isinstance(item, Staff):
-                        if item.color == new_arrow.color:
-                            new_arrow.staff = item
-                            break
+                    self.graphboard_scene.addItem(new_arrow)
 
-                # position the arrow according to its attributes
-                new_arrow.arrow_manager.arrow_positioner.update_arrow_position(
-                    self.graphboard_view
-                )
+                    # find the staff of the smae color on the arrowbox and set arrow.staff to that staff
+                    for item in self.arrowbox_view.arrowbox_scene.items():
+                        if isinstance(item, Staff):
+                            if item.color == new_arrow.color:
+                                new_arrow.staff = item
+                                break
+
+                    # position the arrow according to its attributes
+                    new_arrow.arrow_manager.arrow_positioner.update_arrow_position(
+                        self.graphboard_view
+                    )
+
+                elif not self.has_entered_graphboard_once:
+                    self.drag_preview.deleteLater()
+                    self.drag_preview = None
+            
+            if self.drag_preview is not None:
+                self.drag_preview.deleteLater()
+                self.drag_preview = None
 
     def reset_on_mouse_release(self, view, event):
         over_graphboard = self.is_over_graphboard(view, event)
+
         self.current_rotation_angle = 0
         if over_graphboard:
             self.graphboard_view.mouse_events.handle_drop_event(
                 event, self.drag_preview
             )
-
+        self.graphboard_view.mouse_events.arrow_dragged = False  # Reset the flag

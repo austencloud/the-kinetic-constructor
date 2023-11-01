@@ -80,8 +80,9 @@ class ArrowBoxView(QGraphicsView):
         if arrows:
             self.dragged_item = arrows[0]
         if arrows and event.button() == Qt.MouseButton.LeftButton:
+            self.mouse_events.create_and_show_drag_preview(self, event, arrows[0])
             self.mouse_events.initialize_drag(self, self.dragged_item, event)
-            self.dragging = True
+            # if the user clicked on an item and not the iew itself, then set self.dragging to true
         else:
             event.ignore()
 

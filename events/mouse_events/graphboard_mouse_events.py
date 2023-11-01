@@ -17,6 +17,7 @@ class GraphboardMouseEvents():
         self.staff_factory = self.staff_handler.staff_factory
         self.info_handler = self.graphboard_view.info_handler
         self.temp_staff = None
+        self.arrow_dragged = False
 
     ### MOUSE PRESS ###
 
@@ -42,6 +43,9 @@ class GraphboardMouseEvents():
         return self.graphboard_view.get_graphboard_quadrants(self.graphboard_view.mapToScene(event.position().toPoint()))
 
     def update_temp_staff(self, drag_preview):
+        if not self.arrow_dragged: 
+            return
+        
         if self.graphboard_view.temp_staff:
             self.prev_staff_state = {
                 'color': self.graphboard_view.temp_staff.color,
@@ -69,6 +73,9 @@ class GraphboardMouseEvents():
     ### DROP ###
 
     def handle_drop_event(self, event, drag_preview):
+        if not self.arrow_dragged:
+            return
+        
         self.arrowbox_view.dragging = False
         self.graphboard_view.setFocus()
         event.accept()
@@ -93,6 +100,8 @@ class GraphboardMouseEvents():
         new_staff = self.staff_factory.create_staff(self.graphboard_scene, new_staff_dict)
 
         new_arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
+        new_arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
+        
         self.graphboard_view.clear_selection()
         
         new_arrow.setSelected(True)
@@ -107,11 +116,10 @@ class GraphboardMouseEvents():
 
         self.staff_handler.staffs_on_board[new_staff_key] = new_staff
 
-
         self.graphboard_scene.removeItem(self.graphboard_view.temp_staff)
         self.graphboard_view.update_letter(self.info_handler.determine_current_letter_and_type()[0])
 
-        drag_preview.hide()
+
         
         for item in self.graphboard_view.graphboard_scene.items():
             if isinstance(item, Arrow):

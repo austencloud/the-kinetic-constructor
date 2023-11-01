@@ -90,8 +90,9 @@ class GraphboardView(QGraphicsView):
         super().mousePressEvent(event)
 
     def dragMoveEvent(self, event, drag_preview):
-        if drag_preview.in_graphboard == True:
-            self.mouse_events.update_temp_staff(drag_preview)
+        if drag_preview is not None:
+            if drag_preview.in_graphboard == True:
+                self.mouse_events.update_temp_staff(drag_preview)
 
 
 
