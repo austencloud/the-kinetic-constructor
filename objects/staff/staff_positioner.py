@@ -155,18 +155,40 @@ class StaffPositioner:
         scene.update()
 
     def reposition_G_and_H(self, scale, view, arrow1, arrow2):
+        # Calculate the optimal positions and distances from the center for both arrows
         optimal_position1 = self.get_optimal_arrow_location(arrow1, view)
         optimal_position2 = self.get_optimal_arrow_location(arrow2, view)
 
         distance1 = self.get_distance_from_center(optimal_position1)
         distance2 = self.get_distance_from_center(optimal_position2)
 
+        # Identify the arrow that is further from the center
         further_arrow = arrow1 if distance1 > distance2 else arrow2
+        other_arrow = arrow1 if further_arrow == arrow2 else arrow2
 
-        self.set_staff_position_based_on_arrow(further_arrow, scale)
-        self.set_staff_position_based_on_arrow(
-            arrow1 if further_arrow == arrow2 else arrow2, scale
+        # Determine the direction for the staff corresponding to the further arrow
+        further_direction = self.determine_translation_direction(further_arrow)
+
+        # Find the staff corresponding to the further arrow and move it
+        further_staff = next(
+            staff
+            for staff in self.staff_handler.staffs_on_board.values()
+            if staff.arrow.color == further_arrow["color"]
         )
+        new_position_further = self.calculate_new_position(further_staff.pos(), further_direction, scale)
+        further_staff.setPos(new_position_further)
+
+        # Determine the opposite direction for the other staff
+        other_direction = self.get_opposite_direction(further_direction)
+
+        # Find the other staff and move it in the opposite direction
+        other_staff = next(
+            staff
+            for staff in self.staff_handler.staffs_on_board.values()
+            if staff.arrow.color == other_arrow["color"]
+        )
+        new_position_other = self.calculate_new_position(other_staff.pos(), other_direction, scale)
+        other_staff.setPos(new_position_other)
 
     def reposition_I(self, scale, arrow1, arrow2):
         pro_arrow = arrow1 if arrow1["motion_type"] == "pro" else arrow2
