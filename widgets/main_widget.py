@@ -58,7 +58,7 @@ class MainWidget(QWidget):
         self.sequence_view.info_handler = self.graphboard_view.info_handler
         self.graphboard_view.info_handler.connect_widgets_and_managers()
         self.graphboard_view.mouse_events.arrowbox_view = self.graph_editor_widget.arrowbox_view
-
+        self.arrow_manager.arrow_manipulator.graphboard_staff_handler = self.graphboard_view.staff_handler
 
 ### EVENTS ###
 

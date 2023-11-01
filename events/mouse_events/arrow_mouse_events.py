@@ -11,10 +11,13 @@ class ArrowMouseEvents():
         if arrow.quadrant != new_quadrant:
             arrow.quadrant = new_quadrant
             arrow.update_appearance()
-            arrow.info_frame.update()
-            arrow.view.info_handler.update()
             arrow.start_location, arrow.end_location = arrow.attributes.get_start_end_locations(arrow.motion_type, arrow.rotation_direction, arrow.quadrant)
+            arrow.staff.location = arrow.end_location
+            
             self.update_staff_attributes(arrow)
+            arrow.view.info_handler.update()
+            arrow.info_frame.update()
+
 
     def handle_pictograph_view(self, arrow, event):
         new_pos = arrow.mapToScene(event.pos()) - arrow.drag_offset / 2

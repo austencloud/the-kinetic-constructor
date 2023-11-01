@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QApplication
 from resources.constants import GRAPHBOARD_SCALE
 from objects.arrow.arrow_drag_preview import ArrowDragPreview
 from objects.arrow.arrow import Arrow
-
+from objects.staff.staff import Staff
 # import QGraphicsItem
 from PyQt6.QtWidgets import QGraphicsItem
 
@@ -19,7 +19,7 @@ class ArrowBoxMouseEvents:
         self.graphboard_view = arrowbox_view.graphboard_view
         self.graphboard_scene = self.graphboard_view.scene()
         self.staff_factory = self.graphboard_view.staff_handler.staff_factory
-
+        self.dragging = False
 
     def initialize_drag(self, view, arrow, event):
         self.setup_dragging(arrow)
@@ -65,19 +65,20 @@ class ArrowBoxMouseEvents:
         return self.graphboard_view.rect().contains(local_pos_in_graphboard)
 
     def handle_drag_inside_graphboard(self, view, event):
-        if self.has_entered_graphboard_once is False:
-            self.has_entered_graphboard_once = True
+        if self.dragging:
+            if self.has_entered_graphboard_once is False:
+                self.has_entered_graphboard_once = True
 
-        local_pos_in_graphboard = self.graphboard_view.mapFrom(
-            view.window(), view.mapTo(view.window(), event.pos())
-        )
-        new_quadrant = self.graphboard_view.get_graphboard_quadrants(
-            self.graphboard_view.mapToScene(local_pos_in_graphboard)
-        )
-        for arrow in self.graphboard_scene.items():
-            if isinstance(arrow, Arrow) and arrow.color == self.dragged_arrow.color:
-                self.graphboard_scene.removeItem(arrow)
-        self.update_drag_preview(new_quadrant)
+            local_pos_in_graphboard = self.graphboard_view.mapFrom(
+                view.window(), view.mapTo(view.window(), event.pos())
+            )
+            new_quadrant = self.graphboard_view.get_graphboard_quadrants(
+                self.graphboard_view.mapToScene(local_pos_in_graphboard)
+            )
+            for arrow in self.graphboard_scene.items():
+                if isinstance(arrow, Arrow) and arrow.color == self.dragged_arrow.color:
+                    self.graphboard_scene.removeItem(arrow)
+            self.update_drag_preview(new_quadrant)
 
     def update_drag_preview(self, new_quadrant):
         self.drag_preview.in_graphboard = True
@@ -163,6 +164,13 @@ class ArrowBoxMouseEvents:
 
                 self.graphboard_scene.addItem(new_arrow)
 
+                # find the staff of the smae color on the arrowbox and set arrow.staff to that staff
+                for item in self.arrowbox_view.arrowbox_scene.items():
+                    if isinstance(item, Staff):
+                        if item.color == new_arrow.color:
+                            new_arrow.staff = item
+                            break
+
                 # position the arrow according to its attributes
                 new_arrow.arrow_manager.arrow_positioner.update_arrow_position(
                     self.graphboard_view
@@ -175,4 +183,4 @@ class ArrowBoxMouseEvents:
             self.graphboard_view.mouse_events.handle_drop_event(
                 event, self.drag_preview
             )
-            self.graphboard_view.mouse_events.saved_state = None
+

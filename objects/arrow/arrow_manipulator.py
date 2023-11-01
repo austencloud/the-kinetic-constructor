@@ -8,6 +8,7 @@ from PyQt6.QtGui import QTransform
 class ArrowManipulator:
     def __init__(self, arrow_manager):
         self.arrow_manager = arrow_manager
+        
 
     def update_arrow_and_staff(self, arrow, arrow_dict, staff_dict):
         staff = arrow.staff
@@ -16,6 +17,7 @@ class ArrowManipulator:
         staff.setPos(arrow.view.staff_handler.staff_xy_locations[staff.location])
 
     def finalize_manipulation(self, arrow):
+        self.graphboard_staff_handler.update_staff_key(arrow.staff)
         self.arrow_manager.arrow_positioner.update_arrow_position(
             self.arrow_manager.graphboard_view
         )
@@ -23,6 +25,7 @@ class ArrowManipulator:
         self.arrow_manager.info_frame.update()
         arrow.view.info_handler.update()
         arrow.staff.update_appearance()
+
 
     def move_arrow_quadrant_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {
@@ -205,12 +208,9 @@ class ArrowManipulator:
             self.arrow_manager.info_frame.update()
 
     def swap_colors(self):
-        self.staff_handler = self.arrow_manager.main_widget.graphboard_view.staff_handler
         arrows = [item for item in self.graphboard_scene.items() if isinstance(item, Arrow)]
         
         if len(arrows) >= 1:
-            keys_to_swap = []
-            
             for arrow in arrows:
                 print(f"Before swap: Arrow color: {arrow.color}, Staff color: {arrow.staff.color}")
                 
@@ -222,30 +222,9 @@ class ArrowManipulator:
                     print("swap_colors - Unexpected color:", arrow.color)
                     continue
 
-                # Collect keys that need to be swapped
-                if arrow.staff in self.staff_handler.staffs_on_board.values():
-                    for key in self.staff_handler.staffs_on_board:
-                        if arrow.staff == self.staff_handler.staffs_on_board[key]:
-                            if arrow.color in key:
-                                new_key = key.replace(arrow.color, new_color)
-                                keys_to_swap.append((key, new_key))
-                                break
-
-            # Perform the key swap
-            for old_key, new_key in keys_to_swap:
-                self.staff_handler.staffs_on_board[new_key] = self.staff_handler.staffs_on_board.pop(old_key)
-
-            # Update arrow and staff colors
-            for arrow in arrows:
-                if arrow.color == "red":
-                    new_color = "blue"
-                elif arrow.color == "blue":
-                    new_color = "red"
-                else:
-                    continue
-
                 arrow.color = new_color
                 arrow.staff.color = new_color
+                
                 arrow.update_appearance()
                 arrow.staff.update_appearance()
                 print(f"After swap: Arrow color: {arrow.color}, Staff color: {arrow.staff.color}")

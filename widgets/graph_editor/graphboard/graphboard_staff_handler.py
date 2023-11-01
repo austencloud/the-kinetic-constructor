@@ -48,3 +48,15 @@ class GraphboardStaffHandler(StaffHandler):
                 arrow.staff.update_appearance()
                 
         self.staff_positioner.check_replace_beta_staffs(scene)
+        
+    def update_staff_key(self, staff):
+        new_location = staff.location
+        new_color = staff.color
+        new_key = f"{new_location}_staff_{new_color}"
+
+        # Find the old key and update it
+        for old_key, existing_staff in self.staffs_on_board.items():
+            if existing_staff == staff:
+                if old_key != new_key:
+                    self.staffs_on_board[new_key] = self.staffs_on_board.pop(old_key)
+                break
