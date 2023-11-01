@@ -41,6 +41,7 @@ class DragManager:
         self.arrow = arrow
         self.graphboard_view.dragged_arrow = self.arrow
         self.create_and_show_drag_preview(arrow)
+        self.drag_preview.move_to_cursor(view, event, self.arrow)  # Add this line
 
     def handle_mouse_press(self, event):
         self.graphboard_view.setFocus()
@@ -50,8 +51,8 @@ class DragManager:
             self.graphboard_view.clear_selection()
 
     def handle_mouse_move(self, view, event):
-        self.update_arrow_drag_preview(view, event)
         if self.drag_preview is not None:
+            self.update_arrow_drag_preview(view, event)
             self.graphboard_view.dragMoveEvent(event, self.drag_preview)
 
     def handle_drag_inside_graphboard(self, view, event):
@@ -70,6 +71,8 @@ class DragManager:
     def handle_mouse_release(self, view, event, drag_preview):
         if not hasattr(self, "drag_preview"):
             return
+        
+        
         self.handle_drop_event(event)
         self.reset_drag_state()
 
@@ -228,21 +231,24 @@ class DragManager:
     ### DROP EVENT HANDLING ###
 
     def handle_drop_event(self, event):
-        if not self.arrow_dragged:
-            return
-
-        self.set_focus_and_accept_event(event)
-        new_arrow_dict = self.create_new_arrow_dict()
-        new_staff_dict = self.create_new_staff_dict()
-
-        new_arrow = self.create_and_add_arrow(new_arrow_dict)
-        new_staff = self.create_and_add_staff(new_staff_dict)
         
-        self.graphboard_view.clear_selection()
-        new_arrow.setSelected(True)
+        
+        if not self.dragging:
+            return
+        
+        if self.has_entered_graphboard_once:
+            self.set_focus_and_accept_event(event)
+            new_arrow_dict = self.create_new_arrow_dict()
+            new_staff_dict = self.create_new_staff_dict()
 
-        self.link_arrow_and_staff(new_arrow, new_staff)
-        self.update_staffs_on_board_key(new_staff)
+            new_arrow = self.create_and_add_arrow(new_arrow_dict)
+            new_staff = self.create_and_add_staff(new_staff_dict)
+
+            self.graphboard_view.clear_selection()
+            new_arrow.setSelected(True)
+
+            self.link_arrow_and_staff(new_arrow, new_staff)
+            self.update_staffs_on_board_key(new_staff)
 
         self.cleanup_and_update_scene()
         self.update_info_handler()
