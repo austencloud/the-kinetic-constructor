@@ -31,7 +31,7 @@ class GraphboardInfoHandler:
         arrowbox_view = self.main_widget.graph_editor_widget.arrowbox_view
 
         # Check if an arrow is being dragged and add its attributes to the current_combination list
-        if arrowbox_view.dragging == True:
+        if arrowbox_view.drag_preview == True:
             drag_attr = self.graphboard_drag_manager.drag_preview.get_attributes()
             sorted_drag_attr = {k: drag_attr[k] for k in sorted(drag_attr.keys())}
             current_combination.append(sorted_drag_attr)

@@ -124,7 +124,7 @@ class GraphboardView(QGraphicsView):
     def dragMoveEvent(self, event, drag_preview):
         if drag_preview is not None:
             if drag_preview.in_graphboard == True:
-                self.drag_manager.update_temp_staff(drag_preview)
+                self.drag_manager.update_staff(drag_preview)
 
     def contextMenuEvent(self, event):
         clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())
