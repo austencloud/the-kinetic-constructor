@@ -22,7 +22,7 @@ class ArrowSelector:
                                 'turns': 0
                 }
                 
-                ghost_arrow = self.arrow_manager.arrow_factory.create_arrow(self.arrow_manager.graphboard_view, ghost_attributes_dict)
+                ghost_arrow = self.arrow_manager.factory.create_arrow(self.arrow_manager.graphboard_view, ghost_attributes_dict)
                 ghost_arrow.is_ghost = True
                 ghost_arrow.setScale(GRAPHBOARD_SCALE)
                 ghost_arrow.staff = arrow.staff

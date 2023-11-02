@@ -52,13 +52,11 @@ class GraphboardStaffHandler(StaffHandler):
     def update_graphboard_staffs(self, scene):
         for arrow in scene.items():
             if isinstance(arrow, Arrow):
-
                 staff = arrow.staff
-                location = arrow.end_location
+                staff.location = arrow.end_location
 
-                # Update the staff's attributes directly based on the arrow's attributes
                 staff.attributes.update_attributes_from_arrow(arrow)
                 staff.update_appearance()
-                staff.setPos(self.staff_xy_locations[location])
+                staff.setPos(self.staff_xy_locations[staff.location])
 
         self.positioner.check_replace_beta_staffs(scene)

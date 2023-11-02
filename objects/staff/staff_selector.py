@@ -16,7 +16,6 @@ class StaffSelector:
                         self.arrow_manager.graphboard_view.scene().removeItem(ghost_arrow)
                         print(f"Ghost arrow for {staff.color} staff deleted")
 
-                
                 self.arrow_manager.graphboard_view.scene().removeItem(staff)
                 self.arrow_manager.graphboard_view.scene().removeItem(staff.arrow)
                 

@@ -94,24 +94,20 @@ class DragEventHandler:
     def handle_drop_event(self, event):
         if not self.dragging:
             return
-
-        self.invisible_arrow.deleteLater()
-
+        
+        self.placed_arrow = self.invisible_arrow
+        self.placed_arrow.setVisible(True)
+        
         if self.drag_preview.has_entered_graphboard_once:
             self.drag_manager.set_focus_and_accept_event(event)
-            new_arrow_dict = self.arrow_attributes.create_dict_from_arrow(self.drag_preview)
             new_staff_dict = self.staff_attributes.create_staff_dict_from_arrow(self.drag_preview)
 
-            # Make the invisible arrow visible
-            self.invisible_arrow.setVisible(True)
-
-            new_arrow = self.helpers.create_and_add_arrow(new_arrow_dict)
             new_staff = self.helpers.create_and_add_staff(new_staff_dict)
 
             self.graphboard_view.clear_selection()
-            new_arrow.setSelected(True)
+            self.placed_arrow.setSelected(True)
 
-            self.helpers.link_arrow_and_staff(new_arrow, new_staff)
+            self.helpers.link_arrow_and_staff(self.placed_arrow, new_staff)
 
         self.scene_updater.cleanup_and_update_scene()
         self.scene_updater.update_info_handler()

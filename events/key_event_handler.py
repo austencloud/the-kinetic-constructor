@@ -32,7 +32,7 @@ class KeyEventHandler:
                         arrow_selector.delete_arrow(item)
                         staff_selector.delete_staff(item.staff)
                     elif isinstance(item, Staff):
-                        item.view.staff_handler.staff_selector.delete_staff(item)
+                        item.view.staff_handler.selector.delete_staff(item)
 
             elif selected_item and isinstance(selected_item, Arrow):
                 if event.key() == Qt.Key.Key_W:

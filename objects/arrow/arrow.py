@@ -113,6 +113,7 @@ class Arrow(QGraphicsSvgItem):
             self.staff.location = self.end_location
             self.staff.attributes.update_attributes_from_arrow(self)
             self.staff.handler.update_graphboard_staffs(self.view.graphboard_scene)
+            self.view.graphboard_scene.update()
             self.view.info_handler.update()
             
     def handle_pictograph_view_drag(self, event):
