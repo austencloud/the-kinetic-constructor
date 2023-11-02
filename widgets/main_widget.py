@@ -71,7 +71,7 @@ class MainWidget(QWidget):
         self.graphboard_view.generator = self.pictograph_generator
         self.arrow_manager.info_frame = self.graph_editor_widget.info_frame
         self.arrow_manager.graphboard_view = self.graph_editor_widget.graphboard_view
-        self.arrow_manager.arrow_manipulator.graphboard_scene = (
+        self.arrow_manager.manipulator.graphboard_scene = (
             self.graph_editor_widget.graphboard_view.graphboard_scene
         )
         self.graph_editor_widget.graphboard_view.context_menu_manager.sequence_view = (
@@ -83,7 +83,7 @@ class MainWidget(QWidget):
         self.graphboard_view.drag_manager.arrowbox_view = (
             self.graph_editor_widget.arrowbox_view
         )
-        self.arrow_manager.arrow_manipulator.graphboard_staff_handler = (
+        self.arrow_manager.manipulator.graphboard_staff_handler = (
             self.graphboard_view.staff_handler
         )
 

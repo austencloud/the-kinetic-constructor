@@ -48,7 +48,7 @@ class Arrow(QGraphicsSvgItem):
             self.drag_manager = self.main_widget.drag_manager
             self.setScale(view.view_scale)
 
-        self.attributes = self.main_widget.arrow_manager.arrow_attributes
+        self.attributes = self.main_widget.arrow_manager.attributes
         self.attributes.update_attributes(self, dict)
         self.update_appearance()
         self.center = self.boundingRect().center()
@@ -95,7 +95,7 @@ class Arrow(QGraphicsSvgItem):
         from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
 
         if isinstance(self.view, GraphboardView):
-            self.arrow_manager.arrow_positioner.update_arrow_position(self.view)
+            self.arrow_manager.positioner.update_arrow_position(self.view)
 
     # UPDATE APPEARANCE
 

@@ -4,6 +4,7 @@ from objects.arrow.arrow import Arrow
 from objects.staff.staff_handler import StaffHandler
 from objects.staff.staff import Staff
 
+
 class PictographStaffHandler(StaffHandler):
     def __init__(self, main_widget, scene):
         super().__init__(main_widget)
@@ -16,7 +17,7 @@ class PictographStaffHandler(StaffHandler):
     def connect_pictograph_view(self, pictograph_view):
         self.pictograph_view = pictograph_view
         self.scene = pictograph_view.pictograph_scene
-        
+
     def connect_grid(self, grid):
         self.grid = grid
 
@@ -27,55 +28,52 @@ class PictographStaffHandler(StaffHandler):
 
         # Calculate the handpoints on the graphboard based on the grid
         grid_handpoints = {}
-        for point_name in ['N_hand_point', 'E_hand_point', 'S_hand_point', 'W_hand_point']:
+        for point_name in [
+            "N_hand_point",
+            "E_hand_point",
+            "S_hand_point",
+            "W_hand_point",
+        ]:
             x, y = self.grid.get_circle_coordinates(point_name)
             scaled_x = x * scale + PICTOGRAPH_GRID_PADDING
             scaled_y = y * scale + PICTOGRAPH_GRID_PADDING
             grid_handpoints[point_name] = QPointF(scaled_x, scaled_y)
 
         self.staff_xy_locations = {
-            'N': grid_handpoints['N_hand_point'] ,
-            'E': grid_handpoints['E_hand_point'] ,
-            'S': grid_handpoints['S_hand_point'] ,
-            'W': grid_handpoints['W_hand_point']  
+            "N": grid_handpoints["N_hand_point"],
+            "E": grid_handpoints["E_hand_point"],
+            "S": grid_handpoints["S_hand_point"],
+            "W": grid_handpoints["W_hand_point"],
         }
 
-
     def update_pictograph_staffs(self, scene):
-        
         for item in self.scene.items():
             if isinstance(item, Staff):
                 item.hide()
-
 
         for arrow in scene.items():
             if isinstance(arrow, Arrow):
                 location = arrow.end_location
 
                 if location:
-
-                    if arrow.color == "#ed1c24" or arrow.color == 'red':
-                        color = 'red'
-                    elif arrow.color == "#2e3192" or arrow.color == 'blue':
-                        color = 'blue'
+                    if arrow.color == "#ed1c24" or arrow.color == "red":
+                        color = "red"
+                    elif arrow.color == "#2e3192" or arrow.color == "blue":
+                        color = "blue"
                     else:
+                        continue
 
-                        continue 
-                
                     new_staff = {
-                        'color': color,
-                        'location': location,
-                        'layer': 1,
+                        "color": color,
+                        "location": location,
+                        "layer": 1,
                     }
 
-                    new_staff = self.staff_factory.create_staff(scene, new_staff)
-                    
+                    new_staff = self.factory.create_staff(scene, new_staff)
+
                     new_staff.setScale(PICTOGRAPH_SCALE)
                     arrow.staff = new_staff
                     new_staff.arrow = arrow
                     self.arrow_manager = new_staff.arrow.arrow_manager
 
-                    
-        self.staff_positioner.check_replace_beta_staffs(self.scene)
-    
-
+        self.positioner.check_replace_beta_staffs(self.scene)

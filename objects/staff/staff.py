@@ -26,7 +26,8 @@ class Staff(QGraphicsSvgItem):
 
     def initialize_dict_attributes(self, staff_dict):
         """Initialize attributes from the given dictionary."""
-        self.attributes = StaffAttributes(self, staff_dict)
+        self.attributes = self.staff_handler.attributes
+        self.attributes.update_attributes_from_dict(self, staff_dict)
         self.color = staff_dict.get('color')
         self.location = staff_dict.get('location')
         self.layer = staff_dict.get('layer')

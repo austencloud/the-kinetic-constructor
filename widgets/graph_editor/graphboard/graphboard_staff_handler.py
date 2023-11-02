@@ -1,4 +1,5 @@
 from objects.staff.staff_handler import StaffHandler
+from objects.staff.staff import Staff
 from PyQt6.QtCore import QPointF
 from objects.arrow.arrow import Arrow
 from resources.constants import (
@@ -65,4 +66,4 @@ class GraphboardStaffHandler(StaffHandler):
                 arrow.staff.update_appearance()
                 arrow.staff.setPos(self.staff_xy_locations[location])
 
-        self.staff_positioner.check_replace_beta_staffs(scene)
+        self.positioner.check_replace_beta_staffs(scene)

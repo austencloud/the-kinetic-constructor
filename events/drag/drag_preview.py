@@ -64,11 +64,11 @@ class DragPreview(QWidget):
             "turns": self.turns,
         }
 
-    def move_to_cursor(self, view, event, arrow):
+    def move_to_cursor(self, view, event, target_arrow):
         main_window = view.window()
         local_pos = view.mapTo(main_window, event.pos())
         self.move(
-            local_pos - (arrow.center * GRAPHBOARD_SCALE).toPoint()
+            local_pos - (target_arrow.center * GRAPHBOARD_SCALE).toPoint()
         )
 
     def update_rotation_for_quadrant(self, new_quadrant):
@@ -77,7 +77,7 @@ class DragPreview(QWidget):
         self.rotate()
 
     def rotate(self):
-        renderer = QSvgRenderer(self.drag_manager.arrow.svg_file)
+        renderer = QSvgRenderer(self.drag_manager.event_handler.target_arrow.svg_file)
         scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE
         pixmap = QPixmap(scaled_size)
         pixmap.fill(Qt.GlobalColor.transparent)
@@ -85,7 +85,7 @@ class DragPreview(QWidget):
         with painter as painter:
             renderer.render(painter)
 
-        angle = self.drag_manager.arrow.get_rotation_angle(
+        angle = self.drag_manager.event_handler.target_arrow.get_rotation_angle(
             self.quadrant,
             self.motion_type,
             self.rotation_direction,
@@ -105,7 +105,7 @@ class DragPreview(QWidget):
         (
             self.start_location,
             self.end_location,
-        ) = self.drag_manager.arrow.attributes.get_start_end_locations(
+        ) = self.drag_manager.event_handler.target_arrow.attributes.get_start_end_locations(
             self.motion_type,
             self.rotation_direction,
             self.quadrant,

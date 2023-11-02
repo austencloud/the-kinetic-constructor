@@ -30,7 +30,7 @@ class ArrowBoxView(QGraphicsView):
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.arrow_manager = arrow_manager
-        self.arrow_factory = self.arrow_manager.arrow_factory
+        self.arrow_factory = self.arrow_manager.factory
         self.configure_arrowbox_frame()
         self.view_scale = ARROWBOX_SCALE
         self.populate_arrows()
@@ -95,8 +95,8 @@ class ArrowBoxView(QGraphicsView):
             event.ignore()
 
     def mouseMoveEvent(self, event):
-        self.drag_manager.handle_mouse_move(self, event)
+        self.drag_manager.event_handler.handle_mouse_move(self, event)
 
     def mouseReleaseEvent(self, event):
-        self.drag_manager.handle_mouse_release(self, event, self.drag_preview)
+        self.drag_manager.event_handler.handle_mouse_release(self, event, self.drag_preview)
 

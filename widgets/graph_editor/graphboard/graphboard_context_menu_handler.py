@@ -6,11 +6,11 @@ class GraphboardContextMenuHandler():
         self.graphboard_view = graphboard_view
         self.main_widget = self.graphboard_view.main_widget
         self.arrow_manager = self.main_widget.arrow_manager
-        self.arrow_manipulator = self.arrow_manager.arrow_manipulator
-        self.arrow_selector = self.arrow_manager.arrow_selector
+        self.arrow_manipulator = self.arrow_manager.manipulator
+        self.arrow_selector = self.arrow_manager.selector
         self.export_manager = self.graphboard_view.export_manager
         self.staff_handler = self.graphboard_view.staff_handler
-        self.staff_selector = self.staff_handler.staff_selector
+        self.staff_selector = self.staff_handler.selector
         self.sequence_view = self.main_widget.sequence_view
 
     def create_menu_with_actions(self, parent, actions, event):

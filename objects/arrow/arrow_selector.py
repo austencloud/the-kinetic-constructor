@@ -5,9 +5,6 @@ class ArrowSelector:
     def __init__(self, arrow_manager):
         self.arrow_manager = arrow_manager
 
-
-
-
     def delete_arrow(self, deleted_arrows):
         if not isinstance(deleted_arrows, list):
             deleted_arrows = [deleted_arrows]

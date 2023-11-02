@@ -77,8 +77,8 @@ class GraphboardView(QGraphicsView):
         self.drag_manager = self.main_widget.drag_manager
         self.arrow_manager = main_widget.arrow_manager
         self.arrow_manager.graphboard_view = self
-        self.arrow_factory = self.arrow_manager.arrow_factory
-        self.staff_factory = self.staff_handler.staff_factory
+        self.arrow_factory = self.arrow_manager.factory
+        self.staff_factory = self.staff_handler.factory
 
     def init_grid(self):
         transform = QTransform()
@@ -118,13 +118,13 @@ class GraphboardView(QGraphicsView):
     ### EVENTS ###
 
     def mousePressEvent(self, event):
-        self.drag_manager.handle_mouse_press(event)
+        self.drag_manager.event_handler.handle_mouse_press(event)
         super().mousePressEvent(event)
 
     def dragMoveEvent(self, event, drag_preview):
         if drag_preview is not None:
             if drag_preview.in_graphboard == True:
-                self.drag_manager.update_staff(drag_preview)
+                self.drag_manager.scene_updater.update_staff(drag_preview)
 
     def contextMenuEvent(self, event):
         clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())

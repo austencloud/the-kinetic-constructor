@@ -15,7 +15,7 @@ class GraphboardInfoHandler:
         self.info_frame = self.graph_editor_widget.info_frame
         self.staff_handler = self.view.staff_handler
         self.arrow_manager = self.main_widget.arrow_manager
-        self.arrow_positioner = self.arrow_manager.arrow_positioner
+        self.arrow_positioner = self.arrow_manager.positioner
 
     def update(self):
         self.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard_view)

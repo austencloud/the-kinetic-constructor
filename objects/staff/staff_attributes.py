@@ -1,9 +1,8 @@
 class StaffAttributes:
     STAFF_ATTRIBUTES = ["color", "location", "layer"]
 
-    def __init__(self, staff, staff_dict):
-        self.update_attributes_from_dict(staff, staff_dict)
-
+    def __init__(self, staff_manager):
+        self.staff_manager = staff_manager
 
     def update_attributes_from_dict(self, staff, staff_dict):
         for attr in self.STAFF_ATTRIBUTES:
@@ -13,8 +12,8 @@ class StaffAttributes:
     def get_attributes(self, staff):
         return {attr: getattr(staff, attr) for attr in self.STAFF_ATTRIBUTES}
 
-    def create_staff_dict(self, color, location, layer):
-        staff_dict = {"color": color, "location": location, "layer": layer}
+    def create_staff_dict_from_arrow(self, arrow):
+        staff_dict = {"color": arrow.color, "location": arrow.end_location, "layer": 1}
         return staff_dict
 
     def update_attributes_from_arrow(self, arrow):

@@ -11,11 +11,11 @@ class ArrowManager(QObject):
         self.main_widget = main_widget
 
         # Initialize the helper classes
-        self.arrow_manipulator = ArrowManipulator(self)
-        self.arrow_positioner = ArrowPositioner(self)
-        self.arrow_selector = ArrowSelector(self)
-        self.arrow_attributes = ArrowAttributes(self)
-        self.arrow_factory = ArrowFactory(self)
-        self.arrow_state_comparator = ArrowStateComparator(self)
+        self.manipulator = ArrowManipulator(self)
+        self.positioner = ArrowPositioner(self)
+        self.selector = ArrowSelector(self)
+        self.attributes = ArrowAttributes(self)
+        self.factory = ArrowFactory(self)
+        self.state_comparator = ArrowStateComparator(self)
         
 
