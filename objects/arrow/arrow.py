@@ -16,7 +16,6 @@ class Arrow(QGraphicsSvgItem):
         self.initialize_app_attributes(view, attr_dict)
         self.initialize_graphics_flags()
 
-
     def select(self):
         self.setSelected(True)
 
@@ -84,9 +83,9 @@ class Arrow(QGraphicsSvgItem):
             from objects.pictograph.pictograph_view import PictographView
 
             if isinstance(self.view, GraphboardView):
-                self.drag_manager.handle_graphboard_view_drag(self, event)
+                self.handle_graphboard_view_drag(event)
             elif isinstance(self.view, PictographView):
-                self.drag_manager.handle_pictograph_view_drag(self, event)
+                self.handle_pictograph_view_drag(event)
 
     def mouseReleaseEvent(self, event):
         if hasattr(self, "future_position"):
@@ -96,6 +95,29 @@ class Arrow(QGraphicsSvgItem):
 
         if isinstance(self.view, GraphboardView):
             self.arrow_manager.positioner.update_arrow_position(self.view)
+
+    def handle_graphboard_view_drag(self, event):
+        """Dragging an arrow that is already in the graphboard"""
+        new_pos = self.mapToScene(event.pos()) - self.boundingRect().center()
+        self.setPos(new_pos)
+        new_quadrant = self.view.get_graphboard_quadrants(new_pos + self.center)
+        if self.quadrant != new_quadrant:
+            self.quadrant = new_quadrant
+            self.update_appearance()
+            (
+                self.start_location,
+                self.end_location,
+            ) = self.attributes.get_start_end_locations(
+                self.motion_type, self.rotation_direction, self.quadrant
+            )
+            self.staff.location = self.end_location
+            self.staff.attributes.update_attributes_from_arrow(self)
+            self.staff.handler.update_graphboard_staffs(self.view.graphboard_scene)
+            self.view.info_handler.update()
+            
+    def handle_pictograph_view_drag(self, event):
+        new_pos = self.mapToScene(event.pos()) - self.drag_offset / 2
+        self.setPos(new_pos)
 
     # UPDATE APPEARANCE
 

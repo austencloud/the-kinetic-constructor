@@ -7,11 +7,11 @@ class KeyEventHandler:
         main_widget = graphboard_view.main_widget
         arrow_manager = main_widget.arrow_manager
         sequence_view = main_widget.sequence_view
-        arrow_manipulator = arrow_manager.arrow_manipulator
-        arrow_selector = arrow_manager.arrow_selector
+        arrow_manipulator = arrow_manager.manipulator
+        arrow_selector = arrow_manager.selector
         selected_items = graphboard_view.get_selected_items()
         staff_handler = graphboard_view.staff_handler
-        staff_selector = staff_handler.staff_selector
+        staff_selector = staff_handler.selector
         
         if len(selected_items) >= 1:
             try:

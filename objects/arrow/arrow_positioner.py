@@ -20,7 +20,7 @@ class ArrowPositioner:
         current_letter = self.arrow_manager.graphboard_view.info_handler.determine_current_letter_and_type()[0]
         if current_letter is not None:
             matching_letters = self.letters[current_letter]
-            optimal_locations = self.arrow_manager.arrow_state_comparator.find_optimal_locations(current_state, matching_letters)
+            optimal_locations = self.arrow_manager.state_comparator.find_optimal_locations(current_state, matching_letters)
             for arrow in current_arrows:
                 if optimal_locations:
                     optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")

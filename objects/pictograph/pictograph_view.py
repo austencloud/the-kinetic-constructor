@@ -128,7 +128,7 @@ class PictographView(QGraphicsView):
         created_arrows.append(ghost_arrow)
 
     def place_shift_arrows(self, DISTANCE, created_arrows, optimal_locations, arrow_dict):
-        arrow = self.arrow_manager.arrow_factory.create_arrow(self, arrow_dict)
+        arrow = self.arrow_manager.factory.create_arrow(self, arrow_dict)
 
         arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
         arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
