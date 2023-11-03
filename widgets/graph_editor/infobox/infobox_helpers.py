@@ -1,14 +1,8 @@
 from objects.arrow.arrow import Arrow
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import (
-    QLabel,
-    QHBoxLayout,
-    QWidget,
-    QVBoxLayout,
-)
+from PyQt6.QtWidgets import QLabel, QHBoxLayout, QWidget, QVBoxLayout, QSizePolicy
 from data.positions_map import positions_map
 from resources.constants import GRAPHBOARD_SCALE
-from PyQt6.QtWidgets import QSizePolicy
 import logging
 
 
@@ -16,75 +10,53 @@ class InfoboxHelpers:
     def __init__(self, infobox_manager):
         self.infobox_manager = infobox_manager
 
+    ### LABEL CREATION METHODS ###
+    
     def create_label(self, text="", color=None):
+        """Create a generic label."""
         label = QLabel(text)
         label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         if color:
             label.setStyleSheet(f"color: {color}; font-size: 25px; font-weight: bold;")
         return label
 
-    def create_horizontal_layout(self, widgets=[]):
+    def create_labels_for_attributes(self, attributes):
+        """Create labels for motion type, start-end locations, and turns."""
+        motion_type = attributes.get("motion_type", "").capitalize()
+        start_location = attributes.get("start_location", "")
+        end_location = attributes.get("end_location", "")
+        turns = attributes.get("turns", "")
+
+        motion_type_label = QLabel(f"<h1>{motion_type}</h1>")
+        motion_type_label.setObjectName("motion_type_label")
+
+        if motion_type in ["Pro", "Anti", "Static"]:
+            start_end_label = QLabel(
+                f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{start_location.capitalize()} → {end_location.capitalize()}</span>"
+            )
+            start_end_label.setObjectName("start_end_label")
+        else:
+            start_end_label = QLabel(f"")
+            start_end_label.setObjectName("start_end_label")
+
+        turns_label = QLabel(f"<span style='font-size: 20px;'>{turns}</span>")
+        turns_label.setObjectName("turns_label")
+        turns_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+
+        return motion_type_label, start_end_label, turns_label
+
+    ### LAYOUT METHODS ###
+    
+    def create_horizontal_layout_with_widgets(self, widgets=[]):
+        """Create a horizontal layout and add provided widgets."""
         layout = QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         for widget in widgets:
             layout.addWidget(widget)
         return layout
 
-    def add_widgets_to_grid(self, grid_layout, layouts):
-        for idx, layout in enumerate(layouts):
-            widget = QWidget()
-            widget.setLayout(layout)
-            if idx == 0:
-                widget.setFixedHeight(int(120 * GRAPHBOARD_SCALE))
-            elif idx == 2:
-                widget.setFixedHeight(int(240 * GRAPHBOARD_SCALE))
-            grid_layout.addWidget(widget, idx, 0)
-            grid_layout.setRowStretch(idx, 0 if idx == 0 else 1)
-
-    def clear_layout(self, layout):
-        """Hides all widgets from the given layout."""
-        for i in range(layout.count()):
-            child = layout.itemAt(i)
-            if child.widget():
-                child.widget().hide()
-
-    def construct_info_string_label(self, attributes):
-        """Constructs a widget with arrow information and associated buttons."""
-
-        # Extract the required values
-        motion_type = attributes.get("motion_type", "").capitalize()
-        start_location = attributes.get("start_location", "")
-        end_location = attributes.get("end_location", "")
-        turns = attributes.get("turns", "")
-        color = attributes.get("color", "")
-
-        # Create labels
-        motion_type_label = QLabel(f"<h1>{motion_type}</h1>")
-        motion_type_label.setObjectName("motion_type_label")  # Assign object name
-        if motion_type in ["Pro", "Anti"]:
-            start_end_label = QLabel(
-                f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{start_location.capitalize()} → {end_location.capitalize()}</span>"
-            )
-            start_end_label.setObjectName("start_end_label")  # Assign object name
-
-        elif motion_type == "Static":
-            start_end_label = QLabel(
-                f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{start_location.capitalize()} → {end_location.capitalize()}</span>"
-            )
-            start_end_label.setObjectName("start_end_label")  # Assign object name
-
-        elif motion_type == "":
-            start_end_label = QLabel(f"")
-            start_end_label.setObjectName("start_end_label")  # Assign object name
-
-        turns_label = QLabel(f"<span style='font-size: 20px;'>{turns}</span>")
-        turns_label.setObjectName("turns_label")  # Assign object name
-
-        turns_label.setSizePolicy(
-            QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed
-        )  # Set size policy to Fixed
-
-        # Define the layouts
+    def define_info_layouts(self, motion_type_label, start_end_label, turns_label):
+        """Define layouts for the info widget."""
         motion_type_layout = QHBoxLayout()
         motion_type_layout.addWidget(motion_type_label)
         motion_type_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -97,19 +69,28 @@ class InfoboxHelpers:
         turns_layout.addWidget(turns_label)
         turns_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        # Main layout
         main_layout = QVBoxLayout()
         main_layout.addLayout(motion_type_layout)
         main_layout.addLayout(start_end_layout)
         main_layout.addLayout(turns_layout)
 
-        # Create a widget to hold the main layout
+        return main_layout
+
+    ### WIDGET CONSTRUCTION METHODS ###
+    
+    def construct_info_widget(self, attributes):
+        """Construct a widget displaying arrow information."""
+        motion_type_label, start_end_label, turns_label = self.create_labels_for_attributes(attributes)
+        main_layout = self.define_info_layouts(motion_type_label, start_end_label, turns_label)
+
         info_widget = QWidget()
         info_widget.setLayout(main_layout)
-
         return info_widget
 
-    def get_start_end_positions(self, graphboard_view):
+    ### UTILITY METHODS ###
+    
+    def get_arrow_positions_on_graphboard(self, graphboard_view):
+        """Retrieve the start and end positions of arrows on the graphboard."""
         positions = []
         arrow_items = [
             item for item in graphboard_view.items() if isinstance(item, Arrow)
@@ -140,4 +121,3 @@ class InfoboxHelpers:
             else:
                 logging.warning("No positions returned by get_start_end_positions")
                 return None
-            

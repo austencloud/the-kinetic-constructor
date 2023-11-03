@@ -9,7 +9,7 @@ class InfoboxUpdater:
         self.infobox = infobox
         self.graphboard_view = graphboard_view
         self.infobox_manager = infobox_manager
-        self.ui_setup = infobox_manager.ui_setup
+        
 
     def update_type_and_position_info(self):
         (
@@ -17,9 +17,7 @@ class InfoboxUpdater:
             current_letter_type,
         ) = self.graphboard_view.info_handler.determine_current_letter_and_type()
         if current_letter and current_letter_type:
-            start_end_positions = self.infobox_manager.helpers.get_start_end_positions(
-                self.graphboard_view
-            )
+            start_end_positions = self.infobox_manager.updater.get_start_end_positions()
             if start_end_positions:
                 start_position, end_position = start_end_positions
 
@@ -30,6 +28,7 @@ class InfoboxUpdater:
             self.infobox_manager.ui_setup.type_position_label.setText("")
 
     def update(self):
+        self.ui_setup = self.infobox_manager.ui_setup
         for color in ["blue", "red"]:
             arrows = self.graphboard_view.get_arrows_by_color(color)
             if arrows:
@@ -42,7 +41,6 @@ class InfoboxUpdater:
                 widget.setVisible(False)
 
     def update_info_widget_content(self, widget, attributes):
-        self.controller = self.infobox_manager.controller
         if widget.layout().count() == 0:
             new_content = self.construct_info_string_label(attributes)
             widget.setLayout(new_content.layout())

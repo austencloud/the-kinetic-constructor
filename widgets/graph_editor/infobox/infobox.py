@@ -6,6 +6,9 @@ class InfoboxFrame(QFrame):
         super().__init__()
         self.main_widget = main_widget
         self.graphboard_view = graphboard_view
+        
+
+    def init_manager(self):
         self.manager = InfoboxManager(self)
         self.updater = self.manager.updater
         

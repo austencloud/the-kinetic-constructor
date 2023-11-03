@@ -35,6 +35,7 @@ class GraphEditorWidget(QWidget):
         # Create and add contents to the graph_editor_frame_layout
         self.graphboard_view = GraphboardView(main_widget, self)
         self.infobox = InfoboxFrame(main_widget, self.graphboard_view)
+        self.infobox.init_manager()
         self.propbox_view = PropBoxView(main_widget)
         self.arrowbox_view = ArrowBoxView(
             main_widget,

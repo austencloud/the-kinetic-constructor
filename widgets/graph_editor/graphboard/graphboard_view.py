@@ -225,7 +225,7 @@ class GraphboardView(QGraphicsView):
     def get_arrows_by_color(self, color):
         return [
             item
-            for item in self.items()
+            for item in self.graphboard_scene.items()
             if isinstance(item, Arrow) and item.color == color
         ]
 

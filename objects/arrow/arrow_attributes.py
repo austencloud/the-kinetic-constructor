@@ -30,7 +30,6 @@ class ArrowAttributes:
         elif arrow.motion_type == 'static':
             start_location, end_location = arrow.start_location, arrow.end_location
 
-            
         arrow_dict = {
             'color': arrow.color,
             'motion_type': arrow.motion_type,
@@ -41,3 +40,21 @@ class ArrowAttributes:
             'turns': arrow.turns
         }
         return arrow_dict
+    
+    def get_graphboard_arrow_attributes_by_color(self, color, graphboard_view):
+        # Assuming you have a method to get arrows by color in graphboard_view
+        arrows = graphboard_view.get_arrows_by_color(color)
+        if not arrows:
+            return {}
+
+        # For simplicity, we'll use the first arrow of the given color
+        arrow = arrows[0]
+
+        attributes = {
+            "motion_type": arrow.motion_type,
+            "start_location": arrow.start_location,
+            "end_location": arrow.end_location,
+            "turns": arrow.turns,
+            "color": arrow.color
+        }
+        return attributes
