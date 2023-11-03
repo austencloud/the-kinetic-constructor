@@ -26,9 +26,8 @@ class StaffPositioner:
 
         # check the graphbaord_view to see how many staves are on board, save it as staffs_on_board
         staffs_on_board = []
-        self.graphboard_view = self.staff_handler.main_widget.graphboard_view
-        scene_items = self.graphboard_view.graphboard_scene.items()
-        for item in scene_items:
+
+        for item in scene.items():
             if isinstance(item, Staff):
                 staffs_on_board.append(item)
 
@@ -88,16 +87,9 @@ class StaffPositioner:
 
         scene.update()
 
-    def reposition_static_beta(self, static_arrows, scale):  # β
+    def reposition_static_beta(self, static_arrows, scale):
         for arrow in static_arrows:
-            staff = next(
-                (
-                    staff
-                    for staff in self.staffs_on_board
-                    if staff.arrow.color == arrow["color"]
-                ),
-                None,
-            )
+            staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow['color']), None)
             if not staff:
                 continue
 
@@ -207,7 +199,7 @@ class StaffPositioner:
         pro_staff = next(
             (
                 staff
-                for staff in self.staff_handler.staffs_on_board
+                for staff in self.staff_handler.staffs_on_board.values()
                 if staff.arrow.color == pro_arrow["color"]
             ),
             None,
@@ -215,7 +207,7 @@ class StaffPositioner:
         anti_staff = next(
             (
                 staff
-                for staff in self.staff_handler.staffs_on_board
+                for staff in self.staff_handler.staffs_on_board.values()
                 if staff.arrow.color == anti_arrow["color"]
             ),
             None,
@@ -302,7 +294,7 @@ class StaffPositioner:
         self, current_state, view, matching_letters, arrow_dict
     ):
         for variations in matching_letters:
-            if view.main_widget.arrow_manager.arrow_state_comparator.compare_states(
+            if view.main_widget.arrow_manager.state_comparator.compare_states(
                 current_state, variations
             ):
                 optimal_entry = next(

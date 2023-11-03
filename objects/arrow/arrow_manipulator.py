@@ -154,7 +154,7 @@ class ArrowManipulator:
 
             arrow.attributes.update_attributes(arrow, new_arrow)
             self.finalize_manipulation(arrow)
-            self.arrow_manager.arrow_positioner.update_arrow_position(arrow.view)
+            self.arrow_manager.positioner.update_arrow_position(arrow.view)
             arrow.update()
 
     def swap_motion_type(self, arrows):

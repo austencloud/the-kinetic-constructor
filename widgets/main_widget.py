@@ -46,11 +46,10 @@ class MainWidget(QWidget):
         self.layout_manager.configure_layouts()
         self.init_staffs()
         self.connect_objects()
+        
 
     def init_staffs(self):
-        self.graphboard_view.staff_handler.init_handpoints(
-            self.graph_editor_widget.graphboard_view
-        )
+
         self.propbox_view.staff_handler.init_propbox_staffs(
             self.graph_editor_widget.propbox_view
         )

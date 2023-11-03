@@ -1,7 +1,5 @@
 from objects.staff.staff_handler import StaffHandler
-from objects.staff.staff import Staff
 from PyQt6.QtCore import QPointF
-from objects.arrow.arrow import Arrow
 from resources.constants import (
     GRAPHBOARD_GRID_PADDING,
     GRAPHBOARD_SCALE,
@@ -14,9 +12,10 @@ class GraphboardStaffHandler(StaffHandler):
     def __init__(self, main_widget, scene):
         super().__init__(main_widget)
         self.scene = scene
-        self.staffs_on_board = []
+        self.staffs_on_board = {}
         self.staff_xy_locations = {}
         self.graphboard_view = None
+
 
     def init_handpoints(self, graphboard_view):
         scale = GRAPHBOARD_SCALE
@@ -47,16 +46,7 @@ class GraphboardStaffHandler(StaffHandler):
             + QPointF(-GRAPHBOARD_STAFF_LENGTH / 2, -GRAPHBOARD_STAFF_WIDTH / 2),
         }
 
-        self.staffs_on_board = []
+        self.staffs_on_board = {}
 
-    def update_graphboard_staffs(self, scene):
-        for arrow in scene.items():
-            if isinstance(arrow, Arrow):
-                staff = arrow.staff
-                staff.location = arrow.end_location
-
-                staff.attributes.update_attributes_from_arrow(arrow)
-                staff.update_appearance()
-                staff.setPos(self.staff_xy_locations[staff.location])
-
-        self.positioner.check_replace_beta_staffs(scene)
+    def update_graphboard_staffs(self, graphboard_scene):
+        self.positioner.check_replace_beta_staffs(graphboard_scene)
