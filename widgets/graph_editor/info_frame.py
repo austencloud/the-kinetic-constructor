@@ -10,9 +10,8 @@ from PyQt6.QtWidgets import (
 )
 from data.positions_map import positions_map
 from resources.constants import GRAPHBOARD_SCALE
-from data.start_end_location_mapping import start_end_location_mapping
 from PyQt6.QtWidgets import QPushButton, QSizePolicy
-from PyQt6.QtGui import QFont, QIcon
+from PyQt6.QtGui import QIcon
 
 
 class InfoFrame(QFrame):
@@ -40,88 +39,33 @@ class InfoFrame(QFrame):
         self.setup_buttons()
 
     def setup_buttons(self):
-        button_size = 30  # Square button size
+        self.BUTTON_SIZE = 30  # Square button size
 
-        # Two-sided arrow button
-        self.swap_colors_button = QPushButton("↔")
-        self.swap_colors_button.clicked.connect(self.arrow_manipulator.swap_colors)
+        # Create a dictionary to map buttons to their properties
+        button_properties = {
+            "swap_colors": {"icon": None, "text": "↔", "callback": self.arrow_manipulator.swap_colors},
+            "swap_motion_type_blue": {"icon": "resources/images/icons/swap.jpg", "callback": lambda: self.arrow_manipulator.swap_motion_type(self.get_arrows_by_color("blue"), "blue")},
+            "swap_motion_type_red": {"icon": "resources/images/icons/swap.jpg", "callback": lambda: self.arrow_manipulator.swap_motion_type(self.get_arrows_by_color("red"), "red")},
+            "swap_start_end_blue": {"icon": "resources/images/icons/swap.jpg", "callback": lambda: self.arrow_manipulator.mirror_arrow(self.get_arrows_by_color("blue"), "blue")},
+            "swap_start_end_red": {"icon": "resources/images/icons/swap.jpg", "callback": lambda: self.arrow_manipulator.mirror_arrow(self.get_arrows_by_color("red"), "red")},
+            "decrement_turns_blue": {"icon": None, "text": "-", "callback": lambda: self.arrow_manipulator.decrement_turns(self.get_arrows_by_color("blue"), "blue")},
+            "decrement_turns_red": {"icon": None, "text": "-", "callback": lambda: self.arrow_manipulator.decrement_turns(self.get_arrows_by_color("red"), "red")},
+            "increment_turns_blue": {"icon": None, "text": "+", "callback": lambda: self.arrow_manipulator.increment_turns(self.get_arrows_by_color("blue"), "blue")},
+            "increment_turns_red": {"icon": None, "text": "+", "callback": lambda: self.arrow_manipulator.increment_turns(self.get_arrows_by_color("red"), "red")}, 
+        }
 
-        # Filter arrows for blue and red
-        blue_arrows = [
-            item
-            for item in self.graphboard_view.items()
-            if isinstance(item, Arrow) and item.color == "blue"
-        ]
-        red_arrows = [
-            item
-            for item in self.graphboard_view.items()
-            if isinstance(item, Arrow) and item.color == "red"
-        ]
+        # Create buttons based on the properties
+        for button_name, properties in button_properties.items():
+            if properties["icon"]:
+                button = QPushButton(QIcon(properties["icon"]), properties.get("text", ""))
+            else:
+                button = QPushButton(properties.get("text", ""))            
+            button.clicked.connect(properties["callback"])
+            button.setFixedSize(self.BUTTON_SIZE, self.BUTTON_SIZE)
+            setattr(self, f"{button_name}_button", button)
 
-        # Swap motion type buttons
-        self.swap_motion_type_button_blue = QPushButton(
-            QIcon("resources/images/icons/swap.jpg"), ""
-        )
-        self.swap_motion_type_button_blue.clicked.connect(
-            lambda: self.arrow_manipulator.swap_motion_type(blue_arrows, "blue")
-        )
-
-        self.swap_motion_type_button_red = QPushButton(
-            QIcon("resources/images/icons/swap.jpg"), ""
-        )
-        self.swap_motion_type_button_red.clicked.connect(
-            lambda: self.arrow_manipulator.swap_motion_type(red_arrows, "red")
-        )
-
-        # Swap start and end location buttons
-        self.swap_start_end_button_blue = QPushButton(
-            QIcon("resources/images/icons/swap.jpg"), ""
-        )
-        self.swap_start_end_button_blue.clicked.connect(
-            lambda: self.arrow_manipulator.mirror_arrow(blue_arrows, "blue")
-        )
-
-        self.swap_start_end_button_red = QPushButton(
-            QIcon("resources/images/icons/swap.jpg"), ""
-        )
-        self.swap_start_end_button_red.clicked.connect(
-            lambda: self.arrow_manipulator.mirror_arrow(red_arrows, "red")
-        )
-
-        # Decrement turns buttons
-        self.decrement_turns_button_blue = QPushButton("-")
-        self.decrement_turns_button_blue.clicked.connect(
-            lambda: self.arrow_manipulator.decrement_turns(blue_arrows, "blue")
-        )
-
-        self.decrement_turns_button_red = QPushButton("-")
-        self.decrement_turns_button_red.clicked.connect(
-            lambda: self.arrow_manipulator.decrement_turns(red_arrows, "red")
-        )
-
-        # Increment turns buttons
-        self.increment_turns_button_blue = QPushButton("+")
-        self.increment_turns_button_blue.clicked.connect(
-            lambda: self.arrow_manipulator.increment_turns(blue_arrows, "blue")
-        )
-
-        self.increment_turns_button_red = QPushButton("+")
-        self.increment_turns_button_red.clicked.connect(
-            lambda: self.arrow_manipulator.increment_turns(red_arrows, "red")
-        )
-
-        for btn in [
-            self.swap_colors_button,
-            self.swap_motion_type_button_blue,
-            self.swap_motion_type_button_red,
-            self.swap_start_end_button_blue,
-            self.swap_start_end_button_red,
-            self.decrement_turns_button_blue,
-            self.decrement_turns_button_red,
-            self.increment_turns_button_blue,
-            self.increment_turns_button_red,
-        ]:
-            btn.setFixedSize(button_size, button_size)
+    def get_arrows_by_color(self, color):
+        return [item for item in self.graphboard_view.items() if isinstance(item, Arrow) and item.color == color]
 
     def setup_labels(self):
         self.blue_details_label = self.create_label("Left", "blue")
@@ -244,24 +188,24 @@ class InfoFrame(QFrame):
 
         # Determine which buttons to use based on the color
         swap_motion_type_button = (
-            self.swap_motion_type_button_blue
+            self.swap_motion_type_blue_button
             if color == "blue"
-            else self.swap_motion_type_button_red
+            else self.swap_motion_type_red_button
         )
         swap_start_end_button = (
-            self.swap_start_end_button_blue
+            self.swap_start_end_blue_button
             if color == "blue"
-            else self.swap_start_end_button_red
+            else self.swap_start_end_red_button
         )
         decrement_turns_button = (
-            self.decrement_turns_button_blue
+            self.decrement_turns_blue_button
             if color == "blue"
-            else self.decrement_turns_button_red
+            else self.decrement_turns_red_button
         )
         increment_turns_button = (
-            self.increment_turns_button_blue
+            self.increment_turns_blue_button
             if color == "blue"
-            else self.increment_turns_button_red
+            else self.increment_turns_red_button
         )
 
         # Create layouts for each line
