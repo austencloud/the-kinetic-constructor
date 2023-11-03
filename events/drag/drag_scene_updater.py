@@ -33,7 +33,7 @@ class DragSceneUpdater:
                 )
 
         for item in self.drag_manager.graphboard_view.graphboard_scene.items():
-            if isinstance(item, Staff):
+            if isinstance(item, Staff) and item.isVisible():
                 item.setPos(
                     self.drag_manager.graphboard_view.staff_handler.staff_xy_locations[
                         item.location

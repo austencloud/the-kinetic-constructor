@@ -40,7 +40,7 @@ class DragEventHandler:
 
     def update_drag_preview_for_graphboard(self, view, event):
         if not self.drag_preview.has_entered_graphboard_once:
-            self.graphboard_view.hide_staffs()
+            self.just_entered_graphboard = True
             self.drag_preview.has_entered_graphboard_once = True
 
         local_pos_in_graphboard = self.helpers.get_local_pos_in_graphboard(view, event)
@@ -64,19 +64,19 @@ class DragEventHandler:
         self.new_staff_dict = self.staff_attributes.create_staff_dict_from_arrow(
             self.drag_preview
         )
-        
-        # in graphboard_view.staffs, get the staff that corresponds to the color of the drag preview
-        # update its attributes with the new staff dict
+
+
         for staff in self.graphboard_view.staffs:
             if staff.color == self.drag_preview.color:
                 staff.attributes.update_attributes_from_dict(staff, self.new_staff_dict)
                 staff.arrow = self.invisible_arrow
                 self.invisible_arrow.staff = staff
-                
-            staff.update_appearance()
-            staff.setVisible(True)
-            
-        # Update the invisible arrow's attributes
+                staff.location = staff.arrow.end_location
+                staff.update_appearance()
+                staff.setVisible(True)   
+        
+        self.staff_handler.update_graphboard_staffs(self.graphboard_scene)
+
         self.invisible_arrow.arrow_manager.attributes.update_attributes(
             self.invisible_arrow, new_arrow_dict
         )
@@ -134,11 +134,8 @@ class DragEventHandler:
         if self.drag_preview.has_entered_graphboard_once:
             self.drag_manager.set_focus_and_accept_event(event)
 
-
             self.graphboard_view.clear_selection()
             placed_arrow.setSelected(True)
-
-
 
     ### MOUSE PRESS EVENTS ###
 

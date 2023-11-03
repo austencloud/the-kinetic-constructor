@@ -8,13 +8,11 @@ from PyQt6.QtGui import QTransform
 class ArrowManipulator:
     def __init__(self, arrow_manager):
         self.arrow_manager = arrow_manager
-        
 
     def update_arrow_and_staff(self, arrow, arrow_dict, staff_dict):
         staff = arrow.staff
         arrow.attributes.update_attributes(arrow, arrow_dict)
         staff.attributes.update_attributes_from_dict(staff, staff_dict)
-        staff.setPos(arrow.view.staff_handler.staff_xy_locations[staff.location])
 
     def finalize_manipulation(self, arrow):
         self.arrow_manager.positioner.update_arrow_position(
@@ -22,9 +20,8 @@ class ArrowManipulator:
         )
         arrow.update_appearance()
         self.arrow_manager.info_frame.update()
-        arrow.staff.update_appearance()
+        arrow.view.staff_handler.update_graphboard_staffs(arrow.scene())
         arrow.view.info_handler.update()
-
 
     def move_arrow_quadrant_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {
@@ -137,8 +134,8 @@ class ArrowManipulator:
 
             old_start_location = arrow.start_location
             old_end_location = arrow.end_location
-            arrow.start_location = old_end_location
-            arrow.end_location = old_start_location
+            new_start_location = old_end_location
+            new_end_location = old_start_location
 
             arrow.update_appearance()
 
@@ -147,19 +144,23 @@ class ArrowManipulator:
                 "motion_type": arrow.motion_type,
                 "quadrant": arrow.quadrant,
                 "rotation_direction": new_rotation_direction,
-                "start_location": arrow.start_location,
-                "end_location": arrow.end_location,
+                "start_location": new_start_location,
+                "end_location": new_end_location,
                 "turns": arrow.turns,
             }
 
+            arrow.staff.location = new_end_location
             arrow.attributes.update_attributes(arrow, new_arrow)
             self.finalize_manipulation(arrow)
             self.arrow_manager.positioner.update_arrow_position(arrow.view)
             arrow.update()
+            arrow.view.staff_handler.update_graphboard_staffs(arrow.scene())
 
     def swap_motion_type(self, arrows):
         if not isinstance(arrows, list):
             arrows = [arrows]
+
+        arrows = [arrow for arrow in arrows if isinstance(arrow, Arrow)]
 
         for arrow in arrows:
             if arrow.motion_type == "anti":
@@ -198,28 +199,34 @@ class ArrowManipulator:
             arrow.attributes.update_attributes(arrow, new_arrow_dict)
             arrow.update_appearance()
             arrow.view.info_handler.update()
-            
+
             self.arrow_manager.info_frame.update()
 
             self.update_arrow_and_staff(arrow, new_arrow_dict, new_staff_dict)
             self.finalize_manipulation(arrow)
 
     def swap_colors(self):
-        arrows = [item for item in self.graphboard_scene.items() if isinstance(item, Arrow)]
-        
-        if len(arrows) >= 1:
-            for arrow in arrows:
-                if arrow.color == "red":
-                    new_color = "blue"
-                elif arrow.color == "blue":
-                    new_color = "red"
-                else:
-                    print("swap_colors - Unexpected color:", arrow.color)
-                    continue
+        view = self.arrow_manager.graphboard_view
+        current_letter = view.info_handler.determine_current_letter_and_type()[0]
+        if current_letter != "G" and current_letter != "H":
+            arrows = [
+                item
+                for item in self.graphboard_scene.items()
+                if isinstance(item, Arrow)
+            ]
+            if len(arrows) >= 1:
+                for arrow in arrows:
+                    if arrow.color == "red":
+                        new_color = "blue"
+                    elif arrow.color == "blue":
+                        new_color = "red"
+                    else:
+                        print("swap_colors - Unexpected color:", arrow.color)
+                        continue
 
-                arrow.color = new_color
-                arrow.staff.color = new_color
-                
-                arrow.update_appearance()
-                arrow.staff.update_appearance()
-                self.finalize_manipulation(arrow)
+                    arrow.color = new_color
+                    arrow.staff.color = new_color
+
+                    arrow.update_appearance()
+                    arrow.staff.update_appearance()
+                    self.finalize_manipulation(arrow)

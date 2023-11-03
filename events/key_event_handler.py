@@ -11,7 +11,7 @@ class KeyEventHandler:
         arrow_selector = arrow_manager.selector
         selected_items = graphboard_view.get_selected_items()
         staff_handler = graphboard_view.staff_handler
-        staff_selector = staff_handler.selector
+        staff_visibility_manager = staff_handler.visibility_manager
         
         if len(selected_items) >= 1:
             try:
@@ -30,9 +30,9 @@ class KeyEventHandler:
                 for item in selected_items:
                     if isinstance(item, Arrow):
                         arrow_selector.delete_arrow(item)
-                        staff_selector.delete_staff(item.staff)
+                        staff_visibility_manager.delete_staff(item.staff)
                     elif isinstance(item, Staff):
-                        item.view.staff_handler.selector.delete_staff(item)
+                        item.view.staff_handler.visibility_manager.delete_staff(item)
 
             elif selected_item and isinstance(selected_item, Arrow):
                 if event.key() == Qt.Key.Key_W:

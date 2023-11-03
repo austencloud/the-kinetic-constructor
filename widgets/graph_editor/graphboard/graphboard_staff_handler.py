@@ -18,6 +18,8 @@ class GraphboardStaffHandler(StaffHandler):
 
 
     def init_handpoints(self, graphboard_view):
+        grid = graphboard_view.grid
+        
         scale = GRAPHBOARD_SCALE
         padding = GRAPHBOARD_GRID_PADDING
         GRAPHBOARD_STAFF_WIDTH = STAFF_WIDTH * GRAPHBOARD_SCALE
@@ -30,7 +32,7 @@ class GraphboardStaffHandler(StaffHandler):
             "S_hand_point",
             "W_hand_point",
         ]:
-            x, y = graphboard_view.grid.get_circle_coordinates(point_name)
+            x, y = grid.get_circle_coordinates(point_name)
             scaled_x = x * scale + padding
             scaled_y = y * scale + padding
             grid_handpoints[point_name] = QPointF(scaled_x, scaled_y)
@@ -49,4 +51,8 @@ class GraphboardStaffHandler(StaffHandler):
         self.staffs_on_board = {}
 
     def update_graphboard_staffs(self, graphboard_scene):
+        for staff in self.graphboard_view.staffs:
+            staff.update_appearance()
+            staff.setPos(self.staff_xy_locations[staff.location])
+            
         self.positioner.check_replace_beta_staffs(graphboard_scene)

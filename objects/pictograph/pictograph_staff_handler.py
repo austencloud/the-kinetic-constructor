@@ -21,7 +21,7 @@ class PictographStaffHandler(StaffHandler):
     def connect_grid(self, grid):
         self.grid = grid
 
-    def init_pictograph_staffs(self, pictograph_view, pictograph):
+    def init_handpoints(self, pictograph_view, pictograph):
         self.pictograph = pictograph
         self.pictograph_view = pictograph_view
         scale = self.grid.scale()
@@ -45,6 +45,7 @@ class PictographStaffHandler(StaffHandler):
             "S": grid_handpoints["S_hand_point"],
             "W": grid_handpoints["W_hand_point"],
         }
+
 
     def update_pictograph_staffs(self, scene):
         for item in self.scene.items():

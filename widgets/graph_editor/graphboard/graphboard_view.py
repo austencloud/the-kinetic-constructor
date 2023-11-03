@@ -38,7 +38,7 @@ class GraphboardView(QGraphicsView):
         self.init_managers(main_widget)
         self.init_grid()
         self.init_letter_renderers()
-        self.init_graphboard_staffs()
+        self.init_staffs()
 
     # INIT #
 
@@ -69,52 +69,7 @@ class GraphboardView(QGraphicsView):
         self.view_scale = GRAPHBOARD_SCALE
         # Add the grid and letter item to the scene
         self.graphboard_scene.addItem(self.grid)
-
-    def init_graphboard_staffs(self):
-        self.staffs = []
         
-        red_staff_dict = {
-            "color": "red",
-            "location": "n",
-            "layer": 1,
-        }
-        blue_staff_dict = {
-            "color": "blue",
-            "location": "s",
-            "layer": 1,
-        }
-
-        self.red_staff = self.staff_factory.create_staff(
-            self.graphboard_scene, red_staff_dict
-        )
-        self.blue_staff = self.staff_factory.create_staff(
-            self.graphboard_scene, blue_staff_dict
-        )
-        
-        self.graphboard_scene.addItem(self.red_staff)
-        self.graphboard_scene.addItem(self.blue_staff)
-        self.staff_handler.init_handpoints(self)
-
-        for item in self.graphboard_scene.items():
-            if isinstance(item, Staff):
-                item.setPos(
-                    self.staff_handler.staff_xy_locations[
-                        item.location
-                    ]
-                )
-
-        self.staffs.append(self.red_staff)
-        self.staffs.append(self.blue_staff)
-
-        self.hide_staffs()
-        
-    def show_staff(self, color, location):
-        for item in self.graphboard_scene.items():
-            if isinstance(item, Staff):
-                if item.color == color and item.location == location:
-                    item.setVisible(True)
-                else:
-                    item.setVisible(False)
 
     def init_managers(self, main_widget):
         self.info_handler = GraphboardInfoHandler(main_widget, self)
@@ -126,6 +81,10 @@ class GraphboardView(QGraphicsView):
         self.arrow_manager.graphboard_view = self
         self.arrow_factory = self.arrow_manager.factory
         self.staff_factory = self.staff_handler.factory
+
+    def init_staffs(self):
+        self.staff_handler.init_handpoints(self)
+        self.staff_handler.initializer.init_staffs(self)
 
     def init_grid(self):
         transform = QTransform()
@@ -147,11 +106,6 @@ class GraphboardView(QGraphicsView):
 
         transform.translate(grid_position.x(), grid_position.y())
         self.grid.setTransform(transform)
-
-    def hide_staffs(self):
-        for item in self.graphboard_scene.items():
-            if isinstance(item, Staff):
-                item.setVisible(False)
 
     def init_letter_renderers(self):
         self.letter_renderers = {}

@@ -18,21 +18,21 @@ class StaffPositioner:
         self.staff_handler = staff_handler
         self.letters = staff_handler.main_widget.letters
 
+        
     ### REPOSITIONERS ###
 
     def check_replace_beta_staffs(self, scene):
         view = scene.views()[0]
         board_state = view.get_state()
 
-        # check the graphbaord_view to see how many staves are on board, save it as staffs_on_board
-        staffs_on_board = []
+        visible_staves = []
+        
+        for staff in view.staffs:
+            if staff.isVisible():
+                visible_staves.append(staff)
 
-        for item in scene.items():
-            if isinstance(item, Staff):
-                staffs_on_board.append(item)
-
-        if len(staffs_on_board) == 2:
-            if staffs_on_board[0].location == staffs_on_board[1].location:
+        if len(visible_staves) == 2:
+            if visible_staves[0].location == visible_staves[1].location:
                 self.reposition_staffs(scene, board_state)
 
     def reposition_staffs(self, scene, board_state):
@@ -135,7 +135,7 @@ class StaffPositioner:
                     move_staff(
                         next(
                             staff
-                            for staff in self.staff_handler.staffs_on_board
+                            for staff in self.staff_handler.main_widget.graphboard_view.staffs
                             if staff.arrow.color == arrow["color"]
                         ),
                         direction,
@@ -173,7 +173,7 @@ class StaffPositioner:
 
         further_staff = next(
             staff
-            for staff in self.staff_handler.staffs_on_board
+            for staff in self.staff_handler.main_widget.graphboard_view.staffs
             if staff.arrow.color == further_arrow["color"]
         )
         new_position_further = self.calculate_new_position(
@@ -184,7 +184,7 @@ class StaffPositioner:
         other_direction = self.get_opposite_direction(further_direction)
         other_staff = next(
             staff
-            for staff in self.staff_handler.staffs_on_board
+            for staff in self.staff_handler.main_widget.graphboard_view.staffs
             if staff.arrow.color == other_arrow["color"]
         )
         new_position_other = self.calculate_new_position(
@@ -199,7 +199,7 @@ class StaffPositioner:
         pro_staff = next(
             (
                 staff
-                for staff in self.staff_handler.staffs_on_board.values()
+                for staff in self.staff_handler.main_widget.graphboard_view.staffs
                 if staff.arrow.color == pro_arrow["color"]
             ),
             None,
@@ -207,7 +207,7 @@ class StaffPositioner:
         anti_staff = next(
             (
                 staff
-                for staff in self.staff_handler.staffs_on_board.values()
+                for staff in self.staff_handler.main_widget.graphboard_view.staffs
                 if staff.arrow.color == anti_arrow["color"]
             ),
             None,
