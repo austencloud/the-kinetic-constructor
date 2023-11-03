@@ -64,10 +64,11 @@ class StaffPositioner:
 
         # BETA → BETA - G, H, I
         for start_location, arrows in arrows_grouped_by_start.items():
-            if len(arrows) > 1 and all(
-                arrow["start_location"] == arrow["end_location"] for arrow in arrows
-            ):
-                self.reposition_beta_to_beta(scene, arrows, scale)
+            if len(arrows) == 2:
+                arrow1, arrow2 = arrows
+                if (arrow1["start_location"] == arrow2["start_location"] and
+                    arrow1["end_location"] == arrow2["end_location"]):
+                    self.reposition_beta_to_beta(scene, arrows, scale)
 
 
         # GAMMA → BETA - Y, Z

@@ -17,9 +17,6 @@ class InfoboxUISetup:
         self.set_dimensions()
         self.setup_widgets()
 
-    def setup_dimensions(self):
-        self.infobox.set_dimensions()
-
     def setup_widgets(self):
         self.blue_info_widget = self.helpers.construct_info_string_label({})
         self.red_info_widget = self.helpers.construct_info_string_label({})
