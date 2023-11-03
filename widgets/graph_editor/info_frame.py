@@ -1,13 +1,21 @@
 from objects.arrow.arrow import Arrow
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QLabel, QFrame, QHBoxLayout, QGridLayout, QWidget
+from PyQt6.QtWidgets import (
+    QLabel,
+    QFrame,
+    QHBoxLayout,
+    QGridLayout,
+    QWidget,
+    QVBoxLayout,
+)
 from data.positions_map import positions_map
-
 from resources.constants import GRAPHBOARD_SCALE
 from data.start_end_location_mapping import start_end_location_mapping
+from PyQt6.QtWidgets import QPushButton, QSizePolicy
+from PyQt6.QtGui import QFont, QIcon
+
 
 class InfoFrame(QFrame):
-
     def __init__(self, main_widget, graphboard_view):
         super().__init__()
         self.setup_variables(main_widget, graphboard_view)
@@ -20,6 +28,8 @@ class InfoFrame(QFrame):
         self.staff_handler = graphboard_view.staff_handler
         self.letters = main_widget.letters
         self.main_window = main_widget.main_window
+        self.arrow_manager = main_widget.arrow_manager
+        self.arrow_manipulator = self.arrow_manager.manipulator
 
     def setup_ui_elements(self):
         self.setup_labels()
@@ -27,6 +37,91 @@ class InfoFrame(QFrame):
         self.setLayout(self.grid_layout)
         self.setFixedWidth(int(900 * GRAPHBOARD_SCALE))
         self.setFixedHeight(int(900 * GRAPHBOARD_SCALE))
+        self.setup_buttons()
+
+    def setup_buttons(self):
+        button_size = 30  # Square button size
+
+        # Two-sided arrow button
+        self.swap_colors_button = QPushButton("↔")
+        self.swap_colors_button.clicked.connect(self.arrow_manipulator.swap_colors)
+
+        # Filter arrows for blue and red
+        blue_arrows = [
+            item
+            for item in self.graphboard_view.items()
+            if isinstance(item, Arrow) and item.color == "blue"
+        ]
+        red_arrows = [
+            item
+            for item in self.graphboard_view.items()
+            if isinstance(item, Arrow) and item.color == "red"
+        ]
+
+        # Swap motion type buttons
+        self.swap_motion_type_button_blue = QPushButton(
+            QIcon("resources/images/icons/swap.jpg"), ""
+        )
+        self.swap_motion_type_button_blue.clicked.connect(
+            lambda: self.arrow_manipulator.swap_motion_type(blue_arrows, "blue")
+        )
+
+        self.swap_motion_type_button_red = QPushButton(
+            QIcon("resources/images/icons/swap.jpg"), ""
+        )
+        self.swap_motion_type_button_red.clicked.connect(
+            lambda: self.arrow_manipulator.swap_motion_type(red_arrows, "red")
+        )
+
+        # Swap start and end location buttons
+        self.swap_start_end_button_blue = QPushButton(
+            QIcon("resources/images/icons/swap.jpg"), ""
+        )
+        self.swap_start_end_button_blue.clicked.connect(
+            lambda: self.arrow_manipulator.mirror_arrow(blue_arrows, "blue")
+        )
+
+        self.swap_start_end_button_red = QPushButton(
+            QIcon("resources/images/icons/swap.jpg"), ""
+        )
+        self.swap_start_end_button_red.clicked.connect(
+            lambda: self.arrow_manipulator.mirror_arrow(red_arrows, "red")
+        )
+
+        # Decrement turns buttons
+        self.decrement_turns_button_blue = QPushButton("-")
+        self.decrement_turns_button_blue.clicked.connect(
+            lambda: self.arrow_manipulator.decrement_turns(blue_arrows, "blue")
+        )
+
+        self.decrement_turns_button_red = QPushButton("-")
+        self.decrement_turns_button_red.clicked.connect(
+            lambda: self.arrow_manipulator.decrement_turns(red_arrows, "red")
+        )
+
+        # Increment turns buttons
+        self.increment_turns_button_blue = QPushButton("+")
+        self.increment_turns_button_blue.clicked.connect(
+            lambda: self.arrow_manipulator.increment_turns(blue_arrows, "blue")
+        )
+
+        self.increment_turns_button_red = QPushButton("+")
+        self.increment_turns_button_red.clicked.connect(
+            lambda: self.arrow_manipulator.increment_turns(red_arrows, "red")
+        )
+
+        for btn in [
+            self.swap_colors_button,
+            self.swap_motion_type_button_blue,
+            self.swap_motion_type_button_red,
+            self.swap_start_end_button_blue,
+            self.swap_start_end_button_red,
+            self.decrement_turns_button_blue,
+            self.decrement_turns_button_red,
+            self.increment_turns_button_blue,
+            self.increment_turns_button_red,
+        ]:
+            btn.setFixedSize(button_size, button_size)
 
     def setup_labels(self):
         self.blue_details_label = self.create_label("Left", "blue")
@@ -44,11 +139,15 @@ class InfoFrame(QFrame):
         self.grid_layout = QGridLayout()
         self.grid_layout.setVerticalSpacing(10)
 
-        header_layout = self.create_horizontal_layout([self.blue_details_label, self.red_details_label])
+        header_layout = self.create_horizontal_layout(
+            [self.blue_details_label, self.red_details_label]
+        )
         self.content_layout = self.create_horizontal_layout()
         type_position_layout = self.create_horizontal_layout([self.type_position_label])
 
-        self.add_widgets_to_grid([header_layout, self.content_layout, type_position_layout])
+        self.add_widgets_to_grid(
+            [header_layout, self.content_layout, type_position_layout]
+        )
 
     def create_horizontal_layout(self, widgets=[]):
         layout = QHBoxLayout()
@@ -67,25 +166,30 @@ class InfoFrame(QFrame):
                 widget.setFixedHeight(int(240 * GRAPHBOARD_SCALE))
             self.grid_layout.addWidget(widget, idx, 0)
             self.grid_layout.setRowStretch(idx, 0 if idx == 0 else 1)
-        
+
     def update_type_and_position_info(self):
-        current_letter, current_letter_type = self.graphboard_view.info_handler.determine_current_letter_and_type()
+        (
+            current_letter,
+            current_letter_type,
+        ) = self.graphboard_view.info_handler.determine_current_letter_and_type()
         if current_letter and current_letter_type:
             start_end_positions = self.get_start_end_positions()
             if start_end_positions:
                 start_position, end_position = start_end_positions
 
-            info_text = f"<center><h2>{current_letter_type}</h2><p style='font-size: 18px; font-family:'Cambria;''>{start_position} → {end_position}</center></p>"
+            info_text = f"<center><h1>{current_letter_type}</h1><p style='font-size: 18px; font-family:'Cambria;''>{start_position} → {end_position}</center></p>"
             self.type_position_label.setText(info_text)
         else:
             # Handle cases where the letter or type is not identified
             self.type_position_label.setText("")
-            
+
     def connect_view(self, graphboard_view):
         self.graphboard_view = graphboard_view
 
     def get_current_letter(self):
-        self.letter = self.graphboard_view.info_handler.determine_current_letter_and_type()[0]
+        self.letter = (
+            self.graphboard_view.info_handler.determine_current_letter_and_type()[0]
+        )
         if self.letter is not None:
             return self.letter
 
@@ -93,28 +197,23 @@ class InfoFrame(QFrame):
         self.remaining_staff = {}
         blue_attributes = {}
         red_attributes = {}
-        blue_text = ""
-        red_text = ""
-        
-        for arrow in [item for item in self.graphboard_view.items() if isinstance(item, Arrow)]:
+
+        for arrow in [
+            item for item in self.graphboard_view.items() if isinstance(item, Arrow)
+        ]:
             arrow_dict = arrow.attributes.create_dict_from_arrow(arrow)
-            if arrow.color == 'blue':
+            if arrow.color == "blue":
                 blue_attributes = arrow_dict
             else:
                 red_attributes = arrow_dict
 
-        blue_info_label = self.construct_info_string_label(blue_attributes)
-        red_info_label = self.construct_info_string_label(red_attributes)
-
-        blue_text += blue_info_label.text()
-        red_text += red_info_label.text()
+        blue_info_widget = self.construct_info_string_label(blue_attributes)
+        red_info_widget = self.construct_info_string_label(red_attributes)
 
         self.clear_layout(self.content_layout)
 
-        self.content_layout.addWidget(blue_info_label)
-        self.content_layout.addWidget(red_info_label)
-
-
+        self.content_layout.addWidget(blue_info_widget)
+        self.content_layout.addWidget(red_info_widget)
 
     @staticmethod
     def clear_layout(layout):
@@ -125,25 +224,73 @@ class InfoFrame(QFrame):
                 child.widget().deleteLater()
 
     def construct_info_string_label(self, attributes):
-        """Constructs a formatted string for arrow information with aligned values."""
-        
+        """Constructs a widget with arrow information and associated buttons."""
+
         # Extract the required values
         motion_type = attributes.get("motion_type", "").capitalize()
         start_location = attributes.get("start_location", "")
         end_location = attributes.get("end_location", "")
         turns = attributes.get("turns", "")
-        
-        # Construct the formatted string
-        info_string = f"""
-        <center>
-            <h1>{motion_type}</h1>
-            <p style='font-size: 20px;'><span style='font-weight: bold; font-style: italic;'>{start_location.capitalize()}</span> → <span style='font-weight: bold; font-style: italic;'>{end_location.capitalize()}</span></p>
-            <p style='font-size: 20px; font-weight: bold;'>Turns: {turns}</p>
-        </center>
-        """
-        
-        return QLabel(info_string)
+        color = attributes.get("color", "")
 
+        # Create labels
+        motion_type_label = QLabel(f"<h1>{motion_type}</h1>")
+        start_end_label = QLabel(
+            f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{start_location.capitalize()} → {end_location.capitalize()}</span>"
+        )
+        turns_label = QLabel(f"<span style='font-size: 20px;'>{turns}</span>")
+        turns_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)  # Set size policy to Fixed
+
+
+        # Determine which buttons to use based on the color
+        swap_motion_type_button = (
+            self.swap_motion_type_button_blue
+            if color == "blue"
+            else self.swap_motion_type_button_red
+        )
+        swap_start_end_button = (
+            self.swap_start_end_button_blue
+            if color == "blue"
+            else self.swap_start_end_button_red
+        )
+        decrement_turns_button = (
+            self.decrement_turns_button_blue
+            if color == "blue"
+            else self.decrement_turns_button_red
+        )
+        increment_turns_button = (
+            self.increment_turns_button_blue
+            if color == "blue"
+            else self.increment_turns_button_red
+        )
+
+        # Create layouts for each line
+        motion_type_layout = QHBoxLayout()
+        motion_type_layout.addWidget(swap_motion_type_button)
+        motion_type_layout.addWidget(motion_type_label)
+
+        start_end_layout = QHBoxLayout()
+        start_end_layout.addWidget(swap_start_end_button)
+        start_end_layout.addWidget(start_end_label)
+
+        turns_layout = QHBoxLayout()
+        turns_layout.setSpacing(0)  # Remove spacing between widgets
+        turns_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
+        turns_layout.addWidget(decrement_turns_button)
+        turns_layout.addWidget(turns_label)
+        turns_layout.addWidget(increment_turns_button)
+
+        # Main layout
+        main_layout = QVBoxLayout()
+        main_layout.addLayout(motion_type_layout)
+        main_layout.addLayout(start_end_layout)
+        main_layout.addLayout(turns_layout)
+
+        # Create a widget to hold the main layout
+        info_widget = QWidget()
+        info_widget.setLayout(main_layout)
+
+        return info_widget
 
     def get_start_end_positions(self):
         positions = []
@@ -160,17 +307,22 @@ class InfoFrame(QFrame):
                 arrow_items.append(item)
 
         for arrow in arrow_items:
-            if arrow.color == 'red':
+            if arrow.color == "red":
                 start_location_red = arrow.start_location
                 end_location_red = arrow.end_location
                 color_red = arrow.color
                 counter += 1
-            else: # arrow.color == 'blue'
+            else:  # arrow.color == 'blue'
                 start_location_blue = arrow.start_location
                 end_location_blue = arrow.end_location
                 color_blue = arrow.color
 
-        if start_location_red is not None and end_location_red is not None and start_location_blue is not None and end_location_blue is not None:
+        if (
+            start_location_red is not None
+            and end_location_red is not None
+            and start_location_blue is not None
+            and end_location_blue is not None
+        ):
             start_key = (start_location_red, color_red, start_location_blue, color_blue)
             end_key = (end_location_red, color_red, end_location_blue, color_blue)
             start_location = positions_map.get(start_key)
@@ -178,10 +330,8 @@ class InfoFrame(QFrame):
             positions.append(start_location)
             positions.append(end_location)
 
-
         if positions is not None:
             return positions
         else:
             print("no positions returned by get_start_end_positions")
             return None
-

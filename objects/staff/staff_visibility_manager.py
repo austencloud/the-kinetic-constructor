@@ -9,7 +9,7 @@ class StaffVisibilityManager:
             if isinstance(item, Staff):
                 item.setVisible(False)
        
-    def delete_staff(self, staffs):
+    def hide_staff(self, staffs):
         if staffs:
             # if staffs is not a list, make it a list
             if not isinstance(staffs, list):

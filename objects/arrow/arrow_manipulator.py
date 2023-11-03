@@ -9,6 +9,27 @@ class ArrowManipulator:
     def __init__(self, arrow_manager):
         self.arrow_manager = arrow_manager
 
+    def increment_turns(self, arrows, color):
+        arrows = [arrow for arrow in arrows if arrow.color == color]
+        for arrow in arrows:
+            arrow.turns += 1
+            self.update_arrow_turns(arrow)
+            self.finalize_manipulation(arrow)
+
+    def decrement_turns(self, arrows, color):
+        arrows = [arrow for arrow in arrows if arrow.color == color]
+        for arrow in arrows:
+            if arrow.turns > 0:
+                arrow.turns -= 1
+                self.update_arrow_turns(arrow)
+                self.finalize_manipulation(arrow)
+
+    def update_arrow_turns(self, arrow):
+        """Update the appearance of the arrow based on its turns."""
+        arrow.svg_file = f"resources/images/arrows/shift/{arrow.motion_type}_{arrow.turns}.svg"
+        arrow.initialize_svg_renderer(arrow.svg_file)
+        arrow.update_appearance()
+
     def update_arrow_and_staff(self, arrow, arrow_dict, staff_dict):
         staff = arrow.staff
         arrow.attributes.update_attributes(arrow, arrow_dict)
@@ -101,7 +122,8 @@ class ArrowManipulator:
             self.update_arrow_and_staff(arrow, updated_arrow_dict, updated_staff_dict)
             self.finalize_manipulation(arrow)
 
-    def mirror_arrow(self, arrows):
+    def mirror_arrow(self, arrows, color):
+        arrows = [arrow for arrow in arrows if arrow.color == color]
         for arrow in arrows:
             if arrow.is_mirrored:
                 arrow.is_mirrored = False
@@ -156,7 +178,8 @@ class ArrowManipulator:
             arrow.update()
             arrow.view.staff_handler.update_graphboard_staffs(arrow.scene())
 
-    def swap_motion_type(self, arrows):
+    def swap_motion_type(self, arrows, color):
+        arrows = [arrow for arrow in arrows if arrow.color == color]
         if not isinstance(arrows, list):
             arrows = [arrows]
 

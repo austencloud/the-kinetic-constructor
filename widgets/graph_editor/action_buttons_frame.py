@@ -3,6 +3,7 @@ from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import QSize
 from resources.constants import GRAPHBOARD_SCALE
 from PyQt6.QtWidgets import QVBoxLayout
+from objects.arrow.arrow import Arrow
 
 class ActionButtonsFrame(QFrame):
     def __init__(self, main_widget):
@@ -27,7 +28,7 @@ class ActionButtonsFrame(QFrame):
             (icons_path + "rotate_left.png", "Rotate Left",
                 lambda: self.main_widget.arrow_manager.manipulator.rotate_arrow('left', self.main_widget.graphboard_scene.selectedItems())),
             (icons_path + "mirror.png", "Mirror",
-                lambda: self.main_widget.arrow_manager.manipulator.mirror_arrow(self.main_widget.graphboard_scene.selectedItems())),
+                lambda: self.main_widget.arrow_manager.manipulator.mirror_arrow(self.main_widget.graphboard_scene.selectedItems(), self.get_selected_arrow_color())),
             (icons_path + "swap.png", "Swap Colors",
                 lambda: self.main_widget.arrow_manager.manipulator.swap_colors()),
             (icons_path + "select_all.png", "Select All",
@@ -52,3 +53,9 @@ class ActionButtonsFrame(QFrame):
             self.action_buttons_layout.addWidget(button)
             
         self.setLayout(self.action_buttons_layout)
+
+    def get_selected_arrow_color(self):
+        selected_items = self.main_widget.graphboard_scene.selectedItems()
+        if selected_items and isinstance(selected_items[0], Arrow):
+            return selected_items[0].color
+        return None

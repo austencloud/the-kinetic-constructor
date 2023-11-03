@@ -30,10 +30,7 @@ class ArrowPositioner:
                         new_x = pos.x() - (arrow.boundingRect().width()) / 2
                         new_y = pos.y() - (arrow.boundingRect().height()) / 2
 
-                        # Create a new QPointF object
                         new_pos = QPointF(new_x, new_y)
-
-                        # Set the new position
                         arrow.setPos(new_pos)
                 else:
                     self.set_default_arrow_pos(arrow)

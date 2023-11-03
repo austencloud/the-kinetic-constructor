@@ -15,9 +15,13 @@ class KeyEventHandler:
         
         if len(selected_items) >= 1:
             try:
-                    selected_item = selected_items[0]
+                selected_item = selected_items[0]
             except IndexError:
                 selected_item = None
+
+            selected_arrow_color = None
+            if selected_item and isinstance(selected_item, Arrow):
+                selected_arrow_color = selected_item.color
 
             if event.modifiers() == Qt.KeyboardModifier.ControlModifier and event.key() == Qt.Key.Key_Delete:
                 for item in selected_items:
@@ -44,8 +48,8 @@ class KeyEventHandler:
                 elif event.key() == Qt.Key.Key_D:
                     arrow_manipulator.move_arrow_quadrant_wasd('right', selected_item)
                 elif event.key() == Qt.Key.Key_E:
-                    arrow_manipulator.mirror_arrow(selected_items)
+                    arrow_manipulator.mirror_arrow(selected_items, selected_arrow_color)
                 elif event.key() == Qt.Key.Key_Q:
-                    arrow_manipulator.swap_motion_type(selected_items)
+                    arrow_manipulator.swap_motion_type(selected_items, selected_arrow_color)
                 elif event.key() == Qt.Key.Key_F:
                     sequence_view.add_to_sequence(graphboard_view)
