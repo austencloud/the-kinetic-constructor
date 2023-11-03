@@ -1,11 +1,11 @@
 from PyQt6.QtCore import QPointF
 from resources.constants import PICTOGRAPH_GRID_PADDING, PICTOGRAPH_SCALE
 from objects.arrow.arrow import Arrow
-from objects.staff.staff_handler import StaffHandler
+from objects.staff.staff_handler import StaffManager
 from objects.staff.staff import Staff
 
 
-class PictographStaffHandler(StaffHandler):
+class PictographStaffHandler(StaffManager):
     def __init__(self, main_widget, scene):
         super().__init__(main_widget)
         self.scene = scene
@@ -45,7 +45,6 @@ class PictographStaffHandler(StaffHandler):
             "S": grid_handpoints["S_hand_point"],
             "W": grid_handpoints["W_hand_point"],
         }
-
 
     def update_pictograph_staffs(self, scene):
         for item in self.scene.items():

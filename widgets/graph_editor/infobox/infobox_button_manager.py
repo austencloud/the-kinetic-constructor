@@ -4,7 +4,7 @@ from objects.arrow.arrow import Arrow
 
 
 class InfoboxButtonManager:
-    BUTTON_SIZE = 30  # Square button size
+    BUTTON_SIZE = 30 
 
     def __init__(self, infobox, arrow_manipulator, graphboard_view):
         self.infobox = infobox

@@ -5,7 +5,8 @@ from objects.staff.staff_visibility_manager import StaffVisibilityManager
 from objects.staff.staff_attributes import StaffAttributes
 from objects.staff.staff_initializer import StaffInitializer
 
-class StaffHandler(QObject):
+
+class StaffManager(QObject):
     def __init__(self, main_widget):
         super().__init__()
         self.main_widget = main_widget
