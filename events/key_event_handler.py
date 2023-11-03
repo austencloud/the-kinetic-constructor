@@ -9,7 +9,8 @@ class KeyEventHandler:
         sequence_view = main_widget.sequence_view
         arrow_manipulator = arrow_manager.manipulator
         arrow_selector = arrow_manager.selector
-        selected_items = graphboard_view.get_selected_items()
+        self.graphboard_scene = graphboard_view.scene()
+        selected_items = self.graphboard_scene.selectedItems()
         staff_handler = graphboard_view.staff_handler
         staff_visibility_manager = staff_handler.visibility_manager
         

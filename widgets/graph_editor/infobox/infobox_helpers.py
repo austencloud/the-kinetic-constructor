@@ -13,24 +13,24 @@ import logging
 
 
 class InfoboxHelpers:
-    @staticmethod
-    def create_label(text="", color=None):
+    def __init__(self, infobox_manager):
+        self.infobox_manager = infobox_manager
+
+    def create_label(self, text="", color=None):
         label = QLabel(text)
         label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         if color:
             label.setStyleSheet(f"color: {color}; font-size: 25px; font-weight: bold;")
         return label
 
-    @staticmethod
-    def create_horizontal_layout(widgets=[]):
+    def create_horizontal_layout(self, widgets=[]):
         layout = QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         for widget in widgets:
             layout.addWidget(widget)
         return layout
 
-    @staticmethod
-    def add_widgets_to_grid(grid_layout, layouts):
+    def add_widgets_to_grid(self, grid_layout, layouts):
         for idx, layout in enumerate(layouts):
             widget = QWidget()
             widget.setLayout(layout)
@@ -41,17 +41,14 @@ class InfoboxHelpers:
             grid_layout.addWidget(widget, idx, 0)
             grid_layout.setRowStretch(idx, 0 if idx == 0 else 1)
 
-    @staticmethod
-    def clear_layout(layout):
+    def clear_layout(self, layout):
         """Hides all widgets from the given layout."""
         for i in range(layout.count()):
             child = layout.itemAt(i)
             if child.widget():
                 child.widget().hide()
-                
 
-    @staticmethod
-    def construct_info_string_label(attributes):
+    def construct_info_string_label(self, attributes):
         """Constructs a widget with arrow information and associated buttons."""
 
         # Extract the required values
@@ -112,9 +109,7 @@ class InfoboxHelpers:
 
         return info_widget
 
-
-    @staticmethod
-    def get_start_end_positions(graphboard_view):
+    def get_start_end_positions(self, graphboard_view):
         positions = []
         arrow_items = [
             item for item in graphboard_view.items() if isinstance(item, Arrow)
@@ -145,3 +140,4 @@ class InfoboxHelpers:
             else:
                 logging.warning("No positions returned by get_start_end_positions")
                 return None
+            

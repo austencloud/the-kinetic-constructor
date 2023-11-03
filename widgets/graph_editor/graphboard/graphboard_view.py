@@ -70,7 +70,6 @@ class GraphboardView(QGraphicsView):
         # Add the grid and letter item to the scene
         self.graphboard_scene.addItem(self.grid)
         
-
     def init_managers(self, main_widget):
         self.info_handler = GraphboardInfoHandler(main_widget, self)
         self.staff_handler = GraphboardStaffHandler(main_widget, self.graphboard_scene)
@@ -129,7 +128,7 @@ class GraphboardView(QGraphicsView):
 
     def contextMenuEvent(self, event):
         clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())
-        selected_items = self.get_selected_items()
+        selected_items = self.graphboard_scene.selectedItems()
         if isinstance(clicked_item, Arrow):
             self.context_menu_manager.create_arrow_menu(selected_items, event)
         elif isinstance(clicked_item, Staff):
@@ -216,16 +215,19 @@ class GraphboardView(QGraphicsView):
         print(red_position, blue_position)
         return red_position, blue_position
 
-    def get_selected_items(self):
-        return self.graphboard_scene.selectedItems()
-
     def get_arrows(self):
-        # return the current arrows on the graphboard as an array
         current_arrows = []
         for arrow in self.scene().items():
             if isinstance(arrow, Arrow):
                 current_arrows.append(arrow)
         return current_arrows
+
+    def get_arrows_by_color(self, color):
+        return [
+            item
+            for item in self.items()
+            if isinstance(item, Arrow) and item.color == color
+        ]
 
     ### SELECTION ###
 
