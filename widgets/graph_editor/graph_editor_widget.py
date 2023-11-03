@@ -30,16 +30,16 @@ class GraphEditorWidget(QWidget):
         objectbox_layout = QVBoxLayout()
         graphboard_layout = QVBoxLayout()
         action_buttons_layout = QVBoxLayout()
-        info_frame_layout = QVBoxLayout()
+        infobox_layout = QVBoxLayout()
 
         # Create and add contents to the graph_editor_frame_layout
         self.graphboard_view = GraphboardView(main_widget, self)
-        self.info_frame = InfoboxFrame(main_widget, self.graphboard_view)
+        self.infobox = InfoboxFrame(main_widget, self.graphboard_view)
         self.propbox_view = PropBoxView(main_widget)
         self.arrowbox_view = ArrowBoxView(
             main_widget,
             self.graphboard_view,
-            self.info_frame,
+            self.infobox,
             self.main_widget.arrow_manager,
         )
         self.action_buttons_frame = ActionButtonsFrame(main_widget)
@@ -51,13 +51,13 @@ class GraphEditorWidget(QWidget):
         action_buttons_layout.addWidget(
             self.action_buttons_frame
         )  # self.action_buttons_frame is an instance of Action_Buttons_Frameself.
-        info_frame_layout.addWidget(self.info_frame)
+        infobox_layout.addWidget(self.infobox)
 
         # Add the individual vertical layouts to the main horizontal layout
         graph_editor_frame_layout.addLayout(objectbox_layout)
         graph_editor_frame_layout.addLayout(graphboard_layout)
         graph_editor_frame_layout.addLayout(action_buttons_layout)
-        graph_editor_frame_layout.addLayout(info_frame_layout)
+        graph_editor_frame_layout.addLayout(infobox_layout)
 
         # Add the graph_editor_frame to the main_window's graph_editor_layout
         self.graph_editor_frame.setLayout(graph_editor_frame_layout)

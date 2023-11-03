@@ -28,8 +28,7 @@ class PictographView(QGraphicsView):
         self.init_grid()
         self.init_handlers_and_managers()
         self.init_staffs()
-        self.info_frame = None
-        
+        self.infobox = None
 
     def setup_view(self):
         self.setFixedSize(PICTOGRAPH_WIDTH, PICTOGRAPH_HEIGHT)
@@ -49,7 +48,6 @@ class PictographView(QGraphicsView):
         self.staff_handler.connect_pictograph_view(self)
         self.staff_handler.connect_grid(self.grid)
         self.staff_factory = self.staff_handler.factory
-
 
     def init_staffs(self):
         self.staff_handler.init_handpoints(self, self.grid)

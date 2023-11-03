@@ -16,9 +16,9 @@ from objects.arrow.arrow import Arrow
 
 
 class ArrowBoxView(QGraphicsView):
-    def __init__(self, main_widget, graphboard_view, info_frame, arrow_manager):
+    def __init__(self, main_widget, graphboard_view, infobox, arrow_manager):
         super().__init__()
-        self.info_frame = info_frame
+        self.infobox = infobox
         self.drag_preview = None
         self.drag_state = {}
         self.dragging = False
@@ -99,4 +99,3 @@ class ArrowBoxView(QGraphicsView):
 
     def mouseReleaseEvent(self, event):
         self.drag_manager.event_handler.handle_mouse_release(event)
-

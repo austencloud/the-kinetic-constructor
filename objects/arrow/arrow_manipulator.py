@@ -26,7 +26,9 @@ class ArrowManipulator:
 
     def update_arrow_turns(self, arrow):
         """Update the appearance of the arrow based on its turns."""
-        arrow.svg_file = f"resources/images/arrows/shift/{arrow.motion_type}_{arrow.turns}.svg"
+        arrow.svg_file = (
+            f"resources/images/arrows/shift/{arrow.motion_type}_{arrow.turns}.svg"
+        )
         arrow.initialize_svg_renderer(arrow.svg_file)
         arrow.update_appearance()
 
@@ -40,7 +42,7 @@ class ArrowManipulator:
             self.arrow_manager.graphboard_view
         )
         arrow.update_appearance()
-        self.arrow_manager.info_frame.update()
+        self.arrow_manager.infobox.update()
         arrow.view.staff_handler.update_graphboard_staffs(arrow.scene())
         arrow.view.info_handler.update()
 
@@ -223,7 +225,7 @@ class ArrowManipulator:
             arrow.update_appearance()
             arrow.view.info_handler.update()
 
-            self.arrow_manager.info_frame.update()
+            self.arrow_manager.infobox.update()
 
             self.update_arrow_and_staff(arrow, new_arrow_dict, new_staff_dict)
             self.finalize_manipulation(arrow)

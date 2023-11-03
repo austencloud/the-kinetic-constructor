@@ -1,5 +1,5 @@
 # import the missing modules
-from PyQt5.QtWidgets import QVBoxLayout, QGridLayout
+from PyQt6.QtWidgets import QVBoxLayout, QGridLayout
 from widgets.graph_editor.infobox.infobox_helpers import InfoboxHelpers
 from widgets.graph_editor.infobox.infobox_button_manager import InfoboxButtonManager
 import logging
@@ -21,12 +21,6 @@ class InfoboxSetup:
 
     def setup_dimensions(self):
         self.infobox.set_dimensions()
-
-    def setup_labels(self):
-        self.infobox.setup_labels()
-
-    def setup_layouts(self):
-        self.infobox.setup_layouts()
 
     def setup_widgets(self):
         # Pre-create widgets
@@ -58,8 +52,8 @@ class InfoboxSetup:
         self.helpers = InfoboxHelpers()
         self.setup_labels()
         self.setup_layouts()
-        self.infobox.setLayout(self.infobox.grid_layout)
-        self.infobox.set_dimensions()
+        self.infobox.setLayout(self.grid_layout)
+        self.set_dimensions()
         self.button_manager.setup_buttons()
         logging.debug("InfoFrame setup_ui_elements")
 
@@ -104,6 +98,6 @@ class InfoboxSetup:
         )
         
     def set_dimensions(self):
-        self.setFixedWidth(int(900 * GRAPHBOARD_SCALE))
-        self.setFixedHeight(int(900 * GRAPHBOARD_SCALE))
+        self.infobox.setFixedWidth(int(900 * GRAPHBOARD_SCALE))
+        self.infobox.setFixedHeight(int(900 * GRAPHBOARD_SCALE))
 

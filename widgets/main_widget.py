@@ -32,12 +32,12 @@ class MainWidget(QWidget):
 
         self.letter_buttons_frame = LetterButtonsFrame(self)
         self.graphboard_view = self.graph_editor_widget.graphboard_view
-        self.info_frame = self.graph_editor_widget.info_frame
+        self.infobox = self.graph_editor_widget.infobox
         self.propbox_view = self.graph_editor_widget.propbox_view
         self.arrowbox_view = self.graph_editor_widget.arrowbox_view
 
         self.pictograph_generator = PictographGenerator(
-            self, self.graphboard_view, self.info_frame
+            self, self.graphboard_view, self.infobox
         )
 
         self.drag_manager.initialize_dependencies(
@@ -46,16 +46,13 @@ class MainWidget(QWidget):
         self.layout_manager.configure_layouts()
         self.init_staffs()
         self.connect_objects()
-        
 
     def init_staffs(self):
-
         self.propbox_view.staff_handler.init_propbox_staffs(
             self.graph_editor_widget.propbox_view
         )
 
     def connect_objects(self):
-
         self.graphboard_view.staff_handler.info_handler = (
             self.graphboard_view.info_handler
         )
@@ -66,9 +63,9 @@ class MainWidget(QWidget):
         self.propbox_view.staff_handler.propbox_view = (
             self.graph_editor_widget.propbox_view
         )
-        self.graphboard_view.info_frame = self.graph_editor_widget.info_frame
+        self.graphboard_view.infobox = self.graph_editor_widget.infobox
         self.graphboard_view.generator = self.pictograph_generator
-        self.arrow_manager.info_frame = self.graph_editor_widget.info_frame
+        self.arrow_manager.infobox = self.graph_editor_widget.infobox
         self.arrow_manager.graphboard_view = self.graph_editor_widget.graphboard_view
         self.arrow_manager.manipulator.graphboard_scene = (
             self.graph_editor_widget.graphboard_view.graphboard_scene

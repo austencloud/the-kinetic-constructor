@@ -33,8 +33,8 @@ class Arrow(QGraphicsSvgItem):
     def initialize_app_attributes(self, view, dict):
         if view is not None:
             self.view = view
-            if self.view.info_frame is not None:
-                self.info_frame = view.info_frame
+            if self.view.infobox is not None:
+                self.infobox = view.infobox
             self.main_widget = view.main_widget
             self.arrow_manager = self.main_widget.arrow_manager
             self.arrow_manager.arrow = self
@@ -115,7 +115,7 @@ class Arrow(QGraphicsSvgItem):
             self.staff.handler.update_graphboard_staffs(self.view.graphboard_scene)
             self.view.graphboard_scene.update()
             self.view.info_handler.update()
-            
+
     def handle_pictograph_view_drag(self, event):
         new_pos = self.mapToScene(event.pos()) - self.drag_offset / 2
         self.setPos(new_pos)

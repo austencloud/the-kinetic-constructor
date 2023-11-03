@@ -5,8 +5,10 @@ from PyQt6.QtWidgets import QLabel
 
 
 class InfoboxUpdater:
-    def __init__(self, main_widget, graphboard_view):
+    def __init__(self, infobox_manager, main_widget, graphboard_view):
         self.graphboard_view = graphboard_view
+        self.infobox_manager = infobox_manager
+
         self.setup_variables(main_widget, graphboard_view)
 
     def update_type_and_position_info(self):
@@ -15,24 +17,24 @@ class InfoboxUpdater:
             current_letter_type,
         ) = self.graphboard_view.info_handler.determine_current_letter_and_type()
         if current_letter and current_letter_type:
-            start_end_positions = self.helpers.get_start_end_positions(
+            start_end_positions = self.infobox_manager.helpers.get_start_end_positions(
                 self.graphboard_view
             )
             if start_end_positions:
                 start_position, end_position = start_end_positions
 
             info_text = f"<center><h1>{current_letter_type}</h1><p style='font-size: 18px; font-family:'Cambria;''>{start_position} → {end_position}</center></p>"
-            self.type_position_label.setText(info_text)
+            self.infobox_manager.setup.type_position_label.setText(info_text)
         else:
             # Handle cases where the letter or type is not identified
-            self.type_position_label.setText("")
+            self.infobox_manager.setup.type_position_label.setText("")
 
     def update(self):
         blue_attributes = {}
         red_attributes = {}
 
-        blue_arrows = self.button_manager.get_arrows_by_color("blue")
-        red_arrows = self.button_manager.get_arrows_by_color("red")
+        blue_arrows = self.infobox_manager.button_manager.get_arrows_by_color("blue")
+        red_arrows = self.infobox_manager.button_manager.get_arrows_by_color("red")
 
         # Check if there are blue arrows on the board
         if blue_arrows:
