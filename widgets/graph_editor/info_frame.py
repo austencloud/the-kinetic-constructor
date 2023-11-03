@@ -126,15 +126,25 @@ class InfoFrame(QFrame):
 
     def construct_info_string_label(self, attributes):
         """Constructs a formatted string for arrow information with aligned values."""
-        info_strings = []
-        for key, value in attributes.items():
-            if value:  # Check if the value is not an empty string
-                # Make keys italic and values bold, and both black in color
-                info_strings.append(f"<span style='font-style: italic; color: black;'>{key}:</span> <span style='font-weight: bold; color: black;'>{value}</span><br>")
+        
+        # Extract the required values
+        motion_type = attributes.get("motion_type", "").capitalize()
+        start_location = attributes.get("start_location", "")
+        end_location = attributes.get("end_location", "")
+        turns = attributes.get("turns", "")
+        
+        # Construct the formatted string
+        info_string = f"""
+        <center>
+            <h1>{motion_type}</h1>
+            <p style='font-size: 20px;'><span style='font-weight: bold; font-style: italic;'>{start_location.capitalize()}</span> → <span style='font-weight: bold; font-style: italic;'>{end_location.capitalize()}</span></p>
+            <p style='font-size: 20px; font-weight: bold;'>Turns: {turns}</p>
+        </center>
+        """
+        
+        return QLabel(info_string)
 
-        # Combine all attribute strings and wrap them in a paragraph with a specific font size
-        return QLabel("<p style='font-size: 18px; text-align: left;'>" + "".join(info_strings) + "</p>")
-    
+
     def get_start_end_positions(self):
         positions = []
         arrow_items = []
