@@ -15,7 +15,7 @@ class ArrowSelector:
                 ghost_attributes_dict = {
                                 'color': deleted_arrow_attributes['color'],
                                 'motion_type': 'static',
-                                'rotation_direction': 'None',
+                                'rotation_direction': deleted_arrow_attributes['rotation_direction'],
                                 'quadrant': 'None',
                                 'start_location': deleted_arrow_attributes['end_location'],
                                 'end_location': deleted_arrow_attributes['end_location'],

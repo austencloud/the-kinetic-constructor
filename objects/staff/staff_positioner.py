@@ -64,10 +64,11 @@ class StaffPositioner:
 
         # BETA → BETA - G, H, I
         for start_location, arrows in arrows_grouped_by_start.items():
-            if len(arrows) > 1 and not all(
+            if len(arrows) > 1 and all(
                 arrow["start_location"] == arrow["end_location"] for arrow in arrows
             ):
                 self.reposition_beta_to_beta(scene, arrows, scale)
+
 
         # GAMMA → BETA - Y, Z
         if len(pro_or_anti_arrows) == 1 and len(static_arrows) == 1:
@@ -243,7 +244,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.staff_handler.staffs_on_board
+                    for staff in self.staff_handler.main_widget.graphboard_view.staffs
                     if staff.arrow.color == pro_or_anti_arrow["color"]
                 ),
                 direction,
@@ -251,7 +252,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.staff_handler.staffs_on_board
+                    for staff in self.staff_handler.main_widget.graphboard_view.staffs
                     if staff.arrow.color == static_arrow["color"]
                 ),
                 self.get_opposite_direction(direction),

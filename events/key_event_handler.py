@@ -34,9 +34,9 @@ class KeyEventHandler:
                 for item in selected_items:
                     if isinstance(item, Arrow):
                         arrow_selector.delete_arrow(item)
-                        staff_visibility_manager.delete_staff(item.staff)
+                        staff_visibility_manager.hide_staff(item.staff)
                     elif isinstance(item, Staff):
-                        item.view.staff_handler.visibility_manager.delete_staff(item)
+                        item.view.staff_handler.visibility_manager.hide_staff(item)
 
             elif selected_item and isinstance(selected_item, Arrow):
                 if event.key() == Qt.Key.Key_W:

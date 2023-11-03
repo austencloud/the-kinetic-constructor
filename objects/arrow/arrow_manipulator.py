@@ -191,7 +191,7 @@ class ArrowManipulator:
             elif arrow.motion_type == "pro":
                 new_motion_type = "anti"
             else:
-                print(f"Unknown motion type: {self.motion_type}")
+                print(f"Unknown motion type: {arrow.motion_type}")
                 continue
 
             if arrow.rotation_direction == "l":

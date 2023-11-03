@@ -21,9 +21,9 @@ class StaffVisibilityManager:
                         ghost_arrow.hide()
 
                 staff.hide()
-                self.arrow_manager.graphboard_view.scene().removeItem(staff.arrow)
+                staff.view.scene().removeItem(staff.arrow)
                 
-                self.arrow_manager.info_frame.update()
-                self.arrow_manager.graphboard_view.update_letter(self.arrow_manager.graphboard_view.info_handler.determine_current_letter_and_type()[0])
+                staff.view.arrow_manager.info_frame.update()
+                staff.view.update_letter(staff.view.info_handler.determine_current_letter_and_type()[0])
         else:
             print("No staffs selected")

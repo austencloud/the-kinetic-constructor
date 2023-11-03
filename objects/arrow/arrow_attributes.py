@@ -25,8 +25,12 @@ class ArrowAttributes:
         return {attr: getattr(arrow, attr) for attr in self.ARROW_ATTRIBUTES}
 
     def create_dict_from_arrow(self, arrow):
-        start_location, end_location = self.get_start_end_locations(arrow.motion_type, arrow.rotation_direction, arrow.quadrant)
-        
+        if arrow.motion_type in ['pro', 'anti']:
+            start_location, end_location = self.get_start_end_locations(arrow.motion_type, arrow.rotation_direction, arrow.quadrant)
+        elif arrow.motion_type == 'static':
+            start_location, end_location = arrow.start_location, arrow.end_location
+
+            
         arrow_dict = {
             'color': arrow.color,
             'motion_type': arrow.motion_type,

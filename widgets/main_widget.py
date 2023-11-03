@@ -55,7 +55,7 @@ class MainWidget(QWidget):
         )
 
     def connect_objects(self):
-        self.info_frame.connect_view(self.graph_editor_widget.graphboard_view)
+
         self.graphboard_view.staff_handler.info_handler = (
             self.graphboard_view.info_handler
         )
