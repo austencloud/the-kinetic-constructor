@@ -12,7 +12,7 @@ class InfoboxButtonFactory:
         self.graphboard_view = graphboard_view
 
     def create_and_set_button(self, button_name, properties):
-        """Create a button based on the provided properties and set it as a class attribute."""
+        """Create a button based on the provided properties and set it as an infobox class attribute."""
         if properties["icon"]:
             button = QPushButton(QIcon(properties["icon"]), properties.get("text", ""))
         else:
@@ -20,5 +20,4 @@ class InfoboxButtonFactory:
 
         button.clicked.connect(properties["callback"])
         button.setFixedSize(self.BUTTON_SIZE, self.BUTTON_SIZE)
-
-        setattr(self.infobox, f"{button_name}_button", button)
+        setattr(self.infobox, f"{button_name}_button", button) # sets each button to be a class attribute of the infobox

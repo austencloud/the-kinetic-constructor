@@ -10,7 +10,6 @@ class InfoboxUpdater:
         self.graphboard_view = graphboard_view
         self.infobox_manager = infobox_manager
         self.ui_setup = infobox_manager.ui_setup
-        self.setup_variables(main_widget, graphboard_view)
 
     def update_type_and_position_info(self):
         (
@@ -31,63 +30,27 @@ class InfoboxUpdater:
             self.infobox_manager.ui_setup.type_position_label.setText("")
 
     def update(self):
-        blue_attributes = {}
-        red_attributes = {}
-
-        blue_arrows = self.graphboard_view.get_arrows_by_color("blue")
-        red_arrows = self.graphboard_view.get_arrows_by_color("red")
-
-        # Check if there are blue arrows on the board
-        if blue_arrows:
-            blue_attributes = blue_arrows[0].attributes.create_dict_from_arrow(
-                blue_arrows[0]
-            )
-            self.update_info_widget_content(self.ui_setup.blue_info_widget, blue_attributes)
-            self.ui_setup.blue_info_widget.setVisible(True)
-        else:
-            self.ui_setup.blue_info_widget.setVisible(False)
-
-        # Check if there are red arrows on the board
-        if red_arrows:
-            red_attributes = red_arrows[0].attributes.create_dict_from_arrow(
-                red_arrows[0]
-            )
-            self.update_info_widget_content(self.ui_setup.red_info_widget, red_attributes)
-            self.ui_setup.red_info_widget.setVisible(True)
-        else:
-            self.ui_setup.red_info_widget.setVisible(False)
+        for color in ["blue", "red"]:
+            arrows = self.graphboard_view.get_arrows_by_color(color)
+            if arrows:
+                attributes = arrows[0].attributes.create_dict_from_arrow(arrows[0])
+                widget = getattr(self.ui_setup, f"{color}_info_widget")
+                self.update_info_widget_content(widget, attributes)
+                widget.setVisible(True)
+            else:
+                widget = getattr(self.ui_setup, f"{color}_info_widget")
+                widget.setVisible(False)
 
     def update_info_widget_content(self, widget, attributes):
         self.controller = self.infobox_manager.controller
-        
-        # If the widget doesn't have any children, initialize it
         if widget.layout().count() == 0:
             new_content = self.construct_info_string_label(attributes)
             widget.setLayout(new_content.layout())
             return
+        self.update_labels(widget, attributes)
+        self.update_buttons(attributes)
 
-        # Otherwise, update the existing content
-        motion_type_label = widget.findChild(QLabel, "motion_type_label")
-        start_end_label = widget.findChild(QLabel, "start_end_label")
-        turns_label = widget.findChild(QLabel, "turns_label")
-
-        # Extract the required values
-        motion_type = attributes.get("motion_type", "").capitalize()
-        start_location = attributes.get("start_location", "")
-        end_location = attributes.get("end_location", "")
-        turns = attributes.get("turns", "")
-
-        # Update labels
-        motion_type_label.setText(f"<h1>{motion_type}</h1>")
-        if motion_type in ["Pro", "Anti", "Static"]:
-            start_end_label.setText(
-                f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{start_location.capitalize()} → {end_location.capitalize()}</span>"
-            )
-        elif motion_type == "":
-            start_end_label.setText(f"")
-        turns_label.setText(f"<span style='font-size: 20px;'>{turns}</span>")
-
-        # Determine which buttons to use based on the color
+    def update_buttons(self, attributes):
         color = attributes.get("color", "")
         swap_motion_type_button = (
             self.infobox.swap_motion_type_blue_button
@@ -116,13 +79,25 @@ class InfoboxUpdater:
         decrement_turns_button.setVisible(True)
         increment_turns_button.setVisible(True)
 
-    def setup_variables(self, main_widget, graphboard_view):
-        self.remaining_staff = {}
-        self.previous_state = None
-        self.staff_handler = graphboard_view.staff_handler
-        self.letters = main_widget.letters
-        self.arrow_manager = main_widget.arrow_manager
-        self.arrow_manipulator = self.arrow_manager.manipulator
+    def update_labels(self, widget, attributes):
+        motion_type = attributes.get("motion_type", "").capitalize()
+        start_location = attributes.get("start_location", "")
+        end_location = attributes.get("end_location", "")
+        turns = attributes.get("turns", "")
+
+        # Update labels
+        motion_type_label = widget.findChild(QLabel, "motion_type_label")
+        start_end_label = widget.findChild(QLabel, "start_end_label")
+        turns_label = widget.findChild(QLabel, "turns_label")
+        
+        motion_type_label.setText(f"<h1>{motion_type}</h1>")
+        if motion_type in ["Pro", "Anti", "Static"]:
+            start_end_label.setText(
+                f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{start_location.capitalize()} → {end_location.capitalize()}</span>"
+            )
+        elif motion_type == "":
+            start_end_label.setText(f"")
+        turns_label.setText(f"<span style='font-size: 20px;'>{turns}</span>")
 
     def get_start_end_positions(self):
         positions = []

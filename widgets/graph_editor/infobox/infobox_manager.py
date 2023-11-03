@@ -9,13 +9,13 @@ from widgets.graph_editor.infobox.infobox_controller import InfoboxController
 
 class InfoboxManager:
     def __init__(self, infobox):
+        
         self.helpers = InfoboxHelpers(self)
         self.ui_setup = InfoboxUISetup(infobox, self)
         self.updater = InfoboxUpdater(
             infobox, self, infobox.main_widget, infobox.graphboard_view
         )
         self.button_factory = InfoboxButtonFactory(
-            infobox, self.updater.arrow_manipulator, self.updater.graphboard_view
+            infobox, infobox.graphboard_view.arrow_manager.manipulator, self.updater.graphboard_view
         )
-        
         self.controller = InfoboxController(infobox, self)

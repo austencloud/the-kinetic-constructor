@@ -22,7 +22,7 @@ class ActionButtonsFrame(QFrame):
             (icons_path + "update_locations.png", "Update Position", 
              lambda: self.main_widget.json_handler.update_optimal_locations_in_json(*self.main_widget.graphboard_view.get_current_arrow_positions())),
             (icons_path + "delete.png", "Delete", 
-             lambda: self.main_widget.arrow_manager.arrow_selector.delete_arrow(self.main_widget.graphboard_scene.selectedItems())),
+             lambda: self.main_widget.arrow_manager.selector.delete_arrow(self.main_widget.graphboard_scene.selectedItems())),
             (icons_path + "rotate_right.png", "Rotate Right",
              lambda: self.main_widget.arrow_manager.manipulator.rotate_arrow('right', self.main_widget.graphboard_scene.selectedItems())),
             (icons_path + "rotate_left.png", "Rotate Left",
