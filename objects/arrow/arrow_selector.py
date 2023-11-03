@@ -16,9 +16,7 @@ class ArrowSelector:
                 ghost_attributes_dict = {
                     "color": deleted_arrow_attributes["color"],
                     "motion_type": "static",
-                    "rotation_direction": deleted_arrow_attributes[
-                        "rotation_direction"
-                    ],
+                    "rotation_direction": "None",
                     "quadrant": "None",
                     "start_location": deleted_arrow_attributes["end_location"],
                     "end_location": deleted_arrow_attributes["end_location"],
@@ -37,6 +35,8 @@ class ArrowSelector:
                 graphboard_scene.addItem(ghost_arrow)
                 graphboard_scene.removeItem(arrow)
 
-                self.arrow_manager.infobox.update()
+                view = self.arrow_manager.graphboard_view
+                view.info_handler.update()
+
         else:
             print("No items selected")
