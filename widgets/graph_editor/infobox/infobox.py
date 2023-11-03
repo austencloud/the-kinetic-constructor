@@ -9,4 +9,4 @@ class InfoboxFrame(QFrame):
         self.manager = InfoboxManager(self)
         self.updater = self.manager.updater
         
-
+    

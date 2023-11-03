@@ -5,10 +5,11 @@ from PyQt6.QtWidgets import QLabel
 
 
 class InfoboxUpdater:
-    def __init__(self, infobox_manager, main_widget, graphboard_view):
+    def __init__(self, infobox, infobox_manager, main_widget, graphboard_view):
+        self.infobox = infobox
         self.graphboard_view = graphboard_view
         self.infobox_manager = infobox_manager
-
+        self.ui_setup = infobox_manager.ui_setup
         self.setup_variables(main_widget, graphboard_view)
 
     def update_type_and_position_info(self):
@@ -24,39 +25,41 @@ class InfoboxUpdater:
                 start_position, end_position = start_end_positions
 
             info_text = f"<center><h1>{current_letter_type}</h1><p style='font-size: 18px; font-family:'Cambria;''>{start_position} → {end_position}</center></p>"
-            self.infobox_manager.setup.type_position_label.setText(info_text)
+            self.infobox_manager.ui_setup.type_position_label.setText(info_text)
         else:
             # Handle cases where the letter or type is not identified
-            self.infobox_manager.setup.type_position_label.setText("")
+            self.infobox_manager.ui_setup.type_position_label.setText("")
 
     def update(self):
         blue_attributes = {}
         red_attributes = {}
 
-        blue_arrows = self.infobox_manager.button_manager.get_arrows_by_color("blue")
-        red_arrows = self.infobox_manager.button_manager.get_arrows_by_color("red")
+        blue_arrows = self.graphboard_view.get_arrows_by_color("blue")
+        red_arrows = self.graphboard_view.get_arrows_by_color("red")
 
         # Check if there are blue arrows on the board
         if blue_arrows:
             blue_attributes = blue_arrows[0].attributes.create_dict_from_arrow(
                 blue_arrows[0]
             )
-            self.update_info_widget_content(self.blue_info_widget, blue_attributes)
-            self.blue_info_widget.setVisible(True)
+            self.update_info_widget_content(self.ui_setup.blue_info_widget, blue_attributes)
+            self.ui_setup.blue_info_widget.setVisible(True)
         else:
-            self.blue_info_widget.setVisible(False)
+            self.ui_setup.blue_info_widget.setVisible(False)
 
         # Check if there are red arrows on the board
         if red_arrows:
             red_attributes = red_arrows[0].attributes.create_dict_from_arrow(
                 red_arrows[0]
             )
-            self.update_info_widget_content(self.red_info_widget, red_attributes)
-            self.red_info_widget.setVisible(True)
+            self.update_info_widget_content(self.ui_setup.red_info_widget, red_attributes)
+            self.ui_setup.red_info_widget.setVisible(True)
         else:
-            self.red_info_widget.setVisible(False)
+            self.ui_setup.red_info_widget.setVisible(False)
 
     def update_info_widget_content(self, widget, attributes):
+        self.controller = self.infobox_manager.controller
+        
         # If the widget doesn't have any children, initialize it
         if widget.layout().count() == 0:
             new_content = self.construct_info_string_label(attributes)
@@ -87,24 +90,24 @@ class InfoboxUpdater:
         # Determine which buttons to use based on the color
         color = attributes.get("color", "")
         swap_motion_type_button = (
-            self.swap_motion_type_blue_button
+            self.infobox.swap_motion_type_blue_button
             if color == "blue"
-            else self.swap_motion_type_red_button
+            else self.infobox.swap_motion_type_red_button
         )
         swap_start_end_button = (
-            self.swap_start_end_blue_button
+            self.infobox.swap_start_end_blue_button
             if color == "blue"
-            else self.swap_start_end_red_button
+            else self.infobox.swap_start_end_red_button
         )
         decrement_turns_button = (
-            self.decrement_turns_blue_button
+            self.infobox.decrement_turns_blue_button
             if color == "blue"
-            else self.decrement_turns_red_button
+            else self.infobox.decrement_turns_red_button
         )
         increment_turns_button = (
-            self.increment_turns_blue_button
+            self.infobox.increment_turns_blue_button
             if color == "blue"
-            else self.increment_turns_red_button
+            else self.infobox.increment_turns_red_button
         )
 
         # Make the buttons visible
