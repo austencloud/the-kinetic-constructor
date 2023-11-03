@@ -161,7 +161,7 @@ class ArrowManipulator:
 
             arrow.update_appearance()
 
-            new_arrow = {
+            new_arrow_dict = {
                 "color": arrow.color,
                 "motion_type": arrow.motion_type,
                 "quadrant": arrow.quadrant,
@@ -172,7 +172,7 @@ class ArrowManipulator:
             }
 
             arrow.staff.location = new_end_location
-            arrow.attributes.update_attributes(arrow, new_arrow)
+            arrow.attributes.update_attributes(arrow, new_arrow_dict)
             self.finalize_manipulation(arrow)
             self.arrow_manager.positioner.update_arrow_position(arrow.view)
             arrow.update()
