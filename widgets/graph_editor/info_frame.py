@@ -71,12 +71,10 @@ class InfoFrame(QFrame):
     def update_type_and_position_info(self):
         current_letter, current_letter_type = self.graphboard_view.info_handler.determine_current_letter_and_type()
         if current_letter and current_letter_type:
-            start_end_positions = self.get_start_end_locations()
+            start_end_positions = self.get_start_end_positions()
             if start_end_positions:
                 start_position, end_position = start_end_positions
 
-
-            # Now that you have new type, letter, and position information, you can update the relevant label.
             info_text = f"<center><h2>{current_letter_type}</h2><p style='font-size: 18px; font-family:'Cambria;''>{start_position} → {end_position}</center></p>"
             self.type_position_label.setText(info_text)
         else:
@@ -90,8 +88,7 @@ class InfoFrame(QFrame):
         self.letter = self.graphboard_view.info_handler.determine_current_letter_and_type()[0]
         if self.letter is not None:
             return self.letter
-    
-   
+
     def update(self):
         self.remaining_staff = {}
         blue_attributes = {}
@@ -100,12 +97,11 @@ class InfoFrame(QFrame):
         red_text = ""
         
         for arrow in [item for item in self.graphboard_view.items() if isinstance(item, Arrow)]:
-            attributes_dict = blue_attributes if arrow.color == 'blue' else red_attributes if arrow.color == 'red' else None
-
-            if arrow.quadrant in start_end_location_mapping:
-                if arrow.rotation_direction in start_end_location_mapping[arrow.quadrant]:
-                    if arrow.motion_type in start_end_location_mapping[arrow.quadrant][arrow.rotation_direction]:
-                        arrow.start_location, arrow.end_location = start_end_location_mapping[arrow.quadrant][arrow.rotation_direction][arrow.motion_type]
+            arrow_dict = arrow.attributes.create_dict_from_arrow(arrow)
+            if arrow.color == 'blue':
+                blue_attributes = arrow_dict
+            else:
+                red_attributes = arrow_dict
 
         blue_info_label = self.construct_info_string_label(blue_attributes)
         red_info_label = self.construct_info_string_label(red_attributes)
@@ -139,7 +135,7 @@ class InfoFrame(QFrame):
         # Combine all attribute strings and wrap them in a paragraph with a specific font size
         return QLabel("<p style='font-size: 18px; text-align: left;'>" + "".join(info_strings) + "</p>")
     
-    def get_start_end_locations(self):
+    def get_start_end_positions(self):
         positions = []
         arrow_items = []
         counter = 1
@@ -176,6 +172,6 @@ class InfoFrame(QFrame):
         if positions is not None:
             return positions
         else:
-            print("no positions returned by get_start_end_locations")
+            print("no positions returned by get_start_end_positions")
             return None
 
