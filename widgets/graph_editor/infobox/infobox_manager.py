@@ -6,7 +6,7 @@ from widgets.graph_editor.infobox.infobox_ui_setup import InfoboxUISetup
 class InfoboxManager:
     def __init__(self, infobox):
         self.infobox = infobox
-        self.helpers = InfoboxHelpers(self)
+        self.helpers = InfoboxHelpers(infobox, self)
         self.updater = InfoboxUpdater(
             infobox, self, infobox.main_widget, infobox.graphboard_view
         )

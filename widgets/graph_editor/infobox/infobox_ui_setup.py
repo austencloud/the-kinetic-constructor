@@ -100,76 +100,108 @@ class InfoboxUISetup:
             button = getattr(self.infobox, f"{button_name}_button")
             self.button_layout.addWidget(button)  # Add each button to the layout
 
-        
     def setup_widgets(self):
-        blue_attributes = self.arrow_manager.attributes.get_graphboard_arrow_attributes_by_color("blue", self.graphboard_view)
-        red_attributes = self.arrow_manager.attributes.get_graphboard_arrow_attributes_by_color("red", self.graphboard_view)
-        
-        self.blue_info_widget = self.helpers.construct_info_widget(blue_attributes)
-        self.red_info_widget = self.helpers.construct_info_widget(red_attributes)
+        self.blue_info_widget = QFrame()
+        self.blue_info_widget.setFrameShape(QFrame.Shape.Box)
+        self.blue_info_widget.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.red_info_widget = QFrame()
+        self.red_info_widget.setFrameShape(QFrame.Shape.Box)
+        self.red_info_widget.setFrameShadow(QFrame.Shadow.Sunken)
+
         self.blue_info_widget.setVisible(True)
         self.red_info_widget.setVisible(True)
 
-
-
     def add_widgets_to_layouts(self):
+        self.setup_info_layouts()
+        self.setup_horizontal_layouts()
+        self.add_info_widgets_to_layouts()
+
+    def setup_info_layouts(self):
         self.blue_info_layout = QVBoxLayout()
         self.red_info_layout = QVBoxLayout()
-
+        self.blue_info_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.red_info_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.blue_info_layout.addWidget(self.blue_details_label)
         self.red_info_layout.addWidget(self.red_details_label)
 
+    def setup_horizontal_layouts(self):
+        self.setup_color_horizontal_layout("blue")
+        self.setup_color_horizontal_layout("red")
+
+    def setup_color_horizontal_layout(self, color):
+        horizontal_layout = QHBoxLayout()
+        buttons_layout = QVBoxLayout()
+
+        for button_name in self.button_properties.keys():
+            if color in button_name and "turns" not in button_name:  # Exclude the turns buttons
+                button = getattr(self.infobox, f"{button_name}_button")
+                buttons_layout.addWidget(button)
+
+        # Pass the color as an additional argument to the construct_info_widget method
+        info_widget_inner = self.helpers.construct_info_widget(
+            self.arrow_manager.attributes.get_graphboard_arrow_attributes_by_color(color, self.graphboard_view),
+            color  # Pass the color here
+        )
+
+        horizontal_layout.addLayout(buttons_layout)
+        horizontal_layout.addWidget(info_widget_inner)
+
+        if color == "blue":
+            self.blue_info_widget.setLayout(horizontal_layout)
+        else:
+            self.red_info_widget.setLayout(horizontal_layout)
+
+    def add_info_widgets_to_layouts(self):
         self.blue_info_layout.addWidget(self.blue_info_widget)
         self.red_info_layout.addWidget(self.red_info_widget)
-
         self.attributes_layouts["blue"].addLayout(self.blue_info_layout)
         self.attributes_layouts["red"].addLayout(self.red_info_layout)
 
-
     def setup_labels(self):
-        self.blue_details_label = self.helpers.create_label("Left", "blue")
-        self.red_details_label = self.helpers.create_label("Right", "red")
+        self.setup_color_label("Left", "blue")
+        self.setup_color_label("Right", "red")
         self.type_position_label = self.helpers.create_label()
+
+    def setup_color_label(self, text, color):
+        label = self.helpers.create_label(text, color)
+        label.setAlignment(Qt.AlignmentFlag.AlignTop)
+        setattr(self, f"{color}_details_label", label)
 
     def setup_layouts(self):
         self.master_layout = QVBoxLayout()
-        self.attributes_layouts = {}  # Dictionary to store layouts for each color
-        
+        self.attributes_layouts = {}
+        self.setup_top_layout()
+        self.setup_bottom_layout()
+
+    def setup_top_layout(self):
         top_layout = QHBoxLayout()
         for color in ["blue", "red"]:
-            column_frame = QFrame()
-            column_frame.setFrameShape(QFrame.Shape.Box)
-            column_frame.setFrameShadow(QFrame.Shadow.Sunken)
-            
-            column_layout = QVBoxLayout()
-            header_label = getattr(self, f"{color}_details_label")
-            column_layout.addWidget(header_label)
-            
-            attributes_buttons_layout = QHBoxLayout()
-            
-            self.attributes_layouts[color] = QVBoxLayout()  # Define layout for each color
-            self.attributes_layouts[color].setAlignment(Qt.AlignmentFlag.AlignCenter)
-            
-            buttons_layout = QVBoxLayout()
-            for button_name in self.button_properties.keys():
-                if color in button_name:
-                    button = getattr(self.infobox, f"{button_name}_button")
-                    buttons_layout.addWidget(button)
-            
-            attributes_buttons_layout.addLayout(buttons_layout)
-            attributes_buttons_layout.addLayout(self.attributes_layouts[color])  # Use the layout from the dictionary
-            
-            column_layout.addLayout(attributes_buttons_layout)
-            column_frame.setLayout(column_layout)
-            top_layout.addWidget(column_frame)
-        
+            self.setup_column_layout(color, top_layout)
+        self.master_layout.addLayout(top_layout)
+
+    def setup_column_layout(self, color, top_layout):
+        column_frame = QFrame()
+        column_frame.setFrameShape(QFrame.Shape.Box)
+        column_frame.setFrameShadow(QFrame.Shadow.Sunken)
+        column_layout = QVBoxLayout()
+        header_label = getattr(self, f"{color}_details_label")
+        header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        column_layout.addWidget(header_label)
+        attributes_buttons_layout = QHBoxLayout()
+        self.attributes_layouts[color] = QVBoxLayout()
+        self.attributes_layouts[color].setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.setup_button_layout()
+        attributes_buttons_layout.addLayout(self.button_layout)
+        attributes_buttons_layout.addLayout(self.attributes_layouts[color])
+        column_layout.addLayout(attributes_buttons_layout)
+        column_frame.setLayout(column_layout)
+        top_layout.addWidget(column_frame)
+
+    def setup_bottom_layout(self):
         bottom_layout = QHBoxLayout()
         bottom_layout.addWidget(self.type_position_label)
-        
-        self.master_layout.addLayout(top_layout)
         self.master_layout.addLayout(bottom_layout)
-        
-
 
         
     def set_dimensions(self):

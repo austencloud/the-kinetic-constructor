@@ -2,6 +2,8 @@ import logging
 from objects.arrow.arrow import Arrow
 from data.positions_map import positions_map
 from PyQt6.QtWidgets import QLabel
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtCore import Qt
 
 
 class InfoboxUpdater:
@@ -9,7 +11,6 @@ class InfoboxUpdater:
         self.infobox = infobox
         self.graphboard_view = graphboard_view
         self.infobox_manager = infobox_manager
-        
 
     def update_type_and_position_info(self):
         (
@@ -71,7 +72,6 @@ class InfoboxUpdater:
             else self.infobox.increment_turns_red_button
         )
 
-        # Make the buttons visible
         swap_motion_type_button.setVisible(True)
         swap_start_end_button.setVisible(True)
         decrement_turns_button.setVisible(True)
@@ -79,16 +79,41 @@ class InfoboxUpdater:
 
     def update_labels(self, widget, attributes):
         motion_type = attributes.get("motion_type", "").capitalize()
+        rotation_direction = attributes.get("rotation_direction", "")
         start_location = attributes.get("start_location", "")
         end_location = attributes.get("end_location", "")
         turns = attributes.get("turns", "")
 
         # Update labels
         motion_type_label = widget.findChild(QLabel, "motion_type_label")
+        rotation_direction_label = widget.findChild(QLabel, "rotation_direction_label")
         start_end_label = widget.findChild(QLabel, "start_end_label")
         turns_label = widget.findChild(QLabel, "turns_label")
-        
+
         motion_type_label.setText(f"<h1>{motion_type}</h1>")
+
+        # Update rotation_direction_label based on rotation_direction value
+        if rotation_direction == "r":
+            pixmap = QPixmap("resources/images/icons/clockwise.png")
+            pixmap = pixmap.scaled(
+                40,
+                40,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation,
+            )
+            rotation_direction_label.setPixmap(pixmap)
+        elif rotation_direction == "l":
+            pixmap = QPixmap("resources/images/icons/anti-clockwise.png")
+            pixmap = pixmap.scaled(
+                40,
+                40,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation,
+            )
+            rotation_direction_label.setPixmap(pixmap)
+        else:
+            rotation_direction_label.setText(f"<h1>{rotation_direction}</h1>")
+
         if motion_type in ["Pro", "Anti", "Static"]:
             start_end_label.setText(
                 f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{start_location.capitalize()} → {end_location.capitalize()}</span>"
