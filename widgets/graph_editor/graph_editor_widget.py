@@ -3,7 +3,7 @@ from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
 from widgets.graph_editor.arrowbox.arrowbox_view import ArrowBoxView
 
 from widgets.graph_editor.propbox.propbox_view import PropBoxView
-from widgets.graph_editor.infobox.infobox import InfoboxFrame
+from widgets.graph_editor.infobox.infobox import Infobox
 from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
 from widgets.graph_editor.action_buttons_frame import ActionButtonsFrame
@@ -28,14 +28,19 @@ class GraphEditorWidget(QWidget):
         self.graph_editor_frame.setPalette(palette)
 
         graph_editor_frame_layout = QHBoxLayout(self.graph_editor_frame)
-        
+
         objectbox_layout = QVBoxLayout()
         graphboard_layout = QVBoxLayout()
         action_buttons_layout = QVBoxLayout()
         infobox_layout = QVBoxLayout()
 
         self.graphboard_view = GraphboardView(main_widget, self)
-        self.infobox = InfoboxFrame(main_widget, self.graphboard_view, self.arrow_manipulator, self.arrow_attributes)
+        self.infobox = Infobox(
+            main_widget,
+            self.graphboard_view,
+            self.arrow_manipulator,
+            self.arrow_attributes,
+        )
         self.infobox.init_manager()
         self.propbox_view = PropBoxView(main_widget)
         self.arrowbox_view = ArrowBoxView(
@@ -44,12 +49,18 @@ class GraphEditorWidget(QWidget):
             self.infobox,
             self.arrow_manager,
         )
-        self.action_buttons_frame = ActionButtonsFrame(self.graphboard_view, self.json_handler, self.arrow_manipulator, self.arrow_selector, self.sequence_view)
+        self.action_buttons_frame = ActionButtonsFrame(
+            self.graphboard_view,
+            self.json_handler,
+            self.arrow_manipulator,
+            self.arrow_selector,
+            self.sequence_view,
+        )
 
         objectbox_layout.addWidget(self.arrowbox_view)
         objectbox_layout.addWidget(self.propbox_view)
         graphboard_layout.addWidget(self.graphboard_view)
-        action_buttons_layout.addWidget(self.action_buttons_frame) 
+        action_buttons_layout.addWidget(self.action_buttons_frame)
         infobox_layout.addWidget(self.infobox)
 
         graph_editor_frame_layout.addLayout(objectbox_layout)

@@ -4,12 +4,11 @@ from settings.string_constants import *
 
 
 class InfoboxLayouts:
-    def __init__(self, infobox, infobox_manager, graphboard_view, arrow_attributes):
+    def __init__(self, infobox, graphboard_view, arrow_attributes):
         self.infobox = infobox
-        self.infobox_manager = infobox_manager
         self.graphboard_view = graphboard_view
-        self.labels = infobox_manager.labels
-        self.widgets = infobox_manager.widgets
+        self.labels = infobox.labels
+        self.widgets = infobox.widgets
         self.arrow_attributes = arrow_attributes
 
     def define_info_layouts(

@@ -1,10 +1,9 @@
 from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QFrame
 
 class InfoboxWidgets():
-    def __init__(self, infobox, info_manager):
+    def __init__(self, infobox):
         self.infobox = infobox
-        self.info_manager = info_manager
-        self.labels = info_manager.labels
+        self.labels = infobox.labels
         
         
     def setup_widgets(self):
@@ -20,7 +19,7 @@ class InfoboxWidgets():
         self.red_attributes_widget.setVisible(True)
 
     def construct_attributes_widget(self, attributes, color):
-        self.buttons = self.info_manager.buttons
+        self.buttons = self.infobox.buttons
         
         (
             motion_type_label,
@@ -52,7 +51,7 @@ class InfoboxWidgets():
         return info_widget
     
     def update_info_widget_content(self, widget, attributes):
-        self.buttons = self.info_manager.buttons
+        self.buttons = self.infobox.buttons
         if widget.layout().count() == 0:
             new_content = self.labels.construct_info_string_label(attributes)
             widget.setLayout(new_content.layout())

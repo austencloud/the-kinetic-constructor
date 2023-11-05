@@ -8,9 +8,8 @@ from settings.string_constants import *
 
 
 class InfoboxLabels:
-    def __init__(self, infobox, infobox_manager, graphboard_view):
+    def __init__(self, infobox, graphboard_view):
         self.infobox = infobox
-        self.infobox_manager = infobox_manager
         self.graphboard_view = graphboard_view
 
     ### LABEL CREATION ###
@@ -37,7 +36,7 @@ class InfoboxLabels:
 
         attribute_labels = {}
         
-        
+
         
         attribute_labels[motion_type_label.objectName()] = motion_type_label
         attribute_labels[rotation_direction_label.objectName()] = rotation_direction_label

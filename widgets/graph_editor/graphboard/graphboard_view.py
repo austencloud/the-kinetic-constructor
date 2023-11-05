@@ -22,12 +22,13 @@ from widgets.graph_editor.graphboard.graphboard_info_handler import (
 from widgets.graph_editor.graphboard.graphboard_context_menu_handler import (
     GraphboardContextMenuHandler,
 )
-from events.drag.drag_manager import DragManager
 from utilities.export_handler import ExportHandler
 from data.letter_types import letter_types
 
 
 class GraphboardView(QGraphicsView):
+    LAYER2_POINTS = ["NE_layer2_point", "SE_layer2_point", "SW_layer2_point", "NW_layer2_point"]
+
     def __init__(self, main_widget, graph_editor_widget):
         super().__init__(graph_editor_widget)
         self.init_ui()
@@ -64,7 +65,6 @@ class GraphboardView(QGraphicsView):
         self.scene().setSceneRect(0, 0, int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
         self.VERTICAL_OFFSET = (self.height() - self.width()) / 2
         self.view_scale = GRAPHBOARD_SCALE
-        # Add the grid and letter item to the scene
         self.graphboard_scene.addItem(self.grid)
 
     def init_managers(self, main_widget):
@@ -104,16 +104,11 @@ class GraphboardView(QGraphicsView):
         self.grid.setTransform(transform)
 
     def init_letter_renderers(self, letters):
-        self.letter_renderers = {}
-        for letter in letters:
-            for letter_type, letters in letter_types.items():
-                if letter in letters:
-                    break
-            self.letter_renderers[letter] = QSvgRenderer(
-                f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
-            )
+        self.letter_renderers = {
+            letter: QSvgRenderer(f"{LETTER_SVG_DIR}/{self.get_letter_type(letter)}/{letter}.svg")
+            for letter in letters
+        }
         self.letter_item = QGraphicsSvgItem()
-
         self.main_widget.graphboard_scene = self.graphboard_scene
         self.graphboard_scene.addItem(self.letter_item)
 
@@ -173,7 +168,6 @@ class GraphboardView(QGraphicsView):
         return state
 
     def get_quadrant_center(self, quadrant):
-        # Calculate the layer 2 points on the graphboard based on the grid
         graphboard_layer2_points = {}
         for point_name in [
             "NE_layer2_point",
@@ -184,9 +178,8 @@ class GraphboardView(QGraphicsView):
             cx, cy = self.grid.get_circle_coordinates(point_name)
             graphboard_layer2_points[point_name] = QPointF(
                 cx, cy
-            )  # Subtract VERTICAL_OFFSET from y-coordinate
+            ) 
 
-        # Map the quadrants to the corresponding layer 2 points
         centers = {
             NE: graphboard_layer2_points["NE_layer2_point"],
             SE: graphboard_layer2_points["SE_layer2_point"],
@@ -196,7 +189,7 @@ class GraphboardView(QGraphicsView):
 
         return centers.get(
             quadrant, QPointF(0, 0)
-        )  # Subtract VERTICAL_OFFSET from default y-coordinate
+        )
 
     def get_current_arrow_positions(self):
         red_position = None
