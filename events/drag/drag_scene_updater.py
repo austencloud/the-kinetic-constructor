@@ -15,9 +15,7 @@ class DragSceneUpdater:
     def cleanup_and_update_scene(self):
         self.event_handler = self.drag_manager.event_handler
         self.event_handler.drag_preview.deleteLater()
-        self.event_handler.drag_preview = None 
-
-        
+        self.event_handler.drag_preview = None
 
         self.drag_manager.staff_handler.update_graphboard_staffs(
             self.drag_manager.graphboard_scene
