@@ -48,18 +48,13 @@ class KeyEventHandler:
                     arrow_manipulator.move_arrow_quadrant_wasd('down', selected_item)
                 elif event.key() == Qt.Key.Key_D:
                     arrow_manipulator.move_arrow_quadrant_wasd('right', selected_item)
-                elif event.key() == Qt.Key.Key_E:
+                elif event.key() == Qt.Key.Key_R:
                     arrow_manipulator.mirror_arrow(selected_items, selected_arrow_color)
-                elif event.key() == Qt.Key.Key_Q:
-                    arrow_manipulator.swap_motion_type(selected_items, selected_arrow_color)
                 elif event.key() == Qt.Key.Key_F:
+                    arrow_manipulator.swap_motion_type(selected_items, selected_arrow_color)
+                elif event.key() == Qt.Key.Key_Enter:
                     sequence_view.add_to_sequence(graphboard_view)
-                elif event.key() == Qt.Key.Key_QuoteLeft or event.key() == Qt.Key.Key_0:
-                    arrow_manipulator.set_turns(selected_items, selected_arrow_color, 0)
-                elif event.key() == Qt.Key.Key_1:
-                    arrow_manipulator.set_turns(selected_items, selected_arrow_color, 1)
-                elif event.key() == Qt.Key.Key_2:
-                    arrow_manipulator.set_turns(selected_items, selected_arrow_color, 2)
-
-
-                # When the left 
+                elif event.key() == Qt.Key.Key_Q:
+                    arrow_manipulator.decrement_turns(selected_items, selected_arrow_color)
+                elif event.key() == Qt.Key.Key_E:
+                    arrow_manipulator.increment_turns(selected_items, selected_arrow_color)
