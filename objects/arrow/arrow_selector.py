@@ -1,5 +1,5 @@
 from objects.arrow.arrow import Arrow
-from resources.constants import GRAPHBOARD_SCALE
+from resources.constants.constants import GRAPHBOARD_SCALE
 
 
 class ArrowSelector:
@@ -28,7 +28,7 @@ class ArrowSelector:
         view = self.arrow_manager.graphboard_view
         deleted_arrow_attributes = arrow.attributes.get_attributes(arrow)
         ghost_attributes_dict = {
-            "color": deleted_arrow_attributes["color"],
+            COLOR: deleted_arrow_attributes[COLOR],
             "motion_type": STATIC,
             "rotation_direction": "None",
             "quadrant": "None",

@@ -6,15 +6,15 @@ from PyQt6.QtWidgets import QGraphicsView, QGraphicsScene, QSizePolicy, QFrame
 from objects.staff.staff import Staff
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
-from resources.constants import (
+from resources.constants.constants import (
     GRAPHBOARD_SCALE,
     GRAPHBOARD_WIDTH,
     GRAPHBOARD_HEIGHT,
     VERTICAL_OFFSET,
-    NORTHEAST,
-    SOUTHEAST,
-    SOUTHWEST,
-    NORTHWEST,
+    NE,
+    SE,
+    SW,
+    NW,
 )
 from widgets.graph_editor.graphboard.graphboard_staff_handler import (
     GraphboardStaffHandler,
@@ -145,14 +145,14 @@ class GraphboardView(QGraphicsView):
 
         if adjusted_mouse_y < scene_V_center:
             if mouse_pos.x() < scene_H_center:
-                quadrant = NORTHWEST
+                quadrant = NW
             else:
-                quadrant = NORTHEAST
+                quadrant = NE
         else:
             if mouse_pos.x() < scene_H_center:
-                quadrant = SOUTHWEST
+                quadrant = SW
             else:
-                quadrant = SOUTHEAST
+                quadrant = SE
 
         return quadrant
 
@@ -164,7 +164,7 @@ class GraphboardView(QGraphicsView):
             if isinstance(item, Arrow):
                 state["arrows"].append(
                     {
-                        "color": item.color,
+                        COLOR: item.color,
                         "motion_type": item.motion_type,
                         "rotation_direction": item.rotation_direction,
                         "quadrant": item.quadrant,
@@ -191,10 +191,10 @@ class GraphboardView(QGraphicsView):
 
         # Map the quadrants to the corresponding layer 2 points
         centers = {
-            NORTHEAST: graphboard_layer2_points["NE_layer2_point"],
-            SOUTHEAST: graphboard_layer2_points["SE_layer2_point"],
-            SOUTHWEST: graphboard_layer2_points["SW_layer2_point"],
-            NORTHWEST: graphboard_layer2_points["NW_layer2_point"],
+            NE: graphboard_layer2_points["NE_layer2_point"],
+            SE: graphboard_layer2_points["SE_layer2_point"],
+            SW: graphboard_layer2_points["SW_layer2_point"],
+            NW: graphboard_layer2_points["NW_layer2_point"],
         }
 
         return centers.get(

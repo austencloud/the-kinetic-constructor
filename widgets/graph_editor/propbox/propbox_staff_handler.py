@@ -2,7 +2,8 @@ from PyQt6.QtCore import QPointF
 from objects.staff.staff import Staff
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.staff.staff_handler import StaffManager
-from resources.constants import RED, BLUE
+from resources.constants.string_constants import COLOR, RED, BLUE
+
 
 class PropboxStaffHandler(StaffManager):
     def __init__(self, main_widget):
@@ -20,13 +21,13 @@ class PropboxStaffHandler(StaffManager):
         }
 
         red_propbox_staff = {
-            "color": RED,
+            COLOR: RED,
             "location": "e",
             "layer": 1,
         }
 
         blue_propbox_staff = {
-            "color": BLUE,
+            COLOR: BLUE,
             "location": "n",
             "layer": 1,
         }

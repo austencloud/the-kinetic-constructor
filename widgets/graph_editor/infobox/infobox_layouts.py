@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QHBoxLayout, QWidget, QVBoxLayout, QFrame
-from resources.constants import BLUE, RED
+from resources.constants.constants import BLUE, RED
 
 class InfoboxLayouts:
     def __init__(self, infobox, infobox_manager, graphboard_view, arrow_attributes):

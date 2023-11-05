@@ -10,19 +10,13 @@ from utilities.json_handler import JsonHandler
 from widgets.graph_editor.graphboard.graphboard_info_handler import (
     GraphboardInfoHandler,
 )
-from resources.constants import (
+from resources.constants.constants import (
     PICTOGRAPH_WIDTH,
     PICTOGRAPH_HEIGHT,
     PICTOGRAPH_SCALE,
     PICTOGRAPH_GRID_PADDING,
-    PRO,
-    ANTI,
-    BLUE,
-    RED,
-    STATIC,
-    
 )
-
+from resources.constants.string_constants import COLOR, RED, BLUE, STATIC, PRO, ANTI
 
 class PictographView(QGraphicsView):
     def __init__(self, main_widget):
@@ -89,7 +83,7 @@ class PictographView(QGraphicsView):
             if isinstance(item, Arrow):
                 state["arrows"].append(
                     {
-                        "color": item.color,
+                        COLOR: item.color,
                         "motion_type": item.motion_type,
                         "rotation_direction": item.rotation_direction,
                         "quadrant": item.quadrant,
@@ -145,7 +139,7 @@ class PictographView(QGraphicsView):
             if all(
                 key in arrow_dict
                 for key in [
-                    "color",
+                    COLOR,
                     "motion_type",
                     "rotation_direction",
                     "quadrant",
@@ -235,9 +229,9 @@ class PictographView(QGraphicsView):
                 pos.setY(pos.y() + MAIN_GRAPHBOARD_V_OFFSET)
                 # Reverse the buffer
                 pos = pos + QPointF(MAIN_GRAPHBOARD_BUFFER, MAIN_GRAPHBOARD_BUFFER)
-                if item.get_attributes()["color"] == RED:
+                if item.get_attributes()[COLOR] == RED:
                     red_position = pos
-                elif item.get_attributes()["color"] == BLUE:
+                elif item.get_attributes()[COLOR] == BLUE:
                     blue_position = pos
         self.json_handler.update_optimal_locations_in_json(red_position, blue_position)
 

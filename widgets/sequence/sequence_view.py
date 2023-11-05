@@ -9,7 +9,7 @@ from objects.staff.staff import Staff
 from objects.grid import Grid
 from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
 from objects.pictograph.pictograph_image import PictographImage
-from resources.constants import (
+from resources.constants.constants import (
     DEFAULT_GRAPHBOARD_WIDTH,
     DEFAULT_GRAPHBOARD_HEIGHT,
     PICTOGRAPH_SCALE,
@@ -112,14 +112,14 @@ class SequenceView(QGraphicsView):
             arrow = Arrow(arrow_state["svg_file"])
             arrow.setPos(arrow_state["position"])
             arrow.setRotation(arrow_state["rotation"])
-            arrow.color = arrow_state["color"]
+            arrow.color = arrow_state[COLOR]
             arrow.quadrant = arrow_state["quadrant"]
             graphboard_view.scene().addItem(arrow)
 
         for staff_state in state["staffs"]:
             staff = Staff(staff_state["svg_file"])
             staff.setPos(staff_state["position"])
-            staff.color = staff_state["color"]
+            staff.color = staff_state[COLOR]
             graphboard_view.scene().addItem(staff)
 
         if state["grid"]:

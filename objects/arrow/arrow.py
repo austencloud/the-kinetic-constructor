@@ -5,7 +5,7 @@ from PyQt6.QtCore import QPointF, Qt
 from events.drag.drag_manager import DragManager
 from objects.arrow.arrow_attributes import ArrowAttributes
 import re
-from resources.constants import RED_HEX, BLUE_HEX, PRO, ANTI, STATIC, RED, BLUE
+from resources.constants.constants import RED_HEX, BLUE_HEX, PRO, ANTI, STATIC, RED, BLUE
 
 
 class Arrow(QGraphicsSvgItem):

@@ -1,6 +1,6 @@
 from objects.staff.staff_handler import StaffManager
 from PyQt6.QtCore import QPointF
-from resources.constants import (
+from resources.constants.constants import (
     GRAPHBOARD_GRID_PADDING,
     GRAPHBOARD_SCALE,
     STAFF_LENGTH,

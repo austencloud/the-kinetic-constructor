@@ -8,7 +8,8 @@ from PyQt6.QtWidgets import (
     QFrame,
     QGridLayout,
 )
-from resources.constants import GRAPHBOARD_SCALE, ARROWBOX_SCALE, PRO, ANTI, RED, BLUE
+from resources.constants.constants import GRAPHBOARD_SCALE, ARROWBOX_SCALE
+from resources.constants.string_constants import COLOR, RED, BLUE, PRO, ANTI
 from events.drag.drag_manager import DragManager
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QCursor
@@ -47,7 +48,7 @@ class ArrowBoxView(QGraphicsView):
 
     def populate_arrows(self):
         arrow1 = {
-            "color": RED,
+            COLOR: RED,
             "motion_type": PRO,
             "rotation_direction": "r",
             "quadrant": "ne",
@@ -57,7 +58,7 @@ class ArrowBoxView(QGraphicsView):
         }
 
         arrow2 = {
-            "color": BLUE,
+            COLOR: BLUE,
             "motion_type": ANTI,
             "rotation_direction": "l",
             "quadrant": "ne",

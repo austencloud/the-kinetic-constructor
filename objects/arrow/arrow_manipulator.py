@@ -2,7 +2,7 @@ from objects.arrow.arrow import Arrow
 from PyQt6.QtCore import QByteArray
 
 from PyQt6.QtGui import QTransform
-from resources.constants import PRO, ANTI, LEFT, RIGHT, BLUE, RED
+from resources.constants.string_constants import COLOR, RED, BLUE, ANTI, PRO, LEFT, RIGHT
 
 
 class ArrowManipulator:
@@ -76,7 +76,7 @@ class ArrowManipulator:
         )
 
         updated_arrow_dict = {
-            "color": selected_arrow.color,
+            COLOR: selected_arrow.color,
             "motion_type": selected_arrow.motion_type,
             "quadrant": new_quadrant,
             "rotation_direction": selected_arrow.rotation_direction,
@@ -86,7 +86,7 @@ class ArrowManipulator:
         }
 
         updated_staff_dict = {
-            "color": selected_arrow.color,
+            COLOR: selected_arrow.color,
             "location": new_end_location,
             "layer": 1,
         }
@@ -115,7 +115,7 @@ class ArrowManipulator:
                 )
 
                 updated_arrow_dict = {
-                    "color": arrow.color,
+                    COLOR: arrow.color,
                     "motion_type": arrow.motion_type,
                     "quadrant": new_quadrant,
                     "rotation_direction": arrow.rotation_direction,
@@ -125,7 +125,7 @@ class ArrowManipulator:
                 }
 
                 updated_staff_dict = {
-                    "color": arrow.color,
+                    COLOR: arrow.color,
                     "location": new_end_location,
                     "layer": 1,
                 }
@@ -173,7 +173,7 @@ class ArrowManipulator:
             arrow.update_appearance()
 
             new_arrow_dict = {
-                "color": arrow.color,
+                COLOR: arrow.color,
                 "motion_type": arrow.motion_type,
                 "quadrant": arrow.quadrant,
                 "rotation_direction": new_rotation_direction,
@@ -211,7 +211,7 @@ class ArrowManipulator:
                 new_rotation_direction = "l"
 
             new_arrow_dict = {
-                "color": arrow.color,
+                COLOR: arrow.color,
                 "motion_type": new_motion_type,
                 "quadrant": arrow.quadrant,
                 "rotation_direction": new_rotation_direction,
@@ -221,7 +221,7 @@ class ArrowManipulator:
             }
 
             new_staff_dict = {
-                "color": arrow.color,
+                COLOR: arrow.color,
                 "location": arrow.end_location,
                 "layer": 1,
             }

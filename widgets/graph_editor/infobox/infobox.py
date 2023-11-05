@@ -3,7 +3,7 @@ from widgets.graph_editor.infobox.infobox_buttons import InfoboxButtons
 from widgets.graph_editor.infobox.infobox_labels import InfoboxLabels
 from widgets.graph_editor.infobox.infobox_widgets import InfoboxWidgets
 from widgets.graph_editor.infobox.infobox_layouts import InfoboxLayouts
-from resources.constants import GRAPHBOARD_SCALE, INFOBOX_SIZE, BLUE, RED
+from resources.constants.constants import GRAPHBOARD_SCALE, INFOBOX_SIZE, BLUE, RED
 
 
 class InfoboxFrame(QFrame):

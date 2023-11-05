@@ -1,20 +1,11 @@
 from PyQt6.QtCore import QPointF
 import math
-from resources.constants import (
+from resources.constants.constants import (
     GRAPHBOARD_WIDTH,
     GRAPHBOARD_SCALE,
     PICTOGRAPH_SCALE,
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN,
-    BETA_OFFSET,
-    PRO,
-    ANTI,
-    BLUE,
-    RED,
-    STATIC,
 )
+from resources.constants.string_constants import COLOR, RED, BLUE, PRO, ANTI, STATIC, UP, DOWN, LEFT, RIGHT, BETA_OFFSET
 from objects.staff.staff import Staff
 import logging
 
@@ -107,7 +98,7 @@ class StaffPositioner:
                 (
                     staff
                     for staff in self.staff_handler.main_widget.graphboard_view.staffs
-                    if staff.arrow.color == arrow["color"]
+                    if staff.arrow.color == arrow[COLOR]
                 ),
                 None,
             )
@@ -125,7 +116,7 @@ class StaffPositioner:
                 ("w", BLUE): ("up", "down") if end_location == "w" else None,
             }
 
-            direction = beta_reposition_map.get((staff.location, arrow["color"]), None)
+            direction = beta_reposition_map.get((staff.location, arrow[COLOR]), None)
 
             if direction:
                 if isinstance(direction, str):
@@ -157,7 +148,7 @@ class StaffPositioner:
                         next(
                             staff
                             for staff in self.staff_handler.main_widget.graphboard_view.staffs
-                            if staff.arrow.color == arrow["color"]
+                            if staff.arrow.color == arrow[COLOR]
                         ),
                         direction,
                     )
@@ -199,7 +190,7 @@ class StaffPositioner:
         further_staff = next(
             staff
             for staff in self.staff_handler.main_widget.graphboard_view.staffs
-            if staff.arrow.color == further_arrow["color"]
+            if staff.arrow.color == further_arrow[COLOR]
         )
         new_position_further = self.calculate_new_position(
             further_staff.pos(), further_direction, scale
@@ -210,7 +201,7 @@ class StaffPositioner:
         other_staff = next(
             staff
             for staff in self.staff_handler.main_widget.graphboard_view.staffs
-            if staff.arrow.color == other_arrow["color"]
+            if staff.arrow.color == other_arrow[COLOR]
         )
         new_position_other = self.calculate_new_position(
             other_staff.pos(), other_direction, scale
@@ -225,7 +216,7 @@ class StaffPositioner:
             (
                 staff
                 for staff in self.staff_handler.main_widget.graphboard_view.staffs
-                if staff.arrow.color == pro_arrow["color"]
+                if staff.arrow.color == pro_arrow[COLOR]
             ),
             None,
         )
@@ -233,7 +224,7 @@ class StaffPositioner:
             (
                 staff
                 for staff in self.staff_handler.main_widget.graphboard_view.staffs
-                if staff.arrow.color == anti_arrow["color"]
+                if staff.arrow.color == anti_arrow[COLOR]
             ),
             None,
         )
@@ -269,7 +260,7 @@ class StaffPositioner:
                 next(
                     staff
                     for staff in self.staff_handler.main_widget.graphboard_view.staffs
-                    if staff.arrow.color == pro_or_anti_arrow["color"]
+                    if staff.arrow.color == pro_or_anti_arrow[COLOR]
                 ),
                 direction,
             )
@@ -277,7 +268,7 @@ class StaffPositioner:
                 next(
                     staff
                     for staff in self.staff_handler.main_widget.graphboard_view.staffs
-                    if staff.arrow.color == static_arrow["color"]
+                    if staff.arrow.color == static_arrow[COLOR]
                 ),
                 self.get_opposite_direction(direction),
             )
@@ -342,7 +333,7 @@ class StaffPositioner:
             (
                 staff
                 for staff in self.staff_handler.staffs_on_board
-                if staff.arrow.color == arrow["color"]
+                if staff.arrow.color == arrow[COLOR]
                 and staff.location == arrow["end_location"]
             ),
             None,

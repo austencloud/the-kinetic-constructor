@@ -63,13 +63,13 @@ class PictographGenerator:
                     if all(
                         key in arrow_dict
                         for key in [
-                            "color",
+                            COLOR,
                             "motion_type",
                             "rotation_direction",
                             "quadrant",
                         ]
                     ):
-                        color = arrow_dict["color"]
+                        color = arrow_dict[COLOR]
                         motion_type = arrow_dict["motion_type"]
 
                         file_name = f"{letter}_{start_position}_{end_position}"
@@ -121,7 +121,7 @@ class PictographGenerator:
             if all(
                 key in combination
                 for key in [
-                    "color",
+                    COLOR,
                     "motion_type",
                     "rotation_direction",
                     "quadrant",

@@ -2,24 +2,16 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt, QPointF
-from resources.constants import (
+from resources.constants.constants import (
     STAFF_WIDTH,
     STAFF_LENGTH,
-    COLOR_MAP,
-    HORIZONTAL,
-    VERTICAL,
-    NORTH,
-    SOUTH,
-    EAST,
-    WEST,
-    BLUE_HEX,
-    RED_HEX,
 )
+from resources.constants.string_constants import COLOR, HORIZONTAL, VERTICAL, NORTH, SOUTH, WEST, EAST, COLOR_MAP, RED_HEX, BLUE_HEX
 from objects.staff.staff_attributes import StaffAttributes
 
 """ 
 staff_dict = {
-            "color": RED,
+            COLOR: RED,
             "location": "e",
             "layer": 1,
         }
@@ -42,7 +34,7 @@ class Staff(QGraphicsSvgItem):
         """Initialize attributes from the given dictionary."""
         self.attributes = self.handler.attributes
         self.attributes.update_attributes_from_dict(self, staff_dict)
-        self.color = staff_dict.get("color")
+        self.color = staff_dict.get(COLOR)
         self.location = staff_dict.get("location")
         self.layer = staff_dict.get("layer")
         self.set_axis(staff_dict)

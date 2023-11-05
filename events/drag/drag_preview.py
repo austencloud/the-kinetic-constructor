@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QWidget, QLabel, QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
-from resources.constants import GRAPHBOARD_SCALE
+from resources.constants.constants import GRAPHBOARD_SCALE
 
 
 class DragPreview(QWidget):
@@ -28,7 +28,10 @@ class DragPreview(QWidget):
         self.rotation_direction = arrow.rotation_direction
         self.turns = arrow.turns
 
-        self.start_location, self.end_location = arrow.attributes.get_start_end_locations(
+        (
+            self.start_location,
+            self.end_location,
+        ) = arrow.attributes.get_start_end_locations(
             self.motion_type, self.rotation_direction, self.quadrant
         )
 
@@ -55,7 +58,7 @@ class DragPreview(QWidget):
         )
 
         return {
-            "color": self.color,
+            COLOR: self.color,
             "motion_type": self.motion_type,
             "quadrant": self.quadrant,
             "rotation_direction": self.rotation_direction,
@@ -67,9 +70,7 @@ class DragPreview(QWidget):
     def move_to_cursor(self, view, event, target_arrow):
         main_window = view.window()
         local_pos = view.mapTo(main_window, event.pos())
-        self.move(
-            local_pos - (target_arrow.center * GRAPHBOARD_SCALE).toPoint()
-        )
+        self.move(local_pos - (target_arrow.center * GRAPHBOARD_SCALE).toPoint())
 
     def update_rotation_for_quadrant(self, new_quadrant):
         self.in_graphboard = True
@@ -92,9 +93,7 @@ class DragPreview(QWidget):
         )
 
         unrotate_transform = QTransform().rotate(-self.current_rotation_angle)
-        unrotated_pixmap = self.label.pixmap().transformed(
-            unrotate_transform
-        )
+        unrotated_pixmap = self.label.pixmap().transformed(unrotate_transform)
 
         rotate_transform = QTransform().rotate(angle)
         rotated_pixmap = unrotated_pixmap.transformed(rotate_transform)

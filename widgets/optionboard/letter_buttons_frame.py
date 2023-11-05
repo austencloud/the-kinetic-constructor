@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QPushButton, QVBoxLayout, QHBoxLayout, QFrame
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QIcon, QPainter, QFont, QColor
 from PyQt6.QtSvg import QSvgRenderer
-from resources.constants import GRAPHBOARD_SCALE
+from resources.constants.constants import GRAPHBOARD_SCALE
 from utilities.pictograph_selector_dialog import PictographSelectorDialog
 from data.letter_types import letter_types
 

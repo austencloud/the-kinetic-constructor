@@ -47,14 +47,12 @@ class GraphboardInfoHandler:
                 current_combination.append(sorted_attributes)
 
         # Sort the list of dictionaries by the 'color' key
-        current_combination = sorted(current_combination, key=lambda x: x["color"])
+        current_combination = sorted(current_combination, key=lambda x: x[COLOR])
 
         letter_type = None
         for letter, combinations in self.letters.items():
             combinations = [
-                sorted(
-                    [x for x in combination if "color" in x], key=lambda x: x["color"]
-                )
+                sorted([x for x in combination if COLOR in x], key=lambda x: x[COLOR])
                 for combination in combinations
             ]
             if current_combination in combinations:

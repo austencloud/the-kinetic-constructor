@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QIcon
-from objects.arrow.arrow import Arrow
-from resources.constants import BLUE, RED
+from resources.constants.string_constants import COLOR, RED, BLUE
 
 class InfoboxButtons:
     BUTTON_SIZE = 30
@@ -26,7 +25,7 @@ class InfoboxButtons:
         )  # sets each button to be a class attribute of the infobox
 
     def update_buttons(self, attributes):
-        color = attributes.get("color", "")
+        color = attributes.get(COLOR, "")
         swap_motion_type_button = (
             self.infobox.swap_motion_type_blue_button
             if color == BLUE

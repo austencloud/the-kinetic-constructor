@@ -1,5 +1,5 @@
 from PyQt6.QtCore import QPointF
-from resources.constants import PICTOGRAPH_GRID_PADDING, PICTOGRAPH_SCALE
+from resources.constants.constants import PICTOGRAPH_GRID_PADDING, PICTOGRAPH_SCALE
 from objects.arrow.arrow import Arrow
 from objects.staff.staff_handler import StaffManager
 from objects.staff.staff import Staff
@@ -64,7 +64,7 @@ class PictographStaffHandler(StaffManager):
                         continue
 
                     new_staff = {
-                        "color": color,
+                        COLOR: color,
                         "location": location,
                         "layer": 1,
                     }
