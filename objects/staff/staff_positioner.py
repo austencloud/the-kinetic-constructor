@@ -11,6 +11,10 @@ from resources.constants import (
     BETA_OFFSET,
 )
 from objects.staff.staff import Staff
+import logging
+
+#initialize logging
+logging.basicConfig(filename='staff_positioner.log', level=logging.DEBUG)
 
 
 class StaffPositioner:
@@ -164,6 +168,13 @@ class StaffPositioner:
     def reposition_G_and_H(self, scale, view, arrow1, arrow2):
         optimal_position1 = self.get_optimal_arrow_location(arrow1, view)
         optimal_position2 = self.get_optimal_arrow_location(arrow2, view)
+
+        if not optimal_position1 or not optimal_position2:
+            logging.warning(
+                "No optimal positions found for arrows in reposition_G_and_H"
+            )
+            return
+        
 
         distance1 = self.get_distance_from_center(optimal_position1)
         distance2 = self.get_distance_from_center(optimal_position2)

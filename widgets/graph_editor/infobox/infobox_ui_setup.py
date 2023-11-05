@@ -22,8 +22,7 @@ class InfoboxUISetup:
         self.add_widgets_to_layouts()
         self.set_dimensions()
 
-    def setup_buttons(self):
-        
+    def setup_buttons(self):   
         self.button_properties = {
             "swap_colors": {
                 "icon": None,

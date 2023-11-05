@@ -9,6 +9,13 @@ class ArrowManipulator:
     def __init__(self, arrow_manager):
         self.arrow_manager = arrow_manager
 
+    def set_turns(self, arrows, color, turns):
+        arrows = [arrow for arrow in arrows if arrow.color == color]
+        for arrow in arrows:
+            arrow.turns = turns
+            self.update_arrow_turns(arrow)
+            self.finalize_manipulation(arrow)
+
     def increment_turns(self, arrows, color):
         arrows = [arrow for arrow in arrows if arrow.color == color]
         for arrow in arrows:

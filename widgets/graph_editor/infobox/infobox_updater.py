@@ -96,8 +96,8 @@ class InfoboxUpdater:
         if rotation_direction == "r":
             pixmap = QPixmap("resources/images/icons/clockwise.png")
             pixmap = pixmap.scaled(
-                40,
-                40,
+                60,
+                60,
                 Qt.AspectRatioMode.KeepAspectRatio,
                 Qt.TransformationMode.SmoothTransformation,
             )
@@ -105,8 +105,8 @@ class InfoboxUpdater:
         elif rotation_direction == "l":
             pixmap = QPixmap("resources/images/icons/anti-clockwise.png")
             pixmap = pixmap.scaled(
-                40,
-                40,
+                60,
+                60,
                 Qt.AspectRatioMode.KeepAspectRatio,
                 Qt.TransformationMode.SmoothTransformation,
             )

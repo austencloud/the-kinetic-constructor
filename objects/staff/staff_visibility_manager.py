@@ -16,11 +16,6 @@ class StaffVisibilityManager:
             if not isinstance(staffs, list):
                 staffs = [staffs]
             for staff in staffs:
-                if staff.arrow:
-                    ghost_arrow = staff.arrow if staff.arrow.is_ghost else None
-                    if ghost_arrow:
-                        ghost_arrow.hide()
-
                 staff.hide()
                 staff.view.scene().removeItem(staff.arrow)
 

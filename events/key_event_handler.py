@@ -54,3 +54,12 @@ class KeyEventHandler:
                     arrow_manipulator.swap_motion_type(selected_items, selected_arrow_color)
                 elif event.key() == Qt.Key.Key_F:
                     sequence_view.add_to_sequence(graphboard_view)
+                elif event.key() == Qt.Key.Key_QuoteLeft:
+                    arrow_manipulator.set_turns(selected_items, selected_arrow_color, 0)
+                elif event.key() == Qt.Key.Key_1:
+                    arrow_manipulator.set_turns(selected_items, selected_arrow_color, 1)
+                elif event.key() == Qt.Key.Key_2:
+                    arrow_manipulator.set_turns(selected_items, selected_arrow_color, 2)
+
+
+                
