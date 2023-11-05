@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QIcon
-from resources.constants.string_constants import COLOR, RED, BLUE
+from settings.string_constants import COLOR, RED, BLUE
+
 
 class InfoboxButtons:
     BUTTON_SIZE = 30

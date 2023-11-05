@@ -1,11 +1,11 @@
 from PyQt6.QtCore import QPointF
 import math
-from resources.constants.constants import (
+from settings.numerical_constants import (
     GRAPHBOARD_WIDTH,
     GRAPHBOARD_SCALE,
     PICTOGRAPH_SCALE,
 )
-from resources.constants.string_constants import *
+from settings.string_constants import *
 from objects.staff.staff import Staff
 import logging
 

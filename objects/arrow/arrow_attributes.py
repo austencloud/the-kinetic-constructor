@@ -1,5 +1,5 @@
 from data.start_end_location_mapping import start_end_location_mapping
-from resources.constants.string_constants import *
+from settings.string_constants import *
 
 
 class ArrowAttributes:

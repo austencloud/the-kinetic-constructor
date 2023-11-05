@@ -9,13 +9,14 @@ from objects.staff.staff import Staff
 from objects.grid import Grid
 from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
 from objects.pictograph.pictograph_image import PictographImage
-from resources.constants.constants import (
+from settings.numerical_constants import (
     DEFAULT_GRAPHBOARD_WIDTH,
     DEFAULT_GRAPHBOARD_HEIGHT,
     PICTOGRAPH_SCALE,
     GRAPHBOARD_HEIGHT,
 )
-from resources.constants.string_constants import *
+from settings.string_constants import *
+
 
 class SequenceView(QGraphicsView):
     def __init__(self, main_widget):

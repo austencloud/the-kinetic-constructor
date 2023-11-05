@@ -8,8 +8,8 @@ from PyQt6.QtWidgets import (
     QFrame,
     QGridLayout,
 )
-from resources.constants.constants import GRAPHBOARD_SCALE, ARROWBOX_SCALE
-from resources.constants.string_constants import *
+from settings.numerical_constants import GRAPHBOARD_SCALE, ARROWBOX_SCALE
+from settings.string_constants import *
 from events.drag.drag_manager import DragManager
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QCursor

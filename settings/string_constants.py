@@ -1,6 +1,7 @@
 GRID_PATH = "resources/images/grid/grid.svg"
 ARROW_DIR = "resources/images/arrows"
 LETTER_SVG_DIR = "resources/images/letters"
+ICON_DIR = "resources/images/icons/"
 
 BETA_OFFSET = 20
 

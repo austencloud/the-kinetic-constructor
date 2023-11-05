@@ -2,7 +2,7 @@ from objects.arrow.arrow import Arrow
 from PyQt6.QtCore import QByteArray
 
 from PyQt6.QtGui import QTransform
-from resources.constants.string_constants import *
+from settings.string_constants import *
 
 
 class ArrowManipulator:

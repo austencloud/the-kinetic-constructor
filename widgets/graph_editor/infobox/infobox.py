@@ -3,8 +3,8 @@ from widgets.graph_editor.infobox.infobox_buttons import InfoboxButtons
 from widgets.graph_editor.infobox.infobox_labels import InfoboxLabels
 from widgets.graph_editor.infobox.infobox_widgets import InfoboxWidgets
 from widgets.graph_editor.infobox.infobox_layouts import InfoboxLayouts
-from resources.constants.constants import INFOBOX_SIZE
-from resources.constants.string_constants import RED, BLUE
+from settings.numerical_constants import INFOBOX_SIZE
+from settings.string_constants import RED, BLUE
 
 
 class InfoboxFrame(QFrame):

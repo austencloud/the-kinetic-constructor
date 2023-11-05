@@ -1,4 +1,5 @@
-from resources.constants.string_constants import COLOR, RED, BLUE
+from settings.string_constants import COLOR, RED, BLUE
+
 
 class StaffInitializer:
     def __init__(self, staff_factory):

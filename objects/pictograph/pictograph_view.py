@@ -10,13 +10,13 @@ from utilities.json_handler import JsonHandler
 from widgets.graph_editor.graphboard.graphboard_info_handler import (
     GraphboardInfoHandler,
 )
-from resources.constants.constants import (
+from settings.numerical_constants import (
     PICTOGRAPH_WIDTH,
     PICTOGRAPH_HEIGHT,
     PICTOGRAPH_SCALE,
     PICTOGRAPH_GRID_PADDING,
 )
-from resources.constants.string_constants import *
+from settings.string_constants import *
 
 
 class PictographView(QGraphicsView):

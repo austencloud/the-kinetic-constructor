@@ -2,7 +2,7 @@ from PyQt6.QtCore import QPointF
 from objects.staff.staff import Staff
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.staff.staff_handler import StaffManager
-from resources.constants.string_constants import COLOR, RED, BLUE
+from settings.string_constants import COLOR, RED, BLUE
 
 
 class PropboxStaffHandler(StaffManager):

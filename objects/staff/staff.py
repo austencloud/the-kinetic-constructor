@@ -2,11 +2,22 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt, QPointF
-from resources.constants.constants import (
+from settings.numerical_constants import (
     STAFF_WIDTH,
     STAFF_LENGTH,
 )
-from resources.constants.string_constants import COLOR, HORIZONTAL, VERTICAL, NORTH, SOUTH, WEST, EAST, COLOR_MAP, RED_HEX, BLUE_HEX
+from settings.string_constants import (
+    COLOR,
+    HORIZONTAL,
+    VERTICAL,
+    NORTH,
+    SOUTH,
+    WEST,
+    EAST,
+    COLOR_MAP,
+    RED_HEX,
+    BLUE_HEX,
+)
 from objects.staff.staff_attributes import StaffAttributes
 
 """ 

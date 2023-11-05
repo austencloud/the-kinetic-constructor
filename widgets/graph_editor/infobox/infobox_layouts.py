@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QFrame
-from resources.constants.string_constants import *
+from settings.string_constants import *
 
 
 class InfoboxLayouts:

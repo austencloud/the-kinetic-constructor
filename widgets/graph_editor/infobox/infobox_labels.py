@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QLabel, QSizePolicy
 from objects.arrow.arrow import Arrow
 from data.positions_map import positions_map
 import logging
-from resources.constants.string_constants import *
+from settings.string_constants import *
 
 
 class InfoboxLabels:

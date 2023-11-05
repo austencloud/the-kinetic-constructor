@@ -6,13 +6,13 @@ from PyQt6.QtWidgets import QGraphicsView, QGraphicsScene, QSizePolicy, QFrame
 from objects.staff.staff import Staff
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
-from resources.constants.constants import (
+from settings.numerical_constants import (
     GRAPHBOARD_SCALE,
     GRAPHBOARD_WIDTH,
     GRAPHBOARD_HEIGHT,
     VERTICAL_OFFSET,
 )
-from resources.constants.string_constants import *
+from settings.string_constants import *
 from widgets.graph_editor.graphboard.graphboard_staff_handler import (
     GraphboardStaffHandler,
 )

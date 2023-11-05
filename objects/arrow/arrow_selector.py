@@ -1,5 +1,5 @@
 from objects.arrow.arrow import Arrow
-from resources.constants.constants import GRAPHBOARD_SCALE
+from settings.numerical_constants import GRAPHBOARD_SCALE
 
 
 class ArrowSelector:

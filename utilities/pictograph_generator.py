@@ -4,7 +4,7 @@ import random
 import os
 from objects.arrow.arrow import Arrow
 from utilities.export_handler import ExportHandler
-from resources.constants.string_constants import *
+from settings.string_constants import *
 
 
 class PictographGenerator:
