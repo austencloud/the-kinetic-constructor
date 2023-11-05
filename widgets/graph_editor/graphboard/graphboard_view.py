@@ -69,7 +69,7 @@ class GraphboardView(QGraphicsView):
         self.view_scale = GRAPHBOARD_SCALE
         # Add the grid and letter item to the scene
         self.graphboard_scene.addItem(self.grid)
-        
+
     def init_managers(self, main_widget):
         self.info_handler = GraphboardInfoHandler(main_widget, self)
         self.staff_handler = GraphboardStaffHandler(main_widget, self.graphboard_scene)
@@ -208,9 +208,9 @@ class GraphboardView(QGraphicsView):
         for arrow in self.scene().items():
             if isinstance(arrow, Arrow):
                 center = arrow.pos() + arrow.boundingRect().center()
-                if arrow.color == "red":
+                if arrow.color == RED:
                     red_position = center
-                elif arrow.color == "blue":
+                elif arrow.color == BLUE:
                     blue_position = center
         print(red_position, blue_position)
         return red_position, blue_position

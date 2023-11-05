@@ -1,8 +1,8 @@
 from objects.arrow.arrow import Arrow
 from PyQt6.QtCore import QByteArray
-from lxml import etree
-from PyQt6.QtCore import Qt
+
 from PyQt6.QtGui import QTransform
+from resources.constants import PRO, ANTI, LEFT, RIGHT, BLUE, RED
 
 
 class ArrowManipulator:
@@ -20,6 +20,8 @@ class ArrowManipulator:
         arrows = [arrow for arrow in arrows if arrow.color == color]
         for arrow in arrows:
             arrow.turns += 1
+            if arrow.turns > 2:
+                arrow.turns = 0
             self.update_arrow_turns(arrow)
             self.finalize_manipulation(arrow)
 
@@ -56,9 +58,9 @@ class ArrowManipulator:
     def move_arrow_quadrant_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {
             "up": {"se": "ne", "sw": "nw"},
-            "left": {"ne": "nw", "se": "sw"},
+            LEFT: {"ne": "nw", "se": "sw"},
             "down": {"ne": "se", "nw": "sw"},
-            "right": {"nw": "ne", "sw": "se"},
+            RIGHT: {"nw": "ne", "sw": "se"},
         }
         selected_arrow = selected_arrow
         current_quadrant = selected_arrow.quadrant
@@ -101,7 +103,7 @@ class ArrowManipulator:
                 current_quadrant_index = quadrants.index(arrow.quadrant)
                 new_quadrant_index = (
                     (current_quadrant_index + 1) % 4
-                    if rotation_direction == "right"
+                    if rotation_direction == RIGHT
                     else (current_quadrant_index - 1) % 4
                 )
                 new_quadrant = quadrants[new_quadrant_index]
@@ -195,10 +197,10 @@ class ArrowManipulator:
         arrows = [arrow for arrow in arrows if isinstance(arrow, Arrow)]
 
         for arrow in arrows:
-            if arrow.motion_type == "anti":
-                new_motion_type = "pro"
-            elif arrow.motion_type == "pro":
-                new_motion_type = "anti"
+            if arrow.motion_type == ANTI:
+                new_motion_type = PRO
+            elif arrow.motion_type == PRO:
+                new_motion_type = ANTI
             else:
                 print(f"Unknown motion type: {arrow.motion_type}")
                 continue
@@ -248,10 +250,10 @@ class ArrowManipulator:
             ]
             if len(arrows) >= 1:
                 for arrow in arrows:
-                    if arrow.color == "red":
-                        new_color = "blue"
-                    elif arrow.color == "blue":
-                        new_color = "red"
+                    if arrow.color == RED:
+                        new_color = BLUE
+                    elif arrow.color == BLUE:
+                        new_color = RED
                     else:
                         print("swap_colors - Unexpected color:", arrow.color)
                         continue

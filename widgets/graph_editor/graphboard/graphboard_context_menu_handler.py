@@ -1,7 +1,8 @@
 from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QAction
 
-class GraphboardContextMenuHandler():
+
+class GraphboardContextMenuHandler:
     def __init__(self, graphboard_view):
         self.graphboard_view = graphboard_view
         self.main_widget = self.graphboard_view.main_widget
@@ -23,27 +24,42 @@ class GraphboardContextMenuHandler():
 
     def create_arrow_menu(self, selected_items, event):
         actions = [
-            ('Delete', lambda: self.arrow_selector.delete_arrow(selected_items)),
-            ('Rotate Right', lambda: self.arrow_manipulator.rotate_arrow("right", selected_items)),
-            ('Rotate Left', lambda: self.arrow_manipulator.rotate_arrow("left", selected_items)),
-            ('Mirror', lambda: self.arrow_manipulator.mirror_arrow(selected_items))
+            ("Delete", lambda: self.arrow_selector.delete_arrow(selected_items)),
+            (
+                "Rotate Right",
+                lambda: self.arrow_manipulator.rotate_arrow(RIGHT, selected_items),
+            ),
+            (
+                "Rotate Left",
+                lambda: self.arrow_manipulator.rotate_arrow(LEFT, selected_items),
+            ),
+            ("Mirror", lambda: self.arrow_manipulator.mirror_arrow(selected_items)),
         ]
         self.create_menu_with_actions(self.graphboard_view, actions, event)
 
     def create_staff_menu(self, selected_items, event):
         actions = [
-            ('Delete', lambda: self.staff_selector.delete_staff(selected_items)),
-            ('Rotate Right', lambda: self.arrow_manipulator.rotate_arrow("right", selected_items)),
-            ('Rotate Left', lambda: self.arrow_manipulator.rotate_arrow("left", selected_items))
+            ("Delete", lambda: self.staff_selector.delete_staff(selected_items)),
+            (
+                "Rotate Right",
+                lambda: self.arrow_manipulator.rotate_arrow(RIGHT, selected_items),
+            ),
+            (
+                "Rotate Left",
+                lambda: self.arrow_manipulator.rotate_arrow(LEFT, selected_items),
+            ),
         ]
         self.create_menu_with_actions(self.graphboard_view, actions, event)
 
     def create_graphboard_menu(self, event):
         actions = [
-            ('Swap Colors', lambda: self.arrow_manipulator.swap_colors()),
-            ('Select All', self.graphboard_view.select_all_arrows),
-            ('Add to Sequence', lambda _: self.sequence_view.add_to_sequence(self.graphboard_view)),
-            ('Export to PNG', self.export_manager.export_to_png),
-            ('Export to SVG', lambda: self.export_manager.export_to_svg('output.svg'))
+            ("Swap Colors", lambda: self.arrow_manipulator.swap_colors()),
+            ("Select All", self.graphboard_view.select_all_arrows),
+            (
+                "Add to Sequence",
+                lambda _: self.sequence_view.add_to_sequence(self.graphboard_view),
+            ),
+            ("Export to PNG", self.export_manager.export_to_png),
+            ("Export to SVG", lambda: self.export_manager.export_to_svg("output.svg")),
         ]
         self.create_menu_with_actions(self.graphboard_view, actions, event)

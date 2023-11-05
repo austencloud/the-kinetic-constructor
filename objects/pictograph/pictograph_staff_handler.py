@@ -56,10 +56,10 @@ class PictographStaffHandler(StaffManager):
                 location = arrow.end_location
 
                 if location:
-                    if arrow.color == "#ed1c24" or arrow.color == "red":
-                        color = "red"
-                    elif arrow.color == "#2e3192" or arrow.color == "blue":
-                        color = "blue"
+                    if arrow.color == RED_HEX or arrow.color == RED:
+                        color = RED
+                    elif arrow.color == BLUE_HEX or arrow.color == BLUE:
+                        color = BLUE
                     else:
                         continue
 

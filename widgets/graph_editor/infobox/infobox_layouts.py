@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QHBoxLayout, QWidget, QVBoxLayout, QFrame
-
+from resources.constants import BLUE, RED
 
 class InfoboxLayouts:
     def __init__(self, infobox, infobox_manager, graphboard_view, arrow_attributes):
@@ -14,7 +14,6 @@ class InfoboxLayouts:
     def define_info_layouts(
         self, motion_type_label, rotation_direction_label, start_end_label, turns_label
     ):
-        """Define layouts for the info widget."""
         motion_type_layout = QHBoxLayout()
         motion_type_layout.addWidget(motion_type_label)
         motion_type_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -38,20 +37,19 @@ class InfoboxLayouts:
 
         return main_layout
 
-
     def setup_layouts(self):
         self.master_layout = QVBoxLayout()
         self.attributes_layouts = {}
-        
+
         self.setup_top_layout()
         self.setup_bottom_layout()
         self.add_widgets_to_layouts()
-        
+
         self.infobox.setLayout(self.master_layout)
 
     def setup_top_layout(self):
         top_layout = QHBoxLayout()
-        for color in ["blue", "red"]:
+        for color in [BLUE, RED]:
             self.setup_column_layout(color, top_layout)
         self.master_layout.addLayout(top_layout)
 
@@ -78,19 +76,18 @@ class InfoboxLayouts:
         bottom_layout.addWidget(self.labels.type_position_label)
         self.master_layout.addLayout(bottom_layout)
 
-
     def add_widgets_to_layouts(self):
         self.setup_info_layouts()
-        self.setup_horizontal_layouts()
-        self.add_info_widgets_to_layouts()
+        self.setup_attributes_layouts()
+        self.add_attributes_widgets_to_layouts()
 
     def setup_info_layouts(self):
-        self.blue_info_layout = QVBoxLayout()
-        self.red_info_layout = QVBoxLayout()
-        self.blue_info_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.red_info_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.blue_info_layout.addWidget(self.labels.blue_details_label)
-        self.red_info_layout.addWidget(self.labels.red_details_label)
+        self.blue_attributes_layout = QVBoxLayout()
+        self.red_attributes_layout = QVBoxLayout()
+        self.blue_attributes_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.red_attributes_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.blue_attributes_layout.addWidget(self.labels.blue_details_label)
+        self.red_attributes_layout.addWidget(self.labels.red_details_label)
 
     def setup_button_layout(self):
         self.buttons = self.infobox_manager.buttons
@@ -99,39 +96,36 @@ class InfoboxLayouts:
             button = getattr(self.infobox, f"{button_name}_button")
             self.button_layout.addWidget(button)  # Add each button to the layout
 
-    def setup_horizontal_layouts(self):
-        self.setup_color_horizontal_layout("blue")
-        self.setup_color_horizontal_layout("red")
+    def setup_attributes_layouts(self):
+        self.setup_attributes_layout(BLUE)
+        self.setup_attributes_layout(RED)
 
-    def setup_color_horizontal_layout(self, color):
-        horizontal_layout = QHBoxLayout()
+    def setup_attributes_layout(self, color):
+        attribute_layout = QHBoxLayout()
         buttons_layout = QVBoxLayout()
 
         for button_name in self.buttons.button_properties.keys():
-            if (
-                color in button_name and "turns" not in button_name
-            ):  # Exclude the turns buttons
+            if color in button_name and "turns" not in button_name:
                 button = getattr(self.infobox, f"{button_name}_button")
                 buttons_layout.addWidget(button)
 
-        # Pass the color as an additional argument to the construct_info_widget method
-        info_widget_inner = self.widgets.construct_info_widget(
+        info_widget_inner = self.widgets.construct_attributes_widget(
             self.arrow_attributes.get_graphboard_arrow_attributes_by_color(
                 color, self.graphboard_view
             ),
-            color,  # Pass the color here
+            color,
         )
 
-        horizontal_layout.addLayout(buttons_layout)
-        horizontal_layout.addWidget(info_widget_inner)
+        attribute_layout.addLayout(buttons_layout)
+        attribute_layout.addWidget(info_widget_inner)
 
-        if color == "blue":
-            self.widgets.blue_info_widget.setLayout(horizontal_layout)
+        if color == BLUE:
+            self.widgets.blue_attributes_widget.setLayout(attribute_layout)
         else:
-            self.widgets.red_info_widget.setLayout(horizontal_layout)
+            self.widgets.red_attributes_widget.setLayout(attribute_layout)
 
-    def add_info_widgets_to_layouts(self):
-        self.blue_info_layout.addWidget(self.widgets.blue_info_widget)
-        self.red_info_layout.addWidget(self.widgets.red_info_widget)
-        self.attributes_layouts["blue"].addLayout(self.blue_info_layout)
-        self.attributes_layouts["red"].addLayout(self.red_info_layout)
+    def add_attributes_widgets_to_layouts(self):
+        self.blue_attributes_layout.addWidget(self.widgets.blue_attributes_widget)
+        self.red_attributes_layout.addWidget(self.widgets.red_attributes_widget)
+        self.attributes_layouts[BLUE].addLayout(self.blue_attributes_layout)
+        self.attributes_layouts[RED].addLayout(self.red_attributes_layout)

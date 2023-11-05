@@ -55,7 +55,7 @@ class PictographGenerator:
                     if "motion_type" in arrow_dict
                 ]
                 is_hybrid = (
-                    motion_types.count("anti") == 1 and motion_types.count("pro") == 1
+                    motion_types.count(ANTI) == 1 and motion_types.count("pro") == 1
                 )
 
                 for arrow_dict in combination:
@@ -73,9 +73,9 @@ class PictographGenerator:
                         motion_type = arrow_dict["motion_type"]
 
                         file_name = f"{letter}_{start_position}_{end_position}"
-                        if motion_type == "pro" and is_hybrid and color == "red":
+                        if motion_type == "pro" and is_hybrid and color == RED:
                             file_name += f"_r-pro_l-anti"
-                        elif motion_type == "anti" and is_hybrid and color == "red":
+                        elif motion_type == ANTI and is_hybrid and color == RED:
                             file_name += f"_r-anti_l-pro"
                         file_name += ".svg"
 
@@ -128,7 +128,7 @@ class PictographGenerator:
                     "turns",
                 ]
             ):
-                if combination["motion_type"] == "static":
+                if combination["motion_type"] == STATIC:
                     svg_file = f"resources/images/arrows/static_0.svg"
                     arrow = Arrow(
                         svg_file,

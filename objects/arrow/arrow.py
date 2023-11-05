@@ -5,6 +5,7 @@ from PyQt6.QtCore import QPointF, Qt
 from events.drag.drag_manager import DragManager
 from objects.arrow.arrow_attributes import ArrowAttributes
 import re
+from resources.constants import RED_HEX, BLUE_HEX, PRO, ANTI, STATIC, RED, BLUE
 
 
 class Arrow(QGraphicsSvgItem):
@@ -22,10 +23,10 @@ class Arrow(QGraphicsSvgItem):
         motion_type = attr_dict["motion_type"]
         turns = attr_dict.get("turns", None)
 
-        if motion_type in ["pro", "anti"]:
+        if motion_type in [PRO, ANTI]:
             self.is_shift = True
             return f"resources/images/arrows/shift/{motion_type}_{turns}.svg"
-        elif motion_type in ["static"]:
+        elif motion_type in [STATIC]:
             self.is_static = True
             return None
 
@@ -126,7 +127,7 @@ class Arrow(QGraphicsSvgItem):
         self.update_rotation()
 
     def set_svg_color(self, svg_file, new_color):
-        color_map = {"red": "#ED1C24", "blue": "#2E3192"}
+        color_map = {RED: RED_HEX, BLUE: BLUE_HEX}
         new_hex_color = color_map.get(new_color)
 
         with open(svg_file, "r") as f:
@@ -148,7 +149,7 @@ class Arrow(QGraphicsSvgItem):
         return svg_data.encode("utf-8")
 
     def update_color(self):
-        if self.motion_type in ["pro", "anti"]:
+        if self.motion_type in [PRO, ANTI]:
             new_svg_data = self.set_svg_color(self.svg_file, self.color)
 
             self.renderer.load(new_svg_data)
@@ -167,17 +168,17 @@ class Arrow(QGraphicsSvgItem):
         return quadrant_to_angle.get(quadrant, 0)
 
     def get_quadrant_to_angle_map(self, motion_type, rotation_direction):
-        if motion_type == "pro":
+        if motion_type == PRO:
             return {
                 "r": {"ne": 0, "se": 90, "sw": 180, "nw": 270},
                 "l": {"ne": 270, "se": 180, "sw": 90, "nw": 0},
             }.get(rotation_direction, {})
-        elif motion_type == "anti":
+        elif motion_type == ANTI:
             return {
                 "r": {"ne": 270, "se": 180, "sw": 90, "nw": 0},
                 "l": {"ne": 0, "se": 90, "sw": 180, "nw": 270},
             }.get(rotation_direction, {})
-        elif motion_type == "static":
+        elif motion_type == STATIC:
             return {
                 "r": {"ne": 0, "se": 0, "sw": 0, "nw": 0},
                 "l": {"ne": 0, "se": 0, "sw": 0, "nw": 0},

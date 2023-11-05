@@ -9,12 +9,17 @@ from resources.constants import (
     UP,
     DOWN,
     BETA_OFFSET,
+    PRO,
+    ANTI,
+    BLUE,
+    RED,
+    STATIC,
 )
 from objects.staff.staff import Staff
 import logging
 
-#initialize logging
-logging.basicConfig(filename='staff_positioner.log', level=logging.DEBUG)
+# initialize logging
+logging.basicConfig(filename="staff_positioner.log", level=logging.DEBUG)
 
 
 class StaffPositioner:
@@ -22,7 +27,6 @@ class StaffPositioner:
         self.staff_handler = staff_handler
         self.letters = staff_handler.main_widget.letters
 
-        
     ### REPOSITIONERS ###
 
     def check_replace_beta_staffs(self, scene):
@@ -30,7 +34,7 @@ class StaffPositioner:
         board_state = view.get_state()
 
         visible_staves = []
-        
+
         for staff in view.staffs:
             if staff.isVisible():
                 visible_staves.append(staff)
@@ -56,10 +60,10 @@ class StaffPositioner:
         pro_or_anti_arrows = [
             arrow
             for arrow in board_state["arrows"]
-            if arrow["motion_type"] in ["pro", "anti"]
+            if arrow["motion_type"] in [PRO, ANTI]
         ]
         static_arrows = [
-            arrow for arrow in board_state["arrows"] if arrow["motion_type"] == "static"
+            arrow for arrow in board_state["arrows"] if arrow["motion_type"] == STATIC
         ]
 
         # STATIC BETA
@@ -70,11 +74,14 @@ class StaffPositioner:
         for start_location, arrows in arrows_grouped_by_start.items():
             if len(arrows) == 2:
                 arrow1, arrow2 = arrows
-                if (arrow1["start_location"] == arrow2["start_location"] and
-                    arrow1["end_location"] == arrow2["end_location"]):
-                    if arrow1["motion_type"] in ["pro", "anti"] and arrow2["motion_type"] in ["pro", "anti"]:
+                if (
+                    arrow1["start_location"] == arrow2["start_location"]
+                    and arrow1["end_location"] == arrow2["end_location"]
+                ):
+                    if arrow1["motion_type"] in [PRO, ANTI] and arrow2[
+                        "motion_type"
+                    ] in [PRO, ANTI]:
                         self.reposition_beta_to_beta(scene, arrows, scale)
-
 
         # GAMMA → BETA - Y, Z
         if len(pro_or_anti_arrows) == 1 and len(static_arrows) == 1:
@@ -84,7 +91,7 @@ class StaffPositioner:
         converging_arrows = [
             arrow
             for arrow in board_state["arrows"]
-            if arrow["motion_type"] not in ["static"]
+            if arrow["motion_type"] not in [STATIC]
         ]
         if len(converging_arrows) == 2:
             if converging_arrows[0].get("start_location") != converging_arrows[1].get(
@@ -96,19 +103,26 @@ class StaffPositioner:
 
     def reposition_static_beta(self, move_staff, static_arrows, scale):
         for arrow in static_arrows:
-            staff = next((staff for staff in self.staff_handler.main_widget.graphboard_view.staffs if staff.arrow.color == arrow['color']), None)
+            staff = next(
+                (
+                    staff
+                    for staff in self.staff_handler.main_widget.graphboard_view.staffs
+                    if staff.arrow.color == arrow["color"]
+                ),
+                None,
+            )
             if not staff:
                 continue
 
             end_location = arrow.get("end_location", "")
 
             beta_reposition_map = {
-                ("n", "red"): "right",
-                ("n", "blue"): "left",
-                ("s", "red"): "right",
-                ("s", "blue"): "left",
-                ("e", "red"): ("up", "down") if end_location == "e" else None,
-                ("w", "blue"): ("up", "down") if end_location == "w" else None,
+                ("n", RED): RIGHT,
+                ("n", BLUE): LEFT,
+                ("s", RED): RIGHT,
+                ("s", BLUE): LEFT,
+                ("e", RED): ("up", "down") if end_location == "e" else None,
+                ("w", BLUE): ("up", "down") if end_location == "w" else None,
             }
 
             direction = beta_reposition_map.get((staff.location, arrow["color"]), None)
@@ -154,9 +168,7 @@ class StaffPositioner:
             return
 
         arrow1, arrow2 = arrows
-        same_motion_type = (
-            arrow1["motion_type"] == arrow2["motion_type"] in ["pro", "anti"]
-        )
+        same_motion_type = arrow1["motion_type"] == arrow2["motion_type"] in [PRO, ANTI]
 
         if same_motion_type:
             self.reposition_G_and_H(scale, view, arrow1, arrow2)
@@ -175,7 +187,6 @@ class StaffPositioner:
                 "No optimal positions found for arrows in reposition_G_and_H"
             )
             return
-        
 
         distance1 = self.get_distance_from_center(optimal_position1)
         distance2 = self.get_distance_from_center(optimal_position2)
@@ -207,8 +218,8 @@ class StaffPositioner:
         other_staff.setPos(new_position_other)
 
     def reposition_I(self, scale, arrow1, arrow2):
-        pro_arrow = arrow1 if arrow1["motion_type"] == "pro" else arrow2
-        anti_arrow = arrow2 if arrow1["motion_type"] == "pro" else arrow1
+        pro_arrow = arrow1 if arrow1["motion_type"] == PRO else arrow2
+        anti_arrow = arrow2 if arrow1["motion_type"] == PRO else arrow1
 
         pro_staff = next(
             (
@@ -342,7 +353,7 @@ class StaffPositioner:
 
     def determine_translation_direction(self, arrow_state):
         """Determine the translation direction based on the arrow's board_state."""
-        if arrow_state["motion_type"] in ["pro", "anti"]:
+        if arrow_state["motion_type"] in [PRO, ANTI]:
             if arrow_state["end_location"] in ["n", "s"]:
                 return RIGHT if arrow_state["start_location"] == "e" else LEFT
             elif arrow_state["end_location"] in ["e", "w"]:
@@ -362,10 +373,10 @@ class StaffPositioner:
             return current_position - offset
 
     def get_opposite_direction(self, movement):
-        if movement == "left":
-            return "right"
-        elif movement == "right":
-            return "left"
+        if movement == LEFT:
+            return RIGHT
+        elif movement == RIGHT:
+            return LEFT
         elif movement == "up":
             return "down"
         elif movement == "down":

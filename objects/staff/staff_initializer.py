@@ -1,3 +1,5 @@
+from resources.constants import RED, BLUE
+
 class StaffInitializer:
     def __init__(self, staff_factory):
         self.staff_factory = staff_factory
@@ -7,12 +9,12 @@ class StaffInitializer:
         staffs = []
 
         red_staff_dict = {
-            "color": "red",
+            "color": RED,
             "location": "n",
             "layer": 1,
         }
         blue_staff_dict = {
-            "color": "blue",
+            "color": BLUE,
             "location": "s",
             "layer": 1,
         }

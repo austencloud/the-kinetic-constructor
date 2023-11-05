@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QLabel, QSizePolicy
 from objects.arrow.arrow import Arrow
 from data.positions_map import positions_map
 import logging
+from resources.constants import PRO, ANTI, LEFT, RIGHT, STATIC, BLUE, RED
 
 
 class InfoboxLabels:
@@ -13,8 +14,8 @@ class InfoboxLabels:
         self.graphboard_view = graphboard_view
 
     def setup_labels(self):
-        self.setup_color_label("Left", "blue")
-        self.setup_color_label("Right", "red")
+        self.setup_color_label(LEFT.capitalize(), BLUE)
+        self.setup_color_label(RIGHT.capitalize(), RED)
         self.type_position_label = self.create_label()
 
     def setup_color_label(self, text, color):
@@ -23,7 +24,7 @@ class InfoboxLabels:
         setattr(self, f"{color}_details_label", label)
 
     def update_labels(self, widget, attributes):
-        motion_type = attributes.get("motion_type", "").capitalize()
+        motion_type = attributes.get("motion_type", "")
         rotation_direction = attributes.get("rotation_direction", "")
         start_location = attributes.get("start_location", "")
         end_location = attributes.get("end_location", "")
@@ -35,7 +36,7 @@ class InfoboxLabels:
         start_end_label = widget.findChild(QLabel, "start_end_label")
         turns_label = widget.findChild(QLabel, "turns_label")
 
-        motion_type_label.setText(f"<h1>{motion_type}</h1>")
+        motion_type_label.setText(f"<h1>{motion_type.capitalize()}</h1>")
 
         # Update rotation_direction_label based on rotation_direction value
         if rotation_direction == "r":
@@ -59,14 +60,13 @@ class InfoboxLabels:
         else:
             rotation_direction_label.setText(f"<h1>{rotation_direction}</h1>")
 
-        if motion_type in ["Pro", "Anti", "Static"]:
+        if motion_type in [PRO, ANTI, STATIC]:
             start_end_label.setText(
                 f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{start_location.capitalize()} → {end_location.capitalize()}</span>"
             )
         elif motion_type == "":
             start_end_label.setText(f"")
         turns_label.setText(f"<span style='font-size: 20px;'>{turns}</span>")
-
 
     ### LABEL CREATION METHODS ###
 
@@ -98,7 +98,7 @@ class InfoboxLabels:
         elif rotation_direction == "l":
             rotation_direction_label.setText("Anti-Clockwise")
 
-        if motion_type in ["Pro", "Anti", "Static"]:
+        if motion_type in [PRO, ANTI, "Static"]:
             start_end_label = QLabel(
                 f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{start_location.capitalize()} → {end_location.capitalize()}</span>"
             )
@@ -122,12 +122,12 @@ class InfoboxLabels:
             item for item in self.graphboard_view.items() if isinstance(item, Arrow)
         ]
 
-        arrow_colors = {"red": None, "blue": None}
+        arrow_colors = {RED: None, BLUE: None}
         for arrow in arrow_items:
             arrow_colors[arrow.color] = (arrow.start_location, arrow.end_location)
 
-        start_location_red, end_location_red = arrow_colors["red"]
-        start_location_blue, end_location_blue = arrow_colors["blue"]
+        start_location_red, end_location_red = arrow_colors[RED]
+        start_location_blue, end_location_blue = arrow_colors[BLUE]
 
         if all(
             [
@@ -137,8 +137,8 @@ class InfoboxLabels:
                 end_location_blue,
             ]
         ):
-            start_key = (start_location_red, "red", start_location_blue, "blue")
-            end_key = (end_location_red, "red", end_location_blue, "blue")
+            start_key = (start_location_red, RED, start_location_blue, BLUE)
+            end_key = (end_location_red, RED, end_location_blue, BLUE)
             start_location = positions_map.get(start_key)
             end_location = positions_map.get(end_key)
             if start_location and end_location:
@@ -163,4 +163,3 @@ class InfoboxLabels:
         else:
             # Handle cases where the letter or type is not identified
             self.type_position_label.setText("")
-

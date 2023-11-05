@@ -15,6 +15,12 @@ from resources.constants import (
     PICTOGRAPH_HEIGHT,
     PICTOGRAPH_SCALE,
     PICTOGRAPH_GRID_PADDING,
+    PRO,
+    ANTI,
+    BLUE,
+    RED,
+    STATIC,
+    
 )
 
 
@@ -147,14 +153,14 @@ class PictographView(QGraphicsView):
                 ]
             ):
                 if (
-                    arrow_dict["motion_type"] == "pro"
-                    or arrow_dict["motion_type"] == "anti"
+                    arrow_dict["motion_type"] == PRO
+                    or arrow_dict["motion_type"] == ANTI
                 ):
                     self.place_shift_arrows(
                         DISTANCE, created_arrows, optimal_locations, arrow_dict
                     )
 
-                elif arrow_dict["motion_type"] == "static":
+                elif arrow_dict["motion_type"] == STATIC:
                     self.place_ghost_arrows(created_arrows, arrow_dict)
 
         for arrow in created_arrows:
@@ -229,9 +235,9 @@ class PictographView(QGraphicsView):
                 pos.setY(pos.y() + MAIN_GRAPHBOARD_V_OFFSET)
                 # Reverse the buffer
                 pos = pos + QPointF(MAIN_GRAPHBOARD_BUFFER, MAIN_GRAPHBOARD_BUFFER)
-                if item.get_attributes()["color"] == "red":
+                if item.get_attributes()["color"] == RED:
                     red_position = pos
-                elif item.get_attributes()["color"] == "blue":
+                elif item.get_attributes()["color"] == BLUE:
                     blue_position = pos
         self.json_handler.update_optimal_locations_in_json(red_position, blue_position)
 

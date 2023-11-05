@@ -2,21 +2,35 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt, QPointF
-from resources.constants import STAFF_WIDTH, STAFF_LENGTH, COLOR_MAP, HORIZONTAL, VERTICAL, NORTH, SOUTH, EAST, WEST
+from resources.constants import (
+    STAFF_WIDTH,
+    STAFF_LENGTH,
+    COLOR_MAP,
+    HORIZONTAL,
+    VERTICAL,
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST,
+    BLUE_HEX,
+    RED_HEX,
+)
 from objects.staff.staff_attributes import StaffAttributes
-''' 
+
+""" 
 staff_dict = {
-            "color": "red",
+            "color": RED,
             "location": "e",
             "layer": 1,
         }
         
-'''
+"""
+
 
 class Staff(QGraphicsSvgItem):
     def __init__(self, scene, staff_dict):
         super().__init__()
-        self.svg_file = 'resources/images/staffs/staff.svg'
+        self.svg_file = "resources/images/staffs/staff.svg"
         self.scene = scene
         self.arrow = None
         self.view = scene.views()[0]
@@ -28,9 +42,9 @@ class Staff(QGraphicsSvgItem):
         """Initialize attributes from the given dictionary."""
         self.attributes = self.handler.attributes
         self.attributes.update_attributes_from_dict(self, staff_dict)
-        self.color = staff_dict.get('color')
-        self.location = staff_dict.get('location')
-        self.layer = staff_dict.get('layer')
+        self.color = staff_dict.get("color")
+        self.location = staff_dict.get("location")
+        self.layer = staff_dict.get("layer")
         self.set_axis(staff_dict)
         self.set_rotation_from_axis()
 
@@ -38,12 +52,13 @@ class Staff(QGraphicsSvgItem):
         """Set the axis based on the staff dictionary."""
         axis_switch = {
             1: {HORIZONTAL: [WEST, EAST], VERTICAL: [NORTH, SOUTH]},
-            2: {HORIZONTAL: [NORTH, SOUTH], VERTICAL: [WEST, EAST]}
+            2: {HORIZONTAL: [NORTH, SOUTH], VERTICAL: [WEST, EAST]},
         }
         try:
             self.axis = next(
-                axis for axis, locations in axis_switch.get(self.layer, {}).items()
-                if staff_dict.get('location') in locations
+                axis
+                for axis, locations in axis_switch.get(self.layer, {}).items()
+                if staff_dict.get("location") in locations
             )
         except StopIteration:
             self.axis = HORIZONTAL
@@ -58,9 +73,9 @@ class Staff(QGraphicsSvgItem):
 
     def get_staff_center(self, scale):
         if self.axis == VERTICAL:
-            return QPointF((STAFF_WIDTH/2) * scale, -(STAFF_LENGTH / 2) * scale)
+            return QPointF((STAFF_WIDTH / 2) * scale, -(STAFF_LENGTH / 2) * scale)
         elif self.axis == HORIZONTAL:
-            return QPointF(-(STAFF_LENGTH/2) * scale, -(STAFF_WIDTH / 2) * scale)
+            return QPointF(-(STAFF_LENGTH / 2) * scale, -(STAFF_WIDTH / 2) * scale)
 
     def update_appearance(self):
         self.set_color(self.color)
@@ -76,13 +91,13 @@ class Staff(QGraphicsSvgItem):
 
     def set_color(self, new_color):
         hex_color = COLOR_MAP.get(new_color, new_color)
-        with open(self.svg_file, 'r') as f:
-            svg_data = f.read().replace("#ED1C24", hex_color).replace("#2E3192", hex_color)
-        self.renderer.load(svg_data.encode('utf-8'))
-        
+        with open(self.svg_file, "r") as f:
+            svg_data = f.read().replace(RED_HEX, hex_color).replace(BLUE_HEX, hex_color)
+        self.renderer.load(svg_data.encode("utf-8"))
+
         if not self.renderer.isValid():
             print("Renderer is not valid. SVG data might be incorrect.")
-        
+
         self.setSharedRenderer(self.renderer)  # Re-attach the renderer
         self.color = new_color
         self.scene.update()  # Force a redraw
@@ -93,7 +108,7 @@ class Staff(QGraphicsSvgItem):
         else:
             self.axis = VERTICAL
         self.set_rotation_from_axis()
-        
+
     def set_rotation_from_axis(self):
         if self.axis == VERTICAL:
             self.current_position = self.pos()
@@ -105,5 +120,7 @@ class Staff(QGraphicsSvgItem):
         if event.buttons() == Qt.MouseButton.LeftButton:
             offset = self.get_staff_center(self.view.view_scale)
             x_offset, y_offset = offset.x(), offset.y()
-            self.setPos(event.scenePos().x() + x_offset, event.scenePos().y() + y_offset)
+            self.setPos(
+                event.scenePos().x() + x_offset, event.scenePos().y() + y_offset
+            )
         super().mouseMoveEvent(event)

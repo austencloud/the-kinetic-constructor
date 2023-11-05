@@ -22,27 +22,25 @@ class ArrowSelector:
         else:
             print("No items selected")
 
-
     ### HELPERS ###
- 
+
     def initialize_ghost_arrow(self, arrow, scene):
         view = self.arrow_manager.graphboard_view
         deleted_arrow_attributes = arrow.attributes.get_attributes(arrow)
         ghost_attributes_dict = {
-                    "color": deleted_arrow_attributes["color"],
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": deleted_arrow_attributes["end_location"],
-                    "end_location": deleted_arrow_attributes["end_location"],
-                    "turns": 0,
-                }
+            "color": deleted_arrow_attributes["color"],
+            "motion_type": STATIC,
+            "rotation_direction": "None",
+            "quadrant": "None",
+            "start_location": deleted_arrow_attributes["end_location"],
+            "end_location": deleted_arrow_attributes["end_location"],
+            "turns": 0,
+        }
 
         ghost_arrow = self.arrow_manager.factory.create_arrow(
-                    view, ghost_attributes_dict
-                )
-                
-        
+            view, ghost_attributes_dict
+        )
+
         scene.addItem(ghost_arrow)
         ghost_arrow.is_ghost = True
         ghost_arrow.setScale(GRAPHBOARD_SCALE)

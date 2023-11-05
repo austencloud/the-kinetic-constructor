@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QIcon
 from objects.arrow.arrow import Arrow
-
+from resources.constants import BLUE, RED
 
 class InfoboxButtons:
     BUTTON_SIZE = 30
@@ -25,27 +25,26 @@ class InfoboxButtons:
             self.infobox, f"{button_name}_button", button
         )  # sets each button to be a class attribute of the infobox
 
-
     def update_buttons(self, attributes):
         color = attributes.get("color", "")
         swap_motion_type_button = (
             self.infobox.swap_motion_type_blue_button
-            if color == "blue"
+            if color == BLUE
             else self.infobox.swap_motion_type_red_button
         )
         swap_start_end_button = (
             self.infobox.swap_start_end_blue_button
-            if color == "blue"
+            if color == BLUE
             else self.infobox.swap_start_end_red_button
         )
         decrement_turns_button = (
             self.infobox.decrement_turns_blue_button
-            if color == "blue"
+            if color == BLUE
             else self.infobox.decrement_turns_red_button
         )
         increment_turns_button = (
             self.infobox.increment_turns_blue_button
-            if color == "blue"
+            if color == BLUE
             else self.infobox.increment_turns_red_button
         )
 
@@ -53,7 +52,6 @@ class InfoboxButtons:
         swap_start_end_button.setVisible(True)
         decrement_turns_button.setVisible(True)
         increment_turns_button.setVisible(True)
-
 
     def setup_buttons(self):
         self.button_properties = {
@@ -65,57 +63,57 @@ class InfoboxButtons:
             "swap_motion_type_blue": {
                 "icon": "resources/images/icons/swap.jpg",
                 "callback": lambda: self.arrow_manipulator.swap_motion_type(
-                    self.graphboard_view.get_arrows_by_color("blue"), "blue"
+                    self.graphboard_view.get_arrows_by_color(BLUE), BLUE
                 ),
             },
             "swap_motion_type_red": {
                 "icon": "resources/images/icons/swap.jpg",
                 "callback": lambda: self.arrow_manipulator.swap_motion_type(
-                    self.graphboard_view.get_arrows_by_color("red"), "red"
+                    self.graphboard_view.get_arrows_by_color(RED), RED
                 ),
             },
             "swap_start_end_blue": {
                 "icon": "resources/images/icons/swap.jpg",
                 "callback": lambda: self.arrow_manipulator.mirror_arrow(
-                    self.graphboard_view.get_arrows_by_color("blue"), "blue"
+                    self.graphboard_view.get_arrows_by_color(BLUE), BLUE
                 ),
             },
             "swap_start_end_red": {
                 "icon": "resources/images/icons/swap.jpg",
                 "callback": lambda: self.arrow_manipulator.mirror_arrow(
-                    self.graphboard_view.get_arrows_by_color("red"), "red"
+                    self.graphboard_view.get_arrows_by_color(RED), RED
                 ),
             },
             "decrement_turns_blue": {
                 "icon": None,
                 "text": "-",
                 "callback": lambda: self.arrow_manipulator.decrement_turns(
-                    self.graphboard_view.get_arrows_by_color("blue"), "blue"
+                    self.graphboard_view.get_arrows_by_color(BLUE), BLUE
                 ),
             },
             "decrement_turns_red": {
                 "icon": None,
                 "text": "-",
                 "callback": lambda: self.arrow_manipulator.decrement_turns(
-                    self.graphboard_view.get_arrows_by_color("red"), "red"
+                    self.graphboard_view.get_arrows_by_color(RED), RED
                 ),
             },
             "increment_turns_blue": {
                 "icon": None,
                 "text": "+",
                 "callback": lambda: self.arrow_manipulator.increment_turns(
-                    self.graphboard_view.get_arrows_by_color("blue"), "blue"
+                    self.graphboard_view.get_arrows_by_color(BLUE), BLUE
                 ),
             },
             "increment_turns_red": {
                 "icon": None,
                 "text": "+",
                 "callback": lambda: self.arrow_manipulator.increment_turns(
-                    self.graphboard_view.get_arrows_by_color("red"), "red"
+                    self.graphboard_view.get_arrows_by_color(RED), RED
                 ),
             },
         }
-        
+
         self.create_infobox_buttons()
 
     def create_infobox_buttons(self):
@@ -123,6 +121,6 @@ class InfoboxButtons:
             self.create_and_set_button(button_name, properties)
             button = getattr(self.infobox, f"{button_name}_button")
             button.setVisible(False)  # Set initial visibility to False
-            
+
         self.layouts = self.infobox_manager.layouts
         self.layouts.setup_button_layout()
