@@ -1,6 +1,6 @@
 GRID_PATH = "resources/images/grid/grid.svg"
-ARROW_DIR = "resources/images/arrows"
-LETTER_SVG_DIR = "resources/images/letters"
+ARROW_DIR = "resources/images/arrows/"
+LETTER_SVG_DIR = "resources/images/letters/"
 ICON_DIR = "resources/images/icons/"
 STAFF_SVG_PATH = "resources/images/staffs/staff.svg"
 
@@ -52,4 +52,8 @@ STAFFS = "staffs"
 
 COLOR_MAP = {RED: RED_HEX, BLUE: BLUE_HEX}
 
-ICONS = {CLOCKWISE: "clockwise.png", COUNTER_CLOCKWISE: "counter_clockwise.png"}
+### ICONS ###
+
+CLOCKWISE_ICON = ICON_DIR + "clockwise.png"
+COUNTER_CLOCKWISE_ICON = ICON_DIR + "counter_clockwise.png"
+SWAP_ICON = "swap.png"

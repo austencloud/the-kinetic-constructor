@@ -20,30 +20,34 @@ class InfoboxLabels:
         self.setup_attribute_label(RIGHT.capitalize(), RED)
         self.type_position_label = self.create_label()
 
-    def create_attribute_labels(self, attributes):
-        """Create labels for motion type, start-end locations, and turns."""
-        motion_type = attributes.get(MOTION_TYPE, "").capitalize()
-        rotation_direction = attributes.get(ROTATION_DIRECTION, "")
-        start_location = attributes.get(START_LOCATION, "")
-        end_location = attributes.get(END_LOCATION, "")
-        turns = attributes.get(TURNS, "")
-
-        motion_type_label = QLabel(f"<h1>{motion_type}</h1>")
+    def create_attribute_labels(self):
+        motion_type_label = QLabel()
         motion_type_label.setObjectName("motion_type_label")
 
-        rotation_direction_label = QLabel(f"<h1>{rotation_direction}</h1>")
+        rotation_direction_label = QLabel()
         rotation_direction_label.setObjectName("rotation_direction_label")
 
-        start_end_label = QLabel(
-            f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{start_location.capitalize()} → {end_location.capitalize()}</span>"
-        )
+        start_end_label = QLabel()
         start_end_label.setObjectName("start_end_label")
 
-        turns_label = QLabel(f"<span style='font-size: 20px;'>{turns}</span>")
+        turns_label = QLabel()
         turns_label.setObjectName("turns_label")
-        turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
         turns_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
+        attribute_labels = {}
+        
+        
+        
+        attribute_labels[motion_type_label.objectName()] = motion_type_label
+        attribute_labels[rotation_direction_label.objectName()] = rotation_direction_label
+        attribute_labels[start_end_label.objectName()] = start_end_label
+        attribute_labels[turns_label.objectName()] = turns_label
+        
+        for label in attribute_labels.values():
+            label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        
         return motion_type_label, rotation_direction_label, start_end_label, turns_label
 
     ### LABEL UPDATING ###
@@ -62,10 +66,15 @@ class InfoboxLabels:
 
         motion_type_label.setText(f"<h1>{motion_type.capitalize()}</h1>")
 
-        rotation_icon_filename = ICONS.get(rotation_direction)
-        icon_path = ICON_DIR + rotation_icon_filename
-        self.set_clock_pixmap(rotation_direction_label, icon_path)
-
+        if rotation_direction:
+            if rotation_direction == CLOCKWISE:
+                clock_icon = CLOCKWISE_ICON
+            elif rotation_direction == COUNTER_CLOCKWISE:
+                clock_icon = COUNTER_CLOCKWISE_ICON
+            self.set_clock_pixmap(rotation_direction_label, clock_icon)
+        else:
+            rotation_direction_label.setText("")
+    
         if motion_type in [PRO, ANTI, STATIC]:
             start_end_label.setText(
                 f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{start_location.capitalize()} → {end_location.capitalize()}</span>"
@@ -94,10 +103,12 @@ class InfoboxLabels:
     def set_clock_pixmap(self, label, path):
         pixmap = QPixmap(path)
         pixmap = pixmap.scaled(
-            60, 60, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation
+            60,
+            60,
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
         )
         label.setPixmap(pixmap)
-
 
     def setup_attribute_label(self, text, color):
         label = self.create_label(text, color)

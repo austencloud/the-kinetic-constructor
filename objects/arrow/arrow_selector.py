@@ -1,6 +1,6 @@
 from objects.arrow.arrow import Arrow
 from settings.numerical_constants import GRAPHBOARD_SCALE
-
+from settings.string_constants import *
 
 class ArrowSelector:
     def __init__(self, arrow_manager):
@@ -30,10 +30,10 @@ class ArrowSelector:
         ghost_attributes_dict = {
             COLOR: deleted_arrow_attributes[COLOR],
             MOTION_TYPE: STATIC,
-            ROT_DIR: "None",
+            ROTATION_DIRECTION: "None",
             QUADRANT: "None",
-            START: deleted_arrow_attributes[END],
-            END: deleted_arrow_attributes[END],
+            START_LOCATION: deleted_arrow_attributes[END_LOCATION],
+            END_LOCATION: deleted_arrow_attributes[END_LOCATION],
             TURNS: 0,
         }
 

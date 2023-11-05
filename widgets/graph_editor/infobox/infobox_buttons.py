@@ -1,10 +1,12 @@
 from PyQt6.QtWidgets import QPushButton
-from PyQt6.QtGui import QIcon
-from settings.string_constants import COLOR, RED, BLUE
+from PyQt6.QtGui import QIcon, QFont
+from settings.string_constants import *
 
 
 class InfoboxButtons:
     BUTTON_SIZE = 30
+    TURN_BUTTONS_FONT = QFont()
+    TURN_BUTTONS_FONT.setPointSize(20)
 
     def __init__(self, infobox, infobox_manager, arrow_manipulator, graphboard_view):
         self.infobox = infobox
@@ -23,7 +25,10 @@ class InfoboxButtons:
         button.setFixedSize(self.BUTTON_SIZE, self.BUTTON_SIZE)
         setattr(
             self, f"{button_name}_button", button
-        )  # sets each button to be a class attribute of the infobox
+        )  
+        
+        if properties.get("text") in ["+", "-"]:
+            button.setFont(self.TURN_BUTTONS_FONT)
 
     def update_buttons(self, attributes):
         color = attributes.get(COLOR, "")
@@ -61,53 +66,49 @@ class InfoboxButtons:
                 "callback": self.arrow_manipulator.swap_colors,
             },
             "swap_motion_type_blue": {
-                "icon": "resources/images/icons/swap.jpg",
+                "icon": ICON_DIR + "swap.jpg",
                 "callback": lambda: self.arrow_manipulator.swap_motion_type(
                     self.graphboard_view.get_arrows_by_color(BLUE), BLUE
                 ),
             },
             "swap_motion_type_red": {
-                "icon": "resources/images/icons/swap.jpg",
+                "icon": ICON_DIR + "swap.jpg",
                 "callback": lambda: self.arrow_manipulator.swap_motion_type(
                     self.graphboard_view.get_arrows_by_color(RED), RED
                 ),
             },
             "swap_start_end_blue": {
-                "icon": "resources/images/icons/swap.jpg",
+                "icon": ICON_DIR + "swap.jpg",
                 "callback": lambda: self.arrow_manipulator.mirror_arrow(
                     self.graphboard_view.get_arrows_by_color(BLUE), BLUE
                 ),
             },
             "swap_start_end_red": {
-                "icon": "resources/images/icons/swap.jpg",
+                "icon": ICON_DIR + "swap.jpg",
                 "callback": lambda: self.arrow_manipulator.mirror_arrow(
                     self.graphboard_view.get_arrows_by_color(RED), RED
                 ),
             },
             "decrement_turns_blue": {
-                "icon": None,
-                "text": "-",
+                "icon": ICON_DIR + "decrement_turns.png",
                 "callback": lambda: self.arrow_manipulator.decrement_turns(
                     self.graphboard_view.get_arrows_by_color(BLUE), BLUE
                 ),
             },
-            "decrement_turns_red": {
-                "icon": None,
-                "text": "-",
-                "callback": lambda: self.arrow_manipulator.decrement_turns(
-                    self.graphboard_view.get_arrows_by_color(RED), RED
-                ),
-            },
             "increment_turns_blue": {
-                "icon": None,
-                "text": "+",
+                "icon": ICON_DIR + "increment_turns.png",
                 "callback": lambda: self.arrow_manipulator.increment_turns(
                     self.graphboard_view.get_arrows_by_color(BLUE), BLUE
                 ),
             },
+            "decrement_turns_red": {
+                "icon": ICON_DIR + "decrement_turns.png",
+                "callback": lambda: self.arrow_manipulator.decrement_turns(
+                    self.graphboard_view.get_arrows_by_color(RED), RED
+                ),
+            },
             "increment_turns_red": {
-                "icon": None,
-                "text": "+",
+                "icon": ICON_DIR + "increment_turns.png",
                 "callback": lambda: self.arrow_manipulator.increment_turns(
                     self.graphboard_view.get_arrows_by_color(RED), RED
                 ),

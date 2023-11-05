@@ -27,7 +27,7 @@ class InfoboxWidgets():
             rotation_direction_label,
             start_end_label,
             turns_label,
-        ) = self.labels.create_attribute_labels(attributes)
+        ) = self.labels.create_attribute_labels()
 
         start_end_layout = QHBoxLayout()
         start_end_button = getattr(self.buttons, f"swap_start_end_{color}_button")
