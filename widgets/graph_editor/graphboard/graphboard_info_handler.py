@@ -4,27 +4,24 @@ from settings.string_constants import COLOR
 
 
 class GraphboardInfoHandler:
-    def __init__(self, main_widget, view):
+    def __init__(self, main_widget, scene):
         self.main_widget = main_widget
         self.letters = main_widget.letters
-        self.view = view
+        self.scene = scene
 
     def connect_widgets_and_managers(self):
         self.graph_editor = self.main_widget.graph_editor
         self.infobox = self.graph_editor.infobox
-        self.staff_handler = self.view.staff_handler
+        self.staff_handler = self.scene.staff_handler
         self.arrow_manager = self.main_widget.arrow_manager
         self.arrow_positioner = self.arrow_manager.positioner
 
     def update(self):
         self.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard)
-        self.infobox.manager.labels.update_type_and_position_labels()
-        self.view.update_letter(self.determine_current_letter_and_type()[0])
-        self.staff_handler.update_graphboard_staffs(self.view.scene())
+        self.infobox.labels.update_type_and_position_labels()
+        self.scene.update_letter(self.determine_current_letter_and_type()[0])
+        self.staff_handler.update_graphboard_staffs(self.scene)
         self.infobox.update()
-
-    def connect_view(self, view):
-        self.view = view
 
     def determine_current_letter_and_type(self):
         current_combination = []
@@ -37,7 +34,7 @@ class GraphboardInfoHandler:
             current_combination.append(sorted_drag_attr)
 
         # Add attributes of arrows already in the scene to the current_combination list
-        for arrow in self.view.items():
+        for arrow in self.scene.items():
             if isinstance(arrow, Arrow):
                 attributes = arrow.attributes.get_attributes(arrow)
                 sorted_attributes = {

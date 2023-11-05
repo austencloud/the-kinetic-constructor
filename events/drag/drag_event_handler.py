@@ -1,11 +1,11 @@
 from events.drag.drag_preview import DragPreview
 
-
 class DragEventHandler:
     def __init__(self, drag_manager):
         self.drag_manager = drag_manager
         self.helpers = self.drag_manager.helpers
         self.graphboard = self.drag_manager.graphboard
+        self.arrowbox = self.drag_manager.arrowbox
         self.scene_updater = self.drag_manager.scene_updater
         self.info_handler = self.drag_manager.info_handler
         self.staff_handler = self.drag_manager.staff_handler
@@ -17,20 +17,17 @@ class DragEventHandler:
     ### DRAG INITIALIZATION ###
 
     def start_drag(self, scene, target_arrow, event_pos):
-        if not self.helpers.is_click_on_arrow(scene, event_pos):
-            return
         self.setup_drag_preview(scene, target_arrow, event_pos)
 
-    def setup_drag_preview(self, view, target_arrow, event):
+    def setup_drag_preview(self, scene, target_arrow, event_pos):
         self.drag_preview = DragPreview(self.drag_manager, target_arrow)
         self.arrow_dragged = True
         self.dragging = True
-        self.previous_quadrant = None  # Initialize the previous quadrant to None
+        self.previous_quadrant = None
         self.target_arrow = target_arrow
-        self.graphboard.dragged_arrow = self.target_arrow
-        self.drag_preview.setParent(view.main_widget)
+        self.drag_preview.setParent(scene.main_widget)
         self.drag_preview.show()
-        self.drag_preview.move_to_cursor(view, event, self.target_arrow)
+        self.drag_preview.move_to_cursor(scene, event_pos, target_arrow)
 
     ### DRAG INTO GRAPHBOARD ###
 
@@ -45,7 +42,7 @@ class DragEventHandler:
 
         local_pos_in_graphboard = self.helpers.get_local_pos_in_graphboard(view, event)
         new_quadrant = self.graphboard.get_graphboard_quadrants(
-            self.graphboard.view.mapToScene(local_pos_in_graphboard)
+            self.graphboard.view.mapToScene(local_pos_in_graphboard.toPoint())
         )
 
         # Check if the quadrant has changed
@@ -90,14 +87,14 @@ class DragEventHandler:
 
     ### MOUSE MOVE ###
 
-    def handle_mouse_move(self, view, event):
+    def handle_mouse_move(self, arrowbox, event, event_pos):
         if hasattr(self, "drag_preview") and self.drag_preview:
-            self.update_drag_preview_on_mouse_move(view, event)
+            self.update_drag_preview_on_mouse_move(arrowbox, event_pos)
         else:
             event.ignore()
 
-    def update_drag_preview_on_mouse_move(self, view, event):
-        self.update_arrow_drag_preview(view, event)
+    def update_drag_preview_on_mouse_move(self, arrowbox, event_pos):
+        self.update_arrow_drag_preview(arrowbox, event_pos)
         if self.drag_preview.has_entered_graphboard_once and self.content_changed:
             new_arrow_dict = self.arrow_manager.attributes.create_dict_from_arrow(
                 self.drag_preview
@@ -112,27 +109,31 @@ class DragEventHandler:
             self.info_handler.update()
             self.content_changed = False
 
-    def update_arrow_drag_preview(self, view, event):
+    def update_arrow_drag_preview(self, arrowbox, event_pos):
         """Update the arrow's drag preview."""
-        over_graphboard = self.helpers.is_over_graphboard(view, event)
+        over_graphboard = self.helpers.is_over_graphboard(arrowbox, event_pos)
 
         if over_graphboard:
-            self.handle_drag_into_graphboard(view, event)
+            self.handle_drag_into_graphboard(arrowbox, event_pos)
 
-        self.drag_preview.move_to_cursor(view, event, self.target_arrow)
+        self.drag_preview.move_to_cursor(arrowbox, event_pos, self.target_arrow)
 
     ### MOUSE RELEASE ###
 
-    def handle_mouse_release(self, event):
+    def handle_mouse_release(self, event, event_pos):
         if hasattr(self, "drag_preview") and self.drag_preview:
-            self.handle_drop_event(event)
+            self.handle_drop_event(event, event_pos)
             self.drag_manager.reset_drag_state()
 
-    def handle_drop_event(self, event):
+    def handle_drop_event(self, event, event_pos):
         if self.dragging:
-            self.place_arrow_on_graphboard(event)
-            self.scene_updater.cleanup_and_update_scene()
-            self.scene_updater.update_info_handler()
+            if event_pos.toPoint() not in self.arrowbox.view.rect():
+                self.place_arrow_on_graphboard(event)
+                self.scene_updater.cleanup_and_update_scene()
+                self.scene_updater.update_info_handler()
+            else:
+                self.drag_preview.deleteLater()
+                self.drag_preview = None
 
     def place_arrow_on_graphboard(self, event):
         placed_arrow = self.invisible_arrow

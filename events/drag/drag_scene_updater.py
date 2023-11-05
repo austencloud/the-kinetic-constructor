@@ -24,13 +24,13 @@ class DragSceneUpdater:
 
         from objects.arrow.arrow import Arrow
 
-        for item in self.drag_manager.graphboard.graphboard.items():
+        for item in self.drag_manager.graphboard.items():
             if isinstance(item, Arrow):
                 item.arrow_manager.positioner.update_arrow_position(
                     self.drag_manager.graphboard
                 )
 
-        for item in self.drag_manager.graphboard.graphboard.items():
+        for item in self.drag_manager.graphboard.items():
             if isinstance(item, Staff) and item.isVisible():
                 item.setPos(
                     self.drag_manager.graphboard.staff_handler.staff_xy_locations[

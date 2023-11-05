@@ -34,11 +34,8 @@ class StaffPositioner:
                 self.reposition_staffs(scene, board_state)
 
     def reposition_staffs(self, scene, board_state):
-        view = scene.views()[0]
-        scale = GRAPHBOARD_SCALE if view else PICTOGRAPH_SCALE
-
         def move_staff(staff, direction):
-            new_position = self.calculate_new_position(staff.pos(), direction, scale)
+            new_position = self.calculate_new_position(staff.pos(), direction)
             staff.setPos(new_position)
 
         arrows_grouped_by_start = {}
@@ -54,7 +51,7 @@ class StaffPositioner:
 
         # STATIC BETA
         if len(static_arrows) > 1:
-            self.reposition_static_beta(move_staff, static_arrows, scale)
+            self.reposition_static_beta(move_staff, static_arrows)
 
         # BETA → BETA - G, H, I
         for start_location, arrows in arrows_grouped_by_start.items():
@@ -68,7 +65,7 @@ class StaffPositioner:
                         PRO,
                         ANTI,
                     ]:
-                        self.reposition_beta_to_beta(scene, arrows, scale)
+                        self.reposition_beta_to_beta(scene, arrows)
 
         # GAMMA → BETA - Y, Z
         if len(pro_or_anti_arrows) == 1 and len(static_arrows) == 1:
@@ -147,8 +144,7 @@ class StaffPositioner:
                         direction,
                     )
 
-    def reposition_beta_to_beta(self, scene, arrows, scale):  # G, H, I
-        view = scene.views()[0]
+    def reposition_beta_to_beta(self, scene, arrows):  # G, H, I
         if len(arrows) != 2:
             return
 
@@ -156,16 +152,16 @@ class StaffPositioner:
         same_motion_type = arrow1[MOTION_TYPE] == arrow2[MOTION_TYPE] in [PRO, ANTI]
 
         if same_motion_type:
-            self.reposition_G_and_H(scale, view, arrow1, arrow2)
+            self.reposition_G_and_H(scene, arrow1, arrow2)
 
         else:
-            self.reposition_I(scale, arrow1, arrow2)
+            self.reposition_I(arrow1, arrow2)
 
         scene.update()
 
-    def reposition_G_and_H(self, scale, view, arrow1, arrow2):
-        optimal_position1 = self.get_optimal_arrow_location(arrow1, view)
-        optimal_position2 = self.get_optimal_arrow_location(arrow2, view)
+    def reposition_G_and_H(self, scene, arrow1, arrow2):
+        optimal_position1 = self.get_optimal_arrow_location(arrow1, scene)
+        optimal_position2 = self.get_optimal_arrow_location(arrow2, scene)
 
         if not optimal_position1 or not optimal_position2:
             logging.warning(
@@ -187,7 +183,7 @@ class StaffPositioner:
             if staff.arrow.color == further_arrow[COLOR]
         )
         new_position_further = self.calculate_new_position(
-            further_staff.pos(), further_direction, scale
+            further_staff.pos(), further_direction
         )
         further_staff.setPos(new_position_further)
 
@@ -198,11 +194,11 @@ class StaffPositioner:
             if staff.arrow.color == other_arrow[COLOR]
         )
         new_position_other = self.calculate_new_position(
-            other_staff.pos(), other_direction, scale
+            other_staff.pos(), other_direction
         )
         other_staff.setPos(new_position_other)
 
-    def reposition_I(self, scale, arrow1, arrow2):
+    def reposition_I(self, arrow1, arrow2):
         pro_arrow = arrow1 if arrow1[MOTION_TYPE] == PRO else arrow2
         anti_arrow = arrow2 if arrow1[MOTION_TYPE] == PRO else arrow1
 
@@ -234,13 +230,13 @@ class StaffPositioner:
 
             # Move the staff corresponding to the pro arrow closer
             new_position_pro = self.calculate_new_position(
-                pro_staff.pos(), pro_staff_translation_direction, scale
+                pro_staff.pos(), pro_staff_translation_direction
             )
             pro_staff.setPos(new_position_pro)
 
             # Move the other staff further
             new_position_anti = self.calculate_new_position(
-                anti_staff.pos(), anti_staff_translation_direction, scale
+                anti_staff.pos(), anti_staff_translation_direction
             )
             anti_staff.setPos(new_position_anti)
 
@@ -285,14 +281,14 @@ class StaffPositioner:
         )
         return distance
 
-    def get_optimal_arrow_location(self, arrow, view):
-        current_state = view.get_state()
-        current_letter = view.info_handler.determine_current_letter_and_type()[0]
+    def get_optimal_arrow_location(self, arrow, scene):
+        current_state = scene.get_state()
+        current_letter = scene.info_handler.determine_current_letter_and_type()[0]
 
         if current_letter is not None:
             matching_letters = self.letters[current_letter]
             optimal_location = self.find_optimal_arrow_location(
-                current_state, view, matching_letters, arrow
+                current_state, scene, matching_letters, arrow
             )
 
             if optimal_location:
@@ -301,10 +297,10 @@ class StaffPositioner:
         return None  # Return None if there are no optimal positions
 
     def find_optimal_arrow_location(
-        self, current_state, view, matching_letters, arrow_dict
+        self, current_state, scene, matching_letters, arrow_dict
     ):
         for variations in matching_letters:
-            if view.main_widget.arrow_manager.state_comparator.compare_states(
+            if scene.main_widget.arrow_manager.state_comparator.compare_states(
                 current_state, variations
             ):
                 optimal_entry = next(
@@ -345,12 +341,12 @@ class StaffPositioner:
                 return DOWN if arrow_state[START_LOCATION] == SOUTH else UP
         return None
 
-    def calculate_new_position(self, current_position, direction, scale):
+    def calculate_new_position(self, current_position, direction):
         """Calculate the new position based on the direction."""
         offset = (
-            QPointF(BETA_OFFSET * scale, 0)
+            QPointF(BETA_OFFSET, 0)
             if direction in [LEFT, RIGHT]
-            else QPointF(0, BETA_OFFSET * scale)
+            else QPointF(0, BETA_OFFSET)
         )
         if direction in [RIGHT, DOWN]:
             return current_position + offset

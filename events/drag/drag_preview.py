@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from settings.numerical_constants import GRAPHBOARD_SCALE
-
+from settings.string_constants import *
 
 class DragPreview(QWidget):
     def __init__(self, drag_manager, arrow):
@@ -61,16 +61,16 @@ class DragPreview(QWidget):
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,
             QUADRANT: self.quadrant,
-            ROT_DIR: self.rotation_direction,
-            START: start_location,
-            END: end_location,
+            ROTATION_DIRECTION: self.rotation_direction,
+            START_LOCATION: start_location,
+            END_LOCATION: end_location,
             TURNS: self.turns,
         }
 
-    def move_to_cursor(self, view, event, target_arrow):
-        main_window = view.window()
-        local_pos = view.mapTo(main_window, event.pos())
-        self.move(local_pos - (target_arrow.center * GRAPHBOARD_SCALE).toPoint())
+    def move_to_cursor(self, graphboard, event_pos, target_arrow):
+        main_window = graphboard.view.window()
+        local_pos = graphboard.view.mapTo(main_window, event_pos)
+        self.move(local_pos.toPoint() - (target_arrow.center * GRAPHBOARD_SCALE).toPoint())
 
     def update_rotation_for_quadrant(self, new_quadrant):
         self.in_graphboard = True

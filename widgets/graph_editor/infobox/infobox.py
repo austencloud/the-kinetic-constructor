@@ -32,9 +32,9 @@ class Infobox(QFrame):
             arrows = self.graphboard.get_arrows_by_color(color)
             if arrows:
                 attributes = self.arrow_attributes.create_dict_from_arrow(arrows[0])
-                widget = getattr(self.manager.widgets, f"{color}_attributes_widget")
-                self.manager.widgets.update_info_widget_content(widget, attributes)
+                widget = getattr(self.widgets, f"{color}_attributes_widget")
+                self.widgets.update_info_widget_content(widget, attributes)
                 widget.setVisible(True)
             else:
-                widget = getattr(self.manager.widgets, f"{color}_attributes_widget")
+                widget = getattr(self.widgets, f"{color}_attributes_widget")
                 widget.setVisible(False)

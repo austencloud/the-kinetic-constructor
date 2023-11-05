@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsItem
+from PyQt6.QtWidgets import QGraphicsItem
 
 class DragHelpers:
     def __init__(self, drag_manager):
@@ -8,21 +8,16 @@ class DragHelpers:
         self.staff_factory = self.drag_manager.staff_factory
         self.arrow_factory = self.drag_manager.arrow_factory
 
-    def is_click_on_arrow(self, scene, event_pos):
-        from objects.arrow.arrow import Arrow
-        items = scene.items(event_pos.toPoint())
-        return any(isinstance(item, Arrow) for item in items)
-
-    def is_over_graphboard(self, scene, event):
-        pos_in_main_window = scene.mapTo(scene.window(), event.pos())
+    def is_over_graphboard(self, scene, event_pos):
+        pos_in_main_window = scene.view.mapTo(scene.main_widget, event_pos)
         local_pos_in_graphboard = self.drag_manager.graphboard.view.mapFrom(
-            scene.window(), pos_in_main_window
+            scene.main_widget, pos_in_main_window
         )
-        return self.drag_manager.graphboard.view.rect().contains(local_pos_in_graphboard)
+        return self.drag_manager.graphboard.view.rect().contains(local_pos_in_graphboard.toPoint())
 
-    def get_local_pos_in_graphboard(self, scene, event):
+    def get_local_pos_in_graphboard(self, scene, event_pos):
         return self.drag_manager.graphboard.view.mapFrom(
-            scene.window(), scene.mapTo(scene.window(), event.pos())
+            scene.main_widget, scene.view.mapTo(scene.main_widget, event_pos)
         )
 
     def create_and_add_arrow(self, arrow_dict):

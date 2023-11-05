@@ -80,20 +80,21 @@ class Arrowbox(QGraphicsScene):
         blue_anti_arrow.setPos(25, 25)
 
     def mousePressEvent(self, event):
-        scenePos = event.scenePos()  # Directly get the scene position
-        items = self.items(scenePos)
-        arrows = [item for item in items if isinstance(item, Arrow)]
+        event_pos = event.scenePos()  # Directly get the scene position
+        arrows = self.items(event_pos)
         if arrows:
             self.dragged_item = arrows[0]
         if arrows and event.button() == Qt.MouseButton.LeftButton:
             self.drag_manager.event_handler.start_drag(
-                self.view, self.dragged_item, scenePos
+                self, self.dragged_item, event_pos
             )
         else:
             event.ignore()
 
     def mouseMoveEvent(self, event):
-        self.drag_manager.event_handler.handle_mouse_move(self.view, event)
+        event_pos = event.scenePos()  # Directly get the scene position
+        self.drag_manager.event_handler.handle_mouse_move(self, event, event_pos)
 
     def mouseReleaseEvent(self, event):
-        self.drag_manager.event_handler.handle_mouse_release(event)
+        event_pos = event.scenePos()  # Directly get the scene position
+        self.drag_manager.event_handler.handle_mouse_release(event, event_pos)

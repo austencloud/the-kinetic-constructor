@@ -31,32 +31,39 @@ class Graphboard(QGraphicsScene):
     def __init__(self, main_widget):
         super().__init__()
         self.main_widget = main_widget
-        self.grid = Grid(GRID_PATH)
-        self.grid.setScale(GRAPHBOARD_SCALE)
+        self.view = QGraphicsView()
+        self.set_dimensions()
+        self.init_grid()
+        self.init_handlers()
+        self.init_staffs()
+        self.init_letterbox()
+        
+    def set_dimensions(self):
         self.setSceneRect(0, 0, int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
-        self.addItem(self.grid)
+        self.view.setFixedSize(int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
+        self.scale = GRAPHBOARD_SCALE
+        
+    def init_letterbox(self):
         self.letter_renderers = {}
         self.letter_item = QGraphicsSvgItem()
         self.addItem(self.letter_item)
-        self.scale = GRAPHBOARD_SCALE
-        self.arrow_manager = main_widget.arrow_manager
-        self.staff_handler = GraphboardStaffHandler(main_widget, self)
-        self.info_handler = GraphboardInfoHandler(main_widget, self)
+
+    def init_handlers(self):
+        self.staff_handler = GraphboardStaffHandler(self.main_widget, self)
+        self.info_handler = GraphboardInfoHandler(self.main_widget, self)
         self.export_manager = ExportHandler(self.staff_handler, self.grid, self)
+        self.context_menu_manager = GraphboardContextMenuHandler(self)
+        self.arrow_manager = self.main_widget.arrow_manager
         self.drag_manager = self.main_widget.drag_manager
-        self.arrow_manager = main_widget.arrow_manager
+        self.arrow_manager = self.main_widget.arrow_manager
         self.arrow_factory = self.arrow_manager.factory
         self.staff_factory = self.staff_handler.factory
-        self.view = QGraphicsView()
-        context_menu_manager = GraphboardContextMenuHandler(self)
-        self.context_menu_manager = context_menu_manager
-        self.init_grid()
-        self.init_staffs()
 
     def init_grid(self):
+        self.grid = Grid(GRID_PATH)
+        self.grid.setScale(GRAPHBOARD_SCALE)
         transform = QTransform()
         graphboard_size = self.sceneRect().size()
-
         grid_position = QPointF(
             (
                 graphboard_size.width()
@@ -73,6 +80,7 @@ class Graphboard(QGraphicsScene):
 
         transform.translate(grid_position.x(), grid_position.y())
         self.grid.setTransform(transform)
+        self.addItem(self.grid)
 
     def init_staffs(self):
         self.staff_handler.init_handpoints()
@@ -165,7 +173,7 @@ class Graphboard(QGraphicsScene):
                 del item
 
     def update_letter(self, letter):
-        letter = self.main_widget.info_handler.determine_current_letter_and_type()[0]
+        letter = self.info_handler.determine_current_letter_and_type()[0]
         if letter is None:
             svg_file = f"{LETTER_SVG_DIR}/blank.svg"
             renderer = QSvgRenderer(svg_file)

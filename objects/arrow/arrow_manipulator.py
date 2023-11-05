@@ -53,8 +53,8 @@ class ArrowManipulator:
         )
         arrow.update_appearance()
         self.arrow_manager.infobox.update()
-        arrow.view.staff_handler.update_graphboard_staffs(arrow.scene())
-        arrow.view.info_handler.update()
+        arrow.scene.staff_handler.update_graphboard_staffs(arrow.scene)
+        arrow.scene.info_handler.update()
 
     def move_arrow_quadrant_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {
@@ -186,9 +186,9 @@ class ArrowManipulator:
             arrow.staff.location = new_end_location
             arrow.attributes.update_attributes(arrow, new_arrow_dict)
             self.finalize_manipulation(arrow)
-            self.arrow_manager.positioner.update_arrow_position(arrow.view)
+            self.arrow_manager.positioner.update_arrow_position(arrow.scene)
             arrow.update()
-            arrow.view.staff_handler.update_graphboard_staffs(arrow.scene())
+            arrow.scene.staff_handler.update_graphboard_staffs(arrow.scene)
 
     def swap_motion_type(self, arrows, color):
         arrows = [arrow for arrow in arrows if arrow.color == color]
@@ -233,7 +233,7 @@ class ArrowManipulator:
             arrow.initialize_svg_renderer(arrow.svg_file)
             arrow.attributes.update_attributes(arrow, new_arrow_dict)
             arrow.update_appearance()
-            arrow.view.info_handler.update()
+            arrow.scene.info_handler.update()
 
             self.arrow_manager.infobox.update()
 
@@ -241,8 +241,8 @@ class ArrowManipulator:
             self.finalize_manipulation(arrow)
 
     def swap_colors(self):
-        view = self.arrow_manager.graphboard
-        current_letter = view.info_handler.determine_current_letter_and_type()[0]
+        graphboard = self.arrow_manager.graphboard
+        current_letter = graphboard.info_handler.determine_current_letter_and_type()[0]
         if current_letter != "G" and current_letter != "H":
             arrows = [
                 item for item in self.graphboard.items() if isinstance(item, Arrow)

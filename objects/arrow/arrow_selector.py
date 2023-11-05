@@ -10,23 +10,21 @@ class ArrowSelector:
     ### DELETERS ###
 
     def delete_arrow(self, deleted_arrows, keep_staff=False):
-        view = self.arrow_manager.graphboard
-        scene = view.scene()
+        graphboard = self.arrow_manager.graphboard
         if not isinstance(deleted_arrows, list):
             deleted_arrows = [deleted_arrows]
         for arrow in deleted_arrows:
             if isinstance(arrow, Arrow):
-                scene.removeItem(arrow)
+                graphboard.removeItem(arrow)
                 if keep_staff:
-                    self.initialize_ghost_arrow(arrow, scene)
-            view.info_handler.update()
+                    self.initialize_ghost_arrow(arrow, graphboard)
+            graphboard.info_handler.update()
         else:
             print("No items selected")
 
     ### HELPERS ###
 
-    def initialize_ghost_arrow(self, arrow, scene):
-        view = self.arrow_manager.graphboard
+    def initialize_ghost_arrow(self, arrow, graphboard):
         deleted_arrow_attributes = arrow.attributes.get_attributes(arrow)
         ghost_attributes_dict = {
             COLOR: deleted_arrow_attributes[COLOR],
@@ -39,10 +37,10 @@ class ArrowSelector:
         }
 
         ghost_arrow = self.arrow_manager.factory.create_arrow(
-            view, ghost_attributes_dict
+            graphboard, ghost_attributes_dict
         )
 
-        scene.addItem(ghost_arrow)
+        graphboard.addItem(ghost_arrow)
         ghost_arrow.is_ghost = True
         ghost_arrow.setScale(GRAPHBOARD_SCALE)
         ghost_arrow.staff = arrow.staff
