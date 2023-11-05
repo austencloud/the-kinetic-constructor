@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QLabel, QSizePolicy
 from objects.arrow.arrow import Arrow
 from data.positions_map import positions_map
 import logging
-from resources.constants.constants import PRO, ANTI, LEFT, RIGHT, STATIC, BLUE, RED
+from resources.constants.string_constants import *
 
 
 class InfoboxLabels:
@@ -24,11 +24,11 @@ class InfoboxLabels:
         setattr(self, f"{color}_details_label", label)
 
     def update_labels(self, widget, attributes):
-        motion_type = attributes.get("motion_type", "")
-        rotation_direction = attributes.get("rotation_direction", "")
-        start_location = attributes.get("start_location", "")
-        end_location = attributes.get("end_location", "")
-        turns = attributes.get("turns", "")
+        motion_type = attributes.get(MOTION_TYPE, "")
+        rotation_direction = attributes.get(ROT_DIR, "")
+        start_location = attributes.get(START, "")
+        end_location = attributes.get(END, "")
+        turns = attributes.get(TURNS, "")
 
         # Update labels
         motion_type_label = widget.findChild(QLabel, "motion_type_label")
@@ -80,11 +80,11 @@ class InfoboxLabels:
 
     def create_labels_for_attributes(self, attributes):
         """Create labels for motion type, start-end locations, and turns."""
-        motion_type = attributes.get("motion_type", "").capitalize()
-        rotation_direction = attributes.get("rotation_direction", "")
-        start_location = attributes.get("start_location", "")
-        end_location = attributes.get("end_location", "")
-        turns = attributes.get("turns", "")
+        motion_type = attributes.get(MOTION_TYPE, "").capitalize()
+        rotation_direction = attributes.get(ROT_DIR, "")
+        start_location = attributes.get(START, "")
+        end_location = attributes.get(END, "")
+        turns = attributes.get(TURNS, "")
 
         motion_type_label = QLabel(f"<h1>{motion_type}</h1>")
         motion_type_label.setObjectName("motion_type_label")

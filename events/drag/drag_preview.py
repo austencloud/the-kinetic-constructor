@@ -59,12 +59,12 @@ class DragPreview(QWidget):
 
         return {
             COLOR: self.color,
-            "motion_type": self.motion_type,
-            "quadrant": self.quadrant,
-            "rotation_direction": self.rotation_direction,
-            "start_location": start_location,
-            "end_location": end_location,
-            "turns": self.turns,
+            MOTION_TYPE: self.motion_type,
+            QUADRANT: self.quadrant,
+            ROT_DIR: self.rotation_direction,
+            START: start_location,
+            END: end_location,
+            TURNS: self.turns,
         }
 
     def move_to_cursor(self, view, event, target_arrow):

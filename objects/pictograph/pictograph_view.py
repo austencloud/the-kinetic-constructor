@@ -16,7 +16,8 @@ from resources.constants.constants import (
     PICTOGRAPH_SCALE,
     PICTOGRAPH_GRID_PADDING,
 )
-from resources.constants.string_constants import COLOR, RED, BLUE, STATIC, PRO, ANTI
+from resources.constants.string_constants import *
+
 
 class PictographView(QGraphicsView):
     def __init__(self, main_widget):
@@ -77,19 +78,19 @@ class PictographView(QGraphicsView):
 
     def get_state(self):
         state = {
-            "arrows": [],
+            ARROWS: [],
         }
         for item in self.pictograph_scene.items():
             if isinstance(item, Arrow):
-                state["arrows"].append(
+                state[ARROWS].append(
                     {
                         COLOR: item.color,
-                        "motion_type": item.motion_type,
-                        "rotation_direction": item.rotation_direction,
-                        "quadrant": item.quadrant,
-                        "start_location": item.start_location,
-                        "end_location": item.end_location,
-                        "turns": item.turns,
+                        MOTION_TYPE: item.motion_type,
+                        ROT_DIR: item.rotation_direction,
+                        QUADRANT: item.quadrant,
+                        START: item.start_location,
+                        END: item.end_location,
+                        TURNS: item.turns,
                     }
                 )
         return state
@@ -140,21 +141,18 @@ class PictographView(QGraphicsView):
                 key in arrow_dict
                 for key in [
                     COLOR,
-                    "motion_type",
-                    "rotation_direction",
-                    "quadrant",
-                    "turns",
+                    MOTION_TYPE,
+                    ROT_DIR,
+                    QUADRANT,
+                    TURNS,
                 ]
             ):
-                if (
-                    arrow_dict["motion_type"] == PRO
-                    or arrow_dict["motion_type"] == ANTI
-                ):
+                if arrow_dict[MOTION_TYPE] == PRO or arrow_dict[MOTION_TYPE] == ANTI:
                     self.place_shift_arrows(
                         DISTANCE, created_arrows, optimal_locations, arrow_dict
                     )
 
-                elif arrow_dict["motion_type"] == STATIC:
+                elif arrow_dict[MOTION_TYPE] == STATIC:
                     self.place_ghost_arrows(created_arrows, arrow_dict)
 
         for arrow in created_arrows:

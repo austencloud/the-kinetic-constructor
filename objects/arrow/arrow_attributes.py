@@ -1,15 +1,16 @@
 from data.start_end_location_mapping import start_end_location_mapping
+from resources.constants.string_constants import *
 
 
 class ArrowAttributes:
     ARROW_ATTRIBUTES = [
-        "color",
-        "motion_type",
-        "rotation_direction",
-        "quadrant",
-        "end_location",
-        "start_location",
-        "turns",
+        COLOR,
+        MOTION_TYPE,
+        ROT_DIR,
+        QUADRANT,
+        START,
+        END,
+        TURNS,
     ]
 
     def __init__(self, arrow, arrow_dict=None):
@@ -19,7 +20,7 @@ class ArrowAttributes:
     def update_attributes(self, arrow, arrow_dict):
         for attr in self.ARROW_ATTRIBUTES:
             value = arrow_dict.get(attr)
-            if attr == "turns":
+            if attr == TURNS:
                 value = int(value)
             setattr(arrow, attr, value)
 
@@ -34,21 +35,21 @@ class ArrowAttributes:
         return {attr: getattr(arrow, attr) for attr in self.ARROW_ATTRIBUTES}
 
     def create_dict_from_arrow(self, arrow):
-        if arrow.motion_type in ["pro", "anti"]:
+        if arrow.motion_type in [PRO, ANTI]:
             start_location, end_location = self.get_start_end_locations(
                 arrow.motion_type, arrow.rotation_direction, arrow.quadrant
             )
-        elif arrow.motion_type == "static":
+        elif arrow.motion_type == STATIC:
             start_location, end_location = arrow.start_location, arrow.end_location
 
         arrow_dict = {
-            "color": arrow.color,
-            "motion_type": arrow.motion_type,
-            "rotation_direction": arrow.rotation_direction,
-            "quadrant": arrow.quadrant,
-            "start_location": start_location,
-            "end_location": end_location,
-            "turns": arrow.turns,
+            COLOR: arrow.color,
+            MOTION_TYPE: arrow.motion_type,
+            ROT_DIR: arrow.rotation_direction,
+            QUADRANT: arrow.quadrant,
+            START: start_location,
+            END: end_location,
+            TURNS: arrow.turns,
         }
         return arrow_dict
 
@@ -62,10 +63,10 @@ class ArrowAttributes:
         arrow = arrows[0]
 
         attributes = {
-            "motion_type": arrow.motion_type,
-            "start_location": arrow.start_location,
-            "end_location": arrow.end_location,
-            "turns": arrow.turns,
+            MOTION_TYPE: arrow.motion_type,
+            START: arrow.start_location,
+            END: arrow.end_location,
+            TURNS: arrow.turns,
             COLOR: arrow.color,
         }
         return attributes

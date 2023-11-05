@@ -29,12 +29,12 @@ class ArrowSelector:
         deleted_arrow_attributes = arrow.attributes.get_attributes(arrow)
         ghost_attributes_dict = {
             COLOR: deleted_arrow_attributes[COLOR],
-            "motion_type": STATIC,
-            "rotation_direction": "None",
-            "quadrant": "None",
-            "start_location": deleted_arrow_attributes["end_location"],
-            "end_location": deleted_arrow_attributes["end_location"],
-            "turns": 0,
+            MOTION_TYPE: STATIC,
+            ROT_DIR: "None",
+            QUADRANT: "None",
+            START: deleted_arrow_attributes[END],
+            END: deleted_arrow_attributes[END],
+            TURNS: 0,
         }
 
         ghost_arrow = self.arrow_manager.factory.create_arrow(

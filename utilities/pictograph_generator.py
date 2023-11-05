@@ -4,6 +4,7 @@ import random
 import os
 from objects.arrow.arrow import Arrow
 from utilities.export_handler import ExportHandler
+from resources.constants.string_constants import *
 
 
 class PictographGenerator:
@@ -26,36 +27,32 @@ class PictographGenerator:
         for letter, combinations in self.letters.items():
             for combination in combinations:
                 positions_dict = next(
-                    (
-                        d
-                        for d in combination
-                        if "start_position" in d and "end_position" in d
-                    ),
+                    (d for d in combination if START_POS in d and END_POS in d),
                     None,
                 )
                 if positions_dict is None:
                     continue
 
                 start_position = (
-                    positions_dict["start_position"]
+                    positions_dict[START_POS]
                     .replace("alpha", "a")
                     .replace("beta", "b")
                     .replace("gamma", "g")
                 )
                 end_position = (
-                    positions_dict["end_position"]
+                    positions_dict[END_POS]
                     .replace("alpha", "a")
                     .replace("beta", "b")
                     .replace("gamma", "g")
                 )
 
                 motion_types = [
-                    arrow_dict["motion_type"]
+                    arrow_dict[MOTION_TYPE]
                     for arrow_dict in combination
-                    if "motion_type" in arrow_dict
+                    if MOTION_TYPE in arrow_dict
                 ]
                 is_hybrid = (
-                    motion_types.count(ANTI) == 1 and motion_types.count("pro") == 1
+                    motion_types.count(ANTI) == 1 and motion_types.count(PRO) == 1
                 )
 
                 for arrow_dict in combination:
@@ -64,16 +61,16 @@ class PictographGenerator:
                         key in arrow_dict
                         for key in [
                             COLOR,
-                            "motion_type",
-                            "rotation_direction",
-                            "quadrant",
+                            MOTION_TYPE,
+                            ROT_DIR,
+                            QUADRANT,
                         ]
                     ):
                         color = arrow_dict[COLOR]
-                        motion_type = arrow_dict["motion_type"]
+                        motion_type = arrow_dict[MOTION_TYPE]
 
                         file_name = f"{letter}_{start_position}_{end_position}"
-                        if motion_type == "pro" and is_hybrid and color == RED:
+                        if motion_type == PRO and is_hybrid and color == RED:
                             file_name += f"_r-pro_l-anti"
                         elif motion_type == ANTI and is_hybrid and color == RED:
                             file_name += f"_r-anti_l-pro"
@@ -122,13 +119,13 @@ class PictographGenerator:
                 key in combination
                 for key in [
                     COLOR,
-                    "motion_type",
-                    "rotation_direction",
-                    "quadrant",
-                    "turns",
+                    MOTION_TYPE,
+                    ROT_DIR,
+                    QUADRANT,
+                    TURNS,
                 ]
             ):
-                if combination["motion_type"] == STATIC:
+                if combination[MOTION_TYPE] == STATIC:
                     svg_file = f"resources/images/arrows/static_0.svg"
                     arrow = Arrow(
                         svg_file,
@@ -136,7 +133,7 @@ class PictographGenerator:
                         self.infobox,
                         self.svg_manager,
                         self.arrow_manager,
-                        combination["motion_type"],
+                        STATIC,
                         self.staff_handler,
                     )
                 created_arrows.append(arrow)

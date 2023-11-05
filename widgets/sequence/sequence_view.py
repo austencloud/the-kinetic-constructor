@@ -15,7 +15,7 @@ from resources.constants.constants import (
     PICTOGRAPH_SCALE,
     GRAPHBOARD_HEIGHT,
 )
-
+from resources.constants.string_constants import *
 
 class SequenceView(QGraphicsView):
     def __init__(self, main_widget):
@@ -108,12 +108,12 @@ class SequenceView(QGraphicsView):
         state = pictograph.state
         graphboard_view.clear_graphboard()
 
-        for arrow_state in state["arrows"]:
+        for arrow_state in state[ARROWS]:
             arrow = Arrow(arrow_state["svg_file"])
             arrow.setPos(arrow_state["position"])
             arrow.setRotation(arrow_state["rotation"])
             arrow.color = arrow_state[COLOR]
-            arrow.quadrant = arrow_state["quadrant"]
+            arrow.quadrant = arrow_state[QUADRANT]
             graphboard_view.scene().addItem(arrow)
 
         for staff_state in state["staffs"]:

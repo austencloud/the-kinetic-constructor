@@ -5,7 +5,7 @@ from resources.constants.constants import (
     GRAPHBOARD_SCALE,
     PICTOGRAPH_SCALE,
 )
-from resources.constants.string_constants import COLOR, RED, BLUE, PRO, ANTI, STATIC, UP, DOWN, LEFT, RIGHT, BETA_OFFSET
+from resources.constants.string_constants import *
 from objects.staff.staff import Staff
 import logging
 
@@ -43,18 +43,14 @@ class StaffPositioner:
             staff.setPos(new_position)
 
         arrows_grouped_by_start = {}
-        for arrow in board_state["arrows"]:
-            arrows_grouped_by_start.setdefault(arrow["start_location"], []).append(
-                arrow
-            )
+        for arrow in board_state[ARROWS]:
+            arrows_grouped_by_start.setdefault(arrow[START], []).append(arrow)
 
         pro_or_anti_arrows = [
-            arrow
-            for arrow in board_state["arrows"]
-            if arrow["motion_type"] in [PRO, ANTI]
+            arrow for arrow in board_state[ARROWS] if arrow[MOTION_TYPE] in [PRO, ANTI]
         ]
         static_arrows = [
-            arrow for arrow in board_state["arrows"] if arrow["motion_type"] == STATIC
+            arrow for arrow in board_state[ARROWS] if arrow[MOTION_TYPE] == STATIC
         ]
 
         # STATIC BETA
@@ -65,13 +61,11 @@ class StaffPositioner:
         for start_location, arrows in arrows_grouped_by_start.items():
             if len(arrows) == 2:
                 arrow1, arrow2 = arrows
-                if (
-                    arrow1["start_location"] == arrow2["start_location"]
-                    and arrow1["end_location"] == arrow2["end_location"]
-                ):
-                    if arrow1["motion_type"] in [PRO, ANTI] and arrow2[
-                        "motion_type"
-                    ] in [PRO, ANTI]:
+                if arrow1[START] == arrow2[START] and arrow1[END] == arrow2[END]:
+                    if arrow1[MOTION_TYPE] in [PRO, ANTI] and arrow2[MOTION_TYPE] in [
+                        PRO,
+                        ANTI,
+                    ]:
                         self.reposition_beta_to_beta(scene, arrows, scale)
 
         # GAMMA → BETA - Y, Z
@@ -80,14 +74,10 @@ class StaffPositioner:
 
         # ALPHA → BETA - D, E, F
         converging_arrows = [
-            arrow
-            for arrow in board_state["arrows"]
-            if arrow["motion_type"] not in [STATIC]
+            arrow for arrow in board_state[ARROWS] if arrow[MOTION_TYPE] not in [STATIC]
         ]
         if len(converging_arrows) == 2:
-            if converging_arrows[0].get("start_location") != converging_arrows[1].get(
-                "start_location"
-            ):
+            if converging_arrows[0].get(START) != converging_arrows[1].get(START):
                 self.reposition_alpha_to_beta(move_staff, converging_arrows)
 
         scene.update()
@@ -105,15 +95,15 @@ class StaffPositioner:
             if not staff:
                 continue
 
-            end_location = arrow.get("end_location", "")
+            end_location = arrow.get(END, "")
 
             beta_reposition_map = {
                 ("n", RED): RIGHT,
                 ("n", BLUE): LEFT,
                 ("s", RED): RIGHT,
                 ("s", BLUE): LEFT,
-                ("e", RED): ("up", "down") if end_location == "e" else None,
-                ("w", BLUE): ("up", "down") if end_location == "w" else None,
+                ("e", RED): (UP, DOWN) if end_location == "e" else None,
+                ("w", BLUE): (UP, DOWN) if end_location == "w" else None,
             }
 
             direction = beta_reposition_map.get((staff.location, arrow[COLOR]), None)
@@ -135,8 +125,8 @@ class StaffPositioner:
                         move_staff(other_staff, direction[1])
 
     def reposition_alpha_to_beta(self, move_staff, converging_arrows):  # D, E, F
-        end_locations = [arrow["end_location"] for arrow in converging_arrows]
-        start_locations = [arrow["start_location"] for arrow in converging_arrows]
+        end_locations = [arrow[END] for arrow in converging_arrows]
+        start_locations = [arrow[START] for arrow in converging_arrows]
         if (
             end_locations[0] == end_locations[1]
             and start_locations[0] != start_locations[1]
@@ -159,7 +149,7 @@ class StaffPositioner:
             return
 
         arrow1, arrow2 = arrows
-        same_motion_type = arrow1["motion_type"] == arrow2["motion_type"] in [PRO, ANTI]
+        same_motion_type = arrow1[MOTION_TYPE] == arrow2[MOTION_TYPE] in [PRO, ANTI]
 
         if same_motion_type:
             self.reposition_G_and_H(scale, view, arrow1, arrow2)
@@ -209,8 +199,8 @@ class StaffPositioner:
         other_staff.setPos(new_position_other)
 
     def reposition_I(self, scale, arrow1, arrow2):
-        pro_arrow = arrow1 if arrow1["motion_type"] == PRO else arrow2
-        anti_arrow = arrow2 if arrow1["motion_type"] == PRO else arrow1
+        pro_arrow = arrow1 if arrow1[MOTION_TYPE] == PRO else arrow2
+        anti_arrow = arrow2 if arrow1[MOTION_TYPE] == PRO else arrow1
 
         pro_staff = next(
             (
@@ -333,8 +323,7 @@ class StaffPositioner:
             (
                 staff
                 for staff in self.staff_handler.staffs_on_board
-                if staff.arrow.color == arrow[COLOR]
-                and staff.location == arrow["end_location"]
+                if staff.arrow.color == arrow[COLOR] and staff.location == arrow[END]
             ),
             None,
         )
@@ -344,11 +333,11 @@ class StaffPositioner:
 
     def determine_translation_direction(self, arrow_state):
         """Determine the translation direction based on the arrow's board_state."""
-        if arrow_state["motion_type"] in [PRO, ANTI]:
-            if arrow_state["end_location"] in ["n", "s"]:
-                return RIGHT if arrow_state["start_location"] == "e" else LEFT
-            elif arrow_state["end_location"] in ["e", "w"]:
-                return DOWN if arrow_state["start_location"] == "s" else UP
+        if arrow_state[MOTION_TYPE] in [PRO, ANTI]:
+            if arrow_state[END] in ["n", "s"]:
+                return RIGHT if arrow_state[START] == "e" else LEFT
+            elif arrow_state[END] in ["e", "w"]:
+                return DOWN if arrow_state[START] == "s" else UP
         return None
 
     def calculate_new_position(self, current_position, direction, scale):
@@ -368,10 +357,10 @@ class StaffPositioner:
             return RIGHT
         elif movement == RIGHT:
             return LEFT
-        elif movement == "up":
-            return "down"
-        elif movement == "down":
-            return "up"
+        elif movement == UP:
+            return DOWN
+        elif movement == DOWN:
+            return UP
 
     ### UPDATERS ###
 

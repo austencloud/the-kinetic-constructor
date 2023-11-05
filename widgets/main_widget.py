@@ -31,6 +31,7 @@ class MainWidget(QWidget):
         self.optionboard_view = OptionboardView(self)
 
         self.letter_buttons_frame = LetterButtonsFrame(self)
+        
         self.graphboard_view = self.graph_editor_widget.graphboard_view
         self.infobox = self.graph_editor_widget.infobox
         self.propbox_view = self.graph_editor_widget.propbox_view

@@ -1,5 +1,6 @@
 from data.letter_types import letter_types
 from objects.arrow.arrow import Arrow
+from resources.constants.string_constants import COLOR
 
 
 class GraphboardInfoHandler:

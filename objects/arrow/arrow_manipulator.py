@@ -2,7 +2,7 @@ from objects.arrow.arrow import Arrow
 from PyQt6.QtCore import QByteArray
 
 from PyQt6.QtGui import QTransform
-from resources.constants.string_constants import COLOR, RED, BLUE, ANTI, PRO, LEFT, RIGHT
+from resources.constants.string_constants import *
 
 
 class ArrowManipulator:
@@ -57,9 +57,9 @@ class ArrowManipulator:
 
     def move_arrow_quadrant_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {
-            "up": {"se": "ne", "sw": "nw"},
+            UP: {"se": "ne", "sw": "nw"},
             LEFT: {"ne": "nw", "se": "sw"},
-            "down": {"ne": "se", "nw": "sw"},
+            DOWN: {"ne": "se", "nw": "sw"},
             RIGHT: {"nw": "ne", "sw": "se"},
         }
         selected_arrow = selected_arrow
@@ -77,12 +77,12 @@ class ArrowManipulator:
 
         updated_arrow_dict = {
             COLOR: selected_arrow.color,
-            "motion_type": selected_arrow.motion_type,
-            "quadrant": new_quadrant,
-            "rotation_direction": selected_arrow.rotation_direction,
-            "start_location": new_start_location,
-            "end_location": new_end_location,
-            "turns": selected_arrow.turns,
+            MOTION_TYPE: selected_arrow.motion_type,
+            QUADRANT: new_quadrant,
+            ROT_DIR: selected_arrow.rotation_direction,
+            START: new_start_location,
+            END: new_end_location,
+            TURNS: selected_arrow.turns,
         }
 
         updated_staff_dict = {
@@ -116,12 +116,12 @@ class ArrowManipulator:
 
                 updated_arrow_dict = {
                     COLOR: arrow.color,
-                    "motion_type": arrow.motion_type,
-                    "quadrant": new_quadrant,
-                    "rotation_direction": arrow.rotation_direction,
-                    "start_location": new_start_location,
-                    "end_location": new_end_location,
-                    "turns": arrow.turns,
+                    MOTION_TYPE: arrow.motion_type,
+                    QUADRANT: new_quadrant,
+                    ROT_DIR: arrow.rotation_direction,
+                    START: new_start_location,
+                    END: new_end_location,
+                    TURNS: arrow.turns,
                 }
 
                 updated_staff_dict = {
@@ -174,12 +174,12 @@ class ArrowManipulator:
 
             new_arrow_dict = {
                 COLOR: arrow.color,
-                "motion_type": arrow.motion_type,
-                "quadrant": arrow.quadrant,
-                "rotation_direction": new_rotation_direction,
-                "start_location": new_start_location,
-                "end_location": new_end_location,
-                "turns": arrow.turns,
+                MOTION_TYPE: arrow.motion_type,
+                QUADRANT: arrow.quadrant,
+                ROT_DIR: new_rotation_direction,
+                START: new_start_location,
+                END: new_end_location,
+                TURNS: arrow.turns,
             }
 
             arrow.staff.location = new_end_location
@@ -212,12 +212,12 @@ class ArrowManipulator:
 
             new_arrow_dict = {
                 COLOR: arrow.color,
-                "motion_type": new_motion_type,
-                "quadrant": arrow.quadrant,
-                "rotation_direction": new_rotation_direction,
-                "start_location": arrow.start_location,
-                "end_location": arrow.end_location,
-                "turns": arrow.turns,
+                MOTION_TYPE: new_motion_type,
+                QUADRANT: arrow.quadrant,
+                ROT_DIR: new_rotation_direction,
+                START: arrow.start_location,
+                END: arrow.end_location,
+                TURNS: arrow.turns,
             }
 
             new_staff_dict = {

@@ -5,7 +5,7 @@ from PyQt6.QtCore import QPointF, Qt
 from events.drag.drag_manager import DragManager
 from objects.arrow.arrow_attributes import ArrowAttributes
 import re
-from resources.constants.constants import RED_HEX, BLUE_HEX, PRO, ANTI, STATIC, RED, BLUE
+from resources.constants.string_constants import *
 
 
 class Arrow(QGraphicsSvgItem):
@@ -20,8 +20,8 @@ class Arrow(QGraphicsSvgItem):
         self.setSelected(True)
 
     def get_svg_file(self, attr_dict):
-        motion_type = attr_dict["motion_type"]
-        turns = attr_dict.get("turns", None)
+        motion_type = attr_dict[MOTION_TYPE]
+        turns = attr_dict.get(TURNS, None)
 
         if motion_type in [PRO, ANTI]:
             self.is_shift = True

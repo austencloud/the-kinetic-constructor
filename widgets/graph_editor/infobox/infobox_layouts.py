@@ -1,6 +1,7 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QHBoxLayout, QWidget, QVBoxLayout, QFrame
-from resources.constants.constants import BLUE, RED
+from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QFrame
+from resources.constants.string_constants import *
+
 
 class InfoboxLayouts:
     def __init__(self, infobox, infobox_manager, graphboard_view, arrow_attributes):
@@ -105,7 +106,7 @@ class InfoboxLayouts:
         buttons_layout = QVBoxLayout()
 
         for button_name in self.buttons.button_properties.keys():
-            if color in button_name and "turns" not in button_name:
+            if color in button_name and TURNS not in button_name:
                 button = getattr(self.infobox, f"{button_name}_button")
                 buttons_layout.addWidget(button)
 

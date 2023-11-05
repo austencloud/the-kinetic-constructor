@@ -1,3 +1,4 @@
+from resources.constants.string_constants import COLOR
 class StaffAttributes:
     STAFF_ATTRIBUTES = [COLOR, "location", "layer"]
 

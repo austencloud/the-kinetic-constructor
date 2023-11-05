@@ -1,10 +1,5 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QGraphicsItem, QApplication
-from PyQt6.QtGui import QCursor, QPixmap, QPainter, QTransform
-from PyQt6.QtSvg import QSvgRenderer
-from resources.constants.constants import GRAPHBOARD_SCALE, STATIC
-from events.drag.drag_preview import DragPreview
-from objects.staff.staff import Staff
+from PyQt6.QtWidgets import QGraphicsItem
 from events.drag.drag_helpers import DragHelpers
 from events.drag.drag_scene_updater import DragSceneUpdater
 from events.drag.drag_event_handler import DragEventHandler

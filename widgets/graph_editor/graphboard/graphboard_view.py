@@ -11,11 +11,8 @@ from resources.constants.constants import (
     GRAPHBOARD_WIDTH,
     GRAPHBOARD_HEIGHT,
     VERTICAL_OFFSET,
-    NE,
-    SE,
-    SW,
-    NW,
 )
+from resources.constants.string_constants import *
 from widgets.graph_editor.graphboard.graphboard_staff_handler import (
     GraphboardStaffHandler,
 )
@@ -37,7 +34,7 @@ class GraphboardView(QGraphicsView):
         self.init_scene(main_widget)
         self.init_managers(main_widget)
         self.init_grid()
-        self.init_letter_renderers()
+        self.init_letter_renderers(main_widget.letters)
         self.init_staffs()
 
     # INIT #
@@ -62,7 +59,7 @@ class GraphboardView(QGraphicsView):
         self.graphboard_scene = QGraphicsScene()
         self.setScene(self.graphboard_scene)
         self.main_widget = main_widget
-        self.grid = Grid("resources/images/grid/grid.svg")
+        self.grid = Grid(GRID_PATH)
         self.grid.setScale(GRAPHBOARD_SCALE)
         self.scene().setSceneRect(0, 0, int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
         self.VERTICAL_OFFSET = (self.height() - self.width()) / 2
@@ -106,14 +103,14 @@ class GraphboardView(QGraphicsView):
         transform.translate(grid_position.x(), grid_position.y())
         self.grid.setTransform(transform)
 
-    def init_letter_renderers(self):
+    def init_letter_renderers(self, letters):
         self.letter_renderers = {}
-        for letter in "ABCDEFGHIJKLMNOPQRSTUV":
+        for letter in letters:
             for letter_type, letters in letter_types.items():
                 if letter in letters:
                     break
             self.letter_renderers[letter] = QSvgRenderer(
-                f"resources/images/letters/{letter_type}/{letter}.svg"
+                f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
             )
         self.letter_item = QGraphicsSvgItem()
 
@@ -158,19 +155,19 @@ class GraphboardView(QGraphicsView):
 
     def get_state(self):
         state = {
-            "arrows": [],
+            ARROWS: [],
         }
         for item in self.scene().items():
             if isinstance(item, Arrow):
-                state["arrows"].append(
+                state[ARROWS].append(
                     {
                         COLOR: item.color,
-                        "motion_type": item.motion_type,
-                        "rotation_direction": item.rotation_direction,
-                        "quadrant": item.quadrant,
-                        "start_location": item.start_location,
-                        "end_location": item.end_location,
-                        "turns": item.turns,
+                        MOTION_TYPE: item.motion_type,
+                        ROT_DIR: item.rotation_direction,
+                        QUADRANT: item.quadrant,
+                        START: item.start_location,
+                        END: item.end_location,
+                        TURNS: item.turns,
                     }
                 )
         return state
@@ -254,19 +251,19 @@ class GraphboardView(QGraphicsView):
 
     def update_letter(self, letter):
         letter = self.info_handler.determine_current_letter_and_type()[0]
-        if letter is None or letter == "None":
-            svg_file = f"resources/images/letters/blank.svg"
+        if letter is None:
+            svg_file = f"{LETTER_SVG_DIR}/blank.svg"
             renderer = QSvgRenderer(svg_file)
             if not renderer.isValid():
                 print(f"Invalid SVG file: {svg_file}")
                 return
             self.letter_item.setSharedRenderer(renderer)
 
-        if letter is not None and letter != "None":
+        if letter is not None:
             for letter_type, letters in letter_types.items():
                 if letter in letters:
                     break
-            svg_file = f"resources/images/letters/{letter_type}/{letter}.svg"
+            svg_file = f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
             renderer = QSvgRenderer(svg_file)
             if not renderer.isValid():
                 print(f"Invalid SVG file: {svg_file}")
