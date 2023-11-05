@@ -3,14 +3,16 @@ from resources.constants import GRAPHBOARD_SCALE
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy
 from PyQt6.QtCore import Qt
 
+
 class InfoboxUISetup:
     def __init__(self, infobox, infobox_manager):
         self.infobox = infobox
         self.infobox_manager = infobox_manager
-        self.helpers = infobox_manager.helpers
         self.graphboard_view = infobox.graphboard_view
         self.arrow_manager = self.graphboard_view.arrow_manager
         self.arrow_manipulator = self.arrow_manager.manipulator
+        self.helpers = infobox_manager.helpers
+        self.labels = infobox_manager.labels
         self.setup_ui_elements()
 
     def setup_ui_elements(self):
@@ -22,7 +24,7 @@ class InfoboxUISetup:
         self.add_widgets_to_layouts()
         self.set_dimensions()
 
-    def setup_buttons(self):   
+    def setup_buttons(self):
         self.button_properties = {
             "swap_colors": {
                 "icon": None,
@@ -84,13 +86,13 @@ class InfoboxUISetup:
         }
 
     def create_infobox_buttons(self):
-        self.button_factory = self.infobox_manager.button_factory
-        
+        self.buttons = self.infobox_manager.buttons
+
         for button_name, properties in self.button_properties.items():
-            self.button_factory.create_and_set_button(button_name, properties)
+            self.buttons.create_and_set_button(button_name, properties)
             button = getattr(self.infobox, f"{button_name}_button")
             button.setVisible(False)  # Set initial visibility to False
-            
+
         self.setup_button_layout()
 
     def setup_button_layout(self):
@@ -133,14 +135,18 @@ class InfoboxUISetup:
         buttons_layout = QVBoxLayout()
 
         for button_name in self.button_properties.keys():
-            if color in button_name and "turns" not in button_name:  # Exclude the turns buttons
+            if (
+                color in button_name and "turns" not in button_name
+            ):  # Exclude the turns buttons
                 button = getattr(self.infobox, f"{button_name}_button")
                 buttons_layout.addWidget(button)
 
         # Pass the color as an additional argument to the construct_info_widget method
         info_widget_inner = self.helpers.construct_info_widget(
-            self.arrow_manager.attributes.get_graphboard_arrow_attributes_by_color(color, self.graphboard_view),
-            color  # Pass the color here
+            self.arrow_manager.attributes.get_graphboard_arrow_attributes_by_color(
+                color, self.graphboard_view
+            ),
+            color,  # Pass the color here
         )
 
         horizontal_layout.addLayout(buttons_layout)
@@ -160,10 +166,10 @@ class InfoboxUISetup:
     def setup_labels(self):
         self.setup_color_label("Left", "blue")
         self.setup_color_label("Right", "red")
-        self.type_position_label = self.helpers.create_label()
+        self.type_position_label = self.labels.create_label()
 
     def setup_color_label(self, text, color):
-        label = self.helpers.create_label(text, color)
+        label = self.labels.create_label(text, color)
         label.setAlignment(Qt.AlignmentFlag.AlignTop)
         setattr(self, f"{color}_details_label", label)
 
@@ -202,7 +208,6 @@ class InfoboxUISetup:
         bottom_layout.addWidget(self.type_position_label)
         self.master_layout.addLayout(bottom_layout)
 
-        
     def set_dimensions(self):
         self.infobox.setFixedWidth(int(900 * GRAPHBOARD_SCALE))
         self.infobox.setFixedHeight(int(900 * GRAPHBOARD_SCALE))

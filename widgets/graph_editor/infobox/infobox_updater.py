@@ -18,7 +18,7 @@ class InfoboxUpdater:
             current_letter_type,
         ) = self.graphboard_view.info_handler.determine_current_letter_and_type()
         if current_letter and current_letter_type:
-            start_end_positions = self.infobox_manager.updater.get_start_end_positions()
+            start_end_positions = self.infobox_manager.updater.get_start_end_positions(self.graphboard_view)
             if start_end_positions:
                 start_position, end_position = start_end_positions
 
