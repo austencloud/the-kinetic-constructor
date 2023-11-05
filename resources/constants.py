@@ -61,3 +61,5 @@ COLOR_MAP = {
     "red": "#ED1C24",
     "blue": "#2E3192"
 }
+
+INFOBOX_SIZE = 900 * GRAPHBOARD_SCALE

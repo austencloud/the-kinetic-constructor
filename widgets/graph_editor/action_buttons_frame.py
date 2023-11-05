@@ -6,10 +6,14 @@ from PyQt6.QtWidgets import QVBoxLayout
 from objects.arrow.arrow import Arrow
 
 class ActionButtonsFrame(QFrame):
-    def __init__(self, main_widget):
+    def __init__(self, graphboard_view, json_handler, arrow_manipulator, arrow_selector, sequence_view):
         super().__init__()
-        self.main_widget = main_widget
-        self.main_window = main_widget.main_window
+        self.graphboard_view = graphboard_view
+        self.graphboard_scene = graphboard_view.scene()
+        self.json_handler = json_handler
+        self.arrow_manipulator = arrow_manipulator
+        self.arrow_selector = arrow_selector
+        self.sequence_view = sequence_view
         button_font = QFont('Helvetica', 14)
         button_size = int(100 * GRAPHBOARD_SCALE)
         icon_size = QSize(int(80 * GRAPHBOARD_SCALE), int(70 * GRAPHBOARD_SCALE))
@@ -20,21 +24,21 @@ class ActionButtonsFrame(QFrame):
         # Configuration for each button
         buttons_config = [
             (icons_path + "update_locations.png", "Update Position", 
-             lambda: self.main_widget.json_handler.update_optimal_locations_in_json(*self.main_widget.graphboard_view.get_current_arrow_positions())),
+             lambda: self.json_handler.update_optimal_locations_in_json(*self.graphboard_view.get_current_arrow_positions())),
             (icons_path + "delete.png", "Delete", 
-             lambda: self.main_widget.arrow_manager.selector.delete_arrow(self.main_widget.graphboard_scene.selectedItems())),
+             lambda: self.arrow_selector.delete_arrow(self.graphboard_scene.selectedItems())),
             (icons_path + "rotate_right.png", "Rotate Right",
-             lambda: self.main_widget.arrow_manager.manipulator.rotate_arrow('right', self.main_widget.graphboard_scene.selectedItems())),
+             lambda: self.arrow_manipulator.rotate_arrow('right', self.graphboard_scene.selectedItems())),
             (icons_path + "rotate_left.png", "Rotate Left",
-                lambda: self.main_widget.arrow_manager.manipulator.rotate_arrow('left', self.main_widget.graphboard_scene.selectedItems())),
+                lambda: self.arrow_manipulator.rotate_arrow('left', self.graphboard_scene.selectedItems())),
             (icons_path + "mirror.png", "Mirror",
-                lambda: self.main_widget.arrow_manager.manipulator.mirror_arrow(self.main_widget.graphboard_scene.selectedItems(), self.get_selected_arrow_color())),
+                lambda: self.arrow_manipulator.mirror_arrow(self.graphboard_scene.selectedItems(), self.get_selected_arrow_color())),
             (icons_path + "swap.png", "Swap Colors",
-                lambda: self.main_widget.arrow_manager.manipulator.swap_colors()),
+                lambda: self.arrow_manipulator.swap_colors()),
             (icons_path + "select_all.png", "Select All",
-                lambda: self.main_widget.graphboard_view.select_all_items()),
+                lambda: self.graphboard_view.select_all_items()),
             (icons_path + "add_to_sequence.png", "Add to Sequence",
-                lambda: self.main_widget.sequence_view.add_to_sequence(self.main_widget.graphboard_view))
+                lambda: self.sequence_view.add_to_sequence(self.graphboard_view))
         ]
             
         # Function to create a configured button

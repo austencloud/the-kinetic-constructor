@@ -1,17 +1,28 @@
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QLabel, QSizePolicy
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QLabel, QSizePolicy
 from objects.arrow.arrow import Arrow
 from data.positions_map import positions_map
 import logging
 
+
 class InfoboxLabels:
-    def __init__(self, infobox, infobox_manager):
+    def __init__(self, infobox, infobox_manager, graphboard_view):
         self.infobox = infobox
         self.infobox_manager = infobox_manager
+        self.graphboard_view = graphboard_view
 
-    @staticmethod
-    def update_labels(widget, attributes):
+    def setup_labels(self):
+        self.setup_color_label("Left", "blue")
+        self.setup_color_label("Right", "red")
+        self.type_position_label = self.create_label()
+
+    def setup_color_label(self, text, color):
+        label = self.create_label(text, color)
+        label.setAlignment(Qt.AlignmentFlag.AlignTop)
+        setattr(self, f"{color}_details_label", label)
+
+    def update_labels(self, widget, attributes):
         motion_type = attributes.get("motion_type", "").capitalize()
         rotation_direction = attributes.get("rotation_direction", "")
         start_location = attributes.get("start_location", "")
@@ -26,6 +37,7 @@ class InfoboxLabels:
 
         motion_type_label.setText(f"<h1>{motion_type}</h1>")
 
+        # Update rotation_direction_label based on rotation_direction value
         if rotation_direction == "r":
             pixmap = QPixmap("resources/images/icons/clockwise.png")
             pixmap = pixmap.scaled(
@@ -58,9 +70,7 @@ class InfoboxLabels:
 
     ### LABEL CREATION METHODS ###
 
-    @staticmethod
-
-    def create_label(text="", color=None):
+    def create_label(self, text="", color=None):
         """Create a generic label."""
         label = QLabel(text)
         label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
@@ -68,8 +78,7 @@ class InfoboxLabels:
             label.setStyleSheet(f"color: {color}; font-size: 25px; font-weight: bold;")
         return label
 
-    @staticmethod
-    def create_labels_for_attributes(attributes):
+    def create_labels_for_attributes(self, attributes):
         """Create labels for motion type, start-end locations, and turns."""
         motion_type = attributes.get("motion_type", "").capitalize()
         rotation_direction = attributes.get("rotation_direction", "")
@@ -100,16 +109,17 @@ class InfoboxLabels:
 
         turns_label = QLabel(f"<span style='font-size: 20px;'>{turns}</span>")
         turns_label.setObjectName("turns_label")
-        turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Ensure the label is center-aligned
+        turns_label.setAlignment(
+            Qt.AlignmentFlag.AlignCenter
+        )  # Ensure the label is center-aligned
         turns_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
         return motion_type_label, rotation_direction_label, start_end_label, turns_label
-    
-    @staticmethod
-    def get_start_end_positions(graphboard_view):
+
+    def get_start_end_positions(self):
         positions = []
         arrow_items = [
-            item for item in graphboard_view.items() if isinstance(item, Arrow)
+            item for item in self.graphboard_view.items() if isinstance(item, Arrow)
         ]
 
         arrow_colors = {"red": None, "blue": None}
@@ -137,3 +147,20 @@ class InfoboxLabels:
             else:
                 logging.warning("No positions returned by get_start_end_positions")
                 return None
+
+    def update_type_and_position_labels(self):
+        (
+            current_letter,
+            current_letter_type,
+        ) = self.graphboard_view.info_handler.determine_current_letter_and_type()
+        if current_letter and current_letter_type:
+            start_end_positions = self.get_start_end_positions()
+            if start_end_positions:
+                start_position, end_position = start_end_positions
+
+            info_text = f"<center><h1>{current_letter_type}</h1><p style='font-size: 18px; font-family:'Cambria;''>{start_position} → {end_position}</center></p>"
+            self.type_position_label.setText(info_text)
+        else:
+            # Handle cases where the letter or type is not identified
+            self.type_position_label.setText("")
+
