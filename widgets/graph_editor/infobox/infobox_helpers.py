@@ -10,7 +10,6 @@ class InfoboxHelpers:
     def __init__(self, infobox, infobox_manager):
         self.infobox = infobox
         self.infobox_manager = infobox_manager
-        
 
     ### LABEL CREATION METHODS ###
 
@@ -51,7 +50,9 @@ class InfoboxHelpers:
             start_end_label = QLabel(f"")
             start_end_label.setObjectName("start_end_label")
 
-        turns_label = QLabel(f"<span style='font-size: 20px;'>{turns}</span>")
+        turns_label = QLabel()
+        turns_label.setStyleSheet("QLabel { margin-left: 3px; margin-right: 3px; }")
+
         turns_label.setObjectName("turns_label")
         turns_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
@@ -67,7 +68,9 @@ class InfoboxHelpers:
             layout.addWidget(widget)
         return layout
 
-    def define_info_layouts(self, motion_type_label, rotation_direction_label, start_end_label, turns_label):
+    def define_info_layouts(
+        self, motion_type_label, rotation_direction_label, start_end_label, turns_label
+    ):
         """Define layouts for the info widget."""
         motion_type_layout = QHBoxLayout()
         motion_type_layout.addWidget(motion_type_label)
@@ -105,7 +108,6 @@ class InfoboxHelpers:
         start_end_button = getattr(self.infobox, f"swap_start_end_{color}_button")
         start_end_layout.addWidget(start_end_button)
         start_end_layout.addWidget(start_end_label)
-        
 
         # Create the turns layout
         turns_layout = QHBoxLayout()
@@ -125,7 +127,6 @@ class InfoboxHelpers:
         info_widget = QWidget()
         info_widget.setLayout(main_layout)
         return info_widget
-
 
     ### UTILITY METHODS ###
 

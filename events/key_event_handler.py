@@ -27,14 +27,14 @@ class KeyEventHandler:
             if event.modifiers() == Qt.KeyboardModifier.ControlModifier and event.key() == Qt.Key.Key_Delete:
                 for item in selected_items:
                     if isinstance(item, Arrow):
-                        arrow_selector.delete_arrow(item)
+                        arrow_selector.delete_arrow(item, keep_staff=True)
                     elif isinstance(item, Staff):
                         arrow_selector.delete_staff(item)
 
             elif event.key() == Qt.Key.Key_Delete:
                 for item in selected_items:
                     if isinstance(item, Arrow):
-                        arrow_selector.delete_arrow(item)
+                        arrow_selector.delete_arrow(item, keep_staff=False)
                         staff_visibility_manager.hide_staff(item.staff)
                     elif isinstance(item, Staff):
                         item.view.staff_handler.visibility_manager.hide_staff(item)
@@ -54,7 +54,7 @@ class KeyEventHandler:
                     arrow_manipulator.swap_motion_type(selected_items, selected_arrow_color)
                 elif event.key() == Qt.Key.Key_F:
                     sequence_view.add_to_sequence(graphboard_view)
-                elif event.key() == Qt.Key.Key_QuoteLeft:
+                elif event.key() == Qt.Key.Key_QuoteLeft or event.key() == Qt.Key.Key_0:
                     arrow_manipulator.set_turns(selected_items, selected_arrow_color, 0)
                 elif event.key() == Qt.Key.Key_1:
                     arrow_manipulator.set_turns(selected_items, selected_arrow_color, 1)
@@ -62,4 +62,4 @@ class KeyEventHandler:
                     arrow_manipulator.set_turns(selected_items, selected_arrow_color, 2)
 
 
-                
+                # When the left 

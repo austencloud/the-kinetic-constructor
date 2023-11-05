@@ -64,7 +64,7 @@ class StaffPositioner:
 
         # STATIC BETA
         if len(static_arrows) > 1:
-            self.reposition_static_beta(static_arrows, scale)
+            self.reposition_static_beta(move_staff, static_arrows, scale)
 
         # BETA → BETA - G, H, I
         for start_location, arrows in arrows_grouped_by_start.items():
@@ -72,7 +72,8 @@ class StaffPositioner:
                 arrow1, arrow2 = arrows
                 if (arrow1["start_location"] == arrow2["start_location"] and
                     arrow1["end_location"] == arrow2["end_location"]):
-                    self.reposition_beta_to_beta(scene, arrows, scale)
+                    if arrow1["motion_type"] in ["pro", "anti"] and arrow2["motion_type"] in ["pro", "anti"]:
+                        self.reposition_beta_to_beta(scene, arrows, scale)
 
 
         # GAMMA → BETA - Y, Z
@@ -93,40 +94,40 @@ class StaffPositioner:
 
         scene.update()
 
-    def reposition_static_beta(self, static_arrows, scale):
+    def reposition_static_beta(self, move_staff, static_arrows, scale):
         for arrow in static_arrows:
-            staff = next((staff for staff in self.staffs_on_board.values() if staff.arrow.color == arrow['color']), None)
+            staff = next((staff for staff in self.staff_handler.main_widget.graphboard_view.staffs if staff.arrow.color == arrow['color']), None)
             if not staff:
                 continue
 
             end_location = arrow.get("end_location", "")
 
             beta_reposition_map = {
-                ("N", "red"): "right",
-                ("N", "blue"): "left",
-                ("S", "red"): "right",
-                ("S", "blue"): "left",
-                ("E", "red"): ("up", "down") if end_location == "e" else None,
-                ("W", "blue"): ("up", "down") if end_location == "w" else None,
+                ("n", "red"): "right",
+                ("n", "blue"): "left",
+                ("s", "red"): "right",
+                ("s", "blue"): "left",
+                ("e", "red"): ("up", "down") if end_location == "e" else None,
+                ("w", "blue"): ("up", "down") if end_location == "w" else None,
             }
 
-            action = beta_reposition_map.get((staff.location, arrow["color"]), None)
+            direction = beta_reposition_map.get((staff.location, arrow["color"]), None)
 
-            if action:
-                if isinstance(action, str):
-                    self.move_staff(staff, action, scale)
-                elif isinstance(action, tuple):
-                    self.move_staff(staff, action[0], scale)
+            if direction:
+                if isinstance(direction, str):
+                    move_staff(staff, direction)
+                elif isinstance(direction, tuple):
+                    move_staff(staff, direction[0])
                     other_staff = next(
                         (
                             s
-                            for s in self.staff_handler.staffs_on_board
+                            for s in self.staff_handler.main_widget.graphboard_view.staffs
                             if s.location == staff.location and s != staff
                         ),
                         None,
                     )
                     if other_staff:
-                        self.move_staff(other_staff, action[1], scale)
+                        move_staff(other_staff, direction[1])
 
     def reposition_alpha_to_beta(self, move_staff, converging_arrows):  # D, E, F
         end_locations = [arrow["end_location"] for arrow in converging_arrows]

@@ -6,14 +6,29 @@ class ArrowSelector:
     def __init__(self, arrow_manager):
         self.arrow_manager = arrow_manager
 
-    def delete_arrow(self, deleted_arrows):
+    ### DELETERS ###
+
+    def delete_arrow(self, deleted_arrows, keep_staff=False):
+        view = self.arrow_manager.graphboard_view
+        scene = view.scene()
         if not isinstance(deleted_arrows, list):
             deleted_arrows = [deleted_arrows]
         for arrow in deleted_arrows:
             if isinstance(arrow, Arrow):
-                deleted_arrow_attributes = arrow.attributes.get_attributes(arrow)
+                scene.removeItem(arrow)
+                if keep_staff:
+                    self.initialize_ghost_arrow(arrow, scene)
+            view.info_handler.update()
+        else:
+            print("No items selected")
 
-                ghost_attributes_dict = {
+
+    ### HELPERS ###
+ 
+    def initialize_ghost_arrow(self, arrow, scene):
+        view = self.arrow_manager.graphboard_view
+        deleted_arrow_attributes = arrow.attributes.get_attributes(arrow)
+        ghost_attributes_dict = {
                     "color": deleted_arrow_attributes["color"],
                     "motion_type": "static",
                     "rotation_direction": "None",
@@ -23,20 +38,13 @@ class ArrowSelector:
                     "turns": 0,
                 }
 
-                ghost_arrow = self.arrow_manager.factory.create_arrow(
-                    self.arrow_manager.graphboard_view, ghost_attributes_dict
+        ghost_arrow = self.arrow_manager.factory.create_arrow(
+                    view, ghost_attributes_dict
                 )
-                ghost_arrow.is_ghost = True
-                ghost_arrow.setScale(GRAPHBOARD_SCALE)
-                ghost_arrow.staff = arrow.staff
-                arrow.staff.arrow = ghost_arrow
-
-                graphboard_scene = self.arrow_manager.graphboard_view.scene()
-                graphboard_scene.addItem(ghost_arrow)
-                graphboard_scene.removeItem(arrow)
-
-                view = self.arrow_manager.graphboard_view
-                view.info_handler.update()
-
-        else:
-            print("No items selected")
+                
+        
+        scene.addItem(ghost_arrow)
+        ghost_arrow.is_ghost = True
+        ghost_arrow.setScale(GRAPHBOARD_SCALE)
+        ghost_arrow.staff = arrow.staff
+        ghost_arrow.staff.arrow = ghost_arrow

@@ -11,7 +11,6 @@ class Arrow(QGraphicsSvgItem):
     def __init__(self, view, attr_dict):
         self.svg_file = self.get_svg_file(attr_dict)
         super().__init__(self.svg_file)
-
         self.initialize_svg_renderer(self.svg_file)
         self.initialize_app_attributes(view, attr_dict)
         self.initialize_graphics_flags()
