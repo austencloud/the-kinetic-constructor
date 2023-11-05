@@ -9,18 +9,18 @@ from settings.styles import (
     ACTION_BUTTON_ICON_SIZE,
 )
 
+
 class ActionButtonsFrame(QFrame):
     def __init__(
         self,
-        graphboard_view,
+        scene,
         json_handler,
         arrow_manipulator,
         arrow_selector,
         sequence_view,
     ):
         super().__init__()
-        self.graphboard_view = graphboard_view
-        self.graphboard_scene = graphboard_view.scene()
+        self.scene = scene
         self.json_handler = json_handler
         self.arrow_manipulator = arrow_manipulator
         self.arrow_selector = arrow_selector
@@ -28,8 +28,7 @@ class ActionButtonsFrame(QFrame):
         self.action_buttons_layout = QVBoxLayout()
         self.action_buttons_layout.setSpacing(3)
 
-        # Configuration for each button without ICON_DIR prefix
-        current_positions = self.graphboard_view.get_current_arrow_positions()
+        current_positions = self.scene.get_current_arrow_positions()
         buttons_config = [
             (
                 "update_locations.png",
@@ -41,29 +40,27 @@ class ActionButtonsFrame(QFrame):
             (
                 "delete.png",
                 "Delete",
-                lambda: self.arrow_selector.delete_arrow(
-                    self.graphboard_scene.selectedItems()[0]
-                ),
+                lambda: self.arrow_selector.delete_arrow(self.scene.selectedItems()[0]),
             ),
             (
                 "rotate_right.png",
                 "Rotate Right",
                 lambda: self.arrow_manipulator.rotate_arrow(
-                    "right", self.graphboard_scene.selectedItems()
+                    "right", self.scene.selectedItems()
                 ),
             ),
             (
                 "rotate_left.png",
                 "Rotate Left",
                 lambda: self.arrow_manipulator.rotate_arrow(
-                    "left", self.graphboard_scene.selectedItems()
+                    "left", self.scene.selectedItems()
                 ),
             ),
             (
                 "mirror.png",
                 "Mirror",
                 lambda: self.arrow_manipulator.mirror_arrow(
-                    self.graphboard_scene.selectedItems(),
+                    self.scene.selectedItems(),
                     self.get_selected_arrow_color(),
                 ),
             ),
@@ -71,12 +68,12 @@ class ActionButtonsFrame(QFrame):
             (
                 "select_all.png",
                 "Select All",
-                lambda: self.graphboard_view.select_all_items(),
+                lambda: self.scene.select_all_items(),
             ),
             (
                 "add_to_sequence.png",
                 "Add to Sequence",
-                lambda: self.sequence_view.add_to_sequence(self.graphboard_view),
+                lambda: self.sequence_view.add_to_sequence(self.scene),
             ),
         ]
 
@@ -99,7 +96,7 @@ class ActionButtonsFrame(QFrame):
         self.setLayout(self.action_buttons_layout)
 
     def get_selected_arrow_color(self):
-        selected_items = self.graphboard_scene.selectedItems()
+        selected_items = self.scene.selectedItems()
         if selected_items and isinstance(selected_items[0], Arrow):
             return selected_items[0].color
         return None

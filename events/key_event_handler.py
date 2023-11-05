@@ -2,18 +2,19 @@ from objects.arrow.arrow import Arrow
 from objects.staff.staff import Staff
 from PyQt6.QtCore import Qt
 
+
 class KeyEventHandler:
-    def keyPressEvent(self, event, graphboard_view):
-        main_widget = graphboard_view.main_widget
+    def keyPressEvent(self, event, graphboard):
+        main_widget = graphboard.main_widget
         arrow_manager = main_widget.arrow_manager
         sequence_view = main_widget.sequence_view
         arrow_manipulator = arrow_manager.manipulator
         arrow_selector = arrow_manager.selector
-        self.graphboard_scene = graphboard_view.scene()
-        selected_items = self.graphboard_scene.selectedItems()
-        staff_handler = graphboard_view.staff_handler
+        self.graphboard = graphboard.scene()
+        selected_items = self.graphboard.selectedItems()
+        staff_handler = graphboard.staff_handler
         staff_visibility_manager = staff_handler.visibility_manager
-        
+
         if len(selected_items) >= 1:
             try:
                 selected_item = selected_items[0]
@@ -24,7 +25,10 @@ class KeyEventHandler:
             if selected_item and isinstance(selected_item, Arrow):
                 selected_arrow_color = selected_item.color
 
-            if event.modifiers() == Qt.KeyboardModifier.ControlModifier and event.key() == Qt.Key.Key_Delete:
+            if (
+                event.modifiers() == Qt.KeyboardModifier.ControlModifier
+                and event.key() == Qt.Key.Key_Delete
+            ):
                 for item in selected_items:
                     if isinstance(item, Arrow):
                         arrow_selector.delete_arrow(item, keep_staff=True)
@@ -41,20 +45,26 @@ class KeyEventHandler:
 
             elif selected_item and isinstance(selected_item, Arrow):
                 if event.key() == Qt.Key.Key_W:
-                    arrow_manipulator.move_arrow_quadrant_wasd('up', selected_item)
+                    arrow_manipulator.move_arrow_quadrant_wasd("up", selected_item)
                 elif event.key() == Qt.Key.Key_A:
-                    arrow_manipulator.move_arrow_quadrant_wasd('left', selected_item)
+                    arrow_manipulator.move_arrow_quadrant_wasd("left", selected_item)
                 elif event.key() == Qt.Key.Key_S:
-                    arrow_manipulator.move_arrow_quadrant_wasd('down', selected_item)
+                    arrow_manipulator.move_arrow_quadrant_wasd("down", selected_item)
                 elif event.key() == Qt.Key.Key_D:
-                    arrow_manipulator.move_arrow_quadrant_wasd('right', selected_item)
+                    arrow_manipulator.move_arrow_quadrant_wasd("right", selected_item)
                 elif event.key() == Qt.Key.Key_R:
                     arrow_manipulator.mirror_arrow(selected_items, selected_arrow_color)
                 elif event.key() == Qt.Key.Key_F:
-                    arrow_manipulator.swap_motion_type(selected_items, selected_arrow_color)
+                    arrow_manipulator.swap_motion_type(
+                        selected_items, selected_arrow_color
+                    )
                 elif event.key() == Qt.Key.Key_Enter:
-                    sequence_view.add_to_sequence(graphboard_view)
+                    sequence_view.add_to_sequence(graphboard)
                 elif event.key() == Qt.Key.Key_Q:
-                    arrow_manipulator.decrement_turns(selected_items, selected_arrow_color)
+                    arrow_manipulator.decrement_turns(
+                        selected_items, selected_arrow_color
+                    )
                 elif event.key() == Qt.Key.Key_E:
-                    arrow_manipulator.increment_turns(selected_items, selected_arrow_color)
+                    arrow_manipulator.increment_turns(
+                        selected_items, selected_arrow_color
+                    )

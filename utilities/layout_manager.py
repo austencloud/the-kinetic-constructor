@@ -59,15 +59,15 @@ class LayoutManager:
         )
 
     def add_black_border_to_widgets(self):
-        self.add_black_border(self.main_widget.graph_editor_widget.graphboard_view)
+        self.add_black_border(self.main_widget.graph_editor.graphboard)
         self.add_black_border(self.main_widget.sequence_view)
         self.add_black_border(self.main_widget.word_label)
-        self.add_black_border(self.main_widget.graph_editor_widget.infobox)
+        self.add_black_border(self.main_widget.graph_editor.infobox)
         self.add_black_border(self.main_widget.optionboard_view)
-        self.add_black_border(self.main_widget.graph_editor_widget.action_buttons_frame)
+        self.add_black_border(self.main_widget.graph_editor.action_buttons_frame)
         self.add_black_border(self.main_widget.letter_buttons_frame)
-        self.add_black_border(self.main_widget.graph_editor_widget.graphboard_view)
-        self.add_black_border(self.main_widget.graph_editor_widget.propbox_view)
+        self.add_black_border(self.main_widget.graph_editor.graphboard)
+        self.add_black_border(self.main_widget.graph_editor.propbox)
 
     def assign_layouts_to_window(self):
         for layout_name, layout in self.layouts.items():

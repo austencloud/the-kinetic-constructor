@@ -4,9 +4,9 @@ from settings.string_constants import *
 
 
 class InfoboxLayouts:
-    def __init__(self, infobox, graphboard_view, arrow_attributes):
+    def __init__(self, infobox, graphboard, arrow_attributes):
         self.infobox = infobox
-        self.graphboard_view = graphboard_view
+        self.graphboard = graphboard
         self.labels = infobox.labels
         self.widgets = infobox.widgets
         self.arrow_attributes = arrow_attributes
@@ -90,7 +90,7 @@ class InfoboxLayouts:
         self.red_attributes_layout.addWidget(self.labels.red_details_label)
 
     def setup_button_layout(self):
-        self.buttons = self.infobox_manager.buttons
+        self.buttons = self.infobox.buttons
         self.button_layout = QVBoxLayout()  # Create a vertical layout for the buttons
         for button_name in self.buttons.button_properties.keys():
             button = getattr(self.buttons, f"{button_name}_button")
@@ -111,7 +111,7 @@ class InfoboxLayouts:
 
         info_widget_inner = self.widgets.construct_attributes_widget(
             self.arrow_attributes.get_graphboard_arrow_attributes_by_color(
-                color, self.graphboard_view
+                color, self.graphboard
             ),
             color,
         )

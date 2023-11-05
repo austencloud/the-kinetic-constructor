@@ -6,7 +6,7 @@ from widgets.sequence.sequence_view import SequenceView
 from widgets.optionboard.optionboard_view import OptionboardView
 from utilities.layout_manager import LayoutManager
 from events.key_event_handler import KeyEventHandler
-from widgets.graph_editor.graph_editor_widget import GraphEditorWidget
+from widgets.graph_editor.graph_editor import GraphEditor
 from widgets.optionboard.letter_buttons_frame import LetterButtonsFrame
 from utilities.pictograph_generator import PictographGenerator
 from events.drag.drag_manager import DragManager
@@ -27,69 +27,52 @@ class MainWidget(QWidget):
         self.drag_manager = DragManager()
 
         self.sequence_view = SequenceView(self)
-        self.graph_editor_widget = GraphEditorWidget(self)
+        self.graph_editor = GraphEditor(self)
         self.optionboard_view = OptionboardView(self)
-
         self.letter_buttons_frame = LetterButtonsFrame(self)
-        
-        self.graphboard_view = self.graph_editor_widget.graphboard_view
-        self.infobox = self.graph_editor_widget.infobox
-        self.propbox_view = self.graph_editor_widget.propbox_view
-        self.arrowbox_view = self.graph_editor_widget.arrowbox_view
+
+        self.graphboard = self.graph_editor.graphboard
+        self.infobox = self.graph_editor.infobox
+        self.propbox = self.graph_editor.propbox
+        self.arrowbox = self.graph_editor.arrowbox
 
         self.pictograph_generator = PictographGenerator(
-            self, self.graphboard_view, self.infobox
+            self, self.graphboard, self.infobox
         )
 
-        self.drag_manager.initialize_dependencies(
-            self.graphboard_view, self.arrowbox_view
-        )
+        self.drag_manager.initialize_dependencies(self.graphboard, self.arrowbox)
         self.layout_manager.configure_layouts()
         self.init_staffs()
         self.connect_objects()
 
     def init_staffs(self):
-        self.propbox_view.staff_handler.init_propbox_staffs(
-            self.graph_editor_widget.propbox_view
-        )
+        self.propbox.staff_handler.init_propbox_staffs(self.graph_editor.propbox)
 
     def connect_objects(self):
-        self.graphboard_view.staff_handler.info_handler = (
-            self.graphboard_view.info_handler
-        )
-        self.graphboard_view.staff_handler.grid = self.graphboard_view.grid
-        self.graphboard_view.staff_handler.graphboard_view = (
-            self.graph_editor_widget.graphboard_view
-        )
-        self.propbox_view.staff_handler.propbox_view = (
-            self.graph_editor_widget.propbox_view
-        )
-        self.graphboard_view.infobox = self.graph_editor_widget.infobox
-        self.graphboard_view.generator = self.pictograph_generator
-        self.arrow_manager.infobox = self.graph_editor_widget.infobox
-        self.arrow_manager.graphboard_view = self.graph_editor_widget.graphboard_view
-        self.arrow_manager.manipulator.graphboard_scene = (
-            self.graph_editor_widget.graphboard_view.graphboard_scene
-        )
-        self.graph_editor_widget.graphboard_view.context_menu_manager.sequence_view = (
+        self.graphboard.staff_handler.info_handler = self.graphboard.info_handler
+        self.graphboard.staff_handler.grid = self.graphboard.grid
+        self.graphboard.staff_handler.graphboard = self.graph_editor.graphboard
+        self.propbox.staff_handler.propbox = self.graph_editor.propbox
+        self.graphboard.infobox = self.graph_editor.infobox
+        self.graphboard.generator = self.pictograph_generator
+        self.arrow_manager.infobox = self.graph_editor.infobox
+        self.arrow_manager.graphboard = self.graph_editor.graphboard
+        self.arrow_manager.manipulator.graphboard = self.graphboard
+        self.graph_editor.graphboard.context_menu_manager.sequence_view = (
             self.sequence_view
         )
         self.sequence_view.pictograph_generator = self.pictograph_generator
-        self.sequence_view.info_handler = self.graphboard_view.info_handler
-        self.graphboard_view.info_handler.connect_widgets_and_managers()
-        self.graphboard_view.drag_manager.arrowbox_view = (
-            self.graph_editor_widget.arrowbox_view
-        )
+        self.sequence_view.info_handler = self.graphboard.info_handler
+        self.graphboard.info_handler.connect_widgets_and_managers()
+        self.graphboard.drag_manager.arrowbox = self.graph_editor.arrowbox
         self.arrow_manager.manipulator.graphboard_staff_handler = (
-            self.graphboard_view.staff_handler
+            self.graphboard.staff_handler
         )
 
     ### EVENTS ###
 
     def eventFilter(self, source, event):
         if event.type() == QEvent.Type.KeyPress:
-            self.key_bindings_manager.keyPressEvent(
-                event, self.graph_editor_widget.graphboard_view
-            )
+            self.key_bindings_manager.keyPressEvent(event, self.graph_editor.graphboard)
             return True
         return super().eventFilter(source, event)

@@ -49,7 +49,7 @@ class ArrowManipulator:
 
     def finalize_manipulation(self, arrow):
         self.arrow_manager.positioner.update_arrow_position(
-            self.arrow_manager.graphboard_view
+            self.arrow_manager.graphboard
         )
         arrow.update_appearance()
         self.arrow_manager.infobox.update()
@@ -241,13 +241,11 @@ class ArrowManipulator:
             self.finalize_manipulation(arrow)
 
     def swap_colors(self):
-        view = self.arrow_manager.graphboard_view
+        view = self.arrow_manager.graphboard
         current_letter = view.info_handler.determine_current_letter_and_type()[0]
         if current_letter != "G" and current_letter != "H":
             arrows = [
-                item
-                for item in self.graphboard_scene.items()
-                if isinstance(item, Arrow)
+                item for item in self.graphboard.items() if isinstance(item, Arrow)
             ]
             if len(arrows) >= 1:
                 for arrow in arrows:

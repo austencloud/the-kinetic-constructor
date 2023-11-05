@@ -1,11 +1,11 @@
-from PyQt6.QtCore import QPointF, Qt
-from PyQt6.QtGui import QTransform
+from PyQt6.QtCore import QPointF
 from PyQt6.QtSvg import QSvgRenderer
+from PyQt6.QtGui import QTransform
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsScene, QSizePolicy, QFrame
-from objects.staff.staff import Staff
+from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
+from objects.staff.staff import Staff
 from settings.numerical_constants import (
     GRAPHBOARD_SCALE,
     GRAPHBOARD_WIDTH,
@@ -13,6 +13,7 @@ from settings.numerical_constants import (
     VERTICAL_OFFSET,
 )
 from settings.string_constants import *
+from data.letter_types import letter_types
 from widgets.graph_editor.graphboard.graphboard_staff_handler import (
     GraphboardStaffHandler,
 )
@@ -22,69 +23,39 @@ from widgets.graph_editor.graphboard.graphboard_info_handler import (
 from widgets.graph_editor.graphboard.graphboard_context_menu_handler import (
     GraphboardContextMenuHandler,
 )
+
 from utilities.export_handler import ExportHandler
-from data.letter_types import letter_types
 
 
-class GraphboardView(QGraphicsView):
-    LAYER2_POINTS = ["NE_layer2_point", "SE_layer2_point", "SW_layer2_point", "NW_layer2_point"]
-
-    def __init__(self, main_widget, graph_editor_widget):
-        super().__init__(graph_editor_widget)
-        self.init_ui()
-        self.init_scene(main_widget)
-        self.init_managers(main_widget)
-        self.init_grid()
-        self.init_letter_renderers(main_widget.letters)
-        self.init_staffs()
-
-    # INIT #
-
-    def init_ui(self):
-        self.setAcceptDrops(True)
-        self.setInteractive(True)
-        self.is_graphboard = True
-        self.temp_arrow = None
-        self.temp_staff = None
-        self.drag_preview = None
-
-        self.setSizePolicy(
-            QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        )
-        self.setFixedSize(int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setFrameStyle(QFrame.Shape.NoFrame)
-
-    def init_scene(self, main_widget):
-        self.graphboard_scene = QGraphicsScene()
-        self.setScene(self.graphboard_scene)
+class Graphboard(QGraphicsScene):
+    def __init__(self, main_widget):
+        super().__init__()
         self.main_widget = main_widget
         self.grid = Grid(GRID_PATH)
         self.grid.setScale(GRAPHBOARD_SCALE)
-        self.scene().setSceneRect(0, 0, int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
-        self.VERTICAL_OFFSET = (self.height() - self.width()) / 2
-        self.view_scale = GRAPHBOARD_SCALE
-        self.graphboard_scene.addItem(self.grid)
-
-    def init_managers(self, main_widget):
+        self.setSceneRect(0, 0, int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
+        self.addItem(self.grid)
+        self.letter_renderers = {}
+        self.letter_item = QGraphicsSvgItem()
+        self.addItem(self.letter_item)
+        self.scale = GRAPHBOARD_SCALE
+        self.arrow_manager = main_widget.arrow_manager
+        self.staff_handler = GraphboardStaffHandler(main_widget, self)
         self.info_handler = GraphboardInfoHandler(main_widget, self)
-        self.staff_handler = GraphboardStaffHandler(main_widget, self.graphboard_scene)
         self.export_manager = ExportHandler(self.staff_handler, self.grid, self)
-        self.context_menu_manager = GraphboardContextMenuHandler(self)
         self.drag_manager = self.main_widget.drag_manager
         self.arrow_manager = main_widget.arrow_manager
-        self.arrow_manager.graphboard_view = self
         self.arrow_factory = self.arrow_manager.factory
         self.staff_factory = self.staff_handler.factory
-
-    def init_staffs(self):
-        self.staff_handler.init_handpoints(self)
-        self.staff_handler.initializer.init_staffs(self)
+        self.view = QGraphicsView()
+        context_menu_manager = GraphboardContextMenuHandler(self)
+        self.context_menu_manager = context_menu_manager
+        self.init_grid()
+        self.init_staffs()
 
     def init_grid(self):
         transform = QTransform()
-        graphboard_size = self.frameSize()
+        graphboard_size = self.sceneRect().size()
 
         grid_position = QPointF(
             (
@@ -103,56 +74,15 @@ class GraphboardView(QGraphicsView):
         transform.translate(grid_position.x(), grid_position.y())
         self.grid.setTransform(transform)
 
-    def init_letter_renderers(self, letters):
-        self.letter_renderers = {
-            letter: QSvgRenderer(f"{LETTER_SVG_DIR}/{self.get_letter_type(letter)}/{letter}.svg")
-            for letter in letters
-        }
-        self.letter_item = QGraphicsSvgItem()
-        self.main_widget.graphboard_scene = self.graphboard_scene
-        self.graphboard_scene.addItem(self.letter_item)
-
-    ### EVENTS ###
-
-    def mousePressEvent(self, event):
-        self.drag_manager.event_handler.handle_mouse_press(event)
-        super().mousePressEvent(event)
-
-    def contextMenuEvent(self, event):
-        clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())
-        selected_items = self.graphboard_scene.selectedItems()
-        if isinstance(clicked_item, Arrow):
-            self.context_menu_manager.create_arrow_menu(selected_items, event)
-        elif isinstance(clicked_item, Staff):
-            self.context_menu_manager.create_staff_menu(selected_items, event)
-        else:
-            self.context_menu_manager.create_graphboard_menu(event)
-
-    ### GETTERS ###
-
-    def get_graphboard_quadrants(self, mouse_pos):
-        scene_H_center = self.sceneRect().width() / 2
-        scene_V_center = self.sceneRect().height() / 2
-        adjusted_mouse_y = mouse_pos.y() + VERTICAL_OFFSET
-
-        if adjusted_mouse_y < scene_V_center:
-            if mouse_pos.x() < scene_H_center:
-                quadrant = NW
-            else:
-                quadrant = NE
-        else:
-            if mouse_pos.x() < scene_H_center:
-                quadrant = SW
-            else:
-                quadrant = SE
-
-        return quadrant
+    def init_staffs(self):
+        self.staff_handler.init_handpoints()
+        self.staff_handler.initializer.init_staffs(self)
 
     def get_state(self):
         state = {
             ARROWS: [],
         }
-        for item in self.scene().items():
+        for item in self.items():
             if isinstance(item, Arrow):
                 state[ARROWS].append(
                     {
@@ -176,9 +106,7 @@ class GraphboardView(QGraphicsView):
             "NW_layer2_point",
         ]:
             cx, cy = self.grid.get_circle_coordinates(point_name)
-            graphboard_layer2_points[point_name] = QPointF(
-                cx, cy
-            ) 
+            graphboard_layer2_points[point_name] = QPointF(cx, cy)
 
         centers = {
             NE: graphboard_layer2_points["NE_layer2_point"],
@@ -187,15 +115,13 @@ class GraphboardView(QGraphicsView):
             NW: graphboard_layer2_points["NW_layer2_point"],
         }
 
-        return centers.get(
-            quadrant, QPointF(0, 0)
-        )
+        return centers.get(quadrant, QPointF(0, 0))
 
     def get_current_arrow_positions(self):
         red_position = None
         blue_position = None
 
-        for arrow in self.scene().items():
+        for arrow in self.items():
             if isinstance(arrow, Arrow):
                 center = arrow.pos() + arrow.boundingRect().center()
                 if arrow.color == RED:
@@ -207,7 +133,7 @@ class GraphboardView(QGraphicsView):
 
     def get_arrows(self):
         current_arrows = []
-        for arrow in self.scene().items():
+        for arrow in self.items():
             if isinstance(arrow, Arrow):
                 current_arrows.append(arrow)
         return current_arrows
@@ -215,35 +141,31 @@ class GraphboardView(QGraphicsView):
     def get_arrows_by_color(self, color):
         return [
             item
-            for item in self.graphboard_scene.items()
+            for item in self.items()
             if isinstance(item, Arrow) and item.color == color
         ]
 
-    ### SELECTION ###
-
     def select_all_items(self):
-        for item in self.scene().items():
+        for item in self.items():
             item.setSelected(True)
 
     def select_all_arrows(self):
-        for arrow in self.graphboard_scene.items():
+        for arrow in self.items():
             if isinstance(arrow, Arrow):
                 arrow.setSelected(True)
 
     def clear_selection(self):
-        for arrow in self.scene().selectedItems():
+        for arrow in self.selectedItems():
             arrow.setSelected(False)
 
     def clear_graphboard(self):
-        for item in self.scene().items():
+        for item in self.items():
             if isinstance(item, Arrow) or isinstance(item, Staff):
-                self.scene().removeItem(item)
+                self.removeItem(item)
                 del item
 
-    ### OTHER ###
-
     def update_letter(self, letter):
-        letter = self.info_handler.determine_current_letter_and_type()[0]
+        letter = self.main_widget.info_handler.determine_current_letter_and_type()[0]
         if letter is None:
             svg_file = f"{LETTER_SVG_DIR}/blank.svg"
             renderer = QSvgRenderer(svg_file)
@@ -265,7 +187,25 @@ class GraphboardView(QGraphicsView):
 
         self.letter_item.setScale(GRAPHBOARD_SCALE)
         self.letter_item.setPos(
-            self.width() / 2
+            self.main_widget.width() / 2
             - self.letter_item.boundingRect().width() * GRAPHBOARD_SCALE / 2,
             GRAPHBOARD_WIDTH,
         )
+
+    def get_graphboard_quadrants(self, mouse_pos):
+        scene_H_center = self.sceneRect().width() / 2
+        scene_V_center = self.sceneRect().height() / 2
+        adjusted_mouse_y = mouse_pos.y() + VERTICAL_OFFSET
+
+        if adjusted_mouse_y < scene_V_center:
+            if mouse_pos.x() < scene_H_center:
+                quadrant = NW
+            else:
+                quadrant = NE
+        else:
+            if mouse_pos.x() < scene_H_center:
+                quadrant = SW
+            else:
+                quadrant = SE
+
+        return quadrant

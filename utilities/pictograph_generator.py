@@ -8,15 +8,14 @@ from settings.string_constants import *
 
 
 class PictographGenerator:
-    def __init__(self, main_widget, graphboard_view, infobox):
-        self.staff_handler = graphboard_view.staff_handler
-        self.graphboard_view = graphboard_view
+    def __init__(self, main_widget, scene, infobox):
+        self.staff_handler = scene.staff_handler
+        self.scene = scene
         self.infobox = infobox
         self.main_window = main_widget.main_window
         self.arrow_manager = main_widget.arrow_manager
         self.export_manager = main_widget.export_manager
-        self.grid = graphboard_view.grid
-        self.graphboard_scene = self.graphboard_view.scene()
+        self.grid = self.scene.grid
         self.output_dir = "images/pictographs"
         self.current_letter = None
         self.letters = main_widget.letters
@@ -78,8 +77,8 @@ class PictographGenerator:
 
                         output_file_path = os.path.join(self.output_dir, file_name)
                         self.export_manager = ExportHandler(
-                            self.graphboard_view,
-                            self.graphboard_scene,
+                            self.scene,
+                            self.graphboard,
                             self.staff_handler,
                             self.grid,
                         )
@@ -87,21 +86,21 @@ class PictographGenerator:
                         self.export_manager.export_to_svg(output_file_path)
 
                 # Clear the graphboard for the next combination
-                self.graphboard_view.clear()
+                self.scene.clear()
 
     def open_selection_window(self, letter):
         self.output_dir = "images/pictographs"
-        self.graphboard_view.clear()
+        self.scene.clear()
 
         combinations = self.letters.get(letter, [])
         if not combinations:
             print(f"No combinations found for letter {letter}")
-            self.graphboard_view.update_letter(None)
+            self.scene.update_letter(None)
             self.infobox.update()
             return
         self.current_letter = letter
         print(f"Generating {self.current_letter}")
-        self.graphboard_view.update_letter(self.current_letter)
+        self.scene.update_letter(self.current_letter)
 
         combination_set = random.choice(combinations)
         created_arrows = []
@@ -129,7 +128,7 @@ class PictographGenerator:
                     svg_file = f"resources/images/arrows/static_0.svg"
                     arrow = Arrow(
                         svg_file,
-                        self.graphboard_view,
+                        self.scene,
                         self.infobox,
                         self.svg_manager,
                         self.arrow_manager,
@@ -140,8 +139,8 @@ class PictographGenerator:
 
         # Add the arrows to the scene
         for arrow in created_arrows:
-            if arrow.scene is not self.graphboard_scene:
-                self.graphboard_scene.addItem(arrow)
+            if arrow.scene is not self.graphboard:
+                self.graphboard.addItem(arrow)
 
         for arrow in created_arrows:
             if optimal_positions:
@@ -158,18 +157,18 @@ class PictographGenerator:
                 else:
                     if arrow.quadrant != "None":
                         pos = (
-                            self.graphboard_view.get_quadrant_center(arrow.quadrant)
+                            self.scene.get_quadrant_center(arrow.quadrant)
                             - arrow.boundingRect().center()
                         )
             else:
                 # Calculate the position to center the arrow at the quadrant center
                 pos = (
-                    self.graphboard_view.get_quadrant_center(arrow.quadrant)
+                    self.scene.get_quadrant_center(arrow.quadrant)
                     - arrow.boundingRect().center()
                 )
                 arrow.setPos(pos)
 
-        self.staff_handler.update_graphboard_staffs(self.graphboard_scene)
+        self.staff_handler.update_graphboard_staffs(self.graphboard)
         # created_arrows should be a list
         self.infobox.update()
 

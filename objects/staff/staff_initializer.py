@@ -5,8 +5,7 @@ class StaffInitializer:
     def __init__(self, staff_factory):
         self.staff_factory = staff_factory
 
-    def init_staffs(self, view):
-        scene = view.scene()
+    def init_staffs(self, scene):
         staffs = []
 
         red_staff_dict = {
@@ -28,5 +27,6 @@ class StaffInitializer:
         staffs.append(red_staff)
         staffs.append(blue_staff)
 
-        view.staffs = staffs
-        view.staff_handler.visibility_manager.hide_all_staffs(view.scene())
+        scene.staffs = staffs
+        scene.staff_handler.visibility_manager.hide_all_staffs(scene)
+

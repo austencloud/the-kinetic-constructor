@@ -10,16 +10,14 @@ class GraphboardInfoHandler:
         self.view = view
 
     def connect_widgets_and_managers(self):
-        self.graph_editor_widget = self.main_widget.graph_editor_widget
-        self.graphboard_view = self.graph_editor_widget.graphboard_view
-        self.graphboard_drag_manager = self.graphboard_view.drag_manager
-        self.infobox = self.graph_editor_widget.infobox
+        self.graph_editor = self.main_widget.graph_editor
+        self.infobox = self.graph_editor.infobox
         self.staff_handler = self.view.staff_handler
         self.arrow_manager = self.main_widget.arrow_manager
         self.arrow_positioner = self.arrow_manager.positioner
 
     def update(self):
-        self.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard_view)
+        self.arrow_positioner.update_arrow_position(self.arrow_manager.graphboard)
         self.infobox.manager.labels.update_type_and_position_labels()
         self.view.update_letter(self.determine_current_letter_and_type()[0])
         self.staff_handler.update_graphboard_staffs(self.view.scene())
@@ -30,10 +28,10 @@ class GraphboardInfoHandler:
 
     def determine_current_letter_and_type(self):
         current_combination = []
-        arrowbox_view = self.main_widget.graph_editor_widget.arrowbox_view
+        arrowbox = self.main_widget.graph_editor.arrowbox
 
         # Check if an arrow is being dragged and add its attributes to the current_combination list
-        if arrowbox_view.drag_preview == True:
+        if arrowbox.drag_preview == True:
             drag_attr = self.graphboard_drag_manager.drag_preview.get_attributes()
             sorted_drag_attr = {k: drag_attr[k] for k in sorted(drag_attr.keys())}
             current_combination.append(sorted_drag_attr)

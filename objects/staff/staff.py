@@ -25,8 +25,7 @@ class Staff(QGraphicsSvgItem):
         self.svg_file = STAFF_SVG_PATH
         self.scene = scene
         self.arrow = None
-        self.view = scene.views()[0]
-        self.handler = self.view.staff_handler
+        self.handler = scene.staff_handler
         self.initialize_dict_attributes(staff_dict)
         self.initialize_app_attributes()
 
@@ -60,7 +59,7 @@ class Staff(QGraphicsSvgItem):
         self.renderer = QSvgRenderer(self.svg_file)
         self.setSharedRenderer(self.renderer)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
-        self.setScale(self.view.view_scale)
+        self.setScale(self.scene.scale)
         self.set_color(self.color)
 
     def get_staff_center(self, scale):

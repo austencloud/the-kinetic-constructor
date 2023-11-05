@@ -1,15 +1,16 @@
 from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout
-from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
-from widgets.graph_editor.arrowbox.arrowbox_view import ArrowBoxView
+from widgets.graph_editor.graphboard.graphboard import Graphboard
+from widgets.graph_editor.graphboard.graphboard import Graphboard
+from widgets.graph_editor.arrowbox.arrowbox import Arrowbox
 
-from widgets.graph_editor.propbox.propbox_view import PropBoxView
+from widgets.graph_editor.propbox.propbox import Propbox
 from widgets.graph_editor.infobox.infobox import Infobox
 from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
 from widgets.graph_editor.action_buttons_frame import ActionButtonsFrame
 
 
-class GraphEditorWidget(QWidget):
+class GraphEditor(QWidget):
     def __init__(self, main_widget):
         super().__init__()
         self.main_widget = main_widget
@@ -34,32 +35,32 @@ class GraphEditorWidget(QWidget):
         action_buttons_layout = QVBoxLayout()
         infobox_layout = QVBoxLayout()
 
-        self.graphboard_view = GraphboardView(main_widget, self)
+        self.graphboard = Graphboard(main_widget)
         self.infobox = Infobox(
             main_widget,
-            self.graphboard_view,
+            self.graphboard,
             self.arrow_manipulator,
             self.arrow_attributes,
         )
-        self.infobox.init_manager()
-        self.propbox_view = PropBoxView(main_widget)
-        self.arrowbox_view = ArrowBoxView(
+
+        self.propbox = Propbox(main_widget)
+        self.arrowbox = Arrowbox(
             main_widget,
-            self.graphboard_view,
+            self.graphboard,
             self.infobox,
             self.arrow_manager,
         )
         self.action_buttons_frame = ActionButtonsFrame(
-            self.graphboard_view,
+            self.graphboard,
             self.json_handler,
             self.arrow_manipulator,
             self.arrow_selector,
             self.sequence_view,
         )
 
-        objectbox_layout.addWidget(self.arrowbox_view)
-        objectbox_layout.addWidget(self.propbox_view)
-        graphboard_layout.addWidget(self.graphboard_view)
+        objectbox_layout.addWidget(self.arrowbox.view)
+        objectbox_layout.addWidget(self.propbox.view)
+        graphboard_layout.addWidget(self.graphboard.view)
         action_buttons_layout.addWidget(self.action_buttons_frame)
         infobox_layout.addWidget(self.infobox)
 
@@ -76,6 +77,4 @@ class GraphEditorWidget(QWidget):
     def mouseMoveEvent(self, event):
         global dragged_arrow
         if dragged_arrow:
-            self.arrowbox_view.drag_manager.update_drag_preview(
-                self.arrowbox_view, event
-            )
+            self.arrowbox.drag_manager.update_drag_preview(self.arrowbox, event)

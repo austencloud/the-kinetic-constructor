@@ -4,7 +4,7 @@ from settings.numerical_constants import (
     GRAPHBOARD_WIDTH,
     GRAPHBOARD_SCALE,
     PICTOGRAPH_SCALE,
-    BETA_OFFSET
+    BETA_OFFSET,
 )
 from settings.string_constants import *
 import logging
@@ -21,12 +21,11 @@ class StaffPositioner:
     ### REPOSITIONERS ###
 
     def check_replace_beta_staffs(self, scene):
-        view = scene.views()[0]
-        board_state = view.get_state()
+        board_state = scene.get_state()
 
         visible_staves = []
 
-        for staff in view.staffs:
+        for staff in scene.staffs:
             if staff.isVisible():
                 visible_staves.append(staff)
 
@@ -92,7 +91,7 @@ class StaffPositioner:
             staff = next(
                 (
                     staff
-                    for staff in self.staff_handler.main_widget.graphboard_view.staffs
+                    for staff in self.staff_handler.main_widget.graphboard.staffs
                     if staff.arrow.color == arrow[COLOR]
                 ),
                 None,
@@ -121,7 +120,7 @@ class StaffPositioner:
                     other_staff = next(
                         (
                             s
-                            for s in self.staff_handler.main_widget.graphboard_view.staffs
+                            for s in self.staff_handler.main_widget.graphboard.staffs
                             if s.location == staff.location and s != staff
                         ),
                         None,
@@ -142,7 +141,7 @@ class StaffPositioner:
                     move_staff(
                         next(
                             staff
-                            for staff in self.staff_handler.main_widget.graphboard_view.staffs
+                            for staff in self.staff_handler.main_widget.graphboard.staffs
                             if staff.arrow.color == arrow[COLOR]
                         ),
                         direction,
@@ -184,7 +183,7 @@ class StaffPositioner:
 
         further_staff = next(
             staff
-            for staff in self.staff_handler.main_widget.graphboard_view.staffs
+            for staff in self.staff_handler.main_widget.graphboard.staffs
             if staff.arrow.color == further_arrow[COLOR]
         )
         new_position_further = self.calculate_new_position(
@@ -195,7 +194,7 @@ class StaffPositioner:
         other_direction = self.get_opposite_direction(further_direction)
         other_staff = next(
             staff
-            for staff in self.staff_handler.main_widget.graphboard_view.staffs
+            for staff in self.staff_handler.main_widget.graphboard.staffs
             if staff.arrow.color == other_arrow[COLOR]
         )
         new_position_other = self.calculate_new_position(
@@ -210,7 +209,7 @@ class StaffPositioner:
         pro_staff = next(
             (
                 staff
-                for staff in self.staff_handler.main_widget.graphboard_view.staffs
+                for staff in self.staff_handler.main_widget.graphboard.staffs
                 if staff.arrow.color == pro_arrow[COLOR]
             ),
             None,
@@ -218,7 +217,7 @@ class StaffPositioner:
         anti_staff = next(
             (
                 staff
-                for staff in self.staff_handler.main_widget.graphboard_view.staffs
+                for staff in self.staff_handler.main_widget.graphboard.staffs
                 if staff.arrow.color == anti_arrow[COLOR]
             ),
             None,
@@ -254,7 +253,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.staff_handler.main_widget.graphboard_view.staffs
+                    for staff in self.staff_handler.main_widget.graphboard.staffs
                     if staff.arrow.color == pro_or_anti_arrow[COLOR]
                 ),
                 direction,
@@ -262,7 +261,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.staff_handler.main_widget.graphboard_view.staffs
+                    for staff in self.staff_handler.main_widget.graphboard.staffs
                     if staff.arrow.color == static_arrow[COLOR]
                 ),
                 self.get_opposite_direction(direction),

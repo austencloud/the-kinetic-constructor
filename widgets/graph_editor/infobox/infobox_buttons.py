@@ -13,15 +13,16 @@ class InfoboxButtons:
 
     }
 
-    def __init__(self, infobox, arrow_manipulator, graphboard_view):
+    def __init__(self, infobox, arrow_manipulator, scene):
         self.infobox = infobox
         self.arrow_manipulator = arrow_manipulator
-        self.graphboard_view = graphboard_view
-        self.get_arrows_by_color = self.graphboard_view.get_arrows_by_color
+        self.scene = scene
+        self.get_arrows_by_color = self.scene.get_arrows_by_color
         self.button_groups = {
             BLUE: [],
             RED: []
         }
+        self.layouts = infobox.layouts
 
     def create_and_set_button(self, button_name, properties):
         icon = properties.get("icon", None)
@@ -112,5 +113,4 @@ class InfoboxButtons:
         for button_name, properties in self.button_properties.items():
             self.create_and_set_button(button_name, properties)
 
-        self.layouts = self.infobox_manager.layouts
         self.layouts.setup_button_layout()

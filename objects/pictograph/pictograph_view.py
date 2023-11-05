@@ -211,11 +211,10 @@ class PictographView(QGraphicsView):
 
     def save_optimal_positions(self):
         MAIN_GRAPHBOARD_BUFFER = (
-            self.graphboard_view.width()
-            - self.graphboard_view.grid.boundingRect().width()
+            self.graphboard.width() - self.graphboard.grid.boundingRect().width()
         ) / 2
         MAIN_GRAPHBOARD_V_OFFSET = (
-            self.graphboard_view.height() - self.graphboard_view.width()
+            self.graphboard.height() - self.graphboard.width()
         ) / 2
 
         for item in self.pictograph_scene.items():

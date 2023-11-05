@@ -5,8 +5,7 @@ class DragEventHandler:
     def __init__(self, drag_manager):
         self.drag_manager = drag_manager
         self.helpers = self.drag_manager.helpers
-        self.graphboard_view = self.drag_manager.graphboard_view
-        self.graphboard_scene = self.drag_manager.graphboard_scene
+        self.graphboard = self.drag_manager.graphboard
         self.scene_updater = self.drag_manager.scene_updater
         self.info_handler = self.drag_manager.info_handler
         self.staff_handler = self.drag_manager.staff_handler
@@ -17,10 +16,10 @@ class DragEventHandler:
 
     ### DRAG INITIALIZATION ###
 
-    def start_drag(self, view, target_arrow, event):
-        if not self.helpers.is_click_on_arrow(view, event):
+    def start_drag(self, scene, target_arrow, event_pos):
+        if not self.helpers.is_click_on_arrow(scene, event_pos):
             return
-        self.setup_drag_preview(view, target_arrow, event)
+        self.setup_drag_preview(scene, target_arrow, event_pos)
 
     def setup_drag_preview(self, view, target_arrow, event):
         self.drag_preview = DragPreview(self.drag_manager, target_arrow)
@@ -28,7 +27,7 @@ class DragEventHandler:
         self.dragging = True
         self.previous_quadrant = None  # Initialize the previous quadrant to None
         self.target_arrow = target_arrow
-        self.graphboard_view.dragged_arrow = self.target_arrow
+        self.graphboard.dragged_arrow = self.target_arrow
         self.drag_preview.setParent(view.main_widget)
         self.drag_preview.show()
         self.drag_preview.move_to_cursor(view, event, self.target_arrow)
@@ -45,17 +44,17 @@ class DragEventHandler:
             self.drag_preview.has_entered_graphboard_once = True
 
         local_pos_in_graphboard = self.helpers.get_local_pos_in_graphboard(view, event)
-        new_quadrant = self.graphboard_view.get_graphboard_quadrants(
-            self.graphboard_view.mapToScene(local_pos_in_graphboard)
+        new_quadrant = self.graphboard.get_graphboard_quadrants(
+            self.graphboard.view.mapToScene(local_pos_in_graphboard)
         )
 
         # Check if the quadrant has changed
         if self.previous_quadrant != new_quadrant:
             from objects.arrow.arrow import Arrow
 
-            for item in self.drag_manager.graphboard_scene.items():
+            for item in self.drag_manager.graphboard.items():
                 if isinstance(item, Arrow) and item.color == self.drag_preview.color:
-                    self.graphboard_scene.removeItem(item)
+                    self.graphboard.removeItem(item)
 
             self.drag_preview.update_rotation_for_quadrant(new_quadrant)
             new_arrow_dict = self.target_arrow.attributes.create_dict_from_arrow(
@@ -68,16 +67,18 @@ class DragEventHandler:
                 self.drag_preview
             )
 
-            for staff in self.graphboard_view.staffs:
+            for staff in self.graphboard.staffs:
                 if staff.color == self.drag_preview.color:
-                    staff.attributes.update_attributes_from_dict(staff, self.new_staff_dict)
+                    staff.attributes.update_attributes_from_dict(
+                        staff, self.new_staff_dict
+                    )
                     staff.arrow = self.invisible_arrow
                     self.invisible_arrow.staff = staff
                     staff.location = staff.arrow.end_location
                     staff.update_appearance()
-                    staff.setVisible(True)   
-            
-            self.staff_handler.update_graphboard_staffs(self.graphboard_scene)
+                    staff.setVisible(True)
+
+            self.staff_handler.update_graphboard_staffs(self.graphboard)
 
             self.invisible_arrow.arrow_manager.attributes.update_attributes(
                 self.invisible_arrow, new_arrow_dict
@@ -87,11 +88,10 @@ class DragEventHandler:
 
             self.previous_quadrant = new_quadrant  # Update the previous quadrant
 
-
     ### MOUSE MOVE ###
 
     def handle_mouse_move(self, view, event):
-        if hasattr(self, 'drag_preview') and self.drag_preview:
+        if hasattr(self, "drag_preview") and self.drag_preview:
             self.update_drag_preview_on_mouse_move(view, event)
         else:
             event.ignore()
@@ -105,9 +105,9 @@ class DragEventHandler:
             self.invisible_arrow.arrow_manager.attributes.update_attributes(
                 self.invisible_arrow, new_arrow_dict
             )
-            board_state = self.graphboard_view.get_state()
+            board_state = self.graphboard.get_state()
             self.staff_handler.positioner.reposition_staffs(
-                self.graphboard_scene, board_state
+                self.graphboard, board_state
             )
             self.info_handler.update()
             self.content_changed = False
@@ -124,7 +124,7 @@ class DragEventHandler:
     ### MOUSE RELEASE ###
 
     def handle_mouse_release(self, event):
-        if hasattr(self, 'drag_preview') and self.drag_preview:
+        if hasattr(self, "drag_preview") and self.drag_preview:
             self.handle_drop_event(event)
             self.drag_manager.reset_drag_state()
 
@@ -141,14 +141,14 @@ class DragEventHandler:
         if self.drag_preview.has_entered_graphboard_once:
             self.drag_manager.set_focus_and_accept_event(event)
 
-            self.graphboard_view.clear_selection()
+            self.graphboard.clear_selection()
             placed_arrow.setSelected(True)
 
     ### MOUSE PRESS EVENTS ###
 
     def handle_mouse_press(self, event):
-        self.graphboard_view.setFocus()
-        items = self.graphboard_view.items(event.pos())
+        self.graphboard.setFocus()
+        items = self.graphboard.items(event.pos())
         self.drag_manager.select_or_deselect_items(event, items)
         if not items or not items[0].isSelected():
-            self.graphboard_view.clear_selection()
+            self.graphboard.clear_selection()

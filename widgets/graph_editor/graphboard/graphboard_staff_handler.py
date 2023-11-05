@@ -8,16 +8,17 @@ from settings.numerical_constants import (
 )
 from settings.string_constants import NORTH, EAST, SOUTH, WEST
 
+
 class GraphboardStaffHandler(StaffManager):
     def __init__(self, main_widget, scene):
         super().__init__(main_widget)
         self.scene = scene
         self.staffs_on_board = {}
         self.staff_xy_locations = {}
-        self.graphboard_view = None
+        self.graphboard = None
 
-    def init_handpoints(self, graphboard_view):
-        grid = graphboard_view.grid
+    def init_handpoints(self):
+        grid = self.scene.grid
 
         scale = GRAPHBOARD_SCALE
         padding = GRAPHBOARD_GRID_PADDING
@@ -37,21 +38,21 @@ class GraphboardStaffHandler(StaffManager):
             grid_handpoints[point_name] = QPointF(scaled_x, scaled_y)
 
         self.staff_xy_locations = {
-            NORTH: 
-                grid_handpoints["N_hand_point"] + QPointF(GRAPHBOARD_STAFF_WIDTH / 2, -GRAPHBOARD_STAFF_LENGTH / 2),
-            EAST: 
-                grid_handpoints["E_hand_point"] + QPointF(-GRAPHBOARD_STAFF_LENGTH / 2, -GRAPHBOARD_STAFF_WIDTH / 2),
-            SOUTH: 
-                grid_handpoints["S_hand_point"] + QPointF(GRAPHBOARD_STAFF_WIDTH / 2, -GRAPHBOARD_STAFF_LENGTH / 2),
-            WEST: 
-                grid_handpoints["W_hand_point"] + QPointF(-GRAPHBOARD_STAFF_LENGTH / 2, -GRAPHBOARD_STAFF_WIDTH / 2),
+            NORTH: grid_handpoints["N_hand_point"]
+            + QPointF(GRAPHBOARD_STAFF_WIDTH / 2, -GRAPHBOARD_STAFF_LENGTH / 2),
+            EAST: grid_handpoints["E_hand_point"]
+            + QPointF(-GRAPHBOARD_STAFF_LENGTH / 2, -GRAPHBOARD_STAFF_WIDTH / 2),
+            SOUTH: grid_handpoints["S_hand_point"]
+            + QPointF(GRAPHBOARD_STAFF_WIDTH / 2, -GRAPHBOARD_STAFF_LENGTH / 2),
+            WEST: grid_handpoints["W_hand_point"]
+            + QPointF(-GRAPHBOARD_STAFF_LENGTH / 2, -GRAPHBOARD_STAFF_WIDTH / 2),
         }
 
         self.staffs_on_board = {}
 
-    def update_graphboard_staffs(self, graphboard_scene):
-        for staff in self.graphboard_view.staffs:
+    def update_graphboard_staffs(self, scene):
+        for staff in scene.staffs:
             staff.update_appearance()
             staff.setPos(self.staff_xy_locations[staff.location])
 
-        self.positioner.check_replace_beta_staffs(graphboard_scene)
+        self.positioner.check_replace_beta_staffs(scene)

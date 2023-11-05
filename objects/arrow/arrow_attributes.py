@@ -53,9 +53,9 @@ class ArrowAttributes:
         }
         return arrow_dict
 
-    def get_graphboard_arrow_attributes_by_color(self, color, graphboard_view):
-        # Assuming you have a method to get arrows by color in graphboard_view
-        arrows = graphboard_view.get_arrows_by_color(color)
+    def get_graphboard_arrow_attributes_by_color(self, color, scene):
+        # Assuming you have a method to get arrows by color in graphboard
+        arrows = scene.get_arrows_by_color(color)
         if not arrows:
             return {}
 

@@ -7,7 +7,7 @@ from PyQt6.QtGui import QImage, QPainter, QColor
 from objects.arrow.arrow import Arrow
 from objects.staff.staff import Staff
 from objects.grid import Grid
-from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
+from widgets.graph_editor.graphboard.graphboard import Graphboard
 from objects.pictograph.pictograph_image import PictographImage
 from settings.numerical_constants import (
     DEFAULT_GRAPHBOARD_WIDTH,
@@ -71,19 +71,19 @@ class SequenceView(QGraphicsView):
                 self.sequence_scene.addItem(pictograph)
                 break
 
-    def add_to_sequence(self, graphboard_view):
+    def add_to_sequence(self, graphboard):
         # Get the size of the sequence_scene in sequence_scene coordinates
-        scene_size = graphboard_view.sceneRect().size().toSize()
+        scene_size = graphboard.sceneRect().size().toSize()
 
         # Create the QImage with the adjusted size
         image = QImage(scene_size, QImage.Format.Format_ARGB32)
         image.fill(QColor(Qt.GlobalColor.transparent))
         painter = QPainter(image)
 
-        graphboard_view.clear_selection()
+        graphboard.clear_selection()
 
         # Render the sequence_scene
-        graphboard_view.render(painter)
+        graphboard.render(painter)
         painter.end()
 
         scaled_image = image.scaled(
@@ -92,10 +92,10 @@ class SequenceView(QGraphicsView):
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
         )
-        pictograph = PictographImage(graphboard_view.get_state(), scaled_image)
+        pictograph = PictographImage(graphboard.get_state(), scaled_image)
         self.add_pictograph(pictograph)
-        graphboard_view.clear_graphboard()
-        graphboard_view.update_letter(None)
+        graphboard.clear_graphboard()
+        graphboard.update_letter(None)
         letter = self.info_handler.determine_current_letter_and_type()[0]
         if letter:
             self.main_widget.word_label.setText(
@@ -103,11 +103,9 @@ class SequenceView(QGraphicsView):
             )
         self.sequence_scene.update()
 
-    def add_to_graphboard(
-        self, pictograph: PictographImage, graphboard_view: GraphboardView
-    ):
+    def add_to_graphboard(self, pictograph: PictographImage, graphboard: Graphboard):
         state = pictograph.state
-        graphboard_view.clear_graphboard()
+        graphboard.clear_graphboard()
 
         for arrow_state in state[ARROWS]:
             arrow = Arrow(arrow_state["svg_file"])
@@ -115,18 +113,18 @@ class SequenceView(QGraphicsView):
             arrow.setRotation(arrow_state["rotation"])
             arrow.color = arrow_state[COLOR]
             arrow.quadrant = arrow_state[QUADRANT]
-            graphboard_view.scene().addItem(arrow)
+            graphboard.scene().addItem(arrow)
 
         for staff_state in state["staffs"]:
             staff = Staff(staff_state["svg_file"])
             staff.setPos(staff_state["position"])
             staff.color = staff_state[COLOR]
-            graphboard_view.scene().addItem(staff)
+            graphboard.scene().addItem(staff)
 
         if state["grid"]:
             grid = Grid(state["grid"]["svg_file"])
             grid.setPos(state["grid"]["position"])
-            graphboard_view.scene().addItem(grid)
+            graphboard.scene().addItem(grid)
 
     def clear_sequence(self):
         self.pictographs = []

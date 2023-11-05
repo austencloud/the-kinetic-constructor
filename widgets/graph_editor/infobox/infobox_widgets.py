@@ -5,7 +5,6 @@ class InfoboxWidgets():
         self.infobox = infobox
         self.labels = infobox.labels
         
-        
     def setup_widgets(self):
         self.blue_attributes_widget = QFrame()
         self.blue_attributes_widget.setFrameShape(QFrame.Shape.Box)

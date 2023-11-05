@@ -8,18 +8,16 @@ from settings.string_constants import RED, BLUE
 
 
 class Infobox(QFrame):
-    def __init__(
-        self, main_widget, graphboard_view, arrow_manipulator, arrow_attributes
-    ):
+    def __init__(self, main_widget, graphboard, arrow_manipulator, arrow_attributes):
         super().__init__()
         self.main_widget = main_widget
-        self.graphboard_view = graphboard_view
+        self.graphboard = graphboard
         self.arrow_manipulator = arrow_manipulator
         self.arrow_attributes = arrow_attributes
-        self.labels = InfoboxLabels(self, graphboard_view)
+        self.labels = InfoboxLabels(self, graphboard)
         self.widgets = InfoboxWidgets(self)
-        self.layouts = InfoboxLayouts(self, graphboard_view, arrow_attributes)
-        self.buttons = InfoboxButtons(self, arrow_manipulator, graphboard_view)
+        self.layouts = InfoboxLayouts(self, graphboard, arrow_attributes)
+        self.buttons = InfoboxButtons(self, arrow_manipulator, graphboard)
         self.setup_ui()
 
     def setup_ui(self):
@@ -31,7 +29,7 @@ class Infobox(QFrame):
 
     def update(self):
         for color in [BLUE, RED]:
-            arrows = self.graphboard_view.get_arrows_by_color(color)
+            arrows = self.graphboard.get_arrows_by_color(color)
             if arrows:
                 attributes = self.arrow_attributes.create_dict_from_arrow(arrows[0])
                 widget = getattr(self.manager.widgets, f"{color}_attributes_widget")
@@ -40,4 +38,3 @@ class Infobox(QFrame):
             else:
                 widget = getattr(self.manager.widgets, f"{color}_attributes_widget")
                 widget.setVisible(False)
-

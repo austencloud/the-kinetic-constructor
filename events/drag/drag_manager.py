@@ -11,15 +11,14 @@ class DragManager:
     def __init__(self):
         self.reset_drag_state()
 
-    def initialize_dependencies(self, graphboard_view, arrowbox_view):
-        self.graphboard_view = graphboard_view
-        self.arrowbox_view = arrowbox_view
-        self.graphboard_scene = self.graphboard_view.scene()
-        self.arrow_factory = self.graphboard_view.main_widget.arrow_manager.factory
-        self.info_handler = self.graphboard_view.info_handler
-        self.staff_handler = self.graphboard_view.staff_handler
-        self.staff_factory = self.graphboard_view.staff_handler.factory
-        self.arrow_manager = self.graphboard_view.main_widget.arrow_manager
+    def initialize_dependencies(self, graphboard, arrowbox):
+        self.arrowbox = arrowbox
+        self.graphboard = graphboard
+        self.arrow_factory = self.graphboard.main_widget.arrow_manager.factory
+        self.info_handler = self.graphboard.info_handler
+        self.staff_handler = self.graphboard.staff_handler
+        self.staff_factory = self.graphboard.staff_handler.factory
+        self.arrow_manager = self.graphboard.main_widget.arrow_manager
 
         self.helpers = DragHelpers(self)
         self.scene_updater = DragSceneUpdater(self)
@@ -42,9 +41,9 @@ class DragManager:
             ):
                 items[0].setSelected(not items[0].isSelected())
             elif not items[0].isSelected():
-                self.graphboard_view.clear_selection()
+                self.graphboard.clear_selection()
                 items[0].setSelected(True)
 
     def set_focus_and_accept_event(self, event):
-        self.graphboard_view.setFocus()
+        self.graphboard.setFocus()
         event.accept()

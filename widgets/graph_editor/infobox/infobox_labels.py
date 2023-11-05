@@ -8,9 +8,9 @@ from settings.string_constants import *
 
 
 class InfoboxLabels:
-    def __init__(self, infobox, graphboard_view):
+    def __init__(self, infobox, graphboard):
         self.infobox = infobox
-        self.graphboard_view = graphboard_view
+        self.graphboard = graphboard
 
     ### LABEL CREATION ###
 
@@ -35,18 +35,18 @@ class InfoboxLabels:
         turns_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
         attribute_labels = {}
-        
 
-        
         attribute_labels[motion_type_label.objectName()] = motion_type_label
-        attribute_labels[rotation_direction_label.objectName()] = rotation_direction_label
+        attribute_labels[
+            rotation_direction_label.objectName()
+        ] = rotation_direction_label
         attribute_labels[start_end_label.objectName()] = start_end_label
         attribute_labels[turns_label.objectName()] = turns_label
-        
+
         for label in attribute_labels.values():
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        
+
         return motion_type_label, rotation_direction_label, start_end_label, turns_label
 
     ### LABEL UPDATING ###
@@ -73,7 +73,7 @@ class InfoboxLabels:
             self.set_clock_pixmap(rotation_direction_label, clock_icon)
         else:
             rotation_direction_label.setText("")
-    
+
         if motion_type in [PRO, ANTI, STATIC]:
             start_end_label.setText(
                 f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{start_location.capitalize()} → {end_location.capitalize()}</span>"
@@ -86,7 +86,7 @@ class InfoboxLabels:
         (
             current_letter,
             current_letter_type,
-        ) = self.graphboard_view.info_handler.determine_current_letter_and_type()
+        ) = self.graphboard.info_handler.determine_current_letter_and_type()
         if current_letter and current_letter_type:
             start_end_positions = self.get_start_end_positions()
             if start_end_positions:
@@ -125,7 +125,7 @@ class InfoboxLabels:
     def get_start_end_positions(self):
         positions = []
         arrow_items = [
-            item for item in self.graphboard_view.items() if isinstance(item, Arrow)
+            item for item in self.graphboard.items() if isinstance(item, Arrow)
         ]
 
         arrow_colors = {RED: None, BLUE: None}

@@ -2,6 +2,7 @@ from objects.arrow.arrow import Arrow
 from settings.numerical_constants import GRAPHBOARD_SCALE
 from settings.string_constants import *
 
+
 class ArrowSelector:
     def __init__(self, arrow_manager):
         self.arrow_manager = arrow_manager
@@ -9,7 +10,7 @@ class ArrowSelector:
     ### DELETERS ###
 
     def delete_arrow(self, deleted_arrows, keep_staff=False):
-        view = self.arrow_manager.graphboard_view
+        view = self.arrow_manager.graphboard
         scene = view.scene()
         if not isinstance(deleted_arrows, list):
             deleted_arrows = [deleted_arrows]
@@ -25,7 +26,7 @@ class ArrowSelector:
     ### HELPERS ###
 
     def initialize_ghost_arrow(self, arrow, scene):
-        view = self.arrow_manager.graphboard_view
+        view = self.arrow_manager.graphboard
         deleted_arrow_attributes = arrow.attributes.get_attributes(arrow)
         ghost_attributes_dict = {
             COLOR: deleted_arrow_attributes[COLOR],

@@ -9,11 +9,11 @@ from settings.string_constants import *
 
 
 class Arrow(QGraphicsSvgItem):
-    def __init__(self, view, attr_dict):
+    def __init__(self, scene, attr_dict):
         self.svg_file = self.get_svg_file(attr_dict)
         super().__init__(self.svg_file)
         self.initialize_svg_renderer(self.svg_file)
-        self.initialize_app_attributes(view, attr_dict)
+        self.initialize_app_attributes(scene, attr_dict)
         self.initialize_graphics_flags()
 
     def select(self):
@@ -30,12 +30,12 @@ class Arrow(QGraphicsSvgItem):
             self.is_static = True
             return None
 
-    def initialize_app_attributes(self, view, dict):
-        if view is not None:
-            self.view = view
-            if self.view.infobox is not None:
-                self.infobox = view.infobox
-            self.main_widget = view.main_widget
+    def initialize_app_attributes(self, scene, dict):
+        if scene is not None:
+            self.scene = scene
+            if hasattr(scene, "infobox"):
+                self.infobox = scene.infobox
+            self.main_widget = scene.main_widget
             self.arrow_manager = self.main_widget.arrow_manager
             self.arrow_manager.arrow = self
             self.in_graphboard = False
@@ -45,7 +45,6 @@ class Arrow(QGraphicsSvgItem):
             self.is_mirrored = False
             self.previous_arrow = None
             self.drag_manager = self.main_widget.drag_manager
-            self.setScale(view.view_scale)
 
         self.attributes = self.main_widget.arrow_manager.attributes
         self.attributes.update_attributes(self, dict)
@@ -79,28 +78,28 @@ class Arrow(QGraphicsSvgItem):
     def mouseMoveEvent(self, event):
         self.setSelected(True)
         if event.buttons() == Qt.MouseButton.LeftButton:
-            from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
+            from widgets.graph_editor.graphboard.graphboard import Graphboard
             from objects.pictograph.pictograph_view import PictographView
 
-            if isinstance(self.view, GraphboardView):
-                self.handle_graphboard_view_drag(event)
-            elif isinstance(self.view, PictographView):
+            if isinstance(self.scene, Graphboard):
+                self.handle_graphboard_drag(event)
+            elif isinstance(self.scene, PictographView):
                 self.handle_pictograph_view_drag(event)
 
     def mouseReleaseEvent(self, event):
         if hasattr(self, "future_position"):
             self.setPos(self.future_position)
             del self.future_position
-        from widgets.graph_editor.graphboard.graphboard_view import GraphboardView
+        from widgets.graph_editor.graphboard.graphboard import Graphboard
 
-        if isinstance(self.view, GraphboardView):
-            self.arrow_manager.positioner.update_arrow_position(self.view)
+        if isinstance(self.scene, Graphboard):
+            self.arrow_manager.positioner.update_arrow_position(self.scene)
 
-    def handle_graphboard_view_drag(self, event):
+    def handle_graphboard_drag(self, event):
         """Dragging an arrow that is already in the graphboard"""
         new_pos = self.mapToScene(event.pos()) - self.boundingRect().center()
         self.setPos(new_pos)
-        new_quadrant = self.view.get_graphboard_quadrants(new_pos + self.center)
+        new_quadrant = self.scene.get_graphboard_quadrants(new_pos + self.center)
         if self.quadrant != new_quadrant:
             self.quadrant = new_quadrant
             self.update_appearance()
@@ -112,9 +111,9 @@ class Arrow(QGraphicsSvgItem):
             )
             self.staff.location = self.end_location
             self.staff.attributes.update_attributes_from_arrow(self)
-            self.staff.handler.update_graphboard_staffs(self.view.graphboard_scene)
-            self.view.graphboard_scene.update()
-            self.view.info_handler.update()
+            self.staff.handler.update_graphboard_staffs(self.scene.graphboard)
+            self.scene.graphboard.update()
+            self.scene.info_handler.update()
 
     def handle_pictograph_view_drag(self, event):
         new_pos = self.mapToScene(event.pos()) - self.drag_offset / 2
