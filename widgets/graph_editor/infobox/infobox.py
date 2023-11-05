@@ -17,7 +17,18 @@ class InfoboxFrame(QFrame):
 
     def init_manager(self):
         self.manager = InfoboxManager(self, self.arrow_manipulator, self.arrow_attributes, self.graphboard_view)
-        
+       
+    def update(self):
+        for color in ["blue", "red"]:
+            arrows = self.graphboard_view.get_arrows_by_color(color)
+            if arrows:
+                attributes = self.arrow_attributes.create_dict_from_arrow(arrows[0])
+                widget = getattr(self.manager.widgets, f"{color}_info_widget")
+                self.manager.widgets.update_info_widget_content(widget, attributes)
+                widget.setVisible(True)
+            else:
+                widget = getattr(self.manager.widgets, f"{color}_info_widget")
+                widget.setVisible(False) 
 
 class InfoboxManager:
     def __init__(self, infobox, arrow_manipulator, arrow_attributes, graphboard_view):
@@ -31,24 +42,10 @@ class InfoboxManager:
 
     def setup_ui_elements(self):
         self.buttons.setup_buttons()
-        self.buttons.create_infobox_buttons()
         self.labels.setup_labels()
         self.widgets.setup_widgets()
         self.layouts.setup_layouts()
-        self.layouts.add_widgets_to_layouts()
-        self.finalize_ui_setup()
+        
             
-    def update(self):
-        for color in ["blue", "red"]:
-            arrows = self.graphboard_view.get_arrows_by_color(color)
-            if arrows:
-                attributes = arrows[0].attributes.create_dict_from_arrow(arrows[0])
-                widget = getattr(self.widgets, f"{color}_info_widget")
-                self.widgets.update_info_widget_content(widget, attributes)
-                widget.setVisible(True)
-            else:
-                widget = getattr(self.widgets, f"{color}_info_widget")
-                widget.setVisible(False)
 
-    def finalize_ui_setup(self):
-        self.infobox.setLayout(self.layouts.master_layout)
+

@@ -42,8 +42,12 @@ class InfoboxLayouts:
     def setup_layouts(self):
         self.master_layout = QVBoxLayout()
         self.attributes_layouts = {}
+        
         self.setup_top_layout()
         self.setup_bottom_layout()
+        self.add_widgets_to_layouts()
+        
+        self.infobox.setLayout(self.master_layout)
 
     def setup_top_layout(self):
         top_layout = QHBoxLayout()

@@ -22,7 +22,7 @@ class GraphboardInfoHandler:
         self.infobox.manager.labels.update_type_and_position_labels()
         self.view.update_letter(self.determine_current_letter_and_type()[0])
         self.staff_handler.update_graphboard_staffs(self.view.scene())
-        self.infobox.manager.update()
+        self.infobox.update()
 
     def connect_view(self, view):
         self.view = view

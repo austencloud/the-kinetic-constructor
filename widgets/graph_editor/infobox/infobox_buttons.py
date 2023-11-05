@@ -115,6 +115,8 @@ class InfoboxButtons:
                 ),
             },
         }
+        
+        self.create_infobox_buttons()
 
     def create_infobox_buttons(self):
         for button_name, properties in self.button_properties.items():

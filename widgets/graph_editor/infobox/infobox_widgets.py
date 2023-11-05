@@ -59,38 +59,3 @@ class InfoboxWidgets():
             return
         self.labels.update_labels(widget, attributes)
         self.buttons.update_buttons(attributes)
-
-
-
-    def construct_info_widget(self, attributes, color):
-        """Construct a widget displaying arrow information."""
-        (
-            motion_type_label,
-            rotation_direction_label,
-            start_end_label,
-            turns_label,
-        ) = self.labels.create_labels_for_attributes(attributes)
-
-        start_end_layout = QHBoxLayout()
-        start_end_button = getattr(self.infobox, f"swap_start_end_{color}_button")
-        start_end_layout.addWidget(start_end_button)
-        start_end_layout.addWidget(start_end_label)
-
-        # Create the turns layout
-        turns_layout = QHBoxLayout()
-        decrement_button = getattr(self.infobox, f"decrement_turns_{color}_button")
-        increment_button = getattr(self.infobox, f"increment_turns_{color}_button")
-        turns_layout.addWidget(decrement_button)
-        turns_layout.addWidget(turns_label)
-        turns_layout.addWidget(increment_button)
-
-        # Define the main layout
-        main_layout = QVBoxLayout()
-        main_layout.addWidget(motion_type_label)
-        main_layout.addWidget(rotation_direction_label)
-        main_layout.addWidget(start_end_label)
-        main_layout.addLayout(turns_layout)  # Add the turns layout here
-
-        info_widget = QWidget()
-        info_widget.setLayout(main_layout)
-        return info_widget
