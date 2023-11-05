@@ -86,10 +86,10 @@ class PictographView(QGraphicsView):
                     {
                         COLOR: item.color,
                         MOTION_TYPE: item.motion_type,
-                        ROT_DIR: item.rotation_direction,
+                        ROTATION_DIRECTION: item.rotation_direction,
                         QUADRANT: item.quadrant,
-                        START: item.start_location,
-                        END: item.end_location,
+                        START_LOCATION: item.start_location,
+                        END_LOCATION: item.end_location,
                         TURNS: item.turns,
                     }
                 )
@@ -142,7 +142,7 @@ class PictographView(QGraphicsView):
                 for key in [
                     COLOR,
                     MOTION_TYPE,
-                    ROT_DIR,
+                    ROTATION_DIRECTION,
                     QUADRANT,
                     TURNS,
                 ]

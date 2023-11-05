@@ -13,12 +13,11 @@ from widgets.graph_editor.propbox.propbox_staff_handler import PropboxStaffHandl
 class PropBoxView(QGraphicsView):
     def __init__(self, main_widget):
         super().__init__()
-        self.main_window = main_widget.main_window
         self.staff_handler = PropboxStaffHandler(main_widget)
         self.main_widget = main_widget
 
         self.propbox_scene = QGraphicsScene()
-        self.propbox_frame = QFrame(self.main_window)
+        self.propbox_frame = QFrame()
         self.setScene(self.propbox_scene)
 
         self.setFixedSize(int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE))

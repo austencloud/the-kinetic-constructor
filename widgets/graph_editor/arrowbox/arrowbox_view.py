@@ -50,20 +50,20 @@ class ArrowBoxView(QGraphicsView):
         arrow1 = {
             COLOR: RED,
             MOTION_TYPE: PRO,
-            ROT_DIR: "r",
+            ROTATION_DIRECTION: CLOCKWISE,
             QUADRANT: "ne",
-            START: "n",
-            END: "e",
+            START_LOCATION: NORTH,
+            END_LOCATION: EAST,
             TURNS: 0,
         }
 
         arrow2 = {
             COLOR: BLUE,
             MOTION_TYPE: ANTI,
-            ROT_DIR: "l",
+            ROTATION_DIRECTION: COUNTER_CLOCKWISE,
             QUADRANT: "ne",
-            START: "n",
-            END: "e",
+            START_LOCATION: NORTH,
+            END_LOCATION: EAST,
             TURNS: 0,
         }
 

@@ -6,7 +6,7 @@ from settings.numerical_constants import (
     STAFF_LENGTH,
     STAFF_WIDTH,
 )
-
+from settings.string_constants import NORTH, EAST, SOUTH, WEST
 
 class GraphboardStaffHandler(StaffManager):
     def __init__(self, main_widget, scene):
@@ -37,14 +37,14 @@ class GraphboardStaffHandler(StaffManager):
             grid_handpoints[point_name] = QPointF(scaled_x, scaled_y)
 
         self.staff_xy_locations = {
-            "n": grid_handpoints["N_hand_point"]
-            + QPointF(GRAPHBOARD_STAFF_WIDTH / 2, -GRAPHBOARD_STAFF_LENGTH / 2),
-            "e": grid_handpoints["E_hand_point"]
-            + QPointF(-GRAPHBOARD_STAFF_LENGTH / 2, -GRAPHBOARD_STAFF_WIDTH / 2),
-            "s": grid_handpoints["S_hand_point"]
-            + QPointF(GRAPHBOARD_STAFF_WIDTH / 2, -GRAPHBOARD_STAFF_LENGTH / 2),
-            "w": grid_handpoints["W_hand_point"]
-            + QPointF(-GRAPHBOARD_STAFF_LENGTH / 2, -GRAPHBOARD_STAFF_WIDTH / 2),
+            NORTH: 
+                grid_handpoints["N_hand_point"] + QPointF(GRAPHBOARD_STAFF_WIDTH / 2, -GRAPHBOARD_STAFF_LENGTH / 2),
+            EAST: 
+                grid_handpoints["E_hand_point"] + QPointF(-GRAPHBOARD_STAFF_LENGTH / 2, -GRAPHBOARD_STAFF_WIDTH / 2),
+            SOUTH: 
+                grid_handpoints["S_hand_point"] + QPointF(GRAPHBOARD_STAFF_WIDTH / 2, -GRAPHBOARD_STAFF_LENGTH / 2),
+            WEST: 
+                grid_handpoints["W_hand_point"] + QPointF(-GRAPHBOARD_STAFF_LENGTH / 2, -GRAPHBOARD_STAFF_WIDTH / 2),
         }
 
         self.staffs_on_board = {}

@@ -6,25 +6,14 @@ from settings.numerical_constants import (
     STAFF_WIDTH,
     STAFF_LENGTH,
 )
-from settings.string_constants import (
-    COLOR,
-    HORIZONTAL,
-    VERTICAL,
-    NORTH,
-    SOUTH,
-    WEST,
-    EAST,
-    COLOR_MAP,
-    RED_HEX,
-    BLUE_HEX,
-)
+from settings.string_constants import *
 from objects.staff.staff_attributes import StaffAttributes
 
 """ 
 staff_dict = {
             COLOR: RED,
-            "location": "e",
-            "layer": 1,
+            LOCATION: EAST,
+            LAYER: 1,
         }
         
 """
@@ -33,7 +22,7 @@ staff_dict = {
 class Staff(QGraphicsSvgItem):
     def __init__(self, scene, staff_dict):
         super().__init__()
-        self.svg_file = "resources/images/staffs/staff.svg"
+        self.svg_file = STAFF_SVG_PATH
         self.scene = scene
         self.arrow = None
         self.view = scene.views()[0]
@@ -46,8 +35,8 @@ class Staff(QGraphicsSvgItem):
         self.attributes = self.handler.attributes
         self.attributes.update_attributes_from_dict(self, staff_dict)
         self.color = staff_dict.get(COLOR)
-        self.location = staff_dict.get("location")
-        self.layer = staff_dict.get("layer")
+        self.location = staff_dict.get(LOCATION)
+        self.layer = staff_dict.get(LAYER)
         self.set_axis(staff_dict)
         self.set_rotation_from_axis()
 
@@ -61,7 +50,7 @@ class Staff(QGraphicsSvgItem):
             self.axis = next(
                 axis
                 for axis, locations in axis_switch.get(self.layer, {}).items()
-                if staff_dict.get("location") in locations
+                if staff_dict.get(LOCATION) in locations
             )
         except StopIteration:
             self.axis = HORIZONTAL
@@ -94,7 +83,7 @@ class Staff(QGraphicsSvgItem):
 
     def set_color(self, new_color):
         hex_color = COLOR_MAP.get(new_color, new_color)
-        with open(self.svg_file, "r") as f:
+        with open(self.svg_file, CLOCKWISE) as f:
             svg_data = f.read().replace(RED_HEX, hex_color).replace(BLUE_HEX, hex_color)
         self.renderer.load(svg_data.encode("utf-8"))
 

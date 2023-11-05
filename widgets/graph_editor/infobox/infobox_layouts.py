@@ -94,7 +94,7 @@ class InfoboxLayouts:
         self.buttons = self.infobox_manager.buttons
         self.button_layout = QVBoxLayout()  # Create a vertical layout for the buttons
         for button_name in self.buttons.button_properties.keys():
-            button = getattr(self.infobox, f"{button_name}_button")
+            button = getattr(self.buttons, f"{button_name}_button")
             self.button_layout.addWidget(button)  # Add each button to the layout
 
     def setup_attributes_layouts(self):
@@ -107,7 +107,7 @@ class InfoboxLayouts:
 
         for button_name in self.buttons.button_properties.keys():
             if color in button_name and TURNS not in button_name:
-                button = getattr(self.infobox, f"{button_name}_button")
+                button = getattr(self.buttons, f"{button_name}_button")
                 buttons_layout.addWidget(button)
 
         info_widget_inner = self.widgets.construct_attributes_widget(

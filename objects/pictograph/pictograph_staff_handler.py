@@ -66,8 +66,8 @@ class PictographStaffHandler(StaffManager):
 
                     new_staff = {
                         COLOR: color,
-                        "location": location,
-                        "layer": 1,
+                        LOCATION: location,
+                        LAYER: 1,
                     }
 
                     new_staff = self.factory.create_staff(scene, new_staff)

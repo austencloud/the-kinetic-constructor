@@ -1,4 +1,4 @@
-from settings.string_constants import COLOR, RED, BLUE
+from settings.string_constants import *
 
 
 class StaffInitializer:
@@ -11,13 +11,13 @@ class StaffInitializer:
 
         red_staff_dict = {
             COLOR: RED,
-            "location": "n",
-            "layer": 1,
+            LOCATION: NORTH,
+            LAYER: 1,
         }
         blue_staff_dict = {
             COLOR: BLUE,
-            "location": "s",
-            "layer": 1,
+            LOCATION: SOUTH,
+            LAYER: 1,
         }
 
         red_staff = self.staff_factory.create_staff(scene, red_staff_dict)

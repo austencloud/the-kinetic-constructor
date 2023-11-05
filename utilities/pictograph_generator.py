@@ -62,7 +62,7 @@ class PictographGenerator:
                         for key in [
                             COLOR,
                             MOTION_TYPE,
-                            ROT_DIR,
+                            ROTATION_DIRECTION,
                             QUADRANT,
                         ]
                     ):
@@ -120,7 +120,7 @@ class PictographGenerator:
                 for key in [
                     COLOR,
                     MOTION_TYPE,
-                    ROT_DIR,
+                    ROTATION_DIRECTION,
                     QUADRANT,
                     TURNS,
                 ]

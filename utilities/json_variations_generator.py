@@ -1,8 +1,8 @@
 class JsonVariationsGenerator:
     def __init__(self):
         self.quadrant_mapping = {}
-        for start in ["n", "s"]:
-            for end in ["e", "w"]:
+        for start in [NORTH, SOUTH]:
+            for end in [EAST, WEST]:
                 self.quadrant_mapping[(start, end)] = f"{start}{end}"
 
     def calculate_quadrant(self, start_position, end_position):
@@ -24,10 +24,23 @@ class JsonVariationsGenerator:
         ]
 
     def generate_pictograph_variations(self, arrow_combination):
-        rotation_mapping = {"n": "e", "e": "s", "s": "w", "w": "n"}
-        vertical_reflection_mapping = {"n": "s", "s": "n", "e": "e", "w": "w"}
-        horizontal_reflection_mapping = {"n": "n", "s": "s", "e": "w", "w": "e"}
-        rotation_reflection_mapping = {"l": "r", "r": "l"}
+        rotation_mapping = {NORTH: EAST, EAST: SOUTH, SOUTH: WEST, WEST: NORTH}
+        vertical_reflection_mapping = {
+            NORTH: SOUTH,
+            SOUTH: NORTH,
+            EAST: EAST,
+            WEST: WEST,
+        }
+        horizontal_reflection_mapping = {
+            NORTH: NORTH,
+            SOUTH: SOUTH,
+            EAST: WEST,
+            WEST: EAST,
+        }
+        rotation_reflection_mapping = {
+            COUNTER_CLOCKWISE: CLOCKWISE,
+            CLOCKWISE: COUNTER_CLOCKWISE,
+        }
 
         rotated_versions = [arrow_combination]
         for _ in range(3):

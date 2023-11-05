@@ -28,10 +28,11 @@ class ArrowManipulator:
     def decrement_turns(self, arrows, color):
         arrows = [arrow for arrow in arrows if arrow.color == color]
         for arrow in arrows:
-            if arrow.turns > 0:
-                arrow.turns -= 1
-                self.update_arrow_turns(arrow)
-                self.finalize_manipulation(arrow)
+            arrow.turns -= 1
+            if arrow.turns < 0:
+                arrow.turns = 2
+            self.update_arrow_turns(arrow)
+            self.finalize_manipulation(arrow)
 
     def update_arrow_turns(self, arrow):
         """Update the appearance of the arrow based on its turns."""
@@ -79,16 +80,16 @@ class ArrowManipulator:
             COLOR: selected_arrow.color,
             MOTION_TYPE: selected_arrow.motion_type,
             QUADRANT: new_quadrant,
-            ROT_DIR: selected_arrow.rotation_direction,
-            START: new_start_location,
-            END: new_end_location,
+            ROTATION_DIRECTION: selected_arrow.rotation_direction,
+            START_LOCATION: new_start_location,
+            END_LOCATION: new_end_location,
             TURNS: selected_arrow.turns,
         }
 
         updated_staff_dict = {
             COLOR: selected_arrow.color,
-            "location": new_end_location,
-            "layer": 1,
+            LOCATION: new_end_location,
+            LAYER: 1,
         }
 
         self.update_arrow_and_staff(
@@ -118,16 +119,16 @@ class ArrowManipulator:
                     COLOR: arrow.color,
                     MOTION_TYPE: arrow.motion_type,
                     QUADRANT: new_quadrant,
-                    ROT_DIR: arrow.rotation_direction,
-                    START: new_start_location,
-                    END: new_end_location,
+                    ROTATION_DIRECTION: arrow.rotation_direction,
+                    START_LOCATION: new_start_location,
+                    END_LOCATION: new_end_location,
                     TURNS: arrow.turns,
                 }
 
                 updated_staff_dict = {
                     COLOR: arrow.color,
-                    "location": new_end_location,
-                    "layer": 1,
+                    LOCATION: new_end_location,
+                    LAYER: 1,
                 }
 
             self.update_arrow_and_staff(arrow, updated_arrow_dict, updated_staff_dict)
@@ -160,10 +161,10 @@ class ArrowManipulator:
                 # Apply the transform to the arrow
                 arrow.setTransform(transform)
 
-            if arrow.rotation_direction == "l":
-                new_rotation_direction = "r"
-            elif arrow.rotation_direction == "r":
-                new_rotation_direction = "l"
+            if arrow.rotation_direction == COUNTER_CLOCKWISE:
+                new_rotation_direction = CLOCKWISE
+            elif arrow.rotation_direction == CLOCKWISE:
+                new_rotation_direction = COUNTER_CLOCKWISE
 
             old_start_location = arrow.start_location
             old_end_location = arrow.end_location
@@ -176,9 +177,9 @@ class ArrowManipulator:
                 COLOR: arrow.color,
                 MOTION_TYPE: arrow.motion_type,
                 QUADRANT: arrow.quadrant,
-                ROT_DIR: new_rotation_direction,
-                START: new_start_location,
-                END: new_end_location,
+                ROTATION_DIRECTION: new_rotation_direction,
+                START_LOCATION: new_start_location,
+                END_LOCATION: new_end_location,
                 TURNS: arrow.turns,
             }
 
@@ -205,25 +206,25 @@ class ArrowManipulator:
                 print(f"Unknown motion type: {arrow.motion_type}")
                 continue
 
-            if arrow.rotation_direction == "l":
-                new_rotation_direction = "r"
-            elif arrow.rotation_direction == "r":
-                new_rotation_direction = "l"
+            if arrow.rotation_direction == COUNTER_CLOCKWISE:
+                new_rotation_direction = CLOCKWISE
+            elif arrow.rotation_direction == CLOCKWISE:
+                new_rotation_direction = COUNTER_CLOCKWISE
 
             new_arrow_dict = {
                 COLOR: arrow.color,
                 MOTION_TYPE: new_motion_type,
                 QUADRANT: arrow.quadrant,
-                ROT_DIR: new_rotation_direction,
-                START: arrow.start_location,
-                END: arrow.end_location,
+                ROTATION_DIRECTION: new_rotation_direction,
+                START_LOCATION: arrow.start_location,
+                END_LOCATION: arrow.end_location,
                 TURNS: arrow.turns,
             }
 
             new_staff_dict = {
                 COLOR: arrow.color,
-                "location": arrow.end_location,
-                "layer": 1,
+                LOCATION: arrow.end_location,
+                LAYER: 1,
             }
 
             arrow.svg_file = (

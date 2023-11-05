@@ -2,8 +2,7 @@ GRID_PATH = "resources/images/grid/grid.svg"
 ARROW_DIR = "resources/images/arrows"
 LETTER_SVG_DIR = "resources/images/letters"
 ICON_DIR = "resources/images/icons/"
-
-BETA_OFFSET = 20
+STAFF_SVG_PATH = "resources/images/staffs/staff.svg"
 
 BLUE = "blue"
 RED = "red"
@@ -21,14 +20,20 @@ ANTI = "anti"
 
 COLOR = "color"
 MOTION_TYPE = "motion_type"
-ROT_DIR = "rotation_direction"
+ROTATION_DIRECTION = "rotation_direction"
 QUADRANT = "quadrant"
-START = "start_location"
-END = "end_location"
+START_LOCATION = "start_location"
+END_LOCATION = "end_location"
 TURNS = "turns"
+
+CLOCKWISE = "r"
+COUNTER_CLOCKWISE = "l"
 
 START_POS = "start_position"
 END_POS = "end_position"
+
+LOCATION = "location"
+LAYER = "layer"
 
 HORIZONTAL = "horizontal"
 VERTICAL = "vertical"
@@ -46,3 +51,5 @@ ARROWS = "arrows"
 STAFFS = "staffs"
 
 COLOR_MAP = {RED: RED_HEX, BLUE: BLUE_HEX}
+
+ICONS = {CLOCKWISE: "clockwise.png", COUNTER_CLOCKWISE: "counter_clockwise.png"}

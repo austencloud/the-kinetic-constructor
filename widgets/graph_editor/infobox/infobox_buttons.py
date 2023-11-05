@@ -22,30 +22,30 @@ class InfoboxButtons:
         button.clicked.connect(properties["callback"])
         button.setFixedSize(self.BUTTON_SIZE, self.BUTTON_SIZE)
         setattr(
-            self.infobox, f"{button_name}_button", button
+            self, f"{button_name}_button", button
         )  # sets each button to be a class attribute of the infobox
 
     def update_buttons(self, attributes):
         color = attributes.get(COLOR, "")
         swap_motion_type_button = (
-            self.infobox.swap_motion_type_blue_button
+            self.swap_motion_type_blue_button
             if color == BLUE
-            else self.infobox.swap_motion_type_red_button
+            else self.swap_motion_type_red_button
         )
         swap_start_end_button = (
-            self.infobox.swap_start_end_blue_button
+            self.swap_start_end_blue_button
             if color == BLUE
-            else self.infobox.swap_start_end_red_button
+            else self.swap_start_end_red_button
         )
         decrement_turns_button = (
-            self.infobox.decrement_turns_blue_button
+            self.decrement_turns_blue_button
             if color == BLUE
-            else self.infobox.decrement_turns_red_button
+            else self.decrement_turns_red_button
         )
         increment_turns_button = (
-            self.infobox.increment_turns_blue_button
+            self.increment_turns_blue_button
             if color == BLUE
-            else self.infobox.increment_turns_red_button
+            else self.increment_turns_red_button
         )
 
         swap_motion_type_button.setVisible(True)
@@ -119,7 +119,7 @@ class InfoboxButtons:
     def create_infobox_buttons(self):
         for button_name, properties in self.button_properties.items():
             self.create_and_set_button(button_name, properties)
-            button = getattr(self.infobox, f"{button_name}_button")
+            button = getattr(self, f"{button_name}_button")
             button.setVisible(False)  # Set initial visibility to False
 
         self.layouts = self.infobox_manager.layouts

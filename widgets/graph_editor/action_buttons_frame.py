@@ -1,10 +1,13 @@
 from PyQt6.QtWidgets import QPushButton, QFrame
-from PyQt6.QtGui import QFont, QIcon
-from PyQt6.QtCore import QSize
-from settings.numerical_constants import GRAPHBOARD_SCALE
+from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QVBoxLayout
 from objects.arrow.arrow import Arrow
 from settings.string_constants import ICON_DIR
+from settings.styles import (
+    ACTION_BUTTON_FONT,
+    ACTION_BUTTON_SIZE,
+    ACTION_BUTTON_ICON_SIZE,
+)
 
 class ActionButtonsFrame(QFrame):
     def __init__(
@@ -18,14 +21,10 @@ class ActionButtonsFrame(QFrame):
         super().__init__()
         self.graphboard_view = graphboard_view
         self.graphboard_scene = graphboard_view.scene()
-        selected_items = self.graphboard_scene.selectedItems()
         self.json_handler = json_handler
         self.arrow_manipulator = arrow_manipulator
         self.arrow_selector = arrow_selector
         self.sequence_view = sequence_view
-        button_font = QFont("Helvetica", 14)
-        button_size = int(100 * GRAPHBOARD_SCALE)
-        icon_size = QSize(int(80 * GRAPHBOARD_SCALE), int(70 * GRAPHBOARD_SCALE))
         self.action_buttons_layout = QVBoxLayout()
         self.action_buttons_layout.setSpacing(3)
 
@@ -42,23 +41,30 @@ class ActionButtonsFrame(QFrame):
             (
                 "delete.png",
                 "Delete",
-                lambda: self.arrow_selector.delete_arrow(selected_items[0]),
+                lambda: self.arrow_selector.delete_arrow(
+                    self.graphboard_scene.selectedItems()[0]
+                ),
             ),
             (
                 "rotate_right.png",
                 "Rotate Right",
-                lambda: self.arrow_manipulator.rotate_arrow("right", selected_items),
+                lambda: self.arrow_manipulator.rotate_arrow(
+                    "right", self.graphboard_scene.selectedItems()
+                ),
             ),
             (
                 "rotate_left.png",
                 "Rotate Left",
+                lambda: self.arrow_manipulator.rotate_arrow(
+                    "left", self.graphboard_scene.selectedItems()
+                ),
             ),
-            lambda: self.arrow_manipulator.rotate_arrow("left", selected_items),
             (
                 "mirror.png",
                 "Mirror",
                 lambda: self.arrow_manipulator.mirror_arrow(
-                    selected_items, self.get_selected_arrow_color()
+                    self.graphboard_scene.selectedItems(),
+                    self.get_selected_arrow_color(),
                 ),
             ),
             ("swap.png", "Swap Colors", lambda: self.arrow_manipulator.swap_colors()),
@@ -79,9 +85,9 @@ class ActionButtonsFrame(QFrame):
             icon_path = ICON_DIR + icon_filename
             button = QPushButton(QIcon(icon_path), "")
             button.setToolTip(tooltip)
-            button.setFont(button_font)
-            button.setFixedSize(button_size, button_size)
-            button.setIconSize(icon_size)
+            button.setFont(ACTION_BUTTON_FONT)
+            button.setFixedSize(ACTION_BUTTON_SIZE, ACTION_BUTTON_SIZE)
+            button.setIconSize(ACTION_BUTTON_ICON_SIZE)
             button.clicked.connect(on_click)
             return button
 
@@ -93,7 +99,7 @@ class ActionButtonsFrame(QFrame):
         self.setLayout(self.action_buttons_layout)
 
     def get_selected_arrow_color(self):
-        selected_items = self.main_widget.graphboard_scene.selectedItems()
+        selected_items = self.graphboard_scene.selectedItems()
         if selected_items and isinstance(selected_items[0], Arrow):
             return selected_items[0].color
         return None

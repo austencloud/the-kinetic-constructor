@@ -6,6 +6,7 @@ class InfoboxWidgets():
         self.info_manager = info_manager
         self.labels = info_manager.labels
         
+        
     def setup_widgets(self):
         self.blue_attributes_widget = QFrame()
         self.blue_attributes_widget.setFrameShape(QFrame.Shape.Box)
@@ -19,21 +20,23 @@ class InfoboxWidgets():
         self.red_attributes_widget.setVisible(True)
 
     def construct_attributes_widget(self, attributes, color):
+        self.buttons = self.info_manager.buttons
+        
         (
             motion_type_label,
             rotation_direction_label,
             start_end_label,
             turns_label,
-        ) = self.labels.create_labels_for_attributes(attributes)
+        ) = self.labels.create_attribute_labels(attributes)
 
         start_end_layout = QHBoxLayout()
-        start_end_button = getattr(self.infobox, f"swap_start_end_{color}_button")
+        start_end_button = getattr(self.buttons, f"swap_start_end_{color}_button")
         start_end_layout.addWidget(start_end_button)
         start_end_layout.addWidget(start_end_label)
 
         turns_layout = QHBoxLayout()
-        decrement_button = getattr(self.infobox, f"decrement_turns_{color}_button")
-        increment_button = getattr(self.infobox, f"increment_turns_{color}_button")
+        decrement_button = getattr(self.buttons, f"decrement_turns_{color}_button")
+        increment_button = getattr(self.buttons, f"increment_turns_{color}_button")
         turns_layout.addWidget(decrement_button)
         turns_layout.addWidget(turns_label)
         turns_layout.addWidget(increment_button)
@@ -42,7 +45,7 @@ class InfoboxWidgets():
         main_layout.addWidget(motion_type_label)
         main_layout.addWidget(rotation_direction_label)
         main_layout.addWidget(start_end_label)
-        main_layout.addLayout(turns_layout)  # Add the turns layout here
+        main_layout.addLayout(turns_layout)
 
         info_widget = QWidget()
         info_widget.setLayout(main_layout)

@@ -130,7 +130,7 @@ class Arrow(QGraphicsSvgItem):
         color_map = {RED: RED_HEX, BLUE: BLUE_HEX}
         new_hex_color = color_map.get(new_color)
 
-        with open(svg_file, "r") as f:
+        with open(svg_file, CLOCKWISE) as f:
             svg_data = f.read()
 
         style_tag_pattern = re.compile(
@@ -144,7 +144,7 @@ class Arrow(QGraphicsSvgItem):
         return svg_data.encode("utf-8")
 
     def get_svg_data(self, svg_file):
-        with open(svg_file, "r") as f:
+        with open(svg_file, CLOCKWISE) as f:
             svg_data = f.read()
         return svg_data.encode("utf-8")
 
@@ -170,18 +170,18 @@ class Arrow(QGraphicsSvgItem):
     def get_quadrant_to_angle_map(self, motion_type, rotation_direction):
         if motion_type == PRO:
             return {
-                "r": {"ne": 0, "se": 90, "sw": 180, "nw": 270},
-                "l": {"ne": 270, "se": 180, "sw": 90, "nw": 0},
+                CLOCKWISE: {"ne": 0, "se": 90, "sw": 180, "nw": 270},
+                COUNTER_CLOCKWISE: {"ne": 270, "se": 180, "sw": 90, "nw": 0},
             }.get(rotation_direction, {})
         elif motion_type == ANTI:
             return {
-                "r": {"ne": 270, "se": 180, "sw": 90, "nw": 0},
-                "l": {"ne": 0, "se": 90, "sw": 180, "nw": 270},
+                CLOCKWISE: {"ne": 270, "se": 180, "sw": 90, "nw": 0},
+                COUNTER_CLOCKWISE: {"ne": 0, "se": 90, "sw": 180, "nw": 270},
             }.get(rotation_direction, {})
         elif motion_type == STATIC:
             return {
-                "r": {"ne": 0, "se": 0, "sw": 0, "nw": 0},
-                "l": {"ne": 0, "se": 0, "sw": 0, "nw": 0},
+                CLOCKWISE: {"ne": 0, "se": 0, "sw": 0, "nw": 0},
+                COUNTER_CLOCKWISE: {"ne": 0, "se": 0, "sw": 0, "nw": 0},
             }.get(rotation_direction, {})
 
     def mirror_self(self):

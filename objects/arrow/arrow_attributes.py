@@ -6,10 +6,10 @@ class ArrowAttributes:
     ARROW_ATTRIBUTES = [
         COLOR,
         MOTION_TYPE,
-        ROT_DIR,
+        ROTATION_DIRECTION,
         QUADRANT,
-        START,
-        END,
+        START_LOCATION,
+        END_LOCATION,
         TURNS,
     ]
 
@@ -45,10 +45,10 @@ class ArrowAttributes:
         arrow_dict = {
             COLOR: arrow.color,
             MOTION_TYPE: arrow.motion_type,
-            ROT_DIR: arrow.rotation_direction,
+            ROTATION_DIRECTION: arrow.rotation_direction,
             QUADRANT: arrow.quadrant,
-            START: start_location,
-            END: end_location,
+            START_LOCATION: start_location,
+            END_LOCATION: end_location,
             TURNS: arrow.turns,
         }
         return arrow_dict
@@ -64,8 +64,8 @@ class ArrowAttributes:
 
         attributes = {
             MOTION_TYPE: arrow.motion_type,
-            START: arrow.start_location,
-            END: arrow.end_location,
+            START_LOCATION: arrow.start_location,
+            END_LOCATION: arrow.end_location,
             TURNS: arrow.turns,
             COLOR: arrow.color,
         }
