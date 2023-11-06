@@ -5,15 +5,15 @@ from settings.string_constants import *
 
 
 class Manipulators:
-    def __init__(self, arrow):
-        self.arrow = arrow
+    def __init__(self, graphboard):
+        self.graphboard = graphboard
 
     def update_arrow_and_staff(self, arrow, arrow_dict, staff_dict):
         staff = arrow.staff
-        arrow.attributes.update_attributes(arrow, arrow_dict)
+        arrow.update_attributes(arrow_dict)
         staff.attributes.update_attributes_from_dict(staff, staff_dict)
 
-    def move_arrow_quadrant_wasd(self, direction, selected_arrow):
+    def move_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {
             UP: {SOUTHEAST: NORTHEAST, SOUTHWEST: NORTHWEST},
             LEFT: {NORTHEAST: NORTHWEST, SOUTHEAST: SOUTHWEST},
@@ -29,7 +29,7 @@ class Manipulators:
         (
             new_start_location,
             new_end_location,
-        ) = selected_arrow.attributes.get_start_end_locations(
+        ) = selected_arrow.get_start_end_locations(
             selected_arrow.motion_type, selected_arrow.rotation_direction, new_quadrant
         )
 
@@ -52,7 +52,7 @@ class Manipulators:
         self.update_arrow_and_staff(
             selected_arrow, updated_arrow_dict, updated_staff_dict
         )
-        self.finalize_manipulation(selected_arrow)
+        selected_arrow.finalize_manipulation()
 
     def rotate_arrow(self, rotation_direction, arrows):
         if arrows:
@@ -68,7 +68,7 @@ class Manipulators:
                 (
                     new_start_location,
                     new_end_location,
-                ) = arrow.attributes.get_start_end_locations(
+                ) = arrow.get_start_end_locations(
                     arrow.motion_type, arrow.rotation_direction, new_quadrant
                 )
 
@@ -89,7 +89,7 @@ class Manipulators:
                 }
 
             self.update_arrow_and_staff(arrow, updated_arrow_dict, updated_staff_dict)
-            self.finalize_manipulation(arrow)
+            arrow.finalize_manipulation()
 
     def mirror_arrow(self, arrows, color):
         arrows = [arrow for arrow in arrows if arrow.color == color]
@@ -141,11 +141,11 @@ class Manipulators:
             }
 
             arrow.staff.location = new_end_location
-            arrow.attributes.update_attributes(arrow, new_arrow_dict)
-            self.finalize_manipulation(arrow)
-            self.arrow_manager.positioner.update_arrow_position(arrow.scene)
+            arrow.update_attributes(new_arrow_dict)
+            arrow.finalize_manipulation()
+            arrow.scene.update_arrow_position(arrow.scene.get_arrows())
             arrow.update()
-            arrow.scene.staff_handler.update_graphboard_staffs(arrow.scene)
+            arrow.scene.update_staffs()
 
     def swap_motion_type(self, arrows, color):
         from objects.arrow.arrow import Arrow
@@ -189,20 +189,15 @@ class Manipulators:
                 f"resources/images/arrows/shift/{new_motion_type}_{arrow.turns}.svg"
             )
             arrow.initialize_svg_renderer(arrow.svg_file)
-            arrow.attributes.update_attributes(arrow, new_arrow_dict)
+            arrow.update_attributes(new_arrow_dict)
             arrow.update_appearance()
-            arrow.scene.info_handler.update()
-
-            self.arrow_manager.infobox.update()
-
+            arrow.scene.update()
             self.update_arrow_and_staff(arrow, new_arrow_dict, new_staff_dict)
-            self.finalize_manipulation(arrow)
+            arrow.finalize_manipulation()
 
     def swap_colors(self):
         from objects.arrow.arrow import Arrow
-
-        graphboard = self.arrow_manager.graphboard
-        current_letter = graphboard.info_handler.determine_current_letter_and_type()[0]
+        current_letter = self.graphboard.determine_current_letter_and_type()[0]
         if current_letter != "G" and current_letter != "H":
             arrows = [
                 item for item in self.graphboard.items() if isinstance(item, Arrow)
@@ -222,3 +217,4 @@ class Manipulators:
                     arrow.update_appearance()
                     arrow.staff.update_appearance()
                     self.finalize_manipulation(arrow)
+

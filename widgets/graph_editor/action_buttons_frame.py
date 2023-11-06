@@ -38,7 +38,7 @@ class ActionButtonsFrame(QFrame):
             (
                 "delete.png",
                 "Delete",
-                lambda: self.arrow_selector.delete_arrow(self.scene.selectedItems()[0]),
+                lambda: self.scene.delete_arrow(self.scene.selectedItems()[0]),
             ),
             (
                 "rotate_right.png",

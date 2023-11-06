@@ -8,7 +8,7 @@ from widgets.graph_editor.infobox.infobox import Infobox
 from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
 from widgets.graph_editor.action_buttons_frame import ActionButtonsFrame
-from objects.arrow.manipulators import Manipulators
+from utilities.manipulators import Manipulators
 
 
 class GraphEditor(QWidget):

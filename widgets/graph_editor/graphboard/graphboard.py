@@ -14,7 +14,7 @@ from data.start_end_location_mapping import start_end_location_mapping
 from widgets.graph_editor.graphboard.graphboard_context_menu_handler import (
     GraphboardContextMenuHandler,
 )
-
+from utilities.manipulators import Manipulators
 from utilities.export_handler import ExportHandler
 
 
@@ -24,7 +24,6 @@ class Graphboard(QGraphicsScene):
         self.main_widget = main_widget
         self.setSceneRect(0, 0, 750, 900)
         self.scale = GRAPHBOARD_SCALE
-
         self.setup_view()
         self.init_grid()
         self.init_staffs()
@@ -77,6 +76,7 @@ class Graphboard(QGraphicsScene):
     def init_handlers(self):
         self.export_manager = ExportHandler(self.grid, self)
         self.context_menu_manager = GraphboardContextMenuHandler(self)
+        self.manipulators = Manipulators(self)
         self.drag_manager = self.main_widget.drag_manager
 
     def init_grid(self):
@@ -204,8 +204,6 @@ class Graphboard(QGraphicsScene):
             if isinstance(item, Staff):
                 item.setVisible(False)
 
-
-
     def get_graphboard_quadrants(self, mouse_pos):
         scene_H_center = self.sceneRect().width() / 2
         scene_V_center = self.sceneRect().height() / 2
@@ -225,8 +223,11 @@ class Graphboard(QGraphicsScene):
         return quadrant
 
     def mouse_press_event(self, event):
-        event_pos = event.pos()
-        scene_pos = self.view.mapToScene(event_pos)
+        view_pos = event.pos()
+        scene_pos = self.view.mapToScene(view_pos)
+        print(view_pos)
+        print(scene_pos)
+
         pass
 
     def contextMenuEvent(self, event):
@@ -240,14 +241,13 @@ class Graphboard(QGraphicsScene):
             self.context_menu_manager.create_graphboard_menu(event)
 
     def update_arrow_position(self, arrows):
-        letter = self.determine_current_letter_and_type()[
-            0
-        ]
+        letter = self.determine_current_letter_and_type()[0]
         if letter is not None:
             arrows[0].positioner.set_optimal_arrow_pos(arrows)
         else:
             for arrow in arrows:
-                arrow.positioner.set_default_arrow_pos(arrow)
+                if not arrow.is_still:
+                    arrow.positioner.set_default_arrow_pos(arrow)
 
     def update(self):
         current_arrows = self.get_arrows()
@@ -299,23 +299,36 @@ class Graphboard(QGraphicsScene):
         return self.letter, letter_type  # Always return two values
 
     def delete_arrow(self, arrow, keep_staff=False):
-        if not isinstance(deleted_arrows, list):
-            deleted_arrows = [deleted_arrows]
-        for arrow in deleted_arrows:
-            if isinstance(arrow, Arrow):
-                self.removeItem(arrow)
-                if keep_staff:
-                    arrow.initialize_ghost_arrow(arrow, self)
-                else:
-                    self.removeItem(arrow.staff)
+        if isinstance(arrow, Arrow):
+            self.removeItem(arrow)
+            if keep_staff:
+                self.initialize_ghost_arrow(arrow, self)
+            else:
+                self.delete_staff(arrow.staff)
 
             self.update()
-            
+
     def delete_staff(self, staff):
-        self.removeItem(staff)
+        staff.hide()
         self.removeItem(staff.arrow)
         self.update()
-        self.update_letter(
-            self.determine_current_letter_and_type()[0]
-        )
-        
+        self.update_letter(self.determine_current_letter_and_type()[0])
+
+    def initialize_ghost_arrow(self, arrow, graphboard):
+        deleted_arrow_attributes = arrow.get_attributes()
+        ghost_attributes_dict = {
+            COLOR: deleted_arrow_attributes[COLOR],
+            MOTION_TYPE: STATIC,
+            ROTATION_DIRECTION: "None",
+            QUADRANT: "None",
+            START_LOCATION: deleted_arrow_attributes[END_LOCATION],
+            END_LOCATION: deleted_arrow_attributes[END_LOCATION],
+            TURNS: 0,
+        }
+
+        ghost_arrow = Arrow(graphboard, ghost_attributes_dict)
+        graphboard.addItem(ghost_arrow)
+        ghost_arrow.is_still = True
+        ghost_arrow.setScale(GRAPHBOARD_SCALE)
+        ghost_arrow.staff = arrow.staff
+        ghost_arrow.staff.arrow = ghost_arrow

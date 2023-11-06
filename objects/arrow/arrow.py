@@ -5,11 +5,12 @@ from PyQt6.QtCore import QPointF, Qt
 from events.drag.drag_manager import DragManager
 import re
 from settings.string_constants import *
-from objects.arrow.manipulators import Manipulators
+from utilities.manipulators import Manipulators
 from objects.arrow.arrow_positioner import ArrowPositioner
 from objects.arrow.arrow_selector import ArrowSelector
 from objects.arrow.arrow_state_comparator import ArrowStateComparator
 from data.start_end_location_mapping import start_end_location_mapping
+
 
 class Arrow(QGraphicsSvgItem):
     ARROW_ATTRIBUTES = [
@@ -20,7 +21,7 @@ class Arrow(QGraphicsSvgItem):
         START_LOCATION,
         END_LOCATION,
         TURNS,
-    ]    
+    ]
 
     def __init__(self, scene, dict):
         self.svg_file = self.get_svg_file(dict)
@@ -30,7 +31,6 @@ class Arrow(QGraphicsSvgItem):
         self.initialize_graphics_flags()
         self.setup_handlers()
 
-        
     def setup_handlers(self):
         self.positioner = ArrowPositioner(self.scene, self)
         self.selector = ArrowSelector(self)
@@ -40,7 +40,6 @@ class Arrow(QGraphicsSvgItem):
         self.setSelected(True)
 
     def get_svg_file(self, dict):
-        
         motion_type = dict[MOTION_TYPE]
         turns = dict.get(TURNS, None)
 
@@ -59,7 +58,7 @@ class Arrow(QGraphicsSvgItem):
             self.main_widget = scene.main_widget
             self.in_graphboard = False
             self.drag_offset = QPointF(0, 0)
-            self.is_ghost = False
+            self.is_still = False
             self.staff = None
             self.is_mirrored = False
             self.previous_arrow = None
@@ -105,13 +104,9 @@ class Arrow(QGraphicsSvgItem):
                 self.handle_pictograph_view_drag(event)
 
     def mouseReleaseEvent(self, event):
-        if hasattr(self, "future_position"):
-            self.setPos(self.future_position)
-            del self.future_position
         from widgets.graph_editor.graphboard.graphboard import Graphboard
-
         if isinstance(self.scene, Graphboard):
-            self.arrow_manager.positioner.update_arrow_position(self.scene)
+            self.positioner.update_arrow_position(self.scene)
 
     def handle_graphboard_drag(self, event):
         """Dragging an arrow that is already in the graphboard"""
@@ -269,7 +264,7 @@ class Arrow(QGraphicsSvgItem):
             if attr == TURNS:
                 value = int(value)
             setattr(self, attr, value)
-            
+
         self.attributes = {
             COLOR: dict.get(COLOR, None),
             MOTION_TYPE: dict.get(MOTION_TYPE, None),
@@ -279,7 +274,7 @@ class Arrow(QGraphicsSvgItem):
             END_LOCATION: dict.get(END_LOCATION, None),
             TURNS: dict.get(TURNS, None),
         }
-            
+
     def create_dict_from_arrow(self, arrow):
         if arrow.motion_type in [PRO, ANTI]:
             start_location, end_location = self.get_start_end_locations(
@@ -298,7 +293,7 @@ class Arrow(QGraphicsSvgItem):
             TURNS: arrow.turns,
         }
         return dict
-    
+
     def get_attributes(self):
         return {attr: getattr(self, attr) for attr in self.ARROW_ATTRIBUTES}
 
@@ -308,3 +303,9 @@ class Arrow(QGraphicsSvgItem):
             .get(rotation_direction, {})
             .get(motion_type, (None, None))
         )
+
+    def finalize_manipulation(self):
+        self.positioner.update_arrow_position(self.scene)
+        self.update_appearance()
+        self.scene.update_staffs()
+        self.scene.update()
