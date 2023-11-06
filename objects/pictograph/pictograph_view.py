@@ -6,8 +6,8 @@ from objects.grid import Grid
 from objects.arrow.arrow import Arrow
 from objects.staff.staff import Staff
 from utilities.json_handler import JsonHandler
-from settings.numerical_constants import *
-from settings.string_constants import *
+from config.numerical_constants import *
+from config.string_constants import *
 
 
 class PictographView(QGraphicsView):

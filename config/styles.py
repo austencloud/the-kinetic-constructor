@@ -1,4 +1,4 @@
-from settings.numerical_constants import GRAPHBOARD_SCALE
+from config.numerical_constants import GRAPHBOARD_SCALE
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import QSize
 

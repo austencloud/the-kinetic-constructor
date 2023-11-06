@@ -4,7 +4,7 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
 from events.drag.drag_manager import DragManager
 import re
-from settings.string_constants import *
+from config.string_constants import *
 from utilities.manipulators import Manipulators
 from objects.arrow.arrow_positioner import ArrowPositioner
 from objects.arrow.arrow_selector import ArrowSelector
@@ -13,16 +13,6 @@ from data.start_end_location_mapping import start_end_location_mapping
 
 
 class Arrow(QGraphicsSvgItem):
-    ARROW_ATTRIBUTES = [
-        COLOR,
-        MOTION_TYPE,
-        ROTATION_DIRECTION,
-        QUADRANT,
-        START_LOCATION,
-        END_LOCATION,
-        TURNS,
-    ]
-
     def __init__(self, scene, dict):
         self.svg_file = self.get_svg_file(dict)
         super().__init__(self.svg_file)
@@ -105,6 +95,7 @@ class Arrow(QGraphicsSvgItem):
 
     def mouseReleaseEvent(self, event):
         from widgets.graph_editor.graphboard.graphboard import Graphboard
+
         if isinstance(self.scene, Graphboard):
             self.positioner.update_arrow_position(self.scene)
 
@@ -112,21 +103,32 @@ class Arrow(QGraphicsSvgItem):
         """Dragging an arrow that is already in the graphboard"""
         new_pos = self.mapToScene(event.pos()) - self.boundingRect().center()
         self.setPos(new_pos)
-        new_quadrant = self.scene.get_graphboard_quadrants(new_pos + self.center)
+        
+        # Determine the new quadrant using the distance-based approach
+        scene_pos = new_pos + self.center
+        distances = {
+            NORTHEAST: self.scene.distance(scene_pos.x(), scene_pos.y(), self.scene.grid_center_x, self.scene.grid_center_y),
+            SOUTHEAST: self.scene.distance(scene_pos.x(), scene_pos.y(), self.scene.grid_center_x, self.scene.grid_center_y + self.scene.height()/2),
+            SOUTHWEST: self.scene.distance(scene_pos.x(), scene_pos.y(), self.scene.grid_center_x + self.scene.width()/2, self.scene.grid_center_y + self.scene.height()/2),
+            NORTHWEST: self.scene.distance(scene_pos.x(), scene_pos.y(), self.scene.grid_center_x + self.scene.width()/2, self.scene.grid_center_y)
+        }
+        new_quadrant = min(distances, key=distances.get)
+
         if self.quadrant != new_quadrant:
             self.quadrant = new_quadrant
             self.update_appearance()
             (
                 self.start_location,
                 self.end_location,
-            ) = self.attributes.get_start_end_locations(
+            ) = self.get_start_end_locations(
                 self.motion_type, self.rotation_direction, self.quadrant
             )
             self.staff.location = self.end_location
             self.staff.attributes.update_attributes_from_arrow(self)
-            self.staff.handler.update_graphboard_staffs(self.scene.graphboard)
-            self.scene.graphboard.update()
-            self.scene.info_handler.update()
+            self.scene.update_staffs()
+            self.scene.update()
+
+
 
     def handle_pictograph_view_drag(self, event):
         new_pos = self.mapToScene(event.pos()) - self.drag_offset / 2
@@ -212,7 +214,11 @@ class Arrow(QGraphicsSvgItem):
             }.get(rotation_direction, {})
         elif motion_type == STATIC:
             return {
-                CLOCKWISE: {NORTHEAST: 0, SOUTHEAST: 0, SOUTHWEST: 0, NORTHWEST: 0},
+                CLOCKWISE: {
+                    NORTHEAST: 0, 
+                    SOUTHEAST: 0, 
+                    SOUTHWEST: 0, 
+                    NORTHWEST: 0},
                 COUNTER_CLOCKWISE: {
                     NORTHEAST: 0,
                     SOUTHEAST: 0,
@@ -259,7 +265,7 @@ class Arrow(QGraphicsSvgItem):
         self.scene.info_handler.update()
 
     def update_attributes(self, dict):
-        for attr in self.ARROW_ATTRIBUTES:
+        for attr in ARROW_ATTRIBUTES:
             value = dict.get(attr)
             if attr == TURNS:
                 value = int(value)

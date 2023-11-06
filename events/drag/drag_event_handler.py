@@ -1,4 +1,5 @@
 from events.drag.drag_preview import DragPreview
+from config.string_constants import *
 
 
 class DragEventHandler:
@@ -38,9 +39,19 @@ class DragEventHandler:
             self.drag_preview.has_entered_graphboard_once = True
 
         local_pos_in_graphboard = self.helpers.get_local_pos_in_graphboard(view, event)
-        new_quadrant = self.graphboard.get_graphboard_quadrants(
-            self.graphboard.view.mapToScene(local_pos_in_graphboard)
-        )
+        scene_pos = self.graphboard.view.mapToScene(local_pos_in_graphboard)
+
+        # Determine the new quadrant using the lambda functions
+        if self.graphboard.ne_quadrant(scene_pos.x(), scene_pos.y()):
+            new_quadrant = NORTHEAST
+        elif self.graphboard.se_quadrant(scene_pos.x(), scene_pos.y()):
+            new_quadrant = SOUTHEAST
+        elif self.graphboard.sw_quadrant(scene_pos.x(), scene_pos.y()):
+            new_quadrant = SOUTHWEST
+        elif self.graphboard.nw_quadrant(scene_pos.x(), scene_pos.y()):
+            new_quadrant = NORTHWEST
+        else:
+            new_quadrant = None
 
         # Check if the quadrant has changed
         if self.previous_quadrant != new_quadrant:
@@ -51,9 +62,7 @@ class DragEventHandler:
                     self.graphboard.removeItem(item)
 
             self.drag_preview.update_rotation_for_quadrant(new_quadrant)
-            new_arrow_dict = self.target_arrow.create_dict_from_arrow(
-                self.drag_preview
-            )
+            new_arrow_dict = self.target_arrow.create_dict_from_arrow(self.drag_preview)
             self.invisible_arrow = self.helpers.create_and_add_arrow(new_arrow_dict)
             self.invisible_arrow.setVisible(False)
 
@@ -70,7 +79,7 @@ class DragEventHandler:
                     )
                     staff.arrow = self.invisible_arrow
                     self.invisible_arrow.staff = staff
-                    staff.location = staff.arrow.end_location
+                    staff.location = self.invisible_arrow.end_location
                     staff.update_appearance()
                     staff.setVisible(True)
 
@@ -94,9 +103,7 @@ class DragEventHandler:
             new_arrow_dict = self.invisible_arrow.create_dict_from_arrow(
                 self.drag_preview
             )
-            self.invisible_arrow.update_attributes(
-                new_arrow_dict
-            )
+            self.invisible_arrow.update_attributes(new_arrow_dict)
             board_state = self.graphboard.get_state()
             self.invisible_arrow.staff.positioner.reposition_staffs(
                 self.graphboard, board_state

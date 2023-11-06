@@ -1,7 +1,7 @@
 from PyQt6.QtGui import QPainter, QImage
 from PyQt6.QtCore import QRectF, Qt
 from PyQt6.QtWidgets import QGraphicsItem
-from settings.numerical_constants import (
+from config.numerical_constants import (
     DEFAULT_GRAPHBOARD_HEIGHT,
     DEFAULT_GRAPHBOARD_WIDTH,
     PICTOGRAPH_SCALE,

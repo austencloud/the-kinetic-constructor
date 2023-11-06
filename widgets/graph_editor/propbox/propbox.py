@@ -5,9 +5,10 @@ from PyQt6.QtWidgets import (
     QGraphicsScene,
 )
 from PyQt6.QtCore import Qt, QPointF
-from settings.numerical_constants import GRAPHBOARD_SCALE
-from settings.string_constants import *
+from config.numerical_constants import GRAPHBOARD_SCALE
+from config.string_constants import *
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+
 
 class Propbox(QGraphicsScene):
     def __init__(self, main_widget):
@@ -35,7 +36,7 @@ class Propbox(QGraphicsScene):
         self.view.setFrameShape(QFrame.Shape.NoFrame)
 
         main_widget.propbox = self
-        
+
     def init_propbox_staffs(self, propbox):
         self.propbox_staff_locations = {
             NORTH: QPointF(50, 100),

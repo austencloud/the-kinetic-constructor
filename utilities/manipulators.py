@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QByteArray
 
 from PyQt6.QtGui import QTransform
-from settings.string_constants import *
+from config.string_constants import *
 
 
 class Manipulators:
@@ -197,6 +197,7 @@ class Manipulators:
 
     def swap_colors(self):
         from objects.arrow.arrow import Arrow
+
         current_letter = self.graphboard.determine_current_letter_and_type()[0]
         if current_letter != "G" and current_letter != "H":
             arrows = [
@@ -217,4 +218,3 @@ class Manipulators:
                     arrow.update_appearance()
                     arrow.staff.update_appearance()
                     self.finalize_manipulation(arrow)
-

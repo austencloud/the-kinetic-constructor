@@ -2,14 +2,19 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt, QPointF
-from settings.numerical_constants import (
+from config.numerical_constants import (
     STAFF_WIDTH,
     STAFF_LENGTH,
 )
-from settings.string_constants import *
+from config.string_constants import *
 from objects.staff.staff_attributes import StaffAttributes
 from objects.staff.staff_positioner import StaffPositioner
 from objects.staff.staff_attributes import StaffAttributes
+import logging
+
+#init logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 """ 
 staff_dict = {
@@ -35,7 +40,7 @@ class Staff(QGraphicsSvgItem):
     def setup_managers(self):
         self.positioner = StaffPositioner(self, self.scene)
         self.attributes = StaffAttributes(self)
-        
+
     def set_dict_attributes(self, staff_dict):
         self.attributes.update_attributes_from_dict(self, staff_dict)
         self.color = staff_dict.get(COLOR)
@@ -73,7 +78,10 @@ class Staff(QGraphicsSvgItem):
 
     def update_appearance(self):
         self.set_color(self.color)
-        self.set_axis_from_location(self.location)
+        if self.location:
+            self.set_axis_from_location(self.location)
+        else:
+            logging.warning("Staff has no location")
         self.set_rotation_from_axis()
 
     def set_axis_from_location(self, location):

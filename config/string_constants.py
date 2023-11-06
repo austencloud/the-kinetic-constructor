@@ -27,6 +27,16 @@ START_LOCATION = "start_location"
 END_LOCATION = "end_location"
 TURNS = "turns"
 
+ARROW_ATTRIBUTES = [
+    COLOR,
+    MOTION_TYPE,
+    ROTATION_DIRECTION,
+    QUADRANT,
+    START_LOCATION,
+    END_LOCATION,
+    TURNS,
+]
+
 CLOCKWISE = "r"
 COUNTER_CLOCKWISE = "l"
 
@@ -60,6 +70,5 @@ CLOCKWISE_ICON = CLOCK_DIR + "clockwise.png"
 COUNTER_CLOCKWISE_ICON = CLOCK_DIR + "counter_clockwise.png"
 CLOCK_ICON = CLOCK_DIR + "clock.png"
 
-        
-
 SWAP_ICON = "swap.png"
+

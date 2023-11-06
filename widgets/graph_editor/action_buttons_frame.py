@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QPushButton, QFrame
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QVBoxLayout
 from objects.arrow.arrow import Arrow
-from settings.string_constants import ICON_DIR
-from settings.styles import (
+from config.string_constants import ICON_DIR
+from config.styles import (
     ACTION_BUTTON_FONT,
     ACTION_BUTTON_SIZE,
     ACTION_BUTTON_ICON_SIZE,

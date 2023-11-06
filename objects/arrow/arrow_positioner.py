@@ -1,6 +1,6 @@
 from PyQt6.QtCore import QPointF
-from settings.numerical_constants import *
-from settings.string_constants import *
+from config.numerical_constants import *
+from config.string_constants import *
 
 
 class ArrowPositioner:

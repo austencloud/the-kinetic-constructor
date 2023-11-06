@@ -3,10 +3,10 @@ from PyQt6.QtWidgets import QPushButton, QVBoxLayout, QHBoxLayout, QFrame
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QIcon, QPainter, QFont, QColor
 from PyQt6.QtSvg import QSvgRenderer
-from settings.numerical_constants import GRAPHBOARD_SCALE
+from config.numerical_constants import GRAPHBOARD_SCALE
 from utilities.pictograph_selector_dialog import PictographSelectorDialog
 from data.letter_types import letter_types
-from settings.string_constants import LETTER_SVG_DIR
+from config.string_constants import LETTER_SVG_DIR
 
 
 class LetterButtonsFrame(QFrame):

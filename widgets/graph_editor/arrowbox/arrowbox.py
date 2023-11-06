@@ -6,8 +6,8 @@ from PyQt6.QtWidgets import (
     QGridLayout,
 )
 from PyQt6.QtCore import Qt, QPointF
-from settings.numerical_constants import GRAPHBOARD_SCALE
-from settings.string_constants import *
+from config.numerical_constants import GRAPHBOARD_SCALE
+from config.string_constants import *
 from objects.arrow.arrow import Arrow
 
 
@@ -25,7 +25,6 @@ class Arrowbox(QGraphicsScene):
 
         self.drag_manager = self.main_widget.drag_manager
         self.drag_preview = None
-        
 
     def setup_view(self):
         self.view = QGraphicsView(self)
@@ -77,7 +76,9 @@ class Arrowbox(QGraphicsScene):
     def mousePressEvent(self, event):
         scene_pos = event.scenePos()
         view_pos = self.view.mapFromScene(scene_pos)
-        arrows = [item for item in self.items(QPointF(scene_pos)) if isinstance(item, Arrow)]
+        arrows = [
+            item for item in self.items(QPointF(scene_pos)) if isinstance(item, Arrow)
+        ]
 
         if arrows:
             self.dragged_item = arrows[0]

@@ -1,12 +1,12 @@
 from PyQt6.QtCore import QPointF
 import math
-from settings.numerical_constants import (
+from config.numerical_constants import (
     GRAPHBOARD_VIEW_WIDTH,
     GRAPHBOARD_SCALE,
     PICTOGRAPH_SCALE,
     BETA_OFFSET,
 )
-from settings.string_constants import *
+from config.string_constants import *
 
 
 class StaffPositioner:

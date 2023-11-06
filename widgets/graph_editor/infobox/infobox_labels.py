@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QLabel, QSizePolicy
 from objects.arrow.arrow import Arrow
 from data.positions_map import positions_map
 import logging
-from settings.string_constants import *
+from config.string_constants import *
 
 
 class InfoboxLabels:
@@ -72,7 +72,7 @@ class InfoboxLabels:
                 clock_icon = COUNTER_CLOCKWISE_ICON
             else:
                 clock_icon = CLOCK_ICON
-            
+
             self.set_clock_pixmap(rotation_direction_label, clock_icon)
         else:
             rotation_direction_label.setText("")

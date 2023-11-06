@@ -1,4 +1,4 @@
-from settings.string_constants import *
+from config.string_constants import *
 
 
 class StaffAttributes:
@@ -28,4 +28,4 @@ class StaffAttributes:
         }
         staff.attributes.update_attributes_from_dict(staff, updated_staff_dict)
         staff.update_appearance()
-        staff.setPos(arrow.view.staff_handler.staff_xy_locations[staff.location])
+        staff.setPos(arrow.scene.grid.handpoints[staff.location])

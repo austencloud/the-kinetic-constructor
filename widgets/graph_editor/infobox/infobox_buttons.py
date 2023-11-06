@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QIcon
-from settings.string_constants import *
+from config.string_constants import *
 
 
 class InfoboxButtons:
@@ -9,8 +9,7 @@ class InfoboxButtons:
         "swap": ICON_DIR + "swap.jpg",
         "decrement_turns": ICON_DIR + "decrement_turns.png",
         "increment_turns": ICON_DIR + "increment_turns.png",
-        "swap_colors": None 
-
+        "swap_colors": None,
     }
 
     def __init__(self, infobox, arrow_manipulator, scene):
@@ -18,10 +17,7 @@ class InfoboxButtons:
         self.arrow_manipulator = arrow_manipulator
         self.scene = scene
         self.get_arrows_by_color = self.scene.get_arrows_by_color
-        self.button_groups = {
-            BLUE: [],
-            RED: []
-        }
+        self.button_groups = {BLUE: [], RED: []}
         self.layouts = infobox.layouts
 
     def create_and_set_button(self, button_name, properties):
@@ -49,11 +45,11 @@ class InfoboxButtons:
     def update_buttons(self, attributes):
         color = attributes.get(COLOR, "")
         self.set_buttons_visibility(color)
-        
+
     def setup_buttons(self):
         self.button_properties = {
             "swap_colors": {
-                "icon": self.ICON_PATHS["swap_colors"], 
+                "icon": self.ICON_PATHS["swap_colors"],
                 "text": "↔",
                 "callback": self.arrow_manipulator.swap_colors,
             },
