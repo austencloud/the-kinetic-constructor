@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QWidget, QLabel, QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
-from config.numerical_constants import GRAPHBOARD_SCALE
-from config.string_constants import *
+from settings.numerical_constants import GRAPHBOARD_SCALE
+from settings.string_constants import *
 
 
 class DragPreview(QWidget):

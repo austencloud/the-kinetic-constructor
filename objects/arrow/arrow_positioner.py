@@ -1,6 +1,6 @@
 from PyQt6.QtCore import QPointF
-from config.numerical_constants import *
-from config.string_constants import *
+from settings.numerical_constants import *
+from settings.string_constants import *
 
 
 class ArrowPositioner:
@@ -65,7 +65,7 @@ class ArrowPositioner:
 
         # Manually add the x and y coordinates for the final position
         final_pos = QPointF(
-            new_pos.x() + GRAPHBOARD_GRID_PADDING, new_pos.y() + GRAPHBOARD_GRID_PADDING
+            new_pos.x() + GRID_PADDING, new_pos.y() + GRID_PADDING
         )
 
         arrow.setPos(final_pos.x(), final_pos.y())

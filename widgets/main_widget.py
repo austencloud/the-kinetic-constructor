@@ -41,7 +41,7 @@ class MainWidget(QWidget):
         self.drag_manager.initialize_dependencies(
             main_window, self.graphboard, self.arrowbox
         )
-        self.layout_manager.configure_layouts()
+        self.layout_manager.settingsure_layouts()
         self.connect_objects()
 
     def connect_objects(self):

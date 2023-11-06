@@ -9,13 +9,8 @@ from objects.staff.staff import Staff
 from objects.grid import Grid
 from widgets.graph_editor.graphboard.graphboard import Graphboard
 from objects.pictograph.pictograph_image import PictographImage
-from config.numerical_constants import (
-    DEFAULT_GRAPHBOARD_WIDTH,
-    DEFAULT_GRAPHBOARD_HEIGHT,
-    PICTOGRAPH_SCALE,
-    GRAPHBOARD_VIEW_HEIGHT,
-)
-from config.string_constants import *
+from settings.numerical_constants import *
+from settings.string_constants import *
 
 
 class SequenceView(QGraphicsView):
@@ -24,7 +19,7 @@ class SequenceView(QGraphicsView):
         sequence_scene = QGraphicsScene()
 
         sequence_scene.setSceneRect(
-            0, 0, GRAPHBOARD_VIEW_HEIGHT * 2, GRAPHBOARD_VIEW_HEIGHT * 2
+            0, 0, SEQUENCE_SCENE_WIDTH, SEQUENCE_SCENE_HEIGHT
         )
 
         self.setFixedSize(
@@ -54,15 +49,15 @@ class SequenceView(QGraphicsView):
                 QRectF(
                     0,
                     0,
-                    DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE,
-                    DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE,
+                    GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE,
+                    GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE,
                 )
             )
             for i in range(4)
         ]
 
         for i, section in enumerate(self.beats):
-            section.setPos(QPointF(i * DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE, 0))
+            section.setPos(QPointF(i * GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE, 0))
 
     def add_pictograph(self, pictograph):
         # Find the first section that doesn't have a pictograph
@@ -89,8 +84,8 @@ class SequenceView(QGraphicsView):
         painter.end()
 
         scaled_image = image.scaled(
-            int(DEFAULT_GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE),
-            int(DEFAULT_GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE),
+            int(GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE),
+            int(GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE),
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
         )

@@ -1,9 +1,9 @@
 from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QAction
-from config.string_constants import *
+from settings.string_constants import *
 
 
-class GraphboardContextMenuHandler:
+class ContextMenuHandler:
     def __init__(self, graphboard):
         self.main_widget = graphboard.main_widget
         self.export_manager = graphboard.export_manager

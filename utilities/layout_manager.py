@@ -9,8 +9,8 @@ class LayoutManager:
         self.init_layouts()
         self.assign_layouts_to_window()
 
-    def configure_layouts(self):
-        self.configure_main_layout()
+    def settingsure_layouts(self):
+        self.settingsure_main_layout()
         self.init_sequence_layout()
         self.add_black_border_to_widgets()
 
@@ -32,7 +32,7 @@ class LayoutManager:
             "keyboard": QVBoxLayout(),
         }
 
-    def configure_main_layout(self):
+    def settingsure_main_layout(self):
         self.layouts["left"].addLayout(self.layouts["sequence"])
         self.layouts["left"].addLayout(self.layouts["graph_editor"])
         self.layouts["main"].addLayout(self.layouts["left"])

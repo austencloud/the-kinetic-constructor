@@ -1,18 +1,13 @@
 from PyQt6.QtCore import QPointF
 import math
-from config.numerical_constants import (
-    GRAPHBOARD_VIEW_WIDTH,
-    GRAPHBOARD_SCALE,
-    PICTOGRAPH_SCALE,
-    BETA_OFFSET,
-)
-from config.string_constants import *
-
+from settings.numerical_constants import BETA_OFFSET
+from settings.string_constants import *
 
 class StaffPositioner:
     def __init__(self, staff, scene):
         self.staff = staff
         self.scene = scene
+        self.view = scene.view
         self.letters = staff.scene.main_widget.letters
 
     ### REPOSITIONERS ###
@@ -258,7 +253,7 @@ class StaffPositioner:
 
     def get_distance_from_center(self, position):
         center_point = QPointF(
-            GRAPHBOARD_VIEW_WIDTH / 2, GRAPHBOARD_VIEW_WIDTH / 2
+            self.scene.view.width() / 2, self.scene.view.height() / 2
         )  # Assuming this is the center point of your coordinate system
 
         x_position = position.get("x", 0.0)

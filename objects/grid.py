@@ -1,8 +1,8 @@
 from xml.etree import ElementTree as ET
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from config.numerical_constants import *
-from config.string_constants import *
+from settings.numerical_constants import *
+from settings.string_constants import *
 
 
 class Grid(QGraphicsSvgItem):

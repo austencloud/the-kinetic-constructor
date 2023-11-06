@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QByteArray
 
 from PyQt6.QtGui import QTransform
-from config.string_constants import *
+from settings.string_constants import *
 
 
 class Manipulators:
@@ -109,7 +109,7 @@ class Manipulators:
                 center_x = arrow.boundingRect().width() / 2
                 center_y = arrow.boundingRect().height() / 2
 
-                # Create a QTransform object and configure it for mirroring around the center
+                # Create a QTransform object and settingsure it for mirroring around the center
                 transform = QTransform()
                 transform.translate(center_x, center_y)
                 transform.scale(-1, 1)

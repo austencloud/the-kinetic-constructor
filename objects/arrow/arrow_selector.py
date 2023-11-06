@@ -1,5 +1,5 @@
-from config.numerical_constants import GRAPHBOARD_SCALE
-from config.string_constants import *
+from settings.numerical_constants import GRAPHBOARD_SCALE
+from settings.string_constants import *
 
 
 class ArrowSelector:

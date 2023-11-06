@@ -1,8 +1,8 @@
 from events.drag.drag_preview import DragPreview
-from config.string_constants import *
+from settings.string_constants import *
 
 
-class DragEventHandler:
+class DragEvents:
     def __init__(self, drag_manager):
         self.drag_manager = drag_manager
         self.helpers = self.drag_manager.helpers
@@ -41,17 +41,34 @@ class DragEventHandler:
         local_pos_in_graphboard = self.helpers.get_local_pos_in_graphboard(view, event)
         scene_pos = self.graphboard.view.mapToScene(local_pos_in_graphboard)
 
-        # Determine the new quadrant using the lambda functions
-        if self.graphboard.ne_quadrant(scene_pos.x(), scene_pos.y()):
-            new_quadrant = NORTHEAST
-        elif self.graphboard.se_quadrant(scene_pos.x(), scene_pos.y()):
-            new_quadrant = SOUTHEAST
-        elif self.graphboard.sw_quadrant(scene_pos.x(), scene_pos.y()):
-            new_quadrant = SOUTHWEST
-        elif self.graphboard.nw_quadrant(scene_pos.x(), scene_pos.y()):
-            new_quadrant = NORTHWEST
-        else:
-            new_quadrant = None
+        # Determine the new quadrant using the distance-based approach
+        distances = {
+            NORTHEAST: self.graphboard.distance(
+                scene_pos.x(),
+                scene_pos.y(),
+                self.graphboard.grid_center_x,
+                self.graphboard.grid_center_y,
+            ),
+            SOUTHEAST: self.graphboard.distance(
+                scene_pos.x(),
+                scene_pos.y(),
+                self.graphboard.grid_center_x,
+                self.graphboard.grid_center_y + self.graphboard.height() / 2,
+            ),
+            SOUTHWEST: self.graphboard.distance(
+                scene_pos.x(),
+                scene_pos.y(),
+                self.graphboard.grid_center_x + self.graphboard.width() / 2,
+                self.graphboard.grid_center_y + self.graphboard.height() / 2,
+            ),
+            NORTHWEST: self.graphboard.distance(
+                scene_pos.x(),
+                scene_pos.y(),
+                self.graphboard.grid_center_x + self.graphboard.width() / 2,
+                self.graphboard.grid_center_y,
+            ),
+        }
+        new_quadrant = min(distances, key=distances.get)
 
         # Check if the quadrant has changed
         if self.previous_quadrant != new_quadrant:

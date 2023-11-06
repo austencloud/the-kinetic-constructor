@@ -5,8 +5,8 @@ from PyQt6.QtWidgets import (
     QGraphicsScene,
 )
 from PyQt6.QtCore import Qt, QPointF
-from config.numerical_constants import GRAPHBOARD_SCALE
-from config.string_constants import *
+from settings.numerical_constants import GRAPHBOARD_SCALE
+from settings.string_constants import *
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
 

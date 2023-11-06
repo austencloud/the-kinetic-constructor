@@ -6,8 +6,8 @@ from PyQt6.QtWidgets import (
     QGridLayout,
 )
 from PyQt6.QtCore import Qt, QPointF
-from config.numerical_constants import GRAPHBOARD_SCALE
-from config.string_constants import *
+from settings.numerical_constants import GRAPHBOARD_SCALE
+from settings.string_constants import *
 from objects.arrow.arrow import Arrow
 
 
@@ -17,7 +17,7 @@ class Arrowbox(QGraphicsScene):
         self.infobox = infobox
         self.main_widget = main_widget
 
-        self.configure_frame()
+        self.settingsure_frame()
         self.setup_view()
         self.populate_arrows()
         self.setSceneRect(0, 0, 450, 450)
@@ -34,7 +34,7 @@ class Arrowbox(QGraphicsScene):
         self.view.setFixedSize(int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE))
         self.view.scale(GRAPHBOARD_SCALE, GRAPHBOARD_SCALE)
 
-    def configure_frame(self):
+    def settingsure_frame(self):
         self.arrowbox_frame = QFrame(self.main_widget.main_window)
         self.arrowbox_layout = QGridLayout()
         self.arrowbox_frame.setLayout(self.arrowbox_layout)
@@ -69,7 +69,6 @@ class Arrowbox(QGraphicsScene):
             self.addItem(arrow)
             self.arrows.append(arrow)
 
-        # set positions
         self.arrows[0].setPos(150, 25)
         self.arrows[1].setPos(25, 25)
 

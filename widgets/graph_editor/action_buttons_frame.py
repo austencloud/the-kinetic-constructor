@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QPushButton, QFrame
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QVBoxLayout
 from objects.arrow.arrow import Arrow
-from config.string_constants import ICON_DIR
-from config.styles import (
+from settings.string_constants import ICON_DIR
+from settings.styles import (
     ACTION_BUTTON_FONT,
     ACTION_BUTTON_SIZE,
     ACTION_BUTTON_ICON_SIZE,
@@ -27,7 +27,7 @@ class ActionButtonsFrame(QFrame):
         self.action_buttons_layout.setSpacing(3)
 
         current_positions = self.scene.get_current_arrow_positions()
-        buttons_config = [
+        buttons_settings = [
             (
                 "update_locations.png",
                 "Update Optimal Locations",
@@ -75,8 +75,8 @@ class ActionButtonsFrame(QFrame):
             ),
         ]
 
-        # Function to create a configured button
-        def create_configured_button(icon_filename, tooltip, on_click):
+        # Function to create a settingsured button
+        def create_settingsured_button(icon_filename, tooltip, on_click):
             icon_path = ICON_DIR + icon_filename
             button = QPushButton(QIcon(icon_path), "")
             button.setToolTip(tooltip)
@@ -87,8 +87,8 @@ class ActionButtonsFrame(QFrame):
             return button
 
         # Create and add buttons to the layout
-        for icon_filename, tooltip, action in buttons_config:
-            button = create_configured_button(icon_filename, tooltip, action)
+        for icon_filename, tooltip, action in buttons_settings:
+            button = create_settingsured_button(icon_filename, tooltip, action)
             self.action_buttons_layout.addWidget(button)
 
         self.setLayout(self.action_buttons_layout)

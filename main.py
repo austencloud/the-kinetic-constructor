@@ -1,7 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from widgets.main_widget import MainWidget
-from config.numerical_constants import MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT
+from settings.numerical_constants import MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT
 
 
 class Main_Window(QMainWindow):

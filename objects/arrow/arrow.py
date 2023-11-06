@@ -4,7 +4,7 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
 from events.drag.drag_manager import DragManager
 import re
-from config.string_constants import *
+from settings.string_constants import *
 from utilities.manipulators import Manipulators
 from objects.arrow.arrow_positioner import ArrowPositioner
 from objects.arrow.arrow_selector import ArrowSelector
@@ -103,16 +103,10 @@ class Arrow(QGraphicsSvgItem):
         """Dragging an arrow that is already in the graphboard"""
         new_pos = self.mapToScene(event.pos()) - self.boundingRect().center()
         self.setPos(new_pos)
-        
-        # Determine the new quadrant using the distance-based approach
+
+        # Determine the new quadrant using the boundary-based approach
         scene_pos = new_pos + self.center
-        distances = {
-            NORTHEAST: self.scene.distance(scene_pos.x(), scene_pos.y(), self.scene.grid_center_x, self.scene.grid_center_y),
-            SOUTHEAST: self.scene.distance(scene_pos.x(), scene_pos.y(), self.scene.grid_center_x, self.scene.grid_center_y + self.scene.height()/2),
-            SOUTHWEST: self.scene.distance(scene_pos.x(), scene_pos.y(), self.scene.grid_center_x + self.scene.width()/2, self.scene.grid_center_y + self.scene.height()/2),
-            NORTHWEST: self.scene.distance(scene_pos.x(), scene_pos.y(), self.scene.grid_center_x + self.scene.width()/2, self.scene.grid_center_y)
-        }
-        new_quadrant = min(distances, key=distances.get)
+        new_quadrant = self.scene.determine_quadrant(scene_pos.x(), scene_pos.y())
 
         if self.quadrant != new_quadrant:
             self.quadrant = new_quadrant
@@ -127,8 +121,6 @@ class Arrow(QGraphicsSvgItem):
             self.staff.attributes.update_attributes_from_arrow(self)
             self.scene.update_staffs()
             self.scene.update()
-
-
 
     def handle_pictograph_view_drag(self, event):
         new_pos = self.mapToScene(event.pos()) - self.drag_offset / 2
@@ -214,11 +206,7 @@ class Arrow(QGraphicsSvgItem):
             }.get(rotation_direction, {})
         elif motion_type == STATIC:
             return {
-                CLOCKWISE: {
-                    NORTHEAST: 0, 
-                    SOUTHEAST: 0, 
-                    SOUTHWEST: 0, 
-                    NORTHWEST: 0},
+                CLOCKWISE: {NORTHEAST: 0, SOUTHEAST: 0, SOUTHWEST: 0, NORTHWEST: 0},
                 COUNTER_CLOCKWISE: {
                     NORTHEAST: 0,
                     SOUTHEAST: 0,

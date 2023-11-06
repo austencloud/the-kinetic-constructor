@@ -1,4 +1,4 @@
-from config.string_constants import *
+from settings.string_constants import *
 
 
 class StaffAttributes:

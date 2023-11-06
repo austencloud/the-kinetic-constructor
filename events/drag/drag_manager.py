@@ -2,7 +2,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QGraphicsItem
 from events.drag.drag_helpers import DragHelpers
 from events.drag.drag_scene_updater import DragSceneUpdater
-from events.drag.drag_event_handler import DragEventHandler
+from events.drag.drag_events import DragEvents
 
 
 class DragManager:
@@ -18,7 +18,7 @@ class DragManager:
         self.main_window = main_window
         self.helpers = DragHelpers(self)
         self.scene_updater = DragSceneUpdater(self)
-        self.event_handler = DragEventHandler(self)
+        self.event_handler = DragEvents(self)
 
     def reset_drag_state(self):
         self.dragging = False

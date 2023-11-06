@@ -2,19 +2,23 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import Qt, QPointF
-from config.numerical_constants import (
+from settings.numerical_constants import (
     STAFF_WIDTH,
     STAFF_LENGTH,
 )
-from config.string_constants import *
+from settings.string_constants import *
 from objects.staff.staff_attributes import StaffAttributes
 from objects.staff.staff_positioner import StaffPositioner
 from objects.staff.staff_attributes import StaffAttributes
 import logging
 
-#init logging
 
-logging.basicConfig(level=logging.DEBUG)
+
+logging.basicConfig(
+    filename="logs/staff.log",
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
+)
 
 """ 
 staff_dict = {
