@@ -20,7 +20,6 @@ class Graphboard(QGraphicsScene):
         super().__init__()
         self.main_widget = main_widget
         self.setSceneRect(0, 0, 750, 900)
-        self.scale = GRAPHBOARD_SCALE
         self.initializer = GraphboardInit(self)
 
     def get_state(self):
@@ -127,17 +126,21 @@ class Graphboard(QGraphicsScene):
                 return
             self.letter_item.setSharedRenderer(renderer)
 
-        self.letter_item.setScale(GRAPHBOARD_SCALE)
         self.letter_item.setPos(
             self.main_widget.width() / 2
-            - self.letter_item.boundingRect().width() * GRAPHBOARD_SCALE / 2,
+            - self.letter_item.boundingRect().width() / 2,
             self.view.width(),
         )
 
     def update_staffs(self):
         for staff in self.staffs:
             staff.update_appearance()
-            staff.setPos(self.grid.handpoints[staff.location])
+
+            if staff.axis == VERTICAL:
+                staff.setPos(self.grid.handpoints[staff.location] + QPointF(self.padding, self.padding) + QPointF(STAFF_WIDTH/2, -STAFF_LENGTH/2))
+            else:
+                staff.setPos(self.grid.handpoints[staff.location] + QPointF(self.padding, self.padding) + QPointF(-STAFF_LENGTH/2, -STAFF_WIDTH/2))
+            staff.setTransformOriginPoint(0, 0)
         staff.positioner.check_replace_beta_staffs(self)
 
     def contextMenuEvent(self, event):
@@ -226,7 +229,6 @@ class Graphboard(QGraphicsScene):
         ghost_arrow = Arrow(graphboard, ghost_attributes_dict)
         graphboard.addItem(ghost_arrow)
         ghost_arrow.is_still = True
-        ghost_arrow.setScale(GRAPHBOARD_SCALE)
         ghost_arrow.staff = arrow.staff
         ghost_arrow.staff.arrow = ghost_arrow
 

@@ -75,7 +75,7 @@ class StaffPositioner:
 
         scene.update()
 
-    def reposition_static_beta(self, move_staff, static_arrows, scale):
+    def reposition_static_beta(self, move_staff, static_arrows):
         for arrow in static_arrows:
             staff = next(
                 (
