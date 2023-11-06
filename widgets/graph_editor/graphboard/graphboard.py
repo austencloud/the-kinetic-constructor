@@ -127,9 +127,9 @@ class Graphboard(QGraphicsScene):
             self.letter_item.setSharedRenderer(renderer)
 
         self.letter_item.setPos(
-            self.main_widget.width() / 2
+            self.width() / 2
             - self.letter_item.boundingRect().width() / 2,
-            self.view.width(),
+            self.width(),
         )
 
     def update_staffs(self):

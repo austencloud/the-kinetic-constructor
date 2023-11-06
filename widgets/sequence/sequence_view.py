@@ -93,11 +93,7 @@ class SequenceView(QGraphicsView):
         self.add_pictograph(pictograph)
         graphboard.clear_graphboard()
         graphboard.update_letter(None)
-        letter = self.info_handler.determine_current_letter_and_type()[0]
-        if letter:
-            self.main_widget.word_label.setText(
-                self.main_widget.word_label.text() + letter
-            )
+
         self.sequence_scene.update()
 
     def add_to_graphboard(self, pictograph: PictographImage, graphboard: Graphboard):
