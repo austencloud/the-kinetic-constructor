@@ -10,6 +10,7 @@ class DragPreview(QWidget):
         super().__init__()
 
         self.drag_manager = drag_manager
+        self.main_window = drag_manager.main_window
         self.arrow = arrow
         pixmap = self.create_pixmap(arrow)
 
@@ -67,9 +68,8 @@ class DragPreview(QWidget):
             TURNS: self.turns,
         }
 
-    def move_to_cursor(self, graphboard, event_pos, target_arrow):
-        main_window = graphboard.view.window()
-        local_pos = graphboard.view.mapTo(main_window, event_pos)
+    def move_to_cursor(self, arrowbox, event_pos, target_arrow):
+        local_pos = arrowbox.view.mapTo(self.main_window, event_pos)
         self.move(local_pos.toPoint() - (target_arrow.center * GRAPHBOARD_SCALE).toPoint())
 
     def update_rotation_for_quadrant(self, new_quadrant):

@@ -80,5 +80,3 @@ class LayoutManager:
             palette = widget.palette()
             palette.setColor(QPalette.ColorRole.WindowText, QColor("black"))
             widget.setPalette(palette)
-        else:
-            print(f"Widget {type(widget).__name__} does not support setFrameStyle.")

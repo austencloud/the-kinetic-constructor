@@ -19,8 +19,6 @@ class ArrowSelector:
                 if keep_staff:
                     self.initialize_ghost_arrow(arrow, graphboard)
             graphboard.info_handler.update()
-        else:
-            print("No items selected")
 
     ### HELPERS ###
 

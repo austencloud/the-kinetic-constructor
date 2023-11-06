@@ -7,10 +7,7 @@ from settings.numerical_constants import (
     BETA_OFFSET,
 )
 from settings.string_constants import *
-import logging
 
-# initialize logging
-logging.basicConfig(filename="staff_positioner.log", level=logging.DEBUG)
 
 
 class StaffPositioner:
@@ -164,9 +161,6 @@ class StaffPositioner:
         optimal_position2 = self.get_optimal_arrow_location(arrow2, scene)
 
         if not optimal_position1 or not optimal_position2:
-            logging.warning(
-                "No optimal positions found for arrows in reposition_G_and_H"
-            )
             return
 
         distance1 = self.get_distance_from_center(optimal_position1)

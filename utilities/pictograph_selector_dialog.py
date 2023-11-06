@@ -14,7 +14,6 @@ class PictographSelectorDialog(QDialog):
     def show_dialog(self, letter):
         combinations = self.letters.get(letter, [])
         if not combinations:
-            print(f"No combinations found for letter {letter}")
             return
 
 

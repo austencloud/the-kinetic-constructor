@@ -55,4 +55,4 @@ class OptionboardView(QGraphicsView):
             button.clicked.connect(self.on_pictograph_clicked)
 
     def on_pictograph_clicked(self):
-        print("Pictograph clicked!")
+        pass

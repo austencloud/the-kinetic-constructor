@@ -24,7 +24,7 @@ class MainWidget(QWidget):
         self.letters = self.json_handler.load_all_letters()
         self.key_bindings_manager = KeyEventHandler()
         self.arrow_manager = ArrowManager(self)
-        self.drag_manager = DragManager()
+        self.drag_manager = DragManager(main_window)
 
         self.sequence_view = SequenceView(self)
         self.graph_editor = GraphEditor(self)
@@ -40,7 +40,7 @@ class MainWidget(QWidget):
             self, self.graphboard, self.infobox
         )
 
-        self.drag_manager.initialize_dependencies(self.graphboard, self.arrowbox)
+        self.drag_manager.initialize_dependencies(main_window, self.graphboard, self.arrowbox)
         self.layout_manager.configure_layouts()
         self.init_staffs()
         self.connect_objects()

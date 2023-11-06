@@ -86,9 +86,6 @@ class Staff(QGraphicsSvgItem):
             svg_data = f.read().replace(RED_HEX, hex_color).replace(BLUE_HEX, hex_color)
         self.renderer.load(svg_data.encode("utf-8"))
 
-        if not self.renderer.isValid():
-            print("Renderer is not valid. SVG data might be incorrect.")
-
         self.setSharedRenderer(self.renderer)  # Re-attach the renderer
         self.color = new_color
         self.scene.update()  # Force a redraw
@@ -109,7 +106,7 @@ class Staff(QGraphicsSvgItem):
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.MouseButton.LeftButton:
-            offset = self.get_staff_center(self.view.view_scale)
+            offset = self.get_staff_center(self.scene.scale)
             x_offset, y_offset = offset.x(), offset.y()
             self.setPos(
                 event.scenePos().x() + x_offset, event.scenePos().y() + y_offset

@@ -203,7 +203,6 @@ class ArrowManipulator:
             elif arrow.motion_type == PRO:
                 new_motion_type = ANTI
             else:
-                print(f"Unknown motion type: {arrow.motion_type}")
                 continue
 
             if arrow.rotation_direction == COUNTER_CLOCKWISE:
@@ -254,7 +253,6 @@ class ArrowManipulator:
                     elif arrow.color == BLUE:
                         new_color = RED
                     else:
-                        print("swap_colors - Unexpected color:", arrow.color)
                         continue
 
                     arrow.color = new_color

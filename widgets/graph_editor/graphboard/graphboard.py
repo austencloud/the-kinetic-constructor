@@ -1,17 +1,13 @@
-from PyQt6.QtCore import QPointF
+import typing
+from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtGui import QTransform
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView
+from PyQt6.QtWidgets import QGraphicsScene, QGraphicsSceneMouseEvent, QGraphicsView
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.staff.staff import Staff
-from settings.numerical_constants import (
-    GRAPHBOARD_SCALE,
-    GRAPHBOARD_WIDTH,
-    GRAPHBOARD_HEIGHT,
-    VERTICAL_OFFSET,
-)
+from settings.numerical_constants import *
 from settings.string_constants import *
 from data.letter_types import letter_types
 from widgets.graph_editor.graphboard.graphboard_staff_handler import (
@@ -32,6 +28,7 @@ class Graphboard(QGraphicsScene):
         super().__init__()
         self.main_widget = main_widget
         self.view = QGraphicsView()
+        self.view.mousePressEvent = self.mouse_press_event
         self.set_dimensions()
         self.init_grid()
         self.init_handlers()
@@ -39,7 +36,7 @@ class Graphboard(QGraphicsScene):
         self.init_letterbox()
         
     def set_dimensions(self):
-        self.setSceneRect(0, 0, int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
+        self.setSceneRect(0, 0, DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT)
         self.view.setFixedSize(int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
         self.scale = GRAPHBOARD_SCALE
         
@@ -61,7 +58,6 @@ class Graphboard(QGraphicsScene):
 
     def init_grid(self):
         self.grid = Grid(GRID_PATH)
-        self.grid.setScale(GRAPHBOARD_SCALE)
         transform = QTransform()
         graphboard_size = self.sceneRect().size()
         grid_position = QPointF(
@@ -136,7 +132,6 @@ class Graphboard(QGraphicsScene):
                     red_position = center
                 elif arrow.color == BLUE:
                     blue_position = center
-        print(red_position, blue_position)
         return red_position, blue_position
 
     def get_arrows(self):
@@ -178,7 +173,6 @@ class Graphboard(QGraphicsScene):
             svg_file = f"{LETTER_SVG_DIR}/blank.svg"
             renderer = QSvgRenderer(svg_file)
             if not renderer.isValid():
-                print(f"Invalid SVG file: {svg_file}")
                 return
             self.letter_item.setSharedRenderer(renderer)
 
@@ -189,7 +183,6 @@ class Graphboard(QGraphicsScene):
             svg_file = f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
             renderer = QSvgRenderer(svg_file)
             if not renderer.isValid():
-                print(f"Invalid SVG file: {svg_file}")
                 return
             self.letter_item.setSharedRenderer(renderer)
 
@@ -217,3 +210,16 @@ class Graphboard(QGraphicsScene):
                 quadrant = SE
 
         return quadrant
+
+    def mouse_press_event(self, event):
+        print("mouse press event")
+
+    def contextMenuEvent(self, event):
+        clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())
+        selected_items = self.graphboard_scene.selectedItems()
+        if isinstance(clicked_item, Arrow):
+            self.context_menu_manager.create_arrow_menu(selected_items, event)
+        elif isinstance(clicked_item, Staff):
+            self.context_menu_manager.create_staff_menu(selected_items, event)
+        else:
+            self.context_menu_manager.create_graphboard_menu(event)

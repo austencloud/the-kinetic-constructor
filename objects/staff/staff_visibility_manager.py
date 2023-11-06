@@ -23,5 +23,3 @@ class StaffVisibilityManager:
                 staff.view.update_letter(
                     staff.view.info_handler.determine_current_letter_and_type()[0]
                 )
-        else:
-            print("No staffs selected")

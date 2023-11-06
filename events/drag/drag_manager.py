@@ -8,10 +8,11 @@ from events.drag.drag_event_handler import DragEventHandler
 class DragManager:
     ### INITIALIZATION ###
 
-    def __init__(self):
+    def __init__(self, main_window):
+        self.main_window = main_window
         self.reset_drag_state()
 
-    def initialize_dependencies(self, graphboard, arrowbox):
+    def initialize_dependencies(self, main_window, graphboard, arrowbox):
         self.arrowbox = arrowbox
         self.graphboard = graphboard
         self.arrow_factory = self.graphboard.main_widget.arrow_manager.factory
@@ -19,7 +20,7 @@ class DragManager:
         self.staff_handler = self.graphboard.staff_handler
         self.staff_factory = self.graphboard.staff_handler.factory
         self.arrow_manager = self.graphboard.main_widget.arrow_manager
-
+        self.main_window = main_window
         self.helpers = DragHelpers(self)
         self.scene_updater = DragSceneUpdater(self)
         self.event_handler = DragEventHandler(self)

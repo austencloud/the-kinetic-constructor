@@ -55,7 +55,6 @@ class PictographGenerator:
                 )
 
                 for arrow_dict in combination:
-                    print("iterating over arrow_dict in combination")
                     if all(
                         key in arrow_dict
                         for key in [
@@ -82,7 +81,6 @@ class PictographGenerator:
                             self.staff_handler,
                             self.grid,
                         )
-                        print(output_file_path)
                         self.export_manager.export_to_svg(output_file_path)
 
                 # Clear the graphboard for the next combination
@@ -94,12 +92,10 @@ class PictographGenerator:
 
         combinations = self.letters.get(letter, [])
         if not combinations:
-            print(f"No combinations found for letter {letter}")
             self.scene.update_letter(None)
             self.infobox.update()
             return
         self.current_letter = letter
-        print(f"Generating {self.current_letter}")
         self.scene.update_letter(self.current_letter)
 
         combination_set = random.choice(combinations)

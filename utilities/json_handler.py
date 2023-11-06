@@ -52,10 +52,8 @@ class JsonHandler(QObject):
                     optimal_positions = next((d for d in combination_set if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
                     if optimal_positions is not None:
                         optimal_positions.update(new_optimal_positions)
-                        print(f"Updated optimal positions for letter {letter}")
                     else:
                         combination_set.append(new_optimal_positions)
-                        print(f"Added optimal positions for letter {letter}")
 
                     if letter not in updated_letters:
                         updated_letters.append(letter)
