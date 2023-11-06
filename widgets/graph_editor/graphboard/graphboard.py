@@ -22,6 +22,7 @@ class Graphboard(QGraphicsScene):
         self.setSceneRect(0, 0, 750, 900)
         self.arrows = []
         self.staffs = []
+
         self.letter_item = Letter(self)
         self.initializer = GraphboardInit(self)
 
