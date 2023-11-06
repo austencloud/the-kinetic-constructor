@@ -17,9 +17,9 @@ class StaffVisibilityManager:
                 staffs = [staffs]
             for staff in staffs:
                 staff.hide()
-                staff.view.scene().removeItem(staff.arrow)
+                staff.scene.removeItem(staff.arrow)
 
-                staff.view.arrow_manager.infobox.update()
-                staff.view.update_letter(
-                    staff.view.info_handler.determine_current_letter_and_type()[0]
+                staff.scene.arrow_manager.infobox.update()
+                staff.scene.update_letter(
+                    staff.scene.info_handler.determine_current_letter_and_type()[0]
                 )

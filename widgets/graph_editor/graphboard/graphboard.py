@@ -1,7 +1,7 @@
 import typing
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtGui import QTransform
+from PyQt6.QtGui import QTransform, QPen
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsSceneMouseEvent, QGraphicsView
 from objects.arrow.arrow import Arrow
@@ -27,19 +27,28 @@ class Graphboard(QGraphicsScene):
     def __init__(self, main_widget):
         super().__init__()
         self.main_widget = main_widget
-        self.view = QGraphicsView()
-        self.view.mousePressEvent = self.mouse_press_event
-        self.set_dimensions()
+        self.setSceneRect(0, 0, 750, 900)
+        self.scale = GRAPHBOARD_SCALE
+        
+        self.setup_view()
         self.init_grid()
         self.init_handlers()
         self.init_staffs()
         self.init_letterbox()
+
+    def setup_view(self):
+        self.view = QGraphicsView()
+        self.view.mousePressEvent = self.mouse_press_event
+        self.view.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        self.view.setFixedSize(int(750 * GRAPHBOARD_SCALE), int(900 * GRAPHBOARD_SCALE))
+        self.view.setScene(self)
+        self.view.scale(GRAPHBOARD_SCALE, GRAPHBOARD_SCALE)
+        self.view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        #disable the scroll wheel
+        self.view.wheelEvent = lambda event: None
         
-    def set_dimensions(self):
-        self.setSceneRect(0, 0, DEFAULT_GRAPHBOARD_WIDTH, DEFAULT_GRAPHBOARD_HEIGHT)
-        self.view.setFixedSize(int(GRAPHBOARD_WIDTH), int(GRAPHBOARD_HEIGHT))
-        self.scale = GRAPHBOARD_SCALE
-        
+
     def init_letterbox(self):
         self.letter_renderers = {}
         self.letter_item = QGraphicsSvgItem()
@@ -59,23 +68,22 @@ class Graphboard(QGraphicsScene):
     def init_grid(self):
         self.grid = Grid(GRID_PATH)
         transform = QTransform()
-        graphboard_size = self.sceneRect().size()
+        view_center = QPointF(self.view.width() / 2, self.view.height() / 2)
+
+        grid_center = QPointF(
+            self.grid.boundingRect().width() / 2 * GRAPHBOARD_SCALE,
+            self.grid.boundingRect().height() / 2 * GRAPHBOARD_SCALE,
+        )
+
         grid_position = QPointF(
-            (
-                graphboard_size.width()
-                - self.grid.boundingRect().width() * GRAPHBOARD_SCALE
-            )
-            / 2,
-            (
-                graphboard_size.height()
-                - self.grid.boundingRect().height() * GRAPHBOARD_SCALE
-            )
-            / 2
-            - (VERTICAL_OFFSET),
+            view_center.x() - grid_center.x(),
+            view_center.y() - grid_center.y(),
         )
 
         transform.translate(grid_position.x(), grid_position.y())
         self.grid.setTransform(transform)
+
+        self.grid.setPos(grid_position)
         self.addItem(self.grid)
 
     def init_staffs(self):
@@ -113,10 +121,10 @@ class Graphboard(QGraphicsScene):
             graphboard_layer2_points[point_name] = QPointF(cx, cy)
 
         centers = {
-            NE: graphboard_layer2_points["NE_layer2_point"],
-            SE: graphboard_layer2_points["SE_layer2_point"],
-            SW: graphboard_layer2_points["SW_layer2_point"],
-            NW: graphboard_layer2_points["NW_layer2_point"],
+            NORTHEAST: graphboard_layer2_points["NE_layer2_point"],
+            SOUTHEAST: graphboard_layer2_points["SE_layer2_point"],
+            SOUTHWEST: graphboard_layer2_points["SW_layer2_point"],
+            NORTHWEST: graphboard_layer2_points["NW_layer2_point"],
         }
 
         return centers.get(quadrant, QPointF(0, 0))
@@ -190,7 +198,7 @@ class Graphboard(QGraphicsScene):
         self.letter_item.setPos(
             self.main_widget.width() / 2
             - self.letter_item.boundingRect().width() * GRAPHBOARD_SCALE / 2,
-            GRAPHBOARD_WIDTH,
+            GRAPHBOARD_VIEW_WIDTH,
         )
 
     def get_graphboard_quadrants(self, mouse_pos):
@@ -200,19 +208,21 @@ class Graphboard(QGraphicsScene):
 
         if adjusted_mouse_y < scene_V_center:
             if mouse_pos.x() < scene_H_center:
-                quadrant = NW
+                quadrant = NORTHWEST
             else:
-                quadrant = NE
+                quadrant = NORTHEAST
         else:
             if mouse_pos.x() < scene_H_center:
-                quadrant = SW
+                quadrant = SOUTHWEST
             else:
-                quadrant = SE
+                quadrant = SOUTHEAST
 
         return quadrant
 
     def mouse_press_event(self, event):
-        print("mouse press event")
+        event_pos = event.pos()
+        scene_pos = self.view.mapToScene(event_pos)
+        pass
 
     def contextMenuEvent(self, event):
         clicked_item = self.itemAt(self.mapToScene(event.pos()).toPoint())

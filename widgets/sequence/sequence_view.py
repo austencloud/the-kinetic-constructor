@@ -13,7 +13,7 @@ from settings.numerical_constants import (
     DEFAULT_GRAPHBOARD_WIDTH,
     DEFAULT_GRAPHBOARD_HEIGHT,
     PICTOGRAPH_SCALE,
-    GRAPHBOARD_HEIGHT,
+    GRAPHBOARD_VIEW_HEIGHT,
 )
 from settings.string_constants import *
 
@@ -23,7 +23,9 @@ class SequenceView(QGraphicsView):
         super().__init__()
         sequence_scene = QGraphicsScene()
 
-        sequence_scene.setSceneRect(0, 0, GRAPHBOARD_HEIGHT * 2, GRAPHBOARD_HEIGHT * 2)
+        sequence_scene.setSceneRect(
+            0, 0, GRAPHBOARD_VIEW_HEIGHT * 2, GRAPHBOARD_VIEW_HEIGHT * 2
+        )
 
         self.setFixedSize(
             int(sequence_scene.sceneRect().width()),

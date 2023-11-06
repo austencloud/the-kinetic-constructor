@@ -58,10 +58,10 @@ class ArrowManipulator:
 
     def move_arrow_quadrant_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {
-            UP: {"se": "ne", "sw": "nw"},
-            LEFT: {"ne": "nw", "se": "sw"},
-            DOWN: {"ne": "se", "nw": "sw"},
-            RIGHT: {"nw": "ne", "sw": "se"},
+            UP: {SOUTHEAST: NORTHEAST, SOUTHWEST: NORTHWEST},
+            LEFT: {NORTHEAST: NORTHWEST, SOUTHEAST: SOUTHWEST},
+            DOWN: {NORTHEAST: SOUTHEAST, NORTHWEST: SOUTHWEST},
+            RIGHT: {NORTHWEST: NORTHEAST, SOUTHWEST: SOUTHEAST},
         }
         selected_arrow = selected_arrow
         current_quadrant = selected_arrow.quadrant
@@ -100,7 +100,7 @@ class ArrowManipulator:
     def rotate_arrow(self, rotation_direction, arrows):
         if arrows:
             for arrow in arrows:
-                quadrants = ["ne", "se", "sw", "nw"]
+                quadrants = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
                 current_quadrant_index = quadrants.index(arrow.quadrant)
                 new_quadrant_index = (
                     (current_quadrant_index + 1) % 4

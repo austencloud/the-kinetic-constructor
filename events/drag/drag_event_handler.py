@@ -1,5 +1,6 @@
 from events.drag.drag_preview import DragPreview
 
+
 class DragEventHandler:
     def __init__(self, drag_manager):
         self.drag_manager = drag_manager
@@ -14,7 +15,7 @@ class DragEventHandler:
         self.staff_attributes = self.staff_handler.attributes
         self.staff_factory = self.staff_handler.factory
         self.main_window = self.drag_manager.main_window
-        
+
     ### DRAG INITIALIZATION ###
 
     def start_drag(self, scene, target_arrow, event_pos):
@@ -28,8 +29,8 @@ class DragEventHandler:
         self.invisible_arrow = None
         self.target_arrow = target_arrow
         self.drag_preview.setParent(arrowbox.main_widget)
-        self.drag_preview.show()
         self.drag_preview.move_to_cursor(arrowbox, event_pos, target_arrow)
+        self.drag_preview.show()
 
     ### DRAG INTO GRAPHBOARD ###
 
@@ -44,7 +45,7 @@ class DragEventHandler:
 
         local_pos_in_graphboard = self.helpers.get_local_pos_in_graphboard(view, event)
         new_quadrant = self.graphboard.get_graphboard_quadrants(
-            self.graphboard.view.mapToScene(local_pos_in_graphboard.toPoint())
+            self.graphboard.view.mapToScene(local_pos_in_graphboard)
         )
 
         # Check if the quadrant has changed
@@ -129,7 +130,10 @@ class DragEventHandler:
 
     def handle_drop_event(self, event, event_pos):
         if self.dragging and event_pos:
-            if event_pos.toPoint() not in self.arrowbox.view.rect() and self.drag_preview.has_entered_graphboard_once:
+            if (
+                event_pos not in self.arrowbox.view.rect()
+                and self.drag_preview.has_entered_graphboard_once
+            ):
                 self.place_arrow_on_graphboard(event)
                 self.scene_updater.cleanup_and_update_scene()
                 self.scene_updater.update_info_handler()

@@ -70,7 +70,7 @@ class DragPreview(QWidget):
 
     def move_to_cursor(self, arrowbox, event_pos, target_arrow):
         local_pos = arrowbox.view.mapTo(self.main_window, event_pos)
-        self.move(local_pos.toPoint() - (target_arrow.center * GRAPHBOARD_SCALE).toPoint())
+        self.move(local_pos - (target_arrow.center).toPoint() * GRAPHBOARD_SCALE)
 
     def update_rotation_for_quadrant(self, new_quadrant):
         self.in_graphboard = True

@@ -109,10 +109,10 @@ class PictographView(QGraphicsView):
 
         # Map the quadrants to the corresponding layer 2 points
         centers = {
-            "ne": graphboard_layer2_points["NE_layer2_point"],
-            "se": graphboard_layer2_points["SE_layer2_point"],
-            "sw": graphboard_layer2_points["SW_layer2_point"],
-            "nw": graphboard_layer2_points["NW_layer2_point"],
+            NORTHEAST: graphboard_layer2_points["NE_layer2_point"],
+            SOUTHEAST: graphboard_layer2_points["SE_layer2_point"],
+            SOUTHWEST: graphboard_layer2_points["SW_layer2_point"],
+            NORTHWEST: graphboard_layer2_points["NW_layer2_point"],
         }
 
         return centers.get(quadrant, QPointF(0, 0))
@@ -197,13 +197,13 @@ class PictographView(QGraphicsView):
                 quadrant_center = self.get_quadrant_center(arrow.quadrant)
                 pos = quadrant_center * PICTOGRAPH_SCALE
                 pos = (pos + QPointF(0, 0)) - (arrow.center * PICTOGRAPH_SCALE)
-                if arrow.quadrant == "ne":
+                if arrow.quadrant == NORTHEAST:
                     pos += QPointF(DISTANCE, -DISTANCE)
-                elif arrow.quadrant == "se":
+                elif arrow.quadrant == SOUTHEAST:
                     pos += QPointF(DISTANCE, DISTANCE)
-                elif arrow.quadrant == "sw":
+                elif arrow.quadrant == SOUTHWEST:
                     pos += QPointF(-DISTANCE, DISTANCE)
-                elif arrow.quadrant == "nw":
+                elif arrow.quadrant == NORTHWEST:
                     pos += QPointF(-DISTANCE, -DISTANCE)
                 arrow.setPos(
                     pos + QPointF(PICTOGRAPH_GRID_PADDING, PICTOGRAPH_GRID_PADDING)

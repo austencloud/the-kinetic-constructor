@@ -42,10 +42,10 @@ SOUTH = "s"
 EAST = "e"
 WEST = "w"
 
-NW = "nw"
-NE = "ne"
-SW = "sw"
-SE = "se"
+NORTHWEST = "nw"
+NORTHEAST = "ne"
+SOUTHWEST = "sw"
+SOUTHEAST = "se"
 
 ARROWS = "arrows"
 STAFFS = "staffs"
@@ -54,6 +54,9 @@ COLOR_MAP = {RED: RED_HEX, BLUE: BLUE_HEX}
 
 ### ICONS ###
 
-CLOCKWISE_ICON = ICON_DIR + "clockwise.png"
-COUNTER_CLOCKWISE_ICON = ICON_DIR + "counter_clockwise.png"
+CLOCK_DIR = ICON_DIR + "clock/"
+CLOCKWISE_ICON = CLOCK_DIR + "clockwise.png"
+COUNTER_CLOCKWISE_ICON = CLOCK_DIR + "counter_clockwise.png"
+CLOCK_ICON = CLOCK_DIR + "clock.png"
+
 SWAP_ICON = "swap.png"

@@ -169,18 +169,43 @@ class Arrow(QGraphicsSvgItem):
     def get_quadrant_to_angle_map(self, motion_type, rotation_direction):
         if motion_type == PRO:
             return {
-                CLOCKWISE: {"ne": 0, "se": 90, "sw": 180, "nw": 270},
-                COUNTER_CLOCKWISE: {"ne": 270, "se": 180, "sw": 90, "nw": 0},
+                CLOCKWISE: {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 90,
+                    SOUTHWEST: 180,
+                    NORTHWEST: 270,
+                },
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: 270,
+                    SOUTHEAST: 180,
+                    SOUTHWEST: 90,
+                    NORTHWEST: 0,
+                },
             }.get(rotation_direction, {})
         elif motion_type == ANTI:
             return {
-                CLOCKWISE: {"ne": 270, "se": 180, "sw": 90, "nw": 0},
-                COUNTER_CLOCKWISE: {"ne": 0, "se": 90, "sw": 180, "nw": 270},
+                CLOCKWISE: {
+                    NORTHEAST: 270,
+                    SOUTHEAST: 180,
+                    SOUTHWEST: 90,
+                    NORTHWEST: 0,
+                },
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 90,
+                    SOUTHWEST: 180,
+                    NORTHWEST: 270,
+                },
             }.get(rotation_direction, {})
         elif motion_type == STATIC:
             return {
-                CLOCKWISE: {"ne": 0, "se": 0, "sw": 0, "nw": 0},
-                COUNTER_CLOCKWISE: {"ne": 0, "se": 0, "sw": 0, "nw": 0},
+                CLOCKWISE: {NORTHEAST: 0, SOUTHEAST: 0, SOUTHWEST: 0, NORTHWEST: 0},
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 0,
+                    SOUTHWEST: 0,
+                    NORTHWEST: 0,
+                },
             }.get(rotation_direction, {})
 
     def mirror_self(self):

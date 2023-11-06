@@ -1,10 +1,6 @@
 from PyQt6.QtCore import QPointF
-from settings.numerical_constants import (
-    GRAPHBOARD_SCALE,
-    ARROW_ADJUSTMENT_DISTANCE,
-    GRAPHBOARD_GRID_PADDING,
-)
-
+from settings.numerical_constants import *
+from settings.string_constants import *
 
 class ArrowPositioner:
     def __init__(self, arrow_manager):
@@ -60,13 +56,13 @@ class ArrowPositioner:
         pos = (quadrant_center * GRAPHBOARD_SCALE) - arrow.center
         adjustment = QPointF(0, 0)  # Initialize an adjustment QPointF
 
-        if arrow.quadrant == "ne":
+        if arrow.quadrant == NORTHEAST:
             adjustment = QPointF(ARROW_ADJUSTMENT_DISTANCE, -ARROW_ADJUSTMENT_DISTANCE)
-        elif arrow.quadrant == "se":
+        elif arrow.quadrant == SOUTHEAST:
             adjustment = QPointF(ARROW_ADJUSTMENT_DISTANCE, ARROW_ADJUSTMENT_DISTANCE)
-        elif arrow.quadrant == "sw":
+        elif arrow.quadrant == SOUTHWEST:
             adjustment = QPointF(-ARROW_ADJUSTMENT_DISTANCE, ARROW_ADJUSTMENT_DISTANCE)
-        elif arrow.quadrant == "nw":
+        elif arrow.quadrant == NORTHWEST:
             adjustment = QPointF(-ARROW_ADJUSTMENT_DISTANCE, -ARROW_ADJUSTMENT_DISTANCE)
 
         # Create a new QPointF for the sum

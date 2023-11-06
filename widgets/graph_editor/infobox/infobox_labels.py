@@ -70,6 +70,9 @@ class InfoboxLabels:
                 clock_icon = CLOCKWISE_ICON
             elif rotation_direction == COUNTER_CLOCKWISE:
                 clock_icon = COUNTER_CLOCKWISE_ICON
+            else:
+                clock_icon = CLOCK_ICON
+            
             self.set_clock_pixmap(rotation_direction_label, clock_icon)
         else:
             rotation_direction_label.setText("")
