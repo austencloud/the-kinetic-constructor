@@ -3,6 +3,7 @@ import math
 from settings.numerical_constants import BETA_OFFSET
 from settings.string_constants import *
 
+
 class StaffPositioner:
     def __init__(self, staff, scene):
         self.staff = staff
@@ -269,7 +270,7 @@ class StaffPositioner:
 
     def get_optimal_arrow_location(self, arrow, scene):
         current_state = scene.get_state()
-        current_letter = scene.info_handler.determine_current_letter_and_type()[0]
+        current_letter = scene.get_current_letter()
 
         if current_letter is not None:
             matching_letters = self.letters[current_letter]

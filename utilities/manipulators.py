@@ -143,7 +143,7 @@ class Manipulators:
             arrow.staff.location = new_end_location
             arrow.update_attributes(new_arrow_dict)
             arrow.finalize_manipulation()
-            arrow.scene.update_arrow_position(arrow.scene.get_arrows())
+            arrow.scene.update_arrow_position(arrow.scene.arrows)
             arrow.update()
             arrow.scene.update_staffs()
 
@@ -198,7 +198,7 @@ class Manipulators:
     def swap_colors(self):
         from objects.arrow.arrow import Arrow
 
-        current_letter = self.graphboard.determine_current_letter_and_type()[0]
+        current_letter = self.graphboard.get_current_letter()
         if current_letter != "G" and current_letter != "H":
             arrows = [
                 item for item in self.graphboard.items() if isinstance(item, Arrow)

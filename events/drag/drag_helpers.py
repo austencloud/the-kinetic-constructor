@@ -24,6 +24,7 @@ class DragHelpers:
         new_arrow = Arrow(self.graphboard, arrow_dict)
         new_arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
         self.graphboard.addItem(new_arrow)
+        self.graphboard.arrows.append(new_arrow)
         return new_arrow
 
     def link_arrow_and_staff(self, arrow, staff):

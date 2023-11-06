@@ -9,7 +9,7 @@ from settings.string_constants import *
 from events.context_menu_handler import ContextMenuHandler
 from utilities.manipulators import Manipulators
 from utilities.export_handler import ExportHandler
-
+from objects.letter import Letter
 
 class GraphboardInit:
     def __init__(self, graphboard):
@@ -79,9 +79,7 @@ class GraphboardInit:
     def init_letterbox(self):
         self.graphboard.letters = self.graphboard.main_widget.letters
         self.graphboard.letter_renderers = {}
-        letter_item = QGraphicsSvgItem()
-        self.graphboard.addItem(letter_item)
-        self.graphboard.letter_item = letter_item
+        self.graphboard.addItem(self.graphboard.letter_item)
 
     def init_quadrants(self):
         grid_center = self.graphboard.grid.get_circle_coordinates("center_point")

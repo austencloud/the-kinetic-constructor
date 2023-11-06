@@ -10,17 +10,16 @@ class ArrowPositioner:
         self.scene = scene
 
     def update_arrow_position(self, scene):
-        current_arrows = scene.get_arrows()
-        letter = scene.determine_current_letter_and_type()[0]
+        letter = scene.get_current_letter()
         if letter is not None:
-            self.set_optimal_arrow_pos(current_arrows)
+            self.set_optimal_arrow_pos(scene.arrows)
         else:
-            for arrow in current_arrows:
+            for arrow in scene.arrows:
                 self.set_default_arrow_pos(arrow)
 
     def set_optimal_arrow_pos(self, current_arrows):
         current_state = self.scene.get_state()
-        current_letter = self.scene.determine_current_letter_and_type()[0]
+        current_letter = self.scene.get_current_letter()
         if current_letter is not None:
             matching_letters = self.letters[current_letter]
             optimal_locations = self.arrow.state_comparator.find_optimal_locations(

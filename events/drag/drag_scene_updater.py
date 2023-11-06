@@ -12,7 +12,7 @@ class DragSceneUpdater:
         self.event_handler.drag_preview.deleteLater()
         self.event_handler.drag_preview = None
 
-        current_letter = self.graphboard.determine_current_letter_and_type()[0]
+        current_letter = self.graphboard.get_current_letter()
         self.graphboard.update_staffs()
         self.graphboard.update_letter(current_letter)
 
@@ -20,7 +20,4 @@ class DragSceneUpdater:
 
         for item in self.drag_manager.graphboard.items():
             if isinstance(item, Arrow):
-                item.positioner.update_arrow_position(
-                    self.drag_manager.graphboard
-                )
-
+                item.positioner.update_arrow_position(self.drag_manager.graphboard)

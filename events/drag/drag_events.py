@@ -75,9 +75,7 @@ class DragEvents:
                     staff.setVisible(True)
 
             self.graphboard.update_staffs()
-
             self.content_changed = True
-            self.graphboard.update()
             self.previous_quadrant = new_quadrant  # Update the previous quadrant
 
     ### MOUSE MOVE ###
@@ -95,11 +93,6 @@ class DragEvents:
                 self.drag_preview
             )
             self.invisible_arrow.update_attributes(new_arrow_dict)
-            board_state = self.graphboard.get_state()
-            self.invisible_arrow.staff.positioner.reposition_staffs(
-                self.graphboard, board_state
-            )
-            self.graphboard.update()
             self.content_changed = False
 
     def update_arrow_drag_preview(self, arrowbox, event_pos):
@@ -126,7 +119,6 @@ class DragEvents:
             ):
                 self.place_arrow_on_graphboard(event)
                 self.scene_updater.cleanup_and_update_scene()
-                self.graphboard.update()
             else:
                 self.drag_preview.deleteLater()
                 self.drag_preview = None

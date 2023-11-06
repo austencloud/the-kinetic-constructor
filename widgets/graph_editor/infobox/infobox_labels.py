@@ -89,7 +89,7 @@ class InfoboxLabels:
         (
             current_letter,
             current_letter_type,
-        ) = self.graphboard.determine_current_letter_and_type()
+        ) = self.graphboard.get_current_letter(), self.graphboard.get_current_letter_type()
         if current_letter and current_letter_type:
             start_end_positions = self.get_start_end_positions()
             if start_end_positions:

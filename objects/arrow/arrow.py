@@ -106,6 +106,8 @@ class Arrow(QGraphicsSvgItem):
         scene_pos = new_pos + self.center
         new_quadrant = self.scene.determine_quadrant(scene_pos.x(), scene_pos.y())
 
+
+
         if self.quadrant != new_quadrant:
             self.quadrant = new_quadrant
             self.update_appearance()
