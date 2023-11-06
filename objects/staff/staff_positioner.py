@@ -10,9 +10,10 @@ from settings.string_constants import *
 
 
 class StaffPositioner:
-    def __init__(self, staff_handler):
-        self.staff_handler = staff_handler
-        self.letters = staff_handler.main_widget.letters
+    def __init__(self, staff, scene):
+        self.staff = staff
+        self.scene = scene
+        self.letters = staff.scene.main_widget.letters
 
     ### REPOSITIONERS ###
 
@@ -84,7 +85,7 @@ class StaffPositioner:
             staff = next(
                 (
                     staff
-                    for staff in self.staff_handler.main_widget.graphboard.staffs
+                    for staff in self.scene.staffs
                     if staff.arrow.color == arrow[COLOR]
                 ),
                 None,
@@ -113,7 +114,7 @@ class StaffPositioner:
                     other_staff = next(
                         (
                             s
-                            for s in self.staff_handler.main_widget.graphboard.staffs
+                            for s in self.scene.staffs
                             if s.location == staff.location and s != staff
                         ),
                         None,
@@ -134,7 +135,7 @@ class StaffPositioner:
                     move_staff(
                         next(
                             staff
-                            for staff in self.staff_handler.main_widget.graphboard.staffs
+                            for staff in self.scene.staffs
                             if staff.arrow.color == arrow[COLOR]
                         ),
                         direction,
@@ -172,7 +173,7 @@ class StaffPositioner:
 
         further_staff = next(
             staff
-            for staff in self.staff_handler.main_widget.graphboard.staffs
+            for staff in self.scene.staffs
             if staff.arrow.color == further_arrow[COLOR]
         )
         new_position_further = self.calculate_new_position(
@@ -183,7 +184,7 @@ class StaffPositioner:
         other_direction = self.get_opposite_direction(further_direction)
         other_staff = next(
             staff
-            for staff in self.staff_handler.main_widget.graphboard.staffs
+            for staff in self.scene.staffs
             if staff.arrow.color == other_arrow[COLOR]
         )
         new_position_other = self.calculate_new_position(
@@ -198,7 +199,7 @@ class StaffPositioner:
         pro_staff = next(
             (
                 staff
-                for staff in self.staff_handler.main_widget.graphboard.staffs
+                for staff in self.scene.staffs
                 if staff.arrow.color == pro_arrow[COLOR]
             ),
             None,
@@ -206,14 +207,13 @@ class StaffPositioner:
         anti_staff = next(
             (
                 staff
-                for staff in self.staff_handler.main_widget.graphboard.staffs
+                for staff in self.scene.staffs
                 if staff.arrow.color == anti_arrow[COLOR]
             ),
             None,
         )
 
         if pro_staff and anti_staff:
-            # Determine the direction to move the staffs based on the pro arrow's start and end locations
             pro_staff_translation_direction = self.determine_translation_direction(
                 pro_arrow
             )
@@ -221,13 +221,11 @@ class StaffPositioner:
                 pro_staff_translation_direction
             )
 
-            # Move the staff corresponding to the pro arrow closer
             new_position_pro = self.calculate_new_position(
                 pro_staff.pos(), pro_staff_translation_direction
             )
             pro_staff.setPos(new_position_pro)
 
-            # Move the other staff further
             new_position_anti = self.calculate_new_position(
                 anti_staff.pos(), anti_staff_translation_direction
             )
@@ -242,7 +240,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.staff_handler.main_widget.graphboard.staffs
+                    for staff in self.scene.staffs
                     if staff.arrow.color == pro_or_anti_arrow[COLOR]
                 ),
                 direction,
@@ -250,7 +248,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.staff_handler.main_widget.graphboard.staffs
+                    for staff in self.scene.staffs
                     if staff.arrow.color == static_arrow[COLOR]
                 ),
                 self.get_opposite_direction(direction),
@@ -310,20 +308,6 @@ class StaffPositioner:
                     return optimal_entry.get(color_key)
 
         return None
-
-    def set_staff_position_based_on_arrow(self, arrow, scale):
-        staff = next(
-            (
-                staff
-                for staff in self.staff_handler.staffs_on_board
-                if staff.arrow.color == arrow[COLOR]
-                and staff.location == arrow[END_LOCATION]
-            ),
-            None,
-        )
-        direction = self.determine_translation_direction(arrow)
-        new_position = self.calculate_new_position(staff.pos(), direction, scale)
-        staff.setPos(new_position)
 
     def determine_translation_direction(self, arrow_state):
         """Determine the translation direction based on the arrow's board_state."""

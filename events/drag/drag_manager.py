@@ -15,11 +15,6 @@ class DragManager:
     def initialize_dependencies(self, main_window, graphboard, arrowbox):
         self.arrowbox = arrowbox
         self.graphboard = graphboard
-        self.arrow_factory = self.graphboard.main_widget.arrow_manager.factory
-        self.info_handler = self.graphboard.info_handler
-        self.staff_handler = self.graphboard.staff_handler
-        self.staff_factory = self.graphboard.staff_handler.factory
-        self.arrow_manager = self.graphboard.main_widget.arrow_manager
         self.main_window = main_window
         self.helpers = DragHelpers(self)
         self.scene_updater = DragSceneUpdater(self)

@@ -6,10 +6,7 @@ from PyQt6.QtCore import Qt
 class KeyEventHandler:
     def keyPressEvent(self, event, graphboard):
         main_widget = graphboard.main_widget
-        arrow_manager = main_widget.arrow_manager
         sequence_view = main_widget.sequence_view
-        arrow_manipulator = arrow_manager.manipulator
-        arrow_selector = arrow_manager.selector
         self.graphboard = graphboard
         selected_items = graphboard.selectedItems()
         staff_handler = graphboard.staff_handler

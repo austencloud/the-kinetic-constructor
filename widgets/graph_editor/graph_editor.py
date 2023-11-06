@@ -8,6 +8,7 @@ from widgets.graph_editor.infobox.infobox import Infobox
 from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
 from widgets.graph_editor.action_buttons_frame import ActionButtonsFrame
+from objects.arrow.manipulators import Manipulators
 
 
 class GraphEditor(QWidget):
@@ -16,10 +17,7 @@ class GraphEditor(QWidget):
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.json_handler = main_widget.json_handler
-        self.arrow_manager = main_widget.arrow_manager
-        self.arrow_manipulator = self.arrow_manager.manipulator
-        self.arrow_selector = self.arrow_manager.selector
-        self.arrow_attributes = self.arrow_manager.attributes
+        self.manipulators = Manipulators(self)
         self.sequence_view = main_widget.sequence_view
         self.graph_editor_frame = QFrame()
         self.graph_editor_frame.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
@@ -39,7 +37,7 @@ class GraphEditor(QWidget):
         self.infobox = Infobox(
             main_widget,
             self.graphboard,
-            self.arrow_manipulator,
+            self.manipulators,
             self.arrow_attributes,
         )
 
@@ -53,7 +51,7 @@ class GraphEditor(QWidget):
         self.action_buttons_frame = ActionButtonsFrame(
             self.graphboard,
             self.json_handler,
-            self.arrow_manipulator,
+            self.manipulators,
             self.arrow_selector,
             self.sequence_view,
         )

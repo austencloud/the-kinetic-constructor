@@ -4,10 +4,10 @@ from PyQt6.QtWidgets import (
     QGraphicsView,
     QGraphicsScene,
 )
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QPointF
 from settings.numerical_constants import GRAPHBOARD_SCALE
-from widgets.graph_editor.propbox.propbox_staff_handler import PropboxStaffHandler
-
+from settings.string_constants import *
+from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
 class Propbox(QGraphicsScene):
     def __init__(self, main_widget):
@@ -29,10 +29,42 @@ class Propbox(QGraphicsScene):
         self.view.setFrameStyle(QFrame.Shape.NoFrame)
 
         self.scale = GRAPHBOARD_SCALE * 0.75
-        self.staff_handler = PropboxStaffHandler(main_widget)
 
         self.view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.view.setFrameShape(QFrame.Shape.NoFrame)
 
         main_widget.propbox = self
+        
+    def init_propbox_staffs(self, propbox):
+        self.propbox_staff_locations = {
+            NORTH: QPointF(50, 100),
+            EAST: QPointF(100, 50),
+            SOUTH: QPointF(100, 100),
+            WEST: QPointF(100, 100),
+        }
+
+        red_propbox_staff = {
+            COLOR: RED,
+            LOCATION: EAST,
+            LAYER: 1,
+        }
+
+        blue_propbox_staff = {
+            COLOR: BLUE,
+            LOCATION: NORTH,
+            LAYER: 1,
+        }
+
+        # Create red and blue staffs in the propbox
+        red_staff = self.factory.create_staff(propbox, red_propbox_staff)
+        blue_staff = self.factory.create_staff(propbox, blue_propbox_staff)
+
+        red_staff.setPos(self.propbox_staff_locations[EAST])
+        blue_staff.setPos(self.propbox_staff_locations[NORTH])
+
+        propbox.addItem(red_staff)
+        propbox.addItem(blue_staff)
+
+        red_staff.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
+        blue_staff.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)

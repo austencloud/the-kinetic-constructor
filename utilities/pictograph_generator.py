@@ -9,7 +9,6 @@ from settings.string_constants import *
 
 class PictographGenerator:
     def __init__(self, main_widget, scene, infobox):
-        self.staff_handler = scene.staff_handler
         self.scene = scene
         self.infobox = infobox
         self.main_window = main_widget.main_window

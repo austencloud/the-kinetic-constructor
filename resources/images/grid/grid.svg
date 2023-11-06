@@ -9,22 +9,22 @@
 	<g id="Grid">
 		<circle id="center_point" class="black" cx="325" cy="325" r="11.2"/>
 		<g id="outer_points">
-			<circle id="N_outer_point" class="black" cx="325" cy="25" r="25"/>
-			<circle id="E_outer_point" class="black" cx="625" cy="325" r="25"/>
-			<circle id="S_outer_point" class="black" cx="325" cy="625" r="25"/>
-			<circle id="W_outer_point" class="black" cx="25" cy="325" r="25"/>
+			<circle id="n_outer_point" class="black" cx="325" cy="25" r="25"/>
+			<circle id="e_outer_point" class="black" cx="625" cy="325" r="25"/>
+			<circle id="s_outer_point" class="black" cx="325" cy="625" r="25"/>
+			<circle id="w_outer_point" class="black" cx="25" cy="325" r="25"/>
 		</g>
 		<g id="hand_points">
-			<circle id="N_hand_point" class="black" cx="325" cy="181.9" r="4.2"/>
-			<circle id="E_hand_point" class="black" cx="468.1" cy="325" r="4.2"/>
-			<circle id="S_hand_point" class="black" cx="325" cy="468.1" r="4.2"/>
-			<circle id="W_hand_point" class="black" cx="181.9" cy="325" r="4.2"/>
+			<circle id="n_hand_point" class="black" cx="325" cy="181.9" r="4.2"/>
+			<circle id="e_hand_point" class="black" cx="468.1" cy="325" r="4.2"/>
+			<circle id="s_hand_point" class="black" cx="325" cy="468.1" r="4.2"/>
+			<circle id="w_hand_point" class="black" cx="181.9" cy="325" r="4.2"/>
 		</g>
 		<g id="layer2_points">
-			<circle id="NE_layer2_point" class="black" cx="468.1" cy="181.9" r="8.8"/>
-			<circle id="SE_layer2_point" class="black" cx="468.1" cy="468.1" r="8.8"/>
-			<circle id="SW_layer2_point" class="black" cx="181.9" cy="468.1" r="8.8"/>
-			<circle id="NW_layer2_point" class="black" cx="181.9" cy="181.9" r="8.8"/>
+			<circle id="ne_layer2_point" class="black" cx="468.1" cy="181.9" r="8.8"/>
+			<circle id="se_layer2_point" class="black" cx="468.1" cy="468.1" r="8.8"/>
+			<circle id="sw_layer2_point" class="black" cx="181.9" cy="468.1" r="8.8"/>
+			<circle id="nw_layer2_point" class="black" cx="181.9" cy="181.9" r="8.8"/>
 		</g>
 	</g>
 </g>

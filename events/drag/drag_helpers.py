@@ -5,8 +5,6 @@ class DragHelpers:
     def __init__(self, drag_manager):
         self.drag_manager = drag_manager
         self.graphboard = self.drag_manager.graphboard
-        self.staff_handler = self.drag_manager.staff_handler
-        self.staff_factory = self.drag_manager.staff_factory
         self.arrow_factory = self.drag_manager.arrow_factory
 
     def is_over_graphboard(self, scene, event_pos):

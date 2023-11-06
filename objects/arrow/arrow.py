@@ -6,6 +6,11 @@ from events.drag.drag_manager import DragManager
 from objects.arrow.arrow_attributes import ArrowAttributes
 import re
 from settings.string_constants import *
+from objects.arrow.manipulators import Manipulators
+from objects.arrow.arrow_positioner import ArrowPositioner
+from objects.arrow.arrow_selector import ArrowSelector
+from objects.arrow.arrow_state_comparator import ArrowStateComparator
+from objects.arrow.arrow_attributes import ArrowAttributes
 
 
 class Arrow(QGraphicsSvgItem):
@@ -15,6 +20,13 @@ class Arrow(QGraphicsSvgItem):
         self.initialize_svg_renderer(self.svg_file)
         self.initialize_app_attributes(scene, attr_dict)
         self.initialize_graphics_flags()
+        self.setup_handlers()
+
+    def setup_handlers(self):
+        self.positioner = ArrowPositioner(self)
+        self.selector = ArrowSelector(self)
+        self.attributes = ArrowAttributes(self)
+        self.state_comparator = ArrowStateComparator(self)
 
     def select(self):
         self.setSelected(True)
@@ -25,7 +37,7 @@ class Arrow(QGraphicsSvgItem):
 
         if motion_type in [PRO, ANTI]:
             self.is_shift = True
-            return f"resources/images/arrows/shift/{motion_type}_{turns}.svg"
+            return ARROW_DIR + "shift/{motion_type}_{turns}.svg"
         elif motion_type in [STATIC]:
             self.is_static = True
             return None
@@ -36,8 +48,6 @@ class Arrow(QGraphicsSvgItem):
             if hasattr(scene, "infobox"):
                 self.infobox = scene.infobox
             self.main_widget = scene.main_widget
-            self.arrow_manager = self.main_widget.arrow_manager
-            self.arrow_manager.arrow = self
             self.in_graphboard = False
             self.drag_offset = QPointF(0, 0)
             self.is_ghost = False
@@ -211,3 +221,37 @@ class Arrow(QGraphicsSvgItem):
     def mirror_self(self):
         self.is_mirrored = not self.is_mirrored
         self.setScale(-self.scale())
+
+    def increment_turns(self):
+        self.turns += 1
+        if self.turns > 2:
+            self.turns = 0
+        self.update_arrow_svg()
+        self.finalize_manipulation()
+
+    def decrement_turns(self):
+        self.turns -= 1
+        if self.turns < 0:
+            self.turns = 2
+        self.update_arrow_svg()
+        self.finalize_manipulation()
+
+    def set_turns(self, turns):
+        self.turns = turns
+        self.update_arrow_svg()
+        self.finalize_manipulation()
+
+    def update_arrow_svg(self):
+        SHIFT_DIR = "resources/images/arrows/shift/"
+        self.svg_file = f"{SHIFT_DIR}{self.motion_type}_{self.turns}.svg"
+        self.initialize_svg_renderer(self.svg_file)
+        self.update_appearance()
+
+    def finalize_manipulation(self):
+        self.arrow_manager.positioner.update_arrow_position(
+            self.arrow_manager.graphboard
+        )
+        self.update_appearance()
+        self.infobox.update()
+        self.scene.staff_handler.update_graphboard_staffs(self.scene)
+        self.scene.info_handler.update()

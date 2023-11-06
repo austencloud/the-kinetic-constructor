@@ -1,21 +1,12 @@
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsItem, QMenu
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtWidgets import QGraphicsItem, QFrame
-from PyQt6.QtGui import QTransform, QAction
+from PyQt6.QtGui import QAction
 from objects.grid import Grid
 from objects.arrow.arrow import Arrow
-from objects.pictograph.pictograph_staff_handler import PictographStaffHandler
-from objects.arrow.arrow_manager import ArrowManager
+from objects.staff.staff import Staff
 from utilities.json_handler import JsonHandler
-from widgets.graph_editor.graphboard.graphboard_info_handler import (
-    GraphboardInfoHandler,
-)
-from settings.numerical_constants import (
-    PICTOGRAPH_WIDTH,
-    PICTOGRAPH_HEIGHT,
-    PICTOGRAPH_SCALE,
-    PICTOGRAPH_GRID_PADDING,
-)
+from settings.numerical_constants import *
 from settings.string_constants import *
 
 
@@ -28,7 +19,7 @@ class PictographView(QGraphicsView):
         self.setScene(self.pictograph_scene)
         self.init_grid()
         self.init_handlers_and_managers()
-        self.init_staffs()
+        self.init_handpoints(self, self.grid)
         self.infobox = None
 
     def setup_view(self):
@@ -40,19 +31,7 @@ class PictographView(QGraphicsView):
         self.setDragMode(QGraphicsView.DragMode.NoDrag)
 
     def init_handlers_and_managers(self):
-        self.info_handler = GraphboardInfoHandler(self.main_widget, self)
-        self.staff_handler = PictographStaffHandler(
-            self.main_widget, self.pictograph_scene
-        )
-        self.arrow_manager = ArrowManager(self.main_widget)
         self.json_handler = JsonHandler(self.pictograph_scene)
-        self.staff_handler.connect_pictograph_view(self)
-        self.staff_handler.connect_grid(self.grid)
-        self.staff_factory = self.staff_handler.factory
-
-    def init_staffs(self):
-        self.staff_handler.init_handpoints(self, self.grid)
-        self.staff_handler.initializer.init_staffs(self)
 
     def init_grid(self):
         self.grid = Grid("resources/images/grid/grid.svg")
@@ -238,3 +217,60 @@ class PictographView(QGraphicsView):
         saveOptimalAction.triggered.connect(self.save_optimal_positions)
         contextMenu.addAction(saveOptimalAction)
         contextMenu.exec(event.globalPos())
+
+    def init_handpoints(self, pictograph_view, pictograph):
+        self.pictograph = pictograph
+        self.pictograph_view = pictograph_view
+        scale = self.grid.scale()
+
+        # Calculate the handpoints on the graphboard based on the grid
+        grid_handpoints = {}
+        for point_name in [
+            "N_hand_point",
+            "E_hand_point",
+            "S_hand_point",
+            "W_hand_point",
+        ]:
+            x, y = self.grid.get_circle_coordinates(point_name)
+            scaled_x = x * scale + PICTOGRAPH_GRID_PADDING
+            scaled_y = y * scale + PICTOGRAPH_GRID_PADDING
+            grid_handpoints[point_name] = QPointF(scaled_x, scaled_y)
+
+        self.staff_xy_locations = {
+            "N": grid_handpoints["N_hand_point"],
+            "E": grid_handpoints["E_hand_point"],
+            "S": grid_handpoints["S_hand_point"],
+            "W": grid_handpoints["W_hand_point"],
+        }
+
+    def update_pictograph_staffs(self, scene):
+        for item in self.scene.items():
+            if isinstance(item, Staff):
+                item.hide()
+
+        for arrow in scene.items():
+            if isinstance(arrow, Arrow):
+                location = arrow.end_location
+
+                if location:
+                    if arrow.color == RED_HEX or arrow.color == RED:
+                        color = RED
+                    elif arrow.color == BLUE_HEX or arrow.color == BLUE:
+                        color = BLUE
+                    else:
+                        continue
+
+                    new_staff = {
+                        COLOR: color,
+                        LOCATION: location,
+                        LAYER: 1,
+                    }
+
+                    new_staff = self.factory.create_staff(scene, new_staff)
+
+                    new_staff.setScale(PICTOGRAPH_SCALE)
+                    arrow.staff = new_staff
+                    new_staff.arrow = arrow
+                    self.arrow_manager = new_staff.arrow.arrow_manager
+
+        self.positioner.check_replace_beta_staffs(self.scene)

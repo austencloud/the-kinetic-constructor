@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import QEvent
-from objects.arrow.arrow_manager import ArrowManager
 from utilities.json_handler import JsonHandler
 from widgets.sequence.sequence_view import SequenceView
 from widgets.optionboard.optionboard_view import OptionboardView
@@ -23,7 +22,6 @@ class MainWidget(QWidget):
         self.json_handler = JsonHandler()
         self.letters = self.json_handler.load_all_letters()
         self.key_bindings_manager = KeyEventHandler()
-        self.arrow_manager = ArrowManager(self)
         self.drag_manager = DragManager(main_window)
 
         self.sequence_view = SequenceView(self)
@@ -40,19 +38,13 @@ class MainWidget(QWidget):
             self, self.graphboard, self.infobox
         )
 
-        self.drag_manager.initialize_dependencies(main_window, self.graphboard, self.arrowbox)
+        self.drag_manager.initialize_dependencies(
+            main_window, self.graphboard, self.arrowbox
+        )
         self.layout_manager.configure_layouts()
-        self.init_staffs()
         self.connect_objects()
 
-    def init_staffs(self):
-        self.propbox.staff_handler.init_propbox_staffs(self.graph_editor.propbox)
-
     def connect_objects(self):
-        self.graphboard.staff_handler.info_handler = self.graphboard.info_handler
-        self.graphboard.staff_handler.grid = self.graphboard.grid
-        self.graphboard.staff_handler.graphboard = self.graph_editor.graphboard
-        self.propbox.staff_handler.propbox = self.graph_editor.propbox
         self.graphboard.infobox = self.graph_editor.infobox
         self.graphboard.generator = self.pictograph_generator
         self.arrow_manager.infobox = self.graph_editor.infobox
@@ -62,12 +54,7 @@ class MainWidget(QWidget):
             self.sequence_view
         )
         self.sequence_view.pictograph_generator = self.pictograph_generator
-        self.sequence_view.info_handler = self.graphboard.info_handler
-        self.graphboard.info_handler.connect_widgets_and_managers()
         self.graphboard.drag_manager.arrowbox = self.graph_editor.arrowbox
-        self.arrow_manager.manipulator.graphboard_staff_handler = (
-            self.graphboard.staff_handler
-        )
 
     ### EVENTS ###
 

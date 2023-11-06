@@ -9,9 +9,8 @@ from copy import deepcopy
 
 
 class ExportHandler:
-    def __init__(self, staff_handler, grid, graphboard):
+    def __init__(self, grid, graphboard):
         self.graphboard = graphboard
-        self.staff_handler = staff_handler
         self.grid = grid
 
     def export_to_svg(self, output_file_path):

@@ -8,6 +8,8 @@ from settings.numerical_constants import (
 )
 from settings.string_constants import *
 from objects.staff.staff_attributes import StaffAttributes
+from objects.staff.staff_positioner import StaffPositioner
+from objects.staff.staff_attributes import StaffAttributes
 
 """ 
 staff_dict = {
@@ -25,13 +27,16 @@ class Staff(QGraphicsSvgItem):
         self.svg_file = STAFF_SVG_PATH
         self.scene = scene
         self.arrow = None
-        self.handler = scene.staff_handler
-        self.initialize_dict_attributes(staff_dict)
-        self.initialize_app_attributes()
+        self.setup_managers()
+        self.set_dict_attributes(staff_dict)
+        self.set_app_attributes()
+        self.main_widget = scene.main_widget
 
-    def initialize_dict_attributes(self, staff_dict):
-        """Initialize attributes from the given dictionary."""
-        self.attributes = self.handler.attributes
+    def setup_managers(self):
+        self.positioner = StaffPositioner(self, self.scene)
+        self.attributes = StaffAttributes(self)
+        
+    def set_dict_attributes(self, staff_dict):
         self.attributes.update_attributes_from_dict(self, staff_dict)
         self.color = staff_dict.get(COLOR)
         self.location = staff_dict.get(LOCATION)
@@ -40,7 +45,6 @@ class Staff(QGraphicsSvgItem):
         self.set_rotation_from_axis()
 
     def set_axis(self, staff_dict):
-        """Set the axis based on the staff dictionary."""
         axis_switch = {
             1: {HORIZONTAL: [WEST, EAST], VERTICAL: [NORTH, SOUTH]},
             2: {HORIZONTAL: [NORTH, SOUTH], VERTICAL: [WEST, EAST]},
@@ -54,8 +58,7 @@ class Staff(QGraphicsSvgItem):
         except StopIteration:
             self.axis = HORIZONTAL
 
-    def initialize_app_attributes(self):
-        """Initialize application-specific attributes."""
+    def set_app_attributes(self):
         self.renderer = QSvgRenderer(self.svg_file)
         self.setSharedRenderer(self.renderer)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
@@ -78,7 +81,7 @@ class Staff(QGraphicsSvgItem):
             self.axis = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
         elif self.layer == 2:
             self.axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
-        self.setPos(self.handler.staff_xy_locations[location])
+        self.setPos(self.scene.grid.handpoints[location])
 
     def set_color(self, new_color):
         hex_color = COLOR_MAP.get(new_color, new_color)
@@ -88,7 +91,6 @@ class Staff(QGraphicsSvgItem):
 
         self.setSharedRenderer(self.renderer)  # Re-attach the renderer
         self.color = new_color
-        self.scene.update()  # Force a redraw
 
     def swap_axis(self):
         if self.axis == VERTICAL:

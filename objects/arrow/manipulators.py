@@ -1,60 +1,19 @@
-from objects.arrow.arrow import Arrow
 from PyQt6.QtCore import QByteArray
 
 from PyQt6.QtGui import QTransform
 from settings.string_constants import *
 
 
-class ArrowManipulator:
-    def __init__(self, arrow_manager):
-        self.arrow_manager = arrow_manager
+class Manipulators:
+    def __init__(self, arrow):
+        self.arrow = arrow
 
-    def set_turns(self, arrows, color, turns):
-        arrows = [arrow for arrow in arrows if arrow.color == color]
-        for arrow in arrows:
-            arrow.turns = turns
-            self.update_arrow_turns(arrow)
-            self.finalize_manipulation(arrow)
 
-    def increment_turns(self, arrows, color):
-        arrows = [arrow for arrow in arrows if arrow.color == color]
-        for arrow in arrows:
-            arrow.turns += 1
-            if arrow.turns > 2:
-                arrow.turns = 0
-            self.update_arrow_turns(arrow)
-            self.finalize_manipulation(arrow)
-
-    def decrement_turns(self, arrows, color):
-        arrows = [arrow for arrow in arrows if arrow.color == color]
-        for arrow in arrows:
-            arrow.turns -= 1
-            if arrow.turns < 0:
-                arrow.turns = 2
-            self.update_arrow_turns(arrow)
-            self.finalize_manipulation(arrow)
-
-    def update_arrow_turns(self, arrow):
-        """Update the appearance of the arrow based on its turns."""
-        arrow.svg_file = (
-            f"resources/images/arrows/shift/{arrow.motion_type}_{arrow.turns}.svg"
-        )
-        arrow.initialize_svg_renderer(arrow.svg_file)
-        arrow.update_appearance()
 
     def update_arrow_and_staff(self, arrow, arrow_dict, staff_dict):
         staff = arrow.staff
         arrow.attributes.update_attributes(arrow, arrow_dict)
         staff.attributes.update_attributes_from_dict(staff, staff_dict)
-
-    def finalize_manipulation(self, arrow):
-        self.arrow_manager.positioner.update_arrow_position(
-            self.arrow_manager.graphboard
-        )
-        arrow.update_appearance()
-        self.arrow_manager.infobox.update()
-        arrow.scene.staff_handler.update_graphboard_staffs(arrow.scene)
-        arrow.scene.info_handler.update()
 
     def move_arrow_quadrant_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {
@@ -191,6 +150,8 @@ class ArrowManipulator:
             arrow.scene.staff_handler.update_graphboard_staffs(arrow.scene)
 
     def swap_motion_type(self, arrows, color):
+        from objects.arrow.arrow import Arrow
+
         arrows = [arrow for arrow in arrows if arrow.color == color]
         if not isinstance(arrows, list):
             arrows = [arrows]
@@ -240,6 +201,8 @@ class ArrowManipulator:
             self.finalize_manipulation(arrow)
 
     def swap_colors(self):
+        from objects.arrow.arrow import Arrow
+
         graphboard = self.arrow_manager.graphboard
         current_letter = graphboard.info_handler.determine_current_letter_and_type()[0]
         if current_letter != "G" and current_letter != "H":

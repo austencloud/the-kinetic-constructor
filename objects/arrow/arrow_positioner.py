@@ -7,16 +7,7 @@ class ArrowPositioner:
         self.arrow_manager = arrow_manager
         self.letters = self.arrow_manager.main_widget.letters
 
-    def update_arrow_position(self, scene):
-        current_arrows = scene.get_arrows()
-        letter = self.arrow_manager.graphboard.info_handler.determine_current_letter_and_type()[
-            0
-        ]
-        if letter is not None:
-            self.set_optimal_arrow_pos(current_arrows)
-        else:
-            for arrow in current_arrows:
-                self.set_default_arrow_pos(arrow)
+
 
     def set_optimal_arrow_pos(self, current_arrows):
         current_state = self.arrow_manager.graphboard.get_state()
@@ -50,9 +41,7 @@ class ArrowPositioner:
                     self.set_default_arrow_pos(arrow)
 
     def set_default_arrow_pos(self, arrow):
-        quadrant_center = self.arrow_manager.graphboard.get_quadrant_center(
-            arrow.quadrant
-        )
+        quadrant_center = self.arrow_manager.graphboard.grid.get_layer2_point(arrow.quadrant)
         pos = (quadrant_center * GRAPHBOARD_SCALE) - arrow.center
         adjustment = QPointF(0, 0)  # Initialize an adjustment QPointF
 

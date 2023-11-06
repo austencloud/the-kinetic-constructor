@@ -8,12 +8,6 @@ class DragEventHandler:
         self.graphboard = self.drag_manager.graphboard
         self.arrowbox = self.drag_manager.arrowbox
         self.scene_updater = self.drag_manager.scene_updater
-        self.info_handler = self.drag_manager.info_handler
-        self.staff_handler = self.drag_manager.staff_handler
-        self.arrow_manager = self.drag_manager.arrow_manager
-        self.arrow_attributes = self.arrow_manager.attributes
-        self.staff_attributes = self.staff_handler.attributes
-        self.staff_factory = self.staff_handler.factory
         self.main_window = self.drag_manager.main_window
 
     ### DRAG INITIALIZATION ###
@@ -63,9 +57,11 @@ class DragEventHandler:
             self.invisible_arrow = self.helpers.create_and_add_arrow(new_arrow_dict)
             self.invisible_arrow.setVisible(False)
 
-            self.new_staff_dict = self.staff_attributes.create_staff_dict_from_arrow(
-                self.drag_preview
-            )
+            self.new_staff_dict = {
+                "color": self.drag_preview.color,
+                "location": self.invisible_arrow.end_location,
+                "layer": 1,
+            }
 
             for staff in self.graphboard.staffs:
                 if staff.color == self.drag_preview.color:
@@ -78,14 +74,10 @@ class DragEventHandler:
                     staff.update_appearance()
                     staff.setVisible(True)
 
-            self.staff_handler.update_graphboard_staffs(self.graphboard)
+            self.graphboard.update_staffs()
 
-            self.invisible_arrow.arrow_manager.attributes.update_attributes(
-                self.invisible_arrow, new_arrow_dict
-            )
             self.content_changed = True
-            self.info_handler.update()
-
+            self.graphboard.update()
             self.previous_quadrant = new_quadrant  # Update the previous quadrant
 
     ### MOUSE MOVE ###

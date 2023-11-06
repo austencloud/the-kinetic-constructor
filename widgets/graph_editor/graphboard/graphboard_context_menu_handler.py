@@ -6,12 +6,7 @@ from settings.string_constants import *
 class GraphboardContextMenuHandler:
     def __init__(self, scene):
         self.main_widget = scene.main_widget
-        self.arrow_manager = self.main_widget.arrow_manager
-        self.arrow_manipulator = self.arrow_manager.manipulator
-        self.arrow_selector = self.arrow_manager.selector
         self.export_manager = scene.export_manager
-        self.staff_handler = scene.staff_handler
-        self.staff_visibility_manager = self.staff_handler.visibility_manager
         self.sequence_view = self.main_widget.sequence_view
 
     def create_menu_with_actions(self, parent, actions, event):

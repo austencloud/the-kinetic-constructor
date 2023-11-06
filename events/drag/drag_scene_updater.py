@@ -5,9 +5,7 @@ class DragSceneUpdater:
     def __init__(self, drag_manager):
         self.drag_manager = drag_manager
         self.graphboard = self.drag_manager.graphboard
-        self.staff_handler = self.drag_manager.staff_handler
         self.helpers = self.drag_manager.helpers
-        self.info_handler = self.drag_manager.info_handler
 
     def cleanup_and_update_scene(self):
         self.event_handler = self.drag_manager.event_handler
