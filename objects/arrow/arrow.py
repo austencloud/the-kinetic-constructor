@@ -2,10 +2,8 @@ from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
-from events.drag.drag_manager import DragManager
 import re
 from settings.string_constants import *
-from utilities.manipulators import Manipulators
 from objects.arrow.arrow_positioner import ArrowPositioner
 from objects.arrow.arrow_selector import ArrowSelector
 from objects.arrow.arrow_state_comparator import ArrowStateComparator

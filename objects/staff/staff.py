@@ -71,14 +71,13 @@ class Staff(QGraphicsSvgItem):
         self.renderer = QSvgRenderer(self.svg_file)
         self.setSharedRenderer(self.renderer)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
-        self.setScale(self.scene.scale)
         self.set_color(self.color)
 
-    def get_staff_center(self, scale):
+    def get_staff_center(self):
         if self.axis == VERTICAL:
-            return QPointF((STAFF_WIDTH / 2) * scale, -(STAFF_LENGTH / 2) * scale)
+            return QPointF((STAFF_WIDTH / 2), -(STAFF_LENGTH / 2))
         elif self.axis == HORIZONTAL:
-            return QPointF(-(STAFF_LENGTH / 2) * scale, -(STAFF_WIDTH / 2) * scale)
+            return QPointF(-(STAFF_LENGTH / 2), -(STAFF_WIDTH / 2))
 
     def update_appearance(self):
         self.set_color(self.color)

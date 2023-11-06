@@ -24,7 +24,7 @@ class GraphboardInit:
     def init_view(self):
         view = QGraphicsView()
         view.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
-        view.setFixedSize(int(750 * GRAPHBOARD_SCALE), int(900 * GRAPHBOARD_SCALE))
+        view.setFixedSize(int(GRAPHBOARD_WIDTH * GRAPHBOARD_SCALE), int(GRAPHBOARD_HEIGHT * GRAPHBOARD_SCALE))
         view.setScene(self.graphboard)
         view.scale(GRAPHBOARD_SCALE, GRAPHBOARD_SCALE)
         view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -93,20 +93,20 @@ class GraphboardInit:
         self.graphboard.ne_boundary = (
             self.graphboard.grid_center_x,
             0,
-            750,
+            GRAPHBOARD_WIDTH,
             self.graphboard.grid_center_y,
         )
         self.graphboard.se_boundary = (
             self.graphboard.grid_center_x,
             self.graphboard.grid_center_y,
-            750,
-            900,
+            GRAPHBOARD_WIDTH,
+            GRAPHBOARD_HEIGHT,
         )
         self.graphboard.sw_boundary = (
             0,
             self.graphboard.grid_center_y,
             self.graphboard.grid_center_x,
-            900,
+            GRAPHBOARD_HEIGHT,
         )
         self.graphboard.nw_boundary = (
             0,
@@ -123,18 +123,3 @@ class GraphboardInit:
         self.graphboard.addRect(*self.graphboard.sw_boundary, pen=solid_pen)
         self.graphboard.addRect(*self.graphboard.nw_boundary, pen=solid_pen)
 
-    @staticmethod
-    def point_in_boundary(x, y, boundary):
-        return boundary[0] <= x <= boundary[2] and boundary[1] <= y <= boundary[3]
-
-    def determine_quadrant(self, x, y):
-        if self.point_in_boundary(x, y, self.graphboard.ne_boundary):
-            return NORTHEAST
-        elif self.point_in_boundary(x, y, self.graphboard.se_boundary):
-            return SOUTHEAST
-        elif self.point_in_boundary(x, y, self.graphboard.sw_boundary):
-            return SOUTHWEST
-        elif self.point_in_boundary(x, y, self.graphboard.nw_boundary):
-            return NORTHWEST
-        else:
-            return None

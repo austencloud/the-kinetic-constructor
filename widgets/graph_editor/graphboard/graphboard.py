@@ -165,8 +165,6 @@ class Graphboard(QGraphicsScene):
                     arrow.positioner.set_default_arrow_pos(arrow)
 
     def update(self):
-        current_arrows = self.get_arrows()
-        self.update_arrow_position(current_arrows)
         self.infobox.labels.update_type_and_position_labels()
         self.update_letter(self.determine_current_letter_and_type()[0])
         self.infobox.update()
@@ -234,3 +232,19 @@ class Graphboard(QGraphicsScene):
 
     def distance(self, x1, y1, x2, y2):
         return ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
+
+    @staticmethod
+    def point_in_boundary(x, y, boundary):
+        return boundary[0] <= x <= boundary[2] and boundary[1] <= y <= boundary[3]
+
+    def determine_quadrant(self, x, y):
+        if self.point_in_boundary(x, y, self.ne_boundary):
+            return NORTHEAST
+        elif self.point_in_boundary(x, y, self.se_boundary):
+            return SOUTHEAST
+        elif self.point_in_boundary(x, y, self.sw_boundary):
+            return SOUTHWEST
+        elif self.point_in_boundary(x, y, self.nw_boundary):
+            return NORTHWEST
+        else:
+            return None

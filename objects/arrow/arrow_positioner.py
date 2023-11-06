@@ -33,8 +33,8 @@ class ArrowPositioner:
                     )
                     if optimal_location:
                         pos = QPointF(
-                            optimal_location["x"] * GRAPHBOARD_SCALE,
-                            optimal_location["y"] * GRAPHBOARD_SCALE,
+                            optimal_location["x"],
+                            optimal_location["y"],
                         )
 
                         new_x = pos.x() - (arrow.boundingRect().width()) / 2
@@ -48,8 +48,8 @@ class ArrowPositioner:
 
     def set_default_arrow_pos(self, arrow):
         layer2_point = self.arrow.scene.grid.get_layer2_point(arrow.quadrant)
-        pos = (layer2_point * GRAPHBOARD_SCALE) - arrow.center
-        adjustment = QPointF(0, 0)  # Initialize an adjustment QPointF
+        pos = layer2_point
+        adjustment = QPointF(0, 0)
 
         if arrow.quadrant == NORTHEAST:
             adjustment = QPointF(DISTANCE, -DISTANCE)
@@ -60,12 +60,10 @@ class ArrowPositioner:
         elif arrow.quadrant == NORTHWEST:
             adjustment = QPointF(-DISTANCE, -DISTANCE)
 
-        # Create a new QPointF for the sum
-        new_pos = QPointF(pos.x() + adjustment.x(), pos.y() + adjustment.y())
-
-        # Manually add the x and y coordinates for the final position
-        final_pos = QPointF(
-            new_pos.x() + GRID_PADDING, new_pos.y() + GRID_PADDING
+        new_pos = QPointF(
+            pos.x() + adjustment.x() + arrow.scene.padding,
+            pos.y() + adjustment.y() + arrow.scene.padding,
         )
 
-        arrow.setPos(final_pos.x(), final_pos.y())
+        final_pos = QPointF(new_pos.x(), new_pos.y())
+        arrow.setPos(final_pos - arrow.center)

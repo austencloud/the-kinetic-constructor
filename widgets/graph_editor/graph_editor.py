@@ -39,7 +39,7 @@ class GraphEditor(QWidget):
             self.graphboard,
             self.manipulators,
         )
-
+        self.graphboard.infobox = self.infobox
         self.propbox = Propbox(main_widget)
         self.arrowbox = Arrowbox(
             main_widget,
