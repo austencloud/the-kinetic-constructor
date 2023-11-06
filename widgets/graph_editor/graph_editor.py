@@ -38,21 +38,17 @@ class GraphEditor(QWidget):
             main_widget,
             self.graphboard,
             self.manipulators,
-            self.arrow_attributes,
         )
 
         self.propbox = Propbox(main_widget)
         self.arrowbox = Arrowbox(
             main_widget,
-            self.graphboard,
             self.infobox,
-            self.arrow_manager,
         )
         self.action_buttons_frame = ActionButtonsFrame(
             self.graphboard,
             self.json_handler,
             self.manipulators,
-            self.arrow_selector,
             self.sequence_view,
         )
 

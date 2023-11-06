@@ -10,6 +10,7 @@ from objects.staff.staff import Staff
 from settings.numerical_constants import *
 from settings.string_constants import *
 from data.letter_types import letter_types
+from data.start_end_location_mapping import start_end_location_mapping
 from widgets.graph_editor.graphboard.graphboard_context_menu_handler import (
     GraphboardContextMenuHandler,
 )
@@ -77,7 +78,6 @@ class Graphboard(QGraphicsScene):
         self.export_manager = ExportHandler(self.grid, self)
         self.context_menu_manager = GraphboardContextMenuHandler(self)
         self.drag_manager = self.main_widget.drag_manager
-        self.arrow_factory = self.arrow_manager.factory
 
     def init_grid(self):
         self.grid = Grid(GRID_PATH)
@@ -168,7 +168,7 @@ class Graphboard(QGraphicsScene):
                 del item
 
     def update_letter(self, letter):
-        letter = self.info_handler.determine_current_letter_and_type()[0]
+        letter = self.determine_current_letter_and_type()[0]
         if letter is None:
             svg_file = f"{LETTER_SVG_DIR}/blank.svg"
             renderer = QSvgRenderer(svg_file)
@@ -204,19 +204,7 @@ class Graphboard(QGraphicsScene):
             if isinstance(item, Staff):
                 item.setVisible(False)
 
-    def hide_staff(self, staffs):
-        if staffs:
-            # if staffs is not a list, make it a list
-            if not isinstance(staffs, list):
-                staffs = [staffs]
-            for staff in staffs:
-                staff.hide()
-                staff.scene.removeItem(staff.arrow)
 
-                staff.scene.arrow_manager.infobox.update()
-                staff.scene.update_letter(
-                    staff.scene.info_handler.determine_current_letter_and_type()[0]
-                )
 
     def get_graphboard_quadrants(self, mouse_pos):
         scene_H_center = self.sceneRect().width() / 2
@@ -266,7 +254,6 @@ class Graphboard(QGraphicsScene):
         self.update_arrow_position(current_arrows)
         self.infobox.labels.update_type_and_position_labels()
         self.update_letter(self.determine_current_letter_and_type()[0])
-        self.update_staffs()
         self.infobox.update()
 
     def determine_current_letter_and_type(self):
@@ -282,7 +269,7 @@ class Graphboard(QGraphicsScene):
         # Add attributes of arrows already in the scene to the current_combination list
         for arrow in self.items():
             if isinstance(arrow, Arrow):
-                attributes = arrow.attributes.get_attributes(arrow)
+                attributes = arrow.attributes
                 sorted_attributes = {
                     k: attributes[k] for k in sorted(attributes.keys())
                 }
@@ -310,3 +297,25 @@ class Graphboard(QGraphicsScene):
 
         self.letter = None  # Set to None if no match is found
         return self.letter, letter_type  # Always return two values
+
+    def delete_arrow(self, arrow, keep_staff=False):
+        if not isinstance(deleted_arrows, list):
+            deleted_arrows = [deleted_arrows]
+        for arrow in deleted_arrows:
+            if isinstance(arrow, Arrow):
+                self.removeItem(arrow)
+                if keep_staff:
+                    arrow.initialize_ghost_arrow(arrow, self)
+                else:
+                    self.removeItem(arrow.staff)
+
+            self.update()
+            
+    def delete_staff(self, staff):
+        self.removeItem(staff)
+        self.removeItem(staff.arrow)
+        self.update()
+        self.update_letter(
+            self.determine_current_letter_and_type()[0]
+        )
+        

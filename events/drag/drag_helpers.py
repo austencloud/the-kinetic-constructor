@@ -1,11 +1,9 @@
 from PyQt6.QtWidgets import QGraphicsItem
 
-
 class DragHelpers:
     def __init__(self, drag_manager):
         self.drag_manager = drag_manager
         self.graphboard = self.drag_manager.graphboard
-        self.arrow_factory = self.drag_manager.arrow_factory
 
     def is_over_graphboard(self, scene, event_pos):
         pos_in_main_window = scene.view.mapTo(scene.main_widget, event_pos)
@@ -22,7 +20,8 @@ class DragHelpers:
         )
 
     def create_and_add_arrow(self, arrow_dict):
-        new_arrow = self.arrow_factory.create_arrow(self.graphboard, arrow_dict)
+        from objects.arrow.arrow import Arrow
+        new_arrow = Arrow(self.graphboard, arrow_dict)
         new_arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
         self.graphboard.addItem(new_arrow)
         return new_arrow

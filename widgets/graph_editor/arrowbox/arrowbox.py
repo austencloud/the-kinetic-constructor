@@ -12,12 +12,10 @@ from objects.arrow.arrow import Arrow
 
 
 class Arrowbox(QGraphicsScene):
-    def __init__(self, main_widget, graphboard, infobox, arrow_manager):
+    def __init__(self, main_widget, infobox):
         super().__init__()
         self.infobox = infobox
         self.main_widget = main_widget
-        self.arrow_manager = arrow_manager
-        self.arrow_factory = self.arrow_manager.factory
 
         self.configure_frame()
         self.setup_view()
@@ -27,6 +25,7 @@ class Arrowbox(QGraphicsScene):
 
         self.drag_manager = self.main_widget.drag_manager
         self.drag_preview = None
+        
 
     def setup_view(self):
         self.view = QGraphicsView(self)
@@ -42,7 +41,8 @@ class Arrowbox(QGraphicsScene):
         self.arrowbox_frame.setLayout(self.arrowbox_layout)
 
     def populate_arrows(self):
-        arrow_data = [
+        self.arrows = []
+        arrow_dicts = [
             {
                 COLOR: RED,
                 MOTION_TYPE: PRO,
@@ -63,16 +63,16 @@ class Arrowbox(QGraphicsScene):
             },
         ]
 
-        for data in arrow_data:
-            arrow = self.arrow_factory.create_arrow(self, data)
+        for dict in arrow_dicts:
+            arrow = Arrow(self, dict)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
             self.addItem(arrow)
-            self.main_widget.arrows.append(arrow)
+            self.arrows.append(arrow)
 
         # set positions
-        self.main_widget.arrows[0].setPos(150, 25)
-        self.main_widget.arrows[1].setPos(25, 25)
+        self.arrows[0].setPos(150, 25)
+        self.arrows[1].setPos(25, 25)
 
     def mousePressEvent(self, event):
         scene_pos = event.scenePos()

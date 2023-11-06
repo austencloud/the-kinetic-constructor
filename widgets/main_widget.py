@@ -47,9 +47,6 @@ class MainWidget(QWidget):
     def connect_objects(self):
         self.graphboard.infobox = self.graph_editor.infobox
         self.graphboard.generator = self.pictograph_generator
-        self.arrow_manager.infobox = self.graph_editor.infobox
-        self.arrow_manager.graphboard = self.graph_editor.graphboard
-        self.arrow_manager.manipulator.graphboard = self.graphboard
         self.graph_editor.graphboard.context_menu_manager.sequence_view = (
             self.sequence_view
         )

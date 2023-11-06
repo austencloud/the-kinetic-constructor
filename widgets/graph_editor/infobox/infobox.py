@@ -8,15 +8,14 @@ from settings.string_constants import RED, BLUE
 
 
 class Infobox(QFrame):
-    def __init__(self, main_widget, graphboard, arrow_manipulator, arrow_attributes):
+    def __init__(self, main_widget, graphboard, arrow_manipulator):
         super().__init__()
         self.main_widget = main_widget
         self.graphboard = graphboard
         self.arrow_manipulator = arrow_manipulator
-        self.arrow_attributes = arrow_attributes
         self.labels = InfoboxLabels(self, graphboard)
         self.widgets = InfoboxWidgets(self)
-        self.layouts = InfoboxLayouts(self, graphboard, arrow_attributes)
+        self.layouts = InfoboxLayouts(self, graphboard)
         self.buttons = InfoboxButtons(self, arrow_manipulator, graphboard)
         self.setup_ui()
 
@@ -30,8 +29,8 @@ class Infobox(QFrame):
     def update(self):
         for color in [BLUE, RED]:
             arrows = self.graphboard.get_arrows_by_color(color)
-            if arrows:
-                attributes = self.arrow_attributes.create_dict_from_arrow(arrows[0])
+            for arrow in arrows:
+                attributes = arrow.create_dict_from_arrow(arrow)
                 widget = getattr(self.widgets, f"{color}_attributes_widget")
                 self.widgets.update_info_widget_content(widget, attributes)
                 widget.setVisible(True)

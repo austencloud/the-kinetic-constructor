@@ -51,7 +51,7 @@ class DragEventHandler:
                     self.graphboard.removeItem(item)
 
             self.drag_preview.update_rotation_for_quadrant(new_quadrant)
-            new_arrow_dict = self.target_arrow.attributes.create_dict_from_arrow(
+            new_arrow_dict = self.target_arrow.create_dict_from_arrow(
                 self.drag_preview
             )
             self.invisible_arrow = self.helpers.create_and_add_arrow(new_arrow_dict)
@@ -91,17 +91,17 @@ class DragEventHandler:
     def update_drag_preview_on_mouse_move(self, arrowbox, event_pos):
         self.update_arrow_drag_preview(arrowbox, event_pos)
         if self.drag_preview.has_entered_graphboard_once and self.content_changed:
-            new_arrow_dict = self.arrow_manager.attributes.create_dict_from_arrow(
+            new_arrow_dict = self.invisible_arrow.create_dict_from_arrow(
                 self.drag_preview
             )
-            self.invisible_arrow.arrow_manager.attributes.update_attributes(
-                self.invisible_arrow, new_arrow_dict
+            self.invisible_arrow.update_attributes(
+                new_arrow_dict
             )
             board_state = self.graphboard.get_state()
-            self.staff_handler.positioner.reposition_staffs(
+            self.invisible_arrow.staff.positioner.reposition_staffs(
                 self.graphboard, board_state
             )
-            self.info_handler.update()
+            self.graphboard.update()
             self.content_changed = False
 
     def update_arrow_drag_preview(self, arrowbox, event_pos):
@@ -128,7 +128,7 @@ class DragEventHandler:
             ):
                 self.place_arrow_on_graphboard(event)
                 self.scene_updater.cleanup_and_update_scene()
-                self.scene_updater.update_info_handler()
+                self.graphboard.update()
             else:
                 self.drag_preview.deleteLater()
                 self.drag_preview = None

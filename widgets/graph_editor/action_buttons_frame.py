@@ -15,15 +15,13 @@ class ActionButtonsFrame(QFrame):
         self,
         scene,
         json_handler,
-        arrow_manipulator,
-        arrow_selector,
+        manipulators,
         sequence_view,
     ):
         super().__init__()
         self.scene = scene
         self.json_handler = json_handler
-        self.arrow_manipulator = arrow_manipulator
-        self.arrow_selector = arrow_selector
+        self.manipulators = manipulators
         self.sequence_view = sequence_view
         self.action_buttons_layout = QVBoxLayout()
         self.action_buttons_layout.setSpacing(3)
@@ -45,26 +43,26 @@ class ActionButtonsFrame(QFrame):
             (
                 "rotate_right.png",
                 "Rotate Right",
-                lambda: self.arrow_manipulator.rotate_arrow(
+                lambda: self.manipulators.rotate_arrow(
                     "right", self.scene.selectedItems()
                 ),
             ),
             (
                 "rotate_left.png",
                 "Rotate Left",
-                lambda: self.arrow_manipulator.rotate_arrow(
+                lambda: self.manipulators.rotate_arrow(
                     "left", self.scene.selectedItems()
                 ),
             ),
             (
                 "mirror.png",
                 "Mirror",
-                lambda: self.arrow_manipulator.mirror_arrow(
+                lambda: self.manipulators.mirror_arrow(
                     self.scene.selectedItems(),
                     self.get_selected_arrow_color(),
                 ),
             ),
-            ("swap.png", "Swap Colors", lambda: self.arrow_manipulator.swap_colors()),
+            ("swap.png", "Swap Colors", lambda: self.manipulators.swap_colors()),
             (
                 "select_all.png",
                 "Select All",

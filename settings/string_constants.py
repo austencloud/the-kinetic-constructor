@@ -1,5 +1,6 @@
 GRID_PATH = "resources/images/grid/grid.svg"
 ARROW_DIR = "resources/images/arrows/"
+SHIFT_DIR = "resources/images/arrows/shift/"
 LETTER_SVG_DIR = "resources/images/letters/"
 ICON_DIR = "resources/images/icons/"
 STAFF_SVG_PATH = "resources/images/staffs/staff.svg"
@@ -58,5 +59,7 @@ CLOCK_DIR = ICON_DIR + "clock/"
 CLOCKWISE_ICON = CLOCK_DIR + "clockwise.png"
 COUNTER_CLOCKWISE_ICON = CLOCK_DIR + "counter_clockwise.png"
 CLOCK_ICON = CLOCK_DIR + "clock.png"
+
+        
 
 SWAP_ICON = "swap.png"

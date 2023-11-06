@@ -3,21 +3,27 @@ from settings.numerical_constants import *
 from settings.string_constants import *
 
 class ArrowPositioner:
-    def __init__(self, arrow_manager):
-        self.arrow_manager = arrow_manager
-        self.letters = self.arrow_manager.main_widget.letters
+    def __init__(self, scene, arrow):
+        self.arrow = arrow
+        self.letters = arrow.main_widget.letters
+        self.scene = scene
 
-
+    def update_arrow_position(self, scene):
+        current_arrows = scene.get_arrows()
+        letter = scene.determine_current_letter_and_type()[0]
+        if letter is not None:
+            self.set_optimal_arrow_pos(current_arrows)
+        else:
+            for arrow in current_arrows:
+                self.set_default_arrow_pos(arrow)
 
     def set_optimal_arrow_pos(self, current_arrows):
-        current_state = self.arrow_manager.graphboard.get_state()
-        current_letter = self.arrow_manager.graphboard.info_handler.determine_current_letter_and_type()[
-            0
-        ]
+        current_state = self.scene.get_state()
+        current_letter = self.scene.determine_current_letter_and_type()[0]
         if current_letter is not None:
             matching_letters = self.letters[current_letter]
             optimal_locations = (
-                self.arrow_manager.state_comparator.find_optimal_locations(
+                self.arrow.state_comparator.find_optimal_locations(
                     current_state, matching_letters
                 )
             )
@@ -41,7 +47,7 @@ class ArrowPositioner:
                     self.set_default_arrow_pos(arrow)
 
     def set_default_arrow_pos(self, arrow):
-        quadrant_center = self.arrow_manager.graphboard.grid.get_layer2_point(arrow.quadrant)
+        quadrant_center = self.arrow.scene.grid.get_layer2_point(arrow.quadrant)
         pos = (quadrant_center * GRAPHBOARD_SCALE) - arrow.center
         adjustment = QPointF(0, 0)  # Initialize an adjustment QPointF
 

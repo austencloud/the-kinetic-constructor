@@ -4,12 +4,11 @@ from settings.string_constants import *
 
 
 class InfoboxLayouts:
-    def __init__(self, infobox, graphboard, arrow_attributes):
+    def __init__(self, infobox, graphboard):
         self.infobox = infobox
         self.graphboard = graphboard
         self.labels = infobox.labels
         self.widgets = infobox.widgets
-        self.arrow_attributes = arrow_attributes
 
     def define_info_layouts(
         self, motion_type_label, rotation_direction_label, start_end_label, turns_label
@@ -110,9 +109,7 @@ class InfoboxLayouts:
                 buttons_layout.addWidget(button)
 
         info_widget_inner = self.widgets.construct_attributes_widget(
-            self.arrow_attributes.get_graphboard_arrow_attributes_by_color(
-                color, self.graphboard
-            ),
+            None,
             color,
         )
 

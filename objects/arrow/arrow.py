@@ -3,46 +3,55 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
 from events.drag.drag_manager import DragManager
-from objects.arrow.arrow_attributes import ArrowAttributes
 import re
 from settings.string_constants import *
 from objects.arrow.manipulators import Manipulators
 from objects.arrow.arrow_positioner import ArrowPositioner
 from objects.arrow.arrow_selector import ArrowSelector
 from objects.arrow.arrow_state_comparator import ArrowStateComparator
-from objects.arrow.arrow_attributes import ArrowAttributes
-
+from data.start_end_location_mapping import start_end_location_mapping
 
 class Arrow(QGraphicsSvgItem):
-    def __init__(self, scene, attr_dict):
-        self.svg_file = self.get_svg_file(attr_dict)
+    ARROW_ATTRIBUTES = [
+        COLOR,
+        MOTION_TYPE,
+        ROTATION_DIRECTION,
+        QUADRANT,
+        START_LOCATION,
+        END_LOCATION,
+        TURNS,
+    ]    
+
+    def __init__(self, scene, dict):
+        self.svg_file = self.get_svg_file(dict)
         super().__init__(self.svg_file)
         self.initialize_svg_renderer(self.svg_file)
-        self.initialize_app_attributes(scene, attr_dict)
+        self.setup_attributes(scene, dict)
         self.initialize_graphics_flags()
         self.setup_handlers()
 
+        
     def setup_handlers(self):
-        self.positioner = ArrowPositioner(self)
+        self.positioner = ArrowPositioner(self.scene, self)
         self.selector = ArrowSelector(self)
-        self.attributes = ArrowAttributes(self)
         self.state_comparator = ArrowStateComparator(self)
 
     def select(self):
         self.setSelected(True)
 
-    def get_svg_file(self, attr_dict):
-        motion_type = attr_dict[MOTION_TYPE]
-        turns = attr_dict.get(TURNS, None)
+    def get_svg_file(self, dict):
+        
+        motion_type = dict[MOTION_TYPE]
+        turns = dict.get(TURNS, None)
 
         if motion_type in [PRO, ANTI]:
             self.is_shift = True
-            return ARROW_DIR + "shift/{motion_type}_{turns}.svg"
+            return SHIFT_DIR + motion_type + "_" + str(turns) + ".svg"
         elif motion_type in [STATIC]:
             self.is_static = True
             return None
 
-    def initialize_app_attributes(self, scene, dict):
+    def setup_attributes(self, scene, dict):
         if scene is not None:
             self.scene = scene
             if hasattr(scene, "infobox"):
@@ -56,8 +65,7 @@ class Arrow(QGraphicsSvgItem):
             self.previous_arrow = None
             self.drag_manager = self.main_widget.drag_manager
 
-        self.attributes = self.main_widget.arrow_manager.attributes
-        self.attributes.update_attributes(self, dict)
+        self.update_attributes(dict)
         self.update_appearance()
         self.center = self.boundingRect().center()
 
@@ -242,7 +250,6 @@ class Arrow(QGraphicsSvgItem):
         self.finalize_manipulation()
 
     def update_arrow_svg(self):
-        SHIFT_DIR = "resources/images/arrows/shift/"
         self.svg_file = f"{SHIFT_DIR}{self.motion_type}_{self.turns}.svg"
         self.initialize_svg_renderer(self.svg_file)
         self.update_appearance()
@@ -253,5 +260,51 @@ class Arrow(QGraphicsSvgItem):
         )
         self.update_appearance()
         self.infobox.update()
-        self.scene.staff_handler.update_graphboard_staffs(self.scene)
+        self.scene.update_staffs(self.scene)
         self.scene.info_handler.update()
+
+    def update_attributes(self, dict):
+        for attr in self.ARROW_ATTRIBUTES:
+            value = dict.get(attr)
+            if attr == TURNS:
+                value = int(value)
+            setattr(self, attr, value)
+            
+        self.attributes = {
+            COLOR: dict.get(COLOR, None),
+            MOTION_TYPE: dict.get(MOTION_TYPE, None),
+            ROTATION_DIRECTION: dict.get(ROTATION_DIRECTION, None),
+            QUADRANT: dict.get(QUADRANT, None),
+            START_LOCATION: dict.get(START_LOCATION, None),
+            END_LOCATION: dict.get(END_LOCATION, None),
+            TURNS: dict.get(TURNS, None),
+        }
+            
+    def create_dict_from_arrow(self, arrow):
+        if arrow.motion_type in [PRO, ANTI]:
+            start_location, end_location = self.get_start_end_locations(
+                arrow.motion_type, arrow.rotation_direction, arrow.quadrant
+            )
+        elif arrow.motion_type == STATIC:
+            start_location, end_location = arrow.start_location, arrow.end_location
+
+        dict = {
+            COLOR: arrow.color,
+            MOTION_TYPE: arrow.motion_type,
+            ROTATION_DIRECTION: arrow.rotation_direction,
+            QUADRANT: arrow.quadrant,
+            START_LOCATION: start_location,
+            END_LOCATION: end_location,
+            TURNS: arrow.turns,
+        }
+        return dict
+    
+    def get_attributes(self):
+        return {attr: getattr(self, attr) for attr in self.ARROW_ATTRIBUTES}
+
+    def get_start_end_locations(self, motion_type, rotation_direction, quadrant):
+        return (
+            start_end_location_mapping.get(quadrant, {})
+            .get(rotation_direction, {})
+            .get(motion_type, (None, None))
+        )

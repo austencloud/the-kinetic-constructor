@@ -8,8 +8,6 @@ class Manipulators:
     def __init__(self, arrow):
         self.arrow = arrow
 
-
-
     def update_arrow_and_staff(self, arrow, arrow_dict, staff_dict):
         staff = arrow.staff
         arrow.attributes.update_attributes(arrow, arrow_dict)

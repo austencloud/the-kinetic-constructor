@@ -5,19 +5,7 @@ class ArrowSelector:
     def __init__(self, arrow):
         self.arrow = arrow
 
-    ### DELETERS ###
 
-    def delete_arrow(self, deleted_arrows, keep_staff=False):
-        from objects.arrow.arrow import Arrow
-        graphboard = self.arrow_manager.graphboard
-        if not isinstance(deleted_arrows, list):
-            deleted_arrows = [deleted_arrows]
-        for arrow in deleted_arrows:
-            if isinstance(arrow, Arrow):
-                graphboard.removeItem(arrow)
-                if keep_staff:
-                    self.initialize_ghost_arrow(arrow, graphboard)
-            graphboard.info_handler.update()
 
     ### HELPERS ###
 

@@ -12,29 +12,15 @@ class DragSceneUpdater:
         self.event_handler.drag_preview.deleteLater()
         self.event_handler.drag_preview = None
 
-        self.drag_manager.staff_handler.update_graphboard_staffs(
-            self.drag_manager.graphboard
-        )
-
-        self.drag_manager.graphboard.update_letter(
-            self.drag_manager.info_handler.determine_current_letter_and_type()[0]
-        )
+        current_letter = self.graphboard.determine_current_letter_and_type()[0]
+        self.graphboard.update_staffs()
+        self.graphboard.update_letter(current_letter)
 
         from objects.arrow.arrow import Arrow
 
         for item in self.drag_manager.graphboard.items():
             if isinstance(item, Arrow):
-                item.arrow_manager.positioner.update_arrow_position(
+                item.positioner.update_arrow_position(
                     self.drag_manager.graphboard
                 )
 
-        for item in self.drag_manager.graphboard.items():
-            if isinstance(item, Staff) and item.isVisible():
-                item.setPos(
-                    self.drag_manager.graphboard.staff_handler.staff_xy_locations[
-                        item.location
-                    ]
-                )
-
-    def update_info_handler(self):
-        self.drag_manager.graphboard.info_handler.update()

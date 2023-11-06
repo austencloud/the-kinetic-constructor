@@ -11,6 +11,7 @@ class DragPreview(QWidget):
 
         self.drag_manager = drag_manager
         self.main_window = drag_manager.main_window
+        self.graphboard = drag_manager.graphboard
         self.arrow = arrow
         pixmap = self.create_pixmap(arrow)
 
@@ -32,7 +33,7 @@ class DragPreview(QWidget):
         (
             self.start_location,
             self.end_location,
-        ) = arrow.attributes.get_start_end_locations(
+        ) = arrow.get_start_end_locations(
             self.motion_type, self.rotation_direction, self.quadrant
         )
 
@@ -104,7 +105,7 @@ class DragPreview(QWidget):
         (
             self.start_location,
             self.end_location,
-        ) = self.drag_manager.event_handler.target_arrow.attributes.get_start_end_locations(
+        ) = self.arrow.get_start_end_locations(
             self.motion_type,
             self.rotation_direction,
             self.quadrant,

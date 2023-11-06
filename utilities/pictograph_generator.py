@@ -12,7 +12,6 @@ class PictographGenerator:
         self.scene = scene
         self.infobox = infobox
         self.main_window = main_widget.main_window
-        self.arrow_manager = main_widget.arrow_manager
         self.export_manager = main_widget.export_manager
         self.grid = self.scene.grid
         self.output_dir = "images/pictographs"
