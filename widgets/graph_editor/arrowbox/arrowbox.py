@@ -17,13 +17,12 @@ class Arrowbox(QGraphicsScene):
         self.infobox = infobox
         self.main_widget = main_widget
 
-        self.settingsure_frame()
+        self.setup_frame()
         self.setup_view()
         self.populate_arrows()
         self.setSceneRect(0, 0, 450, 450)
         self.arrowbox_layout.addWidget(self.view)
-
-        self.drag_manager = self.main_widget.drag_manager
+        self.drag = self.main_widget.drag
         self.drag_preview = None
 
     def setup_view(self):
@@ -34,7 +33,7 @@ class Arrowbox(QGraphicsScene):
         self.view.setFixedSize(int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE))
         self.view.scale(GRAPHBOARD_SCALE, GRAPHBOARD_SCALE)
 
-    def settingsure_frame(self):
+    def setup_frame(self):
         self.arrowbox_frame = QFrame(self.main_widget.main_window)
         self.arrowbox_layout = QGridLayout()
         self.arrowbox_frame.setLayout(self.arrowbox_layout)
@@ -82,18 +81,16 @@ class Arrowbox(QGraphicsScene):
         if arrows:
             self.dragged_item = arrows[0]
             if event.button() == Qt.MouseButton.LeftButton:
-                self.drag_manager.event_handler.start_drag(
-                    self, self.dragged_item, view_pos
-                )
+                self.drag.events.start_drag(self, self.dragged_item, view_pos)
         else:
             event.ignore()
 
     def mouseMoveEvent(self, event):
         scene_pos = event.scenePos()
         view_pos = self.view.mapFromScene(scene_pos)
-        self.drag_manager.event_handler.handle_mouse_move(self, event, view_pos)
+        self.drag.events.handle_mouse_move(self, event, view_pos)
 
     def mouseReleaseEvent(self, event):
         scene_pos = event.scenePos()
         view_pos = self.view.mapFromScene(scene_pos)
-        self.drag_manager.event_handler.handle_mouse_release(event, view_pos)
+        self.drag.events.handle_mouse_release(event, view_pos)

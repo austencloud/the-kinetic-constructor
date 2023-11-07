@@ -13,20 +13,18 @@ class StaffPositioner:
 
     ### REPOSITIONERS ###
 
-    def check_replace_beta_staffs(self, scene):
-        board_state = scene.get_state()
-
+    def check_for_beta_staffs(self, scene):
         visible_staves = []
-
         for staff in scene.staffs:
             if staff.isVisible():
                 visible_staves.append(staff)
-
         if len(visible_staves) == 2:
             if visible_staves[0].location == visible_staves[1].location:
-                self.reposition_staffs(scene, board_state)
+                return True
 
-    def reposition_staffs(self, scene, board_state):
+    def reposition_beta_staffs(self, scene):
+        board_state = scene.get_state()
+        
         def move_staff(staff, direction):
             new_position = self.calculate_new_position(staff.pos(), direction)
             staff.setPos(new_position)
@@ -150,7 +148,6 @@ class StaffPositioner:
         else:
             self.reposition_I(arrow1, arrow2)
 
-        scene.update()
 
     def reposition_G_and_H(self, scene, arrow1, arrow2):
         optimal_position1 = self.get_optimal_arrow_location(arrow1, scene)
@@ -335,9 +332,3 @@ class StaffPositioner:
             return DOWN
         elif movement == DOWN:
             return UP
-
-    ### UPDATERS ###
-
-    def update_staff_position_based_on_quadrant(self, staff, quadrant):
-        new_position = self.calculate_new_position_based_on_quadrant(staff, quadrant)
-        staff.setPos(new_position)

@@ -50,7 +50,7 @@ class Arrow(QGraphicsSvgItem):
             self.staff = None
             self.is_mirrored = False
             self.previous_arrow = None
-            self.drag_manager = self.main_widget.drag_manager
+            self.drag = self.main_widget.drag
 
         self.update_attributes(dict)
         self.update_appearance()
@@ -106,17 +106,13 @@ class Arrow(QGraphicsSvgItem):
         scene_pos = new_pos + self.center
         new_quadrant = self.scene.determine_quadrant(scene_pos.x(), scene_pos.y())
 
-
-
         if self.quadrant != new_quadrant:
             self.quadrant = new_quadrant
-            self.update_appearance()
-            (
-                self.start_location,
-                self.end_location,
-            ) = self.get_start_end_locations(
+
+            self.start_location, self.end_location = self.get_start_end_locations(
                 self.motion_type, self.rotation_direction, self.quadrant
             )
+            self.update_appearance()
             self.staff.location = self.end_location
             self.staff.attributes.update_attributes_from_arrow(self)
             self.scene.update_staffs()

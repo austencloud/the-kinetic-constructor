@@ -273,4 +273,6 @@ class PictographView(QGraphicsView):
                     new_staff.arrow = arrow
                     self.arrow_manager = new_staff.arrow.arrow_manager
 
-        self.positioner.check_replace_beta_staffs(self.scene)
+        is_beta = self.positioner.check_for_beta_staffs(self.scene)
+        if is_beta:
+            self.positioner.reposition_beta_staffs(self.scene)

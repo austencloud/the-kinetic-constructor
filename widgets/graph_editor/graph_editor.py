@@ -71,4 +71,4 @@ class GraphEditor(QWidget):
     def mouseMoveEvent(self, event):
         global dragged_arrow
         if dragged_arrow:
-            self.arrowbox.drag_manager.update_drag_preview(self.arrowbox, event)
+            self.arrowbox.drag.update_drag_preview(self.arrowbox, event)

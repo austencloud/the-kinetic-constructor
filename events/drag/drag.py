@@ -5,9 +5,7 @@ from events.drag.drag_scene_updater import DragSceneUpdater
 from events.drag.drag_events import DragEvents
 
 
-class DragManager:
-    ### INITIALIZATION ###
-
+class Drag:
     def __init__(self, main_window):
         self.main_window = main_window
         self.reset_drag_state()
@@ -18,13 +16,12 @@ class DragManager:
         self.main_window = main_window
         self.helpers = DragHelpers(self)
         self.scene_updater = DragSceneUpdater(self)
-        self.event_handler = DragEvents(self)
+        self.events = DragEvents(self)
 
     def reset_drag_state(self):
         self.dragging = False
         self.drag_preview = None
         self.current_rotation_angle = 0
-
         self.invisible_arrow = None  # Reset the invisible arrow
 
     ### OBJECT CREATION AND UPDATE ###

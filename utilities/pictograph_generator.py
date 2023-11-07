@@ -182,4 +182,6 @@ class PictographGenerator:
             else:
                 staff.hide()
 
-        self.staff_handler.check_replace_beta_staffs()
+        is_beta = self.positioner.check_for_beta_staffs()
+        if is_beta:
+            self.positioner.reposition_beta_staffs()

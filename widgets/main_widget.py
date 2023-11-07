@@ -8,7 +8,7 @@ from events.key_event_handler import KeyEventHandler
 from widgets.graph_editor.graph_editor import GraphEditor
 from widgets.optionboard.letter_buttons_frame import LetterButtonsFrame
 from utilities.pictograph_generator import PictographGenerator
-from events.drag.drag_manager import DragManager
+from events.drag.drag import Drag
 
 
 class MainWidget(QWidget):
@@ -22,7 +22,7 @@ class MainWidget(QWidget):
         self.json_handler = JsonHandler()
         self.letters = self.json_handler.load_all_letters()
         self.key_bindings_manager = KeyEventHandler()
-        self.drag_manager = DragManager(main_window)
+        self.drag = Drag(main_window)
 
         self.sequence_view = SequenceView(self)
         self.graph_editor = GraphEditor(self)
@@ -38,9 +38,7 @@ class MainWidget(QWidget):
             self, self.graphboard, self.infobox
         )
 
-        self.drag_manager.initialize_dependencies(
-            main_window, self.graphboard, self.arrowbox
-        )
+        self.drag.initialize_dependencies(main_window, self.graphboard, self.arrowbox)
         self.layout_manager.settingsure_layouts()
         self.connect_objects()
 
@@ -51,7 +49,7 @@ class MainWidget(QWidget):
             self.sequence_view
         )
         self.sequence_view.pictograph_generator = self.pictograph_generator
-        self.graphboard.drag_manager.arrowbox = self.graph_editor.arrowbox
+        self.graphboard.drag.arrowbox = self.graph_editor.arrowbox
 
     ### EVENTS ###
 

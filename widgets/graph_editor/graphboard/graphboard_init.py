@@ -11,6 +11,7 @@ from utilities.manipulators import Manipulators
 from utilities.export_handler import ExportHandler
 from objects.letter import Letter
 
+
 class GraphboardInit:
     def __init__(self, graphboard):
         self.graphboard = graphboard
@@ -24,7 +25,10 @@ class GraphboardInit:
     def init_view(self):
         view = QGraphicsView()
         view.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
-        view.setFixedSize(int(GRAPHBOARD_WIDTH * GRAPHBOARD_SCALE), int(GRAPHBOARD_HEIGHT * GRAPHBOARD_SCALE))
+        view.setFixedSize(
+            int(GRAPHBOARD_WIDTH * GRAPHBOARD_SCALE),
+            int(GRAPHBOARD_HEIGHT * GRAPHBOARD_SCALE),
+        )
         view.setScene(self.graphboard)
         view.scale(GRAPHBOARD_SCALE, GRAPHBOARD_SCALE)
         view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -74,7 +78,7 @@ class GraphboardInit:
             self.graphboard.grid, self.graphboard
         )
         self.graphboard.context_menu_manager = ContextMenuHandler(self.graphboard)
-        self.graphboard.drag_manager = self.graphboard.main_widget.drag_manager
+        self.graphboard.drag = self.graphboard.main_widget.drag
 
     def init_letterbox(self):
         self.graphboard.letters = self.graphboard.main_widget.letters
@@ -120,4 +124,3 @@ class GraphboardInit:
         self.graphboard.addRect(*self.graphboard.se_boundary, pen=solid_pen)
         self.graphboard.addRect(*self.graphboard.sw_boundary, pen=solid_pen)
         self.graphboard.addRect(*self.graphboard.nw_boundary, pen=solid_pen)
-

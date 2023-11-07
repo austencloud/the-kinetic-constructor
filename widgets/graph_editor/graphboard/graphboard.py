@@ -15,6 +15,7 @@ from utilities.export_handler import ExportHandler
 from widgets.graph_editor.graphboard.graphboard_init import GraphboardInit
 from objects.letter import Letter
 
+
 class Graphboard(QGraphicsScene):
     def __init__(self, main_widget):
         super().__init__()
@@ -53,7 +54,7 @@ class Graphboard(QGraphicsScene):
             if arrow.color == RED:
                 red_position = center
             elif arrow.color == BLUE:
-                    blue_position = center
+                blue_position = center
         return red_position, blue_position
 
     def get_arrows_by_color(self, color):
@@ -92,7 +93,6 @@ class Graphboard(QGraphicsScene):
     def delete_staff(self, staff):
         staff.hide()
         self.update()
-
 
     def update_letter(self, letter):
         letter = self.get_current_letter()
@@ -135,8 +135,10 @@ class Graphboard(QGraphicsScene):
                     + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2)
                 )
             staff.setTransformOriginPoint(0, 0)
-            
-        staff.positioner.check_replace_beta_staffs(self)
+
+        is_beta = staff.positioner.check_for_beta_staffs(self)
+        if is_beta:
+            staff.positioner.reposition_beta_staffs(self)
 
     def contextMenuEvent(self, event):
         clicked_item = self.itemAt(
@@ -177,12 +179,11 @@ class Graphboard(QGraphicsScene):
             current_combination.append(sorted_drag_attr)
 
         for arrow in self.arrows:
-            if isinstance(arrow, Arrow):
-                attributes = arrow.attributes
-                sorted_attributes = {
-                    k: attributes[k] for k in sorted(attributes.keys())
-                }
-                current_combination.append(sorted_attributes)
+            attributes = arrow.attributes
+            sorted_attributes = {
+                k: attributes[k] for k in sorted(attributes.keys())
+            }
+            current_combination.append(sorted_attributes)
 
         current_combination = sorted(current_combination, key=lambda x: x[COLOR])
         for letter, combinations in self.letters.items():

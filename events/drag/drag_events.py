@@ -3,13 +3,13 @@ from settings.string_constants import *
 
 
 class DragEvents:
-    def __init__(self, drag_manager):
-        self.drag_manager = drag_manager
-        self.helpers = self.drag_manager.helpers
-        self.graphboard = self.drag_manager.graphboard
-        self.arrowbox = self.drag_manager.arrowbox
-        self.scene_updater = self.drag_manager.scene_updater
-        self.main_window = self.drag_manager.main_window
+    def __init__(self, drag):
+        self.drag = drag
+        self.helpers = self.drag.helpers
+        self.graphboard = self.drag.graphboard
+        self.arrowbox = self.drag.arrowbox
+        self.scene_updater = self.drag.scene_updater
+        self.main_window = self.drag.main_window
 
     ### DRAG INITIALIZATION ###
 
@@ -17,7 +17,7 @@ class DragEvents:
         self.setup_drag_preview(scene, target_arrow, event_pos)
 
     def setup_drag_preview(self, arrowbox, target_arrow, event_pos):
-        self.drag_preview = DragPreview(self.drag_manager, target_arrow)
+        self.drag_preview = DragPreview(self.drag, target_arrow)
         self.arrow_dragged = True
         self.dragging = True
         self.previous_quadrant = None
@@ -48,7 +48,7 @@ class DragEvents:
         if self.previous_quadrant != new_quadrant:
             from objects.arrow.arrow import Arrow
 
-            for item in self.drag_manager.graphboard.items():
+            for item in self.drag.graphboard.items():
                 if isinstance(item, Arrow) and item.color == self.drag_preview.color:
                     self.graphboard.removeItem(item)
 
@@ -109,7 +109,7 @@ class DragEvents:
     def handle_mouse_release(self, event, event_pos):
         if hasattr(self, "drag_preview") and self.drag_preview:
             self.handle_drop_event(event, event_pos)
-            self.drag_manager.reset_drag_state()
+            self.drag.reset_drag_state()
 
     def handle_drop_event(self, event, event_pos):
         if self.dragging and event_pos:
@@ -128,7 +128,7 @@ class DragEvents:
         placed_arrow.setVisible(True)
 
         if self.drag_preview.has_entered_graphboard_once:
-            self.drag_manager.set_focus_and_accept_event(event)
+            self.drag.set_focus_and_accept_event(event)
 
             self.graphboard.clear_selection()
             placed_arrow.setSelected(True)
@@ -138,6 +138,6 @@ class DragEvents:
     def handle_mouse_press(self, event):
         self.graphboard.setFocus()
         items = self.graphboard.items(event.pos())
-        self.drag_manager.select_or_deselect_items(event, items)
+        self.drag.select_or_deselect_items(event, items)
         if not items or not items[0].isSelected():
             self.graphboard.clear_selection()

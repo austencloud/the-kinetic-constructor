@@ -7,12 +7,12 @@ from settings.string_constants import *
 
 
 class DragPreview(QWidget):
-    def __init__(self, drag_manager, arrow):
+    def __init__(self, drag, arrow):
         super().__init__()
 
-        self.drag_manager = drag_manager
-        self.main_window = drag_manager.main_window
-        self.graphboard = drag_manager.graphboard
+        self.drag = drag
+        self.main_window = drag.main_window
+        self.graphboard = drag.graphboard
         self.arrow = arrow
         pixmap = self.create_pixmap(arrow)
 
@@ -80,7 +80,7 @@ class DragPreview(QWidget):
         self.rotate()
 
     def rotate(self):
-        renderer = QSvgRenderer(self.drag_manager.event_handler.target_arrow.svg_file)
+        renderer = QSvgRenderer(self.drag.events.target_arrow.svg_file)
         scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE
         pixmap = QPixmap(scaled_size)
         pixmap.fill(Qt.GlobalColor.transparent)
@@ -88,7 +88,7 @@ class DragPreview(QWidget):
         with painter as painter:
             renderer.render(painter)
 
-        angle = self.drag_manager.event_handler.target_arrow.get_rotation_angle(
+        angle = self.drag.events.target_arrow.get_rotation_angle(
             self.quadrant,
             self.motion_type,
             self.rotation_direction,
