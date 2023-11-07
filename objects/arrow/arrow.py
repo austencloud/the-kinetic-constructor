@@ -99,28 +99,30 @@ class Arrow(QGraphicsSvgItem):
 
     def handle_graphboard_drag(self, event):
         """Dragging an arrow that is already in the graphboard"""
+        scene_event_pos = self.mapToScene(event.pos())
+        view_event_pos = self.scene.view.mapFromScene(scene_event_pos)
+        in_view = self.scene.view.rect().contains(view_event_pos)
         new_pos = self.mapToScene(event.pos()) - self.boundingRect().center()
         self.setPos(new_pos)
 
-        # Determine the new quadrant using the boundary-based approach
         scene_pos = new_pos + self.center
         new_quadrant = self.scene.determine_quadrant(scene_pos.x(), scene_pos.y())
 
         if self.quadrant != new_quadrant:
-            self.quadrant = new_quadrant
+            if in_view:
+                self.quadrant = new_quadrant
 
-            self.start_location, self.end_location = self.get_start_end_locations(
-                self.motion_type, self.rotation_direction, self.quadrant
-            )
-            self.update_appearance()
-            self.staff.location = self.end_location
-            self.staff.attributes.update_attributes_from_arrow(self)
-            self.scene.update_staffs()
-            self.scene.update()
+                self.start_location, self.end_location = self.get_start_end_locations(
+                    self.motion_type, self.rotation_direction, self.quadrant
+                )
+                self.update_appearance()
+                self.staff.location = self.end_location
+                self.staff.attributes.update_attributes_from_arrow(self)
+                self.scene.update_staffs()
+                self.scene.update()
 
     def handle_pictograph_view_drag(self, event):
-        new_pos = self.mapToScene(event.pos()) - self.drag_offset / 2
-        self.setPos(new_pos)
+        pass
 
     # UPDATE APPEARANCE
 

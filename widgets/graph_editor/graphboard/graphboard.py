@@ -163,28 +163,19 @@ class Graphboard(QGraphicsScene):
         self.update_letter(self.get_current_letter())
         self.infobox.update()
 
-    def get_current_letter(self):
+    def get_current_letter(self): # This should be refactored so we don't waste compute going over all the letters - check for positions first. 
         current_combination = []
         arrowbox = self.main_widget.graph_editor.arrowbox
 
         if arrowbox.drag_preview == True:
             drag_attr = arrow.drag_preview.get_attributes()
-            sorted_drag_attr = {k: drag_attr[k] for k in sorted(drag_attr.keys())}
-            current_combination.append(sorted_drag_attr)
+            current_combination.append(drag_attr)
 
         for arrow in self.arrows:
             attributes = arrow.attributes
-            sorted_attributes = {
-                k: attributes[k] for k in sorted(attributes.keys())
-            }
-            current_combination.append(sorted_attributes)
+            current_combination.append(attributes)
 
-        current_combination = sorted(current_combination, key=lambda x: x[COLOR])
         for letter, combinations in self.letters.items():
-            combinations = [
-                sorted([x for x in combination if COLOR in x], key=lambda x: x[COLOR])
-                for combination in combinations
-            ]
             if current_combination in combinations:
                 self.letter = letter
             else:

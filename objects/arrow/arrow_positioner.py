@@ -11,39 +11,49 @@ class ArrowPositioner:
         from objects.arrow.arrow import GhostArrow
         letter = scene.get_current_letter()
         if letter is not None:
-            self.set_optimal_arrow_pos(scene.arrows)
+            self.set_optimal_arrow_location()
         else:
             for arrow in scene.arrows:
                 if not isinstance(arrow, GhostArrow):
                     self.set_default_arrow_pos(arrow)
 
-    def set_optimal_arrow_pos(self, current_arrows):
+    def set_optimal_arrow_location(self):
         current_state = self.scene.get_state()
         current_letter = self.scene.get_current_letter()
+        
         if current_letter is not None:
             matching_letters = self.letters[current_letter]
-            optimal_locations = self.arrow.state_comparator.find_optimal_locations(
-                current_state, matching_letters
-            )
-            for arrow in current_arrows:
-                if optimal_locations:
-                    optimal_location = optimal_locations.get(
+            optimal_locations = self.find_optimal_locations(current_state, matching_letters)
+            
+            for arrow in self.scene.arrows:
+                if not arrow.is_still:
+                    if optimal_locations:
+                        self.set_arrow_to_optimal_location(optimal_locations, arrow)
+                    else:
+                        self.set_default_arrow_pos(arrow)
+
+    def find_optimal_locations(self, current_state, matching_letters):
+        for variations in matching_letters:
+            if self.compare_states(current_state, variations):
+                return next((d for d in variations if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
+        return None
+
+
+
+    def set_arrow_to_optimal_location(self, optimal_locations, arrow):
+        optimal_location = optimal_locations.get(
                         f"optimal_{arrow.color}_location"
                     )
-                    if optimal_location:
-                        pos = QPointF(
-                            optimal_location["x"],
-                            optimal_location["y"],
-                        )
+        pos = QPointF(
+                        optimal_location["x"],
+                        optimal_location["y"],
+                    )
 
-                        new_x = pos.x() - (arrow.boundingRect().width()) / 2
-                        new_y = pos.y() - (arrow.boundingRect().height()) / 2
+        new_x = pos.x() - (arrow.boundingRect().width()) / 2
+        new_y = pos.y() - (arrow.boundingRect().height()) / 2
 
-                        new_pos = QPointF(new_x, new_y)
-                        arrow.setPos(new_pos)
-                else:
-                    if not arrow.is_still:
-                        self.set_default_arrow_pos(arrow)
+        new_pos = QPointF(new_x, new_y)
+        arrow.setPos(new_pos)
 
     def set_default_arrow_pos(self, arrow):
         layer2_point = arrow.scene.grid.get_layer2_point(arrow.quadrant)

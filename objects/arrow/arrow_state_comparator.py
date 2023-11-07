@@ -29,9 +29,3 @@ class ArrowStateComparator:
 
         return True
 
-    def find_optimal_locations(self, current_state, matching_letters):
-        for variations in matching_letters:
-            if self.compare_states(current_state, variations):
-                return next((d for d in variations if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
-        return None
-
