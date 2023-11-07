@@ -1,20 +1,14 @@
-from PyQt6.QtCore import QPointF, Qt
+from PyQt6.QtCore import QPointF
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtGui import QTransform
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView
-from objects.arrow.arrow import Arrow
-from objects.grid import Grid
+from PyQt6.QtWidgets import QGraphicsScene
+from objects.arrow.arrow import Arrow, GhostArrow
 from objects.staff.staff import Staff
 from settings.numerical_constants import *
 from settings.string_constants import *
 from data.letter_types import letter_types
-from events.context_menu_handler import ContextMenuHandler
-from utilities.manipulators import Manipulators
-from utilities.export_handler import ExportHandler
 from widgets.graph_editor.graphboard.graphboard_init import GraphboardInit
 from objects.letter import Letter
-
 
 class Graphboard(QGraphicsScene):
     def __init__(self, main_widget):
@@ -80,7 +74,7 @@ class Graphboard(QGraphicsScene):
     def delete_arrow(self, arrow, keep_staff=False):
         self.removeItem(arrow)
         if keep_staff:
-            self.create_ghost_arrow(arrow, self)
+            self.create_ghost_arrow(arrow)
         else:
             self.delete_staff(arrow.staff)
 
@@ -207,8 +201,8 @@ class Graphboard(QGraphicsScene):
         else:
             return None
 
-    def create_ghost_arrow(self, arrow, graphboard):
-        deleted_arrow_attributes = arrow.get_attributes()
+    def create_ghost_arrow(self, arrow):
+        deleted_arrow_attributes = arrow.attributes
         ghost_attributes_dict = {
             COLOR: deleted_arrow_attributes[COLOR],
             MOTION_TYPE: STATIC,
@@ -219,8 +213,8 @@ class Graphboard(QGraphicsScene):
             TURNS: 0,
         }
 
-        ghost_arrow = Arrow(graphboard, ghost_attributes_dict)
-        graphboard.addItem(ghost_arrow)
+        ghost_arrow = GhostArrow(self, ghost_attributes_dict)
+        self.addItem(ghost_arrow)
         self.arrows.append(ghost_arrow)
         ghost_arrow.is_still = True
         ghost_arrow.staff = arrow.staff

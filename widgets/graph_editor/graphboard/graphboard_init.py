@@ -1,15 +1,13 @@
 from PyQt6.QtCore import QPointF, Qt
-from PyQt6.QtGui import QTransform, QPen
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+from PyQt6.QtGui import QPen
 from PyQt6.QtWidgets import QGraphicsView
 from objects.grid import Grid
-from objects.staff.staff import Staff
+from objects.staff.staff import RedStaff, BlueStaff
 from settings.numerical_constants import *
 from settings.string_constants import *
 from events.context_menu_handler import ContextMenuHandler
 from utilities.manipulators import Manipulators
 from utilities.export_handler import ExportHandler
-from objects.letter import Letter
 
 
 class GraphboardInit:
@@ -62,13 +60,13 @@ class GraphboardInit:
             LAYER: 1,
         }
 
-        red_staff = Staff(self.graphboard, red_staff_dict)
-        blue_staff = Staff(self.graphboard, blue_staff_dict)
+        self.graphboard.red_staff = RedStaff(self.graphboard, red_staff_dict)
+        self.graphboard.blue_staff = BlueStaff(self.graphboard, blue_staff_dict)
 
-        self.graphboard.addItem(red_staff)
-        self.graphboard.addItem(blue_staff)
+        self.graphboard.addItem(self.graphboard.red_staff)
+        self.graphboard.addItem(self.graphboard.blue_staff)
 
-        staffs.extend([red_staff, blue_staff])
+        staffs.extend([self.graphboard.red_staff, self.graphboard.blue_staff])
         self.graphboard.staffs = staffs
         self.graphboard.hide_all_staffs()
 
@@ -91,7 +89,6 @@ class GraphboardInit:
         self.graphboard.grid_center_x = grid_center.x() + self.graphboard.padding
         self.graphboard.grid_center_y = grid_center.y() + self.graphboard.padding
 
-        # Define the boundaries for each quadrant
         self.graphboard.ne_boundary = (
             self.graphboard.grid_center_x,
             0,
@@ -117,10 +114,3 @@ class GraphboardInit:
             self.graphboard.grid_center_y,
         )
 
-        solid_pen = QPen(Qt.PenStyle.SolidLine)
-
-        # Draw outlines for each quadrant
-        self.graphboard.addRect(*self.graphboard.ne_boundary, pen=solid_pen)
-        self.graphboard.addRect(*self.graphboard.se_boundary, pen=solid_pen)
-        self.graphboard.addRect(*self.graphboard.sw_boundary, pen=solid_pen)
-        self.graphboard.addRect(*self.graphboard.nw_boundary, pen=solid_pen)

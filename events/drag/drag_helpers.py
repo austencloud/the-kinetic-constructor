@@ -21,11 +21,12 @@ class DragHelpers:
     def create_and_add_arrow(self, arrow_dict):
         from objects.arrow.arrow import Arrow
 
-        new_arrow = Arrow(self.graphboard, arrow_dict)
-        new_arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
-        self.graphboard.addItem(new_arrow)
-        self.graphboard.arrows.append(new_arrow)
-        return new_arrow
+        arrow = Arrow(self.graphboard, arrow_dict)
+        arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
+        self.graphboard.addItem(arrow)
+        if arrow not in self.graphboard.arrows:
+            self.graphboard.arrows.append(arrow)
+        return arrow
 
     def link_arrow_and_staff(self, arrow, staff):
         arrow.staff = staff

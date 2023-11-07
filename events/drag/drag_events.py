@@ -48,9 +48,10 @@ class DragEvents:
         if self.previous_quadrant != new_quadrant:
             from objects.arrow.arrow import Arrow
 
-            for item in self.drag.graphboard.items():
-                if isinstance(item, Arrow) and item.color == self.drag_preview.color:
-                    self.graphboard.removeItem(item)
+            for arrow in self.graphboard.arrows:
+                if arrow.color == self.drag_preview.color:
+                    self.graphboard.removeItem(arrow)
+                    self.graphboard.arrows.remove(arrow)
 
             self.drag_preview.update_rotation_for_quadrant(new_quadrant)
             new_arrow_dict = self.target_arrow.create_dict_from_arrow(self.drag_preview)

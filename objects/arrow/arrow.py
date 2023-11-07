@@ -285,7 +285,7 @@ class Arrow(QGraphicsSvgItem):
         return dict
 
     def get_attributes(self):
-        return {attr: getattr(self, attr) for attr in self.ARROW_ATTRIBUTES}
+        return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}
 
     def get_start_end_locations(self, motion_type, rotation_direction, quadrant):
         return (
@@ -299,3 +299,13 @@ class Arrow(QGraphicsSvgItem):
         self.update_appearance()
         self.scene.update_staffs()
         self.scene.update()
+
+class GhostArrow(Arrow):
+    # init an arrow that is blank but carries the properties
+    # of the arrow that was deleted
+    def __init__(self, scene, dict):
+        super().__init__(scene, dict)
+        self.setOpacity(0.5)
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, False) 
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
+        self.setVisible(False)

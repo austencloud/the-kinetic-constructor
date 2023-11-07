@@ -1,8 +1,6 @@
 from PyQt6.QtCore import QPointF
 from settings.numerical_constants import *
 from settings.string_constants import *
-
-
 class ArrowPositioner:
     def __init__(self, scene, arrow):
         self.arrow = arrow
@@ -10,12 +8,14 @@ class ArrowPositioner:
         self.scene = scene
 
     def update_arrow_position(self, scene):
+        from objects.arrow.arrow import GhostArrow
         letter = scene.get_current_letter()
         if letter is not None:
             self.set_optimal_arrow_pos(scene.arrows)
         else:
             for arrow in scene.arrows:
-                self.set_default_arrow_pos(arrow)
+                if not isinstance(arrow, GhostArrow):
+                    self.set_default_arrow_pos(arrow)
 
     def set_optimal_arrow_pos(self, current_arrows):
         current_state = self.scene.get_state()
@@ -46,7 +46,7 @@ class ArrowPositioner:
                         self.set_default_arrow_pos(arrow)
 
     def set_default_arrow_pos(self, arrow):
-        layer2_point = self.arrow.scene.grid.get_layer2_point(arrow.quadrant)
+        layer2_point = arrow.scene.grid.get_layer2_point(arrow.quadrant)
         pos = layer2_point
         adjustment = QPointF(0, 0)
 

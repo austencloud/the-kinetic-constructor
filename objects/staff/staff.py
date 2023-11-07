@@ -125,3 +125,15 @@ class Staff(QGraphicsSvgItem):
                 event.scenePos().x() + x_offset, event.scenePos().y() + y_offset
             )
         super().mouseMoveEvent(event)
+
+class RedStaff(Staff):
+    def __init__(self, scene, staff_dict):
+        super().__init__(scene, staff_dict)
+        self.setSharedRenderer(self.renderer)
+        self.set_color(RED)
+        
+class BlueStaff(Staff):
+    def __init__(self, scene, staff_dict):
+        super().__init__(scene, staff_dict)
+        self.setSharedRenderer(self.renderer)
+        self.set_color(BLUE)
