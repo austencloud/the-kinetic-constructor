@@ -4,6 +4,7 @@ from PyQt6.QtGui import QTransform
 from PyQt6.QtWidgets import QGraphicsScene
 from objects.arrow.arrow import Arrow, GhostArrow
 from objects.staff.staff import Staff
+from objects.grid import Grid
 from settings.numerical_constants import *
 from settings.string_constants import *
 from data.letter_types import letter_types
@@ -60,10 +61,6 @@ class Graphboard(QGraphicsScene):
 
         for arrow in self.arrows:
             arrow.setSelected(True)
-
-    def clear_selection(self):
-        for arrow in self.arrows:
-            arrow.setSelected(False)
 
     def clear_graphboard(self):
         for arrow in self.arrows:
@@ -229,3 +226,14 @@ class Graphboard(QGraphicsScene):
             return NORTHWEST
         else:
             return None
+
+    def mousePressEvent(self, event):
+        # if clicked_item is a grid, don't select it
+        clicked_item = self.itemAt(event.scenePos(), QTransform())
+        if isinstance(clicked_item, Grid):
+            clicked_item = None
+        if not clicked_item:
+            self.clearSelection()  # Call the built-in method
+            event.accept()  # Stop further processing of this event
+        else:
+            super().mousePressEvent(event)  # Propagate the event for default handling

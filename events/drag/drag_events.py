@@ -131,7 +131,7 @@ class DragEvents:
         if self.drag_preview.has_entered_graphboard_once:
             self.drag.set_focus_and_accept_event(event)
 
-            self.graphboard.clear_selection()
+            self.graphboard.clearSelection()
             placed_arrow.setSelected(True)
 
     ### MOUSE PRESS EVENTS ###

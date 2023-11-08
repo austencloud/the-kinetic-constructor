@@ -5,7 +5,6 @@ from PyQt6.QtCore import QPointF, Qt
 import re
 from settings.string_constants import *
 from objects.arrow.arrow_positioner import ArrowPositioner
-from objects.arrow.arrow_selector import ArrowSelector
 from objects.arrow.arrow_state_comparator import ArrowStateComparator
 from data.start_end_location_mapping import start_end_location_mapping
 
@@ -21,11 +20,7 @@ class Arrow(QGraphicsSvgItem):
 
     def setup_handlers(self):
         self.positioner = ArrowPositioner(self.scene, self)
-        self.selector = ArrowSelector(self)
         self.state_comparator = ArrowStateComparator(self)
-
-    def select(self):
-        self.setSelected(True)
 
     def get_svg_file(self, dict):
         motion_type = dict[MOTION_TYPE]
@@ -77,11 +72,16 @@ class Arrow(QGraphicsSvgItem):
     ### MOUSE EVENTS ###
 
     def mousePressEvent(self, event):
+        self.setSelected(True)
+    
+        for arrow in self.scene.arrows:
+            if arrow != self:
+                arrow.setSelected(False)
+                
         self.drag_start_pos = self.pos()
         self.drag_offset = event.pos()
 
     def mouseMoveEvent(self, event):
-        self.setSelected(True)
         if event.buttons() == Qt.MouseButton.LeftButton:
             from widgets.graph_editor.graphboard.graphboard import Graphboard
             from objects.pictograph.pictograph_view import PictographView
