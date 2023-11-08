@@ -115,7 +115,10 @@ class Graphboard(QGraphicsScene):
                 return
         if self.letter_item:
             self.letter_item.setSharedRenderer(renderer)
-
+            self.letter_item.setPos(
+                self.width() / 2 - self.letter_item.boundingRect().width() / 2,
+                self.width(),
+            )
         if current_letter is not None:
             for letter_type, letters in letter_types.items():
                 if current_letter in letters:
@@ -125,19 +128,6 @@ class Graphboard(QGraphicsScene):
             if not renderer.isValid():
                 return
             self.letter_item.setSharedRenderer(renderer)
-
-        self.letter_item.setPos(
-            self.width() / 2 - self.letter_item.boundingRect().width() / 2,
-            self.width(),
-        )
-
-    def update_staff_locations(self):
-        for staff in self.staffs:
-            self.set_default_staff_locations(staff)
-
-        is_beta = self.staff_positioner.check_for_beta_staffs(self)
-        if is_beta:
-            self.update_staff_positions()
 
     def set_default_staff_locations(self, staff):
         if staff.axis == VERTICAL:
@@ -169,17 +159,21 @@ class Graphboard(QGraphicsScene):
         else:
             self.context_menu_manager.create_graphboard_menu(event_pos)
 
-    def update_staff_positions(self):
-        self.staff_positioner.reposition_beta_staffs(self)
-
-    def update_arrow_positions(self):
+    def update_arrows(self):
         letter = self.get_current_letter()
         if letter is not None:
-            self.arrow_positioner.set_optimal_arrow_pos(self.arrows)
+            self.arrow_positioner.set_arrow_to_optimal_pos(self.arrows)
         else:
             for arrow in self.arrows:
                 if not arrow.is_still:
-                    self.arrow_positioner.set_default_arrow_pos(arrow)
+                    self.arrow_positioner.set_arrow_to_default_pos(arrow)
+
+    def update_staffs(self):
+        for staff in self.staffs:
+            self.set_default_staff_locations(staff)
+
+        if self.staff_positioner.staffs_in_beta():
+            self.staff_positioner.reposition_beta_staffs()
 
     def create_ghost_arrow(self, arrow):
         deleted_arrow_attributes = arrow.attributes
@@ -238,7 +232,7 @@ class Graphboard(QGraphicsScene):
 
     def update(self):
         if len(self.arrows) >= 1:
-            self.arrow_positioner.update_arrow_position()
+            self.arrow_positioner.update_arrow_positions()
         if len(self.arrows) == 2:
             self.update_letter()
 

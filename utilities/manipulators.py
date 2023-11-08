@@ -10,8 +10,8 @@ class Manipulators:
 
     def update_arrow_and_staff(self, arrow, arrow_dict, staff_dict):
         staff = arrow.staff
-        arrow.update_attributes(arrow_dict)
-        staff.attributes.update(staff, staff_dict)
+        arrow.attributes.update(arrow_dict)
+        staff.attributes.update(staff_dict)
 
     def move_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {
@@ -52,7 +52,7 @@ class Manipulators:
         self.update_arrow_and_staff(
             selected_arrow, updated_arrow_dict, updated_staff_dict
         )
-        selected_arrow.finalize_manipulation()
+        self.finalize_manipulation(selected_arrow)
 
     def rotate_arrow(self, rotation_direction, arrows):
         if arrows:
@@ -97,25 +97,19 @@ class Manipulators:
             if arrow.is_mirrored:
                 arrow.is_mirrored = False
                 original_svg_data = arrow.get_svg_data(arrow.svg_file)
-                arrow.renderer.load(QByteArray(original_svg_data))  # No need to encode
-
-                # Reset the transformation matrix to the identity matrix to unmirror the arrow
-                arrow.resetTransform()
+                arrow.renderer.load(QByteArray(original_svg_data))
 
             else:
                 arrow.is_mirrored = True
 
-                # Get the center of the arrow
                 center_x = arrow.boundingRect().width() / 2
                 center_y = arrow.boundingRect().height() / 2
 
-                # Create a QTransform object and settingsure it for mirroring around the center
                 transform = QTransform()
                 transform.translate(center_x, center_y)
                 transform.scale(-1, 1)
                 transform.translate(-center_x, -center_y)
 
-                # Apply the transform to the arrow
                 arrow.setTransform(transform)
 
             if arrow.rotation_direction == COUNTER_CLOCKWISE:
@@ -143,9 +137,9 @@ class Manipulators:
             arrow.staff.location = new_end_location
             arrow.update_attributes(new_arrow_dict)
             arrow.finalize_manipulation()
-            arrow.scene.update_arrow_position(arrow.scene.arrows)
+            self.graphboard.arrow_positioner.update_arrow_position(self.graphboard.arrows)
             arrow.update()
-            arrow.scene.update_staffs()
+            self.graphboard.update_staffs()
 
     def swap_motion_type(self, arrows, color):
         from objects.arrow.arrow import Arrow
@@ -191,7 +185,7 @@ class Manipulators:
             arrow.initialize_svg_renderer(arrow.svg_file)
             arrow.update_attributes(new_arrow_dict)
             arrow.update_appearance()
-            arrow.scene.update()
+            self.graphboard.update()
             self.update_arrow_and_staff(arrow, new_arrow_dict, new_staff_dict)
             arrow.finalize_manipulation()
 
@@ -218,3 +212,9 @@ class Manipulators:
                     arrow.update_appearance()
                     arrow.staff.update_appearance()
                     self.finalize_manipulation(arrow)
+
+    def finalize_manipulation(self, arrow):
+        self.graphboard.arrow_positioner.update_arrow_positions()
+        arrow.update_appearance()
+        self.graphboard.update_staffs()
+        self.graphboard.update()

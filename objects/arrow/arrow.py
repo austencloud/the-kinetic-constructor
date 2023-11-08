@@ -21,7 +21,7 @@ class Arrow(QGraphicsSvgItem):
         self.state_comparator = ArrowStateComparator(self)
 
     def get_svg_file(self, dict):
-        if dict: 
+        if dict:
             motion_type = dict[MOTION_TYPE]
             turns = dict.get(TURNS, None)
 
@@ -32,7 +32,7 @@ class Arrow(QGraphicsSvgItem):
                 self.is_static = True
                 return None
 
-    def setup_attributes(self, graphboard, dict): 
+    def setup_attributes(self, graphboard, dict):
         self.graphboard = graphboard
         if hasattr(graphboard, "infobox"):
             self.infobox = graphboard.infobox
@@ -44,7 +44,7 @@ class Arrow(QGraphicsSvgItem):
         self.is_mirrored = False
         self.previous_arrow = None
 
-        if dict: 
+        if dict:
             self.update_attributes(dict)
             self.update_appearance()
         self.center = self.boundingRect().center()
@@ -71,11 +71,11 @@ class Arrow(QGraphicsSvgItem):
 
     def mousePressEvent(self, event):
         self.setSelected(True)
-    
+
         for arrow in self.graphboard.arrows:
             if arrow != self:
                 arrow.setSelected(False)
-                
+
         self.drag_start_pos = self.pos()
         self.drag_offset = event.pos()
 
@@ -93,7 +93,7 @@ class Arrow(QGraphicsSvgItem):
         from widgets.graph_editor.graphboard.graphboard import Graphboard
 
         if isinstance(self.graphboard, Graphboard):
-            self.positioner.update_arrow_position(self.graphboard)
+            self.graphboard.arrow_positioner.update_arrow_positions()
 
     def handle_graphboard_drag(self, event):
         """Dragging an arrow that is already in the graphboard"""
@@ -115,9 +115,8 @@ class Arrow(QGraphicsSvgItem):
                 )
                 self.update_appearance()
                 self.staff.location = self.end_location
-                self.staff.attributes.update_attributes_from_arrow(self)
+                self.staff.update_attributes_from_arrow(self)
                 self.graphboard.update_staffs()
-
 
     def handle_pictograph_view_drag(self, event):
         pass
@@ -264,8 +263,6 @@ class Arrow(QGraphicsSvgItem):
             END_LOCATION: dict.get(END_LOCATION, None),
             TURNS: dict.get(TURNS, None),
         }
-        
-
 
     def create_dict_from_arrow(self, arrow):
         if arrow.motion_type in [PRO, ANTI]:
@@ -296,11 +293,8 @@ class Arrow(QGraphicsSvgItem):
             .get(motion_type, (None, None))
         )
 
-    def finalize_manipulation(self):
-        self.graphboard.arrow_positioner.update_arrow_position(self.graphboard)
-        self.update_appearance()
-        self.graphboard.update_staffs()
-        self.graphboard.update()
+
+
 
 class GhostArrow(Arrow):
     # init an arrow that is blank but carries the properties
@@ -308,6 +302,6 @@ class GhostArrow(Arrow):
     def __init__(self, graphboard, dict):
         super().__init__(graphboard, dict)
         self.setOpacity(0.5)
-        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, False) 
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, False)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
         self.hide()

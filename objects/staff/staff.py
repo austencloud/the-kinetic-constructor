@@ -109,8 +109,16 @@ class Staff(QGraphicsSvgItem):
     def update_attributes(self, dict):
         for attr in self.STAFF_ATTRIBUTES:
             value = dict.get(attr)
+            if attr == LAYER:
+                value = int(value)
             setattr(self, attr, value)
-        self.dict = dict
+            
+        self.attributes = {
+            COLOR: dict.get(COLOR, None),
+            LOCATION: dict.get(LOCATION, None),
+            LAYER: dict.get(LAYER, None),
+        }
+
 
 
     def get_attributes(self):
@@ -121,14 +129,14 @@ class Staff(QGraphicsSvgItem):
         return staff_dict
 
     def update_attributes_from_arrow(self, arrow):
-        updated_staff_dict = {
+        new_dict = {
             COLOR: arrow.color,
             LOCATION: arrow.end_location,
             LAYER: 1,
         }
-        self.attributes.update(self, updated_staff_dict)
+        self.attributes.update(new_dict)
         self.update_appearance()
-        self.setPos(arrow.scene.grid.handpoints[self.location])
+
 
 
 

@@ -8,7 +8,6 @@ from objects.arrow.arrow import Arrow
 from objects.staff.staff import Staff
 from objects.grid import Grid
 from widgets.graph_editor.graphboard.graphboard import Graphboard
-from objects.pictograph.pictograph_image import PictographImage
 from settings.numerical_constants import *
 from settings.string_constants import *
 
@@ -89,35 +88,13 @@ class SequenceView(QGraphicsView):
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
         )
-        pictograph = PictographImage(graphboard.get_state(), scaled_image)
+        pictograph = (graphboard.get_state(), scaled_image)
         self.add_pictograph(pictograph)
         graphboard.clear_graphboard()
         graphboard.update_letter(None)
 
         self.sequence_scene.update()
 
-    def add_to_graphboard(self, pictograph: PictographImage, graphboard: Graphboard):
-        state = pictograph.state
-        graphboard.clear_graphboard()
-
-        for arrow_state in state[ARROWS]:
-            arrow = Arrow(arrow_state["svg_file"])
-            arrow.setPos(arrow_state["position"])
-            arrow.setRotation(arrow_state["rotation"])
-            arrow.color = arrow_state[COLOR]
-            arrow.quadrant = arrow_state[QUADRANT]
-            graphboard.scene().addItem(arrow)
-
-        for staff_state in state["staffs"]:
-            staff = Staff(staff_state["svg_file"])
-            staff.setPos(staff_state["position"])
-            staff.color = staff_state[COLOR]
-            graphboard.scene().addItem(staff)
-
-        if state["grid"]:
-            grid = Grid(state["grid"]["svg_file"])
-            grid.setPos(state["grid"]["position"])
-            graphboard.scene().addItem(grid)
 
     def clear_sequence(self):
         self.pictographs = []

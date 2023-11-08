@@ -5,25 +5,25 @@ from settings.string_constants import *
 
 
 class StaffPositioner:
-    def __init__(self, scene):
-        self.scene = scene
-        self.view = scene.view
-        self.letters = scene.letters
+    def __init__(self, graphboard):
+        self.graphboard = graphboard
+        self.view = graphboard.view
+        self.letters = graphboard.letters
 
     ### REPOSITIONERS ###
 
-    def check_for_beta_staffs(self, scene):
+    def staffs_in_beta(self):
         visible_staves = []
-        for staff in scene.staffs:
+        for staff in self.graphboard.staffs:
             if staff.isVisible():
                 visible_staves.append(staff)
         if len(visible_staves) == 2:
             if visible_staves[0].location == visible_staves[1].location:
                 return True
 
-    def reposition_beta_staffs(self, scene):
-        board_state = scene.get_state()
-        
+    def reposition_beta_staffs(self):
+        board_state = self.graphboard.get_state()
+
         def move_staff(staff, direction):
             new_position = self.calculate_new_position(staff.pos(), direction)
             staff.setPos(new_position)
@@ -55,7 +55,7 @@ class StaffPositioner:
                         PRO,
                         ANTI,
                     ]:
-                        self.reposition_beta_to_beta(scene, arrows)
+                        self.reposition_beta_to_beta(arrows)
 
         # GAMMA → BETA - Y, Z
         if len(pro_or_anti_arrows) == 1 and len(static_arrows) == 1:
@@ -71,13 +71,12 @@ class StaffPositioner:
             ):
                 self.reposition_alpha_to_beta(move_staff, converging_arrows)
 
-
     def reposition_static_beta(self, move_staff, static_arrows):
         for arrow in static_arrows:
             staff = next(
                 (
                     staff
-                    for staff in self.scene.staffs
+                    for staff in self.graphboard.staffs
                     if staff.arrow.color == arrow[COLOR]
                 ),
                 None,
@@ -106,7 +105,7 @@ class StaffPositioner:
                     other_staff = next(
                         (
                             s
-                            for s in self.scene.staffs
+                            for s in self.graphboard.staffs
                             if s.location == staff.location and s != staff
                         ),
                         None,
@@ -127,29 +126,25 @@ class StaffPositioner:
                     move_staff(
                         next(
                             staff
-                            for staff in self.scene.staffs
+                            for staff in self.graphboard.staffs
                             if staff.arrow.color == arrow[COLOR]
                         ),
                         direction,
                     )
 
-    def reposition_beta_to_beta(self, scene, arrows):  # G, H, I
-        if len(arrows) != 2:
-            return
-
+    def reposition_beta_to_beta(self, arrows):  # G, H, I
         arrow1, arrow2 = arrows
         same_motion_type = arrow1[MOTION_TYPE] == arrow2[MOTION_TYPE] in [PRO, ANTI]
 
         if same_motion_type:
-            self.reposition_G_and_H(scene, arrow1, arrow2)
+            self.reposition_G_and_H(self.graphboard, arrow1, arrow2)
 
         else:
             self.reposition_I(arrow1, arrow2)
 
-
-    def reposition_G_and_H(self, scene, arrow1, arrow2):
-        optimal_position1 = self.get_optimal_arrow_location(arrow1, scene)
-        optimal_position2 = self.get_optimal_arrow_location(arrow2, scene)
+    def reposition_G_and_H(self, arrow1, arrow2):
+        optimal_position1 = self.get_optimal_arrow_location(arrow1, self.graphboard)
+        optimal_position2 = self.get_optimal_arrow_location(arrow2, self.graphboard)
 
         if not optimal_position1 or not optimal_position2:
             return
@@ -164,7 +159,7 @@ class StaffPositioner:
 
         further_staff = next(
             staff
-            for staff in self.scene.staffs
+            for staff in self.graphboard.staffs
             if staff.arrow.color == further_arrow[COLOR]
         )
         new_position_further = self.calculate_new_position(
@@ -175,7 +170,7 @@ class StaffPositioner:
         other_direction = self.get_opposite_direction(further_direction)
         other_staff = next(
             staff
-            for staff in self.scene.staffs
+            for staff in self.graphboard.staffs
             if staff.arrow.color == other_arrow[COLOR]
         )
         new_position_other = self.calculate_new_position(
@@ -190,7 +185,7 @@ class StaffPositioner:
         pro_staff = next(
             (
                 staff
-                for staff in self.scene.staffs
+                for staff in self.graphboard.staffs
                 if staff.arrow.color == pro_arrow[COLOR]
             ),
             None,
@@ -198,7 +193,7 @@ class StaffPositioner:
         anti_staff = next(
             (
                 staff
-                for staff in self.scene.staffs
+                for staff in self.graphboard.staffs
                 if staff.arrow.color == anti_arrow[COLOR]
             ),
             None,
@@ -231,7 +226,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.scene.staffs
+                    for staff in self.graphboard.staffs
                     if staff.arrow.color == pro_or_anti_arrow[COLOR]
                 ),
                 direction,
@@ -239,7 +234,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.scene.staffs
+                    for staff in self.graphboard.staffs
                     if staff.arrow.color == static_arrow[COLOR]
                 ),
                 self.get_opposite_direction(direction),
@@ -249,7 +244,7 @@ class StaffPositioner:
 
     def get_distance_from_center(self, position):
         center_point = QPointF(
-            self.scene.view.width() / 2, self.scene.view.height() / 2
+            self.graphboard.view.width() / 2, self.graphboard.view.height() / 2
         )  # Assuming this is the center point of your coordinate system
 
         x_position = position.get("x", 0.0)
@@ -263,14 +258,14 @@ class StaffPositioner:
         )
         return distance
 
-    def get_optimal_arrow_location(self, arrow, scene):
-        current_state = scene.get_state()
-        current_letter = scene.get_current_letter()
+    def get_optimal_arrow_location(self, arrow):
+        current_state = self.graphboard.get_state()
+        current_letter = self.graphboard.get_current_letter()
 
         if current_letter is not None:
             matching_letters = self.letters[current_letter]
             optimal_location = self.find_optimal_arrow_location(
-                current_state, scene, matching_letters, arrow
+                current_state, self.graphboard, matching_letters, arrow
             )
 
             if optimal_location:
@@ -279,10 +274,10 @@ class StaffPositioner:
         return None  # Return None if there are no optimal positions
 
     def find_optimal_arrow_location(
-        self, current_state, scene, matching_letters, arrow_dict
+        self, current_state, graphboard, matching_letters, arrow_dict
     ):
         for variations in matching_letters:
-            if scene.main_widget.arrow_manager.state_comparator.compare_states(
+            if graphboard.main_widget.arrow_manager.state_comparator.compare_states(
                 current_state, variations
             ):
                 optimal_entry = next(

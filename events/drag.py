@@ -55,10 +55,9 @@ class Drag(QWidget):
         self.main_window = main_window
 
     def init_temp_arrow(self):
-        from objects.arrow.arrow import GhostArrow
-        self.temp_arrow = GhostArrow(self.graphboard, None)
-        self.temp_arrow.hide()
-        self.graphboard.addItem(self.temp_arrow)
+        from objects.arrow.arrow import Arrow
+        temp_dict = self.target_arrow.create_dict_from_arrow(self)
+        self.temp_arrow = Arrow(self.graphboard, temp_dict)
             
     def create_pixmap(self, dragged_arrow):
         new_svg_data = dragged_arrow.set_svg_color(
@@ -178,13 +177,16 @@ class Drag(QWidget):
                 self.temp_arrow.staff = staff
                 staff.show()
                 staff.update_appearance()
-                self.graphboard.update_staff_locations()
+                self.graphboard.update_staffs()
 
     def place_arrow_on_graphboard(self):
         self.temp_arrow.show()
+        self.graphboard.addItem(self.temp_arrow)
+        self.graphboard.arrows.append(self.temp_arrow) 
+        self.graphboard.arrow_positioner.update_arrow_positions()
         self.graphboard.clearSelection()
         self.temp_arrow.setSelected(True)
-        self.graphboard.arrows.append(self.temp_arrow) 
+        
         
     def start_drag(self, event_pos):
         self.move_to_cursor(self.arrowbox, event_pos)
@@ -200,8 +202,7 @@ class Drag(QWidget):
         if view_pos not in self.arrowbox.view.rect() and self.has_entered_graphboard_once:
             self.place_arrow_on_graphboard()
         self.deleteLater()
-        if self.graphboard.arrows == 1 and not self.graphboard.arrows[0].isVisible(): 
-            self.graphboard.update()
+        self.graphboard.update()
         self.arrowbox.drag = None
         self.reset_drag_state()
 
