@@ -16,8 +16,8 @@ class InfoboxWidgets():
         self.red_attributes_widget.setFrameShape(QFrame.Shape.Box)
         self.red_attributes_widget.setFrameShadow(QFrame.Shadow.Sunken)
 
-        self.blue_attributes_widget.setVisible(True)
-        self.red_attributes_widget.setVisible(True)
+        self.blue_attributes_widget.show()
+        self.red_attributes_widget.show()
 
     def construct_attributes_widget(self, attributes, color):
         self.buttons = self.infobox.buttons
@@ -67,7 +67,7 @@ class InfoboxWidgets():
                 attributes = arrow.create_dict_from_arrow(arrow)
                 widget = getattr(self.widgets, f"{color}_attributes_widget")
                 self.update_info_widget_content(widget, attributes)
-                widget.setVisible(True)
+                widget.show()
             else:
                 widget = getattr(self.widgets, f"{color}_attributes_widget")
-                widget.setVisible(False)
+                widget.hide()

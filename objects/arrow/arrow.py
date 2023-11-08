@@ -45,7 +45,6 @@ class Arrow(QGraphicsSvgItem):
         self.staff = None
         self.is_mirrored = False
         self.previous_arrow = None
-        self.drag = self.main_widget.drag
 
         if dict: 
             self.update_attributes(dict)
@@ -311,4 +310,4 @@ class GhostArrow(Arrow):
         self.setOpacity(0.5)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, False) 
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
-        self.setVisible(False)
+        self.hide()

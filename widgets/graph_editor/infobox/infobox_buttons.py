@@ -30,7 +30,7 @@ class InfoboxButtons:
         button.clicked.connect(properties["callback"])
         button.setFixedSize(self.BUTTON_SIZE, self.BUTTON_SIZE)
         setattr(self, f"{button_name}_button", button)
-        button.setVisible(False)
+        button.hide()
 
         # Add the button to the appropriate color group
         if "blue" in button_name:
@@ -38,14 +38,12 @@ class InfoboxButtons:
         elif "red" in button_name:
             self.button_groups[RED].append(button)
 
-    def set_buttons_visibility(self, color, visibility=True):
-        for button in self.button_groups[color]:
-            button.setVisible(visibility)
 
-    def update_buttons(self, attributes):
+    def show_buttons(self, attributes):
         color = attributes.get(COLOR, "")
-        self.set_buttons_visibility(color)
-
+        for button in self.button_groups[color]:
+            button.show()
+            
     def setup_buttons(self):
         self.button_properties = {
             "swap_colors": {

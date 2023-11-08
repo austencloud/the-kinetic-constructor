@@ -72,7 +72,6 @@ class StaffPositioner:
             ):
                 self.reposition_alpha_to_beta(move_staff, converging_arrows)
 
-        scene.update()
 
     def reposition_static_beta(self, move_staff, static_arrows):
         for arrow in static_arrows:

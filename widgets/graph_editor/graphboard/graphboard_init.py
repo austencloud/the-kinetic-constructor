@@ -47,8 +47,6 @@ class GraphboardInit:
         self.graphboard.padding = padding
 
     def init_staffs(self):
-        staffs = []
-
         red_staff_dict = {
             COLOR: RED,
             LOCATION: NORTH,
@@ -66,8 +64,6 @@ class GraphboardInit:
         self.graphboard.addItem(self.graphboard.red_staff)
         self.graphboard.addItem(self.graphboard.blue_staff)
 
-        staffs.extend([self.graphboard.red_staff, self.graphboard.blue_staff])
-        self.graphboard.staffs = staffs
         self.graphboard.hide_all_staffs()
 
     def init_handlers(self):
@@ -76,12 +72,11 @@ class GraphboardInit:
             self.graphboard.grid, self.graphboard
         )
         self.graphboard.context_menu_manager = ContextMenuHandler(self.graphboard)
-        self.graphboard.drag = self.graphboard.main_widget.drag
 
     def init_letterbox(self):
         self.graphboard.letters = self.graphboard.main_widget.letters
         self.graphboard.letter_renderers = {}
-        self.graphboard.addItem(self.graphboard.letter_item)
+        self.graphboard.addItem(self.graphboard.letter)
 
     def init_quadrants(self):
         grid_center = self.graphboard.grid.get_circle_coordinates("center_point")

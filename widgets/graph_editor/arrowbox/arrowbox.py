@@ -9,21 +9,20 @@ from PyQt6.QtCore import Qt, QPointF
 from settings.numerical_constants import GRAPHBOARD_SCALE
 from settings.string_constants import *
 from objects.arrow.arrow import Arrow
-
+from events.drag.drag import Drag
 
 class Arrowbox(QGraphicsScene):
     def __init__(self, main_widget, infobox):
         super().__init__()
         self.infobox = infobox
         self.main_widget = main_widget
-
+        self.main_window = main_widget.main_window
         self.setup_frame()
         self.setup_view()
         self.populate_arrows()
         self.setSceneRect(0, 0, 450, 450)
         self.arrowbox_layout.addWidget(self.view)
-        self.drag = self.main_widget.drag
-        self.drag_preview = None
+        self.drag = None
 
     def setup_view(self):
         self.view = QGraphicsView(self)
@@ -72,25 +71,29 @@ class Arrowbox(QGraphicsScene):
         self.arrows[1].setPos(25, 25)
 
     def mousePressEvent(self, event):
+        if not self.drag:
+            graphboard = self.main_widget.graphboard
+            self.drag = Drag(self.main_window, graphboard, self)
         scene_pos = event.scenePos()
-        view_pos = self.view.mapFromScene(scene_pos)
+        event_pos = self.view.mapFromScene(scene_pos)
         arrows = [
             item for item in self.items(QPointF(scene_pos)) if isinstance(item, Arrow)
         ]
 
         if arrows:
-            self.dragged_item = arrows[0]
+            self.target_arrow = arrows[0]
             if event.button() == Qt.MouseButton.LeftButton:
-                self.drag.events.start_drag(self, self.dragged_item, view_pos)
+                self.drag.set_attributes_to_target_arrow(self.target_arrow)
+                self.drag.start_drag(event_pos)
         else:
             event.ignore()
 
     def mouseMoveEvent(self, event):
         scene_pos = event.scenePos()
-        view_pos = self.view.mapFromScene(scene_pos)
-        self.drag.events.handle_mouse_move(self, event, view_pos)
+        event_pos = self.view.mapFromScene(scene_pos)
+        self.drag.handle_mouse_move(self, event_pos)
 
     def mouseReleaseEvent(self, event):
         scene_pos = event.scenePos()
-        view_pos = self.view.mapFromScene(scene_pos)
-        self.drag.events.handle_mouse_release(view_pos)
+        event_pos = self.view.mapFromScene(scene_pos)
+        self.drag.handle_mouse_release(event_pos)
