@@ -5,11 +5,10 @@ from settings.string_constants import *
 
 
 class StaffPositioner:
-    def __init__(self, staff, scene):
-        self.staff = staff
+    def __init__(self, scene):
         self.scene = scene
         self.view = scene.view
-        self.letters = staff.scene.main_widget.letters
+        self.letters = scene.letters
 
     ### REPOSITIONERS ###
 

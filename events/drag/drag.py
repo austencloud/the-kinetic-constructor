@@ -61,20 +61,9 @@ class Drag(QWidget):
         self.graphboard.addItem(self.invisible_arrow)
 
     def update(self, event_pos):
-        over_graphboard = self.is_over_graphboard(self.graphboard, event_pos)
 
-        if over_graphboard:
-            local_pos_in_graphboard = self.get_local_pos_in_graphboard(
-                event_pos
-            )
-            scene_pos = self.graphboard.view.mapToScene(local_pos_in_graphboard)
-            current_quadrant = self.graphboard.determine_quadrant(
-                scene_pos.x(), scene_pos.y()
-            )
-
-            if self.previous_quadrant != current_quadrant:
-                self.update_drag_preview_for_graphboard(event_pos)
-
+        self.update_drag_preview_for_graphboard(event_pos)
+            
     def create_pixmap(self, dragged_arrow):
         new_svg_data = dragged_arrow.set_svg_color(
             dragged_arrow.svg_file, dragged_arrow.color
@@ -150,23 +139,22 @@ class Drag(QWidget):
 
 
     def update_drag_preview_for_graphboard(self, event_pos):
+        pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
+        view_pos_in_graphboard = self.graphboard.view.mapFromGlobal(pos_in_main_window)
+        scene_pos = self.graphboard.view.mapToScene(view_pos_in_graphboard)
+        
         if not self.has_entered_graphboard_once:
             self.just_entered_graphboard = True
             self.has_entered_graphboard_once = True
 
-        local_pos_in_graphboard = self.get_local_pos_in_graphboard(
-            event_pos
-        )
-        scene_pos = self.graphboard.view.mapToScene(local_pos_in_graphboard)
-
-        current_quadrant = self.graphboard.determine_quadrant(
+        new_quadrant = self.graphboard.determine_quadrant(
             scene_pos.x(), scene_pos.y()
         )
 
-        if self.previous_quadrant != current_quadrant:
-            self.update_drag_preview_for_new_quadrant(current_quadrant)
+        if self.previous_quadrant != new_quadrant:
+            self.update_drag_preview_for_new_quadrant(new_quadrant)
 
-    def update_drag_preview_for_new_quadrant(self, current_quadrant):
+    def update_drag_preview_for_new_quadrant(self, new_quadrant):
         for arrow in self.graphboard.arrows[
             :
         ]:  # Copy the list to avoid iteration issues
@@ -174,10 +162,14 @@ class Drag(QWidget):
                 self.graphboard.removeItem(arrow)
                 self.graphboard.arrows.remove(arrow)
 
-        self.update_rotation_for_quadrant(current_quadrant)
+        self.update_rotation_for_quadrant(new_quadrant)
         new_arrow = self.invisible_arrow.create_dict_from_arrow(self)
         self.invisible_arrow.update_attributes(new_arrow)
-        self.previous_quadrant = current_quadrant
+        self.previous_quadrant = new_quadrant
+        self.quadrant = new_quadrant
+        self.start_location, self.end_location = self.invisible_arrow.get_start_end_locations(
+            self.motion_type, self.rotation_direction, self.quadrant
+        )
         self.update_staffs()
 
     def update_staffs(self):
@@ -186,7 +178,7 @@ class Drag(QWidget):
                 staff.update_attributes(
                     {
                         COLOR: self.color,
-                        LOCATION: self.invisible_arrow.end_location,
+                        LOCATION: self.end_location,
                         LAYER: 1,
                     }
                 )
@@ -195,7 +187,7 @@ class Drag(QWidget):
                 staff.show()
                 self.graphboard.staffs.append(staff)
                 staff.update_appearance()
-            self.graphboard.update_staffs()
+                self.graphboard.update_staffs()
 
     def place_arrow_on_graphboard(self):
         self.invisible_arrow.show()
@@ -219,16 +211,12 @@ class Drag(QWidget):
         self.arrowbox.drag = None
         self.reset_drag_state()
 
-    def is_over_graphboard(self, scene, event_pos):
-        pos_in_main_window = scene.view.mapTo(scene.main_widget, event_pos)
+    def is_over_graphboard(self, arrowbox, event_pos):
+        # the event position is in the arorowbox view. Convert it to the coordinates of the main window. 
+        pos_in_main_window = arrowbox.view.mapTo(self.main_window, event_pos)
+        
         local_pos_in_graphboard = self.graphboard.view.mapFrom(
-            scene.main_widget, pos_in_main_window
+            arrowbox.main_widget, pos_in_main_window
         )
         return self.graphboard.view.rect().contains(local_pos_in_graphboard)
-
-    def get_local_pos_in_graphboard(self, event_pos):
-        return self.graphboard.view.mapFrom(
-            self.graphboard.main_widget, self.graphboard.view.mapTo(self.graphboard.main_widget, event_pos)
-        )
-
 

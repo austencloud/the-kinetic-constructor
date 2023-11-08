@@ -7,7 +7,6 @@ from settings.numerical_constants import (
     STAFF_LENGTH,
 )
 from settings.string_constants import *
-from objects.staff.staff_positioner import StaffPositioner
 import logging
 
 
@@ -27,15 +26,11 @@ class Staff(QGraphicsSvgItem):
         self.scene = graphboard
         self.graphboard = graphboard
         self.arrow = None
-        self.setup_managers()
         self.update_attributes(dict)
         self.set_axis(dict)
         self.set_rotation_from_axis()
         self.set_app_attributes()
         self.main_widget = graphboard.main_widget
-
-    def setup_managers(self):
-        self.positioner = StaffPositioner(self, self.scene)
 
     def set_axis(self, dict):
         axis_switch = {

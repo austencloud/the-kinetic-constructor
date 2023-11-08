@@ -1,3 +1,4 @@
+from settings.string_constants import *
 
 class ArrowStateComparator:
     def __init__(self, arrow_manager):
@@ -7,15 +8,14 @@ class ArrowStateComparator:
         candidate_state_dict = {
             'arrows': []
         }
-
         for entry in candidate_state:
-            if 'color' in entry and 'motion_type' in entry:
+            if COLOR in entry and MOTION_TYPE in entry:
                 candidate_state_dict['arrows'].append({
-                    'color': entry['color'],
-                    'motion_type': entry['motion_type'],
-                    'rotation_direction': entry['rotation_direction'],
-                    'quadrant': entry['quadrant'],
-                    'turns': entry.get('turns', 0)
+                    COLOR: entry[COLOR],
+                    MOTION_TYPE: entry[MOTION_TYPE],
+                    ROTATION_DIRECTION: entry[ROTATION_DIRECTION],
+                    QUADRANT: entry[QUADRANT],
+                    TURNS: entry.get(TURNS, 0)
                 })
 
         if len(current_state['arrows']) != len(candidate_state_dict['arrows']):
@@ -23,7 +23,7 @@ class ArrowStateComparator:
 
         for arrow in current_state['arrows']:
             matching_arrows = [candidate_arrow for candidate_arrow in candidate_state_dict['arrows']
-                               if all(arrow.get(key) == candidate_arrow.get(key) for key in ['color', 'motion_type', 'quadrant', 'rotation_direction'])]
+                               if all(arrow.get(key) == candidate_arrow.get(key) for key in [COLOR, MOTION_TYPE, QUADRANT, ROTATION_DIRECTION])]
             if not matching_arrows:
                 return False
 

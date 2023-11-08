@@ -8,9 +8,10 @@ from objects.grid import Grid
 from settings.numerical_constants import *
 from settings.string_constants import *
 from data.letter_types import letter_types
-from data.positions_map import positions_map
 from widgets.graph_editor.graphboard.graphboard_init import GraphboardInit
 from objects.letter import Letter
+from widgets.graph_editor.graphboard.position_optimizers.staff_positioner import StaffPositioner
+from widgets.graph_editor.graphboard.position_optimizers.arrow_positioner import ArrowPositioner
 
 class Graphboard(QGraphicsScene):
     def __init__(self, main_widget):
@@ -22,7 +23,12 @@ class Graphboard(QGraphicsScene):
 
         self.letter = Letter(self)
         self.initializer = GraphboardInit(self)
-
+        self.initialize_positioners()
+        
+    def initialize_positioners(self):
+        self.arrow_positioner = ArrowPositioner(self)
+        self.staff_positioner = StaffPositioner(self)
+     
     def get_state(self):
         state = {
             ARROWS: [],
@@ -111,25 +117,26 @@ class Graphboard(QGraphicsScene):
 
     def update_staffs(self):
         for staff in self.staffs:
-            staff.update_appearance()
+            self.set_default_staff_locations(staff)
 
-            if staff.axis == VERTICAL:
-                staff.setPos(
+        is_beta = self.staff_positioner.check_for_beta_staffs(self)
+        if is_beta:
+            self.update_staff_positions()
+
+    def set_default_staff_locations(self, staff):
+        if staff.axis == VERTICAL:
+            staff.setPos(
                     self.grid.handpoints[staff.location]
                     + QPointF(self.padding, self.padding)
                     + QPointF(STAFF_WIDTH / 2, -STAFF_LENGTH / 2)
                 )
-            else:
-                staff.setPos(
+        else:
+            staff.setPos(
                     self.grid.handpoints[staff.location]
                     + QPointF(self.padding, self.padding)
                     + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2)
                 )
-            staff.setTransformOriginPoint(0, 0)
-
-        is_beta = staff.positioner.check_for_beta_staffs(self)
-        if is_beta:
-            staff.positioner.reposition_beta_staffs(self)
+        staff.setTransformOriginPoint(0, 0)
 
     def contextMenuEvent(self, event):
         clicked_item = self.itemAt(
@@ -146,14 +153,17 @@ class Graphboard(QGraphicsScene):
         else:
             self.context_menu_manager.create_graphboard_menu(event_pos)
 
-    def update_arrow_position(self, arrows):
+    def update_staff_positions(self):
+        self.staff_positioner.reposition_beta_staffs(self)
+        
+    def update_arrow_positions(self):
         letter = self.get_current_letter()
         if letter is not None:
-            arrows[0].positioner.set_optimal_arrow_pos(arrows)
+            self.arrow_positioner.set_optimal_arrow_pos(self.arrows)
         else:
-            for arrow in arrows:
+            for arrow in self.arrows:
                 if not arrow.is_still:
-                    arrow.positioner.set_default_arrow_pos(arrow)
+                    self.arrow_positioner.set_default_arrow_pos(arrow)
 
     def create_ghost_arrow(self, arrow):
         deleted_arrow_attributes = arrow.attributes
@@ -213,8 +223,19 @@ class Graphboard(QGraphicsScene):
         
     def update(self):
         if len(self.arrows) >= 1:
-            self.arrows[0].positioner.update_arrow_position(self)
+            self.arrow_positioner.update_arrow_position()
         if len(self.arrows) == 2:
             self.update_letter()
 
         
+    def get_start_end_positions(self):
+        # get the red arrow from the arrows array, ensure that it's red with a check
+        for arrow in self.arrows:
+            if arrow.color == 'red':
+                red_arrow_index = self.arrows.index(arrow)
+            if arrow.color == 'blue':
+                blue_arrow_index = self.arrows.index(arrow)
+        
+        start_positions = (self.arrows[red_arrow_index].start_location, 'red', self.arrows[blue_arrow_index].start_location, 'blue')
+        end_positions = (self.arrows[red_arrow_index].end_location, 'red', self.arrows[blue_arrow_index].end_location, 'blue')
+        return start_positions + end_positions

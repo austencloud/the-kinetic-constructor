@@ -7,7 +7,7 @@ class Letter(QGraphicsSvgItem):
         super().__init__()
 
     def get_current_letter(self):
-        start_end_positions = self.get_start_end_positions()
+        start_end_positions = self.graphboard.get_start_end_positions()
 
         specific_position = positions_map.get(start_end_positions)
 
@@ -22,17 +22,7 @@ class Letter(QGraphicsSvgItem):
         self.graphboard.letter = None
         return self.graphboard.letter
 
-    def get_start_end_positions(self):
-        # get the red arrow from the arrows array, ensure that it's red with a check
-        for arrow in self.graphboard.arrows:
-            if arrow.color == 'red':
-                red_arrow_index = self.graphboard.arrows.index(arrow)
-            if arrow.color == 'blue':
-                blue_arrow_index = self.graphboard.arrows.index(arrow)
-        
-        start_positions = (self.graphboard.arrows[red_arrow_index].start_location, 'red', self.graphboard.arrows[blue_arrow_index].start_location, 'blue')
-        end_positions = (self.graphboard.arrows[red_arrow_index].end_location, 'red', self.graphboard.arrows[blue_arrow_index].end_location, 'blue')
-        return start_positions + end_positions
+
 
     def get_overall_position(self, graphboard, specific_position):
         # Logic to convert specific position to overall position

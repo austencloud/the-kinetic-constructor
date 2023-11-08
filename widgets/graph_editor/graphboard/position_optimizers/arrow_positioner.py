@@ -1,32 +1,32 @@
 from PyQt6.QtCore import QPointF
 from settings.numerical_constants import *
 from settings.string_constants import *
-class ArrowPositioner:
-    def __init__(self, scene, arrow):
-        self.arrow = arrow
-        self.letters = arrow.main_widget.letters
-        self.scene = scene
 
-    def update_arrow_position(self, scene):
+class ArrowPositioner:
+    def __init__(self, graphboard):
+        self.letters = graphboard.letters
+        self.graphboard = graphboard
+
+    def update_arrow_position(self):
         from objects.arrow.arrow import GhostArrow
-        if scene.arrows == 2:
-            letter = scene.get_current_letter()
-            if letter is not None:
+        if self.graphboard.arrows == 2:
+            current_letter = self.graphboard.get_current_letter()
+            if current_letter is not None:
                 self.set_optimal_arrow_location()
         else:
-            for arrow in scene.arrows:
+            for arrow in self.graphboard.arrows:
                 if not isinstance(arrow, GhostArrow):
                     self.set_default_arrow_pos(arrow)
 
     def set_optimal_arrow_location(self):
-        current_state = self.scene.get_state()
-        current_letter = self.scene.get_current_letter()
+        current_state = self.graphboard.get_state()
+        current_letter = self.graphboard.get_current_letter()
         
         if current_letter is not None:
             matching_letters = self.letters[current_letter]
             optimal_locations = self.find_optimal_locations(current_state, matching_letters)
             
-            for arrow in self.scene.arrows:
+            for arrow in self.graphboard.arrows:
                 if not arrow.is_still:
                     if optimal_locations:
                         self.set_arrow_to_optimal_location(optimal_locations, arrow)
@@ -38,7 +38,6 @@ class ArrowPositioner:
             if self.compare_states(current_state, variations):
                 return next((d for d in variations if 'optimal_red_location' in d and 'optimal_blue_location' in d), None)
         return None
-
 
 
     def set_arrow_to_optimal_location(self, optimal_locations, arrow):
@@ -57,7 +56,7 @@ class ArrowPositioner:
         arrow.setPos(new_pos)
 
     def set_default_arrow_pos(self, arrow):
-        layer2_point = arrow.scene.grid.get_layer2_point(arrow.quadrant)
+        layer2_point = arrow.graphboard.grid.get_layer2_point(arrow.quadrant)
         pos = layer2_point
         adjustment = QPointF(0, 0)
 
@@ -71,8 +70,8 @@ class ArrowPositioner:
             adjustment = QPointF(-DISTANCE, -DISTANCE)
 
         new_pos = QPointF(
-            pos.x() + adjustment.x() + arrow.scene.padding,
-            pos.y() + adjustment.y() + arrow.scene.padding,
+            pos.x() + adjustment.x() + arrow.graphboard.padding,
+            pos.y() + adjustment.y() + arrow.graphboard.padding,
         )
 
         final_pos = QPointF(new_pos.x(), new_pos.y())
