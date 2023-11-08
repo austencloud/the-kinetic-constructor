@@ -25,14 +25,14 @@ class ActionButtonsFrame(QFrame):
         self.sequence_view = sequence_view
         self.action_buttons_layout = QVBoxLayout()
         self.action_buttons_layout.setSpacing(3)
-
-        current_positions = self.scene.get_current_arrow_positions()
+        coordinates = self.scene.get_current_arrow_coordinates()
+        
         buttons_settings = [
             (
                 "update_locations.png",
                 "Update Optimal Locations",
                 lambda: self.json_handler.update_optimal_locations_in_json(
-                    current_positions
+                    coordinates
                 ),
             ),
             (

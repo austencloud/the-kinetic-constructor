@@ -85,11 +85,14 @@ class InfoboxLabels:
             start_end_label.setText(f"")
         turns_label.setText(f"<span style='font-size: 20px;'>{turns}</span>")
 
-    def update_type_and_position_labels(self):
+    def update_type_and_position_label(self):
         (
             current_letter,
             current_letter_type,
-        ) = self.graphboard.get_current_letter(), self.graphboard.get_current_letter_type()
+        ) = (
+            self.graphboard.get_current_letter(),
+            self.graphboard.get_current_letter_type(),
+        )
         if current_letter and current_letter_type:
             start_end_positions = self.get_start_end_positions()
             if start_end_positions:

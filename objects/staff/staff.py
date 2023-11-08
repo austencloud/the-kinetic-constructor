@@ -7,11 +7,8 @@ from settings.numerical_constants import (
     STAFF_LENGTH,
 )
 from settings.string_constants import *
-from objects.staff.staff_attributes import StaffAttributes
 from objects.staff.staff_positioner import StaffPositioner
-from objects.staff.staff_attributes import StaffAttributes
 import logging
-
 
 
 logging.basicConfig(
@@ -20,40 +17,27 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(name)s %(message)s",
 )
 
-""" 
-staff_dict = {
-            COLOR: RED,
-            LOCATION: EAST,
-            LAYER: 1,
-        }
-        
-"""
-
 
 class Staff(QGraphicsSvgItem):
-    def __init__(self, scene, staff_dict):
+    STAFF_ATTRIBUTES = [COLOR, LOCATION, LAYER]
+    
+    def __init__(self, graphboard, dict):
         super().__init__()
         self.svg_file = STAFF_SVG_PATH
-        self.scene = scene
+        self.scene = graphboard
+        self.graphboard = graphboard
         self.arrow = None
         self.setup_managers()
-        self.set_dict_attributes(staff_dict)
+        self.update_attributes(dict)
+        self.set_axis(dict)
+        self.set_rotation_from_axis()
         self.set_app_attributes()
-        self.main_widget = scene.main_widget
+        self.main_widget = graphboard.main_widget
 
     def setup_managers(self):
         self.positioner = StaffPositioner(self, self.scene)
-        self.attributes = StaffAttributes(self)
 
-    def set_dict_attributes(self, staff_dict):
-        self.attributes.update_attributes_from_dict(self, staff_dict)
-        self.color = staff_dict.get(COLOR)
-        self.location = staff_dict.get(LOCATION)
-        self.layer = staff_dict.get(LAYER)
-        self.set_axis(staff_dict)
-        self.set_rotation_from_axis()
-
-    def set_axis(self, staff_dict):
+    def set_axis(self, dict):
         axis_switch = {
             1: {HORIZONTAL: [WEST, EAST], VERTICAL: [NORTH, SOUTH]},
             2: {HORIZONTAL: [NORTH, SOUTH], VERTICAL: [WEST, EAST]},
@@ -62,7 +46,7 @@ class Staff(QGraphicsSvgItem):
             self.axis = next(
                 axis
                 for axis, locations in axis_switch.get(self.layer, {}).items()
-                if staff_dict.get(LOCATION) in locations
+                if dict.get(LOCATION) in locations
             )
         except StopIteration:
             self.axis = HORIZONTAL
@@ -119,21 +103,49 @@ class Staff(QGraphicsSvgItem):
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.MouseButton.LeftButton:
-            offset = self.get_staff_center(self.scene.scale)
+            offset = self.get_staff_center()
             x_offset, y_offset = offset.x(), offset.y()
             self.setPos(
                 event.scenePos().x() + x_offset, event.scenePos().y() + y_offset
             )
         super().mouseMoveEvent(event)
 
+
+    def update_attributes(self, dict):
+        for attr in self.STAFF_ATTRIBUTES:
+            value = dict.get(attr)
+            setattr(self, attr, value)
+        self.dict = dict
+
+
+    def get_attributes(self):
+        return {attr: getattr(self, attr) for attr in self.STAFF_ATTRIBUTES}
+
+    def create_staff_dict_from_arrow(self, arrow):
+        staff_dict = {COLOR: arrow.color, LOCATION: arrow.end_location, LAYER: 1}
+        return staff_dict
+
+    def update_attributes_from_arrow(self, arrow):
+        updated_staff_dict = {
+            COLOR: arrow.color,
+            LOCATION: arrow.end_location,
+            LAYER: 1,
+        }
+        self.attributes.update(self, updated_staff_dict)
+        self.update_appearance()
+        self.setPos(arrow.scene.grid.handpoints[self.location])
+
+
+
 class RedStaff(Staff):
-    def __init__(self, scene, staff_dict):
-        super().__init__(scene, staff_dict)
+    def __init__(self, scene, dict):
+        super().__init__(scene, dict)
         self.setSharedRenderer(self.renderer)
         self.set_color(RED)
-        
+
+
 class BlueStaff(Staff):
-    def __init__(self, scene, staff_dict):
-        super().__init__(scene, staff_dict)
+    def __init__(self, scene, dict):
+        super().__init__(scene, dict)
         self.setSharedRenderer(self.renderer)
         self.set_color(BLUE)

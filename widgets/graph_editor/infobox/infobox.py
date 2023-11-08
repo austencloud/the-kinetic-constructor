@@ -14,7 +14,7 @@ class Infobox(QFrame):
         self.graphboard = graphboard
         self.arrow_manipulator = arrow_manipulator
         self.labels = InfoboxLabels(self, graphboard)
-        self.widgets = InfoboxWidgets(self)
+        self.widgets = InfoboxWidgets(self, graphboard)
         self.layouts = InfoboxLayouts(self, graphboard)
         self.buttons = InfoboxButtons(self, arrow_manipulator, graphboard)
         self.setup_ui()
@@ -27,13 +27,7 @@ class Infobox(QFrame):
         self.layouts.setup_layouts()
 
     def update(self):
-        for color in [BLUE, RED]:
-            arrows = self.graphboard.get_arrows_by_color(color)
-            for arrow in arrows:
-                attributes = arrow.create_dict_from_arrow(arrow)
-                widget = getattr(self.widgets, f"{color}_attributes_widget")
-                self.widgets.update_info_widget_content(widget, attributes)
-                widget.setVisible(True)
-            else:
-                widget = getattr(self.widgets, f"{color}_attributes_widget")
-                widget.setVisible(False)
+        self.widgets.update_attribute_widgets()
+        self.labels.update_type_and_position_label()
+
+

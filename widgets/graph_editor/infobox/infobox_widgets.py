@@ -1,9 +1,11 @@
 from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QFrame
+from settings.string_constants import *
 
 class InfoboxWidgets():
-    def __init__(self, infobox):
+    def __init__(self, infobox, graphboard):
         self.infobox = infobox
         self.labels = infobox.labels
+        self.graphboard = graphboard
         
     def setup_widgets(self):
         self.blue_attributes_widget = QFrame()
@@ -57,3 +59,15 @@ class InfoboxWidgets():
             return
         self.labels.update_labels(widget, attributes)
         self.buttons.update_buttons(attributes)
+
+    def update_attribute_widgets(self):
+        for color in [BLUE, RED]:
+            arrows = self.graphboard.get_arrows_by_color(color)
+            for arrow in arrows:
+                attributes = arrow.create_dict_from_arrow(arrow)
+                widget = getattr(self.widgets, f"{color}_attributes_widget")
+                self.update_info_widget_content(widget, attributes)
+                widget.setVisible(True)
+            else:
+                widget = getattr(self.widgets, f"{color}_attributes_widget")
+                widget.setVisible(False)

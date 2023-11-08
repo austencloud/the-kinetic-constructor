@@ -8,6 +8,7 @@ from objects.grid import Grid
 from settings.numerical_constants import *
 from settings.string_constants import *
 from data.letter_types import letter_types
+from data.positions_map import positions_map
 from widgets.graph_editor.graphboard.graphboard_init import GraphboardInit
 from objects.letter import Letter
 
@@ -18,7 +19,6 @@ class Graphboard(QGraphicsScene):
         self.setSceneRect(0, 0, 750, 900)
         self.arrows = []
         self.staffs = []
-
         self.letter_item = Letter(self)
         self.initializer = GraphboardInit(self)
 
@@ -40,7 +40,8 @@ class Graphboard(QGraphicsScene):
             )
         return state
 
-    def get_current_arrow_positions(self):
+    def get_current_arrow_coordinates(self):
+        """Returns the coordinates for setting optimal positions """
         red_position = None
         blue_position = None
 
@@ -53,12 +54,9 @@ class Graphboard(QGraphicsScene):
         return red_position, blue_position
 
     def get_arrows_by_color(self, color):
-        return [arrow for arrow in self.arrows if arrow.color == color]
+        return list(filter(lambda arrow: arrow.color == color, self.arrows))
 
-    def select_all_items(self):
-        for item in self.items():
-            item.setSelected(True)
-
+    def select_all_arrows(self):
         for arrow in self.arrows:
             arrow.setSelected(True)
 
@@ -155,30 +153,51 @@ class Graphboard(QGraphicsScene):
                 if not arrow.is_still:
                     arrow.positioner.set_default_arrow_pos(arrow)
 
-    def update(self):
-        self.infobox.labels.update_type_and_position_labels()
-        self.update_letter(self.get_current_letter())
-        self.infobox.update()
+    def get_current_letter(self):
+        start_end_positions = self.get_start_end_positions()
 
-    def get_current_letter(self): # This should be refactored so we don't waste compute going over all the letters - check for positions first. 
-        current_combination = []
-        arrowbox = self.main_widget.graph_editor.arrowbox
+        specific_position = positions_map.get(start_end_positions)
 
-        if arrowbox.drag_preview == True:
-            drag_attr = arrow.drag_preview.get_attributes()
-            current_combination.append(drag_attr)
+        if specific_position:
+            overall_position = self.get_overall_position(specific_position)
+            possible_letters = self.get_possible_letters(overall_position)
+            for letter, combinations in possible_letters.items():
+                if self.current_combination in combinations:
+                    self.letter = letter
+                    return self.letter
 
-        for arrow in self.arrows:
-            attributes = arrow.attributes
-            current_combination.append(attributes)
-
-        for letter, combinations in self.letters.items():
-            if current_combination in combinations:
-                self.letter = letter
-            else:
-                self.letter = None
-
+        self.letter = None
         return self.letter
+
+    def get_start_end_positions(self):
+        # get the red arrow from the arrows array, ensure that it's red with a check
+        for arrow in self.arrows:
+            if arrow.color == 'red':
+                red_arrow_index = self.arrows.index(arrow)
+            if arrow.color == 'blue':
+                blue_arrow_index = self.arrows.index(arrow)
+        
+        start_positions = (self.arrows[red_arrow_index].start_location, 'red', self.arrows[blue_arrow_index].start_location, 'blue')
+        end_positions = (self.arrows[red_arrow_index].end_location, 'red', self.arrows[blue_arrow_index].end_location, 'blue')
+        return start_positions + end_positions
+
+
+    def get_overall_position(self, specific_position):
+        # Logic to convert specific position to overall position
+        return specific_position[:-1]
+
+    def get_possible_letters(self, overall_position):
+        # Logic to return only the letters that begin with the overall position
+        category_map = {
+            'alpha': 'ABC',
+            'beta': 'DEF',
+            'gamma': 'MNOPQRSTUV',
+            # Add other categories as needed
+        }
+        category = category_map.get(overall_position)
+        if category:
+            return {letter: combinations for letter, combinations in self.letters.items() if letter.startswith(category)}
+        return {}
 
     def get_current_letter_type(self):
         letter = self.get_current_letter()
@@ -228,12 +247,14 @@ class Graphboard(QGraphicsScene):
             return None
 
     def mousePressEvent(self, event):
-        # if clicked_item is a grid, don't select it
         clicked_item = self.itemAt(event.scenePos(), QTransform())
         if isinstance(clicked_item, Grid):
             clicked_item = None
         if not clicked_item:
-            self.clearSelection()  # Call the built-in method
-            event.accept()  # Stop further processing of this event
+            self.clearSelection()
+            event.accept()
         else:
-            super().mousePressEvent(event)  # Propagate the event for default handling
+            super().mousePressEvent(event)
+
+    def set_infobox(self, infobox):
+        self.infobox = infobox

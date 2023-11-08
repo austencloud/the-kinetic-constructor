@@ -11,7 +11,7 @@ class Manipulators:
     def update_arrow_and_staff(self, arrow, arrow_dict, staff_dict):
         staff = arrow.staff
         arrow.update_attributes(arrow_dict)
-        staff.attributes.update_attributes_from_dict(staff, staff_dict)
+        staff.attributes.update(staff, staff_dict)
 
     def move_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {

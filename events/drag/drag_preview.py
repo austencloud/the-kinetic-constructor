@@ -7,14 +7,14 @@ from settings.string_constants import *
 
 
 class DragPreview(QWidget):
-    def __init__(self, drag, arrow):
+    def __init__(self, drag, target_arrow):
         super().__init__()
 
         self.drag = drag
         self.main_window = drag.main_window
         self.graphboard = drag.graphboard
-        self.arrow = arrow
-        pixmap = self.create_pixmap(arrow)
+        self.target_arrow = target_arrow
+        pixmap = self.create_pixmap(target_arrow)
 
         self.label = QLabel(self)
         self.label.setPixmap(pixmap)
@@ -25,16 +25,16 @@ class DragPreview(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.center = pixmap.rect().center() * GRAPHBOARD_SCALE
 
-        self.color = arrow.color
-        self.motion_type = arrow.motion_type
-        self.quadrant = arrow.quadrant
-        self.rotation_direction = arrow.rotation_direction
-        self.turns = arrow.turns
+        self.color = target_arrow.color
+        self.motion_type = target_arrow.motion_type
+        self.quadrant = target_arrow.quadrant
+        self.rotation_direction = target_arrow.rotation_direction
+        self.turns = target_arrow.turns
 
         (
             self.start_location,
             self.end_location,
-        ) = arrow.get_start_end_locations(
+        ) = target_arrow.get_start_end_locations(
             self.motion_type, self.rotation_direction, self.quadrant
         )
 
@@ -56,7 +56,7 @@ class DragPreview(QWidget):
         return pixmap
 
     def get_attributes(self):
-        start_location, end_location = self.arrow.attributes.get_start_end_locations(
+        start_location, end_location = self.target_arrow.attributes.get_start_end_locations(
             self.motion_type, self.rotation_direction, self.quadrant
         )
 
@@ -80,7 +80,7 @@ class DragPreview(QWidget):
         self.rotate()
 
     def rotate(self):
-        renderer = QSvgRenderer(self.drag.events.target_arrow.svg_file)
+        renderer = QSvgRenderer(self.target_arrow.svg_file)
         scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE
         pixmap = QPixmap(scaled_size)
         pixmap.fill(Qt.GlobalColor.transparent)
@@ -88,7 +88,7 @@ class DragPreview(QWidget):
         with painter as painter:
             renderer.render(painter)
 
-        angle = self.drag.events.target_arrow.get_rotation_angle(
+        angle = self.target_arrow.get_rotation_angle(
             self.quadrant,
             self.motion_type,
             self.rotation_direction,
@@ -106,7 +106,7 @@ class DragPreview(QWidget):
         (
             self.start_location,
             self.end_location,
-        ) = self.arrow.get_start_end_locations(
+        ) = self.target_arrow.get_start_end_locations(
             self.motion_type,
             self.rotation_direction,
             self.quadrant,

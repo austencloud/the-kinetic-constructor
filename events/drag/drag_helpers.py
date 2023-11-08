@@ -1,4 +1,3 @@
-from PyQt6.QtWidgets import QGraphicsItem
 
 
 class DragHelpers:
@@ -18,15 +17,7 @@ class DragHelpers:
             scene.main_widget, scene.view.mapTo(scene.main_widget, event_pos)
         )
 
-    def create_and_add_arrow(self, arrow_dict):
-        from objects.arrow.arrow import Arrow
 
-        arrow = Arrow(self.graphboard, arrow_dict)
-        arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
-        self.graphboard.addItem(arrow)
-        if arrow not in self.graphboard.arrows:
-            self.graphboard.arrows.append(arrow)
-        return arrow
 
     def link_arrow_and_staff(self, arrow, staff):
         arrow.staff = staff

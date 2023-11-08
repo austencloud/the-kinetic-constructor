@@ -93,4 +93,4 @@ class Arrowbox(QGraphicsScene):
     def mouseReleaseEvent(self, event):
         scene_pos = event.scenePos()
         view_pos = self.view.mapFromScene(scene_pos)
-        self.drag.events.handle_mouse_release(event, view_pos)
+        self.drag.events.handle_mouse_release(view_pos)

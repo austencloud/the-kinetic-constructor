@@ -113,4 +113,3 @@ class GraphboardInit:
             self.graphboard.grid_center_x,
             self.graphboard.grid_center_y,
         )
-

@@ -9,9 +9,10 @@ class ArrowPositioner:
 
     def update_arrow_position(self, scene):
         from objects.arrow.arrow import GhostArrow
-        letter = scene.get_current_letter()
-        if letter is not None:
-            self.set_optimal_arrow_location()
+        if scene.arrows == 2:
+            letter = scene.get_current_letter()
+            if letter is not None:
+                self.set_optimal_arrow_location()
         else:
             for arrow in scene.arrows:
                 if not isinstance(arrow, GhostArrow):

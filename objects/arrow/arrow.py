@@ -23,32 +23,33 @@ class Arrow(QGraphicsSvgItem):
         self.state_comparator = ArrowStateComparator(self)
 
     def get_svg_file(self, dict):
-        motion_type = dict[MOTION_TYPE]
-        turns = dict.get(TURNS, None)
+        if dict: 
+            motion_type = dict[MOTION_TYPE]
+            turns = dict.get(TURNS, None)
 
-        if motion_type in [PRO, ANTI]:
-            self.is_shift = True
-            return SHIFT_DIR + motion_type + "_" + str(turns) + ".svg"
-        elif motion_type in [STATIC]:
-            self.is_static = True
-            return None
+            if motion_type in [PRO, ANTI]:
+                self.is_shift = True
+                return SHIFT_DIR + motion_type + "_" + str(turns) + ".svg"
+            elif motion_type in [STATIC]:
+                self.is_static = True
+                return None
 
-    def setup_attributes(self, scene, dict):
-        if scene is not None:
-            self.scene = scene
-            if hasattr(scene, "infobox"):
-                self.infobox = scene.infobox
-            self.main_widget = scene.main_widget
-            self.in_graphboard = False
-            self.drag_offset = QPointF(0, 0)
-            self.is_still = False
-            self.staff = None
-            self.is_mirrored = False
-            self.previous_arrow = None
-            self.drag = self.main_widget.drag
+    def setup_attributes(self, scene, dict): 
+        self.scene = scene
+        if hasattr(scene, "infobox"):
+            self.infobox = scene.infobox
+        self.main_widget = scene.main_widget
+        self.in_graphboard = False
+        self.drag_offset = QPointF(0, 0)
+        self.is_still = False
+        self.staff = None
+        self.is_mirrored = False
+        self.previous_arrow = None
+        self.drag = self.main_widget.drag
 
-        self.update_attributes(dict)
-        self.update_appearance()
+        if dict: 
+            self.update_attributes(dict)
+            self.update_appearance()
         self.center = self.boundingRect().center()
 
     def initialize_graphics_flags(self):
@@ -119,7 +120,7 @@ class Arrow(QGraphicsSvgItem):
                 self.staff.location = self.end_location
                 self.staff.attributes.update_attributes_from_arrow(self)
                 self.scene.update_staffs()
-                self.scene.update()
+
 
     def handle_pictograph_view_drag(self, event):
         pass
