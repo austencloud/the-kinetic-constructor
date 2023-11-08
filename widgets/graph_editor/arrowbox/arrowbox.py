@@ -9,7 +9,7 @@ from PyQt6.QtCore import Qt, QPointF
 from settings.numerical_constants import GRAPHBOARD_SCALE
 from settings.string_constants import *
 from objects.arrow.arrow import Arrow
-from events.drag.drag import Drag
+from events.drag import Drag
 
 class Arrowbox(QGraphicsScene):
     def __init__(self, main_widget, infobox):
@@ -71,29 +71,37 @@ class Arrowbox(QGraphicsScene):
         self.arrows[1].setPos(25, 25)
 
     def mousePressEvent(self, event):
-        if not self.drag:
-            graphboard = self.main_widget.graphboard
-            self.drag = Drag(self.main_window, graphboard, self)
+        # check if there are items under the cursor
+
         scene_pos = event.scenePos()
         event_pos = self.view.mapFromScene(scene_pos)
-        arrows = [
-            item for item in self.items(QPointF(scene_pos)) if isinstance(item, Arrow)
-        ]
+        
+        # if there are items in the scene under the click:
+        if self.items(QPointF(scene_pos)):
+            if not self.drag:
+                graphboard = self.main_widget.graphboard
+                self.drag = Drag(self.main_window, graphboard, self)
+            
+            arrows = [
+                item for item in self.items(QPointF(scene_pos)) if isinstance(item, Arrow)
+            ]
 
-        if arrows:
-            self.target_arrow = arrows[0]
-            if event.button() == Qt.MouseButton.LeftButton:
-                self.drag.set_attributes_to_target_arrow(self.target_arrow)
-                self.drag.start_drag(event_pos)
-        else:
-            event.ignore()
+            if arrows:
+                self.target_arrow = arrows[0]
+                if event.button() == Qt.MouseButton.LeftButton:
+                    self.drag.set_attributes_to_target_arrow(self.target_arrow)
+                    self.drag.start_drag(event_pos)
+            else:
+                event.ignore()
 
     def mouseMoveEvent(self, event):
-        scene_pos = event.scenePos()
-        event_pos = self.view.mapFromScene(scene_pos)
-        self.drag.handle_mouse_move(self, event_pos)
+        if self.drag:
+            scene_pos = event.scenePos()
+            event_pos = self.view.mapFromScene(scene_pos)
+            self.drag.handle_mouse_move(self, event_pos)
 
     def mouseReleaseEvent(self, event):
-        scene_pos = event.scenePos()
-        event_pos = self.view.mapFromScene(scene_pos)
-        self.drag.handle_mouse_release(event_pos)
+        if self.drag:
+            scene_pos = event.scenePos()
+            event_pos = self.view.mapFromScene(scene_pos)
+            self.drag.handle_mouse_release(event_pos)

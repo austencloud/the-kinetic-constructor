@@ -19,14 +19,14 @@ class Drag(QWidget):
         self.has_entered_graphboard_once = False
         self.current_rotation_angle = 0
         self.previous_quadrant = None
+        self.preview = None
     
-        self.init_invisible_arrow()
+        
         self.reset_drag_state()
 
     def set_attributes_to_target_arrow(self, target_arrow):
         self.target_arrow = target_arrow
         pixmap = self.create_pixmap(target_arrow)
-        self.center = pixmap.rect().center() * GRAPHBOARD_SCALE
         self.color = target_arrow.color
         self.motion_type = target_arrow.motion_type
         self.quadrant = target_arrow.quadrant
@@ -42,27 +42,23 @@ class Drag(QWidget):
         self.preview.setPixmap(pixmap)
         self.preview.setFixedHeight(pixmap.height())
         self.preview.setPixmap(pixmap)
-
+        self.center = self.rect().center() * GRAPHBOARD_SCALE
+        
     def reset_drag_state(self):
         self.dragging = False
         self.drag_preview = None
         self.current_rotation_angle = 0
-
 
     def initialize_dependencies(self, main_window, graphboard, arrowbox):
         self.arrowbox = arrowbox
         self.graphboard = graphboard
         self.main_window = main_window
 
-    def init_invisible_arrow(self):
-        from objects.arrow.arrow import Arrow
-        self.invisible_arrow = Arrow(self.graphboard, None)
-        self.invisible_arrow.hide()
-        self.graphboard.addItem(self.invisible_arrow)
-
-    def update(self, event_pos):
-
-        self.update_drag_preview_for_graphboard(event_pos)
+    def init_temp_arrow(self):
+        from objects.arrow.arrow import GhostArrow
+        self.temp_arrow = GhostArrow(self.graphboard, None)
+        self.temp_arrow.hide()
+        self.graphboard.addItem(self.temp_arrow)
             
     def create_pixmap(self, dragged_arrow):
         new_svg_data = dragged_arrow.set_svg_color(
@@ -99,11 +95,6 @@ class Drag(QWidget):
         local_pos = arrowbox.view.mapTo(self.main_window, event_pos)
         self.move(local_pos - self.center * GRAPHBOARD_SCALE)
 
-    def update_rotation_for_quadrant(self, new_quadrant):
-        self.in_graphboard = True
-        self.quadrant = new_quadrant
-        self.update_rotation()
-
     def update_rotation(self):
         renderer = QSvgRenderer(self.target_arrow.svg_file)
         scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE
@@ -137,8 +128,7 @@ class Drag(QWidget):
             self.quadrant,
         )
 
-
-    def update_drag_preview_for_graphboard(self, event_pos):
+    def update_for_graphboard(self, event_pos):
         pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
         view_pos_in_graphboard = self.graphboard.view.mapFromGlobal(pos_in_main_window)
         scene_pos = self.graphboard.view.mapToScene(view_pos_in_graphboard)
@@ -146,6 +136,7 @@ class Drag(QWidget):
         if not self.has_entered_graphboard_once:
             self.just_entered_graphboard = True
             self.has_entered_graphboard_once = True
+            self.init_temp_arrow()
 
         new_quadrant = self.graphboard.determine_quadrant(
             scene_pos.x(), scene_pos.y()
@@ -157,23 +148,24 @@ class Drag(QWidget):
     def update_drag_preview_for_new_quadrant(self, new_quadrant):
         for arrow in self.graphboard.arrows[
             :
-        ]:  # Copy the list to avoid iteration issues
-            if arrow.color == self.color:
+        ]:
+            if arrow.isVisible() and arrow.color == self.color:
                 self.graphboard.removeItem(arrow)
                 self.graphboard.arrows.remove(arrow)
 
-        self.update_rotation_for_quadrant(new_quadrant)
-        new_arrow = self.invisible_arrow.create_dict_from_arrow(self)
-        self.invisible_arrow.update_attributes(new_arrow)
+        self.quadrant = new_quadrant
+        self.update_rotation()
+        new_arrow = self.temp_arrow.create_dict_from_arrow(self)
+        self.temp_arrow.update_attributes(new_arrow)
         self.previous_quadrant = new_quadrant
         self.quadrant = new_quadrant
-        self.start_location, self.end_location = self.invisible_arrow.get_start_end_locations(
+        self.start_location, self.end_location = self.temp_arrow.get_start_end_locations(
             self.motion_type, self.rotation_direction, self.quadrant
         )
-        self.update_staffs()
+        self.update_staff_during_drag()
 
-    def update_staffs(self):
-        for staff in [self.graphboard.red_staff, self.graphboard.blue_staff]:
+    def update_staff_during_drag(self):
+        for staff in self.graphboard.staffs:
             if staff.color == self.color:
                 staff.update_attributes(
                     {
@@ -182,41 +174,40 @@ class Drag(QWidget):
                         LAYER: 1,
                     }
                 )
-                staff.arrow = self.invisible_arrow
-                self.invisible_arrow.staff = staff
+                staff.arrow = self.temp_arrow
+                self.temp_arrow.staff = staff
                 staff.show()
-                self.graphboard.staffs.append(staff)
                 staff.update_appearance()
-                self.graphboard.update_staffs()
+                self.graphboard.update_staff_locations()
 
     def place_arrow_on_graphboard(self):
-        self.invisible_arrow.show()
+        self.temp_arrow.show()
         self.graphboard.clearSelection()
-        self.invisible_arrow.setSelected(True)
-        self.graphboard.arrows.append(self.invisible_arrow) 
+        self.temp_arrow.setSelected(True)
+        self.graphboard.arrows.append(self.temp_arrow) 
         
     def start_drag(self, event_pos):
         self.move_to_cursor(self.arrowbox, event_pos)
         self.show()
 
     def handle_mouse_move(self, arrowbox, event_pos):
-        self.move_to_cursor(arrowbox, event_pos)
-        self.update(event_pos)
+        if self.preview:
+            self.move_to_cursor(arrowbox, event_pos)
+            if self.is_over_graphboard(arrowbox, event_pos):
+                self.update_for_graphboard(event_pos)
 
     def handle_mouse_release(self, view_pos):
-        if view_pos not in self.arrowbox.view.rect():
+        if view_pos not in self.arrowbox.view.rect() and self.has_entered_graphboard_once:
             self.place_arrow_on_graphboard()
         self.deleteLater()
-        self.graphboard.update()
+        if self.graphboard.arrows == 1 and not self.graphboard.arrows[0].isVisible(): 
+            self.graphboard.update()
         self.arrowbox.drag = None
         self.reset_drag_state()
 
     def is_over_graphboard(self, arrowbox, event_pos):
-        # the event position is in the arorowbox view. Convert it to the coordinates of the main window. 
-        pos_in_main_window = arrowbox.view.mapTo(self.main_window, event_pos)
+        pos_in_main_window = arrowbox.view.mapToGlobal(event_pos)
+        local_pos_in_graphboard = self.graphboard.view.mapFromGlobal(pos_in_main_window)
         
-        local_pos_in_graphboard = self.graphboard.view.mapFrom(
-            arrowbox.main_widget, pos_in_main_window
-        )
         return self.graphboard.view.rect().contains(local_pos_in_graphboard)
 

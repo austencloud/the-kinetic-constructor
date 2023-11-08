@@ -5,9 +5,6 @@ from objects.grid import Grid
 from objects.staff.staff import RedStaff, BlueStaff
 from settings.numerical_constants import *
 from settings.string_constants import *
-from events.context_menu_handler import ContextMenuHandler
-from utilities.manipulators import Manipulators
-from utilities.export_handler import ExportHandler
 
 
 class GraphboardInit:
@@ -16,7 +13,6 @@ class GraphboardInit:
         self.init_view()
         self.init_grid()
         self.init_staffs()
-        self.init_handlers()
         self.init_letterbox()
         self.init_quadrants()
 
@@ -32,7 +28,7 @@ class GraphboardInit:
         view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         view.wheelEvent = lambda event: None
-        self.graphboard.view = view
+        return view
 
     def init_grid(self):
         grid = Grid(GRID_PATH)
@@ -45,6 +41,7 @@ class GraphboardInit:
         grid.init_handpoints()
         self.graphboard.grid = grid
         self.graphboard.padding = padding
+        return grid
 
     def init_staffs(self):
         red_staff_dict = {
@@ -58,25 +55,22 @@ class GraphboardInit:
             LAYER: 1,
         }
 
-        self.graphboard.red_staff = RedStaff(self.graphboard, red_staff_dict)
-        self.graphboard.blue_staff = BlueStaff(self.graphboard, blue_staff_dict)
-
-        self.graphboard.addItem(self.graphboard.red_staff)
-        self.graphboard.addItem(self.graphboard.blue_staff)
-
-        self.graphboard.hide_all_staffs()
-
-    def init_handlers(self):
-        self.graphboard.manipulators = Manipulators(self.graphboard)
-        self.graphboard.export_manager = ExportHandler(
-            self.graphboard.grid, self.graphboard
-        )
-        self.graphboard.context_menu_manager = ContextMenuHandler(self.graphboard)
+        red_staff = RedStaff(self.graphboard, red_staff_dict)
+        blue_staff = BlueStaff(self.graphboard, blue_staff_dict)
+        
+        red_staff.hide()
+        blue_staff.hide()
+        
+        staffs = [red_staff, blue_staff]
+        
+        self.graphboard.addItem(red_staff)
+        self.graphboard.addItem(blue_staff)
+        
+        return staffs
 
     def init_letterbox(self):
-        self.graphboard.letters = self.graphboard.main_widget.letters
         self.graphboard.letter_renderers = {}
-        self.graphboard.addItem(self.graphboard.letter)
+        self.graphboard.addItem(self.graphboard.letter_item)
 
     def init_quadrants(self):
         grid_center = self.graphboard.grid.get_circle_coordinates("center_point")

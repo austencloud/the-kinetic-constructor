@@ -305,8 +305,8 @@ class Arrow(QGraphicsSvgItem):
 class GhostArrow(Arrow):
     # init an arrow that is blank but carries the properties
     # of the arrow that was deleted
-    def __init__(self, scene, dict):
-        super().__init__(scene, dict)
+    def __init__(self, graphboard, dict):
+        super().__init__(graphboard, dict)
         self.setOpacity(0.5)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, False) 
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)

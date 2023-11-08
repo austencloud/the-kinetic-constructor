@@ -8,10 +8,19 @@ from objects.grid import Grid
 from settings.numerical_constants import *
 from settings.string_constants import *
 from data.letter_types import letter_types
+from data.positions_map import positions_map
 from widgets.graph_editor.graphboard.graphboard_init import GraphboardInit
-from objects.letter import Letter
-from widgets.graph_editor.graphboard.position_optimizers.staff_positioner import StaffPositioner
-from widgets.graph_editor.graphboard.position_optimizers.arrow_positioner import ArrowPositioner
+from widgets.graph_editor.graphboard.position_optimizers.staff_positioner import (
+    StaffPositioner,
+)
+from widgets.graph_editor.graphboard.position_optimizers.arrow_positioner import (
+    ArrowPositioner,
+)
+from events.context_menu_handler import ContextMenuHandler
+from utilities.manipulators import Manipulators
+from utilities.export_handler import ExportHandler
+from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+
 
 class Graphboard(QGraphicsScene):
     def __init__(self, main_widget):
@@ -21,14 +30,20 @@ class Graphboard(QGraphicsScene):
         self.arrows = []
         self.staffs = []
 
-        self.letter = Letter(self)
+        self.letters = self.main_widget.letters
+        self.letter_item = QGraphicsSvgItem()
+
         self.initializer = GraphboardInit(self)
-        self.initialize_positioners()
-        
-    def initialize_positioners(self):
+        self.grid = self.initializer.init_grid()
+        self.view = self.initializer.init_view()
+        self.staffs = self.initializer.init_staffs()
+
+        self.manipulators = Manipulators(self)
+        self.export_manager = ExportHandler(self.grid, self)
+        self.context_menu_manager = ContextMenuHandler(self)
         self.arrow_positioner = ArrowPositioner(self)
         self.staff_positioner = StaffPositioner(self)
-     
+
     def get_state(self):
         state = {
             ARROWS: [],
@@ -48,7 +63,7 @@ class Graphboard(QGraphicsScene):
         return state
 
     def get_current_arrow_coordinates(self):
-        """Returns the coordinates for setting optimal positions """
+        """Returns the coordinates for setting optimal positions"""
         red_position = None
         blue_position = None
 
@@ -92,30 +107,31 @@ class Graphboard(QGraphicsScene):
         self.update()
 
     def update_letter(self):
-        letter = self.letter.get_current_letter()
-        if letter is None:
+        current_letter = self.get_current_letter()
+        if current_letter is None:
             svg_file = f"{LETTER_SVG_DIR}/blank.svg"
             renderer = QSvgRenderer(svg_file)
             if not renderer.isValid():
                 return
-            self.letter.setSharedRenderer(renderer)
+        if self.letter_item:
+            self.letter_item.setSharedRenderer(renderer)
 
-        if letter is not None:
+        if current_letter is not None:
             for letter_type, letters in letter_types.items():
-                if letter in letters:
+                if current_letter in letters:
                     break
-            svg_file = f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
+            svg_file = f"{LETTER_SVG_DIR}/{letter_type}/{current_letter}.svg"
             renderer = QSvgRenderer(svg_file)
             if not renderer.isValid():
                 return
-            self.letter.setSharedRenderer(renderer)
+            self.letter_item.setSharedRenderer(renderer)
 
-        self.letter.setPos(
-            self.width() / 2 - self.letter.boundingRect().width() / 2,
+        self.letter_item.setPos(
+            self.width() / 2 - self.letter_item.boundingRect().width() / 2,
             self.width(),
         )
 
-    def update_staffs(self):
+    def update_staff_locations(self):
         for staff in self.staffs:
             self.set_default_staff_locations(staff)
 
@@ -126,16 +142,16 @@ class Graphboard(QGraphicsScene):
     def set_default_staff_locations(self, staff):
         if staff.axis == VERTICAL:
             staff.setPos(
-                    self.grid.handpoints[staff.location]
-                    + QPointF(self.padding, self.padding)
-                    + QPointF(STAFF_WIDTH / 2, -STAFF_LENGTH / 2)
-                )
+                self.grid.handpoints[staff.location]
+                + QPointF(self.padding, self.padding)
+                + QPointF(STAFF_WIDTH / 2, -STAFF_LENGTH / 2)
+            )
         else:
             staff.setPos(
-                    self.grid.handpoints[staff.location]
-                    + QPointF(self.padding, self.padding)
-                    + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2)
-                )
+                self.grid.handpoints[staff.location]
+                + QPointF(self.padding, self.padding)
+                + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2)
+            )
         staff.setTransformOriginPoint(0, 0)
 
     def contextMenuEvent(self, event):
@@ -155,7 +171,7 @@ class Graphboard(QGraphicsScene):
 
     def update_staff_positions(self):
         self.staff_positioner.reposition_beta_staffs(self)
-        
+
     def update_arrow_positions(self):
         letter = self.get_current_letter()
         if letter is not None:
@@ -215,27 +231,81 @@ class Graphboard(QGraphicsScene):
 
     def set_infobox(self, infobox):
         self.infobox = infobox
-        
-    
+
     def set_focus_and_accept_event(self, event):
         self.setFocus()
         event.accept()
-        
+
     def update(self):
         if len(self.arrows) >= 1:
             self.arrow_positioner.update_arrow_position()
         if len(self.arrows) == 2:
             self.update_letter()
 
-        
     def get_start_end_positions(self):
         # get the red arrow from the arrows array, ensure that it's red with a check
         for arrow in self.arrows:
-            if arrow.color == 'red':
+            if arrow.color == "red":
                 red_arrow_index = self.arrows.index(arrow)
-            if arrow.color == 'blue':
+            if arrow.color == "blue":
                 blue_arrow_index = self.arrows.index(arrow)
-        
-        start_positions = (self.arrows[red_arrow_index].start_location, 'red', self.arrows[blue_arrow_index].start_location, 'blue')
-        end_positions = (self.arrows[red_arrow_index].end_location, 'red', self.arrows[blue_arrow_index].end_location, 'blue')
+
+        start_positions = (
+            self.arrows[red_arrow_index].start_location,
+            "red",
+            self.arrows[blue_arrow_index].start_location,
+            "blue",
+        )
+        end_positions = (
+            self.arrows[red_arrow_index].end_location,
+            "red",
+            self.arrows[blue_arrow_index].end_location,
+            "blue",
+        )
         return start_positions + end_positions
+
+    def get_current_letter(self):
+        start_end_positions = self.get_start_end_positions()
+
+        specific_position = positions_map.get(start_end_positions)
+
+        if specific_position:
+            overall_position = self.get_overall_position(specific_position)
+            possible_letters = self.get_possible_letters(overall_position)
+            for letter, combinations in possible_letters.items():
+                if self.current_combination in combinations:
+                    self.letter_item = letter
+                    return self.letter_item
+
+        self.letter_item = None
+        return self.letter_item
+
+    def get_overall_position(self, specific_position):
+        # Logic to convert specific position to overall position
+        return specific_position[:-1]
+
+    def get_possible_letters(self, overall_position):
+        # Logic to return only the letters that begin with the overall position
+        category_map = {
+            "alpha": "ABC",
+            "beta": "DEF",
+            "gamma": "MNOPQRSTUV",
+            # Add other categories as needed
+        }
+        category = category_map.get(overall_position)
+        if category:
+            return {
+                letter: combinations
+                for letter, combinations in self.letters.items()
+                if letter.startswith(category)
+            }
+        return {}
+
+    def get_current_letter_type(self):
+        letter = self.get_current_letter()
+        if letter is not None:
+            for letter_type, letters in letter_types.items():
+                if letter in letters:
+                    return letter_type
+        else:
+            return None

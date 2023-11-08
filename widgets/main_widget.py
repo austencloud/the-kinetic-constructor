@@ -8,7 +8,6 @@ from events.key_event_handler import KeyEventHandler
 from widgets.graph_editor.graph_editor import GraphEditor
 from widgets.optionboard.letter_buttons_frame import LetterButtonsFrame
 from utilities.pictograph_generator import PictographGenerator
-from events.drag.drag import Drag
 
 
 class MainWidget(QWidget):

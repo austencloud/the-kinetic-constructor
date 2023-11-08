@@ -141,7 +141,6 @@ class PictographView(QGraphicsView):
 
     def place_ghost_arrows(self, created_arrows, arrow_dict):
         ghost_arrow = self.arrow_manager.arrow_factory.create_arrow(self, arrow_dict)
-
         created_arrows.append(ghost_arrow)
 
     def place_shift_arrows(
