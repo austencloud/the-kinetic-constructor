@@ -298,11 +298,7 @@ class Graphboard(QGraphicsScene):
         if len(self.arrows) == 2:
             letter = self.get_current_letter()
             if letter is not None:
-                self.arrow_positioner.set_arrow_to_optimal_pos(self.arrows)
-        else:
-            for arrow in self.arrows:
-                if not arrow.is_still:
-                    self.arrow_positioner.set_arrow_to_default_pos(arrow)
+                self.arrow_positioner.update_arrow_positions()
 
     def update_staffs(self):
         for staff in self.staffs:

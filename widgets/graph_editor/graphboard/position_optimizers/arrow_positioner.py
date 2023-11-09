@@ -14,13 +14,13 @@ class ArrowPositioner:
         if self.graphboard.arrows == 2:
             current_letter = self.graphboard.get_current_letter()
             if current_letter is not None:
-                self.set_optimal_arrow_location()
+                self.set_optimal_arrow_loc()
         else:
             for arrow in self.graphboard.arrows:
                 if not isinstance(arrow, GhostArrow):
-                    self.set_arrow_to_default_pos(arrow)
+                    self.set_arrow_to_default_loc(arrow)
 
-    def set_optimal_arrow_location(self):
+    def set_optimal_arrow_loc(self):
         current_state = self.graphboard.get_state()
         current_letter = self.graphboard.get_current_letter()
 
@@ -33,9 +33,9 @@ class ArrowPositioner:
             for arrow in self.graphboard.arrows:
                 if not arrow.is_still:
                     if optimal_locations:
-                        self.set_arrow_to_optimal_pos(optimal_locations, arrow)
+                        self.set_arrow_to_optimal_loc(optimal_locations, arrow)
                     else:
-                        self.set_arrow_to_default_pos(arrow)
+                        self.set_arrow_to_default_loc(arrow)
 
     def find_optimal_locations(self, current_state, matching_letters):
         for variations in matching_letters:
@@ -50,7 +50,7 @@ class ArrowPositioner:
                 )
         return None
 
-    def set_arrow_to_optimal_pos(self, optimal_locations, arrow):
+    def set_arrow_to_optimal_loc(self, optimal_locations, arrow):
         optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
         pos = QPointF(
             optimal_location["x"],
@@ -63,7 +63,7 @@ class ArrowPositioner:
         new_pos = QPointF(new_x, new_y)
         arrow.setPos(new_pos)
 
-    def set_arrow_to_default_pos(self, arrow):
+    def set_arrow_to_default_loc(self, arrow):
         layer2_point = arrow.graphboard.grid.get_layer2_point(arrow.quadrant)
         pos = layer2_point
         adjustment = QPointF(0, 0)
