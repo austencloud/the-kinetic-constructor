@@ -2,7 +2,7 @@ from PyQt6.QtCore import QPointF
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtGui import QTransform
 from PyQt6.QtWidgets import QGraphicsScene
-from objects.arrow.arrow import Arrow, GhostArrow
+from objects.arrow.arrow import Arrow, BlankArrow
 from objects.staff.staff import Staff
 from objects.grid import Grid
 from settings.numerical_constants import *
@@ -67,10 +67,10 @@ class Graphboard(QGraphicsScene):
     def update_letter(self):
         if len(self.arrows) == 2:
             current_letter = self.get_current_letter()
-            for letter_type, letters in letter_types.items():
-                if current_letter in letters:
-                    break
-            if self.letter_item:
+            if current_letter:
+                for letter_type, letters in letter_types.items():
+                    if current_letter in letters:
+                        break
                 svg_file = f"{LETTER_SVG_DIR}/{letter_type}/{current_letter}.svg"
                 renderer = QSvgRenderer(svg_file)
                 if renderer.isValid():
@@ -81,6 +81,7 @@ class Graphboard(QGraphicsScene):
                 )
 
         else:
+            current_letter = None
             svg_file = f"{LETTER_SVG_DIR}/blank.svg"
             renderer = QSvgRenderer(svg_file)
             if not renderer.isValid():
@@ -150,7 +151,7 @@ class Graphboard(QGraphicsScene):
             super().mousePressEvent(event)
 
     ### SETTERS ###
-    
+
     def set_default_staff_locations(self, staff):
         if staff.axis == VERTICAL:
             staff.setPos(
@@ -310,7 +311,7 @@ class Graphboard(QGraphicsScene):
             END_LOCATION: deleted_arrow_attributes[END_LOCATION],
             TURNS: 0,
         }
-        ghost_arrow = GhostArrow(self, ghost_attributes_dict)
+        ghost_arrow = BlankArrow(self, ghost_attributes_dict)
         self.addItem(ghost_arrow)
         self.arrows.append(ghost_arrow)
         ghost_arrow.is_still = True

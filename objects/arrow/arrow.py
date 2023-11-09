@@ -4,7 +4,6 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
 import re
 from settings.string_constants import *
-from objects.arrow.arrow_state_comparator import ArrowStateComparator
 from data.start_end_location_mapping import start_end_location_mapping
 
 
@@ -15,10 +14,7 @@ class Arrow(QGraphicsSvgItem):
         self.initialize_svg_renderer(self.svg_file)
         self.setup_attributes(graphboard, dict)
         self.initialize_graphics_flags()
-        self.setup_handlers()
 
-    def setup_handlers(self):
-        self.state_comparator = ArrowStateComparator(self)
 
     def get_svg_file(self, dict):
         if dict:
@@ -36,7 +32,7 @@ class Arrow(QGraphicsSvgItem):
         self.graphboard = graphboard
         if hasattr(graphboard, "infobox"):
             self.infobox = graphboard.infobox
-            
+
         self.in_graphboard = False
         self.drag_offset = QPointF(0, 0)
         self.is_still = False
@@ -107,7 +103,7 @@ class Arrow(QGraphicsSvgItem):
                 self.update_appearance()
                 self.staff.location = self.end_location
                 self.staff.update_attributes_from_arrow(self)
-                self.graphboard.update_staffs()
+                self.graphboard.update()
 
     def handle_pictograph_view_drag(self, event):
         pass
@@ -276,14 +272,20 @@ class Arrow(QGraphicsSvgItem):
         )
 
 
-
-
-class GhostArrow(Arrow):
+class BlankArrow(Arrow):
     # init an arrow that is blank but carries the properties
     # of the arrow that was deleted
     def __init__(self, graphboard, dict):
         super().__init__(graphboard, dict)
-        self.setOpacity(0.5)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, False)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
         self.hide()
+
+
+class GhostArrow(Arrow):
+    # is used for the dragging and dropping to carry attributes
+    def __init__(self, graphboard, dict):
+        super().__init__(graphboard, dict)
+        self.setOpacity(0.2)
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, False)
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)

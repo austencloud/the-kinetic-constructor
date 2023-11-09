@@ -7,17 +7,18 @@ class ArrowPositioner:
     def __init__(self, graphboard):
         self.letters = graphboard.letters
         self.graphboard = graphboard
+        
 
     def update_arrow_positions(self):
-        from objects.arrow.arrow import GhostArrow
+        from objects.arrow.arrow import BlankArrow
 
-        if self.graphboard.arrows == 2:
+        if len(self.graphboard.arrows) == 2:
             current_letter = self.graphboard.get_current_letter()
             if current_letter is not None:
                 self.set_optimal_arrow_loc()
         else:
             for arrow in self.graphboard.arrows:
-                if not isinstance(arrow, GhostArrow):
+                if not isinstance(arrow, BlankArrow):
                     self.set_arrow_to_default_loc(arrow)
 
     def set_optimal_arrow_loc(self):
@@ -50,6 +51,32 @@ class ArrowPositioner:
                 )
         return None
 
+
+    def compare_states(self, current_state, candidate_state):
+        candidate_state_dict = {
+            'arrows': []
+        }
+        for entry in candidate_state:
+            if COLOR in entry and MOTION_TYPE in entry:
+                candidate_state_dict['arrows'].append({
+                    COLOR: entry[COLOR],
+                    MOTION_TYPE: entry[MOTION_TYPE],
+                    ROTATION_DIRECTION: entry[ROTATION_DIRECTION],
+                    QUADRANT: entry[QUADRANT],
+                    TURNS: entry.get(TURNS, 0)
+                })
+
+        if len(current_state['arrows']) != len(candidate_state_dict['arrows']):
+            return False
+
+        for arrow in current_state['arrows']:
+            matching_arrows = [candidate_arrow for candidate_arrow in candidate_state_dict['arrows']
+                               if all(arrow.get(key) == candidate_arrow.get(key) for key in [COLOR, MOTION_TYPE, QUADRANT, ROTATION_DIRECTION])]
+            if not matching_arrows:
+                return False
+
+        return True
+    
     def set_arrow_to_optimal_loc(self, optimal_locations, arrow):
         optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
         pos = QPointF(
