@@ -5,20 +5,15 @@ from PyQt6.QtWidgets import QGraphicsScene
 from objects.arrow.arrow import Arrow, BlankArrow
 from objects.staff.staff import Staff
 from objects.grid import Grid
-from settings.numerical_constants import *
-from settings.string_constants import *
+from settings.numerical_constants import STAFF_LENGTH, STAFF_WIDTH
+from settings.string_constants import VERTICAL, ARROWS, COLOR, MOTION_TYPE, STATIC, ROTATION_DIRECTION, QUADRANT, START_LOCATION, END_LOCATION, TURNS, RED, BLUE, LETTER_SVG_DIR, NORTHWEST, SOUTHWEST, SOUTHEAST, NORTHEAST
 from data.letter_types import letter_types
 from data.positions_map import positions_map
-from widgets.graph_editor.graphboard.graphboard_init import GraphboardInit
-from widgets.graph_editor.graphboard.position_optimizers.staff_positioner import (
-    StaffPositioner,
-)
-from widgets.graph_editor.graphboard.position_optimizers.arrow_positioner import (
-    ArrowPositioner,
-)
-from widgets.graph_editor.graphboard.graphboard_menu_handler import (
-    GraphboardMenuHandler,
-)
+from .graphboard_init import GraphboardInit
+from .graphboard_menu_handler import GraphboardMenuHandler
+from .object_manager.position_optimizers.staff_positioner import StaffPositioner
+from .object_manager.position_optimizers.arrow_positioner import ArrowPositioner
+from .object_manager.ghost_arrow_manager import GhostArrowManager
 from utilities.export_handler import ExportHandler
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
@@ -26,27 +21,30 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 class Graphboard(QGraphicsScene):
     def __init__(self, main_widget, graph_editor):
         super().__init__()
-        self.graph_editor = graph_editor
-        self.letters = main_widget.letters
+        self.setup_scene()
+        self.initialize_components(main_widget, graph_editor)
 
+    def setup_scene(self):
         self.setSceneRect(0, 0, 750, 900)
         self.arrows = []
         self.staffs = []
         self.current_letter = None
 
-
+    def initialize_components(self, main_widget, graph_editor):
+        self.graph_editor = graph_editor
+        self.letters = main_widget.letters
         self.letter_item = QGraphicsSvgItem()
-
         self.initializer = GraphboardInit(self)
+        self.ghost_arrow_manager = GhostArrowManager(self)
+
         self.grid = self.initializer.init_grid()
         self.view = self.initializer.init_view()
         self.staff_set = self.initializer.init_staff_set()
-        self.staffs = []
+        self.setup_managers(main_widget, graph_editor)
 
+    def setup_managers(self, main_widget, graph_editor):
         self.export_manager = ExportHandler(self.grid, self)
-        self.context_menu_manager = GraphboardMenuHandler(
-            main_widget, self.graph_editor, self
-        )
+        self.context_menu_manager = GraphboardMenuHandler(main_widget, graph_editor, self)
         self.arrow_positioner = ArrowPositioner(self)
         self.staff_positioner = StaffPositioner(self)
 
@@ -72,7 +70,7 @@ class Graphboard(QGraphicsScene):
         self.removeItem(arrow)
         self.arrows.remove(arrow)
         if keep_staff:
-            self.create_ghost_arrow(arrow)
+            self.create_blank_arrow(arrow)
         else:
             self.delete_staff(arrow.staff)
 
@@ -168,27 +166,32 @@ class Graphboard(QGraphicsScene):
         return red_position, blue_position
 
     def get_current_letter(self):
-        start_locations, end_locations = self.get_start_end_locations()
-        # Generate the representation of current state with arrow attributes
+        current_combination, specific_position = self.get_specific_start_end_locations()
+        possible_letters = self.get_possible_letters(specific_position)
+        return self.get_match(current_combination, possible_letters)
+
+    def get_match(self, current_combination, possible_letters):
+        for letter, combinations in possible_letters.items():
+            for combination in combinations:
+                if self.match_combination(current_combination, combination):
+                    self.letter = letter
+                    return letter
+
+    def get_possible_letters(self, specific_position):
+        if specific_position["start_position"] and specific_position["end_position"]:
+            overall_position = self.get_overall_position(specific_position)
+            possible_letters = self.get_possible_letters(overall_position)
+        return possible_letters
+
+    def get_specific_start_end_locations(self):
+        start_locations, end_locations = self.get_start_end_locations_as_tuple()
         current_combination = self.get_state()[ARROWS]
         specific_position = {
             "start_position": positions_map.get(start_locations),
             "end_position": positions_map.get(end_locations),
         }
-
-        # Ensure we have valid start and end positions
-        if specific_position["start_position"] and specific_position["end_position"]:
-            overall_position = self.get_overall_position(specific_position)
-            possible_letters = self.get_possible_letters(overall_position)
-
-            # Now, check through the possible letters to find a match
-            for letter, combinations in possible_letters.items():
-                # Check each combination in the possible letters
-                for combination in combinations:
-                    if self.match_combination(current_combination, combination):
-                        self.letter = letter
-                        return letter  # Once a match is found, return immediately
-        return None  # In case of no match
+        
+        return current_combination,specific_position # In case of no match
 
     def get_overall_position(self, specific_positions):
         # Refactoring as per previous recommendation
@@ -219,7 +222,7 @@ class Graphboard(QGraphicsScene):
         else:
             return None
 
-    def get_start_end_locations(self):
+    def get_start_end_locations_as_tuple(self):
         self.red_arrow = (
             self.arrows[0] if self.arrows[0].color == "red" else self.arrows[1]
         )
@@ -265,9 +268,9 @@ class Graphboard(QGraphicsScene):
         else:
             return None
 
-    def create_ghost_arrow(self, arrow):
+    def create_blank_arrow(self, arrow):
         deleted_arrow_attributes = arrow.attributes
-        ghost_attributes_dict = {
+        blank_attributes_dict = {
             COLOR: deleted_arrow_attributes[COLOR],
             MOTION_TYPE: STATIC,
             ROTATION_DIRECTION: "None",
@@ -276,12 +279,12 @@ class Graphboard(QGraphicsScene):
             END_LOCATION: deleted_arrow_attributes[END_LOCATION],
             TURNS: 0,
         }
-        ghost_arrow = BlankArrow(self, ghost_attributes_dict)
-        self.addItem(ghost_arrow)
-        self.arrows.append(ghost_arrow)
-        ghost_arrow.is_still = True
-        ghost_arrow.staff = arrow.staff
-        ghost_arrow.staff.arrow = ghost_arrow
+        blank_arrow = BlankArrow(self, blank_attributes_dict)
+        self.addItem(blank_arrow)
+        self.arrows.append(blank_arrow)
+        blank_arrow.is_still = True
+        blank_arrow.staff = arrow.staff
+        blank_arrow.staff.arrow = blank_arrow
 
     def match_combination(self, current_combination, combination):
         # Here we will compare current arrow states with the states in the combination
@@ -304,6 +307,11 @@ class Graphboard(QGraphicsScene):
 
         return all(current_arrows_matched)  # All current arrows should be matched
 
+    def center_letter_item(self):
+        x = self.width() / 2 - self.letter_item.boundingRect().width() / 2
+        y = self.height() / 2 - self.letter_item.boundingRect().height() / 2
+        self.letter_item.setPos(x, y)
+
     ### UPDATERS ###
 
     def update(self):
@@ -323,29 +331,31 @@ class Graphboard(QGraphicsScene):
             self.staff_positioner.reposition_beta_staffs()
 
     def update_letter(self):
-        if len(self.staffs) == 2:
-            current_letter = self.get_current_letter()
-            if current_letter:
-                for letter_type, letters in letter_types.items():
-                    if current_letter in letters:
-                        break
-                svg_file = f"{LETTER_SVG_DIR}/{letter_type}/{current_letter}.svg"
-                renderer = QSvgRenderer(svg_file)
-                if renderer.isValid():
-                    self.letter_item.setSharedRenderer(renderer)
-                self.letter_item.setPos(
-                    self.width() / 2 - self.letter_item.boundingRect().width() / 2,
-                    self.width(),
-                )
+        current_letter = self.get_current_letter() if len(self.staffs) == 2 else None
+        self.update_letter_item(current_letter)
 
+    def update_letter_item(self, letter):
+        if letter:
+            self.set_letter_renderer(letter)
         else:
-            current_letter = None
-            svg_file = f"{LETTER_SVG_DIR}/blank.svg"
-            renderer = QSvgRenderer(svg_file)
-            if not renderer.isValid():
-                return
+            self.set_blank_renderer()
+
+    ### SETTERS ###
+
+    def set_letter_renderer(self, letter):
+        letter_type = self.get_letter_type(letter)
+        svg_path = f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
+        self.set_svg_renderer(svg_path)
+
+    def set_blank_renderer(self):
+        self.set_svg_renderer(f"{LETTER_SVG_DIR}/blank.svg")
+
+    def set_svg_renderer(self, svg_path):
+        renderer = QSvgRenderer(svg_path)
+        if renderer.isValid():
             self.letter_item.setSharedRenderer(renderer)
-            self.letter_item.setPos(
-                self.width() / 2 - self.letter_item.boundingRect().width() / 2,
-                self.width(),
-            )
+            self.center_letter_item()
+
+    
+
+

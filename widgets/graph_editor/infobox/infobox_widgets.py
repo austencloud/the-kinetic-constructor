@@ -66,7 +66,7 @@ class InfoboxWidgets():
         for color in [BLUE, RED]:
             arrow = self.graphboard.get_arrow_by_color(color)
             if arrow:
-                attributes = arrow.create_attributes_from_arrow(arrow)
+                attributes = arrow.attributes
                 widget = getattr(self.widgets, f"{color}_attributes_widget")
                 self.update_info_widget_content(widget, attributes)
                 widget.show()

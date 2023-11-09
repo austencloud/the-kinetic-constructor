@@ -6,6 +6,10 @@ from PyQt6.QtCore import Qt
 from settings.numerical_constants import GRAPHBOARD_SCALE
 from settings.string_constants import *
 from objects.arrow.arrow import Arrow
+from widgets.graph_editor.graphboard.object_manager.ghost_arrow_manager import (
+    GhostArrowManager,
+)
+
 
 class Drag(QWidget):
     def __init__(self, main_window, graphboard, arrowbox):
@@ -20,6 +24,9 @@ class Drag(QWidget):
         self.current_rotation_angle = 0
         self.previous_quadrant = None
         self.preview = None
+
+        self.ghost_arrow_manager = self.graphboard.ghost_arrow_manager
+        self.ghost_arrow = self.ghost_arrow_manager.init_ghost_arrow()
 
         self.reset_drag_state()
 
@@ -53,15 +60,9 @@ class Drag(QWidget):
         self.graphboard = graphboard
         self.main_window = main_window
 
-    def init_ghost_arrow(self):
-        from objects.arrow.arrow import GhostArrow
-
-        temp_attributes = self.target_arrow.create_attributes_from_arrow(self)
-        self.ghost_arrow = GhostArrow(self.graphboard, temp_attributes)
-
-    def create_pixmap(self, dragged_arrow):
-        new_svg_data = dragged_arrow.set_svg_color(
-            dragged_arrow.svg_file, dragged_arrow.color
+    def create_pixmap(self, target_arrow):
+        new_svg_data = target_arrow.set_svg_color(
+            target_arrow.svg_file, target_arrow.color
         )
         renderer = QSvgRenderer(new_svg_data)
         scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE
@@ -76,7 +77,7 @@ class Drag(QWidget):
         (
             start_location,
             end_location,
-        ) = self.target_arrow.attributes.get_start_end_locations(
+        ) = self.target_arrow.get_start_end_locations(
             self.motion_type, self.rotation_direction, self.quadrant
         )
 
@@ -135,32 +136,31 @@ class Drag(QWidget):
         if not self.has_entered_graphboard_once:
             self.just_entered_graphboard = True
             self.has_entered_graphboard_once = True
-            self.init_ghost_arrow()
             self.remove_same_color_arrow()
 
         new_quadrant = self.graphboard.determine_quadrant(scene_pos.x(), scene_pos.y())
 
         if self.previous_quadrant != new_quadrant:
             self.update_drag_preview_for_new_quadrant(new_quadrant)
+            new_quadrant = self.previous_quadrant
+            self.graphboard.arrow_positioner.update_arrow_positions()
+
 
     def update_drag_preview_for_new_quadrant(self, new_quadrant):
         self.quadrant = new_quadrant
         self.update_rotation()
-        self.update_ghost_arrow()
-
-        self.previous_quadrant = new_quadrant
-        
-        (
-            self.start_location,
-            self.end_location,
-        ) = self.ghost_arrow.get_start_end_locations(
-            self.motion_type, self.rotation_direction, self.quadrant
-        )
-        self.update_staff_during_drag()
+        self.ghost_arrow_manager.update_for_new_quadrant(new_quadrant)
         self.graphboard.arrow_positioner.update_arrow_positions()
-        self.ghost_arrow.update_appearance()
+
+        self.update_staff_during_drag()
+        if self.ghost_arrow not in self.graphboard.arrows:
+            self.graphboard.arrows.append(self.ghost_arrow)
+        if self.ghost_arrow not in self.graphboard.items():
+            self.graphboard.addItem(self.ghost_arrow)
         self.graphboard.update_letter()
-        
+        self.graphboard.update_staffs()
+
+
 
     def remove_same_color_arrow(self):
         for arrow in self.graphboard.arrows[:]:
@@ -172,24 +172,12 @@ class Drag(QWidget):
                 self.graphboard.removeItem(staff)
                 self.graphboard.staffs.remove(staff)
 
-    def update_ghost_arrow(self):
-        drag_attributes = self.ghost_arrow.create_attributes_from_arrow(self)
-        self.ghost_arrow.update_attributes(drag_attributes)
-        self.ghost_arrow.show()
-
-        if self.ghost_arrow not in self.graphboard.arrows:
-            if self.ghost_arrow not in self.graphboard.items():
-                self.graphboard.addItem(self.ghost_arrow)
-                self.graphboard.arrows.append(self.ghost_arrow)
-                self.graphboard.arrow_positioner.update_arrow_positions()
-                self.ghost_arrow.update_appearance()
-
     def update_staff_during_drag(self):
         for staff in self.graphboard.staff_set.values():
             if staff.color == self.color:
                 if staff not in self.graphboard.staffs:
                     self.graphboard.staffs.append(staff)
-                    
+
                 staff.update_attributes(
                     {
                         COLOR: self.color,
@@ -221,8 +209,6 @@ class Drag(QWidget):
         self.placed_arrow.update_appearance()
         self.placed_arrow.show()
         self.placed_arrow.setSelected(True)
-
-        self.graphboard.arrow_positioner.update_arrow_positions()
 
     def start_drag(self, event_pos):
         self.move_to_cursor(self.arrowbox, event_pos)

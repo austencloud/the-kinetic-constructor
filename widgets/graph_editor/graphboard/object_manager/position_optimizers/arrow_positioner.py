@@ -9,26 +9,27 @@ class ArrowPositioner:
         self.graphboard = graphboard
         
     def update_arrow_positions(self):
-        current_state = self.graphboard.get_state()
+        for arrow in self.graphboard.arrows:
+            # set the transformation matrix to 0,0
+            arrow.setTransformOriginPoint(0, 0)
         optimal_locations = None
         
         if len(self.graphboard.staffs) == 2:
-            self.graphboard.current_letter = self.graphboard.get_current_letter()
-
-        if self.graphboard.current_letter is not None:
-            matching_letters = self.letters[self.graphboard.current_letter]
-            optimal_locations = self.find_optimal_locations(
-                current_state, matching_letters
-            )
+            current_letter = self.graphboard.get_current_letter()
+            if current_letter is not None:
+                optimal_locations = self.find_optimal_locations()
 
         for arrow in self.graphboard.arrows:
-            if not arrow.is_still:
+            if not isinstance(arrow, BlankArrow):
                 if optimal_locations:
                     self.set_arrow_to_optimal_loc(optimal_locations, arrow)
                 else:
                     self.set_arrow_to_default_loc(arrow)
 
-    def find_optimal_locations(self, current_state, matching_letters):
+    def find_optimal_locations(self):
+        current_state = self.graphboard.get_state()
+        matching_letters = self.letters[self.graphboard.current_letter]
+        
         for variations in matching_letters:
             if self.compare_states(current_state, variations):
                 return next(
@@ -99,4 +100,4 @@ class ArrowPositioner:
         )
 
         final_pos = QPointF(new_pos.x(), new_pos.y())
-        arrow.setPos(final_pos - arrow.center)
+        arrow.setPos(final_pos - arrow.boundingRect().center())
