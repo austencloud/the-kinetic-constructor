@@ -10,8 +10,6 @@ class StaffPositioner:
         self.view = graphboard.view
         self.letters = graphboard.letters
 
-    ### BETA TO BETA REPOSITIONERS ###
-
     def reposition_beta_staffs(self):
         board_state = self.graphboard.get_state()
 
@@ -62,6 +60,8 @@ class StaffPositioner:
             ):
                 self.reposition_alpha_to_beta(move_staff, converging_arrows)
 
+    ### STATIC BETA ###
+
     def reposition_static_beta(self, move_staff, static_arrows):
         for arrow in static_arrows:
             staff = next(
@@ -104,6 +104,8 @@ class StaffPositioner:
                     if other_staff:
                         move_staff(other_staff, direction[1])
 
+    ### ALPHA TO BETA ###
+
     def reposition_alpha_to_beta(self, move_staff, converging_arrows):  # D, E, F
         end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
         start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
@@ -123,6 +125,8 @@ class StaffPositioner:
                         direction,
                     )
 
+    ### BETA TO BETA ###
+
     def reposition_beta_to_beta(self, arrows):  # G, H, I
         arrow1, arrow2 = arrows
         same_motion_type = arrow1[MOTION_TYPE] == arrow2[MOTION_TYPE] in [PRO, ANTI]
@@ -134,8 +138,8 @@ class StaffPositioner:
             self.reposition_I(arrow1, arrow2)
 
     def reposition_G_and_H(self, arrow1, arrow2):
-        optimal_position1 = self.get_optimal_arrow_location(arrow1, self.graphboard)
-        optimal_position2 = self.get_optimal_arrow_location(arrow2, self.graphboard)
+        optimal_position1 = self.get_optimal_arrow_location(arrow1)
+        optimal_position2 = self.get_optimal_arrow_location(arrow2)
 
         if not optimal_position1 or not optimal_position2:
             return
@@ -208,6 +212,8 @@ class StaffPositioner:
             )
             anti_staff.setPos(new_position_anti)
 
+    ### GAMMA TO BETA ###
+
     def reposition_gamma_to_beta(
         self, move_staff, pro_or_anti_arrows, static_arrows
     ):  # Y, Z
@@ -241,37 +247,6 @@ class StaffPositioner:
         if len(visible_staves) == 2:
             if visible_staves[0].location == visible_staves[1].location:
                 return True
-
-    def get_distance_from_center(self, position):
-        center_point = QPointF(
-            self.graphboard.view.width() / 2, self.graphboard.view.height() / 2
-        )  # Assuming this is the center point of your coordinate system
-
-        x_position = position.get("x", 0.0)
-        y_position = position.get("y", 0.0)
-        center_x = center_point.x()
-        center_y = center_point.y()
-
-        # Calculate the distance
-        distance = math.sqrt(
-            (x_position - center_x) ** 2 + (y_position - center_y) ** 2
-        )
-        return distance
-
-    def get_optimal_arrow_location(self, arrow):
-        current_state = self.graphboard.get_state()
-        current_letter = self.graphboard.get_current_letter()
-
-        if current_letter is not None:
-            matching_letters = self.letters[current_letter]
-            optimal_location = self.find_optimal_arrow_location(
-                current_state, self.graphboard, matching_letters, arrow
-            )
-
-            if optimal_location:
-                return optimal_location
-
-        return None  # Return None if there are no optimal positions
 
     def find_optimal_arrow_location(
         self, current_state, graphboard, matching_letters, arrow_dict
@@ -315,6 +290,39 @@ class StaffPositioner:
             return current_position + offset
         else:
             return current_position - offset
+
+    ### GETTERS
+
+    def get_distance_from_center(self, position):
+        center_point = QPointF(
+            self.graphboard.view.width() / 2, self.graphboard.view.height() / 2
+        )  # Assuming this is the center point of your coordinate system
+
+        x_position = position.get("x", 0.0)
+        y_position = position.get("y", 0.0)
+        center_x = center_point.x()
+        center_y = center_point.y()
+
+        # Calculate the distance
+        distance = math.sqrt(
+            (x_position - center_x) ** 2 + (y_position - center_y) ** 2
+        )
+        return distance
+
+    def get_optimal_arrow_location(self, arrow):
+        current_state = self.graphboard.get_state()
+        current_letter = self.graphboard.get_current_letter()
+
+        if current_letter is not None:
+            matching_letters = self.letters[current_letter]
+            optimal_location = self.find_optimal_arrow_location(
+                current_state, self.graphboard, matching_letters, arrow
+            )
+
+            if optimal_location:
+                return optimal_location
+
+        return None  # Return None if there are no optimal positions
 
     def get_opposite_direction(self, movement):
         if movement == LEFT:

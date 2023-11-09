@@ -23,8 +23,6 @@ class KeyEventHandler:
                 for item in selection:
                     if isinstance(item, Arrow):
                         graphboard.delete_arrow(item, keep_staff=keep_staff)
-                        if not keep_staff:
-                            graphboard.delete_staff(item.staff)
                     elif isinstance(item, Staff):
                         graphboard.delete_staff(item)
 

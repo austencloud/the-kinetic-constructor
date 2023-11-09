@@ -32,6 +32,7 @@ class Drag(QWidget):
 
     def set_attributes_to_target_arrow(self, target_arrow):
         self.target_arrow = target_arrow
+        self.ghost_arrow.target_arrow = target_arrow
         pixmap = self.create_pixmap(target_arrow)
         self.color = target_arrow.color
         self.motion_type = target_arrow.motion_type
@@ -149,7 +150,7 @@ class Drag(QWidget):
     def update_drag_preview_for_new_quadrant(self, new_quadrant):
         self.quadrant = new_quadrant
         self.update_rotation()
-        self.ghost_arrow_manager.update_for_new_quadrant(new_quadrant)
+        self.ghost_arrow_manager.update_ghost_arrow(new_quadrant, self)
         self.graphboard.arrow_positioner.update_arrow_positions()
 
         self.update_staff_during_drag()

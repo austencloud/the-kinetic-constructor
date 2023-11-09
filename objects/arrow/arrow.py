@@ -7,6 +7,7 @@ from settings.string_constants import *
 from data.start_end_location_mapping import start_end_location_mapping
 from settings.numerical_constants import GRAPHBOARD_SCALE
 
+
 class Arrow(QGraphicsSvgItem):
     def __init__(self, graphboard, attributes):
         super().__init__()
@@ -183,6 +184,11 @@ class Arrow(QGraphicsSvgItem):
         self.update_color()
         self.update_rotation()
 
+    def set_transform_origin_to_center(self):
+        # Call this method after any changes that might affect the boundingRect.
+        self.center = self.boundingRect().center()
+        self.setTransformOriginPoint(self.center)
+
     def update_color(self):
         if self.motion_type in [PRO, ANTI]:
             new_svg_data = self.set_svg_color(self.svg_file, self.color)
@@ -190,12 +196,12 @@ class Arrow(QGraphicsSvgItem):
             self.setSharedRenderer(self.renderer)
 
     def update_rotation(self):
+        # Ensure transformation origin point is at the center.
+        # Proceed with obtaining the rotation angle and rotate.
         angle = self.get_rotation_angle(
             self.quadrant, self.motion_type, self.rotation_direction
         )
         self.setRotation(angle)
-
-
 
     def update_attributes(self, attributes):
         for attr in ARROW_ATTRIBUTES:
@@ -224,12 +230,18 @@ class Arrow(QGraphicsSvgItem):
 
     def update_for_new_quadrant(self, new_quadrant):
         self.quadrant = new_quadrant
+
         self.start_location, self.end_location = self.get_start_end_locations(
             self.motion_type, self.rotation_direction, self.quadrant
         )
         self.update_appearance()
+        self.previous_arrow = (
+            self.staff.arrow
+        )  # Consider storing the old arrow before changing.
         self.staff.location = self.end_location
         self.staff.update_attributes_from_arrow(self)
+
+        self.update_appearance()  # Now this will reset the transform origin as well.
         self.graphboard.update()
 
     ### MANIPULATION ###
@@ -283,4 +295,3 @@ class GhostArrow(Arrow):
         super().__init__(graphboard, attributes)
         self.setOpacity(0.2)
         self.setTransformOriginPoint(self.center)
-

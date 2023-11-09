@@ -73,7 +73,7 @@ class Graphboard(QGraphicsScene):
             self.create_blank_arrow(arrow)
         else:
             self.delete_staff(arrow.staff)
-
+    
         self.update()
 
     def delete_staff(self, staff):
