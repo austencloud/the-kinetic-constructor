@@ -8,8 +8,9 @@ class Manipulators:
 
     def update_arrow_and_staff(self, arrow, arrow_dict, staff_dict):
         staff = arrow.staff
-        arrow.attributes.update(arrow_dict)
-        staff.attributes.update(staff_dict)
+        arrow.update_attributes(arrow_dict)
+        staff.update_attributes(staff_dict)
+        
 
     def move_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {
@@ -50,6 +51,8 @@ class Manipulators:
         self.update_arrow_and_staff(
             selected_arrow, updated_arrow_dict, updated_staff_dict
         )
+        selected_arrow.update_appearance()
+        selected_arrow.staff.update_appearance()
         self.graphboard.update()
 
     def rotate_arrow(self, rotation_direction, arrows):

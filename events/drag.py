@@ -204,6 +204,7 @@ class Drag(QWidget):
 
         self.placed_arrow.update_appearance()
         self.placed_arrow.show()
+        self.placed_arrow.setSelected(True)
 
         self.graphboard.arrow_positioner.update_arrow_positions()
 
