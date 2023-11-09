@@ -69,6 +69,7 @@ class Graphboard(QGraphicsScene):
 
     def delete_arrow(self, arrow, keep_staff=False):
         self.removeItem(arrow)
+        self.arrows.remove(arrow)
         if keep_staff:
             self.create_ghost_arrow(arrow)
         else:
@@ -77,7 +78,8 @@ class Graphboard(QGraphicsScene):
         self.update()
 
     def delete_staff(self, staff):
-        staff.hide()
+        self.removeItem(staff)
+        self.staffs.remove(staff)
         self.update()
 
     ### EVENTS ###
@@ -193,9 +195,9 @@ class Graphboard(QGraphicsScene):
 
     def get_possible_letters(self, overall_position):
         category_map = {
-            "alpha": "ABCDEF",
-            "beta": "GHIJKL",
-            "gamma": "MNOPQRSTUV",
+            "alpha": "ABCDEFWXα",
+            "beta": "GHIJKLYZβ",
+            "gamma": "MNOPQRSTUVΣΔθΩΓ",
         }
         category = category_map.get(overall_position.get("end_position"))
         if category:

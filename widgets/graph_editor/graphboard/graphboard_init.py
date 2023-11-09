@@ -61,9 +61,6 @@ class GraphboardInit:
         red_staff.hide()
         blue_staff.hide()
 
-        self.graphboard.addItem(red_staff)
-        self.graphboard.addItem(blue_staff)
-
         staff_set = {RED: red_staff, BLUE: blue_staff}
         return staff_set
 

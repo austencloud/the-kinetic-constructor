@@ -13,7 +13,7 @@ class ArrowPositioner:
         current_state = self.graphboard.get_state()
         optimal_locations = None
         
-        if len(self.graphboard.arrows) == 2:
+        if len(self.graphboard.staffs) == 2:
             self.graphboard.current_letter = self.graphboard.get_current_letter()
 
         if self.graphboard.current_letter is not None:

@@ -53,11 +53,11 @@ class Drag(QWidget):
         self.graphboard = graphboard
         self.main_window = main_window
 
-    def init_temp_arrow(self):
+    def init_ghost_arrow(self):
         from objects.arrow.arrow import GhostArrow
 
         temp_attributes = self.target_arrow.create_attributes_from_arrow(self)
-        self.temp_arrow = GhostArrow(self.graphboard, temp_attributes)
+        self.ghost_arrow = GhostArrow(self.graphboard, temp_attributes)
 
     def create_pixmap(self, dragged_arrow):
         new_svg_data = dragged_arrow.set_svg_color(
@@ -135,7 +135,8 @@ class Drag(QWidget):
         if not self.has_entered_graphboard_once:
             self.just_entered_graphboard = True
             self.has_entered_graphboard_once = True
-            self.init_temp_arrow()
+            self.init_ghost_arrow()
+            self.remove_same_color_arrow()
 
         new_quadrant = self.graphboard.determine_quadrant(scene_pos.x(), scene_pos.y())
 
@@ -143,38 +144,52 @@ class Drag(QWidget):
             self.update_drag_preview_for_new_quadrant(new_quadrant)
 
     def update_drag_preview_for_new_quadrant(self, new_quadrant):
+        self.quadrant = new_quadrant
+        self.update_rotation()
+        self.update_ghost_arrow()
+
+        self.previous_quadrant = new_quadrant
+        
+        (
+            self.start_location,
+            self.end_location,
+        ) = self.ghost_arrow.get_start_end_locations(
+            self.motion_type, self.rotation_direction, self.quadrant
+        )
+        self.update_staff_during_drag()
+        self.graphboard.arrow_positioner.update_arrow_positions()
+        self.ghost_arrow.update_appearance()
+        self.graphboard.update_letter()
+        
+
+    def remove_same_color_arrow(self):
         for arrow in self.graphboard.arrows[:]:
             if arrow.isVisible() and arrow.color == self.color:
                 self.graphboard.removeItem(arrow)
                 self.graphboard.arrows.remove(arrow)
+        for staff in self.graphboard.staffs[:]:
+            if staff.isVisible() and staff.color == self.color:
+                self.graphboard.removeItem(staff)
+                self.graphboard.staffs.remove(staff)
 
-        self.quadrant = new_quadrant
-        self.update_rotation()
-        new_arrow = self.temp_arrow.create_attributes_from_arrow(self)
-        self.temp_arrow.update_attributes(new_arrow)
-        self.temp_arrow.show()
+    def update_ghost_arrow(self):
+        drag_attributes = self.ghost_arrow.create_attributes_from_arrow(self)
+        self.ghost_arrow.update_attributes(drag_attributes)
+        self.ghost_arrow.show()
 
-        # if the temp arrow isn't already in the graphboard, add it to the graphboard
-        if self.temp_arrow not in self.graphboard.items():
-            self.graphboard.addItem(self.temp_arrow)
-            self.graphboard.arrows.append(self.temp_arrow)
-            self.graphboard.arrow_positioner.update_arrow_positions()
-            self.temp_arrow.update_appearance()
-
-        self.graphboard.update_letter()
-        self.previous_quadrant = new_quadrant
-        self.quadrant = new_quadrant
-        (
-            self.start_location,
-            self.end_location,
-        ) = self.temp_arrow.get_start_end_locations(
-            self.motion_type, self.rotation_direction, self.quadrant
-        )
-        self.update_staff_during_drag()
+        if self.ghost_arrow not in self.graphboard.arrows:
+            if self.ghost_arrow not in self.graphboard.items():
+                self.graphboard.addItem(self.ghost_arrow)
+                self.graphboard.arrows.append(self.ghost_arrow)
+                self.graphboard.arrow_positioner.update_arrow_positions()
+                self.ghost_arrow.update_appearance()
 
     def update_staff_during_drag(self):
         for staff in self.graphboard.staff_set.values():
             if staff.color == self.color:
+                if staff not in self.graphboard.staffs:
+                    self.graphboard.staffs.append(staff)
+                    
                 staff.update_attributes(
                     {
                         COLOR: self.color,
@@ -182,26 +197,26 @@ class Drag(QWidget):
                         LAYER: 1,
                     }
                 )
-                staff.arrow = self.temp_arrow
-                self.temp_arrow.staff = staff
+                staff.arrow = self.ghost_arrow
+                self.ghost_arrow.staff = staff
+                if staff not in self.graphboard.items():
+                    self.graphboard.addItem(staff)
                 staff.show()
                 staff.update_appearance()
-                if staff not in self.graphboard.staffs:
-                    self.graphboard.staffs.append(staff)
                 self.graphboard.update_staffs()
 
     def place_arrow_on_graphboard(self):
         self.graphboard.arrow_positioner.update_arrow_positions()
         self.graphboard.clearSelection()
 
-        self.placed_arrow = Arrow(self.graphboard, self.temp_arrow.get_attributes())
-        self.placed_arrow.staff = self.temp_arrow.staff
+        self.placed_arrow = Arrow(self.graphboard, self.ghost_arrow.get_attributes())
+        self.placed_arrow.staff = self.ghost_arrow.staff
 
         self.graphboard.addItem(self.placed_arrow)
         self.graphboard.arrows.append(self.placed_arrow)
 
-        self.graphboard.removeItem(self.temp_arrow)
-        self.graphboard.arrows.remove(self.temp_arrow)
+        self.graphboard.removeItem(self.ghost_arrow)
+        self.graphboard.arrows.remove(self.ghost_arrow)
 
         self.placed_arrow.update_appearance()
         self.placed_arrow.show()

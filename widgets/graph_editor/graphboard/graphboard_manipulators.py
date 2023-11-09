@@ -119,6 +119,8 @@ class Manipulators:
             new_rotation_direction = CLOCKWISE
         elif arrow.rotation_direction == CLOCKWISE:
             new_rotation_direction = COUNTER_CLOCKWISE
+        elif arrow.rotation_direction == 'None':
+            new_rotation_direction = 'None'
 
         old_start_location = arrow.start_location
         old_end_location = arrow.end_location
@@ -146,12 +148,16 @@ class Manipulators:
             new_motion_type = PRO
         elif arrow.motion_type == PRO:
             new_motion_type = ANTI
+        elif arrow.motion_type == STATIC:
+            new_motion_type = STATIC
 
 
         if arrow.rotation_direction == COUNTER_CLOCKWISE:
             new_rotation_direction = CLOCKWISE
         elif arrow.rotation_direction == CLOCKWISE:
             new_rotation_direction = COUNTER_CLOCKWISE
+        elif arrow.rotation_direction == 'None':
+            new_rotation_direction = 'None'
 
         new_arrow_dict = {
             COLOR: arrow.color,
