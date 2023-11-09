@@ -47,16 +47,12 @@ class Arrow(QGraphicsSvgItem):
         self.center = self.boundingRect().center()
 
     def setup_graphics_flags(self):
-        flags = [
-            QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges,
-            QGraphicsItem.GraphicsItemFlag.ItemIsFocusable,
-            QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable,
-            QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable,
-        ]
-
-        for flag in flags:
-            self.setFlag(flag, True)
-
+        self.setFlags(
+            QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable |
+            QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable |
+            QGraphicsSvgItem.GraphicsItemFlag.ItemSendsGeometryChanges |
+            QGraphicsSvgItem.GraphicsItemFlag.ItemIsFocusable
+        )
         self.setTransformOriginPoint(self.center)
 
     def setup_svg_renderer(self, svg_file):

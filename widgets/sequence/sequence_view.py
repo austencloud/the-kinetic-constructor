@@ -76,7 +76,7 @@ class SequenceView(QGraphicsView):
         image.fill(QColor(Qt.GlobalColor.transparent))
         painter = QPainter(image)
 
-        graphboard.clear_selection()
+        graphboard.clear()
 
         # Render the sequence_scene
         graphboard.render(painter)
@@ -88,8 +88,8 @@ class SequenceView(QGraphicsView):
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
         )
-        pictograph = (graphboard.get_state(), scaled_image)
-        self.add_pictograph(pictograph)
+        state = (graphboard.get_state(), scaled_image)
+        self.add_pictograph(state)
         graphboard.clear_graphboard()
         graphboard.update_letter(None)
 

@@ -28,6 +28,7 @@ class Infobox(QFrame):
 
     def update(self):
         self.widgets.update_attribute_widgets()
-        self.labels.update_type_and_position_label()
+        if len(self.graphboard.staffs) == 2:
+            self.labels.update_type_and_position_label()
 
 
