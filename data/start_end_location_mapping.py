@@ -1,18 +1,20 @@
+from settings.string_constants import *
+
 start_end_location_mapping = {
-    'ne': {
-        'r': {'anti': ('e', 'n'), 'pro': ('n', 'e')},
-        'l': {'anti': ('n', 'e'), 'pro': ('e', 'n')}
+    NORTHEAST: {
+        CLOCKWISE: {ANTI: (EAST, NORTH), PRO: (NORTH, EAST)},
+        COUNTER_CLOCKWISE: {ANTI: (NORTH, EAST), PRO: (EAST, NORTH)}
     },
-    'nw': {
-        'r': {'anti': ('n', 'w'), 'pro': ('w', 'n')},
-        'l': {'anti': ('w', 'n'), 'pro': ('n', 'w')}
+    NORTHWEST: {
+        CLOCKWISE: {ANTI: (NORTH, WEST), PRO: (WEST, NORTH)},
+        COUNTER_CLOCKWISE: {ANTI: (WEST, NORTH), PRO: (NORTH, WEST)}
     },
-    'se': {
-        'r': {'anti': ('s', 'e'), 'pro': ('e', 's')},
-        'l': {'anti': ('e', 's'), 'pro': ('s', 'e')}
+    SOUTHEAST: {
+        CLOCKWISE: {ANTI: (SOUTH, EAST), PRO: (EAST, SOUTH)},
+        COUNTER_CLOCKWISE: {ANTI: (EAST, SOUTH), PRO: (SOUTH, EAST)}
     },
-    'sw': {
-        'r': {'anti': ('w', 's'), 'pro': ('s', 'w')},
-        'l': {'anti': ('s', 'w'), 'pro': ('w', 's')}
+    SOUTHWEST: {
+        CLOCKWISE: {ANTI: (WEST, SOUTH), PRO: (SOUTH, WEST)},
+        COUNTER_CLOCKWISE: {ANTI: (SOUTH, WEST), PRO: (WEST, SOUTH)}
     }
 }

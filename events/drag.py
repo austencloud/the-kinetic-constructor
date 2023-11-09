@@ -7,7 +7,6 @@ from settings.numerical_constants import GRAPHBOARD_SCALE
 from settings.string_constants import *
 from objects.arrow.arrow import Arrow
 
-
 class Drag(QWidget):
     def __init__(self, main_window, graphboard, arrowbox):
         super().__init__()
@@ -57,8 +56,8 @@ class Drag(QWidget):
     def init_temp_arrow(self):
         from objects.arrow.arrow import GhostArrow
 
-        temp_dict = self.target_arrow.create_dict_from_arrow(self)
-        self.temp_arrow = GhostArrow(self.graphboard, temp_dict)
+        temp_attributes = self.target_arrow.create_attributes_from_arrow(self)
+        self.temp_arrow = GhostArrow(self.graphboard, temp_attributes)
 
     def create_pixmap(self, dragged_arrow):
         new_svg_data = dragged_arrow.set_svg_color(
@@ -151,7 +150,7 @@ class Drag(QWidget):
 
         self.quadrant = new_quadrant
         self.update_rotation()
-        new_arrow = self.temp_arrow.create_dict_from_arrow(self)
+        new_arrow = self.temp_arrow.create_attributes_from_arrow(self)
         self.temp_arrow.update_attributes(new_arrow)
         self.temp_arrow.show()
 

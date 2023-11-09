@@ -8,17 +8,17 @@ from data.start_end_location_mapping import start_end_location_mapping
 
 
 class Arrow(QGraphicsSvgItem):
-    def __init__(self, graphboard, dict):
-        self.svg_file = self.get_svg_file(dict)
+    def __init__(self, graphboard, attributes):
+        self.svg_file = self.get_svg_file(attributes)
         super().__init__(self.svg_file)
         self.initialize_svg_renderer(self.svg_file)
-        self.setup_attributes(graphboard, dict)
+        self.setup_attributes(graphboard, attributes)
         self.initialize_graphics_flags()
 
-    def get_svg_file(self, dict):
-        if dict:
-            motion_type = dict[MOTION_TYPE]
-            turns = dict.get(TURNS, None)
+    def get_svg_file(self, attributes):
+        if attributes:
+            motion_type = attributes[MOTION_TYPE]
+            turns = attributes.get(TURNS, None)
 
             if motion_type in [PRO, ANTI]:
                 self.is_shift = True
@@ -27,7 +27,7 @@ class Arrow(QGraphicsSvgItem):
                 self.is_static = True
                 return None
 
-    def setup_attributes(self, graphboard, dict):
+    def setup_attributes(self, graphboard, attributes):
         self.graphboard = graphboard
         if hasattr(graphboard, "infobox"):
             self.infobox = graphboard.infobox
@@ -39,8 +39,8 @@ class Arrow(QGraphicsSvgItem):
         self.is_mirrored = False
         self.previous_arrow = None
 
-        if dict:
-            self.update_attributes(dict)
+        if attributes:
+            self.update_attributes(attributes)
             self.update_appearance()
         self.center = self.boundingRect().center()
 
@@ -220,24 +220,24 @@ class Arrow(QGraphicsSvgItem):
         self.initialize_svg_renderer(self.svg_file)
         self.update_appearance()
 
-    def update_attributes(self, dict):
+    def update_attributes(self, attributes):
         for attr in ARROW_ATTRIBUTES:
-            value = dict.get(attr)
+            value = attributes.get(attr)
             if attr == TURNS:
                 value = int(value)
             setattr(self, attr, value)
 
         self.attributes = {
-            COLOR: dict.get(COLOR, None),
-            MOTION_TYPE: dict.get(MOTION_TYPE, None),
-            ROTATION_DIRECTION: dict.get(ROTATION_DIRECTION, None),
-            QUADRANT: dict.get(QUADRANT, None),
-            START_LOCATION: dict.get(START_LOCATION, None),
-            END_LOCATION: dict.get(END_LOCATION, None),
-            TURNS: dict.get(TURNS, None),
+            COLOR: attributes.get(COLOR, None),
+            MOTION_TYPE: attributes.get(MOTION_TYPE, None),
+            ROTATION_DIRECTION: attributes.get(ROTATION_DIRECTION, None),
+            QUADRANT: attributes.get(QUADRANT, None),
+            START_LOCATION: attributes.get(START_LOCATION, None),
+            END_LOCATION: attributes.get(END_LOCATION, None),
+            TURNS: attributes.get(TURNS, None),
         }
 
-    def create_dict_from_arrow(self, arrow):
+    def create_attributes_from_arrow(self, arrow):
         if arrow.motion_type in [PRO, ANTI]:
             start_location, end_location = self.get_start_end_locations(
                 arrow.motion_type, arrow.rotation_direction, arrow.quadrant
@@ -245,7 +245,7 @@ class Arrow(QGraphicsSvgItem):
         elif arrow.motion_type == STATIC:
             start_location, end_location = arrow.start_location, arrow.end_location
 
-        dict = {
+        attributes = {
             COLOR: arrow.color,
             MOTION_TYPE: arrow.motion_type,
             ROTATION_DIRECTION: arrow.rotation_direction,
@@ -254,7 +254,7 @@ class Arrow(QGraphicsSvgItem):
             END_LOCATION: end_location,
             TURNS: arrow.turns,
         }
-        return dict
+        return attributes
 
     def get_attributes(self):
         return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}
@@ -270,8 +270,8 @@ class Arrow(QGraphicsSvgItem):
 class BlankArrow(Arrow):
     # init an arrow that is blank but carries the properties
     # of the arrow that was deleted
-    def __init__(self, graphboard, dict):
-        super().__init__(graphboard, dict)
+    def __init__(self, graphboard, attributes):
+        super().__init__(graphboard, attributes)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, False)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
         self.hide()
@@ -279,8 +279,8 @@ class BlankArrow(Arrow):
 
 class GhostArrow(Arrow):
     # is used for the dragging and dropping to carry attributes
-    def __init__(self, graphboard, dict):
-        super().__init__(graphboard, dict)
+    def __init__(self, graphboard, attributes):
+        super().__init__(graphboard, attributes)
         self.setOpacity(0.2)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, False)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)

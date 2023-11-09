@@ -1,7 +1,7 @@
 from objects.arrow.arrow import Arrow
 from objects.staff.staff import Staff
 from PyQt6.QtCore import Qt
-
+from settings.string_constants import *
 class KeyEventHandler:
     def keyPressEvent(self, event, main_widget, graphboard, manipulators):
         sequence_view = main_widget.sequence_view
@@ -31,13 +31,13 @@ class KeyEventHandler:
             # Handle arrow-specific actions
             if selected_item and isinstance(selected_item, Arrow):
                 if event.key() == Qt.Key.Key_W:
-                    manipulators.move_wasd("up", selected_item)
+                    manipulators.move_wasd(UP, selected_item)
                 elif event.key() == Qt.Key.Key_A:
-                    manipulators.move_wasd("left", selected_item)
+                    manipulators.move_wasd(LEFT, selected_item)
                 elif event.key() == Qt.Key.Key_S:
-                    manipulators.move_wasd("down", selected_item)
+                    manipulators.move_wasd(DOWN, selected_item)
                 elif event.key() == Qt.Key.Key_D:
-                    manipulators.move_wasd("right", selected_item)
+                    manipulators.move_wasd(RIGHT, selected_item)
                 elif event.key() == Qt.Key.Key_R:
                     manipulators.mirror_arrow(selected_item)
                 elif event.key() == Qt.Key.Key_F:
