@@ -5,7 +5,6 @@ from PyQt6.QtCore import QPointF, Qt
 import re
 from settings.string_constants import *
 from data.start_end_location_mapping import start_end_location_mapping
-from settings.numerical_constants import GRAPHBOARD_SCALE
 
 
 class Arrow(QGraphicsSvgItem):
@@ -48,10 +47,10 @@ class Arrow(QGraphicsSvgItem):
 
     def setup_graphics_flags(self):
         self.setFlags(
-            QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable |
-            QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable |
-            QGraphicsSvgItem.GraphicsItemFlag.ItemSendsGeometryChanges |
-            QGraphicsSvgItem.GraphicsItemFlag.ItemIsFocusable
+            QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable
+            | QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable
+            | QGraphicsSvgItem.GraphicsItemFlag.ItemSendsGeometryChanges
+            | QGraphicsSvgItem.GraphicsItemFlag.ItemIsFocusable
         )
         self.setTransformOriginPoint(self.center)
 
@@ -63,6 +62,12 @@ class Arrow(QGraphicsSvgItem):
 
     def mousePressEvent(self, event):
         self.setSelected(True)
+        self.ghost_arrow = self.graphboard.ghost_arrow
+        self.ghost_arrow.update(self.quadrant, self)
+        self.graphboard.addItem(self.ghost_arrow)
+        self.ghost_arrow.staff = self.staff
+        self.graphboard.arrows.append(self.ghost_arrow)
+        self.graphboard.arrow_positioner.update()
 
         for arrow in self.graphboard.arrows:
             if arrow != self:
@@ -87,8 +92,18 @@ class Arrow(QGraphicsSvgItem):
             if self.quadrant != new_quadrant:
                 if in_view:
                     self.update_for_new_quadrant(new_quadrant)
+                    # update the ghost arrow
+                    self.ghost_arrow.update(new_quadrant, self)
+                    self.graphboard.arrows.remove(self.ghost_arrow)
+                    self.graphboard.update()
+                    self.graphboard.arrows.append(self.ghost_arrow)
+                    self.graphboard.arrow_positioner.update()
 
     def mouseReleaseEvent(self, event):
+        self.graphboard.removeItem(self.ghost_arrow)
+        self.graphboard.arrows.remove(self.ghost_arrow)
+        self.ghost_arrow.staff = None
+        self.ghost_arrow = None
         self.graphboard.arrow_positioner.update()
 
     ### GETTERS ###
@@ -293,10 +308,3 @@ class BlankArrow(Arrow):
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, False)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
         self.hide()
-
-
-class GhostArrow(Arrow):
-    def __init__(self, graphboard, attributes):
-        super().__init__(graphboard, attributes)
-        self.setOpacity(0.2)
-        self.setTransformOriginPoint(self.center)

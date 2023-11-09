@@ -5,7 +5,6 @@ from objects.grid import Grid
 from objects.staff.staff import RedStaff, BlueStaff
 from settings.numerical_constants import *
 from settings.string_constants import *
-from objects.arrow.arrow import GhostArrow
 
 class GraphboardInit:
     def __init__(self, graphboard):

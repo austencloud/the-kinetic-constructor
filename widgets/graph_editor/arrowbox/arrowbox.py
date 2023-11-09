@@ -11,6 +11,7 @@ from settings.string_constants import *
 from objects.arrow.arrow import Arrow
 from events.drag import Drag
 
+
 class Arrowbox(QGraphicsScene):
     def __init__(self, main_widget, infobox):
         super().__init__()
@@ -75,21 +76,23 @@ class Arrowbox(QGraphicsScene):
 
         scene_pos = event.scenePos()
         event_pos = self.view.mapFromScene(scene_pos)
-        
+
         # if there are items in the scene under the click:
         if self.items(QPointF(scene_pos)):
             if not self.drag:
                 graphboard = self.main_widget.graphboard
                 self.drag = Drag(self.main_window, graphboard, self)
-            
+
             arrows = [
-                item for item in self.items(QPointF(scene_pos)) if isinstance(item, Arrow)
+                item
+                for item in self.items(QPointF(scene_pos))
+                if isinstance(item, Arrow)
             ]
 
             if arrows:
                 self.target_arrow = arrows[0]
                 if event.button() == Qt.MouseButton.LeftButton:
-                    self.drag.set_attributes_to_target_arrow(self.target_arrow)
+                    self.drag.match_target_arrow(self.target_arrow)
                     self.drag.start_drag(event_pos)
             else:
                 event.ignore()
@@ -102,6 +105,4 @@ class Arrowbox(QGraphicsScene):
 
     def mouseReleaseEvent(self, event):
         if self.drag:
-            scene_pos = event.scenePos()
-            event_pos = self.view.mapFromScene(scene_pos)
-            self.drag.handle_mouse_release(event_pos)
+            self.drag.handle_mouse_release()

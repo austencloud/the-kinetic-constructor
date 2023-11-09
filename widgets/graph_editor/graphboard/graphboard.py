@@ -32,7 +32,7 @@ from .graphboard_init import GraphboardInit
 from .graphboard_menu_handler import GraphboardMenuHandler
 from .object_manager.position_optimizers.staff_positioner import StaffPositioner
 from .object_manager.position_optimizers.arrow_positioner import ArrowPositioner
-from .object_manager.ghost_arrow_manager import GhostArrowManager
+from .object_manager.ghost_arrow import GhostArrow
 from utilities.export_handler import ExportHandler
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
@@ -54,7 +54,7 @@ class Graphboard(QGraphicsScene):
         self.letters = main_widget.letters
         self.letter_item = QGraphicsSvgItem()
         self.initializer = GraphboardInit(self)
-        self.ghost_arrow_manager = GhostArrowManager(self)
+        self.ghost_arrow = GhostArrow(self)
 
         self.grid = self.initializer.init_grid()
         self.view = self.initializer.init_view()

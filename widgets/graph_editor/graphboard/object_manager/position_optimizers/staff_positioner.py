@@ -252,7 +252,7 @@ class StaffPositioner:
         self, current_state, graphboard, matching_letters, arrow_dict
     ):
         for variations in matching_letters:
-            if graphboard.main_widget.arrow_manager.state_comparator.compare_states(
+            if graphboard.arrow_positioner.compare_states(
                 current_state, variations
             ):
                 optimal_entry = next(
