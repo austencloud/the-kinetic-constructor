@@ -10,7 +10,9 @@ class Manipulators:
         staff = arrow.staff
         arrow.update_attributes(arrow_dict)
         staff.update_attributes(staff_dict)
-        
+        arrow.update_appearance()
+        staff.update_appearance()
+
     def move_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {
             UP: {SOUTHEAST: NORTHEAST, SOUTHWEST: NORTHWEST},
@@ -50,8 +52,7 @@ class Manipulators:
         self.update_arrow_and_staff(
             selected_arrow, updated_arrow_dict, updated_staff_dict
         )
-        selected_arrow.update_appearance()
-        selected_arrow.staff.update_appearance()
+
         self.graphboard.update()
 
     def rotate_arrow(self, rotation_direction, arrows):
@@ -91,47 +92,54 @@ class Manipulators:
             self.update_arrow_and_staff(arrow, updated_arrow_dict, updated_staff_dict)
             self.graphboard.update()
 
-    def mirror_arrow(self, arrows, color):
-        arrows = [arrow for arrow in arrows if arrow.color == color]
-        for arrow in arrows:
-            if arrow.is_mirrored:
-                arrow.is_mirrored = False
-            else:
-                arrow.is_mirrored = True
+    def mirror_arrow(self, arrow):
+        if arrow.is_mirrored:
+            arrow.is_mirrored = False
+        elif not arrow.is_mirrored:
+            arrow.is_mirrored = True
 
-            center_x = arrow.boundingRect().width() / 2
-            center_y = arrow.boundingRect().height() / 2
+        center_x = arrow.boundingRect().width() / 2
+        center_y = arrow.boundingRect().height() / 2
 
+        if arrow.is_mirrored:
             transform = QTransform()
             transform.translate(center_x, center_y)
             transform.scale(-1, 1)
             transform.translate(-center_x, -center_y)
 
-            arrow.setTransform(transform)
+        if not arrow.is_mirrored:
+            transform = QTransform()
+            transform.translate(center_x, center_y)
+            transform.scale(1, 1)
+            transform.translate(-center_x, -center_y)
 
-            if arrow.rotation_direction == COUNTER_CLOCKWISE:
-                new_rotation_direction = CLOCKWISE
-            elif arrow.rotation_direction == CLOCKWISE:
-                new_rotation_direction = COUNTER_CLOCKWISE
+        arrow.setTransform(transform)
 
-            old_start_location = arrow.start_location
-            old_end_location = arrow.end_location
-            new_start_location = old_end_location
-            new_end_location = old_start_location
+        if arrow.rotation_direction == COUNTER_CLOCKWISE:
+            new_rotation_direction = CLOCKWISE
+        elif arrow.rotation_direction == CLOCKWISE:
+            new_rotation_direction = COUNTER_CLOCKWISE
 
-            new_arrow_dict = {
-                COLOR: arrow.color,
-                MOTION_TYPE: arrow.motion_type,
-                QUADRANT: arrow.quadrant,
-                ROTATION_DIRECTION: new_rotation_direction,
-                START_LOCATION: new_start_location,
-                END_LOCATION: new_end_location,
-                TURNS: arrow.turns,
-            }
+        old_start_location = arrow.start_location
+        old_end_location = arrow.end_location
+        new_start_location = old_end_location
+        new_end_location = old_start_location
 
-            arrow.staff.location = new_end_location
-            arrow.update_attributes(new_arrow_dict)
-            self.graphboard.update()
+        new_arrow_dict = {
+            COLOR: arrow.color,
+            MOTION_TYPE: arrow.motion_type,
+            QUADRANT: arrow.quadrant,
+            ROTATION_DIRECTION: new_rotation_direction,
+            START_LOCATION: new_start_location,
+            END_LOCATION: new_end_location,
+            TURNS: arrow.turns,
+        }
+
+        arrow.staff.location = new_end_location
+        arrow.update_attributes(new_arrow_dict)
+        arrow.update_appearance()
+        arrow.staff.update_appearance()
+        self.graphboard.update()
 
     def swap_motion_type(self, arrows, color):
         from objects.arrow.arrow import Arrow
@@ -204,5 +212,3 @@ class Manipulators:
                     arrow.update_appearance()
                     arrow.staff.update_appearance()
                     self.update()
-
-

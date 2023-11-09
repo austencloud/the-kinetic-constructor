@@ -15,7 +15,6 @@ class Arrow(QGraphicsSvgItem):
         self.setup_attributes(graphboard, dict)
         self.initialize_graphics_flags()
 
-
     def get_svg_file(self, dict):
         if dict:
             motion_type = dict[MOTION_TYPE]
@@ -196,10 +195,6 @@ class Arrow(QGraphicsSvgItem):
                     NORTHWEST: 0,
                 },
             }.get(rotation_direction, {})
-
-    def mirror_self(self):
-        self.is_mirrored = not self.is_mirrored
-        self.setScale(-self.scale())
 
     def increment_turns(self):
         self.turns += 1

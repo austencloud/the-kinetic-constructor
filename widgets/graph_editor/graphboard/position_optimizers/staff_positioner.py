@@ -137,7 +137,7 @@ class StaffPositioner:
         same_motion_type = arrow1[MOTION_TYPE] == arrow2[MOTION_TYPE] in [PRO, ANTI]
 
         if same_motion_type:
-            self.reposition_G_and_H(self.graphboard, arrow1, arrow2)
+            self.reposition_G_and_H(arrow1, arrow2)
 
         else:
             self.reposition_I(arrow1, arrow2)

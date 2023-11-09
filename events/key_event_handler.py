@@ -39,7 +39,7 @@ class KeyEventHandler:
                 elif event.key() == Qt.Key.Key_D:
                     manipulators.move_wasd("right", selected_item)
                 elif event.key() == Qt.Key.Key_R:
-                    manipulators.mirror_arrow(selection, selected_arrow_color)
+                    manipulators.mirror_arrow(selected_item)
                 elif event.key() == Qt.Key.Key_F:
                     manipulators.swap_motion_type(selection, selected_arrow_color)
                 elif event.key() == Qt.Key.Key_Enter:

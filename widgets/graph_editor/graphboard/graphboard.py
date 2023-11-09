@@ -31,7 +31,8 @@ class Graphboard(QGraphicsScene):
         self.setSceneRect(0, 0, 750, 900)
         self.arrows = []
         self.staffs = []
-
+        self.current_letter = None
+        
         self.letters = letters
         self.letter_item = QGraphicsSvgItem()
 

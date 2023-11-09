@@ -58,8 +58,7 @@ class ActionButtonsFrame(QFrame):
                 "mirror.png",
                 "Mirror",
                 lambda: self.manipulators.mirror_arrow(
-                    self.scene.selectedItems(),
-                    self.get_selected_arrow_color(),
+                    self.scene.selectedItems()[0],
                 ),
             ),
             ("swap.png", "Swap Colors", lambda: self.manipulators.swap_colors()),

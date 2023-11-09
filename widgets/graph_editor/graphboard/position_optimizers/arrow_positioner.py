@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QPointF
 from settings.numerical_constants import *
 from settings.string_constants import *
-
+from objects.arrow.arrow import BlankArrow
 
 class ArrowPositioner:
     def __init__(self, graphboard):
@@ -10,33 +10,24 @@ class ArrowPositioner:
         
 
     def update_arrow_positions(self):
-        from objects.arrow.arrow import BlankArrow
-
-        if len(self.graphboard.arrows) == 2:
-            current_letter = self.graphboard.get_current_letter()
-            if current_letter is not None:
-                self.set_optimal_arrow_loc()
-        else:
-            for arrow in self.graphboard.arrows:
-                if not isinstance(arrow, BlankArrow):
-                    self.set_arrow_to_default_loc(arrow)
-
-    def set_optimal_arrow_loc(self):
         current_state = self.graphboard.get_state()
-        current_letter = self.graphboard.get_current_letter()
+        optimal_locations = None
+        
+        if len(self.graphboard.arrows) == 2:
+            self.graphboard.current_letter = self.graphboard.get_current_letter()
 
-        if current_letter is not None:
-            matching_letters = self.letters[current_letter]
+        if self.graphboard.current_letter is not None:
+            matching_letters = self.letters[self.graphboard.current_letter]
             optimal_locations = self.find_optimal_locations(
                 current_state, matching_letters
             )
 
-            for arrow in self.graphboard.arrows:
-                if not arrow.is_still:
-                    if optimal_locations:
-                        self.set_arrow_to_optimal_loc(optimal_locations, arrow)
-                    else:
-                        self.set_arrow_to_default_loc(arrow)
+        for arrow in self.graphboard.arrows:
+            if not arrow.is_still:
+                if optimal_locations:
+                    self.set_arrow_to_optimal_loc(optimal_locations, arrow)
+                else:
+                    self.set_arrow_to_default_loc(arrow)
 
     def find_optimal_locations(self, current_state, matching_letters):
         for variations in matching_letters:
