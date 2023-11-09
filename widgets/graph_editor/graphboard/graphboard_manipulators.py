@@ -141,53 +141,43 @@ class Manipulators:
         arrow.staff.update_appearance()
         self.graphboard.update()
 
-    def swap_motion_type(self, arrows, color):
-        from objects.arrow.arrow import Arrow
+    def swap_motion_type(self, arrow):
+        if arrow.motion_type == ANTI:
+            new_motion_type = PRO
+        elif arrow.motion_type == PRO:
+            new_motion_type = ANTI
 
-        arrows = [arrow for arrow in arrows if arrow.color == color]
-        if not isinstance(arrows, list):
-            arrows = [arrows]
 
-        arrows = [arrow for arrow in arrows if isinstance(arrow, Arrow)]
+        if arrow.rotation_direction == COUNTER_CLOCKWISE:
+            new_rotation_direction = CLOCKWISE
+        elif arrow.rotation_direction == CLOCKWISE:
+            new_rotation_direction = COUNTER_CLOCKWISE
 
-        for arrow in arrows:
-            if arrow.motion_type == ANTI:
-                new_motion_type = PRO
-            elif arrow.motion_type == PRO:
-                new_motion_type = ANTI
-            else:
-                continue
+        new_arrow_dict = {
+            COLOR: arrow.color,
+            MOTION_TYPE: new_motion_type,
+            QUADRANT: arrow.quadrant,
+            ROTATION_DIRECTION: new_rotation_direction,
+            START_LOCATION: arrow.start_location,
+            END_LOCATION: arrow.end_location,
+            TURNS: arrow.turns,
+        }
 
-            if arrow.rotation_direction == COUNTER_CLOCKWISE:
-                new_rotation_direction = CLOCKWISE
-            elif arrow.rotation_direction == CLOCKWISE:
-                new_rotation_direction = COUNTER_CLOCKWISE
+        new_staff_dict = {
+            COLOR: arrow.color,
+            LOCATION: arrow.end_location,
+            LAYER: 1,
+        }
 
-            new_arrow_dict = {
-                COLOR: arrow.color,
-                MOTION_TYPE: new_motion_type,
-                QUADRANT: arrow.quadrant,
-                ROTATION_DIRECTION: new_rotation_direction,
-                START_LOCATION: arrow.start_location,
-                END_LOCATION: arrow.end_location,
-                TURNS: arrow.turns,
-            }
-
-            new_staff_dict = {
-                COLOR: arrow.color,
-                LOCATION: arrow.end_location,
-                LAYER: 1,
-            }
-
-            arrow.svg_file = (
-                f"resources/images/arrows/shift/{new_motion_type}_{arrow.turns}.svg"
-            )
-            arrow.initialize_svg_renderer(arrow.svg_file)
-            arrow.update_attributes(new_arrow_dict)
-            arrow.update_appearance()
-            self.graphboard.update()
-            self.update_arrow_and_staff(arrow, new_arrow_dict, new_staff_dict)
-            self.graphboard.update()
+        arrow.svg_file = (
+            f"resources/images/arrows/shift/{new_motion_type}_{arrow.turns}.svg"
+        )
+        arrow.initialize_svg_renderer(arrow.svg_file)
+        arrow.update_attributes(new_arrow_dict)
+        arrow.update_appearance()
+        self.graphboard.update()
+        self.update_arrow_and_staff(arrow, new_arrow_dict, new_staff_dict)
+        self.graphboard.update()
 
     def swap_colors(self):
         from objects.arrow.arrow import Arrow

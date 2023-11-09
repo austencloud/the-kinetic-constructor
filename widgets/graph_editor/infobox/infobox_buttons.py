@@ -12,9 +12,9 @@ class InfoboxButtons:
         "swap_colors": None,
     }
 
-    def __init__(self, infobox, arrow_manipulator, graphboard):
+    def __init__(self, infobox, manipulator, graphboard):
         self.infobox = infobox
-        self.arrow_manipulator = arrow_manipulator
+        self.manipulator = manipulator
         self.graphboard = graphboard
         self.button_groups = {BLUE: [], RED: []}
         self.layouts = infobox.layouts
@@ -44,59 +44,52 @@ class InfoboxButtons:
             button.show()
             
     def setup_buttons(self):
+    
         self.button_properties = {
             "swap_colors": {
                 "icon": self.ICON_PATHS["swap_colors"],
                 "text": "↔",
-                "callback": self.arrow_manipulator.swap_colors,
+                "callback": self.manipulator.swap_colors,
             },
             "swap_motion_type_blue": {
                 "icon": self.ICON_PATHS["swap"],
-                "callback": lambda: self.arrow_manipulator.swap_motion_type(
-                    self.graphboard.get_arrow_by_color(BLUE), BLUE
+                "callback": lambda: self.manipulator.swap_motion_type(
+                    self.graphboard.get_arrow_by_color(BLUE),
                 ),
             },
             "swap_motion_type_red": {
                 "icon": self.ICON_PATHS["swap"],
-                "callback": lambda: self.arrow_manipulator.swap_motion_type(
-                    self.graphboard.get_arrow_by_color(RED), RED
+                "callback": lambda: self.manipulator.swap_motion_type(
+                    self.graphboard.get_arrow_by_color(RED),
                 ),
             },
             "swap_start_end_blue": {
                 "icon": self.ICON_PATHS["swap"],
-                "callback": lambda: self.arrow_manipulator.mirror_arrow(
+                "callback": lambda: self.manipulator.mirror_arrow(
                     self.graphboard.get_arrow_by_color(BLUE)
                 ),
             },
             "swap_start_end_red": {
                 "icon": self.ICON_PATHS["swap"],
-                "callback": lambda: self.arrow_manipulator.mirror_arrow(
+                "callback": lambda: self.manipulator.mirror_arrow(
                     self.graphboard.get_arrow_by_color(RED)
                 ),
             },
             "decrement_turns_blue": {
                 "icon": self.ICON_PATHS["decrement_turns"],
-                "callback": lambda: self.arrow_manipulator.decrement_turns(
-                    self.graphboard.get_arrow_by_color(BLUE), BLUE
-                ),
+                "callback": lambda: self.graphboard.get_arrow_by_color(BLUE).decrement_turns(),
             },
             "increment_turns_blue": {
                 "icon": self.ICON_PATHS["increment_turns"],
-                "callback": lambda: self.arrow_manipulator.increment_turns(
-                    self.graphboard.get_arrow_by_color(BLUE), BLUE
-                ),
+                "callback": lambda: self.graphboard.get_arrow_by_color(BLUE).increment_turns(),
             },
             "decrement_turns_red": {
                 "icon": self.ICON_PATHS["decrement_turns"],
-                "callback": lambda: self.arrow_manipulator.decrement_turns(
-                    self.graphboard.get_arrow_by_color(RED), RED
-                ),
+                "callback": lambda: self.graphboard.get_arrow_by_color(RED).decrement_turns(),
             },
             "increment_turns_red": {
                 "icon": self.ICON_PATHS["increment_turns"],
-                "callback": lambda: self.arrow_manipulator.increment_turns(
-                    self.graphboard.get_arrow_by_color(RED), RED
-                ),
+                "callback": lambda: self.graphboard.get_arrow_by_color(RED).increment_turns(),
             },
         }
 
