@@ -173,7 +173,7 @@ class Drag(QWidget):
         self.update_staff_during_drag()
 
     def update_staff_during_drag(self):
-        for staff in self.graphboard.staffs:
+        for staff in self.graphboard.staff_set.values():
             if staff.color == self.color:
                 staff.update_attributes(
                     {
@@ -186,6 +186,8 @@ class Drag(QWidget):
                 self.temp_arrow.staff = staff
                 staff.show()
                 staff.update_appearance()
+                if staff not in self.graphboard.staffs:
+                    self.graphboard.staffs.append(staff)
                 self.graphboard.update_staffs()
 
     def place_arrow_on_graphboard(self):

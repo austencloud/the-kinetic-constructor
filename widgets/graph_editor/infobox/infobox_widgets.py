@@ -20,7 +20,7 @@ class InfoboxWidgets():
         self.blue_attributes_widget.show()
         self.red_attributes_widget.show()
 
-    def construct_attributes_widget(self, attributes, color):
+    def construct_attributes_widget(self, color):
         self.buttons = self.infobox.buttons
         
         (

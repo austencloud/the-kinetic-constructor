@@ -108,10 +108,7 @@ class InfoboxLayouts:
                 button = getattr(self.buttons, f"{button_name}_button")
                 buttons_layout.addWidget(button)
 
-        info_widget_inner = self.widgets.construct_attributes_widget(
-            None,
-            color,
-        )
+        info_widget_inner = self.widgets.construct_attributes_widget(color)
 
         attribute_layout.addLayout(buttons_layout)
         attribute_layout.addWidget(info_widget_inner)

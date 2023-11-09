@@ -32,14 +32,15 @@ class Graphboard(QGraphicsScene):
         self.arrows = []
         self.staffs = []
         self.current_letter = None
-        
+
         self.letters = letters
         self.letter_item = QGraphicsSvgItem()
 
         self.initializer = GraphboardInit(self)
         self.grid = self.initializer.init_grid()
         self.view = self.initializer.init_view()
-        self.staffs = self.initializer.init_staffs()
+        self.staff_set = self.initializer.init_staff_set()
+        self.staffs = []
 
         self.export_manager = ExportHandler(self.grid, self)
         self.context_menu_manager = GraphboardMenuHandler(
@@ -47,52 +48,6 @@ class Graphboard(QGraphicsScene):
         )
         self.arrow_positioner = ArrowPositioner(self)
         self.staff_positioner = StaffPositioner(self)
-
-    ### UPDATERS ###
-
-    def update(self):
-        self.update_letter()
-        self.update_arrows()
-        self.update_staffs()
-        self.infobox.update()
-        
-    def update_arrows(self):
-        self.arrow_positioner.update_arrow_positions()
-
-    def update_staffs(self):
-        for staff in self.staffs:
-            self.set_default_staff_locations(staff)
-
-        if self.staff_positioner.staffs_in_beta():
-            self.staff_positioner.reposition_beta_staffs()
-
-    def update_letter(self):
-        if len(self.arrows) == 2:
-            current_letter = self.get_current_letter()
-            if current_letter:
-                for letter_type, letters in letter_types.items():
-                    if current_letter in letters:
-                        break
-                svg_file = f"{LETTER_SVG_DIR}/{letter_type}/{current_letter}.svg"
-                renderer = QSvgRenderer(svg_file)
-                if renderer.isValid():
-                    self.letter_item.setSharedRenderer(renderer)
-                self.letter_item.setPos(
-                    self.width() / 2 - self.letter_item.boundingRect().width() / 2,
-                    self.width(),
-                )
-
-        else:
-            current_letter = None
-            svg_file = f"{LETTER_SVG_DIR}/blank.svg"
-            renderer = QSvgRenderer(svg_file)
-            if not renderer.isValid():
-                return
-            self.letter_item.setSharedRenderer(renderer)
-            self.letter_item.setPos(
-                self.width() / 2 - self.letter_item.boundingRect().width() / 2,
-                self.width(),
-            )
 
     ### SELECTION
 
@@ -345,3 +300,49 @@ class Graphboard(QGraphicsScene):
                         break  # This current_arrow matches with combination's arrow
 
         return all(current_arrows_matched)  # All current arrows should be matched
+
+    ### UPDATERS ###
+
+    def update(self):
+        self.update_letter()
+        self.update_arrows()
+        self.update_staffs()
+        self.infobox.update()
+
+    def update_arrows(self):
+        self.arrow_positioner.update_arrow_positions()
+
+    def update_staffs(self):
+        for staff in self.staffs:
+            self.set_default_staff_locations(staff)
+
+        if self.staff_positioner.staffs_in_beta():
+            self.staff_positioner.reposition_beta_staffs()
+
+    def update_letter(self):
+        if len(self.staffs) == 2:
+            current_letter = self.get_current_letter()
+            if current_letter:
+                for letter_type, letters in letter_types.items():
+                    if current_letter in letters:
+                        break
+                svg_file = f"{LETTER_SVG_DIR}/{letter_type}/{current_letter}.svg"
+                renderer = QSvgRenderer(svg_file)
+                if renderer.isValid():
+                    self.letter_item.setSharedRenderer(renderer)
+                self.letter_item.setPos(
+                    self.width() / 2 - self.letter_item.boundingRect().width() / 2,
+                    self.width(),
+                )
+
+        else:
+            current_letter = None
+            svg_file = f"{LETTER_SVG_DIR}/blank.svg"
+            renderer = QSvgRenderer(svg_file)
+            if not renderer.isValid():
+                return
+            self.letter_item.setSharedRenderer(renderer)
+            self.letter_item.setPos(
+                self.width() / 2 - self.letter_item.boundingRect().width() / 2,
+                self.width(),
+            )

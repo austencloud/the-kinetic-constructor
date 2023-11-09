@@ -12,7 +12,7 @@ class GraphboardInit:
         self.graphboard = graphboard
         self.init_view()
         self.init_grid()
-        self.init_staffs()
+        self.init_staff_set()
         self.init_letterbox()
         self.init_quadrants()
 
@@ -43,7 +43,7 @@ class GraphboardInit:
         self.graphboard.padding = padding
         return grid
 
-    def init_staffs(self):
+    def init_staff_set(self):
         red_staff_dict = {
             COLOR: RED,
             LOCATION: NORTH,
@@ -57,16 +57,15 @@ class GraphboardInit:
 
         red_staff = RedStaff(self.graphboard, red_staff_dict)
         blue_staff = BlueStaff(self.graphboard, blue_staff_dict)
-        
+
         red_staff.hide()
         blue_staff.hide()
-        
-        staffs = [red_staff, blue_staff]
-        
+
         self.graphboard.addItem(red_staff)
         self.graphboard.addItem(blue_staff)
-        
-        return staffs
+
+        staff_set = {RED: red_staff, BLUE: blue_staff}
+        return staff_set
 
     def init_letterbox(self):
         self.graphboard.letter_renderers = {}
