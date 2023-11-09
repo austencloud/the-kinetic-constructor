@@ -13,5 +13,8 @@
             "console": "integratedTerminal",
             "justMyCode": true
         }
+    ],
+    "configurations": [
+    
     ]
 }

@@ -64,8 +64,8 @@ class InfoboxWidgets():
     def update_attribute_widgets(self):
         self.widgets = self.infobox.widgets
         for color in [BLUE, RED]:
-            arrows = self.graphboard.get_arrows_by_color(color)
-            for arrow in arrows:
+            arrow = self.graphboard.get_arrow_by_color(color)
+            if arrow:
                 attributes = arrow.create_dict_from_arrow(arrow)
                 widget = getattr(self.widgets, f"{color}_attributes_widget")
                 self.update_info_widget_content(widget, attributes)
@@ -73,3 +73,4 @@ class InfoboxWidgets():
             else:
                 widget = getattr(self.widgets, f"{color}_attributes_widget")
                 widget.hide()
+

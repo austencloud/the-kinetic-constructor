@@ -54,7 +54,8 @@ class Graphboard(QGraphicsScene):
         self.update_letter()
         self.update_arrows()
         self.update_staffs()
-
+        self.infobox.update()
+        
     def update_arrows(self):
         self.arrow_positioner.update_arrow_positions()
 
@@ -282,6 +283,11 @@ class Graphboard(QGraphicsScene):
         )
 
         return start_locations, end_locations
+
+    def get_arrow_by_color(self, color):
+        for arrow in self.arrows:
+            if arrow.color == color:
+                return arrow
 
     ### HELPERS ###
 
