@@ -81,19 +81,10 @@ class Arrow(QGraphicsSvgItem):
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.MouseButton.LeftButton:
-            from widgets.graph_editor.graphboard.graphboard import Graphboard
-            from objects.pictograph.pictograph_view import PictographView
-
-            if isinstance(self.graphboard, Graphboard):
-                self.handle_graphboard_drag(event)
-            elif isinstance(self.graphboard, PictographView):
-                self.handle_pictograph_view_drag(event)
+            self.handle_graphboard_drag(event)
 
     def mouseReleaseEvent(self, event):
-        from widgets.graph_editor.graphboard.graphboard import Graphboard
-
-        if isinstance(self.graphboard, Graphboard):
-            self.graphboard.arrow_positioner.update_arrow_positions()
+        self.graphboard.arrow_positioner.update_arrow_positions()
 
     def handle_graphboard_drag(self, event):
         """Dragging an arrow that is already in the graphboard"""

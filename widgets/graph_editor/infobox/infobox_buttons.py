@@ -16,7 +16,6 @@ class InfoboxButtons:
         self.infobox = infobox
         self.arrow_manipulator = arrow_manipulator
         self.scene = scene
-        self.get_arrows_by_color = self.scene.get_arrows_by_color
         self.button_groups = {BLUE: [], RED: []}
         self.layouts = infobox.layouts
 

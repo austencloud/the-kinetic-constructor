@@ -1,5 +1,3 @@
-from PyQt6.QtCore import QByteArray
-
 from PyQt6.QtGui import QTransform
 from settings.string_constants import *
 
