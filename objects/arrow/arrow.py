@@ -36,7 +36,7 @@ class Arrow(QGraphicsSvgItem):
         self.graphboard = graphboard
         if hasattr(graphboard, "infobox"):
             self.infobox = graphboard.infobox
-        self.main_widget = graphboard.main_widget
+            
         self.in_graphboard = False
         self.drag_offset = QPointF(0, 0)
         self.is_still = False
@@ -219,33 +219,24 @@ class Arrow(QGraphicsSvgItem):
         if self.turns > 2:
             self.turns = 0
         self.update_arrow_svg()
-        self.finalize_manipulation()
+        self.graphboard.update()
 
     def decrement_turns(self):
         self.turns -= 1
         if self.turns < 0:
             self.turns = 2
         self.update_arrow_svg()
-        self.finalize_manipulation()
+        self.graphboard.update()
 
     def set_turns(self, turns):
         self.turns = turns
         self.update_arrow_svg()
-        self.finalize_manipulation()
+        self.graphboard.update()
 
     def update_arrow_svg(self):
         self.svg_file = f"{SHIFT_DIR}{self.motion_type}_{self.turns}.svg"
         self.initialize_svg_renderer(self.svg_file)
         self.update_appearance()
-
-    def finalize_manipulation(self):
-        self.arrow_manager.positioner.update_arrow_position(
-            self.arrow_manager.graphboard
-        )
-        self.update_appearance()
-        self.infobox.update()
-        self.graphboard.update_staffs(self.graphboard)
-        self.graphboard.info_handler.update()
 
     def update_attributes(self, dict):
         for attr in ARROW_ATTRIBUTES:

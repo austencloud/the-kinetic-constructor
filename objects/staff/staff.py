@@ -30,7 +30,7 @@ class Staff(QGraphicsSvgItem):
         self.set_axis(dict)
         self.set_rotation_from_axis()
         self.set_app_attributes()
-        self.main_widget = graphboard.main_widget
+
 
     def set_axis(self, dict):
         axis_switch = {

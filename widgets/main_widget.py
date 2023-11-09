@@ -20,7 +20,7 @@ class MainWidget(QWidget):
         self.layout_manager = LayoutManager(self)
         self.json_handler = JsonHandler()
         self.letters = self.json_handler.load_all_letters()
-        self.key_bindings_manager = KeyEventHandler()
+        self.key_event_handler = KeyEventHandler()
     
         self.sequence_view = SequenceView(self)
         self.graph_editor = GraphEditor(self)
@@ -52,6 +52,6 @@ class MainWidget(QWidget):
 
     def eventFilter(self, source, event):
         if event.type() == QEvent.Type.KeyPress:
-            self.key_bindings_manager.keyPressEvent(event, self.graph_editor.graphboard)
+            self.key_event_handler.keyPressEvent(event, self, self.graphboard, self.graphboard.manipulators)
             return True
         return super().eventFilter(source, event)

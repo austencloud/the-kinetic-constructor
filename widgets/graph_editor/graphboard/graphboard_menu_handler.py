@@ -3,13 +3,13 @@ from PyQt6.QtGui import QAction
 from settings.string_constants import *
 
 
-class ContextMenuHandler:
-    def __init__(self, graphboard):
-        self.main_widget = graphboard.main_widget
-        self.export_manager = graphboard.export_manager
-        self.sequence_view = self.main_widget.sequence_view
+class GraphboardMenuHandler:
+    def __init__(self, main_widget, manipulators, graphboard):
         self.graphboard = graphboard
-        self.manipulators = graphboard.manipulators
+        self.main_widget = main_widget
+        self.export_manager = main_widget.export_manager
+        self.sequence_view = main_widget.sequence_view
+        self.manipulators = manipulators
 
     def create_menu_with_actions(self, parent, actions, event_pos):
         menu = QMenu()

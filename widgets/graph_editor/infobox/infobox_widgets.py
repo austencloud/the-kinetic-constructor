@@ -5,6 +5,7 @@ class InfoboxWidgets():
     def __init__(self, infobox, graphboard):
         self.infobox = infobox
         self.labels = infobox.labels
+        
         self.graphboard = graphboard
         
     def setup_widgets(self):
@@ -58,9 +59,10 @@ class InfoboxWidgets():
             widget.setLayout(new_content.layout())
             return
         self.labels.update_labels(widget, attributes)
-        self.buttons.update_buttons(attributes)
+        self.buttons.show_buttons(attributes)
 
     def update_attribute_widgets(self):
+        self.widgets = self.infobox.widgets
         for color in [BLUE, RED]:
             arrows = self.graphboard.get_arrows_by_color(color)
             for arrow in arrows:

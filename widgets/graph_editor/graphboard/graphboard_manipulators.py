@@ -52,7 +52,7 @@ class Manipulators:
         self.update_arrow_and_staff(
             selected_arrow, updated_arrow_dict, updated_staff_dict
         )
-        self.finalize_manipulation(selected_arrow)
+        self.graphboard.update()
 
     def rotate_arrow(self, rotation_direction, arrows):
         if arrows:
@@ -89,28 +89,25 @@ class Manipulators:
                 }
 
             self.update_arrow_and_staff(arrow, updated_arrow_dict, updated_staff_dict)
-            arrow.finalize_manipulation()
+            self.graphboard.update()
 
     def mirror_arrow(self, arrows, color):
         arrows = [arrow for arrow in arrows if arrow.color == color]
         for arrow in arrows:
             if arrow.is_mirrored:
                 arrow.is_mirrored = False
-                original_svg_data = arrow.get_svg_data(arrow.svg_file)
-                arrow.renderer.load(QByteArray(original_svg_data))
-
             else:
                 arrow.is_mirrored = True
 
-                center_x = arrow.boundingRect().width() / 2
-                center_y = arrow.boundingRect().height() / 2
+            center_x = arrow.boundingRect().width() / 2
+            center_y = arrow.boundingRect().height() / 2
 
-                transform = QTransform()
-                transform.translate(center_x, center_y)
-                transform.scale(-1, 1)
-                transform.translate(-center_x, -center_y)
+            transform = QTransform()
+            transform.translate(center_x, center_y)
+            transform.scale(-1, 1)
+            transform.translate(-center_x, -center_y)
 
-                arrow.setTransform(transform)
+            arrow.setTransform(transform)
 
             if arrow.rotation_direction == COUNTER_CLOCKWISE:
                 new_rotation_direction = CLOCKWISE
@@ -121,8 +118,6 @@ class Manipulators:
             old_end_location = arrow.end_location
             new_start_location = old_end_location
             new_end_location = old_start_location
-
-            arrow.update_appearance()
 
             new_arrow_dict = {
                 COLOR: arrow.color,
@@ -136,10 +131,7 @@ class Manipulators:
 
             arrow.staff.location = new_end_location
             arrow.update_attributes(new_arrow_dict)
-            arrow.finalize_manipulation()
-            self.graphboard.arrow_positioner.update_arrow_position(self.graphboard.arrows)
-            arrow.update()
-            self.graphboard.update_staffs()
+            self.graphboard.update()
 
     def swap_motion_type(self, arrows, color):
         from objects.arrow.arrow import Arrow
@@ -187,7 +179,7 @@ class Manipulators:
             arrow.update_appearance()
             self.graphboard.update()
             self.update_arrow_and_staff(arrow, new_arrow_dict, new_staff_dict)
-            arrow.finalize_manipulation()
+            self.graphboard.update()
 
     def swap_colors(self):
         from objects.arrow.arrow import Arrow
@@ -211,10 +203,6 @@ class Manipulators:
 
                     arrow.update_appearance()
                     arrow.staff.update_appearance()
-                    self.finalize_manipulation(arrow)
+                    self.update()
 
-    def finalize_manipulation(self, arrow):
-        self.graphboard.arrow_positioner.update_arrow_positions()
-        arrow.update_appearance()
-        self.graphboard.update_staffs()
-        self.graphboard.update()
+

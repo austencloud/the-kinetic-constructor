@@ -180,13 +180,13 @@ class Drag(QWidget):
                 self.graphboard.update_staffs()
 
     def place_arrow_on_graphboard(self):
-        self.temp_arrow.show()
         self.graphboard.addItem(self.temp_arrow)
         self.graphboard.arrows.append(self.temp_arrow) 
         self.graphboard.arrow_positioner.update_arrow_positions()
         self.graphboard.clearSelection()
+        self.temp_arrow.show()
         self.temp_arrow.setSelected(True)
-        
+        self.temp_arrow.update_appearance()
         
     def start_drag(self, event_pos):
         self.move_to_cursor(self.arrowbox, event_pos)

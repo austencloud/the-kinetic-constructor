@@ -3,10 +3,8 @@ from objects.staff.staff import Staff
 from PyQt6.QtCore import Qt
 
 class KeyEventHandler:
-    def keyPressEvent(self, event, graphboard):
-        main_widget = graphboard.main_widget
+    def keyPressEvent(self, event, main_widget, graphboard, manipulators):
         sequence_view = main_widget.sequence_view
-        manipulators = graphboard.manipulators
         selection = graphboard.selectedItems()
 
         if len(selection) >= 1:
