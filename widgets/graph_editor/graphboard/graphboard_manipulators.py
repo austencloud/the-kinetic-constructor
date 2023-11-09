@@ -11,7 +11,6 @@ class Manipulators:
         arrow.update_attributes(arrow_dict)
         staff.update_attributes(staff_dict)
         
-
     def move_wasd(self, direction, selected_arrow):
         wasd_quadrant_mapping = {
             UP: {SOUTHEAST: NORTHEAST, SOUTHWEST: NORTHWEST},
