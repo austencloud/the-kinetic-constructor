@@ -8,7 +8,7 @@ class Manipulators:
 
     def update_arrow_and_staff(self, arrow, arrow_dict, staff_dict):
         staff = arrow.staff
-        arrow.update_attributes(arrow_dict)
+        arrow.set_object_attr_from_dict(arrow_dict)
         staff.update_attributes(staff_dict)
         arrow.update_appearance()
         staff.update_appearance()
@@ -138,7 +138,7 @@ class Manipulators:
         }
 
         arrow.staff.location = new_end_location
-        arrow.update_attributes(new_arrow_dict)
+        arrow.set_object_attr_from_dict(new_arrow_dict)
         arrow.update_appearance()
         arrow.staff.update_appearance()
         self.graphboard.update()
@@ -179,7 +179,7 @@ class Manipulators:
             f"resources/images/arrows/shift/{new_motion_type}_{arrow.turns}.svg"
         )
         arrow.setup_svg_renderer(arrow.svg_file)
-        arrow.update_attributes(new_arrow_dict)
+        arrow.set_object_attr_from_dict(new_arrow_dict)
         arrow.update_appearance()
         self.graphboard.update()
         self.update_arrow_and_staff(arrow, new_arrow_dict, new_staff_dict)

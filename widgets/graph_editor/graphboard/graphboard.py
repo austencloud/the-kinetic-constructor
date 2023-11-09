@@ -5,8 +5,27 @@ from PyQt6.QtWidgets import QGraphicsScene
 from objects.arrow.arrow import Arrow, BlankArrow
 from objects.staff.staff import Staff
 from objects.grid import Grid
-from settings.numerical_constants import STAFF_LENGTH, STAFF_WIDTH
-from settings.string_constants import VERTICAL, ARROWS, COLOR, MOTION_TYPE, STATIC, ROTATION_DIRECTION, QUADRANT, START_LOCATION, END_LOCATION, TURNS, RED, BLUE, LETTER_SVG_DIR, NORTHWEST, SOUTHWEST, SOUTHEAST, NORTHEAST
+from settings.numerical_constants import STAFF_LENGTH, STAFF_WIDTH, LETTER_ITEM_HEIGHT
+from settings.string_constants import (
+    VERTICAL,
+    ARROWS,
+    COLOR,
+    MOTION_TYPE,
+    STATIC,
+    ROTATION_DIRECTION,
+    QUADRANT,
+    START_LOCATION,
+    END_LOCATION,
+    TURNS,
+    RED,
+    BLUE,
+    LETTER_SVG_DIR,
+    NORTHWEST,
+    SOUTHWEST,
+    SOUTHEAST,
+    NORTHEAST,
+    
+)
 from data.letter_types import letter_types
 from data.positions_map import positions_map
 from .graphboard_init import GraphboardInit
@@ -44,7 +63,9 @@ class Graphboard(QGraphicsScene):
 
     def setup_managers(self, main_widget, graph_editor):
         self.export_manager = ExportHandler(self.grid, self)
-        self.context_menu_manager = GraphboardMenuHandler(main_widget, graph_editor, self)
+        self.context_menu_manager = GraphboardMenuHandler(
+            main_widget, graph_editor, self
+        )
         self.arrow_positioner = ArrowPositioner(self)
         self.staff_positioner = StaffPositioner(self)
 
@@ -73,7 +94,7 @@ class Graphboard(QGraphicsScene):
             self.create_blank_arrow(arrow)
         else:
             self.delete_staff(arrow.staff)
-    
+
         self.update()
 
     def delete_staff(self, staff):
@@ -180,7 +201,7 @@ class Graphboard(QGraphicsScene):
     def get_possible_letters(self, specific_position):
         if specific_position["start_position"] and specific_position["end_position"]:
             overall_position = self.get_overall_position(specific_position)
-            possible_letters = self.get_possible_letters(overall_position)
+            possible_letters = self.get_letter_group(overall_position)
         return possible_letters
 
     def get_specific_start_end_locations(self):
@@ -190,25 +211,24 @@ class Graphboard(QGraphicsScene):
             "start_position": positions_map.get(start_locations),
             "end_position": positions_map.get(end_locations),
         }
-        
-        return current_combination,specific_position # In case of no match
+
+        return current_combination, specific_position  # In case of no match
 
     def get_overall_position(self, specific_positions):
         # Refactoring as per previous recommendation
         return {position: value[:-1] for position, value in specific_positions.items()}
 
-    def get_possible_letters(self, overall_position):
-        category_map = {
+    def get_letter_group(self, overall_position):
+        letter_group = {
             "alpha": "ABCDEFWXα",
             "beta": "GHIJKLYZβ",
             "gamma": "MNOPQRSTUVΣΔθΩΓ",
         }
-        category = category_map.get(overall_position.get("end_position"))
+        category = letter_group.get(overall_position.get("end_position"))
         if category:
             return {
                 letter: combinations
                 for letter, combinations in self.letters.items()
-                # if the letter is one of the letters in the category map
                 if letter in category
             }
         return {}
@@ -309,7 +329,7 @@ class Graphboard(QGraphicsScene):
 
     def center_letter_item(self):
         x = self.width() / 2 - self.letter_item.boundingRect().width() / 2
-        y = self.height() / 2 - self.letter_item.boundingRect().height() / 2
+        y = self.grid.boundingRect().height() + LETTER_ITEM_HEIGHT
         self.letter_item.setPos(x, y)
 
     ### UPDATERS ###
@@ -321,7 +341,7 @@ class Graphboard(QGraphicsScene):
         self.infobox.update()
 
     def update_arrows(self):
-        self.arrow_positioner.update_arrow_positions()
+        self.arrow_positioner.update()
 
     def update_staffs(self):
         for staff in self.staffs:
@@ -343,7 +363,7 @@ class Graphboard(QGraphicsScene):
     ### SETTERS ###
 
     def set_letter_renderer(self, letter):
-        letter_type = self.get_letter_type(letter)
+        letter_type = self.get_current_letter_type()
         svg_path = f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
         self.set_svg_renderer(svg_path)
 
@@ -355,7 +375,3 @@ class Graphboard(QGraphicsScene):
         if renderer.isValid():
             self.letter_item.setSharedRenderer(renderer)
             self.center_letter_item()
-
-    
-
-

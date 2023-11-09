@@ -12,7 +12,7 @@ class GhostArrowManager:
 
     def update_ghost_arrow(self, new_quadrant, target_arrow):
         self.ghost_arrow.setOpacity(0.2)
-        self.ghost_arrow.update_attributes(target_arrow.get_attributes())
+        self.ghost_arrow.set_object_attr_from_dict(target_arrow.get_attributes())
         self.ghost_arrow.update_svg(self.ghost_arrow.target_arrow.svg_file)
         self.ghost_arrow.setup_graphics_flags()
         self.ghost_arrow.update_appearance()

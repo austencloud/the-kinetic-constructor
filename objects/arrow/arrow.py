@@ -42,7 +42,7 @@ class Arrow(QGraphicsSvgItem):
         self.turns = None
 
         if attributes:
-            self.update_attributes(attributes)
+            self.set_object_attr_from_dict(attributes)
             self.update_appearance()
         self.center = self.boundingRect().center()
 
@@ -93,7 +93,7 @@ class Arrow(QGraphicsSvgItem):
                     self.update_for_new_quadrant(new_quadrant)
 
     def mouseReleaseEvent(self, event):
-        self.graphboard.arrow_positioner.update_arrow_positions()
+        self.graphboard.arrow_positioner.update()
 
     ### GETTERS ###
 
@@ -175,7 +175,7 @@ class Arrow(QGraphicsSvgItem):
     ### UPDATERS ###
 
     def update(self, attributes):
-        self.update_attributes(attributes)
+        self.set_object_attr_from_dict(attributes)
         self.update_appearance()
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
@@ -191,7 +191,7 @@ class Arrow(QGraphicsSvgItem):
 
     def update_color(self):
         if self.motion_type in [PRO, ANTI]:
-            new_svg_data = self.set_svg_color(self.svg_file, self.color)
+            new_svg_data = self.set_svg_color(self.color)
             self.renderer.load(new_svg_data)
             self.setSharedRenderer(self.renderer)
 
@@ -203,7 +203,11 @@ class Arrow(QGraphicsSvgItem):
         )
         self.setRotation(angle)
 
-    def update_attributes(self, attributes):
+    def set_dict_attr_from_object(self):
+        for attr in ARROW_ATTRIBUTES:
+            self.attributes[attr] = getattr(self, attr)
+
+    def set_object_attr_from_dict(self, attributes):
         for attr in ARROW_ATTRIBUTES:
             value = attributes.get(attr)
             if attr == TURNS:
@@ -223,6 +227,7 @@ class Arrow(QGraphicsSvgItem):
     def update_svg(self, svg_file):
         self.svg_file = svg_file
         self.setup_svg_renderer(svg_file)
+        self.set_svg_color(self.color)
 
     def get_svg_file(self, motion_type, turns):
         svg_file = f"{SHIFT_DIR}{motion_type}_{turns}.svg"
@@ -252,6 +257,8 @@ class Arrow(QGraphicsSvgItem):
             self.turns = 0
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
+        self.update_appearance()
+        self.set_dict_attr_from_object()
         self.graphboard.update()
 
     def decrement_turns(self):
@@ -260,13 +267,15 @@ class Arrow(QGraphicsSvgItem):
             self.turns = 2
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
+        self.update_appearance()
+        self.set_dict_attr_from_object()
         self.graphboard.update()
 
-    def set_svg_color(self, svg_file, new_color):
+    def set_svg_color(self, new_color):
         color_map = {RED: RED_HEX, BLUE: BLUE_HEX}
         new_hex_color = color_map.get(new_color)
 
-        with open(svg_file, CLOCKWISE) as f:
+        with open(self.svg_file, CLOCKWISE) as f:
             svg_data = f.read()
 
         style_tag_pattern = re.compile(

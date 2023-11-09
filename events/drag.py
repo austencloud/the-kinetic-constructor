@@ -63,7 +63,7 @@ class Drag(QWidget):
 
     def create_pixmap(self, target_arrow):
         new_svg_data = target_arrow.set_svg_color(
-            target_arrow.svg_file, target_arrow.color
+            target_arrow.color
         )
         renderer = QSvgRenderer(new_svg_data)
         scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE
@@ -144,14 +144,12 @@ class Drag(QWidget):
         if self.previous_quadrant != new_quadrant:
             self.update_drag_preview_for_new_quadrant(new_quadrant)
             new_quadrant = self.previous_quadrant
-            self.graphboard.arrow_positioner.update_arrow_positions()
-
 
     def update_drag_preview_for_new_quadrant(self, new_quadrant):
         self.quadrant = new_quadrant
         self.update_rotation()
         self.ghost_arrow_manager.update_ghost_arrow(new_quadrant, self)
-        self.graphboard.arrow_positioner.update_arrow_positions()
+        self.graphboard.arrow_positioner.update()
 
         self.update_staff_during_drag()
         if self.ghost_arrow not in self.graphboard.arrows:
@@ -160,8 +158,6 @@ class Drag(QWidget):
             self.graphboard.addItem(self.ghost_arrow)
         self.graphboard.update_letter()
         self.graphboard.update_staffs()
-
-
 
     def remove_same_color_arrow(self):
         for arrow in self.graphboard.arrows[:]:
@@ -195,7 +191,7 @@ class Drag(QWidget):
                 self.graphboard.update_staffs()
 
     def place_arrow_on_graphboard(self):
-        self.graphboard.arrow_positioner.update_arrow_positions()
+        self.graphboard.arrow_positioner.update()
         self.graphboard.clearSelection()
 
         self.placed_arrow = Arrow(self.graphboard, self.ghost_arrow.get_attributes())

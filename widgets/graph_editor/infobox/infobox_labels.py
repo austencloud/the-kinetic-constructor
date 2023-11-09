@@ -31,7 +31,6 @@ class InfoboxLabels:
 
         turns_label = QLabel()
         turns_label.setObjectName("turns_label")
-
         turns_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
         attribute_labels = {}
