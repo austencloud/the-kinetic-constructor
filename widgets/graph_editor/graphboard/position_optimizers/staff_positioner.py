@@ -10,16 +10,7 @@ class StaffPositioner:
         self.view = graphboard.view
         self.letters = graphboard.letters
 
-    ### REPOSITIONERS ###
-
-    def staffs_in_beta(self):
-        visible_staves = []
-        for staff in self.graphboard.staffs:
-            if staff.isVisible():
-                visible_staves.append(staff)
-        if len(visible_staves) == 2:
-            if visible_staves[0].location == visible_staves[1].location:
-                return True
+    ### BETA TO BETA REPOSITIONERS ###
 
     def reposition_beta_staffs(self):
         board_state = self.graphboard.get_state()
@@ -241,6 +232,15 @@ class StaffPositioner:
             )
 
     ### HELPERS ###
+
+    def staffs_in_beta(self):
+        visible_staves = []
+        for staff in self.graphboard.staffs:
+            if staff.isVisible():
+                visible_staves.append(staff)
+        if len(visible_staves) == 2:
+            if visible_staves[0].location == visible_staves[1].location:
+                return True
 
     def get_distance_from_center(self, position):
         center_point = QPointF(

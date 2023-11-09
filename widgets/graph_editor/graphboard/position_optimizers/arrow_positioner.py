@@ -8,7 +8,6 @@ class ArrowPositioner:
         self.letters = graphboard.letters
         self.graphboard = graphboard
         
-
     def update_arrow_positions(self):
         current_state = self.graphboard.get_state()
         optimal_locations = None
@@ -41,7 +40,6 @@ class ArrowPositioner:
                     None,
                 )
         return None
-
 
     def compare_states(self, current_state, candidate_state):
         candidate_state_dict = {

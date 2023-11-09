@@ -33,7 +33,7 @@ class GraphEditor(QWidget):
         action_buttons_layout = QVBoxLayout()
         infobox_layout = QVBoxLayout()
 
-        self.graphboard = Graphboard(self, self.main_widget.letters)
+        self.graphboard = Graphboard(self.main_widget, self)
         self.manipulators = Manipulators(self.graphboard)
         self.graphboard.manipulators = self.manipulators
         self.infobox = Infobox(

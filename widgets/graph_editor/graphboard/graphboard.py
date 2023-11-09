@@ -24,16 +24,17 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
 
 class Graphboard(QGraphicsScene):
-    def __init__(self, graph_editor, letters):
+    def __init__(self, main_widget, graph_editor):
         super().__init__()
         self.graph_editor = graph_editor
+        self.letters = main_widget.letters
 
         self.setSceneRect(0, 0, 750, 900)
         self.arrows = []
         self.staffs = []
         self.current_letter = None
 
-        self.letters = letters
+
         self.letter_item = QGraphicsSvgItem()
 
         self.initializer = GraphboardInit(self)
@@ -44,7 +45,7 @@ class Graphboard(QGraphicsScene):
 
         self.export_manager = ExportHandler(self.grid, self)
         self.context_menu_manager = GraphboardMenuHandler(
-            graph_editor.main_widget, graph_editor, self
+            main_widget, self.graph_editor, self
         )
         self.arrow_positioner = ArrowPositioner(self)
         self.staff_positioner = StaffPositioner(self)

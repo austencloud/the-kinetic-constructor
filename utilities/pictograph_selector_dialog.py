@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QGridLayout, QLabel
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from objects.pictograph.pictograph_view import PictographView
+from objects.pictograph.pictograph import Pictograph
 
 class PictographSelectorDialog(QDialog):
     def __init__(self, main_widget, letter):
@@ -35,7 +35,7 @@ class PictographSelectorDialog(QDialog):
         row = 0
         col = 0
         for i, combination in enumerate(combinations):
-            pictograph = PictographView(self.main_widget)
+            pictograph = Pictograph(self.main_widget)
             pictograph.populate_pictograph(combination)
             grid_layout.addWidget(pictograph, row, col)
                     
