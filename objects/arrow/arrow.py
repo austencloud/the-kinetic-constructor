@@ -1,9 +1,9 @@
-from PyQt6.QtWidgets import QGraphicsItem
+
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
 import re
-from settings.string_constants import *
+from settings.string_constants import MOTION_TYPE, TURNS, COLOR, COUNTER_CLOCKWISE, CLOCKWISE, RED, BLUE, RED_HEX, BLUE_HEX, PRO, ANTI, STATIC, ROTATION_DIRECTION, QUADRANT, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST, START_LOCATION, END_LOCATION, ARROW_ATTRIBUTES, SHIFT_DIR
 from data.start_end_location_mapping import start_end_location_mapping
 
 
@@ -11,16 +11,19 @@ class Arrow(QGraphicsSvgItem):
     def __init__(self, graphboard, attributes):
         super().__init__()
         if attributes:
-            self.svg_file = self.get_svg_file(
+            self.svg_file = self.get_svg_file( 
                 attributes.get(MOTION_TYPE), attributes.get(TURNS)
             )
-            self.setup_svg_renderer(self.svg_file)
-        self.setup_attributes(graphboard, attributes)
-        self.setup_graphics_flags()
+            self._setup_svg_renderer(self.svg_file)
+        self._setup(graphboard, attributes)
 
     ### SETUP ###
 
-    def setup_attributes(self, graphboard, attributes):
+    def _setup(self, graphboard, attributes):
+        self._setup_attributes(graphboard, attributes)
+        self._setup_graphics_flags()
+
+    def _setup_attributes(self, graphboard, attributes):
         self.graphboard = graphboard
         if hasattr(graphboard, "infobox"):
             self.infobox = graphboard.infobox
@@ -45,7 +48,7 @@ class Arrow(QGraphicsSvgItem):
             self.update_appearance()
         self.center = self.boundingRect().center()
 
-    def setup_graphics_flags(self):
+    def _setup_graphics_flags(self):
         self.setFlags(
             QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable
             | QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable
@@ -54,7 +57,7 @@ class Arrow(QGraphicsSvgItem):
         )
         self.setTransformOriginPoint(self.center)
 
-    def setup_svg_renderer(self, svg_file):
+    def _setup_svg_renderer(self, svg_file):
         self.renderer = QSvgRenderer(svg_file)
         self.setSharedRenderer(self.renderer)
 
@@ -161,18 +164,6 @@ class Arrow(QGraphicsSvgItem):
                 },
             }.get(rotation_direction, {})
 
-    def get_svg_file(self, attributes):
-        if attributes:
-            motion_type = attributes[MOTION_TYPE]
-            turns = attributes.get(TURNS, None)
-
-            if motion_type in [PRO, ANTI]:
-                self.is_shift = True
-                return SHIFT_DIR + motion_type + "_" + str(turns) + ".svg"
-            elif motion_type in [STATIC]:
-                self.is_static = True
-                return None
-
     def get_attributes(self):
         return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}
 
@@ -219,6 +210,7 @@ class Arrow(QGraphicsSvgItem):
             self.attributes[attr] = getattr(self, attr)
 
     def set_object_attr_from_dict(self, attributes):
+        
         for attr in ARROW_ATTRIBUTES:
             value = attributes.get(attr)
             if attr == TURNS:
@@ -237,7 +229,7 @@ class Arrow(QGraphicsSvgItem):
 
     def update_svg(self, svg_file):
         self.svg_file = svg_file
-        self.setup_svg_renderer(svg_file)
+        self._setup_svg_renderer(svg_file)
         self.set_svg_color(self.color)
 
     def get_svg_file(self, motion_type, turns):
@@ -301,10 +293,11 @@ class Arrow(QGraphicsSvgItem):
 
 
 class BlankArrow(Arrow):
-    # init an arrow that is blank but carries the properties
-    # of the arrow that was deleted
     def __init__(self, graphboard, attributes):
         super().__init__(graphboard, attributes)
-        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, False)
-        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
+        self._disable_interactivity()
         self.hide()
+        
+    def _disable_interactivity(self):
+        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
+        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)

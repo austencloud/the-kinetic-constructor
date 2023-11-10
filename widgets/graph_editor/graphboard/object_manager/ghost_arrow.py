@@ -16,7 +16,7 @@ class GhostArrow(Arrow):
             self.set_object_attr_from_dict(target_arrow.get_attributes())
             
         self.update_svg(target_arrow.svg_file)
-        self.setup_graphics_flags()
+        self._setup_graphics_flags()
         self.update_appearance()
         self.quadrant = new_quadrant
         self.show()
