@@ -9,7 +9,7 @@ from PyQt6.QtCore import Qt, QPointF
 from settings.numerical_constants import GRAPHBOARD_SCALE
 from settings.string_constants import *
 from objects.arrow.arrow import Arrow
-from events.drag import Drag
+from widgets.graph_editor.events.drag import Drag
 
 
 class Arrowbox(QGraphicsScene):
