@@ -2,12 +2,15 @@ import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from widgets.main_widget import MainWidget
 from settings.numerical_constants import MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT
-
+import cProfile
+import pstats
 
 class Main_Window(QMainWindow):
-    def __init__(self):
+    def __init__(self, profiler):
         super().__init__()
+        self.profiler = profiler
         self.screen = QApplication.primaryScreen().geometry()
+
         self.init_main_window()
         self.init_ui()
 
@@ -22,7 +25,27 @@ class Main_Window(QMainWindow):
     def init_ui(self):
         self.move(-(self.screen.width() + 500), 100)
 
-app = QApplication(sys.argv)
-ex = Main_Window()
-ex.setFocus()
-sys.exit(app.exec())
+    def write_profiling_stats_to_file(self, file_path):
+        stats = pstats.Stats(self.profiler).sort_stats("cumtime")
+        with open(file_path, "w") as f:
+            stats.stream = f
+            stats.print_stats()
+        print(f"Main profiling stats written to {file_path}")
+
+
+def main():
+    profiler = cProfile.Profile()
+    profiler.enable()
+
+    app = QApplication(sys.argv)
+    main_window = Main_Window(profiler)
+    main_window.setFocus()
+    exit_code = app.exec()
+
+    profiler.disable()
+    main_window.write_profiling_stats_to_file("main_profiling_stats.txt")
+
+    sys.exit(exit_code)
+
+if __name__ == "__main__":
+    main()

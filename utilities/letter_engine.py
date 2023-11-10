@@ -1,7 +1,5 @@
 from settings.string_constants import ARROWS
 from data.positions_map import positions_map
-import cProfile
-import pstats
 import logging
 
 # setup logging
@@ -14,7 +12,6 @@ logging.basicConfig(
 class LetterEngine:
     def __init__(self, graphboard):
         self.graphboard = graphboard
-        self.profiler = cProfile.Profile()
         self.preprocessed_combinations = self.preprocess_combinations(
             graphboard.letters
         )
@@ -38,13 +35,6 @@ class LetterEngine:
         return next(
             (arrow for arrow in self.graphboard.arrows if arrow.color == color), None
         )
-
-    def get_current_letter_variation(self):
-        self.profiler.enable()
-        current_combination = self.get_current_combination()
-        current_letter = self.get_current_letter()
-        current_letter_dict = self.get_current_letter_dict(current_letter)
-        return self.get_match(current_combination, current_letter, current_letter_dict)
 
     def get_current_combination(self):
         return self.graphboard.get_state()[ARROWS]
@@ -361,18 +351,6 @@ class LetterEngine:
             }
         return {}
 
-    def get_match(self, current_combination, current_letter, current_letter_dict):
-        for combination in current_letter_dict:
-            if self.match_combination(current_combination, current_letter, combination):
-                self.profiler.disable()
-                self.write_profiling_stats_to_file("letter_engine_stats.txt")
-                return combination
-
-        # No match found
-        self.profiler.disable()
-        self.write_profiling_stats_to_file("letter_engine_stats.txt")
-        return None
-
     def match_combination(self, current_combination, current_letter, combination):
         pre_fetched_current_combination = [
             {key: arrow.get(key, None) for key in arrow}
@@ -397,10 +375,3 @@ class LetterEngine:
                     break
 
         return all(current_arrows_matched)
-
-    def write_profiling_stats_to_file(self, file_path):
-        stats = pstats.Stats(self.profiler).sort_stats("cumtime")
-        with open(file_path, "w") as f:
-            stats.stream = f
-            stats.print_stats()
-        print(f"Letter engine profiling stats written to {file_path}")
