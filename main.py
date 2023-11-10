@@ -22,7 +22,6 @@ class Main_Window(QMainWindow):
     def init_ui(self):
         self.move(-(self.screen.width() + 500), 100)
 
-
 app = QApplication(sys.argv)
 ex = Main_Window()
 ex.setFocus()

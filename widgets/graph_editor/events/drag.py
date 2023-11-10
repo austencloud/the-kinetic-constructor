@@ -6,10 +6,8 @@ from PyQt6.QtCore import Qt
 from settings.numerical_constants import GRAPHBOARD_SCALE
 from settings.string_constants import *
 from objects.arrow.arrow import Arrow
-from widgets.graph_editor.graphboard.object_manager.ghost_arrow import (
-    GhostArrow,
-)
-import time  
+from objects.arrow.ghost_arrow import GhostArrow
+
 
 class Drag(QWidget):
     def __init__(self, main_window, graphboard, arrowbox):

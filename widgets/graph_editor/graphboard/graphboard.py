@@ -29,9 +29,9 @@ from data.letter_types import letter_types
 from data.positions_map import positions_map
 from .graphboard_init import GraphboardInit
 from .graphboard_menu_handler import GraphboardMenuHandler
-from .object_manager.position_engines.staff_positioner import StaffPositioner
-from .object_manager.position_engines.arrow_positioner import ArrowPositioner
-from .object_manager.ghost_arrow import GhostArrow
+from .position_engines.staff_positioner import StaffPositioner
+from .position_engines.arrow_positioner import ArrowPositioner
+from objects.arrow.ghost_arrow import GhostArrow
 from utilities.export_handler import ExportHandler
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from utilities.letter_engine import LetterEngine

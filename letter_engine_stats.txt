@@ -1,41 +1,154 @@
-         3359 function calls in 0.004 seconds
+         57601 function calls in 0.064 seconds
 
    Ordered by: cumulative time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-       14    0.000    0.000    0.003    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:252(get_match)
-       46    0.001    0.000    0.002    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:262(match_combination)
-       14    0.000    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:184(get_possible_letters)
-      212    0.001    0.000    0.001    0.000 {built-in method builtins.all}
-      652    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:279(<genexpr>)
-       46    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:264(<listcomp>)
-       14    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:226(get_letter_group)
-       14    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:18(get_specific_start_end_locations)
-       14    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:245(<dictcomp>)
-       92    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:265(<dictcomp>)
-     1742    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
-       14    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:213(<genexpr>)
-       14    0.000    0.000    0.000    0.000 {built-in method builtins.any}
-        7    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:175(get_gamma_same_handpath_hybrid_group)
-       14    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:223(get_overall_position)
-       14    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:173(get_state)
-       14    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:28(get_start_end_locations_as_tuple)
-        7    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:113(get_gamma_handpath_group)
-       14    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:189(<dictcomp>)
-        7    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:127(determine_same_handpath_hybrid)
-       14    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:51(get_motion_type)
-        7    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:97(determine_handpath)
-       14    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:224(<dictcomp>)
-       21    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:205(<genexpr>)
-       14    0.000    0.000    0.000    0.000 {method 'intersection' of 'set' objects}
-        7    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:198(<dictcomp>)
-        7    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:215(<dictcomp>)
-       70    0.000    0.000    0.000    0.000 {method 'index' of 'list' objects}
-       70    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
-      100    0.000    0.000    0.000    0.000 {built-in method builtins.len}
-       28    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
-       14    0.000    0.000    0.000    0.000 {method 'lower' of 'str' objects}
-       14    0.000    0.000    0.000    0.000 {method 'enable' of '_lsprof.Profiler' objects}
-       14    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+      233    0.003    0.000    0.041    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:252(get_match)
+      797    0.009    0.000    0.039    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:262(match_combination)
+     3814    0.010    0.000    0.019    0.000 {built-in method builtins.all}
+      233    0.004    0.000    0.015    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:184(get_possible_letters)
+    11510    0.011    0.000    0.012    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:279(<genexpr>)
+      797    0.004    0.000    0.007    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:264(<listcomp>)
+      233    0.002    0.000    0.006    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:226(get_letter_group)
+       15    0.000    0.000    0.004    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\main_widget.py:53(eventFilter)
+      233    0.002    0.000    0.004    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:18(get_specific_start_end_locations)
+        2    0.000    0.000    0.004    0.002 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\events\key_event_handler.py:6(keyPressEvent)
+      233    0.004    0.000    0.004    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:245(<dictcomp>)
+        2    0.000    0.000    0.004    0.002 d:\CODE\Apps\Sequence_Constructor\objects\arrow\arrow.py:261(increment_turns)
+     1594    0.003    0.000    0.003    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:265(<dictcomp>)
+        2    0.000    0.000    0.002    0.001 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:249(update)
+        2    0.000    0.000    0.002    0.001 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:258(update_arrows)
+        2    0.000    0.000    0.002    0.001 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\arrow_positioner.py:11(update)
+        4    0.000    0.000    0.002    0.001 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\arrow_positioner.py:84(set_arrow_to_default_loc)
+        4    0.000    0.000    0.002    0.001 d:\CODE\Apps\Sequence_Constructor\objects\grid.py:33(get_layer2_point)
+        4    0.000    0.000    0.002    0.001 d:\CODE\Apps\Sequence_Constructor\objects\grid.py:27(init_points)
+        4    0.000    0.000    0.002    0.001 d:\CODE\Apps\Sequence_Constructor\objects\grid.py:28(<dictcomp>)
+       16    0.000    0.000    0.002    0.000 d:\CODE\Apps\Sequence_Constructor\objects\grid.py:13(get_circle_coordinates)
+    30170    0.002    0.000    0.002    0.000 {method 'get' of 'dict' objects}
+      233    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:223(get_overall_position)
+        2    0.000    0.000    0.001    0.001 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:268(update_letter)
+      235    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:173(get_state)
+        2    0.000    0.000    0.001    0.001 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:12(get_current_letter)
+        2    0.000    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow\arrow.py:231(update_svg)
+       20    0.001    0.000    0.001    0.000 {built-in method io.open}
+      233    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:28(get_start_end_locations_as_tuple)
+       16    0.000    0.000    0.001    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:1325(XML)
+      126    0.000    0.000    0.001    0.000 {built-in method builtins.any}
+      233    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:189(<dictcomp>)
+       59    0.000    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:175(get_gamma_same_handpath_hybrid_group)
+      233    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:51(get_motion_type)
+       63    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:113(get_gamma_handpath_group)
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow\arrow.py:60(_setup_svg_renderer)
+       16    0.000    0.000    0.000    0.000 {method 'feed' of 'xml.etree.ElementTree.XMLParser' objects}
+      233    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:224(<dictcomp>)
+      126    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:213(<genexpr>)
+        4    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow\arrow.py:281(set_svg_color)
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow\arrow.py:186(update_appearance)
+       59    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:127(determine_same_handpath_hybrid)
+       16    0.000    0.000    0.000    0.000 {method 'find' of 'xml.etree.ElementTree.Element' objects}
+       20    0.000    0.000    0.000    0.000 {method 'read' of '_io.TextIOWrapper' objects}
+       16    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:404(find)
+       63    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:97(determine_handpath)
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:255(update_infobox)
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:272(update_letter_item)
+      185    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:205(<genexpr>)
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:285(set_blank_renderer)
+      233    0.000    0.000    0.000    0.000 {method 'intersection' of 'set' objects}
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\infobox.py:29(update)
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:288(set_svg_renderer)
+       20    0.000    0.000    0.000    0.000 {method '__exit__' of '_io._IOBase' objects}
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow\arrow.py:195(update_color)
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:261(update_staffs)
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\infobox_widgets.py:64(update_attribute_widgets)
+       20    0.000    0.000    0.000    0.000 {built-in method builtins.next}
+        4    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\infobox_widgets.py:55(update_info_widget_content)
+       32    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:260(select)
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:13(reposition_beta_staffs)
+       63    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:198(<dictcomp>)
+        4    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\infobox_labels.py:55(update_labels)
+       15    0.000    0.000    0.000    0.000 {built-in method type}
+     1060    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method load}
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:130(reposition_beta_to_beta)
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:176(reposition_I)
+       59    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:215(<dictcomp>)
+     1258    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+       14    0.000    0.000    0.000    0.000 {built-in method setText}
+       15    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\enum.py:688(__call__)
+      200    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:207(select)
+      478    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+      606    0.000    0.000    0.000    0.000 {method 'index' of 'list' objects}
+        6    0.000    0.000    0.000    0.000 {built-in method setSharedRenderer}
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow\arrow.py:201(update_rotation)
+       16    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:360(iterfind)
+       20    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py:22(decode)
+      233    0.000    0.000    0.000    0.000 {method 'lower' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\infobox_labels.py:89(update_type_and_position_label)
+       20    0.000    0.000    0.000    0.000 {built-in method _codecs.charmap_decode}
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:242(center_letter_item)
+      235    0.000    0.000    0.000    0.000 {method 'enable' of '_lsprof.Profiler' objects}
+        4    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:135(set_default_staff_locations)
+        4    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\re\__init__.py:225(compile)
+        4    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:121(get_gamma_opp_handpath_group)
+       16    0.000    0.000    0.000    0.000 {built-in method findChild}
+        4    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\infobox_labels.py:121(set_clock_pixmap)
+        4    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\infobox_buttons.py:41(show_buttons)
+        4    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\re\__init__.py:272(_compile)
+      231    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+       15    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\enum.py:1093(__new__)
+        2    0.000    0.000    0.000    0.000 {built-in method setRotation}
+        2    0.000    0.000    0.000    0.000 {built-in method selectedItems}
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow\arrow.py:120(get_rotation_angle)
+        4    0.000    0.000    0.000    0.000 {built-in method setPixmap}
+       13    0.000    0.000    0.000    0.000 {function MainWidget.eventFilter at 0x000001E0E64FE200}
+        4    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow\arrow.py:190(set_transform_origin_to_center)
+       14    0.000    0.000    0.000    0.000 {built-in method setPos}
+       12    0.000    0.000    0.000    0.000 {built-in method setTransformOriginPoint}
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:242(staffs_in_beta)
+      184    0.000    0.000    0.000    0.000 {method 'get' of 'xml.etree.ElementTree.Element' objects}
+       12    0.000    0.000    0.000    0.000 {built-in method boundingRect}
+        4    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:181(<genexpr>)
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow\arrow.py:209(set_dict_attr_from_object)
+       20    0.000    0.000    0.000    0.000 {built-in method show}
+       16    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:444(Comment)
+        4    0.000    0.000    0.000    0.000 {method 'search' of 're.Pattern' objects}
+        4    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\enum.py:192(__get__)
+        4    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:189(<genexpr>)
+        4    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:79(determine_parallel)
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow\arrow.py:126(get_quadrant_to_angle_map)
+        4    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:282(calculate_new_position)
+       32    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:179(select)
+        4    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:207(<dictcomp>)
+        4    0.000    0.000    0.000    0.000 {built-in method layout}
+       20    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\codecs.py:260(__init__)
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow\arrow.py:236(get_svg_file)
+        4    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+       18    0.000    0.000    0.000    0.000 {built-in method builtins.getattr}
+       10    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+        8    0.000    0.000    0.000    0.000 {built-in method center}
+        4    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:199(get_arrow_by_color)
+        4    0.000    0.000    0.000    0.000 {method 'encode' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:24(<listcomp>)
+        4    0.000    0.000    0.000    0.000 {built-in method count}
+       20    0.000    0.000    0.000    0.000 {built-in method key}
+       16    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:352(__init__)
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:273(determine_translation_direction)
+       12    0.000    0.000    0.000    0.000 {method 'capitalize' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:54(<listcomp>)
+       12    0.000    0.000    0.000    0.000 {built-in method x}
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:27(<listcomp>)
+       16    0.000    0.000    0.000    0.000 {method 'close' of 'xml.etree.ElementTree.XMLParser' objects}
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:327(get_opposite_direction)
+       16    0.000    0.000    0.000    0.000 {method 'iter' of 'xml.etree.ElementTree.Element' objects}
+       12    0.000    0.000    0.000    0.000 {built-in method y}
+        4    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\enum.py:1245(value)
+        4    0.000    0.000    0.000    0.000 {built-in method pos}
+        4    0.000    0.000    0.000    0.000 {method 'group' of 're.Match' objects}
+        4    0.000    0.000    0.000    0.000 {built-in method isVisible}
+        2    0.000    0.000    0.000    0.000 {built-in method isValid}
+        2    0.000    0.000    0.000    0.000 {built-in method width}
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:191(get_current_letter_type)
+        2    0.000    0.000    0.000    0.000 {built-in method height}
+        4    0.000    0.000    0.000    0.000 {method 'setdefault' of 'dict' objects}
 
 

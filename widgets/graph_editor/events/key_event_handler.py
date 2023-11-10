@@ -13,10 +13,6 @@ class KeyEventHandler:
             except IndexError:
                 selected_item = None
 
-            selected_arrow_color = None
-            if selected_item and isinstance(selected_item, Arrow):
-                selected_arrow_color = selected_item.color
-
             # Handle deletion with Ctrl+Delete or just Delete
             if event.key() == Qt.Key.Key_Delete:
                 keep_staff = event.modifiers() == Qt.KeyboardModifier.ControlModifier
