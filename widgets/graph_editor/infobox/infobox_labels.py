@@ -1,7 +1,7 @@
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QLabel, QSizePolicy
-from widgets.graph_editor.graphboard.objects.arrow import Arrow
+from objects.arrow import Arrow
 from data.positions_map import positions_map
 import logging
 from settings.string_constants import *

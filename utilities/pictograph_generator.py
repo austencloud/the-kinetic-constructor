@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtCore import QPointF
 import random
 import os
-from widgets.graph_editor.graphboard.objects.arrow import Arrow
+from objects.arrow import Arrow
 from utilities.export_handler import ExportHandler
 from settings.string_constants import *
 

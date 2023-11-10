@@ -1,5 +1,5 @@
-from widgets.graph_editor.graphboard.objects.arrow import Arrow
-from widgets.graph_editor.graphboard.objects.staff import Staff
+from objects.arrow import Arrow
+from objects.staff import Staff
 from PyQt6.QtCore import Qt
 from settings.string_constants import *
 

@@ -2,8 +2,8 @@ from PyQt6.QtCore import QPointF
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtGui import QTransform
 from PyQt6.QtWidgets import QGraphicsScene
-from widgets.graph_editor.graphboard.objects.arrow import Arrow, BlankArrow
-from widgets.graph_editor.graphboard.objects.staff import Staff
+from objects.arrow import Arrow, BlankArrow
+from objects.staff import Staff
 from widgets.graph_editor.graphboard.objects.grid import Grid
 from settings.numerical_constants import STAFF_LENGTH, STAFF_WIDTH
 from settings.string_constants import (
@@ -230,7 +230,6 @@ class Graphboard(QGraphicsScene):
         blank_arrow = BlankArrow(self, blank_attributes_dict)
         self.addItem(blank_arrow)
         self.arrows.append(blank_arrow)
-        blank_arrow.is_still = True
         blank_arrow.staff = arrow.staff
         blank_arrow.staff.arrow = blank_arrow
 

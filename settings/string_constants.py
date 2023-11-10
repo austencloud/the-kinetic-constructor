@@ -1,8 +1,10 @@
-GRID_PATH = "resources/images/grid/grid.svg"
 ARROW_DIR = "resources/images/arrows/"
+STAFF_DIR = "resources/images/props/"
 LETTER_SVG_DIR = "resources/images/letters/"
 ICON_DIR = "resources/images/icons/"
-STAFF_SVG_PATH = "resources/images/staffs/staff.svg"
+
+GRID_FILE_PATH = "resources/images/grid/grid.svg"
+STAFF_SVG_FILE_PATH = "resources/images/props/staff.svg"
 
 BLUE = "blue"
 RED = "red"
@@ -26,15 +28,6 @@ START_LOCATION = "start_location"
 END_LOCATION = "end_location"
 TURNS = "turns"
 
-ARROW_ATTRIBUTES = [
-    COLOR,
-    MOTION_TYPE,
-    ROTATION_DIRECTION,
-    QUADRANT,
-    START_LOCATION,
-    END_LOCATION,
-    TURNS,
-]
 
 CLOCKWISE = "r"
 COUNTER_CLOCKWISE = "l"
@@ -71,3 +64,19 @@ CLOCK_ICON = CLOCK_DIR + "clock.png"
 
 SWAP_ICON = "swap.png"
 
+
+ARROW_ATTRIBUTES = [
+    COLOR,
+    MOTION_TYPE,
+    ROTATION_DIRECTION,
+    QUADRANT,
+    START_LOCATION,
+    END_LOCATION,
+    TURNS,
+]
+
+STAFF_ATTRIBUTES = [
+    COLOR,
+    LOCATION,
+    LAYER,
+]

@@ -1,9 +1,31 @@
-
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
 import re
-from settings.string_constants import MOTION_TYPE, TURNS, COLOR, COUNTER_CLOCKWISE, CLOCKWISE, RED, BLUE, RED_HEX, BLUE_HEX, PRO, ANTI, STATIC, ROTATION_DIRECTION, QUADRANT, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST, START_LOCATION, END_LOCATION, ARROW_ATTRIBUTES, ARROW_DIR
+from settings.string_constants import (
+    MOTION_TYPE,
+    TURNS,
+    COLOR,
+    COUNTER_CLOCKWISE,
+    CLOCKWISE,
+    RED,
+    BLUE,
+    RED_HEX,
+    BLUE_HEX,
+    PRO,
+    ANTI,
+    STATIC,
+    ROTATION_DIRECTION,
+    QUADRANT,
+    NORTHEAST,
+    SOUTHEAST,
+    SOUTHWEST,
+    NORTHWEST,
+    START_LOCATION,
+    END_LOCATION,
+    ARROW_ATTRIBUTES,
+    ARROW_DIR,
+)
 from data.start_end_location_mapping import start_end_location_mapping
 
 
@@ -11,7 +33,7 @@ class Arrow(QGraphicsSvgItem):
     def __init__(self, graphboard, attributes):
         super().__init__()
         if attributes:
-            self.svg_file = self.get_svg_file( 
+            self.svg_file = self.get_svg_file(
                 attributes.get(MOTION_TYPE), attributes.get(TURNS)
             )
             self._setup_svg_renderer(self.svg_file)
@@ -24,15 +46,10 @@ class Arrow(QGraphicsSvgItem):
 
     def _setup_attributes(self, graphboard, attributes):
         self.graphboard = graphboard
-        if hasattr(graphboard, "infobox"):
-            self.infobox = graphboard.infobox
 
-        self.in_graphboard = False
         self.drag_offset = QPointF(0, 0)
-        self.is_still = False
-        self.staff = None
         self.is_mirrored = False
-        self.previous_arrow = None
+        self.staff = None
 
         self.color = None
         self.motion_type = None
@@ -41,7 +58,10 @@ class Arrow(QGraphicsSvgItem):
         self.start_location = None
         self.end_location = None
         self.turns = None
-        self.mirror_transform = None # carries the transform to be applied to the ghost arrow
+
+        self.mirror_transform = (
+            None  # carries the transform to be applied to the ghost arrow
+        )
 
         if attributes:
             self.set_object_attr_from_dict(attributes)
@@ -60,7 +80,6 @@ class Arrow(QGraphicsSvgItem):
     def _setup_svg_renderer(self, svg_file):
         self.renderer = QSvgRenderer(svg_file)
         self.setSharedRenderer(self.renderer)
-
 
     ### MOUSE EVENTS ###
 
@@ -176,7 +195,6 @@ class Arrow(QGraphicsSvgItem):
         svg_file = f"{ARROW_DIR}{motion_type}_{turns}.svg"
         return svg_file
 
-
     ### UPDATERS ###
 
     def update(self, attributes):
@@ -211,26 +229,22 @@ class Arrow(QGraphicsSvgItem):
         self.start_location, self.end_location = self.get_start_end_locations(
             self.motion_type, self.rotation_direction, self.quadrant
         )
-        
+
         self.attributes[QUADRANT] = new_quadrant
         self.attributes[START_LOCATION] = self.start_location
         self.attributes[END_LOCATION] = self.end_location
-        
+
         self.update_appearance()
-        self.previous_arrow = (
-            self.staff.arrow
-        )  # Consider storing the old arrow before changing.
         self.staff.location = self.end_location
         self.staff.update_attributes_from_arrow(self)
         self.update_appearance()
-        
+
         self.ghost_arrow.update(new_quadrant, self)
         self.graphboard.arrows.remove(self)
-        self.graphboard.arrow_positioner.update()
         self.graphboard.update()
         self.graphboard.arrows.append(self)
-        
-    def set_dict_attr_from_object(self):
+
+    def update_attribute_dict(self):
         for attr in ARROW_ATTRIBUTES:
             self.attributes[attr] = getattr(self, attr)
 
@@ -265,7 +279,7 @@ class Arrow(QGraphicsSvgItem):
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
         self.update_appearance()
-        self.set_dict_attr_from_object()
+        self.update_attribute_dict()
         self.graphboard.update()
 
     def decrement_turns(self):
@@ -275,7 +289,7 @@ class Arrow(QGraphicsSvgItem):
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
         self.update_appearance()
-        self.set_dict_attr_from_object()
+        self.update_attribute_dict()
         self.graphboard.update()
 
     def set_svg_color(self, new_color):
@@ -301,7 +315,7 @@ class BlankArrow(Arrow):
         super().__init__(graphboard, attributes)
         self._disable_interactivity()
         self.hide()
-        
+
     def _disable_interactivity(self):
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)

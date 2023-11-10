@@ -120,8 +120,8 @@ class Manipulators:
             new_rotation_direction = CLOCKWISE
         elif arrow.rotation_direction == CLOCKWISE:
             new_rotation_direction = COUNTER_CLOCKWISE
-        elif arrow.rotation_direction == 'None':
-            new_rotation_direction = 'None'
+        elif arrow.rotation_direction == "None":
+            new_rotation_direction = "None"
 
         old_start_location = arrow.start_location
         old_end_location = arrow.end_location
@@ -139,7 +139,7 @@ class Manipulators:
         }
 
         arrow.staff.location = new_end_location
-        arrow.set_object_attr_from_dict(new_arrow_dict)
+        arrow.set_attr_from_dict(new_arrow_dict)
         arrow.update_appearance()
         arrow.staff.update_appearance()
         self.graphboard.update()
@@ -156,8 +156,8 @@ class Manipulators:
             new_rotation_direction = CLOCKWISE
         elif arrow.rotation_direction == CLOCKWISE:
             new_rotation_direction = COUNTER_CLOCKWISE
-        elif arrow.rotation_direction == 'None':
-            new_rotation_direction = 'None'
+        elif arrow.rotation_direction == "None":
+            new_rotation_direction = "None"
 
         new_arrow_dict = {
             COLOR: arrow.color,
@@ -175,15 +175,13 @@ class Manipulators:
             LAYER: 1,
         }
 
-        arrow.svg_file = (
-            f"resources/images/arrows/{new_motion_type}_{arrow.turns}.svg"
-        )
+        arrow.svg_file = f"resources/images/arrows/{new_motion_type}_{arrow.turns}.svg"
         arrow._setup_svg_renderer(arrow.svg_file)
         self.update_arrow_and_staff(arrow, new_arrow_dict, new_staff_dict)
         self.graphboard.update()
 
     def swap_colors(self):
-        from objects.arrow.arrow import Arrow
+        from objects.arrow import Arrow
 
         current_letter = self.graphboard.get_current_letter()
         if current_letter != "G" and current_letter != "H":

@@ -1,5 +1,4 @@
-from PyQt6.QtWidgets import QGraphicsItem
-from widgets.graph_editor.graphboard.objects.staff import Staff
+from objects.staff import Staff
 
 
 class GhostStaff(Staff):
@@ -14,9 +13,9 @@ class GhostStaff(Staff):
     def update(self, new_quadrant, target_staff, drag=None):
         self.setOpacity(0.2)
         if drag:
-            self.update_object_attr_from_dict(drag.get_attributes())
+            self.set_attributes_from_dict(drag.get_attributes())
         else:
-            self.update_object_attr_from_dict(target_staff.get_attributes())
+            self.set_attributes_from_dict(target_staff.get_attributes())
 
         self.update_svg(target_staff.svg_file)
         self._setup_graphics_flags()

@@ -1,6 +1,6 @@
 import json
 import os
-from widgets.graph_editor.graphboard.objects.arrow import Arrow
+from objects.arrow import Arrow
 from PyQt6.QtCore import QObject
 
 

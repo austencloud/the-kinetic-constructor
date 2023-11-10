@@ -210,7 +210,7 @@
         1    0.000    0.000    0.000    0.000 {built-in method _missing_}
       115    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
        49    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:162(__getitem__)
-        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow\arrow.py:211(set_object_attr_from_dict)
+        2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow\arrow.py:211(set_attributes_from_dict)
       240    0.000    0.000    0.000    0.000 {method 'pop' of 'dict' objects}
         2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow\arrow.py:118(get_rotation_angle)
       7/2    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:172(getwidth)

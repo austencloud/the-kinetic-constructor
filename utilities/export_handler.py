@@ -1,8 +1,8 @@
 import re
 from PyQt6.QtGui import QImage, QPainter
 from PyQt6.QtCore import QPointF
-from widgets.graph_editor.graphboard.objects.arrow import Arrow
-from widgets.graph_editor.graphboard.objects.staff import Staff
+from objects.arrow import Arrow
+from objects.staff import Staff
 from widgets.graph_editor.graphboard.objects.grid import Grid
 from lxml import etree
 from copy import deepcopy

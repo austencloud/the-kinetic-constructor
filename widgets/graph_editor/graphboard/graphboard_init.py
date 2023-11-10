@@ -28,7 +28,7 @@ class GraphboardInit:
         return view
 
     def init_grid(self):
-        grid = Grid(GRID_PATH)
+        grid = Grid(GRID_FILE_PATH)
         grid_width = grid.boundingRect().width()
         scene_width = self.graphboard.width()
         padding = (scene_width - grid_width) / 2

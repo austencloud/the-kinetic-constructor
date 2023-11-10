@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QGraphicsItem
-from widgets.graph_editor.graphboard.objects.arrow import Arrow
+from objects.arrow import Arrow
 
 
 class GhostArrow(Arrow):
@@ -16,7 +16,7 @@ class GhostArrow(Arrow):
         if drag:
             self.set_object_attr_from_dict(drag.get_attributes())
         else:
-            self.set_object_attr_from_dict(target_arrow.get_attributes())
+            self.update_attribute_dict()
 
         self.update_svg(target_arrow.svg_file)
         self._setup_graphics_flags()

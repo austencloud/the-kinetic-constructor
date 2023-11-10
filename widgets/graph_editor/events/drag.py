@@ -5,7 +5,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtCore import Qt
 from settings.numerical_constants import GRAPHBOARD_SCALE
 from settings.string_constants import *
-from widgets.graph_editor.graphboard.objects.arrow import Arrow
+from objects.arrow import Arrow
 
 
 class Drag(QWidget):
@@ -26,7 +26,6 @@ class Drag(QWidget):
         self.graphboard = graphboard
         self.main_window = main_window
 
-        self.in_graphboard = False
         self.has_entered_graphboard_once = False
         self.current_rotation_angle = 0
         self.previous_quadrant = None
@@ -159,7 +158,7 @@ class Drag(QWidget):
                 if staff not in self.graphboard.staffs:
                     self.graphboard.staffs.append(staff)
 
-                staff.update_attributes(
+                staff.set_attributes_from_dict(
                     {
                         COLOR: self.color,
                         LOCATION: self.end_location,
