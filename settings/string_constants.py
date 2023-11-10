@@ -1,6 +1,5 @@
 GRID_PATH = "resources/images/grid/grid.svg"
 ARROW_DIR = "resources/images/arrows/"
-SHIFT_DIR = "resources/images/arrows/shift/"
 LETTER_SVG_DIR = "resources/images/letters/"
 ICON_DIR = "resources/images/icons/"
 STAFF_SVG_PATH = "resources/images/staffs/staff.svg"

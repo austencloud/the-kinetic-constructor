@@ -3,7 +3,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
 import re
-from settings.string_constants import MOTION_TYPE, TURNS, COLOR, COUNTER_CLOCKWISE, CLOCKWISE, RED, BLUE, RED_HEX, BLUE_HEX, PRO, ANTI, STATIC, ROTATION_DIRECTION, QUADRANT, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST, START_LOCATION, END_LOCATION, ARROW_ATTRIBUTES, SHIFT_DIR
+from settings.string_constants import MOTION_TYPE, TURNS, COLOR, COUNTER_CLOCKWISE, CLOCKWISE, RED, BLUE, RED_HEX, BLUE_HEX, PRO, ANTI, STATIC, ROTATION_DIRECTION, QUADRANT, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST, START_LOCATION, END_LOCATION, ARROW_ATTRIBUTES, ARROW_DIR
 from data.start_end_location_mapping import start_end_location_mapping
 
 
@@ -232,7 +232,7 @@ class Arrow(QGraphicsSvgItem):
         self.set_svg_color(self.color)
 
     def get_svg_file(self, motion_type, turns):
-        svg_file = f"{SHIFT_DIR}{motion_type}_{turns}.svg"
+        svg_file = f"{ARROW_DIR}{motion_type}_{turns}.svg"
         return svg_file
 
     def update_for_new_quadrant(self, new_quadrant):

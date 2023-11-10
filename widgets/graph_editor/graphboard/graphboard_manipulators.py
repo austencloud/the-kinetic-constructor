@@ -176,11 +176,9 @@ class Manipulators:
         }
 
         arrow.svg_file = (
-            f"resources/images/arrows/shift/{new_motion_type}_{arrow.turns}.svg"
+            f"resources/images/arrows/{new_motion_type}_{arrow.turns}.svg"
         )
         arrow._setup_svg_renderer(arrow.svg_file)
-        arrow.set_object_attr_from_dict(new_arrow_dict)
-        arrow.update_appearance()
         self.update_arrow_and_staff(arrow, new_arrow_dict, new_staff_dict)
         self.graphboard.update()
 

@@ -105,18 +105,30 @@ class LetterEngine:
         blue_motion_type = self.blue_arrow.motion_type
         combined_motion_type = None
 
+        ### NON_HYBRIDS ###
+
         if red_motion_type == "pro" and blue_motion_type == "pro":
             combined_motion_type = "pro_vs_pro"
         elif red_motion_type == "anti" and blue_motion_type == "anti":
             combined_motion_type = "anti_vs_anti"
+        elif red_motion_type == "static" and blue_motion_type == "static":
+            combined_motion_type = "static_vs_static"
+            
+        ### HYBRIDS ###
+            
         elif red_motion_type == "pro" and blue_motion_type == "anti":
+            combined_motion_type = "pro_vs_anti"
+        elif red_motion_type == "anti" and blue_motion_type == "pro":
             combined_motion_type = "pro_vs_anti"
         elif red_motion_type == "static" and blue_motion_type == "pro":
             combined_motion_type = "static_vs_pro"
+        elif red_motion_type == "pro" and blue_motion_type == "static":
+            combined_motion_type = "static_vs_pro"
         elif red_motion_type == "static" and blue_motion_type == "anti":
             combined_motion_type = "static_vs_anti"
-        elif red_motion_type == "static" and blue_motion_type == "static":
-            combined_motion_type = "static_vs_static"
+        elif red_motion_type == "anti" and blue_motion_type == "static":
+            combined_motion_type = "static_vs_anti"
+
 
         motion_type_letter_group = self.motion_type_letter_groups.get(
             combined_motion_type, ""
