@@ -5,15 +5,12 @@ from objects.grid import Grid
 from objects.staff.staff import RedStaff, BlueStaff
 from settings.numerical_constants import *
 from settings.string_constants import *
+from .ghost_arrow import GhostArrow
+from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
 class GraphboardInit:
     def __init__(self, graphboard):
         self.graphboard = graphboard
-        self.init_view()
-        self.init_grid()
-        self.init_staff_set()
-        self.init_letterbox()
-        self.init_quadrants()
 
     def init_view(self):
         view = QGraphicsView()
@@ -34,7 +31,7 @@ class GraphboardInit:
         grid_width = grid.boundingRect().width()
         scene_width = self.graphboard.width()
         padding = (scene_width - grid_width) / 2
-        grid_position = QPointF(padding, padding)
+        grid_position = QPointF(0, 0)
         grid.setPos(grid_position)
         self.graphboard.addItem(grid)
         grid.init_handpoints()
@@ -63,38 +60,55 @@ class GraphboardInit:
         staff_set = {RED: red_staff, BLUE: blue_staff}
         return staff_set
 
-    def init_letterbox(self):
-        self.graphboard.letter_renderers = {}
-        self.graphboard.addItem(self.graphboard.letter_item)
+    def init_ghost_arrows(self):
+        red_ghost_arrow = GhostArrow(self.graphboard, RED)
+        blue_ghost_arrow = GhostArrow(self.graphboard, BLUE)
 
-    def init_quadrants(self):
-        grid_center = self.graphboard.grid.get_circle_coordinates("center_point")
+        red_ghost_arrow.hide()
+        blue_ghost_arrow.hide()
 
-        self.graphboard.grid_center_x = grid_center.x() + self.graphboard.padding
-        self.graphboard.grid_center_y = grid_center.y() + self.graphboard.padding
+        ghost_arrows = {RED: red_ghost_arrow, BLUE: blue_ghost_arrow}
+        return ghost_arrows
 
-        self.graphboard.ne_boundary = (
-            self.graphboard.grid_center_x,
+    def init_letter_item(self):
+        letter_item = QGraphicsSvgItem()
+        self.graphboard.addItem(letter_item)
+        return letter_item
+
+    def init_quadrants(self, grid):
+        grid_center = grid.get_circle_coordinates("center_point")
+
+        grid_center_x = grid_center.x()
+        grid_center_y = grid_center.y()
+
+        ne_boundary = (
+            grid_center_x,
             0,
             GRAPHBOARD_WIDTH,
-            self.graphboard.grid_center_y,
+            grid_center_y,
         )
-        self.graphboard.se_boundary = (
-            self.graphboard.grid_center_x,
-            self.graphboard.grid_center_y,
+        se_boundary = (
+            grid_center_x,
+            grid_center_y,
             GRAPHBOARD_WIDTH,
             GRAPHBOARD_HEIGHT,
         )
-        self.graphboard.sw_boundary = (
+        sw_boundary = (
             0,
-            self.graphboard.grid_center_y,
-            self.graphboard.grid_center_x,
+            grid_center_y,
+            grid_center_x,
             GRAPHBOARD_HEIGHT,
         )
-        self.graphboard.nw_boundary = (
+        nw_boundary = (
             0,
             0,
-            self.graphboard.grid_center_x,
-            self.graphboard.grid_center_y,
+            grid_center_x,
+            grid_center_y,
         )
-
+        quadrants = {
+            NORTHEAST: ne_boundary,
+            SOUTHEAST: se_boundary,
+            SOUTHWEST: sw_boundary,
+            NORTHWEST: nw_boundary,
+        }
+        return quadrants

@@ -10,13 +10,11 @@ class ArrowPositioner:
         
     def update(self):
         for arrow in self.graphboard.arrows:
-            # set the transformation matrix to 0,0
             arrow.setTransformOriginPoint(0, 0)
         optimal_locations = None
         
         if len(self.graphboard.staffs) == 2:
-            current_letter = self.graphboard.current_letter
-            if current_letter is not None:
+            if self.graphboard.current_letter:
                 optimal_locations = self.find_optimal_locations()
 
         for arrow in self.graphboard.arrows:

@@ -18,7 +18,6 @@ class Arrow(QGraphicsSvgItem):
         self._setup(graphboard, attributes)
 
     ### SETUP ###
-
     def _setup(self, graphboard, attributes):
         self._setup_attributes(graphboard, attributes)
         self._setup_graphics_flags()
@@ -42,6 +41,7 @@ class Arrow(QGraphicsSvgItem):
         self.start_location = None
         self.end_location = None
         self.turns = None
+        self.mirror_transform = None # carries the transform to be applied to the ghost arrow
 
         if attributes:
             self.set_object_attr_from_dict(attributes)
@@ -61,17 +61,21 @@ class Arrow(QGraphicsSvgItem):
         self.renderer = QSvgRenderer(svg_file)
         self.setSharedRenderer(self.renderer)
 
+
     ### MOUSE EVENTS ###
 
     def mousePressEvent(self, event):
         self.setSelected(True)
-        self.ghost_arrow = self.graphboard.ghost_arrow
+        self.ghost_arrow = self.graphboard.ghost_arrows[self.color]
+        if self.mirror_transform:
+            self.ghost_arrow.setTransform(self.mirror_transform)
         self.ghost_arrow.update(self.quadrant, self)
         self.graphboard.addItem(self.ghost_arrow)
         self.ghost_arrow.staff = self.staff
         self.graphboard.arrows.append(self.ghost_arrow)
+        self.graphboard.arrows.remove(self)
         self.graphboard.arrow_positioner.update()
-
+        self.graphboard.arrows.append(self)
         for arrow in self.graphboard.arrows:
             if arrow != self:
                 arrow.setSelected(False)
@@ -95,13 +99,7 @@ class Arrow(QGraphicsSvgItem):
             if self.quadrant != new_quadrant:
                 if in_view:
                     self.update_for_new_quadrant(new_quadrant)
-                    # update the ghost arrow
-                    self.ghost_arrow.update(new_quadrant, self)
-                    self.graphboard.arrows.remove(self.ghost_arrow)
-                    self.graphboard.update()
-                    self.graphboard.arrows.append(self.ghost_arrow)
-                    self.graphboard.arrow_positioner.update()
-                    self.graphboard.infobox.update()
+
 
     def mouseReleaseEvent(self, event):
         self.graphboard.removeItem(self.ghost_arrow)
@@ -253,9 +251,14 @@ class Arrow(QGraphicsSvgItem):
         )  # Consider storing the old arrow before changing.
         self.staff.location = self.end_location
         self.staff.update_attributes_from_arrow(self)
-
-        self.update_appearance()  # Now this will reset the transform origin as well.
-
+        self.update_appearance()
+        
+        self.ghost_arrow.update(new_quadrant, self)
+        self.graphboard.arrows.remove(self)
+        self.graphboard.arrow_positioner.update()
+        self.graphboard.update()
+        self.graphboard.arrows.append(self)
+        
     ### MANIPULATION ###
 
     def increment_turns(self):

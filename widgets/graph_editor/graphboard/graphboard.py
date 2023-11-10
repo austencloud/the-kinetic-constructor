@@ -31,7 +31,7 @@ from .graphboard_init import GraphboardInit
 from .graphboard_menu_handler import GraphboardMenuHandler
 from .position_engines.staff_positioner import StaffPositioner
 from .position_engines.arrow_positioner import ArrowPositioner
-from objects.arrow.ghost_arrow import GhostArrow
+from .ghost_arrow import GhostArrow
 from utilities.export_handler import ExportHandler
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from utilities.letter_engine import LetterEngine
@@ -47,18 +47,20 @@ class Graphboard(QGraphicsScene):
         self.setSceneRect(0, 0, 750, 900)
         self.arrows = []
         self.staffs = []
+        self.letter_renderers = {}
         self.current_letter = None
 
     def setup_components(self, main_widget, graph_editor):
         self.graph_editor = graph_editor
         self.letters = main_widget.letters
-        self.letter_item = QGraphicsSvgItem()
         self.initializer = GraphboardInit(self)
-        self.ghost_arrow = GhostArrow(self)
 
+        self.ghost_arrows = self.initializer.init_ghost_arrows()
         self.grid = self.initializer.init_grid()
         self.view = self.initializer.init_view()
         self.staff_set = self.initializer.init_staff_set()
+        self.letter_item = self.initializer.init_letter_item()
+        self.quadrants = self.initializer.init_quadrants(self.grid)
         self.setup_managers(main_widget, graph_editor)
 
     def setup_managers(self, main_widget, graph_editor):
@@ -69,7 +71,7 @@ class Graphboard(QGraphicsScene):
         self.arrow_positioner = ArrowPositioner(self)
         self.staff_positioner = StaffPositioner(self)
         self.letter_engine = LetterEngine(self)
-        
+
     ### SELECTION
 
     def select_all_arrows(self):
@@ -136,13 +138,11 @@ class Graphboard(QGraphicsScene):
         if staff.axis == VERTICAL:
             staff.setPos(
                 self.grid.handpoints[staff.location]
-                + QPointF(self.padding, self.padding)
                 + QPointF(STAFF_WIDTH / 2, -STAFF_LENGTH / 2)
             )
         else:
             staff.setPos(
                 self.grid.handpoints[staff.location]
-                + QPointF(self.padding, self.padding)
                 + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2)
             )
         staff.setTransformOriginPoint(0, 0)
@@ -168,7 +168,6 @@ class Graphboard(QGraphicsScene):
             elif arrow.color == BLUE:
                 blue_position = center
         return red_position, blue_position
-
 
     def get_state(self):
         state = {
@@ -201,8 +200,6 @@ class Graphboard(QGraphicsScene):
             if arrow.color == color:
                 return arrow
 
-
-
     ### HELPERS ###
 
     @staticmethod
@@ -210,13 +207,13 @@ class Graphboard(QGraphicsScene):
         return boundary[0] <= x <= boundary[2] and boundary[1] <= y <= boundary[3]
 
     def determine_quadrant(self, x, y):
-        if self.point_in_quadrant(x, y, self.ne_boundary):
+        if self.point_in_quadrant(x, y, self.quadrants[NORTHEAST]):
             return NORTHEAST
-        elif self.point_in_quadrant(x, y, self.se_boundary):
+        elif self.point_in_quadrant(x, y, self.quadrants[SOUTHEAST]):
             return SOUTHEAST
-        elif self.point_in_quadrant(x, y, self.sw_boundary):
+        elif self.point_in_quadrant(x, y, self.quadrants[SOUTHWEST]):
             return SOUTHWEST
-        elif self.point_in_quadrant(x, y, self.nw_boundary):
+        elif self.point_in_quadrant(x, y, self.quadrants[NORTHWEST]):
             return NORTHWEST
         else:
             return None
@@ -241,7 +238,7 @@ class Graphboard(QGraphicsScene):
 
     def center_letter_item(self):
         x = self.width() / 2 - self.letter_item.boundingRect().width() / 2
-        y = self.grid.boundingRect().height() + LETTER_ITEM_HEIGHT
+        y = self.grid.boundingRect().height()
         self.letter_item.setPos(x, y)
 
     ### UPDATERS ###
@@ -266,7 +263,10 @@ class Graphboard(QGraphicsScene):
             self.staff_positioner.reposition_beta_staffs()
 
     def update_letter(self):
-        self.current_letter = self.letter_engine.get_current_letter() if len(self.staffs) == 2 else None
+        if len(self.staffs) == 2:
+            self.current_letter = self.letter_engine.get_current_letter()
+        else:
+            self.current_letter = None
         self.update_letter_item(self.current_letter)
 
     def update_letter_item(self, letter):

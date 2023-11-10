@@ -6,7 +6,7 @@ from PyQt6.QtCore import Qt
 from settings.numerical_constants import GRAPHBOARD_SCALE
 from settings.string_constants import *
 from objects.arrow.arrow import Arrow
-from objects.arrow.ghost_arrow import GhostArrow
+
 
 
 class Drag(QWidget):
@@ -16,7 +16,6 @@ class Drag(QWidget):
         self.setup_dependencies(main_window, graphboard, arrowbox)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-        self.ghost_arrow = GhostArrow(self.graphboard)
         self.preview = QLabel(self)
         self.reset_drag_state()
 
@@ -34,12 +33,12 @@ class Drag(QWidget):
         self.previous_quadrant = None
         self.preview = None
         self.svg_file = None
+        self.ghost_arrow = None
 
     def match_target_arrow(self, target_arrow):
         self.target_arrow = target_arrow
-        self.ghost_arrow.target_arrow = target_arrow
-        pixmap = self.create_pixmap(target_arrow)
         self.set_attributes(target_arrow)
+        pixmap = self.create_pixmap(target_arrow)
         self.preview.setPixmap(pixmap)
         self.preview.setFixedHeight(pixmap.height())
         self.arrow_center = self.target_arrow.boundingRect().center() * GRAPHBOARD_SCALE
@@ -56,6 +55,8 @@ class Drag(QWidget):
         ) = target_arrow.get_start_end_locations(
             self.motion_type, self.rotation_direction, self.quadrant
         )
+        self.ghost_arrow = self.graphboard.ghost_arrows[self.color]
+        self.ghost_arrow.target_arrow = target_arrow
 
     def reset_drag_state(self):
         self.dragging = False
@@ -226,15 +227,11 @@ class Drag(QWidget):
         if self.previous_quadrant != new_quadrant:
             self.update_preview_for_new_quadrant(new_quadrant)
             self.previous_quadrant = new_quadrant
-            print(self.previous_quadrant)
-
 
     def update_preview_for_new_quadrant(self, new_quadrant):
-        
         self.quadrant = new_quadrant
         self.update_rotation()
         self.ghost_arrow.update(new_quadrant, self.target_arrow, self)
-        self.graphboard.arrow_positioner.update()
 
         self.update_staff_during_drag()
         if self.ghost_arrow not in self.graphboard.arrows:

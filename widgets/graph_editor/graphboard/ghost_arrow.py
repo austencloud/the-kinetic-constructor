@@ -2,11 +2,14 @@ from PyQt6.QtWidgets import QGraphicsItem
 from objects.arrow.arrow import Arrow
 
 class GhostArrow(Arrow):
-    def __init__(self, graphboard):
+    def __init__(self, graphboard, color):
         super().__init__(graphboard, None)
         self.setOpacity(0.2)
         self.setTransformOriginPoint(self.center)
         self.graphboard = graphboard
+        self.color = color
+        self.target_arrow = None
+
         
     def update(self, new_quadrant, target_arrow, drag=None):
         self.setOpacity(0.2)

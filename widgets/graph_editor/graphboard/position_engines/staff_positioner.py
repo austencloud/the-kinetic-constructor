@@ -311,7 +311,7 @@ class StaffPositioner:
 
     def get_optimal_arrow_location(self, arrow):
         current_state = self.graphboard.get_state()
-        current_letter = self.graphboard.get_current_letter()
+        current_letter = self.graphboard.current_letter
 
         if current_letter is not None:
             matching_letters = self.letters[current_letter]

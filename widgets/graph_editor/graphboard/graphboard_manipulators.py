@@ -114,6 +114,7 @@ class Manipulators:
             transform.translate(-center_x, -center_y)
 
         arrow.setTransform(transform)
+        arrow.mirror_transform = transform
 
         if arrow.rotation_direction == COUNTER_CLOCKWISE:
             new_rotation_direction = CLOCKWISE
@@ -151,7 +152,6 @@ class Manipulators:
         elif arrow.motion_type == STATIC:
             new_motion_type = STATIC
 
-
         if arrow.rotation_direction == COUNTER_CLOCKWISE:
             new_rotation_direction = CLOCKWISE
         elif arrow.rotation_direction == CLOCKWISE:
@@ -181,7 +181,6 @@ class Manipulators:
         arrow._setup_svg_renderer(arrow.svg_file)
         arrow.set_object_attr_from_dict(new_arrow_dict)
         arrow.update_appearance()
-        self.graphboard.update()
         self.update_arrow_and_staff(arrow, new_arrow_dict, new_staff_dict)
         self.graphboard.update()
 
