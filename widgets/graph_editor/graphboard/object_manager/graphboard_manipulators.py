@@ -178,7 +178,7 @@ class Manipulators:
         arrow.svg_file = (
             f"resources/images/arrows/shift/{new_motion_type}_{arrow.turns}.svg"
         )
-        arrow.setup_svg_renderer(arrow.svg_file)
+        arrow._setup_svg_renderer(arrow.svg_file)
         arrow.set_object_attr_from_dict(new_arrow_dict)
         arrow.update_appearance()
         self.graphboard.update()

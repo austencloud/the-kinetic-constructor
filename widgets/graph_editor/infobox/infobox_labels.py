@@ -11,7 +11,9 @@ class InfoboxLabels:
     def __init__(self, infobox, graphboard):
         self.infobox = infobox
         self.graphboard = graphboard
-
+        self.pixmap_cache = {} 
+        self.preload_pixmaps()
+        
     ### LABEL CREATION ###
 
     def setup_labels(self):
@@ -89,7 +91,7 @@ class InfoboxLabels:
             current_letter,
             current_letter_type,
         ) = (
-            self.graphboard.get_current_letter(),
+            self.graphboard.current_letter,
             self.graphboard.get_current_letter_type(),
         )
         if current_letter and current_letter_type:
@@ -104,15 +106,22 @@ class InfoboxLabels:
 
     ### HELPERS ###
 
-    def set_clock_pixmap(self, label, path):
-        pixmap = QPixmap(path)
-        pixmap = pixmap.scaled(
-            60,
-            60,
-            Qt.AspectRatioMode.KeepAspectRatio,
-            Qt.TransformationMode.SmoothTransformation,
-        )
-        label.setPixmap(pixmap)
+    def preload_pixmaps(self):
+        # Preload and cache the pixmaps
+        for icon_name in [CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON]:
+            pixmap = QPixmap(icon_name)
+            scaled_pixmap = pixmap.scaled(
+                60,
+                60,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation,
+            )
+            self.pixmap_cache[icon_name] = scaled_pixmap
+
+    def set_clock_pixmap(self, label, icon_name):
+        # Set the pixmap from the cache
+        if icon_name in self.pixmap_cache:
+            label.setPixmap(self.pixmap_cache[icon_name])
 
     def setup_attribute_label(self, text, color):
         label = self.create_label(text, color)

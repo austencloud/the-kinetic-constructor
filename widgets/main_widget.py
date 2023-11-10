@@ -9,7 +9,6 @@ from widgets.graph_editor.graph_editor import GraphEditor
 from widgets.optionboard.letter_buttons_frame import LetterButtonsFrame
 from utilities.pictograph_generator import PictographGenerator
 
-
 class MainWidget(QWidget):
     def __init__(self, main_window):
         super().__init__(main_window)
@@ -17,6 +16,7 @@ class MainWidget(QWidget):
         self.export_manager = None
         self.main_window = main_window
 
+        
         self.layout_manager = LayoutManager(self)
         self.json_handler = JsonHandler()
         self.letters = self.json_handler.load_all_letters()

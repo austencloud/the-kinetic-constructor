@@ -101,6 +101,7 @@ class Arrow(QGraphicsSvgItem):
                     self.graphboard.update()
                     self.graphboard.arrows.append(self.ghost_arrow)
                     self.graphboard.arrow_positioner.update()
+                    self.graphboard.infobox.update()
 
     def mouseReleaseEvent(self, event):
         self.graphboard.removeItem(self.ghost_arrow)
@@ -238,10 +239,14 @@ class Arrow(QGraphicsSvgItem):
 
     def update_for_new_quadrant(self, new_quadrant):
         self.quadrant = new_quadrant
-
         self.start_location, self.end_location = self.get_start_end_locations(
             self.motion_type, self.rotation_direction, self.quadrant
         )
+        
+        self.attributes[QUADRANT] = new_quadrant
+        self.attributes[START_LOCATION] = self.start_location
+        self.attributes[END_LOCATION] = self.end_location
+        
         self.update_appearance()
         self.previous_arrow = (
             self.staff.arrow
@@ -250,7 +255,6 @@ class Arrow(QGraphicsSvgItem):
         self.staff.update_attributes_from_arrow(self)
 
         self.update_appearance()  # Now this will reset the transform origin as well.
-        self.graphboard.update()
 
     ### MANIPULATION ###
 

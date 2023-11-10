@@ -62,15 +62,15 @@ class InfoboxWidgets():
         self.buttons.show_buttons(attributes)
 
     def update_attribute_widgets(self):
-        self.widgets = self.infobox.widgets
+        widgets = self.infobox.widgets
         for color in [BLUE, RED]:
             arrow = self.graphboard.get_arrow_by_color(color)
             if arrow:
                 attributes = arrow.attributes
-                widget = getattr(self.widgets, f"{color}_attributes_widget")
+                widget = getattr(widgets, f"{color}_attributes_widget")
                 self.update_info_widget_content(widget, attributes)
                 widget.show()
             else:
-                widget = getattr(self.widgets, f"{color}_attributes_widget")
+                widget = getattr(widgets, f"{color}_attributes_widget")
                 widget.hide()
 
