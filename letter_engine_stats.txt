@@ -1,34 +1,41 @@
-         29034 function calls in 9.733 seconds
+         96659 function calls in 40.974 seconds
 
    Ordered by: cumulative time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-       63    6.755    0.107    6.757    0.107 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:51(get_possible_letters)
-       63    2.951    0.047    2.974    0.047 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:86(get_match)
-      504    0.006    0.000    0.023    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:95(match_combination)
-     2745    0.005    0.000    0.009    0.000 {built-in method builtins.all}
-     6435    0.007    0.000    0.007    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:112(<genexpr>)
-      504    0.002    0.000    0.004    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:97(<listcomp>)
-     1008    0.002    0.000    0.002    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:98(<dictcomp>)
-       63    0.001    0.000    0.002    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:60(get_letter_group)
-       63    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:18(get_specific_start_end_locations)
-       63    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:79(<dictcomp>)
-    15822    0.001    0.000    0.001    0.000 {method 'get' of 'dict' objects}
-       63    0.000    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:120(write_profiling_stats_to_file)
-       63    0.000    0.000    0.001    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\pstats.py:108(__init__)
-       63    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\pstats.py:118(init)
-       63    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:28(get_start_end_locations_as_tuple)
-       63    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:57(get_overall_position)
-       63    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:173(get_state)
-       63    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\pstats.py:137(load_stats)
-       63    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:58(<dictcomp>)
-       63    0.000    0.000    0.000    0.000 {method 'intersection' of 'set' objects}
-       63    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\cProfile.py:50(create_stats)
-      567    0.000    0.000    0.000    0.000 {built-in method builtins.len}
-      189    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
-       63    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
-       63    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}
-      126    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
-       63    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+      338   40.876    0.121   40.896    0.121 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:184(get_possible_letters)
+      338    0.004    0.000    0.072    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:252(get_match)
+     1342    0.016    0.000    0.068    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:262(match_combination)
+     6590    0.018    0.000    0.033    0.000 {built-in method builtins.all}
+    19784    0.020    0.000    0.022    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:279(<genexpr>)
+     1342    0.006    0.000    0.012    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:264(<listcomp>)
+      338    0.003    0.000    0.009    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:226(get_letter_group)
+     2684    0.005    0.000    0.006    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:265(<dictcomp>)
+      338    0.006    0.000    0.006    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:245(<dictcomp>)
+      338    0.003    0.000    0.006    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:18(get_specific_start_end_locations)
+    50906    0.003    0.000    0.003    0.000 {method 'get' of 'dict' objects}
+      338    0.001    0.000    0.002    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:223(get_overall_position)
+      342    0.001    0.000    0.002    0.000 {built-in method builtins.any}
+      338    0.002    0.000    0.002    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:173(get_state)
+      171    0.001    0.000    0.002    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:175(get_gamma_same_handpath_hybrid_group)
+      171    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:113(get_gamma_handpath_group)
+      338    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:28(get_start_end_locations_as_tuple)
+      338    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:189(<dictcomp>)
+      342    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:213(<genexpr>)
+      171    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:127(determine_same_handpath_hybrid)
+      338    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:51(get_motion_type)
+      171    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:97(determine_handpath)
+      338    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:224(<dictcomp>)
+      513    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:205(<genexpr>)
+      338    0.000    0.000    0.000    0.000 {method 'intersection' of 'set' objects}
+      171    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:198(<dictcomp>)
+      171    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:215(<dictcomp>)
+     1694    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
+     2638    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+     1710    0.000    0.000    0.000    0.000 {method 'index' of 'list' objects}
+      338    0.000    0.000    0.000    0.000 {method 'lower' of 'str' objects}
+      676    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+      338    0.000    0.000    0.000    0.000 {method 'enable' of '_lsprof.Profiler' objects}
+      338    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
 
 

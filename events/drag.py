@@ -9,9 +9,7 @@ from objects.arrow.arrow import Arrow
 from widgets.graph_editor.graphboard.object_manager.ghost_arrow import (
     GhostArrow,
 )
-import cProfile
-import pstats
-import time  # Add this import at the beginning of your file
+import time  
 
 class Drag(QWidget):
     def __init__(self, main_window, graphboard, arrowbox):
@@ -23,7 +21,7 @@ class Drag(QWidget):
         self.ghost_arrow = GhostArrow(self.graphboard)
         self.preview = QLabel(self)
         self.reset_drag_state()
-        self.profiler = cProfile.Profile()  # Initialize the profiler here
+
         self.last_update_time = 0  # Initialize the last update time to zero
         self.update_interval = 0.1  # Time in seconds, adjust as needed for throttling
 
@@ -133,17 +131,11 @@ class Drag(QWidget):
     ### EVENT HANDLERS ###
 
     def handle_mouse_move(self, arrowbox, event_pos):
-        # Update the drag visual in real-time for smoothness
         if self.preview:
             self.move_to_cursor(arrowbox, event_pos)
-
-        # Throttle the call to update_for_graphboard
-        current_time = time.time()  # Get the current time in seconds
-        if current_time - self.last_update_time > self.update_interval:
-            if self.preview and self.is_over_graphboard(arrowbox, event_pos):
-                
+            if self.is_over_graphboard(arrowbox, event_pos):
                 self.update_for_graphboard(event_pos)
-                self.last_update_time = current_time  # Update the last update time
+
 
     def handle_mouse_release(self):
         if self.has_entered_graphboard_once:
@@ -153,7 +145,6 @@ class Drag(QWidget):
         self.graphboard.update_staffs()
         self.arrowbox.drag = None
         self.reset_drag_state()
-        self.write_profiling_stats_to_file("drag_profiling_stats.txt")
         
     ### FLAGS ###
 
@@ -241,7 +232,6 @@ class Drag(QWidget):
 
 
     def update_preview_for_new_quadrant(self, new_quadrant):
-        self.profiler.enable()  # Start profiling
         
         self.quadrant = new_quadrant
         self.update_rotation()
@@ -255,16 +245,6 @@ class Drag(QWidget):
             self.graphboard.addItem(self.ghost_arrow)
         self.graphboard.update()
 
-        self.profiler.disable()  # Stop profiling
 
     ### PROFILING ###
     
-    def write_profiling_stats_to_file(self, file_path):
-        stats = pstats.Stats(self.profiler).sort_stats('cumtime')
-        with open(file_path, "w") as f:
-            stats.stream = f
-            stats.print_stats()
-        print(f"Drag stats written to {file_path}")
-        
-        
-
