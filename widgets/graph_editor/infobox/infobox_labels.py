@@ -1,7 +1,7 @@
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QLabel, QSizePolicy
-from objects.arrow.arrow import Arrow
+from widgets.graph_editor.graphboard.objects.arrow import Arrow
 from data.positions_map import positions_map
 import logging
 from settings.string_constants import *
@@ -11,9 +11,9 @@ class InfoboxLabels:
     def __init__(self, infobox, graphboard):
         self.infobox = infobox
         self.graphboard = graphboard
-        self.pixmap_cache = {} 
+        self.pixmap_cache = {}
         self.preload_pixmaps()
-        
+
     ### LABEL CREATION ###
 
     def setup_labels(self):

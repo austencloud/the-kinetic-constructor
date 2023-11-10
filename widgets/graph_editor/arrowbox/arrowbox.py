@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, QPointF
 from settings.numerical_constants import GRAPHBOARD_SCALE
 from settings.string_constants import *
-from objects.arrow.arrow import Arrow
+from widgets.graph_editor.graphboard.objects.arrow import Arrow
 from widgets.graph_editor.events.drag import Drag
 
 

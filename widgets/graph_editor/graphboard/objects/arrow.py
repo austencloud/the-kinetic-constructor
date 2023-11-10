@@ -100,7 +100,6 @@ class Arrow(QGraphicsSvgItem):
                 if in_view:
                     self.update_for_new_quadrant(new_quadrant)
 
-
     def mouseReleaseEvent(self, event):
         self.graphboard.removeItem(self.ghost_arrow)
         self.graphboard.arrows.remove(self.ghost_arrow)
@@ -173,6 +172,11 @@ class Arrow(QGraphicsSvgItem):
             .get(motion_type, (None, None))
         )
 
+    def get_svg_file(self, motion_type, turns):
+        svg_file = f"{ARROW_DIR}{motion_type}_{turns}.svg"
+        return svg_file
+
+
     ### UPDATERS ###
 
     def update(self, attributes):
@@ -185,11 +189,6 @@ class Arrow(QGraphicsSvgItem):
         self.update_color()
         self.update_rotation()
 
-    def set_transform_origin_to_center(self):
-        # Call this method after any changes that might affect the boundingRect.
-        self.center = self.boundingRect().center()
-        self.setTransformOriginPoint(self.center)
-
     def update_color(self):
         if self.motion_type in [PRO, ANTI]:
             new_svg_data = self.set_svg_color(self.color)
@@ -197,43 +196,15 @@ class Arrow(QGraphicsSvgItem):
             self.setSharedRenderer(self.renderer)
 
     def update_rotation(self):
-        # Ensure transformation origin point is at the center.
-        # Proceed with obtaining the rotation angle and rotate.
         angle = self.get_rotation_angle(
             self.quadrant, self.motion_type, self.rotation_direction
         )
         self.setRotation(angle)
 
-    def set_dict_attr_from_object(self):
-        for attr in ARROW_ATTRIBUTES:
-            self.attributes[attr] = getattr(self, attr)
-
-    def set_object_attr_from_dict(self, attributes):
-        
-        for attr in ARROW_ATTRIBUTES:
-            value = attributes.get(attr)
-            if attr == TURNS:
-                value = int(value)
-            setattr(self, attr, value)
-
-        self.attributes = {
-            COLOR: attributes.get(COLOR, None),
-            MOTION_TYPE: attributes.get(MOTION_TYPE, None),
-            ROTATION_DIRECTION: attributes.get(ROTATION_DIRECTION, None),
-            QUADRANT: attributes.get(QUADRANT, None),
-            START_LOCATION: attributes.get(START_LOCATION, None),
-            END_LOCATION: attributes.get(END_LOCATION, None),
-            TURNS: attributes.get(TURNS, None),
-        }
-
     def update_svg(self, svg_file):
         self.svg_file = svg_file
         self._setup_svg_renderer(svg_file)
         self.set_svg_color(self.color)
-
-    def get_svg_file(self, motion_type, turns):
-        svg_file = f"{ARROW_DIR}{motion_type}_{turns}.svg"
-        return svg_file
 
     def update_for_new_quadrant(self, new_quadrant):
         self.quadrant = new_quadrant
@@ -259,6 +230,32 @@ class Arrow(QGraphicsSvgItem):
         self.graphboard.update()
         self.graphboard.arrows.append(self)
         
+    def set_dict_attr_from_object(self):
+        for attr in ARROW_ATTRIBUTES:
+            self.attributes[attr] = getattr(self, attr)
+
+    def set_object_attr_from_dict(self, attributes):
+        for attr in ARROW_ATTRIBUTES:
+            value = attributes.get(attr)
+            if attr == TURNS:
+                value = int(value)
+            setattr(self, attr, value)
+
+        self.attributes = {
+            COLOR: attributes.get(COLOR, None),
+            MOTION_TYPE: attributes.get(MOTION_TYPE, None),
+            ROTATION_DIRECTION: attributes.get(ROTATION_DIRECTION, None),
+            QUADRANT: attributes.get(QUADRANT, None),
+            START_LOCATION: attributes.get(START_LOCATION, None),
+            END_LOCATION: attributes.get(END_LOCATION, None),
+            TURNS: attributes.get(TURNS, None),
+        }
+
+    def set_transform_origin_to_center(self):
+        # Call this method after any changes that might affect the boundingRect.
+        self.center = self.boundingRect().center()
+        self.setTransformOriginPoint(self.center)
+
     ### MANIPULATION ###
 
     def increment_turns(self):

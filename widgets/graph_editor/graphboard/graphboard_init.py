@@ -1,12 +1,13 @@
 from PyQt6.QtCore import QPointF, Qt
-from PyQt6.QtGui import QPen
 from PyQt6.QtWidgets import QGraphicsView
-from objects.grid import Grid
-from objects.staff.staff import RedStaff, BlueStaff
+from widgets.graph_editor.graphboard.objects.grid import Grid
+from objects.staff import RedStaff, BlueStaff
 from settings.numerical_constants import *
 from settings.string_constants import *
 from .ghost_arrow import GhostArrow
+from .ghost_staff import GhostStaff
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+
 
 class GraphboardInit:
     def __init__(self, graphboard):
@@ -69,6 +70,16 @@ class GraphboardInit:
 
         ghost_arrows = {RED: red_ghost_arrow, BLUE: blue_ghost_arrow}
         return ghost_arrows
+
+    def init_ghost_staffs(self):
+        red_ghost_staff = GhostStaff(self.graphboard, RED)
+        blue_ghost_staff = GhostStaff(self.graphboard, BLUE)
+
+        red_ghost_staff.hide()
+        blue_ghost_staff.hide()
+
+        ghost_staffs = {RED: red_ghost_staff, BLUE: blue_ghost_staff}
+        return ghost_staffs
 
     def init_letter_item(self):
         letter_item = QGraphicsSvgItem()

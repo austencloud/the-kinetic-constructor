@@ -9,19 +9,19 @@ from widgets.graph_editor.graph_editor import GraphEditor
 from widgets.optionboard.letter_buttons_frame import LetterButtonsFrame
 from utilities.pictograph_generator import PictographGenerator
 
+
 class MainWidget(QWidget):
     def __init__(self, main_window):
         super().__init__(main_window)
         self.arrows = []
-        self.export_manager = None
+        self.export_handler = None
         self.main_window = main_window
 
-        
         self.layout_manager = LayoutManager(self)
         self.json_handler = JsonHandler()
         self.letters = self.json_handler.load_all_letters()
         self.key_event_handler = KeyEventHandler()
-    
+
         self.sequence_view = SequenceView(self)
         self.graph_editor = GraphEditor(self)
         self.optionboard_view = OptionboardView(self)
@@ -47,11 +47,12 @@ class MainWidget(QWidget):
         )
         self.sequence_view.pictograph_generator = self.pictograph_generator
 
-
     ### EVENTS ###
 
     def eventFilter(self, source, event):
         if event.type() == QEvent.Type.KeyPress:
-            self.key_event_handler.keyPressEvent(event, self, self.graphboard, self.graphboard.manipulators)
+            self.key_event_handler.keyPressEvent(
+                event, self, self.graphboard, self.graphboard.manipulators
+            )
             return True
         return super().eventFilter(source, event)

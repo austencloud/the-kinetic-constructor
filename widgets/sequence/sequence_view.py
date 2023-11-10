@@ -4,9 +4,9 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QGraphicsRectItem, QPushButton
 from PyQt6.QtCore import QRectF, Qt, QPointF
 from PyQt6.QtGui import QImage, QPainter, QColor
-from objects.arrow.arrow import Arrow
-from objects.staff.staff import Staff
-from objects.grid import Grid
+from widgets.graph_editor.graphboard.objects.arrow import Arrow
+from widgets.graph_editor.graphboard.objects.staff import Staff
+from widgets.graph_editor.graphboard.objects.grid import Grid
 from widgets.graph_editor.graphboard.graphboard import Graphboard
 from settings.numerical_constants import *
 from settings.string_constants import *
@@ -17,9 +17,7 @@ class SequenceView(QGraphicsView):
         super().__init__()
         sequence_scene = QGraphicsScene()
 
-        sequence_scene.setSceneRect(
-            0, 0, SEQUENCE_SCENE_WIDTH, SEQUENCE_SCENE_HEIGHT
-        )
+        sequence_scene.setSceneRect(0, 0, SEQUENCE_SCENE_WIDTH, SEQUENCE_SCENE_HEIGHT)
 
         self.setFixedSize(
             int(sequence_scene.sceneRect().width()),
@@ -94,7 +92,6 @@ class SequenceView(QGraphicsView):
         graphboard.update_letter(None)
 
         self.sequence_scene.update()
-
 
     def clear_sequence(self):
         self.pictographs = []

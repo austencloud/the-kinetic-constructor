@@ -1,7 +1,9 @@
-from objects.arrow.arrow import Arrow
-from objects.staff.staff import Staff
+from widgets.graph_editor.graphboard.objects.arrow import Arrow
+from widgets.graph_editor.graphboard.objects.staff import Staff
 from PyQt6.QtCore import Qt
 from settings.string_constants import *
+
+
 class KeyEventHandler:
     def keyPressEvent(self, event, main_widget, graphboard, manipulators):
         sequence_view = main_widget.sequence_view

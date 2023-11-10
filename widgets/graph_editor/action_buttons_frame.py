@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QPushButton, QFrame
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QVBoxLayout
-from objects.arrow.arrow import Arrow
+from widgets.graph_editor.graphboard.objects.arrow import Arrow
 from settings.string_constants import ICON_DIR
 from settings.styles import (
     ACTION_BUTTON_FONT,
@@ -26,14 +26,12 @@ class ActionButtonsFrame(QFrame):
         self.action_buttons_layout = QVBoxLayout()
         self.action_buttons_layout.setSpacing(3)
         coordinates = self.scene.get_current_arrow_coordinates()
-        
+
         buttons_settings = [
             (
                 "update_locations.png",
                 "Update Optimal Locations",
-                lambda: self.json_handler.update_optimal_locations_in_json(
-                    coordinates
-                ),
+                lambda: self.json_handler.update_optimal_locations_in_json(coordinates),
             ),
             (
                 "delete.png",

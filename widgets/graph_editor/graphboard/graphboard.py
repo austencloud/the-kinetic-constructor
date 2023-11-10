@@ -2,10 +2,10 @@ from PyQt6.QtCore import QPointF
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtGui import QTransform
 from PyQt6.QtWidgets import QGraphicsScene
-from objects.arrow.arrow import Arrow, BlankArrow
-from objects.staff.staff import Staff
-from objects.grid import Grid
-from settings.numerical_constants import STAFF_LENGTH, STAFF_WIDTH, LETTER_ITEM_HEIGHT
+from widgets.graph_editor.graphboard.objects.arrow import Arrow, BlankArrow
+from widgets.graph_editor.graphboard.objects.staff import Staff
+from widgets.graph_editor.graphboard.objects.grid import Grid
+from settings.numerical_constants import STAFF_LENGTH, STAFF_WIDTH
 from settings.string_constants import (
     VERTICAL,
     ARROWS,
@@ -26,14 +26,11 @@ from settings.string_constants import (
     NORTHEAST,
 )
 from data.letter_types import letter_types
-from data.positions_map import positions_map
 from .graphboard_init import GraphboardInit
 from .graphboard_menu_handler import GraphboardMenuHandler
 from .position_engines.staff_positioner import StaffPositioner
 from .position_engines.arrow_positioner import ArrowPositioner
-from .ghost_arrow import GhostArrow
 from utilities.export_handler import ExportHandler
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from utilities.letter_engine import LetterEngine
 
 
@@ -56,6 +53,7 @@ class Graphboard(QGraphicsScene):
         self.initializer = GraphboardInit(self)
 
         self.ghost_arrows = self.initializer.init_ghost_arrows()
+        self.ghost_staffs = self.initializer.init_ghost_staffs()
         self.grid = self.initializer.init_grid()
         self.view = self.initializer.init_view()
         self.staff_set = self.initializer.init_staff_set()
@@ -64,7 +62,7 @@ class Graphboard(QGraphicsScene):
         self.setup_managers(main_widget, graph_editor)
 
     def setup_managers(self, main_widget, graph_editor):
-        self.export_manager = ExportHandler(self.grid, self)
+        self.export_handler = ExportHandler(self.grid, self)
         self.context_menu_manager = GraphboardMenuHandler(
             main_widget, graph_editor, self
         )

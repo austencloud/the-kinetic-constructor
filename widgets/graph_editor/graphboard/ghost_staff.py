@@ -1,24 +1,24 @@
 from PyQt6.QtWidgets import QGraphicsItem
-from widgets.graph_editor.graphboard.objects.arrow import Arrow
+from widgets.graph_editor.graphboard.objects.staff import Staff
 
 
-class GhostArrow(Arrow):
+class GhostStaff(Staff):
     def __init__(self, graphboard, color):
         super().__init__(graphboard, None)
         self.setOpacity(0.2)
         self.setTransformOriginPoint(self.center)
         self.graphboard = graphboard
         self.color = color
-        self.target_arrow = None
+        self.target_staff = None
 
-    def update(self, new_quadrant, target_arrow, drag=None):
+    def update(self, new_quadrant, target_staff, drag=None):
         self.setOpacity(0.2)
         if drag:
-            self.set_object_attr_from_dict(drag.get_attributes())
+            self.update_object_attr_from_dict(drag.get_attributes())
         else:
-            self.set_object_attr_from_dict(target_arrow.get_attributes())
+            self.update_object_attr_from_dict(target_staff.get_attributes())
 
-        self.update_svg(target_arrow.svg_file)
+        self.update_svg(target_staff.svg_file)
         self._setup_graphics_flags()
         self.update_appearance()
         self.quadrant = new_quadrant

@@ -7,7 +7,7 @@ class GraphboardMenuHandler:
     def __init__(self, main_widget, manipulators, graphboard):
         self.graphboard = graphboard
         self.main_widget = main_widget
-        self.export_manager = main_widget.export_manager
+        self.export_handler = graphboard.export_handler
         self.sequence_view = main_widget.sequence_view
         self.manipulators = manipulators
 
@@ -56,7 +56,7 @@ class GraphboardMenuHandler:
                 "Add to Sequence",
                 lambda _: self.sequence_view.add_to_sequence(self.graphboard),
             ),
-            ("Export to PNG", self.export_manager.export_to_png),
-            ("Export to SVG", lambda: self.export_manager.export_to_svg("output.svg")),
+            ("Export to PNG", self.export_handler.export_to_png),
+            ("Export to SVG", lambda: self.export_handler.export_to_svg("output.svg")),
         ]
         self.create_menu_with_actions(self.graphboard, actions, event)

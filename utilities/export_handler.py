@@ -1,9 +1,9 @@
 import re
 from PyQt6.QtGui import QImage, QPainter
 from PyQt6.QtCore import QPointF
-from objects.arrow.arrow import Arrow
-from objects.staff.staff import Staff
-from objects.grid import Grid
+from widgets.graph_editor.graphboard.objects.arrow import Arrow
+from widgets.graph_editor.graphboard.objects.staff import Staff
+from widgets.graph_editor.graphboard.objects.grid import Grid
 from lxml import etree
 from copy import deepcopy
 
@@ -40,7 +40,6 @@ class ExportHandler:
                     # Append the circle to the grid group
                     grid_group.append(circle_element)
 
-
             elif isinstance(item, Arrow):
                 arrow_svg = etree.parse(item.svg_file)
                 path_elements = arrow_svg.getroot().findall(
@@ -59,7 +58,6 @@ class ExportHandler:
 
                     # Append the path to the arrows group
                     arrows_group.append(path_element)
-
 
             elif isinstance(item, Staff):
                 staff_svg = etree.parse(item.svg_file)
@@ -103,7 +101,6 @@ class ExportHandler:
         svg_string = svg_string.replace(">\n<", ">\n\n<")
         with open(output_file_path, "w") as file:
             file.write(svg_string)
-
 
     def export_to_png(self):
         selectedItems = self.graphboard.selectedItems()

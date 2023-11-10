@@ -5,8 +5,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtCore import Qt
 from settings.numerical_constants import GRAPHBOARD_SCALE
 from settings.string_constants import *
-from objects.arrow.arrow import Arrow
-
+from widgets.graph_editor.graphboard.objects.arrow import Arrow
 
 
 class Drag(QWidget):
@@ -135,7 +134,6 @@ class Drag(QWidget):
             if self.is_over_graphboard(arrowbox, event_pos):
                 self.update_for_graphboard(event_pos)
 
-
     def handle_mouse_release(self):
         if self.has_entered_graphboard_once:
             self.place_arrow_on_graphboard()
@@ -144,7 +142,7 @@ class Drag(QWidget):
         self.graphboard.update_staffs()
         self.arrowbox.drag = None
         self.reset_drag_state()
-        
+
     ### FLAGS ###
 
     def is_over_graphboard(self, arrowbox, event_pos):
@@ -215,15 +213,15 @@ class Drag(QWidget):
             self.has_entered_graphboard_once = True
             self.remove_same_color_arrow()
             print("entered graphboard")
-        
+
         if self.has_entered_graphboard_once:
             self.just_entered_graphboard = False
-        
+
         pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
         view_pos_in_graphboard = self.graphboard.view.mapFromGlobal(pos_in_main_window)
         scene_pos = self.graphboard.view.mapToScene(view_pos_in_graphboard)
         new_quadrant = self.graphboard.determine_quadrant(scene_pos.x(), scene_pos.y())
-            
+
         if self.previous_quadrant != new_quadrant:
             self.update_preview_for_new_quadrant(new_quadrant)
             self.previous_quadrant = new_quadrant
@@ -240,6 +238,4 @@ class Drag(QWidget):
             self.graphboard.addItem(self.ghost_arrow)
         self.graphboard.update()
 
-
     ### PROFILING ###
-    
