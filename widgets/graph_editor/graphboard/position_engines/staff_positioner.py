@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QPointF
 import math
-from settings.numerical_constants import BETA_OFFSET
-from settings.string_constants import *
+from settings.numerical_constants import BETA_OFFSET, STAFF_LENGTH, STAFF_WIDTH
+from settings.string_constants import VERTICAL, ARROWS, COLOR, MOTION_TYPE, STATIC, START_LOCATION, END_LOCATION, PRO, ANTI, NORTH, SOUTH, EAST, WEST, UP, DOWN, LEFT, RIGHT, RED, BLUE
 
 
 class StaffPositioner:
@@ -9,6 +9,27 @@ class StaffPositioner:
         self.graphboard = graphboard
         self.view = graphboard.view
         self.letters = graphboard.letters
+
+    def update(self):
+        for staff in self.graphboard.staffs:
+            self.set_default_staff_locations(staff)
+        if self.staffs_in_beta():
+            self.reposition_beta_staffs()
+
+
+    def set_default_staff_locations(self, staff):
+        if staff.axis == VERTICAL:
+            staff.setPos(
+                self.graphboard.grid.handpoints[staff.location]
+                + QPointF(STAFF_WIDTH / 2, -STAFF_LENGTH / 2)
+            )
+        else:
+            staff.setPos(
+                self.graphboard.grid.handpoints[staff.location]
+                + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2)
+            )
+        staff.setTransformOriginPoint(0, 0)
+
 
     def reposition_beta_staffs(self):
         board_state = self.graphboard.get_state()

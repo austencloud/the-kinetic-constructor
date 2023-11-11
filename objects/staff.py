@@ -125,9 +125,9 @@ class Staff(QGraphicsSvgItem):
             self.attributes[attr] = getattr(self, attr)
 
     def set_attributes_from_dict(self, attributes):
-        for attr in STAFF_ATTRIBUTES:
-            value = attributes.get(attr)
-            setattr(self, attr, value)
+        self.color = attributes.get(COLOR, None)
+        self.location = attributes.get(LOCATION, None)
+        self.layer = attributes.get(LAYER, None)
 
         self.attributes = {
             COLOR: attributes.get(COLOR, None),
@@ -175,7 +175,7 @@ class Staff(QGraphicsSvgItem):
         return closest_handpoint, closest_location
 
     def get_attributes(self):
-        return {attr: getattr(self, attr) for attr in self.STAFF_ATTRIBUTES}
+        return {attr: getattr(self, attr) for attr in STAFF_ATTRIBUTES}
 
     def get_svg_file(self):
         svg_file = f"{STAFF_DIR}staff.svg"
@@ -183,16 +183,39 @@ class Staff(QGraphicsSvgItem):
 
     ### MOUSE EVENTS ###
 
+    def mousePressEvent(self, event):
+        if event.buttons() == Qt.MouseButton.LeftButton:
+            self.ghost_staff = self.graphboard.ghost_staffs[self.color]
+            self.ghost_staff.set_attributes_from_dict(self.get_attributes())
+            self.ghost_staff.update_appearance()
+            self.graphboard.addItem(self.ghost_staff)
+            self.ghost_staff.setPos(self.pos())
+            self.ghost_staff.real_staff = self
+
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.MouseButton.LeftButton:
-            offset = self.get_staff_center()
-            x_offset, y_offset = offset.x(), offset.y()
-            self.setPos(
-                event.scenePos().x() + x_offset, event.scenePos().y() + y_offset
-            )
+            event_pos = event.scenePos()
+            self.setPos(event_pos - QPointF(self.center))
         super().mouseMoveEvent(event)
 
+    def mouseReleaseEvent(self, event):
+        self.setVisible(True)
+        self.graphboard.removeItem(self.ghost_staff)
+        self.set_attributes_from_dict(self.ghost_staff.get_attributes())
+        self.update_appearance()
+        if self.arrow:
+            self.arrow.set_attributes_from_staff(self)
+            self.arrow.update_appearance()
+        # Clean up
+        self.ghost_staff = None
+        self.graphboard.update()
+
+
     ### HELPERS ###
+
+    def move_to_cursor(self, event):
+        event_pos = event.scenePos()
+        self.move(event_pos - (self.arrow_center).toPoint())
 
     def create_staff_dict_from_arrow(self, arrow):
         staff_dict = {COLOR: arrow.color, LOCATION: arrow.end_location, LAYER: 1}

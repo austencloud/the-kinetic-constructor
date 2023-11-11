@@ -32,8 +32,16 @@ from settings.string_constants import (
     RIGHT,
     LOCATION,
     LAYER,
+    NORTH,
+    WEST,
+    SOUTH,
+    EAST,
 )
 from data.start_end_location_mapping import start_end_location_mapping
+from collections import namedtuple
+
+# Define a named tuple for clarity
+Orientation = namedtuple("Orientation", ["new_quadrant", "start_location", "end_location"])
 
 
 class Arrow(QGraphicsSvgItem):
@@ -278,10 +286,6 @@ class Arrow(QGraphicsSvgItem):
                 staff.update_appearance()
                 self.graphboard.update_staffs()
 
-    def update_attribute_dict(self):
-        for attr in ARROW_ATTRIBUTES:
-            self.attributes[attr] = getattr(self, attr)
-
     def set_attributes_from_dict(self, attributes):
         for attr in ARROW_ATTRIBUTES:
             value = attributes.get(attr)
@@ -299,6 +303,34 @@ class Arrow(QGraphicsSvgItem):
             TURNS: attributes.get(TURNS, None),
         }
 
+    def set_attributes_from_staff(self, staff):
+        orientation = self.calculate_new_orientation(self.quadrant, staff.location)
+
+        # Update arrow's attributes using the dictionary
+        self.quadrant = orientation['new_quadrant']
+        self.start_location = orientation['start_location']
+        self.end_location = orientation['end_location']
+
+        self.update_appearance()
+
+    def calculate_new_orientation(self, current_quadrant, new_staff_location):
+        orientation_map = {
+            (NORTHEAST, SOUTH): {'new_quadrant': SOUTHEAST, 'start_location': EAST, 'end_location': SOUTH},
+            (NORTHEAST, WEST): {'new_quadrant': NORTHWEST, 'start_location': NORTH, 'end_location': WEST},
+            (SOUTHEAST, NORTH): {'new_quadrant': NORTHEAST, 'start_location': EAST, 'end_location': NORTH},
+            (SOUTHEAST, WEST): {'new_quadrant': SOUTHWEST, 'start_location': SOUTH, 'end_location': WEST},
+            (SOUTHWEST, NORTH): {'new_quadrant': NORTHWEST, 'start_location': WEST, 'end_location': NORTH},
+            (SOUTHWEST, EAST): {'new_quadrant': SOUTHEAST, 'start_location': SOUTH, 'end_location': EAST},
+            (NORTHWEST, SOUTH): {'new_quadrant': SOUTHWEST, 'start_location': WEST, 'end_location': SOUTH},
+            (NORTHWEST, EAST): {'new_quadrant': NORTHEAST, 'start_location': NORTH, 'end_location': EAST},  
+        }
+        
+        # Use the mapping to find the new orientation
+        return orientation_map.get(
+            (current_quadrant, new_staff_location),
+            {'new_quadrant': None, 'start_location': None, 'end_location': None}
+        )
+
     def set_transform_origin_to_center(self):
         # Call this method after any changes that might affect the boundingRect.
         self.center = self.boundingRect().center()
@@ -313,7 +345,7 @@ class Arrow(QGraphicsSvgItem):
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
         self.update_appearance()
-        self.update_attribute_dict()
+        self.attributes[TURNS] = self.turns
         self.graphboard.update()
 
     def decrement_turns(self):
@@ -323,7 +355,7 @@ class Arrow(QGraphicsSvgItem):
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
         self.update_appearance()
-        self.update_attribute_dict()
+        self.attributes[TURNS] = self.turns
         self.graphboard.update()
 
     def set_svg_color(self, new_color):
@@ -471,13 +503,22 @@ class Arrow(QGraphicsSvgItem):
             TURNS: self.turns,
         }
 
-        self.staff.location = new_end_location
-        self.update_appearance()
-        self.staff.update_appearance()
-        self.update_arrow_and_staff(new_arrow_dict)
+        new_staff_dict = {
+            COLOR: self.color,
+            LOCATION: new_end_location,
+            LAYER: 1,
+        }
+
+        # if the arrow is dragging, update the ghost arrow too
+        self.update_arrow_and_staff(new_arrow_dict, new_staff_dict)
+        
+        if self.ghost_arrow:
+            self.ghost_arrow.setTransform(transform)
+            self.ghost_arrow.mirror_transform = transform
+            self.ghost_arrow.update(self)
+
         self.graphboard.update()
         
-
     def swap_motion_type(self):
         if self.motion_type == ANTI:
             new_motion_type = PRO

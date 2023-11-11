@@ -132,18 +132,7 @@ class Graphboard(QGraphicsScene):
 
     ### SETTERS ###
 
-    def set_default_staff_locations(self, staff):
-        if staff.axis == VERTICAL:
-            staff.setPos(
-                self.grid.handpoints[staff.location]
-                + QPointF(STAFF_WIDTH / 2, -STAFF_LENGTH / 2)
-            )
-        else:
-            staff.setPos(
-                self.grid.handpoints[staff.location]
-                + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2)
-            )
-        staff.setTransformOriginPoint(0, 0)
+
 
     def set_infobox(self, infobox):
         self.infobox = infobox
@@ -253,11 +242,7 @@ class Graphboard(QGraphicsScene):
         self.arrow_positioner.update()
 
     def update_staffs(self):
-        for staff in self.staffs:
-            self.set_default_staff_locations(staff)
-
-        if self.staff_positioner.staffs_in_beta():
-            self.staff_positioner.reposition_beta_staffs()
+        self.staff_positioner.update()
 
     def update_letter(self):
         if len(self.staffs) == 2:

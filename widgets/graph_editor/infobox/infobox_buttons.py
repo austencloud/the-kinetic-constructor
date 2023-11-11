@@ -53,26 +53,26 @@ class InfoboxButtons:
             },
             "swap_motion_type_blue": {
                 "icon": self.ICON_PATHS["swap"],
-                "callback": lambda: self.manipulator.swap_motion_type(
-                    self.graphboard.get_arrow_by_color(BLUE),
+                "callback": lambda: self.graphboard.get_arrow_by_color(BLUE).swap_motion_type(
+                  
                 ),
             },
             "swap_motion_type_red": {
                 "icon": self.ICON_PATHS["swap"],
-                "callback": lambda: self.manipulator.swap_motion_type(
-                    self.graphboard.get_arrow_by_color(RED),
+                "callback": lambda: self.graphboard.get_arrow_by_color(RED).swap_motion_type(
+                    
                 ),
             },
             "swap_start_end_blue": {
                 "icon": self.ICON_PATHS["swap"],
-                "callback": lambda: self.manipulator.mirror_arrow(
-                    self.graphboard.get_arrow_by_color(BLUE)
+                "callback": lambda: self.graphboard.get_arrow_by_color(BLUE).mirror_arrow(
+                    
                 ),
             },
             "swap_start_end_red": {
                 "icon": self.ICON_PATHS["swap"],
-                "callback": lambda: self.manipulator.mirror_arrow(
-                    self.graphboard.get_arrow_by_color(RED)
+                "callback": lambda: self.graphboard.get_arrow_by_color(RED).mirror_arrow(
+                    
                 ),
             },
             "decrement_turns_blue": {
