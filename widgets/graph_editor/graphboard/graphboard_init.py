@@ -1,11 +1,11 @@
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtWidgets import QGraphicsView
-from widgets.graph_editor.graphboard.objects.grid import Grid
+from objects.grid import Grid
 from objects.staff import RedStaff, BlueStaff
 from settings.numerical_constants import *
 from settings.string_constants import *
-from .ghost_arrow import GhostArrow
-from .ghost_staff import GhostStaff
+from objects.ghosts.ghost_arrow import GhostArrow
+from objects.ghosts.ghost_staff import GhostStaff
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
 

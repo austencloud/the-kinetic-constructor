@@ -183,3 +183,4 @@
 2023-11-10 15:17:59,859 DEBUG root Multiple letters returned by get_current_letter: {}
 2023-11-10 15:18:47,574 DEBUG root Multiple letters returned by get_current_letter: {}
 2023-11-10 15:19:12,321 DEBUG root Multiple letters returned by get_current_letter: {}
+2023-11-10 19:25:13,242 WARNING root Staff has no location

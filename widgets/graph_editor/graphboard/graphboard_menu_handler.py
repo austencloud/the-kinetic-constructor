@@ -24,11 +24,11 @@ class GraphboardMenuHandler:
             ("Delete", lambda: self.graphboard.delete_arrow(selected_items)),
             (
                 "Rotate Right",
-                lambda: self.manipulators.rotate_arrow(RIGHT, selected_items),
+                lambda: self.manipulators.rotate_arrow(RIGHT, selected_items[0]),
             ),
             (
                 "Rotate Left",
-                lambda: self.manipulators.rotate_arrow(LEFT, selected_items),
+                lambda: self.manipulators.rotate_arrow(LEFT, selected_items[0]),
             ),
             ("Mirror", lambda: self.manipulators.mirror_arrow(selected_items)),
         ]
@@ -39,11 +39,11 @@ class GraphboardMenuHandler:
             ("Delete", lambda: self.graphboard.delete_staff(selected_items)),
             (
                 "Rotate Right",
-                lambda: self.manipulators.rotate_arrow(RIGHT, selected_items),
+                lambda: self.manipulators.rotate_arrow(RIGHT, selected_items[0]),
             ),
             (
                 "Rotate Left",
-                lambda: self.manipulators.rotate_arrow(LEFT, selected_items),
+                lambda: self.manipulators.rotate_arrow(LEFT, selected_items[0]),
             ),
         ]
         self.create_menu_with_actions(self.graphboard, actions, event)

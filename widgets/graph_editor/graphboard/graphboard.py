@@ -4,7 +4,7 @@ from PyQt6.QtGui import QTransform
 from PyQt6.QtWidgets import QGraphicsScene
 from objects.arrow import Arrow, BlankArrow
 from objects.staff import Staff
-from widgets.graph_editor.graphboard.objects.grid import Grid
+from objects.grid import Grid
 from settings.numerical_constants import STAFF_LENGTH, STAFF_WIDTH
 from settings.string_constants import (
     VERTICAL,

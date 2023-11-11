@@ -52,7 +52,7 @@ class MainWidget(QWidget):
     def eventFilter(self, source, event):
         if event.type() == QEvent.Type.KeyPress:
             self.key_event_handler.keyPressEvent(
-                event, self, self.graphboard, self.graphboard.manipulators
+                event, self, self.graphboard
             )
             return True
         return super().eventFilter(source, event)

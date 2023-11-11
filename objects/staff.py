@@ -135,13 +135,16 @@ class Staff(QGraphicsSvgItem):
             LAYER: attributes.get(LAYER, None),
         }
 
-    def update_attributes_from_arrow(self, arrow):
+    def set_attributes_from_arrow(self, arrow):
         new_dict = {
             COLOR: arrow.color,
             LOCATION: arrow.end_location,
             LAYER: 1,
         }
         self.attributes.update(new_dict)
+        self.color = arrow.color
+        self.location = arrow.end_location
+        self.layer = 1
         self.update_appearance()
 
     ### GETTERS ###

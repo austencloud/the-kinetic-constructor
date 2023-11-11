@@ -11,15 +11,14 @@ class GhostArrow(Arrow):
         self.color = color
         self.target_arrow = None
 
-    def update(self, new_quadrant, target_arrow, drag=None):
+    def update(self, target_arrow, drag=None):
         self.setOpacity(0.2)
         if drag:
-            self.set_object_attr_from_dict(drag.get_attributes())
+            self.set_attributes_from_dict(drag.get_attributes())
         else:
-            self.update_attribute_dict()
+            self.set_attributes_from_dict(target_arrow.get_attributes())
 
         self.update_svg(target_arrow.svg_file)
         self._setup_graphics_flags()
         self.update_appearance()
-        self.quadrant = new_quadrant
         self.show()

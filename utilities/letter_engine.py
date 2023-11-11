@@ -40,19 +40,19 @@ class LetterEngine:
         return self.graphboard.get_state()[ARROWS]
 
     def get_specific_start_end_positions(self):
-        self.red_arrow = self.get_arrow("red")
-        self.blue_arrow = self.get_arrow("blue")
+        red_arrow = self.get_arrow("red")
+        blue_arrow = self.get_arrow("blue")
 
         start_locations = (
-            self.red_arrow.start_location,
+            red_arrow.start_location,
             "red",
-            self.blue_arrow.start_location,
+            blue_arrow.start_location,
             "blue",
         )
         end_locations = (
-            self.red_arrow.end_location,
+            red_arrow.end_location,
             "red",
-            self.blue_arrow.end_location,
+            blue_arrow.end_location,
             "blue",
         )
 
@@ -61,6 +61,8 @@ class LetterEngine:
             "end_position": positions_map.get(end_locations),
         }
 
+        self.red_arrow = red_arrow
+        self.blue_arrow = blue_arrow
         return specific_position
 
     def get_start_end_locations_as_tuple(self):

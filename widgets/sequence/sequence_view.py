@@ -6,7 +6,7 @@ from PyQt6.QtCore import QRectF, Qt, QPointF
 from PyQt6.QtGui import QImage, QPainter, QColor
 from objects.arrow import Arrow
 from objects.staff import Staff
-from widgets.graph_editor.graphboard.objects.grid import Grid
+from objects.grid import Grid
 from widgets.graph_editor.graphboard.graphboard import Graphboard
 from settings.numerical_constants import *
 from settings.string_constants import *

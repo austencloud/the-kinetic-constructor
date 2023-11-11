@@ -1,6 +1,7 @@
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
+from PyQt6.QtGui import QTransform
 import re
 from settings.string_constants import (
     MOTION_TYPE,
@@ -25,6 +26,12 @@ from settings.string_constants import (
     END_LOCATION,
     ARROW_ATTRIBUTES,
     ARROW_DIR,
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    LOCATION,
+    LAYER,
 )
 from data.start_end_location_mapping import start_end_location_mapping
 
@@ -64,7 +71,7 @@ class Arrow(QGraphicsSvgItem):
         )
 
         if attributes:
-            self.set_object_attr_from_dict(attributes)
+            self.set_attributes_from_dict(attributes)
             self.update_appearance()
         self.center = self.boundingRect().center()
 
@@ -88,7 +95,7 @@ class Arrow(QGraphicsSvgItem):
         self.ghost_arrow = self.graphboard.ghost_arrows[self.color]
         if self.mirror_transform:
             self.ghost_arrow.setTransform(self.mirror_transform)
-        self.ghost_arrow.update(self.quadrant, self)
+        self.ghost_arrow.update(self)
         self.graphboard.addItem(self.ghost_arrow)
         self.ghost_arrow.staff = self.staff
         self.graphboard.arrows.append(self.ghost_arrow)
@@ -198,7 +205,7 @@ class Arrow(QGraphicsSvgItem):
     ### UPDATERS ###
 
     def update(self, attributes):
-        self.set_object_attr_from_dict(attributes)
+        self.set_attributes_from_dict(attributes)
         self.update_appearance()
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
@@ -226,29 +233,56 @@ class Arrow(QGraphicsSvgItem):
 
     def update_for_new_quadrant(self, new_quadrant):
         self.quadrant = new_quadrant
+        
+        self.attributes[QUADRANT] = new_quadrant
+        self.attributes[START_LOCATION] = self.start_location
+        self.attributes[END_LOCATION] = self.end_location
+        
+        self.update_rotation()
+        self.ghost_arrow.update(self)
+
         self.start_location, self.end_location = self.get_start_end_locations(
             self.motion_type, self.rotation_direction, self.quadrant
         )
 
-        self.attributes[QUADRANT] = new_quadrant
-        self.attributes[START_LOCATION] = self.start_location
-        self.attributes[END_LOCATION] = self.end_location
-
-        self.update_appearance()
-        self.staff.location = self.end_location
-        self.staff.update_attributes_from_arrow(self)
+        self.ghost_arrow.set_attributes_from_dict(self.attributes)
+        self.ghost_arrow.update_appearance()
+        self.staff.set_attributes_from_arrow(self)
+        self.staff.update_appearance()
+        
         self.update_appearance()
 
-        self.ghost_arrow.update(new_quadrant, self)
+        self.ghost_arrow.update(self)
         self.graphboard.arrows.remove(self)
         self.graphboard.update()
         self.graphboard.arrows.append(self)
+
+    def update_staff_during_drag(self):
+        for staff in self.graphboard.staff_set.values():
+            if staff.color == self.color:
+                if staff not in self.graphboard.staffs:
+                    self.graphboard.staffs.append(staff)
+
+                staff.set_attributes_from_dict(
+                    {
+                        COLOR: self.color,
+                        LOCATION: self.end_location,
+                        LAYER: 1,
+                    }
+                )
+                staff.arrow = self.ghost_arrow
+                self.ghost_arrow.staff = staff
+                if staff not in self.graphboard.items():
+                    self.graphboard.addItem(staff)
+                staff.show()
+                staff.update_appearance()
+                self.graphboard.update_staffs()
 
     def update_attribute_dict(self):
         for attr in ARROW_ATTRIBUTES:
             self.attributes[attr] = getattr(self, attr)
 
-    def set_object_attr_from_dict(self, attributes):
+    def set_attributes_from_dict(self, attributes):
         for attr in ARROW_ATTRIBUTES:
             value = attributes.get(attr)
             if attr == TURNS:
@@ -308,6 +342,177 @@ class Arrow(QGraphicsSvgItem):
             old_color = match.group(1)
             svg_data = svg_data.replace(old_color, new_hex_color)
         return svg_data.encode("utf-8")
+
+    def update_arrow_and_staff(self, arrow_dict, staff_dict):
+        self.set_attributes_from_dict(arrow_dict)
+        self.staff.set_attributes_from_dict(staff_dict)
+        self.update_appearance()
+        self.staff.update_appearance()
+
+    def move_wasd(self, direction):
+        wasd_quadrant_mapping = {
+            UP: {SOUTHEAST: NORTHEAST, SOUTHWEST: NORTHWEST},
+            LEFT: {NORTHEAST: NORTHWEST, SOUTHEAST: SOUTHWEST},
+            DOWN: {NORTHEAST: SOUTHEAST, NORTHWEST: SOUTHWEST},
+            RIGHT: {NORTHWEST: NORTHEAST, SOUTHWEST: SOUTHEAST},
+        }
+        current_quadrant = self.quadrant
+        new_quadrant = wasd_quadrant_mapping.get(direction, {}).get(
+            current_quadrant, current_quadrant
+        )
+        self.quadrant = new_quadrant
+        (
+            new_start_location,
+            new_end_location,
+        ) = self.get_start_end_locations(
+            self.motion_type, self.rotation_direction, new_quadrant
+        )
+
+        updated_arrow_dict = {
+            COLOR: self.color,
+            MOTION_TYPE: self.motion_type,
+            QUADRANT: new_quadrant,
+            ROTATION_DIRECTION: self.rotation_direction,
+            START_LOCATION: new_start_location,
+            END_LOCATION: new_end_location,
+            TURNS: self.turns,
+        }
+
+        updated_staff_dict = {
+            COLOR: self.color,
+            LOCATION: new_end_location,
+            LAYER: 1,
+        }
+
+        self.update_arrow_and_staff(
+            updated_arrow_dict, updated_staff_dict
+        )
+
+        self.graphboard.update()
+
+    def rotate_arrow(self, rotation_direction, arrow):
+        quadrants = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
+        current_quadrant_index = quadrants.index(arrow.quadrant)
+        new_quadrant_index = (
+            (current_quadrant_index + 1) % 4
+            if rotation_direction == RIGHT
+            else (current_quadrant_index - 1) % 4
+        )
+        new_quadrant = quadrants[new_quadrant_index]
+        (
+            new_start_location,
+            new_end_location,
+        ) = arrow.get_start_end_locations(
+            arrow.motion_type, arrow.rotation_direction, new_quadrant
+        )
+
+        updated_arrow_dict = {
+            COLOR: arrow.color,
+            MOTION_TYPE: arrow.motion_type,
+            QUADRANT: new_quadrant,
+            ROTATION_DIRECTION: arrow.rotation_direction,
+            START_LOCATION: new_start_location,
+            END_LOCATION: new_end_location,
+            TURNS: arrow.turns,
+        }
+
+        updated_staff_dict = {
+                COLOR: arrow.color,
+                LOCATION: new_end_location,
+                LAYER: 1,
+            }
+
+        self.update_arrow_and_staff(arrow, updated_arrow_dict, updated_staff_dict)
+        self.graphboard.update()
+
+    def mirror_arrow(self):
+        if self.is_mirrored:
+            self.is_mirrored = False
+        elif not self.is_mirrored:
+            self.is_mirrored = True
+
+        center_x = self.boundingRect().width() / 2
+        center_y = self.boundingRect().height() / 2
+
+        if self.is_mirrored:
+            transform = QTransform()
+            transform.translate(center_x, center_y)
+            transform.scale(-1, 1)
+            transform.translate(-center_x, -center_y)
+
+        if not self.is_mirrored:
+            transform = QTransform()
+            transform.translate(center_x, center_y)
+            transform.scale(1, 1)
+            transform.translate(-center_x, -center_y)
+
+        self.setTransform(transform)
+        self.mirror_transform = transform
+
+        if self.rotation_direction == COUNTER_CLOCKWISE:
+            new_rotation_direction = CLOCKWISE
+        elif self.rotation_direction == CLOCKWISE:
+            new_rotation_direction = COUNTER_CLOCKWISE
+        elif self.rotation_direction == "None":
+            new_rotation_direction = "None"
+
+        old_start_location = self.start_location
+        old_end_location = self.end_location
+        new_start_location = old_end_location
+        new_end_location = old_start_location
+
+        new_arrow_dict = {
+            COLOR: self.color,
+            MOTION_TYPE: self.motion_type,
+            QUADRANT: self.quadrant,
+            ROTATION_DIRECTION: new_rotation_direction,
+            START_LOCATION: new_start_location,
+            END_LOCATION: new_end_location,
+            TURNS: self.turns,
+        }
+
+        self.staff.location = new_end_location
+        self.update_appearance()
+        self.staff.update_appearance()
+        self.update_arrow_and_staff(new_arrow_dict)
+        self.graphboard.update()
+        
+
+    def swap_motion_type(self):
+        if self.motion_type == ANTI:
+            new_motion_type = PRO
+        elif self.motion_type == PRO:
+            new_motion_type = ANTI
+        elif self.motion_type == STATIC:
+            new_motion_type = STATIC
+
+        if self.rotation_direction == COUNTER_CLOCKWISE:
+            new_rotation_direction = CLOCKWISE
+        elif self.rotation_direction == CLOCKWISE:
+            new_rotation_direction = COUNTER_CLOCKWISE
+        elif self.rotation_direction == "None":
+            new_rotation_direction = "None"
+
+        new_arrow_dict = {
+            COLOR: self.color,
+            MOTION_TYPE: new_motion_type,
+            QUADRANT: self.quadrant,
+            ROTATION_DIRECTION: new_rotation_direction,
+            START_LOCATION: self.start_location,
+            END_LOCATION: self.end_location,
+            TURNS: self.turns,
+        }
+
+        new_staff_dict = {
+            COLOR: self.color,
+            LOCATION: self.end_location,
+            LAYER: 1,
+        }
+
+        self.svg_file = f"resources/images/arrows/{new_motion_type}_{self.turns}.svg"
+        self._setup_svg_renderer(self.svg_file)
+        self.update_arrow_and_staff(new_arrow_dict, new_staff_dict)
+        self.graphboard.update()
 
 
 class BlankArrow(Arrow):

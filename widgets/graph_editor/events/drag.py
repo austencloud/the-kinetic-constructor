@@ -227,10 +227,12 @@ class Drag(QWidget):
 
     def update_preview_for_new_quadrant(self, new_quadrant):
         self.quadrant = new_quadrant
+        self.ghost_arrow.quadrant = new_quadrant
         self.update_rotation()
-        self.ghost_arrow.update(new_quadrant, self.target_arrow, self)
+        self.ghost_arrow.update(self.target_arrow, self)
 
         self.update_staff_during_drag()
+        
         if self.ghost_arrow not in self.graphboard.arrows:
             self.graphboard.arrows.append(self.ghost_arrow)
         if self.ghost_arrow not in self.graphboard.items():
