@@ -97,8 +97,8 @@ class Staff(QGraphicsSvgItem):
             if item != self:
                 item.setSelected(False)
 
-        self.drag_start_pos = self.pos()
-        self.drag_offset = event.pos()
+        self.previous_location = self.location  # Store the starting location
+
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.MouseButton.LeftButton:
@@ -106,14 +106,18 @@ class Staff(QGraphicsSvgItem):
             view_event_pos = self.graphboard.view.mapFromScene(scene_event_pos)
             in_view = self.graphboard.view.rect().contains(view_event_pos)
             new_pos = event.scenePos() - self.get_staff_center()
-            self.setPos(new_pos)
+            if self.axis == HORIZONTAL:
+                self.setPos(new_pos)
+            elif self.axis == VERTICAL:
+                self.setPos(new_pos + QPointF(-STAFF_LENGTH/2 + STAFF_WIDTH/2, STAFF_WIDTH / 2 - STAFF_LENGTH / 2))
 
             new_location = self.get_closest_handpoint(event.scenePos())[1]
-            print(new_location)
             
             if new_location != self.previous_location:
-                if in_view:   
+                if in_view:
                     self.update_for_new_location(event, new_location)
+                    self.previous_location = new_location  # Update previous location after change
+
 
     def update_for_new_location(self, event, new_location):
         self.location = new_location
@@ -162,11 +166,10 @@ class Staff(QGraphicsSvgItem):
             staff.arrow.set_attributes_from_staff(staff)
             staff.arrow.update_appearance()
 
-        # Hide ghost staff
         self.graphboard.ghost_staffs[staff.color].hide()
 
         staff.previous_location = new_location
-
+        self.graphboard.update()
         
     ### UPDATERS ###
 
@@ -291,6 +294,7 @@ class Staff(QGraphicsSvgItem):
             return {}
         
     def get_staff_center(self):
+        
         if self.axis == VERTICAL:
             return QPointF((STAFF_WIDTH / 2), (STAFF_LENGTH / 2))
         elif self.axis == HORIZONTAL:

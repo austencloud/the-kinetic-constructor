@@ -121,7 +121,6 @@ class Arrow(QGraphicsSvgItem):
             if item != self:
                 item.setSelected(False)
 
-        self.drag_start_pos = self.pos()
 
 
     def mouseMoveEvent(self, event):
