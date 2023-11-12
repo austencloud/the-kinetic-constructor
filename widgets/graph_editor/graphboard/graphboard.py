@@ -23,7 +23,7 @@ from settings.string_constants import (
     NORTHEAST,
     LOCATION,
     VERTICAL,
-    HORIZONTAL
+    HORIZONTAL,
 )
 from settings.numerical_constants import STAFF_WIDTH, STAFF_LENGTH
 from data.letter_types import letter_types
@@ -51,6 +51,10 @@ class Graphboard(QGraphicsScene):
     def setup_components(self, main_widget, graph_editor):
         self.graph_editor = graph_editor
         self.letters = main_widget.letters
+        
+        self.dragged_arrow = None
+        self.dragged_staff = None
+        
         self.initializer = GraphboardInit(self)
 
         self.ghost_arrows = self.initializer.init_ghost_arrows()
@@ -95,7 +99,8 @@ class Graphboard(QGraphicsScene):
 
     def delete_arrow(self, arrow, keep_staff=False):
         self.removeItem(arrow)
-        self.arrows.remove(arrow)
+        if arrow in self.arrows:
+            self.arrows.remove(arrow)
         if keep_staff:
             self.create_blank_arrow(arrow)
         else:
@@ -128,73 +133,31 @@ class Graphboard(QGraphicsScene):
     def mousePressEvent(self, event):
         clicked_item = self.itemAt(event.scenePos(), QTransform())
         if isinstance(clicked_item, Staff):
-            clicked_item.just_clicked = True
-            self.deselect_all_items()
-            clicked_item.setSelected(True)
             self.dragged_staff = clicked_item
-            self.drag_offset = event.scenePos() - clicked_item.scenePos()
+            self.dragged_staff.mousePressEvent(event)  # Pass the event to the Staff class
+        elif isinstance(clicked_item, Arrow):
+            self.dragged_arrow = clicked_item
+            self.dragged_arrow.mousePressEvent(event)
         else:
             self.dragged_staff = None
-        super().mousePressEvent(event)
+            self.dragged_arrow = None
 
     def mouseMoveEvent(self, event):
-        if self.dragged_staff and event.buttons() == Qt.MouseButton.LeftButton:
-            location_changed = self.dragged_staff.location_changed
-            previous_location = self.dragged_staff.previous_location
-            if not location_changed:
-                if self.dragged_staff.axis == HORIZONTAL:
-                    new_pos = self.move_staff_to_mouse_hor_axis_on_drag(event)
-                elif self.dragged_staff.axis == VERTICAL:
-                    new_pos = self.move_staff_to_mouse_vert_axis_on_drag(event)
-            else: # location has just changed
-                if self.dragged_staff.axis == HORIZONTAL:
-                    new_pos = self.move_staff_to_mouse_hor_axis_on_location_change(event)
-                elif self.dragged_staff.axis == VERTICAL:
-                    new_pos = self.move_staff_to_mouse_vert_axis_on_location_change(event)
-        
-            # Set the new position of the staff
-            self.dragged_staff.setPos(new_pos)
-            new_location = self.dragged_staff.get_closest_handpoint(event.scenePos())[1]            
-            self.dragged_staff.update_axis(new_location)
+        if self.dragged_staff:
+            # Delegate to Staff class
+            self.dragged_staff.mouseMoveEvent(event)  # Pass the event to the Staff class
+        elif self.dragged_arrow:
+            self.dragged_arrow.mouseMoveEvent(event)
             
-            if new_location != previous_location:     
-                self.dragged_staff.update_axis(new_location)
-
-                self.dragged_staff.location = new_location
-                self.dragged_staff.attributes[LOCATION] = new_location
-                
-                new_location = previous_location
-
-                # Update staff orientation and appearance
-                self.dragged_staff.update_appearance()
-                location_changed = True
-
-                # Update the ghost staff
-                # self.update_ghost_staff(self.dragged_staff, event)
-        else:
-            super().mouseMoveEvent(event)
-
-    def move_staff_to_mouse_hor_axis_on_drag(self, event):
-        new_pos = event.scenePos() - QPointF(STAFF_LENGTH / 2, STAFF_WIDTH / 2)
-        return new_pos
-
-    def move_staff_to_mouse_vert_axis_on_drag(self, event):
-        new_pos = event.scenePos() + QPointF(STAFF_WIDTH / 2, -STAFF_LENGTH / 2)
-        return new_pos
-
-    def move_staff_to_mouse_hor_axis_on_location_change(self, event):
-        new_pos = event.scenePos() - QPointF(STAFF_LENGTH / 2, STAFF_WIDTH / 2)
-        return new_pos
-    
-    def move_staff_to_mouse_vert_axis_on_location_change(self, event):
-        new_pos = event.scenePos() + QPointF(STAFF_WIDTH / 2, 0)
-        return new_pos    
-
     def mouseReleaseEvent(self, event):
         if self.dragged_staff:
-            self.finalize_staff_drop(self.dragged_staff, event)
+            # Delegate to Staff class
+            self.dragged_staff.mouseReleaseEvent(event)  # Pass the event to the Staff class
             self.dragged_staff = None
-        super().mouseReleaseEvent(event)
+        elif self.dragged_arrow:
+            self.dragged_arrow.mouseReleaseEvent(event)
+            self.dragged_arrow = None
+
 
     ### SETTERS ###
 
@@ -280,28 +243,6 @@ class Graphboard(QGraphicsScene):
 
     ### HELPERS ###
 
-    def finalize_staff_drop(self, staff, event):
-        # Calculate closest handpoint and new location
-        closest_handpoint, new_location = staff.get_closest_handpoint(event.scenePos())
-
-        staff.attributes[LOCATION] = new_location
-        staff.location = new_location
-
-        # Update staff attributes and appearance
-        staff.update_appearance()
-
-        # Position the staff at the closest handpoint
-        staff.setPos(closest_handpoint)
-
-        # Update associated arrow if any
-        if staff.arrow:
-            staff.arrow.set_attributes_from_staff(staff)
-            staff.arrow.update_appearance()
-
-        # Hide ghost staff
-        self.ghost_staffs[staff.color].hide()
-        staff.previous_location = new_location
-
     @staticmethod
     def point_in_quadrant(x, y, boundary):
         return boundary[0] <= x <= boundary[2] and boundary[1] <= y <= boundary[3]
@@ -375,12 +316,6 @@ class Graphboard(QGraphicsScene):
             self.set_letter_renderer(letter)
         else:
             self.set_blank_renderer()
-
-
-
-
-
-
 
     ### SETTERS ###
 

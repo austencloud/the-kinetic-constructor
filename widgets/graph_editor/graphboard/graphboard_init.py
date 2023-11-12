@@ -72,8 +72,20 @@ class GraphboardInit:
         return ghost_arrows
 
     def init_ghost_staffs(self):
-        red_ghost_staff = GhostStaff(self.graphboard, RED)
-        blue_ghost_staff = GhostStaff(self.graphboard, BLUE)
+        default_red_ghost_staff_attributes = {
+            COLOR: RED,
+            LOCATION: EAST,
+            LAYER: 1,
+        }
+        
+        default_blue_ghost_staff_attributes = {
+            COLOR: BLUE,
+            LOCATION: WEST,
+            LAYER: 1,
+        }
+        
+        red_ghost_staff = GhostStaff(self.graphboard, default_red_ghost_staff_attributes)
+        blue_ghost_staff = GhostStaff(self.graphboard, default_blue_ghost_staff_attributes)
 
         red_ghost_staff.hide()
         blue_ghost_staff.hide()

@@ -1,7 +1,27 @@
 from PyQt6.QtCore import QPointF
 import math
 from settings.numerical_constants import BETA_OFFSET, STAFF_LENGTH, STAFF_WIDTH
-from settings.string_constants import VERTICAL, ARROWS, COLOR, MOTION_TYPE, STATIC, START_LOCATION, END_LOCATION, PRO, ANTI, NORTH, SOUTH, EAST, WEST, UP, DOWN, LEFT, RIGHT, RED, BLUE
+from settings.string_constants import (
+    VERTICAL,
+    ARROWS,
+    COLOR,
+    MOTION_TYPE,
+    STATIC,
+    START_LOCATION,
+    END_LOCATION,
+    PRO,
+    ANTI,
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST,
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    RED,
+    BLUE,
+)
 
 
 class StaffPositioner:
@@ -16,20 +36,18 @@ class StaffPositioner:
         if self.staffs_in_beta():
             self.reposition_beta_staffs()
 
-
     def set_default_staff_locations(self, staff):
+        staff.set_transform_origin_to_center()
         if staff.axis == VERTICAL:
             staff.setPos(
                 self.graphboard.grid.handpoints[staff.location]
-                + QPointF(STAFF_WIDTH / 2, -STAFF_LENGTH / 2)
+                + QPointF(-STAFF_LENGTH / 2, -STAFF_LENGTH + STAFF_WIDTH / 2)
             )
         else:
             staff.setPos(
                 self.graphboard.grid.handpoints[staff.location]
                 + QPointF(-STAFF_LENGTH / 2, -STAFF_WIDTH / 2)
             )
-        staff.setTransformOriginPoint(0, 0)
-
 
     def reposition_beta_staffs(self):
         board_state = self.graphboard.get_state()
@@ -273,9 +291,7 @@ class StaffPositioner:
         self, current_state, graphboard, matching_letters, arrow_dict
     ):
         for variations in matching_letters:
-            if graphboard.arrow_positioner.compare_states(
-                current_state, variations
-            ):
+            if graphboard.arrow_positioner.compare_states(current_state, variations):
                 optimal_entry = next(
                     (
                         d

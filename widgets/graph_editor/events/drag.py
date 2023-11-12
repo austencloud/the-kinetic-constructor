@@ -182,11 +182,7 @@ class Drag(QWidget):
         with painter as painter:
             renderer.render(painter)
 
-        angle = self.target_arrow.get_rotation_angle(
-            self.quadrant,
-            self.motion_type,
-            self.rotation_direction,
-        )
+        angle = self.target_arrow.get_rotation_angle(self)
 
         unrotate_transform = QTransform().rotate(-self.current_rotation_angle)
         unrotated_pixmap = self.preview.pixmap().transformed(unrotate_transform)

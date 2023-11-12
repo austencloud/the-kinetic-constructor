@@ -57,6 +57,7 @@ class Arrow(QGraphicsSvgItem):
         self._setup(graphboard, attributes)
 
     ### SETUP ###
+    
     def _setup(self, graphboard, attributes):
         self._setup_attributes(graphboard, attributes)
         self._setup_graphics_flags()
@@ -65,9 +66,11 @@ class Arrow(QGraphicsSvgItem):
         self.graphboard = graphboard
 
         self.drag_offset = QPointF(0, 0)
-        self.is_mirrored = False
+        
         self.staff = None
         self.ghost_arrow = None
+        
+        self.is_mirrored = False
         
         self.color = None
         self.motion_type = None
@@ -78,12 +81,13 @@ class Arrow(QGraphicsSvgItem):
         self.turns = None
 
         self.mirror_transform = (
-            None  # carries the transform to be applied to the ghost arrow
+            None
         )
 
         if attributes:
             self.set_attributes_from_dict(attributes)
             self.update_appearance()
+        
         self.center = self.boundingRect().center()
 
     def _setup_graphics_flags(self):
@@ -113,20 +117,20 @@ class Arrow(QGraphicsSvgItem):
         self.graphboard.arrows.remove(self)
         self.graphboard.arrow_positioner.update()
         self.graphboard.arrows.append(self)
-        for arrow in self.graphboard.arrows:
-            if arrow != self:
-                arrow.setSelected(False)
+        for item in self.graphboard.items():
+            if item != self:
+                item.setSelected(False)
 
         self.drag_start_pos = self.pos()
-        self.drag_offset = event.pos()
+
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.MouseButton.LeftButton:
             scene_event_pos = self.mapToScene(event.pos())
             view_event_pos = self.graphboard.view.mapFromScene(scene_event_pos)
-            in_view = self.graphboard.view.rect().contains(view_event_pos)
-            new_pos = self.mapToScene(event.pos()) - self.boundingRect().center()
+            new_pos = event.scenePos() - self.center
             self.setPos(new_pos)
+            in_view = self.graphboard.view.rect().contains(view_event_pos)
 
             scene_pos = new_pos + self.center
             new_quadrant = self.graphboard.get_quadrant(scene_pos.x(), scene_pos.y())
@@ -142,75 +146,6 @@ class Arrow(QGraphicsSvgItem):
         self.ghost_arrow = None
         self.graphboard.arrow_positioner.update()
 
-    ### GETTERS ###
-
-    def get_svg_data(self, svg_file):
-        with open(svg_file, CLOCKWISE) as f:
-            svg_data = f.read()
-        return svg_data.encode("utf-8")
-
-    def get_rotation_angle(self, quadrant, motion_type, rotation_direction):
-        quadrant_to_angle = self.get_quadrant_to_angle_map(
-            motion_type, rotation_direction
-        )
-        return quadrant_to_angle.get(quadrant, 0)
-
-    def get_quadrant_to_angle_map(self, motion_type, rotation_direction):
-        if motion_type == PRO:
-            return {
-                CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 90,
-                    SOUTHWEST: 180,
-                    NORTHWEST: 270,
-                },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 270,
-                    SOUTHEAST: 180,
-                    SOUTHWEST: 90,
-                    NORTHWEST: 0,
-                },
-            }.get(rotation_direction, {})
-        elif motion_type == ANTI:
-            return {
-                CLOCKWISE: {
-                    NORTHEAST: 270,
-                    SOUTHEAST: 180,
-                    SOUTHWEST: 90,
-                    NORTHWEST: 0,
-                },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 90,
-                    SOUTHWEST: 180,
-                    NORTHWEST: 270,
-                },
-            }.get(rotation_direction, {})
-        elif motion_type == STATIC:
-            return {
-                CLOCKWISE: {NORTHEAST: 0, SOUTHEAST: 0, SOUTHWEST: 0, NORTHWEST: 0},
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 0,
-                    SOUTHWEST: 0,
-                    NORTHWEST: 0,
-                },
-            }.get(rotation_direction, {})
-
-    def get_attributes(self):
-        return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}
-
-    def get_start_end_locations(self, motion_type, rotation_direction, quadrant):
-        return (
-            start_end_location_mapping.get(quadrant, {})
-            .get(rotation_direction, {})
-            .get(motion_type, (None, None))
-        )
-
-    def get_svg_file(self, motion_type, turns):
-        svg_file = f"{ARROW_DIR}{motion_type}_{turns}.svg"
-        return svg_file
-
     ### UPDATERS ###
 
     def update(self, attributes):
@@ -224,15 +159,13 @@ class Arrow(QGraphicsSvgItem):
         self.update_rotation()
 
     def update_color(self):
-        if self.motion_type in [PRO, ANTI]:
+        if self.motion_type is not STATIC:
             new_svg_data = self.set_svg_color(self.color)
             self.renderer.load(new_svg_data)
             self.setSharedRenderer(self.renderer)
 
     def update_rotation(self):
-        angle = self.get_rotation_angle(
-            self.quadrant, self.motion_type, self.rotation_direction
-        )
+        angle = self.get_rotation_angle()
         self.setRotation(angle)
 
     def update_svg(self, svg_file):
@@ -306,8 +239,6 @@ class Arrow(QGraphicsSvgItem):
 
     def set_attributes_from_staff(self, staff):
         orientation = self.calculate_new_orientation(self.quadrant, staff.location)
-
-        # Update arrow's attributes using the dictionary
         self.quadrant = orientation["new_quadrant"]
         self.start_location = orientation["start_location"]
         self.end_location = orientation["end_location"]
@@ -368,6 +299,78 @@ class Arrow(QGraphicsSvgItem):
         # Call this method after any changes that might affect the boundingRect.
         self.center = self.boundingRect().center()
         self.setTransformOriginPoint(self.center)
+
+
+    ### GETTERS ###
+
+    def get_svg_data(self, svg_file):
+        with open(svg_file, CLOCKWISE) as f:
+            svg_data = f.read()
+        return svg_data.encode("utf-8")
+
+    def get_rotation_angle(self, arrow=None):
+        arrow = arrow or self
+        quadrant_to_angle = self.get_quadrant_to_angle_map(
+            arrow.motion_type, arrow.rotation_direction
+        )
+        return quadrant_to_angle.get(arrow.quadrant, 0)
+
+    def get_quadrant_to_angle_map(self, motion_type, rotation_direction):
+        if motion_type == PRO:
+            return {
+                CLOCKWISE: {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 90,
+                    SOUTHWEST: 180,
+                    NORTHWEST: 270,
+                },
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: 270,
+                    SOUTHEAST: 180,
+                    SOUTHWEST: 90,
+                    NORTHWEST: 0,
+                },
+            }.get(rotation_direction, {})
+        elif motion_type == ANTI:
+            return {
+                CLOCKWISE: {
+                    NORTHEAST: 270,
+                    SOUTHEAST: 180,
+                    SOUTHWEST: 90,
+                    NORTHWEST: 0,
+                },
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 90,
+                    SOUTHWEST: 180,
+                    NORTHWEST: 270,
+                },
+            }.get(rotation_direction, {})
+        elif motion_type == STATIC:
+            return {
+                CLOCKWISE: {NORTHEAST: 0, SOUTHEAST: 0, SOUTHWEST: 0, NORTHWEST: 0},
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 0,
+                    SOUTHWEST: 0,
+                    NORTHWEST: 0,
+                },
+            }.get(rotation_direction, {})
+
+    def get_attributes(self):
+        return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}
+
+    def get_start_end_locations(self, motion_type, rotation_direction, quadrant):
+        return (
+            start_end_location_mapping.get(quadrant, {})
+            .get(rotation_direction, {})
+            .get(motion_type, (None, None))
+        )
+
+    def get_svg_file(self, motion_type, turns):
+        svg_file = f"{ARROW_DIR}{motion_type}_{turns}.svg"
+        return svg_file
+
 
     ### MANIPULATION ###
 
