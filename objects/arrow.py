@@ -67,7 +67,8 @@ class Arrow(QGraphicsSvgItem):
         self.drag_offset = QPointF(0, 0)
         self.is_mirrored = False
         self.staff = None
-
+        self.ghost_arrow = None
+        
         self.color = None
         self.motion_type = None
         self.rotation_direction = None
@@ -217,7 +218,6 @@ class Arrow(QGraphicsSvgItem):
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
         self.update_appearance()
-
 
     def update_appearance(self):
         self.update_color()
