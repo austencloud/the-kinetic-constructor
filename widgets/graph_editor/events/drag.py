@@ -219,7 +219,7 @@ class Drag(QWidget):
         pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
         view_pos_in_graphboard = self.graphboard.view.mapFromGlobal(pos_in_main_window)
         scene_pos = self.graphboard.view.mapToScene(view_pos_in_graphboard)
-        new_quadrant = self.graphboard.determine_quadrant(scene_pos.x(), scene_pos.y())
+        new_quadrant = self.graphboard.get_quadrant(scene_pos.x(), scene_pos.y())
 
         if self.previous_quadrant != new_quadrant:
             self.update_preview_for_new_quadrant(new_quadrant)
@@ -232,7 +232,7 @@ class Drag(QWidget):
         self.ghost_arrow.update(self.target_arrow, self)
 
         self.update_staff_during_drag()
-        
+
         if self.ghost_arrow not in self.graphboard.arrows:
             self.graphboard.arrows.append(self.ghost_arrow)
         if self.ghost_arrow not in self.graphboard.items():

@@ -184,3 +184,15 @@
 2023-11-10 15:18:47,574 DEBUG root Multiple letters returned by get_current_letter: {}
 2023-11-10 15:19:12,321 DEBUG root Multiple letters returned by get_current_letter: {}
 2023-11-10 19:25:13,242 WARNING root Staff has no location
+2023-11-11 18:36:19,094 DEBUG root Multiple letters returned by get_current_letter: {}
+2023-11-11 18:36:20,162 DEBUG root Multiple letters returned by get_current_letter: {}
+2023-11-11 18:36:23,915 DEBUG root Multiple letters returned by get_current_letter: {}
+2023-11-11 18:36:25,009 DEBUG root Multiple letters returned by get_current_letter: {}
+2023-11-11 18:36:26,470 DEBUG root Multiple letters returned by get_current_letter: {}
+2023-11-11 18:38:23,863 DEBUG root Multiple letters returned by get_current_letter: {}
+2023-11-11 18:38:25,203 DEBUG root Multiple letters returned by get_current_letter: {}
+2023-11-11 18:38:26,357 DEBUG root Multiple letters returned by get_current_letter: {}
+2023-11-11 18:38:26,987 DEBUG root Multiple letters returned by get_current_letter: {}
+2023-11-11 18:38:45,188 DEBUG root Multiple letters returned by get_current_letter: {}
+2023-11-11 18:39:08,035 DEBUG root Multiple letters returned by get_current_letter: {}
+2023-11-11 18:39:10,100 DEBUG root Multiple letters returned by get_current_letter: {}

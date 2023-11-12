@@ -61,9 +61,17 @@ CLOCK_DIR = ICON_DIR + "clock/"
 CLOCKWISE_ICON = CLOCK_DIR + "clockwise.png"
 COUNTER_CLOCKWISE_ICON = CLOCK_DIR + "counter_clockwise.png"
 CLOCK_ICON = CLOCK_DIR + "clock.png"
+SWAP_ICON = "swap.jpg"
+DECREMENT_TURNS_ICON = "decrement_turns.png"
+INCREMENT_TURNS_ICON = "increment_turns.png"
+SWAP_COLORS_ICON = "swap_colors.png"
 
-SWAP_ICON = "swap.png"
-
+ICON_PATHS = {
+    "swap": ICON_DIR + SWAP_ICON,
+    "decrement_turns": ICON_DIR + DECREMENT_TURNS_ICON,
+    "increment_turns": ICON_DIR + INCREMENT_TURNS_ICON,
+    "swap_colors": SWAP_COLORS_ICON,
+}
 
 ARROW_ATTRIBUTES = [
     COLOR,

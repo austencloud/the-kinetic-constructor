@@ -1,40 +1,29 @@
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QIcon
-from settings.string_constants import *
+from settings.string_constants import BLUE, RED, COLOR, ICON_PATHS
+from settings.numerical_constants import BUTTON_SIZE
 
 
 class InfoboxButtons:
-    BUTTON_SIZE = 30
-    ICON_PATHS = {
-        "swap": ICON_DIR + "swap.jpg",
-        "decrement_turns": ICON_DIR + "decrement_turns.png",
-        "increment_turns": ICON_DIR + "increment_turns.png",
-        "swap_colors": None,
-    }
-
-    def __init__(self, infobox, manipulator, graphboard):
+    def __init__(self, infobox, graphboard):
         self.infobox = infobox
-        self.manipulator = manipulator
         self.graphboard = graphboard
         self.button_groups = {BLUE: [], RED: []}
         self.layouts = infobox.layouts
 
     def create_and_set_button(self, button_name, properties):
         icon = properties.get("icon", None)
-        if icon:
-            button = QPushButton(QIcon(icon), properties.get("text", ""))
-        else:
-            button = QPushButton(properties.get("text", ""))
+        button = QPushButton(QIcon(icon), properties.get("text", ""))
 
         button.clicked.connect(properties["callback"])
-        button.setFixedSize(self.BUTTON_SIZE, self.BUTTON_SIZE)
+        button.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
         setattr(self, f"{button_name}_button", button)
         button.hide()
 
         # Add the button to the appropriate color group
-        if "blue" in button_name:
+        if BLUE in button_name:
             self.button_groups[BLUE].append(button)
-        elif "red" in button_name:
+        elif RED in button_name:
             self.button_groups[RED].append(button)
 
 
@@ -47,48 +36,39 @@ class InfoboxButtons:
     
         self.button_properties = {
             "swap_colors": {
-                "icon": self.ICON_PATHS["swap_colors"],
-                "text": "↔",
-                "callback": self.manipulator.swap_colors,
+                "icon": ICON_PATHS["swap_colors"],
+                "callback": lambda: self.graphboard.swap_colors(),
             },
             "swap_motion_type_blue": {
-                "icon": self.ICON_PATHS["swap"],
-                "callback": lambda: self.graphboard.get_arrow_by_color(BLUE).swap_motion_type(
-                  
-                ),
+                "icon": ICON_PATHS["swap"],
+                "callback": lambda: self.graphboard.get_arrow_by_color(BLUE).swap_motion_type(),
             },
             "swap_motion_type_red": {
-                "icon": self.ICON_PATHS["swap"],
-                "callback": lambda: self.graphboard.get_arrow_by_color(RED).swap_motion_type(
-                    
-                ),
+                "icon": ICON_PATHS["swap"],
+                "callback": lambda: self.graphboard.get_arrow_by_color(RED).swap_motion_type(),
             },
             "swap_start_end_blue": {
-                "icon": self.ICON_PATHS["swap"],
-                "callback": lambda: self.graphboard.get_arrow_by_color(BLUE).mirror_arrow(
-                    
-                ),
+                "icon": ICON_PATHS["swap"],
+                "callback": lambda: self.graphboard.get_arrow_by_color(BLUE).mirror(),
             },
             "swap_start_end_red": {
-                "icon": self.ICON_PATHS["swap"],
-                "callback": lambda: self.graphboard.get_arrow_by_color(RED).mirror_arrow(
-                    
-                ),
+                "icon": ICON_PATHS["swap"],
+                "callback": lambda: self.graphboard.get_arrow_by_color(RED).mirror(),
             },
             "decrement_turns_blue": {
-                "icon": self.ICON_PATHS["decrement_turns"],
+                "icon": ICON_PATHS["decrement_turns"],
                 "callback": lambda: self.graphboard.get_arrow_by_color(BLUE).decrement_turns(),
             },
             "increment_turns_blue": {
-                "icon": self.ICON_PATHS["increment_turns"],
+                "icon": ICON_PATHS["increment_turns"],
                 "callback": lambda: self.graphboard.get_arrow_by_color(BLUE).increment_turns(),
             },
             "decrement_turns_red": {
-                "icon": self.ICON_PATHS["decrement_turns"],
+                "icon": ICON_PATHS["decrement_turns"],
                 "callback": lambda: self.graphboard.get_arrow_by_color(RED).decrement_turns(),
             },
             "increment_turns_red": {
-                "icon": self.ICON_PATHS["increment_turns"],
+                "icon": ICON_PATHS["increment_turns"],
                 "callback": lambda: self.graphboard.get_arrow_by_color(RED).increment_turns(),
             },
         }

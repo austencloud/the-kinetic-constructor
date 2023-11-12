@@ -8,15 +8,14 @@ from settings.string_constants import RED, BLUE
 
 
 class Infobox(QFrame):
-    def __init__(self, main_widget, graphboard, arrow_manipulator):
+    def __init__(self, main_widget, graphboard):
         super().__init__()
         self.main_widget = main_widget
         self.graphboard = graphboard
-        self.arrow_manipulator = arrow_manipulator
         self.labels = InfoboxLabels(self, graphboard)
         self.widgets = InfoboxWidgets(self, graphboard)
         self.layouts = InfoboxLayouts(self, graphboard)
-        self.buttons = InfoboxButtons(self, arrow_manipulator, graphboard)
+        self.buttons = InfoboxButtons(self, graphboard)
         self.setup_ui()
 
     def setup_ui(self):

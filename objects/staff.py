@@ -51,6 +51,8 @@ class Staff(QGraphicsSvgItem):
 
     def _setup_attributes(self, graphboard, attributes):
         self.arrow = None
+        self.previous_location = None
+        self.location_changed = False
 
         self.color = None
         self.location = None
@@ -78,6 +80,12 @@ class Staff(QGraphicsSvgItem):
         self.renderer = QSvgRenderer(self.svg_file)
         self.setSharedRenderer(self.renderer)
 
+    ### UPDATERS ###
+
+    def update(self, attributes):
+        self.set_attributes_from_dict(attributes)
+        self.update_appearance()
+
     def update_position(self, event):
         offset = self.get_staff_center()
         new_pos = QPointF(
@@ -86,17 +94,17 @@ class Staff(QGraphicsSvgItem):
         self.setPos(new_pos)
 
     def update_staff_orientation(self, mouse_pos):
-        # Find the closest handpoint and set axis and rotation
         closest_handpoint, closest_location = self.get_closest_handpoint(mouse_pos)
         self.update_axis(closest_location)
         self.update_appearance()
+        self.apply_rotation()
 
     def update_axis(self, location):
         if self.layer == 1:
             self.axis = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
         elif self.layer == 2:
             self.axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
-        self.setPos(self.graphboard.grid.handpoints[location])
+        # No need to setPos here since it will be handled in Graphboard
 
     def update_color(self, new_color):
         hex_color = COLOR_MAP.get(new_color, new_color)
@@ -151,11 +159,12 @@ class Staff(QGraphicsSvgItem):
 
     def get_staff_center(self):
         if self.axis == VERTICAL:
-            return QPointF((STAFF_WIDTH / 2), -(STAFF_LENGTH / 2))
+            return QPointF((STAFF_WIDTH / 2), (STAFF_LENGTH / 2))
         elif self.axis == HORIZONTAL:
-            return QPointF(-(STAFF_LENGTH / 2), -(STAFF_WIDTH / 2))
+            return QPointF((STAFF_LENGTH / 2), (STAFF_WIDTH / 2))
 
     def set_rotation_from_axis(self):
+        self.setTransformOriginPoint(self.get_staff_center())
         if self.axis == VERTICAL:
             self.current_position = self.pos()
             self.setRotation(90)
@@ -166,7 +175,7 @@ class Staff(QGraphicsSvgItem):
         closest_distance = float("inf")
         closest_handpoint = None
         closest_location = None
-        for location, point in self.graphboard.handpoints.items():
+        for location, point in self.graphboard.grid.handpoints.items():
             distance = (point - mouse_pos).manhattanLength()
             if distance < closest_distance:
                 closest_distance = distance
@@ -184,38 +193,74 @@ class Staff(QGraphicsSvgItem):
     ### MOUSE EVENTS ###
 
     def mousePressEvent(self, event):
-        if event.buttons() == Qt.MouseButton.LeftButton:
-            self.ghost_staff = self.graphboard.ghost_staffs[self.color]
-            self.ghost_staff.set_attributes_from_dict(self.get_attributes())
-            self.ghost_staff.update_appearance()
-            self.graphboard.addItem(self.ghost_staff)
-            self.ghost_staff.setPos(self.pos())
-            self.ghost_staff.real_staff = self
+        print(f"Staff: {event.scenePos().x()}, {event.scenePos().y()}")
+
+        # if event.buttons() == Qt.MouseButton.LeftButton:
+        #     self.ghost_staff = self.graphboard.ghost_staffs[self.color]
+        #     self.ghost_staff.set_attributes_from_dict(self.get_attributes())
+        #     self.ghost_staff.update_appearance()
+        #     self.ghost_staff.setPos(self.pos())
+        #     self.ghost_staff.real_staff = self
 
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.MouseButton.LeftButton:
-            event_pos = event.scenePos()
-            self.setPos(event_pos - QPointF(self.center))
-        super().mouseMoveEvent(event)
+        # Handled in Graphboard now
+        pass
 
     def mouseReleaseEvent(self, event):
-        self.setVisible(True)
-        self.graphboard.removeItem(self.ghost_staff)
-        self.set_attributes_from_dict(self.ghost_staff.get_attributes())
-        self.update_appearance()
-        if self.arrow:
-            self.arrow.set_attributes_from_staff(self)
-            self.arrow.update_appearance()
-        # Clean up
+        _, new_location = self.get_closest_handpoint(event.scenePos())
+        if new_location != self.previous_location:
+            self.setVisible(True)
+            self.graphboard.removeItem(self.ghost_staff)
+            self.set_attributes_from_dict(self.ghost_staff.get_attributes())
+            self.update_appearance()
+            if self.arrow:
+                self.arrow.set_attributes_from_staff(self)
+                self.arrow.update_appearance()
+            self.previous_location = new_location
+
         self.ghost_staff = None
         self.graphboard.update()
 
-
     ### HELPERS ###
+
+    def get_center_in_scene(self):
+        # Calculate center based on orientation and map it to scene coordinates
+        if self.axis == VERTICAL:
+            center = QPointF(STAFF_WIDTH / 2, STAFF_LENGTH / 2)
+        else:  # HORIZONTAL
+            center = QPointF(STAFF_LENGTH / 2, STAFF_WIDTH / 2)
+        return self.mapToScene(center)
+
+    def get_center(self):
+        if self.axis == VERTICAL:
+            center = QPointF(STAFF_WIDTH / 2, STAFF_LENGTH / 2)
+        else:  # HORIZONTAL
+            center = QPointF(STAFF_LENGTH / 2, STAFF_WIDTH / 2)
+        return center
+
+    def update_staff_orientation(self, mouse_pos):
+        closest_handpoint, closest_location = self.get_closest_handpoint(mouse_pos)
+        previous_axis = self.axis
+        self.update_axis(closest_location)
+        self.update_appearance()
+
+        # If the orientation changed, adjust the position to maintain alignment
+        if self.axis != previous_axis:
+            staff_center = self.get_center()
+            self.setPos(mouse_pos - staff_center)
+
+        self.apply_rotation()
+
+    def apply_rotation(self):
+        self.setTransformOriginPoint(self.get_center())
+        if self.axis == VERTICAL:
+            self.setRotation(90)
+        else:
+            self.setRotation(0)
 
     def move_to_cursor(self, event):
         event_pos = event.scenePos()
-        self.move(event_pos - (self.arrow_center).toPoint())
+        self.setPos(event_pos - self.center)
 
     def create_staff_dict_from_arrow(self, arrow):
         staff_dict = {COLOR: arrow.color, LOCATION: arrow.end_location, LAYER: 1}

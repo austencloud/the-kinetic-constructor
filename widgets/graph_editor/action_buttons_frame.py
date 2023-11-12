@@ -15,13 +15,11 @@ class ActionButtonsFrame(QFrame):
         self,
         scene,
         json_handler,
-        manipulators,
         sequence_view,
     ):
         super().__init__()
         self.scene = scene
         self.json_handler = json_handler
-        self.manipulators = manipulators
         self.sequence_view = sequence_view
         self.action_buttons_layout = QVBoxLayout()
         self.action_buttons_layout.setSpacing(3)
@@ -41,23 +39,21 @@ class ActionButtonsFrame(QFrame):
             (
                 "rotate_right.png",
                 "Rotate Right",
-                lambda: self.manipulators.rotate_arrow(
-                    "right", self.scene.selectedItems()[0]
+                lambda: self.scene.selectedItems()[0].rotate(
+                    "right", 
                 ),
             ),
             (
                 "rotate_left.png",
                 "Rotate Left",
-                lambda: self.manipulators.rotate_arrow(
-                    "left", self.scene.selectedItems()[0]
+                lambda: self.scene.selectedItems()[0].rotate(
+                    "left", 
                 ),
             ),
             (
                 "mirror.png",
                 "Mirror",
-                lambda: self.manipulators.mirror_arrow(
-                    self.scene.selectedItems()[0],
-                ),
+                lambda: self.scene.selectedItems()[0].mirror(),
             ),
             ("swap.png", "Swap Colors", lambda: self.manipulators.swap_colors()),
             (
@@ -72,8 +68,8 @@ class ActionButtonsFrame(QFrame):
             ),
         ]
 
-        # Function to create a settingsured button
-        def create_settingsured_button(icon_filename, tooltip, on_click):
+        # Function to create a congigured button
+        def create_and_configure_button(icon_filename, tooltip, on_click):
             icon_path = ICON_DIR + icon_filename
             button = QPushButton(QIcon(icon_path), "")
             button.setToolTip(tooltip)
@@ -85,7 +81,7 @@ class ActionButtonsFrame(QFrame):
 
         # Create and add buttons to the layout
         for icon_filename, tooltip, action in buttons_settings:
-            button = create_settingsured_button(icon_filename, tooltip, action)
+            button = create_and_configure_button(icon_filename, tooltip, action)
             self.action_buttons_layout.addWidget(button)
 
         self.setLayout(self.action_buttons_layout)

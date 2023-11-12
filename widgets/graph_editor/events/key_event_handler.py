@@ -7,7 +7,7 @@ from settings.string_constants import *
 class KeyEventHandler:
     def keyPressEvent(self, event, main_widget, graphboard):
         sequence_view = main_widget.sequence_view
-        
+
         if not graphboard.selectedItems():
             return
         selection = graphboard.selectedItems()[0]
@@ -33,7 +33,7 @@ class KeyEventHandler:
         elif event.key() == Qt.Key.Key_D:
             selected_arrow.move_wasd(RIGHT)
         elif event.key() == Qt.Key.Key_R:
-            selected_arrow.mirror_arrow()
+            selected_arrow.mirror()
         elif event.key() == Qt.Key.Key_F:
             selected_arrow.swap_motion_type()
         elif event.key() == Qt.Key.Key_Q:
