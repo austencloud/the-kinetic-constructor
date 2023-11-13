@@ -1,6 +1,7 @@
 from settings.string_constants import ARROWS
 from data.positions_map import positions_map
 import logging
+from objects.arrow import Arrow
 
 # setup logging
 logging.basicConfig(
@@ -8,38 +9,51 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 
+from typing import TYPE_CHECKING, Dict, List, Tuple
+
+if TYPE_CHECKING:
+    from widgets.graphboard.graphboard import GraphBoard
+from utilities.TypeChecking.TypeChecking import (
+    PreprocessedStartEndCombinations,
+    SpecificStartEndPositions,
+)
+
 
 class LetterEngine:
-    def __init__(self, graphboard):
+    def __init__(self, graphboard: "GraphBoard") -> None:
         self.graphboard = graphboard
-        self.preprocessed_combinations = self.preprocess_combinations(
-            graphboard.letters
-        )
+        self.letters = graphboard.letters
+        self.preprocessed_start_end_combinations = self.preprocess_combinations()
         self.motion_type_letter_groups = None
         self.cached_parallel = None
         self.cached_handpath = None
 
-    def preprocess_combinations(self, letters):
-        # Pre-process the letter groups for each start/end position and motion type
-        preprocessed = {}
-        for letter, combinations in letters.items():
+    def preprocess_combinations(self) -> PreprocessedStartEndCombinations:
+        preprocessed_start_end_combinations: PreprocessedStartEndCombinations = {}
+        for letter, combinations in self.letters.items():
             for combination in combinations:
                 start_pos = combination[0].get("start_position")
                 end_pos = combination[0].get("end_position")
                 if start_pos and end_pos:
-                    key = (start_pos, end_pos)
-                    preprocessed.setdefault(key, []).append((letter, combination[1:]))
-        return preprocessed
+                    key = f"{start_pos}_{end_pos}"
+                    preprocessed_start_end_combinations.setdefault(key, []).append(
+                        (letter, combination[1:])
+                    )
 
-    def get_arrow(self, color):
+        # Save them to a file called preprocessed.json
+        with open("preprocessed.json", "w") as f:
+            import json
+
+            json.dump(preprocessed_start_end_combinations, f, indent=4)
+
+        return preprocessed_start_end_combinations
+
+    def get_arrow(self, color) -> Arrow | None:
         return next(
             (arrow for arrow in self.graphboard.arrows if arrow.color == color), None
         )
 
-    def get_current_combination(self):
-        return self.graphboard.get_state()[ARROWS]
-
-    def get_specific_start_end_positions(self):
+    def get_specific_start_end_positions(self) -> SpecificStartEndPositions:
         red_arrow = self.get_arrow("red")
         blue_arrow = self.get_arrow("blue")
 
@@ -118,9 +132,9 @@ class LetterEngine:
             combined_motion_type = "anti_vs_anti"
         elif red_motion_type == "static" and blue_motion_type == "static":
             combined_motion_type = "static_vs_static"
-            
+
         ### HYBRIDS ###
-            
+
         elif red_motion_type == "pro" and blue_motion_type == "anti":
             combined_motion_type = "pro_vs_anti"
         elif red_motion_type == "anti" and blue_motion_type == "pro":
@@ -134,14 +148,13 @@ class LetterEngine:
         elif red_motion_type == "anti" and blue_motion_type == "static":
             combined_motion_type = "static_vs_anti"
 
-
         motion_type_letter_group = self.motion_type_letter_groups.get(
             combined_motion_type, ""
         )
-        
+
         self.combined_motion_type = combined_motion_type
         self.motion_letter_group = motion_type_letter_group
-        
+
         return motion_type_letter_group
 
     def determine_parallel(self):
@@ -270,9 +283,17 @@ class LetterEngine:
 
         return gamma_same_handpath_hybrid_letter
 
-    def get_current_letter(self):
+    def get_current_letter(self) -> str | None:
         specific_position = self.get_specific_start_end_positions()
         if specific_position:
+            start_pos = specific_position.get("start_position")
+            end_pos = specific_position.get("end_position")
+            preprocessed_key = f"{start_pos}_{end_pos}"
+            # Use preprocessed combinations to narrow down the options
+            filtered_letter_group = self.preprocessed_start_end_combinations.get(
+                preprocessed_key, []
+            )
+
             overall_position = self.get_overall_position(specific_position)
             letter_group = self.get_letter_group(overall_position)
             motion_letter_group = set(self.get_motion_type_letter_group())
@@ -283,7 +304,7 @@ class LetterEngine:
                 for letter, combinations in letter_group.items()
                 if letter in motion_letter_group
             }
-            
+
             if len(filtered_letter_group) != 1:
                 if "gamma" in overall_position.get("end_position", "").lower():
                     filtered_letter_group = self.get_gamma_letter(filtered_letter_group)
@@ -300,7 +321,7 @@ class LetterEngine:
                 return None
         else:
             return None
-        
+
     def get_gamma_letter(self, letter_group):
         gamma_handpath_letters = set(self.get_gamma_handpath_group())
         filtered_letter_group = {

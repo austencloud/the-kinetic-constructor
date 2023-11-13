@@ -14,7 +14,7 @@ from utilities.export_handler import ExportHandler
 if TYPE_CHECKING:
     from main import MainWindow
     from widgets.propbox.propbox import Propbox
-from utilities.TypeChecking import LettersDict
+from utilities.TypeChecking.TypeChecking import LettersDict
 
 
 class MainWidget(QWidget):
@@ -39,7 +39,7 @@ class MainWidget(QWidget):
         self.graph_editor = GraphEditor(self)
         self.optionboard = OptionBoard(self)
         self.letter_buttons_frame = LetterButtonsFrame(self)
-        
+
         self.graphboard = self.graph_editor.graphboard
         self.sequence_board.graphboard = self.graphboard
         self.infobox = self.graph_editor.infobox

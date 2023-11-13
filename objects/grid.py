@@ -51,11 +51,11 @@ class Grid(QGraphicsSvgItem):
         constants = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
         self.layer2_points = self.init_points(point_names, constants)
 
-    def mousePressEvent(self) -> None:
+    def mousePressEvent(self, event) -> None:
         pass
 
-    def mouseMoveEvent(self) -> None:
+    def mouseMoveEvent(self, event) -> None:
         pass
 
-    def mouseReleaseEvent(self) -> None:
+    def mouseReleaseEvent(self, event) -> None:
         pass

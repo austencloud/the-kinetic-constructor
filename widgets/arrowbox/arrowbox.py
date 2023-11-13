@@ -8,7 +8,13 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, QPointF
 from settings.numerical_constants import GRAPHBOARD_SCALE
 from settings.string_constants import (
-    COLOR, MOTION_TYPE, ROTATION_DIRECTION, QUADRANT, START_LOCATION, END_LOCATION, TURNS,
+    COLOR,
+    MOTION_TYPE,
+    ROTATION_DIRECTION,
+    QUADRANT,
+    START_LOCATION,
+    END_LOCATION,
+    TURNS,
     PRO,
     CLOCKWISE,
     NORTHEAST,
@@ -27,8 +33,8 @@ if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.infobox.infobox import InfoBox
     from objects.arrow import Arrow
-    
-from utilities.TypeChecking import (
+
+from utilities.TypeChecking.TypeChecking import (
     ArrowAttributes,
     Color,
     MotionType,

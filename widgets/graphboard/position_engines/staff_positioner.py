@@ -23,7 +23,7 @@ from settings.string_constants import (
 )
 from typing import TYPE_CHECKING, Dict, List
 from objects.staff import Staff
-from utilities.TypeChecking import (
+from utilities.TypeChecking.TypeChecking import (
     ArrowAttributes,
     LetterVariants,
     OptimalLocation,
@@ -159,9 +159,7 @@ class StaffPositioner:
 
     ### ALPHA TO BETA ### D, E, F
 
-    def reposition_alpha_to_beta(
-        self, move_staff, converging_arrows
-    ) -> None:
+    def reposition_alpha_to_beta(self, move_staff, converging_arrows) -> None:
         end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
         start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
         if (
@@ -182,7 +180,7 @@ class StaffPositioner:
 
     ### BETA TO BETA ### G, H, I
 
-    def reposition_beta_to_beta(self, arrows) -> None:  
+    def reposition_beta_to_beta(self, arrows) -> None:
         arrow1, arrow2 = arrows
         same_motion_type = arrow1[MOTION_TYPE] == arrow2[MOTION_TYPE] in [PRO, ANTI]
 
@@ -271,7 +269,7 @@ class StaffPositioner:
 
     def reposition_gamma_to_beta(
         self, move_staff, pro_or_anti_arrows, static_arrows
-    ) -> None: 
+    ) -> None:
         pro_or_anti_arrow, static_arrow = pro_or_anti_arrows[0], static_arrows[0]
         direction = self.determine_translation_direction(pro_or_anti_arrow)
         if direction:

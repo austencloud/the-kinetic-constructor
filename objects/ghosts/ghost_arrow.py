@@ -23,12 +23,14 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
-    from utilities.TypeChecking import ArrowAttributes
+    from utilities.TypeChecking.TypeChecking import ArrowAttributes
+
 
 class GhostArrow(Arrow):
-    def __init__(self, graphboard: 'GraphBoard', attributes: 'ArrowAttributes'):
+    def __init__(self, graphboard: "GraphBoard", attributes: "ArrowAttributes"):
         super().__init__(graphboard, attributes)
         self.setOpacity(0.2)
         self.graphboard = graphboard
@@ -81,6 +83,7 @@ class GhostArrow(Arrow):
         self.svg_file = svg_file
         self.setup_svg_renderer(svg_file)
         self.update_appearance()
+
     def update_appearance(self):
         self.update_color()
         self.update_rotation()
@@ -168,5 +171,5 @@ class GhostArrow(Arrow):
                 },
             }.get(rotation_direction, {})
 
-    def get_attributes(self) -> 'ArrowAttributes':
+    def get_attributes(self) -> "ArrowAttributes":
         return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}

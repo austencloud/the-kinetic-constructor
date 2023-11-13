@@ -4,12 +4,11 @@ from PyQt6.QtCore import QPoint
 from settings.string_constants import RIGHT, LEFT
 from objects.arrow import Arrow
 from objects.staff import Staff
+from typing import TYPE_CHECKING
 
-from typing import TYPE_CHECKING, List, Tuple, Callable
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graphboard.graphboard import GraphBoard
-
 
 class GraphBoardMenuHandler:
     def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard") -> None:
@@ -17,56 +16,59 @@ class GraphBoardMenuHandler:
         self.main_widget = main_widget
         self.export_handler = main_widget.export_handler
 
-    def create_menu_with_actions(self, actions: List[Tuple[str, Callable]], event_pos: QPoint) -> None:
+    def create_master_menu(self, event_pos: QPoint, clicked_item) -> None:
         menu = QMenu()
-        for label, func in actions:
-            action = QAction(label, self.graphboard)
-            action.triggered.connect(func)
-            menu.addAction(action)
+
+        # Arrow Menu
+        arrow_menu = menu.addMenu("Arrow")
+        self._add_arrow_actions(arrow_menu, clicked_item)
+
+        # Staff Menu
+        staff_menu = menu.addMenu("Staff")
+        self._add_staff_actions(staff_menu, clicked_item)
+
+        # Graphboard Menu
+        graphboard_menu = menu.addMenu("Graphboard")
+        self._add_graphboard_actions(graphboard_menu)
+
         menu.exec(event_pos)
 
-    def create_arrow_menu(self, selected_item, event) -> None:
-        selected_arrow = selected_item if isinstance(selected_item, Arrow) else None
 
-        actions = [
-            ("Delete", lambda: selected_arrow.delete()),
-            (
-                "Rotate Right",
-                lambda: selected_arrow.rotate(RIGHT),
-            ),
-            (
-                "Rotate Left",
-                lambda: selected_arrow.rotate(LEFT),
-            ),
-            ("Mirror", lambda: selected_arrow.mirror()),
-            ("Increment Turns", lambda: selected_arrow.increment_turns()),
-            ("Decrement Turns", lambda: selected_arrow.decrement_turns()),
-            
-        ]
-        self.create_menu_with_actions(actions, event)
+    ### STAFF ACTIONS ###
 
-    def create_staff_menu(self, selected_item, event) -> None:
-        selected_staff = selected_item if isinstance(selected_item, Staff) else None
+    def _add_staff_actions(self, menu: QMenu, clicked_item) -> None:
+        staff_present = isinstance(clicked_item, Staff)
+        
+        delete_action = QAction("Delete", menu)
+        delete_action.setEnabled(staff_present)
+        delete_action.triggered.connect(lambda: self._delete_selected_staff())
+        menu.addAction(delete_action)
 
-        actions = [
-            ("Delete", lambda: selected_staff.delete()),
-            (
-                "Swap Axis",
-                lambda: selected_staff.swap_axis(),
-            ),
-        ]
-        self.create_menu_with_actions(actions, event)
+    def _delete_selected_staff(self) -> None:
+        selected_items = self.graphboard.selectedItems()
+        for item in selected_items:
+            if isinstance(item, Staff):
+                item.delete()
 
-    def create_graphboard_menu(self, event) -> None:
-        actions = [
-            ("Swap Colors", lambda: self.manipulators.swap_colors()),
-            (
-                "Add to Sequence",
-                lambda _: self.graphboard.add_to_sequence(
-                    self.graphboard
-                ),  # Need to implement this method
-            ),
-            ("Export to PNG", self.export_handler.export_to_png),
-            ("Export to SVG", lambda: self.export_handler.export_to_svg("output.svg")),
-        ]
-        self.create_menu_with_actions(actions, event)
+    ### ARROW ACTIONS ###
+
+    def _add_arrow_actions(self, menu: QMenu, clicked_item) -> None:
+        arrow_present = isinstance(clicked_item, Arrow)
+
+        delete_action = QAction("Delete", menu)
+        delete_action.setEnabled(arrow_present)
+        delete_action.triggered.connect(lambda: self._delete_selected_arrow())
+        menu.addAction(delete_action)
+
+    def _delete_selected_arrow(self) -> None:
+        selected_items = self.graphboard.selectedItems()
+        for item in selected_items:
+            if isinstance(item, Arrow):
+                item.delete()
+                
+    ### GRAPHBOARD ACTIONS ###
+    
+    def _add_graphboard_actions(self, menu: QMenu) -> None:        
+        swap_colors_action = QAction("Swap Colors", menu)
+        swap_colors_action.triggered.connect(lambda: self.graphboard.swap_colors())
+        menu.addAction(swap_colors_action)

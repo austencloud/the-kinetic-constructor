@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     from main import MainWindow
     from widgets.graphboard.graphboard import GraphBoard
     from widgets.arrowbox.arrowbox import ArrowBox
-from utilities.TypeChecking import (
+from utilities.TypeChecking.TypeChecking import (
     ArrowAttributes,
     Color,
     MotionType,
@@ -31,6 +31,7 @@ from utilities.TypeChecking import (
     Location,
     Turns,
 )
+
 
 class ArrowBoxDrag(QWidget):
     color: Color

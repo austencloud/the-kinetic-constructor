@@ -164,25 +164,6 @@ class Staff(GraphicalObject):
             self.arrow.end_location = end_location
             self.arrow.update_appearance()
 
-    def update_for_new_location(self, event, new_location):
-        self.location = new_location
-        self.attributes[LOCATION] = new_location
-
-        self.ghost_staff.update(self.attributes)
-
-        self.ghost_staff.set_attributes_from_dict(self.attributes)
-        self.ghost_staff.update_appearance()
-        self.arrow.set_attributes_from_staff(self)
-        self.arrow.update_appearance()
-
-        self.update_axis()
-        self.update_appearance()
-
-        self.ghost_staff.update(self.attributes)
-        self.graphboard.staffs.remove(self)
-        self.graphboard.update()
-        self.graphboard.staffs.append(self)
-
     def mouseReleaseEvent(self, event):
         self.graphboard.removeItem(self.ghost_staff)
         self.graphboard.staffs.remove(self.ghost_staff)
@@ -341,7 +322,7 @@ class Staff(GraphicalObject):
     def delete(self):
         self.graphboard.removeItem(self)
         self.graphboard.staffs.remove(self)
-        self.update()
+        self.graphboard.update()
         
 class RedStaff(Staff):
     def __init__(self, scene, dict):

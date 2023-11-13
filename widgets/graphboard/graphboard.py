@@ -19,6 +19,7 @@ from PyQt6.QtWidgets import QGraphicsScene
 from PyQt6.QtGui import QTransform
 from objects.arrow import Arrow, BlankArrow
 from objects.staff import Staff
+from objects.grid import Grid
 from data.letter_types import letter_types
 from widgets.graphboard.graphboard_init import GraphBoardInit
 from widgets.graphboard.graphboard_menu_handler import GraphBoardMenuHandler
@@ -29,7 +30,7 @@ from utilities.letter_engine import LetterEngine
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
-from PyQt6.QtCore import QPointF
+from PyQt6.QtCore import QPointF, Qt
 
 from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple
 if TYPE_CHECKING:
@@ -76,23 +77,23 @@ class GraphBoard(QGraphicsScene):
     ### EVENTS ###
 
     def contextMenuEvent(self, event: QGraphicsSceneMouseEvent) -> None:
-        clicked_item = self.itemAt(
-            self.view.mapToScene(event.pos().toPoint().x(), event.pos().toPoint().y()),
-            QTransform(),
-        )
-        if clicked_item is self.grid:
-            # pass the click to the next item
-            super().contextMenuEvent(event)
-            selected_item = self.selectedItems()[0]
-            event_pos = event.screenPos()
+        scene_pos = self.view.mapToScene(event.pos().toPoint())
+        items_at_pos = self.items(scene_pos)  # Get all items at the clicked position
 
-            if isinstance(clicked_item, Arrow):
-                self.graphboard_menu_handler.create_arrow_menu(selected_item, event_pos)
-            elif isinstance(clicked_item, Staff):
-                self.graphboard_menu_handler.create_staff_menu(selected_item, event_pos)
-            else:
-                self.graphboard_menu_handler.create_graphboard_menu(event_pos)
+        # Prioritize finding Arrows and Staffs before considering other items
+        clicked_item = None
+        for item in items_at_pos:
+            if isinstance(item, Arrow) or isinstance(item, Staff):
+                clicked_item = item
+                break
 
+        # If no Arrow or Staff was found, but there are items, pick the topmost
+        if not clicked_item and items_at_pos:
+            clicked_item = items_at_pos[0]
+
+        event_pos = event.screenPos()
+        self.graphboard_menu_handler.create_master_menu(event_pos, clicked_item)
+            
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         clicked_item = self.itemAt(event.scenePos(), QTransform())
         if isinstance(clicked_item, Staff):

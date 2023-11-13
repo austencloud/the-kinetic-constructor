@@ -21,10 +21,9 @@ class PictographGenerator:
         self.export_handler = main_widget.export_handler
         self.grid = self.graphboard.grid
         self.output_dir = "images/pictographs"
-        self.current_letter = None
         self.letters = main_widget.letters
 
-    def generate_all_pictographs(self, staff_handler) -> None:
+    def generate_all_pictographs(self) -> None:
         os.makedirs(self.output_dir, exist_ok=True)
 
         for letter, combinations in self.letters.items():
@@ -90,104 +89,3 @@ class PictographGenerator:
                 # Clear the graphboard for the next combination
                 self.graphboard.clear()
 
-    def open_selection_window(self, letter) -> None:
-        self.output_dir = "images/pictographs"
-        self.graphboard.clear()
-
-        combinations = self.letters.get(letter, [])
-        if not combinations:
-            self.graphboard.update_letter(None)
-            self.infobox.update()
-            return
-        self.current_letter = letter
-        self.graphboard.update_letter(self.current_letter)
-
-        combination_set = random.choice(combinations)
-        created_arrows = []
-
-        optimal_positions = next(
-            (
-                d
-                for d in combination_set
-                if "optimal_red_location" in d and "optimal_blue_location" in d
-            ),
-            None,
-        )
-        for combination in combination_set:
-            if all(
-                key in combination
-                for key in [
-                    COLOR,
-                    MOTION_TYPE,
-                    ROTATION_DIRECTION,
-                    QUADRANT,
-                    TURNS,
-                ]
-            ):
-                if combination[MOTION_TYPE] == STATIC:
-                    svg_file = f"resources/images/arrows/static_0.svg"
-                    arrow = Arrow(
-                        svg_file,
-                        self.graphboard,
-                        self.infobox,
-                        self.svg_manager,
-                        self.arrow_manager,
-                        STATIC,
-                        self.staff_handler,
-                    )
-                created_arrows.append(arrow)
-
-        # Add the arrows to the scene
-        for arrow in created_arrows:
-            if arrow.scene is not self.graphboard:
-                self.graphboard.addItem(arrow)
-
-        for arrow in created_arrows:
-            if optimal_positions:
-                optimal_position = optimal_positions.get(
-                    f"optimal_{arrow.color}_location"
-                )
-                if optimal_position:
-                    # Calculate the position to center the arrow at the optimal position
-                    pos = (
-                        QPointF(optimal_position["x"], optimal_position["y"])
-                        - arrow.boundingRect().center()
-                    )
-                    arrow.setPos(pos)
-                else:
-                    if arrow.quadrant != "None":
-                        pos = (
-                            self.graphboard.get_quadrant_center(arrow.quadrant)
-                            - arrow.boundingRect().center()
-                        )
-            else:
-                # Calculate the position to center the arrow at the quadrant center
-                pos = (
-                    self.graphboard.get_quadrant_center(arrow.quadrant)
-                    - arrow.boundingRect().center()
-                )
-                arrow.setPos(pos)
-
-        self.staff_handler.update_graphboard_staffs(self.graphboard)
-        # created_arrows should be a list
-        self.infobox.update()
-
-    def get_current_letter(self) -> str | None:
-        return self.current_letter
-
-    def update_staff(self, arrow, staff_handler) -> None:
-        arrows = [arrow] if not isinstance(arrow, list) else arrow
-
-        staff_positions = [
-            arrow.end_location.upper() + "_staff_" + arrow.color for arrow in arrows
-        ]
-
-        for element_id, staff in staff_handler.graphboard_staffs.items():
-            if element_id in staff_positions:
-                staff.show()
-            else:
-                staff.hide()
-
-        is_beta = self.positioner.check_for_beta_staffs()
-        if is_beta:
-            self.positioner.reposition_beta_staffs()
