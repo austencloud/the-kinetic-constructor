@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtWidgets import QGraphicsView
 from objects.grid import Grid
-from objects.staff import RedStaff, BlueStaff
+from objects.staff import RedStaff, BlueStaff, Staff
 from settings.numerical_constants import (
     GRAPHBOARD_HEIGHT,
     GRAPHBOARD_SCALE,
@@ -38,14 +38,14 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
 
 if TYPE_CHECKING:
-    from widgets.graphboard import GraphBoard
+    from widgets.graphboard.graphboard import GraphBoard
 
 
 class GraphBoardInit:
-    def __init__(self, graphboard: "GraphBoard"):
+    def __init__(self, graphboard: "GraphBoard") -> None:
         self.graphboard = graphboard
 
-    def init_view(self):
+    def init_view(self) -> QGraphicsView:
         view = QGraphicsView()
         view.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         view.setFixedSize(
@@ -59,17 +59,18 @@ class GraphBoardInit:
         view.wheelEvent = lambda event: None
         return view
 
-    def init_grid(self):
+    def init_grid(self) -> Grid:
         grid = Grid(GRID_FILE_PATH)
         grid_position = QPointF(0, 0)
         grid.setPos(grid_position)
         self.graphboard.addItem(grid)
+        grid.init_center()
         grid.init_handpoints()
         grid.init_layer2_points()
         self.graphboard.grid = grid
         return grid
 
-    def init_staff_set(self):
+    def init_staff_set(self) -> dict[str, Staff]:
         red_staff_dict = {
             COLOR: RED,
             LOCATION: NORTH,
@@ -90,7 +91,7 @@ class GraphBoardInit:
         staff_set = {RED: red_staff, BLUE: blue_staff}
         return staff_set
 
-    def init_ghost_arrows(self):
+    def init_ghost_arrows(self) -> dict[str, GhostArrow]:
         default_red_ghost_arrow_attributes = {
             COLOR: RED,
             MOTION_TYPE: PRO,
@@ -124,7 +125,7 @@ class GraphBoardInit:
         ghost_arrows = {RED: red_ghost_arrow, BLUE: blue_ghost_arrow}
         return ghost_arrows
 
-    def init_ghost_staffs(self):
+    def init_ghost_staffs(self) -> dict[str, GhostStaff]:
         default_red_ghost_staff_attributes = {
             COLOR: RED,
             LOCATION: EAST,
@@ -147,14 +148,14 @@ class GraphBoardInit:
         ghost_staffs = {RED: red_ghost_staff, BLUE: blue_ghost_staff}
         return ghost_staffs
 
-    def init_letter_item(self):
+    def init_letter_item(self) -> QGraphicsSvgItem:
         letter_item = QGraphicsSvgItem()
         self.graphboard.addItem(letter_item)
         self.graphboard.position_letter_item(letter_item)
         return letter_item
 
-    def init_quadrants(self, grid: Grid):
-        grid_center = grid.get_circle_coordinates("center_point")
+    def init_quadrants(self, grid: Grid) -> dict[str, Tuple[int, int, int, int]]:
+        grid_center = grid.get_circle_coordinates("center_point").toPoint()
 
         grid_center_x = grid_center.x()
         grid_center_y = grid_center.y()

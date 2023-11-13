@@ -34,12 +34,12 @@ class ArrowPositioner:
         current_state = self.graphboard.get_state()
         matching_letters = self.letters[self.graphboard.current_letter]
 
-        for variations in matching_letters:
-            if self.compare_states(current_state, variations):
+        for variants in matching_letters:
+            if self.compare_states(current_state, variants):
                 return next(
                     (
                         d
-                        for d in variations
+                        for d in variants
                         if "optimal_red_location" in d and "optimal_blue_location" in d
                     ),
                     None,

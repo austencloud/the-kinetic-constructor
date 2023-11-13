@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, Dict, List
 if TYPE_CHECKING:
     from main import MainWindow
     from widgets.propbox.propbox import Propbox
-
+from utilities.TypeChecking import LettersDict
 class MainWidget(QWidget):
     propbox: "Propbox"
     main_window: "MainWindow"
@@ -20,14 +20,6 @@ class MainWidget(QWidget):
     word_label: "QLabel"
     sequence_view: "QGraphicsView"
 
-    ArrowAttributes = Dict[str, str | int]
-    StartEndPositions = Dict[str, str]
-    OptimalLocations = Dict[str, Dict[str, float]]
-    Variant = ArrowAttributes | StartEndPositions | OptimalLocations
-    Variants = List[List[Variant]]
-    LetterVariants = Dict[str, Variants]
-    letters: Dict[str, Variants]
-    
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
         self.arrows = []
@@ -37,7 +29,7 @@ class MainWidget(QWidget):
         self.sequence_scene = SequenceBoard(self)
         self.layout_manager = LayoutManager(self)
         self.json_handler = JsonHandler()
-        self.letters = self.json_handler.load_all_letters()
+        self.letters: LettersDict = self.json_handler.load_all_letters()
         self.key_event_handler = KeyEventHandler()
 
         self.graph_editor = GraphEditor(self)

@@ -32,6 +32,8 @@ class Grid(QGraphicsSvgItem):
             constant: self.get_circle_coordinates(point_name)
             for point_name, constant in zip(point_names, constants)
         }
+    def init_center(self) -> None:
+        self.center: QPointF = self.get_circle_coordinates("center_point")
 
     def init_handpoints(self) -> None:
         point_names = ["n_hand_point", "e_hand_point", "s_hand_point", "w_hand_point"]

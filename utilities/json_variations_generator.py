@@ -23,7 +23,7 @@ class JsonVariationsGenerator:
             for arrow in arrow_combination
         ]
 
-    def generate_pictograph_variations(self, arrow_combination):
+    def generate_pictograph_variants(self, arrow_combination):
         rotation_mapping = {NORTH: EAST, EAST: SOUTH, SOUTH: WEST, WEST: NORTH}
         vertical_reflection_mapping = {
             NORTH: SOUTH,

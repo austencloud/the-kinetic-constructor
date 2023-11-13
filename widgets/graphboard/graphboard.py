@@ -39,6 +39,7 @@ if TYPE_CHECKING:
 class GraphBoard(QGraphicsScene):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
+        self.main_widget = main_widget
         self.setup_scene()
         self.setup_components(main_widget)
 
