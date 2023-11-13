@@ -1,5 +1,7 @@
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
+from typing import Optional, Tuple, Optional, Any, Dict
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtGui import QTransform
 import re
@@ -9,10 +11,6 @@ from settings.string_constants import (
     COLOR,
     COUNTER_CLOCKWISE,
     CLOCKWISE,
-    RED,
-    BLUE,
-    RED_HEX,
-    BLUE_HEX,
     PRO,
     ANTI,
     STATIC,
@@ -38,24 +36,32 @@ from settings.string_constants import (
     EAST,
 )
 from data.start_end_location_mapping import start_end_location_mapping
-from collections import namedtuple
+
 from objects.graphical_object import GraphicalObject
-
-# Define a named tuple for clarity
-Orientation = namedtuple(
-    "Orientation", ["new_quadrant", "start_location", "end_location"]
-)
-
+from objects.staff import Staff
 
 class Arrow(GraphicalObject):
-    def __init__(self, graphboard, attributes):
+    drag_offset: QPointF
+    staff: Optional['Staff']
+    ghost_arrow: Optional['Arrow']
+    is_mirrored: bool
+    color: Optional[str]
+    motion_type: Optional[str]
+    rotation_direction: Optional[str]
+    quadrant: Optional[str]
+    start_location: Optional[str]
+    end_location: Optional[str]
+    turns: Optional[int]
+    mirror_transform: Optional[QTransform]
+    
+    def __init__(self, graphboard, attributes: Dict[str, Any]) -> None:
         svg_file = self.get_svg_file(attributes.get(MOTION_TYPE), attributes.get(TURNS))
         super().__init__(svg_file, graphboard, attributes)
         self._setup_attributes(graphboard, attributes)
         
     ### SETUP ###
 
-    def _setup_attributes(self, graphboard, attributes):
+    def _setup_attributes(self, graphboard, attributes: Dict[str, Any]) -> None:
         self.graphboard = graphboard
 
         self.drag_offset = QPointF(0, 0)
@@ -81,10 +87,9 @@ class Arrow(GraphicalObject):
 
         self.center = self.boundingRect().center()
 
-
     ### MOUSE EVENTS ###
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self) -> None:
         self.setSelected(True)
         self.ghost_arrow = self.graphboard.ghost_arrows[self.color]
         if self.mirror_transform:
@@ -100,7 +105,7 @@ class Arrow(GraphicalObject):
             if item != self:
                 item.setSelected(False)
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
         if event.buttons() == Qt.MouseButton.LeftButton:
             new_pos = event.scenePos() - self.center
             self.setPos(new_pos)
@@ -112,7 +117,7 @@ class Arrow(GraphicalObject):
                 if new_quadrant:
                     self.update_for_new_quadrant(new_quadrant)
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self) -> None:
         self.graphboard.removeItem(self.ghost_arrow)
         self.graphboard.arrows.remove(self.ghost_arrow)
         self.ghost_arrow.staff = None
@@ -121,11 +126,11 @@ class Arrow(GraphicalObject):
 
     ### UPDATERS ###
 
-    def update_rotation(self):
+    def update_rotation(self) -> None:
         angle = self.get_rotation_angle()
         self.setRotation(angle)
 
-    def update_for_new_quadrant(self, new_quadrant):
+    def update_for_new_quadrant(self, new_quadrant: str) -> None:
         self.quadrant = new_quadrant
 
         self.attributes[QUADRANT] = new_quadrant
@@ -151,7 +156,7 @@ class Arrow(GraphicalObject):
         self.graphboard.update()
         self.graphboard.arrows.append(self)
 
-    def update_staff_during_drag(self):
+    def update_staff_during_drag(self) -> None:
         for staff in self.graphboard.staff_set.values():
             if staff.color == self.color:
                 if staff not in self.graphboard.staffs:
@@ -172,7 +177,7 @@ class Arrow(GraphicalObject):
                 staff.update_appearance()
                 self.graphboard.update_staffs()
 
-    def set_attributes_from_dict(self, attributes):
+    def set_attributes_from_dict(self, attributes: Dict[str, Any]) -> None:
         for attr in ARROW_ATTRIBUTES:
             value = attributes.get(attr)
             if attr == TURNS:
@@ -189,7 +194,7 @@ class Arrow(GraphicalObject):
             TURNS: attributes.get(TURNS, None),
         }
 
-    def set_attributes_from_staff(self, staff):
+    def set_attributes_from_staff(self, staff: 'Staff') -> None:
         orientation = self.calculate_new_orientation(self.quadrant, staff.location)
         self.quadrant = orientation["new_quadrant"]
         self.start_location = orientation["start_location"]
@@ -197,7 +202,7 @@ class Arrow(GraphicalObject):
 
         self.update_appearance()
 
-    def calculate_new_orientation(self, current_quadrant, new_staff_location):
+    def calculate_new_orientation(self, current_quadrant: str, new_staff_location: str) -> Dict[str, Optional[str]]:
         orientation_map = {
             (NORTHEAST, SOUTH): {
                 "new_quadrant": SOUTHEAST,
@@ -247,26 +252,26 @@ class Arrow(GraphicalObject):
             {"new_quadrant": None, "start_location": None, "end_location": None},
         )
 
-    def set_transform_origin_to_center(self):
+    def set_transform_origin_to_center(self) -> None:
         # Call this method after any changes that might affect the boundingRect.
         self.center = self.boundingRect().center()
         self.setTransformOriginPoint(self.center)
 
     ### GETTERS ###
 
-    def get_svg_data(self, svg_file):
-        with open(svg_file, CLOCKWISE) as f:
+    def get_svg_data(self, svg_file: str) -> bytes:
+        with open(svg_file, 'r') as f:
             svg_data = f.read()
         return svg_data.encode("utf-8")
-
-    def get_rotation_angle(self, arrow=None):
+    
+    def get_rotation_angle(self, arrow: Optional['Arrow'] = None) -> int:
         arrow = arrow or self
         quadrant_to_angle = self.get_quadrant_to_angle_map(
             arrow.motion_type, arrow.rotation_direction
         )
         return quadrant_to_angle.get(arrow.quadrant, 0)
 
-    def get_quadrant_to_angle_map(self, motion_type, rotation_direction):
+    def get_quadrant_to_angle_map(self, motion_type: str, rotation_direction: str) -> Dict[str, Dict[str, int]]:
         if motion_type == PRO:
             return {
                 CLOCKWISE: {
@@ -308,23 +313,23 @@ class Arrow(GraphicalObject):
                 },
             }.get(rotation_direction, {})
 
-    def get_attributes(self):
+    def get_attributes(self) -> Dict[str, Any]:
         return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}
 
-    def get_start_end_locations(self, motion_type, rotation_direction, quadrant):
+    def get_start_end_locations(self, motion_type: str, rotation_direction: str, quadrant: str) -> Tuple[Optional[str], Optional[str]]:
         return (
             start_end_location_mapping.get(quadrant, {})
             .get(rotation_direction, {})
             .get(motion_type, (None, None))
         )
 
-    def get_svg_file(self, motion_type, turns):
+    def get_svg_file(self, motion_type: str, turns: int) -> str:
         svg_file = f"{ARROW_DIR}{motion_type}_{turns}.svg"
         return svg_file
 
     ### MANIPULATION ###
 
-    def increment_turns(self):
+    def increment_turns(self) -> None:
         self.turns += 1
         if self.turns > 2:
             self.turns = 0
@@ -334,7 +339,7 @@ class Arrow(GraphicalObject):
         self.attributes[TURNS] = self.turns
         self.graphboard.update()
 
-    def decrement_turns(self):
+    def decrement_turns(self) -> None:
         self.turns -= 1
         if self.turns < 0:
             self.turns = 2
@@ -344,7 +349,7 @@ class Arrow(GraphicalObject):
         self.attributes[TURNS] = self.turns
         self.graphboard.update()
 
-    def move_wasd(self, direction):
+    def move_wasd(self, direction: str) -> None:
         wasd_quadrant_mapping = {
             UP: {SOUTHEAST: NORTHEAST, SOUTHWEST: NORTHWEST},
             LEFT: {NORTHEAST: NORTHWEST, SOUTHEAST: SOUTHWEST},
@@ -384,7 +389,7 @@ class Arrow(GraphicalObject):
 
         self.graphboard.update()
 
-    def rotate(self, rotation_direction):
+    def rotate(self, rotation_direction: str) -> None:
         quadrants = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
         current_quadrant_index = quadrants.index(self.quadrant)
         new_quadrant_index = (
@@ -420,7 +425,7 @@ class Arrow(GraphicalObject):
         self.staff.update(updated_staff_dict)
         self.graphboard.update()
 
-    def mirror(self):
+    def mirror(self) -> None:
         if self.is_mirrored:
             self.is_mirrored = False
         elif not self.is_mirrored:
@@ -485,7 +490,7 @@ class Arrow(GraphicalObject):
 
         self.graphboard.update()
 
-    def swap_motion_type(self):
+    def swap_motion_type(self) -> None:
         if self.motion_type == ANTI:
             new_motion_type = PRO
         elif self.motion_type == PRO:

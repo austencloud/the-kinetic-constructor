@@ -1,13 +1,13 @@
 from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout
-from widgets.graph_editor.graphboard.graphboard import Graphboard
-from widgets.graph_editor.graphboard.graphboard import Graphboard
-from widgets.graph_editor.arrowbox.arrowbox import Arrowbox
+from widgets.graphboard.graphboard import Graphboard
+from widgets.graphboard.graphboard import Graphboard
+from widgets.arrowbox.arrowbox import Arrowbox
 
-from widgets.graph_editor.propbox.propbox import Propbox
-from widgets.graph_editor.infobox.infobox import Infobox
+from widgets.propbox.propbox import Propbox
+from widgets.infobox.infobox import Infobox
 from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
-from widgets.graph_editor.action_buttons_frame import ActionButtonsFrame
+from widgets.action_buttons_frame import ActionButtonsFrame
 
 
 class GraphEditor(QWidget):
@@ -16,7 +16,7 @@ class GraphEditor(QWidget):
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.json_handler = main_widget.json_handler
-        
+
         self.sequence_view = main_widget.sequence_view
         self.graph_editor_frame = QFrame()
         self.graph_editor_frame.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)

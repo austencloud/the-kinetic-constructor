@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import QFrame
-from widgets.graph_editor.infobox.infobox_buttons import InfoboxButtons
-from widgets.graph_editor.infobox.infobox_labels import InfoboxLabels
-from widgets.graph_editor.infobox.infobox_widgets import InfoboxWidgets
-from widgets.graph_editor.infobox.infobox_layouts import InfoboxLayouts
+from widgets.infobox.infobox_buttons import InfoboxButtons
+from widgets.infobox.infobox_labels import InfoboxLabels
+from widgets.infobox.infobox_widgets import InfoboxWidgets
+from widgets.infobox.infobox_layouts import InfoboxLayouts
 from settings.numerical_constants import INFOBOX_SIZE
 from settings.string_constants import RED, BLUE
 

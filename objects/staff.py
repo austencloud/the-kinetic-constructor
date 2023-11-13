@@ -332,14 +332,10 @@ class Staff(GraphicalObject):
             old_color = match.group(1)
             svg_data = svg_data.replace(old_color, new_hex_color)
         return svg_data.encode("utf-8")
-
-
 class RedStaff(Staff):
     def __init__(self, scene, dict):
         super().__init__(scene, dict)
         self.setSharedRenderer(self.renderer)
-
-
 class BlueStaff(Staff):
     def __init__(self, scene, dict):
         super().__init__(scene, dict)

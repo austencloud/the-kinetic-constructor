@@ -35,9 +35,16 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_staff import GhostStaff
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
+from .graphboard import Graphboard
+
+from typing import List, Optional, Dict, Any, Tuple, Set
+
 
 class GraphboardInit:
-    def __init__(self, graphboard):
+    padding: Optional[float]
+    grid: Optional['Grid']
+    
+    def __init__(self, graphboard: 'Graphboard'):
         self.graphboard = graphboard
 
     def init_view(self):
@@ -149,12 +156,12 @@ class GraphboardInit:
     def init_letter_item(self):
         letter_item = QGraphicsSvgItem()
         self.graphboard.addItem(letter_item)
-        x = self.graphboard.grid.boundingRect().width() / 2 - letter_item.boundingRect().width() / 2
-        y = self.graphboard.grid.boundingRect().height()
-        letter_item.setPos(x, y)
+        self.graphboard.position_letter_item(letter_item)
         return letter_item
 
-    def init_quadrants(self, grid):
+
+
+    def init_quadrants(self, grid: Grid):
         grid_center = grid.get_circle_coordinates("center_point")
 
         grid_center_x = grid_center.x()
