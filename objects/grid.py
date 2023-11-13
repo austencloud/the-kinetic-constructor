@@ -30,7 +30,13 @@ class Grid(QGraphicsSvgItem):
             for point_name, constant in zip(point_names, constants)
         }
 
-    def get_layer2_point(self, quadrant):
+
+    def init_handpoints(self):
+        point_names = ["n_hand_point", "e_hand_point", "s_hand_point", "w_hand_point"]
+        constants = [NORTH, EAST, SOUTH, WEST]
+        self.handpoints = self.init_points(point_names, constants)
+
+    def init_layer2_points(self):
         point_names = [
             "ne_layer2_point",
             "se_layer2_point",
@@ -39,12 +45,6 @@ class Grid(QGraphicsSvgItem):
         ]
         constants = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
         self.layer2_points = self.init_points(point_names, constants)
-        return self.layer2_points.get(quadrant)
-
-    def init_handpoints(self):
-        point_names = ["n_hand_point", "e_hand_point", "s_hand_point", "w_hand_point"]
-        constants = [NORTH, EAST, SOUTH, WEST]
-        self.handpoints = self.init_points(point_names, constants)
 
     def mousePressEvent(self, event):
         pass
