@@ -20,7 +20,7 @@ from PyQt6.QtGui import QTransform
 from objects.arrow import Arrow, BlankArrow
 from objects.staff import Staff
 from objects.grid import Grid
-from data.letter_types import letter_types
+from data.letter_engine_data import letter_types
 from widgets.graphboard.graphboard_init import GraphBoardInit
 from widgets.graphboard.graphboard_menu_handler import GraphBoardMenuHandler
 from widgets.graphboard.position_engines.staff_positioner import StaffPositioner

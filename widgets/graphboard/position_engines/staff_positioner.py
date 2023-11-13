@@ -191,14 +191,14 @@ class StaffPositioner:
             self.reposition_I(arrow1, arrow2)
 
     def reposition_G_and_H(self, arrow1, arrow2) -> None:
-        optimal_position1 = self.get_optimal_arrow_location(arrow1)
-        optimal_position2 = self.get_optimal_arrow_location(arrow2)
+        optimal_location1 = self.get_optimal_arrow_location(arrow1)
+        optimal_location2 = self.get_optimal_arrow_location(arrow2)
 
-        if not optimal_position1 or not optimal_position2:
+        if not optimal_location1 or not optimal_location2:
             return
 
-        distance1 = self.get_distance_from_center(optimal_position1)
-        distance2 = self.get_distance_from_center(optimal_position2)
+        distance1 = self.get_distance_from_center(optimal_location1)
+        distance2 = self.get_distance_from_center(optimal_location2)
 
         further_arrow = arrow1 if distance1 > distance2 else arrow2
         other_arrow = arrow1 if further_arrow == arrow2 else arrow2

@@ -1,6 +1,6 @@
 from typing import Literal
 
-Letter = Literal[
+Letters = Literal[
     "A",
     "B",
     "C",
@@ -49,10 +49,12 @@ Letter = Literal[
     "β",
     "Γ",
     "⊕",
-    "𝛕", 
+    "𝛕" 
     "𝛕-",
     "μ",
     "ν",
     "ζ",
     "η",
 ]
+
+GammaLetters = Literal["M", "N", "O", "P", "Q", "R", "S", "T", "U", "V"]

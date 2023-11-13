@@ -59,6 +59,16 @@ from utilities.TypeChecking.TypeChecking import (
 
 
 class Arrow(GraphicalObject):
+    color: Color
+    motion_type: MotionType
+    quadrant: Quadrant
+    rotation_direction: RotationDirection
+    start_location: StartLocation
+    end_location: EndLocation
+    turns: Turns
+    graphboard: "GraphBoard"
+    ghost_arrow: Optional["Arrow"]
+    drag_offset: QPointF
     staff: Staff
     attributes: ArrowAttributes
 

@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QIcon, QPainter, QFont, QColor
 from PyQt6.QtSvg import QSvgRenderer
 from settings.numerical_constants import GRAPHBOARD_SCALE
-from data.letter_types import letter_types
+from data.letter_engine_data import letter_types
 from settings.string_constants import LETTER_SVG_DIR
 from settings.styles import LETTER_BUTTON_SIZE
 from typing import TYPE_CHECKING

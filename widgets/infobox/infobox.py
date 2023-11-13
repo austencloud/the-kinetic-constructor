@@ -5,7 +5,6 @@ from widgets.infobox.infobox_widgets import InfoBoxWidgets
 from widgets.infobox.infobox_layouts import InfoBoxLayouts
 from widgets.graphboard.graphboard import GraphBoard
 from settings.numerical_constants import INFOBOX_SIZE
-from settings.string_constants import RED, BLUE
 
 
 class InfoBox(QFrame):

@@ -1,5 +1,5 @@
-from typing import TypedDict, Literal, Dict, List, Tuple
-from .Letter import Letter
+from typing import TypedDict, Literal, Dict, List, Tuple, Set
+from .Letters import Letters, GammaLetters
 from .SpecificPosition import SpecificPosition
 
 RotationAngle = Literal[0, 90, 180, 270]
@@ -14,6 +14,7 @@ StartLocation = Location
 EndLocation = Location
 Turns = Literal[0, 1, 2]
 
+
 class ArrowAttributes(TypedDict):
     color: Color
     motion_type: MotionType
@@ -22,17 +23,50 @@ class ArrowAttributes(TypedDict):
     start_location: StartLocation
     end_location: EndLocation
     turns: Turns
-    
-StartEndLocationTuple = Tuple[StartLocation, EndLocation]
 
+
+StartEndLocationTuple = Tuple[StartLocation, EndLocation]
 SpecificStartEndPositions = Dict[SpecificPosition, SpecificPosition]
 PreprocessedStartEndCombinations = Dict[
-    SpecificStartEndPositions, List[Tuple[str, List[ArrowAttributes]]]
+    SpecificStartEndPositions, List[Tuple[Letters, List[ArrowAttributes]]]
 ]
-OptimalLocation = Dict[str, float]
+OptimalLocation = Dict[Literal["x", "y"], float]
 OptimalLocations = Dict[str, OptimalLocation]
-Variant = ArrowAttributes | SpecificStartEndPositions | OptimalLocations
-Variants = List[List[Variant]]
-LetterVariants = Dict[str, Variants]
-LettersDict = Dict[str, Variants]
+Dict_Variant = ArrowAttributes | SpecificStartEndPositions | OptimalLocations
+Dict_Variants = List[List[Dict_Variant]]
+LetterVariants = Dict[str, Dict_Variants]
+LettersDict = Dict[str, Dict_Variants]
 
+
+List[Tuple[str, List[Dict[str, str | int]]]]
+
+MotionTypeCombinations = Literal[
+    "pro_vs_pro",
+    "anti_vs_anti",
+    "static_vs_static",
+    "pro_vs_anti",
+    "static_vs_pro",
+    "static_vs_anti",
+    "dash_vs_pro",
+    "dash_vs_anti",
+    "dash_vs_static",
+    "dash_vs_dash",
+]
+
+### LETTER GROUPS ###
+
+LetterGroupsByMotionType = Literal[
+    "ADGJMPS",
+    "BEHKNQT",
+    "CFILORUV",
+    "WYΣθ",
+    "XZΔΩ",
+    "W-Y-Σ-θ-",
+    "X-Z-Δ-Ω-",
+    "ΦΨΛ",
+    "Φ-Ψ-Λ-",
+    "αβΓ",
+]
+
+MotionTypeLetterGroupMap = Dict[MotionTypeCombinations, LetterGroupsByMotionType]
+ParallelCombinationsSet = Set[Tuple[str, str, str, str]]
