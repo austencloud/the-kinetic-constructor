@@ -3,12 +3,13 @@ from widgets.infobox.infobox_buttons import InfoboxButtons
 from widgets.infobox.infobox_labels import InfoboxLabels
 from widgets.infobox.infobox_widgets import InfoboxWidgets
 from widgets.infobox.infobox_layouts import InfoboxLayouts
-from widgets.graphboard.graphboard import Graphboard
+from widgets.graphboard.graphboard import GraphBoard
 from settings.numerical_constants import INFOBOX_SIZE
 from settings.string_constants import RED, BLUE
-    
+
+
 class Infobox(QFrame):
-    def __init__(self, main_widget, graphboard: 'Graphboard'):
+    def __init__(self, main_widget, graphboard: "GraphBoard"):
         super().__init__()
         self.main_widget = main_widget
         self.graphboard = graphboard
@@ -29,5 +30,3 @@ class Infobox(QFrame):
         self.widgets.update_attribute_widgets()
         if len(self.graphboard.staffs) == 2:
             self.labels.update_type_and_position_label()
-
-

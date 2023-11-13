@@ -41,7 +41,7 @@ from typing import Optional, Tuple, Optional, Any, Dict
 from typing import TYPE_CHECKING, Optional, Dict, Any, Tuple
 
 if TYPE_CHECKING:
-    from widgets.graphboard.graphboard import Graphboard
+    from widgets.graphboard.graphboard import GraphBoard
     from objects.ghosts.ghost_arrow import GhostArrow
     from objects.ghosts.ghost_staff import GhostStaff
 
@@ -61,7 +61,7 @@ class Arrow(GraphicalObject):
     turns: Optional[int]
     mirror_transform: Optional[QTransform]
 
-    def __init__(self, graphboard: "Graphboard", attributes: Dict[str, Any]) -> None:
+    def __init__(self, graphboard: "GraphBoard", attributes: Dict[str, Any]) -> None:
         svg_file = self.get_svg_file(attributes.get(MOTION_TYPE), attributes.get(TURNS))
         super().__init__(svg_file, graphboard, attributes)
         self._setup_attributes(graphboard, attributes)
@@ -69,7 +69,7 @@ class Arrow(GraphicalObject):
     ### SETUP ###
 
     def _setup_attributes(
-        self, graphboard: "Graphboard", attributes: Dict[str, Any]
+        self, graphboard: "GraphBoard", attributes: Dict[str, Any]
     ) -> None:
         self.graphboard = graphboard
 

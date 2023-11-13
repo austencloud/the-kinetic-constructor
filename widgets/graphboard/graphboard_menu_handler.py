@@ -7,11 +7,11 @@ from objects.staff import Staff
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graphboard.graphboard import Graphboard
+    from widgets.graphboard.graphboard import GraphBoard
 
 
-class GraphboardMenuHandler:
-    def __init__(self, main_widget: "MainWidget", graphboard: "Graphboard"):
+class GraphBoardMenuHandler:
+    def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard"):
         self.graphboard = graphboard
         self.main_widget = main_widget
         self.export_handler = graphboard.export_handler

@@ -8,14 +8,14 @@ parent_directory = os.path.join(current_directory, "..")
 sys.path.append(parent_directory)
 
 from PyQt6.QtWidgets import QApplication
-from widgets.graphboard import Graphboard
+from widgets.graphboard import GraphBoard
 
-# (The Graphboard and related classes would be imported here)
+# (The GraphBoard and related classes would be imported here)
 
 app = QApplication([])  # QApplication instance is required to test PyQt classes
 
 
-class TestGraphboard(unittest.TestCase):
+class TestGraphBoard(unittest.TestCase):
     def setUp(self):
         self.mock_main_widget = Mock()
         self.mock_main_widget.letters = {
@@ -113,8 +113,8 @@ class TestGraphboard(unittest.TestCase):
             ],
             # ... (mock data for other letters if needed)
         }
-        # Create the Graphboard instance
-        self.graphboard = Graphboard(self.mock_main_widget, self.mock_graph_editor)
+        # Create the GraphBoard instance
+        self.graphboard = GraphBoard(self.mock_main_widget, self.mock_graph_editor)
 
     def test_setup_scene(self):
         # Check the scene rectangle is set correctly

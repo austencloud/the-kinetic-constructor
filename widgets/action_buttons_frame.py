@@ -8,13 +8,14 @@ from settings.styles import (
     ACTION_BUTTON_SIZE,
     ACTION_BUTTON_ICON_SIZE,
 )
-from widgets.graphboard.graphboard import Graphboard
+from widgets.graphboard.graphboard import GraphBoard
 from utilities.json_handler import JsonHandler
+
 
 class ActionButtonsFrame(QFrame):
     def __init__(
         self,
-        graphboard: "Graphboard",
+        graphboard: "GraphBoard",
         json_handler: "JsonHandler",
     ):
         super().__init__()
@@ -43,17 +44,22 @@ class ActionButtonsFrame(QFrame):
                 self.mirror_selected_arrow,
             ),
             ("swap_colors.png", "Swap Colors", lambda: self.graphboard.swap_colors()),
-            
-            ("add_to_sequence.png", "Add to Sequence", lambda: self.graphboard.add_to_sequence()),
+            (
+                "add_to_sequence.png",
+                "Add to Sequence",
+                lambda: self.graphboard.add_to_sequence(),
+            ),
         ]
 
         for icon_filename, tooltip, action, *args in buttons_settings:
-            button = self.create_and_configure_button(icon_filename, tooltip, action, *args)
+            button = self.create_and_configure_button(
+                icon_filename, tooltip, action, *args
+            )
             self.action_buttons_layout.addWidget(button)
 
         self.setLayout(self.action_buttons_layout)
 
-    def create_and_configure_button(self, icon_filename, tooltip, on_click, *args):
+    def create_and_configure_button(self, icon_filename, tooltip, on_click, *args) -> QPushButton:
         icon_path = ICON_DIR + icon_filename
         button = QPushButton(QIcon(icon_path), "")
         button.setToolTip(tooltip)
@@ -66,27 +72,29 @@ class ActionButtonsFrame(QFrame):
     def delete_selected_arrow(self):
         arrow: Arrow = (
             self.graphboard.selectedItems()[0]
-            if self.graphboard.selectedItems() and isinstance(self.graphboard.selectedItems()[0], Arrow)
+            if self.graphboard.selectedItems()
+            and isinstance(self.graphboard.selectedItems()[0], Arrow)
             else None
         )
         if arrow:
             arrow.delete()
 
-    def rotate_selected_arrow(self, direction):
+    def rotate_selected_arrow(self, direction) -> None:
         arrow: Arrow = (
             self.graphboard.selectedItems()[0]
-            if self.graphboard.selectedItems() and isinstance(self.graphboard.selectedItems()[0], Arrow)
+            if self.graphboard.selectedItems()
+            and isinstance(self.graphboard.selectedItems()[0], Arrow)
             else None
         )
         if arrow:
             arrow.rotate(direction)
 
-    def mirror_selected_arrow(self):
+    def mirror_selected_arrow(self) -> None:
         arrow: Arrow = (
             self.graphboard.selectedItems()[0]
-            if self.graphboard.selectedItems() and isinstance(self.graphboard.selectedItems()[0], Arrow)
+            if self.graphboard.selectedItems()
+            and isinstance(self.graphboard.selectedItems()[0], Arrow)
             else None
         )
         if arrow:
             arrow.mirror()
-

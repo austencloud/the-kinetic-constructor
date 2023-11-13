@@ -1,4 +1,10 @@
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QLabel, QPushButton, QGraphicsRectItem
+from PyQt6.QtWidgets import (
+    QGraphicsScene,
+    QGraphicsView,
+    QLabel,
+    QPushButton,
+    QGraphicsRectItem,
+)
 from PyQt6.QtCore import QRectF, QPointF, Qt
 from PyQt6.QtGui import QFont, QImage, QPainter, QColor
 from settings.numerical_constants import (
@@ -9,15 +15,17 @@ from settings.numerical_constants import (
     PICTOGRAPH_SCALE,
 )
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from utilities.pictograph_generator import PictographGenerator
-    from widgets.graphboard.graphboard import Graphboard
+    from widgets.graphboard.graphboard import GraphBoard
 
-class SequenceScene(QGraphicsScene):
-    generator: 'PictographGenerator'
-    graphboard: 'Graphboard'
-    
+
+class SequenceBoard(QGraphicsScene):
+    generator: "PictographGenerator"
+    graphboard: "GraphBoard"
+
     def __init__(self, main_widget: "MainWidget"):
         super().__init__()
 
@@ -101,4 +109,3 @@ class SequenceScene(QGraphicsScene):
         for item in self.items():
             self.removeItem(item)
         self.main_widget.word_label.setText("My word: ")
-

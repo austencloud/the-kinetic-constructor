@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import QWidget, QPushButton, QLabel, QGraphicsScene, QGraphicsView
 from PyQt6.QtCore import QEvent
 from utilities.json_handler import JsonHandler
-from widgets.sequence.sequence_scene import SequenceScene
-from widgets.optionboard.optionboard_view import OptionboardView
+from widgets.sequence.sequenceboard import SequenceBoard
+from widgets.optionboard.optionboard import OptionBoard
 from utilities.layout_manager import LayoutManager
 from widgets.events.key_event_handler import KeyEventHandler
 from widgets.graph_editor import GraphEditor
@@ -22,20 +22,20 @@ class MainWidget(QWidget):
     word_label: "QLabel"
     sequence_view: "QGraphicsView"
 
-    def __init__(self, main_window: "MainWindow"):
+    def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
         self.arrows = []
         self.export_handler = None
         self.main_window = main_window
 
-        self.sequence_scene = SequenceScene(self)
+        self.sequence_scene = SequenceBoard(self)
         self.layout_manager = LayoutManager(self)
         self.json_handler = JsonHandler()
         self.letters = self.json_handler.load_all_letters()
         self.key_event_handler = KeyEventHandler()
 
         self.graph_editor = GraphEditor(self)
-        self.optionboard_view = OptionboardView(self)
+        self.optionboard = OptionBoard(self)
         self.letter_buttons_frame = LetterButtonsFrame(self)
 
         self.graphboard = self.graph_editor.graphboard
@@ -52,7 +52,7 @@ class MainWidget(QWidget):
 
     ### EVENTS ###
 
-    def eventFilter(self, source, event: QEvent):
+    def eventFilter(self, source, event: QEvent) -> bool:
         if event.type() == QEvent.Type.KeyPress:
             self.key_event_handler.keyPressEvent(event, self, self.graphboard)
             return True

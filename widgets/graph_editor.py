@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout
-from widgets.graphboard.graphboard import Graphboard
+from widgets.graphboard.graphboard import GraphBoard
 from widgets.arrowbox.arrowbox import Arrowbox
 from widgets.propbox.propbox import Propbox
 from widgets.infobox.infobox import Infobox
@@ -7,11 +7,13 @@ from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
 from widgets.action_buttons_frame import ActionButtonsFrame
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 
+
 class GraphEditor(QWidget):
-    def __init__(self, main_widget: "MainWidget"):
+    def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
@@ -31,7 +33,7 @@ class GraphEditor(QWidget):
         action_buttons_layout = QVBoxLayout()
         infobox_layout = QVBoxLayout()
 
-        self.graphboard = Graphboard(self.main_widget)
+        self.graphboard = GraphBoard(self.main_widget)
         self.infobox = Infobox(
             main_widget,
             self.graphboard,

@@ -36,12 +36,13 @@ from objects.ghosts.ghost_staff import GhostStaff
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
 from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
+
 if TYPE_CHECKING:
-    from widgets.graphboard import Graphboard
+    from widgets.graphboard import GraphBoard
 
-class GraphboardInit:
 
-    def __init__(self, graphboard: 'Graphboard'):
+class GraphBoardInit:
+    def __init__(self, graphboard: "GraphBoard"):
         self.graphboard = graphboard
 
     def init_view(self):

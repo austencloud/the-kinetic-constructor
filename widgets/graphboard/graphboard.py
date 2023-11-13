@@ -22,8 +22,8 @@ from settings.string_constants import (
     STATIC,
 )
 from data.letter_types import letter_types
-from widgets.graphboard.graphboard_init import GraphboardInit
-from widgets.graphboard.graphboard_menu_handler import GraphboardMenuHandler
+from widgets.graphboard.graphboard_init import GraphBoardInit
+from widgets.graphboard.graphboard_menu_handler import GraphBoardMenuHandler
 from widgets.graphboard.position_engines.staff_positioner import StaffPositioner
 from widgets.graphboard.position_engines.arrow_positioner import ArrowPositioner
 from utilities.export_handler import ExportHandler
@@ -34,12 +34,13 @@ from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from PyQt6.QtCore import QPointF
 
 from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
+
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from utilities.pictograph_generator import PictographGenerator
 
 
-class Graphboard(QGraphicsScene):
+class GraphBoard(QGraphicsScene):
     arrows: List[Arrow]
     staffs: List[Staff]
     letter_renderers: Dict[str, QSvgRenderer]
@@ -55,11 +56,11 @@ class Graphboard(QGraphicsScene):
     letter_item: QGraphicsSvgItem
     quadrants: Dict[str, Tuple[float, float, float, float]]
     export_handler: ExportHandler
-    graphboard_menu_handler: GraphboardMenuHandler
+    graphboard_menu_handler: GraphBoardMenuHandler
     arrow_positioner: ArrowPositioner
     staff_positioner: StaffPositioner
     letter_engine: LetterEngine
-    generator: 'PictographGenerator'
+    generator: "PictographGenerator"
 
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
@@ -80,7 +81,7 @@ class Graphboard(QGraphicsScene):
         self.dragged_arrow = None
         self.dragged_staff = None
 
-        self.initializer = GraphboardInit(self)
+        self.initializer = GraphBoardInit(self)
 
         self.ghost_arrows = self.initializer.init_ghost_arrows()
         self.ghost_staffs = self.initializer.init_ghost_staffs()
@@ -93,7 +94,7 @@ class Graphboard(QGraphicsScene):
 
     def setup_managers(self, main_widget: "MainWidget") -> None:
         self.export_handler = ExportHandler(self.grid, self)
-        self.graphboard_menu_handler = GraphboardMenuHandler(main_widget, self)
+        self.graphboard_menu_handler = GraphBoardMenuHandler(main_widget, self)
         self.arrow_positioner = ArrowPositioner(self)
         self.staff_positioner = StaffPositioner(self)
         self.letter_engine = LetterEngine(self)

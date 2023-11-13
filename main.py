@@ -9,8 +9,9 @@ from typing import IO
 
 class MainWindow(QMainWindow):
     graph_editor_layout: 'QHBoxLayout'
+    sequence_layout: 'QHBoxLayout'
     
-    def __init__(self, profiler: cProfile.Profile):
+    def __init__(self, profiler: cProfile.Profile) -> None:
         super().__init__()
         self.profiler: cProfile.Profile = profiler
         self.screen: QRect = QApplication.primaryScreen().geometry()
@@ -36,7 +37,7 @@ class MainWindow(QMainWindow):
             stats.print_stats()
         print(f"Main profiling stats written to {file_path}")
 
-def main():
+def main() -> None:
     profiler: cProfile.Profile = cProfile.Profile()
     profiler.enable()
 

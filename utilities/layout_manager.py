@@ -50,10 +50,8 @@ class LayoutManager:
         self.layouts["main"].addLayout(self.layouts["left"])
         self.layouts["right"].addLayout(self.layouts["optionboard"])
         self.layouts["main"].addLayout(self.layouts["right"])
-        self.layouts["optionboard"].addWidget(self.main_widget.optionboard_view)
-
+        self.layouts["optionboard"].addWidget(self.main_widget.optionboard.view)
         self.main_widget.setLayout(self.layouts["main"])
-
         self.add_black_border_to_widgets()
 
     def init_sequence_layout(self) -> None:
@@ -75,7 +73,7 @@ class LayoutManager:
         self.add_black_border(self.main_widget.sequence_scene)
         self.add_black_border(self.main_widget.word_label)
         self.add_black_border(self.main_widget.graph_editor.infobox)
-        self.add_black_border(self.main_widget.optionboard_view)
+        self.add_black_border(self.main_widget.optionboard.view)
         self.add_black_border(self.main_widget.graph_editor.action_buttons_frame)
         self.add_black_border(self.main_widget.letter_buttons_frame)
         self.add_black_border(self.main_widget.graph_editor.graphboard)

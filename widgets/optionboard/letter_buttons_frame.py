@@ -7,6 +7,7 @@ from settings.numerical_constants import GRAPHBOARD_SCALE
 from utilities.pictograph_selector_dialog import PictographSelectorDialog
 from data.letter_types import letter_types
 from settings.string_constants import LETTER_SVG_DIR
+from settings.styles import LETTER_BUTTON_SIZE
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -65,16 +66,13 @@ class LetterButtonsFrame(QFrame):
                 font = QFont()
                 font.setPointSize(int(20 * GRAPHBOARD_SCALE))
                 button.setFont(font)
-                button.setFixedSize(
-                    int(120 * GRAPHBOARD_SCALE), int(120 * GRAPHBOARD_SCALE)
-                )
+
+                button.setFixedSize(LETTER_BUTTON_SIZE)
                 button.clicked.connect(
                     lambda _, l=letter: PictographSelectorDialog(main_widget, l)
                 )
                 row_layout.addWidget(button)
             self.letter_buttons_layout.addLayout(row_layout)
-            self.letter_buttons_layout.addStretch(
-                1
-            )  # Add a stretch to the bottom of the layout
+            self.letter_buttons_layout.addStretch(1)
 
         self.main_window.sequence_layout.addLayout(self.letter_buttons_layout)

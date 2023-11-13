@@ -4,12 +4,13 @@ from settings.string_constants import *
 from objects.arrow import BlankArrow, Arrow
 
 from typing import TYPE_CHECKING, List, Dict, Any
+
 if TYPE_CHECKING:
-    from widgets.graphboard import Graphboard
+    from widgets.graphboard import GraphBoard
 
 
 class ArrowPositioner:
-    def __init__(self, graphboard: 'Graphboard'):
+    def __init__(self, graphboard: "GraphBoard"):
         self.letters = graphboard.letters
         self.graphboard = graphboard
 
@@ -45,13 +46,16 @@ class ArrowPositioner:
                 )
         return None
 
-    def compare_states(self, 
-                    current_state: List[Dict[str, Any]], 
-                    candidate_state: List[Dict[str, Any]]) -> bool:
+    def compare_states(
+        self, current_state: List[Dict[str, Any]], candidate_state: List[Dict[str, Any]]
+    ) -> bool:
         # Filter out non-arrow entries from candidate_state
         filtered_candidate_state = [
-            entry for entry in candidate_state 
-            if set(entry.keys()).issuperset({COLOR, MOTION_TYPE, QUADRANT, ROTATION_DIRECTION})
+            entry
+            for entry in candidate_state
+            if set(entry.keys()).issuperset(
+                {COLOR, MOTION_TYPE, QUADRANT, ROTATION_DIRECTION}
+            )
         ]
 
         if len(current_state) != len(filtered_candidate_state):
@@ -70,8 +74,8 @@ class ArrowPositioner:
                 return False
 
         return True
-    
-    def set_arrow_to_optimal_loc(self, optimal_locations, arrow: 'Arrow'):
+
+    def set_arrow_to_optimal_loc(self, optimal_locations, arrow: "Arrow"):
         arrow.set_transform_origin_to_center()
         optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
         pos = QPointF(
@@ -85,7 +89,7 @@ class ArrowPositioner:
         new_pos = QPointF(new_x, new_y)
         arrow.setPos(new_pos)
 
-    def set_arrow_to_default_loc(self, arrow: 'Arrow'):
+    def set_arrow_to_default_loc(self, arrow: "Arrow"):
         arrow.set_transform_origin_to_center()
         layer2_point = self.graphboard.grid.layer2_points.get(arrow.quadrant)
         adjustment = QPointF(0, 0)

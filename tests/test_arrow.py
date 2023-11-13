@@ -5,7 +5,7 @@ from objects.arrow.arrow import Arrow
 
 class TestArrow(unittest.TestCase):
     def setUp(self):
-        self.graphboard = None  # Replace with an actual Graphboard object
+        self.graphboard = None  # Replace with an actual GraphBoard object
         self.attributes = {
             "color": "red",
             "motion_type": "pro",
