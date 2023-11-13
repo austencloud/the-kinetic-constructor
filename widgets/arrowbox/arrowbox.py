@@ -7,13 +7,41 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QPointF
 from settings.numerical_constants import GRAPHBOARD_SCALE
-from settings.string_constants import *
+from settings.string_constants import (
+    COLOR, MOTION_TYPE, ROTATION_DIRECTION, QUADRANT, START_LOCATION, END_LOCATION, TURNS,
+    PRO,
+    CLOCKWISE,
+    NORTHEAST,
+    ANTI,
+    COUNTER_CLOCKWISE,
+    RED,
+    BLUE,
+    NORTH,
+    EAST,
+)
 from objects.arrow import Arrow
-from widgets.events.drag import Drag
+from widgets.arrowbox.arrowbox_drag import ArrowBoxDrag
+from typing import TYPE_CHECKING, List
+
+if TYPE_CHECKING:
+    from widgets.main_widget import MainWidget
+    from widgets.infobox.infobox import InfoBox
+    from objects.arrow import Arrow
+    
+from utilities.TypeChecking import (
+    ArrowAttributes,
+    Color,
+    MotionType,
+    Quadrant,
+    RotationDirection,
+    StartLocation,
+    EndLocation,
+    Turns,
+)
 
 
 class ArrowBox(QGraphicsScene):
-    def __init__(self, main_widget, infobox):
+    def __init__(self, main_widget: "MainWidget", infobox: "InfoBox") -> None:
         super().__init__()
         self.infobox = infobox
         self.main_widget = main_widget
@@ -23,24 +51,25 @@ class ArrowBox(QGraphicsScene):
         self.populate_arrows()
         self.setSceneRect(0, 0, 450, 450)
         self.arrowbox_layout.addWidget(self.view)
-        self.drag = None
+        self.arrowbox_drag = None
 
-    def setup_view(self):
-        self.view = QGraphicsView(self)
-        self.view.setAcceptDrops(True)
-        self.view.setFrameShape(QFrame.Shape.NoFrame)
-        self.view.setScene(self)
-        self.view.setFixedSize(int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE))
-        self.view.scale(GRAPHBOARD_SCALE, GRAPHBOARD_SCALE)
+    def setup_view(self) -> None:
+        view = QGraphicsView(self)
+        view.setAcceptDrops(True)
+        view.setFrameShape(QFrame.Shape.NoFrame)
+        view.setScene(self)
+        view.setFixedSize(int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE))
+        view.scale(GRAPHBOARD_SCALE, GRAPHBOARD_SCALE)
+        self.view = view
 
-    def setup_frame(self):
+    def setup_frame(self) -> None:
         self.arrowbox_frame = QFrame(self.main_widget.main_window)
         self.arrowbox_layout = QGridLayout()
         self.arrowbox_frame.setLayout(self.arrowbox_layout)
 
-    def populate_arrows(self):
-        self.arrows = []
-        arrow_dicts = [
+    def populate_arrows(self) -> None:
+        self.arrows: List[Arrow] = []
+        initial_arrow_attribute_collection: List[ArrowAttributes] = [
             {
                 COLOR: RED,
                 MOTION_TYPE: PRO,
@@ -61,7 +90,7 @@ class ArrowBox(QGraphicsScene):
             },
         ]
 
-        for dict in arrow_dicts:
+        for dict in initial_arrow_attribute_collection:
             arrow = Arrow(self, dict)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
@@ -71,17 +100,14 @@ class ArrowBox(QGraphicsScene):
         self.arrows[0].setPos(150, 25)
         self.arrows[1].setPos(25, 25)
 
-    def mousePressEvent(self, event):
-        # check if there are items under the cursor
-
+    def mousePressEvent(self, event) -> None:
         scene_pos = event.scenePos()
         event_pos = self.view.mapFromScene(scene_pos)
 
-        # if there are items in the scene under the click:
         if self.items(QPointF(scene_pos)):
-            if not self.drag:
+            if not self.arrowbox_drag:
                 graphboard = self.main_widget.graphboard
-                self.drag = Drag(self.main_window, graphboard, self)
+                self.arrowbox_drag = ArrowBoxDrag(self.main_window, graphboard, self)
 
             arrows = [
                 item
@@ -92,17 +118,17 @@ class ArrowBox(QGraphicsScene):
             if arrows:
                 self.target_arrow = arrows[0]
                 if event.button() == Qt.MouseButton.LeftButton:
-                    self.drag.match_target_arrow(self.target_arrow)
-                    self.drag.start_drag(event_pos)
+                    self.arrowbox_drag.match_target_arrow(self.target_arrow)
+                    self.arrowbox_drag.start_drag(event_pos)
             else:
                 event.ignore()
 
-    def mouseMoveEvent(self, event):
-        if self.drag:
+    def mouseMoveEvent(self, event) -> None:
+        if self.arrowbox_drag:
             scene_pos = event.scenePos()
             event_pos = self.view.mapFromScene(scene_pos)
-            self.drag.handle_mouse_move(event_pos)
+            self.arrowbox_drag.handle_mouse_move(event_pos)
 
-    def mouseReleaseEvent(self, event):
-        if self.drag:
-            self.drag.handle_mouse_release()
+    def mouseReleaseEvent(self, event) -> None:
+        if self.arrowbox_drag:
+            self.arrowbox_drag.handle_mouse_release()

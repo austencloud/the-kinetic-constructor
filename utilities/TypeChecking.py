@@ -1,10 +1,13 @@
 from typing import TypedDict, Literal, Dict, List
 
+Location = Literal["n", "e", "s", "w"]
+
 Color = Literal["red", "blue"]
 MotionType = Literal["pro", "anti", "dash", "static", "float", "chu"]
 Quadrant = Literal["ne", "se", "sw", "nw"]
 RotationDirection = Literal["cw", "ccw"]
-Location = Literal["n", "e", "s", "w"]
+StartLocation = Location
+EndLocation = Location
 Turns = Literal[0, 1, 2]
 
 # Arrow attributes using TypedDict for precise key-value mapping
@@ -13,11 +16,9 @@ class ArrowAttributes(TypedDict):
     motion_type: MotionType
     quadrant: Quadrant
     rotation_direction: RotationDirection
-    start_location: Location
-    end_location: Location
+    start_location: StartLocation
+    end_location: EndLocation
     turns: Turns
-
-
 
 # Other definitions
 SpecificPosition = Literal[

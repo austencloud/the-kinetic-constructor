@@ -42,14 +42,14 @@ from typing import TYPE_CHECKING, Optional, Dict, Any, Tuple
 
 if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
-    from objects.ghosts.ghost_arrow import GhostArrow
-    from objects.ghosts.ghost_staff import GhostStaff
+
+from utilities.TypeChecking import ArrowAttributes
 
 
 class Arrow(GraphicalObject):
     staff: Staff
     
-    def __init__(self, graphboard: "GraphBoard", attributes: Dict[str, Any]) -> None:
+    def __init__(self, graphboard: "GraphBoard", attributes: 'ArrowAttributes') -> None:
         svg_file = self.get_svg_file(attributes.get(MOTION_TYPE), attributes.get(TURNS))
         super().__init__(svg_file, graphboard, attributes)
         self._setup_attributes(graphboard, attributes)

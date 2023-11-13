@@ -4,15 +4,35 @@ from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtCore import Qt
 from settings.numerical_constants import GRAPHBOARD_SCALE
-from settings.string_constants import COLOR, MOTION_TYPE, QUADRANT, ROTATION_DIRECTION, START_LOCATION, END_LOCATION, TURNS, LOCATION, LAYER
+from settings.string_constants import (
+    COLOR,
+    MOTION_TYPE,
+    QUADRANT,
+    ROTATION_DIRECTION,
+    START_LOCATION,
+    END_LOCATION,
+    TURNS,
+    LOCATION,
+    LAYER,
+)
 from objects.arrow import Arrow
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from main import MainWindow
     from widgets.graphboard.graphboard import GraphBoard
     from widgets.arrowbox.arrowbox import ArrowBox
-from utilities.TypeChecking import ArrowAttributes, Color, MotionType, Quadrant, RotationDirection, Location, Turns
-class Drag(QWidget):
+from utilities.TypeChecking import (
+    ArrowAttributes,
+    Color,
+    MotionType,
+    Quadrant,
+    RotationDirection,
+    Location,
+    Turns,
+)
+
+class ArrowBoxDrag(QWidget):
     color: Color
     motion_type: MotionType
     quadrant: Quadrant
@@ -20,8 +40,10 @@ class Drag(QWidget):
     start_location: Location
     end_location: Location
     turns: Turns
-    
-    def __init__(self, main_window: 'MainWindow', graphboard: 'GraphBoard', arrowbox: 'ArrowBox') -> None:
+
+    def __init__(
+        self, main_window: "MainWindow", graphboard: "GraphBoard", arrowbox: "ArrowBox"
+    ) -> None:
         super().__init__()
         self.setParent(main_window)
         self.setup_dependencies(main_window, graphboard, arrowbox)
@@ -31,9 +53,11 @@ class Drag(QWidget):
         self.reset_drag_state()
 
         self.last_update_time = 0
-        self.update_interval = 0.1 
+        self.update_interval = 0.1
 
-    def setup_dependencies(self, main_window: 'MainWindow', graphboard: 'GraphBoard', arrowbox: 'ArrowBox') -> None:
+    def setup_dependencies(
+        self, main_window: "MainWindow", graphboard: "GraphBoard", arrowbox: "ArrowBox"
+    ) -> None:
         self.arrowbox = arrowbox
         self.graphboard = graphboard
         self.main_window = main_window
@@ -45,7 +69,7 @@ class Drag(QWidget):
         self.svg_file = None
         self.ghost_arrow = None
 
-    def match_target_arrow(self, target_arrow: 'Arrow') -> None:
+    def match_target_arrow(self, target_arrow: "Arrow") -> None:
         self.target_arrow = target_arrow
         self.set_attributes(target_arrow)
         pixmap = self.create_pixmap(target_arrow)
@@ -53,7 +77,7 @@ class Drag(QWidget):
         self.preview.setFixedHeight(pixmap.height())
         self.arrow_center = self.target_arrow.boundingRect().center() * GRAPHBOARD_SCALE
 
-    def set_attributes(self, target_arrow: 'Arrow') -> None:
+    def set_attributes(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
         self.motion_type = target_arrow.motion_type
         self.quadrant = target_arrow.quadrant
@@ -73,7 +97,7 @@ class Drag(QWidget):
         self.drag_preview = None
         self.current_rotation_angle = 0
 
-    def create_pixmap(self, target_arrow: 'Arrow') -> QPixmap:
+    def create_pixmap(self, target_arrow: "Arrow") -> QPixmap:
         new_svg_data = target_arrow.set_svg_color(target_arrow.color)
         renderer = QSvgRenderer(new_svg_data)
         scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE
@@ -136,7 +160,7 @@ class Drag(QWidget):
         self.placed_arrow.show()
         self.placed_arrow.setSelected(True)
 
-    def start_drag(self, event_pos: 'QPoint') -> None:
+    def start_drag(self, event_pos: "QPoint") -> None:
         self.move_to_cursor(event_pos)
         self.show()
 
@@ -153,7 +177,7 @@ class Drag(QWidget):
             self.place_arrow_on_graphboard()
         self.deleteLater()
         self.graphboard.update()
-        self.arrowbox.drag = None
+        self.arrowbox.arrowbox_drag = None
         self.ghost_arrow.staff = None
         self.reset_drag_state()
 
@@ -247,4 +271,3 @@ class Drag(QWidget):
         if self.ghost_arrow not in self.graphboard.items():
             self.graphboard.addItem(self.ghost_arrow)
         self.graphboard.update()
-
