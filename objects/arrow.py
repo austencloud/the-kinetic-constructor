@@ -113,7 +113,7 @@ class Arrow(QGraphicsSvgItem):
         self.ghost_arrow.staff = self.staff
         self.graphboard.arrows.append(self.ghost_arrow)
         self.graphboard.arrows.remove(self)
-        self.graphboard.arrow_positioner.update()
+        self.graphboard.update()
         self.graphboard.arrows.append(self)
         for item in self.graphboard.items():
             if item != self:
@@ -121,8 +121,6 @@ class Arrow(QGraphicsSvgItem):
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.MouseButton.LeftButton:
-            scene_event_pos = self.mapToScene(event.pos())
-            view_event_pos = self.graphboard.view.mapFromScene(scene_event_pos)
             new_pos = event.scenePos() - self.center
             self.setPos(new_pos)
 
@@ -138,7 +136,7 @@ class Arrow(QGraphicsSvgItem):
         self.graphboard.arrows.remove(self.ghost_arrow)
         self.ghost_arrow.staff = None
         self.ghost_arrow = None
-        self.graphboard.arrow_positioner.update()
+        self.graphboard.update()
 
     ### UPDATERS ###
 
@@ -401,6 +399,7 @@ class Arrow(QGraphicsSvgItem):
         if match:
             old_color = match.group(1)
             svg_data = svg_data.replace(old_color, new_hex_color)
+            
         return svg_data.encode("utf-8")
 
     def move_wasd(self, direction):
