@@ -148,7 +148,7 @@ class Staff(QGraphicsSvgItem):
             (NORTHEAST, COUNTER_CLOCKWISE, ANTI): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
             (NORTHWEST, COUNTER_CLOCKWISE, ANTI): {WEST: SOUTHWEST, EAST: NORTHEAST},
             (SOUTHWEST, COUNTER_CLOCKWISE, ANTI): {SOUTH: SOUTHEAST, NORTH: NORTHWEST},
-            (SOUTHEAST, COUNTER_CLOCKWISE, ANTI): {EAST: NORTHEAST, EAST: SOUTHWEST}
+            (SOUTHEAST, COUNTER_CLOCKWISE, ANTI): {EAST: NORTHEAST, WEST: SOUTHWEST}
         }
 
         # Extract current arrow quadrant, rotation direction, and motion type
@@ -169,7 +169,6 @@ class Staff(QGraphicsSvgItem):
             self.arrow.end_location = end_location
 
             # Update arrow appearance
-            self.arrow.set_attributes_from_staff(self)
             self.arrow.update_appearance()
             
     def update_for_new_location(self, event, new_location):
@@ -216,7 +215,6 @@ class Staff(QGraphicsSvgItem):
 
         # Update associated arrow if any
         if staff.arrow:
-            staff.arrow.set_attributes_from_staff(staff)
             staff.arrow.update_appearance()
 
         self.graphboard.ghost_staffs[staff.color].hide()
