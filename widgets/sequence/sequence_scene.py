@@ -14,14 +14,16 @@ from PyQt6.QtWidgets import QGraphicsRectItem
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from utilities.pictograph_generator import PictographGenerator
-
+    from widgets.graphboard.graphboard import Graphboard
 
 class SequenceScene(QGraphicsScene):
+    generator: 'PictographGenerator'
+    graphboard: 'Graphboard'
+    
     def __init__(self, main_widget: "MainWidget"):
         super().__init__()
 
         self.setSceneRect(0, 0, SEQUENCE_SCENE_WIDTH, SEQUENCE_SCENE_HEIGHT)
-        self.graphboard = main_widget.graphboard
         self.main_widget = main_widget
         self.pictographs = []
         self.beats = [
@@ -62,6 +64,7 @@ class SequenceScene(QGraphicsScene):
 
         # Assigning attributes to main_widget for access
         self.main_widget.sequence_scene = self
+        self.main_widget.sequence_view = self.view
         self.main_widget.sequence_scene = self.view
         self.main_widget.clear_sequence_button = self.clear_sequence_button
         self.main_widget.word_label = self.word_label

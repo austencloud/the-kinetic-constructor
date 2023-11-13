@@ -20,7 +20,6 @@ class GraphEditor(QWidget):
         self.main_window = main_widget.main_window
         self.json_handler = main_widget.json_handler
 
-        self.sequence_scene = main_widget.sequence_scene
         self.graph_editor_frame = QFrame()
         self.graph_editor_frame.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
         self.graph_editor_frame.setLineWidth(1)
@@ -49,7 +48,6 @@ class GraphEditor(QWidget):
         self.action_buttons_frame = ActionButtonsFrame(
             self.graphboard,
             self.json_handler,
-            self.sequence_scene,
         )
 
         objectbox_layout.addWidget(self.arrowbox.view)

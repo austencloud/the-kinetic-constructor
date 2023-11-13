@@ -1,16 +1,19 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow
-from widgets.main_widget import MainWidget
-from settings.numerical_constants import MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT
 import cProfile
 import pstats
-
+from PyQt6.QtWidgets import QApplication, QMainWindow, QHBoxLayout
+from widgets.main_widget import MainWidget
+from settings.numerical_constants import MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT
+from PyQt6.QtCore import QRect
+from typing import IO
 
 class MainWindow(QMainWindow):
-    def __init__(self, profiler):
+    graph_editor_layout: 'QHBoxLayout'
+    
+    def __init__(self, profiler: cProfile.Profile):
         super().__init__()
-        self.profiler = profiler
-        self.screen = QApplication.primaryScreen().geometry()
+        self.profiler: cProfile.Profile = profiler
+        self.screen: QRect = QApplication.primaryScreen().geometry()
 
         self.init_main_window()
         self.init_ui()
@@ -26,16 +29,15 @@ class MainWindow(QMainWindow):
     def init_ui(self):
         self.move(-(self.screen.width() + 500), 100)
 
-    def write_profiling_stats_to_file(self, file_path):
-        stats = pstats.Stats(self.profiler).sort_stats("cumtime")
+    def write_profiling_stats_to_file(self, file_path: str):
+        stats: pstats.Stats = pstats.Stats(self.profiler).sort_stats("cumtime")
         with open(file_path, "w") as f:
-            stats.stream = f
+            stats.stream: IO[str] = f
             stats.print_stats()
         print(f"Main profiling stats written to {file_path}")
 
-
 def main():
-    profiler = cProfile.Profile()
+    profiler: cProfile.Profile = cProfile.Profile()
     profiler.enable()
 
     app = QApplication(sys.argv)
@@ -47,7 +49,6 @@ def main():
     main_window.write_profiling_stats_to_file("main_profiling_stats.txt")
 
     sys.exit(exit_code)
-
 
 if __name__ == "__main__":
     main()

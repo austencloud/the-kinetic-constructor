@@ -59,7 +59,7 @@ class Graphboard(QGraphicsScene):
     arrow_positioner: ArrowPositioner
     staff_positioner: StaffPositioner
     letter_engine: LetterEngine
-    generator: PictographGenerator
+    generator: 'PictographGenerator'
 
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()

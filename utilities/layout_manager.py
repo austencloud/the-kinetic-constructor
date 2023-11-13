@@ -1,20 +1,34 @@
-from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QFrame
+from typing import Dict
+from PyQt6.QtWidgets import (
+    QHBoxLayout,
+    QVBoxLayout,
+    QWidget,
+    QGraphicsView,
+    QLabel,
+    QPushButton,
+    QFrame,
+)
 from PyQt6.QtGui import QPalette, QColor
+from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
+
+if TYPE_CHECKING:
+    from widgets.main_widget import MainWidget
 
 
 class LayoutManager:
-    def __init__(self, main_widget):
+    def __init__(self, main_widget: "MainWidget"):
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
+        self.layouts: Dict[str, QHBoxLayout | QVBoxLayout] = {}
         self.init_layouts()
         self.assign_layouts_to_window()
 
-    def settingsure_layouts(self):
-        self.settingsure_main_layout()
+    def configure_layouts(self) -> None:
+        self.configure_main_layout()
         self.init_sequence_layout()
         self.add_black_border_to_widgets()
 
-    def init_layouts(self):
+    def init_layouts(self) -> None:
         # Initialize all layouts and store them in a dictionary for easy access and management.
         self.layouts = {
             "main": QHBoxLayout(),
@@ -32,7 +46,7 @@ class LayoutManager:
             "keyboard": QVBoxLayout(),
         }
 
-    def settingsure_main_layout(self):
+    def configure_main_layout(self) -> None:
         self.layouts["left"].addLayout(self.layouts["sequence"])
         self.layouts["left"].addLayout(self.layouts["graph_editor"])
         self.layouts["main"].addLayout(self.layouts["left"])
@@ -44,12 +58,12 @@ class LayoutManager:
 
         self.add_black_border_to_widgets()
 
-    def init_sequence_layout(self):
+    def init_sequence_layout(self) -> None:
         self.layouts["sequence_with_label_and_button"].addWidget(
             self.main_widget.word_label
         )
         self.layouts["sequence_with_label_and_button"].addWidget(
-            self.main_widget.sequence_scene
+            self.main_widget.sequence_scene.view
         )
         self.layouts["sequence_with_label_and_button"].addWidget(
             self.main_widget.clear_sequence_button
@@ -58,7 +72,7 @@ class LayoutManager:
             self.layouts["sequence_with_label_and_button"]
         )
 
-    def add_black_border_to_widgets(self):
+    def add_black_border_to_widgets(self) -> None:
         self.add_black_border(self.main_widget.graph_editor.graphboard)
         self.add_black_border(self.main_widget.sequence_scene)
         self.add_black_border(self.main_widget.word_label)
@@ -69,11 +83,13 @@ class LayoutManager:
         self.add_black_border(self.main_widget.graph_editor.graphboard)
         self.add_black_border(self.main_widget.graph_editor.propbox)
 
-    def assign_layouts_to_window(self):
+    def assign_layouts_to_window(self) -> None:
         for layout_name, layout in self.layouts.items():
             setattr(self.main_window, f"{layout_name}_layout", layout)
 
-    def add_black_border(self, widget):
+    def add_black_border(
+        self, widget: QWidget | QGraphicsView | QLabel | QPushButton | QFrame
+    ) -> None:
         if hasattr(widget, "setFrameStyle"):
             widget.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
             widget.setLineWidth(1)

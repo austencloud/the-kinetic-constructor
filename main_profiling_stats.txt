@@ -15,7 +15,7 @@
         1    0.000    0.000    0.059    0.059 d:\CODE\Apps\Sequence_Constructor\widgets\action_buttons_frame.py:14(__init__)
         8    0.059    0.007    0.059    0.007 d:\CODE\Apps\Sequence_Constructor\widgets\action_buttons_frame.py:72(create_and_configure_button)
        35    0.042    0.001    0.042    0.001 {built-in method addLayout}
-        1    0.000    0.000    0.039    0.039 d:\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:12(settingsure_layouts)
+        1    0.000    0.000    0.039    0.039 d:\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:12(configure_layouts)
       937    0.001    0.000    0.036    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\enum.py:688(__call__)
       116    0.002    0.000    0.034    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\enum.py:841(_create_)
         1    0.000    0.000    0.034    0.034 d:\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:47(init_sequence_layout)
@@ -49,7 +49,7 @@
         1    0.000    0.000    0.006    0.006 d:\CODE\Apps\Sequence_Constructor\main.py:25(init_ui)
       689    0.002    0.000    0.005    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\main_widget.py:52(eventFilter)
        14    0.005    0.000    0.005    0.000 {built-in method setLayout}
-        1    0.000    0.000    0.005    0.005 d:\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:35(settingsure_main_layout)
+        1    0.000    0.000    0.005    0.005 d:\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:35(configure_main_layout)
         2    0.000    0.000    0.004    0.002 d:\CODE\Apps\Sequence_Constructor\objects\arrow.py:135(update_for_new_quadrant)
         1    0.000    0.000    0.004    0.004 d:\CODE\Apps\Sequence_Constructor\utilities\json_handler.py:11(load_all_letters)
         8    0.000    0.000    0.004    0.001 d:\CODE\Apps\Sequence_Constructor\objects\ghosts\ghost_arrow.py:67(update)

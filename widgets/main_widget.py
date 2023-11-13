@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QPushButton, QLabel
+from PyQt6.QtWidgets import QWidget, QPushButton, QLabel, QGraphicsScene, QGraphicsView
 from PyQt6.QtCore import QEvent
 from utilities.json_handler import JsonHandler
 from widgets.sequence.sequence_scene import SequenceScene
@@ -14,29 +14,32 @@ if TYPE_CHECKING:
     from main import MainWindow
     from widgets.propbox.propbox import Propbox
 
+
 class MainWidget(QWidget):
-    propbox: 'Propbox'
-    main_window: 'MainWindow'
-    clear_sequence_button: 'QPushButton'
-    word_label: 'QLabel'
-    
+    propbox: "Propbox"
+    main_window: "MainWindow"
+    clear_sequence_button: "QPushButton"
+    word_label: "QLabel"
+    sequence_view: "QGraphicsView"
+
     def __init__(self, main_window: "MainWindow"):
         super().__init__(main_window)
         self.arrows = []
         self.export_handler = None
         self.main_window = main_window
 
+        self.sequence_scene = SequenceScene(self)
         self.layout_manager = LayoutManager(self)
         self.json_handler = JsonHandler()
         self.letters = self.json_handler.load_all_letters()
         self.key_event_handler = KeyEventHandler()
 
-        self.sequence_scene = SequenceScene(self)
         self.graph_editor = GraphEditor(self)
         self.optionboard_view = OptionboardView(self)
         self.letter_buttons_frame = LetterButtonsFrame(self)
 
         self.graphboard = self.graph_editor.graphboard
+        self.sequence_scene.graphboard = self.graphboard
         self.infobox = self.graph_editor.infobox
         self.propbox = self.graph_editor.propbox
         self.arrowbox = self.graph_editor.arrowbox
@@ -45,11 +48,7 @@ class MainWidget(QWidget):
         self.graphboard.generator = self.generator
         self.sequence_scene.generator = self.generator
 
-        self.layout_manager.settingsure_layouts()
-        self.connect_objects()
-
-    def connect_objects(self):
-        self.graphboard.graphboard_menu_handler.sequence_scene = self.sequence_scene
+        self.layout_manager.configure_layouts()
 
     ### EVENTS ###
 

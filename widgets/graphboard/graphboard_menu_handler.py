@@ -7,7 +7,7 @@ from objects.staff import Staff
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graphboard import Graphboard
+    from widgets.graphboard.graphboard import Graphboard
 
 
 class GraphboardMenuHandler:
@@ -15,7 +15,6 @@ class GraphboardMenuHandler:
         self.graphboard = graphboard
         self.main_widget = main_widget
         self.export_handler = graphboard.export_handler
-        self.sequence_scene = main_widget.sequence_scene
 
     def create_menu_with_actions(self, parent, actions, event_pos):
         menu = QMenu()
@@ -30,7 +29,7 @@ class GraphboardMenuHandler:
         selected_arrow = selected_item if isinstance(selected_item, Arrow) else None
 
         actions = [
-            ("Delete", lambda: self.graphboard.delete_arrow(selected_items)),
+            ("Delete", lambda: selected_arrow.delete()),
             (
                 "Rotate Right",
                 lambda: selected_arrow.rotate(RIGHT),
@@ -61,7 +60,9 @@ class GraphboardMenuHandler:
             ("Swap Colors", lambda: self.manipulators.swap_colors()),
             (
                 "Add to Sequence",
-                lambda _: self.sequence_scene.add_to_sequence(self.graphboard),
+                lambda _: self.graphboard.add_to_sequence(
+                    self.graphboard
+                ),  # Need to implement this method
             ),
             ("Export to PNG", self.export_handler.export_to_png),
             ("Export to SVG", lambda: self.export_handler.export_to_svg("output.svg")),
