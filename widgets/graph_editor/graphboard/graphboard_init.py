@@ -36,6 +36,7 @@ class GraphboardInit:
         grid.setPos(grid_position)
         self.graphboard.addItem(grid)
         grid.init_handpoints()
+        grid.init_layer2_points()
         self.graphboard.grid = grid
         self.graphboard.padding = padding
         return grid

@@ -88,8 +88,7 @@ class ArrowPositioner:
 
     def set_arrow_to_default_loc(self, arrow):
         arrow.set_transform_origin_to_center()
-        layer2_point = self.graphboard.grid.get_layer2_point(arrow.quadrant)
-        pos = layer2_point
+        layer2_point = self.graphboard.grid.layer2_points.get(arrow.quadrant)
         adjustment = QPointF(0, 0)
 
         if arrow.quadrant == NORTHEAST:
@@ -102,8 +101,8 @@ class ArrowPositioner:
             adjustment = QPointF(-DISTANCE, -DISTANCE)
 
         new_pos = QPointF(
-            pos.x() + adjustment.x() + arrow.graphboard.padding,
-            pos.y() + adjustment.y() + arrow.graphboard.padding,
+            layer2_point.x() + adjustment.x() + arrow.graphboard.padding,
+            layer2_point.y() + adjustment.y() + arrow.graphboard.padding,
         )
 
         final_pos = QPointF(new_pos.x(), new_pos.y())

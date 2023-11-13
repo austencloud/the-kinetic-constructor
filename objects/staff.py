@@ -109,32 +109,31 @@ class Staff(QGraphicsSvgItem):
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.MouseButton.LeftButton:
-            scene_event_pos = self.mapToScene(event.pos())
-            view_event_pos = self.graphboard.view.mapFromScene(scene_event_pos)
-            in_view = self.graphboard.view.rect().contains(view_event_pos)
             new_pos = event.scenePos() - self.get_staff_center()
-            if self.axis == HORIZONTAL:
-                self.setPos(new_pos)
-            elif self.axis == VERTICAL:
-                self.setPos(new_pos + QPointF(-STAFF_LENGTH/2 + STAFF_WIDTH/2, STAFF_WIDTH / 2 - STAFF_LENGTH / 2))
+            self.set_drag_pos(new_pos)
 
             new_location = self.get_closest_handpoint(event.scenePos())[1]
             
-            if new_location != self.previous_location:
-                if in_view and self.arrow:
-                    self.location = new_location
-                    self.update_appearance()
-                    self.update_arrow_quadrant(new_location)
-                    self.update_location(new_location)
-                    self.ghost_staff.update(self)
-                    self.graphboard.staffs.remove(self)
-                    if self.arrow.motion_type == STATIC:
-                        self.arrow.start_location = new_location
-                        self.arrow.end_location = new_location
-                    self.graphboard.update() 
-                    self.graphboard.staffs.append(self)
-                    
-                self.previous_location = new_location  
+            if new_location != self.previous_location and self.arrow:
+                self.location = new_location
+                self.set_drag_pos(new_pos)
+                self.update_appearance()
+                self.update_arrow_quadrant(new_location)
+                self.update_location(new_location)
+                self.ghost_staff.update(self)
+                self.graphboard.staffs.remove(self)
+                if self.arrow.motion_type == STATIC:
+                    self.arrow.start_location = new_location
+                    self.arrow.end_location = new_location
+                self.graphboard.update() 
+                self.graphboard.staffs.append(self)
+                self.previous_location = new_location 
+
+    def set_drag_pos(self, new_pos):
+        if self.axis == HORIZONTAL:
+            self.setPos(new_pos)
+        elif self.axis == VERTICAL:
+            self.setPos(new_pos + QPointF(-STAFF_LENGTH/2 + STAFF_WIDTH/2, STAFF_WIDTH / 2 - STAFF_LENGTH / 2)) 
 
     def update_arrow_quadrant(self, new_location):
         quadrant_mapping = {
@@ -196,7 +195,7 @@ class Staff(QGraphicsSvgItem):
         self.graphboard.staffs.remove(self.ghost_staff)
         self.ghost_staff.arrow = None
         self.ghost_staff = None
-        self.graphboard.arrow_positioner.update() 
+        self.graphboard.update() 
         self.finalize_staff_drop(event)
 
     def finalize_staff_drop(self, event):

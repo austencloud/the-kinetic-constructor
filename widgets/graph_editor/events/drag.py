@@ -105,7 +105,7 @@ class Drag(QWidget):
                 self.graphboard.staffs.remove(staff)
 
     def place_arrow_on_graphboard(self):
-        self.graphboard.arrow_positioner.update()
+        self.graphboard.update()
         self.graphboard.clearSelection()
 
         self.placed_arrow = Arrow(self.graphboard, self.ghost_arrow.get_attributes())
@@ -138,8 +138,7 @@ class Drag(QWidget):
         if self.has_entered_graphboard_once:
             self.place_arrow_on_graphboard()
         self.deleteLater()
-        self.graphboard.update_arrows()
-        self.graphboard.update_staffs()
+        self.graphboard.update()
         self.arrowbox.drag = None
         self.ghost_arrow.staff = None
         self.reset_drag_state()
