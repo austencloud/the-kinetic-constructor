@@ -9,6 +9,7 @@ from widgets.graph_editor import GraphEditor
 from widgets.optionboard.letter_buttons_frame import LetterButtonsFrame
 from utilities.pictograph_generator import PictographGenerator
 from typing import TYPE_CHECKING, Dict, List
+from utilities.export_handler import ExportHandler
 
 if TYPE_CHECKING:
     from main import MainWindow
@@ -38,7 +39,7 @@ class MainWidget(QWidget):
         self.graph_editor = GraphEditor(self)
         self.optionboard = OptionBoard(self)
         self.letter_buttons_frame = LetterButtonsFrame(self)
-
+        
         self.graphboard = self.graph_editor.graphboard
         self.sequence_board.graphboard = self.graphboard
         self.infobox = self.graph_editor.infobox
@@ -46,6 +47,8 @@ class MainWidget(QWidget):
         self.arrowbox = self.graph_editor.arrowbox
 
         self.generator = PictographGenerator(self, self.graphboard, self.infobox)
+        self.export_handler = ExportHandler(self.graphboard.grid, self)
+
         self.graphboard.generator = self.generator
         self.sequence_board.generator = self.generator
 

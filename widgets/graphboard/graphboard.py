@@ -68,7 +68,6 @@ class GraphBoard(QGraphicsScene):
         self.setup_managers(main_widget)
 
     def setup_managers(self, main_widget: "MainWidget") -> None:
-        self.export_handler = ExportHandler(self.grid, self)
         self.graphboard_menu_handler = GraphBoardMenuHandler(main_widget, self)
         self.arrow_positioner = ArrowPositioner(self)
         self.staff_positioner = StaffPositioner(self)
@@ -84,13 +83,13 @@ class GraphBoard(QGraphicsScene):
         if clicked_item is self.grid:
             # pass the click to the next item
             super().contextMenuEvent(event)
-            selected_items = self.selectedItems()
+            selected_item = self.selectedItems()[0]
             event_pos = event.screenPos()
 
             if isinstance(clicked_item, Arrow):
-                self.graphboard_menu_handler.create_arrow_menu(selected_items, event_pos)
+                self.graphboard_menu_handler.create_arrow_menu(selected_item, event_pos)
             elif isinstance(clicked_item, Staff):
-                self.graphboard_menu_handler.create_staff_menu(selected_items, event_pos)
+                self.graphboard_menu_handler.create_staff_menu(selected_item, event_pos)
             else:
                 self.graphboard_menu_handler.create_graphboard_menu(event_pos)
 

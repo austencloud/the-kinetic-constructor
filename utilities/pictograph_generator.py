@@ -5,20 +5,26 @@ import os
 from objects.arrow import Arrow
 from utilities.export_handler import ExportHandler
 from settings.string_constants import *
+from typing import TYPE_CHECKING, List, Dict, Literal, TypedDict
+if TYPE_CHECKING:
+    from widgets.main_widget import MainWidget
+    from widgets.infobox.infobox import InfoBox
+    from widgets.graphboard.graphboard import GraphBoard
+
 
 
 class PictographGenerator:
-    def __init__(self, main_widget, scene, infobox):
-        self.scene = scene
+    def __init__(self, main_widget: 'MainWidget', graphboard: 'GraphBoard', infobox: 'InfoBox') -> None:
+        self.graphboard = graphboard
         self.infobox = infobox
         self.main_window = main_widget.main_window
         self.export_handler = main_widget.export_handler
-        self.grid = self.scene.grid
+        self.grid = self.graphboard.grid
         self.output_dir = "images/pictographs"
         self.current_letter = None
         self.letters = main_widget.letters
 
-    def generate_all_pictographs(self, staff_handler):
+    def generate_all_pictographs(self, staff_handler) -> None:
         os.makedirs(self.output_dir, exist_ok=True)
 
         for letter, combinations in self.letters.items():
@@ -74,7 +80,7 @@ class PictographGenerator:
 
                         output_file_path = os.path.join(self.output_dir, file_name)
                         self.export_handler = ExportHandler(
-                            self.scene,
+                            self.graphboard,
                             self.graphboard,
                             self.staff_handler,
                             self.grid,
@@ -82,19 +88,19 @@ class PictographGenerator:
                         self.export_handler.export_to_svg(output_file_path)
 
                 # Clear the graphboard for the next combination
-                self.scene.clear()
+                self.graphboard.clear()
 
-    def open_selection_window(self, letter):
+    def open_selection_window(self, letter) -> None:
         self.output_dir = "images/pictographs"
-        self.scene.clear()
+        self.graphboard.clear()
 
         combinations = self.letters.get(letter, [])
         if not combinations:
-            self.scene.update_letter(None)
+            self.graphboard.update_letter(None)
             self.infobox.update()
             return
         self.current_letter = letter
-        self.scene.update_letter(self.current_letter)
+        self.graphboard.update_letter(self.current_letter)
 
         combination_set = random.choice(combinations)
         created_arrows = []
@@ -122,7 +128,7 @@ class PictographGenerator:
                     svg_file = f"resources/images/arrows/static_0.svg"
                     arrow = Arrow(
                         svg_file,
-                        self.scene,
+                        self.graphboard,
                         self.infobox,
                         self.svg_manager,
                         self.arrow_manager,
@@ -151,13 +157,13 @@ class PictographGenerator:
                 else:
                     if arrow.quadrant != "None":
                         pos = (
-                            self.scene.get_quadrant_center(arrow.quadrant)
+                            self.graphboard.get_quadrant_center(arrow.quadrant)
                             - arrow.boundingRect().center()
                         )
             else:
                 # Calculate the position to center the arrow at the quadrant center
                 pos = (
-                    self.scene.get_quadrant_center(arrow.quadrant)
+                    self.graphboard.get_quadrant_center(arrow.quadrant)
                     - arrow.boundingRect().center()
                 )
                 arrow.setPos(pos)
@@ -166,10 +172,10 @@ class PictographGenerator:
         # created_arrows should be a list
         self.infobox.update()
 
-    def get_current_letter(self):
+    def get_current_letter(self) -> str | None:
         return self.current_letter
 
-    def update_staff(self, arrow, staff_handler):
+    def update_staff(self, arrow, staff_handler) -> None:
         arrows = [arrow] if not isinstance(arrow, list) else arrow
 
         staff_positions = [

@@ -15,7 +15,7 @@ class GraphBoardMenuHandler:
     def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard") -> None:
         self.graphboard = graphboard
         self.main_widget = main_widget
-        self.export_handler = graphboard.export_handler
+        self.export_handler = main_widget.export_handler
 
     def create_menu_with_actions(self, actions: List[Tuple[str, Callable]], event_pos: QPoint) -> None:
         menu = QMenu()
@@ -25,8 +25,7 @@ class GraphBoardMenuHandler:
             menu.addAction(action)
         menu.exec(event_pos)
 
-    def create_arrow_menu(self, selected_items, event) -> None:
-        selected_item = selected_items[0]
+    def create_arrow_menu(self, selected_item, event) -> None:
         selected_arrow = selected_item if isinstance(selected_item, Arrow) else None
 
         actions = [
@@ -46,8 +45,7 @@ class GraphBoardMenuHandler:
         ]
         self.create_menu_with_actions(actions, event)
 
-    def create_staff_menu(self, selected_items, event) -> None:
-        selected_item = selected_items[0]
+    def create_staff_menu(self, selected_item, event) -> None:
         selected_staff = selected_item if isinstance(selected_item, Staff) else None
 
         actions = [
