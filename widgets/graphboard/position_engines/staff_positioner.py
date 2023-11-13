@@ -26,8 +26,10 @@ from objects.staff import Staff
 from utilities.TypeChecking import (
     ArrowAttributes,
     LetterVariants,
+    OptimalLocation,
     OptimalLocations,
     Direction,
+    LettersDict,
 )
 
 if TYPE_CHECKING:
@@ -39,6 +41,7 @@ class StaffPositioner:
     current_state: List[ArrowAttributes]
     matching_letters: List[LetterVariants]
     arrow_dict: List[ArrowAttributes]
+    letters: LettersDict
 
     def __init__(self, graphboard: "GraphBoard") -> None:
         self.graphboard = graphboard
@@ -110,7 +113,7 @@ class StaffPositioner:
             ):
                 self.reposition_alpha_to_beta(move_staff, converging_arrows)
 
-    ### STATIC BETA ###
+    ### STATIC BETA ### β
 
     def reposition_static_beta(self, move_staff, static_arrows) -> None:
         for arrow in static_arrows:
@@ -154,11 +157,11 @@ class StaffPositioner:
                     if other_staff:
                         move_staff(other_staff, direction[1])
 
-    ### ALPHA TO BETA ###
+    ### ALPHA TO BETA ### D, E, F
 
     def reposition_alpha_to_beta(
         self, move_staff, converging_arrows
-    ) -> None:  # D, E, F
+    ) -> None:
         end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
         start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
         if (
@@ -177,9 +180,9 @@ class StaffPositioner:
                         direction,
                     )
 
-    ### BETA TO BETA ###
+    ### BETA TO BETA ### G, H, I
 
-    def reposition_beta_to_beta(self, arrows) -> None:  # G, H, I
+    def reposition_beta_to_beta(self, arrows) -> None:  
         arrow1, arrow2 = arrows
         same_motion_type = arrow1[MOTION_TYPE] == arrow2[MOTION_TYPE] in [PRO, ANTI]
 
@@ -264,11 +267,11 @@ class StaffPositioner:
             )
             anti_staff.setPos(new_position_anti)
 
-    ### GAMMA TO BETA ###
+    ### GAMMA TO BETA ### Y, Z
 
     def reposition_gamma_to_beta(
         self, move_staff, pro_or_anti_arrows, static_arrows
-    ) -> None:  # Y, Z
+    ) -> None: 
         pro_or_anti_arrow, static_arrow = pro_or_anti_arrows[0], static_arrows[0]
         direction = self.determine_translation_direction(pro_or_anti_arrow)
         if direction:
@@ -307,7 +310,7 @@ class StaffPositioner:
         current_state,
         matching_letters,
         arrow_dict,
-    ) -> Dict[str, float] | None:
+    ) -> OptimalLocation | None:
         for variants in matching_letters:
             if self.graphboard.arrow_positioner.compare_states(current_state, variants):
                 optimal_entry: OptimalLocations = next(
@@ -337,7 +340,6 @@ class StaffPositioner:
         current_position: QPointF,
         direction: Direction,
     ) -> QPointF:
-        """Calculate the new position based on the direction."""
         offset = (
             QPointF(BETA_OFFSET, 0)
             if direction in [LEFT, RIGHT]
@@ -354,8 +356,10 @@ class StaffPositioner:
         grid_center = self.graphboard.grid.center
         arrow_x, arrow_y = arrow_pos.get("x", 0.0), arrow_pos.get("y", 0.0)
         center_x, center_y = grid_center.x(), grid_center.y()
-        
-        distance_from_center = math.sqrt((arrow_x - center_x) ** 2 + (arrow_y - center_y) ** 2)
+
+        distance_from_center = math.sqrt(
+            (arrow_x - center_x) ** 2 + (arrow_y - center_y) ** 2
+        )
         return distance_from_center
 
     def get_optimal_arrow_location(

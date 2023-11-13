@@ -9,10 +9,13 @@ from widgets.graph_editor import GraphEditor
 from widgets.optionboard.letter_buttons_frame import LetterButtonsFrame
 from utilities.pictograph_generator import PictographGenerator
 from typing import TYPE_CHECKING, Dict, List
+
 if TYPE_CHECKING:
     from main import MainWindow
     from widgets.propbox.propbox import Propbox
 from utilities.TypeChecking import LettersDict
+
+
 class MainWidget(QWidget):
     propbox: "Propbox"
     main_window: "MainWindow"
@@ -26,7 +29,7 @@ class MainWidget(QWidget):
         self.export_handler = None
         self.main_window = main_window
 
-        self.sequence_scene = SequenceBoard(self)
+        self.sequence_board = SequenceBoard(self)
         self.layout_manager = LayoutManager(self)
         self.json_handler = JsonHandler()
         self.letters: LettersDict = self.json_handler.load_all_letters()
@@ -37,14 +40,14 @@ class MainWidget(QWidget):
         self.letter_buttons_frame = LetterButtonsFrame(self)
 
         self.graphboard = self.graph_editor.graphboard
-        self.sequence_scene.graphboard = self.graphboard
+        self.sequence_board.graphboard = self.graphboard
         self.infobox = self.graph_editor.infobox
         self.propbox = self.graph_editor.propbox
         self.arrowbox = self.graph_editor.arrowbox
 
         self.generator = PictographGenerator(self, self.graphboard, self.infobox)
         self.graphboard.generator = self.generator
-        self.sequence_scene.generator = self.generator
+        self.sequence_board.generator = self.generator
 
         self.layout_manager.configure_layouts()
 

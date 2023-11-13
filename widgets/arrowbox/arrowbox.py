@@ -12,7 +12,7 @@ from objects.arrow import Arrow
 from widgets.events.drag import Drag
 
 
-class Arrowbox(QGraphicsScene):
+class ArrowBox(QGraphicsScene):
     def __init__(self, main_widget, infobox):
         super().__init__()
         self.infobox = infobox

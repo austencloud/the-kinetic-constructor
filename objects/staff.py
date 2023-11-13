@@ -320,7 +320,7 @@ class Staff(GraphicalObject):
         color_map = {RED: RED_HEX, BLUE: BLUE_HEX}
         new_hex_color = color_map.get(new_color)
 
-        with open(self.svg_file, CLOCKWISE) as f:
+        with open(self.svg_file, "r") as f:
             svg_data = f.read()
 
         style_tag_pattern = re.compile(

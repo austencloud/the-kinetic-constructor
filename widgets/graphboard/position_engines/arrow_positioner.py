@@ -6,15 +6,16 @@ from objects.arrow import BlankArrow, Arrow
 from typing import TYPE_CHECKING, List, Dict, Any
 
 if TYPE_CHECKING:
-    from widgets.graphboard import GraphBoard
+    from widgets.graphboard.graphboard import GraphBoard
 
+from utilities.TypeChecking import OptimalLocations
 
 class ArrowPositioner:
-    def __init__(self, graphboard: "GraphBoard"):
+    def __init__(self, graphboard: "GraphBoard") -> None:
         self.letters = graphboard.letters
         self.graphboard = graphboard
 
-    def update(self):
+    def update(self) -> None:
         for arrow in self.graphboard.arrows:
             arrow.setTransformOriginPoint(0, 0)
         optimal_locations = None
@@ -30,7 +31,7 @@ class ArrowPositioner:
                 else:
                     self.set_arrow_to_default_loc(arrow)
 
-    def find_optimal_locations(self):
+    def find_optimal_locations(self) -> OptimalLocations | None:
         current_state = self.graphboard.get_state()
         matching_letters = self.letters[self.graphboard.current_letter]
 
@@ -75,7 +76,7 @@ class ArrowPositioner:
 
         return True
 
-    def set_arrow_to_optimal_loc(self, optimal_locations, arrow: "Arrow"):
+    def set_arrow_to_optimal_loc(self, optimal_locations: OptimalLocations, arrow: "Arrow") -> None:
         arrow.set_transform_origin_to_center()
         optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
         pos = QPointF(
@@ -89,7 +90,7 @@ class ArrowPositioner:
         new_pos = QPointF(new_x, new_y)
         arrow.setPos(new_pos)
 
-    def set_arrow_to_default_loc(self, arrow: "Arrow"):
+    def set_arrow_to_default_loc(self, arrow: "Arrow") -> None:
         arrow.set_transform_origin_to_center()
         layer2_point = self.graphboard.grid.layer2_points.get(arrow.quadrant)
         adjustment = QPointF(0, 0)

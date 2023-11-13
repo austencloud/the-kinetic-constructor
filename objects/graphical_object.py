@@ -29,7 +29,7 @@ class GraphicalObject(QGraphicsSvgItem):
     def set_svg_color(self, new_color):
         new_hex_color = COLOR_MAP.get(new_color)
 
-        with open(self.svg_file, CLOCKWISE) as f:
+        with open(self.svg_file, "r") as f:
             svg_data = f.read()
 
         style_tag_pattern = re.compile(

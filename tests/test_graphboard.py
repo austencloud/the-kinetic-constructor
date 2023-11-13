@@ -25,7 +25,7 @@ class TestGraphBoard(unittest.TestCase):
                     {
                         "color": "blue",
                         "motion_type": "pro",
-                        "rotation_direction": "r",
+                        "rotation_direction": "cw",
                         "quadrant": "sw",
                         "start_location": "s",
                         "end_location": "w",
@@ -34,7 +34,7 @@ class TestGraphBoard(unittest.TestCase):
                     {
                         "color": "red",
                         "motion_type": "pro",
-                        "rotation_direction": "r",
+                        "rotation_direction": "cw",
                         "quadrant": "ne",
                         "start_location": "n",
                         "end_location": "e",
@@ -48,7 +48,7 @@ class TestGraphBoard(unittest.TestCase):
                     {
                         "color": "blue",
                         "motion_type": "anti",
-                        "rotation_direction": "r",
+                        "rotation_direction": "cw",
                         "quadrant": "sw",
                         "start_location": "w",
                         "end_location": "s",
@@ -57,7 +57,7 @@ class TestGraphBoard(unittest.TestCase):
                     {
                         "color": "red",
                         "motion_type": "anti",
-                        "rotation_direction": "r",
+                        "rotation_direction": "cw",
                         "quadrant": "ne",
                         "start_location": "e",
                         "end_location": "n",
@@ -71,7 +71,7 @@ class TestGraphBoard(unittest.TestCase):
                     {
                         "color": "blue",
                         "motion_type": "anti",
-                        "rotation_direction": "l",
+                        "rotation_direction": "ccw",
                         "quadrant": "ne",
                         "start_location": "n",
                         "end_location": "e",
@@ -80,7 +80,7 @@ class TestGraphBoard(unittest.TestCase):
                     {
                         "color": "red",
                         "motion_type": "pro",
-                        "rotation_direction": "r",
+                        "rotation_direction": "cw",
                         "quadrant": "sw",
                         "start_location": "s",
                         "end_location": "w",
@@ -94,7 +94,7 @@ class TestGraphBoard(unittest.TestCase):
                     {
                         "color": "blue",
                         "motion_type": "pro",
-                        "rotation_direction": "l",
+                        "rotation_direction": "ccw",
                         "quadrant": "nw",
                         "start_location": "n",
                         "end_location": "w",
@@ -103,7 +103,7 @@ class TestGraphBoard(unittest.TestCase):
                     {
                         "color": "red",
                         "motion_type": "pro",
-                        "rotation_direction": "r",
+                        "rotation_direction": "cw",
                         "quadrant": "ne",
                         "start_location": "n",
                         "end_location": "e",

@@ -1,12 +1,20 @@
 from objects.arrow import Arrow
 from objects.staff import Staff
 from PyQt6.QtCore import Qt
-from settings.string_constants import *
+from PyQt6.QtGui import QKeyEvent
+from settings.string_constants import UP, LEFT, DOWN, RIGHT
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from widgets.main_widget import MainWidget
+    from widgets.graphboard.graphboard import GraphBoard
 
 
 class KeyEventHandler:
-    def keyPressEvent(self, event, main_widget, graphboard):
-        sequence_scene = main_widget.sequence_scene
+    def keyPressEvent(
+        self, event: "QKeyEvent", main_widget: "MainWidget", graphboard: "GraphBoard"
+    ) -> None:
+        sequence_board = main_widget.sequence_board
 
         if not graphboard.selectedItems():
             return
@@ -24,7 +32,6 @@ class KeyEventHandler:
                 selected_staff.delete()
 
         ### ARROW MANIPULATION ###
-
         if selected_arrow:
             if event.key() == Qt.Key.Key_W:
                 selected_arrow.move_wasd(UP)
@@ -45,4 +52,4 @@ class KeyEventHandler:
 
         ### SEQEUNCE MANAGEMENT ###
         elif event.key() == Qt.Key.Key_Enter:
-            sequence_scene.add_to_sequence(graphboard)
+            sequence_board.add_to_sequence(graphboard)

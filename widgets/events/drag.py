@@ -4,12 +4,16 @@ from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtCore import Qt
 from settings.numerical_constants import GRAPHBOARD_SCALE
-from settings.string_constants import *
+from settings.string_constants import COLOR, MOTION_TYPE, QUADRANT, ROTATION_DIRECTION, START_LOCATION, END_LOCATION, TURNS, LOCATION, LAYER
 from objects.arrow import Arrow
-
-
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from main import MainWindow
+    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.arrowbox.arrowbox import ArrowBox
+from utilities.TypeChecking import ArrowAttributes
 class Drag(QWidget):
-    def __init__(self, main_window, graphboard, arrowbox):
+    def __init__(self, main_window: 'MainWindow', graphboard: 'GraphBoard', arrowbox: 'ArrowBox') -> None:
         super().__init__()
         self.setParent(main_window)
         self.setup_dependencies(main_window, graphboard, arrowbox)
@@ -18,10 +22,10 @@ class Drag(QWidget):
         self.preview = QLabel(self)
         self.reset_drag_state()
 
-        self.last_update_time = 0  # Initialize the last update time to zero
-        self.update_interval = 0.1  # Time in seconds, adjust as needed for throttling
+        self.last_update_time = 0
+        self.update_interval = 0.1 
 
-    def setup_dependencies(self, main_window, graphboard, arrowbox):
+    def setup_dependencies(self, main_window: 'MainWindow', graphboard: 'GraphBoard', arrowbox: 'ArrowBox') -> None:
         self.arrowbox = arrowbox
         self.graphboard = graphboard
         self.main_window = main_window
@@ -33,7 +37,7 @@ class Drag(QWidget):
         self.svg_file = None
         self.ghost_arrow = None
 
-    def match_target_arrow(self, target_arrow):
+    def match_target_arrow(self, target_arrow: 'Arrow') -> None:
         self.target_arrow = target_arrow
         self.set_attributes(target_arrow)
         pixmap = self.create_pixmap(target_arrow)
@@ -41,7 +45,7 @@ class Drag(QWidget):
         self.preview.setFixedHeight(pixmap.height())
         self.arrow_center = self.target_arrow.boundingRect().center() * GRAPHBOARD_SCALE
 
-    def set_attributes(self, target_arrow):
+    def set_attributes(self, target_arrow: 'Arrow') -> None:
         self.color = target_arrow.color
         self.motion_type = target_arrow.motion_type
         self.quadrant = target_arrow.quadrant
@@ -56,12 +60,12 @@ class Drag(QWidget):
         self.ghost_arrow = self.graphboard.ghost_arrows[self.color]
         self.ghost_arrow.target_arrow = target_arrow
 
-    def reset_drag_state(self):
+    def reset_drag_state(self) -> None:
         self.dragging = False
         self.drag_preview = None
         self.current_rotation_angle = 0
 
-    def create_pixmap(self, target_arrow):
+    def create_pixmap(self, target_arrow: 'Arrow') -> QPixmap:
         new_svg_data = target_arrow.set_svg_color(target_arrow.color)
         renderer = QSvgRenderer(new_svg_data)
         scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE
@@ -208,7 +212,6 @@ class Drag(QWidget):
             self.just_entered_graphboard = True
             self.has_entered_graphboard_once = True
             self.remove_same_color_arrow()
-            print("entered graphboard")
 
         if self.has_entered_graphboard_once:
             self.just_entered_graphboard = False

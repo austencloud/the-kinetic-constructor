@@ -69,16 +69,16 @@ class SequenceBoard(QGraphicsScene):
         self.word_label.setText("My word: ")
 
         # Assigning attributes to main_widget for access
-        self.main_widget.sequence_scene = self
+        self.main_widget.sequence_board = self
         self.main_widget.sequence_view = self.view
-        self.main_widget.sequence_scene = self.view
+        self.main_widget.sequence_board = self.view
         self.main_widget.clear_sequence_button = self.clear_sequence_button
         self.main_widget.word_label = self.word_label
 
     # Rest of the methods remain the same
 
     def add_to_sequence(self):
-        # Get the size of the sequence_scene in sequence_scene coordinates
+        # Get the size of the sequence_board in sequence_board coordinates
         scene_size = self.graphboard.sceneRect().size().toSize()
 
         # Create the QImage with the adjusted size
@@ -88,7 +88,7 @@ class SequenceBoard(QGraphicsScene):
 
         self.graphboard.clear()
 
-        # Render the sequence_scene
+        # Render the sequence_board
         self.graphboard.render(painter)
         painter.end()
 

@@ -9,6 +9,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QPalette, QColor
 from typing import TYPE_CHECKING, Dict
+
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 
@@ -59,7 +60,7 @@ class LayoutManager:
             self.main_widget.word_label
         )
         self.layouts["sequence_with_label_and_button"].addWidget(
-            self.main_widget.sequence_scene.view
+            self.main_widget.sequence_board.view
         )
         self.layouts["sequence_with_label_and_button"].addWidget(
             self.main_widget.clear_sequence_button
@@ -70,7 +71,7 @@ class LayoutManager:
 
     def add_black_border_to_widgets(self) -> None:
         self.add_black_border(self.main_widget.graph_editor.graphboard)
-        self.add_black_border(self.main_widget.sequence_scene)
+        self.add_black_border(self.main_widget.sequence_board)
         self.add_black_border(self.main_widget.word_label)
         self.add_black_border(self.main_widget.graph_editor.infobox)
         self.add_black_border(self.main_widget.optionboard.view)

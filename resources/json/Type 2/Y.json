@@ -8,7 +8,7 @@
             {
                 "color": "blue",
                 "motion_type": "pro",
-                "rotation_direction": "r",
+                "rotation_direction": "cw",
                 "quadrant": "se",
                 "start_location": "e",
                 "end_location": "s",
@@ -32,7 +32,7 @@
             {
                 "color": "blue",
                 "motion_type": "pro",
-                "rotation_direction": "r",
+                "rotation_direction": "cw",
                 "quadrant": "sw",
                 "start_location": "s",
                 "end_location": "w",
@@ -56,7 +56,7 @@
             {
                 "color": "blue",
                 "motion_type": "pro",
-                "rotation_direction": "r",
+                "rotation_direction": "cw",
                 "quadrant": "nw",
                 "start_location": "w",
                 "end_location": "n",
@@ -80,7 +80,7 @@
             {
                 "color": "blue",
                 "motion_type": "pro",
-                "rotation_direction": "r",
+                "rotation_direction": "cw",
                 "quadrant": "ne",
                 "start_location": "n",
                 "end_location": "e",
@@ -104,7 +104,7 @@
             {
                 "color": "blue",
                 "motion_type": "pro",
-                "rotation_direction": "l",
+                "rotation_direction": "ccw",
                 "quadrant": "sw",
                 "start_location": "w",
                 "end_location": "s",
@@ -128,7 +128,7 @@
             {
                 "color": "blue",
                 "motion_type": "pro",
-                "rotation_direction": "l",
+                "rotation_direction": "ccw",
                 "quadrant": "se",
                 "start_location": "s",
                 "end_location": "e",
@@ -152,7 +152,7 @@
             {
                 "color": "blue",
                 "motion_type": "pro",
-                "rotation_direction": "l",
+                "rotation_direction": "ccw",
                 "quadrant": "ne",
                 "start_location": "e",
                 "end_location": "n",
@@ -176,7 +176,7 @@
             {
                 "color": "blue",
                 "motion_type": "pro",
-                "rotation_direction": "l",
+                "rotation_direction": "ccw",
                 "quadrant": "nw",
                 "start_location": "n",
                 "end_location": "w",
@@ -200,7 +200,7 @@
             {
                 "color": "red",
                 "motion_type": "pro",
-                "rotation_direction": "r",
+                "rotation_direction": "cw",
                 "quadrant": "se",
                 "start_location": "e",
                 "end_location": "s",
@@ -224,7 +224,7 @@
             {
                 "color": "red",
                 "motion_type": "pro",
-                "rotation_direction": "r",
+                "rotation_direction": "cw",
                 "quadrant": "sw",
                 "start_location": "s",
                 "end_location": "w",
@@ -248,7 +248,7 @@
             {
                 "color": "red",
                 "motion_type": "pro",
-                "rotation_direction": "r",
+                "rotation_direction": "cw",
                 "quadrant": "nw",
                 "start_location": "w",
                 "end_location": "n",
@@ -272,7 +272,7 @@
             {
                 "color": "red",
                 "motion_type": "pro",
-                "rotation_direction": "r",
+                "rotation_direction": "cw",
                 "quadrant": "ne",
                 "start_location": "n",
                 "end_location": "e",
@@ -296,7 +296,7 @@
             {
                 "color": "red",
                 "motion_type": "pro",
-                "rotation_direction": "l",
+                "rotation_direction": "ccw",
                 "quadrant": "sw",
                 "start_location": "w",
                 "end_location": "s",
@@ -320,7 +320,7 @@
             {
                 "color": "red",
                 "motion_type": "pro",
-                "rotation_direction": "l",
+                "rotation_direction": "ccw",
                 "quadrant": "se",
                 "start_location": "s",
                 "end_location": "e",
@@ -344,7 +344,7 @@
             {
                 "color": "red",
                 "motion_type": "pro",
-                "rotation_direction": "l",
+                "rotation_direction": "ccw",
                 "quadrant": "ne",
                 "start_location": "e",
                 "end_location": "n",
@@ -368,7 +368,7 @@
             {
                 "color": "red",
                 "motion_type": "pro",
-                "rotation_direction": "l",
+                "rotation_direction": "ccw",
                 "quadrant": "nw",
                 "start_location": "n",
                 "end_location": "w",

@@ -5,13 +5,13 @@ from settings.numerical_constants import *
 from settings.string_constants import *
 from typing import Any
 
+
 class Grid(QGraphicsSvgItem):
     def __init__(self, grid_svg_path) -> None:
         super().__init__(grid_svg_path)
         self.svg_file = grid_svg_path
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)
-
 
     def get_circle_coordinates(self, circle_id) -> QPointF | None:
         with open(self.svg_file, "r") as svg_file:
@@ -32,6 +32,7 @@ class Grid(QGraphicsSvgItem):
             constant: self.get_circle_coordinates(point_name)
             for point_name, constant in zip(point_names, constants)
         }
+
     def init_center(self) -> None:
         self.center: QPointF = self.get_circle_coordinates("center_point")
 
