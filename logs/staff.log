@@ -217,3 +217,16 @@
 2023-11-12 19:12:27,409 WARNING root Staff has no location
 2023-11-12 19:13:02,829 WARNING root Staff has no location
 2023-11-12 19:13:02,829 WARNING root Staff has no location
+2023-11-13 17:16:08,381 DEBUG root Multiple letters returned by get_current_letter: {'L', 'V', 'R', 'F', 'I', 'U', 'O', 'C'}
+2023-11-13 17:16:08,984 DEBUG root Multiple letters returned by get_current_letter: {'L', 'V', 'R', 'F', 'I', 'U', 'O', 'C'}
+2023-11-13 17:16:09,149 DEBUG root Multiple letters returned by get_current_letter: {'L', 'V', 'R', 'F', 'I', 'U', 'O', 'C'}
+2023-11-13 17:16:09,412 DEBUG root Multiple letters returned by get_current_letter: {'L', 'V', 'R', 'F', 'I', 'U', 'O', 'C'}
+2023-11-13 17:16:10,262 DEBUG root Multiple letters returned by get_current_letter: {'L', 'V', 'R', 'F', 'I', 'U', 'O', 'C'}
+2023-11-13 17:16:10,892 DEBUG root Multiple letters returned by get_current_letter: {'L', 'V', 'R', 'F', 'I', 'U', 'O', 'C'}
+2023-11-13 17:16:13,465 DEBUG root Multiple letters returned by get_current_letter: {'D', 'J', 'S', 'P', 'G', 'A', 'M'}
+2023-11-13 17:16:14,025 DEBUG root Multiple letters returned by get_current_letter: {'D', 'J', 'S', 'P', 'G', 'A', 'M'}
+2023-11-13 17:16:14,593 DEBUG root Multiple letters returned by get_current_letter: {'D', 'J', 'S', 'P', 'G', 'A', 'M'}
+2023-11-13 17:16:15,205 DEBUG root Multiple letters returned by get_current_letter: {'D', 'J', 'S', 'P', 'G', 'A', 'M'}
+2023-11-13 17:16:16,229 DEBUG root Multiple letters returned by get_current_letter: {'D', 'J', 'S', 'P', 'G', 'A', 'M'}
+2023-11-13 17:16:27,097 DEBUG root Multiple letters returned by get_current_letter: {'U', 'V', 'O', 'C', 'R', 'I', 'L', 'F'}
+2023-11-13 17:16:27,376 DEBUG root Multiple letters returned by get_current_letter: {'U', 'V', 'O', 'C', 'R', 'I', 'L', 'F'}

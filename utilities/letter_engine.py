@@ -265,20 +265,20 @@ class LetterEngine:
             start_pos = specific_position.get("start_position")
             end_pos = specific_position.get("end_position")
             preprocessed_key = f"{start_pos}_{end_pos}"
-            # Use preprocessed combinations to narrow down the options
-            filtered_letter_group: Dict[
-                str, List[Dict_Variants]
-            ] = self.preprocessed_start_end_combinations.get(preprocessed_key, [])
+            filtered_preprocessed_group = self.preprocessed_start_end_combinations.get(preprocessed_key, [])
 
             overall_position = self.get_overall_position(specific_position)
             letter_group = self.get_letter_group(overall_position)
-            motion_letter_group = set(self.get_motion_type_letter_group())
+            motion_letter_group = self.get_motion_type_letter_group()
 
-            # Filter letter group based on motion letter group
+            # Convert motion_letter_group string to a set of individual letters
+            motion_letter_set = set(motion_letter_group)
+
+            # Filter the letter group based on the motion letter set
             filtered_letter_group = {
-                letter: combinations
-                for letter, combinations in letter_group.items()
-                if letter in motion_letter_group
+                letter
+                for letter in letter_group
+                if letter in motion_letter_set
             }
 
             if len(filtered_letter_group) != 1:
@@ -287,7 +287,7 @@ class LetterEngine:
 
             # Return the current letter
             if len(filtered_letter_group) == 1:
-                current_letter = list(filtered_letter_group.keys())[0]
+                current_letter = filtered_letter_group.pop()
                 return current_letter
             else:
                 logging.debug(
@@ -298,11 +298,12 @@ class LetterEngine:
         else:
             return None
 
+        
     def get_gamma_letter(self, letter_group) -> GammaLetters:
         gamma_handpath_letters = set(self.get_gamma_handpath_group())
         filtered_letter_group = {
-            letter: combinations
-            for letter, combinations in letter_group.items()
+            letter
+            for letter in letter_group
             if letter in gamma_handpath_letters
         }
 
@@ -310,8 +311,8 @@ class LetterEngine:
         if any(letter in "MNOPQR" for letter in filtered_letter_group):
             gamma_opp_handpath_letters = set(self.get_gamma_opp_handpath_letter_group())
             filtered_letter_group = {
-                letter: combinations
-                for letter, combinations in filtered_letter_group.items()
+                letter
+                for letter in filtered_letter_group
                 if letter in gamma_opp_handpath_letters
             }
 
@@ -321,8 +322,8 @@ class LetterEngine:
                     self.get_gamma_same_handpath_hybrid_letter()
                 )
                 filtered_letter_group = {
-                    letter: combinations
-                    for letter, combinations in filtered_letter_group.items()
+                    letter
+                    for letter in filtered_letter_group
                     if letter == gamma_same_handpath_hybrid_letter
                 }
 
