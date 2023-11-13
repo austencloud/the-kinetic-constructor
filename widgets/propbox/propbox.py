@@ -5,13 +5,20 @@ from PyQt6.QtWidgets import (
     QGraphicsScene,
 )
 from PyQt6.QtCore import Qt, QPointF
-from settings.numerical_constants import GRAPHBOARD_SCALE
-from settings.string_constants import *
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+from objects.staff import Staff
+from settings.numerical_constants import GRAPHBOARD_SCALE
+from settings.string_constants import NORTH, EAST, SOUTH, WEST, COLOR, RED, BLUE, LOCATION, LAYER
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from widgets.main_widget import MainWidget
+
+
 
 
 class Propbox(QGraphicsScene):
-    def __init__(self, main_widget):
+    def __init__(self, main_widget: 'MainWidget'):
         super().__init__()
         self.main_widget = main_widget
 
@@ -58,8 +65,8 @@ class Propbox(QGraphicsScene):
         }
 
         # Create red and blue staffs in the propbox
-        red_staff = self.factory.create_staff(propbox, red_propbox_staff)
-        blue_staff = self.factory.create_staff(propbox, blue_propbox_staff)
+        red_staff = Staff(propbox, red_propbox_staff)
+        blue_staff = Staff(propbox, blue_propbox_staff)
 
         red_staff.setPos(self.propbox_staff_locations[EAST])
         blue_staff.setPos(self.propbox_staff_locations[NORTH])

@@ -1,4 +1,3 @@
-from typing import Dict
 from PyQt6.QtWidgets import (
     QHBoxLayout,
     QVBoxLayout,
@@ -9,8 +8,7 @@ from PyQt6.QtWidgets import (
     QFrame,
 )
 from PyQt6.QtGui import QPalette, QColor
-from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
-
+from typing import TYPE_CHECKING, Dict
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 

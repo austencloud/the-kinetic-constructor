@@ -6,12 +6,9 @@ from widgets.infobox.infobox import Infobox
 from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
 from widgets.action_buttons_frame import ActionButtonsFrame
-from utilities.json_handler import JsonHandler
-from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
-
+from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-
 
 class GraphEditor(QWidget):
     def __init__(self, main_widget: "MainWidget"):

@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QLabel, QPushButton
+from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QLabel, QPushButton, QGraphicsRectItem
 from PyQt6.QtCore import QRectF, QPointF, Qt
 from PyQt6.QtGui import QFont, QImage, QPainter, QColor
 from settings.numerical_constants import (
@@ -8,9 +8,7 @@ from settings.numerical_constants import (
     GRAPHBOARD_WIDTH,
     PICTOGRAPH_SCALE,
 )
-from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
-from PyQt6.QtWidgets import QGraphicsRectItem
-
+from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from utilities.pictograph_generator import PictographGenerator
