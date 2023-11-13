@@ -121,11 +121,6 @@ class Arrow(GraphicalObject):
 
     ### UPDATERS ###
 
-    def update_appearance(self):
-        if self.motion_type is not STATIC:
-            self.update_color()
-        self.update_rotation()
-
     def update_rotation(self):
         angle = self.get_rotation_angle()
         self.setRotation(angle)

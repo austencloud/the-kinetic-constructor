@@ -60,3 +60,7 @@ class GraphicalObject(QGraphicsSvgItem):
     def update(self, attributes):
         self.set_attributes_from_dict(attributes)
         self.update_appearance()
+        
+    def update_appearance(self):
+        self.update_color()
+        self.update_rotation()

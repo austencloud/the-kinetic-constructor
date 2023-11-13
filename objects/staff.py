@@ -73,7 +73,7 @@ class Staff(GraphicalObject):
         self.ghost_staff.arrow = self.arrow
         self.graphboard.staffs.append(self.ghost_staff)
         self.graphboard.staffs.remove(self)
-        self.graphboard.staff_positioner.update()
+        self.graphboard.update()
         self.graphboard.staffs.append(self)
         for item in self.graphboard.items():
             if item != self:
@@ -91,9 +91,9 @@ class Staff(GraphicalObject):
             if new_location != self.previous_location and self.arrow:
                 self.location = new_location
                 self.attributes[LOCATION] = new_location
-                self.set_drag_pos(new_pos)
                 self.update_axis()
                 self.update_appearance()
+
                 self.update_arrow_quadrant(new_location)
                 self.attributes[LOCATION] = new_location
                 self.ghost_staff.update(self.attributes)
@@ -103,6 +103,8 @@ class Staff(GraphicalObject):
                     self.arrow.end_location = new_location
                 self.graphboard.update()
                 self.graphboard.staffs.append(self)
+                new_pos = event.scenePos() - self.get_staff_center()
+                self.set_drag_pos(new_pos)
                 self.previous_location = new_location
 
     def set_drag_pos(self, new_pos):
@@ -194,15 +196,10 @@ class Staff(GraphicalObject):
 
         if self.arrow:
             self.arrow.update_appearance()
-        self.graphboard.ghost_staffs[self.color].hide()
         self.previous_location = new_location
         self.graphboard.update()
 
     ### UPDATERS ###
-
-    def update_appearance(self):
-        self.update_color()
-        self.update_rotation()
 
     def update_axis(self):
         if self.layer == 1:
