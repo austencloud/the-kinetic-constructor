@@ -35,6 +35,8 @@ from settings.string_constants import (
 import logging
 import re
 
+ATTRIBUTES = STAFF_ATTRIBUTES
+
 logging.basicConfig(
     filename="logs/staff.log",
     level=logging.DEBUG,
@@ -219,6 +221,10 @@ class Staff(GraphicalObject):
         self.color = attributes.get(COLOR, None)
         self.location = attributes.get(LOCATION, None)
         self.layer = attributes.get(LAYER, None)
+
+        for attribute in ATTRIBUTES:
+            setattr(self, attribute, attributes.get(attribute, None))
+
 
         self.attributes = {
             COLOR: attributes.get(COLOR, None),

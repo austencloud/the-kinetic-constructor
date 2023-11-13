@@ -472,9 +472,10 @@ class Arrow(GraphicalObject):
             LAYER: 1,
         }
 
-        self.update(new_arrow_dict)
+        
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
+        self.update(new_arrow_dict)
         self.staff.update(new_staff_dict)
 
         if self.ghost_arrow:
@@ -515,7 +516,7 @@ class Arrow(GraphicalObject):
             LAYER: 1,
         }
 
-        self.svg_file = f"resources/images/arrows/{new_motion_type}_{self.turns}.svg"
+        self.motion_type = new_motion_type
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
         self.update(new_arrow_dict)
