@@ -35,13 +35,15 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_staff import GhostStaff
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
-from .graphboard import Graphboard
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .graphboard import Graphboard
 
 from typing import List, Optional, Dict, Any, Tuple, Set
 
 
 class GraphboardInit:
-    padding: Optional[float]
+
     grid: Optional['Grid']
     
     def __init__(self, graphboard: 'Graphboard'):
@@ -63,16 +65,12 @@ class GraphboardInit:
 
     def init_grid(self):
         grid = Grid(GRID_FILE_PATH)
-        grid_width = grid.boundingRect().width()
-        scene_width = self.graphboard.width()
-        padding = (scene_width - grid_width) / 2
         grid_position = QPointF(0, 0)
         grid.setPos(grid_position)
         self.graphboard.addItem(grid)
         grid.init_handpoints()
         grid.init_layer2_points()
         self.graphboard.grid = grid
-        self.graphboard.padding = padding
         return grid
 
     def init_staff_set(self):
