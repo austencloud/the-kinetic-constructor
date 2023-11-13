@@ -47,20 +47,8 @@ if TYPE_CHECKING:
 
 
 class Arrow(GraphicalObject):
-    drag_offset: QPointF
-    staff: "Staff"
-    ghost_arrow: "GhostArrow"
-    ghost_staff: "GhostStaff"
-    is_mirrored: bool
-    color: Optional[RED or BLUE]
-    motion_type: Optional[PRO or ANTI or STATIC]
-    rotation_direction: Optional[CLOCKWISE or COUNTER_CLOCKWISE]
-    quadrant: Optional[NORTHEAST or SOUTHEAST or SOUTHWEST or NORTHWEST]
-    start_location: Optional[NORTH or EAST or SOUTH or WEST]
-    end_location: Optional[NORTH or EAST or SOUTH or WEST]
-    turns: Optional[int]
-    mirror_transform: Optional[QTransform]
-
+    staff: Staff
+    
     def __init__(self, graphboard: "GraphBoard", attributes: Dict[str, Any]) -> None:
         svg_file = self.get_svg_file(attributes.get(MOTION_TYPE), attributes.get(TURNS))
         super().__init__(svg_file, graphboard, attributes)

@@ -34,6 +34,9 @@ from settings.string_constants import (
 )
 import logging
 import re
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from objects.arrow import Arrow
 
 ATTRIBUTES = STAFF_ATTRIBUTES
 
@@ -45,6 +48,8 @@ logging.basicConfig(
 
 
 class Staff(GraphicalObject):
+    arrow: 'Arrow'
+    
     def __init__(self, graphboard, attributes):
         svg_file = STAFF_SVG_FILE_PATH
         super().__init__(svg_file, graphboard, attributes)

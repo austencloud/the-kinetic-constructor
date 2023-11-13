@@ -1,17 +1,23 @@
-from typing import Dict, Literal, List
+from typing import TypedDict, Literal, Dict, List
 
-# Defining individual types
 Color = Literal["red", "blue"]
 MotionType = Literal["pro", "anti", "dash", "static", "float", "chu"]
 Quadrant = Literal["ne", "se", "sw", "nw"]
 RotationDirection = Literal["cw", "ccw"]
 Location = Literal["n", "e", "s", "w"]
-Turns = Literal[0, 1]
+Turns = Literal[0, 1, 2]
 
-# Arrow attributes
-ArrowAttributes = Dict[
-    str, Color | MotionType | Quadrant | RotationDirection | Location | Location | Turns
-]
+# Arrow attributes using TypedDict for precise key-value mapping
+class ArrowAttributes(TypedDict):
+    color: Color
+    motion_type: MotionType
+    quadrant: Quadrant
+    rotation_direction: RotationDirection
+    start_location: Location
+    end_location: Location
+    turns: Turns
+
+
 
 # Other definitions
 SpecificPosition = Literal[

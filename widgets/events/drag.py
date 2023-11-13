@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QLabel
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QPoint
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtCore import Qt
@@ -11,8 +11,16 @@ if TYPE_CHECKING:
     from main import MainWindow
     from widgets.graphboard.graphboard import GraphBoard
     from widgets.arrowbox.arrowbox import ArrowBox
-from utilities.TypeChecking import ArrowAttributes
+from utilities.TypeChecking import ArrowAttributes, Color, MotionType, Quadrant, RotationDirection, Location, Turns
 class Drag(QWidget):
+    color: Color
+    motion_type: MotionType
+    quadrant: Quadrant
+    rotation_direction: RotationDirection
+    start_location: Location
+    end_location: Location
+    turns: Turns
+    
     def __init__(self, main_window: 'MainWindow', graphboard: 'GraphBoard', arrowbox: 'ArrowBox') -> None:
         super().__init__()
         self.setParent(main_window)
@@ -76,7 +84,9 @@ class Drag(QWidget):
             renderer.render(painter)
         return pixmap
 
-    def get_attributes(self):
+    def get_attributes(self) -> ArrowAttributes:
+        start_location: Location
+        end_location: Location
         (
             start_location,
             end_location,
@@ -94,11 +104,11 @@ class Drag(QWidget):
             TURNS: self.turns,
         }
 
-    def move_to_cursor(self, arrowbox, event_pos):
-        local_pos = arrowbox.view.mapTo(self.main_window, event_pos)
+    def move_to_cursor(self, event_pos: QPoint) -> None:
+        local_pos = self.arrowbox.view.mapTo(self.main_window, event_pos)
         self.move(local_pos - (self.arrow_center).toPoint())
 
-    def remove_same_color_arrow(self):
+    def remove_same_color_arrow(self) -> None:
         for arrow in self.graphboard.arrows[:]:
             if arrow.isVisible() and arrow.color == self.color:
                 self.graphboard.removeItem(arrow)
@@ -108,7 +118,7 @@ class Drag(QWidget):
                 self.graphboard.removeItem(staff)
                 self.graphboard.staffs.remove(staff)
 
-    def place_arrow_on_graphboard(self):
+    def place_arrow_on_graphboard(self) -> None:
         self.graphboard.update()
         self.graphboard.clearSelection()
 
@@ -126,19 +136,19 @@ class Drag(QWidget):
         self.placed_arrow.show()
         self.placed_arrow.setSelected(True)
 
-    def start_drag(self, event_pos):
-        self.move_to_cursor(self.arrowbox, event_pos)
+    def start_drag(self, event_pos: 'QPoint') -> None:
+        self.move_to_cursor(event_pos)
         self.show()
 
     ### EVENT HANDLERS ###
 
-    def handle_mouse_move(self, arrowbox, event_pos):
+    def handle_mouse_move(self, event_pos: QPoint) -> None:
         if self.preview:
-            self.move_to_cursor(arrowbox, event_pos)
-            if self.is_over_graphboard(arrowbox, event_pos):
+            self.move_to_cursor(event_pos)
+            if self.is_over_graphboard(event_pos):
                 self.update_for_graphboard(event_pos)
 
-    def handle_mouse_release(self):
+    def handle_mouse_release(self) -> None:
         if self.has_entered_graphboard_once:
             self.place_arrow_on_graphboard()
         self.deleteLater()
@@ -149,15 +159,14 @@ class Drag(QWidget):
 
     ### FLAGS ###
 
-    def is_over_graphboard(self, arrowbox, event_pos):
-        pos_in_main_window = arrowbox.view.mapToGlobal(event_pos)
+    def is_over_graphboard(self, event_pos: QPoint) -> bool:
+        pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
         local_pos_in_graphboard = self.graphboard.view.mapFromGlobal(pos_in_main_window)
-
         return self.graphboard.view.rect().contains(local_pos_in_graphboard)
 
     ### UPDATERS ###
 
-    def update_staff_during_drag(self):
+    def update_staff_during_drag(self) -> None:
         for staff in self.graphboard.staff_set.values():
             if staff.color == self.color:
                 if staff not in self.graphboard.staffs:
@@ -178,7 +187,7 @@ class Drag(QWidget):
                 staff.update_appearance()
                 self.graphboard.update_staffs()
 
-    def update_rotation(self):
+    def update_rotation(self) -> None:
         renderer = QSvgRenderer(self.target_arrow.svg_file)
         scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE
         pixmap = QPixmap(scaled_size)
@@ -207,7 +216,7 @@ class Drag(QWidget):
             self.quadrant,
         )
 
-    def update_for_graphboard(self, event_pos):
+    def update_for_graphboard(self, event_pos: QPoint) -> None:
         if not self.has_entered_graphboard_once:
             self.just_entered_graphboard = True
             self.has_entered_graphboard_once = True
@@ -225,7 +234,7 @@ class Drag(QWidget):
             self.update_preview_for_new_quadrant(new_quadrant)
             self.previous_quadrant = new_quadrant
 
-    def update_preview_for_new_quadrant(self, new_quadrant):
+    def update_preview_for_new_quadrant(self, new_quadrant: Quadrant) -> None:
         self.quadrant = new_quadrant
         self.ghost_arrow.quadrant = new_quadrant
         self.update_rotation()
@@ -239,4 +248,3 @@ class Drag(QWidget):
             self.graphboard.addItem(self.ghost_arrow)
         self.graphboard.update()
 
-    ### PROFILING ###
