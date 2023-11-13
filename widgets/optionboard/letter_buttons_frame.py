@@ -7,12 +7,17 @@ from settings.numerical_constants import GRAPHBOARD_SCALE
 from utilities.pictograph_selector_dialog import PictographSelectorDialog
 from data.letter_types import letter_types
 from settings.string_constants import LETTER_SVG_DIR
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from widgets.main_widget import MainWidget
+    from main import MainWindow
 
 
 class LetterButtonsFrame(QFrame):
-    def __init__(self, main_widget):
+    def __init__(self, main_widget: "MainWidget"):
         super().__init__()
-        self.main_window = main_widget.main_window
+        self.main_window: "MainWindow" = main_widget.main_window
         self.letter_buttons_layout = QVBoxLayout()
         self.letter_buttons_layout.addStretch(1)
         self.letter_buttons_layout.setSpacing(int(20 * GRAPHBOARD_SCALE))

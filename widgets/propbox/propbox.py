@@ -15,8 +15,6 @@ if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 
 
-
-
 class Propbox(QGraphicsScene):
     def __init__(self, main_widget: 'MainWidget'):
         super().__init__()
@@ -71,8 +69,11 @@ class Propbox(QGraphicsScene):
         red_staff.setPos(self.propbox_staff_locations[EAST])
         blue_staff.setPos(self.propbox_staff_locations[NORTH])
 
-        propbox.addItem(red_staff)
-        propbox.addItem(blue_staff)
+        self.addItem(red_staff)
+        self.addItem(blue_staff)
+        
+        red_staff.show()
+        blue_staff.show()
 
         red_staff.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
         blue_staff.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)

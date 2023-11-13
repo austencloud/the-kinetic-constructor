@@ -251,6 +251,9 @@ class Graphboard(QGraphicsScene):
         y = self.grid.boundingRect().height()
         letter_item.setPos(x, y)
 
+    def add_to_sequence(self):
+        pass
+
     ### UPDATERS ###
 
     def update(self) -> None:

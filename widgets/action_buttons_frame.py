@@ -43,7 +43,8 @@ class ActionButtonsFrame(QFrame):
                 self.mirror_selected_arrow,
             ),
             ("swap_colors.png", "Swap Colors", lambda: self.graphboard.swap_colors()),
-            # Additional buttons can be added here.
+            
+            ("add_to_sequence.png", "Add to Sequence", lambda: self.graphboard.add_to_sequence()),
         ]
 
         for icon_filename, tooltip, action, *args in buttons_settings:

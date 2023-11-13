@@ -91,7 +91,6 @@ class SequenceScene(QGraphicsScene):
             Qt.TransformationMode.SmoothTransformation,
         )
         state = (self.graphboard.get_state(), scaled_image)
-        self.add_pictograph(state)
 
         self.graphboard.update_letter(None)
 
