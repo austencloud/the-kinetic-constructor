@@ -8,12 +8,10 @@ from widgets.events.key_event_handler import KeyEventHandler
 from widgets.graph_editor import GraphEditor
 from widgets.optionboard.letter_buttons_frame import LetterButtonsFrame
 from utilities.pictograph_generator import PictographGenerator
-from typing import TYPE_CHECKING
-
+from typing import TYPE_CHECKING, Dict, List
 if TYPE_CHECKING:
     from main import MainWindow
     from widgets.propbox.propbox import Propbox
-
 
 class MainWidget(QWidget):
     propbox: "Propbox"
@@ -22,6 +20,14 @@ class MainWidget(QWidget):
     word_label: "QLabel"
     sequence_view: "QGraphicsView"
 
+    ArrowAttributes = Dict[str, str | int]
+    StartEndPositions = Dict[str, str]
+    OptimalLocations = Dict[str, Dict[str, float]]
+    Variant = ArrowAttributes | StartEndPositions | OptimalLocations
+    Variants = List[List[Variant]]
+    LetterVariants = Dict[str, Variants]
+    letters: Dict[str, Variants]
+    
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
         self.arrows = []

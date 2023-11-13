@@ -1,9 +1,3 @@
-from typing import List, Optional, Dict, Any, Tuple, Set
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsItem, QGraphicsView, QWidget
-from PyQt6.QtGui import QTransform
-from objects.arrow import Arrow, BlankArrow
-from objects.staff import Staff
-from objects.grid import Grid
 from settings.string_constants import (
     COLOR,
     MOTION_TYPE,
@@ -21,6 +15,10 @@ from settings.string_constants import (
     NORTHEAST,
     STATIC,
 )
+from PyQt6.QtWidgets import QGraphicsScene
+from PyQt6.QtGui import QTransform
+from objects.arrow import Arrow, BlankArrow
+from objects.staff import Staff
 from data.letter_types import letter_types
 from widgets.graphboard.graphboard_init import GraphBoardInit
 from widgets.graphboard.graphboard_menu_handler import GraphBoardMenuHandler
@@ -33,35 +31,12 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from PyQt6.QtCore import QPointF
 
-from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
-
+from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
+    from widgets.infobox.infobox import InfoBox
     from utilities.pictograph_generator import PictographGenerator
-
-
 class GraphBoard(QGraphicsScene):
-    arrows: List[Arrow]
-    staffs: List[Staff]
-    letter_renderers: Dict[str, QSvgRenderer]
-    current_letter: Optional[str]
-    infobox: Optional[QGraphicsItem]
-    dragged_arrow: Optional[Arrow]
-    dragged_staff: Optional[Staff]
-    ghost_arrows: Dict[str, Arrow]
-    ghost_staffs: Dict[str, Staff]
-    grid: Optional[Grid]
-    view: QGraphicsView
-    staff_set: dict[str, Staff]
-    letter_item: QGraphicsSvgItem
-    quadrants: Dict[str, Tuple[float, float, float, float]]
-    export_handler: ExportHandler
-    graphboard_menu_handler: GraphBoardMenuHandler
-    arrow_positioner: ArrowPositioner
-    staff_positioner: StaffPositioner
-    letter_engine: LetterEngine
-    generator: "PictographGenerator"
-
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.setup_scene()
@@ -69,18 +44,17 @@ class GraphBoard(QGraphicsScene):
 
     def setup_scene(self) -> None:
         self.setSceneRect(0, 0, 750, 900)
-        self.arrows = []
-        self.staffs = []
-        self.letter_renderers = {}
-        self.current_letter = None
-        self.infobox = None
+        self.arrows: List[Arrow] = []
+        self.staffs: List[Staff] = []
+        self.current_letter: str = None
+        self.infobox: InfoBox = None
 
     def setup_components(self, main_widget: "MainWidget") -> None:
         self.letters = main_widget.letters
+        self.generator: PictographGenerator = None
 
-        self.dragged_arrow = None
-        self.dragged_staff = None
-
+        self.dragged_arrow: Arrow = None
+        self.dragged_staff: Staff = None
         self.initializer = GraphBoardInit(self)
 
         self.ghost_arrows = self.initializer.init_ghost_arrows()
@@ -252,7 +226,7 @@ class GraphBoard(QGraphicsScene):
         y = self.grid.boundingRect().height()
         letter_item.setPos(x, y)
 
-    def add_to_sequence(self):
+    def add_to_sequence(self) -> None:
         pass
 
     ### UPDATERS ###

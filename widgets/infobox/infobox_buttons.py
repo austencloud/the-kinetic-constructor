@@ -2,16 +2,20 @@ from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QIcon
 from settings.string_constants import BLUE, RED, COLOR, ICON_PATHS
 from settings.numerical_constants import BUTTON_SIZE
-
+from typing import TYPE_CHECKING, Dict, Callable, List
+if TYPE_CHECKING:
+    from widgets.infobox.infobox import InfoBox
+    from widgets.graphboard.graphboard import GraphBoard
+    
 
 class InfoBoxButtons:
-    def __init__(self, infobox, graphboard):
+    def __init__(self, infobox: 'InfoBox', graphboard: 'GraphBoard') -> None:
         self.infobox = infobox
         self.graphboard = graphboard
-        self.button_groups = {BLUE: [], RED: []}
+        self.button_groups: Dict[str, List[QPushButton]] = {BLUE: [], RED: []}
         self.layouts = infobox.layouts
 
-    def create_and_set_button(self, button_name, properties):
+    def create_and_set_button(self, button_name: str, properties: Dict[str, str | Callable]) -> None:
         icon = properties.get("icon", None)
         button = QPushButton(QIcon(icon), properties.get("text", ""))
 
@@ -26,12 +30,12 @@ class InfoBoxButtons:
         elif RED in button_name:
             self.button_groups[RED].append(button)
 
-    def show_buttons(self, attributes):
+    def show_buttons(self, attributes: Dict[str, str | int]) -> None:
         color = attributes.get(COLOR, "")
         for button in self.button_groups[color]:
             button.show()
 
-    def setup_buttons(self):
+    def setup_buttons(self) -> None:
         self.button_properties = {
             "swap_colors": {
                 "icon": ICON_PATHS["swap_colors"],
@@ -85,7 +89,7 @@ class InfoBoxButtons:
 
         self.create_infobox_buttons()
 
-    def create_infobox_buttons(self):
+    def create_infobox_buttons(self) -> None:
         for button_name, properties in self.button_properties.items():
             self.create_and_set_button(button_name, properties)
 
