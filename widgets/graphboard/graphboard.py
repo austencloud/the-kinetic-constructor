@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QGraphicsScene, QGraphicsItem, QGraphicsView, QWidge
 from PyQt6.QtGui import QTransform
 from objects.arrow import Arrow, BlankArrow
 from objects.staff import Staff
+from objects.grid import Grid
 from settings.string_constants import ARROWS, COLOR, MOTION_TYPE, ROTATION_DIRECTION, QUADRANT, START_LOCATION, END_LOCATION, TURNS, RED, BLUE, LETTER_SVG_DIR, NORTHWEST, SOUTHEAST, SOUTHWEST, NORTHEAST, STATIC
 from data.letter_types import letter_types
 from .graphboard_init import GraphboardInit
@@ -26,7 +27,7 @@ class Graphboard(QGraphicsScene):
     dragged_staff: Optional[Staff]
     ghost_arrows: Dict[str, Arrow]
     ghost_staffs: Dict[str, Staff]
-    grid: QGraphicsSvgItem  
+    grid: Optional[Grid]  
     view: QGraphicsView 
     staff_set: Set[Staff]
     letter_item: QGraphicsSvgItem
@@ -154,12 +155,11 @@ class Graphboard(QGraphicsScene):
                 blue_position = center
         return red_position, blue_position
 
-    def get_state(self) -> Dict[str, Any]:
-        state = {
-            ARROWS: [],
-        }
+
+    def get_state(self) -> List[Dict[str, Any]]:
+        state = []
         for arrow in self.arrows:
-            state[ARROWS].append(
+            state.append(
                 {
                     COLOR: arrow.color,
                     MOTION_TYPE: arrow.motion_type,

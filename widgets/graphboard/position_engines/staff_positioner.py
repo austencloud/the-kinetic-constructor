@@ -57,14 +57,14 @@ class StaffPositioner:
             staff.setPos(new_position)
 
         arrows_grouped_by_start = {}
-        for arrow in board_state[ARROWS]:
+        for arrow in board_state:
             arrows_grouped_by_start.setdefault(arrow[START_LOCATION], []).append(arrow)
 
         pro_or_anti_arrows = [
-            arrow for arrow in board_state[ARROWS] if arrow[MOTION_TYPE] in [PRO, ANTI]
+            arrow for arrow in board_state if arrow[MOTION_TYPE] in [PRO, ANTI]
         ]
         static_arrows = [
-            arrow for arrow in board_state[ARROWS] if arrow[MOTION_TYPE] == STATIC
+            arrow for arrow in board_state if arrow[MOTION_TYPE] == STATIC
         ]
 
         # STATIC BETA
@@ -79,11 +79,9 @@ class StaffPositioner:
                     arrow1[START_LOCATION] == arrow2[START_LOCATION]
                     and arrow1[END_LOCATION] == arrow2[END_LOCATION]
                 ):
-                    if arrow1[MOTION_TYPE] in [PRO, ANTI] and arrow2[MOTION_TYPE] in [
-                        PRO,
-                        ANTI,
-                    ]:
-                        self.reposition_beta_to_beta(arrows)
+                    if arrow1[MOTION_TYPE] in [PRO, ANTI]:
+                        if arrow2[MOTION_TYPE] in [PRO, ANTI]:
+                            self.reposition_beta_to_beta(arrows)
 
         # GAMMA → BETA - Y, Z
         if len(pro_or_anti_arrows) == 1 and len(static_arrows) == 1:
@@ -91,7 +89,7 @@ class StaffPositioner:
 
         # ALPHA → BETA - D, E, F
         converging_arrows = [
-            arrow for arrow in board_state[ARROWS] if arrow[MOTION_TYPE] not in [STATIC]
+            arrow for arrow in board_state if arrow[MOTION_TYPE] not in [STATIC]
         ]
         if len(converging_arrows) == 2:
             if converging_arrows[0].get(START_LOCATION) != converging_arrows[1].get(

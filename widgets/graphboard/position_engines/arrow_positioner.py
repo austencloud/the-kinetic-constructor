@@ -1,11 +1,15 @@
 from PyQt6.QtCore import QPointF
 from settings.numerical_constants import *
 from settings.string_constants import *
-from objects.arrow import BlankArrow
+from objects.arrow import BlankArrow, Arrow
+
+from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
+if TYPE_CHECKING:
+    from widgets.graphboard.graphboard import Graphboard
 
 
 class ArrowPositioner:
-    def __init__(self, graphboard):
+    def __init__(self, graphboard: 'Graphboard'):
         self.letters = graphboard.letters
         self.graphboard = graphboard
 
@@ -41,27 +45,22 @@ class ArrowPositioner:
                 )
         return None
 
-    def compare_states(self, current_state, candidate_state):
-        candidate_state_dict = {"arrows": []}
-        for entry in candidate_state:
-            if COLOR in entry and MOTION_TYPE in entry:
-                candidate_state_dict["arrows"].append(
-                    {
-                        COLOR: entry[COLOR],
-                        MOTION_TYPE: entry[MOTION_TYPE],
-                        ROTATION_DIRECTION: entry[ROTATION_DIRECTION],
-                        QUADRANT: entry[QUADRANT],
-                        TURNS: entry.get(TURNS, 0),
-                    }
-                )
+    def compare_states(self, 
+                    current_state: List[Dict[str, Any]], 
+                    candidate_state: List[Dict[str, Any]]) -> bool:
+        # Filter out non-arrow entries from candidate_state
+        filtered_candidate_state = [
+            entry for entry in candidate_state 
+            if set(entry.keys()).issuperset({COLOR, MOTION_TYPE, QUADRANT, ROTATION_DIRECTION})
+        ]
 
-        if len(current_state["arrows"]) != len(candidate_state_dict["arrows"]):
+        if len(current_state) != len(filtered_candidate_state):
             return False
 
-        for arrow in current_state["arrows"]:
+        for arrow in current_state:
             matching_arrows = [
                 candidate_arrow
-                for candidate_arrow in candidate_state_dict["arrows"]
+                for candidate_arrow in filtered_candidate_state
                 if all(
                     arrow.get(key) == candidate_arrow.get(key)
                     for key in [COLOR, MOTION_TYPE, QUADRANT, ROTATION_DIRECTION]
@@ -71,8 +70,8 @@ class ArrowPositioner:
                 return False
 
         return True
-
-    def set_arrow_to_optimal_loc(self, optimal_locations, arrow):
+    
+    def set_arrow_to_optimal_loc(self, optimal_locations, arrow: 'Arrow'):
         arrow.set_transform_origin_to_center()
         optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
         pos = QPointF(
@@ -86,7 +85,7 @@ class ArrowPositioner:
         new_pos = QPointF(new_x, new_y)
         arrow.setPos(new_pos)
 
-    def set_arrow_to_default_loc(self, arrow):
+    def set_arrow_to_default_loc(self, arrow: 'Arrow'):
         arrow.set_transform_origin_to_center()
         layer2_point = self.graphboard.grid.layer2_points.get(arrow.quadrant)
         adjustment = QPointF(0, 0)
@@ -101,8 +100,8 @@ class ArrowPositioner:
             adjustment = QPointF(-DISTANCE, -DISTANCE)
 
         new_pos = QPointF(
-            layer2_point.x() + adjustment.x() + arrow.graphboard.padding,
-            layer2_point.y() + adjustment.y() + arrow.graphboard.padding,
+            layer2_point.x() + adjustment.x(),
+            layer2_point.y() + adjustment.y(),
         )
 
         final_pos = QPointF(new_pos.x(), new_pos.y())
