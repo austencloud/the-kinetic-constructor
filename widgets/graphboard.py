@@ -4,18 +4,23 @@ from PyQt6.QtGui import QTransform
 from objects.arrow import Arrow, BlankArrow
 from objects.staff import Staff
 from objects.grid import Grid
-from settings.string_constants import ARROWS, COLOR, MOTION_TYPE, ROTATION_DIRECTION, QUADRANT, START_LOCATION, END_LOCATION, TURNS, RED, BLUE, LETTER_SVG_DIR, NORTHWEST, SOUTHEAST, SOUTHWEST, NORTHEAST, STATIC
+from settings.string_constants import COLOR, MOTION_TYPE, ROTATION_DIRECTION, QUADRANT, START_LOCATION, END_LOCATION, TURNS, RED, BLUE, LETTER_SVG_DIR, NORTHWEST, SOUTHEAST, SOUTHWEST, NORTHEAST, STATIC
 from data.letter_types import letter_types
-from .graphboard_init import GraphboardInit
-from .graphboard_menu_handler import GraphboardMenuHandler
-from .position_engines.staff_positioner import StaffPositioner
-from .position_engines.arrow_positioner import ArrowPositioner
+from widgets.graphboard.graphboard_init import GraphboardInit
+from widgets.graphboard.graphboard_menu_handler import GraphboardMenuHandler
+from widgets.graphboard.position_engines.staff_positioner import StaffPositioner
+from widgets.graphboard.position_engines.arrow_positioner import ArrowPositioner
 from utilities.export_handler import ExportHandler
 from utilities.letter_engine import LetterEngine
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from PyQt6.QtCore import QPointF
+
+from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
+if TYPE_CHECKING:
+    from widgets.graph_editor import GraphEditor
+    from widgets.main_widget import MainWidget
 
 class Graphboard(QGraphicsScene):
     arrows: List[Arrow]
@@ -29,7 +34,7 @@ class Graphboard(QGraphicsScene):
     ghost_staffs: Dict[str, Staff]
     grid: Optional[Grid]  
     view: QGraphicsView 
-    staff_set: Set[Staff]
+    staff_set: dict[str, Staff]
     letter_item: QGraphicsSvgItem
     quadrants: Dict[str, Tuple[float, float, float, float]]
     export_handler: ExportHandler
@@ -37,9 +42,9 @@ class Graphboard(QGraphicsScene):
     arrow_positioner: ArrowPositioner
     staff_positioner: StaffPositioner
     letter_engine: LetterEngine
-    graph_editor: QWidget 
+
     
-    def __init__(self, main_widget: Any, graph_editor: Any) -> None:
+    def __init__(self, main_widget: 'MainWidget', graph_editor: 'GraphEditor') -> None:
         super().__init__()
         self.setup_scene()
         self.setup_components(main_widget, graph_editor)
@@ -52,7 +57,7 @@ class Graphboard(QGraphicsScene):
         self.current_letter = None
         self.infobox = None
 
-    def setup_components(self, main_widget: Any, graph_editor: Any) -> None:
+    def setup_components(self, main_widget: 'MainWidget', graph_editor: Any) -> None:
         self.graph_editor = graph_editor
         self.letters = main_widget.letters
 
@@ -70,7 +75,7 @@ class Graphboard(QGraphicsScene):
         self.quadrants = self.initializer.init_quadrants(self.grid)
         self.setup_managers(main_widget, graph_editor)
 
-    def setup_managers(self, main_widget: Any, graph_editor: Any) -> None:
+    def setup_managers(self, main_widget: 'MainWidget', graph_editor: Any) -> None:
         self.export_handler = ExportHandler(self.grid, self)
         self.context_menu_manager = GraphboardMenuHandler(
             main_widget, graph_editor, self
@@ -79,23 +84,6 @@ class Graphboard(QGraphicsScene):
         self.staff_positioner = StaffPositioner(self)
         self.letter_engine = LetterEngine(self)
 
-    ### DELETION ###
-
-    def delete_arrow(self, arrow: Arrow, keep_staff: bool = False) -> None:
-        self.removeItem(arrow)
-        if arrow in self.arrows:
-            self.arrows.remove(arrow)
-        if keep_staff:
-            self.create_blank_arrow(arrow)
-        else:
-            self.delete_staff(arrow.staff)
-
-        self.update()
-
-    def delete_staff(self, staff: Staff) -> None:
-        self.removeItem(staff)
-        self.staffs.remove(staff)
-        self.update()
 
     ### EVENTS ###
 

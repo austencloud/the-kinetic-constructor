@@ -1,15 +1,19 @@
 from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QAction
-from settings.string_constants import *
-
+from settings.string_constants import RIGHT, LEFT
+from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
+from objects.arrow import Arrow
+from objects.staff import Staff
+if TYPE_CHECKING:
+    from widgets.main_widget import MainWidget
+    from widgets.graphboard import Graphboard
 
 class GraphboardMenuHandler:
-    def __init__(self, main_widget, manipulators, graphboard):
+    def __init__(self, main_widget: 'MainWidget', graphboard: 'Graphboard'):
         self.graphboard = graphboard
         self.main_widget = main_widget
         self.export_handler = graphboard.export_handler
         self.sequence_view = main_widget.sequence_view
-        self.manipulators = manipulators
 
     def create_menu_with_actions(self, parent, actions, event_pos):
         menu = QMenu()
@@ -20,30 +24,32 @@ class GraphboardMenuHandler:
         menu.exec(event_pos)
 
     def create_arrow_menu(self, selected_items, event):
+        selected_item = selected_items[0]
+        selected_arrow = selected_item if isinstance(selected_item, Arrow) else None
+        
         actions = [
             ("Delete", lambda: self.graphboard.delete_arrow(selected_items)),
             (
                 "Rotate Right",
-                lambda: self.manipulators.rotate_arrow(RIGHT, selected_items[0]),
+                lambda: selected_arrow.rotate(RIGHT),
             ),
             (
                 "Rotate Left",
-                lambda: self.manipulators.rotate_arrow(LEFT, selected_items[0]),
+                lambda: selected_arrow.rotate(LEFT),
             ),
-            ("Mirror", lambda: self.manipulators.mirror_arrow(selected_items)),
+            ("Mirror", lambda: selected_arrow.mirror()),
         ]
         self.create_menu_with_actions(self.graphboard, actions, event)
 
     def create_staff_menu(self, selected_items, event):
+        selected_item = selected_items[0]
+        selected_staff = selected_item if isinstance(selected_item, Staff) else None
+        
         actions = [
-            ("Delete", lambda: self.graphboard.delete_staff(selected_items)),
+            ("Delete", lambda: selected_staff.delete()),
             (
-                "Rotate Right",
-                lambda: self.manipulators.rotate_arrow(RIGHT, selected_items[0]),
-            ),
-            (
-                "Rotate Left",
-                lambda: self.manipulators.rotate_arrow(LEFT, selected_items[0]),
+                "Swap Axis",
+                lambda: selected_staff.swap_axis(),
             ),
         ]
         self.create_menu_with_actions(self.graphboard, actions, event)

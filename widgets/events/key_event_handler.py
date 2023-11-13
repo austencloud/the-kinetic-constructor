@@ -19,9 +19,9 @@ class KeyEventHandler:
         if event.key() == Qt.Key.Key_Delete:
             keep_staff = event.modifiers() == Qt.KeyboardModifier.ControlModifier
             if selected_arrow:
-                graphboard.delete_arrow(selected_arrow, keep_staff=keep_staff)
+                selected_arrow.delete(keep_staff)
             elif selected_staff:
-                graphboard.delete_staff(selected_staff)
+                selected_staff.delete()
 
         ### ARROW MANIPULATION ###
 

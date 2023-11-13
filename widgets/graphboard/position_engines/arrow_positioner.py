@@ -3,9 +3,9 @@ from settings.numerical_constants import *
 from settings.string_constants import *
 from objects.arrow import BlankArrow, Arrow
 
-from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
+from typing import TYPE_CHECKING, List, Dict, Any
 if TYPE_CHECKING:
-    from widgets.graphboard.graphboard import Graphboard
+    from widgets.graphboard import Graphboard
 
 
 class ArrowPositioner:

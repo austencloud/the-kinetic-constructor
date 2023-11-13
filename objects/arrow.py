@@ -1,10 +1,8 @@
-from PyQt6.QtSvg import QSvgRenderer
+
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
-from typing import Optional, Tuple, Optional, Any, Dict
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtGui import QTransform
-import re
 from settings.string_constants import (
     MOTION_TYPE,
     TURNS,
@@ -36,9 +34,13 @@ from settings.string_constants import (
     EAST,
 )
 from data.start_end_location_mapping import start_end_location_mapping
-
 from objects.graphical_object import GraphicalObject
 from objects.staff import Staff
+from typing import Optional, Tuple, Optional, Any, Dict
+from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
+if TYPE_CHECKING:
+    from widgets.graphboard import Graphboard
+    from widgets.main_widget import MainWidget
 
 class Arrow(GraphicalObject):
     drag_offset: QPointF
@@ -54,14 +56,14 @@ class Arrow(GraphicalObject):
     turns: Optional[int]
     mirror_transform: Optional[QTransform]
     
-    def __init__(self, graphboard, attributes: Dict[str, Any]) -> None:
+    def __init__(self, graphboard: 'Graphboard', attributes: Dict[str, Any]) -> None:
         svg_file = self.get_svg_file(attributes.get(MOTION_TYPE), attributes.get(TURNS))
         super().__init__(svg_file, graphboard, attributes)
         self._setup_attributes(graphboard, attributes)
         
     ### SETUP ###
 
-    def _setup_attributes(self, graphboard, attributes: Dict[str, Any]) -> None:
+    def _setup_attributes(self, graphboard: 'Graphboard', attributes: Dict[str, Any]) -> None:
         self.graphboard = graphboard
 
         self.drag_offset = QPointF(0, 0)
@@ -527,6 +529,18 @@ class Arrow(GraphicalObject):
         self.update(new_arrow_dict)
         self.staff.update(new_staff_dict)
         self.graphboard.update()
+
+    def delete(self, keep_staff: bool = False) -> None:
+        self.graphboard.removeItem(self)
+        if self in self.graphboard.arrows:
+            self.graphboard.arrows.remove(self)
+        if keep_staff:
+            self.graphboard.create_blank_arrow(self)
+        else:
+            self.staff.delete()
+
+        self.update()
+
 
 
 class BlankArrow(Arrow):

@@ -1,8 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout
-from widgets.graphboard.graphboard import Graphboard
-from widgets.graphboard.graphboard import Graphboard
+from widgets.graphboard import Graphboard
 from widgets.arrowbox.arrowbox import Arrowbox
-
 from widgets.propbox.propbox import Propbox
 from widgets.infobox.infobox import Infobox
 from PyQt6.QtWidgets import QVBoxLayout

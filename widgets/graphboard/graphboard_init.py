@@ -35,17 +35,12 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_staff import GhostStaff
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
 if TYPE_CHECKING:
-    from .graphboard import Graphboard
-
-from typing import List, Optional, Dict, Any, Tuple, Set
-
+    from widgets.graphboard import Graphboard
 
 class GraphboardInit:
 
-    grid: Optional['Grid']
-    
     def __init__(self, graphboard: 'Graphboard'):
         self.graphboard = graphboard
 
@@ -156,8 +151,6 @@ class GraphboardInit:
         self.graphboard.addItem(letter_item)
         self.graphboard.position_letter_item(letter_item)
         return letter_item
-
-
 
     def init_quadrants(self, grid: Grid):
         grid_center = grid.get_circle_coordinates("center_point")
