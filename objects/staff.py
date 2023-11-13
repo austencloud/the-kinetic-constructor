@@ -21,10 +21,17 @@ from settings.string_constants import (
     STAFF_DIR,
     RED,
     BLUE,
-    COLOR_MAP,
     CLOCKWISE,
+    COUNTER_CLOCKWISE,
     RED_HEX,
     BLUE_HEX,
+    NORTHEAST,
+    NORTHWEST,
+    SOUTHEAST,
+    SOUTHWEST,
+    PRO,
+    ANTI
+    
 )
 import logging
 import re
@@ -114,11 +121,57 @@ class Staff(QGraphicsSvgItem):
             new_location = self.get_closest_handpoint(event.scenePos())[1]
             
             if new_location != self.previous_location:
-                if in_view:
-                    self.update_for_new_location(event, new_location)
-                    self.previous_location = new_location  # Update previous location after change
+                if in_view and self.arrow:
+                    self.update_arrow_quadrant(new_location)
+                    self.update_location(new_location)
+                    self.ghost_staff.update(self)
+                    self.graphboard.update()  # Update graphboard with new arrow position
+                self.previous_location = new_location  # Update after
 
+    def update_arrow_quadrant(self, new_location):
+        # Mapping of new quadrant based on current quadrant, rotation direction, and staff's new location
+        quadrant_mapping = {
+            # Iso
+            (NORTHEAST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
+            (NORTHWEST, CLOCKWISE, PRO): {EAST: NORTHEAST, WEST: SOUTHWEST},
+            (SOUTHWEST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
+            (SOUTHEAST, CLOCKWISE, PRO): {WEST: SOUTHWEST, EAST: NORTHEAST},
+            (NORTHEAST, COUNTER_CLOCKWISE, PRO): {WEST: NORTHWEST, EAST: SOUTHEAST},
+            (NORTHWEST, COUNTER_CLOCKWISE, PRO): {SOUTH: SOUTHWEST, NORTH: NORTHEAST},
+            (SOUTHWEST, COUNTER_CLOCKWISE, PRO): {EAST: SOUTHEAST, WEST: NORTHWEST},
+            (SOUTHEAST, COUNTER_CLOCKWISE, PRO): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
+            # Anti
+            (NORTHEAST, CLOCKWISE, ANTI): {EAST: SOUTHEAST, WEST: NORTHWEST},
+            (NORTHWEST, CLOCKWISE, ANTI): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
+            (SOUTHWEST, CLOCKWISE, ANTI): {EAST: SOUTHEAST, WEST: NORTHWEST},
+            (SOUTHEAST, CLOCKWISE, ANTI): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
+            (NORTHEAST, COUNTER_CLOCKWISE, ANTI): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
+            (NORTHWEST, COUNTER_CLOCKWISE, ANTI): {WEST: SOUTHWEST, EAST: NORTHEAST},
+            (SOUTHWEST, COUNTER_CLOCKWISE, ANTI): {SOUTH: SOUTHEAST, NORTH: NORTHWEST},
+            (SOUTHEAST, COUNTER_CLOCKWISE, ANTI): {EAST: NORTHEAST, EAST: SOUTHWEST}
+        }
 
+        # Extract current arrow quadrant, rotation direction, and motion type
+        current_quadrant = self.arrow.quadrant
+        rotation_direction = self.arrow.rotation_direction
+        motion_type = self.arrow.motion_type
+
+        # Determine new quadrant
+        new_quadrant = quadrant_mapping.get((current_quadrant, rotation_direction, motion_type), {}).get(new_location)
+
+        if new_quadrant:
+            # Update arrow quadrant
+            self.arrow.quadrant = new_quadrant
+
+            # Update start and end locations based on new quadrant
+            start_location, end_location = self.arrow.get_start_end_locations(motion_type, rotation_direction, new_quadrant)
+            self.arrow.start_location = start_location
+            self.arrow.end_location = end_location
+
+            # Update arrow appearance
+            self.arrow.set_attributes_from_staff(self)
+            self.arrow.update_appearance()
+            
     def update_for_new_location(self, event, new_location):
         self.location = new_location
         self.attributes[LOCATION] = new_location
@@ -180,6 +233,10 @@ class Staff(QGraphicsSvgItem):
     def update_rotation(self):
         angle = self.get_rotation_angle()
         self.setRotation(angle)
+
+    def update_location(self, new_location):
+        self.location = new_location
+        self.attributes[LOCATION] = new_location
 
     def update_position(self, event):
         offset = self.get_staff_center()

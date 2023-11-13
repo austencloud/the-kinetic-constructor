@@ -43,27 +43,30 @@ class LetterEngine:
         red_arrow = self.get_arrow("red")
         blue_arrow = self.get_arrow("blue")
 
-        start_locations = (
-            red_arrow.start_location,
-            "red",
-            blue_arrow.start_location,
-            "blue",
-        )
-        end_locations = (
-            red_arrow.end_location,
-            "red",
-            blue_arrow.end_location,
-            "blue",
-        )
+        if red_arrow and blue_arrow:
+            start_locations = (
+                red_arrow.start_location,
+                "red",
+                blue_arrow.start_location,
+                "blue",
+            )
+            end_locations = (
+                red_arrow.end_location,
+                "red",
+                blue_arrow.end_location,
+                "blue",
+            )
 
-        specific_position = {
-            "start_position": positions_map.get(start_locations),
-            "end_position": positions_map.get(end_locations),
-        }
+            specific_position = {
+                "start_position": positions_map.get(start_locations),
+                "end_position": positions_map.get(end_locations),
+            }
 
-        self.red_arrow = red_arrow
-        self.blue_arrow = blue_arrow
-        return specific_position
+            self.red_arrow = red_arrow
+            self.blue_arrow = blue_arrow
+            return specific_position
+        else:
+            return {}
 
     def get_start_end_locations_as_tuple(self):
         self.red_arrow = (
@@ -269,31 +272,34 @@ class LetterEngine:
 
     def get_current_letter(self):
         specific_position = self.get_specific_start_end_positions()
-        overall_position = self.get_overall_position(specific_position)
-        letter_group = self.get_letter_group(overall_position)
-        motion_letter_group = set(self.get_motion_type_letter_group())
+        if specific_position:
+            overall_position = self.get_overall_position(specific_position)
+            letter_group = self.get_letter_group(overall_position)
+            motion_letter_group = set(self.get_motion_type_letter_group())
 
-        # Filter letter group based on motion letter group
-        filtered_letter_group = {
-            letter: combinations
-            for letter, combinations in letter_group.items()
-            if letter in motion_letter_group
-        }
+            # Filter letter group based on motion letter group
+            filtered_letter_group = {
+                letter: combinations
+                for letter, combinations in letter_group.items()
+                if letter in motion_letter_group
+            }
 
-        if "gamma" in overall_position.get("end_position", "").lower():
-            filtered_letter_group = self.get_gamma_letter(filtered_letter_group)
+            if "gamma" in overall_position.get("end_position", "").lower():
+                filtered_letter_group = self.get_gamma_letter(filtered_letter_group)
 
-        # Return the current letter
-        if len(filtered_letter_group) == 1:
-            current_letter = list(filtered_letter_group.keys())[0]
-            return current_letter
+            # Return the current letter
+            if len(filtered_letter_group) == 1:
+                current_letter = list(filtered_letter_group.keys())[0]
+                return current_letter
+            else:
+                logging.debug(
+                    "Multiple letters returned by get_current_letter: %s",
+                    filtered_letter_group,
+                )
+                return None
         else:
-            logging.debug(
-                "Multiple letters returned by get_current_letter: %s",
-                filtered_letter_group,
-            )
             return None
-
+        
     def get_gamma_letter(self, letter_group):
         gamma_handpath_letters = set(self.get_gamma_handpath_group())
         filtered_letter_group = {

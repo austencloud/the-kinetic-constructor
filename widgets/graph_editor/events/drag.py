@@ -110,6 +110,7 @@ class Drag(QWidget):
 
         self.placed_arrow = Arrow(self.graphboard, self.ghost_arrow.get_attributes())
         self.placed_arrow.staff = self.ghost_arrow.staff
+        self.ghost_arrow.staff.arrow = self.placed_arrow
 
         self.graphboard.addItem(self.placed_arrow)
         self.graphboard.arrows.append(self.placed_arrow)
@@ -140,6 +141,7 @@ class Drag(QWidget):
         self.graphboard.update_arrows()
         self.graphboard.update_staffs()
         self.arrowbox.drag = None
+        self.ghost_arrow.staff = None
         self.reset_drag_state()
 
     ### FLAGS ###

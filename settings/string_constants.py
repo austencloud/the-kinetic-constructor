@@ -29,8 +29,8 @@ END_LOCATION = "end_location"
 TURNS = "turns"
 
 
-CLOCKWISE = "r"
-COUNTER_CLOCKWISE = "l"
+CLOCKWISE = "r" or "CW"
+COUNTER_CLOCKWISE = "l" or "CCW"
 
 START_POS = "start_position"
 END_POS = "end_position"

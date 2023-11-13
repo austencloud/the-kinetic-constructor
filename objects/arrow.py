@@ -121,8 +121,6 @@ class Arrow(QGraphicsSvgItem):
             if item != self:
                 item.setSelected(False)
 
-
-
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.MouseButton.LeftButton:
             scene_event_pos = self.mapToScene(event.pos())
@@ -212,7 +210,7 @@ class Arrow(QGraphicsSvgItem):
                     }
                 )
                 staff.arrow = self.ghost_arrow
-                self.ghost_arrow.staff = staff
+                
                 if staff not in self.graphboard.items():
                     self.graphboard.addItem(staff)
                 staff.show()
