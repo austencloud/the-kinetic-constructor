@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
         self.init_main_window()
         self.init_ui()
 
-    def init_main_window(self):
+    def init_main_window(self) -> None:
         self.setMinimumSize(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT)
         self.main_widget = MainWidget(self)
         self.installEventFilter(self.main_widget)
@@ -27,10 +27,10 @@ class MainWindow(QMainWindow):
         self.show()
         self.setWindowTitle("Sequence Constructor")
 
-    def init_ui(self):
+    def init_ui(self) -> None:
         self.move(-(self.screen.width() + 500), 100)
 
-    def write_profiling_stats_to_file(self, file_path: str):
+    def write_profiling_stats_to_file(self, file_path: str) -> None:
         stats: pstats.Stats = pstats.Stats(self.profiler).sort_stats("cumtime")
         with open(file_path, "w") as f:
             stats.stream: IO[str] = f

@@ -194,14 +194,6 @@ class Arrow(GraphicalObject):
             setattr(self, attr, value)
         self.attributes = attributes
 
-    def set_attributes_from_staff(self, staff: "Staff") -> None:
-        orientation = self.calculate_new_orientation(self.quadrant, staff.location)
-        self.quadrant = orientation["new_quadrant"]
-        self.start_location = orientation["start_location"]
-        self.end_location = orientation["end_location"]
-
-        self.update_appearance()
-
     def set_transform_origin_to_center(self) -> None:
         # Call this method after any changes that might affect the boundingRect.
         self.center = self.boundingRect().center()
