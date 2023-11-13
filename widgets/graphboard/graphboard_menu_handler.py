@@ -4,16 +4,18 @@ from settings.string_constants import RIGHT, LEFT
 from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
 from objects.arrow import Arrow
 from objects.staff import Staff
+
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graphboard import Graphboard
 
+
 class GraphboardMenuHandler:
-    def __init__(self, main_widget: 'MainWidget', graphboard: 'Graphboard'):
+    def __init__(self, main_widget: "MainWidget", graphboard: "Graphboard"):
         self.graphboard = graphboard
         self.main_widget = main_widget
         self.export_handler = graphboard.export_handler
-        self.sequence_view = main_widget.sequence_view
+        self.sequence_scene = main_widget.sequence_scene
 
     def create_menu_with_actions(self, parent, actions, event_pos):
         menu = QMenu()
@@ -26,7 +28,7 @@ class GraphboardMenuHandler:
     def create_arrow_menu(self, selected_items, event):
         selected_item = selected_items[0]
         selected_arrow = selected_item if isinstance(selected_item, Arrow) else None
-        
+
         actions = [
             ("Delete", lambda: self.graphboard.delete_arrow(selected_items)),
             (
@@ -44,7 +46,7 @@ class GraphboardMenuHandler:
     def create_staff_menu(self, selected_items, event):
         selected_item = selected_items[0]
         selected_staff = selected_item if isinstance(selected_item, Staff) else None
-        
+
         actions = [
             ("Delete", lambda: selected_staff.delete()),
             (
@@ -59,7 +61,7 @@ class GraphboardMenuHandler:
             ("Swap Colors", lambda: self.manipulators.swap_colors()),
             (
                 "Add to Sequence",
-                lambda _: self.sequence_view.add_to_sequence(self.graphboard),
+                lambda _: self.sequence_scene.add_to_sequence(self.graphboard),
             ),
             ("Export to PNG", self.export_handler.export_to_png),
             ("Export to SVG", lambda: self.export_handler.export_to_svg("output.svg")),

@@ -4,7 +4,23 @@ from PyQt6.QtGui import QTransform
 from objects.arrow import Arrow, BlankArrow
 from objects.staff import Staff
 from objects.grid import Grid
-from settings.string_constants import COLOR, MOTION_TYPE, ROTATION_DIRECTION, QUADRANT, START_LOCATION, END_LOCATION, TURNS, RED, BLUE, LETTER_SVG_DIR, NORTHWEST, SOUTHEAST, SOUTHWEST, NORTHEAST, STATIC
+from settings.string_constants import (
+    COLOR,
+    MOTION_TYPE,
+    ROTATION_DIRECTION,
+    QUADRANT,
+    START_LOCATION,
+    END_LOCATION,
+    TURNS,
+    RED,
+    BLUE,
+    LETTER_SVG_DIR,
+    NORTHWEST,
+    SOUTHEAST,
+    SOUTHWEST,
+    NORTHEAST,
+    STATIC,
+)
 from data.letter_types import letter_types
 from widgets.graphboard.graphboard_init import GraphboardInit
 from widgets.graphboard.graphboard_menu_handler import GraphboardMenuHandler
@@ -19,8 +35,9 @@ from PyQt6.QtCore import QPointF
 
 from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
 if TYPE_CHECKING:
-    from widgets.graph_editor import GraphEditor
     from widgets.main_widget import MainWidget
+    from utilities.pictograph_generator import PictographGenerator
+
 
 class Graphboard(QGraphicsScene):
     arrows: List[Arrow]
@@ -32,22 +49,22 @@ class Graphboard(QGraphicsScene):
     dragged_staff: Optional[Staff]
     ghost_arrows: Dict[str, Arrow]
     ghost_staffs: Dict[str, Staff]
-    grid: Optional[Grid]  
-    view: QGraphicsView 
+    grid: Optional[Grid]
+    view: QGraphicsView
     staff_set: dict[str, Staff]
     letter_item: QGraphicsSvgItem
     quadrants: Dict[str, Tuple[float, float, float, float]]
     export_handler: ExportHandler
-    context_menu_manager: GraphboardMenuHandler
+    graphboard_menu_handler: GraphboardMenuHandler
     arrow_positioner: ArrowPositioner
     staff_positioner: StaffPositioner
     letter_engine: LetterEngine
+    generator: PictographGenerator
 
-    
-    def __init__(self, main_widget: 'MainWidget', graph_editor: 'GraphEditor') -> None:
+    def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.setup_scene()
-        self.setup_components(main_widget, graph_editor)
+        self.setup_components(main_widget)
 
     def setup_scene(self) -> None:
         self.setSceneRect(0, 0, 750, 900)
@@ -57,8 +74,7 @@ class Graphboard(QGraphicsScene):
         self.current_letter = None
         self.infobox = None
 
-    def setup_components(self, main_widget: 'MainWidget', graph_editor: Any) -> None:
-        self.graph_editor = graph_editor
+    def setup_components(self, main_widget: "MainWidget") -> None:
         self.letters = main_widget.letters
 
         self.dragged_arrow = None
@@ -73,17 +89,14 @@ class Graphboard(QGraphicsScene):
         self.staff_set = self.initializer.init_staff_set()
         self.letter_item = self.initializer.init_letter_item()
         self.quadrants = self.initializer.init_quadrants(self.grid)
-        self.setup_managers(main_widget, graph_editor)
+        self.setup_managers(main_widget)
 
-    def setup_managers(self, main_widget: 'MainWidget', graph_editor: Any) -> None:
+    def setup_managers(self, main_widget: "MainWidget") -> None:
         self.export_handler = ExportHandler(self.grid, self)
-        self.context_menu_manager = GraphboardMenuHandler(
-            main_widget, graph_editor, self
-        )
+        self.graphboard_menu_handler = GraphboardMenuHandler(main_widget, self)
         self.arrow_positioner = ArrowPositioner(self)
         self.staff_positioner = StaffPositioner(self)
         self.letter_engine = LetterEngine(self)
-
 
     ### EVENTS ###
 
@@ -96,17 +109,17 @@ class Graphboard(QGraphicsScene):
         event_pos = event.screenPos()
 
         if isinstance(clicked_item, Arrow):
-            self.context_menu_manager.create_arrow_menu(selected_items, event_pos)
+            self.graphboard_menu_handler.create_arrow_menu(selected_items, event_pos)
         elif isinstance(clicked_item, Staff):
-            self.context_menu_manager.create_staff_menu(selected_items, event_pos)
+            self.graphboard_menu_handler.create_staff_menu(selected_items, event_pos)
         else:
-            self.context_menu_manager.create_graphboard_menu(event_pos)
+            self.graphboard_menu_handler.create_graphboard_menu(event_pos)
 
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         clicked_item = self.itemAt(event.scenePos(), QTransform())
         if isinstance(clicked_item, Staff):
             self.dragged_staff = clicked_item
-            self.dragged_staff.mousePressEvent(event)  
+            self.dragged_staff.mousePressEvent(event)
         elif isinstance(clicked_item, Arrow):
             self.dragged_arrow = clicked_item
             self.dragged_arrow.mousePressEvent()
@@ -116,13 +129,13 @@ class Graphboard(QGraphicsScene):
 
     def mouseMoveEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         if self.dragged_staff:
-            self.dragged_staff.mouseMoveEvent(event) 
+            self.dragged_staff.mouseMoveEvent(event)
         elif self.dragged_arrow:
             self.dragged_arrow.mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         if self.dragged_staff:
-            self.dragged_staff.mouseReleaseEvent(event) 
+            self.dragged_staff.mouseReleaseEvent(event)
             self.dragged_staff = None
         elif self.dragged_arrow:
             self.dragged_arrow.mouseReleaseEvent()
@@ -130,7 +143,9 @@ class Graphboard(QGraphicsScene):
 
     ### GETTERS ###
 
-    def get_current_arrow_coordinates(self) -> Tuple[Optional[QPointF], Optional[QPointF]]:
+    def get_current_arrow_coordinates(
+        self,
+    ) -> Tuple[Optional[QPointF], Optional[QPointF]]:
         """Returns the coordinates for setting optimal positions"""
         red_position = None
         blue_position = None
@@ -142,7 +157,6 @@ class Graphboard(QGraphicsScene):
             elif arrow.color == BLUE:
                 blue_position = center
         return red_position, blue_position
-
 
     def get_state(self) -> List[Dict[str, Any]]:
         state = []
@@ -207,7 +221,9 @@ class Graphboard(QGraphicsScene):
     ### HELPERS ###
 
     @staticmethod
-    def point_in_quadrant(x: float, y: float, boundary: Tuple[float, float, float, float]) -> bool:
+    def point_in_quadrant(
+        x: float, y: float, boundary: Tuple[float, float, float, float]
+    ) -> bool:
         return boundary[0] <= x <= boundary[2] and boundary[1] <= y <= boundary[3]
 
     def create_blank_arrow(self, arrow: Arrow) -> None:
@@ -227,9 +243,12 @@ class Graphboard(QGraphicsScene):
         blank_arrow.staff = arrow.staff
         blank_arrow.staff.arrow = blank_arrow
 
-    def position_letter_item(self, letter_item: 'QGraphicsSvgItem'):
-        x = self.grid.boundingRect().width() / 2 - letter_item.boundingRect().width() / 2
-        y = self.grid.boundingRect().height() 
+    def position_letter_item(self, letter_item: "QGraphicsSvgItem"):
+        x = (
+            self.grid.boundingRect().width() / 2
+            - letter_item.boundingRect().width() / 2
+        )
+        y = self.grid.boundingRect().height()
         letter_item.setPos(x, y)
 
     ### UPDATERS ###
@@ -261,7 +280,9 @@ class Graphboard(QGraphicsScene):
         if letter:
             self.set_letter_renderer(letter)
         else:
-            self.letter_item.setSharedRenderer(QSvgRenderer(f"{LETTER_SVG_DIR}/blank.svg"))
+            self.letter_item.setSharedRenderer(
+                QSvgRenderer(f"{LETTER_SVG_DIR}/blank.svg")
+            )
 
     ### SETTERS ###
 
@@ -271,4 +292,3 @@ class Graphboard(QGraphicsScene):
         renderer = QSvgRenderer(svg_path)
         if renderer.isValid():
             self.letter_item.setSharedRenderer(renderer)
-    

@@ -15,12 +15,12 @@ class ActionButtonsFrame(QFrame):
         self,
         scene,
         json_handler,
-        sequence_view,
+        sequence_scene,
     ):
         super().__init__()
         self.scene = scene
         self.json_handler = json_handler
-        self.sequence_view = sequence_view
+        self.sequence_scene = sequence_scene
         self.action_buttons_layout = QVBoxLayout()
         self.action_buttons_layout.setSpacing(3)
         coordinates = self.scene.get_current_arrow_coordinates()
@@ -64,7 +64,7 @@ class ActionButtonsFrame(QFrame):
             (
                 "add_to_sequence.png",
                 "Add to Sequence",
-                lambda: self.sequence_view.add_to_sequence(self.scene),
+                lambda: self.sequence_scene.add_to_sequence(self.scene),
             ),
         ]
 

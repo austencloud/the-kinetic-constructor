@@ -6,7 +6,7 @@ from settings.string_constants import *
 
 class KeyEventHandler:
     def keyPressEvent(self, event, main_widget, graphboard):
-        sequence_view = main_widget.sequence_view
+        sequence_scene = main_widget.sequence_scene
 
         if not graphboard.selectedItems():
             return
@@ -45,4 +45,4 @@ class KeyEventHandler:
 
         ### SEQEUNCE MANAGEMENT ###
         elif event.key() == Qt.Key.Key_Enter:
-            sequence_view.add_to_sequence(graphboard)
+            sequence_scene.add_to_sequence(graphboard)

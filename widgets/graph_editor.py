@@ -1,21 +1,26 @@
 from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout
-from widgets.graphboard import Graphboard
+from widgets.graphboard.graphboard import Graphboard
 from widgets.arrowbox.arrowbox import Arrowbox
 from widgets.propbox.propbox import Propbox
 from widgets.infobox.infobox import Infobox
 from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
 from widgets.action_buttons_frame import ActionButtonsFrame
+from utilities.json_handler import JsonHandler
+from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
+
+if TYPE_CHECKING:
+    from widgets.main_widget import MainWidget
 
 
 class GraphEditor(QWidget):
-    def __init__(self, main_widget):
+    def __init__(self, main_widget: "MainWidget"):
         super().__init__()
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.json_handler = main_widget.json_handler
 
-        self.sequence_view = main_widget.sequence_view
+        self.sequence_scene = main_widget.sequence_scene
         self.graph_editor_frame = QFrame()
         self.graph_editor_frame.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
         self.graph_editor_frame.setLineWidth(1)
@@ -30,7 +35,7 @@ class GraphEditor(QWidget):
         action_buttons_layout = QVBoxLayout()
         infobox_layout = QVBoxLayout()
 
-        self.graphboard = Graphboard(self.main_widget, self)
+        self.graphboard = Graphboard(self.main_widget)
         self.infobox = Infobox(
             main_widget,
             self.graphboard,
@@ -44,7 +49,7 @@ class GraphEditor(QWidget):
         self.action_buttons_frame = ActionButtonsFrame(
             self.graphboard,
             self.json_handler,
-            self.sequence_view,
+            self.sequence_scene,
         )
 
         objectbox_layout.addWidget(self.arrowbox.view)
@@ -62,8 +67,3 @@ class GraphEditor(QWidget):
         self.main_window.graph_editor_layout.addWidget(self.graph_editor_frame)
 
         self.setMouseTracking(True)
-
-    def mouseMoveEvent(self, event):
-        global dragged_arrow
-        if dragged_arrow:
-            self.arrowbox.drag.update_drag_preview(self.arrowbox, event)

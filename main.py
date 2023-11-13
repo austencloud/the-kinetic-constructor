@@ -5,7 +5,8 @@ from settings.numerical_constants import MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT
 import cProfile
 import pstats
 
-class Main_Window(QMainWindow):
+
+class MainWindow(QMainWindow):
     def __init__(self, profiler):
         super().__init__()
         self.profiler = profiler
@@ -38,7 +39,7 @@ def main():
     profiler.enable()
 
     app = QApplication(sys.argv)
-    main_window = Main_Window(profiler)
+    main_window = MainWindow(profiler)
     main_window.setFocus()
     exit_code = app.exec()
 
@@ -46,6 +47,7 @@ def main():
     main_window.write_profiling_stats_to_file("main_profiling_stats.txt")
 
     sys.exit(exit_code)
+
 
 if __name__ == "__main__":
     main()
