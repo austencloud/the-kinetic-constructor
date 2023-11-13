@@ -283,9 +283,10 @@ class LetterEngine:
                 for letter, combinations in letter_group.items()
                 if letter in motion_letter_group
             }
-
-            if "gamma" in overall_position.get("end_position", "").lower():
-                filtered_letter_group = self.get_gamma_letter(filtered_letter_group)
+            
+            if len(filtered_letter_group) != 1:
+                if "gamma" in overall_position.get("end_position", "").lower():
+                    filtered_letter_group = self.get_gamma_letter(filtered_letter_group)
 
             # Return the current letter
             if len(filtered_letter_group) == 1:

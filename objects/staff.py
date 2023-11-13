@@ -30,8 +30,8 @@ from settings.string_constants import (
     SOUTHEAST,
     SOUTHWEST,
     PRO,
-    ANTI
-    
+    ANTI,
+    STATIC,
 )
 import logging
 import re
@@ -122,10 +122,18 @@ class Staff(QGraphicsSvgItem):
             
             if new_location != self.previous_location:
                 if in_view and self.arrow:
+                    self.location = new_location
+                    self.update_appearance()
                     self.update_arrow_quadrant(new_location)
                     self.update_location(new_location)
                     self.ghost_staff.update(self)
+                    self.graphboard.staffs.remove(self)
+                    if self.arrow.motion_type == STATIC:
+                        self.arrow.start_location = new_location
+                        self.arrow.end_location = new_location
                     self.graphboard.update()  # Update graphboard with new arrow position
+                    self.graphboard.staffs.append(self)
+                    
                 self.previous_location = new_location  # Update after
 
     def update_arrow_quadrant(self, new_location):
@@ -198,29 +206,31 @@ class Staff(QGraphicsSvgItem):
         self.ghost_staff.arrow = None
         self.ghost_staff = None
         self.graphboard.arrow_positioner.update() 
-        self.finalize_staff_drop(self, event)
+        self.finalize_staff_drop(event)
 
-    def finalize_staff_drop(self, staff, event):
+    def finalize_staff_drop(self, event):
         # Calculate closest handpoint and new location
-        closest_handpoint, new_location = staff.get_closest_handpoint(event.scenePos())
+        closest_handpoint, new_location = self.get_closest_handpoint(event.scenePos())
 
-        staff.attributes[LOCATION] = new_location
-        staff.location = new_location
+        self.attributes[LOCATION] = new_location
+        self.location = new_location
 
         # Update staff attributes and appearance
-        staff.update_appearance()
+        self.update_appearance()
 
         # Position the staff at the closest handpoint
-        staff.setPos(closest_handpoint)
+        self.setPos(closest_handpoint)
 
         # Update associated arrow if any
-        if staff.arrow:
-            staff.arrow.update_appearance()
+        if self.arrow:
+            self.arrow.update_appearance()
 
-        self.graphboard.ghost_staffs[staff.color].hide()
+        self.graphboard.ghost_staffs[self.color].hide()
 
-        staff.previous_location = new_location
+        self.previous_location = new_location
+
         self.graphboard.update()
+
         
     ### UPDATERS ###
 

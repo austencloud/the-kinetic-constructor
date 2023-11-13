@@ -24,22 +24,24 @@ class KeyEventHandler:
                 graphboard.delete_staff(selected_staff)
 
         ### ARROW MANIPULATION ###
-        if event.key() == Qt.Key.Key_W:
-            selected_arrow.move_wasd(UP)
-        elif event.key() == Qt.Key.Key_A:
-            selected_arrow.move_wasd(LEFT)
-        elif event.key() == Qt.Key.Key_S:
-            selected_arrow.move_wasd(DOWN)
-        elif event.key() == Qt.Key.Key_D:
-            selected_arrow.move_wasd(RIGHT)
-        elif event.key() == Qt.Key.Key_R:
-            selected_arrow.mirror()
-        elif event.key() == Qt.Key.Key_F:
-            selected_arrow.swap_motion_type()
-        elif event.key() == Qt.Key.Key_Q:
-            selected_arrow.decrement_turns()
-        elif event.key() == Qt.Key.Key_E:
-            selected_arrow.increment_turns()
+        
+        if selected_arrow:
+            if event.key() == Qt.Key.Key_W:
+                selected_arrow.move_wasd(UP)
+            elif event.key() == Qt.Key.Key_A:
+                selected_arrow.move_wasd(LEFT)
+            elif event.key() == Qt.Key.Key_S:
+                selected_arrow.move_wasd(DOWN)
+            elif event.key() == Qt.Key.Key_D:
+                selected_arrow.move_wasd(RIGHT)
+            elif event.key() == Qt.Key.Key_R:
+                selected_arrow.mirror()
+            elif event.key() == Qt.Key.Key_F:
+                selected_arrow.swap_motion_type()
+            elif event.key() == Qt.Key.Key_Q:
+                selected_arrow.decrement_turns()
+            elif event.key() == Qt.Key.Key_E:
+                selected_arrow.increment_turns()
 
         ### SEQEUNCE MANAGEMENT ###
         elif event.key() == Qt.Key.Key_Enter:
