@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout
 from widgets.graphboard.graphboard import GraphBoard
 from widgets.arrowbox.arrowbox import Arrowbox
 from widgets.propbox.propbox import Propbox
-from widgets.infobox.infobox import Infobox
+from widgets.infobox.infobox import InfoBox
 from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
 from widgets.action_buttons_frame import ActionButtonsFrame
@@ -34,7 +34,7 @@ class GraphEditor(QWidget):
         infobox_layout = QVBoxLayout()
 
         self.graphboard = GraphBoard(self.main_widget)
-        self.infobox = Infobox(
+        self.infobox = InfoBox(
             main_widget,
             self.graphboard,
         )

@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QFrame
 from settings.string_constants import *
 
 
-class InfoboxLayouts:
+class InfoBoxLayouts:
     def __init__(self, infobox, graphboard):
         self.infobox = infobox
         self.graphboard = graphboard

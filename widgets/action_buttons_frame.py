@@ -17,7 +17,7 @@ class ActionButtonsFrame(QFrame):
         self,
         graphboard: "GraphBoard",
         json_handler: "JsonHandler",
-    ):
+    ) -> None:
         super().__init__()
         self.graphboard = graphboard
         self.json_handler = json_handler
@@ -69,7 +69,7 @@ class ActionButtonsFrame(QFrame):
         button.clicked.connect(lambda: on_click(*args))
         return button
 
-    def delete_selected_arrow(self):
+    def delete_selected_arrow(self) -> None:
         arrow: Arrow = (
             self.graphboard.selectedItems()[0]
             if self.graphboard.selectedItems()

@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 class LetterButtonsFrame(QFrame):
-    def __init__(self, main_widget: "MainWidget"):
+    def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_window: "MainWindow" = main_widget.main_window
         self.letter_buttons_layout = QVBoxLayout()

@@ -1,15 +1,20 @@
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QLabel, QSizePolicy
+from PyQt6.QtWidgets import QLabel, QSizePolicy, QFrame
 from objects.arrow import Arrow
 from objects.ghosts.ghost_arrow import GhostArrow
 from data.positions_map import positions_map
 import logging
 from settings.string_constants import *
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from widgets.infobox.infobox import InfoBox
+    from widgets.graphboard.graphboard import GraphBoard
+from typing import Dict
 
 
-class InfoboxLabels:
-    def __init__(self, infobox, graphboard):
+class InfoBoxLabels:
+    def __init__(self, infobox: 'InfoBox', graphboard: 'GraphBoard') -> None:
         self.infobox = infobox
         self.graphboard = graphboard
         self.pixmap_cache = {}
@@ -17,12 +22,12 @@ class InfoboxLabels:
 
     ### LABEL CREATION ###
 
-    def setup_labels(self):
+    def setup_labels(self) -> None:
         self.setup_attribute_label(LEFT.capitalize(), BLUE)
         self.setup_attribute_label(RIGHT.capitalize(), RED)
         self.type_position_label = self.create_label()
 
-    def create_attribute_labels(self):
+    def create_attribute_labels(self) -> tuple[QLabel, QLabel, QLabel, QLabel]:
         motion_type_label = QLabel()
         motion_type_label.setObjectName("motion_type_label")
 
@@ -36,7 +41,7 @@ class InfoboxLabels:
         turns_label.setObjectName("turns_label")
         turns_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
-        attribute_labels = {}
+        attribute_labels: Dict[str, QLabel] = {}
 
         attribute_labels[motion_type_label.objectName()] = motion_type_label
         attribute_labels[
@@ -53,7 +58,7 @@ class InfoboxLabels:
 
     ### LABEL UPDATING ###
 
-    def update_labels(self, widget, attributes):
+    def update_labels(self, widget: 'QFrame', attributes: Dict[str, str]) -> None:
         motion_type = attributes.get(MOTION_TYPE, "")
         rotation_direction = attributes.get(ROTATION_DIRECTION, "")
         start_location = attributes.get(START_LOCATION, "")
@@ -87,7 +92,7 @@ class InfoboxLabels:
             start_end_label.setText(f"")
         turns_label.setText(f"<span style='font-size: 20px;'>{turns}</span>")
 
-    def update_type_and_position_label(self):
+    def update_type_and_position_label(self) -> None:
         (
             current_letter,
             current_letter_type,
@@ -107,7 +112,7 @@ class InfoboxLabels:
 
     ### HELPERS ###
 
-    def preload_pixmaps(self):
+    def preload_pixmaps(self) -> None:
         # Preload and cache the pixmaps
         for icon_name in [CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON]:
             pixmap = QPixmap(icon_name)
@@ -119,17 +124,17 @@ class InfoboxLabels:
             )
             self.pixmap_cache[icon_name] = scaled_pixmap
 
-    def set_clock_pixmap(self, label, icon_name):
+    def set_clock_pixmap(self, label: 'QLabel', icon_name) -> None:
         # Set the pixmap from the cache
         if icon_name in self.pixmap_cache:
             label.setPixmap(self.pixmap_cache[icon_name])
 
-    def setup_attribute_label(self, text, color):
+    def setup_attribute_label(self, text, color) -> None:
         label = self.create_label(text, color)
         label.setAlignment(Qt.AlignmentFlag.AlignTop)
         setattr(self, f"{color}_details_label", label)
 
-    def create_label(self, text="", color=None):
+    def create_label(self, text="", color=None) -> QLabel:
         """Create a generic label."""
         label = QLabel(text)
         label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
@@ -137,10 +142,12 @@ class InfoboxLabels:
             label.setStyleSheet(f"color: {color}; font-size: 25px; font-weight: bold;")
         return label
 
-    def get_start_end_positions(self):
+    def get_start_end_positions(self)   -> list[tuple[str, str] | None]:
         positions = []
         arrow_items = [
-            item for item in self.graphboard.items() if isinstance(item, Arrow) or isinstance(item, GhostArrow)
+            item
+            for item in self.graphboard.items()
+            if isinstance(item, Arrow) or isinstance(item, GhostArrow)
         ]
 
         arrow_colors = {RED: None, BLUE: None}

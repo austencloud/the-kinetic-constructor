@@ -1,14 +1,24 @@
 from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QFrame
 from settings.string_constants import *
+from typing import TYPE_CHECKING, Dict
 
-class InfoboxWidgets():
-    def __init__(self, infobox, graphboard):
+if TYPE_CHECKING:
+    from widgets.main_widget import MainWidget
+    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.infobox.infobox import InfoBox
+    from widgets.arrowbox.arrowbox import Arrowbox
+    from widgets.propbox.propbox import Propbox
+    from widgets.action_buttons_frame import ActionButtonsFrame
+
+
+class InfoBoxWidgets:
+    def __init__(self, infobox: "InfoBox", graphboard: 'GraphBoard') -> None:
         self.infobox = infobox
         self.labels = infobox.labels
-        
+
         self.graphboard = graphboard
-        
-    def setup_widgets(self):
+
+    def setup_widgets(self) -> None:
         self.blue_attributes_widget = QFrame()
         self.blue_attributes_widget.setFrameShape(QFrame.Shape.Box)
         self.blue_attributes_widget.setFrameShadow(QFrame.Shadow.Sunken)
@@ -20,9 +30,9 @@ class InfoboxWidgets():
         self.blue_attributes_widget.show()
         self.red_attributes_widget.show()
 
-    def construct_attributes_widget(self, color):
+    def construct_attributes_widget(self, color) -> QWidget:
         self.buttons = self.infobox.buttons
-        
+
         (
             motion_type_label,
             rotation_direction_label,
@@ -51,8 +61,8 @@ class InfoboxWidgets():
         info_widget = QWidget()
         info_widget.setLayout(main_layout)
         return info_widget
-    
-    def update_info_widget_content(self, widget, attributes):
+
+    def update_info_widget_content(self, widget: 'QFrame', attributes) -> None:
         self.buttons = self.infobox.buttons
         if widget.layout().count() == 0:
             new_content = self.labels.construct_info_string_label(attributes)
@@ -61,7 +71,7 @@ class InfoboxWidgets():
         self.labels.update_labels(widget, attributes)
         self.buttons.show_buttons(attributes)
 
-    def update_attribute_widgets(self):
+    def update_attribute_widgets(self) -> None:
         widgets = self.infobox.widgets
         for color in [BLUE, RED]:
             arrow = self.graphboard.get_arrow_by_color(color)
@@ -73,4 +83,3 @@ class InfoboxWidgets():
             else:
                 widget = getattr(widgets, f"{color}_attributes_widget")
                 widget.hide()
-
