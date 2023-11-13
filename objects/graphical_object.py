@@ -46,3 +46,13 @@ class GraphicalObject(QGraphicsSvgItem):
     def setup_svg_renderer(self, svg_file):
         self.renderer = QSvgRenderer(svg_file)
         self.setSharedRenderer(self.renderer)
+
+    def update_color(self):
+        new_svg_data = self.set_svg_color(self.color)
+        self.renderer.load(new_svg_data)
+        self.setSharedRenderer(self.renderer)
+
+    def update_svg(self, svg_file):
+        self.svg_file = svg_file
+        self.setup_svg_renderer(svg_file)
+        self.set_svg_color(self.color)

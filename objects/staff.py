@@ -86,7 +86,7 @@ class Staff(GraphicalObject):
             new_pos = event.scenePos() - self.get_staff_center()
             self.set_drag_pos(new_pos)
 
-            new_location = self.get_closest_handpoint(event.scenePos())[1]
+            new_location = self.get_closest_location(event.scenePos())
             
             if new_location != self.previous_location and self.arrow:
                 self.location = new_location
@@ -172,7 +172,8 @@ class Staff(GraphicalObject):
         self.finalize_staff_drop(event)
 
     def finalize_staff_drop(self, event):
-        closest_handpoint, new_location = self.get_closest_handpoint(event.scenePos())
+        closest_handpoint = self.get_closest_handpoint(event.scenePos())
+        new_location = self.get_closest_location(event.scenePos())
 
         self.attributes[LOCATION] = new_location
         self.location = new_location
@@ -206,22 +207,11 @@ class Staff(GraphicalObject):
         )
         self.setPos(new_pos)
 
-    def update_staff_orientation(self, mouse_pos):
-        closest_handpoint, closest_location = self.get_closest_handpoint(mouse_pos)
-        self.update_axis(closest_location)
-        self.update_appearance()
-        self.apply_rotation()
-
     def update_axis(self, location):
         if self.layer == 1:
             self.axis = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
         elif self.layer == 2:
             self.axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
-
-    def update_color(self):
-        new_svg_data = self.set_svg_color(self.color)
-        self.renderer.load(new_svg_data)
-        self.setSharedRenderer(self.renderer)
 
     def update_appearance(self):
         self.update_color()
@@ -233,26 +223,10 @@ class Staff(GraphicalObject):
         self.update_axis(self.location)
         self.set_rotation_from_axis()
 
-    def update_svg(self, svg_file):
-        self.svg_file = svg_file
-        self._setup_svg_renderer(svg_file)
-        self.set_svg_color(self.color)
-
-    def update_dict_attr_from_object(self):
-        for attr in STAFF_ATTRIBUTES:
-            self.attributes[attr] = getattr(self, attr)
-
-    def update_staff_orientation(self, mouse_pos):
-        closest_handpoint, closest_location = self.get_closest_handpoint(mouse_pos)
-        previous_axis = self.axis
+    def update_rotation(self, mouse_pos):
+        closest_location = self.get_closest_location(mouse_pos)
         self.update_axis(closest_location)
         self.update_appearance()
-
-        # If the orientation changed, adjust the position to maintain alignment
-        if self.axis != previous_axis:
-            staff_center = self.get_center()
-            self.setPos(mouse_pos - staff_center)
-
         self.apply_rotation()
 
     def set_attributes_from_dict(self, attributes):
@@ -321,14 +295,22 @@ class Staff(GraphicalObject):
     def get_closest_handpoint(self, mouse_pos):
         closest_distance = float("inf")
         closest_handpoint = None
+        for point in self.graphboard.grid.handpoints.values():
+            distance = (point - mouse_pos).manhattanLength()
+            if distance < closest_distance:
+                closest_distance = distance
+                closest_handpoint = point
+        return closest_handpoint
+    
+    def get_closest_location(self, mouse_pos):
+        closest_distance = float("inf")
         closest_location = None
         for location, point in self.graphboard.grid.handpoints.items():
             distance = (point - mouse_pos).manhattanLength()
             if distance < closest_distance:
                 closest_distance = distance
-                closest_handpoint = point
                 closest_location = location
-        return closest_handpoint, closest_location
+        return closest_location
 
     def get_attributes(self):
         return {attr: getattr(self, attr) for attr in STAFF_ATTRIBUTES}

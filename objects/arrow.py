@@ -128,23 +128,13 @@ class Arrow(GraphicalObject):
         self.update_appearance()
 
     def update_appearance(self):
-        self.update_color()
-        self.update_rotation()
-
-    def update_color(self):
         if self.motion_type is not STATIC:
-            new_svg_data = self.set_svg_color(self.color)
-            self.renderer.load(new_svg_data)
-            self.setSharedRenderer(self.renderer)
+            self.update_color()
+        self.update_rotation()
 
     def update_rotation(self):
         angle = self.get_rotation_angle()
         self.setRotation(angle)
-
-    def update_svg(self, svg_file):
-        self.svg_file = svg_file
-        self.setup_svg_renderer(svg_file)
-        self.set_svg_color(self.color)
 
     def update_for_new_quadrant(self, new_quadrant):
         self.quadrant = new_quadrant
