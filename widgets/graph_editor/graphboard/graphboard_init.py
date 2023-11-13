@@ -2,8 +2,35 @@ from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtWidgets import QGraphicsView
 from objects.grid import Grid
 from objects.staff import RedStaff, BlueStaff
-from settings.numerical_constants import *
-from settings.string_constants import *
+from settings.numerical_constants import (
+    GRAPHBOARD_HEIGHT,
+    GRAPHBOARD_SCALE,
+    GRAPHBOARD_WIDTH,
+)
+from settings.string_constants import (
+    GRID_FILE_PATH,
+    COLOR,
+    RED,
+    BLUE,
+    LOCATION,
+    NORTH,
+    SOUTH,
+    LAYER,
+    PRO,
+    MOTION_TYPE,
+    ROTATION_DIRECTION,
+    CLOCKWISE,
+    QUADRANT,
+    NORTHEAST,
+    START_LOCATION,
+    EAST,
+    SOUTHEAST,
+    SOUTHWEST,
+    WEST,
+    NORTHWEST,
+    END_LOCATION,
+    TURNS,
+)
 from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_staff import GhostStaff
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
@@ -63,8 +90,32 @@ class GraphboardInit:
         return staff_set
 
     def init_ghost_arrows(self):
-        red_ghost_arrow = GhostArrow(self.graphboard, RED)
-        blue_ghost_arrow = GhostArrow(self.graphboard, BLUE)
+        default_red_ghost_arrow_attributes = {
+            COLOR: RED,
+            MOTION_TYPE: PRO,
+            ROTATION_DIRECTION: CLOCKWISE,
+            QUADRANT: NORTHEAST,
+            START_LOCATION: NORTH,
+            END_LOCATION: EAST,
+            TURNS: 0,
+        }
+
+        default_blue_ghost_arrow_attributes = {
+            COLOR: BLUE,
+            MOTION_TYPE: PRO,
+            ROTATION_DIRECTION: CLOCKWISE,
+            QUADRANT: SOUTHWEST,
+            START_LOCATION: SOUTH,
+            END_LOCATION: WEST,
+            TURNS: 0,
+        }
+
+        red_ghost_arrow = GhostArrow(
+            self.graphboard, default_red_ghost_arrow_attributes
+        )
+        blue_ghost_arrow = GhostArrow(
+            self.graphboard, default_blue_ghost_arrow_attributes
+        )
 
         red_ghost_arrow.hide()
         blue_ghost_arrow.hide()
@@ -78,15 +129,19 @@ class GraphboardInit:
             LOCATION: EAST,
             LAYER: 1,
         }
-        
+
         default_blue_ghost_staff_attributes = {
             COLOR: BLUE,
             LOCATION: WEST,
             LAYER: 1,
         }
-        
-        red_ghost_staff = GhostStaff(self.graphboard, default_red_ghost_staff_attributes)
-        blue_ghost_staff = GhostStaff(self.graphboard, default_blue_ghost_staff_attributes)
+
+        red_ghost_staff = GhostStaff(
+            self.graphboard, default_red_ghost_staff_attributes
+        )
+        blue_ghost_staff = GhostStaff(
+            self.graphboard, default_blue_ghost_staff_attributes
+        )
 
         red_ghost_staff.hide()
         blue_ghost_staff.hide()

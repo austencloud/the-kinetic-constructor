@@ -51,10 +51,10 @@ class Graphboard(QGraphicsScene):
     def setup_components(self, main_widget, graph_editor):
         self.graph_editor = graph_editor
         self.letters = main_widget.letters
-        
+
         self.dragged_arrow = None
         self.dragged_staff = None
-        
+
         self.initializer = GraphboardInit(self)
 
         self.ghost_arrows = self.initializer.init_ghost_arrows()
@@ -134,7 +134,9 @@ class Graphboard(QGraphicsScene):
         clicked_item = self.itemAt(event.scenePos(), QTransform())
         if isinstance(clicked_item, Staff):
             self.dragged_staff = clicked_item
-            self.dragged_staff.mousePressEvent(event)  # Pass the event to the Staff class
+            self.dragged_staff.mousePressEvent(
+                event
+            )  # Pass the event to the Staff class
         elif isinstance(clicked_item, Arrow):
             self.dragged_arrow = clicked_item
             self.dragged_arrow.mousePressEvent(event)
@@ -145,19 +147,22 @@ class Graphboard(QGraphicsScene):
     def mouseMoveEvent(self, event):
         if self.dragged_staff:
             # Delegate to Staff class
-            self.dragged_staff.mouseMoveEvent(event)  # Pass the event to the Staff class
+            self.dragged_staff.mouseMoveEvent(
+                event
+            )  # Pass the event to the Staff class
         elif self.dragged_arrow:
             self.dragged_arrow.mouseMoveEvent(event)
-            
+
     def mouseReleaseEvent(self, event):
         if self.dragged_staff:
             # Delegate to Staff class
-            self.dragged_staff.mouseReleaseEvent(event)  # Pass the event to the Staff class
+            self.dragged_staff.mouseReleaseEvent(
+                event
+            )  # Pass the event to the Staff class
             self.dragged_staff = None
         elif self.dragged_arrow:
             self.dragged_arrow.mouseReleaseEvent(event)
             self.dragged_arrow = None
-
 
     ### SETTERS ###
 

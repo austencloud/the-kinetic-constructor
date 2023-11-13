@@ -40,14 +40,14 @@ class ActionButtonsFrame(QFrame):
                 "rotate_right.png",
                 "Rotate Right",
                 lambda: self.scene.selectedItems()[0].rotate(
-                    "right", 
+                    "right",
                 ),
             ),
             (
                 "rotate_left.png",
                 "Rotate Left",
                 lambda: self.scene.selectedItems()[0].rotate(
-                    "left", 
+                    "left",
                 ),
             ),
             (

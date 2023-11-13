@@ -39,6 +39,7 @@ from settings.string_constants import (
 )
 from data.start_end_location_mapping import start_end_location_mapping
 from collections import namedtuple
+from objects.graphical_object import GraphicalObject
 
 # Define a named tuple for clarity
 Orientation = namedtuple(
@@ -46,21 +47,13 @@ Orientation = namedtuple(
 )
 
 
-class Arrow(QGraphicsSvgItem):
+class Arrow(GraphicalObject):
     def __init__(self, graphboard, attributes):
-        super().__init__()
-        if attributes:
-            self.svg_file = self.get_svg_file(
-                attributes.get(MOTION_TYPE), attributes.get(TURNS)
-            )
-            self._setup_svg_renderer(self.svg_file)
-        self._setup(graphboard, attributes)
-
-    ### SETUP ###
-
-    def _setup(self, graphboard, attributes):
+        svg_file = self.get_svg_file(attributes.get(MOTION_TYPE), attributes.get(TURNS))
+        super().__init__(svg_file, graphboard, attributes)
         self._setup_attributes(graphboard, attributes)
-        self._setup_graphics_flags()
+        
+    ### SETUP ###
 
     def _setup_attributes(self, graphboard, attributes):
         self.graphboard = graphboard
@@ -88,18 +81,6 @@ class Arrow(QGraphicsSvgItem):
 
         self.center = self.boundingRect().center()
 
-    def _setup_graphics_flags(self):
-        self.setFlags(
-            QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable
-            | QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable
-            | QGraphicsSvgItem.GraphicsItemFlag.ItemSendsGeometryChanges
-            | QGraphicsSvgItem.GraphicsItemFlag.ItemIsFocusable
-        )
-        self.setTransformOriginPoint(self.center)
-
-    def _setup_svg_renderer(self, svg_file):
-        self.renderer = QSvgRenderer(svg_file)
-        self.setSharedRenderer(self.renderer)
 
     ### MOUSE EVENTS ###
 
@@ -162,7 +143,7 @@ class Arrow(QGraphicsSvgItem):
 
     def update_svg(self, svg_file):
         self.svg_file = svg_file
-        self._setup_svg_renderer(svg_file)
+        self.setup_svg_renderer(svg_file)
         self.set_svg_color(self.color)
 
     def update_for_new_quadrant(self, new_quadrant):
@@ -383,24 +364,6 @@ class Arrow(QGraphicsSvgItem):
         self.update_appearance()
         self.attributes[TURNS] = self.turns
         self.graphboard.update()
-
-    def set_svg_color(self, new_color):
-        color_map = {RED: RED_HEX, BLUE: BLUE_HEX}
-        new_hex_color = color_map.get(new_color)
-
-        with open(self.svg_file, CLOCKWISE) as f:
-            svg_data = f.read()
-
-        style_tag_pattern = re.compile(
-            r"\.st0{fill\s*:\s*(#[a-fA-F0-9]{6})\s*;}", re.DOTALL
-        )
-        match = style_tag_pattern.search(svg_data)
-
-        if match:
-            old_color = match.group(1)
-            svg_data = svg_data.replace(old_color, new_hex_color)
-            
-        return svg_data.encode("utf-8")
 
     def move_wasd(self, direction):
         wasd_quadrant_mapping = {

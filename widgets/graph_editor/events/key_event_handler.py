@@ -24,7 +24,7 @@ class KeyEventHandler:
                 graphboard.delete_staff(selected_staff)
 
         ### ARROW MANIPULATION ###
-        
+
         if selected_arrow:
             if event.key() == Qt.Key.Key_W:
                 selected_arrow.move_wasd(UP)

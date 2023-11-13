@@ -61,8 +61,8 @@ class Arrowbox(QGraphicsScene):
             },
         ]
 
-        for attributes in arrow_dicts:
-            arrow = Arrow(self, attributes)
+        for dict in arrow_dicts:
+            arrow = Arrow(self, dict)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
             self.addItem(arrow)

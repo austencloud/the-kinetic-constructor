@@ -1,6 +1,5 @@
-from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+from objects.graphical_object import GraphicalObject
 from PyQt6.QtCore import Qt, QPointF
 from settings.numerical_constants import (
     STAFF_WIDTH,
@@ -42,51 +41,27 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(name)s %(message)s",
 )
 
-
-class Staff(QGraphicsSvgItem):
+class Staff(GraphicalObject):
     def __init__(self, graphboard, attributes):
-        super().__init__()
-        self._setup(graphboard, attributes)
+        svg_file = STAFF_SVG_FILE_PATH
+        super().__init__(svg_file, graphboard, attributes)
+        self._setup_attributes(graphboard, attributes)
 
     ### SETUP ###
 
-    def _setup(self, graphboard, attributes):
-        self.svg_file = STAFF_SVG_FILE_PATH
-        self._setup_svg_renderer(self.svg_file)
-        self._setup_attributes(graphboard, attributes)
-        self._setup_graphics_flags()
-
     def _setup_attributes(self, graphboard, attributes):
         self.graphboard = graphboard
-        
         self.drag_offset = QPointF(0, 0)
         self.previous_location = None
-        
         self.arrow = None
         self.ghost_staff = None
-
         self.color = None
         self.location = None
         self.layer = None
-
         if attributes:
             self.set_attributes_from_dict(attributes)
             self.update_appearance()
-            
         self.center = self.get_staff_center()
-
-    def _setup_graphics_flags(self):
-        self.setFlags(
-            QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable
-            | QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable
-            | QGraphicsSvgItem.GraphicsItemFlag.ItemSendsGeometryChanges
-            | QGraphicsSvgItem.GraphicsItemFlag.ItemIsFocusable
-        )
-        self.setTransformOriginPoint(self.center)
-
-    def _setup_svg_renderer(self, svg_file):
-        self.renderer = QSvgRenderer(svg_file)
-        self.setSharedRenderer(self.renderer)
 
     ### MOUSE EVENTS ###
 
@@ -105,7 +80,6 @@ class Staff(QGraphicsSvgItem):
                 item.setSelected(False)
 
         self.previous_location = self.location 
-
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.MouseButton.LeftButton:
@@ -189,7 +163,6 @@ class Staff(QGraphicsSvgItem):
         self.graphboard.update()
         self.graphboard.staffs.append(self)
 
-
     def mouseReleaseEvent(self, event):
         self.graphboard.removeItem(self.ghost_staff)
         self.graphboard.staffs.remove(self.ghost_staff)
@@ -212,7 +185,6 @@ class Staff(QGraphicsSvgItem):
         self.previous_location = new_location
         self.graphboard.update()
 
-        
     ### UPDATERS ###
 
     def update(self, attributes):

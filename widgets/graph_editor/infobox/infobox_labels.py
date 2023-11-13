@@ -2,6 +2,7 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QLabel, QSizePolicy
 from objects.arrow import Arrow
+from objects.ghosts.ghost_arrow import GhostArrow
 from data.positions_map import positions_map
 import logging
 from settings.string_constants import *
@@ -139,7 +140,7 @@ class InfoboxLabels:
     def get_start_end_positions(self):
         positions = []
         arrow_items = [
-            item for item in self.graphboard.items() if isinstance(item, Arrow)
+            item for item in self.graphboard.items() if isinstance(item, Arrow) or isinstance(item, GhostArrow)
         ]
 
         arrow_colors = {RED: None, BLUE: None}
