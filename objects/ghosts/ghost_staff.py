@@ -9,12 +9,3 @@ class GhostStaff(Staff):
         self.graphboard = graphboard
         self.target_staff = None
 
-    def update(self, target_staff, drag=None):
-        if drag:
-            self.set_attributes_from_dict(drag.get_attributes())
-        else:
-            self.set_attributes_from_dict(target_staff.get_attributes())
-
-        self.setup_graphics_flags()
-        self.update_appearance()
-        self.show()

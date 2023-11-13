@@ -56,3 +56,7 @@ class GraphicalObject(QGraphicsSvgItem):
         self.svg_file = svg_file
         self.setup_svg_renderer(svg_file)
         self.set_svg_color(self.color)
+        
+    def update(self, attributes):
+        self.set_attributes_from_dict(attributes)
+        self.update_appearance()

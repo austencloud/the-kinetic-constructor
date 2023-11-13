@@ -121,12 +121,6 @@ class Arrow(GraphicalObject):
 
     ### UPDATERS ###
 
-    def update(self, attributes):
-        self.set_attributes_from_dict(attributes)
-        svg_file = self.get_svg_file(self.motion_type, self.turns)
-        self.update_svg(svg_file)
-        self.update_appearance()
-
     def update_appearance(self):
         if self.motion_type is not STATIC:
             self.update_color()
@@ -484,6 +478,8 @@ class Arrow(GraphicalObject):
         }
 
         self.update(new_arrow_dict)
+        svg_file = self.get_svg_file(self.motion_type, self.turns)
+        self.update_svg(svg_file)
         self.staff.update(new_staff_dict)
 
         if self.ghost_arrow:
@@ -525,7 +521,8 @@ class Arrow(GraphicalObject):
         }
 
         self.svg_file = f"resources/images/arrows/{new_motion_type}_{self.turns}.svg"
-        self.setup_svg_renderer(self.svg_file)
+        svg_file = self.get_svg_file(self.motion_type, self.turns)
+        self.update_svg(svg_file)
         self.update(new_arrow_dict)
         self.staff.update(new_staff_dict)
         self.graphboard.update()

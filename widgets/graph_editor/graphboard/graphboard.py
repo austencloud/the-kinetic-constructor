@@ -47,6 +47,7 @@ class Graphboard(QGraphicsScene):
         self.staffs = []
         self.letter_renderers = {}
         self.current_letter = None
+        self.infobox = None
 
     def setup_components(self, main_widget, graph_editor):
         self.graph_editor = graph_editor
@@ -75,27 +76,7 @@ class Graphboard(QGraphicsScene):
         self.staff_positioner = StaffPositioner(self)
         self.letter_engine = LetterEngine(self)
 
-    ### SELECTION
-
-    def select_all_arrows(self):
-        for arrow in self.arrows:
-            arrow.setSelected(True)
-
-    def deselect_all_items(self):
-        for item in self.items():
-            item.setSelected(False)
-
     ### DELETION ###
-
-    def clear_graphboard(self):
-        for arrow in self.arrows:
-            self.removeItem(arrow)
-        for staff in self.staffs:
-            staff.hide()
-
-    def hide_all_staffs(self):
-        for staff in self.staffs:
-            staff.hide()
 
     def delete_arrow(self, arrow, keep_staff=False):
         self.removeItem(arrow)
@@ -163,11 +144,6 @@ class Graphboard(QGraphicsScene):
         elif self.dragged_arrow:
             self.dragged_arrow.mouseReleaseEvent(event)
             self.dragged_arrow = None
-
-    ### SETTERS ###
-
-    def set_infobox(self, infobox):
-        self.infobox = infobox
 
     ### GETTERS ###
 
@@ -269,30 +245,8 @@ class Graphboard(QGraphicsScene):
         blank_arrow.staff = arrow.staff
         blank_arrow.staff.arrow = blank_arrow
 
-    def center_letter_item(self):
-        x = self.width() / 2 - self.letter_item.boundingRect().width() / 2
-        y = self.grid.boundingRect().height()
-        self.letter_item.setPos(x, y)
 
     ### UPDATERS ###
-
-    def update_ghost_staff(self, dragged_staff, event):
-        # Retrieve the ghost staff for the dragged staff's color
-        ghost_staff = self.ghost_staffs[dragged_staff.color]
-
-        # Update the ghost staff's attributes to match the dragged staff
-        ghost_staff.set_attributes_from_dict(dragged_staff.get_attributes())
-        ghost_staff.update_appearance()
-
-        # Calculate the closest handpoint for positioning
-        closest_handpoint, _ = dragged_staff.get_closest_handpoint(event.scenePos())
-
-        # Position the ghost staff at the calculated handpoint
-        ghost_staff.setPos(closest_handpoint)
-
-        # Show the ghost staff if it's not already visible
-        if not ghost_staff.isVisible():
-            ghost_staff.show()
 
     def update(self):
         self.update_letter()
@@ -320,20 +274,14 @@ class Graphboard(QGraphicsScene):
         if letter:
             self.set_letter_renderer(letter)
         else:
-            self.set_blank_renderer()
+            self.letter_item.setSharedRenderer(QSvgRenderer(f"{LETTER_SVG_DIR}/blank.svg"))
 
     ### SETTERS ###
 
     def set_letter_renderer(self, letter):
         letter_type = self.get_current_letter_type()
         svg_path = f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
-        self.set_svg_renderer(svg_path)
-
-    def set_blank_renderer(self):
-        self.set_svg_renderer(f"{LETTER_SVG_DIR}/blank.svg")
-
-    def set_svg_renderer(self, svg_path):
         renderer = QSvgRenderer(svg_path)
         if renderer.isValid():
             self.letter_item.setSharedRenderer(renderer)
-            self.center_letter_item()
+    

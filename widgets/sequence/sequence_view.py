@@ -88,7 +88,7 @@ class SequenceView(QGraphicsView):
         )
         state = (graphboard.get_state(), scaled_image)
         self.add_pictograph(state)
-        graphboard.clear_graphboard()
+
         graphboard.update_letter(None)
 
         self.sequence_scene.update()

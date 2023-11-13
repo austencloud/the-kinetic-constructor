@@ -51,7 +51,6 @@ class GraphboardMenuHandler:
     def create_graphboard_menu(self, event):
         actions = [
             ("Swap Colors", lambda: self.manipulators.swap_colors()),
-            ("Select All", self.graphboard.select_all_arrows),
             (
                 "Add to Sequence",
                 lambda _: self.sequence_view.add_to_sequence(self.graphboard),

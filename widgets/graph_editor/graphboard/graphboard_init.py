@@ -143,15 +143,15 @@ class GraphboardInit:
             self.graphboard, default_blue_ghost_staff_attributes
         )
 
-        red_ghost_staff.hide()
-        blue_ghost_staff.hide()
-
         ghost_staffs = {RED: red_ghost_staff, BLUE: blue_ghost_staff}
         return ghost_staffs
 
     def init_letter_item(self):
         letter_item = QGraphicsSvgItem()
         self.graphboard.addItem(letter_item)
+        x = self.graphboard.grid.boundingRect().width() / 2 - letter_item.boundingRect().width() / 2
+        y = self.graphboard.grid.boundingRect().height()
+        letter_item.setPos(x, y)
         return letter_item
 
     def init_quadrants(self, grid):
