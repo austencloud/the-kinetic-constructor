@@ -104,7 +104,7 @@ class Staff(QGraphicsSvgItem):
             if item != self:
                 item.setSelected(False)
 
-        self.previous_location = self.location  # Store the starting location
+        self.previous_location = self.location 
 
 
     def mouseMoveEvent(self, event):
@@ -131,15 +131,14 @@ class Staff(QGraphicsSvgItem):
                     if self.arrow.motion_type == STATIC:
                         self.arrow.start_location = new_location
                         self.arrow.end_location = new_location
-                    self.graphboard.update()  # Update graphboard with new arrow position
+                    self.graphboard.update() 
                     self.graphboard.staffs.append(self)
                     
-                self.previous_location = new_location  # Update after
+                self.previous_location = new_location  
 
     def update_arrow_quadrant(self, new_location):
-        # Mapping of new quadrant based on current quadrant, rotation direction, and staff's new location
         quadrant_mapping = {
-            # Iso
+            ### ISO ###
             (NORTHEAST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
             (NORTHWEST, CLOCKWISE, PRO): {EAST: NORTHEAST, WEST: SOUTHWEST},
             (SOUTHWEST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
@@ -148,7 +147,7 @@ class Staff(QGraphicsSvgItem):
             (NORTHWEST, COUNTER_CLOCKWISE, PRO): {SOUTH: SOUTHWEST, NORTH: NORTHEAST},
             (SOUTHWEST, COUNTER_CLOCKWISE, PRO): {EAST: SOUTHEAST, WEST: NORTHWEST},
             (SOUTHEAST, COUNTER_CLOCKWISE, PRO): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
-            # Anti
+            ### ANTI ###
             (NORTHEAST, CLOCKWISE, ANTI): {EAST: SOUTHEAST, WEST: NORTHWEST},
             (NORTHWEST, CLOCKWISE, ANTI): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
             (SOUTHWEST, CLOCKWISE, ANTI): {EAST: SOUTHEAST, WEST: NORTHWEST},
@@ -159,24 +158,16 @@ class Staff(QGraphicsSvgItem):
             (SOUTHEAST, COUNTER_CLOCKWISE, ANTI): {EAST: NORTHEAST, WEST: SOUTHWEST}
         }
 
-        # Extract current arrow quadrant, rotation direction, and motion type
         current_quadrant = self.arrow.quadrant
         rotation_direction = self.arrow.rotation_direction
         motion_type = self.arrow.motion_type
-
-        # Determine new quadrant
         new_quadrant = quadrant_mapping.get((current_quadrant, rotation_direction, motion_type), {}).get(new_location)
 
         if new_quadrant:
-            # Update arrow quadrant
             self.arrow.quadrant = new_quadrant
-
-            # Update start and end locations based on new quadrant
             start_location, end_location = self.arrow.get_start_end_locations(motion_type, rotation_direction, new_quadrant)
             self.arrow.start_location = start_location
             self.arrow.end_location = end_location
-
-            # Update arrow appearance
             self.arrow.update_appearance()
             
     def update_for_new_location(self, event, new_location):
@@ -209,26 +200,17 @@ class Staff(QGraphicsSvgItem):
         self.finalize_staff_drop(event)
 
     def finalize_staff_drop(self, event):
-        # Calculate closest handpoint and new location
         closest_handpoint, new_location = self.get_closest_handpoint(event.scenePos())
 
         self.attributes[LOCATION] = new_location
         self.location = new_location
-
-        # Update staff attributes and appearance
         self.update_appearance()
-
-        # Position the staff at the closest handpoint
         self.setPos(closest_handpoint)
 
-        # Update associated arrow if any
         if self.arrow:
             self.arrow.update_appearance()
-
         self.graphboard.ghost_staffs[self.color].hide()
-
         self.previous_location = new_location
-
         self.graphboard.update()
 
         

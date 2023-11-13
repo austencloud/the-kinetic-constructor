@@ -57,7 +57,7 @@ class Arrow(QGraphicsSvgItem):
         self._setup(graphboard, attributes)
 
     ### SETUP ###
-    
+
     def _setup(self, graphboard, attributes):
         self._setup_attributes(graphboard, attributes)
         self._setup_graphics_flags()
@@ -66,12 +66,12 @@ class Arrow(QGraphicsSvgItem):
         self.graphboard = graphboard
 
         self.drag_offset = QPointF(0, 0)
-        
+
         self.staff = None
         self.ghost_arrow = None
-        
+
         self.is_mirrored = False
-        
+
         self.color = None
         self.motion_type = None
         self.rotation_direction = None
@@ -80,14 +80,12 @@ class Arrow(QGraphicsSvgItem):
         self.end_location = None
         self.turns = None
 
-        self.mirror_transform = (
-            None
-        )
+        self.mirror_transform = None
 
         if attributes:
             self.set_attributes_from_dict(attributes)
             self.update_appearance()
-        
+
         self.center = self.boundingRect().center()
 
     def _setup_graphics_flags(self):
@@ -127,13 +125,12 @@ class Arrow(QGraphicsSvgItem):
             view_event_pos = self.graphboard.view.mapFromScene(scene_event_pos)
             new_pos = event.scenePos() - self.center
             self.setPos(new_pos)
-            in_view = self.graphboard.view.rect().contains(view_event_pos)
 
             scene_pos = new_pos + self.center
             new_quadrant = self.graphboard.get_quadrant(scene_pos.x(), scene_pos.y())
 
             if self.quadrant != new_quadrant:
-                if in_view:
+                if new_quadrant:
                     self.update_for_new_quadrant(new_quadrant)
 
     def mouseReleaseEvent(self, event):
@@ -210,7 +207,7 @@ class Arrow(QGraphicsSvgItem):
                     }
                 )
                 staff.arrow = self.ghost_arrow
-                
+
                 if staff not in self.graphboard.items():
                     self.graphboard.addItem(staff)
                 staff.show()
@@ -297,7 +294,6 @@ class Arrow(QGraphicsSvgItem):
         self.center = self.boundingRect().center()
         self.setTransformOriginPoint(self.center)
 
-
     ### GETTERS ###
 
     def get_svg_data(self, svg_file):
@@ -367,7 +363,6 @@ class Arrow(QGraphicsSvgItem):
     def get_svg_file(self, motion_type, turns):
         svg_file = f"{ARROW_DIR}{motion_type}_{turns}.svg"
         return svg_file
-
 
     ### MANIPULATION ###
 

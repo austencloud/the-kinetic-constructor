@@ -211,3 +211,9 @@
 2023-11-12 18:59:49,419 DEBUG root Multiple letters returned by get_current_letter: {}
 2023-11-12 18:59:51,370 DEBUG root Multiple letters returned by get_current_letter: {}
 2023-11-12 18:59:51,616 DEBUG root Multiple letters returned by get_current_letter: {}
+2023-11-12 19:12:02,566 WARNING root Staff has no location
+2023-11-12 19:12:02,566 WARNING root Staff has no location
+2023-11-12 19:12:27,408 WARNING root Staff has no location
+2023-11-12 19:12:27,409 WARNING root Staff has no location
+2023-11-12 19:13:02,829 WARNING root Staff has no location
+2023-11-12 19:13:02,829 WARNING root Staff has no location

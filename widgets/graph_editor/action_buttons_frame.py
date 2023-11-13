@@ -55,7 +55,7 @@ class ActionButtonsFrame(QFrame):
                 "Mirror",
                 lambda: self.scene.selectedItems()[0].mirror(),
             ),
-            ("swap.png", "Swap Colors", lambda: self.manipulators.swap_colors()),
+            ("swap.png", "Swap Colors", lambda: self.scene.swap_colors()),
             (
                 "select_all.png",
                 "Select All",
