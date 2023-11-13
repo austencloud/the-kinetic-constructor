@@ -66,7 +66,7 @@ class Arrow(GraphicalObject):
     start_location: StartLocation
     end_location: EndLocation
     turns: Turns
-    graphboard: "GraphBoard"
+    graphboard: 'GraphBoard'
     ghost_arrow: Optional["Arrow"]
     drag_offset: QPointF
     staff: Staff
@@ -441,6 +441,7 @@ class Arrow(GraphicalObject):
         if self.ghost_arrow:
             self.ghost_arrow.setTransform(transform)
             self.ghost_arrow.mirror_transform = transform
+            self.ghost_arrow.is_mirrored = self.is_mirrored
             self.ghost_arrow.update(self)
 
         self.graphboard.update()

@@ -31,6 +31,7 @@ from utilities.TypeChecking.TypeChecking import (
     GammaLetters,
     Dict_Variants,
     Position,
+    ArrowAttributes
 )
 
 
@@ -265,19 +266,23 @@ class LetterEngine:
             start_pos = specific_position.get("start_position")
             end_pos = specific_position.get("end_position")
             preprocessed_key = f"{start_pos}_{end_pos}"
-            filtered_preprocessed_group = self.preprocessed_start_end_combinations.get(preprocessed_key, [])
-
+            preprocessed_group: Dict[Tuple[Letters, ArrowAttributes]] = self.preprocessed_start_end_combinations.get(preprocessed_key, [])
+            preprocessed_group = {
+                letter: combinations
+                for letter, combinations in preprocessed_group
+            }
+            
             overall_position = self.get_overall_position(specific_position)
             letter_group = self.get_letter_group(overall_position)
             motion_letter_group = self.get_motion_type_letter_group()
 
             # Convert motion_letter_group string to a set of individual letters
             motion_letter_set = set(motion_letter_group)
-
+            filtered_letter_group = set(preprocessed_group.keys())
             # Filter the letter group based on the motion letter set
             filtered_letter_group = {
                 letter
-                for letter in letter_group
+                for letter in filtered_letter_group
                 if letter in motion_letter_set
             }
 

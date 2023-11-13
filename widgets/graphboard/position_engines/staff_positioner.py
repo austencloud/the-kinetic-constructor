@@ -321,7 +321,7 @@ class StaffPositioner:
                 )
 
                 if optimal_entry:
-                    color_key = f"optimal_{arrow_dict['color']}_location"
+                    color_key = f"optimal_{arrow_dict[COLOR]}_location"
                     return optimal_entry.get(color_key)
         return None
 
