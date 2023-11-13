@@ -3,14 +3,17 @@ from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from settings.numerical_constants import *
 from settings.string_constants import *
-
+from typing import Any
 
 class Grid(QGraphicsSvgItem):
-    def __init__(self, grid_svg_path):
+    def __init__(self, grid_svg_path) -> None:
         super().__init__(grid_svg_path)
         self.svg_file = grid_svg_path
+        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
+        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)
 
-    def get_circle_coordinates(self, circle_id):
+
+    def get_circle_coordinates(self, circle_id) -> QPointF | None:
         with open(self.svg_file, "r") as svg_file:
             svg_content = svg_file.read()
 
@@ -24,19 +27,18 @@ class Grid(QGraphicsSvgItem):
         else:
             return None
 
-    def init_points(self, point_names, constants):
+    def init_points(self, point_names, constants) -> dict[str, QPointF]:
         return {
             constant: self.get_circle_coordinates(point_name)
             for point_name, constant in zip(point_names, constants)
         }
 
-
-    def init_handpoints(self):
+    def init_handpoints(self) -> None:
         point_names = ["n_hand_point", "e_hand_point", "s_hand_point", "w_hand_point"]
         constants = [NORTH, EAST, SOUTH, WEST]
         self.handpoints = self.init_points(point_names, constants)
 
-    def init_layer2_points(self):
+    def init_layer2_points(self) -> None:
         point_names = [
             "ne_layer2_point",
             "se_layer2_point",
@@ -46,11 +48,11 @@ class Grid(QGraphicsSvgItem):
         constants = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
         self.layer2_points = self.init_points(point_names, constants)
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self) -> None:
         pass
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self) -> None:
         pass
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self) -> None:
         pass

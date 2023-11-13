@@ -1,30 +1,31 @@
 from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QAction
+from PyQt6.QtCore import QPoint
 from settings.string_constants import RIGHT, LEFT
-from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
 from objects.arrow import Arrow
 from objects.staff import Staff
 
+from typing import TYPE_CHECKING, List, Tuple, Callable
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graphboard.graphboard import GraphBoard
 
 
 class GraphBoardMenuHandler:
-    def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard"):
+    def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard") -> None:
         self.graphboard = graphboard
         self.main_widget = main_widget
         self.export_handler = graphboard.export_handler
 
-    def create_menu_with_actions(self, parent, actions, event_pos):
+    def create_menu_with_actions(self, actions: List[Tuple[str, Callable]], event_pos: QPoint) -> None:
         menu = QMenu()
         for label, func in actions:
-            action = QAction(label, parent)
+            action = QAction(label, self.graphboard)
             action.triggered.connect(func)
             menu.addAction(action)
         menu.exec(event_pos)
 
-    def create_arrow_menu(self, selected_items, event):
+    def create_arrow_menu(self, selected_items, event) -> None:
         selected_item = selected_items[0]
         selected_arrow = selected_item if isinstance(selected_item, Arrow) else None
 
@@ -39,10 +40,13 @@ class GraphBoardMenuHandler:
                 lambda: selected_arrow.rotate(LEFT),
             ),
             ("Mirror", lambda: selected_arrow.mirror()),
+            ("Increment Turns", lambda: selected_arrow.increment_turns()),
+            ("Decrement Turns", lambda: selected_arrow.decrement_turns()),
+            
         ]
-        self.create_menu_with_actions(self.graphboard, actions, event)
+        self.create_menu_with_actions(actions, event)
 
-    def create_staff_menu(self, selected_items, event):
+    def create_staff_menu(self, selected_items, event) -> None:
         selected_item = selected_items[0]
         selected_staff = selected_item if isinstance(selected_item, Staff) else None
 
@@ -53,9 +57,9 @@ class GraphBoardMenuHandler:
                 lambda: selected_staff.swap_axis(),
             ),
         ]
-        self.create_menu_with_actions(self.graphboard, actions, event)
+        self.create_menu_with_actions(actions, event)
 
-    def create_graphboard_menu(self, event):
+    def create_graphboard_menu(self, event) -> None:
         actions = [
             ("Swap Colors", lambda: self.manipulators.swap_colors()),
             (
@@ -67,4 +71,4 @@ class GraphBoardMenuHandler:
             ("Export to PNG", self.export_handler.export_to_png),
             ("Export to SVG", lambda: self.export_handler.export_to_svg("output.svg")),
         ]
-        self.create_menu_with_actions(self.graphboard, actions, event)
+        self.create_menu_with_actions(actions, event)

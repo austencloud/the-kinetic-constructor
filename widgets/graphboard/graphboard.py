@@ -80,15 +80,18 @@ class GraphBoard(QGraphicsScene):
             self.view.mapToScene(event.pos().toPoint().x(), event.pos().toPoint().y()),
             QTransform(),
         )
-        selected_items = self.selectedItems()
-        event_pos = event.screenPos()
+        if clicked_item is self.grid:
+            # pass the click to the next item
+            super().contextMenuEvent(event)
+            selected_items = self.selectedItems()
+            event_pos = event.screenPos()
 
-        if isinstance(clicked_item, Arrow):
-            self.graphboard_menu_handler.create_arrow_menu(selected_items, event_pos)
-        elif isinstance(clicked_item, Staff):
-            self.graphboard_menu_handler.create_staff_menu(selected_items, event_pos)
-        else:
-            self.graphboard_menu_handler.create_graphboard_menu(event_pos)
+            if isinstance(clicked_item, Arrow):
+                self.graphboard_menu_handler.create_arrow_menu(selected_items, event_pos)
+            elif isinstance(clicked_item, Staff):
+                self.graphboard_menu_handler.create_staff_menu(selected_items, event_pos)
+            else:
+                self.graphboard_menu_handler.create_graphboard_menu(event_pos)
 
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         clicked_item = self.itemAt(event.scenePos(), QTransform())
@@ -218,7 +221,7 @@ class GraphBoard(QGraphicsScene):
         blank_arrow.staff = arrow.staff
         blank_arrow.staff.arrow = blank_arrow
 
-    def position_letter_item(self, letter_item: "QGraphicsSvgItem"):
+    def position_letter_item(self, letter_item: "QGraphicsSvgItem") -> None:
         x = (
             self.grid.boundingRect().width() / 2
             - letter_item.boundingRect().width() / 2
