@@ -525,7 +525,7 @@ class Arrow(GraphicalObject):
         }
 
         self.svg_file = f"resources/images/arrows/{new_motion_type}_{self.turns}.svg"
-        self._setup_svg_renderer(self.svg_file)
+        self.setup_svg_renderer(self.svg_file)
         self.update(new_arrow_dict)
         self.staff.update(new_staff_dict)
         self.graphboard.update()

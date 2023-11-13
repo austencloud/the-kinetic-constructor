@@ -147,7 +147,6 @@ class Staff(GraphicalObject):
         self.location = new_location
         self.attributes[LOCATION] = new_location
 
-        self.update_rotation()
         self.ghost_staff.update(self)
 
 
@@ -192,10 +191,6 @@ class Staff(GraphicalObject):
         self.set_attributes_from_dict(attributes)
         self.update_appearance()
 
-    def update_rotation(self):
-        angle = self.get_rotation_angle()
-        self.setRotation(angle)
-
     def update_location(self, new_location):
         self.location = new_location
         self.attributes[LOCATION] = new_location
@@ -222,12 +217,6 @@ class Staff(GraphicalObject):
             
         self.update_axis(self.location)
         self.set_rotation_from_axis()
-
-    def update_rotation(self, mouse_pos):
-        closest_location = self.get_closest_location(mouse_pos)
-        self.update_axis(closest_location)
-        self.update_appearance()
-        self.apply_rotation()
 
     def set_attributes_from_dict(self, attributes):
         self.color = attributes.get(COLOR, None)
@@ -321,12 +310,6 @@ class Staff(GraphicalObject):
 
 
     ### HELPERS ###
-
-    def apply_rotation(self):
-        if self.axis == VERTICAL:
-            self.setRotation(90)
-        else:
-            self.setRotation(0)
 
     def create_staff_dict_from_arrow(self, arrow):
         staff_dict = {COLOR: arrow.color, LOCATION: arrow.end_location, LAYER: 1}
