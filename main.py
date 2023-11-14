@@ -11,7 +11,7 @@ from typing import IO
 class MainWindow(QMainWindow):
     graph_editor_layout: "QHBoxLayout"
     sequence_layout: "QHBoxLayout"
-
+    
     def __init__(self, profiler: cProfile.Profile) -> None:
         super().__init__()
         self.profiler: cProfile.Profile = profiler
@@ -30,6 +30,7 @@ class MainWindow(QMainWindow):
 
     def init_ui(self) -> None:
         self.move(-(self.screen.width() + 500), 100)
+
 
     def write_profiling_stats_to_file(self, file_path: str) -> None:
         stats: pstats.Stats = pstats.Stats(self.profiler).sort_stats("cumtime")
@@ -52,7 +53,6 @@ def main() -> None:
     main_window.write_profiling_stats_to_file("main_profiling_stats.txt")
 
     sys.exit(exit_code)
-
 
 if __name__ == "__main__":
     main()

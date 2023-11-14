@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QPushButton, QLabel, QGraphicsScene, QGraphicsView
+from PyQt6.QtWidgets import QWidget, QPushButton, QLabel, QGraphicsView
 from PyQt6.QtCore import QEvent
 from utilities.json_handler import JsonHandler
 from widgets.sequence.sequenceboard import SequenceBoard
@@ -8,14 +8,13 @@ from widgets.events.key_event_handler import KeyEventHandler
 from widgets.graph_editor import GraphEditor
 from widgets.optionboard.letter_buttons_frame import LetterButtonsFrame
 from utilities.pictograph_generator import PictographGenerator
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING
 from utilities.export_handler import ExportHandler
 
 if TYPE_CHECKING:
     from main import MainWindow
     from widgets.propbox.propbox import Propbox
-from utilities.TypeChecking.TypeChecking import DictVariants, LetterDictionary
-
+from utilities.TypeChecking.TypeChecking import LetterDictionary
 
 class MainWidget(QWidget):
     propbox: "Propbox"
@@ -35,7 +34,6 @@ class MainWidget(QWidget):
         self.json_handler = JsonHandler()
         self.letters: LetterDictionary = self.json_handler.load_all_letters()
         self.key_event_handler = KeyEventHandler()
-        print(self.letters)
         self.graph_editor = GraphEditor(self)
         self.optionboard = OptionBoard(self)
         self.letter_buttons_frame = LetterButtonsFrame(self)

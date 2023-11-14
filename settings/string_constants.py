@@ -3,6 +3,8 @@ STAFF_DIR = "resources/images/props/"
 LETTER_SVG_DIR = "resources/images/letters/"
 ICON_DIR = "resources/images/icons/"
 
+SVG_NS = "http://www.w3.org/2000/svg"
+
 GRID_FILE_PATH = "resources/images/grid/grid.svg"
 STAFF_SVG_FILE_PATH = "resources/images/props/staff.svg"
 

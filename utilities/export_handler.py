@@ -1,114 +1,33 @@
 import re
 from PyQt6.QtGui import QImage, QPainter
-from PyQt6.QtCore import QPointF
+from PyQt6.QtCore import QPointF, QSize
 from objects.arrow import Arrow
 from objects.staff import Staff
 from objects.grid import Grid
-from lxml import etree
+import xml.etree.ElementTree as ET
 from copy import deepcopy
 from typing import TYPE_CHECKING, List
+
 if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
 from utilities.TypeChecking.TypeChecking import ColorHex
-from lxml.etree import ElementTree
+from settings.string_constants import SVG_NS
 
 class ExportHandler:
-    def __init__(self, graphboard: 'GraphBoard') -> None:
+    def __init__(self, graphboard: "GraphBoard") -> None:
         self.graphboard = graphboard
         self.grid = graphboard.grid
+        self.get_fill_color(self.grid.svg_file)
+        self.export_to_png()
 
-    def export_to_svg(self, output_file_path) -> None:
-        svg_data: etree._Element = etree.Element("svg", nsmap={None: "http://www.w3.org/2000/svg"})
-        svg_data.set("width", "750")
-        svg_data.set("height", "900")
-        svg_data.set("viewBox", "0 0 750 900")
-
-        # Create groups for staffs, arrows, and the grid
-        staffs_group: List[etree._Element] = etree.Element("g", id="staffs")
-        arrows_group: List[etree._Element] = etree.Element("g", id="arrows")
-        grid_group: List[etree._Element] = etree.Element("g", id="grid")
-
-        for item in self.graphboard.items():
-            if isinstance(item, Grid):
-                grid_svg_data: ElementTree = etree.parse(item.svg_file)
-                circle_elements: List[etree._Element] = grid_svg_data.getroot().findall(
-                    ".//{http://www.w3.org/2000/svg}circle"
-                )
-
-                for circle_element in circle_elements:
-                    cx = float(circle_element.get("cx")) + 50
-                    cy = float(circle_element.get("cy")) + 50
-                    circle_element.set("cx", str(cx))
-                    circle_element.set("cy", str(cy))
-
-                    # Append the circle to the grid group
-                    grid_group.append(circle_element)
-
-            elif isinstance(item, Arrow):
-                arrow_svg: ElementTree = etree.parse(item.svg_file)
-                path_elements = arrow_svg.getroot().findall(
-                    ".//{http://www.w3.org/2000/svg}path"
-                )
-                fill_color = self.get_fill_color(item.svg_file)
-                transform = item.transform()
-
-                for path_element in path_elements:
-                    path_element.set(
-                        "transform",
-                        f"matrix({transform.m11()}, {transform.m12()}, {transform.m21()}, {transform.m22()}, {item.x()}, {item.y()})",
-                    )
-                    if fill_color is not None:
-                        path_element.set("fill", fill_color)
-
-                    # Append the path to the arrows group
-                    arrows_group.append(path_element)
-
-            elif isinstance(item, Staff):
-                staff_svg: ElementTree = etree.parse(item.svg_file)
-                rect_elements = staff_svg.getroot().findall(
-                    ".//{http://www.w3.org/2000/svg}rect"
-                )
-                fill_color = self.get_fill_color(item.svg_file)
-                position = item.pos()
-
-                for rect_element in rect_elements:
-                    rect_element_copy = deepcopy(
-                        rect_element
-                    )  # Create a deep copy of the element
-                    rect_element_copy.set(
-                        "x", str(position.x())
-                    )  # Set the 'x' attribute
-                    rect_element_copy.set(
-                        "y", str(position.y())
-                    )  # Set the 'y' attribute
-                    rect_element_copy.set(
-                        "transform", f"matrix(1.0, 0.0, 0.0, 1.0, 0, 0)"
-                    )  # Remove the translation from the transformation matrix
-                    if fill_color is not None:
-                        rect_element_copy.set("fill", fill_color)
-
-                    # Append the rect to the staffs group
-                    staffs_group.append(rect_element_copy)
-
-        # Add comments and append the groups to the SVG root element
-        svg_data.append(etree.Comment(" staffs "))
-        svg_data.append(staffs_group)
-        svg_data.append(etree.Comment(" ARROWS "))
-        svg_data.append(arrows_group)
-        svg_data.append(etree.Comment(" GRID "))
-        svg_data.append(grid_group)
-
-        # Convert the SVG element to a string
-        svg_string = etree.tostring(svg_data, pretty_print=True).decode()
-
-        # Add blank lines between elements
-        svg_string = svg_string.replace(">\n<", ">\n\n<")
-        with open(output_file_path, "w") as file:
-            file.write(svg_string)
-
-    def export_to_png(self):
+    ### EXPORTERS ###
+    
+    def export_to_png(self) -> None:
         selectedItems = self.graphboard.selectedItems()
-        image = QImage(self.graphboard.size(), QImage.Format.Format_ARGB32)
+        image = QImage(
+            QSize(int(self.graphboard.width()), int(self.graphboard.height())),
+            QImage.Format.Format_ARGB32,
+        )
         painter = QPainter(image)
 
         for item in selectedItems:
@@ -121,10 +40,109 @@ class ExportHandler:
         for item in selectedItems:
             item.setSelected(True)
 
-    def get_staff_position(self, staff: 'Staff') -> QPointF:
-        staff_svg = etree.parse(staff.svg_file)
+    def export_to_svg(self, output_file_path: str) -> None:
+        nsmap = {"svg": "SVG_NS"}
+        ET.register_namespace('', nsmap["svg"])
+
+        # Create the root element for the SVG
+        svg_data = ET.Element("{SVG_NS}svg")
+        svg_data.set("width", "750")
+        svg_data.set("height", "900")
+        svg_data.set("viewBox", "0 0 750 900")
+
+        # Create groups for staffs, arrows, and the grid
+        staffs_group = ET.SubElement(svg_data, "{SVG_NS}g", id="staffs")
+        arrows_group = ET.SubElement(svg_data, "{SVG_NS}g", id="arrows")
+        grid_group = ET.SubElement(svg_data, "{SVG_NS}g", id="grid")
+
+        for item in self.graphboard.items():
+            if isinstance(item, Grid):
+                circle_elements = self.get_circle_elements(item)
+                grid_group.append(circle_elements)
+
+            elif isinstance(item, Arrow):
+                arrow_path_element = self.get_arrow_path_element(item)
+                arrows_group.append(arrow_path_element)
+
+            elif isinstance(item, Staff):
+                staff_rect_element = self.get_staff_rect_element(item)
+                staffs_group.append(staff_rect_element)
+
+        svg_data.append(ET.Comment(" staffs "))
+        svg_data.append(staffs_group)
+        svg_data.append(ET.Comment(" ARROWS "))
+        svg_data.append(arrows_group)
+        svg_data.append(ET.Comment(" GRID "))
+        svg_data.append(grid_group)
+        svg_string = ET.tostring(svg_data, encoding='unicode', method='xml')
+
+        svg_string = svg_string.replace(">\n<", ">\n\n<")
+        with open(output_file_path, "w") as file:
+            file.write(svg_string)
+
+    ### GETTERS ###
+
+    def get_circle_elements(self, item: Grid) -> List[ET.Element]:
+        grid_svg_data = ET.parse(item.svg_file)
+        circle_elements: List[ET.Element] = grid_svg_data.getroot().findall(
+            ".//{SVG_NS}circle"
+        )
+        for circle_element in circle_elements:
+            cx = float(circle_element.get("cx")) + 50
+            cy = float(circle_element.get("cy")) + 50
+            circle_element.set("cx", str(cx))
+            circle_element.set("cy", str(cy))
+            
+        return circle_elements
+
+    def get_arrow_path_element(self, arrow: "Arrow") -> ET.Element:
+        arrow_svg_data = ET.parse(arrow.svg_file)
+        path_elements = arrow_svg_data.getroot().findall(
+            ".//{SVG_NS}path"
+        )
+        fill_color = self.get_fill_color(arrow.svg_file)
+        transform = arrow.transform()
+
+        for path_element in path_elements:
+            path_element.set(
+                "transform",
+                f"matrix({transform.m11()}, {transform.m12()}, {transform.m21()}, {transform.m22()}, {arrow.x()}, {arrow.y()})",
+            )
+            if fill_color is not None:
+                path_element.set("fill", fill_color)
+
+        return path_elements[0]
+
+    def get_staff_rect_element(self, staff: "Staff") -> ET.Element:
+        staff_svg_data = ET.parse(staff.svg_file)
+        rect_elements = staff_svg_data.getroot().findall(
+            ".//{SVG_NS}rect"
+        )
+        fill_color = self.get_fill_color(staff.svg_file)
+        position = staff.pos()
+
+        for rect_element in rect_elements:
+            rect_element_copy = deepcopy(
+                rect_element
+            )  
+            rect_element_copy.set(
+                "x", str(position.x())
+            )  
+            rect_element_copy.set(
+                "y", str(position.y())
+            )  
+            rect_element_copy.set(
+                "transform", f"matrix(1.0, 0.0, 0.0, 1.0, 0, 0)"
+            )  
+            if fill_color is not None:
+                rect_element_copy.set("fill", fill_color)
+
+        return rect_elements[0]
+
+    def get_staff_position(self, staff: "Staff") -> QPointF:
+        staff_svg = ET.parse(staff.svg_file)
         rect_elements = staff_svg.getroot().findall(
-            ".//{http://www.w3.org/2000/svg}rect"
+            ".//{SVG_NS}rect"
         )
         position = None
 
@@ -138,20 +156,22 @@ class ExportHandler:
         return position
 
     def get_fill_color(self, svg_file) -> ColorHex | None:
-        svg_data: etree._Element = etree.parse(svg_file)
+        svg_data = ET.parse(svg_file)
         fill_color: ColorHex | None = None
-        svg_data.app
+
         # Try to get fill color from style element
-        style_element = svg_data.getroot().find(".//{http://www.w3.org/2000/svg}style")
+        style_element = svg_data.getroot().find(".//{SVG_NS}style")
         if style_element is not None:
             style_text = style_element.text
-            color_match = re.search(r"fill:\s*(#[0-9a-fA-F]+)", style_text)
+            color_match: re.Match | None = re.search(r"fill:\s*(#[0-9a-fA-F]+)", style_text)
             if color_match:
                 fill_color = color_match.group(1)
 
         # If fill color was not found in style element, try to get it from path or rect elements
         if fill_color is None:
-            for element in svg_data.getroot().iterfind(".//{http://www.w3.org/2000/svg}*"):
+            for element in svg_data.getroot().iterfind(
+                ".//{SVG_NS}*"
+            ):
                 if "fill" in element.attrib:
                     fill_color = element.attrib["fill"]
                     break

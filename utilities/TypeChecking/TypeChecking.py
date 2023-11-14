@@ -16,8 +16,6 @@ ColorHex = Literal["#ED1C24", "#2E3192"]
 MotionType = Literal["pro", "anti", "dash", "static", "float", "chu"]
 Quadrant = Literal["ne", "se", "sw", "nw"]
 RotationDirection = Literal["cw", "ccw"]
-StartLocation = Location
-EndLocation = Location
 Turns = Literal[0, 1, 2]
 
 
@@ -31,8 +29,8 @@ class ArrowAttributesDicts(TypedDict):
     motion_type: MotionType
     quadrant: Quadrant
     rotation_direction: RotationDirection
-    start_location: StartLocation
-    end_location: EndLocation
+    start_location: Location
+    end_location: Location
     turns: Turns
 
 
@@ -50,7 +48,7 @@ class StaffAttributesDicts(TypedDict):
     layer: Layer
 
 
-StartEndLocationTuple = Tuple[StartLocation, EndLocation]
+StartEndLocationTuple = Tuple[Location, Location]
 PreprocessedStartEndCombinations = Dict[
     SpecificStartEndPositionsDicts,
     List[Tuple[Letters, List[ArrowAttributesDicts]]],
