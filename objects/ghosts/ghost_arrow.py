@@ -26,11 +26,11 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
-    from utilities.TypeChecking.TypeChecking import ArrowAttributes
+    from utilities.TypeChecking.TypeChecking import ArrowAttributesDicts
 
 
 class GhostArrow(Arrow):
-    def __init__(self, graphboard: "GraphBoard", attributes: "ArrowAttributes"):
+    def __init__(self, graphboard: "GraphBoard", attributes: "ArrowAttributesDicts"):
         super().__init__(graphboard, attributes)
         self.setOpacity(0.2)
         self.graphboard = graphboard
@@ -171,5 +171,5 @@ class GhostArrow(Arrow):
                 },
             }.get(rotation_direction, {})
 
-    def get_attributes(self) -> "ArrowAttributes":
+    def get_attributes(self) -> "ArrowAttributesDicts":
         return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}

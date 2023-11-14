@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, List, Dict, Any
 if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
 
-from utilities.TypeChecking.TypeChecking import OptimalLocations
+from utilities.TypeChecking.TypeChecking import OptimalLocationsDicts
 
 
 class ArrowPositioner:
@@ -32,7 +32,7 @@ class ArrowPositioner:
                 else:
                     self.set_arrow_to_default_loc(arrow)
 
-    def find_optimal_locations(self) -> OptimalLocations | None:
+    def find_optimal_locations(self) -> OptimalLocationsDicts | None:
         current_state = self.graphboard.get_state()
         matching_letters = self.letters[self.graphboard.current_letter]
 
@@ -78,7 +78,7 @@ class ArrowPositioner:
         return True
 
     def set_arrow_to_optimal_loc(
-        self, optimal_locations: OptimalLocations, arrow: "Arrow"
+        self, optimal_locations: OptimalLocationsDicts, arrow: "Arrow"
     ) -> None:
         arrow.set_transform_origin_to_center()
         optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")

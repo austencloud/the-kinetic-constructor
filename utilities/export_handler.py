@@ -6,28 +6,32 @@ from objects.staff import Staff
 from objects.grid import Grid
 from lxml import etree
 from copy import deepcopy
-
+from typing import TYPE_CHECKING, List
+if TYPE_CHECKING:
+    from widgets.graphboard.graphboard import GraphBoard
+from utilities.TypeChecking.TypeChecking import ColorHex
+from lxml.etree import ElementTree
 
 class ExportHandler:
-    def __init__(self, grid, graphboard):
+    def __init__(self, graphboard: 'GraphBoard') -> None:
         self.graphboard = graphboard
-        self.grid = grid
+        self.grid = graphboard.grid
 
-    def export_to_svg(self, output_file_path):
-        svg = etree.Element("svg", nsmap={None: "http://www.w3.org/2000/svg"})
-        svg.set("width", "750")
-        svg.set("height", "900")
-        svg.set("viewBox", "0 0 750 900")
+    def export_to_svg(self, output_file_path) -> None:
+        svg_data: etree._Element = etree.Element("svg", nsmap={None: "http://www.w3.org/2000/svg"})
+        svg_data.set("width", "750")
+        svg_data.set("height", "900")
+        svg_data.set("viewBox", "0 0 750 900")
 
         # Create groups for staffs, arrows, and the grid
-        staffs_group = etree.Element("g", id="staffs")
-        arrows_group = etree.Element("g", id="arrows")
-        grid_group = etree.Element("g", id="grid")
+        staffs_group: List[etree._Element] = etree.Element("g", id="staffs")
+        arrows_group: List[etree._Element] = etree.Element("g", id="arrows")
+        grid_group: List[etree._Element] = etree.Element("g", id="grid")
 
         for item in self.graphboard.items():
             if isinstance(item, Grid):
-                grid_svg = etree.parse(item.svg_file)
-                circle_elements = grid_svg.getroot().findall(
+                grid_svg_data: ElementTree = etree.parse(item.svg_file)
+                circle_elements: List[etree._Element] = grid_svg_data.getroot().findall(
                     ".//{http://www.w3.org/2000/svg}circle"
                 )
 
@@ -41,7 +45,7 @@ class ExportHandler:
                     grid_group.append(circle_element)
 
             elif isinstance(item, Arrow):
-                arrow_svg = etree.parse(item.svg_file)
+                arrow_svg: ElementTree = etree.parse(item.svg_file)
                 path_elements = arrow_svg.getroot().findall(
                     ".//{http://www.w3.org/2000/svg}path"
                 )
@@ -60,7 +64,7 @@ class ExportHandler:
                     arrows_group.append(path_element)
 
             elif isinstance(item, Staff):
-                staff_svg = etree.parse(item.svg_file)
+                staff_svg: ElementTree = etree.parse(item.svg_file)
                 rect_elements = staff_svg.getroot().findall(
                     ".//{http://www.w3.org/2000/svg}rect"
                 )
@@ -87,15 +91,15 @@ class ExportHandler:
                     staffs_group.append(rect_element_copy)
 
         # Add comments and append the groups to the SVG root element
-        svg.append(etree.Comment(" staffs "))
-        svg.append(staffs_group)
-        svg.append(etree.Comment(" ARROWS "))
-        svg.append(arrows_group)
-        svg.append(etree.Comment(" GRID "))
-        svg.append(grid_group)
+        svg_data.append(etree.Comment(" staffs "))
+        svg_data.append(staffs_group)
+        svg_data.append(etree.Comment(" ARROWS "))
+        svg_data.append(arrows_group)
+        svg_data.append(etree.Comment(" GRID "))
+        svg_data.append(grid_group)
 
         # Convert the SVG element to a string
-        svg_string = etree.tostring(svg, pretty_print=True).decode()
+        svg_string = etree.tostring(svg_data, pretty_print=True).decode()
 
         # Add blank lines between elements
         svg_string = svg_string.replace(">\n<", ">\n\n<")
@@ -117,7 +121,7 @@ class ExportHandler:
         for item in selectedItems:
             item.setSelected(True)
 
-    def get_staff_position(self, staff):
+    def get_staff_position(self, staff: 'Staff') -> QPointF:
         staff_svg = etree.parse(staff.svg_file)
         rect_elements = staff_svg.getroot().findall(
             ".//{http://www.w3.org/2000/svg}rect"
@@ -133,12 +137,12 @@ class ExportHandler:
 
         return position
 
-    def get_fill_color(self, svg_file):
-        svg = etree.parse(svg_file)
-        fill_color = None
-
+    def get_fill_color(self, svg_file) -> ColorHex | None:
+        svg_data: etree._Element = etree.parse(svg_file)
+        fill_color: ColorHex | None = None
+        svg_data.app
         # Try to get fill color from style element
-        style_element = svg.getroot().find(".//{http://www.w3.org/2000/svg}style")
+        style_element = svg_data.getroot().find(".//{http://www.w3.org/2000/svg}style")
         if style_element is not None:
             style_text = style_element.text
             color_match = re.search(r"fill:\s*(#[0-9a-fA-F]+)", style_text)
@@ -147,7 +151,7 @@ class ExportHandler:
 
         # If fill color was not found in style element, try to get it from path or rect elements
         if fill_color is None:
-            for element in svg.getroot().iterfind(".//{http://www.w3.org/2000/svg}*"):
+            for element in svg_data.getroot().iterfind(".//{http://www.w3.org/2000/svg}*"):
                 if "fill" in element.attrib:
                     fill_color = element.attrib["fill"]
                     break

@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 from utilities.TypeChecking.TypeChecking import (
     Letters,
     PreprocessedStartEndCombinations,
-    SpecificStartEndPositionsDict,
+    SpecificStartEndPositionsDicts,
     Color,
     MotionTypeCombinations,
     StartEndLocationTuple,
@@ -28,7 +28,7 @@ from utilities.TypeChecking.TypeChecking import (
     GammaLetters,
     Position,
     RotationDirection,
-    ArrowAttributes,
+    ArrowAttributesDicts,
 )
 
 
@@ -68,8 +68,7 @@ class LetterEngine:
             (arrow for arrow in self.graphboard.arrows if arrow.color == color), None
         )
 
-
-    def get_specific_start_end_positions(self) -> SpecificStartEndPositionsDict:
+    def get_specific_start_end_positions(self) -> SpecificStartEndPositionsDicts:
         red_arrow = self.get_arrow("red")
         blue_arrow = self.get_arrow("blue")
 
@@ -87,7 +86,7 @@ class LetterEngine:
                 "blue",
             )
 
-            specific_position: SpecificStartEndPositionsDict = {
+            specific_position: SpecificStartEndPositionsDicts = {
                 "start_position": positions_map.get(start_locations),
                 "end_position": positions_map.get(end_locations),
             }
@@ -172,20 +171,25 @@ class LetterEngine:
             self.red_arrow.start_location,
             self.red_arrow.end_location,
             self.blue_arrow.start_location,
-            self.blue_arrow.end_location
+            self.blue_arrow.end_location,
         ]
         if not all(location in clockwise for location in arrow_locations):
             return None
 
         # Calculate directions for red and blue arrows
-        red_direction = calculate_direction(self.red_arrow.start_location, self.red_arrow.end_location)
-        blue_direction = calculate_direction(self.blue_arrow.start_location, self.blue_arrow.end_location)
+        red_direction = calculate_direction(
+            self.red_arrow.start_location, self.red_arrow.end_location
+        )
+        blue_direction = calculate_direction(
+            self.blue_arrow.start_location, self.blue_arrow.end_location
+        )
 
         # Determine handpath direction relationship
-        handpath_direction_relationship = "same" if red_direction == blue_direction else "opp"
+        handpath_direction_relationship = (
+            "same" if red_direction == blue_direction else "opp"
+        )
         self.handpath_direction_relationship = handpath_direction_relationship
         return handpath_direction_relationship
-
 
     def get_gamma_handpath_group(self) -> Literal["MNOPQR", "STUV"]:
         gamma_handpath_group = {
@@ -276,7 +280,7 @@ class LetterEngine:
             end_pos = specific_position.get("end_position")
             preprocessed_key = f"{start_pos}_{end_pos}"
             preprocessed_group: Dict[
-                Tuple[Letters, ArrowAttributes]
+                Tuple[Letters, ArrowAttributesDicts]
             ] = self.preprocessed_start_end_combinations.get(preprocessed_key, [])
             preprocessed_group = {
                 letter: combinations for letter, combinations in preprocessed_group
@@ -341,6 +345,6 @@ class LetterEngine:
         return filtered_letter_group
 
     def get_overall_position(
-        self, specific_positions: SpecificStartEndPositionsDict
+        self, specific_positions: SpecificStartEndPositionsDicts
     ) -> Position:
         return {position: value[:-1] for position, value in specific_positions.items()}

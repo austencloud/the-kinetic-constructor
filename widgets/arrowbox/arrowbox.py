@@ -35,7 +35,7 @@ if TYPE_CHECKING:
     from objects.arrow import Arrow
 
 from utilities.TypeChecking.TypeChecking import (
-    ArrowAttributes,
+    ArrowAttributesDicts,
     Color,
     MotionType,
     Quadrant,
@@ -75,7 +75,7 @@ class ArrowBox(QGraphicsScene):
 
     def populate_arrows(self) -> None:
         self.arrows: List[Arrow] = []
-        initial_arrow_attribute_collection: List[ArrowAttributes] = [
+        initial_arrow_attribute_collection: List[ArrowAttributesDicts] = [
             {
                 COLOR: RED,
                 MOTION_TYPE: PRO,

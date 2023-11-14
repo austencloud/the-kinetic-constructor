@@ -7,10 +7,11 @@ from settings.numerical_constants import MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT
 from PyQt6.QtCore import QRect
 from typing import IO
 
+
 class MainWindow(QMainWindow):
-    graph_editor_layout: 'QHBoxLayout'
-    sequence_layout: 'QHBoxLayout'
-    
+    graph_editor_layout: "QHBoxLayout"
+    sequence_layout: "QHBoxLayout"
+
     def __init__(self, profiler: cProfile.Profile) -> None:
         super().__init__()
         self.profiler: cProfile.Profile = profiler
@@ -37,6 +38,7 @@ class MainWindow(QMainWindow):
             stats.print_stats()
         print(f"Main profiling stats written to {file_path}")
 
+
 def main() -> None:
     profiler: cProfile.Profile = cProfile.Profile()
     profiler.enable()
@@ -50,6 +52,7 @@ def main() -> None:
     main_window.write_profiling_stats_to_file("main_profiling_stats.txt")
 
     sys.exit(exit_code)
+
 
 if __name__ == "__main__":
     main()

@@ -14,7 +14,7 @@ from utilities.export_handler import ExportHandler
 if TYPE_CHECKING:
     from main import MainWindow
     from widgets.propbox.propbox import Propbox
-from utilities.TypeChecking.TypeChecking import LettersDict
+from utilities.TypeChecking.TypeChecking import DictVariants, LetterDictionary
 
 
 class MainWidget(QWidget):
@@ -33,9 +33,9 @@ class MainWidget(QWidget):
         self.sequence_board = SequenceBoard(self)
         self.layout_manager = LayoutManager(self)
         self.json_handler = JsonHandler()
-        self.letters: LettersDict = self.json_handler.load_all_letters()
+        self.letters: LetterDictionary = self.json_handler.load_all_letters()
         self.key_event_handler = KeyEventHandler()
-
+        print(self.letters)
         self.graph_editor = GraphEditor(self)
         self.optionboard = OptionBoard(self)
         self.letter_buttons_frame = LetterButtonsFrame(self)
@@ -47,7 +47,7 @@ class MainWidget(QWidget):
         self.arrowbox = self.graph_editor.arrowbox
 
         self.generator = PictographGenerator(self, self.graphboard, self.infobox)
-        self.export_handler = ExportHandler(self.graphboard.grid, self)
+        self.export_handler = ExportHandler(self.graphboard)
 
         self.graphboard.generator = self.generator
         self.sequence_board.generator = self.generator

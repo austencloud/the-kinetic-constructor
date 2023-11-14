@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class LayoutManager:
-    def __init__(self, main_widget: "MainWidget"):
+    def __init__(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.layouts: Dict[str, QHBoxLayout | QVBoxLayout] = {}
@@ -25,10 +25,10 @@ class LayoutManager:
     def configure_layouts(self) -> None:
         self.configure_main_layout()
         self.init_sequence_layout()
-        self.add_black_border_to_widgets()
+        # Un-comment this for layout testing
+        # self.add_black_border_to_widgets() 
 
     def init_layouts(self) -> None:
-        # Initialize all layouts and store them in a dictionary for easy access and management.
         self.layouts = {
             "main": QHBoxLayout(),
             "left": QVBoxLayout(),
@@ -53,7 +53,6 @@ class LayoutManager:
         self.layouts["main"].addLayout(self.layouts["right"])
         self.layouts["optionboard"].addWidget(self.main_widget.optionboard.view)
         self.main_widget.setLayout(self.layouts["main"])
-        self.add_black_border_to_widgets()
 
     def init_sequence_layout(self) -> None:
         self.layouts["sequence_with_label_and_button"].addWidget(
@@ -87,9 +86,14 @@ class LayoutManager:
     def add_black_border(
         self, widget: QWidget | QGraphicsView | QLabel | QPushButton | QFrame
     ) -> None:
-        if hasattr(widget, "setFrameStyle"):
-            widget.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
-            widget.setLineWidth(1)
-            palette = widget.palette()
-            palette.setColor(QPalette.ColorRole.WindowText, QColor("black"))
-            widget.setPalette(palette)
+        if isinstance(widget, QFrame):
+            try:
+                widget.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
+                widget.setLineWidth(1)
+                palette = widget.palette()
+                palette.setColor(QPalette.ColorRole.WindowText, QColor("black"))
+                widget.setPalette(palette)
+            except AttributeError:
+                print(f"Widget {widget} does not have a setFrameStyle method.")
+        else:
+            print(f"Widget {widget} is not a QFrame and does not support setFrameStyle.")

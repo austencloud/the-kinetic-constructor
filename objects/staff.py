@@ -49,6 +49,7 @@ logging.basicConfig(
 
 class Staff(GraphicalObject):
     arrow: 'Arrow'
+    svg_file: str
     
     def __init__(self, graphboard, attributes):
         svg_file = STAFF_SVG_FILE_PATH

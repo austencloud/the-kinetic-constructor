@@ -24,12 +24,11 @@ from settings.string_constants import (
 from typing import TYPE_CHECKING, Dict, List
 from objects.staff import Staff
 from utilities.TypeChecking.TypeChecking import (
-    ArrowAttributes,
-    LetterVariants,
-    OptimalLocation,
-    OptimalLocations,
+    ArrowAttributesDicts,
+    LetterDictionary,
+    OptimalLocationEntries,
+    OptimalLocationsDicts,
     Direction,
-    LettersDict,
 )
 
 if TYPE_CHECKING:
@@ -38,10 +37,10 @@ if TYPE_CHECKING:
 
 
 class StaffPositioner:
-    current_state: List[ArrowAttributes]
-    matching_letters: List[LetterVariants]
-    arrow_dict: List[ArrowAttributes]
-    letters: LettersDict
+    current_state: List[ArrowAttributesDicts]
+    matching_letters: List[LetterDictionary]
+    arrow_dict: List[ArrowAttributesDicts]
+    letters: LetterDictionary
 
     def __init__(self, graphboard: "GraphBoard") -> None:
         self.graphboard = graphboard
@@ -308,10 +307,10 @@ class StaffPositioner:
         current_state,
         matching_letters,
         arrow_dict,
-    ) -> OptimalLocation | None:
+    ) -> OptimalLocationEntries | None:
         for variants in matching_letters:
             if self.graphboard.arrow_positioner.compare_states(current_state, variants):
-                optimal_entry: OptimalLocations = next(
+                optimal_entry: OptimalLocationsDicts = next(
                     (
                         d
                         for d in variants
@@ -361,7 +360,7 @@ class StaffPositioner:
         return distance_from_center
 
     def get_optimal_arrow_location(
-        self, arrow_attributes: ArrowAttributes
+        self, arrow_attributes: ArrowAttributesDicts
     ) -> Dict[str, float] | None:
         current_state = self.graphboard.get_state()
         current_letter = self.graphboard.current_letter

@@ -2,15 +2,17 @@ import json
 import os
 from objects.arrow import Arrow
 from PyQt6.QtCore import QObject
-
-
+from typing import Dict, List, TYPE_CHECKING
+from utilities.TypeChecking.TypeChecking import LetterDictionary, Letters
+if TYPE_CHECKING:
+    from widgets.graphboard.graphboard import GraphBoard
 class JsonHandler(QObject):
-    def connect_scene(self, scene):
-        self.scene = scene
+    def connect_scene(self, graphboard: 'GraphBoard') -> None:
+        self.graphboard = graphboard
 
-    def load_all_letters(self):
+    def load_all_letters(self) -> LetterDictionary:
         directory = "resources/json"
-        letters = {}
+        letters: LetterDictionary = {}
         for root, dirs, files in os.walk(directory):
             for filename in files:
                 if filename.endswith(".json"):
@@ -19,19 +21,20 @@ class JsonHandler(QObject):
                         letter_data = json.load(file)
                         letter_key = filename.replace(".json", "")
                         letters[letter_key] = letter_data[letter_key]
+        self.letters = letters
         return letters
 
-    def update_individual_json(self, letter, updated_data, directory):
+    def update_individual_json(self, letter: Letters, updated_data, directory) -> None:
         filepath = os.path.join(directory, f"{letter}.json")
         with open(filepath, "w") as file:
             # Wrap the updated data in a dictionary with the letter as the key
             json.dump({letter: updated_data}, file, indent=4)
 
-    def update_optimal_locations_in_json(self, red_position, blue_position):
+    def update_optimal_locations_in_json(self, red_position, blue_position) -> None:
         current_attributes = []
-        updated_letters = []  # Keep track of updated letters
+        updated_letters: List[Letters] = []  # Keep track of updated letters
 
-        for item in self.scene.items():
+        for item in self.graphboard.items():
             if isinstance(item, Arrow):
                 current_attributes.append(item.get_attributes())
         current_attributes = sorted(current_attributes, key=lambda x: x["color"])

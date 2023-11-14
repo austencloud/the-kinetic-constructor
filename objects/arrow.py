@@ -45,7 +45,7 @@ if TYPE_CHECKING:
     from objects.ghosts.ghost_arrow import GhostArrow
 
 from utilities.TypeChecking.TypeChecking import (
-    ArrowAttributes,
+    ArrowAttributesDicts,
     Color,
     MotionType,
     Quadrant,
@@ -55,7 +55,7 @@ from utilities.TypeChecking.TypeChecking import (
     Turns,
     Direction,
     StartEndLocationTuple,
-    RotationAngle
+    RotationAngle,
 )
 
 
@@ -67,13 +67,15 @@ class Arrow(GraphicalObject):
     start_location: StartLocation
     end_location: EndLocation
     turns: Turns
-    graphboard: 'GraphBoard'
-    ghost_arrow: 'GhostArrow'
+    graphboard: "GraphBoard"
+    ghost_arrow: "GhostArrow"
     drag_offset: QPointF
     staff: Staff
-    attributes: ArrowAttributes
+    attributes: ArrowAttributesDicts
 
-    def __init__(self, graphboard: "GraphBoard", attributes: "ArrowAttributes") -> None:
+    def __init__(
+        self, graphboard: "GraphBoard", attributes: "ArrowAttributesDicts"
+    ) -> None:
         svg_file = self.get_svg_file(attributes[MOTION_TYPE], attributes[TURNS])
         super().__init__(svg_file, graphboard, attributes)
         self._setup_attributes(graphboard, attributes)
@@ -81,7 +83,7 @@ class Arrow(GraphicalObject):
     ### SETUP ###
 
     def _setup_attributes(
-        self, graphboard: "GraphBoard", attributes: "ArrowAttributes"
+        self, graphboard: "GraphBoard", attributes: "ArrowAttributesDicts"
     ) -> None:
         self.graphboard = graphboard
 
@@ -197,7 +199,7 @@ class Arrow(GraphicalObject):
                 staff.update_appearance()
                 self.graphboard.update_staffs()
 
-    def set_attributes_from_dict(self, attributes: "ArrowAttributes") -> None:
+    def set_attributes_from_dict(self, attributes: "ArrowAttributesDicts") -> None:
         for attr in ARROW_ATTRIBUTES:
             value = attributes[attr]
             if attr == TURNS:
@@ -268,7 +270,7 @@ class Arrow(GraphicalObject):
                 },
             }.get(rotation_direction, {})
 
-    def get_attributes(self) -> ArrowAttributes:
+    def get_attributes(self) -> ArrowAttributesDicts:
         return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}
 
     def get_start_end_locations(

@@ -23,7 +23,7 @@ if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
     from widgets.arrowbox.arrowbox import ArrowBox
 from utilities.TypeChecking.TypeChecking import (
-    ArrowAttributes,
+    ArrowAttributesDicts,
     Color,
     MotionType,
     Quadrant,
@@ -109,7 +109,7 @@ class ArrowBoxDrag(QWidget):
             renderer.render(painter)
         return pixmap
 
-    def get_attributes(self) -> ArrowAttributes:
+    def get_attributes(self) -> ArrowAttributesDicts:
         start_location: Location
         end_location: Location
         (
