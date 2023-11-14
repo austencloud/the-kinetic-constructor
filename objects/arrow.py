@@ -50,8 +50,6 @@ from utilities.TypeChecking.TypeChecking import (
     MotionType,
     Quadrant,
     RotationDirection,
-    StartLocation,
-    EndLocation,
     Turns,
     Direction,
     StartEndLocationTuple,
@@ -60,19 +58,6 @@ from utilities.TypeChecking.TypeChecking import (
 
 
 class Arrow(GraphicalObject):
-    color: Color
-    motion_type: MotionType
-    quadrant: Quadrant
-    rotation_direction: RotationDirection
-    start_location: StartLocation
-    end_location: EndLocation
-    turns: Turns
-    graphboard: "GraphBoard"
-    ghost_arrow: "GhostArrow"
-    drag_offset: QPointF
-    staff: Staff
-    attributes: ArrowAttributesDicts
-
     def __init__(
         self, graphboard: "GraphBoard", attributes: "ArrowAttributesDicts"
     ) -> None:

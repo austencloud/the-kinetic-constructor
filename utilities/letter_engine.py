@@ -25,7 +25,7 @@ from utilities.TypeChecking.TypeChecking import (
     StartEndLocationTuple,
     LetterGroupsByMotionType,
     MotionTypeLetterGroupMap,
-    GammaLetters,
+    GammaEndingLetters,
     Position,
     RotationDirection,
     ArrowAttributesDicts,
@@ -316,7 +316,7 @@ class LetterEngine:
         else:
             return None
 
-    def get_gamma_letter(self, letter_group) -> GammaLetters:
+    def get_gamma_letter(self, letter_group) -> GammaEndingLetters:
         gamma_handpath_letters = set(self.get_gamma_handpath_group())
         filtered_letter_group = {
             letter for letter in letter_group if letter in gamma_handpath_letters

@@ -34,17 +34,7 @@ if TYPE_CHECKING:
     from widgets.infobox.infobox import InfoBox
     from objects.arrow import Arrow
 
-from utilities.TypeChecking.TypeChecking import (
-    ArrowAttributesDicts,
-    Color,
-    MotionType,
-    Quadrant,
-    RotationDirection,
-    StartLocation,
-    EndLocation,
-    Turns,
-)
-
+from utilities.TypeChecking.TypeChecking import ArrowAttributesDicts
 
 class ArrowBox(QGraphicsScene):
     def __init__(self, main_widget: "MainWidget", infobox: "InfoBox") -> None:

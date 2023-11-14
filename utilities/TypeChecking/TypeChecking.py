@@ -1,5 +1,5 @@
 from typing import TypedDict, Literal, Dict, List, Tuple, Set
-from .Letters import Letters, GammaLetters
+from .Letters import *
 from .SpecificPosition import SpecificPosition
 
 RotationAngle = Literal[0, 90, 180, 270]
