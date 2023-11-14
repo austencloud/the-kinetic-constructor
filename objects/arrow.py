@@ -42,6 +42,7 @@ from typing import TYPE_CHECKING, Optional, Dict, Any, Tuple
 
 if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
+    from objects.ghosts.ghost_arrow import GhostArrow
 
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributes,
@@ -67,7 +68,7 @@ class Arrow(GraphicalObject):
     end_location: EndLocation
     turns: Turns
     graphboard: 'GraphBoard'
-    ghost_arrow: Optional["Arrow"]
+    ghost_arrow: 'GhostArrow'
     drag_offset: QPointF
     staff: Staff
     attributes: ArrowAttributes
@@ -99,7 +100,7 @@ class Arrow(GraphicalObject):
         self.end_location = None
         self.turns = None
 
-        self.mirror_transform = None
+        self.mirror_transform = False
 
         if attributes:
             self.set_attributes_from_dict(attributes)
@@ -110,10 +111,10 @@ class Arrow(GraphicalObject):
 
     def mousePressEvent(self) -> None:
         self.setSelected(True)
-        self.ghost_arrow = self.graphboard.ghost_arrows[self.color]
-        if self.mirror_transform:
-            self.ghost_arrow.setTransform(self.mirror_transform)
-        self.ghost_arrow.update(self)
+        if not self.ghost_arrow:
+            self.ghost_arrow = self.graphboard.ghost_arrows[self.color]
+        self.ghost_arrow.transform = self.transform()
+        self.ghost_arrow.update_appearance()
         self.graphboard.addItem(self.ghost_arrow)
         self.ghost_arrow.staff = self.staff
         self.graphboard.arrows.append(self.ghost_arrow)
@@ -139,8 +140,8 @@ class Arrow(GraphicalObject):
     def mouseReleaseEvent(self) -> None:
         self.graphboard.removeItem(self.ghost_arrow)
         self.graphboard.arrows.remove(self.ghost_arrow)
+
         self.ghost_arrow.staff = None
-        self.ghost_arrow = None
         self.graphboard.update()
 
     ### UPDATERS ###

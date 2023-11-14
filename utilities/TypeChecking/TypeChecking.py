@@ -26,13 +26,13 @@ class ArrowAttributes(TypedDict):
 
 
 StartEndLocationTuple = Tuple[StartLocation, EndLocation]
-SpecificStartEndPositions = Dict[SpecificPosition, SpecificPosition]
+SpecificStartEndPositionsDict = Dict[SpecificPosition, SpecificPosition]
 PreprocessedStartEndCombinations = Dict[
-    SpecificStartEndPositions, List[Tuple[Letters, List[ArrowAttributes]]]
+    SpecificStartEndPositionsDict, List[Tuple[Letters, List[ArrowAttributes]]]
 ]
 OptimalLocation = Dict[Literal["x", "y"], float]
 OptimalLocations = Dict[str, OptimalLocation]
-Dict_Variant = ArrowAttributes | SpecificStartEndPositions | OptimalLocations
+Dict_Variant = ArrowAttributes | SpecificStartEndPositionsDict | OptimalLocations
 Dict_Variants = List[List[Dict_Variant]]
 LetterVariants = Dict[str, Dict_Variants]
 LettersDict = Dict[str, Dict_Variants]

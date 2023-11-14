@@ -193,6 +193,7 @@ class GraphBoard(QGraphicsScene):
                     arrow.color = new_color
                     arrow.staff.color = new_color
                     arrow.update_appearance()
+                    arrow.ghost_arrow.update_appearance()
                     arrow.staff.update_appearance()
 
                 self.update()

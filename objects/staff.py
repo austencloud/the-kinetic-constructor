@@ -74,7 +74,8 @@ class Staff(GraphicalObject):
 
     def mousePressEvent(self, event):
         self.setSelected(True)
-        self.ghost_staff = self.graphboard.ghost_staffs[self.color]
+        if not self.ghost_staff:
+            self.ghost_staff = self.graphboard.ghost_staffs[self.color]
         self.ghost_staff.update(self.attributes)
         self.graphboard.addItem(self.ghost_staff)
         self.ghost_staff.arrow = self.arrow
@@ -168,7 +169,6 @@ class Staff(GraphicalObject):
         self.graphboard.removeItem(self.ghost_staff)
         self.graphboard.staffs.remove(self.ghost_staff)
         self.ghost_staff.arrow = None
-        self.ghost_staff = None
         self.graphboard.update()
         self.finalize_staff_drop(event)
 

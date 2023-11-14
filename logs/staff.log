@@ -230,3 +230,15 @@
 2023-11-13 17:16:16,229 DEBUG root Multiple letters returned by get_current_letter: {'D', 'J', 'S', 'P', 'G', 'A', 'M'}
 2023-11-13 17:16:27,097 DEBUG root Multiple letters returned by get_current_letter: {'U', 'V', 'O', 'C', 'R', 'I', 'L', 'F'}
 2023-11-13 17:16:27,376 DEBUG root Multiple letters returned by get_current_letter: {'U', 'V', 'O', 'C', 'R', 'I', 'L', 'F'}
+2023-11-13 18:12:09,617 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-13 18:12:09,870 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-13 18:12:09,871 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-13 18:12:10,098 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-13 18:12:10,834 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-13 18:12:11,051 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-13 18:12:11,647 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-13 18:12:13,502 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-13 18:12:13,738 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-13 18:29:33,465 WARNING root Red or blue arrow is missing.
+2023-11-13 18:29:34,559 WARNING root Red or blue arrow is missing.
+2023-11-13 18:29:40,788 WARNING root Red or blue arrow is missing.

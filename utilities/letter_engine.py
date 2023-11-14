@@ -1,4 +1,3 @@
-from settings.string_constants import ARROWS, PRO, ANTI, STATIC
 from data.positions_map import positions_map
 import logging
 from objects.arrow import Arrow
@@ -8,13 +7,11 @@ from data.letter_engine_data import (
     parallel_combinations,
 )
 
-# setup logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
-
-from typing import TYPE_CHECKING, Dict, List, Tuple, Literal, Set
+from typing import TYPE_CHECKING, Dict, Tuple, Literal, Set
 
 if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
@@ -22,16 +19,16 @@ if TYPE_CHECKING:
 from utilities.TypeChecking.TypeChecking import (
     Letters,
     PreprocessedStartEndCombinations,
-    SpecificStartEndPositions,
+    SpecificStartEndPositionsDict,
     Color,
     MotionTypeCombinations,
     StartEndLocationTuple,
     LetterGroupsByMotionType,
     MotionTypeLetterGroupMap,
     GammaLetters,
-    Dict_Variants,
     Position,
-    ArrowAttributes
+    RotationDirection,
+    ArrowAttributes,
 )
 
 
@@ -71,7 +68,8 @@ class LetterEngine:
             (arrow for arrow in self.graphboard.arrows if arrow.color == color), None
         )
 
-    def get_specific_start_end_positions(self) -> SpecificStartEndPositions:
+
+    def get_specific_start_end_positions(self) -> SpecificStartEndPositionsDict:
         red_arrow = self.get_arrow("red")
         blue_arrow = self.get_arrow("blue")
 
@@ -89,7 +87,7 @@ class LetterEngine:
                 "blue",
             )
 
-            specific_position: SpecificStartEndPositions = {
+            specific_position: SpecificStartEndPositionsDict = {
                 "start_position": positions_map.get(start_locations),
                 "end_position": positions_map.get(end_locations),
             }
@@ -98,6 +96,7 @@ class LetterEngine:
             self.blue_arrow = blue_arrow
             return specific_position
         else:
+            logging.warning("Red or blue arrow is missing.")
             return {}
 
     def get_start_end_locations_as_tuple(self) -> StartEndLocationTuple:
@@ -111,6 +110,10 @@ class LetterEngine:
             if self.graphboard.arrows[0].color == "blue"
             else self.graphboard.arrows[1]
         )
+
+        if not self.red_arrow or not self.blue_arrow:
+            logging.warning("Red or blue arrow is missing.")
+            return ({}, {})
 
         start_locations = (
             self.red_arrow.start_location,
@@ -157,26 +160,32 @@ class LetterEngine:
 
         return parallel_check_result
 
-    def determine_handpath_direction_relationship(
-        self,
-    ) -> Literal["same", "opp", None]:
+    def determine_handpath_direction_relationship(self) -> Literal["same", "opp", None]:
         clockwise = ["n", "e", "s", "w"]
 
-        red_start_index = clockwise.index(self.red_arrow.start_location)
-        red_end_index = clockwise.index(self.red_arrow.end_location)
-        blue_start_index = clockwise.index(self.blue_arrow.start_location)
-        blue_end_index = clockwise.index(self.blue_arrow.end_location)
+        # Function to calculate direction
+        def calculate_direction(start, end) -> RotationDirection:
+            return (clockwise.index(end) - clockwise.index(start)) % len(clockwise)
 
-        red_direction = (red_end_index - red_start_index) % len(clockwise)
-        blue_direction = (blue_end_index - blue_start_index) % len(clockwise)
+        # Check if all arrow locations are valid
+        arrow_locations = [
+            self.red_arrow.start_location,
+            self.red_arrow.end_location,
+            self.blue_arrow.start_location,
+            self.blue_arrow.end_location
+        ]
+        if not all(location in clockwise for location in arrow_locations):
+            return None
 
-        # Direct assignment based on the comparison
-        handpath_direction_relationship = (
-            "same" if red_direction == blue_direction else "opp"
-        )
+        # Calculate directions for red and blue arrows
+        red_direction = calculate_direction(self.red_arrow.start_location, self.red_arrow.end_location)
+        blue_direction = calculate_direction(self.blue_arrow.start_location, self.blue_arrow.end_location)
 
+        # Determine handpath direction relationship
+        handpath_direction_relationship = "same" if red_direction == blue_direction else "opp"
         self.handpath_direction_relationship = handpath_direction_relationship
         return handpath_direction_relationship
+
 
     def get_gamma_handpath_group(self) -> Literal["MNOPQR", "STUV"]:
         gamma_handpath_group = {
@@ -266,14 +275,14 @@ class LetterEngine:
             start_pos = specific_position.get("start_position")
             end_pos = specific_position.get("end_position")
             preprocessed_key = f"{start_pos}_{end_pos}"
-            preprocessed_group: Dict[Tuple[Letters, ArrowAttributes]] = self.preprocessed_start_end_combinations.get(preprocessed_key, [])
+            preprocessed_group: Dict[
+                Tuple[Letters, ArrowAttributes]
+            ] = self.preprocessed_start_end_combinations.get(preprocessed_key, [])
             preprocessed_group = {
-                letter: combinations
-                for letter, combinations in preprocessed_group
+                letter: combinations for letter, combinations in preprocessed_group
             }
-            
+
             overall_position = self.get_overall_position(specific_position)
-            letter_group = self.get_letter_group(overall_position)
             motion_letter_group = self.get_motion_type_letter_group()
 
             # Convert motion_letter_group string to a set of individual letters
@@ -303,13 +312,10 @@ class LetterEngine:
         else:
             return None
 
-        
     def get_gamma_letter(self, letter_group) -> GammaLetters:
         gamma_handpath_letters = set(self.get_gamma_handpath_group())
         filtered_letter_group = {
-            letter
-            for letter in letter_group
-            if letter in gamma_handpath_letters
+            letter for letter in letter_group if letter in gamma_handpath_letters
         }
 
         # Opp/same handpath logic
@@ -334,56 +340,7 @@ class LetterEngine:
 
         return filtered_letter_group
 
-    def get_overall_position(self, specific_positions: SpecificStartEndPositions) -> Position:
+    def get_overall_position(
+        self, specific_positions: SpecificStartEndPositionsDict
+    ) -> Position:
         return {position: value[:-1] for position, value in specific_positions.items()}
-
-    def get_letter_group(self, overall_position):
-        end_group = {
-            "alpha": "ABCDEFWXα",
-            "beta": "GHIJKLYZβ",
-            "gamma": "MNOPQRSTUVΣΔθΩΓ",
-        }
-        start_group = {
-            "alpha": "ABCJKLΣΔα",
-            "beta": "GHIDEFθΩβ",
-            "gamma": "MNOPQRSTUVWXYZΓ",
-        }
-
-        end_category = end_group.get(overall_position.get("end_position"))
-        start_category = start_group.get(overall_position.get("start_position"))
-
-        if end_category and start_category:
-            # Intersect the sets to get only the letters that are in both start and end groups
-            letter_group = set(end_category).intersection(start_category)
-
-            return {
-                letter: combinations
-                for letter, combinations in self.graphboard.letters.items()
-                if letter in letter_group
-            }
-        return {}
-
-    def match_combination(self, current_combination, current_letter, combination):
-        pre_fetched_current_combination = [
-            {key: arrow.get(key, None) for key in arrow}
-            for arrow in current_combination
-        ]
-
-        current_arrows_matched = [False] * len(current_combination)
-        for comb in combination:
-            # Skip if 'start_position' or 'end_position' are not in 'comb'
-            if "start_position" in comb and "end_position" in comb:
-                continue
-
-            for i, pre_fetched_arrow in enumerate(pre_fetched_current_combination):
-                if current_arrows_matched[i]:
-                    continue
-                # Compare pre-fetched values instead of accessing them from the dictionary
-                if all(
-                    pre_fetched_arrow.get(key, None) == comb.get(key, None)
-                    for key in pre_fetched_arrow
-                ):
-                    current_arrows_matched[i] = True
-                    break
-
-        return all(current_arrows_matched)
