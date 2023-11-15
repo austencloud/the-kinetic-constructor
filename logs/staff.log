@@ -365,3 +365,10 @@
 2023-11-15 13:36:50,953 WARNING root Red or blue arrow is missing.
 2023-11-15 13:36:53,429 WARNING root Red or blue arrow is missing.
 2023-11-15 13:36:53,578 WARNING root Red or blue arrow is missing.
+2023-11-15 15:27:01,703 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-15 15:27:02,866 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-15 15:27:03,216 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-15 15:27:03,671 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-15 15:27:03,933 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-15 15:27:04,116 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-15 15:27:05,087 DEBUG root Multiple letters returned by get_current_letter: set()

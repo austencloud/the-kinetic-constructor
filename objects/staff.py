@@ -104,7 +104,10 @@ class Staff(GraphicalObject):
         self.setSelected(True)
         if not self.ghost_staff:
             self.ghost_staff = self.graphboard.ghost_staffs[self.color]
-        self.ghost_staff.update(self.attributes)
+        self.ghost_staff.color = self.color
+        self.ghost_staff.location = self.location
+        self.ghost_staff.layer = self.layer
+        self.ghost_staff.axis = self.axis
         self.graphboard.addItem(self.ghost_staff)
         self.ghost_staff.arrow = self.arrow
         self.graphboard.staffs.append(self.ghost_staff)
@@ -126,17 +129,20 @@ class Staff(GraphicalObject):
 
             if new_location != self.previous_location and self.arrow:
                 self.location = new_location
-                self.attributes[LOCATION] = new_location
                 self.update_axis()
                 self.update_appearance()
-
                 self.update_arrow_quadrant(new_location)
-                self.attributes[LOCATION] = new_location
-                self.ghost_staff.update(self.attributes)
+                
+                self.ghost_staff.color = self.color
+                self.ghost_staff.location = self.location
+                self.ghost_staff.layer = self.layer
+                self.ghost_staff.axis = self.axis
+                
                 self.graphboard.staffs.remove(self)
                 if self.arrow.motion_type == STATIC:
                     self.arrow.start_location = new_location
                     self.arrow.end_location = new_location
+                    
                 self.graphboard.update()
                 self.graphboard.staffs.append(self)
                 new_pos = event.scenePos() - self.get_staff_center()
@@ -206,7 +212,6 @@ class Staff(GraphicalObject):
         closest_handpoint = self.get_closest_handpoint(event.scenePos())
         new_location = self.get_closest_location(event.scenePos())
 
-        self.attributes[LOCATION] = new_location
         self.location = new_location
         self.update_axis()
         self.update_appearance()

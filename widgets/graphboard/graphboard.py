@@ -200,7 +200,8 @@ class GraphBoard(QGraphicsScene):
                     else:
                         continue
                     arrow.color = new_color
-                    arrow.staff.color = new_color
+                    arrow.staff = self.get_staff_by_color(new_color)
+                    arrow.ghost_arrow.staff = arrow.staff
                     arrow.update_appearance()
                     arrow.ghost_arrow.update_appearance()
                     arrow.staff.update_appearance()

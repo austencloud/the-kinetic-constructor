@@ -110,16 +110,13 @@ class Arrow(GraphicalObject):
     def mousePressEvent(self) -> None:
         self.setSelected(True)
         self.ghost_arrow: "GhostArrow" = self.graphboard.ghost_arrows[self.color]
+        self.ghost_arrow.staff = self.staff
         self.ghost_arrow.set_attributes_from_dict(self.attributes)
-        ghost_svg = self.get_svg_file(self.motion_type, self.turns)
-        self.ghost_arrow.update_svg(ghost_svg)
-        self.ghost_arrow.color = self.color
-        self.ghost_arrow.motion_type = self.motion_type
-        self.ghost_arrow.quadrant = self.quadrant
-        self.ghost_arrow.rotation_direction = self.rotation_direction
-        self.ghost_arrow.start_location = self.start_location
-        self.ghost_arrow.end_location = self.end_location
-        self.ghost_arrow.turns = self.turns
+        if self.ghost_arrow.is_mirrored != self.is_mirrored:
+            self.ghost_arrow.swap_rot_dir()
+        if self.ghost_arrow.motion_type != self.motion_type:
+            self.ghost_arrow.swap_motion_type()
+        self.ghost_arrow.set_arrow_attrs_from_arrow(self)
         self.ghost_arrow.update_appearance()
         self.ghost_arrow.transform = self.transform
         self.graphboard.addItem(self.ghost_arrow)
@@ -176,6 +173,10 @@ class Arrow(GraphicalObject):
         self.update_appearance()
 
         self.graphboard.arrows.remove(self)
+        for staff in self.graphboard.staffs:
+            if staff.color == self.color:
+                staff.arrow = self
+                self.staff = staff
         self.graphboard.update()
         self.graphboard.arrows.append(self)
 
@@ -394,6 +395,7 @@ class Arrow(GraphicalObject):
         self.graphboard.update()
 
     def swap_rot_dir(self) -> None:
+        from objects.ghosts.ghost_arrow import GhostArrow
         self.center_x = self.boundingRect().width() / 2
         self.center_y = self.boundingRect().height() / 2
 
@@ -414,31 +416,21 @@ class Arrow(GraphicalObject):
         new_start_location = old_end_location
         new_end_location = old_start_location
 
-        new_arrow_dict = {
-            COLOR: self.color,
-            MOTION_TYPE: self.motion_type,
-            QUADRANT: self.quadrant,
-            ROTATION_DIRECTION: new_rotation_direction,
-            START_LOCATION: new_start_location,
-            END_LOCATION: new_end_location,
-            TURNS: self.turns,
-        }
-
-        new_staff_dict = {
-            COLOR: self.color,
-            LOCATION: new_end_location,
-            LAYER: 1,
-        }
-
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
 
-        self.set_attributes_from_dict(new_arrow_dict)
-        self.staff.set_attributes_from_dict(new_staff_dict)
-
-        self.staff.update(new_staff_dict)
+        self.rotation_direction = new_rotation_direction
+        self.start_location = new_start_location
+        self.end_location = new_end_location
+        
+        self.staff.color = self.color
+        self.staff.location = new_end_location
+        self.staff.layer = 1
+        
         self.update_appearance()
-        if self.ghost_arrow:
+        self.staff.update_appearance()
+        
+        if not isinstance (self, GhostArrow) and self.ghost_arrow:
             self.ghost_arrow.is_mirrored = self.is_mirrored
             self.ghost_arrow.update(self.attributes)
         self.graphboard.update()
