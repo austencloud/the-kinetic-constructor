@@ -54,7 +54,7 @@ class StaffPositioner:
             self.reposition_beta_staffs()
 
     def set_default_staff_locations(self, staff: "Staff") -> None:
-        staff.set_transform_origin_to_center()
+        staff.set_staff_transform_origin_to_center()
         if staff.axis == VERTICAL:
             staff.setPos(
                 self.graphboard.grid.handpoints[staff.location]

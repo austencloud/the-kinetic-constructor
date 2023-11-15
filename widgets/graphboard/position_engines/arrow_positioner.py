@@ -80,7 +80,7 @@ class ArrowPositioner:
     def set_arrow_to_optimal_loc(
         self, optimal_locations: OptimalLocationsDicts, arrow: "Arrow"
     ) -> None:
-        arrow.set_transform_origin_to_center()
+        arrow.set_arrow_transform_origin_to_center()
         optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
         pos = QPointF(
             optimal_location["x"],
@@ -94,7 +94,7 @@ class ArrowPositioner:
         arrow.setPos(new_pos)
 
     def set_arrow_to_default_loc(self, arrow: "Arrow") -> None:
-        arrow.set_transform_origin_to_center()
+        arrow.set_arrow_transform_origin_to_center()
         layer2_point = self.graphboard.grid.layer2_points.get(arrow.quadrant)
         adjustment = QPointF(0, 0)
 

@@ -32,7 +32,7 @@ class GhostArrow(Arrow):
         super().__init__(graphboard, attributes)
         self.setOpacity(0.2)
         self.graphboard = graphboard
-        self.color = attributes[COLOR] 
+        self.color = attributes[COLOR]
         self.target_arrow = None
         self.setup_svg_renderer(self.svg_file)
 
@@ -113,7 +113,8 @@ class GhostArrow(Arrow):
             TURNS: attributes.get(TURNS, None),
         }
 
-    def set_transform_origin_to_center(self):
+    def set_arrow_transform_origin_to_center(self):
+        # Call this method after any changes that might affect the boundingRect.
         self.center = self.boundingRect().center()
         self.setTransformOriginPoint(self.center)
 

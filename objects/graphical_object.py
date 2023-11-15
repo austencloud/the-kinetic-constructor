@@ -90,8 +90,3 @@ class GraphicalObject(QGraphicsSvgItem):
             setattr(self, attribute, attributes[attribute])
         return {attribute: getattr(self, attribute) for attribute in attributes.keys()}
 
-    def set_transform_origin_to_center(self: Union["Staff", "Arrow"]) -> None:
-        self.center = self.boundingRect().center()
-        self.setTransformOriginPoint(self.center)
-
-

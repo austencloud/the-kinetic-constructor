@@ -54,6 +54,7 @@ from utilities.TypeChecking.TypeChecking import (
     Optional,
     Dict,
 )
+
 if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
     from objects.ghosts.ghost_arrow import GhostArrow
@@ -183,6 +184,9 @@ class Arrow(GraphicalObject):
                 staff.update_appearance()
                 self.graphboard.update_staffs()
 
+    def set_arrow_transform_origin_to_center(self) -> None:
+        self.center = self.boundingRect().center()
+        self.setTransformOriginPoint(self.center)
 
     ### GETTERS ###
 
@@ -246,7 +250,10 @@ class Arrow(GraphicalObject):
         return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}
 
     def get_start_end_locations(
-        self, motion_type: MotionType, rotation_direction: RotationDirection, quadrant: Quadrant
+        self,
+        motion_type: MotionType,
+        rotation_direction: RotationDirection,
+        quadrant: Quadrant,
     ) -> StartEndLocationTuple:
         return (
             start_end_location_mapping.get(quadrant, {})
@@ -260,7 +267,7 @@ class Arrow(GraphicalObject):
 
     ### MANIPULATION ###
 
-    def increment_turns(self) -> None:
+    def add_turn(self) -> None:
         self.turns += 1
         if self.turns > 2:
             self.turns = 0
@@ -270,7 +277,7 @@ class Arrow(GraphicalObject):
         self.attributes[TURNS] = self.turns
         self.graphboard.update()
 
-    def decrement_turns(self) -> None:
+    def subtract_turn(self) -> None:
         self.turns -= 1
         if self.turns < 0:
             self.turns = 2

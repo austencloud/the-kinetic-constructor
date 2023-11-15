@@ -3,19 +3,22 @@ from PyQt6.QtGui import QIcon
 from settings.string_constants import BLUE, RED, COLOR, ICON_PATHS
 from settings.numerical_constants import BUTTON_SIZE
 from typing import TYPE_CHECKING, Dict, Callable, List
+
 if TYPE_CHECKING:
     from widgets.infobox.infobox import InfoBox
     from widgets.graphboard.graphboard import GraphBoard
-    
+
 
 class InfoBoxButtons:
-    def __init__(self, infobox: 'InfoBox', graphboard: 'GraphBoard') -> None:
+    def __init__(self, infobox: "InfoBox", graphboard: "GraphBoard") -> None:
         self.infobox = infobox
         self.graphboard = graphboard
         self.button_groups: Dict[str, List[QPushButton]] = {BLUE: [], RED: []}
         self.layouts = infobox.layouts
 
-    def create_and_set_button(self, button_name: str, properties: Dict[str, str | Callable]) -> None:
+    def create_and_set_button(
+        self, button_name: str, properties: Dict[str, str | Callable]
+    ) -> None:
         icon = properties.get("icon", None)
         button = QPushButton(QIcon(icon), properties.get("text", ""))
 
@@ -65,25 +68,21 @@ class InfoBoxButtons:
                 "icon": ICON_PATHS["decrement_turns"],
                 "callback": lambda: self.graphboard.get_arrow_by_color(
                     BLUE
-                ).decrement_turns(),
+                ).subtract_turn(),
             },
             "increment_turns_blue": {
                 "icon": ICON_PATHS["increment_turns"],
-                "callback": lambda: self.graphboard.get_arrow_by_color(
-                    BLUE
-                ).increment_turns(),
+                "callback": lambda: self.graphboard.get_arrow_by_color(BLUE).add_turn(),
             },
             "decrement_turns_red": {
                 "icon": ICON_PATHS["decrement_turns"],
                 "callback": lambda: self.graphboard.get_arrow_by_color(
                     RED
-                ).decrement_turns(),
+                ).subtract_turn(),
             },
             "increment_turns_red": {
                 "icon": ICON_PATHS["increment_turns"],
-                "callback": lambda: self.graphboard.get_arrow_by_color(
-                    RED
-                ).increment_turns(),
+                "callback": lambda: self.graphboard.get_arrow_by_color(RED).add_turn(),
             },
         }
 
