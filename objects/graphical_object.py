@@ -21,7 +21,8 @@ class GraphicalObject(QGraphicsSvgItem):
         super().__init__()
         self.svg_file = svg_file
         self.graphboard = graphboard
-        self.renderer = None
+        
+        self.renderer: QSvgRenderer = None
         self.color: Color = None
 
         self.center = self.boundingRect().center()
@@ -75,26 +76,22 @@ class GraphicalObject(QGraphicsSvgItem):
         self.update_appearance()
 
     def update_appearance(self: Union["Staff", "Arrow"]) -> None:
+        from objects.staff import Staff 
         self.update_color()
+        if isinstance(self, Staff):
+            self.update_axis() 
         self.update_rotation()
 
-    def set_attributes_from_dict(
-        self: Union["Staff", "Arrow"], attributes: ArrowAttributesDicts | StaffAttributesDicts
-    ) -> None:
+    def set_attributes_from_dict(self, attributes: ArrowAttributesDicts | StaffAttributesDicts) -> None:
+        self.attributes = self.apply_attributes(attributes)
+
+    def apply_attributes(self, attributes: ArrowAttributesDicts | StaffAttributesDicts) -> dict:
         for attribute in attributes.keys():
             setattr(self, attribute, attributes[attribute])
-
-        self.attributes: StaffAttributesDicts = {
-            attribute: getattr(self, attribute) for attribute in attributes.keys()
-        }
-        if hasattr(self, "axis"):
-            self.update_axis()
+        return {attribute: getattr(self, attribute) for attribute in attributes.keys()}
 
     def set_transform_origin_to_center(self: Union["Staff", "Arrow"]) -> None:
-        from objects.staff import Staff 
-        self.center = (
-            self.get_staff_center()
-            if isinstance(self, Staff)
-            else self.boundingRect().center()
-        )
+        self.center = self.boundingRect().center()
         self.setTransformOriginPoint(self.center)
+
+

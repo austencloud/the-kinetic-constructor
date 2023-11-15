@@ -88,11 +88,11 @@ class Staff(GraphicalObject):
         self.color: Color = None
         self.location: Location = None
         self.layer: Layer = None
-        self.axis: Axis = None
+        self.axis = None
+        self.center = self.boundingRect().center()
         
         if attributes:
             self.update(attributes)
-        self.center = self.get_staff_center()
 
     ### MOUSE EVENTS ###
 
@@ -233,6 +233,9 @@ class Staff(GraphicalObject):
         else:
             self.setRotation(0)
 
+    def set_staff_transform_origin_to_center(self: "Staff") -> None:
+        self.center = self.get_staff_center()
+        self.setTransformOriginPoint(self.center)
 
     def set_attributes_from_arrow(self, arrow: "Arrow") -> None:
         new_dict = {
@@ -326,6 +329,7 @@ class Staff(GraphicalObject):
         self.graphboard.removeItem(self)
         self.graphboard.staffs.remove(self)
         self.graphboard.update()
+
 
 
 class RedStaff(Staff):

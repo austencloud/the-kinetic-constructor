@@ -57,7 +57,7 @@ class StaffAttributesDicts(TypedDict):
     color: Color
     location: Location
     layer: Layer
-
+    axis: Axis
 
 StartEndLocationTuple = Tuple[Location, Location]
 PreprocessedStartEndCombinations = Dict[
