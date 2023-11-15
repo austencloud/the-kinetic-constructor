@@ -37,28 +37,29 @@ from settings.string_constants import (
 from data.start_end_location_mapping import start_end_location_mapping
 from objects.graphical_object import GraphicalObject
 from objects.staff import Staff
-from typing import Optional, Tuple, Optional, Any, Dict
-from typing import TYPE_CHECKING, Optional, Dict, Any, Tuple
 
-if TYPE_CHECKING:
-    from widgets.graphboard.graphboard import GraphBoard
-    from objects.ghosts.ghost_arrow import GhostArrow
 
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
-    Color,
     MotionType,
+    Color,
     Quadrant,
     RotationDirection,
+    Location,
     Turns,
     Direction,
     StartEndLocationTuple,
     RotationAngle,
+    TYPE_CHECKING,
+    Optional,
+    Dict,
 )
+if TYPE_CHECKING:
+    from widgets.graphboard.graphboard import GraphBoard
+    from objects.ghosts.ghost_arrow import GhostArrow
 
 
 class Arrow(GraphicalObject):
-    
     def __init__(
         self, graphboard: "GraphBoard", attributes: "ArrowAttributesDicts"
     ) -> None:
@@ -69,26 +70,23 @@ class Arrow(GraphicalObject):
     ### SETUP ###
 
     def _setup_attributes(
-        self, graphboard: "GraphBoard", attributes: "ArrowAttributesDicts"
+        self, graphboard: "GraphBoard", attributes: ArrowAttributesDicts
     ) -> None:
         self.graphboard = graphboard
 
         self.drag_offset = QPointF(0, 0)
-
         self.staff: Staff = None
-        self.ghost_arrow = None
+        self.ghost_arrow: GhostArrow = None
+        self.is_mirrored: bool = False
+        self.mirror_transform: bool = False
 
-        self.is_mirrored = False
-
-        self.color = None
-        self.motion_type = None
-        self.rotation_direction = None
-        self.quadrant = None
-        self.start_location = None
-        self.end_location = None
-        self.turns = None
-
-        self.mirror_transform = False
+        self.color: Color = None
+        self.motion_type: MotionType = None
+        self.rotation_direction: RotationDirection = None
+        self.quadrant: Quadrant = None
+        self.start_location: Location = None
+        self.end_location: Location = None
+        self.turns: Turns = None
 
         if attributes:
             self.set_attributes_from_dict(attributes)
@@ -185,10 +183,6 @@ class Arrow(GraphicalObject):
                 staff.update_appearance()
                 self.graphboard.update_staffs()
 
-    def set_transform_origin_to_center(self) -> None:
-        # Call this method after any changes that might affect the boundingRect.
-        self.center = self.boundingRect().center()
-        self.setTransformOriginPoint(self.center)
 
     ### GETTERS ###
 
@@ -252,7 +246,7 @@ class Arrow(GraphicalObject):
         return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}
 
     def get_start_end_locations(
-        self, motion_type: str, rotation_direction: str, quadrant: str
+        self, motion_type: MotionType, rotation_direction: RotationDirection, quadrant: Quadrant
     ) -> StartEndLocationTuple:
         return (
             start_end_location_mapping.get(quadrant, {})

@@ -19,8 +19,6 @@ from settings.string_constants import (
     ANTI,
     COUNTER_CLOCKWISE,
 )
-from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF
 from typing import TYPE_CHECKING
 
@@ -34,7 +32,7 @@ class GhostArrow(Arrow):
         super().__init__(graphboard, attributes)
         self.setOpacity(0.2)
         self.graphboard = graphboard
-        self.color = attributes[COLOR]  # Directly accessing the attribute
+        self.color = attributes[COLOR] 
         self.target_arrow = None
         self.setup_svg_renderer(self.svg_file)
 
@@ -116,7 +114,6 @@ class GhostArrow(Arrow):
         }
 
     def set_transform_origin_to_center(self):
-        # Call this method after any changes that might affect the boundingRect.
         self.center = self.boundingRect().center()
         self.setTransformOriginPoint(self.center)
 

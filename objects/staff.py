@@ -26,6 +26,7 @@ from settings.string_constants import (
     PRO,
     ANTI,
     STATIC,
+    COLOR_MAP
 )
 import logging
 import re
@@ -46,7 +47,8 @@ from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
     Dict,
     Tuple,
-    ColorHex
+    ColorHex,
+    Union
 )
 
 if TYPE_CHECKING:
@@ -67,7 +69,7 @@ class Staff(GraphicalObject):
     svg_file: str
 
     def __init__(
-        self, graphboard: "GraphBoard" | "PropBox", attributes: StaffAttributesDicts
+        self, graphboard: Union["GraphBoard", "PropBox"], attributes: StaffAttributesDicts
     ) -> None:
         svg_file = STAFF_SVG_FILE_PATH
         super().__init__(svg_file, graphboard)
@@ -76,7 +78,7 @@ class Staff(GraphicalObject):
     ### SETUP ###
 
     def _setup_attributes(
-        self, graphboard: "GraphBoard" | "PropBox", attributes: StaffAttributesDicts
+        self, graphboard: Union["GraphBoard", "PropBox"], attributes: StaffAttributesDicts
     ) -> None:
         self.graphboard = graphboard
         self.drag_offset = QPointF(0, 0)
@@ -86,6 +88,8 @@ class Staff(GraphicalObject):
         self.color: Color = None
         self.location: Location = None
         self.layer: Layer = None
+        self.axis: Axis = None
+        
         if attributes:
             self.update(attributes)
         self.center = self.get_staff_center()
@@ -229,9 +233,6 @@ class Staff(GraphicalObject):
         else:
             self.setRotation(0)
 
-    def set_transform_origin_to_center(self) -> None:
-        self.center = self.get_staff_center()
-        self.setTransformOriginPoint(self.center)
 
     def set_attributes_from_arrow(self, arrow: "Arrow") -> None:
         new_dict = {
@@ -264,9 +265,9 @@ class Staff(GraphicalObject):
 
     def get_staff_center(self) -> QPointF:
         if self.axis == VERTICAL:
-            return QPointF((STAFF_WIDTH / 2), (STAFF_LENGTH / 2))
+            return QPointF((self.boundingRect().height() / 2), (self.boundingRect().width() / 2))
         elif self.axis == HORIZONTAL:
-            return QPointF((STAFF_LENGTH / 2), (STAFF_WIDTH / 2))
+            return QPointF((self.boundingRect().width() / 2), (self.boundingRect().height() / 2))
 
     def get_closest_handpoint(self, mouse_pos: QPointF) -> QPointF:
         closest_distance = float("inf")
@@ -306,7 +307,7 @@ class Staff(GraphicalObject):
         self.update_rotation()
 
     def set_svg_color(self, new_color: Color) -> bytes:
-        new_hex_color: ColorHex = ColorMap.get(new_color)
+        new_hex_color: ColorHex = COLOR_MAP.get(new_color)
 
         with open(self.svg_file, "r") as f:
             svg_data = f.read()
@@ -329,7 +330,7 @@ class Staff(GraphicalObject):
 
 class RedStaff(Staff):
     def __init__(
-        self, scene: "GraphBoard" | "PropBox", dict: StaffAttributesDicts
+        self, scene: Union["GraphBoard", "PropBox"], dict: StaffAttributesDicts
     ) -> None:
         super().__init__(scene, dict)
         self.setSharedRenderer(self.renderer)
@@ -337,7 +338,7 @@ class RedStaff(Staff):
 
 class BlueStaff(Staff):
     def __init__(
-        self, scene: "GraphBoard" | "PropBox", dict: StaffAttributesDicts
+        self, scene: Union["GraphBoard", "PropBox"], dict: StaffAttributesDicts
     ) -> None:
         super().__init__(scene, dict)
         self.setSharedRenderer(self.renderer)

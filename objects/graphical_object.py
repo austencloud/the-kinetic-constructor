@@ -2,30 +2,28 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from settings.string_constants import COLOR_MAP, CLOCKWISE, RED_HEX
 import re
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
     from objects.arrow import Arrow
     from objects.staff import Staff
+
 from utilities.TypeChecking.TypeChecking import (
     Color,
-    ColorHex,
-    ColorMap,
     ArrowAttributesDicts,
     StaffAttributesDicts,
 )
 
 
 class GraphicalObject(QGraphicsSvgItem):
-    def __init__(self: 'Arrow' | 'Staff', svg_file: str, graphboard: "GraphBoard") -> None:
+    def __init__(self, svg_file: str, graphboard: "GraphBoard") -> None:
         super().__init__()
         self.svg_file = svg_file
         self.graphboard = graphboard
         self.renderer = None
         self.color: Color = None
 
-        self.type = Arrow 
         self.center = self.boundingRect().center()
         if svg_file:
             self.setup_svg_renderer(svg_file)
@@ -41,10 +39,10 @@ class GraphicalObject(QGraphicsSvgItem):
         )
         self.setTransformOriginPoint(self.center)
 
-    def set_svg_color(self, new_color: Color, svg_file: str) -> bytes:
-        new_hex_color = ColorMap.get(new_color, default=RED_HEX)
+    def set_svg_color(self, new_color: Color) -> bytes:
+        new_hex_color = COLOR_MAP.get(new_color)
 
-        with open(svg_file, "r") as f:
+        with open(self.svg_file, "r") as f:
             svg_data = f.read()
 
         style_tag_pattern = re.compile(
@@ -58,7 +56,7 @@ class GraphicalObject(QGraphicsSvgItem):
 
         return svg_data.encode("utf-8")
 
-    def setup_svg_renderer(self, svg_file:str) -> None:
+    def setup_svg_renderer(self, svg_file: str) -> None:
         self.renderer: QSvgRenderer = QSvgRenderer(svg_file)
         self.setSharedRenderer(self.renderer)
 
@@ -76,11 +74,13 @@ class GraphicalObject(QGraphicsSvgItem):
         self.set_attributes_from_dict(attributes)
         self.update_appearance()
 
-    def update_appearance(self: 'Staff' | 'Arrow') -> None:
+    def update_appearance(self: Union["Staff", "Arrow"]) -> None:
         self.update_color()
         self.update_rotation()
 
-    def set_attributes_from_dict(self: 'Staff' | 'Arrow', attributes: ArrowAttributesDicts | StaffAttributesDicts) -> None:
+    def set_attributes_from_dict(
+        self: Union["Staff", "Arrow"], attributes: ArrowAttributesDicts | StaffAttributesDicts
+    ) -> None:
         for attribute in attributes.keys():
             setattr(self, attribute, attributes[attribute])
 
@@ -89,3 +89,12 @@ class GraphicalObject(QGraphicsSvgItem):
         }
         if hasattr(self, "axis"):
             self.update_axis()
+
+    def set_transform_origin_to_center(self: Union["Staff", "Arrow"]) -> None:
+        from objects.staff import Staff 
+        self.center = (
+            self.get_staff_center()
+            if isinstance(self, Staff)
+            else self.boundingRect().center()
+        )
+        self.setTransformOriginPoint(self.center)

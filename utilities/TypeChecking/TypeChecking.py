@@ -7,9 +7,17 @@ from typing import (
     Tuple,
     Set,
     LiteralString,
+    Optional,
+    Union
 )
 from .Letters import *
 from .SpecificPosition import SpecificPosition
+
+Color = Literal["red", "blue"]
+MotionType = Literal["pro", "anti", "dash", "static", "float", "chu"]
+Quadrant = Literal["ne", "se", "sw", "nw"]
+RotationDirection = Literal["cw", "ccw"]
+Turns = Literal[0, 1, 2]
 
 RotationAngle = Literal[0, 90, 180, 270]
 Location = Literal["n", "e", "s", "w"]
@@ -18,17 +26,10 @@ Direction = Literal["right", "left", "down", "up"]
 OptimalLocationEntries = Dict[Literal["x", "y"], float]
 Layer = Literal[0, 1, 2, 3]
 Axis = Literal["vertical", "horizontal"]
+ColorHex = Literal["#ED1C24", "#2E3192"]
+ColorMap = Dict[Color, ColorHex]
 
 ### ARROW ATTRIBUTES ###
-
-Color = Literal["red", "blue"]
-ColorHex = Literal["#ED1C24", "#2E3192"]
-MotionType = Literal["pro", "anti", "dash", "static", "float", "chu"]
-Quadrant = Literal["ne", "se", "sw", "nw"]
-RotationDirection = Literal["cw", "ccw"]
-Turns = Literal[0, 1, 2]
-
-
 class SpecificStartEndPositionsDicts(TypedDict):
     start_position: SpecificPosition
     end_position: SpecificPosition
@@ -41,22 +42,21 @@ class OptimalLocationsDicts(TypedDict):
 
 ### STAFF ATTRIBUTES ###
 
-ArrowAttributesDicts = Dict[
-    Literal[
-        "color",
-        "motion_type",
-        "quadrant",
-        "rotation_direction",
-        "start_location",
-        "end_location",
-        "turns",
-    ],
-    Color | MotionType | Quadrant | RotationDirection | Location | Turns,
-]
-ColorMap = Dict[Color, ColorHex]
-StaffAttributesDicts = Dict[
-    Literal["color", "location", "layer"], Color | Location | Layer
-]
+
+class ArrowAttributesDicts(TypedDict):
+    color: Color
+    motion_type: MotionType
+    quadrant: Quadrant
+    rotation_direction: RotationDirection
+    start_location: Location
+    end_location: Location
+    turns: Turns
+
+
+class StaffAttributesDicts(TypedDict):
+    color: Color
+    location: Location
+    layer: Layer
 
 
 StartEndLocationTuple = Tuple[Location, Location]
