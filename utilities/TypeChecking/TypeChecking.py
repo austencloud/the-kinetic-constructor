@@ -2,24 +2,49 @@ from typing import *
 from .Letters import *
 from .SpecificPosition import SpecificPosition
 
+### ARROW ATTRIBUTES ###
+
+
+
+ArrowAttributes = Literal[
+    "color",
+    "motion_type",
+    "quadrant",
+    "rotation_direction",
+    "start_location",
+    "end_location",
+    "turns",
+]
 Color = Literal["red", "blue"]
 MotionType = Literal["pro", "anti", "dash", "static", "float", "chu"]
 Quadrant = Literal["ne", "se", "sw", "nw"]
 RotationDirection = Literal["cw", "ccw"]
-Turns = Literal[0, 1, 2]
+Location = Literal["n", "e", "s", "w"]
+Turns = float | Literal[0, 1, 2]  # Allowed values: 0, 0.5, 1, 1.5, 2, 2.5
+
+
+class ArrowAttributesDicts(TypedDict):
+    color: Color
+    motion_type: MotionType
+    quadrant: Quadrant
+    rotation_direction: RotationDirection
+    start_location: Location
+    end_location: Location
+    turns: Turns
+
+### STAFF ATTRIBUTES ###
+
+StaffAttributes = Literal["color", "location", "layer", "axis"]
+Layer = Literal[0, 1, 2, 3]
+Axis = Literal["vertical", "horizontal"]
 
 RotationAngle = Literal[0, 90, 180, 270]
-Location = Literal["n", "e", "s", "w"]
 Position = Literal["alpha", "beta", "gamma"]
 Direction = Literal["right", "left", "down", "up"]
 OptimalLocationEntries = Dict[Literal["x", "y"], float]
-Layer = Literal[0, 1, 2, 3]
-Axis = Literal["vertical", "horizontal"]
 ColorHex = Literal["#ED1C24", "#2E3192"]
 ColorMap = Dict[Color, ColorHex]
 
-
-### ARROW ATTRIBUTES ###
 
 
 class SpecificStartEndPositionsDicts(TypedDict):
@@ -35,14 +60,7 @@ class OptimalLocationsDicts(TypedDict):
 ### STAFF ATTRIBUTES ###
 
 
-class ArrowAttributesDicts(TypedDict):
-    color: Color
-    motion_type: MotionType
-    quadrant: Quadrant
-    rotation_direction: RotationDirection
-    start_location: Location
-    end_location: Location
-    turns: Turns
+
 
 
 class StaffAttributesDicts(TypedDict):

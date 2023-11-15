@@ -22,11 +22,8 @@ class GhostArrow(Arrow):
         )
         self.setup_svg_renderer(self.svg_file)
 
-    def update(self, target_arrow: "Arrow", drag: 'ArrowBoxDrag' = None) -> None:
-        self.set_attributes_from_dict(
-            target_arrow.get_attributes() if not drag else drag.get_attributes()
-        )
-        self.update_svg(target_arrow.svg_file)
+    def update(self, attributes) -> None:
+        self.set_attributes_from_dict(attributes)
         self.setup_graphics_flags()
         self.update_appearance()
         self.show()

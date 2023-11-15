@@ -111,7 +111,7 @@ class Arrow(GraphicalObject):
         self.setSelected(True)
         self.ghost_arrow: "GhostArrow" = self.graphboard.ghost_arrows[self.color]
         self.ghost_arrow.transform = self.transform()
-        self.ghost_arrow.update(self)
+        self.ghost_arrow.update(self.attributes)
         self.ghost_arrow.update_appearance()
         self.graphboard.addItem(self.ghost_arrow)
         self.ghost_arrow.staff = self.staff
@@ -162,7 +162,7 @@ class Arrow(GraphicalObject):
         self.attributes[END_LOCATION] = self.end_location
 
         self.update_rotation()
-        self.ghost_arrow.update(self)
+        self.ghost_arrow.update(self.attributes)
 
         self.start_location, self.end_location = self.get_start_end_locations(
             self.motion_type, self.rotation_direction, self.quadrant
@@ -175,7 +175,7 @@ class Arrow(GraphicalObject):
 
         self.update_appearance()
 
-        self.ghost_arrow.update(self)
+        self.ghost_arrow.update(self.attributes)
         self.graphboard.arrows.remove(self)
         self.graphboard.update()
         self.graphboard.arrows.append(self)
@@ -437,8 +437,7 @@ class Arrow(GraphicalObject):
         
         self.set_attributes_from_dict(new_arrow_dict)
         self.staff.set_attributes_from_dict(new_staff_dict)
-        if not isinstance(self, GhostArrow):
-            self.update(new_arrow_dict)
+
             
         self.staff.update(new_staff_dict)
 
@@ -446,7 +445,7 @@ class Arrow(GraphicalObject):
             self.ghost_arrow.setTransform(transform)
             self.ghost_arrow.mirror_transform = transform
             self.ghost_arrow.is_mirrored = self.is_mirrored
-            self.ghost_arrow.update(self)
+            self.ghost_arrow.update(self.attributes)
 
         self.graphboard.update()
 

@@ -52,6 +52,7 @@ class ArrowBoxDrag(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.preview = QLabel(self)
         self.transform = QTransform()
+        self.attributes: ArrowAttributesDicts = {}
         self.reset_drag_state()
 
         self.last_update_time = 0
@@ -80,11 +81,10 @@ class ArrowBoxDrag(QWidget):
         self.arrow_center = self.target_arrow.boundingRect().center() * GRAPHBOARD_SCALE
 
     def set_attributes(self, target_arrow: "Arrow") -> None:
-        self.color = target_arrow.color
-        self.motion_type = target_arrow.motion_type
-        self.quadrant = target_arrow.quadrant
-        self.rotation_direction = target_arrow.rotation_direction
-        self.turns = target_arrow.turns
+        for attribute_name in target_arrow.attributes.keys():
+            setattr(
+                self, attribute_name.lower(), target_arrow.attributes[attribute_name]
+            )
         (
             self.start_location,
             self.end_location,
@@ -258,18 +258,35 @@ class ArrowBoxDrag(QWidget):
         new_quadrant = self.graphboard.get_quadrant(scene_pos.x(), scene_pos.y())
 
         if self.previous_quadrant != new_quadrant and new_quadrant:
-            self.update_preview_for_new_quadrant(new_quadrant)
             self.previous_quadrant = new_quadrant
+            self.update_preview_for_new_quadrant(new_quadrant)
+            self.ghost_arrow.update(self.attributes)
+            self.ghost_arrow.attributes = self.attributes
 
     def update_preview_for_new_quadrant(self, new_quadrant: Quadrant) -> None:
         self.quadrant = new_quadrant
+        (
+            self.start_location,
+            self.end_location,
+        ) = self.target_arrow.get_start_end_locations(
+            self.motion_type, self.rotation_direction, self.quadrant
+        )
+
+        self.attributes[COLOR] = self.color
+        self.attributes[MOTION_TYPE] = self.motion_type
+        self.attributes[QUADRANT] = new_quadrant
+        self.attributes[ROTATION_DIRECTION] = self.rotation_direction
+        self.attributes[START_LOCATION] = self.start_location
+        self.attributes[END_LOCATION] = self.end_location
+        self.attributes[TURNS] = self.turns
+
         if self.ghost_arrow.is_mirrored:
             self.ghost_arrow.is_mirrored = False
             self.ghost_arrow.mirror()
-            
+
         self.ghost_arrow.quadrant = new_quadrant
         self.update_rotation()
-        self.ghost_arrow.update(self.target_arrow, self)
+        self.ghost_arrow.update(self.attributes)
 
         self.update_staff_during_drag()
 
