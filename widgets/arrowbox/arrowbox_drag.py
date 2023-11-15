@@ -157,6 +157,7 @@ class ArrowBoxDrag(QWidget):
         self.graphboard.removeItem(self.ghost_arrow)
         self.graphboard.arrows.remove(self.ghost_arrow)
 
+        self.placed_arrow.ghost_arrow = self.ghost_arrow
         self.placed_arrow.update_appearance()
         self.placed_arrow.show()
         self.placed_arrow.setSelected(True)
