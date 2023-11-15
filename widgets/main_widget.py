@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QPushButton, QLabel, QGraphicsView
 from PyQt6.QtCore import QEvent
 from utilities.json_handler import JsonHandler
-from widgets.sequence.sequenceboard import SequenceBoard
+from widgets.sequence_board.sequence_board import SequenceBoard
 from widgets.optionboard.optionboard import OptionBoard
 from utilities.layout_manager import LayoutManager
 from widgets.events.key_event_handler import KeyEventHandler
@@ -30,7 +30,7 @@ class MainWidget(QWidget):
         self.export_handler = None
         self.main_window = main_window
 
-        self.sequence_board = SequenceBoard(self)
+        
         self.layout_manager = LayoutManager(self)
         self.json_handler = JsonHandler()
         self.letters: LetterDictionary = self.json_handler.load_all_letters()
@@ -39,12 +39,14 @@ class MainWidget(QWidget):
         self.optionboard = OptionBoard(self)
         self.letter_buttons_frame = LetterButtonsFrame(self)
 
+        
         self.graphboard = self.graph_editor.graphboard
-        self.sequence_board.graphboard = self.graphboard
         self.infobox = self.graph_editor.infobox
         self.propbox = self.graph_editor.propbox
         self.arrowbox = self.graph_editor.arrowbox
 
+        
+        self.sequence_board = SequenceBoard(self, self.graphboard)
         self.generator = PictographGenerator(self, self.graphboard, self.infobox)
         self.export_handler = ExportHandler(self.graphboard)
 

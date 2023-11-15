@@ -8,14 +8,13 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import QRectF, QPointF, Qt
 from PyQt6.QtGui import QFont, QImage, QPainter, QColor
 from settings.numerical_constants import (
-    SEQUENCE_SCENE_HEIGHT,
-    SEQUENCE_SCENE_WIDTH,
+
     GRAPHBOARD_HEIGHT,
     GRAPHBOARD_WIDTH,
     PICTOGRAPH_SCALE,
 )
 from typing import TYPE_CHECKING
-
+from widgets.sequence_board.sequence_board_view import SequenceBoardView
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from utilities.pictograph_generator import PictographGenerator
@@ -23,61 +22,46 @@ if TYPE_CHECKING:
 
 
 class SequenceBoard(QGraphicsScene):
-    generator: "PictographGenerator"
-    graphboard: "GraphBoard"
-
-    def __init__(self, main_widget: "MainWidget"):
+    def __init__(self, main_widget: "MainWidget", graphboard: 'GraphBoard') -> None:
         super().__init__()
-
-        self.setSceneRect(0, 0, SEQUENCE_SCENE_WIDTH, SEQUENCE_SCENE_HEIGHT)
         self.main_widget = main_widget
-        self.pictographs = []
-        self.beats = [
-            QGraphicsRectItem(
-                QRectF(
-                    0,
-                    0,
-                    GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE,
-                    GRAPHBOARD_HEIGHT * PICTOGRAPH_SCALE,
-                )
-            )
-            for i in range(4)
-        ]
-
-        for i, section in enumerate(self.beats):
-            section.setPos(QPointF(i * GRAPHBOARD_WIDTH * PICTOGRAPH_SCALE, 0))
-            self.addItem(section)
-
+        self.graphboard = graphboard
         self.setup_view_and_controls()
+        graphboard_ratio = GRAPHBOARD_WIDTH / GRAPHBOARD_HEIGHT
+        self.pictographs = []
+        self.beats = []
 
-    def setup_view_and_controls(self):
+        for j in range(4):
+            for i in range(4):
+                section = QGraphicsRectItem(
+                    QRectF(
+                        0,
+                        0,
+                        self.view.width() * 0.25,
+                        self.view.height() * 0.25,
+                    )
+                )
+                section.setPos(QPointF(i * self.view.width() * 0.25, j * self.view.height() * 0.25))
+                self.beats.append(section)
+                self.addItem(section)
+
+        self.setSceneRect(0, 0, self.view.width(), self.view.height() * 4)
+
+    def setup_view_and_controls(self) -> None:
         # Setup view
-        self.view = QGraphicsView(self)
-        self.view.setFixedSize(
-            int(self.sceneRect().width()),
-            int(self.sceneRect().height()),
-        )
-        self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.view = SequenceBoardView(self)
 
         # Setup controls
         self.clear_sequence_button = QPushButton("Clear Sequence")
         self.clear_sequence_button.clicked.connect(self.clear_sequence)
-
-        self.word_label = QLabel(self.main_widget.main_window)
-        self.word_label.setFont(QFont("Helvetica", 20))
-        self.word_label.setText("My word: ")
 
         # Assigning attributes to main_widget for access
         self.main_widget.sequence_board = self
         self.main_widget.sequence_view = self.view
         self.main_widget.sequence_board = self.view
         self.main_widget.clear_sequence_button = self.clear_sequence_button
-        self.main_widget.word_label = self.word_label
 
-    # Rest of the methods remain the same
-
-    def add_to_sequence(self):
+    def add_to_sequence(self) -> None:
         # Get the size of the sequence_board in sequence_board coordinates
         scene_size = self.graphboard.sceneRect().size().toSize()
 
@@ -104,7 +88,7 @@ class SequenceBoard(QGraphicsScene):
 
         self.update()
 
-    def clear_sequence(self):
+    def clear_sequence(self) -> None:
         self.pictographs = []
         for item in self.items():
             self.removeItem(item)

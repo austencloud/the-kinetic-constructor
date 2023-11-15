@@ -56,9 +56,6 @@ class LayoutManager:
 
     def init_sequence_layout(self) -> None:
         self.layouts["sequence_with_label_and_button"].addWidget(
-            self.main_widget.word_label
-        )
-        self.layouts["sequence_with_label_and_button"].addWidget(
             self.main_widget.sequence_board.view
         )
         self.layouts["sequence_with_label_and_button"].addWidget(
