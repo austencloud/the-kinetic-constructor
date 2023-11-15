@@ -17,7 +17,7 @@ class MainWindow(QMainWindow):
         self.screen: QRect = QApplication.primaryScreen().geometry()
 
         # Calculate dynamic size based on screen dimensions
-        self.main_window_width = int(self.screen.width() * 0.8)  # Example: 80% of screen width
+        self.main_window_width = int(self.screen.width() * 0.5)  # Example: 80% of screen width
         self.main_window_height = int(self.screen.height() * 0.8)  # Example: 80% of screen height
 
         self.init_main_window()

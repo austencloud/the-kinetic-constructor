@@ -255,7 +255,7 @@ class ArrowBoxDrag(QWidget):
         scene_pos = self.graphboard.view.mapToScene(view_pos_in_graphboard)
         new_quadrant = self.graphboard.get_quadrant(scene_pos.x(), scene_pos.y())
 
-        if self.previous_quadrant != new_quadrant:
+        if self.previous_quadrant != new_quadrant and new_quadrant:
             self.update_preview_for_new_quadrant(new_quadrant)
             self.previous_quadrant = new_quadrant
 

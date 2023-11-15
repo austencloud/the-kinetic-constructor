@@ -1,3 +1,17 @@
+from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple
+from PyQt6.QtWidgets import QGraphicsScene
+from PyQt6.QtGui import QTransform
+from PyQt6.QtSvg import QSvgRenderer
+from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
+from PyQt6.QtCore import QPointF
+from objects.arrow import Arrow, BlankArrow
+from objects.staff import Staff
+from widgets.graphboard.graphboard_init import GraphBoardInit
+from widgets.graphboard.graphboard_menu_handler import GraphBoardMenuHandler
+from widgets.graphboard.position_engines.staff_positioner import StaffPositioner
+from widgets.graphboard.position_engines.arrow_positioner import ArrowPositioner
+from utilities.letter_engine import LetterEngine
 from settings.string_constants import (
     COLOR,
     MOTION_TYPE,
@@ -15,28 +29,14 @@ from settings.string_constants import (
     NORTHEAST,
     STATIC,
 )
-from PyQt6.QtWidgets import QGraphicsScene
-from PyQt6.QtGui import QTransform
-from objects.arrow import Arrow, BlankArrow
-from objects.staff import Staff
-from objects.grid import Grid
 from data.letter_engine_data import letter_types
-from widgets.graphboard.graphboard_init import GraphBoardInit
-from widgets.graphboard.graphboard_menu_handler import GraphBoardMenuHandler
-from widgets.graphboard.position_engines.staff_positioner import StaffPositioner
-from widgets.graphboard.position_engines.arrow_positioner import ArrowPositioner
-from utilities.export_handler import ExportHandler
-from utilities.letter_engine import LetterEngine
-from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
-from PyQt6.QtCore import QPointF, Qt
 
-from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.infobox.infobox import InfoBox
     from utilities.pictograph_generator import PictographGenerator
+
+
 class GraphBoard(QGraphicsScene):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
@@ -78,16 +78,14 @@ class GraphBoard(QGraphicsScene):
 
     def contextMenuEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         scene_pos = self.view.mapToScene(event.pos().toPoint())
-        items_at_pos = self.items(scene_pos)  # Get all items at the clicked position
+        items_at_pos = self.items(scene_pos)  
 
-        # Prioritize finding Arrows and Staffs before considering other items
         clicked_item = None
         for item in items_at_pos:
             if isinstance(item, Arrow) or isinstance(item, Staff):
                 clicked_item = item
                 break
 
-        # If no Arrow or Staff was found, but there are items, pick the topmost
         if not clicked_item and items_at_pos:
             clicked_item = items_at_pos[0]
 
@@ -125,7 +123,6 @@ class GraphBoard(QGraphicsScene):
     def get_current_arrow_coordinates(
         self,
     ) -> Tuple[Optional[QPointF], Optional[QPointF]]:
-        """Returns the coordinates for setting optimal positions"""
         red_position = None
         blue_position = None
 
@@ -266,8 +263,6 @@ class GraphBoard(QGraphicsScene):
             self.letter_item.setSharedRenderer(
                 QSvgRenderer(f"{LETTER_SVG_DIR}/blank.svg")
             )
-
-    ### SETTERS ###
 
     def set_letter_renderer(self, letter: str) -> None:
         letter_type = self.get_current_letter_type()

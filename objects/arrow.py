@@ -77,7 +77,7 @@ class Arrow(GraphicalObject):
 
         self.drag_offset = QPointF(0, 0)
         self.staff: Staff = None
-        self.ghost_arrow: GhostArrow = None
+
         self.is_mirrored: bool = False
         self.mirror_transform: bool = False
 
@@ -93,13 +93,13 @@ class Arrow(GraphicalObject):
             self.set_attributes_from_dict(attributes)
             self.update_appearance()
         self.center = self.boundingRect().center()
-
+        
+        
     ### MOUSE EVENTS ###
 
     def mousePressEvent(self) -> None:
         self.setSelected(True)
-        if not self.ghost_arrow:
-            self.ghost_arrow = self.graphboard.ghost_arrows[self.color]
+        self.ghost_arrow: 'GhostArrow' = self.graphboard.ghost_arrows[self.color]
         self.ghost_arrow.transform = self.transform()
         self.ghost_arrow.update_appearance()
         self.graphboard.addItem(self.ghost_arrow)

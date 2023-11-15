@@ -44,21 +44,29 @@ if TYPE_CHECKING:
 class GraphBoardInit:
     def __init__(self, graphboard: "GraphBoard") -> None:
         self.graphboard = graphboard
+        self.window_width = graphboard.main_widget.main_window.main_window_width
+        self.window_height = graphboard.main_widget.main_window.main_window_height
 
     def init_view(self) -> QGraphicsView:
         view = QGraphicsView()
+
+        # Calculate view size based on window dimensions and aspect ratio
+        view_width = self.window_width * 0.25  # Example: 40% of window width
+        view_height = view_width * 90 / 75  # Maintain 75:90 ratio
+
         view.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
-        view.setFixedSize(
-            int(GRAPHBOARD_WIDTH * GRAPHBOARD_SCALE),
-            int(GRAPHBOARD_HEIGHT * GRAPHBOARD_SCALE),
-        )
+        view.setFixedSize(int(view_width), int(view_height))
         view.setScene(self.graphboard)
-        view.scale(GRAPHBOARD_SCALE, GRAPHBOARD_SCALE)
+
+        # Adjust scaling based on new dimensions
+        view_scale = view_width / GRAPHBOARD_WIDTH
+        view.scale(view_scale, view_scale)
+
         view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         view.wheelEvent = lambda event: None
         return view
-
+    
     def init_grid(self) -> Grid:
         grid = Grid(GRID_FILE_PATH)
         grid_position = QPointF(0, 0)
