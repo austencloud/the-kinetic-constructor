@@ -3,7 +3,6 @@ import cProfile
 import pstats
 from PyQt6.QtWidgets import QApplication, QMainWindow, QHBoxLayout
 from widgets.main_widget import MainWidget
-from settings.numerical_constants import MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT
 from PyQt6.QtCore import QRect
 from typing import IO
 
@@ -17,11 +16,15 @@ class MainWindow(QMainWindow):
         self.profiler: cProfile.Profile = profiler
         self.screen: QRect = QApplication.primaryScreen().geometry()
 
+        # Calculate dynamic size based on screen dimensions
+        self.main_window_width = int(self.screen.width() * 0.8)  # Example: 80% of screen width
+        self.main_window_height = int(self.screen.height() * 0.8)  # Example: 80% of screen height
+
         self.init_main_window()
         self.init_ui()
 
     def init_main_window(self) -> None:
-        self.setMinimumSize(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT)
+        self.setMinimumSize(self.main_window_width, self.main_window_height)
         self.main_widget = MainWidget(self)
         self.installEventFilter(self.main_widget)
         self.setCentralWidget(self.main_widget)
@@ -29,8 +32,8 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Sequence Constructor")
 
     def init_ui(self) -> None:
-        self.move(-(self.screen.width() + 500), 100)
-
+        # Center the window on the screen
+        self.move((self.screen.width() - self.width()) // 2, (self.screen.height() - self.height()) // 2)
 
     def write_profiling_stats_to_file(self, file_path: str) -> None:
         stats: pstats.Stats = pstats.Stats(self.profiler).sort_stats("cumtime")
