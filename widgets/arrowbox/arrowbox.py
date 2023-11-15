@@ -35,33 +35,28 @@ if TYPE_CHECKING:
     from objects.arrow import Arrow
 
 from utilities.TypeChecking.TypeChecking import ArrowAttributesDicts
-
+from PyQt6.QtWidgets import QGraphicsView, QFrame, QGridLayout
+from PyQt6.QtCore import Qt
+from settings.numerical_constants import GRAPHBOARD_SCALE
+from widgets.arrowbox.arrowbox_view import ArrowBoxView
 class ArrowBox(QGraphicsScene):
     def __init__(self, main_widget: "MainWidget", infobox: "InfoBox") -> None:
         super().__init__()
         self.infobox = infobox
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
-        self.setup_frame()
         self.setup_view()
         self.populate_arrows()
         self.setSceneRect(0, 0, 450, 450)
+        self.arrowbox_layout = QGridLayout()
         self.arrowbox_layout.addWidget(self.view)
         self.arrowbox_drag = None
 
     def setup_view(self) -> None:
-        view = QGraphicsView(self)
-        view.setAcceptDrops(True)
-        view.setFrameShape(QFrame.Shape.NoFrame)
-        view.setScene(self)
-        view.setFixedSize(int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE))
-        view.scale(GRAPHBOARD_SCALE, GRAPHBOARD_SCALE)
+        view = ArrowBoxView(self)
         self.view = view
 
-    def setup_frame(self) -> None:
-        self.arrowbox_frame = QFrame(self.main_widget.main_window)
-        self.arrowbox_layout = QGridLayout()
-        self.arrowbox_frame.setLayout(self.arrowbox_layout)
+
 
     def populate_arrows(self) -> None:
         self.arrows: List[Arrow] = []

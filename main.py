@@ -28,6 +28,12 @@ class MainWindow(QMainWindow):
         self.init_main_window()
         self.init_ui()
 
+
+    def get_current_width(self) -> int:
+        # Get the  width of the main window, intended for use after the resize has occured so I can't just resue a previously made value
+        return self.width()
+    
+
     def init_main_window(self) -> None:
         self.setMinimumSize(self.main_window_width, self.main_window_height)
         self.main_widget = MainWidget(self)

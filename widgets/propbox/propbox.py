@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.staff import Staff
+from widgets.propbox.propbox_view import PropBoxView
 from settings.numerical_constants import GRAPHBOARD_SCALE
 from settings.string_constants import (
     NORTH,
@@ -27,33 +28,24 @@ if TYPE_CHECKING:
 
 
 class PropBox(QGraphicsScene):
-    def __init__(self, main_widget: "MainWidget"):
+    def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
-
-        self.propbox_frame = QFrame()
-        self.view = QGraphicsView()
-        self.view.setScene(self)
-
-        self.view.setFixedSize(int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE))
+        self.view = PropBoxView(self)
+        self.view.scale(GRAPHBOARD_SCALE, GRAPHBOARD_SCALE)
         self.setSceneRect(
-            0, 0, int(450 * GRAPHBOARD_SCALE), int(450 * GRAPHBOARD_SCALE)
+            0, 0, int(450), int(450)
         )
-
         self.propbox_layout = QVBoxLayout()
-        self.propbox_frame.setLayout(self.propbox_layout)
         self.propbox_layout.addWidget(self.view)
         self.view.setFrameStyle(QFrame.Shape.NoFrame)
-
         self.scale = GRAPHBOARD_SCALE * 0.75
-
         self.view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.view.setFrameShape(QFrame.Shape.NoFrame)
-
         main_widget.propbox = self
 
-    def init_propbox_staffs(self, propbox):
+    def init_propbox_staffs(self, propbox) -> None:
         self.propbox_staff_locations = {
             NORTH: QPointF(50, 100),
             EAST: QPointF(100, 50),
@@ -73,7 +65,6 @@ class PropBox(QGraphicsScene):
             LAYER: 1,
         }
 
-        # Create red and blue staffs in the propbox
         red_staff = Staff(propbox, red_propbox_staff)
         blue_staff = Staff(propbox, blue_propbox_staff)
 

@@ -10,8 +10,8 @@ class GraphBoardView(QGraphicsView):
         self.graphboard = graphboard
         main_window = self.graphboard.main_widget.main_window
         # Calculate view size based on window dimensions and aspect ratio
-        view_width = main_window.width() * 0.3  # Example: 40% of window width
-        view_height = view_width * 90 / 75  # Maintain 75:90 ratio
+        view_height = main_window.get_current_width() * 0.30  # Example: 40% of window width
+        view_width = view_height * 75 / 90  # Maintain 75:90 ratio
 
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.setFixedSize(int(view_width), int(view_height))
@@ -24,3 +24,7 @@ class GraphBoardView(QGraphicsView):
         # Adjust scaling based on new dimensions
         view_scale = view_width / self.graphboard.width()
         self.scale(view_scale, view_scale)
+        
+
+        
+        
