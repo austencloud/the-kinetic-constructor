@@ -66,7 +66,7 @@ class GraphBoardInit:
         view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         view.wheelEvent = lambda event: None
         return view
-    
+
     def init_grid(self) -> Grid:
         grid = Grid(GRID_FILE_PATH)
         grid_position = QPointF(0, 0)
@@ -126,9 +126,6 @@ class GraphBoardInit:
         blue_ghost_arrow = GhostArrow(
             self.graphboard, default_blue_ghost_arrow_attributes
         )
-
-        red_ghost_arrow.hide()
-        blue_ghost_arrow.hide()
 
         ghost_arrows = {RED: red_ghost_arrow, BLUE: blue_ghost_arrow}
         return ghost_arrows
