@@ -51,6 +51,7 @@ class ArrowBoxDrag(QWidget):
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.preview = QLabel(self)
+        self.transform = QTransform()
         self.reset_drag_state()
 
         self.last_update_time = 0
@@ -172,7 +173,7 @@ class ArrowBoxDrag(QWidget):
         if self.preview:
             self.move_to_cursor(event_pos)
             if self.is_over_graphboard(event_pos):
-                self.update_for_graphboard(event_pos)
+                self.handle_enter_graphboard(event_pos)
 
     def handle_mouse_release(self) -> None:
         if self.has_entered_graphboard_once:
@@ -242,7 +243,7 @@ class ArrowBoxDrag(QWidget):
             self.quadrant,
         )
 
-    def update_for_graphboard(self, event_pos: QPoint) -> None:
+    def handle_enter_graphboard(self, event_pos: QPoint) -> None:
         if not self.has_entered_graphboard_once:
             self.just_entered_graphboard = True
             self.has_entered_graphboard_once = True
@@ -262,6 +263,10 @@ class ArrowBoxDrag(QWidget):
 
     def update_preview_for_new_quadrant(self, new_quadrant: Quadrant) -> None:
         self.quadrant = new_quadrant
+        if self.ghost_arrow.is_mirrored:
+            self.ghost_arrow.is_mirrored = False
+            self.ghost_arrow.mirror()
+            
         self.ghost_arrow.quadrant = new_quadrant
         self.update_rotation()
         self.ghost_arrow.update(self.target_arrow, self)

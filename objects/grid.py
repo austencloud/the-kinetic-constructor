@@ -12,7 +12,8 @@ class Grid(QGraphicsSvgItem):
         self.svg_file = grid_svg_path
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)
-
+        self.setZValue(-1)
+        
     def get_circle_coordinates(self, circle_id) -> QPointF | None:
         with open(self.svg_file, "r") as svg_file:
             svg_content = svg_file.read()
@@ -52,10 +53,10 @@ class Grid(QGraphicsSvgItem):
         self.layer2_points = self.init_points(point_names, constants)
 
     def mousePressEvent(self, event) -> None:
-        pass
+        event.ignore()
 
     def mouseMoveEvent(self, event) -> None:
-        pass
+        event.ignore()
 
     def mouseReleaseEvent(self, event) -> None:
-        pass
+        event.ignore()

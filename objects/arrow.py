@@ -1,7 +1,6 @@
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from PyQt6.QtCore import QPointF, Qt
-from PyQt6.QtGui import QTransform
+from PyQt6.QtGui import QTransform, QCursor
 from settings.string_constants import (
     MOTION_TYPE,
     TURNS,
@@ -38,7 +37,6 @@ from data.start_end_location_mapping import start_end_location_mapping
 from objects.graphical_object import GraphicalObject
 from objects.staff import Staff
 
-
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
     MotionType,
@@ -66,6 +64,7 @@ class Arrow(GraphicalObject):
     ) -> None:
         svg_file = self.get_svg_file(attributes[MOTION_TYPE], attributes[TURNS])
         super().__init__(svg_file, graphboard)
+        self.setAcceptHoverEvents(True)
         self._setup_attributes(graphboard, attributes)
 
     ### SETUP ###
@@ -93,14 +92,26 @@ class Arrow(GraphicalObject):
             self.set_attributes_from_dict(attributes)
             self.update_appearance()
         self.center = self.boundingRect().center()
-        
-        
+
     ### MOUSE EVENTS ###
+
+    # add a hover effect to the graphboard arrows where the cursor changes to the corresponding color and turns into a grabber. Also when the object is grabbed the grabber should be closed like it's grabbing it.
+
+    def hoverEnterEvent(self, event) -> None:
+        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        # Optional: Change the appearance, e.g., change color or outline
+        self.update_appearance_on_hover()
+
+    def hoverLeaveEvent(self, event) -> None:
+        self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
+        # Revert any appearance changes made on hover
+        self.revert_appearance_on_hover()
 
     def mousePressEvent(self) -> None:
         self.setSelected(True)
-        self.ghost_arrow: 'GhostArrow' = self.graphboard.ghost_arrows[self.color]
+        self.ghost_arrow: "GhostArrow" = self.graphboard.ghost_arrows[self.color]
         self.ghost_arrow.transform = self.transform()
+        self.ghost_arrow.update(self)
         self.ghost_arrow.update_appearance()
         self.graphboard.addItem(self.ghost_arrow)
         self.ghost_arrow.staff = self.staff
@@ -132,6 +143,12 @@ class Arrow(GraphicalObject):
         self.graphboard.update()
 
     ### UPDATERS ###
+
+    def update_appearance_on_hover(self) -> None:
+        self.setOpacity(0.5)
+
+    def revert_appearance_on_hover(self) -> None:
+        self.setOpacity(1)
 
     def update_rotation(self) -> None:
         angle = self.get_rotation_angle()
@@ -417,7 +434,12 @@ class Arrow(GraphicalObject):
 
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
-        self.update(new_arrow_dict)
+        
+        self.set_attributes_from_dict(new_arrow_dict)
+        self.staff.set_attributes_from_dict(new_staff_dict)
+        if not isinstance(self, GhostArrow):
+            self.update(new_arrow_dict)
+            
         self.staff.update(new_staff_dict)
 
         if self.ghost_arrow:

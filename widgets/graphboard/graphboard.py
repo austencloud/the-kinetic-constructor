@@ -72,6 +72,7 @@ class GraphBoard(QGraphicsScene):
         self.staff_set = self.initializer.init_staff_set()
         self.letter_item = self.initializer.init_letter_item()
         self.quadrants = self.initializer.init_quadrants(self.grid)
+
         self.setup_managers(main_widget)
 
     def setup_managers(self, main_widget: "MainWidget") -> None:
@@ -169,6 +170,11 @@ class GraphBoard(QGraphicsScene):
             if arrow.color == color:
                 return arrow
 
+    def get_staff_by_color(self, color: str) -> Optional[Staff]:
+        for staff in self.staff_set.values():
+            if staff.color == color:
+                return staff
+
     def get_quadrant(self, x: float, y: float) -> Optional[str]:
         if self.point_in_quadrant(x, y, self.quadrants[NORTHEAST]):
             return NORTHEAST
@@ -185,7 +191,7 @@ class GraphBoard(QGraphicsScene):
 
     def swap_colors(self) -> None:
         if self.current_letter != "G" and self.current_letter != "H":
-            if len(self.arrows) >= 1:
+            if len(self.arrows) > 1:
                 for arrow in self.arrows:
                     if arrow.color == RED:
                         new_color = BLUE
@@ -198,7 +204,24 @@ class GraphBoard(QGraphicsScene):
                     arrow.update_appearance()
                     arrow.ghost_arrow.update_appearance()
                     arrow.staff.update_appearance()
+                    arrow.staff.ghost_staff = self.ghost_staffs[new_color]
+                self.update()
 
+            elif len(self.arrows) == 1:
+                arrow = self.arrows[0]
+                if arrow.color == RED:
+                    arrow.color = BLUE
+                elif arrow.color == BLUE:
+                    arrow.color = RED
+                arrow.update_appearance()
+                arrow.ghost_arrow.update_appearance()
+                self.staffs.remove(arrow.staff)
+                self.removeItem(arrow.staff)
+                arrow.staff = self.get_staff_by_color(arrow.color)
+                arrow.staff.set_attributes_from_arrow(arrow)
+                self.staffs.append(arrow.staff)
+                self.addItem(arrow.staff)
+                arrow.staff.show()
                 self.update()
 
     ### HELPERS ###

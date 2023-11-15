@@ -238,7 +238,7 @@ class Staff(GraphicalObject):
         self.setTransformOriginPoint(self.center)
 
     def set_attributes_from_arrow(self, arrow: "Arrow") -> None:
-        new_dict = {
+        new_dict: StaffAttributesDicts = {
             COLOR: arrow.color,
             LOCATION: arrow.end_location,
             LAYER: 1,

@@ -2,6 +2,7 @@ from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtWidgets import QGraphicsView
 from objects.grid import Grid
 from objects.staff import RedStaff, BlueStaff, Staff
+from objects.letter_item import LetterItem
 from settings.numerical_constants import (
     GRAPHBOARD_HEIGHT,
     GRAPHBOARD_WIDTH,
@@ -156,7 +157,7 @@ class GraphBoardInit:
         return ghost_staffs
 
     def init_letter_item(self) -> QGraphicsSvgItem:
-        letter_item = QGraphicsSvgItem()
+        letter_item = LetterItem(self.graphboard)
         self.graphboard.addItem(letter_item)
         self.graphboard.position_letter_item(letter_item)
         return letter_item
