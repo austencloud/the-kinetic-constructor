@@ -4,7 +4,6 @@ from objects.grid import Grid
 from objects.staff import RedStaff, BlueStaff, Staff
 from settings.numerical_constants import (
     GRAPHBOARD_HEIGHT,
-    GRAPHBOARD_SCALE,
     GRAPHBOARD_WIDTH,
 )
 from settings.string_constants import (
@@ -35,7 +34,7 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_staff import GhostStaff
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
-from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple, Set
+from typing import TYPE_CHECKING, Tuple
 
 if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard

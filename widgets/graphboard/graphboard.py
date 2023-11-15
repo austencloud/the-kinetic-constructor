@@ -1,4 +1,3 @@
-from typing import TYPE_CHECKING, List, Optional, Dict, Any, Tuple
 from PyQt6.QtWidgets import QGraphicsScene
 from PyQt6.QtGui import QTransform
 from PyQt6.QtSvg import QSvgRenderer
@@ -30,6 +29,13 @@ from settings.string_constants import (
     STATIC,
 )
 from data.letter_engine_data import letter_types
+from utilities.TypeChecking.TypeChecking import (
+    ArrowAttributesDicts,
+    TYPE_CHECKING,
+    List,
+    Optional,
+    Tuple,
+)
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
@@ -78,7 +84,7 @@ class GraphBoard(QGraphicsScene):
 
     def contextMenuEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         scene_pos = self.view.mapToScene(event.pos().toPoint())
-        items_at_pos = self.items(scene_pos)  
+        items_at_pos = self.items(scene_pos)
 
         clicked_item = None
         for item in items_at_pos:
@@ -91,7 +97,7 @@ class GraphBoard(QGraphicsScene):
 
         event_pos = event.screenPos()
         self.graphboard_menu_handler.create_master_menu(event_pos, clicked_item)
-            
+
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         clicked_item = self.itemAt(event.scenePos(), QTransform())
         if isinstance(clicked_item, Staff):
@@ -134,7 +140,7 @@ class GraphBoard(QGraphicsScene):
                 blue_position = center
         return red_position, blue_position
 
-    def get_state(self) -> List[Dict[str, Any]]:
+    def get_state(self) -> List[ArrowAttributesDicts]:
         state = []
         for arrow in self.arrows:
             state.append(

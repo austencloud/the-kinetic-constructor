@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QAction
 from PyQt6.QtCore import QPoint
-from settings.string_constants import RIGHT, LEFT
 from objects.arrow import Arrow
 from objects.staff import Staff
 from typing import TYPE_CHECKING
@@ -19,20 +18,16 @@ class GraphBoardMenuHandler:
     def create_master_menu(self, event_pos: QPoint, clicked_item) -> None:
         menu = QMenu()
 
-        # Arrow Menu
         arrow_menu = menu.addMenu("Arrow")
         self._add_arrow_actions(arrow_menu, clicked_item)
 
-        # Staff Menu
         staff_menu = menu.addMenu("Staff")
         self._add_staff_actions(staff_menu, clicked_item)
 
-        # Graphboard Menu
         graphboard_menu = menu.addMenu("Graphboard")
         self._add_graphboard_actions(graphboard_menu)
 
         menu.exec(event_pos)
-
 
     ### STAFF ACTIONS ###
 

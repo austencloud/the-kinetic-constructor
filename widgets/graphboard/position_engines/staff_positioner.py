@@ -29,11 +29,11 @@ from utilities.TypeChecking.TypeChecking import (
     OptimalLocationEntries,
     OptimalLocationsDicts,
     Direction,
+    Location,
 )
 
 if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
-    from widgets.main_widget import MainWidget
 
 
 class StaffPositioner:
@@ -55,7 +55,9 @@ class StaffPositioner:
 
     def set_default_staff_locations(self, staff: "Staff") -> None:
         staff.set_staff_transform_origin_to_center()
-        if staff.location in self.graphboard.grid.handpoints:  # add check for key existence
+        if (
+            staff.location in self.graphboard.grid.handpoints
+        ):  # add check for key existence
             if staff.axis == VERTICAL:
                 staff.setPos(
                     self.graphboard.grid.handpoints[staff.location]
@@ -70,13 +72,13 @@ class StaffPositioner:
     def reposition_beta_staffs(self) -> None:
         board_state = self.graphboard.get_state()
 
-        def move_staff(staff, direction) -> None:
+        def move_staff(staff: Staff, direction) -> None:
             new_position = self.calculate_new_position(staff.pos(), direction)
             staff.setPos(new_position)
 
-        arrows_grouped_by_start = {}
+        arrows_grouped_by_start_loc: Dict[Location, List[ArrowAttributesDicts]] = {}
         for arrow in board_state:
-            arrows_grouped_by_start.setdefault(arrow[START_LOCATION], []).append(arrow)
+            arrows_grouped_by_start_loc.setdefault(arrow[START_LOCATION], []).append(arrow)
 
         pro_or_anti_arrows = [
             arrow for arrow in board_state if arrow[MOTION_TYPE] in [PRO, ANTI]
@@ -88,7 +90,7 @@ class StaffPositioner:
             self.reposition_static_beta(move_staff, static_arrows)
 
         # BETA → BETA - G, H, I
-        for start_location, arrows in arrows_grouped_by_start.items():
+        for start_location, arrows in arrows_grouped_by_start_loc.items():
             if len(arrows) == 2:
                 arrow1, arrow2 = arrows
                 if (
@@ -115,7 +117,7 @@ class StaffPositioner:
 
     ### STATIC BETA ### β
 
-    def reposition_static_beta(self, move_staff, static_arrows) -> None:
+    def reposition_static_beta(self, move_staff: callable, static_arrows: List[ArrowAttributesDicts]) -> None:
         for arrow in static_arrows:
             staff = next(
                 (
@@ -128,7 +130,7 @@ class StaffPositioner:
             if not staff:
                 continue
 
-            end_location = arrow.get(END_LOCATION, "")
+            end_location = arrow[END_LOCATION]
 
             beta_reposition_map = {
                 (NORTH, RED): RIGHT,
@@ -139,7 +141,7 @@ class StaffPositioner:
                 (WEST, BLUE): (UP, DOWN) if end_location == WEST else None,
             }
 
-            direction = beta_reposition_map.get((staff.location, arrow[COLOR]), None)
+            direction: Direction= beta_reposition_map.get((staff.location, arrow[COLOR]), None)
 
             if direction:
                 if isinstance(direction, str):

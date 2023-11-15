@@ -1,15 +1,4 @@
-from typing import (
-    TYPE_CHECKING,
-    TypedDict,
-    Literal,
-    Dict,
-    List,
-    Tuple,
-    Set,
-    LiteralString,
-    Optional,
-    Union
-)
+from typing import *
 from .Letters import *
 from .SpecificPosition import SpecificPosition
 
@@ -29,7 +18,10 @@ Axis = Literal["vertical", "horizontal"]
 ColorHex = Literal["#ED1C24", "#2E3192"]
 ColorMap = Dict[Color, ColorHex]
 
+
 ### ARROW ATTRIBUTES ###
+
+
 class SpecificStartEndPositionsDicts(TypedDict):
     start_position: SpecificPosition
     end_position: SpecificPosition
@@ -58,6 +50,7 @@ class StaffAttributesDicts(TypedDict):
     location: Location
     layer: Layer
     axis: Axis
+
 
 StartEndLocationTuple = Tuple[Location, Location]
 PreprocessedStartEndCombinations = Dict[
