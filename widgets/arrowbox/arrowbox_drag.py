@@ -284,10 +284,23 @@ class ArrowBoxDrag(QWidget):
             self.ghost_arrow.is_mirrored = False
             self.ghost_arrow.mirror()
 
+        self.ghost_arrow.color = self.color
         self.ghost_arrow.quadrant = new_quadrant
-        self.update_rotation()
-        self.ghost_arrow.update(self.attributes)
+        self.ghost_arrow.motion_type = self.motion_type
+        self.ghost_arrow.rotation_direction = self.rotation_direction
+        self.ghost_arrow.start_location = self.start_location
+        self.ghost_arrow.end_location = self.end_location
+        self.ghost_arrow.turns = self.turns
+        
+        self.ghost_arrow.attributes = self.attributes
+        
+        ghost_svg = self.ghost_arrow.get_svg_file(
+            self.motion_type, self.turns
+        )
 
+        self.ghost_arrow.update_svg(ghost_svg)
+        
+        self.update_rotation()
         self.update_staff_during_drag()
 
         if self.ghost_arrow not in self.graphboard.arrows:

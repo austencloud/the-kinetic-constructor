@@ -110,9 +110,18 @@ class Arrow(GraphicalObject):
     def mousePressEvent(self) -> None:
         self.setSelected(True)
         self.ghost_arrow: "GhostArrow" = self.graphboard.ghost_arrows[self.color]
-        self.ghost_arrow.transform = self.transform()
-        self.ghost_arrow.update(self.attributes)
-        self.ghost_arrow.update_appearance()
+        self.ghost_arrow.set_attributes_from_dict(self.attributes)
+        ghost_svg = self.get_svg_file(self.motion_type, self.turns)
+        self.ghost_arrow.update_svg(ghost_svg)
+        self.ghost_arrow.color = self.color
+        self.ghost_arrow.motion_type = self.motion_type
+        self.ghost_arrow.quadrant = self.quadrant
+        self.ghost_arrow.rotation_direction = self.rotation_direction
+        self.ghost_arrow.start_location = self.start_location
+        self.ghost_arrow.end_location = self.end_location
+        self.ghost_arrow.turns = self.turns
+        self.ghost_arrow.update_appearance()  
+        self.ghost_arrow.transform = self.transform
         self.graphboard.addItem(self.ghost_arrow)
         self.ghost_arrow.staff = self.staff
         self.graphboard.arrows.append(self.ghost_arrow)
@@ -157,25 +166,39 @@ class Arrow(GraphicalObject):
     def update_for_new_quadrant(self, new_quadrant: Quadrant) -> None:
         self.quadrant = new_quadrant
 
+        self.attributes[COLOR] = self.color
+        self.attributes[MOTION_TYPE] = self.motion_type
         self.attributes[QUADRANT] = new_quadrant
+        self.attributes[ROTATION_DIRECTION] = self.rotation_direction
         self.attributes[START_LOCATION] = self.start_location
         self.attributes[END_LOCATION] = self.end_location
-
-        self.update_rotation()
-        self.ghost_arrow.update(self.attributes)
+        self.attributes[TURNS] = self.turns
 
         self.start_location, self.end_location = self.get_start_end_locations(
             self.motion_type, self.rotation_direction, self.quadrant
         )
+        self.ghost_arrow.color = self.color
+        self.ghost_arrow.motion_type = self.motion_type
+        self.ghost_arrow.quadrant = self.quadrant
+        self.ghost_arrow.rotation_direction = self.rotation_direction
+        self.ghost_arrow.start_location = self.start_location
+        self.ghost_arrow.end_location = self.end_location
+        self.ghost_arrow.turns = self.turns
 
-        self.ghost_arrow.set_attributes_from_dict(self.attributes)
+        self.ghost_arrow.attributes[COLOR] = self.color
+        self.ghost_arrow.attributes[MOTION_TYPE] = self.motion_type
+        self.ghost_arrow.attributes[QUADRANT] = self.quadrant
+        self.ghost_arrow.attributes[ROTATION_DIRECTION] = self.rotation_direction
+        self.ghost_arrow.attributes[START_LOCATION] = self.start_location
+        self.ghost_arrow.attributes[END_LOCATION] = self.end_location
+        self.ghost_arrow.attributes[TURNS] = self.turns
+
         self.ghost_arrow.update_appearance()
         self.staff.set_attributes_from_arrow(self)
         self.staff.update_appearance()
 
         self.update_appearance()
 
-        self.ghost_arrow.update(self.attributes)
         self.graphboard.arrows.remove(self)
         self.graphboard.update()
         self.graphboard.arrows.append(self)
@@ -434,11 +457,10 @@ class Arrow(GraphicalObject):
 
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
-        
+
         self.set_attributes_from_dict(new_arrow_dict)
         self.staff.set_attributes_from_dict(new_staff_dict)
 
-            
         self.staff.update(new_staff_dict)
 
         if self.ghost_arrow:

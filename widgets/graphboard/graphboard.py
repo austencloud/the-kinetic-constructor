@@ -214,7 +214,10 @@ class GraphBoard(QGraphicsScene):
                 elif arrow.color == BLUE:
                     arrow.color = RED
                 arrow.update_appearance()
-                arrow.ghost_arrow.update_appearance()
+                self.removeItem(arrow.ghost_arrow)
+                self.ghost_arrow = self.ghost_arrows[arrow.color]
+                self.ghost_arrow.update_appearance()
+                
                 self.staffs.remove(arrow.staff)
                 self.removeItem(arrow.staff)
                 arrow.staff = self.get_staff_by_color(arrow.color)
@@ -222,6 +225,7 @@ class GraphBoard(QGraphicsScene):
                 self.staffs.append(arrow.staff)
                 self.addItem(arrow.staff)
                 arrow.staff.show()
+                
                 self.update()
 
     ### HELPERS ###

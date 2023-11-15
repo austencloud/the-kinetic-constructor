@@ -24,6 +24,5 @@ class GhostArrow(Arrow):
 
     def update(self, attributes) -> None:
         self.set_attributes_from_dict(attributes)
-        self.setup_graphics_flags()
         self.update_appearance()
         self.show()
