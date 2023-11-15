@@ -394,6 +394,20 @@ class Arrow(GraphicalObject):
         self.staff.update(updated_staff_dict)
         self.graphboard.update()
 
+    def swap_color(self) -> None:
+        if self.color == RED:
+            new_color = BLUE
+        elif self.color == BLUE:
+            new_color = RED
+
+        self.color = new_color
+        self.update_appearance()
+    
+        self.staff.color = new_color
+        self.staff.update_appearance()
+    
+        self.graphboard.update()
+
     def swap_rot_dir(self) -> None:
         from objects.ghosts.ghost_arrow import GhostArrow
         self.center_x = self.boundingRect().width() / 2

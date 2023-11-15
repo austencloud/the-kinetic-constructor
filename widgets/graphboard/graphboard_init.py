@@ -34,7 +34,7 @@ from settings.string_constants import (
 from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_staff import GhostStaff
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-
+from widgets.graphboard.graphboard_view import GraphBoardView
 from typing import TYPE_CHECKING, Tuple
 
 if TYPE_CHECKING:
@@ -48,23 +48,7 @@ class GraphBoardInit:
         self.window_height = graphboard.main_widget.main_window.main_window_height
 
     def init_view(self) -> QGraphicsView:
-        view = QGraphicsView()
-
-        # Calculate view size based on window dimensions and aspect ratio
-        view_width = self.window_width * 0.25  # Example: 40% of window width
-        view_height = view_width * 90 / 75  # Maintain 75:90 ratio
-
-        view.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
-        view.setFixedSize(int(view_width), int(view_height))
-        view.setScene(self.graphboard)
-
-        # Adjust scaling based on new dimensions
-        view_scale = view_width / GRAPHBOARD_WIDTH
-        view.scale(view_scale, view_scale)
-
-        view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        view.wheelEvent = lambda event: None
+        view = GraphBoardView(self.graphboard)
         return view
 
     def init_grid(self) -> Grid:

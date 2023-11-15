@@ -89,10 +89,11 @@ class Staff(GraphicalObject):
         self.previous_location = None
         self.arrow: Arrow = None
         self.ghost_staff: Staff = None
-        self.color: Color = None
-        self.location: Location = None
-        self.layer: Layer = None
-        self.axis = None
+        
+        self.color = attributes[COLOR]
+        self.location = attributes[LOCATION]
+        self.layer = attributes[LAYER]
+        self.axis = self.update_axis()
         self.center = self.boundingRect().center()
 
         if attributes:

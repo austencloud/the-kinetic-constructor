@@ -43,7 +43,6 @@ class ActionButtonsFrame(QFrame):
                 "Mirror",
                 self.mirror_selected_arrow,
             ),
-            ("swap_colors.png", "Swap Colors", lambda: self.graphboard.swap_colors()),
             (
                 "add_to_sequence.png",
                 "Add to Sequence",

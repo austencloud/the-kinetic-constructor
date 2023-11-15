@@ -187,47 +187,6 @@ class GraphBoard(QGraphicsScene):
         else:
             return None
 
-    ### MANIPULATORS ###
-
-    def swap_colors(self) -> None:
-        if self.current_letter != "G" and self.current_letter != "H":
-            if len(self.arrows) > 1:
-                for arrow in self.arrows:
-                    if arrow.color == RED:
-                        new_color = BLUE
-                    elif arrow.color == BLUE:
-                        new_color = RED
-                    else:
-                        continue
-                    arrow.color = new_color
-                    arrow.staff = self.get_staff_by_color(new_color)
-                    arrow.ghost_arrow.staff = arrow.staff
-                    arrow.update_appearance()
-                    arrow.ghost_arrow.update_appearance()
-                    arrow.staff.update_appearance()
-                    arrow.staff.ghost_staff = self.ghost_staffs[new_color]
-                self.update()
-
-            elif len(self.arrows) == 1:
-                arrow = self.arrows[0]
-                if arrow.color == RED:
-                    arrow.color = BLUE
-                elif arrow.color == BLUE:
-                    arrow.color = RED
-                arrow.update_appearance()
-                self.removeItem(arrow.ghost_arrow)
-                self.ghost_arrow = self.ghost_arrows[arrow.color]
-                self.ghost_arrow.update_appearance()
-
-                self.staffs.remove(arrow.staff)
-                self.removeItem(arrow.staff)
-                arrow.staff = self.get_staff_by_color(arrow.color)
-                arrow.staff.set_staff_attrs_from_arrow(arrow)
-                self.staffs.append(arrow.staff)
-                self.addItem(arrow.staff)
-                arrow.staff.show()
-
-                self.update()
 
     ### HELPERS ###
 
