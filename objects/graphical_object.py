@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from objects.staff import Staff
     from objects.ghosts.ghost_staff import GhostStaff
     from objects.ghosts.ghost_arrow import GhostArrow
-    
+
 from utilities.TypeChecking.TypeChecking import (
     Color,
     ArrowAttributesDicts,
@@ -23,7 +23,7 @@ class GraphicalObject(QGraphicsSvgItem):
         super().__init__()
         self.svg_file = svg_file
         self.graphboard = graphboard
-        
+
         self.renderer: QSvgRenderer = None
         self.color: Color = None
 
@@ -77,18 +77,18 @@ class GraphicalObject(QGraphicsSvgItem):
         self.set_attributes_from_dict(attributes)
         self.update_appearance()
 
-    def update_appearance(self: Union["Staff", "Arrow", "GhostStaff", "GhostArrow"]) -> None:
-        from objects.staff import Staff 
+    def update_appearance(
+        self: Union["Staff", "Arrow", "GhostStaff", "GhostArrow"]
+    ) -> None:
+        from objects.staff import Staff
+
         self.update_color()
         if isinstance(self, Staff):
-            self.update_axis() 
+            self.update_axis()
         self.update_rotation()
 
-    def set_attributes_from_dict(self, attributes: ArrowAttributesDicts | StaffAttributesDicts) -> None:
-        self.attributes = self.apply_attributes(attributes)
-
-    def apply_attributes(self, attributes: ArrowAttributesDicts | StaffAttributesDicts) -> dict:
-        for attribute in attributes.keys():
-            setattr(self, attribute, attributes[attribute])
-        return {attribute: getattr(self, attribute) for attribute in attributes.keys()}
-
+    def set_attributes_from_dict(
+        self, attributes: ArrowAttributesDicts | StaffAttributesDicts
+    ) -> None:
+        for attribute_name, attribute_value in attributes.items():
+            setattr(self, attribute_name, attribute_value)

@@ -78,7 +78,6 @@ class Arrow(GraphicalObject):
         self.staff: Staff = None
 
         self.is_mirrored: bool = False
-        self.mirror_transform: bool = False
 
         self.color: Color = None
         self.motion_type: MotionType = None
@@ -91,6 +90,7 @@ class Arrow(GraphicalObject):
         if attributes:
             self.set_attributes_from_dict(attributes)
             self.update_appearance()
+            self.attributes = attributes
         self.center = self.boundingRect().center()
 
     ### MOUSE EVENTS ###
@@ -120,7 +120,7 @@ class Arrow(GraphicalObject):
         self.ghost_arrow.start_location = self.start_location
         self.ghost_arrow.end_location = self.end_location
         self.ghost_arrow.turns = self.turns
-        self.ghost_arrow.update_appearance()  
+        self.ghost_arrow.update_appearance()
         self.ghost_arrow.transform = self.transform
         self.graphboard.addItem(self.ghost_arrow)
         self.ghost_arrow.staff = self.staff
@@ -147,7 +147,6 @@ class Arrow(GraphicalObject):
     def mouseReleaseEvent(self) -> None:
         self.graphboard.removeItem(self.ghost_arrow)
         self.graphboard.arrows.remove(self.ghost_arrow)
-
         self.ghost_arrow.staff = None
         self.graphboard.update()
 
@@ -166,35 +165,12 @@ class Arrow(GraphicalObject):
     def update_for_new_quadrant(self, new_quadrant: Quadrant) -> None:
         self.quadrant = new_quadrant
 
-        self.attributes[COLOR] = self.color
-        self.attributes[MOTION_TYPE] = self.motion_type
-        self.attributes[QUADRANT] = new_quadrant
-        self.attributes[ROTATION_DIRECTION] = self.rotation_direction
-        self.attributes[START_LOCATION] = self.start_location
-        self.attributes[END_LOCATION] = self.end_location
-        self.attributes[TURNS] = self.turns
+        self.set_start_end_locations()
 
-        self.start_location, self.end_location = self.get_start_end_locations(
-            self.motion_type, self.rotation_direction, self.quadrant
-        )
-        self.ghost_arrow.color = self.color
-        self.ghost_arrow.motion_type = self.motion_type
-        self.ghost_arrow.quadrant = self.quadrant
-        self.ghost_arrow.rotation_direction = self.rotation_direction
-        self.ghost_arrow.start_location = self.start_location
-        self.ghost_arrow.end_location = self.end_location
-        self.ghost_arrow.turns = self.turns
-
-        self.ghost_arrow.attributes[COLOR] = self.color
-        self.ghost_arrow.attributes[MOTION_TYPE] = self.motion_type
-        self.ghost_arrow.attributes[QUADRANT] = self.quadrant
-        self.ghost_arrow.attributes[ROTATION_DIRECTION] = self.rotation_direction
-        self.ghost_arrow.attributes[START_LOCATION] = self.start_location
-        self.ghost_arrow.attributes[END_LOCATION] = self.end_location
-        self.ghost_arrow.attributes[TURNS] = self.turns
-
+        self.ghost_arrow.set_arrow_attrs_from_arrow(self)
         self.ghost_arrow.update_appearance()
-        self.staff.set_attributes_from_arrow(self)
+        self.staff.set_staff_attrs_from_arrow(self)
+
         self.staff.update_appearance()
 
         self.update_appearance()
@@ -202,6 +178,20 @@ class Arrow(GraphicalObject):
         self.graphboard.arrows.remove(self)
         self.graphboard.update()
         self.graphboard.arrows.append(self)
+
+    def set_start_end_locations(self) -> None:
+        self.start_location, self.end_location = self.get_start_end_locations(
+            self.motion_type, self.rotation_direction, self.quadrant
+        )
+
+    def set_arrow_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
+        self.color = target_arrow.color
+        self.motion_type = target_arrow.motion_type
+        self.quadrant = target_arrow.quadrant
+        self.rotation_direction = target_arrow.rotation_direction
+        self.start_location = target_arrow.start_location
+        self.end_location = target_arrow.end_location
+        self.turns = target_arrow.turns
 
     def update_staff_during_drag(self) -> None:
         for staff in self.graphboard.staff_set.values():
@@ -403,29 +393,14 @@ class Arrow(GraphicalObject):
         self.staff.update(updated_staff_dict)
         self.graphboard.update()
 
-    def mirror(self) -> None:
+    def swap_rot_dir(self) -> None:
+        self.center_x = self.boundingRect().width() / 2
+        self.center_y = self.boundingRect().height() / 2
+
         if self.is_mirrored:
-            self.is_mirrored = False
+            self.unmirror()
         elif not self.is_mirrored:
-            self.is_mirrored = True
-
-        center_x = self.boundingRect().width() / 2
-        center_y = self.boundingRect().height() / 2
-
-        if self.is_mirrored:
-            transform = QTransform()
-            transform.translate(center_x, center_y)
-            transform.scale(-1, 1)
-            transform.translate(-center_x, -center_y)
-
-        if not self.is_mirrored:
-            transform = QTransform()
-            transform.translate(center_x, center_y)
-            transform.scale(1, 1)
-            transform.translate(-center_x, -center_y)
-
-        self.setTransform(transform)
-        self.mirror_transform = transform
+            self.mirror()
 
         if self.rotation_direction == COUNTER_CLOCKWISE:
             new_rotation_direction = CLOCKWISE
@@ -462,15 +437,38 @@ class Arrow(GraphicalObject):
         self.staff.set_attributes_from_dict(new_staff_dict)
 
         self.staff.update(new_staff_dict)
-
+        self.update_appearance()
         if self.ghost_arrow:
-            self.ghost_arrow.setTransform(transform)
-            self.ghost_arrow.mirror_transform = transform
             self.ghost_arrow.is_mirrored = self.is_mirrored
             self.ghost_arrow.update(self.attributes)
-
         self.graphboard.update()
 
+    def mirror(self) -> None:
+        from objects.ghosts.ghost_arrow import GhostArrow
+        transform = QTransform()
+        transform.translate(self.center_x, self.center_y)
+        transform.scale(-1, 1)
+        transform.translate(-self.center_x, -self.center_y)
+        self.setTransform(transform)
+        if not isinstance(self, GhostArrow):
+            self.ghost_arrow.setTransform(transform)
+            self.ghost_arrow.is_mirrored = True
+        self.is_mirrored = True
+        
+
+    def unmirror(self) -> None:
+        from objects.ghosts.ghost_arrow import GhostArrow
+        transform = QTransform()
+        transform.translate(self.center.x(), self.center.y())
+        transform.scale(1, 1)
+        transform.translate(-self.center.x(), -self.center.y())
+        self.setTransform(transform)
+        if not isinstance(self, GhostArrow):
+            self.ghost_arrow.setTransform(transform)
+            self.ghost_arrow.is_mirrored = False
+        self.is_mirrored = False
+
+    
     def swap_motion_type(self) -> None:
         if self.motion_type == ANTI:
             new_motion_type = PRO

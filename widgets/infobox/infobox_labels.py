@@ -7,6 +7,7 @@ from data.positions_map import positions_map
 import logging
 from settings.string_constants import *
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from widgets.infobox.infobox import InfoBox
     from widgets.graphboard.graphboard import GraphBoard
@@ -14,7 +15,7 @@ from typing import Dict
 
 
 class InfoBoxLabels:
-    def __init__(self, infobox: 'InfoBox', graphboard: 'GraphBoard') -> None:
+    def __init__(self, infobox: "InfoBox", graphboard: "GraphBoard") -> None:
         self.infobox = infobox
         self.graphboard = graphboard
         self.pixmap_cache = {}
@@ -58,24 +59,18 @@ class InfoBoxLabels:
 
     ### LABEL UPDATING ###
 
-    def update_labels(self, widget: 'QFrame', attributes: Dict[str, str]) -> None:
-        motion_type = attributes.get(MOTION_TYPE, "")
-        rotation_direction = attributes.get(ROTATION_DIRECTION, "")
-        start_location = attributes.get(START_LOCATION, "")
-        end_location = attributes.get(END_LOCATION, "")
-        turns = attributes.get(TURNS, "")
-
+    def update_labels(self, widget: "QFrame", arrow: "Arrow") -> None:
         motion_type_label = widget.findChild(QLabel, "motion_type_label")
         rotation_direction_label = widget.findChild(QLabel, "rotation_direction_label")
         start_end_label = widget.findChild(QLabel, "start_end_label")
         turns_label = widget.findChild(QLabel, "turns_label")
 
-        motion_type_label.setText(f"<h1>{motion_type.capitalize()}</h1>")
+        motion_type_label.setText(f"<h1>{arrow.motion_type.capitalize()}</h1>")
 
-        if rotation_direction:
-            if rotation_direction == CLOCKWISE:
+        if arrow.rotation_direction:
+            if arrow.rotation_direction == CLOCKWISE:
                 clock_icon = CLOCKWISE_ICON
-            elif rotation_direction == COUNTER_CLOCKWISE:
+            elif arrow.rotation_direction == COUNTER_CLOCKWISE:
                 clock_icon = COUNTER_CLOCKWISE_ICON
             else:
                 clock_icon = CLOCK_ICON
@@ -84,13 +79,13 @@ class InfoBoxLabels:
         else:
             rotation_direction_label.setText("")
 
-        if motion_type in [PRO, ANTI, STATIC]:
+        if arrow.motion_type in [PRO, ANTI, STATIC]:
             start_end_label.setText(
-                f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{start_location.capitalize()} → {end_location.capitalize()}</span>"
+                f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{arrow.start_location.capitalize()} → {arrow.end_location.capitalize()}</span>"
             )
-        elif motion_type == "":
+        elif arrow.motion_type == "":
             start_end_label.setText(f"")
-        turns_label.setText(f"<span style='font-size: 20px;'>{turns}</span>")
+        turns_label.setText(f"<span style='font-size: 20px;'>{arrow.turns}</span>")
 
     def update_type_and_position_label(self) -> None:
         (
@@ -124,7 +119,7 @@ class InfoBoxLabels:
             )
             self.pixmap_cache[icon_name] = scaled_pixmap
 
-    def set_clock_pixmap(self, label: 'QLabel', icon_name) -> None:
+    def set_clock_pixmap(self, label: "QLabel", icon_name) -> None:
         # Set the pixmap from the cache
         if icon_name in self.pixmap_cache:
             label.setPixmap(self.pixmap_cache[icon_name])
@@ -142,7 +137,7 @@ class InfoBoxLabels:
             label.setStyleSheet(f"color: {color}; font-size: 25px; font-weight: bold;")
         return label
 
-    def get_start_end_positions(self)   -> list[tuple[str, str] | None]:
+    def get_start_end_positions(self) -> list[tuple[str, str] | None]:
         positions = []
         arrow_items = [
             item

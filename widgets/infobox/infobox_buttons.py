@@ -3,6 +3,7 @@ from PyQt6.QtGui import QIcon
 from settings.string_constants import BLUE, RED, COLOR, ICON_PATHS
 from settings.numerical_constants import BUTTON_SIZE
 from typing import TYPE_CHECKING, Dict, Callable, List
+from utilities.TypeChecking.TypeChecking import Color
 
 if TYPE_CHECKING:
     from widgets.infobox.infobox import InfoBox
@@ -33,9 +34,8 @@ class InfoBoxButtons:
         elif RED in button_name:
             self.button_groups[RED].append(button)
 
-    def show_buttons(self, attributes: Dict[str, str | int]) -> None:
-        color = attributes.get(COLOR, "")
-        for button in self.button_groups[color]:
+    def show_buttons(self, arrow_color: Color) -> None:
+        for button in self.button_groups[arrow_color]:
             button.show()
 
     def setup_buttons(self) -> None:
@@ -58,11 +58,15 @@ class InfoBoxButtons:
             },
             "swap_start_end_blue": {
                 "icon": ICON_PATHS["swap"],
-                "callback": lambda: self.graphboard.get_arrow_by_color(BLUE).mirror(),
+                "callback": lambda: self.graphboard.get_arrow_by_color(
+                    BLUE
+                ).swap_rot_dir(),
             },
             "swap_start_end_red": {
                 "icon": ICON_PATHS["swap"],
-                "callback": lambda: self.graphboard.get_arrow_by_color(RED).mirror(),
+                "callback": lambda: self.graphboard.get_arrow_by_color(
+                    RED
+                ).swap_rot_dir(),
             },
             "decrement_turns_blue": {
                 "icon": ICON_PATHS["decrement_turns"],

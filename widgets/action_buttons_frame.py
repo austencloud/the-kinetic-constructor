@@ -59,7 +59,9 @@ class ActionButtonsFrame(QFrame):
 
         self.setLayout(self.action_buttons_layout)
 
-    def create_and_configure_button(self, icon_filename, tooltip, on_click, *args) -> QPushButton:
+    def create_and_configure_button(
+        self, icon_filename, tooltip, on_click, *args
+    ) -> QPushButton:
         icon_path = ICON_DIR + icon_filename
         button = QPushButton(QIcon(icon_path), "")
         button.setToolTip(tooltip)
@@ -97,4 +99,4 @@ class ActionButtonsFrame(QFrame):
             else None
         )
         if arrow:
-            arrow.mirror()
+            arrow.swap_rot_dir()

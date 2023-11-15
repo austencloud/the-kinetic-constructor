@@ -42,7 +42,7 @@ class KeyEventHandler:
             elif event.key() == Qt.Key.Key_D:
                 selected_arrow.move_wasd(RIGHT)
             elif event.key() == Qt.Key.Key_R:
-                selected_arrow.mirror()
+                selected_arrow.swap_rot_dir()
             elif event.key() == Qt.Key.Key_F:
                 selected_arrow.swap_motion_type()
             elif event.key() == Qt.Key.Key_Q:

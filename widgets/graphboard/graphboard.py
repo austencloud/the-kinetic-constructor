@@ -217,15 +217,15 @@ class GraphBoard(QGraphicsScene):
                 self.removeItem(arrow.ghost_arrow)
                 self.ghost_arrow = self.ghost_arrows[arrow.color]
                 self.ghost_arrow.update_appearance()
-                
+
                 self.staffs.remove(arrow.staff)
                 self.removeItem(arrow.staff)
                 arrow.staff = self.get_staff_by_color(arrow.color)
-                arrow.staff.set_attributes_from_arrow(arrow)
+                arrow.staff.set_staff_attrs_from_arrow(arrow)
                 self.staffs.append(arrow.staff)
                 self.addItem(arrow.staff)
                 arrow.staff.show()
-                
+
                 self.update()
 
     ### HELPERS ###
@@ -236,21 +236,20 @@ class GraphBoard(QGraphicsScene):
     ) -> bool:
         return boundary[0] <= x <= boundary[2] and boundary[1] <= y <= boundary[3]
 
-    def create_blank_arrow(self, arrow: Arrow) -> None:
-        deleted_arrow_attributes = arrow.attributes
+    def create_blank_arrow(self, deleted_arrow: Arrow) -> None:
         blank_attributes_dict = {
-            COLOR: deleted_arrow_attributes[COLOR],
+            COLOR: deleted_arrow.color,
             MOTION_TYPE: STATIC,
             ROTATION_DIRECTION: "None",
             QUADRANT: "None",
-            START_LOCATION: deleted_arrow_attributes[END_LOCATION],
-            END_LOCATION: deleted_arrow_attributes[END_LOCATION],
-            TURNS: 0,
+            START_LOCATION: deleted_arrow.end_location,
+            END_LOCATION: deleted_arrow.end_location,
+            TURNS: deleted_arrow.turns
         }
         blank_arrow = BlankArrow(self, blank_attributes_dict)
         self.addItem(blank_arrow)
         self.arrows.append(blank_arrow)
-        blank_arrow.staff = arrow.staff
+        blank_arrow.staff = deleted_arrow.staff
         blank_arrow.staff.arrow = blank_arrow
 
     def position_letter_item(self, letter_item: "QGraphicsSvgItem") -> None:

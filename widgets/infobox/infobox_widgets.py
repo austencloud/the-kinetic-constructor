@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from widgets.arrowbox.arrowbox import ArrowBox
     from widgets.propbox.propbox import PropBox
     from widgets.action_buttons_frame import ActionButtonsFrame
-
+    from objects.arrow import Arrow
 
 class InfoBoxWidgets:
     def __init__(self, infobox: "InfoBox", graphboard: "GraphBoard") -> None:
@@ -62,23 +62,22 @@ class InfoBoxWidgets:
         info_widget.setLayout(main_layout)
         return info_widget
 
-    def update_info_widget_content(self, widget: "QFrame", attributes) -> None:
+    def update_info_widget_content(self, widget: "QFrame", arrow: 'Arrow') -> None:
         self.buttons = self.infobox.buttons
         if widget.layout().count() == 0:
-            new_content = self.labels.construct_info_string_label(attributes)
+            new_content = self.labels.construct_info_string_label(arrow)
             widget.setLayout(new_content.layout())
             return
-        self.labels.update_labels(widget, attributes)
-        self.buttons.show_buttons(attributes)
+        self.labels.update_labels(widget, arrow)
+        self.buttons.show_buttons(arrow.color)
 
     def update_attribute_widgets(self) -> None:
         widgets = self.infobox.widgets
         for color in [BLUE, RED]:
             arrow = self.graphboard.get_arrow_by_color(color)
             if arrow:
-                attributes = arrow.attributes
                 widget = getattr(widgets, f"{color}_attributes_widget")
-                self.update_info_widget_content(widget, attributes)
+                self.update_info_widget_content(widget, arrow)
                 widget.show()
             else:
                 widget = getattr(widgets, f"{color}_attributes_widget")

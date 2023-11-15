@@ -26,7 +26,7 @@ from settings.string_constants import (
     PRO,
     ANTI,
     STATIC,
-    COLOR_MAP
+    COLOR_MAP,
 )
 import logging
 import re
@@ -48,7 +48,7 @@ from utilities.TypeChecking.TypeChecking import (
     Dict,
     Tuple,
     ColorHex,
-    Union
+    Union,
 )
 
 if TYPE_CHECKING:
@@ -69,7 +69,9 @@ class Staff(GraphicalObject):
     svg_file: str
 
     def __init__(
-        self, graphboard: Union["GraphBoard", "PropBox"], attributes: StaffAttributesDicts
+        self,
+        graphboard: Union["GraphBoard", "PropBox"],
+        attributes: StaffAttributesDicts,
     ) -> None:
         svg_file = STAFF_SVG_FILE_PATH
         super().__init__(svg_file, graphboard)
@@ -78,7 +80,9 @@ class Staff(GraphicalObject):
     ### SETUP ###
 
     def _setup_attributes(
-        self, graphboard: Union["GraphBoard", "PropBox"], attributes: StaffAttributesDicts
+        self,
+        graphboard: Union["GraphBoard", "PropBox"],
+        attributes: StaffAttributesDicts,
     ) -> None:
         self.graphboard = graphboard
         self.drag_offset = QPointF(0, 0)
@@ -90,7 +94,7 @@ class Staff(GraphicalObject):
         self.layer: Layer = None
         self.axis = None
         self.center = self.boundingRect().center()
-        
+
         if attributes:
             self.update(attributes)
 
@@ -237,15 +241,15 @@ class Staff(GraphicalObject):
         self.center = self.get_staff_center()
         self.setTransformOriginPoint(self.center)
 
-    def set_attributes_from_arrow(self, arrow: "Arrow") -> None:
+    def set_staff_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         new_dict: StaffAttributesDicts = {
-            COLOR: arrow.color,
-            LOCATION: arrow.end_location,
+            COLOR: target_arrow.color,
+            LOCATION: target_arrow.end_location,
             LAYER: 1,
         }
-        self.attributes.update(new_dict)
-        self.color = arrow.color
-        self.location = arrow.end_location
+        self.set_attributes_from_dict(new_dict)
+        self.color = target_arrow.color
+        self.location = target_arrow.end_location
         self.update_axis()
         self.layer = 1
         self.update_appearance()
@@ -268,9 +272,13 @@ class Staff(GraphicalObject):
 
     def get_staff_center(self) -> QPointF:
         if self.axis == VERTICAL:
-            return QPointF((self.boundingRect().height() / 2), (self.boundingRect().width() / 2))
+            return QPointF(
+                (self.boundingRect().height() / 2), (self.boundingRect().width() / 2)
+            )
         elif self.axis == HORIZONTAL:
-            return QPointF((self.boundingRect().width() / 2), (self.boundingRect().height() / 2))
+            return QPointF(
+                (self.boundingRect().width() / 2), (self.boundingRect().height() / 2)
+            )
 
     def get_closest_handpoint(self, mouse_pos: QPointF) -> QPointF:
         closest_distance = float("inf")
@@ -329,7 +337,6 @@ class Staff(GraphicalObject):
         self.graphboard.removeItem(self)
         self.graphboard.staffs.remove(self)
         self.graphboard.update()
-
 
 
 class RedStaff(Staff):
