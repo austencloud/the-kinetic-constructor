@@ -8,15 +8,26 @@ from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.staff import Staff
 from settings.numerical_constants import GRAPHBOARD_SCALE
-from settings.string_constants import NORTH, EAST, SOUTH, WEST, COLOR, RED, BLUE, LOCATION, LAYER
+from settings.string_constants import (
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST,
+    COLOR,
+    RED,
+    BLUE,
+    LOCATION,
+    LAYER,
+)
 
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 
 
-class Propbox(QGraphicsScene):
-    def __init__(self, main_widget: 'MainWidget'):
+class PropBox(QGraphicsScene):
+    def __init__(self, main_widget: "MainWidget"):
         super().__init__()
         self.main_widget = main_widget
 
@@ -71,7 +82,7 @@ class Propbox(QGraphicsScene):
 
         self.addItem(red_staff)
         self.addItem(blue_staff)
-        
+
         red_staff.show()
         blue_staff.show()
 

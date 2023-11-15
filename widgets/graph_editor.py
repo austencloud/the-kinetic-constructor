@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout
 from widgets.graphboard.graphboard import GraphBoard
 from widgets.arrowbox.arrowbox import ArrowBox
-from widgets.propbox.propbox import Propbox
+from widgets.propbox.propbox import PropBox
 from widgets.infobox.infobox import InfoBox
 from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
@@ -39,7 +39,7 @@ class GraphEditor(QWidget):
             self.graphboard,
         )
         self.graphboard.infobox = self.infobox
-        self.propbox = Propbox(main_widget)
+        self.propbox = PropBox(main_widget)
         self.arrowbox = ArrowBox(
             main_widget,
             self.infobox,

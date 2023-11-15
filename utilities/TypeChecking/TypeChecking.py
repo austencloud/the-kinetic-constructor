@@ -1,4 +1,13 @@
-from typing import TypedDict, Literal, Dict, List, Tuple, Set
+from typing import (
+    TYPE_CHECKING,
+    TypedDict,
+    Literal,
+    Dict,
+    List,
+    Tuple,
+    Set,
+    LiteralString,
+)
 from .Letters import *
 from .SpecificPosition import SpecificPosition
 
@@ -8,6 +17,7 @@ Position = Literal["alpha", "beta", "gamma"]
 Direction = Literal["right", "left", "down", "up"]
 OptimalLocationEntries = Dict[Literal["x", "y"], float]
 Layer = Literal[0, 1, 2, 3]
+Axis = Literal["vertical", "horizontal"]
 
 ### ARROW ATTRIBUTES ###
 
@@ -24,16 +34,6 @@ class SpecificStartEndPositionsDicts(TypedDict):
     end_position: SpecificPosition
 
 
-class ArrowAttributesDicts(TypedDict):
-    color: Color
-    motion_type: MotionType
-    quadrant: Quadrant
-    rotation_direction: RotationDirection
-    start_location: Location
-    end_location: Location
-    turns: Turns
-
-
 class OptimalLocationsDicts(TypedDict):
     optimal_red_location: OptimalLocationEntries
     optimal_blue_location: OptimalLocationEntries
@@ -41,11 +41,22 @@ class OptimalLocationsDicts(TypedDict):
 
 ### STAFF ATTRIBUTES ###
 
-
-class StaffAttributesDicts(TypedDict):
-    color: Color
-    location: Location
-    layer: Layer
+ArrowAttributesDicts = Dict[
+    Literal[
+        "color",
+        "motion_type",
+        "quadrant",
+        "rotation_direction",
+        "start_location",
+        "end_location",
+        "turns",
+    ],
+    Color | MotionType | Quadrant | RotationDirection | Location | Turns,
+]
+ColorMap = Dict[Color, ColorHex]
+StaffAttributesDicts = Dict[
+    Literal["color", "location", "layer"], Color | Location | Layer
+]
 
 
 StartEndLocationTuple = Tuple[Location, Location]

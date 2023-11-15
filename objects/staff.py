@@ -17,13 +17,8 @@ from settings.string_constants import (
     HORIZONTAL,
     VERTICAL,
     STAFF_SVG_FILE_PATH,
-    STAFF_DIR,
-    RED,
-    BLUE,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
-    RED_HEX,
-    BLUE_HEX,
     NORTHEAST,
     NORTHWEST,
     SOUTHEAST,
@@ -34,10 +29,30 @@ from settings.string_constants import (
 )
 import logging
 import re
-from typing import TYPE_CHECKING
+
+from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
+
+from utilities.TypeChecking.TypeChecking import (
+    RotationAngle,
+    StaffAttributesDicts,
+    Location,
+    Quadrant,
+    RotationDirection,
+    MotionType,
+    Axis,
+    Color,
+    Layer,
+    ColorMap,
+    TYPE_CHECKING,
+    Dict,
+    Tuple,
+    ColorHex
+)
+
 if TYPE_CHECKING:
     from objects.arrow import Arrow
-
+    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.propbox.propbox import PropBox
 ATTRIBUTES = STAFF_ATTRIBUTES
 
 logging.basicConfig(
@@ -48,32 +63,36 @@ logging.basicConfig(
 
 
 class Staff(GraphicalObject):
-    arrow: 'Arrow'
+    arrow: "Arrow"
     svg_file: str
-    
-    def __init__(self, graphboard, attributes):
+
+    def __init__(
+        self, graphboard: "GraphBoard" | "PropBox", attributes: StaffAttributesDicts
+    ) -> None:
         svg_file = STAFF_SVG_FILE_PATH
-        super().__init__(svg_file, graphboard, attributes)
+        super().__init__(svg_file, graphboard)
         self._setup_attributes(graphboard, attributes)
 
     ### SETUP ###
 
-    def _setup_attributes(self, graphboard, attributes):
+    def _setup_attributes(
+        self, graphboard: "GraphBoard" | "PropBox", attributes: StaffAttributesDicts
+    ) -> None:
         self.graphboard = graphboard
         self.drag_offset = QPointF(0, 0)
         self.previous_location = None
-        self.arrow = None
-        self.ghost_staff = None
-        self.color = None
-        self.location = None
-        self.layer = None
+        self.arrow: Arrow = None
+        self.ghost_staff: Staff = None
+        self.color: Color = None
+        self.location: Location = None
+        self.layer: Layer = None
         if attributes:
             self.update(attributes)
         self.center = self.get_staff_center()
 
     ### MOUSE EVENTS ###
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event) -> None:
         self.setSelected(True)
         if not self.ghost_staff:
             self.ghost_staff = self.graphboard.ghost_staffs[self.color]
@@ -90,7 +109,7 @@ class Staff(GraphicalObject):
 
         self.previous_location = self.location
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event) -> None:
         if event.buttons() == Qt.MouseButton.LeftButton:
             new_pos = event.scenePos() - self.get_staff_center()
             self.set_drag_pos(new_pos)
@@ -116,7 +135,7 @@ class Staff(GraphicalObject):
                 self.set_drag_pos(new_pos)
                 self.previous_location = new_location
 
-    def set_drag_pos(self, new_pos):
+    def set_drag_pos(self, new_pos: QPointF) -> None:
         if self.axis == HORIZONTAL:
             self.setPos(new_pos)
         elif self.axis == VERTICAL:
@@ -128,8 +147,10 @@ class Staff(GraphicalObject):
                 )
             )
 
-    def update_arrow_quadrant(self, new_location):
-        quadrant_mapping = {
+    def update_arrow_quadrant(self, new_location: Location) -> None:
+        quadrant_mapping: Dict[
+            Tuple(Quadrant, RotationDirection, MotionType), Dict[Location, Quadrant]
+        ] = {
             ### ISO ###
             (NORTHEAST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
             (NORTHWEST, CLOCKWISE, PRO): {EAST: NORTHEAST, WEST: SOUTHWEST},
@@ -166,14 +187,14 @@ class Staff(GraphicalObject):
             self.arrow.end_location = end_location
             self.arrow.update_appearance()
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event) -> None:
         self.graphboard.removeItem(self.ghost_staff)
         self.graphboard.staffs.remove(self.ghost_staff)
         self.ghost_staff.arrow = None
         self.graphboard.update()
         self.finalize_staff_drop(event)
 
-    def finalize_staff_drop(self, event):
+    def finalize_staff_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
         closest_handpoint = self.get_closest_handpoint(event.scenePos())
         new_location = self.get_closest_location(event.scenePos())
 
@@ -190,13 +211,17 @@ class Staff(GraphicalObject):
 
     ### UPDATERS ###
 
-    def update_axis(self):
+    def update_axis(self) -> None:
         if self.layer == 1:
-            self.axis = VERTICAL if self.location in [NORTH, SOUTH] else HORIZONTAL
+            self.axis: Axis = (
+                VERTICAL if self.location in [NORTH, SOUTH] else HORIZONTAL
+            )
         elif self.layer == 2:
-            self.axis = HORIZONTAL if self.location in [NORTH, SOUTH] else VERTICAL
+            self.axis: Axis = (
+                HORIZONTAL if self.location in [NORTH, SOUTH] else VERTICAL
+            )
 
-    def update_rotation(self):
+    def update_rotation(self) -> None:
         if self.axis == VERTICAL:
             self.current_position = self.pos()
             self.setTransformOriginPoint(self.get_staff_center())
@@ -204,27 +229,11 @@ class Staff(GraphicalObject):
         else:
             self.setRotation(0)
 
-    def set_attributes_from_dict(self, attributes):
-        self.color = attributes.get(COLOR, None)
-        self.location = attributes.get(LOCATION, None)
-        self.layer = attributes.get(LAYER, None)
-
-        for attribute in ATTRIBUTES:
-            setattr(self, attribute, attributes.get(attribute, None))
-
-
-        self.attributes = {
-            COLOR: attributes.get(COLOR, None),
-            LOCATION: attributes.get(LOCATION, None),
-            LAYER: attributes.get(LAYER, None),
-        }
-        self.update_axis()
-
-    def set_transform_origin_to_center(self):
+    def set_transform_origin_to_center(self) -> None:
         self.center = self.get_staff_center()
         self.setTransformOriginPoint(self.center)
 
-    def set_attributes_from_arrow(self, arrow):
+    def set_attributes_from_arrow(self, arrow: "Arrow") -> None:
         new_dict = {
             COLOR: arrow.color,
             LOCATION: arrow.end_location,
@@ -239,11 +248,7 @@ class Staff(GraphicalObject):
 
     ### GETTERS ###
 
-    def get_rotation_angle(self):
-        location_to_angle = self.get_location_to_angle()
-        return location_to_angle
-
-    def get_location_to_angle(self):
+    def get_rotation_angle(self) -> RotationAngle:
         if self.location == NORTH or self.location == SOUTH:
             return {
                 NORTH: 90,
@@ -257,13 +262,13 @@ class Staff(GraphicalObject):
         else:
             return {}
 
-    def get_staff_center(self):
+    def get_staff_center(self) -> QPointF:
         if self.axis == VERTICAL:
             return QPointF((STAFF_WIDTH / 2), (STAFF_LENGTH / 2))
         elif self.axis == HORIZONTAL:
             return QPointF((STAFF_LENGTH / 2), (STAFF_WIDTH / 2))
 
-    def get_closest_handpoint(self, mouse_pos):
+    def get_closest_handpoint(self, mouse_pos: QPointF) -> QPointF:
         closest_distance = float("inf")
         closest_handpoint = None
         for point in self.graphboard.grid.handpoints.values():
@@ -273,7 +278,7 @@ class Staff(GraphicalObject):
                 closest_handpoint = point
         return closest_handpoint
 
-    def get_closest_location(self, mouse_pos):
+    def get_closest_location(self, mouse_pos: QPointF) -> Location:
         closest_distance = float("inf")
         closest_location = None
         for location, point in self.graphboard.grid.handpoints.items():
@@ -283,29 +288,25 @@ class Staff(GraphicalObject):
                 closest_location = location
         return closest_location
 
-    def get_attributes(self):
-        return {attr: getattr(self, attr) for attr in STAFF_ATTRIBUTES}
-
-    def get_svg_file(self):
-        svg_file = f"{STAFF_DIR}staff.svg"
-        return svg_file
-
     ### HELPERS ###
 
-    def create_staff_dict_from_arrow(self, arrow):
-        staff_dict = {COLOR: arrow.color, LOCATION: arrow.end_location, LAYER: 1}
+    def create_staff_dict_from_arrow(self, arrow: "Arrow") -> StaffAttributesDicts:
+        staff_dict: StaffAttributesDicts = {
+            "color": arrow.color,
+            "location": arrow.end_location,
+            "layer": 1,
+        }
         return staff_dict
 
-    def swap_axis(self):
+    def swap_axis(self) -> None:
         if self.axis == VERTICAL:
             self.axis = HORIZONTAL
         else:
             self.axis = VERTICAL
         self.update_rotation()
 
-    def set_svg_color(self, new_color):
-        color_map = {RED: RED_HEX, BLUE: BLUE_HEX}
-        new_hex_color = color_map.get(new_color)
+    def set_svg_color(self, new_color: Color) -> bytes:
+        new_hex_color: ColorHex = ColorMap.get(new_color)
 
         with open(self.svg_file, "r") as f:
             svg_data = f.read()
@@ -316,20 +317,27 @@ class Staff(GraphicalObject):
         match = style_tag_pattern.search(svg_data)
 
         if match:
-            old_color = match.group(1)
-            svg_data = svg_data.replace(old_color, new_hex_color)
+            old_hex_color: ColorHex = match.group(1)
+            svg_data = svg_data.replace(old_hex_color, new_hex_color)
         return svg_data.encode("utf-8")
 
-    def delete(self):
+    def delete(self) -> None:
         self.graphboard.removeItem(self)
         self.graphboard.staffs.remove(self)
         self.graphboard.update()
-        
+
+
 class RedStaff(Staff):
-    def __init__(self, scene, dict):
+    def __init__(
+        self, scene: "GraphBoard" | "PropBox", dict: StaffAttributesDicts
+    ) -> None:
         super().__init__(scene, dict)
         self.setSharedRenderer(self.renderer)
+
+
 class BlueStaff(Staff):
-    def __init__(self, scene, dict):
+    def __init__(
+        self, scene: "GraphBoard" | "PropBox", dict: StaffAttributesDicts
+    ) -> None:
         super().__init__(scene, dict)
         self.setSharedRenderer(self.renderer)

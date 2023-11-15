@@ -1,6 +1,6 @@
 import unittest
 from PyQt6.QtCore import QPointF
-from objects.arrow.arrow import Arrow
+from objects.arrow import Arrow
 
 
 class TestArrow(unittest.TestCase):

@@ -58,11 +58,12 @@ from utilities.TypeChecking.TypeChecking import (
 
 
 class Arrow(GraphicalObject):
+    
     def __init__(
         self, graphboard: "GraphBoard", attributes: "ArrowAttributesDicts"
     ) -> None:
         svg_file = self.get_svg_file(attributes[MOTION_TYPE], attributes[TURNS])
-        super().__init__(svg_file, graphboard, attributes)
+        super().__init__(svg_file, graphboard)
         self._setup_attributes(graphboard, attributes)
 
     ### SETUP ###
@@ -74,7 +75,7 @@ class Arrow(GraphicalObject):
 
         self.drag_offset = QPointF(0, 0)
 
-        self.staff = None
+        self.staff: Staff = None
         self.ghost_arrow = None
 
         self.is_mirrored = False
@@ -183,14 +184,6 @@ class Arrow(GraphicalObject):
                 staff.show()
                 staff.update_appearance()
                 self.graphboard.update_staffs()
-
-    def set_attributes_from_dict(self, attributes: "ArrowAttributesDicts") -> None:
-        for attr in ARROW_ATTRIBUTES:
-            value = attributes[attr]
-            if attr == TURNS:
-                value = int(value)
-            setattr(self, attr, value)
-        self.attributes = attributes
 
     def set_transform_origin_to_center(self) -> None:
         # Call this method after any changes that might affect the boundingRect.

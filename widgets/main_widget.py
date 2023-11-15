@@ -13,11 +13,12 @@ from utilities.export_handler import ExportHandler
 
 if TYPE_CHECKING:
     from main import MainWindow
-    from widgets.propbox.propbox import Propbox
+    from widgets.propbox.propbox import PropBox
 from utilities.TypeChecking.TypeChecking import LetterDictionary
 
+
 class MainWidget(QWidget):
-    propbox: "Propbox"
+    propbox: "PropBox"
     main_window: "MainWindow"
     clear_sequence_button: "QPushButton"
     word_label: "QLabel"

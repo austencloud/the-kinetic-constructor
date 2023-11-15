@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
     from widgets.infobox.infobox import InfoBox
     from widgets.arrowbox.arrowbox import ArrowBox
-    from widgets.propbox.propbox import Propbox
+    from widgets.propbox.propbox import PropBox
     from widgets.action_buttons_frame import ActionButtonsFrame
 
 
