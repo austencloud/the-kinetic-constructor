@@ -47,24 +47,19 @@ class SequenceBoard(QGraphicsScene):
         self.setSceneRect(0, 0, self.view.width(), self.view.height() * 4)
 
     def setup_view_and_controls(self) -> None:
-        # Setup view
         self.view = SequenceBoardView(self)
 
-        # Setup controls
         self.clear_sequence_button = QPushButton("Clear Sequence")
         self.clear_sequence_button.clicked.connect(self.clear_sequence)
 
-        # Assigning attributes to main_widget for access
         self.main_widget.sequence_board = self
         self.main_widget.sequence_view = self.view
         self.main_widget.sequence_board = self.view
         self.main_widget.clear_sequence_button = self.clear_sequence_button
 
     def add_to_sequence(self) -> None:
-        # Get the size of the sequence_board in sequence_board coordinates
         scene_size = self.graphboard.sceneRect().size().toSize()
 
-        # Create the QImage with the adjusted size
         image = QImage(scene_size, QImage.Format.Format_ARGB32)
         image.fill(QColor(Qt.GlobalColor.transparent))
         painter = QPainter(image)
@@ -91,4 +86,3 @@ class SequenceBoard(QGraphicsScene):
         self.pictographs = []
         for item in self.items():
             self.removeItem(item)
-        self.main_widget.word_label.setText("My word: ")

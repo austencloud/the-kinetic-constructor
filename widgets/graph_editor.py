@@ -67,3 +67,5 @@ class GraphEditor(QWidget):
         self.main_window.graph_editor_layout.addWidget(self.graph_editor_frame)
 
         self.setMouseTracking(True)
+        self.graph_editor_frame.setMaximumWidth(int(self.main_window.width() * 1/2))
+        self.graph_editor_frame.setMaximumHeight(int(self.main_window.height() * 1/3))

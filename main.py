@@ -31,13 +31,19 @@ class MainWindow(QMainWindow):
         screen_geometry = secondary_screen.geometry()
 
         # Adjust size based on the screen used
-        self.main_window_width = int(screen_geometry.width() * (0.60 if len(screens) > 1 else 0.6))
-        self.main_window_height = int(screen_geometry.height() * (0.85 if len(screens) > 1 else 0.7))
+        self.main_window_width = int(
+            screen_geometry.width() * (0.8 if len(screens) > 1 else 0.6)
+        )
+        self.main_window_height = int(
+            screen_geometry.height() * (0.8 if len(screens) > 1 else 0.7)
+        )
 
         # Positioning the window
         self.move(
-            screen_geometry.x() + (screen_geometry.width() - self.main_window_width) // 2,
-            screen_geometry.y() + (screen_geometry.height() - self.main_window_height) // 2,
+            screen_geometry.x()
+            + (screen_geometry.width() - self.main_window_width) // 2,
+            screen_geometry.y()
+            + (screen_geometry.height() - self.main_window_height) // 2 - 50,
         )
 
     def init_main_window(self) -> None:

@@ -41,7 +41,7 @@ class OptionBoard(QGraphicsScene):
             QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed
         )
         self.container_widget.setFixedSize(self.view.width(), self.view.height())
-        self.setSceneRect(0, 0, 600, 800)
+        self.setSceneRect(0, 0, self.view.width(), self.view.height())
         self.addWidget(self.container_widget)
 
     def populate_pictographs(self) -> None:
