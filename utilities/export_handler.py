@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING, List
 if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
 from utilities.TypeChecking.TypeChecking import ColorHex
-from settings.string_constants import SVG_NS
+
 
 class ExportHandler:
     def __init__(self, graphboard: "GraphBoard") -> None:

@@ -13,5 +13,6 @@
     ],
     "files.exclude": {
         ".git": true
-    }
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

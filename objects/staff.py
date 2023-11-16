@@ -1,4 +1,3 @@
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.graphical_object import GraphicalObject
 from PyQt6.QtCore import Qt, QPointF
 from settings.numerical_constants import (
@@ -42,8 +41,6 @@ from utilities.TypeChecking.TypeChecking import (
     MotionType,
     Axis,
     Color,
-    Layer,
-    ColorMap,
     TYPE_CHECKING,
     Dict,
     Tuple,

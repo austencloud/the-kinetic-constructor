@@ -1,11 +1,16 @@
 import json
 import os
-from objects.arrow import Arrow
+from typing import List, TYPE_CHECKING
+
 from PyQt6.QtCore import QObject
-from typing import Dict, List, TYPE_CHECKING
+
+from objects.arrow import Arrow
 from utilities.TypeChecking.TypeChecking import LetterDictionary, Letters
+
 if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
+
+
 class JsonHandler(QObject):
     def connect_scene(self, graphboard: 'GraphBoard') -> None:
         self.graphboard = graphboard

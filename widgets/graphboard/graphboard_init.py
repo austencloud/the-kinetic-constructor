@@ -1,41 +1,40 @@
-from PyQt6.QtCore import QPointF, Qt
+from typing import TYPE_CHECKING, Tuple
+
+from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtWidgets import QGraphicsView
-from objects.grid import Grid
-from objects.staff import RedStaff, BlueStaff, Staff
-from objects.letter_item import LetterItem
-from settings.numerical_constants import (
-    GRAPHBOARD_HEIGHT,
-    GRAPHBOARD_WIDTH,
-)
-from settings.string_constants import (
-    GRID_FILE_PATH,
-    COLOR,
-    RED,
-    BLUE,
-    LOCATION,
-    NORTH,
-    SOUTH,
-    LAYER,
-    PRO,
-    MOTION_TYPE,
-    ROTATION_DIRECTION,
-    CLOCKWISE,
-    QUADRANT,
-    NORTHEAST,
-    START_LOCATION,
-    EAST,
-    SOUTHEAST,
-    SOUTHWEST,
-    WEST,
-    NORTHWEST,
-    END_LOCATION,
-    TURNS,
-)
+from PyQt6.QtCore import QPointF
+
 from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_staff import GhostStaff
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+from objects.grid import Grid
+from objects.letter_item import LetterItem
+from objects.staff import BlueStaff, RedStaff, Staff
+from settings.numerical_constants import GRAPHBOARD_HEIGHT, GRAPHBOARD_WIDTH
+from settings.string_constants import (
+    BLUE,
+    CLOCKWISE,
+    COLOR,
+    EAST,
+    END_LOCATION,
+    GRID_FILE_PATH,
+    LAYER,
+    LOCATION,
+    MOTION_TYPE,
+    NORTH,
+    NORTHEAST,
+    NORTHWEST,
+    PRO,
+    QUADRANT,
+    RED,
+    ROTATION_DIRECTION,
+    SOUTH,
+    SOUTHEAST,
+    SOUTHWEST,
+    START_LOCATION,
+    TURNS,
+    WEST,
+)
 from widgets.graphboard.graphboard_view import GraphBoardView
-from typing import TYPE_CHECKING, Tuple
 
 if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard

@@ -1,26 +1,22 @@
+from typing import Any, Dict, List, Tuple
+
 from settings.string_constants import (
-    NORTH,
-    SOUTH,
-    EAST,
-    WEST,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
-    START_POS,
+    EAST,
     END_POS,
+    NORTH,
     QUADRANT,
     ROTATION_DIRECTION,
+    SOUTH,
+    START_POS,
+    WEST,
 )
-from typing import Any, Dict, List, Tuple
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
     Location,
-    Color,
-    MotionType,
     Quadrant,
     RotationDirection,
-    StartLocation,
-    EndLocation,
-    Turns,
 )
 
 

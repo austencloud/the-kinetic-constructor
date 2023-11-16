@@ -1,6 +1,8 @@
-from PyQt6.QtWidgets import QGraphicsView
-from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
+
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QGraphicsView
+
 if TYPE_CHECKING:
     from widgets.optionboard.optionboard import OptionBoard
 

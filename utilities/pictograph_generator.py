@@ -1,16 +1,10 @@
-from PyQt6.QtWidgets import QGraphicsItem
-from PyQt6.QtCore import QPointF
-import random
 import os
-
-from settings.string_constants import *
-from typing import TYPE_CHECKING, List, Dict, Literal, TypedDict
+from settings.string_constants import START_POS, END_POS, MOTION_TYPE, ROTATION_DIRECTION, ANTI, PRO, COLOR, RED, CLOCKWISE, QUADRANT
+from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.infobox.infobox import InfoBox
     from widgets.graphboard.graphboard import GraphBoard
-
-
 
 class PictographGenerator:
     def __init__(self, main_widget: 'MainWidget', graphboard: 'GraphBoard', infobox: 'InfoBox') -> None:

@@ -32,16 +32,7 @@ from utilities.TypeChecking.TypeChecking import (
     Turns,
 )
 
-
 class ArrowBoxDrag(QWidget):
-    color: Color
-    motion_type: MotionType
-    quadrant: Quadrant
-    rotation_direction: RotationDirection
-    start_location: Location
-    end_location: Location
-    turns: Turns
-
     def __init__(
         self, main_window: "MainWindow", graphboard: "GraphBoard", arrowbox: "ArrowBox"
     ) -> None:
@@ -81,14 +72,14 @@ class ArrowBoxDrag(QWidget):
         self.arrow_center = self.target_arrow.boundingRect().center() * GRAPHBOARD_SCALE
 
     def set_attributes(self, target_arrow: "Arrow") -> None:
-        self.color = target_arrow.color
-        self.motion_type = target_arrow.motion_type
-        self.quadrant = target_arrow.quadrant
-        self.rotation_direction = target_arrow.rotation_direction
-        self.start_location = target_arrow.start_location
-        self.end_location = target_arrow.end_location
-        self.turns = target_arrow.turns
-        
+        self.color: Color = target_arrow.color
+        self.motion_type: MotionType = target_arrow.motion_type
+        self.quadrant: Quadrant = target_arrow.quadrant
+        self.rotation_direction: RotationDirection = target_arrow.rotation_direction
+        self.start_location: Location = target_arrow.start_location
+        self.end_location: Location = target_arrow.end_location
+        self.turns: Turns = target_arrow.turns
+
         self.ghost_arrow = self.graphboard.ghost_arrows[self.color]
         self.ghost_arrow.target_arrow = target_arrow
 

@@ -1,12 +1,13 @@
-from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout
-from widgets.graphboard.graphboard import GraphBoard
-from widgets.arrowbox.arrowbox import ArrowBox
-from widgets.propbox.propbox import PropBox
-from widgets.infobox.infobox import InfoBox
-from PyQt6.QtWidgets import QVBoxLayout
-from PyQt6.QtGui import QPalette, QColor
-from widgets.action_buttons_frame import ActionButtonsFrame
 from typing import TYPE_CHECKING
+
+from PyQt6.QtGui import QColor, QPalette
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QWidget
+
+from widgets.action_buttons_frame import ActionButtonsFrame
+from widgets.arrowbox.arrowbox import ArrowBox
+from widgets.graphboard.graphboard import GraphBoard
+from widgets.infobox.infobox import InfoBox
+from widgets.propbox.propbox import PropBox
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget

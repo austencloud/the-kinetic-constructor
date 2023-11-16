@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import (
     QFrame,
     QVBoxLayout,
-    QGraphicsView,
     QGraphicsScene,
 )
 from PyQt6.QtCore import Qt, QPointF

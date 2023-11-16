@@ -1,6 +1,6 @@
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from settings.string_constants import COLOR_MAP, CLOCKWISE, RED_HEX
+from settings.string_constants import COLOR_MAP
 import re
 from typing import TYPE_CHECKING, Union
 

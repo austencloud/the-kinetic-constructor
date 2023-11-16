@@ -1,12 +1,10 @@
 from PyQt6.QtWidgets import (
     QGraphicsScene,
-    QGraphicsView,
-    QLabel,
     QPushButton,
     QGraphicsRectItem,
 )
 from PyQt6.QtCore import QRectF, QPointF, Qt
-from PyQt6.QtGui import QFont, QImage, QPainter, QColor
+from PyQt6.QtGui import QImage, QPainter, QColor
 from settings.numerical_constants import (
 
     GRAPHBOARD_HEIGHT,
@@ -17,7 +15,6 @@ from typing import TYPE_CHECKING
 from widgets.sequence_board.sequence_board_view import SequenceBoardView
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from utilities.pictograph_generator import PictographGenerator
     from widgets.graphboard.graphboard import GraphBoard
 
 

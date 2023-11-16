@@ -6,7 +6,7 @@ from typing import IO
 from PyQt6.QtWidgets import QApplication, QMainWindow, QHBoxLayout
 from PyQt6.QtCore import QRect
 from widgets.main_widget import MainWidget
-
+from PyQt6.QtGui import QScreen
 
 class MainWindow(QMainWindow):
     graph_editor_layout: QHBoxLayout
@@ -36,7 +36,7 @@ class MainWindow(QMainWindow):
 
     def apply_multi_screen_logic(self) -> None:
         # Logic for multiple screens
-        self.screen = QApplication.primaryScreen()
+        self.screen: QScreen = QApplication.primaryScreen()
         scaling_factor = self.screen.devicePixelRatio()
         self.scaled_screen_width = self.screen.geometry().width() * scaling_factor
         self.scaled_screen_height = self.screen.geometry().height() * scaling_factor

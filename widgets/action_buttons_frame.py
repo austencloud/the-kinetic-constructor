@@ -1,15 +1,15 @@
-from PyQt6.QtWidgets import QPushButton, QFrame
 from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QVBoxLayout
+from PyQt6.QtWidgets import QFrame, QPushButton, QVBoxLayout
+
 from objects.arrow import Arrow
-from settings.string_constants import ICON_DIR, RIGHT, LEFT
+from settings.string_constants import ICON_DIR, LEFT, RIGHT
 from settings.styles import (
     ACTION_BUTTON_FONT,
-    ACTION_BUTTON_SIZE,
     ACTION_BUTTON_ICON_SIZE,
+    ACTION_BUTTON_SIZE,
 )
-from widgets.graphboard.graphboard import GraphBoard
 from utilities.json_handler import JsonHandler
+from widgets.graphboard.graphboard import GraphBoard
 
 
 class ActionButtonsFrame(QFrame):

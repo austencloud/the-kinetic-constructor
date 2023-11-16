@@ -1,13 +1,12 @@
 from PyQt6.QtWidgets import (
     QGraphicsScene,
-    QGraphicsView,
     QGridLayout,
     QWidget,
     QVBoxLayout,
     QPushButton,
     QScrollArea,
 )
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QPixmap, QIcon
 from typing import TYPE_CHECKING
 from widgets.optionboard.optionboard_view import OptionBoardView

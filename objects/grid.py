@@ -1,9 +1,16 @@
 from xml.etree import ElementTree as ET
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from settings.numerical_constants import *
-from settings.string_constants import *
-from typing import Any
+from settings.string_constants import (
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST,
+    NORTHEAST,
+    SOUTHEAST,
+    SOUTHWEST,
+    NORTHWEST,
+)
 
 
 class Grid(QGraphicsSvgItem):
@@ -13,7 +20,7 @@ class Grid(QGraphicsSvgItem):
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)
         self.setZValue(-1)
-        
+
     def get_circle_coordinates(self, circle_id) -> QPointF | None:
         with open(self.svg_file, "r") as svg_file:
             svg_content = svg_file.read()

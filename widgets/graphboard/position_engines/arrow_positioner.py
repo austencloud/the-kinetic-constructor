@@ -1,6 +1,15 @@
 from PyQt6.QtCore import QPointF
-from settings.numerical_constants import *
-from settings.string_constants import *
+from settings.numerical_constants import DISTANCE
+from settings.string_constants import (
+    COLOR,
+    MOTION_TYPE,
+    QUADRANT,
+    ROTATION_DIRECTION,
+    NORTHEAST,
+    SOUTHEAST,
+    SOUTHWEST,
+    NORTHWEST,
+)
 from objects.arrow import BlankArrow, Arrow
 
 from typing import TYPE_CHECKING, List, Dict, Any

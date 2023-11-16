@@ -1,46 +1,46 @@
-from PyQt6.QtWidgets import QGraphicsScene
+from PyQt6.QtCore import QPointF
 from PyQt6.QtGui import QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
-from PyQt6.QtCore import QPointF
+from PyQt6.QtWidgets import QGraphicsScene, QGraphicsSceneMouseEvent
+
+from data.letter_engine_data import letter_types
 from objects.arrow import Arrow, BlankArrow
 from objects.staff import Staff
-from widgets.graphboard.graphboard_init import GraphBoardInit
-from widgets.graphboard.graphboard_menu_handler import GraphBoardMenuHandler
-from widgets.graphboard.position_engines.staff_positioner import StaffPositioner
-from widgets.graphboard.position_engines.arrow_positioner import ArrowPositioner
-from utilities.letter_engine import LetterEngine
 from settings.string_constants import (
-    COLOR,
-    MOTION_TYPE,
-    ROTATION_DIRECTION,
-    QUADRANT,
-    START_LOCATION,
-    END_LOCATION,
-    TURNS,
-    RED,
     BLUE,
+    COLOR,
+    END_LOCATION,
     LETTER_SVG_DIR,
+    MOTION_TYPE,
+    NORTHEAST,
     NORTHWEST,
+    QUADRANT,
+    RED,
+    ROTATION_DIRECTION,
     SOUTHEAST,
     SOUTHWEST,
-    NORTHEAST,
+    START_LOCATION,
     STATIC,
+    TURNS,
 )
-from data.letter_engine_data import letter_types
+from utilities.letter_engine import LetterEngine
 from utilities.TypeChecking.TypeChecking import (
-    ArrowAttributesDicts,
     TYPE_CHECKING,
+    ArrowAttributesDicts,
     List,
     Optional,
     Tuple,
 )
+from widgets.graphboard.graphboard_init import GraphBoardInit
+from widgets.graphboard.graphboard_menu_handler import GraphBoardMenuHandler
+from widgets.graphboard.position_engines.arrow_positioner import ArrowPositioner
+from widgets.graphboard.position_engines.staff_positioner import StaffPositioner
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
-    from widgets.infobox.infobox import InfoBox
     from utilities.pictograph_generator import PictographGenerator
+    from widgets.infobox.infobox import InfoBox
+    from widgets.main_widget import MainWidget
 
 
 class GraphBoard(QGraphicsScene):
@@ -99,7 +99,7 @@ class GraphBoard(QGraphicsScene):
         event_pos = event.screenPos()
         self.graphboard_menu_handler.create_master_menu(event_pos, clicked_item)
 
-    def mousePressEvent(self, event: QGraphicsSceneMouseEvent) -> None:
+    def mousePressEvent(self, event) -> None:
         clicked_item = self.itemAt(event.scenePos(), QTransform())
         if isinstance(clicked_item, Staff):
             self.dragged_staff = clicked_item
@@ -111,13 +111,13 @@ class GraphBoard(QGraphicsScene):
             self.dragged_staff = None
             self.dragged_arrow = None
 
-    def mouseMoveEvent(self, event: QGraphicsSceneMouseEvent) -> None:
+    def mouseMoveEvent(self, event) -> None:
         if self.dragged_staff:
             self.dragged_staff.mouseMoveEvent(event)
         elif self.dragged_arrow:
             self.dragged_arrow.mouseMoveEvent(event)
 
-    def mouseReleaseEvent(self, event: QGraphicsSceneMouseEvent) -> None:
+    def mouseReleaseEvent(self, event) -> None:
         if self.dragged_staff:
             self.dragged_staff.mouseReleaseEvent(event)
             self.dragged_staff = None
@@ -187,7 +187,6 @@ class GraphBoard(QGraphicsScene):
         else:
             return None
 
-
     ### HELPERS ###
 
     @staticmethod
@@ -204,7 +203,7 @@ class GraphBoard(QGraphicsScene):
             QUADRANT: "None",
             START_LOCATION: deleted_arrow.end_location,
             END_LOCATION: deleted_arrow.end_location,
-            TURNS: deleted_arrow.turns
+            TURNS: deleted_arrow.turns,
         }
         blank_arrow = BlankArrow(self, blank_attributes_dict)
         self.addItem(blank_arrow)
