@@ -372,3 +372,96 @@
 2023-11-15 15:27:03,933 DEBUG root Multiple letters returned by get_current_letter: set()
 2023-11-15 15:27:04,116 DEBUG root Multiple letters returned by get_current_letter: set()
 2023-11-15 15:27:05,087 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 10:23:59,179 DEBUG root Multiple letters returned by get_current_letter: {'\u03a3', 'W'}
+2023-11-16 10:24:00,231 DEBUG root Multiple letters returned by get_current_letter: {'\u03a3', 'W'}
+2023-11-16 10:24:01,947 DEBUG root Multiple letters returned by get_current_letter: {'\u03a3', 'W'}
+2023-11-16 10:34:00,262 DEBUG root Multiple letters returned by get_current_letter: {'\u03a3', 'W'}
+2023-11-16 10:34:00,787 DEBUG root Multiple letters returned by get_current_letter: {'\u03a3', 'W'}
+2023-11-16 10:34:03,149 DEBUG root Multiple letters returned by get_current_letter: {'\u03a3', 'W'}
+2023-11-16 10:41:21,312 DEBUG root Multiple letters returned by get_current_letter: {'W', '\u03a3'}
+2023-11-16 10:58:56,633 DEBUG root Multiple letters returned by get_current_letter: {'W', '\u03a3'}
+2023-11-16 10:58:57,899 DEBUG root Multiple letters returned by get_current_letter: {'W', '\u03a3'}
+2023-11-16 10:59:21,516 DEBUG root Multiple letters returned by get_current_letter: {'W', '\u03a3'}
+2023-11-16 10:59:25,487 DEBUG root Multiple letters returned by get_current_letter: {'W', '\u03a3'}
+2023-11-16 11:01:24,045 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:01:24,316 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:01:52,404 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:01:52,736 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:01:53,000 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:01:53,621 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:01:53,830 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:01:54,382 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:02:01,426 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:02:01,679 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:02:01,680 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:02:02,090 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:05:10,814 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:05:11,128 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:05:22,259 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:05:22,486 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:05:23,003 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:05:23,991 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:05:25,951 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:05:53,777 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:05:54,731 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:05:56,017 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:05:56,875 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:05:57,153 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:05:59,009 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:06:00,077 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:06:00,269 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:06:59,552 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:06:59,779 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:07:00,146 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:07:00,838 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:07:00,994 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:07:01,502 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:07:18,216 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:07:18,530 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:07:20,491 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:07:21,505 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:07:21,794 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:10:15,119 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:10:15,459 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:10:15,818 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:10:16,493 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:10:16,772 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:10:17,034 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:10:17,568 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:10:20,843 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:10:21,829 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:10:29,232 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:10:29,661 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:12:16,143 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:12:16,474 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:12:16,475 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:12:16,885 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:12:17,620 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:12:17,900 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:12:18,146 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:12:35,138 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:12:35,427 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:29:42,601 DEBUG root Cannot disambiguate U and V. Handpath directions aren't the same.
+2023-11-16 11:29:42,602 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:29:43,082 DEBUG root Cannot disambiguate U and V. Handpath directions aren't the same.
+2023-11-16 11:29:43,082 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:29:43,083 DEBUG root Cannot disambiguate U and V. Handpath directions aren't the same.
+2023-11-16 11:29:43,084 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:29:43,345 DEBUG root Cannot disambiguate U and V. Handpath directions aren't the same.
+2023-11-16 11:29:43,345 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:29:43,992 DEBUG root Cannot disambiguate U and V. Handpath directions aren't the same.
+2023-11-16 11:29:43,993 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:29:44,220 DEBUG root Cannot disambiguate U and V. Handpath directions aren't the same.
+2023-11-16 11:29:44,220 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:29:44,457 DEBUG root Cannot disambiguate U and V. Handpath directions aren't the same.
+2023-11-16 11:29:44,457 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:29:45,900 DEBUG root Cannot disambiguate U and V. Handpath directions aren't the same.
+2023-11-16 11:29:45,900 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:29:46,259 DEBUG root Cannot disambiguate U and V. Handpath directions aren't the same.
+2023-11-16 11:29:46,259 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:29:46,740 DEBUG root Cannot disambiguate U and V. Handpath directions aren't the same.
+2023-11-16 11:29:46,740 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:29:47,169 DEBUG root Cannot disambiguate U and V. Handpath directions aren't the same.
+2023-11-16 11:29:47,169 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 11:29:47,518 DEBUG root Cannot disambiguate U and V. Handpath directions aren't the same.
+2023-11-16 11:29:47,518 DEBUG root Multiple letters returned by get_current_letter: set()
