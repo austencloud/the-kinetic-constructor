@@ -1,33 +1,29 @@
-from PyQt6.QtWidgets import (
-    QGraphicsView,
-    QFrame,
-    QGraphicsScene,
-    QGraphicsItem,
-    QGridLayout,
-)
-from PyQt6.QtCore import Qt, QPointF
-from settings.numerical_constants import GRAPHBOARD_SCALE
-from settings.string_constants import (
-    COLOR,
-    MOTION_TYPE,
-    ROTATION_DIRECTION,
-    QUADRANT,
-    START_LOCATION,
-    END_LOCATION,
-    TURNS,
-    PRO,
-    CLOCKWISE,
-    NORTHEAST,
-    ANTI,
-    COUNTER_CLOCKWISE,
-    RED,
-    BLUE,
-    NORTH,
-    EAST,
-)
-from objects.arrow import Arrow
-from widgets.arrowbox.arrowbox_drag import ArrowBoxDrag
 from typing import TYPE_CHECKING, List
+
+from PyQt6.QtCore import QPointF, Qt
+from PyQt6.QtWidgets import QGraphicsItem, QGraphicsScene, QGridLayout
+
+from objects.arrow import Arrow
+from settings.string_constants import (
+    ANTI,
+    BLUE,
+    CLOCKWISE,
+    COLOR,
+    COUNTER_CLOCKWISE,
+    EAST,
+    END_LOCATION,
+    MOTION_TYPE,
+    NORTH,
+    NORTHEAST,
+    PRO,
+    QUADRANT,
+    RED,
+    ROTATION_DIRECTION,
+    START_LOCATION,
+    TURNS,
+)
+from widgets.arrowbox.arrowbox_drag import ArrowBoxDrag
+from widgets.arrowbox.arrowbox_view import ArrowBoxView
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
@@ -35,10 +31,8 @@ if TYPE_CHECKING:
     from objects.arrow import Arrow
 
 from utilities.TypeChecking.TypeChecking import ArrowAttributesDicts
-from PyQt6.QtWidgets import QGraphicsView, QFrame, QGridLayout
-from PyQt6.QtCore import Qt
-from settings.numerical_constants import GRAPHBOARD_SCALE
-from widgets.arrowbox.arrowbox_view import ArrowBoxView
+
+
 class ArrowBox(QGraphicsScene):
     def __init__(self, main_widget: "MainWidget", infobox: "InfoBox") -> None:
         super().__init__()

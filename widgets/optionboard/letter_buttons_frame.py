@@ -73,12 +73,15 @@ class LetterButtonsFrame(QFrame):
                 button.setFixedSize(button_size, button_size)
 
                 # Set icon size (slightly smaller than button for best appearance)
-                icon_size = int(button_size * 0.6)  # 80% of the button size
-                button.setIconSize(QSize(icon_size, icon_size))
+                icon_size = int(button_size * 0.8)  # 80% of the button size
+                button.setIconSize(QSize(int(button.width() * 0.8), int(button.height() * 0.8)))
 
                 row_layout.addWidget(button)
             self.letter_buttons_layout.addLayout(row_layout)
             self.letter_buttons_layout.addStretch(1)
-            
+
         self.setLayout(self.letter_buttons_layout)
         self.main_window.optionboard_layout.addWidget(self)
+
+
+# write me a python script that iterates over all the svgs in a given folder and makes them 120x120, leaving the current contents centered by adding the space on the edges equally.

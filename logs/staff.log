@@ -478,3 +478,16 @@
 2023-11-16 13:12:28,084 DEBUG root Multiple letters returned by get_current_letter: {'X', '\u0394'}
 2023-11-16 13:12:28,312 DEBUG root Multiple letters returned by get_current_letter: {'X', '\u0394'}
 2023-11-16 13:12:28,313 DEBUG root Multiple letters returned by get_current_letter: {'X', '\u0394'}
+2023-11-16 14:27:08,843 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 14:27:09,255 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 14:27:11,180 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 14:27:11,591 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 14:29:54,655 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 14:29:54,979 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 14:29:55,269 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 14:29:55,270 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 14:29:55,969 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 14:29:56,327 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 14:29:56,625 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 14:29:56,626 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 14:29:58,777 DEBUG root Multiple letters returned by get_current_letter: set()

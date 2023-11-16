@@ -11,8 +11,8 @@ class PropBoxView(QGraphicsView):
     def __init__(self, propbox: "PropBox") -> None:
         super().__init__()
         self.setFixedSize(
-            int(propbox.main_window.width() * 0.1),
-            int(propbox.main_window.width() * 0.1),
+            int(propbox.main_window.height() * 1/3 / 2),
+            int(propbox.main_window.height() * 1/3 / 2),
         )
         self.setScene(propbox)
 
