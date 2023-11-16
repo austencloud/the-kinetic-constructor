@@ -105,7 +105,6 @@ class Staff(GraphicalObject):
         self.ghost_staff.color = self.color
         self.ghost_staff.location = self.location
         self.ghost_staff.layer = self.layer
-        self.ghost_staff.axis = self.axis
         self.ghost_staff.update_appearance()
         self.graphboard.addItem(self.ghost_staff)
         self.ghost_staff.arrow = self.arrow
@@ -124,29 +123,32 @@ class Staff(GraphicalObject):
             new_pos = event.scenePos() - self.get_staff_center()
             self.set_drag_pos(new_pos)
 
-            new_location = self.get_closest_location(event.scenePos())
+            self.update_location(event.scenePos())
 
-            if new_location != self.previous_location and self.arrow:
-                self.location = new_location
-                self.axis = self.get_axis(self.location)
-                self.update_appearance()
-                self.update_arrow_quadrant(new_location)
-                
-                self.ghost_staff.color = self.color
-                self.ghost_staff.location = self.location
-                self.ghost_staff.layer = self.layer
-                self.ghost_staff.axis = self.axis
-                
-                self.graphboard.staffs.remove(self)
-                if self.arrow.motion_type == STATIC:
-                    self.arrow.start_location = new_location
-                    self.arrow.end_location = new_location
-                    
-                self.graphboard.update()
-                self.graphboard.staffs.append(self)
-                new_pos = event.scenePos() - self.get_staff_center()
-                self.set_drag_pos(new_pos)
-                self.previous_location = new_location
+    def update_location(self, new_pos: QPointF) -> None:
+        new_location = self.get_closest_location(new_pos)
+
+        if new_location != self.previous_location:
+            self.location = new_location
+            self.axis = self.get_axis(self.location)
+            self.update_appearance()
+            self.update_arrow_quadrant(new_location)
+
+            self.ghost_staff.color = self.color
+            self.ghost_staff.location = self.location
+            self.ghost_staff.layer = self.layer
+            self.ghost_staff.update_appearance()
+            
+            self.graphboard.staffs.remove(self)
+            if self.arrow.motion_type == STATIC:
+                self.arrow.start_location = new_location
+                self.arrow.end_location = new_location
+
+            self.graphboard.update()
+            self.graphboard.staffs.append(self)
+            new_pos = new_pos - self.get_staff_center()
+            self.set_drag_pos(new_pos)
+            self.previous_location = new_location
 
     def set_drag_pos(self, new_pos: QPointF) -> None:
         if self.axis == HORIZONTAL:
