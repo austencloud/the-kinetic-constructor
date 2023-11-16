@@ -98,6 +98,8 @@ class LayoutManager:
         for layout_name, layout in self.layouts.items():
             setattr(self.main_window, f"{layout_name}_layout", layout)
 
+
+
     def add_black_border(
         self, widget: QWidget | QGraphicsView | QLabel | QPushButton | QFrame
     ) -> None:

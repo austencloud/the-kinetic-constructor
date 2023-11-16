@@ -1,6 +1,6 @@
 # import the necessary things
 from PyQt6.QtWidgets import QPushButton, QVBoxLayout, QHBoxLayout, QFrame
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QPixmap, QIcon, QPainter, QFont, QColor
 from PyQt6.QtSvg import QSvgRenderer
 from settings.numerical_constants import GRAPHBOARD_SCALE
@@ -21,6 +21,10 @@ class LetterButtonsFrame(QFrame):
         self.letter_buttons_layout = QVBoxLayout()
         self.letter_buttons_layout.setSpacing(int(20 * GRAPHBOARD_SCALE))
         self.letter_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.setMaximumWidth(
+            int(self.main_window.width() * 0.15)
+        )  # set maximum width to 20% of window width
+
         letter_rows = [
             # Type 1 - Dual-Shift
             ["A", "B", "C"],
@@ -34,10 +38,8 @@ class LetterButtonsFrame(QFrame):
             ["W", "X", "Y", "Z"],
             ["Σ", "Δ", "θ", "Ω"],
             # Type 3 - Cross-Shift
-            # ['W-', 'X-'],
-            # ['Y-', 'Z-'],
-            # ['Σ-', 'Δ-'],
-            # ['θ-', 'Ω-'],
+            # ["W-", "X-", "Y-", "Z-"],
+            # ["Σ-", "Δ-", "θ-", "Ω-"],
             # Type 4 - Dash
             # ['Φ', 'Ψ', 'Λ'],
             # Type 5 - Dual-Dash
@@ -62,10 +64,17 @@ class LetterButtonsFrame(QFrame):
                 painter.end()
                 button = QPushButton(QIcon(pixmap), "", self.main_window)
                 font = QFont()
-                font.setPointSize(int(20 * GRAPHBOARD_SCALE))
+                font.setPointSize(int(20))
                 button.setFont(font)
 
-                button.setFixedSize(LETTER_BUTTON_SIZE)
+                # Set the fixed size of the button
+                button_size = int(self.main_window.width() * 0.025)
+                button.setFixedSize(button_size, button_size)
+
+                # Set icon size (slightly smaller than button for best appearance)
+                icon_size = int(button_size * 0.6)  # 80% of the button size
+                button.setIconSize(QSize(icon_size, icon_size))
+
                 row_layout.addWidget(button)
             self.letter_buttons_layout.addLayout(row_layout)
             self.letter_buttons_layout.addStretch(1)

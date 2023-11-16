@@ -10,7 +10,7 @@ class GraphBoardView(QGraphicsView):
         self.graphboard = graphboard
         main_window = self.graphboard.main_widget.main_window
         # Calculate view size based on window dimensions and aspect ratio
-        view_height = main_window.width() * 0.20  # Example: 40% of window width
+        view_height = main_window.height() * 1/3  # Example: 40% of window width
         view_width = view_height * 75 / 90  # Maintain 75:90 ratio
 
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
