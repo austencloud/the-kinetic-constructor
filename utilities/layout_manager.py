@@ -21,7 +21,26 @@ class LayoutManager:
         self.layouts: Dict[str, QHBoxLayout | QVBoxLayout] = {}
         self.init_layouts()
         self.assign_layouts_to_window()
+        self.main_layout: QHBoxLayout = self.layouts["main"]
+        self.left_layout: QVBoxLayout = self.layouts["left"]
+        self.right_layout: QVBoxLayout = self.layouts["right"]
+        self.graph_editor_layout: QHBoxLayout = self.layouts["graph_editor"]
+        self.objectbox_layout: QVBoxLayout = self.layouts["objectbox"]
+    
+        self.graphboard_layout: QVBoxLayout = self.layouts["graphboard"]
+        self.word_layout: QHBoxLayout = self.layouts["word"]
+        self.graphboard_and_buttons_layout: QHBoxLayout = self.layouts[
+            "graphboard_and_buttons"
+        ]
+        self.letter_buttons_layout: QVBoxLayout = self.layouts["letter_buttons"]
+        self.sequence_board_layout: QVBoxLayout = self.layouts[
+            "sequence_board"
+        ]
+        self.keyboard_layout: QVBoxLayout = self.layouts["keyboard"]
+        self.optionboard_layout: QHBoxLayout = self.layouts["optionboard"]
 
+        self.sequence_layout: QHBoxLayout = self.layouts["sequence"]
+        
     def configure_layouts(self) -> None:
         self.configure_main_layout()
         self.init_sequence_layout()
@@ -41,28 +60,28 @@ class LayoutManager:
             "graphboard_and_buttons": QHBoxLayout(),
             "optionboard": QHBoxLayout(),
             "letter_buttons": QVBoxLayout(),
-            "sequence_with_label_and_button": QVBoxLayout(),
+            "sequence_board": QVBoxLayout(),
             "keyboard": QVBoxLayout(),
         }
 
     def configure_main_layout(self) -> None:
-        self.layouts["left"].addLayout(self.layouts["sequence"])
+        self.layouts["left"].addLayout(self.layouts["optionboard"])
         self.layouts["left"].addLayout(self.layouts["graph_editor"])
         self.layouts["main"].addLayout(self.layouts["left"])
-        self.layouts["right"].addLayout(self.layouts["optionboard"])
+        self.layouts["right"].addLayout(self.layouts["sequence"])
         self.layouts["main"].addLayout(self.layouts["right"])
         self.layouts["optionboard"].addWidget(self.main_widget.optionboard.view)
         self.main_widget.setLayout(self.layouts["main"])
 
     def init_sequence_layout(self) -> None:
-        self.layouts["sequence_with_label_and_button"].addWidget(
+        self.layouts["sequence_board"].addWidget(
             self.main_widget.sequence_board.view
         )
-        self.layouts["sequence_with_label_and_button"].addWidget(
+        self.layouts["sequence_board"].addWidget(
             self.main_widget.clear_sequence_button
         )
         self.layouts["sequence"].addLayout(
-            self.layouts["sequence_with_label_and_button"]
+            self.layouts["sequence_board"]
         )
 
     def add_black_border_to_widgets(self) -> None:

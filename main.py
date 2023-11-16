@@ -11,7 +11,8 @@ from widgets.main_widget import MainWidget
 class MainWindow(QMainWindow):
     graph_editor_layout: QHBoxLayout
     sequence_layout: QHBoxLayout
-
+    optionboard_layout: QHBoxLayout
+    
     def __init__(self, profiler: cProfile.Profile) -> None:
         super().__init__()
         self.profiler = profiler
@@ -41,7 +42,7 @@ class MainWindow(QMainWindow):
         self.scaled_screen_height = self.screen.geometry().height() * scaling_factor
 
         # Calculate dynamic size based on scaled screen dimensions
-        self.main_window_width = int(self.screen.geometry().width() * 0.4)
+        self.main_window_width = int(self.screen.geometry().width() * 0.75)
         self.main_window_height = int(self.screen.geometry().height() * 0.85)
 
     def apply_single_screen_logic(self) -> None:

@@ -9,7 +9,6 @@ if TYPE_CHECKING:
 class SequenceBoardView(QGraphicsView):
     def __init__(self, sequence_board: "SequenceBoard") -> None:
         super().__init__(sequence_board)
-        main_window = sequence_board.main_widget.main_window
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setFixedSize(

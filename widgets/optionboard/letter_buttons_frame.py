@@ -71,4 +71,4 @@ class LetterButtonsFrame(QFrame):
             self.letter_buttons_layout.addLayout(row_layout)
             self.letter_buttons_layout.addStretch(1)
 
-        self.main_window.sequence_layout.addLayout(self.letter_buttons_layout)
+        self.main_window.optionboard_layout.addLayout(self.letter_buttons_layout)

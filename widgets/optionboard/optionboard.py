@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QPixmap, QIcon
 from typing import TYPE_CHECKING
-
+from widgets.optionboard.optionboard_view import OptionBoardView
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 
@@ -24,9 +24,8 @@ class OptionBoard(QGraphicsScene):
         self.scroll_area = QScrollArea()
         self.main_layout = QVBoxLayout()
         self.container_widget = QWidget()
-
         self.setup_ui()
-        self.setup_view()
+        self.view = OptionBoardView(self)
         self.populate_pictographs()
         self.connect_signals()
 
@@ -40,13 +39,6 @@ class OptionBoard(QGraphicsScene):
         self.container_widget.setFixedSize(600, 800)
         self.setSceneRect(0, 0, 600, 800)
         self.addWidget(self.container_widget)
-
-    def setup_view(self) -> None:
-        view = QGraphicsView(self)
-        view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        view.setFixedSize(int(self.sceneRect().width()), int(self.sceneRect().height()))
-        self.view = view
 
     def populate_pictographs(self) -> None:
         number_of_pictographs = 50

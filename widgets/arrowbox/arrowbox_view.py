@@ -9,8 +9,8 @@ class ArrowBoxView(QGraphicsView):
     def __init__(self, arrowbox: 'ArrowBox') -> None:
         super().__init__(arrowbox)
         self.setFixedSize(
-            int(arrowbox.main_widget.main_window.width() * 0.15),
-            int(arrowbox.main_widget.main_window.width() * 0.15),
+            int(arrowbox.main_window.width() * 0.1),
+            int(arrowbox.main_window.width() * 0.1),
         )
         self.setScene(arrowbox)
         

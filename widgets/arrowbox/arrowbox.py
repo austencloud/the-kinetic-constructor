@@ -56,8 +56,6 @@ class ArrowBox(QGraphicsScene):
         view = ArrowBoxView(self)
         self.view = view
 
-
-
     def populate_arrows(self) -> None:
         self.arrows: List[Arrow] = []
         initial_arrow_attribute_collection: List[ArrowAttributesDicts] = [

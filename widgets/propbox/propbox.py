@@ -31,6 +31,7 @@ class PropBox(QGraphicsScene):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
+        self.main_window = main_widget.main_window
         self.view = PropBoxView(self)
         self.view.scale(GRAPHBOARD_SCALE, GRAPHBOARD_SCALE)
         self.setSceneRect(
