@@ -84,7 +84,7 @@ class GraphicalObject(QGraphicsSvgItem):
 
         self.update_color()
         if isinstance(self, Staff):
-            self.update_axis()
+            self.axis = self.get_axis(self.location)
         self.update_rotation()
 
     def set_attributes_from_dict(

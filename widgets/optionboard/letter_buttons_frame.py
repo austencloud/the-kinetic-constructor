@@ -21,6 +21,7 @@ class LetterButtonsFrame(QFrame):
         self.letter_buttons_layout = QVBoxLayout()
         self.letter_buttons_layout.setSpacing(int(20 * GRAPHBOARD_SCALE))
         self.letter_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.width = int(self.main_window.width() * 0.15)
         self.setMaximumWidth(
             int(self.main_window.width() * 0.15)
         )  # set maximum width to 20% of window width
@@ -78,5 +79,6 @@ class LetterButtonsFrame(QFrame):
                 row_layout.addWidget(button)
             self.letter_buttons_layout.addLayout(row_layout)
             self.letter_buttons_layout.addStretch(1)
-
-        self.main_window.optionboard_layout.addLayout(self.letter_buttons_layout)
+            
+        self.setLayout(self.letter_buttons_layout)
+        self.main_window.optionboard_layout.addWidget(self)

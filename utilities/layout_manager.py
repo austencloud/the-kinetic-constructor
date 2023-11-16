@@ -38,6 +38,7 @@ class LayoutManager:
         ]
         self.keyboard_layout: QVBoxLayout = self.layouts["keyboard"]
         self.optionboard_layout: QHBoxLayout = self.layouts["optionboard"]
+        self.optionboard_layout.setSpacing(0) # set spacing to 0 to remove padding
 
         self.sequence_layout: QHBoxLayout = self.layouts["sequence"]
         

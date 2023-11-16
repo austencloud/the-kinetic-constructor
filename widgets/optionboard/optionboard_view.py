@@ -14,8 +14,10 @@ class OptionBoardView(QGraphicsView):
         super().__init__(optionboard)
 
         self.main_window = optionboard.main_widget.main_window
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         # set the maximum height to 2/3 of the window height
-        self.setMaximumHeight(int(self.main_window.height() * (2 / 3)))
-        self.setMaximumWidth(int(self.main_window.width() * 0.35))
+        self.width = int(self.main_window.width() * 0.35)
+        self.height = int(self.main_window.height() * (2 / 3))
+        self.setMaximumHeight(self.height)
+        self.setMaximumWidth(self.width)

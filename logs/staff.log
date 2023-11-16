@@ -465,3 +465,16 @@
 2023-11-16 11:29:47,169 DEBUG root Multiple letters returned by get_current_letter: set()
 2023-11-16 11:29:47,518 DEBUG root Cannot disambiguate U and V. Handpath directions aren't the same.
 2023-11-16 11:29:47,518 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 13:12:21,243 DEBUG root Multiple letters returned by get_current_letter: {'W', '\u03a3'}
+2023-11-16 13:12:22,344 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 13:12:22,659 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 13:12:23,132 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 13:12:24,690 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 13:12:25,284 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 13:12:25,285 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 13:12:25,486 DEBUG root Multiple letters returned by get_current_letter: {'X', '\u0394'}
+2023-11-16 13:12:27,315 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-16 13:12:27,866 DEBUG root Multiple letters returned by get_current_letter: {'X', '\u0394'}
+2023-11-16 13:12:28,084 DEBUG root Multiple letters returned by get_current_letter: {'X', '\u0394'}
+2023-11-16 13:12:28,312 DEBUG root Multiple letters returned by get_current_letter: {'X', '\u0394'}
+2023-11-16 13:12:28,313 DEBUG root Multiple letters returned by get_current_letter: {'X', '\u0394'}

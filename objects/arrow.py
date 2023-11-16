@@ -125,6 +125,7 @@ class Arrow(GraphicalObject):
         self.graphboard.arrows.remove(self)
         self.staff.color = self.color
         self.staff.location = self.end_location
+        self.staff.axis = self.staff.get_axis(self.end_location)
         self.graphboard.update()
         self.graphboard.arrows.append(self)
         for item in self.graphboard.items():

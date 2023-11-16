@@ -90,7 +90,7 @@ class Staff(GraphicalObject):
         self.color = attributes[COLOR]
         self.location = attributes[LOCATION]
         self.layer = attributes[LAYER]
-        self.axis = self.update_axis()
+        self.axis = self.get_axis(self.location)
         self.center = self.boundingRect().center()
 
         if attributes:
@@ -106,6 +106,7 @@ class Staff(GraphicalObject):
         self.ghost_staff.location = self.location
         self.ghost_staff.layer = self.layer
         self.ghost_staff.axis = self.axis
+        self.ghost_staff.update_appearance()
         self.graphboard.addItem(self.ghost_staff)
         self.ghost_staff.arrow = self.arrow
         self.graphboard.staffs.append(self.ghost_staff)
@@ -127,7 +128,7 @@ class Staff(GraphicalObject):
 
             if new_location != self.previous_location and self.arrow:
                 self.location = new_location
-                self.update_axis()
+                self.axis = self.get_axis(self.location)
                 self.update_appearance()
                 self.update_arrow_quadrant(new_location)
                 
@@ -211,7 +212,7 @@ class Staff(GraphicalObject):
         new_location = self.get_closest_location(event.scenePos())
 
         self.location = new_location
-        self.update_axis()
+        self.axis = self.get_axis(self.location)
         self.update_appearance()
         self.setPos(closest_handpoint)
 
@@ -222,16 +223,17 @@ class Staff(GraphicalObject):
 
     ### UPDATERS ###
 
-    def update_axis(self) -> None:
+    def get_axis(self, location) -> None:
         if self.layer == 1:
-            self.axis: Axis = (
-                VERTICAL if self.location in [NORTH, SOUTH] else HORIZONTAL
+            axis: Axis = (
+                VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
             )
         elif self.layer == 2:
-            self.axis: Axis = (
-                HORIZONTAL if self.location in [NORTH, SOUTH] else VERTICAL
+            axis: Axis = (
+                HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
             )
-
+        return axis
+        
     def update_rotation(self) -> None:
         if self.axis == VERTICAL:
             self.current_position = self.pos()
@@ -253,7 +255,7 @@ class Staff(GraphicalObject):
         self.set_attributes_from_dict(new_dict)
         self.color = target_arrow.color
         self.location = target_arrow.end_location
-        self.update_axis()
+        self.axis = self.get_axis(self.location)
         self.layer = 1
         self.update_appearance()
 

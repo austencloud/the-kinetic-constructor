@@ -10,6 +10,7 @@ from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QPixmap, QIcon
 from typing import TYPE_CHECKING
 from widgets.optionboard.optionboard_view import OptionBoardView
+
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 from PyQt6.QtWidgets import QSizePolicy
@@ -24,8 +25,8 @@ class OptionBoard(QGraphicsScene):
         self.scroll_area = QScrollArea()
         self.main_layout = QVBoxLayout()
         self.container_widget = QWidget()
-    
         self.view = OptionBoardView(self)
+
         self.setup_ui()
         self.populate_pictographs()
         self.connect_signals()
@@ -40,19 +41,21 @@ class OptionBoard(QGraphicsScene):
         self.container_widget.setSizePolicy(
             QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed
         )
-        self.container_widget.setFixedSize(self.view.width(), self.view.height())
-        self.setSceneRect(0, 0, self.view.width(), self.view.height())
+        self.container_widget.setFixedSize(int(self.view.width), int(self.view.height))
+        self.setSceneRect(0, 0, int(self.view.width), int(self.view.height))
         self.addWidget(self.container_widget)
 
     def populate_pictographs(self) -> None:
         number_of_pictographs = 50
         MAX_ITEMS_PER_ROW = 4
+        pictograph_width = int(self.view.width * 0.9 // MAX_ITEMS_PER_ROW)
+        pictograph_height = int(pictograph_width * (90 / 75))
 
         for i in range(number_of_pictographs):
             pictograph_button = QPushButton(f"Picto {i+1}")
             pictograph_button.setIcon(QIcon(QPixmap("path/to/your/pictograph/image")))
-            pictograph_button.setIconSize(QSize(100, 100))
-            pictograph_button.setFixedSize(125, 150)
+            pictograph_button.setIconSize(QSize(pictograph_width, pictograph_height))
+            pictograph_button.setFixedSize(pictograph_width, pictograph_height)
             self.optionboard_grid_layout.addWidget(
                 pictograph_button, i // MAX_ITEMS_PER_ROW, i % MAX_ITEMS_PER_ROW
             )
@@ -63,6 +66,3 @@ class OptionBoard(QGraphicsScene):
 
     def on_pictograph_clicked(self) -> None:
         pass
-
-
-# In another part of your code, where you instantiate Op
