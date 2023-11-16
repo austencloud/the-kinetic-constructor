@@ -8,48 +8,37 @@ from PyQt6.QtCore import QRect
 from widgets.main_widget import MainWidget
 from PyQt6.QtGui import QScreen
 
+
 class MainWindow(QMainWindow):
     graph_editor_layout: QHBoxLayout
     sequence_layout: QHBoxLayout
     optionboard_layout: QHBoxLayout
-    
+
     def __init__(self, profiler: cProfile.Profile) -> None:
         super().__init__()
         self.profiler = profiler
 
-        # Detecting screen setup
-        self.screens = QApplication.screens()
-        self.multi_screen_logic_needed = self.check_multi_screen_logic()
-
-        # Apply multi-screen logic if necessary
-        if self.multi_screen_logic_needed:
-            self.apply_multi_screen_logic()
-        else:
-            self.apply_single_screen_logic()
-
+        self.configure_window()
         self.init_main_window()
         self.init_ui()
 
-    def check_multi_screen_logic(self) -> bool:
-        # Determine if multi-screen adjustments are needed
-        return len(self.screens) > 1
+    def configure_window(self) -> None:
+        screens = QApplication.screens()
+        primary_screen = screens[0]
+        secondary_screen = screens[1] if len(screens) > 1 else primary_screen
 
-    def apply_multi_screen_logic(self) -> None:
-        # Logic for multiple screens
-        self.screen: QScreen = QApplication.primaryScreen()
-        scaling_factor = self.screen.devicePixelRatio()
-        self.scaled_screen_width = self.screen.geometry().width() * scaling_factor
-        self.scaled_screen_height = self.screen.geometry().height() * scaling_factor
+        scaling_factor = primary_screen.devicePixelRatio()
+        screen_geometry = secondary_screen.geometry()
 
-        # Calculate dynamic size based on scaled screen dimensions
-        self.main_window_width = int(self.screen.geometry().width() * 0.75)
-        self.main_window_height = int(self.screen.geometry().height() * 0.85)
+        # Adjust size based on the screen used
+        self.main_window_width = int(screen_geometry.width() * (0.60 if len(screens) > 1 else 0.6))
+        self.main_window_height = int(screen_geometry.height() * (0.85 if len(screens) > 1 else 0.7))
 
-    def apply_single_screen_logic(self) -> None:
-        # Logic for a single screen
-        self.screen = QApplication.primaryScreen()
-        self.main_window_width = int(self.screen.geometry().width() * 0.6)
-        self.main_window_height = int(self.screen.geometry().height() * 0.7)
+        # Positioning the window
+        self.move(
+            screen_geometry.x() + (screen_geometry.width() - self.main_window_width) // 2,
+            screen_geometry.y() + (screen_geometry.height() - self.main_window_height) // 2,
+        )
 
     def init_main_window(self) -> None:
         self.setMinimumSize(self.main_window_width, self.main_window_height)
@@ -60,25 +49,8 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Sequence Constructor")
 
     def init_ui(self) -> None:
-        if self.multi_screen_logic_needed:
-            # Center the window on the second screen to the left if multiple screens are detected
-            screen_number = 1 if len(self.screens) > 1 else 0
-            screen_geometry = self.screens[screen_number].geometry()
-            self.move(
-                screen_geometry.x()
-                + (screen_geometry.width() - self.main_window_width) // 2,
-                screen_geometry.y()
-                + (screen_geometry.height() - self.main_window_height) // 2,
-            )
-        else:
-            self.setGeometry(
-                QRect(
-                    (self.screen.geometry().width() - self.main_window_width) // 2,
-                    (self.screen.geometry().height() - self.main_window_height) // 2,
-                    self.main_window_width,
-                    self.main_window_height,
-                )
-            )
+        # Any additional UI initialization goes here
+        pass
 
     def write_profiling_stats_to_file(self, file_path: str) -> None:
         stats: pstats.Stats = pstats.Stats(self.profiler).sort_stats("cumtime")
@@ -92,9 +64,7 @@ def main() -> None:
     profiler: cProfile.Profile = cProfile.Profile()
     profiler.enable()
 
-    # Set the environment variable for automatic screen scaling
     os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
-
     app = QApplication(sys.argv)
     main_window = MainWindow(profiler)
     main_window.setFocus()

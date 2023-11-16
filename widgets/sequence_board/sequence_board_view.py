@@ -12,6 +12,6 @@ class SequenceBoardView(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setFixedSize(
-            int(sequence_board.graphboard.view.width() * 2.5),
-            int(sequence_board.graphboard.view.height() * 2.5),
+            int(sequence_board.graphboard.main_widget.main_window.height() * 0.8 * (75/90)),
+            int(sequence_board.graphboard.main_widget.main_window.height()*0.8),
         )

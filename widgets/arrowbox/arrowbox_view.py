@@ -16,6 +16,6 @@ class ArrowBoxView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         
-        self.scale(0.4, 0.4)
+        self.scale(0.3, 0.3)
         self.setFrameStyle(QFrame.Shape.NoFrame)
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)

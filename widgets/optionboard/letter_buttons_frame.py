@@ -19,7 +19,6 @@ class LetterButtonsFrame(QFrame):
         super().__init__()
         self.main_window: "MainWindow" = main_widget.main_window
         self.letter_buttons_layout = QVBoxLayout()
-        self.letter_buttons_layout.addStretch(1)
         self.letter_buttons_layout.setSpacing(int(20 * GRAPHBOARD_SCALE))
         self.letter_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         letter_rows = [

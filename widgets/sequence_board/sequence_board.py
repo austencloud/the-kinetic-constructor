@@ -1,32 +1,32 @@
-from PyQt6.QtWidgets import (
-    QGraphicsScene,
-    QPushButton,
-    QGraphicsRectItem,
-)
-from PyQt6.QtCore import QRectF, QPointF, Qt
-from PyQt6.QtGui import QImage, QPainter, QColor
-from settings.numerical_constants import (
+from typing import TYPE_CHECKING
 
+from PyQt6.QtCore import QPointF, QRectF, Qt
+from PyQt6.QtGui import QColor, QImage, QPainter
+from PyQt6.QtWidgets import QGraphicsRectItem, QGraphicsScene, QPushButton
+
+from settings.numerical_constants import (
     GRAPHBOARD_HEIGHT,
     GRAPHBOARD_WIDTH,
     PICTOGRAPH_SCALE,
 )
-from typing import TYPE_CHECKING
 from widgets.sequence_board.sequence_board_view import SequenceBoardView
+
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graphboard.graphboard import GraphBoard
 
+from utilities.pictograph_generator import PictographGenerator
+
 
 class SequenceBoard(QGraphicsScene):
-    def __init__(self, main_widget: "MainWidget", graphboard: 'GraphBoard') -> None:
+    def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard") -> None:
         super().__init__()
         self.main_widget = main_widget
         self.graphboard = graphboard
         self.setup_view_and_controls()
-        graphboard_ratio = GRAPHBOARD_WIDTH / GRAPHBOARD_HEIGHT
         self.pictographs = []
         self.beats = []
+        self.generator: "PictographGenerator" = None
 
         for j in range(4):
             for i in range(4):
@@ -38,7 +38,9 @@ class SequenceBoard(QGraphicsScene):
                         self.view.height() * 0.25,
                     )
                 )
-                section.setPos(QPointF(i * self.view.width() * 0.25, j * self.view.height() * 0.25))
+                section.setPos(
+                    QPointF(i * self.view.width() * 0.25, j * self.view.height() * 0.25)
+                )
                 self.beats.append(section)
                 self.addItem(section)
 

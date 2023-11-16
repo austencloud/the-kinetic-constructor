@@ -44,8 +44,8 @@ class LayoutManager:
     def configure_layouts(self) -> None:
         self.configure_main_layout()
         self.init_sequence_layout()
-        # Un-comment this for layout testing
-        # self.add_black_border_to_widgets() 
+
+        self.add_black_border_to_widgets() # Toggle this for layout testing
 
     def init_layouts(self) -> None:
         self.layouts = {
@@ -87,7 +87,6 @@ class LayoutManager:
     def add_black_border_to_widgets(self) -> None:
         self.add_black_border(self.main_widget.graph_editor.graphboard)
         self.add_black_border(self.main_widget.sequence_board)
-        self.add_black_border(self.main_widget.word_label)
         self.add_black_border(self.main_widget.graph_editor.infobox)
         self.add_black_border(self.main_widget.optionboard.view)
         self.add_black_border(self.main_widget.graph_editor.action_buttons_frame)

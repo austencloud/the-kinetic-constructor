@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING
 from widgets.optionboard.optionboard_view import OptionBoardView
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
+from PyQt6.QtWidgets import QSizePolicy
 
 
 class OptionBoard(QGraphicsScene):
@@ -23,8 +24,9 @@ class OptionBoard(QGraphicsScene):
         self.scroll_area = QScrollArea()
         self.main_layout = QVBoxLayout()
         self.container_widget = QWidget()
-        self.setup_ui()
+    
         self.view = OptionBoardView(self)
+        self.setup_ui()
         self.populate_pictographs()
         self.connect_signals()
 
@@ -35,7 +37,10 @@ class OptionBoard(QGraphicsScene):
         self.scroll_area.setWidget(self.grid_widget)
         self.main_layout.addWidget(self.scroll_area)
         self.container_widget.setLayout(self.main_layout)
-        self.container_widget.setFixedSize(600, 800)
+        self.container_widget.setSizePolicy(
+            QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed
+        )
+        self.container_widget.setFixedSize(self.view.width(), self.view.height())
         self.setSceneRect(0, 0, 600, 800)
         self.addWidget(self.container_widget)
 

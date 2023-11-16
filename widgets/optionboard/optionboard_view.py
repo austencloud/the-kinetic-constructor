@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from settings.numerical_constants import RATIO
+
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QGraphicsView
 
@@ -9,6 +11,8 @@ if TYPE_CHECKING:
 class OptionBoardView(QGraphicsView):
     def __init__(self, optionboard: "OptionBoard") -> None:
         super().__init__(optionboard)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setFixedSize(int(self.sceneRect().width()), int(self.sceneRect().height()))
+    
+        self.main_window = optionboard.main_widget.main_window
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.setFixedSize(int(self.main_window.width()*0.5 * RATIO), int(self.main_window.width()*0.5))

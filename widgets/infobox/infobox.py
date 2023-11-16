@@ -4,13 +4,14 @@ from widgets.infobox.infobox_labels import InfoBoxLabels
 from widgets.infobox.infobox_widgets import InfoBoxWidgets
 from widgets.infobox.infobox_layouts import InfoBoxLayouts
 from widgets.graphboard.graphboard import GraphBoard
-from settings.numerical_constants import INFOBOX_SIZE
+
 
 
 class InfoBox(QFrame):
     def __init__(self, main_widget, graphboard: "GraphBoard") -> None:
         super().__init__()
         self.main_widget = main_widget
+        self.main_window = self.main_widget.main_window
         self.graphboard = graphboard
         self.labels = InfoBoxLabels(self, graphboard)
         self.widgets = InfoBoxWidgets(self, graphboard)
@@ -19,7 +20,7 @@ class InfoBox(QFrame):
         self.setup_ui()
 
     def setup_ui(self) -> None:
-        self.setFixedSize(int(INFOBOX_SIZE), int(INFOBOX_SIZE))
+        self.setFixedSize(int(self.main_window.width() * 0.20), int(self.main_window.width() * 0.20))
         self.buttons.setup_buttons()
         self.labels.setup_labels()
         self.widgets.setup_widgets()

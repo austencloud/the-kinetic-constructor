@@ -23,7 +23,11 @@ class ActionButtonsFrame(QFrame):
         self.json_handler = json_handler
         self.action_buttons_layout = QVBoxLayout()
         self.action_buttons_layout.setSpacing(3)
+        self.action_buttons_layout.setContentsMargins(0, 0, 0, 0)
         coordinates = self.graphboard.get_current_arrow_coordinates()
+        #remove the frame border
+        self.setFrameStyle(QFrame.Shape.NoFrame)
+
 
         buttons_settings = [
             (
@@ -57,7 +61,13 @@ class ActionButtonsFrame(QFrame):
             self.action_buttons_layout.addWidget(button)
 
         self.setLayout(self.action_buttons_layout)
-
+        button_count = len(buttons_settings)
+        total_button_height = button_count * ACTION_BUTTON_SIZE
+        total_spacing = (button_count - 1) * self.action_buttons_layout.spacing()
+        total_height = total_button_height + total_spacing
+        self.setMaximumHeight(min(total_height, int(self.graphboard.height())))
+        self.setMaximumWidth(ACTION_BUTTON_SIZE)
+        
     def create_and_configure_button(
         self, icon_filename, tooltip, on_click, *args
     ) -> QPushButton:
