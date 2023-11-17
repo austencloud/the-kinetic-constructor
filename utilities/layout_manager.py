@@ -87,6 +87,7 @@ class LayoutManager:
     def add_stretch(self) -> None:
         self.main_window.graph_editor_layout.addStretch(1)
         self.main_window.optionboard_layout.addStretch(1)
+        self.main_window.sequence_layout.addStretch(1)
 
     def set_contents_margins_to_zero(self) -> None:
         self.graph_editor.graph_editor_frame_layout.setContentsMargins(0, 0, 0, 0)
