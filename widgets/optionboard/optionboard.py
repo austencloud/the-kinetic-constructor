@@ -57,9 +57,6 @@ class OptionBoard(QFrame):
         letter_buttons_layout = QVBoxLayout()
         letter_buttons_layout.setSpacing(int(0))
         letter_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-
-        letter_buttons_frame.setMaximumWidth(int(self.width() * 1 / 4))
-
         letter_rows = [
             # Type 1 - Dual-Shift
             ["A", "B", "C"],
@@ -83,8 +80,6 @@ class OptionBoard(QFrame):
             ["α", "β", "Γ"],
         ]
 
-        spacing = int(self.main_window.width() * 0.000)  # Spacing between buttons
-
         for row in letter_rows:
             row_layout = QHBoxLayout()
             for letter in row:
@@ -104,9 +99,8 @@ class OptionBoard(QFrame):
                 font = QFont()
                 font.setPointSize(int(20))
                 button.setFont(font)
-
                 # Set the fixed size of the button
-                button_size = int(self.main_window.width() * 0.025)
+                button_size = int(self.main_window.width() * 0.023)
                 button.setFixedSize(button_size, button_size)
 
                 # Set icon size (slightly smaller than button for best appearance)
@@ -116,7 +110,6 @@ class OptionBoard(QFrame):
                 )
 
                 row_layout.addWidget(button)
-                row_layout.addSpacing(spacing)  # Add spacing between buttons
             letter_buttons_layout.addLayout(row_layout)
             letter_buttons_layout.addStretch(1)
 
