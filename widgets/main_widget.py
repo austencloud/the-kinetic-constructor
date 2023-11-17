@@ -92,5 +92,5 @@ class MainWidget(QWidget):
     def update_sequenceboard_size(self) -> None:
         if hasattr(self, "sequence_board"):
             self.sequence_board.setFixedSize(
-                int(self.width() * 0.5), int(self.height() * 2 / 3)
+                int(self.width() * 0.5), int(self.height()- 50)
             )

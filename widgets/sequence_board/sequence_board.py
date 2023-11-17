@@ -59,7 +59,6 @@ class SequenceBoard(QFrame):
     def setup_view_and_controls(self) -> None:
         self.clear_sequence_button = QPushButton("Clear Sequence")
         # set the height of the button
-        self.clear_sequence_button.setFixedHeight(50)
         self.clear_sequence_button.clicked.connect(self.clear_sequence)
 
         self.main_widget.sequence_board = self

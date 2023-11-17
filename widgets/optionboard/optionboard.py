@@ -46,9 +46,9 @@ class OptionBoard(QFrame):
 
         self.setMinimumWidth(int(self.main_window.width() * 0.5))
         self.setMaximumWidth(int(self.main_window.width() * 0.5))
-
         self.setMinimumHeight(int(self.main_window.height() * 2 / 3))
         self.setMaximumHeight(int(self.main_window.height() * 2 / 3))
+        self.setFixedSize(self.width(), self.height())
         self.init_letter_buttons_frame()
         self.init_scroll_area()
 
@@ -56,7 +56,7 @@ class OptionBoard(QFrame):
         letter_buttons_frame = QFrame()
         letter_buttons_layout = QVBoxLayout()
         letter_buttons_layout.setSpacing(int(0))
-        letter_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        letter_buttons_frame.setContentsMargins(0, 0, 0, 0)
         letter_rows = [
             # Type 1 - Dual-Shift
             ["A", "B", "C"],
@@ -100,7 +100,7 @@ class OptionBoard(QFrame):
                 font.setPointSize(int(20))
                 button.setFont(font)
                 # Set the fixed size of the button
-                button_size = int(self.main_window.width() * 0.023)
+                button_size = int(self.main_window.width() * 0.020)
                 button.setFixedSize(button_size, button_size)
 
                 # Set icon size (slightly smaller than button for best appearance)
@@ -111,7 +111,6 @@ class OptionBoard(QFrame):
 
                 row_layout.addWidget(button)
             letter_buttons_layout.addLayout(row_layout)
-            letter_buttons_layout.addStretch(1)
 
         letter_buttons_frame.setLayout(letter_buttons_layout)
         self.main_layout.addWidget(letter_buttons_frame)
@@ -123,10 +122,9 @@ class OptionBoard(QFrame):
         scroll_area.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
-        
-        # Set the fixed width to a portion of the OptionBoard width
-        scroll_area.setMinimumWidth(int(self.width() * 3/4))
 
+        # Set the fixed width to a portion of the OptionBoard width
+        scroll_area.setMinimumWidth(int(self.width() * 3 / 4))
         # Set the content margins of the scroll area and its widget to zero
         scroll_area.setContentsMargins(0, 0, 0, 0)
         self.grid_widget.setContentsMargins(0, 0, 0, 0)
@@ -137,13 +135,14 @@ class OptionBoard(QFrame):
         self.main_layout.addWidget(scroll_area)
         self.scroll_area = scroll_area
 
-
     def populate_pictographs(self) -> None:
         number_of_pictographs = 50
         MAX_ITEMS_PER_ROW = 4
 
         # Assuming the width of the OptionBoard (self.width()) is available
-        pictograph_width = self.scroll_area.width() / 4  # 4 pictographs per row
+        pictograph_width = (
+            (self.main_widget.main_window.width() / 2) * (3 / 4) / 4
+        )  # 4 pictographs per row
         pictograph_height = pictograph_width * (
             90 / 75
         )  # According to the desired ratio

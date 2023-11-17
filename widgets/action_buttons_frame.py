@@ -10,6 +10,7 @@ from settings.styles import (
 )
 from utilities.json_handler import JsonHandler
 from widgets.graphboard.graphboard import GraphBoard
+from PyQt6.QtCore import QSize
 
 
 class ActionButtonsFrame(QFrame):
@@ -19,12 +20,15 @@ class ActionButtonsFrame(QFrame):
         json_handler: "JsonHandler",
     ) -> None:
         super().__init__()
+
         self.graphboard = graphboard
         self.json_handler = json_handler
         self.action_buttons_layout = QVBoxLayout()
         self.action_buttons_layout.setContentsMargins(0, 0, 0, 0)
         self.setFrameStyle(QFrame.Shape.NoFrame)
         self.setMaximumHeight(int(self.graphboard.view.height()))
+        self.button_size = int(self.graphboard.main_widget.main_window.width() * 0.020)
+
         buttons_settings = [
             (
                 "update_locations.png",
@@ -61,6 +65,7 @@ class ActionButtonsFrame(QFrame):
         self.setLayout(self.action_buttons_layout)
         self.setMaximumWidth(ACTION_BUTTON_SIZE)
 
+
     def create_and_configure_button(
         self, icon_filename, tooltip, on_click, *args
     ) -> QPushButton:
@@ -68,8 +73,8 @@ class ActionButtonsFrame(QFrame):
         button = QPushButton(QIcon(icon_path), "")
         button.setToolTip(tooltip)
         button.setFont(ACTION_BUTTON_FONT)
-        button.setFixedSize(ACTION_BUTTON_SIZE, ACTION_BUTTON_SIZE)
-        button.setIconSize(ACTION_BUTTON_ICON_SIZE)
+        button.setFixedSize(self.button_size, self.button_size)
+        button.setIconSize(QSize(int(self.button_size * 0.8), int(self.button_size * 0.8)))
         button.clicked.connect(lambda: on_click(*args))
         return button
 

@@ -32,10 +32,10 @@ class MainWindow(QMainWindow):
 
         # Adjust size based on the screen used
         self.main_window_width = int(
-            screen_geometry.width() * (0.8 if len(screens) > 1 else 0.6)
+            screen_geometry.width() * (0.5 if len(screens) > 1 else 0.6)
         )
         self.main_window_height = int(
-            screen_geometry.height() * (0.8 if len(screens) > 1 else 0.7)
+            screen_geometry.height() * (0.5 if len(screens) > 1 else 0.7)
         )
 
         # Positioning the window
@@ -48,6 +48,7 @@ class MainWindow(QMainWindow):
 
     def init_main_window(self) -> None:
         self.setMinimumSize(self.main_window_width, self.main_window_height)
+        self.setFixedSize(self.width(), self.height())
         self.main_widget = MainWidget(self)
         self.installEventFilter(self.main_widget)
         self.setCentralWidget(self.main_widget)
