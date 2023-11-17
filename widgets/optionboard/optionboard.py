@@ -132,11 +132,7 @@ class OptionBoard(QFrame):
         )
         
         # Set the fixed width to a portion of the OptionBoard width
-        scroll_area.setMaximumWidth(int(self.width() * 2 / 3))
         scroll_area.setMinimumWidth(int(self.width() * 2 / 3))
-
-        # Set maximum height if needed
-        # scroll_area.setMaximumHeight(int(self.height()))
 
         # Set the content margins of the scroll area and its widget to zero
         scroll_area.setContentsMargins(0, 0, 0, 0)
