@@ -115,7 +115,9 @@ class JsonValidationEngine(QMainWindow):
         for file_path in self.selectedFiles:
             errors = self.validate_and_correct_json_file(file_path)
             if errors:
-                self.categorize_and_display_errors(errors, total_errors)
+                for error in errors:
+                    attribute = error.split(":")[0].split()[-1]
+                    total_errors.setdefault(attribute, []).append(error)
         
         if total_errors:
             self.display_errors_summary(total_errors)
@@ -125,21 +127,22 @@ class JsonValidationEngine(QMainWindow):
         else:
             self.errorsText.append("No errors found in selected files.")
 
-    def categorize_and_display_errors(self, errors, total_errors):
-        for error in errors:
-            attribute = error[0].split(":")[0].split()[-1]  # Assuming error is a list with the first item being the error string
-            total_errors.setdefault(attribute, []).append(error)
-            self.errorsText.append(error[0])  # Display the error string
 
     def display_errors_summary(self, total_errors):
         summary = "\nError Summary:\n"
         for attribute, errors in total_errors.items():
             summary += f"{attribute}: {len(errors)} errors found\n"
+            for error in errors:
+                summary += f"  - {error}\n"
         self.errorsText.append(summary)
 
     def apply_corrections_to_all_files(self):
         for file_path in self.selectedFiles:
-            self.validate_and_correct_json_file(file_path, True)
+            _, corrections = self.validate_and_correct_json_file(file_path, True)
+            if corrections:
+                self.errorsText.append(f"Corrections applied to {file_path}:\n")
+                for correction in corrections:
+                    self.errorsText.append(f"  - {correction}")
 
 
     # Helper functions
