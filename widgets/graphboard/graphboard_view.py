@@ -14,7 +14,6 @@ class GraphBoardView(QGraphicsView):
         view_width = view_height * 75 / 90  # Maintain 75:90 ratio
 
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
-        self.setFixedSize(int(view_width), int(view_height))
         self.setScene(self.graphboard)
         
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)

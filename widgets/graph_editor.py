@@ -13,21 +13,20 @@ if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 
 
-class GraphEditor(QWidget):
+class GraphEditor(QFrame):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.json_handler = main_widget.json_handler
 
-        self.graph_editor_frame = QFrame()
-        self.graph_editor_frame.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
-        self.graph_editor_frame.setLineWidth(1)
-        palette = self.graph_editor_frame.palette()
+        self.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
+        self.setLineWidth(1)
+        palette = self.palette()
         palette.setColor(QPalette.ColorRole.WindowText, QColor("black"))
-        self.graph_editor_frame.setPalette(palette)
+        self.setPalette(palette)
 
-        graph_editor_frame_layout = QHBoxLayout(self.graph_editor_frame)
+        graph_editor_frame_layout = QHBoxLayout(self)
 
         objectbox_layout = QVBoxLayout()
         graphboard_layout = QVBoxLayout()
@@ -62,10 +61,8 @@ class GraphEditor(QWidget):
         graph_editor_frame_layout.addLayout(graphboard_layout)
         graph_editor_frame_layout.addLayout(action_buttons_layout)
         graph_editor_frame_layout.addLayout(infobox_layout)
-
-        self.graph_editor_frame.setLayout(graph_editor_frame_layout)
-        self.main_window.graph_editor_layout.addWidget(self.graph_editor_frame)
-
+        self.graph_editor_frame_layout = graph_editor_frame_layout
+        self.setLayout(graph_editor_frame_layout)
+        
         self.setMouseTracking(True)
-        self.graph_editor_frame.setMaximumWidth(int(self.main_window.width() * 1/2))
-        self.graph_editor_frame.setMaximumHeight(int(self.main_window.height() * 1/3))
+
