@@ -41,7 +41,7 @@ class MainWindow(QMainWindow):
         # Positioning the window
         self.move(
             screen_geometry.x()
-            + (screen_geometry.width() - self.main_window_width) // 2,
+            + (screen_geometry.width() - self.main_window_width) // 2 - 50,
             screen_geometry.y()
             + (screen_geometry.height() - self.main_window_height) // 2 - 50,
         )

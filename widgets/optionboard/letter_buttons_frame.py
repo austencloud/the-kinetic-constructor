@@ -84,4 +84,3 @@ class LetterButtonsFrame(QFrame):
         self.main_window.optionboard_layout.addWidget(self)
 
 
-# write me a python script that iterates over all the svgs in a given folder and makes them 120x120, leaving the current contents centered by adding the space on the edges equally.

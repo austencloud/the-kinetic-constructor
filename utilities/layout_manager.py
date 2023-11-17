@@ -38,14 +38,13 @@ class LayoutManager:
         ]
         self.keyboard_layout: QVBoxLayout = self.layouts["keyboard"]
         self.optionboard_layout: QHBoxLayout = self.layouts["optionboard"]
-        self.optionboard_layout.setSpacing(0) # set spacing to 0 to remove padding
-
         self.sequence_layout: QHBoxLayout = self.layouts["sequence"]
         
     def configure_layouts(self) -> None:
         self.configure_main_layout()
         self.init_sequence_layout()
-
+        self.layouts["optionboard"].setSpacing(0)
+        self.layouts["graph_editor"].setSpacing(0)
         self.add_black_border_to_widgets() # Toggle this for layout testing
 
     def init_layouts(self) -> None:
@@ -71,7 +70,7 @@ class LayoutManager:
         self.layouts["main"].addLayout(self.layouts["left"])
         self.layouts["right"].addLayout(self.layouts["sequence"])
         self.layouts["main"].addLayout(self.layouts["right"])
-        self.layouts["optionboard"].addWidget(self.main_widget.optionboard.view)
+        self.layouts["optionboard"].addWidget(self.main_widget.optionboard)
         self.main_widget.setLayout(self.layouts["main"])
 
     def init_sequence_layout(self) -> None:
@@ -89,7 +88,7 @@ class LayoutManager:
         self.add_black_border(self.main_widget.graph_editor.graphboard)
         self.add_black_border(self.main_widget.sequence_board)
         self.add_black_border(self.main_widget.graph_editor.infobox)
-        self.add_black_border(self.main_widget.optionboard.view)
+        self.add_black_border(self.main_widget.optionboard)
         self.add_black_border(self.main_widget.graph_editor.action_buttons_frame)
         self.add_black_border(self.main_widget.letter_buttons_frame)
         self.add_black_border(self.main_widget.graph_editor.graphboard)
@@ -114,4 +113,4 @@ class LayoutManager:
             except AttributeError:
                 print(f"Widget {widget} does not have a setFrameStyle method.")
         else:
-            print(f"Widget {widget} is not a QFrame and does not support setFrameStyle.")
+            print(f"Widget {widget} is not a QWidget or QFrame.")
