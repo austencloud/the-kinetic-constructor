@@ -58,7 +58,7 @@ class OptionBoard(QFrame):
         letter_buttons_layout.setSpacing(int(0))
         letter_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        letter_buttons_frame.setMaximumWidth(int(self.width() * 1 / 3))
+        letter_buttons_frame.setMaximumWidth(int(self.width() * 1 / 4))
 
         letter_rows = [
             # Type 1 - Dual-Shift
@@ -83,7 +83,7 @@ class OptionBoard(QFrame):
             ["α", "β", "Γ"],
         ]
 
-        spacing = int(self.main_window.width() * 0.01)  # Spacing between buttons
+        spacing = int(self.main_window.width() * 0.000)  # Spacing between buttons
 
         for row in letter_rows:
             row_layout = QHBoxLayout()
@@ -132,7 +132,7 @@ class OptionBoard(QFrame):
         )
         
         # Set the fixed width to a portion of the OptionBoard width
-        scroll_area.setMinimumWidth(int(self.width() * 2 / 3))
+        scroll_area.setMinimumWidth(int(self.width() * 3/4))
 
         # Set the content margins of the scroll area and its widget to zero
         scroll_area.setContentsMargins(0, 0, 0, 0)

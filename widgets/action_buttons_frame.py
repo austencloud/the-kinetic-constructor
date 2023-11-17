@@ -22,18 +22,16 @@ class ActionButtonsFrame(QFrame):
         self.graphboard = graphboard
         self.json_handler = json_handler
         self.action_buttons_layout = QVBoxLayout()
-        self.action_buttons_layout.setSpacing(3)
         self.action_buttons_layout.setContentsMargins(0, 0, 0, 0)
-        coordinates = self.graphboard.get_current_arrow_coordinates()
-        #remove the frame border
         self.setFrameStyle(QFrame.Shape.NoFrame)
-        self.setMinimumHeight(int(self.graphboard.view.height()))
-
+        self.setMaximumHeight(int(self.graphboard.view.height()))
         buttons_settings = [
             (
                 "update_locations.png",
                 "Update Optimal Locations",
-                lambda: self.json_handler.update_optimal_locations_in_json(coordinates),
+                lambda: self.json_handler.update_optimal_locations_in_json(
+                    self.graphboard.get_current_arrow_coordinates()
+                ),
             ),
             (
                 "delete.png",
@@ -61,13 +59,8 @@ class ActionButtonsFrame(QFrame):
             self.action_buttons_layout.addWidget(button)
 
         self.setLayout(self.action_buttons_layout)
-        button_count = len(buttons_settings)
-        total_button_height = button_count * ACTION_BUTTON_SIZE
-        total_spacing = (button_count - 1) * self.action_buttons_layout.spacing()
-        total_height = total_button_height + total_spacing
-        self.setMaximumHeight(min(total_height, int(self.graphboard.height())))
         self.setMaximumWidth(ACTION_BUTTON_SIZE)
-        
+
     def create_and_configure_button(
         self, icon_filename, tooltip, on_click, *args
     ) -> QPushButton:
