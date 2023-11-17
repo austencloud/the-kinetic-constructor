@@ -95,7 +95,7 @@ class LayoutManager:
         self.main_layout.setContentsMargins(0, 0, 0, 0)
 
     def init_sequence_layout(self) -> None:
-        self.layouts["sequence_board"].addWidget(self.main_widget.sequence_board.view)
+        self.layouts["sequence_board"].addWidget(self.main_widget.sequence_board)
         self.layouts["sequence_board"].addWidget(self.main_widget.clear_sequence_button)
         self.layouts["sequence"].addLayout(self.layouts["sequence_board"])
 

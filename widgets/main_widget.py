@@ -68,7 +68,8 @@ class MainWidget(QWidget):
         self.update_graph_editor_size()
         self.update_graphboard_size()
         self.update_optionboard_size()
-
+        self.update_sequenceboard_size()
+        
     def update_graph_editor_size(self) -> None:
         if hasattr(self, "graph_editor"):
             self.graph_editor.setFixedSize(
@@ -84,6 +85,12 @@ class MainWidget(QWidget):
 
     def update_optionboard_size(self) -> None:
         if hasattr(self, "optionboard"):
-            self.graph_editor.setFixedSize(
-                int(self.width() * 0.5), int(self.height() * 2 / 3 * 0.5)
+            self.optionboard.setFixedSize(
+                int(self.width() * 0.5), int(self.height() * 2 / 3)
+            )
+
+    def update_sequenceboard_size(self) -> None:
+        if hasattr(self, "sequence_board"):
+            self.sequence_board.setFixedSize(
+                int(self.width() * 0.5), int(self.height() * 2 / 3)
             )

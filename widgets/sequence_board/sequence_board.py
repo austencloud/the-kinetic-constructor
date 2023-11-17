@@ -1,24 +1,30 @@
 from typing import TYPE_CHECKING
 
-from PyQt6.QtCore import QPointF, QRectF, Qt
+from PyQt6.QtCore import QRectF, Qt
 from PyQt6.QtGui import QColor, QImage, QPainter
-from PyQt6.QtWidgets import QGraphicsRectItem, QGraphicsScene, QPushButton
+from PyQt6.QtWidgets import (
+    QGraphicsScene,
+    QGridLayout,
+    QPushButton,
+    QGraphicsView,
+    QFrame,
+)
 
 from settings.numerical_constants import (
     GRAPHBOARD_HEIGHT,
     GRAPHBOARD_WIDTH,
     PICTOGRAPH_SCALE,
 )
-from widgets.sequence_board.sequence_board_view import SequenceBoardView
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graphboard.graphboard import GraphBoard
 
 from utilities.pictograph_generator import PictographGenerator
+from PyQt6.QtWidgets import QSizePolicy
 
 
-class SequenceBoard(QGraphicsScene):
+class SequenceBoard(QFrame):
     def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard") -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -26,35 +32,37 @@ class SequenceBoard(QGraphicsScene):
         self.setup_view_and_controls()
         self.pictographs = []
         self.beats = []
+
         self.generator: "PictographGenerator" = None
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
+        # Create a QGridLayout for the QFrame
+        self.layout = QGridLayout(self)
 
         for j in range(4):
             for i in range(4):
-                section = QGraphicsRectItem(
-                    QRectF(
-                        0,
-                        0,
-                        self.view.width() * 0.25,
-                        self.view.height() * 0.25,
-                    )
-                )
-                section.setPos(
-                    QPointF(i * self.view.width() * 0.25, j * self.view.height() * 0.25)
-                )
-                self.beats.append(section)
-                self.addItem(section)
+                view = QGraphicsView()
+                scene = QGraphicsScene()
 
-        self.setSceneRect(0, 0, self.view.width(), self.view.height() * 4)
+                view.setScene(scene)
+
+                view.setSceneRect(0, 0, 100, 100)
+
+                rect = QRectF(0, 0, 50, 50)
+                color = QColor(255, 0, 0)
+                scene.addRect(rect, color)
+
+                self.layout.addWidget(view, j, i)
+
+                self.beats.append(view)
 
     def setup_view_and_controls(self) -> None:
-        self.view = SequenceBoardView(self)
-
         self.clear_sequence_button = QPushButton("Clear Sequence")
+        # set the height of the button
+        self.clear_sequence_button.setFixedHeight(50)
         self.clear_sequence_button.clicked.connect(self.clear_sequence)
 
         self.main_widget.sequence_board = self
-        self.main_widget.sequence_view = self.view
-        self.main_widget.sequence_board = self.view
         self.main_widget.clear_sequence_button = self.clear_sequence_button
 
     def add_to_sequence(self) -> None:
