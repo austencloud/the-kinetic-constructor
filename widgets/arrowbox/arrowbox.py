@@ -41,7 +41,7 @@ class ArrowBox(QGraphicsScene):
         self.main_window = main_widget.main_window
         self.setup_view()
         self.populate_arrows()
-        self.setSceneRect(0, 0, 250, 250)
+        self.setSceneRect(0, 0, 450, 450)
         self.arrowbox_layout = QGridLayout()
         self.arrowbox_layout.addWidget(self.view)
         self.arrowbox_drag = None

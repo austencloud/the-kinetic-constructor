@@ -27,7 +27,7 @@ class ActionButtonsFrame(QFrame):
         coordinates = self.graphboard.get_current_arrow_coordinates()
         #remove the frame border
         self.setFrameStyle(QFrame.Shape.NoFrame)
-
+        self.setMinimumHeight(int(self.graphboard.view.height()))
 
         buttons_settings = [
             (

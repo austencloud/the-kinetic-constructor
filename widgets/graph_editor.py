@@ -35,6 +35,7 @@ class GraphEditor(QFrame):
 
         self.graphboard = GraphBoard(
             self.main_widget,
+            self,
         )
         self.infobox = InfoBox(
             main_widget,
@@ -56,7 +57,7 @@ class GraphEditor(QFrame):
         graphboard_layout.addWidget(self.graphboard.view)
         action_buttons_layout.addWidget(self.action_buttons_frame)
         infobox_layout.addWidget(self.infobox)
-
+        graph_editor_frame_layout.setContentsMargins(0, 0, 0, 0)
         graph_editor_frame_layout.addLayout(objectbox_layout)
         graph_editor_frame_layout.addLayout(graphboard_layout)
         graph_editor_frame_layout.addLayout(action_buttons_layout)

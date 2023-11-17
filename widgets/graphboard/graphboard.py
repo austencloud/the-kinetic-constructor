@@ -41,12 +41,13 @@ if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
     from widgets.infobox.infobox import InfoBox
     from widgets.main_widget import MainWidget
-
+    from widgets.graph_editor import GraphEditor
 
 class GraphBoard(QGraphicsScene):
-    def __init__(self, main_widget: "MainWidget") -> None:
+    def __init__(self, main_widget: "MainWidget", graph_editor: 'GraphEditor') -> None:
         super().__init__()
         self.main_widget = main_widget
+        self.graph_editor = graph_editor
         self.setup_scene()
         self.setup_components(main_widget)
 

@@ -6680,29 +6680,6 @@
             ]
         ],
         [
-            "W",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "se",
-                    "start_location": "s",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "X",
             [
                 {
@@ -6721,29 +6698,6 @@
                     "quadrant": "se",
                     "start_location": "s",
                     "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "X",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "se",
-                    "start_location": "s",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
                     "turns": 0
                 }
             ]
@@ -6774,29 +6728,6 @@
             ]
         ],
         [
-            "W",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "sw",
-                    "start_location": "w",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "X",
             [
                 {
@@ -6815,29 +6746,6 @@
                     "quadrant": "sw",
                     "start_location": "w",
                     "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "X",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "sw",
-                    "start_location": "w",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "n",
-                    "end_location": "n",
                     "turns": 0
                 }
             ]
@@ -6868,29 +6776,6 @@
             ]
         ],
         [
-            "W",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "nw",
-                    "start_location": "n",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "X",
             [
                 {
@@ -6909,75 +6794,6 @@
                     "quadrant": "nw",
                     "start_location": "n",
                     "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "X",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "nw",
-                    "start_location": "n",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u0394",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "sw",
-                    "start_location": "w",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03a3",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "sw",
-                    "start_location": "w",
-                    "end_location": "s",
                     "turns": 0
                 }
             ]
@@ -7008,29 +6824,6 @@
             ]
         ],
         [
-            "W",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "ne",
-                    "start_location": "e",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "X",
             [
                 {
@@ -7049,75 +6842,6 @@
                     "quadrant": "ne",
                     "start_location": "e",
                     "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "X",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "ne",
-                    "start_location": "e",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u0394",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "nw",
-                    "start_location": "n",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03a3",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "nw",
-                    "start_location": "n",
-                    "end_location": "w",
                     "turns": 0
                 }
             ]
@@ -7148,29 +6872,6 @@
             ]
         ],
         [
-            "W",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "ne",
-                    "start_location": "n",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "X",
             [
                 {
@@ -7189,75 +6890,6 @@
                     "quadrant": "ne",
                     "start_location": "n",
                     "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "X",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "ne",
-                    "start_location": "n",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u0394",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "se",
-                    "start_location": "e",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03a3",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "se",
-                    "start_location": "e",
-                    "end_location": "s",
                     "turns": 0
                 }
             ]
@@ -7288,29 +6920,6 @@
             ]
         ],
         [
-            "W",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "nw",
-                    "start_location": "w",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "X",
             [
                 {
@@ -7329,75 +6938,6 @@
                     "quadrant": "nw",
                     "start_location": "w",
                     "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "X",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "nw",
-                    "start_location": "w",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u0394",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "ne",
-                    "start_location": "n",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03a3",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "ne",
-                    "start_location": "n",
-                    "end_location": "e",
                     "turns": 0
                 }
             ]
@@ -7428,29 +6968,6 @@
             ]
         ],
         [
-            "W",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "sw",
-                    "start_location": "s",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "X",
             [
                 {
@@ -7469,75 +6986,6 @@
                     "quadrant": "sw",
                     "start_location": "s",
                     "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "X",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "sw",
-                    "start_location": "s",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u0394",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "nw",
-                    "start_location": "w",
-                    "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03a3",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "nw",
-                    "start_location": "w",
-                    "end_location": "n",
                     "turns": 0
                 }
             ]
@@ -7568,6 +7016,367 @@
             ]
         ],
         [
+            "X",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "se",
+                    "start_location": "e",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma4_alpha4": [
+        [
+            "W",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "se",
+                    "start_location": "s",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "X",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "se",
+                    "start_location": "s",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma1_alpha1": [
+        [
+            "W",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "sw",
+                    "start_location": "w",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "X",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "sw",
+                    "start_location": "w",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma2_alpha2": [
+        [
+            "W",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "nw",
+                    "start_location": "n",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "X",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "nw",
+                    "start_location": "n",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma3_alpha3": [
+        [
+            "W",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "ne",
+                    "start_location": "e",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "X",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "ne",
+                    "start_location": "e",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma8_alpha4": [
+        [
+            "W",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "ne",
+                    "start_location": "n",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "X",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "ne",
+                    "start_location": "n",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma7_alpha3": [
+        [
+            "W",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "nw",
+                    "start_location": "w",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "X",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "nw",
+                    "start_location": "w",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma6_alpha2": [
+        [
+            "W",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "sw",
+                    "start_location": "s",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "X",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "sw",
+                    "start_location": "s",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma5_alpha1": [
+        [
             "W",
             [
                 {
@@ -7595,29 +7404,6 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "se",
-                    "start_location": "e",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "X",
-            [
-                {
-                    "color": "blue",
                     "motion_type": "anti",
                     "rotation_direction": "ccw",
                     "quadrant": "se",
@@ -7632,52 +7418,6 @@
                     "quadrant": "None",
                     "start_location": "n",
                     "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u0394",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "sw",
-                    "start_location": "s",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03a3",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "sw",
-                    "start_location": "s",
-                    "end_location": "w",
                     "turns": 0
                 }
             ]
@@ -7698,29 +7438,6 @@
                 },
                 {
                     "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "Y",
-            [
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "se",
-                    "start_location": "e",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "blue",
                     "motion_type": "static",
                     "rotation_direction": "None",
                     "quadrant": "None",
@@ -7779,29 +7496,6 @@
             ]
         ],
         [
-            "Y",
-            [
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "sw",
-                    "start_location": "s",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "Z",
             [
                 {
@@ -7840,29 +7534,6 @@
                 },
                 {
                     "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "Y",
-            [
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "nw",
-                    "start_location": "w",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "blue",
                     "motion_type": "static",
                     "rotation_direction": "None",
                     "quadrant": "None",
@@ -7921,29 +7592,6 @@
             ]
         ],
         [
-            "Y",
-            [
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "ne",
-                    "start_location": "n",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "Z",
             [
                 {
@@ -7962,250 +7610,35 @@
                     "quadrant": "None",
                     "start_location": "e",
                     "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma6_beta3": [
-        [
-            "Y",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "sw",
-                    "start_location": "w",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "Y",
-            [
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "sw",
-                    "start_location": "w",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "Z",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "se",
-                    "start_location": "e",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma5_beta2": [
-        [
-            "Y",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "se",
-                    "start_location": "s",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "Y",
-            [
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "se",
-                    "start_location": "s",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "Z",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "ne",
-                    "start_location": "n",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma4_beta1": [
-        [
-            "Y",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "ne",
-                    "start_location": "e",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "Y",
-            [
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "ne",
-                    "start_location": "e",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma3_beta4": [
-        [
-            "Y",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "nw",
-                    "start_location": "n",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "Y",
-            [
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "nw",
-                    "start_location": "n",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
                     "turns": 0
                 }
             ]
         ]
     ],
     "gamma7_beta3": [
+        [
+            "Y",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "sw",
+                    "start_location": "w",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ],
         [
             "Z",
             [
@@ -8232,6 +7665,29 @@
     ],
     "gamma6_beta2": [
         [
+            "Y",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "se",
+                    "start_location": "s",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
             "Z",
             [
                 {
@@ -8250,6 +7706,463 @@
                     "quadrant": "None",
                     "start_location": "e",
                     "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma5_beta1": [
+        [
+            "Y",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "ne",
+                    "start_location": "e",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma8_beta4": [
+        [
+            "Y",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "nw",
+                    "start_location": "n",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Z",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "nw",
+                    "start_location": "n",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma6_beta3": [
+        [
+            "Y",
+            [
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "se",
+                    "start_location": "e",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Z",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "se",
+                    "start_location": "e",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma7_beta4": [
+        [
+            "Y",
+            [
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "sw",
+                    "start_location": "s",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Z",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "sw",
+                    "start_location": "s",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma8_beta1": [
+        [
+            "Y",
+            [
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "nw",
+                    "start_location": "w",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Z",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "nw",
+                    "start_location": "w",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma5_beta2": [
+        [
+            "Y",
+            [
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "ne",
+                    "start_location": "n",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Z",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "ne",
+                    "start_location": "n",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma4_beta3": [
+        [
+            "Y",
+            [
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "sw",
+                    "start_location": "w",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Z",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "sw",
+                    "start_location": "w",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma3_beta2": [
+        [
+            "Y",
+            [
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "se",
+                    "start_location": "s",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Z",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "se",
+                    "start_location": "s",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma2_beta1": [
+        [
+            "Y",
+            [
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "ne",
+                    "start_location": "e",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Z",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "ne",
+                    "start_location": "e",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma1_beta4": [
+        [
+            "Y",
+            [
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "nw",
+                    "start_location": "n",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Z",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "nw",
+                    "start_location": "n",
+                    "end_location": "w",
                     "turns": 0
                 }
             ]
@@ -8284,202 +8197,6 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "ne",
-                    "start_location": "n",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03a9",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "ne",
-                    "start_location": "n",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma8_beta4": [
-        [
-            "Z",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "nw",
-                    "start_location": "n",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma7_beta4": [
-        [
-            "Z",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "sw",
-                    "start_location": "s",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma8_beta1": [
-        [
-            "Z",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "nw",
-                    "start_location": "w",
-                    "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma4_beta3": [
-        [
-            "Z",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "sw",
-                    "start_location": "w",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma3_beta2": [
-        [
-            "Z",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "se",
-                    "start_location": "s",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "beta1_gamma2": [
-        [
-            "Z",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "ne",
-                    "start_location": "e",
-                    "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03b8",
-            [
-                {
-                    "color": "blue",
                     "motion_type": "pro",
                     "rotation_direction": "cw",
                     "quadrant": "ne",
@@ -8517,31 +8234,6 @@
                     "quadrant": "None",
                     "start_location": "n",
                     "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma1_beta4": [
-        [
-            "Z",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "nw",
-                    "start_location": "n",
-                    "end_location": "w",
                     "turns": 0
                 }
             ]
@@ -8572,29 +8264,6 @@
             ]
         ],
         [
-            "\u0394",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "ne",
-                    "start_location": "e",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "\u03a3",
             [
                 {
@@ -8613,29 +8282,6 @@
                     "quadrant": "ne",
                     "start_location": "e",
                     "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03a3",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "ne",
-                    "start_location": "e",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
                     "turns": 0
                 }
             ]
@@ -8666,29 +8312,6 @@
             ]
         ],
         [
-            "\u0394",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "se",
-                    "start_location": "s",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "\u03a3",
             [
                 {
@@ -8707,29 +8330,6 @@
                     "quadrant": "se",
                     "start_location": "s",
                     "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03a3",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "se",
-                    "start_location": "s",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "n",
-                    "end_location": "n",
                     "turns": 0
                 }
             ]
@@ -8741,20 +8341,20 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "sw",
-                    "start_location": "w",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
                     "motion_type": "static",
                     "rotation_direction": "None",
                     "quadrant": "None",
                     "start_location": "e",
                     "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "sw",
+                    "start_location": "w",
+                    "end_location": "s",
                     "turns": 0
                 }
             ]
@@ -8764,20 +8364,20 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "sw",
-                    "start_location": "w",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
                     "motion_type": "static",
                     "rotation_direction": "None",
                     "quadrant": "None",
                     "start_location": "e",
                     "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "sw",
+                    "start_location": "w",
+                    "end_location": "s",
                     "turns": 0
                 }
             ]
@@ -8789,20 +8389,20 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "nw",
-                    "start_location": "n",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
                     "motion_type": "static",
                     "rotation_direction": "None",
                     "quadrant": "None",
                     "start_location": "s",
                     "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "nw",
+                    "start_location": "n",
+                    "end_location": "w",
                     "turns": 0
                 }
             ]
@@ -8812,20 +8412,20 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "nw",
-                    "start_location": "n",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
                     "motion_type": "static",
                     "rotation_direction": "None",
                     "quadrant": "None",
                     "start_location": "s",
                     "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "nw",
+                    "start_location": "n",
+                    "end_location": "w",
                     "turns": 0
                 }
             ]
@@ -8837,20 +8437,20 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "se",
-                    "start_location": "e",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
                     "motion_type": "static",
                     "rotation_direction": "None",
                     "quadrant": "None",
                     "start_location": "w",
                     "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "se",
+                    "start_location": "e",
+                    "end_location": "s",
                     "turns": 0
                 }
             ]
@@ -8860,20 +8460,20 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "se",
-                    "start_location": "e",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
                     "motion_type": "static",
                     "rotation_direction": "None",
                     "quadrant": "None",
                     "start_location": "w",
                     "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "se",
+                    "start_location": "e",
+                    "end_location": "s",
                     "turns": 0
                 }
             ]
@@ -8885,6 +8485,390 @@
             [
                 {
                     "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "ne",
+                    "start_location": "n",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "\u03a3",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "ne",
+                    "start_location": "n",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "alpha4_gamma5": [
+        [
+            "\u0394",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "nw",
+                    "start_location": "w",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "\u03a3",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "nw",
+                    "start_location": "w",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "alpha3_gamma8": [
+        [
+            "\u0394",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "sw",
+                    "start_location": "s",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "\u03a3",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "sw",
+                    "start_location": "s",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "alpha4_gamma8": [
+        [
+            "\u0394",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "ne",
+                    "start_location": "e",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "\u03a3",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "ne",
+                    "start_location": "e",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "alpha1_gamma5": [
+        [
+            "\u0394",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "se",
+                    "start_location": "s",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "\u03a3",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "se",
+                    "start_location": "s",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "alpha2_gamma6": [
+        [
+            "\u0394",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "sw",
+                    "start_location": "w",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "\u03a3",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "sw",
+                    "start_location": "w",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "alpha3_gamma7": [
+        [
+            "\u0394",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "nw",
+                    "start_location": "n",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "\u03a3",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "nw",
+                    "start_location": "n",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "alpha4_gamma4": [
+        [
+            "\u0394",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "se",
+                    "start_location": "e",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "\u03a3",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "se",
+                    "start_location": "e",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "alpha3_gamma3": [
+        [
+            "\u0394",
+            [
+                {
+                    "color": "blue",
                     "motion_type": "anti",
                     "rotation_direction": "ccw",
                     "quadrant": "ne",
@@ -8927,7 +8911,7 @@
             ]
         ]
     ],
-    "alpha4_gamma5": [
+    "alpha2_gamma2": [
         [
             "\u0394",
             [
@@ -8975,7 +8959,7 @@
             ]
         ]
     ],
-    "alpha3_gamma8": [
+    "alpha1_gamma1": [
         [
             "\u0394",
             [
@@ -9048,29 +9032,6 @@
             ]
         ],
         [
-            "\u03b8",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "sw",
-                    "start_location": "w",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "\u03a9",
             [
                 {
@@ -9089,29 +9050,6 @@
                     "quadrant": "sw",
                     "start_location": "w",
                     "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03a9",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "sw",
-                    "start_location": "w",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
                     "turns": 0
                 }
             ]
@@ -9142,24 +9080,289 @@
             ]
         ],
         [
-            "\u03b8",
+            "\u03a9",
             [
                 {
                     "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "nw",
-                    "start_location": "n",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
                     "motion_type": "static",
                     "rotation_direction": "None",
                     "quadrant": "None",
                     "start_location": "n",
                     "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "nw",
+                    "start_location": "n",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "beta2_gamma5": [
+        [
+            "\u03b8",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "ne",
+                    "start_location": "e",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "\u03a9",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "ne",
+                    "start_location": "e",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "beta3_gamma6": [
+        [
+            "\u03b8",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "se",
+                    "start_location": "s",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "\u03a9",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
+                    "quadrant": "se",
+                    "start_location": "s",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "beta4_gamma1": [
+        [
+            "\u03b8",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "nw",
+                    "start_location": "w",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "\u03a9",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "nw",
+                    "start_location": "w",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "beta3_gamma4": [
+        [
+            "\u03b8",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "sw",
+                    "start_location": "s",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "\u03a9",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "sw",
+                    "start_location": "s",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "beta2_gamma3": [
+        [
+            "\u03b8",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "se",
+                    "start_location": "e",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "\u03a9",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "se",
+                    "start_location": "e",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "beta1_gamma2": [
+        [
+            "\u03b8",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
+                    "quadrant": "ne",
+                    "start_location": "n",
+                    "end_location": "e",
                     "turns": 0
                 }
             ]
@@ -9179,10 +9382,83 @@
                 {
                     "color": "red",
                     "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "quadrant": "ne",
+                    "start_location": "n",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "beta4_gamma4": [
+        [
+            "\u03b8",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
+                    "quadrant": "sw",
+                    "start_location": "w",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "\u03a9",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "anti",
                     "rotation_direction": "cw",
+                    "quadrant": "sw",
+                    "start_location": "w",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "beta1_gamma1": [
+        [
+            "\u03b8",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
                     "quadrant": "nw",
                     "start_location": "n",
                     "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "n",
+                    "end_location": "n",
                     "turns": 0
                 }
             ]
@@ -9217,20 +9493,20 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
                     "motion_type": "pro",
                     "rotation_direction": "ccw",
                     "quadrant": "ne",
                     "start_location": "e",
                     "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
                     "turns": 0
                 }
             ]
@@ -9240,20 +9516,20 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
                     "motion_type": "anti",
                     "rotation_direction": "cw",
                     "quadrant": "ne",
                     "start_location": "e",
                     "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "e",
+                    "end_location": "e",
                     "turns": 0
                 }
             ]
@@ -9265,20 +9541,20 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
                     "motion_type": "pro",
                     "rotation_direction": "ccw",
                     "quadrant": "se",
                     "start_location": "s",
                     "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
                     "turns": 0
                 }
             ]
@@ -9288,20 +9564,20 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
                     "motion_type": "anti",
                     "rotation_direction": "cw",
                     "quadrant": "se",
                     "start_location": "s",
                     "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
                     "turns": 0
                 }
             ]
@@ -9313,20 +9589,20 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
                     "motion_type": "pro",
                     "rotation_direction": "cw",
                     "quadrant": "nw",
                     "start_location": "w",
                     "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
                     "turns": 0
                 }
             ]
@@ -9336,20 +9612,20 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
                     "motion_type": "anti",
                     "rotation_direction": "ccw",
                     "quadrant": "nw",
                     "start_location": "w",
                     "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "w",
+                    "end_location": "w",
                     "turns": 0
                 }
             ]
@@ -9361,20 +9637,20 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
                     "motion_type": "pro",
                     "rotation_direction": "cw",
                     "quadrant": "sw",
                     "start_location": "s",
                     "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
                     "turns": 0
                 }
             ]
@@ -9384,266 +9660,26 @@
             [
                 {
                     "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
                     "motion_type": "anti",
                     "rotation_direction": "ccw",
                     "quadrant": "sw",
                     "start_location": "s",
                     "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "quadrant": "None",
+                    "start_location": "s",
+                    "end_location": "s",
                     "turns": 0
                 }
             ]
         ]
     ],
     "beta2_gamma6": [
-        [
-            "\u03b8",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "se",
-                    "start_location": "e",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03a9",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "se",
-                    "start_location": "e",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "beta2_gamma5": [
-        [
-            "\u03b8",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "ne",
-                    "start_location": "e",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03a9",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "ne",
-                    "start_location": "e",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "beta3_gamma6": [
-        [
-            "\u03b8",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
-                    "quadrant": "se",
-                    "start_location": "s",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03a9",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "quadrant": "se",
-                    "start_location": "s",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "beta4_gamma1": [
-        [
-            "\u03b8",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "nw",
-                    "start_location": "w",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03a9",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "nw",
-                    "start_location": "w",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "beta3_gamma4": [
-        [
-            "\u03b8",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
-                    "quadrant": "sw",
-                    "start_location": "s",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
-            "\u03a9",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "quadrant": "sw",
-                    "start_location": "s",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "quadrant": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "beta2_gamma3": [
         [
             "\u03b8",
             [

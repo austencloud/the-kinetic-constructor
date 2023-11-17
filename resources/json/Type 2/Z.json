@@ -338,8 +338,8 @@
         ],
         [
             {
-                "start_position": "beta1",
-                "end_position": "gamma2"
+                "start_position": "gamma2",
+                "end_position": "beta1"
             },
             {
                 "color": "blue",

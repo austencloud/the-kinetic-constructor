@@ -1,36 +1,39 @@
-from data.positions_map import positions_map
-import logging, json
-from objects.arrow import Arrow
+import json
+import logging
+
 from data.letter_engine_data import (
     motion_type_combinations,
     motion_type_letter_groups,
     parallel_combinations,
 )
+from data.positions_map import positions_map
+from objects.arrow import Arrow
 from settings.string_constants import *
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
-from typing import TYPE_CHECKING, Dict, Tuple, Literal, Set
+from typing import TYPE_CHECKING, Dict, Literal, Set, Tuple
 
 if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
 
 from utilities.TypeChecking.TypeChecking import (
-    Letters,
-    PreprocessedStartEndCombinations,
-    SpecificStartEndPositionsDicts,
-    Color,
-    MotionTypeCombinations,
-    StartEndLocationTuple,
-    LetterGroupsByMotionType,
-    MotionTypeLetterGroupMap,
-    GammaEndingLetters,
-    Position,
-    RotationDirection,
     ArrowAttributesDicts,
+    Color,
+    GammaEndingLetters,
+    LetterGroupsByMotionType,
+    Letters,
+    MotionTypeCombinations,
+    MotionTypeLetterGroupMap,
+    Position,
+    PreprocessedStartEndCombinations,
+    RotationDirection,
+    SpecificPosition,
+    SpecificStartEndPositionsDicts,
+    StartEndLocationTuple,
 )
-
 
 
 class LetterEngine:
@@ -46,10 +49,11 @@ class LetterEngine:
 
     def preprocess_combinations(self) -> PreprocessedStartEndCombinations:
         preprocessed_start_end_combinations: PreprocessedStartEndCombinations = {}
+
         for letter, combinations in self.letters.items():
             for combination in combinations:
-                start_pos = combination[0].get("start_position")
-                end_pos = combination[0].get("end_position")
+                start_pos: SpecificPosition = combination[0].get("start_position")
+                end_pos: SpecificPosition = combination[0].get("end_position")
                 if start_pos and end_pos:
                     key = f"{start_pos}_{end_pos}"
                     preprocessed_start_end_combinations.setdefault(key, []).append(
@@ -247,7 +251,6 @@ class LetterEngine:
         else:
             return "PQR"  # Return antiparallel group
 
-
     def get_gamma_letter(self, letter_group) -> GammaEndingLetters:
         gamma_handpath_letters = set(self.get_gamma_handpath_group())
         filtered_letter_group = {
@@ -265,8 +268,16 @@ class LetterEngine:
 
         if any(letter in "STUV" for letter in filtered_letter_group):
             if self.motion_type_combination == "pro_vs_anti":
-                self.pro_arrow = self.red_arrow if self.red_arrow.motion_type == "pro" else self.blue_arrow
-                self.anti_arrow = self.red_arrow if self.red_arrow.motion_type == "anti" else self.blue_arrow
+                self.pro_arrow = (
+                    self.red_arrow
+                    if self.red_arrow.motion_type == "pro"
+                    else self.blue_arrow
+                )
+                self.anti_arrow = (
+                    self.red_arrow
+                    if self.red_arrow.motion_type == "anti"
+                    else self.blue_arrow
+                )
                 gamma_same_handpath_hybrid_letter = (
                     self.get_gamma_same_handpath_hybrid_letter()
                 )
@@ -283,54 +294,73 @@ class LetterEngine:
     ) -> Position:
         return {position: value[:-1] for position, value in specific_positions.items()}
 
-
-    def get_handpath_direction(self, start, end) -> Literal['ccw', 'cw'] | None:
+    def get_handpath_direction(self, start, end) -> Literal["ccw", "cw"] | None:
         """Returns COUNTER_CLOCKWISE if the handpath direction is counter-clockwise, CLOCKWISE otherwise."""
-        ccw_positions = [NORTH, WEST, SOUTH, EAST] 
+        ccw_positions = [NORTH, WEST, SOUTH, EAST]
         start_index = ccw_positions.index(start)
         end_index = ccw_positions.index(end)
-        if (start_index == 3 and end_index == 0):
+        if start_index == 3 and end_index == 0:
             return COUNTER_CLOCKWISE
-        elif (start_index == 0 and end_index == 3):
+        elif start_index == 0 and end_index == 3:
             return CLOCKWISE
         elif start_index < end_index:
-            return COUNTER_CLOCKWISE 
+            return COUNTER_CLOCKWISE
         elif start_index > end_index:
-            return CLOCKWISE  
+            return CLOCKWISE
 
-    def determine_leader_and_same_handpath_hybrid(self) -> Literal['leading_pro', 'leading_anti'] | None:
+    def determine_leader_and_same_handpath_hybrid(
+        self,
+    ) -> Literal["leading_pro", "leading_anti"] | None:
         """Determine the leading arrow and whether the handpath is a hybrid of same-direction motion."""
-        pro_handpath = self.get_handpath_direction(self.pro_arrow.start_location, self.pro_arrow.end_location)
-        anti_handpath = self.get_handpath_direction(self.anti_arrow.start_location, self.anti_arrow.end_location)
+        pro_handpath = self.get_handpath_direction(
+            self.pro_arrow.start_location, self.pro_arrow.end_location
+        )
+        anti_handpath = self.get_handpath_direction(
+            self.anti_arrow.start_location, self.anti_arrow.end_location
+        )
 
         # Both arrows should have the same handpath direction, otherwise, we cannot determine a hybrid
         if pro_handpath != anti_handpath:
-            logging.ERROR("Cannot disambiguate U and V. Handpath directions aren't the same.")
+            logging.ERROR(
+                "Cannot disambiguate U and V. Handpath directions aren't the same."
+            )
             return None, ""
         else:
             handpath_direction = pro_handpath
 
         # Determine the leading arrow based on the counterclockwise position sequence
-        ccw_positions = [NORTH, WEST, SOUTH, EAST] 
+        ccw_positions = [NORTH, WEST, SOUTH, EAST]
         pro_start_index = ccw_positions.index(self.pro_arrow.start_location)
         anti_start_index = ccw_positions.index(self.anti_arrow.start_location)
 
-        if handpath_direction == CLOCKWISE and (anti_start_index - pro_start_index) % len(ccw_positions) == 1:
+        if (
+            handpath_direction == CLOCKWISE
+            and (anti_start_index - pro_start_index) % len(ccw_positions) == 1
+        ):
             return "leading_pro"
-        elif handpath_direction == CLOCKWISE and (pro_start_index - anti_start_index) % len(ccw_positions) == 1:
+        elif (
+            handpath_direction == CLOCKWISE
+            and (pro_start_index - anti_start_index) % len(ccw_positions) == 1
+        ):
             return "leading_anti"
-        elif handpath_direction == COUNTER_CLOCKWISE and (pro_start_index - anti_start_index) % len(ccw_positions) == 1:
+        elif (
+            handpath_direction == COUNTER_CLOCKWISE
+            and (pro_start_index - anti_start_index) % len(ccw_positions) == 1
+        ):
             return "leading_pro"
-        elif handpath_direction == COUNTER_CLOCKWISE and (anti_start_index - pro_start_index) % len(ccw_positions) == 1:
+        elif (
+            handpath_direction == COUNTER_CLOCKWISE
+            and (anti_start_index - pro_start_index) % len(ccw_positions) == 1
+        ):
             return "leading_anti"
-        
+
     def get_gamma_same_handpath_hybrid_letter(self) -> Literal["U", "V"]:
         gamma_same_handpath_hybrid_group = {
             "leading_pro": "U",
             "leading_anti": "V",
         }
         same_handpath_hybrid_type = self.determine_leader_and_same_handpath_hybrid()
-        
+
         gamma_same_handpath_hybrid_letter: Literal[
             "U", "V"
         ] = gamma_same_handpath_hybrid_group.get(same_handpath_hybrid_type, "")

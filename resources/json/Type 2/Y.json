@@ -98,7 +98,7 @@
         ],
         [
             {
-                "start_position": "gamma6",
+                "start_position": "gamma7",
                 "end_position": "beta3"
             },
             {
@@ -122,7 +122,7 @@
         ],
         [
             {
-                "start_position": "gamma5",
+                "start_position": "gamma6",
                 "end_position": "beta2"
             },
             {
@@ -146,7 +146,7 @@
         ],
         [
             {
-                "start_position": "gamma4",
+                "start_position": "gamma5",
                 "end_position": "beta1"
             },
             {
@@ -170,7 +170,7 @@
         ],
         [
             {
-                "start_position": "gamma3",
+                "start_position": "gamma8",
                 "end_position": "beta4"
             },
             {
@@ -194,7 +194,7 @@
         ],
         [
             {
-                "start_position": "gamma3",
+                "start_position": "gamma6",
                 "end_position": "beta3"
             },
             {
@@ -218,7 +218,7 @@
         ],
         [
             {
-                "start_position": "gamma4",
+                "start_position": "gamma7",
                 "end_position": "beta4"
             },
             {
@@ -242,7 +242,7 @@
         ],
         [
             {
-                "start_position": "gamma1",
+                "start_position": "gamma8",
                 "end_position": "beta1"
             },
             {
@@ -261,84 +261,84 @@
                 "quadrant": "None",
                 "start_location": "n",
                 "end_location": "n",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma5",
+                "end_position": "beta2"
+            },
+            {
+                "color": "red",
+                "motion_type": "pro",
+                "rotation_direction": "cw",
+                "quadrant": "ne",
+                "start_location": "n",
+                "end_location": "e",
+                "turns": 0
+            },
+            {
+                "color": "blue",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "e",
+                "end_location": "e",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma4",
+                "end_position": "beta3"
+            },
+            {
+                "color": "red",
+                "motion_type": "pro",
+                "rotation_direction": "ccw",
+                "quadrant": "sw",
+                "start_location": "w",
+                "end_location": "s",
+                "turns": 0
+            },
+            {
+                "color": "blue",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "s",
+                "end_location": "s",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "gamma3",
+                "end_position": "beta2"
+            },
+            {
+                "color": "red",
+                "motion_type": "pro",
+                "rotation_direction": "ccw",
+                "quadrant": "se",
+                "start_location": "s",
+                "end_location": "e",
+                "turns": 0
+            },
+            {
+                "color": "blue",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "e",
+                "end_location": "e",
                 "turns": 0
             }
         ],
         [
             {
                 "start_position": "gamma2",
-                "end_position": "beta2"
-            },
-            {
-                "color": "red",
-                "motion_type": "pro",
-                "rotation_direction": "cw",
-                "quadrant": "ne",
-                "start_location": "n",
-                "end_location": "e",
-                "turns": 0
-            },
-            {
-                "color": "blue",
-                "motion_type": "static",
-                "rotation_direction": "None",
-                "quadrant": "None",
-                "start_location": "e",
-                "end_location": "e",
-                "turns": 0
-            }
-        ],
-        [
-            {
-                "start_position": "gamma6",
-                "end_position": "beta3"
-            },
-            {
-                "color": "red",
-                "motion_type": "pro",
-                "rotation_direction": "ccw",
-                "quadrant": "sw",
-                "start_location": "w",
-                "end_location": "s",
-                "turns": 0
-            },
-            {
-                "color": "blue",
-                "motion_type": "static",
-                "rotation_direction": "None",
-                "quadrant": "None",
-                "start_location": "s",
-                "end_location": "s",
-                "turns": 0
-            }
-        ],
-        [
-            {
-                "start_position": "gamma5",
-                "end_position": "beta2"
-            },
-            {
-                "color": "red",
-                "motion_type": "pro",
-                "rotation_direction": "ccw",
-                "quadrant": "se",
-                "start_location": "s",
-                "end_location": "e",
-                "turns": 0
-            },
-            {
-                "color": "blue",
-                "motion_type": "static",
-                "rotation_direction": "None",
-                "quadrant": "None",
-                "start_location": "e",
-                "end_location": "e",
-                "turns": 0
-            }
-        ],
-        [
-            {
-                "start_position": "gamma4",
                 "end_position": "beta1"
             },
             {
@@ -362,7 +362,7 @@
         ],
         [
             {
-                "start_position": "gamma3",
+                "start_position": "gamma1",
                 "end_position": "beta4"
             },
             {

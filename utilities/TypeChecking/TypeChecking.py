@@ -79,7 +79,7 @@ OptimalLocationsDicts = Dict[str, OptimalLocationEntries]
 DictVariants = (
     ArrowAttributesDicts | SpecificStartEndPositionsDicts | OptimalLocationsDicts
 )
-DictVariantsLists = List[List[DictVariants]]
+DictVariantsLists = List[DictVariants]
 LetterDictionary = Dict[Letters, List[List[DictVariants]]]
 
 MotionTypeCombinations = Literal[

@@ -26,10 +26,6 @@ from settings.string_constants import (
     RIGHT,
     LOCATION,
     LAYER,
-    NORTH,
-    WEST,
-    SOUTH,
-    EAST,
     RED,
     BLUE,
 )

@@ -1,5 +1,5 @@
 {
-    "Σ": [
+    "\u03a3": [
         [
             {
                 "start_position": "alpha2",
@@ -45,198 +45,6 @@
                 "quadrant": "se",
                 "start_location": "s",
                 "end_location": "e",
-                "turns": 0
-            }
-        ],
-        [
-            {
-                "start_position": "gamma5",
-                "end_position": "alpha4"
-            },
-            {
-                "color": "blue",
-                "motion_type": "static",
-                "rotation_direction": "None",
-                "quadrant": "None",
-                "start_location": "e",
-                "end_location": "e",
-                "turns": 0
-            },
-            {
-                "color": "red",
-                "motion_type": "pro",
-                "rotation_direction": "ccw",
-                "quadrant": "sw",
-                "start_location": "w",
-                "end_location": "s",
-                "turns": 0
-            }
-        ],
-        [
-            {
-                "start_position": "gamma6",
-                "end_position": "alpha1"
-            },
-            {
-                "color": "blue",
-                "motion_type": "static",
-                "rotation_direction": "None",
-                "quadrant": "None",
-                "start_location": "s",
-                "end_location": "s",
-                "turns": 0
-            },
-            {
-                "color": "red",
-                "motion_type": "pro",
-                "rotation_direction": "ccw",
-                "quadrant": "nw",
-                "start_location": "n",
-                "end_location": "w",
-                "turns": 0
-            }
-        ],
-        [
-            {
-                "start_position": "gamma1",
-                "end_position": "alpha2"
-            },
-            {
-                "color": "blue",
-                "motion_type": "static",
-                "rotation_direction": "None",
-                "quadrant": "None",
-                "start_location": "w",
-                "end_location": "w",
-                "turns": 0
-            },
-            {
-                "color": "red",
-                "motion_type": "pro",
-                "rotation_direction": "cw",
-                "quadrant": "se",
-                "start_location": "e",
-                "end_location": "s",
-                "turns": 0
-            }
-        ],
-        [
-            {
-                "start_position": "gamma4",
-                "end_position": "alpha1"
-            },
-            {
-                "color": "blue",
-                "motion_type": "static",
-                "rotation_direction": "None",
-                "quadrant": "None",
-                "start_location": "s",
-                "end_location": "s",
-                "turns": 0
-            },
-            {
-                "color": "red",
-                "motion_type": "pro",
-                "rotation_direction": "cw",
-                "quadrant": "ne",
-                "start_location": "n",
-                "end_location": "e",
-                "turns": 0
-            }
-        ],
-        [
-            {
-                "start_position": "gamma3",
-                "end_position": "alpha4"
-            },
-            {
-                "color": "blue",
-                "motion_type": "static",
-                "rotation_direction": "None",
-                "quadrant": "None",
-                "start_location": "e",
-                "end_location": "e",
-                "turns": 0
-            },
-            {
-                "color": "red",
-                "motion_type": "pro",
-                "rotation_direction": "cw",
-                "quadrant": "nw",
-                "start_location": "w",
-                "end_location": "n",
-                "turns": 0
-            }
-        ],
-        [
-            {
-                "start_position": "gamma2",
-                "end_position": "alpha3"
-            },
-            {
-                "color": "blue",
-                "motion_type": "static",
-                "rotation_direction": "None",
-                "quadrant": "None",
-                "start_location": "n",
-                "end_location": "n",
-                "turns": 0
-            },
-            {
-                "color": "red",
-                "motion_type": "pro",
-                "rotation_direction": "cw",
-                "quadrant": "sw",
-                "start_location": "s",
-                "end_location": "w",
-                "turns": 0
-            }
-        ],
-        [
-            {
-                "start_position": "alpha2",
-                "end_position": "gamma1"
-            },
-            {
-                "color": "blue",
-                "motion_type": "pro",
-                "rotation_direction": "ccw",
-                "quadrant": "ne",
-                "start_location": "e",
-                "end_location": "n",
-                "turns": 0
-            },
-            {
-                "color": "red",
-                "motion_type": "static",
-                "rotation_direction": "None",
-                "quadrant": "None",
-                "start_location": "w",
-                "end_location": "w",
-                "turns": 0
-            }
-        ],
-        [
-            {
-                "start_position": "alpha3",
-                "end_position": "gamma2"
-            },
-            {
-                "color": "blue",
-                "motion_type": "pro",
-                "rotation_direction": "ccw",
-                "quadrant": "se",
-                "start_location": "s",
-                "end_location": "e",
-                "turns": 0
-            },
-            {
-                "color": "red",
-                "motion_type": "static",
-                "rotation_direction": "None",
-                "quadrant": "None",
-                "start_location": "n",
-                "end_location": "n",
                 "turns": 0
             }
         ],
@@ -247,6 +55,198 @@
             },
             {
                 "color": "blue",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "e",
+                "end_location": "e",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "pro",
+                "rotation_direction": "ccw",
+                "quadrant": "sw",
+                "start_location": "w",
+                "end_location": "s",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "alpha1",
+                "end_position": "gamma4"
+            },
+            {
+                "color": "blue",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "s",
+                "end_location": "s",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "pro",
+                "rotation_direction": "ccw",
+                "quadrant": "nw",
+                "start_location": "n",
+                "end_location": "w",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "alpha2",
+                "end_position": "gamma7"
+            },
+            {
+                "color": "blue",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "w",
+                "end_location": "w",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "pro",
+                "rotation_direction": "cw",
+                "quadrant": "se",
+                "start_location": "e",
+                "end_location": "s",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "alpha1",
+                "end_position": "gamma6"
+            },
+            {
+                "color": "blue",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "s",
+                "end_location": "s",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "pro",
+                "rotation_direction": "cw",
+                "quadrant": "ne",
+                "start_location": "n",
+                "end_location": "e",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "alpha4",
+                "end_position": "gamma5"
+            },
+            {
+                "color": "blue",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "e",
+                "end_location": "e",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "pro",
+                "rotation_direction": "cw",
+                "quadrant": "nw",
+                "start_location": "w",
+                "end_location": "n",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "alpha3",
+                "end_position": "gamma8"
+            },
+            {
+                "color": "blue",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "n",
+                "end_location": "n",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "pro",
+                "rotation_direction": "cw",
+                "quadrant": "sw",
+                "start_location": "s",
+                "end_location": "w",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "alpha4",
+                "end_position": "gamma8"
+            },
+            {
+                "color": "blue",
+                "motion_type": "pro",
+                "rotation_direction": "ccw",
+                "quadrant": "ne",
+                "start_location": "e",
+                "end_location": "n",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "w",
+                "end_location": "w",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "alpha1",
+                "end_position": "gamma5"
+            },
+            {
+                "color": "blue",
+                "motion_type": "pro",
+                "rotation_direction": "ccw",
+                "quadrant": "se",
+                "start_location": "s",
+                "end_location": "e",
+                "turns": 0
+            },
+            {
+                "color": "red",
+                "motion_type": "static",
+                "rotation_direction": "None",
+                "quadrant": "None",
+                "start_location": "n",
+                "end_location": "n",
+                "turns": 0
+            }
+        ],
+        [
+            {
+                "start_position": "alpha2",
+                "end_position": "gamma6"
+            },
+            {
+                "color": "blue",
                 "motion_type": "pro",
                 "rotation_direction": "ccw",
                 "quadrant": "sw",
@@ -266,8 +266,8 @@
         ],
         [
             {
-                "start_position": "alpha1",
-                "end_position": "gamma4"
+                "start_position": "alpha3",
+                "end_position": "gamma7"
             },
             {
                 "color": "blue",
@@ -290,8 +290,8 @@
         ],
         [
             {
-                "start_position": "alpha2",
-                "end_position": "gamma7"
+                "start_position": "alpha4",
+                "end_position": "gamma4"
             },
             {
                 "color": "blue",
@@ -314,8 +314,8 @@
         ],
         [
             {
-                "start_position": "alpha1",
-                "end_position": "gamma6"
+                "start_position": "alpha3",
+                "end_position": "gamma3"
             },
             {
                 "color": "blue",
@@ -338,8 +338,8 @@
         ],
         [
             {
-                "start_position": "alpha4",
-                "end_position": "gamma5"
+                "start_position": "alpha2",
+                "end_position": "gamma2"
             },
             {
                 "color": "blue",
@@ -362,8 +362,8 @@
         ],
         [
             {
-                "start_position": "alpha3",
-                "end_position": "gamma8"
+                "start_position": "alpha1",
+                "end_position": "gamma1"
             },
             {
                 "color": "blue",
