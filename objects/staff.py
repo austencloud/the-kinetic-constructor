@@ -51,7 +51,7 @@ from utilities.TypeChecking.TypeChecking import (
 if TYPE_CHECKING:
     from objects.arrow import Arrow
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
-    from widgets.propbox.propbox import PropBox
+    from widgets.graph_editor.propbox.propbox import PropBox
 ATTRIBUTES = STAFF_ATTRIBUTES
 
 logging.basicConfig(

@@ -35,18 +35,18 @@
         1    0.000    0.000    0.024    0.024 d:\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence.py:13(__init__)
         1    0.010    0.010    0.024    0.024 d:\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence_beats.py:26(__init__)
       118    0.003    0.000    0.020    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\enum.py:485(__new__)
-        1    0.000    0.000    0.020    0.020 d:\CODE\Apps\Sequence_Constructor\widgets\letter_picker\letter_picker.py:27(__init__)
+        1    0.000    0.000    0.020    0.020 d:\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker.py:27(__init__)
         1    0.000    0.000    0.020    0.020 d:\CODE\Apps\Sequence_Constructor\utilities\export_handler.py:17(__init__)
         1    0.000    0.000    0.020    0.020 d:\CODE\Apps\Sequence_Constructor\utilities\export_handler.py:25(export_to_png)
         1    0.018    0.018    0.018    0.018 {built-in method save}
  1635/122    0.002    0.000    0.014    0.000 {built-in method __new__ of type object at 0x00007FFC73EB8F90}
      1513    0.007    0.000    0.013    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\enum.py:237(__set_name__)
-        1    0.011    0.011    0.011    0.011 d:\CODE\Apps\Sequence_Constructor\widgets\letter_picker\letter_picker.py:139(populate_pictographs)
+        1    0.011    0.011    0.011    0.011 d:\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker.py:139(populate_pictographs)
     31171    0.007    0.000    0.011    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py:18(encode)
      1867    0.006    0.000    0.010    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\enum.py:353(__setitem__)
-        1    0.000    0.000    0.009    0.009 d:\CODE\Apps\Sequence_Constructor\widgets\letter_picker\letter_picker.py:41(setup_ui)
+        1    0.000    0.000    0.009    0.009 d:\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker.py:41(setup_ui)
        19    0.008    0.000    0.008    0.000 {built-in method setScene}
-        1    0.005    0.005    0.007    0.007 d:\CODE\Apps\Sequence_Constructor\widgets\letter_picker\letter_picker.py:54(init_letter_buttons_frame)
+        1    0.005    0.005    0.007    0.007 d:\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker.py:54(init_letter_buttons_frame)
         1    0.000    0.000    0.007    0.007 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\propbox\propbox.py:30(__init__)
         1    0.000    0.000    0.006    0.006 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\infobox_buttons.py:41(setup_buttons)
         1    0.000    0.000    0.006    0.006 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\infobox_buttons.py:95(create_infobox_buttons)
@@ -88,7 +88,7 @@
         1    0.000    0.000    0.001    0.001 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:49(init_view)
         2    0.000    0.000    0.001    0.001 d:\CODE\Apps\Sequence_Constructor\objects\grid.py:38(init_points)
         2    0.000    0.000    0.001    0.001 d:\CODE\Apps\Sequence_Constructor\objects\grid.py:39(<dictcomp>)
-        1    0.001    0.001    0.001    0.001 d:\CODE\Apps\Sequence_Constructor\widgets\letter_picker\letter_picker.py:119(init_scroll_area)
+        1    0.001    0.001    0.001    0.001 d:\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker.py:119(init_scroll_area)
         2    0.001    0.001    0.001    0.001 {built-in method scaled}
         1    0.000    0.000    0.001    0.001 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\infobox_layouts.py:98(setup_attributes_layouts)
         2    0.000    0.000    0.001    0.001 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\infobox_layouts.py:102(setup_attributes_layout)
@@ -142,7 +142,7 @@
        10    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:1325(XML)
        12    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:360(iterfind)
         4    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\staff.py:323(set_svg_color)
-        1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\letter_picker\letter_picker.py:164(connect_signals)
+        1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker.py:164(connect_signals)
         1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\staff.py:346(__init__)
         1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\export_handler.py:158(get_fill_color)
         8    0.000    0.000    0.000    0.000 {built-in method load}
@@ -170,9 +170,9 @@
         1    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:1208(parse)
        27    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\enum.py:1491(__or__)
        51    0.000    0.000    0.000    0.000 {built-in method builtins.next}
-        1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\main_widget.py:62(update_letter_picker_size)
+        1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\main_widget.py:62(update_option_picker_size)
         1    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:556(parse)
-        1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\letter_picker\letter_picker.py:173(update_size)
+        1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker.py:173(update_size)
         2    0.000    0.000    0.000    0.000 {built-in method setStyleSheet}
       157    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\enum.py:192(__get__)
        34    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\enum.py:652(<listcomp>)
@@ -182,7 +182,7 @@
         1    0.000    0.000    0.000    0.000 {built-in method screens}
         1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\grid.py:17(__init__)
         1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:145(init_quadrants)
-        1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\letter_picker\letter_picker.py:185(update_letter_buttons_size)
+        1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker.py:185(update_letter_buttons_size)
         1    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:571(_code)
      1513    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\enum.py:1144(__init__)
      1937    0.000    0.000    0.000    0.000 {built-in method builtins.id}
@@ -344,7 +344,7 @@
         1    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\os.py:282(walk)
         1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence_buttons.py:30(update_size)
         1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:92(set_contents_margins_to_zero)
-        1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\letter_picker\letter_picker.py:182(update_scroll_area_size)
+        1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker.py:182(update_scroll_area_size)
         4    0.000    0.000    0.000    0.000 {built-in method setContentsMargins}
         2    0.000    0.000    0.000    0.000 {built-in method hide}
        36    0.000    0.000    0.000    0.000 {method 'is_dir' of 'nt.DirEntry' objects}

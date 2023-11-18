@@ -11,12 +11,11 @@ from utilities.layout_manager import LayoutManager
 from utilities.pictograph_generator import PictographGenerator
 from widgets.graph_editor.key_event_handler import KeyEventHandler
 from widgets.graph_editor.graph_editor import GraphEditor
-from widgets.letter_picker.letter_picker import LetterPicker
+from widgets.option_picker.option_picker import OptionPicker
 from widgets.sequence.sequence import Sequence
 
 if TYPE_CHECKING:
     from main import MainWindow
-
 
 
 class MainWidget(QWidget):
@@ -31,7 +30,7 @@ class MainWidget(QWidget):
         self.letters: LetterDictionary = self.json_handler.load_all_letters()
 
         self.graph_editor = GraphEditor(self)
-        self.letter_picker = LetterPicker(self)
+        self.option_picker = OptionPicker(self)
         self.sequence = Sequence(self)
 
         self.generator = PictographGenerator(self)
@@ -52,16 +51,16 @@ class MainWidget(QWidget):
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
         self.update_graph_editor_size()
-        self.update_letter_picker_size()
+        self.update_option_picker_size()
         self.update_sequenceboard_size()
 
     def update_graph_editor_size(self) -> None:
         if hasattr(self, "graph_editor"):
             self.graph_editor.update_size()
 
-    def update_letter_picker_size(self) -> None:
-        if hasattr(self, "letter_picker"):
-            self.letter_picker.update_size()
+    def update_option_picker_size(self) -> None:
+        if hasattr(self, "option_picker"):
+            self.option_picker.update_size()
 
     def update_sequenceboard_size(self) -> None:
         if hasattr(self, "sequence"):

@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Dict, Callable, List
 from utilities.TypeChecking.TypeChecking import Color
 
 if TYPE_CHECKING:
-    from widgets.infobox.infobox import InfoBox
+    from widgets.graph_editor.infobox.infobox import InfoBox
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
 
 
