@@ -5,11 +5,13 @@ from widgets.graph_editor.infobox.infobox_widgets import InfoBoxWidgets
 from widgets.graph_editor.infobox.infobox_layouts import InfoBoxLayouts
 from widgets.graph_editor.graphboard.graphboard import GraphBoard
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 
+
 class InfoBox(QFrame):
-    def __init__(self, main_widget: 'MainWidget', graphboard: "GraphBoard") -> None:
+    def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard") -> None:
         super().__init__()
         self.main_widget = main_widget
         self.main_window = self.main_widget.main_window
@@ -21,9 +23,6 @@ class InfoBox(QFrame):
         self.setup_ui()
 
     def setup_ui(self) -> None:
-        self.setFixedSize(
-            int(self.main_window.width() * 0.20), int(self.main_window.width() * 0.20)
-        )
         self.buttons.setup_buttons()
         self.labels.setup_labels()
         self.widgets.setup_widgets()

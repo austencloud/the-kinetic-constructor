@@ -23,9 +23,8 @@ class ActionButtonsFrame(QFrame):
 
         self.graphboard = graphboard
         self.json_handler = json_handler
-        self.action_buttons_layout = QVBoxLayout()
-        self.action_buttons_layout.setContentsMargins(0, 0, 0, 0)
-        self.action_buttons_layout.setSpacing(0)
+        self.setLayout(QVBoxLayout())
+        self.layout().setSpacing(0)
         # remove all space from the edges fo the frame to its contents
 
         self.setMaximumHeight(int(self.graphboard.view.height()))
@@ -61,10 +60,9 @@ class ActionButtonsFrame(QFrame):
             button = self.create_and_configure_button(
                 icon_filename, tooltip, action, *args
             )
-            self.action_buttons_layout.addWidget(button)
+            self.layout().addWidget(button)
 
-        self.setLayout(self.action_buttons_layout)
-        self.setMaximumWidth(ACTION_BUTTON_SIZE)
+
 
     def create_and_configure_button(
         self, icon_filename, tooltip, on_click, *args

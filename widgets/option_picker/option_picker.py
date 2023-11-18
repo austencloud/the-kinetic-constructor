@@ -24,7 +24,8 @@ from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from .option_picker_buttons_frame import LetterButtons
 from .option_picker_scroll_area import OptionPickerScrollArea
 
-class OptionPicker(QWidget):
+
+class OptionPicker(QFrame):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -36,26 +37,20 @@ class OptionPicker(QWidget):
         self.main_layout.setSpacing(0)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
-        self.setMinimumWidth(int(self.main_window.width() * 0.5))
-        self.setMaximumWidth(int(self.main_window.width() * 0.5))
-        self.setMinimumHeight(int(self.main_window.height() * 2 / 3))
-        self.setMaximumHeight(int(self.main_window.height() * 2 / 3))
         self.setFixedSize(self.width(), self.height())
         self.scroll_area = OptionPickerScrollArea(self)
         self.button_frame = LetterButtons(self.main_window)
-        self.main_layout.addLayout(self.button_frame.letter_buttons_layout)
+
         self.main_layout.addWidget(self.scroll_area)
+        self.main_layout.addWidget(self.button_frame)
 
         self.setLayout(self.main_layout)
 
     ### RESIZE EVENT HANDLERS ###
 
     def update_size(self) -> None:
-        self.setMinimumWidth(int(self.main_widget.width() * 0.5))
-        self.setMinimumHeight(int(self.main_widget.height() * 2 / 3))
         self.setFixedSize(
-            int(self.main_widget.width() * 0.5), int(self.main_widget.height() * 2 / 3)
+            int(self.main_widget.width() * 0.5), int(self.main_widget.height() * 3 / 4)
         )
         self.scroll_area.update_scroll_area_size()
         self.button_frame.update_letter_buttons_size()
-

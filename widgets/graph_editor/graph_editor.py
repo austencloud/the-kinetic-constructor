@@ -52,7 +52,7 @@ class GraphEditor(QFrame):
             main_widget,
             self.infobox,
         )
-        self.action_buttons_frame = ActionButtonsFrame(
+        self.action_buttons = ActionButtonsFrame(
             self.graphboard,
             self.json_handler,
         )
@@ -60,20 +60,19 @@ class GraphEditor(QFrame):
         objectbox_layout.addWidget(self.arrowbox.view)
         objectbox_layout.addWidget(self.propbox.view)
         graphboard_layout.addWidget(self.graphboard.view)
-        action_buttons_layout.addWidget(self.action_buttons_frame)
+        action_buttons_layout.addWidget(self.action_buttons)
         infobox_layout.addWidget(self.infobox)
         graph_editor_frame_layout.setContentsMargins(0, 0, 0, 0)
         graph_editor_frame_layout.addLayout(objectbox_layout)
         graph_editor_frame_layout.addLayout(graphboard_layout)
         graph_editor_frame_layout.addLayout(action_buttons_layout)
         graph_editor_frame_layout.addLayout(infobox_layout)
-        self_frame_layout = graph_editor_frame_layout
         self.setLayout(graph_editor_frame_layout)
 
         self.setMouseTracking(True)
 
     def update_size(self) -> None:
-        self.setFixedHeight(int(self.main_widget.height() * 1 / 3))
+        self.setFixedHeight(int(self.main_widget.height() * 1 / 4))
         self.setFixedWidth(int(self.main_widget.width() * 0.5))
         self.update_graphboard_size()
         self.update_arrowbox_size()
@@ -102,11 +101,14 @@ class GraphEditor(QFrame):
 
     def update_action_button_size(self) -> None:
         button_size = int((self.height() / 6) * 0.8)
-        for i in range(self.action_buttons_frame.action_buttons_layout.count()):
-            button: QPushButton = (
-                self.action_buttons_frame.action_buttons_layout.itemAt(i).widget()
-            )
+        for i in range(self.action_buttons.layout().count()):
+            button: QPushButton = self.action_buttons.layout().itemAt(i).widget()
             button.setFixedSize(button_size, button_size)
             button.setIconSize(QSize(int(button_size * 0.8), int(button_size * 0.8)))
-        self.action_buttons_frame.setMinimumWidth(button_size)
-        self.action_buttons_frame.setMaximumWidth(button_size)
+        self.action_buttons.setFixedSize(
+            button_size * 2,
+            int(self.graphboard.view.height()),
+        )
+        self.action_buttons.layout().setContentsMargins(
+            int(button_size / 2), 0, int(button_size / 2), 0
+        )

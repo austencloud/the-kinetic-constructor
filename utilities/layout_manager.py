@@ -69,16 +69,15 @@ class LayoutManager:
         self.layouts["left"].addLayout(self.layouts["sequence"])
         self.layouts["right"].addLayout(self.layouts["option_picker"])
         self.layouts["right"].addLayout(self.layouts["graph_editor"])
-        
+
         self.layouts["main"].addLayout(self.layouts["left"])
         self.layouts["main"].addLayout(self.layouts["right"])
 
         self.layouts["option_picker"].addWidget(self.main_widget.option_picker)
         self.main_window.graph_editor_layout.addWidget(self.graph_editor)
         self.main_widget.setLayout(self.layouts["main"])
-
-
-
+        self.main_widget.layout().setSpacing(0)
+        self.main_widget.layout().setContentsMargins(0, 0, 0, 0)
 
     def init_sequence_layout(self) -> None:
         self.layouts["sequence"].addWidget(self.main_widget.sequence)
@@ -89,7 +88,9 @@ class LayoutManager:
         self.add_black_border(self.main_widget.sequence)
         self.add_black_border(self.main_widget.graph_editor.infobox)
         self.add_black_border(self.main_widget.option_picker)
-        self.add_black_border(self.main_widget.graph_editor.action_buttons_frame)
+        self.add_black_border(self.main_widget.option_picker.scroll_area)
+        self.add_black_border(self.main_widget.option_picker.button_frame)
+        self.add_black_border(self.main_widget.graph_editor.action_buttons)
         self.add_black_border(self.main_widget.graph_editor.graphboard)
         self.add_black_border(self.main_widget.graph_editor.propbox)
 
