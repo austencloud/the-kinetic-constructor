@@ -113,6 +113,8 @@ class OptionBoard(QFrame):
             letter_buttons_layout.addLayout(row_layout)
 
         letter_buttons_frame.setLayout(letter_buttons_layout)
+        self.letter_buttons_frame = letter_buttons_frame
+        self.letter_buttons_layout = letter_buttons_layout
         self.main_layout.addWidget(letter_buttons_frame)
 
     def init_scroll_area(self) -> None:
@@ -166,3 +168,29 @@ class OptionBoard(QFrame):
 
     def on_pictograph_clicked(self) -> None:
         pass
+
+    ### RESIZE EVENT HANDLERS ###
+
+    def update_scroll_area_size(self) -> None:
+        if hasattr(self, "scroll_area"):
+            self.scroll_area.setMinimumWidth(int(self.width() * 3 / 4))
+
+    def update_letter_buttons_size(self) -> None:
+        if hasattr(self, "letter_buttons_frame"):
+            button_size = int(self.main_window.width() * 0.020)
+            for i in range(self.letter_buttons_layout.count()):
+                item = self.letter_buttons_layout.itemAt(i)
+                if item is not None:
+                    row_layout: QHBoxLayout = item.layout()
+                    for j in range(row_layout.count()):
+                        button_item = row_layout.itemAt(j)
+                        if button_item is not None:
+                            button: QPushButton = button_item.widget()
+                            button.setFixedSize(button_size, button_size)
+                            button.setIconSize(
+                                QSize(int(button_size * 0.8), int(button_size * 0.8))
+                            )
+
+            
+            
+                            

@@ -25,9 +25,11 @@ class ActionButtonsFrame(QFrame):
         self.json_handler = json_handler
         self.action_buttons_layout = QVBoxLayout()
         self.action_buttons_layout.setContentsMargins(0, 0, 0, 0)
-        self.setFrameStyle(QFrame.Shape.NoFrame)
+        self.action_buttons_layout.setSpacing(0)
+        #remove all space from the edges fo the frame to its contents
+        
+        
         self.setMaximumHeight(int(self.graphboard.view.height()))
-        self.button_size = int(self.graphboard.main_widget.main_window.width() * 0.020)
 
         buttons_settings = [
             (
@@ -73,8 +75,6 @@ class ActionButtonsFrame(QFrame):
         button = QPushButton(QIcon(icon_path), "")
         button.setToolTip(tooltip)
         button.setFont(ACTION_BUTTON_FONT)
-        button.setFixedSize(self.button_size, self.button_size)
-        button.setIconSize(QSize(int(self.button_size * 0.8), int(self.button_size * 0.8)))
         button.clicked.connect(lambda: on_click(*args))
         return button
 

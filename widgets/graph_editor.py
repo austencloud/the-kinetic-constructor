@@ -25,8 +25,10 @@ class GraphEditor(QFrame):
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.WindowText, QColor("black"))
         self.setPalette(palette)
+        # remove the space in between each widget in the frame
 
         graph_editor_frame_layout = QHBoxLayout(self)
+        graph_editor_frame_layout.setSpacing(0)
 
         objectbox_layout = QVBoxLayout()
         graphboard_layout = QVBoxLayout()
@@ -64,6 +66,5 @@ class GraphEditor(QFrame):
         graph_editor_frame_layout.addLayout(infobox_layout)
         self.graph_editor_frame_layout = graph_editor_frame_layout
         self.setLayout(graph_editor_frame_layout)
-        
-        self.setMouseTracking(True)
 
+        self.setMouseTracking(True)

@@ -34,26 +34,25 @@ class SequenceBoard(QFrame):
         self.beats = []
 
         self.generator: "PictographGenerator" = None
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         # Create a QGridLayout for the QFrame
         self.layout = QGridLayout(self)
-
+        # remove all the padding from the layout
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
         for j in range(4):
             for i in range(4):
                 view = QGraphicsView()
                 scene = QGraphicsScene()
-
                 view.setScene(scene)
-
                 view.setSceneRect(0, 0, 100, 100)
-
+                view.setMinimumWidth(int(self.width() / 4)) 
+                self.setMinimumHeight(int((self.width() / 4) / 75/90))
+                view.resize(int(self.width() / 4), int(self.width() / 4))
                 rect = QRectF(0, 0, 50, 50)
                 color = QColor(255, 0, 0)
                 scene.addRect(rect, color)
-
                 self.layout.addWidget(view, j, i)
-
                 self.beats.append(view)
 
     def setup_view_and_controls(self) -> None:
