@@ -14,7 +14,7 @@ class KeyEventHandler:
     def keyPressEvent(
         self, event: "QKeyEvent", main_widget: "MainWidget", graphboard: "GraphBoard"
     ) -> None:
-        sequence_board = main_widget.sequence_board
+        sequence = main_widget.sequence
 
         if not graphboard.selectedItems():
             return
@@ -52,4 +52,4 @@ class KeyEventHandler:
 
         ### SEQEUNCE MANAGEMENT ###
         elif event.key() == Qt.Key.Key_Enter:
-            sequence_board.add_to_sequence(graphboard)
+            sequence.add_to_sequence(graphboard)

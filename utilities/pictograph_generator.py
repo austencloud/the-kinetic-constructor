@@ -7,9 +7,9 @@ if TYPE_CHECKING:
     from widgets.graphboard.graphboard import GraphBoard
 
 class PictographGenerator:
-    def __init__(self, main_widget: 'MainWidget', graphboard: 'GraphBoard', infobox: 'InfoBox') -> None:
-        self.graphboard = graphboard
-        self.infobox = infobox
+    def __init__(self, main_widget: 'MainWidget') -> None:
+        self.graphboard = main_widget.graph_editor.graphboard
+        self.infobox = main_widget.graph_editor.infobox
         self.main_window = main_widget.main_window
         self.export_handler = main_widget.export_handler
         self.grid = self.graphboard.grid

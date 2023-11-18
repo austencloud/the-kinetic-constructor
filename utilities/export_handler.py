@@ -9,14 +9,14 @@ from copy import deepcopy
 from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.main_widget import MainWidget
 from utilities.TypeChecking.TypeChecking import ColorHex
 
 
 class ExportHandler:
-    def __init__(self, graphboard: "GraphBoard") -> None:
-        self.graphboard = graphboard
-        self.grid = graphboard.grid
+    def __init__(self, main_widget: "MainWidget") -> None:
+        self.graphboard = main_widget.graph_editor.graphboard
+        self.grid = self.graphboard.grid
         self.get_fill_color(self.grid.svg_file)
         self.export_to_png()
 

@@ -23,7 +23,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
 
 
-class OptionBoard(QFrame):
+class OptionBoard(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -42,7 +42,6 @@ class OptionBoard(QFrame):
         self.optionboard_grid_layout.setSpacing(0)
         self.main_layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
-        self.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
 
         self.setMinimumWidth(int(self.main_window.width() * 0.5))
         self.setMaximumWidth(int(self.main_window.width() * 0.5))
@@ -171,26 +170,29 @@ class OptionBoard(QFrame):
 
     ### RESIZE EVENT HANDLERS ###
 
+    def update_size(self) -> None:
+        self.setMinimumWidth(int(self.main_window.width() * 0.5))
+        self.setMinimumHeight(int(self.main_window.height() * 2 / 3))
+        self.setFixedSize(
+            int(self.main_window.width() * 0.5), int(self.main_window.height() * 2 / 3)
+        )
+        self.update_scroll_area_size()
+        self.update_letter_buttons_size()
+
     def update_scroll_area_size(self) -> None:
-        if hasattr(self, "scroll_area"):
-            self.scroll_area.setMinimumWidth(int(self.width() * 3 / 4))
+        self.scroll_area.setMinimumWidth(int(self.width() * 3 / 4))
 
     def update_letter_buttons_size(self) -> None:
-        if hasattr(self, "letter_buttons_frame"):
-            button_size = int(self.main_window.width() * 0.020)
-            for i in range(self.letter_buttons_layout.count()):
-                item = self.letter_buttons_layout.itemAt(i)
-                if item is not None:
-                    row_layout: QHBoxLayout = item.layout()
-                    for j in range(row_layout.count()):
-                        button_item = row_layout.itemAt(j)
-                        if button_item is not None:
-                            button: QPushButton = button_item.widget()
-                            button.setFixedSize(button_size, button_size)
-                            button.setIconSize(
-                                QSize(int(button_size * 0.8), int(button_size * 0.8))
-                            )
-
-            
-            
-                            
+        button_size = int(self.main_window.width() * 0.020)
+        for i in range(self.letter_buttons_layout.count()):
+            item = self.letter_buttons_layout.itemAt(i)
+            if item is not None:
+                row_layout: QHBoxLayout = item.layout()
+                for j in range(row_layout.count()):
+                    button_item = row_layout.itemAt(j)
+                    if button_item is not None:
+                        button: QPushButton = button_item.widget()
+                        button.setFixedSize(button_size, button_size)
+                        button.setIconSize(
+                            QSize(int(button_size * 0.8), int(button_size * 0.8))
+                        )

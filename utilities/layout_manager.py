@@ -33,14 +33,14 @@ class LayoutManager:
             "graphboard_and_buttons"
         ]
         self.letter_buttons_layout: QVBoxLayout = self.layouts["letter_buttons"]
-        self.sequence_board_layout: QVBoxLayout = self.layouts["sequence_board"]
+        self.sequence_layout: QVBoxLayout = self.layouts["sequence"]
         self.keyboard_layout: QVBoxLayout = self.layouts["keyboard"]
         self.optionboard_layout: QHBoxLayout = self.layouts["optionboard"]
         self.sequence_layout: QHBoxLayout = self.layouts["sequence"]
 
         self.optionboard = self.main_widget.optionboard
         self.graph_editor = self.main_widget.graph_editor
-        self.sequence_board = self.main_widget.sequence_board
+        self.sequence = self.main_widget.sequence
         self.graphboard = self.main_widget.graph_editor.graphboard
 
     def configure_layouts(self) -> None:
@@ -68,7 +68,7 @@ class LayoutManager:
             "graphboard_and_buttons": QHBoxLayout(),
             "optionboard": QHBoxLayout(),
             "letter_buttons": QVBoxLayout(),
-            "sequence_board": QVBoxLayout(),
+            "sequence": QVBoxLayout(),
             "keyboard": QVBoxLayout(),
         }
 
@@ -80,9 +80,7 @@ class LayoutManager:
         self.layouts["main"].addLayout(self.layouts["right"])
         self.layouts["optionboard"].addWidget(self.main_widget.optionboard)
         self.main_widget.setLayout(self.layouts["main"])
-        self.main_window.graph_editor_layout.addWidget(
-            self.graph_editor
-        )
+        self.main_window.graph_editor_layout.addWidget(self.graph_editor)
 
     def add_stretch(self) -> None:
         self.main_window.graph_editor_layout.addStretch(1)
@@ -90,19 +88,17 @@ class LayoutManager:
         self.main_window.sequence_layout.addStretch(1)
 
     def set_contents_margins_to_zero(self) -> None:
-        self.graph_editor.graph_editor_frame_layout.setContentsMargins(0, 0, 0, 0)
         self.optionboard_layout.setContentsMargins(0, 0, 0, 0)
         self.optionboard.optionboard_grid_layout.setContentsMargins(0, 0, 0, 0)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
 
     def init_sequence_layout(self) -> None:
-        self.layouts["sequence_board"].addWidget(self.main_widget.sequence_board)
-        self.layouts["sequence_board"].addWidget(self.main_widget.clear_sequence_button)
-        self.layouts["sequence"].addLayout(self.layouts["sequence_board"])
+        self.layouts["sequence"].addWidget(self.main_widget.sequence)
+        self.layouts["sequence"].addLayout(self.layouts["sequence"])
 
     def add_black_border_to_widgets(self) -> None:
         self.add_black_border(self.main_widget.graph_editor.graphboard)
-        self.add_black_border(self.main_widget.sequence_board)
+        self.add_black_border(self.main_widget.sequence)
         self.add_black_border(self.main_widget.graph_editor.infobox)
         self.add_black_border(self.main_widget.optionboard)
         self.add_black_border(self.main_widget.graph_editor.action_buttons_frame)

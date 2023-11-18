@@ -92,7 +92,7 @@ class ArrowBox(QGraphicsScene):
 
         if self.items(QPointF(scene_pos)):
             if not self.arrowbox_drag:
-                graphboard = self.main_widget.graphboard
+                graphboard = self.main_widget.graph_editor.graphboard
                 self.arrowbox_drag = ArrowBoxDrag(self.main_window, graphboard, self)
 
             arrows = [

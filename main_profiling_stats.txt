@@ -44,7 +44,7 @@
       547    0.012    0.000    0.021    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\main_widget.py:103(update_action_button_size)
         1    0.000    0.000    0.020    0.020 d:\CODE\Apps\Sequence_Constructor\widgets\optionboard\optionboard.py:27(__init__)
         1    0.019    0.019    0.019    0.019 {built-in method save}
-        1    0.009    0.009    0.018    0.018 d:\CODE\Apps\Sequence_Constructor\widgets\sequence_board\sequence_board.py:28(__init__)
+        1    0.009    0.009    0.018    0.018 d:\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence.py:28(__init__)
       547    0.002    0.000    0.018    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\main_widget.py:89(update_arrowbox_size)
       547    0.001    0.000    0.017    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\main_widget.py:121(update_optionboard_size)
      3634    0.008    0.000    0.016    0.000 {built-in method type}
@@ -369,7 +369,7 @@
        17    0.000    0.000    0.000    0.000 {built-in method resize}
         6    0.000    0.000    0.000    0.000 {built-in method setFlag}
         2    0.000    0.000    0.000    0.000 {built-in method removeItem}
-        1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\sequence_board\sequence_board.py:58(setup_view_and_controls)
+        1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence.py:58(setup_view_and_controls)
        34    0.000    0.000    0.000    0.000 {built-in method end}
         1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:169(__enter__)
        63    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\codecs.py:260(__init__)
