@@ -235,7 +235,7 @@ class GraphBoard(QGraphicsScene):
         self.update_infobox()
 
     def update_infobox(self) -> None:
-        self.infobox.update()
+        self.infobox.control_panel.update()
 
     def update_arrows(self) -> None:
         self.arrow_positioner.update()

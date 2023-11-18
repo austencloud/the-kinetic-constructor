@@ -1,22 +1,40 @@
-from PyQt6.QtGui import QPixmap
+import logging
+from typing import TYPE_CHECKING, Dict
+
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QLabel, QSizePolicy, QFrame
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtWidgets import QFrame, QLabel, QSizePolicy, QHBoxLayout
+
+from data.positions_map import positions_map
 from objects.arrow import Arrow
 from objects.ghosts.ghost_arrow import GhostArrow
-from data.positions_map import positions_map
-import logging
-from settings.string_constants import *
-from typing import TYPE_CHECKING
+from settings.string_constants import (
+    LEFT,
+    RIGHT,
+    BLUE,
+    RED,
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
+    CLOCK_ICON,
+    CLOCKWISE_ICON,
+    COUNTER_CLOCKWISE_ICON,
+    PRO,
+    ANTI,
+    STATIC,
+    CLOCKWISE_ICON,
+    COUNTER_CLOCKWISE_ICON,
+    CLOCK_ICON,
+)
+from utilities.TypeChecking.TypeChecking import Color
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.infobox.infobox import InfoBox
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
-from typing import Dict
+    from widgets.graph_editor.infobox.control_panel.control_panel import ControlPanel
 
 
 class InfoBoxLabels:
-    def __init__(self, infobox: "InfoBox", graphboard: "GraphBoard") -> None:
-        self.infobox = infobox
+    def __init__(self, control_panel: "ControlPanel", graphboard: "GraphBoard") -> None:
+        self.control_panel = control_panel
         self.graphboard = graphboard
         self.pixmap_cache = {}
         self.blue_details_label: QLabel = None
@@ -31,6 +49,7 @@ class InfoBoxLabels:
         self.setup_attribute_label(LEFT.capitalize(), BLUE)
         self.setup_attribute_label(RIGHT.capitalize(), RED)
         self.type_position_label = self.create_label()
+        self.type_position_label_widget = self.create_label_widget()
 
     def create_attribute_labels(self) -> tuple[QLabel, QLabel, QLabel, QLabel]:
         motion_type_label = QLabel()
@@ -128,19 +147,40 @@ class InfoBoxLabels:
         if icon_name in self.pixmap_cache:
             label.setPixmap(self.pixmap_cache[icon_name])
 
-    def setup_attribute_label(self, text, color) -> None:
+    def setup_attribute_label(self, text: str, color: Color) -> None:
+        """
+        Set up an attribute label with the given text and color.
+
+        Args:
+            text (str): The text to be displayed on the label.
+            color (str): The color of the label.
+
+        Returns:
+            None
+        """
         label = self.create_label(text, color)
-        label.setAlignment(Qt.AlignmentFlag.AlignTop)
         setattr(self, f"{color}_details_label", label)
 
-    def create_label(self, text="", color=None) -> QLabel:
-        """Create a generic label."""
+
+    def create_label_widget(self, text="", color=None) -> QFrame:
+        frame = QFrame()
+        layout = QHBoxLayout(frame)
         label = QLabel(text)
         label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         if color:
             label.setStyleSheet(f"color: {color}; font-size: 25px; font-weight: bold;")
-        return label
+        layout.addWidget(label)
 
+        return frame
+
+    def create_label(self, text="", color=None) -> QLabel:
+        label = QLabel(text)
+        label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        if color:
+            label.setStyleSheet(f"color: {color}; font-size: 25px; font-weight: bold;")
+
+        return label
+    
     def get_start_end_positions(self) -> list[tuple[str, str] | None]:
         positions = []
         arrow_items = [

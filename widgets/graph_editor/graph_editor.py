@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from PyQt6.QtGui import QColor, QPalette
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 
 from widgets.graph_editor.action_buttons_frame import ActionButtonsFrame
 from widgets.graph_editor.arrowbox.arrowbox import ArrowBox
@@ -65,7 +65,7 @@ class GraphEditor(QFrame):
         graph_editor_frame_layout.setContentsMargins(0, 0, 0, 0)
         graph_editor_frame_layout.addLayout(objectbox_layout)
         graph_editor_frame_layout.addLayout(graphboard_layout)
-        graph_editor_frame_layout.addLayout(action_buttons_layout)
+
         graph_editor_frame_layout.addLayout(infobox_layout)
         self.setLayout(graph_editor_frame_layout)
 

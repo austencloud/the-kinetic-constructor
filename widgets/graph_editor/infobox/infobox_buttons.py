@@ -8,14 +8,16 @@ from utilities.TypeChecking.TypeChecking import Color
 if TYPE_CHECKING:
     from widgets.graph_editor.infobox.infobox import InfoBox
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
-
+    from widgets.graph_editor.infobox.control_panel.control_panel import ControlPanel
+from PyQt6.QtWidgets import QVBoxLayout
 
 class InfoBoxButtons:
-    def __init__(self, infobox: "InfoBox", graphboard: "GraphBoard") -> None:
-        self.infobox = infobox
+    def __init__(self, control_panel: 'ControlPanel', graphboard: "GraphBoard") -> None:
         self.graphboard = graphboard
+        self.control_panel = control_panel
         self.button_groups: Dict[str, List[QPushButton]] = {BLUE: [], RED: []}
-        self.layouts = infobox.layouts
+        self.setup_buttons()
+        self.setup_button_layout()
 
     def create_and_set_button(
         self, button_name: str, properties: Dict[str, str | Callable]
@@ -88,8 +90,15 @@ class InfoBoxButtons:
 
         self.create_infobox_buttons()
 
+
     def create_infobox_buttons(self) -> None:
         for button_name, properties in self.button_properties.items():
             self.create_and_set_button(button_name, properties)
 
-        self.layouts.setup_button_layout()
+        self.setup_button_layout()
+
+    def setup_button_layout(self) -> None:
+        self.button_layout = QVBoxLayout()  # Create a vertical layout for the buttons
+        for button_name in self.button_properties.keys():
+            button = getattr(self, f"{button_name}_button")
+            self.button_layout.addWidget(button)  # Add each button to the layout
