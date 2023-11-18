@@ -7,7 +7,8 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+
 
 class GraphBoardMenuHandler:
     def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard") -> None:
@@ -33,7 +34,7 @@ class GraphBoardMenuHandler:
 
     def _add_staff_actions(self, menu: QMenu, clicked_item) -> None:
         staff_present = isinstance(clicked_item, Staff)
-        
+
         delete_action = QAction("Delete", menu)
         delete_action.setEnabled(staff_present)
         delete_action.triggered.connect(lambda: self._delete_selected_staff())
@@ -60,10 +61,10 @@ class GraphBoardMenuHandler:
         for item in selected_items:
             if isinstance(item, Arrow):
                 item.delete()
-                
+
     ### GRAPHBOARD ACTIONS ###
-    
-    def _add_graphboard_actions(self, menu: QMenu) -> None:        
+
+    def _add_graphboard_actions(self, menu: QMenu) -> None:
         swap_colors_action = QAction("Swap Colors", menu)
         swap_colors_action.triggered.connect(lambda: self.graphboard.swap_colors())
         menu.addAction(swap_colors_action)

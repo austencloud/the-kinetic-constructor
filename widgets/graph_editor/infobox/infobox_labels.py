@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.infobox.infobox import InfoBox
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
 from typing import Dict
 
 

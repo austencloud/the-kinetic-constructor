@@ -22,12 +22,12 @@ from settings.string_constants import (
     START_LOCATION,
     TURNS,
 )
-from widgets.arrowbox.arrowbox_drag import ArrowBoxDrag
-from widgets.arrowbox.arrowbox_view import ArrowBoxView
+from widgets.graph_editor.arrowbox.arrowbox_drag import ArrowBoxDrag
+from widgets.graph_editor.arrowbox.arrowbox_view import ArrowBoxView
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.infobox.infobox import InfoBox
+    from widgets.graph_editor.infobox.infobox import InfoBox
     from objects.arrow import Arrow
 
 from utilities.TypeChecking.TypeChecking import ArrowAttributesDicts

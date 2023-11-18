@@ -6,7 +6,7 @@ from widgets.sequence.sequence_beats import SequenceBeats
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
 
 
 class Sequence(QWidget):

@@ -34,10 +34,10 @@ from settings.string_constants import (
     TURNS,
     WEST,
 )
-from widgets.graphboard.graphboard_view import GraphBoardView
+from widgets.graph_editor.graphboard.graphboard_view import GraphBoardView
 
 if TYPE_CHECKING:
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
 
 
 class GraphBoardInit:

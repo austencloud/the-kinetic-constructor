@@ -33,7 +33,7 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
 
 
 class StaffPositioner:
@@ -78,7 +78,9 @@ class StaffPositioner:
 
         arrows_grouped_by_start_loc: Dict[Location, List[ArrowAttributesDicts]] = {}
         for arrow in board_state:
-            arrows_grouped_by_start_loc.setdefault(arrow[START_LOCATION], []).append(arrow)
+            arrows_grouped_by_start_loc.setdefault(arrow[START_LOCATION], []).append(
+                arrow
+            )
 
         pro_or_anti_arrows = [
             arrow for arrow in board_state if arrow[MOTION_TYPE] in [PRO, ANTI]
@@ -117,7 +119,9 @@ class StaffPositioner:
 
     ### STATIC BETA ### β
 
-    def reposition_static_beta(self, move_staff: callable, static_arrows: List[ArrowAttributesDicts]) -> None:
+    def reposition_static_beta(
+        self, move_staff: callable, static_arrows: List[ArrowAttributesDicts]
+    ) -> None:
         for arrow in static_arrows:
             staff = next(
                 (
@@ -141,7 +145,9 @@ class StaffPositioner:
                 (WEST, BLUE): (UP, DOWN) if end_location == WEST else None,
             }
 
-            direction: Direction= beta_reposition_map.get((staff.location, arrow[COLOR]), None)
+            direction: Direction = beta_reposition_map.get(
+                (staff.location, arrow[COLOR]), None
+            )
 
             if direction:
                 if isinstance(direction, str):

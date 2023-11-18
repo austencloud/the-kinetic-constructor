@@ -50,7 +50,7 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
     from objects.ghosts.ghost_arrow import GhostArrow
 
 
@@ -401,14 +401,15 @@ class Arrow(GraphicalObject):
 
         self.color = new_color
         self.update_appearance()
-    
+
         self.staff.color = new_color
         self.staff.update_appearance()
-    
+
         self.graphboard.update()
 
     def swap_rot_dir(self) -> None:
         from objects.ghosts.ghost_arrow import GhostArrow
+
         self.center_x = self.boundingRect().width() / 2
         self.center_y = self.boundingRect().height() / 2
 
@@ -435,21 +436,22 @@ class Arrow(GraphicalObject):
         self.rotation_direction = new_rotation_direction
         self.start_location = new_start_location
         self.end_location = new_end_location
-        
+
         self.staff.color = self.color
         self.staff.location = new_end_location
         self.staff.layer = 1
-        
+
         self.update_appearance()
         self.staff.update_appearance()
-        
-        if not isinstance (self, GhostArrow) and self.ghost_arrow:
+
+        if not isinstance(self, GhostArrow) and self.ghost_arrow:
             self.ghost_arrow.is_mirrored = self.is_mirrored
             self.ghost_arrow.update(self.attributes)
         self.graphboard.update()
 
     def mirror(self) -> None:
         from objects.ghosts.ghost_arrow import GhostArrow
+
         transform = QTransform()
         transform.translate(self.center_x, self.center_y)
         transform.scale(-1, 1)
@@ -459,10 +461,10 @@ class Arrow(GraphicalObject):
             self.ghost_arrow.setTransform(transform)
             self.ghost_arrow.is_mirrored = True
         self.is_mirrored = True
-        
 
     def unmirror(self) -> None:
         from objects.ghosts.ghost_arrow import GhostArrow
+
         transform = QTransform()
         transform.translate(self.center.x(), self.center.y())
         transform.scale(1, 1)
@@ -473,7 +475,6 @@ class Arrow(GraphicalObject):
             self.ghost_arrow.is_mirrored = False
         self.is_mirrored = False
 
-    
     def swap_motion_type(self) -> None:
         if self.motion_type == ANTI:
             new_motion_type = PRO

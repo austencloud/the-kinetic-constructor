@@ -4,12 +4,13 @@ from typing import TYPE_CHECKING, Dict
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
     from widgets.infobox.infobox import InfoBox
     from widgets.arrowbox.arrowbox import ArrowBox
     from widgets.propbox.propbox import PropBox
     from widgets.action_buttons_frame import ActionButtonsFrame
     from objects.arrow import Arrow
+
 
 class InfoBoxWidgets:
     def __init__(self, infobox: "InfoBox", graphboard: "GraphBoard") -> None:
@@ -62,7 +63,7 @@ class InfoBoxWidgets:
         info_widget.setLayout(main_layout)
         return info_widget
 
-    def update_info_widget_content(self, widget: "QFrame", arrow: 'Arrow') -> None:
+    def update_info_widget_content(self, widget: "QFrame", arrow: "Arrow") -> None:
         self.buttons = self.infobox.buttons
         if widget.layout().count() == 0:
             new_content = self.labels.construct_info_string_label(arrow)

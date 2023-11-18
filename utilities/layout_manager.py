@@ -35,10 +35,10 @@ class LayoutManager:
         self.letter_buttons_layout: QVBoxLayout = self.layouts["letter_buttons"]
         self.sequence_layout: QVBoxLayout = self.layouts["sequence"]
         self.keyboard_layout: QVBoxLayout = self.layouts["keyboard"]
-        self.optionboard_layout: QHBoxLayout = self.layouts["optionboard"]
+        self.letter_picker_layout: QHBoxLayout = self.layouts["letter_picker"]
         self.sequence_layout: QHBoxLayout = self.layouts["sequence"]
 
-        self.optionboard = self.main_widget.optionboard
+        self.letter_picker = self.main_widget.letter_picker
         self.graph_editor = self.main_widget.graph_editor
         self.sequence = self.main_widget.sequence
         self.graphboard = self.main_widget.graph_editor.graphboard
@@ -52,7 +52,7 @@ class LayoutManager:
         self.add_black_border_to_widgets()
 
     def remove_padding(self):
-        self.layouts["optionboard"].setSpacing(0)
+        self.layouts["letter_picker"].setSpacing(0)
         self.layouts["graph_editor"].setSpacing(0)  # Toggle this for layout testing
 
     def init_layouts(self) -> None:
@@ -66,33 +66,32 @@ class LayoutManager:
             "graphboard": QVBoxLayout(),
             "word": QHBoxLayout(),
             "graphboard_and_buttons": QHBoxLayout(),
-            "optionboard": QHBoxLayout(),
+            "letter_picker": QHBoxLayout(),
             "letter_buttons": QVBoxLayout(),
             "sequence": QVBoxLayout(),
             "keyboard": QVBoxLayout(),
         }
 
     def configure_main_layout(self) -> None:
-        self.layouts["left"].addLayout(self.layouts["optionboard"])
+        self.layouts["left"].addLayout(self.layouts["letter_picker"])
         self.layouts["left"].addLayout(self.layouts["graph_editor"])
         self.layouts["right"].addLayout(self.layouts["sequence"])
-        
+
         self.layouts["main"].addLayout(self.layouts["right"])
         self.layouts["main"].addLayout(self.layouts["left"])
 
-        
-        self.layouts["optionboard"].addWidget(self.main_widget.optionboard)
+        self.layouts["letter_picker"].addWidget(self.main_widget.letter_picker)
         self.main_widget.setLayout(self.layouts["main"])
         self.main_window.graph_editor_layout.addWidget(self.graph_editor)
 
     def add_stretch(self) -> None:
         self.main_window.graph_editor_layout.addStretch(1)
-        self.main_window.optionboard_layout.addStretch(1)
+        self.main_window.letter_picker_layout.addStretch(1)
         self.main_window.sequence_layout.addStretch(1)
 
     def set_contents_margins_to_zero(self) -> None:
-        self.optionboard_layout.setContentsMargins(0, 0, 0, 0)
-        self.optionboard.optionboard_grid_layout.setContentsMargins(0, 0, 0, 0)
+        self.letter_picker_layout.setContentsMargins(0, 0, 0, 0)
+        self.letter_picker.letter_picker_grid_layout.setContentsMargins(0, 0, 0, 0)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
 
     def init_sequence_layout(self) -> None:
@@ -103,7 +102,7 @@ class LayoutManager:
         self.add_black_border(self.main_widget.graph_editor.graphboard)
         self.add_black_border(self.main_widget.sequence)
         self.add_black_border(self.main_widget.graph_editor.infobox)
-        self.add_black_border(self.main_widget.optionboard)
+        self.add_black_border(self.main_widget.letter_picker)
         self.add_black_border(self.main_widget.graph_editor.action_buttons_frame)
         self.add_black_border(self.main_widget.graph_editor.graphboard)
         self.add_black_border(self.main_widget.graph_editor.propbox)

@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QWidget
 
-from widgets.action_buttons_frame import ActionButtonsFrame
-from widgets.arrowbox.arrowbox import ArrowBox
-from widgets.graphboard.graphboard import GraphBoard
-from widgets.infobox.infobox import InfoBox
-from widgets.propbox.propbox import PropBox
+from widgets.graph_editor.action_buttons_frame import ActionButtonsFrame
+from widgets.graph_editor.arrowbox.arrowbox import ArrowBox
+from widgets.graph_editor.graphboard.graphboard import GraphBoard
+from widgets.graph_editor.infobox.infobox import InfoBox
+from widgets.graph_editor.propbox.propbox import PropBox
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
@@ -107,8 +107,6 @@ class GraphEditor(QFrame):
                 self.action_buttons_frame.action_buttons_layout.itemAt(i).widget()
             )
             button.setFixedSize(button_size, button_size)
-            button.setIconSize(
-                QSize(int(button_size * 0.8), int(button_size * 0.8))
-            )
+            button.setIconSize(QSize(int(button_size * 0.8), int(button_size * 0.8)))
         self.action_buttons_frame.setMinimumWidth(button_size)
         self.action_buttons_frame.setMaximumWidth(button_size)

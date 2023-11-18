@@ -8,11 +8,11 @@ from objects.arrow import Arrow
 from utilities.TypeChecking.TypeChecking import LetterDictionary, Letters
 
 if TYPE_CHECKING:
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
 
 
 class JsonHandler(QObject):
-    def connect_scene(self, graphboard: 'GraphBoard') -> None:
+    def connect_scene(self, graphboard: "GraphBoard") -> None:
         self.graphboard = graphboard
 
     def load_all_letters(self) -> LetterDictionary:

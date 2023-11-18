@@ -12,7 +12,7 @@ from PyQt6.QtGui import QScreen
 class MainWindow(QMainWindow):
     graph_editor_layout: QHBoxLayout
     sequence_layout: QHBoxLayout
-    optionboard_layout: QHBoxLayout
+    letter_picker_layout: QHBoxLayout
 
     def __init__(self, profiler: cProfile.Profile) -> None:
         super().__init__()

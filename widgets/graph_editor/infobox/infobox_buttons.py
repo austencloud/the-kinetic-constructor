@@ -7,7 +7,7 @@ from utilities.TypeChecking.TypeChecking import Color
 
 if TYPE_CHECKING:
     from widgets.infobox.infobox import InfoBox
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
 
 
 class InfoBoxButtons:

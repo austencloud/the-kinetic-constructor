@@ -50,7 +50,7 @@ from utilities.TypeChecking.TypeChecking import (
 
 if TYPE_CHECKING:
     from objects.arrow import Arrow
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
     from widgets.propbox.propbox import PropBox
 ATTRIBUTES = STAFF_ATTRIBUTES
 
@@ -86,7 +86,7 @@ class Staff(GraphicalObject):
         self.previous_location = None
         self.arrow: Arrow = None
         self.ghost_staff: Staff = None
-        
+
         self.color = attributes[COLOR]
         self.location = attributes[LOCATION]
         self.layer = attributes[LAYER]
@@ -138,7 +138,7 @@ class Staff(GraphicalObject):
             self.ghost_staff.location = self.location
             self.ghost_staff.layer = self.layer
             self.ghost_staff.update_appearance()
-            
+
             self.graphboard.staffs.remove(self)
             if self.arrow.motion_type == STATIC:
                 self.arrow.start_location = new_location
@@ -227,15 +227,11 @@ class Staff(GraphicalObject):
 
     def get_axis(self, location) -> None:
         if self.layer == 1:
-            axis: Axis = (
-                VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
-            )
+            axis: Axis = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
         elif self.layer == 2:
-            axis: Axis = (
-                HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
-            )
+            axis: Axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
         return axis
-        
+
     def update_rotation(self) -> None:
         if self.axis == VERTICAL:
             self.current_position = self.pos()

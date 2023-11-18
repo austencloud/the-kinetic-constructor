@@ -1,13 +1,26 @@
 import os
-from settings.string_constants import START_POS, END_POS, MOTION_TYPE, ROTATION_DIRECTION, ANTI, PRO, COLOR, RED, CLOCKWISE, QUADRANT
+from settings.string_constants import (
+    START_POS,
+    END_POS,
+    MOTION_TYPE,
+    ROTATION_DIRECTION,
+    ANTI,
+    PRO,
+    COLOR,
+    RED,
+    CLOCKWISE,
+    QUADRANT,
+)
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.infobox.infobox import InfoBox
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.infobox.infobox import InfoBox
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+
 
 class PictographGenerator:
-    def __init__(self, main_widget: 'MainWidget') -> None:
+    def __init__(self, main_widget: "MainWidget") -> None:
         self.graphboard = main_widget.graph_editor.graphboard
         self.infobox = main_widget.graph_editor.infobox
         self.main_window = main_widget.main_window
@@ -76,4 +89,3 @@ class PictographGenerator:
 
                 # Clear the graphboard for the next combination
                 self.graphboard.clear()
-

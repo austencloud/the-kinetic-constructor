@@ -20,7 +20,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from main import MainWindow
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
     from widgets.arrowbox.arrowbox import ArrowBox
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
@@ -31,6 +31,7 @@ from utilities.TypeChecking.TypeChecking import (
     Location,
     Turns,
 )
+
 
 class ArrowBoxDrag(QWidget):
     def __init__(
@@ -239,7 +240,7 @@ class ArrowBoxDrag(QWidget):
             self.remove_same_color_arrow()
         if self.ghost_arrow.is_mirrored:
             self.ghost_arrow.unmirror()
-            
+
         if self.has_entered_graphboard_once:
             self.just_entered_graphboard = False
 
@@ -252,7 +253,6 @@ class ArrowBoxDrag(QWidget):
             self.previous_quadrant = new_quadrant
             self.update_preview_for_new_quadrant(new_quadrant)
             self.ghost_arrow.update(self.attributes)
-
 
     def update_preview_for_new_quadrant(self, new_quadrant: Quadrant) -> None:
         self.quadrant = new_quadrant
@@ -270,13 +270,11 @@ class ArrowBoxDrag(QWidget):
         self.ghost_arrow.start_location = self.start_location
         self.ghost_arrow.end_location = self.end_location
         self.ghost_arrow.turns = self.turns
-        
-        ghost_svg = self.ghost_arrow.get_svg_file(
-            self.motion_type, self.turns
-        )
+
+        ghost_svg = self.ghost_arrow.get_svg_file(self.motion_type, self.turns)
 
         self.ghost_arrow.update_svg(ghost_svg)
-        
+
         self.update_rotation()
         self.update_staff_during_drag()
 

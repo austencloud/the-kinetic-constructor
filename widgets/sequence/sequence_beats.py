@@ -18,7 +18,7 @@ from settings.numerical_constants import (
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
     from widgets.sequence.sequence import Sequence
 
 

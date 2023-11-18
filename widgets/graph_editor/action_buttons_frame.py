@@ -9,7 +9,7 @@ from settings.styles import (
     ACTION_BUTTON_SIZE,
 )
 from utilities.json_handler import JsonHandler
-from widgets.graphboard.graphboard import GraphBoard
+from widgets.graph_editor.graphboard.graphboard import GraphBoard
 from PyQt6.QtCore import QSize
 
 
@@ -26,9 +26,8 @@ class ActionButtonsFrame(QFrame):
         self.action_buttons_layout = QVBoxLayout()
         self.action_buttons_layout.setContentsMargins(0, 0, 0, 0)
         self.action_buttons_layout.setSpacing(0)
-        #remove all space from the edges fo the frame to its contents
-        
-        
+        # remove all space from the edges fo the frame to its contents
+
         self.setMaximumHeight(int(self.graphboard.view.height()))
 
         buttons_settings = [
@@ -66,7 +65,6 @@ class ActionButtonsFrame(QFrame):
 
         self.setLayout(self.action_buttons_layout)
         self.setMaximumWidth(ACTION_BUTTON_SIZE)
-
 
     def create_and_configure_button(
         self, icon_filename, tooltip, on_click, *args

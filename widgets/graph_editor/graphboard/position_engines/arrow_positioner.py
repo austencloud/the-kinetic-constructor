@@ -15,7 +15,7 @@ from objects.arrow import BlankArrow, Arrow
 from typing import TYPE_CHECKING, List, Dict, Any
 
 if TYPE_CHECKING:
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
 
 from utilities.TypeChecking.TypeChecking import OptimalLocationsDicts
 

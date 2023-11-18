@@ -3,7 +3,7 @@ from objects.arrow import Arrow
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
     from utilities.TypeChecking.TypeChecking import ArrowAttributesDicts
     from objects.arrow import Arrow
     from widgets.arrowbox.arrowbox_drag import ArrowBoxDrag

@@ -23,13 +23,13 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
 
 
-class OptionBoard(QWidget):
+class LetterPicker(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.grid_widget = QWidget()
-        self.optionboard_grid_layout = QGridLayout(self.grid_widget)
+        self.letter_picker_grid_layout = QGridLayout(self.grid_widget)
         self.main_layout = QHBoxLayout(
             self
         )  # Use QHBoxLayout to place items side by side
@@ -39,7 +39,7 @@ class OptionBoard(QWidget):
         self.connect_signals()
 
     def setup_ui(self) -> None:
-        self.optionboard_grid_layout.setSpacing(0)
+        self.letter_picker_grid_layout.setSpacing(0)
         self.main_layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
 
@@ -129,7 +129,7 @@ class OptionBoard(QWidget):
         # Set the content margins of the scroll area and its widget to zero
         scroll_area.setContentsMargins(0, 0, 0, 0)
         self.grid_widget.setContentsMargins(0, 0, 0, 0)
-        self.optionboard_grid_layout.setContentsMargins(0, 0, 0, 0)
+        self.letter_picker_grid_layout.setContentsMargins(0, 0, 0, 0)
         # Remove frame around the QScrollArea
         scroll_area.setFrameStyle(QFrame.Shape.NoFrame)
 
@@ -157,7 +157,7 @@ class OptionBoard(QWidget):
             pictograph_button.setFixedSize(
                 int(pictograph_width), int(pictograph_height)
             )
-            self.optionboard_grid_layout.addWidget(
+            self.letter_picker_grid_layout.addWidget(
                 pictograph_button, i // MAX_ITEMS_PER_ROW, i % MAX_ITEMS_PER_ROW
             )
 

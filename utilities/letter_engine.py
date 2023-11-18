@@ -17,7 +17,7 @@ logging.basicConfig(
 from typing import TYPE_CHECKING, Dict, Literal, Set, Tuple
 
 if TYPE_CHECKING:
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
 
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,

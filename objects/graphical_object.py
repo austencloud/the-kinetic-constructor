@@ -5,7 +5,7 @@ import re
 from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from widgets.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
     from objects.arrow import Arrow
     from objects.staff import Staff
     from objects.ghosts.ghost_staff import GhostStaff

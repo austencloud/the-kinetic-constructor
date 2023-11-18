@@ -32,19 +32,22 @@ from utilities.TypeChecking.TypeChecking import (
     Optional,
     Tuple,
 )
-from widgets.graphboard.graphboard_init import GraphBoardInit
-from widgets.graphboard.graphboard_menu_handler import GraphBoardMenuHandler
-from widgets.graphboard.position_engines.arrow_positioner import ArrowPositioner
-from widgets.graphboard.position_engines.staff_positioner import StaffPositioner
+from widgets.graph_editor.graphboard.graphboard_init import GraphBoardInit
+from widgets.graph_editor.graphboard.graphboard_menu_handler import (
+    GraphBoardMenuHandler,
+)
+from widgets.graph_editor.graphboard.position_engines.arrow_positioner import ArrowPositioner
+from widgets.graph_editor.graphboard.position_engines.staff_positioner import StaffPositioner
 
 if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
-    from widgets.infobox.infobox import InfoBox
+    from widgets.graph_editor.infobox.infobox import InfoBox
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor import GraphEditor
+    from widgets.graph_editor.graph_editor import GraphEditor
+
 
 class GraphBoard(QGraphicsScene):
-    def __init__(self, main_widget: "MainWidget", graph_editor: 'GraphEditor') -> None:
+    def __init__(self, main_widget: "MainWidget", graph_editor: "GraphEditor") -> None:
         super().__init__()
         self.main_widget = main_widget
         self.graph_editor = graph_editor
