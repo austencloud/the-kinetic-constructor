@@ -75,9 +75,12 @@ class LayoutManager:
     def configure_main_layout(self) -> None:
         self.layouts["left"].addLayout(self.layouts["optionboard"])
         self.layouts["left"].addLayout(self.layouts["graph_editor"])
-        self.layouts["main"].addLayout(self.layouts["left"])
         self.layouts["right"].addLayout(self.layouts["sequence"])
+        
         self.layouts["main"].addLayout(self.layouts["right"])
+        self.layouts["main"].addLayout(self.layouts["left"])
+
+        
         self.layouts["optionboard"].addWidget(self.main_widget.optionboard)
         self.main_widget.setLayout(self.layouts["main"])
         self.main_window.graph_editor_layout.addWidget(self.graph_editor)

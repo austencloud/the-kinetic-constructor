@@ -16,16 +16,16 @@ class Sequence(QWidget):
         self.graphboard = main_widget.graph_editor.graphboard
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
-        self.beats = SequenceBeats(self.main_widget, self.graphboard, self)
-        self.buttons = SequenceButtons(self.main_widget, self.graphboard, self)
+        self.beat_frame = SequenceBeats(self.main_widget, self.graphboard, self)
+        self.button_frame = SequenceButtons(self.main_widget, self.graphboard, self)
 
         self.layout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        
-        self.layout.addWidget(self.beats)
-        self.layout.addWidget(self.buttons)
+
+        self.layout.addWidget(self.beat_frame)
+        self.layout.addWidget(self.button_frame)
 
     def update_size(self) -> None:
-        self.buttons.update_size()
-        self.beats.update_size()
+        self.button_frame.update_size()
+        self.beat_frame.update_size()

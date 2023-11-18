@@ -22,7 +22,6 @@ if TYPE_CHECKING:
     from widgets.sequence.sequence import Sequence
 
 
-
 class SequenceBeats(QFrame):
     def __init__(
         self, main_widget: "MainWidget", graphboard: "GraphBoard", sequence: "Sequence"
@@ -43,9 +42,6 @@ class SequenceBeats(QFrame):
                 scene = QGraphicsScene()
                 view.setScene(scene)
                 view.setSceneRect(0, 0, 100, 100)
-                view.setMinimumWidth(int(self.width() / 4))
-                view.setMinimumHeight(int((self.width() / 4) / 75 / 90))
-                view.resize(int(self.width() / 4), int(self.width() / 4))
                 rect = QRectF(0, 0, 50, 50)
                 color = QColor(255, 0, 0)
                 scene.addRect(rect, color)
@@ -53,7 +49,14 @@ class SequenceBeats(QFrame):
                 self.beats.append(view)
 
     def update_size(self) -> None:
-        self.setFixedHeight(int(self.main_widget.height() - (self.main_widget.height() * 1 / 20)))
+        self.setFixedHeight(
+            int(self.main_widget.height() - self.sequence.button_frame.height())
+        )
+        beat_height = int(((self.height() / 4)))
+        beat_width = int(beat_height * 75 / 90)
+
+        self.sequence.setFixedWidth(beat_width * 4)
+
         for beat in self.beats:
-            beat.setFixedHeight(int(((self.height()- (self.main_widget.height() * 1 / 20)) / 4)))
-            beat.setFixedWidth(int(beat.height() * 75/90))
+            beat.setFixedHeight(beat_height)
+            beat.setFixedWidth(beat_width)

@@ -15,16 +15,20 @@ class SequenceButtons(QFrame):
         self.main_widget = main_widget
         self.graphboard = graphboard
         self.sequence = sequence
+        self.button_height = int(self.main_widget.height() * 1 / 20)
 
         self.layout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
 
+        self.buttons = []
         self.clear_sequence_button = QPushButton("Clear Sequence")
+        self.buttons.append(self.clear_sequence_button)
+        
         self.layout.addWidget(self.clear_sequence_button)
-    
+
+        
     def update_size(self) -> None:
-        self.button_height = int(self.main_widget.height() * 1 / 20)
         self.setFixedHeight(self.button_height)
         self.clear_sequence_button.setFixedHeight(self.button_height)
 
