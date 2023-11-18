@@ -1,14 +1,20 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QFrame
 from settings.string_constants import *
-
+from typing import TYPE_CHECKING, Dict
+if TYPE_CHECKING:
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.infobox.infobox import InfoBox
+    from objects.arrow import Arrow
+from PyQt6.QtWidgets import QLabel
+from utilities.TypeChecking.TypeChecking import Color
 
 class InfoBoxLayouts:
-    def __init__(self, infobox, graphboard):
+    def __init__(self, infobox: 'InfoBox', graphboard: 'GraphBoard'):
         self.infobox = infobox
         self.graphboard = graphboard
         self.labels = infobox.labels
-        self.widgets = infobox.widgets
+        self.frames = infobox.frames
 
     def define_info_layouts(
         self, motion_type_label, rotation_direction_label, start_end_label, turns_label
@@ -38,7 +44,7 @@ class InfoBoxLayouts:
 
     def setup_layouts(self):
         self.master_layout = QVBoxLayout()
-        self.attributes_layouts = {}
+        self.attributes_layouts: Dict[Color, QVBoxLayout] = {}
 
         self.setup_top_layout()
         self.setup_bottom_layout()
@@ -46,18 +52,18 @@ class InfoBoxLayouts:
 
         self.infobox.setLayout(self.master_layout)
 
-    def setup_top_layout(self):
-        top_layout = QHBoxLayout()
+    def setup_top_layout(self) -> None:
+        self.top_layout = QHBoxLayout()
         for color in [BLUE, RED]:
-            self.setup_column_layout(color, top_layout)
-        self.master_layout.addLayout(top_layout)
+            self.setup_column_layout(color)
+        self.master_layout.addLayout(self.top_layout)
 
-    def setup_column_layout(self, color, top_layout):
+    def setup_column_layout(self, color: Color):
         column_frame = QFrame()
         column_frame.setFrameShape(QFrame.Shape.Box)
         column_frame.setFrameShadow(QFrame.Shadow.Sunken)
         column_layout = QVBoxLayout()
-        header_label = getattr(self.labels, f"{color}_details_label")
+        header_label: QLabel = getattr(self.labels, f"{color}_details_label")
         header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         column_layout.addWidget(header_label)
         attributes_buttons_layout = QHBoxLayout()
@@ -68,7 +74,7 @@ class InfoBoxLayouts:
         attributes_buttons_layout.addLayout(self.attributes_layouts[color])
         column_layout.addLayout(attributes_buttons_layout)
         column_frame.setLayout(column_layout)
-        top_layout.addWidget(column_frame)
+        self.top_layout.addWidget(column_frame)
 
     def setup_bottom_layout(self):
         bottom_layout = QHBoxLayout()
@@ -108,18 +114,18 @@ class InfoBoxLayouts:
                 button = getattr(self.buttons, f"{button_name}_button")
                 buttons_layout.addWidget(button)
 
-        info_widget_inner = self.widgets.construct_attributes_widget(color)
+        info_widget_inner = self.frames.construct_attribute_frame(color)
 
         attribute_layout.addLayout(buttons_layout)
         attribute_layout.addWidget(info_widget_inner)
 
         if color == BLUE:
-            self.widgets.blue_attributes_widget.setLayout(attribute_layout)
+            self.frames.blue_attribute_frame.setLayout(attribute_layout)
         else:
-            self.widgets.red_attributes_widget.setLayout(attribute_layout)
+            self.frames.red_attribute_frame.setLayout(attribute_layout)
 
     def add_attributes_widgets_to_layouts(self):
-        self.blue_attributes_layout.addWidget(self.widgets.blue_attributes_widget)
-        self.red_attributes_layout.addWidget(self.widgets.red_attributes_widget)
+        self.blue_attributes_layout.addWidget(self.frames.blue_attribute_frame)
+        self.red_attributes_layout.addWidget(self.frames.red_attribute_frame)
         self.attributes_layouts[BLUE].addLayout(self.blue_attributes_layout)
         self.attributes_layouts[RED].addLayout(self.red_attributes_layout)

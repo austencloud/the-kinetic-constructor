@@ -40,10 +40,6 @@ class InfoBoxButtons:
 
     def setup_buttons(self) -> None:
         self.button_properties = {
-            "swap_colors": {
-                "icon": ICON_PATHS["swap_colors"],
-                "callback": lambda: self.graphboard.swap_colors(),
-            },
             "swap_motion_type_blue": {
                 "icon": ICON_PATHS["swap"],
                 "callback": lambda: self.graphboard.get_arrow_by_color(

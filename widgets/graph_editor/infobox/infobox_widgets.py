@@ -3,35 +3,34 @@ from settings.string_constants import *
 from typing import TYPE_CHECKING, Dict
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
-    from widgets.infobox.infobox import InfoBox
-    from widgets.arrowbox.arrowbox import ArrowBox
-    from widgets.propbox.propbox import PropBox
-    from widgets.action_buttons_frame import ActionButtonsFrame
+    from widgets.graph_editor.infobox.infobox import InfoBox
     from objects.arrow import Arrow
+from PyQt6.QtCore import Qt
 
 
-class InfoBoxWidgets:
+class InfoBoxFrames:
     def __init__(self, infobox: "InfoBox", graphboard: "GraphBoard") -> None:
         self.infobox = infobox
         self.labels = infobox.labels
-
         self.graphboard = graphboard
 
-    def setup_widgets(self) -> None:
-        self.blue_attributes_widget = QFrame()
-        self.blue_attributes_widget.setFrameShape(QFrame.Shape.Box)
-        self.blue_attributes_widget.setFrameShadow(QFrame.Shadow.Sunken)
+    def setup_frames(self) -> None:
+        widget_colors = [BLUE, RED]
+        for color in widget_colors:
+            attribute_frame = QFrame()
+            attribute_frame.setStyleSheet(
+                "border: 1px solid black;"
+            )  # Add black outlines
+            attribute_frame.setObjectName(f"{color}_attribute_frame")
+            attribute_frame.setFixedHeight(int(self.infobox.height() / 3))
+            attribute_frame.setFixedWidth(int(self.infobox.width() / 3))
+            attribute_frame.setContentsMargins(0, 0, 0, 0)
 
-        self.red_attributes_widget = QFrame()
-        self.red_attributes_widget.setFrameShape(QFrame.Shape.Box)
-        self.red_attributes_widget.setFrameShadow(QFrame.Shadow.Sunken)
+            setattr(self, f"{color}_attribute_frame", attribute_frame)
+            attribute_frame.show()
 
-        self.blue_attributes_widget.show()
-        self.red_attributes_widget.show()
-
-    def construct_attributes_widget(self, color) -> QWidget:
+    def construct_attribute_frame(self, color) -> QWidget:
         self.buttons = self.infobox.buttons
 
         (
@@ -63,23 +62,18 @@ class InfoBoxWidgets:
         info_widget.setLayout(main_layout)
         return info_widget
 
-    def update_info_widget_content(self, widget: "QFrame", arrow: "Arrow") -> None:
-        self.buttons = self.infobox.buttons
-        if widget.layout().count() == 0:
-            new_content = self.labels.construct_info_string_label(arrow)
-            widget.setLayout(new_content.layout())
-            return
+    def update_frame_contents(self, widget: "QFrame", arrow: "Arrow") -> None:
         self.labels.update_labels(widget, arrow)
-        self.buttons.show_buttons(arrow.color)
+        self.infobox.buttons.show_buttons(arrow.color)
 
-    def update_attribute_widgets(self) -> None:
-        widgets = self.infobox.widgets
+    def update_attribute_frames(self) -> None:
+        widgets = self.infobox.frames
         for color in [BLUE, RED]:
             arrow = self.graphboard.get_arrow_by_color(color)
             if arrow:
-                widget = getattr(widgets, f"{color}_attributes_widget")
-                self.update_info_widget_content(widget, arrow)
+                widget: QFrame = getattr(widgets, f"{color}_attribute_frame")
+                self.update_frame_contents(widget, arrow)
                 widget.show()
             else:
-                widget = getattr(widgets, f"{color}_attributes_widget")
+                widget = getattr(widgets, f"{color}_attribute_frame")
                 widget.hide()

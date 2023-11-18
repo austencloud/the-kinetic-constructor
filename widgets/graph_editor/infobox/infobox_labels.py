@@ -9,7 +9,7 @@ from settings.string_constants import *
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.infobox.infobox import InfoBox
+    from widgets.graph_editor.infobox.infobox import InfoBox
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
 from typing import Dict
 
@@ -19,6 +19,10 @@ class InfoBoxLabels:
         self.infobox = infobox
         self.graphboard = graphboard
         self.pixmap_cache = {}
+        self.blue_details_label: QLabel = None
+        self.red_details_label: QLabel = None
+        self.type_position_label: QLabel = None
+        self.setup_labels()
         self.preload_pixmaps()
 
     ### LABEL CREATION ###
