@@ -50,18 +50,8 @@ class MainWidget(QWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
-        self.update_graph_editor_size()
-        self.update_option_picker_size()
-        self.update_sequenceboard_size()
+        self.sequence.update_size()
+        self.option_picker.update_size()
+        self.graph_editor.update_size()
 
-    def update_graph_editor_size(self) -> None:
-        if hasattr(self, "graph_editor"):
-            self.graph_editor.update_size()
 
-    def update_option_picker_size(self) -> None:
-        if hasattr(self, "option_picker"):
-            self.option_picker.update_size()
-
-    def update_sequenceboard_size(self) -> None:
-        if hasattr(self, "sequence"):
-            self.sequence.update_size()

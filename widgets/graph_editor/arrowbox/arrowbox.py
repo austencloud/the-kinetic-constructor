@@ -39,9 +39,10 @@ class ArrowBox(QGraphicsScene):
         self.infobox = infobox
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
+        self.setSceneRect(0, 0, 450, 450)
         self.setup_view()
         self.populate_arrows()
-        self.setSceneRect(0, 0, 450, 450)
+        
         # set dimensions
 
         

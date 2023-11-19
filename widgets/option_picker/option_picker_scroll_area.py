@@ -44,15 +44,9 @@ class OptionPickerScrollArea(QScrollArea):
             self.grid_widget
         )  # Set the grid widget as the widget for the scroll area
         # Assuming the width of the OptionBoard (self.width()) is available
-        self.pictograph_width = (
-            (self.main_widget.main_window.width() / 2) * (3 / 4) / 4
-        )  # 4 pictographs per row
-        self.pictograph_height = self.pictograph_width * (
-            90 / 75
-        )  # According to the desired ratio
+        # According to the desired ratio
         # set the vertical scrol bar's width
         self.verticalScrollBar().setFixedWidth(int(self.main_window.width() * 0.01))
-
         self.populate_pictographs()
         self.connect_signals()
         self.update_scroll_area_size()
@@ -68,6 +62,8 @@ class OptionPickerScrollArea(QScrollArea):
         """
         Populate the scroll area with pictograph buttons.
         """
+        self.pictograph_width = ((self.option_picker.width() * 5 / 6) / 4) - (self.verticalScrollBar().width()/4)
+        self.pictograph_height = self.pictograph_width * (90 / 75)
         number_of_pictographs = 50
         MAX_ITEMS_PER_ROW = 4
 
@@ -94,6 +90,14 @@ class OptionPickerScrollArea(QScrollArea):
         """
         Update the size of the scroll area based on the pictograph width and scrollbar width.
         """
-        if self.scrollbar_width == 0:
-            self.scrollbar_width = self.verticalScrollBar().width()
-        self.setFixedWidth(int(self.pictograph_width * 4 + self.scrollbar_width))
+        self.setFixedWidth(int(self.option_picker.width() * 4 / 5))
+        self.setFixedHeight(int(self.option_picker.height()))
+        self.pictograph_width = (self.option_picker.width() * 4 / 5) / 4 - (self.verticalScrollBar().width()/4)
+        self.pictograph_height = self.pictograph_width * (90 / 75)
+        for button in self.grid_widget.findChildren(QPushButton):
+            button.setFixedSize(
+                int(self.pictograph_width), int(self.pictograph_height)
+            )
+            button.setIconSize(
+                QSize(int(self.pictograph_width), int(self.pictograph_height))
+            )

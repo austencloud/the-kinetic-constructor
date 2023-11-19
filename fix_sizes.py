@@ -1,7 +1,8 @@
 import os
+from xml.etree.ElementTree import ElementTree
 import xml.etree.ElementTree as ET
 
-def resize_svg(file_path, output_size=(120, 120)):
+def resize_svg(file_path, output_size=(120, 120)) -> ElementTree:
     # Parse the original SVG file
     tree = ET.parse(file_path)
     root = tree.getroot()
@@ -30,7 +31,7 @@ def resize_svg(file_path, output_size=(120, 120)):
 
     return tree
 
-def process_svgs(directory):
+def process_svgs(directory) -> None:
     for subdir, _, files in os.walk(directory):
         for filename in files:
             if filename.endswith(".svg"):

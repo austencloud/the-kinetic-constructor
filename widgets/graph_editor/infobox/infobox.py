@@ -7,6 +7,18 @@ if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 
 class InfoBox(QFrame):
+    """
+    The InfoBox widget displays information related to the graph editor.
+
+    Args:
+        main_widget (MainWidget): The main widget of the application.
+        graphboard (GraphBoard): The graph board widget.
+
+    Attributes:
+        main_window (MainWindow): The main window of the application.
+        control_panel (ControlPanel): The control panel widget.
+
+    """
     def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard") -> None:
         """
         Initialize the InfoBox widget.

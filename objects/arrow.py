@@ -91,20 +91,27 @@ class Arrow(GraphicalObject):
 
     ### MOUSE EVENTS ###
 
-    # add a hover effect to the graphboard arrows where the cursor changes to the corresponding color and turns into a grabber. Also when the object is grabbed the grabber should be closed like it's grabbing it.
-
-    def hoverEnterEvent(self, event) -> None:
-        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        # Optional: Change the appearance, e.g., change color or outline
-        self.update_appearance_on_hover()
-
-    def hoverLeaveEvent(self, event) -> None:
-        self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
-        # Revert any appearance changes made on hover
-        self.revert_appearance_on_hover()
-
     def mousePressEvent(self) -> None:
         self.setSelected(True)
+        
+        self.update_ghost_on_click()
+        self.update_staff_on_click()
+        
+        self.graphboard.arrows.remove(self)
+        self.graphboard.update()
+        self.graphboard.arrows.append(self)
+        
+        for item in self.graphboard.items():
+            if item != self:
+                item.setSelected(False)
+
+    def update_staff_on_click(self):
+        self.staff.color = self.color
+        self.staff.location = self.end_location
+        self.staff.axis = self.staff.get_axis(self.end_location)
+        self.staff.update_appearance()
+
+    def update_ghost_on_click(self):
         self.ghost_arrow: "GhostArrow" = self.graphboard.ghost_arrows[self.color]
         self.ghost_arrow.staff = self.staff
         self.ghost_arrow.set_attributes_from_dict(self.attributes)
@@ -118,16 +125,6 @@ class Arrow(GraphicalObject):
         self.graphboard.addItem(self.ghost_arrow)
         self.ghost_arrow.staff = self.staff
         self.graphboard.arrows.append(self.ghost_arrow)
-        self.graphboard.arrows.remove(self)
-        self.staff.color = self.color
-        self.staff.location = self.end_location
-        self.staff.axis = self.staff.get_axis(self.end_location)
-        self.staff.update_appearance()
-        self.graphboard.update()
-        self.graphboard.arrows.append(self)
-        for item in self.graphboard.items():
-            if item != self:
-                item.setSelected(False)
 
     def mouseMoveEvent(self, event) -> None:
         if event.buttons() == Qt.MouseButton.LeftButton:
@@ -149,11 +146,6 @@ class Arrow(GraphicalObject):
 
     ### UPDATERS ###
 
-    def update_appearance_on_hover(self) -> None:
-        self.setOpacity(0.5)
-
-    def revert_appearance_on_hover(self) -> None:
-        self.setOpacity(1)
 
     def update_rotation(self) -> None:
         angle = self.get_rotation_angle()
