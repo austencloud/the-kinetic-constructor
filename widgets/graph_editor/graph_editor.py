@@ -52,21 +52,19 @@ class GraphEditor(QFrame):
             main_widget,
             self.infobox,
         )
-        self.action_buttons = ActionButtonsFrame(
-            self.graphboard,
-            self.json_handler,
-        )
 
         objectbox_layout.addWidget(self.arrowbox.view)
         objectbox_layout.addWidget(self.propbox.view)
+
         graphboard_layout.addWidget(self.graphboard.view)
-        action_buttons_layout.addWidget(self.action_buttons)
         infobox_layout.addWidget(self.infobox)
+
         graph_editor_frame_layout.setContentsMargins(0, 0, 0, 0)
+
         graph_editor_frame_layout.addLayout(objectbox_layout)
         graph_editor_frame_layout.addLayout(graphboard_layout)
-
         graph_editor_frame_layout.addLayout(infobox_layout)
+
         self.setLayout(graph_editor_frame_layout)
 
         self.setMouseTracking(True)
@@ -77,7 +75,6 @@ class GraphEditor(QFrame):
         self.update_graphboard_size()
         self.update_arrowbox_size()
         self.update_propbox_size()
-        self.update_action_button_size()
 
     def update_graphboard_size(self) -> None:
         view_width = int(self.height() * 75 / 90)
@@ -97,18 +94,4 @@ class GraphEditor(QFrame):
         self.propbox.view.setFixedSize(
             int(self.graphboard.view.height() * 1 / 2),
             int(self.graphboard.view.height() * 1 / 2),
-        )
-
-    def update_action_button_size(self) -> None:
-        button_size = int((self.height() / 6) * 0.8)
-        for i in range(self.action_buttons.layout().count()):
-            button: QPushButton = self.action_buttons.layout().itemAt(i).widget()
-            button.setFixedSize(button_size, button_size)
-            button.setIconSize(QSize(int(button_size * 0.8), int(button_size * 0.8)))
-        self.action_buttons.setFixedSize(
-            button_size * 2,
-            int(self.graphboard.view.height()),
-        )
-        self.action_buttons.layout().setContentsMargins(
-            int(button_size / 2), 0, int(button_size / 2), 0
         )

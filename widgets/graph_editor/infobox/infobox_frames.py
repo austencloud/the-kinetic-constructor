@@ -77,14 +77,14 @@ class InfoBoxFrames:
         turns_layout.addWidget(turns_label)
         turns_layout.addWidget(increment_button)
 
-        main_layout = QVBoxLayout()
-        main_layout.addWidget(motion_type_label)
-        main_layout.addWidget(rotation_direction_label)
-        main_layout.addWidget(start_end_label)
-        main_layout.addLayout(turns_layout)
+        frame_layout = QVBoxLayout()
+        frame_layout.addWidget(motion_type_label)
+        frame_layout.addWidget(rotation_direction_label)
+        frame_layout.addWidget(start_end_label)
+        frame_layout.addLayout(turns_layout)
 
         info_widget = QWidget()
-        info_widget.setLayout(main_layout)
+        info_widget.setLayout(frame_layout)
         return info_widget
 
     def update_frame_contents(self, widget: "QFrame", arrow: "Arrow") -> None:

@@ -26,8 +26,12 @@ from PyQt6.QtWidgets import (
 )
 import xml.etree.ElementTree as ET
 import svg.path
-from xml.dom import minidom
-from svgpathtools import parse_path
+import sys
+import cairosvg
+from PIL import Image
+import io
+from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
+import xml.etree.ElementTree as ET
 
 class SvgResizer(QMainWindow):
     """
@@ -200,32 +204,23 @@ class SvgResizer(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "Error", f"An error occurred: {e}")
     
-    def trim_svg(self, svg_file_path) -> None:
-        doc = minidom.parse(svg_file_path)
-        paths = [path.getAttribute('d') for path in doc.getElementsByTagName('path')]
-        doc.unlink()
+    def trim_svg(self, svg_file_path):
+        png_data = cairosvg.svg2png(url=svg_file_path)
+        image = Image.open(io.BytesIO(png_data))
+        image = image.convert("RGBA")
+        bbox = image.getbbox()
+        if bbox:
+            new_viewbox = f"{bbox[0]} {bbox[1]} {bbox[2] - bbox[0]} {bbox[3] - bbox[1]}"
+            self.update_viewbox(svg_file_path, new_viewbox)
+        else:
+            QMessageBox.warning(self, "Warning", "The image appears to be blank.")
 
-        min_x, max_x = float('inf'), float('-inf')
-        min_y, max_y = float('inf'), float('-inf')
-
-        # Iterate over each path and calculate the bounding box
-        for d in paths:
-            path_obj = parse_path(d)
-            path_min_x, path_min_y, path_max_x, path_max_y = path_obj.bbox()
-
-            min_x = min(min_x, path_min_x)
-            max_x = max(max_x, path_max_x)
-            min_y = min(min_y, path_min_y)
-            max_y = max(max_y, path_max_y)
-
-        # Adjust viewBox based on the calculated bounding box
-        new_viewbox = f"{min_x} {min_y} {max_x - min_x} {max_y - min_y}"
-
-        # Modify the SVG file
+    def update_viewbox(self, svg_file_path, new_viewbox):
         tree = ET.parse(svg_file_path)
         root = tree.getroot()
         root.attrib['viewBox'] = new_viewbox
         tree.write(svg_file_path)
+
 
     def determine_width_of_svg_contents(self, svg_file_path) -> float:
         """ Determines the width of the contents of an SVG file.

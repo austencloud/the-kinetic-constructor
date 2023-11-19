@@ -12,6 +12,28 @@ if TYPE_CHECKING:
 from PyQt6.QtWidgets import QVBoxLayout
 
 class InfoBoxButtons:
+    """
+    Class representing the buttons in the info box of the graph editor.
+
+    Attributes:
+        graphboard (GraphBoard): The graph board associated with the info box.
+        control_panel (ControlPanel): The control panel associated with the info box.
+        button_groups (Dict[str, List[QPushButton]]): A dictionary mapping color names to lists of buttons.
+
+    Methods:
+        __init__(self, control_panel: 'ControlPanel', graphboard: "GraphBoard") -> None:
+            Initializes the InfoBoxButtons instance.
+        create_and_set_button(self, button_name: str, properties: Dict[str, str | Callable]) -> None:
+            Creates and sets a button with the given name and properties.
+        show_buttons(self, arrow_color: Color) -> None:
+            Shows the buttons of the specified arrow color.
+        setup_buttons(self) -> None:
+            Sets up the button properties.
+        create_infobox_buttons(self) -> None:
+            Creates the info box buttons based on the button properties.
+        setup_button_layout(self) -> None:
+            Sets up the button layout.
+    """
     def __init__(self, control_panel: 'ControlPanel', graphboard: "GraphBoard") -> None:
         self.graphboard = graphboard
         self.control_panel = control_panel
@@ -22,6 +44,16 @@ class InfoBoxButtons:
     def create_and_set_button(
         self, button_name: str, properties: Dict[str, str | Callable]
     ) -> None:
+        """
+        Creates and sets a button with the given name and properties.
+
+        Args:
+            button_name (str): The name of the button.
+            properties (Dict[str, str | Callable]): The properties of the button.
+
+        Returns:
+            None
+        """
         icon = properties.get("icon", None)
         button = QPushButton(QIcon(icon), properties.get("text", ""))
 
@@ -37,10 +69,25 @@ class InfoBoxButtons:
             self.button_groups[RED].append(button)
 
     def show_buttons(self, arrow_color: Color) -> None:
+        """
+        Shows the buttons of the specified arrow color.
+
+        Args:
+            arrow_color (Color): The color of the arrow.
+
+        Returns:
+            None
+        """
         for button in self.button_groups[arrow_color]:
             button.show()
 
     def setup_buttons(self) -> None:
+        """
+        Sets up the button properties.
+
+        Returns:
+            None
+        """
         self.button_properties = {
             "swap_motion_type_blue": {
                 "icon": ICON_PATHS["swap"],
@@ -91,12 +138,24 @@ class InfoBoxButtons:
         self.create_infobox_buttons()
 
     def create_infobox_buttons(self) -> None:
+        """
+        Creates the info box buttons based on the button properties.
+
+        Returns:
+            None
+        """
         for button_name, properties in self.button_properties.items():
             self.create_and_set_button(button_name, properties)
 
         self.setup_button_layout()
 
     def setup_button_layout(self) -> None:
+        """
+        Sets up the button layout.
+
+        Returns:
+            None
+        """
         self.button_layout = QVBoxLayout()  # Create a vertical layout for the buttons
         for button_name in self.button_properties.keys():
             button = getattr(self, f"{button_name}_button")

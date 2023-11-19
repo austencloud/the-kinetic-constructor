@@ -49,21 +49,32 @@ class InfoBoxLabels:
         self.type_position_label: QLabel = None
         self.setup_labels()
         self.preload_pixmaps()
-
+        self.create_attribute_labels()
+        
     ### LABEL CREATION ###
 
     def setup_labels(self) -> None:
         """
         Set up the labels for the infobox.
-
-        This method initializes the attribute labels for the left and right sides,
-        as well as creates the type position label.
         """
-        self.setup_attribute_label(LEFT.capitalize(), BLUE)
-        self.setup_attribute_label(RIGHT.capitalize(), RED)
-        self.type_position_label = self.create_label()
+        # Instead of creating a separate function to set up each label,
+        # you can create them directly here, applying the necessary styles and properties.
+        self.blue_details_label = QLabel("Blue", self.control_panel)
+        self.blue_details_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        self.blue_details_label.setStyleSheet("color: blue; font-size: 25px; font-weight: bold;")
+
+        self.red_details_label = QLabel("Red", self.control_panel)
+        self.red_details_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        self.red_details_label.setStyleSheet("color: red; font-size: 25px; font-weight: bold;")
+
 
     def create_attribute_labels(self) -> tuple[QLabel, QLabel, QLabel, QLabel]:
+        """
+        Creates attribute labels for motion type, rotation direction, start/end, and turns.
+
+        Returns:
+            A tuple of QLabel objects representing the attribute labels.
+        """
         motion_type_label = QLabel()
         motion_type_label.setObjectName("motion_type_label")
 
@@ -90,7 +101,11 @@ class InfoBoxLabels:
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
-        return motion_type_label, rotation_direction_label, start_end_label, turns_label
+        self.motion_type_label = motion_type_label
+        self.rotation_direction_label = rotation_direction_label
+        self.start_end_label = start_end_label
+        self.turns_label = turns_label
+
 
     ### LABEL UPDATING ###
 
@@ -105,12 +120,9 @@ class InfoBoxLabels:
             Returns:
                 None
             """
-            motion_type_label = widget.findChild(QLabel, "motion_type_label")
-            rotation_direction_label = widget.findChild(QLabel, "rotation_direction_label")
-            start_end_label = widget.findChild(QLabel, "start_end_label")
-            turns_label = widget.findChild(QLabel, "turns_label")
 
-            motion_type_label.setText(f"<h1>{arrow.motion_type.capitalize()}</h1>")
+
+            self.motion_type_label.setText(f"<h1>{arrow.motion_type.capitalize()}</h1>")
 
             if arrow.rotation_direction:
                 if arrow.rotation_direction == CLOCKWISE:
@@ -120,17 +132,17 @@ class InfoBoxLabels:
                 else:
                     clock_icon = CLOCK_ICON
 
-                self.set_clock_pixmap(rotation_direction_label, clock_icon)
+                self.set_clock_pixmap(self.rotation_direction_label, clock_icon)
             else:
-                rotation_direction_label.setText("")
+                self.rotation_direction_label.setText("")
 
             if arrow.motion_type in [PRO, ANTI, STATIC]:
-                start_end_label.setText(
+                self.start_end_label.setText(
                     f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{arrow.start_location.capitalize()} → {arrow.end_location.capitalize()}</span>"
                 )
             elif arrow.motion_type == "":
-                start_end_label.setText(f"")
-            turns_label.setText(f"<span style='font-size: 20px;'>{arrow.turns}</span>")
+                self.start_end_label.setText(f"")
+            self.turns_label.setText(f"<span style='font-size: 20px;'>{arrow.turns}</span>")
 
     def update_type_and_position_label(self) -> None:
         """
@@ -160,8 +172,8 @@ class InfoBoxLabels:
         Preload and cache the pixmaps.
 
         This method loads and caches the pixmaps for the infobox clock.
-        It iterates over a list of icon names, loads each pixmap using QPixmap,
-        scales it to a size of 60x60 pixels, and stores the scaled pixmap in the pixmap_cache dictionary.
+        
+        It scales them to a size of 60x60 pixels, and stores them in the pixmap_cache dictionary.
 
         Returns:
             None

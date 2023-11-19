@@ -21,6 +21,9 @@ from settings.string_constants import (
     ROTATION_DIRECTION,
     START_LOCATION,
     TURNS,
+    SOUTHEAST,
+    SOUTH,
+    
 )
 from widgets.graph_editor.arrowbox.arrowbox_drag import ArrowBoxDrag
 from widgets.graph_editor.arrowbox.arrowbox_view import ArrowBoxView
@@ -42,10 +45,9 @@ class ArrowBox(QGraphicsScene):
         self.setSceneRect(0, 0, 450, 450)
         self.setup_view()
         self.populate_arrows()
-        
+
         # set dimensions
 
-        
         self.arrowbox_layout = QGridLayout()
         self.arrowbox_layout.addWidget(self.view)
         self.arrowbox_drag = None
@@ -75,6 +77,24 @@ class ArrowBox(QGraphicsScene):
                 END_LOCATION: EAST,
                 TURNS: 0,
             },
+            {
+                COLOR: RED,
+                MOTION_TYPE: PRO,
+                ROTATION_DIRECTION: COUNTER_CLOCKWISE,
+                QUADRANT: SOUTHEAST,
+                START_LOCATION: SOUTH,
+                END_LOCATION: EAST,
+                TURNS: 0,
+            },
+            {
+                COLOR: BLUE,
+                MOTION_TYPE: ANTI,
+                ROTATION_DIRECTION: CLOCKWISE,
+                QUADRANT: SOUTHEAST,
+                START_LOCATION: SOUTH,
+                END_LOCATION: EAST,
+                TURNS: 0,
+            },
         ]
 
         for dict in initial_arrow_attribute_collection:
@@ -83,9 +103,15 @@ class ArrowBox(QGraphicsScene):
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
             self.addItem(arrow)
             self.arrows.append(arrow)
+            
+        for arrow in self.arrows:
+            arrow.update_appearance()
+            arrow.setTransformOriginPoint(arrow.boundingRect().center())
 
-        self.arrows[0].setPos(150, 25)
+        self.arrows[0].setPos(350, 25)
         self.arrows[1].setPos(25, 25)
+        self.arrows[2].setPos(350, 350)
+        self.arrows[3].setPos(25, 350)
 
     def mousePressEvent(self, event) -> None:
         scene_pos = event.scenePos()

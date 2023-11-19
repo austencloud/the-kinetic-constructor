@@ -1,5 +1,6 @@
-from PyQt6.QtWidgets import QFrame
+from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from widgets.graph_editor.infobox.control_panel.control_panel import ControlPanel
+from widgets.graph_editor.infobox.info_panel import InfoPanel
 from widgets.graph_editor.graphboard.graphboard import GraphBoard
 from typing import TYPE_CHECKING
 
@@ -34,5 +35,14 @@ class InfoBox(QFrame):
         self.main_widget = main_widget
         self.main_window = self.main_widget.main_window
         self.graphboard = graphboard
+        self.info_panel = InfoPanel(self, graphboard)
         self.control_panel = ControlPanel(self, graphboard)
-
+    
+        self.infobox_layout = QHBoxLayout()
+        self.infobox_layout.setSpacing(0)
+        self.infobox_layout.setContentsMargins(0, 0, 0, 0)
+        self.infobox_layout.addWidget(self.info_panel)
+        self.infobox_layout.addWidget(self.control_panel)
+        
+        self.setLayout(self.infobox_layout)
+        

@@ -83,11 +83,31 @@ class Arrow(GraphicalObject):
         self.end_location: Location = None
         self.turns: Turns = None
 
+        self.center_x = self.boundingRect().width() / 2
+        self.center_y = self.boundingRect().height() / 2
+
         if attributes:
             self.set_attributes_from_dict(attributes)
             self.update_appearance()
             self.attributes = attributes
+            
+        self.set_is_mirrored_from_attributes()
+        self.update_mirror()
         self.center = self.boundingRect().center()
+
+    def set_is_mirrored_from_attributes(self):
+        if self.motion_type == PRO:
+            rotation_direction = self.rotation_direction
+            if rotation_direction == CLOCKWISE:
+                self.is_mirrored = False
+            elif rotation_direction == COUNTER_CLOCKWISE:
+                self.is_mirrored = True
+        elif self.motion_type == ANTI:
+            rotation_direction = self.rotation_direction
+            if rotation_direction == CLOCKWISE:
+                self.is_mirrored = True
+            elif rotation_direction == COUNTER_CLOCKWISE:
+                self.is_mirrored = False
 
     ### MOUSE EVENTS ###
 
@@ -146,7 +166,12 @@ class Arrow(GraphicalObject):
 
     ### UPDATERS ###
 
-
+    def update_mirror(self) -> None:
+        if self.is_mirrored:
+            self.mirror()
+        else:
+            self.unmirror()
+        
     def update_rotation(self) -> None:
         angle = self.get_rotation_angle()
         self.setRotation(angle)
@@ -158,10 +183,10 @@ class Arrow(GraphicalObject):
 
         self.ghost_arrow.set_arrow_attrs_from_arrow(self)
         self.ghost_arrow.update_appearance()
+        
         self.staff.set_staff_attrs_from_arrow(self)
-
         self.staff.update_appearance()
-
+        
         self.update_appearance()
 
         self.graphboard.arrows.remove(self)
@@ -403,8 +428,7 @@ class Arrow(GraphicalObject):
     def swap_rot_dir(self) -> None:
         from objects.ghosts.ghost_arrow import GhostArrow
 
-        self.center_x = self.boundingRect().width() / 2
-        self.center_y = self.boundingRect().height() / 2
+
 
         if self.is_mirrored:
             self.unmirror()
@@ -450,7 +474,7 @@ class Arrow(GraphicalObject):
         transform.scale(-1, 1)
         transform.translate(-self.center_x, -self.center_y)
         self.setTransform(transform)
-        if not isinstance(self, GhostArrow):
+        if hasattr(self, 'ghost_arrow'):
             self.ghost_arrow.setTransform(transform)
             self.ghost_arrow.is_mirrored = True
         self.is_mirrored = True
@@ -463,7 +487,7 @@ class Arrow(GraphicalObject):
         transform.scale(1, 1)
         transform.translate(-self.center.x(), -self.center.y())
         self.setTransform(transform)
-        if not isinstance(self, GhostArrow):
+        if hasattr(self, 'ghost_arrow'):
             self.ghost_arrow.setTransform(transform)
             self.ghost_arrow.is_mirrored = False
         self.is_mirrored = False
