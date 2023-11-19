@@ -58,7 +58,7 @@ class OptionPicker(QFrame):
         self.setContentsMargins(0, 0, 0, 0)
         self.setFixedSize(self.width(), self.height())
         self.scroll_area = OptionPickerScrollArea(self)
-        self.button_frame = LetterButtons(self.main_window, self)
+        self.button_frame = LetterButtons(self.main_widget, self)
 
         self.main_layout.addWidget(self.scroll_area)
         self.main_layout.addWidget(self.button_frame)

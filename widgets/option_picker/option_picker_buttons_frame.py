@@ -8,8 +8,10 @@ from settings.string_constants import LETTER_SVG_DIR
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main import MainWindow
+    from widgets.main_widget import MainWidget
     from widgets.option_picker.option_picker import OptionPicker
+
+
 class LetterButtons(QFrame):
     """
     A class representing a frame containing letter buttons.
@@ -30,9 +32,10 @@ class LetterButtons(QFrame):
         update_letter_buttons_size(self) -> None: Updates the size of the letter buttons.
     """
 
-    def __init__(self, main_window: "MainWindow", option_picker: "OptionPicker"):
+    def __init__(self, main_widget: "MainWidget", option_picker: "OptionPicker"):
         super().__init__()
-        self.main_window = main_window
+        self.main_widget = main_widget
+
         self.option_picker = option_picker
         self.init_letter_buttons_layout()
 
@@ -60,9 +63,9 @@ class LetterButtons(QFrame):
             ["W-", "X-", "Y-", "Z-"],
             ["Σ-", "Δ-", "θ-", "Ω-"],
             # Type 4 - Dash
-            ['Φ', 'Ψ', 'Λ'],
+            ["Φ", "Ψ", "Λ"],
             # Type 5 - Dual-Dash
-            ['Φ-', 'Ψ-', 'Λ-'],
+            ["Φ-", "Ψ-", "Λ-"],
             # Type 6 - Static
             ["α", "β", "Γ"],
         ]
@@ -80,7 +83,7 @@ class LetterButtons(QFrame):
 
         self.letter_buttons_layout = letter_buttons_layout
         self.setLayout(letter_buttons_layout)
-        
+
     def get_letter_type(self, letter: str) -> str:
         """
         Returns the type of the given letter.
@@ -125,47 +128,42 @@ class LetterButtons(QFrame):
         painter = QPainter(pixmap)
         renderer.render(painter)
         painter.end()
-
-        button = QPushButton(QIcon(pixmap), "", self.main_window)
+        button = QPushButton(QIcon(pixmap), "", self.main_widget)
         font = QFont()
         font.setPointSize(int(20))
         button.setFont(font)
-
-        button_size = int(self.main_window.width() * 0.020)
-        button.setFixedSize(button_size, button_size)
-
-        icon_size = int(button_size * 0.8)
-        button.setIconSize(QSize(icon_size, icon_size))
-
         return button
 
     def update_letter_buttons_size(self) -> None:
-            """
-            Updates the size of the letter buttons.
+        """
+        Updates the size of the letter buttons.
 
-            This method calculates the available width based on the main window's width and the number of letter buttons.
-            It then sets the fixed size of each letter button and adjusts the icon size accordingly.
-            """
-            button_count = self.letter_buttons_layout.count()
-            available_width = self.main_window.width() * 0.015 * 1.5 * button_count
-            button_size = int(available_width / button_count)
+        This method calculates the available width based on the main window's width and the number of letter buttons.
+        It then sets the fixed size of each letter button and adjusts the icon size accordingly.
+        """
+        button_row_count = self.letter_buttons_layout.count()
+        available_width = int(self.main_widget.width() * 0.015 * 1.5 * button_row_count)
+        button_size = int(available_width / button_row_count)
 
-            for i in range(button_count):
-                item = self.letter_buttons_layout.itemAt(i)
-                if item is not None:
-                    row_layout: QHBoxLayout = item.layout()
-                    for j in range(row_layout.count()):
-                        button_item = row_layout.itemAt(j)
-                        if button_item is not None:
-                            button: QPushButton = button_item.widget()
-                            button.setFixedSize(button_size, button_size)
-                            icon_size = int(button_size * 0.9)
-                            button.setIconSize(QSize(icon_size, icon_size))
-                        
+        for i in range(button_row_count):
+            item = self.letter_buttons_layout.itemAt(i)
+            if item is not None:
+                row_layout: QHBoxLayout = item.layout()
+                for j in range(row_layout.count()):
+                    button_item = row_layout.itemAt(j)
+                    if button_item is not None:
+                        button: QPushButton = button_item.widget()
+                        if button_size > self.height() / button_row_count:
+                            button_size = int(self.height() / button_row_count)
+                        button.setFixedSize(button_size, button_size)
+                        icon_size = int(button_size * 0.9)
+                        button.setIconSize(QSize(icon_size, icon_size))
+
     def update_size(self) -> None:
         """
         Updates the size of the letter buttons.
         """
-        self.update_letter_buttons_size()
-        #set the max width of the frame to 1/6 of the option picker width
+        # set the max width of the frame to 1/6 of the option picker width
         self.setFixedWidth(int(self.option_picker.width() / 5))
+        self.setFixedHeight(int(self.option_picker.height()))
+        self.update_letter_buttons_size()

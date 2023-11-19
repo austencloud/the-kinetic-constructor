@@ -1,4 +1,4 @@
-import re
+
 import sys
 import xml.etree.ElementTree as ET
 from typing import List
@@ -26,6 +26,8 @@ from PyQt6.QtWidgets import (
 )
 import xml.etree.ElementTree as ET
 import svg.path
+from xml.dom import minidom
+from svgpathtools import parse_path
 
 class SvgResizer(QMainWindow):
     """
@@ -199,31 +201,31 @@ class SvgResizer(QMainWindow):
             QMessageBox.critical(self, "Error", f"An error occurred: {e}")
     
     def trim_svg(self, svg_file_path) -> None:
-        tree = ET.parse(svg_file_path)
-        root = tree.getroot()
+        doc = minidom.parse(svg_file_path)
+        paths = [path.getAttribute('d') for path in doc.getElementsByTagName('path')]
+        doc.unlink()
 
         min_x, max_x = float('inf'), float('-inf')
         min_y, max_y = float('inf'), float('-inf')
 
         # Iterate over each path and calculate the bounding box
-        for path_element in root.iter('path'):
-            d = path_element.attrib['d']
-            path_obj = svg.path.parse_path(d)
+        for d in paths:
+            path_obj = parse_path(d)
+            path_min_x, path_min_y, path_max_x, path_max_y = path_obj.bbox()
 
-            for segment in path_obj:
-                # Check each point in the segment
-                for line in segment:
-                    min_x = min(min_x, line.start.real, line.end.real)
-                    max_x = max(max_x, line.start.real, line.end.real)
-                    min_y = min(min_y, line.start.imag, line.end.imag)
-                    max_y = max(max_y, line.start.imag, line.end.imag)
+            min_x = min(min_x, path_min_x)
+            max_x = max(max_x, path_max_x)
+            min_y = min(min_y, path_min_y)
+            max_y = max(max_y, path_max_y)
 
         # Adjust viewBox based on the calculated bounding box
         new_viewbox = f"{min_x} {min_y} {max_x - min_x} {max_y - min_y}"
+
+        # Modify the SVG file
+        tree = ET.parse(svg_file_path)
+        root = tree.getroot()
         root.attrib['viewBox'] = new_viewbox
-
         tree.write(svg_file_path)
-
 
     def determine_width_of_svg_contents(self, svg_file_path) -> float:
         """ Determines the width of the contents of an SVG file.
