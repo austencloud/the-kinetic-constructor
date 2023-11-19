@@ -8,8 +8,18 @@ if TYPE_CHECKING:
     from objects.arrow import Arrow
 
 
-
 class InfoBoxFrames:
+    """
+    Represents the attribute frames in the info box of the graph editor.
+
+    Attributes:
+        control_panel (ControlPanel): The control panel associated with the info box.
+        labels (Labels): The labels associated with the control panel.
+        graphboard (GraphBoard): The graph board associated with the info box.
+        blue_attribute_frame (QFrame): The frame for the blue attribute.
+        red_attribute_frame (QFrame): The frame for the red attribute.
+    """
+
     def __init__(self, control_panel: "ControlPanel", graphboard: "GraphBoard") -> None:
         self.control_panel = control_panel
         self.labels = control_panel.labels
@@ -19,6 +29,9 @@ class InfoBoxFrames:
         self.setup_frames()
 
     def setup_frames(self) -> None:
+        """
+        Set up the attribute frames for the blue and red attributes.
+        """
         widget_colors = [BLUE, RED]
         for color in widget_colors:
             attribute_frame = QFrame()
@@ -34,6 +47,15 @@ class InfoBoxFrames:
             attribute_frame.show()
 
     def construct_attribute_frame(self, color) -> QWidget:
+        """
+        Construct the attribute frame for the given color.
+
+        Args:
+            color (str): The color of the attribute frame.
+
+        Returns:
+            QWidget: The constructed attribute frame widget.
+        """
         self.buttons = self.control_panel.buttons
 
         (
@@ -66,10 +88,20 @@ class InfoBoxFrames:
         return info_widget
 
     def update_frame_contents(self, widget: "QFrame", arrow: "Arrow") -> None:
+        """
+        Update the contents of the attribute frame with the information from the arrow.
+
+        Args:
+            widget (QFrame): The attribute frame widget to update.
+            arrow (Arrow): The arrow containing the information.
+        """
         self.labels.update_labels(widget, arrow)
         self.control_panel.buttons.show_buttons(arrow.color)
 
-    def update(self) -> None:
+    def update_attribute_frames(self) -> None:
+        """
+        Update the attribute frames based on the arrows in the graph board.
+        """
         widgets = self.control_panel.frames
         for color in [BLUE, RED]:
             arrow = self.graphboard.get_arrow_by_color(color)

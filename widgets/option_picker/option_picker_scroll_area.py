@@ -12,17 +12,26 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.option_picker.option_picker import OptionPicker
-from PyQt6.QtWidgets import QScrollBar
 
 
 class OptionPickerScrollArea(QScrollArea):
-    scrollbar_width = 0  # Class variable to store the width of the scrollbar
+    """
+    A custom scroll area widget for the option picker.
+    """
 
     def __init__(self, option_picker: "OptionPicker") -> None:
+        """
+        Initialize the OptionPickerScrollArea.
+
+        Args:
+            option_picker (OptionPicker): The parent OptionPicker widget.
+        """
         super().__init__()
         self.main_window = option_picker.main_window
         self.main_widget = option_picker.main_widget
         self.option_picker = option_picker
+        self.scrollbar_width = 0  # Class variable to store the width of the scrollbar
+
         self.setContentsMargins(0, 0, 0, 0)
         self.setFrameStyle(QFrame.Shape.NoFrame)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
@@ -49,10 +58,16 @@ class OptionPickerScrollArea(QScrollArea):
         self.update_scroll_area_size()
 
     def connect_signals(self) -> None:
+        """
+        Connect the clicked signal of each pictograph button to the on_pictograph_clicked slot.
+        """
         for button in self.grid_widget.findChildren(QPushButton):
             button.clicked.connect(self.on_pictograph_clicked)
 
     def populate_pictographs(self) -> None:
+        """
+        Populate the scroll area with pictograph buttons.
+        """
         number_of_pictographs = 50
         MAX_ITEMS_PER_ROW = 4
 
@@ -70,9 +85,15 @@ class OptionPickerScrollArea(QScrollArea):
             )
 
     def on_pictograph_clicked(self) -> None:
+        """
+        Slot function called when a pictograph button is clicked.
+        """
         pass
 
     def update_scroll_area_size(self) -> None:
+        """
+        Update the size of the scroll area based on the pictograph width and scrollbar width.
+        """
         if self.scrollbar_width == 0:
             self.scrollbar_width = self.verticalScrollBar().width()
         self.setFixedWidth(int(self.pictograph_width * 4 + self.scrollbar_width))

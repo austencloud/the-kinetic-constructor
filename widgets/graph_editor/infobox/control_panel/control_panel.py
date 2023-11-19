@@ -16,6 +16,13 @@ from widgets.graph_editor.infobox.infobox_labels import InfoBoxLabels
 
 class ControlPanel(QFrame):
     def __init__(self, infobox: "InfoBox", graphboard: "GraphBoard") -> None:
+        """
+        Initialize the ControlPanel object.
+
+        Args:
+            infobox (InfoBox): The InfoBox object associated with the ControlPanel.
+            graphboard (GraphBoard): The GraphBoard object associated with the ControlPanel.
+        """
         super().__init__()
         self.infobox = infobox
         self.graphboard = graphboard
@@ -26,13 +33,30 @@ class ControlPanel(QFrame):
 
         self.setup_layouts()
 
-    def update(self) -> None:
-        self.frames.update()
+    def update_control_panel(self) -> None:
+        """
+        Update the control panel.
+
+        This method updates the attribute frames and the type and position label.
+        """
+        self.frames.update_attribute_frames()
         self.labels.update_type_and_position_label()
 
     def define_info_layouts(
         self, motion_type_label, rotation_direction_label, start_end_label, turns_label
-    ):
+    ) -> QVBoxLayout:
+        """
+        Define the layouts for the information labels.
+
+        Args:
+            motion_type_label (QLabel): The label for the motion type.
+            rotation_direction_label (QLabel): The label for the rotation direction.
+            start_end_label (QLabel): The label for the start and end positions.
+            turns_label (QLabel): The label for the number of turns.
+
+        Returns:
+            QVBoxLayout: The main layout containing the information labels.
+        """
         motion_type_layout = QHBoxLayout()
         motion_type_layout.addWidget(motion_type_label)
         motion_type_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -57,6 +81,13 @@ class ControlPanel(QFrame):
         return main_layout
 
     def setup_layouts(self) -> None:
+        """
+        Set up the layouts for the control panel.
+
+        This method initializes the master layout, attributes layouts, and the bottom layout.
+        It also sets up column layouts for each color (BLUE and RED) and adds widgets to the layouts.
+        Finally, it sets the layout of the infobox to the master layout.
+        """
         self.master_layout = QHBoxLayout()
         self.attributes_layouts: Dict[Color, QVBoxLayout] = {}
         self.setup_bottom_layout()
@@ -66,6 +97,15 @@ class ControlPanel(QFrame):
         self.infobox.setLayout(self.master_layout)
 
     def setup_column_layout(self, color: Color) -> None:
+        """
+        Set up the column layout for the control panel.
+
+        Args:
+            color (Color): The color of the column.
+
+        Returns:
+            None
+        """
         column_frame = QFrame()
         column_frame.setFrameShape(QFrame.Shape.Box)
         column_frame.setFrameShadow(QFrame.Shadow.Sunken)
@@ -76,12 +116,6 @@ class ControlPanel(QFrame):
         header_label_frame.setLineWidth(1)
         header_label_frame.setContentsMargins(0, 0, 0, 0)
         header_label_frame.setStyleSheet("border: 1px solid black;")
-        header_layout = QHBoxLayout()
-
-        header_label: QLabel = getattr(self.labels, f"{color}_details_label")
-        header_label.setContentsMargins(0, 0, 0, 0)
-        header_layout.addWidget(header_label)
-        header_label_frame.setLayout(header_layout)
 
         attributes_buttons_layout = QHBoxLayout()
         self.attributes_layouts[color] = QVBoxLayout()
@@ -94,16 +128,30 @@ class ControlPanel(QFrame):
         self.master_layout.addWidget(column_frame)
 
     def setup_bottom_layout(self) -> None:
+        """
+        Set up the bottom layout of the control panel.
+
+        This method creates a QHBoxLayout and adds the type_position_label widget to it.
+        The QHBoxLayout is then added to the master_layout.
+        """
         bottom_layout = QHBoxLayout()
         bottom_layout.addWidget(self.labels.type_position_label)
         self.master_layout.addLayout(bottom_layout)
 
     def add_widgets_to_layouts(self) -> None:
+        """
+        Adds widgets to the layouts.
+
+        This method sets up the information layouts, attributes layouts, and adds the attributes widgets to the layouts.
+        """
         self.setup_info_layouts()
         self.setup_attributes_layouts()
         self.add_attributes_widgets_to_layouts()
 
     def setup_info_layouts(self) -> None:
+        """
+        Set up the layouts for the blue and red attributes in the control panel.
+        """
         self.blue_attributes_layout = QVBoxLayout()
         self.red_attributes_layout = QVBoxLayout()
         self.blue_attributes_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -112,10 +160,22 @@ class ControlPanel(QFrame):
         self.red_attributes_layout.addWidget(self.labels.red_details_label)
 
     def setup_attributes_layouts(self) -> None:
+        """
+        Set up the layouts for the attributes in the control panel.
+        """
         self.setup_attributes_layout(BLUE)
         self.setup_attributes_layout(RED)
 
     def setup_attributes_layout(self, color) -> None:
+        """
+        Set up the attribute layout for a specific color.
+
+        Args:
+            color (Color): The color of the attributes.
+
+        Returns:
+            None
+        """
         attribute_layout = QHBoxLayout()
         buttons_layout = QVBoxLayout()
 
@@ -135,6 +195,9 @@ class ControlPanel(QFrame):
             self.frames.red_attribute_frame.setLayout(attribute_layout)
 
     def add_attributes_widgets_to_layouts(self) -> None:
+        """
+        Add the attribute widgets to the layouts.
+        """
         self.blue_attributes_layout.addWidget(self.frames.blue_attribute_frame)
         self.red_attributes_layout.addWidget(self.frames.red_attribute_frame)
         self.attributes_layouts[BLUE].addLayout(self.blue_attributes_layout)

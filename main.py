@@ -10,11 +10,22 @@ from PyQt6.QtGui import QScreen
 
 
 class MainWindow(QMainWindow):
-    graph_editor_layout: QHBoxLayout
-    sequence_layout: QHBoxLayout
-    option_picker_layout: QHBoxLayout
+    """
+    The main window of the Sequence Constructor application.
+
+    Attributes:
+        graph_editor_layout (QHBoxLayout): The layout for the graph editor widget.
+        sequence_layout (QHBoxLayout): The layout for the sequence widget.
+        option_picker_layout (QHBoxLayout): The layout for the option picker widget.
+    """
 
     def __init__(self, profiler: cProfile.Profile) -> None:
+        """
+        Initializes the MainWindow.
+
+        Args:
+            profiler (cProfile.Profile): The profiler used for performance profiling.
+        """
         super().__init__()
         self.profiler = profiler
 
@@ -23,34 +34,29 @@ class MainWindow(QMainWindow):
         self.init_ui()
 
     def configure_window(self) -> None:
-        screens = QApplication.screens()
-        primary_screen = screens[0]
-        secondary_screen = screens[1] if len(screens) > 1 else primary_screen
+        """
+        Configures the main window based on the screen used.
+        """
+        primary_screen = QApplication.primaryScreen()
+        screen_geometry = primary_screen.geometry()
 
         scaling_factor = primary_screen.devicePixelRatio()
-        screen_geometry = secondary_screen.geometry()
 
         # Adjust size based on the screen used
-        self.main_window_width = int(
-            screen_geometry.width() * (0.8 if len(screens) > 1 else 0.6)
-        )
-        self.main_window_height = int(
-            screen_geometry.height() * (0.8 if len(screens) > 1 else 0.7)
-        )
+        self.main_window_width = int(screen_geometry.width() * 0.6)
+        self.main_window_height = int(screen_geometry.height() * 0.7)
 
         # Positioning the window
         self.move(
-            screen_geometry.x()
-            + (screen_geometry.width() - self.main_window_width) // 2
-            - 50,
-            screen_geometry.y()
-            + (screen_geometry.height() - self.main_window_height) // 2
-            - 50,
+            screen_geometry.x() + (screen_geometry.width() - self.main_window_width) // 2 - 50,
+            screen_geometry.y() + (screen_geometry.height() - self.main_window_height) // 2 - 50,
         )
 
     def init_main_window(self) -> None:
+        """
+        Initializes the main window.
+        """
         self.setMinimumSize(self.main_window_width, self.main_window_height)
-        self.resize(self.width(), self.height())
         self.main_widget = MainWidget(self)
         self.installEventFilter(self.main_widget)
         self.setCentralWidget(self.main_widget)
@@ -58,10 +64,19 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Sequence Constructor")
 
     def init_ui(self) -> None:
+        """
+        Initializes the user interface.
+        """
         # Any additional UI initialization goes here
         pass
 
     def write_profiling_stats_to_file(self, file_path: str) -> None:
+        """
+        Writes the profiling statistics to a file.
+
+        Args:
+            file_path (str): The path to the output file.
+        """
         stats: pstats.Stats = pstats.Stats(self.profiler).sort_stats("cumtime")
         with open(file_path, "w") as f:
             stats.stream: IO[str] = f
@@ -70,6 +85,9 @@ class MainWindow(QMainWindow):
 
 
 def main() -> None:
+    """
+    The entry point of the application.
+    """
     profiler: cProfile.Profile = cProfile.Profile()
     profiler.enable()
 

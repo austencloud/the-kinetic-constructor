@@ -34,9 +34,16 @@ if TYPE_CHECKING:
 
 class InfoBoxLabels:
     def __init__(self, control_panel: "ControlPanel", graphboard: "GraphBoard") -> None:
+        """
+        Initialize the InfoboxLabels class.
+
+        Args:
+            control_panel (ControlPanel): The control panel object.
+            graphboard (GraphBoard): The graphboard object.
+        """
         self.control_panel = control_panel
         self.graphboard = graphboard
-        self.pixmap_cache = {}
+        self.pixmap_cache: Dict[str] = {}
         self.blue_details_label: QLabel = None
         self.red_details_label: QLabel = None
         self.type_position_label: QLabel = None
@@ -46,10 +53,15 @@ class InfoBoxLabels:
     ### LABEL CREATION ###
 
     def setup_labels(self) -> None:
+        """
+        Set up the labels for the infobox.
+
+        This method initializes the attribute labels for the left and right sides,
+        as well as creates the type position label.
+        """
         self.setup_attribute_label(LEFT.capitalize(), BLUE)
         self.setup_attribute_label(RIGHT.capitalize(), RED)
         self.type_position_label = self.create_label()
-        self.type_position_label_widget = self.create_label_widget()
 
     def create_attribute_labels(self) -> tuple[QLabel, QLabel, QLabel, QLabel]:
         motion_type_label = QLabel()
@@ -83,34 +95,47 @@ class InfoBoxLabels:
     ### LABEL UPDATING ###
 
     def update_labels(self, widget: "QFrame", arrow: "Arrow") -> None:
-        motion_type_label = widget.findChild(QLabel, "motion_type_label")
-        rotation_direction_label = widget.findChild(QLabel, "rotation_direction_label")
-        start_end_label = widget.findChild(QLabel, "start_end_label")
-        turns_label = widget.findChild(QLabel, "turns_label")
+            """
+            Update the labels in the infobox widget based on the arrow object.
 
-        motion_type_label.setText(f"<h1>{arrow.motion_type.capitalize()}</h1>")
+            Args:
+                widget (QFrame): The infobox widget.
+                arrow (Arrow): The arrow object containing the data.
 
-        if arrow.rotation_direction:
-            if arrow.rotation_direction == CLOCKWISE:
-                clock_icon = CLOCKWISE_ICON
-            elif arrow.rotation_direction == COUNTER_CLOCKWISE:
-                clock_icon = COUNTER_CLOCKWISE_ICON
+            Returns:
+                None
+            """
+            motion_type_label = widget.findChild(QLabel, "motion_type_label")
+            rotation_direction_label = widget.findChild(QLabel, "rotation_direction_label")
+            start_end_label = widget.findChild(QLabel, "start_end_label")
+            turns_label = widget.findChild(QLabel, "turns_label")
+
+            motion_type_label.setText(f"<h1>{arrow.motion_type.capitalize()}</h1>")
+
+            if arrow.rotation_direction:
+                if arrow.rotation_direction == CLOCKWISE:
+                    clock_icon = CLOCKWISE_ICON
+                elif arrow.rotation_direction == COUNTER_CLOCKWISE:
+                    clock_icon = COUNTER_CLOCKWISE_ICON
+                else:
+                    clock_icon = CLOCK_ICON
+
+                self.set_clock_pixmap(rotation_direction_label, clock_icon)
             else:
-                clock_icon = CLOCK_ICON
+                rotation_direction_label.setText("")
 
-            self.set_clock_pixmap(rotation_direction_label, clock_icon)
-        else:
-            rotation_direction_label.setText("")
-
-        if arrow.motion_type in [PRO, ANTI, STATIC]:
-            start_end_label.setText(
-                f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{arrow.start_location.capitalize()} → {arrow.end_location.capitalize()}</span>"
-            )
-        elif arrow.motion_type == "":
-            start_end_label.setText(f"")
-        turns_label.setText(f"<span style='font-size: 20px;'>{arrow.turns}</span>")
+            if arrow.motion_type in [PRO, ANTI, STATIC]:
+                start_end_label.setText(
+                    f"<span style='font-weight: bold; font-style: italic; font-size: 20px;'>{arrow.start_location.capitalize()} → {arrow.end_location.capitalize()}</span>"
+                )
+            elif arrow.motion_type == "":
+                start_end_label.setText(f"")
+            turns_label.setText(f"<span style='font-size: 20px;'>{arrow.turns}</span>")
 
     def update_type_and_position_label(self) -> None:
+        """
+        Update the type and position label based on the current letter and its type.
+        """
         (
             current_letter,
             current_letter_type,
@@ -131,7 +156,16 @@ class InfoBoxLabels:
     ### HELPERS ###
 
     def preload_pixmaps(self) -> None:
-        # Preload and cache the pixmaps
+        """
+        Preload and cache the pixmaps.
+
+        This method loads and caches the pixmaps for the infobox clock.
+        It iterates over a list of icon names, loads each pixmap using QPixmap,
+        scales it to a size of 60x60 pixels, and stores the scaled pixmap in the pixmap_cache dictionary.
+
+        Returns:
+            None
+        """
         for icon_name in [CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON]:
             pixmap = QPixmap(icon_name)
             scaled_pixmap = pixmap.scaled(
@@ -142,7 +176,17 @@ class InfoBoxLabels:
             )
             self.pixmap_cache[icon_name] = scaled_pixmap
 
-    def set_clock_pixmap(self, label: "QLabel", icon_name) -> None:
+    def set_clock_pixmap(self, label: "QLabel", icon_name: str) -> None:
+        """
+        Set the pixmap of a QLabel widget using the specified icon name.
+
+        Args:
+            label (QLabel): The QLabel widget to set the pixmap for.
+            icon_name (str): The name of the icon to use for the pixmap.
+
+        Returns:
+            None
+        """
         # Set the pixmap from the cache
         if icon_name in self.pixmap_cache:
             label.setPixmap(self.pixmap_cache[icon_name])
@@ -161,26 +205,23 @@ class InfoBoxLabels:
         label = self.create_label(text, color)
         setattr(self, f"{color}_details_label", label)
 
-
-    def create_label_widget(self, text="", color=None) -> QFrame:
-        frame = QFrame()
-        layout = QHBoxLayout(frame)
-        label = QLabel(text)
-        label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-        if color:
-            label.setStyleSheet(f"color: {color}; font-size: 25px; font-weight: bold;")
-        layout.addWidget(label)
-
-        return frame
-
     def create_label(self, text="", color=None) -> QLabel:
-        label = QLabel(text)
-        label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-        if color:
-            label.setStyleSheet(f"color: {color}; font-size: 25px; font-weight: bold;")
+            """
+            Create a QLabel widget with the specified text and color.
 
-        return label
-    
+            Args:
+                text (str): The text to be displayed on the label. Defaults to an empty string.
+                color (str): The color of the label. Defaults to None.
+
+            Returns:
+                QLabel: The created label widget.
+            """
+            label = QLabel(text, self.control_panel)  # Set control_panel as parent
+            label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+            if color:
+                label.setStyleSheet(f"color: {color}; font-size: 25px; font-weight: bold;")
+            return label
+
     def get_start_end_positions(self) -> list[tuple[str, str] | None]:
         positions = []
         arrow_items = [

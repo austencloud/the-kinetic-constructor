@@ -11,12 +11,34 @@ if TYPE_CHECKING:
     from main import MainWindow
 
 class LetterButtons(QFrame):
+    """
+    A class representing a frame containing letter buttons.
+
+    Args:
+        main_window (MainWindow): The main window object.
+
+    Attributes:
+        main_window (MainWindow): The main window object.
+        letter_buttons_layout (QVBoxLayout): The layout for the letter buttons.
+
+    Methods:
+        __init__(self, main_window: MainWindow): Initializes the LetterButtons object.
+        init_letter_buttons_layout(self) -> None: Initializes the layout for the letter buttons.
+        get_letter_type(self, letter: str) -> str: Returns the type of the given letter.
+        get_icon_path(self, letter_type: str, letter: str) -> str: Returns the icon path for the given letter type and letter.
+        create_button(self, icon_path: str) -> QPushButton: Creates a button with the given icon path.
+        update_letter_buttons_size(self) -> None: Updates the size of the letter buttons.
+    """
+
     def __init__(self, main_window: "MainWindow"):
         super().__init__()
         self.main_window = main_window
         self.init_letter_buttons_layout()
 
     def init_letter_buttons_layout(self) -> None:
+        """
+        Initializes the layout for the letter buttons.
+        """
         letter_buttons_layout = QVBoxLayout()
         letter_buttons_layout.setSpacing(int(0))
         self.setContentsMargins(0, 0, 0, 0)
@@ -59,15 +81,43 @@ class LetterButtons(QFrame):
         self.setLayout(letter_buttons_layout)
         
     def get_letter_type(self, letter: str) -> str:
+        """
+        Returns the type of the given letter.
+
+        Args:
+            letter (str): The letter.
+
+        Returns:
+            str: The type of the letter.
+        """
         for letter_type in letter_types:
             if letter in letter_types[letter_type]:
                 return letter_type
         return ""
 
     def get_icon_path(self, letter_type: str, letter: str) -> str:
+        """
+        Returns the icon path for the given letter type and letter.
+
+        Args:
+            letter_type (str): The type of the letter.
+            letter (str): The letter.
+
+        Returns:
+            str: The icon path.
+        """
         return f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
 
     def create_button(self, icon_path: str) -> QPushButton:
+        """
+        Creates a button with the given icon path.
+
+        Args:
+            icon_path (str): The icon path.
+
+        Returns:
+            QPushButton: The created button.
+        """
         renderer = QSvgRenderer(icon_path)
         pixmap = QPixmap(renderer.defaultSize())
         pixmap.fill(QColor(Qt.GlobalColor.white))
@@ -89,6 +139,9 @@ class LetterButtons(QFrame):
         return button
 
     def update_letter_buttons_size(self) -> None:
+        """
+        Updates the size of the letter buttons.
+        """
         button_size = int(self.main_window.width() * 0.020)
         for i in range(self.letter_buttons_layout.count()):
             item = self.letter_buttons_layout.itemAt(i)

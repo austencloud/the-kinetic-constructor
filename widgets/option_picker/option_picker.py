@@ -26,6 +26,8 @@ from .option_picker_scroll_area import OptionPickerScrollArea
 
 
 class OptionPicker(QFrame):
+    """A widget that allows the user to pick options from a scrollable area and buttons frame."""
+
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -34,6 +36,7 @@ class OptionPicker(QFrame):
         self.setup_ui()
 
     def setup_ui(self) -> None:
+        """Set up the user interface of the OptionPicker widget."""
         self.main_layout.setSpacing(0)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
@@ -49,6 +52,7 @@ class OptionPicker(QFrame):
     ### RESIZE EVENT HANDLERS ###
 
     def update_size(self) -> None:
+        """Update the size of the OptionPicker widget and its child widgets."""
         self.setFixedSize(
             int(self.main_widget.width() * 0.5), int(self.main_widget.height() * 3 / 4)
         )

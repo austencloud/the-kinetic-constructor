@@ -90,7 +90,6 @@ class InfoBoxButtons:
 
         self.create_infobox_buttons()
 
-
     def create_infobox_buttons(self) -> None:
         for button_name, properties in self.button_properties.items():
             self.create_and_set_button(button_name, properties)

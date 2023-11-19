@@ -11,9 +11,31 @@ if TYPE_CHECKING:
 
 
 class KeyEventHandler:
+    """
+    Handles key events for the graph editor.
+
+    Args:
+        event (QKeyEvent): The key event.
+        main_widget (MainWidget): The main widget.
+        graphboard (GraphBoard): The graph board.
+
+    Returns:
+        None
+    """
     def keyPressEvent(
         self, event: "QKeyEvent", main_widget: "MainWidget", graphboard: "GraphBoard"
     ) -> None:
+        """
+        Handles the key press event.
+
+        Args:
+            event (QKeyEvent): The key event.
+            main_widget (MainWidget): The main widget.
+            graphboard (GraphBoard): The graph board.
+
+        Returns:
+            None
+        """
         sequence = main_widget.sequence
 
         if not graphboard.selectedItems():

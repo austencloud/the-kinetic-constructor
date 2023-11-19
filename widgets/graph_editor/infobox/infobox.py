@@ -8,6 +8,16 @@ if TYPE_CHECKING:
 
 class InfoBox(QFrame):
     def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard") -> None:
+        """
+        Initialize the InfoBox widget.
+
+        Args:
+            main_widget (MainWidget): The main widget of the application.
+            graphboard (GraphBoard): The graph board widget.
+
+        Returns:
+            None
+        """
         super().__init__()
         self.main_widget = main_widget
         self.main_window = self.main_widget.main_window

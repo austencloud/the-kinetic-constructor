@@ -1,19 +1,19 @@
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtWidgets import QFrame, QPushButton, QVBoxLayout
-
 from objects.arrow import Arrow
-from settings.string_constants import ICON_DIR, LEFT, RIGHT
-from settings.styles import (
-    ACTION_BUTTON_FONT,
-    ACTION_BUTTON_ICON_SIZE,
-    ACTION_BUTTON_SIZE,
-)
+from settings.string_constants import ICON_DIR, CLOCKWISE, COUNTER_CLOCKWISE
 from utilities.json_handler import JsonHandler
 from widgets.graph_editor.graphboard.graphboard import GraphBoard
-from PyQt6.QtCore import QSize
-
-
+from utilities.TypeChecking.TypeChecking import RotationDirection
 class ActionButtonsFrame(QFrame):
+    """
+    A frame that contains action buttons for manipulating arrows in the graphboard.
+
+    Args:
+        graphboard (GraphBoard): The graphboard widget.
+        json_handler (JsonHandler): The JSON handler.
+    """
+
     def __init__(
         self,
         graphboard: "GraphBoard",
@@ -42,8 +42,8 @@ class ActionButtonsFrame(QFrame):
                 "Delete",
                 self.delete_selected_arrow,
             ),
-            ("rotate_right.png", "Rotate Right", self.rotate_selected_arrow, RIGHT),
-            ("rotate_left.png", "Rotate Left", self.rotate_selected_arrow, LEFT),
+            ("rotate_right.png", "Rotate Right", self.rotate_selected_arrow, CLOCKWISE),
+            ("rotate_left.png", "Rotate Left", self.rotate_selected_arrow, COUNTER_CLOCKWISE),
             (
                 "mirror.png",
                 "Mirror",
@@ -62,19 +62,32 @@ class ActionButtonsFrame(QFrame):
             )
             self.layout().addWidget(button)
 
-
-
     def create_and_configure_button(
         self, icon_filename, tooltip, on_click, *args
     ) -> QPushButton:
+        """
+        Create and configure a QPushButton.
+
+        Args:
+            icon_filename (str): The filename of the button icon.
+            tooltip (str): The tooltip text.
+            on_click (function): The function to be called when the button is clicked.
+            *args: Additional arguments to be passed to the on_click function.
+
+        Returns:
+            QPushButton: The configured button.
+        """
         icon_path = ICON_DIR + icon_filename
         button = QPushButton(QIcon(icon_path), "")
         button.setToolTip(tooltip)
-        button.setFont(ACTION_BUTTON_FONT)
+        button.setFont(QFont("Helvetica", 14))
         button.clicked.connect(lambda: on_click(*args))
         return button
 
     def delete_selected_arrow(self) -> None:
+        """
+        Delete the selected arrow from the graphboard.
+        """
         arrow: Arrow = (
             self.graphboard.selectedItems()[0]
             if self.graphboard.selectedItems()
@@ -84,17 +97,27 @@ class ActionButtonsFrame(QFrame):
         if arrow:
             arrow.delete()
 
-    def rotate_selected_arrow(self, direction) -> None:
-        arrow: Arrow = (
-            self.graphboard.selectedItems()[0]
-            if self.graphboard.selectedItems()
-            and isinstance(self.graphboard.selectedItems()[0], Arrow)
-            else None
-        )
-        if arrow:
-            arrow.rotate(direction)
+    def rotate_selected_arrow(self, direction: RotationDirection) -> None:
+            """
+            Rotate the selected arrow in the specified direction.
+
+            Args:
+                direction (RotationDirection): The direction to rotate the arrow, either "cw" or "ccw".
+
+            """
+            arrow: Arrow = (
+                self.graphboard.selectedItems()[0]
+                if self.graphboard.selectedItems()
+                and isinstance(self.graphboard.selectedItems()[0], Arrow)
+                else None
+            )
+            if arrow:
+                arrow.rotate(direction)
 
     def mirror_selected_arrow(self) -> None:
+        """
+        Mirror the selected arrow.
+        """
         arrow: Arrow = (
             self.graphboard.selectedItems()[0]
             if self.graphboard.selectedItems()
