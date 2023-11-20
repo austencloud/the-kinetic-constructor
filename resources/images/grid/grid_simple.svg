@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 27.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 750 750" style="enable-background:new 0 0 750 750;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#231F20;}
+</style>
+<g id="Layer_1-2">
+	<g id="Grid">
+		<circle id="center_point" class="st0" cx="375" cy="375" r="11.2"/>
+		<g id="outer_points">
+			<circle id="n_outer_point" class="st0" cx="375" cy="75" r="25"/>
+			<circle id="e_outer_point" class="st0" cx="675" cy="375" r="25"/>
+			<circle id="s_outer_point" class="st0" cx="375" cy="675" r="25"/>
+			<circle id="w_outer_point" class="st0" cx="75" cy="375" r="25"/>
+		</g>
+		<g id="hand_points">
+			<circle id="n_hand_point" class="st0" cx="375" cy="231.9" r="4.2"/>
+			<circle id="e_hand_point" class="st0" cx="518.1" cy="375" r="4.2"/>
+			<circle id="s_hand_point" class="st0" cx="375" cy="518.1" r="4.2"/>
+			<circle id="w_hand_point" class="st0" cx="231.9" cy="375" r="4.2"/>
+		</g>
+		<g id="layer2_points">
+			<circle id="ne_layer2_point" class="st0" cx="518.1" cy="231.9" r="8.8"/>
+			<circle id="se_layer2_point" class="st0" cx="518.1" cy="518.1" r="8.8"/>
+			<circle id="sw_layer2_point" class="st0" cx="231.9" cy="518.1" r="8.8"/>
+			<circle id="nw_layer2_point" class="st0" cx="231.9" cy="231.9" r="8.8"/>
+		</g>
+	</g>
+</g>
+</svg>

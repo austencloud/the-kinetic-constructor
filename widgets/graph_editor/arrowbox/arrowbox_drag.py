@@ -14,14 +14,23 @@ from settings.string_constants import (
     TURNS,
     LOCATION,
     LAYER,
+    NORTHEAST,
+    SOUTHEAST,
+    SOUTHWEST,
+    NORTHWEST,
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
+    PRO,
+    ANTI,
+    STATIC,
 )
 from objects.arrow import Arrow
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, Optional
 
 if TYPE_CHECKING:
     from main import MainWindow
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
-    from widgets.arrowbox.arrowbox import ArrowBox
+    from widgets.graph_editor.arrowbox.arrowbox import ArrowBox
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
     Color,
@@ -30,6 +39,7 @@ from utilities.TypeChecking.TypeChecking import (
     RotationDirection,
     Location,
     Turns,
+    RotationAngle,
 )
 
 
@@ -71,6 +81,12 @@ class ArrowBoxDrag(QWidget):
         self.preview.setPixmap(pixmap)
         self.preview.setFixedHeight(pixmap.height())
         self.arrow_center = self.target_arrow.boundingRect().center() * GRAPHBOARD_SCALE
+        self.current_rotation_angle = target_arrow.get_rotation_angle()
+        self.is_mirrored = target_arrow.is_mirrored
+
+        pixmap = self.create_pixmap(target_arrow)
+        self.preview.setPixmap(pixmap)
+        self.apply_transformations_to_preview()
 
     def set_attributes(self, target_arrow: "Arrow") -> None:
         self.color: Color = target_arrow.color
@@ -204,6 +220,19 @@ class ArrowBoxDrag(QWidget):
                 staff.update_appearance()
                 self.graphboard.update_staffs()
 
+    def apply_transformations_to_preview(self):
+        self.update_mirror()
+        self.update_rotation()
+
+    def update_mirror(self) -> None:
+        if self.is_mirrored:
+            transform = QTransform().scale(-1, 1)
+            mirrored_pixmap = self.preview.pixmap().transformed(
+                transform, Qt.TransformationMode.SmoothTransformation
+            )
+            self.preview.setPixmap(mirrored_pixmap)
+            self.is_mirrored = True
+
     def update_rotation(self) -> None:
         renderer = QSvgRenderer(self.target_arrow.svg_file)
         scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE
@@ -213,8 +242,8 @@ class ArrowBoxDrag(QWidget):
         with painter as painter:
             renderer.render(painter)
 
-        angle = self.target_arrow.get_rotation_angle(self)
-
+        angle = self.get_drag_preview_rotation_angle(self)
+        
         unrotate_transform = QTransform().rotate(-self.current_rotation_angle)
         unrotated_pixmap = self.preview.pixmap().transformed(unrotate_transform)
 
@@ -233,13 +262,82 @@ class ArrowBoxDrag(QWidget):
             self.quadrant,
         )
 
+    def get_drag_preview_rotation_angle(
+        self, arrow: Optional["Arrow"] = None
+    ) -> RotationAngle:
+        arrow = arrow or self
+        quadrant_to_angle = self.get_drag_preview_rotation_angle_to_quadrant_map(
+            arrow.motion_type, arrow.rotation_direction
+        )
+        return quadrant_to_angle.get(arrow.quadrant, 0)
+
+    def get_drag_preview_rotation_angle_to_quadrant_map(
+        self, motion_type: str, rotation_direction: str
+    ) -> Dict[str, Dict[str, int]]:
+        """
+        Returns a mapping of rotation angles to quadrants based on the motion type and rotation direction. 
+        
+        Specifically designed for the arrowbox_drag. 
+        
+        The values are different than the values in the Arrow class.
+
+        T
+        Args:
+            motion_type (str): The type of motion (PRO, ANTI, STATIC).
+            rotation_direction (str): The direction of rotation (CLOCKWISE, COUNTER_CLOCKWISE).
+
+        Returns:
+            Dict[str, Dict[str, int]]: A mapping of rotation angles to quadrants.
+
+        """
+        if motion_type == PRO:
+            return {
+                CLOCKWISE: {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 90,
+                    SOUTHWEST: 180,
+                    NORTHWEST: 270,
+                },
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: 270,
+                    SOUTHEAST: 0,
+                    SOUTHWEST: 90,
+                    NORTHWEST: 180,
+                },
+            }.get(rotation_direction, {})
+        elif motion_type == ANTI:
+            return {
+                CLOCKWISE: {
+                    NORTHEAST: 90,
+                    SOUTHEAST: 180,
+                    SOUTHWEST: 270,
+                    NORTHWEST: 0,
+                },
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: 180,
+                    SOUTHEAST: 270,
+                    SOUTHWEST: 0,
+                    NORTHWEST: 90,
+                },
+            }.get(rotation_direction, {})
+        elif motion_type == STATIC:
+            return {
+                CLOCKWISE: {NORTHEAST: 0, SOUTHEAST: 0, SOUTHWEST: 0, NORTHWEST: 0},
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 0,
+                    SOUTHWEST: 0,
+                    NORTHWEST: 0,
+                },
+            }.get(rotation_direction, {})
+
+
+
     def handle_enter_graphboard(self, event_pos: QPoint) -> None:
         if not self.has_entered_graphboard_once:
             self.just_entered_graphboard = True
             self.has_entered_graphboard_once = True
             self.remove_same_color_arrow()
-        if self.ghost_arrow.is_mirrored:
-            self.ghost_arrow.unmirror()
 
         if self.has_entered_graphboard_once:
             self.just_entered_graphboard = False
@@ -270,11 +368,13 @@ class ArrowBoxDrag(QWidget):
         self.ghost_arrow.start_location = self.start_location
         self.ghost_arrow.end_location = self.end_location
         self.ghost_arrow.turns = self.turns
-
+        self.ghost_arrow.is_mirrored = self.is_mirrored
+        
         ghost_svg = self.ghost_arrow.get_svg_file(self.motion_type, self.turns)
-
+        
+        self.ghost_arrow.update_mirror()
         self.ghost_arrow.update_svg(ghost_svg)
-
+        
         self.update_rotation()
         self.update_staff_during_drag()
 

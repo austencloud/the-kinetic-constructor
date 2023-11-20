@@ -14,6 +14,28 @@ from settings.string_constants import (
 
 
 class Grid(QGraphicsSvgItem):
+    """
+    Represents a grid object in a graphics scene.
+
+    Args:
+        grid_svg_path (str): The path to the SVG file representing the grid.
+
+    Attributes:
+        svg_file (str): The path to the SVG file representing the grid.
+        center (QPointF): The coordinates of the center point of the grid.
+        handpoints (dict[str, QPointF]): A dictionary mapping hand point names to their coordinates.
+        layer2_points (dict[str, QPointF]): A dictionary mapping layer 2 point names to their coordinates.
+    """
+
+    def __init__(self, grid_svg_path) -> None:
+        super().__init__(grid_svg_path)
+        self.svg_file = grid_svg_path
+        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
+        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)
+        self.setZValue(-1)
+
+    # Rest of the code...
+class Grid(QGraphicsSvgItem):
     def __init__(self, grid_svg_path) -> None:
         super().__init__(grid_svg_path)
         self.svg_file = grid_svg_path

@@ -467,8 +467,6 @@ class Arrow(GraphicalObject):
         self.graphboard.update()
 
     def mirror(self) -> None:
-        from objects.ghosts.ghost_arrow import GhostArrow
-
         transform = QTransform()
         transform.translate(self.center_x, self.center_y)
         transform.scale(-1, 1)
@@ -480,8 +478,6 @@ class Arrow(GraphicalObject):
         self.is_mirrored = True
 
     def unmirror(self) -> None:
-        from objects.ghosts.ghost_arrow import GhostArrow
-
         transform = QTransform()
         transform.translate(self.center.x(), self.center.y())
         transform.scale(1, 1)

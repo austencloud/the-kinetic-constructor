@@ -23,11 +23,13 @@ from settings.string_constants import (
     TURNS,
     SOUTHEAST,
     SOUTH,
-    
+    SOUTHWEST,
+    NORTHWEST,
+    WEST,
 )
 from widgets.graph_editor.arrowbox.arrowbox_drag import ArrowBoxDrag
 from widgets.graph_editor.arrowbox.arrowbox_view import ArrowBoxView
-
+from objects.grid import Grid
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.infobox.infobox import InfoBox
@@ -42,10 +44,10 @@ class ArrowBox(QGraphicsScene):
         self.infobox = infobox
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
-        self.setSceneRect(0, 0, 450, 450)
+        self.setSceneRect(0, 0, 650, 650)
         self.setup_view()
         self.populate_arrows()
-
+        self.grid = Grid("")
         # set dimensions
 
         self.arrowbox_layout = QGridLayout()
@@ -72,9 +74,9 @@ class ArrowBox(QGraphicsScene):
                 COLOR: BLUE,
                 MOTION_TYPE: ANTI,
                 ROTATION_DIRECTION: COUNTER_CLOCKWISE,
-                QUADRANT: NORTHEAST,
-                START_LOCATION: NORTH,
-                END_LOCATION: EAST,
+                QUADRANT: SOUTHWEST,
+                START_LOCATION: SOUTH,
+                END_LOCATION: WEST,
                 TURNS: 0,
             },
             {
@@ -90,9 +92,9 @@ class ArrowBox(QGraphicsScene):
                 COLOR: BLUE,
                 MOTION_TYPE: ANTI,
                 ROTATION_DIRECTION: CLOCKWISE,
-                QUADRANT: SOUTHEAST,
-                START_LOCATION: SOUTH,
-                END_LOCATION: EAST,
+                QUADRANT: NORTHWEST,
+                START_LOCATION: NORTH,
+                END_LOCATION: WEST,
                 TURNS: 0,
             },
         ]
@@ -103,15 +105,15 @@ class ArrowBox(QGraphicsScene):
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
             self.addItem(arrow)
             self.arrows.append(arrow)
-            
+
         for arrow in self.arrows:
             arrow.update_appearance()
             arrow.setTransformOriginPoint(arrow.boundingRect().center())
 
         self.arrows[0].setPos(350, 25)
-        self.arrows[1].setPos(25, 25)
+        self.arrows[1].setPos(25, 350)
         self.arrows[2].setPos(350, 350)
-        self.arrows[3].setPos(25, 350)
+        self.arrows[3].setPos(25, 25)
 
     def mousePressEvent(self, event) -> None:
         scene_pos = event.scenePos()

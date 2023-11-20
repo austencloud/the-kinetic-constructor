@@ -18,7 +18,9 @@ class PropBoxView(QGraphicsView):
 
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.propbox = propbox
 
-        self.scale(0.2, 0.2)
-        self.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)  # Add Box flag
+        self.setFrameStyle(
+            QFrame.Shape.Box | QFrame.Shadow.Plain
+        ) 
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
