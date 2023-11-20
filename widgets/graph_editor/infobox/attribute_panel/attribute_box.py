@@ -1,9 +1,17 @@
 import logging
 from typing import TYPE_CHECKING, Dict
 
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import QFrame, QLabel, QSizePolicy
+from PyQt6.QtWidgets import (
+    QFrame,
+    QLabel,
+    QSizePolicy,
+    QVBoxLayout,
+    QPushButton,
+    QSpacerItem,
+    QWidget,
+)
 
 from data.positions_map import positions_map
 from objects.arrow import Arrow
@@ -19,16 +27,19 @@ from settings.string_constants import (
     PRO,
     RED,
     STATIC,
+    ICON_PATHS,
+    RED_HEX,
+    BLUE_HEX,
 )
 from utilities.TypeChecking.TypeChecking import Color
+from PyQt6.QtGui import QIcon
+
 
 if TYPE_CHECKING:
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
     from widgets.graph_editor.infobox.attribute_panel.attribute_panel import (
         AttributePanel,
     )
-
-from PyQt6.QtWidgets import QVBoxLayout
 
 
 class AttributeBox(QFrame):
@@ -40,30 +51,37 @@ class AttributeBox(QFrame):
         self.color = color
 
         super().__init__(self.attribute_panel)
-        # Set object name for the frame
         self.setObjectName("AttributeBox")
-
-        # Add black border to the frame
-        self.setStyleSheet("#AttributeBox { border: 1px solid black; }")
+        border_color = RED_HEX if color == RED else BLUE_HEX
+        self.setStyleSheet(f"#AttributeBox {{ border: 2px solid {border_color}; }}")
 
         self.pixmap_cache: Dict[str, QPixmap] = {}
 
         header_text = {BLUE: "Left", RED: "Right"}.get(color, "")
         header_color = {BLUE: BLUE, RED: RED}.get(color, "")
 
+        self.setLayout(QVBoxLayout(self))
+
         self.info_header = self.create_info_header(
-            header_text, Qt.AlignmentFlag.AlignHCenter, header_color
+            header_text, Qt.AlignmentFlag.AlignCenter, header_color
         )
-        self.attributebox_layout = QVBoxLayout(self)
-        self.setLayout(self.attributebox_layout)
+        self.layout().addWidget(self.info_header)
+
+        self.setFixedHeight(int(self.attribute_panel.height() / 2))
+        self.setFixedWidth(int(self.attribute_panel.width()))
+
         self.setContentsMargins(0, 0, 0, 0)  # Remove padding on the edges
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().setSpacing(0)
+
         self.attribute_labels = self.create_attribute_labels()
         self.clock_label = self.create_clock_label()  # Create the clock label
         self.layout().addWidget(self.info_header)
         for label in self.attribute_labels.values():
             self.layout().addWidget(label)
+
+        self.setup_left_button_column()
+        self.setup_right_button_column()
 
         # COMMENT THIS OUT FOR LAYOUT MANAGEMENT
         # self.setStyleSheet("QFrame { border: 1px solid black; }")
@@ -104,7 +122,7 @@ class AttributeBox(QFrame):
 
     def create_info_header(
         self, text: str, alignment: Qt.AlignmentFlag, color: str
-    ) -> QLabel:
+    ) -> QWidget:
         """
         Create an info header QLabel widget with the specified text, alignment, and color.
 
@@ -114,17 +132,35 @@ class AttributeBox(QFrame):
             color (str): The color of the info header text.
 
         Returns:
-            QLabel: The created info header widget.
+            QVBoxLayout: The layout containing the created info header widget and the underline.
         """
         info_header = QLabel(text, self.attribute_panel)
         info_header.setAlignment(alignment)
         info_header.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
         )
+        header_color = RED_HEX if color == RED else BLUE_HEX
         info_header.setStyleSheet(
-            f"color: {color}; font-size: {int(self.attribute_panel.height()*0.07)}px; font-weight: bold;"
+            f"color: {header_color}; font-size: {int(self.attribute_panel.height()*0.07)}px; font-weight: bold;"
         )
-        return info_header
+
+        # Create a QFrame to act as an underline
+        underline = QFrame()
+        underline.setFixedHeight(1)  # Set the height to 1 to create a line effect
+        underline.setStyleSheet("background-color: black;")
+
+        # Create a layout to hold the header and the underline
+        layout = QVBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+
+        layout.addWidget(info_header)
+        layout.addWidget(underline)
+
+        widget = QWidget()
+        widget.setLayout(layout)
+
+        return widget
 
     def create_attribute_labels(self) -> Dict[str, QLabel]:
         """
@@ -163,6 +199,93 @@ class AttributeBox(QFrame):
         self.turns_label = attribute_labels["turns_label"]
 
         return attribute_labels
+
+    def setup_right_button_column(self):
+        buttonColumnFrame = QFrame(self)
+        buttonColumnLayout = QVBoxLayout(buttonColumnFrame)
+        buttonColumnFrame.setLayout(buttonColumnLayout)
+        buttonColumnLayout.setContentsMargins(0, 0, 0, 0)
+        buttonColumnLayout.setSpacing(0)
+
+        buttonSize = self.height() // 4
+        buttonColumnFrame.setFixedSize(buttonSize, self.height())
+
+        # Add spacers to push the button to the bottom
+        for _ in range(3):
+            spacer = QSpacerItem(
+                buttonSize,
+                buttonSize,
+                QSizePolicy.Policy.Fixed,
+                QSizePolicy.Policy.Fixed,
+            )
+            buttonColumnLayout.addItem(spacer)
+
+
+        increment_turns_button = QPushButton(buttonColumnFrame)
+        increment_turns_button.setIcon(QIcon(ICON_PATHS["increment_turns"]))
+        increment_turns_button.clicked.connect(
+            lambda: self.graphboard.get_arrow_by_color(self.color).add_turn()
+        )
+        increment_turns_button.setFixedSize(buttonSize, buttonSize)
+
+
+        icon_size = int(buttonSize * 0.6)
+        increment_turns_button.setIconSize(QSize(icon_size, icon_size))
+
+        buttonColumnLayout.addWidget(increment_turns_button)
+
+        buttonColumnFrame.move(self.width() - buttonSize, 0) 
+        buttonColumnFrame.raise_()
+
+    def setup_left_button_column(self):
+        buttonColumnFrame = QFrame(self)
+        buttonColumnLayout = QVBoxLayout(buttonColumnFrame)
+        buttonColumnFrame.setLayout(buttonColumnLayout)
+        buttonColumnLayout.setContentsMargins(0, 0, 0, 0)
+        buttonColumnLayout.setSpacing(0)
+
+        buttonSize = self.height() // 4
+        buttonColumnFrame.setFixedSize(buttonSize, self.height())
+
+        # Top spacer to push the buttons down
+        top_spacer = QSpacerItem(
+            buttonSize, buttonSize, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed
+        )
+        buttonColumnLayout.addItem(top_spacer)
+
+        # Define the button functionalities based on the color
+        button_functions = [
+            (
+                "swap_motion_type",
+                lambda: self.graphboard.get_arrow_by_color(
+                    self.color
+                ).swap_motion_type(),
+            ),
+            (
+                "swap_start_end",
+                lambda: self.graphboard.get_arrow_by_color(self.color).swap_rot_dir(),
+            ),
+            (
+                "decrement_turns",
+                lambda: self.graphboard.get_arrow_by_color(self.color).subtract_turn(),
+            ),
+        ]
+
+        # Create and add buttons with the functionalities
+        for func_name, callback in button_functions:
+            button = QPushButton(buttonColumnFrame)
+            button.setIcon(QIcon(ICON_PATHS[func_name]))
+            button.clicked.connect(callback)
+            button.setFixedSize(buttonSize, buttonSize)
+
+            # Set the icon size to 85% of the button size
+            icon_size = int(buttonSize * 0.6)
+            button.setIconSize(QSize(icon_size, icon_size))
+
+            buttonColumnLayout.addWidget(button)
+
+        buttonColumnFrame.move(0, 0)  # Position to the left
+        buttonColumnFrame.raise_()
 
     ### LABEL UPDATING ###
 
@@ -212,20 +335,17 @@ class AttributeBox(QFrame):
 
     def preload_pixmaps(self) -> None:
         """
-        Preload and cache the pixmaps.
+        Preloads and caches pixmaps for the attribute panel.
 
-        This method loads and caches the pixmaps for the infobox clock.
-
-        It scales them to a size of 60x60 pixels, and stores them in the pixmap_cache dictionary.
-
-        Returns:
-            None
+        This method loads the pixmaps for the CLOCKWISE_ICON and COUNTER_CLOCKWISE_ICON
+        and scales them to a size that is one-third of the height of the attribute panel's
+        column frame. The scaled pixmaps are then stored in the pixmap_cache dictionary.
         """
         for icon_name in [CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON]:
             pixmap = QPixmap(icon_name)
             scaled_pixmap = pixmap.scaled(
-                int(self.attribute_panel.column_frame.height() / 3),
-                int(self.attribute_panel.column_frame.height() / 3),
+                int(self.height() / 4),
+                int(self.height() / 4),
                 Qt.AspectRatioMode.KeepAspectRatio,
                 Qt.TransformationMode.SmoothTransformation,
             )
