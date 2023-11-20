@@ -15,7 +15,6 @@ class PropBoxView(QGraphicsView):
             int(propbox.main_window.height() * 1/6),
         )
         self.setScene(propbox)
-
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.propbox = propbox
@@ -24,3 +23,8 @@ class PropBoxView(QGraphicsView):
             QFrame.Shape.Box | QFrame.Shadow.Plain
         ) 
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)  # Call the parent class's resizeEvent
+        if self.scene():
+            self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)

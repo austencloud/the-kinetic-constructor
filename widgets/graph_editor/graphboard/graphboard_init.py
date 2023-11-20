@@ -43,6 +43,7 @@ if TYPE_CHECKING:
 class GraphBoardInit:
     def __init__(self, graphboard: "GraphBoard") -> None:
         self.graphboard = graphboard
+        self.main_widget = graphboard.main_widget
         self.window_width = graphboard.main_widget.main_window.main_window_width
         self.window_height = graphboard.main_widget.main_window.main_window_height
 
@@ -73,8 +74,8 @@ class GraphBoardInit:
             LAYER: 1,
         }
 
-        red_staff = RedStaff(self.graphboard, red_staff_dict)
-        blue_staff = BlueStaff(self.graphboard, blue_staff_dict)
+        red_staff = RedStaff(self.main_widget, self.graphboard, red_staff_dict)
+        blue_staff = BlueStaff(self.main_widget, self.graphboard, blue_staff_dict)
 
         red_staff.hide()
         blue_staff.hide()
@@ -127,10 +128,10 @@ class GraphBoardInit:
         }
 
         red_ghost_staff = GhostStaff(
-            self.graphboard, default_red_ghost_staff_attributes
+            self.main_widget, self.graphboard, default_red_ghost_staff_attributes
         )
         blue_ghost_staff = GhostStaff(
-            self.graphboard, default_blue_ghost_staff_attributes
+            self.main_widget, self.graphboard, default_blue_ghost_staff_attributes
         )
 
         ghost_staffs = {RED: red_ghost_staff, BLUE: blue_ghost_staff}

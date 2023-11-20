@@ -24,26 +24,19 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
 
 class PropBox(QGraphicsScene):
-    def __init__(self, main_widget: "MainWidget") -> None:
+    def __init__(self, main_widget: "MainWidget", graphboard:"GraphBoard") -> None:
         super().__init__()
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
+        self.graphboard = graphboard
         self.view = PropBoxView(self)
-        self.view.scale(GRAPHBOARD_SCALE, GRAPHBOARD_SCALE)
-        self.setSceneRect(
-            0, 0, int(450), int(450)
-        )
+        self.setSceneRect(0, 0, int(450), int(450))
         self.propbox_layout = QVBoxLayout()
         self.propbox_layout.addWidget(self.view)
-        self.view.setFrameStyle(QFrame.Shape.NoFrame)
-        self.scale = GRAPHBOARD_SCALE * 0.75
-        self.view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.view.setFrameShape(QFrame.Shape.NoFrame)
-        main_widget.propbox = self
+        self.init_propbox_staffs(self)
 
     def init_propbox_staffs(self, propbox) -> None:
         self.propbox_staff_locations = {
@@ -53,20 +46,20 @@ class PropBox(QGraphicsScene):
             WEST: QPointF(100, 100),
         }
 
-        red_propbox_staff = {
+        red_propbox_staff_dict = {
             COLOR: RED,
             LOCATION: EAST,
             LAYER: 1,
         }
 
-        blue_propbox_staff = {
+        blue_propbox_staff_dict = {
             COLOR: BLUE,
             LOCATION: NORTH,
             LAYER: 1,
         }
 
-        red_staff = Staff(propbox, red_propbox_staff)
-        blue_staff = Staff(propbox, blue_propbox_staff)
+        red_staff = Staff(self.main_widget, self.graphboard, red_propbox_staff_dict)
+        blue_staff = Staff(self.main_widget, self.graphboard, blue_propbox_staff_dict)
 
         red_staff.setPos(self.propbox_staff_locations[EAST])
         blue_staff.setPos(self.propbox_staff_locations[NORTH])

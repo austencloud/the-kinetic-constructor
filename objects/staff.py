@@ -50,8 +50,9 @@ from utilities.TypeChecking.TypeChecking import (
 
 if TYPE_CHECKING:
     from objects.arrow import Arrow
+    from widgets.main_widget import MainWidget
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
-    from widgets.graph_editor.propbox.propbox import PropBox
+    
 ATTRIBUTES = STAFF_ATTRIBUTES
 
 logging.basicConfig(
@@ -67,18 +68,20 @@ class Staff(GraphicalObject):
 
     def __init__(
         self,
-        graphboard: Union["GraphBoard", "PropBox"],
-        attributes: StaffAttributesDicts,
+        main_widget: "MainWidget",
+        graphboard: "GraphBoard",
+        attributes,
     ) -> None:
         svg_file = STAFF_SVG_FILE_PATH
-        super().__init__(svg_file, graphboard)
-        self._setup_attributes(graphboard, attributes)
+        super().__init__(svg_file, main_widget)
+        self._setup_attributes(main_widget, graphboard, attributes)
 
     ### SETUP ###
 
     def _setup_attributes(
         self,
-        graphboard: Union["GraphBoard", "PropBox"],
+        main_widget: "MainWidget",
+        graphboard: "GraphBoard",
         attributes: StaffAttributesDicts,
     ) -> None:
         self.graphboard = graphboard
@@ -100,30 +103,31 @@ class Staff(GraphicalObject):
 
     def mousePressEvent(self, event) -> None:
         self.setSelected(True)
-        if not self.ghost_staff:
-            self.ghost_staff = self.graphboard.ghost_staffs[self.color]
-        self.ghost_staff.color = self.color
-        self.ghost_staff.location = self.location
-        self.ghost_staff.layer = self.layer
-        self.ghost_staff.update_appearance()
-        self.graphboard.addItem(self.ghost_staff)
-        self.ghost_staff.arrow = self.arrow
-        self.graphboard.staffs.append(self.ghost_staff)
-        self.graphboard.staffs.remove(self)
-        self.graphboard.update()
-        self.graphboard.staffs.append(self)
-        for item in self.graphboard.items():
-            if item != self:
-                item.setSelected(False)
+        if isinstance(self.scene(), self.graphboard.__class__):
+            if not self.ghost_staff:
+                self.ghost_staff = self.graphboard.ghost_staffs[self.color]
+            self.ghost_staff.color = self.color
+            self.ghost_staff.location = self.location
+            self.ghost_staff.layer = self.layer
+            self.ghost_staff.update_appearance()
+            self.graphboard.addItem(self.ghost_staff)
+            self.ghost_staff.arrow = self.arrow
+            self.graphboard.staffs.append(self.ghost_staff)
+            self.graphboard.staffs.remove(self)
+            self.graphboard.update()
+            self.graphboard.staffs.append(self)
+            for item in self.graphboard.items():
+                if item != self:
+                    item.setSelected(False)
 
-        self.previous_location = self.location
+            self.previous_location = self.location
 
     def mouseMoveEvent(self, event) -> None:
-        if event.buttons() == Qt.MouseButton.LeftButton:
-            new_pos = event.scenePos() - self.get_staff_center()
-            self.set_drag_pos(new_pos)
-
-            self.update_location(event.scenePos())
+        if isinstance(self.scene(), self.graphboard.__class__):
+            if event.buttons() == Qt.MouseButton.LeftButton:
+                new_pos = event.scenePos() - self.get_staff_center()
+                self.set_drag_pos(new_pos)
+                self.update_location(event.scenePos())
 
     def update_location(self, new_pos: QPointF) -> None:
         new_location = self.get_closest_location(new_pos)
@@ -203,11 +207,12 @@ class Staff(GraphicalObject):
             self.arrow.update_appearance()
 
     def mouseReleaseEvent(self, event) -> None:
-        self.graphboard.removeItem(self.ghost_staff)
-        self.graphboard.staffs.remove(self.ghost_staff)
-        self.ghost_staff.arrow = None
-        self.graphboard.update()
-        self.finalize_staff_drop(event)
+        if isinstance(self.scene(), self.graphboard.__class__):
+            self.graphboard.removeItem(self.ghost_staff)
+            self.graphboard.staffs.remove(self.ghost_staff)
+            self.ghost_staff.arrow = None
+            self.graphboard.update()
+            self.finalize_staff_drop(event)
 
     def finalize_staff_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
         closest_handpoint = self.get_closest_handpoint(event.scenePos())
@@ -343,16 +348,12 @@ class Staff(GraphicalObject):
 
 
 class RedStaff(Staff):
-    def __init__(
-        self, scene: Union["GraphBoard", "PropBox"], dict: StaffAttributesDicts
-    ) -> None:
-        super().__init__(scene, dict)
+    def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard", dict: StaffAttributesDicts) -> None:
+        super().__init__(main_widget, graphboard, dict)
         self.setSharedRenderer(self.renderer)
 
 
 class BlueStaff(Staff):
-    def __init__(
-        self, scene: Union["GraphBoard", "PropBox"], dict: StaffAttributesDicts
-    ) -> None:
-        super().__init__(scene, dict)
+    def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard", dict: StaffAttributesDicts) -> None:
+        super().__init__(main_widget, graphboard, dict)
         self.setSharedRenderer(self.renderer)

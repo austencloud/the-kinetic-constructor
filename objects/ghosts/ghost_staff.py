@@ -1,8 +1,8 @@
 from objects.staff import Staff
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, StaffAttributesDicts
 if TYPE_CHECKING:
+    from widgets.main_widget import MainWidget
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
-
 
 class GhostStaff(Staff):
     """
@@ -19,9 +19,8 @@ class GhostStaff(Staff):
     """
 
     def __init__(
-        self, graphboard: "GraphBoard", attributes: StaffAttributesDicts
+        self, main_widget: "MainWidget", graphboard: "GraphBoard", attributes: StaffAttributesDicts
     ) -> None:
-        super().__init__(graphboard, attributes)
+        super().__init__(main_widget, graphboard, attributes)
         self.setOpacity(0.2)
-        self.graphboard = graphboard
         self.target_staff = None
