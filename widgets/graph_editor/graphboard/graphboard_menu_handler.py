@@ -66,5 +66,4 @@ class GraphBoardMenuHandler:
 
     def _add_graphboard_actions(self, menu: QMenu) -> None:
         swap_colors_action = QAction("Swap Colors", menu)
-        swap_colors_action.triggered.connect(lambda: self.graphboard.swap_colors())
         menu.addAction(swap_colors_action)

@@ -1,13 +1,15 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QGroupBox, QLineEdit, QLabel, QTextEdit
+
 if TYPE_CHECKING:
     from widgets.graph_editor.infobox.infobox import InfoBox
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
-from widgets.graph_editor.infobox.infobox_labels import InfoBoxLabels
+from widgets.graph_editor.infobox.attribute_panel.attribute_box import AttributeBox
 from widgets.graph_editor.infobox.infobox_frames import InfoBoxFrames
 
+
 class InfoPanel(QFrame):
-    def __init__(self, infobox: 'InfoBox', graphboard: 'GraphBoard') -> None:
+    def __init__(self, infobox: "InfoBox", graphboard: "GraphBoard") -> None:
         super().__init__()
         self.infobox = infobox
         self.graphboard = graphboard
@@ -51,4 +53,31 @@ class InfoPanel(QFrame):
 
         # Set the layout for the info panel
         self.setLayout(layout)
-    
+
+    def update_info_panel(self) -> None:
+        pass
+        # self.update_letter_line()
+        # self.update_letter_type_line()
+        # self.update_motion_line()
+        # self.update_additional_info()
+
+    def update_type_and_position_label(self) -> None:
+        """
+        Update the type and position label based on the current letter and its type.
+        """
+        (
+            current_letter,
+            current_letter_type,
+        ) = (
+            self.graphboard.current_letter,
+            self.graphboard.get_current_letter_type(),
+        )
+        if current_letter and current_letter_type:
+            start_end_positions = self.get_start_end_positions()
+            if start_end_positions:
+                start_position, end_position = start_end_positions
+
+            info_text = f"<center><h1>{current_letter_type}</h1><p style='font-size: 18px; font-family:'Cambria;''>{start_position} → {end_position}</center></p>"
+            self.type_position_label.setText(info_text)
+        else:
+            self.type_position_label.setText("")

@@ -204,7 +204,7 @@ class SvgResizer(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "Error", f"An error occurred: {e}")
     
-    def trim_svg(self, svg_file_path):
+    def trim_svg(self, svg_file_path) -> None:
         png_data = cairosvg.svg2png(url=svg_file_path)
         image = Image.open(io.BytesIO(png_data))
         image = image.convert("RGBA")
@@ -215,7 +215,7 @@ class SvgResizer(QMainWindow):
         else:
             QMessageBox.warning(self, "Warning", "The image appears to be blank.")
 
-    def update_viewbox(self, svg_file_path, new_viewbox):
+    def update_viewbox(self, svg_file_path, new_viewbox) -> None:
         tree = ET.parse(svg_file_path)
         root = tree.getroot()
         root.attrib['viewBox'] = new_viewbox

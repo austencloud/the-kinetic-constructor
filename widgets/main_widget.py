@@ -24,6 +24,8 @@ class MainWidget(QWidget):
         self.arrows = []
         self.export_handler = None
         self.main_window = main_window
+        self.resize(int(self.main_window.width()), int(self.main_window.height()))
+
 
         self.key_event_handler = KeyEventHandler()
         self.json_handler = JsonHandler()
@@ -50,6 +52,8 @@ class MainWidget(QWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
+        self.resize(int(self.main_window.width()), int(self.main_window.height()))
+
         self.sequence.update_size()
         self.option_picker.update_size()
         self.graph_editor.update_size()

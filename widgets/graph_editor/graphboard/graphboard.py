@@ -36,8 +36,12 @@ from widgets.graph_editor.graphboard.graphboard_init import GraphBoardInit
 from widgets.graph_editor.graphboard.graphboard_menu_handler import (
     GraphBoardMenuHandler,
 )
-from widgets.graph_editor.graphboard.position_engines.arrow_positioner import ArrowPositioner
-from widgets.graph_editor.graphboard.position_engines.staff_positioner import StaffPositioner
+from widgets.graph_editor.graphboard.position_engines.arrow_positioner import (
+    ArrowPositioner,
+)
+from widgets.graph_editor.graphboard.position_engines.staff_positioner import (
+    StaffPositioner,
+)
 
 if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
@@ -235,7 +239,7 @@ class GraphBoard(QGraphicsScene):
         self.update_infobox()
 
     def update_infobox(self) -> None:
-        self.infobox.control_panel.update_control_panel()
+        self.infobox.update_infobox()
 
     def update_arrows(self) -> None:
         self.arrow_positioner.update()

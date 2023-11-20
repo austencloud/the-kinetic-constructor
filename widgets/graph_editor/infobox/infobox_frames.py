@@ -4,7 +4,9 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
-    from widgets.graph_editor.infobox.control_panel.control_panel import ControlPanel
+    from widgets.graph_editor.infobox.attribute_panel.attribute_panel import (
+        ControlPanel,
+    )
     from objects.arrow import Arrow
 
 
@@ -13,16 +15,18 @@ class InfoBoxFrames:
     Represents the attribute frames in the info box of the graph editor.
 
     Attributes:
-        control_panel (ControlPanel): The control panel associated with the info box.
+        attribute_panel (ControlPanel): The control panel associated with the info box.
         labels (Labels): The labels associated with the control panel.
         graphboard (GraphBoard): The graph board associated with the info box.
         blue_attribute_frame (QFrame): The frame for the blue attribute.
         red_attribute_frame (QFrame): The frame for the red attribute.
     """
 
-    def __init__(self, control_panel: "ControlPanel", graphboard: "GraphBoard") -> None:
-        self.control_panel = control_panel
-        self.labels = control_panel.labels
+    def __init__(
+        self, attribute_panel: "ControlPanel", graphboard: "GraphBoard"
+    ) -> None:
+        self.attribute_panel = attribute_panel
+        self.labels = attribute_panel.labels
         self.graphboard = graphboard
         self.blue_attribute_frame: QFrame = None
         self.red_attribute_frame: QFrame = None
@@ -39,8 +43,8 @@ class InfoBoxFrames:
                 "border: 1px solid black;"
             )  # Add black outlines
             attribute_frame.setObjectName(f"{color}_attribute_frame")
-            attribute_frame.setFixedHeight(int(self.control_panel.height() / 3))
-            attribute_frame.setFixedWidth(int(self.control_panel.width() / 3))
+            attribute_frame.setFixedHeight(int(self.attribute_panel.height() / 3))
+            attribute_frame.setFixedWidth(int(self.attribute_panel.width() / 3))
             attribute_frame.setContentsMargins(0, 0, 0, 0)
 
             setattr(self, f"{color}_attribute_frame", attribute_frame)
@@ -56,11 +60,11 @@ class InfoBoxFrames:
         Returns:
             QWidget: The constructed attribute frame widget.
         """
-        self.buttons = self.control_panel.buttons
+        self.buttons = self.attribute_panel.buttons
 
         (
             motion_type_label,
-            rotation_direction_label,
+            clock_label,
             start_end_label,
             turns_label,
         ) = self.labels.create_attribute_labels()
@@ -79,7 +83,7 @@ class InfoBoxFrames:
 
         frame_layout = QVBoxLayout()
         frame_layout.addWidget(motion_type_label)
-        frame_layout.addWidget(rotation_direction_label)
+        frame_layout.addWidget(clock_label)
         frame_layout.addWidget(start_end_label)
         frame_layout.addLayout(turns_layout)
 
@@ -96,13 +100,13 @@ class InfoBoxFrames:
             arrow (Arrow): The arrow containing the information.
         """
         self.labels.update_labels(widget, arrow)
-        self.control_panel.buttons.show_buttons(arrow.color)
+        self.attribute_panel.buttons.show_buttons(arrow.color)
 
     def update_attribute_frames(self) -> None:
         """
         Update the attribute frames based on the arrows in the graph board.
         """
-        widgets = self.control_panel.frames
+        widgets = self.attribute_panel.frames
         for color in [BLUE, RED]:
             arrow = self.graphboard.get_arrow_by_color(color)
             if arrow:

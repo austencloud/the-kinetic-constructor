@@ -1,15 +1,18 @@
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QIcon
-from settings.string_constants import BLUE, RED, COLOR, ICON_PATHS
+from settings.string_constants import BLUE, RED, ICON_PATHS
 from settings.numerical_constants import BUTTON_SIZE
 from typing import TYPE_CHECKING, Dict, Callable, List
 from utilities.TypeChecking.TypeChecking import Color
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.infobox.infobox import InfoBox
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
-    from widgets.graph_editor.infobox.control_panel.control_panel import ControlPanel
+    from widgets.graph_editor.infobox.attribute_panel.attribute_panel import (
+        AttributePanel,
+    )
+
 from PyQt6.QtWidgets import QVBoxLayout
+
 
 class InfoBoxButtons:
     """
@@ -17,11 +20,11 @@ class InfoBoxButtons:
 
     Attributes:
         graphboard (GraphBoard): The graph board associated with the info box.
-        control_panel (ControlPanel): The control panel associated with the info box.
+        attribute_panel (ControlPanel): The control panel associated with the info box.
         button_groups (Dict[str, List[QPushButton]]): A dictionary mapping color names to lists of buttons.
 
     Methods:
-        __init__(self, control_panel: 'ControlPanel', graphboard: "GraphBoard") -> None:
+        __init__(self, attribute_panel: 'ControlPanel', graphboard: "GraphBoard") -> None:
             Initializes the InfoBoxButtons instance.
         create_and_set_button(self, button_name: str, properties: Dict[str, str | Callable]) -> None:
             Creates and sets a button with the given name and properties.
@@ -34,9 +37,12 @@ class InfoBoxButtons:
         setup_button_layout(self) -> None:
             Sets up the button layout.
     """
-    def __init__(self, control_panel: 'ControlPanel', graphboard: "GraphBoard") -> None:
+
+    def __init__(
+        self, attribute_panel: "AttributePanel", graphboard: "GraphBoard"
+    ) -> None:
         self.graphboard = graphboard
-        self.control_panel = control_panel
+        self.attribute_panel = attribute_panel
         self.button_groups: Dict[str, List[QPushButton]] = {BLUE: [], RED: []}
         self.setup_buttons()
         self.setup_button_layout()
@@ -156,7 +162,7 @@ class InfoBoxButtons:
         Returns:
             None
         """
-        self.button_layout = QVBoxLayout()  # Create a vertical layout for the buttons
+        self.button_layout = QVBoxLayout() 
         for button_name in self.button_properties.keys():
             button = getattr(self, f"{button_name}_button")
-            self.button_layout.addWidget(button)  # Add each button to the layout
+            self.button_layout.addWidget(button)
