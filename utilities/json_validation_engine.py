@@ -23,6 +23,7 @@ valid_quadrants = {"ne", "se", "sw", "nw", None}
 valid_rotation_directions = {"cw", "ccw", None}
 valid_locations = {"n", "e", "s", "w"}
 valid_turns = {0, 0.5, 1, 1.5, 2, 2.5}
+
 positions_map = {
     (NORTH, RED, SOUTH, BLUE): "alpha1",
     (EAST, RED, WEST, BLUE): "alpha2",
@@ -41,9 +42,6 @@ positions_map = {
     (SOUTH, RED, WEST, BLUE): "gamma7",
     (WEST, RED, NORTH, BLUE): "gamma8",
 }
-
-
-
 
 class JsonValidationEngine(QMainWindow):
     def __init__(self):

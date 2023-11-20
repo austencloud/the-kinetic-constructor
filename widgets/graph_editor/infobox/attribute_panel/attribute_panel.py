@@ -46,7 +46,3 @@ class AttributePanel(QFrame):
         if red_arrow:
             self.red_attr_box.update_labels(red_arrow)
 
-        if blue_arrow:
-            self.blue_attr_box.update_clock_label(blue_arrow)
-        if red_arrow:
-            self.red_attr_box.update_clock_label(red_arrow)
