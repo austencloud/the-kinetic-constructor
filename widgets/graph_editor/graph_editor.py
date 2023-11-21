@@ -78,6 +78,7 @@ class GraphEditor(QFrame):
         self.update_graphboard_size()
         self.update_arrowbox_size()
         self.update_propbox_size()
+        self.update_infobox_size()
 
     def update_graphboard_size(self) -> None:
         view_width = int(self.height() * 75 / 90)
@@ -98,3 +99,6 @@ class GraphEditor(QFrame):
             int(self.graphboard.view.height() * 1 / 2),
             int(self.graphboard.view.height() * 1 / 2),
         )
+
+    def update_infobox_size(self) -> None:
+        self.infobox.update_infobox_size()

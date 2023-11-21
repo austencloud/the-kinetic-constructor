@@ -81,7 +81,6 @@ class LayoutManager:
 
     def init_sequence_layout(self) -> None:
         self.layouts["sequence"].addWidget(self.main_widget.sequence)
-        self.layouts["sequence"].addLayout(self.layouts["sequence"])
 
     def add_black_border_to_widgets(self) -> None:
         self.add_black_border(self.main_widget.graph_editor.graphboard)

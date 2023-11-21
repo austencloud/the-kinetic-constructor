@@ -45,6 +45,7 @@ class InfoBox(QFrame):
         self.graphboard = graphboard
         self.graph_editor = graph_editor
         self.setFixedHeight(int(self.graph_editor.height()))
+        self.setFixedWidth(int(self.graph_editor.width() / 2))
         self.info_panel = InfoPanel(self, graphboard)
         self.attribute_panel = AttributePanel(self, graphboard)
         self.infobox_layout = QHBoxLayout()
@@ -52,7 +53,6 @@ class InfoBox(QFrame):
         self.infobox_layout.setContentsMargins(0, 0, 0, 0)
         self.infobox_layout.addWidget(self.attribute_panel)
         self.infobox_layout.addWidget(self.info_panel)
-
         self.setLayout(self.infobox_layout)
 
     def update_infobox(self) -> None:
@@ -64,3 +64,8 @@ class InfoBox(QFrame):
         """
         self.info_panel.update_info_panel()
         self.attribute_panel.update_attribute_panel()
+
+    def update_infobox_size(self) -> None:
+        self.setFixedHeight(self.graph_editor.height())
+        self.info_panel.update_info_panel_size()
+        self.attribute_panel.update_attribute_panel_size()

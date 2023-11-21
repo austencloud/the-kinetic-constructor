@@ -37,29 +37,19 @@ class MainWindow(QMainWindow):
         """
         Configures the main window based on the screen used.
         """
-        screens = QApplication.screens()
-        primary_screen = screens[0]
-        secondary_screen = screens[1] if len(screens) > 1 else primary_screen
+        primary_screen = QApplication.primaryScreen()
+        screen_geometry = primary_screen.geometry()
 
         scaling_factor = primary_screen.devicePixelRatio()
-        screen_geometry = secondary_screen.geometry()
 
         # Adjust size based on the screen used
-        self.main_window_width = int(
-            screen_geometry.width() * (0.8 if len(screens) > 1 else 0.6)
-        )
-        self.main_window_height = int(
-            screen_geometry.height() * (0.8 if len(screens) > 1 else 0.7)
-        )
+        self.main_window_width = int(screen_geometry.width() * 0.9)
+        self.main_window_height = int(screen_geometry.height() * 0.8)
 
         # Positioning the window
         self.move(
-            screen_geometry.x()
-            + (screen_geometry.width() - self.main_window_width) // 2
-            - 50,
-            screen_geometry.y()
-            + (screen_geometry.height() - self.main_window_height) // 2
-            - 50,
+            screen_geometry.x() + (screen_geometry.width() - self.main_window_width) // 2 - 50,
+            screen_geometry.y() + (screen_geometry.height() - self.main_window_height) // 2 - 50,
         )
 
     def init_main_window(self) -> None:

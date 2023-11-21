@@ -74,8 +74,8 @@ ICON_PATHS = {
     "swap_start_end": ICON_DIR + MIRROR_ICON,
     "decrement_turns": ICON_DIR + DECREMENT_TURNS_ICON,
     "increment_turns": ICON_DIR + INCREMENT_TURNS_ICON,
-    "swap_colors": SWAP_COLORS_ICON,
-    
+    "swap_colors": ICON_DIR + SWAP_COLORS_ICON,
+
 }
 
 ARROW_ATTRIBUTES = [

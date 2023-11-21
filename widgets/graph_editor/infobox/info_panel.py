@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QGroupBox, QLineEdit, QLabel, QTextEdit
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QGroupBox, QLineEdit, QLabel, QTextEdit, QSizePolicy
 
 if TYPE_CHECKING:
     from widgets.graph_editor.infobox.infobox import InfoBox
@@ -18,6 +18,8 @@ class InfoPanel(QFrame):
     def setup_info_panel(self) -> None:
         # Create the vbox layout
         layout = QVBoxLayout(self)
+
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         # Create the top box
         top_box = QGroupBox("Top Box")
@@ -81,3 +83,7 @@ class InfoPanel(QFrame):
             self.type_position_label.setText(info_text)
         else:
             self.type_position_label.setText("")
+
+    def update_info_panel_size(self) -> None:
+        self.setFixedHeight(self.infobox.height())
+        self.setMaximumWidth(self.infobox.width() - self.infobox.attribute_panel.red_attr_box.width())
