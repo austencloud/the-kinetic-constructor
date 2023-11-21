@@ -1,5 +1,5 @@
 import logging
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Literal, Dict
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtWidgets import (
@@ -51,7 +51,7 @@ class AttributeBox(QFrame):
         self.init_ui()
 
     def calculate_button_size(self) -> int:
-        return int((self.height() // 4) * 0.9)
+        return int((self.height() // 4) * 1)
 
     def init_ui(self) -> None:
         self.setup_box()
@@ -66,8 +66,12 @@ class AttributeBox(QFrame):
         self.attribute_labels = self.create_attribute_labels()
         self.clock_label = self.create_clock_label()
         self.add_labels_to_layout()
-        self.setup_button_column(0, ["swap_motion_type", "swap_start_end", "decrement_turns"], is_right_column=False)
-        self.setup_button_column(self.width() - self.button_size, ["increment_turns"], is_right_column=True)
+        self.setup_button_column(
+            0, ["swap_motion_type", "swap_start_end", "decrement_turns"], column="left"
+        )
+        self.setup_button_column(
+            self.width() - self.button_size, ["increment_turns"], column="right"
+        )
         self.preload_pixmaps()
 
     def setup_box(self) -> None:
@@ -91,7 +95,7 @@ class AttributeBox(QFrame):
         info_header.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
         )
-        
+
         color_hex = RED_HEX if color == RED else BLUE_HEX
         info_header.setStyleSheet(
             f"color: {color_hex}; font-size: {int(self.height() * 0.07)}px; font-weight: bold;"
@@ -124,8 +128,9 @@ class AttributeBox(QFrame):
         for label in self.attribute_labels.values():
             self.layout().addWidget(label)
 
-
-    def setup_button_column(self, x_position: int, button_names: list, is_right_column=False) -> None:
+    def setup_button_column(
+        self, x_position: int, button_names: list, column: Literal["left", "right"]
+    ) -> None:
         button_column_frame = QFrame(self)
         button_column_layout = QVBoxLayout(button_column_frame)
         button_column_layout.setContentsMargins(0, 0, 0, 0)
@@ -134,17 +139,24 @@ class AttributeBox(QFrame):
         button_column_frame.setFixedSize(self.button_size, self.height())
         button_column_frame.move(x_position, 0)
 
-        spacer_count = 3 if is_right_column else 1  # If right column, 3 spacers at the top
+        if column == "right":
+            spacer_count = 3
+        else:
+            spacer_count = 1
+
+        if column == "right":
+            button_column_layout.addWidget(self.clock_label)
 
         # Add spacer items to position the buttons correctly
-        for _ in range(spacer_count):
-            spacer = QSpacerItem(
-                self.button_size,
-                self.button_size,
-                QSizePolicy.Policy.Fixed,
-                QSizePolicy.Policy.Fixed,
-            )
-            button_column_layout.addItem(spacer)
+        if column == "left":
+            for _ in range(spacer_count):
+                spacer = QSpacerItem(
+                    self.button_size,
+                    self.button_size,
+                    QSizePolicy.Policy.Fixed,
+                    QSizePolicy.Policy.Fixed,
+                )
+                button_column_layout.addItem(spacer)
 
         # Add buttons
         for button_name in button_names:
@@ -154,7 +166,7 @@ class AttributeBox(QFrame):
             button_column_layout.addWidget(button)
 
         # Add remaining spacers, if any
-        remaining_spacers = 4 - spacer_count - len(button_names)
+        remaining_spacers = 4 - spacer_count - len(button_names) - 1
         for _ in range(remaining_spacers):
             spacer = QSpacerItem(
                 self.button_size,
@@ -212,10 +224,10 @@ class AttributeBox(QFrame):
             )
             self.pixmap_cache[icon_name] = pixmap  # Store in the type hinted cache
 
-    def set_clock_pixmap(self, label: QLabel, icon_name: str) -> None:
+    def set_clock_pixmap(self, clock_label: QLabel, icon_name: str) -> None:
         pixmap = self.pixmap_cache.get(icon_name, QPixmap())
         if not pixmap.isNull():
-            label.setPixmap(pixmap)
+            clock_label.setPixmap(pixmap)
 
     def update_attribute_box(self) -> None:
         arrow = self.graphboard.get_arrow_by_color(self.color)
