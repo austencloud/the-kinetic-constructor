@@ -1,12 +1,20 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QGroupBox, QLineEdit, QLabel, QTextEdit, QSizePolicy
+from PyQt6.QtWidgets import (
+    QFrame,
+    QVBoxLayout,
+    QGroupBox,
+    QLineEdit,
+    QLabel,
+    QTextEdit,
+    QSizePolicy,
+)
 
 if TYPE_CHECKING:
     from widgets.graph_editor.infobox.infobox import InfoBox
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
 
 
-class InfoPanel(QFrame):
+class VTGPanel(QFrame):
     def __init__(self, infobox: "InfoBox", graphboard: "GraphBoard") -> None:
         super().__init__()
         self.infobox = infobox
@@ -82,5 +90,5 @@ class InfoPanel(QFrame):
         else:
             self.type_position_label.setText("")
 
-    def update_info_panel_size(self) -> None:
+    def update_vtg_panel_size(self) -> None:
         self.setFixedHeight(self.infobox.height())

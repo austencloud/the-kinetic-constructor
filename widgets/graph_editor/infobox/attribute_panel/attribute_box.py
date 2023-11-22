@@ -275,5 +275,3 @@ class AttributeBox(QFrame):
         self.attribute_labels['turns_label'].setText(
             f"<span style='font-size: {int(infobox_height * 0.07)}px;'>{arrow.turns}</span>"
         )
-        self.update()
-        self.repaint()

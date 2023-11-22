@@ -21,8 +21,8 @@ class AttributePanel(QFrame):
         self.graphboard = graphboard
 
         self.setFixedHeight(self.infobox.height())
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-    
+        self.setFixedWidth(int(self.height() / 2))
+
         self.setContentsMargins(0, 0, 0, 0)
 
         self.blue_attr_box = AttributeBox(self, graphboard, BLUE)
@@ -45,12 +45,3 @@ class AttributePanel(QFrame):
             self.blue_attr_box.update_labels(blue_arrow)
         if red_arrow:
             self.red_attr_box.update_labels(red_arrow)
-
-    def update_attribute_panel_size(self) -> None:
-        self.setFixedHeight(self.infobox.height())
-        self.blue_attr_box.setFixedHeight(int(self.infobox.height()/2))
-        self.red_attr_box.setFixedHeight(int(self.infobox.height()/2))
-        self.blue_attr_box.setFixedWidth(int(self.infobox.height()/2))
-        self.red_attr_box.setFixedWidth(int(self.infobox.height()/2))
-        # update the attribute boxes
-        

@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from widgets.graph_editor.infobox.attribute_panel.attribute_panel import AttributePanel
-from widgets.graph_editor.infobox.info_panel import InfoPanel
+from widgets.graph_editor.infobox.vtg_panel import VTGPanel
 from widgets.graph_editor.graphboard.graphboard import GraphBoard
 from typing import TYPE_CHECKING
 
@@ -46,13 +46,13 @@ class InfoBox(QFrame):
         self.graph_editor = graph_editor
         self.setFixedHeight(int(self.graph_editor.height()))
         self.setFixedWidth(int(self.graph_editor.width() / 2))
-        self.info_panel = InfoPanel(self, graphboard)
+        self.vtg_panel = VTGPanel(self, graphboard)
         self.attribute_panel = AttributePanel(self, graphboard)
         self.infobox_layout = QHBoxLayout()
         self.infobox_layout.setSpacing(0)
         self.infobox_layout.setContentsMargins(0, 0, 0, 0)
         self.infobox_layout.addWidget(self.attribute_panel)
-        self.infobox_layout.addWidget(self.info_panel)
+        self.infobox_layout.addWidget(self.vtg_panel)
         self.setLayout(self.infobox_layout)
 
     def update_infobox(self) -> None:
@@ -62,12 +62,10 @@ class InfoBox(QFrame):
         Returns:
             None
         """
-        self.info_panel.update_info_panel()
+        self.vtg_panel.update_info_panel()
         self.attribute_panel.update_attribute_panel()
 
     def update_infobox_size(self) -> None:
         pass
         self.setFixedHeight(self.graph_editor.height())
-        self.info_panel.update_info_panel_size()
-        self.attribute_panel.update_attribute_panel_size()
-        
+        self.vtg_panel.update_vtg_panel_size()
