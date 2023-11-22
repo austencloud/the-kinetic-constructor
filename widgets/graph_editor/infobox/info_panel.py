@@ -4,8 +4,6 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout, QGroupBox, QLineEdit, QLabel, Q
 if TYPE_CHECKING:
     from widgets.graph_editor.infobox.infobox import InfoBox
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
-from widgets.graph_editor.infobox.attribute_panel.attribute_box import AttributeBox
-from widgets.graph_editor.infobox.infobox_frames import InfoBoxFrames
 
 
 class InfoPanel(QFrame):
@@ -86,4 +84,3 @@ class InfoPanel(QFrame):
 
     def update_info_panel_size(self) -> None:
         self.setFixedHeight(self.infobox.height())
-        self.setMaximumWidth(self.infobox.width() - self.infobox.attribute_panel.red_attr_box.width())

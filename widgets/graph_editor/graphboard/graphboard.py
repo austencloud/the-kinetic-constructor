@@ -31,6 +31,7 @@ from utilities.TypeChecking.TypeChecking import (
     List,
     Optional,
     Tuple,
+    Quadrant
 )
 from widgets.graph_editor.graphboard.graphboard_init import GraphBoardInit
 from widgets.graph_editor.graphboard.graphboard_menu_handler import (
@@ -183,7 +184,7 @@ class GraphBoard(QGraphicsScene):
             if staff.color == color:
                 return staff
 
-    def get_quadrant(self, x: float, y: float) -> Optional[str]:
+    def get_quadrant(self, x: float, y: float) -> Quadrant:
         if self.point_in_quadrant(x, y, self.quadrants[NORTHEAST]):
             return NORTHEAST
         elif self.point_in_quadrant(x, y, self.quadrants[SOUTHEAST]):

@@ -66,6 +66,8 @@ class InfoBox(QFrame):
         self.attribute_panel.update_attribute_panel()
 
     def update_infobox_size(self) -> None:
+        pass
         self.setFixedHeight(self.graph_editor.height())
         self.info_panel.update_info_panel_size()
         self.attribute_panel.update_attribute_panel_size()
+        
