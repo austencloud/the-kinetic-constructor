@@ -237,10 +237,10 @@ class GraphBoard(QGraphicsScene):
         self.update_letter()
         self.update_arrows()
         self.update_staffs()
-        self.update_infobox()
+        self.update_attribute_panel()
 
-    def update_infobox(self) -> None:
-        self.infobox.update_infobox()
+    def update_attribute_panel(self) -> None:
+        self.graph_editor.attribute_panel.update_attribute_panel()
 
     def update_arrows(self) -> None:
         self.arrow_positioner.update()

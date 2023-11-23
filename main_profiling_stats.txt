@@ -1,551 +1,450 @@
-         415587 function calls (325508 primitive calls) in 52.202 seconds
+         402716 function calls (312637 primitive calls) in 173.092 seconds
 
    Ordered by: cumulative time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1   50.185   50.185   50.565   50.565 {built-in method exec}
-        1    0.001    0.001    1.769    1.769 G:\My Drive\CODE\Apps\Sequence_Constructor\main.py:22(__init__)
-        1    0.000    0.000    1.768    1.768 G:\My Drive\CODE\Apps\Sequence_Constructor\main.py:55(init_main_window)
-        1    0.001    0.001    1.624    1.624 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\main_widget.py:22(__init__)
-        1    0.002    0.002    0.708    0.708 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graph_editor.py:19(__init__)
-        1    0.003    0.003    0.511    0.511 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\json_handler.py:18(load_all_letters)
-       75    0.509    0.007    0.509    0.007 {built-in method io.open}
-        1    0.000    0.000    0.415    0.415 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:55(__init__)
-        1    0.000    0.000    0.415    0.415 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:69(setup_components)
-        1    0.000    0.000    0.345    0.345 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker.py:43(__init__)
-        1    0.000    0.000    0.345    0.345 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker.py:50(setup_ui)
-        1    0.000    0.000    0.315    0.315 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:87(setup_managers)
-        1    0.000    0.000    0.315    0.315 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:40(__init__)
-        1    0.001    0.001    0.315    0.315 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:50(preprocess_combinations)
-        1    0.037    0.037    0.308    0.308 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\__init__.py:120(dump)
-        1    0.000    0.000    0.201    0.201 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_buttons_frame.py:35(__init__)
-        1    0.001    0.001    0.201    0.201 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_buttons_frame.py:42(init_letter_buttons_layout)
-       47    0.188    0.004    0.200    0.004 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_buttons_frame.py:115(create_button)
-        1    0.000    0.000    0.175    0.175 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\infobox.py:26(__init__)
-       73    0.167    0.002    0.168    0.002 {method 'read' of '_io.TextIOWrapper' objects}
-    31172    0.028    0.000    0.167    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\encoder.py:414(_iterencode)
-        1    0.000    0.000    0.165    0.165 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_panel.py:18(__init__)
-        2    0.000    0.000    0.165    0.083 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_box.py:43(__init__)
-        2    0.000    0.000    0.165    0.083 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_box.py:56(init_ui)
-       22    0.001    0.000    0.156    0.007 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:45(set_svg_color)
-        1    0.000    0.000    0.144    0.144 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_scroll_area.py:22(__init__)
-       24    0.001    0.000    0.143    0.006 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:80(update_appearance)
-       24    0.000    0.000    0.142    0.006 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:66(update_color)
-        1    0.140    0.140    0.141    0.141 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_scroll_area.py:61(populate_pictographs)
-60356/31172    0.047    0.000    0.139    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\encoder.py:334(_iterencode_dict)
-      269    0.002    0.000    0.126    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox.py:141(mouseMoveEvent)
-       97    0.002    0.000    0.123    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:178(handle_mouse_move)
-       45    0.001    0.000    0.111    0.002 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:336(handle_enter_graphboard)
-90176/30880    0.086    0.000    0.111    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\encoder.py:278(_iterencode_list)
-     2043    0.016    0.000    0.108    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:685(__call__)
-    31171    0.078    0.000    0.103    0.000 {method 'write' of '_io.TextIOWrapper' objects}
-        3    0.000    0.000    0.095    0.032 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox.py:147(mouseReleaseEvent)
-        2    0.000    0.000    0.095    0.048 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:184(handle_mouse_release)
-        2    0.000    0.000    0.093    0.047 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:355(update_preview_for_new_quadrant)
-       18    0.088    0.005    0.088    0.005 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:62(setup_svg_renderer)
-        8    0.000    0.000    0.087    0.011 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:58(__init__)
-        2    0.082    0.041    0.084    0.042 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_box.py:216(preload_pixmaps)
-      128    0.004    0.000    0.083    0.001 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:838(_create_)
-        3    0.000    0.000    0.082    0.027 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox.py:118(mousePressEvent)
-        2    0.000    0.000    0.082    0.041 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:153(place_arrow_on_graphboard)
-        2    0.000    0.000    0.080    0.040 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:77(match_target_arrow)
-        4    0.000    0.000    0.080    0.020 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_box.py:131(setup_button_column)
-        8    0.078    0.010    0.079    0.010 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_box.py:181(create_button)
-     1867    0.017    0.000    0.069    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\main_widget.py:45(eventFilter)
-       14    0.001    0.000    0.066    0.005 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:22(__init__)
-        4    0.002    0.001    0.059    0.015 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:108(create_pixmap)
-        6    0.000    0.000    0.057    0.010 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:236(update)
-        1    0.000    0.000    0.055    0.055 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\export_handler.py:17(__init__)
-        8    0.000    0.000    0.052    0.007 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:328(set_svg_color)
-      128    0.006    0.000    0.052    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:496(__new__)
-        1    0.000    0.000    0.051    0.051 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\export_handler.py:25(export_to_png)
-        6    0.000    0.000    0.051    0.008 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:251(update_letter)
-       33    0.001    0.000    0.050    0.002 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\__init__.py:274(load)
-        6    0.023    0.004    0.050    0.008 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:259(update_letter_item)
-        1    0.047    0.047    0.047    0.047 {built-in method save}
-     1867    0.022    0.000    0.046    0.000 {built-in method type}
-        6    0.000    0.000    0.045    0.008 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:69(__init__)
-        8    0.000    0.000    0.044    0.005 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:68(_setup_attributes)
-        1    0.000    0.000    0.040    0.040 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:86(init_ghost_arrows)
-        2    0.000    0.000    0.040    0.020 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\ghosts\ghost_arrow.py:26(__init__)
-       74    0.040    0.001    0.040    0.001 {method '__exit__' of '_io._IOBase' objects}
- 1707/132    0.004    0.000    0.038    0.000 {built-in method __new__ of type object at 0x00007FFDBD818F90}
-     1575    0.020    0.000    0.034    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:241(__set_name__)
-        1    0.000    0.000    0.033    0.033 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox.py:42(__init__)
-        2    0.000    0.000    0.032    0.016 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:202(update_staff_during_drag)
-        4    0.031    0.008    0.032    0.008 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:236(update_rotation)
-        1    0.000    0.000    0.031    0.031 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox.py:61(populate_arrows)
-        1    0.000    0.000    0.029    0.029 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:54(init_grid)
-        2    0.000    0.000    0.028    0.014 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:71(update_svg)
-       10    0.000    0.000    0.027    0.003 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\grid.py:46(get_circle_coordinates)
-        3    0.026    0.009    0.026    0.009 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:267(set_letter_renderer)
-    31171    0.016    0.000    0.025    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py:18(encode)
-     1959    0.013    0.000    0.023    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:364(__setitem__)
-        6    0.000    0.000    0.022    0.004 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:81(_setup_attributes)
-        6    0.000    0.000    0.022    0.004 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:76(update)
-     11/5    0.000    0.000    0.022    0.004 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\os.py:345(_walk)
-        2    0.000    0.000    0.021    0.011 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\grid.py:60(init_points)
-        2    0.000    0.000    0.021    0.011 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\grid.py:61(<dictcomp>)
-        2    0.000    0.000    0.021    0.010 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:223(apply_transformations_to_preview)
-        1    0.000    0.000    0.020    0.020 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\propbox\propbox.py:30(__init__)
-        1    0.000    0.000    0.020    0.020 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\propbox\propbox.py:41(init_propbox_staffs)
-        2    0.000    0.000    0.016    0.008 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\ghosts\ghost_arrow.py:48(update)
-        1    0.000    0.000    0.016    0.016 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:117(init_ghost_staffs)
-        2    0.000    0.000    0.016    0.008 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\ghosts\ghost_staff.py:21(__init__)
-        1    0.000    0.000    0.011    0.011 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\grid.py:74(init_layer2_points)
-        1    0.000    0.000    0.010    0.010 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\grid.py:69(init_handpoints)
-        1    0.000    0.000    0.010    0.010 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:65(init_staff_set)
-        1    0.000    0.000    0.009    0.009 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\vtg_panel.py:18(__init__)
-        1    0.006    0.006    0.009    0.009 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\vtg_panel.py:24(setup_info_panel)
-        4    0.009    0.002    0.009    0.002 {built-in method nt.scandir}
-     1915    0.008    0.000    0.009    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1091(__new__)
-    31171    0.009    0.000    0.009    0.000 {built-in method _codecs.charmap_encode}
-        2    0.000    0.000    0.008    0.004 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\main_widget.py:53(resizeEvent)
-       99    0.001    0.000    0.008    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:139(move_to_cursor)
-        3    0.000    0.000    0.007    0.002 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\ntpath.py:256(islink)
-        3    0.007    0.002    0.007    0.002 {built-in method nt.lstat}
-        1    0.006    0.006    0.006    0.006 {built-in method setFocus}
-     1867    0.006    0.000    0.006    0.000 {function MainWidget.eventFilter at 0x000001CBF56C2480}
-      104    0.006    0.000    0.006    0.000 {built-in method move}
-        2    0.006    0.003    0.006    0.003 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\grid.py:39(__init__)
-       33    0.001    0.000    0.006    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\__init__.py:299(loads)
-     2051    0.002    0.000    0.005    0.000 {built-in method builtins.setattr}
-       60    0.005    0.000    0.005    0.000 {built-in method builtins.next}
-        1    0.000    0.000    0.005    0.005 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:351(__init__)
-     3041    0.004    0.000    0.005    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:825(__setattr__)
-       55    0.005    0.000    0.005    0.000 {built-in method render}
-        1    0.000    0.000    0.005    0.005 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:357(__init__)
-       33    0.000    0.000    0.005    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\decoder.py:332(decode)
-    35287    0.005    0.000    0.005    0.000 {built-in method builtins.isinstance}
-     2040    0.002    0.000    0.004    0.000 {built-in method builtins.delattr}
-        6    0.000    0.000    0.004    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:245(update_arrows)
-        6    0.000    0.000    0.004    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\arrow_positioner.py:28(update)
-       33    0.004    0.000    0.004    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\decoder.py:343(raw_decode)
-        1    0.000    0.000    0.004    0.004 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\grid.py:66(init_center)
-      128    0.001    0.000    0.004    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:481(__prepare__)
-      384    0.001    0.000    0.004    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:939(_get_mixins_)
-        2    0.000    0.000    0.004    0.002 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker.py:70(update_size)
-       24    0.004    0.000    0.004    0.000 {built-in method load}
-        3    0.000    0.000    0.003    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\arrow_positioner.py:44(find_optimal_locations)
-       24    0.000    0.000    0.003    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\arrow_positioner.py:60(compare_states)
-        1    0.000    0.000    0.003    0.003 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\export_handler.py:158(get_fill_color)
-     1959    0.002    0.000    0.003    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:78(_is_private)
-        2    0.000    0.000    0.003    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence.py:29(update_size)
-        2    0.000    0.000    0.003    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence_beats.py:51(update_size)
+        1  170.332  170.332  170.341  170.341 {built-in method exec}
+        1    0.000    0.000    2.960    2.960 G:\My Drive\CODE\Apps\Sequence_Constructor\main.py:22(__init__)
+        1    0.000    0.000    2.960    2.960 G:\My Drive\CODE\Apps\Sequence_Constructor\main.py:55(init_main_window)
+        1    0.001    0.001    2.743    2.743 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\main_widget.py:22(__init__)
+        1    0.003    0.003    1.408    1.408 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graph_editor.py:19(__init__)
+        1    0.000    0.000    0.813    0.813 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker.py:43(__init__)
+        1    0.000    0.000    0.813    0.813 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker.py:50(setup_ui)
+        1    0.000    0.000    0.789    0.789 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:55(__init__)
+        1    0.000    0.000    0.789    0.789 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:69(setup_components)
+        1    0.000    0.000    0.585    0.585 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:87(setup_managers)
+        1    0.000    0.000    0.585    0.585 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:40(__init__)
+        1    0.001    0.001    0.585    0.585 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:50(preprocess_combinations)
+        1    0.074    0.074    0.565    0.565 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\__init__.py:120(dump)
+        1    0.000    0.000    0.507    0.507 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_buttons_frame.py:35(__init__)
+        1    0.002    0.002    0.507    0.507 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_buttons_frame.py:42(init_letter_buttons_layout)
+       47    0.484    0.010    0.504    0.011 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_buttons_frame.py:115(create_button)
+       61    0.408    0.007    0.408    0.007 {built-in method io.open}
+        1    0.002    0.002    0.387    0.387 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\json_handler.py:18(load_all_letters)
+        1    0.000    0.000    0.347    0.347 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_panel.py:18(__init__)
+        2    0.000    0.000    0.346    0.173 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_box.py:43(__init__)
+        2    0.001    0.000    0.346    0.173 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_box.py:56(init_ui)
+    31172    0.060    0.000    0.343    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\encoder.py:414(_iterencode)
+        1    0.000    0.000    0.305    0.305 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_scroll_area.py:22(__init__)
+        1    0.300    0.300    0.302    0.302 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_scroll_area.py:61(populate_pictographs)
+60356/31172    0.097    0.000    0.283    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\encoder.py:334(_iterencode_dict)
+90176/30880    0.175    0.000    0.226    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\encoder.py:278(_iterencode_list)
+        2    0.195    0.097    0.198    0.099 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_box.py:223(preload_pixmaps)
+       59    0.156    0.003    0.157    0.003 {method 'read' of '_io.TextIOWrapper' objects}
+       16    0.001    0.000    0.157    0.010 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:80(update_appearance)
+       16    0.001    0.000    0.156    0.010 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:66(update_color)
+    31171    0.098    0.000    0.148    0.000 {method 'write' of '_io.TextIOWrapper' objects}
+        4    0.001    0.000    0.145    0.036 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_box.py:138(setup_button_column)
+        8    0.142    0.018    0.144    0.018 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_box.py:188(create_button)
+      352    0.003    0.000    0.141    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:685(__call__)
+      128    0.006    0.000    0.136    0.001 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:838(_create_)
+        6    0.000    0.000    0.131    0.022 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:58(__init__)
+        1    0.001    0.001    0.127    0.127 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\export_handler.py:17(__init__)
+        1    0.000    0.000    0.118    0.118 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\export_handler.py:25(export_to_png)
+        1    0.000    0.000    0.112    0.112 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox.py:41(__init__)
+        1    0.110    0.110    0.110    0.110 {built-in method save}
+       10    0.000    0.000    0.110    0.011 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:45(set_svg_color)
+       14    0.109    0.008    0.110    0.008 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:62(setup_svg_renderer)
+        1    0.000    0.000    0.106    0.106 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox.py:59(populate_arrows)
+       12    0.001    0.000    0.103    0.009 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:22(__init__)
+        6    0.000    0.000    0.096    0.016 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:69(__init__)
+      128    0.009    0.000    0.088    0.001 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:496(__new__)
+        6    0.000    0.000    0.080    0.013 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:68(_setup_attributes)
+        1    0.000    0.000    0.070    0.070 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:86(init_ghost_arrows)
+        2    0.000    0.000    0.070    0.035 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\ghosts\ghost_arrow.py:26(__init__)
+ 1707/132    0.007    0.000    0.067    0.001 {built-in method __new__ of type object at 0x00007FF8C9508F90}
+       10    0.000    0.000    0.066    0.007 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\grid.py:46(get_circle_coordinates)
+        1    0.000    0.000    0.066    0.066 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:54(init_grid)
+     1575    0.037    0.000    0.061    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:241(__set_name__)
+        2    0.000    0.000    0.053    0.027 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\grid.py:60(init_points)
+        2    0.000    0.000    0.053    0.027 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\grid.py:61(<dictcomp>)
+    31171    0.033    0.000    0.050    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py:18(encode)
+        6    0.000    0.000    0.044    0.007 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:81(_setup_attributes)
+        6    0.000    0.000    0.044    0.007 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:76(update)
+        6    0.000    0.000    0.041    0.007 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:328(set_svg_color)
+        1    0.000    0.000    0.041    0.041 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\propbox\propbox.py:30(__init__)
+        1    0.000    0.000    0.040    0.040 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\propbox\propbox.py:41(init_propbox_staffs)
+     1959    0.021    0.000    0.036    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:364(__setitem__)
+        1    0.000    0.000    0.034    0.034 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\grid.py:74(init_layer2_points)
+       60    0.032    0.001    0.032    0.001 {method '__exit__' of '_io._IOBase' objects}
+        1    0.000    0.000    0.030    0.030 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:117(init_ghost_staffs)
+        2    0.000    0.000    0.030    0.015 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\ghosts\ghost_staff.py:21(__init__)
+        1    0.000    0.000    0.027    0.027 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:65(init_staff_set)
+       33    0.000    0.000    0.024    0.001 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\__init__.py:274(load)
+        1    0.000    0.000    0.019    0.019 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\grid.py:69(init_handpoints)
+    31171    0.017    0.000    0.017    0.000 {built-in method _codecs.charmap_encode}
+        1    0.000    0.000    0.014    0.014 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:351(__init__)
+        1    0.000    0.000    0.013    0.013 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:357(__init__)
+     11/5    0.000    0.000    0.013    0.003 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\os.py:345(_walk)
+        1    0.000    0.000    0.012    0.012 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\vtg_panel.py:18(__init__)
+        1    0.006    0.006    0.012    0.012 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\vtg_panel.py:24(setup_info_panel)
+        2    0.011    0.006    0.011    0.006 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\grid.py:39(__init__)
+      184    0.002    0.000    0.010    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\main_widget.py:45(eventFilter)
+     2031    0.004    0.000    0.009    0.000 {built-in method builtins.setattr}
+    35249    0.008    0.000    0.008    0.000 {built-in method builtins.isinstance}
+        1    0.000    0.000    0.008    0.008 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\export_handler.py:158(get_fill_color)
+     2040    0.004    0.000    0.008    0.000 {built-in method builtins.delattr}
+     3042    0.007    0.000    0.008    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:825(__setattr__)
+        1    0.000    0.000    0.007    0.007 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:146(init_quadrants)
+        1    0.000    0.000    0.007    0.007 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:1208(parse)
+        1    0.000    0.000    0.007    0.007 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:556(parse)
+       47    0.007    0.000    0.007    0.000 {built-in method render}
+      184    0.003    0.000    0.007    0.000 {built-in method type}
+        4    0.006    0.001    0.006    0.001 {built-in method nt.scandir}
+      128    0.001    0.000    0.006    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:481(__prepare__)
+      384    0.002    0.000    0.006    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:939(_get_mixins_)
+        1    0.000    0.000    0.005    0.005 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\grid.py:66(init_center)
+        1    0.000    0.000    0.005    0.005 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence.py:13(__init__)
+        3    0.000    0.000    0.005    0.002 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\ntpath.py:256(islink)
+        3    0.005    0.002    0.005    0.002 {built-in method nt.lstat}
+       33    0.001    0.000    0.005    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\__init__.py:299(loads)
+        1    0.004    0.004    0.005    0.005 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence_beats.py:26(__init__)
+        1    0.004    0.004    0.004    0.004 {method '_parse_whole' of 'xml.etree.ElementTree.XMLParser' objects}
+     1959    0.003    0.000    0.004    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:78(_is_private)
+    11312    0.004    0.000    0.004    0.000 {built-in method _json.encode_basestring_ascii}
+       33    0.000    0.000    0.004    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\decoder.py:332(decode)
+     2040    0.004    0.000    0.004    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:744(__delattr__)
+       16    0.004    0.000    0.004    0.000 {built-in method load}
+       10    0.004    0.000    0.004    0.000 {built-in method scaled}
+       33    0.003    0.000    0.003    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\decoder.py:343(raw_decode)
         1    0.000    0.000    0.003    0.003 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:50(init_view)
-        1    0.000    0.000    0.003    0.003 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:1208(parse)
-        1    0.000    0.000    0.003    0.003 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:556(parse)
-       47    0.002    0.000    0.002    0.000 {built-in method setFixedWidth}
-       27    0.000    0.000    0.002    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\arrow_positioner.py:76(<listcomp>)
-       10    0.002    0.000    0.002    0.000 {built-in method scaled}
-    11312    0.002    0.000    0.002    0.000 {built-in method _json.encode_basestring_ascii}
-     2040    0.002    0.000    0.002    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:744(__delattr__)
-        1    0.000    0.000    0.002    0.002 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:146(init_quadrants)
-        1    0.000    0.000    0.002    0.002 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence.py:13(__init__)
-     3077    0.001    0.000    0.002    0.000 {built-in method builtins.getattr}
-       97    0.001    0.000    0.002    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:195(is_over_graphboard)
-     2052    0.002    0.000    0.002    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:47(_is_dunder)
-        3    0.001    0.000    0.002    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_scroll_area.py:89(update_scroll_area_size)
-      128    0.001    0.000    0.002    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1004(_find_new_)
-        1    0.001    0.001    0.002    0.002 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence_beats.py:26(__init__)
-     1575    0.001    0.000    0.002    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:37(_is_descriptor)
-        2    0.000    0.000    0.002    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_buttons_frame.py:162(update_size)
-       56    0.002    0.000    0.002    0.000 {built-in method setFixedHeight}
-     1959    0.002    0.000    0.002    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:58(_is_sunder)
+     2053    0.003    0.000    0.003    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:47(_is_dunder)
+     3063    0.002    0.000    0.003    0.000 {built-in method builtins.getattr}
+     1575    0.002    0.000    0.003    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:37(_is_descriptor)
+     8697    0.003    0.000    0.003    0.000 {method 'get' of 'mappingproxy' objects}
+     1959    0.002    0.000    0.003    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:58(_is_sunder)
+      128    0.001    0.000    0.003    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1004(_find_new_)
+      384    0.002    0.000    0.002    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:975(_find_data_type_)
+       47    0.002    0.000    0.002    0.000 {built-in method fill}
        67    0.002    0.000    0.002    0.000 {built-in method addWidget}
-      384    0.001    0.000    0.002    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:975(_find_data_type_)
-       55    0.001    0.000    0.002    0.000 {built-in method fill}
-       54    0.001    0.000    0.002    0.000 {built-in method builtins.all}
-     8696    0.001    0.000    0.001    0.000 {method 'get' of 'mappingproxy' objects}
+       11    0.000    0.000    0.002    0.000 {method 'find' of 'xml.etree.ElementTree.Element' objects}
+       51    0.002    0.000    0.002    0.000 {built-in method builtins.next}
+        5    0.000    0.000    0.002    0.000 {built-in method palette}
+       11    0.000    0.000    0.002    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:404(find)
+10081/10075    0.002    0.000    0.002    0.000 {built-in method builtins.len}
+       16    0.000    0.000    0.002    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\__init__.py:225(compile)
+     6315    0.002    0.000    0.002    0.000 {built-in method builtins.hasattr}
+     1959    0.001    0.000    0.002    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:69(_is_internal_class)
+        4    0.000    0.000    0.002    0.000 {built-in method verticalScrollBar}
+      512    0.001    0.000    0.002    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:929(_check_for_existing_members_)
+       16    0.000    0.000    0.002    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\__init__.py:272(_compile)
+      224    0.001    0.000    0.002    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1091(__new__)
+        1    0.000    0.000    0.002    0.002 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:46(configure_layouts)
+       58    0.002    0.000    0.002    0.000 {method 'connect' of 'PyQt6.QtCore.pyqtBoundSignal' objects}
+       12    0.000    0.000    0.002    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:35(setup_graphics_flags)
+       10    0.000    0.000    0.002    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:1325(XML)
+     3711    0.002    0.000    0.002    0.000 {built-in method builtins.issubclass}
+        1    0.000    0.000    0.002    0.002 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\main_widget.py:53(resizeEvent)
        36    0.001    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\ntpath.py:107(join)
-        1    0.001    0.001    0.001    0.001 {method '_parse_whole' of 'xml.etree.ElementTree.XMLParser' objects}
-        6    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:242(update_infobox)
-        6    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\infobox.py:58(update_infobox)
-        5    0.000    0.000    0.001    0.000 {built-in method palette}
-       30    0.000    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\__init__.py:225(compile)
-       58    0.001    0.000    0.001    0.000 {method 'connect' of 'PyQt6.QtCore.pyqtBoundSignal' objects}
-        2    0.001    0.000    0.001    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_buttons_frame.py:137(update_letter_buttons_size)
-        6    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_panel.py:40(update_attribute_panel)
-10154/10148    0.001    0.000    0.001    0.000 {built-in method builtins.len}
-     1959    0.001    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:69(_is_internal_class)
-      512    0.001    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:929(_check_for_existing_members_)
-       30    0.000    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\__init__.py:272(_compile)
-        2    0.000    0.000    0.001    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graph_editor.py:75(update_size)
-       14    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:35(setup_graphics_flags)
-      327    0.001    0.000    0.001    0.000 {built-in method setFixedSize}
-        9    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_box.py:237(update_labels)
-       11    0.000    0.000    0.001    0.000 {method 'find' of 'xml.etree.ElementTree.Element' objects}
-     6319    0.001    0.000    0.001    0.000 {built-in method builtins.hasattr}
-      171    0.001    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\arrow_positioner.py:79(<genexpr>)
-       11    0.000    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:404(find)
-       10    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:169(update_mirror)
-        5    0.000    0.000    0.001    0.000 {built-in method verticalScrollBar}
-     3711    0.001    0.000    0.001    0.000 {built-in method builtins.issubclass}
-       10    0.000    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:1325(XML)
-        1    0.001    0.001    0.001    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_view.py:10(__init__)
-        1    0.000    0.000    0.001    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_scroll_area.py:54(connect_signals)
-      221    0.001    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:769(__getattr__)
-        3    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:69(get_current_letter)
-       45    0.001    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:187(get_quadrant)
-        2    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:47(__init__)
-       12    0.000    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:360(iterfind)
-        8    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:248(update_staffs)
-       50    0.001    0.000    0.001    0.000 {built-in method setSharedRenderer}
-      240    0.001    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:192(__get__)
-        6    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:480(unmirror)
-       33    0.000    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\codecs.py:319(decode)
-        2    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:172(start_drag)
-      100    0.001    0.000    0.001    0.000 {built-in method scenePos}
-       27    0.001    0.000    0.001    0.000 {built-in method setText}
-       72    0.001    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\ntpath.py:154(splitdrive)
-        8    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:50(update)
-     3913    0.001    0.000    0.001    0.000 {method 'append' of 'list' objects}
-       10    0.001    0.000    0.001    0.000 {method 'feed' of 'xml.etree.ElementTree.XMLParser' objects}
-        1    0.001    0.001    0.001    0.001 {built-in method setWindowTitle}
+       12    0.001    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:360(iterfind)
+      222    0.001    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:769(__getattr__)
+        6    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:169(update_mirror)
         1    0.000    0.000    0.001    0.001 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:738(compile)
-       44    0.000    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1505(__or__)
-        3    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:117(get_specific_start_end_positions)
-      142    0.001    0.000    0.001    0.000 {built-in method mapToGlobal}
-        9    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\arrow_positioner.py:105(set_arrow_to_default_loc)
-        1    0.000    0.000    0.001    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\main.py:36(configure_window)
-       10    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_box.py:114(create_label)
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:46(configure_layouts)
-       47    0.000    0.000    0.000    0.000 {built-in method setFont}
-        6    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:112(get_arrow)
-       12    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:56(set_default_staff_locations)
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_box.py:108(create_attribute_labels)
-      128    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
-     2107    0.000    0.000    0.000    0.000 {method 'setdefault' of 'dict' objects}
-       40    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py:22(decode)
-       99    0.000    0.000    0.000    0.000 {built-in method mapTo}
-        9    0.000    0.000    0.000    0.000 {built-in method transformed}
-      100    0.000    0.000    0.000    0.000 {built-in method mapFromScene}
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_box.py:77(setup_box)
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:227(update_mirror)
-       35    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:649(<listcomp>)
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:970(parse)
+       10    0.001    0.000    0.001    0.000 {method 'feed' of 'xml.etree.ElementTree.XMLParser' objects}
+     3889    0.001    0.000    0.001    0.000 {method 'append' of 'list' objects}
+      169    0.001    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:192(__get__)
+        4    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:480(unmirror)
+        1    0.000    0.000    0.001    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_scroll_area.py:54(connect_signals)
+        1    0.000    0.000    0.001    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker.py:70(update_size)
+       38    0.000    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1505(__or__)
+        8    0.001    0.000    0.001    0.000 {built-in method setLayout}
+        8    0.001    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_box.py:122(create_label)
+       47    0.001    0.000    0.001    0.000 {built-in method setFont}
+      184    0.001    0.000    0.001    0.000 {function MainWidget.eventFilter at 0x00000220F9251E40}
+       32    0.001    0.000    0.001    0.000 {built-in method setSharedRenderer}
+     2107    0.001    0.000    0.001    0.000 {method 'setdefault' of 'dict' objects}
+        1    0.000    0.000    0.001    0.001 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:970(parse)
+      256    0.001    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\encoder.py:224(floatstr)
+      2/1    0.000    0.000    0.001    0.001 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:447(_parse_sub)
+        2    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_box.py:81(setup_box)
+      2/1    0.000    0.000    0.001    0.001 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:507(_parse)
+       72    0.001    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\ntpath.py:154(splitdrive)
+        1    0.001    0.001    0.001    0.001 {method 'close' of '_io.BufferedReader' objects}
+        1    0.000    0.000    0.001    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:85(add_black_border_to_widgets)
+       35    0.000    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:649(<listcomp>)
+        1    0.000    0.000    0.001    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox.py:55(setup_view)
+     1937    0.001    0.000    0.001    0.000 {built-in method builtins.id}
+        1    0.000    0.000    0.001    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:18(__init__)
+     1575    0.001    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:238(__init__)
+        1    0.000    0.000    0.001    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_view.py:10(__init__)
+      128    0.001    0.000    0.001    0.000 {method 'update' of 'dict' objects}
+        1    0.001    0.001    0.001    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_view.py:8(__init__)
+        1    0.000    0.000    0.001    0.001 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:68(configure_main_layout)
+        8    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:99(add_black_border)
+        2    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_scroll_area.py:89(update_scroll_area_size)
+        8    0.001    0.000    0.001    0.000 {built-in method setStyleSheet}
+        2    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_box.py:91(apply_border_style)
+       33    0.000    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\codecs.py:319(decode)
+     1575    0.001    0.000    0.001    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1142(__init__)
+        2    0.000    0.000    0.001    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_box.py:110(create_attribute_labels)
       595    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:92(_is_single_bit)
-     1575    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:238(__init__)
-       33    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
-      2/1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:447(_parse_sub)
-        9    0.000    0.000    0.000    0.000 {built-in method setLayout}
-       24    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\arrow_positioner.py:64(<listcomp>)
-      2/1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:507(_parse)
-       55    0.000    0.000    0.000    0.000 {built-in method defaultSize}
-       16    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:175(update_rotation)
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox.py:57(setup_view)
-     1937    0.000    0.000    0.000    0.000 {built-in method builtins.id}
-     1575    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1142(__init__)
-        1    0.000    0.000    0.000    0.000 {built-in method primaryScreen}
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_box.py:87(apply_border_style)
-        6    0.000    0.000    0.000    0.000 {built-in method setStyleSheet}
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_view.py:8(__init__)
-       12    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:114(<genexpr>)
-      142    0.000    0.000    0.000    0.000 {built-in method mapFromGlobal}
-       33    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\codecs.py:309(__init__)
-     1093    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
-      159    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:201(point_in_quadrant)
-      256    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\encoder.py:224(floatstr)
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graph_editor.py:83(update_graphboard_size)
-      100    0.000    0.000    0.000    0.000 {built-in method toPoint}
-      123    0.000    0.000    0.000    0.000 {built-in method boundingRect}
-     1312    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
-       64    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:123(mouseMoveEvent)
-       14    0.000    0.000    0.000    0.000 {built-in method setFlags}
-      128    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:357(__init__)
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:571(_code)
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:85(add_black_border_to_widgets)
-        2    0.000    0.000    0.000    0.000 {built-in method setParent}
-       40    0.000    0.000    0.000    0.000 {built-in method _codecs.charmap_decode}
-        7    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:223(position_letter_item)
-      135    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
-        9    0.000    0.000    0.000    0.000 {built-in method items}
-        8    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:240(update_rotation)
         1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\propbox\propbox_view.py:11(__init__)
-       53    0.000    0.000    0.000    0.000 {built-in method setTransformOriginPoint}
-       12    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:248(set_staff_transform_origin_to_center)
-        4    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:469(mirror)
-       97    0.000    0.000    0.000    0.000 {built-in method rect}
-      128    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:961(_find_data_repr_)
-        8    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:99(add_black_border)
-       66    0.000    0.000    0.000    0.000 {method 'match' of 're.Pattern' objects}
-      302    0.000    0.000    0.000    0.000 {built-in method setIconSize}
-       14    0.000    0.000    0.000    0.000 {built-in method addItem}
-       18    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:246(get_rotation_angle)
-     1150    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
-        1    0.000    0.000    0.000    0.000 {method 'close' of '_io.BufferedReader' objects}
-       97    0.000    0.000    0.000    0.000 {built-in method contains}
-       17    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:281(get_staff_center)
-       30    0.000    0.000    0.000    0.000 {method 'search' of 're.Pattern' objects}
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graph_editor.py:91(update_arrowbox_size)
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_buttons_frame.py:162(update_size)
+       47    0.000    0.000    0.000    0.000 {built-in method defaultSize}
+       26    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py:22(decode)
+     1138    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
+        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_box.py:96(create_info_header)
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_buttons_frame.py:137(update_letter_buttons_size)
+       23    0.000    0.000    0.000    0.000 {built-in method addLayout}
+      225    0.000    0.000    0.000    0.000 {built-in method setFixedSize}
+     1093    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:571(_code)
+        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_box.py:128(create_clock_label)
+       33    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\codecs.py:309(__init__)
+       12    0.000    0.000    0.000    0.000 {built-in method setFlags}
+       10    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:175(update_rotation)
         1    0.000    0.000    0.000    0.000 {built-in method selectedItems}
-        9    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:227(prepare_predicate)
-      6/1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:37(_compile)
-       58    0.000    0.000    0.000    0.000 {built-in method setIcon}
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graph_editor.py:103(update_infobox_size)
-        4    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1374(_missing_)
-        4    0.000    0.000    0.000    0.000 {built-in method fitInView}
        20    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:260(select)
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:18(__init__)
-       18    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:90(set_attributes_from_dict)
-       16    0.000    0.000    0.000    0.000 {built-in method addRect}
-       47    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_buttons_frame.py:87(get_letter_type)
-       19    0.000    0.000    0.000    0.000 {built-in method setScene}
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graph_editor.py:97(update_propbox_size)
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_view.py:24(resizeEvent)
-        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1165(_find_and_load)
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:68(configure_main_layout)
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\infobox.py:68(update_infobox_size)
-       22    0.000    0.000    0.000    0.000 {built-in method addLayout}
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_box.py:92(create_info_header)
-      122    0.000    0.000    0.000    0.000 {built-in method itemAt}
-        9    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:235(set_arrow_transform_origin_to_center)
-       98    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:74(xpath_tokenizer)
+      128    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:357(__init__)
+        9    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:227(prepare_predicate)
+       33    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
         5    0.000    0.000    0.000    0.000 {built-in method setPalette}
+       16    0.000    0.000    0.000    0.000 {built-in method addRect}
+      6/1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:37(_compile)
+        6    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:240(update_rotation)
+      128    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:961(_find_data_repr_)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1165(_find_and_load)
+       98    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:74(xpath_tokenizer)
+       26    0.000    0.000    0.000    0.000 {built-in method _codecs.charmap_decode}
+       19    0.000    0.000    0.000    0.000 {built-in method setScene}
+       47    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_buttons_frame.py:87(get_letter_type)
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graph_editor.py:64(update_size)
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\main.py:36(configure_window)
+      983    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
+       58    0.000    0.000    0.000    0.000 {built-in method setIcon}
+        4    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1374(_missing_)
       858    0.000    0.000    0.000    0.000 {method 'add' of 'set' objects}
-        9    0.000    0.000    0.000    0.000 {built-in method setPixmap}
-      240    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1243(value)
+        8    0.000    0.000    0.000    0.000 {built-in method addItem}
       273    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:795(<genexpr>)
-        2    0.000    0.000    0.000    0.000 {built-in method resetTransform}
-       24    0.000    0.000    0.000    0.000 {built-in method setRotation}
         1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1120(_find_and_load_unlocked)
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\os.py:682(__setitem__)
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\propbox\propbox_view.py:27(resizeEvent)
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\vtg_panel.py:93(update_vtg_panel_size)
-       18    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:253(get_quadrant_to_angle_map)
-       15    0.000    0.000    0.000    0.000 {built-in method setSizePolicy}
-        1    0.000    0.000    0.000    0.000 {built-in method geometry}
-        4    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:265(get_drag_preview_rotation_angle)
-        9    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_box.py:227(set_clock_pixmap)
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:51(init_layouts)
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:140(init_letter_item)
+        1    0.000    0.000    0.000    0.000 {built-in method setWindowTitle}
+      121    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+       49    0.000    0.000    0.000    0.000 {built-in method boundingRect}
+       66    0.000    0.000    0.000    0.000 {method 'match' of 're.Pattern' objects}
        11    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:183(prepare_descendant)
-       35    0.000    0.000    0.000    0.000 {built-in method setPos}
-       73    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\codecs.py:260(__init__)
-      169    0.000    0.000    0.000    0.000 {built-in method height}
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:297(get_attributes)
-       52    0.000    0.000    0.000    0.000 {built-in method center}
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_box.py:121(create_clock_label)
-        2    0.000    0.000    0.000    0.000 {built-in method setWindowFlags}
-       45    0.000    0.000    0.000    0.000 {built-in method mapToScene}
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence_buttons.py:11(__init__)
-        4    0.000    0.000    0.000    0.000 {built-in method findChildren}
-        8    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:303(staffs_in_beta)
-       30    0.000    0.000    0.000    0.000 {method 'encode' of 'str' objects}
-       89    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:207(select)
+       10    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:246(get_rotation_angle)
+       12    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\graphical_object.py:90(set_attributes_from_dict)
        14    0.000    0.000    0.000    0.000 {built-in method setFlag}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence_buttons.py:11(__init__)
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence.py:29(update_size)
+      169    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1243(value)
+       16    0.000    0.000    0.000    0.000 {method 'search' of 're.Pattern' objects}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:95(assign_layouts_to_window)
+       89    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:207(select)
+        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:469(mirror)
+        1    0.000    0.000    0.000    0.000 {method 'iterfind' of 'xml.etree.ElementTree.Element' objects}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_view.py:24(resizeEvent)
+       16    0.000    0.000    0.000    0.000 {built-in method setSceneRect}
+      205    0.000    0.000    0.000    0.000 {built-in method setIconSize}
+        1    0.000    0.000    0.000    0.000 {built-in method primaryScreen}
+       11    0.000    0.000    0.000    0.000 {method 'findall' of 're.Pattern' objects}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:140(init_letter_item)
        47    0.000    0.000    0.000    0.000 {built-in method setPointSize}
        48    0.000    0.000    0.000    0.000 {built-in method end}
-      257    0.000    0.000    0.000    0.000 {method 'pop' of 'dict' objects}
-       33    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
-        1    0.000    0.000    0.000    0.000 {built-in method nt.putenv}
-        1    0.000    0.000    0.000    0.000 {method 'iterfind' of 'xml.etree.ElementTree.Element' objects}
-       15    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1354(_iter_member_by_value_)
-       30    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:252(get)
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:509(_compile_info)
-       47    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_buttons_frame.py:102(get_icon_path)
-       11    0.000    0.000    0.000    0.000 {method 'findall' of 're.Pattern' objects}
-        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1054(_find_spec)
-        2    0.000    0.000    0.000    0.000 {built-in method scale}
-       16    0.000    0.000    0.000    0.000 {built-in method setSceneRect}
-        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:666(_load_unlocked)
-      303    0.000    0.000    0.000    0.000 {method 'bit_length' of 'int' objects}
-      109    0.000    0.000    0.000    0.000 {built-in method nt.fspath}
         5    0.000    0.000    0.000    0.000 {built-in method setColor}
-       30    0.000    0.000    0.000    0.000 {method 'group' of 're.Match' objects}
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_panel.py:33(setup_layouts)
-        4    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:241(_optimize_charset)
-       40    0.000    0.000    0.000    0.000 {built-in method width}
-        3    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:153(get_state)
-        3    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:292(get_overall_position)
-       35    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:791(__iter__)
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_box.py:126(add_labels_to_layout)
-        2    0.000    0.000    0.000    0.000 {built-in method setAlignment}
-        1    0.000    0.000    0.000    0.000 {built-in method setWidget}
-       49    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:162(__getitem__)
-       94    0.000    0.000    0.000    0.000 {built-in method widget}
-        8    0.000    0.000    0.000    0.000 {built-in method setFrameStyle}
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:143(select)
-        2    0.000    0.000    0.000    0.000 {built-in method removeItem}
-       35    0.000    0.000    0.000    0.000 {built-in method builtins.sorted}
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:91(set_attributes)
-       37    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:231(__next)
-      7/2    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:172(getwidth)
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:298(<dictcomp>)
-        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:566(module_from_spec)
-        4    0.000    0.000    0.000    0.000 {function ArrowBoxView.resizeEvent at 0x000001CBF567E8E0}
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:62(setup_scene)
-        4    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:274(get_drag_preview_rotation_angle_to_quadrant_map)
-        5    0.000    0.000    0.000    0.000 {built-in method pos}
-       72    0.000    0.000    0.000    0.000 {method 'issuperset' of 'set' objects}
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\letter_item.py:9(__init__)
-       10    0.000    0.000    0.000    0.000 {built-in method setTransform}
-        6    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:300(get_start_end_locations)
+        1    0.000    0.000    0.000    0.000 {built-in method _missing_}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:51(init_layouts)
+       30    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:252(get)
         1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:82(init_sequence_layout)
+       16    0.000    0.000    0.000    0.000 {built-in method setRotation}
+       47    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\option_picker\option_picker_buttons_frame.py:102(get_icon_path)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:666(_load_unlocked)
+        3    0.000    0.000    0.000    0.000 {built-in method findChildren}
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:509(_compile_info)
+      257    0.000    0.000    0.000    0.000 {method 'pop' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1054(_find_spec)
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:143(select)
+       10    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:253(get_quadrant_to_angle_map)
+       33    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
+       28    0.000    0.000    0.000    0.000 {built-in method center}
+      303    0.000    0.000    0.000    0.000 {method 'bit_length' of 'int' objects}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence_beats.py:51(update_size)
+       19    0.000    0.000    0.000    0.000 {built-in method setTransformOriginPoint}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_panel.py:33(setup_layouts)
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graph_editor.py:73(update_graphboard_size)
+       15    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1354(_iter_member_by_value_)
+       49    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:162(__getitem__)
+        3    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:281(get_staff_center)
+        8    0.000    0.000    0.000    0.000 {built-in method setFrameStyle}
+        4    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:241(_optimize_charset)
+       59    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\codecs.py:260(__init__)
+        1    0.000    0.000    0.000    0.000 {built-in method setWidget}
+       35    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:791(__iter__)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:566(module_from_spec)
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\os.py:682(__setitem__)
+       61    0.000    0.000    0.000    0.000 {built-in method itemAt}
+        1    0.000    0.000    0.000    0.000 {built-in method geometry}
+        3    0.000    0.000    0.000    0.000 {built-in method setSizePolicy}
+        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_box.py:133(add_labels_to_layout)
+       37    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:231(__next)
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:62(setup_scene)
+        2    0.000    0.000    0.000    0.000 {built-in method fitInView}
+      7/2    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:172(getwidth)
         1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\encoder.py:205(iterencode)
-        2    0.000    0.000    0.000    0.000 {built-in method button}
-        5    0.000    0.000    0.000    0.000 {built-in method pixmap}
-        8    0.000    0.000    0.000    0.000 {built-in method show}
+        1    0.000    0.000    0.000    0.000 {built-in method scale}
+        1    0.000    0.000    0.000    0.000 {built-in method setFocus}
+       99    0.000    0.000    0.000    0.000 {built-in method height}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\propbox\propbox_view.py:27(resizeEvent)
+        2    0.000    0.000    0.000    0.000 {built-in method setAlignment}
         1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:169(__enter__)
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:95(assign_layouts_to_window)
-        3    0.000    0.000    0.000    0.000 {built-in method resize}
-       10    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:312(get_svg_file)
-        2    0.000    0.000    0.000    0.000 {built-in method setAttribute}
-       10    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:444(Comment)
-        3    0.000    0.000    0.000    0.000 {built-in method setVerticalScrollBarPolicy}
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\os.py:748(encodekey)
-        4    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:367(_escape)
-       14    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:233(get_axis)
-       66    0.000    0.000    0.000    0.000 {method 'end' of 're.Match' objects}
-        4    0.000    0.000    0.000    0.000 {built-in method setObjectName}
-       27    0.000    0.000    0.000    0.000 {method 'capitalize' of 'str' objects}
-        2    0.000    0.000    0.000    0.000 {built-in method setZValue}
-        2    0.000    0.000    0.000    0.000 {built-in method clearSelection}
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:233(_call_with_frames_removed)
-       20    0.000    0.000    0.000    0.000 {built-in method translate}
-       75    0.000    0.000    0.000    0.000 {method 'keys' of 'dict' objects}
-        1    0.000    0.000    0.000    0.000 {built-in method setMinimumSize}
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence_buttons.py:30(update_size)
-       13    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
-        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:770(create_module)
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\os.py:282(walk)
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:143(remove_same_color_arrow)
-        8    0.000    0.000    0.000    0.000 {built-in method rotate}
-        2    0.000    0.000    0.000    0.000 {built-in method hide}
-        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:179(_get_module_lock)
-       36    0.000    0.000    0.000    0.000 {method 'is_dir' of 'nt.DirEntry' objects}
-        2    0.000    0.000    0.000    0.000 {built-in method setSelected}
-        2    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1515(__and__)
-       12    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:177(get_arrow_by_color)
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:63(setup_dependencies)
-        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:748(find_spec)
-        8    0.000    0.000    0.000    0.000 {built-in method __exit__}
-        3    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:178(get_motion_type_letter_group)
-        3    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:78(<dictcomp>)
-       14    0.000    0.000    0.000    0.000 {built-in method isVisible}
-       30    0.000    0.000    0.000    0.000 {built-in method count}
-       15    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:116(_iter_bits_lsb)
-        1    0.000    0.000    0.000    0.000 {built-in method _imp.create_builtin}
-        4    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:396(_simple)
-        3    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:169(get_current_letter_type)
-        8    0.000    0.000    0.000    0.000 {built-in method setAcceptHoverEvents}
-        3    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:295(<dictcomp>)
-        3    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\arrow_positioner.py:51(<genexpr>)
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:384(_mk_bitmap)
+      109    0.000    0.000    0.000    0.000 {built-in method nt.fspath}
+        2    0.000    0.000    0.000    0.000 {function ArrowBoxView.resizeEvent at 0x00000220F91CE8E0}
        18    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:170(append)
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox.py:127(<listcomp>)
+       10    0.000    0.000    0.000    0.000 {built-in method setObjectName}
+       35    0.000    0.000    0.000    0.000 {built-in method builtins.sorted}
+        3    0.000    0.000    0.000    0.000 {built-in method setVerticalScrollBarPolicy}
+       31    0.000    0.000    0.000    0.000 {built-in method setFixedHeight}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\letter_item.py:9(__init__)
+       16    0.000    0.000    0.000    0.000 {method 'encode' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:214(_compile_charset)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:233(_call_with_frames_removed)
+        1    0.000    0.000    0.000    0.000 {built-in method nt.putenv}
+        6    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:312(get_svg_file)
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graph_editor.py:93(update_attribute_panel_size)
+       12    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\staff.py:233(get_axis)
+        3    0.000    0.000    0.000    0.000 {built-in method pos}
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:770(create_module)
+        1    0.000    0.000    0.000    0.000 {built-in method setCentralWidget}
+        2    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1515(__and__)
+       28    0.000    0.000    0.000    0.000 {built-in method setFixedWidth}
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:179(_get_module_lock)
+        6    0.000    0.000    0.000    0.000 {built-in method setTransform}
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:748(find_spec)
+       30    0.000    0.000    0.000    0.000 {built-in method width}
+       10    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:444(Comment)
+       15    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:116(_iter_bits_lsb)
+        8    0.000    0.000    0.000    0.000 {built-in method setPos}
+        4    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:396(_simple)
        20    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:247(match)
-        9    0.000    0.000    0.000    0.000 {built-in method isNull}
+        1    0.000    0.000    0.000    0.000 {built-in method _imp.create_builtin}
+        2    0.000    0.000    0.000    0.000 {built-in method setZValue}
+       16    0.000    0.000    0.000    0.000 {method 'group' of 're.Match' objects}
+       12    0.000    0.000    0.000    0.000 {built-in method translate}
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:493(_init_module_attrs)
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:384(_mk_bitmap)
+       47    0.000    0.000    0.000    0.000 {built-in method widget}
         1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:422(spec_from_loader)
         1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:94(closegroup)
-       11    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:178(prepare_self)
-        3    0.000    0.000    0.000    0.000 {built-in method isValid}
-        8    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:98(set_is_mirrored_from_attributes)
-        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:493(_init_module_attrs)
-        2    0.000    0.000    0.000    0.000 {built-in method deleteLater}
-        2    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\os.py:742(check_str)
-        1    0.000    0.000    0.000    0.000 {built-in method setCentralWidget}
-        3    0.000    0.000    0.000    0.000 {built-in method setHorizontalScrollBarPolicy}
-        3    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\letter_engine.py:89(<setcomp>)
-        4    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:214(_compile_charset)
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\site-packages\_distutils_hack\__init__.py:89(find_spec)
-       24    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:179(select)
-       11    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:108(_is_wildcard_tag)
-        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:71(__init__)
        20    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:198(select_child)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1030(__exit__)
        78    0.000    0.000    0.000    0.000 {method 'get' of 'xml.etree.ElementTree.Element' objects}
-        1    0.000    0.000    0.000    0.000 {built-in method devicePixelRatio}
-       36    0.000    0.000    0.000    0.000 {method 'pop' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method toPoint}
+       24    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:179(select)
+       66    0.000    0.000    0.000    0.000 {method 'end' of 're.Match' objects}
+       11    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:108(_is_wildcard_tag)
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\site-packages\_distutils_hack\__init__.py:89(find_spec)
+        3    0.000    0.000    0.000    0.000 {built-in method setHorizontalScrollBarPolicy}
+        2    0.000    0.000    0.000    0.000 {built-in method show}
+        4    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:367(_escape)
         1    0.000    0.000    0.000    0.000 {built-in method installEventFilter}
-        4    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_drag.py:103(reset_drag_state)
-        2    0.000    0.000    0.000    0.000 {function MainWidget.resizeEvent at 0x000001CBF56C2E80}
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:434(_get_literal_prefix)
-        4    0.000    0.000    0.000    0.000 {built-in method setContentsMargins}
+        6    0.000    0.000    0.000    0.000 {built-in method setAcceptHoverEvents}
+        5    0.000    0.000    0.000    0.000 {built-in method move}
+       36    0.000    0.000    0.000    0.000 {method 'is_dir' of 'nt.DirEntry' objects}
+       18    0.000    0.000    0.000    0.000 {built-in method layout}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard.py:223(position_letter_item)
+        2    0.000    0.000    0.000    0.000 {built-in method hide}
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\os.py:748(encodekey)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:71(__init__)
        14    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:158(__len__)
-        4    0.000    0.000    0.000    0.000 {built-in method setOpacity}
-        4    0.000    0.000    0.000    0.000 {built-in method sceneRect}
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:386(<listcomp>)
+        6    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\objects\arrow.py:98(set_is_mirrored_from_attributes)
         9    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:284(tell)
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:222(__init__)
-        2    0.000    0.000    0.000    0.000 {built-in method _thread.allocate_lock}
-       22    0.000    0.000    0.000    0.000 {built-in method layout}
+       11    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:178(prepare_self)
+        4    0.000    0.000    0.000    0.000 {built-in method setContentsMargins}
         1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:778(exec_module)
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:405(_generate_overlap_table)
-       12    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:352(__init__)
-        4    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1450(<listcomp>)
-        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:100(acquire)
-        4    0.000    0.000    0.000    0.000 {method '__exit__' of 'nt.ScandirIterator' objects}
-        4    0.000    0.000    0.000    0.000 {built-in method scene}
-       13    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:434(_get_literal_prefix)
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence_buttons.py:30(update_size)
         1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:82(opengroup)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:100(acquire)
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:222(__init__)
+       12    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:352(__init__)
+        1    0.000    0.000    0.000    0.000 {built-in method setMinimumSize}
+        2    0.000    0.000    0.000    0.000 {built-in method scene}
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:405(_generate_overlap_table)
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graph_editor.py:81(update_arrowbox_size)
+        4    0.000    0.000    0.000    0.000 {built-in method setOpacity}
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:386(<listcomp>)
         1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:173(__exit__)
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\pictograph_generator.py:23(__init__)
+       13    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\os.py:282(walk)
+       33    0.000    0.000    0.000    0.000 {method 'pop' of 'set' objects}
         1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:444(_uniq)
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\encoder.py:260(_make_iterencode)
-       12    0.000    0.000    0.000    0.000 {method 'iter' of 'xml.etree.ElementTree.Element' objects}
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:44(__init__)
-        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\attribute_panel\attribute_box.py:53(calculate_button_size)
+       15    0.000    0.000    0.000    0.000 {built-in method count}
+        2    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_box.py:53(calculate_button_size)
         1    0.000    0.000    0.000    0.000 {built-in method _imp.exec_builtin}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\utilities\pictograph_generator.py:23(__init__)
+        2    0.000    0.000    0.000    0.000 {built-in method resize}
+        2    0.000    0.000    0.000    0.000 {built-in method _thread.allocate_lock}
         6    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:109(__init__)
-        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:254(_requires_builtin_wrapper)
-        3    0.000    0.000    0.000    0.000 {built-in method _stat.S_ISLNK}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graph_editor.py:87(update_propbox_size)
        11    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
         5    0.000    0.000    0.000    0.000 {built-in method setLineWidth}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graph_editor.py:99(update_vtg_panel_size)
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_init.py:44(__init__)
+       12    0.000    0.000    0.000    0.000 {method 'iter' of 'xml.etree.ElementTree.Element' objects}
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:254(_requires_builtin_wrapper)
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\encoder.py:260(_make_iterencode)
         1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:112(_prepare_tag)
-        4    0.000    0.000    0.000    0.000 {built-in method raise_}
-        8    0.000    0.000    0.000    0.000 {method 'find' of 'bytearray' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\encoder.py:105(__init__)
-       19    0.000    0.000    0.000    0.000 {built-in method builtins.ord}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attribute_panel\attribute_box.py:283(update_attribute_box_size)
+        2    0.000    0.000    0.000    0.000 {built-in method sceneRect}
+        4    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\enum.py:1450(<listcomp>)
         1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:125(release)
-       10    0.000    0.000    0.000    0.000 {method 'close' of 'xml.etree.ElementTree.XMLParser' objects}
         2    0.000    0.000    0.000    0.000 {built-in method setSpacing}
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_menu_handler.py:14(__init__)
-        6    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\infobox\vtg_panel.py:65(update_info_panel)
-        1    0.000    0.000    0.000    0.000 {built-in method _sre.compile}
-        2    0.000    0.000    0.000    0.000 {method 'remove' of 'list' objects}
         1    0.000    0.000    0.000    0.000 {built-in method setMouseTracking}
+        8    0.000    0.000    0.000    0.000 {method 'find' of 'bytearray' objects}
+        1    0.000    0.000    0.000    0.000 {function MainWidget.resizeEvent at 0x00000220F9252840}
+       13    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+       10    0.000    0.000    0.000    0.000 {method 'close' of 'xml.etree.ElementTree.XMLParser' objects}
+        4    0.000    0.000    0.000    0.000 {built-in method raise_}
+        2    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\os.py:742(check_str)
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\json\encoder.py:105(__init__)
+        1    0.000    0.000    0.000    0.000 {built-in method resetTransform}
+       19    0.000    0.000    0.000    0.000 {built-in method builtins.ord}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\graphboard_menu_handler.py:14(__init__)
+        3    0.000    0.000    0.000    0.000 {built-in method _stat.S_ISLNK}
         4    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:79(groups)
-        4    0.000    0.000    0.000    0.000 {method 'values' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:286(seek)
         1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:198(cb)
         1    0.000    0.000    0.000    0.000 {method 'format' of 'str' objects}
         1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\codecs.py:186(__init__)
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:286(seek)
         1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:357(__init__)
-        2    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:568(isstring)
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:73(__init__)
-        1    0.000    0.000    0.000    0.000 {built-in method x}
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:954(fix_flags)
-        1    0.000    0.000    0.000    0.000 {built-in method fromkeys}
+        1    0.000    0.000    0.000    0.000 {built-in method devicePixelRatio}
+        1    0.000    0.000    0.000    0.000 {built-in method _sre.compile}
         4    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:166(__setitem__)
-        1    0.000    0.000    0.000    0.000 {method 'upper' of 'str' objects}
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\arrow_positioner.py:24(__init__)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1026(__enter__)
-        1    0.000    0.000    0.000    0.000 {built-in method sys.audit}
-        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:244(_verbose_message)
-        1    0.000    0.000    0.000    0.000 {built-in method builtins.locals}
-        3    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:197(select)
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:73(__init__)
         1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:405(parent)
-        1    0.000    0.000    0.000    0.000 {built-in method _imp.is_builtin}
-        1    0.000    0.000    0.000    0.000 {built-in method setWidgetResizable}
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:31(_combine_flags)
-        2    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:542(getroot)
-        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:45(__init__)
-        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
-        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:165(__init__)
-        1    0.000    0.000    0.000    0.000 {method 'translate' of 'bytearray' objects}
-        4    0.000    0.000    0.000    0.000 {built-in method _imp.acquire_lock}
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:536(__init__)
+        2    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:568(isstring)
+        1    0.000    0.000    0.000    0.000 {built-in method x}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1030(__exit__)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1026(__enter__)
+        1    0.000    0.000    0.000    0.000 {built-in method fromkeys}
+        4    0.000    0.000    0.000    0.000 {method '__exit__' of 'nt.ScandirIterator' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:954(fix_flags)
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:197(select)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:244(_verbose_message)
         2    0.000    0.000    0.000    0.000 {method 'rpartition' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:542(getroot)
+        3    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.locals}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        4    0.000    0.000    0.000    0.000 {built-in method _imp.acquire_lock}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\staff_positioner.py:45(__init__)
+        1    0.000    0.000    0.000    0.000 {built-in method setWidgetResizable}
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:165(__init__)
+        1    0.000    0.000    0.000    0.000 {built-in method _imp.is_builtin}
+        1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\widgets\graph_editor\graphboard\position_engines\arrow_positioner.py:24(__init__)
+        1    0.000    0.000    0.000    0.000 {method 'translate' of 'bytearray' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:31(_combine_flags)
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementTree.py:536(__init__)
+        2    0.000    0.000    0.000    0.000 {method 'values' of 'dict' objects}
         4    0.000    0.000    0.000    0.000 {built-in method _imp.release_lock}
-        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:426(_get_iscased)
         1    0.000    0.000    0.000    0.000 G:\My Drive\CODE\Apps\Sequence_Constructor\main.py:66(init_ui)
         2    0.000    0.000    0.000    0.000 {method '__exit__' of '_thread.lock' objects}
         2    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
-        1    0.000    0.000    0.000    0.000 {built-in method y}
+        1    0.000    0.000    0.000    0.000 {method 'upper' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:426(_get_iscased)
+        1    0.000    0.000    0.000    0.000 {built-in method sys.audit}
         1    0.000    0.000    0.000    0.000 C:\Users\auste\AppData\Local\Programs\Python\Python311\Lib\site-packages\_distutils_hack\__init__.py:96(<lambda>)
         1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:413(has_location)
         1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:795(is_package)
+        1    0.000    0.000    0.000    0.000 {built-in method y}
 
 

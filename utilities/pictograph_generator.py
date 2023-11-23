@@ -22,7 +22,6 @@ if TYPE_CHECKING:
 class PictographGenerator:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.graphboard = main_widget.graph_editor.graphboard
-        self.infobox = main_widget.graph_editor.infobox
         self.main_window = main_widget.main_window
         self.export_handler = main_widget.export_handler
         self.grid = self.graphboard.grid

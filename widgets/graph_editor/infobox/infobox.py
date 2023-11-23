@@ -67,5 +67,8 @@ class InfoBox(QFrame):
 
     def update_infobox_size(self) -> None:
         pass
-        self.setFixedHeight(self.graph_editor.height())
+        self.setFixedHeight(int(self.graph_editor.height()))
         self.vtg_panel.update_vtg_panel_size()
+        # make the contents of the infobox fill the infobox
+        self.attribute_panel.setFixedWidth(int(self.width() / 2))
+        self.vtg_panel.setFixedHeight(int(self.height()))

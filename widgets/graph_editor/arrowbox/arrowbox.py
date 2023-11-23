@@ -32,16 +32,14 @@ from widgets.graph_editor.arrowbox.arrowbox_view import ArrowBoxView
 from objects.grid import Grid
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.infobox.infobox import InfoBox
     from objects.arrow import Arrow
 
 from utilities.TypeChecking.TypeChecking import ArrowAttributesDicts
 
 
 class ArrowBox(QGraphicsScene):
-    def __init__(self, main_widget: "MainWidget", infobox: "InfoBox") -> None:
+    def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
-        self.infobox = infobox
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.setSceneRect(0, 0, 650, 650)
