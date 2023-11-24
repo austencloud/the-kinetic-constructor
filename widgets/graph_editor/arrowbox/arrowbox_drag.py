@@ -66,7 +66,6 @@ class ArrowBoxDrag(QWidget):
         self.arrowbox = arrowbox
         self.graphboard = graphboard
         self.main_window = main_window
-
         self.has_entered_graphboard_once = False
         self.current_rotation_angle = 0
         self.previous_quadrant = None
@@ -83,7 +82,6 @@ class ArrowBoxDrag(QWidget):
         self.arrow_center = self.target_arrow.boundingRect().center() * GRAPHBOARD_SCALE
         self.current_rotation_angle = target_arrow.get_rotation_angle()
         self.is_mirrored = target_arrow.is_mirrored
-
         pixmap = self.create_pixmap(target_arrow)
         self.preview.setPixmap(pixmap)
         self.apply_transformations_to_preview()
@@ -243,7 +241,7 @@ class ArrowBoxDrag(QWidget):
             renderer.render(painter)
 
         angle = self.get_drag_preview_rotation_angle(self)
-        
+
         unrotate_transform = QTransform().rotate(-self.current_rotation_angle)
         unrotated_pixmap = self.preview.pixmap().transformed(unrotate_transform)
 
@@ -275,10 +273,10 @@ class ArrowBoxDrag(QWidget):
         self, motion_type: str, rotation_direction: str
     ) -> Dict[str, Dict[str, int]]:
         """
-        Returns a mapping of rotation angles to quadrants based on the motion type and rotation direction. 
-        
-        Specifically designed for the arrowbox_drag. 
-        
+        Returns a mapping of rotation angles to quadrants based on the motion type and rotation direction.
+
+        Specifically designed for the arrowbox_drag.
+
         The values are different than the values in the Arrow class.
 
         T
@@ -331,8 +329,6 @@ class ArrowBoxDrag(QWidget):
                 },
             }.get(rotation_direction, {})
 
-
-
     def handle_enter_graphboard(self, event_pos: QPoint) -> None:
         if not self.has_entered_graphboard_once:
             self.just_entered_graphboard = True
@@ -369,12 +365,12 @@ class ArrowBoxDrag(QWidget):
         self.ghost_arrow.end_location = self.end_location
         self.ghost_arrow.turns = self.turns
         self.ghost_arrow.is_mirrored = self.is_mirrored
-        
+
         ghost_svg = self.ghost_arrow.get_svg_file(self.motion_type, self.turns)
-        
+
         self.ghost_arrow.update_mirror()
         self.ghost_arrow.update_svg(ghost_svg)
-        
+
         self.update_rotation()
         self.update_staff_during_drag()
 

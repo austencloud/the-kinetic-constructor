@@ -95,7 +95,7 @@ class Arrow(GraphicalObject):
         self.update_mirror()
         self.center = self.boundingRect().center()
 
-    def set_is_mirrored_from_attributes(self):
+    def set_is_mirrored_from_attributes(self) -> None:
         if self.motion_type == PRO:
             rotation_direction = self.rotation_direction
             if rotation_direction == CLOCKWISE:
@@ -111,7 +111,7 @@ class Arrow(GraphicalObject):
 
     ### MOUSE EVENTS ###
 
-    def mousePressEvent(self) -> None:
+    def mousePressEvent(self, event) -> None:
         self.setSelected(True)
         
         self.update_ghost_on_click()
@@ -125,13 +125,13 @@ class Arrow(GraphicalObject):
             if item != self:
                 item.setSelected(False)
 
-    def update_staff_on_click(self):
+    def update_staff_on_click(self, event) -> None:
         self.staff.color = self.color
         self.staff.location = self.end_location
         self.staff.axis = self.staff.get_axis(self.end_location)
         self.staff.update_appearance()
 
-    def update_ghost_on_click(self):
+    def update_ghost_on_click(self, event) -> None:
         self.ghost_arrow: "GhostArrow" = self.graphboard.ghost_arrows[self.color]
         self.ghost_arrow.staff = self.staff
         self.ghost_arrow.set_attributes_from_dict(self.attributes)
