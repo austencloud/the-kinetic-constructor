@@ -1,6 +1,10 @@
+
+from typing import List, Dict, Union
 from xml.etree import ElementTree as ET
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+
+
 from settings.string_constants import (
     NORTH,
     EAST,
@@ -15,35 +19,45 @@ from settings.string_constants import (
 
 class Grid(QGraphicsSvgItem):
     """
-    Represents a grid object in a graphics scene.
+    Represents a grid object in the application.
 
     Args:
-        grid_svg_path (str): The path to the SVG file representing the grid.
+        grid_svg_path (str): The path to the SVG file for the grid.
 
     Attributes:
-        svg_file (str): The path to the SVG file representing the grid.
+        svg_file (str): The path to the SVG file for the grid.
         center (QPointF): The coordinates of the center point of the grid.
-        handpoints (dict[str, QPointF]): A dictionary mapping hand point names to their coordinates.
-        layer2_points (dict[str, QPointF]): A dictionary mapping layer 2 point names to their coordinates.
+        handpoints (Dict[str, QPointF]): A dictionary mapping hand point names to their coordinates.
+        layer2_points (Dict[str, QPointF]): A dictionary mapping layer 2 point names to their coordinates.
+
+    Methods:
+        get_circle_coordinates: Get the coordinates of a circle in the SVG file.
+        init_points: Initialize the points of the grid.
+        init_center: Initialize the center point of the grid.
+        init_handpoints: Initialize the hand points of the grid.
+        init_layer2_points: Initialize the layer 2 points of the grid.
+        mousePressEvent: Handle the mouse press event.
+        mouseMoveEvent: Handle the mouse move event.
+        mouseReleaseEvent: Handle the mouse release event.
     """
 
-    def __init__(self, grid_svg_path) -> None:
+    def __init__(self, grid_svg_path: str) -> None:
         super().__init__(grid_svg_path)
-        self.svg_file = grid_svg_path
+        self.svg_file: str = grid_svg_path
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)
         self.setZValue(-1)
 
-    # Rest of the code...
-class Grid(QGraphicsSvgItem):
-    def __init__(self, grid_svg_path) -> None:
-        super().__init__(grid_svg_path)
-        self.svg_file = grid_svg_path
-        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
-        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)
-        self.setZValue(-1)
+    def get_circle_coordinates(self, circle_id: str) -> Union[QPointF, None]:
+        """
+        Get the coordinates of a circle in the SVG file.
 
-    def get_circle_coordinates(self, circle_id) -> QPointF | None:
+        Args:
+            circle_id (str): The ID of the circle element.
+
+        Returns:
+            Union[QPointF, None]: The coordinates of the circle if found, None otherwise.
+        """
         with open(self.svg_file, "r") as svg_file:
             svg_content = svg_file.read()
 
@@ -57,21 +71,40 @@ class Grid(QGraphicsSvgItem):
         else:
             return None
 
-    def init_points(self, point_names, constants) -> dict[str, QPointF]:
+    def init_points(self, point_names: List[str], constants: List[str]) -> Dict[str, QPointF]:
+        """
+        Initialize the points of the grid.
+
+        Args:
+            point_names (List[str]): The names of the points.
+            constants (List[str]): The constants associated with the points.
+
+        Returns:
+            Dict[str, QPointF]: A dictionary mapping point names to their coordinates.
+        """
         return {
             constant: self.get_circle_coordinates(point_name)
             for point_name, constant in zip(point_names, constants)
         }
 
     def init_center(self) -> None:
+        """
+        Initialize the center point of the grid.
+        """
         self.center: QPointF = self.get_circle_coordinates("center_point")
 
     def init_handpoints(self) -> None:
+        """
+        Initialize the hand points of the grid.
+        """
         point_names = ["n_hand_point", "e_hand_point", "s_hand_point", "w_hand_point"]
         constants = [NORTH, EAST, SOUTH, WEST]
-        self.handpoints = self.init_points(point_names, constants)
+        self.handpoints: Dict[str, QPointF] = self.init_points(point_names, constants)
 
     def init_layer2_points(self) -> None:
+        """
+        Initialize the layer 2 points of the grid.
+        """
         point_names = [
             "ne_layer2_point",
             "se_layer2_point",
@@ -79,13 +112,31 @@ class Grid(QGraphicsSvgItem):
             "nw_layer2_point",
         ]
         constants = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
-        self.layer2_points = self.init_points(point_names, constants)
+        self.layer2_points: Dict[str, QPointF] = self.init_points(point_names, constants)
 
     def mousePressEvent(self, event) -> None:
+        """
+        Handle the mouse press event.
+
+        Args:
+            event: The mouse press event.
+        """
         event.ignore()
 
     def mouseMoveEvent(self, event) -> None:
+        """
+        Handle the mouse move event.
+
+        Args:
+            event: The mouse move event.
+        """
         event.ignore()
 
     def mouseReleaseEvent(self, event) -> None:
+        """
+        Handle the mouse release event.
+
+        Args:
+            event: The mouse release event.
+        """
         event.ignore()

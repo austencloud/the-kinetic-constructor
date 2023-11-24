@@ -153,37 +153,33 @@ class AttributeBox(QFrame):
             )
             button_column_layout.addItem(top_spacer)
 
-        # Add the clock label or buttons
+        # For the right column, add the clock label at the top
         if column == "right":
             button_column_layout.addWidget(self.clock_label)
-        else:
+
+        # Add spacer(s)
+        middle_spacer = QSpacerItem(
+            self.button_size,
+            self.button_size,
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Expanding
+        )
+        button_column_layout.addItem(middle_spacer)
+
+        # For the left column, add the buttons
+        if column == "left":
             for button_name in button_names:
                 button = self.create_button(
                     ICON_PATHS[button_name], getattr(self, f"{button_name}_callback")
                 )
                 button_column_layout.addWidget(button)
 
-        # For the right column, add two equal spacers and the increment_turns at the bottom
-        if column == "right":
-            spacer1 = QSpacerItem(
-                self.button_size,
-                self.button_size // 2,  # half-size spacer
-                QSizePolicy.Policy.Fixed,
-                QSizePolicy.Policy.Expanding
-            )
-            button_column_layout.addItem(spacer1)
-            # Add the increment_turns button
+        # For the right column, add the increment button at the bottom
+        if column == "right" and "increment_turns" in button_names:
             increment_button = self.create_button(
                 ICON_PATHS["increment_turns"], self.increment_turns_callback
             )
             button_column_layout.addWidget(increment_button)
-            spacer2 = QSpacerItem(
-                self.button_size,
-                self.button_size // 2,  # half-size spacer
-                QSizePolicy.Policy.Fixed,
-                QSizePolicy.Policy.Expanding
-            )
-            button_column_layout.addItem(spacer2)
 
         button_column_frame.raise_()
         
@@ -221,23 +217,35 @@ class AttributeBox(QFrame):
         if arrow:
             arrow.add_turn()
             self.update_labels(arrow)
-
+    
     def preload_pixmaps(self) -> None:
         # Preloads pixmaps for the icons
         for icon_name, icon_path in ICON_PATHS.items():
-            pixmap = QPixmap(icon_path).scaled(
+            if not icon_path:  # Check if the path is empty
+                logging.warning(f"No file path specified for icon '{icon_name}'.")
+                continue
+            pixmap = QPixmap(icon_path)
+            if pixmap.isNull():  # Check if the QPixmap could not load the image
+                logging.error(f"Failed to load icon '{icon_name}' from path '{icon_path}'.")
+                continue
+            scaled_pixmap = pixmap.scaled(
                 self.button_size,
                 self.button_size,
                 Qt.AspectRatioMode.KeepAspectRatio,
                 Qt.TransformationMode.SmoothTransformation,
             )
-            self.pixmap_cache[icon_name] = pixmap  # Store in the type hinted cache
-
+            self.pixmap_cache[icon_name] = scaled_pixmap
+    
     def set_clock_pixmap(self, clock_label: QLabel, icon_name: str) -> None:
-        pixmap = self.pixmap_cache.get(icon_name, QPixmap())
-        if not pixmap.isNull():
-            clock_label.setPixmap(pixmap)
-
+        if icon_name not in self.pixmap_cache:
+            logging.error(f"Icon name '{icon_name}' not found in pixmap cache.")
+            return
+        pixmap = self.pixmap_cache[icon_name]
+        if pixmap.isNull():
+            logging.error(f"Pixmap for icon name '{icon_name}' is null.")
+            return
+        clock_label.setPixmap(pixmap)
+        
     def update_attribute_box(self) -> None:
         arrow = self.graphboard.get_arrow_by_color(self.color)
         if arrow:
