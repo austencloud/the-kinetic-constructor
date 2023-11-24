@@ -43,8 +43,8 @@ class GraphEditor(QFrame):
         self.graphboard = GraphBoard(self.main_widget, self)
         self.propbox = PropBox(main_widget, self.graphboard)
         self.arrowbox = ArrowBox(main_widget)
-        self.vtg_panel = VTGPanel(self, self.graphboard)
-        self.attribute_panel = AttributePanel(self, self.graphboard)
+        self.vtg_panel = VTGPanel(self.graphboard)
+        self.attribute_panel = AttributePanel(self.graphboard)
 
         objectbox_layout.addWidget(self.arrowbox.view)
         objectbox_layout.addWidget(self.propbox.view)
@@ -62,7 +62,7 @@ class GraphEditor(QFrame):
         self.setMouseTracking(True)
 
     def update_size(self) -> None:
-        self.setFixedHeight(int(self.main_widget.height() * 1 / 4))
+        self.setFixedHeight(int(self.main_widget.height() * 1 / 3))
         self.setFixedWidth(int(self.main_widget.width() * 0.5))
         self.update_graphboard_size()
         self.update_arrowbox_size()
@@ -93,7 +93,7 @@ class GraphEditor(QFrame):
     def update_attribute_panel_size(self) -> None:
         self.attribute_panel.setFixedHeight(self.height())
         self.attribute_panel.setFixedWidth(int(self.height() / 2))
-        # self.attribute_panel.red_attr_box.update_attribute_box_size()
+        self.attribute_panel.red_attr_box.update_attribute_box_size()
         self.attribute_panel.blue_attr_box.update_attribute_box_size()
         
     def update_vtg_panel_size(self) -> None:

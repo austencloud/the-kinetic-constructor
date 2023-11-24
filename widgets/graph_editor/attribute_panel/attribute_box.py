@@ -290,6 +290,25 @@ class AttributeBox(QFrame):
             f"<span style='font-size: {int(infobox_height * 0.07)}px;'>{arrow.turns}</span>"
         )
 
+
+    def update_button_size(self) -> None:
+        self.button_size = self.calculate_button_size()  # Re-implemented button size
+        self.icon_size = QSize(
+            int(self.button_size * 0.6), int(self.button_size * 0.6)
+        )  # Re-implemented icon size
+        for child in self.children():
+            if isinstance(child, QPushButton):
+                child.setFixedSize(self.button_size, self.button_size)
+                child.setIconSize(self.icon_size)
+        for child in self.clock_label.children():
+            if isinstance(child, QLabel):
+                child.setFixedSize(self.button_size, self.button_size)
+                child.setPixmap(child.pixmap().scaled(self.button_size, self.button_size, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+        self.update()
+        
+
+        
     def update_attribute_box_size(self) -> None:
-        self.setFixedHeight(int(self.attribute_panel.height() / 2))
-        self.setFixedWidth(int(self.attribute_panel.height() / 2))
+        self.setFixedHeight(int(self.attribute_panel.graphboard.graph_editor.height() / 2))
+        self.setFixedWidth(int(self.attribute_panel.graphboard.graph_editor.height() / 2))
+        self.update_button_size()

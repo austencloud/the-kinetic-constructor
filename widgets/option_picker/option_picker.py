@@ -76,7 +76,7 @@ class OptionPicker(QFrame):
 
         """
         self.setFixedSize(
-            int(self.main_widget.width() * 0.5), int(self.main_widget.height() * 3 / 4)
+            int(self.main_widget.width() * 0.5), int(self.main_widget.height() * 2 / 3)
         )
 
         self.scroll_area.update_scroll_area_size()

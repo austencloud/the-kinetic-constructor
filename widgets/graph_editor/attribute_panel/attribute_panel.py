@@ -15,12 +15,12 @@ if TYPE_CHECKING:
 
 
 class AttributePanel(QFrame):
-    def __init__(self, infobox: "InfoBox", graphboard: "GraphBoard") -> None:
+    def __init__(self, graphboard: "GraphBoard") -> None:
         super().__init__()
-        self.infobox = infobox
+
         self.graphboard = graphboard
 
-        self.setFixedHeight(self.infobox.height())
+        self.setFixedHeight(self.graphboard.graph_editor.height())
         self.setFixedWidth(int(self.height() / 2))
 
         self.setContentsMargins(0, 0, 0, 0)
@@ -47,3 +47,9 @@ class AttributePanel(QFrame):
         if red_arrow:
             self.red_attr_box.update_labels(red_arrow)
 
+    def update_attribute_panel_size(self) -> None:
+        self.setFixedHeight(self.graphboard.view.height())
+        self.setFixedWidth(int(self.height() / 2))
+        self.blue_attr_box.update_attribute_box_size()
+        self.red_attr_box.update_attribute_box_size()
+        

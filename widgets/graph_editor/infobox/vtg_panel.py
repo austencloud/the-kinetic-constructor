@@ -15,9 +15,9 @@ if TYPE_CHECKING:
 
 
 class VTGPanel(QFrame):
-    def __init__(self, infobox: "InfoBox", graphboard: "GraphBoard") -> None:
+    def __init__(self, graphboard: "GraphBoard") -> None:
         super().__init__()
-        self.infobox = infobox
+
         self.graphboard = graphboard
         self.setup_info_panel()
 
@@ -31,18 +31,18 @@ class VTGPanel(QFrame):
         top_box = QGroupBox("Top Box")
         top_layout = QVBoxLayout(top_box)
 
-        # Add lines for letter and letter type
-        letter_line = QLineEdit()
-        letter_type_line = QLineEdit()
+        # Add labels for letter and letter type
+        letter_label = QLabel()
+        letter_type_label = QLabel()
         top_layout.addWidget(QLabel("Letter:"))
-        top_layout.addWidget(letter_line)
+        top_layout.addWidget(letter_label)
         top_layout.addWidget(QLabel("Type:"))
-        top_layout.addWidget(letter_type_line)
+        top_layout.addWidget(letter_type_label)
 
-        # Add motion to motion indication line
-        motion_line = QLineEdit()
+        # Add motion to motion indication label
+        motion_label = QLabel()
         top_layout.addWidget(QLabel("Motion to motion indication:"))
-        top_layout.addWidget(motion_line)
+        top_layout.addWidget(motion_label)
 
         # Add the top box to the layout
         layout.addWidget(top_box)
@@ -64,9 +64,9 @@ class VTGPanel(QFrame):
 
     def update_info_panel(self) -> None:
         pass
-        # self.update_letter_line()
-        # self.update_letter_type_line()
-        # self.update_motion_line()
+        # self.update_letter_label()
+        # self.update_letter_type_label()
+        # self.update_motion_label()
         # self.update_additional_info()
 
     def update_type_and_position_label(self) -> None:
