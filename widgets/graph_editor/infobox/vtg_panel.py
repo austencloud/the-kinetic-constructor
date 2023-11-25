@@ -10,7 +10,6 @@ from PyQt6.QtWidgets import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.infobox.infobox import InfoBox
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
 
 
@@ -52,9 +51,9 @@ class VTGPanel(QFrame):
         bottom_layout = QVBoxLayout(bottom_box)
 
         # Add additional information
-        additional_info = QTextEdit()
+        additional_info_label = QLabel()
         bottom_layout.addWidget(QLabel("Additional Information:"))
-        bottom_layout.addWidget(additional_info)
+        bottom_layout.addWidget(additional_info_label)
 
         # Add the bottom box to the layout
         layout.addWidget(bottom_box)

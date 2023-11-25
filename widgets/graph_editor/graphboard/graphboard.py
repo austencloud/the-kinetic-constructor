@@ -46,7 +46,6 @@ from widgets.graph_editor.graphboard.position_engines.staff_positioner import (
 
 if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
-    from widgets.graph_editor.infobox.infobox import InfoBox
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.graph_editor import GraphEditor
 
@@ -64,7 +63,6 @@ class GraphBoard(QGraphicsScene):
         self.arrows: List[Arrow] = []
         self.staffs: List[Staff] = []
         self.current_letter: str = None
-        self.infobox: InfoBox = None
 
     def setup_components(self, main_widget: "MainWidget") -> None:
         self.letters = main_widget.letters
@@ -115,7 +113,7 @@ class GraphBoard(QGraphicsScene):
             self.dragged_staff.mousePressEvent(event)
         elif isinstance(clicked_item, Arrow):
             self.dragged_arrow = clicked_item
-            self.dragged_arrow.mousePressEvent()
+            self.dragged_arrow.mousePressEvent(event)
         else:
             self.dragged_staff = None
             self.dragged_arrow = None
@@ -131,7 +129,7 @@ class GraphBoard(QGraphicsScene):
             self.dragged_staff.mouseReleaseEvent(event)
             self.dragged_staff = None
         elif self.dragged_arrow:
-            self.dragged_arrow.mouseReleaseEvent()
+            self.dragged_arrow.mouseReleaseEvent(event)
             self.dragged_arrow = None
 
     ### GETTERS ###

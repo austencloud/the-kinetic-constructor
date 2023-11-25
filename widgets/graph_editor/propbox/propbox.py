@@ -21,7 +21,7 @@ from settings.string_constants import (
 )
 
 from typing import TYPE_CHECKING
-
+from objects.grid import Grid
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
@@ -33,7 +33,10 @@ class PropBox(QGraphicsScene):
         self.main_window = main_widget.main_window
         self.graphboard = graphboard
         self.view = PropBoxView(self)
-        self.setSceneRect(0, 0, int(450), int(450))
+        self.grid = Grid("resources/images/grid/grid_simple.svg")
+        self.setSceneRect(0, 0, int(750), int(750))
+        self.addItem(self.grid)
+        self.grid.setPos(0, 0)        
         self.propbox_layout = QVBoxLayout()
         self.propbox_layout.addWidget(self.view)
         self.init_propbox_staffs(self)

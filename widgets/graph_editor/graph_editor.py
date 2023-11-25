@@ -56,7 +56,7 @@ class GraphEditor(QFrame):
         graph_editor_frame_layout.addLayout(objectbox_layout)
         graph_editor_frame_layout.addLayout(graphboard_layout)
         graph_editor_frame_layout.addLayout(attribute_panel_layout)
-        graph_editor_frame_layout.addLayout(vtg_panel_layout)
+        # graph_editor_frame_layout.addLayout(vtg_panel_layout)
         
         self.setLayout(graph_editor_frame_layout)
         self.setMouseTracking(True)

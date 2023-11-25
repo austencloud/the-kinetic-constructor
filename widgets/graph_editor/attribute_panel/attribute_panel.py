@@ -1,17 +1,13 @@
 from PyQt6.QtWidgets import (
     QVBoxLayout,
     QFrame,
-    QGridLayout,
-    QSizePolicy,
 )
 from settings.string_constants import RED, BLUE
 from widgets.graph_editor.attribute_panel.attribute_box import AttributeBox
 from typing import TYPE_CHECKING
-from utilities.TypeChecking.TypeChecking import Color
 
 if TYPE_CHECKING:
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
-    from widgets.graph_editor.infobox.infobox import InfoBox
 
 
 class AttributePanel(QFrame):

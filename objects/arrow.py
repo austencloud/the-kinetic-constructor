@@ -125,13 +125,13 @@ class Arrow(GraphicalObject):
             if item != self:
                 item.setSelected(False)
 
-    def update_staff_on_click(self, event) -> None:
+    def update_staff_on_click(self) -> None:
         self.staff.color = self.color
         self.staff.location = self.end_location
         self.staff.axis = self.staff.get_axis(self.end_location)
         self.staff.update_appearance()
 
-    def update_ghost_on_click(self, event) -> None:
+    def update_ghost_on_click(self) -> None:
         self.ghost_arrow: "GhostArrow" = self.graphboard.ghost_arrows[self.color]
         self.ghost_arrow.staff = self.staff
         self.ghost_arrow.set_attributes_from_dict(self.attributes)
@@ -158,7 +158,7 @@ class Arrow(GraphicalObject):
                 if new_quadrant:
                     self.update_for_new_quadrant(new_quadrant)
 
-    def mouseReleaseEvent(self) -> None:
+    def mouseReleaseEvent(self, event) -> None:
         self.graphboard.removeItem(self.ghost_arrow)
         self.graphboard.arrows.remove(self.ghost_arrow)
         self.ghost_arrow.staff = None

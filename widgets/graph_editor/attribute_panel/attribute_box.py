@@ -51,7 +51,7 @@ class AttributeBox(QFrame):
         self.init_ui()
 
     def calculate_button_size(self) -> int:
-        return int((self.height() // 4) * 1)
+        return int((self.graphboard.view.height() // 2 // 4) * 1)
 
     def init_ui(self) -> None:
         self.setup_box()
@@ -69,10 +69,10 @@ class AttributeBox(QFrame):
         self.clock_label = self.create_clock_label()
         self.add_labels_to_layout()
 
-        self.setup_button_column(
+        self.left_button_column = self.setup_button_column(
             0, ["swap_motion_type", "swap_start_end", "decrement_turns"], column="left"
         )
-        self.setup_button_column(
+        self.right_button_column = self.setup_button_column(
             self.width() - self.button_size, ["increment_turns"], column="right"
         )
         self.preload_pixmaps()
@@ -182,6 +182,7 @@ class AttributeBox(QFrame):
             button_column_layout.addWidget(increment_button)
 
         button_column_frame.raise_()
+        return button_column_frame
         
     def create_button(self, icon_path: str, callback) -> QPushButton:
         button = QPushButton(self)
@@ -311,4 +312,10 @@ class AttributeBox(QFrame):
     def update_attribute_box_size(self) -> None:
         self.setFixedHeight(int(self.attribute_panel.graphboard.graph_editor.height() / 2))
         self.setFixedWidth(int(self.attribute_panel.graphboard.graph_editor.height() / 2))
-        self.update_button_size()
+        #delete the buttons layouts 
+        for child in self.children():
+            if isinstance(child, QFrame):
+                child.deleteLater()
+        self.init_ui()
+        self.update()
+        
