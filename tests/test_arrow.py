@@ -30,11 +30,11 @@ class TestArrow(unittest.TestCase):
         svg_file = self.arrow.get_svg_file("pro", 1)
         self.assertEqual(svg_file, "shift_dir/pro_1.svg")
 
-    def test_increment_turns(self):
+    def test_add_turns(self):
         self.arrow.add_turn()
         self.assertEqual(self.arrow.turns, 2)
 
-    def test_decrement_turns(self):
+    def test_subtract_turns(self):
         self.arrow.subtract_turn()
         self.assertEqual(self.arrow.turns, 0)
 

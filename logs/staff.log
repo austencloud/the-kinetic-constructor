@@ -561,3 +561,47 @@
 2023-11-18 14:44:05,451 DEBUG root Multiple letters returned by get_current_letter: set()
 2023-11-18 14:44:06,115 DEBUG root Multiple letters returned by get_current_letter: set()
 2023-11-18 14:44:06,466 DEBUG root Multiple letters returned by get_current_letter: set()
+2023-11-25 14:48:04,022 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:48:04,022 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:48:04,048 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:48:04,048 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:48:44,515 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:48:44,516 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:48:44,542 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:48:44,542 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:49:36,231 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:49:36,232 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:49:36,255 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:49:36,256 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:50:36,463 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:50:36,464 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:50:36,486 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:50:36,486 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:51:10,758 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:51:10,758 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:51:10,782 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:51:10,782 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:56:23,997 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:56:23,997 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:56:24,021 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:56:24,021 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:56:57,179 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:56:57,181 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:56:57,203 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:56:57,203 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:57:52,412 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:57:52,412 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:57:52,435 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:57:52,435 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:58:40,000 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:58:40,001 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:58:40,023 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:58:40,023 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:59:17,603 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:59:17,604 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 14:59:17,627 ERROR root Failed to load icon 'clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 14:59:17,627 ERROR root Failed to load icon 'counter_clockwise' from path 'resources/images/icons/clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 15:00:26,916 ERROR root Failed to load icon 'clockwise' from path 'clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 15:00:26,916 ERROR root Failed to load icon 'counter_clockwise' from path 'clock/resources/images/icons/clock/counter_clockwise.png'.
+2023-11-25 15:00:26,938 ERROR root Failed to load icon 'clockwise' from path 'clock/resources/images/icons/clock/clockwise.png'.
+2023-11-25 15:00:26,938 ERROR root Failed to load icon 'counter_clockwise' from path 'clock/resources/images/icons/clock/counter_clockwise.png'.

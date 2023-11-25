@@ -65,17 +65,18 @@ COUNTER_CLOCKWISE_ICON = CLOCK_DIR + "counter_clockwise.png"
 CLOCK_ICON = CLOCK_DIR + "clock.png"
 SWAP_ICON = "swap.jpg"
 MIRROR_ICON = "mirror.png"
-DECREMENT_TURNS_ICON = "decrement_turns.png"
-INCREMENT_TURNS_ICON = "increment_turns.png"
+DECREMENT_TURNS_ICON = "subtract_turns.png"
+INCREMENT_TURNS_ICON = "add_turns.png"
 SWAP_COLORS_ICON = "swap_colors.png"
 
 ICON_PATHS = {
     "swap_motion_type": ICON_DIR + SWAP_ICON,
     "swap_start_end": ICON_DIR + MIRROR_ICON,
-    "decrement_turns": ICON_DIR + DECREMENT_TURNS_ICON,
-    "increment_turns": ICON_DIR + INCREMENT_TURNS_ICON,
+    "subtract_turns": ICON_DIR + DECREMENT_TURNS_ICON,
+    "add_turns": ICON_DIR + INCREMENT_TURNS_ICON,
     "swap_colors": ICON_DIR + SWAP_COLORS_ICON,
-
+    "clockwise": CLOCKWISE_ICON,
+    "counter_clockwise": COUNTER_CLOCKWISE_ICON,
 }
 
 ARROW_ATTRIBUTES = [

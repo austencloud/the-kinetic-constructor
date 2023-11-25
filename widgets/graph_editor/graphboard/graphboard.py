@@ -31,7 +31,7 @@ from utilities.TypeChecking.TypeChecking import (
     List,
     Optional,
     Tuple,
-    Quadrant
+    Quadrant,
 )
 from widgets.graph_editor.graphboard.graphboard_init import GraphBoardInit
 from widgets.graph_editor.graphboard.graphboard_menu_handler import (
@@ -235,10 +235,10 @@ class GraphBoard(QGraphicsScene):
         self.update_letter()
         self.update_arrows()
         self.update_staffs()
-        self.update_attribute_panel()
+        self.update_attr_panel()
 
-    def update_attribute_panel(self) -> None:
-        self.graph_editor.attribute_panel.update_attribute_panel()
+    def update_attr_panel(self) -> None:
+        self.graph_editor.attr_panel.update_attr_panel()
 
     def update_arrows(self) -> None:
         self.arrow_positioner.update()

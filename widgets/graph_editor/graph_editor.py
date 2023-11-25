@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 from widgets.graph_editor.arrowbox.arrowbox import ArrowBox
 from widgets.graph_editor.graphboard.graphboard import GraphBoard
 from widgets.graph_editor.propbox.propbox import PropBox
-from widgets.graph_editor.attribute_panel.attribute_panel import AttributePanel
+from widgets.graph_editor.attr_panel.attr_panel import AttrPanel
 from widgets.graph_editor.vtg_panel import VTGPanel
 from widgets.graph_editor.graphboard.graphboard import GraphBoard
 
@@ -37,27 +37,27 @@ class GraphEditor(QFrame):
 
         objectbox_layout = QVBoxLayout()
         graphboard_layout = QVBoxLayout()
-        attribute_panel_layout = QVBoxLayout()
+        attr_panel_layout = QVBoxLayout()
         vtg_panel_layout = QVBoxLayout()
 
         self.graphboard = GraphBoard(self.main_widget, self)
         self.propbox = PropBox(main_widget, self.graphboard)
         self.arrowbox = ArrowBox(main_widget)
         self.vtg_panel = VTGPanel(self.graphboard)
-        self.attribute_panel = AttributePanel(self.graphboard)
+        self.attr_panel = AttrPanel(self.graphboard)
 
         objectbox_layout.addWidget(self.arrowbox.view)
         objectbox_layout.addWidget(self.propbox.view)
         graphboard_layout.addWidget(self.graphboard.view)
-        attribute_panel_layout.addWidget(self.attribute_panel)
+        attr_panel_layout.addWidget(self.attr_panel)
         vtg_panel_layout.addWidget(self.vtg_panel)
 
         graph_editor_frame_layout.setContentsMargins(0, 0, 0, 0)
         graph_editor_frame_layout.addLayout(objectbox_layout)
         graph_editor_frame_layout.addLayout(graphboard_layout)
-        graph_editor_frame_layout.addLayout(attribute_panel_layout)
+        graph_editor_frame_layout.addLayout(attr_panel_layout)
         graph_editor_frame_layout.addLayout(vtg_panel_layout)
-        
+
         self.setLayout(graph_editor_frame_layout)
         self.setMouseTracking(True)
 
@@ -67,7 +67,7 @@ class GraphEditor(QFrame):
         self.update_graphboard_size()
         self.update_arrowbox_size()
         self.update_propbox_size()
-        self.update_attribute_panel_size()
+        self.update_attr_panel_size()
         self.update_vtg_panel_size()
 
     def update_graphboard_size(self) -> None:
@@ -90,12 +90,12 @@ class GraphEditor(QFrame):
             int(self.graphboard.view.height() * 1 / 2),
         )
 
-    def update_attribute_panel_size(self) -> None:
-        self.attribute_panel.setFixedHeight(self.height())
-        self.attribute_panel.setFixedWidth(int(self.height() / 2))
-        self.attribute_panel.red_attr_box.update_attribute_box_size()
-        self.attribute_panel.blue_attr_box.update_attribute_box_size()
-        
+    def update_attr_panel_size(self) -> None:
+        self.attr_panel.setFixedHeight(self.height())
+        self.attr_panel.setFixedWidth(int(self.height() / 2))
+        self.attr_panel.red_attr_box.update_attr_box_size()
+        self.attr_panel.blue_attr_box.update_attr_box_size()
+
     def update_vtg_panel_size(self) -> None:
         self.vtg_panel.setFixedHeight(self.height())
         self.vtg_panel.setFixedWidth(int(self.width() / 2))

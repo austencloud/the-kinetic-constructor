@@ -8,6 +8,8 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QPushButton,
     QSpacerItem,
+    QWidget,
+    QHBoxLayout,
 )
 from objects.arrow import Arrow
 from settings.string_constants import (
@@ -24,20 +26,21 @@ from utilities.TypeChecking.TypeChecking import Color
 
 if TYPE_CHECKING:
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
-    from widgets.graph_editor.attribute_panel.attribute_panel import (
-        AttributePanel,
+    from widgets.graph_editor.attr_panel.attr_panel import (
+        AttrPanel,
     )
 from PyQt6.QtWidgets import QSizePolicy
+from widgets.graph_editor.attr_panel.attr_box_widgets import StartEndWidget, MotionTypeWidget, TurnsWidget, HeaderWidget
 
-
-class AttributeBox(QFrame):
+class AttrBox(QFrame):
     def __init__(
-        self, attribute_panel: "AttributePanel", graphboard: "GraphBoard", color: Color
+        self, attr_panel: "AttrPanel", graphboard: "GraphBoard", color: Color
     ) -> None:
-        super().__init__(attribute_panel)
-        self.attribute_panel = attribute_panel
+        super().__init__(attr_panel)
+        self.attr_panel = attr_panel
         self.graphboard = graphboard
         self.color = color
+        self.turns_widget = None
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
 
     def calculate_button_size(self) -> int:
@@ -45,33 +48,69 @@ class AttributeBox(QFrame):
 
     def init_ui(self) -> None:
         self.setup_box()
-        self.button_size = self.calculate_button_size()  # Re-implemented button size
-        self.icon_size = QSize(
-            int(self.button_size * 0.6), int(self.button_size * 0.6)
-        )  # Re-implemented icon size
+        self.button_size = self.calculate_button_size()
+        self.icon_size = QSize(int(self.button_size * 0.5), int(self.button_size * 0.5))
 
-        self.info_header = self.create_info_header(
-            "Left" if self.color == BLUE else "Right", self.color
+
+        # self.attribute_labels = self.create_attribute_labels()
+
+        self.header_widget = HeaderWidget(self, self.color)
+        self.motion_type_widget = MotionTypeWidget(self)
+        self.start_end_widget = StartEndWidget(self)
+        self.turns_widget = TurnsWidget(self.graphboard, self.color, self)
+        
+        self.turns_widget.subtract_turns_button.setIconSize(self.icon_size)
+        self.turns_widget.add_turns_button.setIconSize(self.icon_size)
+        self.turns_widget.subtract_turns_button.setFixedSize(
+            self.button_size, self.button_size
         )
-
-        # self.layout().addWidget(self.info_header)
-        self.attribute_labels = self.create_attribute_labels()
+        self.turns_widget.add_turns_button.setFixedSize(
+            self.button_size, self.button_size
+        )
         self.clock_label = self.create_clock_label()
-        self.add_labels_to_layout()
+        # self.add_labels_to_layout()
 
-        self.left_button_column = self.setup_button_column(
-            0, ["swap_motion_type", "swap_start_end", "decrement_turns"], column="left"
-        )
-        self.right_button_column = self.setup_button_column(
-            self.width() - self.button_size, ["increment_turns"], column="right"
-        )
+        # self.left_button_column: QFrame = self.setup_button_column(
+        #     0, ["swap_motion_type", "swap_start_end"], column="left"
+        # )
+        # self.right_button_column: QFrame = self.setup_button_column(self.width() - self.button_size, [], column="right")
+        
+        # self.apply_button_styles()
+        
         self.preload_pixmaps()
+        
+        self.layout().addWidget(self.header_widget)
+        self.layout().addWidget(self.motion_type_widget)
+        self.layout().addWidget(self.start_end_widget)
+        self.layout().addWidget(self.turns_widget)
+
+    def apply_button_styles(self) -> None:
+        button_style = (
+            "QPushButton {"
+            "   border-radius: 15px;"
+            "   background-color: #f0f0f0;"
+            "   border: 1px solid #a0a0a0;"
+            "   min-width: 30px;"
+            "   min-height: 30px;"
+            "}"
+            "QPushButton:pressed {"
+            "   background-color: #c0c0c0;"
+            "}"
+        )
+        if self.turns_widget:
+            self.turns_widget.subtract_turns_button.setStyleSheet(button_style)
+            self.turns_widget.add_turns_button.setStyleSheet(button_style)
+        
+        for button_column in [self.left_button_column, self.right_button_column]:
+            if button_column:
+                for child in button_column.findChildren(QPushButton):
+                    child.setStyleSheet(button_style)
 
     def setup_box(self) -> None:
         self.setObjectName("AttributeBox")
         self.apply_border_style(RED_HEX if self.color == RED else BLUE_HEX)
         self.setFixedSize(
-            int(self.attribute_panel.width()), int(self.attribute_panel.height() / 2)
+            int(self.attr_panel.width()), int(self.attr_panel.height() / 2)
         )
         self.setLayout(QVBoxLayout(self))
         self.layout().setContentsMargins(0, 0, 0, 0)
@@ -82,26 +121,13 @@ class AttributeBox(QFrame):
 
     ### CREATE LABELS ###
 
-    def create_info_header(self, text: str, color: Color) -> QLabel:
-        info_header = QLabel(text, self)
-        info_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        info_header.setFixedHeight(int(self.height() / 4))
 
-        color_hex = RED_HEX if color == RED else BLUE_HEX
-        info_header.setStyleSheet(
-            f"color: {color_hex}; font-size: {int(self.height() * 0.07)}px; font-weight: bold;"
-        )
-        info_header.setStyleSheet(
-            f"color: {color_hex}; font-size: {int(self.height() * 0.14)}px; font-weight: bold;"
-        )
-        return info_header
 
     def create_attribute_labels(self) -> Dict[str, QLabel]:
         labels = {}
         for name in [
             "motion_type_label",
             "start_end_label",
-            "turns_label",
         ]:
             label = self.create_label(self.height() // 4)
             label.setObjectName(name)
@@ -123,22 +149,25 @@ class AttributeBox(QFrame):
         self.layout().addWidget(self.info_header)
         for label in self.attribute_labels.values():
             self.layout().addWidget(label)
+        self.layout().addWidget(self.turns_widget)
 
-    def setup_button_column(self, x_position: int, button_names: list, column: Literal["left", "right"]) -> None:
-        button_column_frame = QFrame(self)
-        button_column_layout = QVBoxLayout(button_column_frame)
+    def setup_button_column(
+        self, x_position: int, button_names: list, column: Literal["left", "right"]
+    ) -> None:
+        button_column = QFrame(self)
+        button_column_layout = QVBoxLayout(button_column)
         button_column_layout.setContentsMargins(0, 0, 0, 0)
         button_column_layout.setSpacing(0)
 
-        button_column_frame.setFixedSize(self.button_size, self.height())
-        button_column_frame.move(x_position, 0)
+        button_column.setFixedSize(self.button_size, self.height())
+        button_column.move(x_position, 0)
 
         if column == "left":
             top_spacer = QSpacerItem(
                 self.button_size,
                 self.button_size,
                 QSizePolicy.Policy.Fixed,
-                QSizePolicy.Policy.Expanding
+                QSizePolicy.Policy.Expanding,
             )
             button_column_layout.addItem(top_spacer)
 
@@ -149,7 +178,7 @@ class AttributeBox(QFrame):
             self.button_size,
             self.button_size,
             QSizePolicy.Policy.Fixed,
-            QSizePolicy.Policy.Expanding
+            QSizePolicy.Policy.Expanding,
         )
         button_column_layout.addItem(middle_spacer)
 
@@ -160,25 +189,25 @@ class AttributeBox(QFrame):
                 )
                 button_column_layout.addWidget(button)
 
-        if column == "right" and "increment_turns" in button_names:
-            increment_button = self.create_button(
-                ICON_PATHS["increment_turns"], self.increment_turns_callback
+        if column == "right" and "add_turns" in button_names:
+            add_turns_button = self.create_button(
+                ICON_PATHS["add_turns"], self.add_turns_callback
             )
-            button_column_layout.addWidget(increment_button)
+            button_column_layout.addWidget(add_turns_button)
 
-        button_column_frame.raise_()
-        return button_column_frame
-        
-    def create_button(self, icon_path: str, callback) -> QPushButton:
+        button_column.raise_()
+        return button_column
+
+    def create_button(self, icon_path, callback):
         button = QPushButton(self)
         button.setIcon(QIcon(icon_path))
-        button.setIconSize(self.icon_size)  
-        button.setFixedSize(
-            self.button_size, self.button_size
-        ) 
+        button.setIconSize(self.icon_size)
+        button.setFixedSize(self.button_size, self.button_size)
         button.clicked.connect(callback)
+        
+        # Return the button without setting a stylesheet
         return button
-
+    
     def swap_motion_type_callback(self) -> None:
         arrow = self.graphboard.get_arrow_by_color(self.color)
         if arrow:
@@ -191,26 +220,28 @@ class AttributeBox(QFrame):
             arrow.swap_rot_dir()
             self.update_labels(arrow)
 
-    def decrement_turns_callback(self) -> None:
+    def subtract_turns_callback(self) -> None:
         arrow = self.graphboard.get_arrow_by_color(self.color)
         if arrow:
             arrow.subtract_turn()
             self.update_labels(arrow)
 
-    def increment_turns_callback(self) -> None:
+    def add_turns_callback(self) -> None:
         arrow = self.graphboard.get_arrow_by_color(self.color)
         if arrow:
             arrow.add_turn()
             self.update_labels(arrow)
-    
+
     def preload_pixmaps(self) -> None:
         for icon_name, icon_path in ICON_PATHS.items():
-            if not icon_path:  
+            if not icon_path:
                 logging.warning(f"No file path specified for icon '{icon_name}'.")
                 continue
             pixmap = QPixmap(icon_path)
-            if pixmap.isNull():  
-                logging.error(f"Failed to load icon '{icon_name}' from path '{icon_path}'.")
+            if pixmap.isNull():
+                logging.error(
+                    f"Failed to load icon '{icon_name}' from path '{icon_path}'."
+                )
                 continue
             scaled_pixmap = pixmap.scaled(
                 self.button_size,
@@ -219,7 +250,7 @@ class AttributeBox(QFrame):
                 Qt.TransformationMode.SmoothTransformation,
             )
             self.pixmap_cache[icon_name] = scaled_pixmap
-    
+
     def set_clock_pixmap(self, clock_label: QLabel, icon_name: str) -> None:
         if icon_name not in self.pixmap_cache:
             logging.error(f"Icon name '{icon_name}' not found in pixmap cache.")
@@ -229,8 +260,8 @@ class AttributeBox(QFrame):
             logging.error(f"Pixmap for icon name '{icon_name}' is null.")
             return
         clock_label.setPixmap(pixmap)
-        
-    def update_attribute_box(self) -> None:
+
+    def update_attr_box(self) -> None:
         arrow = self.graphboard.get_arrow_by_color(self.color)
         if arrow:
             self.update_labels(arrow)
@@ -247,10 +278,10 @@ class AttributeBox(QFrame):
             None
         """
 
-        infobox_height = self.attribute_panel.height()
-        self.attribute_labels["motion_type_label"].setText(
-            f"<h1><span style='font-weight: bold; font-style: italic; font-size: {int(infobox_height * 0.07)}px;'>{arrow.motion_type.capitalize()}</h1>"
-        )
+        infobox_height = self.attr_panel.height()
+        # self.attribute_labels["motion_type_label"].setText(
+        #     f"<h1><span style='font-weight: bold; font-style: italic; font-size: {int(infobox_height * 0.07)}px;'>{arrow.motion_type.capitalize()}</h1>"
+        # )
 
         # if arrow.rotation_direction:
         #     if arrow.rotation_direction == CLOCKWISE:
@@ -264,38 +295,25 @@ class AttributeBox(QFrame):
         # else:
         #     self.attribute_labels["clock_label"].setText("")
 
-        if arrow.motion_type in [PRO, ANTI, STATIC]:
-            self.attribute_labels["start_end_label"].setText(
-                f"<span style='font-weight: bold; font-style: italic; font-size: {int(infobox_height * 0.07)}px;'>{arrow.start_location.capitalize()} → {arrow.end_location.capitalize()}</span>"
-            )
-        elif arrow.motion_type == "":
-            self.attribute_labels["start_end_label"].setText("")
-        self.attribute_labels["turns_label"].setText(
-            f"<span style='font-size: {int(infobox_height * 0.07)}px;'>{arrow.turns}</span>"
-        )
+        # if arrow.motion_type in [PRO, ANTI, STATIC]:
+        #     self.attribute_labels["start_end_label"].setText(
+        #         f"<span style='font-weight: bold; font-style: italic; font-size: {int(infobox_height * 0.07)}px;'>{arrow.start_location.capitalize()} → {arrow.end_location.capitalize()}</span>"
+        #     )
+        # elif arrow.motion_type == "":
+        #     self.attribute_labels["start_end_label"].setText("")
+        self.turns_widget.turns_label.setText(f"{arrow.turns}")
 
-    def update_button_size(self) -> None:
-        self.button_size = self.calculate_button_size()  # Re-implemented button size
-        self.icon_size = QSize(
-            int(self.button_size * 0.6), int(self.button_size * 0.6)
-        )  # Re-implemented icon size
-        for child in self.children():
-            if isinstance(child, QPushButton):
-                child.setFixedSize(self.button_size, self.button_size)
-                child.setIconSize(self.icon_size)
-        for child in self.clock_label.children():
-            if isinstance(child, QLabel):
-                child.setFixedSize(self.button_size, self.button_size)
-                child.setPixmap(child.pixmap().scaled(self.button_size, self.button_size, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
-        self.update()
-        
-    def update_attribute_box_size(self) -> None:
-        self.setFixedHeight(int(self.attribute_panel.graphboard.graph_editor.height() / 2))
-        self.setFixedWidth(int(self.attribute_panel.graphboard.graph_editor.height() / 2))
-        #delete the buttons layouts 
+    def update_attr_box_size(self) -> None:
+        self.setFixedHeight(int(self.attr_panel.graphboard.graph_editor.height() / 2))
+        self.setFixedWidth(int(self.attr_panel.graphboard.graph_editor.height() / 2))
+        # delete the buttons layouts
         for child in self.children():
             if isinstance(child, QFrame):
                 child.deleteLater()
+
+        if self.turns_widget:
+            for child in self.turns_widget.children():
+                if isinstance(child, QFrame):
+                    child.deleteLater()
         self.init_ui()
         self.update()
-        

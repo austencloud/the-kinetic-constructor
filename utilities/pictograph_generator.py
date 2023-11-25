@@ -15,8 +15,6 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.infobox.infobox import InfoBox
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
 
 
 class PictographGenerator:
