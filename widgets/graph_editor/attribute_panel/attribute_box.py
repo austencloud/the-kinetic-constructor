@@ -8,19 +8,11 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QPushButton,
     QSpacerItem,
-    QWidget,
 )
-
-from data.positions_map import positions_map
 from objects.arrow import Arrow
 from settings.string_constants import (
     ANTI,
     BLUE,
-    CLOCK_ICON,
-    CLOCKWISE,
-    CLOCKWISE_ICON,
-    COUNTER_CLOCKWISE,
-    COUNTER_CLOCKWISE_ICON,
     PRO,
     RED,
     STATIC,
@@ -35,7 +27,6 @@ if TYPE_CHECKING:
     from widgets.graph_editor.attribute_panel.attribute_panel import (
         AttributePanel,
     )
-    from objects.ghosts.ghost_arrow import GhostArrow
 from PyQt6.QtWidgets import QSizePolicy
 
 
@@ -48,7 +39,6 @@ class AttributeBox(QFrame):
         self.graphboard = graphboard
         self.color = color
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
-        self.init_ui()
 
     def calculate_button_size(self) -> int:
         return int((self.graphboard.view.height() // 2 // 4) * 1)
@@ -143,7 +133,6 @@ class AttributeBox(QFrame):
         button_column_frame.setFixedSize(self.button_size, self.height())
         button_column_frame.move(x_position, 0)
 
-        # For the left column, add a spacer at the top
         if column == "left":
             top_spacer = QSpacerItem(
                 self.button_size,
@@ -153,11 +142,9 @@ class AttributeBox(QFrame):
             )
             button_column_layout.addItem(top_spacer)
 
-        # For the right column, add the clock label at the top
         if column == "right":
             button_column_layout.addWidget(self.clock_label)
 
-        # Add spacer(s)
         middle_spacer = QSpacerItem(
             self.button_size,
             self.button_size,
@@ -166,7 +153,6 @@ class AttributeBox(QFrame):
         )
         button_column_layout.addItem(middle_spacer)
 
-        # For the left column, add the buttons
         if column == "left":
             for button_name in button_names:
                 button = self.create_button(
@@ -174,7 +160,6 @@ class AttributeBox(QFrame):
                 )
                 button_column_layout.addWidget(button)
 
-        # For the right column, add the increment button at the bottom
         if column == "right" and "increment_turns" in button_names:
             increment_button = self.create_button(
                 ICON_PATHS["increment_turns"], self.increment_turns_callback
@@ -187,14 +172,13 @@ class AttributeBox(QFrame):
     def create_button(self, icon_path: str, callback) -> QPushButton:
         button = QPushButton(self)
         button.setIcon(QIcon(icon_path))
-        button.setIconSize(self.icon_size)  # Use the re-implemented icon size
+        button.setIconSize(self.icon_size)  
         button.setFixedSize(
             self.button_size, self.button_size
-        )  # Use the re-implemented button size
+        ) 
         button.clicked.connect(callback)
         return button
 
-    # Button Callbacks
     def swap_motion_type_callback(self) -> None:
         arrow = self.graphboard.get_arrow_by_color(self.color)
         if arrow:
@@ -220,13 +204,12 @@ class AttributeBox(QFrame):
             self.update_labels(arrow)
     
     def preload_pixmaps(self) -> None:
-        # Preloads pixmaps for the icons
         for icon_name, icon_path in ICON_PATHS.items():
-            if not icon_path:  # Check if the path is empty
+            if not icon_path:  
                 logging.warning(f"No file path specified for icon '{icon_name}'.")
                 continue
             pixmap = QPixmap(icon_path)
-            if pixmap.isNull():  # Check if the QPixmap could not load the image
+            if pixmap.isNull():  
                 logging.error(f"Failed to load icon '{icon_name}' from path '{icon_path}'.")
                 continue
             scaled_pixmap = pixmap.scaled(
@@ -291,7 +274,6 @@ class AttributeBox(QFrame):
             f"<span style='font-size: {int(infobox_height * 0.07)}px;'>{arrow.turns}</span>"
         )
 
-
     def update_button_size(self) -> None:
         self.button_size = self.calculate_button_size()  # Re-implemented button size
         self.icon_size = QSize(
@@ -306,8 +288,6 @@ class AttributeBox(QFrame):
                 child.setFixedSize(self.button_size, self.button_size)
                 child.setPixmap(child.pixmap().scaled(self.button_size, self.button_size, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
         self.update()
-        
-
         
     def update_attribute_box_size(self) -> None:
         self.setFixedHeight(int(self.attribute_panel.graphboard.graph_editor.height() / 2))

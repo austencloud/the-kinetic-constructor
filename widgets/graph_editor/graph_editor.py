@@ -7,7 +7,7 @@ from widgets.graph_editor.arrowbox.arrowbox import ArrowBox
 from widgets.graph_editor.graphboard.graphboard import GraphBoard
 from widgets.graph_editor.propbox.propbox import PropBox
 from widgets.graph_editor.attribute_panel.attribute_panel import AttributePanel
-from widgets.graph_editor.infobox.vtg_panel import VTGPanel
+from widgets.graph_editor.vtg_panel import VTGPanel
 from widgets.graph_editor.graphboard.graphboard import GraphBoard
 
 
@@ -56,7 +56,7 @@ class GraphEditor(QFrame):
         graph_editor_frame_layout.addLayout(objectbox_layout)
         graph_editor_frame_layout.addLayout(graphboard_layout)
         graph_editor_frame_layout.addLayout(attribute_panel_layout)
-        # graph_editor_frame_layout.addLayout(vtg_panel_layout)
+        graph_editor_frame_layout.addLayout(vtg_panel_layout)
         
         self.setLayout(graph_editor_frame_layout)
         self.setMouseTracking(True)
