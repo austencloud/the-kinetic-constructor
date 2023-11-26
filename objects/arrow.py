@@ -90,7 +90,7 @@ class Arrow(GraphicalObject):
             self.set_attributes_from_dict(attributes)
             self.update_appearance()
             self.attributes = attributes
-            
+
         self.set_is_mirrored_from_attributes()
         self.update_mirror()
         self.center = self.boundingRect().center()
@@ -113,14 +113,14 @@ class Arrow(GraphicalObject):
 
     def mousePressEvent(self, event) -> None:
         self.setSelected(True)
-        
+
         self.update_ghost_on_click()
         self.update_staff_on_click()
-        
+
         self.graphboard.arrows.remove(self)
         self.graphboard.update()
         self.graphboard.arrows.append(self)
-        
+
         for item in self.graphboard.items():
             if item != self:
                 item.setSelected(False)
@@ -171,7 +171,7 @@ class Arrow(GraphicalObject):
             self.mirror()
         else:
             self.unmirror()
-        
+
     def update_rotation(self) -> None:
         angle = self.get_rotation_angle()
         self.setRotation(angle)
@@ -183,10 +183,10 @@ class Arrow(GraphicalObject):
 
         self.ghost_arrow.set_arrow_attrs_from_arrow(self)
         self.ghost_arrow.update_appearance()
-        
+
         self.staff.set_staff_attrs_from_arrow(self)
         self.staff.update_appearance()
-        
+
         self.update_appearance()
 
         self.graphboard.arrows.remove(self)
@@ -411,6 +411,12 @@ class Arrow(GraphicalObject):
         self.staff.update(updated_staff_dict)
         self.graphboard.update()
 
+    def is_dim(self, on: bool):
+        if on:
+            self.setOpacity(0.25)  # Change opacity or use another effect to highlight
+        else:
+            self.setOpacity(1.0)  # Reset to normal when not highlighted
+
     def swap_color(self) -> None:
         if self.color == RED:
             new_color = BLUE
@@ -427,8 +433,6 @@ class Arrow(GraphicalObject):
 
     def swap_rot_dir(self) -> None:
         from objects.ghosts.ghost_arrow import GhostArrow
-
-
 
         if self.is_mirrored:
             self.unmirror()
@@ -472,7 +476,7 @@ class Arrow(GraphicalObject):
         transform.scale(-1, 1)
         transform.translate(-self.center_x, -self.center_y)
         self.setTransform(transform)
-        if hasattr(self, 'ghost_arrow'):
+        if hasattr(self, "ghost_arrow"):
             self.ghost_arrow.setTransform(transform)
             self.ghost_arrow.is_mirrored = True
         self.is_mirrored = True
@@ -483,7 +487,7 @@ class Arrow(GraphicalObject):
         transform.scale(1, 1)
         transform.translate(-self.center.x(), -self.center.y())
         self.setTransform(transform)
-        if hasattr(self, 'ghost_arrow'):
+        if hasattr(self, "ghost_arrow"):
             self.ghost_arrow.setTransform(transform)
             self.ghost_arrow.is_mirrored = False
         self.is_mirrored = False

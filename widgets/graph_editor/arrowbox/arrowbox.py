@@ -167,9 +167,19 @@ class ArrowBox(QGraphicsScene):
         # Find all items at the event position which are instances of Arrow
         arrows = [item for item in self.items(scene_pos) if isinstance(item, Arrow)]
 
-        if arrows:
-            # If there are any Arrow items under the cursor, initiate dragging
-            self.target_arrow = arrows[0]  # Assuming you want the first arrow in the list
+        # Determine the closest arrow to the cursor position
+        closest_arrow = None
+        min_distance = float('inf')
+        for arrow in arrows:
+            arrow_center = arrow.sceneBoundingRect().center()
+            distance = (scene_pos - arrow_center).manhattanLength()
+            if distance < min_distance:
+                closest_arrow = arrow
+                min_distance = distance
+
+        # Set the target arrow as the closest arrow
+        if closest_arrow:
+            self.target_arrow = closest_arrow
             if not self.arrowbox_drag:
                 graphboard = self.main_widget.graph_editor.graphboard
                 self.arrowbox_drag = ArrowBoxDrag(self.main_window, graphboard, self)
@@ -187,6 +197,25 @@ class ArrowBox(QGraphicsScene):
             scene_pos = event.scenePos()
             event_pos = self.view.mapFromScene(scene_pos)
             self.arrowbox_drag.handle_mouse_move(event_pos)
+        else:
+            # New code for highlighting
+            cursor_pos = event.scenePos()
+            closest_arrow = None
+            min_distance = float('inf')
+
+            for arrow in self.arrows:
+                arrow_center = arrow.sceneBoundingRect().center()
+                distance = (cursor_pos - arrow_center).manhattanLength()  # Manhattan distance for simplicity
+
+                if distance < min_distance:
+                    closest_arrow = arrow
+                    min_distance = distance
+
+            for arrow in self.arrows:
+                if arrow != closest_arrow:
+                    arrow.is_dim(True)  # Highlight all arrows except the closest one
+                else:
+                    arrow.is_dim(False)  # Do not highlight the closest one
 
     def mouseReleaseEvent(self, event) -> None:
         if self.arrowbox_drag:
