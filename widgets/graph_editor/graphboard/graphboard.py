@@ -48,6 +48,7 @@ if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.graph_editor import GraphEditor
+from PyQt6.QtCore import Qt
 
 
 class GraphBoard(QGraphicsScene):
@@ -60,6 +61,7 @@ class GraphBoard(QGraphicsScene):
 
     def setup_scene(self) -> None:
         self.setSceneRect(0, 0, 750, 900)
+        self.setBackgroundBrush(Qt.GlobalColor.white)
         self.arrows: List[Arrow] = []
         self.staffs: List[Staff] = []
         self.current_letter: str = None

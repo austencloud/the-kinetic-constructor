@@ -1,28 +1,10 @@
 from typing import TYPE_CHECKING
 
-from PyQt6.QtCore import QSize
-from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtWidgets import (
-    QGridLayout,
-    QPushButton,
-    QScrollArea,
-    QSizePolicy,
-    QVBoxLayout,
-    QWidget,
-)
-
-from data.letter_engine_data import letter_types
-from settings.string_constants import LETTER_SVG_DIR
-
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QColor, QFont, QPainter
-from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
-from .option_picker_buttons_frame import LetterButtons
-from .option_picker_scroll_area import OptionPickerScrollArea
+from .letter_buttons import LetterButtons
+from .scroll_area import ScrollArea
 
 
 class OptionPicker(QFrame):
@@ -57,7 +39,7 @@ class OptionPicker(QFrame):
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
         self.setFixedSize(self.width(), self.height())
-        self.scroll_area = OptionPickerScrollArea(self)
+        self.scroll_area = ScrollArea(self)
         self.button_frame = LetterButtons(self.main_widget, self)
 
         self.main_layout.addWidget(self.scroll_area)
@@ -68,8 +50,7 @@ class OptionPicker(QFrame):
     ### RESIZE EVENT HANDLERS ###
 
     def update_size(self) -> None:
-        """
-        Update the size of the OptionPicker widget.
+        """Update the size of the OptionPicker widget.
 
         This method is called when the size of the main widget changes.
         It updates the size of the OptionPicker widget based on the new size of the main widget.

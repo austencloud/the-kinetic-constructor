@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from widgets.option_picker.option_picker import OptionPicker
 
 
-class OptionPickerScrollArea(QScrollArea):
+class ScrollArea(QScrollArea):
     """
     A custom scroll area widget for the option picker.
     """
@@ -31,7 +31,7 @@ class OptionPickerScrollArea(QScrollArea):
         self.main_widget = option_picker.main_widget
         self.option_picker = option_picker
         self.scrollbar_width = 0  # Class variable to store the width of the scrollbar
-
+        self.spacing = 16  # Class variable to store the spacing between pictographs
         self.setContentsMargins(0, 0, 0, 0)
         self.setFrameStyle(QFrame.Shape.NoFrame)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
@@ -39,7 +39,7 @@ class OptionPickerScrollArea(QScrollArea):
         self.grid_widget = QWidget()
         self.option_picker_grid_layout = QGridLayout(self.grid_widget)
         self.option_picker_grid_layout.setContentsMargins(0, 0, 0, 0)
-        self.option_picker_grid_layout.setSpacing(0)
+        self.option_picker_grid_layout.setSpacing(self.spacing)
         self.setWidget(
             self.grid_widget
         )  # Set the grid widget as the widget for the scroll area
@@ -62,20 +62,13 @@ class OptionPickerScrollArea(QScrollArea):
         """
         Populate the scroll area with pictograph buttons.
         """
-        self.pictograph_width = ((self.option_picker.width() * 5 / 6) / 4) - (self.verticalScrollBar().width()/4)
-        self.pictograph_height = self.pictograph_width * (90 / 75)
+
         number_of_pictographs = 50
         MAX_ITEMS_PER_ROW = 4
-
         for i in range(number_of_pictographs):
             pictograph_button = QPushButton(f"Picto {i+1}")
             pictograph_button.setIcon(QIcon(QPixmap("path/to/your/pictograph/image")))
-            pictograph_button.setIconSize(
-                QSize(int(self.pictograph_width), int(self.pictograph_height))
-            )
-            pictograph_button.setFixedSize(
-                int(self.pictograph_width), int(self.pictograph_height)
-            )
+
             self.option_picker_grid_layout.addWidget(
                 pictograph_button, i // MAX_ITEMS_PER_ROW, i % MAX_ITEMS_PER_ROW
             )
@@ -92,12 +85,12 @@ class OptionPickerScrollArea(QScrollArea):
         """
         self.setFixedWidth(int(self.option_picker.width() * 4 / 5))
         self.setFixedHeight(int(self.option_picker.height()))
-        self.pictograph_width = (self.option_picker.width() * 4 / 5) / 4 - (self.verticalScrollBar().width()/4)
+        self.pictograph_width = ((self.option_picker.width() * 5 / 6) / 4) - (
+            self.verticalScrollBar().width() / 4
+        )  - (self.spacing*2)
         self.pictograph_height = self.pictograph_width * (90 / 75)
         for button in self.grid_widget.findChildren(QPushButton):
-            button.setFixedSize(
-                int(self.pictograph_width), int(self.pictograph_height)
-            )
+            button.setFixedSize(int(self.pictograph_width), int(self.pictograph_height))
             button.setIconSize(
                 QSize(int(self.pictograph_width), int(self.pictograph_height))
             )

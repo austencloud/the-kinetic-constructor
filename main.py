@@ -48,8 +48,12 @@ class MainWindow(QMainWindow):
 
         # Positioning the window
         self.move(
-            screen_geometry.x() + (screen_geometry.width() - self.main_window_width) // 2 - 50,
-            screen_geometry.y() + (screen_geometry.height() - self.main_window_height) // 2 - 50,
+            screen_geometry.x()
+            + (screen_geometry.width() - self.main_window_width) // 2
+            - 50,
+            screen_geometry.y()
+            + (screen_geometry.height() - self.main_window_height) // 2
+            - 50,
         )
 
     def init_main_window(self) -> None:
@@ -93,6 +97,8 @@ def main() -> None:
 
     os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
     app = QApplication(sys.argv)
+
+
     main_window = MainWindow(profiler)
     main_window.setFocus()
     exit_code = app.exec()

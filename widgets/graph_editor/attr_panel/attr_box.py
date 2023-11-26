@@ -68,14 +68,7 @@ class AttrBox(QFrame):
             self.button_size, self.button_size
         )
         self.clock_label = self.create_clock_label()
-        # self.add_labels_to_layout()
-
-        # self.left_button_column: QFrame = self.setup_button_column(
-        #     0, ["swap_motion_type", "swap_start_end"], column="left"
-        # )
-        # self.right_button_column: QFrame = self.setup_button_column(self.width() - self.button_size, [], column="right")
-        
-        # self.apply_button_styles()
+        self.apply_button_styles()
         
         self.preload_pixmaps()
         
@@ -101,10 +94,6 @@ class AttrBox(QFrame):
             self.turns_widget.subtract_turns_button.setStyleSheet(button_style)
             self.turns_widget.add_turns_button.setStyleSheet(button_style)
         
-        for button_column in [self.left_button_column, self.right_button_column]:
-            if button_column:
-                for child in button_column.findChildren(QPushButton):
-                    child.setStyleSheet(button_style)
 
     def setup_box(self) -> None:
         self.setObjectName("AttributeBox")
@@ -316,4 +305,5 @@ class AttrBox(QFrame):
                 if isinstance(child, QFrame):
                     child.deleteLater()
         self.init_ui()
+        self.header_widget.setup_header_widget()
         self.update()

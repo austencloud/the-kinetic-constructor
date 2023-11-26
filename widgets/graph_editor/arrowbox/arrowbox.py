@@ -43,6 +43,7 @@ class ArrowBox(QGraphicsScene):
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.setSceneRect(0, 0, 750, 750)
+        self.setBackgroundBrush(Qt.GlobalColor.white)
         self.setup_view()
         self.populate_arrows()
         self.grid = Grid("resources/images/grid/grid_simple.svg")

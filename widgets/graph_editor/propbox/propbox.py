@@ -32,6 +32,7 @@ class PropBox(QGraphicsScene):
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.graphboard = graphboard
+        self.setBackgroundBrush(Qt.GlobalColor.white)
         self.view = PropBoxView(self)
         self.grid = Grid("resources/images/grid/grid_simple.svg")
         self.setSceneRect(0, 0, int(750), int(750))

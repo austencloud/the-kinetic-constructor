@@ -30,8 +30,9 @@ class AttrPanel(QFrame):
         self.setLayout(QVBoxLayout(self))
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().setSpacing(0)
-        self.layout().addWidget(self.blue_attr_box)
         self.layout().addWidget(self.red_attr_box)
+        self.layout().addWidget(self.blue_attr_box)
+
 
     def update_attr_panel(self) -> None:
         blue_arrow = self.graphboard.get_arrow_by_color(BLUE)
