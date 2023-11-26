@@ -28,7 +28,7 @@ from settings.string_constants import (
     ANTI,
     STATIC,
     COLOR_MAP,
-    IN
+    IN,
 )
 import logging
 import re
@@ -85,7 +85,7 @@ class Prop(GraphicalObject):
         self.location = attributes[LOCATION]
         self.layer = attributes[LAYER]
         self.orientation = attributes[ORIENTATION]
-        
+
         self.axis = self.get_axis(self.location)
         self.center = self.boundingRect().center()
         self.update_rotation()
@@ -149,14 +149,29 @@ class Prop(GraphicalObject):
             self.previous_location = new_location
 
     def set_drag_pos(self, new_pos: QPointF) -> None:
-        if self.axis == HORIZONTAL:
+        staff_length = self.boundingRect().width()
+        staff_width = self.boundingRect().height()
+
+        self.setTransformOriginPoint(0, 0)
+
+        if self.axis == HORIZONTAL and self.location == WEST:
             self.setPos(new_pos)
-        elif self.axis == VERTICAL:
+        elif self.axis == HORIZONTAL and self.location == EAST:
             self.setPos(
                 new_pos
                 + QPointF(
-                    -STAFF_LENGTH / 2 + STAFF_WIDTH / 2,
-                    STAFF_WIDTH / 2 - STAFF_LENGTH / 2,
+                    staff_length,
+                    staff_width,
+                )
+            )
+        elif self.axis == VERTICAL and self.location == NORTH:
+            self.setPos(new_pos + QPointF(staff_width, 0))
+        elif self.axis == VERTICAL and self.location == SOUTH:
+            self.setPos(
+                new_pos
+                + QPointF(
+                    0,
+                    staff_length,
                 )
             )
 
@@ -262,7 +277,7 @@ class Prop(GraphicalObject):
                     WEST: 0,
                     EAST: 180,
                 }.get(self.location, {})
-                
+
         elif self.layer == 1 and self.orientation == OUT:
             if self.location == NORTH or self.location == SOUTH:
                 return {
@@ -274,7 +289,7 @@ class Prop(GraphicalObject):
                     WEST: 180,
                     EAST: 0,
                 }.get(self.location, {})
-                
+
         elif self.layer == 2 and self.orientation == CLOCKWISE:
             if self.location == NORTH or self.location == SOUTH:
                 return {
@@ -286,7 +301,7 @@ class Prop(GraphicalObject):
                     WEST: 270,
                     EAST: 90,
                 }.get(self.location, {})
-                
+
         elif self.layer == 2 and self.orientation == COUNTER_CLOCKWISE:
             if self.location == NORTH or self.location == SOUTH:
                 return {
@@ -298,7 +313,6 @@ class Prop(GraphicalObject):
                     WEST: 90,
                     EAST: 270,
                 }.get(self.location, {})
-
 
     def update_rotation(self) -> None:
         rotation_angle = self.get_rotation_angle()

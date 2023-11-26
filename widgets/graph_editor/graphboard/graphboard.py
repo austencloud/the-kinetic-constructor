@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import QGraphicsScene, QGraphicsSceneMouseEvent
 
 from data.letter_engine_data import letter_types
 from objects.arrow import Arrow, BlankArrow
+from objects.grid import Grid
 from objects.props.staff import Staff
 from settings.string_constants import (
     BLUE,
@@ -116,7 +117,11 @@ class GraphBoard(QGraphicsScene):
         elif isinstance(clicked_item, Arrow):
             self.dragged_arrow = clicked_item
             self.dragged_arrow.mousePressEvent(event)
-        else:
+        elif not clicked_item or isinstance(clicked_item, Grid):
+            for arrow in self.arrows:
+                arrow.setSelected(False)
+            for staff in self.staffs:
+                staff.setSelected(False)
             self.dragged_staff = None
             self.dragged_arrow = None
 

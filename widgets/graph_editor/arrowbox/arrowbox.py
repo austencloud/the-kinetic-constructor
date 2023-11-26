@@ -219,6 +219,27 @@ class ArrowBox(QGraphicsScene):
             self.arrowbox_drag.handle_mouse_release()
             self.target_arrow = None  # Reset
 
+        # After releasing, highlight the arrow under the cursor
+        cursor_pos = event.scenePos()
+        closest_arrow = None
+        min_distance = float("inf")
+
+        for arrow in self.arrows:
+            arrow_center = arrow.sceneBoundingRect().center()
+            distance = (cursor_pos - arrow_center).manhattanLength()
+
+            if distance < min_distance:
+                closest_arrow = arrow
+                min_distance = distance
+
+        # Update the dim state of each arrow
+        for arrow in self.arrows:
+            if arrow != closest_arrow:
+                arrow.is_dim(True)
+            else:
+                arrow.is_dim(False)
+
+
     def dim_all_arrows(self) -> None:
         for arrow in self.arrows:
             arrow.is_dim(True)
