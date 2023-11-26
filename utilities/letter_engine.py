@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
 
 from utilities.TypeChecking.TypeChecking import (
-    ArrowAttributesDicts,
+    MotionAttributesDicts,
     Color,
     GammaEndingLetters,
     LetterGroupsByMotionType,
@@ -73,7 +73,7 @@ class LetterEngine:
             end_pos = specific_position.get("end_position")
             preprocessed_key = f"{start_pos}_{end_pos}"
             preprocessed_group: Dict[
-                Tuple[Letters, ArrowAttributesDicts]
+                Tuple[Letters, MotionAttributesDicts]
             ] = self.preprocessed_start_end_combinations.get(preprocessed_key, [])
             preprocessed_group = {
                 letter: combinations for letter, combinations in preprocessed_group

@@ -35,7 +35,7 @@ if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from objects.arrow import Arrow
 
-from utilities.TypeChecking.TypeChecking import ArrowAttributesDicts
+from utilities.TypeChecking.TypeChecking import MotionAttributesDicts
 
 
 class ArrowBox(QGraphicsScene):
@@ -61,7 +61,7 @@ class ArrowBox(QGraphicsScene):
 
     def populate_arrows(self) -> None:
         self.arrows: List[Arrow] = []
-        initial_arrow_attribute_collection: List[ArrowAttributesDicts] = [
+        initial_arrow_attribute_collection: List[MotionAttributesDicts] = [
             {
                 COLOR: RED,
                 MOTION_TYPE: PRO,
@@ -137,7 +137,7 @@ class ArrowBox(QGraphicsScene):
         ]
 
         for dict in initial_arrow_attribute_collection:
-            arrow = Arrow(self, dict)
+            arrow = Arrow(self, dict, None)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
             self.addItem(arrow)

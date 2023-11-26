@@ -36,6 +36,11 @@ START_LOCATION = "start_location"
 END_LOCATION = "end_location"
 TURNS = "turns"
 
+START_ORIENTATION = "start_orientation"
+END_ORIENTATION = "end_orientation"
+
+START_LAYER = "start_layer"
+END_LAYER = "end_layer"
 
 CLOCKWISE = "cw" or "CW"
 COUNTER_CLOCKWISE = "ccw" or "CCW"

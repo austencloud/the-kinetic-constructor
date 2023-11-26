@@ -1,6 +1,6 @@
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
-from PyQt6.QtGui import QTransform, QCursor
+from PyQt6.QtGui import QTransform
 from settings.string_constants import (
     MOTION_TYPE,
     TURNS,
@@ -32,14 +32,13 @@ from settings.string_constants import (
 from data.start_end_location_mapping import start_end_location_mapping
 from objects.graphical_object import GraphicalObject
 from objects.props.staff import Staff
+from objects.motion import Motion
 
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
     MotionType,
-    Color,
     Quadrant,
     RotationDirection,
-    Location,
     Turns,
     Direction,
     StartEndLocationTuple,
@@ -55,33 +54,27 @@ if TYPE_CHECKING:
 
 
 class Arrow(GraphicalObject):
-    def __init__(
-        self, graphboard: "GraphBoard", attributes: "ArrowAttributesDicts"
-    ) -> None:
+    def __init__(self, graphboard, attributes, motion=None) -> None:
         svg_file = self.get_svg_file(attributes[MOTION_TYPE], attributes[TURNS])
         super().__init__(svg_file, graphboard)
         self.setAcceptHoverEvents(True)
-        self._setup_attributes(graphboard, attributes)
+        self._setup_attributes(graphboard, attributes, motion)
 
     ### SETUP ###
 
     def _setup_attributes(
-        self, graphboard: "GraphBoard", attributes: ArrowAttributesDicts
+        self,
+        graphboard: "GraphBoard",
+        attributes: "ArrowAttributesDicts",
+        motion: "Motion",
     ) -> None:
+        
         self.graphboard = graphboard
 
         self.drag_offset = QPointF(0, 0)
         self.staff: Staff = None
 
-        self.is_mirrored: bool = False
-
-        self.color: Color = None
-        self.motion_type: MotionType = None
-        self.rotation_direction: RotationDirection = None
-        self.quadrant: Quadrant = None
-        self.start_location: Location = None
-        self.end_location: Location = None
-        self.turns: Turns = None
+        self.is_svg_mirrored: bool = False
 
         self.center_x = self.boundingRect().width() / 2
         self.center_y = self.boundingRect().height() / 2
@@ -91,23 +84,23 @@ class Arrow(GraphicalObject):
             self.update_appearance()
             self.attributes = attributes
 
-        self.set_is_mirrored_from_attributes()
+        self.set_is_svg_mirrored_from_attributes()
         self.update_mirror()
         self.center = self.boundingRect().center()
 
-    def set_is_mirrored_from_attributes(self) -> None:
+    def set_is_svg_mirrored_from_attributes(self) -> None:
         if self.motion_type == PRO:
             rotation_direction = self.rotation_direction
             if rotation_direction == CLOCKWISE:
-                self.is_mirrored = False
+                self.is_svg_mirrored = False
             elif rotation_direction == COUNTER_CLOCKWISE:
-                self.is_mirrored = True
+                self.is_svg_mirrored = True
         elif self.motion_type == ANTI:
             rotation_direction = self.rotation_direction
             if rotation_direction == CLOCKWISE:
-                self.is_mirrored = True
+                self.is_svg_mirrored = True
             elif rotation_direction == COUNTER_CLOCKWISE:
-                self.is_mirrored = False
+                self.is_svg_mirrored = False
 
     ### MOUSE EVENTS ###
 
@@ -134,7 +127,7 @@ class Arrow(GraphicalObject):
         self.ghost_arrow: "GhostArrow" = self.graphboard.ghost_arrows[self.color]
         self.ghost_arrow.staff = self.staff
         self.ghost_arrow.set_attributes_from_dict(self.attributes)
-        if self.ghost_arrow.is_mirrored != self.is_mirrored:
+        if self.ghost_arrow.is_svg_mirrored != self.is_svg_mirrored:
             self.ghost_arrow.swap_rot_dir()
         if self.ghost_arrow.motion_type != self.motion_type:
             self.ghost_arrow.swap_motion_type()
@@ -166,7 +159,7 @@ class Arrow(GraphicalObject):
     ### UPDATERS ###
 
     def update_mirror(self) -> None:
-        if self.is_mirrored:
+        if self.is_svg_mirrored:
             self.mirror()
         else:
             self.unmirror()
@@ -441,9 +434,9 @@ class Arrow(GraphicalObject):
     def swap_rot_dir(self) -> None:
         from objects.ghosts.ghost_arrow import GhostArrow
 
-        if self.is_mirrored:
+        if self.is_svg_mirrored:
             self.unmirror()
-        elif not self.is_mirrored:
+        elif not self.is_svg_mirrored:
             self.mirror()
 
         if self.rotation_direction == COUNTER_CLOCKWISE:
@@ -473,7 +466,7 @@ class Arrow(GraphicalObject):
         self.staff.update_appearance()
 
         if not isinstance(self, GhostArrow) and self.ghost_arrow:
-            self.ghost_arrow.is_mirrored = self.is_mirrored
+            self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
             self.ghost_arrow.update(self.attributes)
         self.graphboard.update()
 
@@ -485,8 +478,8 @@ class Arrow(GraphicalObject):
         self.setTransform(transform)
         if hasattr(self, "ghost_arrow"):
             self.ghost_arrow.setTransform(transform)
-            self.ghost_arrow.is_mirrored = True
-        self.is_mirrored = True
+            self.ghost_arrow.is_svg_mirrored = True
+        self.is_svg_mirrored = True
 
     def unmirror(self) -> None:
         transform = QTransform()
@@ -496,8 +489,8 @@ class Arrow(GraphicalObject):
         self.setTransform(transform)
         if hasattr(self, "ghost_arrow"):
             self.ghost_arrow.setTransform(transform)
-            self.ghost_arrow.is_mirrored = False
-        self.is_mirrored = False
+            self.ghost_arrow.is_svg_mirrored = False
+        self.is_svg_mirrored = False
 
     def swap_motion_type(self) -> None:
         if self.motion_type == ANTI:

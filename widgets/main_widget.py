@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
 
-from PyQt6.QtCore import QEvent, QSize
+from PyQt6.QtCore import QEvent
 from PyQt6.QtGui import QResizeEvent
-from PyQt6.QtWidgets import QGraphicsView, QLabel, QPushButton, QWidget
+from PyQt6.QtWidgets import QWidget
 
 from utilities.TypeChecking.TypeChecking import LetterDictionary
 from utilities.export_handler import ExportHandler

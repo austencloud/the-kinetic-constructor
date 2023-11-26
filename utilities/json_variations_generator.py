@@ -13,10 +13,10 @@ from settings.string_constants import (
     WEST,
 )
 from utilities.TypeChecking.TypeChecking import (
-    ArrowAttributesDicts,
     Location,
     Quadrant,
     RotationDirection,
+    MotionAttributesDicts,
 )
 
 
@@ -37,7 +37,7 @@ class JsonVariationsGenerator:
         arrow_combination: Dict[Location, Location],
         position_mapping: Dict[Location, Location],
         rotation_mapping: Dict[RotationDirection, RotationDirection],
-    ) -> List[ArrowAttributesDicts]:
+    ) -> List[MotionAttributesDicts]:
         return [
             {
                 **arrow,
@@ -53,7 +53,7 @@ class JsonVariationsGenerator:
         ]
 
     def generate_pictograph_variants(
-        self, arrow_combination: List[ArrowAttributesDicts]
+        self, arrow_combination: List[MotionAttributesDicts]
     ) -> List[Dict[str, Any]]:
         rotation_mapping: Dict[Location, Location] = {
             NORTH: EAST,
@@ -85,7 +85,7 @@ class JsonVariationsGenerator:
             )
             rotated_variants.append(arrow_combination)
 
-        reflected_variants: List[List[ArrowAttributesDicts]] = []
+        reflected_variants: List[List[MotionAttributesDicts]] = []
         for variant in rotated_variants:
             vertical_reflected_variant = self.apply_mapping(
                 variant, vertical_reflection_mapping, rotation_reflection_mapping

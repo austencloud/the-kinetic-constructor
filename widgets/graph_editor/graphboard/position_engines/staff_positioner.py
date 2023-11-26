@@ -24,7 +24,7 @@ from settings.string_constants import (
 from typing import TYPE_CHECKING, Dict, List
 from objects.props.staff import Staff
 from utilities.TypeChecking.TypeChecking import (
-    ArrowAttributesDicts,
+    MotionAttributesDicts,
     LetterDictionary,
     OptimalLocationEntries,
     OptimalLocationsDicts,
@@ -37,9 +37,9 @@ if TYPE_CHECKING:
 
 
 class StaffPositioner:
-    current_state: List[ArrowAttributesDicts]
+    current_state: List[MotionAttributesDicts]
     matching_letters: List[LetterDictionary]
-    arrow_dict: List[ArrowAttributesDicts]
+    arrow_dict: List[MotionAttributesDicts]
     letters: LetterDictionary
 
     def __init__(self, graphboard: "GraphBoard") -> None:
@@ -85,7 +85,7 @@ class StaffPositioner:
             new_position = self.calculate_new_position(staff.pos(), direction)
             staff.setPos(new_position)
 
-        arrows_grouped_by_start_loc: Dict[Location, List[ArrowAttributesDicts]] = {}
+        arrows_grouped_by_start_loc: Dict[Location, List[MotionAttributesDicts]] = {}
         for arrow in board_state:
             arrows_grouped_by_start_loc.setdefault(arrow[START_LOCATION], []).append(
                 arrow
@@ -129,7 +129,7 @@ class StaffPositioner:
     ### STATIC BETA ### β
 
     def reposition_static_beta(
-        self, move_staff: callable, static_arrows: List[ArrowAttributesDicts]
+        self, move_staff: callable, static_arrows: List[MotionAttributesDicts]
     ) -> None:
         for arrow in static_arrows:
             staff = next(
@@ -378,7 +378,7 @@ class StaffPositioner:
         return distance_from_center
 
     def get_optimal_arrow_location(
-        self, arrow_attributes: ArrowAttributesDicts
+        self, arrow_attributes: MotionAttributesDicts
     ) -> Dict[str, float] | None:
         current_state = self.graphboard.get_state()
         current_letter = self.graphboard.current_letter

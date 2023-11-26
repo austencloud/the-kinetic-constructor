@@ -7,9 +7,10 @@ if TYPE_CHECKING:
     from utilities.TypeChecking.TypeChecking import ArrowAttributesDicts
     from objects.arrow import Arrow
 
+
 class GhostArrow(Arrow):
     """
-    Represents a ghost arrow object, displaying the position that an arrow will be while dragging if the user were to drop it. 
+    Represents a ghost arrow object, displaying the position that an arrow will be while dragging if the user were to drop it.
 
     Inherits from the Arrow class.
 
@@ -31,17 +32,17 @@ class GhostArrow(Arrow):
 
         Args:
             graphboard (GraphBoard): The graphboard object.
-            attributes (ArrowAttributesDicts): The attributes of the arrow.
+            attributes (MotionAttributesDicts): The attributes of the arrow.
 
         Returns:
             None
         """
-        super().__init__(graphboard, attributes)
+        super().__init__(graphboard, attributes, None)
         self.setOpacity(0.2)
         self.graphboard, self.color, self.target_arrow = (
             graphboard,
             attributes[COLOR],
-            None
+            None,
         )
         self.setup_svg_renderer(self.svg_file)
 
@@ -50,7 +51,7 @@ class GhostArrow(Arrow):
         Update the GhostArrow object with new attributes.
 
         Args:
-            attributes (ArrowAttributesDicts): The updated attributes of the arrow.
+            attributes (MotionAttributesDicts): The updated attributes of the arrow.
 
         Returns:
             None

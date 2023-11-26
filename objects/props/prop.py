@@ -1,307 +1,375 @@
-from PyQt6.QtCore import QPointF, Qt
-from PyQt6.QtGui import QTransform, QIcon
-from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsSceneMouseEvent, QPushButton
-
-from objects.letter_item import LetterItem
-from data.letter_engine_data import letter_types
-from objects.arrow import Arrow, BlankArrow
-from objects.grid import Grid
-from objects.props.staff import Staff
+from objects.graphical_object import GraphicalObject
+from PyQt6.QtCore import Qt, QPointF
 from settings.string_constants import (
-    BLUE,
-    CLOCKWISE,
+    ORIENTATION,
+    OUT,
     COLOR,
+    LOCATION,
+    LAYER,
+    NORTH,
+    SOUTH,
+    WEST,
+    EAST,
+    HORIZONTAL,
+    VERTICAL,
+    CLOCKWISE,
     COUNTER_CLOCKWISE,
-    END_LOCATION,
-    LETTER_SVG_DIR,
-    MOTION_TYPE,
     NORTHEAST,
     NORTHWEST,
-    QUADRANT,
-    RED,
-    ROTATION_DIRECTION,
     SOUTHEAST,
     SOUTHWEST,
-    START_LOCATION,
+    PRO,
+    ANTI,
     STATIC,
-    TURNS,
+    COLOR_MAP,
+    IN,
 )
-from utilities.letter_engine import LetterEngine
+import re
+
+from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from utilities.TypeChecking.TypeChecking import (
-    TYPE_CHECKING,
-    ArrowAttributesDicts,
-    List,
-    Optional,
-    Tuple,
+    RotationAngle,
+    PropAttributesDicts,
+    Location,
     Quadrant,
-)
-from widgets.graph_editor.graphboard.graphboard_view import GraphBoardView
-from widgets.graph_editor.graphboard.graphboard_init import GraphBoardInit
-from widgets.graph_editor.graphboard.graphboard_menu_handler import (
-    GraphBoardMenuHandler,
-)
-from widgets.graph_editor.graphboard.position_engines.arrow_positioner import (
-    ArrowPositioner,
-)
-from widgets.graph_editor.graphboard.position_engines.staff_positioner import (
-    StaffPositioner,
+    RotationDirection,
+    MotionType,
+    Axis,
+    Color,
+    TYPE_CHECKING,
+    Dict,
+    Tuple,
+    ColorHex,
 )
 
 if TYPE_CHECKING:
-    from utilities.pictograph_generator import PictographGenerator
+    from objects.arrow import Arrow
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.graph_editor import GraphEditor
+    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from objects.motion import Motion
 
+class Prop(GraphicalObject):
+    def __init__(
+        self,
+        main_widget,
+        graphboard,
+        svg_file: str,
+        attributes: Dict,
+        motion=None,
+    ) -> None:
+        super().__init__(svg_file, graphboard)
+        self._setup_attributes(main_widget, graphboard, attributes)
+        self.set_staff_transform_origin_to_center()
+        self.update_appearance()
 
-class GraphBoard(QGraphicsScene):
-    def __init__(self, main_widget: "MainWidget", graph_editor: "GraphEditor") -> None:
-        super().__init__()
-        self.main_widget = main_widget
-        self.graph_editor = graph_editor
-        self.setup_scene()
-        self.setup_components(main_widget)
+    def _setup_attributes(
+        self,
+        main_widget: "MainWidget",
+        graphboard: "GraphBoard",
+        attributes: PropAttributesDicts,
+        motion: "Motion"=None,
+    ) -> None:
+        self.graphboard = graphboard
+        if motion:
+            self.motion = motion
+        self.drag_offset = QPointF(0, 0)
+        self.previous_location = None
+        self.arrow: Arrow = None
+        self.ghost_prop: Prop = None
 
-    def setup_scene(self) -> None:
-        self.setSceneRect(0, 0, 750, 900)
-        self.setBackgroundBrush(Qt.GlobalColor.white)
-        self.arrows: List[Arrow] = []
-        self.staffs: List[Staff] = []
-        self.current_letter: str = None
+        self.color = attributes[COLOR]
+        self.location = attributes[LOCATION]
+        self.layer = attributes[LAYER]
+        self.orientation = attributes[ORIENTATION]
 
-    def setup_components(self, main_widget: "MainWidget") -> None:
-        self.letters = main_widget.letters
-        self.generator: PictographGenerator = None
+        self.axis = self.get_axis(self.location)
+        self.center = self.boundingRect().center()
+        self.update_rotation()
 
-        self.dragged_arrow: Arrow = None
-        self.dragged_staff: Staff = None
-        self.initializer = GraphBoardInit(self)
+        if attributes:
+            self.update(attributes)
 
-        self.ghost_arrows = self.initializer.init_ghost_arrows()
-        self.ghost_staffs = self.initializer.init_ghost_staffs()
-        self.grid = self.initializer.init_grid()
-        self.view: GraphBoardView = self.initializer.init_view()
-        self.staff_set = self.initializer.init_staff_set()
-        self.letter_item = self.initializer.init_letter_item()
-        self.quadrants = self.initializer.init_quadrants(self.grid)
-
-
-
-        # set the icons to 80% of the button size
-
-        self.setup_managers(main_widget)
-
-    def set_letter_renderer(self, letter: str) -> None:
-        letter_type = self.get_current_letter_type()
-        svg_path = f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
-        renderer = QSvgRenderer(svg_path)
-        if renderer.isValid():
-            self.letter_item.setSharedRenderer(renderer)
-
-    def setup_managers(self, main_widget: "MainWidget") -> None:
-        self.graphboard_menu_handler = GraphBoardMenuHandler(main_widget, self)
-        self.arrow_positioner = ArrowPositioner(self)
-        self.staff_positioner = StaffPositioner(self)
-        self.letter_engine = LetterEngine(self)
-
-    ### EVENTS ###
-
-    def contextMenuEvent(self, event: QGraphicsSceneMouseEvent) -> None:
-        scene_pos = self.view.mapToScene(event.pos().toPoint())
-        items_at_pos = self.items(scene_pos)
-
-        clicked_item = None
-        for item in items_at_pos:
-            if isinstance(item, Arrow) or isinstance(item, Staff):
-                clicked_item = item
-                break
-
-        if not clicked_item and items_at_pos:
-            clicked_item = items_at_pos[0]
-
-        event_pos = event.screenPos()
-        self.graphboard_menu_handler.create_master_menu(event_pos, clicked_item)
+    ### MOUSE EVENTS ###
 
     def mousePressEvent(self, event) -> None:
-        clicked_item = self.itemAt(event.scenePos(), QTransform())
-        if isinstance(clicked_item, Staff):
-            self.dragged_staff = clicked_item
-            self.dragged_staff.mousePressEvent(event)
-        elif isinstance(clicked_item, Arrow):
-            self.dragged_arrow = clicked_item
-            self.dragged_arrow.mousePressEvent(event)
-        elif isinstance(clicked_item, LetterItem):
-            clicked_item.setSelected(False)
-            for arrow in self.arrows:
-                arrow.setSelected(False)
-            for staff in self.staffs:
-                staff.setSelected(False)
-            self.dragged_staff = None
-            self.dragged_arrow = None
-        elif not clicked_item or isinstance(clicked_item, Grid):
-            for arrow in self.arrows:
-                arrow.setSelected(False)
-            for staff in self.staffs:
-                staff.setSelected(False)
-            self.dragged_staff = None
-            self.dragged_arrow = None
+        self.setSelected(True)
+        if isinstance(self.scene(), self.graphboard.__class__):
+            if not self.ghost_prop:
+                self.ghost_prop = self.graphboard.ghost_staffs[self.color]
+            self.ghost_prop.color = self.color
+            self.ghost_prop.location = self.location
+            self.ghost_prop.layer = self.layer
+            self.ghost_prop.update_appearance()
+            self.graphboard.addItem(self.ghost_prop)
+            self.ghost_prop.arrow = self.arrow
+            self.graphboard.staffs.append(self.ghost_prop)
+            self.graphboard.staffs.remove(self)
+            self.graphboard.update()
+            self.graphboard.staffs.append(self)
+            for item in self.graphboard.items():
+                if item != self:
+                    item.setSelected(False)
+
+            self.previous_location = self.location
 
     def mouseMoveEvent(self, event) -> None:
-        if self.dragged_staff:
-            self.dragged_staff.mouseMoveEvent(event)
-        elif self.dragged_arrow:
-            self.dragged_arrow.mouseMoveEvent(event)
+        if isinstance(self.scene(), self.graphboard.__class__):
+            if event.buttons() == Qt.MouseButton.LeftButton:
+                new_pos = event.scenePos() - self.get_staff_center()
+                self.set_drag_pos(new_pos)
+                self.update_location(event.scenePos())
+
+    def update_location(self, new_pos: QPointF) -> None:
+        new_location = self.get_closest_location(new_pos)
+
+        if new_location != self.previous_location:
+            self.location = new_location
+            self.axis = self.get_axis(self.location)
+            self.update_appearance()
+            self.update_arrow_quadrant(new_location)
+
+            self.ghost_prop.color = self.color
+            self.ghost_prop.location = self.location
+            self.ghost_prop.layer = self.layer
+            self.ghost_prop.update_appearance()
+
+            self.graphboard.staffs.remove(self)
+            if self.arrow.motion_type == STATIC:
+                self.arrow.start_location = new_location
+                self.arrow.end_location = new_location
+
+            self.graphboard.update()
+            self.graphboard.staffs.append(self)
+            new_pos = new_pos - self.get_staff_center()
+            self.set_drag_pos(new_pos)
+            self.previous_location = new_location
+
+    def set_drag_pos(self, new_pos: QPointF) -> None:
+        staff_length = self.boundingRect().width()
+        staff_width = self.boundingRect().height()
+
+        self.setTransformOriginPoint(0, 0)
+
+        if self.axis == HORIZONTAL and self.location == WEST:
+            self.setPos(new_pos)
+        elif self.axis == HORIZONTAL and self.location == EAST:
+            self.setPos(
+                new_pos
+                + QPointF(
+                    staff_length,
+                    staff_width,
+                )
+            )
+        elif self.axis == VERTICAL and self.location == NORTH:
+            self.setPos(new_pos + QPointF(staff_width, 0))
+        elif self.axis == VERTICAL and self.location == SOUTH:
+            self.setPos(
+                new_pos
+                + QPointF(
+                    0,
+                    staff_length,
+                )
+            )
+
+    def update_arrow_quadrant(self, new_location: Location) -> None:
+        quadrant_mapping: Dict[
+            Tuple(Quadrant, RotationDirection, MotionType), Dict[Location, Quadrant]
+        ] = {
+            ### ISO ###
+            (NORTHEAST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
+            (NORTHWEST, CLOCKWISE, PRO): {EAST: NORTHEAST, WEST: SOUTHWEST},
+            (SOUTHWEST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
+            (SOUTHEAST, CLOCKWISE, PRO): {WEST: SOUTHWEST, EAST: NORTHEAST},
+            (NORTHEAST, COUNTER_CLOCKWISE, PRO): {WEST: NORTHWEST, EAST: SOUTHEAST},
+            (NORTHWEST, COUNTER_CLOCKWISE, PRO): {SOUTH: SOUTHWEST, NORTH: NORTHEAST},
+            (SOUTHWEST, COUNTER_CLOCKWISE, PRO): {EAST: SOUTHEAST, WEST: NORTHWEST},
+            (SOUTHEAST, COUNTER_CLOCKWISE, PRO): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
+            ### ANTI ###
+            (NORTHEAST, CLOCKWISE, ANTI): {EAST: SOUTHEAST, WEST: NORTHWEST},
+            (NORTHWEST, CLOCKWISE, ANTI): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
+            (SOUTHWEST, CLOCKWISE, ANTI): {EAST: SOUTHEAST, WEST: NORTHWEST},
+            (SOUTHEAST, CLOCKWISE, ANTI): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
+            (NORTHEAST, COUNTER_CLOCKWISE, ANTI): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
+            (NORTHWEST, COUNTER_CLOCKWISE, ANTI): {WEST: SOUTHWEST, EAST: NORTHEAST},
+            (SOUTHWEST, COUNTER_CLOCKWISE, ANTI): {SOUTH: SOUTHEAST, NORTH: NORTHWEST},
+            (SOUTHEAST, COUNTER_CLOCKWISE, ANTI): {EAST: NORTHEAST, WEST: SOUTHWEST},
+        }
+
+        current_quadrant = self.arrow.quadrant
+        rotation_direction = self.arrow.rotation_direction
+        motion_type = self.arrow.motion_type
+        new_quadrant = quadrant_mapping.get(
+            (current_quadrant, rotation_direction, motion_type), {}
+        ).get(new_location)
+
+        if new_quadrant:
+            self.arrow.quadrant = new_quadrant
+            start_location, end_location = self.arrow.get_start_end_locations(
+                motion_type, rotation_direction, new_quadrant
+            )
+            self.arrow.start_location = start_location
+            self.arrow.end_location = end_location
+            self.arrow.update_appearance()
 
     def mouseReleaseEvent(self, event) -> None:
-        if self.dragged_staff:
-            self.dragged_staff.mouseReleaseEvent(event)
-            self.dragged_staff = None
-        elif self.dragged_arrow:
-            self.dragged_arrow.mouseReleaseEvent(event)
-            self.dragged_arrow = None
+        if isinstance(self.scene(), self.graphboard.__class__):
+            self.graphboard.removeItem(self.ghost_prop)
+            self.graphboard.staffs.remove(self.ghost_prop)
+            self.ghost_prop.arrow = None
+            self.graphboard.update()
+            self.finalize_staff_drop(event)
 
-    ### GETTERS ###
+    def finalize_staff_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
+        closest_handpoint = self.get_closest_handpoint(event.scenePos())
+        new_location = self.get_closest_location(event.scenePos())
 
-    def get_current_arrow_coordinates(
-        self,
-    ) -> Tuple[Optional[QPointF], Optional[QPointF]]:
-        red_position = None
-        blue_position = None
+        self.location = new_location
+        self.axis = self.get_axis(self.location)
+        self.update_appearance()
+        self.setPos(closest_handpoint)
 
-        for arrow in self.arrows:
-            center = arrow.pos() + arrow.boundingRect().center()
-            if arrow.color == RED:
-                red_position = center
-            elif arrow.color == BLUE:
-                blue_position = center
-        return red_position, blue_position
-
-    def get_state(self) -> List[ArrowAttributesDicts]:
-        state = []
-        for arrow in self.arrows:
-            state.append(
-                {
-                    COLOR: arrow.color,
-                    MOTION_TYPE: arrow.motion_type,
-                    ROTATION_DIRECTION: arrow.rotation_direction,
-                    QUADRANT: arrow.quadrant,
-                    START_LOCATION: arrow.start_location,
-                    END_LOCATION: arrow.end_location,
-                    TURNS: arrow.turns,
-                }
-            )
-        return state
-
-    def get_current_letter_type(self) -> Optional[str]:
-        if self.current_letter is not None:
-            for letter_type, letters in letter_types.items():
-                if self.current_letter in letters:
-                    return letter_type
-        else:
-            return None
-
-    def get_arrow_by_color(self, color: str) -> Optional[Arrow]:
-        for arrow in self.arrows:
-            if arrow.color == color:
-                return arrow
-
-    def get_staff_by_color(self, color: str) -> Optional[Staff]:
-        for staff in self.staff_set.values():
-            if staff.color == color:
-                return staff
-
-    def get_quadrant(self, x: float, y: float) -> Quadrant:
-        if self.point_in_quadrant(x, y, self.quadrants[NORTHEAST]):
-            return NORTHEAST
-        elif self.point_in_quadrant(x, y, self.quadrants[SOUTHEAST]):
-            return SOUTHEAST
-        elif self.point_in_quadrant(x, y, self.quadrants[SOUTHWEST]):
-            return SOUTHWEST
-        elif self.point_in_quadrant(x, y, self.quadrants[NORTHWEST]):
-            return NORTHWEST
-        else:
-            return None
-
-    ### HELPERS ###
-
-    @staticmethod
-    def point_in_quadrant(
-        x: float, y: float, boundary: Tuple[float, float, float, float]
-    ) -> bool:
-        return boundary[0] <= x <= boundary[2] and boundary[1] <= y <= boundary[3]
-
-    def create_blank_arrow(self, deleted_arrow: Arrow) -> None:
-        blank_attributes_dict = {
-            COLOR: deleted_arrow.color,
-            MOTION_TYPE: STATIC,
-            ROTATION_DIRECTION: "None",
-            QUADRANT: "None",
-            START_LOCATION: deleted_arrow.end_location,
-            END_LOCATION: deleted_arrow.end_location,
-            TURNS: deleted_arrow.turns,
-        }
-        blank_arrow = BlankArrow(self, blank_attributes_dict)
-        self.addItem(blank_arrow)
-        self.arrows.append(blank_arrow)
-        blank_arrow.staff = deleted_arrow.staff
-        blank_arrow.staff.arrow = blank_arrow
-
-    def position_letter_item(self, letter_item: "QGraphicsSvgItem") -> None:
-        x = (
-            self.grid.boundingRect().width() / 2
-            - letter_item.boundingRect().width() / 2
-        )
-        y = self.grid.boundingRect().height()
-        letter_item.setPos(x, y)
-
-    def add_to_sequence(self) -> None:
-        self.clear_graphboard()
-
-    def rotate_pictograph(self, direction: str) -> None:
-        for arrow in self.arrows:
-            arrow.rotate(direction)
-
-    def clear_graphboard(self) -> None:
-        for arrow in self.arrows:
-            self.removeItem(arrow)
-        for staff in self.staffs:
-            self.removeItem(staff)
-        self.arrows = []
-        self.staffs = []
-        self.update()
+        if self.arrow:
+            self.arrow.update_appearance()
+        self.previous_location = new_location
+        self.graphboard.update()
 
     ### UPDATERS ###
 
-    def update(self) -> None:
-        self.update_letter()
-        self.update_arrows()
-        self.update_staffs()
-        self.update_attr_panel()
+    def get_axis(self, location) -> None:
+        if self.layer == 1:
+            axis: Axis = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
+        elif self.layer == 2:
+            axis: Axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
+        return axis
 
-    def update_attr_panel(self) -> None:
-        self.graph_editor.attr_panel.update_attr_panel()
+    def set_staff_transform_origin_to_center(self: "Prop") -> None:
+        self.center = self.get_staff_center()
+        self.setTransformOriginPoint(self.center)
 
-    def update_arrows(self) -> None:
-        self.arrow_positioner.update()
+    def set_staff_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
+        new_dict: PropAttributesDicts = {
+            COLOR: target_arrow.color,
+            LOCATION: target_arrow.end_location,
+            LAYER: 1,
+        }
+        self.set_attributes_from_dict(new_dict)
+        self.color = target_arrow.color
+        self.location = target_arrow.end_location
+        self.axis = self.get_axis(self.location)
+        self.layer = 1
+        self.update_appearance()
 
-    def update_staffs(self) -> None:
-        self.staff_positioner.update()
+    ### GETTERS ###
 
-    def update_letter(self) -> None:
-        if len(self.staffs) == 2:
-            self.current_letter = self.letter_engine.get_current_letter()
-        else:
-            self.current_letter = None
-        self.update_letter_item(self.current_letter)
-        self.position_letter_item(self.letter_item)
+    def get_rotation_angle(self) -> RotationAngle:
+        if self.layer == 1 and self.orientation == IN:
+            if self.location == NORTH or self.location == SOUTH:
+                return {
+                    NORTH: 90,
+                    SOUTH: 270,
+                }.get(self.location, {})
+            elif self.location == EAST or self.location == WEST:
+                return {
+                    WEST: 0,
+                    EAST: 180,
+                }.get(self.location, {})
 
-    def update_letter_item(self, letter: str) -> None:
-        if letter:
-            self.set_letter_renderer(letter)
-        else:
-            self.letter_item.setSharedRenderer(
-                QSvgRenderer(f"{LETTER_SVG_DIR}/blank.svg")
+        elif self.layer == 1 and self.orientation == OUT:
+            if self.location == NORTH or self.location == SOUTH:
+                return {
+                    NORTH: 270,
+                    SOUTH: 90,
+                }.get(self.location, {})
+            elif self.location == EAST or self.location == WEST:
+                return {
+                    WEST: 180,
+                    EAST: 0,
+                }.get(self.location, {})
+
+        elif self.layer == 2 and self.orientation == CLOCKWISE:
+            if self.location == NORTH or self.location == SOUTH:
+                return {
+                    NORTH: 0,
+                    SOUTH: 180,
+                }.get(self.location, {})
+            elif self.location == EAST or self.location == WEST:
+                return {
+                    WEST: 270,
+                    EAST: 90,
+                }.get(self.location, {})
+
+        elif self.layer == 2 and self.orientation == COUNTER_CLOCKWISE:
+            if self.location == NORTH or self.location == SOUTH:
+                return {
+                    NORTH: 180,
+                    SOUTH: 0,
+                }.get(self.location, {})
+            elif self.location == EAST or self.location == WEST:
+                return {
+                    WEST: 90,
+                    EAST: 270,
+                }.get(self.location, {})
+
+    def update_rotation(self) -> None:
+        rotation_angle = self.get_rotation_angle()
+        self.setRotation(rotation_angle)
+
+    def get_staff_center(self) -> QPointF:
+        if self.axis == VERTICAL:
+            return QPointF(
+                (self.boundingRect().height() / 2), (self.boundingRect().width() / 2)
+            )
+        elif self.axis == HORIZONTAL:
+            return QPointF(
+                (self.boundingRect().width() / 2), (self.boundingRect().height() / 2)
             )
 
+    def get_closest_handpoint(self, mouse_pos: QPointF) -> QPointF:
+        closest_distance = float("inf")
+        closest_handpoint = None
+        for point in self.graphboard.grid.handpoints.values():
+            distance = (point - mouse_pos).manhattanLength()
+            if distance < closest_distance:
+                closest_distance = distance
+                closest_handpoint = point
+        return closest_handpoint
 
+    def get_closest_location(self, mouse_pos: QPointF) -> Location:
+        closest_distance = float("inf")
+        closest_location = None
+        for location, point in self.graphboard.grid.handpoints.items():
+            distance = (point - mouse_pos).manhattanLength()
+            if distance < closest_distance:
+                closest_distance = distance
+                closest_location = location
+        return closest_location
+
+    ### HELPERS ###
+
+    def swap_axis(self) -> None:
+        if self.axis == VERTICAL:
+            self.axis = HORIZONTAL
+        else:
+            self.axis = VERTICAL
+        self.update_rotation()
+
+    def set_svg_color(self, new_color: Color) -> bytes:
+        new_hex_color: ColorHex = COLOR_MAP.get(new_color)
+
+        with open(self.svg_file, "r") as f:
+            svg_data = f.read()
+
+        style_tag_pattern = re.compile(
+            r"\.st0{fill\s*:\s*(#[a-fA-F0-9]{6})\s*;}", re.DOTALL
+        )
+        match = style_tag_pattern.search(svg_data)
+
+        if match:
+            old_hex_color: ColorHex = match.group(1)
+            svg_data = svg_data.replace(old_hex_color, new_hex_color)
+        return svg_data.encode("utf-8")
+
+    def delete(self) -> None:
+        self.graphboard.removeItem(self)
+        self.graphboard.staffs.remove(self)
+        self.graphboard.update()

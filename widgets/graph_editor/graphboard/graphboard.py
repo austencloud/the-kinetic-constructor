@@ -1,19 +1,18 @@
 from PyQt6.QtCore import QPointF, Qt
-from PyQt6.QtGui import QTransform, QIcon
+from PyQt6.QtGui import QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsSceneMouseEvent, QPushButton
+from PyQt6.QtWidgets import QGraphicsScene, QGraphicsSceneMouseEvent
 
 from objects.letter_item import LetterItem
 from data.letter_engine_data import letter_types
 from objects.arrow import Arrow, BlankArrow
 from objects.grid import Grid
 from objects.props.staff import Staff
+from objects.motion import Motion
 from settings.string_constants import (
     BLUE,
-    CLOCKWISE,
     COLOR,
-    COUNTER_CLOCKWISE,
     END_LOCATION,
     LETTER_SVG_DIR,
     MOTION_TYPE,
@@ -27,13 +26,16 @@ from settings.string_constants import (
     START_LOCATION,
     STATIC,
     TURNS,
+    START_ORIENTATION, END_ORIENTATION, START_LAYER, END_LAYER
 )
 from utilities.letter_engine import LetterEngine
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
-    ArrowAttributesDicts,
+    Layer,
+    MotionAttributesDicts,
     List,
     Optional,
+    Orientation,
     Tuple,
     Quadrant,
 )
@@ -68,6 +70,7 @@ class GraphBoard(QGraphicsScene):
         self.setBackgroundBrush(Qt.GlobalColor.white)
         self.arrows: List[Arrow] = []
         self.staffs: List[Staff] = []
+        self.motions: List[Motion] = []
         self.current_letter: str = None
 
     def setup_components(self, main_widget: "MainWidget") -> None:
@@ -85,8 +88,6 @@ class GraphBoard(QGraphicsScene):
         self.staff_set = self.initializer.init_staff_set()
         self.letter_item = self.initializer.init_letter_item()
         self.quadrants = self.initializer.init_quadrants(self.grid)
-
-
 
         # set the icons to 80% of the button size
 
@@ -177,7 +178,7 @@ class GraphBoard(QGraphicsScene):
                 blue_position = center
         return red_position, blue_position
 
-    def get_state(self) -> List[ArrowAttributesDicts]:
+    def get_state(self) -> List[MotionAttributesDicts]:
         state = []
         for arrow in self.arrows:
             state.append(
@@ -271,6 +272,38 @@ class GraphBoard(QGraphicsScene):
         self.staffs = []
         self.update()
 
+    def add_motion(
+        self,
+        attributes: MotionAttributesDicts,
+        arrow: Arrow   ,
+        staff,
+        start_orientation: Orientation,
+        start_layer: Layer,
+    ) -> None:
+        motion_attributes: MotionAttributesDicts = {
+            COLOR: arrow.attributes[COLOR],  
+            MOTION_TYPE: arrow.attributes[MOTION_TYPE],
+            ROTATION_DIRECTION: arrow.attributes[ROTATION_DIRECTION], 
+            QUADRANT: arrow.attributes[QUADRANT],
+            START_LOCATION: arrow.attributes[START_LOCATION],
+            END_LOCATION: arrow.attributes[END_LOCATION],
+            TURNS: arrow.attributes[TURNS],
+            
+            START_ORIENTATION: None,
+            END_ORIENTATION: None,
+            START_LAYER: None,
+            END_LAYER: None,
+        }
+        
+        
+        motion = Motion(self, arrow, staff, motion_attributes)
+        # remove the motion of matching color from self.motions if it exists
+        for m in self.motions:
+            if m.color == motion.color:
+                self.motions.remove(m)
+        self.motions.append(motion)
+        return motion
+
     ### UPDATERS ###
 
     def update(self) -> None:
@@ -303,5 +336,3 @@ class GraphBoard(QGraphicsScene):
             self.letter_item.setSharedRenderer(
                 QSvgRenderer(f"{LETTER_SVG_DIR}/blank.svg")
             )
-
-

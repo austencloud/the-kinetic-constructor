@@ -9,14 +9,12 @@ from objects.ghosts.ghost_staff import GhostStaff
 from objects.grid import Grid
 from objects.letter_item import LetterItem
 from objects.props.staff import Staff
-from settings.numerical_constants import GRAPHBOARD_HEIGHT, GRAPHBOARD_WIDTH
 from settings.string_constants import (
     BLUE,
     CLOCKWISE,
     COLOR,
     EAST,
     END_LOCATION,
-    GRID_FILE_PATH,
     LAYER,
     LOCATION,
     MOTION_TYPE,
@@ -35,7 +33,6 @@ from settings.string_constants import (
     WEST,
     ORIENTATION,
     IN,
-    OUT,
 )
 from widgets.graph_editor.graphboard.graphboard_view import GraphBoardView
 
@@ -55,7 +52,7 @@ class GraphBoardInit:
         return view
 
     def init_grid(self) -> Grid:
-        grid = Grid('resources/images/grid/grid.svg')
+        grid = Grid("resources/images/grid/grid.svg")
         grid_position = QPointF(0, 0)
         grid.setPos(grid_position)
         self.graphboard.addItem(grid)
@@ -66,18 +63,8 @@ class GraphBoardInit:
         return grid
 
     def init_staff_set(self) -> dict[str, Staff]:
-        red_staff_dict = {
-            COLOR: RED,
-            LOCATION: NORTH,
-            LAYER: 1,
-            ORIENTATION: IN
-        }
-        blue_staff_dict = {
-            COLOR: BLUE,
-            LOCATION: SOUTH,
-            LAYER: 1,
-            ORIENTATION: IN
-        }
+        red_staff_dict = {COLOR: RED, LOCATION: NORTH, LAYER: 1, ORIENTATION: IN}
+        blue_staff_dict = {COLOR: BLUE, LOCATION: SOUTH, LAYER: 1, ORIENTATION: IN}
 
         red_staff = Staff(self.main_widget, self.graphboard, red_staff_dict)
         blue_staff = Staff(self.main_widget, self.graphboard, blue_staff_dict)
@@ -127,14 +114,14 @@ class GraphBoardInit:
             COLOR: RED,
             LOCATION: EAST,
             LAYER: 1,
-            ORIENTATION: IN
+            ORIENTATION: IN,
         }
 
         default_blue_ghost_staff_attributes = {
             COLOR: BLUE,
             LOCATION: WEST,
             LAYER: 1,
-            ORIENTATION: IN
+            ORIENTATION: IN,
         }
 
         red_ghost_staff = GhostStaff(
@@ -162,21 +149,16 @@ class GraphBoardInit:
         ne_boundary = (
             grid_center_x,
             0,
-            GRAPHBOARD_WIDTH,
+            self.graphboard.width(),
             grid_center_y,
         )
         se_boundary = (
             grid_center_x,
             grid_center_y,
-            GRAPHBOARD_WIDTH,
-            GRAPHBOARD_HEIGHT,
+            self.graphboard.width(),
+            self.graphboard.height(),
         )
-        sw_boundary = (
-            0,
-            grid_center_y,
-            grid_center_x,
-            GRAPHBOARD_HEIGHT,
-        )
+        sw_boundary = (0, grid_center_y, grid_center_x, self.graphboard.height())
         nw_boundary = (
             0,
             0,

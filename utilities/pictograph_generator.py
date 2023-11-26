@@ -8,7 +8,6 @@ from settings.string_constants import (
     PRO,
     COLOR,
     RED,
-    CLOCKWISE,
     QUADRANT,
 )
 from typing import TYPE_CHECKING
