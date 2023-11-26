@@ -8,7 +8,7 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_staff import GhostStaff
 from objects.grid import Grid
 from objects.letter_item import LetterItem
-from objects.props.staff import BlueStaff, RedStaff, Staff
+from objects.props.staff import Staff
 from settings.numerical_constants import GRAPHBOARD_HEIGHT, GRAPHBOARD_WIDTH
 from settings.string_constants import (
     BLUE,
@@ -33,6 +33,9 @@ from settings.string_constants import (
     START_LOCATION,
     TURNS,
     WEST,
+    ORIENTATION,
+    IN,
+    OUT,
 )
 from widgets.graph_editor.graphboard.graphboard_view import GraphBoardView
 
@@ -67,15 +70,20 @@ class GraphBoardInit:
             COLOR: RED,
             LOCATION: NORTH,
             LAYER: 1,
+            ORIENTATION: IN
         }
         blue_staff_dict = {
             COLOR: BLUE,
             LOCATION: SOUTH,
             LAYER: 1,
+            ORIENTATION: IN
         }
 
-        red_staff = RedStaff(self.main_widget, self.graphboard, red_staff_dict)
-        blue_staff = BlueStaff(self.main_widget, self.graphboard, blue_staff_dict)
+        red_staff = Staff(self.main_widget, self.graphboard, red_staff_dict)
+        blue_staff = Staff(self.main_widget, self.graphboard, blue_staff_dict)
+
+        red_staff.set_svg_color(RED)
+        blue_staff.set_svg_color(BLUE)
 
         red_staff.hide()
         blue_staff.hide()
@@ -119,12 +127,14 @@ class GraphBoardInit:
             COLOR: RED,
             LOCATION: EAST,
             LAYER: 1,
+            ORIENTATION: IN
         }
 
         default_blue_ghost_staff_attributes = {
             COLOR: BLUE,
             LOCATION: WEST,
             LAYER: 1,
+            ORIENTATION: IN
         }
 
         red_ghost_staff = GhostStaff(

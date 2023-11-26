@@ -1,4 +1,3 @@
-
 from objects.graphical_object import GraphicalObject
 from PyQt6.QtCore import Qt, QPointF
 from settings.numerical_constants import (
@@ -6,6 +5,8 @@ from settings.numerical_constants import (
     STAFF_LENGTH,
 )
 from settings.string_constants import (
+    ORIENTATION,
+    OUT,
     STAFF_ATTRIBUTES,
     COLOR,
     LOCATION,
@@ -27,6 +28,7 @@ from settings.string_constants import (
     ANTI,
     STATIC,
     COLOR_MAP,
+    IN
 )
 import logging
 import re
@@ -34,7 +36,7 @@ import re
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from utilities.TypeChecking.TypeChecking import (
     RotationAngle,
-    StaffAttributesDicts,
+    PropAttributesDicts,
     Location,
     Quadrant,
     RotationDirection,
@@ -52,7 +54,8 @@ if TYPE_CHECKING:
     from objects.arrow import Arrow
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
-    
+
+
 class Prop(GraphicalObject):
     def __init__(
         self,
@@ -65,13 +68,12 @@ class Prop(GraphicalObject):
         self._setup_attributes(main_widget, graphboard, attributes)
         self.set_staff_transform_origin_to_center()
         self.update_appearance()
-        
-        
+
     def _setup_attributes(
         self,
         main_widget: "MainWidget",
         graphboard: "GraphBoard",
-        attributes: StaffAttributesDicts,
+        attributes: PropAttributesDicts,
     ) -> None:
         self.graphboard = graphboard
         self.drag_offset = QPointF(0, 0)
@@ -82,8 +84,11 @@ class Prop(GraphicalObject):
         self.color = attributes[COLOR]
         self.location = attributes[LOCATION]
         self.layer = attributes[LAYER]
+        self.orientation = attributes[ORIENTATION]
+        
         self.axis = self.get_axis(self.location)
         self.center = self.boundingRect().center()
+        self.update_rotation()
 
         if attributes:
             self.update(attributes)
@@ -226,14 +231,12 @@ class Prop(GraphicalObject):
             axis: Axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
         return axis
 
-
-
     def set_staff_transform_origin_to_center(self: "Prop") -> None:
         self.center = self.get_staff_center()
         self.setTransformOriginPoint(self.center)
 
     def set_staff_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
-        new_dict: StaffAttributesDicts = {
+        new_dict: PropAttributesDicts = {
             COLOR: target_arrow.color,
             LOCATION: target_arrow.end_location,
             LAYER: 1,
@@ -248,18 +251,54 @@ class Prop(GraphicalObject):
     ### GETTERS ###
 
     def get_rotation_angle(self) -> RotationAngle:
-        if self.location == NORTH or self.location == SOUTH:
-            return {
-                NORTH: 90,
-                SOUTH: 90,
-            }.get(self.location, {})
-        elif self.location == EAST or self.location == WEST:
-            return {
-                WEST: 0,
-                EAST: 0,
-            }.get(self.location, {})
-        else:
-            return {}
+        if self.layer == 1 and self.orientation == IN:
+            if self.location == NORTH or self.location == SOUTH:
+                return {
+                    NORTH: 90,
+                    SOUTH: 270,
+                }.get(self.location, {})
+            elif self.location == EAST or self.location == WEST:
+                return {
+                    WEST: 0,
+                    EAST: 180,
+                }.get(self.location, {})
+                
+        elif self.layer == 1 and self.orientation == OUT:
+            if self.location == NORTH or self.location == SOUTH:
+                return {
+                    NORTH: 270,
+                    SOUTH: 90,
+                }.get(self.location, {})
+            elif self.location == EAST or self.location == WEST:
+                return {
+                    WEST: 180,
+                    EAST: 0,
+                }.get(self.location, {})
+                
+        elif self.layer == 2 and self.orientation == CLOCKWISE:
+            if self.location == NORTH or self.location == SOUTH:
+                return {
+                    NORTH: 0,
+                    SOUTH: 180,
+                }.get(self.location, {})
+            elif self.location == EAST or self.location == WEST:
+                return {
+                    WEST: 270,
+                    EAST: 90,
+                }.get(self.location, {})
+                
+        elif self.layer == 2 and self.orientation == COUNTER_CLOCKWISE:
+            if self.location == NORTH or self.location == SOUTH:
+                return {
+                    NORTH: 180,
+                    SOUTH: 0,
+                }.get(self.location, {})
+            elif self.location == EAST or self.location == WEST:
+                return {
+                    WEST: 90,
+                    EAST: 270,
+                }.get(self.location, {})
+
 
     def update_rotation(self) -> None:
         rotation_angle = self.get_rotation_angle()

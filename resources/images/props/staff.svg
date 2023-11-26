@@ -4,7 +4,10 @@
 	 viewBox="0 0 250 25" style="enable-background:new 0 0 250 25;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:#2E3192;}
+	.st1{fill:#231F20;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}
 </style>
 <path id="staff" class="st0" d="M9.9,0h230.2c5.5,0,9.9,4.4,9.9,9.9v5.2c0,5.5-4.4,9.9-9.9,9.9H9.9C4.4,25,0,20.6,0,15.1V9.9
 	C0,4.4,4.4,0,9.9,0z"/>
+<path class="st1" id="thumb" d="M0,12.5"/>
+<path class="st1" d="M250,12.5"/>
 </svg>

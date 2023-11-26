@@ -1,9 +1,10 @@
 import logging
 from objects.props.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
-    StaffAttributesDicts,
+    PropAttributesDicts,
     TYPE_CHECKING,
 )
+
 if TYPE_CHECKING:
     from objects.arrow import Arrow
     from widgets.main_widget import MainWidget
@@ -27,27 +28,5 @@ class Staff(Prop):
         graphboard: "GraphBoard",
         attributes,
     ) -> None:
-        svg_file = STAFF_SVG_FILE_PATH
+        svg_file = "resources/images/props/staff_with_thumb.svg"
         super().__init__(main_widget, graphboard, svg_file, attributes)
-
-
-class RedStaff(Staff):
-    def __init__(
-        self,
-        main_widget: "MainWidget",
-        graphboard: "GraphBoard",
-        dict: StaffAttributesDicts,
-    ) -> None:
-        super().__init__(main_widget, graphboard, dict)
-        self.setSharedRenderer(self.renderer)
-
-
-class BlueStaff(Staff):
-    def __init__(
-        self,
-        main_widget: "MainWidget",
-        graphboard: "GraphBoard",
-        dict: StaffAttributesDicts,
-    ) -> None:
-        super().__init__(main_widget, graphboard, dict)
-        self.setSharedRenderer(self.renderer)

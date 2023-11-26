@@ -45,6 +45,11 @@ END_POS = "end_position"
 
 LOCATION = "location"
 LAYER = "layer"
+AXIS = "axis"
+ORIENTATION = "orientation"
+
+IN = "in"
+OUT = "out"
 
 HORIZONTAL = "horizontal"
 VERTICAL = "vertical"

@@ -5,7 +5,6 @@ from .SpecificPosition import SpecificPosition
 ### ARROW ATTRIBUTES ###
 
 
-
 ArrowAttributes = Literal[
     "color",
     "motion_type",
@@ -32,11 +31,14 @@ class ArrowAttributesDicts(TypedDict):
     end_location: Location
     turns: Turns
 
+
 ### STAFF ATTRIBUTES ###
 
-StaffAttributes = Literal["color", "location", "layer", "axis"]
-Layer = Literal[0, 1, 2, 3]
+PropAttributes = Literal["color", "location", "layer", "axis", "orientation"]
+Layer = Literal[1, 2]
 Axis = Literal["vertical", "horizontal"]
+Layer1_Orientation = Literal["in", "out"]
+Layer2_Orientation = Literal["cw", "ccw"]
 
 RotationAngle = Literal[0, 90, 180, 270]
 Position = Literal["alpha", "beta", "gamma"]
@@ -44,7 +46,6 @@ Direction = Literal["right", "left", "down", "up"]
 OptimalLocationEntries = Dict[Literal["x", "y"], float]
 ColorHex = Literal["#ED1C24", "#2E3192"]
 ColorMap = Dict[Color, ColorHex]
-
 
 
 class SpecificStartEndPositionsDicts(TypedDict):
@@ -60,14 +61,12 @@ class OptimalLocationsDicts(TypedDict):
 ### STAFF ATTRIBUTES ###
 
 
-
-
-
-class StaffAttributesDicts(TypedDict):
+class PropAttributesDicts(TypedDict):
     color: Color
     location: Location
     layer: Layer
     axis: Axis
+    orientation: Layer1_Orientation | Layer2_Orientation
 
 
 StartEndLocationTuple = Tuple[Location, Location]

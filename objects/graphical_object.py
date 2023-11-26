@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 from utilities.TypeChecking.TypeChecking import (
     Color,
     ArrowAttributesDicts,
-    StaffAttributesDicts,
+    PropAttributesDicts,
 )
 
 
@@ -88,7 +88,7 @@ class GraphicalObject(QGraphicsSvgItem):
         self.update_rotation()
 
     def set_attributes_from_dict(
-        self, attributes: ArrowAttributesDicts | StaffAttributesDicts
+        self, attributes: ArrowAttributesDicts | PropAttributesDicts
     ) -> None:
         for attribute_name, attribute_value in attributes.items():
             setattr(self, attribute_name, attribute_value)
