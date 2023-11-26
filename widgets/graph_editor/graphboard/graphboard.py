@@ -289,10 +289,8 @@ class GraphBoard(QGraphicsScene):
             END_LOCATION: arrow.attributes[END_LOCATION],
             TURNS: arrow.attributes[TURNS],
             
-            START_ORIENTATION: None,
-            END_ORIENTATION: None,
-            START_LAYER: None,
-            END_LAYER: None,
+            START_ORIENTATION: start_orientation,
+            START_LAYER: start_layer,
         }
         
         

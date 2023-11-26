@@ -24,9 +24,10 @@ RIGHT = "right"
 UP = "up"
 DOWN = "down"
 
-STATIC = "static"
 PRO = "pro"
 ANTI = "anti"
+DASH = "dash"
+STATIC = "static"
 
 COLOR = "color"
 MOTION_TYPE = "motion_type"
