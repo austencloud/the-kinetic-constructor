@@ -274,33 +274,31 @@ class GraphBoard(QGraphicsScene):
 
     def add_motion(
         self,
-        attributes: MotionAttributesDicts,
-        arrow: Arrow   ,
+        arrow: Arrow,
         staff,
         start_orientation: Orientation,
         start_layer: Layer,
     ) -> None:
         motion_attributes: MotionAttributesDicts = {
-            COLOR: arrow.attributes[COLOR],  
-            MOTION_TYPE: arrow.attributes[MOTION_TYPE],
-            ROTATION_DIRECTION: arrow.attributes[ROTATION_DIRECTION], 
-            QUADRANT: arrow.attributes[QUADRANT],
-            START_LOCATION: arrow.attributes[START_LOCATION],
-            END_LOCATION: arrow.attributes[END_LOCATION],
-            TURNS: arrow.attributes[TURNS],
+            COLOR: arrow.color,  
+            MOTION_TYPE: arrow.motion_type,
+            ROTATION_DIRECTION: arrow.rotation_direction, 
+            QUADRANT: arrow.quadrant,
+            START_LOCATION: arrow.start_location,
+            END_LOCATION: arrow.end_location,
+            TURNS: arrow.turns,
             
             START_ORIENTATION: start_orientation,
             START_LAYER: start_layer,
         }
-        
-        
+    
         motion = Motion(self, arrow, staff, motion_attributes)
-        # remove the motion of matching color from self.motions if it exists
+        
         for m in self.motions:
             if m.color == motion.color:
                 self.motions.remove(m)
+                
         self.motions.append(motion)
-        return motion
 
     ### UPDATERS ###
 

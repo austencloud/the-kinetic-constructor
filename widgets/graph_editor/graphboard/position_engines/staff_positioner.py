@@ -2,6 +2,9 @@ from PyQt6.QtCore import QPointF
 import math
 from settings.numerical_constants import BETA_OFFSET, STAFF_LENGTH, STAFF_WIDTH
 from settings.string_constants import (
+    HORIZONTAL,
+    IN,
+    OUT,
     VERTICAL,
     COLOR,
     MOTION_TYPE,
@@ -61,16 +64,56 @@ class StaffPositioner:
         if (
             staff.location in self.graphboard.grid.handpoints
         ):  # add check for key existence
-            if staff.axis == VERTICAL and staff.location == NORTH:
-                staff.setPos(
-                    self.graphboard.grid.handpoints[staff.location]
-                    + QPointF(-staff_length / 2, -staff_length + staff_width / 2)
-                )
-            elif staff.axis == VERTICAL and staff.location == SOUTH:
-                staff.setPos(
-                    self.graphboard.grid.handpoints[staff.location]
-                    + QPointF(-staff_width + staff_length / 2, -staff_width / 2)
-                )
+            if staff.layer == 1:
+                if staff.orientation == IN:
+                    if staff.location == NORTH:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(
+                                -staff_length / 2, -staff_length + staff_width / 2
+                            )
+                        )
+                    elif staff.location == SOUTH:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(-staff_width + staff_length / 2, -staff_width / 2)
+                        )
+                    elif staff.location == EAST:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(-staff_length / 2, -staff_width / 2)
+                        )
+                    elif staff.location == WEST:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(-staff_length / 2, -staff_width / 2)
+                        )
+
+                elif staff.orientation == OUT:
+                    if staff.location == NORTH:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(staff_length / 2 - staff_width, -staff_width / 2)
+                        )
+                    elif staff.location == SOUTH:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(
+                                -staff_length / 2, -staff_length + staff_width / 2
+                            )
+                        )
+                    elif staff.location == EAST:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(-staff_length / 2, -staff_width / 2)
+                        )
+                    elif staff.location == WEST:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(
+                                -staff_length / 2, -staff_width/2
+                            )
+                        )
 
             else:
                 staff.setPos(

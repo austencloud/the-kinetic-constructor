@@ -48,6 +48,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
     from objects.motion import Motion
 
+
 class Prop(GraphicalObject):
     def __init__(
         self,
@@ -67,7 +68,7 @@ class Prop(GraphicalObject):
         main_widget: "MainWidget",
         graphboard: "GraphBoard",
         attributes: PropAttributesDicts,
-        motion: "Motion"=None,
+        motion: "Motion" = None,
     ) -> None:
         self.graphboard = graphboard
         if motion:
@@ -99,6 +100,7 @@ class Prop(GraphicalObject):
             self.ghost_prop.color = self.color
             self.ghost_prop.location = self.location
             self.ghost_prop.layer = self.layer
+            self.ghost_prop.orientation = self.orientation
             self.ghost_prop.update_appearance()
             self.graphboard.addItem(self.ghost_prop)
             self.ghost_prop.arrow = self.arrow
@@ -149,28 +151,26 @@ class Prop(GraphicalObject):
         staff_width = self.boundingRect().height()
 
         self.setTransformOriginPoint(0, 0)
-
-        if self.axis == HORIZONTAL and self.location == WEST:
-            self.setPos(new_pos)
-        elif self.axis == HORIZONTAL and self.location == EAST:
-            self.setPos(
-                new_pos
-                + QPointF(
-                    staff_length,
-                    staff_width,
-                )
-            )
-        elif self.axis == VERTICAL and self.location == NORTH:
-            self.setPos(new_pos + QPointF(staff_width, 0))
-        elif self.axis == VERTICAL and self.location == SOUTH:
-            self.setPos(
-                new_pos
-                + QPointF(
-                    0,
-                    staff_length,
-                )
-            )
-
+        if self.layer == 1:
+            if self.orientation == IN:
+                if self.location == WEST:
+                    self.setPos(new_pos)
+                elif self.location == EAST:
+                    self.setPos(new_pos + QPointF(staff_length, staff_width))
+                elif self.location == NORTH:
+                    self.setPos(new_pos + QPointF(staff_width, 0))
+                elif self.location == SOUTH:
+                    self.setPos(new_pos + QPointF(0, staff_length))
+            elif self.orientation == OUT:
+                if self.location == WEST:
+                    self.setPos(new_pos + QPointF(staff_length, staff_width))
+                elif self.location == EAST:
+                    self.setPos(new_pos + QPointF(0, 0))
+                elif self.location == NORTH:
+                    self.setPos(new_pos + QPointF(0, staff_length))
+                elif self.location == SOUTH:
+                    self.setPos(new_pos + QPointF(staff_width, 0))
+                    
     def update_arrow_quadrant(self, new_location: Location) -> None:
         quadrant_mapping: Dict[
             Tuple(Quadrant, RotationDirection, MotionType), Dict[Location, Quadrant]

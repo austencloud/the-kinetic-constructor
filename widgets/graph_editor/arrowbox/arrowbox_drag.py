@@ -9,6 +9,7 @@ from settings.string_constants import (
     COLOR,
     IN,
     MOTION_TYPE,
+    OUT,
     QUADRANT,
     RED,
     ROTATION_DIRECTION,
@@ -75,6 +76,7 @@ class ArrowBoxDrag(QWidget):
         self.preview = None
         self.svg_file = None
         self.ghost_arrow = None
+        self.start_orientation = IN
 
     def match_target_arrow(self, target_arrow: "Arrow") -> None:
         self.target_arrow = target_arrow
@@ -156,15 +158,14 @@ class ArrowBoxDrag(QWidget):
         self.graphboard.clearSelection()
         self.placed_arrow = Arrow(self.graphboard, self.ghost_arrow.get_attributes())
         self.placed_arrow.staff = self.ghost_arrow.staff
+        self.ghost_arrow.staff.arrow = self.placed_arrow
 
-        motion = self.graphboard.add_motion(
-            self.ghost_arrow.get_attributes(),
-            self.placed_arrow,
-            self.placed_arrow.staff,
+        self.graphboard.add_motion(
+            self.ghost_arrow,
+            self.ghost_arrow.staff,
             IN,
             1,
         )
-        self.ghost_arrow.staff.arrow = self.placed_arrow
 
         self.graphboard.addItem(self.placed_arrow)
         self.graphboard.arrows.append(self.placed_arrow)
@@ -222,6 +223,7 @@ class ArrowBoxDrag(QWidget):
                 )
                 staff.arrow = self.ghost_arrow
                 self.ghost_arrow.staff = staff
+                
                 if staff not in self.graphboard.items():
                     self.graphboard.addItem(staff)
                 staff.show()
@@ -366,7 +368,9 @@ class ArrowBoxDrag(QWidget):
             self.just_entered_graphboard = True
             self.has_entered_graphboard_once = True
             self.remove_same_color_arrow()
+            
 
+        
         if self.has_entered_graphboard_once:
             self.just_entered_graphboard = False
 
@@ -405,6 +409,13 @@ class ArrowBoxDrag(QWidget):
 
         self.update_rotation()
         self.update_staff_during_drag()
+
+        self.graphboard.add_motion(
+            self.ghost_arrow,
+            self.ghost_arrow.staff,
+            IN,
+            1,
+        )
 
         if self.ghost_arrow not in self.graphboard.arrows:
             self.graphboard.arrows.append(self.ghost_arrow)
