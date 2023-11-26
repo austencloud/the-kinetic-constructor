@@ -57,15 +57,21 @@ class StaffPositioner:
         staff.set_staff_transform_origin_to_center()
         staff_length = staff.boundingRect().width()
         staff_width = staff.boundingRect().height()
-        
+
         if (
             staff.location in self.graphboard.grid.handpoints
         ):  # add check for key existence
-            if staff.axis == VERTICAL:
+            if staff.axis == VERTICAL and staff.location == NORTH:
                 staff.setPos(
                     self.graphboard.grid.handpoints[staff.location]
                     + QPointF(-staff_length / 2, -staff_length + staff_width / 2)
                 )
+            elif staff.axis == VERTICAL and staff.location == SOUTH:
+                staff.setPos(
+                    self.graphboard.grid.handpoints[staff.location]
+                    + QPointF(-staff_width + staff_length / 2, -staff_width / 2)
+                )
+
             else:
                 staff.setPos(
                     self.graphboard.grid.handpoints[staff.location]

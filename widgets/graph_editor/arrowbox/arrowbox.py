@@ -30,6 +30,7 @@ from settings.string_constants import (
 from widgets.graph_editor.arrowbox.arrowbox_drag import ArrowBoxDrag
 from widgets.graph_editor.arrowbox.arrowbox_view import ArrowBoxView
 from objects.grid import Grid
+
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from objects.arrow import Arrow
@@ -100,7 +101,7 @@ class ArrowBox(QGraphicsScene):
             {
                 COLOR: RED,
                 MOTION_TYPE: ANTI,
-                ROTATION_DIRECTION: CLOCKWISE,
+                ROTATION_DIRECTION: COUNTER_CLOCKWISE,
                 QUADRANT: SOUTHEAST,
                 START_LOCATION: SOUTH,
                 END_LOCATION: EAST,
@@ -118,7 +119,7 @@ class ArrowBox(QGraphicsScene):
             {
                 COLOR: BLUE,
                 MOTION_TYPE: PRO,
-                ROTATION_DIRECTION: CLOCKWISE,
+                ROTATION_DIRECTION: COUNTER_CLOCKWISE,
                 QUADRANT: SOUTHWEST,
                 START_LOCATION: SOUTH,
                 END_LOCATION: WEST,
@@ -132,7 +133,7 @@ class ArrowBox(QGraphicsScene):
                 START_LOCATION: NORTH,
                 END_LOCATION: WEST,
                 TURNS: 0,
-            }
+            },
         ]
 
         for dict in initial_arrow_attribute_collection:
@@ -147,33 +148,33 @@ class ArrowBox(QGraphicsScene):
             arrow.setTransformOriginPoint(arrow.boundingRect().center())
             arrow.is_dim(True)
 
-        self.arrows[0].setPos(425, 50) # RED PRO CLOCKWISE NE
-        self.arrows[1].setPos(100, 375) # BLUE ANTI COUNTERCLOCKWISE SW
-        
-        self.arrows[2].setPos(425, 425) # RED PRO COUNTERCLOCKWISE SE
-        self.arrows[3].setPos(100, 100) # BLUE ANTI CLOCKWISE NW
-        
-        self.arrows[4].setPos(375, 375) # RED ANTI CLOCKWISE SE
-        self.arrows[5].setPos(375, 100) # RED ANTI COUNTERCLOCKWISE NE
-        
-        self.arrows[6].setPos(50, 425) # BLUE PRO CLOCKWISE SW
-        self.arrows[7].setPos(50, 50) # BLUE PRO COUNTERCLOCKWISE NW
+        self.arrows[0].setPos(425, 50)  # RED PRO CLOCKWISE NE
+        self.arrows[1].setPos(100, 375)  # BLUE ANTI COUNTERCLOCKWISE SW
+
+        self.arrows[2].setPos(425, 425)  # RED PRO COUNTERCLOCKWISE SE
+        self.arrows[3].setPos(100, 100)  # BLUE ANTI CLOCKWISE NW
+
+        self.arrows[4].setPos(375, 375)  # RED ANTI CLOCKWISE SE
+        self.arrows[5].setPos(375, 100)  # RED ANTI COUNTERCLOCKWISE NE
+
+        self.arrows[6].setPos(50, 425)  # BLUE PRO CLOCKWISE SW
+        self.arrows[7].setPos(50, 50)  # BLUE PRO COUNTERCLOCKWISE NW
 
     def mousePressEvent(self, event) -> None:
         scene_pos = event.scenePos()
         event_pos = self.view.mapFromScene(scene_pos)
 
-        arrows = [item for item in self.items(scene_pos) if isinstance(item, Arrow)]
-
+        # Find the closest arrow to the cursor position
         closest_arrow = None
-        min_distance = float('inf')
-        for arrow in arrows:
+        min_distance = float("inf")
+        for arrow in self.arrows:
             arrow_center = arrow.sceneBoundingRect().center()
             distance = (scene_pos - arrow_center).manhattanLength()
             if distance < min_distance:
                 closest_arrow = arrow
                 min_distance = distance
 
+        # Proceed only if the closest arrow is found
         if closest_arrow:
             self.target_arrow = closest_arrow
             if not self.arrowbox_drag:
@@ -183,6 +184,7 @@ class ArrowBox(QGraphicsScene):
                 self.arrowbox_drag.match_target_arrow(self.target_arrow)
                 self.arrowbox_drag.start_drag(event_pos)
         else:
+            # If no closest arrow is found, ignore the event
             self.target_arrow = None
             event.ignore()
 
@@ -194,11 +196,13 @@ class ArrowBox(QGraphicsScene):
         else:
             cursor_pos = event.scenePos()
             closest_arrow = None
-            min_distance = float('inf')
+            min_distance = float("inf")
 
             for arrow in self.arrows:
                 arrow_center = arrow.sceneBoundingRect().center()
-                distance = (cursor_pos - arrow_center).manhattanLength()  # Manhattan distance for simplicity
+                distance = (
+                    cursor_pos - arrow_center
+                ).manhattanLength()  # Manhattan distance for simplicity
 
                 if distance < min_distance:
                     closest_arrow = arrow
@@ -214,8 +218,7 @@ class ArrowBox(QGraphicsScene):
         if self.arrowbox_drag:
             self.arrowbox_drag.handle_mouse_release()
             self.target_arrow = None  # Reset
-            
-    def onMouseLeaveScene(self) -> None:
-        # Redim all arrows when the mouse leaves the scene
+
+    def dim_all_arrows(self) -> None:
         for arrow in self.arrows:
             arrow.is_dim(True)
