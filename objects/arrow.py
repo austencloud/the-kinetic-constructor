@@ -323,6 +323,10 @@ class Arrow(GraphicalObject):
         self.update_svg(svg_file)
         self.update_appearance()
         self.attributes[TURNS] = self.turns
+        if hasattr(self, "ghost_arrow"):
+            self.ghost_arrow.turns = self.turns
+            self.ghost_arrow.update_svg(svg_file)
+            self.ghost_arrow.update_appearance()
         self.graphboard.update()
 
     def subtract_turn(self) -> None:
@@ -333,6 +337,10 @@ class Arrow(GraphicalObject):
         self.update_svg(svg_file)
         self.update_appearance()
         self.attributes[TURNS] = self.turns
+        if hasattr(self, "ghost_arrow"):
+            self.ghost_arrow.turns = self.turns
+            self.ghost_arrow.update_svg(svg_file)
+            self.ghost_arrow.update_appearance()
         self.graphboard.update()
 
     def move_wasd(self, direction: Direction) -> None:

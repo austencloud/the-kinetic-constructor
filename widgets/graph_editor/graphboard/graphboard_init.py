@@ -52,7 +52,7 @@ class GraphBoardInit:
         return view
 
     def init_grid(self) -> Grid:
-        grid = Grid(GRID_FILE_PATH)
+        grid = Grid('resources/images/grid/grid_simple.svg')
         grid_position = QPointF(0, 0)
         grid.setPos(grid_position)
         self.graphboard.addItem(grid)
