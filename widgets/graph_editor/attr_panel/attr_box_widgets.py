@@ -103,7 +103,8 @@ class MotionTypeWidget(QWidget):
         super().__init__(parent)
         self.layout = QHBoxLayout(self)
         self.motion_type = "Pro"
-
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
         self.typeLabel = QLabel("Type:", self)
         self.typeButton = QPushButton(self.motion_type, self)
         self.typeButton.clicked.connect(self.toggle_motion_type)
@@ -130,7 +131,8 @@ class StartEndWidget(QWidget):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.layout = QHBoxLayout(self)
-
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
         self.startLabel = QLabel("Start:", self)
         self.startComboBox = QComboBox(self)
         self.startComboBox.addItems(["N", "E", "S", "W"])

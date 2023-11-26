@@ -5,9 +5,11 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtCore import Qt
 from settings.numerical_constants import GRAPHBOARD_SCALE
 from settings.string_constants import (
+    BLUE,
     COLOR,
     MOTION_TYPE,
     QUADRANT,
+    RED,
     ROTATION_DIRECTION,
     START_LOCATION,
     END_LOCATION,
@@ -260,17 +262,15 @@ class ArrowBoxDrag(QWidget):
             self.quadrant,
         )
 
-    def get_drag_preview_rotation_angle(
-        self, arrow: Optional["Arrow"] = None
-    ) -> RotationAngle:
+    def get_drag_preview_rotation_angle(self, arrow: "Arrow") -> RotationAngle:
         arrow = arrow or self
         quadrant_to_angle = self.get_drag_preview_rotation_angle_to_quadrant_map(
-            arrow.motion_type, arrow.rotation_direction
+            arrow.motion_type, arrow.rotation_direction, arrow.color
         )
         return quadrant_to_angle.get(arrow.quadrant, 0)
 
     def get_drag_preview_rotation_angle_to_quadrant_map(
-        self, motion_type: str, rotation_direction: str
+        self, motion_type: MotionType, rotation_direction: RotationDirection, color: Color
     ) -> Dict[str, Dict[str, int]]:
         """
         Returns a mapping of rotation angles to quadrants based on the motion type and rotation direction.
@@ -288,7 +288,7 @@ class ArrowBoxDrag(QWidget):
             Dict[str, Dict[str, int]]: A mapping of rotation angles to quadrants.
 
         """
-        if motion_type == PRO:
+        if motion_type == PRO and color == RED:
             return {
                 CLOCKWISE: {
                     NORTHEAST: 0,
@@ -303,7 +303,38 @@ class ArrowBoxDrag(QWidget):
                     NORTHWEST: 180,
                 },
             }.get(rotation_direction, {})
-        elif motion_type == ANTI:
+        elif motion_type == PRO and color == BLUE:
+            return {
+                CLOCKWISE: {
+                    NORTHEAST: 180,
+                    SOUTHEAST: 270,
+                    SOUTHWEST: 0,
+                    NORTHWEST: 90,
+                },
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: 90,
+                    SOUTHEAST: 180,
+                    SOUTHWEST: 270,
+                    NORTHWEST: 0,
+                },
+            }.get(rotation_direction, {})    
+        
+        elif motion_type == ANTI and color == RED:
+            return {
+                CLOCKWISE: {
+                    NORTHEAST: 270,
+                    SOUTHEAST: 0,
+                    SOUTHWEST: 90,
+                    NORTHWEST: 180,
+                },
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 90,
+                    SOUTHWEST: 180,
+                    NORTHWEST: 270,
+                },
+            }.get(rotation_direction, {})
+        elif motion_type == ANTI and color == BLUE:
             return {
                 CLOCKWISE: {
                     NORTHEAST: 90,
@@ -316,16 +347,6 @@ class ArrowBoxDrag(QWidget):
                     SOUTHEAST: 270,
                     SOUTHWEST: 0,
                     NORTHWEST: 90,
-                },
-            }.get(rotation_direction, {})
-        elif motion_type == STATIC:
-            return {
-                CLOCKWISE: {NORTHEAST: 0, SOUTHEAST: 0, SOUTHWEST: 0, NORTHWEST: 0},
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 0,
-                    SOUTHWEST: 0,
-                    NORTHWEST: 0,
                 },
             }.get(rotation_direction, {})
 
