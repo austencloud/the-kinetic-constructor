@@ -239,7 +239,6 @@ class ArrowBox(QGraphicsScene):
             else:
                 arrow.is_dim(False)
 
-
     def dim_all_arrows(self) -> None:
         for arrow in self.arrows:
             arrow.is_dim(True)

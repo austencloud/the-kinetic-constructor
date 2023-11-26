@@ -37,6 +37,7 @@ from utilities.TypeChecking.TypeChecking import (
     Tuple,
     Quadrant,
 )
+from widgets.graph_editor.graphboard.graphboard_view import GraphBoardView
 from widgets.graph_editor.graphboard.graphboard_init import GraphBoardInit
 from widgets.graph_editor.graphboard.graphboard_menu_handler import (
     GraphBoardMenuHandler,
@@ -80,32 +81,12 @@ class GraphBoard(QGraphicsScene):
         self.ghost_arrows = self.initializer.init_ghost_arrows()
         self.ghost_staffs = self.initializer.init_ghost_staffs()
         self.grid = self.initializer.init_grid()
-        self.view = self.initializer.init_view()
+        self.view: GraphBoardView = self.initializer.init_view()
         self.staff_set = self.initializer.init_staff_set()
         self.letter_item = self.initializer.init_letter_item()
         self.quadrants = self.initializer.init_quadrants(self.grid)
 
-        self.add_to_sequence_button = QPushButton(
-            QIcon("resources/images/icons/add_to_sequence.png"), "", self.view
-        )
-        self.clear_button = QPushButton(
-            QIcon("resources/images/icons/clear.png"), "", self.view
-        )
-        self.rotate_clockwise_button = QPushButton(
-            QIcon("resources/images/icons/rotate_right.png"), "", self.view
-        )
-        self.rotate_counterclockwise_button = QPushButton(
-            QIcon("resources/images/icons/rotate_left.png"), "", self.view
-        )
 
-        self.add_to_sequence_button.clicked.connect(lambda: self.add_to_sequence())
-        self.clear_button.clicked.connect(lambda: self.clear_graphboard())
-        self.rotate_clockwise_button.clicked.connect(
-            lambda: self.rotate_pictograph(CLOCKWISE)
-        )
-        self.rotate_counterclockwise_button.clicked.connect(
-            lambda: self.rotate_pictograph(COUNTER_CLOCKWISE)
-        )
 
         # set the icons to 80% of the button size
 
@@ -323,47 +304,4 @@ class GraphBoard(QGraphicsScene):
                 QSvgRenderer(f"{LETTER_SVG_DIR}/blank.svg")
             )
 
-    def update_graphboard_size(self) -> None:
-        view_width = int(self.graph_editor.height() * 75 / 90)
-        self.view.setFixedWidth(view_width)
-        self.view.setFixedHeight(self.graph_editor.height())
-        view_scale = view_width / self.width()
-        self.view.resetTransform()
-        self.view.scale(view_scale, view_scale)
 
-        self.add_to_sequence_button.setFixedSize(
-            int(self.view.width() / 7), int(self.view.width() / 7)
-        )
-        self.clear_button.setFixedSize(
-            int(self.view.width() / 7), int(self.view.width() / 7)
-        )
-        self.rotate_clockwise_button.setFixedSize(
-            int(self.view.width() / 7), int(self.view.width() / 7)
-        )
-        self.rotate_counterclockwise_button.setFixedSize(
-            int(self.view.width() / 7), int(self.view.width() / 7)
-        )
-
-        self.add_to_sequence_button.move(
-            self.view.width() - self.add_to_sequence_button.width(),
-            self.view.height() - self.add_to_sequence_button.height(),
-        )
-        self.clear_button.move(
-            0,
-            self.view.height() - self.clear_button.height(),
-        )
-        self.rotate_counterclockwise_button.move(0, 0)
-        self.rotate_clockwise_button.move(
-            self.view.width() - self.rotate_counterclockwise_button.width(), 0
-        )
-
-        self.add_to_sequence_button.setIconSize(
-            self.add_to_sequence_button.size() * 0.8
-        )
-        self.clear_button.setIconSize(self.clear_button.size() * 0.8)
-        self.rotate_clockwise_button.setIconSize(
-            self.rotate_clockwise_button.size() * 0.8
-        )
-        self.rotate_counterclockwise_button.setIconSize(
-            self.rotate_counterclockwise_button.size() * 0.8
-        )
