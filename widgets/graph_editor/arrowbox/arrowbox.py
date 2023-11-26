@@ -101,7 +101,7 @@ class ArrowBox(QGraphicsScene):
             {
                 COLOR: RED,
                 MOTION_TYPE: ANTI,
-                ROTATION_DIRECTION: COUNTER_CLOCKWISE,
+                ROTATION_DIRECTION: CLOCKWISE,
                 QUADRANT: SOUTHEAST,
                 START_LOCATION: SOUTH,
                 END_LOCATION: EAST,
@@ -119,7 +119,7 @@ class ArrowBox(QGraphicsScene):
             {
                 COLOR: BLUE,
                 MOTION_TYPE: PRO,
-                ROTATION_DIRECTION: COUNTER_CLOCKWISE,
+                ROTATION_DIRECTION: CLOCKWISE,
                 QUADRANT: SOUTHWEST,
                 START_LOCATION: SOUTH,
                 END_LOCATION: WEST,

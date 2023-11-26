@@ -1,8 +1,8 @@
-from PyQt6.QtCore import QPointF
-from PyQt6.QtGui import QTransform
+from PyQt6.QtCore import QPointF, Qt
+from PyQt6.QtGui import QTransform, QIcon
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsSceneMouseEvent
+from PyQt6.QtWidgets import QGraphicsScene, QGraphicsSceneMouseEvent, QPushButton
 
 from data.letter_engine_data import letter_types
 from objects.arrow import Arrow, BlankArrow
@@ -10,7 +10,9 @@ from objects.grid import Grid
 from objects.props.staff import Staff
 from settings.string_constants import (
     BLUE,
+    CLOCKWISE,
     COLOR,
+    COUNTER_CLOCKWISE,
     END_LOCATION,
     LETTER_SVG_DIR,
     MOTION_TYPE,
@@ -49,7 +51,6 @@ if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.graph_editor import GraphEditor
-from PyQt6.QtCore import Qt
 
 
 class GraphBoard(QGraphicsScene):
@@ -83,7 +84,38 @@ class GraphBoard(QGraphicsScene):
         self.letter_item = self.initializer.init_letter_item()
         self.quadrants = self.initializer.init_quadrants(self.grid)
 
+        self.add_to_sequence_button = QPushButton(
+            QIcon("resources/images/icons/add_to_sequence.png"), "", self.view
+        )
+        self.clear_button = QPushButton(
+            QIcon("resources/images/icons/clear.png"), "", self.view
+        )
+        self.rotate_clockwise_button = QPushButton(
+            QIcon("resources/images/icons/rotate_right.png"), "", self.view
+        )
+        self.rotate_counterclockwise_button = QPushButton(
+            QIcon("resources/images/icons/rotate_left.png"), "", self.view
+        )
+
+        self.add_to_sequence_button.clicked.connect(lambda: self.add_to_sequence())
+        self.clear_button.clicked.connect(lambda: self.clear_graphboard())
+        self.rotate_clockwise_button.clicked.connect(
+            lambda: self.rotate_pictograph(CLOCKWISE)
+        )
+        self.rotate_counterclockwise_button.clicked.connect(
+            lambda: self.rotate_pictograph(COUNTER_CLOCKWISE)
+        )
+
+        # set the icons to 80% of the button size
+
         self.setup_managers(main_widget)
+
+    def set_letter_renderer(self, letter: str) -> None:
+        letter_type = self.get_current_letter_type()
+        svg_path = f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
+        renderer = QSvgRenderer(svg_path)
+        if renderer.isValid():
+            self.letter_item.setSharedRenderer(renderer)
 
     def setup_managers(self, main_widget: "MainWidget") -> None:
         self.graphboard_menu_handler = GraphBoardMenuHandler(main_widget, self)
@@ -234,7 +266,20 @@ class GraphBoard(QGraphicsScene):
         letter_item.setPos(x, y)
 
     def add_to_sequence(self) -> None:
-        pass
+        self.clear_graphboard()
+
+    def rotate_pictograph(self, direction: str) -> None:
+        for arrow in self.arrows:
+            arrow.rotate(direction)
+
+    def clear_graphboard(self) -> None:
+        for arrow in self.arrows:
+            self.removeItem(arrow)
+        for staff in self.staffs:
+            self.removeItem(staff)
+        self.arrows = []
+        self.staffs = []
+        self.update()
 
     ### UPDATERS ###
 
@@ -269,9 +314,47 @@ class GraphBoard(QGraphicsScene):
                 QSvgRenderer(f"{LETTER_SVG_DIR}/blank.svg")
             )
 
-    def set_letter_renderer(self, letter: str) -> None:
-        letter_type = self.get_current_letter_type()
-        svg_path = f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
-        renderer = QSvgRenderer(svg_path)
-        if renderer.isValid():
-            self.letter_item.setSharedRenderer(renderer)
+    def update_graphboard_size(self) -> None:
+        view_width = int(self.graph_editor.height() * 75 / 90)
+        self.view.setFixedWidth(view_width)
+        self.view.setFixedHeight(self.graph_editor.height())
+        view_scale = view_width / self.width()
+        self.view.resetTransform()
+        self.view.scale(view_scale, view_scale)
+
+        self.add_to_sequence_button.setFixedSize(
+            int(self.view.width() / 7), int(self.view.width() / 7)
+        )
+        self.clear_button.setFixedSize(
+            int(self.view.width() / 7), int(self.view.width() / 7)
+        )
+        self.rotate_clockwise_button.setFixedSize(
+            int(self.view.width() / 7), int(self.view.width() / 7)
+        )
+        self.rotate_counterclockwise_button.setFixedSize(
+            int(self.view.width() / 7), int(self.view.width() / 7)
+        )
+
+        self.add_to_sequence_button.move(
+            self.view.width() - self.add_to_sequence_button.width(),
+            self.view.height() - self.add_to_sequence_button.height(),
+        )
+        self.clear_button.move(
+            0,
+            self.view.height() - self.clear_button.height(),
+        )
+        self.rotate_counterclockwise_button.move(0, 0)
+        self.rotate_clockwise_button.move(
+            self.view.width() - self.rotate_counterclockwise_button.width(), 0
+        )
+
+        self.add_to_sequence_button.setIconSize(
+            self.add_to_sequence_button.size() * 0.8
+        )
+        self.clear_button.setIconSize(self.clear_button.size() * 0.8)
+        self.rotate_clockwise_button.setIconSize(
+            self.rotate_clockwise_button.size() * 0.8
+        )
+        self.rotate_counterclockwise_button.setIconSize(
+            self.rotate_counterclockwise_button.size() * 0.8
+        )

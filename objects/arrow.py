@@ -387,7 +387,7 @@ class Arrow(GraphicalObject):
         current_quadrant_index = quadrants.index(self.quadrant)
         new_quadrant_index = (
             (current_quadrant_index + 1) % 4
-            if rotation_direction == RIGHT
+            if rotation_direction == CLOCKWISE
             else (current_quadrant_index - 1) % 4
         )
         new_quadrant = quadrants[new_quadrant_index]

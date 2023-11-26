@@ -64,19 +64,13 @@ class GraphEditor(QFrame):
     def update_size(self) -> None:
         self.setFixedHeight(int(self.main_widget.height() * 1 / 3))
         self.setFixedWidth(int(self.main_widget.width() * 0.5))
-        self.update_graphboard_size()
+        self.graphboard.update_graphboard_size()
         self.update_arrowbox_size()
         self.update_propbox_size()
         self.update_attr_panel_size()
         self.update_vtg_panel_size()
 
-    def update_graphboard_size(self) -> None:
-        view_width = int(self.height() * 75 / 90)
-        self.graphboard.view.setFixedWidth(view_width)
-        self.graphboard.view.setFixedHeight(self.height())
-        view_scale = view_width / self.graphboard.width()
-        self.graphboard.view.resetTransform()  # Reset the current transform
-        self.graphboard.view.scale(view_scale, view_scale)  # Set the new scale
+
 
     def update_arrowbox_size(self) -> None:
         self.arrowbox.view.setFixedSize(
