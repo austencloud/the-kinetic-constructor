@@ -27,4 +27,7 @@ class PropBoxView(QGraphicsView):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)  # Call the parent class's resizeEvent
         if self.scene():
-            self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
+            self.scale(
+                self.width() / self.scene().width(),
+                self.height() / self.scene().height(),
+            )

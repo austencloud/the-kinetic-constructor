@@ -8,7 +8,7 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_staff import GhostStaff
 from objects.grid import Grid
 from objects.letter_item import LetterItem
-from objects.staff import BlueStaff, RedStaff, Staff
+from objects.props.staff import BlueStaff, RedStaff, Staff
 from settings.numerical_constants import GRAPHBOARD_HEIGHT, GRAPHBOARD_WIDTH
 from settings.string_constants import (
     BLUE,

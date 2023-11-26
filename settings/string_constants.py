@@ -7,6 +7,12 @@ SVG_NS = "http://www.w3.org/2000/svg"
 
 GRID_FILE_PATH = "resources/images/grid/grid.svg"
 STAFF_SVG_FILE_PATH = "resources/images/props/staff.svg"
+CLUB_SVG_FILE_PATH = "resources/images/props/club.svg"
+BUUGENG_SVG_FILE_PATH = "resources/images/props/buugeng.svg"
+FAN_SVG_FILE_PATH = "resources/images/props/fan.svg"
+TRIAD_SVG_FILE_PATH = "resources/images/props/triad.svg"
+HOOP_SVG_FILE_PATH = "resources/images/props/hoop.svg"
+
 
 BLUE = "blue"
 RED = "red"

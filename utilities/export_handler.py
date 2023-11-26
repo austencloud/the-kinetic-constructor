@@ -2,7 +2,7 @@ import re
 from PyQt6.QtGui import QImage, QPainter
 from PyQt6.QtCore import QPointF, QSize
 from objects.arrow import Arrow
-from objects.staff import Staff
+from objects.props.staff import Staff
 from objects.grid import Grid
 import xml.etree.ElementTree as ET
 from copy import deepcopy

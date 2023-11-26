@@ -31,7 +31,7 @@ from settings.string_constants import (
 )
 from data.start_end_location_mapping import start_end_location_mapping
 from objects.graphical_object import GraphicalObject
-from objects.staff import Staff
+from objects.props.staff import Staff
 
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
@@ -129,7 +129,6 @@ class Arrow(GraphicalObject):
         self.staff.color = self.color
         self.staff.location = self.end_location
         self.staff.axis = self.staff.get_axis(self.end_location)
-        self.staff.update_appearance()
 
     def update_ghost_on_click(self) -> None:
         self.ghost_arrow: "GhostArrow" = self.graphboard.ghost_arrows[self.color]

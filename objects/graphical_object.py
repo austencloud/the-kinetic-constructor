@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Union
 if TYPE_CHECKING:
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
     from objects.arrow import Arrow
-    from objects.staff import Staff
+    from objects.props.staff import Staff
     from objects.ghosts.ghost_staff import GhostStaff
     from objects.ghosts.ghost_arrow import GhostArrow
 
@@ -80,7 +80,7 @@ class GraphicalObject(QGraphicsSvgItem):
     def update_appearance(
         self: Union["Staff", "Arrow", "GhostStaff", "GhostArrow"]
     ) -> None:
-        from objects.staff import Staff
+        from objects.props.staff import Staff
 
         self.update_color()
         if isinstance(self, Staff):

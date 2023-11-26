@@ -1,4 +1,4 @@
-from objects.staff import Staff
+from objects.props.staff import Staff
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, StaffAttributesDicts
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget

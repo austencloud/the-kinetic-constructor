@@ -22,7 +22,7 @@ from settings.string_constants import (
     BLUE,
 )
 from typing import TYPE_CHECKING, Dict, List
-from objects.staff import Staff
+from objects.props.staff import Staff
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
     LetterDictionary,

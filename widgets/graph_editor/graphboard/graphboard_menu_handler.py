@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QAction
 from PyQt6.QtCore import QPoint
 from objects.arrow import Arrow
-from objects.staff import Staff
+from objects.props.staff import Staff
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:

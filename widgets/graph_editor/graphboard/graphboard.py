@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import QGraphicsScene, QGraphicsSceneMouseEvent
 
 from data.letter_engine_data import letter_types
 from objects.arrow import Arrow, BlankArrow
-from objects.staff import Staff
+from objects.props.staff import Staff
 from settings.string_constants import (
     BLUE,
     COLOR,

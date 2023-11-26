@@ -1,3 +1,4 @@
+
 from objects.graphical_object import GraphicalObject
 from PyQt6.QtCore import Qt, QPointF
 from settings.numerical_constants import (
@@ -31,7 +32,6 @@ import logging
 import re
 
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
-
 from utilities.TypeChecking.TypeChecking import (
     RotationAngle,
     StaffAttributesDicts,
@@ -53,31 +53,20 @@ if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
     
-ATTRIBUTES = STAFF_ATTRIBUTES
-
-logging.basicConfig(
-    filename="logs/staff.log",
-    level=logging.DEBUG,
-    format="%(asctime)s %(levelname)s %(name)s %(message)s",
-)
-
-
-class Staff(GraphicalObject):
-    arrow: "Arrow"
-    svg_file: str
-
+class Prop(GraphicalObject):
     def __init__(
         self,
         main_widget: "MainWidget",
         graphboard: "GraphBoard",
-        attributes,
+        svg_file: str,
+        attributes: Dict = None,
     ) -> None:
-        svg_file = STAFF_SVG_FILE_PATH
-        super().__init__(svg_file, main_widget)
+        super().__init__(svg_file, graphboard)
         self._setup_attributes(main_widget, graphboard, attributes)
-
-    ### SETUP ###
-
+        self.set_staff_transform_origin_to_center()
+        self.update_appearance()
+        
+        
     def _setup_attributes(
         self,
         main_widget: "MainWidget",
@@ -88,7 +77,7 @@ class Staff(GraphicalObject):
         self.drag_offset = QPointF(0, 0)
         self.previous_location = None
         self.arrow: Arrow = None
-        self.ghost_staff: Staff = None
+        self.ghost_prop: Prop = None
 
         self.color = attributes[COLOR]
         self.location = attributes[LOCATION]
@@ -104,15 +93,15 @@ class Staff(GraphicalObject):
     def mousePressEvent(self, event) -> None:
         self.setSelected(True)
         if isinstance(self.scene(), self.graphboard.__class__):
-            if not self.ghost_staff:
-                self.ghost_staff = self.graphboard.ghost_staffs[self.color]
-            self.ghost_staff.color = self.color
-            self.ghost_staff.location = self.location
-            self.ghost_staff.layer = self.layer
-            self.ghost_staff.update_appearance()
-            self.graphboard.addItem(self.ghost_staff)
-            self.ghost_staff.arrow = self.arrow
-            self.graphboard.staffs.append(self.ghost_staff)
+            if not self.ghost_prop:
+                self.ghost_prop = self.graphboard.ghost_staffs[self.color]
+            self.ghost_prop.color = self.color
+            self.ghost_prop.location = self.location
+            self.ghost_prop.layer = self.layer
+            self.ghost_prop.update_appearance()
+            self.graphboard.addItem(self.ghost_prop)
+            self.ghost_prop.arrow = self.arrow
+            self.graphboard.staffs.append(self.ghost_prop)
             self.graphboard.staffs.remove(self)
             self.graphboard.update()
             self.graphboard.staffs.append(self)
@@ -138,10 +127,10 @@ class Staff(GraphicalObject):
             self.update_appearance()
             self.update_arrow_quadrant(new_location)
 
-            self.ghost_staff.color = self.color
-            self.ghost_staff.location = self.location
-            self.ghost_staff.layer = self.layer
-            self.ghost_staff.update_appearance()
+            self.ghost_prop.color = self.color
+            self.ghost_prop.location = self.location
+            self.ghost_prop.layer = self.layer
+            self.ghost_prop.update_appearance()
 
             self.graphboard.staffs.remove(self)
             if self.arrow.motion_type == STATIC:
@@ -208,9 +197,9 @@ class Staff(GraphicalObject):
 
     def mouseReleaseEvent(self, event) -> None:
         if isinstance(self.scene(), self.graphboard.__class__):
-            self.graphboard.removeItem(self.ghost_staff)
-            self.graphboard.staffs.remove(self.ghost_staff)
-            self.ghost_staff.arrow = None
+            self.graphboard.removeItem(self.ghost_prop)
+            self.graphboard.staffs.remove(self.ghost_prop)
+            self.ghost_prop.arrow = None
             self.graphboard.update()
             self.finalize_staff_drop(event)
 
@@ -237,15 +226,9 @@ class Staff(GraphicalObject):
             axis: Axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
         return axis
 
-    def update_rotation(self) -> None:
-        if self.axis == VERTICAL:
-            self.current_position = self.pos()
-            self.setTransformOriginPoint(self.get_staff_center())
-            self.setRotation(90)
-        else:
-            self.setRotation(0)
 
-    def set_staff_transform_origin_to_center(self: "Staff") -> None:
+
+    def set_staff_transform_origin_to_center(self: "Prop") -> None:
         self.center = self.get_staff_center()
         self.setTransformOriginPoint(self.center)
 
@@ -268,15 +251,19 @@ class Staff(GraphicalObject):
         if self.location == NORTH or self.location == SOUTH:
             return {
                 NORTH: 90,
-                SOUTH: 270,
+                SOUTH: 90,
             }.get(self.location, {})
         elif self.location == EAST or self.location == WEST:
             return {
                 WEST: 0,
-                EAST: 180,
+                EAST: 0,
             }.get(self.location, {})
         else:
             return {}
+
+    def update_rotation(self) -> None:
+        rotation_angle = self.get_rotation_angle()
+        self.setRotation(rotation_angle)
 
     def get_staff_center(self) -> QPointF:
         if self.axis == VERTICAL:
@@ -310,14 +297,6 @@ class Staff(GraphicalObject):
 
     ### HELPERS ###
 
-    def create_staff_dict_from_arrow(self, arrow: "Arrow") -> StaffAttributesDicts:
-        staff_dict: StaffAttributesDicts = {
-            "color": arrow.color,
-            "location": arrow.end_location,
-            "layer": 1,
-        }
-        return staff_dict
-
     def swap_axis(self) -> None:
         if self.axis == VERTICAL:
             self.axis = HORIZONTAL
@@ -345,15 +324,3 @@ class Staff(GraphicalObject):
         self.graphboard.removeItem(self)
         self.graphboard.staffs.remove(self)
         self.graphboard.update()
-
-
-class RedStaff(Staff):
-    def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard", dict: StaffAttributesDicts) -> None:
-        super().__init__(main_widget, graphboard, dict)
-        self.setSharedRenderer(self.renderer)
-
-
-class BlueStaff(Staff):
-    def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard", dict: StaffAttributesDicts) -> None:
-        super().__init__(main_widget, graphboard, dict)
-        self.setSharedRenderer(self.renderer)
