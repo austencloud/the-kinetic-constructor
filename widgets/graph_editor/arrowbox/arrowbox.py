@@ -47,8 +47,6 @@ class ArrowBox(QGraphicsScene):
         self.setup_view()
         self.populate_arrows()
         self.grid = Grid("resources/images/grid/grid_simple.svg")
-        # set dimensions
-        # add the grid to the scene and scale it to the height and width of the scene
         self.addItem(self.grid)
         self.grid.setPos(0, 0)
         self.target_arrow: "Arrow" = None
@@ -147,6 +145,7 @@ class ArrowBox(QGraphicsScene):
         for arrow in self.arrows:
             arrow.update_appearance()
             arrow.setTransformOriginPoint(arrow.boundingRect().center())
+            arrow.is_dim(True)
 
         self.arrows[0].setPos(425, 50) # RED PRO CLOCKWISE NE
         self.arrows[1].setPos(100, 375) # BLUE ANTI COUNTERCLOCKWISE SW
@@ -164,10 +163,8 @@ class ArrowBox(QGraphicsScene):
         scene_pos = event.scenePos()
         event_pos = self.view.mapFromScene(scene_pos)
 
-        # Find all items at the event position which are instances of Arrow
         arrows = [item for item in self.items(scene_pos) if isinstance(item, Arrow)]
 
-        # Determine the closest arrow to the cursor position
         closest_arrow = None
         min_distance = float('inf')
         for arrow in arrows:
@@ -177,7 +174,6 @@ class ArrowBox(QGraphicsScene):
                 closest_arrow = arrow
                 min_distance = distance
 
-        # Set the target arrow as the closest arrow
         if closest_arrow:
             self.target_arrow = closest_arrow
             if not self.arrowbox_drag:
@@ -187,18 +183,15 @@ class ArrowBox(QGraphicsScene):
                 self.arrowbox_drag.match_target_arrow(self.target_arrow)
                 self.arrowbox_drag.start_drag(event_pos)
         else:
-            # If no Arrow items are found, ignore the event and don't initiate dragging
             self.target_arrow = None
             event.ignore()
 
     def mouseMoveEvent(self, event) -> None:
         if self.target_arrow and self.arrowbox_drag:
-            # Only handle the mouse move if dragging has been initiated
             scene_pos = event.scenePos()
             event_pos = self.view.mapFromScene(scene_pos)
             self.arrowbox_drag.handle_mouse_move(event_pos)
         else:
-            # New code for highlighting
             cursor_pos = event.scenePos()
             closest_arrow = None
             min_distance = float('inf')
@@ -221,3 +214,8 @@ class ArrowBox(QGraphicsScene):
         if self.arrowbox_drag:
             self.arrowbox_drag.handle_mouse_release()
             self.target_arrow = None  # Reset
+            
+    def onMouseLeaveScene(self) -> None:
+        # Redim all arrows when the mouse leaves the scene
+        for arrow in self.arrows:
+            arrow.is_dim(True)

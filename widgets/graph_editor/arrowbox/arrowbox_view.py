@@ -26,3 +26,7 @@ class ArrowBoxView(QGraphicsView):
         if self.scene():
             self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
 
+    def leaveEvent(self, event) -> None:
+        # Call a method on the ArrowBox scene when the mouse leaves the view
+        if self.scene():
+            self.scene().onMouseLeaveScene()
