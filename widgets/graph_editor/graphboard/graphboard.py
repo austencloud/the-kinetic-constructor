@@ -4,6 +4,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsSceneMouseEvent, QPushButton
 
+from objects.letter_item import LetterItem
 from data.letter_engine_data import letter_types
 from objects.arrow import Arrow, BlankArrow
 from objects.grid import Grid
@@ -149,6 +150,14 @@ class GraphBoard(QGraphicsScene):
         elif isinstance(clicked_item, Arrow):
             self.dragged_arrow = clicked_item
             self.dragged_arrow.mousePressEvent(event)
+        elif isinstance(clicked_item, LetterItem):
+            clicked_item.setSelected(False)
+            for arrow in self.arrows:
+                arrow.setSelected(False)
+            for staff in self.staffs:
+                staff.setSelected(False)
+            self.dragged_staff = None
+            self.dragged_arrow = None
         elif not clicked_item or isinstance(clicked_item, Grid):
             for arrow in self.arrows:
                 arrow.setSelected(False)
