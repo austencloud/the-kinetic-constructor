@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
 class KeyEventHandler:
@@ -17,13 +17,14 @@ class KeyEventHandler:
     Args:
         event (QKeyEvent): The key event.
         main_widget (MainWidget): The main widget.
-        graphboard (GraphBoard): The graph board.
+        pictograph (Pictograph): The graph board.
 
     Returns:
         None
     """
+
     def keyPressEvent(
-        self, event: "QKeyEvent", main_widget: "MainWidget", graphboard: "GraphBoard"
+        self, event: "QKeyEvent", main_widget: "MainWidget", pictograph: "Pictograph"
     ) -> None:
         """
         Handles the key press event.
@@ -31,16 +32,16 @@ class KeyEventHandler:
         Args:
             event (QKeyEvent): The key event.
             main_widget (MainWidget): The main widget.
-            graphboard (GraphBoard): The graph board.
+            pictograph (Pictograph): The graph board.
 
         Returns:
             None
         """
         sequence = main_widget.sequence
 
-        if not graphboard.selectedItems():
+        if not pictograph.selectedItems():
             return
-        selection = graphboard.selectedItems()[0]
+        selection = pictograph.selectedItems()[0]
 
         selected_arrow = selection if isinstance(selection, Arrow) else None
         selected_staff = selection if isinstance(selection, Staff) else None
@@ -74,4 +75,4 @@ class KeyEventHandler:
 
         ### SEQEUNCE MANAGEMENT ###
         elif event.key() == Qt.Key.Key_Enter:
-            sequence.add_to_sequence(graphboard)
+            sequence.add_to_sequence(pictograph)

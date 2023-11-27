@@ -31,7 +31,7 @@ from objects.grid import Grid
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 from objects.props.club import Club
 from objects.props.buugeng import Buugeng
 from objects.props.fan import Fan
@@ -40,11 +40,11 @@ from objects.props.hoop import Hoop
 
 
 class PropBox(QGraphicsScene):
-    def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard") -> None:
+    def __init__(self, main_widget: "MainWidget", pictograph: "Pictograph") -> None:
         super().__init__()
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
-        self.graphboard = graphboard
+        self.pictograph = pictograph
         self.grid = Grid("resources/images/grid/grid.svg")
         self.grid_position = QPointF(0, 0)
         self.grid.setPos(self.grid_position)
@@ -119,11 +119,10 @@ class PropBox(QGraphicsScene):
                 AXIS: HORIZONTAL,
                 ORIENTATION: CLOCKWISE,
             },
-
         }
 
         for key, attrs in self.staff_config.items():
-            staff = Staff(self.main_widget, self.graphboard, attrs)
+            staff = Staff(self.main_widget, self.pictograph, attrs)
             staff.setTransformOriginPoint(QPointF(0, 0))
             staff.setPos(self.calculate_staff_position(key, staff))
             self.addItem(staff)
@@ -217,8 +216,8 @@ class PropBox(QGraphicsScene):
             LAYER: 1,
         }
 
-        red_club = Club(self.main_widget, self.graphboard, red_propbox_club_dict)
-        blue_club = Club(self.main_widget, self.graphboard, blue_propbox_club_dict)
+        red_club = Club(self.main_widget, self.pictograph, red_propbox_club_dict)
+        blue_club = Club(self.main_widget, self.pictograph, blue_propbox_club_dict)
 
         red_club.setPos(club_locations[EAST])
         blue_club.setPos(club_locations[NORTH])
@@ -253,10 +252,10 @@ class PropBox(QGraphicsScene):
         }
 
         red_buugeng = Buugeng(
-            self.main_widget, self.graphboard, red_propbox_buugeng_dict
+            self.main_widget, self.pictograph, red_propbox_buugeng_dict
         )
         blue_buugeng = Buugeng(
-            self.main_widget, self.graphboard, blue_propbox_buugeng_dict
+            self.main_widget, self.pictograph, blue_propbox_buugeng_dict
         )
 
         red_buugeng.setPos(buugeng_locations[EAST])
@@ -291,8 +290,8 @@ class PropBox(QGraphicsScene):
             LAYER: 1,
         }
 
-        red_fan = Fan(self.main_widget, self.graphboard, red_propbox_fan_dict)
-        blue_fan = Fan(self.main_widget, self.graphboard, blue_propbox_fan_dict)
+        red_fan = Fan(self.main_widget, self.pictograph, red_propbox_fan_dict)
+        blue_fan = Fan(self.main_widget, self.pictograph, blue_propbox_fan_dict)
 
         red_fan.setPos(fan_locations[EAST])
         blue_fan.setPos(fan_locations[NORTH])
@@ -326,8 +325,8 @@ class PropBox(QGraphicsScene):
             LAYER: 1,
         }
 
-        red_triad = Triad(self.main_widget, self.graphboard, red_propbox_triad_dict)
-        blue_triad = Triad(self.main_widget, self.graphboard, blue_propbox_triad_dict)
+        red_triad = Triad(self.main_widget, self.pictograph, red_propbox_triad_dict)
+        blue_triad = Triad(self.main_widget, self.pictograph, blue_propbox_triad_dict)
 
         red_triad.setPos(triad_locations[EAST])
         blue_triad.setPos(triad_locations[NORTH])
@@ -361,8 +360,8 @@ class PropBox(QGraphicsScene):
             LAYER: 1,
         }
 
-        red_hoop = Hoop(self.main_widget, self.graphboard, red_propbox_hoop_dict)
-        blue_hoop = Hoop(self.main_widget, self.graphboard, blue_propbox_hoop_dict)
+        red_hoop = Hoop(self.main_widget, self.pictograph, red_propbox_hoop_dict)
+        blue_hoop = Hoop(self.main_widget, self.pictograph, blue_propbox_hoop_dict)
 
         red_hoop.setPos(hoop_locations[EAST])
         blue_hoop.setPos(hoop_locations[NORTH])

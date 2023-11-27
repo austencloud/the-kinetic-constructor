@@ -6,18 +6,18 @@ from widgets.sequence.sequence_beats import SequenceBeats
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
 class Sequence(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.graphboard = main_widget.graph_editor.graphboard
+        self.pictograph = main_widget.graph_editor.pictograph
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
-        self.beat_frame = SequenceBeats(self.main_widget, self.graphboard, self)
-        self.button_frame = SequenceButtons(self.main_widget, self.graphboard, self)
+        self.beat_frame = SequenceBeats(self.main_widget, self.pictograph, self)
+        self.button_frame = SequenceButtons(self.main_widget, self.pictograph, self)
 
         self.layout = QVBoxLayout(self)
         self.layout.setSpacing(0)

@@ -26,40 +26,45 @@ from settings.string_constants import (
 from utilities.TypeChecking.TypeChecking import Color
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.attr_panel.attr_panel import (
         AttrPanel,
     )
 from PyQt6.QtWidgets import QSizePolicy
-from widgets.graph_editor.attr_panel.attr_box_widgets import StartEndWidget, MotionTypeWidget, TurnsWidget, HeaderWidget
+from widgets.graph_editor.attr_panel.attr_box_widgets import (
+    StartEndWidget,
+    MotionTypeWidget,
+    TurnsWidget,
+    HeaderWidget,
+)
+
 
 class AttrBox(QFrame):
     def __init__(
-        self, attr_panel: "AttrPanel", graphboard: "GraphBoard", color: Color
+        self, attr_panel: "AttrPanel", pictograph: "Pictograph", color: Color
     ) -> None:
         super().__init__(attr_panel)
         self.attr_panel = attr_panel
-        self.graphboard = graphboard
+        self.pictograph = pictograph
         self.color = color
         self.turns_widget = None
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
 
     def calculate_button_size(self) -> int:
-        return int((self.graphboard.view.height() // 2 // 4) * 1)
+        return int((self.pictograph.view.height() // 2 // 4) * 1)
 
     def init_ui(self) -> None:
         self.setup_box()
         self.button_size = self.calculate_button_size()
         self.icon_size = QSize(int(self.button_size * 0.5), int(self.button_size * 0.5))
 
-
         # self.attribute_labels = self.create_attribute_labels()
 
         self.header_widget = HeaderWidget(self, self.color)
         self.motion_type_widget = MotionTypeWidget(self)
         self.start_end_widget = StartEndWidget(self)
-        self.turns_widget = TurnsWidget(self.graphboard, self.color, self)
-        
+        self.turns_widget = TurnsWidget(self.pictograph, self.color, self)
+
         self.turns_widget.subtract_turns_button.setIconSize(self.icon_size)
         self.turns_widget.add_turns_button.setIconSize(self.icon_size)
         self.turns_widget.subtract_turns_button.setFixedSize(
@@ -70,9 +75,9 @@ class AttrBox(QFrame):
         )
         self.clock_label = self.create_clock_label()
         self.apply_button_styles()
-        
+
         self.preload_pixmaps()
-        
+
         self.layout().addWidget(self.header_widget)
         self.layout().addWidget(self.motion_type_widget)
         self.layout().addWidget(self.start_end_widget)
@@ -94,7 +99,6 @@ class AttrBox(QFrame):
         if self.turns_widget:
             self.turns_widget.subtract_turns_button.setStyleSheet(button_style)
             self.turns_widget.add_turns_button.setStyleSheet(button_style)
-        
 
     def setup_box(self) -> None:
         self.setObjectName("AttributeBox")
@@ -110,8 +114,6 @@ class AttrBox(QFrame):
         self.setStyleSheet(f"#AttributeBox {{ border: 2px solid {color_hex}; }}")
 
     ### CREATE LABELS ###
-
-
 
     def create_attribute_labels(self) -> Dict[str, QLabel]:
         labels = {}
@@ -194,30 +196,30 @@ class AttrBox(QFrame):
         button.setIconSize(self.icon_size)
         button.setFixedSize(self.button_size, self.button_size)
         button.clicked.connect(callback)
-        
+
         # Return the button without setting a stylesheet
         return button
-    
+
     def swap_motion_type_callback(self) -> None:
-        arrow = self.graphboard.get_arrow_by_color(self.color)
+        arrow = self.pictograph.get_arrow_by_color(self.color)
         if arrow:
             arrow.swap_motion_type()
             self.update_labels(arrow)
 
     def swap_start_end_callback(self) -> None:
-        arrow = self.graphboard.get_arrow_by_color(self.color)
+        arrow = self.pictograph.get_arrow_by_color(self.color)
         if arrow:
             arrow.swap_rot_dir()
             self.update_labels(arrow)
 
     def subtract_turns_callback(self) -> None:
-        arrow = self.graphboard.get_arrow_by_color(self.color)
+        arrow = self.pictograph.get_arrow_by_color(self.color)
         if arrow:
             arrow.subtract_turn()
             self.update_labels(arrow)
 
     def add_turns_callback(self) -> None:
-        arrow = self.graphboard.get_arrow_by_color(self.color)
+        arrow = self.pictograph.get_arrow_by_color(self.color)
         if arrow:
             arrow.add_turn()
             self.update_labels(arrow)
@@ -252,7 +254,7 @@ class AttrBox(QFrame):
         clock_label.setPixmap(pixmap)
 
     def update_attr_box(self) -> None:
-        arrow = self.graphboard.get_arrow_by_color(self.color)
+        arrow = self.pictograph.get_arrow_by_color(self.color)
         if arrow:
             self.update_labels(arrow)
 
@@ -260,8 +262,8 @@ class AttrBox(QFrame):
         self.turns_widget.turns_label.setText(f"{motion.turns}")
 
     def update_attr_box_size(self) -> None:
-        self.setFixedHeight(int(self.attr_panel.graphboard.graph_editor.height() / 2))
-        self.setFixedWidth(int(self.attr_panel.graphboard.graph_editor.height() / 2))
+        self.setFixedHeight(int(self.attr_panel.pictograph.graph_editor.height() / 2))
+        self.setFixedWidth(int(self.attr_panel.pictograph.graph_editor.height() / 2))
         # delete the buttons layouts
         for child in self.children():
             if isinstance(child, QFrame):

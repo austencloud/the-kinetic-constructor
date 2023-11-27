@@ -8,12 +8,12 @@ from objects.arrow import Arrow
 from utilities.TypeChecking.TypeChecking import LetterDictionary, Letters
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
 class JsonHandler(QObject):
-    def connect_scene(self, graphboard: "GraphBoard") -> None:
-        self.graphboard = graphboard
+    def connect_scene(self, pictograph: "Pictograph") -> None:
+        self.pictograph = pictograph
 
     def load_all_letters(self) -> LetterDictionary:
         directory = "resources/json"
@@ -39,7 +39,7 @@ class JsonHandler(QObject):
         current_attributes = []
         updated_letters: List[Letters] = []  # Keep track of updated letters
 
-        for item in self.graphboard.items():
+        for item in self.pictograph.items():
             if isinstance(item, Arrow):
                 current_attributes.append(item.get_attributes())
         current_attributes = sorted(current_attributes, key=lambda x: x["color"])

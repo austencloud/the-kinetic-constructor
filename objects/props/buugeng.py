@@ -7,7 +7,7 @@ from utilities.TypeChecking.TypeChecking import (
 if TYPE_CHECKING:
     from objects.arrow import Arrow
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 from settings.string_constants import BUUGENG_SVG_FILE_PATH
 
 logging.basicConfig(
@@ -24,9 +24,9 @@ class Buugeng(Prop):
     def __init__(
         self,
         main_widget: "MainWidget",
-        graphboard: "GraphBoard",
+        pictograph: "Pictograph",
         attributes,
     ) -> None:
         svg_file = BUUGENG_SVG_FILE_PATH
-        super().__init__(main_widget, graphboard, svg_file, attributes)
-        self._setup_attributes(main_widget, graphboard, attributes)
+        super().__init__(main_widget, pictograph, svg_file, attributes)
+        self._setup_attributes(main_widget, pictograph, attributes)

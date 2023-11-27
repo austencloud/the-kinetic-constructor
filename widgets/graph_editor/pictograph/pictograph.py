@@ -26,7 +26,10 @@ from settings.string_constants import (
     START_LOCATION,
     STATIC,
     TURNS,
-    START_ORIENTATION, END_ORIENTATION, START_LAYER, END_LAYER
+    START_ORIENTATION,
+    END_ORIENTATION,
+    START_LAYER,
+    END_LAYER,
 )
 from utilities.letter_engine import LetterEngine
 from utilities.TypeChecking.TypeChecking import (
@@ -39,15 +42,15 @@ from utilities.TypeChecking.TypeChecking import (
     Tuple,
     Quadrant,
 )
-from widgets.graph_editor.graphboard.graphboard_view import GraphBoardView
-from widgets.graph_editor.graphboard.graphboard_init import GraphBoardInit
-from widgets.graph_editor.graphboard.graphboard_menu_handler import (
-    GraphBoardMenuHandler,
+from widgets.graph_editor.pictograph.pictograph_view import PictographView
+from widgets.graph_editor.pictograph.pictograph_init import PictographInit
+from widgets.graph_editor.pictograph.pictograph_menu_handler import (
+    PictographMenuHandler,
 )
-from widgets.graph_editor.graphboard.position_engines.arrow_positioner import (
+from widgets.graph_editor.pictograph.position_engines.arrow_positioner import (
     ArrowPositioner,
 )
-from widgets.graph_editor.graphboard.position_engines.staff_positioner import (
+from widgets.graph_editor.pictograph.position_engines.staff_positioner import (
     StaffPositioner,
 )
 
@@ -57,7 +60,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor.graph_editor import GraphEditor
 
 
-class GraphBoard(QGraphicsScene):
+class Pictograph(QGraphicsScene):
     def __init__(self, main_widget: "MainWidget", graph_editor: "GraphEditor") -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -79,12 +82,12 @@ class GraphBoard(QGraphicsScene):
 
         self.dragged_arrow: Arrow = None
         self.dragged_staff: Staff = None
-        self.initializer = GraphBoardInit(self)
+        self.initializer = PictographInit(self)
 
         self.ghost_arrows = self.initializer.init_ghost_arrows()
         self.ghost_staffs = self.initializer.init_ghost_staffs()
         self.grid = self.initializer.init_grid()
-        self.view: GraphBoardView = self.initializer.init_view()
+        self.view: PictographView = self.initializer.init_view()
         self.staff_set = self.initializer.init_staff_set()
         self.letter_item = self.initializer.init_letter_item()
         self.quadrants = self.initializer.init_quadrants(self.grid)
@@ -101,7 +104,7 @@ class GraphBoard(QGraphicsScene):
             self.letter_item.setSharedRenderer(renderer)
 
     def setup_managers(self, main_widget: "MainWidget") -> None:
-        self.graphboard_menu_handler = GraphBoardMenuHandler(main_widget, self)
+        self.pictograph_menu_handler = PictographMenuHandler(main_widget, self)
         self.arrow_positioner = ArrowPositioner(self)
         self.staff_positioner = StaffPositioner(self)
         self.letter_engine = LetterEngine(self)
@@ -122,7 +125,7 @@ class GraphBoard(QGraphicsScene):
             clicked_item = items_at_pos[0]
 
         event_pos = event.screenPos()
-        self.graphboard_menu_handler.create_master_menu(event_pos, clicked_item)
+        self.pictograph_menu_handler.create_master_menu(event_pos, clicked_item)
 
     def mousePressEvent(self, event) -> None:
         clicked_item = self.itemAt(event.scenePos(), QTransform())
@@ -180,16 +183,22 @@ class GraphBoard(QGraphicsScene):
 
     def get_state(self) -> List[MotionAttributesDicts]:
         state = []
-        for arrow in self.arrows:
+        for motion in self.motions:
             state.append(
                 {
-                    COLOR: arrow.color,
-                    MOTION_TYPE: arrow.motion_type,
-                    ROTATION_DIRECTION: arrow.rotation_direction,
-                    QUADRANT: arrow.quadrant,
-                    START_LOCATION: arrow.start_location,
-                    END_LOCATION: arrow.end_location,
-                    TURNS: arrow.turns,
+                    COLOR: motion.color,
+                    MOTION_TYPE: motion.motion_type,
+                    ROTATION_DIRECTION: motion.rotation_direction,
+                    QUADRANT: motion.quadrant,
+                    START_LOCATION: motion.start_location,
+                    END_LOCATION: motion.end_location,
+                    TURNS: motion.turns,
+                    START_LOCATION: motion.start_location,
+                    END_LOCATION: motion.end_location,
+                    START_ORIENTATION: motion.start_orientation,
+                    END_ORIENTATION: motion.end_orientation,
+                    START_LAYER: motion.start_layer,
+                    END_LAYER: motion.end_layer,
                 }
             )
         return state
@@ -211,7 +220,7 @@ class GraphBoard(QGraphicsScene):
         for motion in self.motions:
             if motion.color == color:
                 return motion
-    
+
     def get_staff_by_color(self, color: str) -> Optional[Staff]:
         for staff in self.staff_set.values():
             if staff.color == color:
@@ -262,13 +271,13 @@ class GraphBoard(QGraphicsScene):
         letter_item.setPos(x, y)
 
     def add_to_sequence(self) -> None:
-        self.clear_graphboard()
+        self.clear_pictograph()
 
     def rotate_pictograph(self, direction: str) -> None:
         for arrow in self.arrows:
             arrow.rotate(direction)
 
-    def clear_graphboard(self) -> None:
+    def clear_pictograph(self) -> None:
         for arrow in self.arrows:
             self.removeItem(arrow)
         for staff in self.staffs:
@@ -285,24 +294,23 @@ class GraphBoard(QGraphicsScene):
         start_layer: Layer,
     ) -> None:
         motion_attributes: MotionAttributesDicts = {
-            COLOR: arrow.color,  
+            COLOR: arrow.color,
             MOTION_TYPE: arrow.motion_type,
-            ROTATION_DIRECTION: arrow.rotation_direction, 
+            ROTATION_DIRECTION: arrow.rotation_direction,
             QUADRANT: arrow.quadrant,
             START_LOCATION: arrow.start_location,
             END_LOCATION: arrow.end_location,
             TURNS: arrow.turns,
-            
             START_ORIENTATION: start_orientation,
             START_LAYER: start_layer,
         }
-    
+
         motion = Motion(self, arrow, staff, motion_attributes)
-        
+
         for m in self.motions:
             if m.color == motion.color:
                 self.motions.remove(m)
-                
+
         self.motions.append(motion)
 
     ### UPDATERS ###

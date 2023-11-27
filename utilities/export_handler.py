@@ -15,17 +15,17 @@ from utilities.TypeChecking.TypeChecking import ColorHex
 
 class ExportHandler:
     def __init__(self, main_widget: "MainWidget") -> None:
-        self.graphboard = main_widget.graph_editor.graphboard
-        self.grid = self.graphboard.grid
+        self.pictograph = main_widget.graph_editor.pictograph
+        self.grid = self.pictograph.grid
         self.get_fill_color(self.grid.svg_file)
         self.export_to_png()
 
     ### EXPORTERS ###
-    
+
     def export_to_png(self) -> None:
-        selectedItems = self.graphboard.selectedItems()
+        selectedItems = self.pictograph.selectedItems()
         image = QImage(
-            QSize(int(self.graphboard.width()), int(self.graphboard.height())),
+            QSize(int(self.pictograph.width()), int(self.pictograph.height())),
             QImage.Format.Format_ARGB32,
         )
         painter = QPainter(image)
@@ -33,7 +33,7 @@ class ExportHandler:
         for item in selectedItems:
             item.setSelected(False)
 
-        self.graphboard.render(painter)
+        self.pictograph.render(painter)
         painter.end()
         image.save("export.png")
 
@@ -42,7 +42,7 @@ class ExportHandler:
 
     def export_to_svg(self, output_file_path: str) -> None:
         nsmap = {"svg": "SVG_NS"}
-        ET.register_namespace('', nsmap["svg"])
+        ET.register_namespace("", nsmap["svg"])
 
         # Create the root element for the SVG
         svg_data = ET.Element("{SVG_NS}svg")
@@ -55,7 +55,7 @@ class ExportHandler:
         arrows_group = ET.SubElement(svg_data, "{SVG_NS}g", id="arrows")
         grid_group = ET.SubElement(svg_data, "{SVG_NS}g", id="grid")
 
-        for item in self.graphboard.items():
+        for item in self.pictograph.items():
             if isinstance(item, Grid):
                 circle_elements = self.get_circle_elements(item)
                 grid_group.append(circle_elements)
@@ -74,7 +74,7 @@ class ExportHandler:
         svg_data.append(arrows_group)
         svg_data.append(ET.Comment(" GRID "))
         svg_data.append(grid_group)
-        svg_string = ET.tostring(svg_data, encoding='unicode', method='xml')
+        svg_string = ET.tostring(svg_data, encoding="unicode", method="xml")
 
         svg_string = svg_string.replace(">\n<", ">\n\n<")
         with open(output_file_path, "w") as file:
@@ -92,14 +92,12 @@ class ExportHandler:
             cy = float(circle_element.get("cy")) + 50
             circle_element.set("cx", str(cx))
             circle_element.set("cy", str(cy))
-            
+
         return circle_elements
 
     def get_arrow_path_element(self, arrow: "Arrow") -> ET.Element:
         arrow_svg_data = ET.parse(arrow.svg_file)
-        path_elements = arrow_svg_data.getroot().findall(
-            ".//{SVG_NS}path"
-        )
+        path_elements = arrow_svg_data.getroot().findall(".//{SVG_NS}path")
         fill_color = self.get_fill_color(arrow.svg_file)
         transform = arrow.transform()
 
@@ -115,25 +113,15 @@ class ExportHandler:
 
     def get_staff_rect_element(self, staff: "Staff") -> ET.Element:
         staff_svg_data = ET.parse(staff.svg_file)
-        rect_elements = staff_svg_data.getroot().findall(
-            ".//{SVG_NS}rect"
-        )
+        rect_elements = staff_svg_data.getroot().findall(".//{SVG_NS}rect")
         fill_color = self.get_fill_color(staff.svg_file)
         position = staff.pos()
 
         for rect_element in rect_elements:
-            rect_element_copy = deepcopy(
-                rect_element
-            )  
-            rect_element_copy.set(
-                "x", str(position.x())
-            )  
-            rect_element_copy.set(
-                "y", str(position.y())
-            )  
-            rect_element_copy.set(
-                "transform", f"matrix(1.0, 0.0, 0.0, 1.0, 0, 0)"
-            )  
+            rect_element_copy = deepcopy(rect_element)
+            rect_element_copy.set("x", str(position.x()))
+            rect_element_copy.set("y", str(position.y()))
+            rect_element_copy.set("transform", f"matrix(1.0, 0.0, 0.0, 1.0, 0, 0)")
             if fill_color is not None:
                 rect_element_copy.set("fill", fill_color)
 
@@ -141,9 +129,7 @@ class ExportHandler:
 
     def get_staff_position(self, staff: "Staff") -> QPointF:
         staff_svg = ET.parse(staff.svg_file)
-        rect_elements = staff_svg.getroot().findall(
-            ".//{SVG_NS}rect"
-        )
+        rect_elements = staff_svg.getroot().findall(".//{SVG_NS}rect")
         position = None
 
         for rect_element in rect_elements:
@@ -163,15 +149,15 @@ class ExportHandler:
         style_element = svg_data.getroot().find(".//{SVG_NS}style")
         if style_element is not None:
             style_text = style_element.text
-            color_match: re.Match | None = re.search(r"fill:\s*(#[0-9a-fA-F]+)", style_text)
+            color_match: re.Match | None = re.search(
+                r"fill:\s*(#[0-9a-fA-F]+)", style_text
+            )
             if color_match:
                 fill_color = color_match.group(1)
 
         # If fill color was not found in style element, try to get it from path or rect elements
         if fill_color is None:
-            for element in svg_data.getroot().iterfind(
-                ".//{SVG_NS}*"
-            ):
+            for element in svg_data.getroot().iterfind(".//{SVG_NS}*"):
                 if "fill" in element.attrib:
                     fill_color = element.attrib["fill"]
                     break

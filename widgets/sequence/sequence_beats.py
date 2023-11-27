@@ -18,17 +18,17 @@ from settings.numerical_constants import (
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.sequence.sequence import Sequence
 
 
 class SequenceBeats(QFrame):
     def __init__(
-        self, main_widget: "MainWidget", graphboard: "GraphBoard", sequence: "Sequence"
+        self, main_widget: "MainWidget", pictograph: "Pictograph", sequence: "Sequence"
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.graphboard = graphboard
+        self.pictograph = pictograph
         self.sequence = sequence
         self.beats: List[QGraphicsView] = []
 

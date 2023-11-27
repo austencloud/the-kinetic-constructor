@@ -13,7 +13,7 @@ from settings.string_constants import *
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.arrow import Arrow
     from objects.props.staff import Staff
 from settings.string_constants import DASH
@@ -22,12 +22,12 @@ from settings.string_constants import DASH
 class Motion:
     def __init__(
         self,
-        graphboard: "GraphBoard",
+        pictograph: "Pictograph",
         arrow: "Arrow",
         staff: "Staff",
         attributes: MotionAttributesDicts,
     ) -> None:
-        self.graphboard = graphboard
+        self.pictograph = pictograph
         self.arrow = arrow
         self.staff = staff
         self.attributes = attributes
@@ -54,7 +54,6 @@ class Motion:
 
         self.start_layer: Layer = attributes[START_LAYER]
         self.end_layer: Layer = self.get_end_layer()
-
 
     def get_end_layer(self) -> Layer:
         if self.turns in [0, 1, 2]:
@@ -93,9 +92,9 @@ class Motion:
         key = (self.start_orientation, self.rotation_direction)
         motion_map = orientation_map.get(key, {})
         return motion_map.get(self.motion_type, {}).get(self.turns)
-    
-    ### 
-    
+
+    ###
+
     def update_turns(self, turns: int) -> None:
         self.arrow.turns = turns
         self.turns = self.arrow.turns
@@ -111,7 +110,7 @@ class Motion:
             self.arrow.ghost_arrow.turns = self.arrow.turns
             self.arrow.ghost_arrow.update_svg(svg_file)
             self.arrow.ghost_arrow.update_appearance()
-        self.graphboard.update()
+        self.pictograph.update()
 
     def add_half_turn(self) -> None:
         if self.arrow.turns < 2:

@@ -48,32 +48,31 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.ghosts.ghost_arrow import GhostArrow
     from objects.props.staff import Staff
 
 
 class Arrow(GraphicalObject):
-    def __init__(self, graphboard, attributes) -> None:
+    def __init__(self, pictograph, attributes) -> None:
         svg_file = self.get_svg_file(attributes[MOTION_TYPE], attributes[TURNS])
-        super().__init__(svg_file, graphboard)
+        super().__init__(svg_file, pictograph)
         self.setAcceptHoverEvents(True)
-        self._setup_attributes(graphboard, attributes)
+        self._setup_attributes(pictograph, attributes)
 
     ### SETUP ###
 
     def _setup_attributes(
         self,
-        graphboard: "GraphBoard",
+        pictograph: "Pictograph",
         attributes: "ArrowAttributesDicts",
     ) -> None:
-        
-        self.graphboard = graphboard
+        self.pictograph = pictograph
 
         self.drag_offset = QPointF(0, 0)
         self.staff: Staff = None
         self.motion: Motion = None
-        
+
         self.is_svg_mirrored: bool = False
 
         self.center_x = self.boundingRect().width() / 2
@@ -110,11 +109,11 @@ class Arrow(GraphicalObject):
         self.update_ghost_on_click()
         self.update_staff_on_click()
 
-        self.graphboard.arrows.remove(self)
-        self.graphboard.update()
-        self.graphboard.arrows.append(self)
+        self.pictograph.arrows.remove(self)
+        self.pictograph.update()
+        self.pictograph.arrows.append(self)
 
-        for item in self.graphboard.items():
+        for item in self.pictograph.items():
             if item != self:
                 item.setSelected(False)
 
@@ -124,7 +123,7 @@ class Arrow(GraphicalObject):
         self.staff.axis = self.staff.get_axis(self.end_location)
 
     def update_ghost_on_click(self) -> None:
-        self.ghost_arrow: "GhostArrow" = self.graphboard.ghost_arrows[self.color]
+        self.ghost_arrow: "GhostArrow" = self.pictograph.ghost_arrows[self.color]
         self.ghost_arrow.staff = self.staff
         self.ghost_arrow.set_attributes_from_dict(self.attributes)
         if self.ghost_arrow.is_svg_mirrored != self.is_svg_mirrored:
@@ -134,9 +133,9 @@ class Arrow(GraphicalObject):
         self.ghost_arrow.set_arrow_attrs_from_arrow(self)
         self.ghost_arrow.update_appearance()
         self.ghost_arrow.transform = self.transform
-        self.graphboard.addItem(self.ghost_arrow)
+        self.pictograph.addItem(self.ghost_arrow)
         self.ghost_arrow.staff = self.staff
-        self.graphboard.arrows.append(self.ghost_arrow)
+        self.pictograph.arrows.append(self.ghost_arrow)
 
     def mouseMoveEvent(self, event) -> None:
         if event.buttons() == Qt.MouseButton.LeftButton:
@@ -144,17 +143,17 @@ class Arrow(GraphicalObject):
             self.setPos(new_pos)
 
             scene_pos = new_pos + self.center
-            new_quadrant = self.graphboard.get_quadrant(scene_pos.x(), scene_pos.y())
+            new_quadrant = self.pictograph.get_quadrant(scene_pos.x(), scene_pos.y())
 
             if self.quadrant != new_quadrant:
                 if new_quadrant:
                     self.update_for_new_quadrant(new_quadrant)
 
     def mouseReleaseEvent(self, event) -> None:
-        self.graphboard.removeItem(self.ghost_arrow)
-        self.graphboard.arrows.remove(self.ghost_arrow)
+        self.pictograph.removeItem(self.ghost_arrow)
+        self.pictograph.arrows.remove(self.ghost_arrow)
         self.ghost_arrow.staff = None
-        self.graphboard.update()
+        self.pictograph.update()
 
     ### UPDATERS ###
 
@@ -181,13 +180,13 @@ class Arrow(GraphicalObject):
 
         self.update_appearance()
 
-        self.graphboard.arrows.remove(self)
-        for staff in self.graphboard.staffs:
+        self.pictograph.arrows.remove(self)
+        for staff in self.pictograph.staffs:
             if staff.color == self.color:
                 staff.arrow = self
                 self.staff = staff
-        self.graphboard.update()
-        self.graphboard.arrows.append(self)
+        self.pictograph.update()
+        self.pictograph.arrows.append(self)
 
     def set_start_end_locations(self) -> None:
         self.start_location, self.end_location = self.get_start_end_locations(
@@ -204,10 +203,10 @@ class Arrow(GraphicalObject):
         self.turns = target_arrow.turns
 
     def update_staff_during_drag(self) -> None:
-        for staff in self.graphboard.staff_set.values():
+        for staff in self.pictograph.staff_set.values():
             if staff.color == self.color:
-                if staff not in self.graphboard.staffs:
-                    self.graphboard.staffs.append(staff)
+                if staff not in self.pictograph.staffs:
+                    self.pictograph.staffs.append(staff)
 
                 staff.set_attributes_from_dict(
                     {
@@ -218,11 +217,11 @@ class Arrow(GraphicalObject):
                 )
                 staff.arrow = self.ghost_arrow
 
-                if staff not in self.graphboard.items():
-                    self.graphboard.addItem(staff)
+                if staff not in self.pictograph.items():
+                    self.pictograph.addItem(staff)
                 staff.show()
                 staff.update_appearance()
-                self.graphboard.update_staffs()
+                self.pictograph.update_staffs()
 
     def set_arrow_transform_origin_to_center(self) -> None:
         self.center = self.boundingRect().center()
@@ -307,7 +306,6 @@ class Arrow(GraphicalObject):
 
     ### MANIPULATION ###
 
-
     def move_wasd(self, direction: Direction) -> None:
         wasd_quadrant_mapping = {
             UP: {SOUTHEAST: NORTHEAST, SOUTHWEST: NORTHWEST},
@@ -346,7 +344,7 @@ class Arrow(GraphicalObject):
         self.update(updated_arrow_dict)
         self.staff.update(updated_staff_dict)
 
-        self.graphboard.update()
+        self.pictograph.update()
 
     def rotate(self, rotation_direction: RotationDirection) -> None:
         quadrants = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
@@ -382,7 +380,7 @@ class Arrow(GraphicalObject):
 
         self.update(updated_arrow_dict)
         self.staff.update(updated_staff_dict)
-        self.graphboard.update()
+        self.pictograph.update()
 
     def is_dim(self, on: bool):
         if on:
@@ -402,7 +400,7 @@ class Arrow(GraphicalObject):
         self.staff.color = new_color
         self.staff.update_appearance()
 
-        self.graphboard.update()
+        self.pictograph.update()
 
     def swap_rot_dir(self) -> None:
         from objects.ghosts.ghost_arrow import GhostArrow
@@ -441,7 +439,7 @@ class Arrow(GraphicalObject):
         if not isinstance(self, GhostArrow) and self.ghost_arrow:
             self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
             self.ghost_arrow.update(self.attributes)
-        self.graphboard.update()
+        self.pictograph.update()
 
     def mirror(self) -> None:
         transform = QTransform()
@@ -501,23 +499,23 @@ class Arrow(GraphicalObject):
         self.update_svg(svg_file)
         self.update(new_arrow_dict)
         self.staff.update(new_staff_dict)
-        self.graphboard.update()
+        self.pictograph.update()
 
     def delete(self, keep_staff: bool = False) -> None:
-        self.graphboard.removeItem(self)
-        if self in self.graphboard.arrows:
-            self.graphboard.arrows.remove(self)
+        self.pictograph.removeItem(self)
+        if self in self.pictograph.arrows:
+            self.pictograph.arrows.remove(self)
         if keep_staff:
-            self.graphboard.create_blank_arrow(self)
+            self.pictograph.create_blank_arrow(self)
         else:
             self.staff.delete()
 
-        self.graphboard.update()
+        self.pictograph.update()
 
 
 class BlankArrow(Arrow):
-    def __init__(self, graphboard, attributes) -> None:
-        super().__init__(graphboard, attributes)
+    def __init__(self, pictograph, attributes) -> None:
+        super().__init__(pictograph, attributes)
         self._disable_interactivity()
         self.hide()
 

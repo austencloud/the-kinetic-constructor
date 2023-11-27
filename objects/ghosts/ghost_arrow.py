@@ -3,7 +3,7 @@ from objects.arrow import Arrow
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from utilities.TypeChecking.TypeChecking import ArrowAttributesDicts
     from objects.arrow import Arrow
 
@@ -15,7 +15,7 @@ class GhostArrow(Arrow):
     Inherits from the Arrow class.
 
     Attributes:
-        graphboard (GraphBoard): The graphboard object.
+        pictograph (Pictograph): The pictograph object.
         color (str): The color of the arrow.
         target_arrow (Arrow): The arrow that the ghost arrow is copying.
 
@@ -25,22 +25,22 @@ class GhostArrow(Arrow):
     """
 
     def __init__(
-        self, graphboard: "GraphBoard", attributes: "ArrowAttributesDicts"
+        self, pictograph: "Pictograph", attributes: "ArrowAttributesDicts"
     ) -> None:
         """
         Initialize a GhostArrow object.
 
         Args:
-            graphboard (GraphBoard): The graphboard object.
+            pictograph (Pictograph): The pictograph object.
             attributes (MotionAttributesDicts): The attributes of the arrow.
 
         Returns:
             None
         """
-        super().__init__(graphboard, attributes)
+        super().__init__(pictograph, attributes)
         self.setOpacity(0.2)
-        self.graphboard, self.color, self.target_arrow = (
-            graphboard,
+        self.pictograph, self.color, self.target_arrow = (
+            pictograph,
             attributes[COLOR],
             None,
         )

@@ -8,14 +8,14 @@ parent_directory = os.path.join(current_directory, "..")
 sys.path.append(parent_directory)
 
 from PyQt6.QtWidgets import QApplication
-from widgets.graph_editor.graphboard.graphboard import GraphBoard
+from widgets.graph_editor.pictograph.pictograph import Pictograph
 
-# (The GraphBoard and related classes would be imported here)
+# (The Pictograph and related classes would be imported here)
 
 app = QApplication([])  # QApplication instance is required to test PyQt classes
 
 
-class TestGraphBoard(unittest.TestCase):
+class TestPictograph(unittest.TestCase):
     def setUp(self):
         self.mock_main_widget = Mock()
         self.mock_main_widget.letters = {
@@ -113,31 +113,31 @@ class TestGraphBoard(unittest.TestCase):
             ],
             # ... (mock data for other letters if needed)
         }
-        # Create the GraphBoard instance
-        self.graphboard = GraphBoard(self.mock_main_widget, self.mock_graph_editor)
+        # Create the Pictograph instance
+        self.pictograph = Pictograph(self.mock_main_widget, self.mock_graph_editor)
 
     def test_setup_scene(self):
         # Check the scene rectangle is set correctly
-        self.assertEqual(self.graphboard.sceneRect().width(), 750)
-        self.assertEqual(self.graphboard.sceneRect().height(), 900)
+        self.assertEqual(self.pictograph.sceneRect().width(), 750)
+        self.assertEqual(self.pictograph.sceneRect().height(), 900)
 
     def test_setup_components(self):
         # Ensure that the setup components are initialized
-        self.assertIsNotNone(self.graphboard.grid)
-        self.assertIsNotNone(self.graphboard.ghost_arrows)
-        self.assertIsNotNone(self.graphboard.view)
+        self.assertIsNotNone(self.pictograph.grid)
+        self.assertIsNotNone(self.pictograph.ghost_arrows)
+        self.assertIsNotNone(self.pictograph.view)
 
-    def test_clear_graphboard(self):
+    def test_clear_pictograph(self):
         # Setup the board with some items
         arrow1 = Mock()
-        self.graphboard.arrows.append(arrow1)
+        self.pictograph.arrows.append(arrow1)
         staff1 = Mock()
-        self.graphboard.staffs.append(staff1)
+        self.pictograph.staffs.append(staff1)
 
-        self.graphboard.clear_graphboard()
+        self.pictograph.clear_pictograph()
         # Verify the items are cleared correctly
-        self.assertEqual(len(self.graphboard.arrows), 0)
-        self.assertEqual(len(self.graphboard.staffs), 0)
+        self.assertEqual(len(self.pictograph.arrows), 0)
+        self.assertEqual(len(self.pictograph.staffs), 0)
         staff1.hide.assert_called_once()
 
     # Additional test cases would go here covering other functionalities like select_all_arrows, contextMenuEvent, etc.

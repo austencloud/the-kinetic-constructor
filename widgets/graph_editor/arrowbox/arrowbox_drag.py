@@ -33,7 +33,7 @@ from typing import TYPE_CHECKING, Dict, Optional
 
 if TYPE_CHECKING:
     from main import MainWindow
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.arrowbox.arrowbox import ArrowBox
 from utilities.TypeChecking.TypeChecking import (
     MotionAttributesDicts,
@@ -49,11 +49,11 @@ from utilities.TypeChecking.TypeChecking import (
 
 class ArrowBoxDrag(QWidget):
     def __init__(
-        self, main_window: "MainWindow", graphboard: "GraphBoard", arrowbox: "ArrowBox"
+        self, main_window: "MainWindow", pictograph: "Pictograph", arrowbox: "ArrowBox"
     ) -> None:
         super().__init__()
         self.setParent(main_window)
-        self.setup_dependencies(main_window, graphboard, arrowbox)
+        self.setup_dependencies(main_window, pictograph, arrowbox)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.preview = QLabel(self)
@@ -65,12 +65,12 @@ class ArrowBoxDrag(QWidget):
         self.update_interval = 0.1
 
     def setup_dependencies(
-        self, main_window: "MainWindow", graphboard: "GraphBoard", arrowbox: "ArrowBox"
+        self, main_window: "MainWindow", pictograph: "Pictograph", arrowbox: "ArrowBox"
     ) -> None:
         self.arrowbox = arrowbox
-        self.graphboard = graphboard
+        self.pictograph = pictograph
         self.main_window = main_window
-        self.has_entered_graphboard_once = False
+        self.has_entered_pictograph_once = False
         self.current_rotation_angle = 0
         self.previous_quadrant = None
         self.preview = None
@@ -100,7 +100,7 @@ class ArrowBoxDrag(QWidget):
         self.end_location: Location = target_arrow.end_location
         self.turns: Turns = target_arrow.turns
 
-        self.ghost_arrow = self.graphboard.ghost_arrows[self.color]
+        self.ghost_arrow = self.pictograph.ghost_arrows[self.color]
         self.ghost_arrow.target_arrow = target_arrow
 
     def reset_drag_state(self) -> None:
@@ -144,34 +144,34 @@ class ArrowBoxDrag(QWidget):
         self.move(local_pos - (self.arrow_center).toPoint())
 
     def remove_same_color_arrow(self) -> None:
-        for arrow in self.graphboard.arrows[:]:
+        for arrow in self.pictograph.arrows[:]:
             if arrow.isVisible() and arrow.color == self.color:
-                self.graphboard.removeItem(arrow)
-                self.graphboard.arrows.remove(arrow)
-        for staff in self.graphboard.staffs[:]:
+                self.pictograph.removeItem(arrow)
+                self.pictograph.arrows.remove(arrow)
+        for staff in self.pictograph.staffs[:]:
             if staff.isVisible() and staff.color == self.color:
-                self.graphboard.removeItem(staff)
-                self.graphboard.staffs.remove(staff)
+                self.pictograph.removeItem(staff)
+                self.pictograph.staffs.remove(staff)
 
-    def place_arrow_on_graphboard(self) -> None:
-        self.graphboard.update()
-        self.graphboard.clearSelection()
-        self.placed_arrow = Arrow(self.graphboard, self.ghost_arrow.get_attributes())
+    def place_arrow_on_pictograph(self) -> None:
+        self.pictograph.update()
+        self.pictograph.clearSelection()
+        self.placed_arrow = Arrow(self.pictograph, self.ghost_arrow.get_attributes())
         self.placed_arrow.staff = self.ghost_arrow.staff
         self.ghost_arrow.staff.arrow = self.placed_arrow
 
-        self.graphboard.add_motion(
+        self.pictograph.add_motion(
             self.placed_arrow,
             self.ghost_arrow.staff,
             IN,
             1,
         )
 
-        self.graphboard.addItem(self.placed_arrow)
-        self.graphboard.arrows.append(self.placed_arrow)
+        self.pictograph.addItem(self.placed_arrow)
+        self.pictograph.arrows.append(self.placed_arrow)
 
-        self.graphboard.removeItem(self.ghost_arrow)
-        self.graphboard.arrows.remove(self.ghost_arrow)
+        self.pictograph.removeItem(self.ghost_arrow)
+        self.pictograph.arrows.remove(self.ghost_arrow)
 
         self.placed_arrow.ghost_arrow = self.ghost_arrow
         self.placed_arrow.update_appearance()
@@ -187,32 +187,32 @@ class ArrowBoxDrag(QWidget):
     def handle_mouse_move(self, event_pos: QPoint) -> None:
         if self.preview:
             self.move_to_cursor(event_pos)
-            if self.is_over_graphboard(event_pos):
-                self.handle_enter_graphboard(event_pos)
+            if self.is_over_pictograph(event_pos):
+                self.handle_enter_pictograph(event_pos)
 
     def handle_mouse_release(self) -> None:
-        if self.has_entered_graphboard_once:
-            self.place_arrow_on_graphboard()
+        if self.has_entered_pictograph_once:
+            self.place_arrow_on_pictograph()
         self.deleteLater()
-        self.graphboard.update()
+        self.pictograph.update()
         self.arrowbox.arrowbox_drag = None
         self.ghost_arrow.staff = None
         self.reset_drag_state()
 
     ### FLAGS ###
 
-    def is_over_graphboard(self, event_pos: QPoint) -> bool:
+    def is_over_pictograph(self, event_pos: QPoint) -> bool:
         pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
-        local_pos_in_graphboard = self.graphboard.view.mapFromGlobal(pos_in_main_window)
-        return self.graphboard.view.rect().contains(local_pos_in_graphboard)
+        local_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
+        return self.pictograph.view.rect().contains(local_pos_in_pictograph)
 
     ### UPDATERS ###
 
     def update_staff_during_drag(self) -> None:
-        for staff in self.graphboard.staff_set.values():
+        for staff in self.pictograph.staff_set.values():
             if staff.color == self.color:
-                if staff not in self.graphboard.staffs:
-                    self.graphboard.staffs.append(staff)
+                if staff not in self.pictograph.staffs:
+                    self.pictograph.staffs.append(staff)
 
                 staff.set_attributes_from_dict(
                     {
@@ -223,12 +223,12 @@ class ArrowBoxDrag(QWidget):
                 )
                 staff.arrow = self.ghost_arrow
                 self.ghost_arrow.staff = staff
-                
-                if staff not in self.graphboard.items():
-                    self.graphboard.addItem(staff)
+
+                if staff not in self.pictograph.items():
+                    self.pictograph.addItem(staff)
                 staff.show()
                 staff.update_appearance()
-                self.graphboard.update_staffs()
+                self.pictograph.update_staffs()
 
     def apply_transformations_to_preview(self):
         self.update_mirror()
@@ -363,21 +363,19 @@ class ArrowBoxDrag(QWidget):
                 },
             }.get(rotation_direction, {})
 
-    def handle_enter_graphboard(self, event_pos: QPoint) -> None:
-        if not self.has_entered_graphboard_once:
-            self.just_entered_graphboard = True
-            self.has_entered_graphboard_once = True
+    def handle_enter_pictograph(self, event_pos: QPoint) -> None:
+        if not self.has_entered_pictograph_once:
+            self.just_entered_pictograph = True
+            self.has_entered_pictograph_once = True
             self.remove_same_color_arrow()
-            
 
-        
-        if self.has_entered_graphboard_once:
-            self.just_entered_graphboard = False
+        if self.has_entered_pictograph_once:
+            self.just_entered_pictograph = False
 
         pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
-        view_pos_in_graphboard = self.graphboard.view.mapFromGlobal(pos_in_main_window)
-        scene_pos = self.graphboard.view.mapToScene(view_pos_in_graphboard)
-        new_quadrant = self.graphboard.get_quadrant(scene_pos.x(), scene_pos.y())
+        view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
+        scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
+        new_quadrant = self.pictograph.get_quadrant(scene_pos.x(), scene_pos.y())
 
         if self.previous_quadrant != new_quadrant and new_quadrant:
             self.previous_quadrant = new_quadrant
@@ -410,15 +408,15 @@ class ArrowBoxDrag(QWidget):
         self.update_rotation()
         self.update_staff_during_drag()
 
-        self.graphboard.add_motion(
+        self.pictograph.add_motion(
             self.ghost_arrow,
             self.ghost_arrow.staff,
             IN,
             1,
         )
 
-        if self.ghost_arrow not in self.graphboard.arrows:
-            self.graphboard.arrows.append(self.ghost_arrow)
-        if self.ghost_arrow not in self.graphboard.items():
-            self.graphboard.addItem(self.ghost_arrow)
-        self.graphboard.update()
+        if self.ghost_arrow not in self.pictograph.arrows:
+            self.pictograph.arrows.append(self.ghost_arrow)
+        if self.ghost_arrow not in self.pictograph.items():
+            self.pictograph.addItem(self.ghost_arrow)
+        self.pictograph.update()

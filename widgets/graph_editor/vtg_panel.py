@@ -10,14 +10,14 @@ from PyQt6.QtWidgets import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
 class VTGPanel(QFrame):
-    def __init__(self, graphboard: "GraphBoard") -> None:
+    def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__()
 
-        self.graphboard = graphboard
+        self.pictograph = pictograph
         self.setup_info_panel()
 
     def setup_info_panel(self) -> None:
@@ -76,8 +76,8 @@ class VTGPanel(QFrame):
             current_letter,
             current_letter_type,
         ) = (
-            self.graphboard.current_letter,
-            self.graphboard.get_current_letter_type(),
+            self.pictograph.current_letter,
+            self.pictograph.get_current_letter_type(),
         )
         if current_letter and current_letter_type:
             start_end_positions = self.get_start_end_positions()

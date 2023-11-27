@@ -8,7 +8,7 @@ from utilities.TypeChecking.TypeChecking import (
 if TYPE_CHECKING:
     from objects.arrow import Arrow
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.TypeChecking import (
     Color,
     Location,
@@ -34,11 +34,11 @@ class Staff(Prop):
     def __init__(
         self,
         main_widget: "MainWidget",
-        graphboard: "GraphBoard",
+        pictograph: "Pictograph",
         attributes,
     ) -> None:
         svg_file = "resources/images/props/staff_with_thumb.svg"
-        super().__init__(main_widget, graphboard, svg_file, attributes)
+        super().__init__(main_widget, pictograph, svg_file, attributes)
 
     def update_appearance(self) -> None:
         self.axis = self.get_axis(self.location)

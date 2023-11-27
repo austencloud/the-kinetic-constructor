@@ -5,7 +5,7 @@ import re
 from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.arrow import Arrow
     from objects.props.prop import Prop
 
@@ -17,10 +17,10 @@ from utilities.TypeChecking.TypeChecking import (
 
 
 class GraphicalObject(QGraphicsSvgItem):
-    def __init__(self, svg_file: str, graphboard: "GraphBoard") -> None:
+    def __init__(self, svg_file: str, pictograph: "Pictograph") -> None:
         super().__init__()
         self.svg_file = svg_file
-        self.graphboard = graphboard
+        self.pictograph = pictograph
 
         self.renderer: QSvgRenderer = None
         self.color: Color = None
@@ -75,9 +75,7 @@ class GraphicalObject(QGraphicsSvgItem):
         self.set_attributes_from_dict(attributes)
         self.update_appearance()
 
-    def update_appearance(
-        self: Union["Prop", "Arrow"]
-    ) -> None:
+    def update_appearance(self: Union["Prop", "Arrow"]) -> None:
         self.update_color()
         self.update_rotation()
 

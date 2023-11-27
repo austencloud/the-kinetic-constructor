@@ -27,10 +27,10 @@ class LayoutManager:
         self.graph_editor_layout: QHBoxLayout = self.layouts["graph_editor"]
         self.objectbox_layout: QVBoxLayout = self.layouts["objectbox"]
 
-        self.graphboard_layout: QVBoxLayout = self.layouts["graphboard"]
+        self.pictograph_layout: QVBoxLayout = self.layouts["pictograph"]
         self.word_layout: QHBoxLayout = self.layouts["word"]
-        self.graphboard_and_buttons_layout: QHBoxLayout = self.layouts[
-            "graphboard_and_buttons"
+        self.pictograph_and_buttons_layout: QHBoxLayout = self.layouts[
+            "pictograph_and_buttons"
         ]
         self.letter_buttons_layout: QVBoxLayout = self.layouts["letter_buttons"]
         self.sequence_layout: QVBoxLayout = self.layouts["sequence"]
@@ -41,7 +41,7 @@ class LayoutManager:
         self.option_picker = self.main_widget.option_picker
         self.graph_editor = self.main_widget.graph_editor
         self.sequence = self.main_widget.sequence
-        self.graphboard = self.main_widget.graph_editor.graphboard
+        self.pictograph = self.main_widget.graph_editor.pictograph
 
     def configure_layouts(self) -> None:
         self.configure_main_layout()
@@ -56,9 +56,9 @@ class LayoutManager:
             "graph_editor": QHBoxLayout(),
             "sequence": QHBoxLayout(),
             "objectbox": QVBoxLayout(),
-            "graphboard": QVBoxLayout(),
+            "pictograph": QVBoxLayout(),
             "word": QHBoxLayout(),
-            "graphboard_and_buttons": QHBoxLayout(),
+            "pictograph_and_buttons": QHBoxLayout(),
             "option_picker": QHBoxLayout(),
             "letter_buttons": QVBoxLayout(),
             "sequence": QVBoxLayout(),
@@ -83,13 +83,13 @@ class LayoutManager:
         self.layouts["sequence"].addWidget(self.main_widget.sequence)
 
     def add_black_border_to_widgets(self) -> None:
-        self.add_black_border(self.main_widget.graph_editor.graphboard)
+        self.add_black_border(self.main_widget.graph_editor.pictograph)
         self.add_black_border(self.main_widget.sequence)
         self.add_black_border(self.main_widget.graph_editor.vtg_panel)
         self.add_black_border(self.main_widget.option_picker)
         self.add_black_border(self.main_widget.option_picker.scroll_area)
         self.add_black_border(self.main_widget.option_picker.button_frame)
-        self.add_black_border(self.main_widget.graph_editor.graphboard)
+        self.add_black_border(self.main_widget.graph_editor.pictograph)
         self.add_black_border(self.main_widget.graph_editor.propbox)
 
     def assign_layouts_to_window(self) -> None:

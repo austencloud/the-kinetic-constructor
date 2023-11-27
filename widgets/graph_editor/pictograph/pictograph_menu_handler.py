@@ -7,12 +7,12 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
-class GraphBoardMenuHandler:
-    def __init__(self, main_widget: "MainWidget", graphboard: "GraphBoard") -> None:
-        self.graphboard = graphboard
+class PictographMenuHandler:
+    def __init__(self, main_widget: "MainWidget", pictograph: "Pictograph") -> None:
+        self.pictograph = pictograph
         self.main_widget = main_widget
         self.export_handler = main_widget.export_handler
 
@@ -25,8 +25,8 @@ class GraphBoardMenuHandler:
         staff_menu = menu.addMenu("Staff")
         self._add_staff_actions(staff_menu, clicked_item)
 
-        graphboard_menu = menu.addMenu("Graphboard")
-        self._add_graphboard_actions(graphboard_menu)
+        pictograph_menu = menu.addMenu("Graphboard")
+        self._add_pictograph_actions(pictograph_menu)
 
         menu.exec(event_pos)
 
@@ -41,7 +41,7 @@ class GraphBoardMenuHandler:
         menu.addAction(delete_action)
 
     def _delete_selected_staff(self) -> None:
-        selected_items = self.graphboard.selectedItems()
+        selected_items = self.pictograph.selectedItems()
         for item in selected_items:
             if isinstance(item, Staff):
                 item.delete()
@@ -57,13 +57,13 @@ class GraphBoardMenuHandler:
         menu.addAction(delete_action)
 
     def _delete_selected_arrow(self) -> None:
-        selected_items = self.graphboard.selectedItems()
+        selected_items = self.pictograph.selectedItems()
         for item in selected_items:
             if isinstance(item, Arrow):
                 item.delete()
 
     ### GRAPHBOARD ACTIONS ###
 
-    def _add_graphboard_actions(self, menu: QMenu) -> None:
+    def _add_pictograph_actions(self, menu: QMenu) -> None:
         swap_colors_action = QAction("Swap Colors", menu)
         menu.addAction(swap_colors_action)

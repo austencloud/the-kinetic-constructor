@@ -34,40 +34,40 @@ from settings.string_constants import (
     ORIENTATION,
     IN,
 )
-from widgets.graph_editor.graphboard.graphboard_view import GraphBoardView
+from widgets.graph_editor.pictograph.pictograph_view import PictographView
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
-class GraphBoardInit:
-    def __init__(self, graphboard: "GraphBoard") -> None:
-        self.graphboard = graphboard
-        self.main_widget = graphboard.main_widget
-        self.window_width = graphboard.main_widget.main_window.main_window_width
-        self.window_height = graphboard.main_widget.main_window.main_window_height
+class PictographInit:
+    def __init__(self, pictograph: "Pictograph") -> None:
+        self.pictograph = pictograph
+        self.main_widget = pictograph.main_widget
+        self.window_width = pictograph.main_widget.main_window.main_window_width
+        self.window_height = pictograph.main_widget.main_window.main_window_height
 
     def init_view(self) -> QGraphicsView:
-        view = GraphBoardView(self.graphboard)
+        view = PictographView(self.pictograph)
         return view
 
     def init_grid(self) -> Grid:
         grid = Grid("resources/images/grid/grid.svg")
         grid_position = QPointF(0, 0)
         grid.setPos(grid_position)
-        self.graphboard.addItem(grid)
+        self.pictograph.addItem(grid)
         grid.init_center()
         grid.init_handpoints()
         grid.init_layer2_points()
-        self.graphboard.grid = grid
+        self.pictograph.grid = grid
         return grid
 
     def init_staff_set(self) -> dict[str, Staff]:
         red_staff_dict = {COLOR: RED, LOCATION: NORTH, LAYER: 1, ORIENTATION: IN}
         blue_staff_dict = {COLOR: BLUE, LOCATION: SOUTH, LAYER: 1, ORIENTATION: IN}
 
-        red_staff = Staff(self.main_widget, self.graphboard, red_staff_dict)
-        blue_staff = Staff(self.main_widget, self.graphboard, blue_staff_dict)
+        red_staff = Staff(self.main_widget, self.pictograph, red_staff_dict)
+        blue_staff = Staff(self.main_widget, self.pictograph, blue_staff_dict)
 
         red_staff.set_svg_color(RED)
         blue_staff.set_svg_color(BLUE)
@@ -100,10 +100,10 @@ class GraphBoardInit:
         }
 
         red_ghost_arrow = GhostArrow(
-            self.graphboard, default_red_ghost_arrow_attributes
+            self.pictograph, default_red_ghost_arrow_attributes
         )
         blue_ghost_arrow = GhostArrow(
-            self.graphboard, default_blue_ghost_arrow_attributes
+            self.pictograph, default_blue_ghost_arrow_attributes
         )
 
         ghost_arrows = {RED: red_ghost_arrow, BLUE: blue_ghost_arrow}
@@ -125,19 +125,19 @@ class GraphBoardInit:
         }
 
         red_ghost_staff = GhostStaff(
-            self.main_widget, self.graphboard, default_red_ghost_staff_attributes
+            self.main_widget, self.pictograph, default_red_ghost_staff_attributes
         )
         blue_ghost_staff = GhostStaff(
-            self.main_widget, self.graphboard, default_blue_ghost_staff_attributes
+            self.main_widget, self.pictograph, default_blue_ghost_staff_attributes
         )
 
         ghost_staffs = {RED: red_ghost_staff, BLUE: blue_ghost_staff}
         return ghost_staffs
 
     def init_letter_item(self) -> QGraphicsSvgItem:
-        letter_item = LetterItem(self.graphboard)
-        self.graphboard.addItem(letter_item)
-        self.graphboard.position_letter_item(letter_item)
+        letter_item = LetterItem(self.pictograph)
+        self.pictograph.addItem(letter_item)
+        self.pictograph.position_letter_item(letter_item)
         return letter_item
 
     def init_quadrants(self, grid: Grid) -> dict[str, Tuple[int, int, int, int]]:
@@ -149,16 +149,16 @@ class GraphBoardInit:
         ne_boundary = (
             grid_center_x,
             0,
-            self.graphboard.width(),
+            self.pictograph.width(),
             grid_center_y,
         )
         se_boundary = (
             grid_center_x,
             grid_center_y,
-            self.graphboard.width(),
-            self.graphboard.height(),
+            self.pictograph.width(),
+            self.pictograph.height(),
         )
-        sw_boundary = (0, grid_center_y, grid_center_x, self.graphboard.height())
+        sw_boundary = (0, grid_center_y, grid_center_x, self.pictograph.height())
         nw_boundary = (
             0,
             0,

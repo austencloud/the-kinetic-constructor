@@ -26,7 +26,6 @@ class MainWidget(QWidget):
         self.main_window = main_window
         self.resize(int(self.main_window.width()), int(self.main_window.height()))
 
-
         self.key_event_handler = KeyEventHandler()
         self.json_handler = JsonHandler()
         self.letters: LetterDictionary = self.json_handler.load_all_letters()
@@ -45,7 +44,7 @@ class MainWidget(QWidget):
     def eventFilter(self, source, event: QEvent) -> bool:
         if event.type() == QEvent.Type.KeyPress:
             self.key_event_handler.keyPressEvent(
-                event, self, self.graph_editor.graphboard
+                event, self, self.graph_editor.pictograph
             )
             return True
         return super().eventFilter(source, event)
@@ -57,5 +56,3 @@ class MainWidget(QWidget):
         self.sequence.update_size()
         self.option_picker.update_size()
         self.graph_editor.update_size()
-
-

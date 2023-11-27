@@ -38,7 +38,7 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
 class StaffPositioner:
@@ -47,13 +47,13 @@ class StaffPositioner:
     arrow_dict: List[MotionAttributesDicts]
     letters: LetterDictionary
 
-    def __init__(self, graphboard: "GraphBoard") -> None:
-        self.graphboard = graphboard
-        self.view = graphboard.view
-        self.letters = graphboard.letters
+    def __init__(self, pictograph: "Pictograph") -> None:
+        self.pictograph = pictograph
+        self.view = pictograph.view
+        self.letters = pictograph.letters
 
     def update(self) -> None:
-        for staff in self.graphboard.staffs:
+        for staff in self.pictograph.staffs:
             self.set_default_staff_locations(staff)
         if self.staffs_in_beta():
             self.reposition_beta_staffs()
@@ -83,22 +83,22 @@ class StaffPositioner:
             (COUNTER_CLOCKWISE, WEST): QPointF(staff_width / 2, -staff_length / 2),
         }
 
-        if staff.location in self.graphboard.grid.handpoints:
+        if staff.location in self.pictograph.grid.handpoints:
             key = (staff.orientation, staff.location)
             offset = position_offsets.get(key, QPointF(0, 0))  # Default offset
-            staff.setPos(self.graphboard.grid.handpoints[staff.location] + offset)
+            staff.setPos(self.pictograph.grid.handpoints[staff.location] + offset)
 
     def reposition_beta_staffs(self) -> None:
-        board_state = self.graphboard.get_state()
+        board_state = self.pictograph.get_state()
 
         def move_staff(staff: Staff, direction) -> None:
             new_position = self.calculate_new_position(staff.pos(), direction)
             staff.setPos(new_position)
 
-        arrows_grouped_by_start_loc: Dict[Location, List[MotionAttributesDicts]] = {}
-        for arrow in board_state:
-            arrows_grouped_by_start_loc.setdefault(arrow[START_LOCATION], []).append(
-                arrow
+        motions_grouped_by_start_loc: Dict[Location, List[MotionAttributesDicts]] = {}
+        for motion in board_state:
+            motions_grouped_by_start_loc.setdefault(motion[START_LOCATION], []).append(
+                motion
             )
 
         pro_or_anti_arrows = [
@@ -143,28 +143,33 @@ class StaffPositioner:
     ) -> None:
         for arrow in static_arrows:
             staff = next(
-                (
-                    staff
-                    for staff in self.graphboard.staffs
-                    if staff.arrow.color == arrow[COLOR]
-                ),
+                (s for s in self.pictograph.staffs if s.arrow.color == arrow[COLOR]),
                 None,
             )
             if not staff:
                 continue
 
             end_location = arrow[END_LOCATION]
-
-            beta_reposition_map = {
-                (NORTH, RED): RIGHT,
-                (NORTH, BLUE): LEFT,
-                (SOUTH, RED): RIGHT,
-                (SOUTH, BLUE): LEFT,
-                (EAST, RED): (UP, DOWN) if end_location == EAST else None,
-                (WEST, BLUE): (UP, DOWN) if end_location == WEST else None,
+            layer_reposition_map = {
+                1: {
+                    (NORTH, RED): RIGHT,
+                    (NORTH, BLUE): LEFT,
+                    (SOUTH, RED): RIGHT,
+                    (SOUTH, BLUE): LEFT,
+                    (EAST, RED): (UP, DOWN) if end_location == EAST else None,
+                    (WEST, BLUE): (UP, DOWN) if end_location == WEST else None,
+                },
+                2: {
+                    (NORTH, RED): UP,
+                    (NORTH, BLUE): DOWN,
+                    (SOUTH, RED): UP,
+                    (SOUTH, BLUE): DOWN,
+                    (EAST, RED): (RIGHT, LEFT) if end_location == EAST else None,
+                    (WEST, BLUE): (LEFT, RIGHT) if end_location == WEST else None,
+                },
             }
 
-            direction: Direction = beta_reposition_map.get(
+            direction: Direction = layer_reposition_map[staff.layer].get(
                 (staff.location, arrow[COLOR]), None
             )
 
@@ -176,7 +181,7 @@ class StaffPositioner:
                     other_staff = next(
                         (
                             s
-                            for s in self.graphboard.staffs
+                            for s in self.pictograph.staffs
                             if s.location == staff.location and s != staff
                         ),
                         None,
@@ -187,23 +192,65 @@ class StaffPositioner:
     ### ALPHA TO BETA ### D, E, F
 
     def reposition_alpha_to_beta(self, move_staff, converging_arrows) -> None:
-        end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
-        start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
-        if (
-            end_locations[0] == end_locations[1]
-            and start_locations[0] != start_locations[1]
+        # check if all the staffs are in layer 1
+        if all(staff.layer == 1 for staff in self.pictograph.staffs):
+            end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
+            start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
+            if (
+                end_locations[0] == end_locations[1]
+                and start_locations[0] != start_locations[1]
+            ):
+                for arrow in converging_arrows:
+                    direction = self.determine_translation_direction(arrow)
+                    if direction:
+                        move_staff(
+                            next(
+                                staff
+                                for staff in self.pictograph.staffs
+                                if staff.arrow.color == arrow[COLOR]
+                            ),
+                            direction,
+                        )
+        # check if all the staffs are in layer 2
+        elif all(staff.layer == 2 for staff in self.pictograph.staffs):
+            end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
+            start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
+            if (
+                end_locations[0] == end_locations[1]
+                and start_locations[0] != start_locations[1]
+            ):
+                for arrow in converging_arrows:
+                    direction = self.determine_translation_direction(arrow)
+                    if direction:
+                        move_staff(
+                            next(
+                                staff
+                                for staff in self.pictograph.staffs
+                                if staff.arrow.color == arrow[COLOR]
+                            ),
+                            direction,
+                        )
+        # check if one staff is in layer 1 and the other is in layer 2
+        elif any(staff.layer == 1 for staff in self.pictograph.staffs) and any(
+            staff.layer == 2 for staff in self.pictograph.staffs
         ):
-            for arrow in converging_arrows:
-                direction = self.determine_translation_direction(arrow)
-                if direction:
-                    move_staff(
-                        next(
-                            staff
-                            for staff in self.graphboard.staffs
-                            if staff.arrow.color == arrow[COLOR]
-                        ),
-                        direction,
-                    )
+            end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
+            start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
+            if (
+                end_locations[0] == end_locations[1]
+                and start_locations[0] != start_locations[1]
+            ):
+                for arrow in converging_arrows:
+                    direction = self.determine_translation_direction(arrow)
+                    if direction:
+                        move_staff(
+                            next(
+                                staff
+                                for staff in self.pictograph.staffs
+                                if staff.arrow.color == arrow[COLOR]
+                            ),
+                            direction,
+                        )
 
     ### BETA TO BETA ### G, H, I
 
@@ -234,7 +281,7 @@ class StaffPositioner:
 
         further_staff = next(
             staff
-            for staff in self.graphboard.staffs
+            for staff in self.pictograph.staffs
             if staff.arrow.color == further_arrow[COLOR]
         )
         new_position_further = self.calculate_new_position(
@@ -245,7 +292,7 @@ class StaffPositioner:
         other_direction = self.get_opposite_direction(further_direction)
         other_staff = next(
             staff
-            for staff in self.graphboard.staffs
+            for staff in self.pictograph.staffs
             if staff.arrow.color == other_arrow[COLOR]
         )
         new_position_other = self.calculate_new_position(
@@ -260,7 +307,7 @@ class StaffPositioner:
         pro_staff = next(
             (
                 staff
-                for staff in self.graphboard.staffs
+                for staff in self.pictograph.staffs
                 if staff.arrow.color == pro_arrow[COLOR]
             ),
             None,
@@ -268,7 +315,7 @@ class StaffPositioner:
         anti_staff = next(
             (
                 staff
-                for staff in self.graphboard.staffs
+                for staff in self.pictograph.staffs
                 if staff.arrow.color == anti_arrow[COLOR]
             ),
             None,
@@ -303,7 +350,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.graphboard.staffs
+                    for staff in self.pictograph.staffs
                     if staff.arrow.color == pro_or_anti_arrow[COLOR]
                 ),
                 direction,
@@ -311,7 +358,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.graphboard.staffs
+                    for staff in self.pictograph.staffs
                     if staff.arrow.color == static_arrow[COLOR]
                 ),
                 self.get_opposite_direction(direction),
@@ -321,7 +368,7 @@ class StaffPositioner:
 
     def staffs_in_beta(self) -> bool | None:
         visible_staves: List[Staff] = []
-        for staff in self.graphboard.staffs:
+        for staff in self.pictograph.staffs:
             if staff.isVisible():
                 visible_staves.append(staff)
         if len(visible_staves) == 2:
@@ -337,7 +384,7 @@ class StaffPositioner:
         arrow_dict,
     ) -> OptimalLocationEntries | None:
         for variants in matching_letters:
-            if self.graphboard.arrow_positioner.compare_states(current_state, variants):
+            if self.pictograph.arrow_positioner.compare_states(current_state, variants):
                 optimal_entry: OptimalLocationsDicts = next(
                     (
                         d
@@ -354,6 +401,7 @@ class StaffPositioner:
 
     def determine_translation_direction(self, arrow_state) -> Direction:
         """Determine the translation direction based on the arrow's board_state."""
+
         if arrow_state[MOTION_TYPE] in [PRO, ANTI]:
             if arrow_state[END_LOCATION] in [NORTH, SOUTH]:
                 return RIGHT if arrow_state[START_LOCATION] == EAST else LEFT
@@ -378,7 +426,7 @@ class StaffPositioner:
     ### GETTERS
 
     def get_distance_from_center(self, arrow_pos: Dict[str, float]) -> float:
-        grid_center = self.graphboard.grid.center
+        grid_center = self.pictograph.grid.center
         arrow_x, arrow_y = arrow_pos.get("x", 0.0), arrow_pos.get("y", 0.0)
         center_x, center_y = grid_center.x(), grid_center.y()
 
@@ -390,8 +438,8 @@ class StaffPositioner:
     def get_optimal_arrow_location(
         self, arrow_attributes: MotionAttributesDicts
     ) -> Dict[str, float] | None:
-        current_state = self.graphboard.get_state()
-        current_letter = self.graphboard.current_letter
+        current_state = self.pictograph.get_state()
+        current_letter = self.pictograph.current_letter
 
         if current_letter is not None:
             matching_letters = self.letters[current_letter]

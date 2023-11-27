@@ -17,7 +17,7 @@ from objects.arrow import Arrow
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
 
 
@@ -29,7 +29,7 @@ class HeaderWidget(QWidget):
         super().__init__(attr_box)
         self.attr_box = attr_box
         self.color = color
-        self.arrow: Arrow = self.attr_box.graphboard.get_arrow_by_color(self.color)
+        self.arrow: Arrow = self.attr_box.pictograph.get_arrow_by_color(self.color)
 
     def setup_header_widget(self):
         layout = QHBoxLayout(self)
@@ -64,8 +64,6 @@ class HeaderWidget(QWidget):
 
         self.rotate_ccw_button = self.create_round_button(f"{ICON_DIR}rotate_left.png")
         self.rotate_cw_button = self.create_round_button(f"{ICON_DIR}rotate_right.png")
-
-
 
         if self.arrow:
             self.rotate_ccw_button.clicked.connect(self.arrow.rotate("ccw"))
@@ -171,10 +169,10 @@ class StartEndWidget(QWidget):
 
 class TurnsWidget(QWidget):
     def __init__(
-        self, graphboard: "GraphBoard", color: Color, attr_box: "AttrBox"
+        self, pictograph: "Pictograph", color: Color, attr_box: "AttrBox"
     ) -> None:
         super().__init__()
-        self.graphboard = graphboard
+        self.pictograph = pictograph
         self.color = color
         self.attr_box = attr_box
         self.init_ui()
@@ -247,13 +245,13 @@ class TurnsWidget(QWidget):
         layout.addItem(right_spacer)
 
     def subtract_turns_callback(self) -> None:
-        motion = self.graphboard.get_motion_by_color(self.color)
+        motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
             motion.subtract_half_turn()
             self.attr_box.update_labels(motion)
 
     def add_turns_callback(self) -> None:
-        motion = self.graphboard.get_motion_by_color(self.color)
+        motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
             motion.add_half_turn()
             self.attr_box.update_labels(motion)

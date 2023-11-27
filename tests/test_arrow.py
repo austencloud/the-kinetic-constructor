@@ -5,7 +5,7 @@ from objects.arrow import Arrow
 
 class TestArrow(unittest.TestCase):
     def setUp(self):
-        self.graphboard = None  # Replace with an actual GraphBoard object
+        self.pictograph = None  # Replace with an actual Pictograph object
         self.attributes = {
             "color": "red",
             "motion_type": "pro",
@@ -15,7 +15,7 @@ class TestArrow(unittest.TestCase):
             "end_location": "E",
             "turns": 1,
         }
-        self.arrow = Arrow(self.graphboard, self.attributes)
+        self.arrow = Arrow(self.pictograph, self.attributes)
 
     def test_init(self):
         self.assertEqual(self.arrow.color, "red")

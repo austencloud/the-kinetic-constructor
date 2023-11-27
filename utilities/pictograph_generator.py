@@ -18,10 +18,10 @@ if TYPE_CHECKING:
 
 class PictographGenerator:
     def __init__(self, main_widget: "MainWidget") -> None:
-        self.graphboard = main_widget.graph_editor.graphboard
+        self.pictograph = main_widget.graph_editor.pictograph
         self.main_window = main_widget.main_window
         self.export_handler = main_widget.export_handler
-        self.grid = self.graphboard.grid
+        self.grid = self.pictograph.grid
         self.output_dir = "images/pictographs"
         self.letters = main_widget.letters
 
@@ -80,8 +80,8 @@ class PictographGenerator:
                         file_name += ".svg"
 
                         output_file_path = os.path.join(self.output_dir, file_name)
-                        self.export_handler = self.graphboard.main_widget.export_handler
+                        self.export_handler = self.pictograph.main_widget.export_handler
                         self.export_handler.export_to_svg(output_file_path)
 
-                # Clear the graphboard for the next combination
-                self.graphboard.clear()
+                # Clear the pictograph for the next combination
+                self.pictograph.clear()

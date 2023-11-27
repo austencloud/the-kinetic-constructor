@@ -178,8 +178,8 @@ class ArrowBox(QGraphicsScene):
         if closest_arrow:
             self.target_arrow = closest_arrow
             if not self.arrowbox_drag:
-                graphboard = self.main_widget.graph_editor.graphboard
-                self.arrowbox_drag = ArrowBoxDrag(self.main_window, graphboard, self)
+                pictograph = self.main_widget.graph_editor.pictograph
+                self.arrowbox_drag = ArrowBoxDrag(self.main_window, pictograph, self)
             if event.button() == Qt.MouseButton.LeftButton:
                 self.arrowbox_drag.match_target_arrow(self.target_arrow)
                 self.arrowbox_drag.start_drag(event_pos)

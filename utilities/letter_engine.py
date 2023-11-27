@@ -17,7 +17,7 @@ logging.basicConfig(
 from typing import TYPE_CHECKING, Dict, Literal, Set, Tuple
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 from utilities.TypeChecking.TypeChecking import (
     MotionAttributesDicts,
@@ -37,9 +37,9 @@ from utilities.TypeChecking.TypeChecking import (
 
 
 class LetterEngine:
-    def __init__(self, graphboard: "GraphBoard") -> None:
-        self.graphboard = graphboard
-        self.letters = graphboard.letters
+    def __init__(self, pictograph: "Pictograph") -> None:
+        self.pictograph = pictograph
+        self.letters = pictograph.letters
         self.preprocessed_start_end_combinations = self.preprocess_combinations()
         self.parallel_combinations: Set[
             Tuple[str, str, str, str]
@@ -111,7 +111,7 @@ class LetterEngine:
 
     def get_arrow(self, color: Color) -> Arrow | None:
         return next(
-            (arrow for arrow in self.graphboard.arrows if arrow.color == color), None
+            (arrow for arrow in self.pictograph.arrows if arrow.color == color), None
         )
 
     def get_specific_start_end_positions(self) -> SpecificStartEndPositionsDicts:
@@ -146,14 +146,14 @@ class LetterEngine:
 
     def get_start_end_locations_as_tuple(self) -> StartEndLocationTuple:
         self.red_arrow = (
-            self.graphboard.arrows[0]
-            if self.graphboard.arrows[0].color == "red"
-            else self.graphboard.arrows[1]
+            self.pictograph.arrows[0]
+            if self.pictograph.arrows[0].color == "red"
+            else self.pictograph.arrows[1]
         )
         self.blue_arrow = (
-            self.graphboard.arrows[0]
-            if self.graphboard.arrows[0].color == "blue"
-            else self.graphboard.arrows[1]
+            self.pictograph.arrows[0]
+            if self.pictograph.arrows[0].color == "blue"
+            else self.pictograph.arrows[1]
         )
 
         if not self.red_arrow or not self.blue_arrow:

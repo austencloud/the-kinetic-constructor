@@ -15,26 +15,26 @@ from objects.arrow import BlankArrow, Arrow
 from typing import TYPE_CHECKING, List, Dict, Any
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 from utilities.TypeChecking.TypeChecking import OptimalLocationsDicts
 
 
 class ArrowPositioner:
-    def __init__(self, graphboard: "GraphBoard") -> None:
-        self.letters = graphboard.letters
-        self.graphboard = graphboard
+    def __init__(self, pictograph: "Pictograph") -> None:
+        self.letters = pictograph.letters
+        self.pictograph = pictograph
 
     def update(self) -> None:
-        for arrow in self.graphboard.arrows:
+        for arrow in self.pictograph.arrows:
             arrow.setTransformOriginPoint(0, 0)
         optimal_locations = None
 
-        if len(self.graphboard.staffs) == 2:
-            if self.graphboard.current_letter:
+        if len(self.pictograph.staffs) == 2:
+            if self.pictograph.current_letter:
                 optimal_locations = self.find_optimal_locations()
 
-        for arrow in self.graphboard.arrows:
+        for arrow in self.pictograph.arrows:
             if not isinstance(arrow, BlankArrow):
                 if optimal_locations:
                     self.set_arrow_to_optimal_loc(optimal_locations, arrow)
@@ -42,8 +42,8 @@ class ArrowPositioner:
                     self.set_arrow_to_default_loc(arrow)
 
     def find_optimal_locations(self) -> OptimalLocationsDicts | None:
-        current_state = self.graphboard.get_state()
-        matching_letters = self.letters[self.graphboard.current_letter]
+        current_state = self.pictograph.get_state()
+        matching_letters = self.letters[self.pictograph.current_letter]
 
         for variants in matching_letters:
             if self.compare_states(current_state, variants):
@@ -104,7 +104,7 @@ class ArrowPositioner:
 
     def set_arrow_to_default_loc(self, arrow: "Arrow") -> None:
         arrow.set_arrow_transform_origin_to_center()
-        layer2_point = self.graphboard.grid.layer2_points.get(arrow.quadrant)
+        layer2_point = self.pictograph.grid.layer2_points.get(arrow.quadrant)
         adjustment = QPointF(0, 0)
 
         if arrow.quadrant == NORTHEAST:

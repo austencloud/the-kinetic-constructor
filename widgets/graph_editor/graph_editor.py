@@ -4,11 +4,11 @@ from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 
 from widgets.graph_editor.arrowbox.arrowbox import ArrowBox
-from widgets.graph_editor.graphboard.graphboard import GraphBoard
+from widgets.graph_editor.pictograph.pictograph import Pictograph
 from widgets.graph_editor.propbox.propbox import PropBox
 from widgets.graph_editor.attr_panel.attr_panel import AttrPanel
 from widgets.graph_editor.vtg_panel import VTGPanel
-from widgets.graph_editor.graphboard.graphboard import GraphBoard
+from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
 if TYPE_CHECKING:
@@ -36,25 +36,25 @@ class GraphEditor(QFrame):
         graph_editor_frame_layout.setContentsMargins(0, 0, 0, 0)
 
         objectbox_layout = QVBoxLayout()
-        graphboard_layout = QVBoxLayout()
+        pictograph_layout = QVBoxLayout()
         attr_panel_layout = QVBoxLayout()
         vtg_panel_layout = QVBoxLayout()
 
-        self.graphboard = GraphBoard(self.main_widget, self)
-        self.propbox = PropBox(main_widget, self.graphboard)
+        self.pictograph = Pictograph(self.main_widget, self)
+        self.propbox = PropBox(main_widget, self.pictograph)
         self.arrowbox = ArrowBox(main_widget)
-        self.vtg_panel = VTGPanel(self.graphboard)
-        self.attr_panel = AttrPanel(self.graphboard)
+        self.vtg_panel = VTGPanel(self.pictograph)
+        self.attr_panel = AttrPanel(self.pictograph)
 
         objectbox_layout.addWidget(self.arrowbox.view)
         objectbox_layout.addWidget(self.propbox.view)
-        graphboard_layout.addWidget(self.graphboard.view)
+        pictograph_layout.addWidget(self.pictograph.view)
         attr_panel_layout.addWidget(self.attr_panel)
         vtg_panel_layout.addWidget(self.vtg_panel)
 
         graph_editor_frame_layout.setContentsMargins(0, 0, 0, 0)
         graph_editor_frame_layout.addLayout(objectbox_layout)
-        graph_editor_frame_layout.addLayout(graphboard_layout)
+        graph_editor_frame_layout.addLayout(pictograph_layout)
         graph_editor_frame_layout.addLayout(attr_panel_layout)
         graph_editor_frame_layout.addLayout(vtg_panel_layout)
 
@@ -64,7 +64,7 @@ class GraphEditor(QFrame):
     def update_size(self) -> None:
         self.setFixedHeight(int(self.main_widget.height() * 1 / 3))
         self.setFixedWidth(int(self.main_widget.width() * 0.5))
-        self.graphboard.view.update_graphboard_size()
+        self.pictograph.view.update_pictograph_size()
         self.update_arrowbox_size()
         self.update_propbox_size()
         self.update_attr_panel_size()
@@ -72,14 +72,14 @@ class GraphEditor(QFrame):
 
     def update_arrowbox_size(self) -> None:
         self.arrowbox.view.setFixedSize(
-            int(self.graphboard.view.height() * 1 / 2),
-            int(self.graphboard.view.height() * 1 / 2),
+            int(self.pictograph.view.height() * 1 / 2),
+            int(self.pictograph.view.height() * 1 / 2),
         )
 
     def update_propbox_size(self) -> None:
         self.propbox.view.setFixedSize(
-            int(self.graphboard.view.height() * 1 / 2),
-            int(self.graphboard.view.height() * 1 / 2),
+            int(self.pictograph.view.height() * 1 / 2),
+            int(self.pictograph.view.height() * 1 / 2),
         )
 
     def update_attr_panel_size(self) -> None:

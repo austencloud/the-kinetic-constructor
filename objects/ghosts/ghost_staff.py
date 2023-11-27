@@ -3,7 +3,7 @@ from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, PropAttributesDic
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
 class GhostStaff(Staff):
@@ -11,7 +11,7 @@ class GhostStaff(Staff):
     Represents a ghost staff object.
 
     Args:
-        graphboard (GraphBoard): The main GraphBoard object.
+        pictograph (Pictograph): The main Pictograph object.
         attributes (StaffAttributesDicts): The attributes of the ghost staff.
 
     Attributes:
@@ -23,9 +23,9 @@ class GhostStaff(Staff):
     def __init__(
         self,
         main_widget: "MainWidget",
-        graphboard: "GraphBoard",
+        pictograph: "Pictograph",
         attributes: PropAttributesDicts,
     ) -> None:
-        super().__init__(main_widget, graphboard, attributes)
+        super().__init__(main_widget, pictograph, attributes)
         self.setOpacity(0.2)
         self.target_staff = None

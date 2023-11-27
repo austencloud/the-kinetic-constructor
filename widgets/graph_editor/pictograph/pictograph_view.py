@@ -5,17 +5,17 @@ from settings.string_constants import CLOCKWISE, COUNTER_CLOCKWISE
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graphboard.graphboard import GraphBoard
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import QSize
 
 
-class GraphBoardView(QGraphicsView):
-    def __init__(self, graphboard: "GraphBoard") -> None:
+class PictographView(QGraphicsView):
+    def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__()
-        self.graphboard = graphboard
+        self.pictograph = pictograph
 
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
-        self.setScene(self.graphboard)
+        self.setScene(self.pictograph)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.wheelEvent = lambda event: None
@@ -26,18 +26,18 @@ class GraphBoardView(QGraphicsView):
     def init_buttons(self):
         self.add_to_sequence_button = self.create_button(
             "resources/images/icons/add_to_sequence.png",
-            self.graphboard.add_to_sequence,
+            self.pictograph.add_to_sequence,
         )
         self.clear_button = self.create_button(
-            "resources/images/icons/clear.png", self.graphboard.clear_graphboard
+            "resources/images/icons/clear.png", self.pictograph.clear_pictograph
         )
         self.rotate_clockwise_button = self.create_button(
             "resources/images/icons/rotate_right.png",
-            lambda: self.graphboard.rotate_pictograph(CLOCKWISE),
+            lambda: self.pictograph.rotate_pictograph(CLOCKWISE),
         )
         self.rotate_counterclockwise_button = self.create_button(
             "resources/images/icons/rotate_left.png",
-            lambda: self.graphboard.rotate_pictograph(COUNTER_CLOCKWISE),
+            lambda: self.pictograph.rotate_pictograph(COUNTER_CLOCKWISE),
         )
 
     def create_button(self, icon_path, action) -> QPushButton:
@@ -45,11 +45,11 @@ class GraphBoardView(QGraphicsView):
         button.clicked.connect(action)
         return button
 
-    def update_graphboard_size(self) -> None:
-        view_width = int(self.graphboard.graph_editor.height() * 75 / 90)
+    def update_pictograph_size(self) -> None:
+        view_width = int(self.pictograph.graph_editor.height() * 75 / 90)
         self.setFixedWidth(view_width)
-        self.setFixedHeight(self.graphboard.graph_editor.height())
-        view_scale = view_width / self.graphboard.width()
+        self.setFixedHeight(self.pictograph.graph_editor.height())
+        view_scale = view_width / self.pictograph.width()
         self.resetTransform()
         self.scale(view_scale, view_scale)
 
