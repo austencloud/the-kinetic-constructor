@@ -60,7 +60,6 @@ class Prop(GraphicalObject):
     ) -> None:
         super().__init__(svg_file, graphboard)
         self._setup_attributes(main_widget, graphboard, attributes)
-        self.set_staff_transform_origin_to_center()
         self.update_appearance()
 
     def _setup_attributes(
@@ -170,7 +169,7 @@ class Prop(GraphicalObject):
                     self.setPos(new_pos + QPointF(0, staff_length))
                 elif self.location == SOUTH:
                     self.setPos(new_pos + QPointF(staff_width, 0))
-                    
+
     def update_arrow_quadrant(self, new_location: Location) -> None:
         quadrant_mapping: Dict[
             Tuple(Quadrant, RotationDirection, MotionType), Dict[Location, Quadrant]
@@ -247,16 +246,9 @@ class Prop(GraphicalObject):
         self.setTransformOriginPoint(self.center)
 
     def set_staff_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
-        new_dict: PropAttributesDicts = {
-            COLOR: target_arrow.color,
-            LOCATION: target_arrow.end_location,
-            LAYER: 1,
-        }
-        self.set_attributes_from_dict(new_dict)
         self.color = target_arrow.color
         self.location = target_arrow.end_location
         self.axis = self.get_axis(self.location)
-        self.layer = 1
         self.update_appearance()
 
     ### GETTERS ###
@@ -271,7 +263,6 @@ class Prop(GraphicalObject):
 
         key = (self.layer, self.orientation)
         return angle_map.get(key, {}).get(self.location, 0)  # Default to 0 if not found
-
 
     def update_rotation(self) -> None:
         rotation_angle = self.get_rotation_angle()
@@ -308,8 +299,6 @@ class Prop(GraphicalObject):
         return closest_location
 
     ### HELPERS ###
-
-
 
     def swap_axis(self) -> None:
         if self.axis == VERTICAL:
