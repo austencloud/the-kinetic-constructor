@@ -95,6 +95,15 @@ class Motion:
 
     ###
 
+    def update_attr_from_arrow(self) -> None:
+        self.color = self.arrow.color
+        self.motion_type = self.arrow.motion_type
+        self.turns = self.arrow.turns
+        self.rotation_direction = self.arrow.rotation_direction
+        self.quadrant = self.arrow.quadrant
+        self.start_location = self.arrow.start_location
+        self.end_location = self.arrow.end_location
+
     def update_turns(self, turns: int) -> None:
         self.arrow.turns = turns
         self.turns = self.arrow.turns

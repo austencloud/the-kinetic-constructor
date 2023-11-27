@@ -169,6 +169,7 @@ class Arrow(GraphicalObject):
 
     def update_for_new_quadrant(self, new_quadrant: Quadrant) -> None:
         self.quadrant = new_quadrant
+        self.motion.quadrant = new_quadrant
 
         self.set_start_end_locations()
 
@@ -192,6 +193,8 @@ class Arrow(GraphicalObject):
         self.start_location, self.end_location = self.get_start_end_locations(
             self.motion_type, self.rotation_direction, self.quadrant
         )
+        self.motion.start_location = self.start_location
+        self.motion.end_location = self.end_location
 
     def set_arrow_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
@@ -318,6 +321,7 @@ class Arrow(GraphicalObject):
             current_quadrant, current_quadrant
         )
         self.quadrant = new_quadrant
+        self.motion.quadrant = new_quadrant
         (
             new_start_location,
             new_end_location,
@@ -343,6 +347,7 @@ class Arrow(GraphicalObject):
 
         self.update(updated_arrow_dict)
         self.staff.update(updated_staff_dict)
+        self.motion.update_attr_from_arrow()
 
         self.pictograph.update()
 

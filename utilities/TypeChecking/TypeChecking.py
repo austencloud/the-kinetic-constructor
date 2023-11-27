@@ -55,12 +55,13 @@ class MotionAttributesDicts(TypedDict):
     rotation_direction: RotationDirection
     quadrant: Quadrant
     turns: Turns
-    start_location: Location
-    end_location: Location
     
+    start_location: Location
     start_orientation: Orientation
-    end_orientation: Orientation
     start_layer: Layer
+    
+    end_location: Location
+    end_orientation: Orientation
     end_layer: Layer
 
 

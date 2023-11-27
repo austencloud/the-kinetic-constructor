@@ -2,6 +2,7 @@ from PyQt6.QtCore import QPointF
 from settings.numerical_constants import DISTANCE
 from settings.string_constants import (
     COLOR,
+    END_LOCATION,
     MOTION_TYPE,
     QUADRANT,
     ROTATION_DIRECTION,
@@ -9,6 +10,8 @@ from settings.string_constants import (
     SOUTHEAST,
     SOUTHWEST,
     NORTHWEST,
+    START_LOCATION,
+    TURNS,
 )
 from objects.arrow import BlankArrow, Arrow
 
@@ -43,10 +46,32 @@ class ArrowPositioner:
 
     def find_optimal_locations(self) -> OptimalLocationsDicts | None:
         current_state = self.pictograph.get_state()
-        matching_letters = self.letters[self.pictograph.current_letter]
+        current_letter = self.pictograph.current_letter
+        current_letter_variants = self.letters[current_letter]
 
-        for variants in matching_letters:
-            if self.compare_states(current_state, variants):
+        variant_dict1 = {
+            COLOR: current_state[0][COLOR],
+            MOTION_TYPE: current_state[0][MOTION_TYPE],
+            ROTATION_DIRECTION: current_state[0][ROTATION_DIRECTION],
+            QUADRANT: current_state[0][QUADRANT],
+            START_LOCATION: current_state[0][START_LOCATION],
+            END_LOCATION: current_state[0][END_LOCATION],
+            TURNS: current_state[0][TURNS],
+        }
+        variant_dict2 = {
+            COLOR: current_state[1][COLOR],
+            MOTION_TYPE: current_state[1][MOTION_TYPE],
+            ROTATION_DIRECTION: current_state[1][ROTATION_DIRECTION],
+            QUADRANT: current_state[1][QUADRANT],
+            START_LOCATION: current_state[1][START_LOCATION],
+            END_LOCATION: current_state[1][END_LOCATION],
+            TURNS: current_state[1][TURNS],
+        }
+
+        modified_state = [variant_dict1, variant_dict2]
+
+        for variants in current_letter_variants:
+            if self.compare_states(modified_state, variants):
                 return next(
                     (
                         d

@@ -8,6 +8,7 @@ from objects.letter_item import LetterItem
 from data.letter_engine_data import letter_types
 from objects.arrow import Arrow, BlankArrow
 from objects.grid import Grid
+from objects.props.prop import Prop
 from objects.props.staff import Staff
 from objects.motion import Motion
 from settings.string_constants import (
@@ -298,7 +299,7 @@ class Pictograph(QGraphicsScene):
         self.staffs = []
         self.update()
 
-    def clear_selections(self):
+    def clear_selections(self) -> None:
         for arrow in self.arrows:
             arrow.setSelected(False)
         for staff in self.staffs:
@@ -310,7 +311,7 @@ class Pictograph(QGraphicsScene):
     def add_motion(
         self,
         arrow: Arrow,
-        staff,
+        prop: Prop,
         start_orientation: Orientation,
         start_layer: Layer,
     ) -> None:
@@ -326,8 +327,10 @@ class Pictograph(QGraphicsScene):
             START_LAYER: start_layer,
         }
 
-        motion = Motion(self, arrow, staff, motion_attributes)
-
+        motion = Motion(self, arrow, prop, motion_attributes)
+        arrow.motion = motion
+        prop.motion = motion
+        
         for m in self.motions:
             if m.color == motion.color:
                 self.motions.remove(m)
