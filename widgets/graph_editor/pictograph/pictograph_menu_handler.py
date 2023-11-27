@@ -25,7 +25,7 @@ class PictographMenuHandler:
         staff_menu = menu.addMenu("Staff")
         self._add_staff_actions(staff_menu, clicked_item)
 
-        pictograph_menu = menu.addMenu("Graphboard")
+        pictograph_menu = menu.addMenu("Pictograph")
         self._add_pictograph_actions(pictograph_menu)
 
         menu.exec(event_pos)

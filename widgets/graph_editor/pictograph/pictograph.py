@@ -43,7 +43,7 @@ from utilities.TypeChecking.TypeChecking import (
     Quadrant,
 )
 from widgets.graph_editor.pictograph.pictograph_view import PictographView
-from widgets.graph_editor.pictograph.pictograph_init import PictographInit
+from widgets.graph_editor.pictograph.pictogaph_init import PictographInit
 from widgets.graph_editor.pictograph.pictograph_menu_handler import (
     PictographMenuHandler,
 )
@@ -128,28 +128,40 @@ class Pictograph(QGraphicsScene):
         self.pictograph_menu_handler.create_master_menu(event_pos, clicked_item)
 
     def mousePressEvent(self, event) -> None:
-        clicked_item = self.itemAt(event.scenePos(), QTransform())
+        scene_pos = event.scenePos()
+        items_at_pos = self.items(scene_pos)
+
+        # Collect all Arrow items at the click position
+        arrows_at_pos = [item for item in items_at_pos if isinstance(item, Arrow)]
+
+        # Find the closest arrow to the cursor position
+        closest_arrow = None
+        min_distance = float("inf")
+        for arrow in arrows_at_pos:
+            arrow_center = arrow.sceneBoundingRect().center()
+            distance = (scene_pos - arrow_center).manhattanLength()
+            if distance < min_distance:
+                closest_arrow = arrow
+                min_distance = distance
+
+        # If the closest item is an arrow, select it
+        if closest_arrow:
+            self.dragged_arrow = closest_arrow
+            self.dragged_arrow.mousePressEvent(event)
+        else:
+            # Handle other items (Staff, LetterItem, Grid) or no item
+            clicked_item = self.itemAt(scene_pos, QTransform())
+            self.handle_non_arrow_click(clicked_item, event)
+
+    def handle_non_arrow_click(self, clicked_item, event):
         if isinstance(clicked_item, Staff):
             self.dragged_staff = clicked_item
             self.dragged_staff.mousePressEvent(event)
-        elif isinstance(clicked_item, Arrow):
-            self.dragged_arrow = clicked_item
-            self.dragged_arrow.mousePressEvent(event)
         elif isinstance(clicked_item, LetterItem):
             clicked_item.setSelected(False)
-            for arrow in self.arrows:
-                arrow.setSelected(False)
-            for staff in self.staffs:
-                staff.setSelected(False)
-            self.dragged_staff = None
-            self.dragged_arrow = None
+            self.clear_selections()
         elif not clicked_item or isinstance(clicked_item, Grid):
-            for arrow in self.arrows:
-                arrow.setSelected(False)
-            for staff in self.staffs:
-                staff.setSelected(False)
-            self.dragged_staff = None
-            self.dragged_arrow = None
+            self.clear_selections()
 
     def mouseMoveEvent(self, event) -> None:
         if self.dragged_staff:
@@ -285,6 +297,15 @@ class Pictograph(QGraphicsScene):
         self.arrows = []
         self.staffs = []
         self.update()
+
+    def clear_selections(self):
+        for arrow in self.arrows:
+            arrow.setSelected(False)
+        for staff in self.staffs:
+            staff.setSelected(False)
+        self.dragged_staff = None
+        self.dragged_arrow = None
+
 
     def add_motion(
         self,
