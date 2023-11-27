@@ -60,9 +60,9 @@ class LetterEngine:
                         (letter, combination[1:])
                     )
 
-        # Save them to a file called preprocessed.json
-        with open("preprocessed.json", "w") as f:
-            json.dump(preprocessed_start_end_combinations, f, indent=4)
+        # Save them to a file called preprocessed.json with UTF-8 encoding
+        with open("preprocessed.json", "w", encoding="utf-8") as f:
+            json.dump(preprocessed_start_end_combinations, f, indent=4, ensure_ascii=False)
 
         return preprocessed_start_end_combinations
 
