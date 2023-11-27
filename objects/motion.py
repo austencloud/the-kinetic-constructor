@@ -67,20 +67,84 @@ class Motion:
             tuple[Orientation], dict[MotionType, dict[Turns, Orientation]]
         ] = {
             (IN, CLOCKWISE): {
-                PRO: {0: IN, 0.5: COUNTER_CLOCKWISE, 1: OUT, 1.5: CLOCKWISE, 2: IN},
-                ANTI: {0: OUT, 0.5: CLOCKWISE, 1: IN, 1.5: COUNTER_CLOCKWISE, 2: OUT},
+                PRO: {
+                    0: IN,
+                    0.5: COUNTER_CLOCKWISE,
+                    1: OUT,
+                    1.5: CLOCKWISE,
+                    2: IN,
+                    2.5: COUNTER_CLOCKWISE,
+                    3: OUT,
+                },
+                ANTI: {
+                    0: OUT,
+                    0.5: CLOCKWISE,
+                    1: IN,
+                    1.5: COUNTER_CLOCKWISE,
+                    2: OUT,
+                    2.5: CLOCKWISE,
+                    3: IN,
+                },
             },
             (OUT, CLOCKWISE): {
-                PRO: {0: OUT, 0.5: CLOCKWISE, 1: IN, 1.5: COUNTER_CLOCKWISE, 2: OUT},
-                ANTI: {0: IN, 0.5: COUNTER_CLOCKWISE, 1: OUT, 1.5: CLOCKWISE, 2: IN},
+                PRO: {
+                    0: OUT,
+                    0.5: CLOCKWISE,
+                    1: IN,
+                    1.5: COUNTER_CLOCKWISE,
+                    2: OUT,
+                    2.5: CLOCKWISE,
+                    3: IN,
+                },
+                ANTI: {
+                    0: IN,
+                    0.5: COUNTER_CLOCKWISE,
+                    1: OUT,
+                    1.5: CLOCKWISE,
+                    2: IN,
+                    2.5: COUNTER_CLOCKWISE,
+                    3: OUT,
+                },
             },
             (IN, COUNTER_CLOCKWISE): {
-                PRO: {0: IN, 0.5: CLOCKWISE, 1: OUT, 1.5: COUNTER_CLOCKWISE, 2: IN},
-                ANTI: {0: OUT, 0.5: COUNTER_CLOCKWISE, 1: IN, 1.5: CLOCKWISE, 2: OUT},
+                PRO: {
+                    0: IN,
+                    0.5: CLOCKWISE,
+                    1: OUT,
+                    1.5: COUNTER_CLOCKWISE,
+                    2: IN,
+                    2.5: CLOCKWISE,
+                    3: OUT,
+                },
+                ANTI: {
+                    0: OUT,
+                    0.5: COUNTER_CLOCKWISE,
+                    1: IN,
+                    1.5: CLOCKWISE,
+                    2: OUT,
+                    2.5: COUNTER_CLOCKWISE,
+                    3: IN,
+                },
             },
             (OUT, COUNTER_CLOCKWISE): {
-                PRO: {0: OUT, 0.5: COUNTER_CLOCKWISE, 1: IN, 1.5: CLOCKWISE, 2: OUT},
-                ANTI: {0: IN, 0.5: CLOCKWISE, 1: OUT, 1.5: COUNTER_CLOCKWISE, 2: IN},
+                PRO: {
+                    0: OUT,
+                    0.5: COUNTER_CLOCKWISE,
+                    1: IN,
+                    1.5: CLOCKWISE,
+                    2: OUT,
+                    2.5: COUNTER_CLOCKWISE,
+                    3: IN,
+                },
+                ANTI: {
+                    0: IN,
+                    0.5: CLOCKWISE,
+                    1: OUT,
+                    1.5: COUNTER_CLOCKWISE,
+                    2: IN,
+                    2.5: CLOCKWISE,
+                    3: OUT,
+                },
             },
         }
         # Update repetitive mappings for STATIC and DASH
@@ -122,12 +186,12 @@ class Motion:
         self.pictograph.update()
 
     def add_half_turn(self) -> None:
-        if self.arrow.turns < 2:
+        if self.arrow.turns < 3:
             self.staff.swap_layer()
             self.staff.swap_axis()
             self.update_turns(self.arrow.turns + 0.5)
         else:
-            self.update_turns(2)
+            self.update_turns(3)
 
     def subtract_half_turn(self) -> None:
         if self.arrow.turns > 0:
@@ -138,7 +202,7 @@ class Motion:
             self.update_turns(0)
 
     def add_turn(self) -> None:
-        self.update_turns(self.arrow.turns + 1 if self.arrow.turns < 2 else 2)
+        self.update_turns(self.arrow.turns + 1 if self.arrow.turns < 3 else 3)
 
     def subtract_turn(self) -> None:
         self.update_turns(self.arrow.turns - 1 if self.arrow.turns > 0 else 0)

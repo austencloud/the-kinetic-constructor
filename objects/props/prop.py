@@ -169,6 +169,25 @@ class Prop(GraphicalObject):
                     self.setPos(new_pos + QPointF(0, staff_length))
                 elif self.location == SOUTH:
                     self.setPos(new_pos + QPointF(staff_width, 0))
+        elif self.layer == 2:
+            if self.orientation == CLOCKWISE:
+                if self.location == WEST:
+                    self.setPos(new_pos + QPointF(0, staff_length))
+                elif self.location == EAST:
+                    self.setPos(new_pos + QPointF(staff_width, 0))
+                elif self.location == NORTH:
+                    self.setPos(new_pos)
+                elif self.location == SOUTH:
+                    self.setPos(new_pos + QPointF(staff_length, staff_width))
+            elif self.orientation == COUNTER_CLOCKWISE:
+                if self.location == WEST:
+                    self.setPos(new_pos + QPointF(staff_width, 0))
+                elif self.location == EAST:
+                    self.setPos(new_pos + QPointF(0, staff_length))
+                elif self.location == NORTH:
+                    self.setPos(new_pos + QPointF(staff_length, staff_width))
+                elif self.location == SOUTH:
+                    self.setPos(new_pos)
 
     def update_arrow_quadrant(self, new_location: Location) -> None:
         quadrant_mapping: Dict[

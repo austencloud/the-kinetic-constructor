@@ -25,7 +25,7 @@ from settings.string_constants import (
     RIGHT,
     RED,
     BLUE,
-    END_LAYER, 
+    END_LAYER,
 )
 from typing import TYPE_CHECKING, Dict, List
 from objects.props.staff import Staff
@@ -263,41 +263,15 @@ class StaffPositioner:
     def reposition_beta_to_beta(self, motions) -> None:
         motion1, motion2 = motions
         same_motion_type = motion1[MOTION_TYPE] == motion2[MOTION_TYPE] in [PRO, ANTI]
-
-        if same_motion_type:
-            self.reposition_G_and_H(motion1, motion2)
-
-        else:
-            self.reposition_I(motion1, motion2)
+        
+        if all(staff.layer == 1 for staff in self.pictograph.staffs):
+            if same_motion_type:
+                self.reposition_G_and_H(motion1, motion2)
+            else:
+                self.reposition_I(motion1, motion2)
 
     def reposition_G_and_H(self, motion1, motion2) -> None:
         optimal_location1 = self.get_optimal_arrow_location(motion1)
-
-
-
-
-
-
-
-
-
-        # TODO:
-        # Need to pass Arrow Attributes instead of motion attributes in get_optimal_arrow_location.
-        # This way it can comparea against the json
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         optimal_location2 = self.get_optimal_arrow_location(motion2)
 
         if not optimal_location1 or not optimal_location2:
@@ -443,7 +417,7 @@ class StaffPositioner:
                     return UP if motion[START_LOCATION] == EAST else DOWN
                 elif motion[END_LOCATION] in [EAST, WEST]:
                     return RIGHT if motion[START_LOCATION] == SOUTH else LEFT
-                
+
     def calculate_new_position(
         self,
         current_position: QPointF,
