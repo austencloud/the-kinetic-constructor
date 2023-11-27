@@ -93,3 +93,44 @@ class Motion:
         key = (self.start_orientation, self.rotation_direction)
         motion_map = orientation_map.get(key, {})
         return motion_map.get(self.motion_type, {}).get(self.turns)
+    
+    ### 
+    
+    def update_turns(self, turns: int) -> None:
+        self.arrow.turns = turns
+        self.turns = self.arrow.turns
+        self.end_orientation = self.get_end_orientation()
+        self.staff.orientation = self.end_orientation
+        self.staff.update_appearance()
+        self.staff.update_rotation()
+        svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
+        self.arrow.update_svg(svg_file)
+        self.arrow.update_appearance()
+        self.arrow.attributes[TURNS] = self.arrow.turns
+        if hasattr(self.arrow, "ghost_arrow"):
+            self.arrow.ghost_arrow.turns = self.arrow.turns
+            self.arrow.ghost_arrow.update_svg(svg_file)
+            self.arrow.ghost_arrow.update_appearance()
+        self.graphboard.update()
+
+    def add_half_turn(self) -> None:
+        if self.arrow.turns < 2:
+            self.staff.swap_layer()
+            self.staff.swap_axis()
+            self.update_turns(self.arrow.turns + 0.5)
+        else:
+            self.update_turns(2)
+
+    def subtract_half_turn(self) -> None:
+        if self.arrow.turns > 0:
+            self.staff.swap_layer()
+            self.staff.swap_axis()
+            self.update_turns(self.arrow.turns - 0.5)
+        else:
+            self.update_turns(0)
+
+    def add_turn(self) -> None:
+        self.update_turns(self.arrow.turns + 1 if self.arrow.turns < 2 else 2)
+
+    def subtract_turn(self) -> None:
+        self.update_turns(self.arrow.turns - 1 if self.arrow.turns > 0 else 0)

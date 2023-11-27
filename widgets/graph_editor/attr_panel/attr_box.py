@@ -12,6 +12,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
 )
 from objects.arrow import Arrow
+from objects.motion import Motion
 from settings.string_constants import (
     ANTI,
     BLUE,
@@ -255,42 +256,8 @@ class AttrBox(QFrame):
         if arrow:
             self.update_labels(arrow)
 
-    def update_labels(self, arrow: "Arrow") -> None:
-        """
-        Update the labels in the infobox widget based on the arrow object.
-
-        Args:
-            widget (QFrame): The infobox widget.
-            arrow (Arrow): The arrow object containing the data.
-
-        Returns:
-            None
-        """
-
-        infobox_height = self.attr_panel.height()
-        # self.attribute_labels["motion_type_label"].setText(
-        #     f"<h1><span style='font-weight: bold; font-style: italic; font-size: {int(infobox_height * 0.07)}px;'>{arrow.motion_type.capitalize()}</h1>"
-        # )
-
-        # if arrow.rotation_direction:
-        #     if arrow.rotation_direction == CLOCKWISE:
-        #         clock_icon = CLOCKWISE_ICON
-        #     elif arrow.rotation_direction == COUNTER_CLOCKWISE:
-        #         clock_icon = COUNTER_CLOCKWISE_ICON
-        #     else:
-        #         clock_icon = CLOCK_ICON
-
-        #     self.set_clock_pixmap(self.attribute_labels["clock_label"], clock_icon)
-        # else:
-        #     self.attribute_labels["clock_label"].setText("")
-
-        # if arrow.motion_type in [PRO, ANTI, STATIC]:
-        #     self.attribute_labels["start_end_label"].setText(
-        #         f"<span style='font-weight: bold; font-style: italic; font-size: {int(infobox_height * 0.07)}px;'>{arrow.start_location.capitalize()} → {arrow.end_location.capitalize()}</span>"
-        #     )
-        # elif arrow.motion_type == "":
-        #     self.attribute_labels["start_end_label"].setText("")
-        self.turns_widget.turns_label.setText(f"{arrow.turns}")
+    def update_labels(self, motion: "Motion") -> None:
+        self.turns_widget.turns_label.setText(f"{motion.turns}")
 
     def update_attr_box_size(self) -> None:
         self.setFixedHeight(int(self.attr_panel.graphboard.graph_editor.height() / 2))

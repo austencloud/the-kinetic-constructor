@@ -7,9 +7,7 @@ from typing import TYPE_CHECKING, Union
 if TYPE_CHECKING:
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
     from objects.arrow import Arrow
-    from objects.props.staff import Staff
-    from objects.ghosts.ghost_staff import GhostStaff
-    from objects.ghosts.ghost_arrow import GhostArrow
+    from objects.props.prop import Prop
 
 from utilities.TypeChecking.TypeChecking import (
     Color,
@@ -78,13 +76,9 @@ class GraphicalObject(QGraphicsSvgItem):
         self.update_appearance()
 
     def update_appearance(
-        self: Union["Staff", "Arrow", "GhostStaff", "GhostArrow"]
+        self: Union["Prop", "Arrow"]
     ) -> None:
-        from objects.props.staff import Staff
-
         self.update_color()
-        if isinstance(self, Staff):
-            self.axis = self.get_axis(self.location)
         self.update_rotation()
 
     def set_attributes_from_dict(

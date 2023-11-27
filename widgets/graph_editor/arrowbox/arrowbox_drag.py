@@ -161,7 +161,7 @@ class ArrowBoxDrag(QWidget):
         self.ghost_arrow.staff.arrow = self.placed_arrow
 
         self.graphboard.add_motion(
-            self.ghost_arrow,
+            self.placed_arrow,
             self.ghost_arrow.staff,
             IN,
             1,

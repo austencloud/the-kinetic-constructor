@@ -247,13 +247,13 @@ class TurnsWidget(QWidget):
         layout.addItem(right_spacer)
 
     def subtract_turns_callback(self) -> None:
-        arrow = self.graphboard.get_arrow_by_color(self.color)
-        if arrow:
-            arrow.subtract_turn()
-            self.attr_box.update_labels(arrow)
+        motion = self.graphboard.get_motion_by_color(self.color)
+        if motion:
+            motion.subtract_half_turn()
+            self.attr_box.update_labels(motion)
 
     def add_turns_callback(self) -> None:
-        arrow = self.graphboard.get_arrow_by_color(self.color)
-        if arrow:
-            arrow.add_turn()
-            self.attr_box.update_labels(arrow)
+        motion = self.graphboard.get_motion_by_color(self.color)
+        if motion:
+            motion.add_half_turn()
+            self.attr_box.update_labels(motion)

@@ -207,6 +207,11 @@ class GraphBoard(QGraphicsScene):
             if arrow.color == color:
                 return arrow
 
+    def get_motion_by_color(self, color: str) -> Optional[Motion]:
+        for motion in self.motions:
+            if motion.color == color:
+                return motion
+    
     def get_staff_by_color(self, color: str) -> Optional[Staff]:
         for staff in self.staff_set.values():
             if staff.color == color:

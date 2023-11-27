@@ -37,7 +37,7 @@ class GhostArrow(Arrow):
         Returns:
             None
         """
-        super().__init__(graphboard, attributes, None)
+        super().__init__(graphboard, attributes)
         self.setOpacity(0.2)
         self.graphboard, self.color, self.target_arrow = (
             graphboard,

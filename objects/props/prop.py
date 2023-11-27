@@ -262,53 +262,16 @@ class Prop(GraphicalObject):
     ### GETTERS ###
 
     def get_rotation_angle(self) -> RotationAngle:
-        if self.layer == 1 and self.orientation == IN:
-            if self.location == NORTH or self.location == SOUTH:
-                return {
-                    NORTH: 90,
-                    SOUTH: 270,
-                }.get(self.location, {})
-            elif self.location == EAST or self.location == WEST:
-                return {
-                    WEST: 0,
-                    EAST: 180,
-                }.get(self.location, {})
+        angle_map = {
+            (1, IN): {NORTH: 90, SOUTH: 270, WEST: 0, EAST: 180},
+            (1, OUT): {NORTH: 270, SOUTH: 90, WEST: 180, EAST: 0},
+            (2, CLOCKWISE): {NORTH: 0, SOUTH: 180, WEST: 270, EAST: 90},
+            (2, COUNTER_CLOCKWISE): {NORTH: 180, SOUTH: 0, WEST: 90, EAST: 270},
+        }
 
-        elif self.layer == 1 and self.orientation == OUT:
-            if self.location == NORTH or self.location == SOUTH:
-                return {
-                    NORTH: 270,
-                    SOUTH: 90,
-                }.get(self.location, {})
-            elif self.location == EAST or self.location == WEST:
-                return {
-                    WEST: 180,
-                    EAST: 0,
-                }.get(self.location, {})
+        key = (self.layer, self.orientation)
+        return angle_map.get(key, {}).get(self.location, 0)  # Default to 0 if not found
 
-        elif self.layer == 2 and self.orientation == CLOCKWISE:
-            if self.location == NORTH or self.location == SOUTH:
-                return {
-                    NORTH: 0,
-                    SOUTH: 180,
-                }.get(self.location, {})
-            elif self.location == EAST or self.location == WEST:
-                return {
-                    WEST: 270,
-                    EAST: 90,
-                }.get(self.location, {})
-
-        elif self.layer == 2 and self.orientation == COUNTER_CLOCKWISE:
-            if self.location == NORTH or self.location == SOUTH:
-                return {
-                    NORTH: 180,
-                    SOUTH: 0,
-                }.get(self.location, {})
-            elif self.location == EAST or self.location == WEST:
-                return {
-                    WEST: 90,
-                    EAST: 270,
-                }.get(self.location, {})
 
     def update_rotation(self) -> None:
         rotation_angle = self.get_rotation_angle()
@@ -346,11 +309,20 @@ class Prop(GraphicalObject):
 
     ### HELPERS ###
 
+
+
     def swap_axis(self) -> None:
         if self.axis == VERTICAL:
             self.axis = HORIZONTAL
         else:
             self.axis = VERTICAL
+        self.update_rotation()
+
+    def swap_layer(self) -> None:
+        if self.layer == 1:
+            self.layer = 2
+        else:
+            self.layer = 1
         self.update_rotation()
 
     def set_svg_color(self, new_color: Color) -> bytes:

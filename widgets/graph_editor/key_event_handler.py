@@ -68,9 +68,9 @@ class KeyEventHandler:
             elif event.key() == Qt.Key.Key_F:
                 selected_arrow.swap_motion_type()
             elif event.key() == Qt.Key.Key_Q:
-                selected_arrow.subtract_turn()
+                selected_arrow.motion.subtract_half_turn()
             elif event.key() == Qt.Key.Key_E:
-                selected_arrow.add_turn()
+                selected_arrow.motion.add_half_turn()
 
         ### SEQEUNCE MANAGEMENT ###
         elif event.key() == Qt.Key.Key_Enter:

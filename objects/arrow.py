@@ -31,7 +31,6 @@ from settings.string_constants import (
 )
 from data.start_end_location_mapping import start_end_location_mapping
 from objects.graphical_object import GraphicalObject
-from objects.props.staff import Staff
 from objects.motion import Motion
 
 from utilities.TypeChecking.TypeChecking import (
@@ -51,14 +50,15 @@ from utilities.TypeChecking.TypeChecking import (
 if TYPE_CHECKING:
     from widgets.graph_editor.graphboard.graphboard import GraphBoard
     from objects.ghosts.ghost_arrow import GhostArrow
+    from objects.props.staff import Staff
 
 
 class Arrow(GraphicalObject):
-    def __init__(self, graphboard, attributes, motion=None) -> None:
+    def __init__(self, graphboard, attributes) -> None:
         svg_file = self.get_svg_file(attributes[MOTION_TYPE], attributes[TURNS])
         super().__init__(svg_file, graphboard)
         self.setAcceptHoverEvents(True)
-        self._setup_attributes(graphboard, attributes, motion)
+        self._setup_attributes(graphboard, attributes)
 
     ### SETUP ###
 
@@ -66,14 +66,14 @@ class Arrow(GraphicalObject):
         self,
         graphboard: "GraphBoard",
         attributes: "ArrowAttributesDicts",
-        motion: "Motion",
     ) -> None:
         
         self.graphboard = graphboard
 
         self.drag_offset = QPointF(0, 0)
         self.staff: Staff = None
-
+        self.motion: Motion = None
+        
         self.is_svg_mirrored: bool = False
 
         self.center_x = self.boundingRect().width() / 2
@@ -302,38 +302,11 @@ class Arrow(GraphicalObject):
         )
 
     def get_svg_file(self, motion_type: MotionType, turns: Turns) -> str:
-        svg_file = f"{ARROW_DIR}{motion_type}_{turns}.svg"
+        svg_file = f"{ARROW_DIR}{motion_type}_{float(turns)}.svg"
         return svg_file
 
     ### MANIPULATION ###
 
-    def add_turn(self) -> None:
-        self.turns += 1
-        if self.turns > 2:
-            self.turns = 0
-        svg_file = self.get_svg_file(self.motion_type, self.turns)
-        self.update_svg(svg_file)
-        self.update_appearance()
-        self.attributes[TURNS] = self.turns
-        if hasattr(self, "ghost_arrow"):
-            self.ghost_arrow.turns = self.turns
-            self.ghost_arrow.update_svg(svg_file)
-            self.ghost_arrow.update_appearance()
-        self.graphboard.update()
-
-    def subtract_turn(self) -> None:
-        self.turns -= 1
-        if self.turns < 0:
-            self.turns = 2
-        svg_file = self.get_svg_file(self.motion_type, self.turns)
-        self.update_svg(svg_file)
-        self.update_appearance()
-        self.attributes[TURNS] = self.turns
-        if hasattr(self, "ghost_arrow"):
-            self.ghost_arrow.turns = self.turns
-            self.ghost_arrow.update_svg(svg_file)
-            self.ghost_arrow.update_appearance()
-        self.graphboard.update()
 
     def move_wasd(self, direction: Direction) -> None:
         wasd_quadrant_mapping = {

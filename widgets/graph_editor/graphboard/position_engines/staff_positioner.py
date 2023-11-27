@@ -2,6 +2,8 @@ from PyQt6.QtCore import QPointF
 import math
 from settings.numerical_constants import BETA_OFFSET, STAFF_LENGTH, STAFF_WIDTH
 from settings.string_constants import (
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
     HORIZONTAL,
     IN,
     OUT,
@@ -110,16 +112,56 @@ class StaffPositioner:
                     elif staff.location == WEST:
                         staff.setPos(
                             self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(-staff_length / 2, -staff_width / 2)
+                        )
+            elif staff.layer == 2:
+                if staff.orientation == CLOCKWISE:
+                    if staff.location == NORTH:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(-staff_length / 2, -staff_width / 2)
+                        )
+                    elif staff.location == SOUTH:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(-staff_length / 2, -staff_width / 2)
+                        )
+                    elif staff.location == EAST:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
                             + QPointF(
-                                -staff_length / 2, -staff_width/2
+                                -staff_length / 2, -staff_length + staff_width / 2
                             )
                         )
+                    elif staff.location == WEST:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(staff_length / 2 - staff_width, -staff_width / 2)
+                        )
 
-            else:
-                staff.setPos(
-                    self.graphboard.grid.handpoints[staff.location]
-                    + QPointF(-staff_length / 2, -staff_width / 2)
-                )
+                elif staff.orientation == COUNTER_CLOCKWISE:
+                    if staff.location == NORTH:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(-staff_length / 2, -staff_width / 2)
+                        )
+                    elif staff.location == SOUTH:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(-staff_length / 2, -staff_width / 2)
+                        )
+                    elif staff.location == EAST:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(staff_length / 2 - staff_width, -staff_width / 2)
+                        )
+                    elif staff.location == WEST:
+                        staff.setPos(
+                            self.graphboard.grid.handpoints[staff.location]
+                            + QPointF(
+                                -staff_length / 2, -staff_length + staff_width / 2
+                            )
+                        )
 
     def reposition_beta_staffs(self) -> None:
         board_state = self.graphboard.get_state()
