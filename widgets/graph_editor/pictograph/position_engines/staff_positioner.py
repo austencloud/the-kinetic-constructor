@@ -25,10 +25,12 @@ from settings.string_constants import (
     RIGHT,
     RED,
     BLUE,
+    END_LAYER, 
 )
 from typing import TYPE_CHECKING, Dict, List
 from objects.props.staff import Staff
 from utilities.TypeChecking.TypeChecking import (
+    ArrowAttributesDicts,
     MotionAttributesDicts,
     LetterDictionary,
     OptimalLocationEntries,
@@ -104,44 +106,48 @@ class StaffPositioner:
         pro_or_anti_arrows = [
             arrow for arrow in board_state if arrow[MOTION_TYPE] in [PRO, ANTI]
         ]
-        static_arrows = [arrow for arrow in board_state if arrow[MOTION_TYPE] == STATIC]
+        static_motions = [
+            arrow for arrow in board_state if arrow[MOTION_TYPE] == STATIC
+        ]
 
         # STATIC BETA
-        if len(static_arrows) > 1:
-            self.reposition_static_beta(move_staff, static_arrows)
+        if len(static_motions) > 1:
+            self.reposition_static_beta(move_staff, static_motions)
 
         # BETA → BETA - G, H, I
-        for start_location, arrows in arrows_grouped_by_start_loc.items():
-            if len(arrows) == 2:
-                arrow1, arrow2 = arrows
+        for start_location, motions in motions_grouped_by_start_loc.items():
+            if len(motions) == 2:
+                motion1, motion2 = motions
                 if (
-                    arrow1[START_LOCATION] == arrow2[START_LOCATION]
-                    and arrow1[END_LOCATION] == arrow2[END_LOCATION]
+                    motion1[START_LOCATION] == motion2[START_LOCATION]
+                    and motion1[END_LOCATION] == motion2[END_LOCATION]
                 ):
-                    if arrow1[MOTION_TYPE] in [PRO, ANTI]:
-                        if arrow2[MOTION_TYPE] in [PRO, ANTI]:
-                            self.reposition_beta_to_beta(arrows)
+                    if motion1[MOTION_TYPE] in [PRO, ANTI]:
+                        if motion2[MOTION_TYPE] in [PRO, ANTI]:
+                            self.reposition_beta_to_beta(motions)
 
         # GAMMA → BETA - Y, Z
-        if len(pro_or_anti_arrows) == 1 and len(static_arrows) == 1:
-            self.reposition_gamma_to_beta(move_staff, pro_or_anti_arrows, static_arrows)
+        if len(pro_or_anti_arrows) == 1 and len(static_motions) == 1:
+            self.reposition_gamma_to_beta(
+                move_staff, pro_or_anti_arrows, static_motions
+            )
 
         # ALPHA → BETA - D, E, F
-        converging_arrows = [
-            arrow for arrow in board_state if arrow[MOTION_TYPE] not in [STATIC]
+        converging_motions = [
+            motion for motion in board_state if motion[MOTION_TYPE] not in [STATIC]
         ]
-        if len(converging_arrows) == 2:
-            if converging_arrows[0].get(START_LOCATION) != converging_arrows[1].get(
+        if len(converging_motions) == 2:
+            if converging_motions[0].get(START_LOCATION) != converging_motions[1].get(
                 START_LOCATION
             ):
-                self.reposition_alpha_to_beta(move_staff, converging_arrows)
+                self.reposition_alpha_to_beta(move_staff, converging_motions)
 
     ### STATIC BETA ### β
 
     def reposition_static_beta(
-        self, move_staff: callable, static_arrows: List[MotionAttributesDicts]
+        self, move_staff: callable, static_motions: List[MotionAttributesDicts]
     ) -> None:
-        for arrow in static_arrows:
+        for arrow in static_motions:
             staff = next(
                 (s for s in self.pictograph.staffs if s.arrow.color == arrow[COLOR]),
                 None,
@@ -254,19 +260,45 @@ class StaffPositioner:
 
     ### BETA TO BETA ### G, H, I
 
-    def reposition_beta_to_beta(self, arrows) -> None:
-        arrow1, arrow2 = arrows
-        same_motion_type = arrow1[MOTION_TYPE] == arrow2[MOTION_TYPE] in [PRO, ANTI]
+    def reposition_beta_to_beta(self, motions) -> None:
+        motion1, motion2 = motions
+        same_motion_type = motion1[MOTION_TYPE] == motion2[MOTION_TYPE] in [PRO, ANTI]
 
         if same_motion_type:
-            self.reposition_G_and_H(arrow1, arrow2)
+            self.reposition_G_and_H(motion1, motion2)
 
         else:
-            self.reposition_I(arrow1, arrow2)
+            self.reposition_I(motion1, motion2)
 
-    def reposition_G_and_H(self, arrow1, arrow2) -> None:
-        optimal_location1 = self.get_optimal_arrow_location(arrow1)
-        optimal_location2 = self.get_optimal_arrow_location(arrow2)
+    def reposition_G_and_H(self, motion1, motion2) -> None:
+        optimal_location1 = self.get_optimal_arrow_location(motion1)
+
+
+
+
+
+
+
+
+
+        # TODO:
+        # Need to pass Arrow Attributes instead of motion attributes in get_optimal_arrow_location.
+        # This way it can comparea against the json
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        optimal_location2 = self.get_optimal_arrow_location(motion2)
 
         if not optimal_location1 or not optimal_location2:
             return
@@ -274,8 +306,8 @@ class StaffPositioner:
         distance1 = self.get_distance_from_center(optimal_location1)
         distance2 = self.get_distance_from_center(optimal_location2)
 
-        further_arrow = arrow1 if distance1 > distance2 else arrow2
-        other_arrow = arrow1 if further_arrow == arrow2 else arrow2
+        further_arrow = motion1 if distance1 > distance2 else motion2
+        other_arrow = motion1 if further_arrow == motion2 else motion2
 
         further_direction = self.determine_translation_direction(further_arrow)
 
@@ -300,15 +332,15 @@ class StaffPositioner:
         )
         other_staff.setPos(new_position_other)
 
-    def reposition_I(self, arrow1, arrow2) -> None:
-        pro_arrow = arrow1 if arrow1[MOTION_TYPE] == PRO else arrow2
-        anti_arrow = arrow2 if arrow1[MOTION_TYPE] == PRO else arrow1
+    def reposition_I(self, motion1, motion2) -> None:
+        pro_motion = motion1 if motion1[MOTION_TYPE] == PRO else motion2
+        anti_motion = motion2 if motion1[MOTION_TYPE] == PRO else motion1
 
         pro_staff = next(
             (
                 staff
                 for staff in self.pictograph.staffs
-                if staff.arrow.color == pro_arrow[COLOR]
+                if staff.arrow.color == pro_motion[COLOR]
             ),
             None,
         )
@@ -316,14 +348,14 @@ class StaffPositioner:
             (
                 staff
                 for staff in self.pictograph.staffs
-                if staff.arrow.color == anti_arrow[COLOR]
+                if staff.arrow.color == anti_motion[COLOR]
             ),
             None,
         )
 
         if pro_staff and anti_staff:
             pro_staff_translation_direction = self.determine_translation_direction(
-                pro_arrow
+                pro_motion
             )
             anti_staff_translation_direction = self.get_opposite_direction(
                 pro_staff_translation_direction
@@ -341,17 +373,15 @@ class StaffPositioner:
 
     ### GAMMA TO BETA ### Y, Z
 
-    def reposition_gamma_to_beta(
-        self, move_staff, pro_or_anti_arrows, static_arrows
-    ) -> None:
-        pro_or_anti_arrow, static_arrow = pro_or_anti_arrows[0], static_arrows[0]
-        direction = self.determine_translation_direction(pro_or_anti_arrow)
+    def reposition_gamma_to_beta(self, move_staff, shifts, static_motions) -> None:
+        shift, static_motion = shifts[0], static_motions[0]
+        direction = self.determine_translation_direction(shift)
         if direction:
             move_staff(
                 next(
                     staff
                     for staff in self.pictograph.staffs
-                    if staff.arrow.color == pro_or_anti_arrow[COLOR]
+                    if staff.arrow.color == shift[COLOR]
                 ),
                 direction,
             )
@@ -359,7 +389,7 @@ class StaffPositioner:
                 next(
                     staff
                     for staff in self.pictograph.staffs
-                    if staff.arrow.color == static_arrow[COLOR]
+                    if staff.arrow.color == static_motion[COLOR]
                 ),
                 self.get_opposite_direction(direction),
             )
@@ -399,15 +429,21 @@ class StaffPositioner:
                     return optimal_entry.get(color_key)
         return None
 
-    def determine_translation_direction(self, arrow_state) -> Direction:
+    def determine_translation_direction(self, motion) -> Direction:
         """Determine the translation direction based on the arrow's board_state."""
-
-        if arrow_state[MOTION_TYPE] in [PRO, ANTI]:
-            if arrow_state[END_LOCATION] in [NORTH, SOUTH]:
-                return RIGHT if arrow_state[START_LOCATION] == EAST else LEFT
-            elif arrow_state[END_LOCATION] in [EAST, WEST]:
-                return DOWN if arrow_state[START_LOCATION] == SOUTH else UP
-
+        if motion[END_LAYER] == 1:
+            if motion[MOTION_TYPE] in [PRO, ANTI, STATIC]:
+                if motion[END_LOCATION] in [NORTH, SOUTH]:
+                    return RIGHT if motion[START_LOCATION] == EAST else LEFT
+                elif motion[END_LOCATION] in [EAST, WEST]:
+                    return DOWN if motion[START_LOCATION] == SOUTH else UP
+        elif motion[END_LAYER] == 2:
+            if motion[MOTION_TYPE] in [PRO, ANTI, STATIC]:
+                if motion[END_LOCATION] in [NORTH, SOUTH]:
+                    return UP if motion[START_LOCATION] == EAST else DOWN
+                elif motion[END_LOCATION] in [EAST, WEST]:
+                    return RIGHT if motion[START_LOCATION] == SOUTH else LEFT
+                
     def calculate_new_position(
         self,
         current_position: QPointF,
@@ -436,7 +472,7 @@ class StaffPositioner:
         return distance_from_center
 
     def get_optimal_arrow_location(
-        self, arrow_attributes: MotionAttributesDicts
+        self, arrow_attributes: ArrowAttributesDicts
     ) -> Dict[str, float] | None:
         current_state = self.pictograph.get_state()
         current_letter = self.pictograph.current_letter
