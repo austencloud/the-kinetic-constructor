@@ -23,7 +23,6 @@ from settings.string_constants import (
     NORTHWEST,
     PRO,
     PROP_TYPE,
-    location,
     RED,
     ROTATION_DIRECTION,
     SOUTH,
@@ -35,6 +34,7 @@ from settings.string_constants import (
     WEST,
     ORIENTATION,
     IN,
+    PROP_LOCATION
 )
 from widgets.graph_editor.pictograph.pictograph_view import PictographView
 
@@ -65,8 +65,8 @@ class PictographInit:
         return grid
 
     def init_prop_set(self) -> dict[str, Staff]:
-        red_prop_dict = {COLOR: RED, LOCATION: NORTH, LAYER: 1, ORIENTATION: IN}
-        blue_prop_dict = {COLOR: BLUE, LOCATION: SOUTH, LAYER: 1, ORIENTATION: IN}
+        red_prop_dict = {COLOR: RED, PROP_LOCATION: NORTH, LAYER: 1, ORIENTATION: IN}
+        blue_prop_dict = {COLOR: BLUE, PROP_LOCATION: SOUTH, LAYER: 1, ORIENTATION: IN}
 
         red_staff = Staff(self.pictograph, red_prop_dict)
         blue_staff = Staff(self.pictograph, blue_prop_dict)
@@ -127,7 +127,7 @@ class PictographInit:
         default_red_ghost_prop_attributes = {
             COLOR: RED,
             PROP_TYPE: STAFF,
-            LOCATION: EAST,
+            PROP_LOCATION: EAST,
             LAYER: 1,
             ORIENTATION: IN,
         }
@@ -135,7 +135,7 @@ class PictographInit:
         default_blue_ghost_prop_attributes = {
             COLOR: BLUE,
             PROP_TYPE: STAFF,
-            LOCATION: WEST,
+            PROP_LOCATION: WEST,
             LAYER: 1,
             ORIENTATION: IN,
         }

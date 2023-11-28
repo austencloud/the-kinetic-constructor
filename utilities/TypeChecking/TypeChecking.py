@@ -45,7 +45,7 @@ class OptimalLocationsDicts(TypedDict):
 class PropAttributesDicts(TypedDict):
     color: Color
     prop_type: PropType
-    location: Location
+    prop_location: Location
     layer: Layer
     orientation: Orientation
 
@@ -71,7 +71,7 @@ class ArrowAttributesDicts(TypedDict):
     color: Color
     motion_type: MotionType
     rotation_direction: RotationDirection
-    location: Location
+    arrow_location: Location
     start_location: Location
     end_location: Location
     turns: Turns

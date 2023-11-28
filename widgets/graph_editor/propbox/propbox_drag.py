@@ -58,12 +58,12 @@ class PropBoxDrag(QWidget):
             (2, COUNTER_CLOCKWISE): {NORTH: 180, SOUTH: 0, WEST: 90, EAST: 270},
         }
         key = (self.layer, self.orientation)
-        return angle_map.get(key, {}).get(self.location, 0)
+        return angle_map.get(key, {}).get(self.prop_location, 0)
 
     def set_attributes(self, target_prop: "Prop") -> None:
         self.prop_type: PropType = target_prop.prop_type
         self.color: Color = target_prop.color
-        self.location: Location = target_prop.location
+        self.prop_location: Location = target_prop.prop_location
         self.layer: Layer = target_prop.layer
         self.orientation: Orientation = target_prop.orientation
         self.ghost_prop = self.pictograph.ghost_props[self.color]
@@ -147,11 +147,11 @@ class PropBoxDrag(QWidget):
                 self.pictograph.props.remove(prop)
 
     def update_preview_for_new_location(self, new_location: Location) -> None:
-        self.location = new_location
+        self.prop_location = new_location
 
         self.ghost_prop.prop_type = self.prop_type
         self.ghost_prop.color = self.color
-        self.ghost_prop.location = new_location
+        self.ghost_prop.prop_location = new_location
         self.ghost_prop.orientation = self.orientation
         self.ghost_prop.layer = self.layer
 

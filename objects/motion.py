@@ -44,7 +44,7 @@ class Motion:
         self.motion_type: MotionType = attributes[MOTION_TYPE]
         self.turns: Turns = attributes[TURNS]
         self.rotation_direction: RotationDirection = attributes[ROTATION_DIRECTION]
-        self.location: Location = attributes[location]
+        self.arrow_location: Location = attributes[ARROW_LOCATION]
 
         self.start_location: Location = attributes[START_LOCATION]
         self.end_location: Location = attributes[END_LOCATION]
@@ -164,7 +164,7 @@ class Motion:
         self.motion_type = self.arrow.motion_type
         self.turns = self.arrow.turns
         self.rotation_direction = self.arrow.rotation_direction
-        self.location = self.arrow.location
+        self.arrow_location = self.arrow.location
         self.start_location = self.arrow.start_location
         self.end_location = self.arrow.end_location
 

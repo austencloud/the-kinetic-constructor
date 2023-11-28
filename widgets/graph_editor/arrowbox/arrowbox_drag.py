@@ -3,28 +3,27 @@ from PyQt6.QtCore import Qt, QPoint
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtCore import Qt
-from settings.numerical_constants import GRAPHBOARD_SCALE
 from settings.string_constants import (
+    ANTI,
+    ARROW_LOCATION,
     BLUE,
+    CLOCKWISE,
     COLOR,
+    COUNTER_CLOCKWISE,
+    END_LOCATION,
     IN,
+    LAYER,
+    LOCATION,
     MOTION_TYPE,
-    location,
+    NORTHEAST,
+    NORTHWEST,
+    PRO,
     RED,
     ROTATION_DIRECTION,
-    START_LOCATION,
-    END_LOCATION,
-    TURNS,
-    LOCATION,
-    LAYER,
-    NORTHEAST,
     SOUTHEAST,
     SOUTHWEST,
-    NORTHWEST,
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
-    PRO,
-    ANTI,
+    START_LOCATION,
+    TURNS,
 )
 from objects.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Tuple
@@ -128,7 +127,7 @@ class ArrowBoxDrag(QWidget):
         return {
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,
-            LOCATION: self.location,
+            ARROW_LOCATION: self.location,
             ROTATION_DIRECTION: self.rotation_direction,
             START_LOCATION: start_location,
             END_LOCATION: end_location,

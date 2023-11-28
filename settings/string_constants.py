@@ -31,10 +31,14 @@ STATIC = "static"
 COLOR = "color"
 MOTION_TYPE = "motion_type"
 ROTATION_DIRECTION = "rotation_direction"
-location = "location"
+TURNS = "turns"
+
+
+LOCATION = "location"
+ARROW_LOCATION = "arrow_location"
+PROP_LOCATION = "prop_location"
 START_LOCATION = "start_location"
 END_LOCATION = "end_location"
-TURNS = "turns"
 
 START_ORIENTATION = "start_orientation"
 END_ORIENTATION = "end_orientation"
@@ -49,7 +53,6 @@ START_POS = "start_position"
 END_POS = "end_position"
 
 PROP_TYPE = "prop_type"
-LOCATION = "location"
 LAYER = "layer"
 AXIS = "axis"
 ORIENTATION = "orientation"
@@ -108,7 +111,7 @@ ARROW_ATTRIBUTES = [
     COLOR,
     MOTION_TYPE,
     ROTATION_DIRECTION,
-    location,
+    LOCATION,
     START_LOCATION,
     END_LOCATION,
     TURNS,

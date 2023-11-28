@@ -12,7 +12,6 @@ from settings.string_constants import (
     ANTI,
     STATIC,
     ROTATION_DIRECTION,
-    LOCATION,
     NORTHEAST,
     SOUTHEAST,
     SOUTHWEST,
@@ -25,7 +24,8 @@ from settings.string_constants import (
     DOWN,
     LEFT,
     RIGHT,
-    LOCATION,
+    ARROW_LOCATION,
+    PROP_LOCATION,
     LAYER,
     RED,
     BLUE,
@@ -118,7 +118,7 @@ class Arrow(GraphicalObject):
 
     def update_prop_on_click(self) -> None:
         self.prop.color = self.color
-        self.prop.location = self.end_location
+        self.prop.prop_location = self.end_location
         self.prop.axis = self.prop.get_axis(self.end_location)
 
     def update_ghost_on_click(self) -> None:
@@ -168,7 +168,7 @@ class Arrow(GraphicalObject):
 
     def update_for_new_location(self, new_location: Location) -> None:
         self.location = new_location
-        self.motion.location = new_location
+        self.motion.arrow_location = new_location
 
         self.set_start_end_locations()
 
@@ -213,7 +213,7 @@ class Arrow(GraphicalObject):
                 prop.set_attributes_from_dict(
                     {
                         COLOR: self.color,
-                        LOCATION: self.end_location,
+                        PROP_LOCATION: self.end_location,
                         LAYER: 1,
                     }
                 )
@@ -320,7 +320,7 @@ class Arrow(GraphicalObject):
             current_location, current_location
         )
         self.location = new_location
-        self.motion.location = new_location
+        self.motion.arrow_location = new_location
         (
             new_start_location,
             new_end_location,
@@ -331,7 +331,7 @@ class Arrow(GraphicalObject):
         updated_arrow_dict = {
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,
-            LOCATION: new_location,
+            ARROW_LOCATION: new_location,
             ROTATION_DIRECTION: self.rotation_direction,
             START_LOCATION: new_start_location,
             END_LOCATION: new_end_location,
@@ -340,7 +340,7 @@ class Arrow(GraphicalObject):
 
         updated_prop_dict = {
             COLOR: self.color,
-            LOCATION: new_end_location,
+            PROP_LOCATION: new_end_location,
             LAYER: 1,
         }
 
@@ -369,7 +369,7 @@ class Arrow(GraphicalObject):
         updated_arrow_dict = {
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,
-            LOCATION: new_location,
+            ARROW_LOCATION: new_location,
             ROTATION_DIRECTION: self.rotation_direction,
             START_LOCATION: new_start_location,
             END_LOCATION: new_end_location,
@@ -378,7 +378,7 @@ class Arrow(GraphicalObject):
 
         updated_prop_dict = {
             COLOR: self.color,
-            LOCATION: new_end_location,
+            PROP_LOCATION: new_end_location,
             LAYER: 1,
         }
 
@@ -428,7 +428,7 @@ class Arrow(GraphicalObject):
         self.end_location = new_end_location
 
         self.prop.color = self.color
-        self.prop.location = new_end_location
+        self.prop.prop_location = new_end_location
         self.prop.layer = 1
 
         self.update_appearance()
@@ -479,7 +479,7 @@ class Arrow(GraphicalObject):
         new_arrow_dict = {
             COLOR: self.color,
             MOTION_TYPE: new_motion_type,
-            LOCATION: self.location,
+            ARROW_LOCATION: self.location,
             ROTATION_DIRECTION: new_rotation_direction,
             START_LOCATION: self.start_location,
             END_LOCATION: self.end_location,
@@ -488,7 +488,7 @@ class Arrow(GraphicalObject):
 
         new_prop_dict = {
             COLOR: self.color,
-            LOCATION: self.end_location,
+            PROP_LOCATION: self.end_location,
             LAYER: 1,
         }
 

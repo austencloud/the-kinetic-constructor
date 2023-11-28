@@ -8,7 +8,7 @@ from settings.string_constants import (
     PRO,
     COLOR,
     RED,
-    location,
+    ARROW_LOCATION,
 )
 from typing import TYPE_CHECKING
 
@@ -66,7 +66,7 @@ class PictographGenerator:
                             COLOR,
                             MOTION_TYPE,
                             ROTATION_DIRECTION,
-                            location,
+                            ARROW_LOCATION,
                         ]
                     ):
                         color = arrow_dict[COLOR]

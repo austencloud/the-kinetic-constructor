@@ -9,7 +9,7 @@
         "color": "blue",
         "motion_type": "anti",
         "rotation_direction": "ccw",
-        "location": "sw",
+        "arrow_location": "sw",
         "start_location": "s",
         "end_location": "w",
         "turns": 0
@@ -18,7 +18,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "location": "sw",
+        "arrow_location": "sw",
         "start_location": "s",
         "end_location": "w",
         "turns": 0
@@ -43,7 +43,7 @@
         "color": "blue",
         "motion_type": "anti",
         "rotation_direction": "ccw",
-        "location": "nw",
+        "arrow_location": "nw",
         "start_location": "w",
         "end_location": "n",
         "turns": 0
@@ -52,7 +52,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "location": "nw",
+        "arrow_location": "nw",
         "start_location": "w",
         "end_location": "n",
         "turns": 0
@@ -78,7 +78,7 @@
         "color": "blue",
         "motion_type": "anti",
         "rotation_direction": "ccw",
-        "location": "ne",
+        "arrow_location": "ne",
         "start_location": "n",
         "end_location": "e",
         "turns": 0
@@ -87,7 +87,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "location": "ne",
+        "arrow_location": "ne",
         "start_location": "n",
         "end_location": "e",
         "turns": 0
@@ -112,7 +112,7 @@
         "color": "blue",
         "motion_type": "anti",
         "rotation_direction": "ccw",
-        "location": "se",
+        "arrow_location": "se",
         "start_location": "e",
         "end_location": "s",
         "turns": 0
@@ -121,7 +121,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "location": "se",
+        "arrow_location": "se",
         "start_location": "e",
         "end_location": "s",
         "turns": 0
@@ -146,7 +146,7 @@
         "color": "blue",
         "motion_type": "anti",
         "rotation_direction": "cw",
-        "location": "nw",
+        "arrow_location": "nw",
         "start_location": "n",
         "end_location": "w",
         "turns": 0
@@ -155,7 +155,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "location": "nw",
+        "arrow_location": "nw",
         "start_location": "n",
         "end_location": "w",
         "turns": 0
@@ -180,7 +180,7 @@
         "color": "blue",
         "motion_type": "anti",
         "rotation_direction": "cw",
-        "location": "se",
+        "arrow_location": "se",
         "start_location": "s",
         "end_location": "e",
         "turns": 0
@@ -189,7 +189,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "location": "se",
+        "arrow_location": "se",
         "start_location": "s",
         "end_location": "e",
         "turns": 0
@@ -214,7 +214,7 @@
         "color": "blue",
         "motion_type": "anti",
         "rotation_direction": "cw",
-        "location": "sw",
+        "arrow_location": "sw",
         "start_location": "w",
         "end_location": "s",
         "turns": 0
@@ -223,7 +223,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "location": "sw",
+        "arrow_location": "sw",
         "start_location": "w",
         "end_location": "s",
         "turns": 0
@@ -248,7 +248,7 @@
         "color": "blue",
         "motion_type": "anti",
         "rotation_direction": "cw",
-        "location": "ne",
+        "arrow_location": "ne",
         "start_location": "e",
         "end_location": "n",
         "turns": 0
@@ -257,7 +257,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "location": "ne",
+        "arrow_location": "ne",
         "start_location": "e",
         "end_location": "n",
         "turns": 0
@@ -282,7 +282,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "location": "sw",
+        "arrow_location": "sw",
         "start_location": "w",
         "end_location": "s",
         "turns": 0
@@ -291,7 +291,7 @@
         "color": "red",
         "motion_type": "anti",
         "rotation_direction": "cw",
-        "location": "sw",
+        "arrow_location": "sw",
         "start_location": "w",
         "end_location": "s",
         "turns": 0
@@ -316,7 +316,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "location": "nw",
+        "arrow_location": "nw",
         "start_location": "n",
         "end_location": "w",
         "turns": 0
@@ -325,7 +325,7 @@
         "color": "red",
         "motion_type": "anti",
         "rotation_direction": "cw",
-        "location": "nw",
+        "arrow_location": "nw",
         "start_location": "n",
         "end_location": "w",
         "turns": 0
@@ -350,7 +350,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "location": "ne",
+        "arrow_location": "ne",
         "start_location": "e",
         "end_location": "n",
         "turns": 0
@@ -359,7 +359,7 @@
         "color": "red",
         "motion_type": "anti",
         "rotation_direction": "cw",
-        "location": "ne",
+        "arrow_location": "ne",
         "start_location": "e",
         "end_location": "n",
         "turns": 0
@@ -384,7 +384,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "location": "se",
+        "arrow_location": "se",
         "start_location": "s",
         "end_location": "e",
         "turns": 0
@@ -393,7 +393,7 @@
         "color": "red",
         "motion_type": "anti",
         "rotation_direction": "cw",
-        "location": "se",
+        "arrow_location": "se",
         "start_location": "s",
         "end_location": "e",
         "turns": 0
@@ -418,7 +418,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "location": "nw",
+        "arrow_location": "nw",
         "start_location": "w",
         "end_location": "n",
         "turns": 0
@@ -427,7 +427,7 @@
         "color": "red",
         "motion_type": "anti",
         "rotation_direction": "ccw",
-        "location": "nw",
+        "arrow_location": "nw",
         "start_location": "w",
         "end_location": "n",
         "turns": 0
@@ -452,7 +452,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "location": "se",
+        "arrow_location": "se",
         "start_location": "e",
         "end_location": "s",
         "turns": 0
@@ -461,7 +461,7 @@
         "color": "red",
         "motion_type": "anti",
         "rotation_direction": "ccw",
-        "location": "se",
+        "arrow_location": "se",
         "start_location": "e",
         "end_location": "s",
         "turns": 0
@@ -486,7 +486,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "location": "sw",
+        "arrow_location": "sw",
         "start_location": "s",
         "end_location": "w",
         "turns": 0
@@ -495,7 +495,7 @@
         "color": "red",
         "motion_type": "anti",
         "rotation_direction": "ccw",
-        "location": "sw",
+        "arrow_location": "sw",
         "start_location": "s",
         "end_location": "w",
         "turns": 0
@@ -520,7 +520,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "location": "ne",
+        "arrow_location": "ne",
         "start_location": "n",
         "end_location": "e",
         "turns": 0
@@ -529,7 +529,7 @@
         "color": "red",
         "motion_type": "anti",
         "rotation_direction": "ccw",
-        "location": "ne",
+        "arrow_location": "ne",
         "start_location": "n",
         "end_location": "e",
         "turns": 0

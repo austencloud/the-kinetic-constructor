@@ -85,10 +85,10 @@ class PropPositioner:
             (COUNTER_CLOCKWISE, WEST): QPointF(staff_width / 2, -staff_length / 2),
         }
 
-        if staff.location in self.pictograph.grid.handpoints:
-            key = (staff.orientation, staff.location)
+        if staff.prop_location in self.pictograph.grid.handpoints:
+            key = (staff.orientation, staff.prop_location)
             offset = position_offsets.get(key, QPointF(0, 0))  # Default offset
-            staff.setPos(self.pictograph.grid.handpoints[staff.location] + offset)
+            staff.setPos(self.pictograph.grid.handpoints[staff.prop_location] + offset)
 
     def reposition_beta_staffs(self) -> None:
         board_state = self.pictograph.get_state()
@@ -176,7 +176,7 @@ class PropPositioner:
             }
 
             direction: Direction = layer_reposition_map[staff.layer].get(
-                (staff.location, arrow[COLOR]), None
+                (staff.prop_location, arrow[COLOR]), None
             )
 
             if direction:
@@ -188,7 +188,7 @@ class PropPositioner:
                         (
                             s
                             for s in self.pictograph.props
-                            if s.location == staff.location and s != staff
+                            if s.prop_location == staff.prop_location and s != staff
                         ),
                         None,
                     )
@@ -376,7 +376,7 @@ class PropPositioner:
             if staff.isVisible():
                 visible_staves.append(staff)
         if len(visible_staves) == 2:
-            if visible_staves[0].location == visible_staves[1].location:
+            if visible_staves[0].prop_location == visible_staves[1].prop_location:
                 return True
             else:
                 return False

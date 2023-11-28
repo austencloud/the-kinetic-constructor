@@ -17,6 +17,7 @@ from settings.string_constants import (
     NORTHEAST,
     NORTHWEST,
     LOCATION,
+    PROP_LOCATION,
     RED,
     ROTATION_DIRECTION,
     SOUTHEAST,
@@ -27,6 +28,7 @@ from settings.string_constants import (
     END_ORIENTATION,
     START_LAYER,
     END_LAYER,
+    ARROW_LOCATION
 )
 from utilities.letter_engine import LetterEngine
 from utilities.TypeChecking.TypeChecking import (
@@ -150,7 +152,7 @@ class Pictograph(QGraphicsScene):
                     COLOR: motion.color,
                     MOTION_TYPE: motion.motion_type,
                     ROTATION_DIRECTION: motion.rotation_direction,
-                    LOCATION: motion.prop.location,
+                    ARROW_LOCATION: motion.arrow.location,
                     START_LOCATION: motion.start_location,
                     END_LOCATION: motion.end_location,
                     TURNS: motion.turns,
@@ -242,7 +244,7 @@ class Pictograph(QGraphicsScene):
             COLOR: arrow.color,
             MOTION_TYPE: arrow.motion_type,
             ROTATION_DIRECTION: arrow.rotation_direction,
-            LOCATION: arrow.location,
+            ARROW_LOCATION: arrow.location,
             START_LOCATION: arrow.start_location,
             END_LOCATION: arrow.end_location,
             TURNS: arrow.turns,

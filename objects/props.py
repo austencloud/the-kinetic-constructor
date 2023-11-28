@@ -48,11 +48,11 @@ class Prop(GraphicalObject):
         self.ghost_prop: Prop = None
 
         self.color = attributes[COLOR]
-        self.location = attributes[LOCATION]
+        self.prop_location = attributes[PROP_LOCATION]
         self.layer = attributes[LAYER]
         self.orientation = attributes[ORIENTATION]
 
-        self.axis = self.get_axis(self.location)
+        self.axis = self.get_axis(self.prop_location)
         self.center = self.boundingRect().center()
         self.update_rotation()
 
@@ -67,7 +67,7 @@ class Prop(GraphicalObject):
             if not self.ghost_prop:
                 self.ghost_prop = self.pictograph.ghost_props[self.color]
             self.ghost_prop.color = self.color
-            self.ghost_prop.location = self.location
+            self.ghost_prop.prop_location = self.prop_location
             self.ghost_prop.layer = self.layer
             self.ghost_prop.orientation = self.orientation
             self.ghost_prop.update_appearance()
@@ -80,7 +80,7 @@ class Prop(GraphicalObject):
             for item in self.pictograph.items():
                 if item != self:
                     item.setSelected(False)
-            self.previous_location = self.location
+            self.previous_location = self.prop_location
 
     def mouseMoveEvent(self, event) -> None:
         if isinstance(self.scene(), self.pictograph.__class__):
@@ -93,13 +93,13 @@ class Prop(GraphicalObject):
         new_location = self.get_closest_location(new_pos)
 
         if new_location != self.previous_location:
-            self.location = new_location
-            self.axis = self.get_axis(self.location)
+            self.prop_location = new_location
+            self.axis = self.get_axis(self.prop_location)
             self.update_appearance()
             self.update_arrow_location(new_location)
 
             self.ghost_prop.color = self.color
-            self.ghost_prop.location = self.location
+            self.ghost_prop.prop_location = self.prop_location
             self.ghost_prop.layer = self.layer
             self.ghost_prop.update_appearance()
 
@@ -137,7 +137,7 @@ class Prop(GraphicalObject):
         self.setTransformOriginPoint(0, 0)
 
         # Calculate the new position
-        offset_x, offset_y = position_offsets.get(self.location)
+        offset_x, offset_y = position_offsets.get(self.prop_location)
         if invert_x:
             offset_x = staff_length - offset_x
         if invert_y:
@@ -197,8 +197,8 @@ class Prop(GraphicalObject):
         closest_handpoint = self.get_closest_handpoint(event.scenePos())
         new_location = self.get_closest_location(event.scenePos())
 
-        self.location = new_location
-        self.axis = self.get_axis(self.location)
+        self.prop_location = new_location
+        self.axis = self.get_axis(self.prop_location)
         self.update_appearance()
         self.setPos(closest_handpoint)
 
@@ -210,7 +210,7 @@ class Prop(GraphicalObject):
     ### UPDATERS ###
 
     def update_appearance(self) -> None:
-        self.axis = self.get_axis(self.location)
+        self.axis = self.get_axis(self.prop_location)
         super().update_appearance()
 
     def set_prop_transform_origin_to_center(self: "Prop") -> None:
@@ -219,8 +219,8 @@ class Prop(GraphicalObject):
 
     def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
-        self.location = target_arrow.end_location
-        self.axis = self.get_axis(self.location)
+        self.prop_location = target_arrow.end_location
+        self.axis = self.get_axis(self.prop_location)
         self.update_appearance()
 
     ### GETTERS ###
@@ -241,7 +241,9 @@ class Prop(GraphicalObject):
         }
 
         key = (self.layer, self.orientation)
-        return angle_map.get(key, {}).get(self.location, 0)  # Default to 0 if not found
+        return angle_map.get(key, {}).get(
+            self.prop_location, 0
+        )  # Default to 0 if not found
 
     def update_rotation(self) -> None:
         rotation_angle = self.get_rotation_angle()
@@ -320,14 +322,14 @@ class Prop(GraphicalObject):
 
         self.create_static_arrow()
 
-    def create_static_arrow(self):
+    def create_static_arrow(self) -> None:
         static_attributes_dict = {
             COLOR: self.color,
             MOTION_TYPE: STATIC,
             ROTATION_DIRECTION: "None",
-            LOCATION: "None",
-            START_LOCATION: self.location,
-            END_LOCATION: self.location,
+            ARROW_LOCATION: self.prop_location,
+            START_LOCATION: self.prop_location,
+            END_LOCATION: self.prop_location,
             TURNS: 0,
         }
         static_arrow = Arrow(self, static_attributes_dict)

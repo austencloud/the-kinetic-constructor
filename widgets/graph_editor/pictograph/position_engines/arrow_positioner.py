@@ -1,6 +1,7 @@
 from PyQt6.QtCore import QPointF
 from settings.numerical_constants import DISTANCE
 from settings.string_constants import (
+    ARROW_LOCATION,
     COLOR,
     END_LOCATION,
     MOTION_TYPE,
@@ -53,7 +54,7 @@ class ArrowPositioner:
             COLOR: current_state[0][COLOR],
             MOTION_TYPE: current_state[0][MOTION_TYPE],
             ROTATION_DIRECTION: current_state[0][ROTATION_DIRECTION],
-            LOCATION: current_state[0][LOCATION],
+            ARROW_LOCATION: current_state[0][ARROW_LOCATION],
             START_LOCATION: current_state[0][START_LOCATION],
             END_LOCATION: current_state[0][END_LOCATION],
             TURNS: current_state[0][TURNS],
@@ -62,7 +63,7 @@ class ArrowPositioner:
             COLOR: current_state[1][COLOR],
             MOTION_TYPE: current_state[1][MOTION_TYPE],
             ROTATION_DIRECTION: current_state[1][ROTATION_DIRECTION],
-            LOCATION: current_state[1][LOCATION],
+            ARROW_LOCATION: current_state[1][ARROW_LOCATION],
             START_LOCATION: current_state[1][START_LOCATION],
             END_LOCATION: current_state[1][END_LOCATION],
             TURNS: current_state[1][TURNS],

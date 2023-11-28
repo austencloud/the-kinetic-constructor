@@ -12,6 +12,7 @@ from settings.string_constants import (
     IN,
     NORTH,
     EAST,
+    PROP_LOCATION,
     SOUTH,
     WEST,
     COLOR,
@@ -74,25 +75,25 @@ class PropBox(QGraphicsScene):
         initial_prop_attributes: List[Dict] = [
             {
                 COLOR: RED,
-                LOCATION: NORTH,
+                PROP_LOCATION: NORTH,
                 LAYER: 1,
                 ORIENTATION: IN,
             },
             {
                 COLOR: BLUE,
-                LOCATION: EAST,
+                PROP_LOCATION: EAST,
                 LAYER: 1,
                 ORIENTATION: IN,
             },
             {
                 COLOR: RED,
-                LOCATION: SOUTH,
+                PROP_LOCATION: SOUTH,
                 LAYER: 1,
                 ORIENTATION: IN,
             },
             {
                 COLOR: BLUE,
-                LOCATION: WEST,
+                PROP_LOCATION: WEST,
                 LAYER: 1,
                 ORIENTATION: IN,
             },
@@ -126,7 +127,7 @@ class PropBox(QGraphicsScene):
         self.props.clear()
 
     def set_prop_position(self, prop: Prop) -> None:
-        handpoint = self.grid.get_circle_coordinates(f"{prop.location}_hand_point")
+        handpoint = self.grid.get_circle_coordinates(f"{prop.prop_location}_hand_point")
         prop_length = prop.boundingRect().width()
         prop_width = prop.boundingRect().height()
         offset_x = -prop_length / 2
