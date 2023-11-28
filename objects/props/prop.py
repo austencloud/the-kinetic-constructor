@@ -95,7 +95,7 @@ class Prop(GraphicalObject):
         self.setSelected(True)
         if isinstance(self.scene(), self.pictograph.__class__):
             if not self.ghost_prop:
-                self.ghost_prop = self.pictograph.ghost_staffs[self.color]
+                self.ghost_prop = self.pictograph.ghost_props[self.color]
             self.ghost_prop.color = self.color
             self.ghost_prop.location = self.location
             self.ghost_prop.layer = self.layer
@@ -103,10 +103,10 @@ class Prop(GraphicalObject):
             self.ghost_prop.update_appearance()
             self.pictograph.addItem(self.ghost_prop)
             self.ghost_prop.arrow = self.arrow
-            self.pictograph.staffs.append(self.ghost_prop)
-            self.pictograph.staffs.remove(self)
+            self.pictograph.props.append(self.ghost_prop)
+            self.pictograph.props.remove(self)
             self.pictograph.update()
-            self.pictograph.staffs.append(self)
+            self.pictograph.props.append(self)
             for item in self.pictograph.items():
                 if item != self:
                     item.setSelected(False)
@@ -116,7 +116,7 @@ class Prop(GraphicalObject):
     def mouseMoveEvent(self, event) -> None:
         if isinstance(self.scene(), self.pictograph.__class__):
             if event.buttons() == Qt.MouseButton.LeftButton:
-                new_pos = event.scenePos() - self.get_staff_center()
+                new_pos = event.scenePos() - self.get_prop_center()
                 self.set_drag_pos(new_pos)
                 self.update_location(event.scenePos())
 
@@ -134,14 +134,14 @@ class Prop(GraphicalObject):
             self.ghost_prop.layer = self.layer
             self.ghost_prop.update_appearance()
 
-            self.pictograph.staffs.remove(self)
+            self.pictograph.props.remove(self)
             if self.arrow.motion_type == STATIC:
                 self.arrow.start_location = new_location
                 self.arrow.end_location = new_location
 
             self.pictograph.update()
-            self.pictograph.staffs.append(self)
-            new_pos = new_pos - self.get_staff_center()
+            self.pictograph.props.append(self)
+            new_pos = new_pos - self.get_prop_center()
             self.set_drag_pos(new_pos)
             self.previous_location = new_location
 
@@ -232,12 +232,12 @@ class Prop(GraphicalObject):
     def mouseReleaseEvent(self, event) -> None:
         if isinstance(self.scene(), self.pictograph.__class__):
             self.pictograph.removeItem(self.ghost_prop)
-            self.pictograph.staffs.remove(self.ghost_prop)
+            self.pictograph.props.remove(self.ghost_prop)
             self.ghost_prop.arrow = None
             self.pictograph.update()
-            self.finalize_staff_drop(event)
+            self.finalize_prop_drop(event)
 
-    def finalize_staff_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
+    def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
         closest_handpoint = self.get_closest_handpoint(event.scenePos())
         new_location = self.get_closest_location(event.scenePos())
 
@@ -260,11 +260,11 @@ class Prop(GraphicalObject):
             axis: Axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
         return axis
 
-    def set_staff_transform_origin_to_center(self: "Prop") -> None:
-        self.center = self.get_staff_center()
+    def set_prop_transform_origin_to_center(self: "Prop") -> None:
+        self.center = self.get_prop_center()
         self.setTransformOriginPoint(self.center)
 
-    def set_staff_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
+    def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
         self.location = target_arrow.end_location
         self.axis = self.get_axis(self.location)
@@ -287,7 +287,7 @@ class Prop(GraphicalObject):
         rotation_angle = self.get_rotation_angle()
         self.setRotation(rotation_angle)
 
-    def get_staff_center(self) -> QPointF:
+    def get_prop_center(self) -> QPointF:
         if self.axis == VERTICAL:
             return QPointF(
                 (self.boundingRect().height() / 2), (self.boundingRect().width() / 2)
@@ -351,5 +351,5 @@ class Prop(GraphicalObject):
 
     def delete(self) -> None:
         self.pictograph.removeItem(self)
-        self.pictograph.staffs.remove(self)
+        self.pictograph.props.remove(self)
         self.pictograph.update()
