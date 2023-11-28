@@ -189,23 +189,22 @@ class Pictograph(QGraphicsScene):
             if prop.color == color:
                 return prop
 
-    def get_location(self, x: float, y: float) -> Location:
-        @staticmethod
-        def point_in_location(
-            x: float, y: float, boundary: Tuple[float, float, float, float]
-        ) -> bool:
-            return boundary[0] <= x <= boundary[2] and boundary[1] <= y <= boundary[3]
 
-        if point_in_location(x, y, self.locations[NORTHEAST]):
-            return NORTHEAST
-        elif point_in_location(x, y, self.locations[SOUTHEAST]):
-            return SOUTHEAST
-        elif point_in_location(x, y, self.locations[SOUTHWEST]):
-            return SOUTHWEST
-        elif point_in_location(x, y, self.locations[NORTHWEST]):
-            return NORTHWEST
-        else:
-            return None
+    def get_nearest_layer2_point(self, pos: QPointF) -> Tuple[str, QPointF]:
+        min_distance = float('inf')
+        nearest_point_name = None
+        nearest_point_pos = None
+
+        for name, point in self.grid.layer2_points.items():
+            distance = (pos - point).manhattanLength()
+            if distance < min_distance:
+                min_distance = distance
+                nearest_point_name = name
+                nearest_point_pos = point
+
+        return nearest_point_name, nearest_point_pos
+
+
 
     ### HELPERS ###
 
