@@ -3,10 +3,28 @@ from PyQt6.QtCore import Qt, QPoint, QPointF
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from objects.props import Prop
-from objects.arrow import Arrow, StaticArrow
+from objects.arrow import Arrow
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
-from settings.string_constants import *
+from settings.string_constants import (
+    IN,
+    OUT,
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
+    NORTH,
+    SOUTH,
+    WEST,
+    EAST,
+    COLOR,
+    MOTION_TYPE,
+    STATIC,
+    ROTATION_DIRECTION,
+    ARROW_LOCATION,
+    START_LOCATION,
+    END_LOCATION,
+    TURNS,
+)
+
 
 if TYPE_CHECKING:
     from main import MainWindow
@@ -147,7 +165,6 @@ class PropBoxDrag(QWidget):
                 self.pictograph.props.remove(prop)
 
     def update_preview_for_new_location(self, new_location: Location) -> None:
-        self.prop_location = new_location
 
         self.ghost_prop.prop_type = self.prop_type
         self.ghost_prop.color = self.color
@@ -163,8 +180,8 @@ class PropBoxDrag(QWidget):
         self.update_static_arrow_during_drag()
 
         self.pictograph.add_motion(
-            self.ghost_prop,
             self.ghost_prop.arrow,
+            self.ghost_prop,
             IN,
             1,
         )
@@ -177,15 +194,15 @@ class PropBoxDrag(QWidget):
 
     def update_static_arrow_during_drag(self) -> None:
         static_arrow_dict = {
-                COLOR: self.color,
-                MOTION_TYPE: STATIC,
-                ROTATION_DIRECTION: "None",
-                ARROW_LOCATION: self.prop_location,
-                START_LOCATION: self.prop_location,
-                END_LOCATION: self.prop_location,
-                TURNS: 0,
-            }
-    
+            COLOR: self.color,
+            MOTION_TYPE: STATIC,
+            ROTATION_DIRECTION: "None",
+            ARROW_LOCATION: self.prop_location,
+            START_LOCATION: self.prop_location,
+            END_LOCATION: self.prop_location,
+            TURNS: 0,
+        }
+
         static_arrow = Arrow(self, static_arrow_dict)
         self.pictograph.addItem(static_arrow)
         self.pictograph.arrows.append(static_arrow)
