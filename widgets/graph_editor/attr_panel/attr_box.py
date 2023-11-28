@@ -41,7 +41,7 @@ from widgets.graph_editor.attr_panel.attr_box_widgets import (
 
 class AttrBox(QFrame):
     def __init__(
-        self, attr_panel: 'AttrPanel', pictograph: 'Pictograph', color: Color
+        self, attr_panel: "AttrPanel", pictograph: "Pictograph", color: Color
     ) -> None:
         super().__init__(attr_panel)
         self.attr_panel = attr_panel
@@ -85,23 +85,23 @@ class AttrBox(QFrame):
 
     def apply_button_styles(self) -> None:
         button_style = (
-            'QPushButton {'
-            '   border-radius: 15px;'
-            '   background-color: #f0f0f0;'
-            '   border: 1px solid #a0a0a0;'
-            '   min-width: 30px;'
-            '   min-height: 30px;'
-            '}'
-            'QPushButton:pressed {'
-            '   background-color: #c0c0c0;'
-            '}'
+            "QPushButton {"
+            "   border-radius: 15px;"
+            "   background-color: #f0f0f0;"
+            "   border: 1px solid #a0a0a0;"
+            "   min-width: 30px;"
+            "   min-height: 30px;"
+            "}"
+            "QPushButton:pressed {"
+            "   background-color: #c0c0c0;"
+            "}"
         )
         if self.turns_widget:
             self.turns_widget.subtract_turns_button.setStyleSheet(button_style)
             self.turns_widget.add_turns_button.setStyleSheet(button_style)
 
     def setup_box(self) -> None:
-        self.setObjectName('AttributeBox')
+        self.setObjectName("AttributeBox")
         self.apply_border_style(RED_HEX if self.color == RED else BLUE_HEX)
         self.setFixedSize(
             int(self.attr_panel.width()), int(self.attr_panel.height() / 2)
@@ -111,15 +111,15 @@ class AttrBox(QFrame):
         self.layout().setSpacing(0)
 
     def apply_border_style(self, color_hex: str) -> None:
-        self.setStyleSheet(f'#AttributeBox {{ border: 3px solid {color_hex}; }}')
+        self.setStyleSheet(f"#AttributeBox {{ border: 3px solid {color_hex}; }}")
 
     ### CREATE LABELS ###
 
     def create_attribute_labels(self) -> Dict[str, QLabel]:
         labels = {}
         for name in [
-            'motion_type_label',
-            'start_end_label',
+            "motion_type_label",
+            "start_end_label",
         ]:
             label = self.create_label(self.height() // 4)
             label.setObjectName(name)
@@ -134,7 +134,7 @@ class AttrBox(QFrame):
 
     def create_clock_label(self) -> QLabel:
         label = self.create_label(self.height() // 4)
-        label.setObjectName('clock_label')
+        label.setObjectName("clock_label")
         return label
 
     def add_labels_to_layout(self) -> None:
@@ -144,7 +144,7 @@ class AttrBox(QFrame):
         self.layout().addWidget(self.turns_widget)
 
     def setup_button_column(
-        self, x_position: int, button_names: list, column: Literal['left', 'right']
+        self, x_position: int, button_names: list, column: Literal["left", "right"]
     ) -> None:
         button_column = QFrame(self)
         button_column_layout = QVBoxLayout(button_column)
@@ -154,7 +154,7 @@ class AttrBox(QFrame):
         button_column.setFixedSize(self.button_size, self.height())
         button_column.move(x_position, 0)
 
-        if column == 'left':
+        if column == "left":
             top_spacer = QSpacerItem(
                 self.button_size,
                 self.button_size,
@@ -163,7 +163,7 @@ class AttrBox(QFrame):
             )
             button_column_layout.addItem(top_spacer)
 
-        if column == 'right':
+        if column == "right":
             button_column_layout.addWidget(self.clock_label)
 
         middle_spacer = QSpacerItem(
@@ -174,16 +174,16 @@ class AttrBox(QFrame):
         )
         button_column_layout.addItem(middle_spacer)
 
-        if column == 'left':
+        if column == "left":
             for button_name in button_names:
                 button = self.create_button(
-                    ICON_PATHS[button_name], getattr(self, f'{button_name}_callback')
+                    ICON_PATHS[button_name], getattr(self, f"{button_name}_callback")
                 )
                 button_column_layout.addWidget(button)
 
-        if column == 'right' and 'add_turns' in button_names:
+        if column == "right" and "add_turns" in button_names:
             add_turns_button = self.create_button(
-                ICON_PATHS['add_turns'], self.add_turns_callback
+                ICON_PATHS["add_turns"], self.add_turns_callback
             )
             button_column_layout.addWidget(add_turns_button)
 
@@ -227,12 +227,12 @@ class AttrBox(QFrame):
     def preload_pixmaps(self) -> None:
         for icon_name, icon_path in ICON_PATHS.items():
             if not icon_path:
-                logging.warning(f'No file path specified for icon '{icon_name}'.')
+                logging.warning(f"No file path specified for icon '{icon_name}'.")
                 continue
             pixmap = QPixmap(icon_path)
             if pixmap.isNull():
                 logging.error(
-                    f'Failed to load icon '{icon_name}' from path '{icon_path}'.'
+                    f"Failed to load icon '{icon_name}' from path '{icon_path}'."
                 )
                 continue
             scaled_pixmap = pixmap.scaled(
@@ -245,11 +245,11 @@ class AttrBox(QFrame):
 
     def set_clock_pixmap(self, clock_label: QLabel, icon_name: str) -> None:
         if icon_name not in self.pixmap_cache:
-            logging.error(f'Icon name '{icon_name}' not found in pixmap cache.')
+            logging.error(f"Icon name '{icon_name}' not found in pixmap cache.")
             return
         pixmap = self.pixmap_cache[icon_name]
         if pixmap.isNull():
-            logging.error(f'Pixmap for icon name '{icon_name}' is null.')
+            logging.error(f"Pixmap for icon name '{icon_name}' is null.")
             return
         clock_label.setPixmap(pixmap)
 
@@ -258,8 +258,8 @@ class AttrBox(QFrame):
         if arrow:
             self.update_labels(arrow)
 
-    def update_labels(self, motion: 'Motion') -> None:
-        self.turns_widget.turns_label.setText(f'{motion.turns}')
+    def update_labels(self, motion: "Motion") -> None:
+        self.turns_widget.turns_label.setText(f"{motion.turns}")
 
     def update_attr_box_size(self) -> None:
         self.setFixedHeight(int(self.attr_panel.pictograph.graph_editor.height() / 2))

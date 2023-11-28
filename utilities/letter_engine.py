@@ -322,7 +322,7 @@ class LetterEngine:
         # Both arrows should have the same handpath direction, otherwise, we cannot determine a hybrid
         if pro_handpath != anti_handpath:
             logging.ERROR(
-                'Cannot disambiguate U and V. Handpath directions aren't the same.'
+               "Cannot disambiguate U and V. Handpath directions aren't the same."
             )
             return None, ''
         else:
