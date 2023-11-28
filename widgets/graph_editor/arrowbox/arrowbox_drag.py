@@ -9,7 +9,6 @@ from settings.string_constants import (
     COLOR,
     IN,
     MOTION_TYPE,
-    OUT,
     QUADRANT,
     RED,
     ROTATION_DIRECTION,
@@ -26,17 +25,16 @@ from settings.string_constants import (
     COUNTER_CLOCKWISE,
     PRO,
     ANTI,
-    STATIC,
 )
 from objects.arrow import Arrow
-from typing import TYPE_CHECKING, Dict, Optional
+from typing import TYPE_CHECKING, Dict
 
 if TYPE_CHECKING:
     from main import MainWindow
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.arrowbox.arrowbox import ArrowBox
 from utilities.TypeChecking.TypeChecking import (
-    MotionAttributesDicts,
+    ArrowAttributesDicts,
     Color,
     MotionType,
     Quadrant,
@@ -53,18 +51,15 @@ class ArrowBoxDrag(QWidget):
     ) -> None:
         super().__init__()
         self.setParent(main_window)
-        self.setup_dependencies(main_window, pictograph, arrowbox)
+        self._setup_dependencies(main_window, pictograph, arrowbox)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.preview = QLabel(self)
         self.transform = QTransform()
-        self.attributes: MotionAttributesDicts = {}
+        self.attributes: ArrowAttributesDicts = {}
         self.reset_drag_state()
 
-        self.last_update_time = 0
-        self.update_interval = 0.1
-
-    def setup_dependencies(
+    def _setup_dependencies(
         self, main_window: "MainWindow", pictograph: "Pictograph", arrowbox: "ArrowBox"
     ) -> None:
         self.arrowbox = arrowbox
@@ -84,10 +79,11 @@ class ArrowBoxDrag(QWidget):
         pixmap = self.create_pixmap(target_arrow)
         self.preview.setPixmap(pixmap)
         self.preview.setFixedHeight(pixmap.height())
-        self.arrow_center = self.target_arrow.boundingRect().center() * GRAPHBOARD_SCALE
+        self.arrow_center = (
+            self.target_arrow.boundingRect().center() * self.pictograph.view.view_scale
+        )
         self.current_rotation_angle = target_arrow.get_rotation_angle()
         self.is_svg_mirrored = target_arrow.is_svg_mirrored
-        pixmap = self.create_pixmap(target_arrow)
         self.preview.setPixmap(pixmap)
         self.apply_transformations_to_preview()
 
@@ -111,7 +107,7 @@ class ArrowBoxDrag(QWidget):
     def create_pixmap(self, target_arrow: "Arrow") -> QPixmap:
         new_svg_data = target_arrow.set_svg_color(target_arrow.color)
         renderer = QSvgRenderer(new_svg_data)
-        scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE
+        scaled_size = renderer.defaultSize() * self.pictograph.view.view_scale
         pixmap = QPixmap(scaled_size)
         pixmap.fill(Qt.GlobalColor.transparent)
         painter = QPainter(pixmap)
@@ -119,7 +115,7 @@ class ArrowBoxDrag(QWidget):
             renderer.render(painter)
         return pixmap
 
-    def get_attributes(self) -> MotionAttributesDicts:
+    def get_attributes(self) -> ArrowAttributesDicts:
         start_location: Location
         end_location: Location
         (
@@ -207,7 +203,7 @@ class ArrowBoxDrag(QWidget):
         return self.pictograph.view.rect().contains(local_pos_in_pictograph)
 
     ### UPDATERS ###
-s
+
     def update_staff_during_drag(self) -> None:
         for staff in self.pictograph.staff_set.values():
             if staff.color == self.color:
@@ -230,7 +226,7 @@ s
                 staff.update_appearance()
                 self.pictograph.update_staffs()
 
-    def apply_transformations_to_preview(self):
+    def apply_transformations_to_preview(self) -> None:
         self.update_mirror()
         self.update_rotation()
 

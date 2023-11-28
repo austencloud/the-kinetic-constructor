@@ -23,7 +23,7 @@ class PictographView(QGraphicsView):
         # Initialize buttons
         self.init_buttons()
 
-    def init_buttons(self):
+    def init_buttons(self) -> None:
         self.add_to_sequence_button = self.create_button(
             "resources/images/icons/add_to_sequence.png",
             self.pictograph.add_to_sequence,
@@ -49,9 +49,9 @@ class PictographView(QGraphicsView):
         view_width = int(self.pictograph.graph_editor.height() * 75 / 90)
         self.setFixedWidth(view_width)
         self.setFixedHeight(self.pictograph.graph_editor.height())
-        view_scale = view_width / self.pictograph.width()
+        self.view_scale = view_width / self.pictograph.width()
         self.resetTransform()
-        self.scale(view_scale, view_scale)
+        self.scale(self.view_scale, self.view_scale)
 
         button_size = int(self.width() / 7)
         self.configure_button_size_and_position(

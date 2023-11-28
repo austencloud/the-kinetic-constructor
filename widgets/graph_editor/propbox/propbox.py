@@ -4,7 +4,9 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+from objects.props.prop import Prop
 from objects.props.staff import Staff
+from widgets.graph_editor.propbox.propbox_drag import PropBoxDrag
 from widgets.graph_editor.propbox.propbox_view import PropBoxView
 from settings.string_constants import (
     IN,
@@ -26,7 +28,7 @@ from settings.string_constants import (
     COUNTER_CLOCKWISE,
 )
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List
 from objects.grid import Grid
 
 if TYPE_CHECKING:
@@ -54,147 +56,95 @@ class PropBox(QGraphicsScene):
         self.setSceneRect(0, 0, int(750), int(750))
         self.propbox_layout = QVBoxLayout()
         self.propbox_layout.addWidget(self.view)
-        self.init_propbox_staffs()
         # self.init_propbox_clubs()
         # self.init_propbox_buugeng()
         # self.init_propbox_fans()
         # self.init_propbox_triads()
         # self.init_propbox_hoops()
+        
+        self.props: List[Prop] = []
+        self.staffs: List[Staff] = []
+        self.clubs: List[Club] = []
+        self.buugeng: List[Buugeng] = []
+        self.fans: List[Fan] = []
+        self.triads: List[Triad] = []
+        self.hoops: List[Hoop] = []
+        
+        self.populate_staffs()
 
-    def init_propbox_staffs(self) -> None:
-        self.staff_config = {
-            "n_layer1": {
+
+    def populate_staffs(self) -> None:
+        initial_staff_attribute_collection: List[Dict] = [
+            {
                 COLOR: RED,
                 LOCATION: NORTH,
                 LAYER: 1,
-                AXIS: VERTICAL,
-                ORIENTATION: IN,
+                ORIENTATION: OUT,
             },
-            "e_layer1": {
+            {
                 COLOR: BLUE,
                 LOCATION: EAST,
                 LAYER: 1,
-                AXIS: HORIZONTAL,
-                ORIENTATION: IN,
+                ORIENTATION: OUT,
             },
-            "s_layer1": {
+            {
                 COLOR: RED,
                 LOCATION: SOUTH,
                 LAYER: 1,
-                AXIS: VERTICAL,
-                ORIENTATION: IN,
+                ORIENTATION: OUT,
             },
-            "w_layer1": {
+            {
                 COLOR: BLUE,
                 LOCATION: WEST,
                 LAYER: 1,
-                AXIS: HORIZONTAL,
-                ORIENTATION: IN,
+                ORIENTATION: OUT,
             },
-            "n_layer2": {
+            {
                 COLOR: RED,
                 LOCATION: NORTH,
                 LAYER: 2,
-                AXIS: VERTICAL,
-                ORIENTATION: CLOCKWISE,
+                ORIENTATION: COUNTER_CLOCKWISE,
             },
-            "e_layer2": {
+            {
                 COLOR: BLUE,
                 LOCATION: EAST,
                 LAYER: 2,
-                AXIS: HORIZONTAL,
-                ORIENTATION: CLOCKWISE,
+                ORIENTATION: COUNTER_CLOCKWISE,
             },
-            "s_layer2": {
+            {
                 COLOR: RED,
                 LOCATION: SOUTH,
                 LAYER: 2,
-                AXIS: VERTICAL,
-                ORIENTATION: CLOCKWISE,
+                ORIENTATION: COUNTER_CLOCKWISE,
             },
-            "w_layer2": {
+            {
                 COLOR: BLUE,
                 LOCATION: WEST,
                 LAYER: 2,
-                AXIS: HORIZONTAL,
-                ORIENTATION: CLOCKWISE,
+                ORIENTATION: COUNTER_CLOCKWISE,
             },
-        }
-
-        for key, attrs in self.staff_config.items():
-            staff = Staff(self.main_widget, self.pictograph, attrs)
-            staff.setTransformOriginPoint(QPointF(0, 0))
-            staff.setPos(self.calculate_staff_position(key, staff))
-            self.addItem(staff)
+        ]
+        
+        for attributes in initial_staff_attribute_collection:
+            staff = Staff(self.main_widget, self.pictograph, attributes)
             staff.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
+            staff.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, True)
 
-    def calculate_staff_position(self, key: str, staff: Staff) -> QPointF:
-        location = self.staff_config[key][LOCATION]
-        layer = self.staff_config[key][LAYER]
-        orientation = self.staff_config[key][ORIENTATION]
-        handpoint = self.grid.get_circle_coordinates(f"{location}_hand_point")
+            handpoint = self.grid.get_circle_coordinates(f"{staff.location}_hand_point")
+            staff_length = staff.boundingRect().width()
+            staff_width = staff.boundingRect().height()
+            offset_x = -staff_length / 2
+            offset_y = -staff_width / 2
+            staff_position = handpoint + QPointF(offset_x, offset_y)
 
-        staff_length = staff.boundingRect().width()
-        staff_width = staff.boundingRect().height()
+            staff.update_appearance()
+            staff.setTransformOriginPoint(staff.boundingRect().center())
+            staff.setPos(staff_position)
 
-        # Adjust position based on layer and location
-        if layer == 1 and orientation == IN:
-            if location == NORTH:
-                offset_x = staff_width / 2
-                offset_y = -staff_length / 2
-            elif location == SOUTH:
-                offset_x = -staff_width / 2
-                offset_y = staff_length / 2
-            elif location == EAST:
-                offset_x = staff_length / 2
-                offset_y = staff_width / 2
-            elif location == WEST:
-                offset_x = -staff_length / 2
-                offset_y = -staff_width / 2
-
-        elif layer == 1 and orientation == OUT:
-            if location == NORTH:
-                offset_x = -staff_width / 2
-                offset_y = staff_length / 2
-            elif location == SOUTH:
-                offset_x = staff_width / 2
-                offset_y = -staff_length / 2
-            elif location == EAST:
-                offset_x = -staff_length / 2
-                offset_y = -staff_width / 2
-            elif location == WEST:
-                offset_x = staff_length / 2
-                offset_y = staff_width / 2
-
-        elif layer == 2 and orientation == CLOCKWISE:
-            if location == NORTH:
-                offset_x = -staff_length / 2
-                offset_y = -staff_width / 2
-            elif location == SOUTH:
-                offset_x = staff_length / 2
-                offset_y = staff_width / 2
-            elif location == EAST:
-                offset_x = staff_width / 2
-                offset_y = -staff_length / 2
-            elif location == WEST:
-                offset_x = -staff_width / 2
-                offset_y = staff_length / 2
-
-        elif layer == 2 and orientation == COUNTER_CLOCKWISE:
-            if location == NORTH:
-                offset_x = staff_length / 2
-                offset_y = staff_width / 2
-            elif location == SOUTH:
-                offset_x = -staff_length / 2
-                offset_y = -staff_width / 2
-            elif location == EAST:
-                offset_x = -staff_width / 2
-                offset_y = staff_length / 2
-            elif location == WEST:
-                offset_x = staff_width / 2
-                offset_y = -staff_length / 2
-
-        return handpoint + QPointF(offset_x, offset_y)
+            self.addItem(staff)
+            self.staffs.append(staff)
+            
+        self.staffs = self.props
 
     def init_propbox_clubs(self) -> None:
         club_locations = {
@@ -374,3 +324,31 @@ class PropBox(QGraphicsScene):
 
         red_hoop.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
         blue_hoop.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
+
+    def mousePressEvent(self, event) -> None:
+        scene_pos = event.scenePos()
+        event_pos = self.view.mapFromScene(scene_pos)
+
+        # Find the closest arrow to the cursor position
+        closest_prop = None
+        min_distance = float("inf")
+        for prop in self.props:
+            prop_center = prop.sceneBoundingRect().center()
+            distance = (scene_pos - prop_center).manhattanLength()
+            if distance < min_distance:
+                closest_prop = prop
+                min_distance = distance
+
+        # Proceed only if the closest prop is found
+        if closest_prop:
+            self.target_prop = closest_prop
+            if not self.propbox_drag:
+                pictograph = self.main_widget.graph_editor.pictograph
+                self.propbox_drag = PropBoxDrag(self.main_window, pictograph, self)
+            if event.button() == Qt.MouseButton.LeftButton:
+                self.propbox_drag.match_target_arrow(self.target_arrow)
+                self.propbox_drag.start_drag(event_pos)
+        else:
+            # If no closest arrow is found, ignore the event
+            self.target_arrow = None
+            event.ignore()

@@ -5,28 +5,59 @@ from PyQt6.QtSvg import QSvgRenderer
 
 from objects.props.prop import Prop
 from objects.arrow import BlankArrow
+from settings.string_constants import IN
 from utilities.TypeChecking.TypeChecking import (
-    MotionAttributesDicts,
+    PropAttributesDicts,
     Color,
 )
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
+    from main import MainWindow
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.propbox.propbox import PropBox
 
+
 class PropBoxDrag(QWidget):
-    def __init__(self, main_widget: MainWidget, pictograph: Pictograph, propbox: PropBox) -> None:
-        super().__init__(main_widget)
-        self.pictograph = pictograph
-        self.propbox = propbox
+    def __init__(
+        self, main_window: "MainWindow", pictograph: "Pictograph", propbox: "PropBox"
+    ) -> None:
+        super().__init__(main_window)
+        self.setParent(main_window)
+        self._setup_dependencies(main_window, pictograph, propbox)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
         # Initialize QLabel to show the ghost image of the prop
         self.preview = QLabel(self)
         self.transform = QTransform()
-        self.dragging_prop: Prop = None
+        self.attributes: PropAttributesDicts = {}
+
+    def _setup_dependencies(
+        self, main_window: "MainWindow", pictograph: "Pictograph", propbox: "PropBox"
+    ) -> None:
+        self.propbox = propbox
+        self.pictograph = pictograph
+        self.main_window = main_window
+        self.has_entered_pictograph_once = False
+        self.current_rotation_angle = 0
+        self.previous_quadrant = None
+        self.preview = None
+        self.svg_file = None
+        self.ghost_arrow = None
+        self.start_orientation = IN
+
+    def match_target_prop(self, target_prop: "Prop") -> None:
+        self.target_prop = target_prop
+        self.set_attributes(target_prop)
+        pixmap = self.create_pixmap(target_prop)
+        self.preview.setPixmap(pixmap)
+        self.preview.setFixedHeight(pixmap.height())
+        self.arrow_center = self.target_prop.boundingRect().center()
+        self.current_rotation_angle = target_prop.get_rotation_angle()
+        self.is_svg_mirrored = target_prop.is_svg_mirrored
+        self.preview.setPixmap(pixmap)
+        self.apply_transformations_to_preview()
 
     def start_drag(self, prop: Prop, cursor_pos: QPoint) -> None:
         self.dragging_prop = prop
@@ -81,7 +112,7 @@ class PropBoxDrag(QWidget):
 
     def _create_blank_arrow_at_location(self, location: QPointF) -> None:
         # Define attributes for a blank arrow
-        blank_arrow_attributes: MotionAttributesDicts = {
+        blank_arrow_attributes: PropAttributesDicts = {
             # Populate with necessary attributes
             "color": Color.RED,  # Example attribute, adjust as needed
             # Add other necessary attributes here

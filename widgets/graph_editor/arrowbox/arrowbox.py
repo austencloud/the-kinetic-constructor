@@ -61,7 +61,10 @@ class ArrowBox(QGraphicsScene):
 
     def populate_arrows(self) -> None:
         self.arrows: List[Arrow] = []
-        initial_arrow_attribute_collection: List[MotionAttributesDicts] = [
+        self.red_arrows: List[Arrow] = []
+        self.blue_arrows: List[Arrow] = []
+
+        red_arrow_attributes: List[MotionAttributesDicts] = [
             {
                 COLOR: RED,
                 MOTION_TYPE: PRO,
@@ -72,30 +75,12 @@ class ArrowBox(QGraphicsScene):
                 TURNS: 0,
             },
             {
-                COLOR: BLUE,
-                MOTION_TYPE: ANTI,
-                ROTATION_DIRECTION: COUNTER_CLOCKWISE,
-                QUADRANT: SOUTHWEST,
-                START_LOCATION: SOUTH,
-                END_LOCATION: WEST,
-                TURNS: 0,
-            },
-            {
                 COLOR: RED,
                 MOTION_TYPE: PRO,
                 ROTATION_DIRECTION: COUNTER_CLOCKWISE,
                 QUADRANT: SOUTHEAST,
                 START_LOCATION: SOUTH,
                 END_LOCATION: EAST,
-                TURNS: 0,
-            },
-            {
-                COLOR: BLUE,
-                MOTION_TYPE: ANTI,
-                ROTATION_DIRECTION: CLOCKWISE,
-                QUADRANT: NORTHWEST,
-                START_LOCATION: NORTH,
-                END_LOCATION: WEST,
                 TURNS: 0,
             },
             {
@@ -116,6 +101,9 @@ class ArrowBox(QGraphicsScene):
                 END_LOCATION: EAST,
                 TURNS: 0,
             },
+        ]
+
+        blue_arrow_attributes: List[MotionAttributesDicts] = [
             {
                 COLOR: BLUE,
                 MOTION_TYPE: PRO,
@@ -131,34 +119,59 @@ class ArrowBox(QGraphicsScene):
                 ROTATION_DIRECTION: COUNTER_CLOCKWISE,
                 QUADRANT: NORTHWEST,
                 START_LOCATION: NORTH,
+                END_LOCATION: WEST,
+                TURNS: 0,
+            },
+            {
+                COLOR: BLUE,
+                MOTION_TYPE: ANTI,
+                ROTATION_DIRECTION: CLOCKWISE,
+                QUADRANT: NORTHWEST,
+                START_LOCATION: NORTH,
+                END_LOCATION: WEST,
+                TURNS: 0,
+            },
+            {
+                COLOR: BLUE,
+                MOTION_TYPE: ANTI,
+                ROTATION_DIRECTION: COUNTER_CLOCKWISE,
+                QUADRANT: SOUTHWEST,
+                START_LOCATION: SOUTH,
                 END_LOCATION: WEST,
                 TURNS: 0,
             },
         ]
 
-        for dict in initial_arrow_attribute_collection:
+        for dict in red_arrow_attributes:
             arrow = Arrow(self, dict)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
             self.addItem(arrow)
             self.arrows.append(arrow)
+            self.red_arrows.append(arrow)
+
+        for dict in blue_arrow_attributes:
+            arrow = Arrow(self, dict)
+            arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
+            arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
+            self.addItem(arrow)
+            self.arrows.append(arrow)
+            self.blue_arrows.append(arrow)
 
         for arrow in self.arrows:
             arrow.update_appearance()
             arrow.setTransformOriginPoint(arrow.boundingRect().center())
             arrow.is_dim(True)
 
-        self.arrows[0].setPos(425, 50)  # RED PRO CLOCKWISE NE
-        self.arrows[1].setPos(100, 375)  # BLUE ANTI COUNTERCLOCKWISE SW
+        self.red_arrows[0].setPos(425, 50)  # RED PRO CLOCKWISE NE
+        self.red_arrows[1].setPos(425, 425)  # RED PRO COUNTERCLOCKWISE SE
+        self.red_arrows[2].setPos(375, 375)  # RED ANTI CLOCKWISE SE
+        self.red_arrows[3].setPos(375, 100)  # RED ANTI COUNTERCLOCKWISE NE
 
-        self.arrows[2].setPos(425, 425)  # RED PRO COUNTERCLOCKWISE SE
-        self.arrows[3].setPos(100, 100)  # BLUE ANTI CLOCKWISE NW
-
-        self.arrows[4].setPos(375, 375)  # RED ANTI CLOCKWISE SE
-        self.arrows[5].setPos(375, 100)  # RED ANTI COUNTERCLOCKWISE NE
-
-        self.arrows[6].setPos(50, 425)  # BLUE PRO CLOCKWISE SW
-        self.arrows[7].setPos(50, 50)  # BLUE PRO COUNTERCLOCKWISE NW
+        self.blue_arrows[0].setPos(50, 425)  # BLUE PRO CLOCKWISE SW
+        self.blue_arrows[1].setPos(50, 50)  # BLUE PRO COUNTERCLOCKWISE NW
+        self.blue_arrows[2].setPos(100, 100)  # BLUE ANTI CLOCKWISE NW
+        self.blue_arrows[3].setPos(100, 375)  # BLUE ANTI COUNTERCLOCKWISE SW
 
     def mousePressEvent(self, event) -> None:
         scene_pos = event.scenePos()
