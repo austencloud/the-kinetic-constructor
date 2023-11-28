@@ -155,14 +155,7 @@ class ArrowBoxDrag(QWidget):
         self.placed_arrow = Arrow(self.pictograph, self.ghost_arrow.get_attributes())
         self.placed_arrow.prop = self.ghost_arrow.prop
         self.ghost_arrow.prop.arrow = self.placed_arrow
-
-        self.pictograph.add_motion(
-            self.placed_arrow,
-            self.ghost_arrow.prop,
-            IN,
-            1,
-        )
-
+        self.pictograph.add_motion(self.placed_arrow, self.ghost_arrow.prop, IN, 1)
         self.pictograph.addItem(self.placed_arrow)
         self.pictograph.arrows.append(self.placed_arrow)
 
@@ -184,7 +177,21 @@ class ArrowBoxDrag(QWidget):
         if self.preview:
             self.move_to_cursor(event_pos)
             if self.is_over_pictograph(event_pos):
-                self.handle_enter_pictograph(event_pos)
+                if not self.has_entered_pictograph_once:
+                    self.has_entered_pictograph_once = True
+                    self.remove_same_color_arrow()
+                pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
+                view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
+                    pos_in_main_window
+                )
+                scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
+
+                # Get nearest layer 2 point
+                nearest_point_name, _ = self.pictograph.get_nearest_layer2_point(
+                    scene_pos
+                )
+                self.update_preview_for_new_location(nearest_point_name)
+                self.ghost_arrow.update_ghost_arrow(self.attributes)
 
     def handle_mouse_release(self) -> None:
         if self.has_entered_pictograph_once:
@@ -194,25 +201,6 @@ class ArrowBoxDrag(QWidget):
         self.arrowbox.arrowbox_drag = None
         self.ghost_arrow.prop = None
         self.reset_drag_state()
-
-    def handle_enter_pictograph(self, event_pos: QPoint) -> None:
-        if not self.has_entered_pictograph_once:
-            self.just_entered_pictograph = True
-            self.has_entered_pictograph_once = True
-            self.remove_same_color_arrow()
-
-        if self.has_entered_pictograph_once:
-            self.just_entered_pictograph = False
-
-        pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
-        view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
-        scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
-        new_location = self.pictograph.get_location(scene_pos.x(), scene_pos.y())
-
-        if self.previous_location != new_location and new_location:
-            self.previous_location = new_location
-            self.update_preview_for_new_location(new_location)
-            self.ghost_arrow.update_ghost_arrow(self.attributes)
 
     ### FLAGS ###
 
