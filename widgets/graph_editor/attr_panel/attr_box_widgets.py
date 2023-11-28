@@ -164,7 +164,9 @@ class StartEndWidget(QWidget):
     def update_locations(self) -> None:
         start_location = self.startComboBox.currentText()
         end_location = self.endComboBox.currentText()
-        print(f"Start location: {start_location}, End location: {end_location}")
+        print(
+            f"Start from objects.props {start_location}, End from objects.props {end_location}"
+        )
 
 
 class TurnsWidget(QWidget):

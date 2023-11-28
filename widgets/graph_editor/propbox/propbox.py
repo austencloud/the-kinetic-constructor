@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from objects.props.props import Prop, Staff, Club, Buugeng, Fan, Triad, Hoop
+from objects.props import Prop, Staff, Club, Buugeng, Fan, Triad, Hoop
 
 from widgets.graph_editor.propbox.propbox_drag import PropBoxDrag
 from widgets.graph_editor.propbox.propbox_view import PropBoxView
@@ -28,7 +28,6 @@ from objects.grid import Grid
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.pictograph.pictograph import Pictograph
-
 
 
 class PropBox(QGraphicsScene):

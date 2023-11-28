@@ -1,7 +1,7 @@
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtGui import QTransform
-from objects.props.props import Prop
+from objects.props import Prop
 from settings.string_constants import (
     MOTION_TYPE,
     TURNS,
@@ -51,7 +51,7 @@ from utilities.TypeChecking.TypeChecking import (
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.ghosts.ghost_arrow import GhostArrow
-    from objects.props.props import Staff
+    from objects.props import Prop
 
 
 class Arrow(GraphicalObject):
@@ -331,7 +331,7 @@ class Arrow(GraphicalObject):
         updated_arrow_dict = {
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,
-            location: new_location,
+            LOCATION: new_location,
             ROTATION_DIRECTION: self.rotation_direction,
             START_LOCATION: new_start_location,
             END_LOCATION: new_end_location,
@@ -369,7 +369,7 @@ class Arrow(GraphicalObject):
         updated_arrow_dict = {
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,
-            location: new_location,
+            LOCATION: new_location,
             ROTATION_DIRECTION: self.rotation_direction,
             START_LOCATION: new_start_location,
             END_LOCATION: new_end_location,
@@ -479,7 +479,7 @@ class Arrow(GraphicalObject):
         new_arrow_dict = {
             COLOR: self.color,
             MOTION_TYPE: new_motion_type,
-            location: self.location,
+            LOCATION: self.location,
             ROTATION_DIRECTION: new_rotation_direction,
             START_LOCATION: self.start_location,
             END_LOCATION: self.end_location,
@@ -504,27 +504,14 @@ class Arrow(GraphicalObject):
         if self in self.pictograph.arrows:
             self.pictograph.arrows.remove(self)
         if keep_prop:
-            blank_attributes_dict = {
-                COLOR: self.color,
-                MOTION_TYPE: STATIC,
-                ROTATION_DIRECTION: "None",
-                location: "None",
-                START_LOCATION: self.end_location,
-                END_LOCATION: self.end_location,
-                TURNS: self.turns,
-            }
-            blank_arrow = BlankArrow(self, blank_attributes_dict)
-            self.pictograph.addItem(blank_arrow)
-            self.pictograph.arrows.append(blank_arrow)
-            blank_arrow.prop = self.prop
-            blank_arrow.prop.arrow = blank_arrow
+            self.prop.create_static_arrow()
         else:
             self.prop.delete()
 
         self.pictograph.update()
 
 
-class BlankArrow(Arrow):
+class StaticArrow(Arrow):
     def __init__(self, pictograph, attributes) -> None:
         super().__init__(pictograph, attributes)
         self._disable_interactivity()

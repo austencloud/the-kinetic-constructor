@@ -1,13 +1,12 @@
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtWidgets import QGraphicsScene
 
 from data.letter_engine_data import letter_types
-from objects.arrow import Arrow, BlankArrow
+from objects.arrow import Arrow
 from objects.grid import Grid
-from objects.props.props import Prop
-from objects.props.props import Staff
+from objects.props import Prop
+from objects.props import Staff
 from objects.motion import Motion
 from settings.string_constants import (
     BLUE,
@@ -17,13 +16,12 @@ from settings.string_constants import (
     MOTION_TYPE,
     NORTHEAST,
     NORTHWEST,
-    location,
+    LOCATION,
     RED,
     ROTATION_DIRECTION,
     SOUTHEAST,
     SOUTHWEST,
     START_LOCATION,
-    STATIC,
     TURNS,
     START_ORIENTATION,
     END_ORIENTATION,
@@ -152,7 +150,7 @@ class Pictograph(QGraphicsScene):
                     COLOR: motion.color,
                     MOTION_TYPE: motion.motion_type,
                     ROTATION_DIRECTION: motion.rotation_direction,
-                    location: motion.location,
+                    LOCATION: motion.prop.location,
                     START_LOCATION: motion.start_location,
                     END_LOCATION: motion.end_location,
                     TURNS: motion.turns,
@@ -244,7 +242,7 @@ class Pictograph(QGraphicsScene):
             COLOR: arrow.color,
             MOTION_TYPE: arrow.motion_type,
             ROTATION_DIRECTION: arrow.rotation_direction,
-            location: arrow.location,
+            LOCATION: arrow.location,
             START_LOCATION: arrow.start_location,
             END_LOCATION: arrow.end_location,
             TURNS: arrow.turns,

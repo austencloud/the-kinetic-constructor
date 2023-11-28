@@ -8,7 +8,7 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
-from objects.props.props import Staff, Club, Fan, Hoop, Buugeng, Triad
+from objects.props import Staff, Club, Fan, Hoop, Buugeng, Triad
 from settings.string_constants import (
     BLUE,
     CLOCKWISE,
@@ -73,19 +73,19 @@ class PictographInit:
 
         red_club = Club(self.pictograph, red_prop_dict)
         blue_club = Club(self.pictograph, blue_prop_dict)
-        
+
         red_fan = Fan(self.pictograph, red_prop_dict)
         blue_fan = Fan(self.pictograph, blue_prop_dict)
-        
+
         red_hoop = Hoop(self.pictograph, red_prop_dict)
         blue_hoop = Hoop(self.pictograph, blue_prop_dict)
-        
+
         red_buugeng = Buugeng(self.pictograph, red_prop_dict)
         blue_buugeng = Buugeng(self.pictograph, blue_prop_dict)
-        
+
         red_triad = Triad(self.pictograph, red_prop_dict)
         blue_triad = Triad(self.pictograph, blue_prop_dict)
-        
+
         red_staff.set_svg_color(RED)
         blue_staff.set_svg_color(BLUE)
 
@@ -100,7 +100,7 @@ class PictographInit:
             COLOR: RED,
             MOTION_TYPE: PRO,
             ROTATION_DIRECTION: CLOCKWISE,
-            location: NORTHEAST,
+            LOCATION: NORTHEAST,
             START_LOCATION: NORTH,
             END_LOCATION: EAST,
             TURNS: 0,
@@ -110,7 +110,7 @@ class PictographInit:
             COLOR: BLUE,
             MOTION_TYPE: PRO,
             ROTATION_DIRECTION: CLOCKWISE,
-            location: SOUTHWEST,
+            LOCATION: SOUTHWEST,
             START_LOCATION: SOUTH,
             END_LOCATION: WEST,
             TURNS: 0,

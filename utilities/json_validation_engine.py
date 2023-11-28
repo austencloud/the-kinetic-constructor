@@ -213,7 +213,7 @@ class JsonValidationEngine(QMainWindow):
                 entry['location'] = None
         elif 'start_location' in entry and 'end_location' in entry:
             inferred_location = self.infer_location(entry['start_location'], entry['end_location'])
-            if entry.get('location') != inferred_location:
+            if entry.get('location') != inferred_from objects.props
                 corrections.append(f'location corrected to {inferred_location}.')
                 entry['location'] = inferred_location
         # Add more correction rules as needed

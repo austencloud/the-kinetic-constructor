@@ -128,7 +128,7 @@ class ArrowBoxDrag(QWidget):
         return {
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,
-            location: self.location,
+            LOCATION: self.location,
             ROTATION_DIRECTION: self.rotation_direction,
             START_LOCATION: start_location,
             END_LOCATION: end_location,

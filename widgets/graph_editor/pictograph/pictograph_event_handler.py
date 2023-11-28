@@ -3,7 +3,7 @@ from PyQt6.QtGui import QTransform
 from objects.letter_item import LetterItem
 from objects.arrow import Arrow
 from objects.grid import Grid
-from objects.props.props import Staff
+from objects.props import Staff
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
 )
@@ -41,8 +41,8 @@ class PictographEventHandler:
 
     def handle_non_arrow_click(self, clicked_item, event) -> None:
         if isinstance(clicked_item, Staff):
-            self.pictograph.dragged_staff = clicked_item
-            self.pictograph.dragged_staff.mousePressEvent(event)
+            self.pictograph.dragged_prop = clicked_item
+            self.pictograph.dragged_prop.mousePressEvent(event)
         elif isinstance(clicked_item, LetterItem):
             clicked_item.setSelected(False)
             self.pictograph.clear_selections()
@@ -50,15 +50,15 @@ class PictographEventHandler:
             self.pictograph.clear_selections()
 
     def handle_mouse_move(self, event) -> None:
-        if self.pictograph.dragged_staff:
-            self.pictograph.dragged_staff.mouseMoveEvent(event)
+        if self.pictograph.dragged_prop:
+            self.pictograph.dragged_prop.mouseMoveEvent(event)
         elif self.pictograph.dragged_arrow:
             self.pictograph.dragged_arrow.mouseMoveEvent(event)
 
     def handle_mouse_release(self, event) -> None:
-        if self.pictograph.dragged_staff:
-            self.pictograph.dragged_staff.mouseReleaseEvent(event)
-            self.pictograph.dragged_staff = None
+        if self.pictograph.dragged_prop:
+            self.pictograph.dragged_prop.mouseReleaseEvent(event)
+            self.pictograph.dragged_prop = None
         elif self.pictograph.dragged_arrow:
             self.pictograph.dragged_arrow.mouseReleaseEvent(event)
             self.pictograph.dragged_arrow = None

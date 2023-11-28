@@ -28,7 +28,7 @@ class JsonVariationsGenerator:
                 self.location_mapping[(start, end)] = f"{start}{end}"
 
     def calculate_location(
-        self, start_location: Location, end_location: Location
+        self, start_from objects.props Location, end_from objects.props Location
     ) -> Location:
         return self.location_mapping.get((start_location, end_location))
 
@@ -44,7 +44,7 @@ class JsonVariationsGenerator:
                 START_POS: position_mapping[arrow[START_POS]],
                 END_POS: position_mapping[arrow[END_POS]],
                 ROTATION_DIRECTION: rotation_mapping[arrow[ROTATION_DIRECTION]],
-                location: self.calculate_location(
+                from objects.props self.calculate_location(
                     position_mapping[arrow[START_POS]],
                     position_mapping[arrow[END_POS]],
                 ),

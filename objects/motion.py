@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.arrow import Arrow
-    from objects.props.staff import Staff
+    from objects.props import Prop
 from settings.string_constants import DASH
 
 
@@ -24,30 +24,30 @@ class Motion:
         self,
         pictograph: "Pictograph",
         arrow: "Arrow",
-        staff: "Staff",
+        prop: "Prop",
         attributes: MotionAttributesDicts,
     ) -> None:
         self.pictograph = pictograph
         self.arrow = arrow
-        self.staff = staff
+        self.prop = prop
         self.attributes = attributes
 
         self.setup_attributes(attributes)
 
-        self.staff.layer = self.end_layer
-        self.staff.orientation = self.end_orientation
+        self.prop.layer = self.end_layer
+        self.prop.orientation = self.end_orientation
 
-        staff.update_rotation()
+        prop.update_rotation()
 
     def setup_attributes(self, attributes) -> None:
         self.color: Color = attributes[COLOR]
         self.motion_type: MotionType = attributes[MOTION_TYPE]
         self.turns: Turns = attributes[TURNS]
         self.rotation_direction: RotationDirection = attributes[ROTATION_DIRECTION]
-        self.location: Location = attributes[location]
+        self.LOCATION: Location = attributes[location]
 
-        self.start_location: Location = attributes[START_LOCATION]
-        self.end_location: Location = attributes[END_LOCATION]
+        self.start_LOCATION: Location = attributes[START_LOCATION]
+        self.end_LOCATION: Location = attributes[END_LOCATION]
 
         self.start_orientation: Orientation = attributes[START_ORIENTATION]
         self.end_orientation: Orientation = self.get_end_orientation()
@@ -172,9 +172,9 @@ class Motion:
         self.arrow.turns = turns
         self.turns = self.arrow.turns
         self.end_orientation = self.get_end_orientation()
-        self.staff.orientation = self.end_orientation
-        self.staff.update_appearance()
-        self.staff.update_rotation()
+        self.prop.orientation = self.end_orientation
+        self.prop.update_appearance()
+        self.prop.update_rotation()
         svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
         self.arrow.update_svg(svg_file)
         self.arrow.update_appearance()
@@ -187,16 +187,16 @@ class Motion:
 
     def add_half_turn(self) -> None:
         if self.arrow.turns < 3:
-            self.staff.swap_layer()
-            self.staff.swap_axis()
+            self.prop.swap_layer()
+            self.prop.swap_axis()
             self.update_turns(self.arrow.turns + 0.5)
         else:
             self.update_turns(3)
 
     def subtract_half_turn(self) -> None:
         if self.arrow.turns > 0:
-            self.staff.swap_layer()
-            self.staff.swap_axis()
+            self.prop.swap_layer()
+            self.prop.swap_axis()
             self.update_turns(self.arrow.turns - 0.5)
         else:
             self.update_turns(0)

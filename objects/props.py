@@ -126,8 +126,12 @@ class Prop(GraphicalObject):
             SOUTH: (0, staff_length),
         }
 
-        invert_x = self.orientation == OUT or (self.layer == 2 and self.orientation == COUNTER_CLOCKWISE)
-        invert_y = self.orientation == OUT or (self.layer == 2 and self.orientation == CLOCKWISE)
+        invert_x = self.orientation == OUT or (
+            self.layer == 2 and self.orientation == COUNTER_CLOCKWISE
+        )
+        invert_y = self.orientation == OUT or (
+            self.layer == 2 and self.orientation == CLOCKWISE
+        )
 
         # Set transform origin point to top-left corner
         self.setTransformOriginPoint(0, 0)
@@ -140,7 +144,6 @@ class Prop(GraphicalObject):
             offset_y = staff_width - offset_y
 
         self.setPos(new_pos + QPointF(offset_x, offset_y))
-
 
     def update_arrow_location(self, new_location: Location) -> None:
         location_mapping: Dict[
@@ -314,6 +317,24 @@ class Prop(GraphicalObject):
         self.pictograph.removeItem(self)
         self.pictograph.props.remove(self)
         self.pictograph.update()
+
+        self.create_static_arrow()
+
+    def create_static_arrow(self):
+        static_attributes_dict = {
+            COLOR: self.color,
+            MOTION_TYPE: STATIC,
+            ROTATION_DIRECTION: "None",
+            LOCATION: "None",
+            START_LOCATION: self.location,
+            END_LOCATION: self.location,
+            TURNS: 0,
+        }
+        static_arrow = Arrow(self, static_attributes_dict)
+        self.pictograph.addItem(static_arrow)
+        self.pictograph.arrows.append(static_arrow)
+        static_arrow.prop = self.ghost_prop
+        static_arrow.prop.arrow = static_arrow
 
 
 class Staff(Prop):

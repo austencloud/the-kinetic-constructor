@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QWidget, QLabel
 from PyQt6.QtCore import Qt, QPoint, QPointF
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
-from objects.props.props import Prop
-from objects.arrow import BlankArrow
+from objects.props import Prop
+from objects.arrow import StaticArrow
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
 from settings.string_constants import *
@@ -160,7 +160,7 @@ class PropBoxDrag(QWidget):
         self.ghost_prop.update_svg(ghost_svg)
 
         self.update_rotation()
-        self.update_blank_arrow_during_drag()
+        self.update_static_arrow_during_drag()
 
         self.pictograph.add_motion(
             self.ghost_prop,
@@ -174,6 +174,29 @@ class PropBoxDrag(QWidget):
         if self.ghost_prop not in self.pictograph.items():
             self.pictograph.addItem(self.ghost_prop)
         self.pictograph.update()
+
+    def update_prop_during_drag(self) -> None:
+        for prop in self.pictograph.prop_set.values():
+            if prop.color == self.color:
+                if prop not in self.pictograph.props:
+                    self.pictograph.props.append(prop)
+
+                prop.set_attributes_from_dict(
+                    {
+                        COLOR: self.color,
+                        LOCATION: self.end_location,
+                        LAYER: 1,
+                    }
+                )
+                prop.arrow = self.ghost_arrow
+                self.ghost_arrow.prop = prop
+
+                if prop not in self.pictograph.items():
+                    self.pictograph.addItem(prop)
+                prop.show()
+                prop.update_appearance()
+                self.pictograph.update_props()
+
 
     def update_rotation(self) -> None:
         renderer = QSvgRenderer(self.target_prop.svg_file)
@@ -195,11 +218,11 @@ class PropBoxDrag(QWidget):
         self.current_rotation_angle = angle
         self.preview.setPixmap(rotated_pixmap)
 
-    def _create_blank_arrow_at_location(self, location: QPointF) -> None:
-        blank_arrow_attributes: PropAttributesDicts = {
+    def _create_static_arrow_at_location(self, location: QPointF) -> None:
+        static_arrow_attributes: PropAttributesDicts = {
             "color": RED,  # Example attribute, adjust as needed
         }
 
-        blank_arrow = BlankArrow(self.pictograph, blank_arrow_attributes)
-        blank_arrow.setPos(location)
-        self.pictograph.addItem(blank_arrow)
+        static_arrow = StaticArrow(self.pictograph, static_arrow_attributes)
+        static_arrow.setPos(location)
+        self.pictograph.addItem(static_arrow)

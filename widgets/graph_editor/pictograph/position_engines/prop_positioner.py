@@ -28,7 +28,7 @@ from settings.string_constants import (
     END_LAYER,
 )
 from typing import TYPE_CHECKING, Dict, List
-from objects.props.props import Prop
+from objects.props import Prop
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
     MotionAttributesDicts,

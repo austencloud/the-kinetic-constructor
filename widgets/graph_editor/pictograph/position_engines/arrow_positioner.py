@@ -13,7 +13,7 @@ from settings.string_constants import (
     START_LOCATION,
     TURNS,
 )
-from objects.arrow import BlankArrow, Arrow
+from objects.arrow import StaticArrow, Arrow
 
 from typing import TYPE_CHECKING, List, Dict, Any
 
@@ -38,7 +38,7 @@ class ArrowPositioner:
                 optimal_locations = self.find_optimal_locations()
 
         for arrow in self.pictograph.arrows:
-            if not isinstance(arrow, BlankArrow):
+            if not isinstance(arrow, StaticArrow):
                 if optimal_locations:
                     self.set_arrow_to_optimal_loc(optimal_locations, arrow)
                 else:
@@ -53,7 +53,7 @@ class ArrowPositioner:
             COLOR: current_state[0][COLOR],
             MOTION_TYPE: current_state[0][MOTION_TYPE],
             ROTATION_DIRECTION: current_state[0][ROTATION_DIRECTION],
-            location: current_state[0][location],
+            LOCATION: current_state[0][location],
             START_LOCATION: current_state[0][START_LOCATION],
             END_LOCATION: current_state[0][END_LOCATION],
             TURNS: current_state[0][TURNS],
@@ -62,7 +62,7 @@ class ArrowPositioner:
             COLOR: current_state[1][COLOR],
             MOTION_TYPE: current_state[1][MOTION_TYPE],
             ROTATION_DIRECTION: current_state[1][ROTATION_DIRECTION],
-            location: current_state[1][location],
+            LOCATION: current_state[1][location],
             START_LOCATION: current_state[1][START_LOCATION],
             END_LOCATION: current_state[1][END_LOCATION],
             TURNS: current_state[1][TURNS],
