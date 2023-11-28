@@ -7,6 +7,9 @@ from objects.props.prop import Prop
 from objects.arrow import BlankArrow
 from settings.string_constants import IN
 from utilities.TypeChecking.TypeChecking import (
+    Layer,
+    Location,
+    Orientation,
     PropAttributesDicts,
     Color,
 )
@@ -53,11 +56,22 @@ class PropBoxDrag(QWidget):
         pixmap = self.create_pixmap(target_prop)
         self.preview.setPixmap(pixmap)
         self.preview.setFixedHeight(pixmap.height())
-        self.arrow_center = self.target_prop.boundingRect().center()
+        self.arrow_center = (
+            self.target_prop.boundingRect().center() * self.pictograph.view.view_scale
+        )
         self.current_rotation_angle = target_prop.get_rotation_angle()
         self.is_svg_mirrored = target_prop.is_svg_mirrored
         self.preview.setPixmap(pixmap)
         self.apply_transformations_to_preview()
+
+    def set_attributes(self, target_prop: "Prop") -> None:
+        self.color: Color = target_prop.color
+        self.location: Location = target_prop.location
+        self.layer: Layer = target_prop.layer
+        self.orientation: Orientation = target_prop.orientation
+
+        self.ghost_prop = self.pictograph.ghost_props[self.color]
+        self.ghost_prop.target_prop = target_prop
 
     def start_drag(self, prop: Prop, cursor_pos: QPoint) -> None:
         self.dragging_prop = prop

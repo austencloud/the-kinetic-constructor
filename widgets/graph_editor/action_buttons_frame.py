@@ -109,7 +109,7 @@ class ActionButtonsFrame(QFrame):
         Rotate the selected arrow in the specified direction.
 
         Args:
-            direction (RotationDirection): The direction to rotate the arrow, either "cw" or "ccw".
+            direction (RotationDirection): The direction to rotate the arrow, either 'cw' or 'ccw'.
 
         """
         arrow: Arrow = (

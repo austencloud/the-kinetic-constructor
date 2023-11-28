@@ -1,31 +1,38 @@
-from objects.props.staff import Staff
+from objects.props.prop import Prop
+from settings.string_constants import COLOR
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, PropAttributesDicts
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
     from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
-class GhostStaff(Staff):
+class GhostProp(Prop):
     """
-    Represents a ghost staff object.
+    Represents a ghost prop object, displaying the position that a prop will be while dragging if the user were to drop it.
 
-    Args:
-        pictograph (Pictograph): The main Pictograph object.
-        attributes (StaffAttributesDicts): The attributes of the ghost staff.
+    Inherits from the Prop class.
 
     Attributes:
+        pictograph (Pictograph): The pictograph object.
+        color (str): The color of the prop.
+        target_prop (Prop): The prop that the ghost prop is copying.
 
-        target_staff: The staff that the ghost arrow is mimicking.
+    Methods:
+        __init__: Initialize a GhostProp object.
 
     """
 
     def __init__(
-        self,
-        main_widget: "MainWidget",
-        pictograph: "Pictograph",
-        attributes: PropAttributesDicts,
+        self, pictograph: "Pictograph", attributes: PropAttributesDicts
     ) -> None:
-        super().__init__(main_widget, pictograph, attributes)
+        super().__init__(pictograph, attributes)
         self.setOpacity(0.2)
-        self.target_staff = None
+        self.pictograph = pictograph
+        self.color = attributes[COLOR]
+        self.target_prop: "Prop" = None
+        self.setup_svg_renderer(self.svg_file)
+
+    def update_ghost_prop(self, attributes) -> None:
+        self.set_attributes_from_dict(attributes)
+        self.update_appearance()
+        self.show()

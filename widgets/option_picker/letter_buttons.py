@@ -130,7 +130,7 @@ class LetterButtons(QFrame):
         painter.end()
         button = QPushButton(QIcon(pixmap), "", self.main_widget)
         # make the background white and add a hover effect. The hover effect should gradually fade in blue, like the deafult QPush button. Also add a press event just like the default button.
-        
+
         button.setStyleSheet(
             """
             QPushButton {

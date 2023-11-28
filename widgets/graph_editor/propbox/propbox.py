@@ -61,7 +61,7 @@ class PropBox(QGraphicsScene):
         # self.init_propbox_fans()
         # self.init_propbox_triads()
         # self.init_propbox_hoops()
-        
+
         self.props: List[Prop] = []
         self.staffs: List[Staff] = []
         self.clubs: List[Club] = []
@@ -69,9 +69,8 @@ class PropBox(QGraphicsScene):
         self.fans: List[Fan] = []
         self.triads: List[Triad] = []
         self.hoops: List[Hoop] = []
-        
-        self.populate_staffs()
 
+        self.populate_staffs()
 
     def populate_staffs(self) -> None:
         initial_staff_attribute_collection: List[Dict] = [
@@ -124,7 +123,7 @@ class PropBox(QGraphicsScene):
                 ORIENTATION: COUNTER_CLOCKWISE,
             },
         ]
-        
+
         for attributes in initial_staff_attribute_collection:
             staff = Staff(self.main_widget, self.pictograph, attributes)
             staff.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
@@ -143,7 +142,7 @@ class PropBox(QGraphicsScene):
 
             self.addItem(staff)
             self.staffs.append(staff)
-            
+
         self.staffs = self.props
 
     def init_propbox_clubs(self) -> None:

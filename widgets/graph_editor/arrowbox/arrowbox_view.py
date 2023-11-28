@@ -31,4 +31,3 @@ class ArrowBoxView(QGraphicsView):
 
     def leaveEvent(self, event) -> None:
         self.arrowbox.dim_all_arrows()
-

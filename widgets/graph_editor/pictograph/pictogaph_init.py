@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QGraphicsView
 from PyQt6.QtCore import QPointF
 
 from objects.ghosts.ghost_arrow import GhostArrow
-from objects.ghosts.ghost_staff import GhostStaff
+from objects.ghosts.ghost_staff import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
 from objects.props.staff import Staff
@@ -22,12 +22,14 @@ from settings.string_constants import (
     NORTHEAST,
     NORTHWEST,
     PRO,
+    PROP_TYPE,
     QUADRANT,
     RED,
     ROTATION_DIRECTION,
     SOUTH,
     SOUTHEAST,
     SOUTHWEST,
+    STAFF,
     START_LOCATION,
     TURNS,
     WEST,
@@ -109,30 +111,27 @@ class PictographInit:
         ghost_arrows = {RED: red_ghost_arrow, BLUE: blue_ghost_arrow}
         return ghost_arrows
 
-    def init_ghost_staffs(self) -> dict[str, GhostStaff]:
-        default_red_ghost_staff_attributes = {
+    def init_ghost_props(self) -> dict[str, GhostProp]:
+        default_red_ghost_prop_attributes = {
             COLOR: RED,
             LOCATION: EAST,
             LAYER: 1,
             ORIENTATION: IN,
         }
 
-        default_blue_ghost_staff_attributes = {
+        default_blue_ghost_prop_attributes = {
             COLOR: BLUE,
+            PROP_TYPE: STAFF,
             LOCATION: WEST,
             LAYER: 1,
             ORIENTATION: IN,
         }
 
-        red_ghost_staff = GhostStaff(
-            self.main_widget, self.pictograph, default_red_ghost_staff_attributes
-        )
-        blue_ghost_staff = GhostStaff(
-            self.main_widget, self.pictograph, default_blue_ghost_staff_attributes
-        )
+        red_ghost_prop = GhostProp(self.pictograph, default_red_ghost_prop_attributes)
+        blue_ghost_prop = GhostProp(self.pictograph, default_blue_ghost_prop_attributes)
 
-        ghost_staffs = {RED: red_ghost_staff, BLUE: blue_ghost_staff}
-        return ghost_staffs
+        ghost_props = {RED: red_ghost_prop, BLUE: blue_ghost_prop}
+        return ghost_props
 
     def init_letter_item(self) -> QGraphicsSvgItem:
         letter_item = LetterItem(self.pictograph)

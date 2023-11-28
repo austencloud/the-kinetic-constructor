@@ -7,6 +7,8 @@ from settings.string_constants import (
     LOCATION,
     LAYER,
     NORTH,
+    PROP_DIR,
+    PROP_TYPE,
     SOUTH,
     WEST,
     EAST,
@@ -28,6 +30,7 @@ import re
 
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from utilities.TypeChecking.TypeChecking import (
+    PropType,
     RotationAngle,
     PropAttributesDicts,
     Location,
@@ -44,34 +47,23 @@ from utilities.TypeChecking.TypeChecking import (
 
 if TYPE_CHECKING:
     from objects.arrow import Arrow
-    from widgets.main_widget import MainWidget
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.motion import Motion
 
-
 class Prop(GraphicalObject):
-    def __init__(
-        self,
-        main_widget,
-        pictograph,
-        svg_file: str,
-        attributes: Dict,
-        motion=None,
-    ) -> None:
+    def __init__(self, pictograph, attributes: Dict) -> None:
+        svg_file = self.get_svg_file(attributes[PROP_TYPE])
         super().__init__(svg_file, pictograph)
-        self._setup_attributes(main_widget, pictograph, attributes)
+        self._setup_attributes(pictograph, attributes)
         self.update_appearance()
 
     def _setup_attributes(
-        self,
-        main_widget: "MainWidget",
-        pictograph: "Pictograph",
-        attributes: PropAttributesDicts,
-        motion: "Motion" = None,
+        self, pictograph: 'Pictograph', attributes: 'PropAttributesDicts'
     ) -> None:
         self.pictograph = pictograph
-        if motion:
-            self.motion = motion
+        self.motion: Motion = None
+        self.prop_type = None
+        
         self.drag_offset = QPointF(0, 0)
         self.previous_location = None
         self.arrow: Arrow = None
@@ -95,7 +87,7 @@ class Prop(GraphicalObject):
         self.setSelected(True)
         if isinstance(self.scene(), self.pictograph.__class__):
             if not self.ghost_prop:
-                self.ghost_prop = self.pictograph.ghost_props[self.color]
+                self.ghost_prop = self.pictograph.ghost_staffs[self.color]
             self.ghost_prop.color = self.color
             self.ghost_prop.location = self.location
             self.ghost_prop.layer = self.layer
@@ -237,7 +229,7 @@ class Prop(GraphicalObject):
             self.pictograph.update()
             self.finalize_prop_drop(event)
 
-    def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
+    def finalize_prop_drop(self, event: 'QGraphicsSceneMouseEvent') -> None:
         closest_handpoint = self.get_closest_handpoint(event.scenePos())
         new_location = self.get_closest_location(event.scenePos())
 
@@ -260,11 +252,11 @@ class Prop(GraphicalObject):
             axis: Axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
         return axis
 
-    def set_prop_transform_origin_to_center(self: "Prop") -> None:
+    def set_prop_transform_origin_to_center(self: 'Prop') -> None:
         self.center = self.get_prop_center()
         self.setTransformOriginPoint(self.center)
 
-    def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
+    def set_prop_attrs_from_arrow(self, target_arrow: 'Arrow') -> None:
         self.color = target_arrow.color
         self.location = target_arrow.end_location
         self.axis = self.get_axis(self.location)
@@ -298,7 +290,7 @@ class Prop(GraphicalObject):
             )
 
     def get_closest_handpoint(self, mouse_pos: QPointF) -> QPointF:
-        closest_distance = float("inf")
+        closest_distance = float('inf')
         closest_handpoint = None
         for point in self.pictograph.grid.handpoints.values():
             distance = (point - mouse_pos).manhattanLength()
@@ -308,7 +300,7 @@ class Prop(GraphicalObject):
         return closest_handpoint
 
     def get_closest_location(self, mouse_pos: QPointF) -> Location:
-        closest_distance = float("inf")
+        closest_distance = float('inf')
         closest_location = None
         for location, point in self.pictograph.grid.handpoints.items():
             distance = (point - mouse_pos).manhattanLength()
@@ -317,6 +309,10 @@ class Prop(GraphicalObject):
                 closest_location = location
         return closest_location
 
+    def get_svg_file(self, prop_type: PropType) -> str:
+        svg_file = f'{PROP_DIR}/{prop_type}.svg'
+        return svg_file
+    
     ### HELPERS ###
 
     def swap_axis(self) -> None:
@@ -336,18 +332,18 @@ class Prop(GraphicalObject):
     def set_svg_color(self, new_color: Color) -> bytes:
         new_hex_color: ColorHex = COLOR_MAP.get(new_color)
 
-        with open(self.svg_file, "r") as f:
+        with open(self.svg_file, 'r') as f:
             svg_data = f.read()
 
         style_tag_pattern = re.compile(
-            r"\.st0{fill\s*:\s*(#[a-fA-F0-9]{6})\s*;}", re.DOTALL
+            r'\.st0{fill\s*:\s*(#[a-fA-F0-9]{6})\s*;}', re.DOTALL
         )
         match = style_tag_pattern.search(svg_data)
 
         if match:
             old_hex_color: ColorHex = match.group(1)
             svg_data = svg_data.replace(old_hex_color, new_hex_color)
-        return svg_data.encode("utf-8")
+        return svg_data.encode('utf-8')
 
     def delete(self) -> None:
         self.pictograph.removeItem(self)

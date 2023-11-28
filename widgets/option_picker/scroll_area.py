@@ -85,9 +85,11 @@ class ScrollArea(QScrollArea):
         """
         self.setFixedWidth(int(self.option_picker.width() * 4 / 5))
         self.setFixedHeight(int(self.option_picker.height()))
-        self.pictograph_width = ((self.option_picker.width() * 5 / 6) / 4) - (
-            self.verticalScrollBar().width() / 4
-        )  - (self.spacing*2)
+        self.pictograph_width = (
+            ((self.option_picker.width() * 5 / 6) / 4)
+            - (self.verticalScrollBar().width() / 4)
+            - (self.spacing * 2)
+        )
         self.pictograph_height = self.pictograph_width * (90 / 75)
         for button in self.grid_widget.findChildren(QPushButton):
             button.setFixedSize(int(self.pictograph_width), int(self.pictograph_height))

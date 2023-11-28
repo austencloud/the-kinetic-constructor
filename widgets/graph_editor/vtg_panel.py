@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 
 class VTGPanel(QFrame):
-    def __init__(self, pictograph: "Pictograph") -> None:
+    def __init__(self, pictograph: 'Pictograph') -> None:
         super().__init__()
 
         self.pictograph = pictograph
@@ -27,32 +27,32 @@ class VTGPanel(QFrame):
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         # Create the top box
-        top_box = QGroupBox("Top Box")
+        top_box = QGroupBox('Top Box')
         top_layout = QVBoxLayout(top_box)
 
         # Add labels for letter and letter type
         letter_label = QLabel()
         letter_type_label = QLabel()
-        top_layout.addWidget(QLabel("Letter:"))
+        top_layout.addWidget(QLabel('Letter:'))
         top_layout.addWidget(letter_label)
-        top_layout.addWidget(QLabel("Type:"))
+        top_layout.addWidget(QLabel('Type:'))
         top_layout.addWidget(letter_type_label)
 
         # Add motion to motion indication label
         motion_label = QLabel()
-        top_layout.addWidget(QLabel("Motion to motion indication:"))
+        top_layout.addWidget(QLabel('Motion to motion indication:'))
         top_layout.addWidget(motion_label)
 
         # Add the top box to the layout
         layout.addWidget(top_box)
 
         # Create the bottom box
-        bottom_box = QGroupBox("Bottom Box")
+        bottom_box = QGroupBox('Bottom Box')
         bottom_layout = QVBoxLayout(bottom_box)
 
         # Add additional information
         additional_info_label = QLabel()
-        bottom_layout.addWidget(QLabel("Additional Information:"))
+        bottom_layout.addWidget(QLabel('Additional Information:'))
         bottom_layout.addWidget(additional_info_label)
 
         # Add the bottom box to the layout
@@ -69,9 +69,9 @@ class VTGPanel(QFrame):
         # self.update_additional_info()
 
     def update_type_and_position_label(self) -> None:
-        """
+        '''
         Update the type and position label based on the current letter and its type.
-        """
+        '''
         (
             current_letter,
             current_letter_type,
@@ -84,10 +84,10 @@ class VTGPanel(QFrame):
             if start_end_positions:
                 start_position, end_position = start_end_positions
 
-            info_text = f"<center><h1>{current_letter_type}</h1><p style='font-size: 18px; font-family:'Cambria;''>{start_position} → {end_position}</center></p>"
+            info_text = f'<center><h1>{current_letter_type}</h1><p style='font-size: 18px; font-family:'Cambria;''>{start_position} → {end_position}</center></p>'
             self.type_position_label.setText(info_text)
         else:
-            self.type_position_label.setText("")
+            self.type_position_label.setText('')
 
     def update_vtg_panel_size(self) -> None:
         self.setFixedHeight(self.infobox.height())

@@ -27,35 +27,14 @@ class GhostArrow(Arrow):
     def __init__(
         self, pictograph: "Pictograph", attributes: "ArrowAttributesDicts"
     ) -> None:
-        """
-        Initialize a GhostArrow object.
-
-        Args:
-            pictograph (Pictograph): The pictograph object.
-            attributes (MotionAttributesDicts): The attributes of the arrow.
-
-        Returns:
-            None
-        """
         super().__init__(pictograph, attributes)
         self.setOpacity(0.2)
-        self.pictograph, self.color, self.target_arrow = (
-            pictograph,
-            attributes[COLOR],
-            None,
-        )
+        self.pictograph = pictograph
+        self.color = attributes[COLOR]
+        self.target_arrow: "Arrow" = None
         self.setup_svg_renderer(self.svg_file)
 
-    def update(self, attributes) -> None:
-        """
-        Update the GhostArrow object with new attributes.
-
-        Args:
-            attributes (MotionAttributesDicts): The updated attributes of the arrow.
-
-        Returns:
-            None
-        """
+    def update_ghost_arrow(self, attributes) -> None:
         self.set_attributes_from_dict(attributes)
         self.update_appearance()
         self.show()

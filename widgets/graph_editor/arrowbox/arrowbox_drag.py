@@ -376,7 +376,7 @@ class ArrowBoxDrag(QWidget):
         if self.previous_quadrant != new_quadrant and new_quadrant:
             self.previous_quadrant = new_quadrant
             self.update_preview_for_new_quadrant(new_quadrant)
-            self.ghost_arrow.update(self.attributes)
+            self.ghost_arrow.update_ghost_arrow(self.attributes)
 
     def update_preview_for_new_quadrant(self, new_quadrant: Quadrant) -> None:
         self.quadrant = new_quadrant
