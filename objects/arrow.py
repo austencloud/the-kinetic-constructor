@@ -118,7 +118,7 @@ class Arrow(GraphicalObject):
 
     def update_prop_on_click(self) -> None:
         self.prop.color = self.color
-        self.prop.location = self.end_location
+        self.prop.prop_location = self.end_location
         self.prop.axis = self.prop.get_axis(self.end_location)
 
     def update_ghost_on_click(self) -> None:
@@ -142,7 +142,9 @@ class Arrow(GraphicalObject):
             self.setPos(new_pos)
 
             scene_pos = new_pos + self.center
-            new_location = self.pictograph.get_location(scene_pos.x(), scene_pos.y())
+            new_location = self.pictograph.get_nearest_layer2_point(
+                QPointF(scene_pos.x(), scene_pos.y())
+            )
 
             if self.arrow_location != new_location:
                 if new_location:
@@ -294,10 +296,10 @@ class Arrow(GraphicalObject):
         self,
         motion_type: MotionType,
         rotation_direction: RotationDirection,
-        location: Location,
+        arrow_location: Location,
     ) -> StartEndLocationTuple:
         return (
-            start_end_location_mapping.get(location, {})
+            start_end_location_mapping.get(arrow_location, {})
             .get(rotation_direction, {})
             .get(motion_type, (None, None))
         )

@@ -49,15 +49,6 @@ class Grid(QGraphicsSvgItem):
         self.setZValue(-1)
 
     def get_circle_coordinates(self, circle_id: str) -> Union[QPointF, None]:
-        """
-        Get the coordinates of a circle in the SVG file.
-
-        Args:
-            circle_id (str): The ID of the circle element.
-
-        Returns:
-            Union[QPointF, None]: The coordinates of the circle if found, None otherwise.
-        """
         with open(self.svg_file, "r") as svg_file:
             svg_content = svg_file.read()
 
@@ -72,39 +63,20 @@ class Grid(QGraphicsSvgItem):
             return None
 
     def init_points(self, point_names: List[str], constants: List[str]) -> Dict[str, QPointF]:
-        """
-        Initialize the points of the grid.
-
-        Args:
-            point_names (List[str]): The names of the points.
-            constants (List[str]): The constants associated with the points.
-
-        Returns:
-            Dict[str, QPointF]: A dictionary mapping point names to their coordinates.
-        """
         return {
             constant: self.get_circle_coordinates(point_name)
             for point_name, constant in zip(point_names, constants)
         }
 
     def init_center(self) -> None:
-        """
-        Initialize the center point of the grid.
-        """
         self.center: QPointF = self.get_circle_coordinates("center_point")
 
     def init_handpoints(self) -> None:
-        """
-        Initialize the hand points of the grid.
-        """
         point_names = ["n_hand_point", "e_hand_point", "s_hand_point", "w_hand_point"]
         constants = [NORTH, EAST, SOUTH, WEST]
         self.handpoints: Dict[str, QPointF] = self.init_points(point_names, constants)
 
     def init_layer2_points(self) -> None:
-        """
-        Initialize the layer 2 points of the grid.
-        """
         point_names = [
             "ne_layer2_point",
             "se_layer2_point",
@@ -115,28 +87,10 @@ class Grid(QGraphicsSvgItem):
         self.layer2_points: Dict[str, QPointF] = self.init_points(point_names, constants)
 
     def mousePressEvent(self, event) -> None:
-        """
-        Handle the mouse press event.
-
-        Args:
-            event: The mouse press event.
-        """
         event.ignore()
 
     def mouseMoveEvent(self, event) -> None:
-        """
-        Handle the mouse move event.
-
-        Args:
-            event: The mouse move event.
-        """
         event.ignore()
 
     def mouseReleaseEvent(self, event) -> None:
-        """
-        Handle the mouse release event.
-
-        Args:
-            event: The mouse release event.
-        """
         event.ignore()
