@@ -28,7 +28,7 @@ from settings.string_constants import (
     END_LAYER,
 )
 from typing import TYPE_CHECKING, Dict, List
-from objects.props.staff import Staff
+from objects.props.props import Prop
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
     MotionAttributesDicts,
@@ -43,7 +43,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
-class StaffPositioner:
+class PropPositioner:
     current_state: List[MotionAttributesDicts]
     matching_letters: List[LetterDictionary]
     arrow_dict: List[MotionAttributesDicts]
@@ -60,7 +60,7 @@ class StaffPositioner:
         if self.staffs_in_beta():
             self.reposition_beta_staffs()
 
-    def set_default_staff_locations(self, staff: "Staff") -> None:
+    def set_default_staff_locations(self, staff: "Prop") -> None:
         staff.setTransformOriginPoint(0, 0)
         staff_length = staff.boundingRect().width()
         staff_width = staff.boundingRect().height()
@@ -93,7 +93,7 @@ class StaffPositioner:
     def reposition_beta_staffs(self) -> None:
         board_state = self.pictograph.get_state()
 
-        def move_staff(staff: Staff, direction) -> None:
+        def move_staff(staff: Prop, direction) -> None:
             new_position = self.calculate_new_position(staff.pos(), direction)
             staff.setPos(new_position)
 
@@ -371,7 +371,7 @@ class StaffPositioner:
     ### HELPERS ###
 
     def staffs_in_beta(self) -> bool | None:
-        visible_staves: List[Staff] = []
+        visible_staves: List[Prop] = []
         for staff in self.pictograph.props:
             if staff.isVisible():
                 visible_staves.append(staff)

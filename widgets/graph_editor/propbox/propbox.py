@@ -4,15 +4,14 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from objects.props.prop import Prop
-from objects.props.staff import Staff
+from objects.props.props import Prop, Staff, Club, Buugeng, Fan, Triad, Hoop
+
 from widgets.graph_editor.propbox.propbox_drag import PropBoxDrag
 from widgets.graph_editor.propbox.propbox_view import PropBoxView
 from settings.string_constants import (
     IN,
     NORTH,
     EAST,
-    OUT,
     SOUTH,
     WEST,
     COLOR,
@@ -21,11 +20,6 @@ from settings.string_constants import (
     LOCATION,
     LAYER,
     ORIENTATION,
-    AXIS,
-    VERTICAL,
-    HORIZONTAL,
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
 )
 
 from typing import TYPE_CHECKING, Dict, List
@@ -34,11 +28,7 @@ from objects.grid import Grid
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.pictograph.pictograph import Pictograph
-from objects.props.club import Club
-from objects.props.buugeng import Buugeng
-from objects.props.fan import Fan
-from objects.props.triad import Triad
-from objects.props.hoop import Hoop
+
 
 
 class PropBox(QGraphicsScene):
@@ -49,21 +39,21 @@ class PropBox(QGraphicsScene):
         self.setSceneRect(0, 0, int(750), int(750))
         self.setBackgroundBrush(Qt.GlobalColor.white)
         self.view = PropBoxView(self)
-        
+
         self.pictograph = pictograph
         self.grid = Grid("resources/images/grid/grid.svg")
         self.grid_position = QPointF(0, 0)
         self.grid.setPos(self.grid_position)
         self.addItem(self.grid)
-        
+
         self.props: List[Prop] = []
         self.prop_type = None
         self.propbox_drag = None
         self.change_prop_type(Staff)
-        
+
         self.propbox_layout = QVBoxLayout()
         self.propbox_layout.addWidget(self.view)
-        
+
         # self.init_propbox_clubs()
         # self.init_propbox_buugeng()
         # self.init_propbox_fans()
@@ -106,7 +96,7 @@ class PropBox(QGraphicsScene):
                 LOCATION: WEST,
                 LAYER: 1,
                 ORIENTATION: IN,
-            }
+            },
         ]
 
         for attributes in initial_prop_attributes:
@@ -130,7 +120,7 @@ class PropBox(QGraphicsScene):
             self.set_prop_position(prop)
             self.addItem(prop)
             self.props.append(prop)
-            
+
     def clear_props(self) -> None:
         for prop in self.props:
             self.removeItem(prop)
@@ -354,7 +344,6 @@ class PropBox(QGraphicsScene):
         else:
             self.target_prop = None
             event.ignore()
-
 
     def mouseMoveEvent(self, event) -> None:
         if self.target_prop and self.propbox_drag:

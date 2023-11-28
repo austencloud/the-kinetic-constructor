@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import QWidget, QLabel
-from PyQt6.QtCore import Qt, QPoint, QPointF, QSize
+from PyQt6.QtCore import Qt, QPoint, QPointF
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
-from objects.props.prop import Prop
+from objects.props.props import Prop
 from objects.arrow import BlankArrow
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
@@ -160,7 +160,7 @@ class PropBoxDrag(QWidget):
         self.ghost_prop.update_svg(ghost_svg)
 
         self.update_rotation()
-        self.update_prop_during_drag()
+        self.update_blank_arrow_during_drag()
 
         self.pictograph.add_motion(
             self.ghost_prop,
@@ -184,7 +184,7 @@ class PropBoxDrag(QWidget):
         with painter as painter:
             renderer.render(painter)
 
-        angle = self.get_rotation_angle(self)
+        angle = self.get_rotation_angle()
 
         unrotate_transform = QTransform().rotate(-self.current_rotation_angle)
         unrotated_pixmap = self.preview.pixmap().transformed(unrotate_transform)

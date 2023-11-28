@@ -2,7 +2,7 @@ import re
 from PyQt6.QtGui import QImage, QPainter
 from PyQt6.QtCore import QPointF, QSize
 from objects.arrow import Arrow
-from objects.props.staff import Staff
+from objects.props.props import Prop
 from objects.grid import Grid
 import xml.etree.ElementTree as ET
 from copy import deepcopy
@@ -64,7 +64,7 @@ class ExportHandler:
                 arrow_path_element = self.get_arrow_path_element(item)
                 arrows_group.append(arrow_path_element)
 
-            elif isinstance(item, Staff):
+            elif isinstance(item, Prop):
                 staff_rect_element = self.get_staff_rect_element(item)
                 staffs_group.append(staff_rect_element)
 
@@ -111,7 +111,7 @@ class ExportHandler:
 
         return path_elements[0]
 
-    def get_staff_rect_element(self, staff: "Staff") -> ET.Element:
+    def get_staff_rect_element(self, staff: "Prop") -> ET.Element:
         staff_svg_data = ET.parse(staff.svg_file)
         rect_elements = staff_svg_data.getroot().findall(".//{SVG_NS}rect")
         fill_color = self.get_fill_color(staff.svg_file)
@@ -127,7 +127,7 @@ class ExportHandler:
 
         return rect_elements[0]
 
-    def get_staff_position(self, staff: "Staff") -> QPointF:
+    def get_staff_position(self, staff: "Prop") -> QPointF:
         staff_svg = ET.parse(staff.svg_file)
         rect_elements = staff_svg.getroot().findall(".//{SVG_NS}rect")
         position = None

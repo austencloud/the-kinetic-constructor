@@ -1,31 +1,6 @@
 from objects.graphical_object import GraphicalObject
 from PyQt6.QtCore import Qt, QPointF
-from settings.string_constants import (
-    ORIENTATION,
-    OUT,
-    COLOR,
-    LOCATION,
-    LAYER,
-    NORTH,
-    PROP_DIR,
-    PROP_TYPE,
-    SOUTH,
-    WEST,
-    EAST,
-    HORIZONTAL,
-    VERTICAL,
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
-    NORTHEAST,
-    NORTHWEST,
-    SOUTHEAST,
-    SOUTHWEST,
-    PRO,
-    ANTI,
-    STATIC,
-    COLOR_MAP,
-    IN,
-)
+from settings.string_constants import *
 import re
 
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
@@ -143,45 +118,29 @@ class Prop(GraphicalObject):
         staff_length = self.boundingRect().width()
         staff_width = self.boundingRect().height()
 
+        # Simplified mapping of positions
+        position_offsets = {
+            WEST: (0, 0),
+            EAST: (staff_length, staff_width),
+            NORTH: (staff_width, 0),
+            SOUTH: (0, staff_length),
+        }
+
+        invert_x = self.orientation == OUT or (self.layer == 2 and self.orientation == COUNTER_CLOCKWISE)
+        invert_y = self.orientation == OUT or (self.layer == 2 and self.orientation == CLOCKWISE)
+
+        # Set transform origin point to top-left corner
         self.setTransformOriginPoint(0, 0)
-        if self.layer == 1:
-            if self.orientation == IN:
-                if self.location == WEST:
-                    self.setPos(new_pos)
-                elif self.location == EAST:
-                    self.setPos(new_pos + QPointF(staff_length, staff_width))
-                elif self.location == NORTH:
-                    self.setPos(new_pos + QPointF(staff_width, 0))
-                elif self.location == SOUTH:
-                    self.setPos(new_pos + QPointF(0, staff_length))
-            elif self.orientation == OUT:
-                if self.location == WEST:
-                    self.setPos(new_pos + QPointF(staff_length, staff_width))
-                elif self.location == EAST:
-                    self.setPos(new_pos + QPointF(0, 0))
-                elif self.location == NORTH:
-                    self.setPos(new_pos + QPointF(0, staff_length))
-                elif self.location == SOUTH:
-                    self.setPos(new_pos + QPointF(staff_width, 0))
-        elif self.layer == 2:
-            if self.orientation == CLOCKWISE:
-                if self.location == WEST:
-                    self.setPos(new_pos + QPointF(0, staff_length))
-                elif self.location == EAST:
-                    self.setPos(new_pos + QPointF(staff_width, 0))
-                elif self.location == NORTH:
-                    self.setPos(new_pos)
-                elif self.location == SOUTH:
-                    self.setPos(new_pos + QPointF(staff_length, staff_width))
-            elif self.orientation == COUNTER_CLOCKWISE:
-                if self.location == WEST:
-                    self.setPos(new_pos + QPointF(staff_width, 0))
-                elif self.location == EAST:
-                    self.setPos(new_pos + QPointF(0, staff_length))
-                elif self.location == NORTH:
-                    self.setPos(new_pos + QPointF(staff_length, staff_width))
-                elif self.location == SOUTH:
-                    self.setPos(new_pos)
+
+        # Calculate the new position
+        offset_x, offset_y = position_offsets.get(self.location)
+        if invert_x:
+            offset_x = staff_length - offset_x
+        if invert_y:
+            offset_y = staff_width - offset_y
+
+        self.setPos(new_pos + QPointF(offset_x, offset_y))
+
 
     def update_arrow_location(self, new_location: Location) -> None:
         location_mapping: Dict[
@@ -247,12 +206,9 @@ class Prop(GraphicalObject):
 
     ### UPDATERS ###
 
-    def get_axis(self, location) -> None:
-        if self.layer == 1:
-            axis: Axis = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
-        elif self.layer == 2:
-            axis: Axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
-        return axis
+    def update_appearance(self) -> None:
+        self.axis = self.get_axis(self.location)
+        super().update_appearance()
 
     def set_prop_transform_origin_to_center(self: "Prop") -> None:
         self.center = self.get_prop_center()
@@ -265,6 +221,13 @@ class Prop(GraphicalObject):
         self.update_appearance()
 
     ### GETTERS ###
+
+    def get_axis(self, location) -> None:
+        if self.layer == 1:
+            axis: Axis = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
+        elif self.layer == 2:
+            axis: Axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
+        return axis
 
     def get_rotation_angle(self) -> RotationAngle:
         angle_map: Dict[Tuple[Layer, Orientation], Dict[Location, RotationAngle]] = {
@@ -351,3 +314,39 @@ class Prop(GraphicalObject):
         self.pictograph.removeItem(self)
         self.pictograph.props.remove(self)
         self.pictograph.update()
+
+
+class Staff(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = STAFF
+        super().__init__(pictograph, attributes)
+
+
+class Triad(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = TRIAD
+        super().__init__(pictograph, attributes)
+
+
+class Hoop(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = HOOP
+        super().__init__(pictograph, attributes)
+
+
+class Fan(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = FAN
+        super().__init__(pictograph, attributes)
+
+
+class Club(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = CLUB
+        super().__init__(pictograph, attributes)
+
+
+class Buugeng(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = BUUGENG
+        super().__init__(pictograph, attributes)

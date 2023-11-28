@@ -8,7 +8,7 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
-from objects.props.staff import Staff
+from objects.props.props import Staff, Club, Fan, Hoop, Buugeng, Triad
 from settings.string_constants import (
     BLUE,
     CLOCKWISE,
@@ -64,21 +64,36 @@ class PictographInit:
         self.pictograph.grid = grid
         return grid
 
-    def init_staff_set(self) -> dict[str, Staff]:
-        red_staff_dict = {COLOR: RED, LOCATION: NORTH, LAYER: 1, ORIENTATION: IN}
-        blue_staff_dict = {COLOR: BLUE, LOCATION: SOUTH, LAYER: 1, ORIENTATION: IN}
+    def init_prop_set(self) -> dict[str, Staff]:
+        red_prop_dict = {COLOR: RED, LOCATION: NORTH, LAYER: 1, ORIENTATION: IN}
+        blue_prop_dict = {COLOR: BLUE, LOCATION: SOUTH, LAYER: 1, ORIENTATION: IN}
 
-        red_staff = Staff(self.pictograph, red_staff_dict)
-        blue_staff = Staff(self.pictograph, blue_staff_dict)
+        red_staff = Staff(self.pictograph, red_prop_dict)
+        blue_staff = Staff(self.pictograph, blue_prop_dict)
 
+        red_club = Club(self.pictograph, red_prop_dict)
+        blue_club = Club(self.pictograph, blue_prop_dict)
+        
+        red_fan = Fan(self.pictograph, red_prop_dict)
+        blue_fan = Fan(self.pictograph, blue_prop_dict)
+        
+        red_hoop = Hoop(self.pictograph, red_prop_dict)
+        blue_hoop = Hoop(self.pictograph, blue_prop_dict)
+        
+        red_buugeng = Buugeng(self.pictograph, red_prop_dict)
+        blue_buugeng = Buugeng(self.pictograph, blue_prop_dict)
+        
+        red_triad = Triad(self.pictograph, red_prop_dict)
+        blue_triad = Triad(self.pictograph, blue_prop_dict)
+        
         red_staff.set_svg_color(RED)
         blue_staff.set_svg_color(BLUE)
 
         red_staff.hide()
         blue_staff.hide()
 
-        staff_set = {RED: red_staff, BLUE: blue_staff}
-        return staff_set
+        prop_set = {RED: red_staff, BLUE: blue_staff}
+        return prop_set
 
     def init_ghost_arrows(self) -> dict[str, GhostArrow]:
         default_red_ghost_arrow_attributes = {

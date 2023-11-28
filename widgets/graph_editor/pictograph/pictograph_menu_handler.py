@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QAction
 from PyQt6.QtCore import QPoint
 from objects.arrow import Arrow
-from objects.props.staff import Staff
+from objects.props.props import Prop
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -22,8 +22,8 @@ class PictographMenuHandler:
         arrow_menu = menu.addMenu("Arrow")
         self._add_arrow_actions(arrow_menu, clicked_item)
 
-        staff_menu = menu.addMenu("Staff")
-        self._add_staff_actions(staff_menu, clicked_item)
+        prop_menu = menu.addMenu("Prop")
+        self._add_prop_actions(prop_menu, clicked_item)
 
         pictograph_menu = menu.addMenu("Pictograph")
         self._add_pictograph_actions(pictograph_menu)
@@ -32,18 +32,18 @@ class PictographMenuHandler:
 
     ### STAFF ACTIONS ###
 
-    def _add_staff_actions(self, menu: QMenu, clicked_item) -> None:
-        staff_present = isinstance(clicked_item, Staff)
+    def _add_prop_actions(self, menu: QMenu, clicked_item) -> None:
+        prop_present = isinstance(clicked_item, Prop)
 
         delete_action = QAction("Delete", menu)
-        delete_action.setEnabled(staff_present)
-        delete_action.triggered.connect(lambda: self._delete_selected_staff())
+        delete_action.setEnabled(prop_present)
+        delete_action.triggered.connect(lambda: self._delete_selected_prop())
         menu.addAction(delete_action)
 
-    def _delete_selected_staff(self) -> None:
+    def _delete_selected_prop(self) -> None:
         selected_items = self.pictograph.selectedItems()
         for item in selected_items:
-            if isinstance(item, Staff):
+            if isinstance(item, Prop):
                 item.delete()
 
     ### ARROW ACTIONS ###

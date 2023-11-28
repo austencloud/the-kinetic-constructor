@@ -90,7 +90,7 @@
         2    0.001    0.001    0.002    0.001 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attr_panel\attr_box_widgets.py:180(init_ui)
       104    0.002    0.000    0.002    0.000 {method '__exit__' of '_io._IOBase' objects}
        47    0.002    0.000    0.002    0.000 {built-in method render}
-        1    0.000    0.000    0.001    0.001 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\pictograph\pictogaph_init.py:65(init_staff_set)
+        1    0.000    0.000    0.001    0.001 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\pictograph\pictogaph_init.py:65(init_prop_set)
      1950    0.001    0.000    0.001    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\enum.py:78(_is_private)
         2    0.000    0.000    0.001    0.001 d:\CODE\Apps\Sequence_Constructor\objects\grid.py:74(init_points)
         2    0.000    0.000    0.001    0.001 d:\CODE\Apps\Sequence_Constructor\objects\grid.py:85(<dictcomp>)

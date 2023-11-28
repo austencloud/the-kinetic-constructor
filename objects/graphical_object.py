@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Union
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.arrow import Arrow
-    from objects.props.prop import Prop
+    from objects.props.props import Prop
 
 from utilities.TypeChecking.TypeChecking import (
     Color,

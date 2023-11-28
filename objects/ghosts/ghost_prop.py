@@ -1,4 +1,4 @@
-from objects.props.prop import Prop
+from objects.props.props import Prop
 from settings.string_constants import COLOR
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, PropAttributesDicts
 

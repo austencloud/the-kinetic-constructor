@@ -6,8 +6,8 @@ from PyQt6.QtWidgets import QGraphicsScene
 from data.letter_engine_data import letter_types
 from objects.arrow import Arrow, BlankArrow
 from objects.grid import Grid
-from objects.props.prop import Prop
-from objects.props.staff import Staff
+from objects.props.props import Prop
+from objects.props.props import Staff
 from objects.motion import Motion
 from settings.string_constants import (
     BLUE,
@@ -52,8 +52,8 @@ from widgets.graph_editor.pictograph.pictograph_menu_handler import (
 from widgets.graph_editor.pictograph.position_engines.arrow_positioner import (
     ArrowPositioner,
 )
-from widgets.graph_editor.pictograph.position_engines.staff_positioner import (
-    StaffPositioner,
+from widgets.graph_editor.pictograph.position_engines.prop_positioner import (
+    PropPositioner,
 )
 
 if TYPE_CHECKING:
@@ -85,7 +85,7 @@ class Pictograph(QGraphicsScene):
         self.event_handler = PictographEventHandler(self)
 
         self.dragged_arrow: Arrow = None
-        self.dragged_staff: Staff = None
+        self.dragged_prop: Staff = None
         self.initializer = PictographInit(self)
 
         self.ghost_arrows = self.initializer.init_ghost_arrows()
@@ -93,7 +93,7 @@ class Pictograph(QGraphicsScene):
 
         self.grid: Grid = self.initializer.init_grid()
         self.view: PictographView = self.initializer.init_view()
-        self.staff_set = self.initializer.init_staff_set()
+        self.prop_set = self.initializer.init_prop_set()
         self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.locations = self.initializer.init_locations(self.grid)
 
@@ -111,7 +111,7 @@ class Pictograph(QGraphicsScene):
     def setup_managers(self, main_widget: "MainWidget") -> None:
         self.pictograph_menu_handler = PictographMenuHandler(main_widget, self)
         self.arrow_positioner = ArrowPositioner(self)
-        self.staff_positioner = StaffPositioner(self)
+        self.prop_positioner = PropPositioner(self)
         self.letter_engine = LetterEngine(self)
 
     ### EVENTS ###
@@ -184,10 +184,10 @@ class Pictograph(QGraphicsScene):
             if motion.color == color:
                 return motion
 
-    def get_staff_by_color(self, color: str) -> Optional[Staff]:
-        for staff in self.staff_set.values():
-            if staff.color == color:
-                return staff
+    def get_prop_by_color(self, color: str) -> Optional[Staff]:
+        for prop in self.prop_set.values():
+            if prop.color == color:
+                return prop
 
     def get_location(self, x: float, y: float) -> Location:
         @staticmethod
@@ -219,8 +219,8 @@ class Pictograph(QGraphicsScene):
     def clear_pictograph(self) -> None:
         for arrow in self.arrows:
             self.removeItem(arrow)
-        for staff in self.props:
-            self.removeItem(staff)
+        for prop in self.props:
+            self.removeItem(prop)
         self.arrows = []
         self.props = []
         self.update()
@@ -228,9 +228,9 @@ class Pictograph(QGraphicsScene):
     def clear_selections(self) -> None:
         for arrow in self.arrows:
             arrow.setSelected(False)
-        for staff in self.props:
-            staff.setSelected(False)
-        self.dragged_staff = None
+        for prop in self.props:
+            prop.setSelected(False)
+        self.dragged_prop = None
         self.dragged_arrow = None
 
     def add_motion(
@@ -267,7 +267,7 @@ class Pictograph(QGraphicsScene):
     def update(self) -> None:
         self.update_letter()
         self.update_arrows()
-        self.update_staffs()
+        self.update_props()
         self.update_attr_panel()
 
     def update_attr_panel(self) -> None:
@@ -276,8 +276,8 @@ class Pictograph(QGraphicsScene):
     def update_arrows(self) -> None:
         self.arrow_positioner.update()
 
-    def update_staffs(self) -> None:
-        self.staff_positioner.update()
+    def update_props(self) -> None:
+        self.prop_positioner.update()
 
     def update_letter(self) -> None:
         if len(self.props) == 2:

@@ -1,5 +1,5 @@
 from objects.arrow import Arrow
-from objects.props.staff import Staff
+from objects.props.props import Prop
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 from settings.string_constants import UP, LEFT, DOWN, RIGHT
@@ -44,15 +44,15 @@ class KeyEventHandler:
         selection = pictograph.selectedItems()[0]
 
         selected_arrow = selection if isinstance(selection, Arrow) else None
-        selected_staff = selection if isinstance(selection, Staff) else None
+        selected_prop = selection if isinstance(selection, Prop) else None
 
         ### DELETION ###
         if event.key() == Qt.Key.Key_Delete:
             keep_staff = event.modifiers() == Qt.KeyboardModifier.ControlModifier
             if selected_arrow:
                 selected_arrow.delete(keep_staff)
-            elif selected_staff:
-                selected_staff.delete()
+            elif selected_prop:
+                selected_prop.delete()
 
         ### ARROW MANIPULATION ###
         if selected_arrow:

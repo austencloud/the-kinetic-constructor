@@ -3,7 +3,7 @@ from PyQt6.QtGui import QTransform
 from objects.letter_item import LetterItem
 from objects.arrow import Arrow
 from objects.grid import Grid
-from objects.props.staff import Staff
+from objects.props.props import Staff
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
 )
