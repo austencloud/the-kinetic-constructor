@@ -111,7 +111,7 @@ class AttrBox(QFrame):
         self.layout().setSpacing(0)
 
     def apply_border_style(self, color_hex: str) -> None:
-        self.setStyleSheet(f"#AttributeBox {{ border: 2px solid {color_hex}; }}")
+        self.setStyleSheet(f"#AttributeBox {{ border: 3px solid {color_hex}; }}")
 
     ### CREATE LABELS ###
 

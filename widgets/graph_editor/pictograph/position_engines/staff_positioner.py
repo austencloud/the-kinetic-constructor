@@ -55,7 +55,7 @@ class StaffPositioner:
         self.letters = pictograph.letters
 
     def update(self) -> None:
-        for staff in self.pictograph.staffs:
+        for staff in self.pictograph.props:
             self.set_default_staff_locations(staff)
         if self.staffs_in_beta():
             self.reposition_beta_staffs()
@@ -149,7 +149,7 @@ class StaffPositioner:
     ) -> None:
         for arrow in static_motions:
             staff = next(
-                (s for s in self.pictograph.staffs if s.arrow.color == arrow[COLOR]),
+                (s for s in self.pictograph.props if s.arrow.color == arrow[COLOR]),
                 None,
             )
             if not staff:
@@ -187,7 +187,7 @@ class StaffPositioner:
                     other_staff = next(
                         (
                             s
-                            for s in self.pictograph.staffs
+                            for s in self.pictograph.props
                             if s.location == staff.location and s != staff
                         ),
                         None,
@@ -199,7 +199,7 @@ class StaffPositioner:
 
     def reposition_alpha_to_beta(self, move_staff, converging_arrows) -> None:
         # check if all the staffs are in layer 1
-        if all(staff.layer == 1 for staff in self.pictograph.staffs):
+        if all(staff.layer == 1 for staff in self.pictograph.props):
             end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
             start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
             if (
@@ -212,13 +212,13 @@ class StaffPositioner:
                         move_staff(
                             next(
                                 staff
-                                for staff in self.pictograph.staffs
+                                for staff in self.pictograph.props
                                 if staff.arrow.color == arrow[COLOR]
                             ),
                             direction,
                         )
         # check if all the staffs are in layer 2
-        elif all(staff.layer == 2 for staff in self.pictograph.staffs):
+        elif all(staff.layer == 2 for staff in self.pictograph.props):
             end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
             start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
             if (
@@ -231,14 +231,14 @@ class StaffPositioner:
                         move_staff(
                             next(
                                 staff
-                                for staff in self.pictograph.staffs
+                                for staff in self.pictograph.props
                                 if staff.arrow.color == arrow[COLOR]
                             ),
                             direction,
                         )
         # check if one staff is in layer 1 and the other is in layer 2
-        elif any(staff.layer == 1 for staff in self.pictograph.staffs) and any(
-            staff.layer == 2 for staff in self.pictograph.staffs
+        elif any(staff.layer == 1 for staff in self.pictograph.props) and any(
+            staff.layer == 2 for staff in self.pictograph.props
         ):
             end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
             start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
@@ -252,7 +252,7 @@ class StaffPositioner:
                         move_staff(
                             next(
                                 staff
-                                for staff in self.pictograph.staffs
+                                for staff in self.pictograph.props
                                 if staff.arrow.color == arrow[COLOR]
                             ),
                             direction,
@@ -263,8 +263,8 @@ class StaffPositioner:
     def reposition_beta_to_beta(self, motions) -> None:
         motion1, motion2 = motions
         same_motion_type = motion1[MOTION_TYPE] == motion2[MOTION_TYPE] in [PRO, ANTI]
-        
-        if all(staff.layer == 1 for staff in self.pictograph.staffs):
+
+        if all(staff.layer == 1 for staff in self.pictograph.props):
             if same_motion_type:
                 self.reposition_G_and_H(motion1, motion2)
             else:
@@ -287,7 +287,7 @@ class StaffPositioner:
 
         further_staff = next(
             staff
-            for staff in self.pictograph.staffs
+            for staff in self.pictograph.props
             if staff.arrow.color == further_arrow[COLOR]
         )
         new_position_further = self.calculate_new_position(
@@ -298,7 +298,7 @@ class StaffPositioner:
         other_direction = self.get_opposite_direction(further_direction)
         other_staff = next(
             staff
-            for staff in self.pictograph.staffs
+            for staff in self.pictograph.props
             if staff.arrow.color == other_arrow[COLOR]
         )
         new_position_other = self.calculate_new_position(
@@ -313,7 +313,7 @@ class StaffPositioner:
         pro_staff = next(
             (
                 staff
-                for staff in self.pictograph.staffs
+                for staff in self.pictograph.props
                 if staff.arrow.color == pro_motion[COLOR]
             ),
             None,
@@ -321,7 +321,7 @@ class StaffPositioner:
         anti_staff = next(
             (
                 staff
-                for staff in self.pictograph.staffs
+                for staff in self.pictograph.props
                 if staff.arrow.color == anti_motion[COLOR]
             ),
             None,
@@ -354,7 +354,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.pictograph.staffs
+                    for staff in self.pictograph.props
                     if staff.arrow.color == shift[COLOR]
                 ),
                 direction,
@@ -362,7 +362,7 @@ class StaffPositioner:
             move_staff(
                 next(
                     staff
-                    for staff in self.pictograph.staffs
+                    for staff in self.pictograph.props
                     if staff.arrow.color == static_motion[COLOR]
                 ),
                 self.get_opposite_direction(direction),
@@ -372,7 +372,7 @@ class StaffPositioner:
 
     def staffs_in_beta(self) -> bool | None:
         visible_staves: List[Staff] = []
-        for staff in self.pictograph.staffs:
+        for staff in self.pictograph.props:
             if staff.isVisible():
                 visible_staves.append(staff)
         if len(visible_staves) == 2:

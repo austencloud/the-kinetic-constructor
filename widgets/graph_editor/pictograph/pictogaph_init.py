@@ -137,7 +137,7 @@ class PictographInit:
     def init_letter_item(self) -> QGraphicsSvgItem:
         letter_item = LetterItem(self.pictograph)
         self.pictograph.addItem(letter_item)
-        self.pictograph.position_letter_item(letter_item)
+        letter_item.position_letter_item(letter_item)
         return letter_item
 
     def init_quadrants(self, grid: Grid) -> dict[str, Tuple[int, int, int, int]]:

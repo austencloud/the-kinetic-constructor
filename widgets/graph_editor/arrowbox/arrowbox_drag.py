@@ -148,10 +148,10 @@ class ArrowBoxDrag(QWidget):
             if arrow.isVisible() and arrow.color == self.color:
                 self.pictograph.removeItem(arrow)
                 self.pictograph.arrows.remove(arrow)
-        for staff in self.pictograph.staffs[:]:
+        for staff in self.pictograph.props[:]:
             if staff.isVisible() and staff.color == self.color:
                 self.pictograph.removeItem(staff)
-                self.pictograph.staffs.remove(staff)
+                self.pictograph.props.remove(staff)
 
     def place_arrow_on_pictograph(self) -> None:
         self.pictograph.update()
@@ -207,12 +207,12 @@ class ArrowBoxDrag(QWidget):
         return self.pictograph.view.rect().contains(local_pos_in_pictograph)
 
     ### UPDATERS ###
-
+s
     def update_staff_during_drag(self) -> None:
         for staff in self.pictograph.staff_set.values():
             if staff.color == self.color:
-                if staff not in self.pictograph.staffs:
-                    self.pictograph.staffs.append(staff)
+                if staff not in self.pictograph.props:
+                    self.pictograph.props.append(staff)
 
                 staff.set_attributes_from_dict(
                     {

@@ -132,12 +132,12 @@ class TestPictograph(unittest.TestCase):
         arrow1 = Mock()
         self.pictograph.arrows.append(arrow1)
         staff1 = Mock()
-        self.pictograph.staffs.append(staff1)
+        self.pictograph.props.append(staff1)
 
         self.pictograph.clear_pictograph()
         # Verify the items are cleared correctly
         self.assertEqual(len(self.pictograph.arrows), 0)
-        self.assertEqual(len(self.pictograph.staffs), 0)
+        self.assertEqual(len(self.pictograph.props), 0)
         staff1.hide.assert_called_once()
 
     # Additional test cases would go here covering other functionalities like select_all_arrows, contextMenuEvent, etc.

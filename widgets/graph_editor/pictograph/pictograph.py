@@ -1,10 +1,8 @@
 from PyQt6.QtCore import QPointF, Qt
-from PyQt6.QtGui import QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsSceneMouseEvent
+from PyQt6.QtWidgets import QGraphicsScene
 
-from objects.letter_item import LetterItem
 from data.letter_engine_data import letter_types
 from objects.arrow import Arrow, BlankArrow
 from objects.grid import Grid
@@ -43,6 +41,9 @@ from utilities.TypeChecking.TypeChecking import (
     Tuple,
     Quadrant,
 )
+from widgets.graph_editor.pictograph.pictograph_event_handler import (
+    PictographEventHandler,
+)
 from widgets.graph_editor.pictograph.pictograph_view import PictographView
 from widgets.graph_editor.pictograph.pictogaph_init import PictographInit
 from widgets.graph_editor.pictograph.pictograph_menu_handler import (
@@ -59,6 +60,7 @@ if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.graph_editor import GraphEditor
+    from objects.letter_item import LetterItem
 
 
 class Pictograph(QGraphicsScene):
@@ -73,24 +75,25 @@ class Pictograph(QGraphicsScene):
         self.setSceneRect(0, 0, 750, 900)
         self.setBackgroundBrush(Qt.GlobalColor.white)
         self.arrows: List[Arrow] = []
-        self.staffs: List[Staff] = []
+        self.props: List[Prop] = []
         self.motions: List[Motion] = []
         self.current_letter: str = None
 
     def setup_components(self, main_widget: "MainWidget") -> None:
         self.letters = main_widget.letters
         self.generator: PictographGenerator = None
+        self.event_handler = PictographEventHandler(self)
 
         self.dragged_arrow: Arrow = None
         self.dragged_staff: Staff = None
         self.initializer = PictographInit(self)
 
         self.ghost_arrows = self.initializer.init_ghost_arrows()
-        self.ghost_staffs = self.initializer.init_ghost_staffs()
-        self.grid = self.initializer.init_grid()
+        self.ghost_props = self.initializer.init_ghost_staffs()
+        self.grid: Grid = self.initializer.init_grid()
         self.view: PictographView = self.initializer.init_view()
         self.staff_set = self.initializer.init_staff_set()
-        self.letter_item = self.initializer.init_letter_item()
+        self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.quadrants = self.initializer.init_quadrants(self.grid)
 
         # set the icons to 80% of the button size
@@ -112,71 +115,17 @@ class Pictograph(QGraphicsScene):
 
     ### EVENTS ###
 
-    def contextMenuEvent(self, event: QGraphicsSceneMouseEvent) -> None:
-        scene_pos = self.view.mapToScene(event.pos().toPoint())
-        items_at_pos = self.items(scene_pos)
-
-        clicked_item = None
-        for item in items_at_pos:
-            if isinstance(item, Arrow) or isinstance(item, Staff):
-                clicked_item = item
-                break
-
-        if not clicked_item and items_at_pos:
-            clicked_item = items_at_pos[0]
-
-        event_pos = event.screenPos()
-        self.pictograph_menu_handler.create_master_menu(event_pos, clicked_item)
-
     def mousePressEvent(self, event) -> None:
-        scene_pos = event.scenePos()
-        items_at_pos = self.items(scene_pos)
-
-        # Collect all Arrow items at the click position
-        arrows_at_pos = [item for item in items_at_pos if isinstance(item, Arrow)]
-
-        # Find the closest arrow to the cursor position
-        closest_arrow = None
-        min_distance = float("inf")
-        for arrow in arrows_at_pos:
-            arrow_center = arrow.sceneBoundingRect().center()
-            distance = (scene_pos - arrow_center).manhattanLength()
-            if distance < min_distance:
-                closest_arrow = arrow
-                min_distance = distance
-
-        # If the closest item is an arrow, select it
-        if closest_arrow:
-            self.dragged_arrow = closest_arrow
-            self.dragged_arrow.mousePressEvent(event)
-        else:
-            # Handle other items (Staff, LetterItem, Grid) or no item
-            clicked_item = self.itemAt(scene_pos, QTransform())
-            self.handle_non_arrow_click(clicked_item, event)
-
-    def handle_non_arrow_click(self, clicked_item, event):
-        if isinstance(clicked_item, Staff):
-            self.dragged_staff = clicked_item
-            self.dragged_staff.mousePressEvent(event)
-        elif isinstance(clicked_item, LetterItem):
-            clicked_item.setSelected(False)
-            self.clear_selections()
-        elif not clicked_item or isinstance(clicked_item, Grid):
-            self.clear_selections()
+        self.event_handler.handle_mouse_press(event)
 
     def mouseMoveEvent(self, event) -> None:
-        if self.dragged_staff:
-            self.dragged_staff.mouseMoveEvent(event)
-        elif self.dragged_arrow:
-            self.dragged_arrow.mouseMoveEvent(event)
+        self.event_handler.handle_mouse_move(event)
 
     def mouseReleaseEvent(self, event) -> None:
-        if self.dragged_staff:
-            self.dragged_staff.mouseReleaseEvent(event)
-            self.dragged_staff = None
-        elif self.dragged_arrow:
-            self.dragged_arrow.mouseReleaseEvent(event)
-            self.dragged_arrow = None
+        self.event_handler.handle_mouse_release(event)
+
+    def contextMenuEvent(self, event) -> None:
+        self.event_handler.handle_context_menu(event)
 
     ### GETTERS ###
 
@@ -240,48 +189,24 @@ class Pictograph(QGraphicsScene):
                 return staff
 
     def get_quadrant(self, x: float, y: float) -> Quadrant:
-        if self.point_in_quadrant(x, y, self.quadrants[NORTHEAST]):
+        @staticmethod
+        def point_in_quadrant(
+            x: float, y: float, boundary: Tuple[float, float, float, float]
+        ) -> bool:
+            return boundary[0] <= x <= boundary[2] and boundary[1] <= y <= boundary[3]
+
+        if point_in_quadrant(x, y, self.quadrants[NORTHEAST]):
             return NORTHEAST
-        elif self.point_in_quadrant(x, y, self.quadrants[SOUTHEAST]):
+        elif point_in_quadrant(x, y, self.quadrants[SOUTHEAST]):
             return SOUTHEAST
-        elif self.point_in_quadrant(x, y, self.quadrants[SOUTHWEST]):
+        elif point_in_quadrant(x, y, self.quadrants[SOUTHWEST]):
             return SOUTHWEST
-        elif self.point_in_quadrant(x, y, self.quadrants[NORTHWEST]):
+        elif point_in_quadrant(x, y, self.quadrants[NORTHWEST]):
             return NORTHWEST
         else:
             return None
 
     ### HELPERS ###
-
-    @staticmethod
-    def point_in_quadrant(
-        x: float, y: float, boundary: Tuple[float, float, float, float]
-    ) -> bool:
-        return boundary[0] <= x <= boundary[2] and boundary[1] <= y <= boundary[3]
-
-    def create_blank_arrow(self, deleted_arrow: Arrow) -> None:
-        blank_attributes_dict = {
-            COLOR: deleted_arrow.color,
-            MOTION_TYPE: STATIC,
-            ROTATION_DIRECTION: "None",
-            QUADRANT: "None",
-            START_LOCATION: deleted_arrow.end_location,
-            END_LOCATION: deleted_arrow.end_location,
-            TURNS: deleted_arrow.turns,
-        }
-        blank_arrow = BlankArrow(self, blank_attributes_dict)
-        self.addItem(blank_arrow)
-        self.arrows.append(blank_arrow)
-        blank_arrow.staff = deleted_arrow.staff
-        blank_arrow.staff.arrow = blank_arrow
-
-    def position_letter_item(self, letter_item: "QGraphicsSvgItem") -> None:
-        x = (
-            self.grid.boundingRect().width() / 2
-            - letter_item.boundingRect().width() / 2
-        )
-        y = self.grid.boundingRect().height()
-        letter_item.setPos(x, y)
 
     def add_to_sequence(self) -> None:
         self.clear_pictograph()
@@ -293,20 +218,19 @@ class Pictograph(QGraphicsScene):
     def clear_pictograph(self) -> None:
         for arrow in self.arrows:
             self.removeItem(arrow)
-        for staff in self.staffs:
+        for staff in self.props:
             self.removeItem(staff)
         self.arrows = []
-        self.staffs = []
+        self.props = []
         self.update()
 
     def clear_selections(self) -> None:
         for arrow in self.arrows:
             arrow.setSelected(False)
-        for staff in self.staffs:
+        for staff in self.props:
             staff.setSelected(False)
         self.dragged_staff = None
         self.dragged_arrow = None
-
 
     def add_motion(
         self,
@@ -330,7 +254,7 @@ class Pictograph(QGraphicsScene):
         motion = Motion(self, arrow, prop, motion_attributes)
         arrow.motion = motion
         prop.motion = motion
-        
+
         for m in self.motions:
             if m.color == motion.color:
                 self.motions.remove(m)
@@ -355,12 +279,12 @@ class Pictograph(QGraphicsScene):
         self.staff_positioner.update()
 
     def update_letter(self) -> None:
-        if len(self.staffs) == 2:
+        if len(self.props) == 2:
             self.current_letter = self.letter_engine.get_current_letter()
         else:
             self.current_letter = None
         self.update_letter_item(self.current_letter)
-        self.position_letter_item(self.letter_item)
+        self.letter_item.position_letter_item(self.letter_item)
 
     def update_letter_item(self, letter: str) -> None:
         if letter:
