@@ -10,7 +10,7 @@ class TestArrow(unittest.TestCase):
             "color": "red",
             "motion_type": "pro",
             "rotation_direction": "clockwise",
-            "quadrant": "northeast",
+            "location": "northeast",
             "start_location": "W",
             "end_location": "E",
             "turns": 1,
@@ -21,7 +21,7 @@ class TestArrow(unittest.TestCase):
         self.assertEqual(self.arrow.color, "red")
         self.assertEqual(self.arrow.motion_type, "pro")
         self.assertEqual(self.arrow.rotation_direction, "clockwise")
-        self.assertEqual(self.arrow.quadrant, "northeast")
+        self.assertEqual(self.arrow.location, "northeast")
         self.assertEqual(self.arrow.start_location, "W")
         self.assertEqual(self.arrow.end_location, "E")
         self.assertEqual(self.arrow.turns, 1)
@@ -43,7 +43,7 @@ class TestArrow(unittest.TestCase):
             "color": "blue",
             "motion_type": "anti",
             "rotation_direction": "counter_clockwise",
-            "quadrant": "southeast",
+            "location": "southeast",
             "start_location": "E",
             "end_location": "W",
             "turns": 2,
@@ -52,7 +52,7 @@ class TestArrow(unittest.TestCase):
         self.assertEqual(self.arrow.color, "blue")
         self.assertEqual(self.arrow.motion_type, "anti")
         self.assertEqual(self.arrow.rotation_direction, "counter_clockwise")
-        self.assertEqual(self.arrow.quadrant, "southeast")
+        self.assertEqual(self.arrow.location, "southeast")
         self.assertEqual(self.arrow.start_location, "E")
         self.assertEqual(self.arrow.end_location, "W")
         self.assertEqual(self.arrow.turns, 2)

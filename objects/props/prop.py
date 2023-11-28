@@ -121,7 +121,7 @@ class Prop(GraphicalObject):
             self.location = new_location
             self.axis = self.get_axis(self.location)
             self.update_appearance()
-            self.update_arrow_quadrant(new_location)
+            self.update_arrow_location(new_location)
 
             self.ghost_prop.color = self.color
             self.ghost_prop.location = self.location
@@ -183,8 +183,8 @@ class Prop(GraphicalObject):
                 elif self.location == SOUTH:
                     self.setPos(new_pos)
 
-    def update_arrow_quadrant(self, new_location: Location) -> None:
-        quadrant_mapping: Dict[
+    def update_arrow_location(self, new_location: Location) -> None:
+        location_mapping: Dict[
             Tuple(Location, RotationDirection, MotionType), Dict[Location, Location]
         ] = {
             ### ISO ###
@@ -207,17 +207,17 @@ class Prop(GraphicalObject):
             (SOUTHEAST, COUNTER_CLOCKWISE, ANTI): {EAST: NORTHEAST, WEST: SOUTHWEST},
         }
 
-        current_quadrant = self.arrow.quadrant
+        current_location = self.arrow.location
         rotation_direction = self.arrow.rotation_direction
         motion_type = self.arrow.motion_type
-        new_quadrant = quadrant_mapping.get(
-            (current_quadrant, rotation_direction, motion_type), {}
+        new_location = location_mapping.get(
+            (current_location, rotation_direction, motion_type), {}
         ).get(new_location)
 
-        if new_quadrant:
-            self.arrow.quadrant = new_quadrant
+        if new_location:
+            self.arrow.location = new_location
             start_location, end_location = self.arrow.get_start_end_locations(
-                motion_type, rotation_direction, new_quadrant
+                motion_type, rotation_direction, new_location
             )
             self.arrow.start_location = start_location
             self.arrow.end_location = end_location

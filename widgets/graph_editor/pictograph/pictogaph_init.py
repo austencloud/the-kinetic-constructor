@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QGraphicsView
 from PyQt6.QtCore import QPointF
 
 from objects.ghosts.ghost_arrow import GhostArrow
-from objects.ghosts.ghost_staff import GhostProp
+from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
 from objects.props.staff import Staff
@@ -23,7 +23,7 @@ from settings.string_constants import (
     NORTHWEST,
     PRO,
     PROP_TYPE,
-    QUADRANT,
+    location,
     RED,
     ROTATION_DIRECTION,
     SOUTH,
@@ -85,7 +85,7 @@ class PictographInit:
             COLOR: RED,
             MOTION_TYPE: PRO,
             ROTATION_DIRECTION: CLOCKWISE,
-            QUADRANT: NORTHEAST,
+            location: NORTHEAST,
             START_LOCATION: NORTH,
             END_LOCATION: EAST,
             TURNS: 0,
@@ -95,7 +95,7 @@ class PictographInit:
             COLOR: BLUE,
             MOTION_TYPE: PRO,
             ROTATION_DIRECTION: CLOCKWISE,
-            QUADRANT: SOUTHWEST,
+            location: SOUTHWEST,
             START_LOCATION: SOUTH,
             END_LOCATION: WEST,
             TURNS: 0,
@@ -140,7 +140,7 @@ class PictographInit:
         letter_item.position_letter_item(letter_item)
         return letter_item
 
-    def init_quadrants(self, grid: Grid) -> dict[str, Tuple[int, int, int, int]]:
+    def init_locations(self, grid: Grid) -> dict[str, Tuple[int, int, int, int]]:
         grid_center = grid.get_circle_coordinates("center_point").toPoint()
 
         grid_center_x = grid_center.x()
@@ -165,10 +165,10 @@ class PictographInit:
             grid_center_x,
             grid_center_y,
         )
-        quadrants = {
+        locations = {
             NORTHEAST: ne_boundary,
             SOUTHEAST: se_boundary,
             SOUTHWEST: sw_boundary,
             NORTHWEST: nw_boundary,
         }
-        return quadrants
+        return locations

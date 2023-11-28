@@ -9,7 +9,7 @@
         "color": "blue",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "w",
         "end_location": "w",
         "turns": 0
@@ -18,7 +18,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "quadrant": "se",
+        "location": "se",
         "start_location": "s",
         "end_location": "e",
         "turns": 0
@@ -33,7 +33,7 @@
         "color": "blue",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "n",
         "end_location": "n",
         "turns": 0
@@ -42,7 +42,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "quadrant": "sw",
+        "location": "sw",
         "start_location": "w",
         "end_location": "s",
         "turns": 0
@@ -57,7 +57,7 @@
         "color": "blue",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "e",
         "end_location": "e",
         "turns": 0
@@ -66,7 +66,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "quadrant": "nw",
+        "location": "nw",
         "start_location": "n",
         "end_location": "w",
         "turns": 0
@@ -81,7 +81,7 @@
         "color": "blue",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "s",
         "end_location": "s",
         "turns": 0
@@ -90,7 +90,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "quadrant": "ne",
+        "location": "ne",
         "start_location": "e",
         "end_location": "n",
         "turns": 0
@@ -105,7 +105,7 @@
         "color": "blue",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "w",
         "end_location": "w",
         "turns": 0
@@ -114,7 +114,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "quadrant": "ne",
+        "location": "ne",
         "start_location": "n",
         "end_location": "e",
         "turns": 0
@@ -129,7 +129,7 @@
         "color": "blue",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "s",
         "end_location": "s",
         "turns": 0
@@ -138,7 +138,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "quadrant": "nw",
+        "location": "nw",
         "start_location": "w",
         "end_location": "n",
         "turns": 0
@@ -153,7 +153,7 @@
         "color": "blue",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "e",
         "end_location": "e",
         "turns": 0
@@ -162,7 +162,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "quadrant": "sw",
+        "location": "sw",
         "start_location": "s",
         "end_location": "w",
         "turns": 0
@@ -177,7 +177,7 @@
         "color": "blue",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "n",
         "end_location": "n",
         "turns": 0
@@ -186,7 +186,7 @@
         "color": "red",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "quadrant": "se",
+        "location": "se",
         "start_location": "e",
         "end_location": "s",
         "turns": 0
@@ -201,7 +201,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "quadrant": "se",
+        "location": "se",
         "start_location": "s",
         "end_location": "e",
         "turns": 0
@@ -210,7 +210,7 @@
         "color": "red",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "w",
         "end_location": "w",
         "turns": 0
@@ -225,7 +225,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "quadrant": "sw",
+        "location": "sw",
         "start_location": "w",
         "end_location": "s",
         "turns": 0
@@ -234,7 +234,7 @@
         "color": "red",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "n",
         "end_location": "n",
         "turns": 0
@@ -249,7 +249,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "quadrant": "nw",
+        "location": "nw",
         "start_location": "n",
         "end_location": "w",
         "turns": 0
@@ -258,7 +258,7 @@
         "color": "red",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "e",
         "end_location": "e",
         "turns": 0
@@ -273,7 +273,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "ccw",
-        "quadrant": "ne",
+        "location": "ne",
         "start_location": "e",
         "end_location": "n",
         "turns": 0
@@ -282,7 +282,7 @@
         "color": "red",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "s",
         "end_location": "s",
         "turns": 0
@@ -297,7 +297,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "quadrant": "ne",
+        "location": "ne",
         "start_location": "n",
         "end_location": "e",
         "turns": 0
@@ -306,7 +306,7 @@
         "color": "red",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "w",
         "end_location": "w",
         "turns": 0
@@ -321,7 +321,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "quadrant": "nw",
+        "location": "nw",
         "start_location": "w",
         "end_location": "n",
         "turns": 0
@@ -330,7 +330,7 @@
         "color": "red",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "s",
         "end_location": "s",
         "turns": 0
@@ -345,7 +345,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "quadrant": "sw",
+        "location": "sw",
         "start_location": "s",
         "end_location": "w",
         "turns": 0
@@ -354,7 +354,7 @@
         "color": "red",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "e",
         "end_location": "e",
         "turns": 0
@@ -369,7 +369,7 @@
         "color": "blue",
         "motion_type": "pro",
         "rotation_direction": "cw",
-        "quadrant": "se",
+        "location": "se",
         "start_location": "e",
         "end_location": "s",
         "turns": 0
@@ -378,7 +378,7 @@
         "color": "red",
         "motion_type": "static",
         "rotation_direction": "None",
-        "quadrant": null,
+        "location": null,
         "start_location": "n",
         "end_location": "n",
         "turns": 0

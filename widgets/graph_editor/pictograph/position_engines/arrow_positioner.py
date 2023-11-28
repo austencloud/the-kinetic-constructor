@@ -4,7 +4,7 @@ from settings.string_constants import (
     COLOR,
     END_LOCATION,
     MOTION_TYPE,
-    QUADRANT,
+    location,
     ROTATION_DIRECTION,
     NORTHEAST,
     SOUTHEAST,
@@ -53,7 +53,7 @@ class ArrowPositioner:
             COLOR: current_state[0][COLOR],
             MOTION_TYPE: current_state[0][MOTION_TYPE],
             ROTATION_DIRECTION: current_state[0][ROTATION_DIRECTION],
-            QUADRANT: current_state[0][QUADRANT],
+            location: current_state[0][location],
             START_LOCATION: current_state[0][START_LOCATION],
             END_LOCATION: current_state[0][END_LOCATION],
             TURNS: current_state[0][TURNS],
@@ -62,7 +62,7 @@ class ArrowPositioner:
             COLOR: current_state[1][COLOR],
             MOTION_TYPE: current_state[1][MOTION_TYPE],
             ROTATION_DIRECTION: current_state[1][ROTATION_DIRECTION],
-            QUADRANT: current_state[1][QUADRANT],
+            location: current_state[1][location],
             START_LOCATION: current_state[1][START_LOCATION],
             END_LOCATION: current_state[1][END_LOCATION],
             TURNS: current_state[1][TURNS],
@@ -90,7 +90,7 @@ class ArrowPositioner:
             entry
             for entry in candidate_state
             if set(entry.keys()).issuperset(
-                {COLOR, MOTION_TYPE, QUADRANT, ROTATION_DIRECTION}
+                {COLOR, MOTION_TYPE, location, ROTATION_DIRECTION}
             )
         ]
 
@@ -103,7 +103,7 @@ class ArrowPositioner:
                 for candidate_arrow in filtered_candidate_state
                 if all(
                     arrow.get(key) == candidate_arrow.get(key)
-                    for key in [COLOR, MOTION_TYPE, QUADRANT, ROTATION_DIRECTION]
+                    for key in [COLOR, MOTION_TYPE, location, ROTATION_DIRECTION]
                 )
             ]
             if not matching_arrows:
@@ -129,16 +129,16 @@ class ArrowPositioner:
 
     def set_arrow_to_default_loc(self, arrow: "Arrow") -> None:
         arrow.set_arrow_transform_origin_to_center()
-        layer2_point = self.pictograph.grid.layer2_points.get(arrow.quadrant)
+        layer2_point = self.pictograph.grid.layer2_points.get(arrow.location)
         adjustment = QPointF(0, 0)
 
-        if arrow.quadrant == NORTHEAST:
+        if arrow.location == NORTHEAST:
             adjustment = QPointF(DISTANCE, -DISTANCE)
-        elif arrow.quadrant == SOUTHEAST:
+        elif arrow.location == SOUTHEAST:
             adjustment = QPointF(DISTANCE, DISTANCE)
-        elif arrow.quadrant == SOUTHWEST:
+        elif arrow.location == SOUTHWEST:
             adjustment = QPointF(-DISTANCE, DISTANCE)
-        elif arrow.quadrant == NORTHWEST:
+        elif arrow.location == NORTHWEST:
             adjustment = QPointF(-DISTANCE, -DISTANCE)
 
         new_pos = QPointF(

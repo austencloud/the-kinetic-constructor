@@ -55,7 +55,7 @@ class MotionAttributesDicts(TypedDict):
     color: Color
     motion_type: MotionType
     rotation_direction: RotationDirection
-    quadrant: Location
+    location: Location
     turns: Turns
 
     start_location: Location
@@ -71,7 +71,7 @@ class ArrowAttributesDicts(TypedDict):
     color: Color
     motion_type: MotionType
     rotation_direction: RotationDirection
-    quadrant: Location
+    location: Location
     start_location: Location
     end_location: Location
     turns: Turns
@@ -80,7 +80,7 @@ class ArrowAttributesDicts(TypedDict):
 MotionAttributes = Literal[
     "color",
     "motion_type",
-    "quadrant",
+    "location",
     "rotation_direction",
     "turns",
     "start_location",

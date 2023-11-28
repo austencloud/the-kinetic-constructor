@@ -17,7 +17,7 @@ from settings.string_constants import (
     MOTION_TYPE,
     NORTHEAST,
     NORTHWEST,
-    QUADRANT,
+    location,
     RED,
     ROTATION_DIRECTION,
     SOUTHEAST,
@@ -95,7 +95,7 @@ class Pictograph(QGraphicsScene):
         self.view: PictographView = self.initializer.init_view()
         self.staff_set = self.initializer.init_staff_set()
         self.letter_item: LetterItem = self.initializer.init_letter_item()
-        self.quadrants = self.initializer.init_quadrants(self.grid)
+        self.locations = self.initializer.init_locations(self.grid)
 
         # set the icons to 80% of the button size
 
@@ -152,7 +152,7 @@ class Pictograph(QGraphicsScene):
                     COLOR: motion.color,
                     MOTION_TYPE: motion.motion_type,
                     ROTATION_DIRECTION: motion.rotation_direction,
-                    QUADRANT: motion.quadrant,
+                    location: motion.location,
                     START_LOCATION: motion.start_location,
                     END_LOCATION: motion.end_location,
                     TURNS: motion.turns,
@@ -189,20 +189,20 @@ class Pictograph(QGraphicsScene):
             if staff.color == color:
                 return staff
 
-    def get_quadrant(self, x: float, y: float) -> Location:
+    def get_location(self, x: float, y: float) -> Location:
         @staticmethod
-        def point_in_quadrant(
+        def point_in_location(
             x: float, y: float, boundary: Tuple[float, float, float, float]
         ) -> bool:
             return boundary[0] <= x <= boundary[2] and boundary[1] <= y <= boundary[3]
 
-        if point_in_quadrant(x, y, self.quadrants[NORTHEAST]):
+        if point_in_location(x, y, self.locations[NORTHEAST]):
             return NORTHEAST
-        elif point_in_quadrant(x, y, self.quadrants[SOUTHEAST]):
+        elif point_in_location(x, y, self.locations[SOUTHEAST]):
             return SOUTHEAST
-        elif point_in_quadrant(x, y, self.quadrants[SOUTHWEST]):
+        elif point_in_location(x, y, self.locations[SOUTHWEST]):
             return SOUTHWEST
-        elif point_in_quadrant(x, y, self.quadrants[NORTHWEST]):
+        elif point_in_location(x, y, self.locations[NORTHWEST]):
             return NORTHWEST
         else:
             return None
@@ -244,7 +244,7 @@ class Pictograph(QGraphicsScene):
             COLOR: arrow.color,
             MOTION_TYPE: arrow.motion_type,
             ROTATION_DIRECTION: arrow.rotation_direction,
-            QUADRANT: arrow.quadrant,
+            location: arrow.location,
             START_LOCATION: arrow.start_location,
             END_LOCATION: arrow.end_location,
             TURNS: arrow.turns,

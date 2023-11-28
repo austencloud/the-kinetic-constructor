@@ -9,7 +9,7 @@ from settings.string_constants import (
     COLOR,
     IN,
     MOTION_TYPE,
-    QUADRANT,
+    location,
     RED,
     ROTATION_DIRECTION,
     START_LOCATION,
@@ -67,7 +67,7 @@ class ArrowBoxDrag(QWidget):
         self.main_window = main_window
         self.has_entered_pictograph_once = False
         self.current_rotation_angle = 0
-        self.previous_quadrant = None
+        self.previous_location = None
         self.preview = None
         self.svg_file = None
         self.ghost_arrow = None
@@ -90,7 +90,7 @@ class ArrowBoxDrag(QWidget):
     def set_attributes(self, target_arrow: "Arrow") -> None:
         self.color: Color = target_arrow.color
         self.motion_type: MotionType = target_arrow.motion_type
-        self.quadrant: Location = target_arrow.quadrant
+        self.location: Location = target_arrow.location
         self.rotation_direction: RotationDirection = target_arrow.rotation_direction
         self.start_location: Location = target_arrow.start_location
         self.end_location: Location = target_arrow.end_location
@@ -122,13 +122,13 @@ class ArrowBoxDrag(QWidget):
             start_location,
             end_location,
         ) = self.target_arrow.get_start_end_locations(
-            self.motion_type, self.rotation_direction, self.quadrant
+            self.motion_type, self.rotation_direction, self.location
         )
 
         return {
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,
-            QUADRANT: self.quadrant,
+            location: self.location,
             ROTATION_DIRECTION: self.rotation_direction,
             START_LOCATION: start_location,
             END_LOCATION: end_location,
@@ -144,21 +144,21 @@ class ArrowBoxDrag(QWidget):
             if arrow.isVisible() and arrow.color == self.color:
                 self.pictograph.removeItem(arrow)
                 self.pictograph.arrows.remove(arrow)
-        for staff in self.pictograph.props[:]:
-            if staff.isVisible() and staff.color == self.color:
-                self.pictograph.removeItem(staff)
-                self.pictograph.props.remove(staff)
+        for prop in self.pictograph.props[:]:
+            if prop.isVisible() and prop.color == self.color:
+                self.pictograph.removeItem(prop)
+                self.pictograph.props.remove(prop)
 
     def place_arrow_on_pictograph(self) -> None:
         self.pictograph.update()
         self.pictograph.clearSelection()
         self.placed_arrow = Arrow(self.pictograph, self.ghost_arrow.get_attributes())
-        self.placed_arrow.staff = self.ghost_arrow.staff
-        self.ghost_arrow.staff.arrow = self.placed_arrow
+        self.placed_arrow.prop = self.ghost_arrow.prop
+        self.ghost_arrow.prop.arrow = self.placed_arrow
 
         self.pictograph.add_motion(
             self.placed_arrow,
-            self.ghost_arrow.staff,
+            self.ghost_arrow.prop,
             IN,
             1,
         )
@@ -192,7 +192,7 @@ class ArrowBoxDrag(QWidget):
         self.deleteLater()
         self.pictograph.update()
         self.arrowbox.arrowbox_drag = None
-        self.ghost_arrow.staff = None
+        self.ghost_arrow.prop = None
         self.reset_drag_state()
 
     def handle_enter_pictograph(self, event_pos: QPoint) -> None:
@@ -207,11 +207,11 @@ class ArrowBoxDrag(QWidget):
         pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
         view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
         scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
-        new_quadrant = self.pictograph.get_quadrant(scene_pos.x(), scene_pos.y())
+        new_location = self.pictograph.get_location(scene_pos.x(), scene_pos.y())
 
-        if self.previous_quadrant != new_quadrant and new_quadrant:
-            self.previous_quadrant = new_quadrant
-            self.update_preview_for_new_quadrant(new_quadrant)
+        if self.previous_location != new_location and new_location:
+            self.previous_location = new_location
+            self.update_preview_for_new_location(new_location)
             self.ghost_arrow.update_ghost_arrow(self.attributes)
 
     ### FLAGS ###
@@ -223,27 +223,27 @@ class ArrowBoxDrag(QWidget):
 
     ### UPDATERS ###
 
-    def update_staff_during_drag(self) -> None:
-        for staff in self.pictograph.staff_set.values():
-            if staff.color == self.color:
-                if staff not in self.pictograph.props:
-                    self.pictograph.props.append(staff)
+    def update_prop_during_drag(self) -> None:
+        for prop in self.pictograph.prop_set.values():
+            if prop.color == self.color:
+                if prop not in self.pictograph.props:
+                    self.pictograph.props.append(prop)
 
-                staff.set_attributes_from_dict(
+                prop.set_attributes_from_dict(
                     {
                         COLOR: self.color,
                         LOCATION: self.end_location,
                         LAYER: 1,
                     }
                 )
-                staff.arrow = self.ghost_arrow
-                self.ghost_arrow.staff = staff
+                prop.arrow = self.ghost_arrow
+                self.ghost_arrow.prop = prop
 
-                if staff not in self.pictograph.items():
-                    self.pictograph.addItem(staff)
-                staff.show()
-                staff.update_appearance()
-                self.pictograph.update_staffs()
+                if prop not in self.pictograph.items():
+                    self.pictograph.addItem(prop)
+                prop.show()
+                prop.update_appearance()
+                self.pictograph.update_props()
 
     def apply_transformations_to_preview(self) -> None:
         self.update_mirror()
@@ -284,15 +284,15 @@ class ArrowBoxDrag(QWidget):
         ) = self.target_arrow.get_start_end_locations(
             self.motion_type,
             self.rotation_direction,
-            self.quadrant,
+            self.location,
         )
 
     def get_rotation_angle(self, arrow: "Arrow") -> RotationAngle:
-        motion_type, rotation_direction, color, quadrant = (
+        motion_type, rotation_direction, color, location = (
             arrow.motion_type,
             arrow.rotation_direction,
             arrow.color,
-            arrow.quadrant,
+            arrow.location,
         )
 
         rotation_angle_map: Dict[
@@ -360,24 +360,24 @@ class ArrowBoxDrag(QWidget):
         direction_map: Dict[
             RotationDirection, Dict[Location, RotationAngle]
         ] = rotation_angle_map.get((motion_type, color), {})
-        quadrant_map: Dict[Location, RotationAngle] = direction_map.get(
+        location_map: Dict[Location, RotationAngle] = direction_map.get(
             rotation_direction, {}
         )
-        rotation_angle: RotationAngle = quadrant_map.get(quadrant, 0)
+        rotation_angle: RotationAngle = location_map.get(location, 0)
 
         return rotation_angle
 
-    def update_preview_for_new_quadrant(self, new_quadrant: Location) -> None:
-        self.quadrant = new_quadrant
+    def update_preview_for_new_location(self, new_location: Location) -> None:
+        self.location = new_location
         (
             self.start_location,
             self.end_location,
         ) = self.target_arrow.get_start_end_locations(
-            self.motion_type, self.rotation_direction, self.quadrant
+            self.motion_type, self.rotation_direction, self.location
         )
 
         self.ghost_arrow.color = self.color
-        self.ghost_arrow.quadrant = new_quadrant
+        self.ghost_arrow.location = new_location
         self.ghost_arrow.motion_type = self.motion_type
         self.ghost_arrow.rotation_direction = self.rotation_direction
         self.ghost_arrow.start_location = self.start_location
@@ -391,11 +391,11 @@ class ArrowBoxDrag(QWidget):
         self.ghost_arrow.update_svg(ghost_svg)
 
         self.update_rotation()
-        self.update_staff_during_drag()
+        self.update_prop_during_drag()
 
         self.pictograph.add_motion(
             self.ghost_arrow,
-            self.ghost_arrow.staff,
+            self.ghost_arrow.prop,
             IN,
             1,
         )

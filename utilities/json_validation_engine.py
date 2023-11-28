@@ -19,7 +19,7 @@ from PyQt6.QtWidgets import (
 NORTH, SOUTH, EAST, WEST, BLUE, RED = 'n', 's', 'e', 'w', 'blue', 'red'
 valid_colors = {RED, BLUE}
 valid_motion_types = {'pro', 'anti', 'dash', 'static', 'float', 'chu'}
-valid_quadrants = {'ne', 'se', 'sw', 'nw', None}
+valid_locations = {'ne', 'se', 'sw', 'nw', None}
 valid_rotation_directions = {'cw', 'ccw', None}
 valid_locations = {'n', 'e', 's', 'w'}
 valid_turns = {0, 0.5, 1, 1.5, 2, 2.5}
@@ -144,7 +144,7 @@ class JsonValidationEngine(QMainWindow):
 
 
     # Helper functions
-    def is_none_allowed_for_quadrant(self, motion_type: str) -> bool:
+    def is_none_allowed_for_location(self, motion_type: str) -> bool:
         return motion_type in {'static', 'dash'}
 
     def is_none_allowed_for_rotation_direction(self, motion_type: str, turns: str) -> bool:
@@ -164,9 +164,9 @@ class JsonValidationEngine(QMainWindow):
         if entry.get('turns') not in valid_turns:
             errors.append(f'{letter} {position}: Invalid turns '{entry.get('turns')}'')
 
-        # Special validation for quadrant and rotation direction
-        if not self.is_none_allowed_for_quadrant(entry.get('motion_type')) and entry.get('quadrant') is None:
-            errors.append(f'{letter} {position}: Invalid quadrant '{entry.get('quadrant')}'')
+        # Special validation for location and rotation direction
+        if not self.is_none_allowed_for_location(entry.get('motion_type')) and entry.get('location') is None:
+            errors.append(f'{letter} {position}: Invalid location '{entry.get('location')}'')
         if not self.is_none_allowed_for_rotation_direction(entry.get('motion_type'), str(entry.get('turns'))) and entry.get('rotation_direction') is None:
             errors.append(f'{letter} {position}: Invalid rotation direction '{entry.get('rotation_direction')}'')
 
@@ -208,18 +208,18 @@ class JsonValidationEngine(QMainWindow):
     def apply_corrections(self, entry: Dict) -> List[str]:
         corrections = []
         if entry.get('motion_type') in {'static', 'dash'}:
-            if entry.get('quadrant') is not None:
-                corrections.append('Quadrant set to None for static or dash motion type.')
-                entry['quadrant'] = None
+            if entry.get('location') is not None:
+                corrections.append('location set to None for static or dash motion type.')
+                entry['location'] = None
         elif 'start_location' in entry and 'end_location' in entry:
-            inferred_quadrant = self.infer_quadrant(entry['start_location'], entry['end_location'])
-            if entry.get('quadrant') != inferred_quadrant:
-                corrections.append(f'Quadrant corrected to {inferred_quadrant}.')
-                entry['quadrant'] = inferred_quadrant
+            inferred_location = self.infer_location(entry['start_location'], entry['end_location'])
+            if entry.get('location') != inferred_location:
+                corrections.append(f'location corrected to {inferred_location}.')
+                entry['location'] = inferred_location
         # Add more correction rules as needed
         return corrections
 
-    def infer_quadrant(self, start: str, end: str) -> str:
+    def infer_location(self, start: str, end: str) -> str:
         if start == 'n':
             return 'ne' if end == 'e' else 'nw'
         elif start == 'e':

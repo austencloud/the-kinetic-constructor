@@ -16,7 +16,7 @@ from settings.string_constants import (
     NORTH,
     NORTHEAST,
     PRO,
-    QUADRANT,
+    location,
     RED,
     ROTATION_DIRECTION,
     START_LOCATION,
@@ -46,7 +46,7 @@ class ArrowBox(QGraphicsScene):
         self.setSceneRect(0, 0, 750, 750)
         self.setBackgroundBrush(Qt.GlobalColor.white)
         self.view = ArrowBoxView(self)
-        
+
         self.populate_arrows()
         self.grid = Grid("resources/images/grid/grid_simple.svg")
         self.addItem(self.grid)
@@ -66,7 +66,7 @@ class ArrowBox(QGraphicsScene):
                 COLOR: RED,
                 MOTION_TYPE: PRO,
                 ROTATION_DIRECTION: CLOCKWISE,
-                QUADRANT: NORTHEAST,
+                location: NORTHEAST,
                 START_LOCATION: NORTH,
                 END_LOCATION: EAST,
                 TURNS: 0,
@@ -75,7 +75,7 @@ class ArrowBox(QGraphicsScene):
                 COLOR: RED,
                 MOTION_TYPE: PRO,
                 ROTATION_DIRECTION: COUNTER_CLOCKWISE,
-                QUADRANT: SOUTHEAST,
+                location: SOUTHEAST,
                 START_LOCATION: SOUTH,
                 END_LOCATION: EAST,
                 TURNS: 0,
@@ -84,7 +84,7 @@ class ArrowBox(QGraphicsScene):
                 COLOR: RED,
                 MOTION_TYPE: ANTI,
                 ROTATION_DIRECTION: CLOCKWISE,
-                QUADRANT: SOUTHEAST,
+                location: SOUTHEAST,
                 START_LOCATION: SOUTH,
                 END_LOCATION: EAST,
                 TURNS: 0,
@@ -93,7 +93,7 @@ class ArrowBox(QGraphicsScene):
                 COLOR: RED,
                 MOTION_TYPE: ANTI,
                 ROTATION_DIRECTION: COUNTER_CLOCKWISE,
-                QUADRANT: NORTHEAST,
+                location: NORTHEAST,
                 START_LOCATION: NORTH,
                 END_LOCATION: EAST,
                 TURNS: 0,
@@ -105,7 +105,7 @@ class ArrowBox(QGraphicsScene):
                 COLOR: BLUE,
                 MOTION_TYPE: PRO,
                 ROTATION_DIRECTION: CLOCKWISE,
-                QUADRANT: SOUTHWEST,
+                location: SOUTHWEST,
                 START_LOCATION: SOUTH,
                 END_LOCATION: WEST,
                 TURNS: 0,
@@ -114,7 +114,7 @@ class ArrowBox(QGraphicsScene):
                 COLOR: BLUE,
                 MOTION_TYPE: PRO,
                 ROTATION_DIRECTION: COUNTER_CLOCKWISE,
-                QUADRANT: NORTHWEST,
+                location: NORTHWEST,
                 START_LOCATION: NORTH,
                 END_LOCATION: WEST,
                 TURNS: 0,
@@ -123,7 +123,7 @@ class ArrowBox(QGraphicsScene):
                 COLOR: BLUE,
                 MOTION_TYPE: ANTI,
                 ROTATION_DIRECTION: CLOCKWISE,
-                QUADRANT: NORTHWEST,
+                location: NORTHWEST,
                 START_LOCATION: NORTH,
                 END_LOCATION: WEST,
                 TURNS: 0,
@@ -132,7 +132,7 @@ class ArrowBox(QGraphicsScene):
                 COLOR: BLUE,
                 MOTION_TYPE: ANTI,
                 ROTATION_DIRECTION: COUNTER_CLOCKWISE,
-                QUADRANT: SOUTHWEST,
+                location: SOUTHWEST,
                 START_LOCATION: SOUTH,
                 END_LOCATION: WEST,
                 TURNS: 0,

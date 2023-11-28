@@ -35,7 +35,7 @@ class PropBoxDrag(QWidget):
         self.main_window = main_window
         self.has_entered_pictograph_once = False
         self.current_rotation_angle = 0
-        self.previous_quadrant = None
+        self.previous_location = None
         self.preview = None
         self.svg_file = None
         self.ghost_arrow = None
@@ -61,6 +61,7 @@ class PropBoxDrag(QWidget):
         return angle_map.get(key, {}).get(self.location, 0)
 
     def set_attributes(self, target_prop: "Prop") -> None:
+        self.prop_type: PropType = target_prop.prop_type
         self.color: Color = target_prop.color
         self.location: Location = target_prop.location
         self.layer: Layer = target_prop.layer
@@ -82,10 +83,10 @@ class PropBoxDrag(QWidget):
         renderer = QSvgRenderer()
         renderer.load(new_svg_data)
 
-        original_size = renderer.defaultSize() * self.pictograph.view.view_scale
-        original_pixmap = QPixmap(original_size)
-        self.setFixedSize(original_size)
-        self.preview.setFixedSize(original_size)
+        scaled_size = renderer.defaultSize() * self.pictograph.view.view_scale
+        original_pixmap = QPixmap(scaled_size)
+        self.setFixedSize(scaled_size)
+        self.preview.setFixedSize(scaled_size)
         original_pixmap.fill(Qt.GlobalColor.transparent)
         painter = QPainter(original_pixmap)
         renderer.render(painter)
@@ -128,11 +129,11 @@ class PropBoxDrag(QWidget):
         pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
         view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
         scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
-        new_quadrant = self.pictograph.get_quadrant(scene_pos.x(), scene_pos.y())
+        new_location = self.pictograph.get_location(scene_pos.x(), scene_pos.y())
 
-        if self.previous_quadrant != new_quadrant and new_quadrant:
-            self.previous_quadrant = new_quadrant
-            self.update_preview_for_new_location(new_quadrant)
+        if self.previous_location != new_location and new_location:
+            self.previous_location = new_location
+            self.update_preview_for_new_location(new_location)
             self.ghost_prop.update_ghost_prop(self.attributes)
 
     def remove_same_color_prop(self) -> None:
@@ -140,40 +141,30 @@ class PropBoxDrag(QWidget):
             if prop.isVisible() and prop.color == self.color:
                 self.pictograph.removeItem(prop)
                 self.pictograph.props.remove(prop)
-        for staff in self.pictograph.props[:]:
-            if staff.isVisible() and staff.color == self.color:
-                self.pictograph.removeItem(staff)
-                self.pictograph.props.remove(staff)
+        for prop in self.pictograph.props[:]:
+            if prop.isVisible() and prop.color == self.color:
+                self.pictograph.removeItem(prop)
+                self.pictograph.props.remove(prop)
 
     def update_preview_for_new_location(self, new_location: Location) -> None:
-        self.quadrant = new_quadrant
-        (
-            self.start_location,
-            self.end_location,
-        ) = self.target_prop.get_start_end_locations(
-            self.motion_type, self.rotation_direction, self.quadrant
-        )
+        self.location = new_location
 
+        self.ghost_prop.prop_type = self.prop_type
         self.ghost_prop.color = self.color
-        self.ghost_prop.quadrant = new_quadrant
-        self.ghost_prop.motion_type = self.motion_type
-        self.ghost_prop.rotation_direction = self.rotation_direction
-        self.ghost_prop.start_location = self.start_location
-        self.ghost_prop.end_location = self.end_location
-        self.ghost_prop.turns = self.turns
-        self.ghost_prop.is_svg_mirrored = self.is_svg_mirrored
+        self.ghost_prop.location = new_location
+        self.ghost_prop.orientation = self.orientation
+        self.ghost_prop.layer = self.layer
 
-        ghost_svg = self.ghost_prop.get_svg_file(self.motion_type, self.turns)
+        ghost_svg = self.ghost_prop.get_svg_file(self.prop_type)
 
-        self.ghost_prop.update_mirror()
         self.ghost_prop.update_svg(ghost_svg)
 
         self.update_rotation()
-        self.update_staff_during_drag()
+        self.update_prop_during_drag()
 
         self.pictograph.add_motion(
             self.ghost_prop,
-            self.ghost_prop.staff,
+            self.ghost_prop.arrow,
             IN,
             1,
         )
@@ -184,7 +175,25 @@ class PropBoxDrag(QWidget):
             self.pictograph.addItem(self.ghost_prop)
         self.pictograph.update()
 
+    def update_rotation(self) -> None:
+        renderer = QSvgRenderer(self.target_prop.svg_file)
+        scaled_size = renderer.defaultSize() * self.pictograph.view.view_scale
+        pixmap = QPixmap(scaled_size)
+        pixmap.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(pixmap)
+        with painter as painter:
+            renderer.render(painter)
 
+        angle = self.get_rotation_angle(self)
+
+        unrotate_transform = QTransform().rotate(-self.current_rotation_angle)
+        unrotated_pixmap = self.preview.pixmap().transformed(unrotate_transform)
+
+        rotate_transform = QTransform().rotate(angle)
+        rotated_pixmap = unrotated_pixmap.transformed(rotate_transform)
+
+        self.current_rotation_angle = angle
+        self.preview.setPixmap(rotated_pixmap)
 
     def _create_blank_arrow_at_location(self, location: QPointF) -> None:
         blank_arrow_attributes: PropAttributesDicts = {

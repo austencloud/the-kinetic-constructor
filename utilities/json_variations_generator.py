@@ -6,7 +6,7 @@ from settings.string_constants import (
     EAST,
     END_POS,
     NORTH,
-    QUADRANT,
+    location,
     ROTATION_DIRECTION,
     SOUTH,
     START_POS,
@@ -22,15 +22,15 @@ from utilities.TypeChecking.TypeChecking import (
 
 class JsonVariationsGenerator:
     def __init__(self) -> None:
-        self.quadrant_mapping: Dict[Tuple[Location, Location], str] = {}
+        self.location_mapping: Dict[Tuple[Location, Location], str] = {}
         for start in [NORTH, SOUTH]:
             for end in [EAST, WEST]:
-                self.quadrant_mapping[(start, end)] = f"{start}{end}"
+                self.location_mapping[(start, end)] = f"{start}{end}"
 
-    def calculate_quadrant(
+    def calculate_location(
         self, start_location: Location, end_location: Location
     ) -> Location:
-        return self.quadrant_mapping.get((start_location, end_location))
+        return self.location_mapping.get((start_location, end_location))
 
     def apply_mapping(
         self,
@@ -44,7 +44,7 @@ class JsonVariationsGenerator:
                 START_POS: position_mapping[arrow[START_POS]],
                 END_POS: position_mapping[arrow[END_POS]],
                 ROTATION_DIRECTION: rotation_mapping[arrow[ROTATION_DIRECTION]],
-                QUADRANT: self.calculate_quadrant(
+                location: self.calculate_location(
                     position_mapping[arrow[START_POS]],
                     position_mapping[arrow[END_POS]],
                 ),

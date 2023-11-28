@@ -155,7 +155,7 @@
         1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\option_picker\letter_buttons.py:181(update_size)
         1    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py:970(parse)
         2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attr_panel\attr_box.py:103(setup_box)
-        1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\pictograph\pictogaph_init.py:143(init_quadrants)
+        1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\pictograph\pictogaph_init.py:143(init_locations)
        47    0.000    0.000    0.000    0.000 {built-in method setFont}
         2    0.000    0.000    0.000    0.000 {built-in method scale}
         1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\propbox\propbox_view.py:11(__init__)
@@ -237,7 +237,7 @@
        11    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\xml\etree\ElementPath.py:183(prepare_descendant)
         1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\sequence\sequence.py:29(update_size)
         1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\arrowbox\arrowbox_view.py:27(resizeEvent)
-       18    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow.py:247(get_quadrant_to_angle_map)
+       18    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\objects\arrow.py:247(get_location_to_angle_map)
       157    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
         2    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\attr_panel\attr_box_widgets.py:28(__init__)
         1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\graph_editor\propbox\propbox_view.py:27(resizeEvent)
