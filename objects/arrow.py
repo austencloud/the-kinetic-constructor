@@ -118,7 +118,7 @@ class Arrow(GraphicalObject):
 
     def update_prop_on_click(self) -> None:
         self.prop.color = self.color
-        self.prop.prop_location = self.end_location
+        self.prop.location = self.end_location
         self.prop.axis = self.prop.get_axis(self.end_location)
 
     def update_ghost_on_click(self) -> None:
@@ -428,7 +428,7 @@ class Arrow(GraphicalObject):
         self.end_location = new_end_location
 
         self.prop.color = self.color
-        self.prop.prop_location = new_end_location
+        self.prop.location = new_end_location
         self.prop.layer = 1
 
         self.update_appearance()

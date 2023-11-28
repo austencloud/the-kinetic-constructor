@@ -18,6 +18,7 @@ from settings.string_constants import (
     NORTHEAST,
     NORTHWEST,
     PRO,
+    PROP_LOCATION,
     RED,
     ROTATION_DIRECTION,
     SOUTHEAST,
@@ -231,7 +232,7 @@ class ArrowBoxDrag(QWidget):
                 prop.set_attributes_from_dict(
                     {
                         COLOR: self.color,
-                        LOCATION: self.end_location,
+                        PROP_LOCATION: self.end_location,
                         LAYER: 1,
                     }
                 )

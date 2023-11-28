@@ -241,9 +241,7 @@ class Prop(GraphicalObject):
         }
 
         key = (self.layer, self.orientation)
-        return angle_map.get(key, {}).get(
-            self.prop_location, 0
-        )  # Default to 0 if not found
+        return angle_map.get(key, {}).get(self.prop_location, 0)  # Default to 0 if not found
 
     def update_rotation(self) -> None:
         rotation_angle = self.get_rotation_angle()
