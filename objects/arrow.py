@@ -176,13 +176,13 @@ class Arrow(GraphicalObject):
         self.ghost_arrow.set_arrow_attrs_from_arrow(self)
         self.ghost_arrow.update_appearance()
 
-        self.staff.set_staff_attrs_from_arrow(self)
+        self.staff.set_prop_attrs_from_arrow(self)
         self.staff.update_appearance()
 
         self.update_appearance()
 
         self.pictograph.arrows.remove(self)
-        for staff in self.pictograph.staffs:
+        for staff in self.pictograph.props:
             if staff.color == self.color:
                 staff.arrow = self
                 self.staff = staff
@@ -208,8 +208,8 @@ class Arrow(GraphicalObject):
     def update_staff_during_drag(self) -> None:
         for staff in self.pictograph.staff_set.values():
             if staff.color == self.color:
-                if staff not in self.pictograph.staffs:
-                    self.pictograph.staffs.append(staff)
+                if staff not in self.pictograph.props:
+                    self.pictograph.props.append(staff)
 
                 staff.set_attributes_from_dict(
                     {
@@ -304,7 +304,7 @@ class Arrow(GraphicalObject):
         )
 
     def get_svg_file(self, motion_type: MotionType, turns: Turns) -> str:
-        svg_file = f"{ARROW_DIR}{motion_type}_{float(turns)}.svg"
+        svg_file = f"{ARROW_DIR}{motion_type}/{motion_type}_{float(turns)}.svg"
         return svg_file
 
     ### MANIPULATION ###
@@ -511,7 +511,20 @@ class Arrow(GraphicalObject):
         if self in self.pictograph.arrows:
             self.pictograph.arrows.remove(self)
         if keep_staff:
-            self.pictograph.create_blank_arrow(self)
+            blank_attributes_dict = {
+                COLOR: self.color,
+                MOTION_TYPE: STATIC,
+                ROTATION_DIRECTION: "None",
+                QUADRANT: "None",
+                START_LOCATION: self.end_location,
+                END_LOCATION: self.end_location,
+                TURNS: self.turns,
+            }
+            blank_arrow = BlankArrow(self, blank_attributes_dict)
+            self.pictograph.addItem(blank_arrow)
+            self.pictograph.arrows.append(blank_arrow)
+            blank_arrow.staff = self.staff
+            blank_arrow.staff.arrow = blank_arrow
         else:
             self.staff.delete()
 
