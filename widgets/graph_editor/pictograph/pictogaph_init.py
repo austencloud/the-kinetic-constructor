@@ -68,8 +68,8 @@ class PictographInit:
         red_staff_dict = {COLOR: RED, LOCATION: NORTH, LAYER: 1, ORIENTATION: IN}
         blue_staff_dict = {COLOR: BLUE, LOCATION: SOUTH, LAYER: 1, ORIENTATION: IN}
 
-        red_staff = Staff(self.main_widget, self.pictograph, red_staff_dict)
-        blue_staff = Staff(self.main_widget, self.pictograph, blue_staff_dict)
+        red_staff = Staff(self.pictograph, red_staff_dict)
+        blue_staff = Staff(self.pictograph, blue_staff_dict)
 
         red_staff.set_svg_color(RED)
         blue_staff.set_svg_color(BLUE)
@@ -114,6 +114,7 @@ class PictographInit:
     def init_ghost_props(self) -> dict[str, GhostProp]:
         default_red_ghost_prop_attributes = {
             COLOR: RED,
+            PROP_TYPE: STAFF,
             LOCATION: EAST,
             LAYER: 1,
             ORIENTATION: IN,

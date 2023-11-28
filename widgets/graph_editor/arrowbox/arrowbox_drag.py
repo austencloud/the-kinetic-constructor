@@ -27,7 +27,7 @@ from settings.string_constants import (
     ANTI,
 )
 from objects.arrow import Arrow
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, Tuple
 
 if TYPE_CHECKING:
     from main import MainWindow
@@ -241,14 +241,14 @@ class ArrowBoxDrag(QWidget):
 
     def update_rotation(self) -> None:
         renderer = QSvgRenderer(self.target_arrow.svg_file)
-        scaled_size = renderer.defaultSize() * GRAPHBOARD_SCALE
+        scaled_size = renderer.defaultSize() * self.pictograph.view.view_scale
         pixmap = QPixmap(scaled_size)
         pixmap.fill(Qt.GlobalColor.transparent)
         painter = QPainter(pixmap)
         with painter as painter:
             renderer.render(painter)
 
-        angle = self.get_drag_preview_rotation_angle(self)
+        angle = self.get_rotation_angle(self)
 
         unrotate_transform = QTransform().rotate(-self.current_rotation_angle)
         unrotated_pixmap = self.preview.pixmap().transformed(unrotate_transform)
@@ -268,37 +268,19 @@ class ArrowBoxDrag(QWidget):
             self.quadrant,
         )
 
-    def get_drag_preview_rotation_angle(self, arrow: "Arrow") -> RotationAngle:
-        arrow = arrow or self
-        quadrant_to_angle = self.get_drag_preview_rotation_angle_to_quadrant_map(
-            arrow.motion_type, arrow.rotation_direction, arrow.color
+    def get_rotation_angle(self, arrow: "Arrow") -> RotationAngle:
+        motion_type, rotation_direction, color, quadrant = (
+            arrow.motion_type,
+            arrow.rotation_direction,
+            arrow.color,
+            arrow.quadrant,
         )
-        return quadrant_to_angle.get(arrow.quadrant, 0)
 
-    def get_drag_preview_rotation_angle_to_quadrant_map(
-        self,
-        motion_type: MotionType,
-        rotation_direction: RotationDirection,
-        color: Color,
-    ) -> Dict[str, Dict[str, int]]:
-        """
-        Returns a mapping of rotation angles to quadrants based on the motion type and rotation direction.
-
-        Specifically designed for the arrowbox_drag.
-
-        The values are different than the values in the Arrow class.
-
-        T
-        Args:
-            motion_type (str): The type of motion (PRO, ANTI, STATIC).
-            rotation_direction (str): The direction of rotation (CLOCKWISE, COUNTER_CLOCKWISE).
-
-        Returns:
-            Dict[str, Dict[str, int]]: A mapping of rotation angles to quadrants.
-
-        """
-        if motion_type == PRO and color == RED:
-            return {
+        rotation_angle_map: Dict[
+            Tuple[MotionType, Color],
+            Dict[RotationDirection, Dict[Quadrant, RotationAngle]],
+        ] = {
+            (PRO, RED): {
                 CLOCKWISE: {
                     NORTHEAST: 0,
                     SOUTHEAST: 90,
@@ -311,9 +293,8 @@ class ArrowBoxDrag(QWidget):
                     SOUTHWEST: 90,
                     NORTHWEST: 180,
                 },
-            }.get(rotation_direction, {})
-        elif motion_type == PRO and color == BLUE:
-            return {
+            },
+            (PRO, BLUE): {
                 CLOCKWISE: {
                     NORTHEAST: 180,
                     SOUTHEAST: 270,
@@ -326,10 +307,8 @@ class ArrowBoxDrag(QWidget):
                     SOUTHWEST: 270,
                     NORTHWEST: 0,
                 },
-            }.get(rotation_direction, {})
-
-        elif motion_type == ANTI and color == RED:
-            return {
+            },
+            (ANTI, RED): {
                 CLOCKWISE: {
                     NORTHEAST: 270,
                     SOUTHEAST: 0,
@@ -342,9 +321,8 @@ class ArrowBoxDrag(QWidget):
                     SOUTHWEST: 180,
                     NORTHWEST: 270,
                 },
-            }.get(rotation_direction, {})
-        elif motion_type == ANTI and color == BLUE:
-            return {
+            },
+            (ANTI, BLUE): {
                 CLOCKWISE: {
                     NORTHEAST: 90,
                     SOUTHEAST: 180,
@@ -357,7 +335,18 @@ class ArrowBoxDrag(QWidget):
                     SOUTHWEST: 0,
                     NORTHWEST: 90,
                 },
-            }.get(rotation_direction, {})
+            },
+        }
+
+        direction_map: Dict[
+            RotationDirection, Dict[Quadrant, RotationAngle]
+        ] = rotation_angle_map.get((motion_type, color), {})
+        quadrant_map: Dict[Quadrant, RotationAngle] = direction_map.get(
+            rotation_direction, {}
+        )
+        rotation_angle: RotationAngle = quadrant_map.get(quadrant, 0)
+
+        return rotation_angle
 
     def handle_enter_pictograph(self, event_pos: QPoint) -> None:
         if not self.has_entered_pictograph_once:

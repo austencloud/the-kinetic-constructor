@@ -45,7 +45,8 @@ class ArrowBox(QGraphicsScene):
         self.main_window = main_widget.main_window
         self.setSceneRect(0, 0, 750, 750)
         self.setBackgroundBrush(Qt.GlobalColor.white)
-        self.setup_view()
+        self.view = ArrowBoxView(self)
+        
         self.populate_arrows()
         self.grid = Grid("resources/images/grid/grid_simple.svg")
         self.addItem(self.grid)
@@ -54,10 +55,6 @@ class ArrowBox(QGraphicsScene):
         self.arrowbox_layout = QGridLayout()
         self.arrowbox_layout.addWidget(self.view)
         self.arrowbox_drag = None
-
-    def setup_view(self) -> None:
-        view = ArrowBoxView(self)
-        self.view = view
 
     def populate_arrows(self) -> None:
         self.arrows: List[Arrow] = []

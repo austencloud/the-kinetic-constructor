@@ -71,7 +71,7 @@ class GraphicalObject(QGraphicsSvgItem):
         self.setup_svg_renderer(svg_file)
         self.set_svg_color(self.color)
 
-    def update(self, attributes) -> None:
+    def update_attributes(self, attributes) -> None:
         self.set_attributes_from_dict(attributes)
         self.update_appearance()
 

@@ -30,6 +30,8 @@ import re
 
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from utilities.TypeChecking.TypeChecking import (
+    Layer,
+    Orientation,
     PropType,
     RotationAngle,
     PropAttributesDicts,
@@ -79,7 +81,7 @@ class Prop(GraphicalObject):
         self.update_rotation()
 
         if attributes:
-            self.update(attributes)
+            self.update_attributes(attributes)
 
     ### MOUSE EVENTS ###
 
@@ -87,7 +89,7 @@ class Prop(GraphicalObject):
         self.setSelected(True)
         if isinstance(self.scene(), self.pictograph.__class__):
             if not self.ghost_prop:
-                self.ghost_prop = self.pictograph.ghost_staffs[self.color]
+                self.ghost_prop = self.pictograph.ghost_props[self.color]
             self.ghost_prop.color = self.color
             self.ghost_prop.location = self.location
             self.ghost_prop.layer = self.layer
@@ -102,7 +104,6 @@ class Prop(GraphicalObject):
             for item in self.pictograph.items():
                 if item != self:
                     item.setSelected(False)
-
             self.previous_location = self.location
 
     def mouseMoveEvent(self, event) -> None:
@@ -265,7 +266,7 @@ class Prop(GraphicalObject):
     ### GETTERS ###
 
     def get_rotation_angle(self) -> RotationAngle:
-        angle_map = {
+        angle_map: Dict[Tuple[Layer, Orientation], Dict[Location, RotationAngle]] = {
             (1, IN): {NORTH: 90, SOUTH: 270, WEST: 0, EAST: 180},
             (1, OUT): {NORTH: 270, SOUTH: 90, WEST: 180, EAST: 0},
             (2, CLOCKWISE): {NORTH: 0, SOUTH: 180, WEST: 270, EAST: 90},

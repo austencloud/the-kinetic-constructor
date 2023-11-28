@@ -46,16 +46,24 @@ class PropBox(QGraphicsScene):
         super().__init__()
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
+        self.setSceneRect(0, 0, int(750), int(750))
+        self.setBackgroundBrush(Qt.GlobalColor.white)
+        self.view = PropBoxView(self)
+        
         self.pictograph = pictograph
         self.grid = Grid("resources/images/grid/grid.svg")
         self.grid_position = QPointF(0, 0)
         self.grid.setPos(self.grid_position)
         self.addItem(self.grid)
-        self.setBackgroundBrush(Qt.GlobalColor.white)
-        self.view = PropBoxView(self)
-        self.setSceneRect(0, 0, int(750), int(750))
+        
+        self.props: List[Prop] = []
+        self.prop_type = None
+        self.propbox_drag = None
+        self.change_prop_type(Staff)
+        
         self.propbox_layout = QVBoxLayout()
         self.propbox_layout.addWidget(self.view)
+        
         # self.init_propbox_clubs()
         # self.init_propbox_buugeng()
         # self.init_propbox_fans()
@@ -70,80 +78,78 @@ class PropBox(QGraphicsScene):
         self.triads: List[Triad] = []
         self.hoops: List[Hoop] = []
 
-        self.populate_staffs()
+        self.populate_props()
 
-    def populate_staffs(self) -> None:
-        initial_staff_attribute_collection: List[Dict] = [
+    def populate_props(self) -> None:
+        self.clear_props()
+        initial_prop_attributes: List[Dict] = [
             {
                 COLOR: RED,
                 LOCATION: NORTH,
                 LAYER: 1,
-                ORIENTATION: OUT,
+                ORIENTATION: IN,
             },
             {
                 COLOR: BLUE,
                 LOCATION: EAST,
                 LAYER: 1,
-                ORIENTATION: OUT,
+                ORIENTATION: IN,
             },
             {
                 COLOR: RED,
                 LOCATION: SOUTH,
                 LAYER: 1,
-                ORIENTATION: OUT,
+                ORIENTATION: IN,
             },
             {
                 COLOR: BLUE,
                 LOCATION: WEST,
                 LAYER: 1,
-                ORIENTATION: OUT,
-            },
-            {
-                COLOR: RED,
-                LOCATION: NORTH,
-                LAYER: 2,
-                ORIENTATION: COUNTER_CLOCKWISE,
-            },
-            {
-                COLOR: BLUE,
-                LOCATION: EAST,
-                LAYER: 2,
-                ORIENTATION: COUNTER_CLOCKWISE,
-            },
-            {
-                COLOR: RED,
-                LOCATION: SOUTH,
-                LAYER: 2,
-                ORIENTATION: COUNTER_CLOCKWISE,
-            },
-            {
-                COLOR: BLUE,
-                LOCATION: WEST,
-                LAYER: 2,
-                ORIENTATION: COUNTER_CLOCKWISE,
-            },
+                ORIENTATION: IN,
+            }
         ]
 
-        for attributes in initial_staff_attribute_collection:
-            staff = Staff(self.main_widget, self.pictograph, attributes)
-            staff.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
-            staff.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, True)
+        for attributes in initial_prop_attributes:
+            if self.prop_type == Staff:
+                prop = Staff(self.pictograph, attributes)
+            elif self.prop_type == Club:
+                prop = Club(self.pictograph, attributes)
+            elif self.prop_type == Buugeng:
+                prop = Buugeng(self.pictograph, attributes)
+            elif self.prop_type == Fan:
+                prop = Fan(self.pictograph, attributes)
+            elif self.prop_type == Triad:
+                prop = Triad(self.pictograph, attributes)
+            elif self.prop_type == Hoop:
+                prop = Hoop(self.pictograph, attributes)
+            else:
+                raise ValueError("Invalid prop type")
 
-            handpoint = self.grid.get_circle_coordinates(f"{staff.location}_hand_point")
-            staff_length = staff.boundingRect().width()
-            staff_width = staff.boundingRect().height()
-            offset_x = -staff_length / 2
-            offset_y = -staff_width / 2
-            staff_position = handpoint + QPointF(offset_x, offset_y)
+            prop.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
+            prop.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, True)
+            self.set_prop_position(prop)
+            self.addItem(prop)
+            self.props.append(prop)
+            
+    def clear_props(self) -> None:
+        for prop in self.props:
+            self.removeItem(prop)
+        self.props.clear()
 
-            staff.update_appearance()
-            staff.setTransformOriginPoint(staff.boundingRect().center())
-            staff.setPos(staff_position)
+    def set_prop_position(self, prop: Prop) -> None:
+        handpoint = self.grid.get_circle_coordinates(f"{prop.location}_hand_point")
+        prop_length = prop.boundingRect().width()
+        prop_width = prop.boundingRect().height()
+        offset_x = -prop_length / 2
+        offset_y = -prop_width / 2
+        prop_position = handpoint + QPointF(offset_x, offset_y)
+        prop.setPos(prop_position)
+        prop.update_appearance()
+        prop.setTransformOriginPoint(prop.boundingRect().center())
 
-            self.addItem(staff)
-            self.staffs.append(staff)
-
-        self.staffs = self.props
+    def change_prop_type(self, new_prop_type) -> None:
+        self.prop_type = new_prop_type
+        self.populate_props()
 
     def init_propbox_clubs(self) -> None:
         club_locations = {
@@ -345,9 +351,9 @@ class PropBox(QGraphicsScene):
                 pictograph = self.main_widget.graph_editor.pictograph
                 self.propbox_drag = PropBoxDrag(self.main_window, pictograph, self)
             if event.button() == Qt.MouseButton.LeftButton:
-                self.propbox_drag.match_target_arrow(self.target_arrow)
+                self.propbox_drag.match_target_prop(self.target_prop)
                 self.propbox_drag.start_drag(event_pos)
         else:
             # If no closest arrow is found, ignore the event
-            self.target_arrow = None
+            self.target_prop = None
             event.ignore()
