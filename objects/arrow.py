@@ -12,7 +12,7 @@ from settings.string_constants import (
     ANTI,
     STATIC,
     ROTATION_DIRECTION,
-    location,
+    LOCATION,
     NORTHEAST,
     SOUTHEAST,
     SOUTHWEST,
@@ -109,7 +109,7 @@ class Arrow(GraphicalObject):
         self.update_prop_on_click()
 
         self.pictograph.arrows.remove(self)
-        self.pictograph.update()
+        self.pictograph.update_pictograph()
         self.pictograph.arrows.append(self)
 
         for item in self.pictograph.items():
@@ -152,7 +152,7 @@ class Arrow(GraphicalObject):
         self.pictograph.removeItem(self.ghost_arrow)
         self.pictograph.arrows.remove(self.ghost_arrow)
         self.ghost_arrow.prop = None
-        self.pictograph.update()
+        self.pictograph.update_pictograph()
 
     ### UPDATERS ###
 
@@ -185,7 +185,7 @@ class Arrow(GraphicalObject):
             if prop.color == self.color:
                 prop.arrow = self
                 self.prop = prop
-        self.pictograph.update()
+        self.pictograph.update_pictograph()
         self.pictograph.arrows.append(self)
 
     def set_start_end_locations(self) -> None:
@@ -223,7 +223,7 @@ class Arrow(GraphicalObject):
                     self.pictograph.addItem(prop)
                 prop.show()
                 prop.update_appearance()
-                self.pictograph.update_props()
+                self.pictograph.update_pictograph()
 
     def set_arrow_transform_origin_to_center(self) -> None:
         self.center = self.boundingRect().center()
@@ -348,7 +348,7 @@ class Arrow(GraphicalObject):
         self.prop.update(updated_prop_dict)
         self.motion.update_attr_from_arrow()
 
-        self.pictograph.update()
+        self.pictograph.update_pictograph()
 
     def rotate(self, rotation_direction: RotationDirection) -> None:
         locations = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
@@ -382,9 +382,9 @@ class Arrow(GraphicalObject):
             LAYER: 1,
         }
 
-        self.update(updated_arrow_dict)
-        self.prop.update(updated_prop_dict)
-        self.pictograph.update()
+        self.update_attributes(updated_arrow_dict)
+        self.prop.update_attributes(updated_prop_dict)
+        self.pictograph.update_pictograph()
 
     def swap_color(self) -> None:
         if self.color == RED:
@@ -398,7 +398,7 @@ class Arrow(GraphicalObject):
         self.prop.color = new_color
         self.prop.update_appearance()
 
-        self.pictograph.update()
+        self.pictograph.update_pictograph()
 
     def swap_rot_dir(self) -> None:
         from objects.ghosts.ghost_arrow import GhostArrow
@@ -437,7 +437,7 @@ class Arrow(GraphicalObject):
         if not isinstance(self, GhostArrow) and self.ghost_arrow:
             self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
             self.ghost_arrow.update(self.attributes)
-        self.pictograph.update()
+        self.pictograph.update_pictograph()
 
     def mirror(self) -> None:
         transform = QTransform()
@@ -497,7 +497,7 @@ class Arrow(GraphicalObject):
         self.update_svg(svg_file)
         self.update(new_arrow_dict)
         self.prop.update(new_prop_dict)
-        self.pictograph.update()
+        self.pictograph.update_pictograph()
 
     def delete(self, keep_prop: bool = False) -> None:
         self.pictograph.removeItem(self)
@@ -508,7 +508,7 @@ class Arrow(GraphicalObject):
         else:
             self.prop.delete()
 
-        self.pictograph.update()
+        self.pictograph.update_pictograph()
 
 
 class StaticArrow(Arrow):

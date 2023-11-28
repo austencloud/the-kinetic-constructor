@@ -89,9 +89,6 @@ class PictographInit:
         red_staff.set_svg_color(RED)
         blue_staff.set_svg_color(BLUE)
 
-        red_staff.hide()
-        blue_staff.hide()
-
         prop_set = {RED: red_staff, BLUE: blue_staff}
         return prop_set
 

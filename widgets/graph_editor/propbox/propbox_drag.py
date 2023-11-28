@@ -173,7 +173,7 @@ class PropBoxDrag(QWidget):
             self.pictograph.props.append(self.ghost_prop)
         if self.ghost_prop not in self.pictograph.items():
             self.pictograph.addItem(self.ghost_prop)
-        self.pictograph.update()
+        self.pictograph.update_pictograph()
 
     def update_prop_during_drag(self) -> None:
         for prop in self.pictograph.prop_set.values():
@@ -195,8 +195,7 @@ class PropBoxDrag(QWidget):
                     self.pictograph.addItem(prop)
                 prop.show()
                 prop.update_appearance()
-                self.pictograph.update_props()
-
+                self.pictograph.update_pictograph()
 
     def update_rotation(self) -> None:
         renderer = QSvgRenderer(self.target_prop.svg_file)

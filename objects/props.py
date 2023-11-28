@@ -75,7 +75,7 @@ class Prop(GraphicalObject):
             self.ghost_prop.arrow = self.arrow
             self.pictograph.props.append(self.ghost_prop)
             self.pictograph.props.remove(self)
-            self.pictograph.update()
+            self.pictograph.update_pictograph()
             self.pictograph.props.append(self)
             for item in self.pictograph.items():
                 if item != self:
@@ -108,7 +108,7 @@ class Prop(GraphicalObject):
                 self.arrow.start_location = new_location
                 self.arrow.end_location = new_location
 
-            self.pictograph.update()
+            self.pictograph.update_pictograph()
             self.pictograph.props.append(self)
             new_pos = new_pos - self.get_prop_center()
             self.set_drag_pos(new_pos)
@@ -190,7 +190,7 @@ class Prop(GraphicalObject):
             self.pictograph.removeItem(self.ghost_prop)
             self.pictograph.props.remove(self.ghost_prop)
             self.ghost_prop.arrow = None
-            self.pictograph.update()
+            self.pictograph.update_pictograph()
             self.finalize_prop_drop(event)
 
     def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
@@ -205,7 +205,7 @@ class Prop(GraphicalObject):
         if self.arrow:
             self.arrow.update_appearance()
         self.previous_location = new_location
-        self.pictograph.update()
+        self.pictograph.update_pictograph()
 
     ### UPDATERS ###
 
@@ -316,7 +316,7 @@ class Prop(GraphicalObject):
     def delete(self) -> None:
         self.pictograph.removeItem(self)
         self.pictograph.props.remove(self)
-        self.pictograph.update()
+        self.pictograph.update_pictograph()
 
         self.create_static_arrow()
 

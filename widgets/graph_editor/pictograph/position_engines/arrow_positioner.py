@@ -4,7 +4,7 @@ from settings.string_constants import (
     COLOR,
     END_LOCATION,
     MOTION_TYPE,
-    location,
+    LOCATION,
     ROTATION_DIRECTION,
     NORTHEAST,
     SOUTHEAST,
@@ -20,7 +20,7 @@ from typing import TYPE_CHECKING, List, Dict, Any
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
 
-from utilities.TypeChecking.TypeChecking import OptimalLocationsDicts
+from utilities.TypeChecking.TypeChecking import MotionAttributes, OptimalLocationsDicts
 
 
 class ArrowPositioner:
@@ -45,7 +45,7 @@ class ArrowPositioner:
                     self.set_arrow_to_default_loc(arrow)
 
     def find_optimal_locations(self) -> OptimalLocationsDicts | None:
-        current_state = self.pictograph.get_state()
+        current_state: List[Dict[MotionAttributes, str]] = self.pictograph.get_state()
         current_letter = self.pictograph.current_letter
         current_letter_variants = self.letters[current_letter]
 
@@ -53,7 +53,7 @@ class ArrowPositioner:
             COLOR: current_state[0][COLOR],
             MOTION_TYPE: current_state[0][MOTION_TYPE],
             ROTATION_DIRECTION: current_state[0][ROTATION_DIRECTION],
-            LOCATION: current_state[0][location],
+            LOCATION: current_state[0][LOCATION],
             START_LOCATION: current_state[0][START_LOCATION],
             END_LOCATION: current_state[0][END_LOCATION],
             TURNS: current_state[0][TURNS],
@@ -62,7 +62,7 @@ class ArrowPositioner:
             COLOR: current_state[1][COLOR],
             MOTION_TYPE: current_state[1][MOTION_TYPE],
             ROTATION_DIRECTION: current_state[1][ROTATION_DIRECTION],
-            LOCATION: current_state[1][location],
+            LOCATION: current_state[1][LOCATION],
             START_LOCATION: current_state[1][START_LOCATION],
             END_LOCATION: current_state[1][END_LOCATION],
             TURNS: current_state[1][TURNS],
@@ -90,7 +90,7 @@ class ArrowPositioner:
             entry
             for entry in candidate_state
             if set(entry.keys()).issuperset(
-                {COLOR, MOTION_TYPE, location, ROTATION_DIRECTION}
+                {COLOR, MOTION_TYPE, LOCATION, ROTATION_DIRECTION}
             )
         ]
 
@@ -103,7 +103,7 @@ class ArrowPositioner:
                 for candidate_arrow in filtered_candidate_state
                 if all(
                     arrow.get(key) == candidate_arrow.get(key)
-                    for key in [COLOR, MOTION_TYPE, location, ROTATION_DIRECTION]
+                    for key in [COLOR, MOTION_TYPE, LOCATION, ROTATION_DIRECTION]
                 )
             ]
             if not matching_arrows:

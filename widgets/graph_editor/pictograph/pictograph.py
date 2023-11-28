@@ -262,7 +262,7 @@ class Pictograph(QGraphicsScene):
 
     ### UPDATERS ###
 
-    def update(self) -> None:
+    def update_pictograph(self) -> None:
         self.update_letter()
         self.update_arrows()
         self.update_props()

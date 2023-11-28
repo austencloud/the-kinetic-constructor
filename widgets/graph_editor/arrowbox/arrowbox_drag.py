@@ -150,7 +150,7 @@ class ArrowBoxDrag(QWidget):
                 self.pictograph.props.remove(prop)
 
     def place_arrow_on_pictograph(self) -> None:
-        self.pictograph.update()
+        self.pictograph.update_pictograph()
         self.pictograph.clearSelection()
         self.placed_arrow = Arrow(self.pictograph, self.ghost_arrow.get_attributes())
         self.placed_arrow.prop = self.ghost_arrow.prop
@@ -190,7 +190,7 @@ class ArrowBoxDrag(QWidget):
         if self.has_entered_pictograph_once:
             self.place_arrow_on_pictograph()
         self.deleteLater()
-        self.pictograph.update()
+        self.pictograph.update_pictograph()
         self.arrowbox.arrowbox_drag = None
         self.ghost_arrow.prop = None
         self.reset_drag_state()
@@ -404,4 +404,4 @@ class ArrowBoxDrag(QWidget):
             self.pictograph.arrows.append(self.ghost_arrow)
         if self.ghost_arrow not in self.pictograph.items():
             self.pictograph.addItem(self.ghost_arrow)
-        self.pictograph.update()
+        self.pictograph.update_pictograph()

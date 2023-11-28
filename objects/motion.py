@@ -44,10 +44,10 @@ class Motion:
         self.motion_type: MotionType = attributes[MOTION_TYPE]
         self.turns: Turns = attributes[TURNS]
         self.rotation_direction: RotationDirection = attributes[ROTATION_DIRECTION]
-        self.LOCATION: Location = attributes[location]
+        self.location: Location = attributes[location]
 
-        self.start_LOCATION: Location = attributes[START_LOCATION]
-        self.end_LOCATION: Location = attributes[END_LOCATION]
+        self.start_location: Location = attributes[START_LOCATION]
+        self.end_location: Location = attributes[END_LOCATION]
 
         self.start_orientation: Orientation = attributes[START_ORIENTATION]
         self.end_orientation: Orientation = self.get_end_orientation()
@@ -183,7 +183,7 @@ class Motion:
             self.arrow.ghost_arrow.turns = self.arrow.turns
             self.arrow.ghost_arrow.update_svg(svg_file)
             self.arrow.ghost_arrow.update_appearance()
-        self.pictograph.update()
+        self.pictograph.update_pictograph()
 
     def add_half_turn(self) -> None:
         if self.arrow.turns < 3:
