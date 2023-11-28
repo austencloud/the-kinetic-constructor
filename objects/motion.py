@@ -4,7 +4,7 @@ from utilities.TypeChecking.TypeChecking import (
     MotionType,
     Turns,
     RotationDirection,
-    Quadrant,
+    Location,
     Location,
     Orientation,
     Layer,
@@ -44,7 +44,7 @@ class Motion:
         self.motion_type: MotionType = attributes[MOTION_TYPE]
         self.turns: Turns = attributes[TURNS]
         self.rotation_direction: RotationDirection = attributes[ROTATION_DIRECTION]
-        self.quadrant: Quadrant = attributes[QUADRANT]
+        self.quadrant: Location = attributes[QUADRANT]
 
         self.start_location: Location = attributes[START_LOCATION]
         self.end_location: Location = attributes[END_LOCATION]

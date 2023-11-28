@@ -36,7 +36,7 @@ from utilities.TypeChecking.TypeChecking import (
     RotationAngle,
     PropAttributesDicts,
     Location,
-    Quadrant,
+    Location,
     RotationDirection,
     MotionType,
     Axis,
@@ -52,6 +52,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.motion import Motion
 
+
 class Prop(GraphicalObject):
     def __init__(self, pictograph, attributes: Dict) -> None:
         svg_file = self.get_svg_file(attributes[PROP_TYPE])
@@ -60,12 +61,12 @@ class Prop(GraphicalObject):
         self.update_appearance()
 
     def _setup_attributes(
-        self, pictograph: 'Pictograph', attributes: 'PropAttributesDicts'
+        self, pictograph: "Pictograph", attributes: "PropAttributesDicts"
     ) -> None:
         self.pictograph = pictograph
         self.motion: Motion = None
         self.prop_type = None
-        
+
         self.drag_offset = QPointF(0, 0)
         self.previous_location = None
         self.arrow: Arrow = None
@@ -184,7 +185,7 @@ class Prop(GraphicalObject):
 
     def update_arrow_quadrant(self, new_location: Location) -> None:
         quadrant_mapping: Dict[
-            Tuple(Quadrant, RotationDirection, MotionType), Dict[Location, Quadrant]
+            Tuple(Location, RotationDirection, MotionType), Dict[Location, Location]
         ] = {
             ### ISO ###
             (NORTHEAST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
@@ -230,7 +231,7 @@ class Prop(GraphicalObject):
             self.pictograph.update()
             self.finalize_prop_drop(event)
 
-    def finalize_prop_drop(self, event: 'QGraphicsSceneMouseEvent') -> None:
+    def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
         closest_handpoint = self.get_closest_handpoint(event.scenePos())
         new_location = self.get_closest_location(event.scenePos())
 
@@ -253,11 +254,11 @@ class Prop(GraphicalObject):
             axis: Axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
         return axis
 
-    def set_prop_transform_origin_to_center(self: 'Prop') -> None:
+    def set_prop_transform_origin_to_center(self: "Prop") -> None:
         self.center = self.get_prop_center()
         self.setTransformOriginPoint(self.center)
 
-    def set_prop_attrs_from_arrow(self, target_arrow: 'Arrow') -> None:
+    def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
         self.location = target_arrow.end_location
         self.axis = self.get_axis(self.location)
@@ -291,7 +292,7 @@ class Prop(GraphicalObject):
             )
 
     def get_closest_handpoint(self, mouse_pos: QPointF) -> QPointF:
-        closest_distance = float('inf')
+        closest_distance = float("inf")
         closest_handpoint = None
         for point in self.pictograph.grid.handpoints.values():
             distance = (point - mouse_pos).manhattanLength()
@@ -301,7 +302,7 @@ class Prop(GraphicalObject):
         return closest_handpoint
 
     def get_closest_location(self, mouse_pos: QPointF) -> Location:
-        closest_distance = float('inf')
+        closest_distance = float("inf")
         closest_location = None
         for location, point in self.pictograph.grid.handpoints.items():
             distance = (point - mouse_pos).manhattanLength()
@@ -311,9 +312,9 @@ class Prop(GraphicalObject):
         return closest_location
 
     def get_svg_file(self, prop_type: PropType) -> str:
-        svg_file = f'{PROP_DIR}/{prop_type}.svg'
+        svg_file = f"{PROP_DIR}/{prop_type}.svg"
         return svg_file
-    
+
     ### HELPERS ###
 
     def swap_axis(self) -> None:
@@ -333,18 +334,18 @@ class Prop(GraphicalObject):
     def set_svg_color(self, new_color: Color) -> bytes:
         new_hex_color: ColorHex = COLOR_MAP.get(new_color)
 
-        with open(self.svg_file, 'r') as f:
+        with open(self.svg_file, "r") as f:
             svg_data = f.read()
 
         style_tag_pattern = re.compile(
-            r'\.st0{fill\s*:\s*(#[a-fA-F0-9]{6})\s*;}', re.DOTALL
+            r"\.st0{fill\s*:\s*(#[a-fA-F0-9]{6})\s*;}", re.DOTALL
         )
         match = style_tag_pattern.search(svg_data)
 
         if match:
             old_hex_color: ColorHex = match.group(1)
             svg_data = svg_data.replace(old_hex_color, new_hex_color)
-        return svg_data.encode('utf-8')
+        return svg_data.encode("utf-8")
 
     def delete(self) -> None:
         self.pictograph.removeItem(self)

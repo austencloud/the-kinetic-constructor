@@ -84,3 +84,9 @@ class GraphicalObject(QGraphicsSvgItem):
     ) -> None:
         for attribute_name, attribute_value in attributes.items():
             setattr(self, attribute_name, attribute_value)
+
+    def is_dim(self, on: bool):
+        if on:
+            self.setOpacity(0.25)  # Change opacity or use another effect to highlight
+        else:
+            self.setOpacity(1.0)  # Reset to normal when not highlighted

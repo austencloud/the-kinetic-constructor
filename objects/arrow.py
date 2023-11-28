@@ -36,7 +36,7 @@ from objects.motion import Motion
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
     MotionType,
-    Quadrant,
+    Location,
     RotationDirection,
     Turns,
     Direction,
@@ -63,7 +63,7 @@ class Arrow(GraphicalObject):
     ### SETUP ###
 
     def _setup_attributes(
-        self, pictograph: 'Pictograph', attributes: 'ArrowAttributesDicts'
+        self, pictograph: "Pictograph", attributes: "ArrowAttributesDicts"
     ) -> None:
         self.pictograph = pictograph
 
@@ -121,7 +121,7 @@ class Arrow(GraphicalObject):
         self.staff.axis = self.staff.get_axis(self.end_location)
 
     def update_ghost_on_click(self) -> None:
-        self.ghost_arrow: 'GhostArrow' = self.pictograph.ghost_arrows[self.color]
+        self.ghost_arrow: "GhostArrow" = self.pictograph.ghost_arrows[self.color]
         self.ghost_arrow.staff = self.staff
         self.ghost_arrow.set_attributes_from_dict(self.attributes)
         if self.ghost_arrow.is_svg_mirrored != self.is_svg_mirrored:
@@ -165,7 +165,7 @@ class Arrow(GraphicalObject):
         angle = self.get_rotation_angle()
         self.setRotation(angle)
 
-    def update_for_new_quadrant(self, new_quadrant: Quadrant) -> None:
+    def update_for_new_quadrant(self, new_quadrant: Location) -> None:
         self.quadrant = new_quadrant
         self.motion.quadrant = new_quadrant
 
@@ -194,7 +194,7 @@ class Arrow(GraphicalObject):
         self.motion.start_location = self.start_location
         self.motion.end_location = self.end_location
 
-    def set_arrow_attrs_from_arrow(self, target_arrow: 'Arrow') -> None:
+    def set_arrow_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
         self.motion_type = target_arrow.motion_type
         self.quadrant = target_arrow.quadrant
@@ -231,11 +231,11 @@ class Arrow(GraphicalObject):
     ### GETTERS ###
 
     def get_svg_data(self, svg_file: str) -> bytes:
-        with open(svg_file, 'r') as f:
+        with open(svg_file, "r") as f:
             svg_data = f.read()
-        return svg_data.encode('utf-8')
+        return svg_data.encode("utf-8")
 
-    def get_rotation_angle(self, arrow: Optional['Arrow'] = None) -> RotationAngle:
+    def get_rotation_angle(self, arrow: Optional["Arrow"] = None) -> RotationAngle:
         arrow = arrow or self
         quadrant_to_angle = self.get_quadrant_to_angle_map(
             arrow.motion_type, arrow.rotation_direction
@@ -293,7 +293,7 @@ class Arrow(GraphicalObject):
         self,
         motion_type: MotionType,
         rotation_direction: RotationDirection,
-        quadrant: Quadrant,
+        quadrant: Location,
     ) -> StartEndLocationTuple:
         return (
             start_end_location_mapping.get(quadrant, {})
@@ -302,7 +302,7 @@ class Arrow(GraphicalObject):
         )
 
     def get_svg_file(self, motion_type: MotionType, turns: Turns) -> str:
-        svg_file = f'{ARROW_DIR}{motion_type}/{motion_type}_{float(turns)}.svg'
+        svg_file = f"{ARROW_DIR}{motion_type}/{motion_type}_{float(turns)}.svg"
         return svg_file
 
     ### MANIPULATION ###
@@ -385,12 +385,6 @@ class Arrow(GraphicalObject):
         self.staff.update(updated_staff_dict)
         self.pictograph.update()
 
-    def is_dim(self, on: bool):
-        if on:
-            self.setOpacity(0.25)  # Change opacity or use another effect to highlight
-        else:
-            self.setOpacity(1.0)  # Reset to normal when not highlighted
-
     def swap_color(self) -> None:
         if self.color == RED:
             new_color = BLUE
@@ -417,8 +411,8 @@ class Arrow(GraphicalObject):
             new_rotation_direction = CLOCKWISE
         elif self.rotation_direction == CLOCKWISE:
             new_rotation_direction = COUNTER_CLOCKWISE
-        elif self.rotation_direction == 'None':
-            new_rotation_direction = 'None'
+        elif self.rotation_direction == "None":
+            new_rotation_direction = "None"
 
         old_start_location = self.start_location
         old_end_location = self.end_location
@@ -450,7 +444,7 @@ class Arrow(GraphicalObject):
         transform.scale(-1, 1)
         transform.translate(-self.center_x, -self.center_y)
         self.setTransform(transform)
-        if hasattr(self, 'ghost_arrow'):
+        if hasattr(self, "ghost_arrow"):
             self.ghost_arrow.setTransform(transform)
             self.ghost_arrow.is_svg_mirrored = True
         self.is_svg_mirrored = True
@@ -461,7 +455,7 @@ class Arrow(GraphicalObject):
         transform.scale(1, 1)
         transform.translate(-self.center.x(), -self.center.y())
         self.setTransform(transform)
-        if hasattr(self, 'ghost_arrow'):
+        if hasattr(self, "ghost_arrow"):
             self.ghost_arrow.setTransform(transform)
             self.ghost_arrow.is_svg_mirrored = False
         self.is_svg_mirrored = False
@@ -478,8 +472,8 @@ class Arrow(GraphicalObject):
             new_rotation_direction = CLOCKWISE
         elif self.rotation_direction == CLOCKWISE:
             new_rotation_direction = COUNTER_CLOCKWISE
-        elif self.rotation_direction == 'None':
-            new_rotation_direction = 'None'
+        elif self.rotation_direction == "None":
+            new_rotation_direction = "None"
 
         new_arrow_dict = {
             COLOR: self.color,
@@ -512,8 +506,8 @@ class Arrow(GraphicalObject):
             blank_attributes_dict = {
                 COLOR: self.color,
                 MOTION_TYPE: STATIC,
-                ROTATION_DIRECTION: 'None',
-                QUADRANT: 'None',
+                ROTATION_DIRECTION: "None",
+                QUADRANT: "None",
                 START_LOCATION: self.end_location,
                 END_LOCATION: self.end_location,
                 TURNS: self.turns,

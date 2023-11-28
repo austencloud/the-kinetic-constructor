@@ -39,7 +39,7 @@ from utilities.TypeChecking.TypeChecking import (
     Optional,
     Orientation,
     Tuple,
-    Quadrant,
+    Location,
 )
 from widgets.graph_editor.pictograph.pictograph_event_handler import (
     PictographEventHandler,
@@ -189,7 +189,7 @@ class Pictograph(QGraphicsScene):
             if staff.color == color:
                 return staff
 
-    def get_quadrant(self, x: float, y: float) -> Quadrant:
+    def get_quadrant(self, x: float, y: float) -> Location:
         @staticmethod
         def point_in_quadrant(
             x: float, y: float, boundary: Tuple[float, float, float, float]

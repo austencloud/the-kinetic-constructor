@@ -14,7 +14,7 @@ from settings.string_constants import (
 )
 from utilities.TypeChecking.TypeChecking import (
     Location,
-    Quadrant,
+    Location,
     RotationDirection,
     MotionAttributesDicts,
 )
@@ -29,7 +29,7 @@ class JsonVariationsGenerator:
 
     def calculate_quadrant(
         self, start_location: Location, end_location: Location
-    ) -> Quadrant:
+    ) -> Location:
         return self.quadrant_mapping.get((start_location, end_location))
 
     def apply_mapping(

@@ -334,7 +334,6 @@ class PropBox(QGraphicsScene):
         scene_pos = event.scenePos()
         event_pos = self.view.mapFromScene(scene_pos)
 
-        # Find the closest arrow to the cursor position
         closest_prop = None
         min_distance = float("inf")
         for prop in self.props:
@@ -344,7 +343,6 @@ class PropBox(QGraphicsScene):
                 closest_prop = prop
                 min_distance = distance
 
-        # Proceed only if the closest prop is found
         if closest_prop:
             self.target_prop = closest_prop
             if not self.propbox_drag:
@@ -354,6 +352,32 @@ class PropBox(QGraphicsScene):
                 self.propbox_drag.match_target_prop(self.target_prop)
                 self.propbox_drag.start_drag(event_pos)
         else:
-            # If no closest arrow is found, ignore the event
             self.target_prop = None
             event.ignore()
+
+
+    def mouseMoveEvent(self, event) -> None:
+        if self.target_prop and self.propbox_drag:
+            scene_pos = event.scenePos()
+            event_pos = self.view.mapFromScene(scene_pos)
+            self.propbox_drag.handle_mouse_move(event_pos)
+        else:
+            cursor_pos = event.scenePos()
+            closest_prop = None
+            min_distance = float("inf")
+
+            for prop in self.props:
+                prop_center = prop.sceneBoundingRect().center()
+                distance = (
+                    cursor_pos - prop_center
+                ).manhattanLength()  # Manhattan distance for simplicity
+
+                if distance < min_distance:
+                    closest_prop = prop
+                    min_distance = distance
+
+            for prop in self.props:
+                if prop != closest_prop:
+                    prop.is_dim(True)  # Highlight all props except the closest one
+                else:
+                    prop.is_dim(False)  # Do not highlight the closest one

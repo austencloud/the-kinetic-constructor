@@ -37,7 +37,7 @@ from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
     Color,
     MotionType,
-    Quadrant,
+    Location,
     RotationDirection,
     Location,
     Turns,
@@ -90,7 +90,7 @@ class ArrowBoxDrag(QWidget):
     def set_attributes(self, target_arrow: "Arrow") -> None:
         self.color: Color = target_arrow.color
         self.motion_type: MotionType = target_arrow.motion_type
-        self.quadrant: Quadrant = target_arrow.quadrant
+        self.quadrant: Location = target_arrow.quadrant
         self.rotation_direction: RotationDirection = target_arrow.rotation_direction
         self.start_location: Location = target_arrow.start_location
         self.end_location: Location = target_arrow.end_location
@@ -195,6 +195,25 @@ class ArrowBoxDrag(QWidget):
         self.ghost_arrow.staff = None
         self.reset_drag_state()
 
+    def handle_enter_pictograph(self, event_pos: QPoint) -> None:
+        if not self.has_entered_pictograph_once:
+            self.just_entered_pictograph = True
+            self.has_entered_pictograph_once = True
+            self.remove_same_color_arrow()
+
+        if self.has_entered_pictograph_once:
+            self.just_entered_pictograph = False
+
+        pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
+        view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
+        scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
+        new_quadrant = self.pictograph.get_quadrant(scene_pos.x(), scene_pos.y())
+
+        if self.previous_quadrant != new_quadrant and new_quadrant:
+            self.previous_quadrant = new_quadrant
+            self.update_preview_for_new_quadrant(new_quadrant)
+            self.ghost_arrow.update_ghost_arrow(self.attributes)
+
     ### FLAGS ###
 
     def is_over_pictograph(self, event_pos: QPoint) -> bool:
@@ -278,7 +297,7 @@ class ArrowBoxDrag(QWidget):
 
         rotation_angle_map: Dict[
             Tuple[MotionType, Color],
-            Dict[RotationDirection, Dict[Quadrant, RotationAngle]],
+            Dict[RotationDirection, Dict[Location, RotationAngle]],
         ] = {
             (PRO, RED): {
                 CLOCKWISE: {
@@ -339,35 +358,16 @@ class ArrowBoxDrag(QWidget):
         }
 
         direction_map: Dict[
-            RotationDirection, Dict[Quadrant, RotationAngle]
+            RotationDirection, Dict[Location, RotationAngle]
         ] = rotation_angle_map.get((motion_type, color), {})
-        quadrant_map: Dict[Quadrant, RotationAngle] = direction_map.get(
+        quadrant_map: Dict[Location, RotationAngle] = direction_map.get(
             rotation_direction, {}
         )
         rotation_angle: RotationAngle = quadrant_map.get(quadrant, 0)
 
         return rotation_angle
 
-    def handle_enter_pictograph(self, event_pos: QPoint) -> None:
-        if not self.has_entered_pictograph_once:
-            self.just_entered_pictograph = True
-            self.has_entered_pictograph_once = True
-            self.remove_same_color_arrow()
-
-        if self.has_entered_pictograph_once:
-            self.just_entered_pictograph = False
-
-        pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
-        view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
-        scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
-        new_quadrant = self.pictograph.get_quadrant(scene_pos.x(), scene_pos.y())
-
-        if self.previous_quadrant != new_quadrant and new_quadrant:
-            self.previous_quadrant = new_quadrant
-            self.update_preview_for_new_quadrant(new_quadrant)
-            self.ghost_arrow.update_ghost_arrow(self.attributes)
-
-    def update_preview_for_new_quadrant(self, new_quadrant: Quadrant) -> None:
+    def update_preview_for_new_quadrant(self, new_quadrant: Location) -> None:
         self.quadrant = new_quadrant
         (
             self.start_location,
