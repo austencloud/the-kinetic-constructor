@@ -131,16 +131,16 @@ class ArrowPositioner:
 
     def set_arrow_to_default_loc(self, arrow: "Arrow") -> None:
         arrow.set_arrow_transform_origin_to_center()
-        layer2_point = self.pictograph.grid.layer2_points.get(arrow.location)
+        layer2_point = self.pictograph.grid.layer2_points.get(arrow.arrow_location)
         adjustment = QPointF(0, 0)
 
-        if arrow.location == NORTHEAST:
+        if arrow.arrow_location == NORTHEAST:
             adjustment = QPointF(DISTANCE, -DISTANCE)
-        elif arrow.location == SOUTHEAST:
+        elif arrow.arrow_location == SOUTHEAST:
             adjustment = QPointF(DISTANCE, DISTANCE)
-        elif arrow.location == SOUTHWEST:
+        elif arrow.arrow_location == SOUTHWEST:
             adjustment = QPointF(-DISTANCE, DISTANCE)
-        elif arrow.location == NORTHWEST:
+        elif arrow.arrow_location == NORTHWEST:
             adjustment = QPointF(-DISTANCE, -DISTANCE)
 
         new_pos = QPointF(

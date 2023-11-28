@@ -90,7 +90,7 @@ class ArrowBoxDrag(QWidget):
     def set_attributes(self, target_arrow: "Arrow") -> None:
         self.color: Color = target_arrow.color
         self.motion_type: MotionType = target_arrow.motion_type
-        self.location: Location = target_arrow.location
+        self.arrow_location: Location = target_arrow.arrow_location
         self.rotation_direction: RotationDirection = target_arrow.rotation_direction
         self.start_location: Location = target_arrow.start_location
         self.end_location: Location = target_arrow.end_location
@@ -122,13 +122,13 @@ class ArrowBoxDrag(QWidget):
             start_location,
             end_location,
         ) = self.target_arrow.get_start_end_locations(
-            self.motion_type, self.rotation_direction, self.location
+            self.motion_type, self.rotation_direction, self.arrow_location
         )
 
         return {
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,
-            ARROW_LOCATION: self.location,
+            ARROW_LOCATION: self.arrow_location,
             ROTATION_DIRECTION: self.rotation_direction,
             START_LOCATION: start_location,
             END_LOCATION: end_location,
@@ -284,7 +284,7 @@ class ArrowBoxDrag(QWidget):
         ) = self.target_arrow.get_start_end_locations(
             self.motion_type,
             self.rotation_direction,
-            self.location,
+            self.arrow_location,
         )
 
     def get_rotation_angle(self, arrow: "Arrow") -> RotationAngle:
@@ -292,7 +292,7 @@ class ArrowBoxDrag(QWidget):
             arrow.motion_type,
             arrow.rotation_direction,
             arrow.color,
-            arrow.location,
+            arrow.arrow_location,
         )
 
         rotation_angle_map: Dict[
@@ -368,16 +368,16 @@ class ArrowBoxDrag(QWidget):
         return rotation_angle
 
     def update_preview_for_new_location(self, new_location: Location) -> None:
-        self.location = new_location
+        self.arrow_location = new_location
         (
             self.start_location,
             self.end_location,
         ) = self.target_arrow.get_start_end_locations(
-            self.motion_type, self.rotation_direction, self.location
+            self.motion_type, self.rotation_direction, self.arrow_location
         )
 
         self.ghost_arrow.color = self.color
-        self.ghost_arrow.location = new_location
+        self.ghost_arrow.arrow_location = new_location
         self.ghost_arrow.motion_type = self.motion_type
         self.ghost_arrow.rotation_direction = self.rotation_direction
         self.ghost_arrow.start_location = self.start_location

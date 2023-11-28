@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt, QPoint, QPointF
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from objects.props import Prop
-from objects.arrow import StaticArrow
+from objects.arrow import Arrow, StaticArrow
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
 from settings.string_constants import *
@@ -175,27 +175,26 @@ class PropBoxDrag(QWidget):
             self.pictograph.addItem(self.ghost_prop)
         self.pictograph.update_pictograph()
 
-    def update_prop_during_drag(self) -> None:
-        for prop in self.pictograph.prop_set.values():
-            if prop.color == self.color:
-                if prop not in self.pictograph.props:
-                    self.pictograph.props.append(prop)
+    def update_static_arrow_during_drag(self) -> None:
+        static_arrow_dict = {
+                COLOR: self.color,
+                MOTION_TYPE: STATIC,
+                ROTATION_DIRECTION: "None",
+                ARROW_LOCATION: self.prop_location,
+                START_LOCATION: self.prop_location,
+                END_LOCATION: self.prop_location,
+                TURNS: 0,
+            }
+    
+        static_arrow = Arrow(self, static_arrow_dict)
+        self.pictograph.addItem(static_arrow)
+        self.pictograph.arrows.append(static_arrow)
+        static_arrow.prop = self.ghost_prop
+        static_arrow.prop.arrow = static_arrow
 
-                prop.set_attributes_from_dict(
-                    {
-                        COLOR: self.color,
-                        LOCATION: self.end_location,
-                        LAYER: 1,
-                    }
-                )
-                prop.arrow = self.ghost_arrow
-                self.ghost_arrow.prop = prop
-
-                if prop not in self.pictograph.items():
-                    self.pictograph.addItem(prop)
-                prop.show()
-                prop.update_appearance()
-                self.pictograph.update_pictograph()
+        if static_arrow not in self.pictograph.items():
+            self.pictograph.addItem(static_arrow)
+        self.pictograph.update_pictograph()
 
     def update_rotation(self) -> None:
         renderer = QSvgRenderer(self.target_prop.svg_file)
@@ -216,12 +215,3 @@ class PropBoxDrag(QWidget):
 
         self.current_rotation_angle = angle
         self.preview.setPixmap(rotated_pixmap)
-
-    def _create_static_arrow_at_location(self, location: QPointF) -> None:
-        static_arrow_attributes: PropAttributesDicts = {
-            "color": RED,  # Example attribute, adjust as needed
-        }
-
-        static_arrow = StaticArrow(self.pictograph, static_arrow_attributes)
-        static_arrow.setPos(location)
-        self.pictograph.addItem(static_arrow)

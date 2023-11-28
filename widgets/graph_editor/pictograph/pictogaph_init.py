@@ -10,6 +10,7 @@ from objects.grid import Grid
 from objects.letter_item import LetterItem
 from objects.props import Staff, Club, Fan, Hoop, Buugeng, Triad
 from settings.string_constants import (
+    ARROW_LOCATION,
     BLUE,
     CLOCKWISE,
     COLOR,
@@ -97,7 +98,7 @@ class PictographInit:
             COLOR: RED,
             MOTION_TYPE: PRO,
             ROTATION_DIRECTION: CLOCKWISE,
-            LOCATION: NORTHEAST,
+            ARROW_LOCATION: NORTHEAST,
             START_LOCATION: NORTH,
             END_LOCATION: EAST,
             TURNS: 0,
@@ -107,7 +108,7 @@ class PictographInit:
             COLOR: BLUE,
             MOTION_TYPE: PRO,
             ROTATION_DIRECTION: CLOCKWISE,
-            LOCATION: SOUTHWEST,
+            ARROW_LOCATION: SOUTHWEST,
             START_LOCATION: SOUTH,
             END_LOCATION: WEST,
             TURNS: 0,

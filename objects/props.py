@@ -169,7 +169,7 @@ class Prop(GraphicalObject):
             (SOUTHEAST, COUNTER_CLOCKWISE, ANTI): {EAST: NORTHEAST, WEST: SOUTHWEST},
         }
 
-        current_location = self.arrow.location
+        current_location = self.arrow.arrow_location
         rotation_direction = self.arrow.rotation_direction
         motion_type = self.arrow.motion_type
         new_location = location_mapping.get(
@@ -177,7 +177,7 @@ class Prop(GraphicalObject):
         ).get(new_location)
 
         if new_location:
-            self.arrow.location = new_location
+            self.arrow.arrow_location = new_location
             start_location, end_location = self.arrow.get_start_end_locations(
                 motion_type, rotation_direction, new_location
             )
@@ -241,7 +241,9 @@ class Prop(GraphicalObject):
         }
 
         key = (self.layer, self.orientation)
-        return angle_map.get(key, {}).get(self.prop_location, 0)  # Default to 0 if not found
+        return angle_map.get(key, {}).get(
+            self.prop_location, 0
+        )  # Default to 0 if not found
 
     def update_rotation(self) -> None:
         rotation_angle = self.get_rotation_angle()
@@ -321,7 +323,7 @@ class Prop(GraphicalObject):
         self.create_static_arrow()
 
     def create_static_arrow(self) -> None:
-        static_attributes_dict = {
+        static_arrow_dict = {
             COLOR: self.color,
             MOTION_TYPE: STATIC,
             ROTATION_DIRECTION: "None",
@@ -330,7 +332,7 @@ class Prop(GraphicalObject):
             END_LOCATION: self.prop_location,
             TURNS: 0,
         }
-        static_arrow = Arrow(self, static_attributes_dict)
+        static_arrow = Arrow(self, static_arrow_dict)
         self.pictograph.addItem(static_arrow)
         self.pictograph.arrows.append(static_arrow)
         static_arrow.prop = self.ghost_prop

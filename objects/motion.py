@@ -164,7 +164,7 @@ class Motion:
         self.motion_type = self.arrow.motion_type
         self.turns = self.arrow.turns
         self.rotation_direction = self.arrow.rotation_direction
-        self.arrow_location = self.arrow.location
+        self.arrow_location = self.arrow.arrow_location
         self.start_location = self.arrow.start_location
         self.end_location = self.arrow.end_location
 
