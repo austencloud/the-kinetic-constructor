@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.propbox.propbox import PropBox
+    from widgets.graph_editor.object_panel.propbox.propbox import PropBox
 
 
 class PropBoxView(QGraphicsView):

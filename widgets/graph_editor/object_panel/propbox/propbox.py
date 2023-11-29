@@ -1,5 +1,4 @@
 from PyQt6.QtWidgets import (
-    QGraphicsSceneMouseEvent,
     QVBoxLayout,
     QGraphicsScene,
 )
@@ -7,8 +6,8 @@ from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.props import Prop, Staff, Club, Buugeng, Fan, Triad, Hoop
 
-from widgets.graph_editor.propbox.propbox_drag import PropBoxDrag
-from widgets.graph_editor.propbox.propbox_view import PropBoxView
+from widgets.graph_editor.object_panel.propbox.propbox_drag import PropBoxDrag
+from widgets.graph_editor.object_panel.propbox.propbox_view import PropBoxView
 from settings.string_constants import (
     IN,
     NORTH,

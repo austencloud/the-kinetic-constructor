@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, List
 
-from PyQt6.QtCore import QPointF, Qt
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QGraphicsItem, QGraphicsScene, QGridLayout
 
 from objects.arrow import Arrow
@@ -17,7 +17,6 @@ from settings.string_constants import (
     NORTH,
     NORTHEAST,
     PRO,
-    LOCATION,
     RED,
     ROTATION_DIRECTION,
     START_LOCATION,
@@ -28,8 +27,8 @@ from settings.string_constants import (
     NORTHWEST,
     WEST,
 )
-from widgets.graph_editor.arrowbox.arrowbox_drag import ArrowBoxDrag
-from widgets.graph_editor.arrowbox.arrowbox_view import ArrowBoxView
+from widgets.graph_editor.object_panel.arrowbox.arrowbox_drag import ArrowBoxDrag
+from widgets.graph_editor.object_panel.arrowbox.arrowbox_view import ArrowBoxView
 from objects.grid import Grid
 
 if TYPE_CHECKING:
