@@ -1,5 +1,6 @@
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+from PyQt6.QtCore import QPointF, Qt
 from settings.string_constants import COLOR_MAP
 import re
 from typing import TYPE_CHECKING, Union
@@ -17,6 +18,8 @@ from utilities.TypeChecking.TypeChecking import (
 
 
 class GraphicalObject(QGraphicsSvgItem):
+    self: Union["Prop", "Arrow"]    
+
     def __init__(self, svg_file: str, pictograph: "Pictograph") -> None:
         super().__init__()
         self.svg_file = svg_file
@@ -85,8 +88,26 @@ class GraphicalObject(QGraphicsSvgItem):
         for attribute_name, attribute_value in attributes.items():
             setattr(self, attribute_name, attribute_value)
 
-    def is_dim(self, on: bool):
+    def is_dim(self, on: bool) -> None:
         if on:
             self.setOpacity(0.25)  # Change opacity or use another effect to highlight
         else:
             self.setOpacity(1.0)  # Reset to normal when not highlighted
+    
+
+        
+    def get_object_center(self) -> QPointF:
+        if self.rotation() in [90, 270]:
+            return QPointF(
+                (self.boundingRect().height() / 2), (self.boundingRect().width() / 2)
+            )
+        elif self.rotation() in [0, 180]:
+            return QPointF(
+                (self.boundingRect().width() / 2), (self.boundingRect().height() / 2)
+            )
+
+    def mouseMoveEvent(self: Union["Prop", "Arrow"], event) -> None:
+        if event.buttons() == Qt.MouseButton.LeftButton:
+            new_pos = event.scenePos() - self.get_object_center()
+            self.set_drag_pos(new_pos)
+            self.update_location(event.scenePos())

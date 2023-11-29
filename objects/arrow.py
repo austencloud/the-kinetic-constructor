@@ -30,6 +30,12 @@ from settings.string_constants import (
     LAYER,
     RED,
     BLUE,
+    IN,
+    OUT,
+    NORTH,
+    SOUTH,
+    WEST,
+    EAST,
 )
 from data.start_end_location_mapping import start_end_location_mapping
 from objects.graphical_object import GraphicalObject
@@ -47,6 +53,7 @@ from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
     Optional,
     Dict,
+    Tuple,
 )
 
 if TYPE_CHECKING:
@@ -136,39 +143,9 @@ class Arrow(GraphicalObject):
         self.ghost_arrow.prop = self.prop
         self.scene.arrows.append(self.ghost_arrow)
 
-    def mouseMoveEvent(self, event) -> None:
-        if event.buttons() == Qt.MouseButton.LeftButton:
-            new_pos = event.scenePos() - self.center
-            self.setPos(new_pos)
+    def update_location(self, new_pos: QPointF) -> None:
+        new_location = self.scene.get_closest_box_point(new_pos)
 
-            scene_pos = new_pos + self.center
-            new_location = self.scene.get_nearest_layer2_point(
-                QPointF(scene_pos.x(), scene_pos.y())
-            )
-
-            if self.arrow_location != new_location:
-                if new_location:
-                    self.update_for_new_location(new_location)
-
-    def mouseReleaseEvent(self, event) -> None:
-        self.scene.removeItem(self.ghost_arrow)
-        self.scene.arrows.remove(self.ghost_arrow)
-        self.ghost_arrow.prop = None
-        self.scene.update_pictograph()
-
-    ### UPDATERS ###
-
-    def update_mirror(self) -> None:
-        if self.is_svg_mirrored:
-            self.mirror()
-        else:
-            self.unmirror()
-
-    def update_rotation(self) -> None:
-        angle = self.get_arrow_rotation_angle()
-        self.setRotation(angle)
-
-    def update_for_new_location(self, new_location: Location) -> None:
         self.arrow_location = new_location
         self.motion.arrow_location = new_location
 
@@ -189,6 +166,28 @@ class Arrow(GraphicalObject):
                 self.prop = prop
         self.scene.update_pictograph()
         self.scene.arrows.append(self)
+
+
+    def set_drag_pos(self, new_pos: QPointF) -> None:
+        self.setPos(new_pos)
+
+    def mouseReleaseEvent(self, event) -> None:
+        self.scene.removeItem(self.ghost_arrow)
+        self.scene.arrows.remove(self.ghost_arrow)
+        self.ghost_arrow.prop = None
+        self.scene.update_pictograph()
+
+    ### UPDATERS ###
+
+    def update_mirror(self) -> None:
+        if self.is_svg_mirrored:
+            self.mirror()
+        else:
+            self.unmirror()
+
+    def update_rotation(self) -> None:
+        angle = self.get_arrow_rotation_angle()
+        self.setRotation(angle)
 
     def set_start_end_locations(self) -> None:
         self.start_location, self.end_location = self.get_start_end_locations(
@@ -355,7 +354,7 @@ class Arrow(GraphicalObject):
         self.scene.update_pictograph()
 
     def rotate(self, rotation_direction: RotationDirection) -> None:
-        locations = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
+        locations = [NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST]
         current_location_index = locations.index(self.arrow_location)
         new_location_index = (
             (current_location_index + 1) % 4

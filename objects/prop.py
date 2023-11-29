@@ -83,15 +83,10 @@ class Prop(GraphicalObject):
                     item.setSelected(False)
             self.previous_location = self.prop_location
 
-    def mouseMoveEvent(self, event) -> None:
-        if isinstance(self.scene, self.scene.__class__):
-            if event.buttons() == Qt.MouseButton.LeftButton:
-                new_pos = event.scenePos() - self.get_prop_center()
-                self.set_drag_pos(new_pos)
-                self.update_location(event.scenePos())
+
 
     def update_location(self, new_pos: QPointF) -> None:
-        new_location = self.get_closest_location(new_pos)
+        new_location = self.get_closest_diamond_point(new_pos)
 
         if new_location != self.previous_location:
             self.prop_location = new_location
@@ -123,32 +118,34 @@ class Prop(GraphicalObject):
 
             self.scene.update_pictograph()
             self.scene.props.append(self)
-            new_pos = new_pos - self.get_prop_center()
+            new_pos = new_pos - self.get_object_center()
             self.set_drag_pos(new_pos)
             self.previous_location = new_location
 
     def set_drag_pos(self, new_pos: QPointF) -> None:
-        staff_length = self.boundingRect().width()
-        staff_width = self.boundingRect().height()
+        object_length = self.boundingRect().width()
+        object_width = self.boundingRect().height()
 
-        offset = self.get_offset(staff_length, staff_width)
+        
+        offset = self.get_offset(object_length, object_width)
+        
         self.setPos(new_pos + offset)
 
-    def get_offset(self, staff_length, staff_width) -> Tuple[int, int]:
+    def get_offset(self, prop_length, prop_width) -> Tuple[int, int]:
         # Layer 1 logic
         if self.layer == 1:
             if self.orientation == IN:
                 offset_map = {
-                    NORTH: (staff_width, 0),
-                    SOUTH: (0, staff_length),
+                    NORTH: (prop_width, 0),
+                    SOUTH: (0, prop_length),
                     WEST: (0, 0),
-                    EAST: (staff_length, staff_width),
+                    EAST: (prop_length, prop_width),
                 }
             else:  # OUT
                 offset_map = {
-                    NORTH: (0, staff_length),
-                    SOUTH: (staff_width, 0),
-                    WEST: (staff_length, staff_width),
+                    NORTH: (0, prop_length),
+                    SOUTH: (prop_width, 0),
+                    WEST: (prop_length, prop_width),
                     EAST: (0, 0),
                 }
 
@@ -157,22 +154,20 @@ class Prop(GraphicalObject):
             if self.orientation == CLOCKWISE:
                 offset_map = {
                     NORTH: (0, 0),
-                    SOUTH: (staff_length, staff_width),
-                    WEST: (0, staff_length),
-                    EAST: (staff_width, 0),
+                    SOUTH: (prop_length, prop_width),
+                    WEST: (0, prop_length),
+                    EAST: (prop_width, 0),
                 }
             else:  # COUNTER_CLOCKWISE
                 offset_map = {
-                    NORTH: (staff_length, staff_width),
+                    NORTH: (prop_length, prop_width),
                     SOUTH: (0, 0),
-                    WEST: (staff_width, 0),
-                    EAST: (0, staff_length),
+                    WEST: (prop_width, 0),
+                    EAST: (0, prop_length),
                 }
 
         offset_tuple = offset_map.get(self.prop_location, (0, 0))
         return QPointF(offset_tuple[0], offset_tuple[1])
-
-
 
     def update_arrow_location(self, new_location: Location) -> None:
         location_mapping: Dict[
@@ -224,7 +219,7 @@ class Prop(GraphicalObject):
 
     def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
         closest_handpoint = self.get_closest_handpoint(event.scenePos())
-        new_location = self.get_closest_location(event.scenePos())
+        new_location = self.get_closest_diamond_point(event.scenePos())
 
         self.prop_location = new_location
         self.axis = self.update_axis(self.prop_location)
@@ -243,7 +238,7 @@ class Prop(GraphicalObject):
         super().update_appearance()
 
     def set_prop_transform_origin_to_center(self: "Prop") -> None:
-        self.center = self.get_prop_center()
+        self.center = self.get_object_center()
         self.setTransformOriginPoint(self.center)
 
     def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
@@ -284,16 +279,6 @@ class Prop(GraphicalObject):
             self.ghost_prop.setRotation(rotation_angle)
         self.setRotation(rotation_angle)
 
-    def get_prop_center(self) -> QPointF:
-        if self.axis == VERTICAL:
-            return QPointF(
-                (self.boundingRect().height() / 2), (self.boundingRect().width() / 2)
-            )
-        elif self.axis == HORIZONTAL:
-            return QPointF(
-                (self.boundingRect().width() / 2), (self.boundingRect().height() / 2)
-            )
-
     def get_closest_handpoint(self, mouse_pos: QPointF) -> QPointF:
         closest_distance = float("inf")
         closest_handpoint = None
@@ -304,7 +289,7 @@ class Prop(GraphicalObject):
                 closest_handpoint = point
         return closest_handpoint
 
-    def get_closest_location(self, mouse_pos: QPointF) -> Location:
+    def get_closest_diamond_point(self, mouse_pos: QPointF) -> Location:
         closest_distance = float("inf")
         closest_location = None
         for location, point in self.scene.grid.handpoints.items():

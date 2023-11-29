@@ -91,7 +91,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         self.placed_arrow.setSelected(True)
 
-    ### UPDATERS ### 
+    ### UPDATERS ###
 
     def _update_arrow_preview_for_new_location(self, new_location: Location) -> None:
         self.arrow_location = new_location
@@ -123,7 +123,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.ghost_arrow.end_location = self.end_location
         self.ghost_arrow.turns = self.turns
         self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
-    
+
         ghost_svg = self.ghost_arrow.get_svg_file(self.motion_type, self.turns)
         self.ghost_arrow.update_mirror()
         self.ghost_arrow.update_svg(ghost_svg)
@@ -146,7 +146,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
                     pos_in_main_window
                 )
                 scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
-                new_location = self.pictograph.get_nearest_layer2_point(scene_pos)
+                new_location = self.pictograph.get_closest_box_point(scene_pos)
 
                 if self.previous_location != new_location:
                     self.previous_location = new_location
