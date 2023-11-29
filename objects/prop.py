@@ -278,6 +278,19 @@ class Prop(GraphicalObject):
             self.axis: Axes = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
         return self.axis
 
+    def swap_orientation(self, orientation) -> None:
+        if orientation == IN:
+            orientation = OUT
+        elif orientation == OUT:
+            orientation = IN
+        elif orientation == CLOCKWISE:
+            orientation = COUNTER_CLOCKWISE
+        elif orientation == COUNTER_CLOCKWISE:
+            orientation = CLOCKWISE
+
+        self.update_rotation()
+        return orientation
+
     def get_rotation_angle(self) -> RotationAngles:
         angle_map: Dict[
             Tuple[Layers, Orientations], Dict[Locations, RotationAngles]
@@ -387,6 +400,7 @@ class Prop(GraphicalObject):
 
         if self.static_arrow not in self.pictograph.items():
             self.pictograph.addItem(self.static_arrow)
+
 
 class Staff(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:

@@ -468,7 +468,7 @@ class Arrow(GraphicalObject):
         self.rotation_direction = new_rotation_direction
         self.start_location = new_start_location
         self.end_location = new_end_location
-        
+
         self.motion.rotation_direction = new_rotation_direction
         self.motion.start_location = new_start_location
         self.motion.end_location = new_end_location
@@ -532,17 +532,27 @@ class Arrow(GraphicalObject):
             TURNS: self.turns,
         }
 
-        new_prop_dict = {
-            COLOR: self.color,
-            PROP_LOCATION: self.end_location,
-            LAYER: 1,
-        }
-
         self.motion_type = new_motion_type
+        self.motion.motion_type = new_motion_type
+        self.rotation_direction = new_rotation_direction
+        self.motion.rotation_direction = new_rotation_direction
+
+        self.prop.orientation = self.prop.swap_orientation(self.prop.orientation)
+        self.motion.start_orientation = self.prop.swap_orientation(
+            self.prop.orientation
+        )
+        self.motion.end_orientation = self.prop.orientation
+
+
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
         self.update_attributes(new_arrow_dict)
-        self.prop.update(new_prop_dict)
+        if hasattr(self, "ghost_arrow"):
+            self.ghost_arrow.update_svg(svg_file)
+            self.ghost_arrow.update_attributes(new_arrow_dict)
+            
+        self.prop.update_appearance()
+        
         self.scene.update_pictograph()
 
     def delete(self, keep_prop: bool = False) -> None:
@@ -550,7 +560,7 @@ class Arrow(GraphicalObject):
         if self in self.scene.arrows:
             self.scene.arrows.remove(self)
         if keep_prop:
-            self.prop.create_static_arrow()
+            self.prop._create_static_arrow()
         else:
             self.prop.delete()
 
