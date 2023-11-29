@@ -144,7 +144,7 @@ class Arrow(GraphicalObject):
             scene_pos = new_pos + self.center
             new_location = self.pictograph.get_nearest_layer2_point(
                 QPointF(scene_pos.x(), scene_pos.y())
-            )
+            )[0]
 
             if self.arrow_location != new_location:
                 if new_location:
