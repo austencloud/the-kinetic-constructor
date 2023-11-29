@@ -138,6 +138,9 @@ class PropBoxDrag(QWidget):
         self.ghost_prop.arrow.arrow_location = self.prop_location
         self.ghost_prop.arrow.start_location = self.prop_location
         self.ghost_prop.arrow.end_location = self.prop_location
+        self.ghost_prop.motion.arrow_location = self.prop_location
+        self.ghost_prop.motion.start_location = self.prop_location
+        self.ghost_prop.motion.end_location = self.prop_location
 
         self.current_rotation_angle = self.get_rotation_angle()
         rotated_pixmap = self.create_pixmap_with_rotation(self.current_rotation_angle)
@@ -194,7 +197,9 @@ class PropBoxDrag(QWidget):
         self.pictograph.update_pictograph()
         
     ### EVENT HANDLERS ###
-
+    def handle_mouse_press(self, event_pos: QPoint) -> None:
+        self.create_static_arrow()
+        
     def handle_mouse_move(self, event_pos: QPoint) -> None:
         if self.preview:
             self.move_to_cursor(event_pos)
@@ -202,6 +207,7 @@ class PropBoxDrag(QWidget):
                 if not self.has_entered_pictograph_once:
                     self.has_entered_pictograph_once = True
                     self.remove_same_color_objects()
+                    self.pictograph.add_motion(self.ghost_prop.arrow, self.ghost_prop, IN, 1)
 
                 pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
@@ -215,7 +221,6 @@ class PropBoxDrag(QWidget):
                     self.update_preview_for_new_location(new_location)
                     self.ghost_prop.update_attributes(self.attributes)
                     self.pictograph.update_pictograph()
-
 
     def handle_mouse_release(self) -> None:
         if self.has_entered_pictograph_once:
@@ -242,6 +247,10 @@ class PropBoxDrag(QWidget):
         self.placed_prop.arrow.arrow_location = self.prop_location
         self.placed_prop.arrow.start_location = self.prop_location
         self.placed_prop.arrow.end_location = self.prop_location
+        self.placed_prop.motion.arrow_location = self.prop_location
+        self.placed_prop.motion.start_location = self.prop_location
+        self.placed_prop.motion.end_location = self.prop_location
+        
         self.ghost_prop.arrow.prop = self.placed_prop
         self.pictograph.add_motion(self.placed_prop.arrow, self.ghost_prop, IN, 1)
         self.pictograph.addItem(self.placed_prop)
@@ -267,10 +276,9 @@ class PropBoxDrag(QWidget):
                 self.pictograph.props.remove(prop)
         for arrow in self.pictograph.arrows[:]:
             if arrow.isVisible() and arrow.color == self.color:
-                self.pictograph.removeItem(arrow)
-                self.pictograph.arrows.remove(arrow)
                 if isinstance(arrow, StaticArrow):
                     self.ghost_prop.arrow = arrow
+
 
 
 

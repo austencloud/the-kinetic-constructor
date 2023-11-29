@@ -106,11 +106,11 @@ class PropPositioner:
                 motion
             )
 
-        pro_or_anti_arrows = [
-            arrow for arrow in board_state if arrow[MOTION_TYPE] in [PRO, ANTI]
+        pro_or_anti_motions = [
+            motion for motion in board_state if motion[MOTION_TYPE] in [PRO, ANTI]
         ]
         static_motions = [
-            arrow for arrow in board_state if arrow[MOTION_TYPE] == STATIC
+            motion for motion in board_state if motion[MOTION_TYPE] == STATIC
         ]
 
         # STATIC BETA
@@ -130,9 +130,9 @@ class PropPositioner:
                             self.reposition_beta_to_beta(motions)
 
         # GAMMA → BETA - Y, Z
-        if len(pro_or_anti_arrows) == 1 and len(static_motions) == 1:
+        if len(pro_or_anti_motions) == 1 and len(static_motions) == 1:
             self.reposition_gamma_to_beta(
-                move_prop, pro_or_anti_arrows, static_motions
+                move_prop, pro_or_anti_motions, static_motions
             )
 
         # ALPHA → BETA - D, E, F

@@ -341,6 +341,7 @@ class PropBox(QGraphicsScene):
                 self.propbox_drag = PropBoxDrag(self.main_window, pictograph, self)
             if event.button() == Qt.MouseButton.LeftButton:
                 self.propbox_drag.match_target_prop(self.target_prop)
+                self.propbox_drag.handle_mouse_press(event_pos)
                 self.propbox_drag.start_drag(event_pos)
         else:
             self.target_prop = None

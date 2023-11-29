@@ -139,7 +139,7 @@ class ArrowBoxDrag(QWidget):
         local_pos = self.arrowbox.view.mapTo(self.main_window, event_pos)
         self.move(local_pos - (self.arrow_center).toPoint())
 
-    def remove_same_color_arrow(self) -> None:
+    def remove_same_color_objects(self) -> None:
         for arrow in self.pictograph.arrows[:]:
             if arrow.isVisible() and arrow.color == self.color:
                 self.pictograph.removeItem(arrow)
@@ -179,7 +179,7 @@ class ArrowBoxDrag(QWidget):
             if self.is_over_pictograph(event_pos):
                 if not self.has_entered_pictograph_once:
                     self.has_entered_pictograph_once = True
-                    self.remove_same_color_arrow()
+                    self.remove_same_color_objects()
                 pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
                     pos_in_main_window
