@@ -468,6 +468,10 @@ class Arrow(GraphicalObject):
         self.rotation_direction = new_rotation_direction
         self.start_location = new_start_location
         self.end_location = new_end_location
+        
+        self.motion.rotation_direction = new_rotation_direction
+        self.motion.start_location = new_start_location
+        self.motion.end_location = new_end_location
 
         self.prop.color = self.color
         self.prop.prop_location = new_end_location
