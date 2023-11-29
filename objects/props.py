@@ -52,7 +52,7 @@ class Prop(GraphicalObject):
         self.layer = attributes[LAYER]
         self.orientation = attributes[ORIENTATION]
 
-        self.axis = self.get_axis(self.prop_location)
+        self.axis = self.update_axis(self.prop_location)
         self.center = self.boundingRect().center()
         self.update_rotation()
 
@@ -94,7 +94,7 @@ class Prop(GraphicalObject):
 
         if new_location != self.previous_location:
             self.prop_location = new_location
-            self.axis = self.get_axis(self.prop_location)
+            self.axis = self.update_axis(self.prop_location)
             self.update_appearance()
             self.update_arrow_location(new_location)
 
@@ -198,7 +198,7 @@ class Prop(GraphicalObject):
         new_location = self.get_closest_location(event.scenePos())
 
         self.prop_location = new_location
-        self.axis = self.get_axis(self.prop_location)
+        self.axis = self.update_axis(self.prop_location)
         self.update_appearance()
         self.setPos(closest_handpoint)
 
@@ -210,7 +210,7 @@ class Prop(GraphicalObject):
     ### UPDATERS ###
 
     def update_appearance(self) -> None:
-        self.axis = self.get_axis(self.prop_location)
+        self.axis = self.update_axis(self.prop_location)
         super().update_appearance()
 
     def set_prop_transform_origin_to_center(self: "Prop") -> None:
@@ -220,17 +220,17 @@ class Prop(GraphicalObject):
     def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
         self.prop_location = target_arrow.end_location
-        self.axis = self.get_axis(self.prop_location)
+        self.axis = self.update_axis(self.prop_location)
         self.update_appearance()
 
     ### GETTERS ###
 
-    def get_axis(self, location) -> None:
+    def update_axis(self, location) -> Axis:
         if self.layer == 1:
-            axis: Axis = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
+            self.axis: Axis = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
         elif self.layer == 2:
-            axis: Axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
-        return axis
+            self.axis: Axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
+        return self.axis
 
     def get_rotation_angle(self) -> RotationAngle:
         angle_map: Dict[Tuple[Layer, Orientation], Dict[Location, RotationAngle]] = {
@@ -247,6 +247,9 @@ class Prop(GraphicalObject):
 
     def update_rotation(self) -> None:
         rotation_angle = self.get_rotation_angle()
+
+        if self.ghost_prop:
+            self.ghost_prop.setRotation(rotation_angle)
         self.setRotation(rotation_angle)
 
     def get_prop_center(self) -> QPointF:
@@ -280,7 +283,7 @@ class Prop(GraphicalObject):
         return closest_location
 
     def get_svg_file(self, prop_type: PropType) -> str:
-        svg_file = f"{PROP_DIR}/{prop_type}.svg"
+        svg_file = f"{PROP_DIR}{prop_type}.svg"
         return svg_file
 
     ### HELPERS ###

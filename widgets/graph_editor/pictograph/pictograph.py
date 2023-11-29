@@ -28,7 +28,7 @@ from settings.string_constants import (
     END_ORIENTATION,
     START_LAYER,
     END_LAYER,
-    ARROW_LOCATION
+    ARROW_LOCATION,
 )
 from utilities.letter_engine import LetterEngine
 from utilities.TypeChecking.TypeChecking import (
@@ -189,22 +189,29 @@ class Pictograph(QGraphicsScene):
             if prop.color == color:
                 return prop
 
+    def get_nearest_handpoint(self, pos: QPointF) -> Tuple[str, QPointF]:
+        min_distance = float("inf")
+        nearest_point_name = None
+
+        for name, point in self.grid.handpoints.items():
+            distance = (pos - point).manhattanLength()
+            if distance < min_distance:
+                min_distance = distance
+                nearest_point_name = name
+
+        return nearest_point_name
 
     def get_nearest_layer2_point(self, pos: QPointF) -> Tuple[str, QPointF]:
-        min_distance = float('inf')
+        min_distance = float("inf")
         nearest_point_name = None
-        nearest_point_pos = None
 
         for name, point in self.grid.layer2_points.items():
             distance = (pos - point).manhattanLength()
             if distance < min_distance:
                 min_distance = distance
                 nearest_point_name = name
-                nearest_point_pos = point
 
-        return nearest_point_name, nearest_point_pos
-
-
+        return nearest_point_name
 
     ### HELPERS ###
 
@@ -220,6 +227,8 @@ class Pictograph(QGraphicsScene):
             self.removeItem(arrow)
         for prop in self.props:
             self.removeItem(prop)
+        self.update_letter_item(None)
+        self.motions = []
         self.arrows = []
         self.props = []
         self.update()
@@ -273,10 +282,10 @@ class Pictograph(QGraphicsScene):
         self.graph_editor.attr_panel.update_attr_panel()
 
     def update_arrows(self) -> None:
-        self.arrow_positioner.update()
+        self.arrow_positioner.update_arrow_positions()
 
     def update_props(self) -> None:
-        self.prop_positioner.update()
+        self.prop_positioner.update_prop_positions()
 
     def update_letter(self) -> None:
         if len(self.props) == 2:

@@ -119,7 +119,7 @@ class Arrow(GraphicalObject):
     def update_prop_on_click(self) -> None:
         self.prop.color = self.color
         self.prop.prop_location = self.end_location
-        self.prop.axis = self.prop.get_axis(self.end_location)
+        self.prop.axis = self.prop.update_axis(self.end_location)
 
     def update_ghost_on_click(self) -> None:
         self.ghost_arrow: "GhostArrow" = self.pictograph.ghost_arrows[self.color]
@@ -144,7 +144,7 @@ class Arrow(GraphicalObject):
             scene_pos = new_pos + self.center
             new_location = self.pictograph.get_nearest_layer2_point(
                 QPointF(scene_pos.x(), scene_pos.y())
-            )[0]
+            )
 
             if self.arrow_location != new_location:
                 if new_location:

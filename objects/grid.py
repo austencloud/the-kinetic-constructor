@@ -1,4 +1,3 @@
-
 from typing import List, Dict, Union
 from xml.etree import ElementTree as ET
 from PyQt6.QtCore import QPointF
@@ -62,7 +61,9 @@ class Grid(QGraphicsSvgItem):
         else:
             return None
 
-    def init_points(self, point_names: List[str], constants: List[str]) -> Dict[str, QPointF]:
+    def init_points(
+        self, point_names: List[str], constants: List[str]
+    ) -> Dict[str, QPointF]:
         return {
             constant: self.get_circle_coordinates(point_name)
             for point_name, constant in zip(point_names, constants)
@@ -84,7 +85,9 @@ class Grid(QGraphicsSvgItem):
             "nw_layer2_point",
         ]
         constants = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
-        self.layer2_points: Dict[str, QPointF] = self.init_points(point_names, constants)
+        self.layer2_points: Dict[str, QPointF] = self.init_points(
+            point_names, constants
+        )
 
     def mousePressEvent(self, event) -> None:
         event.ignore()

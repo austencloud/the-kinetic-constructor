@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import (
+    QGraphicsSceneMouseEvent,
     QVBoxLayout,
     QGraphicsScene,
 )
@@ -370,3 +371,12 @@ class PropBox(QGraphicsScene):
                     prop.is_dim(True)  # Highlight all props except the closest one
                 else:
                     prop.is_dim(False)  # Do not highlight the closest one
+
+    def mouseReleaseEvent(self, event) -> None:
+        if self.target_prop and self.propbox_drag:
+            scene_pos = event.scenePos()
+            event_pos = self.view.mapFromScene(scene_pos)
+            self.propbox_drag.handle_mouse_release(event_pos)
+            self.target_prop = None
+        else:
+            event.ignore()

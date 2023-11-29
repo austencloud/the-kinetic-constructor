@@ -1,9 +1,9 @@
 from PyQt6.QtWidgets import QWidget, QLabel
-from PyQt6.QtCore import Qt, QPoint, QPointF
+from PyQt6.QtCore import Qt, QPoint, QPointF, QSize
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from objects.props import Prop
-from objects.arrow import Arrow
+from objects.arrow import Arrow, StaticArrow
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
 from settings.string_constants import (
@@ -111,12 +111,10 @@ class PropBoxDrag(QWidget):
         painter.end()
 
         angle = self.get_rotation_angle()
-
         rotate_transform = QTransform().rotate(angle)
         rotated_pixmap = original_pixmap.transformed(rotate_transform)
         self.setFixedSize(rotated_pixmap.size())
         self.preview.setFixedSize(rotated_pixmap.size())
-
         self.preview.setPixmap(rotated_pixmap)
         self.preview.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -128,7 +126,23 @@ class PropBoxDrag(QWidget):
         if self.preview:
             self.move_to_cursor(event_pos)
             if self.is_over_pictograph(event_pos):
-                self.handle_enter_pictograph(event_pos)
+                if not self.has_entered_pictograph_once:
+                    self.has_entered_pictograph_once = True
+                    self.remove_same_color_prop()
+
+                pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
+                view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
+                    pos_in_main_window
+                )
+                scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
+                new_location = self.pictograph.get_nearest_handpoint(scene_pos)
+
+                if self.previous_location != new_location and new_location:
+                    self.previous_location = new_location
+                    self.update_preview_for_new_location(new_location)
+
+    def handle_mouse_release(self, event_pos: QPoint) -> None:
+        self.previous_location = None
 
     def is_over_pictograph(self, event_pos: QPoint) -> bool:
         pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
@@ -147,7 +161,9 @@ class PropBoxDrag(QWidget):
         pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
         view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
         scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
-        new_location = self.pictograph.get_location(scene_pos.x(), scene_pos.y())
+        new_location = self.pictograph.get_nearest_handpoint(
+            QPointF(scene_pos.x(), scene_pos.y())
+        )
 
         if self.previous_location != new_location and new_location:
             self.previous_location = new_location
@@ -165,32 +181,44 @@ class PropBoxDrag(QWidget):
                 self.pictograph.props.remove(prop)
 
     def update_preview_for_new_location(self, new_location: Location) -> None:
-
         self.ghost_prop.prop_type = self.prop_type
         self.ghost_prop.color = self.color
         self.ghost_prop.prop_location = new_location
         self.ghost_prop.orientation = self.orientation
         self.ghost_prop.layer = self.layer
 
+        self.prop_location = new_location
+        self.ghost_prop.prop_location = new_location
+
         ghost_svg = self.ghost_prop.get_svg_file(self.prop_type)
-
         self.ghost_prop.update_svg(ghost_svg)
+        self.ghost_prop.update_color()
+        self.ghost_prop.update_axis(new_location)
+        self.ghost_prop.update_rotation()
 
-        self.update_rotation()
         self.update_static_arrow_during_drag()
 
-        self.pictograph.add_motion(
-            self.ghost_prop.arrow,
-            self.ghost_prop,
-            IN,
-            1,
-        )
+        self.current_rotation_angle = self.get_rotation_angle()
+        rotated_pixmap = self.create_pixmap_with_rotation(self.current_rotation_angle)
+
+        if self.current_rotation_angle in [90, 270]:
+            new_size = QSize(rotated_pixmap.width(), rotated_pixmap.height())
+        else:
+            new_size = rotated_pixmap.size()
+
+        self.setFixedSize(new_size)
+        self.preview.setFixedSize(new_size)
+        self.preview.setPixmap(rotated_pixmap)
+        self.preview.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
 
         if self.ghost_prop not in self.pictograph.props:
             self.pictograph.props.append(self.ghost_prop)
         if self.ghost_prop not in self.pictograph.items():
             self.pictograph.addItem(self.ghost_prop)
+
         self.pictograph.update_pictograph()
+        self.move_to_cursor(self.propbox.view.mapFromGlobal(self.pos()))
 
     def update_static_arrow_during_drag(self) -> None:
         static_arrow_dict = {
@@ -203,7 +231,7 @@ class PropBoxDrag(QWidget):
             TURNS: 0,
         }
 
-        static_arrow = Arrow(self, static_arrow_dict)
+        static_arrow = StaticArrow(self, static_arrow_dict)
         self.pictograph.addItem(static_arrow)
         self.pictograph.arrows.append(static_arrow)
         static_arrow.prop = self.ghost_prop
@@ -213,22 +241,20 @@ class PropBoxDrag(QWidget):
             self.pictograph.addItem(static_arrow)
         self.pictograph.update_pictograph()
 
-    def update_rotation(self) -> None:
-        renderer = QSvgRenderer(self.target_prop.svg_file)
+    def create_pixmap_with_rotation(self, angle: RotationAngle) -> QPixmap:
+        # Generate a new pixmap based on target prop and apply the rotation
+        new_svg_data = self.target_prop.set_svg_color(self.color)
+        renderer = QSvgRenderer()
+        renderer.load(new_svg_data)
+
         scaled_size = renderer.defaultSize() * self.pictograph.view.view_scale
         pixmap = QPixmap(scaled_size)
         pixmap.fill(Qt.GlobalColor.transparent)
         painter = QPainter(pixmap)
-        with painter as painter:
-            renderer.render(painter)
 
-        angle = self.get_rotation_angle()
-
-        unrotate_transform = QTransform().rotate(-self.current_rotation_angle)
-        unrotated_pixmap = self.preview.pixmap().transformed(unrotate_transform)
-
+        renderer.render(painter)
+        painter.end()
         rotate_transform = QTransform().rotate(angle)
-        rotated_pixmap = unrotated_pixmap.transformed(rotate_transform)
+        rotated_pixmap = pixmap.transformed(rotate_transform)
 
-        self.current_rotation_angle = angle
-        self.preview.setPixmap(rotated_pixmap)
+        return rotated_pixmap

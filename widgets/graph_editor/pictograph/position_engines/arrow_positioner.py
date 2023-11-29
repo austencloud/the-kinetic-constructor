@@ -29,7 +29,7 @@ class ArrowPositioner:
         self.letters = pictograph.letters
         self.pictograph = pictograph
 
-    def update(self) -> None:
+    def update_arrow_positions(self) -> None:
         for arrow in self.pictograph.arrows:
             arrow.setTransformOriginPoint(0, 0)
         optimal_locations = None
@@ -91,7 +91,15 @@ class ArrowPositioner:
             entry
             for entry in candidate_state
             if set(entry.keys()).issuperset(
-                {COLOR, MOTION_TYPE, ARROW_LOCATION, ROTATION_DIRECTION, START_LOCATION, END_LOCATION, TURNS}
+                {
+                    COLOR,
+                    MOTION_TYPE,
+                    ARROW_LOCATION,
+                    ROTATION_DIRECTION,
+                    START_LOCATION,
+                    END_LOCATION,
+                    TURNS,
+                }
             )
         ]
 
@@ -104,14 +112,21 @@ class ArrowPositioner:
                 for candidate_arrow in filtered_candidate_state
                 if all(
                     arrow.get(key) == candidate_arrow.get(key)
-                    for key in [COLOR, MOTION_TYPE, ARROW_LOCATION, ROTATION_DIRECTION, START_LOCATION, END_LOCATION, TURNS]
+                    for key in [
+                        COLOR,
+                        MOTION_TYPE,
+                        ARROW_LOCATION,
+                        ROTATION_DIRECTION,
+                        START_LOCATION,
+                        END_LOCATION,
+                        TURNS,
+                    ]
                 )
             ]
             if not matching_arrows:
                 return False
 
         return True
-
 
     def set_arrow_to_optimal_loc(
         self, optimal_locations: OptimalLocationsDicts, arrow: "Arrow"

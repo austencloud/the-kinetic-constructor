@@ -54,7 +54,7 @@ class PropPositioner:
         self.view = pictograph.view
         self.letters = pictograph.letters
 
-    def update(self) -> None:
+    def update_prop_positions(self) -> None:
         for staff in self.pictograph.props:
             self.set_default_staff_locations(staff)
         if self.staffs_in_beta():

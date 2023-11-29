@@ -187,9 +187,7 @@ class ArrowBoxDrag(QWidget):
                 scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
 
                 # Get nearest layer 2 point
-                nearest_point_name, _ = self.pictograph.get_nearest_layer2_point(
-                    scene_pos
-                )
+                nearest_point_name = self.pictograph.get_nearest_layer2_point(scene_pos)
                 self.update_preview_for_new_location(nearest_point_name)
                 self.ghost_arrow.update_ghost_arrow(self.attributes)
 
@@ -364,20 +362,7 @@ class ArrowBoxDrag(QWidget):
             self.motion_type, self.rotation_direction, self.arrow_location
         )
 
-        self.ghost_arrow.color = self.color
-        self.ghost_arrow.arrow_location = new_location
-        self.ghost_arrow.motion_type = self.motion_type
-        self.ghost_arrow.rotation_direction = self.rotation_direction
-        self.ghost_arrow.start_location = self.start_location
-        self.ghost_arrow.end_location = self.end_location
-        self.ghost_arrow.turns = self.turns
-        self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
-
-        ghost_svg = self.ghost_arrow.get_svg_file(self.motion_type, self.turns)
-
-        self.ghost_arrow.update_mirror()
-        self.ghost_arrow.update_svg(ghost_svg)
-
+        self.update_ghost_arrow_for_new_location(new_location)
         self.update_rotation()
         self.update_prop_during_drag()
 
@@ -387,9 +372,21 @@ class ArrowBoxDrag(QWidget):
             IN,
             1,
         )
+        self.pictograph.update_pictograph()
 
+    def update_ghost_arrow_for_new_location(self, new_location) -> None:
+        self.ghost_arrow.color = self.color
+        self.ghost_arrow.arrow_location = new_location
+        self.ghost_arrow.motion_type = self.motion_type
+        self.ghost_arrow.rotation_direction = self.rotation_direction
+        self.ghost_arrow.start_location = self.start_location
+        self.ghost_arrow.end_location = self.end_location
+        self.ghost_arrow.turns = self.turns
+        self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
+        ghost_svg = self.ghost_arrow.get_svg_file(self.motion_type, self.turns)
+        self.ghost_arrow.update_mirror()
+        self.ghost_arrow.update_svg(ghost_svg)
         if self.ghost_arrow not in self.pictograph.arrows:
             self.pictograph.arrows.append(self.ghost_arrow)
         if self.ghost_arrow not in self.pictograph.items():
             self.pictograph.addItem(self.ghost_arrow)
-        self.pictograph.update_pictograph()
