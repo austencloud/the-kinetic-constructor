@@ -55,47 +55,50 @@ class PropPositioner:
         self.letters = pictograph.letters
 
     def update_prop_positions(self) -> None:
-        for staff in self.pictograph.props:
-            self.set_default_staff_locations(staff)
-        if self.staffs_in_beta():
-            self.reposition_beta_staffs()
+        for prop in self.pictograph.props:
+            self.set_default_prop_locations(prop)
+        if self.props_in_beta():
+            self.reposition_beta_props()
 
-    def set_default_staff_locations(self, staff: "Prop") -> None:
-        staff.setTransformOriginPoint(0, 0)
-        staff_length = staff.boundingRect().width()
-        staff_width = staff.boundingRect().height()
+    def set_default_prop_locations(self, prop: "Prop") -> None:
+        prop.setTransformOriginPoint(0, 0)
+        prop_length = prop.boundingRect().width()
+        prop_width = prop.boundingRect().height()
 
         # Define a mapping for position offsets based on orientation and location
         position_offsets = {
-            (IN, NORTH): QPointF(staff_width / 2, -staff_length / 2),
-            (IN, SOUTH): QPointF(-staff_width / 2, staff_length / 2),
-            (IN, EAST): QPointF(staff_length / 2, staff_width / 2),
-            (IN, WEST): QPointF(-staff_length / 2, -staff_width / 2),
-            (OUT, NORTH): QPointF(-staff_width / 2, staff_length / 2),
-            (OUT, SOUTH): QPointF(staff_width / 2, -staff_length / 2),
-            (OUT, EAST): QPointF(-staff_length / 2, -staff_width / 2),
-            (OUT, WEST): QPointF(staff_length / 2, staff_width / 2),
-            (CLOCKWISE, NORTH): QPointF(-staff_length / 2, -staff_width / 2),
-            (CLOCKWISE, SOUTH): QPointF(staff_length / 2, staff_width / 2),
-            (CLOCKWISE, EAST): QPointF(staff_width / 2, -staff_length / 2),
-            (CLOCKWISE, WEST): QPointF(-staff_width / 2, staff_length / 2),
-            (COUNTER_CLOCKWISE, NORTH): QPointF(staff_length / 2, staff_width / 2),
-            (COUNTER_CLOCKWISE, SOUTH): QPointF(-staff_length / 2, -staff_width / 2),
-            (COUNTER_CLOCKWISE, EAST): QPointF(-staff_width / 2, staff_length / 2),
-            (COUNTER_CLOCKWISE, WEST): QPointF(staff_width / 2, -staff_length / 2),
+            (IN, NORTH): QPointF(prop_width / 2, -prop_length / 2),
+            (IN, SOUTH): QPointF(-prop_width / 2, prop_length / 2),
+            (IN, EAST): QPointF(prop_length / 2, prop_width / 2),
+            (IN, WEST): QPointF(-prop_length / 2, -prop_width / 2),
+            
+            (OUT, NORTH): QPointF(-prop_width / 2, prop_length / 2),
+            (OUT, SOUTH): QPointF(prop_width / 2, -prop_length / 2),
+            (OUT, EAST): QPointF(-prop_length / 2, -prop_width / 2),
+            (OUT, WEST): QPointF(prop_length / 2, prop_width / 2),
+            
+            (CLOCKWISE, NORTH): QPointF(-prop_length / 2, -prop_width / 2),
+            (CLOCKWISE, SOUTH): QPointF(prop_length / 2, prop_width / 2),
+            (CLOCKWISE, EAST): QPointF(prop_width / 2, -prop_length / 2),
+            (CLOCKWISE, WEST): QPointF(-prop_width / 2, prop_length / 2),
+            
+            (COUNTER_CLOCKWISE, NORTH): QPointF(prop_length / 2, prop_width / 2),
+            (COUNTER_CLOCKWISE, SOUTH): QPointF(-prop_length / 2, -prop_width / 2),
+            (COUNTER_CLOCKWISE, EAST): QPointF(-prop_width / 2, prop_length / 2),
+            (COUNTER_CLOCKWISE, WEST): QPointF(prop_width / 2, -prop_length / 2),
         }
 
-        if staff.prop_location in self.pictograph.grid.handpoints:
-            key = (staff.orientation, staff.prop_location)
+        if prop.prop_location in self.pictograph.grid.handpoints:
+            key = (prop.orientation, prop.prop_location)
             offset = position_offsets.get(key, QPointF(0, 0))  # Default offset
-            staff.setPos(self.pictograph.grid.handpoints[staff.prop_location] + offset)
+            prop.setPos(self.pictograph.grid.handpoints[prop.prop_location] + offset)
 
-    def reposition_beta_staffs(self) -> None:
+    def reposition_beta_props(self) -> None:
         board_state = self.pictograph.get_state()
 
-        def move_staff(staff: Prop, direction) -> None:
-            new_position = self.calculate_new_position(staff.pos(), direction)
-            staff.setPos(new_position)
+        def move_prop(prop: Prop, direction) -> None:
+            new_position = self.calculate_new_position(prop.pos(), direction)
+            prop.setPos(new_position)
 
         motions_grouped_by_start_loc: Dict[Location, List[MotionAttributesDicts]] = {}
         for motion in board_state:
@@ -112,7 +115,7 @@ class PropPositioner:
 
         # STATIC BETA
         if len(static_motions) > 1:
-            self.reposition_static_beta(move_staff, static_motions)
+            self.reposition_static_beta(move_prop, static_motions)
 
         # BETA → BETA - G, H, I
         for start_location, motions in motions_grouped_by_start_loc.items():
@@ -129,7 +132,7 @@ class PropPositioner:
         # GAMMA → BETA - Y, Z
         if len(pro_or_anti_arrows) == 1 and len(static_motions) == 1:
             self.reposition_gamma_to_beta(
-                move_staff, pro_or_anti_arrows, static_motions
+                move_prop, pro_or_anti_arrows, static_motions
             )
 
         # ALPHA → BETA - D, E, F
@@ -140,19 +143,19 @@ class PropPositioner:
             if converging_motions[0].get(START_LOCATION) != converging_motions[1].get(
                 START_LOCATION
             ):
-                self.reposition_alpha_to_beta(move_staff, converging_motions)
+                self.reposition_alpha_to_beta(move_prop, converging_motions)
 
     ### STATIC BETA ### β
 
     def reposition_static_beta(
-        self, move_staff: callable, static_motions: List[MotionAttributesDicts]
+        self, move_prop: callable, static_motions: List[MotionAttributesDicts]
     ) -> None:
         for arrow in static_motions:
-            staff = next(
+            prop = next(
                 (s for s in self.pictograph.props if s.arrow.color == arrow[COLOR]),
                 None,
             )
-            if not staff:
+            if not prop:
                 continue
 
             end_location = arrow[END_LOCATION]
@@ -175,31 +178,31 @@ class PropPositioner:
                 },
             }
 
-            direction: Direction = layer_reposition_map[staff.layer].get(
-                (staff.prop_location, arrow[COLOR]), None
+            direction: Direction = layer_reposition_map[prop.layer].get(
+                (prop.prop_location, arrow[COLOR]), None
             )
 
             if direction:
                 if isinstance(direction, str):
-                    move_staff(staff, direction)
+                    move_prop(prop, direction)
                 elif isinstance(direction, tuple):
-                    move_staff(staff, direction[0])
-                    other_staff = next(
+                    move_prop(prop, direction[0])
+                    other_prop = next(
                         (
                             s
                             for s in self.pictograph.props
-                            if s.prop_location == staff.prop_location and s != staff
+                            if s.prop_location == prop.prop_location and s != prop
                         ),
                         None,
                     )
-                    if other_staff:
-                        move_staff(other_staff, direction[1])
+                    if other_prop:
+                        move_prop(other_prop, direction[1])
 
     ### ALPHA TO BETA ### D, E, F
 
-    def reposition_alpha_to_beta(self, move_staff, converging_arrows) -> None:
-        # check if all the staffs are in layer 1
-        if all(staff.layer == 1 for staff in self.pictograph.props):
+    def reposition_alpha_to_beta(self, move_prop, converging_arrows) -> None:
+        # check if all the props are in layer 1
+        if all(prop.layer == 1 for prop in self.pictograph.props):
             end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
             start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
             if (
@@ -209,16 +212,16 @@ class PropPositioner:
                 for arrow in converging_arrows:
                     direction = self.determine_translation_direction(arrow)
                     if direction:
-                        move_staff(
+                        move_prop(
                             next(
-                                staff
-                                for staff in self.pictograph.props
-                                if staff.arrow.color == arrow[COLOR]
+                                prop
+                                for prop in self.pictograph.props
+                                if prop.arrow.color == arrow[COLOR]
                             ),
                             direction,
                         )
-        # check if all the staffs are in layer 2
-        elif all(staff.layer == 2 for staff in self.pictograph.props):
+        # check if all the props are in layer 2
+        elif all(prop.layer == 2 for prop in self.pictograph.props):
             end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
             start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
             if (
@@ -228,17 +231,17 @@ class PropPositioner:
                 for arrow in converging_arrows:
                     direction = self.determine_translation_direction(arrow)
                     if direction:
-                        move_staff(
+                        move_prop(
                             next(
-                                staff
-                                for staff in self.pictograph.props
-                                if staff.arrow.color == arrow[COLOR]
+                                prop
+                                for prop in self.pictograph.props
+                                if prop.arrow.color == arrow[COLOR]
                             ),
                             direction,
                         )
-        # check if one staff is in layer 1 and the other is in layer 2
-        elif any(staff.layer == 1 for staff in self.pictograph.props) and any(
-            staff.layer == 2 for staff in self.pictograph.props
+        # check if one prop is in layer 1 and the other is in layer 2
+        elif any(prop.layer == 1 for prop in self.pictograph.props) and any(
+            prop.layer == 2 for prop in self.pictograph.props
         ):
             end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
             start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
@@ -249,11 +252,11 @@ class PropPositioner:
                 for arrow in converging_arrows:
                     direction = self.determine_translation_direction(arrow)
                     if direction:
-                        move_staff(
+                        move_prop(
                             next(
-                                staff
-                                for staff in self.pictograph.props
-                                if staff.arrow.color == arrow[COLOR]
+                                prop
+                                for prop in self.pictograph.props
+                                if prop.arrow.color == arrow[COLOR]
                             ),
                             direction,
                         )
@@ -264,7 +267,7 @@ class PropPositioner:
         motion1, motion2 = motions
         same_motion_type = motion1[MOTION_TYPE] == motion2[MOTION_TYPE] in [PRO, ANTI]
 
-        if all(staff.layer == 1 for staff in self.pictograph.props):
+        if all(prop.layer == 1 for prop in self.pictograph.props):
             if same_motion_type:
                 self.reposition_G_and_H(motion1, motion2)
             else:
@@ -285,96 +288,96 @@ class PropPositioner:
 
         further_direction = self.determine_translation_direction(further_arrow)
 
-        further_staff = next(
-            staff
-            for staff in self.pictograph.props
-            if staff.arrow.color == further_arrow[COLOR]
+        further_prop = next(
+            prop
+            for prop in self.pictograph.props
+            if prop.arrow.color == further_arrow[COLOR]
         )
         new_position_further = self.calculate_new_position(
-            further_staff.pos(), further_direction
+            further_prop.pos(), further_direction
         )
-        further_staff.setPos(new_position_further)
+        further_prop.setPos(new_position_further)
 
         other_direction = self.get_opposite_direction(further_direction)
-        other_staff = next(
-            staff
-            for staff in self.pictograph.props
-            if staff.arrow.color == other_arrow[COLOR]
+        other_prop = next(
+            prop
+            for prop in self.pictograph.props
+            if prop.arrow.color == other_arrow[COLOR]
         )
         new_position_other = self.calculate_new_position(
-            other_staff.pos(), other_direction
+            other_prop.pos(), other_direction
         )
-        other_staff.setPos(new_position_other)
+        other_prop.setPos(new_position_other)
 
     def reposition_I(self, motion1, motion2) -> None:
         pro_motion = motion1 if motion1[MOTION_TYPE] == PRO else motion2
         anti_motion = motion2 if motion1[MOTION_TYPE] == PRO else motion1
 
-        pro_staff = next(
+        pro_prop = next(
             (
-                staff
-                for staff in self.pictograph.props
-                if staff.arrow.color == pro_motion[COLOR]
+                prop
+                for prop in self.pictograph.props
+                if prop.arrow.color == pro_motion[COLOR]
             ),
             None,
         )
-        anti_staff = next(
+        anti_prop = next(
             (
-                staff
-                for staff in self.pictograph.props
-                if staff.arrow.color == anti_motion[COLOR]
+                prop
+                for prop in self.pictograph.props
+                if prop.arrow.color == anti_motion[COLOR]
             ),
             None,
         )
 
-        if pro_staff and anti_staff:
-            pro_staff_translation_direction = self.determine_translation_direction(
+        if pro_prop and anti_prop:
+            pro_prop_translation_direction = self.determine_translation_direction(
                 pro_motion
             )
-            anti_staff_translation_direction = self.get_opposite_direction(
-                pro_staff_translation_direction
+            anti_prop_translation_direction = self.get_opposite_direction(
+                pro_prop_translation_direction
             )
 
             new_position_pro = self.calculate_new_position(
-                pro_staff.pos(), pro_staff_translation_direction
+                pro_prop.pos(), pro_prop_translation_direction
             )
-            pro_staff.setPos(new_position_pro)
+            pro_prop.setPos(new_position_pro)
 
             new_position_anti = self.calculate_new_position(
-                anti_staff.pos(), anti_staff_translation_direction
+                anti_prop.pos(), anti_prop_translation_direction
             )
-            anti_staff.setPos(new_position_anti)
+            anti_prop.setPos(new_position_anti)
 
     ### GAMMA TO BETA ### Y, Z
 
-    def reposition_gamma_to_beta(self, move_staff, shifts, static_motions) -> None:
+    def reposition_gamma_to_beta(self, move_prop, shifts, static_motions) -> None:
         shift, static_motion = shifts[0], static_motions[0]
         direction = self.determine_translation_direction(shift)
         if direction:
-            move_staff(
+            move_prop(
                 next(
-                    staff
-                    for staff in self.pictograph.props
-                    if staff.arrow.color == shift[COLOR]
+                    prop
+                    for prop in self.pictograph.props
+                    if prop.arrow.color == shift[COLOR]
                 ),
                 direction,
             )
-            move_staff(
+            move_prop(
                 next(
-                    staff
-                    for staff in self.pictograph.props
-                    if staff.arrow.color == static_motion[COLOR]
+                    prop
+                    for prop in self.pictograph.props
+                    if prop.arrow.color == static_motion[COLOR]
                 ),
                 self.get_opposite_direction(direction),
             )
 
     ### HELPERS ###
 
-    def staffs_in_beta(self) -> bool | None:
+    def props_in_beta(self) -> bool | None:
         visible_staves: List[Prop] = []
-        for staff in self.pictograph.props:
-            if staff.isVisible():
-                visible_staves.append(staff)
+        for prop in self.pictograph.props:
+            if prop.isVisible():
+                visible_staves.append(prop)
         if len(visible_staves) == 2:
             if visible_staves[0].prop_location == visible_staves[1].prop_location:
                 return True
@@ -405,18 +408,16 @@ class PropPositioner:
 
     def determine_translation_direction(self, motion) -> Direction:
         """Determine the translation direction based on the arrow's board_state."""
-        if motion[END_LAYER] == 1:
-            if motion[MOTION_TYPE] in [PRO, ANTI, STATIC]:
-                if motion[END_LOCATION] in [NORTH, SOUTH]:
-                    return RIGHT if motion[START_LOCATION] == EAST else LEFT
-                elif motion[END_LOCATION] in [EAST, WEST]:
-                    return DOWN if motion[START_LOCATION] == SOUTH else UP
-        elif motion[END_LAYER] == 2:
-            if motion[MOTION_TYPE] in [PRO, ANTI, STATIC]:
-                if motion[END_LOCATION] in [NORTH, SOUTH]:
-                    return UP if motion[START_LOCATION] == EAST else DOWN
-                elif motion[END_LOCATION] in [EAST, WEST]:
-                    return RIGHT if motion[START_LOCATION] == SOUTH else LEFT
+        if motion[END_LAYER] == 1 and motion[MOTION_TYPE] in [PRO, ANTI, STATIC]:
+            if motion[END_LOCATION] in [NORTH, SOUTH]:
+                return RIGHT if motion[START_LOCATION] == EAST else LEFT
+            elif motion[END_LOCATION] in [EAST, WEST]:
+                return DOWN if motion[START_LOCATION] == SOUTH else UP
+        elif motion[END_LAYER] == 2 and motion[MOTION_TYPE] in [PRO, ANTI, STATIC]:
+            if motion[END_LOCATION] in [NORTH, SOUTH]:
+                return UP if motion[START_LOCATION] == EAST else DOWN
+            elif motion[END_LOCATION] in [EAST, WEST]:
+                return RIGHT if motion[START_LOCATION] == SOUTH else LEFT
 
     def calculate_new_position(
         self,

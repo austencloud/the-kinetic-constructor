@@ -87,15 +87,6 @@ class PropBoxDrag(QWidget):
         self.ghost_prop = self.pictograph.ghost_props[self.color]
         self.ghost_prop.target_prop = target_prop
 
-    def start_drag(self, event_pos: "QPoint") -> None:
-        self.move_to_cursor(event_pos)
-        self.show()
-
-    def move_to_cursor(self, event_pos: QPoint) -> None:
-        local_pos = self.propbox.view.mapTo(self.main_window, event_pos)
-        self.center = QPointF((self.width() / 2), self.height() / 2)
-        self.move(local_pos - self.center.toPoint())
-
     def create_pixmap(self) -> None:
         new_svg_data = self.target_prop.set_svg_color(self.color)
         renderer = QSvgRenderer()
@@ -120,65 +111,7 @@ class PropBoxDrag(QWidget):
 
         return rotated_pixmap
 
-    ### EVENT HANDLERS ###
-
-    def handle_mouse_move(self, event_pos: QPoint) -> None:
-        if self.preview:
-            self.move_to_cursor(event_pos)
-            if self.is_over_pictograph(event_pos):
-                if not self.has_entered_pictograph_once:
-                    self.has_entered_pictograph_once = True
-                    self.remove_same_color_prop()
-
-                pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
-                view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
-                    pos_in_main_window
-                )
-                scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
-                new_location = self.pictograph.get_nearest_handpoint(scene_pos)
-
-                if self.previous_location != new_location and new_location:
-                    self.previous_location = new_location
-                    self.update_preview_for_new_location(new_location)
-
-    def handle_mouse_release(self, event_pos: QPoint) -> None:
-        self.previous_location = None
-
-    def is_over_pictograph(self, event_pos: QPoint) -> bool:
-        pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
-        local_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
-        return self.pictograph.view.rect().contains(local_pos_in_pictograph)
-
-    def handle_enter_pictograph(self, event_pos: QPoint) -> None:
-        if not self.has_entered_pictograph_once:
-            self.just_entered_pictograph = True
-            self.has_entered_pictograph_once = True
-            self.remove_same_color_prop()
-
-        if self.has_entered_pictograph_once:
-            self.just_entered_pictograph = False
-
-        pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
-        view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
-        scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
-        new_location = self.pictograph.get_nearest_handpoint(
-            QPointF(scene_pos.x(), scene_pos.y())
-        )
-
-        if self.previous_location != new_location and new_location:
-            self.previous_location = new_location
-            self.update_preview_for_new_location(new_location)
-            self.ghost_prop.update_ghost_prop(self.attributes)
-
-    def remove_same_color_prop(self) -> None:
-        for prop in self.pictograph.props[:]:
-            if prop.isVisible() and prop.color == self.color:
-                self.pictograph.removeItem(prop)
-                self.pictograph.props.remove(prop)
-        for prop in self.pictograph.props[:]:
-            if prop.isVisible() and prop.color == self.color:
-                self.pictograph.removeItem(prop)
-                self.pictograph.props.remove(prop)
+    ### UPDATERS ###
 
     def update_preview_for_new_location(self, new_location: Location) -> None:
         self.ghost_prop.prop_type = self.prop_type
@@ -211,12 +144,12 @@ class PropBoxDrag(QWidget):
         self.preview.setPixmap(rotated_pixmap)
         self.preview.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-
         if self.ghost_prop not in self.pictograph.props:
             self.pictograph.props.append(self.ghost_prop)
         if self.ghost_prop not in self.pictograph.items():
             self.pictograph.addItem(self.ghost_prop)
-
+            
+        self.pictograph.add_motion(self.ghost_prop.arrow, self.ghost_prop, IN, 1)
         self.pictograph.update_pictograph()
         self.move_to_cursor(self.propbox.view.mapFromGlobal(self.pos()))
 
@@ -241,6 +174,100 @@ class PropBoxDrag(QWidget):
             self.pictograph.addItem(static_arrow)
         self.pictograph.update_pictograph()
 
+    ### EVENT HANDLERS ###
+
+    def handle_mouse_move(self, event_pos: QPoint) -> None:
+        if self.preview:
+            self.move_to_cursor(event_pos)
+            if self.is_over_pictograph(event_pos):
+                if not self.has_entered_pictograph_once:
+                    self.has_entered_pictograph_once = True
+                    self.remove_same_color_prop()
+
+                pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
+                view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
+                    pos_in_main_window
+                )
+                scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
+                new_location = self.pictograph.get_nearest_handpoint(scene_pos)
+
+                if self.previous_location != new_location and new_location:
+                    self.previous_location = new_location
+                    self.update_preview_for_new_location(new_location)
+                    self.ghost_prop.update_ghost_prop(self.attributes)
+
+    def handle_enter_pictograph(self, event_pos: QPoint) -> None:
+        if not self.has_entered_pictograph_once:
+            self.just_entered_pictograph = True
+            self.has_entered_pictograph_once = True
+            self.remove_same_color_prop()
+
+        if self.has_entered_pictograph_once:
+            self.just_entered_pictograph = False
+
+        pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
+        view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
+        scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
+        new_location = self.pictograph.get_nearest_handpoint(
+            QPointF(scene_pos.x(), scene_pos.y())
+        )
+
+        if self.previous_location != new_location and new_location:
+            self.previous_location = new_location
+            self.update_preview_for_new_location(new_location)
+            self.ghost_prop.update_ghost_prop(self.attributes)
+
+
+    def handle_mouse_release(self) -> None:
+        if self.has_entered_pictograph_once:
+            self.place_prop_on_pictograph()
+        self.deleteLater()
+        self.pictograph.update_pictograph()
+        self.propbox.propbox_drag = None
+        self.ghost_prop.arrow = None
+        self.reset_drag_state()
+        self.previous_location = None
+
+    ### HELPERS ###
+
+    def reset_drag_state(self) -> None:
+        self.dragging = False
+        self.drag_preview = None
+        self.current_rotation_angle = 0
+
+    def place_prop_on_pictograph(self) -> None:
+        self.pictograph.update_pictograph()
+        self.pictograph.clearSelection()
+        self.placed_prop = Prop(self.pictograph, self.ghost_prop.get_attributes())
+        self.placed_prop.arrow = self.ghost_prop.arrow
+        self.ghost_prop.arrow.prop = self.placed_prop
+        self.pictograph.add_motion(self.placed_prop.arrow, self.ghost_prop, IN, 1)
+        self.pictograph.addItem(self.placed_prop)
+        self.pictograph.props.append(self.placed_prop)
+
+        self.pictograph.removeItem(self.ghost_prop)
+        self.pictograph.props.remove(self.ghost_prop)
+
+        self.placed_prop.ghost_prop = self.ghost_prop
+        self.placed_prop.update_appearance()
+        self.placed_prop.show()
+        self.placed_prop.setSelected(True)
+
+    def is_over_pictograph(self, event_pos: QPoint) -> bool:
+        pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
+        local_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
+        return self.pictograph.view.rect().contains(local_pos_in_pictograph)
+
+    def remove_same_color_prop(self) -> None:
+        for prop in self.pictograph.props[:]:
+            if prop.isVisible() and prop.color == self.color:
+                self.pictograph.removeItem(prop)
+                self.pictograph.props.remove(prop)
+        for prop in self.pictograph.props[:]:
+            if prop.isVisible() and prop.color == self.color:
+                self.pictograph.removeItem(prop)
+                self.pictograph.props.remove(prop)
+
     def create_pixmap_with_rotation(self, angle: RotationAngle) -> QPixmap:
         # Generate a new pixmap based on target prop and apply the rotation
         new_svg_data = self.target_prop.set_svg_color(self.color)
@@ -258,3 +285,12 @@ class PropBoxDrag(QWidget):
         rotated_pixmap = pixmap.transformed(rotate_transform)
 
         return rotated_pixmap
+
+    def start_drag(self, event_pos: "QPoint") -> None:
+        self.move_to_cursor(event_pos)
+        self.show()
+
+    def move_to_cursor(self, event_pos: QPoint) -> None:
+        local_pos = self.propbox.view.mapTo(self.main_window, event_pos)
+        self.center = QPointF((self.width() / 2), self.height() / 2)
+        self.move(local_pos - self.center.toPoint())

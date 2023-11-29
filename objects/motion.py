@@ -34,9 +34,6 @@ class Motion:
 
         self.setup_attributes(attributes)
 
-        self.prop.layer = self.end_layer
-        self.prop.orientation = self.end_orientation
-
         prop.update_rotation()
 
     def setup_attributes(self, attributes) -> None:

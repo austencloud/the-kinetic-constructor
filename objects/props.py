@@ -245,6 +245,9 @@ class Prop(GraphicalObject):
             self.prop_location, 0
         )  # Default to 0 if not found
 
+    def get_attributes(self) -> PropAttributesDicts:
+        return {attr: getattr(self, attr) for attr in PROP_ATTRIBUTES}
+
     def update_rotation(self) -> None:
         rotation_angle = self.get_rotation_angle()
 

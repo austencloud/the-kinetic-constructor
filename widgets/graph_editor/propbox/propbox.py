@@ -376,7 +376,7 @@ class PropBox(QGraphicsScene):
         if self.target_prop and self.propbox_drag:
             scene_pos = event.scenePos()
             event_pos = self.view.mapFromScene(scene_pos)
-            self.propbox_drag.handle_mouse_release(event_pos)
+            self.propbox_drag.handle_mouse_release()
             self.target_prop = None
         else:
             event.ignore()

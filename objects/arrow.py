@@ -346,8 +346,8 @@ class Arrow(GraphicalObject):
             LAYER: 1,
         }
 
-        self.update(updated_arrow_dict)
-        self.prop.update(updated_prop_dict)
+        self.update_attributes(updated_arrow_dict)
+        self.prop.update_attributes(updated_prop_dict)
         self.motion.update_attr_from_arrow()
 
         self.pictograph.update_pictograph()
@@ -430,7 +430,7 @@ class Arrow(GraphicalObject):
         self.end_location = new_end_location
 
         self.prop.color = self.color
-        self.prop.location = new_end_location
+        self.prop.prop_location = new_end_location
         self.prop.layer = 1
 
         self.update_appearance()
@@ -438,7 +438,7 @@ class Arrow(GraphicalObject):
 
         if not isinstance(self, GhostArrow) and self.ghost_arrow:
             self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
-            self.ghost_arrow.update(self.attributes)
+            self.ghost_arrow.update_attributes(self.attributes)
         self.pictograph.update_pictograph()
 
     def mirror(self) -> None:
@@ -497,7 +497,7 @@ class Arrow(GraphicalObject):
         self.motion_type = new_motion_type
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
-        self.update(new_arrow_dict)
+        self.update_attributes(new_arrow_dict)
         self.prop.update(new_prop_dict)
         self.pictograph.update_pictograph()
 

@@ -185,11 +185,12 @@ class ArrowBoxDrag(QWidget):
                     pos_in_main_window
                 )
                 scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
-
-                # Get nearest layer 2 point
-                nearest_point_name = self.pictograph.get_nearest_layer2_point(scene_pos)
-                self.update_preview_for_new_location(nearest_point_name)
-                self.ghost_arrow.update_ghost_arrow(self.attributes)
+                new_location = self.pictograph.get_nearest_layer2_point(scene_pos)
+                
+                if self.previous_location != new_location:
+                    self.previous_location = new_location
+                    self.update_preview_for_new_location(new_location)
+                    self.ghost_arrow.update_ghost_arrow(self.attributes)
 
     def handle_mouse_release(self) -> None:
         if self.has_entered_pictograph_once:
@@ -199,6 +200,7 @@ class ArrowBoxDrag(QWidget):
         self.arrowbox.arrowbox_drag = None
         self.ghost_arrow.prop = None
         self.reset_drag_state()
+        self.previous_location = None
 
     ### FLAGS ###
 

@@ -34,7 +34,7 @@ class ArrowPositioner:
             arrow.setTransformOriginPoint(0, 0)
         optimal_locations = None
 
-        if len(self.pictograph.props) == 2:
+        if len(self.pictograph.props) == 2 and len(self.pictograph.arrows) == 2:
             if self.pictograph.current_letter:
                 optimal_locations = self.find_optimal_locations()
 
