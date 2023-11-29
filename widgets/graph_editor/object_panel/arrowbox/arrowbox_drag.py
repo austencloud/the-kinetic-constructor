@@ -91,6 +91,8 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         self.placed_arrow.setSelected(True)
 
+    ### UPDATERS ### 
+
     def update_preview_for_new_location(self, new_location: Location) -> None:
         self.arrow_location = new_location
         (
@@ -111,6 +113,24 @@ class ArrowBoxDrag(ObjectBoxDrag):
             1,
         )
         self.pictograph.update_pictograph()
+
+    def update_ghost_arrow_for_new_location(self, new_location) -> None:
+        self.ghost_arrow.color = self.color
+        self.ghost_arrow.arrow_location = new_location
+        self.ghost_arrow.motion_type = self.motion_type
+        self.ghost_arrow.rotation_direction = self.rotation_direction
+        self.ghost_arrow.start_location = self.start_location
+        self.ghost_arrow.end_location = self.end_location
+        self.ghost_arrow.turns = self.turns
+        self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
+        ghost_svg = self.ghost_arrow.get_svg_file(self.motion_type, self.turns)
+        self.ghost_arrow.update_mirror()
+        self.ghost_arrow.update_svg(ghost_svg)
+        if self.ghost_arrow not in self.pictograph.arrows:
+            self.pictograph.arrows.append(self.ghost_arrow)
+        if self.ghost_arrow not in self.pictograph.items():
+            self.pictograph.addItem(self.ghost_arrow)
+
 
     ### EVENT HANDLERS ###
 
@@ -215,23 +235,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
             self.rotation_direction,
             self.arrow_location,
         )
-
-    def update_ghost_arrow_for_new_location(self, new_location) -> None:
-        self.ghost_arrow.color = self.color
-        self.ghost_arrow.arrow_location = new_location
-        self.ghost_arrow.motion_type = self.motion_type
-        self.ghost_arrow.rotation_direction = self.rotation_direction
-        self.ghost_arrow.start_location = self.start_location
-        self.ghost_arrow.end_location = self.end_location
-        self.ghost_arrow.turns = self.turns
-        self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
-        ghost_svg = self.ghost_arrow.get_svg_file(self.motion_type, self.turns)
-        self.ghost_arrow.update_mirror()
-        self.ghost_arrow.update_svg(ghost_svg)
-        if self.ghost_arrow not in self.pictograph.arrows:
-            self.pictograph.arrows.append(self.ghost_arrow)
-        if self.ghost_arrow not in self.pictograph.items():
-            self.pictograph.addItem(self.ghost_arrow)
 
     def _get_arrow_drag_rotation_angle(
         self, arrow: Arrow | ObjectBoxDrag

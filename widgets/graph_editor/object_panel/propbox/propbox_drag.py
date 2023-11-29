@@ -84,6 +84,8 @@ class PropBoxDrag(ObjectBoxDrag):
         self.placed_prop.show()
         self.placed_prop.setSelected(True)
 
+    ### UPDATERS ### 
+
     def update_preview_for_new_location(self, new_location: Location) -> None:
         self.prop_location = new_location
 

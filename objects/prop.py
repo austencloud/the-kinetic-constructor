@@ -48,8 +48,8 @@ class Prop(GraphicalObject):
         self.static_arrow: StaticArrow = None
         self.ghost_prop: Prop = None
 
-        self.color:Color = attributes[COLOR]
-        self.prop_location:Location = attributes[PROP_LOCATION]
+        self.color: Color = attributes[COLOR]
+        self.prop_location: Location = attributes[PROP_LOCATION]
         self.layer: Layer = attributes[LAYER]
         self.orientation: Orientation = attributes[ORIENTATION]
 
@@ -127,37 +127,42 @@ class Prop(GraphicalObject):
             self.set_drag_pos(new_pos)
             self.previous_location = new_location
 
-    def set_drag_pos(self, new_pos: QPointF) -> None:
-        staff_length = self.boundingRect().width()
-        staff_width = self.boundingRect().height()
+    def calculate_position(layer, orientation, location, staff_length, staff_width):
+        # Layer 1 logic
+        if layer == 1:
+            if orientation == IN:
+                offset_map = {
+                    NORTH: (staff_width, 0),
+                    SOUTH: (0, staff_length),
+                    WEST: (0, 0),
+                    EAST: (staff_length, staff_width),
+                }
+            else:  # OUT
+                offset_map = {
+                    NORTH: (0, staff_length),
+                    SOUTH: (staff_width, 0),
+                    WEST: (staff_length, staff_width),
+                    EAST: (0, 0),
+                }
 
-        position_mappings = {
-            (1, IN, NORTH): (staff_width, 0),
-            (1, IN, SOUTH): (0, staff_length),
-            (1, IN, WEST): (0, 0),
-            (1, IN, EAST): (staff_length, staff_width),
-            
-            (1, OUT, NORTH): (0, staff_length),
-            (1, OUT, SOUTH): (staff_width, 0),
-            (1, OUT, WEST): (staff_length, staff_width), 
-            (1, OUT, EAST): (0, 0),
-            
-            (2, CLOCKWISE, NORTH): (0, 0),
-            (2, CLOCKWISE, SOUTH): (staff_length, staff_width),
-            (2, CLOCKWISE, WEST): (0, staff_length),
-            (2, CLOCKWISE, EAST): (staff_width, 0),
-            
-            (2, COUNTER_CLOCKWISE, NORTH): (staff_length, staff_width),
-            (2, COUNTER_CLOCKWISE, SOUTH): (0, 0),
-            (2, COUNTER_CLOCKWISE, WEST): (staff_width, 0),
-            (2, COUNTER_CLOCKWISE, EAST): (0, staff_length),
-        }
+        # Layer 2 logic
+        elif layer == 2:
+            if orientation == CLOCKWISE:
+                offset_map = {
+                    NORTH: (0, 0),
+                    SOUTH: (staff_length, staff_width),
+                    WEST: (0, staff_length),
+                    EAST: (staff_width, 0),
+                }
+            else:  # COUNTER_CLOCKWISE
+                offset_map = {
+                    NORTH: (staff_length, staff_width),
+                    SOUTH: (0, 0),
+                    WEST: (staff_width, 0),
+                    EAST: (0, staff_length),
+                }
 
-        key = (self.layer, self.orientation, self.prop_location)
-        offset_x, offset_y = position_mappings.get(key, (0, 0))
-
-        self.setPos(new_pos + QPointF(offset_x, offset_y))
-
+        return offset_map.get(location, (0, 0))
 
     def update_arrow_location(self, new_location: Location) -> None:
         location_mapping: Dict[
