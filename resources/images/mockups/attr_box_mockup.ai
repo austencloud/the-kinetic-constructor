@@ -188,7 +188,7 @@ endobj
                <rdf:li rdf:parseType="Resource">
                   <xmpG:groupName>Default Swatch Group</xmpG:groupName>
                   <xmpG:groupType>0</xmpG:groupType>
-                  <xmpG:Colorants>
+                  <xmpG:Colorsants>
                      <rdf:Seq>
                         <rdf:li rdf:parseType="Resource">
                            <xmpG:swatchName>White</xmpG:swatchName>
@@ -551,12 +551,12 @@ endobj
                            <xmpG:black>70.000000</xmpG:black>
                         </rdf:li>
                      </rdf:Seq>
-                  </xmpG:Colorants>
+                  </xmpG:Colorsants>
                </rdf:li>
                <rdf:li rdf:parseType="Resource">
                   <xmpG:groupName>Grays</xmpG:groupName>
                   <xmpG:groupType>1</xmpG:groupType>
-                  <xmpG:Colorants>
+                  <xmpG:Colorsants>
                      <rdf:Seq>
                         <rdf:li rdf:parseType="Resource">
                            <xmpG:swatchName>C=0 M=0 Y=0 K=100</xmpG:swatchName>
@@ -658,12 +658,12 @@ endobj
                            <xmpG:black>4.998800</xmpG:black>
                         </rdf:li>
                      </rdf:Seq>
-                  </xmpG:Colorants>
+                  </xmpG:Colorsants>
                </rdf:li>
                <rdf:li rdf:parseType="Resource">
                   <xmpG:groupName>Brights</xmpG:groupName>
                   <xmpG:groupType>1</xmpG:groupType>
-                  <xmpG:Colorants>
+                  <xmpG:Colorsants>
                      <rdf:Seq>
                         <rdf:li rdf:parseType="Resource">
                            <xmpG:swatchName>C=0 M=100 Y=100 K=0</xmpG:swatchName>
@@ -720,7 +720,7 @@ endobj
                            <xmpG:black>0.003100</xmpG:black>
                         </rdf:li>
                      </rdf:Seq>
-                  </xmpG:Colorants>
+                  </xmpG:Colorsants>
                </rdf:li>
             </rdf:Seq>
          </xmpTPg:SwatchGroups>

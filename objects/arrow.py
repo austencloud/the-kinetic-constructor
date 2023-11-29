@@ -1,3 +1,4 @@
+from typing import List
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtWidgets import QGraphicsScene
 from PyQt6.QtCore import QPointF, Qt
@@ -43,13 +44,13 @@ from objects.motion import Motion
 
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
-    MotionType,
-    Location,
-    RotationDirection,
+    MotionTypes,
+    Locations,
+    RotationDirections,
     Turns,
     Direction,
-    StartEndLocationTuple,
-    RotationAngle,
+    StartEndLocationsTuple,
+    RotationAngles,
     TYPE_CHECKING,
     Optional,
     Dict,
@@ -78,7 +79,7 @@ class Arrow(GraphicalObject):
         self.drag_offset = QPointF(0, 0)
         self.prop: Prop = None
         self.motion: Motion = None
-        self.arrow_location: Location = attributes[ARROW_LOCATION]
+        self.arrow_location: Locations = attributes[ARROW_LOCATION]
         self.is_svg_mirrored: bool = False
 
         self.center_x = self.boundingRect().width() / 2
@@ -238,7 +239,7 @@ class Arrow(GraphicalObject):
 
     def get_arrow_rotation_angle(
         self, arrow: Optional["Arrow"] = None
-    ) -> RotationAngle:
+    ) -> RotationAngles:
         arrow = arrow or self
         location_to_angle = self.get_location_to_angle_map(
             arrow.motion_type, arrow.rotation_direction
@@ -294,17 +295,17 @@ class Arrow(GraphicalObject):
 
     def get_start_end_locations(
         self,
-        motion_type: MotionType,
-        rotation_direction: RotationDirection,
-        arrow_location: Location,
-    ) -> StartEndLocationTuple:
+        motion_type: MotionTypes,
+        rotation_direction: RotationDirections,
+        arrow_location: Locations,
+    ) -> StartEndLocationsTuple:
         return (
             start_end_location_mapping.get(arrow_location, {})
             .get(rotation_direction, {})
             .get(motion_type, (None, None))
         )
 
-    def get_svg_file(self, motion_type: MotionType, turns: Turns) -> str:
+    def get_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
         svg_file = f"{ARROW_DIR}{motion_type}/{motion_type}_{float(turns)}.svg"
         return svg_file
 
@@ -352,7 +353,7 @@ class Arrow(GraphicalObject):
 
         self.scene.update_pictograph()
 
-    def rotate(self, rotation_direction: RotationDirection) -> None:
+    def rotate(self, rotation_direction: RotationDirections) -> None:
         diamond_mode_locations = [NORTH, EAST, SOUTH, WEST]
         box_mode_locations = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
         if isinstance(self, StaticArrow):
@@ -360,38 +361,38 @@ class Arrow(GraphicalObject):
         else:
             self.rotate_shift(rotation_direction, box_mode_locations)
 
-    def rotate_shift(self, rotation_direction, box_mode_locations):
+    def rotate_shift(self, rotation_direction, box_mode_locations: List[Locations]):
         current_location_index = box_mode_locations.index(self.arrow_location)
         new_location_index = (
-                (current_location_index + 1) % 4
-                if rotation_direction == CLOCKWISE
-                else (current_location_index - 1) % 4
-            )
+            (current_location_index + 1) % 4
+            if rotation_direction == CLOCKWISE
+            else (current_location_index - 1) % 4
+        )
 
         new_arrow_location = box_mode_locations[new_location_index]
         (
-                new_start_location,
-                new_end_location,
-            ) = self.get_start_end_locations(
-                self.motion_type, self.rotation_direction, new_arrow_location
-            )
+            new_start_location,
+            new_end_location,
+        ) = self.get_start_end_locations(
+            self.motion_type, self.rotation_direction, new_arrow_location
+        )
 
         updated_arrow_dict = {
-                COLOR: self.color,
-                MOTION_TYPE: self.motion_type,
-                ARROW_LOCATION: new_arrow_location,
-                ROTATION_DIRECTION: self.rotation_direction,
-                START_LOCATION: new_start_location,
-                END_LOCATION: new_end_location,
-                TURNS: self.turns,
-            }
+            COLOR: self.color,
+            MOTION_TYPE: self.motion_type,
+            ARROW_LOCATION: new_arrow_location,
+            ROTATION_DIRECTION: self.rotation_direction,
+            START_LOCATION: new_start_location,
+            END_LOCATION: new_end_location,
+            TURNS: self.turns,
+        }
 
         updated_prop_dict = {
-                COLOR: self.color,
-                PROP_LOCATION: new_end_location,
-                LAYER: self.prop.layer,
-            }
-            
+            COLOR: self.color,
+            PROP_LOCATION: new_end_location,
+            LAYER: self.prop.layer,
+        }
+
         self.motion.arrow_location = new_arrow_location
         self.motion.start_location = new_start_location
         self.motion.end_location = new_end_location
@@ -399,19 +400,21 @@ class Arrow(GraphicalObject):
         self.start_location = new_start_location
         self.end_location = new_end_location
         self.prop.prop_location = new_end_location
-            
+
         self.update_attributes(updated_arrow_dict)
         self.prop.update_attributes(updated_prop_dict)
         self.prop.update_appearance()
         self.scene.update_pictograph()
 
-    def rotate_static_motion(self, rotation_direction, diamond_mode_locations):
+    def rotate_static_motion(
+        self, rotation_direction, diamond_mode_locations: List[Locations]
+    ):
         current_location_index = diamond_mode_locations.index(self.arrow_location)
         new_location_index = (
-                (current_location_index + 1) % 4
-                if rotation_direction == CLOCKWISE
-                else (current_location_index - 1) % 4
-            )
+            (current_location_index + 1) % 4
+            if rotation_direction == CLOCKWISE
+            else (current_location_index - 1) % 4
+        )
         new_location = diamond_mode_locations[new_location_index]
         self.motion.arrow_location = new_location
         self.motion.start_location = new_location
@@ -420,7 +423,7 @@ class Arrow(GraphicalObject):
         self.start_location = new_location
         self.end_location = new_location
         self.prop.prop_location = new_location
-        
+
         self.motion.update_attr_from_arrow()
         self.prop.update_appearance()
         self.scene.update_pictograph()

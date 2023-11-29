@@ -23,7 +23,7 @@ from settings.string_constants import (
     RED_HEX,
     BLUE_HEX,
 )
-from utilities.TypeChecking.TypeChecking import Color
+from utilities.TypeChecking.TypeChecking import Colors
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 from PyQt6.QtWidgets import QSizePolicy
 from widgets.graph_editor.attr_panel.attr_box_widgets import (
     StartEndWidget,
-    MotionTypeWidget,
+    MotionTypesWidget,
     TurnsWidget,
     HeaderWidget,
 )
@@ -41,7 +41,7 @@ from widgets.graph_editor.attr_panel.attr_box_widgets import (
 
 class AttrBox(QFrame):
     def __init__(
-        self, attr_panel: "AttrPanel", pictograph: "Pictograph", color: Color
+        self, attr_panel: "AttrPanel", pictograph: "Pictograph", color: Colors
     ) -> None:
         super().__init__(attr_panel)
         self.attr_panel = attr_panel
@@ -61,7 +61,7 @@ class AttrBox(QFrame):
         # self.attribute_labels = self.create_attribute_labels()
 
         self.header_widget = HeaderWidget(self, self.color)
-        self.motion_type_widget = MotionTypeWidget(self)
+        self.motion_type_widget = MotionTypesWidget(self)
         self.start_end_widget = StartEndWidget(self)
         self.turns_widget = TurnsWidget(self.pictograph, self.color, self)
 

@@ -1,13 +1,13 @@
 from utilities.TypeChecking.TypeChecking import (
     MotionAttributesDicts,
-    Color,
-    MotionType,
+    Colors,
+    MotionTypes,
     Turns,
-    RotationDirection,
-    Location,
-    Location,
-    Orientation,
-    Layer,
+    RotationDirections,
+    Locations,
+    Locations,
+    Orientations,
+    Layers,
 )
 from settings.string_constants import *
 from typing import TYPE_CHECKING, Dict, Tuple
@@ -37,20 +37,20 @@ class Motion:
         prop.update_rotation()
 
     def setup_attributes(self, attributes) -> None:
-        self.color: Color = attributes[COLOR]
-        self.motion_type: MotionType = attributes[MOTION_TYPE]
+        self.color: Colors = attributes[COLOR]
+        self.motion_type: MotionTypes = attributes[MOTION_TYPE]
         self.turns: Turns = attributes[TURNS]
-        self.rotation_direction: RotationDirection = attributes[ROTATION_DIRECTION]
-        self.arrow_location: Location = attributes[ARROW_LOCATION]
+        self.rotation_direction: RotationDirections = attributes[ROTATION_DIRECTION]
+        self.arrow_location: Locations = attributes[ARROW_LOCATION]
 
-        self.start_location: Location = attributes[START_LOCATION]
-        self.end_location: Location = attributes[END_LOCATION]
+        self.start_location: Locations = attributes[START_LOCATION]
+        self.end_location: Locations = attributes[END_LOCATION]
 
-        self.start_orientation: Orientation = attributes[START_ORIENTATION]
-        self.end_orientation: Orientation = self.get_end_orientation()
+        self.start_orientation: Orientations = attributes[START_ORIENTATION]
+        self.end_orientation: Orientations = self.get_end_orientation()
 
-        self.start_layer: Layer = attributes[START_LAYER]
-        self.end_layer: Layer = self.get_end_layer()
+        self.start_layer: Layers = attributes[START_LAYER]
+        self.end_layer: Layers = self.get_end_layer()
 
         from objects.arrow import StaticArrow
 
@@ -59,16 +59,16 @@ class Motion:
             self.prop.layer = self.end_layer
             self.prop.update_appearance()
 
-    def get_end_layer(self) -> Layer:
+    def get_end_layer(self) -> Layers:
         if self.turns in [0, 1, 2]:
             end_layer = self.start_layer
         elif self.turns in [0.5, 1.5]:
             end_layer = 3 - self.start_layer  # Switches between 1 and 2
         return end_layer
 
-    def get_end_orientation(self) -> Orientation:
+    def get_end_orientation(self) -> Orientations:
         orientation_map: dict[
-            Tuple[Orientation], Dict[MotionType, Dict[Turns, Orientation]]
+            Tuple[Orientations], Dict[MotionTypes, Dict[Turns, Orientations]]
         ] = {
             (IN, CLOCKWISE): {
                 PRO: {
@@ -155,7 +155,7 @@ class Motion:
             orientation_map[key][STATIC] = orientation_map[key][PRO]
             orientation_map[key][DASH] = orientation_map[key][ANTI]
 
-        key: Tuple[Orientation] = (self.start_orientation, self.rotation_direction)
+        key: Tuple[Orientations] = (self.start_orientation, self.rotation_direction)
         motion_map = orientation_map.get(key, {})
         return motion_map.get(self.motion_type, {}).get(self.turns)
 

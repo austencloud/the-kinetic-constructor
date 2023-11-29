@@ -21,7 +21,7 @@ from typing import TYPE_CHECKING, List, Dict, Any
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
 
-from utilities.TypeChecking.TypeChecking import MotionAttributes, OptimalLocationsDicts
+from utilities.TypeChecking.TypeChecking import MotionAttributes, OptimalLocationssDicts
 
 
 class ArrowPositioner:
@@ -45,7 +45,7 @@ class ArrowPositioner:
                 else:
                     self.set_arrow_to_default_loc(arrow)
 
-    def find_optimal_locations(self) -> OptimalLocationsDicts | None:
+    def find_optimal_locations(self) -> OptimalLocationssDicts | None:
         current_state: List[Dict[MotionAttributes, str]] = self.pictograph.get_state()
         current_letter = self.pictograph.current_letter
         current_letter_variants = self.letters[current_letter]
@@ -129,7 +129,7 @@ class ArrowPositioner:
         return True
 
     def set_arrow_to_optimal_loc(
-        self, optimal_locations: OptimalLocationsDicts, arrow: "Arrow"
+        self, optimal_locations: OptimalLocationssDicts, arrow: "Arrow"
     ) -> None:
         arrow.set_arrow_transform_origin_to_center()
         optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")

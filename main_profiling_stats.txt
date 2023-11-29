@@ -348,7 +348,7 @@
       223    0.000    0.000    0.000    0.000 {built-in method height}
        47    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\widgets\option_picker\letter_buttons.py:102(get_icon_path)
         1    0.000    0.000    0.000    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py:509(_compile_info)
-        5    0.000    0.000    0.000    0.000 {built-in method setColor}
+        5    0.000    0.000    0.000    0.000 {built-in method setColors}
         1    0.000    0.000    0.000    0.000 {built-in method setWidget}
       139    0.000    0.000    0.000    0.000 {built-in method key}
         1    0.000    0.000    0.000    0.000 d:\CODE\Apps\Sequence_Constructor\utilities\layout_manager.py:82(init_sequence_layout)

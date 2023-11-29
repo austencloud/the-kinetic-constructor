@@ -1,6 +1,6 @@
 from typing import Literal
 
-SpecificPosition = Literal[
+SpecificPositions = Literal[
     "alpha1",
     "alpha2",
     "alpha3",

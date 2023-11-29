@@ -1,12 +1,12 @@
 from typing import *
 from .Letters import *
-from .SpecificPosition import SpecificPosition
+from .SpecificPositions import SpecificPositions
 from typing import Literal
 
-Color = Literal["red", "blue"]
-MotionType = Literal["pro", "anti", "dash", "static"]
-Location = Literal["n", "e", "s", "w", "ne", "se", "sw", "nw"]
-RotationDirection = Literal["cw", "ccw"]
+Colors = Literal["red", "blue"]
+MotionTypes = Literal["pro", "anti", "dash", "static"]
+Locations = Literal["n", "e", "s", "w", "ne", "se", "sw", "nw"]
+RotationDirections = Literal["cw", "ccw"]
 Turns = float | Literal["fl", "0", "0.5", "1", "1.5", "2"]
 
 ### STAFF ATTRIBUTES ###
@@ -14,67 +14,64 @@ Turns = float | Literal["fl", "0", "0.5", "1", "1.5", "2"]
 PropAttributes = Literal[
     "color", "prop_type", "location", "layer", "axis", "orientation"
 ]
-PropType = Literal["staff", "buugeng", "club", "fan", "hoop", "triad"]
-Layer = Literal[1, 2]
-Axis = Literal["vertical", "horizontal"]
-Layer1_Orientation = Literal["in", "out"]
-Layer2_Orientation = Literal["cw", "ccw"]
-Orientation = Literal["in", "out", "cw", "ccw"]
+PropTypes = Literal["staff", "buugeng", "club", "fan", "hoop", "triad"]
+Layers = Literal[1, 2]
+Axes = Literal["vertical", "horizontal"]
+Orientations = Literal["in", "out", "cw", "ccw"]
 
-RotationAngle = Literal[0, 90, 180, 270]
-Position = Literal["alpha", "beta", "gamma"]
+RotationAngles = Literal[0, 90, 180, 270]
+Positions = Literal["alpha", "beta", "gamma"]
 Direction = Literal["right", "left", "down", "up"]
-OptimalLocationEntries = Dict[Literal["x", "y"], float]
-ColorHex = Literal["#ED1C24", "#2E3192"]
-ColorMap = Dict[Color, ColorHex]
+ColorsHex = Literal["#ED1C24", "#2E3192"]
 LetterType = Literal[
     "Dual-Shift", "Shift", "Cross-Shift", "Dash", "Dual-Dash", "Static"
 ]
 
 
-
 class SpecificStartEndPositionsDicts(TypedDict):
-    start_position: SpecificPosition
-    end_position: SpecificPosition
+    start_position: SpecificPositions
+    end_position: SpecificPositions
 
 
-class OptimalLocationsDicts(TypedDict):
-    optimal_red_location: OptimalLocationEntries
-    optimal_blue_location: OptimalLocationEntries
+
+OptimalLocationsEntries = Dict[Literal["x", "y"], float]
+class OptimalLocationssDicts(TypedDict):
+    optimal_red_location: OptimalLocationsEntries
+    optimal_blue_location: OptimalLocationsEntries
 
 
 class PropAttributesDicts(TypedDict):
-    color: Color
-    prop_type: PropType
-    prop_location: Location
-    layer: Layer
-    orientation: Orientation
+    color: Colors
+    prop_type: PropTypes
+    prop_location: Locations
+    layer: Layers
+    orientation: Orientations
 
 
 ### MOTION ATTRIBUTES ###
 class MotionAttributesDicts(TypedDict):
-    color: Color
-    motion_type: MotionType
-    rotation_direction: RotationDirection
-    location: Location
+    color: Colors
+    motion_type: MotionTypes
+    rotation_direction: RotationDirections
+    location: Locations
     turns: Turns
 
-    start_location: Location
-    start_orientation: Orientation
-    start_layer: Layer
+    start_location: Locations
+    start_orientation: Orientations
+    start_layer: Layers
 
-    end_location: Location
-    end_orientation: Orientation
-    end_layer: Layer
+    end_location: Locations
+    end_orientation: Orientations
+    end_layer: Layers
 
 
 class ArrowAttributesDicts(TypedDict):
-    color: Color
-    motion_type: MotionType
-    rotation_direction: RotationDirection
-    arrow_location: Location
-    start_location: Location
-    end_location: Location
+    color: Colors
+    motion_type: MotionTypes
+    rotation_direction: RotationDirections
+    arrow_location: Locations
+    start_location: Locations
+    end_location: Locations
     turns: Turns
 
 
@@ -92,7 +89,7 @@ MotionAttributes = Literal[
     "end_layer",
 ]
 
-MotionTypeCombinations = Literal[
+MotionTypesCombinations = Literal[
     "pro_vs_pro",
     "anti_vs_anti",
     "static_vs_static",
@@ -105,14 +102,14 @@ MotionTypeCombinations = Literal[
     "dash_vs_dash",
 ]
 
-StartEndLocationTuple = Tuple[Location, Location]
+StartEndLocationsTuple = Tuple[Locations, Locations]
 PreprocessedStartEndCombinations = Dict[
     SpecificStartEndPositionsDicts,
     List[Tuple[Letters, List[MotionAttributesDicts]]],
 ]
-OptimalLocationsDicts = Dict[str, OptimalLocationEntries]
+OptimalLocationssDicts = Dict[str, OptimalLocationsEntries]
 DictVariants = (
-    MotionAttributesDicts | SpecificStartEndPositionsDicts | OptimalLocationsDicts
+    MotionAttributesDicts | SpecificStartEndPositionsDicts | OptimalLocationssDicts
 )
 DictVariantsLists = List[DictVariants]
 LetterDictionary = Dict[Letters, List[List[DictVariants]]]
@@ -122,11 +119,11 @@ Mode = Optional[Literal["TS", "TO", "SS", "SO", "QTS", "QTO"]]
 
 
 class PictographAttributesDict(TypedDict):
-    start_position: Position
-    end_position: Position
+    start_position: Positions
+    end_position: Positions
     letter_type: LetterType
     mode: Mode
-    motion_type_combination: MotionTypeCombinations
+    motion_type_combination: MotionTypesCombinations
 
 
 HybridCombinations = Literal[
@@ -140,7 +137,7 @@ HybridCombinations = Literal[
 
 ### LETTER GROUPS ###
 
-LetterGroupsByMotionType = Literal[
+LetterGroupsByMotionTypes = Literal[
     "ADGJMPS",
     "BEHKNQT",
     "CFILORUV",
@@ -154,5 +151,5 @@ LetterGroupsByMotionType = Literal[
 ]
 
 
-MotionTypeLetterGroupMap = Dict[MotionTypeCombinations, LetterGroupsByMotionType]
+MotionTypesLetterGroupMap = Dict[MotionTypesCombinations, LetterGroupsByMotionTypes]
 ParallelCombinationsSet = Set[Tuple[str, str, str, str]]

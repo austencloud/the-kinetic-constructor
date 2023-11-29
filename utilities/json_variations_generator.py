@@ -13,30 +13,30 @@ from settings.string_constants import (
     WEST,
 )
 from utilities.TypeChecking.TypeChecking import (
-    Location,
-    Location,
-    RotationDirection,
+    Locations,
+    Locations,
+    RotationDirections,
     MotionAttributesDicts,
 )
 
 
 class JsonVariationsGenerator:
     def __init__(self) -> None:
-        self.location_mapping: Dict[Tuple[Location, Location], str] = {}
+        self.location_mapping: Dict[Tuple[Locations, Locations], str] = {}
         for start in [NORTH, SOUTH]:
             for end in [EAST, WEST]:
                 self.location_mapping[(start, end)] = f"{start}{end}"
 
     def calculate_location(
-        self, start_location: Location, end_location: Location
-    ) -> Location:
+        self, start_location: Locations, end_location: Locations
+    ) -> Locations:
         return self.location_mapping.get((start_location, end_location))
 
     def apply_mapping(
         self,
         arrow_combination: List[MotionAttributesDicts],
-        position_mapping: Dict[Location, Location],
-        rotation_mapping: Dict[RotationDirection, RotationDirection],
+        position_mapping: Dict[Locations, Locations],
+        rotation_mapping: Dict[RotationDirections, RotationDirections],
     ) -> List[MotionAttributesDicts]:
         return [
             {
@@ -55,25 +55,25 @@ class JsonVariationsGenerator:
     def generate_pictograph_variants(
         self, arrow_combination: List[MotionAttributesDicts]
     ) -> List[Dict[str, Any]]:
-        rotation_mapping: Dict[Location, Location] = {
+        rotation_mapping: Dict[Locations, Locations] = {
             NORTH: EAST,
             EAST: SOUTH,
             SOUTH: WEST,
             WEST: NORTH,
         }
-        vertical_reflection_mapping: Dict[Location, Location] = {
+        vertical_reflection_mapping: Dict[Locations, Locations] = {
             NORTH: SOUTH,
             SOUTH: NORTH,
             EAST: EAST,
             WEST: WEST,
         }
-        horizontal_reflection_mapping: Dict[Location, Location] = {
+        horizontal_reflection_mapping: Dict[Locations, Locations] = {
             NORTH: NORTH,
             SOUTH: SOUTH,
             EAST: WEST,
             WEST: EAST,
         }
-        rotation_reflection_mapping: Dict[RotationDirection, RotationDirection] = {
+        rotation_reflection_mapping: Dict[RotationDirections, RotationDirections] = {
             COUNTER_CLOCKWISE: CLOCKWISE,
             CLOCKWISE: COUNTER_CLOCKWISE,
         }

@@ -48,11 +48,11 @@ class PropBoxDrag(ObjectBoxDrag):
         super().match_target_object(target_prop, drag_angle)
 
     def set_attributes(self, target_prop: "Prop") -> None:
-        self.color: Color = target_prop.color
-        self.prop_type: PropType = target_prop.prop_type
-        self.prop_location: Location = target_prop.prop_location
-        self.layer: Layer = target_prop.layer
-        self.orientation: Orientation = target_prop.orientation
+        self.color: Colors = target_prop.color
+        self.prop_type: PropTypes = target_prop.prop_type
+        self.prop_location: Locations = target_prop.prop_location
+        self.layer: Layers = target_prop.layer
+        self.orientation: Orientations = target_prop.orientation
 
         self.ghost_prop = self.pictograph.ghost_props[self.color]
         self.ghost_prop.target_prop = target_prop
@@ -88,7 +88,7 @@ class PropBoxDrag(ObjectBoxDrag):
 
     ### UPDATERS ###
 
-    def _update_prop_preview_for_new_location(self, new_location: Location) -> None:
+    def _update_prop_preview_for_new_location(self, new_location: Locations) -> None:
         self.prop_location = new_location
 
         self._update_ghost_prop_for_new_location(new_location)
@@ -202,7 +202,7 @@ class PropBoxDrag(ObjectBoxDrag):
         local_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
         return self.pictograph.view.rect().contains(local_pos_in_pictograph)
 
-    def create_pixmap_with_rotation(self, angle: RotationAngle) -> QPixmap:
+    def create_pixmap_with_rotation(self, angle: RotationAngles) -> QPixmap:
         # Generate a new pixmap based on target prop and apply the rotation
         new_svg_data = self.target_prop.set_svg_color(self.color)
         renderer = QSvgRenderer()
@@ -222,7 +222,7 @@ class PropBoxDrag(ObjectBoxDrag):
 
     def _get_prop_drag_rotation_angle(
         self, staff: Prop | ObjectBoxDrag
-    ) -> RotationAngle:
+    ) -> RotationAngles:
         """
         Get the rotation angle for the given staff specifically for use with the PropBoxDrag.
 
@@ -230,10 +230,12 @@ class PropBoxDrag(ObjectBoxDrag):
             staff (Union[Prop, ObjectBoxDrag]): The staff for which to retrieve the rotation angle.
 
         Returns:
-            RotationAngle: The rotation angle for the staff.
+            RotationAngles: The rotation angle for the staff.
 
         """
-        angle_map: Dict[Tuple[Layer, Orientation], Dict[Location, RotationAngle]] = {
+        angle_map: Dict[
+            Tuple[Layers, Orientations], Dict[Locations, RotationAngles]
+        ] = {
             (1, IN): {NORTH: 90, SOUTH: 270, WEST: 0, EAST: 180},
             (1, OUT): {NORTH: 270, SOUTH: 90, WEST: 180, EAST: 0},
             (2, CLOCKWISE): {NORTH: 0, SOUTH: 180, WEST: 270, EAST: 90},

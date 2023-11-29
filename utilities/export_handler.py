@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-from utilities.TypeChecking.TypeChecking import ColorHex
+from utilities.TypeChecking.TypeChecking import ColorsHex
 
 
 class ExportHandler:
@@ -141,9 +141,9 @@ class ExportHandler:
 
         return position
 
-    def get_fill_color(self, svg_file) -> ColorHex | None:
+    def get_fill_color(self, svg_file) -> ColorsHex | None:
         svg_data = ET.parse(svg_file)
-        fill_color: ColorHex | None = None
+        fill_color: ColorsHex | None = None
 
         # Try to get fill color from style element
         style_element = svg_data.getroot().find(".//{SVG_NS}style")

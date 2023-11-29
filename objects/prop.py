@@ -5,21 +5,21 @@ import re
 
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from utilities.TypeChecking.TypeChecking import (
-    Layer,
-    Orientation,
-    PropType,
-    RotationAngle,
+    Layers,
+    Orientations,
+    PropTypes,
+    RotationAngles,
     PropAttributesDicts,
-    Location,
-    Location,
-    RotationDirection,
-    MotionType,
-    Axis,
-    Color,
+    Locations,
+    Locations,
+    RotationDirections,
+    MotionTypes,
+    Axes,
+    Colors,
     TYPE_CHECKING,
     Dict,
     Tuple,
-    ColorHex,
+    ColorsHex,
 )
 
 if TYPE_CHECKING:
@@ -40,20 +40,20 @@ class Prop(GraphicalObject):
     def _setup_attributes(self, scene, attributes: "PropAttributesDicts") -> None:
         self.scene: Pictograph | PropBox = scene
         self.motion: Motion = None
-        self.prop_type: PropType = None
+        self.prop_type: PropTypes = None
 
         self.drag_offset = QPointF(0, 0)
-        self.previous_location: Location = None
+        self.previous_location: Locations = None
         self.arrow: Arrow = None
         self.static_arrow: StaticArrow = None
         self.ghost_prop: Prop = None
 
-        self.color: Color = attributes[COLOR]
-        self.prop_location: Location = attributes[PROP_LOCATION]
-        self.layer: Layer = attributes[LAYER]
-        self.orientation: Orientation = attributes[ORIENTATION]
+        self.color: Colors = attributes[COLOR]
+        self.prop_location: Locations = attributes[PROP_LOCATION]
+        self.layer: Layers = attributes[LAYER]
+        self.orientation: Orientations = attributes[ORIENTATION]
 
-        self.axis: Axis = self.update_axis(self.prop_location)
+        self.axis: Axes = self.update_axis(self.prop_location)
         self.center = self.boundingRect().center()
         self.update_rotation()
 
@@ -82,8 +82,6 @@ class Prop(GraphicalObject):
                 if item != self:
                     item.setSelected(False)
             self.previous_location = self.prop_location
-
-
 
     def update_location(self, new_pos: QPointF) -> None:
         new_location = self.get_closest_diamond_point(new_pos)
@@ -126,13 +124,12 @@ class Prop(GraphicalObject):
         object_length = self.boundingRect().width()
         object_width = self.boundingRect().height()
 
-        
         offset = self.get_offset(object_length, object_width)
-        
+
         self.setPos(new_pos + offset)
 
     def get_offset(self, prop_length, prop_width) -> Tuple[int, int]:
-        # Layer 1 logic
+        # Layers 1 logic
         if self.layer == 1:
             if self.orientation == IN:
                 offset_map = {
@@ -149,7 +146,7 @@ class Prop(GraphicalObject):
                     EAST: (0, 0),
                 }
 
-        # Layer 2 logic
+        # Layers 2 logic
         elif self.layer == 2:
             if self.orientation == CLOCKWISE:
                 offset_map = {
@@ -169,10 +166,11 @@ class Prop(GraphicalObject):
         offset_tuple = offset_map.get(self.prop_location, (0, 0))
         return QPointF(offset_tuple[0], offset_tuple[1])
 
-    def update_arrow_location(self, new_location: Location) -> None:
+    def update_arrow_location(self, new_location: Locations) -> None:
         if self.arrow.motion_type in [PRO, ANTI]:
             shift_location_mapping: Dict[
-                Tuple(Location, RotationDirection, MotionType), Dict[Location, Location]
+                Tuple(Locations, RotationDirections, MotionTypes),
+                Dict[Locations, Locations],
             ] = {
                 ### ISO ###
                 (NORTHEAST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
@@ -180,18 +178,36 @@ class Prop(GraphicalObject):
                 (SOUTHWEST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
                 (SOUTHEAST, CLOCKWISE, PRO): {WEST: SOUTHWEST, EAST: NORTHEAST},
                 (NORTHEAST, COUNTER_CLOCKWISE, PRO): {WEST: NORTHWEST, EAST: SOUTHEAST},
-                (NORTHWEST, COUNTER_CLOCKWISE, PRO): {SOUTH: SOUTHWEST, NORTH: NORTHEAST},
+                (NORTHWEST, COUNTER_CLOCKWISE, PRO): {
+                    SOUTH: SOUTHWEST,
+                    NORTH: NORTHEAST,
+                },
                 (SOUTHWEST, COUNTER_CLOCKWISE, PRO): {EAST: SOUTHEAST, WEST: NORTHWEST},
-                (SOUTHEAST, COUNTER_CLOCKWISE, PRO): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
+                (SOUTHEAST, COUNTER_CLOCKWISE, PRO): {
+                    NORTH: NORTHEAST,
+                    SOUTH: SOUTHWEST,
+                },
                 ### ANTI ###
                 (NORTHEAST, CLOCKWISE, ANTI): {EAST: SOUTHEAST, WEST: NORTHWEST},
                 (NORTHWEST, CLOCKWISE, ANTI): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
                 (SOUTHWEST, CLOCKWISE, ANTI): {EAST: SOUTHEAST, WEST: NORTHWEST},
                 (SOUTHEAST, CLOCKWISE, ANTI): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
-                (NORTHEAST, COUNTER_CLOCKWISE, ANTI): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
-                (NORTHWEST, COUNTER_CLOCKWISE, ANTI): {WEST: SOUTHWEST, EAST: NORTHEAST},
-                (SOUTHWEST, COUNTER_CLOCKWISE, ANTI): {SOUTH: SOUTHEAST, NORTH: NORTHWEST},
-                (SOUTHEAST, COUNTER_CLOCKWISE, ANTI): {EAST: NORTHEAST, WEST: SOUTHWEST},
+                (NORTHEAST, COUNTER_CLOCKWISE, ANTI): {
+                    NORTH: NORTHWEST,
+                    SOUTH: SOUTHEAST,
+                },
+                (NORTHWEST, COUNTER_CLOCKWISE, ANTI): {
+                    WEST: SOUTHWEST,
+                    EAST: NORTHEAST,
+                },
+                (SOUTHWEST, COUNTER_CLOCKWISE, ANTI): {
+                    SOUTH: SOUTHEAST,
+                    NORTH: NORTHWEST,
+                },
+                (SOUTHEAST, COUNTER_CLOCKWISE, ANTI): {
+                    EAST: NORTHEAST,
+                    WEST: SOUTHWEST,
+                },
             }
 
             current_location = self.arrow.arrow_location
@@ -255,15 +271,17 @@ class Prop(GraphicalObject):
 
     ### GETTERS ###
 
-    def update_axis(self, location) -> Axis:
+    def update_axis(self, location) -> Axes:
         if self.layer == 1:
-            self.axis: Axis = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
+            self.axis: Axes = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
         elif self.layer == 2:
-            self.axis: Axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
+            self.axis: Axes = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
         return self.axis
 
-    def get_rotation_angle(self) -> RotationAngle:
-        angle_map: Dict[Tuple[Layer, Orientation], Dict[Location, RotationAngle]] = {
+    def get_rotation_angle(self) -> RotationAngles:
+        angle_map: Dict[
+            Tuple[Layers, Orientations], Dict[Locations, RotationAngles]
+        ] = {
             (1, IN): {NORTH: 90, SOUTH: 270, WEST: 0, EAST: 180},
             (1, OUT): {NORTH: 270, SOUTH: 90, WEST: 180, EAST: 0},
             (2, CLOCKWISE): {NORTH: 0, SOUTH: 180, WEST: 270, EAST: 90},
@@ -295,7 +313,7 @@ class Prop(GraphicalObject):
                 closest_handpoint = point
         return closest_handpoint
 
-    def get_closest_diamond_point(self, mouse_pos: QPointF) -> Location:
+    def get_closest_diamond_point(self, mouse_pos: QPointF) -> Locations:
         closest_distance = float("inf")
         closest_location = None
         for location, point in self.scene.grid.handpoints.items():
@@ -305,7 +323,7 @@ class Prop(GraphicalObject):
                 closest_location = location
         return closest_location
 
-    def get_svg_file(self, prop_type: PropType) -> str:
+    def get_svg_file(self, prop_type: PropTypes) -> str:
         svg_file = f"{PROP_DIR}{prop_type}.svg"
         return svg_file
 
@@ -325,8 +343,8 @@ class Prop(GraphicalObject):
             self.layer = 1
         self.update_rotation()
 
-    def set_svg_color(self, new_color: Color) -> bytes:
-        new_hex_color: ColorHex = COLOR_MAP.get(new_color)
+    def set_svg_color(self, new_color: Colors) -> bytes:
+        new_hex_color: ColorsHex = COLOR_MAP.get(new_color)
 
         with open(self.svg_file, "r") as f:
             svg_data = f.read()
@@ -337,7 +355,7 @@ class Prop(GraphicalObject):
         match = style_tag_pattern.search(svg_data)
 
         if match:
-            old_hex_color: ColorHex = match.group(1)
+            old_hex_color: ColorsHex = match.group(1)
             svg_data = svg_data.replace(old_hex_color, new_hex_color)
         return svg_data.encode("utf-8")
 
@@ -346,6 +364,29 @@ class Prop(GraphicalObject):
         self.scene.props.remove(self)
         self.scene.update_pictograph()
 
+    def _create_static_arrow(self) -> None:
+        static_arrow_dict = {
+            COLOR: self.color,
+            MOTION_TYPE: STATIC,
+            ROTATION_DIRECTION: "None",
+            ARROW_LOCATION: self.prop_location,
+            START_LOCATION: self.prop_location,
+            END_LOCATION: self.prop_location,
+            TURNS: 0,
+        }
+
+        self.static_arrow = StaticArrow(self.pictograph, static_arrow_dict)
+        for arrow in self.pictograph.arrows[:]:
+            if arrow.color == self.color:
+                self.pictograph.removeItem(arrow)
+                self.pictograph.arrows.remove(arrow)
+        self.pictograph.addItem(self.static_arrow)
+        self.pictograph.arrows.append(self.static_arrow)
+        self.static_arrow.prop = self.ghost_prop
+        self.static_arrow.prop.arrow = self.static_arrow
+
+        if self.static_arrow not in self.pictograph.items():
+            self.pictograph.addItem(self.static_arrow)
 
 class Staff(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:

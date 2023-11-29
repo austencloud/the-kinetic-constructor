@@ -65,5 +65,5 @@ class PictographMenuHandler:
     ### GRAPHBOARD ACTIONS ###
 
     def _add_pictograph_actions(self, menu: QMenu) -> None:
-        swap_colors_action = QAction("Swap Colors", menu)
+        swap_colors_action = QAction("Swap Colorss", menu)
         menu.addAction(swap_colors_action)

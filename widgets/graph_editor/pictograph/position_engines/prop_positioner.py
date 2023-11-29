@@ -31,10 +31,10 @@ from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
     MotionAttributesDicts,
     LetterDictionary,
-    OptimalLocationEntries,
-    OptimalLocationsDicts,
+    OptimalLocationsEntries,
+    OptimalLocationssDicts,
     Direction,
-    Location,
+    Locations,
 )
 
 if TYPE_CHECKING:
@@ -95,7 +95,7 @@ class PropPositioner:
             new_position = self.calculate_new_position(prop.pos(), direction)
             prop.setPos(new_position)
 
-        motions_grouped_by_start_loc: Dict[Location, List[MotionAttributesDicts]] = {}
+        motions_grouped_by_start_loc: Dict[Locations, List[MotionAttributesDicts]] = {}
         for motion in board_state:
             motions_grouped_by_start_loc.setdefault(motion[START_LOCATION], []).append(
                 motion
@@ -389,10 +389,10 @@ class PropPositioner:
         current_state,
         matching_letters,
         arrow_dict,
-    ) -> OptimalLocationEntries | None:
+    ) -> OptimalLocationsEntries | None:
         for variants in matching_letters:
             if self.pictograph.arrow_positioner.compare_states(current_state, variants):
-                optimal_entry: OptimalLocationsDicts = next(
+                optimal_entry: OptimalLocationssDicts = next(
                     (
                         d
                         for d in variants

@@ -33,13 +33,13 @@ from settings.string_constants import (
 from utilities.letter_engine import LetterEngine
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
-    Layer,
+    Layers,
     MotionAttributesDicts,
     List,
     Optional,
-    Orientation,
+    Orientations,
     Tuple,
-    Location,
+    Locations,
 )
 from widgets.graph_editor.pictograph.pictograph_event_handler import (
     PictographEventHandler,
@@ -245,8 +245,8 @@ class Pictograph(QGraphicsScene):
         self,
         arrow: Arrow,
         prop: Prop,
-        start_orientation: Orientation,
-        start_layer: Layer,
+        start_orientation: Orientations,
+        start_layer: Layers,
     ) -> None:
         motion_attributes: MotionAttributesDicts = {
             COLOR: arrow.color,

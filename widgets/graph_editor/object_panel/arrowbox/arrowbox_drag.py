@@ -24,13 +24,13 @@ from typing import TYPE_CHECKING, Dict, Tuple
 from widgets.graph_editor.object_panel.objectbox_drag import ObjectBoxDrag
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
-    Color,
-    MotionType,
-    Location,
-    RotationDirection,
-    Location,
+    Colors,
+    MotionTypes,
+    Locations,
+    RotationDirections,
+    Locations,
     Turns,
-    RotationAngle,
+    RotationAngles,
 )
 
 if TYPE_CHECKING:
@@ -60,12 +60,12 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.apply_transformations_to_preview()
 
     def set_attributes(self, target_arrow: "Arrow") -> None:
-        self.color: Color = target_arrow.color
-        self.motion_type: MotionType = target_arrow.motion_type
-        self.arrow_location: Location = target_arrow.arrow_location
-        self.rotation_direction: RotationDirection = target_arrow.rotation_direction
-        self.start_location: Location = target_arrow.start_location
-        self.end_location: Location = target_arrow.end_location
+        self.color: Colors = target_arrow.color
+        self.motion_type: MotionTypes = target_arrow.motion_type
+        self.arrow_location: Locations = target_arrow.arrow_location
+        self.rotation_direction: RotationDirections = target_arrow.rotation_direction
+        self.start_location: Locations = target_arrow.start_location
+        self.end_location: Locations = target_arrow.end_location
         self.turns: Turns = target_arrow.turns
 
         self.ghost_arrow = self.pictograph.ghost_arrows[self.color]
@@ -93,7 +93,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
     ### UPDATERS ###
 
-    def _update_arrow_preview_for_new_location(self, new_location: Location) -> None:
+    def _update_arrow_preview_for_new_location(self, new_location: Locations) -> None:
         self.arrow_location = new_location
         (
             self.start_location,
@@ -238,7 +238,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
     def _get_arrow_drag_rotation_angle(
         self, arrow: Arrow | ObjectBoxDrag
-    ) -> RotationAngle:
+    ) -> RotationAngles:
         """
         Calculate the rotation angle for the given arrow based on its motion type, rotation direction, color, and location.
         Takes either the target arrow when setting the pixmap, or the drag widget itself when updating rotation.
@@ -247,7 +247,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         arrow (Arrow): The arrow object for which to calculate the rotation angle.
 
         Returns:
-        RotationAngle: The calculated rotation angle for the arrow.
+        RotationAngles: The calculated rotation angle for the arrow.
         """
         motion_type, rotation_direction, color, location = (
             arrow.motion_type,
@@ -257,8 +257,8 @@ class ArrowBoxDrag(ObjectBoxDrag):
         )
 
         rotation_angle_map: Dict[
-            Tuple[MotionType, Color],
-            Dict[RotationDirection, Dict[Location, RotationAngle]],
+            Tuple[MotionTypes, Colors],
+            Dict[RotationDirections, Dict[Locations, RotationAngles]],
         ] = {
             (PRO, RED): {
                 CLOCKWISE: {
@@ -319,11 +319,11 @@ class ArrowBoxDrag(ObjectBoxDrag):
         }
 
         direction_map: Dict[
-            RotationDirection, Dict[Location, RotationAngle]
+            RotationDirections, Dict[Locations, RotationAngles]
         ] = rotation_angle_map.get((motion_type, color), {})
-        location_map: Dict[Location, RotationAngle] = direction_map.get(
+        location_map: Dict[Locations, RotationAngles] = direction_map.get(
             rotation_direction, {}
         )
-        rotation_angle: RotationAngle = location_map.get(location, 0)
+        rotation_angle: RotationAngles = location_map.get(location, 0)
 
         return rotation_angle

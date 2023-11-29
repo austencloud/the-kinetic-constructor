@@ -21,18 +21,18 @@ if TYPE_CHECKING:
 
 from utilities.TypeChecking.TypeChecking import (
     MotionAttributesDicts,
-    Color,
+    Colors,
     GammaEndingLetters,
-    LetterGroupsByMotionType,
+    LetterGroupsByMotionTypes,
     Letters,
-    MotionTypeCombinations,
-    MotionTypeLetterGroupMap,
-    Position,
+    MotionTypesCombinations,
+    MotionTypesLetterGroupMap,
+    Positions,
     PreprocessedStartEndCombinations,
-    RotationDirection,
-    SpecificPosition,
+    RotationDirections,
+    SpecificPositions,
     SpecificStartEndPositionsDicts,
-    StartEndLocationTuple,
+    StartEndLocationsTuple,
 )
 
 
@@ -52,8 +52,8 @@ class LetterEngine:
 
         for letter, combinations in self.letters.items():
             for combination in combinations:
-                start_pos: SpecificPosition = combination[0].get("start_position")
-                end_pos: SpecificPosition = combination[0].get("end_position")
+                start_pos: SpecificPositions = combination[0].get("start_position")
+                end_pos: SpecificPositions = combination[0].get("end_position")
                 if start_pos and end_pos:
                     key = f"{start_pos}_{end_pos}"
                     preprocessed_start_end_combinations.setdefault(key, []).append(
@@ -70,7 +70,7 @@ class LetterEngine:
 
     def get_current_letter(self) -> Letters | None:
         specific_position: Dict[
-            str, SpecificPosition
+            str, SpecificPositions
         ] = self.get_specific_start_end_positions()
         if specific_position:
             start_pos = specific_position.get("start_position")
@@ -85,7 +85,7 @@ class LetterEngine:
                 letter: combinations for letter, combinations in preprocessed_group
             }
 
-            overall_position: Dict[str, Position] = self.get_overall_position(
+            overall_position: Dict[str, Positions] = self.get_overall_position(
                 specific_position
             )
             motion_letter_group = self.get_motion_type_letter_group()
@@ -114,9 +114,10 @@ class LetterEngine:
         else:
             return None
 
-    def get_motion(self, color: Color) -> Arrow | None:
+    def get_motion(self, color: Colors) -> Arrow | None:
         return next(
-            (motion for motion in self.pictograph.motions if motion.color == color), None
+            (motion for motion in self.pictograph.motions if motion.color == color),
+            None,
         )
 
     def get_specific_start_end_positions(self) -> SpecificStartEndPositionsDicts:
@@ -146,7 +147,7 @@ class LetterEngine:
             self.blue_motion = blue_motion
             return specific_position
 
-    def get_start_end_locations_as_tuple(self) -> StartEndLocationTuple:
+    def get_start_end_locations_as_tuple(self) -> StartEndLocationsTuple:
         self.red_arrow = (
             self.pictograph.arrows[0]
             if self.pictograph.arrows[0].color == "red"
@@ -177,14 +178,14 @@ class LetterEngine:
 
         return (start_locations, end_locations)
 
-    def get_motion_type_letter_group(self) -> LetterGroupsByMotionType:
+    def get_motion_type_letter_group(self) -> LetterGroupsByMotionTypes:
         red_motion_type = self.red_arrow.motion_type
         blue_motion_type = self.blue_motion.motion_type
 
-        motion_type_combination: MotionTypeCombinations = motion_type_combinations.get(
+        motion_type_combination: MotionTypesCombinations = motion_type_combinations.get(
             (red_motion_type, blue_motion_type)
         )
-        motion_type_letter_group: MotionTypeLetterGroupMap = (
+        motion_type_letter_group: MotionTypesLetterGroupMap = (
             motion_type_letter_groups.get(motion_type_combination, "")
         )
 
@@ -211,7 +212,7 @@ class LetterEngine:
         clockwise = ["n", "e", "s", "w"]
 
         # Function to calculate direction
-        def calculate_direction(start, end) -> RotationDirection:
+        def calculate_direction(start, end) -> RotationDirections:
             return (clockwise.index(end) - clockwise.index(start)) % len(clockwise)
 
         # Check if all arrow locations are valid
@@ -293,7 +294,7 @@ class LetterEngine:
 
     def get_overall_position(
         self, specific_positions: SpecificStartEndPositionsDicts
-    ) -> Position:
+    ) -> Positions:
         return {position: value[:-1] for position, value in specific_positions.items()}
 
     def get_handpath_direction(self, start, end) -> Literal["ccw", "cw"] | None:

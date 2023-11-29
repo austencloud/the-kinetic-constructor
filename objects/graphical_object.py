@@ -11,14 +11,14 @@ if TYPE_CHECKING:
     from objects.prop import Prop
 
 from utilities.TypeChecking.TypeChecking import (
-    Color,
+    Colors,
     PropAttributesDicts,
     MotionAttributesDicts,
 )
 
 
 class GraphicalObject(QGraphicsSvgItem):
-    self: Union["Prop", "Arrow"]    
+    self: Union["Prop", "Arrow"]
 
     def __init__(self, svg_file: str, pictograph: "Pictograph") -> None:
         super().__init__()
@@ -26,7 +26,7 @@ class GraphicalObject(QGraphicsSvgItem):
         self.pictograph = pictograph
 
         self.renderer: QSvgRenderer = None
-        self.color: Color = None
+        self.color: Colors = None
 
         self.center = self.boundingRect().center()
         if svg_file:
@@ -43,7 +43,7 @@ class GraphicalObject(QGraphicsSvgItem):
         )
         self.setTransformOriginPoint(self.center)
 
-    def set_svg_color(self, new_color: Color) -> bytes:
+    def set_svg_color(self, new_color: Colors) -> bytes:
         new_hex_color = COLOR_MAP.get(new_color)
 
         with open(self.svg_file, "r") as f:
@@ -93,9 +93,7 @@ class GraphicalObject(QGraphicsSvgItem):
             self.setOpacity(0.25)  # Change opacity or use another effect to highlight
         else:
             self.setOpacity(1.0)  # Reset to normal when not highlighted
-    
 
-        
     def get_object_center(self) -> QPointF:
         if self.rotation() in [90, 270]:
             return QPointF(

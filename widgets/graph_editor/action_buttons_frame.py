@@ -4,7 +4,7 @@ from objects.arrow import Arrow
 from settings.string_constants import ICON_DIR, CLOCKWISE, COUNTER_CLOCKWISE
 from utilities.json_handler import JsonHandler
 from widgets.graph_editor.pictograph.pictograph import Pictograph
-from utilities.TypeChecking.TypeChecking import RotationDirection
+from utilities.TypeChecking.TypeChecking import RotationDirections
 
 
 class ActionButtonsFrame(QFrame):
@@ -34,7 +34,7 @@ class ActionButtonsFrame(QFrame):
         buttons_settings = [
             (
                 "update_locations.png",
-                "Update Optimal Locations",
+                "Update Optimal Locationss",
                 lambda: self.json_handler.update_optimal_locations_in_json(
                     self.pictograph.get_current_arrow_coordinates()
                 ),
@@ -104,12 +104,12 @@ class ActionButtonsFrame(QFrame):
         if arrow:
             arrow.delete()
 
-    def rotate_selected_arrow(self, direction: RotationDirection) -> None:
+    def rotate_selected_arrow(self, direction: RotationDirections) -> None:
         """
         Rotate the selected arrow in the specified direction.
 
         Args:
-            direction (RotationDirection): The direction to rotate the arrow, either 'cw' or 'ccw'.
+            direction (RotationDirections): The direction to rotate the arrow, either 'cw' or 'ccw'.
 
         """
         arrow: Arrow = (

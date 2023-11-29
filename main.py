@@ -49,7 +49,7 @@ class MainWindow(QMainWindow):
         self.main_window_width = int(screen_geometry.width() * 0.9)
         self.main_window_height = int(screen_geometry.height() * 0.8)
 
-        # Positioning the window
+        # Positionsing the window
         self.move(
             screen_geometry.x()
             + (screen_geometry.width() - self.main_window_width) // 2

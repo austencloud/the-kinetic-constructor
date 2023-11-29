@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QWidget
 from typing import TYPE_CHECKING, Optional, Union
 
 from objects.graphical_object import GraphicalObject
-from utilities.TypeChecking.TypeChecking import RotationAngle
+from utilities.TypeChecking.TypeChecking import RotationAngles
 
 if TYPE_CHECKING:
     from main import MainWindow
@@ -49,7 +49,7 @@ class ObjectBoxDrag(QWidget):
         self.static_arrow = None
 
     def create_pixmap(
-        self, target_object: GraphicalObject, drag_angle: RotationAngle
+        self, target_object: GraphicalObject, drag_angle: RotationAngles
     ) -> None:
         new_svg_data = target_object.set_svg_color(self.color)
         renderer = QSvgRenderer()
@@ -81,7 +81,7 @@ class ObjectBoxDrag(QWidget):
     def match_target_object(
         self: Union["ArrowBoxDrag", "PropBoxDrag"],
         target_object: GraphicalObject,
-        drag_angle: Optional[RotationAngle],
+        drag_angle: Optional[RotationAngles],
     ) -> None:
         self.target_object = target_object
         self.set_attributes(target_object)

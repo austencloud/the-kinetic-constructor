@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import Qt
 from settings.string_constants import BLUE, BLUE_HEX, ICON_PATHS, RED, RED_HEX, ICON_DIR
-from utilities.TypeChecking.TypeChecking import Color
+from utilities.TypeChecking.TypeChecking import Colors
 from typing import TYPE_CHECKING
 from objects.arrow import Arrow
 
@@ -25,7 +25,7 @@ from PyQt6.QtCore import QSize
 
 
 class HeaderWidget(QWidget):
-    def __init__(self, attr_box: "AttrBox", color: Color) -> None:
+    def __init__(self, attr_box: "AttrBox", color: Colors) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
         self.color = color
@@ -96,7 +96,7 @@ class HeaderWidget(QWidget):
         pass
 
 
-class MotionTypeWidget(QWidget):
+class MotionTypesWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.layout = QHBoxLayout(self)
@@ -171,7 +171,7 @@ class StartEndWidget(QWidget):
 
 class TurnsWidget(QWidget):
     def __init__(
-        self, pictograph: "Pictograph", color: Color, attr_box: "AttrBox"
+        self, pictograph: "Pictograph", color: Colors, attr_box: "AttrBox"
     ) -> None:
         super().__init__()
         self.pictograph = pictograph
