@@ -29,10 +29,12 @@ from settings.string_constants import (
 from objects.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Tuple
 
+from widgets.graph_editor.object_panel.objectbox_drag import ObjectBoxDrag
+
 if TYPE_CHECKING:
     from main import MainWindow
     from widgets.graph_editor.pictograph.pictograph import Pictograph
-    from widgets.graph_editor.arrowbox.arrowbox import ArrowBox
+    from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
     Color,
@@ -45,44 +47,29 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 
-class ArrowBoxDrag(QWidget):
+class ArrowBoxDrag(ObjectBoxDrag):
     def __init__(
         self, main_window: "MainWindow", pictograph: "Pictograph", arrowbox: "ArrowBox"
     ) -> None:
-        super().__init__()
-        self.setParent(main_window)
-        self._setup_dependencies(main_window, pictograph, arrowbox)
-        self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
-        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-        self.preview = QLabel(self)
-        self.transform = QTransform()
+        super().__init__(main_window, pictograph, arrowbox)
         self.attributes: ArrowAttributesDicts = {}
-        self.reset_drag_state()
-
-    def _setup_dependencies(
-        self, main_window: "MainWindow", pictograph: "Pictograph", arrowbox: "ArrowBox"
-    ) -> None:
         self.arrowbox = arrowbox
-        self.pictograph = pictograph
-        self.main_window = main_window
-        self.has_entered_pictograph_once = False
-        self.current_rotation_angle = 0
-        self.previous_location = None
-        self.preview = None
-        self.svg_file = None
         self.ghost_arrow = None
         self.start_orientation = IN
+        self.setup_dependencies(main_window, pictograph, arrowbox)
 
     def match_target_arrow(self, target_arrow: "Arrow") -> None:
         self.target_arrow = target_arrow
         self.set_attributes(target_arrow)
-        pixmap = self.create_pixmap(target_arrow)
+        target_arrow_angle = self._get_arrow_drag_rotation_angle(target_arrow)
+        pixmap = self.create_pixmap(target_arrow, target_arrow_angle)
+        
         self.preview.setPixmap(pixmap)
         self.preview.setFixedHeight(pixmap.height())
         self.arrow_center = (
             self.target_arrow.boundingRect().center() * self.pictograph.view.view_scale
         )
-        self.current_rotation_angle = target_arrow.get_rotation_angle()
+        self.current_rotation_angle = target_arrow.get_arrow_rotation_angle()
         self.is_svg_mirrored = target_arrow.is_svg_mirrored
         self.preview.setPixmap(pixmap)
         self.apply_transformations_to_preview()
@@ -98,22 +85,6 @@ class ArrowBoxDrag(QWidget):
 
         self.ghost_arrow = self.pictograph.ghost_arrows[self.color]
         self.ghost_arrow.target_arrow = target_arrow
-
-    def reset_drag_state(self) -> None:
-        self.dragging = False
-        self.drag_preview = None
-        self.current_rotation_angle = 0
-
-    def create_pixmap(self, target_arrow: "Arrow") -> QPixmap:
-        new_svg_data = target_arrow.set_svg_color(target_arrow.color)
-        renderer = QSvgRenderer(new_svg_data)
-        scaled_size = renderer.defaultSize() * self.pictograph.view.view_scale
-        pixmap = QPixmap(scaled_size)
-        pixmap.fill(Qt.GlobalColor.transparent)
-        painter = QPainter(pixmap)
-        with painter as painter:
-            renderer.render(painter)
-        return pixmap
 
     def get_attributes(self) -> ArrowAttributesDicts:
         start_location: Location
@@ -186,7 +157,7 @@ class ArrowBoxDrag(QWidget):
                 )
                 scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
                 new_location = self.pictograph.get_nearest_layer2_point(scene_pos)
-                
+
                 if self.previous_location != new_location:
                     self.previous_location = new_location
                     self.update_preview_for_new_location(new_location)
@@ -255,7 +226,7 @@ class ArrowBoxDrag(QWidget):
         with painter as painter:
             renderer.render(painter)
 
-        angle = self.get_rotation_angle(self)
+        angle = self._get_arrow_drag_rotation_angle (self)
 
         unrotate_transform = QTransform().rotate(-self.current_rotation_angle)
         unrotated_pixmap = self.preview.pixmap().transformed(unrotate_transform)
@@ -275,7 +246,17 @@ class ArrowBoxDrag(QWidget):
             self.arrow_location,
         )
 
-    def get_rotation_angle(self, arrow: "Arrow") -> RotationAngle:
+    def _get_arrow_drag_rotation_angle (self, arrow: Arrow | ObjectBoxDrag) -> RotationAngle:
+        """
+        Calculate the rotation angle for the given arrow based on its motion type, rotation direction, color, and location.
+        Takes either the target arrow when setting the pixmap, or the drag widget itself when updating rotation.
+
+        Parameters:
+        arrow (Arrow): The arrow object for which to calculate the rotation angle.
+
+        Returns:
+        RotationAngle: The calculated rotation angle for the arrow.
+        """
         motion_type, rotation_direction, color, location = (
             arrow.motion_type,
             arrow.rotation_direction,

@@ -45,8 +45,6 @@ class ArrowBox(ObjectBox):
         super().__init__(main_widget, pictograph)
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
-        self.setSceneRect(0, 0, 750, 750)
-        self.setBackgroundBrush(Qt.GlobalColor.white)
         self.view = ArrowBoxView(self)
 
         self.populate_arrows()

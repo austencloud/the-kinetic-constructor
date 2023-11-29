@@ -39,19 +39,19 @@ class Prop(GraphicalObject):
     def _setup_attributes(self, scene, attributes: "PropAttributesDicts") -> None:
         self.scene: Pictograph | PropBox = scene
         self.motion: Motion = None
-        self.prop_type = None
+        self.prop_type: PropType = None
 
         self.drag_offset = QPointF(0, 0)
-        self.previous_location = None
+        self.previous_location: Location = None
         self.arrow: Arrow = None
         self.ghost_prop: Prop = None
 
-        self.color = attributes[COLOR]
-        self.prop_location = attributes[PROP_LOCATION]
-        self.layer = attributes[LAYER]
-        self.orientation = attributes[ORIENTATION]
+        self.color:Color = attributes[COLOR]
+        self.prop_location:Location = attributes[PROP_LOCATION]
+        self.layer: Layer = attributes[LAYER]
+        self.orientation: Orientation = attributes[ORIENTATION]
 
-        self.axis = self.update_axis(self.prop_location)
+        self.axis: Axis = self.update_axis(self.prop_location)
         self.center = self.boundingRect().center()
         self.update_rotation()
 

@@ -165,7 +165,7 @@ class Arrow(GraphicalObject):
             self.unmirror()
 
     def update_rotation(self) -> None:
-        angle = self.get_rotation_angle()
+        angle = self.get_arrow_rotation_angle()
         self.setRotation(angle)
 
     def update_for_new_location(self, new_location: Location) -> None:
@@ -238,7 +238,9 @@ class Arrow(GraphicalObject):
             svg_data = f.read()
         return svg_data.encode("utf-8")
 
-    def get_rotation_angle(self, arrow: Optional["Arrow"] = None) -> RotationAngle:
+    def get_arrow_rotation_angle(
+        self, arrow: Optional["Arrow"] = None
+    ) -> RotationAngle:
         arrow = arrow or self
         location_to_angle = self.get_location_to_angle_map(
             arrow.motion_type, arrow.rotation_direction
