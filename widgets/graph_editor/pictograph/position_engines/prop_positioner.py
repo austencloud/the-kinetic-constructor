@@ -150,15 +150,15 @@ class PropPositioner:
     def reposition_static_beta(
         self, move_prop: callable, static_motions: List[MotionAttributesDicts]
     ) -> None:
-        for arrow in static_motions:
+        for motion in static_motions:
             prop = next(
-                (s for s in self.pictograph.props if s.arrow.color == arrow[COLOR]),
+                (s for s in self.pictograph.props if s.arrow.color == motion[COLOR]),
                 None,
             )
             if not prop:
                 continue
 
-            end_location = arrow[END_LOCATION]
+            end_location = motion[END_LOCATION]
             layer_reposition_map = {
                 1: {
                     (NORTH, RED): RIGHT,
@@ -179,7 +179,7 @@ class PropPositioner:
             }
 
             direction: Direction = layer_reposition_map[prop.layer].get(
-                (prop.prop_location, arrow[COLOR]), None
+                (prop.prop_location, motion[COLOR]), None
             )
 
             if direction:

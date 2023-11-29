@@ -56,7 +56,8 @@ class PropBoxDrag(QWidget):
         self.previous_location = None
         self.preview = None
         self.svg_file = None
-        self.ghost_arrow = None
+        self.static_arrow = None
+    
 
     def match_target_prop(self, target_prop: "Prop") -> None:
         self.target_prop = target_prop
@@ -129,7 +130,14 @@ class PropBoxDrag(QWidget):
         self.ghost_prop.update_axis(new_location)
         self.ghost_prop.update_rotation()
 
-        self.update_static_arrow_during_drag()
+        if not self.static_arrow:
+            self.create_static_arrow()
+        self.update_static_arrow()
+            
+        self.ghost_prop.arrow = self.static_arrow    
+        self.ghost_prop.arrow.arrow_location = self.prop_location
+        self.ghost_prop.arrow.start_location = self.prop_location
+        self.ghost_prop.arrow.end_location = self.prop_location
 
         self.current_rotation_angle = self.get_rotation_angle()
         rotated_pixmap = self.create_pixmap_with_rotation(self.current_rotation_angle)
@@ -153,7 +161,7 @@ class PropBoxDrag(QWidget):
         self.pictograph.update_pictograph()
         self.move_to_cursor(self.propbox.view.mapFromGlobal(self.pos()))
 
-    def update_static_arrow_during_drag(self) -> None:
+    def create_static_arrow(self) -> None:
         static_arrow_dict = {
             COLOR: self.color,
             MOTION_TYPE: STATIC,
@@ -164,16 +172,27 @@ class PropBoxDrag(QWidget):
             TURNS: 0,
         }
 
-        static_arrow = StaticArrow(self, static_arrow_dict)
-        self.pictograph.addItem(static_arrow)
-        self.pictograph.arrows.append(static_arrow)
-        static_arrow.prop = self.ghost_prop
-        static_arrow.prop.arrow = static_arrow
+        self.static_arrow = StaticArrow(self, static_arrow_dict)
+        self.pictograph.addItem(self.static_arrow)
+        self.pictograph.arrows.append(self.static_arrow)
+        self.static_arrow.prop = self.ghost_prop
+        self.static_arrow.prop.arrow = self.static_arrow
 
-        if static_arrow not in self.pictograph.items():
-            self.pictograph.addItem(static_arrow)
+        if self.static_arrow not in self.pictograph.items():
+            self.pictograph.addItem(self.static_arrow)
+        
         self.pictograph.update_pictograph()
 
+    def update_static_arrow(self) -> None:
+        self.static_arrow.color = self.color
+        self.static_arrow.arrow_location = self.prop_location
+        self.static_arrow.start_location = self.prop_location
+        self.static_arrow.end_location = self.prop_location
+        self.static_arrow.prop = self.ghost_prop
+        self.static_arrow.prop.arrow = self.static_arrow
+        self.static_arrow.update_appearance()
+        self.pictograph.update_pictograph()
+        
     ### EVENT HANDLERS ###
 
     def handle_mouse_move(self, event_pos: QPoint) -> None:
@@ -182,7 +201,7 @@ class PropBoxDrag(QWidget):
             if self.is_over_pictograph(event_pos):
                 if not self.has_entered_pictograph_once:
                     self.has_entered_pictograph_once = True
-                    self.remove_same_color_prop()
+                    self.remove_same_color_objects()
 
                 pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
@@ -194,28 +213,8 @@ class PropBoxDrag(QWidget):
                 if self.previous_location != new_location and new_location:
                     self.previous_location = new_location
                     self.update_preview_for_new_location(new_location)
-                    self.ghost_prop.update_ghost_prop(self.attributes)
-
-    def handle_enter_pictograph(self, event_pos: QPoint) -> None:
-        if not self.has_entered_pictograph_once:
-            self.just_entered_pictograph = True
-            self.has_entered_pictograph_once = True
-            self.remove_same_color_prop()
-
-        if self.has_entered_pictograph_once:
-            self.just_entered_pictograph = False
-
-        pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
-        view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
-        scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
-        new_location = self.pictograph.get_nearest_handpoint(
-            QPointF(scene_pos.x(), scene_pos.y())
-        )
-
-        if self.previous_location != new_location and new_location:
-            self.previous_location = new_location
-            self.update_preview_for_new_location(new_location)
-            self.ghost_prop.update_ghost_prop(self.attributes)
+                    self.ghost_prop.update_attributes(self.attributes)
+                    self.pictograph.update_pictograph()
 
 
     def handle_mouse_release(self) -> None:
@@ -240,6 +239,9 @@ class PropBoxDrag(QWidget):
         self.pictograph.clearSelection()
         self.placed_prop = Prop(self.pictograph, self.ghost_prop.get_attributes())
         self.placed_prop.arrow = self.ghost_prop.arrow
+        self.placed_prop.arrow.arrow_location = self.prop_location
+        self.placed_prop.arrow.start_location = self.prop_location
+        self.placed_prop.arrow.end_location = self.prop_location
         self.ghost_prop.arrow.prop = self.placed_prop
         self.pictograph.add_motion(self.placed_prop.arrow, self.ghost_prop, IN, 1)
         self.pictograph.addItem(self.placed_prop)
@@ -258,15 +260,19 @@ class PropBoxDrag(QWidget):
         local_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
         return self.pictograph.view.rect().contains(local_pos_in_pictograph)
 
-    def remove_same_color_prop(self) -> None:
+    def remove_same_color_objects(self) -> None:
         for prop in self.pictograph.props[:]:
             if prop.isVisible() and prop.color == self.color:
                 self.pictograph.removeItem(prop)
                 self.pictograph.props.remove(prop)
-        for prop in self.pictograph.props[:]:
-            if prop.isVisible() and prop.color == self.color:
-                self.pictograph.removeItem(prop)
-                self.pictograph.props.remove(prop)
+        for arrow in self.pictograph.arrows[:]:
+            if arrow.isVisible() and arrow.color == self.color:
+                self.pictograph.removeItem(arrow)
+                self.pictograph.arrows.remove(arrow)
+                if isinstance(arrow, StaticArrow):
+                    self.ghost_prop.arrow = arrow
+
+
 
     def create_pixmap_with_rotation(self, angle: RotationAngle) -> QPixmap:
         # Generate a new pixmap based on target prop and apply the rotation

@@ -32,7 +32,3 @@ class GhostProp(Prop):
         self.target_prop: "Prop" = None
         self.setup_svg_renderer(self.svg_file)
 
-    def update_ghost_prop(self, attributes) -> None:
-        self.set_attributes_from_dict(attributes)
-        self.update_appearance()
-        self.show()

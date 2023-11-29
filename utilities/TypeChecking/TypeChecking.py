@@ -32,6 +32,7 @@ LetterType = Literal[
 ]
 
 
+
 class SpecificStartEndPositionsDicts(TypedDict):
     start_position: SpecificPosition
     end_position: SpecificPosition

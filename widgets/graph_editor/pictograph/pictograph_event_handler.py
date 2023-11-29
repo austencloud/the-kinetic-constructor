@@ -3,7 +3,7 @@ from PyQt6.QtGui import QTransform
 from objects.letter_item import LetterItem
 from objects.arrow import Arrow
 from objects.grid import Grid
-from objects.props import Staff
+from objects.props import Prop
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
 )
@@ -40,7 +40,7 @@ class PictographEventHandler:
             self.handle_non_arrow_click(clicked_item, event)
 
     def handle_non_arrow_click(self, clicked_item, event) -> None:
-        if isinstance(clicked_item, Staff):
+        if isinstance(clicked_item, Prop):
             self.pictograph.dragged_prop = clicked_item
             self.pictograph.dragged_prop.mousePressEvent(event)
         elif isinstance(clicked_item, LetterItem):
@@ -69,7 +69,7 @@ class PictographEventHandler:
 
         clicked_item = None
         for item in items_at_pos:
-            if isinstance(item, Arrow) or isinstance(item, Staff):
+            if isinstance(item, Arrow) or isinstance(item, Prop):
                 clicked_item = item
                 break
 

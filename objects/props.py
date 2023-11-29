@@ -93,11 +93,21 @@ class Prop(GraphicalObject):
         new_location = self.get_closest_location(new_pos)
 
         if new_location != self.previous_location:
+            from objects.arrow import StaticArrow
             self.prop_location = new_location
+            
+            if isinstance(self.arrow, StaticArrow):
+                self.arrow.arrow_location = new_location
+                self.arrow.start_location = new_location
+                self.arrow.end_location = new_location
             self.axis = self.update_axis(self.prop_location)
             self.update_appearance()
             self.update_arrow_location(new_location)
 
+            self.ghost_prop.arrow.end_location, self.ghost_prop.arrow.start_location = (
+                new_location,
+                new_location,
+            )
             self.ghost_prop.color = self.color
             self.ghost_prop.prop_location = self.prop_location
             self.ghost_prop.layer = self.layer
@@ -326,23 +336,7 @@ class Prop(GraphicalObject):
         self.pictograph.props.remove(self)
         self.pictograph.update_pictograph()
 
-        self.create_static_arrow()
 
-    def create_static_arrow(self) -> None:
-        static_arrow_dict = {
-            COLOR: self.color,
-            MOTION_TYPE: STATIC,
-            ROTATION_DIRECTION: "None",
-            ARROW_LOCATION: self.prop_location,
-            START_LOCATION: self.prop_location,
-            END_LOCATION: self.prop_location,
-            TURNS: 0,
-        }
-        static_arrow = Arrow(self, static_arrow_dict)
-        self.pictograph.addItem(static_arrow)
-        self.pictograph.arrows.append(static_arrow)
-        static_arrow.prop = self.ghost_prop
-        static_arrow.prop.arrow = static_arrow
 
 
 class Staff(Prop):
