@@ -26,19 +26,18 @@ if TYPE_CHECKING:
     from objects.arrow import Arrow
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.motion import Motion
+    from widgets.graph_editor.object_panel.propbox.propbox import PropBox
 
 
 class Prop(GraphicalObject):
-    def __init__(self, pictograph, attributes: Dict) -> None:
+    def __init__(self, scene, attributes: Dict) -> None:
         svg_file = self.get_svg_file(attributes[PROP_TYPE])
-        super().__init__(svg_file, pictograph)
-        self._setup_attributes(pictograph, attributes)
+        super().__init__(svg_file, scene)
+        self._setup_attributes(scene, attributes)
         self.update_appearance()
 
-    def _setup_attributes(
-        self, pictograph: "Pictograph", attributes: "PropAttributesDicts"
-    ) -> None:
-        self.pictograph = pictograph
+    def _setup_attributes(self, scene, attributes: "PropAttributesDicts") -> None:
+        self.scene: Pictograph | PropBox = scene
         self.motion: Motion = None
         self.prop_type = None
 
@@ -63,27 +62,27 @@ class Prop(GraphicalObject):
 
     def mousePressEvent(self, event) -> None:
         self.setSelected(True)
-        if isinstance(self.scene(), self.pictograph.__class__):
+        if isinstance(self.scene, self.scene.__class__):
             if not self.ghost_prop:
-                self.ghost_prop = self.pictograph.ghost_props[self.color]
+                self.ghost_prop = self.scene.ghost_props[self.color]
             self.ghost_prop.color = self.color
             self.ghost_prop.prop_location = self.prop_location
             self.ghost_prop.layer = self.layer
             self.ghost_prop.orientation = self.orientation
             self.ghost_prop.update_appearance()
-            self.pictograph.addItem(self.ghost_prop)
+            self.scene.addItem(self.ghost_prop)
             self.ghost_prop.arrow = self.arrow
-            self.pictograph.props.append(self.ghost_prop)
-            self.pictograph.props.remove(self)
-            self.pictograph.update_pictograph()
-            self.pictograph.props.append(self)
-            for item in self.pictograph.items():
+            self.scene.props.append(self.ghost_prop)
+            self.scene.props.remove(self)
+            self.scene.update_pictograph()
+            self.scene.props.append(self)
+            for item in self.scene.items():
                 if item != self:
                     item.setSelected(False)
             self.previous_location = self.prop_location
 
     def mouseMoveEvent(self, event) -> None:
-        if isinstance(self.scene(), self.pictograph.__class__):
+        if isinstance(self.scene, self.scene.__class__):
             if event.buttons() == Qt.MouseButton.LeftButton:
                 new_pos = event.scenePos() - self.get_prop_center()
                 self.set_drag_pos(new_pos)
@@ -93,9 +92,9 @@ class Prop(GraphicalObject):
         new_location = self.get_closest_location(new_pos)
 
         if new_location != self.previous_location:
-            from objects.arrow import StaticArrow
             self.prop_location = new_location
-            
+            from objects.arrow import StaticArrow
+
             if isinstance(self.arrow, StaticArrow):
                 self.arrow.start_location = new_location
                 self.arrow.end_location = new_location
@@ -115,13 +114,13 @@ class Prop(GraphicalObject):
             self.ghost_prop.layer = self.layer
             self.ghost_prop.update_appearance()
 
-            self.pictograph.props.remove(self)
+            self.scene.props.remove(self)
             if self.arrow.motion_type == STATIC:
                 self.arrow.start_location = new_location
                 self.arrow.end_location = new_location
 
-            self.pictograph.update_pictograph()
-            self.pictograph.props.append(self)
+            self.scene.update_pictograph()
+            self.scene.props.append(self)
             new_pos = new_pos - self.get_prop_center()
             self.set_drag_pos(new_pos)
             self.previous_location = new_location
@@ -198,11 +197,11 @@ class Prop(GraphicalObject):
             self.arrow.update_appearance()
 
     def mouseReleaseEvent(self, event) -> None:
-        if isinstance(self.scene(), self.pictograph.__class__):
-            self.pictograph.removeItem(self.ghost_prop)
-            self.pictograph.props.remove(self.ghost_prop)
+        if isinstance(self.scene, self.scene.__class__):
+            self.scene.removeItem(self.ghost_prop)
+            self.scene.props.remove(self.ghost_prop)
             self.ghost_prop.arrow = None
-            self.pictograph.update_pictograph()
+            self.scene.update_pictograph()
             self.finalize_prop_drop(event)
 
     def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
@@ -217,7 +216,7 @@ class Prop(GraphicalObject):
         if self.arrow:
             self.arrow.update_appearance()
         self.previous_location = new_location
-        self.pictograph.update_pictograph()
+        self.scene.update_pictograph()
 
     ### UPDATERS ###
 
@@ -280,7 +279,7 @@ class Prop(GraphicalObject):
     def get_closest_handpoint(self, mouse_pos: QPointF) -> QPointF:
         closest_distance = float("inf")
         closest_handpoint = None
-        for point in self.pictograph.grid.handpoints.values():
+        for point in self.scene.grid.handpoints.values():
             distance = (point - mouse_pos).manhattanLength()
             if distance < closest_distance:
                 closest_distance = distance
@@ -290,7 +289,7 @@ class Prop(GraphicalObject):
     def get_closest_location(self, mouse_pos: QPointF) -> Location:
         closest_distance = float("inf")
         closest_location = None
-        for location, point in self.pictograph.grid.handpoints.items():
+        for location, point in self.scene.grid.handpoints.items():
             distance = (point - mouse_pos).manhattanLength()
             if distance < closest_distance:
                 closest_distance = distance
@@ -334,11 +333,9 @@ class Prop(GraphicalObject):
         return svg_data.encode("utf-8")
 
     def delete(self) -> None:
-        self.pictograph.removeItem(self)
-        self.pictograph.props.remove(self)
-        self.pictograph.update_pictograph()
-
-
+        self.scene.removeItem(self)
+        self.scene.props.remove(self)
+        self.scene.update_pictograph()
 
 
 class Staff(Prop):

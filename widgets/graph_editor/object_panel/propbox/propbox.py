@@ -25,18 +25,19 @@ from settings.string_constants import (
 
 from typing import TYPE_CHECKING, Dict, List
 from objects.grid import Grid
+from widgets.graph_editor.object_panel.objectbox import ObjectBox
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
-class PropBox(QGraphicsScene):
+class PropBox(ObjectBox):
     def __init__(self, main_widget: "MainWidget", pictograph: "Pictograph") -> None:
-        super().__init__()
+        super().__init__(main_widget, pictograph)
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
-        self.setSceneRect(0, 0, int(750), int(750))
+        self.setSceneRect(0, 0, 750, 750)
         self.setBackgroundBrush(Qt.GlobalColor.white)
         self.view = PropBoxView(self)
 

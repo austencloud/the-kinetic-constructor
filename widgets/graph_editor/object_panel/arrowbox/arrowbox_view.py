@@ -2,11 +2,13 @@ from PyQt6.QtWidgets import QGraphicsView, QFrame
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
+from widgets.graph_editor.object_panel.objectbox_view import ObjectBoxView
+
 if TYPE_CHECKING:
-    from widgets.graph_editor.arrowbox.arrowbox import ArrowBox
+    from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
 
 
-class ArrowBoxView(QGraphicsView):
+class ArrowBoxView(ObjectBoxView):
     def __init__(self, arrowbox: "ArrowBox") -> None:
         super().__init__(arrowbox)
         self.setFixedSize(

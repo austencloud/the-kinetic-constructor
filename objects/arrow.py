@@ -1,4 +1,5 @@
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+from PyQt6.QtWidgets import QGraphicsScene
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtGui import QTransform
 from objects.props import Prop
@@ -52,21 +53,20 @@ if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.ghosts.ghost_arrow import GhostArrow
     from objects.props import Prop
+    from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
 
 
 class Arrow(GraphicalObject):
-    def __init__(self, pictograph, attributes) -> None:
+    def __init__(self, scene, attributes) -> None:
         svg_file = self.get_svg_file(attributes[MOTION_TYPE], attributes[TURNS])
-        super().__init__(svg_file, pictograph)
+        super().__init__(svg_file, scene)
         self.setAcceptHoverEvents(True)
-        self._setup_attributes(pictograph, attributes)
+        self._setup_attributes(scene, attributes)
 
     ### SETUP ###
 
-    def _setup_attributes(
-        self, pictograph: "Pictograph", attributes: "ArrowAttributesDicts"
-    ) -> None:
-        self.pictograph = pictograph
+    def _setup_attributes(self, scene, attributes: "ArrowAttributesDicts") -> None:
+        self.scene: Pictograph | ArrowBox = scene
 
         self.drag_offset = QPointF(0, 0)
         self.prop: Prop = None
@@ -108,11 +108,11 @@ class Arrow(GraphicalObject):
         self.update_ghost_on_click()
         self.update_prop_on_click()
 
-        self.pictograph.arrows.remove(self)
-        self.pictograph.update_pictograph()
-        self.pictograph.arrows.append(self)
+        self.scene.arrows.remove(self)
+        self.scene.update_pictograph()
+        self.scene.arrows.append(self)
 
-        for item in self.pictograph.items():
+        for item in self.scene.items():
             if item != self:
                 item.setSelected(False)
 
@@ -122,7 +122,7 @@ class Arrow(GraphicalObject):
         self.prop.axis = self.prop.update_axis(self.end_location)
 
     def update_ghost_on_click(self) -> None:
-        self.ghost_arrow: "GhostArrow" = self.pictograph.ghost_arrows[self.color]
+        self.ghost_arrow: "GhostArrow" = self.scene.ghost_arrows[self.color]
         self.ghost_arrow.prop = self.prop
         self.ghost_arrow.set_attributes_from_dict(self.attributes)
         if self.ghost_arrow.is_svg_mirrored != self.is_svg_mirrored:
@@ -132,9 +132,9 @@ class Arrow(GraphicalObject):
         self.ghost_arrow.set_arrow_attrs_from_arrow(self)
         self.ghost_arrow.update_appearance()
         self.ghost_arrow.transform = self.transform
-        self.pictograph.addItem(self.ghost_arrow)
+        self.scene.addItem(self.ghost_arrow)
         self.ghost_arrow.prop = self.prop
-        self.pictograph.arrows.append(self.ghost_arrow)
+        self.scene.arrows.append(self.ghost_arrow)
 
     def mouseMoveEvent(self, event) -> None:
         if event.buttons() == Qt.MouseButton.LeftButton:
@@ -142,7 +142,7 @@ class Arrow(GraphicalObject):
             self.setPos(new_pos)
 
             scene_pos = new_pos + self.center
-            new_location = self.pictograph.get_nearest_layer2_point(
+            new_location = self.scene.get_nearest_layer2_point(
                 QPointF(scene_pos.x(), scene_pos.y())
             )
 
@@ -151,10 +151,10 @@ class Arrow(GraphicalObject):
                     self.update_for_new_location(new_location)
 
     def mouseReleaseEvent(self, event) -> None:
-        self.pictograph.removeItem(self.ghost_arrow)
-        self.pictograph.arrows.remove(self.ghost_arrow)
+        self.scene.removeItem(self.ghost_arrow)
+        self.scene.arrows.remove(self.ghost_arrow)
         self.ghost_arrow.prop = None
-        self.pictograph.update_pictograph()
+        self.scene.update_pictograph()
 
     ### UPDATERS ###
 
@@ -182,13 +182,13 @@ class Arrow(GraphicalObject):
 
         self.update_appearance()
 
-        self.pictograph.arrows.remove(self)
-        for prop in self.pictograph.props:
+        self.scene.arrows.remove(self)
+        for prop in self.scene.props:
             if prop.color == self.color:
                 prop.arrow = self
                 self.prop = prop
-        self.pictograph.update_pictograph()
-        self.pictograph.arrows.append(self)
+        self.scene.update_pictograph()
+        self.scene.arrows.append(self)
 
     def set_start_end_locations(self) -> None:
         self.start_location, self.end_location = self.get_start_end_locations(
@@ -207,10 +207,10 @@ class Arrow(GraphicalObject):
         self.turns = target_arrow.turns
 
     def update_prop_during_drag(self) -> None:
-        for prop in self.pictograph.prop_set.values():
+        for prop in self.scene.prop_set.values():
             if prop.color == self.color:
-                if prop not in self.pictograph.props:
-                    self.pictograph.props.append(prop)
+                if prop not in self.scene.props:
+                    self.scene.props.append(prop)
 
                 prop.set_attributes_from_dict(
                     {
@@ -221,11 +221,11 @@ class Arrow(GraphicalObject):
                 )
                 prop.arrow = self.ghost_arrow
 
-                if prop not in self.pictograph.items():
-                    self.pictograph.addItem(prop)
+                if prop not in self.scene.items():
+                    self.scene.addItem(prop)
                 prop.show()
                 prop.update_appearance()
-                self.pictograph.update_pictograph()
+                self.scene.update_pictograph()
 
     def set_arrow_transform_origin_to_center(self) -> None:
         self.center = self.boundingRect().center()
@@ -350,7 +350,7 @@ class Arrow(GraphicalObject):
         self.prop.update_attributes(updated_prop_dict)
         self.motion.update_attr_from_arrow()
 
-        self.pictograph.update_pictograph()
+        self.scene.update_pictograph()
 
     def rotate(self, rotation_direction: RotationDirection) -> None:
         locations = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
@@ -386,7 +386,7 @@ class Arrow(GraphicalObject):
 
         self.update_attributes(updated_arrow_dict)
         self.prop.update_attributes(updated_prop_dict)
-        self.pictograph.update_pictograph()
+        self.scene.update_pictograph()
 
     def swap_color(self) -> None:
         if self.color == RED:
@@ -400,7 +400,7 @@ class Arrow(GraphicalObject):
         self.prop.color = new_color
         self.prop.update_appearance()
 
-        self.pictograph.update_pictograph()
+        self.scene.update_pictograph()
 
     def swap_rot_dir(self) -> None:
         from objects.ghosts.ghost_arrow import GhostArrow
@@ -436,10 +436,10 @@ class Arrow(GraphicalObject):
         self.update_appearance()
         self.prop.update_appearance()
 
-        if not isinstance(self, GhostArrow) and self.ghost_arrow:
+        if not isinstance(self, self.ghost_arrow.__class__) and self.ghost_arrow:
             self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
             self.ghost_arrow.update_attributes(self.attributes)
-        self.pictograph.update_pictograph()
+        self.scene.update_pictograph()
 
     def mirror(self) -> None:
         transform = QTransform()
@@ -499,18 +499,18 @@ class Arrow(GraphicalObject):
         self.update_svg(svg_file)
         self.update_attributes(new_arrow_dict)
         self.prop.update(new_prop_dict)
-        self.pictograph.update_pictograph()
+        self.scene.update_pictograph()
 
     def delete(self, keep_prop: bool = False) -> None:
-        self.pictograph.removeItem(self)
-        if self in self.pictograph.arrows:
-            self.pictograph.arrows.remove(self)
+        self.scene.removeItem(self)
+        if self in self.scene.arrows:
+            self.scene.arrows.remove(self)
         if keep_prop:
             self.prop.create_static_arrow()
         else:
             self.prop.delete()
 
-        self.pictograph.update_pictograph()
+        self.scene.update_pictograph()
 
 
 class StaticArrow(Arrow):

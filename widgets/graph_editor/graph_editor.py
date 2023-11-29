@@ -3,9 +3,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 
-from widgets.graph_editor.arrowbox.arrowbox import ArrowBox
+from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
 from widgets.graph_editor.pictograph.pictograph import Pictograph
-from widgets.graph_editor.propbox.propbox import PropBox
+from widgets.graph_editor.object_panel.propbox.propbox import PropBox
 from widgets.graph_editor.attr_panel.attr_panel import AttrPanel
 from widgets.graph_editor.vtg_panel import VTGPanel
 from widgets.graph_editor.pictograph.pictograph import Pictograph
@@ -42,7 +42,7 @@ class GraphEditor(QFrame):
 
         self.pictograph = Pictograph(self.main_widget, self)
         self.propbox = PropBox(main_widget, self.pictograph)
-        self.arrowbox = ArrowBox(main_widget)
+        self.arrowbox = ArrowBox(main_widget, self.pictograph)
         self.vtg_panel = VTGPanel(self.pictograph)
         self.attr_panel = AttrPanel(self.pictograph)
 

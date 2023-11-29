@@ -28,13 +28,13 @@ class JsonVariationsGenerator:
                 self.location_mapping[(start, end)] = f"{start}{end}"
 
     def calculate_location(
-        self, start_from objects.props Location, end_from objects.props Location
+        self, start_location: Location, end_location: Location
     ) -> Location:
         return self.location_mapping.get((start_location, end_location))
 
     def apply_mapping(
         self,
-        arrow_combination: Dict[Location, Location],
+        arrow_combination: List[MotionAttributesDicts],
         position_mapping: Dict[Location, Location],
         rotation_mapping: Dict[RotationDirection, RotationDirection],
     ) -> List[MotionAttributesDicts]:
@@ -44,7 +44,7 @@ class JsonVariationsGenerator:
                 START_POS: position_mapping[arrow[START_POS]],
                 END_POS: position_mapping[arrow[END_POS]],
                 ROTATION_DIRECTION: rotation_mapping[arrow[ROTATION_DIRECTION]],
-                from objects.props self.calculate_location(
+                **self.calculate_location(
                     position_mapping[arrow[START_POS]],
                     position_mapping[arrow[END_POS]],
                 ),

@@ -53,7 +53,6 @@ class Motion:
         self.end_layer: Layer = self.get_end_layer()
         
         from objects.arrow import StaticArrow
-
         if not isinstance(self.arrow, StaticArrow):
             self.prop.orientation = self.end_orientation
             self.prop.layer = self.end_layer

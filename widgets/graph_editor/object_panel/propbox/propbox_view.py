@@ -3,13 +3,15 @@ from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING
 
+from widgets.graph_editor.object_panel.objectbox_view import ObjectBoxView
+
 if TYPE_CHECKING:
     from widgets.graph_editor.object_panel.propbox.propbox import PropBox
 
 
-class PropBoxView(QGraphicsView):
+class PropBoxView(ObjectBoxView):
     def __init__(self, propbox: "PropBox") -> None:
-        super().__init__()
+        super().__init__(propbox)
         self.setFixedSize(
             int(propbox.main_window.height() * 1 / 6),
             int(propbox.main_window.height() * 1 / 6),

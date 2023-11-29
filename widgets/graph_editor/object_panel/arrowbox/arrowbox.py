@@ -30,17 +30,19 @@ from settings.string_constants import (
 from widgets.graph_editor.object_panel.arrowbox.arrowbox_drag import ArrowBoxDrag
 from widgets.graph_editor.object_panel.arrowbox.arrowbox_view import ArrowBoxView
 from objects.grid import Grid
+from widgets.graph_editor.object_panel.objectbox import ObjectBox
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from objects.arrow import Arrow
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 from utilities.TypeChecking.TypeChecking import MotionAttributesDicts
 
 
-class ArrowBox(QGraphicsScene):
-    def __init__(self, main_widget: "MainWidget") -> None:
-        super().__init__()
+class ArrowBox(ObjectBox):
+    def __init__(self, main_widget: "MainWidget", pictograph: "Pictograph") -> None:
+        super().__init__(main_widget, pictograph)
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.setSceneRect(0, 0, 750, 750)

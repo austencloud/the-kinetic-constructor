@@ -154,21 +154,21 @@ class JsonValidationEngine(QMainWindow):
         errors = []
         # Validate each attribute
         if entry.get('color') not in valid_colors:
-            errors.append(f'{letter} {position}: Invalid color '{entry.get('color')}'')
+            errors.append(f"{letter} {position}: Invalid color '{entry.get('color')}'")
         if entry.get('motion_type') not in valid_motion_types:
-            errors.append(f'{letter} {position}: Invalid motion type '{entry.get('motion_type')}'')
+            errors.append(f"{letter} {position}: Invalid motion type '{entry.get('motion_type')}'")
         if entry.get('start_location') not in valid_locations:
-            errors.append(f'{letter} {position}: Invalid start location '{entry.get('start_location')}'')
+            errors.append(f"{letter} {position}: Invalid start location '{entry.get('start_location')}'")
         if entry.get('end_location') not in valid_locations:
-            errors.append(f'{letter} {position}: Invalid end location '{entry.get('end_location')}'')
+            errors.append(f"{letter} {position}: Invalid end location '{entry.get('end_location')}'")
         if entry.get('turns') not in valid_turns:
-            errors.append(f'{letter} {position}: Invalid turns '{entry.get('turns')}'')
+            errors.append(f"{letter} {position}: Invalid turns '{entry.get('turns')}'")
 
         # Special validation for location and rotation direction
         if not self.is_none_allowed_for_location(entry.get('motion_type')) and entry.get('location') is None:
-            errors.append(f'{letter} {position}: Invalid location '{entry.get('location')}'')
+            errors.append(f"{letter} {position}: Invalid location '{entry.get('location')}'")
         if not self.is_none_allowed_for_rotation_direction(entry.get('motion_type'), str(entry.get('turns'))) and entry.get('rotation_direction') is None:
-            errors.append(f'{letter} {position}: Invalid rotation direction '{entry.get('rotation_direction')}'')
+            errors.append(f"{letter} {position}: Invalid rotation direction '{entry.get('rotation_direction')}'")
 
         return errors
 
@@ -182,7 +182,7 @@ class JsonValidationEngine(QMainWindow):
         all_corrections = []
 
         for sequence in data[key]:
-            formatted_position = f'{sequence[0]['start_position']}→{sequence[0]['end_position']}'.replace('alpha', 'α').replace('beta', 'β').replace('gamma', 'Γ')
+            formatted_position = f"{sequence[0]['start_position']}→{sequence[0]['end_position']}".replace('alpha', 'α').replace('beta', 'β').replace('gamma', 'Γ')
             if self.user_wants_corrections():
                 for item in sequence[1:]:
                     if 'color' in item:
@@ -213,7 +213,7 @@ class JsonValidationEngine(QMainWindow):
                 entry['location'] = None
         elif 'start_location' in entry and 'end_location' in entry:
             inferred_location = self.infer_location(entry['start_location'], entry['end_location'])
-            if entry.get('location') != inferred_from objects.props
+            if entry.get('location') != inferred_location:
                 corrections.append(f'location corrected to {inferred_location}.')
                 entry['location'] = inferred_location
         # Add more correction rules as needed
