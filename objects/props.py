@@ -97,9 +97,11 @@ class Prop(GraphicalObject):
             self.prop_location = new_location
             
             if isinstance(self.arrow, StaticArrow):
-                self.arrow.arrow_location = new_location
                 self.arrow.start_location = new_location
                 self.arrow.end_location = new_location
+                self.motion.arrow_location = new_location
+                self.motion.start_location = new_location
+                self.motion.end_location = new_location
             self.axis = self.update_axis(self.prop_location)
             self.update_appearance()
             self.update_arrow_location(new_location)

@@ -69,25 +69,29 @@ class LetterEngine:
         return preprocessed_start_end_combinations
 
     def get_current_letter(self) -> Letters | None:
-        specific_position: Dict[str, SpecificPosition] = self.get_specific_start_end_positions()
+        specific_position: Dict[
+            str, SpecificPosition
+        ] = self.get_specific_start_end_positions()
         if specific_position:
             start_pos = specific_position.get("start_position")
             end_pos = specific_position.get("end_position")
             preprocessed_key = f"{start_pos}_{end_pos}"
             preprocessed_group: Dict[
                 Tuple[Letters, MotionAttributesDicts]
-            ] = self.preprocessed_start_end_combinations.get(preprocessed_key, [])  # type: ignore
+            ] = self.preprocessed_start_end_combinations.get(
+                preprocessed_key, []
+            )  # type: ignore
             preprocessed_group = {
                 letter: combinations for letter, combinations in preprocessed_group
             }
 
-            overall_position: Dict[str, Position] = self.get_overall_position(specific_position)
+            overall_position: Dict[str, Position] = self.get_overall_position(
+                specific_position
+            )
             motion_letter_group = self.get_motion_type_letter_group()
 
-            # Convert motion_letter_group string to a set of individual letters
             motion_letter_set = set(motion_letter_group)
             filtered_letter_group = set(preprocessed_group.keys())
-            # Filter the letter group based on the motion letter set
             filtered_letter_group = {
                 letter
                 for letter in filtered_letter_group
@@ -98,7 +102,6 @@ class LetterEngine:
                 if "gamma" in overall_position.get("end_position", "").lower():
                     filtered_letter_group = self.get_gamma_letter(filtered_letter_group)
 
-            # Return the current letter
             if len(filtered_letter_group) == 1:
                 current_letter = filtered_letter_group.pop()
                 return current_letter
@@ -111,26 +114,26 @@ class LetterEngine:
         else:
             return None
 
-    def get_arrow(self, color: Color) -> Arrow | None:
+    def get_motion(self, color: Color) -> Arrow | None:
         return next(
-            (arrow for arrow in self.pictograph.arrows if arrow.color == color), None
+            (motion for motion in self.pictograph.motions if motion.color == color), None
         )
 
     def get_specific_start_end_positions(self) -> SpecificStartEndPositionsDicts:
-        red_arrow = self.get_arrow("red")
-        blue_arrow = self.get_arrow("blue")
+        red_motion = self.get_motion("red")
+        blue_motion = self.get_motion("blue")
 
-        if red_arrow and blue_arrow:
+        if red_motion and blue_motion:
             start_locations = (
-                red_arrow.start_location,
+                red_motion.start_location,
                 "red",
-                blue_arrow.start_location,
+                blue_motion.start_location,
                 "blue",
             )
             end_locations = (
-                red_arrow.end_location,
+                red_motion.end_location,
                 "red",
-                blue_arrow.end_location,
+                blue_motion.end_location,
                 "blue",
             )
 
@@ -139,8 +142,8 @@ class LetterEngine:
                 "end_position": positions_map.get(end_locations),
             }
 
-            self.red_arrow = red_arrow
-            self.blue_arrow = blue_arrow
+            self.red_arrow = red_motion
+            self.blue_motion = blue_motion
             return specific_position
 
     def get_start_end_locations_as_tuple(self) -> StartEndLocationTuple:
@@ -149,26 +152,26 @@ class LetterEngine:
             if self.pictograph.arrows[0].color == "red"
             else self.pictograph.arrows[1]
         )
-        self.blue_arrow = (
+        self.blue_motion = (
             self.pictograph.arrows[0]
             if self.pictograph.arrows[0].color == "blue"
             else self.pictograph.arrows[1]
         )
 
-        if not self.red_arrow or not self.blue_arrow:
+        if not self.red_arrow or not self.blue_motion:
             logging.warning("Red or blue arrow is missing.")
             return ({}, {})
 
         start_locations = (
             self.red_arrow.start_location,
             "red",
-            self.blue_arrow.start_location,
+            self.blue_motion.start_location,
             "blue",
         )
         end_locations = (
             self.red_arrow.end_location,
             "red",
-            self.blue_arrow.end_location,
+            self.blue_motion.end_location,
             "blue",
         )
 
@@ -176,7 +179,7 @@ class LetterEngine:
 
     def get_motion_type_letter_group(self) -> LetterGroupsByMotionType:
         red_motion_type = self.red_arrow.motion_type
-        blue_motion_type = self.blue_arrow.motion_type
+        blue_motion_type = self.blue_motion.motion_type
 
         motion_type_combination: MotionTypeCombinations = motion_type_combinations.get(
             (red_motion_type, blue_motion_type)
@@ -193,8 +196,8 @@ class LetterEngine:
     def is_parallel(self) -> bool:
         red_start = self.red_arrow.start_location
         red_end = self.red_arrow.end_location
-        blue_start = self.blue_arrow.start_location
-        blue_end = self.blue_arrow.end_location
+        blue_start = self.blue_motion.start_location
+        blue_end = self.blue_motion.end_location
         parallel_check_result = (
             red_start,
             red_end,
@@ -215,8 +218,8 @@ class LetterEngine:
         arrow_locations = [
             self.red_arrow.start_location,
             self.red_arrow.end_location,
-            self.blue_arrow.start_location,
-            self.blue_arrow.end_location,
+            self.blue_motion.start_location,
+            self.blue_motion.end_location,
         ]
         if not all(location in clockwise for location in arrow_locations):
             return None
@@ -226,7 +229,7 @@ class LetterEngine:
             self.red_arrow.start_location, self.red_arrow.end_location
         )
         blue_direction = calculate_direction(
-            self.blue_arrow.start_location, self.blue_arrow.end_location
+            self.blue_motion.start_location, self.blue_motion.end_location
         )
 
         # Determine handpath direction relationship
@@ -270,12 +273,12 @@ class LetterEngine:
                 self.pro_arrow = (
                     self.red_arrow
                     if self.red_arrow.motion_type == "pro"
-                    else self.blue_arrow
+                    else self.blue_motion
                 )
                 self.anti_arrow = (
                     self.red_arrow
                     if self.red_arrow.motion_type == "anti"
-                    else self.blue_arrow
+                    else self.blue_motion
                 )
                 gamma_same_handpath_hybrid_letter = (
                     self.get_gamma_same_handpath_hybrid_letter()

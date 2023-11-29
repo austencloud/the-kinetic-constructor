@@ -10,7 +10,7 @@ from utilities.TypeChecking.TypeChecking import (
     Layer,
 )
 from settings.string_constants import *
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, Tuple
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
@@ -51,6 +51,14 @@ class Motion:
 
         self.start_layer: Layer = attributes[START_LAYER]
         self.end_layer: Layer = self.get_end_layer()
+        
+        from objects.arrow import StaticArrow
+
+        if not isinstance(self.arrow, StaticArrow):
+            self.prop.orientation = self.end_orientation
+            self.prop.layer = self.end_layer
+            self.prop.update_appearance()
+            
 
     def get_end_layer(self) -> Layer:
         if self.turns in [0, 1, 2]:
@@ -61,7 +69,7 @@ class Motion:
 
     def get_end_orientation(self) -> Orientation:
         orientation_map: dict[
-            tuple[Orientation], dict[MotionType, dict[Turns, Orientation]]
+            Tuple[Orientation], Dict[MotionType, Dict[Turns, Orientation]]
         ] = {
             (IN, CLOCKWISE): {
                 PRO: {
@@ -144,17 +152,13 @@ class Motion:
                 },
             },
         }
-        # Update repetitive mappings for STATIC and DASH
         for key in orientation_map:
             orientation_map[key][STATIC] = orientation_map[key][PRO]
             orientation_map[key][DASH] = orientation_map[key][ANTI]
 
-        # Retrieve end orientation
-        key = (self.start_orientation, self.rotation_direction)
+        key: Tuple[Orientation] = (self.start_orientation, self.rotation_direction)
         motion_map = orientation_map.get(key, {})
         return motion_map.get(self.motion_type, {}).get(self.turns)
-
-    ###
 
     def update_attr_from_arrow(self) -> None:
         self.color = self.arrow.color
