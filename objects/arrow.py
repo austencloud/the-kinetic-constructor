@@ -167,7 +167,6 @@ class Arrow(GraphicalObject):
         self.scene.update_pictograph()
         self.scene.arrows.append(self)
 
-
     def set_drag_pos(self, new_pos: QPointF) -> None:
         self.setPos(new_pos)
 
@@ -354,39 +353,76 @@ class Arrow(GraphicalObject):
         self.scene.update_pictograph()
 
     def rotate(self, rotation_direction: RotationDirection) -> None:
-        locations = [NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST]
-        current_location_index = locations.index(self.arrow_location)
+        diamond_mode_locations = [NORTH, EAST, SOUTH, WEST]
+        box_mode_locations = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
+        if isinstance(self, StaticArrow):
+            self.rotate_static_motion(rotation_direction, diamond_mode_locations)
+        else:
+            self.rotate_shift(rotation_direction, box_mode_locations)
+
+    def rotate_shift(self, rotation_direction, box_mode_locations):
+        current_location_index = box_mode_locations.index(self.arrow_location)
         new_location_index = (
-            (current_location_index + 1) % 4
-            if rotation_direction == CLOCKWISE
-            else (current_location_index - 1) % 4
-        )
-        new_location = locations[new_location_index]
+                (current_location_index + 1) % 4
+                if rotation_direction == CLOCKWISE
+                else (current_location_index - 1) % 4
+            )
+
+        new_arrow_location = box_mode_locations[new_location_index]
         (
-            new_start_location,
-            new_end_location,
-        ) = self.get_start_end_locations(
-            self.motion_type, self.rotation_direction, new_location
-        )
+                new_start_location,
+                new_end_location,
+            ) = self.get_start_end_locations(
+                self.motion_type, self.rotation_direction, new_arrow_location
+            )
 
         updated_arrow_dict = {
-            COLOR: self.color,
-            MOTION_TYPE: self.motion_type,
-            ARROW_LOCATION: new_location,
-            ROTATION_DIRECTION: self.rotation_direction,
-            START_LOCATION: new_start_location,
-            END_LOCATION: new_end_location,
-            TURNS: self.turns,
-        }
+                COLOR: self.color,
+                MOTION_TYPE: self.motion_type,
+                ARROW_LOCATION: new_arrow_location,
+                ROTATION_DIRECTION: self.rotation_direction,
+                START_LOCATION: new_start_location,
+                END_LOCATION: new_end_location,
+                TURNS: self.turns,
+            }
 
         updated_prop_dict = {
-            COLOR: self.color,
-            PROP_LOCATION: new_end_location,
-            LAYER: 1,
-        }
-
+                COLOR: self.color,
+                PROP_LOCATION: new_end_location,
+                LAYER: self.prop.layer,
+            }
+            
+        self.motion.arrow_location = new_arrow_location
+        self.motion.start_location = new_start_location
+        self.motion.end_location = new_end_location
+        self.arrow_location = new_arrow_location
+        self.start_location = new_start_location
+        self.end_location = new_end_location
+        self.prop.prop_location = new_end_location
+            
         self.update_attributes(updated_arrow_dict)
         self.prop.update_attributes(updated_prop_dict)
+        self.prop.update_appearance()
+        self.scene.update_pictograph()
+
+    def rotate_static_motion(self, rotation_direction, diamond_mode_locations):
+        current_location_index = diamond_mode_locations.index(self.arrow_location)
+        new_location_index = (
+                (current_location_index + 1) % 4
+                if rotation_direction == CLOCKWISE
+                else (current_location_index - 1) % 4
+            )
+        new_location = diamond_mode_locations[new_location_index]
+        self.motion.arrow_location = new_location
+        self.motion.start_location = new_location
+        self.motion.end_location = new_location
+        self.arrow_location = new_location
+        self.start_location = new_location
+        self.end_location = new_location
+        self.prop.prop_location = new_location
+        
+        self.motion.update_attr_from_arrow()
+        self.prop.update_appearance()
         self.scene.update_pictograph()
 
     def swap_color(self) -> None:

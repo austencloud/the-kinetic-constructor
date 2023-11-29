@@ -148,8 +148,8 @@ class ArrowBoxDrag(ObjectBoxDrag):
                 scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
                 new_location = self.pictograph.get_closest_box_point(scene_pos)
 
-                if self.previous_location != new_location:
-                    self.previous_location = new_location
+                if self.previous_drag_location != new_location:
+                    self.previous_drag_location = new_location
                     self._update_arrow_preview_for_new_location(new_location)
                     self.ghost_arrow.update_ghost_arrow(self.attributes)
 
@@ -161,7 +161,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.arrowbox.arrowbox_drag = None
         self.ghost_arrow.prop = None
         self.reset_drag_state()
-        self.previous_location = None
+        self.previous_drag_location = None
 
     ### FLAGS ###
 

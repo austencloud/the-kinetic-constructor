@@ -170,43 +170,49 @@ class Prop(GraphicalObject):
         return QPointF(offset_tuple[0], offset_tuple[1])
 
     def update_arrow_location(self, new_location: Location) -> None:
-        location_mapping: Dict[
-            Tuple(Location, RotationDirection, MotionType), Dict[Location, Location]
-        ] = {
-            ### ISO ###
-            (NORTHEAST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
-            (NORTHWEST, CLOCKWISE, PRO): {EAST: NORTHEAST, WEST: SOUTHWEST},
-            (SOUTHWEST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
-            (SOUTHEAST, CLOCKWISE, PRO): {WEST: SOUTHWEST, EAST: NORTHEAST},
-            (NORTHEAST, COUNTER_CLOCKWISE, PRO): {WEST: NORTHWEST, EAST: SOUTHEAST},
-            (NORTHWEST, COUNTER_CLOCKWISE, PRO): {SOUTH: SOUTHWEST, NORTH: NORTHEAST},
-            (SOUTHWEST, COUNTER_CLOCKWISE, PRO): {EAST: SOUTHEAST, WEST: NORTHWEST},
-            (SOUTHEAST, COUNTER_CLOCKWISE, PRO): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
-            ### ANTI ###
-            (NORTHEAST, CLOCKWISE, ANTI): {EAST: SOUTHEAST, WEST: NORTHWEST},
-            (NORTHWEST, CLOCKWISE, ANTI): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
-            (SOUTHWEST, CLOCKWISE, ANTI): {EAST: SOUTHEAST, WEST: NORTHWEST},
-            (SOUTHEAST, CLOCKWISE, ANTI): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
-            (NORTHEAST, COUNTER_CLOCKWISE, ANTI): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
-            (NORTHWEST, COUNTER_CLOCKWISE, ANTI): {WEST: SOUTHWEST, EAST: NORTHEAST},
-            (SOUTHWEST, COUNTER_CLOCKWISE, ANTI): {SOUTH: SOUTHEAST, NORTH: NORTHWEST},
-            (SOUTHEAST, COUNTER_CLOCKWISE, ANTI): {EAST: NORTHEAST, WEST: SOUTHWEST},
-        }
+        if self.arrow.motion_type in [PRO, ANTI]:
+            shift_location_mapping: Dict[
+                Tuple(Location, RotationDirection, MotionType), Dict[Location, Location]
+            ] = {
+                ### ISO ###
+                (NORTHEAST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
+                (NORTHWEST, CLOCKWISE, PRO): {EAST: NORTHEAST, WEST: SOUTHWEST},
+                (SOUTHWEST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
+                (SOUTHEAST, CLOCKWISE, PRO): {WEST: SOUTHWEST, EAST: NORTHEAST},
+                (NORTHEAST, COUNTER_CLOCKWISE, PRO): {WEST: NORTHWEST, EAST: SOUTHEAST},
+                (NORTHWEST, COUNTER_CLOCKWISE, PRO): {SOUTH: SOUTHWEST, NORTH: NORTHEAST},
+                (SOUTHWEST, COUNTER_CLOCKWISE, PRO): {EAST: SOUTHEAST, WEST: NORTHWEST},
+                (SOUTHEAST, COUNTER_CLOCKWISE, PRO): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
+                ### ANTI ###
+                (NORTHEAST, CLOCKWISE, ANTI): {EAST: SOUTHEAST, WEST: NORTHWEST},
+                (NORTHWEST, CLOCKWISE, ANTI): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
+                (SOUTHWEST, CLOCKWISE, ANTI): {EAST: SOUTHEAST, WEST: NORTHWEST},
+                (SOUTHEAST, CLOCKWISE, ANTI): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
+                (NORTHEAST, COUNTER_CLOCKWISE, ANTI): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
+                (NORTHWEST, COUNTER_CLOCKWISE, ANTI): {WEST: SOUTHWEST, EAST: NORTHEAST},
+                (SOUTHWEST, COUNTER_CLOCKWISE, ANTI): {SOUTH: SOUTHEAST, NORTH: NORTHWEST},
+                (SOUTHEAST, COUNTER_CLOCKWISE, ANTI): {EAST: NORTHEAST, WEST: SOUTHWEST},
+            }
 
-        current_location = self.arrow.arrow_location
-        rotation_direction = self.arrow.rotation_direction
-        motion_type = self.arrow.motion_type
-        new_location = location_mapping.get(
-            (current_location, rotation_direction, motion_type), {}
-        ).get(new_location)
+            current_location = self.arrow.arrow_location
+            rotation_direction = self.arrow.rotation_direction
+            motion_type = self.arrow.motion_type
+            new_location = shift_location_mapping.get(
+                (current_location, rotation_direction, motion_type), {}
+            ).get(new_location)
 
-        if new_location:
+            if new_location:
+                self.arrow.arrow_location = new_location
+                start_location, end_location = self.arrow.get_start_end_locations(
+                    motion_type, rotation_direction, new_location
+                )
+                self.arrow.start_location = start_location
+                self.arrow.end_location = end_location
+                self.arrow.update_appearance()
+        elif self.arrow.motion_type == STATIC:
             self.arrow.arrow_location = new_location
-            start_location, end_location = self.arrow.get_start_end_locations(
-                motion_type, rotation_direction, new_location
-            )
-            self.arrow.start_location = start_location
-            self.arrow.end_location = end_location
+            self.arrow.start_location = new_location
+            self.arrow.end_location = new_location
             self.arrow.update_appearance()
 
     def mouseReleaseEvent(self, event) -> None:

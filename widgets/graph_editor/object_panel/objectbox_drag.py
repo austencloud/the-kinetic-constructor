@@ -44,7 +44,7 @@ class ObjectBoxDrag(QWidget):
         self.main_window = main_window
         self.has_entered_pictograph_once = False
         self.current_rotation_angle = 0
-        self.previous_location = None
+        self.previous_drag_location = None
         self.svg_file = None
         self.static_arrow = None
 
