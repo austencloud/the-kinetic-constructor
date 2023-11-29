@@ -224,9 +224,14 @@ class Pictograph(QGraphicsScene):
 
     def clear_pictograph(self) -> None:
         for arrow in self.arrows:
-            self.removeItem(arrow)
+            self.arrows.remove(arrow)
+            if arrow in self.items():
+                self.removeItem(arrow)
         for prop in self.props:
-            self.removeItem(prop)
+            self.props.remove(prop)
+            if prop in self.items():
+                self.removeItem(prop)
+                
         self.update_letter_item(None)
         self.motions = []
         self.arrows = []
