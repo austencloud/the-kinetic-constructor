@@ -84,7 +84,6 @@ class ObjectBoxDrag(QWidget):
         drag_angle: Optional[RotationAngles],
     ) -> None:
         self.target_object = target_object
-        self.set_attributes(target_object)
         self.color = target_object.color
         self.svg_file = target_object.svg_file
         pixmap = self.create_pixmap(target_object, drag_angle)

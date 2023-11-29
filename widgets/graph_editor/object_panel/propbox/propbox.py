@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (
     QVBoxLayout,
-    QGraphicsScene,
+    QGraphicsScene, QGraphicsSceneMouseEvent
 )
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
@@ -25,10 +25,9 @@ from settings.string_constants import (
     ORIENTATION,
 )
 
-from typing import TYPE_CHECKING, Dict, List
 from objects.grid import Grid
 from widgets.graph_editor.object_panel.objectbox import ObjectBox
-
+from utilities.TypeChecking.TypeChecking import PropTypes, TYPE_CHECKING, Dict, List
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.pictograph.pictograph import Pictograph
@@ -138,190 +137,11 @@ class PropBox(ObjectBox):
         prop.update_appearance()
         prop.setTransformOriginPoint(prop.boundingRect().center())
 
-    def change_prop_type(self, new_prop_type) -> None:
+    def change_prop_type(self, new_prop_type: PropTypes) -> None:
         self.prop_type = new_prop_type
         self.populate_props()
 
-    def init_propbox_clubs(self) -> None:
-        club_locations = {
-            NORTH: QPointF(50, 100),
-            EAST: QPointF(100, 50),
-            SOUTH: QPointF(100, 100),
-            WEST: QPointF(100, 100),
-        }
-
-        red_propbox_club_dict = {
-            COLOR: RED,
-            LOCATION: EAST,
-            LAYER: 1,
-        }
-
-        blue_propbox_club_dict = {
-            COLOR: BLUE,
-            LOCATION: NORTH,
-            LAYER: 1,
-        }
-
-        red_club = Club(self.main_widget, self.pictograph, red_propbox_club_dict)
-        blue_club = Club(self.main_widget, self.pictograph, blue_propbox_club_dict)
-
-        red_club.setPos(club_locations[EAST])
-        blue_club.setPos(club_locations[NORTH])
-
-        self.addItem(red_club)
-        self.addItem(blue_club)
-
-        red_club.show()
-        blue_club.show()
-
-        red_club.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
-        blue_club.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
-
-    def init_propbox_buugeng(self) -> None:
-        buugeng_locations = {
-            NORTH: QPointF(50, 100),
-            EAST: QPointF(100, 50),
-            SOUTH: QPointF(100, 100),
-            WEST: QPointF(100, 100),
-        }
-
-        red_propbox_buugeng_dict = {
-            COLOR: RED,
-            LOCATION: EAST,
-            LAYER: 1,
-        }
-
-        blue_propbox_buugeng_dict = {
-            COLOR: BLUE,
-            LOCATION: NORTH,
-            LAYER: 1,
-        }
-
-        red_buugeng = Buugeng(
-            self.main_widget, self.pictograph, red_propbox_buugeng_dict
-        )
-        blue_buugeng = Buugeng(
-            self.main_widget, self.pictograph, blue_propbox_buugeng_dict
-        )
-
-        red_buugeng.setPos(buugeng_locations[EAST])
-        blue_buugeng.setPos(buugeng_locations[NORTH])
-
-        self.addItem(red_buugeng)
-        self.addItem(blue_buugeng)
-
-        red_buugeng.show()
-        blue_buugeng.show()
-
-        red_buugeng.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
-        blue_buugeng.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
-
-    def init_propbox_fans(self) -> None:
-        fan_locations = {
-            NORTH: QPointF(50, 100),
-            EAST: QPointF(100, 50),
-            SOUTH: QPointF(100, 100),
-            WEST: QPointF(100, 100),
-        }
-
-        red_propbox_fan_dict = {
-            COLOR: RED,
-            LOCATION: EAST,
-            LAYER: 1,
-        }
-
-        blue_propbox_fan_dict = {
-            COLOR: BLUE,
-            LOCATION: NORTH,
-            LAYER: 1,
-        }
-
-        red_fan = Fan(self.main_widget, self.pictograph, red_propbox_fan_dict)
-        blue_fan = Fan(self.main_widget, self.pictograph, blue_propbox_fan_dict)
-
-        red_fan.setPos(fan_locations[EAST])
-        blue_fan.setPos(fan_locations[NORTH])
-
-        self.addItem(red_fan)
-        self.addItem(blue_fan)
-
-        red_fan.show()
-        blue_fan.show()
-
-        red_fan.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
-        blue_fan.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
-
-    def init_propbox_triads(self) -> None:
-        triad_locations = {
-            NORTH: QPointF(50, 100),
-            EAST: QPointF(100, 50),
-            SOUTH: QPointF(100, 100),
-            WEST: QPointF(100, 100),
-        }
-
-        red_propbox_triad_dict = {
-            COLOR: RED,
-            LOCATION: EAST,
-            LAYER: 1,
-        }
-
-        blue_propbox_triad_dict = {
-            COLOR: BLUE,
-            LOCATION: NORTH,
-            LAYER: 1,
-        }
-
-        red_triad = Triad(self.main_widget, self.pictograph, red_propbox_triad_dict)
-        blue_triad = Triad(self.main_widget, self.pictograph, blue_propbox_triad_dict)
-
-        red_triad.setPos(triad_locations[EAST])
-        blue_triad.setPos(triad_locations[NORTH])
-
-        self.addItem(red_triad)
-        self.addItem(blue_triad)
-
-        red_triad.show()
-        blue_triad.show()
-
-        red_triad.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
-        blue_triad.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
-
-    def init_propbox_hoops(self) -> None:
-        hoop_locations = {
-            NORTH: QPointF(50, 100),
-            EAST: QPointF(100, 50),
-            SOUTH: QPointF(100, 100),
-            WEST: QPointF(100, 100),
-        }
-
-        red_propbox_hoop_dict = {
-            COLOR: RED,
-            LOCATION: EAST,
-            LAYER: 1,
-        }
-
-        blue_propbox_hoop_dict = {
-            COLOR: BLUE,
-            LOCATION: NORTH,
-            LAYER: 1,
-        }
-
-        red_hoop = Hoop(self.main_widget, self.pictograph, red_propbox_hoop_dict)
-        blue_hoop = Hoop(self.main_widget, self.pictograph, blue_propbox_hoop_dict)
-
-        red_hoop.setPos(hoop_locations[EAST])
-        blue_hoop.setPos(hoop_locations[NORTH])
-
-        self.addItem(red_hoop)
-        self.addItem(blue_hoop)
-
-        red_hoop.show()
-        blue_hoop.show()
-
-        red_hoop.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
-        blue_hoop.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
-
-    def mousePressEvent(self, event) -> None:
+    def mousePressEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         scene_pos = event.scenePos()
         event_pos = self.view.mapFromScene(scene_pos)
 

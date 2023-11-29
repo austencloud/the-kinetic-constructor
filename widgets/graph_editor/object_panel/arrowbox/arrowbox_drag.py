@@ -46,6 +46,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         super().__init__(main_window, pictograph, arrowbox)
         self.attributes: ArrowAttributesDicts = {}
         self.arrowbox = arrowbox
+        self.objectbox = arrowbox
         self.ghost_arrow = None
         self.start_orientation = IN
         self.setup_dependencies(main_window, pictograph, arrowbox)
@@ -158,7 +159,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             self.place_arrow_on_pictograph()
         self.deleteLater()
         self.pictograph.update_pictograph()
-        self.arrowbox.arrowbox_drag = None
+        self.arrowbox.drag = None
         self.ghost_arrow.prop = None
         self.reset_drag_state()
         self.previous_drag_location = None

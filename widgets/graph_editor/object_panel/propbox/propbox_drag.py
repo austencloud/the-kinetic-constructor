@@ -39,6 +39,7 @@ class PropBoxDrag(ObjectBoxDrag):
         super().__init__(main_window, pictograph, propbox)
         self.attributes: PropAttributesDicts = {}
         self.propbox = propbox
+        self.objectbox = propbox
         self.static_arrow = None
 
     def match_target_prop(self, target_prop: "Prop") -> None:
@@ -150,9 +151,6 @@ class PropBoxDrag(ObjectBoxDrag):
 
     ### EVENT HANDLERS ###
 
-    def handle_mouse_press(self, event_pos: QPoint) -> None:
-        self._create_static_arrow()
-
     def handle_mouse_move(self, event_pos: QPoint) -> None:
         if self.preview:
             self.move_to_cursor(event_pos)
@@ -166,6 +164,7 @@ class PropBoxDrag(ObjectBoxDrag):
                         self.orientation,
                         self.layer,
                     )
+                    self._create_static_arrow()
 
                 pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
@@ -191,7 +190,7 @@ class PropBoxDrag(ObjectBoxDrag):
             self.place_prop_on_pictograph()
         self.deleteLater()
         self.pictograph.update_pictograph()
-        self.propbox.propbox_drag = None
+        self.propbox.drag = None
         self.ghost_prop.arrow = None
         self.reset_drag_state()
         self.previous_drag_location = None
