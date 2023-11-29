@@ -121,7 +121,7 @@ class MotionTypesWidget(QWidget):
         self.typeButton.setText(self.motion_type)
         self.update_motion_type(self.motion_type)
 
-    def update_motion_type(self, motion_type):
+    def update_motion_type(self, motion_type) -> None:
         print(f"Motion type set to: {motion_type}")
 
 
@@ -203,6 +203,9 @@ class TurnsWidget(QWidget):
         )  # Set the border-radius to half of the width
 
         self.turns_label = QLabel("0", self)
+        self.turns_label.setFixedSize(
+            int(self.attr_box.width() * 0.2), int(self.attr_box.height() / 4)
+        )
         self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.turns_label.setStyleSheet(
             f"font-size: {int(self.attr_box.height() * 0.1)}px;"

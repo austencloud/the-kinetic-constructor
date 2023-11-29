@@ -186,13 +186,13 @@ class Motion:
         self.pictograph.update_pictograph()
 
     def add_half_turn(self) -> None:
-        if self.arrow.turns < 3:
+        if self.arrow.turns < 3.0:
             self.prop.swap_layer()
             self.prop.motion.end_layer = self.prop.layer
             self.prop.swap_axis()
             self.update_turns(self.arrow.turns + 0.5)
         else:
-            self.update_turns(3)
+            self.update_turns(3.0)
 
     def subtract_half_turn(self) -> None:
         if self.arrow.turns > 0:
@@ -200,6 +200,8 @@ class Motion:
             self.prop.motion.end_layer = self.prop.layer
             self.prop.swap_axis()
             self.update_turns(self.arrow.turns - 0.5)
+            if self.arrow.turns == 0:
+                self.update_turns(0)
         else:
             self.update_turns(0)
 
