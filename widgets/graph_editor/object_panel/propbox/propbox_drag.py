@@ -77,7 +77,6 @@ class PropBoxDrag(ObjectBoxDrag):
 
         self.ghost_prop.arrow.prop = self.placed_prop
         self.pictograph.addItem(self.placed_prop)
-        self.pictograph.arrows.append(self.placed_prop.arrow)
         self.pictograph.props.append(self.placed_prop)
 
         self.pictograph.removeItem(self.ghost_prop)
