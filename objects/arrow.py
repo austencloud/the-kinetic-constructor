@@ -2,7 +2,7 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtWidgets import QGraphicsScene
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtGui import QTransform
-from objects.props import Prop
+from objects.prop import Prop
 from settings.string_constants import (
     MOTION_TYPE,
     TURNS,
@@ -52,7 +52,7 @@ from utilities.TypeChecking.TypeChecking import (
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.ghosts.ghost_arrow import GhostArrow
-    from objects.props import Prop
+    from objects.prop import Prop
     from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
 
 

@@ -1,4 +1,4 @@
-from objects.props import Prop
+from objects.prop import Prop
 from settings.string_constants import COLOR
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, PropAttributesDicts
 
@@ -31,4 +31,3 @@ class GhostProp(Prop):
         self.color = attributes[COLOR]
         self.target_prop: "Prop" = None
         self.setup_svg_renderer(self.svg_file)
-

@@ -165,7 +165,7 @@ class StartEndWidget(QWidget):
         start_location = self.startComboBox.currentText()
         end_location = self.endComboBox.currentText()
         print(
-            f"Start from objects.props {start_location}, End from objects.props {end_location}"
+            f"Start from objects.prop {start_location}, End from objects.prop {end_location}"
         )
 
 

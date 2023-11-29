@@ -38,6 +38,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 from utilities.TypeChecking.TypeChecking import MotionAttributesDicts
+from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 
 class ArrowBox(ObjectBox):
@@ -170,7 +171,8 @@ class ArrowBox(ObjectBox):
         self.blue_arrows[2].setPos(100, 100)  # BLUE ANTI CLOCKWISE NW
         self.blue_arrows[3].setPos(100, 375)  # BLUE ANTI COUNTERCLOCKWISE SW
 
-    def mousePressEvent(self, event) -> None:
+
+    def mousePressEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         scene_pos = event.scenePos()
         event_pos = self.view.mapFromScene(scene_pos)
 

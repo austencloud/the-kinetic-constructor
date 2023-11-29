@@ -27,6 +27,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.motion import Motion
     from widgets.graph_editor.object_panel.propbox.propbox import PropBox
+    from objects.arrow import StaticArrow
 
 
 class Prop(GraphicalObject):
@@ -44,6 +45,7 @@ class Prop(GraphicalObject):
         self.drag_offset = QPointF(0, 0)
         self.previous_location: Location = None
         self.arrow: Arrow = None
+        self.static_arrow: StaticArrow = None
         self.ghost_prop: Prop = None
 
         self.color:Color = attributes[COLOR]
@@ -129,32 +131,33 @@ class Prop(GraphicalObject):
         staff_length = self.boundingRect().width()
         staff_width = self.boundingRect().height()
 
-        # Simplified mapping of positions
-        position_offsets = {
-            WEST: (0, 0),
-            EAST: (staff_length, staff_width),
-            NORTH: (staff_width, 0),
-            SOUTH: (0, staff_length),
+        position_mappings = {
+            (1, IN, NORTH): (staff_width, 0),
+            (1, IN, SOUTH): (0, staff_length),
+            (1, IN, WEST): (0, 0),
+            (1, IN, EAST): (staff_length, staff_width),
+            
+            (1, OUT, NORTH): (0, staff_length),
+            (1, OUT, SOUTH): (staff_width, 0),
+            (1, OUT, WEST): (staff_length, staff_width), 
+            (1, OUT, EAST): (0, 0),
+            
+            (2, CLOCKWISE, NORTH): (0, 0),
+            (2, CLOCKWISE, SOUTH): (staff_length, staff_width),
+            (2, CLOCKWISE, WEST): (0, staff_length),
+            (2, CLOCKWISE, EAST): (staff_width, 0),
+            
+            (2, COUNTER_CLOCKWISE, NORTH): (staff_length, staff_width),
+            (2, COUNTER_CLOCKWISE, SOUTH): (0, 0),
+            (2, COUNTER_CLOCKWISE, WEST): (staff_width, 0),
+            (2, COUNTER_CLOCKWISE, EAST): (0, staff_length),
         }
 
-        invert_x = self.orientation == OUT or (
-            self.layer == 2 and self.orientation == COUNTER_CLOCKWISE
-        )
-        invert_y = self.orientation == OUT or (
-            self.layer == 2 and self.orientation == CLOCKWISE
-        )
-
-        # Set transform origin point to top-left corner
-        self.setTransformOriginPoint(0, 0)
-
-        # Calculate the new position
-        offset_x, offset_y = position_offsets.get(self.prop_location)
-        if invert_x:
-            offset_x = staff_length - offset_x
-        if invert_y:
-            offset_y = staff_width - offset_y
+        key = (self.layer, self.orientation, self.prop_location)
+        offset_x, offset_y = position_mappings.get(key, (0, 0))
 
         self.setPos(new_pos + QPointF(offset_x, offset_y))
+
 
     def update_arrow_location(self, new_location: Location) -> None:
         location_mapping: Dict[

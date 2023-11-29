@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional, Union
 
 from objects.graphical_object import GraphicalObject
 from utilities.TypeChecking.TypeChecking import RotationAngle
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor.object_panel.propbox.propbox_drag import PropBoxDrag
 
 from PyQt6.QtWidgets import QWidget, QLabel
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QPointF, QPoint
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 
@@ -78,8 +78,39 @@ class ObjectBoxDrag(QWidget):
         self.drag_preview = None
         self.current_rotation_angle = 0
 
-    def match_target_object(self, target_object: GraphicalObject) -> None:
+    def match_target_object(
+        self: Union["ArrowBoxDrag", "PropBoxDrag"],
+        target_object: GraphicalObject,
+        drag_angle: Optional[RotationAngle],
+    ) -> None:
         self.target_object = target_object
+        self.set_attributes(target_object)
         self.color = target_object.color
         self.svg_file = target_object.svg_file
-        self.static_arrow = target_object.static_arrow
+        pixmap = self.create_pixmap(target_object, drag_angle)
+        self.preview.setPixmap(pixmap)
+        self.object_center = (
+            self.target_object.boundingRect().center() * self.pictograph.view.view_scale
+        )
+
+    def move_to_cursor(self, event_pos: QPoint) -> None:
+        local_pos = self.objectbox.view.mapTo(self.main_window, event_pos)
+        self.center = QPointF((self.width() / 2), self.height() / 2)
+        self.move(local_pos - self.center.toPoint())
+
+    def remove_same_color_objects(self) -> None:
+        for prop in self.pictograph.props[:]:
+            if prop.isVisible() and prop.color == self.color:
+                self.pictograph.removeItem(prop)
+                self.pictograph.props.remove(prop)
+        for arrow in self.pictograph.arrows[:]:
+            if arrow.isVisible() and arrow.color == self.color:
+                self.pictograph.removeItem(arrow)
+                self.pictograph.arrows.remove(arrow)
+        for motion in self.pictograph.motions[:]:
+            if motion.color == self.color:
+                self.pictograph.motions.remove(motion)
+
+    def start_drag(self, event_pos: "QPoint") -> None:
+        self.move_to_cursor(event_pos)
+        self.show()

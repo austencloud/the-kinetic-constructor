@@ -8,7 +8,7 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
-from objects.props import Staff, Club, Fan, Hoop, Buugeng, Triad
+from objects.prop import Staff, Club, Fan, Hoop, Buugeng, Triad
 from settings.string_constants import (
     ARROW_LOCATION,
     BLUE,
@@ -35,7 +35,7 @@ from settings.string_constants import (
     WEST,
     ORIENTATION,
     IN,
-    PROP_LOCATION
+    PROP_LOCATION,
 )
 from widgets.graph_editor.pictograph.pictograph_view import PictographView
 

@@ -28,7 +28,7 @@ from settings.string_constants import (
     END_LAYER,
 )
 from typing import TYPE_CHECKING, Dict, List
-from objects.props import Prop
+from objects.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
     MotionAttributesDicts,
@@ -71,17 +71,14 @@ class PropPositioner:
             (IN, SOUTH): QPointF(-prop_width / 2, prop_length / 2),
             (IN, EAST): QPointF(prop_length / 2, prop_width / 2),
             (IN, WEST): QPointF(-prop_length / 2, -prop_width / 2),
-            
             (OUT, NORTH): QPointF(-prop_width / 2, prop_length / 2),
             (OUT, SOUTH): QPointF(prop_width / 2, -prop_length / 2),
             (OUT, EAST): QPointF(-prop_length / 2, -prop_width / 2),
             (OUT, WEST): QPointF(prop_length / 2, prop_width / 2),
-            
             (CLOCKWISE, NORTH): QPointF(-prop_length / 2, -prop_width / 2),
             (CLOCKWISE, SOUTH): QPointF(prop_length / 2, prop_width / 2),
             (CLOCKWISE, EAST): QPointF(prop_width / 2, -prop_length / 2),
             (CLOCKWISE, WEST): QPointF(-prop_width / 2, prop_length / 2),
-            
             (COUNTER_CLOCKWISE, NORTH): QPointF(prop_length / 2, prop_width / 2),
             (COUNTER_CLOCKWISE, SOUTH): QPointF(-prop_length / 2, -prop_width / 2),
             (COUNTER_CLOCKWISE, EAST): QPointF(-prop_width / 2, prop_length / 2),

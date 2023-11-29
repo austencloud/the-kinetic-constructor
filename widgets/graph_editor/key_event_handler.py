@@ -1,5 +1,5 @@
 from objects.arrow import Arrow
-from objects.props import Prop
+from objects.prop import Prop
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 from settings.string_constants import UP, LEFT, DOWN, RIGHT

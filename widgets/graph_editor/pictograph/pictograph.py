@@ -5,8 +5,8 @@ from PyQt6.QtWidgets import QGraphicsScene
 from data.letter_engine_data import letter_types
 from objects.arrow import Arrow
 from objects.grid import Grid
-from objects.props import Prop
-from objects.props import Staff
+from objects.prop import Prop
+from objects.prop import Staff
 from objects.motion import Motion
 from settings.string_constants import (
     BLUE,

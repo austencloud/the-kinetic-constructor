@@ -1,9 +1,8 @@
-from PyQt6.QtWidgets import QWidget, QLabel
-from PyQt6.QtCore import Qt, QPoint, QPointF, QSize
+from PyQt6.QtCore import Qt, QPoint, QSize
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
-from objects.props import Prop, Staff
-from objects.arrow import Arrow, StaticArrow
+from objects.prop import Prop
+from objects.arrow import StaticArrow
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
 from settings.string_constants import (
@@ -44,61 +43,51 @@ class PropBoxDrag(ObjectBoxDrag):
 
     def match_target_prop(self, target_prop: "Prop") -> None:
         self.target_prop = target_prop
-        self.set_attributes(target_prop)
+        self.static_arrow = target_prop.static_arrow
         drag_angle = self._get_prop_drag_rotation_angle(target_prop)
-        pixmap = self.create_pixmap(target_prop, drag_angle)
-        self.preview.setPixmap(pixmap)
-        self.prop_center = (
-            self.target_prop.boundingRect().center() * self.pictograph.view.view_scale
-        )
-        self.current_rotation_angle = self._get_prop_drag_rotation_angle(self)
-
-    def _get_prop_drag_rotation_angle(self, staff: Prop | ObjectBoxDrag) -> RotationAngle:
-        """
-        Get the rotation angle for the given staff specifically for use with the PropBoxDrag.
-
-        Args:
-            staff (Union[Prop, ObjectBoxDrag]): The staff for which to retrieve the rotation angle.
-
-        Returns:
-            RotationAngle: The rotation angle for the staff.
-
-        """
-        angle_map: Dict[Tuple[Layer, Orientation], Dict[Location, RotationAngle]] = {
-            (1, IN): {NORTH: 90, SOUTH: 270, WEST: 0, EAST: 180},
-            (1, OUT): {NORTH: 270, SOUTH: 90, WEST: 180, EAST: 0},
-            (2, CLOCKWISE): {NORTH: 0, SOUTH: 180, WEST: 270, EAST: 90},
-            (2, COUNTER_CLOCKWISE): {NORTH: 180, SOUTH: 0, WEST: 90, EAST: 270},
-        }
-        key = (staff.layer, staff.orientation)
-        return angle_map.get(key, {}).get(staff.prop_location, 0)
+        super().match_target_object(target_prop, drag_angle)
 
     def set_attributes(self, target_prop: "Prop") -> None:
-        self.prop_type: PropType = target_prop.prop_type
         self.color: Color = target_prop.color
+        self.prop_type: PropType = target_prop.prop_type
         self.prop_location: Location = target_prop.prop_location
         self.layer: Layer = target_prop.layer
         self.orientation: Orientation = target_prop.orientation
+
         self.ghost_prop = self.pictograph.ghost_props[self.color]
         self.ghost_prop.target_prop = target_prop
 
-    ### UPDATERS ###
+    def place_prop_on_pictograph(self) -> None:
+        self.placed_prop = Prop(self.pictograph, self.ghost_prop.get_attributes())
+
+        self.placed_prop.arrow = self.ghost_prop.arrow
+        self.placed_prop.arrow.arrow_location = self.prop_location
+        self.placed_prop.arrow.start_location = self.prop_location
+        self.placed_prop.arrow.end_location = self.prop_location
+
+        self.pictograph.add_motion(self.placed_prop.arrow, self.placed_prop, IN, 1)
+        self.placed_prop.motion.arrow_location = self.prop_location
+        self.placed_prop.motion.start_location = self.prop_location
+        self.placed_prop.motion.end_location = self.prop_location
+
+        self.ghost_prop.arrow.prop = self.placed_prop
+        self.pictograph.addItem(self.placed_prop)
+        self.pictograph.props.append(self.placed_prop)
+
+        self.pictograph.removeItem(self.ghost_prop)
+        self.pictograph.props.remove(self.ghost_prop)
+        self.pictograph.update_pictograph()
+        self.pictograph.clearSelection()
+
+        self.placed_prop.ghost_prop = self.ghost_prop
+        self.placed_prop.update_appearance()
+        self.placed_prop.show()
+        self.placed_prop.setSelected(True)
 
     def update_preview_for_new_location(self, new_location: Location) -> None:
-        self.ghost_prop.prop_type = self.prop_type
-        self.ghost_prop.color = self.color
-        self.ghost_prop.prop_location = new_location
-        self.ghost_prop.orientation = self.orientation
-        self.ghost_prop.layer = self.layer
-
         self.prop_location = new_location
-        self.ghost_prop.prop_location = new_location
 
-        ghost_svg = self.ghost_prop.get_svg_file(self.prop_type)
-        self.ghost_prop.update_svg(ghost_svg)
-        self.ghost_prop.update_color()
-        self.ghost_prop.update_axis(new_location)
-        self.ghost_prop.update_rotation()
+        self.update_ghost_prop_for_new_location(new_location)
 
         if not self.static_arrow:
             self.create_static_arrow()
@@ -129,6 +118,16 @@ class PropBoxDrag(ObjectBoxDrag):
 
         self.pictograph.add_motion(self.ghost_prop.arrow, self.ghost_prop, IN, 1)
 
+        self.pictograph.update_pictograph()
+        self.move_to_cursor(self.propbox.view.mapFromGlobal(self.pos()))
+
+    def update_ghost_prop_for_new_location(self, new_location):
+        self.ghost_prop.prop_type = self.prop_type
+        self.ghost_prop.color = self.color
+        self.ghost_prop.prop_location = new_location
+        self.ghost_prop.orientation = self.orientation
+        self.ghost_prop.layer = self.layer
+
         self.ghost_prop.motion.arrow_location = self.prop_location
         self.ghost_prop.motion.start_location = self.prop_location
         self.ghost_prop.motion.end_location = self.prop_location
@@ -138,8 +137,11 @@ class PropBoxDrag(ObjectBoxDrag):
         self.ghost_prop.arrow.start_location = self.prop_location
         self.ghost_prop.arrow.end_location = self.prop_location
 
-        self.pictograph.update_pictograph()
-        self.move_to_cursor(self.propbox.view.mapFromGlobal(self.pos()))
+        ghost_svg = self.ghost_prop.get_svg_file(self.prop_type)
+        self.ghost_prop.update_svg(ghost_svg)
+        self.ghost_prop.update_color()
+        self.ghost_prop.update_axis(new_location)
+        self.ghost_prop.update_rotation()
 
     def create_static_arrow(self) -> None:
         static_arrow_dict = {
@@ -176,6 +178,7 @@ class PropBoxDrag(ObjectBoxDrag):
         self.pictograph.update_pictograph()
 
     ### EVENT HANDLERS ###
+
     def handle_mouse_press(self, event_pos: QPoint) -> None:
         self.create_static_arrow()
 
@@ -221,52 +224,10 @@ class PropBoxDrag(ObjectBoxDrag):
 
     ### HELPERS ###
 
-    def place_prop_on_pictograph(self) -> None:
-        self.pictograph.update_pictograph()
-        self.pictograph.clearSelection()
-        self.placed_prop = Prop(self.pictograph, self.ghost_prop.get_attributes())
-
-        self.placed_prop.arrow = self.ghost_prop.arrow
-        self.placed_prop.arrow.arrow_location = self.prop_location
-        self.placed_prop.arrow.start_location = self.prop_location
-        self.placed_prop.arrow.end_location = self.prop_location
-
-        self.pictograph.add_motion(self.placed_prop.arrow, self.placed_prop, IN, 1)
-        self.placed_prop.motion.arrow_location = self.prop_location
-        self.placed_prop.motion.start_location = self.prop_location
-        self.placed_prop.motion.end_location = self.prop_location
-
-        self.ghost_prop.arrow.prop = self.placed_prop
-        self.pictograph.addItem(self.placed_prop)
-        self.pictograph.props.append(self.placed_prop)
-
-        self.pictograph.removeItem(self.ghost_prop)
-        self.pictograph.props.remove(self.ghost_prop)
-
-        self.placed_prop.ghost_prop = self.ghost_prop
-        self.placed_prop.update_appearance()
-        self.placed_prop.show()
-        self.placed_prop.setSelected(True)
-
     def is_over_pictograph(self, event_pos: QPoint) -> bool:
         pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
         local_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
         return self.pictograph.view.rect().contains(local_pos_in_pictograph)
-
-    def remove_same_color_objects(self) -> None:
-        for prop in self.pictograph.props[:]:
-            if prop.isVisible() and prop.color == self.color:
-                self.pictograph.removeItem(prop)
-                self.pictograph.props.remove(prop)
-        for arrow in self.pictograph.arrows[:]:
-            if arrow.isVisible() and arrow.color == self.color:
-                if isinstance(arrow, StaticArrow):
-                    self.ghost_prop.arrow = arrow
-                self.pictograph.removeItem(arrow)
-                self.pictograph.arrows.remove(arrow)
-        for motion in self.pictograph.motions[:]:
-            if motion.color == self.color:
-                self.pictograph.motions.remove(motion)
 
     def create_pixmap_with_rotation(self, angle: RotationAngle) -> QPixmap:
         # Generate a new pixmap based on target prop and apply the rotation
@@ -286,11 +247,24 @@ class PropBoxDrag(ObjectBoxDrag):
 
         return rotated_pixmap
 
-    def start_drag(self, event_pos: "QPoint") -> None:
-        self.move_to_cursor(event_pos)
-        self.show()
+    def _get_prop_drag_rotation_angle(
+        self, staff: Prop | ObjectBoxDrag
+    ) -> RotationAngle:
+        """
+        Get the rotation angle for the given staff specifically for use with the PropBoxDrag.
 
-    def move_to_cursor(self, event_pos: QPoint) -> None:
-        local_pos = self.propbox.view.mapTo(self.main_window, event_pos)
-        self.center = QPointF((self.width() / 2), self.height() / 2)
-        self.move(local_pos - self.center.toPoint())
+        Args:
+            staff (Union[Prop, ObjectBoxDrag]): The staff for which to retrieve the rotation angle.
+
+        Returns:
+            RotationAngle: The rotation angle for the staff.
+
+        """
+        angle_map: Dict[Tuple[Layer, Orientation], Dict[Location, RotationAngle]] = {
+            (1, IN): {NORTH: 90, SOUTH: 270, WEST: 0, EAST: 180},
+            (1, OUT): {NORTH: 270, SOUTH: 90, WEST: 180, EAST: 0},
+            (2, CLOCKWISE): {NORTH: 0, SOUTH: 180, WEST: 270, EAST: 90},
+            (2, COUNTER_CLOCKWISE): {NORTH: 180, SOUTH: 0, WEST: 90, EAST: 270},
+        }
+        key = (staff.layer, staff.orientation)
+        return angle_map.get(key, {}).get(staff.prop_location, 0)

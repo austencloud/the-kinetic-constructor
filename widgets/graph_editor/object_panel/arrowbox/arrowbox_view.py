@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QGraphicsView, QFrame
+from PyQt6.QtWidgets import QFrame
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 

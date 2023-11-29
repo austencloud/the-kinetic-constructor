@@ -4,11 +4,13 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from objects.props import Prop, Staff, Club, Buugeng, Fan, Triad, Hoop
+from objects.prop import Prop, Staff, Club, Buugeng, Fan, Triad, Hoop
 
 from widgets.graph_editor.object_panel.propbox.propbox_drag import PropBoxDrag
 from widgets.graph_editor.object_panel.propbox.propbox_view import PropBoxView
 from settings.string_constants import (
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
     IN,
     NORTH,
     EAST,
@@ -75,26 +77,26 @@ class PropBox(ObjectBox):
             {
                 COLOR: RED,
                 PROP_LOCATION: NORTH,
-                LAYER: 1,
-                ORIENTATION: IN,
+                LAYER: 2,
+                ORIENTATION: CLOCKWISE,
             },
             {
                 COLOR: BLUE,
                 PROP_LOCATION: EAST,
-                LAYER: 1,
-                ORIENTATION: IN,
+                LAYER: 2,
+                ORIENTATION: CLOCKWISE,
             },
             {
                 COLOR: RED,
                 PROP_LOCATION: SOUTH,
-                LAYER: 1,
-                ORIENTATION: IN,
+                LAYER: 2,
+                ORIENTATION: COUNTER_CLOCKWISE,
             },
             {
                 COLOR: BLUE,
                 PROP_LOCATION: WEST,
-                LAYER: 1,
-                ORIENTATION: IN,
+                LAYER: 2,
+                ORIENTATION: COUNTER_CLOCKWISE,
             },
         ]
 
