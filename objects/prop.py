@@ -127,10 +127,17 @@ class Prop(GraphicalObject):
             self.set_drag_pos(new_pos)
             self.previous_location = new_location
 
-    def calculate_position(layer, orientation, location, staff_length, staff_width):
+    def set_drag_pos(self, new_pos: QPointF) -> None:
+        staff_length = self.boundingRect().width()
+        staff_width = self.boundingRect().height()
+
+        offset = self.get_offset(staff_length, staff_width)
+        self.setPos(new_pos + offset)
+
+    def get_offset(self, staff_length, staff_width) -> Tuple[int, int]:
         # Layer 1 logic
-        if layer == 1:
-            if orientation == IN:
+        if self.layer == 1:
+            if self.orientation == IN:
                 offset_map = {
                     NORTH: (staff_width, 0),
                     SOUTH: (0, staff_length),
@@ -146,8 +153,8 @@ class Prop(GraphicalObject):
                 }
 
         # Layer 2 logic
-        elif layer == 2:
-            if orientation == CLOCKWISE:
+        elif self.layer == 2:
+            if self.orientation == CLOCKWISE:
                 offset_map = {
                     NORTH: (0, 0),
                     SOUTH: (staff_length, staff_width),
@@ -162,7 +169,10 @@ class Prop(GraphicalObject):
                     EAST: (0, staff_length),
                 }
 
-        return offset_map.get(location, (0, 0))
+        offset_tuple = offset_map.get(self.prop_location, (0, 0))
+        return QPointF(offset_tuple[0], offset_tuple[1])
+
+
 
     def update_arrow_location(self, new_location: Location) -> None:
         location_mapping: Dict[

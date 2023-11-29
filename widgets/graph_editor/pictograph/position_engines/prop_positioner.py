@@ -1,13 +1,11 @@
 from PyQt6.QtCore import QPointF
 import math
-from settings.numerical_constants import BETA_OFFSET, STAFF_LENGTH, STAFF_WIDTH
+from settings.numerical_constants import BETA_OFFSET
 from settings.string_constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
-    HORIZONTAL,
     IN,
     OUT,
-    VERTICAL,
     COLOR,
     MOTION_TYPE,
     STATIC,
@@ -128,9 +126,13 @@ class PropPositioner:
 
         # GAMMA → BETA - Y, Z
         if len(pro_or_anti_motions) == 1 and len(static_motions) == 1:
-            self.reposition_gamma_to_beta(
-                move_prop, pro_or_anti_motions, static_motions
-            )
+            # if all the staves are in layer 1 or layer 2
+            if all(prop.layer == 1 for prop in self.pictograph.props) or all(
+                prop.layer == 2 for prop in self.pictograph.props
+            ):
+                self.reposition_gamma_to_beta(
+                    move_prop, pro_or_anti_motions, static_motions
+                )
 
         # ALPHA → BETA - D, E, F
         converging_motions = [
@@ -348,6 +350,7 @@ class PropPositioner:
     ### GAMMA TO BETA ### Y, Z
 
     def reposition_gamma_to_beta(self, move_prop, shifts, static_motions) -> None:
+        # if all of the staffs are in layer 1:
         shift, static_motion = shifts[0], static_motions[0]
         direction = self.determine_translation_direction(shift)
         if direction:

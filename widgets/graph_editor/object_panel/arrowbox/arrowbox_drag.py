@@ -93,7 +93,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
     ### UPDATERS ### 
 
-    def update_preview_for_new_location(self, new_location: Location) -> None:
+    def _update_arrow_preview_for_new_location(self, new_location: Location) -> None:
         self.arrow_location = new_location
         (
             self.start_location,
@@ -102,7 +102,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             self.motion_type, self.rotation_direction, self.arrow_location
         )
 
-        self.update_ghost_arrow_for_new_location(new_location)
+        self._update_ghost_arrow_for_new_location(new_location)
         self.update_rotation()
         self.update_prop_during_drag()
 
@@ -114,7 +114,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         )
         self.pictograph.update_pictograph()
 
-    def update_ghost_arrow_for_new_location(self, new_location) -> None:
+    def _update_ghost_arrow_for_new_location(self, new_location) -> None:
         self.ghost_arrow.color = self.color
         self.ghost_arrow.arrow_location = new_location
         self.ghost_arrow.motion_type = self.motion_type
@@ -123,6 +123,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.ghost_arrow.end_location = self.end_location
         self.ghost_arrow.turns = self.turns
         self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
+    
         ghost_svg = self.ghost_arrow.get_svg_file(self.motion_type, self.turns)
         self.ghost_arrow.update_mirror()
         self.ghost_arrow.update_svg(ghost_svg)
@@ -130,7 +131,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
             self.pictograph.arrows.append(self.ghost_arrow)
         if self.ghost_arrow not in self.pictograph.items():
             self.pictograph.addItem(self.ghost_arrow)
-
 
     ### EVENT HANDLERS ###
 
@@ -150,7 +150,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
                 if self.previous_location != new_location:
                     self.previous_location = new_location
-                    self.update_preview_for_new_location(new_location)
+                    self._update_arrow_preview_for_new_location(new_location)
                     self.ghost_arrow.update_ghost_arrow(self.attributes)
 
     def handle_mouse_release(self) -> None:

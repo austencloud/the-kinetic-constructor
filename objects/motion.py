@@ -188,6 +188,7 @@ class Motion:
     def add_half_turn(self) -> None:
         if self.arrow.turns < 3:
             self.prop.swap_layer()
+            self.prop.motion.end_layer = self.prop.layer
             self.prop.swap_axis()
             self.update_turns(self.arrow.turns + 0.5)
         else:
@@ -196,6 +197,7 @@ class Motion:
     def subtract_half_turn(self) -> None:
         if self.arrow.turns > 0:
             self.prop.swap_layer()
+            self.prop.motion.end_layer = self.prop.layer
             self.prop.swap_axis()
             self.update_turns(self.arrow.turns - 0.5)
         else:
