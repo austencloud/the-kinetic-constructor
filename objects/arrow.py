@@ -133,10 +133,6 @@ class Arrow(GraphicalObject):
         self.ghost_arrow: "GhostArrow" = self.scene.ghost_arrows[self.color]
         self.ghost_arrow.prop = self.prop
         self.ghost_arrow.set_attributes_from_dict(self.attributes)
-        if self.ghost_arrow.is_svg_mirrored != self.is_svg_mirrored:
-            self.ghost_arrow.swap_rot_dir()
-        if self.ghost_arrow.motion_type != self.motion_type:
-            self.ghost_arrow.swap_motion_type()
         self.ghost_arrow.set_arrow_attrs_from_arrow(self)
         self.ghost_arrow.update_appearance()
         self.ghost_arrow.transform = self.transform
