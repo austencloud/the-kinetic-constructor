@@ -141,7 +141,6 @@ class Arrow(GraphicalObject):
         self.ghost_arrow.update_appearance()
         self.ghost_arrow.transform = self.transform
         self.scene.addItem(self.ghost_arrow)
-        self.ghost_arrow.prop = self.prop
         self.scene.arrows.append(self.ghost_arrow)
 
     def update_location(self, new_pos: QPointF) -> None:
@@ -173,7 +172,9 @@ class Arrow(GraphicalObject):
 
     def mouseReleaseEvent(self, event) -> None:
         self.scene.removeItem(self.ghost_arrow)
-        self.scene.arrows.remove(self.ghost_arrow)
+        if self.ghost_arrow in self.scene.arrows:
+            self.scene.arrows.remove(self.ghost_arrow)
+
         self.ghost_arrow.prop = None
         self.scene.update_pictograph()
 
@@ -548,6 +549,7 @@ class Arrow(GraphicalObject):
         self.update_svg(svg_file)
         self.update_attributes(new_arrow_dict)
         if hasattr(self, "ghost_arrow"):
+            self.ghost_arrow.motion_type = new_motion_type
             self.ghost_arrow.update_svg(svg_file)
             self.ghost_arrow.update_attributes(new_arrow_dict)
             
