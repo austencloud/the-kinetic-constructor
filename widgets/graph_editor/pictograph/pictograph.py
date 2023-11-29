@@ -36,6 +36,7 @@ from utilities.TypeChecking.TypeChecking import (
     Layers,
     MotionAttributesDicts,
     List,
+    MotionTypes,
     Optional,
     Orientations,
     Tuple,
@@ -250,12 +251,13 @@ class Pictograph(QGraphicsScene):
         self,
         arrow: Arrow,
         prop: Prop,
+        motion_type: MotionTypes,
         start_orientation: Orientations,
         start_layer: Layers,
     ) -> None:
         motion_attributes: MotionAttributesDicts = {
             COLOR: arrow.color,
-            MOTION_TYPE: arrow.motion_type,
+            MOTION_TYPE: motion_type,
             ROTATION_DIRECTION: arrow.rotation_direction,
             ARROW_LOCATION: arrow.arrow_location,
             START_LOCATION: arrow.start_location,

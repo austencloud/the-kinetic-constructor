@@ -48,7 +48,7 @@ class PropBox(ObjectBox):
 
         self.props: List[Prop] = []
         self.prop_type = None
-        self.propbox_drag = None
+        self.drag = None
         self.change_prop_type(Staff)
 
         self.propbox_layout = QVBoxLayout()
@@ -156,22 +156,21 @@ class PropBox(ObjectBox):
 
         if closest_prop:
             self.target_prop = closest_prop
-            if not self.propbox_drag:
+            if not self.drag:
                 pictograph = self.main_widget.graph_editor.pictograph
-                self.propbox_drag = PropBoxDrag(self.main_window, pictograph, self)
+                self.drag = PropBoxDrag(self.main_window, pictograph, self)
             if event.button() == Qt.MouseButton.LeftButton:
-                self.propbox_drag.match_target_prop(self.target_prop)
-                self.propbox_drag.handle_mouse_press(event_pos)
-                self.propbox_drag.start_drag(event_pos)
+                self.drag.match_target_prop(self.target_prop)
+                self.drag.start_drag(event_pos)
         else:
             self.target_prop = None
             event.ignore()
 
     def mouseMoveEvent(self, event) -> None:
-        if self.target_prop and self.propbox_drag:
+        if self.target_prop and self.drag:
             scene_pos = event.scenePos()
             event_pos = self.view.mapFromScene(scene_pos)
-            self.propbox_drag.handle_mouse_move(event_pos)
+            self.drag.handle_mouse_move(event_pos)
         else:
             cursor_pos = event.scenePos()
             closest_prop = None
@@ -194,10 +193,10 @@ class PropBox(ObjectBox):
                     prop.is_dim(False)  # Do not highlight the closest one
 
     def mouseReleaseEvent(self, event) -> None:
-        if self.target_prop and self.propbox_drag:
+        if self.target_prop and self.drag:
             scene_pos = event.scenePos()
             event_pos = self.view.mapFromScene(scene_pos)
-            self.propbox_drag.handle_mouse_release()
+            self.drag.handle_mouse_release()
             self.target_prop = None
         else:
             event.ignore()

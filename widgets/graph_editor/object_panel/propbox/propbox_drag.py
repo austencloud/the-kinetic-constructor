@@ -41,13 +41,15 @@ class PropBoxDrag(ObjectBoxDrag):
         self.propbox = propbox
         self.objectbox = propbox
         self.static_arrow = None
+        
 
     def match_target_prop(self, target_prop: "Prop") -> None:
         self.target_prop = target_prop
         self.static_arrow = target_prop.static_arrow
         drag_angle = self._get_prop_drag_rotation_angle(target_prop)
         super().match_target_object(target_prop, drag_angle)
-
+        self.set_attributes(target_prop)
+        
     def set_attributes(self, target_prop: "Prop") -> None:
         self.color: Colors = target_prop.color
         self.prop_type: PropTypes = target_prop.prop_type
@@ -67,7 +69,7 @@ class PropBoxDrag(ObjectBoxDrag):
         self.placed_prop.arrow.end_location = self.prop_location
 
         self.pictograph.add_motion(
-            self.placed_prop.arrow, self.placed_prop, self.orientation, self.layer
+            self.placed_prop.arrow, self.placed_prop, STATIC, self.orientation, self.layer
         )
         self.placed_prop.motion.arrow_location = self.prop_location
         self.placed_prop.motion.start_location = self.prop_location
@@ -122,7 +124,7 @@ class PropBoxDrag(ObjectBoxDrag):
             if motion.color == self.color:
                 self.pictograph.motions.remove(motion)
 
-        self.pictograph.add_motion(self.ghost_prop.arrow, self.ghost_prop, IN, 1)
+        self.pictograph.add_motion(self.ghost_prop.arrow, self.ghost_prop, STATIC, IN, 1)
 
         self.pictograph.update_pictograph()
         self.move_to_cursor(self.propbox.view.mapFromGlobal(self.pos()))
@@ -158,14 +160,16 @@ class PropBoxDrag(ObjectBoxDrag):
                 if not self.has_entered_pictograph_once:
                     self.has_entered_pictograph_once = True
                     self.remove_same_color_objects()
+                    self._create_static_arrow()
                     self.pictograph.add_motion(
                         self.ghost_prop.arrow,
                         self.ghost_prop,
+                        STATIC,
                         self.orientation,
                         self.layer,
                     )
-                    self._create_static_arrow()
-
+                    
+                    
                 pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
                     pos_in_main_window
