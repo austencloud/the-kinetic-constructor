@@ -101,11 +101,13 @@ class ObjectBoxDrag(QWidget):
     def remove_same_color_objects(self) -> None:
         for prop in self.pictograph.props[:]:
             if prop.color == self.color:
-                self.pictograph.removeItem(prop)
+                if prop in self.pictograph.items():
+                    self.pictograph.removeItem(prop)
                 self.pictograph.props.remove(prop)
         for arrow in self.pictograph.arrows[:]:
             if arrow.color == self.color:
-                self.pictograph.removeItem(arrow)
+                if arrow in self.pictograph.items():
+                    self.pictograph.removeItem(arrow)
                 self.pictograph.arrows.remove(arrow)
         for motion in self.pictograph.motions[:]:
             if motion.color == self.color:
