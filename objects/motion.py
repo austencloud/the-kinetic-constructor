@@ -192,7 +192,7 @@ class Motion:
         Args:
         adjustment (float): The amount to adjust the turns by. Can be negative.
         """
-        new_turns = max(0, min(3, self.arrow.turns + adjustment))
+        new_turns = max(0, min(3.0, float(self.arrow.turns) + adjustment))
         is_crossing_half_turn = self.arrow.turns % 1 != new_turns % 1
 
         if is_crossing_half_turn and abs(adjustment) == 0.5:
