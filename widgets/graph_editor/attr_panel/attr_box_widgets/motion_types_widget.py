@@ -1,11 +1,15 @@
 from PyQt6.QtWidgets import (
     QWidget,
     QHBoxLayout,
-    QPushButton,
     QLabel,
+    QSpacerItem,
+    QSizePolicy,
+    QComboBox,
+    QFrame, QVBoxLayout
 )
 from typing import TYPE_CHECKING
-
+from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
@@ -14,28 +18,70 @@ if TYPE_CHECKING:
 class MotionTypesWidget(QWidget):
     def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__(attr_box)
-        self.layout = QHBoxLayout(self)
+        self.layout = QVBoxLayout(self)
         self.attr_box = attr_box
-        self.motion_type = "Pro"
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
-        self.typeLabel = QLabel("Type:", self)
-        self.typeButton = QPushButton(self.motion_type, self)
-        self.typeButton.clicked.connect(self.toggle_motion_type)
+        self.layout.setAlignment(
+            Qt.AlignmentFlag.AlignCenter
+        )  # Add this line to center the contents
 
-        self.layout.addWidget(self.typeLabel)
-        self.layout.addWidget(self.typeButton)
+        # Type Label
+        self.type_label = QLabel("Type", self)
+        self.type_label.setFixedWidth(int(self.attr_box.attr_box_width / 5))
+        self.type_label.setFont(QFont("Arial", 12))
+        self.type_label.setAlignment(
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+        )
 
-    def toggle_motion_type(self) -> None:
-        if self.motion_type == "Pro":
-            self.motion_type = "Anti"
-        elif self.motion_type == "Anti":
-            self.motion_type = "Pro"
-        elif self.motion_type == "Static":
-            pass
+        # Motion Type ComboBox
+        self.type_combo_box = QComboBox(self)
+        self.type_combo_box.addItems(["Pro", "Anti", "Dash", "Static"])
+        self.type_combo_box.setStyleSheet(self.get_combo_box_style())
+        self.type_combo_box.setFont(QFont("Arial", 20, QFont.Weight.Bold, italic=True))
 
-        self.typeButton.setText(self.motion_type)
-        self.update_motion_type(self.motion_type)
+        # Set the fixed size to maintain the size of the ComboBox
+
+        top_layout = QHBoxLayout()
+        bottom_layout = QHBoxLayout()
+        
+        button_frame = QFrame()
+        spacer_frame = QFrame()
+
+        bottom_layout.addWidget(button_frame)
+        bottom_layout.addWidget(self.type_combo_box)
+        bottom_layout.addWidget(spacer_frame)
+
+        button_frame.setFixedWidth(int(self.attr_box.attr_box_width / 5))
+        spacer_frame.setFixedWidth(int(self.attr_box.attr_box_width / 5))
+
+        self.layout.addLayout(top_layout)
+        self.layout.addLayout(bottom_layout)
+
+        top_layout.addWidget(self.type_label)
+
+    def get_combo_box_style(self) -> str:
+        return (
+            "QComboBox {"
+            "   border: 2px solid black;"
+            "   border-radius: 10px;"
+            "}"
+            "QComboBox::drop-down {"
+            "   subcontrol-origin: padding;"
+            "   subcontrol-position: top right;"
+            "   width: 15px;"
+            "   border-left-width: 1px;"
+            "   border-left-color: darkgray;"
+            "   border-left-style: solid;"
+            "   border-top-right-radius: 3px;"
+            "   border-bottom-right-radius: 3px;"
+            "}"
+            "QComboBox::down-arrow {"
+            "   image: url('resources/images/icons/combobox_arrow.png');"
+            "   width: 10px;"
+            "   height: 10px;"
+            "}"
+        )
 
     def update_motion_type(self, motion_type) -> None:
         print(f"Motion type set to: {motion_type}")
