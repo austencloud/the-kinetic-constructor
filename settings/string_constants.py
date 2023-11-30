@@ -98,7 +98,7 @@ INCREMENT_TURNS_ICON = "add_turns.png"
 SWAP_COLORS_ICON = "swap_colors.png"
 
 ICON_PATHS = {
-    "swap_motion_type": ICON_DIR + SWAP_ICON,
+    "swap_icon": ICON_DIR + SWAP_ICON,
     "swap_start_end": ICON_DIR + MIRROR_ICON,
     "subtract_turns": ICON_DIR + DECREMENT_TURNS_ICON,
     "add_turns": ICON_DIR + INCREMENT_TURNS_ICON,

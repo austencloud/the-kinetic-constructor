@@ -30,14 +30,10 @@ if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_panel import (
         AttrPanel,
     )
-from PyQt6.QtWidgets import QSizePolicy
-from widgets.graph_editor.attr_panel.attr_box_widgets import (
-    StartEndWidget,
-    MotionTypesWidget,
-    TurnsWidget,
-    HeaderWidget,
-)
-
+from widgets.graph_editor.attr_panel.attr_box_widgets.header_widget import HeaderWidget
+from widgets.graph_editor.attr_panel.attr_box_widgets.motion_types_widget import MotionTypesWidget  
+from widgets.graph_editor.attr_panel.attr_box_widgets.start_end_widget import StartEndWidget
+from widgets.graph_editor.attr_panel.attr_box_widgets.turns_widget import TurnsWidget
 
 class AttrBox(QFrame):
     def __init__(

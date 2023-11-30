@@ -206,7 +206,23 @@ class Motion:
             self.update_turns(0)
 
     def add_turn(self) -> None:
-        self.update_turns(self.arrow.turns + 1 if self.arrow.turns < 3 else 3)
-
+        if self.arrow.turns < 3.0:
+            if self.arrow.turns <= 2:
+                self.prop.motion.end_layer = self.prop.layer
+                self.prop.swap_axis()
+                self.update_turns(self.arrow.turns + 1)
+            else:
+                self.update_turns(3.0)
+        else:
+            self.update_turns(3.0)
+            
     def subtract_turn(self) -> None:
-        self.update_turns(self.arrow.turns - 1 if self.arrow.turns > 0 else 0)
+        if self.arrow.turns > 0:
+            if self.arrow.turns >= 1:
+                self.prop.motion.end_layer = self.prop.layer
+                self.prop.swap_axis()
+                self.update_turns(self.arrow.turns - 1)
+            else:
+                self.update_turns(0)
+        else:
+            self.update_turns(0)
