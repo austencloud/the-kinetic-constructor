@@ -18,7 +18,7 @@ class AttrPanel(QFrame):
         self.pictograph = pictograph
 
         self.setFixedHeight(self.pictograph.graph_editor.height())
-        self.setFixedWidth(int(self.pictograph.graph_editor.width() * 0.4))
+        self.setFixedWidth(int(self.pictograph.graph_editor.width() * 0.35))
 
         self.setContentsMargins(0, 0, 0, 0)
 

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from PyQt6.QtGui import QColor, QPalette
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 
 from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
@@ -34,6 +35,11 @@ class GraphEditor(QFrame):
         graph_editor_frame_layout = QHBoxLayout(self)
         graph_editor_frame_layout.setSpacing(0)
         graph_editor_frame_layout.setContentsMargins(0, 0, 0, 0)
+        graph_editor_frame_layout.setAlignment(
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop
+        )
+        
+
 
         objectbox_layout = QVBoxLayout()
         pictograph_layout = QVBoxLayout()

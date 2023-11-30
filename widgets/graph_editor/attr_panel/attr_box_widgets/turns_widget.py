@@ -29,30 +29,9 @@ class TurnsWidget(QWidget):
     def create_button(self, text, callback) -> QPushButton:
         button = QPushButton(text, self)
         button.clicked.connect(callback)
-        button.setFixedSize(
-            30, 30
-        )  # This size should be large enough to fit the text and be circular
-        button.setStyleSheet(self.get_button_style())
-        return button
 
-    def get_button_style(self) -> str:
-        return (
-            "QPushButton {"
-            "   border-radius: 15px;"  # Half of fixed size (30px / 2)
-            "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
-            "   stop:0 rgba(255, 255, 255, 255), stop:1 rgba(229, 229, 229, 255));"
-            "   border: 1px solid #8f8f91;"
-            "   min-width: 30px;"  # Ensures the width is not less than 30px
-            "   min-height: 30px;"  # Ensures the height is not less than 30px
-            "}"
-            "QPushButton:pressed {"
-            "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
-            "   stop:0 rgba(204, 228, 247, 255), stop:1 rgba(164, 209, 247, 255));"
-            "}"
-            "QPushButton:hover:!pressed {"
-            "   border: 1px solid #1c1c1c;"
-            "}"
-        )
+        button.setStyleSheet(self.attr_box.get_button_style())
+        return button
 
     def init_ui(self) -> None:
         layout = QHBoxLayout(self)
@@ -85,7 +64,7 @@ class TurnsWidget(QWidget):
         )
         self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.turns_label.setStyleSheet(
-            f"font-size: {int(self.attr_box.height() * 0.1)}px; font-weight: bold;"
+            f"font-size: {int(self.attr_box.height() * 0.085)}px; font-weight: bold;"
         )
 
         # Add widgets to layout
