@@ -10,7 +10,7 @@ from utilities.TypeChecking.TypeChecking import (
     Layers,
 )
 from settings.string_constants import *
-from typing import TYPE_CHECKING, Dict, Tuple
+from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
@@ -185,19 +185,21 @@ class Motion:
             self.arrow.ghost_arrow.update_svg(svg_file)
             self.arrow.ghost_arrow.update_appearance()
         self.pictograph.update_pictograph()
-
+        
     def adjust_turns(self, adjustment: float) -> None:
         potential_new_turns = self.arrow.turns + adjustment
-        new_turns = max(0, min(3, potential_new_turns))
+        new_turns_float: float = max(0, min(3, potential_new_turns))
 
-        if new_turns % 1 == 0:  # Whole numbers
+        if new_turns_float % 1 == 0:
             self.end_layer = 1 if self.start_layer == 1 else 2
-        else:  # Half numbers
+            new_turns_int: int = int(new_turns_float)
+            if new_turns_int != self.arrow.turns:
+                self.update_turns(new_turns_int)
+        else: 
             self.end_layer = 2 if self.start_layer == 1 else 1
-
-        if new_turns != self.arrow.turns:
-            self.update_turns(new_turns)
-
+            if new_turns_float != self.arrow.turns:
+                self.update_turns(new_turns_float)
+            
     def add_half_turn(self) -> None:
         self.adjust_turns(0.5)
 
@@ -209,3 +211,4 @@ class Motion:
 
     def subtract_turn(self) -> None:
         self.adjust_turns(-1)
+        
