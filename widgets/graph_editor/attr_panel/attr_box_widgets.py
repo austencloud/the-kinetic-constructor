@@ -169,58 +169,33 @@ class StartEndWidget(QWidget):
         )
 
 
+
+
+from PyQt6.QtWidgets import QWidget, QPushButton, QHBoxLayout, QLabel, QSpacerItem, QSizePolicy
+from PyQt6.QtCore import Qt
+
 class TurnsWidget(QWidget):
-    def __init__(
-        self, pictograph: "Pictograph", color: Colors, attr_box: "AttrBox"
-    ) -> None:
+    def __init__(self, pictograph: "Pictograph", color: Colors, attr_box: "AttrBox") -> None:
         super().__init__()
         self.pictograph = pictograph
         self.color = color
         self.attr_box = attr_box
         self.init_ui()
 
+    def create_button(self, text, callback):
+        button = QPushButton(text, self)
+        button.clicked.connect(callback)
+        button.setFixedSize(30, 30)  # Fixed size for all buttons
+        button.setStyleSheet("border-radius: 15px;")  # Consistent styling
+        return button
+
     def init_ui(self) -> None:
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(5)  # Reduced spacing between widgets
-
-        self.setFixedHeight(int(self.attr_box.height() * 0.25))
-        self.setFixedWidth(int(self.attr_box.width()))
-        # Create spacers that will push the buttons and label to the center
-        left_spacer = QSpacerItem(
-            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
-        )
-        right_spacer = QSpacerItem(
-            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
-        )
-
-        self.subtract_turns_button = QPushButton(self)
-        self.subtract_turns_button.setIcon(QIcon(ICON_PATHS["subtract_turns"]))
-        self.subtract_turns_button.clicked.connect(self.subtract_turns_callback)
-        self.subtract_turns_button.setFixedSize(30, 30)
-        self.subtract_turns_button.setStyleSheet(
-            "border-radius: 15px;"
-        )  # Set the border-radius to half of the width
-
-        self.turns_label = QLabel("0", self)
-        self.turns_label.setFixedSize(
-            int(self.attr_box.width() * 0.2), int(self.attr_box.height() / 4)
-        )
-        self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.turns_label.setStyleSheet(
-            f"font-size: {int(self.attr_box.height() * 0.1)}px;"
-        )  # Set the font size dynamically
-
-        self.add_turns_button = QPushButton(self)
-        # Apply a stylesheet to make the button round and stylized
-        self.add_turns_button.setStyleSheet(
+        self.setStyleSheet(
             "QPushButton {"
-            "   border-radius: %dpx;"  # Half of the button size for a perfect circle
+            "   border-radius: 15px;"
             "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
             "   stop:0 rgba(255, 255, 255, 255), stop:1 rgba(229, 229, 229, 255));"
             "   border: 1px solid #8f8f91;"
-            "   min-width: %dpx;"
-            "   min-height: %dpx;"
             "}"
             "QPushButton:pressed {"
             "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
@@ -229,34 +204,60 @@ class TurnsWidget(QWidget):
             "QPushButton:hover:!pressed {"
             "   border: 1px solid #1c1c1c;"
             "}"
-            % (
-                self.attr_box.button_size // 2,
-                self.attr_box.button_size,
-                self.attr_box.button_size,
-            )
         )
-        self.add_turns_button.setIcon(QIcon(ICON_PATHS["add_turns"]))
-        self.add_turns_button.setIconSize(self.attr_box.icon_size)
-        self.add_turns_button.clicked.connect(self.add_turns_callback)
-        self.add_turns_button.setStyleSheet(
-            "border-radius: 15px;"
-        )  # Set the border-radius to half of the width
+        
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(5)
 
-        # Add the spacers and widgets to the layout
+        # Create spacers for alignment
+        left_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        right_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.setFixedHeight(30)  # Set a fixed height for the widget
+        self.setFixedWidth(int(self.attr_box.width()))
+
+        # Create buttons
+        self.subtract_turn_button = self.create_button("-1", self.subtract_turn_callback)
+        self.subtract_half_turn_button = self.create_button("-0.5", self.subtract_half_turn_callback)
+        self.add_half_turn_button = self.create_button("+0.5", self.add_half_turn_callback)
+        self.add_turn_button = self.create_button("+1", self.add_turn_callback)
+
+        # Turns label
+        self.turns_label = QLabel("0", self)
+        self.turns_label.setFixedSize(int(self.attr_box.width() * 0.2), 30)
+        self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.turns_label.setStyleSheet(f"font-size: {int(self.attr_box.height() * 0.1)}px;")
+
+        # Add widgets to layout
         layout.addItem(left_spacer)
-        layout.addWidget(self.subtract_turns_button)
+        layout.addWidget(self.subtract_turn_button)
+        layout.addWidget(self.subtract_half_turn_button)
         layout.addWidget(self.turns_label)
-        layout.addWidget(self.add_turns_button)
+        layout.addWidget(self.add_half_turn_button)
+        layout.addWidget(self.add_turn_button)
         layout.addItem(right_spacer)
 
-    def subtract_turns_callback(self) -> None:
+    def add_turn_callback(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
-            motion.subtract_half_turn()
+            motion.add_turn()
             self.attr_box.update_labels(motion)
 
-    def add_turns_callback(self) -> None:
+    def subtract_turn_callback(self) -> None:
+        motion = self.pictograph.get_motion_by_color(self.color)
+        if motion:
+            motion.subtract_turn()
+            self.attr_box.update_labels(motion)
+
+    def add_half_turn_callback(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
             motion.add_half_turn()
+            self.attr_box.update_labels(motion)
+
+    def subtract_half_turn_callback(self) -> None:
+        motion = self.pictograph.get_motion_by_color(self.color)
+        if motion:
+            motion.subtract_half_turn()
             self.attr_box.update_labels(motion)

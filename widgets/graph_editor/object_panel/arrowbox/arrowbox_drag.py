@@ -147,8 +147,9 @@ class ArrowBoxDrag(ObjectBoxDrag):
             self.move_to_cursor(event_pos)
             if self.is_over_pictograph(event_pos):
                 if not self.has_entered_pictograph_once:
-                    self.has_entered_pictograph_once = True
                     self.remove_same_color_objects()
+                    self.has_entered_pictograph_once = True
+
                     
                 pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(

@@ -65,12 +65,12 @@ class AttrBox(QFrame):
         self.start_end_widget = StartEndWidget(self)
         self.turns_widget = TurnsWidget(self.pictograph, self.color, self)
 
-        self.turns_widget.subtract_turns_button.setIconSize(self.icon_size)
-        self.turns_widget.add_turns_button.setIconSize(self.icon_size)
-        self.turns_widget.subtract_turns_button.setFixedSize(
+        self.turns_widget.subtract_turn_button.setIconSize(self.icon_size)
+        self.turns_widget.add_turn_button.setIconSize(self.icon_size)
+        self.turns_widget.subtract_turn_button.setFixedSize(
             self.button_size, self.button_size
         )
-        self.turns_widget.add_turns_button.setFixedSize(
+        self.turns_widget.add_turn_button.setFixedSize(
             self.button_size, self.button_size
         )
         self.clock_label = self.create_clock_label()
@@ -97,8 +97,8 @@ class AttrBox(QFrame):
             "}"
         )
         if self.turns_widget:
-            self.turns_widget.subtract_turns_button.setStyleSheet(button_style)
-            self.turns_widget.add_turns_button.setStyleSheet(button_style)
+            self.turns_widget.subtract_turn_button.setStyleSheet(button_style)
+            self.turns_widget.add_turn_button.setStyleSheet(button_style)
 
     def setup_box(self) -> None:
         self.setObjectName("AttributeBox")

@@ -224,20 +224,15 @@ class Pictograph(QGraphicsScene):
             arrow.rotate(direction)
 
     def clear_pictograph(self) -> None:
-        for arrow in self.arrows:
-            self.arrows.remove(arrow)
-            if arrow in self.items():
-                self.removeItem(arrow)
-        for prop in self.props:
-            self.props.remove(prop)
-            if prop in self.items():
-                self.removeItem(prop)
-                
-        self.update_letter_item(None)
-        self.motions = []
         self.arrows = []
         self.props = []
-        self.update()
+        self.motions = []
+        for item in self.items():
+            if isinstance(item, Arrow) or isinstance(item, Prop):
+                self.removeItem(item)
+        self.update_pictograph()
+                        
+
 
     def clear_selections(self) -> None:
         for arrow in self.arrows:
