@@ -17,7 +17,6 @@ if TYPE_CHECKING:
 from settings.string_constants import ICON_DIR
 
 
-
 class HeaderWidget(QWidget):
     def __init__(self, attr_box: "AttrBox", color: Colors) -> None:
         super().__init__(attr_box)
@@ -48,7 +47,7 @@ class HeaderWidget(QWidget):
         self.header_text_label = QLabel("Left" if self.color == BLUE else "Right", self)
         self.header_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.header_text_label.setFixedSize(
-            int(self.attr_box.width() * 0.5), int(self.attr_box.height() * 1/6)
+            int(self.attr_box.width() * 0.5), int(self.attr_box.height() * 1 / 6)
         )
         color_hex = RED_HEX if self.color == RED else BLUE_HEX
         font_size = int(self.header_text_label.height() * 0.5)
@@ -88,3 +87,9 @@ class HeaderWidget(QWidget):
     def rotate_right(self) -> None:
         # Implementation for rotating right
         pass
+
+    def update_header_widget_size(self) -> None:
+        self.setFixedSize(
+            self.attr_box.attr_box_width,
+            int(self.attr_box.height() * 1 / 6),
+        )

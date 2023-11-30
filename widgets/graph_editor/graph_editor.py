@@ -38,8 +38,6 @@ class GraphEditor(QFrame):
         graph_editor_frame_layout.setAlignment(
             Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop
         )
-        
-
 
         objectbox_layout = QVBoxLayout()
         pictograph_layout = QVBoxLayout()

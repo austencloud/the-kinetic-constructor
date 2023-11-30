@@ -59,9 +59,7 @@ class TurnsWidget(QWidget):
 
         # Turns label
         self.turns_label = QLabel("0", self)
-        self.turns_label.setFixedSize(
-            int(self.attr_box.width() * 0.25), int(self.height())
-        )
+
         self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.turns_label.setStyleSheet(
             f"font-size: {int(self.attr_box.height() * 0.085)}px; font-weight: bold;"
@@ -97,3 +95,12 @@ class TurnsWidget(QWidget):
         if motion:
             motion.subtract_half_turn()
             self.attr_box.update_labels(motion)
+
+    def update_turns_widget_size(self) -> None:
+        self.setFixedSize(
+            self.attr_box.attr_box_width,
+            int(self.attr_box.height() * 1 / 6),
+        )
+        self.turns_label.setFixedSize(
+            int(self.attr_box.width() * 0.25), int(self.height())
+        )

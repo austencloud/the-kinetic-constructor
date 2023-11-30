@@ -34,7 +34,6 @@ class AttrPanel(QFrame):
         self.attr_panel_layout.addWidget(self.blue_attr_box)
         self.attr_panel_layout.addWidget(self.red_attr_box)
 
-
     def update_attr_panel(self) -> None:
         blue_arrow = self.pictograph.get_arrow_by_color(BLUE)
         red_arrow = self.pictograph.get_arrow_by_color(RED)

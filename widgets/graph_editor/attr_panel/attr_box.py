@@ -1,5 +1,5 @@
 import logging
-from typing import TYPE_CHECKING, Literal, Dict
+from typing import TYPE_CHECKING, Dict
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtWidgets import (
@@ -7,18 +7,10 @@ from PyQt6.QtWidgets import (
     QLabel,
     QVBoxLayout,
     QPushButton,
-    QSpacerItem,
-    QWidget,
-    QHBoxLayout,
 )
-from objects.arrow import Arrow
 from objects.motion import Motion
 from settings.string_constants import (
-    ANTI,
-    BLUE,
-    PRO,
     RED,
-    STATIC,
     ICON_PATHS,
     RED_HEX,
     BLUE_HEX,
@@ -54,21 +46,15 @@ class AttrBox(QFrame):
     def calculate_button_size(self) -> int:
         return int((self.pictograph.view.height() // 2 // 4) * 1)
 
-    def init_ui(self) -> None:
+    def init_ui(self):
         self.setup_box()
         self.button_size = self.calculate_button_size()
         self.icon_size = QSize(int(self.button_size * 0.5), int(self.button_size * 0.5))
-
-        # self.attribute_labels = self.create_attribute_labels()
 
         self.header_widget = HeaderWidget(self, self.color)
         self.motion_type_widget = MotionTypesWidget(self)
         self.start_end_widget = StartEndWidget(self.pictograph, self.color, self)
         self.turns_widget = TurnsWidget(self.pictograph, self.color, self)
-
-        self.clock_label = self.create_clock_label()
-
-        self.preload_pixmaps()
 
         self.layout().addWidget(self.header_widget)
         self.layout().addWidget(self.motion_type_widget)
@@ -79,7 +65,7 @@ class AttrBox(QFrame):
         self.setObjectName("AttributeBox")
         self.apply_border_style(RED_HEX if self.color == RED else BLUE_HEX)
         self.setFixedSize(
-            int(self.attr_panel.width()/2), int(self.attr_panel.height())
+            int(self.attr_panel.width() / 2), int(self.attr_panel.height())
         )
         self.setLayout(QVBoxLayout(self))
         self.layout().setContentsMargins(0, 0, 0, 0)
@@ -87,18 +73,20 @@ class AttrBox(QFrame):
 
     def apply_border_style(self, color_hex: str) -> None:
         self.border_width = 5
-        self.setStyleSheet(f"#AttributeBox {{ border: {self.border_width}px solid {color_hex}; }}")
-
+        self.attr_box_width = int(self.width())
+        self.setStyleSheet(
+            f"#AttributeBox {{ border: {self.border_width}px solid {color_hex}; }}"
+        )
 
     def get_button_style(self) -> str:
         return (
             "QPushButton {"
-            "   border-radius: 15px;"  # Half of fixed size (30px / 2)
+            "   border-radius: 15px;" 
             "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
             "   stop:0 rgba(255, 255, 255, 255), stop:1 rgba(229, 229, 229, 255));"
             "   border: 1px solid #8f8f91;"
-            "   min-width: 30px;"  # Ensures the width is not less than 30px
-            "   min-height: 30px;"  # Ensures the height is not less than 30px
+            "   min-width: 30px;"  
+            "   min-height: 30px;"  
             "}"
             "QPushButton:pressed {"
             "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
@@ -196,7 +184,6 @@ class AttrBox(QFrame):
     def update_attr_box_size(self) -> None:
         self.setFixedHeight(int(self.attr_panel.pictograph.graph_editor.height() / 2))
         self.setFixedWidth(int(self.attr_panel.pictograph.graph_editor.height() / 2))
-        # delete the buttons layouts
         for child in self.children():
             if isinstance(child, QFrame):
                 child.deleteLater()
@@ -208,3 +195,8 @@ class AttrBox(QFrame):
         self.init_ui()
         self.header_widget.setup_header_widget()
         self.update()
+
+        self.header_widget.update_header_widget_size()
+        self.motion_type_widget.update_motion_type_widget_size()
+        self.start_end_widget.update_start_end_widget_size()
+        self.turns_widget.update_turns_widget_size()
