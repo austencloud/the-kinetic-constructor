@@ -96,10 +96,7 @@ class StartEndWidget(QWidget):
         self.swap_button.clicked.connect(self.swap_locations)
 
     def _setup_layouts(self) -> None:
-        # Set up the layouts for the widget
         self.start_layout = self._create_layout(self.start_label, self.start_combo_box)
-
-        # Create a spacer item with a vertical policy set to expanding
         self.bottom_spacer = QSpacerItem(
             0, self.height() - self.start_combo_box.height()
         )
@@ -108,7 +105,6 @@ class StartEndWidget(QWidget):
         self.arrow_button_layout.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         self.arrow_button_layout.addWidget(self.swap_button)
         self.arrow_button_layout.addWidget(self.arrow_label)
-        # Add the spacer to the bottom of the arrow_button_layout
         self.arrow_button_layout.addItem(self.bottom_spacer)
 
         self.end_layout = self._create_layout(self.end_label, self.end_combo_box)
