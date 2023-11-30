@@ -138,7 +138,23 @@ class StartEndWidget(QWidget):
 
     def _create_button(self, size: int) -> QPushButton:
         button = QPushButton(self)
-        button.setStyleSheet(self.attr_box.get_button_style())
+        button.setStyleSheet(
+            "QPushButton {"
+            "   border-radius: 15px;"
+            "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
+            "   stop:0 rgba(255, 255, 255, 255), stop:1 rgba(200, 200, 200, 255));"
+            "   border: 1px solid black;"
+            "   min-width: 30px;"
+            "   min-height: 30px;"
+            "}"
+            "QPushButton:pressed {"
+            "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
+            "   stop:0 rgba(204, 228, 247, 255), stop:1 rgba(164, 209, 247, 255));"
+            "}"
+            "QPushButton:hover:!pressed {"
+            "   border: 1px solid #1c1c1c;"
+            "}"
+        )
         button.setIcon(QIcon(ICON_DIR + SWAP_ICON))
         button.setFixedSize(int(size / 2), int(size / 2))
         return button

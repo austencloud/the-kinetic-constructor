@@ -72,30 +72,13 @@ class AttrBox(QFrame):
         self.layout().setSpacing(0)
 
     def apply_border_style(self, color_hex: str) -> None:
-        self.border_width = 5
+        self.border_width = 3
         self.setStyleSheet(
             f"#AttributeBox {{ border: {self.border_width}px solid {color_hex}; }}"
         )
-        self.attr_box_width = int(self.width())
+        self.attr_box_width = int(self.width()+self.border_width)
 
-    def get_button_style(self) -> str:
-        return (
-            "QPushButton {"
-            "   border-radius: 15px;"
-            "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
-            "   stop:0 rgba(255, 255, 255, 255), stop:1 rgba(229, 229, 229, 255));"
-            "   border: 1px solid #8f8f91;"
-            "   min-width: 30px;"
-            "   min-height: 30px;"
-            "}"
-            "QPushButton:pressed {"
-            "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
-            "   stop:0 rgba(204, 228, 247, 255), stop:1 rgba(164, 209, 247, 255));"
-            "}"
-            "QPushButton:hover:!pressed {"
-            "   border: 1px solid #1c1c1c;"
-            "}"
-        )
+
 
     ### CREATE LABELS ###
 
