@@ -172,6 +172,7 @@ class Motion:
         self.arrow.turns = turns
         self.turns = self.arrow.turns
         self.end_orientation = self.get_end_orientation()
+        self.prop.layer = self.end_layer
         self.prop.orientation = self.end_orientation
         self.prop.update_appearance()
         self.prop.update_rotation()
@@ -188,19 +189,23 @@ class Motion:
     def adjust_turns(self, adjustment: float) -> None:
         """
         Adjusts the number of turns by a specified amount and updates the motion attributes.
-
-        Args:
-        adjustment (float): The amount to adjust the turns by. Can be negative.
+        This also directly sets the end_layer based on the turns being whole or half numbers.
         """
-        new_turns = max(0, min(3.0, float(self.arrow.turns) + adjustment))
-        is_crossing_half_turn = self.arrow.turns % 1 != new_turns % 1
+        # Calculate potential new turns without clamping to range [0, 3]
+        potential_new_turns = self.arrow.turns + adjustment
 
-        if is_crossing_half_turn and abs(adjustment) == 0.5:
-            self.prop.swap_layer()
-            self.prop.motion.end_layer = self.prop.layer
-            self.prop.swap_axis()
+        # Determine the actual new turns, ensuring it's within [0, 3]
+        new_turns = max(0, min(3, potential_new_turns))
 
-        self.update_turns(new_turns)
+        # Directly set the layer based on the new turns
+        if new_turns % 1 == 0:  # Whole numbers
+            self.end_layer = 1 if self.start_layer == 1 else 2
+        else:  # Half numbers
+            self.end_layer = 2 if self.start_layer == 1 else 1
+
+        # Update the turns only if there's a change
+        if new_turns != self.arrow.turns:
+            self.update_turns(new_turns)
 
     def add_half_turn(self) -> None:
         self.adjust_turns(0.5)
