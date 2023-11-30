@@ -187,23 +187,14 @@ class Motion:
         self.pictograph.update_pictograph()
 
     def adjust_turns(self, adjustment: float) -> None:
-        """
-        Adjusts the number of turns by a specified amount and updates the motion attributes.
-        This also directly sets the end_layer based on the turns being whole or half numbers.
-        """
-        # Calculate potential new turns without clamping to range [0, 3]
         potential_new_turns = self.arrow.turns + adjustment
-
-        # Determine the actual new turns, ensuring it's within [0, 3]
         new_turns = max(0, min(3, potential_new_turns))
 
-        # Directly set the layer based on the new turns
         if new_turns % 1 == 0:  # Whole numbers
             self.end_layer = 1 if self.start_layer == 1 else 2
         else:  # Half numbers
             self.end_layer = 2 if self.start_layer == 1 else 1
 
-        # Update the turns only if there's a change
         if new_turns != self.arrow.turns:
             self.update_turns(new_turns)
 
