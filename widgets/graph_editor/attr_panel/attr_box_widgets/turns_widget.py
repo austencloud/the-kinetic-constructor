@@ -1,10 +1,12 @@
 from PyQt6.QtWidgets import (
-    QWidget,
     QHBoxLayout,
     QPushButton,
     QLabel,
     QVBoxLayout,
     QFrame,
+    QBoxLayout,
+    QSpacerItem,
+    QSizePolicy,
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
@@ -14,7 +16,6 @@ from typing import TYPE_CHECKING, List, Literal
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
-from PyQt6.QtWidgets import QBoxLayout
 
 
 class TurnsWidget(QFrame):
@@ -96,7 +97,19 @@ class TurnsWidget(QFrame):
         # Arrange buttons with turns label in the middle
         self.bottom_layout.addWidget(self.subtract_turn_button)
         self.bottom_layout.addWidget(self.subtract_half_turn_button)
+
+        # Add spacer to the left of the turns label
+        self.bottom_layout.addItem(
+            QSpacerItem(5, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        )
+
         self.create_turns_label()
+
+        # Add spacer to the right of the turns label
+        self.bottom_layout.addItem(
+            QSpacerItem(5, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        )
+
         self.bottom_layout.addWidget(self.add_half_turn_button)
         self.bottom_layout.addWidget(self.add_turn_button)
 
@@ -109,11 +122,19 @@ class TurnsWidget(QFrame):
         self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.bottom_layout.addWidget(self.turns_label)
 
-    def get_turns_label_style(self) -> str:
-        return (
-            f"font-size: {self.bottom_frame.height()}px; font-weight: bold; background-color: white;"
-            "border: 2px solid black; border-radius: 10px;"
+    def create_turns_label(self) -> None:
+        self.turns_label = QLabel("0", self)
+        self.turns_label.setFrameShape(QFrame.Shape.Box)
+        self.turns_label.setLineWidth(1)
+        self.turns_label.setFrameShadow(QFrame.Shadow.Plain)
+        self.turns_label.setFont(
+            QFont("Arial", int(self.bottom_frame.height() * 0.7), QFont.Weight.Bold)
         )
+        self.turns_label.setStyleSheet(
+            "background-color: white; border: 2px solid black; border-radius: 10px; letter-spacing: -2px;"
+        )
+        self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.bottom_layout.addWidget(self.turns_label)
 
     def create_button(self, text: str, callback) -> QPushButton:
         button = QPushButton(text, self)

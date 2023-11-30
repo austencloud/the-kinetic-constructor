@@ -472,7 +472,6 @@ class Arrow(GraphicalObject):
 
         self.prop.color = self.color
         self.prop.prop_location = new_end_location
-        self.prop.layer = 1
 
         self.update_appearance()
         self.prop.update_appearance()
