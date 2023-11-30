@@ -31,9 +31,14 @@ if TYPE_CHECKING:
         AttrPanel,
     )
 from widgets.graph_editor.attr_panel.attr_box_widgets.header_widget import HeaderWidget
-from widgets.graph_editor.attr_panel.attr_box_widgets.motion_types_widget import MotionTypesWidget  
-from widgets.graph_editor.attr_panel.attr_box_widgets.start_end_widget import StartEndWidget
+from widgets.graph_editor.attr_panel.attr_box_widgets.motion_types_widget import (
+    MotionTypesWidget,
+)
+from widgets.graph_editor.attr_panel.attr_box_widgets.start_end_widget import (
+    StartEndWidget,
+)
 from widgets.graph_editor.attr_panel.attr_box_widgets.turns_widget import TurnsWidget
+
 
 class AttrBox(QFrame):
     def __init__(
@@ -61,16 +66,7 @@ class AttrBox(QFrame):
         self.start_end_widget = StartEndWidget(self)
         self.turns_widget = TurnsWidget(self.pictograph, self.color, self)
 
-        self.turns_widget.subtract_turn_button.setIconSize(self.icon_size)
-        self.turns_widget.add_turn_button.setIconSize(self.icon_size)
-        self.turns_widget.subtract_turn_button.setFixedSize(
-            self.button_size, self.button_size
-        )
-        self.turns_widget.add_turn_button.setFixedSize(
-            self.button_size, self.button_size
-        )
         self.clock_label = self.create_clock_label()
-        self.apply_button_styles()
 
         self.preload_pixmaps()
 
@@ -78,23 +74,6 @@ class AttrBox(QFrame):
         self.layout().addWidget(self.motion_type_widget)
         self.layout().addWidget(self.start_end_widget)
         self.layout().addWidget(self.turns_widget)
-
-    def apply_button_styles(self) -> None:
-        button_style = (
-            "QPushButton {"
-            "   border-radius: 15px;"
-            "   background-color: #f0f0f0;"
-            "   border: 1px solid #a0a0a0;"
-            "   min-width: 30px;"
-            "   min-height: 30px;"
-            "}"
-            "QPushButton:pressed {"
-            "   background-color: #c0c0c0;"
-            "}"
-        )
-        if self.turns_widget:
-            self.turns_widget.subtract_turn_button.setStyleSheet(button_style)
-            self.turns_widget.add_turn_button.setStyleSheet(button_style)
 
     def setup_box(self) -> None:
         self.setObjectName("AttributeBox")
@@ -107,7 +86,8 @@ class AttrBox(QFrame):
         self.layout().setSpacing(0)
 
     def apply_border_style(self, color_hex: str) -> None:
-        self.setStyleSheet(f"#AttributeBox {{ border: 3px solid {color_hex}; }}")
+        self.border_width = 5
+        self.setStyleSheet(f"#AttributeBox {{ border: {self.border_width}px solid {color_hex}; }}")
 
     ### CREATE LABELS ###
 
@@ -154,7 +134,6 @@ class AttrBox(QFrame):
         if arrow:
             arrow.swap_rot_dir()
             self.update_labels(arrow)
-
 
     def preload_pixmaps(self) -> None:
         for icon_name, icon_path in ICON_PATHS.items():

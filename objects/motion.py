@@ -185,44 +185,31 @@ class Motion:
             self.arrow.ghost_arrow.update_appearance()
         self.pictograph.update_pictograph()
 
-    def add_half_turn(self) -> None:
-        if self.arrow.turns < 3.0:
+    def adjust_turns(self, adjustment: float) -> None:
+        """
+        Adjusts the number of turns by a specified amount and updates the motion attributes.
+
+        Args:
+        adjustment (float): The amount to adjust the turns by. Can be negative.
+        """
+        new_turns = max(0, min(3, self.arrow.turns + adjustment))
+        is_crossing_half_turn = self.arrow.turns % 1 != new_turns % 1
+
+        if is_crossing_half_turn and abs(adjustment) == 0.5:
             self.prop.swap_layer()
             self.prop.motion.end_layer = self.prop.layer
             self.prop.swap_axis()
-            self.update_turns(self.arrow.turns + 0.5)
-        else:
-            self.update_turns(3.0)
+
+        self.update_turns(new_turns)
+
+    def add_half_turn(self) -> None:
+        self.adjust_turns(0.5)
 
     def subtract_half_turn(self) -> None:
-        if self.arrow.turns > 0:
-            self.prop.swap_layer()
-            self.prop.motion.end_layer = self.prop.layer
-            self.prop.swap_axis()
-            self.update_turns(self.arrow.turns - 0.5)
-            if self.arrow.turns == 0:
-                self.update_turns(0)
-        else:
-            self.update_turns(0)
+        self.adjust_turns(-0.5)
 
     def add_turn(self) -> None:
-        if self.arrow.turns < 3.0:
-            if self.arrow.turns <= 2:
-                self.prop.motion.end_layer = self.prop.layer
-                self.prop.swap_axis()
-                self.update_turns(self.arrow.turns + 1)
-            else:
-                self.update_turns(3.0)
-        else:
-            self.update_turns(3.0)
-            
+        self.adjust_turns(1)
+
     def subtract_turn(self) -> None:
-        if self.arrow.turns > 0:
-            if self.arrow.turns >= 1:
-                self.prop.motion.end_layer = self.prop.layer
-                self.prop.swap_axis()
-                self.update_turns(self.arrow.turns - 1)
-            else:
-                self.update_turns(0)
-        else:
-            self.update_turns(0)
+        self.adjust_turns(-1)

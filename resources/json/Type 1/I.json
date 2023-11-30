@@ -12,7 +12,7 @@
         "arrow_location": "sw",
         "start_location": "s",
         "end_location": "w",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -21,7 +21,7 @@
         "arrow_location": "sw",
         "start_location": "s",
         "end_location": "w",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {
@@ -46,7 +46,7 @@
         "arrow_location": "nw",
         "start_location": "w",
         "end_location": "n",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -55,7 +55,7 @@
         "arrow_location": "nw",
         "start_location": "w",
         "end_location": "n",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {
@@ -81,7 +81,7 @@
         "arrow_location": "ne",
         "start_location": "n",
         "end_location": "e",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -90,7 +90,7 @@
         "arrow_location": "ne",
         "start_location": "n",
         "end_location": "e",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {
@@ -115,7 +115,7 @@
         "arrow_location": "se",
         "start_location": "e",
         "end_location": "s",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -124,7 +124,7 @@
         "arrow_location": "se",
         "start_location": "e",
         "end_location": "s",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {
@@ -149,7 +149,7 @@
         "arrow_location": "nw",
         "start_location": "n",
         "end_location": "w",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -158,7 +158,7 @@
         "arrow_location": "nw",
         "start_location": "n",
         "end_location": "w",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {
@@ -183,7 +183,7 @@
         "arrow_location": "se",
         "start_location": "s",
         "end_location": "e",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -192,7 +192,7 @@
         "arrow_location": "se",
         "start_location": "s",
         "end_location": "e",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {
@@ -217,7 +217,7 @@
         "arrow_location": "sw",
         "start_location": "w",
         "end_location": "s",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -226,7 +226,7 @@
         "arrow_location": "sw",
         "start_location": "w",
         "end_location": "s",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {
@@ -251,7 +251,7 @@
         "arrow_location": "ne",
         "start_location": "e",
         "end_location": "n",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -260,7 +260,7 @@
         "arrow_location": "ne",
         "start_location": "e",
         "end_location": "n",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {
@@ -285,7 +285,7 @@
         "arrow_location": "sw",
         "start_location": "w",
         "end_location": "s",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -294,7 +294,7 @@
         "arrow_location": "sw",
         "start_location": "w",
         "end_location": "s",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {
@@ -319,7 +319,7 @@
         "arrow_location": "nw",
         "start_location": "n",
         "end_location": "w",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -328,7 +328,7 @@
         "arrow_location": "nw",
         "start_location": "n",
         "end_location": "w",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {
@@ -353,7 +353,7 @@
         "arrow_location": "ne",
         "start_location": "e",
         "end_location": "n",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -362,7 +362,7 @@
         "arrow_location": "ne",
         "start_location": "e",
         "end_location": "n",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {
@@ -387,7 +387,7 @@
         "arrow_location": "se",
         "start_location": "s",
         "end_location": "e",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -396,7 +396,7 @@
         "arrow_location": "se",
         "start_location": "s",
         "end_location": "e",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {
@@ -421,7 +421,7 @@
         "arrow_location": "nw",
         "start_location": "w",
         "end_location": "n",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -430,7 +430,7 @@
         "arrow_location": "nw",
         "start_location": "w",
         "end_location": "n",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {
@@ -455,7 +455,7 @@
         "arrow_location": "se",
         "start_location": "e",
         "end_location": "s",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -464,7 +464,7 @@
         "arrow_location": "se",
         "start_location": "e",
         "end_location": "s",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {
@@ -489,7 +489,7 @@
         "arrow_location": "sw",
         "start_location": "s",
         "end_location": "w",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -498,7 +498,7 @@
         "arrow_location": "sw",
         "start_location": "s",
         "end_location": "w",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {
@@ -523,7 +523,7 @@
         "arrow_location": "ne",
         "start_location": "n",
         "end_location": "e",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -532,7 +532,7 @@
         "arrow_location": "ne",
         "start_location": "n",
         "end_location": "e",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "optimal_blue_location": {

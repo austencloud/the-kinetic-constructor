@@ -29,17 +29,21 @@ class TurnsWidget(QWidget):
     def create_button(self, text, callback) -> QPushButton:
         button = QPushButton(text, self)
         button.clicked.connect(callback)
-        button.setFixedSize(30, 30)  # Fixed size for all buttons
-        button.setStyleSheet("border-radius: 15px;")  # Consistent styling
+        button.setFixedSize(
+            30, 30
+        )  # This size should be large enough to fit the text and be circular
+        button.setStyleSheet(self.get_button_style())
         return button
 
-    def init_ui(self) -> None:
-        self.setStyleSheet(
+    def get_button_style(self) -> str:
+        return (
             "QPushButton {"
-            "   border-radius: 15px;"
+            "   border-radius: 15px;"  # Half of fixed size (30px / 2)
             "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
             "   stop:0 rgba(255, 255, 255, 255), stop:1 rgba(229, 229, 229, 255));"
             "   border: 1px solid #8f8f91;"
+            "   min-width: 30px;"  # Ensures the width is not less than 30px
+            "   min-height: 30px;"  # Ensures the height is not less than 30px
             "}"
             "QPushButton:pressed {"
             "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
@@ -50,20 +54,17 @@ class TurnsWidget(QWidget):
             "}"
         )
 
+    def init_ui(self) -> None:
         layout = QHBoxLayout(self)
+        self.setContentsMargins(0, 0, 0, 0)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(5)
+        layout.setSpacing(0)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        # Create spacers for alignment
-        left_spacer = QSpacerItem(
-            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
-        )
-        right_spacer = QSpacerItem(
-            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
-        )
-
-        self.setFixedHeight(30)  # Set a fixed height for the widget
-        self.setFixedWidth(int(self.attr_box.width()))
+        self.setFixedHeight(
+            int(self.attr_box.height() / 4)
+        )  # Set a fixed height for the widget
+        self.setFixedWidth(int(self.attr_box.width() - self.attr_box.border_width * 2))
 
         # Create buttons
         self.subtract_turn_button = self.create_button(
@@ -80,21 +81,19 @@ class TurnsWidget(QWidget):
         # Turns label
         self.turns_label = QLabel("0", self)
         self.turns_label.setFixedSize(
-            int(self.attr_box.width() * 0.2), int(self.height())
+            int(self.attr_box.width() * 0.25), int(self.height())
         )
         self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.turns_label.setStyleSheet(
-            f"font-size: {int(self.attr_box.height() * 0.1)}px;"
+            f"font-size: {int(self.attr_box.height() * 0.1)}px; font-weight: bold;"
         )
 
         # Add widgets to layout
-        layout.addItem(left_spacer)
         layout.addWidget(self.subtract_turn_button)
         layout.addWidget(self.subtract_half_turn_button)
         layout.addWidget(self.turns_label)
         layout.addWidget(self.add_half_turn_button)
         layout.addWidget(self.add_turn_button)
-        layout.addItem(right_spacer)
 
     def add_turn_callback(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)

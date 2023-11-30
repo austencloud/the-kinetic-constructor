@@ -12,7 +12,7 @@
         "arrow_location": "None",
         "start_location": "w",
         "end_location": "w",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -21,7 +21,7 @@
         "arrow_location": "None",
         "start_location": "n",
         "end_location": "n",
-        "turns": 0
+        "turns": 0.0
       }
     ],
     [
@@ -36,7 +36,7 @@
         "arrow_location": "None",
         "start_location": "n",
         "end_location": "n",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -45,7 +45,7 @@
         "arrow_location": "None",
         "start_location": "e",
         "end_location": "e",
-        "turns": 0
+        "turns": 0.0
       }
     ],
     [
@@ -60,7 +60,7 @@
         "arrow_location": "None",
         "start_location": "e",
         "end_location": "e",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -69,7 +69,7 @@
         "arrow_location": "None",
         "start_location": "s",
         "end_location": "s",
-        "turns": 0
+        "turns": 0.0
       }
     ],
     [
@@ -84,7 +84,7 @@
         "arrow_location": "None",
         "start_location": "s",
         "end_location": "s",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -93,7 +93,7 @@
         "arrow_location": "None",
         "start_location": "w",
         "end_location": "w",
-        "turns": 0
+        "turns": 0.0
       }
     ],
     [
@@ -108,7 +108,7 @@
         "arrow_location": "None",
         "start_location": "e",
         "end_location": "e",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -117,7 +117,7 @@
         "arrow_location": "None",
         "start_location": "n",
         "end_location": "n",
-        "turns": 0
+        "turns": 0.0
       }
     ],
     [
@@ -132,7 +132,7 @@
         "arrow_location": "None",
         "start_location": "s",
         "end_location": "s",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -141,7 +141,7 @@
         "arrow_location": "None",
         "start_location": "e",
         "end_location": "e",
-        "turns": 0
+        "turns": 0.0
       }
     ],
     [
@@ -156,7 +156,7 @@
         "arrow_location": "None",
         "start_location": "w",
         "end_location": "w",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -165,7 +165,7 @@
         "arrow_location": "None",
         "start_location": "s",
         "end_location": "s",
-        "turns": 0
+        "turns": 0.0
       }
     ],
     [
@@ -180,7 +180,7 @@
         "arrow_location": "None",
         "start_location": "n",
         "end_location": "n",
-        "turns": 0
+        "turns": 0.0
       },
       {
         "color": "red",
@@ -189,7 +189,7 @@
         "arrow_location": "None",
         "start_location": "w",
         "end_location": "w",
-        "turns": 0
+        "turns": 0.0
       }
     ]
   ]
