@@ -9,8 +9,8 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
 )
 from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtCore import Qt
-from settings.string_constants import BLUE, BLUE_HEX, ICON_PATHS, RED, RED_HEX, ICON_DIR
+from PyQt6.QtCore import Qt, QSize
+from settings.string_constants import BLUE, BLUE_HEX, RED, RED_HEX, ICON_DIR
 from utilities.TypeChecking.TypeChecking import Colors
 from typing import TYPE_CHECKING
 from objects.arrow import Arrow
@@ -19,9 +19,9 @@ from objects.arrow import Arrow
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
+from PyQt6.QtGui import QFont
 
 
-from PyQt6.QtCore import QSize
 
 
 class HeaderWidget(QWidget):
@@ -134,6 +134,8 @@ class StartEndWidget(QWidget):
         self.startLabel = QLabel("Start:", self)
         self.startComboBox = QComboBox(self)
         self.startComboBox.addItems(["N", "E", "S", "W"])
+        self.startComboBox.setFont(QFont("Arial", 12))  # Set the font size here
+
 
         self.swapButton = QPushButton("Swap", self)
         self.swapButton.clicked.connect(self.swap_locations)
@@ -141,6 +143,7 @@ class StartEndWidget(QWidget):
         self.endLabel = QLabel("End:", self)
         self.endComboBox = QComboBox(self)
         self.endComboBox.addItems(["N", "E", "S", "W"])
+        self.endComboBox.setFont(QFont("Arial", 12))  # Set the font size here
 
         self.startLayout = QVBoxLayout()
         self.startLayout.addWidget(self.startLabel)
@@ -171,8 +174,7 @@ class StartEndWidget(QWidget):
 
 
 
-from PyQt6.QtWidgets import QWidget, QPushButton, QHBoxLayout, QLabel, QSpacerItem, QSizePolicy
-from PyQt6.QtCore import Qt
+
 
 class TurnsWidget(QWidget):
     def __init__(self, pictograph: "Pictograph", color: Colors, attr_box: "AttrBox") -> None:
@@ -225,7 +227,7 @@ class TurnsWidget(QWidget):
 
         # Turns label
         self.turns_label = QLabel("0", self)
-        self.turns_label.setFixedSize(int(self.attr_box.width() * 0.2), 30)
+        self.turns_label.setFixedSize(int(self.attr_box.width() * 0.2), int(self.height()))
         self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.turns_label.setStyleSheet(f"font-size: {int(self.attr_box.height() * 0.1)}px;")
 

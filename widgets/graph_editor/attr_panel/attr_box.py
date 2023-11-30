@@ -137,59 +137,6 @@ class AttrBox(QFrame):
         label.setObjectName("clock_label")
         return label
 
-    def add_labels_to_layout(self) -> None:
-        self.layout().addWidget(self.info_header)
-        for label in self.attribute_labels.values():
-            self.layout().addWidget(label)
-        self.layout().addWidget(self.turns_widget)
-
-    def setup_button_column(
-        self, x_position: int, button_names: list, column: Literal["left", "right"]
-    ) -> None:
-        button_column = QFrame(self)
-        button_column_layout = QVBoxLayout(button_column)
-        button_column_layout.setContentsMargins(0, 0, 0, 0)
-        button_column_layout.setSpacing(0)
-
-        button_column.setFixedSize(self.button_size, self.height())
-        button_column.move(x_position, 0)
-
-        if column == "left":
-            top_spacer = QSpacerItem(
-                self.button_size,
-                self.button_size,
-                QSizePolicy.Policy.Fixed,
-                QSizePolicy.Policy.Expanding,
-            )
-            button_column_layout.addItem(top_spacer)
-
-        if column == "right":
-            button_column_layout.addWidget(self.clock_label)
-
-        middle_spacer = QSpacerItem(
-            self.button_size,
-            self.button_size,
-            QSizePolicy.Policy.Fixed,
-            QSizePolicy.Policy.Expanding,
-        )
-        button_column_layout.addItem(middle_spacer)
-
-        if column == "left":
-            for button_name in button_names:
-                button = self.create_button(
-                    ICON_PATHS[button_name], getattr(self, f"{button_name}_callback")
-                )
-                button_column_layout.addWidget(button)
-
-        if column == "right" and "add_turns" in button_names:
-            add_turns_button = self.create_button(
-                ICON_PATHS["add_turns"], self.add_turns_callback
-            )
-            button_column_layout.addWidget(add_turns_button)
-
-        button_column.raise_()
-        return button_column
-
     def create_button(self, icon_path, callback):
         button = QPushButton(self)
         button.setIcon(QIcon(icon_path))
@@ -212,17 +159,6 @@ class AttrBox(QFrame):
             arrow.swap_rot_dir()
             self.update_labels(arrow)
 
-    def subtract_turns_callback(self) -> None:
-        arrow = self.pictograph.get_arrow_by_color(self.color)
-        if arrow:
-            arrow.subtract_turn()
-            self.update_labels(arrow)
-
-    def add_turns_callback(self) -> None:
-        arrow = self.pictograph.get_arrow_by_color(self.color)
-        if arrow:
-            arrow.add_turn()
-            self.update_labels(arrow)
 
     def preload_pixmaps(self) -> None:
         for icon_name, icon_path in ICON_PATHS.items():

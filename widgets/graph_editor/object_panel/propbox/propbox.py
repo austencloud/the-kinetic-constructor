@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (
     QVBoxLayout,
-    QGraphicsScene, QGraphicsSceneMouseEvent
+    QGraphicsSceneMouseEvent
 )
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
@@ -11,7 +11,6 @@ from widgets.graph_editor.object_panel.propbox.propbox_view import PropBoxView
 from settings.string_constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
-    IN,
     NORTH,
     EAST,
     PROP_LOCATION,
@@ -20,7 +19,6 @@ from settings.string_constants import (
     COLOR,
     RED,
     BLUE,
-    LOCATION,
     LAYER,
     ORIENTATION,
 )
