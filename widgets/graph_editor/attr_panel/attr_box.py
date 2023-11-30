@@ -63,7 +63,7 @@ class AttrBox(QFrame):
 
         self.header_widget = HeaderWidget(self, self.color)
         self.motion_type_widget = MotionTypesWidget(self)
-        self.start_end_widget = StartEndWidget(self)
+        self.start_end_widget = StartEndWidget(self.pictograph, self.color, self)
         self.turns_widget = TurnsWidget(self.pictograph, self.color, self)
 
         self.clock_label = self.create_clock_label()
@@ -79,7 +79,7 @@ class AttrBox(QFrame):
         self.setObjectName("AttributeBox")
         self.apply_border_style(RED_HEX if self.color == RED else BLUE_HEX)
         self.setFixedSize(
-            int(self.attr_panel.width()), int(self.attr_panel.height() / 2)
+            int(self.attr_panel.width()/2), int(self.attr_panel.height())
         )
         self.setLayout(QVBoxLayout(self))
         self.layout().setContentsMargins(0, 0, 0, 0)
@@ -170,6 +170,7 @@ class AttrBox(QFrame):
             self.update_labels(arrow)
 
     def update_labels(self, motion: "Motion") -> None:
+        self.start_end_widget.update_combo_boxes()
         self.turns_widget.turns_label.setText(f"{motion.turns}")
 
     def update_attr_box_size(self) -> None:

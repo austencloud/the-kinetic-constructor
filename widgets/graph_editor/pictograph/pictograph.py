@@ -14,14 +14,8 @@ from settings.string_constants import (
     END_LOCATION,
     LETTER_SVG_DIR,
     MOTION_TYPE,
-    NORTHEAST,
-    NORTHWEST,
-    LOCATION,
-    PROP_LOCATION,
     RED,
     ROTATION_DIRECTION,
-    SOUTHEAST,
-    SOUTHWEST,
     START_LOCATION,
     TURNS,
     START_ORIENTATION,
@@ -40,7 +34,6 @@ from utilities.TypeChecking.TypeChecking import (
     Optional,
     Orientations,
     Tuple,
-    Locations,
 )
 from widgets.graph_editor.pictograph.pictograph_event_handler import (
     PictographEventHandler,
@@ -232,8 +225,6 @@ class Pictograph(QGraphicsScene):
                 self.removeItem(item)
         self.update_pictograph()
                         
-
-
     def clear_selections(self) -> None:
         for arrow in self.arrows:
             arrow.setSelected(False)

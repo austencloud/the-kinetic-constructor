@@ -6,110 +6,124 @@ from PyQt6.QtWidgets import (
     QComboBox,
     QVBoxLayout,
     QSpacerItem,
-    QSizePolicy,
 )
 from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
 from settings.string_constants import ICON_DIR
 from typing import TYPE_CHECKING, List
 
-from utilities.TypeChecking.TypeChecking import Locations
+from utilities.TypeChecking.TypeChecking import Locations, Colors
 
 
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    
 
 from settings.string_constants import ICON_DIR, SWAP_ICON
-from PyQt6.QtWidgets import QSizePolicy
 
 
 class StartEndWidget(QWidget):
-    def __init__(self, attr_box: "AttrBox") -> None:
+    def __init__(self, pictograph: 'Pictograph', color:Colors, attr_box: "AttrBox") -> None:
         super().__init__(attr_box)
         self.layout = QHBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
+        self.pictograph = pictograph
+        self.color = color
+
         locations: List[Locations] = ["N", "E", "S", "W"]
-        font = QFont("Arial", 14)
+        
+        font = QFont("Arial", 14, weight=QFont.Weight.Bold)
+        arrow_font = QFont("Arial", 20, weight=QFont.Weight.Bold) 
+        
+        combo_box_height = 30
+        arrow_extra_width = 10 
 
-        # Adjust these sizes as necessary
-        combo_box_height = 30  # Height for the combo box
-        arrow_extra_width = 10  # Additional width for the dropdown arrow
-
-        self.startLabel = QLabel("Start:", self)
-        self.startLabel.setFixedHeight(int(combo_box_height / 2))
-        self.startComboBox = QComboBox(self)
-        self.startComboBox.addItems(locations)
-        self.startComboBox.setFont(font)
-        self.startComboBox.setFixedSize(
+        self.start_label = QLabel("Start:", self)
+        self.start_label.setFixedHeight(int(combo_box_height / 2))
+        self.start_combo_box = QComboBox(self)
+        self.start_combo_box.addItems(locations)
+        self.start_combo_box.setFont(font)
+        self.start_combo_box.setFixedSize(
             combo_box_height + arrow_extra_width, combo_box_height
         )
-
+        self.label_sized_spacer = QSpacerItem(0, int(combo_box_height / 2))
         self.arrow_label = QLabel("→", self)
         self.arrow_label.setFixedHeight(int(combo_box_height / 2))
-        self.arrow_label.setFont(font)
+        self.arrow_label.setFont(arrow_font)  # Set the font to bold
 
-        self.swapButton = QPushButton(self)
+        self.swap_button = QPushButton(self)
         swap_icon_path = ICON_DIR + SWAP_ICON
-        self.swapButton.setIcon(QIcon(swap_icon_path))
-        self.swapButton.setFixedSize(
+        self.swap_button.setIcon(QIcon(swap_icon_path))
+        self.swap_button.setFixedSize(
             combo_box_height, combo_box_height
         )  # Keep the button add_
-        self.swapButton.clicked.connect(self.swap_locations)
+        self.swap_button.clicked.connect(self.swap_locations)
 
-        self.endLabel = QLabel("End:", self)
-        self.endLabel.setFixedHeight(int(combo_box_height / 2))
-        self.endComboBox = QComboBox(self)
-        self.endComboBox.addItems(locations)
-        self.endComboBox.setFont(font)
-        self.endComboBox.setFixedSize(
+        self.end_label = QLabel("End:", self)
+        self.end_label.setFixedHeight(int(combo_box_height / 2))
+        self.end_combo_box = QComboBox(self)
+        self.end_combo_box.addItems(locations)
+        self.end_combo_box.setFont(font)
+        self.end_combo_box.setFixedSize(
             combo_box_height + arrow_extra_width, combo_box_height
         )
 
-        self.label_sized_spacer = QSpacerItem(0, int(combo_box_height / 2))
+        self.wide_spacer = QSpacerItem(int(combo_box_height/2), int(combo_box_height))
 
         self.swap_layout = QVBoxLayout()
         self.swap_layout.addItem(self.label_sized_spacer)
-        self.swap_layout.addWidget(self.swapButton)
+        self.swap_layout.addWidget(self.swap_button)
 
-        self.startLayout = QVBoxLayout()
-        self.startLayout.addWidget(self.startLabel)
-        self.startLayout.addWidget(self.startComboBox)
+        self.spacer_layout = QVBoxLayout()
+        self.spacer_layout.addItem(self.wide_spacer)
+
+        self.start_layout = QVBoxLayout()
+        self.start_layout.addWidget(self.start_label)
+        self.start_layout.addWidget(self.start_combo_box)
 
         self.arrow_layout = QVBoxLayout()
         self.arrow_layout.addItem(self.label_sized_spacer)
         self.arrow_layout.addWidget(self.arrow_label)
 
-        self.endLayout = QVBoxLayout()
-        self.endLayout.addWidget(self.endLabel)
-        self.endLayout.addWidget(self.endComboBox)
+        self.end_layout = QVBoxLayout()
+        self.end_layout.addWidget(self.end_label)
+        self.end_layout.addWidget(self.end_combo_box)
 
         self.locations_layout = QHBoxLayout()
-        self.locations_layout.addLayout(self.startLayout)
+        self.locations_layout.addLayout(self.start_layout)
         self.locations_layout.addLayout(self.arrow_layout)
-        self.locations_layout.addLayout(self.endLayout)
+        self.locations_layout.addLayout(self.end_layout)
         self.locations_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.swap_layout_parent = QHBoxLayout()
         self.swap_layout_parent.addLayout(self.swap_layout)
         self.swap_layout_parent.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.swap_layout_parent.setStretch(0, 1)  # Set swap layout to 1/4 of the width
-        self.swap_layout_parent.setStretch(1, 3)  # Set other layout to 3/4 of the width
 
         self.layout.addLayout(self.swap_layout_parent)
+        self.layout.addLayout(self.spacer_layout)
         self.layout.addLayout(self.locations_layout)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def swap_locations(self) -> None:
-        start_index = self.startComboBox.currentIndex()
-        end_index = self.endComboBox.currentIndex()
-        self.startComboBox.setCurrentIndex(end_index)
-        self.endComboBox.setCurrentIndex(start_index)
-        self.update_locations()
+        start_index = self.start_combo_box.currentIndex()
+        end_index = self.end_combo_box.currentIndex()
+        self.start_combo_box.setCurrentIndex(end_index)
+        self.end_combo_box.setCurrentIndex(start_index)
+        self.update_arrow_rotation_direction()
 
-    def update_locations(self) -> None:
-        start_location = self.startComboBox.currentText()
-        end_location = self.endComboBox.currentText()
-        print(
-            f"Start from objects.prop {start_location}, End from objects.prop {end_location}"
-        )
+
+    def update_combo_boxes(self) -> None:
+        motion = self.pictograph.get_motion_by_color(self.color)
+        if motion:
+            start_location = motion.start_location.upper()
+            end_location = motion.end_location.upper()
+            self.start_combo_box.setCurrentText(start_location)
+            self.end_combo_box.setCurrentText(end_location)
+
+    def update_arrow_rotation_direction(self) -> None:
+        arrow = self.pictograph.get_arrow_by_color(self.color)
+        if arrow:
+            arrow.swap_rot_dir()

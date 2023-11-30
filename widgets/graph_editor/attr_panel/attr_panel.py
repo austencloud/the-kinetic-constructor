@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import (
     QVBoxLayout,
+    QHBoxLayout,
     QFrame,
 )
 from settings.string_constants import RED, BLUE
@@ -17,21 +18,22 @@ class AttrPanel(QFrame):
         self.pictograph = pictograph
 
         self.setFixedHeight(self.pictograph.graph_editor.height())
-        self.setFixedWidth(int(self.height() / 2))
+        self.setFixedWidth(int(self.pictograph.graph_editor.width() * 0.4))
 
         self.setContentsMargins(0, 0, 0, 0)
 
         self.blue_attr_box = AttrBox(self, pictograph, BLUE)
         self.red_attr_box = AttrBox(self, pictograph, RED)
-
+        self.attr_panel_layout = QHBoxLayout()
+        self.setLayout(self.attr_panel_layout)
         self.setup_layouts()
 
     def setup_layouts(self) -> None:
-        self.setLayout(QVBoxLayout(self))
-        self.layout().setContentsMargins(0, 0, 0, 0)
-        self.layout().setSpacing(0)
-        self.layout().addWidget(self.red_attr_box)
-        self.layout().addWidget(self.blue_attr_box)
+        self.attr_panel_layout.setContentsMargins(0, 0, 0, 0)
+        self.attr_panel_layout.setSpacing(0)
+        self.attr_panel_layout.addWidget(self.blue_attr_box)
+        self.attr_panel_layout.addWidget(self.red_attr_box)
+
 
     def update_attr_panel(self) -> None:
         blue_arrow = self.pictograph.get_arrow_by_color(BLUE)
@@ -44,6 +46,7 @@ class AttrPanel(QFrame):
 
     def update_attr_panel_size(self) -> None:
         self.setFixedHeight(self.pictograph.view.height())
-        self.setFixedWidth(int(self.height() / 2))
+        self.setFixedWidth(int(self.pictograph.graph_editor.width() * 0.4))
+
         self.blue_attr_box.update_attr_box_size()
         self.red_attr_box.update_attr_box_size()

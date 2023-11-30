@@ -37,7 +37,6 @@ class GraphEditor(QFrame):
 
         objectbox_layout = QVBoxLayout()
         pictograph_layout = QVBoxLayout()
-        attr_panel_layout = QVBoxLayout()
         vtg_panel_layout = QVBoxLayout()
 
         self.pictograph = Pictograph(self.main_widget, self)
@@ -49,14 +48,13 @@ class GraphEditor(QFrame):
         objectbox_layout.addWidget(self.arrowbox.view)
         objectbox_layout.addWidget(self.propbox.view)
         pictograph_layout.addWidget(self.pictograph.view)
-        attr_panel_layout.addWidget(self.attr_panel)
         vtg_panel_layout.addWidget(self.vtg_panel)
 
         graph_editor_frame_layout.setContentsMargins(0, 0, 0, 0)
         graph_editor_frame_layout.addLayout(objectbox_layout)
         graph_editor_frame_layout.addLayout(pictograph_layout)
-        graph_editor_frame_layout.addLayout(attr_panel_layout)
-        graph_editor_frame_layout.addLayout(vtg_panel_layout)
+        graph_editor_frame_layout.addWidget(self.attr_panel)
+        # graph_editor_frame_layout.addLayout(vtg_panel_layout)
 
         self.setLayout(graph_editor_frame_layout)
         self.setMouseTracking(True)
@@ -84,7 +82,6 @@ class GraphEditor(QFrame):
 
     def update_attr_panel_size(self) -> None:
         self.attr_panel.setFixedHeight(self.height())
-        self.attr_panel.setFixedWidth(int(self.height() / 2))
         self.attr_panel.red_attr_box.update_attr_box_size()
         self.attr_panel.blue_attr_box.update_attr_box_size()
 
