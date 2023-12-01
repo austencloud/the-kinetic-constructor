@@ -69,7 +69,7 @@ class CustomButton(QPushButton):
 
     def startColorAnimation(self, new_color):
         self.color_animation.stop()
-        self.color_animation.setDuration(300)
+        self.color_animation.setDuration(1000)  # Set the duration to 1000 milliseconds (1 second)
         self.color_animation.setStartValue(self._color)
         self.color_animation.setEndValue(new_color)
         self.color_animation.setEasingCurve(QEasingCurve.Type.InOutQuad)
