@@ -29,51 +29,92 @@ class MotionTypesWidget(QWidget):
         self.pictograph = attr_box.pictograph
         self.color = attr_box.color
         self._setup_ui()
-        self.update_motion_type()  
+        self.update_motion_type()
+
     def _setup_ui(self) -> None:
         # Main vertical layout
-        main_layout = QVBoxLayout(self)
+        main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
 
+        type_combo_box_frame = self.setup_combo_box_frame()
+
+        button_frame = self.setup_button_frame()
+
+
+        main_layout.addWidget(button_frame)
+        main_layout.addWidget(type_combo_box_frame)
+
+    def setup_button_frame(self) -> QFrame:
+        button_frame = QFrame(self)
+
+        # Define the layout for the button frame
+        button_frame_layout = QVBoxLayout(button_frame)
+        button_frame_layout.setContentsMargins(0, 0, 0, 0)
+        button_frame_layout.setSpacing(0)
+
+        # Create the button
+        self.swap_button = self._create_button()
+
+        # Adjust the size of the button to be round
+        button_size = int(self.attr_box.attr_box_width * 0.15)  # Example size
+        self.swap_button.setFixedSize(button_size, button_size)
+
+        # Add spacer to push the button up and prevent it from expanding
+        button_frame_layout.addSpacerItem(
+            QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        )
+
+        # Add the button to the layout
+        button_frame_layout.addWidget(
+            self.swap_button,
+            0,
+            Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignCenter,
+        )
+
+        # Set fixed width for the button frame
+
+        return button_frame
+
+    def setup_combo_box_frame(self):
         # Header label layout
+        type_header_frame = self.setup_type_header_frame()
+        type_combo_box = self.setup_combo_box()
+
+        type_combo_box_frame = QFrame(self)
+
+        type_combo_box_frame_layout = QVBoxLayout(type_combo_box_frame)
+        type_combo_box_frame_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        type_combo_box_frame_layout.setContentsMargins(0, 0, 0, 0)
+        type_combo_box_frame_layout.setSpacing(0)
+        type_combo_box_frame_layout.addWidget(type_header_frame)
+        type_combo_box_frame_layout.addWidget(type_combo_box)
+
+        type_combo_box_frame.setFixedWidth(int(self.attr_box.attr_box_width * 3 / 4))
+        return type_combo_box_frame
+
+    def setup_type_header_frame(self):
+        type_header_frame = QFrame(self)
         header_layout = QHBoxLayout()
         header_label = QLabel("Type", self)
         header_label.setFont(QFont("Arial", 12))
         header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         header_layout.addWidget(header_label)
+        type_header_frame.setLayout(header_layout)
+        type_header_frame.setContentsMargins(0, 0, 0, 0)
+        header_layout.setContentsMargins(0, 0, 0, 0)
+        type_header_frame.setFixedHeight(int(self.attr_box.attr_box_width * 1 / 10))
+        self.type_header_frame = type_header_frame
+        return type_header_frame
 
-        # Bottom layout with button frame and combo box
-        bottom_layout = QHBoxLayout()
-
-        # Button Frame
-        button_frame = QFrame(self)
-        button_frame_layout = QHBoxLayout(button_frame)
-        button_frame_layout.setContentsMargins(5, 0, 5, 0)  # Adjust padding as needed
-        button_frame_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.swap_button = self._create_button()
-        button_frame_layout.addWidget(self.swap_button)
-        button_frame.setFixedWidth(int(self.attr_box.attr_box_width *1/4))
-
-        # Motion Type ComboBox
-        self.type_combo_box = QComboBox(self)
-        self.type_combo_box.addItems(["Pro", "Anti", "Dash", "Static"])
-        self.type_combo_box.setFont(QFont("Arial", 20, QFont.Weight.Bold, True))
-        self.type_combo_box.setStyleSheet(self.get_combo_box_style())
-        self.type_combo_box.setFixedWidth(int(self.attr_box.attr_box_width /2))
-        self.type_combo_box_frame = QFrame(self)
-        self.type_combo_box_frame_layout = QVBoxLayout(self.type_combo_box_frame)
-        self.type_combo_box_frame_layout.setContentsMargins(0, 0, 0, 0)
-        self.type_combo_box_frame_layout.addWidget(self.type_combo_box)
-        self.type_combo_box_frame.setFixedWidth(int(self.attr_box.attr_box_width * 3/4))
-        
-        # Add widgets to bottom layout
-        bottom_layout.addWidget(button_frame)
-        bottom_layout.addWidget(self.type_combo_box_frame)
-
-        # Add layouts to the main layout
-        main_layout.addLayout(header_layout)
-        main_layout.addLayout(bottom_layout)
+    def setup_combo_box(self):
+        type_combo_box = QComboBox(self)
+        type_combo_box.addItems(["Pro", "Anti", "Dash", "Static"])
+        type_combo_box.setFont(QFont("Arial", 20, QFont.Weight.Bold, True))
+        type_combo_box.setStyleSheet(self.get_combo_box_style())
+        type_combo_box.setFixedWidth(int(self.attr_box.attr_box_width / 2))
+        self.type_combo_box = type_combo_box
+        return type_combo_box
 
     def _create_button(self) -> QPushButton:
         button = QPushButton(self)
@@ -83,8 +124,6 @@ class MotionTypesWidget(QWidget):
         return button
 
     ### HELPERS ###
-
-
 
     def swap_motion_type(self) -> None:
         original_motion_type_index = self.type_combo_box.currentIndex()
@@ -153,7 +192,9 @@ class MotionTypesWidget(QWidget):
         arrow = self.pictograph.get_arrow_by_color(self.color)
         if arrow:
             motion_type = arrow.motion.motion_type
-            index = self.type_combo_box.findText(motion_type.capitalize(), Qt.MatchFlag.MatchExactly)
+            index = self.type_combo_box.findText(
+                motion_type.capitalize(), Qt.MatchFlag.MatchExactly
+            )
             if index >= 0:
                 self.type_combo_box.setCurrentIndex(index)
 
@@ -165,5 +206,5 @@ class MotionTypesWidget(QWidget):
     def update_motion_type_widget_size(self) -> None:
         self.setFixedSize(
             self.attr_box.attr_box_width,
-            int(self.attr_box.height() * 1 / 6),
+            self.type_combo_box.height() + self.type_header_frame.height(),
         )

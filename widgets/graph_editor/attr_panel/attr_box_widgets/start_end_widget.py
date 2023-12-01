@@ -70,7 +70,7 @@ class StartEndWidget(QWidget):
         self.setContentsMargins(0, 0, 0, 0)
         main_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.setFixedHeight(int(self.attr_box.height() * 1 / 8))
-        
+
         button_frame = self.setup_button_frame()
         combobox_frame = self.setup_combo_frame()
     
