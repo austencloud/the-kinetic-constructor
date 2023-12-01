@@ -162,6 +162,7 @@ class AttrBox(QFrame):
 
     def update_labels(self, motion: "Motion") -> None:
         self.start_end_widget.update_combo_boxes()
+        self.motion_type_widget.update_motion_type()
         self.turns_widget.turns_label.setText(f"{motion.turns}")
 
     def update_attr_box_size(self) -> None:

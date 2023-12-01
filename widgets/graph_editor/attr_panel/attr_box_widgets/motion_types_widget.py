@@ -29,7 +29,7 @@ class MotionTypesWidget(QWidget):
         self.pictograph = attr_box.pictograph
         self.color = attr_box.color
         self._setup_ui()
-
+        self.update_motion_type()  
     def _setup_ui(self) -> None:
         # Main vertical layout
         main_layout = QVBoxLayout(self)
@@ -50,27 +50,26 @@ class MotionTypesWidget(QWidget):
         button_frame = QFrame(self)
         button_frame_layout = QHBoxLayout(button_frame)
         button_frame_layout.setContentsMargins(5, 0, 5, 0)  # Adjust padding as needed
-        button_frame_layout.setAlignment(
-            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
-        )
+        button_frame_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.swap_button = self._create_button()
         button_frame_layout.addWidget(self.swap_button)
-        button_frame.setFixedWidth(int(self.attr_box.attr_box_width / 4))
+        button_frame.setFixedWidth(int(self.attr_box.attr_box_width *1/4))
 
         # Motion Type ComboBox
         self.type_combo_box = QComboBox(self)
         self.type_combo_box.addItems(["Pro", "Anti", "Dash", "Static"])
         self.type_combo_box.setFont(QFont("Arial", 20, QFont.Weight.Bold, True))
         self.type_combo_box.setStyleSheet(self.get_combo_box_style())
-
-        # Right Spacer
-        right_spacer = QFrame(self)
-        right_spacer.setFixedWidth(int(self.attr_box.attr_box_width / 4))
-
+        self.type_combo_box.setFixedWidth(int(self.attr_box.attr_box_width /2))
+        self.type_combo_box_frame = QFrame(self)
+        self.type_combo_box_frame_layout = QVBoxLayout(self.type_combo_box_frame)
+        self.type_combo_box_frame_layout.setContentsMargins(0, 0, 0, 0)
+        self.type_combo_box_frame_layout.addWidget(self.type_combo_box)
+        self.type_combo_box_frame.setFixedWidth(int(self.attr_box.attr_box_width * 3/4))
+        
         # Add widgets to bottom layout
         bottom_layout.addWidget(button_frame)
-        bottom_layout.addWidget(self.type_combo_box)
-        bottom_layout.addWidget(right_spacer)
+        bottom_layout.addWidget(self.type_combo_box_frame)
 
         # Add layouts to the main layout
         main_layout.addLayout(header_layout)
@@ -85,6 +84,8 @@ class MotionTypesWidget(QWidget):
 
     ### HELPERS ###
 
+
+
     def swap_motion_type(self) -> None:
         original_motion_type_index = self.type_combo_box.currentIndex()
         # if the start index is 1
@@ -98,7 +99,7 @@ class MotionTypesWidget(QWidget):
             new_motion_type_index = 2
 
         self.type_combo_box.setCurrentIndex(new_motion_type_index)
-        self.update_arrow_rotation_direction()
+        self.update_arrow_motion_type()
 
     ### GETTERS ###
 
@@ -148,13 +149,18 @@ class MotionTypesWidget(QWidget):
 
     ### UPDATERS ###
 
-    def update_arrow_rotation_direction(self) -> None:
+    def update_motion_type(self) -> None:
+        arrow = self.pictograph.get_arrow_by_color(self.color)
+        if arrow:
+            motion_type = arrow.motion.motion_type
+            index = self.type_combo_box.findText(motion_type.capitalize(), Qt.MatchFlag.MatchExactly)
+            if index >= 0:
+                self.type_combo_box.setCurrentIndex(index)
+
+    def update_arrow_motion_type(self) -> None:
         arrow = self.pictograph.get_arrow_by_color(self.color)
         if arrow:
             arrow.swap_motion_type()
-
-    def update_motion_type(self, motion_type) -> None:
-        print(f"Motion type set to: {motion_type}")
 
     def update_motion_type_widget_size(self) -> None:
         self.setFixedSize(

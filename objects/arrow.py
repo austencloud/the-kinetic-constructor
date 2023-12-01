@@ -201,6 +201,15 @@ class Arrow(GraphicalObject):
         self.start_location = target_arrow.start_location
         self.end_location = target_arrow.end_location
         self.turns = target_arrow.turns
+        
+        self.motion.color = target_arrow.color
+        self.motion.motion_type = target_arrow.motion_type
+        self.motion.arrow_location = target_arrow.arrow_location
+        self.motion.rotation_direction = target_arrow.rotation_direction
+        self.motion.start_location = target_arrow.start_location
+        self.motion.end_location = target_arrow.end_location
+        self.motion.turns = target_arrow.turns
+        
 
     def update_prop_during_drag(self) -> None:
         for prop in self.scene.prop_set.values():
@@ -338,14 +347,11 @@ class Arrow(GraphicalObject):
             TURNS: self.turns,
         }
 
-        updated_prop_dict = {
-            COLOR: self.color,
-            PROP_LOCATION: new_end_location,
-            LAYER: 1,
-        }
+
 
         self.update_attributes(updated_arrow_dict)
-        self.prop.update_attributes(updated_prop_dict)
+        self.prop.prop_location = new_end_location
+        self.prop.update_appearance()
         self.motion.update_attr_from_arrow()
 
         self.scene.update_pictograph()
