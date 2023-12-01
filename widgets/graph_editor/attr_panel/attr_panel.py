@@ -45,7 +45,7 @@ class AttrPanel(QFrame):
 
     def update_attr_panel_size(self) -> None:
         self.setFixedHeight(self.pictograph.view.height())
-        self.setFixedWidth(int(self.pictograph.graph_editor.width() * 0.4))
+        self.setFixedWidth(int(self.pictograph.graph_editor.width() * 0.6))
 
         self.blue_attr_box.update_attr_box_size()
         self.red_attr_box.update_attr_box_size()

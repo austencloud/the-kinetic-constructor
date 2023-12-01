@@ -14,6 +14,7 @@ from PyQt6.QtWidgets import (
     QSpacerItem,
     QSizePolicy,
     QFrame,
+    QBoxLayout,
 )
 
 if TYPE_CHECKING:
@@ -52,168 +53,152 @@ class CustomComboBox(QComboBox):
 
 
 class StartEndWidget(QWidget):
-    def __init__(
-        self, pictograph: "Pictograph", color: Colors, attr_box: "AttrBox"
-    ) -> None:
+    def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__(attr_box)
-        self.pictograph = pictograph
-        self.color = color
+        self.pictograph = attr_box.pictograph
+        self.color = attr_box.color
         self.attr_box = attr_box
+        self._init_ui()
 
-        self._setup_ui()
+    ### SETUP UI ###
 
-    def _setup_ui(self) -> None:
-        # Main horizontal layout
-        main_layout = QHBoxLayout(self)
-        main_layout.setContentsMargins(0, 0, 0, 0)
-        main_layout.setSpacing(0)
-        self.setContentsMargins(0, 0, 0, 0)
-        main_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
+    def _init_ui(self) -> None:
+        self._setup_main_layout()
+        self.button_frame = self._setup_button_frame()
+        self.start_box = self._setup_start_end_box()
+        self.end_box = self._setup_start_end_box()
+        self.arrow_frame = self._setup_arrow_frame()
+        self._add_widgets_to_layout()
+
+    def _setup_main_layout(self) -> None:
+        self.main_layout = QHBoxLayout(self)
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
+        self.main_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.setFixedHeight(int(self.attr_box.height() * 1 / 8))
+        self.setFixedWidth(self.attr_box.attr_box_width)
 
-        button_frame = self.setup_button_frame()
-        combobox_frame = self.setup_combo_frame()
-    
-        main_layout.addWidget(button_frame)
-        main_layout.addWidget(combobox_frame)
-
-    def setup_button_frame(self):
-        button_frame = QFrame(self)
-        button_layout = QVBoxLayout(button_frame)
-        button_frame.setContentsMargins(0, 0, 0, 0)  # No margins
-        button_layout.setSpacing(0)  # No extra spacing
-        button_layout.setContentsMargins(0, 0, 0, 0)  # No margins
-        self.swap_button = self._create_button()
-        button_spacer = QFrame()
-        button_spacer.setFixedHeight(int(self.width() * 1 / 8))
-        button_layout.addWidget(button_spacer)
-        button_layout.addWidget(self.swap_button)
-        button_frame.setFixedWidth(int(self.attr_box.attr_box_width / 4))
-        button_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        return button_frame
-
-    def setup_arrow_frame(self):
-        arrow_frame = QFrame()
-        arrow_frame_layout = QVBoxLayout(arrow_frame)
-        self.arrow_label = QLabel("→", self)
-        self.arrow_label.setFont(QFont("Arial", 16, QFont.Weight.Bold, True))
-        self.arrow_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.arrow_label.setContentsMargins(0, 0, 0, 0)  # No margins
-        arrow_frame_layout.setContentsMargins(0, 0, 0, 0)  # No margins
-        arrow_frame_layout.setSpacing(0)  # No extra spacing
-        arrow_frame_layout.addSpacing(int(self.width() * 1 / 8))
-        arrow_frame_layout.addWidget(self.arrow_label)
-        return arrow_frame
-
-    def setup_combo_frame(self):
-        arrow_frame = self.setup_arrow_frame()
-        self.start_combo_box = self.create_combo_box()
-        self.end_combo_box = self.create_combo_box()
-        start_combo_frame = self._create_combo_frame("Start", self.start_combo_box)
-        end_combo_frame = self._create_combo_frame("End", self.end_combo_box)
-        combobox_layout = QHBoxLayout()
-        combobox_layout.addWidget(start_combo_frame)
-        combobox_layout.addWidget(arrow_frame)
-        combobox_layout.addWidget(end_combo_frame)
-        combobox_layout.setSpacing(0)
-        combobox_frame = QFrame()
-        combobox_frame.setLayout(combobox_layout)
-        combobox_frame.setContentsMargins(0, 0, 0, 0)
-        combobox_layout.setContentsMargins(0, 0, 0, 0)
-        return combobox_frame
-
-    def _create_combo_frame(self, label_text, combo_box) -> QFrame:
-        combo_frame_layout = QVBoxLayout()
-
-        self.combo_box_label = QLabel(label_text, self)
-        self.combo_box_label.setFont(QFont("Arial", 12))
-        self.combo_box_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.combo_box_label.setContentsMargins(0, 0, 0, 0)  # No margins on label
-        self.combo_box_label.setFixedHeight(int(self.width() * 1 / 8))
-        
-        combo_frame_layout.setSpacing(0)  # No extra spacing
-        combo_frame_layout.setContentsMargins(0, 0, 0, 0)  # No margins
-
-        combo_frame_layout.addWidget(self.combo_box_label)
-        combo_frame_layout.addWidget(combo_box)
-
-        combo_frame_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        frame = QFrame()
-        frame.setLayout(combo_frame_layout)
-
-        return frame
-
-    def create_combo_box(self):
-        combo_box = CustomComboBox(self)
-        combo_box.addItems(["N", "E", "S", "W"])
-        combo_box.setFont(QFont("Arial", 20, QFont.Weight.Bold, True))
-        combo_box.setFixedSize(
+    def _setup_start_end_box(self) -> CustomComboBox:
+        start_end_box = CustomComboBox(self)
+        start_end_box.addItems(["N", "E", "S", "W"])
+        start_end_box.setFont(
+            QFont("Arial", int(self.width() / 10), QFont.Weight.Bold, True)
+        )
+        start_end_box.setFixedSize(
             int(self.attr_box.attr_box_width * 0.3),
             int(self.attr_box.attr_box_width * 0.2),
         )
-        return combo_box
+        return start_end_box
 
+    def _setup_arrow_frame(self) -> QFrame:
+        arrow_label = self._setup_arrow_label()
+        arrow_frame = QFrame(self)
+        arrow_label.setContentsMargins(0, 0, 0, 0)
+
+        arrow_frame_layout = QVBoxLayout(arrow_frame)
+        arrow_frame_layout.setContentsMargins(0, 0, 0, 0)
+        arrow_frame_layout.setSpacing(0)
+
+        arrow_frame_layout.addSpacerItem(QSpacerItem(0, int(self.width() * 1 / 8)))
+        arrow_frame_layout.addWidget(
+            arrow_label,
+            0,
+            Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignCenter,
+        )
+
+        return arrow_frame
+
+    def _setup_arrow_label(self) -> QFrame:
+        arrow_label = QLabel("→", self)
+        arrow_label.setFont(QFont("Arial", int(self.width() / 10), QFont.Weight.Bold))
+        arrow_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        arrow_label.setContentsMargins(0, 0, 0, 0)
+        return arrow_label
+
+    def _setup_start_end_header_label(self, label_text) -> QLabel:
+        label = QLabel(label_text, self)
+        label.setFont(QFont("Arial", int(self.width() / 14)))
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        label.setContentsMargins(0, 0, 0, 0)
+        label.setFixedHeight(int(self.width() * 1 / 8))
+        return label
+
+    def _add_widgets_to_layout(self) -> None:
+        self.main_layout.addWidget(self.button_frame)
+        self.main_layout.addWidget(
+            self._create_frame(self.start_box, QVBoxLayout, "Start")
+        )
+        self.main_layout.addWidget(self.arrow_frame)
+        self.main_layout.addWidget(self._create_frame(self.end_box, QVBoxLayout, "End"))
     ### CREATE WIDGETS ###
 
-    def _create_button(self) -> QPushButton:
+    def _setup_button_frame(self) -> QFrame:
+        swap_button = self._create_button()
+        button_frame = QFrame(self)
+
+        button_frame_layout = QVBoxLayout(button_frame)
+        button_frame_layout.setContentsMargins(0, 0, 0, 0)
+        button_frame_layout.setSpacing(0)
+
+        button_size = int(self.attr_box.attr_box_width * 0.15)  # Example size
+        swap_button.setFixedSize(button_size, button_size)
+        button_frame_layout.addSpacerItem(
+            QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        )
+        button_frame_layout.addWidget(
+            swap_button,
+            0,
+            Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignCenter,
+        )
+
+        return button_frame
+
+    def _create_button(self):
         button = QPushButton(self)
         button.setIcon(QIcon(ICON_DIR + SWAP_ICON))
-        button.setStyleSheet(
-            "QPushButton {"
-            f"   border-radius: {int(self.attr_box.attr_box_width * 0.15 / 2)};"
-            "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
-            "   stop:0 rgba(255, 255, 255, 255), stop:1 rgba(200, 200, 200, 255));"
-            "   border: 1px solid black;"
-            f"   min-width: {self.attr_box.attr_box_width * 0.15}px;"
-            f"   min-height: {self.attr_box.attr_box_width * 0.15}px;"
-            "}"
-            "QPushButton:pressed {"
-            "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
-            "   stop:0 rgba(204, 228, 247, 255), stop:1 rgba(164, 209, 247, 255));"
-            "}"
-            "QPushButton:hover:!pressed {"
-            "   border: 1px solid #1c1c1c;"
-            "}"
-        )
-        button.setFixedSize(
-            int(self.attr_box.attr_box_width * 0.3),
-            int(self.attr_box.attr_box_width * 0.3),
-        )
+        button.setStyleSheet(self.attr_box.get_button_style())
         button.clicked.connect(self.swap_locations)
+        # prevent the button from stretching
+        button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         return button
 
-    def _create_layout(self, *widgets) -> QVBoxLayout:
-        layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.setSpacing(0)
-        for widget in widgets:
-            layout.addWidget(widget)
-        return layout
+    def _create_frame(self, widget, layout_type, label_text=None) -> QFrame:
+        frame = QFrame(self)
+        layout: QBoxLayout = layout_type(frame)
 
-    ### CONNECT SIGNALS ###
+        layout.setSpacing(0)
+        layout.setContentsMargins(0, 0, 0, 0)
+        frame.setContentsMargins(0, 0, 0, 0)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        frame.setLayout(layout)
+        if label_text:
+            self.start_end_header_label = self._setup_start_end_header_label(label_text)
+            layout.addWidget(self.start_end_header_label)
+        if isinstance(widget, CustomComboBox):
+            frame.setFixedWidth(int(self.attr_box.attr_box_width * 0.3))
+        layout.addWidget(widget)
+
+        return frame
+
+    ### CALLBACKS ###
 
     def swap_locations(self) -> None:
-        start_index = self.start_combo_box.currentIndex()
-        end_index = self.end_combo_box.currentIndex()
-        self.start_combo_box.setCurrentIndex(end_index)
-        self.end_combo_box.setCurrentIndex(start_index)
-        self.update_arrow_rotation_direction()
-
-    ### UPDATE ###
-
-    def update_combo_boxes(self) -> None:
+        start_index = self.start_box.currentIndex()
+        end_index = self.end_box.currentIndex()
+        self.start_box.setCurrentIndex(end_index)
+        self.end_box.setCurrentIndex(start_index)
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
-            self.start_combo_box.setCurrentText(motion.start_location.upper())
-            self.end_combo_box.setCurrentText(motion.end_location.upper())
+            motion.arrow.swap_rot_dir()
 
-    def update_arrow_rotation_direction(self) -> None:
-        arrow = self.pictograph.get_arrow_by_color(self.color)
-        if arrow:
-            arrow.swap_rot_dir()
+    ### UPDATE WIDGETS ###
+
+    def update_start_end_boxes(self) -> None:
+        motion = self.pictograph.get_motion_by_color(self.color)
+        if motion:
+            self.start_box.setCurrentText(motion.start_location.upper())
+            self.end_box.setCurrentText(motion.end_location.upper())
 
     def update_start_end_widget_size(self) -> None:
         self.setFixedHeight(
-            int(self.start_combo_box.height() + self.combo_box_label.height()) + 3
+            int(self.start_box.height() + self.start_end_header_label.height())
         )

@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from utilities.TypeChecking.TypeChecking import Colors
-from typing import TYPE_CHECKING, List, Literal
+from typing import TYPE_CHECKING, Dict, List, Literal
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
@@ -26,128 +26,128 @@ class TurnsWidget(QFrame):
         self.pictograph = pictograph
         self.color = color
         self.attr_box = attr_box
-        self.init_ui()
+        self._init_ui()
 
-    def init_ui(self) -> None:
-        self.setup_layouts()
-        self.create_header()
-        self.create_buttons_and_label()
+    def _init_ui(self) -> None:
+        self.setFixedWidth(self.attr_box.attr_box_width)
+        self.turnbox_frame: QFrame = self._setup_turnbox_frame()
+        self.button_frames: Dict[str, QPushButton] = self._setup_button_frames()
+        self.layout: QHBoxLayout = self._setup_layout()
 
-    def setup_layouts(self) -> None:
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.top_layout = QHBoxLayout()
-        self.bottom_layout = QHBoxLayout()
-        self.bottom_frame = QFrame(self)
-        self.bottom_frame.setFixedWidth(self.attr_box.attr_box_width)
-        self.bottom_frame.setLayout(self.bottom_layout)
+    ### SETUP LAYOUTS ###
 
-        self.layout.addLayout(self.top_layout)
-        self.layout.addWidget(self.bottom_frame)
-        self.apply_layout_styles()
-
-    def apply_layout_styles(self) -> None:
-        layouts: List[QBoxLayout] = [self.layout, self.top_layout, self.bottom_layout]
-        for layout in layouts:
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(0)
-        self.bottom_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.top_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-    def create_header(self) -> None:
-        font = QFont("Arial", 12)
-        self.turns_label_header = self._create_label("Turns", font)
-        self.top_layout.addWidget(self.turns_label_header)
-
-    def get_turns_button_style(self, button: Literal["large", "small"]) -> str:
-        if button == "large":
-            size = 25  # Or any other value you want for 'wide' buttons
-        elif button == "small":
-            size = 35  # The 'round' button size, ensuring it's the same as height
-
-        border_radius = size / 2
-
-        return (
-            f"QPushButton {{"
-            f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(200, 200, 200, 255));"
-            f"   border: 1px solid black;"
-            f"   min-width: {size}px;"
-            f"   min-height: {size}px;"  # Adjust height to match width for a circle
-            f"   border-radius: {border_radius}px;"
-            "}"
-            "QPushButton:pressed {"
-            "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(204, 228, 247, 255), stop:1 rgba(164, 209, 247, 255));"
-            "}"
-            "QPushButton:hover:!pressed {"
-            "   border: 1px solid #1c1c1c;"
-            "}"
+    def _setup_layout(self) -> QHBoxLayout:
+        spacer = QSpacerItem(
+            5, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
         )
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.button_frames[self.subtract_turn_button])
+        layout.addWidget(self.button_frames[self.subtract_half_turn_button])
+        layout.addItem(spacer)
+        layout.addWidget(self.turnbox_frame)
+        layout.addItem(spacer)
+        layout.addWidget(self.button_frames[self.add_half_turn_button])
+        layout.addWidget(self.button_frames[self.add_turn_button])
+        return layout
 
-    def create_buttons_and_label(self) -> None:
-        self.subtract_turn_button = self.create_button(
-            "-1", self.subtract_turn_callback
+    ### CREATE WIDGETS ###
+
+    def _setup_button_frame(self, button) -> QFrame:
+        # set a frame so that the button is pushed down by the same amount as the height of the turns header label.
+        button_frame = QFrame(self)
+        button_frame_layout = QVBoxLayout(button_frame)
+        button_frame_layout.setContentsMargins(0, 0, 0, 0)
+        button_frame_layout.setSpacing(0)
+        button_frame_layout.addSpacerItem(
+            QSpacerItem(
+                0,
+                int(self.width() / 14),
+                QSizePolicy.Policy.Minimum,
+                QSizePolicy.Policy.Expanding,
+            )
         )
-        self.subtract_half_turn_button = self.create_button(
-            "-0.5", self.subtract_half_turn_callback
+        button_frame_layout.addWidget(button)
+        return button_frame
+
+
+    def _setup_turnbox_frame(self) -> QFrame:
+        turnbox_frame = QFrame(self)
+        turnbox_frame_layout = QVBoxLayout(turnbox_frame)
+
+        self.turnbox_header = self._setup_turnbox_header()
+        self.turns_label = self._create_turns_label()
+
+        turnbox_frame_layout.addWidget(self.turnbox_header)
+        turnbox_frame_layout.addWidget(self.turns_label)
+        turnbox_frame_layout.setContentsMargins(0, 0, 0, 0)
+        turnbox_frame_layout.setSpacing(0)
+        turnbox_frame.setContentsMargins(0, 0, 0, 0)
+        
+        turnbox_frame.setFixedHeight(int(self.turnbox_header.height() + self.turns_label.height()))
+
+        return turnbox_frame
+
+    def _setup_turnbox_header(self) -> QLabel:
+        turnbox_header = QLabel("Turns", self)
+        turnbox_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        turnbox_header.setFont(QFont("Arial", int(self.width() / 14)))
+        turnbox_header.setFixedHeight(int(self.width() / 14))
+        return turnbox_header
+
+    def _setup_button_frames(self) -> list[QPushButton]:
+        button_frames = {}
+        self.subtract_turn_button = self._create_turns_button(
+            "-1", self._subtract_turn_callback
         )
-        self.add_half_turn_button = self.create_button(
-            "+0.5", self.add_half_turn_callback
+        self.subtract_half_turn_button = self._create_turns_button(
+            "-0.5", self._subtract_half_turn_callback
         )
-        self.add_turn_button = self.create_button("+1", self.add_turn_callback)
-
-        # Arrange buttons with turns label in the middle
-        self.bottom_layout.addWidget(self.subtract_turn_button)
-        self.bottom_layout.addWidget(self.subtract_half_turn_button)
-
-        # Add spacer to the left of the turns label
-        self.bottom_layout.addItem(
-            QSpacerItem(5, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.add_half_turn_button = self._create_turns_button(
+            "+0.5", self._add_half_turn_callback
         )
+        self.add_turn_button = self._create_turns_button("+1", self._add_turn_callback)
+        buttons = [
+            self.subtract_turn_button,
+            self.subtract_half_turn_button,
+            self.add_half_turn_button,
+            self.add_turn_button,
+        ]
+        
+        for button in buttons:
+            button_frame = self._setup_button_frame(button)
+            button_frames[button] = button_frame 
+               
+        return button_frames
 
-        self.create_turns_label()
-
-        # Add spacer to the right of the turns label
-        self.bottom_layout.addItem(
-            QSpacerItem(5, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+    def _create_turns_label(self) -> QLabel:
+        turns_label = QLabel("0", self)
+        turns_label.setFrameShape(QFrame.Shape.Box)
+        turns_label.setLineWidth(1)
+        turns_label.setFrameShadow(QFrame.Shadow.Plain)
+        turns_label.setFont(QFont("Arial", int(self.width() / 8), QFont.Weight.Bold))
+        turns_label.setStyleSheet(
+            "background-color: white; border: 2px solid black; border-radius: 10px; letter-spacing: -3px;"
         )
+        turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        turns_label.setFixedHeight(int(self.attr_box.attr_box_width * 0.2) + self.turnbox_header.height())
 
-        self.bottom_layout.addWidget(self.add_half_turn_button)
-        self.bottom_layout.addWidget(self.add_turn_button)
+        return turns_label
 
-    def create_turns_label(self) -> None:
-        self.turns_label = QLabel("0", self)
-        self.turns_label.setFrameShape(QFrame.Shape.Box)
-        self.turns_label.setLineWidth(1)
-        self.turns_label.setFrameShadow(QFrame.Shadow.Plain)
-        self.turns_label.setStyleSheet(self.get_turns_label_style())
-        self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.bottom_layout.addWidget(self.turns_label)
-
-    def create_turns_label(self) -> None:
-        self.turns_label = QLabel("0", self)
-        self.turns_label.setFrameShape(QFrame.Shape.Box)
-        self.turns_label.setLineWidth(1)
-        self.turns_label.setFrameShadow(QFrame.Shadow.Plain)
-        self.turns_label.setFont(
-            QFont("Arial", int(self.bottom_frame.height() * 0.7), QFont.Weight.Bold)
-        )
-        self.turns_label.setStyleSheet(
-            "background-color: white; border: 2px solid black; border-radius: 10px; letter-spacing: -2px;"
-        )
-        self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.bottom_layout.addWidget(self.turns_label)
-
-    def create_button(self, text: str, callback) -> QPushButton:
+    def _create_turns_button(
+        self, text: Literal["+1", "-1", "+0.5", "-0.5"], callback
+    ) -> QPushButton:
         button = QPushButton(text, self)
         button.clicked.connect(callback)
-        button.setFont(QFont("Arial", 12))
-        button.setStyleSheet(self.get_button_style(text))
-        return button
-
-    def get_button_style(self, text: str) -> str:
+        button.setFont(QFont("Arial", int(self.width() / 10)))
         if text in ["+1", "-1"]:
-            return self.get_turns_button_style("large")
+            stylesheet = self.attr_box.get_turns_button_stylesheet("small")
         elif text in ["+0.5", "-0.5"]:
-            return self.get_turns_button_style("small")
+            stylesheet = self.attr_box.get_turns_button_stylesheet("small")
+        button.setStyleSheet(stylesheet)
+        return button
 
     def _create_label(self, text: str, font: QFont) -> QLabel:
         label = QLabel(text, self)
@@ -155,33 +155,33 @@ class TurnsWidget(QFrame):
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         return label
 
-    def add_turn_callback(self) -> None:
+    def _add_turn_callback(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
             motion.add_turn()
             self.attr_box.update_labels(motion)
 
-    def subtract_turn_callback(self) -> None:
+    def _subtract_turn_callback(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
             motion.subtract_turn()
             self.attr_box.update_labels(motion)
 
-    def add_half_turn_callback(self) -> None:
+    def _add_half_turn_callback(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
             motion.add_half_turn()
             self.attr_box.update_labels(motion)
 
-    def subtract_half_turn_callback(self) -> None:
+    def _subtract_half_turn_callback(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
             motion.subtract_half_turn()
             self.attr_box.update_labels(motion)
 
+    ### UPDATERS ###
+
     def update_turns_widget_size(self) -> None:
         self.setFixedWidth(self.attr_box.attr_box_width)
         self.turns_label.setFixedWidth(int(self.attr_box.attr_box_width / 4))
-        self.setFixedHeight(
-            self.turns_label_header.height() + self.bottom_frame.height()
-        )
+        self.setFixedHeight(int(self.width() / 14) + self.turnbox_frame.height())

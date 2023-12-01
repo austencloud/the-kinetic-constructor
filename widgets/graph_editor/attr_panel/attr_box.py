@@ -1,5 +1,5 @@
 import logging
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, Literal
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtWidgets import (
@@ -53,7 +53,7 @@ class AttrBox(QFrame):
 
         self.header_widget = HeaderWidget(self, self.color)
         self.motion_type_widget = MotionTypesWidget(self)
-        self.start_end_widget = StartEndWidget(self.pictograph, self.color, self)
+        self.start_end_widget = StartEndWidget(self)
         self.turns_widget = TurnsWidget(self.pictograph, self.color, self)
 
         self.layout().addWidget(self.header_widget)
@@ -68,6 +68,7 @@ class AttrBox(QFrame):
             int(self.attr_panel.width() / 2), int(self.attr_panel.height())
         )
         self.setLayout(QVBoxLayout(self))
+        self.layout().setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().setSpacing(0)
 
@@ -76,9 +77,7 @@ class AttrBox(QFrame):
         self.setStyleSheet(
             f"#AttributeBox {{ border: {self.border_width}px solid {color_hex}; }}"
         )
-        self.attr_box_width = int(self.width()+self.border_width)
-
-
+        self.attr_box_width = int(self.width() + self.border_width)
 
     ### CREATE LABELS ###
 
@@ -161,8 +160,8 @@ class AttrBox(QFrame):
             self.update_labels(arrow)
 
     def update_labels(self, motion: "Motion") -> None:
-        self.start_end_widget.update_combo_boxes()
-        self.motion_type_widget.update_motion_type()
+        self.start_end_widget.update_start_end_boxes()
+        self.motion_type_widget.update_motion_type_box()
         self.turns_widget.turns_label.setText(f"{motion.turns}")
 
     def update_attr_box_size(self) -> None:
@@ -184,3 +183,71 @@ class AttrBox(QFrame):
         self.motion_type_widget.update_motion_type_widget_size()
         self.start_end_widget.update_start_end_widget_size()
         self.turns_widget.update_turns_widget_size()
+
+    def get_turns_button_stylesheet(self, button: Literal["small", "large"]) -> str:
+        if button == "small":
+            size = self.width() / 7
+        elif button == "large":
+            size = self.width() / 5
+
+        border_radius = size / 2
+
+        return (
+            f"QPushButton {{"
+            f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(200, 200, 200, 255));"
+            f"   border: 1px solid black;"
+            f"   min-width: {size}px;"
+            f"   min-height: {size}px;"  # Adjust height to match width for a circle
+            f"   border-radius: {border_radius}px;"
+            f"}}"
+            f"QPushButton:pressed {{"
+            f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(204, 228, 247, 255), stop:1 rgba(164, 209, 247, 255));"
+            f"}}"
+            f"QPushButton:hover:!pressed {{"
+            f"   border: 1px solid #1c1c1c;"
+            f"}}"
+        )
+
+    def get_combobox_style(self) -> str:
+        # ComboBox style
+        return (
+            "QComboBox {"
+            "   border: 2px solid black;"
+            "   border-radius: 10px;"
+            "}"
+            "QComboBox::drop-down {"
+            "   subcontrol-origin: padding;"
+            "   subcontrol-position: top right;"
+            "   width: 15px;"
+            "   border-left-width: 1px;"
+            "   border-left-color: darkgray;"
+            "   border-left-style: solid;"
+            "   border-top-right-radius: 3px;"
+            "   border-bottom-right-radius: 3px;"
+            "}"
+            "QComboBox::down-arrow {"
+            "   image: url('resources/images/icons/combobox_arrow.png');"
+            "   width: 10px;"
+            "   height: 10px;"
+            "}"
+        )
+
+    def get_button_style(self) -> str:
+        # Button style
+        return (
+            "QPushButton {"
+            "   border-radius: 15px;"
+            "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
+            "   stop:0 rgba(255, 255, 255, 255), stop:1 rgba(200, 200, 200, 255));"
+            "   border: 1px solid black;"
+            "   min-width: 30px;"
+            "   min-height: 30px;"
+            "}"
+            "QPushButton:pressed {"
+            "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
+            "   stop:0 rgba(204, 228, 247, 255), stop:1 rgba(164, 209, 247, 255));"
+            "}"
+            "QPushButton:hover:!pressed {"
+            "   border: 1px solid #1c1c1c;"
+            "}"
+        )
