@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import (
     QHBoxLayout,
-    QPushButton,
     QLabel,
     QVBoxLayout,
     QFrame,
@@ -13,15 +12,17 @@ from PyQt6.QtGui import QFont
 from utilities.TypeChecking.TypeChecking import Colors
 from typing import TYPE_CHECKING, Dict, List, Literal
 
+from widgets.graph_editor.attr_panel.attr_box_widgets.animated_button import (
+    AnimatedButton,
+)
+
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
 
 
-class TurnsWidget(QWidget):
-    def __init__(
-        self, pictograph: "Pictograph", color: Colors, attr_box: "AttrBox"
-    ) -> None:
+class TurnsWidget(QFrame):
+    def __init__(self, pictograph: "Pictograph", color: "Colors", attr_box: "AttrBox"):
         super().__init__()
         self.pictograph = pictograph
         self.color = color
@@ -29,12 +30,15 @@ class TurnsWidget(QWidget):
         self._init_ui()
 
     def _init_ui(self) -> None:
-        self.setFixedWidth(self.attr_box.attr_box_width)
+        self.setFixedWidth(
+            self.attr_box.attr_box_width - self.attr_box.border_width * 2
+        )
         self.turnbox_frame: QFrame = self._setup_turnbox_frame()
-        self.button_frames: Dict[str, QPushButton] = self._setup_button_frames()
-        self.layout: QHBoxLayout = self._setup_layout()
-        self.setLayout(self.layout)
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+        self._create_buttons()
         self._add_borders()
 
     def _add_borders(self) -> None:
@@ -55,6 +59,35 @@ class TurnsWidget(QWidget):
 
     ### CREATE WIDGETS ###
 
+    def _create_buttons(self):
+        self.subtract_turn_button = self._create_turns_button(
+            "-1", self._subtract_turn_callback, is_full_turn=True
+        )
+        self.subtract_half_turn_button = self._create_turns_button(
+            "-0.5", self._subtract_half_turn_callback, is_full_turn=False
+        )
+        self.add_half_turn_button = self._create_turns_button(
+            "+0.5", self._add_half_turn_callback, is_full_turn=False
+        )
+        self.add_turn_button = self._create_turns_button(
+            "+1", self._add_turn_callback, is_full_turn=True
+        )
+
+        top_layout = QHBoxLayout(self)
+        bottom_layout = QHBoxLayout(self)
+
+        self.layout.addLayout(top_layout)
+        self.layout.addLayout(bottom_layout)
+        
+        top_layout.addWidget(self.turnbox_frame)
+        
+        bottom_layout.addWidget(self.subtract_turn_button)
+        bottom_layout.addWidget(self.subtract_half_turn_button)
+        bottom_layout.addWidget(self.add_half_turn_button)
+        bottom_layout.addWidget(self.add_turn_button)
+
+
+        
     def _setup_button_frame(self, full_turn_button, half_turn_button) -> QFrame:
         # set a frame so that the buttons are stacked vertically
         button_frame = QFrame(self)
@@ -67,25 +100,19 @@ class TurnsWidget(QWidget):
 
     def _setup_turnbox_frame(self) -> QFrame:
         turnbox_frame = QFrame(self)
-        turnbox_frame_layout = QVBoxLayout(turnbox_frame)
+        turnbox_layout = QVBoxLayout(turnbox_frame)
+        turnbox_layout.setContentsMargins(0, 0, 0, 0)
+        turnbox_layout.setSpacing(0)
 
-        self.turnbox_header = self._setup_turns_header()
+        self.turnbox_header = QLabel("Turns", self)
+        self.turnbox_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.turnbox_header.setFont(QFont("Arial", int(self.width() / 14)))
+        self.turnbox_header.setFixedHeight(int(self.width() / 14))
+
         self.turns_label = self._create_turns_label()
 
-        turnbox_frame_layout.addWidget(self.turnbox_header)
-        turnbox_frame_layout.addWidget(self.turns_label)
-        turnbox_frame_layout.setContentsMargins(0, 0, 0, 0)
-        turnbox_frame_layout.setSpacing(self.attr_box.header_spacing)
-        turnbox_frame.setContentsMargins(0, 0, 0, 0)
-
-        turnbox_frame.setFixedHeight(
-            int(
-                self.turnbox_header.height()
-                + self.turns_label.height()
-                + self.attr_box.header_spacing
-            )
-        )
-        turnbox_frame.setFixedWidth(self.turns_label.width())
+        turnbox_layout.addWidget(self.turnbox_header)
+        turnbox_layout.addWidget(self.turns_label)
 
         return turnbox_frame
 
@@ -140,23 +167,22 @@ class TurnsWidget(QWidget):
         return turns_label
 
     def _create_turns_button(
-        self, text: Literal["+1", "-1", "+0.5", "-0.5"], callback
-    ) -> QPushButton:
-        button = QPushButton(text, self)
+        self, text: Literal["+1", "-1", "+0.5", "-0.5"], callback, is_full_turn: bool
+    ) -> AnimatedButton:
+        button_size = int(self.attr_box.attr_box_width * 0.2)
+        if not is_full_turn:
+            button_size = int(button_size * 0.75)  # Half turn buttons are smaller
+
+        button = AnimatedButton(self)
+        button.setText(text)
+        button.setFont(
+            QFont("Arial", int(button_size / 3))
+        )  # Adjust font size based on button size
+        button.setFixedSize(button_size, button_size)
         button.clicked.connect(callback)
-        button.setFont(QFont("Arial", int(self.width() / 10)))
-        if text in ["+1", "-1"]:
-            stylesheet = self.attr_box.get_turns_button_stylesheet("small")
-        elif text in ["+0.5", "-0.5"]:
-            stylesheet = self.attr_box.get_turns_button_stylesheet("small")
-        button.setStyleSheet(stylesheet)
+
         return button
 
-    def _create_label(self, text: str, font: QFont) -> QLabel:
-        label = QLabel(text, self)
-        label.setFont(font)
-        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        return label
 
     def _add_turn_callback(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
@@ -185,5 +211,4 @@ class TurnsWidget(QWidget):
     ### UPDATERS ###
 
     def update_turns_widget_size(self) -> None:
-        self.setFixedWidth(self.attr_box.attr_box_width)
-        self.setFixedHeight(int(self.width() / 14) + self.turnbox_frame.height())
+        self.setFixedWidth(self.attr_box.attr_box_width - self.attr_box.border_width*2)

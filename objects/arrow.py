@@ -481,10 +481,10 @@ class Arrow(GraphicalObject):
 
         self.update_appearance()
         self.prop.update_appearance()
-
-        if not isinstance(self, self.ghost_arrow.__class__) and self.ghost_arrow:
-            self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
-            self.ghost_arrow.update_attributes(self.attributes)
+        if hasattr(self, "ghost_arrow"):
+            if not isinstance(self, self.ghost_arrow.__class__) and self.ghost_arrow:
+                self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
+                self.ghost_arrow.update_attributes(self.attributes)
         self.scene.update_pictograph()
 
     def mirror(self) -> None:

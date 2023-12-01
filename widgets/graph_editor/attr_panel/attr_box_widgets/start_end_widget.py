@@ -195,8 +195,6 @@ class StartEndWidget(QWidget):
     def _create_button(self) -> AnimatedButton:
         button = AnimatedButton(self)
         button.setIcon(QIcon(ICON_DIR + SWAP_ICON))
-        button_size = int(self.attr_box.attr_box_width * 0.2)  # Example size
-        button.setFixedSize(button_size, button_size)
         button.setSizePolicy(
             QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed
         )  # Set size policy to fixed

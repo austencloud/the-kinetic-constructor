@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
 
 
-class MotionTypesWidget(QWidget):
+class MotionTypesWidget(QFrame):
     def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box

@@ -76,7 +76,7 @@ class AttrBox(QFrame):
         self.setStyleSheet(
             f"#AttributeBox {{ border: {self.border_width}px solid {color_hex}; }}"
         )
-        self.attr_box_width = int(self.width() + self.border_width)
+        self.attr_box_width = int(self.width())
         self.header_spacing = int(self.attr_box_width * 0.02)
         self.widget_spacing = int(self.attr_box_width * 0.05)
 
@@ -174,16 +174,18 @@ class AttrBox(QFrame):
         return (
             f"QPushButton {{"
             f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(200, 200, 200, 255));"
+            f"   border-radius: {border_radius}px;"
             f"   border: 1px solid black;"
             f"   min-width: {size}px;"
             f"   min-height: {size}px;"  # Adjust height to match width for a circle
-            f"   border-radius: {border_radius}px;"
+            f"   max-width: {size}px;"
+            f"   max-height: {size}px;"
+            f"}}"
+            f"QPushButton:hover {{"
+            f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(230, 230, 230, 255), stop:1 rgba(200, 200, 200, 255));"
             f"}}"
             f"QPushButton:pressed {{"
             f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(204, 228, 247, 255), stop:1 rgba(164, 209, 247, 255));"
-            f"}}"
-            f"QPushButton:hover:!pressed {{"
-            f"   border: 1px solid #1c1c1c;"
             f"}}"
         )
 
@@ -210,4 +212,3 @@ class AttrBox(QFrame):
             "   height: 10px;"
             "}"
         )
-
