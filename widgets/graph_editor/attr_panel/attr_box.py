@@ -52,10 +52,10 @@ class AttrBox(QFrame):
         self.button_size = self.calculate_button_size()
         self.icon_size = QSize(int(self.button_size * 0.5), int(self.button_size * 0.5))
 
-        self.header_widget = HeaderWidget(self, self.color)
+        self.header_widget = HeaderWidget(self)
         self.motion_type_widget = MotionTypesWidget(self)
         self.start_end_widget = StartEndWidget(self)
-        self.turns_widget = TurnsWidget(self.pictograph, self.color, self)
+        self.turns_widget = TurnsWidget(self)
 
         self.layout().addWidget(self.header_widget)
         self.layout().addWidget(self.motion_type_widget)
@@ -78,7 +78,7 @@ class AttrBox(QFrame):
         self.setStyleSheet(
             f"#AttributeBox {{ border: {self.border_width}px solid {color_hex}; }}"
         )
-        self.attr_box_width = int(self.attr_panel.width()/2)
+        self.attr_box_width = int(self.attr_panel.width()/2 - self.border_width * 2)
         self.header_spacing = int(self.attr_box_width * 0.02)
         self.widget_spacing = int(self.attr_box_width * 0.05)
 

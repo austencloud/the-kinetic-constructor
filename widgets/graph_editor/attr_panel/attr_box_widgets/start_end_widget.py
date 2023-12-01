@@ -88,7 +88,7 @@ class StartEndWidget(QWidget):
 
         # self._add_borders()
 
-    def _add_borders(self) -> None:
+    def _add_black_borders(self) -> None:
         self.setStyleSheet("border: 1px solid black;")
         self.button_frame.setStyleSheet("border: 1px solid black;")
         self.start_box_with_header_frame.setStyleSheet("border: 1px solid black;")
@@ -100,7 +100,6 @@ class StartEndWidget(QWidget):
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.main_layout.setSpacing(0)
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        self.setFixedHeight(int(self.attr_box.height() * 1 / 8))
         self.setFixedWidth(self.attr_box.attr_box_width)
 
     def _setup_start_end_box(self) -> CustomComboBox:

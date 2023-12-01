@@ -21,10 +21,10 @@ if TYPE_CHECKING:
 
 
 class TurnsWidget(QFrame):
-    def __init__(self, pictograph: "Pictograph", color: "Colors", attr_box: "AttrBox"):
+    def __init__(self, attr_box: "AttrBox"):
         super().__init__()
-        self.pictograph = pictograph
-        self.color = color
+        self.pictograph = attr_box.pictograph
+        self.color = attr_box.color
         self.attr_box = attr_box
         self._init_ui()
 

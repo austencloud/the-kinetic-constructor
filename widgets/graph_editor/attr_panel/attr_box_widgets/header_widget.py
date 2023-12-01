@@ -17,86 +17,95 @@ from settings.string_constants import ICON_DIR
 
 
 class HeaderWidget(QWidget):
-    def __init__(self, attr_box: "AttrBox", color: Colors) -> None:
+    def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__(attr_box)
+
         self.attr_box = attr_box
-        self.color = color
-        
+        self.color = attr_box.color
+        self.pictograph = attr_box.pictograph
+
         self.motion: Motion = self.attr_box.pictograph.get_motion_by_color(self.color)
         self.clock: QLabel = self._setup_clock()
-        self.header_text:QLabel = self._setup_header_text()
+        self.header_text: QLabel = self._setup_header_label()
         self.rotate_cw_button, self.rotate_ccw_button = self._setup_buttons()
-        
+
         self._setup_main_layout()
+        self.setFixedWidth(self.attr_box.attr_box_width)
 
     def _setup_main_layout(self) -> QHBoxLayout:
         main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
+
         main_layout.addWidget(self.clock)
         main_layout.addWidget(self.header_text)
         main_layout.addWidget(self.rotate_ccw_button)
         main_layout.addWidget(self.rotate_cw_button)
-        
+
         return main_layout
 
+    def _add_black_borders(self):
+        self.setStyleSheet("border: 1px solid black;")
+        self.clock.setStyleSheet("border: 1px solid black;")
+        self.header_text.setStyleSheet("border: 1px solid black;")
+        self.rotate_cw_button.setStyleSheet("border: 1px solid black;")
+        self.rotate_ccw_button.setStyleSheet("border: 1px solid black;")
+
     def _setup_clock(self) -> QLabel:
-        clock = QLabel(self)
+        clock_label = QLabel(self)
         clock_pixmap = QPixmap(f"{ICON_DIR}clock/clockwise.png")
         if clock_pixmap.isNull():
             print("Failed to load the clock icon.")
         else:
-            clock.setPixmap(
+            clock_label.setPixmap(
                 clock_pixmap.scaled(
-                    int(self.attr_box.width() / 4),
-                    int(self.attr_box.width() / 4),
+                    int(self.attr_box.width() / 3),
+                    int(self.attr_box.width() / 3),
                     Qt.AspectRatioMode.KeepAspectRatio,
                     Qt.TransformationMode.SmoothTransformation,
                 )
             )
-        return clock
+        clock_label.setFixedSize(
+            int(self.attr_box.width() / 3), int(self.attr_box.width() / 3)
+        )
+        return clock_label
 
     def _setup_buttons(self) -> tuple[CustomButton, CustomButton]:
-        rotate_ccw_button = self.create_round_button(f"{ICON_DIR}rotate_left.png")
-        rotate_cw_button = self.create_round_button(f"{ICON_DIR}rotate_right.png")
+        rotate_ccw_button = self._create_button(f"{ICON_DIR}rotate_ccw.png")
+        rotate_cw_button = self._create_button(f"{ICON_DIR}rotate_cw.png")
         if self.motion:
             rotate_ccw_button.clicked.connect(self.motion.arrow.rotate("ccw"))
             rotate_cw_button.clicked.connect(self.motion.arrow.rotate("cw"))
         buttons = (rotate_ccw_button, rotate_cw_button)
         return buttons
 
-    def _setup_header_text(self) -> QLabel:
-        header_text = QLabel("Left" if self.color == BLUE else "Right", self)
-        header_text.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        header_text.setFixedSize(
-            int(self.attr_box.width() * 0.5), int(self.attr_box.height() * 1 / 6)
-        )
+    def _setup_header_label(self) -> QLabel:
+        header_label = QLabel("Left" if self.color == BLUE else "Right", self)
+        header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        
         color_hex = RED_HEX if self.color == RED else BLUE_HEX
-        font_size = int(header_text.height() * 0.5)
-        header_text.setStyleSheet(
+        font_size = int(header_label.height() * 0.8)
+        header_label.setStyleSheet(
             f"color: {color_hex}; font-size: {font_size}px; font-weight: bold;"
         )
-        return header_text
+        return header_label
 
-    def create_round_button(self, icon_path: str) -> CustomButton:
+    def _create_button(self, icon_path: str) -> CustomButton:
         button = CustomButton(self)
         button.setIcon(QIcon(icon_path))
-        button_size = 25  # Example size, adjust as needed
-        button.setIconSize(QSize(int(button_size * 0.8), int(button_size * 0.8)))
-        button.setFixedSize(int(button_size), int(button_size))
-
         return button
 
-    def rotate_left(self) -> None:
+    def rotate_ccw(self) -> None:
         # Implementation for rotating left
         pass
 
-    def rotate_right(self) -> None:
+    def rotate_cw(self) -> None:
         # Implementation for rotating right
         pass
 
     def update_header_widget_size(self) -> None:
         self.setFixedSize(
             self.attr_box.attr_box_width,
-            int(self.attr_box.height() * 1 / 6),
+            self.clock.height(),
         )

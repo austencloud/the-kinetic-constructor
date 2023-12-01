@@ -46,7 +46,7 @@ class ActionButtonsFrame(QFrame):
             ),
             ("rotate_right.png", "Rotate Right", self.rotate_selected_arrow, CLOCKWISE),
             (
-                "rotate_left.png",
+                "rotate_cw.png",
                 "Rotate Left",
                 self.rotate_selected_arrow,
                 COUNTER_CLOCKWISE,

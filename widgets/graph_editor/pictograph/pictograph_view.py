@@ -31,12 +31,12 @@ class PictographView(QGraphicsView):
         self.clear_button = self.create_button(
             "resources/images/icons/clear.png", self.pictograph.clear_pictograph
         )
-        self.rotate_clockwise_button = self.create_button(
-            "resources/images/icons/rotate_right.png",
+        self.rotate_cw_button = self.create_button(
+            "resources/images/icons/rotate_cw.png",
             lambda: self.pictograph.rotate_pictograph(CLOCKWISE),
         )
-        self.rotate_counterclockwise_button = self.create_button(
-            "resources/images/icons/rotate_left.png",
+        self.rotate_ccw_button = self.create_button(
+            "resources/images/icons/rotate_ccw.png",
             lambda: self.pictograph.rotate_pictograph(COUNTER_CLOCKWISE),
         )
 
@@ -59,10 +59,10 @@ class PictographView(QGraphicsView):
         )
         self.configure_button_size_and_position(self.clear_button, button_size)
         self.configure_button_size_and_position(
-            self.rotate_clockwise_button, button_size
+            self.rotate_cw_button, button_size
         )
         self.configure_button_size_and_position(
-            self.rotate_counterclockwise_button, button_size
+            self.rotate_ccw_button, button_size
         )
 
     def configure_button_size_and_position(self, button: QPushButton, size) -> None:
@@ -75,7 +75,7 @@ class PictographView(QGraphicsView):
             button.move(self.width() - size, self.height() - size)
         elif button == self.clear_button:
             button.move(0, self.height() - size)
-        elif button == self.rotate_clockwise_button:
+        elif button == self.rotate_cw_button:
             button.move(self.width() - size, 0)
-        elif button == self.rotate_counterclockwise_button:
+        elif button == self.rotate_ccw_button:
             button.move(0, 0)

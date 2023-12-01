@@ -15,7 +15,6 @@ from PyQt6.QtCore import Qt
 
 from widgets.graph_editor.attr_panel.attr_box_widgets.custom_button import CustomButton
 
-
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
 
@@ -37,6 +36,7 @@ class MotionTypesWidget(QFrame):
         main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
+        
         main_layout.addWidget(self.button_frame)
         main_layout.addWidget(self.motion_type_box_frame)
         
@@ -127,24 +127,25 @@ class MotionTypesWidget(QFrame):
     ### HELPERS ###
 
     def _swap_motion_type_callback(self) -> None:
-        original_motion_type = self.motion_type_box.currentText()
-        if original_motion_type == "Pro":
-            new_motion_type = "Anti"
-        elif original_motion_type == "Anti":
-            new_motion_type = "Pro"
-        elif original_motion_type == "Dash":
-            new_motion_type = "Static"
-        elif original_motion_type == "Static":
-            new_motion_type = "Dash"
+        if self.motion_type_box.currentText():
+            original_motion_type = self.motion_type_box.currentText()
+            if original_motion_type == "Pro":
+                new_motion_type = "Anti"
+            elif original_motion_type == "Anti":
+                new_motion_type = "Pro"
+            elif original_motion_type == "Dash":
+                new_motion_type = "Static"
+            elif original_motion_type == "Static":
+                new_motion_type = "Dash"
 
-        new_motion_type_index = self.motion_type_box.findText(
-            new_motion_type, Qt.MatchFlag.MatchExactly
-        )
-        if new_motion_type_index >= 0:
-            self.motion_type_box.setCurrentIndex(new_motion_type_index)
-            motion = self.pictograph.get_motion_by_color(self.color)
-            if motion:
-                motion.arrow.swap_motion_type()
+            new_motion_type_index = self.motion_type_box.findText(
+                new_motion_type, Qt.MatchFlag.MatchExactly
+            )
+            if new_motion_type_index >= 0:
+                self.motion_type_box.setCurrentIndex(new_motion_type_index)
+                motion = self.pictograph.get_motion_by_color(self.color)
+                if motion:
+                    motion.arrow.swap_motion_type()
 
     ### UPDATERS ###
 
