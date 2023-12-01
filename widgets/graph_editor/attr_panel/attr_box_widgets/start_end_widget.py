@@ -52,6 +52,7 @@ class CustomComboBox(QComboBox):
         )
 
 
+
 class StartEndWidget(QWidget):
     def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__(attr_box)
@@ -73,6 +74,7 @@ class StartEndWidget(QWidget):
     def _setup_main_layout(self) -> None:
         self.main_layout = QHBoxLayout(self)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
+        self.main_layout.setSpacing(0)
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.setFixedHeight(int(self.attr_box.height() * 1 / 8))
         self.setFixedWidth(self.attr_box.attr_box_width)
@@ -124,6 +126,10 @@ class StartEndWidget(QWidget):
 
     def _add_widgets_to_layout(self) -> None:
         self.main_layout.addWidget(self.button_frame)
+        spacer = QSpacerItem(
+            5, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
+        )
+        self.main_layout.addItem(spacer)
         self.main_layout.addWidget(
             self._create_frame(self.start_box, QVBoxLayout, "Start")
         )
