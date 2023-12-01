@@ -53,7 +53,6 @@ class TurnsWidget(QWidget):
         layout.addWidget(self.button_frames["add_buttons"])
         return layout
 
-
     ### CREATE WIDGETS ###
 
     def _setup_button_frame(self, full_turn_button, half_turn_button) -> QFrame:
@@ -134,8 +133,8 @@ class TurnsWidget(QWidget):
         )
         turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         turns_label.setFixedSize(
-            int(self.attr_box.attr_box_width * 0.35),
-            int(self.attr_box.attr_box_width * 0.25),
+            int(self.attr_box.attr_box_width * 0.3),
+            int(self.attr_box.attr_box_width * 0.2),
         )
 
         return turns_label
