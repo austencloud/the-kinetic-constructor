@@ -1,12 +1,11 @@
 import logging
 from typing import TYPE_CHECKING, Dict, Literal
 from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtGui import QPixmap, QIcon
+from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import (
     QFrame,
     QLabel,
     QVBoxLayout,
-    QPushButton,
 )
 from objects.motion import Motion
 from settings.string_constants import (
@@ -70,7 +69,7 @@ class AttrBox(QFrame):
         self.setLayout(QVBoxLayout(self))
         self.layout().setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout().setContentsMargins(0, 0, 0, 0)
-        self.layout().setSpacing(0)
+        self.layout().setSpacing(self.widget_spacing)
 
     def apply_border_style(self, color_hex: str) -> None:
         self.border_width = 3
@@ -78,6 +77,8 @@ class AttrBox(QFrame):
             f"#AttributeBox {{ border: {self.border_width}px solid {color_hex}; }}"
         )
         self.attr_box_width = int(self.width() + self.border_width)
+        self.header_spacing = int(self.attr_box_width * 0.02)
+        self.widget_spacing = int(self.attr_box_width * 0.05)
 
     ### CREATE LABELS ###
 
@@ -102,28 +103,6 @@ class AttrBox(QFrame):
         label = self.create_label(self.height() // 4)
         label.setObjectName("clock_label")
         return label
-
-    def create_button(self, icon_path, callback):
-        button = QPushButton(self)
-        button.setIcon(QIcon(icon_path))
-        button.setIconSize(self.icon_size)
-        button.setFixedSize(self.button_size, self.button_size)
-        button.clicked.connect(callback)
-
-        # Return the button without setting a stylesheet
-        return button
-
-    def swap_motion_type_callback(self) -> None:
-        arrow = self.pictograph.get_arrow_by_color(self.color)
-        if arrow:
-            arrow.swap_motion_type()
-            self.update_labels(arrow)
-
-    def swap_start_end_callback(self) -> None:
-        arrow = self.pictograph.get_arrow_by_color(self.color)
-        if arrow:
-            arrow.swap_rot_dir()
-            self.update_labels(arrow)
 
     def preload_pixmaps(self) -> None:
         for icon_name, icon_path in ICON_PATHS.items():
@@ -165,8 +144,8 @@ class AttrBox(QFrame):
         self.turns_widget.turns_label.setText(f"{motion.turns}")
 
     def update_attr_box_size(self) -> None:
-        self.setFixedHeight(int(self.attr_panel.pictograph.graph_editor.height() / 2))
-        self.setFixedWidth(int(self.attr_panel.pictograph.graph_editor.height() / 2))
+        self.setFixedHeight(int(self.attr_panel.height()))
+        self.setFixedWidth(int(self.attr_panel.width() / 2))
         for child in self.children():
             if isinstance(child, QFrame):
                 child.deleteLater()
@@ -232,22 +211,3 @@ class AttrBox(QFrame):
             "}"
         )
 
-    def get_button_style(self) -> str:
-        # Button style
-        return (
-            "QPushButton {"
-            "   border-radius: 15px;"
-            "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
-            "   stop:0 rgba(255, 255, 255, 255), stop:1 rgba(200, 200, 200, 255));"
-            "   border: 1px solid black;"
-            "   min-width: 30px;"
-            "   min-height: 30px;"
-            "}"
-            "QPushButton:pressed {"
-            "   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
-            "   stop:0 rgba(204, 228, 247, 255), stop:1 rgba(164, 209, 247, 255));"
-            "}"
-            "QPushButton:hover:!pressed {"
-            "   border: 1px solid #1c1c1c;"
-            "}"
-        )

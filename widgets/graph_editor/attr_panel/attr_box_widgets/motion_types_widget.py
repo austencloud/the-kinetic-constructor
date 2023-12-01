@@ -15,6 +15,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import Qt
 
+from widgets.graph_editor.attr_panel.attr_box_widgets.animated_button import AnimatedButton
+
 
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
@@ -65,15 +67,14 @@ class MotionTypesWidget(QWidget):
     def _setup_motion_type_box_frame(self):
         # Header label layout
         type_header_frame = self._setup_type_header_frame()
-        typebox = self._setup_typebox()
-        self.spacing = int(self.attr_box.attr_box_width * 0.01)
+        motion_type_box = self._setup_motion_type_box()
         motion_type_box_frame = QFrame(self)
         motion_type_box_frame_layout = QVBoxLayout(motion_type_box_frame)
         motion_type_box_frame_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         motion_type_box_frame_layout.setContentsMargins(0, 0, 0, 0)
-        motion_type_box_frame_layout.setSpacing(self.spacing)
+        motion_type_box_frame_layout.setSpacing(self.attr_box.header_spacing)
         motion_type_box_frame_layout.addWidget(type_header_frame)
-        motion_type_box_frame_layout.addWidget(typebox)
+        motion_type_box_frame_layout.addWidget(motion_type_box)
 
         motion_type_box_frame.setFixedWidth(int(self.attr_box.attr_box_width * 3 / 4))
 
@@ -98,7 +99,7 @@ class MotionTypesWidget(QWidget):
         self.type_header_frame = motion_type_header_frame
         return motion_type_header_frame
 
-    def _setup_typebox(self):
+    def _setup_motion_type_box(self):
         motion_type_box = QComboBox(self)
         motion_type_box.addItems(["Pro", "Anti", "Dash", "Static"])
         motion_type_box.setFont(QFont("Arial", int(self.width() / 10), QFont.Weight.Bold, True))
@@ -108,10 +109,9 @@ class MotionTypesWidget(QWidget):
         self.motion_type_box = motion_type_box
         return motion_type_box
 
-    def _create_button(self) -> QPushButton:
-        button = QPushButton(self)
+    def _create_button(self) -> AnimatedButton:
+        button = AnimatedButton(self)
         button.setIcon(QIcon(ICON_DIR + SWAP_ICON))
-        button.setStyleSheet(self.attr_box.get_button_style())
         button.clicked.connect(self._swap_motion_type_callback)
         return button
 
@@ -149,5 +149,5 @@ class MotionTypesWidget(QWidget):
     def update_motion_type_widget_size(self) -> None:
         self.setFixedSize(
             self.attr_box.attr_box_width,
-            self.motion_type_box.height() + self.type_header_frame.height() + self.spacing,
+            self.motion_type_box.height() + self.type_header_frame.height() + self.attr_box.header_spacing,
         )
