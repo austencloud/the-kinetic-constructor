@@ -170,30 +170,24 @@ class StartEndWidget(QWidget):
     def _setup_button_frame(self) -> QFrame:
         swap_button = self._create_button()
         button_frame = QFrame(self)
-        button_frame.setFixedWidth(int(self.attr_box.attr_box_width / 5))
+        button_frame.setFixedWidth(int(self.attr_box.attr_box_width * 1 / 5))
+        button_frame_layout = QVBoxLayout(button_frame)
+        button_frame_layout.setContentsMargins(0, 0, 0, 0)
+        button_frame_layout.setSpacing(0)
 
-        button_frame_vbox = QVBoxLayout(button_frame)
-        button_frame_vbox.setContentsMargins(0, 0, 0, 0)
-        button_frame_vbox.setSpacing(0)
-
-        button_frame_vbox.addSpacerItem(
-            QSpacerItem(
-                0,
-                int(
-                    self.start_end_header_label.height()
-                    + self.attr_box.header_spacing * 2
-                ),
-                QSizePolicy.Policy.Minimum,
-                QSizePolicy.Policy.Expanding,
-            )
-        )
-        button_frame_vbox.addWidget(swap_button, 0, Qt.AlignmentFlag.AlignCenter)
-        button_frame_vbox.addSpacerItem(
+        button_size = int(self.attr_box.attr_box_width * 0.15)  # Example size
+        swap_button.setFixedSize(button_size, button_size)
+        button_frame_layout.addSpacerItem(
             QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        )
+        button_frame_layout.addWidget(
+            swap_button,
+            0,
+            Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignCenter,
         )
 
         return button_frame
-
+    
     def _create_button(self) -> CustomButton:
         button = CustomButton(self)
         button.setIcon(QIcon(ICON_DIR + SWAP_ICON))

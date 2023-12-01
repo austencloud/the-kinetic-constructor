@@ -48,32 +48,6 @@ class CustomButton(QPushButton):
 
         super().paintEvent(event)
 
-    @pyqtProperty(QColor)
-    def animatedColor(self):
-        return self._color
-
-    @animatedColor.setter
-    def animatedColor(self, color):
-        self._color = color
-        self.update()
-
-    def enterEvent(self, event):
-        self.startColorAnimation(QColor(200, 200, 200))  # Lighter color on hover
-        super().enterEvent(event)
-
-    def leaveEvent(self, event):
-        self.startColorAnimation(
-            self.palette().color(QPalette.ColorRole.Button)
-        )  # Original color on leave
-        super().leaveEvent(event)
-
-    def startColorAnimation(self, new_color):
-        self.color_animation.stop()
-        self.color_animation.setDuration(1000)  # Set the duration to 1000 milliseconds (1 second)
-        self.color_animation.setStartValue(self._color)
-        self.color_animation.setEndValue(new_color)
-        self.color_animation.setEasingCurve(QEasingCurve.Type.InOutQuad)
-        self.color_animation.start()
 
     def get_button_style(self):
         return (

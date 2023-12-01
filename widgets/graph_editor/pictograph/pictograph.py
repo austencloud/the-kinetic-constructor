@@ -271,6 +271,8 @@ class Pictograph(QGraphicsScene):
             if motion is not None
         ]
 
+        if not motions:
+            self.graph_editor.attr_panel.clear_all_attr_boxes()
         for motion in motions:
             self.graph_editor.attr_panel.update_panel(motion.color)
 

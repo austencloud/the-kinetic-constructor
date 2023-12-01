@@ -49,3 +49,7 @@ class AttrPanel(QFrame):
 
         self.blue_attr_box.update_attr_box_size()
         self.red_attr_box.update_attr_box_size()
+
+    def clear_all_attr_boxes(self) -> None:
+        self.blue_attr_box.clear_attr_box()
+        self.red_attr_box.clear_attr_box()

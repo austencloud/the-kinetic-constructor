@@ -41,6 +41,8 @@ class AttrBox(QFrame):
         self.color = color
         self.turns_widget = None
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
+        self.init_ui()
+
 
     def calculate_button_size(self) -> int:
         return int((self.pictograph.view.height() // 2 // 4) * 1)
@@ -76,7 +78,7 @@ class AttrBox(QFrame):
         self.setStyleSheet(
             f"#AttributeBox {{ border: {self.border_width}px solid {color_hex}; }}"
         )
-        self.attr_box_width = int(self.width())
+        self.attr_box_width = int(self.attr_panel.width()/2)
         self.header_spacing = int(self.attr_box_width * 0.02)
         self.widget_spacing = int(self.attr_box_width * 0.05)
 
@@ -134,9 +136,9 @@ class AttrBox(QFrame):
         clock_label.setPixmap(pixmap)
 
     def update_attr_box(self) -> None:
-        arrow = self.pictograph.get_motion_by_color(self.color)
-        if arrow:
-            self.update_labels(arrow)
+        motion = self.pictograph.get_motion_by_color(self.color)
+        if motion:
+            self.update_labels(motion)
 
     def update_labels(self, motion: "Motion") -> None:
         self.start_end_widget.update_start_end_boxes()
@@ -218,8 +220,6 @@ class AttrBox(QFrame):
             for child in self.turns_widget.children():
                 if isinstance(child, QFrame):
                     child.deleteLater()
-        self.init_ui()
-        self.header_widget.setup_header_widget()
         self.update()
 
         self.header_widget.update_header_widget_size()
