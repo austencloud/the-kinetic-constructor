@@ -45,17 +45,6 @@ class TurnsWidget(QFrame):
         self.setStyleSheet("border: 1px solid black;")
         self.turnbox_frame.setStyleSheet("border: 1px solid black;")
 
-    ### SETUP LAYOUTS ###
-
-    def _setup_layout(self) -> QHBoxLayout:
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
-        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.button_frames["subtract_buttons"])
-        layout.addWidget(self.turnbox_frame)
-        layout.addWidget(self.button_frames["add_buttons"])
-        return layout
 
     ### CREATE WIDGETS ###
 
@@ -85,7 +74,6 @@ class TurnsWidget(QFrame):
         bottom_layout.addWidget(self.subtract_half_turn_button)
         bottom_layout.addWidget(self.add_half_turn_button)
         bottom_layout.addWidget(self.add_turn_button)
-
 
         
     def _setup_button_frame(self, full_turn_button, half_turn_button) -> QFrame:
@@ -150,7 +138,7 @@ class TurnsWidget(QFrame):
         return button_frames
 
     def _create_turns_label(self) -> QLabel:
-        turns_label = QLabel("0", self)
+        turns_label = QLabel("", self)
         turns_label.setFrameShape(QFrame.Shape.Box)
         turns_label.setLineWidth(1)
         turns_label.setFrameShadow(QFrame.Shadow.Plain)
@@ -211,7 +199,7 @@ class TurnsWidget(QFrame):
     ### UPDATERS ###
 
     def clear_turns_label(self) -> None:
-        self.turns_label.setText(" ")
+        self.turns_label.setText("")
 
     def update_turns_widget_size(self) -> None:
         self.setFixedWidth(self.attr_box.attr_box_width - self.attr_box.border_width*2)

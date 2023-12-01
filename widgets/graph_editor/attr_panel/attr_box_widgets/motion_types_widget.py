@@ -64,23 +64,24 @@ class MotionTypesWidget(QFrame):
 
         return button_frame
 
-    def _setup_motion_type_box_frame(self):
+    def _setup_motion_type_box_frame(self) -> QFrame:
         # Header label layout
-        type_header_frame = self._setup_type_header_frame()
+        motion_type_header_frame = self._setup_type_header_frame()
         motion_type_box = self._setup_motion_type_box()
+        
         motion_type_box_frame = QFrame(self)
+        motion_type_box_frame.setFixedWidth(int(self.attr_box.attr_box_width * 3 / 4))
+        
         motion_type_box_frame_layout = QVBoxLayout(motion_type_box_frame)
         motion_type_box_frame_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         motion_type_box_frame_layout.setContentsMargins(0, 0, 0, 0)
         motion_type_box_frame_layout.setSpacing(self.attr_box.header_spacing)
-        motion_type_box_frame_layout.addWidget(type_header_frame)
+        motion_type_box_frame_layout.addWidget(motion_type_header_frame)
         motion_type_box_frame_layout.addWidget(motion_type_box)
-
-        motion_type_box_frame.setFixedWidth(int(self.attr_box.attr_box_width * 3 / 4))
 
         return motion_type_box_frame
 
-    def _setup_type_header_frame(self):
+    def _setup_type_header_frame(self) -> QFrame:
         motion_type_header_frame = QFrame(self)
         motion_type_header_layout = QHBoxLayout()
 
@@ -99,13 +100,14 @@ class MotionTypesWidget(QFrame):
         self.type_header_frame = motion_type_header_frame
         return motion_type_header_frame
 
-    def _setup_motion_type_box(self):
+    def _setup_motion_type_box(self) -> QComboBox:
         motion_type_box = QComboBox(self)
         motion_type_box.addItems(["Pro", "Anti", "Dash", "Static"])
         motion_type_box.setFont(QFont("Arial", int(self.width() / 10), QFont.Weight.Bold, True))
         motion_type_box.setStyleSheet(self.attr_box.get_combobox_style())
         motion_type_box.setFixedWidth(int(self.attr_box.attr_box_width * 0.6))
         motion_type_box.setFixedHeight(int(self.attr_box.attr_box_width * 0.2))
+        motion_type_box.setCurrentIndex(-1)
         self.motion_type_box = motion_type_box
         return motion_type_box
 

@@ -73,6 +73,7 @@ class StartEndWidget(QWidget):
 
         self.start_box = self._setup_start_end_box()
         self.end_box = self._setup_start_end_box()
+        
 
         self.start_box_with_header_frame = self._create_box_with_header_frame(
             self.start_box, QVBoxLayout, "Start"
@@ -113,6 +114,7 @@ class StartEndWidget(QWidget):
             self.combobox_width,
             int(self.attr_box.attr_box_width * 0.2),
         )
+        start_end_box.setCurrentIndex(-1)
         return start_end_box
 
     def _setup_arrow_frame(self) -> QFrame:
