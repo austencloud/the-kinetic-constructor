@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import (
     QFrame,
 )
 from settings.string_constants import RED, BLUE
+from utilities.TypeChecking.TypeChecking import Colors
 from widgets.graph_editor.attr_panel.attr_box import AttrBox
 from typing import TYPE_CHECKING
 
@@ -34,14 +35,13 @@ class AttrPanel(QFrame):
         self.attr_panel_layout.addWidget(self.blue_attr_box)
         self.attr_panel_layout.addWidget(self.red_attr_box)
 
-    def update_attr_panel(self) -> None:
-        blue_arrow = self.pictograph.get_arrow_by_color(BLUE)
-        red_arrow = self.pictograph.get_arrow_by_color(RED)
-
-        if blue_arrow:
-            self.blue_attr_box.update_labels(blue_arrow)
-        if red_arrow:
-            self.red_attr_box.update_labels(red_arrow)
+    def update_panel(self, motion_color: Colors) -> None:
+        motion = self.pictograph.get_motion_by_color(motion_color)
+        
+        if motion_color == BLUE:
+            self.blue_attr_box.update_attr_box(motion)
+        elif motion_color == RED:
+            self.red_attr_box.update_attr_box(motion)
 
     def update_attr_panel_size(self) -> None:
         self.setFixedHeight(self.pictograph.view.height())

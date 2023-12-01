@@ -134,7 +134,7 @@ class AttrBox(QFrame):
         clock_label.setPixmap(pixmap)
 
     def update_attr_box(self) -> None:
-        arrow = self.pictograph.get_arrow_by_color(self.color)
+        arrow = self.pictograph.get_motion_by_color(self.color)
         if arrow:
             self.update_labels(arrow)
 
@@ -142,26 +142,6 @@ class AttrBox(QFrame):
         self.start_end_widget.update_start_end_boxes()
         self.motion_type_widget.update_motion_type_box()
         self.turns_widget.turns_label.setText(f"{motion.turns}")
-
-    def update_attr_box_size(self) -> None:
-        self.setFixedHeight(int(self.attr_panel.height()))
-        self.setFixedWidth(int(self.attr_panel.width() / 2))
-        for child in self.children():
-            if isinstance(child, QFrame):
-                child.deleteLater()
-
-        if self.turns_widget:
-            for child in self.turns_widget.children():
-                if isinstance(child, QFrame):
-                    child.deleteLater()
-        self.init_ui()
-        self.header_widget.setup_header_widget()
-        self.update()
-
-        self.header_widget.update_header_widget_size()
-        self.motion_type_widget.update_motion_type_widget_size()
-        self.start_end_widget.update_start_end_widget_size()
-        self.turns_widget.update_turns_widget_size()
 
     def get_turns_button_stylesheet(self, button: Literal["small", "large"]) -> str:
         if button == "small":
@@ -212,3 +192,37 @@ class AttrBox(QFrame):
             "   height: 10px;"
             "}"
         )
+
+    def clear_attr_box(self):
+        # Clear all attributes in the attribute box
+        # You might want to clear labels, reset combo boxes, etc.
+        self.motion_type_widget.clear_motion_type_box()
+        self.start_end_widget.clear_start_end_boxes()
+        self.turns_widget.clear_turns_label()
+
+    # Update the update_attr_box method to only update when the corresponding arrow is selected
+    def update_attr_box(self, arrow=None):
+        if arrow:
+            self.update_labels(arrow)
+        else:
+            self.clear_attr_box()
+
+    def update_attr_box_size(self) -> None:
+        self.setFixedHeight(int(self.attr_panel.height()))
+        self.setFixedWidth(int(self.attr_panel.width() / 2))
+        for child in self.children():
+            if isinstance(child, QFrame):
+                child.deleteLater()
+
+        if self.turns_widget:
+            for child in self.turns_widget.children():
+                if isinstance(child, QFrame):
+                    child.deleteLater()
+        self.init_ui()
+        self.header_widget.setup_header_widget()
+        self.update()
+
+        self.header_widget.update_header_widget_size()
+        self.motion_type_widget.update_motion_type_widget_size()
+        self.start_end_widget.update_start_end_widget_size()
+        self.turns_widget.update_turns_widget_size()

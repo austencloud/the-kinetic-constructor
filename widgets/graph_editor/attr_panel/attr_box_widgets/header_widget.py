@@ -22,7 +22,7 @@ class HeaderWidget(QWidget):
         super().__init__(attr_box)
         self.attr_box = attr_box
         self.color = color
-        self.arrow: Arrow = self.attr_box.pictograph.get_arrow_by_color(self.color)
+        self.arrow: Arrow = self.attr_box.pictograph.get_motion_by_color(self.color)
 
     def setup_header_widget(self) -> None:
         layout = QHBoxLayout(self)

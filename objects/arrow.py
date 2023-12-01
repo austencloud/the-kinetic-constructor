@@ -1,7 +1,6 @@
 from typing import List
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtWidgets import QGraphicsScene
-from PyQt6.QtCore import QPointF, Qt
+from PyQt6.QtCore import QPointF
 from PyQt6.QtGui import QTransform
 from objects.prop import Prop
 from settings.string_constants import (
@@ -31,8 +30,6 @@ from settings.string_constants import (
     LAYER,
     RED,
     BLUE,
-    IN,
-    OUT,
     NORTH,
     SOUTH,
     WEST,
@@ -111,6 +108,7 @@ class Arrow(GraphicalObject):
     ### MOUSE EVENTS ###
 
     def mousePressEvent(self, event) -> None:
+        super().mousePressEvent(event)
         self.setSelected(True)
 
         self.update_ghost_on_click()
@@ -123,6 +121,9 @@ class Arrow(GraphicalObject):
         for item in self.scene.items():
             if item != self:
                 item.setSelected(False)
+        # Notify the pictograph scene about the selection change
+        if self.scene:
+            self.scene.update_attr_panel()
 
     def update_prop_on_click(self) -> None:
         self.prop.color = self.color
@@ -201,7 +202,7 @@ class Arrow(GraphicalObject):
         self.start_location = target_arrow.start_location
         self.end_location = target_arrow.end_location
         self.turns = target_arrow.turns
-        
+
         self.motion.color = target_arrow.color
         self.motion.motion_type = target_arrow.motion_type
         self.motion.arrow_location = target_arrow.arrow_location
@@ -209,7 +210,6 @@ class Arrow(GraphicalObject):
         self.motion.start_location = target_arrow.start_location
         self.motion.end_location = target_arrow.end_location
         self.motion.turns = target_arrow.turns
-        
 
     def update_prop_during_drag(self) -> None:
         for prop in self.scene.prop_set.values():
@@ -346,8 +346,6 @@ class Arrow(GraphicalObject):
             END_LOCATION: new_end_location,
             TURNS: self.turns,
         }
-
-
 
         self.update_attributes(updated_arrow_dict)
         self.prop.prop_location = new_end_location
@@ -542,7 +540,6 @@ class Arrow(GraphicalObject):
         self.prop.orientation = self.prop.swap_orientation(self.prop.orientation)
         self.motion.end_orientation = self.prop.orientation
 
-
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
         self.update_attributes(new_arrow_dict)
@@ -550,15 +547,17 @@ class Arrow(GraphicalObject):
             self.ghost_arrow.motion_type = new_motion_type
             self.ghost_arrow.update_svg(svg_file)
             self.ghost_arrow.update_attributes(new_arrow_dict)
-            
+
         self.prop.update_appearance()
-        
+
         self.scene.update_pictograph()
 
     def delete(self, keep_prop: bool = False) -> None:
         self.scene.removeItem(self)
         if self in self.scene.arrows:
             self.scene.arrows.remove(self)
+            self.scene.motions.remove(self.motion)
+            self.pictograph.graph_editor.attr_panel.update_panel(self.color)
         if keep_prop:
             self.prop._create_static_arrow()
         else:

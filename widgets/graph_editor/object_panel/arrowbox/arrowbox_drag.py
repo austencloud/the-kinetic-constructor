@@ -86,7 +86,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         self.pictograph.removeItem(self.ghost_arrow)
         self.pictograph.arrows.remove(self.ghost_arrow)
-        self.pictograph.update_pictograph()
         self.pictograph.clearSelection()
 
         self.placed_arrow.ghost_arrow = self.ghost_arrow
@@ -118,8 +117,8 @@ class ArrowBoxDrag(ObjectBoxDrag):
             IN,
             1,
         )
-        self.pictograph.update_pictograph()
         self.ghost_arrow.update_ghost_arrow(self.attributes)
+        self.pictograph.update_pictograph()
 
 
     def _update_ghost_arrow_for_new_location(self, new_location) -> None:
@@ -160,7 +159,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
                 if self.previous_drag_location != new_location:
                     self._update_arrow_preview_for_new_location(new_location)
-
+                    
     def handle_mouse_release(self) -> None:
         if self.has_entered_pictograph_once:
             self.place_arrow_on_pictograph()

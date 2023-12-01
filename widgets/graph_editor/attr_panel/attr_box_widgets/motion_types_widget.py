@@ -118,21 +118,22 @@ class MotionTypesWidget(QFrame):
     ### HELPERS ###
 
     def _swap_motion_type_callback(self) -> None:
-        original_motion_type_index = self.motion_type_box.currentIndex()
-        # if the start index is 1
-        if original_motion_type_index == 0:
-            new_motion_type_index = 1
-        elif original_motion_type_index == 1:
-            new_motion_type_index = 0
-        elif original_motion_type_index == 2:
-            new_motion_type_index = 3
-        elif original_motion_type_index == 3:
-            new_motion_type_index = 2
+        original_motion_type = self.motion_type_box.currentText()
+        if original_motion_type == "Pro":
+            new_motion_type = "Anti"
+        elif original_motion_type == "Anti":
+            new_motion_type = "Pro"
+        elif original_motion_type == "Dash":
+            new_motion_type = "Static"
+        elif original_motion_type == "Static":
+            new_motion_type = "Dash"
 
-        self.motion_type_box.setCurrentIndex(new_motion_type_index)
-        motion = self.pictograph.get_motion_by_color(self.color)
-        if motion:
-            motion.arrow.swap_motion_type()
+        new_motion_type_index = self.motion_type_box.findText(new_motion_type, Qt.MatchFlag.MatchExactly)
+        if new_motion_type_index >= 0:
+            self.motion_type_box.setCurrentIndex(new_motion_type_index)
+            motion = self.pictograph.get_motion_by_color(self.color)
+            if motion:
+                motion.arrow.swap_motion_type()
 
     ### UPDATERS ###
 
@@ -146,8 +147,13 @@ class MotionTypesWidget(QFrame):
             if index >= 0:
                 self.motion_type_box.setCurrentIndex(index)
 
+    def clear_motion_type_box(self) -> None:
+        self.motion_type_box.setCurrentIndex(-1)
+        
+
     def update_motion_type_widget_size(self) -> None:
         self.setFixedSize(
             self.attr_box.attr_box_width,
             self.motion_type_box.height() + self.type_header_frame.height() + self.attr_box.header_spacing,
         )
+

@@ -210,5 +210,8 @@ class TurnsWidget(QFrame):
 
     ### UPDATERS ###
 
+    def clear_turns_label(self) -> None:
+        self.turns_label.setText(" ")
+
     def update_turns_widget_size(self) -> None:
         self.setFixedWidth(self.attr_box.attr_box_width - self.attr_box.border_width*2)

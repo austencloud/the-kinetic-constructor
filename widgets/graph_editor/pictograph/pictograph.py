@@ -168,11 +168,6 @@ class Pictograph(QGraphicsScene):
         else:
             return None
 
-    def get_arrow_by_color(self, color: str) -> Optional[Arrow]:
-        for arrow in self.arrows:
-            if arrow.color == color:
-                return arrow
-
     def get_motion_by_color(self, color: str) -> Optional[Motion]:
         for motion in self.motions:
             if motion.color == color:
@@ -224,7 +219,7 @@ class Pictograph(QGraphicsScene):
             if isinstance(item, Arrow) or isinstance(item, Prop):
                 self.removeItem(item)
         self.update_pictograph()
-                        
+
     def clear_selections(self) -> None:
         for arrow in self.arrows:
             arrow.setSelected(False)
@@ -265,14 +260,25 @@ class Pictograph(QGraphicsScene):
 
     ### UPDATERS ###
 
+    def update_attr_panel(self):
+        # Pass the selected motion color to update_attr_panel
+        motions = [
+            motion
+            for motion in [
+                self.get_motion_by_color(RED),
+                self.get_motion_by_color(BLUE),
+            ]
+            if motion is not None
+        ]
+
+        for motion in motions:
+            self.graph_editor.attr_panel.update_panel(motion.color)
+
     def update_pictograph(self) -> None:
         self.update_letter()
         self.update_arrows()
         self.update_props()
         self.update_attr_panel()
-
-    def update_attr_panel(self) -> None:
-        self.graph_editor.attr_panel.update_attr_panel()
 
     def update_arrows(self) -> None:
         self.arrow_positioner.update_arrow_positions()

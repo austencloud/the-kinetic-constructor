@@ -240,6 +240,10 @@ class StartEndWidget(QWidget):
 
     ### UPDATE WIDGETS ###
 
+    def clear_start_end_boxes(self) -> None:
+        self.start_box.setCurrentIndex(-1)
+        self.end_box.setCurrentIndex(-1)
+
     def update_start_end_boxes(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
