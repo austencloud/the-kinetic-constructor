@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import Qt
 
-from widgets.graph_editor.attr_panel.attr_box_widgets.animated_button import AnimatedButton
+from widgets.graph_editor.attr_panel.attr_box_widgets.custom_button import CustomButton
 
 
 if TYPE_CHECKING:
@@ -36,7 +36,7 @@ class MotionTypesWidget(QFrame):
         main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         self.setFixedWidth(self.attr_box.attr_box_width)
-        
+
         motion_type_box_frame = self._setup_motion_type_box_frame()
         button_frame = self._setup_button_frame()
 
@@ -68,10 +68,10 @@ class MotionTypesWidget(QFrame):
         # Header label layout
         motion_type_header_frame = self._setup_type_header_frame()
         motion_type_box = self._setup_motion_type_box()
-        
+
         motion_type_box_frame = QFrame(self)
         motion_type_box_frame.setFixedWidth(int(self.attr_box.attr_box_width * 3 / 4))
-        
+
         motion_type_box_frame_layout = QVBoxLayout(motion_type_box_frame)
         motion_type_box_frame_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         motion_type_box_frame_layout.setContentsMargins(0, 0, 0, 0)
@@ -94,16 +94,16 @@ class MotionTypesWidget(QFrame):
         motion_type_header_layout.setContentsMargins(0, 0, 0, 0)
 
         motion_type_header_frame.setLayout(motion_type_header_layout)
-        motion_type_header_frame.setContentsMargins(0, 0, 0, 0)
-        motion_type_header_frame.setFixedHeight(int(self.attr_box.attr_box_width * 1 / 10))
-        
+
         self.type_header_frame = motion_type_header_frame
         return motion_type_header_frame
 
     def _setup_motion_type_box(self) -> QComboBox:
         motion_type_box = QComboBox(self)
         motion_type_box.addItems(["Pro", "Anti", "Dash", "Static"])
-        motion_type_box.setFont(QFont("Arial", int(self.width() / 10), QFont.Weight.Bold, True))
+        motion_type_box.setFont(
+            QFont("Arial", int(self.width() / 10), QFont.Weight.Bold, True)
+        )
         motion_type_box.setStyleSheet(self.attr_box.get_combobox_style())
         motion_type_box.setFixedWidth(int(self.attr_box.attr_box_width * 0.6))
         motion_type_box.setFixedHeight(int(self.attr_box.attr_box_width * 0.2))
@@ -111,8 +111,8 @@ class MotionTypesWidget(QFrame):
         self.motion_type_box = motion_type_box
         return motion_type_box
 
-    def _create_button(self) -> AnimatedButton:
-        button = AnimatedButton(self)
+    def _create_button(self) -> CustomButton:
+        button = CustomButton(self)
         button.setIcon(QIcon(ICON_DIR + SWAP_ICON))
         button.clicked.connect(self._swap_motion_type_callback)
         return button
@@ -130,7 +130,9 @@ class MotionTypesWidget(QFrame):
         elif original_motion_type == "Static":
             new_motion_type = "Dash"
 
-        new_motion_type_index = self.motion_type_box.findText(new_motion_type, Qt.MatchFlag.MatchExactly)
+        new_motion_type_index = self.motion_type_box.findText(
+            new_motion_type, Qt.MatchFlag.MatchExactly
+        )
         if new_motion_type_index >= 0:
             self.motion_type_box.setCurrentIndex(new_motion_type_index)
             motion = self.pictograph.get_motion_by_color(self.color)
@@ -151,11 +153,11 @@ class MotionTypesWidget(QFrame):
 
     def clear_motion_type_box(self) -> None:
         self.motion_type_box.setCurrentIndex(-1)
-        
 
     def update_motion_type_widget_size(self) -> None:
         self.setFixedSize(
             self.attr_box.attr_box_width,
-            self.motion_type_box.height() + self.type_header_frame.height() + self.attr_box.header_spacing,
+            self.motion_type_box.height()
+            + self.type_header_frame.height()
+            + self.attr_box.header_spacing,
         )
-

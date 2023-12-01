@@ -23,7 +23,7 @@ if TYPE_CHECKING:
     )
 
 
-class AnimatedButton(QPushButton):
+class CustomButton(QPushButton):
     def __init__(
         self, widget: Union["StartEndWidget", "TurnsWidget", "MotionTypesWidget"]
     ):

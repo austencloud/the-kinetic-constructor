@@ -2,8 +2,8 @@ from settings.string_constants import ICON_DIR, SWAP_ICON
 from PyQt6.QtGui import QIcon, QFont, QPainter, QPen
 from PyQt6.QtCore import Qt
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, List, Locations, Colors
-from widgets.graph_editor.attr_panel.attr_box_widgets.animated_button import (
-    AnimatedButton,
+from widgets.graph_editor.attr_panel.attr_box_widgets.custom_button import (
+    CustomButton,
 )
 from widgets.graph_editor.pictograph.pictograph import Pictograph
 
@@ -73,7 +73,6 @@ class StartEndWidget(QWidget):
 
         self.start_box = self._setup_start_end_box()
         self.end_box = self._setup_start_end_box()
-        
 
         self.start_box_with_header_frame = self._create_box_with_header_frame(
             self.start_box, QVBoxLayout, "Start"
@@ -181,7 +180,8 @@ class StartEndWidget(QWidget):
             QSpacerItem(
                 0,
                 int(
-                    self.start_end_header_label.height() + self.attr_box.header_spacing *2
+                    self.start_end_header_label.height()
+                    + self.attr_box.header_spacing * 2
                 ),
                 QSizePolicy.Policy.Minimum,
                 QSizePolicy.Policy.Expanding,
@@ -194,8 +194,8 @@ class StartEndWidget(QWidget):
 
         return button_frame
 
-    def _create_button(self) -> AnimatedButton:
-        button = AnimatedButton(self)
+    def _create_button(self) -> CustomButton:
+        button = CustomButton(self)
         button.setIcon(QIcon(ICON_DIR + SWAP_ICON))
         button.setSizePolicy(
             QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed
