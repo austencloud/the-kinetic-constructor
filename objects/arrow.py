@@ -540,9 +540,6 @@ class Arrow(GraphicalObject):
         self.motion.rotation_direction = new_rotation_direction
 
         self.prop.orientation = self.prop.swap_orientation(self.prop.orientation)
-        self.motion.start_orientation = self.prop.swap_orientation(
-            self.prop.orientation
-        )
         self.motion.end_orientation = self.prop.orientation
 
 
