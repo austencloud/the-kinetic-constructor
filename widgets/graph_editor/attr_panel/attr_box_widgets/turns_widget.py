@@ -60,8 +60,8 @@ class TurnsWidget(QFrame):
             "+1", self._add_turn_callback, is_full_turn=True
         )
 
-        top_layout = QHBoxLayout(self)
-        bottom_layout = QHBoxLayout(self)
+        top_layout = QHBoxLayout()
+        bottom_layout = QHBoxLayout()
 
         self.layout.addLayout(top_layout)
         self.layout.addLayout(bottom_layout)

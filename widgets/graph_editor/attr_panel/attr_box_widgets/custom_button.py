@@ -30,23 +30,9 @@ class CustomButton(QPushButton):
         super().__init__(widget)
         self._color = self.palette().color(QPalette.ColorRole.Button)
         self.widget = widget
-        self.color_animation = QPropertyAnimation(self, b"animatedColor")
         self.button_size = int(self.widget.attr_box.attr_box_width * 0.2 * 0.8)
         self.border_radius = self.button_size / 2
         self.setStyleSheet(self.get_button_style())
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-
-        # Define the circular shape
-        clipping_rectF = QRectF(self.rect().adjusted(1, 1, -1, -1))
-        painter.setBrush(QBrush(self._color))
-        pen = QPen(Qt.GlobalColor.black, 1)
-        painter.setPen(pen)
-        painter.drawEllipse(clipping_rectF)
-
-        super().paintEvent(event)
 
 
     def get_button_style(self):
@@ -67,8 +53,3 @@ class CustomButton(QPushButton):
             f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(204, 228, 247, 255), stop:1 rgba(164, 209, 247, 255));"
             f"}}"
         )
-
-    def isPointInCircle(self, point: QPoint):
-        center = QPoint(int(self.width() / 2), int(self.height() / 2))
-        radius = min(self.width(), self.height()) / 2
-        return (point - center).manhattanLength() < radius

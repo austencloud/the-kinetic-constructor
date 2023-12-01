@@ -119,7 +119,7 @@ class ActionButtonsFrame(QFrame):
             else None
         )
         if arrow:
-            arrow.rotate(direction)
+            arrow.rotate_arrow(direction)
 
     def mirror_selected_arrow(self) -> None:
         """

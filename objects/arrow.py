@@ -354,15 +354,20 @@ class Arrow(GraphicalObject):
 
         self.scene.update_pictograph()
 
-    def rotate(self, rotation_direction: RotationDirections) -> None:
+    def rotate_arrow(self, rotation_direction: RotationDirections) -> None:
         diamond_mode_locations = [NORTH, EAST, SOUTH, WEST]
         box_mode_locations = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
-        if isinstance(self, StaticArrow):
-            self.rotate_static_motion(rotation_direction, diamond_mode_locations)
-        else:
-            self.rotate_shift(rotation_direction, box_mode_locations)
 
-    def rotate_shift(self, rotation_direction, box_mode_locations: List[Locations]):
+        if isinstance(self, StaticArrow):
+            self.rotate_diamond_mode_static_arrow(
+                rotation_direction, diamond_mode_locations
+            )
+        else:
+            self.rotate_diamond_mode_shift_arrow(rotation_direction, box_mode_locations)
+
+    def rotate_diamond_mode_shift_arrow(
+        self, rotation_direction, box_mode_locations: List[Locations]
+    ) -> None:
         current_location_index = box_mode_locations.index(self.arrow_location)
         new_location_index = (
             (current_location_index + 1) % 4
@@ -407,7 +412,7 @@ class Arrow(GraphicalObject):
         self.prop.update_appearance()
         self.scene.update_pictograph()
 
-    def rotate_static_motion(
+    def rotate_diamond_mode_static_arrow(
         self, rotation_direction, diamond_mode_locations: List[Locations]
     ):
         current_location_index = diamond_mode_locations.index(self.arrow_location)

@@ -73,17 +73,17 @@ class HeaderWidget(QWidget):
     def _setup_buttons(self) -> tuple[CustomButton, CustomButton]:
         rotate_ccw_button = self._create_button(f"{ICON_DIR}rotate_ccw.png")
         rotate_cw_button = self._create_button(f"{ICON_DIR}rotate_cw.png")
-        if self.motion:
-            rotate_ccw_button.clicked.connect(self.motion.arrow.rotate("ccw"))
-            rotate_cw_button.clicked.connect(self.motion.arrow.rotate("cw"))
-        buttons = (rotate_ccw_button, rotate_cw_button)
+
+        rotate_ccw_button.clicked.connect(self.rotate_ccw)
+        rotate_cw_button.clicked.connect(self.rotate_cw)
+
+        buttons = (rotate_cw_button, rotate_ccw_button)
         return buttons
 
     def _setup_header_label(self) -> QLabel:
         header_label = QLabel("Left" if self.color == BLUE else "Right", self)
         header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        
         color_hex = RED_HEX if self.color == RED else BLUE_HEX
         font_size = int(header_label.height() * 0.8)
         header_label.setStyleSheet(
@@ -97,12 +97,14 @@ class HeaderWidget(QWidget):
         return button
 
     def rotate_ccw(self) -> None:
-        # Implementation for rotating left
-        pass
+        motion = self.pictograph.get_motion_by_color(self.color)
+        if motion:
+            motion.arrow.rotate_diamond_mode_shift_arrow("ccw")
 
     def rotate_cw(self) -> None:
-        # Implementation for rotating right
-        pass
+        motion = self.pictograph.get_motion_by_color(self.color)
+        if motion:
+            motion.arrow.rotate_diamond_mode_shift_arrow("cw")
 
     def update_header_widget_size(self) -> None:
         self.setFixedSize(
