@@ -45,9 +45,13 @@ class Motion:
         self.rotation_direction: RotationDirections = attributes[ROTATION_DIRECTION]
         self.arrow_location: Locations = attributes[ARROW_LOCATION]
 
-        self.start_location, self.end_location = get_start_end_locations(
-            self.motion_type, self.rotation_direction, self.arrow_location
-        )
+        if self.motion_type in [PRO, ANTI]:
+            self.start_location, self.end_location = get_start_end_locations(
+                self.motion_type, self.rotation_direction, self.arrow_location
+            )
+        elif self.motion_type in [STATIC]:
+            self.start_location = self.arrow_location
+            self.end_location = self.arrow_location
 
         self.start_orientation: Orientations = attributes[START_ORIENTATION]
         self.end_orientation: Orientations = self.get_end_orientation()

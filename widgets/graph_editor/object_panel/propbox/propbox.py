@@ -20,7 +20,7 @@ from settings.string_constants import (
     RED,
     BLUE,
     LAYER,
-    ORIENTATION,
+    ORIENTATION, IN, OUT
 )
 
 from objects.grid import Grid
@@ -47,7 +47,7 @@ class PropBox(ObjectBox):
         self.props: List[Prop] = []
         self.prop_type = None
         self.drag = None
-        self.change_prop_type(Staff)
+        self.change_prop_type(Buugeng)
 
         self.propbox_layout = QVBoxLayout()
         self.propbox_layout.addWidget(self.view)
@@ -74,26 +74,26 @@ class PropBox(ObjectBox):
             {
                 COLOR: RED,
                 PROP_LOCATION: NORTH,
-                LAYER: 2,
-                ORIENTATION: CLOCKWISE,
+                LAYER: 1,
+                ORIENTATION: IN,
             },
             {
                 COLOR: BLUE,
                 PROP_LOCATION: EAST,
-                LAYER: 2,
-                ORIENTATION: CLOCKWISE,
+                LAYER: 1,
+                ORIENTATION: IN,
             },
             {
                 COLOR: RED,
                 PROP_LOCATION: SOUTH,
-                LAYER: 2,
-                ORIENTATION: COUNTER_CLOCKWISE,
+                LAYER: 1,
+                ORIENTATION: IN,
             },
             {
                 COLOR: BLUE,
                 PROP_LOCATION: WEST,
-                LAYER: 2,
-                ORIENTATION: COUNTER_CLOCKWISE,
+                LAYER: 1,
+                ORIENTATION: IN,
             },
         ]
 

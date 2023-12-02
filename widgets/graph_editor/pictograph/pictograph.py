@@ -246,6 +246,8 @@ class Pictograph(QGraphicsScene):
             START_LAYER: start_layer,
         }
 
+        
+
         motion = Motion(self, arrow, prop, motion_attributes)
         arrow.motion = motion
         prop.motion = motion
