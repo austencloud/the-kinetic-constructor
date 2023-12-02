@@ -8,6 +8,7 @@ from data.letter_engine_data import (
 )
 from data.positions_map import positions_map
 from objects.arrow import Arrow
+from objects.motion import Motion
 from settings.string_constants import *
 
 logging.basicConfig(
@@ -114,7 +115,7 @@ class LetterEngine:
         else:
             return None
 
-    def get_motion(self, color: Colors) -> Arrow | None:
+    def get_motion(self, color: Colors) -> Motion | None:
         return next(
             (motion for motion in self.pictograph.motions if motion.color == color),
             None,
@@ -143,13 +144,13 @@ class LetterEngine:
                 "end_position": positions_map.get(end_locations),
             }
 
-            self.red_arrow = red_motion
+            self.red_motion = red_motion
             self.blue_motion = blue_motion
             return specific_position
 
 
     def get_motion_type_letter_group(self) -> LetterGroupsByMotionTypes:
-        red_motion_type = self.red_arrow.motion_type
+        red_motion_type = self.red_motion.motion_type
         blue_motion_type = self.blue_motion.motion_type
 
         motion_type_combination: MotionTypesCombinations = motion_type_combinations.get(
@@ -165,10 +166,12 @@ class LetterEngine:
         return motion_type_letter_group
 
     def is_parallel(self) -> bool:
-        red_start = self.red_arrow.motion.start_location
-        red_end = self.red_arrow.motion.end_location
+        red_start = self.red_motion.start_location
+        red_end = self.red_motion.end_location
+        
         blue_start = self.blue_motion.start_location
         blue_end = self.blue_motion.end_location
+        
         parallel_check_result = (
             red_start,
             red_end,
@@ -187,8 +190,8 @@ class LetterEngine:
 
         # Check if all arrow locations are valid
         arrow_locations = [
-            self.red_arrow.motion.start_location,
-            self.red_arrow.motion.end_location,
+            self.red_motion.start_location,
+            self.red_motion.end_location,
             self.blue_motion.start_location,
             self.blue_motion.end_location,
         ]
@@ -197,7 +200,7 @@ class LetterEngine:
 
         # Calculate directions for red and blue arrows
         red_direction = calculate_direction(
-            self.red_arrow.motion.start_location, self.red_arrow.motion.end_location
+            self.red_motion.start_location, self.red_motion.end_location
         )
         blue_direction = calculate_direction(
             self.blue_motion.start_location, self.blue_motion.end_location
@@ -241,14 +244,14 @@ class LetterEngine:
 
         if any(letter in "STUV" for letter in filtered_letter_group):
             if self.motion_type_combination == "pro_vs_anti":
-                self.pro_arrow = (
-                    self.red_arrow
-                    if self.red_arrow.motion_type == "pro"
+                self.pro_motion = (
+                    self.red_motion
+                    if self.red_motion.motion_type == "pro"
                     else self.blue_motion
                 )
-                self.anti_arrow = (
-                    self.red_arrow
-                    if self.red_arrow.motion_type == "anti"
+                self.anti_motion = (
+                    self.red_motion
+                    if self.red_motion.motion_type == "anti"
                     else self.blue_motion
                 )
                 gamma_same_handpath_hybrid_letter = (
@@ -286,10 +289,10 @@ class LetterEngine:
     ) -> Literal["leading_pro", "leading_anti"] | None:
         """Determine the leading arrow and whether the handpath is a hybrid of same-direction motion."""
         pro_handpath = self.get_handpath_direction(
-            self.pro_arrow.motion.start_location, self.pro_arrow.motion.end_location
+            self.pro_motion.start_location, self.pro_motion.end_location
         )
         anti_handpath = self.get_handpath_direction(
-            self.anti_arrow.motion.start_location, self.anti_arrow.motion.end_location
+            self.anti_motion.start_location, self.anti_motion.end_location
         )
 
         # Both arrows should have the same handpath direction, otherwise, we cannot determine a hybrid
@@ -303,8 +306,8 @@ class LetterEngine:
 
         # Determine the leading arrow based on the counterclockwise position sequence
         ccw_positions = [NORTH, WEST, SOUTH, EAST]
-        pro_start_index = ccw_positions.index(self.pro_arrow.motion.start_location)
-        anti_start_index = ccw_positions.index(self.anti_arrow.motion.start_location)
+        pro_start_index = ccw_positions.index(self.pro_motion.start_location)
+        anti_start_index = ccw_positions.index(self.anti_motion.start_location)
 
         if (
             handpath_direction == CLOCKWISE

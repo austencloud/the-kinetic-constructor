@@ -5,7 +5,15 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import Qt, QSize
-from settings.string_constants import BLUE, BLUE_HEX, RED, RED_HEX, ICON_DIR
+from settings.string_constants import (
+    BLUE,
+    BLUE_HEX,
+    CLOCKWISE_ICON,
+    COUNTER_CLOCKWISE_ICON,
+    RED,
+    RED_HEX,
+    ICON_DIR,
+)
 from utilities.TypeChecking.TypeChecking import Colors
 from typing import TYPE_CHECKING
 from objects.motion import Motion
@@ -14,6 +22,7 @@ from widgets.graph_editor.attr_panel.attr_box_widgets.custom_button import Custo
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
 from settings.string_constants import ICON_DIR
+from PyQt6.QtGui import QPixmap
 
 
 class HeaderWidget(QWidget):
@@ -23,6 +32,9 @@ class HeaderWidget(QWidget):
         self.attr_box = attr_box
         self.color = attr_box.color
         self.pictograph = attr_box.pictograph
+
+        self.clockwise_pixmap = self.load_clock_pixmap(CLOCKWISE_ICON)
+        self.counter_clockwise_pixmap = self.load_clock_pixmap(COUNTER_CLOCKWISE_ICON)
 
         self.motion: Motion = self.attr_box.pictograph.get_motion_by_color(self.color)
         self.clock: QLabel = self._setup_clock()
@@ -51,24 +63,46 @@ class HeaderWidget(QWidget):
         self.rotate_cw_button.setStyleSheet("border: 1px solid black;")
         self.rotate_ccw_button.setStyleSheet("border: 1px solid black;")
 
+    def load_clock_pixmap(self, icon_path: str) -> QPixmap:
+        """Load and scale a clock pixmap."""
+        pixmap = QPixmap(icon_path)
+        if pixmap.isNull():
+            print(f"Failed to load the icon from {icon_path}.")
+            return QPixmap()
+        return pixmap.scaled(
+            int(self.attr_box.width() / 3),
+            int(self.attr_box.width() / 3),
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
+        )
+
     def _setup_clock(self) -> QLabel:
+        # Setup clock label, initially with the clockwise pixmap
         clock_label = QLabel(self)
-        clock_pixmap = QPixmap(f"{ICON_DIR}clock/clockwise.png")
-        if clock_pixmap.isNull():
-            print("Failed to load the clock icon.")
-        else:
-            clock_label.setPixmap(
-                clock_pixmap.scaled(
-                    int(self.attr_box.width() / 3),
-                    int(self.attr_box.width() / 3),
-                    Qt.AspectRatioMode.KeepAspectRatio,
-                    Qt.TransformationMode.SmoothTransformation,
-                )
-            )
+        clock_label.setPixmap(self.clockwise_pixmap)
         clock_label.setFixedSize(
             int(self.attr_box.width() / 3), int(self.attr_box.width() / 3)
         )
         return clock_label
+
+    def update_clock(self) -> None:
+        """Update the clock pixmap based on the motion's rotation direction."""
+        if self.motion and self.motion.rotation_direction == "cw":
+            self.clock.setPixmap(self.clockwise_pixmap)
+        else:
+            self.clock.setPixmap(self.counter_clockwise_pixmap)
+
+    def rotate_ccw(self) -> None:
+        motion = self.pictograph.get_motion_by_color(self.color)
+        if motion:
+            motion.arrow.rotate_arrow("ccw")
+            self.update_clock()  # Update the clock after rotation
+
+    def rotate_cw(self) -> None:
+        motion = self.pictograph.get_motion_by_color(self.color)
+        if motion:
+            motion.arrow.rotate_arrow("cw")
+            self.update_clock()  # Update the clock after rotation
 
     def _setup_buttons(self) -> tuple[CustomButton, CustomButton]:
         rotate_ccw_button = self._create_button(f"{ICON_DIR}rotate_ccw.png")
@@ -95,16 +129,6 @@ class HeaderWidget(QWidget):
         button = CustomButton(self)
         button.setIcon(QIcon(icon_path))
         return button
-
-    def rotate_ccw(self) -> None:
-        motion = self.pictograph.get_motion_by_color(self.color)
-        if motion:
-            motion.arrow.rotate_arrow("ccw")
-
-    def rotate_cw(self) -> None:
-        motion = self.pictograph.get_motion_by_color(self.color)
-        if motion:
-            motion.arrow.rotate_arrow("cw")
 
     def update_header_widget_size(self) -> None:
         self.setFixedSize(
