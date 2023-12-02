@@ -1,6 +1,8 @@
-from settings.string_constants import *
 
-positions_map = {
+from settings.string_constants import *
+from utilities.TypeChecking.TypeChecking import Colors, Locations, SpecificPositions, Dict, Tuple
+
+positions_map: Dict[Tuple[Locations, Colors, Locations, Colors], SpecificPositions] = {
     (NORTH, RED, SOUTH, BLUE): 'alpha1',
     (EAST, RED, WEST, BLUE): 'alpha2',
     (SOUTH, RED, NORTH, BLUE): 'alpha3',
@@ -20,3 +22,5 @@ positions_map = {
     (SOUTH, RED, WEST, BLUE): 'gamma7',
     (WEST, RED, NORTH, BLUE): 'gamma8',
 }
+
+

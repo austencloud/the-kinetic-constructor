@@ -1,0 +1,18 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "python.formatting.provider": "none",
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "cSpell.words": [
+        "\"cumtime\""
+    ],
+    "files.exclude": {
+        ".git": true
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
