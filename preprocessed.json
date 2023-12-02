@@ -8961,29 +8961,6 @@
     ],
     "beta4_gamma7": [
         [
-            "Ω",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "arrow_location": "sw",
-                    "start_location": "w",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "θ",
             [
                 {
@@ -8999,6 +8976,29 @@
                     "color": "red",
                     "motion_type": "pro",
                     "rotation_direction": "ccw",
+                    "arrow_location": "sw",
+                    "start_location": "w",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Ω",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
                     "arrow_location": "sw",
                     "start_location": "w",
                     "end_location": "s",
@@ -9009,29 +9009,6 @@
     ],
     "beta1_gamma8": [
         [
-            "Ω",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "arrow_location": "nw",
-                    "start_location": "n",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "θ",
             [
                 {
@@ -9047,6 +9024,29 @@
                     "color": "red",
                     "motion_type": "pro",
                     "rotation_direction": "ccw",
+                    "arrow_location": "nw",
+                    "start_location": "n",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Ω",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
                     "arrow_location": "nw",
                     "start_location": "n",
                     "end_location": "w",
@@ -9057,29 +9057,6 @@
     ],
     "beta2_gamma5": [
         [
-            "Ω",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "arrow_location": "ne",
-                    "start_location": "e",
-                    "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "θ",
             [
                 {
@@ -9095,6 +9072,29 @@
                     "color": "red",
                     "motion_type": "pro",
                     "rotation_direction": "ccw",
+                    "arrow_location": "ne",
+                    "start_location": "e",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Ω",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
                     "arrow_location": "ne",
                     "start_location": "e",
                     "end_location": "n",
@@ -9105,29 +9105,6 @@
     ],
     "beta3_gamma6": [
         [
-            "Ω",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
-                    "arrow_location": "se",
-                    "start_location": "s",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "θ",
             [
                 {
@@ -9143,6 +9120,29 @@
                     "color": "red",
                     "motion_type": "pro",
                     "rotation_direction": "ccw",
+                    "arrow_location": "se",
+                    "start_location": "s",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Ω",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
                     "arrow_location": "se",
                     "start_location": "s",
                     "end_location": "e",
@@ -9153,29 +9153,6 @@
     ],
     "beta4_gamma1": [
         [
-            "Ω",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "arrow_location": "nw",
-                    "start_location": "w",
-                    "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "θ",
             [
                 {
@@ -9191,6 +9168,29 @@
                     "color": "red",
                     "motion_type": "pro",
                     "rotation_direction": "cw",
+                    "arrow_location": "nw",
+                    "start_location": "w",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Ω",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
                     "arrow_location": "nw",
                     "start_location": "w",
                     "end_location": "n",
@@ -9201,29 +9201,6 @@
     ],
     "beta3_gamma4": [
         [
-            "Ω",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "arrow_location": "sw",
-                    "start_location": "s",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "θ",
             [
                 {
@@ -9239,6 +9216,29 @@
                     "color": "red",
                     "motion_type": "pro",
                     "rotation_direction": "cw",
+                    "arrow_location": "sw",
+                    "start_location": "s",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Ω",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
                     "arrow_location": "sw",
                     "start_location": "s",
                     "end_location": "w",
@@ -9249,29 +9249,6 @@
     ],
     "beta2_gamma3": [
         [
-            "Ω",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "arrow_location": "se",
-                    "start_location": "e",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "θ",
             [
                 {
@@ -9287,6 +9264,29 @@
                     "color": "red",
                     "motion_type": "pro",
                     "rotation_direction": "cw",
+                    "arrow_location": "se",
+                    "start_location": "e",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ],
+        [
+            "Ω",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
                     "arrow_location": "se",
                     "start_location": "e",
                     "end_location": "s",
@@ -9297,29 +9297,6 @@
     ],
     "beta1_gamma2": [
         [
-            "Ω",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "arrow_location": "ne",
-                    "start_location": "n",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "θ",
             [
                 {
@@ -9341,16 +9318,39 @@
                     "turns": 0
                 }
             ]
-        ]
-    ],
-    "beta4_gamma4": [
+        ],
         [
             "Ω",
             [
                 {
                     "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
                     "motion_type": "anti",
-                    "rotation_direction": "cw",
+                    "rotation_direction": "ccw",
+                    "arrow_location": "ne",
+                    "start_location": "n",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "beta4_gamma4": [
+        [
+            "θ",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
                     "arrow_location": "sw",
                     "start_location": "w",
                     "end_location": "s",
@@ -9368,12 +9368,12 @@
             ]
         ],
         [
-            "θ",
+            "Ω",
             [
                 {
                     "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
                     "arrow_location": "sw",
                     "start_location": "w",
                     "end_location": "s",
@@ -9393,12 +9393,12 @@
     ],
     "beta1_gamma1": [
         [
-            "Ω",
+            "θ",
             [
                 {
                     "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
                     "arrow_location": "nw",
                     "start_location": "n",
                     "end_location": "w",
@@ -9416,12 +9416,12 @@
             ]
         ],
         [
-            "θ",
+            "Ω",
             [
                 {
                     "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
                     "arrow_location": "nw",
                     "start_location": "n",
                     "end_location": "w",
@@ -9441,12 +9441,12 @@
     ],
     "beta2_gamma2": [
         [
-            "Ω",
+            "θ",
             [
                 {
                     "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
                     "arrow_location": "ne",
                     "start_location": "e",
                     "end_location": "n",
@@ -9464,12 +9464,12 @@
             ]
         ],
         [
-            "θ",
+            "Ω",
             [
                 {
                     "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
                     "arrow_location": "ne",
                     "start_location": "e",
                     "end_location": "n",
@@ -9489,12 +9489,12 @@
     ],
     "beta3_gamma3": [
         [
-            "Ω",
+            "θ",
             [
                 {
                     "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "cw",
+                    "motion_type": "pro",
+                    "rotation_direction": "ccw",
                     "arrow_location": "se",
                     "start_location": "s",
                     "end_location": "e",
@@ -9512,12 +9512,12 @@
             ]
         ],
         [
-            "θ",
+            "Ω",
             [
                 {
                     "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "ccw",
+                    "motion_type": "anti",
+                    "rotation_direction": "cw",
                     "arrow_location": "se",
                     "start_location": "s",
                     "end_location": "e",
@@ -9537,12 +9537,12 @@
     ],
     "beta4_gamma8": [
         [
-            "Ω",
+            "θ",
             [
                 {
                     "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
                     "arrow_location": "nw",
                     "start_location": "w",
                     "end_location": "n",
@@ -9560,12 +9560,12 @@
             ]
         ],
         [
-            "θ",
+            "Ω",
             [
                 {
                     "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
                     "arrow_location": "nw",
                     "start_location": "w",
                     "end_location": "n",
@@ -9585,12 +9585,12 @@
     ],
     "beta3_gamma7": [
         [
-            "Ω",
+            "θ",
             [
                 {
                     "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
                     "arrow_location": "sw",
                     "start_location": "s",
                     "end_location": "w",
@@ -9608,12 +9608,12 @@
             ]
         ],
         [
-            "θ",
+            "Ω",
             [
                 {
                     "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
                     "arrow_location": "sw",
                     "start_location": "s",
                     "end_location": "w",
@@ -9633,12 +9633,12 @@
     ],
     "beta2_gamma6": [
         [
-            "Ω",
+            "θ",
             [
                 {
                     "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
+                    "motion_type": "pro",
+                    "rotation_direction": "cw",
                     "arrow_location": "se",
                     "start_location": "e",
                     "end_location": "s",
@@ -9656,12 +9656,12 @@
             ]
         ],
         [
-            "θ",
+            "Ω",
             [
                 {
                     "color": "blue",
-                    "motion_type": "pro",
-                    "rotation_direction": "cw",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
                     "arrow_location": "se",
                     "start_location": "e",
                     "end_location": "s",
@@ -9681,29 +9681,6 @@
     ],
     "beta1_gamma5": [
         [
-            "Ω",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "anti",
-                    "rotation_direction": "ccw",
-                    "arrow_location": "ne",
-                    "start_location": "n",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ],
-        [
             "θ",
             [
                 {
@@ -9725,118 +9702,16 @@
                     "turns": 0
                 }
             ]
-        ]
-    ],
-    "gamma1_gamma1": [
+        ],
         [
-            "Γ",
+            "Ω",
             [
                 {
                     "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
+                    "motion_type": "anti",
+                    "rotation_direction": "ccw",
+                    "arrow_location": "ne",
                     "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma2_gamma2": [
-        [
-            "Γ",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma3_gamma3": [
-        [
-            "Γ",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma4_gamma4": [
-        [
-            "Γ",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma5_gamma5": [
-        [
-            "Γ",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "e",
                     "end_location": "e",
                     "turns": 0
                 },
@@ -9847,81 +9722,6 @@
                     "arrow_location": "None",
                     "start_location": "n",
                     "end_location": "n",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma6_gamma6": [
-        [
-            "Γ",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "e",
-                    "end_location": "e",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma7_gamma7": [
-        [
-            "Γ",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "w",
-                    "end_location": "w",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "s",
-                    "end_location": "s",
-                    "turns": 0
-                }
-            ]
-        ]
-    ],
-    "gamma8_gamma8": [
-        [
-            "Γ",
-            [
-                {
-                    "color": "blue",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "n",
-                    "end_location": "n",
-                    "turns": 0
-                },
-                {
-                    "color": "red",
-                    "motion_type": "static",
-                    "rotation_direction": "None",
-                    "arrow_location": "None",
-                    "start_location": "w",
-                    "end_location": "w",
                     "turns": 0
                 }
             ]
@@ -10113,6 +9913,206 @@
                     "arrow_location": "None",
                     "start_location": "w",
                     "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma1_gamma1": [
+        [
+            "Γ",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma2_gamma2": [
+        [
+            "Γ",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma3_gamma3": [
+        [
+            "Γ",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma4_gamma4": [
+        [
+            "Γ",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma5_gamma5": [
+        [
+            "Γ",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "n",
+                    "end_location": "n",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma6_gamma6": [
+        [
+            "Γ",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "e",
+                    "end_location": "e",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma7_gamma7": [
+        [
+            "Γ",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "w",
+                    "end_location": "w",
+                    "turns": 0
+                },
+                {
+                    "color": "red",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "s",
+                    "end_location": "s",
+                    "turns": 0
+                }
+            ]
+        ]
+    ],
+    "gamma8_gamma8": [
+        [
+            "Γ",
+            [
+                {
+                    "color": "blue",
+                    "motion_type": "static",
+                    "rotation_direction": "None",
+                    "arrow_location": "None",
+                    "start_location": "n",
+                    "end_location": "n",
                     "turns": 0
                 },
                 {
