@@ -90,6 +90,7 @@ COLOR_MAP = {RED: RED_HEX, BLUE: BLUE_HEX}
 CLOCK_DIR = ICON_DIR + "clock/"
 CLOCKWISE_ICON = CLOCK_DIR + "clockwise.png"
 COUNTER_CLOCKWISE_ICON = CLOCK_DIR + "counter_clockwise.png"
+EMPTY_CLOCK_ICON = CLOCK_DIR + "empty_clock.png"
 CLOCK_ICON = CLOCK_DIR + "clock.png"
 SWAP_ICON = "swap.png"
 MIRROR_ICON = "mirror.png"

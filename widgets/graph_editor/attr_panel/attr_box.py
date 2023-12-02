@@ -43,7 +43,6 @@ class AttrBox(QFrame):
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
         self.init_ui()
 
-
     def calculate_button_size(self) -> int:
         return int((self.pictograph.view.height() // 2 // 4) * 1)
 
@@ -78,7 +77,7 @@ class AttrBox(QFrame):
         self.setStyleSheet(
             f"#AttributeBox {{ border: {self.border_width}px solid {color_hex}; }}"
         )
-        self.attr_box_width = int(self.attr_panel.width()/2 - self.border_width * 2)
+        self.attr_box_width = int(self.attr_panel.width() / 2 - self.border_width * 2)
         self.header_spacing = int(self.attr_box_width * 0.02)
         self.widget_spacing = int(self.attr_box_width * 0.05)
 
@@ -137,14 +136,13 @@ class AttrBox(QFrame):
 
     def update_attr_box(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
-        if motion:
-            self.update_labels(motion)
+        self.update_labels(motion)
 
     def update_labels(self, motion: "Motion") -> None:
-        self.header_widget.update_clock()
+        self.header_widget._update_clock()
         self.start_end_widget.update_start_end_boxes()
         self.motion_type_widget.update_motion_type_box()
-        self.turns_widget.turns_label.setText(f"{motion.turns}")
+        self.turns_widget.update_turns_label_box(motion)
 
     def get_turns_button_stylesheet(self, button: Literal["small", "large"]) -> str:
         if button == "small":
@@ -198,7 +196,8 @@ class AttrBox(QFrame):
 
     def clear_attr_box(self):
         # Clear all attributes in the attribute box
-        # You might want to clear labels, reset combo boxes, etc.
+        # You might want to clear labels, reset combo boxes, etc.\
+        self.header_widget.clear_clock_label()
         self.motion_type_widget.clear_motion_type_box()
         self.start_end_widget.clear_start_end_boxes()
         self.turns_widget.clear_turns_label()

@@ -47,7 +47,7 @@ class PropBox(ObjectBox):
         self.props: List[Prop] = []
         self.prop_type = None
         self.drag = None
-        self.change_prop_type(Buugeng)
+        self.change_prop_type(Staff)
 
         self.propbox_layout = QVBoxLayout()
         self.propbox_layout.addWidget(self.view)

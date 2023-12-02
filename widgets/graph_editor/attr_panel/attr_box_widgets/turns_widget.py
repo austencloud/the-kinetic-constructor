@@ -192,6 +192,14 @@ class TurnsWidget(QFrame):
 
     ### UPDATERS ###
 
+
+    def update_turns_label_box(self, motion):
+        motion = self.pictograph.get_motion_by_color(self.color)
+        if motion:
+            self.turns_label.setText(f"{motion.turns}")
+        else:
+            self.turns_label.setText("")
+
     def clear_turns_label(self) -> None:
         self.turns_label.setText("")
 
