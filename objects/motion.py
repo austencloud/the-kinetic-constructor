@@ -2,6 +2,7 @@ from utilities.TypeChecking.TypeChecking import (
     MotionAttributesDicts,
     Colors,
     MotionTypes,
+    StartEndLocationsTuple,
     Turns,
     RotationDirections,
     Locations,
@@ -17,6 +18,7 @@ if TYPE_CHECKING:
     from objects.arrow import Arrow
     from objects.prop import Prop
 from settings.string_constants import DASH
+from data.start_end_location_map import get_start_end_locations
 
 
 class Motion:
@@ -43,8 +45,9 @@ class Motion:
         self.rotation_direction: RotationDirections = attributes[ROTATION_DIRECTION]
         self.arrow_location: Locations = attributes[ARROW_LOCATION]
 
-        self.start_location: Locations = attributes[START_LOCATION]
-        self.end_location: Locations = attributes[END_LOCATION]
+        self.start_location, self.end_location = get_start_end_locations(
+            self.motion_type, self.rotation_direction, self.arrow_location
+        )
 
         self.start_orientation: Orientations = attributes[START_ORIENTATION]
         self.end_orientation: Orientations = self.get_end_orientation()
@@ -165,8 +168,8 @@ class Motion:
         self.turns = self.arrow.turns
         self.rotation_direction = self.arrow.rotation_direction
         self.arrow_location = self.arrow.arrow_location
-        self.start_location = self.arrow.start_location
-        self.end_location = self.arrow.end_location
+        self.start_location = self.arrow.motion.start_location
+        self.end_location = self.arrow.motion.end_location
 
     def update_turns(self, turns: int) -> None:
         self.arrow.turns = turns
@@ -185,7 +188,7 @@ class Motion:
             self.arrow.ghost_arrow.update_svg(svg_file)
             self.arrow.ghost_arrow.update_appearance()
         self.pictograph.update_pictograph()
-        
+
     def adjust_turns(self, adjustment: float) -> None:
         potential_new_turns = self.arrow.turns + adjustment
         new_turns_float: float = max(0, min(3, potential_new_turns))
@@ -195,11 +198,11 @@ class Motion:
             new_turns_int: int = int(new_turns_float)
             if new_turns_int != self.arrow.turns:
                 self.update_turns(new_turns_int)
-        else: 
+        else:
             self.end_layer = 2 if self.start_layer == 1 else 1
             if new_turns_float != self.arrow.turns:
                 self.update_turns(new_turns_float)
-            
+
     def add_half_turn(self) -> None:
         self.adjust_turns(0.5)
 
@@ -211,4 +214,3 @@ class Motion:
 
     def subtract_turn(self) -> None:
         self.adjust_turns(-1)
-        

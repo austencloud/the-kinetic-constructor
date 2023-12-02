@@ -41,7 +41,6 @@ class PropBoxDrag(ObjectBoxDrag):
         self.propbox = propbox
         self.objectbox = propbox
         self.static_arrow = None
-        
 
     def match_target_prop(self, target_prop: "Prop") -> None:
         self.target_prop = target_prop
@@ -49,7 +48,7 @@ class PropBoxDrag(ObjectBoxDrag):
         drag_angle = self._get_prop_drag_rotation_angle(target_prop)
         super().match_target_object(target_prop, drag_angle)
         self.set_attributes(target_prop)
-        
+
     def set_attributes(self, target_prop: "Prop") -> None:
         self.color: Colors = target_prop.color
         self.prop_type: PropTypes = target_prop.prop_type
@@ -65,11 +64,15 @@ class PropBoxDrag(ObjectBoxDrag):
 
         self.placed_prop.arrow = self.ghost_prop.arrow
         self.placed_prop.arrow.arrow_location = self.prop_location
-        self.placed_prop.arrow.start_location = self.prop_location
-        self.placed_prop.arrow.end_location = self.prop_location
+        self.placed_prop.arrow.motion.start_location = self.prop_location
+        self.placed_prop.arrow.motion.end_location = self.prop_location
 
         self.pictograph.add_motion(
-            self.placed_prop.arrow, self.placed_prop, STATIC, self.orientation, self.layer
+            self.placed_prop.arrow,
+            self.placed_prop,
+            STATIC,
+            self.orientation,
+            self.layer,
         )
         self.placed_prop.motion.arrow_location = self.prop_location
         self.placed_prop.motion.start_location = self.prop_location
@@ -123,7 +126,9 @@ class PropBoxDrag(ObjectBoxDrag):
             if motion.color == self.color:
                 self.pictograph.motions.remove(motion)
 
-        self.pictograph.add_motion(self.ghost_prop.arrow, self.ghost_prop, STATIC, IN, 1)
+        self.pictograph.add_motion(
+            self.ghost_prop.arrow, self.ghost_prop, STATIC, IN, 1
+        )
 
         self.pictograph.update_pictograph()
         self.move_to_cursor(self.propbox.view.mapFromGlobal(self.pos()))
@@ -141,8 +146,8 @@ class PropBoxDrag(ObjectBoxDrag):
 
         self.ghost_prop.arrow = self.static_arrow
         self.ghost_prop.arrow.arrow_location = self.prop_location
-        self.ghost_prop.arrow.start_location = self.prop_location
-        self.ghost_prop.arrow.end_location = self.prop_location
+        self.ghost_prop.arrow.motion.start_location = self.prop_location
+        self.ghost_prop.arrow.motion.end_location = self.prop_location
 
         ghost_svg = self.ghost_prop.get_svg_file(self.prop_type)
         self.ghost_prop.update_svg(ghost_svg)
@@ -167,8 +172,7 @@ class PropBoxDrag(ObjectBoxDrag):
                         self.orientation,
                         self.layer,
                     )
-                    
-                    
+
                 pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
                     pos_in_main_window
@@ -179,8 +183,8 @@ class PropBoxDrag(ObjectBoxDrag):
                 if self.previous_drag_location != new_location and new_location:
                     self.previous_drag_location = new_location
                     self.ghost_prop.arrow.arrow_location = new_location
-                    self.ghost_prop.arrow.start_location = new_location
-                    self.ghost_prop.arrow.end_location = new_location
+                    self.ghost_prop.arrow.motion.start_location = new_location
+                    self.ghost_prop.arrow.motion.end_location = new_location
                     self.ghost_prop.motion.arrow_location = new_location
                     self.ghost_prop.motion.start_location = new_location
                     self.ghost_prop.motion.end_location = new_location
@@ -274,8 +278,8 @@ class PropBoxDrag(ObjectBoxDrag):
     def _update_static_arrow(self) -> None:
         self.static_arrow.color = self.color
         self.static_arrow.arrow_location = self.prop_location
-        self.static_arrow.start_location = self.prop_location
-        self.static_arrow.end_location = self.prop_location
+        self.static_arrow.motion.start_location = self.prop_location
+        self.static_arrow.motion.end_location = self.prop_location
         self.static_arrow.prop = self.ghost_prop
         self.static_arrow.prop.arrow = self.static_arrow
         self.static_arrow.update_appearance()

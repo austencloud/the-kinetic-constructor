@@ -99,12 +99,12 @@ class HeaderWidget(QWidget):
     def rotate_ccw(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
-            motion.arrow.rotate_diamond_mode_shift_arrow("ccw")
+            motion.arrow.rotate_arrow("ccw")
 
     def rotate_cw(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
-            motion.arrow.rotate_diamond_mode_shift_arrow("cw")
+            motion.arrow.rotate_arrow("cw")
 
     def update_header_widget_size(self) -> None:
         self.setFixedSize(

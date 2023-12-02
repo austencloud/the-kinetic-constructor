@@ -140,7 +140,7 @@
        66    0.001    0.000    0.001    0.000 {method 'connect' of 'PyQt6.QtCore.pyqtBoundSignal' objects}
         1    0.000    0.000    0.001    0.001 d:\CODE\Apps\Sequence_Constructor\objects\grid.py:75(init_handpoints)
        72    0.000    0.000    0.001    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\re\__init__.py:225(compile)
-     7855    0.001    0.000    0.001    0.000 {method 'get' of 'mappingproxy' objects}
+     7855    0.001    0.000    0.001    0.000 {method 'get' of 'mapproxy' objects}
         3    0.001    0.000    0.001    0.000 d:\CODE\Apps\Sequence_Constructor\objects\grid.py:43(__init__)
         1    0.000    0.000    0.001    0.001 d:\CODE\Apps\Sequence_Constructor\objects\grid.py:80(init_layer2_points)
        72    0.000    0.000    0.001    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python311\Lib\re\__init__.py:272(_compile)

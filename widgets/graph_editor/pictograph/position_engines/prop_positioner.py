@@ -63,7 +63,7 @@ class PropPositioner:
         prop_length = prop.boundingRect().width()
         prop_width = prop.boundingRect().height()
 
-        # Define a mapping for position offsets based on orientation and location
+        # Define a map for position offsets based on orientation and location
         position_offsets = {
             (IN, NORTH): QPointF(prop_width / 2, -prop_length / 2),
             (IN, SOUTH): QPointF(-prop_width / 2, prop_length / 2),

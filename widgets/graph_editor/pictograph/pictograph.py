@@ -241,8 +241,6 @@ class Pictograph(QGraphicsScene):
             MOTION_TYPE: motion_type,
             ROTATION_DIRECTION: arrow.rotation_direction,
             ARROW_LOCATION: arrow.arrow_location,
-            START_LOCATION: arrow.start_location,
-            END_LOCATION: arrow.end_location,
             TURNS: arrow.turns,
             START_ORIENTATION: start_orientation,
             START_LAYER: start_layer,

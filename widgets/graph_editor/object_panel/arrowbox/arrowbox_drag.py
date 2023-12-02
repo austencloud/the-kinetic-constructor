@@ -32,6 +32,7 @@ from utilities.TypeChecking.TypeChecking import (
     Turns,
     RotationAngles,
 )
+from data.start_end_location_map import get_start_end_locations
 
 if TYPE_CHECKING:
     from main import MainWindow
@@ -66,8 +67,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.motion_type: MotionTypes = target_arrow.motion_type
         self.arrow_location: Locations = target_arrow.arrow_location
         self.rotation_direction: RotationDirections = target_arrow.rotation_direction
-        self.start_location: Locations = target_arrow.start_location
-        self.end_location: Locations = target_arrow.end_location
+
         self.turns: Turns = target_arrow.turns
 
         self.ghost_arrow = self.pictograph.ghost_arrows[self.color]
@@ -102,7 +102,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         (
             self.start_location,
             self.end_location,
-        ) = self.target_arrow.get_start_end_locations(
+        ) = get_start_end_locations(
             self.motion_type, self.rotation_direction, self.arrow_location
         )
 
@@ -120,14 +120,12 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.ghost_arrow.update_ghost_arrow(self.attributes)
         self.pictograph.update_pictograph()
 
-
     def _update_ghost_arrow_for_new_location(self, new_location) -> None:
         self.ghost_arrow.color = self.color
         self.ghost_arrow.arrow_location = new_location
         self.ghost_arrow.motion_type = self.motion_type
         self.ghost_arrow.rotation_direction = self.rotation_direction
-        self.ghost_arrow.start_location = self.start_location
-        self.ghost_arrow.end_location = self.end_location
+
         self.ghost_arrow.turns = self.turns
         self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
 
@@ -149,7 +147,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
                     self.remove_same_color_objects()
                     self.has_entered_pictograph_once = True
 
-                    
                 pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
                     pos_in_main_window
@@ -159,7 +156,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
                 if self.previous_drag_location != new_location:
                     self._update_arrow_preview_for_new_location(new_location)
-                    
+
     def handle_mouse_release(self) -> None:
         if self.has_entered_pictograph_once:
             self.place_arrow_on_pictograph()
@@ -237,7 +234,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         (
             self.start_location,
             self.end_location,
-        ) = self.target_arrow.get_start_end_locations(
+        ) = get_start_end_locations(
             self.motion_type,
             self.rotation_direction,
             self.arrow_location,
