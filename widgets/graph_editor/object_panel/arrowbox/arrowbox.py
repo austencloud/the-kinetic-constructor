@@ -55,7 +55,7 @@ class ArrowBox(ObjectBox):
         self.target_arrow: "Arrow" = None
         self.arrowbox_layout = QGridLayout()
         self.arrowbox_layout.addWidget(self.view)
-        self.arrowbox_drag = None
+        self.drag = None
 
     def populate_arrows(self) -> None:
         self.arrows: List[Arrow] = []
@@ -189,22 +189,22 @@ class ArrowBox(ObjectBox):
         # Proceed only if the closest arrow is found
         if closest_arrow:
             self.target_arrow = closest_arrow
-            if not self.arrowbox_drag:
+            if not self.drag:
                 pictograph = self.main_widget.graph_editor.pictograph
-                self.arrowbox_drag = ArrowBoxDrag(self.main_window, pictograph, self)
+                self.drag = ArrowBoxDrag(self.main_window, pictograph, self)
             if event.button() == Qt.MouseButton.LeftButton:
-                self.arrowbox_drag.match_target_arrow(self.target_arrow)
-                self.arrowbox_drag.start_drag(event_pos)
+                self.drag.match_target_arrow(self.target_arrow)
+                self.drag.start_drag(event_pos)
         else:
             # If no closest arrow is found, ignore the event
             self.target_arrow = None
             event.ignore()
 
     def mouseMoveEvent(self, event) -> None:
-        if self.target_arrow and self.arrowbox_drag:
+        if self.target_arrow and self.drag:
             scene_pos = event.scenePos()
             event_pos = self.view.mapFromScene(scene_pos)
-            self.arrowbox_drag.handle_mouse_move(event_pos)
+            self.drag.handle_mouse_move(event_pos)
         else:
             cursor_pos = event.scenePos()
             closest_arrow = None
@@ -227,8 +227,8 @@ class ArrowBox(ObjectBox):
                     arrow.is_dim(False)  # Do not highlight the closest one
 
     def mouseReleaseEvent(self, event) -> None:
-        if self.arrowbox_drag:
-            self.arrowbox_drag.handle_mouse_release()
+        if self.drag:
+            self.drag.handle_mouse_release()
             self.target_arrow = None  # Reset
 
         cursor_pos = event.scenePos()
