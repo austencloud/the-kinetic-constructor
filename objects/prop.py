@@ -1,3 +1,4 @@
+from data.start_end_location_map import get_start_end_locations
 from objects.graphical_object import GraphicalObject
 from PyQt6.QtCore import Qt, QPointF
 from settings.string_constants import *
@@ -91,8 +92,8 @@ class Prop(GraphicalObject):
             from objects.arrow import StaticArrow
 
             if isinstance(self.arrow, StaticArrow):
-                self.arrow.start_location = new_location
-                self.arrow.end_location = new_location
+                self.arrow.motion.start_location = new_location
+                self.arrow.motion.end_location = new_location
                 self.motion.arrow_location = new_location
                 self.motion.start_location = new_location
                 self.motion.end_location = new_location
@@ -100,7 +101,10 @@ class Prop(GraphicalObject):
             self.update_appearance()
             self.update_arrow_location(new_location)
 
-            self.ghost_prop.arrow.end_location, self.ghost_prop.arrow.start_location = (
+            (
+                self.ghost_prop.arrow.motion.end_location,
+                self.ghost_prop.arrow.motion.start_location,
+            ) = (
                 new_location,
                 new_location,
             )
@@ -111,8 +115,8 @@ class Prop(GraphicalObject):
 
             self.scene.props.remove(self)
             if self.arrow.motion_type == STATIC:
-                self.arrow.start_location = new_location
-                self.arrow.end_location = new_location
+                self.arrow.motion.start_location = new_location
+                self.arrow.motion.end_location = new_location
 
             self.scene.update_pictograph()
             self.scene.props.append(self)
@@ -168,7 +172,7 @@ class Prop(GraphicalObject):
 
     def update_arrow_location(self, new_location: Locations) -> None:
         if self.arrow.motion_type in [PRO, ANTI]:
-            shift_location_mapping: Dict[
+            shift_location_map: Dict[
                 Tuple(Locations, RotationDirections, MotionTypes),
                 Dict[Locations, Locations],
             ] = {
@@ -213,22 +217,30 @@ class Prop(GraphicalObject):
             current_location = self.arrow.arrow_location
             rotation_direction = self.arrow.rotation_direction
             motion_type = self.arrow.motion_type
-            new_location = shift_location_mapping.get(
+            new_location = shift_location_map.get(
                 (current_location, rotation_direction, motion_type), {}
             ).get(new_location)
 
             if new_location:
                 self.arrow.arrow_location = new_location
-                start_location, end_location = self.arrow.get_start_end_locations(
+                start_location, end_location = get_start_end_locations(
                     motion_type, rotation_direction, new_location
                 )
-                self.arrow.start_location = start_location
-                self.arrow.end_location = end_location
+                self.arrow.motion.start_location = start_location
+                self.arrow.motion.end_location = end_location
                 self.arrow.update_appearance()
+                self.arrow.motion.arrow_location = new_location
+                self.arrow.motion.start_location = start_location
+                self.arrow.motion.end_location = end_location
+
         elif self.arrow.motion_type == STATIC:
+            self.arrow.motion.arrow_location = new_location
+            self.arrow.motion.start_location = new_location
+            self.arrow.motion.end_location = new_location
+
             self.arrow.arrow_location = new_location
-            self.arrow.start_location = new_location
-            self.arrow.end_location = new_location
+            self.arrow.motion.start_location = new_location
+            self.arrow.motion.end_location = new_location
             self.arrow.update_appearance()
 
     def mouseReleaseEvent(self, event) -> None:
@@ -265,7 +277,7 @@ class Prop(GraphicalObject):
 
     def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
-        self.prop_location = target_arrow.end_location
+        self.prop_location = target_arrow.motion.end_location
         self.axis = self.update_axis(self.prop_location)
         self.update_appearance()
 
@@ -277,6 +289,19 @@ class Prop(GraphicalObject):
         elif self.layer == 2:
             self.axis: Axes = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
         return self.axis
+
+    def swap_orientation(self, orientation) -> None:
+        if orientation == IN:
+            orientation = OUT
+        elif orientation == OUT:
+            orientation = IN
+        elif orientation == CLOCKWISE:
+            orientation = COUNTER_CLOCKWISE
+        elif orientation == COUNTER_CLOCKWISE:
+            orientation = CLOCKWISE
+
+        self.update_rotation()
+        return orientation
 
     def get_rotation_angle(self) -> RotationAngles:
         angle_map: Dict[
@@ -387,6 +412,7 @@ class Prop(GraphicalObject):
 
         if self.static_arrow not in self.pictograph.items():
             self.pictograph.addItem(self.static_arrow)
+
 
 class Staff(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:

@@ -63,7 +63,7 @@ class PropPositioner:
         prop_length = prop.boundingRect().width()
         prop_width = prop.boundingRect().height()
 
-        # Define a mapping for position offsets based on orientation and location
+        # Define a map for position offsets based on orientation and location
         position_offsets = {
             (IN, NORTH): QPointF(prop_width / 2, -prop_length / 2),
             (IN, SOUTH): QPointF(-prop_width / 2, prop_length / 2),
@@ -142,7 +142,10 @@ class PropPositioner:
             if converging_motions[0].get(START_LOCATION) != converging_motions[1].get(
                 START_LOCATION
             ):
-                self.reposition_alpha_to_beta(move_prop, converging_motions)
+                if all(prop.layer == 1 for prop in self.pictograph.props) or all(
+                    prop.layer == 2 for prop in self.pictograph.props
+                ):
+                    self.reposition_alpha_to_beta(move_prop, converging_motions)
 
     ### STATIC BETA ### β
 

@@ -1,7 +1,6 @@
 from typing import List
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtWidgets import QGraphicsScene
-from PyQt6.QtCore import QPointF, Qt
+from PyQt6.QtCore import QPointF
 from PyQt6.QtGui import QTransform
 from objects.prop import Prop
 from settings.string_constants import (
@@ -31,17 +30,14 @@ from settings.string_constants import (
     LAYER,
     RED,
     BLUE,
-    IN,
-    OUT,
     NORTH,
     SOUTH,
     WEST,
     EAST,
 )
-from data.start_end_location_mapping import start_end_location_mapping
 from objects.graphical_object import GraphicalObject
 from objects.motion import Motion
-
+from data.start_end_location_map import get_start_end_locations
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
     MotionTypes,
@@ -111,6 +107,7 @@ class Arrow(GraphicalObject):
     ### MOUSE EVENTS ###
 
     def mousePressEvent(self, event) -> None:
+        super().mousePressEvent(event)
         self.setSelected(True)
 
         self.update_ghost_on_click()
@@ -123,25 +120,23 @@ class Arrow(GraphicalObject):
         for item in self.scene.items():
             if item != self:
                 item.setSelected(False)
+        # Notify the pictograph scene about the selection change
+        if self.scene:
+            self.scene.update_attr_panel()
 
     def update_prop_on_click(self) -> None:
         self.prop.color = self.color
-        self.prop.prop_location = self.end_location
-        self.prop.axis = self.prop.update_axis(self.end_location)
+        self.prop.prop_location = self.motion.end_location
+        self.prop.axis = self.prop.update_axis(self.motion.end_location)
 
     def update_ghost_on_click(self) -> None:
         self.ghost_arrow: "GhostArrow" = self.scene.ghost_arrows[self.color]
         self.ghost_arrow.prop = self.prop
         self.ghost_arrow.set_attributes_from_dict(self.attributes)
-        if self.ghost_arrow.is_svg_mirrored != self.is_svg_mirrored:
-            self.ghost_arrow.swap_rot_dir()
-        if self.ghost_arrow.motion_type != self.motion_type:
-            self.ghost_arrow.swap_motion_type()
         self.ghost_arrow.set_arrow_attrs_from_arrow(self)
         self.ghost_arrow.update_appearance()
         self.ghost_arrow.transform = self.transform
         self.scene.addItem(self.ghost_arrow)
-        self.ghost_arrow.prop = self.prop
         self.scene.arrows.append(self.ghost_arrow)
 
     def update_location(self, new_pos: QPointF) -> None:
@@ -173,7 +168,9 @@ class Arrow(GraphicalObject):
 
     def mouseReleaseEvent(self, event) -> None:
         self.scene.removeItem(self.ghost_arrow)
-        self.scene.arrows.remove(self.ghost_arrow)
+        if self.ghost_arrow in self.scene.arrows:
+            self.scene.arrows.remove(self.ghost_arrow)
+
         self.ghost_arrow.prop = None
         self.scene.update_pictograph()
 
@@ -190,20 +187,31 @@ class Arrow(GraphicalObject):
         self.setRotation(angle)
 
     def set_start_end_locations(self) -> None:
-        self.start_location, self.end_location = self.get_start_end_locations(
+        (
+            self.motion.start_location,
+            self.motion.end_location,
+        ) = get_start_end_locations(
             self.motion_type, self.rotation_direction, self.arrow_location
         )
-        self.motion.start_location = self.start_location
-        self.motion.end_location = self.end_location
+        self.motion.start_location = self.motion.start_location
+        self.motion.end_location = self.motion.end_location
 
     def set_arrow_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
         self.motion_type = target_arrow.motion_type
         self.arrow_location = target_arrow.arrow_location
         self.rotation_direction = target_arrow.rotation_direction
-        self.start_location = target_arrow.start_location
-        self.end_location = target_arrow.end_location
+        self.motion.start_location = target_arrow.motion.start_location
+        self.motion.end_location = target_arrow.motion.end_location
         self.turns = target_arrow.turns
+
+        self.motion.color = target_arrow.color
+        self.motion.motion_type = target_arrow.motion_type
+        self.motion.arrow_location = target_arrow.arrow_location
+        self.motion.rotation_direction = target_arrow.rotation_direction
+        self.motion.start_location = target_arrow.motion.start_location
+        self.motion.end_location = target_arrow.motion.end_location
+        self.motion.turns = target_arrow.turns
 
     def update_prop_during_drag(self) -> None:
         for prop in self.scene.prop_set.values():
@@ -214,7 +222,7 @@ class Arrow(GraphicalObject):
                 prop.set_attributes_from_dict(
                     {
                         COLOR: self.color,
-                        PROP_LOCATION: self.end_location,
+                        PROP_LOCATION: self.motion.end_location,
                         LAYER: 1,
                     }
                 )
@@ -293,18 +301,6 @@ class Arrow(GraphicalObject):
     def get_attributes(self) -> ArrowAttributesDicts:
         return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}
 
-    def get_start_end_locations(
-        self,
-        motion_type: MotionTypes,
-        rotation_direction: RotationDirections,
-        arrow_location: Locations,
-    ) -> StartEndLocationsTuple:
-        return (
-            start_end_location_mapping.get(arrow_location, {})
-            .get(rotation_direction, {})
-            .get(motion_type, (None, None))
-        )
-
     def get_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
         svg_file = f"{ARROW_DIR}{motion_type}/{motion_type}_{float(turns)}.svg"
         return svg_file
@@ -312,14 +308,14 @@ class Arrow(GraphicalObject):
     ### MANIPULATION ###
 
     def move_wasd(self, direction: Direction) -> None:
-        wasd_location_mapping = {
+        wasd_location_map = {
             UP: {SOUTHEAST: NORTHEAST, SOUTHWEST: NORTHWEST},
             LEFT: {NORTHEAST: NORTHWEST, SOUTHEAST: SOUTHWEST},
             DOWN: {NORTHEAST: SOUTHEAST, NORTHWEST: SOUTHWEST},
             RIGHT: {NORTHWEST: NORTHEAST, SOUTHWEST: SOUTHEAST},
         }
         current_location = self.arrow_location
-        new_location = wasd_location_mapping.get(direction, {}).get(
+        new_location = wasd_location_map.get(direction, {}).get(
             current_location, current_location
         )
         self.arrow_location = new_location
@@ -327,7 +323,7 @@ class Arrow(GraphicalObject):
         (
             new_start_location,
             new_end_location,
-        ) = self.get_start_end_locations(
+        ) = get_start_end_locations(
             self.motion_type, self.rotation_direction, new_location
         )
 
@@ -341,27 +337,27 @@ class Arrow(GraphicalObject):
             TURNS: self.turns,
         }
 
-        updated_prop_dict = {
-            COLOR: self.color,
-            PROP_LOCATION: new_end_location,
-            LAYER: 1,
-        }
-
         self.update_attributes(updated_arrow_dict)
-        self.prop.update_attributes(updated_prop_dict)
+        self.prop.prop_location = new_end_location
+        self.prop.update_appearance()
         self.motion.update_attr_from_arrow()
 
         self.scene.update_pictograph()
 
-    def rotate(self, rotation_direction: RotationDirections) -> None:
+    def rotate_arrow(self, rotation_direction: RotationDirections) -> None:
         diamond_mode_locations = [NORTH, EAST, SOUTH, WEST]
         box_mode_locations = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
-        if isinstance(self, StaticArrow):
-            self.rotate_static_motion(rotation_direction, diamond_mode_locations)
-        else:
-            self.rotate_shift(rotation_direction, box_mode_locations)
 
-    def rotate_shift(self, rotation_direction, box_mode_locations: List[Locations]):
+        if isinstance(self, StaticArrow):
+            self.rotate_diamond_mode_static_arrow(
+                rotation_direction, diamond_mode_locations
+            )
+        else:
+            self.rotate_diamond_mode_shift(rotation_direction, box_mode_locations)
+
+    def rotate_diamond_mode_shift(
+        self, rotation_direction, box_mode_locations: List[Locations]
+    ) -> None:
         current_location_index = box_mode_locations.index(self.arrow_location)
         new_location_index = (
             (current_location_index + 1) % 4
@@ -373,40 +369,24 @@ class Arrow(GraphicalObject):
         (
             new_start_location,
             new_end_location,
-        ) = self.get_start_end_locations(
+        ) = get_start_end_locations(
             self.motion_type, self.rotation_direction, new_arrow_location
         )
-
-        updated_arrow_dict = {
-            COLOR: self.color,
-            MOTION_TYPE: self.motion_type,
-            ARROW_LOCATION: new_arrow_location,
-            ROTATION_DIRECTION: self.rotation_direction,
-            START_LOCATION: new_start_location,
-            END_LOCATION: new_end_location,
-            TURNS: self.turns,
-        }
-
-        updated_prop_dict = {
-            COLOR: self.color,
-            PROP_LOCATION: new_end_location,
-            LAYER: self.prop.layer,
-        }
 
         self.motion.arrow_location = new_arrow_location
         self.motion.start_location = new_start_location
         self.motion.end_location = new_end_location
+
         self.arrow_location = new_arrow_location
-        self.start_location = new_start_location
-        self.end_location = new_end_location
+        self.motion.start_location = new_start_location
+        self.motion.end_location = new_end_location
         self.prop.prop_location = new_end_location
 
-        self.update_attributes(updated_arrow_dict)
-        self.prop.update_attributes(updated_prop_dict)
+        self.update_appearance()
         self.prop.update_appearance()
         self.scene.update_pictograph()
 
-    def rotate_static_motion(
+    def rotate_diamond_mode_static_arrow(
         self, rotation_direction, diamond_mode_locations: List[Locations]
     ):
         current_location_index = diamond_mode_locations.index(self.arrow_location)
@@ -420,8 +400,8 @@ class Arrow(GraphicalObject):
         self.motion.start_location = new_location
         self.motion.end_location = new_location
         self.arrow_location = new_location
-        self.start_location = new_location
-        self.end_location = new_location
+        self.motion.start_location = new_location
+        self.motion.end_location = new_location
         self.prop.prop_location = new_location
 
         self.motion.update_attr_from_arrow()
@@ -457,8 +437,8 @@ class Arrow(GraphicalObject):
         elif self.rotation_direction == "None":
             new_rotation_direction = "None"
 
-        old_start_location = self.start_location
-        old_end_location = self.end_location
+        old_start_location = self.motion.start_location
+        old_end_location = self.motion.end_location
         new_start_location = old_end_location
         new_end_location = old_start_location
 
@@ -466,19 +446,22 @@ class Arrow(GraphicalObject):
         self.update_svg(svg_file)
 
         self.rotation_direction = new_rotation_direction
-        self.start_location = new_start_location
-        self.end_location = new_end_location
+        self.motion.start_location = new_start_location
+        self.motion.end_location = new_end_location
+
+        self.motion.rotation_direction = new_rotation_direction
+        self.motion.start_location = new_start_location
+        self.motion.end_location = new_end_location
 
         self.prop.color = self.color
         self.prop.prop_location = new_end_location
-        self.prop.layer = 1
 
         self.update_appearance()
         self.prop.update_appearance()
-
-        if not isinstance(self, self.ghost_arrow.__class__) and self.ghost_arrow:
-            self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
-            self.ghost_arrow.update_attributes(self.attributes)
+        if hasattr(self, "ghost_arrow"):
+            if not isinstance(self, self.ghost_arrow.__class__) and self.ghost_arrow:
+                self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
+                self.ghost_arrow.update_attributes(self.attributes)
         self.scene.update_pictograph()
 
     def mirror(self) -> None:
@@ -523,30 +506,39 @@ class Arrow(GraphicalObject):
             MOTION_TYPE: new_motion_type,
             ARROW_LOCATION: self.arrow_location,
             ROTATION_DIRECTION: new_rotation_direction,
-            START_LOCATION: self.start_location,
-            END_LOCATION: self.end_location,
+            START_LOCATION: self.motion.start_location,
+            END_LOCATION: self.motion.end_location,
             TURNS: self.turns,
         }
 
-        new_prop_dict = {
-            COLOR: self.color,
-            PROP_LOCATION: self.end_location,
-            LAYER: 1,
-        }
-
         self.motion_type = new_motion_type
+        self.motion.motion_type = new_motion_type
+        self.rotation_direction = new_rotation_direction
+        self.motion.rotation_direction = new_rotation_direction
+
+        self.prop.orientation = self.prop.swap_orientation(self.prop.orientation)
+        self.motion.end_orientation = self.prop.orientation
+
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.update_svg(svg_file)
         self.update_attributes(new_arrow_dict)
-        self.prop.update(new_prop_dict)
+        if hasattr(self, "ghost_arrow"):
+            self.ghost_arrow.motion_type = new_motion_type
+            self.ghost_arrow.update_svg(svg_file)
+            self.ghost_arrow.update_attributes(new_arrow_dict)
+
+        self.prop.update_appearance()
+
         self.scene.update_pictograph()
 
     def delete(self, keep_prop: bool = False) -> None:
         self.scene.removeItem(self)
         if self in self.scene.arrows:
             self.scene.arrows.remove(self)
+            self.scene.motions.remove(self.motion)
+            self.pictograph.graph_editor.attr_panel.update_panel(self.color)
         if keep_prop:
-            self.prop.create_static_arrow()
+            self.prop._create_static_arrow()
         else:
             self.prop.delete()
 
