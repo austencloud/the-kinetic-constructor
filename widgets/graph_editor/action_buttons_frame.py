@@ -46,7 +46,7 @@ class ActionButtonsFrame(QFrame):
             ),
             ("rotate_right.png", "Rotate Right", self.rotate_selected_arrow, CLOCKWISE),
             (
-                "rotate_cw.png",
+                "rotate_left.png",
                 "Rotate Left",
                 self.rotate_selected_arrow,
                 COUNTER_CLOCKWISE,
@@ -119,7 +119,7 @@ class ActionButtonsFrame(QFrame):
             else None
         )
         if arrow:
-            arrow.rotate_arrow(direction)
+            arrow.rotate(direction)
 
     def mirror_selected_arrow(self) -> None:
         """

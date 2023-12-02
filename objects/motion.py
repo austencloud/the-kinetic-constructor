@@ -2,7 +2,6 @@ from utilities.TypeChecking.TypeChecking import (
     MotionAttributesDicts,
     Colors,
     MotionTypes,
-    StartEndLocationsTuple,
     Turns,
     RotationDirections,
     Locations,
@@ -11,14 +10,13 @@ from utilities.TypeChecking.TypeChecking import (
     Layers,
 )
 from settings.string_constants import *
-from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Dict, Tuple
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.arrow import Arrow
     from objects.prop import Prop
 from settings.string_constants import DASH
-from data.start_end_location_map import get_start_end_locations
 
 
 class Motion:
@@ -45,9 +43,8 @@ class Motion:
         self.rotation_direction: RotationDirections = attributes[ROTATION_DIRECTION]
         self.arrow_location: Locations = attributes[ARROW_LOCATION]
 
-        self.start_location, self.end_location = get_start_end_locations(
-            self.motion_type, self.rotation_direction, self.arrow_location
-        )
+        self.start_location: Locations = attributes[START_LOCATION]
+        self.end_location: Locations = attributes[END_LOCATION]
 
         self.start_orientation: Orientations = attributes[START_ORIENTATION]
         self.end_orientation: Orientations = self.get_end_orientation()
@@ -168,14 +165,13 @@ class Motion:
         self.turns = self.arrow.turns
         self.rotation_direction = self.arrow.rotation_direction
         self.arrow_location = self.arrow.arrow_location
-        self.start_location = self.arrow.motion.start_location
-        self.end_location = self.arrow.motion.end_location
+        self.start_location = self.arrow.start_location
+        self.end_location = self.arrow.end_location
 
     def update_turns(self, turns: int) -> None:
         self.arrow.turns = turns
         self.turns = self.arrow.turns
         self.end_orientation = self.get_end_orientation()
-        self.prop.layer = self.end_layer
         self.prop.orientation = self.end_orientation
         self.prop.update_appearance()
         self.prop.update_rotation()
@@ -189,28 +185,26 @@ class Motion:
             self.arrow.ghost_arrow.update_appearance()
         self.pictograph.update_pictograph()
 
-    def adjust_turns(self, adjustment: float) -> None:
-        potential_new_turns = self.arrow.turns + adjustment
-        new_turns_float: float = max(0, min(3, potential_new_turns))
-
-        if new_turns_float % 1 == 0:
-            self.end_layer = 1 if self.start_layer == 1 else 2
-            new_turns_int: int = int(new_turns_float)
-            if new_turns_int != self.arrow.turns:
-                self.update_turns(new_turns_int)
-        else:
-            self.end_layer = 2 if self.start_layer == 1 else 1
-            if new_turns_float != self.arrow.turns:
-                self.update_turns(new_turns_float)
-
     def add_half_turn(self) -> None:
-        self.adjust_turns(0.5)
+        if self.arrow.turns < 3:
+            self.prop.swap_layer()
+            self.prop.motion.end_layer = self.prop.layer
+            self.prop.swap_axis()
+            self.update_turns(self.arrow.turns + 0.5)
+        else:
+            self.update_turns(3)
 
     def subtract_half_turn(self) -> None:
-        self.adjust_turns(-0.5)
+        if self.arrow.turns > 0:
+            self.prop.swap_layer()
+            self.prop.motion.end_layer = self.prop.layer
+            self.prop.swap_axis()
+            self.update_turns(self.arrow.turns - 0.5)
+        else:
+            self.update_turns(0)
 
     def add_turn(self) -> None:
-        self.adjust_turns(1)
+        self.update_turns(self.arrow.turns + 1 if self.arrow.turns < 3 else 3)
 
     def subtract_turn(self) -> None:
-        self.adjust_turns(-1)
+        self.update_turns(self.arrow.turns - 1 if self.arrow.turns > 0 else 0)

@@ -39,7 +39,6 @@ class PropBoxDrag(ObjectBoxDrag):
         super().__init__(main_window, pictograph, propbox)
         self.attributes: PropAttributesDicts = {}
         self.propbox = propbox
-        self.objectbox = propbox
         self.static_arrow = None
 
     def match_target_prop(self, target_prop: "Prop") -> None:
@@ -47,7 +46,6 @@ class PropBoxDrag(ObjectBoxDrag):
         self.static_arrow = target_prop.static_arrow
         drag_angle = self._get_prop_drag_rotation_angle(target_prop)
         super().match_target_object(target_prop, drag_angle)
-        self.set_attributes(target_prop)
 
     def set_attributes(self, target_prop: "Prop") -> None:
         self.color: Colors = target_prop.color
@@ -64,15 +62,11 @@ class PropBoxDrag(ObjectBoxDrag):
 
         self.placed_prop.arrow = self.ghost_prop.arrow
         self.placed_prop.arrow.arrow_location = self.prop_location
-        self.placed_prop.arrow.motion.start_location = self.prop_location
-        self.placed_prop.arrow.motion.end_location = self.prop_location
+        self.placed_prop.arrow.start_location = self.prop_location
+        self.placed_prop.arrow.end_location = self.prop_location
 
         self.pictograph.add_motion(
-            self.placed_prop.arrow,
-            self.placed_prop,
-            STATIC,
-            self.orientation,
-            self.layer,
+            self.placed_prop.arrow, self.placed_prop, self.orientation, self.layer
         )
         self.placed_prop.motion.arrow_location = self.prop_location
         self.placed_prop.motion.start_location = self.prop_location
@@ -126,9 +120,7 @@ class PropBoxDrag(ObjectBoxDrag):
             if motion.color == self.color:
                 self.pictograph.motions.remove(motion)
 
-        self.pictograph.add_motion(
-            self.ghost_prop.arrow, self.ghost_prop, STATIC, IN, 1
-        )
+        self.pictograph.add_motion(self.ghost_prop.arrow, self.ghost_prop, IN, 1)
 
         self.pictograph.update_pictograph()
         self.move_to_cursor(self.propbox.view.mapFromGlobal(self.pos()))
@@ -146,8 +138,8 @@ class PropBoxDrag(ObjectBoxDrag):
 
         self.ghost_prop.arrow = self.static_arrow
         self.ghost_prop.arrow.arrow_location = self.prop_location
-        self.ghost_prop.arrow.motion.start_location = self.prop_location
-        self.ghost_prop.arrow.motion.end_location = self.prop_location
+        self.ghost_prop.arrow.start_location = self.prop_location
+        self.ghost_prop.arrow.end_location = self.prop_location
 
         ghost_svg = self.ghost_prop.get_svg_file(self.prop_type)
         self.ghost_prop.update_svg(ghost_svg)
@@ -157,6 +149,9 @@ class PropBoxDrag(ObjectBoxDrag):
 
     ### EVENT HANDLERS ###
 
+    def handle_mouse_press(self, event_pos: QPoint) -> None:
+        self._create_static_arrow()
+
     def handle_mouse_move(self, event_pos: QPoint) -> None:
         if self.preview:
             self.move_to_cursor(event_pos)
@@ -164,11 +159,9 @@ class PropBoxDrag(ObjectBoxDrag):
                 if not self.has_entered_pictograph_once:
                     self.has_entered_pictograph_once = True
                     self.remove_same_color_objects()
-                    self._create_static_arrow()
                     self.pictograph.add_motion(
                         self.ghost_prop.arrow,
                         self.ghost_prop,
-                        STATIC,
                         self.orientation,
                         self.layer,
                     )
@@ -183,8 +176,8 @@ class PropBoxDrag(ObjectBoxDrag):
                 if self.previous_drag_location != new_location and new_location:
                     self.previous_drag_location = new_location
                     self.ghost_prop.arrow.arrow_location = new_location
-                    self.ghost_prop.arrow.motion.start_location = new_location
-                    self.ghost_prop.arrow.motion.end_location = new_location
+                    self.ghost_prop.arrow.start_location = new_location
+                    self.ghost_prop.arrow.end_location = new_location
                     self.ghost_prop.motion.arrow_location = new_location
                     self.ghost_prop.motion.start_location = new_location
                     self.ghost_prop.motion.end_location = new_location
@@ -197,7 +190,7 @@ class PropBoxDrag(ObjectBoxDrag):
             self.place_prop_on_pictograph()
         self.deleteLater()
         self.pictograph.update_pictograph()
-        self.propbox.drag = None
+        self.propbox.propbox_drag = None
         self.ghost_prop.arrow = None
         self.reset_drag_state()
         self.previous_drag_location = None
@@ -278,8 +271,8 @@ class PropBoxDrag(ObjectBoxDrag):
     def _update_static_arrow(self) -> None:
         self.static_arrow.color = self.color
         self.static_arrow.arrow_location = self.prop_location
-        self.static_arrow.motion.start_location = self.prop_location
-        self.static_arrow.motion.end_location = self.prop_location
+        self.static_arrow.start_location = self.prop_location
+        self.static_arrow.end_location = self.prop_location
         self.static_arrow.prop = self.ghost_prop
         self.static_arrow.prop.arrow = self.static_arrow
         self.static_arrow.update_appearance()

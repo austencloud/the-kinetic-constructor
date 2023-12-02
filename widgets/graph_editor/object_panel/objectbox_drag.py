@@ -84,6 +84,7 @@ class ObjectBoxDrag(QWidget):
         drag_angle: Optional[RotationAngles],
     ) -> None:
         self.target_object = target_object
+        self.set_attributes(target_object)
         self.color = target_object.color
         self.svg_file = target_object.svg_file
         pixmap = self.create_pixmap(target_object, drag_angle)
@@ -99,14 +100,12 @@ class ObjectBoxDrag(QWidget):
 
     def remove_same_color_objects(self) -> None:
         for prop in self.pictograph.props[:]:
-            if prop.color == self.color:
-                if prop in self.pictograph.items():
-                    self.pictograph.removeItem(prop)
+            if prop.isVisible() and prop.color == self.color:
+                self.pictograph.removeItem(prop)
                 self.pictograph.props.remove(prop)
         for arrow in self.pictograph.arrows[:]:
-            if arrow.color == self.color:
-                if arrow in self.pictograph.items():
-                    self.pictograph.removeItem(arrow)
+            if arrow.isVisible() and arrow.color == self.color:
+                self.pictograph.removeItem(arrow)
                 self.pictograph.arrows.remove(arrow)
         for motion in self.pictograph.motions[:]:
             if motion.color == self.color:

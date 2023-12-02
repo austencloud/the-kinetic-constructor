@@ -14,8 +14,14 @@ from settings.string_constants import (
     END_LOCATION,
     LETTER_SVG_DIR,
     MOTION_TYPE,
+    NORTHEAST,
+    NORTHWEST,
+    LOCATION,
+    PROP_LOCATION,
     RED,
     ROTATION_DIRECTION,
+    SOUTHEAST,
+    SOUTHWEST,
     START_LOCATION,
     TURNS,
     START_ORIENTATION,
@@ -30,10 +36,10 @@ from utilities.TypeChecking.TypeChecking import (
     Layers,
     MotionAttributesDicts,
     List,
-    MotionTypes,
     Optional,
     Orientations,
     Tuple,
+    Locations,
 )
 from widgets.graph_editor.pictograph.pictograph_event_handler import (
     PictographEventHandler,
@@ -168,6 +174,11 @@ class Pictograph(QGraphicsScene):
         else:
             return None
 
+    def get_arrow_by_color(self, color: str) -> Optional[Arrow]:
+        for arrow in self.arrows:
+            if arrow.color == color:
+                return arrow
+
     def get_motion_by_color(self, color: str) -> Optional[Motion]:
         for motion in self.motions:
             if motion.color == color:
@@ -209,16 +220,18 @@ class Pictograph(QGraphicsScene):
 
     def rotate_pictograph(self, direction: str) -> None:
         for arrow in self.arrows:
-            arrow.rotate_arrow(direction)
+            arrow.rotate(direction)
 
     def clear_pictograph(self) -> None:
+        for arrow in self.arrows:
+            self.removeItem(arrow)
+        for prop in self.props:
+            self.removeItem(prop)
+        self.update_letter_item(None)
+        self.motions = []
         self.arrows = []
         self.props = []
-        self.motions = []
-        for item in self.items():
-            if isinstance(item, Arrow) or isinstance(item, Prop):
-                self.removeItem(item)
-        self.update_pictograph()
+        self.update()
 
     def clear_selections(self) -> None:
         for arrow in self.arrows:
@@ -232,15 +245,16 @@ class Pictograph(QGraphicsScene):
         self,
         arrow: Arrow,
         prop: Prop,
-        motion_type: MotionTypes,
         start_orientation: Orientations,
         start_layer: Layers,
     ) -> None:
         motion_attributes: MotionAttributesDicts = {
             COLOR: arrow.color,
-            MOTION_TYPE: motion_type,
+            MOTION_TYPE: arrow.motion_type,
             ROTATION_DIRECTION: arrow.rotation_direction,
             ARROW_LOCATION: arrow.arrow_location,
+            START_LOCATION: arrow.start_location,
+            END_LOCATION: arrow.end_location,
             TURNS: arrow.turns,
             START_ORIENTATION: start_orientation,
             START_LAYER: start_layer,
@@ -258,27 +272,14 @@ class Pictograph(QGraphicsScene):
 
     ### UPDATERS ###
 
-    def update_attr_panel(self):
-        # Pass the selected motion color to update_attr_panel
-        motions = [
-            motion
-            for motion in [
-                self.get_motion_by_color(RED),
-                self.get_motion_by_color(BLUE),
-            ]
-            if motion is not None
-        ]
-
-        if not motions:
-            self.graph_editor.attr_panel.clear_all_attr_boxes()
-        for motion in motions:
-            self.graph_editor.attr_panel.update_panel(motion.color)
-
     def update_pictograph(self) -> None:
         self.update_letter()
         self.update_arrows()
         self.update_props()
         self.update_attr_panel()
+
+    def update_attr_panel(self) -> None:
+        self.graph_editor.attr_panel.update_attr_panel()
 
     def update_arrows(self) -> None:
         self.arrow_positioner.update_arrow_positions()

@@ -91,14 +91,14 @@ CLOCK_DIR = ICON_DIR + "clock/"
 CLOCKWISE_ICON = CLOCK_DIR + "clockwise.png"
 COUNTER_CLOCKWISE_ICON = CLOCK_DIR + "counter_clockwise.png"
 CLOCK_ICON = CLOCK_DIR + "clock.png"
-SWAP_ICON = "swap.png"
+SWAP_ICON = "swap.jpg"
 MIRROR_ICON = "mirror.png"
 DECREMENT_TURNS_ICON = "subtract_turns.png"
 INCREMENT_TURNS_ICON = "add_turns.png"
 SWAP_COLORS_ICON = "swap_colors.png"
 
 ICON_PATHS = {
-    "swap_icon": ICON_DIR + SWAP_ICON,
+    "swap_motion_type": ICON_DIR + SWAP_ICON,
     "swap_start_end": ICON_DIR + MIRROR_ICON,
     "subtract_turns": ICON_DIR + DECREMENT_TURNS_ICON,
     "add_turns": ICON_DIR + INCREMENT_TURNS_ICON,

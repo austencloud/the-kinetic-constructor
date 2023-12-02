@@ -26,8 +26,8 @@ class Grid(QGraphicsSvgItem):
     Attributes:
         svg_file (str): The path to the SVG file for the grid.
         center (QPointF): The coordinates of the center point of the grid.
-        handpoints (Dict[str, QPointF]): A dictionary map hand point names to their coordinates.
-        layer2_points (Dict[str, QPointF]): A dictionary map layer 2 point names to their coordinates.
+        handpoints (Dict[str, QPointF]): A dictionary mapping hand point names to their coordinates.
+        layer2_points (Dict[str, QPointF]): A dictionary mapping layer 2 point names to their coordinates.
 
     Methods:
         get_circle_coordinates: Get the coordinates of a circle in the SVG file.

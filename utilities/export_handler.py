@@ -35,6 +35,7 @@ class ExportHandler:
 
         self.pictograph.render(painter)
         painter.end()
+        image.save("export.png")
 
         for item in selectedItems:
             item.setSelected(True)
