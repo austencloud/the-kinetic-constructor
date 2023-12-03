@@ -110,8 +110,12 @@ class Arrow(GraphicalObject):
         super().mousePressEvent(event)
         self.setSelected(True)
 
-        self.update_ghost_on_click()
-        self.update_prop_on_click()
+        if hasattr(self, "ghost_arrow"):
+            if self.ghost_arrow:
+                self.update_ghost_on_click()
+        if hasattr(self, "prop"):
+            if self.prop:
+                self.update_prop_on_click()
 
         self.scene.arrows.remove(self)
         self.scene.update_pictograph()
@@ -130,14 +134,16 @@ class Arrow(GraphicalObject):
         self.prop.axis = self.prop.update_axis(self.motion.end_location)
 
     def update_ghost_on_click(self) -> None:
-        self.ghost_arrow: "GhostArrow" = self.scene.ghost_arrows[self.color]
-        self.ghost_arrow.prop = self.prop
-        self.ghost_arrow.set_attributes_from_dict(self.attributes)
-        self.ghost_arrow.set_arrow_attrs_from_arrow(self)
-        self.ghost_arrow.update_appearance()
-        self.ghost_arrow.transform = self.transform
-        self.scene.addItem(self.ghost_arrow)
-        self.scene.arrows.append(self.ghost_arrow)
+        from widgets.graph_editor.pictograph.pictograph import Pictograph
+        if isinstance(self.scene, Pictograph):
+            self.ghost_arrow: "GhostArrow" = self.scene.ghost_arrows[self.color]
+            self.ghost_arrow.prop = self.prop
+            self.ghost_arrow.set_attributes_from_dict(self.attributes)
+            self.ghost_arrow.set_arrow_attrs_from_arrow(self)
+            self.ghost_arrow.update_appearance()
+            self.ghost_arrow.transform = self.transform
+            self.scene.addItem(self.ghost_arrow)
+            self.scene.arrows.append(self.ghost_arrow)
 
     def update_location(self, new_pos: QPointF) -> None:
         new_location = self.scene.get_closest_box_point(new_pos)

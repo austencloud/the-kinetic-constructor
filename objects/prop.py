@@ -232,6 +232,7 @@ class Prop(GraphicalObject):
                 self.arrow.motion.arrow_location = new_location
                 self.arrow.motion.start_location = start_location
                 self.arrow.motion.end_location = end_location
+                self.pictograph.update_pictograph()
 
         elif self.arrow.motion_type == STATIC:
             self.arrow.motion.arrow_location = new_location

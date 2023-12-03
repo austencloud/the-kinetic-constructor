@@ -8,22 +8,7 @@ from widgets.main_widget import MainWidget
 
 
 class MainWindow(QMainWindow):
-    """
-    The main window of the Sequence Constructor application. 
-
-    Attributes:
-        graph_editor_layout (QHBoxLayout): The layout for the graph editor widget.
-        sequence_layout (QHBoxLayout): The layout for the sequence widget.
-        option_picker_layout (QHBoxLayout): The layout for the option picker widget.
-    """
-
     def __init__(self, profiler: cProfile.Profile) -> None:
-        """
-        Initializes the MainWindow.
-
-        Args:
-            profiler (cProfile.Profile): The profiler used for performance profiling.
-        """
         super().__init__()
         self.profiler = profiler
 
@@ -32,9 +17,6 @@ class MainWindow(QMainWindow):
         self.init_ui()
 
     def configure_window(self) -> None:
-        """
-        Configures the main window based on the screen used.
-        """
         screens = QApplication.screens()
         if len(screens) > 1:
             screen = screens[1]  # Use the second screen if available
@@ -58,9 +40,6 @@ class MainWindow(QMainWindow):
         )
 
     def init_main_window(self) -> None:
-        """
-        Initializes the main window.
-        """
         self.setMinimumSize(self.main_window_width, self.main_window_height)
         self.main_widget = MainWidget(self)
         self.installEventFilter(self.main_widget)
@@ -69,19 +48,10 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Sequence Constructor")
 
     def init_ui(self) -> None:
-        """
-        Initializes the user interface.
-        """
         # Any additional UI initialization goes here
         pass
 
     def write_profiling_stats_to_file(self, file_path: str) -> None:
-        """
-        Writes the profiling statistics to a file.
-
-        Args:
-            file_path (str): The path to the output file.
-        """
         stats: pstats.Stats = pstats.Stats(self.profiler).sort_stats("cumtime")
         with open(file_path, "w") as f:
             stats.stream: IO[str] = f
