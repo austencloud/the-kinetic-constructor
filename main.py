@@ -3,15 +3,13 @@ import os
 import cProfile
 import pstats
 from typing import IO
-from PyQt6.QtWidgets import QApplication, QMainWindow, QHBoxLayout
-from PyQt6.QtCore import QRect
+from PyQt6.QtWidgets import QApplication, QMainWindow
 from widgets.main_widget import MainWidget
-from PyQt6.QtGui import QScreen
 
 
 class MainWindow(QMainWindow):
     """
-    The main window of the Sequence Constructor application.
+    The main window of the Sequence Constructor application. 
 
     Attributes:
         graph_editor_layout (QHBoxLayout): The layout for the graph editor widget.
