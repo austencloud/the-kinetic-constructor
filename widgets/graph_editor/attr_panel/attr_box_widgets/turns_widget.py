@@ -12,7 +12,7 @@ from PyQt6.QtGui import QFont
 from utilities.TypeChecking.TypeChecking import Colors
 from typing import TYPE_CHECKING, Dict, List, Literal
 
-from widgets.graph_editor.attr_panel.attr_box_widgets.custom_button import CustomButton
+from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
 
 if TYPE_CHECKING:

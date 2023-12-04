@@ -18,7 +18,7 @@ from settings.string_constants import (
 from utilities.TypeChecking.TypeChecking import Colors
 from typing import TYPE_CHECKING
 from objects.motion import Motion
-from widgets.graph_editor.attr_panel.attr_box_widgets.custom_button import CustomButton
+from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
