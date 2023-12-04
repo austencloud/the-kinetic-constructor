@@ -6,7 +6,6 @@ from settings.string_constants import (
     EAST,
     END_POS,
     NORTH,
-    location,
     ROTATION_DIRECTION,
     SOUTH,
     START_POS,

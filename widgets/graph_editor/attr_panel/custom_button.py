@@ -1,14 +1,5 @@
-from PyQt6.QtWidgets import QPushButton, QWidget
-from PyQt6.QtCore import (
-    QPropertyAnimation,
-    QEasingCurve,
-    pyqtProperty,
-    Qt,
-    QRectF,
-    QPoint,
-)
-from PyQt6.QtGui import QColor, QPainter, QBrush, QPen, QPalette, QPainterPath
-from PyQt6.QtGui import QMouseEvent
+from PyQt6.QtWidgets import QPushButton
+from PyQt6.QtGui import QPalette
 from typing import Union, TYPE_CHECKING
 
 if TYPE_CHECKING:

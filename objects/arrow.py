@@ -45,12 +45,10 @@ from utilities.TypeChecking.TypeChecking import (
     RotationDirections,
     Turns,
     Direction,
-    StartEndLocationsTuple,
     RotationAngles,
     TYPE_CHECKING,
     Optional,
     Dict,
-    Tuple,
 )
 
 if TYPE_CHECKING:
@@ -429,7 +427,7 @@ class Arrow(GraphicalObject):
         self.scene.update_pictograph()
 
     def swap_rot_dir(self) -> None:
-        from objects.ghosts.ghost_arrow import GhostArrow
+        pass
 
         if self.is_svg_mirrored:
             self.unmirror()

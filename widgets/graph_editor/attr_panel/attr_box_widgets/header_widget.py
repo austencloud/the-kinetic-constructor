@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
     QLabel,
 )
 from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtCore import Qt
 from settings.string_constants import (
     BLUE,
     BLUE_HEX,
@@ -15,7 +15,6 @@ from settings.string_constants import (
     RED_HEX,
     ICON_DIR,
 )
-from utilities.TypeChecking.TypeChecking import Colors
 from typing import TYPE_CHECKING
 from objects.motion import Motion
 from widgets.graph_editor.attr_panel.custom_button import CustomButton

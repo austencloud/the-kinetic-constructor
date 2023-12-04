@@ -6,7 +6,6 @@ from widgets.sequence.sequence_beats import SequenceBeats
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
 class Sequence(QWidget):

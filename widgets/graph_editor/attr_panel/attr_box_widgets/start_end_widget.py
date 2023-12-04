@@ -1,16 +1,14 @@
 from settings.string_constants import ICON_DIR, SWAP_ICON
-from PyQt6.QtGui import QIcon, QFont, QPainter, QPen
+from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
-from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, List, Locations, Colors
+from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
 from widgets.graph_editor.attr_panel.custom_button import (
     CustomButton,
 )
-from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 from PyQt6.QtWidgets import (
     QWidget,
     QHBoxLayout,
-    QPushButton,
     QLabel,
     QComboBox,
     QVBoxLayout,

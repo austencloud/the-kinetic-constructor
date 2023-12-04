@@ -17,7 +17,6 @@ from settings.string_constants import (
     EAST,
     END_LOCATION,
     LAYER,
-    LOCATION,
     MOTION_TYPE,
     NORTH,
     NORTHEAST,

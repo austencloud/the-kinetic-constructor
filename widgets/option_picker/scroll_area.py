@@ -77,7 +77,6 @@ class ScrollArea(QScrollArea):
         """
         Slot function called when a pictograph button is clicked.
         """
-        pass
 
     def update_scroll_area_size(self) -> None:
         """

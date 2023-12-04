@@ -1,20 +1,14 @@
 from typing import TYPE_CHECKING, List
 
-from PyQt6.QtCore import QRectF, Qt
-from PyQt6.QtGui import QColor, QImage, QPainter
+from PyQt6.QtCore import QRectF
+from PyQt6.QtGui import QColor
 from PyQt6.QtWidgets import (
     QGraphicsScene,
     QGridLayout,
-    QPushButton,
     QGraphicsView,
     QFrame,
 )
 
-from settings.numerical_constants import (
-    GRAPHBOARD_HEIGHT,
-    GRAPHBOARD_WIDTH,
-    PICTOGRAPH_SCALE,
-)
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget

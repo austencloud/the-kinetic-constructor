@@ -5,7 +5,6 @@ from settings.string_constants import (
     COLOR,
     END_LOCATION,
     MOTION_TYPE,
-    LOCATION,
     ROTATION_DIRECTION,
     NORTHEAST,
     SOUTHEAST,

@@ -9,8 +9,6 @@ from objects.prop import Prop, Staff, Club, Buugeng, Fan, Triad, Hoop
 from widgets.graph_editor.object_panel.propbox.propbox_drag import PropBoxDrag
 from widgets.graph_editor.object_panel.propbox.propbox_view import PropBoxView
 from settings.string_constants import (
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
     NORTH,
     EAST,
     PROP_LOCATION,
@@ -20,7 +18,8 @@ from settings.string_constants import (
     RED,
     BLUE,
     LAYER,
-    ORIENTATION, IN, OUT
+    ORIENTATION,
+    IN
 )
 
 from objects.grid import Grid

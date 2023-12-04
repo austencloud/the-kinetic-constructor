@@ -3,7 +3,6 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
     from widgets.graph_editor.object_panel.objectbox import ObjectBox
 
 

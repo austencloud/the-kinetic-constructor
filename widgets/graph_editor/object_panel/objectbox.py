@@ -1,8 +1,5 @@
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsSceneMouseEvent
-from widgets.graph_editor.object_panel.objectbox_drag import ObjectBoxDrag
+from PyQt6.QtWidgets import QGraphicsScene
 from widgets.graph_editor.object_panel.objectbox_view import ObjectBoxView
-from PyQt6.QtCore import Qt
-from objects.graphical_object import GraphicalObject
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:

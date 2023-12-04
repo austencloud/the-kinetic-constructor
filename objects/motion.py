@@ -2,7 +2,6 @@ from utilities.TypeChecking.TypeChecking import (
     MotionAttributesDicts,
     Colors,
     MotionTypes,
-    StartEndLocationsTuple,
     Turns,
     RotationDirections,
     Locations,
@@ -11,7 +10,7 @@ from utilities.TypeChecking.TypeChecking import (
     Layers,
 )
 from settings.string_constants import *
-from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Dict, Tuple
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph

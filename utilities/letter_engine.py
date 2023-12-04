@@ -7,7 +7,6 @@ from data.letter_engine_data import (
     parallel_combinations,
 )
 from data.positions_map import positions_map
-from objects.arrow import Arrow
 from objects.motion import Motion
 from settings.string_constants import *
 
@@ -33,7 +32,6 @@ from utilities.TypeChecking.TypeChecking import (
     RotationDirections,
     SpecificPositions,
     SpecificStartEndPositionsDicts,
-    StartEndLocationsTuple,
 )
 
 

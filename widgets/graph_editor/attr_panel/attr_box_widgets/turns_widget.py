@@ -3,20 +3,15 @@ from PyQt6.QtWidgets import (
     QLabel,
     QVBoxLayout,
     QFrame,
-    QWidget,
-    QSpacerItem,
-    QSizePolicy,
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from utilities.TypeChecking.TypeChecking import Colors
-from typing import TYPE_CHECKING, Dict, List, Literal
+from typing import TYPE_CHECKING, Dict, Literal
 
 from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
 
 

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, List
 
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QGraphicsItem, QGraphicsScene, QGridLayout
+from PyQt6.QtWidgets import QGraphicsItem, QGridLayout
 
 from objects.arrow import Arrow
 from settings.string_constants import (

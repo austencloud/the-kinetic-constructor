@@ -1,6 +1,6 @@
 from data.start_end_location_map import get_start_end_locations
 from objects.graphical_object import GraphicalObject
-from PyQt6.QtCore import Qt, QPointF
+from PyQt6.QtCore import QPointF
 from settings.string_constants import *
 import re
 

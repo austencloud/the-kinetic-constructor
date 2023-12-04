@@ -3,9 +3,7 @@ from PyQt6.QtWidgets import (
     QFrame,
     QVBoxLayout,
     QGroupBox,
-    QLineEdit,
     QLabel,
-    QTextEdit,
     QSizePolicy,
 )
 
