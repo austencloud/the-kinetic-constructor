@@ -63,7 +63,7 @@ class SvgResizer(QMainWindow):
         """
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
-        self.layout = QVBoxLayout(self.central_widget)
+        self.layout: QVBoxLayout = QVBoxLayout(self.central_widget)
 
         # Add widgets to the layout
         self.graphics_view = QGraphicsView()

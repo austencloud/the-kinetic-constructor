@@ -62,6 +62,7 @@ class Pictograph(QGraphicsScene):
         super().__init__()
         self.main_widget = main_widget
         self.graph_editor = graph_editor
+
         self.setup_scene()
         self.setup_components(main_widget)
 
@@ -205,6 +206,7 @@ class Pictograph(QGraphicsScene):
     ### HELPERS ###
 
     def add_to_sequence(self) -> None:
+        self.main_widget.sequence.frame.add_scene_to_next_beat(self)
         self.clear_pictograph()
 
     def rotate_pictograph(self, direction: str) -> None:

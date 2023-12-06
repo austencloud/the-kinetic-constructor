@@ -390,7 +390,9 @@ class Prop(GraphicalObject):
         self.scene.props.remove(self)
         self.scene.update_pictograph()
 
-    def _create_static_arrow(self) -> None:
+    def _create_static_arrow(self, deleted_arrow: "Arrow") -> None:
+        from objects.arrow import StaticArrow
+
         static_arrow_dict = {
             COLOR: self.color,
             MOTION_TYPE: STATIC,
@@ -408,8 +410,9 @@ class Prop(GraphicalObject):
                 self.pictograph.arrows.remove(arrow)
         self.pictograph.addItem(self.static_arrow)
         self.pictograph.arrows.append(self.static_arrow)
-        self.static_arrow.prop = self.ghost_prop
+        self.static_arrow.prop = self
         self.static_arrow.prop.arrow = self.static_arrow
+        self.static_arrow.motion = deleted_arrow.motion
 
         if self.static_arrow not in self.pictograph.items():
             self.pictograph.addItem(self.static_arrow)

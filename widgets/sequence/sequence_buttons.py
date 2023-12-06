@@ -17,7 +17,7 @@ class SequenceButtons(QFrame):
         self.sequence = sequence
         self.button_height = int(self.main_widget.height() * 1 / 20)
 
-        self.layout = QVBoxLayout(self)
+        self.layout:QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
 

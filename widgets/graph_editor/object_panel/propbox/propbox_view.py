@@ -27,6 +27,7 @@ class PropBoxView(ObjectBoxView):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)  # Call the parent class's resizeEvent
         if self.scene():
+            self.resetTransform()
             self.scale(
                 self.width() / self.scene().width(),
                 self.height() / self.scene().height(),

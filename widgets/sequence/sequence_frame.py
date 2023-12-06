@@ -15,8 +15,9 @@ if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.sequence.sequence import Sequence
 
+from widgets.sequence.beat_view import BeatView
 
-class SequenceBeats(QFrame):
+class SequenceFrame(QFrame):
     def __init__(
         self, main_widget: "MainWidget", pictograph: "Pictograph", sequence: "Sequence"
     ) -> None:
@@ -24,27 +25,21 @@ class SequenceBeats(QFrame):
         self.main_widget = main_widget
         self.pictograph = pictograph
         self.sequence = sequence
-        self.beats: List[QGraphicsView] = []
+        self.beats: List[BeatView] = []
 
-        self.layout = QGridLayout(self)
+        self.layout: QGridLayout = QGridLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
         for j in range(4):
             for i in range(4):
-                view = QGraphicsView()
-                scene = QGraphicsScene()
-                view.setScene(scene)
-                view.setSceneRect(0, 0, 100, 100)
-                rect = QRectF(0, 0, 50, 50)
-                color = QColor(255, 0, 0)
-                scene.addRect(rect, color)
-                self.layout.addWidget(view, j, i)
-                self.beats.append(view)
+                beat_view = BeatView()
+                self.layout.addWidget(beat_view, j, i)
+                self.beats.append(beat_view)
 
     def update_size(self) -> None:
         self.setFixedHeight(
-            int(self.main_widget.height() - self.sequence.button_frame.height())
+            int(self.main_widget.height() - self.sequence.buttons.height())
         )
         beat_height = int(((self.height() / 4)))
         beat_width = int(beat_height * 75 / 90)
@@ -54,3 +49,15 @@ class SequenceBeats(QFrame):
         for beat in self.beats:
             beat.setFixedHeight(beat_height)
             beat.setFixedWidth(beat_width)
+
+    def add_scene_to_next_beat(self, scene: QGraphicsScene) -> None:
+        next_beat_index = self.find_next_available_beat()
+        if next_beat_index is not None:
+            self.beats[next_beat_index].set_pictograph(scene)
+
+    def find_next_available_beat(self) -> int:
+        # Implement logic to find the next available beat
+        for i, beat in enumerate(self.beats):
+            if beat.scene() is None or beat.scene().items() == []:  # Check if the beat is empty
+                return i
+        return None  # Return None if all beats are full
