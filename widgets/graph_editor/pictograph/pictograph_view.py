@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QGraphicsView, QPushButton
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
-from settings.string_constants import CLOCKWISE, COUNTER_CLOCKWISE
+from settings.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -25,18 +25,18 @@ class PictographView(QGraphicsView):
 
     def init_buttons(self) -> None:
         self.add_to_sequence_button = self.create_button(
-            "resources/images/icons/add_to_sequence.png",
+            f"{ICON_DIR}add_to_sequence.png",
             self.pictograph.add_to_sequence,
         )
         self.clear_button = self.create_button(
-            "resources/images/icons/clear.png", self.pictograph.clear_pictograph
+            f"{ICON_DIR}clear.png", self.pictograph.clear_pictograph
         )
         self.rotate_cw_button = self.create_button(
-            "resources/images/icons/rotate_cw.png",
+            f"{ICON_DIR}rotate_cw.png",
             lambda: self.pictograph.rotate_pictograph(CLOCKWISE),
         )
         self.rotate_ccw_button = self.create_button(
-            "resources/images/icons/rotate_ccw.png",
+            f"{ICON_DIR}rotate_ccw.png",
             lambda: self.pictograph.rotate_pictograph(COUNTER_CLOCKWISE),
         )
 
@@ -58,12 +58,8 @@ class PictographView(QGraphicsView):
             self.add_to_sequence_button, button_size
         )
         self.configure_button_size_and_position(self.clear_button, button_size)
-        self.configure_button_size_and_position(
-            self.rotate_cw_button, button_size
-        )
-        self.configure_button_size_and_position(
-            self.rotate_ccw_button, button_size
-        )
+        self.configure_button_size_and_position(self.rotate_cw_button, button_size)
+        self.configure_button_size_and_position(self.rotate_ccw_button, button_size)
 
     def configure_button_size_and_position(self, button: QPushButton, size) -> None:
         button.setFixedSize(size, size)

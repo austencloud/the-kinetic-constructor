@@ -2,11 +2,10 @@ from typing import TYPE_CHECKING, List, Dict, Union
 from xml.etree import ElementTree as ET
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtWidgets import QGraphicsScene
 
 
 from settings.string_constants import (
+    GRID_DIR,
     NORTH,
     EAST,
     SOUTH,
@@ -24,12 +23,12 @@ if TYPE_CHECKING:
 
 
 class Grid:
-    def __init__(self, grid_scene: Union['ArrowBox', 'PropBox', 'Pictograph']) -> None:
+    def __init__(self, grid_scene: Union["ArrowBox", "PropBox", "Pictograph"]) -> None:
         self.svg_paths = {
-            "center_point": "resources/images/grid/grid_center_point.svg",
-            "hand_points": "resources/images/grid/grid_hand_points.svg",
-            "layer2_points": "resources/images/grid/grid_layer2_points.svg",
-            "outer_points": "resources/images/grid/grid_outer_points.svg",
+            "center_point": f"{GRID_DIR}grid_center_point.svg",
+            "hand_points": f"{GRID_DIR}grid_hand_points.svg",
+            "layer2_points": f"{GRID_DIR}grid_layer2_points.svg",
+            "outer_points": f"{GRID_DIR}grid_outer_points.svg",
         }
 
         self.items: Dict[str, QGraphicsSvgItem] = {}
@@ -41,7 +40,6 @@ class Grid:
             grid_scene.addItem(item)
             self.items[key] = item
         self.grid_scene = grid_scene
-
 
     def setPos(self, position: QPointF) -> None:
         for item in self.items.values():
@@ -75,14 +73,14 @@ class Grid:
 
     def _determine_svg_file_path(self, circle_id: str) -> str:
         # Logic to determine which SVG file to read based on the circle_id
-        if 'hand' in circle_id:
-            return self.svg_paths['hand_points']
-        elif 'layer2' in circle_id:
-            return self.svg_paths['layer2_points']
-        elif 'outer' in circle_id:
-            return self.svg_paths['outer_points']
-        elif 'center' in circle_id:
-            return self.svg_paths['center_point']
+        if "hand" in circle_id:
+            return self.svg_paths["hand_points"]
+        elif "layer2" in circle_id:
+            return self.svg_paths["layer2_points"]
+        elif "outer" in circle_id:
+            return self.svg_paths["outer_points"]
+        elif "center" in circle_id:
+            return self.svg_paths["center_point"]
         return ""
 
     def init_points(

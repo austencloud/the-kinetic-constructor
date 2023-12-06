@@ -9,6 +9,7 @@ from PyQt6.QtWidgets import (
 )
 from objects.motion import Motion
 from settings.string_constants import (
+    ICON_DIR,
     RED,
     ICON_PATHS,
     RED_HEX,
@@ -29,7 +30,6 @@ from widgets.graph_editor.attr_panel.attr_box_widgets.start_end_widget import (
     StartEndWidget,
 )
 from widgets.graph_editor.attr_panel.attr_box_widgets.turns_widget import TurnsWidget
-
 
 class AttrBox(QFrame):
     def __init__(
@@ -152,48 +152,49 @@ class AttrBox(QFrame):
 
         border_radius = size / 2
 
-        return (
-            f"QPushButton {{"
-            f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(200, 200, 200, 255));"
-            f"   border-radius: {border_radius}px;"
-            f"   border: 1px solid black;"
-            f"   min-width: {size}px;"
-            f"   min-height: {size}px;"  # Adjust height to match width for a circle
-            f"   max-width: {size}px;"
-            f"   max-height: {size}px;"
-            f"}}"
-            f"QPushButton:hover {{"
-            f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(230, 230, 230, 255), stop:1 rgba(200, 200, 200, 255));"
-            f"}}"
-            f"QPushButton:pressed {{"
-            f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(204, 228, 247, 255), stop:1 rgba(164, 209, 247, 255));"
-            f"}}"
-        )
+        return f"""
+            QPushButton {{
+                background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(200, 200, 200, 255));
+                border-radius: {border_radius}px;
+                border: 1px solid black;
+                min-width: {size}px;
+                min-height: {size}px;  # Adjust height to match width for a circle
+                max-width: {size}px;
+                max-height: {size}px;
+            }}
+            QPushButton:hover {{
+                background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(230, 230, 230, 255), stop:1 rgba(200, 200, 200, 255));
+            }}
+            QPushButton:pressed {{
+                background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(204, 228, 247, 255), stop:1 rgba(164, 209, 247, 255));
+            }}
+        """
 
     def get_combobox_style(self) -> str:
         # ComboBox style
-        return (
-            "QComboBox {"
-            "   border: 2px solid black;"
-            "   border-radius: 10px;"
-            "}"
-            "QComboBox::drop-down {"
-            "   subcontrol-origin: padding;"
-            "   subcontrol-position: top right;"
-            "   width: 15px;"
-            "   border-left-width: 1px;"
-            "   border-left-color: darkgray;"
-            "   border-left-style: solid;"
-            "   border-top-right-radius: 3px;"
-            "   border-bottom-right-radius: 3px;"
-            "}"
-            "QComboBox::down-arrow {"
-            "   image: url('resources/images/icons/combobox_arrow.png');"
-            "   width: 10px;"
-            "   height: 10px;"
-            "}"
-        )
+        return f"""
+            QComboBox {{
+                border: 2px solid black;
+                border-radius: 10px;
+            }}
 
+            QComboBox::drop-down {{
+                subcontrol-origin: padding;
+                subcontrol-position: top right;
+                width: 15px;
+                border-left-width: 1px;
+                border-left-color: darkgray;
+                border-left-style: solid;
+                border-top-right-radius: 3px;
+                border-bottom-right-radius: 3px;
+            }}
+
+            QComboBox::down-arrow {{
+                image: url('{ICON_DIR}combobox_arrow.png');
+                width: 10px;
+                height: 10px;
+            }}
+        """
     def clear_attr_box(self):
         # Clear all attributes in the attribute box
         # You might want to clear labels, reset combo boxes, etc.\

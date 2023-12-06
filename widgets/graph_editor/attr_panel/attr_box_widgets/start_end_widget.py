@@ -2,6 +2,7 @@ from settings.string_constants import ICON_DIR, SWAP_ICON
 from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
+from widgets.graph_editor.attr_panel.attr_box_widgets.custom_combo_box import CustomComboBox
 from widgets.graph_editor.attr_panel.custom_button import (
     CustomButton,
 )
@@ -21,37 +22,8 @@ from PyQt6.QtWidgets import (
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
 
-combobox_border = 2
 
 
-class CustomComboBox(QComboBox):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setStyleSheet(
-            f"""
-            QComboBox {{
-                border: {combobox_border}px solid black;
-                border-radius: 10px;
-            }}
-
-            QComboBox::drop-down {{
-                subcontrol-origin: padding;
-                subcontrol-position: top right;
-                width: 15px; /* Width of the arrow */
-                border-left-width: 1px;
-                border-left-color: darkgray;
-                border-left-style: solid; /* Just a single line */
-                border-top-right-radius: 3px; /* Same radius as QComboBox */
-                border-bottom-right-radius: 3px;
-            }}
-
-            QComboBox::down-arrow {{
-                image: url("resources/images/icons/combobox_arrow.png"); /* Path to your custom arrow icon */
-                width: 10px; /* Width of the icon */
-                height: 10px; /* Height of the icon */
-            }}
-        """
-        )
 
 
 class StartEndWidget(QWidget):
@@ -184,7 +156,7 @@ class StartEndWidget(QWidget):
         )
 
         return button_frame
-    
+
     def _create_button(self) -> CustomButton:
         button = CustomButton(self)
         button.setIcon(QIcon(ICON_DIR + SWAP_ICON))

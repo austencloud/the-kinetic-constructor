@@ -1,17 +1,26 @@
-ARROW_DIR = "resources/images/arrows/"
-PROP_DIR = "resources/images/props/"
-LETTER_SVG_DIR = "resources/images/letters/"
-ICON_DIR = "resources/images/icons/"
+import os
+
+current_script_path = os.path.abspath(__file__)
+current_dir = os.path.dirname(current_script_path)
+tka_sequence_constructor_dir = os.path.dirname(current_dir)
+tka_app_dir = os.path.dirname(tka_sequence_constructor_dir)
+resources_path = os.path.join(tka_app_dir, 'resources')
+
+STAFF_SVG_FILE_PATH = os.path.join(resources_path, "images/props/staff.svg")
+CLUB_SVG_FILE_PATH = os.path.join(resources_path, "images/props/club.svg")
+BUUGENG_SVG_FILE_PATH = os.path.join(resources_path, "images/props/buugeng.svg")
+FAN_SVG_FILE_PATH = os.path.join(resources_path, "images/props/fan.svg")
+TRIAD_SVG_FILE_PATH = os.path.join(resources_path, "images/props/triad.svg")
+HOOP_SVG_FILE_PATH = os.path.join(resources_path, "images/props/hoop.svg")
+
+PICTOGRAPH_DIR = os.path.join(resources_path, "images/pictographs/")
+ARROW_DIR = os.path.join(resources_path, "images/arrows/")
+PROP_DIR = os.path.join(resources_path, "images/props/")
+LETTER_SVG_DIR = os.path.join(resources_path, "images/letters/")
+ICON_DIR = os.path.join(resources_path, "images/icons/")
+GRID_DIR = os.path.join(resources_path, "images/grid/")
 
 SVG_NS = "http://www.w3.org/2000/svg"
-
-GRID_FILE_PATH = "resources/images/grid/grid.svg"
-STAFF_SVG_FILE_PATH = "resources/images/props/staff.svg"
-CLUB_SVG_FILE_PATH = "resources/images/props/club.svg"
-BUUGENG_SVG_FILE_PATH = "resources/images/props/buugeng.svg"
-FAN_SVG_FILE_PATH = "resources/images/props/fan.svg"
-TRIAD_SVG_FILE_PATH = "resources/images/props/triad.svg"
-HOOP_SVG_FILE_PATH = "resources/images/props/hoop.svg"
 
 BLUE = "blue"
 RED = "red"
@@ -118,10 +127,4 @@ ARROW_ATTRIBUTES = [
     TURNS,
 ]
 
-PROP_ATTRIBUTES = [
-    COLOR,
-    PROP_TYPE,
-    PROP_LOCATION,
-    LAYER,
-    ORIENTATION
-]
+PROP_ATTRIBUTES = [COLOR, PROP_TYPE, PROP_LOCATION, LAYER, ORIENTATION]

@@ -1,5 +1,6 @@
 import os
 from settings.string_constants import (
+    PICTOGRAPH_DIR,
     START_POS,
     END_POS,
     MOTION_TYPE,
@@ -22,7 +23,7 @@ class PictographGenerator:
         self.main_window = main_widget.main_window
         self.export_handler = main_widget.export_handler
         self.grid = self.pictograph.grid
-        self.output_dir = "images/pictographs"
+        self.output_dir = f"{PICTOGRAPH_DIR}"
         self.letters = main_widget.letters
 
     def generate_all_pictographs(self) -> None:
