@@ -222,7 +222,7 @@ class Pictograph(QGraphicsScene):
         for item in self.items():
             if isinstance(item, Arrow) or isinstance(item, Prop):
                 self.removeItem(item)
-                
+
         self.update_pictograph()
 
     def clear_selections(self) -> None:
@@ -262,8 +262,16 @@ class Pictograph(QGraphicsScene):
         self.motions.append(motion)
 
     def copy_scene(self) -> QGraphicsScene:
-        new_scene = Pictograph(self.main_widget, self.graph_editor)
+        from widgets.sequence.beat import Beat
+        new_scene = Beat(self.main_widget, self.graph_editor)
         new_scene.setSceneRect(self.sceneRect())
+        new_scene.motions = self.motions
+
+        new_scene.ghost_arrows = new_scene.initializer.init_ghost_arrows()
+        new_scene.ghost_props = new_scene.initializer.init_ghost_props()
+        new_scene.grid = new_scene.initializer.init_grid()
+        new_scene.letter_item = new_scene.initializer.init_letter_item()
+
         for item in self.items():
             if isinstance(item, Arrow):
                 new_arrow = Arrow(new_scene, item.get_attributes())
@@ -271,26 +279,54 @@ class Pictograph(QGraphicsScene):
                 new_arrow.setPos(item.pos())
                 new_arrow.setZValue(item.zValue())
                 new_scene.addItem(new_arrow)
+                new_scene.arrows.append(new_arrow)
+                motion = new_scene.get_motion_by_color(new_arrow.color)
+                new_arrow.motion = motion
+                motion.arrow = new_arrow
                 
             elif isinstance(item, Prop):
                 new_prop = Prop(new_scene, item.get_attributes())
                 new_prop.setPos(item.pos())
                 new_prop.setZValue(item.zValue())
-                new_scene.addItem(new_prop)   
-                 
-            elif isinstance(item, Grid):
-                new_grid = Grid(new_scene)
-                grid_position = QPointF(0, 0)
-                new_grid.setPos(grid_position)
-                new_grid.init_center()
-                new_grid.init_handpoints()
-                new_grid.init_layer2_points()
-                new_scene.grid = new_grid
-                        
-            elif isinstance(item, LetterItem):
-                new_letter_item = LetterItem(new_scene)
-                new_letter_item.setPos(item.pos())
-                new_scene.addItem(new_letter_item)
+                new_scene.addItem(new_prop)
+                new_scene.props.append(new_prop)
+                motion = new_scene.get_motion_by_color(new_prop.color)
+                new_prop.motion = motion
+                motion.prop = new_prop
+
+        for arrow in new_scene.arrows:
+            for prop in new_scene.props:
+                if arrow.color == prop.color:
+                    arrow.prop = prop
+                    prop.arrow = arrow
+
+        for arrow in new_scene.arrows:
+            for ghost_arrow in new_scene.ghost_arrows.values():
+                if arrow.color == ghost_arrow.color:
+                    arrow.ghost_arrow = ghost_arrow
+                    ghost_arrow.update_attributes(arrow.get_attributes())
+                    ghost_arrow.set_is_svg_mirrored_from_attributes()
+                    ghost_arrow.update_mirror()
+                    ghost_arrow.update_svg(arrow.svg_file)
+                    ghost_arrow.update_appearance()
+
+        for prop in new_scene.props:
+            for ghost_prop in new_scene.ghost_props.values():
+                if prop.color == ghost_prop.color:
+                    prop.ghost_prop = ghost_prop
+
+        for ghost_arrow in new_scene.ghost_arrows.values():
+            for motion in new_scene.motions:
+                if ghost_arrow.color == motion.color:
+                    ghost_arrow.motion = motion
+                    
+        for ghost_prop in new_scene.ghost_props.values():
+            for motion in new_scene.motions:
+                if ghost_prop.color == motion.color:
+                    ghost_prop.motion = motion
+
+        new_scene.update_pictograph()
+        
         return new_scene
 
     ### UPDATERS ###

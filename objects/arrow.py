@@ -138,6 +138,7 @@ class Arrow(GraphicalObject):
             self.ghost_arrow.prop = self.prop
             self.ghost_arrow.set_attributes_from_dict(self.attributes)
             self.ghost_arrow.set_arrow_attrs_from_arrow(self)
+            self.ghost_arrow.set_is_svg_mirrored_from_attributes()
             self.ghost_arrow.update_appearance()
             self.ghost_arrow.transform = self.transform
             self.scene.addItem(self.ghost_arrow)

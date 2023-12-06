@@ -11,6 +11,7 @@ from settings.string_constants import (
     SOUTHWEST,
     NORTHWEST,
     START_LOCATION,
+    STATIC,
     TURNS,
 )
 from objects.arrow import StaticArrow, Arrow
@@ -38,7 +39,7 @@ class ArrowPositioner:
                 optimal_locations = self.find_optimal_locations()
 
         for arrow in self.pictograph.arrows:
-            if not isinstance(arrow, StaticArrow):
+            if arrow.motion.motion_type is not STATIC:
                 if optimal_locations:
                     self.set_arrow_to_optimal_loc(optimal_locations, arrow)
                 else:
@@ -144,8 +145,8 @@ class ArrowPositioner:
         arrow.setPos(new_pos)
 
     def set_arrow_to_default_loc(self, arrow: "Arrow") -> None:
-        arrow.set_arrow_transform_origin_to_center()
         layer2_point = self.pictograph.grid.layer2_points.get(arrow.arrow_location)
+        arrow.set_arrow_transform_origin_to_center()
         adjustment = QPointF(0, 0)
 
         if arrow.arrow_location == NORTHEAST:
@@ -161,6 +162,5 @@ class ArrowPositioner:
             layer2_point.x() + adjustment.x(),
             layer2_point.y() + adjustment.y(),
         )
-
         final_pos = QPointF(new_pos.x(), new_pos.y())
         arrow.setPos(final_pos - arrow.boundingRect().center())

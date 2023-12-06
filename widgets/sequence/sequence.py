@@ -18,6 +18,7 @@ class Sequence(QWidget):
 
         self.frame = SequenceFrame(self.main_widget, self.pictograph, self)
         self.buttons = SequenceButtons(self.main_widget, self.pictograph, self)
+        self.beats = self.frame.beats
 
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
