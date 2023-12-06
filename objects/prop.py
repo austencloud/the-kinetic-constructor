@@ -388,6 +388,7 @@ class Prop(GraphicalObject):
     def delete(self) -> None:
         self.scene.removeItem(self)
         self.scene.props.remove(self)
+        self.motion.reset_motion_attributes()
         self.scene.update_pictograph()
 
     def _create_static_arrow(self, deleted_arrow: "Arrow") -> None:

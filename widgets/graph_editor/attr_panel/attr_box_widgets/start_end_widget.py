@@ -2,7 +2,9 @@ from settings.string_constants import ICON_DIR, SWAP_ICON
 from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
-from widgets.graph_editor.attr_panel.attr_box_widgets.custom_combo_box import CustomComboBox
+from widgets.graph_editor.attr_panel.attr_box_widgets.custom_combo_box import (
+    CustomComboBox,
+)
 from widgets.graph_editor.attr_panel.custom_button import (
     CustomButton,
 )
@@ -21,9 +23,6 @@ from PyQt6.QtWidgets import (
 
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
-
-
-
 
 
 class StartEndWidget(QWidget):
@@ -212,8 +211,14 @@ class StartEndWidget(QWidget):
     def update_start_end_boxes(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
-            self.start_box.setCurrentText(motion.start_location.upper())
-            self.end_box.setCurrentText(motion.end_location.upper())
+            for location, combo_box in [
+                (motion.start_location, self.start_box),
+                (motion.end_location, self.end_box),
+            ]:
+                if location is None:
+                    combo_box.setCurrentIndex(-1)
+                else:
+                    combo_box.setCurrentText(location.upper())
 
     def update_start_end_widget_size(self) -> None:
         self.setFixedHeight(

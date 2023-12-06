@@ -190,8 +190,8 @@ class TurnsWidget(QFrame):
 
     def update_turns_label_box(self, motion):
         motion = self.pictograph.get_motion_by_color(self.color)
-        if motion:
-            self.turns_label.setText(f"{motion.turns}")
+        if motion and motion.turns is not None:
+            self.turns_label.setText(str(motion.turns))
         else:
             self.turns_label.setText("")
 

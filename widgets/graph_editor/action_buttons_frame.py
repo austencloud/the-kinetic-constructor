@@ -59,7 +59,7 @@ class ActionButtonsFrame(QFrame):
             (
                 "add_to_sequence.png",
                 "Add to Sequence",
-                lambda: self.pictograph.add_to_sequence(),
+                lambda: self.pictograph.add_to_sequence_callback(),
             ),
         ]
 

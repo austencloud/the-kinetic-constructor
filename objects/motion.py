@@ -65,6 +65,19 @@ class Motion:
             self.prop.layer = self.end_layer
             self.prop.update_appearance()
 
+    def reset_motion_attributes(self):
+        self.start_location = None
+        self.end_location = None
+        self.arrow_location = None
+        self.arrow = None
+        self.turns = None
+        self.motion_type = None
+        self.start_layer = None
+        self.end_layer = None
+        self.rotation_direction = None
+        self.start_orientation = None
+        self.end_orientation = None
+
     def get_end_layer(self) -> Layers:
         if self.turns in [0, 1, 2]:
             end_layer = self.start_layer

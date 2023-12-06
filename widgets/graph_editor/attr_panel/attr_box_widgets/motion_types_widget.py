@@ -22,24 +22,24 @@ if TYPE_CHECKING:
 class MotionTypesWidget(QFrame):
     def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__(attr_box)
-        
+
         self.attr_box = attr_box
         self.pictograph = attr_box.pictograph
         self.color = attr_box.color
-        
+
         self.button_frame = self._setup_button_frame()
         self.motion_type_box_frame = self._setup_motion_type_box_frame()
-        
+
         self._setup_main_layout()
 
     def _setup_main_layout(self) -> None:
         main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
-        
+
         main_layout.addWidget(self.button_frame)
         main_layout.addWidget(self.motion_type_box_frame)
-        
+
         return main_layout
 
     def add_black_borders(self):
@@ -108,7 +108,9 @@ class MotionTypesWidget(QFrame):
         motion_type_box = QComboBox(self)
         motion_type_box.addItems(["Pro", "Anti", "Dash", "Static"])
         motion_type_box.setFont(
-            QFont("Arial", int(self.attr_box.attr_box_width / 10), QFont.Weight.Bold, True)
+            QFont(
+                "Arial", int(self.attr_box.attr_box_width / 10), QFont.Weight.Bold, True
+            )
         )
         motion_type_box.setStyleSheet(self.attr_box.get_combobox_style())
         motion_type_box.setFixedWidth(int(self.attr_box.attr_box_width * 0.6))
@@ -153,11 +155,14 @@ class MotionTypesWidget(QFrame):
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
             motion_type = motion.motion_type
-            index = self.motion_type_box.findText(
-                motion_type.capitalize(), Qt.MatchFlag.MatchExactly
-            )
-            if index >= 0:
-                self.motion_type_box.setCurrentIndex(index)
+            if motion_type is None:
+                self.motion_type_box.setCurrentIndex(-1)
+            else:
+                index = self.motion_type_box.findText(
+                    motion_type.capitalize(), Qt.MatchFlag.MatchExactly
+                )
+                if index >= 0:
+                    self.motion_type_box.setCurrentIndex(index)
 
     def clear_motion_type_box(self) -> None:
         self.motion_type_box.setCurrentIndex(-1)
@@ -165,6 +170,5 @@ class MotionTypesWidget(QFrame):
     def update_motion_type_widget_size(self) -> None:
         self.setFixedSize(
             self.attr_box.attr_box_width,
-            self.motion_type_box.height()
-            + self.type_header_frame.height()
+            self.motion_type_box.height() + self.type_header_frame.height(),
         )

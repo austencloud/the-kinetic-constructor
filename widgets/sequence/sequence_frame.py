@@ -17,6 +17,7 @@ if TYPE_CHECKING:
 
 from widgets.sequence.beat_view import BeatView
 
+
 class SequenceFrame(QFrame):
     def __init__(
         self, main_widget: "MainWidget", pictograph: "Pictograph", sequence: "Sequence"
@@ -50,14 +51,17 @@ class SequenceFrame(QFrame):
             beat.setFixedHeight(beat_height)
             beat.setFixedWidth(beat_width)
 
-    def add_scene_to_next_beat(self, scene: QGraphicsScene) -> None:
+    def add_scene_to_sequence(self, copied_scene: 'Pictograph') -> None:
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
-            self.beats[next_beat_index].set_pictograph(scene)
+            self.beats[next_beat_index].set_pictograph(copied_scene)
+
 
     def find_next_available_beat(self) -> int:
         # Implement logic to find the next available beat
         for i, beat in enumerate(self.beats):
-            if beat.scene() is None or beat.scene().items() == []:  # Check if the beat is empty
+            if (
+                beat.scene() is None or beat.scene().items() == []
+            ):  # Check if the beat is empty
                 return i
         return None  # Return None if all beats are full

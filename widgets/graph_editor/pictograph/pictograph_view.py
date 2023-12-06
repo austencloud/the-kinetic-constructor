@@ -26,7 +26,7 @@ class PictographView(QGraphicsView):
     def init_buttons(self) -> None:
         self.add_to_sequence_button = self.create_button(
             f"{ICON_DIR}add_to_sequence.png",
-            self.pictograph.add_to_sequence,
+            self.pictograph.add_to_sequence_callback,
         )
         self.clear_button = self.create_button(
             f"{ICON_DIR}clear.png", self.pictograph.clear_pictograph

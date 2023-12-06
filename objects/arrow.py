@@ -544,9 +544,12 @@ class Arrow(GraphicalObject):
         if keep_prop:
             self.prop._create_static_arrow(self)
         else:
+            self.motion.reset_motion_attributes()
             self.prop.delete()
 
         self.scene.update_pictograph()
+
+
 
 
 class StaticArrow(Arrow):

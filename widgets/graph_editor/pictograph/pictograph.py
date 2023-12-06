@@ -54,7 +54,8 @@ if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.graph_editor import GraphEditor
-    from objects.letter_item import LetterItem
+
+from objects.letter_item import LetterItem
 
 
 class Pictograph(QGraphicsScene):
@@ -205,8 +206,9 @@ class Pictograph(QGraphicsScene):
 
     ### HELPERS ###
 
-    def add_to_sequence(self) -> None:
-        self.main_widget.sequence.frame.add_scene_to_next_beat(self)
+    def add_to_sequence_callback(self) -> None:
+        copied_scene = self.copy_scene()
+        self.main_widget.sequence.frame.add_scene_to_sequence(copied_scene)
         self.clear_pictograph()
 
     def rotate_pictograph(self, direction: str) -> None:
@@ -220,6 +222,7 @@ class Pictograph(QGraphicsScene):
         for item in self.items():
             if isinstance(item, Arrow) or isinstance(item, Prop):
                 self.removeItem(item)
+                
         self.update_pictograph()
 
     def clear_selections(self) -> None:
@@ -248,8 +251,6 @@ class Pictograph(QGraphicsScene):
             START_LAYER: start_layer,
         }
 
-        
-
         motion = Motion(self, arrow, prop, motion_attributes)
         arrow.motion = motion
         prop.motion = motion
@@ -259,6 +260,38 @@ class Pictograph(QGraphicsScene):
                 self.motions.remove(m)
 
         self.motions.append(motion)
+
+    def copy_scene(self) -> QGraphicsScene:
+        new_scene = Pictograph(self.main_widget, self.graph_editor)
+        new_scene.setSceneRect(self.sceneRect())
+        for item in self.items():
+            if isinstance(item, Arrow):
+                new_arrow = Arrow(new_scene, item.get_attributes())
+                new_arrow.setTransformOriginPoint(new_arrow.boundingRect().center())
+                new_arrow.setPos(item.pos())
+                new_arrow.setZValue(item.zValue())
+                new_scene.addItem(new_arrow)
+                
+            elif isinstance(item, Prop):
+                new_prop = Prop(new_scene, item.get_attributes())
+                new_prop.setPos(item.pos())
+                new_prop.setZValue(item.zValue())
+                new_scene.addItem(new_prop)   
+                 
+            elif isinstance(item, Grid):
+                new_grid = Grid(new_scene)
+                grid_position = QPointF(0, 0)
+                new_grid.setPos(grid_position)
+                new_grid.init_center()
+                new_grid.init_handpoints()
+                new_grid.init_layer2_points()
+                new_scene.grid = new_grid
+                        
+            elif isinstance(item, LetterItem):
+                new_letter_item = LetterItem(new_scene)
+                new_letter_item.setPos(item.pos())
+                new_scene.addItem(new_letter_item)
+        return new_scene
 
     ### UPDATERS ###
 
