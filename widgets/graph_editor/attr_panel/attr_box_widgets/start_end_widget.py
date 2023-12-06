@@ -116,7 +116,7 @@ class StartEndWidget(QWidget):
         arrow_label.setFixedWidth(
             int(self.attr_box.attr_box_width / 5)
             - self.attr_box.border_width * 2
-            - combobox_border
+            - self.start_box.combobox_border
         )
         return arrow_label
 

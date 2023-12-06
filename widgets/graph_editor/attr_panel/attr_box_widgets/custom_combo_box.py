@@ -12,11 +12,11 @@ from PyQt6.QtWidgets import QComboBox
 class CustomComboBox(QComboBox):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        combobox_border = 2
+        self.combobox_border = 2
         self.setStyleSheet(
             f"""
             QComboBox {{
-                border: {combobox_border}px solid black;
+                border: {self.combobox_border}px solid black;
                 border-radius: 10px;
             }}
 
