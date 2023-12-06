@@ -134,9 +134,7 @@ class AttrBox(QFrame):
             return
         clock_label.setPixmap(pixmap)
 
-    def update_attr_box(self) -> None:
-        motion = self.pictograph.get_motion_by_color(self.color)
-        self.update_labels(motion)
+
 
     def update_labels(self, motion: "Motion") -> None:
         self.header_widget._update_clock()
@@ -204,7 +202,7 @@ class AttrBox(QFrame):
         self.turns_widget.clear_turns_label()
 
     # Update the update_attr_box method to only update when the corresponding arrow is selected
-    def update_attr_box(self, arrow=None):
+    def update_attr_box(self, arrow=None) -> None:
         if arrow:
             self.update_labels(arrow)
         else:

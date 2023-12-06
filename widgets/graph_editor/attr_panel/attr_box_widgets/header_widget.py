@@ -93,9 +93,11 @@ class HeaderWidget(QWidget):
         if self.motion:
             if self.motion.rotation_direction == "cw":
                 self.clock.setPixmap(self.clockwise_pixmap)
-            else:
+            elif self.motion.rotation_direction == "ccw":
                 self.clock.setPixmap(self.counter_clockwise_pixmap)
-
+            else:
+                self.clock.setPixmap(self.empty_clock_pixmap)
+                
     def clear_clock_label(self) -> None:
         self.clock.setPixmap(self.empty_clock_pixmap)
 

@@ -413,6 +413,15 @@ class Prop(GraphicalObject):
         self.static_arrow.prop = self
         self.static_arrow.prop.arrow = self.static_arrow
         self.static_arrow.motion = deleted_arrow.motion
+        self.motion = deleted_arrow.motion
+        
+        self.motion.start_location = self.prop_location
+        self.motion.end_location = self.prop_location
+        self.motion.arrow_location = self.prop_location
+        self.motion.arrow = self.static_arrow
+        self.motion.turns = 0
+        self.motion.motion_type = STATIC
+
 
         if self.static_arrow not in self.pictograph.items():
             self.pictograph.addItem(self.static_arrow)
