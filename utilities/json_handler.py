@@ -5,6 +5,7 @@ from typing import List, TYPE_CHECKING
 from PyQt6.QtCore import QObject
 
 from objects.arrow import Arrow
+from settings.string_constants import LETTER_JSON_DIR
 from utilities.TypeChecking.TypeChecking import LetterDictionary, Letters
 
 if TYPE_CHECKING:
@@ -16,7 +17,7 @@ class JsonHandler(QObject):
         self.pictograph = pictograph
 
     def load_all_letters(self) -> LetterDictionary:
-        directory = "resources/json"
+        directory = LETTER_JSON_DIR
         letters: LetterDictionary = {}
         for root, dirs, files in os.walk(directory):
             for filename in files:
