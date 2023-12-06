@@ -41,7 +41,6 @@ class Grid:
             grid_scene.addItem(item)
             self.items[key] = item
         self.grid_scene = grid_scene
-        self.toggle_element_visibility("layer2_points", False)
 
 
     def setPos(self, position: QPointF) -> None:
