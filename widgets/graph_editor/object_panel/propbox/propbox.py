@@ -36,13 +36,12 @@ class PropBox(ObjectBox):
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.view = PropBoxView(self)
-
         self.pictograph = pictograph
-        self.grid = Grid("resources/images/grid/grid.svg")
+        
+        self.grid = Grid(self)
         self.grid_position = QPointF(0, 0)
         self.grid.setPos(self.grid_position)
-        self.addItem(self.grid)
-
+        
         self.props: List[Prop] = []
         self.prop_type = None
         self.drag = None

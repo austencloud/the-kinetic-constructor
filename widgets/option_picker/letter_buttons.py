@@ -186,3 +186,4 @@ class LetterButtons(QFrame):
         self.setFixedWidth(int(self.option_picker.width() / 5))
         self.setFixedHeight(int(self.option_picker.height()))
         self.update_letter_buttons_size()
+ 

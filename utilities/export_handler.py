@@ -17,7 +17,6 @@ class ExportHandler:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.pictograph = main_widget.graph_editor.pictograph
         self.grid = self.pictograph.grid
-        self.get_fill_color(self.grid.svg_file)
         self.export_to_png()
 
     ### EXPORTERS ###

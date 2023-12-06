@@ -54,15 +54,15 @@ class PictographInit:
         return view
 
     def init_grid(self) -> Grid:
-        grid = Grid("resources/images/grid/grid.svg")
+        grid = Grid(self.pictograph)
         grid_position = QPointF(0, 0)
         grid.setPos(grid_position)
-        self.pictograph.addItem(grid)
         grid.init_center()
         grid.init_handpoints()
         grid.init_layer2_points()
         self.pictograph.grid = grid
         return grid
+
 
     def init_prop_set(self) -> dict[str, Staff]:
         red_prop_dict = {COLOR: RED, PROP_LOCATION: NORTH, LAYER: 1, ORIENTATION: IN}

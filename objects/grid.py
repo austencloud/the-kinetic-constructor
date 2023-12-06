@@ -1,7 +1,9 @@
-from typing import List, Dict, Union
+from typing import TYPE_CHECKING, List, Dict, Union
 from xml.etree import ElementTree as ET
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+from PyQt6.QtSvg import QSvgRenderer
+from PyQt6.QtWidgets import QGraphicsScene
 
 
 from settings.string_constants import (
@@ -15,40 +17,51 @@ from settings.string_constants import (
     NORTHWEST,
 )
 
+if TYPE_CHECKING:
+    from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
+    from widgets.graph_editor.object_panel.propbox.propbox import PropBox
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 
-class Grid(QGraphicsSvgItem):
-    """
-    Represents a grid object in the application.
 
-    Args:
-        grid_svg_path (str): The path to the SVG file for the grid.
+class Grid:
+    def __init__(self, grid_scene: Union['ArrowBox', 'PropBox', 'Pictograph']) -> None:
+        self.svg_paths = {
+            "center_point": "resources/images/grid/grid_center_point.svg",
+            "hand_points": "resources/images/grid/grid_hand_points.svg",
+            "layer2_points": "resources/images/grid/grid_layer2_points.svg",
+            "outer_points": "resources/images/grid/grid_outer_points.svg",
+        }
 
-    Attributes:
-        svg_file (str): The path to the SVG file for the grid.
-        center (QPointF): The coordinates of the center point of the grid.
-        handpoints (Dict[str, QPointF]): A dictionary map hand point names to their coordinates.
-        layer2_points (Dict[str, QPointF]): A dictionary map layer 2 point names to their coordinates.
+        self.items: Dict[str, QGraphicsSvgItem] = {}
+        for key, path in self.svg_paths.items():
+            item = QGraphicsSvgItem(path)
+            item.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
+            item.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)
+            item.setZValue(-1)
+            grid_scene.addItem(item)
+            self.items[key] = item
+        self.grid_scene = grid_scene
+        self.toggle_element_visibility("layer2_points", False)
 
-    Methods:
-        get_circle_coordinates: Get the coordinates of a circle in the SVG file.
-        init_points: Initialize the points of the grid.
-        init_center: Initialize the center point of the grid.
-        init_handpoints: Initialize the hand points of the grid.
-        init_layer2_points: Initialize the layer 2 points of the grid.
-        mousePressEvent: Handle the mouse press event.
-        mouseMoveEvent: Handle the mouse move event.
-        mouseReleaseEvent: Handle the mouse release event.
-    """
 
-    def __init__(self, grid_svg_path: str) -> None:
-        super().__init__(grid_svg_path)
-        self.svg_file: str = grid_svg_path
-        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
-        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)
-        self.setZValue(-1)
+    def setPos(self, position: QPointF) -> None:
+        for item in self.items.values():
+            item.setPos(position)
+
+    def toggle_element_visibility(self, element_id: str, visible: bool):
+        if element_id in self.items:
+            self.items[element_id].setVisible(visible)
+        else:
+            raise ValueError(f"Element with id '{element_id}' not found.")
 
     def get_circle_coordinates(self, circle_id: str) -> Union[QPointF, None]:
-        with open(self.svg_file, "r") as svg_file:
+        # Determine which SVG file contains the circle based on its ID
+        svg_file_path = self._determine_svg_file_path(circle_id)
+        if not svg_file_path:
+            return None
+
+        # Read and parse the SVG file
+        with open(svg_file_path, "r") as svg_file:
             svg_content = svg_file.read()
 
         root = ET.fromstring(svg_content)
@@ -60,6 +73,18 @@ class Grid(QGraphicsSvgItem):
             return QPointF(cx, cy)
         else:
             return None
+
+    def _determine_svg_file_path(self, circle_id: str) -> str:
+        # Logic to determine which SVG file to read based on the circle_id
+        if 'hand' in circle_id:
+            return self.svg_paths['hand_points']
+        elif 'layer2' in circle_id:
+            return self.svg_paths['layer2_points']
+        elif 'outer' in circle_id:
+            return self.svg_paths['outer_points']
+        elif 'center' in circle_id:
+            return self.svg_paths['center_point']
+        return ""
 
     def init_points(
         self, point_names: List[str], constants: List[str]

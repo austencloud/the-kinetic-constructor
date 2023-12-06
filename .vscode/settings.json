@@ -8,9 +8,7 @@
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
-    "cSpell.words": [
-        "\"cumtime\""
-    ],
+
     "files.exclude": {
         ".git": true
     },

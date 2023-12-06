@@ -49,9 +49,7 @@ class ArrowBox(ObjectBox):
         self.view = ArrowBoxView(self)
 
         self.populate_arrows()
-        self.grid = Grid("resources/images/grid/grid_simple.svg")
-        self.addItem(self.grid)
-        self.grid.setPos(0, 0)
+        self.grid = Grid(self)
         self.target_arrow: "Arrow" = None
         self.arrowbox_layout = QGridLayout()
         self.arrowbox_layout.addWidget(self.view)

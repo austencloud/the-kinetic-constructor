@@ -74,7 +74,7 @@ class LayoutManager:
         self.layouts["main"].addLayout(self.layouts["right"])
 
         self.layouts["option_picker"].addWidget(self.main_widget.option_picker)
-        self.main_window.graph_editor_layout.addWidget(self.graph_editor)
+        self.graph_editor_layout.addWidget(self.graph_editor)
         self.main_widget.setLayout(self.layouts["main"])
         self.main_widget.layout().setSpacing(0)
         self.main_widget.layout().setContentsMargins(0, 0, 0, 0)
