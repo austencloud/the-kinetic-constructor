@@ -59,7 +59,7 @@ class LetterEngine:
                         (letter, combination[1:])
                     )
 
-        # Save them to a file called preprocessed.json with UTF-8 encoding
+        # Save them to a file called preprocessed.json with utf-8 encoding
         with open("preprocessed.json", "w", encoding="utf-8") as f:
             json.dump(
                 preprocessed_start_end_combinations, f, indent=4, ensure_ascii=False
@@ -165,10 +165,10 @@ class LetterEngine:
     def is_parallel(self) -> bool:
         red_start = self.red_motion.start_location
         red_end = self.red_motion.end_location
-        
+
         blue_start = self.blue_motion.start_location
         blue_end = self.blue_motion.end_location
-        
+
         parallel_check_result = (
             red_start,
             red_end,

@@ -61,6 +61,7 @@ if TYPE_CHECKING:
 class Arrow(GraphicalObject):
     def __init__(self, scene, attributes) -> None:
         svg_file = self.get_svg_file(attributes[MOTION_TYPE], attributes[TURNS])
+
         super().__init__(svg_file, scene)
         self.setAcceptHoverEvents(True)
         self._setup_attributes(scene, attributes)
@@ -133,6 +134,7 @@ class Arrow(GraphicalObject):
 
     def update_ghost_on_click(self) -> None:
         from widgets.graph_editor.pictograph.pictograph import Pictograph
+
         if isinstance(self.scene, Pictograph):
             self.ghost_arrow: "GhostArrow" = self.scene.ghost_arrows[self.color]
             self.ghost_arrow.prop = self.prop
@@ -345,7 +347,7 @@ class Arrow(GraphicalObject):
 
         self.motion.start_location = new_start_location
         self.motion.end_location = new_end_location
-        
+
         self.update_attributes(updated_arrow_dict)
         self.prop.prop_location = new_end_location
         self.prop.update_appearance()
@@ -552,8 +554,6 @@ class Arrow(GraphicalObject):
             self.prop.delete()
 
         self.scene.update_pictograph()
-
-
 
 
 class StaticArrow(Arrow):

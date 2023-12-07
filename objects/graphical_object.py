@@ -1,7 +1,7 @@
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
-from settings.string_constants import COLOR_MAP
+from settings.string_constants import BLUE, BLUE_HEX, COLOR_MAP, RED, RED_HEX
 import re
 from typing import TYPE_CHECKING, Union
 
@@ -43,20 +43,22 @@ class GraphicalObject(QGraphicsSvgItem):
         )
         self.setTransformOriginPoint(self.center)
 
-    def set_svg_color(self, new_color: Colors) -> bytes:
+    def set_svg_color(self, new_color: str) -> bytes:
+        COLOR_MAP = {RED: RED_HEX, BLUE: BLUE_HEX}
         new_hex_color = COLOR_MAP.get(new_color)
 
         with open(self.svg_file, "r") as f:
             svg_data = f.read()
 
-        style_tag_pattern = re.compile(
-            r"\.st0{fill\s*:\s*(#[a-fA-F0-9]{6})\s*;}", re.DOTALL
-        )
-        match = style_tag_pattern.search(svg_data)
+        # This regex pattern looks for the fill attribute and captures the color value
+        fill_pattern = re.compile(r'(fill=")(#[a-fA-F0-9]{6})(")')
+        
+        # This function will replace the old color with the new color
+        def replace_color(match):
+            return match.group(1) + new_hex_color + match.group(3)
 
-        if match:
-            old_color = match.group(1)
-            svg_data = svg_data.replace(old_color, new_hex_color)
+        # Replace all occurrences of the fill color
+        svg_data = fill_pattern.sub(replace_color, svg_data)
 
         return svg_data.encode("utf-8")
 

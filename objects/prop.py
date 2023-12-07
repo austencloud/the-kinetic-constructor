@@ -361,21 +361,6 @@ class Prop(GraphicalObject):
             self.layer = 1
         self.update_rotation()
 
-    def set_svg_color(self, new_color: Colors) -> bytes:
-        new_hex_color: ColorsHex = COLOR_MAP.get(new_color)
-
-        with open(self.svg_file, "r") as f:
-            svg_data = f.read()
-
-        style_tag_pattern = re.compile(
-            r"\.st0{fill\s*:\s*(#[a-fA-F0-9]{6})\s*;}", re.DOTALL
-        )
-        match = style_tag_pattern.search(svg_data)
-
-        if match:
-            old_hex_color: ColorsHex = match.group(1)
-            svg_data = svg_data.replace(old_hex_color, new_hex_color)
-        return svg_data.encode("utf-8")
 
     def delete(self) -> None:
         self.scene.removeItem(self)
