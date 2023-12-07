@@ -1,7 +1,4 @@
-from PyQt6.QtWidgets import (
-    QVBoxLayout,
-    QGraphicsSceneMouseEvent
-)
+from PyQt6.QtWidgets import QVBoxLayout, QGraphicsSceneMouseEvent
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.prop import Prop, Staff, Club, Buugeng, Fan, Triad, Hoop
@@ -9,8 +6,10 @@ from objects.prop import Prop, Staff, Club, Buugeng, Fan, Triad, Hoop
 from widgets.graph_editor.object_panel.propbox.propbox_drag import PropBoxDrag
 from widgets.graph_editor.object_panel.propbox.propbox_view import PropBoxView
 from settings.string_constants import (
+    CLOCKWISE,
     NORTH,
     EAST,
+    OUT,
     PROP_LOCATION,
     SOUTH,
     WEST,
@@ -19,12 +18,13 @@ from settings.string_constants import (
     BLUE,
     LAYER,
     ORIENTATION,
-    IN
+    IN,
 )
 
 from objects.grid import Grid
 from widgets.graph_editor.object_panel.objectbox import ObjectBox
 from utilities.TypeChecking.TypeChecking import PropTypes, TYPE_CHECKING, Dict, List
+
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.pictograph.pictograph import Pictograph
@@ -37,11 +37,11 @@ class PropBox(ObjectBox):
         self.main_window = main_widget.main_window
         self.view = PropBoxView(self)
         self.pictograph = pictograph
-        
+
         self.grid = Grid(self)
         self.grid_position = QPointF(0, 0)
         self.grid.setPos(self.grid_position)
-        
+
         self.props: List[Prop] = []
         self.prop_type = None
         self.drag = None
@@ -72,26 +72,26 @@ class PropBox(ObjectBox):
             {
                 COLOR: RED,
                 PROP_LOCATION: NORTH,
-                LAYER: 1,
-                ORIENTATION: IN,
+                LAYER: 2,
+                ORIENTATION: CLOCKWISE,
             },
             {
                 COLOR: BLUE,
                 PROP_LOCATION: EAST,
-                LAYER: 1,
-                ORIENTATION: IN,
+                LAYER: 2,
+                ORIENTATION: CLOCKWISE,
             },
             {
                 COLOR: RED,
                 PROP_LOCATION: SOUTH,
-                LAYER: 1,
-                ORIENTATION: IN,
+                LAYER: 2,
+                ORIENTATION: CLOCKWISE,
             },
             {
                 COLOR: BLUE,
                 PROP_LOCATION: WEST,
-                LAYER: 1,
-                ORIENTATION: IN,
+                LAYER: 2,
+                ORIENTATION: CLOCKWISE,
             },
         ]
 
