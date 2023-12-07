@@ -18,7 +18,7 @@ class MainWindow(QMainWindow):
     def _configure_window(self) -> None:
         screens = QApplication.screens()
         if len(screens) > 1:
-            screen = screens[1]  # Use the second screen if available
+            screen = screens[1] 
         else:
             screen = QApplication.primaryScreen()
 
@@ -44,11 +44,9 @@ class MainWindow(QMainWindow):
         self.show()
         self.setWindowTitle("Sequence Constructor")
 
-
     def write_profiling_stats_to_file(self, file_path: str) -> None:
         stats: pstats.Stats = pstats.Stats(self.profiler).sort_stats("cumtime")
         with open(file_path, "w") as f:
-            stats.stream: IO[str] = f
             stats.print_stats()
         print(f"Main profiling stats written to {file_path}")
 
@@ -59,9 +57,6 @@ def main() -> None:
     """
     profiler: cProfile.Profile = cProfile.Profile()
     profiler.enable()
-
-    os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
-    
     app = QApplication(sys.argv)
     main_window = MainWindow(profiler)
     main_window.setFocus()

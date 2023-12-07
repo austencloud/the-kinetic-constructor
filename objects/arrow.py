@@ -152,8 +152,9 @@ class Arrow(GraphicalObject):
 
         self.set_start_end_locations()
 
-        self.ghost_arrow.set_arrow_attrs_from_arrow(self)
-        self.ghost_arrow.update_appearance()
+        if hasattr(self, "ghost_arrow"):
+            self.ghost_arrow.set_arrow_attrs_from_arrow(self)
+            self.ghost_arrow.update_appearance()
 
         self.prop.set_prop_attrs_from_arrow(self)
         self.prop.update_appearance()
