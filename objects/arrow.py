@@ -342,11 +342,13 @@ class Arrow(GraphicalObject):
             TURNS: self.turns,
         }
 
+        self.motion.start_location = new_start_location
+        self.motion.end_location = new_end_location
+        
         self.update_attributes(updated_arrow_dict)
         self.prop.prop_location = new_end_location
         self.prop.update_appearance()
         self.motion.update_attr_from_arrow()
-
         self.scene.update_pictograph()
 
     def rotate_arrow(self, rotation_direction: RotationDirections) -> None:

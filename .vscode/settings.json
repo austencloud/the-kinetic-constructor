@@ -10,7 +10,8 @@
     "python.testing.pytestEnabled": true,
 
     "files.exclude": {
-        ".git": true
-    },
+        "**/__pycache__": true
+      },
+
     "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

@@ -113,7 +113,7 @@ class Pictograph(QGraphicsScene):
     ### EVENTS ###
 
     def mousePressEvent(self, event) -> None:
-        
+        self.main_widget.deselect_all_except(self)
         self.event_handler.handle_mouse_press(event)
 
     def mouseMoveEvent(self, event) -> None:

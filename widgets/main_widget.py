@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from PyQt6.QtCore import QEvent
 from PyQt6.QtGui import QResizeEvent
@@ -11,6 +11,7 @@ from utilities.layout_manager import LayoutManager
 from utilities.pictograph_generator import PictographGenerator
 from widgets.graph_editor.key_event_handler import KeyEventHandler
 from widgets.graph_editor.graph_editor import GraphEditor
+from widgets.graph_editor.pictograph.pictograph import Pictograph
 from widgets.option_picker.option_picker import OptionPicker
 from widgets.sequence.sequence import Sequence
 
@@ -43,12 +44,31 @@ class MainWidget(QWidget):
 
     def eventFilter(self, source, event: QEvent) -> bool:
         if event.type() == QEvent.Type.KeyPress:
-            self.key_event_handler.keyPressEvent(
-                event, self, self.graph_editor.pictograph
-            )
-            return True
+            active_pictograph = self.find_active_pictograph()
+            if active_pictograph:
+                self.key_event_handler.keyPressEvent(event, self, active_pictograph)
+                return True
         return super().eventFilter(source, event)
 
+    def deselect_all_except(self, active_pictograph: Pictograph) -> None:
+        if self.graph_editor.pictograph != active_pictograph:
+            self.graph_editor.pictograph.clearSelection()
+
+        for beat_view in self.sequence.frame.beats:
+            if beat_view.pictograph and beat_view.pictograph != active_pictograph:
+                beat_view.pictograph.clearSelection()
+
+    def find_active_pictograph(self) -> Optional[Pictograph]:
+        # Check if the main pictograph has a selected item
+        if self.graph_editor.pictograph.selectedItems():
+            return self.graph_editor.pictograph
+
+        # Check each beat for a selected item
+        for beat_view in self.sequence.frame.beats:
+            if beat_view.pictograph and beat_view.pictograph.selectedItems():
+                return beat_view.pictograph
+
+        return None
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
         self.resize(int(self.main_window.width()), int(self.main_window.height()))
