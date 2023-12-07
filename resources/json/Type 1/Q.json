@@ -1,0 +1,276 @@
+{
+  "Q": [
+    [
+      {
+        "start_position": "gamma3",
+        "end_position": "gamma6"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "se",
+        "start_location": "e",
+        "end_location": "s",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "se",
+        "start_location": "s",
+        "end_location": "e",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 574.5,
+          "y": 618.5
+        },
+        "optimal_red_location": {
+          "x": 536.5,
+          "y": 536.5
+        }
+      }
+    ],
+    [
+      {
+        "start_position": "gamma4",
+        "end_position": "gamma7"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "sw",
+        "start_location": "s",
+        "end_location": "w",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "sw",
+        "start_location": "w",
+        "end_location": "s",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 219.0,
+          "y": 524.0
+        },
+        "optimal_red_location": {
+          "x": 186.0,
+          "y": 601.0
+        }
+      }
+    ],
+    [
+      {
+        "start_position": "gamma1",
+        "end_position": "gamma8"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "nw",
+        "start_location": "w",
+        "end_location": "n",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "nw",
+        "start_location": "n",
+        "end_location": "w",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 205.0,
+          "y": 214.0
+        },
+        "optimal_red_location": {
+          "x": 130.0,
+          "y": 174.0
+        }
+      }
+    ],
+    [
+      {
+        "start_position": "gamma2",
+        "end_position": "gamma5"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "ne",
+        "start_location": "n",
+        "end_location": "e",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "ne",
+        "start_location": "e",
+        "end_location": "n",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 603.0,
+          "y": 187.0
+        },
+        "optimal_red_location": {
+          "x": 524.0,
+          "y": 221.0
+        }
+      }
+    ],
+    [
+      {
+        "start_position": "gamma5",
+        "end_position": "gamma2"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "ne",
+        "start_location": "e",
+        "end_location": "n",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "ne",
+        "start_location": "n",
+        "end_location": "e",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 527.0,
+          "y": 223.0
+        },
+        "optimal_red_location": {
+          "x": 599.0,
+          "y": 186.0
+        }
+      }
+    ],
+    [
+      {
+        "start_position": "gamma7",
+        "end_position": "gamma4"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "sw",
+        "start_location": "w",
+        "end_location": "s",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "sw",
+        "start_location": "s",
+        "end_location": "w",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 227.0,
+          "y": 529.0
+        },
+        "optimal_red_location": {
+          "x": 150.0,
+          "y": 557.0
+        }
+      }
+    ],
+    [
+      {
+        "start_position": "gamma8",
+        "end_position": "gamma1"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "nw",
+        "start_location": "n",
+        "end_location": "w",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "nw",
+        "start_location": "w",
+        "end_location": "n",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 217.5,
+          "y": 221.5
+        },
+        "optimal_red_location": {
+          "x": 190.5,
+          "y": 141.5
+        }
+      }
+    ],
+    [
+      {
+        "start_position": "gamma6",
+        "end_position": "gamma3"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "se",
+        "start_location": "s",
+        "end_location": "e",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "se",
+        "start_location": "e",
+        "end_location": "s",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 599.5,
+          "y": 562.5
+        },
+        "optimal_red_location": {
+          "x": 526.0,
+          "y": 524.0
+        }
+      }
+    ]
+  ]
+}

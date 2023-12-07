@@ -8,20 +8,20 @@ tka_sequence_constructor_dir = os.path.dirname(current_dir)
 tka_app_dir = os.path.dirname(tka_sequence_constructor_dir)
 resources_path = tka_app_dir + '/resources'
 
-STAFF_SVG_FILE_PATH = resources_path + "/images/props/staff.svg"
-CLUB_SVG_FILE_PATH = resources_path + "/images/props/club.svg"
-BUUGENG_SVG_FILE_PATH = resources_path + "/images/props/buugeng.svg"
-FAN_SVG_FILE_PATH = resources_path + "/images/props/fan.svg"
-TRIAD_SVG_FILE_PATH = resources_path + "/images/props/triad.svg"
-HOOP_SVG_FILE_PATH = resources_path + "/images/props/hoop.svg"
+STAFF_SVG_FILE_PATH = "resources/images/props/staff.svg"
+CLUB_SVG_FILE_PATH = "resources/images/props/club.svg"
+BUUGENG_SVG_FILE_PATH = "resources/images/props/buugeng.svg"
+FAN_SVG_FILE_PATH = "resources/images/props/fan.svg"
+TRIAD_SVG_FILE_PATH = "resources/images/props/triad.svg"
+HOOP_SVG_FILE_PATH = "resources/images/props/hoop.svg"
 
-PICTOGRAPH_DIR = resources_path + "/images/pictographs/"
-ARROW_DIR = resources_path + "/images/arrows/"
-PROP_DIR = resources_path + "/images/props/"
-LETTER_SVG_DIR = resources_path + "/images/letters/"
-ICON_DIR = resources_path + "/images/icons/"
-GRID_DIR = resources_path + "/images/grid/"
-LETTER_JSON_DIR = resources_path + "/json/"
+PICTOGRAPH_DIR = "resources/images/pictographs/"
+ARROW_DIR = "resources/images/arrows/"
+PROP_DIR = "resources/images/props/"
+LETTER_SVG_DIR = "resources/images/letters/"
+ICON_DIR = "resources/images/icons/"
+GRID_DIR = "resources/images/grid/"
+LETTER_JSON_DIR = "resources/json/"
 
 SVG_NS = "http://www.w3.org/2000/svg"
 

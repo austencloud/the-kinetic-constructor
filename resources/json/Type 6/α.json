@@ -1,0 +1,100 @@
+{
+  "α": [
+    [
+      {
+        "start_position": "alpha1",
+        "end_position": "alpha1"
+      },
+      {
+        "color": "blue",
+        "motion_type": "static",
+        "rotation_direction": "None",
+        "arrow_location": "None",
+        "start_location": "s",
+        "end_location": "s",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "static",
+        "rotation_direction": "None",
+        "arrow_location": "None",
+        "start_location": "n",
+        "end_location": "n",
+        "turns": 0
+      }
+    ],
+    [
+      {
+        "start_position": "alpha2",
+        "end_position": "alpha2"
+      },
+      {
+        "color": "blue",
+        "motion_type": "static",
+        "rotation_direction": "None",
+        "arrow_location": "None",
+        "start_location": "w",
+        "end_location": "w",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "static",
+        "rotation_direction": "None",
+        "arrow_location": "None",
+        "start_location": "e",
+        "end_location": "e",
+        "turns": 0
+      }
+    ],
+    [
+      {
+        "start_position": "alpha3",
+        "end_position": "alpha3"
+      },
+      {
+        "color": "blue",
+        "motion_type": "static",
+        "rotation_direction": "None",
+        "arrow_location": "None",
+        "start_location": "n",
+        "end_location": "n",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "static",
+        "rotation_direction": "None",
+        "arrow_location": "None",
+        "start_location": "s",
+        "end_location": "s",
+        "turns": 0
+      }
+    ],
+    [
+      {
+        "start_position": "alpha4",
+        "end_position": "alpha4"
+      },
+      {
+        "color": "blue",
+        "motion_type": "static",
+        "rotation_direction": "None",
+        "arrow_location": "None",
+        "start_location": "e",
+        "end_location": "e",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "static",
+        "rotation_direction": "None",
+        "arrow_location": "None",
+        "start_location": "w",
+        "end_location": "w",
+        "turns": 0
+      }
+    ]
+  ]
+}

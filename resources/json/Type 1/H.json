@@ -1,0 +1,276 @@
+{
+  "H": [
+    [
+      {
+        "start_position": "beta3",
+        "end_position": "beta2"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "se",
+        "start_location": "s",
+        "end_location": "e",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "se",
+        "start_location": "s",
+        "end_location": "e",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 543.0,
+          "y": 547.5
+        },
+        "optimal_red_location": {
+          "x": 587.0,
+          "y": 615.5
+        }
+      }
+    ],
+    [
+      {
+        "start_position": "beta4",
+        "end_position": "beta3"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "sw",
+        "start_location": "w",
+        "end_location": "s",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "sw",
+        "start_location": "w",
+        "end_location": "s",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 152.0,
+          "y": 581.0
+        },
+        "optimal_red_location": {
+          "x": 208.0,
+          "y": 539.0
+        }
+      }
+    ],
+    [
+      {
+        "start_position": "beta1",
+        "end_position": "beta4"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "nw",
+        "start_location": "n",
+        "end_location": "w",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "nw",
+        "start_location": "n",
+        "end_location": "w",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 204.0,
+          "y": 206.0
+        },
+        "optimal_red_location": {
+          "x": 158.0,
+          "y": 145.0
+        }
+      }
+    ],
+    [
+      {
+        "start_position": "beta2",
+        "end_position": "beta1"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "ne",
+        "start_location": "e",
+        "end_location": "n",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "cw",
+        "arrow_location": "ne",
+        "start_location": "e",
+        "end_location": "n",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 541.0,
+          "y": 226.0
+        },
+        "optimal_red_location": {
+          "x": 603.0,
+          "y": 185.0
+        }
+      }
+    ],
+    [
+      {
+        "start_position": "beta1",
+        "end_position": "beta2"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "ne",
+        "start_location": "n",
+        "end_location": "e",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "ne",
+        "start_location": "n",
+        "end_location": "e",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 538.0,
+          "y": 194.0
+        },
+        "optimal_red_location": {
+          "x": 579.0,
+          "y": 132.0
+        }
+      }
+    ],
+    [
+      {
+        "start_position": "beta3",
+        "end_position": "beta4"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "sw",
+        "start_location": "s",
+        "end_location": "w",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "sw",
+        "start_location": "s",
+        "end_location": "w",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 183.91999999999996,
+          "y": 620.0799999999999
+        },
+        "optimal_red_location": {
+          "x": 217.91999999999996,
+          "y": 552.0799999999999
+        }
+      }
+    ],
+    [
+      {
+        "start_position": "beta4",
+        "end_position": "beta1"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "nw",
+        "start_location": "w",
+        "end_location": "n",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "nw",
+        "start_location": "w",
+        "end_location": "n",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 199.0,
+          "y": 220.0
+        },
+        "optimal_red_location": {
+          "x": 144.0,
+          "y": 166.0
+        }
+      }
+    ],
+    [
+      {
+        "start_position": "beta2",
+        "end_position": "beta3"
+      },
+      {
+        "color": "blue",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "se",
+        "start_location": "e",
+        "end_location": "s",
+        "turns": 0
+      },
+      {
+        "color": "red",
+        "motion_type": "anti",
+        "rotation_direction": "ccw",
+        "arrow_location": "se",
+        "start_location": "e",
+        "end_location": "s",
+        "turns": 0
+      },
+      {
+        "optimal_blue_location": {
+          "x": 541.0,
+          "y": 530.0
+        },
+        "optimal_red_location": {
+          "x": 599.0,
+          "y": 571.0
+        }
+      }
+    ]
+  ]
+}
