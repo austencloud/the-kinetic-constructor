@@ -1,5 +1,14 @@
 from objects.prop import Prop
-from settings.string_constants import COLOR
+from settings.string_constants import (
+    COLOR,
+    PROP_TYPE,
+    STAFF,
+    TRIAD,
+    HOOP,
+    FAN,
+    CLUB,
+    BUUGENG,
+)
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, PropAttributesDicts
 
 if TYPE_CHECKING:
@@ -31,3 +40,39 @@ class GhostProp(Prop):
         self.color = attributes[COLOR]
         self.target_prop: "Prop" = None
         self.setup_svg_renderer(self.svg_file)
+
+
+class GhostStaff(GhostProp):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = STAFF
+        super().__init__(pictograph, attributes)
+
+
+class GhostTriad(GhostProp):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = TRIAD
+        super().__init__(pictograph, attributes)
+
+
+class GhostHoop(GhostProp):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = HOOP
+        super().__init__(pictograph, attributes)
+
+
+class GhostFan(GhostProp):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = FAN
+        super().__init__(pictograph, attributes)
+
+
+class GhostClub(GhostProp):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = CLUB
+        super().__init__(pictograph, attributes)
+
+
+class GhostBuugeng(GhostProp):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = BUUGENG
+        super().__init__(pictograph, attributes)

@@ -5,21 +5,8 @@ from objects.prop import Prop, Staff, Club, Buugeng, Fan, Triad, Hoop
 
 from widgets.graph_editor.object_panel.propbox.propbox_drag import PropBoxDrag
 from widgets.graph_editor.object_panel.propbox.propbox_view import PropBoxView
-from settings.string_constants import (
-    CLOCKWISE,
-    NORTH,
-    EAST,
-    OUT,
-    PROP_LOCATION,
-    SOUTH,
-    WEST,
-    COLOR,
-    RED,
-    BLUE,
-    LAYER,
-    ORIENTATION,
-    IN,
-)
+from settings.string_constants import *
+
 
 from objects.grid import Grid
 from widgets.graph_editor.object_panel.objectbox import ObjectBox
@@ -36,7 +23,7 @@ class PropBox(ObjectBox):
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.view = PropBoxView(self)
-        self.prop_type = Staff
+        self.prop_type = STAFF
 
         self.init_combobox()
         self.pictograph = pictograph
@@ -47,7 +34,6 @@ class PropBox(ObjectBox):
 
         self.drag = None
         self.props = []
-        self.change_prop_type(Staff)
 
         self.propbox_layout = QVBoxLayout()
         self.propbox_layout.addWidget(self.view)
@@ -97,17 +83,17 @@ class PropBox(ObjectBox):
         ]
 
         for attributes in initial_prop_attributes:
-            if self.prop_type == Staff:
+            if self.prop_type == STAFF:
                 prop = Staff(self.pictograph, attributes)
-            elif self.prop_type == Club:
+            elif self.prop_type == CLUB:
                 prop = Club(self.pictograph, attributes)
-            elif self.prop_type == Buugeng:
+            elif self.prop_type == BUUGENG:
                 prop = Buugeng(self.pictograph, attributes)
-            elif self.prop_type == Fan:
+            elif self.prop_type == FAN:
                 prop = Fan(self.pictograph, attributes)
-            elif self.prop_type == Triad:
+            elif self.prop_type == TRIAD:
                 prop = Triad(self.pictograph, attributes)
-            elif self.prop_type == Hoop:
+            elif self.prop_type == HOOP:
                 prop = Hoop(self.pictograph, attributes)
             else:
                 raise ValueError("Invalid prop type")
@@ -124,33 +110,24 @@ class PropBox(ObjectBox):
         prop_types = ["Staff", "Club", "Buugeng", "Fan", "Triad", "Hoop"]
         self.prop_type_combobox.addItems(prop_types)
         # Set the default value to the current prop type
-        self.prop_type_combobox.setCurrentText(str(self.prop_type.__name__))
+        self.prop_type_combobox.setCurrentText(str(self.prop_type.capitalize()))
         # Connect the combobox to change the prop type when a different prop is selected
         self.prop_type_combobox.currentTextChanged.connect(self.on_prop_type_change)
         # Position the combobox at the top right
         self.prop_type_combobox.move(0, 0)  # Position will be adjusted after the view is initialized
 
     def on_prop_type_change(self, text: str) -> None:
-        # Map the prop type string to the actual class if necessary
-        prop_type_mapping = {
-            "Staff": Staff,
-            "Club": Club,
-            "Buugeng": Buugeng,
-            "Fan": Fan,
-            "Triad": Triad,
-            "Hoop": Hoop
-        }
-        new_prop_type = prop_type_mapping.get(text, Staff)  # Default to Staff if not found
+        new_prop_type = text.lower()
         self.change_prop_type(new_prop_type)
+        self.update_prop_type_in_pictograph(new_prop_type)
+
 
     def clear_props(self) -> None:
         # Log the props before removal for debugging
-        print(f"Clearing props: {[prop for prop in self.props]}")
         for prop in self.props[:]:  # Iterate over a shallow copy of the list
             self.removeItem(prop)
         self.props.clear()  # Clear the list after all items have been removed from the scene
         # Log after clearing to confirm
-        print("Props after clearing:", self.props)
 
     def set_prop_position(self, prop: Prop) -> None:
         handpoint = self.grid.get_circle_coordinates(f"{prop.prop_location}_hand_point")
@@ -164,10 +141,14 @@ class PropBox(ObjectBox):
         prop.setTransformOriginPoint(prop.boundingRect().center())
 
     def change_prop_type(self, new_prop_type: PropTypes) -> None:
-        print(f"Changing prop type to {new_prop_type}")
         self.prop_type = new_prop_type
-        self.clear_props()  # Remove previous props
-        self.populate_props()  # Add new props
+        self.clear_props()
+        self.populate_props()  
+
+    def update_prop_type_in_pictograph(self, new_prop_type: PropTypes) -> None:
+        self.pictograph.initializer.update_prop_set_and_ghost_props(new_prop_type)
+
+
 
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         scene_pos = event.scenePos()

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING, Dict, Tuple
 
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtWidgets import QGraphicsView
@@ -8,34 +8,9 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
-from objects.prop import Staff, Club, Fan, Hoop, Buugeng, Triad
-from settings.string_constants import (
-    ARROW_LOCATION,
-    BLUE,
-    CLOCKWISE,
-    COLOR,
-    EAST,
-    END_LOCATION,
-    LAYER,
-    MOTION_TYPE,
-    NORTH,
-    NORTHEAST,
-    NORTHWEST,
-    PRO,
-    PROP_TYPE,
-    RED,
-    ROTATION_DIRECTION,
-    SOUTH,
-    SOUTHEAST,
-    SOUTHWEST,
-    STAFF,
-    START_LOCATION,
-    TURNS,
-    WEST,
-    ORIENTATION,
-    IN,
-    PROP_LOCATION,
-)
+from objects.prop import Prop, Staff, Club, Fan, Hoop, Buugeng, Triad
+from settings.string_constants import *
+from utilities.TypeChecking.TypeChecking import Colors, Locations, PropTypes
 from widgets.graph_editor.pictograph.pictograph_view import PictographView
 
 if TYPE_CHECKING:
@@ -63,36 +38,45 @@ class PictographInit:
         self.pictograph.grid = grid
         return grid
 
+    def init_prop_set(self, prop_type: PropTypes) -> Dict[Colors, Prop]:
+        red_prop_Dict = {
+            COLOR: RED,
+            PROP_TYPE: prop_type,
+            PROP_LOCATION: NORTH,
+            LAYER: 1,
+            ORIENTATION: IN,
+        }
+        blue_prop_Dict = {
+            COLOR: BLUE,
+            PROP_TYPE: prop_type,
+            PROP_LOCATION: SOUTH,
+            LAYER: 1,
+            ORIENTATION: IN,
+        }
 
-    def init_prop_set(self) -> dict[str, Staff]:
-        red_prop_dict = {COLOR: RED, PROP_LOCATION: NORTH, LAYER: 1, ORIENTATION: IN}
-        blue_prop_dict = {COLOR: BLUE, PROP_LOCATION: SOUTH, LAYER: 1, ORIENTATION: IN}
+        prop_class_mapping = {
+            STAFF.lower(): Staff,
+            CLUB.lower(): Club,
+            FAN.lower(): Fan,
+            HOOP.lower(): Hoop,
+            BUUGENG.lower(): Buugeng,
+            TRIAD.lower(): Triad
+        }
 
-        red_staff = Staff(self.pictograph, red_prop_dict)
-        blue_staff = Staff(self.pictograph, blue_prop_dict)
+        prop_class = prop_class_mapping.get(prop_type)
+        if prop_class is None:
+            raise ValueError(f"Invalid prop_type: {prop_type}")
 
-        red_club = Club(self.pictograph, red_prop_dict)
-        blue_club = Club(self.pictograph, blue_prop_dict)
+        red_prop: Prop = prop_class(self.pictograph, red_prop_Dict)
+        blue_prop: Prop = prop_class(self.pictograph, blue_prop_Dict)
 
-        red_fan = Fan(self.pictograph, red_prop_dict)
-        blue_fan = Fan(self.pictograph, blue_prop_dict)
+        red_prop.set_svg_color(RED)
+        blue_prop.set_svg_color(BLUE)
 
-        red_hoop = Hoop(self.pictograph, red_prop_dict)
-        blue_hoop = Hoop(self.pictograph, blue_prop_dict)
-
-        red_buugeng = Buugeng(self.pictograph, red_prop_dict)
-        blue_buugeng = Buugeng(self.pictograph, blue_prop_dict)
-
-        red_triad = Triad(self.pictograph, red_prop_dict)
-        blue_triad = Triad(self.pictograph, blue_prop_dict)
-
-        red_staff.set_svg_color(RED)
-        blue_staff.set_svg_color(BLUE)
-
-        prop_set = {RED: red_staff, BLUE: blue_staff}
+        prop_set = {RED: red_prop, BLUE: blue_prop}
         return prop_set
 
-    def init_ghost_arrows(self) -> dict[str, GhostArrow]:
+    def init_ghost_arrows(self) -> Dict[Colors, GhostArrow]:
         default_red_ghost_arrow_attributes = {
             COLOR: RED,
             MOTION_TYPE: PRO,
@@ -123,10 +107,25 @@ class PictographInit:
         ghost_arrows = {RED: red_ghost_arrow, BLUE: blue_ghost_arrow}
         return ghost_arrows
 
-    def init_ghost_props(self) -> dict[str, GhostProp]:
+    def init_ghost_props(self, prop_type: PropTypes) -> Dict[Colors, GhostProp]:
+    
+        prop_class_mapping = {
+            STAFF.lower(): Staff,
+            CLUB.lower(): Club,
+            FAN.lower(): Fan,
+            HOOP.lower(): Hoop,
+            BUUGENG.lower(): Buugeng,
+            TRIAD.lower(): Triad
+        }
+
+        prop_class = prop_class_mapping.get(prop_type)
+        if prop_class is None:
+            raise ValueError(f"Invalid prop_type: {prop_type}")
+
+        
         default_red_ghost_prop_attributes = {
             COLOR: RED,
-            PROP_TYPE: STAFF,
+            PROP_TYPE: prop_type,
             PROP_LOCATION: EAST,
             LAYER: 1,
             ORIENTATION: IN,
@@ -134,7 +133,7 @@ class PictographInit:
 
         default_blue_ghost_prop_attributes = {
             COLOR: BLUE,
-            PROP_TYPE: STAFF,
+            PROP_TYPE: prop_type,
             PROP_LOCATION: WEST,
             LAYER: 1,
             ORIENTATION: IN,
@@ -146,13 +145,13 @@ class PictographInit:
         ghost_props = {RED: red_ghost_prop, BLUE: blue_ghost_prop}
         return ghost_props
 
-    def init_letter_item(self) -> QGraphicsSvgItem:
+    def init_letter_item(self) -> LetterItem:
         letter_item = LetterItem(self.pictograph)
         self.pictograph.addItem(letter_item)
         letter_item.position_letter_item(letter_item)
         return letter_item
 
-    def init_locations(self, grid: Grid) -> dict[str, Tuple[int, int, int, int]]:
+    def init_locations(self, grid: Grid) -> Dict[Locations, Tuple[int, int, int, int]]:
         grid_center = grid.get_circle_coordinates("center_point").toPoint()
 
         grid_center_x = grid_center.x()
@@ -184,3 +183,8 @@ class PictographInit:
             NORTHWEST: nw_boundary,
         }
         return locations
+
+    def update_prop_set_and_ghost_props(self, new_prop_type: PropTypes) -> None:
+        self.pictograph.prop_set = self.init_prop_set(new_prop_type)
+        self.pictograph.prop_type = new_prop_type
+        self.pictograph.ghost_props = self.init_ghost_props(new_prop_type)

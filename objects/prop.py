@@ -33,7 +33,9 @@ if TYPE_CHECKING:
 
 class Prop(GraphicalObject):
     def __init__(self, scene, attributes: Dict) -> None:
-        svg_file = self.get_svg_file(attributes[PROP_TYPE])
+        prop_type = str(attributes[PROP_TYPE])
+        prop_type = prop_type[0].lower() + prop_type[1:]
+        svg_file = self.get_svg_file(prop_type)
         super().__init__(svg_file, scene)
         self._setup_attributes(scene, attributes)
         self.update_appearance()

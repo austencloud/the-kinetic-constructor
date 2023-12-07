@@ -1,3 +1,4 @@
+from typing import Dict
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsScene
@@ -16,6 +17,7 @@ from settings.string_constants import (
     MOTION_TYPE,
     RED,
     ROTATION_DIRECTION,
+    STAFF,
     START_LOCATION,
     TURNS,
     START_ORIENTATION,
@@ -27,6 +29,7 @@ from settings.string_constants import (
 from utilities.letter_engine import LetterEngine
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
+    Colors,
     Layers,
     MotionAttributesDicts,
     List,
@@ -83,13 +86,15 @@ class Pictograph(QGraphicsScene):
         self.dragged_arrow: Arrow = None
         self.dragged_prop: Staff = None
         self.initializer = PictographInit(self)
-
+        
+        self.prop_type: Prop = STAFF
+        
+        self.prop_set: Dict[Colors, Prop] = self.initializer.init_prop_set(self.prop_type)
         self.ghost_arrows = self.initializer.init_ghost_arrows()
-        self.ghost_props = self.initializer.init_ghost_props()
+        self.ghost_props = self.initializer.init_ghost_props(self.prop_type)
 
         self.grid: Grid = self.initializer.init_grid()
         self.view: PictographView = self.initializer.init_view()
-        self.prop_set = self.initializer.init_prop_set()
         self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.locations = self.initializer.init_locations(self.grid)
 
@@ -270,7 +275,7 @@ class Pictograph(QGraphicsScene):
         new_scene.motions = self.motions
 
         new_scene.ghost_arrows = new_scene.initializer.init_ghost_arrows()
-        new_scene.ghost_props = new_scene.initializer.init_ghost_props()
+        new_scene.ghost_props = new_scene.initializer.init_ghost_props(self.prop_type)
         new_scene.letter_item = new_scene.initializer.init_letter_item()
 
         for item in self.items():
