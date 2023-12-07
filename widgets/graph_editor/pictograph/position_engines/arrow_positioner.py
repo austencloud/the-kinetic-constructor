@@ -106,12 +106,12 @@ class ArrowPositioner:
         if len(current_state) != len(filtered_candidate_state):
             return False
 
-        for arrow in current_state:
+        for motion in current_state:
             matching_arrows = [
                 candidate_arrow
                 for candidate_arrow in filtered_candidate_state
                 if all(
-                    arrow.get(key) == candidate_arrow.get(key)
+                    motion.get(key) == candidate_arrow.get(key)
                     for key in [
                         COLOR,
                         MOTION_TYPE,
