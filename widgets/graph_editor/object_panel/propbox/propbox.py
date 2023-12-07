@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QVBoxLayout, QGraphicsSceneMouseEvent
+from PyQt6.QtWidgets import QVBoxLayout, QGraphicsSceneMouseEvent, QComboBox
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.prop import Prop, Staff, Club, Buugeng, Fan, Triad, Hoop
@@ -36,15 +36,17 @@ class PropBox(ObjectBox):
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.view = PropBoxView(self)
+        self.prop_type = Staff
+
+        self.init_combobox()
         self.pictograph = pictograph
 
         self.grid = Grid(self)
         self.grid_position = QPointF(0, 0)
         self.grid.setPos(self.grid_position)
 
-        self.props: List[Prop] = []
-        self.prop_type = None
         self.drag = None
+        self.props = []
         self.change_prop_type(Staff)
 
         self.propbox_layout = QVBoxLayout()
@@ -56,7 +58,6 @@ class PropBox(ObjectBox):
         # self.init_propbox_triads()
         # self.init_propbox_hoops()
 
-        self.props: List[Prop] = []
         self.staffs: List[Staff] = []
         self.clubs: List[Club] = []
         self.buugeng: List[Buugeng] = []
@@ -72,26 +73,26 @@ class PropBox(ObjectBox):
             {
                 COLOR: RED,
                 PROP_LOCATION: NORTH,
-                LAYER: 2,
-                ORIENTATION: CLOCKWISE,
+                LAYER: 1,
+                ORIENTATION: IN,
             },
             {
                 COLOR: BLUE,
                 PROP_LOCATION: EAST,
-                LAYER: 2,
-                ORIENTATION: CLOCKWISE,
+                LAYER: 1,
+                ORIENTATION: IN,
             },
             {
                 COLOR: RED,
                 PROP_LOCATION: SOUTH,
-                LAYER: 2,
-                ORIENTATION: CLOCKWISE,
+                LAYER: 1,
+                ORIENTATION: IN,
             },
             {
                 COLOR: BLUE,
                 PROP_LOCATION: WEST,
-                LAYER: 2,
-                ORIENTATION: CLOCKWISE,
+                LAYER: 1,
+                ORIENTATION: IN,
             },
         ]
 
@@ -117,10 +118,39 @@ class PropBox(ObjectBox):
             self.addItem(prop)
             self.props.append(prop)
 
+    def init_combobox(self) -> None:
+        self.prop_type_combobox = QComboBox(self.view)
+        # Populate the combobox with prop types, assuming prop types are strings in a list
+        prop_types = ["Staff", "Club", "Buugeng", "Fan", "Triad", "Hoop"]
+        self.prop_type_combobox.addItems(prop_types)
+        # Set the default value to the current prop type
+        self.prop_type_combobox.setCurrentText(str(self.prop_type.__name__))
+        # Connect the combobox to change the prop type when a different prop is selected
+        self.prop_type_combobox.currentTextChanged.connect(self.on_prop_type_change)
+        # Position the combobox at the top right
+        self.prop_type_combobox.move(0, 0)  # Position will be adjusted after the view is initialized
+
+    def on_prop_type_change(self, text: str) -> None:
+        # Map the prop type string to the actual class if necessary
+        prop_type_mapping = {
+            "Staff": Staff,
+            "Club": Club,
+            "Buugeng": Buugeng,
+            "Fan": Fan,
+            "Triad": Triad,
+            "Hoop": Hoop
+        }
+        new_prop_type = prop_type_mapping.get(text, Staff)  # Default to Staff if not found
+        self.change_prop_type(new_prop_type)
+
     def clear_props(self) -> None:
-        for prop in self.props:
+        # Log the props before removal for debugging
+        print(f"Clearing props: {[prop for prop in self.props]}")
+        for prop in self.props[:]:  # Iterate over a shallow copy of the list
             self.removeItem(prop)
-        self.props.clear()
+        self.props.clear()  # Clear the list after all items have been removed from the scene
+        # Log after clearing to confirm
+        print("Props after clearing:", self.props)
 
     def set_prop_position(self, prop: Prop) -> None:
         handpoint = self.grid.get_circle_coordinates(f"{prop.prop_location}_hand_point")
@@ -134,8 +164,10 @@ class PropBox(ObjectBox):
         prop.setTransformOriginPoint(prop.boundingRect().center())
 
     def change_prop_type(self, new_prop_type: PropTypes) -> None:
+        print(f"Changing prop type to {new_prop_type}")
         self.prop_type = new_prop_type
-        self.populate_props()
+        self.clear_props()  # Remove previous props
+        self.populate_props()  # Add new props
 
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         scene_pos = event.scenePos()

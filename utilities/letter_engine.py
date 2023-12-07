@@ -146,7 +146,6 @@ class LetterEngine:
             self.blue_motion = blue_motion
             return specific_position
 
-
     def get_motion_type_letter_group(self) -> LetterGroupsByMotionTypes:
         red_motion_type = self.red_motion.motion_type
         blue_motion_type = self.blue_motion.motion_type
