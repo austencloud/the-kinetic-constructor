@@ -89,34 +89,26 @@ class Prop(GraphicalObject):
 
         if new_location != self.previous_location:
             self.prop_location = new_location
-            from objects.arrow import StaticArrow
 
-            if isinstance(self.arrow, StaticArrow):
+            if self.arrow.motion_type == STATIC:
                 self.arrow.motion.start_location = new_location
                 self.arrow.motion.end_location = new_location
                 self.motion.arrow_location = new_location
                 self.motion.start_location = new_location
                 self.motion.end_location = new_location
+
+        
+            
             self.axis = self.update_axis(self.prop_location)
             self.update_appearance()
             self.update_arrow_location(new_location)
 
-            (
-                self.ghost_prop.arrow.motion.end_location,
-                self.ghost_prop.arrow.motion.start_location,
-            ) = (
-                new_location,
-                new_location,
-            )
             self.ghost_prop.color = self.color
             self.ghost_prop.prop_location = self.prop_location
             self.ghost_prop.layer = self.layer
             self.ghost_prop.update_appearance()
-
             self.scene.props.remove(self)
-            if self.arrow.motion_type == STATIC:
-                self.arrow.motion.start_location = new_location
-                self.arrow.motion.end_location = new_location
+
 
             self.scene.update_pictograph()
             self.scene.props.append(self)
@@ -170,7 +162,7 @@ class Prop(GraphicalObject):
         offset_tuple = offset_map.get(self.prop_location, (0, 0))
         return QPointF(offset_tuple[0], offset_tuple[1])
 
-    def update_arrow_location(self, new_location: Locations) -> None:
+    def update_arrow_location(self, new_arrow_location: Locations) -> None:
         if self.arrow.motion_type in [PRO, ANTI]:
             shift_location_map: Dict[
                 Tuple(Locations, RotationDirections, MotionTypes),
@@ -217,31 +209,31 @@ class Prop(GraphicalObject):
             current_location = self.arrow.arrow_location
             rotation_direction = self.arrow.rotation_direction
             motion_type = self.arrow.motion_type
-            new_location = shift_location_map.get(
+            new_arrow_location = shift_location_map.get(
                 (current_location, rotation_direction, motion_type), {}
-            ).get(new_location)
+            ).get(new_arrow_location)
 
-            if new_location:
-                self.arrow.arrow_location = new_location
+            if new_arrow_location:
+                self.arrow.arrow_location = new_arrow_location
                 start_location, end_location = get_start_end_locations(
-                    motion_type, rotation_direction, new_location
+                    motion_type, rotation_direction, new_arrow_location
                 )
                 self.arrow.motion.start_location = start_location
                 self.arrow.motion.end_location = end_location
                 self.arrow.update_appearance()
-                self.arrow.motion.arrow_location = new_location
+                self.arrow.motion.arrow_location = new_arrow_location
                 self.arrow.motion.start_location = start_location
                 self.arrow.motion.end_location = end_location
                 self.pictograph.update_pictograph()
 
         elif self.arrow.motion_type == STATIC:
-            self.arrow.motion.arrow_location = new_location
-            self.arrow.motion.start_location = new_location
-            self.arrow.motion.end_location = new_location
+            self.arrow.motion.arrow_location = new_arrow_location
+            self.arrow.motion.start_location = new_arrow_location
+            self.arrow.motion.end_location = new_arrow_location
 
-            self.arrow.arrow_location = new_location
-            self.arrow.motion.start_location = new_location
-            self.arrow.motion.end_location = new_location
+            self.arrow.arrow_location = new_arrow_location
+            self.arrow.motion.start_location = new_arrow_location
+            self.arrow.motion.end_location = new_arrow_location
             self.arrow.update_appearance()
 
     def mouseReleaseEvent(self, event) -> None:

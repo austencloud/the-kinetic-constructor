@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, List, Dict, Union
 from xml.etree import ElementTree as ET
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 
 from settings.string_constants import (
@@ -22,6 +23,23 @@ if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
+class GridItem(QGraphicsSvgItem):
+    def __init__(self, path) -> None:
+        super().__init__(path)
+        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
+        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)
+        self.setZValue(-1)
+
+    def mousePressEvent(self, event) -> None:
+        event.ignore()
+        
+    def mouseMoveEvent(self, event) -> None:
+        event.ignore()
+        
+    def mouseReleaseEvent(self, event) -> None:
+        event.ignore()
+        
+
 class Grid:
     def __init__(self, grid_scene: Union["ArrowBox", "PropBox", "Pictograph"]) -> None:
         self.svg_paths = {
@@ -31,12 +49,9 @@ class Grid:
             "outer_points": f"{GRID_DIR}grid_outer_points.svg",
         }
 
-        self.items: Dict[str, QGraphicsSvgItem] = {}
+        self.items: Dict[str, GridItem] = {}
         for key, path in self.svg_paths.items():
-            item = QGraphicsSvgItem(path)
-            item.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
-            item.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)
-            item.setZValue(-1)
+            item = GridItem(path)
             grid_scene.addItem(item)
             self.items[key] = item
         self.grid_scene = grid_scene

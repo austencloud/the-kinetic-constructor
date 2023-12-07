@@ -39,7 +39,7 @@ from widgets.graph_editor.pictograph.pictograph_event_handler import (
     PictographEventHandler,
 )
 from widgets.graph_editor.pictograph.pictograph_view import PictographView
-from widgets.graph_editor.pictograph.pictogaph_init import PictographInit
+from widgets.graph_editor.pictograph.pictograph_init import PictographInit
 from widgets.graph_editor.pictograph.pictograph_menu_handler import (
     PictographMenuHandler,
 )
@@ -113,6 +113,7 @@ class Pictograph(QGraphicsScene):
     ### EVENTS ###
 
     def mousePressEvent(self, event) -> None:
+        
         self.event_handler.handle_mouse_press(event)
 
     def mouseMoveEvent(self, event) -> None:
@@ -263,13 +264,13 @@ class Pictograph(QGraphicsScene):
 
     def copy_scene(self) -> QGraphicsScene:
         from widgets.sequence.beat import Beat
+
         new_scene = Beat(self.main_widget, self.graph_editor)
         new_scene.setSceneRect(self.sceneRect())
         new_scene.motions = self.motions
 
         new_scene.ghost_arrows = new_scene.initializer.init_ghost_arrows()
         new_scene.ghost_props = new_scene.initializer.init_ghost_props()
-        new_scene.grid = new_scene.initializer.init_grid()
         new_scene.letter_item = new_scene.initializer.init_letter_item()
 
         for item in self.items():
@@ -283,7 +284,7 @@ class Pictograph(QGraphicsScene):
                 motion = new_scene.get_motion_by_color(new_arrow.color)
                 new_arrow.motion = motion
                 motion.arrow = new_arrow
-                
+
             elif isinstance(item, Prop):
                 new_prop = Prop(new_scene, item.get_attributes())
                 new_prop.setPos(item.pos())
@@ -319,14 +320,14 @@ class Pictograph(QGraphicsScene):
             for motion in new_scene.motions:
                 if ghost_arrow.color == motion.color:
                     ghost_arrow.motion = motion
-                    
+
         for ghost_prop in new_scene.ghost_props.values():
             for motion in new_scene.motions:
                 if ghost_prop.color == motion.color:
                     ghost_prop.motion = motion
 
         new_scene.update_pictograph()
-        
+
         return new_scene
 
     ### UPDATERS ###

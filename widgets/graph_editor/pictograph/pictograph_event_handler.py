@@ -2,7 +2,7 @@ from PyQt6.QtGui import QTransform
 
 from objects.letter_item import LetterItem
 from objects.arrow import Arrow
-from objects.grid import Grid
+from objects.grid import Grid, GridItem
 from objects.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
@@ -37,6 +37,8 @@ class PictographEventHandler:
             self.pictograph.dragged_arrow.mousePressEvent(event)
         else:
             clicked_item = self.pictograph.itemAt(scene_pos, QTransform())
+            if isinstance(clicked_item, GridItem):
+                clicked_item = None
             self.handle_non_arrow_click(clicked_item, event)
 
     def handle_non_arrow_click(self, clicked_item, event) -> None:
