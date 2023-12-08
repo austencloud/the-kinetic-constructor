@@ -38,6 +38,7 @@ from utilities.TypeChecking.TypeChecking import (
     Orientations,
     Tuple,
 )
+from widgets.graph_editor.pictograph.pictograph import Pictograph
 from widgets.graph_editor.pictograph.pictograph_event_handler import (
     PictographEventHandler,
 )
@@ -63,11 +64,11 @@ if TYPE_CHECKING:
 from objects.letter_item import LetterItem
 
 
-class Option(QGraphicsScene):
+class Option(Pictograph):
     def __init__(
         self, main_widget: "MainWidget", option_picker: "OptionPicker"
     ) -> None:
-        super().__init__()
+        super().__init__(main_widget, main_widget.graph_editor)
         self.main_widget = main_widget
         self.option_picker: OptionPicker = option_picker
 
@@ -235,7 +236,7 @@ class Option(QGraphicsScene):
             if isinstance(item, Arrow) or isinstance(item, Prop):
                 self.removeItem(item)
 
-        self.update_option()
+        self.update_pictograph()
 
     def clear_selections(self) -> None:
         for arrow in self.arrows:
@@ -276,40 +277,40 @@ class Option(QGraphicsScene):
     def copy_scene(self) -> QGraphicsScene:
         from widgets.sequence.beat import Beat
 
-        new_scene = Beat(self.main_widget, self.option_picker)
-        new_scene.setSceneRect(self.sceneRect())
-        new_scene.motions = self.motions
+        new_beat = Beat(self.main_widget, self.option_picker)
+        new_beat.setSceneRect(self.sceneRect())
+        new_beat.motions = self.motions
 
         for item in self.items():
             if isinstance(item, Arrow):
-                new_arrow = Arrow(new_scene, item.get_attributes())
+                new_arrow = Arrow(new_beat, item.get_attributes())
                 new_arrow.setTransformOriginPoint(new_arrow.boundingRect().center())
                 new_arrow.setPos(item.pos())
                 new_arrow.setZValue(item.zValue())
-                new_scene.addItem(new_arrow)
-                new_scene.arrows.append(new_arrow)
-                motion = new_scene.get_motion_by_color(new_arrow.color)
+                new_beat.addItem(new_arrow)
+                new_beat.arrows.append(new_arrow)
+                motion = new_beat.get_motion_by_color(new_arrow.color)
                 new_arrow.motion = motion
                 motion.arrow = new_arrow
 
             elif isinstance(item, Prop):
-                new_prop = Prop(new_scene, item.get_attributes())
+                new_prop = Prop(new_beat, item.get_attributes())
                 new_prop.setPos(item.pos())
                 new_prop.setZValue(item.zValue())
-                new_scene.addItem(new_prop)
-                new_scene.props.append(new_prop)
-                motion = new_scene.get_motion_by_color(new_prop.color)
+                new_beat.addItem(new_prop)
+                new_beat.props.append(new_prop)
+                motion = new_beat.get_motion_by_color(new_prop.color)
                 new_prop.motion = motion
                 motion.prop = new_prop
 
-        for arrow in new_scene.arrows:
-            for prop in new_scene.props:
+        for arrow in new_beat.arrows:
+            for prop in new_beat.props:
                 if arrow.color == prop.color:
                     arrow.prop = prop
                     prop.arrow = arrow
 
-        for arrow in new_scene.arrows:
-            for ghost_arrow in new_scene.ghost_arrows.values():
+        for arrow in new_beat.arrows:
+            for ghost_arrow in new_beat.ghost_arrows.values():
                 if arrow.color == ghost_arrow.color:
                     arrow.ghost_arrow = ghost_arrow
                     ghost_arrow.update_attributes(arrow.get_attributes())
@@ -318,24 +319,24 @@ class Option(QGraphicsScene):
                     ghost_arrow.update_svg(arrow.svg_file)
                     ghost_arrow.update_appearance()
 
-        for prop in new_scene.props:
-            for ghost_prop in new_scene.ghost_props.values():
+        for prop in new_beat.props:
+            for ghost_prop in new_beat.ghost_props.values():
                 if prop.color == ghost_prop.color:
                     prop.ghost_prop = ghost_prop
 
-        for ghost_arrow in new_scene.ghost_arrows.values():
-            for motion in new_scene.motions:
+        for ghost_arrow in new_beat.ghost_arrows.values():
+            for motion in new_beat.motions:
                 if ghost_arrow.color == motion.color:
                     ghost_arrow.motion = motion
 
-        for ghost_prop in new_scene.ghost_props.values():
-            for motion in new_scene.motions:
+        for ghost_prop in new_beat.ghost_props.values():
+            for motion in new_beat.motions:
                 if ghost_prop.color == motion.color:
                     ghost_prop.motion = motion
 
-        new_scene.update_pictograph()
+        new_beat.update_pictograph()
 
-        return new_scene
+        return new_beat
 
     ### UPDATERS ###
 
@@ -355,7 +356,7 @@ class Option(QGraphicsScene):
         for motion in motions:
             self.option_picker.attr_panel.update_panel(motion.color)
 
-    def update_option(self) -> None:
+    def update_pictograph(self) -> None:
         self.update_letter()
         self.update_arrows()
         self.update_props()

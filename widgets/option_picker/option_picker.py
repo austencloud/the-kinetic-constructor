@@ -94,39 +94,47 @@ class OptionPicker(QScrollArea):
         row, col = 0, 0
         MAX_ITEMS_PER_ROW = 4
         pictograph_count = 0  # Counter for number of pictographs created
-        MAX_PICTOGRAPHS = 5  # Limit for the number of pictographs
+        MAX_PICTOGRAPHS = 4  # Limit for the number of pictographs
 
         for letter, pictographs in pictographs_by_letter.items():
             for attributes_list in pictographs:
-                for attributes in attributes_list:
-                    if pictograph_count >= MAX_PICTOGRAPHS:
-                        break  # Stop if maximum number of pictographs is reached
-                    if self.is_ArrowAttributesDicts(attributes):
-                        option = self.create_Option_from_attributes(attributes)
-                        option_view = option.view
-                        option_view.mousePressEvent = (
-                            lambda event: self.on_option_clicked(option)
-                        )
-                        self.option_picker_grid_layout.addWidget(option_view, row, col)
-                        col += 1
-                        if col >= MAX_ITEMS_PER_ROW:
-                            col = 0
-                            row += 1
-                        pictograph_count += 1  # Increment the pictograph counter
-                        self.options.append(option)
+                # Filter out dictionaries that are not arrow attributes
+                arrow_attributes = [
+                    attr
+                    for attr in attributes_list
+                    if self.is_ArrowAttributesDicts(attr)
+                ]
+
+                if pictograph_count >= MAX_PICTOGRAPHS:
+                    break  # Stop if maximum number of pictographs is reached
+
+                if len(arrow_attributes) >= 2:
+                    # Process the first two arrow attributes as a pair
+                    option = self.create_Option_from_attributes(arrow_attributes[:2])
+                    option_view = option.view
+                    option_view.mousePressEvent = (
+                        lambda event, opt=option: self.on_option_clicked(opt)
+                    )
+                    self.option_picker_grid_layout.addWidget(option_view, row, col)
+                    col += 1
+                    if col >= MAX_ITEMS_PER_ROW:
+                        col = 0
+                        row += 1
+                    pictograph_count += 1  # Increment the pictograph counter
+                    self.options.append(option)
 
     def is_ArrowAttributesDicts(self, attributes: DictVariants) -> bool:
         return COLOR in attributes and MOTION_TYPE in attributes
 
-    def create_Option_from_attributes(self, attributes: ArrowAttributesDicts) -> Option:
+    def create_Option_from_attributes(
+        self, attributes_list: list[ArrowAttributesDicts]
+    ) -> Option:
         option = Option(self.main_widget, self)
-
         option.setSceneRect(0, 0, 750, 900)
-        color = attributes[COLOR]
-        motion_type = attributes[MOTION_TYPE]
 
-        if color == BLUE or color == RED:
-            # Instead of adding one arrow per option, add both arrows per option
+        for attributes in attributes_list:
+            color = attributes[COLOR]
+            motion_type = attributes[MOTION_TYPE]
             arrow = Arrow(option, attributes)
             prop_attributes: PropAttributesDicts = {
                 COLOR: color,
@@ -143,8 +151,6 @@ class OptionPicker(QScrollArea):
                 IN,
                 1,
             )
-            print("Added motion to option")
-            print(option.motions)
             option.addItem(arrow)
             option.addItem(prop)
             motion = option.get_motion_by_color(color)
@@ -152,8 +158,18 @@ class OptionPicker(QScrollArea):
             arrow.ghost_arrow = option.ghost_arrows[color]
             prop.ghost_prop = option.ghost_props[color]
             option.arrows.append(arrow)
+            option.props.append(prop)
 
-        option.update_option()
+        for arrow in option.arrows:
+            for prop in option.props:
+                if arrow.color == prop.color:
+                    arrow.prop = prop
+                    prop.arrow = arrow
+
+        print("Added motion to option")
+        print(option.motions)
+
+        option.update_pictograph()
         return option
 
     def on_option_clicked(self, option: "Option"):
@@ -161,46 +177,46 @@ class OptionPicker(QScrollArea):
         self.main_widget.sequence.frame.add_scene_to_sequence(copied_scene)
 
     def copy_scene(self, option: "Option") -> Beat:
-        new_scene = Beat(self.main_widget, self.main_widget.graph_editor)
-        new_scene.setSceneRect(option.sceneRect())
-        new_scene.motions = option.motions
+        new_beat = Beat(self.main_widget, self.main_widget.graph_editor)
+        new_beat.setSceneRect(option.sceneRect())
+        new_beat.motions = option.motions
 
         for item in option.items():
             if isinstance(item, Arrow):
-                new_arrow = Arrow(new_scene, item.get_attributes())
+                new_arrow = Arrow(new_beat, item.get_attributes())
                 new_arrow.setPos(item.pos())
                 new_arrow.setZValue(item.zValue())
-                new_scene.addItem(new_arrow)
-                new_scene.arrows.append(new_arrow)
-                ghost_arrow = new_scene.ghost_arrows[new_arrow.color]
+                new_beat.addItem(new_arrow)
+                new_beat.arrows.append(new_arrow)
+                ghost_arrow = new_beat.ghost_arrows[new_arrow.color]
                 new_arrow.ghost_arrow = ghost_arrow
-                motion = new_scene.get_motion_by_color(new_arrow.color)
+                motion = new_beat.get_motion_by_color(new_arrow.color)
                 new_arrow.motion = motion
                 motion.arrow = new_arrow
                 new_arrow.ghost_arrow.motion = new_arrow.motion
 
             elif isinstance(item, Prop):
-                new_prop = Prop(new_scene, item.get_attributes())
+                new_prop = Prop(new_beat, item.get_attributes())
                 new_prop.setPos(item.pos())
                 new_prop.setZValue(item.zValue())
-                new_scene.addItem(new_prop)
-                new_scene.props.append(new_prop)
-                motion = new_scene.get_motion_by_color(new_prop.color)
-                ghost_prop = new_scene.ghost_props[new_prop.color]
+                new_beat.addItem(new_prop)
+                new_beat.props.append(new_prop)
+                motion = new_beat.get_motion_by_color(new_prop.color)
+                ghost_prop = new_beat.ghost_props[new_prop.color]
                 new_prop.ghost_prop = ghost_prop
-                motion = new_scene.get_motion_by_color(new_prop.color)
+                motion = new_beat.get_motion_by_color(new_prop.color)
                 motion.prop = new_prop
                 new_prop.motion = motion
                 new_prop.ghost_prop.motion = motion
 
-        for arrow in new_scene.arrows:
-            for prop in new_scene.props:
+        for arrow in new_beat.arrows:
+            for prop in new_beat.props:
                 if arrow.color == prop.color:
                     arrow.prop = prop
                     prop.arrow = arrow
 
-        new_scene.update_pictograph()
-        return new_scene
+        new_beat.update_pictograph()
+        return new_beat
 
     def update_option_picker_size(self) -> None:
         self.setFixedWidth(int(self.option_picker_widget.width() * 4 / 5))
