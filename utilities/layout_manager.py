@@ -87,7 +87,7 @@ class LayoutManager:
         self.add_black_border(self.main_widget.sequence)
         self.add_black_border(self.main_widget.graph_editor.vtg_panel)
         self.add_black_border(self.main_widget.option_picker)
-        self.add_black_border(self.main_widget.option_picker.scroll_area)
+        self.add_black_border(self.main_widget.option_picker.option_picker)
         self.add_black_border(self.main_widget.option_picker.button_frame)
         self.add_black_border(self.main_widget.graph_editor.pictograph)
         self.add_black_border(self.main_widget.graph_editor.propbox)

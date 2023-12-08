@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.pictograph.pictograph import Pictograph
-    from widgets.sequence.sequence import Sequence
+    from widgets.sequence.sequence_frame import Sequence
 
 
 class SequenceButtons(QFrame):

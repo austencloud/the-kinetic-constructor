@@ -19,14 +19,14 @@ class OptionView(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.wheelEvent = lambda event: None
         
-    def update_pictograph_size(self) -> None:
-        view_width = int(self.option.option_picker.width() / 4)
+    def update_OptionView_size(self) -> None:
+        view_width = int((self.option.option_picker.width() / 4) - self.option.option_picker.spacing)
         
         self.setFixedWidth(view_width)
         self.setFixedHeight(int(view_width * 90/75))
         
         self.view_scale = view_width / self.option.width()
         
-        
+    
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)

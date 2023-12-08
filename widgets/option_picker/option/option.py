@@ -235,7 +235,7 @@ class Option(QGraphicsScene):
             if isinstance(item, Arrow) or isinstance(item, Prop):
                 self.removeItem(item)
 
-        self.update_pictograph()
+        self.update_option()
 
     def clear_selections(self) -> None:
         for arrow in self.arrows:
@@ -355,11 +355,10 @@ class Option(QGraphicsScene):
         for motion in motions:
             self.option_picker.attr_panel.update_panel(motion.color)
 
-    def update_pictograph(self) -> None:
+    def update_option(self) -> None:
         self.update_letter()
         self.update_arrows()
         self.update_props()
-        self.update_attr_panel()
 
     def update_arrows(self) -> None:
         self.arrow_positioner.update_arrow_positions()

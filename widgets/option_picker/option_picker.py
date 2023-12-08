@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 import json
 from PyQt6.QtWidgets import (
     QScrollArea,
@@ -62,7 +62,7 @@ class OptionPicker(QScrollArea):
         self.setWidget(self.grid_widget)
         self.setFixedWidth(int(self.option_picker_widget.width() * 4 / 5))
         self.setFixedHeight(int(self.option_picker_widget.height()))
-
+        self.options: List[Option] = []
         # Load pictographs from JSON
         with open("preprocessed.json", "r") as file:
             data = json.load(file)
@@ -77,7 +77,7 @@ class OptionPicker(QScrollArea):
 
         self.verticalScrollBar().setFixedWidth(int(self.main_window.width() * 0.01))
         self.populate_pictographs()
-        self.update_scroll_area_size()
+        self.update_option_picker_size()
 
     def populate_pictographs(self):
         with open("preprocessed.json", "r") as file:
@@ -107,19 +107,19 @@ class OptionPicker(QScrollArea):
                         option_view.mousePressEvent = (
                             lambda event: self.on_option_clicked(option)
                         )
-                        option_view.update_pictograph_size()
                         self.option_picker_grid_layout.addWidget(option_view, row, col)
                         col += 1
                         if col >= MAX_ITEMS_PER_ROW:
                             col = 0
                             row += 1
                         pictograph_count += 1  # Increment the pictograph counter
+                        self.options.append(option)
 
     def is_ArrowAttributesDicts(self, attributes: DictVariants) -> bool:
         return COLOR in attributes and MOTION_TYPE in attributes
 
     def create_Option_from_attributes(self, attributes: ArrowAttributesDicts) -> Option:
-        option = Option(self.main_widget, self.main_widget.graph_editor)
+        option = Option(self.main_widget, self)
 
         option.setSceneRect(0, 0, 750, 900)
         color = attributes[COLOR]
@@ -153,7 +153,7 @@ class OptionPicker(QScrollArea):
             prop.ghost_prop = option.ghost_props[color]
             option.arrows.append(arrow)
 
-        option.update_pictograph()
+        option.update_option()
         return option
 
     def on_option_clicked(self, option: "Option"):
@@ -202,6 +202,8 @@ class OptionPicker(QScrollArea):
         new_scene.update_pictograph()
         return new_scene
 
-    def update_scroll_area_size(self) -> None:
+    def update_option_picker_size(self) -> None:
         self.setFixedWidth(int(self.option_picker_widget.width() * 4 / 5))
         self.setFixedHeight(int(self.option_picker_widget.height()))
+        for option in self.options:
+            option.view.update_OptionView_size()

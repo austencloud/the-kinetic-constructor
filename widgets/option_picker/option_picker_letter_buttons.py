@@ -130,7 +130,7 @@ class OptionPickerLetterButtons(QFrame):
                         icon_size = int(button_size * 0.9)
                         button.setIconSize(QSize(icon_size, icon_size))
 
-    def update_size(self) -> None:
+    def update_button_frame_size(self) -> None:
         """
         Updates the size of the letter buttons.
         """
