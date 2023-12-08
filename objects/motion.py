@@ -34,7 +34,6 @@ class Motion:
         self.attributes = attributes
 
         self.setup_attributes(attributes)
-        
 
     def setup_attributes(self, attributes) -> None:
         self.color: Colors = attributes[COLOR]
@@ -58,9 +57,10 @@ class Motion:
         self.end_layer: Layers = self.get_end_layer()
 
         from objects.arrow import StaticArrow
+
         if self.prop and not isinstance(self.arrow, StaticArrow):
             self.update_prop_orientation_and_layer()
-        
+
     def update_prop_orientation_and_layer(self) -> None:
         self.prop.orientation = self.end_orientation
         self.prop.layer = self.end_layer
@@ -89,97 +89,100 @@ class Motion:
         return end_layer
 
     def get_end_orientation(self) -> Orientations:
-        orientation_map: dict[
-            Tuple[Orientations], Dict[MotionTypes, Dict[Turns, Orientations]]
-        ] = {
-            (IN, CLOCKWISE): {
-                PRO: {
-                    0: IN,
-                    0.5: COUNTER_CLOCKWISE,
-                    1: OUT,
-                    1.5: CLOCKWISE,
-                    2: IN,
-                    2.5: COUNTER_CLOCKWISE,
-                    3: OUT,
-                },
-                ANTI: {
-                    0: OUT,
-                    0.5: CLOCKWISE,
-                    1: IN,
-                    1.5: COUNTER_CLOCKWISE,
-                    2: OUT,
-                    2.5: CLOCKWISE,
-                    3: IN,
-                },
-            },
-            (OUT, CLOCKWISE): {
-                PRO: {
-                    0: OUT,
-                    0.5: CLOCKWISE,
-                    1: IN,
-                    1.5: COUNTER_CLOCKWISE,
-                    2: OUT,
-                    2.5: CLOCKWISE,
-                    3: IN,
-                },
-                ANTI: {
-                    0: IN,
-                    0.5: COUNTER_CLOCKWISE,
-                    1: OUT,
-                    1.5: CLOCKWISE,
-                    2: IN,
-                    2.5: COUNTER_CLOCKWISE,
-                    3: OUT,
-                },
-            },
-            (IN, COUNTER_CLOCKWISE): {
-                PRO: {
-                    0: IN,
-                    0.5: CLOCKWISE,
-                    1: OUT,
-                    1.5: COUNTER_CLOCKWISE,
-                    2: IN,
-                    2.5: CLOCKWISE,
-                    3: OUT,
-                },
-                ANTI: {
-                    0: OUT,
-                    0.5: COUNTER_CLOCKWISE,
-                    1: IN,
-                    1.5: CLOCKWISE,
-                    2: OUT,
-                    2.5: COUNTER_CLOCKWISE,
-                    3: IN,
-                },
-            },
-            (OUT, COUNTER_CLOCKWISE): {
-                PRO: {
-                    0: OUT,
-                    0.5: COUNTER_CLOCKWISE,
-                    1: IN,
-                    1.5: CLOCKWISE,
-                    2: OUT,
-                    2.5: COUNTER_CLOCKWISE,
-                    3: IN,
-                },
-                ANTI: {
-                    0: IN,
-                    0.5: CLOCKWISE,
-                    1: OUT,
-                    1.5: COUNTER_CLOCKWISE,
-                    2: IN,
-                    2.5: CLOCKWISE,
-                    3: OUT,
-                },
-            },
+        anti_orientation_map = {
+            (0, IN): OUT,
+            (0.5, IN): COUNTER_CLOCKWISE,
+            (1, IN): OUT,
+            (1.5, IN): COUNTER_CLOCKWISE,
+            (2, IN): OUT,
+            (2.5, IN): COUNTER_CLOCKWISE,
+            (3, IN): OUT,
+            (0, OUT): IN,
+            (0.5, OUT): CLOCKWISE,
+            (1, OUT): IN,
+            (1.5, OUT): CLOCKWISE,
+            (2, OUT): IN,
+            (2.5, OUT): CLOCKWISE,
+            (3, OUT): IN,
         }
-        for key in orientation_map:
-            orientation_map[key][STATIC] = orientation_map[key][PRO]
-            orientation_map[key][DASH] = orientation_map[key][ANTI]
+        
+        pro_orientation_map = {
+            (0, IN): IN,
+            (0.5, IN): CLOCKWISE,
+            (1, IN): IN,
+            (1.5, IN): CLOCKWISE,
+            (2, IN): IN,
+            (2.5, IN): CLOCKWISE,
+            (3, IN): IN,
+            (0, OUT): OUT,
+            (0.5, OUT): COUNTER_CLOCKWISE,
+            (1, OUT): OUT,
+            (1.5, OUT): COUNTER_CLOCKWISE,
+            (2, OUT): OUT,
+            (2.5, OUT): COUNTER_CLOCKWISE,
+            (3, OUT): OUT,
+        }
+        
 
-        key: Tuple[Orientations] = (self.start_orientation, self.rotation_direction)
-        motion_map = orientation_map.get(key, {})
-        return motion_map.get(self.motion_type, {}).get(self.turns)
+        float_orientation_map_layer_1 = {
+            (IN, "n", "e"): CLOCKWISE,
+            (IN, "e", "s"): CLOCKWISE,
+            (IN, "s", "w"): CLOCKWISE,
+            (IN, "w", "n"): CLOCKWISE,
+            (IN, "n", "w"): COUNTER_CLOCKWISE,
+            (IN, "w", "s"): COUNTER_CLOCKWISE,
+            (IN, "s", "e"): COUNTER_CLOCKWISE,
+            (IN, "e", "n"): COUNTER_CLOCKWISE,
+            (OUT, "n", "e"): COUNTER_CLOCKWISE,
+            (OUT, "e", "s"): COUNTER_CLOCKWISE,
+            (OUT, "s", "w"): COUNTER_CLOCKWISE,
+            (OUT, "w", "n"): COUNTER_CLOCKWISE,
+            (OUT, "n", "w"): CLOCKWISE,
+            (OUT, "w", "s"): CLOCKWISE,
+            (OUT, "s", "e"): CLOCKWISE,
+            (OUT, "e", "n"): CLOCKWISE,
+        }
+
+        float_orientation_map_layer_2 = {
+            (CLOCKWISE, "n", "e"): OUT,
+            (CLOCKWISE, "e", "s"): OUT,
+            (CLOCKWISE, "s", "w"): OUT,
+            (CLOCKWISE, "w", "n"): OUT,
+            (CLOCKWISE, "n", "w"): IN,
+            (CLOCKWISE, "w", "s"): IN,
+            (CLOCKWISE, "s", "e"): IN,
+            (CLOCKWISE, "e", "n"): IN,
+            (COUNTER_CLOCKWISE, "n", "e"): IN,
+            (COUNTER_CLOCKWISE, "e", "s"): IN,
+            (COUNTER_CLOCKWISE, "s", "w"): IN,
+            (COUNTER_CLOCKWISE, "w", "n"): IN,
+            (COUNTER_CLOCKWISE, "n", "w"): OUT,
+            (COUNTER_CLOCKWISE, "w", "s"): OUT,
+            (COUNTER_CLOCKWISE, "s", "e"): OUT,
+            (COUNTER_CLOCKWISE, "e", "n"): OUT,
+        }
+
+        if self.rotation_direction is not None:
+            key = (self.turns, self.start_orientation)
+            if self.motion_type in [PRO, STATIC]:
+                end_orientation = pro_orientation_map.get(key)
+            elif self.motion_type in [ANTI, DASH]:
+                end_orientation = anti_orientation_map.get(key)
+            return end_orientation
+
+        elif self.rotation_direction is None:
+            if self.motion_type == STATIC:
+                return self.start_orientation
+            elif self.motion_type == DASH:
+                return OUT if self.start_orientation == IN else IN
+            elif self.motion_type == FLOAT:
+                if self.start_layer == 1:
+                    key = (self.start_orientation, self.start_location, self.end_location)
+                    return float_orientation_map_layer_1.get(key, self.start_orientation)
+                elif self.start_layer == 2:
+                    key = (self.start_orientation, self.start_location, self.end_location)
+                    return float_orientation_map_layer_2.get(key, self.start_orientation)
+
 
     def update_attr_from_arrow(self) -> None:
         self.color = self.arrow.color

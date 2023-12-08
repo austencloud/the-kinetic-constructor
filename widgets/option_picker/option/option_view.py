@@ -5,13 +5,15 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon
 
+from widgets.graph_editor.pictograph.pictograph_view import PictographView
+
 if TYPE_CHECKING:
     from widgets.option_picker.option.option import Option
 
 
-class OptionView(QGraphicsView):
+class OptionView(PictographView):
     def __init__(self, option: "Option") -> None:
-        super().__init__()
+        super().__init__(option)
         self.option = option
 
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)

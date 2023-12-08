@@ -1,23 +1,6 @@
 from PyQt6.QtCore import QPointF
 from settings.numerical_constants import DISTANCE
-from settings.string_constants import (
-    ANTI,
-    ARROW_LOCATION,
-    COLOR,
-    DIAMOND,
-    END_LOCATION,
-    FLOAT,
-    MOTION_TYPE,
-    PRO,
-    ROTATION_DIRECTION,
-    NORTHEAST,
-    SOUTHEAST,
-    SOUTHWEST,
-    NORTHWEST,
-    START_LOCATION,
-    STATIC,
-    TURNS,
-)
+from settings.string_constants import *
 from objects.arrow import StaticArrow, Arrow
 
 from typing import TYPE_CHECKING, List, Dict, Any
@@ -152,27 +135,55 @@ class ArrowPositioner:
         layer2_points = (self.pictograph.grid.diamond_layer2_points if self.pictograph.grid.grid_mode == DIAMOND 
                         else self.pictograph.grid.box_layer2_points)
 
-        if arrow.motion_type in [PRO, ANTI, FLOAT]:
-            layer2_point = layer2_points.get(arrow.arrow_location)
-            
-            if layer2_point is None:
-                print(f"Warning: No layer2_point found for arrow_location {arrow.arrow_location}")
+        if self.pictograph.grid.grid_mode == DIAMOND:
+            if arrow.motion_type in [PRO, ANTI, FLOAT]:
+                layer2_point = layer2_points.get(arrow.arrow_location)
+                
+                if layer2_point is None:
+                    print(f"Warning: No layer2_point found for arrow_location {arrow.arrow_location}")
 
-            arrow.set_arrow_transform_origin_to_center()
-            adjustment = QPointF(0, 0)
+                arrow.set_arrow_transform_origin_to_center()
+                adjustment = QPointF(0, 0)
 
-            if arrow.arrow_location == NORTHEAST:
-                adjustment = QPointF(DISTANCE, -DISTANCE)
-            elif arrow.arrow_location == SOUTHEAST:
-                adjustment = QPointF(DISTANCE, DISTANCE)
-            elif arrow.arrow_location == SOUTHWEST:
-                adjustment = QPointF(-DISTANCE, DISTANCE)
-            elif arrow.arrow_location == NORTHWEST:
-                adjustment = QPointF(-DISTANCE, -DISTANCE)
+                if arrow.arrow_location == NORTHEAST:
+                    adjustment = QPointF(DISTANCE, -DISTANCE)
+                elif arrow.arrow_location == SOUTHEAST:
+                    adjustment = QPointF(DISTANCE, DISTANCE)
+                elif arrow.arrow_location == SOUTHWEST:
+                    adjustment = QPointF(-DISTANCE, DISTANCE)
+                elif arrow.arrow_location == NORTHWEST:
+                    adjustment = QPointF(-DISTANCE, -DISTANCE)
 
-            new_pos = QPointF(
-                layer2_point.x() + adjustment.x(),
-                layer2_point.y() + adjustment.y(),
-            )
-            final_pos = QPointF(new_pos.x(), new_pos.y())
-            arrow.setPos(final_pos - arrow.boundingRect().center())
+                new_pos = QPointF(
+                    layer2_point.x() + adjustment.x(),
+                    layer2_point.y() + adjustment.y(),
+                )
+                final_pos = QPointF(new_pos.x(), new_pos.y())
+                arrow.setPos(final_pos - arrow.boundingRect().center())
+                
+                
+        elif self.pictograph.grid.grid_mode == "box":
+            if arrow.motion_type in [PRO, ANTI, FLOAT]:
+                layer2_point = layer2_points.get(arrow.arrow_location)
+                
+                if layer2_point is None:
+                    print(f"Warning: No layer2_point found for arrow_location {arrow.arrow_location}")
+
+                arrow.set_arrow_transform_origin_to_center()
+                adjustment = QPointF(0, 0)
+
+                if arrow.arrow_location == NORTH:
+                    adjustment = QPointF(DISTANCE, -DISTANCE)
+                elif arrow.arrow_location == SOUTH:
+                    adjustment = QPointF(DISTANCE, DISTANCE)
+                elif arrow.arrow_location == EAST:
+                    adjustment = QPointF(-DISTANCE, DISTANCE)
+                elif arrow.arrow_location == WEST:
+                    adjustment = QPointF(-DISTANCE, -DISTANCE)
+
+                new_pos = QPointF(
+                    layer2_point.x() + adjustment.x(),
+                    layer2_point.y() + adjustment.y(),
+                )
+                final_pos = QPointF(new_pos.x(), new_pos.y())
+                arrow.setPos(final_pos - arrow.boundingRect().center())

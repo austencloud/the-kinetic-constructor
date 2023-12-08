@@ -360,6 +360,7 @@ class Option(Pictograph):
         self.update_letter()
         self.update_arrows()
         self.update_props()
+        self.view.update_OptionView_size()
 
     def update_arrows(self) -> None:
         self.arrow_positioner.update_arrow_positions()

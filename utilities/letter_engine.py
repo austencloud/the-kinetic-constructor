@@ -6,7 +6,7 @@ from data.letter_engine_data import (
     motion_type_letter_groups,
     parallel_combinations,
 )
-from data.positions_map import positions_map
+from data.positions_map import get_specific_start_end_positions
 from objects.motion import Motion
 from settings.string_constants import *
 
@@ -68,9 +68,12 @@ class LetterEngine:
         return preprocessed_start_end_combinations
 
     def get_current_letter(self) -> Letters | None:
+        self.red_motion = self.get_motion("red")
+        self.blue_motion = self.get_motion("blue")
+        
         specific_position: Dict[
             str, SpecificPositions
-        ] = self.get_specific_start_end_positions()
+        ] = get_specific_start_end_positions(self.red_motion, self.blue_motion)
         if specific_position:
             start_pos = specific_position.get("start_position")
             end_pos = specific_position.get("end_position")
@@ -118,33 +121,6 @@ class LetterEngine:
             (motion for motion in self.pictograph.motions if motion.color == color),
             None,
         )
-
-    def get_specific_start_end_positions(self) -> SpecificStartEndPositionsDicts:
-        red_motion = self.get_motion("red")
-        blue_motion = self.get_motion("blue")
-
-        if red_motion and blue_motion:
-            start_locations = (
-                red_motion.start_location,
-                "red",
-                blue_motion.start_location,
-                "blue",
-            )
-            end_locations = (
-                red_motion.end_location,
-                "red",
-                blue_motion.end_location,
-                "blue",
-            )
-
-            specific_position: SpecificStartEndPositionsDicts = {
-                "start_position": positions_map.get(start_locations),
-                "end_position": positions_map.get(end_locations),
-            }
-
-            self.red_motion = red_motion
-            self.blue_motion = blue_motion
-            return specific_position
 
     def get_motion_type_letter_group(self) -> LetterGroupsByMotionTypes:
         red_motion_type = self.red_motion.motion_type

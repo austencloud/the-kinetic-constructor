@@ -1,6 +1,7 @@
 
+from objects.motion import Motion
 from settings.string_constants import *
-from utilities.TypeChecking.TypeChecking import Colors, Locations, SpecificPositions, Dict, Tuple
+from utilities.TypeChecking.TypeChecking import Colors, Locations, SpecificPositions, Dict, SpecificStartEndPositionsDicts, Tuple
 
 positions_map: Dict[Tuple[Locations, Colors, Locations, Colors], SpecificPositions] = {
     (NORTH, RED, SOUTH, BLUE): 'alpha1',
@@ -24,3 +25,24 @@ positions_map: Dict[Tuple[Locations, Colors, Locations, Colors], SpecificPositio
 }
 
 
+def get_specific_start_end_positions(red_motion:Motion, blue_motion:Motion) -> SpecificStartEndPositionsDicts:
+    if red_motion and blue_motion:
+        start_locations = (
+            red_motion.start_location,
+            "red",
+            blue_motion.start_location,
+            "blue",
+        )
+        end_locations = (
+            red_motion.end_location,
+            "red",
+            blue_motion.end_location,
+            "blue",
+        )
+
+        specific_positions: SpecificStartEndPositionsDicts = {
+            "start_position": positions_map.get(start_locations),
+            "end_position": positions_map.get(end_locations),
+        }
+
+        return specific_positions

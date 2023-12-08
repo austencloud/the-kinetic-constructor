@@ -2,11 +2,13 @@ from typing import Dict, List
 import json
 from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout, QLabel, QPushButton
 from PyQt6.QtGui import QPixmap
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QSize
 from typing import TYPE_CHECKING
+from data.positions_map import get_specific_start_end_positions
 from objects.arrow import Arrow
 from objects.prop import Prop
 from settings.string_constants import (
+    BLUE,
     COLOR,
     IN,
     LAYER,
@@ -14,6 +16,7 @@ from settings.string_constants import (
     ORIENTATION,
     PROP_LOCATION,
     PROP_TYPE,
+    RED,
     STAFF,
 )
 from utilities.TypeChecking.TypeChecking import (
@@ -21,6 +24,7 @@ from utilities.TypeChecking.TypeChecking import (
     DictVariants,
     LetterDictionary,
     PropAttributesDicts,
+    SpecificStartEndPositionsDicts,
 )
 
 from widgets.option_picker.option.option import Option
@@ -32,55 +36,114 @@ if TYPE_CHECKING:
 
 
 class OptionPicker(QScrollArea):
-    def __init__(self, main_widget: 'MainWidget', option_picker_widget: 'OptionPickerWidget'):
+    def __init__(
+        self, main_widget: "MainWidget", option_picker_widget: "OptionPickerWidget"
+    ):
         super().__init__()
         self.main_widget = main_widget
         self.option_picker_widget = option_picker_widget
+        self.spacing = 5
         self.setWidgetResizable(True)
         self.container = QWidget()
         self.option_picker_layout = QGridLayout(self.container)
         self.setWidget(self.container)
-        self.pictographs = self.load_pictographs()
+        self.pictographs = self.load_preprocessed_pictographs()
         self.show_initial_selection()
         self.options: List[Option] = []
-        
-    def load_pictographs(self):
+
+    def load_preprocessed_pictographs(self):
         with open("preprocessed.json", "r") as file:
             return json.load(file)
 
-    def show_initial_selection(self):
+    def show_initial_selection(self) -> None:
         self.clear_layout(self.option_picker_layout)
+        # Set the layout to have 3 columns for the initial options
+        column_count = 3
+        row = 0
+        col = 0
+
         # Define starting positions (assuming they are part of the JSON keys)
         starting_positions = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
         for i, position_key in enumerate(starting_positions):
-            self.add_option_to_layout(position_key, is_initial=True)
+            self.add_option_to_layout(
+                position_key, is_initial=True, row=row, col=i % column_count
+            )
+            # Update the row index after every third item
+            if (i + 1) % column_count == 0:
+                row += 1
 
-    def on_initial_selection(self, selected_option: Option):
+    def on_initial_selection(self, selected_option: Option) -> None:
         # The user has selected an initial position, now populate the picker based on that choice
-        end_position = selected_option.get_end_position()
+        red_motion = selected_option.get_motion_by_color(RED)
+        blue_motion = selected_option.get_motion_by_color(BLUE)
+        specific_positions: SpecificStartEndPositionsDicts = (
+            get_specific_start_end_positions(red_motion, blue_motion)
+        )
+        end_position = specific_positions["end_position"]
         self.populate_options_based_on_selection(end_position)
 
-    def populate_options_based_on_selection(self, end_position):
+    def populate_options_based_on_selection(self, end_position) -> None:
         self.clear_layout(self.option_picker_layout)
-        # Populate options based on the end position of the selected starting position
+        self.option_picker_layout.setSpacing(
+            self.spacing
+        )  # Set the spacing between items
+
+        # Set fixed column count
+        column_count = 4
+        row = 0
+        col = 0
+
         for key in self.pictographs.keys():
             if key.startswith(end_position):
-                self.add_option_to_layout(key)
+                option = self.create_Option_from_attributes_pair(
+                    self.pictographs[key][0][1][:2]
+                )
 
-    def add_option_to_layout(self, letter_key, is_initial=False):
+                self.option_picker_layout.addWidget(option.view, row, col)
+
+                col += 1
+                if col == column_count:
+                    row += 1
+                    col = 0
+
+    def add_option_to_layout(
+        self, position_key: str, is_initial: bool = False, row: int = 0, col: int = 0
+    ) -> None:
         # Create an Option from the JSON data
-        attributes_list = self.pictographs[letter_key][0][1]
-        option = self.create_Option_from_attributes(attributes_list)
+        attributes_pair = self.pictographs[position_key][0][1][
+            :2
+        ]  # Filter out the optimal position values
 
+        option = self.create_Option_from_attributes_pair(attributes_pair)
+        print(f"Created option from attributes pair: {position_key}")
         if is_initial:
-            option.view.mousePressEvent = lambda event, opt=option: self.on_initial_selection(opt)
+            option.view.mousePressEvent = (
+                lambda event, opt=option: self.on_initial_selection(opt)
+            )
         else:
             # Define what happens when the option is clicked after the initial selection
-            option.view.mousePressEvent = lambda event, opt=option: self.on_option_clicked()(opt)
+            option.view.mousePressEvent = (
+                lambda event, opt=option: self.on_option_clicked(opt)
+            )
 
-        self.option_picker_layout.addWidget(option.view)
+        # Calculate the size of the view based on the number of items per row
+        column_count = 4  # Set the desired column count
+        view_width = self.calculate_view_width(column_count)
+        option.view.setFixedSize(QSize(view_width, int(view_width * 90 / 75)))
 
-    def clear_layout(self, layout):
+        # Add the option to the layout at the specified row and column
+        self.option_picker_layout.addWidget(option.view, row, col)
+
+    def calculate_view_width(self, items_per_row: int) -> int:
+        # Calculate view width based on the container's width and desired aspect ratio
+        container_width = (
+            self.container.width()
+            - self.option_picker_layout.horizontalSpacing() * (items_per_row - 1)
+        )
+        view_width = int(container_width / items_per_row)
+        return view_width
+
+    def clear_layout(self, layout: QGridLayout) -> None:
         while layout.count():
             child = layout.takeAt(0)
             if child.widget():
@@ -117,7 +180,9 @@ class OptionPicker(QScrollArea):
 
                 if len(arrow_attributes) >= 2:
                     # Process the first two arrow attributes as a pair
-                    option = self.create_Option_from_attributes(arrow_attributes[:2])
+                    option = self.create_Option_from_attributes_pair(
+                        arrow_attributes[:2]
+                    )
                     option_view = option.view
                     option_view.mousePressEvent = (
                         lambda event, opt=option: self.on_option_clicked(opt)
@@ -133,16 +198,16 @@ class OptionPicker(QScrollArea):
     def is_ArrowAttributesDicts(self, attributes: DictVariants) -> bool:
         return COLOR in attributes and MOTION_TYPE in attributes
 
-    def create_Option_from_attributes(
+    def create_Option_from_attributes_pair(
         self, attributes_list: list[ArrowAttributesDicts]
     ) -> Option:
         option = Option(self.main_widget, self)
         option.setSceneRect(0, 0, 750, 900)
 
-        for attributes in attributes_list:
-            color = attributes[COLOR]
-            motion_type = attributes[MOTION_TYPE]
-            arrow = Arrow(option, attributes)
+        for attribute in attributes_list:
+            color = attribute[COLOR]
+            motion_type = attribute[MOTION_TYPE]
+            arrow = Arrow(option, attribute)
             prop_attributes: PropAttributesDicts = {
                 COLOR: color,
                 PROP_TYPE: STAFF,
@@ -163,7 +228,9 @@ class OptionPicker(QScrollArea):
             motion = option.get_motion_by_color(color)
             motion.update_prop_orientation_and_layer()
             arrow.ghost_arrow = option.ghost_arrows[color]
+            arrow.ghost_arrow.motion = motion
             prop.ghost_prop = option.ghost_props[color]
+            prop.ghost_prop.motion = motion
             option.arrows.append(arrow)
             option.props.append(prop)
 
@@ -173,8 +240,10 @@ class OptionPicker(QScrollArea):
                     arrow.prop = prop
                     prop.arrow = arrow
 
-        print("Added motion to option")
-        print(option.motions)
+        for prop in option.props:
+            prop.motion.update_prop_orientation_and_layer()
+            prop.update_rotation()
+            prop.update_appearance()
 
         option.update_pictograph()
         return option

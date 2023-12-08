@@ -309,10 +309,11 @@ class Prop(GraphicalObject):
         }
 
         key = (self.layer, self.orientation)
-        return angle_map.get(key, {}).get(
+        rotation_angle = angle_map.get(key, {}).get(
             self.prop_location, 0
-        )  # Default to 0 if not found
-
+        )
+        return rotation_angle
+    
     def get_attributes(self) -> PropAttributesDicts:
         return {attr: getattr(self, attr) for attr in PROP_ATTRIBUTES}
 
