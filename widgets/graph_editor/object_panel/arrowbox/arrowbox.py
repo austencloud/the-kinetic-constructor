@@ -50,8 +50,12 @@ class ArrowBox(ObjectBox):
 
         self.populate_arrows()
         self.grid = Grid(self)
-        self.grid.toggle_element_visibility("layer2_points", False)
-        self.grid.toggle_element_visibility("hand_points", False)
+        if self.grid.grid_mode == "diamond":
+            self.grid.toggle_element_visibility("diamond_layer2_points", False)
+            self.grid.toggle_element_visibility("diamond_hand_points", False)
+        elif self.grid.grid_mode == "box":
+            self.grid.toggle_element_visibility("box_layer2_points", False)
+            self.grid.toggle_element_visibility("box_hand_points", False)
         self.target_arrow: "Arrow" = None
         self.arrowbox_layout = QGridLayout()
         self.arrowbox_layout.addWidget(self.view)

@@ -66,9 +66,7 @@ from objects.letter_item import LetterItem
 
 
 class Beat(Pictograph):
-    def __init__(
-        self, main_widget: "MainWidget", Sequence: "Sequence"
-    ) -> None:
+    def __init__(self, main_widget: "MainWidget", Sequence: "Sequence") -> None:
         super().__init__(main_widget, main_widget.graph_editor)
         self.main_widget = main_widget
         self.sequence = Sequence
@@ -194,7 +192,7 @@ class Beat(Pictograph):
             if prop.color == color:
                 return prop
 
-    def get_nearest_handpoint(self, pos: QPointF) -> Tuple[str, QPointF]:
+    def get_closest_handpoint(self, pos: QPointF) -> Tuple[str, QPointF]:
         min_distance = float("inf")
         nearest_point_name = None
 
@@ -206,7 +204,7 @@ class Beat(Pictograph):
 
         return nearest_point_name
 
-    def get_closest_box_point(self, pos: QPointF) -> Tuple[str, QPointF]:
+    def get_closest_layer2_point(self, pos: QPointF) -> Tuple[str, QPointF]:
         min_distance = float("inf")
         nearest_point_name = None
 

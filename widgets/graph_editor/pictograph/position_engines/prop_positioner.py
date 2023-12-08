@@ -32,7 +32,7 @@ from utilities.TypeChecking.TypeChecking import (
     MotionAttributesDicts,
     LetterDictionary,
     OptimalLocationsEntries,
-    OptimalLocationssDicts,
+    OptimalLocationsDicts,
     Direction,
     Locations,
 )
@@ -395,7 +395,7 @@ class PropPositioner:
     ) -> OptimalLocationsEntries | None:
         for variants in matching_letters:
             if self.pictograph.arrow_positioner.compare_states(current_state, variants):
-                optimal_entry: OptimalLocationssDicts = next(
+                optimal_entry: OptimalLocationsDicts = next(
                     (
                         d
                         for d in variants

@@ -21,7 +21,7 @@ class OptionPickerWidget(QFrame):
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
         self.setFixedSize(self.width(), self.height())
-        self.option_picker = OptionPicker(self)
+        self.option_picker = OptionPicker(self.main_widget, self)
         self.button_frame = OptionPickerLetterButtons(self.main_widget, self)
 
         self.main_layout.addWidget(self.option_picker)

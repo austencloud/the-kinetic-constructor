@@ -32,9 +32,7 @@ class PictographInit:
         grid = Grid(self.pictograph)
         grid_position = QPointF(0, 0)
         grid.setPos(grid_position)
-        grid.init_center()
-        grid.init_handpoints()
-        grid.init_layer2_points()
+
         self.pictograph.grid = grid
         return grid
 

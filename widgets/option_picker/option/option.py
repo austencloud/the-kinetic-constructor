@@ -193,7 +193,7 @@ class Option(Pictograph):
             if prop.color == color:
                 return prop
 
-    def get_nearest_handpoint(self, pos: QPointF) -> Tuple[str, QPointF]:
+    def get_closest_handpoint(self, pos: QPointF) -> Tuple[str, QPointF]:
         min_distance = float("inf")
         nearest_point_name = None
 
@@ -205,7 +205,7 @@ class Option(Pictograph):
 
         return nearest_point_name
 
-    def get_closest_box_point(self, pos: QPointF) -> Tuple[str, QPointF]:
+    def get_closest_layer2_point(self, pos: QPointF) -> Tuple[str, QPointF]:
         min_distance = float("inf")
         nearest_point_name = None
 

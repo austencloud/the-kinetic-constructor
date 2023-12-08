@@ -1,10 +1,14 @@
 from PyQt6.QtCore import QPointF
 from settings.numerical_constants import DISTANCE
 from settings.string_constants import (
+    ANTI,
     ARROW_LOCATION,
     COLOR,
+    DIAMOND,
     END_LOCATION,
+    FLOAT,
     MOTION_TYPE,
+    PRO,
     ROTATION_DIRECTION,
     NORTHEAST,
     SOUTHEAST,
@@ -21,7 +25,7 @@ from typing import TYPE_CHECKING, List, Dict, Any
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
 
-from utilities.TypeChecking.TypeChecking import MotionAttributes, OptimalLocationssDicts
+from utilities.TypeChecking.TypeChecking import MotionAttributes, OptimalLocationsDicts
 
 
 class ArrowPositioner:
@@ -45,7 +49,7 @@ class ArrowPositioner:
                 else:
                     self.set_arrow_to_default_loc(arrow)
 
-    def find_optimal_locations(self) -> OptimalLocationssDicts | None:
+    def find_optimal_locations(self) -> OptimalLocationsDicts | None:
         current_state: List[Dict[MotionAttributes, str]] = self.pictograph.get_state()
         current_letter = self.pictograph.current_letter
         current_letter_variants = self.letters[current_letter]
@@ -129,7 +133,7 @@ class ArrowPositioner:
         return True
 
     def set_arrow_to_optimal_loc(
-        self, optimal_locations: OptimalLocationssDicts, arrow: "Arrow"
+        self, optimal_locations: OptimalLocationsDicts, arrow: "Arrow"
     ) -> None:
         arrow.set_arrow_transform_origin_to_center()
         optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
@@ -145,22 +149,30 @@ class ArrowPositioner:
         arrow.setPos(new_pos)
 
     def set_arrow_to_default_loc(self, arrow: "Arrow") -> None:
-        layer2_point = self.pictograph.grid.layer2_points.get(arrow.arrow_location)
-        arrow.set_arrow_transform_origin_to_center()
-        adjustment = QPointF(0, 0)
+        layer2_points = (self.pictograph.grid.diamond_layer2_points if self.pictograph.grid.grid_mode == DIAMOND 
+                        else self.pictograph.grid.box_layer2_points)
 
-        if arrow.arrow_location == NORTHEAST:
-            adjustment = QPointF(DISTANCE, -DISTANCE)
-        elif arrow.arrow_location == SOUTHEAST:
-            adjustment = QPointF(DISTANCE, DISTANCE)
-        elif arrow.arrow_location == SOUTHWEST:
-            adjustment = QPointF(-DISTANCE, DISTANCE)
-        elif arrow.arrow_location == NORTHWEST:
-            adjustment = QPointF(-DISTANCE, -DISTANCE)
+        if arrow.motion_type in [PRO, ANTI, FLOAT]:
+            layer2_point = layer2_points.get(arrow.arrow_location)
+            
+            if layer2_point is None:
+                print(f"Warning: No layer2_point found for arrow_location {arrow.arrow_location}")
 
-        new_pos = QPointF(
-            layer2_point.x() + adjustment.x(),
-            layer2_point.y() + adjustment.y(),
-        )
-        final_pos = QPointF(new_pos.x(), new_pos.y())
-        arrow.setPos(final_pos - arrow.boundingRect().center())
+            arrow.set_arrow_transform_origin_to_center()
+            adjustment = QPointF(0, 0)
+
+            if arrow.arrow_location == NORTHEAST:
+                adjustment = QPointF(DISTANCE, -DISTANCE)
+            elif arrow.arrow_location == SOUTHEAST:
+                adjustment = QPointF(DISTANCE, DISTANCE)
+            elif arrow.arrow_location == SOUTHWEST:
+                adjustment = QPointF(-DISTANCE, DISTANCE)
+            elif arrow.arrow_location == NORTHWEST:
+                adjustment = QPointF(-DISTANCE, -DISTANCE)
+
+            new_pos = QPointF(
+                layer2_point.x() + adjustment.x(),
+                layer2_point.y() + adjustment.y(),
+            )
+            final_pos = QPointF(new_pos.x(), new_pos.y())
+            arrow.setPos(final_pos - arrow.boundingRect().center())

@@ -4,6 +4,10 @@ from PyQt6.QtCore import QPointF
 from PyQt6.QtGui import QTransform
 from objects.prop import Prop
 from settings.string_constants import (
+    BOX,
+    DASH,
+    DIAMOND,
+    FLOAT,
     MOTION_TYPE,
     TURNS,
     COLOR,
@@ -147,7 +151,7 @@ class Arrow(GraphicalObject):
             self.scene.arrows.append(self.ghost_arrow)
 
     def update_location(self, new_pos: QPointF) -> None:
-        new_location = self.scene.get_closest_box_point(new_pos)
+        new_location = self.scene.get_closest_layer2_point(new_pos)
 
         self.arrow_location = new_location
         self.motion.arrow_location = new_location
@@ -355,27 +359,69 @@ class Arrow(GraphicalObject):
         self.scene.update_pictograph()
 
     def rotate_arrow(self, rotation_direction: RotationDirections) -> None:
-        diamond_mode_locations = [NORTH, EAST, SOUTH, WEST]
-        box_mode_locations = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
+        diamond_mode_static_arrow_locations = [NORTH, EAST, SOUTH, WEST]
+        diamond_mode_shift_arrow_locations = [
+            NORTHEAST,
+            SOUTHEAST,
+            SOUTHWEST,
+            NORTHWEST,
+        ]
+        diamond_mode_dash_arrow_locations = [NORTH, EAST, SOUTH, WEST]
 
-        if isinstance(self, StaticArrow):
-            self.rotate_diamond_mode_static_arrow(
-                rotation_direction, diamond_mode_locations
-            )
-        else:
-            self.rotate_diamond_mode_shift(rotation_direction, box_mode_locations)
+        box_mode_static_arrow_locations = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
+        box_mode_shift_arrow_locations = [NORTH, EAST, SOUTH, WEST]
+        box_mode_dash_arrow_locations = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
 
-    def rotate_diamond_mode_shift(
-        self, rotation_direction, box_mode_locations: List[Locations]
+        if self.pictograph.grid.grid_mode == DIAMOND:
+            if self.motion.motion_type == STATIC:
+                self.rotate_diamond_mode_static_arrow(
+                    rotation_direction, diamond_mode_static_arrow_locations
+                )
+            elif self.motion.motion_type in [PRO, ANTI, FLOAT]:
+                self.rotate_diamond_mode_shift_arrow(
+                    rotation_direction, diamond_mode_shift_arrow_locations
+                )
+            elif self.motion.motion_type in [DASH]:
+                self.rotate_diamond_mode_dash_arrow(
+                    rotation_direction, diamond_mode_dash_arrow_locations
+                )
+        elif self.pictograph.grid.grid_mode == BOX:
+            if self.motion.motion_type == STATIC:
+                self.rotate_box_mode_static_arrow(
+                    rotation_direction, box_mode_static_arrow_locations
+                )
+            elif self.motion.motion_type in [PRO, ANTI, FLOAT]:
+                self.rotate_box_mode_shift_arrow(
+                    rotation_direction, box_mode_shift_arrow_locations
+                )
+            elif self.motion.motion_type in [DASH]:
+                self.rotate_box_mode_dash_arrow(
+                    rotation_direction, box_mode_dash_arrow_locations
+                )
+
+    def rotate_diamond_mode_dash_arrow(
+        self, rotation_direction, box_mode_arrow_locations: List[Locations]
     ) -> None:
-        current_location_index = box_mode_locations.index(self.arrow_location)
+        pass
+
+    def rotate_diamond_mode_dash_arrow(
+        self, rotation_direction, diamond_mode_arrow_locations: List[Locations]
+    ) -> None:
+        pass
+
+    def rotate_box_mode_shift_arrow(
+        self, rotation_direction, box_mode_shift_arrow_locations: List[Locations]
+    ) -> None:
+        current_location_index = box_mode_shift_arrow_locations.index(
+            self.arrow_location
+        )
         new_location_index = (
             (current_location_index + 1) % 4
             if rotation_direction == CLOCKWISE
             else (current_location_index - 1) % 4
         )
 
-        new_arrow_location = box_mode_locations[new_location_index]
+        new_arrow_location = box_mode_shift_arrow_locations[new_location_index]
         (
             new_start_location,
             new_end_location,
@@ -393,6 +439,63 @@ class Arrow(GraphicalObject):
         self.prop.prop_location = new_end_location
 
         self.update_appearance()
+        self.prop.update_appearance()
+        self.scene.update_pictograph()
+
+    def rotate_diamond_mode_shift_arrow(
+        self, rotation_direction, diamond_mode_shift_arrow_locations: List[Locations]
+    ) -> None:
+        current_location_index = diamond_mode_shift_arrow_locations.index(
+            self.arrow_location
+        )
+        new_location_index = (
+            (current_location_index + 1) % 4
+            if rotation_direction == CLOCKWISE
+            else (current_location_index - 1) % 4
+        )
+
+        new_arrow_location = diamond_mode_shift_arrow_locations[new_location_index]
+        (
+            new_start_location,
+            new_end_location,
+        ) = get_start_end_locations(
+            self.motion_type, self.rotation_direction, new_arrow_location
+        )
+
+        self.motion.arrow_location = new_arrow_location
+        self.motion.start_location = new_start_location
+        self.motion.end_location = new_end_location
+
+        self.arrow_location = new_arrow_location
+        self.motion.start_location = new_start_location
+        self.motion.end_location = new_end_location
+        self.prop.prop_location = new_end_location
+
+        self.update_appearance()
+        self.prop.update_appearance()
+        self.scene.update_pictograph()
+
+    def rotate_box_mode_static_arrow(
+        self, rotation_direction, box_mode_static_arrow_locations: List[Locations]
+    ) -> None:
+        current_location_index = box_mode_static_arrow_locations.index(
+            self.arrow_location
+        )
+        new_location_index = (
+            (current_location_index + 1) % 4
+            if rotation_direction == CLOCKWISE
+            else (current_location_index - 1) % 4
+        )
+        new_location = box_mode_static_arrow_locations[new_location_index]
+        self.motion.arrow_location = new_location
+        self.motion.start_location = new_location
+        self.motion.end_location = new_location
+        self.arrow_location = new_location
+        self.motion.start_location = new_location
+        self.motion.end_location = new_location
+        self.prop.prop_location = new_location
+
+        self.motion.update_attr_from_arrow()
         self.prop.update_appearance()
         self.scene.update_pictograph()
 

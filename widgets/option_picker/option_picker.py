@@ -1,17 +1,12 @@
 from typing import Dict, List
 import json
-from PyQt6.QtWidgets import (
-    QScrollArea,
-    QSizePolicy,
-    QFrame,
-    QWidget,
-    QGridLayout,
-)
+from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout, QLabel, QPushButton
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from objects.arrow import Arrow
 from objects.prop import Prop
 from settings.string_constants import (
-    BLUE,
     COLOR,
     IN,
     LAYER,
@@ -19,7 +14,6 @@ from settings.string_constants import (
     ORIENTATION,
     PROP_LOCATION,
     PROP_TYPE,
-    RED,
     STAFF,
 )
 from utilities.TypeChecking.TypeChecking import (
@@ -30,56 +24,69 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 from widgets.option_picker.option.option import Option
-from widgets.option_picker.option.option_view import OptionView
 from widgets.sequence.beat import Beat
 
 if TYPE_CHECKING:
     from widgets.option_picker.option_picker_widget import OptionPickerWidget
+    from widgets.main_widget import MainWidget
 
 
 class OptionPicker(QScrollArea):
-    def __init__(self, option_picker_widget: "OptionPickerWidget") -> None:
-        """
-        Initialize the OptionPickerScrollArea.
-
-        Args:
-            option_picker (OptionPicker): The parent OptionPicker widget.
-        """
+    def __init__(self, main_widget: 'MainWidget', option_picker_widget: 'OptionPickerWidget'):
         super().__init__()
-        self.main_window = option_picker_widget.main_window
-        self.main_widget = option_picker_widget.main_widget
+        self.main_widget = main_widget
         self.option_picker_widget = option_picker_widget
-        self.scrollbar_width = 0  # Class variable to store the width of the scrollbar
-        self.spacing = 16  # Class variable to store the spacing between pictographs
-        self.setContentsMargins(0, 0, 0, 0)
-        self.setFrameStyle(QFrame.Shape.NoFrame)
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setWidgetResizable(True)
-        self.grid_widget = QWidget()
-        self.option_picker_grid_layout = QGridLayout(self.grid_widget)
-        self.option_picker_grid_layout.setContentsMargins(0, 0, 0, 0)
-        self.option_picker_grid_layout.setSpacing(self.spacing)
-        self.setWidget(self.grid_widget)
-        self.setFixedWidth(int(self.option_picker_widget.width() * 4 / 5))
-        self.setFixedHeight(int(self.option_picker_widget.height()))
+        self.container = QWidget()
+        self.option_picker_layout = QGridLayout(self.container)
+        self.setWidget(self.container)
+        self.pictographs = self.load_pictographs()
+        self.show_initial_selection()
         self.options: List[Option] = []
-        # Load pictographs from JSON
+        
+    def load_pictographs(self):
         with open("preprocessed.json", "r") as file:
-            data = json.load(file)
+            return json.load(file)
 
-        # Categorize pictographs by letter
-        self.pictographs_by_letter = {}
-        for pictograph in data:
-            letter = data["alpha1_alpha2"][0][0]
-            if letter not in self.pictographs_by_letter:
-                self.pictographs_by_letter[letter] = []
-            self.pictographs_by_letter[letter].append(pictograph)
+    def show_initial_selection(self):
+        self.clear_layout(self.option_picker_layout)
+        # Define starting positions (assuming they are part of the JSON keys)
+        starting_positions = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
+        for i, position_key in enumerate(starting_positions):
+            self.add_option_to_layout(position_key, is_initial=True)
 
-        self.verticalScrollBar().setFixedWidth(int(self.main_window.width() * 0.01))
-        self.populate_pictographs()
-        self.update_option_picker_size()
+    def on_initial_selection(self, selected_option: Option):
+        # The user has selected an initial position, now populate the picker based on that choice
+        end_position = selected_option.get_end_position()
+        self.populate_options_based_on_selection(end_position)
 
-    def populate_pictographs(self):
+    def populate_options_based_on_selection(self, end_position):
+        self.clear_layout(self.option_picker_layout)
+        # Populate options based on the end position of the selected starting position
+        for key in self.pictographs.keys():
+            if key.startswith(end_position):
+                self.add_option_to_layout(key)
+
+    def add_option_to_layout(self, letter_key, is_initial=False):
+        # Create an Option from the JSON data
+        attributes_list = self.pictographs[letter_key][0][1]
+        option = self.create_Option_from_attributes(attributes_list)
+
+        if is_initial:
+            option.view.mousePressEvent = lambda event, opt=option: self.on_initial_selection(opt)
+        else:
+            # Define what happens when the option is clicked after the initial selection
+            option.view.mousePressEvent = lambda event, opt=option: self.on_option_clicked()(opt)
+
+        self.option_picker_layout.addWidget(option.view)
+
+    def clear_layout(self, layout):
+        while layout.count():
+            child = layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+
+    def populate_pictographs(self) -> None:
         with open("preprocessed.json", "r") as file:
             data: Dict = json.load(file)
 
@@ -115,7 +122,7 @@ class OptionPicker(QScrollArea):
                     option_view.mousePressEvent = (
                         lambda event, opt=option: self.on_option_clicked(opt)
                     )
-                    self.option_picker_grid_layout.addWidget(option_view, row, col)
+                    self.option_picker_layout.addWidget(option_view, row, col)
                     col += 1
                     if col >= MAX_ITEMS_PER_ROW:
                         col = 0
@@ -172,7 +179,7 @@ class OptionPicker(QScrollArea):
         option.update_pictograph()
         return option
 
-    def on_option_clicked(self, option: "Option"):
+    def on_option_clicked(self, option: "Option") -> None:
         copied_scene = self.copy_scene(option)
         self.main_widget.sequence.frame.add_scene_to_sequence(copied_scene)
 

@@ -12,6 +12,7 @@ from objects.motion import Motion
 from settings.string_constants import (
     BLUE,
     COLOR,
+    DIAMOND,
     END_LOCATION,
     LETTER_SVG_DIR,
     MOTION_TYPE,
@@ -31,6 +32,7 @@ from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
     Colors,
     Layers,
+    Locations,
     MotionAttributesDicts,
     List,
     MotionTypes,
@@ -187,7 +189,7 @@ class Pictograph(QGraphicsScene):
             if prop.color == color:
                 return prop
 
-    def get_nearest_handpoint(self, pos: QPointF) -> Tuple[str, QPointF]:
+    def get_closest_handpoint(self, pos: QPointF) -> Tuple[str, QPointF]:
         min_distance = float("inf")
         nearest_point_name = None
 
@@ -199,17 +201,21 @@ class Pictograph(QGraphicsScene):
 
         return nearest_point_name
 
-    def get_closest_box_point(self, pos: QPointF) -> Tuple[str, QPointF]:
+    # Inside class Pictograph
+    def get_closest_layer2_point(self, pos: QPointF) -> Locations:
         min_distance = float("inf")
         nearest_point_name = None
+        relevant_points = (self.grid.diamond_layer2_points if self.grid.grid_mode == DIAMOND 
+                        else self.grid.box_layer2_points)
 
-        for name, point in self.grid.layer2_points.items():
+        for name, point in relevant_points.items():
             distance = (pos - point).manhattanLength()
             if distance < min_distance:
                 min_distance = distance
                 nearest_point_name = name
 
         return nearest_point_name
+
 
     ### HELPERS ###
 
@@ -267,7 +273,6 @@ class Pictograph(QGraphicsScene):
                 self.motions.remove(m)
 
         self.motions.append(motion)
-
 
     def copy_scene(self) -> QGraphicsScene:
         from widgets.sequence.beat import Beat

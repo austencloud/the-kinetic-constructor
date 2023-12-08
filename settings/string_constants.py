@@ -37,6 +37,7 @@ DOWN = "down"
 
 PRO = "pro"
 ANTI = "anti"
+FLOAT = "float"
 DASH = "dash"
 STATIC = "static"
 
@@ -45,6 +46,8 @@ MOTION_TYPE = "motion_type"
 ROTATION_DIRECTION = "rotation_direction"
 TURNS = "turns"
 
+DIAMOND = "diamond"
+BOX = "box"
 
 LOCATION = "location"
 ARROW_LOCATION = "arrow_location"

@@ -27,15 +27,18 @@ LetterType = Literal[
     "Dual-Shift", "Shift", "Cross-Shift", "Dash", "Dual-Dash", "Static"
 ]
 
+GridModes = Literal["Box", "Diamond"]
+
 
 class SpecificStartEndPositionsDicts(TypedDict):
     start_position: SpecificPositions
     end_position: SpecificPositions
 
 
-
 OptimalLocationsEntries = Dict[Literal["x", "y"], float]
-class OptimalLocationssDicts(TypedDict):
+
+
+class OptimalLocationsDicts(TypedDict):
     optimal_red_location: OptimalLocationsEntries
     optimal_blue_location: OptimalLocationsEntries
 
@@ -107,9 +110,9 @@ PreprocessedStartEndCombinations = Dict[
     SpecificStartEndPositionsDicts,
     List[Tuple[Letters, List[MotionAttributesDicts]]],
 ]
-OptimalLocationssDicts = Dict[str, OptimalLocationsEntries]
+OptimalLocationsDicts = Dict[str, OptimalLocationsEntries]
 DictVariants = (
-    MotionAttributesDicts | SpecificStartEndPositionsDicts | OptimalLocationssDicts
+    MotionAttributesDicts | SpecificStartEndPositionsDicts | OptimalLocationsDicts
 )
 DictVariantsLists = List[DictVariants]
 LetterDictionary = Dict[Letters, List[DictVariantsLists]]
