@@ -12,8 +12,8 @@ from utilities.pictograph_generator import PictographGenerator
 from widgets.graph_editor.key_event_handler import KeyEventHandler
 from widgets.graph_editor.graph_editor import GraphEditor
 from widgets.graph_editor.pictograph.pictograph import Pictograph
-from widgets.option_picker.option_picker import OptionPicker
-from widgets.sequence.sequence import Sequence
+from widgets.option_picker.option_picker_widget import OptionPickerWidget
+from widgets.sequence.sequence_widget import SequenceWidget
 
 if TYPE_CHECKING:
     from main import MainWindow
@@ -32,8 +32,8 @@ class MainWidget(QWidget):
         self.letters: LetterDictionary = self.json_handler.load_all_letters()
 
         self.graph_editor = GraphEditor(self)
-        self.option_picker = OptionPicker(self)
-        self.sequence = Sequence(self)
+        self.option_picker = OptionPickerWidget(self)
+        self.sequence = SequenceWidget(self)
 
         self.generator = PictographGenerator(self)
         self.export_handler = ExportHandler(self)
@@ -69,6 +69,7 @@ class MainWidget(QWidget):
                 return beat_view.pictograph
 
         return None
+
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
         self.resize(int(self.main_window.width()), int(self.main_window.height()))

@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, List, Dict, Union
 from xml.etree import ElementTree as ET
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
+from PyQt6.QtGui import QTransform
 
 
 from settings.string_constants import (
@@ -59,6 +59,25 @@ class Grid:
     def setPos(self, position: QPointF) -> None:
         for item in self.items.values():
             item.setPos(position)
+
+    def scale_grid(self, scale_factor: float) -> None:
+        # Determine the center point of the grid layout before scaling
+        grid_center = QPointF(self.grid_scene.width() / 2, self. grid_scene.height() / 2)
+        
+        for item in self.items.values():
+            item.setTransform(QTransform())
+
+            item_center = item.boundingRect().center()
+            transform = QTransform()
+            transform.translate(item_center.x(), item_center.y())
+            transform.scale(scale_factor, scale_factor)
+            transform.translate(-item_center.x(), -item_center.y())
+            item.setTransform(transform)
+
+            relative_pos = (item.pos() - grid_center) * scale_factor
+            new_pos = grid_center + relative_pos - item_center * scale_factor
+            item.setPos(new_pos)
+
 
     def toggle_element_visibility(self, element_id: str, visible: bool):
         if element_id in self.items:

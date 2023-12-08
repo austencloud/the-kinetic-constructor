@@ -112,7 +112,7 @@ DictVariants = (
     MotionAttributesDicts | SpecificStartEndPositionsDicts | OptimalLocationssDicts
 )
 DictVariantsLists = List[DictVariants]
-LetterDictionary = Dict[Letters, List[List[DictVariants]]]
+LetterDictionary = Dict[Letters, List[DictVariantsLists]]
 
 
 Mode = Optional[Literal["TS", "TO", "SS", "SO", "QTS", "QTO"]]

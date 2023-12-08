@@ -1,39 +1,207 @@
+from typing import Dict
+import json
+from PyQt6.QtWidgets import (
+    QScrollArea,
+    QSizePolicy,
+    QFrame,
+    QWidget,
+    QGridLayout,
+)
 from typing import TYPE_CHECKING
+from objects.arrow import Arrow
+from objects.prop import Prop
+from settings.string_constants import (
+    BLUE,
+    COLOR,
+    IN,
+    LAYER,
+    MOTION_TYPE,
+    ORIENTATION,
+    PROP_LOCATION,
+    PROP_TYPE,
+    RED,
+    STAFF,
+)
+from utilities.TypeChecking.TypeChecking import (
+    ArrowAttributesDicts,
+    DictVariants,
+    LetterDictionary,
+    PropAttributesDicts,
+)
+
+from widgets.option_picker.option.option import Option
+from widgets.option_picker.option.option_view import OptionView
+from widgets.sequence.beat import Beat
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
-from PyQt6.QtWidgets import QFrame, QHBoxLayout
-from .letter_buttons import LetterButtons
-from .scroll_area import ScrollArea
+    from widgets.option_picker.option_picker_widget import OptionPickerWidget
 
 
-class OptionPicker(QFrame):
-    def __init__(self, main_widget: "MainWidget") -> None:
+class OptionPicker(QScrollArea):
+    def __init__(self, option_picker_widget: "OptionPickerWidget") -> None:
+        """
+        Initialize the OptionPickerScrollArea.
+
+        Args:
+            option_picker (OptionPicker): The parent OptionPicker widget.
+        """
         super().__init__()
-        self.main_widget = main_widget
-        self.main_window = main_widget.main_window
-        self.main_layout = QHBoxLayout(self)
-        self.setup_ui()
-
-    def setup_ui(self) -> None:
-        self.main_layout.setSpacing(0)
-        self.main_layout.setContentsMargins(0, 0, 0, 0)
+        self.main_window = option_picker_widget.main_window
+        self.main_widget = option_picker_widget.main_widget
+        self.option_picker_widget = option_picker_widget
+        self.scrollbar_width = 0  # Class variable to store the width of the scrollbar
+        self.spacing = 16  # Class variable to store the spacing between pictographs
         self.setContentsMargins(0, 0, 0, 0)
-        self.setFixedSize(self.width(), self.height())
-        self.scroll_area = ScrollArea(self)
-        self.button_frame = LetterButtons(self.main_widget, self)
+        self.setFrameStyle(QFrame.Shape.NoFrame)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.setWidgetResizable(True)
+        self.grid_widget = QWidget()
+        self.option_picker_grid_layout = QGridLayout(self.grid_widget)
+        self.option_picker_grid_layout.setContentsMargins(0, 0, 0, 0)
+        self.option_picker_grid_layout.setSpacing(self.spacing)
+        self.setWidget(self.grid_widget)
+        self.setFixedWidth(int(self.option_picker_widget.width() * 4 / 5))
+        self.setFixedHeight(int(self.option_picker_widget.height()))
 
-        self.main_layout.addWidget(self.scroll_area)
-        self.main_layout.addWidget(self.button_frame)
+        # Load pictographs from JSON
+        with open("preprocessed.json", "r") as file:
+            data = json.load(file)
 
-        self.setLayout(self.main_layout)
+        # Categorize pictographs by letter
+        self.pictographs_by_letter = {}
+        for pictograph in data:
+            letter = data["alpha1_alpha2"][0][0]
+            if letter not in self.pictographs_by_letter:
+                self.pictographs_by_letter[letter] = []
+            self.pictographs_by_letter[letter].append(pictograph)
 
-    ### RESIZE EVENT HANDLERS ###
+        self.verticalScrollBar().setFixedWidth(int(self.main_window.width() * 0.01))
+        self.populate_pictographs()
+        self.update_scroll_area_size()
 
-    def update_size(self) -> None:
-        self.setFixedSize(
-            int(self.main_widget.width() * 0.5), int(self.main_widget.height() * 2 / 3)
-        )
+    def populate_pictographs(self):
+        with open("preprocessed.json", "r") as file:
+            data: Dict = json.load(file)
 
-        self.scroll_area.update_scroll_area_size()
-        self.button_frame.update_size()
+        pictographs_by_letter: LetterDictionary = {}
+        for key, value in data.items():
+            for pictograph_data in value:
+                letter = pictograph_data[0]
+                if letter not in pictographs_by_letter:
+                    pictographs_by_letter[letter] = []
+                pictographs_by_letter[letter].append(pictograph_data[1])
+
+        row, col = 0, 0
+        MAX_ITEMS_PER_ROW = 4
+        pictograph_count = 0  # Counter for number of pictographs created
+        MAX_PICTOGRAPHS = 5  # Limit for the number of pictographs
+
+        for letter, pictographs in pictographs_by_letter.items():
+            for attributes_list in pictographs:
+                for attributes in attributes_list:
+                    if pictograph_count >= MAX_PICTOGRAPHS:
+                        break  # Stop if maximum number of pictographs is reached
+                    if self.is_ArrowAttributesDicts(attributes):
+                        option = self.create_Option_from_attributes(attributes)
+                        option_view = option.view
+                        option_view.mousePressEvent = (
+                            lambda event: self.on_option_clicked(option)
+                        )
+                        option_view.update_pictograph_size()
+                        self.option_picker_grid_layout.addWidget(option_view, row, col)
+                        col += 1
+                        if col >= MAX_ITEMS_PER_ROW:
+                            col = 0
+                            row += 1
+                        pictograph_count += 1  # Increment the pictograph counter
+
+    def is_ArrowAttributesDicts(self, attributes: DictVariants) -> bool:
+        return COLOR in attributes and MOTION_TYPE in attributes
+
+    def create_Option_from_attributes(self, attributes: ArrowAttributesDicts) -> Option:
+        option = Option(self.main_widget, self.main_widget.graph_editor)
+
+        option.setSceneRect(0, 0, 750, 900)
+        color = attributes[COLOR]
+        motion_type = attributes[MOTION_TYPE]
+
+        if color == BLUE or color == RED:
+            # Instead of adding one arrow per option, add both arrows per option
+            arrow = Arrow(option, attributes)
+            prop_attributes: PropAttributesDicts = {
+                COLOR: color,
+                PROP_TYPE: STAFF,
+                PROP_LOCATION: None,
+                LAYER: 1,
+                ORIENTATION: IN,
+            }
+            prop = Prop(option, prop_attributes)
+            option.add_motion(
+                arrow,
+                prop,
+                motion_type,
+                IN,
+                1,
+            )
+            print("Added motion to option")
+            print(option.motions)
+            option.addItem(arrow)
+            option.addItem(prop)
+            motion = option.get_motion_by_color(color)
+            motion.update_prop_orientation_and_layer()
+            arrow.ghost_arrow = option.ghost_arrows[color]
+            prop.ghost_prop = option.ghost_props[color]
+            option.arrows.append(arrow)
+
+        option.update_pictograph()
+        return option
+
+    def on_option_clicked(self, option: "Option"):
+        copied_scene = self.copy_scene(option)
+        self.main_widget.sequence.frame.add_scene_to_sequence(copied_scene)
+
+    def copy_scene(self, option: "Option") -> Beat:
+        new_scene = Beat(self.main_widget, self.main_widget.graph_editor)
+        new_scene.setSceneRect(option.sceneRect())
+        new_scene.motions = option.motions
+
+        for item in option.items():
+            if isinstance(item, Arrow):
+                new_arrow = Arrow(new_scene, item.get_attributes())
+                new_arrow.setPos(item.pos())
+                new_arrow.setZValue(item.zValue())
+                new_scene.addItem(new_arrow)
+                new_scene.arrows.append(new_arrow)
+                ghost_arrow = new_scene.ghost_arrows[new_arrow.color]
+                new_arrow.ghost_arrow = ghost_arrow
+                motion = new_scene.get_motion_by_color(new_arrow.color)
+                new_arrow.motion = motion
+                motion.arrow = new_arrow
+                new_arrow.ghost_arrow.motion = new_arrow.motion
+
+            elif isinstance(item, Prop):
+                new_prop = Prop(new_scene, item.get_attributes())
+                new_prop.setPos(item.pos())
+                new_prop.setZValue(item.zValue())
+                new_scene.addItem(new_prop)
+                new_scene.props.append(new_prop)
+                motion = new_scene.get_motion_by_color(new_prop.color)
+                ghost_prop = new_scene.ghost_props[new_prop.color]
+                new_prop.ghost_prop = ghost_prop
+                motion = new_scene.get_motion_by_color(new_prop.color)
+                motion.prop = new_prop
+                new_prop.motion = motion
+                new_prop.ghost_prop.motion = motion
+
+        for arrow in new_scene.arrows:
+            for prop in new_scene.props:
+                if arrow.color == prop.color:
+                    arrow.prop = prop
+                    prop.arrow = arrow
+
+        new_scene.update_pictograph()
+        return new_scene
+
+    def update_scroll_area_size(self) -> None:
+        self.setFixedWidth(int(self.option_picker_widget.width() * 4 / 5))
+        self.setFixedHeight(int(self.option_picker_widget.height()))

@@ -13,19 +13,22 @@ from PyQt6.QtWidgets import (
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.pictograph.pictograph import Pictograph
-    from widgets.sequence.sequence import Sequence
+    from widgets.sequence.sequence_widget import SequenceWidget
 
 from widgets.sequence.beat_view import BeatView
 
 
-class SequenceFrame(QFrame):
+class Sequence(QFrame):
     def __init__(
-        self, main_widget: "MainWidget", pictograph: "Pictograph", sequence: "Sequence"
+        self,
+        main_widget: "MainWidget",
+        pictograph: "Pictograph",
+        sequence_widget: "SequenceWidget",
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
         self.pictograph = pictograph
-        self.sequence = sequence
+        self.sequence = sequence_widget
         self.beats: List[BeatView] = []
 
         self.layout: QGridLayout = QGridLayout(self)
@@ -51,11 +54,10 @@ class SequenceFrame(QFrame):
             beat.setFixedHeight(beat_height)
             beat.setFixedWidth(beat_width)
 
-    def add_scene_to_sequence(self, copied_scene: 'Pictograph') -> None:
+    def add_scene_to_sequence(self, copied_scene: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
             self.beats[next_beat_index].set_pictograph(copied_scene)
-
 
     def find_next_available_beat(self) -> int:
         # Implement logic to find the next available beat

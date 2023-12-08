@@ -23,6 +23,12 @@ class PictographView(QGraphicsView):
         # Initialize buttons
         self.init_buttons()
 
+    def remove_buttons(self) -> None:
+        self.add_to_sequence_button.deleteLater()
+        self.clear_button.deleteLater()
+        self.rotate_cw_button.deleteLater()
+        self.rotate_ccw_button.deleteLater()
+
     def init_buttons(self) -> None:
         self.add_to_sequence_button = self.create_button(
             f"{ICON_DIR}add_to_sequence.png",
@@ -45,22 +51,6 @@ class PictographView(QGraphicsView):
         button.clicked.connect(action)
         return button
 
-    def update_pictograph_size(self) -> None:
-        view_width = int(self.pictograph.graph_editor.height() * 75 / 90)
-        self.setFixedWidth(view_width)
-        self.setFixedHeight(self.pictograph.graph_editor.height())
-        self.view_scale = view_width / self.pictograph.width()
-        self.resetTransform()
-        self.scale(self.view_scale, self.view_scale)
-
-        button_size = int(self.width() / 7)
-        self.configure_button_size_and_position(
-            self.add_to_sequence_button, button_size
-        )
-        self.configure_button_size_and_position(self.clear_button, button_size)
-        self.configure_button_size_and_position(self.rotate_cw_button, button_size)
-        self.configure_button_size_and_position(self.rotate_ccw_button, button_size)
-
     def configure_button_size_and_position(self, button: QPushButton, size) -> None:
         button.setFixedSize(size, size)
         icon_size = int(size * 0.8)
@@ -75,3 +65,27 @@ class PictographView(QGraphicsView):
             button.move(self.width() - size, 0)
         elif button == self.rotate_ccw_button:
             button.move(0, 0)
+
+
+    def update_pictograph_size(self) -> None:
+        view_width = int(self.pictograph.graph_editor.height() * 75 / 90)
+        
+        self.setFixedWidth(view_width)
+        self.setFixedHeight(self.pictograph.graph_editor.height())
+        
+        self.view_scale = view_width / self.pictograph.width()
+        
+        self.resetTransform()
+        self.scale(self.view_scale, self.view_scale)
+
+
+
+
+
+        button_size = int(self.width() / 7)
+        self.configure_button_size_and_position(
+            self.add_to_sequence_button, button_size
+        )
+        self.configure_button_size_and_position(self.clear_button, button_size)
+        self.configure_button_size_and_position(self.rotate_cw_button, button_size)
+        self.configure_button_size_and_position(self.rotate_ccw_button, button_size)

@@ -9,7 +9,10 @@ if TYPE_CHECKING:
 
 class SequenceButtons(QFrame):
     def __init__(
-        self, main_widget: "MainWidget", pictograph: "Pictograph", sequence: "Sequence"
+        self,
+        main_widget: "MainWidget",
+        pictograph: "Pictograph",
+        sequence: "Sequence",
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -17,7 +20,7 @@ class SequenceButtons(QFrame):
         self.sequence = sequence
         self.button_height = int(self.main_widget.height() * 1 / 20)
 
-        self.layout:QVBoxLayout = QVBoxLayout(self)
+        self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
 

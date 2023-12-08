@@ -52,19 +52,24 @@ from widgets.graph_editor.pictograph.position_engines.arrow_positioner import (
 from widgets.graph_editor.pictograph.position_engines.prop_positioner import (
     PropPositioner,
 )
+from widgets.option_picker.option.option_init import OptionInit
+from widgets.option_picker.option.option_view import OptionView
 
 if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.graph_editor import GraphEditor
+    from widgets.option_picker.option_picker import OptionPicker
+
 from objects.letter_item import LetterItem
 
 
-class Pictograph(QGraphicsScene):
-    def __init__(self, main_widget: "MainWidget", graph_editor: "GraphEditor") -> None:
+class Option(QGraphicsScene):
+    def __init__(
+        self, main_widget: "MainWidget", option_picker: "OptionPicker"
+    ) -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.graph_editor = graph_editor
+        self.option_picker: OptionPicker = option_picker
 
         self.setup_scene()
         self.setup_components(main_widget)
@@ -84,7 +89,7 @@ class Pictograph(QGraphicsScene):
 
         self.dragged_arrow: Arrow = None
         self.dragged_prop: Staff = None
-        self.initializer = PictographInit(self)
+        self.initializer = OptionInit(self)
 
         self.prop_type: Prop = STAFF
 
@@ -95,7 +100,7 @@ class Pictograph(QGraphicsScene):
         self.ghost_props = self.initializer.init_ghost_props(self.prop_type)
 
         self.grid: Grid = self.initializer.init_grid()
-        self.view: PictographView = self.initializer.init_view()
+        self.view: OptionView = self.initializer.init_view()
         self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.locations = self.initializer.init_locations(self.grid)
 
@@ -268,11 +273,10 @@ class Pictograph(QGraphicsScene):
 
         self.motions.append(motion)
 
-
     def copy_scene(self) -> QGraphicsScene:
         from widgets.sequence.beat import Beat
 
-        new_scene = Beat(self.main_widget, self.graph_editor)
+        new_scene = Beat(self.main_widget, self.option_picker)
         new_scene.setSceneRect(self.sceneRect())
         new_scene.motions = self.motions
 
@@ -347,9 +351,9 @@ class Pictograph(QGraphicsScene):
         ]
 
         if not motions:
-            self.graph_editor.attr_panel.clear_all_attr_boxes()
+            self.option_picker.attr_panel.clear_all_attr_boxes()
         for motion in motions:
-            self.graph_editor.attr_panel.update_panel(motion.color)
+            self.option_picker.attr_panel.update_panel(motion.color)
 
     def update_pictograph(self) -> None:
         self.update_letter()

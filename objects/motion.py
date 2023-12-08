@@ -34,8 +34,7 @@ class Motion:
         self.attributes = attributes
 
         self.setup_attributes(attributes)
-
-        prop.update_rotation()
+        
 
     def setup_attributes(self, attributes) -> None:
         self.color: Colors = attributes[COLOR]
@@ -59,11 +58,15 @@ class Motion:
         self.end_layer: Layers = self.get_end_layer()
 
         from objects.arrow import StaticArrow
-
-        if not isinstance(self.arrow, StaticArrow):
-            self.prop.orientation = self.end_orientation
-            self.prop.layer = self.end_layer
-            self.prop.update_appearance()
+        if self.prop and not isinstance(self.arrow, StaticArrow):
+            self.update_prop_orientation_and_layer()
+        
+    def update_prop_orientation_and_layer(self) -> None:
+        self.prop.orientation = self.end_orientation
+        self.prop.layer = self.end_layer
+        self.prop.prop_location = self.end_location
+        self.prop.update_rotation()
+        self.prop.update_appearance()
 
     def reset_motion_attributes(self):
         self.start_location = None
