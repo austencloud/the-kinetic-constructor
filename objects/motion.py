@@ -197,8 +197,7 @@ class Motion:
         self.arrow.turns = turns
         self.turns = self.arrow.turns
         self.end_orientation = self.get_end_orientation()
-        self.prop.layer = self.end_layer
-        self.prop.orientation = self.end_orientation
+        self.update_prop_orientation_and_layer()
         self.prop.update_appearance()
         self.prop.update_rotation()
         svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)

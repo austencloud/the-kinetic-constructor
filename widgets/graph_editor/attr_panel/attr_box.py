@@ -137,7 +137,7 @@ class AttrBox(QFrame):
 
 
     def update_labels(self, motion: "Motion") -> None:
-        self.header_widget._update_clock()
+        self.turns_widget.update_clocks(motion.rotation_direction)
         self.start_end_widget.update_start_end_boxes()
         self.motion_type_widget.update_motion_type_box()
         self.turns_widget.update_turns_label_box(motion)

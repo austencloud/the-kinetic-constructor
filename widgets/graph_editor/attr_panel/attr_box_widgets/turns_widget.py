@@ -2,11 +2,12 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QVBoxLayout,
-    QFrame,
+    QFrame, 
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QPixmap
 from typing import TYPE_CHECKING, Dict, Literal
+from settings.string_constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON
 
 from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
@@ -34,6 +35,49 @@ class TurnsWidget(QFrame):
 
         self._create_buttons()
         # self._add_borders()
+
+        # Clock labels for showing rotation direction
+        self.clock_left = QLabel(self)
+        self.clock_right = QLabel(self)
+        self.clock_left.setFixedSize(int(self.width() * 0.2), int(self.height() * 0.2))
+        self.clock_right.setFixedSize(int(self.width() * 0.2), int(self.height() * 0.2))
+
+        # Modify layout to include clocks
+        main_layout = QHBoxLayout()
+        main_layout.addWidget(self.clock_left)
+        main_layout.addWidget(self.turnbox_frame)
+        main_layout.addWidget(self.clock_right)
+        self.setLayout(main_layout)
+
+        self.clockwise_pixmap = self.load_clock_pixmap(CLOCKWISE_ICON)
+        self.counter_clockwise_pixmap = self.load_clock_pixmap(COUNTER_CLOCKWISE_ICON)
+        
+    def load_clock_pixmap(self, icon_path: str) -> QPixmap:
+        """Load and scale a clock pixmap."""
+        pixmap = QPixmap(icon_path)
+        if pixmap.isNull():
+            print(f"Failed to load the icon from {icon_path}.")
+            return QPixmap()
+        return pixmap.scaled(
+            int(self.attr_box.width() / 3),
+            int(self.attr_box.width() / 3),
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
+        )
+
+    def update_clocks(self, rotation_direction: str):
+        """Update the visibility of clocks based on rotation direction."""
+        if rotation_direction == "ccw":
+            self.clock_left.setPixmap(self.counter_clockwise_pixmap)
+            self.clock_right.clear()
+        elif rotation_direction == "cw":
+            self.clock_right.setPixmap(self.clockwise_pixmap)
+            self.clock_left.clear()
+        else:
+            self.clock_left.clear()
+            self.clock_right.clear()
+
+
 
     def _add_borders(self) -> None:
         self.setStyleSheet("border: 1px solid black;")
