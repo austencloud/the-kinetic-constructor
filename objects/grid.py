@@ -44,10 +44,10 @@ class GridItem(QGraphicsSvgItem):
 
 class Grid:
     def __init__(self, grid_scene: Union["ArrowBox", "PropBox", "Pictograph"]) -> None:
-        self.grid_mode = DIAMOND
+        self.grid_mode: GridModes = DIAMOND
         self.items: Dict[str, GridItem] = {}
         self._initialize_grid_elements(grid_scene)
-        self._apply_grid_mode()
+        self._apply_grid_mode(self.grid_mode)
 
     def _initialize_grid_elements(
         self, grid_scene: Union["ArrowBox", "PropBox", "Pictograph"]
@@ -77,17 +77,16 @@ class Grid:
         self._create_grid_items(grid_scene)
 
     def _create_grid_items(self, grid_scene: "Pictograph") -> None:
+        # Updated paths to include the whole SVG for each grid mode
         paths = {
-            "hand_points": f"{GRID_DIR}hand_points.svg",
-            "layer2_points": f"{GRID_DIR}layer2_points.svg",
-            "outer_points": f"{GRID_DIR}outer_points.svg",
-            "center_point": f"{GRID_DIR}center_point.svg",
+            DIAMOND: f"{GRID_DIR}diamond_grid.svg",
+            BOX: f"{GRID_DIR}box_grid.svg",
         }
 
-        for key, path in paths.items():
+        for mode, path in paths.items():
             item = GridItem(path)
             grid_scene.addItem(item)
-            self.items[key] = item
+            self.items[mode] = item
 
     def _init_points(
         self, point_names: List[str], constants: List[str]
@@ -97,13 +96,8 @@ class Grid:
             for point_name, constant in zip(point_names, constants)
         }
 
-    def _apply_grid_mode(self) -> None:
-        if self.grid_mode == DIAMOND:
-            self._toggle_visibility("diamond_", True)
-            self._toggle_visibility("box_", False)
-        elif self.grid_mode == BOX:
-            self._toggle_visibility("diamond_", False)
-            self._toggle_visibility("box_", True)
+    def _apply_grid_mode(self, grid_mode: GridModes) -> None:
+        self.toggle_grid_mode(grid_mode)
 
     def _toggle_visibility(self, prefix: str, visible: bool) -> None:
         for key in self.items.keys():
