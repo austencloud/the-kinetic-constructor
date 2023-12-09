@@ -36,7 +36,7 @@ class AttrPanel(QFrame):
 
     def update_panel(self, motion_color: Colors) -> None:
         motion = self.pictograph.get_motion_by_color(motion_color)
-        
+
         if motion_color == BLUE:
             self.blue_attr_box.update_attr_box(motion)
         elif motion_color == RED:
@@ -44,7 +44,7 @@ class AttrPanel(QFrame):
 
     def update_attr_panel_size(self) -> None:
         self.setFixedHeight(self.pictograph.view.height())
-        self.setFixedWidth(int(self.pictograph.graph_editor.width() * 0.6))
+        self.setFixedWidth(int(self.pictograph.graph_editor.width() * 0.4))
 
         self.blue_attr_box.update_attr_box_size()
         self.red_attr_box.update_attr_box_size()

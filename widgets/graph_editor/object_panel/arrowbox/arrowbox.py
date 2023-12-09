@@ -255,3 +255,11 @@ class ArrowBox(ObjectBox):
     def dim_all_arrows(self) -> None:
         for arrow in self.arrows:
             arrow.is_dim(True)
+
+
+    def update_arrowbox_size(self) -> None:
+        self.view.setFixedSize(
+            int(self.pictograph.view.height() * 1 / 2),
+            int(self.pictograph.view.height() * 1 / 2),
+        )
+

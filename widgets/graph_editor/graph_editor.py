@@ -67,27 +67,13 @@ class GraphEditor(QFrame):
         self.setFixedHeight(int(self.main_widget.height() * 1 / 3))
         self.setFixedWidth(int(self.main_widget.width() * 0.5))
         self.pictograph.view.update_pictograph_size()
-        self.update_arrowbox_size()
-        self.update_propbox_size()
-        self.update_attr_panel_size()
+        self.arrowbox.update_arrowbox_size()
+        self.propbox.update_propbox_size()
+        self.attr_panel.update_attr_panel_size()
         self.update_vtg_panel_size()
 
-    def update_arrowbox_size(self) -> None:
-        self.arrowbox.view.setFixedSize(
-            int(self.pictograph.view.height() * 1 / 2),
-            int(self.pictograph.view.height() * 1 / 2),
-        )
 
-    def update_propbox_size(self) -> None:
-        self.propbox.view.setFixedSize(
-            int(self.pictograph.view.height() * 1 / 2),
-            int(self.pictograph.view.height() * 1 / 2),
-        )
 
-    def update_attr_panel_size(self) -> None:
-        self.attr_panel.setFixedHeight(self.height())
-        self.attr_panel.red_attr_box.update_attr_box_size()
-        self.attr_panel.blue_attr_box.update_attr_box_size()
 
     def update_vtg_panel_size(self) -> None:
         self.vtg_panel.setFixedHeight(self.height())

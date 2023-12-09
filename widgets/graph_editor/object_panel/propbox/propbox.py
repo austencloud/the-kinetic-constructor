@@ -210,3 +210,10 @@ class PropBox(ObjectBox):
             self.target_prop = None
         else:
             event.ignore()
+
+
+    def update_propbox_size(self) -> None:
+        self.view.setFixedSize(
+            int(self.pictograph.view.height() * 1 / 2),
+            int(self.pictograph.view.height() * 1 / 2),
+        )
