@@ -83,6 +83,7 @@ class HeaderWidget(QWidget):
         clock_label.setFixedSize(
             int(self.attr_box.width() / 3), int(self.attr_box.width() / 3)
         )
+        clock_label.setToolTip("Prop rotation direction")
         return clock_label
 
     def _update_clock(self) -> None:
