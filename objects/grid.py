@@ -54,24 +54,39 @@ class Grid:
     ) -> None:
         self.center = self.get_circle_coordinates("center_point")
         self.diamond_hand_points = self._init_points(
-            ["n_hand_point", "e_hand_point", "s_hand_point", "w_hand_point"],
+            [
+                "n_diamond_hand_point",
+                "e_diamond_hand_point",
+                "s_diamond_hand_point",
+                "w_diamond_hand_point",
+            ],
             [NORTH, EAST, SOUTH, WEST],
         )
         self.box_hand_points = self._init_points(
-            ["ne_hand_point", "se_hand_point", "sw_hand_point", "nw_hand_point"],
+            [
+                "ne_box_hand_point",
+                "se_box_hand_point",
+                "sw_box_hand_point",
+                "nw_box_hand_point",
+            ],
             [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST],
         )
         self.diamond_layer2_points = self._init_points(
             [
-                "ne_layer2_point",
-                "se_layer2_point",
-                "sw_layer2_point",
-                "nw_layer2_point",
+                "ne_diamond_layer2_point",
+                "se_diamond_layer2_point",
+                "sw_diamond_layer2_point",
+                "nw_diamond_layer2_point",
             ],
             [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST],
         )
         self.box_layer2_points = self._init_points(
-            ["n_layer2_point", "e_layer2_point", "s_layer2_point", "w_layer2_point"],
+            [
+                "n_box_layer2_point",
+                "e_box_layer2_point",
+                "s_box_layer2_point",
+                "w_box_layer2_point",
+            ],
             [NORTH, EAST, SOUTH, WEST],
         )
         self._create_grid_items(grid_scene)
@@ -105,12 +120,10 @@ class Grid:
                 self.items[key].setVisible(visible)
 
     def _hide_box_mode_elements(self) -> None:
-        for key in ["hand_points", "layer2_points", "outer_points"]:
-            self.items[f"box_{key}"].setVisible(False)
+        self.items[BOX].setVisible(False)
 
     def _hide_diamond_mode_elements(self) -> None:
-        for key in ["hand_points", "layer2_points", "outer_points"]:
-            self.items[f"diamond_{key}"].setVisible(False)
+        self.items[DIAMOND].setVisible(False)
 
     def get_circle_coordinates(self, circle_id: str) -> Union[QPointF, None]:
         svg_file_path = self._get_svg_file_path(circle_id)
@@ -128,14 +141,13 @@ class Grid:
         return None
 
     def _get_svg_file_path(self, circle_id: str) -> str:
-        if "hand" in circle_id:
-            return f"{GRID_DIR}hand_points.svg"
-        elif "layer2" in circle_id:
-            return f"{GRID_DIR}layer2_points.svg"
-        elif "outer" in circle_id:
-            return f"{GRID_DIR}outer_points.svg"
-        elif "center" in circle_id:
-            return f"{GRID_DIR}center_point.svg"
+        # Determine the correct SVG file based on the grid mode and circle ID
+        if "diamond" in circle_id or "center_point" in circle_id:
+            return f"{GRID_DIR}diamond_grid.svg"
+        elif "box" in circle_id:
+            return f"{GRID_DIR}box_grid.svg"
+        # Fallback if no matching pattern is found
+
         return ""
 
     def setPos(self, position: QPointF) -> None:
