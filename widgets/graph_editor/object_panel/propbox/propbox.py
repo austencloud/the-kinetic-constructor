@@ -32,17 +32,11 @@ class PropBox(ObjectBox):
         self.grid_position = QPointF(0, 0)
         self.grid.setPos(self.grid_position)
 
-        self.drag = None
-        self.props = []
+        self.drag: PropBoxDrag = None
+        self.props: List[Prop] = []
 
         self.propbox_layout = QVBoxLayout()
         self.propbox_layout.addWidget(self.view)
-
-        # self.init_propbox_clubs()
-        # self.init_propbox_buugeng()
-        # self.init_propbox_fans()
-        # self.init_propbox_triads()
-        # self.init_propbox_hoops()
 
         self.staffs: List[Staff] = []
         self.clubs: List[Club] = []
@@ -210,7 +204,6 @@ class PropBox(ObjectBox):
             self.target_prop = None
         else:
             event.ignore()
-
 
     def update_propbox_size(self) -> None:
         self.view.setFixedSize(
