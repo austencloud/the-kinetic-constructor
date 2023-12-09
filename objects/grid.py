@@ -6,6 +6,7 @@ from PyQt6.QtGui import QTransform
 
 
 from settings.string_constants import (
+    BOX,
     DIAMOND,
     GRID_DIR,
     NORTH,
@@ -50,11 +51,13 @@ class Grid:
 
         self._init_all_points(grid_scene)
         self._init_center()
-        self._init_handpoints()
+        self._init_hand_points()
         self._init_layer2_points()
 
         if self.grid_mode == DIAMOND:
             self.hide_box_mode_elements()
+        elif self.grid_mode == BOX:
+            self.hide_diamond_mode_elements()
 
     ### INITIALIZATION ###
 
@@ -69,50 +72,50 @@ class Grid:
     def _init_center(self) -> None:
         self.center: QPointF = self.get_circle_coordinates("center_point")
 
-    def _init_handpoints(self) -> None:
-        point_names = [
+    def _init_hand_points(self) -> None:
+        diamond_hand_point_names = [
             "n_hand_point",
-            "ne_hand_point",
             "e_hand_point",
-            "se_hand_point",
             "s_hand_point",
-            "sw_hand_point",
             "w_hand_point",
+        ]
+        diamond_hand_point_constants = [NORTH, EAST, SOUTH, WEST]
+        self.diamond_hand_points: Dict[str, QPointF] = self.init_points(
+            diamond_hand_point_names, diamond_hand_point_constants
+        )
+
+        box_hand_point_names = [
+            "ne_hand_point",
+            "se_hand_point",
+            "sw_hand_point",
             "nw_hand_point",
         ]
-        constants = [
-            NORTH,
-            NORTHEAST,
-            EAST,
-            SOUTHEAST,
-            SOUTH,
-            SOUTHWEST,
-            WEST,
-            NORTHWEST,
-        ]
-        self.handpoints: Dict[str, QPointF] = self.init_points(point_names, constants)
+        box_hand_point_constants = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
+        self.box_hand_points: Dict[str, QPointF] = self.init_points(
+            box_hand_point_names, box_hand_point_constants
+        )
 
     def _init_layer2_points(self) -> None:
-        diamond_point_names = [
+        diamond_layer2_point_names = [
             "ne_layer2_point",
             "se_layer2_point",
             "sw_layer2_point",
             "nw_layer2_point",
         ]
-        diamond_constants = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
+        diamond_layer2_constants = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
         self.diamond_layer2_points: Dict[str, QPointF] = self.init_points(
-            diamond_point_names, diamond_constants
+            diamond_layer2_point_names, diamond_layer2_constants
         )
 
-        box_point_names = [
+        box_layer2_point_names = [
             "n_layer2_point",
             "e_layer2_point",
             "s_layer2_point",
             "w_layer2_point",
         ]
-        box_constants = [NORTH, EAST, SOUTH, WEST]
+        box_layer2_constants = [NORTH, EAST, SOUTH, WEST]
         self.box_layer2_points: Dict[str, QPointF] = self.init_points(
-            box_point_names, box_constants
+            box_layer2_point_names, box_layer2_constants
         )
 
     def _init_all_points(
@@ -137,22 +140,20 @@ class Grid:
         self.items["center_point"] = center_item
 
         for key, path in self.diamond_svg_paths.items():
-            if (
-                key != "center_point"
-            ):  
+            if key != "center_point":
                 item = GridItem(path)
                 grid_scene.addItem(item)
                 self.items[key] = item
 
         for key, path in self.box_svg_paths.items():
-            if key != "center_point": 
+            if key != "center_point":
                 item = GridItem(path)
                 grid_scene.addItem(item)
                 box_key = f"box_{key}"
-                self.items[box_key] = item 
-                
+                self.items[box_key] = item
+
     def init_outer_points(self) -> None:
-        # Initialize the outer points similarly to how handpoints and layer2_points are initialized
+        # Initialize the outer points similarly to how hand_points and layer2_points are initialized
         pass
 
     def setPos(self, position: QPointF) -> None:
@@ -189,30 +190,15 @@ class Grid:
         self.grid_mode = grid_mode
 
     def hide_box_mode_elements(self) -> None:
-        for key in self.box_svg_paths.keys():
-            box_key = f"box_{key}"
-            if box_key in self.items:
+        for key in self.box_svg_paths:
+            if key != "center_point":  # Exclude the center point as it's common
+                box_key = f"box_{key}"
                 self.toggle_element_visibility(box_key, False)
 
-    def get_circle_coordinates_from_path(self, path_d: str) -> QPointF:
-        path_parts = path_d.split(" ")
-        if path_parts[0] == "M":
-            center_x = float(path_parts[1])
-            center_y = float(path_parts[2])
-            return QPointF(center_x, center_y)
-        return QPointF()
-
-    def get_circle_coordinates(self, circle_id: str) -> Union[QPointF, None]:
-        svg_file_path = self._get_svg_file_path(circle_id)
-        if not svg_file_path:
-            return None
-
-        with open(svg_file_path, "r") as svg_file:
-            svg_content = svg_file.read()
-
-        root = ET.fromstring(svg_content)
-        namespace = "{http://www.w3.org/2000/svg}"
-        circle_element = root.find(f".//{namespace}circle[@id='{circle_id}']")
+    def hide_diamond_mode_elements(self) -> None:
+        for key in self.diamond_svg_paths:
+            if key != "center_point":  # Exclude the center point as it's common
+                self.toggle_element_visibility(key, False)
 
     ### GETTERS ###
 
@@ -226,18 +212,18 @@ class Grid:
         return QPointF()
 
     def get_circle_coordinates(self, circle_id: str) -> Union[QPointF, None]:
-        # Determine which SVG file contains the circle based on its ID
         svg_file_path = self._get_svg_file_path(circle_id)
+
         if not svg_file_path:
             return None
 
-        # Read and parse the SVG file
         with open(svg_file_path, "r") as svg_file:
             svg_content = svg_file.read()
 
         root = ET.fromstring(svg_content)
         namespace = "{http://www.w3.org/2000/svg}"
         circle_element = root.find(f".//{namespace}circle[@id='{circle_id}']")
+
         if circle_element is not None:
             cx = float(circle_element.attrib["cx"])
             cy = float(circle_element.attrib["cy"])
@@ -245,28 +231,26 @@ class Grid:
         else:
             return None
 
+
     def _get_svg_file_path(self, circle_id: str) -> str:
-        # Logic to determine which SVG file to read based on the circle_id
-        if self.grid_mode == DIAMOND:
-            if "hand" in circle_id:
-                return self.diamond_svg_paths[f"diamond_hand_points"]
-            elif "layer2" in circle_id:
+        if "hand" in circle_id:
+            if any(x in circle_id for x in ["ne_", "se_", "sw_", "nw_"]):
+                return self.box_svg_paths["box_hand_points"]
+            else:
+                return self.diamond_svg_paths["diamond_hand_points"]
+        elif "layer2" in circle_id: 
+            if any(x in circle_id for x in ["ne_", "se_", "sw_", "nw_"]):
                 return self.diamond_svg_paths["diamond_layer2_points"]
-            elif "outer" in circle_id:
-                return self.diamond_svg_paths["diamond_outer_points"]
-            elif "center" in circle_id:
-                return self.diamond_svg_paths["center_point"]
-            return ""
-        elif self.grid_mode == "box":
-            if "hand" in circle_id:
-                return self.box_svg_paths[f"box_hand_points"]
-            elif "layer2" in circle_id:
+            else:
                 return self.box_svg_paths["box_layer2_points"]
-            elif "outer" in circle_id:
+        elif "outer" in circle_id:
+            if any(x in circle_id for x in ["ne_", "se_", "sw_", "nw_"]):
                 return self.box_svg_paths["box_outer_points"]
-            elif "center" in circle_id:
-                return self.box_svg_paths["center_point"]
-            return ""
+            else:
+                return self.diamond_svg_paths["diamond_outer_points"]
+        elif "center" in circle_id:
+            return self.diamond_svg_paths["center_point"]
+        return ""
 
     ### EVENTS ###
 

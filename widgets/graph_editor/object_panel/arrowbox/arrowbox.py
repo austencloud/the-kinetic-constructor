@@ -175,7 +175,6 @@ class ArrowBox(ObjectBox):
         self.blue_arrows[2].setPos(100, 100)  # BLUE ANTI CLOCKWISE NW
         self.blue_arrows[3].setPos(100, 375)  # BLUE ANTI COUNTERCLOCKWISE SW
 
-
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         scene_pos = event.scenePos()
         event_pos = self.view.mapFromScene(scene_pos)

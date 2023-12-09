@@ -189,11 +189,16 @@ class Pictograph(QGraphicsScene):
             if prop.color == color:
                 return prop
 
-    def get_closest_handpoint(self, pos: QPointF) -> Tuple[str, QPointF]:
+    def get_closest_hand_point(self, pos: QPointF) -> Tuple[str, QPointF]:
         min_distance = float("inf")
         nearest_point_name = None
+        relevant_hand_points = (
+            self.grid.diamond_hand_points
+            if self.grid.grid_mode == DIAMOND
+            else self.grid.box_hand_points
+        )
 
-        for name, point in self.grid.handpoints.items():
+        for name, point in relevant_hand_points.items():
             distance = (pos - point).manhattanLength()
             if distance < min_distance:
                 min_distance = distance
@@ -205,17 +210,19 @@ class Pictograph(QGraphicsScene):
     def get_closest_layer2_point(self, pos: QPointF) -> Locations:
         min_distance = float("inf")
         nearest_point_name = None
-        relevant_points = (self.grid.diamond_layer2_points if self.grid.grid_mode == DIAMOND 
-                        else self.grid.box_layer2_points)
+        relevant_layer2_points = (
+            self.grid.diamond_layer2_points
+            if self.grid.grid_mode == DIAMOND
+            else self.grid.box_layer2_points
+        )
 
-        for name, point in relevant_points.items():
+        for name, point in relevant_layer2_points.items():
             distance = (pos - point).manhattanLength()
             if distance < min_distance:
                 min_distance = distance
                 nearest_point_name = name
 
         return nearest_point_name
-
 
     ### HELPERS ###
 

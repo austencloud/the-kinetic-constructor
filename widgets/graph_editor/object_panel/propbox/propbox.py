@@ -114,13 +114,14 @@ class PropBox(ObjectBox):
         # Connect the combobox to change the prop type when a different prop is selected
         self.prop_type_combobox.currentTextChanged.connect(self.on_prop_type_change)
         # Position the combobox at the top right
-        self.prop_type_combobox.move(0, 0)  # Position will be adjusted after the view is initialized
+        self.prop_type_combobox.move(
+            0, 0
+        )  # Position will be adjusted after the view is initialized
 
     def on_prop_type_change(self, text: str) -> None:
         new_prop_type = text.lower()
         self.change_prop_type(new_prop_type)
         self.update_prop_type_in_pictograph(new_prop_type)
-
 
     def clear_props(self) -> None:
         # Log the props before removal for debugging
@@ -130,12 +131,14 @@ class PropBox(ObjectBox):
         # Log after clearing to confirm
 
     def set_prop_position(self, prop: Prop) -> None:
-        handpoint = self.grid.get_circle_coordinates(f"{prop.prop_location}_hand_point")
+        hand_point = self.grid.get_circle_coordinates(
+            f"{prop.prop_location}_hand_point"
+        )
         prop_length = prop.boundingRect().width()
         prop_width = prop.boundingRect().height()
         offset_x = -prop_length / 2
         offset_y = -prop_width / 2
-        prop_position = handpoint + QPointF(offset_x, offset_y)
+        prop_position = hand_point + QPointF(offset_x, offset_y)
         prop.setPos(prop_position)
         prop.update_appearance()
         prop.setTransformOriginPoint(prop.boundingRect().center())
@@ -143,12 +146,10 @@ class PropBox(ObjectBox):
     def change_prop_type(self, new_prop_type: PropTypes) -> None:
         self.prop_type = new_prop_type
         self.clear_props()
-        self.populate_props()  
+        self.populate_props()
 
     def update_prop_type_in_pictograph(self, new_prop_type: PropTypes) -> None:
         self.pictograph.initializer.update_prop_set_and_ghost_props(new_prop_type)
-
-
 
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         scene_pos = event.scenePos()

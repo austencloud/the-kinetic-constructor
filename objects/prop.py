@@ -99,8 +99,6 @@ class Prop(GraphicalObject):
                 self.motion.start_location = new_location
                 self.motion.end_location = new_location
 
-        
-            
             self.axis = self.update_axis(self.prop_location)
             self.update_appearance()
             self.update_arrow_location(new_location)
@@ -110,7 +108,6 @@ class Prop(GraphicalObject):
             self.ghost_prop.layer = self.layer
             self.ghost_prop.update_appearance()
             self.scene.props.remove(self)
-
 
             self.scene.update_pictograph()
             self.scene.props.append(self)
@@ -247,17 +244,16 @@ class Prop(GraphicalObject):
             self.finalize_prop_drop(event)
 
     def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
-        closest_handpoint = self.get_closest_handpoint(event.scenePos())
-        new_location = self.get_closest_diamond_point(event.scenePos())
+        closest_hand_point = self.pictograph.get_closest_hand_point(event.scenePos())
 
-        self.prop_location = new_location
+        self.prop_location = closest_hand_point
         self.axis = self.update_axis(self.prop_location)
         self.update_appearance()
-        self.setPos(closest_handpoint)
+        self.setPos(closest_hand_point)
 
         if self.arrow:
             self.arrow.update_appearance()
-        self.previous_location = new_location
+        self.previous_location = closest_hand_point
         self.scene.update_pictograph()
 
     ### UPDATERS ###
@@ -309,11 +305,9 @@ class Prop(GraphicalObject):
         }
 
         key = (self.layer, self.orientation)
-        rotation_angle = angle_map.get(key, {}).get(
-            self.prop_location, 0
-        )
+        rotation_angle = angle_map.get(key, {}).get(self.prop_location, 0)
         return rotation_angle
-    
+
     def get_attributes(self) -> PropAttributesDicts:
         return {attr: getattr(self, attr) for attr in PROP_ATTRIBUTES}
 
@@ -323,26 +317,6 @@ class Prop(GraphicalObject):
         if self.ghost_prop:
             self.ghost_prop.setRotation(rotation_angle)
         self.setRotation(rotation_angle)
-
-    def get_closest_handpoint(self, mouse_pos: QPointF) -> QPointF:
-        closest_distance = float("inf")
-        closest_handpoint = None
-        for point in self.scene.grid.handpoints.values():
-            distance = (point - mouse_pos).manhattanLength()
-            if distance < closest_distance:
-                closest_distance = distance
-                closest_handpoint = point
-        return closest_handpoint
-
-    def get_closest_diamond_point(self, mouse_pos: QPointF) -> Locations:
-        closest_distance = float("inf")
-        closest_location = None
-        for location, point in self.scene.grid.handpoints.items():
-            distance = (point - mouse_pos).manhattanLength()
-            if distance < closest_distance:
-                closest_distance = distance
-                closest_location = location
-        return closest_location
 
     def get_svg_file(self, prop_type: PropTypes) -> str:
         svg_file = f"{PROP_DIR}{prop_type}.svg"
@@ -363,7 +337,6 @@ class Prop(GraphicalObject):
         else:
             self.layer = 1
         self.update_rotation()
-
 
     def delete(self) -> None:
         self.scene.removeItem(self)
@@ -395,14 +368,13 @@ class Prop(GraphicalObject):
         self.static_arrow.prop.arrow = self.static_arrow
         self.static_arrow.motion = deleted_arrow.motion
         self.motion = deleted_arrow.motion
-        
+
         self.motion.start_location = self.prop_location
         self.motion.end_location = self.prop_location
         self.motion.arrow_location = self.prop_location
         self.motion.arrow = self.static_arrow
         self.motion.turns = 0
         self.motion.motion_type = STATIC
-
 
         if self.static_arrow not in self.pictograph.items():
             self.pictograph.addItem(self.static_arrow)

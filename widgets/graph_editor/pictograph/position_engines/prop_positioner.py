@@ -2,8 +2,10 @@ from PyQt6.QtCore import QPointF
 import math
 from settings.numerical_constants import BETA_OFFSET
 from settings.string_constants import (
+    BOX,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
+    DIAMOND,
     IN,
     OUT,
     COLOR,
@@ -83,10 +85,22 @@ class PropPositioner:
             (COUNTER_CLOCKWISE, WEST): QPointF(prop_width / 2, -prop_length / 2),
         }
 
-        if prop.prop_location in self.pictograph.grid.handpoints:
-            key = (prop.orientation, prop.prop_location)
-            offset = position_offsets.get(key, QPointF(0, 0))  # Default offset
-            prop.setPos(self.pictograph.grid.handpoints[prop.prop_location] + offset)
+        if self.pictograph.grid.grid_mode == DIAMOND:
+            if prop.prop_location in self.pictograph.grid.diamond_hand_points:
+                key = (prop.orientation, prop.prop_location)
+                offset = position_offsets.get(key, QPointF(0, 0))  # Default offset
+                prop.setPos(
+                    self.pictograph.grid.diamond_hand_points[prop.prop_location]
+                    + offset
+                )
+
+        elif self.pictograph.grid.grid_mode == BOX:
+            if prop.prop_location in self.pictograph.grid.box_hand_points:
+                key = (prop.orientation, prop.prop_location)
+                offset = position_offsets.get(key, QPointF(0, 0))  # Default offset
+                prop.setPos(
+                    self.pictograph.grid.box_hand_points[prop.prop_location] + offset
+                )
 
     def reposition_beta_props(self) -> None:
         board_state = self.pictograph.get_state()

@@ -192,11 +192,11 @@ class Beat(Pictograph):
             if prop.color == color:
                 return prop
 
-    def get_closest_handpoint(self, pos: QPointF) -> Tuple[str, QPointF]:
+    def get_closest_hand_point(self, pos: QPointF) -> Tuple[str, QPointF]:
         min_distance = float("inf")
         nearest_point_name = None
 
-        for name, point in self.grid.handpoints.items():
+        for name, point in self.grid.hand_points.items():
             distance = (pos - point).manhattanLength()
             if distance < min_distance:
                 min_distance = distance
