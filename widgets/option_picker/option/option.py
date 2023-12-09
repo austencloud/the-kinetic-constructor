@@ -340,26 +340,11 @@ class Option(Pictograph):
 
     ### UPDATERS ###
 
-    def update_attr_panel(self):
-        # Pass the selected motion color to update_attr_panel
-        motions = [
-            motion
-            for motion in [
-                self.get_motion_by_color(RED),
-                self.get_motion_by_color(BLUE),
-            ]
-            if motion is not None
-        ]
-
-        if not motions:
-            self.option_picker.attr_panel.clear_all_attr_boxes()
-        for motion in motions:
-            self.option_picker.attr_panel.update_panel(motion.color)
-
     def update_pictograph(self) -> None:
         self.update_letter()
         self.update_arrows()
         self.update_props()
+        
         self.view.update_OptionView_size()
 
     def update_arrows(self) -> None:

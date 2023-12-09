@@ -152,7 +152,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
                     pos_in_main_window
                 )
                 scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
-                new_location = self.pictograph.get_closest_layer2_point(scene_pos)
+                new_location = self.pictograph.get_closest_layer2_point(scene_pos)[0]
 
                 if self.previous_drag_location != new_location:
                     self._update_arrow_preview_for_new_location(new_location)

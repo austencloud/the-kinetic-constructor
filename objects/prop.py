@@ -87,7 +87,7 @@ class Prop(GraphicalObject):
             self.previous_location = self.prop_location
 
     def update_location(self, new_pos: QPointF) -> None:
-        new_location = self.get_closest_diamond_point(new_pos)
+        new_location = self.pictograph.get_closest_hand_point(new_pos)[0]
 
         if new_location != self.previous_location:
             self.prop_location = new_location
@@ -244,12 +244,12 @@ class Prop(GraphicalObject):
             self.finalize_prop_drop(event)
 
     def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
-        closest_hand_point = self.pictograph.get_closest_hand_point(event.scenePos())
+        closest_hand_point, closest_hand_point_coord = self.pictograph.get_closest_hand_point(event.scenePos())
 
         self.prop_location = closest_hand_point
         self.axis = self.update_axis(self.prop_location)
         self.update_appearance()
-        self.setPos(closest_hand_point)
+        self.setPos(closest_hand_point_coord)
 
         if self.arrow:
             self.arrow.update_appearance()

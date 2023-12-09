@@ -11,7 +11,9 @@ from objects.prop import Staff
 from objects.motion import Motion
 from settings.string_constants import (
     BLUE,
+    BOX,
     COLOR,
+    DIAMOND,
     END_LOCATION,
     LETTER_SVG_DIR,
     MOTION_TYPE,
@@ -26,11 +28,13 @@ from settings.string_constants import (
     END_LAYER,
     ARROW_LOCATION,
 )
+from utilities.TypeChecking.Letters import Letters
 from utilities.letter_engine import LetterEngine
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
     Colors,
     Layers,
+    Locations,
     MotionAttributesDicts,
     List,
     MotionTypes,
@@ -174,7 +178,7 @@ class Beat(Pictograph):
             )
         return state
 
-    def get_current_letter_type(self) -> Optional[str]:
+    def get_current_letter_type(self) -> Optional[Letters]:
         if self.current_letter is not None:
             for letter_type, letters in letter_types.items():
                 if self.current_letter in letters:
@@ -192,29 +196,7 @@ class Beat(Pictograph):
             if prop.color == color:
                 return prop
 
-    def get_closest_hand_point(self, pos: QPointF) -> Tuple[str, QPointF]:
-        min_distance = float("inf")
-        nearest_point_name = None
 
-        for name, point in self.grid.hand_points.items():
-            distance = (pos - point).manhattanLength()
-            if distance < min_distance:
-                min_distance = distance
-                nearest_point_name = name
-
-        return nearest_point_name
-
-    def get_closest_layer2_point(self, pos: QPointF) -> Tuple[str, QPointF]:
-        min_distance = float("inf")
-        nearest_point_name = None
-
-        for name, point in self.grid.layer2_points.items():
-            distance = (pos - point).manhattanLength()
-            if distance < min_distance:
-                min_distance = distance
-                nearest_point_name = name
-
-        return nearest_point_name
 
     ### HELPERS ###
 

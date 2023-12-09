@@ -11,6 +11,7 @@ from objects.prop import Staff
 from objects.motion import Motion
 from settings.string_constants import (
     BLUE,
+    BOX,
     COLOR,
     DIAMOND,
     END_LOCATION,
@@ -179,50 +180,68 @@ class Pictograph(QGraphicsScene):
         else:
             return None
 
+
+
     def get_motion_by_color(self, color: str) -> Optional[Motion]:
         for motion in self.motions:
             if motion.color == color:
                 return motion
+
+    def get_arrow_by_color(self, color: str) -> Optional[Arrow]:
+        for arrow in self.arrows:
+            if arrow.color == color:
+                return arrow
 
     def get_prop_by_color(self, color: str) -> Optional[Staff]:
         for prop in self.prop_set.values():
             if prop.color == color:
                 return prop
 
-    def get_closest_hand_point(self, pos: QPointF) -> Tuple[str, QPointF]:
+    def get_closest_hand_point(self, pos: QPointF) -> Tuple[Optional[str], Optional[QPointF]]:
         min_distance = float("inf")
         nearest_point_name = None
-        relevant_hand_points = (
-            self.grid.diamond_hand_points
-            if self.grid.grid_mode == DIAMOND
-            else self.grid.box_hand_points
-        )
+        nearest_point_coords = None
 
-        for name, point in relevant_hand_points.items():
-            distance = (pos - point).manhattanLength()
-            if distance < min_distance:
-                min_distance = distance
-                nearest_point_name = name
+        if self.grid.grid_mode == DIAMOND:
+            for name, point in self.grid.diamond_hand_points.items():
+                distance = (pos - point).manhattanLength()
+                if distance < min_distance:
+                    min_distance = distance
+                    nearest_point_name = name
+                    nearest_point_coords = point
+                    
+        elif self.grid.grid_mode == BOX:
+            for name, point in self.grid.box_hand_points.items():
+                distance = (pos - point).manhattanLength()
+                if distance < min_distance:
+                    min_distance = distance
+                    nearest_point_name = name
+                    nearest_point_coords = point
 
-        return nearest_point_name
+        return nearest_point_name, nearest_point_coords
 
-    # Inside class Pictograph
-    def get_closest_layer2_point(self, pos: QPointF) -> Locations:
+    def get_closest_layer2_point(self, pos: QPointF) -> Tuple[Optional[str], Optional[QPointF]]:
         min_distance = float("inf")
         nearest_point_name = None
-        relevant_layer2_points = (
-            self.grid.diamond_layer2_points
-            if self.grid.grid_mode == DIAMOND
-            else self.grid.box_layer2_points
-        )
+        nearest_point_coords = None
 
-        for name, point in relevant_layer2_points.items():
-            distance = (pos - point).manhattanLength()
-            if distance < min_distance:
-                min_distance = distance
-                nearest_point_name = name
+        if self.grid.grid_mode == DIAMOND:
+            for name, point in self.grid.diamond_layer2_points.items():
+                distance = (pos - point).manhattanLength()
+                if distance < min_distance:
+                    min_distance = distance
+                    nearest_point_name = name
+                    nearest_point_coords = point
+                    
+        elif self.grid.grid_mode == BOX:
+            for name, point in self.grid.box_layer2_points.items():
+                distance = (pos - point).manhattanLength()
+                if distance < min_distance:
+                    min_distance = distance
+                    nearest_point_name = name
+                    nearest_point_coords = point
 
-        return nearest_point_name
+        return nearest_point_name, nearest_point_coords
 
     ### HELPERS ###
 

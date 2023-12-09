@@ -1,6 +1,0 @@
-<svg id="box_hand_points" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 750 750">
-	<circle id="nw_hand_point" cx="273.8" cy="273.8" r="4.2"/>
-	<circle id="ne_hand_point" cx="476.2" cy="273.8" r="4.2"/>
-	<circle id="se_hand_point" cx="476.2" cy="476.2" r="4.2"/>
-	<circle id="sw_hand_point" cx="273.8" cy="476.2" r="4.2"/>
-</svg>

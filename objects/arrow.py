@@ -151,7 +151,7 @@ class Arrow(GraphicalObject):
             self.scene.arrows.append(self.ghost_arrow)
 
     def update_location(self, new_pos: QPointF) -> None:
-        new_location = self.scene.get_closest_layer2_point(new_pos)
+        new_location = self.scene.get_closest_layer2_point(new_pos)[0]
 
         self.arrow_location = new_location
         self.motion.arrow_location = new_location

@@ -178,7 +178,7 @@ class PropBoxDrag(ObjectBoxDrag):
                     pos_in_main_window
                 )
                 scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
-                new_location = self.pictograph.get_closest_hand_point(scene_pos)
+                new_location = self.pictograph.get_closest_hand_point(scene_pos)[0]
 
                 if self.previous_drag_location != new_location and new_location:
                     self.previous_drag_location = new_location
