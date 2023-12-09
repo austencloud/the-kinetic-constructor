@@ -57,8 +57,7 @@ class TurnsWidget(QFrame):
         self.layout.addWidget(self.header_frame)
         self.layout.addWidget(self.buttons_frame)
 
-        # Initial height setup
-        self._adjust_height()
+
 
 
     def _create_header_layout(self) -> QHBoxLayout:
@@ -327,4 +326,3 @@ class TurnsWidget(QFrame):
 
     def update_turns_widget_size(self) -> None:
         self.setFixedWidth(self.attr_box.attr_box_width)
-        self._adjust_height()
