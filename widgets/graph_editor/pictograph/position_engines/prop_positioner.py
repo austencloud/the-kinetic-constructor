@@ -27,7 +27,7 @@ from settings.string_constants import (
     BLUE,
     END_LAYER,
 )
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING, Dict, List, Union
 from objects.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
@@ -49,13 +49,13 @@ class PropPositioner:
     arrow_dict: List[MotionAttributesDicts]
     letters: LetterDictionary
 
-    def __init__(self, pictograph: "Pictograph") -> None:
-        self.pictograph = pictograph
-        self.view = pictograph.view
-        self.letters = pictograph.letters
+    def __init__(self, scene: "Pictograph") -> None:
+        self.scene = scene
+        self.view = scene.view
+        self.letters = scene.letters
 
     def update_prop_positions(self) -> None:
-        for prop in self.pictograph.props:
+        for prop in self.scene.props:
             self.set_default_prop_locations(prop)
         if self.props_in_beta():
             self.reposition_beta_props()
@@ -85,25 +85,25 @@ class PropPositioner:
             (COUNTER_CLOCKWISE, WEST): QPointF(prop_width / 2, -prop_length / 2),
         }
 
-        if self.pictograph.grid.grid_mode == DIAMOND:
-            if prop.prop_location in self.pictograph.grid.diamond_hand_points:
+        if self.scene.grid.grid_mode == DIAMOND:
+            if prop.prop_location in self.scene.grid.diamond_hand_points:
                 key = (prop.orientation, prop.prop_location)
                 offset = position_offsets.get(key, QPointF(0, 0))  # Default offset
                 prop.setPos(
-                    self.pictograph.grid.diamond_hand_points[prop.prop_location]
+                    self.scene.grid.diamond_hand_points[prop.prop_location]
                     + offset
                 )
 
-        elif self.pictograph.grid.grid_mode == BOX:
-            if prop.prop_location in self.pictograph.grid.box_hand_points:
+        elif self.scene.grid.grid_mode == BOX:
+            if prop.prop_location in self.scene.grid.box_hand_points:
                 key = (prop.orientation, prop.prop_location)
                 offset = position_offsets.get(key, QPointF(0, 0))  # Default offset
                 prop.setPos(
-                    self.pictograph.grid.box_hand_points[prop.prop_location] + offset
+                    self.scene.grid.box_hand_points[prop.prop_location] + offset
                 )
 
     def reposition_beta_props(self) -> None:
-        board_state = self.pictograph.get_state()
+        board_state = self.scene.get_state()
 
         def move_prop(prop: Prop, direction) -> None:
             new_position = self.calculate_new_position(prop.pos(), direction)
@@ -141,8 +141,8 @@ class PropPositioner:
         # GAMMA → BETA - Y, Z
         if len(pro_or_anti_motions) == 1 and len(static_motions) == 1:
             # if all the staves are in layer 1 or layer 2
-            if all(prop.layer == 1 for prop in self.pictograph.props) or all(
-                prop.layer == 2 for prop in self.pictograph.props
+            if all(prop.layer == 1 for prop in self.scene.props) or all(
+                prop.layer == 2 for prop in self.scene.props
             ):
                 self.reposition_gamma_to_beta(
                     move_prop, pro_or_anti_motions, static_motions
@@ -156,8 +156,8 @@ class PropPositioner:
             if converging_motions[0].get(START_LOCATION) != converging_motions[1].get(
                 START_LOCATION
             ):
-                if all(prop.layer == 1 for prop in self.pictograph.props) or all(
-                    prop.layer == 2 for prop in self.pictograph.props
+                if all(prop.layer == 1 for prop in self.scene.props) or all(
+                    prop.layer == 2 for prop in self.scene.props
                 ):
                     self.reposition_alpha_to_beta(move_prop, converging_motions)
 
@@ -168,7 +168,7 @@ class PropPositioner:
     ) -> None:
         for motion in static_motions:
             prop = next(
-                (prop for prop in self.pictograph.props if prop.color == motion[COLOR]),
+                (prop for prop in self.scene.props if prop.color == motion[COLOR]),
                 None,
             )
             if not prop:
@@ -206,7 +206,7 @@ class PropPositioner:
                     other_prop = next(
                         (
                             s
-                            for s in self.pictograph.props
+                            for s in self.scene.props
                             if s.prop_location == prop.prop_location and s != prop
                         ),
                         None,
@@ -218,7 +218,7 @@ class PropPositioner:
 
     def reposition_alpha_to_beta(self, move_prop, converging_arrows) -> None:
         # check if all the props are in layer 1
-        if all(prop.layer == 1 for prop in self.pictograph.props):
+        if all(prop.layer == 1 for prop in self.scene.props):
             end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
             start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
             if (
@@ -231,13 +231,13 @@ class PropPositioner:
                         move_prop(
                             next(
                                 prop
-                                for prop in self.pictograph.props
+                                for prop in self.scene.props
                                 if prop.color == arrow[COLOR]
                             ),
                             direction,
                         )
         # check if all the props are in layer 2
-        elif all(prop.layer == 2 for prop in self.pictograph.props):
+        elif all(prop.layer == 2 for prop in self.scene.props):
             end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
             start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
             if (
@@ -250,14 +250,14 @@ class PropPositioner:
                         move_prop(
                             next(
                                 prop
-                                for prop in self.pictograph.props
+                                for prop in self.scene.props
                                 if prop.arrow.color == arrow[COLOR]
                             ),
                             direction,
                         )
         # check if one prop is in layer 1 and the other is in layer 2
-        elif any(prop.layer == 1 for prop in self.pictograph.props) and any(
-            prop.layer == 2 for prop in self.pictograph.props
+        elif any(prop.layer == 1 for prop in self.scene.props) and any(
+            prop.layer == 2 for prop in self.scene.props
         ):
             end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
             start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
@@ -271,7 +271,7 @@ class PropPositioner:
                         move_prop(
                             next(
                                 prop
-                                for prop in self.pictograph.props
+                                for prop in self.scene.props
                                 if prop.arrow.color == arrow[COLOR]
                             ),
                             direction,
@@ -283,7 +283,7 @@ class PropPositioner:
         motion1, motion2 = motions
         same_motion_type = motion1[MOTION_TYPE] == motion2[MOTION_TYPE] in [PRO, ANTI]
 
-        if all(prop.layer == 1 for prop in self.pictograph.props):
+        if all(prop.layer == 1 for prop in self.scene.props):
             if same_motion_type:
                 self.reposition_G_and_H(motion1, motion2)
             else:
@@ -306,7 +306,7 @@ class PropPositioner:
 
         further_prop = next(
             prop
-            for prop in self.pictograph.props
+            for prop in self.scene.props
             if prop.arrow.color == further_arrow[COLOR]
         )
         new_position_further = self.calculate_new_position(
@@ -317,7 +317,7 @@ class PropPositioner:
         other_direction = self.get_opposite_direction(further_direction)
         other_prop = next(
             prop
-            for prop in self.pictograph.props
+            for prop in self.scene.props
             if prop.arrow.color == other_arrow[COLOR]
         )
         new_position_other = self.calculate_new_position(
@@ -332,7 +332,7 @@ class PropPositioner:
         pro_prop = next(
             (
                 prop
-                for prop in self.pictograph.props
+                for prop in self.scene.props
                 if prop.arrow.color == pro_motion[COLOR]
             ),
             None,
@@ -340,7 +340,7 @@ class PropPositioner:
         anti_prop = next(
             (
                 prop
-                for prop in self.pictograph.props
+                for prop in self.scene.props
                 if prop.arrow.color == anti_motion[COLOR]
             ),
             None,
@@ -374,7 +374,7 @@ class PropPositioner:
             move_prop(
                 next(
                     prop
-                    for prop in self.pictograph.props
+                    for prop in self.scene.props
                     if prop.arrow.color == shift[COLOR]
                 ),
                 direction,
@@ -382,7 +382,7 @@ class PropPositioner:
             move_prop(
                 next(
                     prop
-                    for prop in self.pictograph.props
+                    for prop in self.scene.props
                     if prop.arrow.color == static_motion[COLOR]
                 ),
                 self.get_opposite_direction(direction),
@@ -392,7 +392,7 @@ class PropPositioner:
 
     def props_in_beta(self) -> bool | None:
         visible_staves: List[Prop] = []
-        for prop in self.pictograph.props:
+        for prop in self.scene.props:
             if prop.isVisible():
                 visible_staves.append(prop)
         if len(visible_staves) == 2:
@@ -408,7 +408,7 @@ class PropPositioner:
         arrow_dict,
     ) -> OptimalLocationsEntries | None:
         for variants in matching_letters:
-            if self.pictograph.arrow_positioner.compare_states(current_state, variants):
+            if self.scene.arrow_positioner.compare_states(current_state, variants):
                 optimal_entry: OptimalLocationsDicts = next(
                     (
                         d
@@ -454,7 +454,7 @@ class PropPositioner:
     ### GETTERS
 
     def get_distance_from_center(self, arrow_pos: Dict[str, float]) -> float:
-        grid_center = self.pictograph.grid.center
+        grid_center = self.scene.grid.center
         arrow_x, arrow_y = arrow_pos.get("x", 0.0), arrow_pos.get("y", 0.0)
         center_x, center_y = grid_center.x(), grid_center.y()
 
@@ -466,8 +466,8 @@ class PropPositioner:
     def get_optimal_arrow_location(
         self, arrow_attributes: ArrowAttributesDicts
     ) -> Dict[str, float] | None:
-        current_state = self.pictograph.get_state()
-        current_letter = self.pictograph.current_letter
+        current_state = self.scene.get_state()
+        current_letter = self.scene.current_letter
 
         if current_letter is not None:
             matching_letters = self.letters[current_letter]

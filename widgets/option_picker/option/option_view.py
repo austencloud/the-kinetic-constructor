@@ -21,8 +21,7 @@ class OptionView(PictographView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.wheelEvent = lambda event: None
-        self.init_buttons()
-
+        
 
     def init_buttons(self) -> None:
         self.rotate_cw_button = self.create_button(

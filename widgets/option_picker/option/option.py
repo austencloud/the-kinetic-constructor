@@ -66,10 +66,14 @@ from objects.letter_item import LetterItem
 
 class Option(Pictograph):
     def __init__(
-        self, main_widget: "MainWidget", option_picker: "OptionPicker"
+        self,
+        main_widget: "MainWidget",
+        option_picker: "OptionPicker",
+        is_starter: bool = False,  # Set a default value for is_starter
     ) -> None:
         super().__init__(main_widget, main_widget.graph_editor)
         self.main_widget = main_widget
+        self.is_starter = is_starter
         self.option_picker: OptionPicker = option_picker
 
         self.setup_scene()
@@ -99,13 +103,11 @@ class Option(Pictograph):
         )
         self.ghost_arrows = self.initializer.init_ghost_arrows()
         self.ghost_props = self.initializer.init_ghost_props(self.prop_type)
-
         self.grid: Grid = self.initializer.init_grid()
-        self.view: OptionView = self.initializer.init_view()
+        self.view: OptionView = self.initializer.init_view() 
         self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.locations = self.initializer.init_locations(self.grid)
-
-        # set the icons to 80% of the button size
+        
 
         self.setup_managers(main_widget)
 
@@ -192,30 +194,6 @@ class Option(Pictograph):
         for prop in self.prop_set.values():
             if prop.color == color:
                 return prop
-
-    def get_closest_hand_point(self, pos: QPointF) -> Tuple[str, QPointF]:
-        min_distance = float("inf")
-        nearest_point_name = None
-
-        for name, point in self.grid.hand_points.items():
-            distance = (pos - point).manhattanLength()
-            if distance < min_distance:
-                min_distance = distance
-                nearest_point_name = name
-
-        return nearest_point_name
-
-    def get_closest_layer2_point(self, pos: QPointF) -> Tuple[str, QPointF]:
-        min_distance = float("inf")
-        nearest_point_name = None
-
-        for name, point in self.grid.layer2_points.items():
-            distance = (pos - point).manhattanLength()
-            if distance < min_distance:
-                min_distance = distance
-                nearest_point_name = name
-
-        return nearest_point_name
 
     ### HELPERS ###
 
@@ -344,7 +322,7 @@ class Option(Pictograph):
         self.update_letter()
         self.update_arrows()
         self.update_props()
-        
+
         self.view.update_OptionView_size()
 
     def update_arrows(self) -> None:
