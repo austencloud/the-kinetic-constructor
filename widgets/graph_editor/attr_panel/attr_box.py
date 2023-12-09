@@ -194,9 +194,7 @@ class AttrBox(QFrame):
             }}
         """
     def clear_attr_box(self):
-        # Clear all attributes in the attribute box
-        # You might want to clear labels, reset combo boxes, etc.\
-        self.header_widget.clear_clock_label()
+
         self.motion_type_widget.clear_motion_type_box()
         self.start_end_widget.clear_start_end_boxes()
         self.turns_widget.clear_turns_label()
