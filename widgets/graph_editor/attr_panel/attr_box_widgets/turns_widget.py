@@ -128,8 +128,8 @@ class TurnsWidget(QFrame):
             print(f"Failed to load the icon from {icon_path}.")
             return QPixmap()
         return pixmap.scaled(
-            int(self.turnbox_frame.height() * 0.9),
-            int(self.turnbox_frame.height() * 0.9),
+            int(self.turnbox_frame.height() * 0.8),
+            int(self.turnbox_frame.height() * 0.8),
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
         )
@@ -241,7 +241,7 @@ class TurnsWidget(QFrame):
         turnbox_layout.addWidget(self.turns_label)
         # set maximum width to width of box
         turnbox_frame.setMaximumWidth(self.turns_label.width() + self.border_width)
-        turnbox_frame.setMinimumHeight(
+        turnbox_frame.setFixedHeight(
             self.turns_label.height() + self.turnbox_header.height()
         )
         return turnbox_frame

@@ -71,9 +71,7 @@ class MainWidget(QWidget):
         return None
 
     def resizeEvent(self, event: QResizeEvent) -> None:
-        super().resizeEvent(event)
-        self.resize(int(self.main_window.width()), int(self.main_window.height()))
-
+        pass
         self.sequence.update_size()
         self.option_picker.update_size()
         self.graph_editor.update_size()

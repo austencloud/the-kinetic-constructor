@@ -5,6 +5,9 @@ import pstats
 from typing import IO
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from widgets.main_widget import MainWidget
+from PyQt6.QtGui import QGuiApplication
+from PyQt6.QtWidgets import QMainWindow
+from widgets.main_widget import MainWidget
 
 
 class MainWindow(QMainWindow):
@@ -16,37 +19,43 @@ class MainWindow(QMainWindow):
         self._init_main_window()
 
     def _configure_window(self) -> None:
-        screens = QApplication.screens()
+        screens = QGuiApplication.screens()
         if len(screens) > 1:
-            screen = screens[1] 
+            screen = screens[1]  # Secondary screen
         else:
-            screen = QApplication.primaryScreen()
+            screen = QGuiApplication.primaryScreen()  # Fallback to primary screen
 
-        screen_geometry = screen.geometry()
+        # Use availableGeometry to respect taskbar and docked items
+        available_geometry = screen.availableGeometry()
 
-        self.main_window_width = int(screen_geometry.width() * 0.9)
-        self.main_window_height = int(screen_geometry.height() * 0.8)
+        self.main_window_width = available_geometry.width() * 0.75
+        self.main_window_height = available_geometry.height() * 0.75
 
+        # Move the window to the center of the available geometry of the selected screen
         self.move(
-            screen_geometry.x()
-            + (screen_geometry.width() - self.main_window_width) // 2
-            - 50,
-            screen_geometry.y()
-            + (screen_geometry.height() - self.main_window_height) // 2
-            - 50,
+            int(
+                available_geometry.x()
+                + (available_geometry.width() - self.main_window_width) / 2
+            ),
+            int(
+                available_geometry.y()
+                + (available_geometry.height() - self.main_window_height) / 2
+            ),
         )
+        self.resize(int(self.main_window_width), int(self.main_window_height))
 
     def _init_main_window(self) -> None:
-        self.setMinimumSize(self.main_window_width, self.main_window_height)
         self.main_widget = MainWidget(self)
         self.installEventFilter(self.main_widget)
         self.setCentralWidget(self.main_widget)
         self.show()
         self.setWindowTitle("Sequence Constructor")
+        self._configure_window()
 
     def write_profiling_stats_to_file(self, file_path: str) -> None:
         stats: pstats.Stats = pstats.Stats(self.profiler).sort_stats("cumtime")
         with open(file_path, "w") as f:
+            stats.stream = f  # Add this line to set the output stream
             stats.print_stats()
         print(f"Main profiling stats written to {file_path}")
 

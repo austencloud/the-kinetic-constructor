@@ -70,11 +70,3 @@ class GraphEditor(QFrame):
         self.arrowbox.update_arrowbox_size()
         self.propbox.update_propbox_size()
         self.attr_panel.update_attr_panel_size()
-        self.update_vtg_panel_size()
-
-
-
-
-    def update_vtg_panel_size(self) -> None:
-        self.vtg_panel.setFixedHeight(self.height())
-        self.vtg_panel.setFixedWidth(int(self.width() / 2))
