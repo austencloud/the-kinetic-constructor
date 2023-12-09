@@ -204,6 +204,12 @@ class OptionPicker(QScrollArea):
                 self.duplicate_arrow(item, target_beat)
             elif isinstance(item, Prop):
                 self.duplicate_prop(item, target_beat)
+        for arrow in target_beat.arrows:
+            arrow.prop = target_beat.get_prop_by_color(arrow.color)
+        for prop in target_beat.props:
+            prop.arrow = target_beat.get_arrow_by_color(prop.color)
+            
+
 
     def duplicate_arrow(self, arrow: Arrow, target_beat: Beat) -> None:
         new_arrow = Arrow(target_beat, arrow.get_attributes())
