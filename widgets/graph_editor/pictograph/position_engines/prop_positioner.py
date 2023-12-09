@@ -168,7 +168,7 @@ class PropPositioner:
     ) -> None:
         for motion in static_motions:
             prop = next(
-                (prop for prop in self.pictograph.props if prop.arrow.color == motion[COLOR]),
+                (prop for prop in self.pictograph.props if prop.color == motion[COLOR]),
                 None,
             )
             if not prop:
@@ -232,7 +232,7 @@ class PropPositioner:
                             next(
                                 prop
                                 for prop in self.pictograph.props
-                                if prop.arrow.color == arrow[COLOR]
+                                if prop.color == arrow[COLOR]
                             ),
                             direction,
                         )

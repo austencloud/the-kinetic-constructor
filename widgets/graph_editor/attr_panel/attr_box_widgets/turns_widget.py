@@ -13,13 +13,11 @@ from settings.string_constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON
 
 from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
-
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
 
-
 class TurnsWidget(QFrame):
-    def __init__(self, attr_box: "AttrBox"):
+    def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__()
         self.pictograph = attr_box.pictograph
         self.color = attr_box.color
@@ -57,9 +55,6 @@ class TurnsWidget(QFrame):
         self.layout.addWidget(self.header_frame)
         self.layout.addWidget(self.buttons_frame)
 
-
-
-
     def _create_header_layout(self) -> QHBoxLayout:
         header_layout = QHBoxLayout()
         header_layout.setContentsMargins(0, 0, 0, 0)
@@ -79,13 +74,11 @@ class TurnsWidget(QFrame):
         self.clock_left.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.clock_right.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        
-
         self.turnbox_frame = self._setup_turnbox_frame()
 
         self.clock_left.setFixedHeight(self.turnbox_frame.height())
         self.clock_right.setFixedHeight(self.turnbox_frame.height())
-        
+
         # Load pixmaps for clocks
         self.clockwise_pixmap = self.load_clock_pixmap(CLOCKWISE_ICON)
         self.counter_clockwise_pixmap = self.load_clock_pixmap(COUNTER_CLOCKWISE_ICON)
@@ -120,7 +113,7 @@ class TurnsWidget(QFrame):
 
         return buttons_layout
 
-    def _adjust_height(self):
+    def _adjust_height(self) -> None:
         # Adjust the height of the widget based on the combined height of header and buttons frames
         total_height = (
             self.header_frame.sizeHint().height()
@@ -141,7 +134,7 @@ class TurnsWidget(QFrame):
             Qt.TransformationMode.SmoothTransformation,
         )
 
-    def update_clocks(self, rotation_direction: str):
+    def update_clocks(self, rotation_direction: str) -> None:
         """Update the visibility of clocks based on rotation direction."""
         if rotation_direction == "ccw":
             self.clock_left.setPixmap(self.counter_clockwise_pixmap)
@@ -159,7 +152,7 @@ class TurnsWidget(QFrame):
 
     ### CREATE WIDGETS ###
 
-    def _create_buttons(self):
+    def _create_buttons(self) -> None:
         self.subtract_turn_button = self._create_turns_button(
             "-1", self._subtract_turn_callback, is_full_turn=True
         )
@@ -317,7 +310,7 @@ class TurnsWidget(QFrame):
     def clear_turns_label(self) -> None:
         self.turns_label.setText("")
 
-    def update_turns_label_box(self, motion):
+    def update_turns_label_box(self, motion) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion and motion.turns is not None:
             self.turns_label.setText(str(motion.turns))
