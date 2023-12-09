@@ -52,7 +52,7 @@ class GraphicalObject(QGraphicsSvgItem):
 
         # This regex pattern looks for the fill attribute and captures the color value
         fill_pattern = re.compile(r'(fill=")(#[a-fA-F0-9]{6})(")')
-        
+
         # This function will replace the old color with the new color
         def replace_color(match):
             return match.group(1) + new_hex_color + match.group(3)

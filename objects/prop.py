@@ -64,6 +64,10 @@ class Prop(GraphicalObject):
             self.update_attributes(attributes)
 
     ### MOUSE EVENTS ###
+    def update_prop_type(self, prop_type: PropTypes) -> None:
+        self.prop_type = prop_type
+        self.update_svg(self.get_svg_file(prop_type))
+        self.update_appearance()
 
     def mousePressEvent(self, event) -> None:
         self.setSelected(True)
@@ -244,7 +248,10 @@ class Prop(GraphicalObject):
             self.finalize_prop_drop(event)
 
     def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
-        closest_hand_point, closest_hand_point_coord = self.pictograph.get_closest_hand_point(event.scenePos())
+        (
+            closest_hand_point,
+            closest_hand_point_coord,
+        ) = self.pictograph.get_closest_hand_point(event.scenePos())
 
         self.prop_location = closest_hand_point
         self.axis = self.update_axis(self.prop_location)

@@ -349,6 +349,7 @@ class Pictograph(QGraphicsScene):
             for ghost_prop in new_scene.ghost_props.values():
                 if prop.color == ghost_prop.color:
                     prop.ghost_prop = ghost_prop
+                    ghost_prop.update_prop_type(prop.prop_type)
 
         for ghost_arrow in new_scene.ghost_arrows.values():
             for motion in new_scene.motions:

@@ -115,10 +115,10 @@ class Arrow(GraphicalObject):
 
         if hasattr(self, "ghost_arrow"):
             if self.ghost_arrow:
-                self.update_ghost_on_click()
+                self._update_ghost_on_click()
         if hasattr(self, "prop"):
             if self.prop:
-                self.update_prop_on_click()
+                self._update_prop_on_click()
 
         self.scene.arrows.remove(self)
         self.scene.update_pictograph()
@@ -131,12 +131,12 @@ class Arrow(GraphicalObject):
         if self.scene:
             self.scene.update_attr_panel()
 
-    def update_prop_on_click(self) -> None:
+    def _update_prop_on_click(self) -> None:
         self.prop.color = self.color
         self.prop.prop_location = self.motion.end_location
         self.prop.axis = self.prop.update_axis(self.motion.end_location)
 
-    def update_ghost_on_click(self) -> None:
+    def _update_ghost_on_click(self) -> None:
         from widgets.graph_editor.pictograph.pictograph import Pictograph
 
         if isinstance(self.scene, Pictograph):
