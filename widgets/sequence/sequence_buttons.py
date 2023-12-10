@@ -31,5 +31,5 @@ class SequenceButtons(QFrame):
         self.layout.addWidget(self.clear_sequence_button)
 
     def update_size(self) -> None:
-        self.setFixedHeight(self.button_height)
-        self.clear_sequence_button.setFixedHeight(self.button_height)
+        self.setMinimumHeight(self.button_height)
+        self.clear_sequence_button.setMinimumHeight(self.button_height)

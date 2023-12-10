@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class ObjectBoxView(QGraphicsView):
     def __init__(self, objectbox: "ObjectBox") -> None:
         super().__init__()
-        self.setFixedSize(
+        self.setMinimumSize(
             int(objectbox.main_window.height() * 1 / 6),
             int(objectbox.main_window.height() * 1 / 6),
         )

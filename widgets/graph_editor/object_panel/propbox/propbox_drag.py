@@ -111,8 +111,8 @@ class PropBoxDrag(ObjectBoxDrag):
         else:
             new_size = rotated_pixmap.size()
 
-        self.setFixedSize(new_size)
-        self.preview.setFixedSize(new_size)
+        self.setMinimumSize(new_size)
+        self.preview.setMinimumSize(new_size)
         self.preview.setPixmap(rotated_pixmap)
         self.preview.setAlignment(Qt.AlignmentFlag.AlignCenter)
 

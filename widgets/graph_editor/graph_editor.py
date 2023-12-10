@@ -1,14 +1,13 @@
 from typing import TYPE_CHECKING
 
 from PyQt6.QtGui import QColor, QPalette
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
 
 from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
 from widgets.graph_editor.pictograph.pictograph import Pictograph
 from widgets.graph_editor.object_panel.propbox.propbox import PropBox
 from widgets.graph_editor.attr_panel.attr_panel import AttrPanel
-from widgets.graph_editor.vtg_panel import VTGPanel
 from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
@@ -37,18 +36,16 @@ class GraphEditor(QFrame):
 
         objectbox_layout = QVBoxLayout()
         pictograph_layout = QVBoxLayout()
-        vtg_panel_layout = QVBoxLayout()
 
         self.pictograph = Pictograph(self.main_widget, self)
-        self.propbox = PropBox(main_widget, self.pictograph)
+
         self.arrowbox = ArrowBox(main_widget, self.pictograph)
-        self.vtg_panel = VTGPanel(self.pictograph)
+        self.propbox = PropBox(main_widget, self.pictograph)
         self.attr_panel = AttrPanel(self.pictograph)
 
         objectbox_layout.addWidget(self.arrowbox.view)
         objectbox_layout.addWidget(self.propbox.view)
         pictograph_layout.addWidget(self.pictograph.view)
-        vtg_panel_layout.addWidget(self.vtg_panel)
 
         graph_editor_frame_layout.setContentsMargins(0, 0, 0, 0)
         graph_editor_frame_layout.addLayout(objectbox_layout)
@@ -60,6 +57,5 @@ class GraphEditor(QFrame):
 
     def update_graph_editor_size(self) -> None:
         self.pictograph.view.update_pictograph_size()
-        self.setMaximumHeight(self.pictograph.view.height())
         self.arrowbox.update_arrowbox_size()
         self.propbox.update_propbox_size()

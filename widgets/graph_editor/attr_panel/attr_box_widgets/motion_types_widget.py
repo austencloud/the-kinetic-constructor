@@ -51,13 +51,13 @@ class MotionTypesWidget(QFrame):
     def _setup_button_frame(self) -> QFrame:
         swap_button = self._create_button()
         button_frame = QFrame(self)
-        button_frame.setFixedWidth(int(self.attr_box.width() * 1 / 5))
+        button_frame.setMinimumWidth(int(self.attr_box.width() * 1 / 5))
         button_frame_layout = QVBoxLayout(button_frame)
         button_frame_layout.setContentsMargins(0, 0, 0, 0)
         button_frame_layout.setSpacing(0)
 
         button_size = int(self.attr_box.width() * 0.15)  # Example size
-        swap_button.setFixedSize(button_size, button_size)
+        swap_button.setMinimumSize(button_size, button_size)
         button_frame_layout.addSpacerItem(
             QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
         )
@@ -75,7 +75,7 @@ class MotionTypesWidget(QFrame):
         motion_type_box = self._setup_motion_type_box()
 
         motion_type_box_frame = QFrame(self)
-        motion_type_box_frame.setFixedWidth(int(self.attr_box.width() * 4 / 5))
+        motion_type_box_frame.setMinimumWidth(int(self.attr_box.width() * 4 / 5))
 
         motion_type_box_frame_layout = QVBoxLayout(motion_type_box_frame)
         motion_type_box_frame_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
@@ -112,8 +112,8 @@ class MotionTypesWidget(QFrame):
             QFont("Arial", int(self.attr_box.width() / 10), QFont.Weight.Bold, True)
         )
         motion_type_box.setStyleSheet(self.attr_box.get_combobox_style())
-        motion_type_box.setFixedWidth(int(self.attr_box.width() * 0.6))
-        motion_type_box.setFixedHeight(int(self.attr_box.width() * 0.2))
+        motion_type_box.setMinimumWidth(int(self.attr_box.width() * 0.5))
+        motion_type_box.setMinimumHeight(int(self.attr_box.width() * 0.2))
         motion_type_box.setCurrentIndex(-1)
         self.motion_type_box = motion_type_box
         return motion_type_box
@@ -163,7 +163,7 @@ class MotionTypesWidget(QFrame):
         self.motion_type_box.setCurrentIndex(-1)
 
     def update_motion_type_widget_size(self) -> None:
-        self.setFixedSize(
+        self.setMinimumSize(
             self.attr_box.width(),
             self.motion_type_box.height() + self.type_header_frame.height(),
         )

@@ -2,12 +2,11 @@ from typing import TYPE_CHECKING, Optional
 
 from PyQt6.QtCore import QEvent
 from PyQt6.QtGui import QResizeEvent
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
 
 from utilities.TypeChecking.TypeChecking import LetterDictionary
 from utilities.export_handler import ExportHandler
 from utilities.json_handler import JsonHandler
-from utilities.layout_manager import LayoutManager
 from utilities.pictograph_generator import PictographGenerator
 from widgets.graph_editor.key_event_handler import KeyEventHandler
 from widgets.graph_editor.graph_editor import GraphEditor
@@ -37,8 +36,32 @@ class MainWidget(QWidget):
 
         self.generator = PictographGenerator(self)
         self.export_handler = ExportHandler(self)
-        self.layout_manager = LayoutManager(self)
-        self.layout_manager.configure_layouts()
+        self.configure_layouts()
+
+    def configure_layouts(self) -> None:
+        self.main_layout = QHBoxLayout()
+
+        self.left_layout = QVBoxLayout()
+        self.right_layout = QVBoxLayout()
+
+        self.left_layout.addWidget(self.sequence)
+
+        self.right_layout.addWidget(self.option_picker)
+        self.right_layout.addWidget(self.graph_editor)
+
+        self.right_layout.setStretchFactor(self.option_picker, 2)
+        self.right_layout.setStretchFactor(self.graph_editor, 1)
+
+        self.main_layout.addLayout(self.left_layout)
+        self.main_layout.addLayout(self.right_layout)
+
+        # Set stretch factors
+        self.main_layout.setStretchFactor(self.left_layout, 1)
+        self.main_layout.setStretchFactor(self.right_layout, 2)
+
+        self.setLayout(self.main_layout)
+        self.layout().setSpacing(0)
+        self.layout().setContentsMargins(0, 0, 0, 0)
 
     ### EVENTS ###
 
@@ -70,5 +93,5 @@ class MainWidget(QWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.sequence.update_size()
-        self.option_picker.update_size()
+        # self.option_picker.update_size()
         self.graph_editor.update_graph_editor_size()

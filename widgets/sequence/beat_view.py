@@ -30,7 +30,7 @@ class BeatView(QGraphicsView):
 
     def update_pictograph_size(self) -> None:
         view_width = int(self.height() * 75 / 90)
-        self.setFixedWidth(view_width)
+        self.setMinimumWidth(view_width)
         if self.pictograph:
             self.view_scale = view_width / self.pictograph.width()
             self.resetTransform()

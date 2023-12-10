@@ -143,9 +143,9 @@ class StartEndWidget(QWidget):
             button, alignment=Qt.AlignmentFlag.AlignCenter
         )  # Center the button in the frame
 
-        frame.setFixedWidth(int(self.attr_box.width() / 5))
+        frame.setMinimumWidth(int(self.attr_box.width() / 5))
         button_height = self.start_box_with_header_frame.sizeHint().height()
-        frame.setFixedHeight(button_height)
+        frame.setMinimumHeight(button_height)
 
         return frame
 
@@ -201,14 +201,14 @@ class StartEndWidget(QWidget):
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
         # Set the fixed width for the button frame based on the attr_box width
-        self.button_frame.setFixedWidth(int(self.attr_box.width() / 5))
+        self.button_frame.setMinimumWidth(int(self.attr_box.width() / 5))
         # Set the fixed height for the button and arrow label frames based on the height of the start_box_with_header_frame
         common_height = self.start_box_with_header_frame.sizeHint().height()
-        self.button_frame.setFixedHeight(common_height)
-        self.start_to_end_frame.setFixedHeight(common_height)
-        self.arrow_label.setFixedHeight(
+        self.button_frame.setMinimumHeight(common_height)
+        self.start_to_end_frame.setMinimumHeight(common_height)
+        self.arrow_label.setMinimumHeight(
             common_height - self.start_end_header_label.height()
         )
-        self.arrow_label_frame.setFixedHeight(
+        self.arrow_label_frame.setMinimumHeight(
             self.start_box_with_header_frame.sizeHint().height()
         )  # Match the height with the button and combo boxes

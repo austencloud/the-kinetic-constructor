@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 class PropBoxView(ObjectBoxView):
     def __init__(self, propbox: "PropBox") -> None:
         super().__init__(propbox)
-        self.setFixedSize(
+        self.setMinimumSize(
             int(propbox.main_window.height() * 1 / 6),
             int(propbox.main_window.height() * 1 / 6),
         )

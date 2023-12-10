@@ -61,7 +61,7 @@ class AttrBox(QFrame):
         self.layout().addWidget(self.turns_widget)
 
     def setup_box(self) -> None:
-        self.setFixedWidth(int(self.attr_panel.width() / 2))
+        self.setMinimumWidth(int(self.attr_panel.width() / 2))
         self.setObjectName("AttributeBox")
         self.apply_border_style(RED_HEX if self.color == RED else BLUE_HEX)
         self.setLayout(QVBoxLayout(self))
@@ -123,7 +123,7 @@ class AttrBox(QFrame):
             self.clear_attr_box()
 
     def update_attr_box_size(self) -> None:
-        self.setFixedWidth(
+        self.setMaximumWidth(
             int(
                 (
                     self.attr_panel.pictograph.graph_editor.width()

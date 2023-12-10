@@ -38,8 +38,9 @@ class AttrPanel(QFrame):
         elif motion_color == RED:
             self.red_attr_box.update_attr_box(motion)
 
-    def update_attr_panel_size(self) -> None:
-        self.setFixedHeight(self.pictograph.view.height())
+    def resizeEvent(self, event) -> None:
+        self.setMinimumHeight(self.pictograph.view.height())
+        self.setMaximumHeight(self.pictograph.view.height())
         self.blue_attr_box.update_attr_box_size()
         self.red_attr_box.update_attr_box_size()
 

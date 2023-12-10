@@ -22,16 +22,9 @@ if TYPE_CHECKING:
 class TurnsWidget(QFrame):
     def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__()
-        self.pictograph = attr_box.pictograph
-        self.color = attr_box.color
-        self.attr_box: AttrBox = attr_box
-        self.turnbox_frame_size = int(self.attr_box.width() * 0.3)
-        self.turnbox_frame_height = int(self.attr_box.width() * 0.2)
-        self.button_size = int(self.attr_box.width() * 0.2)
-        # Load and scale pixmaps
+        self.attr_box = attr_box
         self.clockwise_pixmap = self._load_clock_pixmap(CLOCKWISE_ICON)
         self.counter_clockwise_pixmap = self._load_clock_pixmap(COUNTER_CLOCKWISE_ICON)
-
         self._init_ui()
 
     def _init_ui(self) -> None:
@@ -46,13 +39,10 @@ class TurnsWidget(QFrame):
         self.layout.addWidget(self.header_frame)
         self.layout.addWidget(self.buttons_frame)
 
-        # Set clock labels to scale contents
         for clock in [self.clock_left, self.clock_right]:
             clock.setScaledContents(True)
-        # hide the clocks
         self.clock_left.clear()
         self.clock_right.clear()
-
 
     ### CREATE WIDGETS ###
 
@@ -263,25 +253,25 @@ class TurnsWidget(QFrame):
     ### CALLBACKS ###
 
     def _add_turn_callback(self) -> None:
-        motion = self.pictograph.get_motion_by_color(self.color)
+        motion = self.attr_box.pictograph.get_motion_by_color(self.attr_box.color)
         if motion:
             motion.add_turn()
             self.attr_box.update_attr_box(motion)
 
     def _subtract_turn_callback(self) -> None:
-        motion = self.pictograph.get_motion_by_color(self.color)
+        motion = self.attr_box.pictograph.get_motion_by_color(self.attr_box.color)
         if motion:
             motion.subtract_turn()
             self.attr_box.update_attr_box(motion)
 
     def _add_half_turn_callback(self) -> None:
-        motion = self.pictograph.get_motion_by_color(self.color)
+        motion = self.attr_box.pictograph.get_motion_by_color(self.attr_box.color)
         if motion:
             motion.add_half_turn()
             self.attr_box.update_attr_box(motion)
 
     def _subtract_half_turn_callback(self) -> None:
-        motion = self.pictograph.get_motion_by_color(self.color)
+        motion = self.attr_box.pictograph.get_motion_by_color(self.attr_box.color)
         if motion:
             motion.subtract_half_turn()
             self.attr_box.update_attr_box(motion)
@@ -300,7 +290,6 @@ class TurnsWidget(QFrame):
             self.clock_left.clear()
             self.clock_right.clear()
 
-
     def clear_turns_label(self) -> None:
         self.turns_label.setText("")
 
@@ -311,7 +300,7 @@ class TurnsWidget(QFrame):
             self.turns_label.setText("0")
         else:
             self.clear_turns_label()
-            
+
     def resizeEvent(self, event) -> None:
         """Handle the resize event to update clock pixmaps."""
         super().resizeEvent(event)
@@ -326,7 +315,9 @@ class TurnsWidget(QFrame):
 
     def update_turns_widget(self, motion: Motion) -> None:
         self.update_clocks(motion.rotation_direction)
-        self.update_turns_label_box(self.pictograph.get_motion_by_color(self.color))
+        self.update_turns_label_box(
+            self.attr_box.pictograph.get_motion_by_color(self.attr_box.color)
+        )
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

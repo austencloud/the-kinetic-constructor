@@ -25,7 +25,6 @@ class OptionPickerLetterButtons(QFrame):
         # Set a size policy on the frame
         self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
 
-
     def init_letter_buttons_layout(self) -> None:
         letter_buttons_layout = QVBoxLayout()
         letter_buttons_layout.setSpacing(int(0))
@@ -64,13 +63,14 @@ class OptionPickerLetterButtons(QFrame):
                 row_layout.addWidget(button)
 
                 # Set a size policy on the button
-                button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
+                button.setSizePolicy(
+                    QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding
+                )
 
             letter_buttons_layout.addLayout(row_layout)
 
         self.letter_buttons_layout = letter_buttons_layout
         self.setLayout(letter_buttons_layout)
-
 
     def get_letter_type(self, letter: str) -> str:
         for letter_type in letter_types:
@@ -134,7 +134,7 @@ class OptionPickerLetterButtons(QFrame):
                         button: QPushButton = button_item.widget()
                         if button_size > self.height() / button_row_count:
                             button_size = int(self.height() / button_row_count)
-                        button.setFixedSize(button_size, button_size)
+                        button.setMinimumSize(button_size, button_size)
                         icon_size = int(button_size * 0.9)
                         button.setIconSize(QSize(icon_size, icon_size))
 

@@ -37,7 +37,7 @@ class HeaderWidget(QWidget):
         self.rotate_cw_button, self.rotate_ccw_button = self._setup_buttons()
 
         self._setup_main_layout()
-        self.setFixedWidth(self.attr_box.width())
+        self.setMinimumWidth(self.attr_box.width())
 
     def _setup_main_layout(self) -> QHBoxLayout:
         self.margins = self.attr_box.border_width
@@ -100,5 +100,5 @@ class HeaderWidget(QWidget):
         return button
 
     def update_header_widget_size(self) -> None:
-        self.setFixedWidth(self.attr_box.width())
-        self.setFixedHeight(self.rotate_cw_button.height() + self.margins)
+        self.setMinimumWidth(self.attr_box.width())
+        self.setMinimumHeight(self.rotate_cw_button.height() + self.margins)

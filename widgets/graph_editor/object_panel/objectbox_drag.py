@@ -57,8 +57,8 @@ class ObjectBoxDrag(QWidget):
 
         scaled_size = renderer.defaultSize() * self.pictograph.view.view_scale
         original_pixmap = QPixmap(scaled_size)
-        self.setFixedSize(scaled_size)
-        self.preview.setFixedSize(scaled_size)
+        self.setMinimumSize(scaled_size)
+        self.preview.setMinimumSize(scaled_size)
         original_pixmap.fill(Qt.GlobalColor.transparent)
         painter = QPainter(original_pixmap)
         renderer.render(painter)
@@ -66,8 +66,8 @@ class ObjectBoxDrag(QWidget):
 
         rotate_transform = QTransform().rotate(drag_angle)
         rotated_pixmap = original_pixmap.transformed(rotate_transform)
-        self.setFixedSize(rotated_pixmap.size())
-        self.preview.setFixedSize(rotated_pixmap.size())
+        self.setMinimumSize(rotated_pixmap.size())
+        self.preview.setMinimumSize(rotated_pixmap.size())
         self.preview.setPixmap(rotated_pixmap)
         self.preview.setAlignment(Qt.AlignmentFlag.AlignCenter)
 

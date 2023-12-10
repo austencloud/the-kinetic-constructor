@@ -42,17 +42,17 @@ class Sequence(QFrame):
                 self.beats.append(beat_view)
 
     def update_size(self) -> None:
-        self.setFixedHeight(
+        self.setMinimumHeight(
             int(self.main_widget.height() - self.sequence.buttons.height())
         )
         beat_height = int(((self.height() / 4)))
         beat_width = int(beat_height * 75 / 90)
 
-        self.sequence.setFixedWidth(beat_width * 4)
+        self.sequence.setMinimumWidth(beat_width * 4)
 
         for beat in self.beats:
-            beat.setFixedHeight(beat_height)
-            beat.setFixedWidth(beat_width)
+            beat.setMinimumHeight(beat_height)
+            beat.setMinimumWidth(beat_width)
 
     def add_scene_to_sequence(self, copied_scene: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()
