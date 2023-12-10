@@ -60,6 +60,6 @@ class GraphEditor(QFrame):
 
     def update_graph_editor_size(self) -> None:
         self.pictograph.view.update_pictograph_size()
+        self.setMaximumHeight(self.pictograph.view.height())
         self.arrowbox.update_arrowbox_size()
         self.propbox.update_propbox_size()
-        self.attr_panel.update_attr_panel_size()

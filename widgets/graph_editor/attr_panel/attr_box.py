@@ -123,7 +123,16 @@ class AttrBox(QFrame):
             self.clear_attr_box()
 
     def update_attr_box_size(self) -> None:
-        self.setFixedWidth(int(self.attr_panel.width() / 2))
+        self.setFixedWidth(
+            int(
+                (
+                    self.attr_panel.pictograph.graph_editor.width()
+                    - self.attr_panel.pictograph.graph_editor.arrowbox.view.width()
+                    - self.attr_panel.pictograph.view.width()
+                )
+                / 2
+            )
+        )
         self.setMaximumHeight(self.attr_panel.height())
         self.header_widget.update_header_widget_size()
         self.motion_type_widget.update_motion_type_widget_size()

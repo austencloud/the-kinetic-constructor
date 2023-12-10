@@ -34,6 +34,5 @@ class OptionPickerWidget(QFrame):
     ### RESIZE EVENT HANDLERS ###
 
     def update_size(self) -> None:
-
         self.option_picker.update_option_picker_size()
         self.button_frame.update_button_frame_size()
