@@ -37,7 +37,7 @@ class HeaderWidget(QWidget):
         self.rotate_cw_button, self.rotate_ccw_button = self._setup_buttons()
 
         self._setup_main_layout()
-        self.setFixedWidth(self.attr_box.attr_box_width)
+        self.setFixedWidth(self.attr_box.width())
 
     def _setup_main_layout(self) -> QHBoxLayout:
         self.margins = self.attr_box.border_width
@@ -45,10 +45,15 @@ class HeaderWidget(QWidget):
         main_layout.setContentsMargins(self.margins, self.margins, self.margins, 0)
         main_layout.setSpacing(0)
 
-        main_layout.addWidget(self.rotate_ccw_button, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        main_layout.addWidget(
+            self.rotate_ccw_button,
+            alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft,
+        )
         main_layout.addWidget(self.header_text, alignment=Qt.AlignmentFlag.AlignCenter)
-        main_layout.addWidget(self.rotate_cw_button, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
-
+        main_layout.addWidget(
+            self.rotate_cw_button,
+            alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight,
+        )
 
         return main_layout
 
@@ -95,5 +100,5 @@ class HeaderWidget(QWidget):
         return button
 
     def update_header_widget_size(self) -> None:
-        self.setFixedWidth(self.attr_box.attr_box_width)
+        self.setFixedWidth(self.attr_box.width())
         self.setFixedHeight(self.rotate_cw_button.height() + self.margins)

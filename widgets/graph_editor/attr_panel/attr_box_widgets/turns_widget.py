@@ -25,9 +25,9 @@ class TurnsWidget(QFrame):
         self.pictograph = attr_box.pictograph
         self.color = attr_box.color
         self.attr_box: AttrBox = attr_box
-        self.turnbox_frame_size = int(self.attr_box.attr_box_width * 0.3)
-        self.turnbox_frame_height = int(self.attr_box.attr_box_width * 0.2)
-        self.button_size = int(self.attr_box.attr_box_width * 0.2)
+        self.turnbox_frame_size = int(self.attr_box.width() * 0.3)
+        self.turnbox_frame_height = int(self.attr_box.width() * 0.2)
+        self.button_size = int(self.attr_box.width() * 0.2)
         # Load and scale pixmaps
         self.clockwise_pixmap = self._load_clock_pixmap(CLOCKWISE_ICON)
         self.counter_clockwise_pixmap = self._load_clock_pixmap(COUNTER_CLOCKWISE_ICON)
@@ -52,6 +52,9 @@ class TurnsWidget(QFrame):
         # hide the clocks
         self.clock_left.clear()
         self.clock_right.clear()
+
+
+    ### CREATE WIDGETS ###
 
     def _create_header_layout(self) -> QHBoxLayout:
         header_layout: QHBoxLayout = QHBoxLayout()
@@ -107,28 +110,6 @@ class TurnsWidget(QFrame):
         frame.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         return frame
 
-    def _create_turns_button(
-        self, text: Literal["+1", "-1", "+0.5", "-0.5"], callback, is_full_turn: bool
-    ) -> QPushButton:
-        size = self.button_size if is_full_turn else int(self.button_size * 0.75)
-        button = QPushButton(text, self)
-        button.setFont(QFont("Arial", int(size / 3)))
-        button.setFixedSize(size, size)
-        button.clicked.connect(callback)
-        return button
-
-    def _create_turns_label(self) -> QLabel:
-        turns_label = QLabel("", self)
-        turns_label.setFont(
-            QFont("Arial", int(self.turnbox_frame_size / 8), QFont.Weight.Bold)
-        )
-        turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        turns_label.setFixedSize(self.turnbox_frame_size, self.turnbox_frame_height)
-        turns_label.setStyleSheet(
-            "background-color: white; border: 2px solid black; border-radius: 10px; letter-spacing: -2px;"
-        )
-        return turns_label
-
     def _create_turnbox_frame(self) -> QFrame:
         turnbox_frame = QFrame(self)
 
@@ -150,24 +131,6 @@ class TurnsWidget(QFrame):
         turnbox_frame.setMaximumWidth(self.turns_label.width() + 2)  # border width
 
         return turnbox_frame
-
-    def update_clocks(self, rotation_direction: str) -> None:
-        """Update the visibility of clocks based on rotation direction."""
-        if rotation_direction == "ccw":
-            self.clock_left.setPixmap(self.counter_clockwise_pixmap)
-            self.clock_right.clear()
-        elif rotation_direction == "cw":
-            self.clock_right.setPixmap(self.clockwise_pixmap)
-            self.clock_left.clear()
-        else:
-            self.clock_left.clear()
-            self.clock_right.clear()
-
-    def _add_borders(self) -> None:
-        self.setStyleSheet("border: 1px solid black;")
-        self.turnbox_frame.setStyleSheet("border: 1px solid black;")
-
-    ### CREATE WIDGETS ###
 
     def _create_buttons(self) -> None:
         self.subtract_turn_button = self._create_turns_button(
@@ -212,8 +175,8 @@ class TurnsWidget(QFrame):
         )
         turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         turns_label.setFixedSize(
-            int(self.attr_box.attr_box_width * 0.3),
-            int(self.attr_box.attr_box_width * 0.2),
+            int(self.attr_box.width() * 0.3),
+            int(self.attr_box.width() * 0.2),
         )
         turns_label.setContentsMargins(0, 0, 0, 0)
         return turns_label
@@ -221,7 +184,7 @@ class TurnsWidget(QFrame):
     def _create_turns_button(
         self, text: Literal["+1", "-1", "+0.5", "-0.5"], callback, is_full_turn: bool
     ) -> CustomButton:
-        button_size = int(self.attr_box.attr_box_width * 0.2)
+        button_size = int(self.attr_box.width() * 0.2)
         if not is_full_turn:
             button_size = int(button_size * 0.75)  # Half turn buttons are smaller
 
@@ -326,13 +289,31 @@ class TurnsWidget(QFrame):
 
     ### UPDATERS ###
 
+    def update_clocks(self, rotation_direction: str) -> None:
+        """Update the visibility of clocks based on rotation direction."""
+        if rotation_direction == "ccw":
+            self.clock_left.setPixmap(self.counter_clockwise_pixmap)
+            self.clock_right.clear()
+        elif rotation_direction == "cw":
+            self.clock_right.setPixmap(self.clockwise_pixmap)
+            self.clock_left.clear()
+        else:
+            self.clock_left.clear()
+            self.clock_right.clear()
+
+
     def clear_turns_label(self) -> None:
         self.turns_label.setText("")
 
     def update_turns_label_box(self, turns) -> None:
-        self.turns_label.setText(str(turns))
-
-    def resizeEvent(self, event):
+        if turns:
+            self.turns_label.setText(str(turns))
+        elif turns == 0:
+            self.turns_label.setText("0")
+        else:
+            self.clear_turns_label()
+            
+    def resizeEvent(self, event) -> None:
         """Handle the resize event to update clock pixmaps."""
         super().resizeEvent(event)
 
@@ -348,5 +329,5 @@ class TurnsWidget(QFrame):
         self.update_clocks(motion.rotation_direction)
         self.update_turns_label_box(self.pictograph.get_motion_by_color(self.color))
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

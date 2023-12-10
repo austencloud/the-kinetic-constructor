@@ -61,6 +61,7 @@ class AttrBox(QFrame):
         self.layout().addWidget(self.turns_widget)
 
     def setup_box(self) -> None:
+        self.setFixedWidth(int(self.attr_panel.width() / 2))
         self.setObjectName("AttributeBox")
         self.apply_border_style(RED_HEX if self.color == RED else BLUE_HEX)
         self.setLayout(QVBoxLayout(self))
@@ -139,4 +140,3 @@ class AttrBox(QFrame):
         self.setMaximumHeight(self.attr_panel.height())
         self.header_widget.update_header_widget_size()
         self.motion_type_widget.update_motion_type_widget_size()
-        self.start_end_widget.update_start_end_widget_size()

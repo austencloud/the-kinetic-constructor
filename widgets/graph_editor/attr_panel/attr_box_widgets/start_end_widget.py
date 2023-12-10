@@ -31,8 +31,6 @@ class StartEndWidget(QWidget):
         self.pictograph = attr_box.pictograph
         self.color = attr_box.color
         self.attr_box = attr_box
-        self.combobox_width = int(self.attr_box.attr_box_width * 0.3)
-
         self._init_ui()
 
         ### SETUP UI ###
@@ -69,17 +67,21 @@ class StartEndWidget(QWidget):
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.main_layout.setSpacing(0)
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        self.setFixedWidth(self.attr_box.attr_box_width)
 
     def _setup_start_end_box(self) -> CustomComboBox:
         start_end_box = CustomComboBox(self)
         start_end_box.addItems(["N", "E", "S", "W"])
         start_end_box.setFont(
-            QFont("Arial", int(self.width() / 10), QFont.Weight.Bold, True)
+            QFont(
+                "Arial",
+                int(self.attr_box.attr_panel.width() / 20),
+                QFont.Weight.Bold,
+                True,
+            )
         )
         start_end_box.setFixedSize(
-            self.combobox_width,
-            int(self.attr_box.attr_box_width * 0.2),
+            int(self.attr_box.width() * 0.3),
+            int(self.attr_box.width() * 0.2),
         )
         start_end_box.setCurrentIndex(-1)
         return start_end_box
@@ -106,14 +108,18 @@ class StartEndWidget(QWidget):
 
     def _setup_arrow_label(self) -> QFrame:
         arrow_label = QLabel("→", self)
-        arrow_label.setFont(QFont("Arial", int(self.width() / 10), QFont.Weight.Bold))
+        arrow_label.setFont(
+            QFont(
+                "Arial", int(self.attr_box.attr_panel.width() / 20), QFont.Weight.Bold
+            )
+        )
         arrow_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         arrow_label.setContentsMargins(0, 0, 0, 0)
         arrow_label.setFixedHeight(
             self.start_box.height() + self.attr_box.header_spacing
         )
         arrow_label.setFixedWidth(
-            int(self.attr_box.attr_box_width / 5)
+            int(self.attr_box.width() / 5)
             - self.attr_box.border_width * 2
             - self.start_box.combobox_border
         )
@@ -121,10 +127,12 @@ class StartEndWidget(QWidget):
 
     def _setup_start_end_header_label(self, label_text) -> QLabel:
         label = QLabel(label_text, self)
-        label.setFont(QFont("Arial", int(self.width() / 14)))
+        label.setFont(QFont("Arial", int(self.attr_box.attr_panel.width() / 28)))
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label.setContentsMargins(0, 0, 0, 0)
-        label.setFixedHeight(int(self.width() / 14) + self.attr_box.header_spacing)
+        label.setFixedHeight(
+            int(self.attr_box.attr_panel.width() / 28) + self.attr_box.header_spacing
+        )
         return label
 
     def _add_widgets_to_layout(self) -> None:
@@ -138,12 +146,12 @@ class StartEndWidget(QWidget):
     def _setup_button_frame(self) -> QFrame:
         swap_button = self._create_button()
         button_frame = QFrame(self)
-        button_frame.setFixedWidth(int(self.attr_box.attr_box_width * 1 / 5))
+        button_frame.setFixedWidth(int(self.attr_box.width() * 1 / 5))
         button_frame_layout = QVBoxLayout(button_frame)
         button_frame_layout.setContentsMargins(0, 0, 0, 0)
         button_frame_layout.setSpacing(0)
 
-        button_size = int(self.attr_box.attr_box_width * 0.15)  # Example size
+        button_size = int(self.attr_box.width() * 0.15)  # Example size
         swap_button.setFixedSize(button_size, button_size)
         button_frame_layout.addSpacerItem(
             QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
@@ -179,7 +187,7 @@ class StartEndWidget(QWidget):
         frame.setLayout(layout)
         self.start_end_header_label = self._setup_start_end_header_label(label_text)
         layout.addWidget(self.start_end_header_label)
-        frame.setFixedWidth(self.combobox_width)
+        frame.setFixedWidth(int(self.attr_box.width() * 0.3))
         layout.addWidget(widget)
         frame.setFixedHeight(
             int(
@@ -208,8 +216,9 @@ class StartEndWidget(QWidget):
         self.start_box.setCurrentIndex(-1)
         self.end_box.setCurrentIndex(-1)
 
-    def update_start_end_boxes(self, start_location:Locations, end_location:Locations) -> None:
-
+    def update_start_end_boxes(
+        self, start_location: Locations, end_location: Locations
+    ) -> None:
         for location, combo_box in [
             (start_location, self.start_box),
             (end_location, self.end_box),
@@ -218,13 +227,3 @@ class StartEndWidget(QWidget):
                 combo_box.setCurrentIndex(-1)
             else:
                 combo_box.setCurrentText(location.upper())
-
-    def update_start_end_widget_size(self) -> None:
-        self.setFixedHeight(
-            int(
-                self.start_box.height()
-                + self.start_end_header_label.height()
-                + self.attr_box.header_spacing
-            )
-        )
-        self.setFixedWidth(self.attr_box.attr_box_width)
