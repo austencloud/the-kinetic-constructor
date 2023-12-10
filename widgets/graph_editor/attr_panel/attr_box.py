@@ -63,9 +63,6 @@ class AttrBox(QFrame):
     def setup_box(self) -> None:
         self.setObjectName("AttributeBox")
         self.apply_border_style(RED_HEX if self.color == RED else BLUE_HEX)
-        self.setFixedSize(
-            int(self.attr_panel.width() / 2), int(self.attr_panel.height())
-        )
         self.setLayout(QVBoxLayout(self))
         self.layout().setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout().setContentsMargins(0, 0, 0, 0)
@@ -116,7 +113,9 @@ class AttrBox(QFrame):
     def update_attr_box(self, motion: Motion = None) -> None:
         if motion:
             self.turns_widget.update_clocks(motion.rotation_direction)
-            self.start_end_widget.update_start_end_boxes(motion.start_location, motion.end_location)
+            self.start_end_widget.update_start_end_boxes(
+                motion.start_location, motion.end_location
+            )
             self.motion_type_widget.update_motion_type_box(motion.motion_type)
             self.turns_widget.update_turns_label_box(motion.turns)
         else:
@@ -136,18 +135,8 @@ class AttrBox(QFrame):
         )
 
     def update_attr_box_size(self) -> None:
-        self.setFixedHeight(int(self.attr_panel.height()))
         self.setFixedWidth(int(self.attr_panel.width() / 2))
-        for child in self.children():
-            if isinstance(child, QFrame):
-                child.deleteLater()
-
-        if self.turns_widget:
-            for child in self.turns_widget.children():
-                if isinstance(child, QFrame):
-                    child.deleteLater()
-        self.update()
-
+        self.setMaximumHeight(self.attr_panel.height())
         self.header_widget.update_header_widget_size()
         self.motion_type_widget.update_motion_type_widget_size()
         self.start_end_widget.update_start_end_widget_size()

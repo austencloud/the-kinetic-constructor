@@ -58,8 +58,7 @@ class GraphEditor(QFrame):
         self.setLayout(graph_editor_frame_layout)
         self.setMouseTracking(True)
 
-
-    def update_size(self) -> None:
+    def update_graph_editor_size(self) -> None:
         self.pictograph.view.update_pictograph_size()
         self.arrowbox.update_arrowbox_size()
         self.propbox.update_propbox_size()

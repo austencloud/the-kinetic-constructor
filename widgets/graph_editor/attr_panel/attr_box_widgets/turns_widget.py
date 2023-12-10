@@ -74,7 +74,11 @@ class TurnsWidget(QFrame):
             header_layout.addLayout(clock_layout)
             clock.setPixmap(self.clockwise_pixmap)
             clock_size = int(
-                ((self.attr_box.width() - self.turnbox_frame.width()) / 2) * 0.8
+                (
+                    (self.attr_box.attr_panel.width() / 2 - self.turnbox_frame.width())
+                    / 2
+                )
+                * 0.8
             )
             clock.setFixedSize(clock_size, clock_size)  # Set fixed size
             clock.setScaledContents(True)  # Scale contents
@@ -134,7 +138,9 @@ class TurnsWidget(QFrame):
         turnbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.turnbox_header = QLabel("Turns", self)
-        self.turnbox_header.setFont(QFont("Arial", int(self.attr_box.width() / 14)))
+        self.turnbox_header.setFont(
+            QFont("Arial", int(self.attr_box.attr_panel.width() / 28))
+        )
         self.turnbox_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.turns_label = self._create_turns_label()
@@ -196,7 +202,9 @@ class TurnsWidget(QFrame):
         turns_label.setLineWidth(1)
         turns_label.setFrameShadow(QFrame.Shadow.Plain)
         turns_label.setFont(
-            QFont("Arial", int(self.attr_box.width() / 8), QFont.Weight.Bold)
+            QFont(
+                "Arial", int(self.attr_box.attr_panel.width() / 16), QFont.Weight.Bold
+            )
         )
         self.border_width = 2
         turns_label.setStyleSheet(
@@ -247,7 +255,9 @@ class TurnsWidget(QFrame):
         turnbox_layout.setSpacing(0)
         self.turnbox_header = QLabel("Turns", self)
         self.turnbox_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.turnbox_header.setFont(QFont("Arial", int(self.attr_box.width() / 14)))
+        self.turnbox_header.setFont(
+            QFont("Arial", int(self.attr_box.attr_panel.width() / 28))
+        )
         self.turnbox_header.setContentsMargins(0, 0, 0, 0)
         self.turns_label = self._create_turns_label()
         turnbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -321,7 +331,6 @@ class TurnsWidget(QFrame):
 
     def update_turns_label_box(self, turns) -> None:
         self.turns_label.setText(str(turns))
-
 
     def resizeEvent(self, event):
         """Handle the resize event to update clock pixmaps."""

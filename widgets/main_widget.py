@@ -59,11 +59,9 @@ class MainWidget(QWidget):
                 beat_view.pictograph.clearSelection()
 
     def find_active_pictograph(self) -> Optional[Pictograph]:
-        # Check if the main pictograph has a selected item
         if self.graph_editor.pictograph.selectedItems():
             return self.graph_editor.pictograph
 
-        # Check each beat for a selected item
         for beat_view in self.sequence.frame.beats:
             if beat_view.pictograph and beat_view.pictograph.selectedItems():
                 return beat_view.pictograph
@@ -71,7 +69,6 @@ class MainWidget(QWidget):
         return None
 
     def resizeEvent(self, event: QResizeEvent) -> None:
-        pass
         self.sequence.update_size()
         self.option_picker.update_size()
-        self.graph_editor.update_size()
+        self.graph_editor.update_graph_editor_size()

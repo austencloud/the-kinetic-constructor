@@ -46,7 +46,6 @@ class LayoutManager:
     def configure_layouts(self) -> None:
         self.configure_main_layout()
         self.init_sequence_layout()
-        self.add_black_border_to_widgets()
 
     def init_layouts(self) -> None:
         self.layouts = {
@@ -81,16 +80,6 @@ class LayoutManager:
 
     def init_sequence_layout(self) -> None:
         self.layouts["sequence"].addWidget(self.main_widget.sequence)
-
-    def add_black_border_to_widgets(self) -> None:
-        self.add_black_border(self.main_widget.graph_editor.pictograph)
-        self.add_black_border(self.main_widget.sequence)
-        self.add_black_border(self.main_widget.graph_editor.vtg_panel)
-        self.add_black_border(self.main_widget.option_picker)
-        self.add_black_border(self.main_widget.option_picker.option_picker)
-        self.add_black_border(self.main_widget.option_picker.button_frame)
-        self.add_black_border(self.main_widget.graph_editor.pictograph)
-        self.add_black_border(self.main_widget.graph_editor.propbox)
 
     def assign_layouts_to_window(self) -> None:
         for layout_name, layout in self.layouts.items():
