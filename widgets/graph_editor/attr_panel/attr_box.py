@@ -40,7 +40,7 @@ class AttrBox(QFrame):
         self.turns_widget = None
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
         self.init_ui()
-        self.add_black_border_to_all_widgets()
+        # self.add_black_border_to_all_widgets()
 
     def calculate_button_size(self) -> int:
         return int((self.pictograph.view.height() // 2 // 4) * 1)
@@ -121,19 +121,6 @@ class AttrBox(QFrame):
             self.turns_widget.update_turns_label_box(motion.turns)
         else:
             self.clear_attr_box()
-
-    def add_black_border_to_all_widgets(self) -> None:
-        for child in self.children():
-            if isinstance(child, QFrame):
-                self.add_black_border(child)
-
-    def add_black_border(self, widget: QWidget) -> None:
-        widget.setStyleSheet(
-            f"""
-            {widget.styleSheet()}
-            border: 1px solid black;
-        """
-        )
 
     def update_attr_box_size(self) -> None:
         self.setFixedWidth(int(self.attr_panel.width() / 2))

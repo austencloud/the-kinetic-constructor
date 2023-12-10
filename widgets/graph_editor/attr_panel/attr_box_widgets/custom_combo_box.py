@@ -8,7 +8,6 @@ if TYPE_CHECKING:
 from PyQt6.QtWidgets import QComboBox
 
 
-
 class CustomComboBox(QComboBox):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -38,3 +37,5 @@ class CustomComboBox(QComboBox):
             }}
         """
         )
+
+

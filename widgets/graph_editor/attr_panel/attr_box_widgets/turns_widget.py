@@ -40,7 +40,7 @@ class TurnsWidget(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.setSpacing(0)
 
-        self.header_frame = self._create_frame(self._create_header_layout())
+        self.header_frame = self._create_frame(self._create_clocks_and_turnbox_layout())
         self.buttons_frame = self._create_frame(self._create_buttons_layout())
 
         self.layout.addWidget(self.header_frame)
@@ -56,25 +56,24 @@ class TurnsWidget(QFrame):
 
     ### CREATE WIDGETS ###
 
-    def _create_header_layout(self) -> QHBoxLayout:
-        header_layout: QHBoxLayout = QHBoxLayout()
-        header_layout.setContentsMargins(0, 0, 0, 0)
-        header_layout.setSpacing(0)
+    def _create_clocks_and_turnbox_layout(self) -> QHBoxLayout:
+        clocks_and_turnbox_layout: QHBoxLayout = QHBoxLayout()
+        clocks_and_turnbox_layout.setContentsMargins(0, 0, 0, 0)
+        clocks_and_turnbox_layout.setSpacing(0)
 
         self.turnbox_frame = self._create_turnbox_frame()
-        self.clock_left, self.clock_right = self._create_clock_labels(header_layout)
+        self.clock_left, self.clock_right = self._create_clock_labels()
 
-        header_layout.addWidget(self.clock_left)
-        header_layout.addWidget(self.turnbox_frame)
-        header_layout.addWidget(self.clock_right)
-        return header_layout
+        clocks_and_turnbox_layout.addWidget(self.clock_left)
+        clocks_and_turnbox_layout.addWidget(self.turnbox_frame)
+        clocks_and_turnbox_layout.addWidget(self.clock_right)
+        return clocks_and_turnbox_layout
 
-    def _create_clock_labels(self, header_layout: QHBoxLayout) -> Tuple[QLabel, QLabel]:
+    def _create_clock_labels(self) -> Tuple[QLabel, QLabel]:
         clock_left, clock_right = QLabel(), QLabel()
         for clock in [clock_left, clock_right]:
             clock_layout = QVBoxLayout(clock)
             clock_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            header_layout.addLayout(clock_layout)
             clock.setPixmap(self.clockwise_pixmap)
             clock_size = int(
                 (
@@ -120,7 +119,7 @@ class TurnsWidget(QFrame):
 
         self.turnbox_header = QLabel("Turns", self)
         self.turnbox_header.setFont(
-            QFont("Arial", int(self.attr_box.attr_panel.width() / 28))
+            QFont("Arial", int(self.attr_box.attr_panel.width() / 35))
         )
         self.turnbox_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -219,7 +218,7 @@ class TurnsWidget(QFrame):
         self.turnbox_header = QLabel("Turns", self)
         self.turnbox_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.turnbox_header.setFont(
-            QFont("Arial", int(self.attr_box.attr_panel.width() / 28))
+            QFont("Arial", int(self.attr_box.attr_panel.width() / 35))
         )
         self.turnbox_header.setContentsMargins(0, 0, 0, 0)
         self.turns_label = self._create_turns_label()
