@@ -72,8 +72,8 @@ class TurnsWidget(QFrame):
                 )
                 * 0.8
             )
-            clock.setFixedSize(clock_size, clock_size)  # Set fixed size
-            clock.setScaledContents(True)  # Scale contents
+            clock.setMaximumSize(clock_size, clock_size)
+            clock.setScaledContents(True)
 
         return clock_left, clock_right
 
@@ -163,7 +163,7 @@ class TurnsWidget(QFrame):
             f"background-color: white; border: {self.border_width}px solid black; border-radius: 10px; letter-spacing: -2px;"
         )
         turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        turns_label.setFixedSize(
+        turns_label.setMinimumSize(
             int(self.attr_box.width() * 0.3),
             int(self.attr_box.width() * 0.2),
         )
@@ -182,7 +182,7 @@ class TurnsWidget(QFrame):
         button.setFont(
             QFont("Arial", int(button_size / 3))
         )  # Adjust font size based on button size
-        button.setFixedSize(button_size, button_size)
+        button.setMaximumSize(button_size, button_size)
         button.clicked.connect(callback)
 
         return button
@@ -217,7 +217,7 @@ class TurnsWidget(QFrame):
         turnbox_layout.addWidget(self.turns_label)
         # set maximum width to width of box
         turnbox_frame.setMaximumWidth(self.turns_label.width() + self.border_width)
-        turnbox_frame.setFixedHeight(
+        turnbox_frame.setMinimumHeight(
             self.turns_label.height()
             + self.turnbox_header.height()
             + self.border_width * 2

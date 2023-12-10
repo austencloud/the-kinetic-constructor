@@ -13,7 +13,6 @@ class PictographView(QGraphicsView):
     def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__()
         self.pictograph = pictograph
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.setScene(self.pictograph)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -22,6 +21,9 @@ class PictographView(QGraphicsView):
 
         # Initialize buttons
         self.init_buttons()
+
+        # Update pictograph size
+        self.update_pictograph_size()
 
     def remove_buttons(self) -> None:
         self.add_to_sequence_button.deleteLater()
@@ -67,19 +69,27 @@ class PictographView(QGraphicsView):
             button.move(0, 0)
 
     def update_pictograph_size(self) -> None:
-        view_height = int(self.pictograph.graph_editor.main_window.height() * 0.4)
+        # Calculate the view height based on the GraphEditor's height
+        view_height = int(self.pictograph.graph_editor.height())
+        # Calculate the view width maintaining the aspect ratio (75/90)
         view_width = int(view_height * 75 / 90)
 
-        if self.width() != view_width or self.height() != view_height:
-            self.setFixedWidth(view_width)
-            self.setFixedHeight(view_height)
+        # Set the size of the view
+        self.setMinimumSize(view_width, view_height)
+        self.setMaximumSize(view_width, view_height)
 
-        self.view_scale = view_width / self.pictograph.width()
+        # Calculate the scaling factor
+        self.view_scale = min(
+            view_width / self.pictograph.sceneRect().width(),
+            view_height / self.pictograph.sceneRect().height(),
+        )
 
+        # Reset any existing transformations and apply the new scale
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
 
-        button_size = int(self.width() / 7)
+        # Update the size and position of the buttons
+        button_size = int(view_width / 7)
         self.configure_button_size_and_position(
             self.add_to_sequence_button, button_size
         )

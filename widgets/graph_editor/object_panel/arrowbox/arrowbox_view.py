@@ -6,15 +6,12 @@ from widgets.graph_editor.object_panel.objectbox_view import ObjectBoxView
 
 if TYPE_CHECKING:
     from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
+    from widgets.graph_editor.graph_editor import GraphEditor
 
 
 class ArrowBoxView(ObjectBoxView):
-    def __init__(self, arrowbox: "ArrowBox") -> None:
-        super().__init__(arrowbox)
-        self.setFixedSize(
-            int(arrowbox.main_window.height() * 1 / 6),
-            int(arrowbox.main_window.height() * 1 / 6),
-        )
+    def __init__(self, arrowbox: "ArrowBox", graph_editor: "GraphEditor") -> None:
+        super().__init__(arrowbox, graph_editor)
         self.setScene(arrowbox)
 
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)

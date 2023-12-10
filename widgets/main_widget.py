@@ -91,7 +91,3 @@ class MainWidget(QWidget):
 
         return None
 
-    def resizeEvent(self, event: QResizeEvent) -> None:
-        self.sequence.update_size()
-        # self.option_picker.update_size()
-        self.graph_editor.update_graph_editor_size()

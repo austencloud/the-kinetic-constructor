@@ -15,18 +15,19 @@ from utilities.TypeChecking.TypeChecking import PropTypes, TYPE_CHECKING, Dict, 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from widgets.graph_editor.graph_editor import GraphEditor
 
 
 class PropBox(ObjectBox):
-    def __init__(self, main_widget: "MainWidget", pictograph: "Pictograph") -> None:
-        super().__init__(main_widget, pictograph)
+    def __init__(self, main_widget: "MainWidget", graph_editor: "GraphEditor") -> None:
+        super().__init__(main_widget, graph_editor)
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
-        self.view = PropBoxView(self)
+        self.view = PropBoxView(self, graph_editor)
         self.prop_type = STAFF
 
         self.init_combobox()
-        self.pictograph = pictograph
+        self.pictograph = graph_editor.pictograph
 
         self.grid = Grid(self)
         self.grid_position = QPointF(0, 0)
@@ -204,9 +205,3 @@ class PropBox(ObjectBox):
             self.target_prop = None
         else:
             event.ignore()
-
-    def update_propbox_size(self) -> None:
-        self.view.setFixedSize(
-            int(self.pictograph.view.height() * 1 / 2),
-            int(self.pictograph.view.height() * 1 / 2),
-        )

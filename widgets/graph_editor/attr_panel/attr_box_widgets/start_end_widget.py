@@ -124,13 +124,12 @@ class StartEndWidget(QWidget):
 
         return arrow_label_frame
 
-    def _setup_arrow_label(self, arrow_label_frame):
+    def _setup_arrow_label(self, arrow_label_frame) -> QLabel:
         arrow_label = QLabel("→", arrow_label_frame)
         arrow_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         font = arrow_label.font()
         font.setPointSize(35)
         arrow_label.setFont(font)
-        arrow_label.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         return arrow_label
 
     def _setup_button_frame(self) -> QFrame:
@@ -167,10 +166,6 @@ class StartEndWidget(QWidget):
         box_with_header_frame_layout.addWidget(self.start_end_header_label)
         box_with_header_frame_layout.addWidget(box)
 
-        box_with_header_frame.setSizePolicy(
-            QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed
-        )
-
         return box_with_header_frame
 
     def _setup_start_end_header_label(self, text: str) -> QLabel:
@@ -200,15 +195,13 @@ class StartEndWidget(QWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
-        # Set the fixed width for the button frame based on the attr_box width
-        self.button_frame.setMinimumWidth(int(self.attr_box.width() / 5))
-        # Set the fixed height for the button and arrow label frames based on the height of the start_box_with_header_frame
+        self.button_frame.setMaximumHeight(int(self.attr_box.width() / 5))
         common_height = self.start_box_with_header_frame.sizeHint().height()
-        self.button_frame.setMinimumHeight(common_height)
-        self.start_to_end_frame.setMinimumHeight(common_height)
-        self.arrow_label.setMinimumHeight(
+        self.button_frame.setMaximumHeight(common_height)
+        self.start_to_end_frame.setMaximumHeight(common_height)
+        self.arrow_label.setMaximumHeight(
             common_height - self.start_end_header_label.height()
         )
-        self.arrow_label_frame.setMinimumHeight(
+        self.arrow_label_frame.setMaximumHeight(
             self.start_box_with_header_frame.sizeHint().height()
-        )  # Match the height with the button and combo boxes
+        )

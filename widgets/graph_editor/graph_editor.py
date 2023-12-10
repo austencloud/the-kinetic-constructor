@@ -39,8 +39,8 @@ class GraphEditor(QFrame):
 
         self.pictograph = Pictograph(self.main_widget, self)
 
-        self.arrowbox = ArrowBox(main_widget, self.pictograph)
-        self.propbox = PropBox(main_widget, self.pictograph)
+        self.arrowbox = ArrowBox(main_widget, self)
+        self.propbox = PropBox(main_widget, self)
         self.attr_panel = AttrPanel(self.pictograph)
 
         objectbox_layout.addWidget(self.arrowbox.view)
@@ -55,7 +55,3 @@ class GraphEditor(QFrame):
         self.setLayout(graph_editor_frame_layout)
         self.setMouseTracking(True)
 
-    def update_graph_editor_size(self) -> None:
-        self.pictograph.view.update_pictograph_size()
-        self.arrowbox.update_arrowbox_size()
-        self.propbox.update_propbox_size()

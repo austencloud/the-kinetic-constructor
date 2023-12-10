@@ -36,26 +36,22 @@ if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from objects.arrow import Arrow
     from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from widgets.graph_editor.graph_editor import GraphEditor
 
 from utilities.TypeChecking.TypeChecking import MotionAttributesDicts
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 
 class ArrowBox(ObjectBox):
-    def __init__(self, main_widget: "MainWidget", pictograph: "Pictograph") -> None:
-        super().__init__(main_widget, pictograph)
+    def __init__(self, main_widget: "MainWidget", graph_editor: "GraphEditor") -> None:
+        super().__init__(main_widget, graph_editor)
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
-        self.view = ArrowBoxView(self)
+        self.view = ArrowBoxView(self, graph_editor)
 
         self.populate_arrows()
-        self.grid = Grid(self)
-        if self.grid.grid_mode == "diamond":
-            self.grid.toggle_element_visibility("diamond_layer2_points", False)
-            self.grid.toggle_element_visibility("diamond_hand_points", False)
-        elif self.grid.grid_mode == "box":
-            self.grid.toggle_element_visibility("box_layer2_points", False)
-            self.grid.toggle_element_visibility("box_hand_points", False)
+        self.grid: Grid = Grid(self)
+
         self.target_arrow: "Arrow" = None
         self.arrowbox_layout = QGridLayout()
         self.arrowbox_layout.addWidget(self.view)
@@ -255,11 +251,3 @@ class ArrowBox(ObjectBox):
     def dim_all_arrows(self) -> None:
         for arrow in self.arrows:
             arrow.is_dim(True)
-
-
-    def update_arrowbox_size(self) -> None:
-        self.view.setFixedSize(
-            int(self.pictograph.view.height() * 1 / 2),
-            int(self.pictograph.view.height() * 1 / 2),
-        )
-

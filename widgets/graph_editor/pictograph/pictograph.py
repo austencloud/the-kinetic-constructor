@@ -102,6 +102,8 @@ class Pictograph(QGraphicsScene):
         self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.locations = self.initializer.init_locations(self.grid)
 
+        
+
         # set the icons to 80% of the button size
 
         self.setup_managers(main_widget)
@@ -180,8 +182,6 @@ class Pictograph(QGraphicsScene):
         else:
             return None
 
-
-
     def get_motion_by_color(self, color: str) -> Optional[Motion]:
         for motion in self.motions:
             if motion.color == color:
@@ -197,7 +197,9 @@ class Pictograph(QGraphicsScene):
             if prop.color == color:
                 return prop
 
-    def get_closest_hand_point(self, pos: QPointF) -> Tuple[Optional[str], Optional[QPointF]]:
+    def get_closest_hand_point(
+        self, pos: QPointF
+    ) -> Tuple[Optional[str], Optional[QPointF]]:
         min_distance = float("inf")
         nearest_point_name = None
         nearest_point_coords = None
@@ -209,7 +211,7 @@ class Pictograph(QGraphicsScene):
                     min_distance = distance
                     nearest_point_name = name
                     nearest_point_coords = point
-                    
+
         elif self.grid.grid_mode == BOX:
             for name, point in self.grid.box_hand_points.items():
                 distance = (pos - point).manhattanLength()
@@ -220,7 +222,9 @@ class Pictograph(QGraphicsScene):
 
         return nearest_point_name, nearest_point_coords
 
-    def get_closest_layer2_point(self, pos: QPointF) -> Tuple[Optional[str], Optional[QPointF]]:
+    def get_closest_layer2_point(
+        self, pos: QPointF
+    ) -> Tuple[Optional[str], Optional[QPointF]]:
         min_distance = float("inf")
         nearest_point_name = None
         nearest_point_coords = None
@@ -232,7 +236,7 @@ class Pictograph(QGraphicsScene):
                     min_distance = distance
                     nearest_point_name = name
                     nearest_point_coords = point
-                    
+
         elif self.grid.grid_mode == BOX:
             for name, point in self.grid.box_layer2_points.items():
                 distance = (pos - point).manhattanLength()
