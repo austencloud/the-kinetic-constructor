@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
 
 from PyQt6.QtGui import QColor, QPalette
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
+from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
 
 from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
 from widgets.graph_editor.pictograph.pictograph import Pictograph
@@ -22,22 +22,18 @@ class GraphEditor(QFrame):
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.json_handler = main_widget.json_handler
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         self.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
         self.setLineWidth(1)
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.WindowText, QColor("black"))
         self.setPalette(palette)
-        # remove the space in between each widget in the frame
-        self.setFixedHeight(int(self.main_widget.height() * 1 / 4))
-        self.setFixedWidth(int(self.main_widget.width() * 0.5))
 
         graph_editor_frame_layout = QHBoxLayout(self)
         graph_editor_frame_layout.setSpacing(0)
         graph_editor_frame_layout.setContentsMargins(0, 0, 0, 0)
-        graph_editor_frame_layout.setAlignment(
-            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop
-        )
+        graph_editor_frame_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         objectbox_layout = QVBoxLayout()
         pictograph_layout = QVBoxLayout()
@@ -58,14 +54,12 @@ class GraphEditor(QFrame):
         graph_editor_frame_layout.addLayout(objectbox_layout)
         graph_editor_frame_layout.addLayout(pictograph_layout)
         graph_editor_frame_layout.addWidget(self.attr_panel)
-        # graph_editor_frame_layout.addLayout(vtg_panel_layout)
 
         self.setLayout(graph_editor_frame_layout)
         self.setMouseTracking(True)
 
+
     def update_size(self) -> None:
-        self.setFixedHeight(int(self.main_widget.height() * 1 / 3))
-        self.setFixedWidth(int(self.main_widget.width() * 0.5))
         self.pictograph.view.update_pictograph_size()
         self.arrowbox.update_arrowbox_size()
         self.propbox.update_propbox_size()

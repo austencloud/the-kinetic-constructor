@@ -3,136 +3,147 @@ from PyQt6.QtWidgets import (
     QLabel,
     QVBoxLayout,
     QFrame,
-    QSpacerItem,
     QSizePolicy,
+    QPushButton,
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QPixmap
-from typing import TYPE_CHECKING, Dict, Literal
+from typing import Literal, Dict, TYPE_CHECKING, Tuple
+from objects.motion import Motion
 from settings.string_constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON
+from utilities.TypeChecking.TypeChecking import RotationDirections
 
 from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
 
+
 class TurnsWidget(QFrame):
     def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__()
         self.pictograph = attr_box.pictograph
         self.color = attr_box.color
-        self.attr_box = attr_box
+        self.attr_box: AttrBox = attr_box
+        self.turnbox_frame_size = int(self.attr_box.attr_box_width * 0.3)
+        self.turnbox_frame_height = int(self.attr_box.attr_box_width * 0.2)
+        self.button_size = int(self.attr_box.attr_box_width * 0.2)
+        # Load and scale pixmaps
+        self.clockwise_pixmap = self._load_clock_pixmap(CLOCKWISE_ICON)
+        self.counter_clockwise_pixmap = self._load_clock_pixmap(COUNTER_CLOCKWISE_ICON)
+
         self._init_ui()
 
     def _init_ui(self) -> None:
-        self.setFixedWidth(
-            self.attr_box.attr_box_width - self.attr_box.border_width * 2
-        )
-        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout = QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.layout.setSpacing(0)
 
-        # Create header and buttons layout
-        self.header_layout = self._create_header_layout()
-        self.buttons_layout = self._create_buttons_layout()
+        self.header_frame = self._create_frame(self._create_header_layout())
+        self.buttons_frame = self._create_frame(self._create_buttons_layout())
 
-        # Wrap header and buttons layout in frames
-        self.header_frame = QFrame()
-        self.buttons_frame = QFrame()
-
-        # Set layout for frames
-        self.header_frame.setLayout(self.header_layout)
-        self.buttons_frame.setLayout(self.buttons_layout)
-
-        self.header_frame.setFixedSize(
-            self.attr_box.attr_box_width, self.turnbox_frame.height()
-        )
-        self.buttons_frame.setFixedSize(
-            self.attr_box.attr_box_width, self.buttons_frame.sizeHint().height()
-        )
-
-        # Add frames to main layout
         self.layout.addWidget(self.header_frame)
         self.layout.addWidget(self.buttons_frame)
 
+        # Set clock labels to scale contents
+        for clock in [self.clock_left, self.clock_right]:
+            clock.setScaledContents(True)
+        # hide the clocks
+        self.clock_left.clear()
+        self.clock_right.clear()
+
     def _create_header_layout(self) -> QHBoxLayout:
-        header_layout = QHBoxLayout()
+        header_layout: QHBoxLayout = QHBoxLayout()
         header_layout.setContentsMargins(0, 0, 0, 0)
         header_layout.setSpacing(0)
 
-        self.clock_left = QLabel()
-        self.clock_right = QLabel()
+        self.turnbox_frame = self._create_turnbox_frame()
+        self.clock_left, self.clock_right = self._create_clock_labels(header_layout)
 
-        # Ensure that clocks expand to fill available space and are centered
-        self.clock_left.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
-        )
-        self.clock_right.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
-        )
-
-        self.clock_left.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.clock_right.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.turnbox_frame = self._setup_turnbox_frame()
-
-        self.clock_left.setFixedHeight(self.turnbox_frame.height())
-        self.clock_right.setFixedHeight(self.turnbox_frame.height())
-
-        # Load pixmaps for clocks
-        self.clockwise_pixmap = self.load_clock_pixmap(CLOCKWISE_ICON)
-        self.counter_clockwise_pixmap = self.load_clock_pixmap(COUNTER_CLOCKWISE_ICON)
-
-        # Add widgets to the layout, the clocks will expand as needed
         header_layout.addWidget(self.clock_left)
-        header_layout.addWidget(self.turnbox_frame, 1)
+        header_layout.addWidget(self.turnbox_frame)
         header_layout.addWidget(self.clock_right)
-
         return header_layout
 
-    def _create_buttons_layout(self) -> QHBoxLayout:
-        # Create buttons layout
-        buttons_layout = QHBoxLayout()
-        self.subtract_turn_button = self._create_turns_button(
-            "-1", self._subtract_turn_callback, is_full_turn=True
-        )
-        self.subtract_half_turn_button = self._create_turns_button(
-            "-0.5", self._subtract_half_turn_callback, is_full_turn=False
-        )
-        self.add_half_turn_button = self._create_turns_button(
-            "+0.5", self._add_half_turn_callback, is_full_turn=False
-        )
-        self.add_turn_button = self._create_turns_button(
-            "+1", self._add_turn_callback, is_full_turn=True
-        )
+    def _create_clock_labels(self, header_layout: QHBoxLayout) -> Tuple[QLabel, QLabel]:
+        clock_left, clock_right = QLabel(), QLabel()
+        for clock in [clock_left, clock_right]:
+            clock_layout = QVBoxLayout(clock)
+            clock_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            header_layout.addLayout(clock_layout)
+            clock.setPixmap(self.clockwise_pixmap)
+            clock_size = int(
+                ((self.attr_box.width() - self.turnbox_frame.width()) / 2) * 0.8
+            )
+            clock.setFixedSize(clock_size, clock_size)  # Set fixed size
+            clock.setScaledContents(True)  # Scale contents
 
-        buttons_layout.addWidget(self.subtract_turn_button)
-        buttons_layout.addWidget(self.subtract_half_turn_button)
-        buttons_layout.addWidget(self.add_half_turn_button)
-        buttons_layout.addWidget(self.add_turn_button)
+        return clock_left, clock_right
+
+    def _create_buttons_layout(self) -> QHBoxLayout:
+        buttons_layout = QHBoxLayout()
+        button_texts = ["-1", "-0.5", "+0.5", "+1"]
+        callbacks = [
+            self._subtract_turn_callback,
+            self._subtract_half_turn_callback,
+            self._add_half_turn_callback,
+            self._add_turn_callback,
+        ]
+
+        for text, callback in zip(button_texts, callbacks):
+            button = self._create_turns_button(text, callback, text in ["-1", "+1"])
+            buttons_layout.addWidget(button)
 
         return buttons_layout
 
-    def _adjust_height(self) -> None:
-        # Adjust the height of the widget based on the combined height of header and buttons frames
-        total_height = (
-            self.header_frame.sizeHint().height()
-            + self.buttons_frame.sizeHint().height()
-        )
-        self.setFixedHeight(total_height)
+    def _create_frame(self, layout) -> QFrame:
+        frame = QFrame()
+        frame.setLayout(layout)
+        frame.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        return frame
 
-    def load_clock_pixmap(self, icon_path: str) -> QPixmap:
-        """Load and scale a clock pixmap."""
-        pixmap = QPixmap(icon_path)
-        if pixmap.isNull():
-            print(f"Failed to load the icon from {icon_path}.")
-            return QPixmap()
-        return pixmap.scaled(
-            int(self.turnbox_frame.height() * 0.8),
-            int(self.turnbox_frame.height() * 0.8),
-            Qt.AspectRatioMode.KeepAspectRatio,
-            Qt.TransformationMode.SmoothTransformation,
+    def _create_turns_button(
+        self, text: Literal["+1", "-1", "+0.5", "-0.5"], callback, is_full_turn: bool
+    ) -> QPushButton:
+        size = self.button_size if is_full_turn else int(self.button_size * 0.75)
+        button = QPushButton(text, self)
+        button.setFont(QFont("Arial", int(size / 3)))
+        button.setFixedSize(size, size)
+        button.clicked.connect(callback)
+        return button
+
+    def _create_turns_label(self) -> QLabel:
+        turns_label = QLabel("", self)
+        turns_label.setFont(
+            QFont("Arial", int(self.turnbox_frame_size / 8), QFont.Weight.Bold)
         )
+        turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        turns_label.setFixedSize(self.turnbox_frame_size, self.turnbox_frame_height)
+        turns_label.setStyleSheet(
+            "background-color: white; border: 2px solid black; border-radius: 10px; letter-spacing: -2px;"
+        )
+        return turns_label
+
+    def _create_turnbox_frame(self) -> QFrame:
+        turnbox_frame = QFrame(self)
+
+        turnbox_layout = QVBoxLayout(turnbox_frame)
+        turnbox_layout.setContentsMargins(0, 0, 0, 0)
+        turnbox_layout.setSpacing(0)
+        turnbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.turnbox_header = QLabel("Turns", self)
+        self.turnbox_header.setFont(QFont("Arial", int(self.attr_box.width() / 14)))
+        self.turnbox_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.turns_label = self._create_turns_label()
+        turnbox_layout.addWidget(self.turnbox_header)
+        turnbox_layout.addWidget(self.turns_label)
+
+        turnbox_frame.setMaximumWidth(self.turns_label.width() + 2)  # border width
+
+        return turnbox_frame
 
     def update_clocks(self, rotation_direction: str) -> None:
         """Update the visibility of clocks based on rotation direction."""
@@ -184,7 +195,9 @@ class TurnsWidget(QFrame):
         turns_label.setFrameShape(QFrame.Shape.Box)
         turns_label.setLineWidth(1)
         turns_label.setFrameShadow(QFrame.Shadow.Plain)
-        turns_label.setFont(QFont("Arial", int(self.width() / 8), QFont.Weight.Bold))
+        turns_label.setFont(
+            QFont("Arial", int(self.attr_box.width() / 8), QFont.Weight.Bold)
+        )
         self.border_width = 2
         turns_label.setStyleSheet(
             f"background-color: white; border: {self.border_width}px solid black; border-radius: 10px; letter-spacing: -2px;"
@@ -234,7 +247,8 @@ class TurnsWidget(QFrame):
         turnbox_layout.setSpacing(0)
         self.turnbox_header = QLabel("Turns", self)
         self.turnbox_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.turnbox_header.setFont(QFont("Arial", int(self.width() / 14)))
+        self.turnbox_header.setFont(QFont("Arial", int(self.attr_box.width() / 14)))
+        self.turnbox_header.setContentsMargins(0, 0, 0, 0)
         self.turns_label = self._create_turns_label()
         turnbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         turnbox_layout.addWidget(self.turnbox_header)
@@ -242,16 +256,11 @@ class TurnsWidget(QFrame):
         # set maximum width to width of box
         turnbox_frame.setMaximumWidth(self.turns_label.width() + self.border_width)
         turnbox_frame.setFixedHeight(
-            self.turns_label.height() + self.turnbox_header.height()
+            self.turns_label.height()
+            + self.turnbox_header.height()
+            + self.border_width * 2
         )
         return turnbox_frame
-
-    def _setup_turns_header(self) -> QLabel:
-        turnbox_header = QLabel("Turns", self)
-        turnbox_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        turnbox_header.setFont(QFont("Arial", int(self.width() / 14)))
-        turnbox_header.setFixedHeight(int(self.width() / 14))
-        return turnbox_header
 
     def _setup_button_frames(self) -> Dict[str, QFrame]:
         button_frames = {}
@@ -285,37 +294,50 @@ class TurnsWidget(QFrame):
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
             motion.add_turn()
-            self.attr_box.update_labels(motion)
+            self.attr_box.update_attr_box(motion)
 
     def _subtract_turn_callback(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
             motion.subtract_turn()
-            self.attr_box.update_labels(motion)
+            self.attr_box.update_attr_box(motion)
 
     def _add_half_turn_callback(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
             motion.add_half_turn()
-            self.attr_box.update_labels(motion)
+            self.attr_box.update_attr_box(motion)
 
     def _subtract_half_turn_callback(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
             motion.subtract_half_turn()
-            self.attr_box.update_labels(motion)
+            self.attr_box.update_attr_box(motion)
 
     ### UPDATERS ###
 
     def clear_turns_label(self) -> None:
         self.turns_label.setText("")
 
-    def update_turns_label_box(self, motion) -> None:
-        motion = self.pictograph.get_motion_by_color(self.color)
-        if motion and motion.turns is not None:
-            self.turns_label.setText(str(motion.turns))
-        else:
-            self.turns_label.setText("")
+    def update_turns_label_box(self, turns) -> None:
+        self.turns_label.setText(str(turns))
 
-    def update_turns_widget_size(self) -> None:
-        self.setFixedWidth(self.attr_box.attr_box_width)
+
+    def resizeEvent(self, event):
+        """Handle the resize event to update clock pixmaps."""
+        super().resizeEvent(event)
+
+    def _load_clock_pixmap(self, icon_path: str) -> QPixmap:
+        """Load and scale a clock pixmap based on the initial size."""
+        pixmap = QPixmap(icon_path)
+        if pixmap.isNull():
+            print(f"Failed to load the icon from {icon_path}.")
+            return QPixmap()
+        return pixmap
+
+    def update_turns_widget(self, motion: Motion) -> None:
+        self.update_clocks(motion.rotation_direction)
+        self.update_turns_label_box(self.pictograph.get_motion_by_color(self.color))
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)

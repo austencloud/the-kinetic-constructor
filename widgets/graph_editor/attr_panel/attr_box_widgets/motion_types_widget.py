@@ -12,6 +12,7 @@ from settings.string_constants import ICON_DIR, SWAP_ICON
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import Qt
+from utilities.TypeChecking.TypeChecking import MotionTypes
 
 from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
@@ -117,7 +118,6 @@ class MotionTypesWidget(QFrame):
         motion_type_box.setFixedHeight(int(self.attr_box.attr_box_width * 0.2))
         motion_type_box.setCurrentIndex(-1)
         self.motion_type_box = motion_type_box
-        self.update_motion_type_box()
         return motion_type_box
 
     def _create_button(self) -> CustomButton:
@@ -151,18 +151,15 @@ class MotionTypesWidget(QFrame):
 
     ### UPDATERS ###
 
-    def update_motion_type_box(self) -> None:
-        motion = self.pictograph.get_motion_by_color(self.color)
-        if motion:
-            motion_type = motion.motion_type
-            if motion_type is None:
-                self.motion_type_box.setCurrentIndex(-1)
-            else:
-                index = self.motion_type_box.findText(
-                    motion_type.capitalize(), Qt.MatchFlag.MatchExactly
-                )
-                if index >= 0:
-                    self.motion_type_box.setCurrentIndex(index)
+    def update_motion_type_box(self, motion_type: MotionTypes) -> None:
+        if motion_type is None:
+            self.motion_type_box.setCurrentIndex(-1)
+        else:
+            index = self.motion_type_box.findText(
+                motion_type.capitalize(), Qt.MatchFlag.MatchExactly
+            )
+            if index >= 0:
+                self.motion_type_box.setCurrentIndex(index)
 
     def clear_motion_type_box(self) -> None:
         self.motion_type_box.setCurrentIndex(-1)

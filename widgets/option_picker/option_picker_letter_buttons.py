@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton, QSizePolicy
 from PyQt6.QtGui import QIcon, QPixmap, QPainter, QFont
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QColor
@@ -21,6 +21,10 @@ class OptionPickerLetterButtons(QFrame):
 
         self.option_picker = option_picker
         self.init_letter_buttons_layout()
+
+        # Set a size policy on the frame
+        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
+
 
     def init_letter_buttons_layout(self) -> None:
         letter_buttons_layout = QVBoxLayout()
@@ -59,10 +63,14 @@ class OptionPickerLetterButtons(QFrame):
                 button = self.create_button(icon_path)
                 row_layout.addWidget(button)
 
+                # Set a size policy on the button
+                button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
+
             letter_buttons_layout.addLayout(row_layout)
 
         self.letter_buttons_layout = letter_buttons_layout
         self.setLayout(letter_buttons_layout)
+
 
     def get_letter_type(self, letter: str) -> str:
         for letter_type in letter_types:
@@ -113,8 +121,8 @@ class OptionPickerLetterButtons(QFrame):
         It then sets the fixed size of each letter button and adjusts the icon size accordingly.
         """
         button_row_count = self.letter_buttons_layout.count()
-        available_width = int(self.main_widget.width() * 0.015 * 1.5 * button_row_count)
-        button_size = int(available_width / button_row_count)
+        available_height = int(self.main_widget.width() * 0.05 * button_row_count)
+        button_size = int(available_height / button_row_count)
 
         for i in range(button_row_count):
             item = self.letter_buttons_layout.itemAt(i)
@@ -135,6 +143,4 @@ class OptionPickerLetterButtons(QFrame):
         Updates the size of the letter buttons.
         """
         # set the max width of the frame to 1/6 of the option picker width
-        self.setFixedWidth(int(self.option_picker.width() / 5))
-        self.setFixedHeight(int(self.option_picker.height()))
         self.update_letter_buttons_size()

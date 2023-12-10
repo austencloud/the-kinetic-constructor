@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QGraphicsView, QPushButton
+from PyQt6.QtWidgets import QGraphicsView, QPushButton, QSizePolicy
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 from settings.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
@@ -13,7 +13,7 @@ class PictographView(QGraphicsView):
     def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__()
         self.pictograph = pictograph
-
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.setScene(self.pictograph)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -66,21 +66,18 @@ class PictographView(QGraphicsView):
         elif button == self.rotate_ccw_button:
             button.move(0, 0)
 
-
     def update_pictograph_size(self) -> None:
-        view_width = int(self.pictograph.graph_editor.height() * 75 / 90)
-        
-        self.setFixedWidth(view_width)
-        self.setFixedHeight(self.pictograph.graph_editor.height())
-        
+        view_height = int(self.pictograph.graph_editor.main_window.height() * 0.4)
+        view_width = int(view_height * 75 / 90)
+
+        if self.width() != view_width or self.height() != view_height:
+            self.setFixedWidth(view_width)
+            self.setFixedHeight(view_height)
+
         self.view_scale = view_width / self.pictograph.width()
-        
+
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
-
-
-
-
 
         button_size = int(self.width() / 7)
         self.configure_button_size_and_position(

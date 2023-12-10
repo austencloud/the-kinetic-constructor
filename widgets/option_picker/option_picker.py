@@ -190,7 +190,6 @@ class OptionPicker(QScrollArea):
                 new_item.ghost_prop.motion = new_item.motion
 
     def update_option_picker_size(self) -> None:
-        self.setFixedWidth(int(self.option_picker_widget.width() * 4 / 5))
-        self.setFixedHeight(int(self.option_picker_widget.height()))
+
         for option in self.options:
             option.view.update_OptionView_size()
