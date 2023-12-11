@@ -19,17 +19,15 @@ class MainWindow(QMainWindow):
     def _configure_window(self) -> None:
         screens = QGuiApplication.screens()
         if len(screens) > 1:
-            screen = screens[1]  # Secondary screen
+            screen = screens[1]
         else:
-            screen = QGuiApplication.primaryScreen()  # Fallback to primary screen
+            screen = QGuiApplication.primaryScreen() 
 
-        # Use availableGeometry to respect taskbar and docked items
         available_geometry = screen.availableGeometry()
 
         self.main_window_width = available_geometry.width() * 0.75
         self.main_window_height = available_geometry.height() * 0.75
 
-        # Move the window to the center of the available geometry of the selected screen
         self.move(
             int(
                 available_geometry.x()
@@ -40,7 +38,7 @@ class MainWindow(QMainWindow):
                 + (available_geometry.height() - self.main_window_height) / 2
             ),
         )
-        self.resize(int(self.main_window_width), int(self.main_window_height))
+
 
     def _init_main_window(self) -> None:
         self.main_widget = MainWidget(self)

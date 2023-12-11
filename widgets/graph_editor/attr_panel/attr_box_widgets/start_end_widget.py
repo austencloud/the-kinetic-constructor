@@ -32,7 +32,7 @@ class StartEndWidget(AttrBoxWidget):
         self.end_box = self._setup_start_end_box()
         self.boxes: List[CustomComboBox] = [self.start_box, self.end_box]
         self.header_labels: List[QLabel] = []
-        
+
         # Setup frames for start and end combo boxes with headers
         self.start_box_with_header_frame = self._create_combobox_with_header_frame(
             "Start", self.start_box
@@ -87,8 +87,9 @@ class StartEndWidget(AttrBoxWidget):
         layout = QVBoxLayout(arrow_label_frame)
         layout.setContentsMargins(0, 0, 0, 0)
         self.arrow_spacer_label = QLabel()
-        layout.addWidget(self.arrow_spacer_label)
+        layout.addStretch(4)
         layout.addWidget(arrow_label)
+        layout.addStretch(2)
         return arrow_label_frame
 
     def _setup_swap_button_frame(self) -> QFrame:

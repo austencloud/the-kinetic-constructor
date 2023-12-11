@@ -29,3 +29,7 @@ class OptionPickerWidget(QFrame):
         self.main_layout.addWidget(self.button_frame, 1)
 
         self.setLayout(self.main_layout)
+
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+        self.setMaximumHeight(int(self.main_widget.height() * 2 / 3))
