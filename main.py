@@ -44,9 +44,10 @@ class MainWindow(QMainWindow):
         self.main_widget = MainWidget(self)
         self.installEventFilter(self.main_widget)
         self.setCentralWidget(self.main_widget)
-        self.show()
         self.setWindowTitle("Sequence Constructor")
         self._configure_window()
+        self.show()
+        
 
     def write_profiling_stats_to_file(self, file_path: str) -> None:
         stats: pstats.Stats = pstats.Stats(self.profiler).sort_stats("cumtime")

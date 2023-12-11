@@ -1,7 +1,7 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import QFrame, QVBoxLayout
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QWidget, QSizePolicy
 from objects.motion import Motion
 from settings.string_constants import (
     ICON_DIR,
@@ -10,6 +10,9 @@ from settings.string_constants import (
     BLUE_HEX,
 )
 from utilities.TypeChecking.TypeChecking import Colors
+from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
+    AttrBoxWidget,
+)
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
@@ -35,7 +38,8 @@ class AttrBox(QFrame):
         self.pictograph = pictograph
         self.color = color
         self.font_size = self.width() // 10
-        self.turns_widget = None
+        self.widgets: List[AttrBoxWidget] = []
+
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
         self.init_ui()
 
@@ -44,25 +48,41 @@ class AttrBox(QFrame):
 
     def init_ui(self):
         self.setup_box()
-        self.button_size = self.calculate_button_size()
-        self.icon_size = QSize(int(self.button_size * 0.5), int(self.button_size * 0.5))
 
+        # Create widgets and add them to the layout
+        self.layout = QVBoxLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+
+        # Initialize child widgets
         self.header_widget = HeaderWidget(self)
         self.motion_type_widget = MotionTypesWidget(self)
         self.start_end_widget = StartEndWidget(self)
         self.turns_widget = TurnsWidget(self)
 
-        self.layout().addWidget(self.header_widget)
-        self.layout().addWidget(self.motion_type_widget)
-        self.layout().addWidget(self.start_end_widget)
-        self.layout().addWidget(self.turns_widget)
+        # Add child widgets to the layout
+        self.widgets = [
+            self.header_widget,
+            self.motion_type_widget,
+            self.start_end_widget,
+            self.turns_widget,
+        ]
+
+        for widget in self.widgets:
+            self.layout.addWidget(widget)
+
+        # Add a stretch to allow the AttrBox to grow vertically and fit its contents
+        self.layout.addStretch(1)
+
+        # Apply the layout to the AttrBox
+        self.setLayout(self.layout)
+
+        # Set the AttrBox to have a dynamic size based on its content
+        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
 
     def setup_box(self) -> None:
         self.setObjectName("AttributeBox")
         self.apply_border_style(RED_HEX if self.color == RED else BLUE_HEX)
-        self.setLayout(QVBoxLayout(self))
-        self.layout().setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.layout().setContentsMargins(0, 0, 0, 0)
 
     def apply_border_style(self, color_hex: str) -> None:
         self.border_width = 3
@@ -112,13 +132,12 @@ class AttrBox(QFrame):
                 motion.start_location, motion.end_location
             )
             self.motion_type_widget.update_motion_type_box(motion.motion_type)
-            self.turns_widget.update_turns_label_box(motion.turns)
+            self.turns_widget.update_turns_box(motion.turns)
         else:
             self.clear_attr_box()
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        self.setMaximumWidth(int(self.pictograph.view.width()))
-        self.font_size = self.width() // 10
-        self.widget_spacing = int(self.attr_box_width * 0.02)
-        self.layout().setSpacing(self.widget_spacing)
+        self.setMaximumWidth(self.pictograph.view.width())
+        self.attr_panel.graph_editor.set_height_to_attr_panel_widgets_height()
+
