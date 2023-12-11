@@ -89,8 +89,8 @@ class AttrBox(QFrame):
         self.setStyleSheet(
             f"#AttributeBox {{ border: {self.border_width}px solid {color_hex}; }}"
         )
-        self.attr_box_width = int(self.attr_panel.width() / 2 - self.border_width * 2)
-        self.header_spacing = int(self.attr_box_width * 0.02)
+
+
 
     ### CREATE LABELS ###
 
@@ -141,3 +141,6 @@ class AttrBox(QFrame):
         self.setMaximumWidth(self.pictograph.view.width())
         self.attr_panel.graph_editor.set_height_to_attr_panel_widgets_height()
 
+        # Subtract the border width twice (left and right) to get the correct content width
+        self.attr_box_content_width = int(self.attr_panel.width() / 2 - self.border_width * 2)
+        self.header_spacing = int(self.attr_box_content_width * 0.02)

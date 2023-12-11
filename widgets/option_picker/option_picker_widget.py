@@ -32,4 +32,5 @@ class OptionPickerWidget(QFrame):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        self.setMaximumHeight(int(self.main_widget.height() * 2 / 3))
+        self.setMinimumHeight(int(self.main_widget.height() * 3 / 4))
+        self.setMaximumHeight(int(self.main_widget.height() * 3 / 4))

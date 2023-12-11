@@ -23,6 +23,7 @@ from settings.string_constants import ICON_DIR
 class HeaderWidget(QWidget):
     def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__(attr_box)
+
         self.attr_box = attr_box
 
         self.header_label: QLabel = self._setup_header_label()

@@ -38,6 +38,18 @@ class TurnsWidget(AttrBoxWidget):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.buttons: List[CustomButton] = []
 
+        # Initialize placeholders for the clocks
+        self.placeholder_left = QLabel()
+        self.placeholder_right = QLabel()
+
+        # Apply same size policy to placeholders as clocks
+        self.placeholder_left.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
+        self.placeholder_right.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
+
         # Initialize the header and buttons layout
         self.header_layout = self._create_header_layout()
         self.buttons_layout = self._create_buttons_layout()
@@ -62,34 +74,52 @@ class TurnsWidget(AttrBoxWidget):
     ### CREATE WIDGETS ###
 
     def _create_header_layout(self) -> QHBoxLayout:
-        clocks_and_turnbox_layout: QHBoxLayout = QHBoxLayout()
-        clocks_and_turnbox_layout.setContentsMargins(0, 0, 0, 0)
-        clocks_and_turnbox_layout.setSpacing(0)
+        header_layout = QHBoxLayout()
+        header_layout.setContentsMargins(0, 0, 0, 0)
+        header_layout.setSpacing(0)
 
-        self.turnbox_frame = self._create_turnbox_vert_frame()
+        # Create the left and right clock labels and the turnbox frame
         self.clock_left, self.clock_right = self._create_clock_labels()
+        self.turnbox_frame = self._create_turnbox_vert_frame()
 
-        clocks_and_turnbox_layout.addWidget(self.clock_left)
-        clocks_and_turnbox_layout.addWidget(self.turnbox_frame)
-        clocks_and_turnbox_layout.addWidget(self.clock_right)
-        return clocks_and_turnbox_layout
+        # Set size policies to Expanding to fill the available space
+        self.clock_left.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
+        self.clock_right.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
+        self.turnbox_frame.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
+        )
+
+        # Add widgets to the layout, they will equally share the space
+        header_layout.addWidget(self.clock_left)
+        header_layout.addWidget(self.turnbox_frame)
+        header_layout.addWidget(self.clock_right)
+
+        return header_layout
 
     def _create_clock_labels(self) -> Tuple[QLabel, QLabel]:
         clock_left, clock_right = QLabel(), QLabel()
-        for clock in [clock_left, clock_right]:
+        self.clocks = [clock_left, clock_right]
+        for clock in self.clocks:
             clock_layout = QVBoxLayout(clock)
             clock_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
             clock.setPixmap(self.clockwise_pixmap)
-            clock_size = int(
-                (
-                    (self.attr_box.attr_panel.width() / 2 - self.turnbox_frame.width())
-                    / 2
-                )
-                * 0.7
+            clock_margin = int(self.attr_box.width() / 20)
+            clock.setContentsMargins(
+                clock_margin, clock_margin, clock_margin, clock_margin
             )
-            clock.setMaximumSize(clock_size, clock_size)
-            clock.setScaledContents(True)
-
+        clock_aspect_ratio = 1  # This can be adjusted as needed
+        clock_left.setMaximumSize(
+            int(clock_left.sizeHint().width()),
+            int(clock_left.sizeHint().width() / clock_aspect_ratio),
+        )
+        clock_right.setMaximumSize(
+            int(clock_right.sizeHint().width()),
+            int(clock_right.sizeHint().width() / clock_aspect_ratio),
+        )
         return clock_left, clock_right
 
     def _create_buttons_layout(self) -> QHBoxLayout:
@@ -113,7 +143,6 @@ class TurnsWidget(AttrBoxWidget):
         frame = QFrame()
         frame.setLayout(layout)
         frame.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        frame.setMinimumHeight(int(self.attr_box.width() / 5))
         return frame
 
     def _create_turnbox_vert_frame(self) -> QFrame:
@@ -185,10 +214,10 @@ class TurnsWidget(AttrBoxWidget):
         turns_box.setContentsMargins(0, 0, 0, 0)
 
         # Populate the combo box with the specified turns choices
-        turns_choices = [0.5, 1, 1.5, 2, 2.5, 3]
+        turns_choices = [0, 0.5, 1, 1.5, 2, 2.5, 3]
         for choice in turns_choices:
             turns_box.addItem(str(choice))  # Convert the number to a string
-
+        turns_box.setCurrentIndex(-1)
         return turns_box
 
     def _create_turns_button(
@@ -275,16 +304,15 @@ class TurnsWidget(AttrBoxWidget):
     ### UPDATERS ###
 
     def update_clocks(self, rotation_direction: str) -> None:
-        """Update the visibility of clocks based on rotation direction."""
+        # Clear both clock labels
+        self.clock_left.clear()
+        self.clock_right.clear()
+
+        # Depending on the rotation direction, display the correct clock
         if rotation_direction == "ccw":
             self.clock_left.setPixmap(self.counter_clockwise_pixmap)
-            self.clock_right.clear()
         elif rotation_direction == "cw":
             self.clock_right.setPixmap(self.clockwise_pixmap)
-            self.clock_left.clear()
-        else:
-            self.clock_left.clear()
-            self.clock_right.clear()
 
     def clear_turns_label(self) -> None:
         self.turns_box.setCurrentIndex(-1)
@@ -292,6 +320,8 @@ class TurnsWidget(AttrBoxWidget):
     def update_turns_box(self, turns) -> None:
         if turns:
             self.turns_box.setCurrentText(str(turns))
+        elif turns == 0:
+            self.turns_box.setCurrentText("0")
         else:
             self.clear_turns_label()
 
@@ -316,7 +346,7 @@ class TurnsWidget(AttrBoxWidget):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         border_radius = min(self.turns_box.width(), self.turns_box.height()) * 0.25
-        self.turns_box.setMinimumWidth(int(self.attr_box.width() * 0.3))
+        self.turns_box.setMinimumWidth(int(self.attr_box.attr_box_content_width / 3))
         self.turns_box.setMinimumHeight(int(self.attr_box.width() / 5))
         self.turns_box.setMaximumHeight(int(self.attr_box.width() / 5))
         box_font_size = int(self.attr_box.width() / 10)
@@ -352,3 +382,12 @@ class TurnsWidget(AttrBoxWidget):
         )
         if self.buttons:
             self.buttons_frame.setMinimumHeight(self.buttons[0].height())
+        for clock in self.clocks:
+            clock_size = int(((self.attr_box.attr_box_content_width) / 3))
+            clock.setMaximumSize(clock_size, clock_size)
+        self.turnbox_frame.setMaximumWidth(
+            int(((self.attr_box.attr_box_content_width) / 3))
+        )
+        self.turnbox_header.setFont(
+            QFont("Arial", int(self.attr_box.attr_panel.width() / 35))
+        )
