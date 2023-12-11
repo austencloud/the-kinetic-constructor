@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 from PyQt6.QtWidgets import (
     QHBoxLayout,
     QVBoxLayout,
@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QFont, QResizeEvent, QFontMetrics
 from PyQt6.QtCore import Qt
-from settings.string_constants import SWAP_ICON
+from settings.string_constants import ICON_DIR, SWAP_ICON
 from utilities.TypeChecking.TypeChecking import Locations
 from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
@@ -28,19 +28,20 @@ class StartEndWidget(AttrBoxWidget):
         super().__init__(attr_box)
 
         # Setup start and end combo boxes
-        self.start_box = self._setup_start_end_box(["N", "E", "S", "W"])
-        self.end_box = self._setup_start_end_box(["N", "E", "S", "W"])
-
+        self.start_box = self._setup_start_end_box()
+        self.end_box = self._setup_start_end_box()
+        self.boxes: List[CustomComboBox] = [self.start_box, self.end_box]
+        self.header_labels: List[QLabel] = []
+        
         # Setup frames for start and end combo boxes with headers
-        self.start_box_with_header_frame = self._create_box_with_header_frame(
+        self.start_box_with_header_frame = self._create_combobox_with_header_frame(
             "Start", self.start_box
         )
-        self.end_box_with_header_frame = self._create_box_with_header_frame(
+        self.end_box_with_header_frame = self._create_combobox_with_header_frame(
             "End", self.end_box
         )
-
         # Setup arrow label
-        self.arrow_label = self.create_label("→", 35, Qt.AlignmentFlag.AlignCenter)
+        self.arrow_label = self.create_attr_header_label("→")
         self.arrow_label_frame = self._setup_arrow_label_frame(self.arrow_label)
 
         # Setup swap button
@@ -62,42 +63,32 @@ class StartEndWidget(AttrBoxWidget):
         main_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         return main_layout
 
-    def _setup_start_end_box(self, locations: list[str]) -> CustomComboBox:
+    def _setup_start_end_box(self) -> CustomComboBox:
         box = CustomComboBox(self)
-        box.addItems(locations)
-        box.setFont(
-            QFont(
-                "Arial", int(self.attr_box.attr_panel.width() / 20), QFont.Weight.Bold
-            )
-        )
+        box.addItems(["N", "E", "S", "W"])
         box.setCurrentIndex(-1)
-
-        # Calculate the width of the widest item
-        font_metrics = QFontMetrics(box.font())
-        widest_char_width = font_metrics.horizontalAdvance("W")
-        box.setMinimumWidth(
-            int(widest_char_width * 1.75)
-        )  # Adjust the multiplier as needed
-
         return box
 
-    def _create_box_with_header_frame(self, label_text: str, box: QComboBox) -> QFrame:
+    def _create_combobox_with_header_frame(
+        self, label_text: str, box: QComboBox
+    ) -> QFrame:
         frame = QFrame(self)
         layout = QVBoxLayout(frame)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
-        layout.addWidget(
-            self.create_label(label_text, int(self.attr_box.attr_panel.width() / 35))
-        )
+        header_label = self.create_attr_header_label(label_text)
+        layout.addWidget(header_label)
         layout.addWidget(box)
+        self.header_labels.append(header_label)
         return frame
 
     def _setup_arrow_label_frame(self, arrow_label: QLabel) -> QFrame:
         arrow_label_frame = QFrame(self)
         layout = QVBoxLayout(arrow_label_frame)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.addStretch(1)
-        layout.addWidget(arrow_label, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.arrow_spacer_label = QLabel()
+        layout.addWidget(self.arrow_spacer_label)
+        layout.addWidget(arrow_label)
         return arrow_label_frame
 
     def _setup_swap_button_frame(self) -> QFrame:
@@ -106,10 +97,10 @@ class StartEndWidget(AttrBoxWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        swap_button = self.create_custom_button(
+        self.swap_button = self.create_custom_button(
             SWAP_ICON, self._swap_locations_callback
         )
-        swap_button.setMinimumSize(
+        self.swap_button.setMinimumSize(
             int(self.attr_box.width() * 0.15), int(self.attr_box.width() * 0.15)
         )
         layout.addSpacerItem(
@@ -118,7 +109,7 @@ class StartEndWidget(AttrBoxWidget):
             )
         )
         layout.addWidget(
-            swap_button,
+            self.swap_button,
             alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignCenter,
         )
 
@@ -143,28 +134,75 @@ class StartEndWidget(AttrBoxWidget):
             self.end_box.setCurrentText(end.upper())
         else:
             self.clear_start_end_boxes()
-            
+
     def clear_start_end_boxes(self) -> None:
         self.start_box.setCurrentIndex(-1)
         self.end_box.setCurrentIndex(-1)
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
-        common_height = max(
-            widget.sizeHint().height()
-            for widget in [
-                self.start_box_with_header_frame,
-                self.end_box_with_header_frame,
-                self.arrow_label_frame,
-                self.swap_button_frame,
-            ]
-        )
-        for widget in [
-            self.start_box_with_header_frame,
-            self.end_box_with_header_frame,
-            self.arrow_label_frame,
-            self.swap_button_frame,
-        ]:
-            widget.setMaximumHeight(common_height)
+        self.swap_button.update_button_size()
         self.swap_button_frame.setMinimumWidth(int(self.attr_box.width() * 1 / 4))
         self.swap_button_frame.setMaximumWidth(int(self.attr_box.width() * 1 / 4))
+
+        self.arrow_spacer_label.setMinimumHeight(self.header_labels[0].height())
+        self.arrow_spacer_label.setMaximumHeight(self.header_labels[0].height())
+        header_font_size = int(self.attr_box.pictograph.view.width() * 0.06)
+        for header_label in self.header_labels:
+            header_label.setFont(QFont("Arial", header_font_size))
+        self.arrow_label.setFont(
+            QFont(
+                "Arial",
+                int(self.attr_box.width() / 10),
+                QFont.Weight.Bold,
+            )
+        )
+
+        for box in self.boxes:
+            box.setFont(
+                QFont(
+                    "Arial",
+                    int(self.attr_box.attr_panel.width() / 20),
+                    QFont.Weight.Bold,
+                )
+            )
+
+            box.setMinimumWidth(int(self.attr_box.width() / 3.5))
+            box.setMaximumWidth(int(self.attr_box.width() / 3.5))
+            box.setMinimumHeight(int(self.attr_box.width() / 5))
+            box.setMaximumHeight(int(self.attr_box.width() / 5))
+
+            box_font_size = int(self.attr_box.width() / 10)
+            box.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold, True))
+
+            # Calculate the border radius as a fraction of the width or height
+            border_radius = (
+                min(box.width(), box.height()) * 0.25
+            )  # Adjust the factor as needed
+
+            # Update the stylesheet with the new border radius
+            box.setStyleSheet(
+                f"""
+                QComboBox {{
+                    border: {box.combobox_border}px solid black;
+                    border-radius: {border_radius}px;
+                }}
+
+                QComboBox::drop-down {{
+                    subcontrol-origin: padding;
+                    subcontrol-position: top right;
+                    width: 15px;
+                    border-left-width: 1px;
+                    border-left-color: darkgray;
+                    border-left-style: solid;
+                    border-top-right-radius: {border_radius}px;
+                    border-bottom-right-radius: {border_radius}px;
+                }}
+
+                QComboBox::down-arrow {{
+                    image: url("{ICON_DIR}combobox_arrow.png");
+                    width: 10px;
+                    height: 10px;
+                }}
+                """
+            )

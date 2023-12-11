@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QPalette
+from PyQt6.QtCore import Qt, QSize
 from typing import Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -20,15 +21,21 @@ class CustomButton(QPushButton):
     ) -> None:
         super().__init__(widget)
         self.widget = widget
-        self.update_button_size()
 
-    def update_button_size(self) -> None:
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+        # self.update_button_size()
+
+    def update_button_size(self):
         parent_width = self.widget.width()  # Assuming parent widget defines the size
         self.button_size = int(parent_width * 0.2 * 0.8)  # Update proportionally
         self.border_radius = self.button_size / 2
         self.setFixedSize(self.button_size, self.button_size)  # Set the new size
+        self.setIconSize(
+            QSize(int(self.button_size * 0.6), int(self.button_size * 0.6))
+        )
         self.setStyleSheet(self.get_button_style())
-        
+
     def get_button_style(self):
         return (
             f"QPushButton {{"

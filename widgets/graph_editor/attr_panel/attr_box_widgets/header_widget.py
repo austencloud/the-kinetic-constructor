@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLabel,
 )
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
 from settings.string_constants import (
     BLUE,
@@ -23,12 +23,9 @@ from settings.string_constants import ICON_DIR
 class HeaderWidget(QWidget):
     def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__(attr_box)
-
         self.attr_box = attr_box
-        self.color = attr_box.color
-        self.pictograph = attr_box.pictograph
 
-        self.header_text: QLabel = self._setup_header_label()
+        self.header_label: QLabel = self._setup_header_label()
         self.rotate_cw_button, self.rotate_ccw_button = self._setup_buttons()
 
         self._setup_main_layout()
@@ -44,7 +41,7 @@ class HeaderWidget(QWidget):
             self.rotate_ccw_button,
             alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft,
         )
-        main_layout.addWidget(self.header_text, alignment=Qt.AlignmentFlag.AlignCenter)
+        main_layout.addWidget(self.header_label, alignment=Qt.AlignmentFlag.AlignCenter)
         main_layout.addWidget(
             self.rotate_cw_button,
             alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight,
@@ -54,17 +51,17 @@ class HeaderWidget(QWidget):
 
     def _add_black_borders(self):
         self.setStyleSheet("border: 1px solid black;")
-        self.header_text.setStyleSheet("border: 1px solid black;")
+        self.header_label.setStyleSheet("border: 1px solid black;")
         self.rotate_cw_button.setStyleSheet("border: 1px solid black;")
         self.rotate_ccw_button.setStyleSheet("border: 1px solid black;")
 
     def _rotate_ccw(self) -> None:
-        motion = self.pictograph.get_motion_by_color(self.color)
+        motion = self.attr_box.pictograph.get_motion_by_color(self.attr_box.color)
         if motion:
             motion.arrow.rotate_arrow("ccw")
 
     def _rotate_cw(self) -> None:
-        motion = self.pictograph.get_motion_by_color(self.color)
+        motion = self.attr_box.pictograph.get_motion_by_color(self.attr_box.color)
         if motion:
             motion.arrow.rotate_arrow("cw")
 
@@ -79,14 +76,11 @@ class HeaderWidget(QWidget):
         return buttons
 
     def _setup_header_label(self) -> QLabel:
-        header_label = QLabel("Left" if self.color == BLUE else "Right", self)
+        header_label = QLabel("Left" if self.attr_box.color == BLUE else "Right", self)
         header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        color_hex = RED_HEX if self.attr_box.color == RED else BLUE_HEX
+        header_label.setStyleSheet(f"color: {color_hex}; font-weight: bold;")
 
-        color_hex = RED_HEX if self.color == RED else BLUE_HEX
-        font_size = int(header_label.height() * 0.8)
-        header_label.setStyleSheet(
-            f"color: {color_hex}; font-size: {font_size}px; font-weight: bold;"
-        )
         return header_label
 
     def _create_button(self, icon_path: str) -> CustomButton:
@@ -98,3 +92,5 @@ class HeaderWidget(QWidget):
         super().resizeEvent(event)
         self.rotate_cw_button.update_button_size()
         self.rotate_ccw_button.update_button_size()
+        font_size = int(self.attr_box.pictograph.view.width() * 0.1)
+        self.header_label.setFont(QFont("Arial", font_size))

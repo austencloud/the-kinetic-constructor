@@ -34,6 +34,7 @@ class AttrBox(QFrame):
         self.attr_panel = attr_panel
         self.pictograph = pictograph
         self.color = color
+        self.font_size = self.width() // 10
         self.turns_widget = None
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
         self.init_ui()
@@ -62,7 +63,6 @@ class AttrBox(QFrame):
         self.setLayout(QVBoxLayout(self))
         self.layout().setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout().setContentsMargins(0, 0, 0, 0)
-        self.layout().setSpacing(self.widget_spacing)
 
     def apply_border_style(self, color_hex: str) -> None:
         self.border_width = 3
@@ -71,7 +71,6 @@ class AttrBox(QFrame):
         )
         self.attr_box_width = int(self.attr_panel.width() / 2 - self.border_width * 2)
         self.header_spacing = int(self.attr_box_width * 0.02)
-        self.widget_spacing = int(self.attr_box_width * 0.00)
 
     ### CREATE LABELS ###
 
@@ -120,3 +119,6 @@ class AttrBox(QFrame):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.setMaximumWidth(int(self.pictograph.view.width()))
+        self.font_size = self.width() // 10
+        self.widget_spacing = int(self.attr_box_width * 0.02)
+        self.layout().setSpacing(self.widget_spacing)
