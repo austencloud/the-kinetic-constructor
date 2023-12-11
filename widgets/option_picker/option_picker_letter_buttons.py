@@ -134,5 +134,5 @@ class OptionPickerLetterButtons(QFrame):
             for i in range(row_layout.count()):
                 button: QPushButton = row_layout.itemAt(i).widget()
                 if button:
-                    button.setMaximumSize(button_size, button_size)
+                    button.resize(button_size, button_size)
                     button.setIconSize(QSize(icon_size, icon_size))

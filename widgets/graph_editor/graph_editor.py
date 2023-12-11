@@ -74,7 +74,7 @@ class GraphEditor(QFrame):
         self.propbox.view.fitInView(
             self.propbox.view.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio
         )
-        self.set_height_to_attr_panel_widgets_height() 
+        self.set_height_to_attr_panel_widgets_height()
 
     def set_height_to_attr_panel_widgets_height(self):
         required_height = sum(
@@ -82,3 +82,4 @@ class GraphEditor(QFrame):
             for widget in self.attr_panel.red_attr_box.widgets
         )
         self.setMinimumHeight(required_height)
+        self.setMaximumHeight(required_height)

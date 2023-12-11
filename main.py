@@ -25,9 +25,6 @@ class MainWindow(QMainWindow):
 
         available_geometry = screen.availableGeometry()
 
-        self.main_window_width = available_geometry.width() * 0.75
-        self.main_window_height = available_geometry.height() * 0.75
-
         self.move(
             int(available_geometry.x()),
             int(available_geometry.y()),

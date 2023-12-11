@@ -229,10 +229,7 @@ class TurnsWidget(AttrBoxWidget):
 
         button = CustomButton(self)
         button.setText(text)
-        button.setFont(
-            QFont("Arial", int(button_size / 3))
-        )  # Adjust font size based on button size
-        button.setMaximumSize(button_size, button_size)
+        button.setFont(QFont("Arial", int(button_size / 3)))
         button.clicked.connect(callback)
 
         return button
@@ -346,12 +343,12 @@ class TurnsWidget(AttrBoxWidget):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         border_radius = min(self.turns_box.width(), self.turns_box.height()) * 0.25
-        self.turns_box.setMinimumWidth(int(self.attr_box.attr_box_content_width / 3))
+        self.turns_box.setMinimumWidth(int(self.attr_box.attr_box_content_width / 3.25))
         self.turns_box.setMinimumHeight(int(self.attr_box.width() / 5))
         self.turns_box.setMaximumHeight(int(self.attr_box.width() / 5))
         box_font_size = int(self.attr_box.width() / 10)
 
-        self.turns_box.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold, True))
+        self.turns_box.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
         self.turns_box.setStyleSheet(
             f"""
             QComboBox {{
@@ -380,8 +377,6 @@ class TurnsWidget(AttrBoxWidget):
         self.header_frame.setMinimumHeight(
             self.turns_box.height() + self.turnbox_header.height()
         )
-        if self.buttons:
-            self.buttons_frame.setMinimumHeight(self.buttons[0].height())
         for clock in self.clocks:
             clock_size = int(((self.attr_box.attr_box_content_width) / 3))
             clock.setMaximumSize(clock_size, clock_size)
@@ -391,3 +386,10 @@ class TurnsWidget(AttrBoxWidget):
         self.turnbox_header.setFont(
             QFont("Arial", int(self.attr_box.attr_panel.width() / 35))
         )
+        self.turnbox_frame.setMinimumHeight(
+            self.turnbox_header.height() + self.turns_box.height()
+        )
+        self.buttons_frame.setMinimumHeight(self.turnbox_frame.height())
+        for button in self.buttons:
+            button.update_button_size()
+            button.setFont(QFont("Arial", int(button.height() / 3)))

@@ -20,8 +20,7 @@ class PictographInit:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
         self.main_widget = pictograph.main_widget
-        self.window_width = pictograph.main_widget.main_window.main_window_width
-        self.window_height = pictograph.main_widget.main_window.main_window_height
+
 
     def init_view(self) -> QGraphicsView:
         view = PictographView(self.pictograph)
