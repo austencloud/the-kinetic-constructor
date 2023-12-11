@@ -138,9 +138,12 @@ class StartEndWidget(AttrBoxWidget):
             self.update_start_end_boxes(motion.start_location, motion.end_location)
 
     def update_start_end_boxes(self, start: Locations, end: Locations) -> None:
-        self.start_box.setCurrentText(start.upper())
-        self.end_box.setCurrentText(end.upper())
-
+        if start and end:
+            self.start_box.setCurrentText(start.upper())
+            self.end_box.setCurrentText(end.upper())
+        else:
+            self.clear_start_end_boxes()
+            
     def clear_start_end_boxes(self) -> None:
         self.start_box.setCurrentIndex(-1)
         self.end_box.setCurrentIndex(-1)

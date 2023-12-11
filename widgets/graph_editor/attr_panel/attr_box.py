@@ -120,4 +120,3 @@ class AttrBox(QFrame):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.setMaximumWidth(int(self.pictograph.view.width()))
-        self.header_widget.update_header_widget_size()

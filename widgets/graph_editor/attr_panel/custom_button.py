@@ -17,15 +17,18 @@ if TYPE_CHECKING:
 class CustomButton(QPushButton):
     def __init__(
         self, widget: Union["StartEndWidget", "TurnsWidget", "MotionTypesWidget"]
-    ):
+    ) -> None:
         super().__init__(widget)
-        self._color = self.palette().color(QPalette.ColorRole.Button)
         self.widget = widget
-        self.button_size = int(self.widget.attr_box.attr_box_width * 0.2 * 0.8)
+        self.update_button_size()
+
+    def update_button_size(self) -> None:
+        parent_width = self.widget.width()  # Assuming parent widget defines the size
+        self.button_size = int(parent_width * 0.2 * 0.8)  # Update proportionally
         self.border_radius = self.button_size / 2
+        self.setFixedSize(self.button_size, self.button_size)  # Set the new size
         self.setStyleSheet(self.get_button_style())
-
-
+        
     def get_button_style(self):
         return (
             f"QPushButton {{"
@@ -33,7 +36,7 @@ class CustomButton(QPushButton):
             f"   border-radius: {self.border_radius}px;"
             f"   border: 1px solid black;"
             f"   min-width: {self.button_size}px;"
-            f"   min-height: {self.button_size}px;"  # Adjust height to match width for a circle
+            f"   min-height: {self.button_size}px;"
             f"   max-width: {self.button_size}px;"
             f"   max-height: {self.button_size}px;"
             f"}}"

@@ -58,12 +58,12 @@ class HeaderWidget(QWidget):
         self.rotate_cw_button.setStyleSheet("border: 1px solid black;")
         self.rotate_ccw_button.setStyleSheet("border: 1px solid black;")
 
-    def rotate_ccw(self) -> None:
+    def _rotate_ccw(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
             motion.arrow.rotate_arrow("ccw")
 
-    def rotate_cw(self) -> None:
+    def _rotate_cw(self) -> None:
         motion = self.pictograph.get_motion_by_color(self.color)
         if motion:
             motion.arrow.rotate_arrow("cw")
@@ -72,8 +72,8 @@ class HeaderWidget(QWidget):
         rotate_ccw_button = self._create_button(f"{ICON_DIR}rotate_ccw.png")
         rotate_cw_button = self._create_button(f"{ICON_DIR}rotate_cw.png")
 
-        rotate_ccw_button.clicked.connect(self.rotate_ccw)
-        rotate_cw_button.clicked.connect(self.rotate_cw)
+        rotate_ccw_button.clicked.connect(self._rotate_ccw)
+        rotate_cw_button.clicked.connect(self._rotate_cw)
 
         buttons = (rotate_cw_button, rotate_ccw_button)
         return buttons
@@ -94,6 +94,7 @@ class HeaderWidget(QWidget):
         button.setIcon(QIcon(icon_path))
         return button
 
-    def update_header_widget_size(self) -> None:
-        self.setMinimumWidth(self.attr_box.width())
-        self.setMinimumHeight(self.rotate_cw_button.height() + self.margins)
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+        self.rotate_cw_button.update_button_size()
+        self.rotate_ccw_button.update_button_size()
