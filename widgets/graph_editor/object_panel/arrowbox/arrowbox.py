@@ -35,7 +35,6 @@ from widgets.graph_editor.object_panel.objectbox import ObjectBox
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from objects.arrow import Arrow
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.graph_editor import GraphEditor
 
 from utilities.TypeChecking.TypeChecking import MotionAttributesDicts

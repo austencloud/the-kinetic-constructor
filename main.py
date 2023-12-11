@@ -1,8 +1,6 @@
 import sys
-import os
 import cProfile
 import pstats
-from typing import IO
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from widgets.main_widget import MainWidget
 from PyQt6.QtGui import QGuiApplication

@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.graph_editor import GraphEditor
 
 
@@ -16,3 +15,4 @@ class ObjectBox(QGraphicsScene):
         self.pictograph = graph_editor.pictograph
         self.setSceneRect(0, 0, 750, 750)
         self.view: ObjectBoxView = None
+

@@ -1,11 +1,10 @@
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFrame, QLabel, QComboBox
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFrame, QLabel
 from PyQt6.QtGui import QFont, QIcon, QResizeEvent
 from PyQt6.QtCore import Qt
-from typing import TYPE_CHECKING, Optional, Callable
+from typing import TYPE_CHECKING, Callable
 
-from settings.string_constants import ICON_DIR, SWAP_ICON
+from settings.string_constants import ICON_DIR
 from widgets.graph_editor.attr_panel.custom_button import CustomButton
-from utilities.TypeChecking.TypeChecking import MotionTypes, Locations
 
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox

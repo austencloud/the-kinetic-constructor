@@ -4,14 +4,12 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QFrame,
     QSizePolicy,
-    QPushButton,
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QPixmap
 from typing import Literal, Dict, TYPE_CHECKING, Tuple
 from objects.motion import Motion
 from settings.string_constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON
-from utilities.TypeChecking.TypeChecking import RotationDirections
 
 from widgets.graph_editor.attr_panel.custom_button import CustomButton
 

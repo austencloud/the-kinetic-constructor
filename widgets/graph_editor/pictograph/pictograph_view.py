@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QGraphicsView, QPushButton, QSizePolicy
+from PyQt6.QtWidgets import QGraphicsView, QPushButton
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 from settings.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR

@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, Dict, Tuple
 
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtWidgets import QGraphicsView
 from PyQt6.QtCore import QPointF
 

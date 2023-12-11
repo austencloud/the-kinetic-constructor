@@ -11,9 +11,7 @@ from objects.prop import Staff
 from objects.motion import Motion
 from settings.string_constants import (
     BLUE,
-    BOX,
     COLOR,
-    DIAMOND,
     END_LOCATION,
     LETTER_SVG_DIR,
     MOTION_TYPE,
@@ -34,7 +32,6 @@ from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
     Colors,
     Layers,
-    Locations,
     MotionAttributesDicts,
     List,
     MotionTypes,
@@ -46,8 +43,6 @@ from widgets.graph_editor.pictograph.pictograph import Pictograph
 from widgets.graph_editor.pictograph.pictograph_event_handler import (
     PictographEventHandler,
 )
-from widgets.graph_editor.pictograph.pictograph_view import PictographView
-from widgets.graph_editor.pictograph.pictograph_init import PictographInit
 from widgets.graph_editor.pictograph.pictograph_menu_handler import (
     PictographMenuHandler,
 )
@@ -64,7 +59,6 @@ from widgets.sequence.sequence_frame import Sequence
 if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
     from widgets.main_widget import MainWidget
-    from widgets.option_picker.option_picker import OptionPicker
 
 from objects.letter_item import LetterItem
 

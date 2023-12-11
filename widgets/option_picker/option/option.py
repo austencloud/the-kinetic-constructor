@@ -42,8 +42,6 @@ from widgets.graph_editor.pictograph.pictograph import Pictograph
 from widgets.graph_editor.pictograph.pictograph_event_handler import (
     PictographEventHandler,
 )
-from widgets.graph_editor.pictograph.pictograph_view import PictographView
-from widgets.graph_editor.pictograph.pictograph_init import PictographInit
 from widgets.graph_editor.pictograph.pictograph_menu_handler import (
     PictographMenuHandler,
 )

@@ -1,7 +1,7 @@
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
-from settings.string_constants import BLUE, BLUE_HEX, COLOR_MAP, RED, RED_HEX
+from settings.string_constants import BLUE, BLUE_HEX, RED, RED_HEX
 import re
 from typing import TYPE_CHECKING, Union
 
@@ -92,9 +92,9 @@ class GraphicalObject(QGraphicsSvgItem):
 
     def is_dim(self, on: bool) -> None:
         if on:
-            self.setOpacity(0.25)  # Change opacity or use another effect to highlight
+            self.setOpacity(0.25)
         else:
-            self.setOpacity(1.0)  # Reset to normal when not highlighted
+            self.setOpacity(1.0)
 
     def get_object_center(self) -> QPointF:
         if self.rotation() in [90, 270]:

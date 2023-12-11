@@ -1,14 +1,11 @@
-import logging
-from typing import TYPE_CHECKING, Dict, Literal
+from typing import TYPE_CHECKING, Dict
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import QFrame, QLabel, QVBoxLayout, QWidget
-from objects.arrow import Arrow
+from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from objects.motion import Motion
 from settings.string_constants import (
     ICON_DIR,
     RED,
-    ICON_PATHS,
     RED_HEX,
     BLUE_HEX,
 )

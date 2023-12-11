@@ -1,7 +1,5 @@
-from re import M
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
-    QWidget,
     QHBoxLayout,
     QVBoxLayout,
     QFrame,
@@ -10,9 +8,9 @@ from PyQt6.QtWidgets import (
     QSpacerItem,
     QSizePolicy,
 )
-from PyQt6.QtGui import QFont, QIcon, QResizeEvent, QFontMetrics
+from PyQt6.QtGui import QFont, QResizeEvent, QFontMetrics
 from PyQt6.QtCore import Qt
-from settings.string_constants import ICON_DIR, SWAP_ICON
+from settings.string_constants import SWAP_ICON
 from utilities.TypeChecking.TypeChecking import Locations
 from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
@@ -20,7 +18,6 @@ from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
 from widgets.graph_editor.attr_panel.attr_box_widgets.custom_combo_box import (
     CustomComboBox,
 )
-from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox

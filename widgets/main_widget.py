@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, Optional
 
 from PyQt6.QtCore import QEvent
-from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
 
 from utilities.TypeChecking.TypeChecking import LetterDictionary
@@ -49,7 +48,7 @@ class MainWidget(QWidget):
         self.right_layout.addWidget(self.option_picker)
         self.right_layout.addWidget(self.graph_editor)
 
-        self.right_layout.setStretchFactor(self.option_picker, 2)
+        self.right_layout.setStretchFactor(self.option_picker, 3)
         self.right_layout.setStretchFactor(self.graph_editor, 1)
 
         self.main_layout.addLayout(self.left_layout)

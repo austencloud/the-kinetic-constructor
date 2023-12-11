@@ -1,8 +1,7 @@
-from PyQt6.QtWidgets import QGraphicsView, QPushButton
+from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtCore import Qt
 from settings.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon
 
 from widgets.graph_editor.pictograph.pictograph_view import PictographView

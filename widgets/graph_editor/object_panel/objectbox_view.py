@@ -19,9 +19,8 @@ class ObjectBoxView(QGraphicsView):
 
         self.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
-
+        
     def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-        objectbox_size = self.graph_editor.height() / 2
-        self.setMaximumSize(int(objectbox_size), int(objectbox_size))
-        self.setMinimumSize(int(objectbox_size), int(objectbox_size))
+        super().resizeEvent(event) 
+        if self.scene():
+            self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)

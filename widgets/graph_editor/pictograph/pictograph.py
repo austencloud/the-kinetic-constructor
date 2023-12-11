@@ -33,7 +33,6 @@ from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
     Colors,
     Layers,
-    Locations,
     MotionAttributesDicts,
     List,
     MotionTypes,
@@ -101,10 +100,6 @@ class Pictograph(QGraphicsScene):
         self.view: PictographView = self.initializer.init_view()
         self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.locations = self.initializer.init_locations(self.grid)
-
-        
-
-        # set the icons to 80% of the button size
 
         self.setup_managers(main_widget)
 

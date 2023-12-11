@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QPointF
 from settings.numerical_constants import DISTANCE
 from settings.string_constants import *
-from objects.arrow import StaticArrow, Arrow
+from objects.arrow import Arrow
 
 from typing import TYPE_CHECKING, List, Dict, Any
 

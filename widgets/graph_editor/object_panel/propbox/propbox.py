@@ -14,7 +14,6 @@ from utilities.TypeChecking.TypeChecking import PropTypes, TYPE_CHECKING, Dict, 
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.graph_editor import GraphEditor
 
 
@@ -38,13 +37,6 @@ class PropBox(ObjectBox):
 
         self.propbox_layout = QVBoxLayout()
         self.propbox_layout.addWidget(self.view)
-
-        self.staffs: List[Staff] = []
-        self.clubs: List[Club] = []
-        self.buugeng: List[Buugeng] = []
-        self.fans: List[Fan] = []
-        self.triads: List[Triad] = []
-        self.hoops: List[Hoop] = []
 
         self.populate_props()
 
@@ -99,19 +91,18 @@ class PropBox(ObjectBox):
             self.addItem(prop)
             self.props.append(prop)
 
+        for prop in self.props:
+            prop.update_appearance()
+            prop.setTransformOriginPoint(prop.boundingRect().center())
+            prop.is_dim(True)
+
     def init_combobox(self) -> None:
         self.prop_type_combobox = QComboBox(self.view)
-        # Populate the combobox with prop types, assuming prop types are strings in a list
         prop_types = ["Staff", "Club", "Buugeng", "Fan", "Triad", "Hoop"]
         self.prop_type_combobox.addItems(prop_types)
-        # Set the default value to the current prop type
         self.prop_type_combobox.setCurrentText(str(self.prop_type.capitalize()))
-        # Connect the combobox to change the prop type when a different prop is selected
         self.prop_type_combobox.currentTextChanged.connect(self.on_prop_type_change)
-        # Position the combobox at the top right
-        self.prop_type_combobox.move(
-            0, 0
-        )  # Position will be adjusted after the view is initialized
+        self.prop_type_combobox.move(0, 0)
 
     def on_prop_type_change(self, text: str) -> None:
         new_prop_type = text.lower()
@@ -119,11 +110,9 @@ class PropBox(ObjectBox):
         self.update_prop_type_in_pictograph(new_prop_type)
 
     def clear_props(self) -> None:
-        # Log the props before removal for debugging
-        for prop in self.props[:]:  # Iterate over a shallow copy of the list
+        for prop in self.props[:]:
             self.removeItem(prop)
-        self.props.clear()  # Clear the list after all items have been removed from the scene
-        # Log after clearing to confirm
+        self.props.clear()
 
     def set_prop_position(self, prop: Prop) -> None:
         hand_point = self.grid.get_circle_coordinates(
@@ -183,9 +172,7 @@ class PropBox(ObjectBox):
 
             for prop in self.props:
                 prop_center = prop.sceneBoundingRect().center()
-                distance = (
-                    cursor_pos - prop_center
-                ).manhattanLength()  # Manhattan distance for simplicity
+                distance = (cursor_pos - prop_center).manhattanLength()
 
                 if distance < min_distance:
                     closest_prop = prop
@@ -193,9 +180,9 @@ class PropBox(ObjectBox):
 
             for prop in self.props:
                 if prop != closest_prop:
-                    prop.is_dim(True)  # Highlight all props except the closest one
+                    prop.is_dim(True)
                 else:
-                    prop.is_dim(False)  # Do not highlight the closest one
+                    prop.is_dim(False)
 
     def mouseReleaseEvent(self, event) -> None:
         if self.target_prop and self.drag:
@@ -205,3 +192,7 @@ class PropBox(ObjectBox):
             self.target_prop = None
         else:
             event.ignore()
+
+    def dim_all_props(self) -> None:
+        for prop in self.props:
+            prop.is_dim(True)

@@ -27,7 +27,7 @@ from settings.string_constants import (
     BLUE,
     END_LAYER,
 )
-from typing import TYPE_CHECKING, Dict, List, Union
+from typing import TYPE_CHECKING, Dict, List
 from objects.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
