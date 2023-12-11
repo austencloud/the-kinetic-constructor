@@ -13,6 +13,4 @@ class PropBoxView(ObjectBoxView):
         super().__init__(propbox, graph_editor)
         self.setScene(propbox)
         self.propbox = propbox
-
-    def leaveEvent(self, event) -> None:
-        self.propbox.dim_all_props()
+        

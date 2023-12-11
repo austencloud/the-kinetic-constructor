@@ -22,8 +22,6 @@ class PictographView(QGraphicsView):
         # Initialize buttons
         self.init_buttons()
 
-        # Update pictograph size
-        self.update_pictograph_size()
 
     def remove_buttons(self) -> None:
         self.add_to_sequence_button.deleteLater()
@@ -68,15 +66,17 @@ class PictographView(QGraphicsView):
         elif button == self.rotate_ccw_button:
             button.move(0, 0)
 
-    def update_pictograph_size(self) -> None:
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
         # Calculate the view height based on the GraphEditor's height
         view_height = int(self.pictograph.graph_editor.height())
         # Calculate the view width maintaining the aspect ratio (75/90)
         view_width = int(view_height * 75 / 90)
-
-        # Set the size of the view
-        self.setMinimumSize(view_width, view_height)
-        self.setMaximumSize(view_width, view_height)
+        self.setMinimumWidth(view_width)
+        self.setMaximumWidth(view_width)
+        # # Set the size of the view
+        # self.setMinimumSize(view_width, view_height)
+        # self.setMaximumSize(view_width, view_height)
 
         # Calculate the scaling factor
         self.view_scale = min(
@@ -89,6 +89,10 @@ class PictographView(QGraphicsView):
         self.scale(self.view_scale, self.view_scale)
 
         # Update the size and position of the buttons
+        if hasattr(self, "add_to_sequence_button"):
+            self.update_button_size(view_width)
+
+    def update_button_size(self, view_width) -> None:
         button_size = int(view_width / 7)
         self.configure_button_size_and_position(
             self.add_to_sequence_button, button_size

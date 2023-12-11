@@ -41,8 +41,6 @@ class AttrPanel(QFrame):
     def resizeEvent(self, event) -> None:
         self.setMinimumHeight(self.pictograph.view.height())
         self.setMaximumHeight(self.pictograph.view.height())
-        self.blue_attr_box.update_attr_box_size()
-        self.red_attr_box.update_attr_box_size()
 
     def clear_all_attr_boxes(self) -> None:
         self.blue_attr_box.clear_attr_box()

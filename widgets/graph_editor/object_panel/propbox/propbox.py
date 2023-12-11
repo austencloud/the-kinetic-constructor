@@ -14,6 +14,7 @@ from utilities.TypeChecking.TypeChecking import PropTypes, TYPE_CHECKING, Dict, 
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.graph_editor import GraphEditor
 
 
@@ -93,7 +94,6 @@ class PropBox(ObjectBox):
 
         for prop in self.props:
             prop.update_appearance()
-            prop.setTransformOriginPoint(prop.boundingRect().center())
             prop.is_dim(True)
 
     def init_combobox(self) -> None:
@@ -180,9 +180,9 @@ class PropBox(ObjectBox):
 
             for prop in self.props:
                 if prop != closest_prop:
-                    prop.is_dim(True)
+                    prop.is_dim(True)  # Highlight all props except the closest one
                 else:
-                    prop.is_dim(False)
+                    prop.is_dim(False)  # Do not highlight the closest one
 
     def mouseReleaseEvent(self, event) -> None:
         if self.target_prop and self.drag:

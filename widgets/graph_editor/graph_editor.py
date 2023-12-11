@@ -55,3 +55,17 @@ class GraphEditor(QFrame):
         self.setLayout(graph_editor_frame_layout)
         self.setMouseTracking(True)
 
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+        self.setMinimumHeight(int(self.main_widget.height() / 3))
+        self.pictograph.view.fitInView(
+            self.pictograph.view.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio
+        )
+        self.arrowbox.view.setMinimumWidth(int(self.pictograph.view.height() / 2))
+        self.arrowbox.view.fitInView(
+            self.arrowbox.view.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio
+        )
+        self.propbox.view.setMinimumWidth(int(self.pictograph.view.height() / 2))
+        self.propbox.view.fitInView(
+            self.propbox.view.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio
+        )
