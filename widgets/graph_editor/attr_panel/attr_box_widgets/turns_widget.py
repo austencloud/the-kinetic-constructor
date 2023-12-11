@@ -70,7 +70,7 @@ class TurnsWidget(QFrame):
                     (self.attr_box.attr_panel.width() / 2 - self.turnbox_frame.width())
                     / 2
                 )
-                * 0.8
+                * 0.7
             )
             clock.setMaximumSize(clock_size, clock_size)
             clock.setScaledContents(True)

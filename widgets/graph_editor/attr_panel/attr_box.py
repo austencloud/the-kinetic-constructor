@@ -40,7 +40,6 @@ class AttrBox(QFrame):
         self.turns_widget = None
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
         self.init_ui()
-        # self.add_black_border_to_all_widgets()
 
     def calculate_button_size(self) -> int:
         return int((self.pictograph.view.height() // 2 // 4) * 1)
@@ -123,16 +122,6 @@ class AttrBox(QFrame):
             self.clear_attr_box()
 
     def update_attr_box_size(self) -> None:
-        self.setMaximumWidth(
-            int(
-                (
-                    self.attr_panel.pictograph.graph_editor.width()
-                    - self.attr_panel.pictograph.graph_editor.arrowbox.view.width()
-                    - self.attr_panel.pictograph.view.width()
-                )
-                / 2
-            )
-        )
+        self.setMaximumWidth(int(self.pictograph.view.width() * 0.8))
         self.setMaximumHeight(self.attr_panel.height())
         self.header_widget.update_header_widget_size()
-        self.motion_type_widget.update_motion_type_widget_size()
