@@ -9,7 +9,10 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QPixmap
 from typing import Literal, Dict, TYPE_CHECKING, Tuple
 from objects.motion import Motion
-from settings.string_constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON
+from settings.string_constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, ICON_DIR
+from widgets.graph_editor.attr_panel.attr_box_widgets.custom_combo_box import (
+    CustomComboBox,
+)
 
 from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
@@ -111,11 +114,11 @@ class TurnsWidget(QFrame):
         )
         self.turnbox_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.turns_label = self._create_turns_label()
+        self.turns_box = self._create_turns_box()
         turnbox_layout.addWidget(self.turnbox_header)
-        turnbox_layout.addWidget(self.turns_label)
+        turnbox_layout.addWidget(self.turns_box)
 
-        turnbox_frame.setMaximumWidth(self.turns_label.width() + 2)  # border width
+        turnbox_frame.setMaximumWidth(self.turns_box.width() + 2)  # border width
 
         return turnbox_frame
 
@@ -146,27 +149,22 @@ class TurnsWidget(QFrame):
         bottom_layout.addWidget(self.add_half_turn_button)
         bottom_layout.addWidget(self.add_turn_button)
 
-    def _create_turns_label(self) -> QLabel:
-        turns_label = QLabel("", self)
-        turns_label.setFrameShape(QFrame.Shape.Box)
-        turns_label.setLineWidth(1)
-        turns_label.setFrameShadow(QFrame.Shadow.Plain)
-        turns_label.setFont(
+    def _create_turns_box(self) -> CustomComboBox:
+        turns_box = CustomComboBox(self)
+        turns_box.setFont(
             QFont(
                 "Arial", int(self.attr_box.attr_panel.width() / 16), QFont.Weight.Bold
             )
         )
-        self.border_width = 2
-        turns_label.setStyleSheet(
-            f"background-color: white; border: {self.border_width}px solid black; border-radius: 10px; letter-spacing: -2px;"
-        )
-        turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        turns_label.setMinimumSize(
-            int(self.attr_box.width() * 0.3),
-            int(self.attr_box.width() * 0.2),
-        )
-        turns_label.setContentsMargins(0, 0, 0, 0)
-        return turns_label
+
+        turns_box.setContentsMargins(0, 0, 0, 0)
+
+        # Populate the combo box with the specified turns choices
+        turns_choices = [0.5, 1, 1.5, 2, 2.5, 3]
+        for choice in turns_choices:
+            turns_box.addItem(str(choice))  # Convert the number to a string
+
+        return turns_box
 
     def _create_turns_button(
         self, text: Literal["+1", "-1", "+0.5", "-0.5"], callback, is_full_turn: bool
@@ -196,31 +194,6 @@ class TurnsWidget(QFrame):
         button_frame_layout.addWidget(full_turn_button)
         button_frame_layout.addWidget(half_turn_button)
         return button_frame
-
-    def _setup_turnbox_frame(self) -> QFrame:
-        turnbox_frame = QFrame(self)
-        turnbox_layout = QVBoxLayout(turnbox_frame)
-        turnbox_layout.setContentsMargins(0, 0, 0, 0)
-        turnbox_frame.setContentsMargins(0, 0, 0, 0)
-        turnbox_layout.setSpacing(0)
-        self.turnbox_header = QLabel("Turns", self)
-        self.turnbox_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.turnbox_header.setFont(
-            QFont("Arial", int(self.attr_box.attr_panel.width() / 35))
-        )
-        self.turnbox_header.setContentsMargins(0, 0, 0, 0)
-        self.turns_label = self._create_turns_label()
-        turnbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        turnbox_layout.addWidget(self.turnbox_header)
-        turnbox_layout.addWidget(self.turns_label)
-        # set maximum width to width of box
-        turnbox_frame.setMaximumWidth(self.turns_label.width() + self.border_width)
-        turnbox_frame.setMinimumHeight(
-            self.turns_label.height()
-            + self.turnbox_header.height()
-            + self.border_width * 2
-        )
-        return turnbox_frame
 
     def _setup_button_frames(self) -> Dict[str, QFrame]:
         button_frames = {}
@@ -289,13 +262,13 @@ class TurnsWidget(QFrame):
             self.clock_right.clear()
 
     def clear_turns_label(self) -> None:
-        self.turns_label.setText("")
+        self.turns_box.setText("")
 
     def update_turns_label_box(self, turns) -> None:
         if turns:
-            self.turns_label.setText(str(turns))
+            self.turns_box.setText(str(turns))
         elif turns == 0:
-            self.turns_label.setText("0")
+            self.turns_box.setText("0")
         else:
             self.clear_turns_label()
 
@@ -319,3 +292,35 @@ class TurnsWidget(QFrame):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
+        border_radius = min(self.turns_box.width(), self.turns_box.height()) * 0.25
+        self.turns_box.setMinimumWidth(int(self.attr_box.width() * 0.5))
+        self.turns_box.setMinimumHeight(int(self.attr_box.width() / 5))
+        self.turns_box.setMaximumHeight(int(self.attr_box.width() / 5))
+        box_font_size = int(self.attr_box.width() / 10)
+
+        self.turns_box.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold, True))
+        self.turns_box.setStyleSheet(
+            f"""
+            QComboBox {{
+                border: {self.turns_box.combobox_border}px solid black;
+                border-radius: {border_radius}px;
+            }}
+
+            QComboBox::drop-down {{
+                subcontrol-origin: padding;
+                subcontrol-position: top right;
+                width: 15px;
+                border-left-width: 1px;
+                border-left-color: darkgray;
+                border-left-style: solid;
+                border-top-right-radius: {border_radius}px;
+                border-bottom-right-radius: {border_radius}px;
+            }}
+
+            QComboBox::down-arrow {{
+                image: url("{ICON_DIR}combobox_arrow.png");
+                width: 10px;
+                height: 10px;
+            }}
+            """
+        )
