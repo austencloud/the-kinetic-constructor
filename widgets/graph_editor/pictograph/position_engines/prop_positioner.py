@@ -3,13 +3,19 @@ import math
 from settings.numerical_constants import BETA_OFFSET
 from settings.string_constants import (
     BOX,
+    BUUGENG,
     CLOCKWISE,
+    CLUB,
     COUNTER_CLOCKWISE,
     DIAMOND,
+    DOUBLESTAR,
+    FAN,
+    HOOP,
     IN,
     OUT,
     COLOR,
     MOTION_TYPE,
+    STAFF,
     STATIC,
     START_LOCATION,
     END_LOCATION,
@@ -18,6 +24,7 @@ from settings.string_constants import (
     NORTH,
     SOUTH,
     EAST,
+    TRIAD,
     WEST,
     UP,
     DOWN,
@@ -56,9 +63,46 @@ class PropPositioner:
 
     def update_prop_positions(self) -> None:
         for prop in self.scene.props:
-            self.set_default_prop_locations(prop)
+            if prop.prop_type in [STAFF, FAN, CLUB, BUUGENG, HOOP, TRIAD]:
+                self.set_default_prop_locations(prop)
+            elif prop.prop_type == DOUBLESTAR:
+                self.set_strict_prop_locations(prop)
         if self.props_in_beta():
             self.reposition_beta_props()
+
+    def set_strict_prop_locations(self, prop: "Prop") -> None:
+        prop.setTransformOriginPoint(0, 0)
+        prop_length = prop.boundingRect().width()
+        prop_width = prop.boundingRect().height()
+
+        # Define a map for position offsets based on orientation and location
+        position_offsets = {
+            (IN, NORTH): QPointF(prop_width / 2, -prop_length / 2),
+            (IN, SOUTH): QPointF(-prop_width / 2, prop_length / 2),
+            (IN, EAST): QPointF(prop_length / 2, prop_width / 2),
+            (IN, WEST): QPointF(-prop_length / 2, -prop_width / 2),
+            (OUT, NORTH): QPointF(-prop_width / 2, prop_length / 2),
+            (OUT, SOUTH): QPointF(prop_width / 2, -prop_length / 2),
+            (OUT, EAST): QPointF(-prop_length / 2, -prop_width / 2),
+            (OUT, WEST): QPointF(prop_length / 2, prop_width / 2),
+            (CLOCKWISE, NORTH): QPointF(-prop_length / 2, -prop_width / 2),
+            (CLOCKWISE, SOUTH): QPointF(prop_length / 2, prop_width / 2),
+            (CLOCKWISE, EAST): QPointF(prop_width / 2, -prop_length / 2),
+            (CLOCKWISE, WEST): QPointF(-prop_width / 2, prop_length / 2),
+            (COUNTER_CLOCKWISE, NORTH): QPointF(prop_length / 2, prop_width / 2),
+            (COUNTER_CLOCKWISE, SOUTH): QPointF(-prop_length / 2, -prop_width / 2),
+            (COUNTER_CLOCKWISE, EAST): QPointF(-prop_width / 2, prop_length / 2),
+            (COUNTER_CLOCKWISE, WEST): QPointF(prop_width / 2, -prop_length / 2),
+        }
+
+        if self.scene.grid.grid_mode == DIAMOND:
+            if prop.prop_location in self.scene.grid.strict_diamond_hand_points:
+                key = (prop.orientation, prop.prop_location)
+                offset = position_offsets.get(key, QPointF(0, 0))
+                prop.setPos(
+                    self.scene.grid.strict_diamond_hand_points[prop.prop_location]
+                    + offset
+                )
 
     def set_default_prop_locations(self, prop: "Prop") -> None:
         prop.setTransformOriginPoint(0, 0)
@@ -90,8 +134,7 @@ class PropPositioner:
                 key = (prop.orientation, prop.prop_location)
                 offset = position_offsets.get(key, QPointF(0, 0))  # Default offset
                 prop.setPos(
-                    self.scene.grid.diamond_hand_points[prop.prop_location]
-                    + offset
+                    self.scene.grid.diamond_hand_points[prop.prop_location] + offset
                 )
 
         elif self.scene.grid.grid_mode == BOX:
@@ -315,9 +358,7 @@ class PropPositioner:
 
         other_direction = self.get_opposite_direction(further_direction)
         other_prop = next(
-            prop
-            for prop in self.scene.props
-            if prop.arrow.color == other_arrow[COLOR]
+            prop for prop in self.scene.props if prop.arrow.color == other_arrow[COLOR]
         )
         new_position_other = self.calculate_new_position(
             other_prop.pos(), other_direction
