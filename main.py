@@ -46,6 +46,7 @@ class MainWindow(QMainWindow):
         print(f"Main profiling stats written to {file_path}")
 
 
+
 def main() -> None:
     """
     The entry point of the application.

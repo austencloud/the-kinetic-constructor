@@ -14,9 +14,6 @@ from utilities.TypeChecking.TypeChecking import MotionTypes
 from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
-from widgets.graph_editor.attr_panel.attr_box_widgets.custom_combo_box import (
-    CustomComboBox,
-)
 
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
@@ -27,7 +24,7 @@ class MotionTypesWidget(AttrBoxWidget):
         super().__init__(attr_box)
 
         self.header_label = self.create_attr_header_label("Type")
-        self.motion_type_box = self._setup_motion_type_box()
+        self.motion_type_box: QComboBox = self._setup_motion_type_box()
         self.swap_button = self.create_custom_button(
             SWAP_ICON, self._swap_motion_type_callback
         )
@@ -68,8 +65,8 @@ class MotionTypesWidget(AttrBoxWidget):
 
         return frame
 
-    def _setup_motion_type_box(self) -> CustomComboBox:
-        box = CustomComboBox(self)
+    def _setup_motion_type_box(self) -> QComboBox:
+        box = QComboBox(self)
         box.addItems(["Pro", "Anti", "Dash", "Static"])
         box.setCurrentIndex(-1)
         return box
@@ -134,10 +131,9 @@ class MotionTypesWidget(AttrBoxWidget):
         self.swap_button_frame.setMaximumWidth(int(self.attr_box.width() * 1 / 4))
         self.motion_type_box.setMinimumWidth(int(self.attr_box.width() * 0.5))
         self.swap_button.update_button_size()
-        
-    
+
         self.header_label.setFont(QFont("Arial", int(self.attr_box.width() / 18)))
-        
+
         self.motion_type_box.setMinimumHeight(int(self.attr_box.width() / 5))
         self.motion_type_box.setMaximumHeight(int(self.attr_box.width() / 5))
         box_font_size = int(self.attr_box.width() / 10)
@@ -154,7 +150,7 @@ class MotionTypesWidget(AttrBoxWidget):
         self.motion_type_box.setStyleSheet(
             f"""
             QComboBox {{
-                border: {self.motion_type_box.combobox_border}px solid black;
+                border: {self.attr_box.combobox_border}px solid black;
                 border-radius: {border_radius}px;
             }}
 

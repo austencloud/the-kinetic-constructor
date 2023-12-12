@@ -66,24 +66,22 @@ class PictographView(QGraphicsView):
             button.move(0, 0)
 
     def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
         view_height = int(self.pictograph.graph_editor.height())
         view_width = int(view_height * 75 / 90)
         self.setMaximumHeight(view_height)
         self.setMinimumWidth(view_width)
         self.setMaximumWidth(view_width)
-
-
-        # Calculate the scaling factor
+        self.pictograph.graph_editor.arrowbox.view.set_size_to_match_pictograph_view()
+        self.pictograph.graph_editor.propbox.view.set_size_to_match_pictograph_view()
         self.view_scale = min(
             view_width / self.pictograph.sceneRect().width(),
             view_height / self.pictograph.sceneRect().height(),
         )
 
-        # Reset any existing transformations and apply the new scale
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
 
-        # Update the size and position of the buttons
         if hasattr(self, "add_to_sequence_button"):
             self.update_button_size(view_width)
 

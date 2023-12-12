@@ -15,9 +15,6 @@ from utilities.TypeChecking.TypeChecking import Locations
 from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
-from widgets.graph_editor.attr_panel.attr_box_widgets.custom_combo_box import (
-    CustomComboBox,
-)
 
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
@@ -28,9 +25,9 @@ class StartEndWidget(AttrBoxWidget):
         super().__init__(attr_box)
 
         # Setup start and end combo boxes
-        self.start_box = self._setup_start_end_box()
-        self.end_box = self._setup_start_end_box()
-        self.boxes: List[CustomComboBox] = [self.start_box, self.end_box]
+        self.start_box: QComboBox = self._setup_start_end_box()
+        self.end_box: QComboBox = self._setup_start_end_box()
+        self.boxes: List[QComboBox] = [self.start_box, self.end_box]
         self.header_labels: List[QLabel] = []
 
         # Setup frames for start and end combo boxes with headers
@@ -71,8 +68,8 @@ class StartEndWidget(AttrBoxWidget):
         main_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         return main_layout
 
-    def _setup_start_end_box(self) -> CustomComboBox:
-        box = CustomComboBox(self)
+    def _setup_start_end_box(self) -> QComboBox:
+        box = QComboBox(self)
         box.addItems(["N", "E", "S", "W"])
         box.setCurrentIndex(-1)
         return box
@@ -199,7 +196,7 @@ class StartEndWidget(AttrBoxWidget):
             box.setStyleSheet(
                 f"""
                 QComboBox {{
-                    border: {box.combobox_border}px solid black;
+                    border: {self.attr_box.combobox_border}px solid black;
                     border-radius: {border_radius}px;
                 }}
 

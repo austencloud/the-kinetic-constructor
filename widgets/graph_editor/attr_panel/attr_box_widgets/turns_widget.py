@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QFrame,
     QSizePolicy,
-    QWidget,
+    QWidget, QComboBox
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QPixmap
@@ -14,9 +14,7 @@ from settings.string_constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, IC
 from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
-from widgets.graph_editor.attr_panel.attr_box_widgets.custom_combo_box import (
-    CustomComboBox,
-)
+
 from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
@@ -94,7 +92,7 @@ class TurnsWidget(AttrBoxWidget):
 
     def _create_turnbox_vbox_frame(self) -> None:
         """Creates the turns box and buttons for turn adjustments."""
-        self.turnbox = CustomComboBox(self)
+        self.turnbox: QComboBox = QComboBox(self)
         self.turnbox.addItems(["0", "0.5", "1", "1.5", "2", "2.5", "3"])
         self.turnbox.currentTextChanged.connect(self._update_turns)
 
@@ -265,7 +263,7 @@ class TurnsWidget(AttrBoxWidget):
         self.turnbox.setStyleSheet(
             f"""
             QComboBox {{
-                border: {self.turnbox.combobox_border}px solid black;
+                border: {self.attr_box.combobox_border}px solid black;
                 border-radius: {border_radius}px;
             }}
 

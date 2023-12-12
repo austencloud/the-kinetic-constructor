@@ -62,6 +62,15 @@ class Grid:
             ],
             [NORTH, EAST, SOUTH, WEST],
         )
+        self.strict_diamond_hand_points = self._init_points(
+            [
+                "strict_n_diamond_hand_point",
+                "strict_e_diamond_hand_point",
+                "strict_s_diamond_hand_point",
+                "strict_w_diamond_hand_point",
+            ],
+            [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST],
+        )
         self.box_hand_points = self._init_points(
             [
                 "ne_box_hand_point",
@@ -79,6 +88,15 @@ class Grid:
                 "nw_diamond_layer2_point",
             ],
             [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST],
+        )
+        self.strict_diamond_layer2_points = self._init_points(
+            [
+                "strict_ne_diamond_layer2_point",
+                "strict_se_diamond_layer2_point",
+                "strict_sw_diamond_layer2_point",
+                "strict_nw_diamond_layer2_point",
+            ],
+            [NORTH, EAST, SOUTH, WEST],
         )
         self.box_layer2_points = self._init_points(
             [

@@ -22,6 +22,9 @@ class ObjectBoxView(QGraphicsView):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
+        self.set_size_to_match_pictograph_view()
+
+    def set_size_to_match_pictograph_view(self):
         self.setMinimumWidth(int(self.graph_editor.pictograph.view.height() / 2))
         self.setMaximumWidth(int(self.graph_editor.pictograph.view.height() / 2))
         if self.scene():

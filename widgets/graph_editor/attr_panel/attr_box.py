@@ -39,7 +39,7 @@ class AttrBox(QFrame):
         self.color = color
         self.font_size = self.width() // 10
         self.widgets: List[AttrBoxWidget] = []
-
+        self.combobox_border = 2
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
         self.init_ui()
 

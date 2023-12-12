@@ -117,7 +117,7 @@
        84    0.001    0.000    0.013    0.000 f:\CODE\tka-app\tka-sequence-constructor\objects\prop.py:274(set_prop_attrs_from_arrow)
       663    0.001    0.000    0.013    0.000 f:\CODE\tka-app\tka-sequence-constructor\widgets\graph_editor\graph_editor.py:107(_fit_view_in_aspect_ratio)
      9509    0.008    0.000    0.012    0.000 C:\Users\Austen\AppData\Local\Programs\Python\Python312\Lib\queue.py:209(_qsize)
-      638    0.012    0.000    0.012    0.000 {function CustomComboBox.sizeHint at 0x000001EF41B3CE00}
+      638    0.012    0.000    0.012    0.000 {function QComboBox.sizeHint at 0x000001EF41B3CE00}
        47    0.006    0.000    0.012    0.000 f:\CODE\tka-app\tka-sequence-constructor\widgets\option_picker\option_picker_letter_buttons.py:87(create_button)
        22    0.000    0.000    0.012    0.001 f:\CODE\tka-app\tka-sequence-constructor\objects\prop.py:389(__init__)
         2    0.000    0.000    0.012    0.006 f:\CODE\tka-app\tka-sequence-constructor\widgets\graph_editor\attr_panel\attr_box_widgets\turns_widget.py:171(_add_half_turn_callback)
@@ -440,7 +440,7 @@
         1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1343(_find_and_load)
       120    0.000    0.000    0.000    0.000 {built-in method mapFromScene}
         8    0.000    0.000    0.000    0.000 f:\CODE\tka-app\tka-sequence-constructor\objects\arrow.py:580(mirror)
-      402    0.000    0.000    0.000    0.000 {function CustomComboBox.resizeEvent at 0x000001EF41B3CEA0}
+      402    0.000    0.000    0.000    0.000 {function QComboBox.resizeEvent at 0x000001EF41B3CEA0}
         3    0.000    0.000    0.000    0.000 f:\CODE\tka-app\tka-sequence-constructor\widgets\option_picker\option\option_view.py:43(update_OptionView_size)
      1084    0.000    0.000    0.000    0.000 c:\Users\Austen\.vscode\extensions\ms-python.python-2023.22.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_constants.py:660(__enter__)
         9    0.000    0.000    0.000    0.000 {built-in method setBackgroundBrush}

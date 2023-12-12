@@ -90,6 +90,6 @@ class MainWidget(QWidget):
 
     def resizeEvent(self, event: QEvent) -> None:
         super().resizeEvent(event)
-        # self.graph_editor.resizeEvent(event)
-        # self.sequence.resizeEvent(event)
-        # self.option_picker.resizeEvent(event)
+        self.sequence.resizeEvent(event)
+        self.option_picker.resizeEvent(event)
+        self.graph_editor.resizeEvent(event)

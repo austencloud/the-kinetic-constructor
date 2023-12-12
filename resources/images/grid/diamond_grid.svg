@@ -1,22 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" id="Layer_1"
-    xmlns="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 750 750" style="enable-background:new 0 0 750 750;" xml:space="preserve">
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" id="Layer_1" viewBox="0 0 750 750">
 
-    <circle id="center_point" cx="375" cy="375" r="12"/>
+    <circle id="center_point" cx="375" cy="375" r="11.2" fill="#000"/>
+
+    <!-- 
+These points represent the visual center between the edge of the center point's circle 
+and the edge of the outer point's circle. This is more visually pleasing for pictographs but 
+not auitable for animations. 
+-->
+
+    <circle id="n_diamond_hand_point" cx="375" cy="231.9" r="4.7"/>
+    <circle id="e_diamond_hand_point" cx="518.1" cy="375" r="4.7"/>
+    <circle id="s_diamond_hand_point" cx="375" cy="518.1" r="4.7"/>
+    <circle id="w_diamond_hand_point" cx="231.9" cy="375" r="4.7"/>
 
     <circle id="n_diamond_outer_point" cx="375" cy="75" r="25"/>
     <circle id="e_diamond_outer_point" cx="675" cy="375" r="25"/>
     <circle id="s_diamond_outer_point" cx="375" cy="675" r="25"/>
     <circle id="w_diamond_outer_point" cx="75" cy="375" r="25"/>
 
-    <circle id="se_diamond_layer2_point" cx="525" cy="525" r="10"/>
-    <circle id="ne_diamond_layer2_point" cx="525" cy="225" r="10"/>
-    <circle id="nw_diamond_layer2_point" cx="225" cy="225" r="10"/>
-    <circle id="sw_diamond_layer2_point" cx="225" cy="525" r="10"/>
+    <circle id="ne_diamond_layer2_point" cx="518.1" cy="231.9" r="8.8"/>
+    <circle id="se_diamond_layer2_point" cx="518.1" cy="518.1" r="8.8"/>
+    <circle id="sw_diamond_layer2_point" cx="231.9" cy="518.1" r="8.8"/>
+    <circle id="nw_diamond_layer2_point" cx="231.9" cy="231.9" r="8.8"/>
 
-    <circle id="n_diamond_hand_point" cx="375" cy="225" r="4.7"/>
-    <circle id="e_diamond_hand_point" cx="525" cy="375" r="4.7"/>
-    <circle id="s_diamond_hand_point" cx="225" cy="375" r="4.7"/>
-    <circle id="w_diamond_hand_point" cx="375" cy="525" r="4.7"/>
+
+    <!-- 
+These strict points are for posiitoning props like doublestars, which must be 
+placed on a handpoint perfectly in between the center point and the outer point.
+These will also be used to create accurate sequence animations.
+-->
+
+    <circle fill="transparent" id="strict_n_diamond_hand_point" cx="375" cy="231.9" r="4.7"/>
+    <circle fill="transparent" id="strict_e_diamond_hand_point" cx="518.1" cy="375" r="4.7"/>
+    <circle fill="transparent" id="strict_s_diamond_hand_point" cx="375" cy="518.1" r="4.7"/>
+    <circle fill="transparent" id="strict_w_diamond_hand_point" cx="231.9" cy="375" r="4.7"/>
+
+    <circle fill="transparent" id="strict_ne_diamond_layer2_point" cx="518.1" cy="231.9" r="8.8"/>
+    <circle fill="transparent" id="strict_se_diamond_layer2_point" cx="518.1" cy="518.1" r="8.8"/>
+    <circle fill="transparent" id="strict_sw_diamond_layer2_point" cx="231.9" cy="518.1" r="8.8"/>
+    <circle fill="transparent" id="strict_nw_diamond_layer2_point" cx="231.9" cy="231.9" r="8.8"/>
+
 </svg>
+
+
+
