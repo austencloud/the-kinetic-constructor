@@ -62,10 +62,6 @@ class Prop(GraphicalObject):
             self.update_attributes(attributes)
 
     ### MOUSE EVENTS ###
-    def update_prop_type(self, prop_type: PropTypes) -> None:
-        self.prop_type = prop_type
-        self.update_svg(self.get_svg_file(prop_type))
-        self.update_appearance()
 
     def mousePressEvent(self, event) -> None:
         self.setSelected(True)
@@ -87,6 +83,87 @@ class Prop(GraphicalObject):
                 if item != self:
                     item.setSelected(False)
             self.previous_location = self.prop_location
+
+    def mouseReleaseEvent(self, event) -> None:
+        if isinstance(self.scene, self.scene.__class__):
+            self.scene.removeItem(self.ghost_prop)
+            self.scene.props.remove(self.ghost_prop)
+            self.ghost_prop.arrow = None
+            self.scene.update_pictograph()
+            self.finalize_prop_drop(event)
+
+    ### UPDATERS ###
+
+    def update_appearance(self) -> None:
+        self.axis = self.update_axis(self.prop_location)
+        super().update_appearance()
+
+    def set_prop_transform_origin_to_center(self: "Prop") -> None:
+        self.center = self.get_object_center()
+        self.setTransformOriginPoint(self.center)
+
+    def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
+        self.color = target_arrow.color
+        self.prop_location = target_arrow.motion.end_location
+        self.axis = self.update_axis(self.prop_location)
+        self.update_appearance()
+
+    ### GETTERS ###
+
+    def update_axis(self, location) -> Axes:
+        if self.layer == 1:
+            self.axis: Axes = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
+        elif self.layer == 2:
+            self.axis: Axes = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
+        return self.axis
+
+    def swap_orientation(self, orientation) -> None:
+        if orientation == IN:
+            orientation = OUT
+        elif orientation == OUT:
+            orientation = IN
+        elif orientation == CLOCKWISE:
+            orientation = COUNTER_CLOCKWISE
+        elif orientation == COUNTER_CLOCKWISE:
+            orientation = CLOCKWISE
+
+        self.update_rotation()
+        return orientation
+
+    def get_rotation_angle(self) -> RotationAngles:
+        angle_map: Dict[
+            Tuple[Layers, Orientations], Dict[Locations, RotationAngles]
+        ] = {
+            (1, IN): {NORTH: 90, SOUTH: 270, WEST: 0, EAST: 180},
+            (1, OUT): {NORTH: 270, SOUTH: 90, WEST: 180, EAST: 0},
+            (2, CLOCKWISE): {NORTH: 0, SOUTH: 180, WEST: 270, EAST: 90},
+            (2, COUNTER_CLOCKWISE): {NORTH: 180, SOUTH: 0, WEST: 90, EAST: 270},
+        }
+
+        key = (self.layer, self.orientation)
+        rotation_angle = angle_map.get(key, {}).get(self.prop_location, 0)
+        return rotation_angle
+
+    def get_attributes(self) -> PropAttributesDicts:
+        return {attr: getattr(self, attr) for attr in PROP_ATTRIBUTES}
+
+    def update_rotation(self) -> None:
+        rotation_angle = self.get_rotation_angle()
+
+        if self.ghost_prop:
+            self.ghost_prop.setRotation(rotation_angle)
+        self.setRotation(rotation_angle)
+
+    def get_svg_file(self, prop_type: PropTypes) -> str:
+        svg_file = f"{PROP_DIR}{prop_type}.svg"
+        return svg_file
+
+    ### HELPERS ###
+
+    def update_prop_type(self, prop_type: PropTypes) -> None:
+        self.prop_type = prop_type
+        self.update_svg(self.get_svg_file(prop_type))
+        self.update_appearance()
 
     def update_location(self, new_pos: QPointF) -> None:
         new_location = self.pictograph.get_closest_hand_point(new_pos)[0]
@@ -237,14 +314,6 @@ class Prop(GraphicalObject):
             self.arrow.motion.end_location = new_arrow_location
             self.arrow.update_appearance()
 
-    def mouseReleaseEvent(self, event) -> None:
-        if isinstance(self.scene, self.scene.__class__):
-            self.scene.removeItem(self.ghost_prop)
-            self.scene.props.remove(self.ghost_prop)
-            self.ghost_prop.arrow = None
-            self.scene.update_pictograph()
-            self.finalize_prop_drop(event)
-
     def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
         (
             closest_hand_point,
@@ -260,74 +329,6 @@ class Prop(GraphicalObject):
             self.arrow.update_appearance()
         self.previous_location = closest_hand_point
         self.scene.update_pictograph()
-
-    ### UPDATERS ###
-
-    def update_appearance(self) -> None:
-        self.axis = self.update_axis(self.prop_location)
-        super().update_appearance()
-
-    def set_prop_transform_origin_to_center(self: "Prop") -> None:
-        self.center = self.get_object_center()
-        self.setTransformOriginPoint(self.center)
-
-    def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
-        self.color = target_arrow.color
-        self.prop_location = target_arrow.motion.end_location
-        self.axis = self.update_axis(self.prop_location)
-        self.update_appearance()
-
-    ### GETTERS ###
-
-    def update_axis(self, location) -> Axes:
-        if self.layer == 1:
-            self.axis: Axes = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
-        elif self.layer == 2:
-            self.axis: Axes = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
-        return self.axis
-
-    def swap_orientation(self, orientation) -> None:
-        if orientation == IN:
-            orientation = OUT
-        elif orientation == OUT:
-            orientation = IN
-        elif orientation == CLOCKWISE:
-            orientation = COUNTER_CLOCKWISE
-        elif orientation == COUNTER_CLOCKWISE:
-            orientation = CLOCKWISE
-
-        self.update_rotation()
-        return orientation
-
-    def get_rotation_angle(self) -> RotationAngles:
-        angle_map: Dict[
-            Tuple[Layers, Orientations], Dict[Locations, RotationAngles]
-        ] = {
-            (1, IN): {NORTH: 90, SOUTH: 270, WEST: 0, EAST: 180},
-            (1, OUT): {NORTH: 270, SOUTH: 90, WEST: 180, EAST: 0},
-            (2, CLOCKWISE): {NORTH: 0, SOUTH: 180, WEST: 270, EAST: 90},
-            (2, COUNTER_CLOCKWISE): {NORTH: 180, SOUTH: 0, WEST: 90, EAST: 270},
-        }
-
-        key = (self.layer, self.orientation)
-        rotation_angle = angle_map.get(key, {}).get(self.prop_location, 0)
-        return rotation_angle
-
-    def get_attributes(self) -> PropAttributesDicts:
-        return {attr: getattr(self, attr) for attr in PROP_ATTRIBUTES}
-
-    def update_rotation(self) -> None:
-        rotation_angle = self.get_rotation_angle()
-
-        if self.ghost_prop:
-            self.ghost_prop.setRotation(rotation_angle)
-        self.setRotation(rotation_angle)
-
-    def get_svg_file(self, prop_type: PropTypes) -> str:
-        svg_file = f"{PROP_DIR}{prop_type}.svg"
-        return svg_file
-
-    ### HELPERS ###
 
     def swap_axis(self) -> None:
         if self.axis == VERTICAL:
@@ -419,6 +420,7 @@ class Buugeng(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
         attributes[PROP_TYPE] = BUUGENG
         super().__init__(pictograph, attributes)
+
 
 class DoubleStar(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:

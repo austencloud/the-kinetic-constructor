@@ -21,35 +21,19 @@ class PictographEventHandler:
         scene_pos = event.scenePos()
         items_at_pos = self.pictograph.items(scene_pos)
 
-        arrows_at_pos = [item for item in items_at_pos if isinstance(item, Arrow)]
-
-        closest_arrow = None
-        min_distance = float("inf")
-        for arrow in arrows_at_pos:
-            arrow_center = arrow.sceneBoundingRect().center()
-            distance = (scene_pos - arrow_center).manhattanLength()
-            if distance < min_distance:
-                closest_arrow = arrow
-                min_distance = distance
-
-        if closest_arrow:
-            self.pictograph.dragged_arrow = closest_arrow
+        # Prioritize arrows over props if both are clicked simultaneously
+        arrow = next((item for item in items_at_pos if isinstance(item, Arrow)), None)
+        if arrow:
+            self.pictograph.dragged_arrow = arrow
             self.pictograph.dragged_arrow.mousePressEvent(event)
         else:
-            clicked_item = self.pictograph.itemAt(scene_pos, QTransform())
-            if isinstance(clicked_item, GridItem):
-                clicked_item = None
-            self.handle_non_arrow_click(clicked_item, event)
+            prop = next((item for item in items_at_pos if isinstance(item, Prop)), None)
+            if prop:
+                self.pictograph.dragged_prop = prop
+                self.pictograph.dragged_prop.mousePressEvent(event)
+            else: 
+                self.pictograph.clear_selections()
 
-    def handle_non_arrow_click(self, clicked_item, event) -> None:
-        if isinstance(clicked_item, Prop):
-            self.pictograph.dragged_prop = clicked_item
-            self.pictograph.dragged_prop.mousePressEvent(event)
-        elif isinstance(clicked_item, LetterItem):
-            clicked_item.setSelected(False)
-            self.pictograph.clear_selections()
-        elif not clicked_item or isinstance(clicked_item, Grid):
-            self.pictograph.clear_selections()
 
     def handle_mouse_move(self, event) -> None:
         if self.pictograph.dragged_prop:

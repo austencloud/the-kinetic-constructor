@@ -30,7 +30,7 @@ class GridItem(QGraphicsSvgItem):
         super().__init__(path)
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)
-        self.setZValue(-1)
+        self.setZValue(100)
 
     def mousePressEvent(self, event) -> None:
         event.ignore()
