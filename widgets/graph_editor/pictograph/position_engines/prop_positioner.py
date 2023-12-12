@@ -283,11 +283,10 @@ class PropPositioner:
         motion1, motion2 = motions
         same_motion_type = motion1[MOTION_TYPE] == motion2[MOTION_TYPE] in [PRO, ANTI]
 
-        if all(prop.layer == 1 for prop in self.scene.props):
-            if same_motion_type:
-                self.reposition_G_and_H(motion1, motion2)
-            else:
-                self.reposition_I(motion1, motion2)
+        if same_motion_type:
+            self.reposition_G_and_H(motion1, motion2)
+        else:
+            self.reposition_I(motion1, motion2)
 
     def reposition_G_and_H(self, motion1, motion2) -> None:
         optimal_location1 = self.get_optimal_arrow_location(motion1)
