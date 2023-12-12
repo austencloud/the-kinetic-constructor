@@ -217,45 +217,52 @@ class PropPositioner:
             if not prop:
                 continue
 
-            end_location = motion[END_LOCATION]
-            layer_reposition_map = {
-                1: {
-                    (NORTH, RED): RIGHT,
-                    (NORTH, BLUE): LEFT,
-                    (SOUTH, RED): RIGHT,
-                    (SOUTH, BLUE): LEFT,
-                    (EAST, RED): (UP, DOWN) if end_location == EAST else None,
-                    (WEST, BLUE): (UP, DOWN) if end_location == WEST else None,
-                },
-                2: {
-                    (NORTH, RED): UP,
-                    (NORTH, BLUE): DOWN,
-                    (SOUTH, RED): UP,
-                    (SOUTH, BLUE): DOWN,
-                    (EAST, RED): (RIGHT, LEFT) if end_location == EAST else None,
-                    (WEST, BLUE): (LEFT, RIGHT) if end_location == WEST else None,
-                },
-            }
-
-            direction: Direction = layer_reposition_map[prop.layer].get(
-                (prop.prop_location, motion[COLOR]), None
+            # Check if there's another prop at the same location but in a different layer
+            other_prop = next(
+                (
+                    other
+                    for other in self.scene.props
+                    if other != prop and other.prop_location == prop.prop_location
+                ),
+                None,
             )
 
-            if direction:
-                if isinstance(direction, str):
+            # If the other prop is in a different layer, set both props to default locations
+            if other_prop and other_prop.layer != prop.layer:
+                self.set_default_prop_locations(prop)
+                self.set_default_prop_locations(other_prop)
+            else:
+                # Original logic for handling props in the same layer
+                end_location = motion[END_LOCATION]
+                direction = self.determine_direction_for_static_beta(prop, end_location)
+                if direction:
                     move_prop(prop, direction)
-                elif isinstance(direction, tuple):
-                    move_prop(prop, direction[0])
-                    other_prop = next(
-                        (
-                            s
-                            for s in self.scene.props
-                            if s.prop_location == prop.prop_location and s != prop
-                        ),
-                        None,
-                    )
-                    if other_prop:
-                        move_prop(other_prop, direction[1])
+
+    def determine_direction_for_static_beta(
+        self, prop: Prop, end_location: str
+    ) -> Direction | None:
+        layer_reposition_map = {
+            1: {
+                (NORTH, RED): RIGHT,
+                (NORTH, BLUE): LEFT,
+                (SOUTH, RED): RIGHT,
+                (SOUTH, BLUE): LEFT,
+                (EAST, RED): UP if end_location == EAST else None,
+                (WEST, BLUE): DOWN if end_location == WEST else None,
+            },
+            2: {
+                (NORTH, RED): UP,
+                (NORTH, BLUE): DOWN,
+                (SOUTH, RED): UP,
+                (SOUTH, BLUE): DOWN,
+                (EAST, RED): RIGHT if end_location == EAST else None,
+                (WEST, BLUE): LEFT if end_location == WEST else None,
+            },
+        }
+
+        return layer_reposition_map[prop.layer].get(
+            (prop.prop_location, prop.color), None
+        )
 
     ### ALPHA TO BETA ### D, E, F
 
@@ -407,26 +414,32 @@ class PropPositioner:
     ### GAMMA TO BETA ### Y, Z
 
     def reposition_gamma_to_beta(self, move_prop, shifts, static_motions) -> None:
-        # if all of the staffs are in layer 1:
-        shift, static_motion = shifts[0], static_motions[0]
-        direction = self.determine_translation_direction(shift)
-        if direction:
-            move_prop(
-                next(
-                    prop
-                    for prop in self.scene.props
-                    if prop.arrow.color == shift[COLOR]
-                ),
-                direction,
-            )
-            move_prop(
-                next(
-                    prop
-                    for prop in self.scene.props
-                    if prop.arrow.color == static_motion[COLOR]
-                ),
-                self.get_opposite_direction(direction),
-            )
+        if any(prop.layer == 1 for prop in self.scene.props) and any(
+            prop.layer == 2 for prop in self.scene.props
+        ):
+            for prop in self.scene.props:
+                self.set_default_prop_locations(prop)
+        else:
+            # if all of the staffs are in layer 1:
+            shift, static_motion = shifts[0], static_motions[0]
+            direction = self.determine_translation_direction(shift)
+            if direction:
+                move_prop(
+                    next(
+                        prop
+                        for prop in self.scene.props
+                        if prop.arrow.color == shift[COLOR]
+                    ),
+                    direction,
+                )
+                move_prop(
+                    next(
+                        prop
+                        for prop in self.scene.props
+                        if prop.arrow.color == static_motion[COLOR]
+                    ),
+                    self.get_opposite_direction(direction),
+                )
 
     ### HELPERS ###
 
@@ -488,8 +501,10 @@ class PropPositioner:
         )
         if direction in [RIGHT, DOWN]:
             return current_position + offset
-        else:
+        elif direction in [LEFT, UP]:
             return current_position - offset
+        else:
+            return current_position
 
     ### GETTERS
 
@@ -527,3 +542,6 @@ class PropPositioner:
             return DOWN
         elif movement == DOWN:
             return UP
+
+
+
