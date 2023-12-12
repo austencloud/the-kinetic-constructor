@@ -419,3 +419,8 @@ class Buugeng(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
         attributes[PROP_TYPE] = BUUGENG
         super().__init__(pictograph, attributes)
+
+class DoubleStar(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = DOUBLESTAR
+        super().__init__(pictograph, attributes)

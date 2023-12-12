@@ -70,21 +70,37 @@ class GraphEditor(QFrame):
     def _setup_size_policy(self) -> None:
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
+    def _fit_view_in_aspect_ratio(self, view: QGraphicsView) -> None:
+        """
+        Fits the view of a widget within its scene's rectangle while maintaining the aspect ratio.
+        This method is particularly useful for graphical widgets like Pictograph, ArrowBox, and PropBox.
+        """
+        view.fitInView(view.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
+
+    def _set_objectbox_view_size(
+        self, view: ObjectBoxView, reference_view: PictographView
+    ) -> None:
+        """
+        Sets the minimum size for a widget based on the dimensions of a reference widget.
+        """
+        view.setMinimumSize(int(reference_view.height() / 2), reference_view.height())
+
     def resizeEvent(self, event) -> None:
         """
         Handles the resizing of GraphEditor and its child widgets.
         This method is automatically called whenever the GraphEditor widget is resized.
         """
         super().resizeEvent(event)
-        self._adjust_graph_editor_size()
         self._adjust_child_widgets_size()
+        self._adjust_graph_editor_size()
+        
 
     def _adjust_graph_editor_size(self) -> None:
         """
         Adjusts the maximum height of the GraphEditor relative to its parent widget's height.
         This ensures that the GraphEditor does not become disproportionately large or small.
         """
-        self.setMaximumHeight(int(self.main_widget.height() / 3.5))
+        self.setMaximumHeight(int(self.main_widget.height() / 2))
 
     def _adjust_child_widgets_size(self) -> None:
         """
@@ -103,16 +119,3 @@ class GraphEditor(QFrame):
         # Adjust the size and view of the PropBox widget
         self._set_objectbox_view_size(self.propbox.view, self.pictograph.view)
         self._fit_view_in_aspect_ratio(self.propbox.view)
-
-    def _fit_view_in_aspect_ratio(self, view: QGraphicsView) -> None:
-        """
-        Fits the view of a widget within its scene's rectangle while maintaining the aspect ratio.
-        This method is particularly useful for graphical widgets like Pictograph, ArrowBox, and PropBox.
-        """
-        view.fitInView(view.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
-
-    def _set_objectbox_view_size(self, view: ObjectBoxView, reference_view: PictographView) -> None:
-        """
-        Sets the minimum size for a widget based on the dimensions of a reference widget.
-        """
-        view.setMinimumSize(int(reference_view.height() / 2), reference_view.height())

@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QVBoxLayout, QGraphicsSceneMouseEvent, QComboBox
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from objects.prop import Prop, Staff, Club, Buugeng, Fan, Triad, Hoop
+from objects.prop import DoubleStar, Prop, Staff, Club, Buugeng, Fan, Triad, Hoop
 
 from widgets.graph_editor.object_panel.propbox.propbox_drag import PropBoxDrag
 from widgets.graph_editor.object_panel.propbox.propbox_view import PropBoxView
@@ -83,6 +83,8 @@ class PropBox(ObjectBox):
                 prop = Triad(self.pictograph, attributes)
             elif self.prop_type == HOOP:
                 prop = Hoop(self.pictograph, attributes)
+            elif self.prop_type == DOUBLESTAR:
+                prop = DoubleStar(self.pictograph, attributes)
             else:
                 raise ValueError("Invalid prop type")
 
@@ -98,8 +100,9 @@ class PropBox(ObjectBox):
 
     def init_combobox(self) -> None:
         self.prop_type_combobox = QComboBox(self.view)
-        prop_types = ["Staff", "Club", "Buugeng", "Fan", "Triad", "Hoop"]
+        prop_types = ["Staff", "Club", "Buugeng", "Fan", "Triad", "Hoop", "Doublestar"]
         self.prop_type_combobox.addItems(prop_types)
+        
         self.prop_type_combobox.setCurrentText(str(self.prop_type.capitalize()))
         self.prop_type_combobox.currentTextChanged.connect(self.on_prop_type_change)
         self.prop_type_combobox.move(0, 0)
