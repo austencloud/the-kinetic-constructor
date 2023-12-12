@@ -26,55 +26,61 @@ class MotionTypesWidget(AttrBoxWidget):
     def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__(attr_box)
 
-        self.motion_type_box_frame = self._setup_main_frame()
+        self.header_label = self.create_attr_header_label("Type")
+        self.motion_type_box = self._setup_motion_type_box()
+        self.swap_button = self.create_custom_button(
+            SWAP_ICON, self._swap_motion_type_callback
+        )
         self.swap_button_frame = self._setup_swap_button_frame()
-
-        # Main layout
+        self.main_vbox_frame = self._setup_main_vbox_frame()
+        self.spacing = self.attr_box.pictograph.view.width() // 250
         self._setup_main_layout()
+        # self.add_black_borders()
+
+    def add_black_borders(self) -> None:
+        self.setStyleSheet("border: 1px solid black;")
+        self.header_label.setStyleSheet("border: 1px solid black;")
+        self.motion_type_box.setStyleSheet("border: 1px solid black;")
+        self.swap_button.setStyleSheet("border: 1px solid black;")
 
     def _setup_main_layout(self) -> None:
         main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
+
         main_layout.addWidget(self.swap_button_frame)
-        main_layout.addWidget(self.motion_type_box_frame)
-
+        main_layout.addWidget(self.main_vbox_frame)
         main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        return main_layout
 
-    def _setup_main_frame(self) -> QFrame:
-        motion_type_box_frame = QFrame(self)
-        main_frame_hbox_container = QHBoxLayout(motion_type_box_frame)
-        self.main_frame_vbox_layout = QVBoxLayout()
-        main_frame_hbox_container.setContentsMargins(0, 0, 0, 0)
-        main_frame_hbox_container.setSpacing(0)
-        main_frame_hbox_container.addStretch(1)
-        main_frame_hbox_container.addLayout(self.main_frame_vbox_layout)
-        main_frame_hbox_container.addStretch(3)
+    def _setup_main_vbox_frame(self) -> QFrame:
+        frame = QFrame(self)
+        hbox = QHBoxLayout(frame)
+        vbox = QVBoxLayout()
 
-        self.header_label = self.create_attr_header_label("Type")
-        self.motion_type_box = self._setup_motion_type_box()
+        vbox.setSpacing(0)
+        hbox.setContentsMargins(0, 0, 0, 0)
+        hbox.setSpacing(0)
+        hbox.addStretch(1)
+        hbox.addLayout(vbox)
+        hbox.addStretch(2)
 
-        self.main_frame_vbox_layout.addWidget(self.header_label)
-        self.main_frame_vbox_layout.addWidget(self.motion_type_box)
+        vbox.addWidget(self.header_label)
+        vbox.addWidget(self.motion_type_box)
 
-        return motion_type_box_frame
+        return frame
 
     def _setup_motion_type_box(self) -> CustomComboBox:
-        motion_type_box = CustomComboBox(self)
-        motion_type_box.addItems(["Pro", "Anti", "Dash", "Static"])
-        motion_type_box.setCurrentIndex(-1)
-        return motion_type_box
+        box = CustomComboBox(self)
+        box.addItems(["Pro", "Anti", "Dash", "Static"])
+        box.setCurrentIndex(-1)
+        return box
 
     def _setup_swap_button_frame(self) -> QFrame:
-        swap_button_frame = QFrame(self)
-        layout = QVBoxLayout(swap_button_frame)
+        frame = QFrame(self)
+        layout = QVBoxLayout(frame)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        self.swap_button = self.create_custom_button(
-            SWAP_ICON, self._swap_motion_type_callback
-        )
         self.swap_button.setMinimumSize(
             int(self.attr_box.width() * 0.15), int(self.attr_box.width() * 0.15)
         )
@@ -88,7 +94,7 @@ class MotionTypesWidget(AttrBoxWidget):
             alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignCenter,
         )
 
-        return swap_button_frame
+        return frame
 
     def _swap_motion_type_callback(self) -> None:
         current_text = self.motion_type_box.currentText()
@@ -124,25 +130,18 @@ class MotionTypesWidget(AttrBoxWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
-        common_height = max(
-            widget.sizeHint().height()
-            for widget in [self.swap_button_frame, self.motion_type_box_frame]
-        )
-        for widget in [self.swap_button_frame, self.motion_type_box_frame]:
-            widget.setMaximumHeight(common_height)
         self.swap_button_frame.setMinimumWidth(int(self.attr_box.width() * 1 / 4))
         self.swap_button_frame.setMaximumWidth(int(self.attr_box.width() * 1 / 4))
         self.motion_type_box.setMinimumWidth(int(self.attr_box.width() * 0.5))
         self.swap_button.update_button_size()
-        header_font_size = int(self.attr_box.pictograph.view.width() * 0.06)
-        self.header_label.setFont(QFont("Arial", header_font_size))
+        self.header_label.setFont(QFont("Arial", int(self.attr_box.width() / 18)))
         self.motion_type_box.setMinimumHeight(int(self.attr_box.width() / 5))
         self.motion_type_box.setMaximumHeight(int(self.attr_box.width() / 5))
         box_font_size = int(self.attr_box.width() / 10)
         self.motion_type_box.setFont(
             QFont("Arial", box_font_size, QFont.Weight.Bold, True)
         )
-        self.main_frame_vbox_layout.setSpacing(
+        self.main_vbox_frame.layout().setSpacing(
             self.attr_box.pictograph.view.width() // 100
         )
         # Update the stylesheet with the new border radius
@@ -174,3 +173,8 @@ class MotionTypesWidget(AttrBoxWidget):
             }}
             """
         )
+        self.header_label.setContentsMargins(0, 0, self.spacing, 0)
+        self.main_vbox_frame.setMaximumHeight(self.height() + self.spacing)
+        self.motion_type_box.setMaximumHeight(int(self.height() * 3 / 4 + self.spacing))
+
+        self.header_label.setMinimumHeight(int(self.height() * 1 / 4 + self.spacing))

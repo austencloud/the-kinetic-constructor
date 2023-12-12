@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from settings.string_constants import (
     ICON_DIR,
 )
+from PyQt6.QtGui import QResizeEvent
 
 if TYPE_CHECKING:
     pass
@@ -12,30 +13,16 @@ class CustomComboBox(QComboBox):
     def __init__(self, parent) -> None:
         super().__init__(parent)
         self.combobox_border = 2
-        self.setStyleSheet(
-            f"""
-            QComboBox {{
-                border: {self.combobox_border}px solid black;
-                border-radius: 10px;
-            }}
 
-            QComboBox::drop-down {{
-                subcontrol-origin: padding;
-                subcontrol-position: top right;
-                width: 15px; /* Width of the arrow */
-                border-left-width: 1px;
-                border-left-color: darkgray;
-                border-left-style: solid; /* Just a single line */
-                border-top-right-radius: 3px; /* Same radius as QComboBox */
-                border-bottom-right-radius: 3px;
-            }}
+    def sizeHint(self):
+        # Ensure size hint accounts for border width
+        size = super().sizeHint()
+        border_adjustment = (
+            2 * self.combobox_border
+        )  # Adjust the 2 if border width is different
+        size.setWidth(size.width() + border_adjustment)
+        size.setHeight(size.height() + border_adjustment)
+        return size
 
-            QComboBox::down-arrow {{
-                image: url("{ICON_DIR}combobox_arrow.png"); /* Path to your custom arrow icon */
-                width: 10px; /* Width of the icon */
-                height: 10px; /* Height of the icon */
-            }}
-        """
-        )
-
-
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        super().resizeEvent(event)

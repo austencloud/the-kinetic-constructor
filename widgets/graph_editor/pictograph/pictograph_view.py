@@ -22,7 +22,6 @@ class PictographView(QGraphicsView):
         # Initialize buttons
         self.init_buttons()
 
-
     def remove_buttons(self) -> None:
         self.add_to_sequence_button.deleteLater()
         self.clear_button.deleteLater()
@@ -67,16 +66,12 @@ class PictographView(QGraphicsView):
             button.move(0, 0)
 
     def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-        # Calculate the view height based on the GraphEditor's height
         view_height = int(self.pictograph.graph_editor.height())
-        # Calculate the view width maintaining the aspect ratio (75/90)
         view_width = int(view_height * 75 / 90)
+        self.setMaximumHeight(view_height)
         self.setMinimumWidth(view_width)
         self.setMaximumWidth(view_width)
-        # # Set the size of the view
-        # self.setMinimumSize(view_width, view_height)
-        # self.setMaximumSize(view_width, view_height)
+
 
         # Calculate the scaling factor
         self.view_scale = min(

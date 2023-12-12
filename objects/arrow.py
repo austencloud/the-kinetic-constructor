@@ -649,7 +649,7 @@ class Arrow(GraphicalObject):
         if self in self.scene.arrows:
             self.scene.arrows.remove(self)
             self.motion.rotation_direction = None
-            self.pictograph.graph_editor.attr_panel.update_panel(self.color)
+            self.pictograph.graph_editor.attr_panel.update_attr_panel(self.color)
         if keep_prop:
             self.prop._create_static_arrow(self)
         else:

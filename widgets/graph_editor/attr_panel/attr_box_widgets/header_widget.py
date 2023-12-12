@@ -12,49 +12,64 @@ from settings.string_constants import (
     RED_HEX,
     ICON_DIR,
 )
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
 from settings.string_constants import ICON_DIR
+from PyQt6.QtGui import QResizeEvent
+from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 
 class HeaderWidget(QWidget):
     def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__(attr_box)
-
         self.attr_box = attr_box
 
-        self.header_label: QLabel = self._setup_header_label()
-        self.rotate_cw_button, self.rotate_ccw_button = self._setup_buttons()
+        self.header_label = self._setup_header_label()
+        self.rotate_cw_button = self._create_button(
+            f"{ICON_DIR}rotate_cw.png", self._rotate_cw
+        )
+        self.rotate_ccw_button = self._create_button(
+            f"{ICON_DIR}rotate_ccw.png", self._rotate_ccw
+        )
 
         self._setup_main_layout()
         self.setMinimumWidth(self.attr_box.width())
 
-    def _setup_main_layout(self) -> QHBoxLayout:
-        self.margins = self.attr_box.border_width
-        main_layout = QHBoxLayout(self)
-        main_layout.setContentsMargins(self.margins, self.margins, self.margins, 0)
+    def create_separator(self) -> QFrame:
+        separator = QFrame(self)
+        separator.setFrameShape(QFrame.Shape.HLine)
+        separator.setFrameShadow(QFrame.Shadow.Raised)
+        separator.setStyleSheet("color: #000000;")  # You can adjust the color as needed
+        return separator
+
+    def _setup_main_layout(self) -> None:
+        margins = self.attr_box.border_width
+        main_layout = QVBoxLayout(self)  # Change to QVBoxLayout to stack vertically
+        main_layout.setContentsMargins(margins, margins, margins, margins)
         main_layout.setSpacing(0)
 
-        main_layout.addWidget(
+        header_layout = QHBoxLayout()  # Use a QHBoxLayout for the header contents
+        header_layout.addWidget(
             self.rotate_ccw_button,
             alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft,
         )
-        main_layout.addWidget(self.header_label, alignment=Qt.AlignmentFlag.AlignCenter)
-        main_layout.addWidget(
+        header_layout.addWidget(
+            self.header_label, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        header_layout.addWidget(
             self.rotate_cw_button,
             alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight,
         )
 
-        return main_layout
+        # Add the header layout to the main layout
+        main_layout.addLayout(header_layout)
 
-    def _add_black_borders(self):
-        self.setStyleSheet("border: 1px solid black;")
-        self.header_label.setStyleSheet("border: 1px solid black;")
-        self.rotate_cw_button.setStyleSheet("border: 1px solid black;")
-        self.rotate_ccw_button.setStyleSheet("border: 1px solid black;")
+        # Create and add the separator
+        separator = self.create_separator()
+        main_layout.addWidget(separator)
 
     def _rotate_ccw(self) -> None:
         motion = self.attr_box.pictograph.get_motion_by_color(self.attr_box.color)
@@ -67,8 +82,10 @@ class HeaderWidget(QWidget):
             motion.arrow.rotate_arrow("cw")
 
     def _setup_buttons(self) -> tuple[CustomButton, CustomButton]:
-        rotate_ccw_button = self._create_button(f"{ICON_DIR}rotate_ccw.png")
-        rotate_cw_button = self._create_button(f"{ICON_DIR}rotate_cw.png")
+        rotate_ccw_button: CustomButton = self._create_button(
+            f"{ICON_DIR}rotate_ccw.png"
+        )
+        rotate_cw_button: CustomButton = self._create_button(f"{ICON_DIR}rotate_cw.png")
 
         rotate_ccw_button.clicked.connect(self._rotate_ccw)
         rotate_cw_button.clicked.connect(self._rotate_cw)
@@ -77,21 +94,23 @@ class HeaderWidget(QWidget):
         return buttons
 
     def _setup_header_label(self) -> QLabel:
-        header_label = QLabel("Left" if self.attr_box.color == BLUE else "Right", self)
-        header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        text = "Left" if self.attr_box.color == BLUE else "Right"
         color_hex = RED_HEX if self.attr_box.color == RED else BLUE_HEX
-        header_label.setStyleSheet(f"color: {color_hex}; font-weight: bold;")
+        label = QLabel(text, self)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        label.setStyleSheet(f"color: {color_hex}; font-weight: bold;")
+        return label
 
-        return header_label
-
-    def _create_button(self, icon_path: str) -> CustomButton:
+    def _create_button(
+        self, icon_path: str, callback: Callable[[], None]
+    ) -> CustomButton:
         button = CustomButton(self)
         button.setIcon(QIcon(icon_path))
+        button.clicked.connect(callback)
         return button
 
-    def resizeEvent(self, event) -> None:
+    def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
-        self.rotate_cw_button.update_button_size()
-        self.rotate_ccw_button.update_button_size()
-        font_size = int(self.attr_box.pictograph.view.width() * 0.1)
-        self.header_label.setFont(QFont("Arial", font_size))
+        self.header_label.setFont(QFont("Arial", int(self.attr_box.width() / 10)))
+        for button in [self.rotate_cw_button, self.rotate_ccw_button]:
+            button.update_button_size()

@@ -380,7 +380,7 @@ class Pictograph(QGraphicsScene):
         if not motions:
             self.graph_editor.attr_panel.clear_all_attr_boxes()
         for motion in motions:
-            self.graph_editor.attr_panel.update_panel(motion.color)
+            self.graph_editor.attr_panel.update_attr_panel(motion.color)
 
     def update_pictograph(self) -> None:
         self.update_letter()

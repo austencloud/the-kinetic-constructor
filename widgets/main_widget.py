@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Optional
 
 from PyQt6.QtCore import QEvent
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QSplitter
 
 from utilities.TypeChecking.TypeChecking import LetterDictionary
 from utilities.export_handler import ExportHandler
@@ -33,8 +33,6 @@ class MainWidget(QWidget):
         self.option_picker = OptionPickerWidget(self)
         self.sequence = SequenceWidget(self)
 
-        self.generator = PictographGenerator(self)
-        self.export_handler = ExportHandler(self)
         self.configure_layouts()
 
     def configure_layouts(self) -> None:
@@ -90,3 +88,8 @@ class MainWidget(QWidget):
 
         return None
 
+    def resizeEvent(self, event: QEvent) -> None:
+        super().resizeEvent(event)
+        # self.graph_editor.resizeEvent(event)
+        # self.sequence.resizeEvent(event)
+        # self.option_picker.resizeEvent(event)

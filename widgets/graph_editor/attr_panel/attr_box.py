@@ -49,30 +49,22 @@ class AttrBox(QFrame):
     def init_ui(self):
         self.setup_box()
 
-        # Create widgets and add them to the layout
+        # Create widgets and add them to the layout with calculated heights
         self.layout = QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        # Initialize child widgets
+        # Initialize and set maximum heights for child widgets
         self.header_widget = HeaderWidget(self)
         self.motion_type_widget = MotionTypesWidget(self)
         self.start_end_widget = StartEndWidget(self)
         self.turns_widget = TurnsWidget(self)
 
         # Add child widgets to the layout
-        self.widgets = [
-            self.header_widget,
-            self.motion_type_widget,
-            self.start_end_widget,
-            self.turns_widget,
-        ]
-
-        for widget in self.widgets:
-            self.layout.addWidget(widget)
-
-        # Add a stretch to allow the AttrBox to grow vertically and fit its contents
-        self.layout.addStretch(1)
+        self.layout.addWidget(self.header_widget)
+        self.layout.addWidget(self.motion_type_widget)
+        self.layout.addWidget(self.start_end_widget)
+        self.layout.addWidget(self.turns_widget)
 
         # Apply the layout to the AttrBox
         self.setLayout(self.layout)
@@ -89,8 +81,6 @@ class AttrBox(QFrame):
         self.setStyleSheet(
             f"#AttributeBox {{ border: {self.border_width}px solid {color_hex}; }}"
         )
-
-
 
     ### CREATE LABELS ###
 
@@ -138,9 +128,16 @@ class AttrBox(QFrame):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        self.setMaximumWidth(self.pictograph.view.width())
-        self.attr_panel.graph_editor.set_height_to_attr_panel_widgets_height()
-
-        # Subtract the border width twice (left and right) to get the correct content width
-        self.attr_box_content_width = int(self.attr_panel.width() / 2 - self.border_width * 2)
-        self.header_spacing = int(self.attr_box_content_width * 0.02)
+        self.setMinimumWidth(int(self.pictograph.view.width() * 0.85))
+        self.setMaximumWidth(int(self.pictograph.view.width() * 0.85))
+        self.header_spacing = int(self.width() * 0.02)
+        ratio_total = 1 + 1 + 1 + 2
+        available_height = self.height()
+        header_height = int(available_height * (1 / ratio_total))
+        motion_types_height = int(available_height * (1 / ratio_total))
+        start_end_height = int(available_height * (1 / ratio_total))
+        turns_widget_height = int(available_height * (2 / ratio_total))
+        self.header_widget.setMaximumHeight(header_height)
+        self.motion_type_widget.setMaximumHeight(motion_types_height)
+        self.start_end_widget.setMaximumHeight(start_end_height)
+        self.turns_widget.setMaximumHeight(turns_widget_height)

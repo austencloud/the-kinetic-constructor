@@ -49,6 +49,14 @@ class StartEndWidget(AttrBoxWidget):
 
         # Main layout
         self._setup_main_layout()
+        # self.add_black_borders()
+
+    def add_black_borders(self):
+        self.setStyleSheet("border: 1px solid black;")
+        self.start_box.setStyleSheet("border: 1px solid black;")
+        self.end_box.setStyleSheet("border: 1px solid black;")
+        self.arrow_label.setStyleSheet("border: 1px solid black;")
+        self.swap_button.setStyleSheet("border: 1px solid black;")
 
     def _setup_main_layout(self) -> None:
         main_layout = QHBoxLayout(self)
@@ -86,10 +94,14 @@ class StartEndWidget(AttrBoxWidget):
         arrow_label_frame = QFrame(self)
         layout = QVBoxLayout(arrow_label_frame)
         layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
         self.arrow_spacer_label = QLabel()
-        layout.addStretch(4)
+        self.arrow_spacer_label.setMinimumHeight(self.header_labels[0].height())
+        self.arrow_spacer_label.setMaximumHeight(self.header_labels[0].height())
+
+        layout.addWidget(self.arrow_spacer_label)
         layout.addWidget(arrow_label)
-        layout.addStretch(2)
+
         return arrow_label_frame
 
     def _setup_swap_button_frame(self) -> QFrame:
@@ -146,11 +158,13 @@ class StartEndWidget(AttrBoxWidget):
         self.swap_button_frame.setMinimumWidth(int(self.attr_box.width() * 1 / 4))
         self.swap_button_frame.setMaximumWidth(int(self.attr_box.width() * 1 / 4))
 
+        self.arrow_label.setMinimumHeight(self.start_box.height())
+        self.arrow_label.setMaximumHeight(self.start_box.height())
+
         self.arrow_spacer_label.setMinimumHeight(self.header_labels[0].height())
         self.arrow_spacer_label.setMaximumHeight(self.header_labels[0].height())
-        header_font_size = int(self.attr_box.pictograph.view.width() * 0.06)
         for header_label in self.header_labels:
-            header_label.setFont(QFont("Arial", header_font_size))
+            header_label.setFont(QFont("Arial", int(self.attr_box.width() / 18)))
         self.arrow_label.setFont(
             QFont(
                 "Arial",

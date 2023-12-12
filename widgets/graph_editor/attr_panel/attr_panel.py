@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QFrame,
 )
+from PyQt6.QtGui import QResizeEvent
 from settings.string_constants import RED, BLUE
 from utilities.TypeChecking.TypeChecking import Colors
 from widgets.graph_editor.attr_panel.attr_box import AttrBox
@@ -31,18 +32,17 @@ class AttrPanel(QFrame):
         self.attr_panel_layout.addWidget(self.blue_attr_box)
         self.attr_panel_layout.addWidget(self.red_attr_box)
 
-    def update_panel(self, motion_color: Colors) -> None:
+    def update_attr_panel(self, motion_color: Colors) -> None:
         motion = self.graph_editor.pictograph.get_motion_by_color(motion_color)
-
         if motion_color == BLUE:
             self.blue_attr_box.update_attr_box(motion)
         elif motion_color == RED:
             self.red_attr_box.update_attr_box(motion)
 
-    def resizeEvent(self, event) -> None:
-        self.setMinimumHeight(self.graph_editor.pictograph.view.height())
-        self.setMaximumHeight(self.graph_editor.pictograph.view.height())
-
     def clear_all_attr_boxes(self) -> None:
         self.blue_attr_box.clear_attr_box()
         self.red_attr_box.clear_attr_box()
+
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        super().resizeEvent(event)
+        self.setMaximumWidth(self.blue_attr_box.width() + self.red_attr_box.width())
