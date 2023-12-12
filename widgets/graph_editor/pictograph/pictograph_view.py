@@ -74,6 +74,8 @@ class PictographView(QGraphicsView):
         self.setMaximumWidth(view_width)
         self.pictograph.graph_editor.arrowbox.view.set_size_to_match_pictograph_view()
         self.pictograph.graph_editor.propbox.view.set_size_to_match_pictograph_view()
+        self.pictograph.graph_editor.attr_panel.red_attr_box.set_size_to_match_pictograph_view()
+        self.pictograph.graph_editor.attr_panel.blue_attr_box.set_size_to_match_pictograph_view()
         self.view_scale = min(
             view_width / self.pictograph.sceneRect().width(),
             view_height / self.pictograph.sceneRect().height(),

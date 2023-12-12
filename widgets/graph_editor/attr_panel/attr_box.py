@@ -128,8 +128,7 @@ class AttrBox(QFrame):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        self.setMinimumWidth(int(self.pictograph.view.width() * 0.85))
-        self.setMaximumWidth(int(self.pictograph.view.width() * 0.85))
+        self.set_size_to_match_pictograph_view()
         self.header_spacing = int(self.width() * 0.02)
         ratio_total = 1 + 1 + 1 + 2
         available_height = self.height()
@@ -141,3 +140,7 @@ class AttrBox(QFrame):
         self.motion_type_widget.setMaximumHeight(motion_types_height)
         self.start_end_widget.setMaximumHeight(start_end_height)
         self.turns_widget.setMaximumHeight(turns_widget_height)
+
+    def set_size_to_match_pictograph_view(self):
+        self.setMinimumWidth(int(self.pictograph.view.width() * 0.85))
+        self.setMaximumWidth(int(self.pictograph.view.width() * 0.85))
