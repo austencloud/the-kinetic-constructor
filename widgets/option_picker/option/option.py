@@ -102,10 +102,9 @@ class Option(Pictograph):
         self.ghost_arrows = self.initializer.init_ghost_arrows()
         self.ghost_props = self.initializer.init_ghost_props(self.prop_type)
         self.grid: Grid = self.initializer.init_grid()
-        self.view: OptionView = self.initializer.init_view() 
+        self.view: OptionView = self.initializer.init_view()
         self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.locations = self.initializer.init_locations(self.grid)
-        
 
         self.setup_managers(main_widget)
 
@@ -122,7 +121,7 @@ class Option(Pictograph):
         self.prop_positioner = PropPositioner(self)
         self.letter_engine = LetterEngine(self)
 
-    ### EVENTS ###
+    ### EVENT HANDLERS ###
 
     def mousePressEvent(self, event) -> None:
         self.main_widget.deselect_all_except(self)

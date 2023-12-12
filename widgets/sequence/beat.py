@@ -119,7 +119,7 @@ class Beat(Pictograph):
         self.prop_positioner = PropPositioner(self)
         self.letter_engine = LetterEngine(self)
 
-    ### EVENTS ###
+    ### EVENT HANDLERS ###
 
     def mousePressEvent(self, event) -> None:
         self.main_widget.deselect_all_except(self)
@@ -189,8 +189,6 @@ class Beat(Pictograph):
         for prop in self.prop_set.values():
             if prop.color == color:
                 return prop
-
-
 
     ### HELPERS ###
 

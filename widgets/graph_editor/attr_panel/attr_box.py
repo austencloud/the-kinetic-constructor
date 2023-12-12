@@ -113,7 +113,7 @@ class AttrBox(QFrame):
     def clear_attr_box(self) -> None:
         self.motion_type_widget.clear_motion_type_box()
         self.start_end_widget.clear_start_end_boxes()
-        self.turns_widget.clear_turns_label()
+        self.turns_widget.turnbox.setCurrentIndex(-1)
 
     def update_attr_box(self, motion: Motion = None) -> None:
         if motion:
@@ -122,7 +122,7 @@ class AttrBox(QFrame):
                 motion.start_location, motion.end_location
             )
             self.motion_type_widget.update_motion_type_box(motion.motion_type)
-            self.turns_widget.update_turns_box(motion.turns)
+            self.turns_widget.update_turnbox(motion.turns)
         else:
             self.clear_attr_box()
 

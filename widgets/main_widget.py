@@ -60,7 +60,7 @@ class MainWidget(QWidget):
         self.layout().setSpacing(0)
         self.layout().setContentsMargins(0, 0, 0, 0)
 
-    ### EVENTS ###
+    ### EVENT HANDLERS ###
 
     def eventFilter(self, source, event: QEvent) -> bool:
         if event.type() == QEvent.Type.KeyPress:

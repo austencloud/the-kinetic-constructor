@@ -33,7 +33,6 @@ class MotionTypesWidget(AttrBoxWidget):
         )
         self.swap_button_frame = self._setup_swap_button_frame()
         self.main_vbox_frame = self._setup_main_vbox_frame()
-        self.spacing = self.attr_box.pictograph.view.width() // 250
         self._setup_main_layout()
         # self.add_black_borders()
 
@@ -130,11 +129,15 @@ class MotionTypesWidget(AttrBoxWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
+        self.spacing = self.attr_box.pictograph.view.width() // 250
         self.swap_button_frame.setMinimumWidth(int(self.attr_box.width() * 1 / 4))
         self.swap_button_frame.setMaximumWidth(int(self.attr_box.width() * 1 / 4))
         self.motion_type_box.setMinimumWidth(int(self.attr_box.width() * 0.5))
         self.swap_button.update_button_size()
+        
+    
         self.header_label.setFont(QFont("Arial", int(self.attr_box.width() / 18)))
+        
         self.motion_type_box.setMinimumHeight(int(self.attr_box.width() / 5))
         self.motion_type_box.setMaximumHeight(int(self.attr_box.width() / 5))
         box_font_size = int(self.attr_box.width() / 10)
@@ -176,5 +179,4 @@ class MotionTypesWidget(AttrBoxWidget):
         self.header_label.setContentsMargins(0, 0, self.spacing, 0)
         self.main_vbox_frame.setMaximumHeight(self.height() + self.spacing)
         self.motion_type_box.setMaximumHeight(int(self.height() * 3 / 4 + self.spacing))
-
         self.header_label.setMinimumHeight(int(self.height() * 1 / 4 + self.spacing))

@@ -116,7 +116,7 @@ class Pictograph(QGraphicsScene):
         self.prop_positioner = PropPositioner(self)
         self.letter_engine = LetterEngine(self)
 
-    ### EVENTS ###
+    ### EVENT HANDLERS ###
 
     def mousePressEvent(self, event) -> None:
         self.main_widget.deselect_all_except(self)

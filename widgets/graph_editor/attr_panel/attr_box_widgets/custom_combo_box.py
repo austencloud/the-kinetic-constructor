@@ -26,3 +26,4 @@ class CustomComboBox(QComboBox):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
+
