@@ -1,5 +1,5 @@
 from objects.prop import Prop
-from settings.string_constants import (
+from constants.string_constants import (
     COLOR,
     PROP_TYPE,
     STAFF,

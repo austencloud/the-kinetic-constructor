@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QFont, QResizeEvent, QFontMetrics
 from PyQt6.QtCore import Qt
-from settings.string_constants import ICON_DIR, SWAP_ICON
+from constants.string_constants import ICON_DIR, SWAP_ICON
 from utilities.TypeChecking.TypeChecking import Locations
 from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,

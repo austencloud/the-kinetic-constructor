@@ -8,7 +8,7 @@ from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
 from objects.prop import Prop, Staff, Club, Fan, Hoop, Buugeng, Triad
-from settings.string_constants import *
+from constants.string_constants import *
 from utilities.TypeChecking.TypeChecking import Colors, Locations, PropTypes
 from widgets.option_picker.option.option_view import OptionView
 
@@ -20,7 +20,6 @@ class OptionInit:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
         self.main_widget = pictograph.main_widget
-
 
     def init_view(self) -> QGraphicsView:
         view = OptionView(self.pictograph)
@@ -56,7 +55,7 @@ class OptionInit:
             FAN.lower(): Fan,
             HOOP.lower(): Hoop,
             BUUGENG.lower(): Buugeng,
-            TRIAD.lower(): Triad
+            TRIAD.lower(): Triad,
         }
 
         prop_class = prop_class_mapping.get(prop_type)
@@ -104,21 +103,19 @@ class OptionInit:
         return ghost_arrows
 
     def init_ghost_props(self, prop_type: PropTypes) -> Dict[Colors, GhostProp]:
-    
         prop_class_mapping = {
             STAFF.lower(): Staff,
             CLUB.lower(): Club,
             FAN.lower(): Fan,
             HOOP.lower(): Hoop,
             BUUGENG.lower(): Buugeng,
-            TRIAD.lower(): Triad
+            TRIAD.lower(): Triad,
         }
 
         prop_class = prop_class_mapping.get(prop_type)
         if prop_class is None:
             raise ValueError(f"Invalid prop_type: {prop_type}")
 
-        
         default_red_ghost_prop_attributes = {
             COLOR: RED,
             PROP_TYPE: prop_type,

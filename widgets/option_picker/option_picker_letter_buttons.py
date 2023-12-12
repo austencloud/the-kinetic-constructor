@@ -4,7 +4,7 @@ from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QColor
 from PyQt6.QtSvg import QSvgRenderer
 from data.letter_engine_data import letter_types
-from settings.string_constants import LETTER_SVG_DIR
+from constants.string_constants import LETTER_SVG_DIR
 from typing import TYPE_CHECKING, List
 
 from utilities.TypeChecking.Letters import Letters

@@ -1,4 +1,4 @@
-from settings.string_constants import (
+from constants.string_constants import (
     NORTHEAST,
     NORTHWEST,
     SOUTHEAST,

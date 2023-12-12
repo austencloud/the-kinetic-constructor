@@ -3,7 +3,7 @@ from PyQt6.QtGui import QFont, QIcon, QResizeEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Callable
 
-from settings.string_constants import ICON_DIR
+from constants.string_constants import ICON_DIR
 from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:

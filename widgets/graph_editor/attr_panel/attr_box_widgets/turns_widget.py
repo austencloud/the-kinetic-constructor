@@ -4,13 +4,14 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QFrame,
     QSizePolicy,
-    QWidget, QComboBox
+    QWidget,
+    QComboBox,
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QPixmap
 from typing import TYPE_CHECKING, List, Tuple
 from objects.motion import Motion
-from settings.string_constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, ICON_DIR
+from constants.string_constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, ICON_DIR
 from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )

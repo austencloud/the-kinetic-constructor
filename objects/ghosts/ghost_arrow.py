@@ -1,4 +1,4 @@
-from settings.string_constants import COLOR
+from constants.string_constants import COLOR
 from objects.arrow import Arrow
 from typing import TYPE_CHECKING
 
@@ -32,7 +32,6 @@ class GhostArrow(Arrow):
         self.pictograph = pictograph
         self.color = attributes[COLOR]
         self.target_arrow: "Arrow" = None
-        self.setup_svg_renderer(self.svg_file)
 
     def update_ghost_arrow(self, attributes) -> None:
         self.set_attributes_from_dict(attributes)

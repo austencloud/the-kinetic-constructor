@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QGraphicsItem, QGridLayout
 
 from objects.arrow import Arrow
-from settings.string_constants import (
+from constants.string_constants import (
     ANTI,
     ARROW_LOCATION,
     BLUE,
@@ -48,8 +48,9 @@ class ArrowBox(ObjectBox):
         self.main_window = main_widget.main_window
         self.view = ArrowBoxView(self, graph_editor)
 
-        self.populate_arrows()
         self.grid: Grid = Grid(self)
+
+        self.populate_arrows()
 
         self.target_arrow: "Arrow" = None
         self.arrowbox_layout = QGridLayout()

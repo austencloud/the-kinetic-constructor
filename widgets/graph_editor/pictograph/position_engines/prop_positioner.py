@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QPointF
 import math
-from settings.numerical_constants import BETA_OFFSET
-from settings.string_constants import (
+from constants.numerical_constants import BETA_OFFSET
+from constants.string_constants import (
     BOX,
     BUUGENG,
     CLOCKWISE,
@@ -542,6 +542,3 @@ class PropPositioner:
             return DOWN
         elif movement == DOWN:
             return UP
-
-
-

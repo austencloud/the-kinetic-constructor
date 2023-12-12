@@ -9,14 +9,14 @@ from utilities.TypeChecking.TypeChecking import (
     Orientations,
     Layers,
 )
-from settings.string_constants import *
+from constants.string_constants import *
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.arrow import Arrow
     from objects.prop import Prop
-from settings.string_constants import DASH
+from constants.string_constants import DASH
 from data.start_end_location_map import get_start_end_locations
 
 
@@ -105,7 +105,7 @@ class Motion:
             (2.5, OUT): CLOCKWISE,
             (3, OUT): IN,
         }
-        
+
         pro_orientation_map = {
             (0, IN): IN,
             (0.5, IN): CLOCKWISE,
@@ -122,7 +122,6 @@ class Motion:
             (2.5, OUT): COUNTER_CLOCKWISE,
             (3, OUT): OUT,
         }
-        
 
         float_orientation_map_layer_1 = {
             (IN, "n", "e"): CLOCKWISE,
@@ -177,12 +176,23 @@ class Motion:
                 return OUT if self.start_orientation == IN else IN
             elif self.motion_type == FLOAT:
                 if self.start_layer == 1:
-                    key = (self.start_orientation, self.start_location, self.end_location)
-                    return float_orientation_map_layer_1.get(key, self.start_orientation)
+                    key = (
+                        self.start_orientation,
+                        self.start_location,
+                        self.end_location,
+                    )
+                    return float_orientation_map_layer_1.get(
+                        key, self.start_orientation
+                    )
                 elif self.start_layer == 2:
-                    key = (self.start_orientation, self.start_location, self.end_location)
-                    return float_orientation_map_layer_2.get(key, self.start_orientation)
-
+                    key = (
+                        self.start_orientation,
+                        self.start_location,
+                        self.end_location,
+                    )
+                    return float_orientation_map_layer_2.get(
+                        key, self.start_orientation
+                    )
 
     def update_attr_from_arrow(self) -> None:
         self.color = self.arrow.color

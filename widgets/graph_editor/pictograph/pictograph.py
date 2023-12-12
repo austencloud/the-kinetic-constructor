@@ -9,7 +9,7 @@ from objects.grid import Grid
 from objects.prop import Prop
 from objects.prop import Staff
 from objects.motion import Motion
-from settings.string_constants import (
+from constants.string_constants import (
     BLUE,
     BOX,
     COLOR,
@@ -90,16 +90,16 @@ class Pictograph(QGraphicsScene):
 
         self.prop_type: Prop = STAFF
 
+        self.grid: Grid = self.initializer.init_grid()
+        self.view: PictographView = self.initializer.init_view()
+        self.letter_item: LetterItem = self.initializer.init_letter_item()
+        self.locations = self.initializer.init_locations(self.grid)
+
         self.prop_set: Dict[Colors, Prop] = self.initializer.init_prop_set(
             self.prop_type
         )
         self.ghost_arrows = self.initializer.init_ghost_arrows()
         self.ghost_props = self.initializer.init_ghost_props(self.prop_type)
-
-        self.grid: Grid = self.initializer.init_grid()
-        self.view: PictographView = self.initializer.init_view()
-        self.letter_item: LetterItem = self.initializer.init_letter_item()
-        self.locations = self.initializer.init_locations(self.grid)
 
         self.setup_managers(main_widget)
 

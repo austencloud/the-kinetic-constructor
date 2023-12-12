@@ -32,7 +32,7 @@ import io
 from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
 import xml.etree.ElementTree as ET
 
-from settings.string_constants import LETTER_SVG_DIR
+from constants.string_constants import LETTER_SVG_DIR
 
 
 class SvgResizer(QMainWindow):

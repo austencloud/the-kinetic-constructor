@@ -5,7 +5,7 @@ from objects.prop import Prop
 from objects.arrow import StaticArrow
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
-from settings.string_constants import (
+from constants.string_constants import (
     IN,
     OUT,
     CLOCKWISE,

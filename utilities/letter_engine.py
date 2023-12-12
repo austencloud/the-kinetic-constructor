@@ -8,7 +8,7 @@ from data.letter_engine_data import (
 )
 from data.positions_map import get_specific_start_end_positions
 from objects.motion import Motion
-from settings.string_constants import *
+from constants.string_constants import *
 
 logging.basicConfig(
     level=logging.INFO,
@@ -70,7 +70,7 @@ class LetterEngine:
     def get_current_letter(self) -> Letters | None:
         self.red_motion = self.get_motion("red")
         self.blue_motion = self.get_motion("blue")
-        
+
         specific_position: Dict[
             str, SpecificPositions
         ] = get_specific_start_end_positions(self.red_motion, self.blue_motion)

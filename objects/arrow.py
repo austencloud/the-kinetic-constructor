@@ -3,7 +3,7 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF
 from PyQt6.QtGui import QTransform
 from objects.prop import Prop
-from settings.string_constants import (
+from constants.string_constants import (
     BOX,
     DASH,
     DIAMOND,
@@ -64,9 +64,9 @@ if TYPE_CHECKING:
 
 class Arrow(GraphicalObject):
     def __init__(self, scene, attributes) -> None:
-        svg_file = self.get_svg_file(attributes[MOTION_TYPE], attributes[TURNS])
-
-        super().__init__(svg_file, scene)
+        super().__init__(scene)
+        self.svg_file = self.get_svg_file(attributes[MOTION_TYPE], attributes[TURNS])
+        self.setup_svg_renderer(self.svg_file)
         self.setAcceptHoverEvents(True)
         self._setup_attributes(scene, attributes)
 
@@ -314,7 +314,7 @@ class Arrow(GraphicalObject):
         return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}
 
     def get_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
-        svg_file = f"{ARROW_DIR}{motion_type}/{motion_type}_{float(turns)}.svg"
+        svg_file = f"{ARROW_DIR}{self.pictograph.grid.grid_mode}/{motion_type}/{motion_type}_{float(turns)}.svg"
         return svg_file
 
     ### MANIPULATION ###

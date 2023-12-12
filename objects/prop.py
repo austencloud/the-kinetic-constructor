@@ -1,7 +1,7 @@
 from data.start_end_location_map import get_start_end_locations
 from objects.graphical_object import GraphicalObject
 from PyQt6.QtCore import QPointF
-from settings.string_constants import *
+from constants.string_constants import *
 
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from utilities.TypeChecking.TypeChecking import (
@@ -33,8 +33,9 @@ class Prop(GraphicalObject):
     def __init__(self, scene, attributes: Dict) -> None:
         prop_type = str(attributes[PROP_TYPE])
         prop_type = prop_type[0].lower() + prop_type[1:]
-        svg_file = self.get_svg_file(prop_type)
-        super().__init__(svg_file, scene)
+        self.svg_file = self.get_svg_file(prop_type)
+        super().__init__(scene)
+        self.setup_svg_renderer(self.svg_file)
         self._setup_attributes(scene, attributes)
         self.update_appearance()
 

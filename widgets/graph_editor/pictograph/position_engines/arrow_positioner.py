@@ -1,6 +1,6 @@
 from PyQt6.QtCore import QPointF
-from settings.numerical_constants import DISTANCE
-from settings.string_constants import *
+from constants.numerical_constants import DISTANCE
+from constants.string_constants import *
 from objects.arrow import Arrow
 
 from typing import TYPE_CHECKING, List, Dict, Any
@@ -132,15 +132,20 @@ class ArrowPositioner:
         arrow.setPos(new_pos)
 
     def set_arrow_to_default_loc(self, arrow: "Arrow") -> None:
-        layer2_points = (self.pictograph.grid.diamond_layer2_points if self.pictograph.grid.grid_mode == DIAMOND 
-                        else self.pictograph.grid.box_layer2_points)
+        layer2_points = (
+            self.pictograph.grid.diamond_layer2_points
+            if self.pictograph.grid.grid_mode == DIAMOND
+            else self.pictograph.grid.box_layer2_points
+        )
 
         if self.pictograph.grid.grid_mode == DIAMOND:
             if arrow.motion_type in [PRO, ANTI, FLOAT]:
                 layer2_point = layer2_points.get(arrow.arrow_location)
-                
+
                 if layer2_point is None:
-                    print(f"Warning: No layer2_point found for arrow_location {arrow.arrow_location}")
+                    print(
+                        f"Warning: No layer2_point found for arrow_location {arrow.arrow_location}"
+                    )
 
                 arrow.set_arrow_transform_origin_to_center()
                 adjustment = QPointF(0, 0)
@@ -160,14 +165,15 @@ class ArrowPositioner:
                 )
                 final_pos = QPointF(new_pos.x(), new_pos.y())
                 arrow.setPos(final_pos - arrow.boundingRect().center())
-                
-                
-        elif self.pictograph.grid.grid_mode == "box":
+
+        elif self.pictograph.grid.grid_mode == BOX:
             if arrow.motion_type in [PRO, ANTI, FLOAT]:
                 layer2_point = layer2_points.get(arrow.arrow_location)
-                
+
                 if layer2_point is None:
-                    print(f"Warning: No layer2_point found for arrow_location {arrow.arrow_location}")
+                    print(
+                        f"Warning: No layer2_point found for arrow_location {arrow.arrow_location}"
+                    )
 
                 arrow.set_arrow_transform_origin_to_center()
                 adjustment = QPointF(0, 0)

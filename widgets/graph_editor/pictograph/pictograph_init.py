@@ -8,7 +8,7 @@ from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
 from objects.prop import DoubleStar, Prop, Staff, Club, Fan, Hoop, Buugeng, Triad
-from settings.string_constants import *
+from constants.string_constants import *
 from utilities.TypeChecking.TypeChecking import Colors, Locations, PropTypes
 from widgets.graph_editor.pictograph.pictograph_view import PictographView
 
@@ -20,7 +20,6 @@ class PictographInit:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
         self.main_widget = pictograph.main_widget
-
 
     def init_view(self) -> QGraphicsView:
         view = PictographView(self.pictograph)
@@ -105,7 +104,6 @@ class PictographInit:
         return ghost_arrows
 
     def init_ghost_props(self, prop_type: PropTypes) -> Dict[Colors, GhostProp]:
-    
         prop_class_mapping = {
             STAFF.lower(): Staff,
             CLUB.lower(): Club,
@@ -120,7 +118,6 @@ class PictographInit:
         if prop_class is None:
             raise ValueError(f"Invalid prop_type: {prop_type}")
 
-        
         default_red_ghost_prop_attributes = {
             COLOR: RED,
             PROP_TYPE: prop_type,

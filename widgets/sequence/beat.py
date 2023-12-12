@@ -9,7 +9,7 @@ from objects.grid import Grid
 from objects.prop import Prop
 from objects.prop import Staff
 from objects.motion import Motion
-from settings.string_constants import (
+from constants.string_constants import (
     BLUE,
     COLOR,
     END_LOCATION,

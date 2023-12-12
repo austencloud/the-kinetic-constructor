@@ -5,7 +5,7 @@ from objects.prop import DoubleStar, Prop, Staff, Club, Buugeng, Fan, Triad, Hoo
 
 from widgets.graph_editor.object_panel.propbox.propbox_drag import PropBoxDrag
 from widgets.graph_editor.object_panel.propbox.propbox_view import PropBoxView
-from settings.string_constants import *
+from constants.string_constants import *
 
 
 from objects.grid import Grid
@@ -43,32 +43,40 @@ class PropBox(ObjectBox):
 
     def populate_props(self) -> None:
         self.clear_props()
-        initial_prop_attributes: List[Dict] = [
-            {
-                COLOR: RED,
-                PROP_LOCATION: NORTH,
-                LAYER: 1,
-                ORIENTATION: IN,
-            },
-            {
-                COLOR: BLUE,
-                PROP_LOCATION: EAST,
-                LAYER: 1,
-                ORIENTATION: IN,
-            },
-            {
-                COLOR: RED,
-                PROP_LOCATION: SOUTH,
-                LAYER: 1,
-                ORIENTATION: IN,
-            },
-            {
-                COLOR: BLUE,
-                PROP_LOCATION: WEST,
-                LAYER: 1,
-                ORIENTATION: IN,
-            },
-        ]
+        if self.grid.grid_mode == DIAMOND:
+            initial_prop_attributes: List[Dict] = [
+                {
+                    COLOR: RED,
+                    PROP_LOCATION: NORTH,
+                    LAYER: 1,
+                    ORIENTATION: IN,
+                },
+                {
+                    COLOR: BLUE,
+                    PROP_LOCATION: EAST,
+                    LAYER: 1,
+                    ORIENTATION: IN,
+                },
+                {
+                    COLOR: RED,
+                    PROP_LOCATION: SOUTH,
+                    LAYER: 1,
+                    ORIENTATION: IN,
+                },
+                {
+                    COLOR: BLUE,
+                    PROP_LOCATION: WEST,
+                    LAYER: 1,
+                    ORIENTATION: IN,
+                },
+            ]
+        elif self.grid.grid_mode == BOX:
+            initial_prop_attributes = [
+                {COLOR: RED, PROP_LOCATION: NORTHEAST, LAYER: 1, ORIENTATION: IN},
+                {COLOR: BLUE, PROP_LOCATION: SOUTHEAST, LAYER: 1, ORIENTATION: IN},
+                {COLOR: RED, PROP_LOCATION: SOUTHWEST, LAYER: 1, ORIENTATION: IN},
+                {COLOR: BLUE, PROP_LOCATION: NORTHWEST, LAYER: 1, ORIENTATION: IN},
+            ]
 
         for attributes in initial_prop_attributes:
             if self.prop_type == STAFF:
@@ -102,7 +110,7 @@ class PropBox(ObjectBox):
         self.prop_type_combobox = QComboBox(self.view)
         prop_types = ["Staff", "Club", "Buugeng", "Fan", "Triad", "Hoop", "Doublestar"]
         self.prop_type_combobox.addItems(prop_types)
-        
+
         self.prop_type_combobox.setCurrentText(str(self.prop_type.capitalize()))
         self.prop_type_combobox.currentTextChanged.connect(self.on_prop_type_change)
         self.prop_type_combobox.move(0, 0)

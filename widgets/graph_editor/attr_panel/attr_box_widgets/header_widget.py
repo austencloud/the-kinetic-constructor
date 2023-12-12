@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
-from settings.string_constants import (
+from constants.string_constants import (
     BLUE,
     BLUE_HEX,
     RED,
@@ -17,7 +17,7 @@ from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
-from settings.string_constants import ICON_DIR
+from constants.string_constants import ICON_DIR
 from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 

@@ -4,7 +4,7 @@ from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtGui import QTransform
 
-from settings.string_constants import (
+from constants.string_constants import (
     BOX,
     DIAMOND,
     GRID_DIR,

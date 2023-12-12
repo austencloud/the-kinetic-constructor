@@ -5,7 +5,7 @@ from typing import List, TYPE_CHECKING
 from PyQt6.QtCore import QObject
 
 from objects.arrow import Arrow
-from settings.string_constants import LETTER_JSON_DIR
+from constants.string_constants import LETTER_JSON_DIR
 from utilities.TypeChecking.TypeChecking import LetterDictionary, Letters
 
 if TYPE_CHECKING:

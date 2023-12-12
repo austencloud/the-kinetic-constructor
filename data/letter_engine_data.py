@@ -1,4 +1,4 @@
-from settings.string_constants import PRO, ANTI, STATIC
+from constants.string_constants import PRO, ANTI, STATIC
 
 letter_types = {
     "Type 1": [

@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Tuple
 
-from settings.string_constants import (
+from constants.string_constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     EAST,

@@ -1,5 +1,5 @@
 import os
-from settings.string_constants import (
+from constants.string_constants import (
     PICTOGRAPH_DIR,
     START_POS,
     END_POS,

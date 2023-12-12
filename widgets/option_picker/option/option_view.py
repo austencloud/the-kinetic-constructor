@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtCore import Qt
-from settings.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
+from constants.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QIcon
 
@@ -20,7 +20,6 @@ class OptionView(PictographView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.wheelEvent = lambda event: None
-        
 
     def init_buttons(self) -> None:
         self.rotate_cw_button = self.create_button(
@@ -41,17 +40,17 @@ class OptionView(PictographView):
         pass
 
     def update_OptionView_size(self) -> None:
-        view_width = int((self.option.option_picker.width() / 4) - self.option.option_picker.spacing)
-        
+        view_width = int(
+            (self.option.option_picker.width() / 4) - self.option.option_picker.spacing
+        )
+
         self.setFixedWidth(view_width)
-        self.setFixedHeight(int(view_width * 90/75))
-        
+        self.setFixedHeight(int(view_width * 90 / 75))
+
         self.view_scale = view_width / self.option.width()
-        
-    
+
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
-
 
         button_size = int(self.width() / 7)
         self.configure_button_size_and_position(self.rotate_cw_button, button_size)
@@ -75,4 +74,3 @@ class OptionView(PictographView):
         # Reset any existing transformations and apply the new scale
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
-

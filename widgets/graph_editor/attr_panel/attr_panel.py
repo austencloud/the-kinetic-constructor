@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (
     QFrame,
 )
 from PyQt6.QtGui import QResizeEvent
-from settings.string_constants import RED, BLUE
+from constants.string_constants import RED, BLUE
 from utilities.TypeChecking.TypeChecking import Colors
 from widgets.graph_editor.attr_panel.attr_box import AttrBox
 from typing import TYPE_CHECKING

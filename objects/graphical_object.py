@@ -1,7 +1,7 @@
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
-from settings.string_constants import BLUE, BLUE_HEX, COLOR_MAP, RED, RED_HEX
+from constants.string_constants import BLUE, BLUE_HEX, COLOR_MAP, RED, RED_HEX
 import re
 from typing import TYPE_CHECKING, Union
 
@@ -20,17 +20,15 @@ from utilities.TypeChecking.TypeChecking import (
 class GraphicalObject(QGraphicsSvgItem):
     self: Union["Prop", "Arrow"]
 
-    def __init__(self, svg_file: str, pictograph: "Pictograph") -> None:
+    def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__()
-        self.svg_file = svg_file
         self.pictograph = pictograph
 
         self.renderer: QSvgRenderer = None
         self.color: Colors = None
 
         self.center = self.boundingRect().center()
-        if svg_file:
-            self.setup_svg_renderer(svg_file)
+
         self.setup_graphics_flags()
 
     def setup_graphics_flags(self) -> None:
@@ -92,7 +90,7 @@ class GraphicalObject(QGraphicsSvgItem):
 
     def is_dim(self, on: bool) -> None:
         if on:
-            self.setOpacity(0.25) 
+            self.setOpacity(0.25)
         else:
             self.setOpacity(1.0)
 
