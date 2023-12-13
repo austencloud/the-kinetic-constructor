@@ -11,6 +11,7 @@ from constants.string_constants import (
     DOUBLESTAR,
     FAN,
     HOOP,
+    BIGHOOP,
     IN,
     OUT,
     COLOR,
@@ -63,7 +64,7 @@ class PropPositioner:
 
     def update_prop_positions(self) -> None:
         for prop in self.scene.props:
-            if prop.prop_type in [STAFF, FAN, CLUB, BUUGENG, HOOP, TRIAD]:
+            if prop.prop_type in [STAFF, FAN, CLUB, BUUGENG, HOOP, BIGHOOP, TRIAD]:
                 self.set_default_prop_locations(prop)
             elif prop.prop_type == DOUBLESTAR:
                 self.set_strict_prop_locations(prop)

@@ -5,9 +5,11 @@ from constants.string_constants import (
     STAFF,
     TRIAD,
     HOOP,
+    BIGHOOP,
     FAN,
     CLUB,
     BUUGENG,
+    
 )
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, PropAttributesDicts
 

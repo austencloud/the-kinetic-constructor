@@ -12,25 +12,24 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.graph_editor import GraphEditor
-
+from PyQt6.QtCore import Qt
 
 class AttrPanel(QFrame):
     def __init__(self, graph_editor: "GraphEditor") -> None:
         super().__init__()
         self.graph_editor = graph_editor
         self.setContentsMargins(0, 0, 0, 0)
-
         self.blue_attr_box = AttrBox(self, self.graph_editor.pictograph, BLUE)
         self.red_attr_box = AttrBox(self, self.graph_editor.pictograph, RED)
-        self.attr_panel_layout = QHBoxLayout()
-        self.setLayout(self.attr_panel_layout)
         self.setup_layouts()
 
     def setup_layouts(self) -> None:
-        self.attr_panel_layout.setContentsMargins(0, 0, 0, 0)
-        self.attr_panel_layout.setSpacing(0)
-        self.attr_panel_layout.addWidget(self.blue_attr_box)
-        self.attr_panel_layout.addWidget(self.red_attr_box)
+        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
+        self.layout.addWidget(self.blue_attr_box)
+        self.layout.addWidget(self.red_attr_box)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
     def update_attr_panel(self, motion_color: Colors) -> None:
         motion = self.graph_editor.pictograph.get_motion_by_color(motion_color)
@@ -46,5 +45,3 @@ class AttrPanel(QFrame):
     def resize_attr_panel(self) -> None:
         for box in [self.blue_attr_box, self.red_attr_box]:
             box.resize_attr_box()
-        self.setMaximumWidth(self.blue_attr_box.width() + self.red_attr_box.width())
-            

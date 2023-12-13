@@ -427,3 +427,8 @@ class DoubleStar(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
         attributes[PROP_TYPE] = DOUBLESTAR
         super().__init__(pictograph, attributes)
+
+class BigHoop(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = BIGHOOP
+        super().__init__(pictograph, attributes)

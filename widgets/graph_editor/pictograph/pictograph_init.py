@@ -7,7 +7,7 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
-from objects.prop import DoubleStar, Prop, Staff, Club, Fan, Hoop, Buugeng, Triad
+from objects.prop import BigHoop, DoubleStar, Prop, Staff, Club, Fan, Hoop, Buugeng, Triad
 from constants.string_constants import *
 from utilities.TypeChecking.TypeChecking import Colors, Locations, PropTypes
 from widgets.graph_editor.pictograph.pictograph_view import PictographView
@@ -57,6 +57,7 @@ class PictographInit:
             BUUGENG.lower(): Buugeng,
             TRIAD.lower(): Triad,
             DOUBLESTAR.lower(): DoubleStar,
+            BIGHOOP.lower(): BigHoop,
         }
 
         prop_class = prop_class_mapping.get(prop_type)
@@ -112,6 +113,8 @@ class PictographInit:
             BUUGENG.lower(): Buugeng,
             TRIAD.lower(): Triad,
             DOUBLESTAR.lower(): DoubleStar,
+            BIGHOOP.lower(): BigHoop,
+            
         }
 
         prop_class = prop_class_mapping.get(prop_type)

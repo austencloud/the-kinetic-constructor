@@ -15,9 +15,10 @@ class PictographWidget(QWidget):
         self.aspect_ratio = aspect_ratio
         self.graph_editor = graph_editor
         self.view = view
-        self.setLayout(QVBoxLayout())
-        self.layout().addWidget(view)
-        self.layout().setContentsMargins(0, 0, 0, 0)
+        
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout.addWidget(view)
+        self.layout.setContentsMargins(0, 0, 0, 0)
 
     def resize_pictograph_widget(self) -> None:
         new_width = int(self.graph_editor.height() * 75 / 90)

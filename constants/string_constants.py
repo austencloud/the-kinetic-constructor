@@ -98,6 +98,7 @@ BUUGENG = "buugeng"
 FAN = "fan"
 TRIAD = "triad"
 HOOP = "hoop"
+BIGHOOP = "bighoop"
 DOUBLESTAR = "doublestar"
 
 COLOR_MAP = {RED: RED_HEX, BLUE: BLUE_HEX}
