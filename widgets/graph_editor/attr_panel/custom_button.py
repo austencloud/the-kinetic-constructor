@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QPushButton
-from PyQt6.QtGui import QPalette
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtCore import QSize
 from typing import Union, TYPE_CHECKING
 
 if TYPE_CHECKING:

@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton, QSizePolicy
 from PyQt6.QtGui import QIcon, QPixmap, QPainter, QFont
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor
 from PyQt6.QtSvg import QSvgRenderer
 from data.letter_engine_data import letter_types

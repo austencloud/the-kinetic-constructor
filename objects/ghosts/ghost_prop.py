@@ -5,7 +5,6 @@ from constants.string_constants import (
     STAFF,
     TRIAD,
     HOOP,
-    BIGHOOP,
     FAN,
     CLUB,
     BUUGENG,

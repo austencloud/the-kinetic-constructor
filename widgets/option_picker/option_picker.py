@@ -1,7 +1,7 @@
 from typing import Callable, Dict, List, TYPE_CHECKING
 import json
 from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout
-from PyQt6.QtCore import QSize, Qt, QEvent
+from PyQt6.QtCore import QSize, Qt
 from constants.string_constants import *
 from data.positions_map import get_specific_start_end_positions
 from objects.arrow import Arrow

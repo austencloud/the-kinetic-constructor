@@ -5,7 +5,7 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtGui import QTransform
 from PyQt6.QtWidgets import QGraphicsSceneWheelEvent
 from typing import Dict, Literal
-from PyQt6.QtCore import QPointF, Qt, QEvent
+from PyQt6.QtCore import QPointF, QEvent
 from constants.string_constants import (
     BOX,
     DIAMOND,

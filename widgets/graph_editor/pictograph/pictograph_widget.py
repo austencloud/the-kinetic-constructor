@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
-from PyQt6.QtGui import QResizeEvent
 
 if TYPE_CHECKING:
     from widgets.graph_editor.graph_editor import GraphEditor

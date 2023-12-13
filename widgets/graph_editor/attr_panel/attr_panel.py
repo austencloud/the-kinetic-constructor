@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QFrame,
 )
-from PyQt6.QtGui import QResizeEvent
 from constants.string_constants import RED, BLUE
 from utilities.TypeChecking.TypeChecking import Colors
 from widgets.graph_editor.attr_panel.attr_box import AttrBox
@@ -10,7 +9,6 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.graph_editor import GraphEditor
 from PyQt6.QtCore import Qt
 

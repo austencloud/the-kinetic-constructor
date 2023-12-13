@@ -1,8 +1,5 @@
-from PyQt6.QtGui import QTransform
 
-from objects.letter_item import LetterItem
 from objects.arrow import Arrow
-from objects.grid import Grid, GridItem
 from objects.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,

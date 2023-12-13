@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (
     QSpacerItem,
     QSizePolicy,
 )
-from PyQt6.QtGui import QFont, QResizeEvent
+from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants.string_constants import ICON_DIR, SWAP_ICON
 from utilities.TypeChecking.TypeChecking import MotionTypes

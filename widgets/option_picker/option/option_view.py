@@ -1,6 +1,4 @@
 from PyQt6.QtWidgets import QPushButton
-from typing import Literal
-from PyQt6.QtCore import QEvent
 from PyQt6.QtCore import Qt
 from constants.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
 from typing import TYPE_CHECKING

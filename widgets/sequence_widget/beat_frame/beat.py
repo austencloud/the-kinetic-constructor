@@ -1,11 +1,8 @@
-from typing import Dict
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtWidgets import QGraphicsScene
 
 from data.letter_engine_data import letter_types
 from objects.arrow import Arrow
-from objects.grid import Grid
 from objects.prop import Prop
 from objects.prop import Staff
 from objects.motion import Motion
@@ -17,7 +14,6 @@ from constants.string_constants import (
     MOTION_TYPE,
     RED,
     ROTATION_DIRECTION,
-    STAFF,
     START_LOCATION,
     TURNS,
     START_ORIENTATION,
@@ -30,7 +26,6 @@ from utilities.TypeChecking.Letters import Letters
 from utilities.letter_engine import LetterEngine
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
-    Colors,
     Layers,
     MotionAttributesDicts,
     List,
@@ -40,9 +35,6 @@ from utilities.TypeChecking.TypeChecking import (
     Tuple,
 )
 from widgets.graph_editor.pictograph.pictograph import Pictograph
-from widgets.graph_editor.pictograph.pictograph_event_handler import (
-    PictographEventHandler,
-)
 from widgets.graph_editor.pictograph.pictograph_menu_handler import (
     PictographMenuHandler,
 )
@@ -52,15 +44,11 @@ from widgets.graph_editor.pictograph.position_engines.arrow_positioner import (
 from widgets.graph_editor.pictograph.position_engines.prop_positioner import (
     PropPositioner,
 )
-from widgets.option_picker.option.option_init import OptionInit
-from widgets.option_picker.option.option_view import OptionView
 from widgets.sequence_widget.beat_frame.beat_frame import BeatFrame
 
 if TYPE_CHECKING:
-    from utilities.pictograph_generator import PictographGenerator
     from widgets.main_widget import MainWidget
 
-from objects.letter_item import LetterItem
 
 
 class Beat(Pictograph):

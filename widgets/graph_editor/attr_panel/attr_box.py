@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING, Dict, List
-from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtGui import QPixmap, QFont, QResizeEvent
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QWidget, QSizePolicy, QComboBox
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPixmap, QFont
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
 from objects.motion import Motion
 from constants.string_constants import (
-    ICON_DIR,
     RED,
     RED_HEX,
     BLUE_HEX,

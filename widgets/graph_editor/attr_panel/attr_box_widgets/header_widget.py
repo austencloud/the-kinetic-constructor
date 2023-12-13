@@ -1,5 +1,4 @@
 from PyQt6.QtWidgets import (
-    QWidget,
     QHBoxLayout,
     QLabel,
 )
@@ -21,7 +20,6 @@ from widgets.graph_editor.attr_panel.custom_button import CustomButton
 if TYPE_CHECKING:
     from widgets.graph_editor.attr_panel.attr_box import AttrBox
 from constants.string_constants import ICON_DIR
-from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 

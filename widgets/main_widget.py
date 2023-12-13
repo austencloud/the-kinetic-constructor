@@ -1,13 +1,11 @@
 from typing import TYPE_CHECKING, Optional
-from PyQt6 import QtGui, QtCore
+from PyQt6 import QtGui
 
 from PyQt6.QtCore import QEvent
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QSplitter
-from PyQt6.QtGui import QWheelEvent, QShowEvent
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
+from PyQt6.QtGui import QWheelEvent
 from utilities.TypeChecking.TypeChecking import LetterDictionary
-from utilities.export_handler import ExportHandler
 from utilities.json_handler import JsonHandler
-from utilities.pictograph_generator import PictographGenerator
 from widgets.graph_editor.key_event_handler import KeyEventHandler
 from widgets.graph_editor.graph_editor import GraphEditor
 from widgets.graph_editor.pictograph.pictograph import Pictograph

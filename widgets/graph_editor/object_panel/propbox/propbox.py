@@ -24,7 +24,6 @@ from utilities.TypeChecking.TypeChecking import PropTypes, TYPE_CHECKING, Dict, 
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from widgets.graph_editor.graph_editor import GraphEditor
 
 

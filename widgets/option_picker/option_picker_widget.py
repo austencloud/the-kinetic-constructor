@@ -1,9 +1,7 @@
 from typing import TYPE_CHECKING
-from PyQt6 import QtGui
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-from PyQt6.QtGui import QShowEvent
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from .option_picker_letter_buttons import OptionPickerLetterButtons
 from .option_picker import OptionPicker
