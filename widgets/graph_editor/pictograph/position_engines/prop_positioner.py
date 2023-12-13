@@ -64,9 +64,9 @@ class PropPositioner:
 
     def update_prop_positions(self) -> None:
         for prop in self.scene.props:
-            if prop.prop_type in [STAFF, FAN, CLUB, BUUGENG, HOOP, BIGHOOP, TRIAD]:
+            if prop.prop_type in [STAFF, FAN, CLUB, BUUGENG, HOOP, TRIAD]:
                 self.set_default_prop_locations(prop)
-            elif prop.prop_type == DOUBLESTAR:
+            elif prop.prop_type in [DOUBLESTAR, BIGHOOP]:
                 self.set_strict_prop_locations(prop)
         if self.props_in_beta():
             self.reposition_beta_props()
@@ -230,8 +230,10 @@ class PropPositioner:
 
             # If the other prop is in a different layer, set both props to default locations
             if other_prop and other_prop.layer != prop.layer:
-                self.set_default_prop_locations(prop)
-                self.set_default_prop_locations(other_prop)
+                if prop.prop_type in [STAFF, FAN, CLUB, BUUGENG, HOOP, TRIAD]:
+                    self.set_default_prop_locations(prop)
+                elif prop.prop_type in [DOUBLESTAR, BIGHOOP]:
+                    self.set_strict_prop_locations(other_prop)
             else:
                 # Original logic for handling props in the same layer
                 end_location = motion[END_LOCATION]
@@ -250,6 +252,9 @@ class PropPositioner:
                 (SOUTH, BLUE): LEFT,
                 (EAST, RED): UP if end_location == EAST else None,
                 (WEST, BLUE): DOWN if end_location == WEST else None,
+                (WEST, RED): UP if end_location == WEST else None,
+                (EAST, BLUE): DOWN if end_location == EAST else None,
+                
             },
             2: {
                 (NORTH, RED): UP,
@@ -258,6 +263,8 @@ class PropPositioner:
                 (SOUTH, BLUE): DOWN,
                 (EAST, RED): RIGHT if end_location == EAST else None,
                 (WEST, BLUE): LEFT if end_location == WEST else None,
+                (WEST, RED): RIGHT if end_location == WEST else None,
+                (EAST, BLUE): LEFT if end_location == EAST else None,
             },
         }
 

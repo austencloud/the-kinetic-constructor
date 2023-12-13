@@ -64,15 +64,13 @@ class MainWidget(QWidget):
     ### EVENT HANDLERS ###
 
     def eventFilter(self, source, event: QEvent) -> bool:
-        print (f"Event: {event.type()} in {source}")
         if event.type() == QEvent.Type.KeyPress:
             active_pictograph = self.find_active_pictograph()
             if active_pictograph:
                 self.key_event_handler.keyPressEvent(event, self, active_pictograph)
                 return True
 
-        if event.type() == QEvent.Type.Wheel:
-            print(f"Wheel event in {source}")
+
 
         return super().eventFilter(source, event)
 

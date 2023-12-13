@@ -39,14 +39,31 @@ class TurnsWidget(AttrBoxWidget):
         self._setup_layout_frames()
         self._apply_layout_settings()
         # Create the 'Turns' header label
+        self._update_widget_sizes()
+        self._update_clock_size()
+        self._update_turnbox_size()
+        self._update_button_size()
+
+        self.add_black_borders()
 
     ### LAYOUTS ###
+    def add_black_borders(self) -> None:
+        self.setStyleSheet("border: 1px solid black;")
+        self.header_frame.setStyleSheet("border: 1px solid black;")
+        self.button_frame.setStyleSheet("border: 1px solid black;")
+        self.turnbox_vbox_frame.setStyleSheet("border: 1px solid black;")
+        self.header_label.setStyleSheet("border: 1px solid black;")
+        self.turnbox.setStyleSheet("border: 1px solid black;")
+        for button in self.buttons:
+            button.setStyleSheet("border: 1px solid black;")
 
     def _setup_layouts(self) -> None:
         """Sets up the main and auxiliary layouts for the widget."""
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
         self.header_layout = QHBoxLayout()
         self.buttons_layout = QHBoxLayout()
 
@@ -58,8 +75,14 @@ class TurnsWidget(AttrBoxWidget):
         )
         self._add_widgets_to_layout(self.buttons, self.buttons_layout)
 
+        self.header_layout.setContentsMargins(0, 0, 0, 0)
+        self.buttons_layout.setContentsMargins(0, 0, 0, 0)
+
         self.header_frame = self._create_frame(self.header_layout)
         self.button_frame = self._create_frame(self.buttons_layout)
+
+        self.header_frame.setContentsMargins(0, 0, 0, 0)
+        self.button_frame.setContentsMargins(0, 0, 0, 0)
 
         self.layout.addWidget(self.header_frame)
         self.layout.addWidget(self.button_frame)
@@ -102,6 +125,7 @@ class TurnsWidget(AttrBoxWidget):
             self._create_turns_button(text) for text in ["-1", "-0.5", "+0.5", "+1"]
         ]
         turnbox_frame = QFrame(self)
+
         turnbox_frame.setLayout(QVBoxLayout())
 
         self.header_label = QLabel("Turns")
@@ -237,7 +261,7 @@ class TurnsWidget(AttrBoxWidget):
 
     def _update_clock_size(self) -> None:
         """Updates the sizes of the clock labels based on the widget's size."""
-        clock_size = int(self.height() / 2 * 0.8)
+        clock_size = int(self.height() / 2)
         for clock in [self.clock_left, self.clock_right]:
             clock.setMinimumSize(clock_size, clock_size)
             clock.setMaximumSize(clock_size, clock_size)
@@ -285,7 +309,6 @@ class TurnsWidget(AttrBoxWidget):
         self.turnbox_vbox_frame.setMaximumWidth(int(self.attr_box.width() / 3.25))
 
         self.turnbox_vbox_frame.setMinimumHeight(int(self.height() / 2))
-        self.turnbox_vbox_frame.setMaximumHeight(int(self.height() / 2))
 
     def _update_button_size(self) -> None:
         for button in self.buttons:
