@@ -79,9 +79,9 @@ class PictographView(QGraphicsView):
         self.scale(self.view_scale, self.view_scale)
 
         button_size = int(view_width / 7)
-        self.configure_button_size_and_position(
-            self.add_to_sequence_button, button_size
-        )
-        self.configure_button_size_and_position(self.clear_button, button_size)
-        self.configure_button_size_and_position(self.rotate_cw_button, button_size)
-        self.configure_button_size_and_position(self.rotate_ccw_button, button_size)
+        # self.configure_button_size_and_position(
+        #     self.add_to_sequence_button, button_size
+        # )
+        # self.configure_button_size_and_position(self.clear_button, button_size)
+        # self.configure_button_size_and_position(self.rotate_cw_button, button_size)
+        # self.configure_button_size_and_position(self.rotate_ccw_button, button_size)

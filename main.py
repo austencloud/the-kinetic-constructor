@@ -1,15 +1,12 @@
 import sys
-import cProfile
-import pstats
 from PyQt6.QtWidgets import QApplication, QMainWindow
-from widgets.main_widget import MainWidget
 from PyQt6.QtGui import QGuiApplication
-from PyQt6.QtWidgets import QMainWindow
 from widgets.main_widget import MainWidget
+from profiler import Profiler
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, profiler: cProfile.Profile) -> None:
+    def __init__(self, profiler: Profiler) -> None:
         super().__init__()
         self.profiler = profiler
 
@@ -18,47 +15,33 @@ class MainWindow(QMainWindow):
 
     def _configure_window(self) -> None:
         screens = QGuiApplication.screens()
-        if len(screens) > 1:
-            screen = screens[1]
-        else:
-            screen = QGuiApplication.primaryScreen()
-
+        screen = screens[1] if len(screens) > 1 else QGuiApplication.primaryScreen()
         available_geometry = screen.availableGeometry()
         self.setMaximumSize(available_geometry.size())
-        self.move(
-            int(available_geometry.x()),
-            int(available_geometry.y()),
-        )
+        self.move(int(available_geometry.x()), int(available_geometry.y()))
 
     def _init_main_window(self) -> None:
         self.main_widget = MainWidget(self)
         self.installEventFilter(self.main_widget)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Sequence Constructor")
-        self._configure_window()
         self.show()
 
-    def write_profiling_stats_to_file(self, file_path: str) -> None:
-        stats: pstats.Stats = pstats.Stats(self.profiler).sort_stats("calls")
-        with open(file_path, "w") as f:
-            stats.stream = f  # Add this line to set the output stream
-            stats.print_stats()
-        print(f"Main profiling stats written to {file_path}")
+    def exec_with_profiling(self, app: QApplication) -> int:
+        for func in [app.exec, self.show]:
+            self.profiler.runcall(func)
 
 
 def main() -> None:
-    """
-    The entry point of the application.
-    """
-    profiler: cProfile.Profile = cProfile.Profile()
-    profiler.enable()
     app = QApplication(sys.argv)
+    profiler = Profiler()
     main_window = MainWindow(profiler)
     main_window.setFocus()
-    exit_code = app.exec()
 
-    profiler.disable()
-    main_window.write_profiling_stats_to_file("main_profiling_stats.txt")
+    exit_code = main_window.exec_with_profiling(app)
+    main_window.profiler.write_profiling_stats_to_file(
+        "main_profiling_stats.txt", "f:/CODE/tka-app/tka-sequence-constructor/"
+    )
 
     sys.exit(exit_code)
 

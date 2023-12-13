@@ -151,7 +151,10 @@ class StartEndWidget(AttrBoxWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
+        if self.size() != event.oldSize():
+            self.update_size_and_styles()
 
+    def update_size_and_styles(self):
         self.swap_button_frame.setMinimumWidth(int(self.attr_box.width() * 1 / 4))
         self.swap_button_frame.setMaximumWidth(int(self.attr_box.width() * 1 / 4))
 
@@ -199,7 +202,6 @@ class StartEndWidget(AttrBoxWidget):
                     border: {self.attr_box.combobox_border}px solid black;
                     border-radius: {border_radius}px;
                 }}
-
                 QComboBox::drop-down {{
                     subcontrol-origin: padding;
                     subcontrol-position: top right;
@@ -210,7 +212,6 @@ class StartEndWidget(AttrBoxWidget):
                     border-top-right-radius: {border_radius}px;
                     border-bottom-right-radius: {border_radius}px;
                 }}
-
                 QComboBox::down-arrow {{
                     image: url("{ICON_DIR}combobox_arrow.png");
                     width: 10px;

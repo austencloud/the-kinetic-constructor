@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
     QComboBox,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont, QPixmap
+from PyQt6.QtGui import QFont, QPixmap, QResizeEvent
 from typing import TYPE_CHECKING, List, Tuple
 from objects.motion import Motion
 from constants.string_constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, ICON_DIR
@@ -235,14 +235,15 @@ class TurnsWidget(AttrBoxWidget):
 
     ### EVENT HANDLERS ###
 
-    def resizeEvent(self, event) -> None:
+    def resizeEvent(self, event:QResizeEvent) -> None:
         """Handles the resizing event of the widget."""
-        self.spacing = self.attr_box.pictograph.view.width() // 250
 
         super().resizeEvent(event)
-        self._update_widget_sizes()
-        self._update_clock_size()
-        self._update_turnbox_size()
+        if self.size() != event.oldSize():
+            self.spacing = self.attr_box.pictograph.view.width() // 250
+            self._update_widget_sizes()
+            self._update_clock_size()
+            self._update_turnbox_size()
 
     def _update_widget_sizes(self) -> None:
         """Updates the sizes of the widgets based on the widget's size."""

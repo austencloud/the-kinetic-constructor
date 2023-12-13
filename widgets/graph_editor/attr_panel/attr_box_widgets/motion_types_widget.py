@@ -124,7 +124,14 @@ class MotionTypesWidget(AttrBoxWidget):
     def clear_motion_type_box(self) -> None:
         self.motion_type_box.setCurrentIndex(-1)
 
+
     def resizeEvent(self, event: QResizeEvent) -> None:
+        if self.size() != event.oldSize():
+            self._update_styles_and_sizes()
+            super().resizeEvent(event)
+
+
+    def _update_styles_and_sizes(self) -> None:
         # super().resizeEvent(event)
         self.spacing = self.attr_box.pictograph.view.width() // 250
         self.swap_button_frame.setMinimumWidth(int(self.attr_box.width() * 1 / 4))
