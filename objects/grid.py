@@ -3,7 +3,9 @@ from xml.etree import ElementTree as ET
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtGui import QTransform
-
+from PyQt6.QtWidgets import QGraphicsSceneWheelEvent
+from typing import Dict, Literal
+from PyQt6.QtCore import QPointF, Qt, QEvent
 from constants.string_constants import (
     BOX,
     DIAMOND,
@@ -31,6 +33,9 @@ class GridItem(QGraphicsSvgItem):
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)
         self.setZValue(100)
+
+    def wheelEvent(self, event: QGraphicsSceneWheelEvent | None) -> None:
+        return super().wheelEvent(event)
 
     def mousePressEvent(self, event) -> None:
         event.ignore()
@@ -206,3 +211,9 @@ class Grid:
 
     def mouseReleaseEvent(self, event) -> None:
         event.ignore()
+
+
+    def eventFilter(self, obj, event:QEvent) -> Literal[False]:
+        if event.type() == QEvent.Type.Wheel:
+            event.ignore()  # Ignore the event to let it propagate
+        return False  # Return False to continue event propagation

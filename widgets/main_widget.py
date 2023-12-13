@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING, Optional
+from PyQt6 import QtGui, QtCore
 
 from PyQt6.QtCore import QEvent
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QSplitter
-
+from PyQt6.QtGui import QWheelEvent
 from utilities.TypeChecking.TypeChecking import LetterDictionary
 from utilities.export_handler import ExportHandler
 from utilities.json_handler import JsonHandler
@@ -68,6 +69,10 @@ class MainWidget(QWidget):
             if active_pictograph:
                 self.key_event_handler.keyPressEvent(event, self, active_pictograph)
                 return True
+            
+        if event.type() == QEvent.Type.Wheel:
+            print(f"Wheel event in {source}")
+
         return super().eventFilter(source, event)
 
     def deselect_all_except(self, active_pictograph: Pictograph) -> None:
@@ -93,3 +98,6 @@ class MainWidget(QWidget):
         self.sequence.resizeEvent(event)
         self.option_picker.resizeEvent(event)
         self.graph_editor.resizeEvent(event)
+
+    def wheelEvent(self, a0: QWheelEvent | None) -> None:
+        return super().wheelEvent(a0)

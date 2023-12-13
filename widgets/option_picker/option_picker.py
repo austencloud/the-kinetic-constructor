@@ -1,7 +1,7 @@
 from typing import Callable, Dict, List, TYPE_CHECKING
 import json
 from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout
-from PyQt6.QtCore import QSize
+from PyQt6.QtCore import QSize, Qt, QEvent
 from constants.string_constants import *
 from data.positions_map import get_specific_start_end_positions
 from objects.arrow import Arrow
@@ -27,8 +27,12 @@ class OptionPicker(QScrollArea):
         self.spacing = 10
         self.options: List[Option] = []
         self.initialize_ui()
+        self.viewport().installEventFilter(self)
+
         self.pictographs = self.load_json_file("preprocessed.json")
         self.show_initial_selection()
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
     def initialize_ui(self) -> None:
         self.setWidgetResizable(True)
@@ -195,3 +199,4 @@ class OptionPicker(QScrollArea):
                 new_item.ghost_prop = target_beat.ghost_props[new_item.color]
                 new_item.ghost_prop.motion = new_item.motion
                 new_item.arrow = target_beat.get_arrow_by_color(new_item.color)
+

@@ -1,4 +1,6 @@
 from PyQt6.QtWidgets import QPushButton
+from typing import Literal
+from PyQt6.QtCore import QEvent
 from PyQt6.QtCore import Qt
 from constants.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
 from typing import TYPE_CHECKING
@@ -19,7 +21,6 @@ class OptionView(PictographView):
         self.setScene(self.option)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.wheelEvent = lambda event: None
 
     def init_buttons(self) -> None:
         self.rotate_cw_button = self.create_button(
@@ -41,9 +42,10 @@ class OptionView(PictographView):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        view_width = (
-            int(self.option.option_picker.width() / 4)
-            - self.option.option_picker.spacing * (self.option.option_picker.COLUMN_COUNT - 1)
+        view_width = int(
+            self.option.option_picker.width() / 4
+        ) - self.option.option_picker.spacing * (
+            self.option.option_picker.COLUMN_COUNT - 1
         )
 
         self.setMinimumWidth(view_width)
@@ -59,3 +61,13 @@ class OptionView(PictographView):
         button_size = int(self.width() / 7)
         self.configure_button_size_and_position(self.rotate_cw_button, button_size)
         self.configure_button_size_and_position(self.rotate_ccw_button, button_size)
+
+    def wheelEvent(self, event):
+        # Send the event to the OptionPicker's event filter
+        self.option.option_picker.wheelEvent(event)
+
+
+    def eventFilter(self, obj, event: QEvent) -> Literal[False]:
+        if event.type() == QEvent.Type.Wheel:
+            event.ignore()  # Ignore the event to let it propagate
+        return False  # Return False to continue event propagation

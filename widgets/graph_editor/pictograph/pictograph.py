@@ -409,3 +409,4 @@ class Pictograph(QGraphicsScene):
             self.letter_item.setSharedRenderer(
                 QSvgRenderer(f"{LETTER_SVG_DIR}/blank.svg")
             )
+

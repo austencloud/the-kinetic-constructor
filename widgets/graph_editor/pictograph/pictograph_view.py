@@ -17,7 +17,6 @@ class PictographView(QGraphicsView):
         self.setScene(self.pictograph)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.wheelEvent = lambda event: None
 
         # Initialize buttons
         self.init_buttons()
