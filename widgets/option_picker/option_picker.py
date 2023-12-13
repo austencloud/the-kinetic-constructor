@@ -199,3 +199,4 @@ class OptionPicker(QScrollArea):
                 new_item.ghost_prop = target_beat.ghost_props[new_item.color]
                 new_item.ghost_prop.motion = new_item.motion
                 new_item.arrow = target_beat.get_arrow_by_color(new_item.color)
+

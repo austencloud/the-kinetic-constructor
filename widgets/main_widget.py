@@ -3,7 +3,7 @@ from PyQt6 import QtGui, QtCore
 
 from PyQt6.QtCore import QEvent
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QSplitter
-from PyQt6.QtGui import QWheelEvent
+from PyQt6.QtGui import QWheelEvent, QShowEvent
 from utilities.TypeChecking.TypeChecking import LetterDictionary
 from utilities.export_handler import ExportHandler
 from utilities.json_handler import JsonHandler
@@ -64,6 +64,7 @@ class MainWidget(QWidget):
     ### EVENT HANDLERS ###
 
     def eventFilter(self, source, event: QEvent) -> bool:
+        print (f"Event: {event.type()} in {source}")
         if event.type() == QEvent.Type.KeyPress:
             active_pictograph = self.find_active_pictograph()
             if active_pictograph:
@@ -93,11 +94,13 @@ class MainWidget(QWidget):
 
         return None
 
-    def resizeEvent(self, event: QEvent) -> None:
-        super().resizeEvent(event)
-        self.sequence.resizeEvent(event)
-        self.option_picker.resizeEvent(event)
-        self.graph_editor.resizeEvent(event)
+    def wheelEvent(self, event: QWheelEvent | None) -> None:
+        return super().wheelEvent(event)
 
-    def wheelEvent(self, a0: QWheelEvent | None) -> None:
-        return super().wheelEvent(a0)
+    def resizeEvent(self, event: QtGui.QResizeEvent) -> None:
+        ### KEEP THIS TO PREVENT THE WIDGETS FROM INFINITELY RESIZING ###
+        self.option_picker.setMaximumHeight(int(self.main_window.height() * 7 / 10))
+        self.graph_editor.setMaximumHeight(int(self.main_window.height() * 3 / 10))
+
+        
+

@@ -40,34 +40,34 @@ class OptionView(PictographView):
     def configure_button_size_and_position(self, button: QPushButton, size) -> None:
         pass
 
-    def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-        view_width = int(
-            self.option.option_picker.width() / 4
-        ) - self.option.option_picker.spacing * (
-            self.option.option_picker.COLUMN_COUNT - 1
-        )
+    # def resizeEvent(self, event) -> None:
+    #     super().resizeEvent(event)
+    #     view_width = int(
+    #         self.option.option_picker.width() / 4
+    #     ) - self.option.option_picker.spacing * (
+    #         self.option.option_picker.COLUMN_COUNT - 1
+    #     )
 
-        self.setMinimumWidth(view_width)
-        self.setMaximumWidth(view_width)
-        self.setMinimumHeight(int(view_width * 90 / 75))
-        self.setMaximumHeight(int(view_width * 90 / 75))
+    #     self.setMinimumWidth(view_width)
+    #     self.setMaximumWidth(view_width)
+    #     self.setMinimumHeight(int(view_width * 90 / 75))
+    #     self.setMaximumHeight(int(view_width * 90 / 75))
 
-        self.view_scale = view_width / self.option.width()
+    #     self.view_scale = view_width / self.option.width()
 
-        self.resetTransform()
-        self.scale(self.view_scale, self.view_scale)
+    #     self.resetTransform()
+    #     self.scale(self.view_scale, self.view_scale)
 
-        button_size = int(self.width() / 7)
-        self.configure_button_size_and_position(self.rotate_cw_button, button_size)
-        self.configure_button_size_and_position(self.rotate_ccw_button, button_size)
+    #     button_size = int(self.width() / 7)
+    #     self.configure_button_size_and_position(self.rotate_cw_button, button_size)
+    #     self.configure_button_size_and_position(self.rotate_ccw_button, button_size)
 
-    def wheelEvent(self, event):
-        # Send the event to the OptionPicker's event filter
-        self.option.option_picker.wheelEvent(event)
+    # def wheelEvent(self, event):
+    #     # Send the event to the OptionPicker's event filter
+    #     self.option.option_picker.wheelEvent(event)
 
 
-    def eventFilter(self, obj, event: QEvent) -> Literal[False]:
-        if event.type() == QEvent.Type.Wheel:
-            event.ignore()  # Ignore the event to let it propagate
-        return False  # Return False to continue event propagation
+    # def eventFilter(self, obj, event: QEvent) -> Literal[False]:
+    #     if event.type() == QEvent.Type.Wheel:
+    #         event.ignore()  # Ignore the event to let it propagate
+    #     return False  # Return False to continue event propagation

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtGui import QPixmap, QFont, QResizeEvent
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QWidget, QSizePolicy
 from objects.motion import Motion
 from constants.string_constants import (
@@ -126,9 +126,9 @@ class AttrBox(QFrame):
         else:
             self.clear_attr_box()
 
-    def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-        self.set_size_to_match_pictograph_view()
+    def resize_attr_box(self) -> None:
+        self.setMinimumWidth(int(self.pictograph.view.width() * 0.85))
+        self.setMaximumWidth(int(self.pictograph.view.width() * 0.85))        
         self.header_spacing = int(self.width() * 0.02)
         ratio_total = 1 + 1 + 1 + 2
         available_height = self.height()
@@ -141,6 +141,132 @@ class AttrBox(QFrame):
         self.start_end_widget.setMaximumHeight(start_end_height)
         self.turns_widget.setMaximumHeight(turns_widget_height)
 
-    def set_size_to_match_pictograph_view(self):
-        self.setMinimumWidth(int(self.pictograph.view.width() * 0.85))
-        self.setMaximumWidth(int(self.pictograph.view.width() * 0.85))
+        self.turns_widget._update_button_size()
+        self.turns_widget._update_widget_sizes()
+        self.turns_widget._update_clock_size()
+        self.turns_widget._update_turnbox_size()
+        
+        self.resize_motion_type_widget()
+        self.resize_start_end_widget()
+        
+        self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
+
+    def resize_motion_type_widget(self) -> None:
+        self.spacing = self.pictograph.view.width() // 250
+        self.motion_type_widget.swap_button_frame.setMinimumWidth(int(self.width() * 1 / 4))
+        self.motion_type_widget.swap_button_frame.setMaximumWidth(int(self.width() * 1 / 4))
+        self.motion_type_widget.motion_type_box.setMinimumWidth(int(self.width() * 0.5))
+
+        self.motion_type_widget.header_label.setFont(QFont("Arial", int(self.width() / 18)))
+
+        self.motion_type_widget.motion_type_box.setMinimumHeight(int(self.width() / 5))
+        self.motion_type_widget.motion_type_box.setMaximumHeight(int(self.width() / 5))
+        box_font_size = int(self.width() / 10)
+        self.motion_type_widget.motion_type_box.setFont(
+            QFont("Arial", box_font_size, QFont.Weight.Bold, True)
+        )
+        self.motion_type_widget.main_vbox_frame.layout().setSpacing(
+            self.pictograph.view.width() // 100
+        )
+        # Update the stylesheet with the new border radius
+        border_radius = (
+            min(self.motion_type_widget.motion_type_box.width(), self.motion_type_widget.motion_type_box.height()) * 0.25
+        )
+        self.motion_type_widget.motion_type_box.setStyleSheet(
+            f"""
+            QComboBox {{
+                border: {self.combobox_border}px solid black;
+                border-radius: {border_radius}px;
+            }}
+
+            QComboBox::drop-down {{
+                subcontrol-origin: padding;
+                subcontrol-position: top right;
+                width: 15px;
+                border-left-width: 1px;
+                border-left-color: darkgray;
+                border-left-style: solid;
+                border-top-right-radius: {border_radius}px;
+                border-bottom-right-radius: {border_radius}px;
+            }}
+
+            QComboBox::down-arrow {{
+                image: url("{ICON_DIR}combobox_arrow.png");
+                width: 10px;
+                height: 10px;
+            }}
+            """
+        )
+        self.motion_type_widget.header_label.setContentsMargins(0, 0, self.spacing, 0)
+        self.motion_type_widget.main_vbox_frame.setMaximumHeight(self.height() + self.spacing)
+        self.motion_type_widget.motion_type_box.setMaximumHeight(int(self.height() * 3 / 4 + self.spacing))
+        self.motion_type_widget.header_label.setMinimumHeight(int(self.height() * 1 / 4 + self.spacing))
+
+
+    def resize_start_end_widget(self) -> None:
+        self.start_end_widget.swap_button_frame.setMaximumWidth(int(self.width() * 1 / 4))
+        self.start_end_widget.swap_button_frame.setMinimumWidth(int(self.width() * 1 / 4))
+
+        self.start_end_widget.arrow_label.setMinimumHeight(self.start_end_widget.start_box.height())
+        self.start_end_widget.arrow_label.setMaximumHeight(self.start_end_widget.start_box.height())
+
+        self.start_end_widget.arrow_spacer_label.setMinimumHeight(self.start_end_widget.header_labels[0].height())
+        self.start_end_widget.arrow_spacer_label.setMaximumHeight(self.start_end_widget.header_labels[0].height())
+        for header_label in self.start_end_widget.header_labels:
+            header_label.setFont(QFont("Arial", int(self.width() / 18)))
+        self.start_end_widget.arrow_label.setFont(
+            QFont(
+                "Arial",
+                int(self.width() / 10),
+                QFont.Weight.Bold,
+            )
+        )
+
+        for box in self.start_end_widget.boxes:
+            box.setFont(
+                QFont(
+                    "Arial",
+                    int(self.attr_panel.width() / 20),
+                    QFont.Weight.Bold,
+                )
+            )
+
+            box.setMinimumWidth(int(self.width() / 3.5))
+            box.setMaximumWidth(int(self.width() / 3.5))
+            box.setMinimumHeight(int(self.width() / 5))
+            box.setMaximumHeight(int(self.width() / 5))
+
+            box_font_size = int(self.width() / 10)
+            box.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold, True))
+
+            # Calculate the border radius as a fraction of the width or height
+            border_radius = (
+                min(box.width(), box.height()) * 0.25
+            )  # Adjust the factor as needed
+
+            # Update the stylesheet with the new border radius
+            box.setStyleSheet(
+                f"""
+                QComboBox {{
+                    border: {self.combobox_border}px solid black;
+                    border-radius: {border_radius}px;
+                }}
+
+                QComboBox::drop-down {{
+                    subcontrol-origin: padding;
+                    subcontrol-position: top right;
+                    width: 15px;
+                    border-left-width: 1px;
+                    border-left-color: darkgray;
+                    border-left-style: solid;
+                    border-top-right-radius: {border_radius}px;
+                    border-bottom-right-radius: {border_radius}px;
+                }}
+
+                QComboBox::down-arrow {{
+                    image: url("{ICON_DIR}combobox_arrow.png");
+                    width: 10px;
+                    height: 10px;
+                }}
+                """
+            )

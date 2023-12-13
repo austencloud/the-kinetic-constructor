@@ -224,16 +224,6 @@ class TurnsWidget(AttrBoxWidget):
 
     ### EVENT HANDLERS ###
 
-    def resizeEvent(self, event) -> None:
-        """Handles the resizing event of the widget."""
-        self.spacing = self.attr_box.pictograph.view.width() // 250
-
-        super().resizeEvent(event)
-        self._update_button_size()
-        self._update_widget_sizes()
-        self._update_clock_size()
-        self._update_turnbox_size()
-
     def _update_widget_sizes(self) -> None:
         """Updates the sizes of the widgets based on the widget's size."""
         available_height = self.height()
@@ -250,6 +240,8 @@ class TurnsWidget(AttrBoxWidget):
             clock.setMaximumSize(clock_size, clock_size)
 
     def _update_turnbox_size(self) -> None:
+        self.spacing = self.attr_box.pictograph.view.width() // 250
+
         border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
         self.turnbox.setMinimumWidth(int(self.attr_box.width() / 3.25))
         self.turnbox.setMaximumWidth(int(self.attr_box.width() / 3.25))
@@ -293,7 +285,5 @@ class TurnsWidget(AttrBoxWidget):
         self.turnbox_vbox_frame.setMaximumHeight(int(self.height() / 2))
 
     def _update_button_size(self) -> None:
-        """Updates the sizes of the buttons based on the widget's size."""
         for button in self.buttons:
-            button.update_button_size()
             button.setFont(QFont("Arial", int(button.height() / 3)))

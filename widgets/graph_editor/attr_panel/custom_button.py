@@ -23,9 +23,6 @@ class CustomButton(QPushButton):
         self.widget = widget
 
     def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-
-    def update_button_size(self):
         parent_width = self.widget.width()  # Assuming parent widget defines the size
         self.button_size = int(parent_width * 0.2 * 0.7)  # Update proportionally
         self.border_radius = self.button_size / 2
@@ -34,6 +31,7 @@ class CustomButton(QPushButton):
             QSize(int(self.button_size * 0.6), int(self.button_size * 0.6))
         )
         self.setStyleSheet(self.get_button_style())
+
 
     def get_button_style(self):
         return (

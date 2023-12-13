@@ -26,10 +26,6 @@ class SequenceWidget(QWidget):
         self.layout.addWidget(self.beat_frame)
         self.layout.addWidget(self.button_frame)
 
-    def resizeEvent(self, event) -> None:
-        self.setMinimumWidth(int(self.main_widget.width() / 2))
-        super().resizeEvent(event)
-
-    def set_size_to_match_beat_width(self):
-        self.setMaximumWidth(self.beat_frame.beats[0].width() * 4)
-        self.setMinimumWidth(self.beat_frame.beats[0].width() * 4)
+    # def resizeEvent(self, event) -> None:
+    #     self.setMinimumWidth(int(self.main_widget.width() / 2))
+    #     super().resizeEvent(event)

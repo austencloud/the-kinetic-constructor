@@ -115,24 +115,21 @@ class OptionPickerLetterButtons(QFrame):
         button.setFont(font)
         return button
 
-    def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-        self.update_letter_buttons_size()
+    # def resizeEvent(self, event) -> None:
+    #     super().resizeEvent(event)
+        # button_row_count = len(self.letter_rows)
+        # available_height = int(self.main_widget.width() * 0.6 * button_row_count)
+        # button_size = int(available_height / button_row_count)
+        # if button_size > self.height() / button_row_count:
+        #     button_size = int(self.height() / button_row_count)
+        # icon_size = int(button_size * 0.9)
 
-    def update_letter_buttons_size(self) -> None:
-        button_row_count = len(self.letter_rows)
-        available_height = int(self.main_widget.width() * 0.6 * button_row_count)
-        button_size = int(available_height / button_row_count)
-        if button_size > self.height() / button_row_count:
-            button_size = int(self.height() / button_row_count)
-        icon_size = int(button_size * 0.9)
-
-        # Set button size and icon size
-        for (
-            row_layout
-        ) in self.row_layouts:  # Change this line to iterate over the row layouts
-            for i in range(row_layout.count()):
-                button: QPushButton = row_layout.itemAt(i).widget()
-                if button:
-                    button.resize(button_size, button_size)
-                    button.setIconSize(QSize(icon_size, icon_size))
+        # # Set button size and icon size
+        # for (
+        #     row_layout
+        # ) in self.row_layouts:  # Change this line to iterate over the row layouts
+        #     for i in range(row_layout.count()):
+        #         button: QPushButton = row_layout.itemAt(i).widget()
+        #         if button:
+        #             button.resize(button_size, button_size)
+        #             button.setIconSize(QSize(icon_size, icon_size))

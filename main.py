@@ -41,9 +41,11 @@ def main() -> None:
 
     exit_code = main_window.exec_with_profiling(app)
     root_directory = os.path.abspath(os.sep)
-    root_directory = root_directory.replace("/", os.path.sep)
+    # Get the directory of the main script
+    root_directory = os.path.dirname(os.path.abspath(__file__))
+
     main_window.profiler.write_profiling_stats_to_file(
-        "main_profiling_stats.txt", os.path.join(root_directory, "CODE/tka-sequence-constructor-a182f9dd39fd04fee343321a3445294f884eaf0e")
+        "main_profiling_stats.txt", root_directory
     )
 
     sys.exit(exit_code)
