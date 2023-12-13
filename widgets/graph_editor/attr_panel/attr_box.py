@@ -51,10 +51,10 @@ class AttrBox(QFrame):
         self.setup_box()
 
         # Create widgets and add them to the layout with calculated heights
-        self.layout = QVBoxLayout(self)
+        self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-
+        self.layout.setSpacing(0)
         # Initialize and set maximum heights for child widgets
         self.header_widget = HeaderWidget(self)
         self.motion_type_widget = MotionTypesWidget(self)
@@ -117,95 +117,12 @@ class AttrBox(QFrame):
         self.start_end_widget.setMaximumHeight(start_end_height)
         self.turns_widget.setMaximumHeight(turns_widget_height)
 
-        self.turns_widget._update_button_size()
-        self.turns_widget._update_widget_sizes()
-        self.turns_widget._update_clock_size()
-        self.turns_widget._update_turnbox_size()
-
+        self.header_widget.resize_header_widget()
+        self.turns_widget.resize_turns_widget()
         self.motion_type_widget.resize_motion_type_widget()
-        self.resize_start_end_widget()
+        self.start_end_widget.resize_start_end_widget()
 
         self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
 
         for button in self.findChildren(CustomButton):
             button.update_custom_button_size()
-
-    def resize_start_end_widget(self) -> None:
-        self.start_end_widget.swap_button_frame.setMaximumWidth(
-            int(self.width() * 1 / 4)
-        )
-        self.start_end_widget.swap_button_frame.setMinimumWidth(
-            int(self.width() * 1 / 4)
-        )
-
-        self.start_end_widget.arrow_label.setMinimumHeight(
-            self.start_end_widget.start_box.height()
-        )
-        self.start_end_widget.arrow_label.setMaximumHeight(
-            self.start_end_widget.start_box.height()
-        )
-
-        self.start_end_widget.arrow_spacer_label.setMinimumHeight(
-            self.start_end_widget.header_labels[0].height()
-        )
-        self.start_end_widget.arrow_spacer_label.setMaximumHeight(
-            self.start_end_widget.header_labels[0].height()
-        )
-        for header_label in self.start_end_widget.header_labels:
-            header_label.setFont(QFont("Arial", int(self.width() / 18)))
-        self.start_end_widget.arrow_label.setFont(
-            QFont(
-                "Arial",
-                int(self.width() / 10),
-                QFont.Weight.Bold,
-            )
-        )
-
-        for box in self.start_end_widget.boxes:
-            box.setFont(
-                QFont(
-                    "Arial",
-                    int(self.attr_panel.width() / 20),
-                    QFont.Weight.Bold,
-                )
-            )
-
-            box.setMinimumWidth(int(self.width() / 3.5))
-            box.setMaximumWidth(int(self.width() / 3.5))
-            box.setMinimumHeight(int(self.width() / 5))
-            box.setMaximumHeight(int(self.width() / 5))
-
-            box_font_size = int(self.width() / 10)
-            box.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold, True))
-
-            # Calculate the border radius as a fraction of the width or height
-            border_radius = (
-                min(box.width(), box.height()) * 0.25
-            )  # Adjust the factor as needed
-
-            # Update the stylesheet with the new border radius
-            box.setStyleSheet(
-                f"""
-                QComboBox {{
-                    border: {self.combobox_border}px solid black;
-                    border-radius: {border_radius}px;
-                }}
-
-                QComboBox::drop-down {{
-                    subcontrol-origin: padding;
-                    subcontrol-position: top right;
-                    width: 15px;
-                    border-left-width: 1px;
-                    border-left-color: darkgray;
-                    border-left-style: solid;
-                    border-top-right-radius: {border_radius}px;
-                    border-bottom-right-radius: {border_radius}px;
-                }}
-
-                QComboBox::down-arrow {{
-                    image: url("{ICON_DIR}combobox_arrow.png");
-                    width: {int(box.width()/5)}px;
-                    height: {int(box.width()/5)}px;
-                }}
-                """
-            )

@@ -39,10 +39,6 @@ class TurnsWidget(AttrBoxWidget):
         self._setup_layout_frames()
         self._apply_layout_settings()
         # Create the 'Turns' header label
-        self._update_widget_sizes()
-        self._update_clock_size()
-        self._update_turnbox_size()
-        self._update_button_size()
 
         # self.add_black_borders()
 
@@ -280,30 +276,36 @@ class TurnsWidget(AttrBoxWidget):
         self.header_label.setFont(QFont("Arial", int(self.attr_box.width() / 18)))
 
         self.turnbox.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
+        dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
+
+        # Calculate the border radius as a fraction of the width or height
+        border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
+
+        # Adjust the stylesheet to add padding inside the combo box on the left
         self.turnbox.setStyleSheet(
             f"""
             QComboBox {{
+                padding-left: 2px; /* add some padding on the left for the text */
+                padding-right: 0px; /* make room for the arrow on the right */
                 border: {self.attr_box.combobox_border}px solid black;
                 border-radius: {border_radius}px;
             }}
-
             QComboBox::drop-down {{
                 subcontrol-origin: padding;
                 subcontrol-position: top right;
-                width: 15px;
+                width: {dropdown_arrow_width}px;
                 border-left-width: 1px;
                 border-left-color: darkgray;
-                border-left-style: solid;
+                border-left-style: solid; /* visually separate the arrow part */
                 border-top-right-radius: {border_radius}px;
                 border-bottom-right-radius: {border_radius}px;
             }}
-
             QComboBox::down-arrow {{
-                image: url("{ICON_DIR}combobox_arrow.png");
-                width: 10px;
-                height: 10px;
+                image: url("{ICON_DIR}/combobox_arrow.png");
+                width: {int(dropdown_arrow_width * 0.6)}px;
+                height: {int(dropdown_arrow_width * 0.6)}px;
             }}
-            """
+        """
         )
         self.turnbox_vbox_frame.setMinimumWidth(int(self.attr_box.width() / 3.25))
         self.turnbox_vbox_frame.setMaximumWidth(int(self.attr_box.width() / 3.25))
@@ -313,3 +315,9 @@ class TurnsWidget(AttrBoxWidget):
     def _update_button_size(self) -> None:
         for button in self.buttons:
             button.setFont(QFont("Arial", int(button.height() / 3)))
+
+    def resize_turns_widget(self):
+        self._update_button_size()
+        self._update_widget_sizes()
+        self._update_clock_size()
+        self._update_turnbox_size()

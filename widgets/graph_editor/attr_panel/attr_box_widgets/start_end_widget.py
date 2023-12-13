@@ -31,10 +31,10 @@ class StartEndWidget(AttrBoxWidget):
         self.header_labels: List[QLabel] = []
 
         # Setup frames for start and end combo boxes with headers
-        self.start_box_with_header_frame = self._create_combobox_with_header_frame(
+        self.start_box_with_header_frame = self._create_vbox_with_header_frame(
             "Start", self.start_box
         )
-        self.end_box_with_header_frame = self._create_combobox_with_header_frame(
+        self.end_box_with_header_frame = self._create_vbox_with_header_frame(
             "End", self.end_box
         )
         # Setup arrow label
@@ -74,9 +74,7 @@ class StartEndWidget(AttrBoxWidget):
         box.setCurrentIndex(-1)
         return box
 
-    def _create_combobox_with_header_frame(
-        self, label_text: str, box: QComboBox
-    ) -> QFrame:
+    def _create_vbox_with_header_frame(self, label_text: str, box: QComboBox) -> QFrame:
         frame = QFrame(self)
         layout = QVBoxLayout(frame)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -149,3 +147,64 @@ class StartEndWidget(AttrBoxWidget):
         self.start_box.setCurrentIndex(-1)
         self.end_box.setCurrentIndex(-1)
 
+    def resize_start_end_widget(self) -> None:
+        self.swap_button_frame.setMaximumWidth(int(self.width() * 1 / 4))
+        self.swap_button_frame.setMinimumWidth(int(self.width() * 1 / 4))
+
+        self.arrow_label.setMinimumHeight(self.start_box.height())
+        self.arrow_label.setMaximumHeight(self.start_box.height())
+
+        self.arrow_spacer_label.setMinimumHeight(self.header_labels[0].height())
+        self.arrow_spacer_label.setMaximumHeight(self.header_labels[0].height())
+
+        for header_label in self.header_labels:
+            header_label.setFont(QFont("Arial", int(self.width() / 18)))
+        self.arrow_label.setFont(
+            QFont(
+                "Arial",
+                int(self.width() / 10),
+                QFont.Weight.Bold,
+            )
+        )
+        dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
+
+        for box in self.boxes:
+            box_font_size = int(self.width() / 10)
+            box.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
+
+            # Set the minimum and maximum width for the combo box
+            box.setMinimumWidth(int(self.width() / 3.5))
+            box.setMaximumWidth(int(self.width() / 3.5))
+
+            # Set the minimum and maximum height for the combo box
+            box.setMinimumHeight(int(self.height() - self.header_labels[0].height()))
+
+            # Calculate the border radius as a fraction of the width or height
+            border_radius = min(box.width(), box.height()) * 0.25
+
+            # Adjust the stylesheet to add padding inside the combo box on the left
+            box.setStyleSheet(
+                f"""
+                QComboBox {{
+                    padding-left: 2px; /* add some padding on the left for the text */
+                    padding-right: 0px; /* make room for the arrow on the right */
+                    border: {self.attr_box.combobox_border}px solid black;
+                    border-radius: {border_radius}px;
+                }}
+                QComboBox::drop-down {{
+                    subcontrol-origin: padding;
+                    subcontrol-position: top right;
+                    width: {dropdown_arrow_width}px;
+                    border-left-width: 1px;
+                    border-left-color: darkgray;
+                    border-left-style: solid; /* visually separate the arrow part */
+                    border-top-right-radius: {border_radius}px;
+                    border-bottom-right-radius: {border_radius}px;
+                }}
+                QComboBox::down-arrow {{
+                    image: url("{ICON_DIR}/combobox_arrow.png");
+                    width: {int(dropdown_arrow_width * 0.6)}px;
+                    height: {int(dropdown_arrow_width * 0.6)}px;
+                }}
+            """
+            )

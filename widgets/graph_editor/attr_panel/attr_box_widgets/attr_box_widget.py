@@ -21,6 +21,7 @@ class AttrBoxWidget(QWidget):
         attr_label = QLabel(text, self)
         attr_label.setFont(QFont("Arial", self.attr_box.font_size))
         attr_label.setAlignment(align)
+        attr_label.setContentsMargins(0, 0, 0, 0)
         return attr_label
 
     def create_frame(self, layout: QHBoxLayout | QVBoxLayout) -> QFrame:
