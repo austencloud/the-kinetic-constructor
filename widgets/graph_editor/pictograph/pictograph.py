@@ -246,7 +246,7 @@ class Pictograph(QGraphicsScene):
 
     def add_to_sequence_callback(self) -> None:
         copied_scene = self.copy_scene()
-        self.main_widget.sequence.frame.add_scene_to_sequence(copied_scene)
+        self.main_widget.sequence.beat_frame.add_scene_to_sequence(copied_scene)
         self.clear_pictograph()
 
     def rotate_pictograph(self, direction: str) -> None:
@@ -300,7 +300,7 @@ class Pictograph(QGraphicsScene):
         self.motions.append(motion)
 
     def copy_scene(self) -> QGraphicsScene:
-        from widgets.sequence.beat import Beat
+        from widgets.sequence_widget.beat_frame.beat import Beat
 
         new_scene = Beat(self.main_widget, self.graph_editor)
         new_scene.setSceneRect(self.sceneRect())
@@ -409,4 +409,3 @@ class Pictograph(QGraphicsScene):
             self.letter_item.setSharedRenderer(
                 QSvgRenderer(f"{LETTER_SVG_DIR}/blank.svg")
             )
-

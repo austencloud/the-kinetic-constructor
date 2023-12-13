@@ -54,7 +54,7 @@ from widgets.graph_editor.pictograph.position_engines.prop_positioner import (
 )
 from widgets.option_picker.option.option_init import OptionInit
 from widgets.option_picker.option.option_view import OptionView
-from widgets.sequence.sequence_frame import Sequence
+from widgets.sequence_widget.beat_frame.beat_frame import BeatFrame
 
 if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
@@ -64,7 +64,7 @@ from objects.letter_item import LetterItem
 
 
 class Beat(Pictograph):
-    def __init__(self, main_widget: "MainWidget", Sequence: "Sequence") -> None:
+    def __init__(self, main_widget: "MainWidget", Sequence: "BeatFrame") -> None:
         super().__init__(main_widget, main_widget.graph_editor)
         self.main_widget = main_widget
         self.sequence = Sequence
@@ -92,7 +92,6 @@ class Beat(Pictograph):
         self.arrow_positioner = ArrowPositioner(self)
         self.prop_positioner = PropPositioner(self)
         self.letter_engine = LetterEngine(self)
-
 
     ### GETTERS ###
 
@@ -154,7 +153,7 @@ class Beat(Pictograph):
 
     def add_to_sequence_callback(self) -> None:
         copied_scene = self.copy_scene()
-        self.main_widget.sequence.frame.add_scene_to_sequence(copied_scene)
+        self.main_widget.sequence.beat_frame.add_scene_to_sequence(copied_scene)
         self.clear_pictograph()
 
     def rotate_pictograph(self, direction: str) -> None:

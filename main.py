@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
             screen = QGuiApplication.primaryScreen()
 
         available_geometry = screen.availableGeometry()
-
+        self.setMaximumSize(available_geometry.size())
         self.move(
             int(available_geometry.x()),
             int(available_geometry.y()),

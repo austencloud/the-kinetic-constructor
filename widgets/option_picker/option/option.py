@@ -197,7 +197,7 @@ class Option(Pictograph):
 
     def add_to_sequence_callback(self) -> None:
         copied_scene = self.copy_scene()
-        self.main_widget.sequence.frame.add_scene_to_sequence(copied_scene)
+        self.main_widget.sequence.beat_frame.add_scene_to_sequence(copied_scene)
         self.clear_pictograph()
 
     def rotate_pictograph(self, direction: str) -> None:
@@ -251,7 +251,7 @@ class Option(Pictograph):
         self.motions.append(motion)
 
     def copy_scene(self) -> QGraphicsScene:
-        from widgets.sequence.beat import Beat
+        from widgets.sequence_widget.beat_frame.beat import Beat
 
         new_beat = Beat(self.main_widget, self.option_picker)
         new_beat.setSceneRect(self.sceneRect())
@@ -346,7 +346,7 @@ class Option(Pictograph):
     def wheelEvent(self, event) -> None:
         return super().wheelEvent(event)
 
-    def eventFilter(self, obj, event:QEvent) -> Literal[False]:
+    def eventFilter(self, obj, event: QEvent) -> Literal[False]:
         if event.type() == QEvent.Type.Wheel:
             event.ignore()  # Ignore the event to let it propagate
         return False  # Return False to continue event propagation

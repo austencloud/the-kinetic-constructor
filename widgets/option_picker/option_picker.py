@@ -8,7 +8,7 @@ from objects.arrow import Arrow
 from objects.prop import Prop
 from widgets.graph_editor.pictograph.pictograph_view import PictographView
 from widgets.option_picker.option.option import Option
-from widgets.sequence.beat import Beat
+from widgets.sequence_widget.beat_frame.beat import Beat
 
 if TYPE_CHECKING:
     from widgets.option_picker.option_picker_widget import OptionPickerWidget
@@ -165,7 +165,7 @@ class OptionPicker(QScrollArea):
 
     def on_option_clicked(self, option: "Option") -> None:
         new_beat = self.copy_scene(option)
-        self.main_widget.sequence.frame.add_scene_to_sequence(new_beat)
+        self.main_widget.sequence.beat_frame.add_scene_to_sequence(new_beat)
 
     def copy_scene(self, option: "Option") -> Beat:
         new_beat = Beat(self.main_widget, self.main_widget.graph_editor)
@@ -199,4 +199,3 @@ class OptionPicker(QScrollArea):
                 new_item.ghost_prop = target_beat.ghost_props[new_item.color]
                 new_item.ghost_prop.motion = new_item.motion
                 new_item.arrow = target_beat.get_arrow_by_color(new_item.color)
-

@@ -12,7 +12,7 @@ from widgets.graph_editor.key_event_handler import KeyEventHandler
 from widgets.graph_editor.graph_editor import GraphEditor
 from widgets.graph_editor.pictograph.pictograph import Pictograph
 from widgets.option_picker.option_picker_widget import OptionPickerWidget
-from widgets.sequence.sequence_widget import SequenceWidget
+from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 if TYPE_CHECKING:
     from main import MainWindow
@@ -69,7 +69,7 @@ class MainWidget(QWidget):
             if active_pictograph:
                 self.key_event_handler.keyPressEvent(event, self, active_pictograph)
                 return True
-            
+
         if event.type() == QEvent.Type.Wheel:
             print(f"Wheel event in {source}")
 
@@ -79,7 +79,7 @@ class MainWidget(QWidget):
         if self.graph_editor.pictograph != active_pictograph:
             self.graph_editor.pictograph.clearSelection()
 
-        for beat_view in self.sequence.frame.beats:
+        for beat_view in self.sequence.beat_frame.beats:
             if beat_view.pictograph and beat_view.pictograph != active_pictograph:
                 beat_view.pictograph.clearSelection()
 
@@ -87,7 +87,7 @@ class MainWidget(QWidget):
         if self.graph_editor.pictograph.selectedItems():
             return self.graph_editor.pictograph
 
-        for beat_view in self.sequence.frame.beats:
+        for beat_view in self.sequence.beat_frame.beats:
             if beat_view.pictograph and beat_view.pictograph.selectedItems():
                 return beat_view.pictograph
 
