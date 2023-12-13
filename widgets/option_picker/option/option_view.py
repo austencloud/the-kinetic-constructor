@@ -39,13 +39,17 @@ class OptionView(PictographView):
     def configure_button_size_and_position(self, button: QPushButton, size) -> None:
         pass
 
-    def update_OptionView_size(self) -> None:
-        view_width = int(
-            (self.option.option_picker.width() / 4) - self.option.option_picker.spacing
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+        view_width = (
+            int(self.option.option_picker.width() / 4)
+            - self.option.option_picker.spacing * (self.option.option_picker.COLUMN_COUNT - 1)
         )
 
-        self.setFixedWidth(view_width)
-        self.setFixedHeight(int(view_width * 90 / 75))
+        self.setMinimumWidth(view_width)
+        self.setMaximumWidth(view_width)
+        self.setMinimumHeight(int(view_width * 90 / 75))
+        self.setMaximumHeight(int(view_width * 90 / 75))
 
         self.view_scale = view_width / self.option.width()
 
@@ -55,22 +59,3 @@ class OptionView(PictographView):
         button_size = int(self.width() / 7)
         self.configure_button_size_and_position(self.rotate_cw_button, button_size)
         self.configure_button_size_and_position(self.rotate_ccw_button, button_size)
-
-    def update_pictograph_size(self) -> None:
-        # Calculate the view height based on the GraphEditor's height
-        view_height = int(self.pictograph.graph_editor.height())
-        # Calculate the view width maintaining the aspect ratio (75/90)
-        view_width = int(view_height * 75 / 90)
-
-        # Set the size of the view
-        self.setMinimumSize(view_width, view_height)
-
-        # Calculate the scaling factor
-        self.view_scale = min(
-            view_width / self.pictograph.sceneRect().width(),
-            view_height / self.pictograph.sceneRect().height(),
-        )
-
-        # Reset any existing transformations and apply the new scale
-        self.resetTransform()
-        self.scale(self.view_scale, self.view_scale)

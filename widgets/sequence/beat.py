@@ -80,32 +80,6 @@ class Beat(Pictograph):
         self.motions: List[Motion] = []
         self.current_letter: str = None
 
-    def setup_components(self, main_widget: "MainWidget") -> None:
-        self.letters = main_widget.letters
-        self.generator: PictographGenerator = None
-        self.event_handler = PictographEventHandler(self)
-
-        self.dragged_arrow: Arrow = None
-        self.dragged_prop: Staff = None
-        self.initializer = OptionInit(self)
-
-        self.prop_type: Prop = STAFF
-
-        self.prop_set: Dict[Colors, Prop] = self.initializer.init_prop_set(
-            self.prop_type
-        )
-        self.ghost_arrows = self.initializer.init_ghost_arrows()
-        self.ghost_props = self.initializer.init_ghost_props(self.prop_type)
-
-        self.grid: Grid = self.initializer.init_grid()
-        self.view: OptionView = self.initializer.init_view()
-        self.letter_item: LetterItem = self.initializer.init_letter_item()
-        self.locations = self.initializer.init_locations(self.grid)
-
-        # set the icons to 80% of the button size
-
-        self.setup_managers(main_widget)
-
     def set_letter_renderer(self, letter: str) -> None:
         letter_type = self.get_current_letter_type()
         svg_path = f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
@@ -119,20 +93,6 @@ class Beat(Pictograph):
         self.prop_positioner = PropPositioner(self)
         self.letter_engine = LetterEngine(self)
 
-    ### EVENT HANDLERS ###
-
-    def mousePressEvent(self, event) -> None:
-        self.main_widget.deselect_all_except(self)
-        self.event_handler.handle_mouse_press(event)
-
-    def mouseMoveEvent(self, event) -> None:
-        self.event_handler.handle_mouse_move(event)
-
-    def mouseReleaseEvent(self, event) -> None:
-        self.event_handler.handle_mouse_release(event)
-
-    def contextMenuEvent(self, event) -> None:
-        self.event_handler.handle_context_menu(event)
 
     ### GETTERS ###
 
@@ -246,70 +206,6 @@ class Beat(Pictograph):
                 self.motions.remove(m)
 
         self.motions.append(motion)
-
-    def copy_scene(self) -> QGraphicsScene:
-        from widgets.sequence.beat import Beat
-
-        new_beat = Beat(self.main_widget, self.sequence)
-        new_beat.setSceneRect(self.sceneRect())
-        new_beat.motions = self.motions
-
-        for item in self.items():
-            if isinstance(item, Arrow):
-                new_arrow = Arrow(new_beat, item.get_attributes())
-                new_arrow.setTransformOriginPoint(new_arrow.boundingRect().center())
-                new_arrow.setPos(item.pos())
-                new_arrow.setZValue(item.zValue())
-                new_beat.addItem(new_arrow)
-                new_beat.arrows.append(new_arrow)
-                motion = new_beat.get_motion_by_color(new_arrow.color)
-                new_arrow.motion = motion
-                motion.arrow = new_arrow
-
-            elif isinstance(item, Prop):
-                new_prop = Prop(new_beat, item.get_attributes())
-                new_prop.setPos(item.pos())
-                new_prop.setZValue(item.zValue())
-                new_beat.addItem(new_prop)
-                new_beat.props.append(new_prop)
-                motion = new_beat.get_motion_by_color(new_prop.color)
-                new_prop.motion = motion
-                motion.prop = new_prop
-
-        for arrow in new_beat.arrows:
-            for prop in new_beat.props:
-                if arrow.color == prop.color:
-                    arrow.prop = prop
-                    prop.arrow = arrow
-
-        for arrow in new_beat.arrows:
-            for ghost_arrow in new_beat.ghost_arrows.values():
-                if arrow.color == ghost_arrow.color:
-                    arrow.ghost_arrow = ghost_arrow
-                    ghost_arrow.update_attributes(arrow.get_attributes())
-                    ghost_arrow.set_is_svg_mirrored_from_attributes()
-                    ghost_arrow.update_mirror()
-                    ghost_arrow.update_svg(arrow.svg_file)
-                    ghost_arrow.update_appearance()
-
-        for prop in new_beat.props:
-            for ghost_prop in new_beat.ghost_props.values():
-                if prop.color == ghost_prop.color:
-                    prop.ghost_prop = ghost_prop
-
-        for ghost_arrow in new_beat.ghost_arrows.values():
-            for motion in new_beat.motions:
-                if ghost_arrow.color == motion.color:
-                    ghost_arrow.motion = motion
-
-        for ghost_prop in new_beat.ghost_props.values():
-            for motion in new_beat.motions:
-                if ghost_prop.color == motion.color:
-                    ghost_prop.motion = motion
-
-        new_beat.update_pictograph()
-
-        return new_beat
 
     ### UPDATERS ###
 

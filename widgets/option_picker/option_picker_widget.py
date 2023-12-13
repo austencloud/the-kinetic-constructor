@@ -20,10 +20,9 @@ class OptionPickerWidget(QFrame):
         self.main_layout.setSpacing(0)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
-        self.option_picker = OptionPicker(self.main_widget, self)
         self.button_frame = OptionPickerLetterButtons(self.main_widget, self)
+        self.option_picker = OptionPicker(self.main_widget, self)
 
-        # Set a size policy that allows the widget to expand and shrink vertically
 
         self.main_layout.addWidget(self.option_picker, 5)
         self.main_layout.addWidget(self.button_frame, 1)

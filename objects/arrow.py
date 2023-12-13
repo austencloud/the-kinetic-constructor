@@ -164,7 +164,7 @@ class Arrow(GraphicalObject):
 
         self.prop.set_prop_attrs_from_arrow(self)
         self.prop.update_appearance()
-
+        self.motion.arrow_location = new_location
         self.update_appearance()
 
         self.scene.arrows.remove(self)

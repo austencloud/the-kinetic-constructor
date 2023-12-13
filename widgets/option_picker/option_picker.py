@@ -16,9 +16,7 @@ if TYPE_CHECKING:
 
 
 class OptionPicker(QScrollArea):
-    COLUMN_COUNT_INITIAL = 3
     COLUMN_COUNT = 4
-    MAX_PICTOGRAPHS = 4
 
     def __init__(
         self, main_widget: "MainWidget", option_picker_widget: "OptionPickerWidget"
@@ -26,7 +24,7 @@ class OptionPicker(QScrollArea):
         super().__init__()
         self.main_widget = main_widget
         self.option_picker_widget = option_picker_widget
-        self.spacing = 5
+        self.spacing = 10
         self.options: List[Option] = []
         self.initialize_ui()
         self.pictographs = self.load_json_file("preprocessed.json")
@@ -36,6 +34,7 @@ class OptionPicker(QScrollArea):
         self.setWidgetResizable(True)
         self.container = QWidget()
         self.option_picker_layout = QGridLayout(self.container)
+        self.container.setContentsMargins(10, 10, 10, 10)  # Set content margins
         self.setWidget(self.container)
 
     @staticmethod
@@ -59,7 +58,6 @@ class OptionPicker(QScrollArea):
             else self.get_click_handler(option)
         )
         option.view.mousePressEvent = event_handler
-        self.set_option_view_size(option.view)
         self.option_picker_layout.addWidget(option.view, row, col)
 
     def get_initial_handler(self, option: "Option") -> Callable:
@@ -70,12 +68,18 @@ class OptionPicker(QScrollArea):
 
     def set_option_view_size(self, view: PictographView) -> None:
         view_width = self.calculate_view_width(self.COLUMN_COUNT)
-        view.setFixedSize(QSize(view_width, int(view_width * 90 / 75)))
+        view_height = int(view_width * 90 / 75)
+        view.setFixedSize(QSize(view_width, view_height))
 
     def calculate_view_width(self, items_per_row: int) -> int:
         container_width = (
-            self.container.width()
+            self.option_picker_widget.width()
+            - self.option_picker_widget.button_frame.width()
             - self.option_picker_layout.horizontalSpacing() * (items_per_row - 1)
+            - (
+                self.container.contentsMargins().left()
+                + self.container.contentsMargins().right()
+            )
         )
         return int(container_width / items_per_row)
 
@@ -93,6 +97,7 @@ class OptionPicker(QScrollArea):
         self.populate_options(specific_positions["end_position"])
 
     def populate_options(self, end_position: str) -> None:
+        self.options = []
         self.clear_layout()
         self.option_picker_layout.setSpacing(self.spacing)
         for row, (key, _) in enumerate(
@@ -183,12 +188,10 @@ class OptionPicker(QScrollArea):
                 new_item.motion = target_beat.get_motion_by_color(new_item.color)
                 new_item.ghost_arrow = target_beat.ghost_arrows[new_item.color]
                 new_item.ghost_arrow.motion = new_item.motion
+                new_item.prop = target_beat.get_prop_by_color(new_item.color)
             elif isinstance(new_item, Prop):
                 target_beat.props.append(new_item)
                 new_item.motion = target_beat.get_motion_by_color(new_item.color)
                 new_item.ghost_prop = target_beat.ghost_props[new_item.color]
                 new_item.ghost_prop.motion = new_item.motion
-
-    def update_option_picker_size(self) -> None:
-        for option in self.options:
-            option.view.update_OptionView_size()
+                new_item.arrow = target_beat.get_arrow_by_color(new_item.color)
