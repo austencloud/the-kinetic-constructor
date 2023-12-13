@@ -151,7 +151,7 @@ class StartEndWidget(AttrBoxWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
-        self.swap_button.update_button_size()
+
         self.swap_button_frame.setMinimumWidth(int(self.attr_box.width() * 1 / 4))
         self.swap_button_frame.setMaximumWidth(int(self.attr_box.width() * 1 / 4))
 

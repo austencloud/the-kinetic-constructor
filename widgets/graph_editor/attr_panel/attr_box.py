@@ -1,7 +1,8 @@
+from tkinter import Button
 from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QWidget, QSizePolicy
+from PyQt6.QtGui import QPixmap, QShowEvent
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QWidget, QSizePolicy, QPushButton
 from objects.motion import Motion
 from constants.string_constants import (
     ICON_DIR,
@@ -13,6 +14,7 @@ from utilities.TypeChecking.TypeChecking import Colors
 from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
+from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
@@ -128,7 +130,7 @@ class AttrBox(QFrame):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        self.set_size_to_match_pictograph_view()
+        # self.set_size_to_match_pictograph_view()
         self.header_spacing = int(self.width() * 0.02)
         ratio_total = 1 + 1 + 1 + 2
         available_height = self.height()
@@ -136,7 +138,8 @@ class AttrBox(QFrame):
         motion_types_height = int(available_height * (1 / ratio_total))
         start_end_height = int(available_height * (1 / ratio_total))
         turns_widget_height = int(available_height * (2 / ratio_total))
-        self.header_widget.setMaximumHeight(header_height)
+        self.header_widget.setMinimumHeight(header_height + self.combobox_border)
+        self.header_widget.setMaximumHeight(header_height + self.combobox_border)
         self.motion_type_widget.setMaximumHeight(motion_types_height)
         self.start_end_widget.setMaximumHeight(start_end_height)
         self.turns_widget.setMaximumHeight(turns_widget_height)
@@ -144,3 +147,8 @@ class AttrBox(QFrame):
     def set_size_to_match_pictograph_view(self):
         self.setMinimumWidth(int(self.pictograph.view.width() * 0.85))
         self.setMaximumWidth(int(self.pictograph.view.width() * 0.85))
+
+    def showEvent(self, a0: QShowEvent | None) -> None:
+        for button in self.findChildren(CustomButton):
+            button.update_button_size(self.width(), self.height())
+        super().showEvent(a0)

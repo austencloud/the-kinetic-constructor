@@ -39,12 +39,11 @@ class MainWindow(QMainWindow):
         self.show()
 
     def write_profiling_stats_to_file(self, file_path: str) -> None:
-        stats: pstats.Stats = pstats.Stats(self.profiler).sort_stats("cumtime")
+        stats: pstats.Stats = pstats.Stats(self.profiler).sort_stats("calls")
         with open(file_path, "w") as f:
             stats.stream = f  # Add this line to set the output stream
             stats.print_stats()
         print(f"Main profiling stats written to {file_path}")
-
 
 
 def main() -> None:

@@ -112,5 +112,4 @@ class HeaderWidget(QWidget):
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
         self.header_label.setFont(QFont("Arial", int(self.attr_box.width() / 10)))
-        for button in [self.rotate_cw_button, self.rotate_ccw_button]:
-            button.update_button_size()
+

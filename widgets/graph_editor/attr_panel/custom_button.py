@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QPushButton
+from PyQt6.QtWidgets import QPushButton, QSizePolicy
 from PyQt6.QtGui import QPalette
 from PyQt6.QtCore import Qt, QSize
 from typing import Union, TYPE_CHECKING
@@ -16,40 +16,13 @@ if TYPE_CHECKING:
 
 
 class CustomButton(QPushButton):
-    def __init__(
-        self, widget: Union["StartEndWidget", "TurnsWidget", "MotionTypesWidget"]
-    ) -> None:
-        super().__init__(widget)
-        self.widget = widget
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        if parent:
+            self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+            self.update_button_size(parent.width(), parent.height())
 
-    def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-
-    def update_button_size(self):
-        parent_width = self.widget.width()  # Assuming parent widget defines the size
-        self.button_size = int(parent_width * 0.2 * 0.7)  # Update proportionally
-        self.border_radius = self.button_size / 2
-        self.setFixedSize(self.button_size, self.button_size)  # Set the new size
-        self.setIconSize(
-            QSize(int(self.button_size * 0.6), int(self.button_size * 0.6))
-        )
-        self.setStyleSheet(self.get_button_style())
-
-    def get_button_style(self):
-        return (
-            f"QPushButton {{"
-            f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(200, 200, 200, 255));"
-            f"   border-radius: {self.border_radius}px;"
-            f"   border: 1px solid black;"
-            f"   min-width: {self.button_size}px;"
-            f"   min-height: {self.button_size}px;"
-            f"   max-width: {self.button_size}px;"
-            f"   max-height: {self.button_size}px;"
-            f"}}"
-            f"QPushButton:hover {{"
-            f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(230, 230, 230, 255), stop:1 rgba(200, 200, 200, 255));"
-            f"}}"
-            f"QPushButton:pressed {{"
-            f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(204, 228, 247, 255), stop:1 rgba(164, 209, 247, 255));"
-            f"}}"
-        )
+    def update_button_size(self, parent_width, parent_height):
+        # Determine the button size based on parent dimensions
+        button_size = QSize(int(parent_width * 0.2), int(parent_height * 0.2))
+        self.setFixedSize(button_size)

@@ -140,9 +140,20 @@ class TurnsWidget(AttrBoxWidget):
             button_size = int(button_size * 0.75)  # Half turn buttons are smaller
 
         button = CustomButton(self)
+        button.setStyleSheet(
+            f"QPushButton {{"
+            f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(200, 200, 200, 255));"
+            f"   border: 1px solid black;"
+            f"}}"
+            f"QPushButton:hover {{"
+            f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(230, 230, 230, 255), stop:1 rgba(200, 200, 200, 255));"
+            f"}}"
+            f"QPushButton:pressed {{"
+            f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(204, 228, 247, 255), stop:1 rgba(164, 209, 247, 255));"
+            f"}}"
+        )
         button.setText(text)
         button.setFont(QFont("Arial", int(button_size / 3)))
-        # Set the appropriate callback based on the button text
         if text == "-1":
             button.clicked.connect(self._subtract_turn_callback)
         elif text == "-0.5":
@@ -229,7 +240,6 @@ class TurnsWidget(AttrBoxWidget):
         self.spacing = self.attr_box.pictograph.view.width() // 250
 
         super().resizeEvent(event)
-        self._update_button_size()
         self._update_widget_sizes()
         self._update_clock_size()
         self._update_turnbox_size()
@@ -291,9 +301,3 @@ class TurnsWidget(AttrBoxWidget):
 
         self.turnbox_vbox_frame.setMinimumHeight(int(self.height() / 2))
         self.turnbox_vbox_frame.setMaximumHeight(int(self.height() / 2))
-
-    def _update_button_size(self) -> None:
-        """Updates the sizes of the buttons based on the widget's size."""
-        for button in self.buttons:
-            button.update_button_size()
-            button.setFont(QFont("Arial", int(button.height() / 3)))

@@ -41,7 +41,6 @@ class OptionView(PictographView):
         pass
 
     def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
         view_width = int(
             self.option.option_picker.width() / 4
         ) - self.option.option_picker.spacing * (
