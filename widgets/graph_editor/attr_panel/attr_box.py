@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QPixmap, QFont, QResizeEvent
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QWidget, QSizePolicy
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QWidget, QSizePolicy, QComboBox
 from objects.motion import Motion
 from constants.string_constants import (
     ICON_DIR,
@@ -85,32 +85,6 @@ class AttrBox(QFrame):
 
     ### CREATE LABELS ###
 
-    def get_combobox_style(self) -> str:
-        # ComboBox style
-        return f"""
-            QComboBox {{
-                border: 2px solid black;
-                border-radius: 10px;
-            }}
-
-            QComboBox::drop-down {{
-                subcontrol-origin: padding;
-                subcontrol-position: top right;
-                width: 15px;
-                border-left-width: 1px;
-                border-left-color: darkgray;
-                border-left-style: solid;
-                border-top-right-radius: 3px;
-                border-bottom-right-radius: 3px;
-            }}
-
-            QComboBox::down-arrow {{
-                image: url('{ICON_DIR}combobox_arrow.png');
-                width: 10px;
-                height: 10px;
-            }}
-        """
-
     def clear_attr_box(self) -> None:
         self.motion_type_widget.clear_motion_type_box()
         self.start_end_widget.clear_start_end_boxes()
@@ -155,7 +129,6 @@ class AttrBox(QFrame):
 
         for button in self.findChildren(CustomButton):
             button.update_custom_button_size()
-
 
     def resize_start_end_widget(self) -> None:
         self.start_end_widget.swap_button_frame.setMaximumWidth(
@@ -231,8 +204,8 @@ class AttrBox(QFrame):
 
                 QComboBox::down-arrow {{
                     image: url("{ICON_DIR}combobox_arrow.png");
-                    width: 10px;
-                    height: 10px;
+                    width: {int(box.width()/5)}px;
+                    height: {int(box.width()/5)}px;
                 }}
                 """
             )

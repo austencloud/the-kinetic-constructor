@@ -2,7 +2,9 @@ from PyQt6.QtWidgets import QGraphicsView, QPushButton
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 from constants.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
+
+from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
@@ -19,7 +21,7 @@ class PictographView(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
         # Initialize buttons
-        self.buttons = self.init_buttons()
+        self.buttons: List[CustomButton] = self.init_buttons()
         
     def remove_buttons(self) -> None:
         self.add_to_sequence_button.deleteLater()
@@ -56,18 +58,19 @@ class PictographView(QGraphicsView):
         button.clicked.connect(action)
         return button
 
-    def configure_button_size_and_position(self, button: QPushButton, size) -> None:
-        button.setFixedSize(size, size)
-        icon_size = int(size * 0.8)
-        button.setIconSize(QSize(icon_size, icon_size))
+    def configure_button_size_and_position(self, size) -> None:
+        for button in self.buttons:
+            button.setMinimumSize(size, size)
+            icon_size = int(size * 0.8)
+            button.setIconSize(QSize(icon_size, icon_size))
 
-        # Custom positioning logic if needed
-        if button == self.add_to_sequence_button:
-            button.move(self.width() - size, self.height() - size)
-        elif button == self.clear_button:
-            button.move(0, self.height() - size)
-        elif button == self.rotate_cw_button:
-            button.move(self.width() - size, 0)
-        elif button == self.rotate_ccw_button:
-            button.move(0, 0)
+            # Custom positioning logic if needed
+            if button == self.add_to_sequence_button:
+                button.move(self.width() - size, self.height() - size)
+            elif button == self.clear_button:
+                button.move(0, self.height() - size)
+            elif button == self.rotate_cw_button:
+                button.move(self.width() - size, 0)
+            elif button == self.rotate_ccw_button:
+                button.move(0, 0)
 

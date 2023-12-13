@@ -44,7 +44,7 @@ class TurnsWidget(AttrBoxWidget):
         self._update_turnbox_size()
         self._update_button_size()
 
-        self.add_black_borders()
+        # self.add_black_borders()
 
     ### LAYOUTS ###
     def add_black_borders(self) -> None:

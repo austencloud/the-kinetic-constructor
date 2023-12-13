@@ -254,7 +254,6 @@ class PropPositioner:
                 (WEST, BLUE): DOWN if end_location == WEST else None,
                 (WEST, RED): UP if end_location == WEST else None,
                 (EAST, BLUE): DOWN if end_location == EAST else None,
-                
             },
             2: {
                 (NORTH, RED): UP,
@@ -422,32 +421,36 @@ class PropPositioner:
     ### GAMMA TO BETA ### Y, Z
 
     def reposition_gamma_to_beta(self, move_prop, shifts, static_motions) -> None:
-        if any(prop.layer == 1 for prop in self.scene.props) and any(
-            prop.layer == 2 for prop in self.scene.props
-        ):
+        if self.scene.prop_type in [STAFF, FAN, CLUB, BUUGENG, HOOP, TRIAD, DOUBLESTAR]:
+            if any(prop.layer == 1 for prop in self.scene.props) and any(
+                prop.layer == 2 for prop in self.scene.props
+            ):
+                for prop in self.scene.props:
+                    self.set_default_prop_locations(prop)
+            else:
+                # if all of the staffs are in layer 1:
+                shift, static_motion = shifts[0], static_motions[0]
+                direction = self.determine_translation_direction(shift)
+                if direction:
+                    move_prop(
+                        next(
+                            prop
+                            for prop in self.scene.props
+                            if prop.arrow.color == shift[COLOR]
+                        ),
+                        direction,
+                    )
+                    move_prop(
+                        next(
+                            prop
+                            for prop in self.scene.props
+                            if prop.arrow.color == static_motion[COLOR]
+                        ),
+                        self.get_opposite_direction(direction),
+                    )
+        elif self.scene.prop_type in [BIGHOOP]:
             for prop in self.scene.props:
-                self.set_default_prop_locations(prop)
-        else:
-            # if all of the staffs are in layer 1:
-            shift, static_motion = shifts[0], static_motions[0]
-            direction = self.determine_translation_direction(shift)
-            if direction:
-                move_prop(
-                    next(
-                        prop
-                        for prop in self.scene.props
-                        if prop.arrow.color == shift[COLOR]
-                    ),
-                    direction,
-                )
-                move_prop(
-                    next(
-                        prop
-                        for prop in self.scene.props
-                        if prop.arrow.color == static_motion[COLOR]
-                    ),
-                    self.get_opposite_direction(direction),
-                )
+                self.set_strict_prop_locations(prop)
 
     ### HELPERS ###
 
