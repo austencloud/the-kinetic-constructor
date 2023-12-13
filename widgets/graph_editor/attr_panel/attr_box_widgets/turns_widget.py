@@ -191,6 +191,9 @@ class TurnsWidget(AttrBoxWidget):
             self.clock_left.setPixmap(self.counter_clockwise_pixmap)
         elif rotation_direction == "cw":
             self.clock_right.setPixmap(self.clockwise_pixmap)
+        elif rotation_direction == None:
+            self.clock_left.clear()
+            self.clock_right.clear()
 
     def update_turnbox(self, turns) -> None:
         turns_str = str(turns)
