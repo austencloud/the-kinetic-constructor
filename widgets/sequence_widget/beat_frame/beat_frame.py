@@ -49,15 +49,15 @@ class BeatFrame(QFrame):
         return None
 
     def resizeEvent(self, event) -> None:
-        # self.setMaximumHeight(
-        #     int(
-        #         self.sequence_widget.height()
-        #         - self.sequence_widget.button_frame.height()
-        #     )
-        # )
+        self.setMaximumHeight(
+            int(
+                self.sequence_widget.height()
+                - self.sequence_widget.button_frame.height()
+            )
+        )
         beat_height = int(((self.height() / 4)))
         beat_width = int(beat_height * 75 / 90)
 
-        # for beat in self.beats:
-        #     beat.setMaximumHeight(beat_height)
-        #     beat.setMaximumWidth(beat_width)
+        for beat in self.beats:
+            beat.setMaximumHeight(beat_height)
+            beat.setMaximumWidth(beat_width)

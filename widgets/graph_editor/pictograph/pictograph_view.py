@@ -68,8 +68,13 @@ class PictographView(QGraphicsView):
         super().resizeEvent(event)
         view_height = int(self.pictograph.graph_editor.height())
         view_width = int(view_height * 75 / 90)
+        self.setMaximumHeight(view_height)
+        self.setMinimumWidth(view_width)
         self.setMaximumWidth(view_width)
-
+        self.pictograph.graph_editor.arrowbox.view.set_size_to_match_pictograph_view()
+        self.pictograph.graph_editor.propbox.view.set_size_to_match_pictograph_view()
+        self.pictograph.graph_editor.attr_panel.red_attr_box.set_size_to_match_pictograph_view()
+        self.pictograph.graph_editor.attr_panel.blue_attr_box.set_size_to_match_pictograph_view()
         self.view_scale = min(
             view_width / self.pictograph.sceneRect().width(),
             view_height / self.pictograph.sceneRect().height(),
@@ -78,10 +83,14 @@ class PictographView(QGraphicsView):
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
 
+        if hasattr(self, "add_to_sequence_button"):
+            self.update_button_size(view_width)
+
+    def update_button_size(self, view_width) -> None:
         button_size = int(view_width / 7)
-        # self.configure_button_size_and_position(
-        #     self.add_to_sequence_button, button_size
-        # )
-        # self.configure_button_size_and_position(self.clear_button, button_size)
-        # self.configure_button_size_and_position(self.rotate_cw_button, button_size)
-        # self.configure_button_size_and_position(self.rotate_ccw_button, button_size)
+        self.configure_button_size_and_position(
+            self.add_to_sequence_button, button_size
+        )
+        self.configure_button_size_and_position(self.clear_button, button_size)
+        self.configure_button_size_and_position(self.rotate_cw_button, button_size)
+        self.configure_button_size_and_position(self.rotate_ccw_button, button_size)

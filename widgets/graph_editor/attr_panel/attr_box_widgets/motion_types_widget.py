@@ -124,25 +124,18 @@ class MotionTypesWidget(AttrBoxWidget):
     def clear_motion_type_box(self) -> None:
         self.motion_type_box.setCurrentIndex(-1)
 
-
     def resizeEvent(self, event: QResizeEvent) -> None:
-        if self.size() != event.oldSize():
-            self._update_styles_and_sizes()
-            super().resizeEvent(event)
-
-
-    def _update_styles_and_sizes(self) -> None:
-        # super().resizeEvent(event)
+        super().resizeEvent(event)
         self.spacing = self.attr_box.pictograph.view.width() // 250
         self.swap_button_frame.setMinimumWidth(int(self.attr_box.width() * 1 / 4))
         self.swap_button_frame.setMaximumWidth(int(self.attr_box.width() * 1 / 4))
         self.motion_type_box.setMinimumWidth(int(self.attr_box.width() * 0.5))
-
+        self.swap_button.update_button_size()
 
         self.header_label.setFont(QFont("Arial", int(self.attr_box.width() / 18)))
 
-        # self.motion_type_box.setMinimumHeight(int(self.attr_box.width() / 5))
-        # self.motion_type_box.setMaximumHeight(int(self.attr_box.width() / 5))
+        self.motion_type_box.setMinimumHeight(int(self.attr_box.width() / 5))
+        self.motion_type_box.setMaximumHeight(int(self.attr_box.width() / 5))
         box_font_size = int(self.attr_box.width() / 10)
         self.motion_type_box.setFont(
             QFont("Arial", box_font_size, QFont.Weight.Bold, True)

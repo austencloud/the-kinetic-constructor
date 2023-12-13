@@ -1,6 +1,5 @@
-from PyQt6 import QtGui
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFrame, QLabel
-from PyQt6.QtGui import QFont, QIcon, QResizeEvent, QShowEvent
+from PyQt6.QtGui import QFont, QIcon, QResizeEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Callable
 
@@ -42,4 +41,3 @@ class AttrBoxWidget(QWidget):
         frame = self.create_frame(frame_layout)
         frame_layout.addWidget(label)
         return frame
-

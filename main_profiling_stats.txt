@@ -1,2 +1,0 @@
-     Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum) Function
--------------------------------------------------------------------------------------

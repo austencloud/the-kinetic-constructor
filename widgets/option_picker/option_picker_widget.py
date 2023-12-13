@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from .option_picker_letter_buttons import OptionPickerLetterButtons
 from .option_picker import OptionPicker
-from PyQt6.QtGui import QResizeEvent
+
 
 class OptionPickerWidget(QFrame):
     def __init__(self, main_widget: "MainWidget") -> None:
@@ -23,12 +23,12 @@ class OptionPickerWidget(QFrame):
         self.button_frame = OptionPickerLetterButtons(self.main_widget, self)
         self.option_picker = OptionPicker(self.main_widget, self)
 
+
         self.main_layout.addWidget(self.option_picker, 5)
         self.main_layout.addWidget(self.button_frame, 1)
 
         self.setLayout(self.main_layout)
 
-    def resizeEvent(self, event:QResizeEvent) -> None:
+    def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        if self.size() != event.oldSize():
-            self.setMaximumWidth(int(self.main_widget.width() / 2))
+        self.setMaximumHeight(int(self.main_widget.height() * 7 / 10))

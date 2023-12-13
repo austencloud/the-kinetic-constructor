@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QApplication, QMainWindow
 from PyQt6.QtGui import QGuiApplication
 from widgets.main_widget import MainWidget
 from profiler import Profiler
+import os
 
 
 class MainWindow(QMainWindow):
@@ -39,8 +40,10 @@ def main() -> None:
     main_window.setFocus()
 
     exit_code = main_window.exec_with_profiling(app)
+    root_directory = os.path.abspath(os.sep)
+    root_directory = root_directory.replace("/", os.path.sep)
     main_window.profiler.write_profiling_stats_to_file(
-        "main_profiling_stats.txt", "f:/CODE/tka-app/tka-sequence-constructor/"
+        "main_profiling_stats.txt", os.path.join(root_directory, "CODE/tka-sequence-constructor-a182f9dd39fd04fee343321a3445294f884eaf0e")
     )
 
     sys.exit(exit_code)
