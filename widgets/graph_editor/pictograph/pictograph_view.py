@@ -13,15 +13,14 @@ class PictographView(QGraphicsView):
     def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__()
         self.pictograph = pictograph
-        self.view_scale = None
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.setScene(self.pictograph)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
         # Initialize buttons
-        self.init_buttons()
-
+        self.buttons = self.init_buttons()
+        
     def remove_buttons(self) -> None:
         self.add_to_sequence_button.deleteLater()
         self.clear_button.deleteLater()
@@ -44,7 +43,14 @@ class PictographView(QGraphicsView):
             f"{ICON_DIR}rotate_ccw.png",
             lambda: self.pictograph.rotate_pictograph(COUNTER_CLOCKWISE),
         )
-
+        buttons = [
+            self.add_to_sequence_button,
+            self.clear_button,
+            self.rotate_cw_button,
+            self.rotate_ccw_button,
+        ]
+        return buttons
+    
     def create_button(self, icon_path, action) -> QPushButton:
         button = QPushButton(QIcon(icon_path), "", self)
         button.clicked.connect(action)

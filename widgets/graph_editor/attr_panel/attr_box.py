@@ -13,6 +13,7 @@ from utilities.TypeChecking.TypeChecking import Colors
 from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
+from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
@@ -128,7 +129,7 @@ class AttrBox(QFrame):
 
     def resize_attr_box(self) -> None:
         self.setMinimumWidth(int(self.pictograph.view.width() * 0.85))
-        self.setMaximumWidth(int(self.pictograph.view.width() * 0.85))        
+        self.setMaximumWidth(int(self.pictograph.view.width() * 0.85))
         self.header_spacing = int(self.width() * 0.02)
         ratio_total = 1 + 1 + 1 + 2
         available_height = self.height()
@@ -145,73 +146,37 @@ class AttrBox(QFrame):
         self.turns_widget._update_widget_sizes()
         self.turns_widget._update_clock_size()
         self.turns_widget._update_turnbox_size()
-        
-        self.resize_motion_type_widget()
+
+        self.motion_type_widget.resize_motion_type_widget()
         self.resize_start_end_widget()
-        
+
         self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
 
-    def resize_motion_type_widget(self) -> None:
-        self.spacing = self.pictograph.view.width() // 250
-        self.motion_type_widget.swap_button_frame.setMinimumWidth(int(self.width() * 1 / 4))
-        self.motion_type_widget.swap_button_frame.setMaximumWidth(int(self.width() * 1 / 4))
-        self.motion_type_widget.motion_type_box.setMinimumWidth(int(self.width() * 0.5))
-
-        self.motion_type_widget.header_label.setFont(QFont("Arial", int(self.width() / 18)))
-
-        self.motion_type_widget.motion_type_box.setMinimumHeight(int(self.width() / 5))
-        self.motion_type_widget.motion_type_box.setMaximumHeight(int(self.width() / 5))
-        box_font_size = int(self.width() / 10)
-        self.motion_type_widget.motion_type_box.setFont(
-            QFont("Arial", box_font_size, QFont.Weight.Bold, True)
-        )
-        self.motion_type_widget.main_vbox_frame.layout().setSpacing(
-            self.pictograph.view.width() // 100
-        )
-        # Update the stylesheet with the new border radius
-        border_radius = (
-            min(self.motion_type_widget.motion_type_box.width(), self.motion_type_widget.motion_type_box.height()) * 0.25
-        )
-        self.motion_type_widget.motion_type_box.setStyleSheet(
-            f"""
-            QComboBox {{
-                border: {self.combobox_border}px solid black;
-                border-radius: {border_radius}px;
-            }}
-
-            QComboBox::drop-down {{
-                subcontrol-origin: padding;
-                subcontrol-position: top right;
-                width: 15px;
-                border-left-width: 1px;
-                border-left-color: darkgray;
-                border-left-style: solid;
-                border-top-right-radius: {border_radius}px;
-                border-bottom-right-radius: {border_radius}px;
-            }}
-
-            QComboBox::down-arrow {{
-                image: url("{ICON_DIR}combobox_arrow.png");
-                width: 10px;
-                height: 10px;
-            }}
-            """
-        )
-        self.motion_type_widget.header_label.setContentsMargins(0, 0, self.spacing, 0)
-        self.motion_type_widget.main_vbox_frame.setMaximumHeight(self.height() + self.spacing)
-        self.motion_type_widget.motion_type_box.setMaximumHeight(int(self.height() * 3 / 4 + self.spacing))
-        self.motion_type_widget.header_label.setMinimumHeight(int(self.height() * 1 / 4 + self.spacing))
+        for button in self.findChildren(CustomButton):
+            button.update_custom_button_size()
 
 
     def resize_start_end_widget(self) -> None:
-        self.start_end_widget.swap_button_frame.setMaximumWidth(int(self.width() * 1 / 4))
-        self.start_end_widget.swap_button_frame.setMinimumWidth(int(self.width() * 1 / 4))
+        self.start_end_widget.swap_button_frame.setMaximumWidth(
+            int(self.width() * 1 / 4)
+        )
+        self.start_end_widget.swap_button_frame.setMinimumWidth(
+            int(self.width() * 1 / 4)
+        )
 
-        self.start_end_widget.arrow_label.setMinimumHeight(self.start_end_widget.start_box.height())
-        self.start_end_widget.arrow_label.setMaximumHeight(self.start_end_widget.start_box.height())
+        self.start_end_widget.arrow_label.setMinimumHeight(
+            self.start_end_widget.start_box.height()
+        )
+        self.start_end_widget.arrow_label.setMaximumHeight(
+            self.start_end_widget.start_box.height()
+        )
 
-        self.start_end_widget.arrow_spacer_label.setMinimumHeight(self.start_end_widget.header_labels[0].height())
-        self.start_end_widget.arrow_spacer_label.setMaximumHeight(self.start_end_widget.header_labels[0].height())
+        self.start_end_widget.arrow_spacer_label.setMinimumHeight(
+            self.start_end_widget.header_labels[0].height()
+        )
+        self.start_end_widget.arrow_spacer_label.setMaximumHeight(
+            self.start_end_widget.header_labels[0].height()
+        )
         for header_label in self.start_end_widget.header_labels:
             header_label.setFont(QFont("Arial", int(self.width() / 18)))
         self.start_end_widget.arrow_label.setFont(

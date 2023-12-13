@@ -124,3 +124,69 @@ class MotionTypesWidget(AttrBoxWidget):
     def clear_motion_type_box(self) -> None:
         self.motion_type_box.setCurrentIndex(-1)
 
+    def resize_motion_type_widget(self) -> None:
+        self.spacing = self.attr_box.pictograph.view.width() // 250
+        self.swap_button_frame.setMinimumWidth(
+            int(self.width() * 1 / 4)
+        )
+        self.swap_button_frame.setMaximumWidth(
+            int(self.width() * 1 / 4)
+        )
+        self.motion_type_box.setMinimumWidth(int(self.width() * 0.5))
+
+        self.header_label.setFont(
+            QFont("Arial", int(self.width() / 18))
+        )
+
+        self.motion_type_box.setMinimumHeight(int(self.width() / 5))
+        self.motion_type_box.setMaximumHeight(int(self.width() / 5))
+        box_font_size = int(self.width() / 10)
+        self.motion_type_box.setFont(
+            QFont("Arial", box_font_size, QFont.Weight.Bold, True)
+        )
+        self.main_vbox_frame.layout().setSpacing(
+            self.attr_box.pictograph.view.width() // 100
+        )
+        # Update the stylesheet with the new border radius
+        border_radius = (
+            min(
+                self.motion_type_box.width(),
+                self.motion_type_box.height(),
+            )
+            * 0.25
+        )
+        self.motion_type_box.setStyleSheet(
+            f"""
+            QComboBox {{
+                border: {self.attr_box.combobox_border}px solid black;
+                border-radius: {border_radius}px;
+            }}
+
+            QComboBox::drop-down {{
+                subcontrol-origin: padding;
+                subcontrol-position: top right;
+                width: 15px;
+                border-left-width: 1px;
+                border-left-color: darkgray;
+                border-left-style: solid;
+                border-top-right-radius: {border_radius}px;
+                border-bottom-right-radius: {border_radius}px;
+            }}
+
+            QComboBox::down-arrow {{
+                image: url("{ICON_DIR}combobox_arrow.png");
+                width: 10px;
+                height: 10px;
+            }}
+            """
+        )
+        self.header_label.setContentsMargins(0, 0, self.spacing, 0)
+        self.main_vbox_frame.setMaximumHeight(
+            self.height() + self.spacing
+        )
+        self.motion_type_box.setMaximumHeight(
+            int(self.height() * 3 / 4 + self.spacing)
+        )
+        self.header_label.setMinimumHeight(
+            int(self.height() * 1 / 4 + self.spacing)
+        )

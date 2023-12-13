@@ -17,13 +17,13 @@ if TYPE_CHECKING:
 
 class CustomButton(QPushButton):
     def __init__(
-        self, widget: Union["StartEndWidget", "TurnsWidget", "MotionTypesWidget"]
+        self, parent_widget: Union["StartEndWidget", "TurnsWidget", "MotionTypesWidget"]
     ) -> None:
-        super().__init__(widget)
-        self.widget = widget
+        super().__init__(parent_widget)
+        self.parent_widget = parent_widget
 
-    def resizeEvent(self, event) -> None:
-        parent_width = self.widget.width()  # Assuming parent widget defines the size
+    def update_custom_button_size(self) -> None:
+        parent_width = self.parent_widget.width()  # Assuming parent widget defines the size
         self.button_size = int(parent_width * 0.2 * 0.7)  # Update proportionally
         self.border_radius = self.button_size / 2
         self.setFixedSize(self.button_size, self.button_size)  # Set the new size

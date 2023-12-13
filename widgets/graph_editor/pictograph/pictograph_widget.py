@@ -19,18 +19,16 @@ class PictographWidget(QWidget):
         self.layout().addWidget(view)
         self.layout().setContentsMargins(0, 0, 0, 0)
 
-
-    def resizeEvent(self, event: QResizeEvent) -> None:
+    def resize_pictograph_widget(self) -> None:
         new_width = int(self.graph_editor.height() * 75 / 90)
         self.setMaximumHeight(self.graph_editor.height())
         self.setMinimumWidth(new_width)
         self.setMaximumWidth(new_width)
-        
+        for button in self.view.buttons:
+            self.view.configure_button_size_and_position(button, int(self.width() / 10))
         self.view_scale = min(
-            self.width()
-            / self.graph_editor.pictograph.sceneRect().width(),
-            self.height()
-            / self.graph_editor.pictograph.sceneRect().height(),
+            self.width() / self.graph_editor.pictograph.sceneRect().width(),
+            self.height() / self.graph_editor.pictograph.sceneRect().height(),
         )
 
         self.view.resetTransform()

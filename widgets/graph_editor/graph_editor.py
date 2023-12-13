@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
+from PyQt6 import QtGui
 
-from PyQt6.QtGui import QColor, QPalette
-from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QColor, QPalette, QResizeEvent
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy, QGraphicsView
 
 from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
@@ -75,3 +75,6 @@ class GraphEditor(QFrame):
     def _setup_size_policy(self) -> None:
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        self.attr_panel.resize_attr_panel()
+        self.pictograph_widget.resize_pictograph_widget()
