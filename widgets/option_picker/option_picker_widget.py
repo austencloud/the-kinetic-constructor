@@ -22,7 +22,6 @@ class OptionPickerWidget(QFrame):
         self.button_frame = OptionPickerLetterButtons(self.main_widget, self)
         self.option_picker = OptionPicker(self.main_widget, self)
 
-
         self.main_layout.addWidget(self.option_picker, 5)
         self.main_layout.addWidget(self.button_frame, 1)
 

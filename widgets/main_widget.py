@@ -1,9 +1,7 @@
 from typing import TYPE_CHECKING, Optional
-from PyQt6 import QtGui
-
-from PyQt6.QtCore import QEvent
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
-from PyQt6.QtGui import QWheelEvent
+from PyQt6.QtCore import QEvent, Qt
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QSplitter, QFrame
+from PyQt6.QtGui import QWheelEvent, QResizeEvent
 from utilities.TypeChecking.TypeChecking import LetterDictionary
 from utilities.json_handler import JsonHandler
 from widgets.graph_editor.key_event_handler import KeyEventHandler
@@ -35,29 +33,36 @@ class MainWidget(QWidget):
         self.configure_layouts()
 
     def configure_layouts(self) -> None:
-        self.main_layout = QHBoxLayout()
+        self.horizontal_splitter = QSplitter(Qt.Orientation.Horizontal)  # Create a horizontal splitter
 
-        self.left_layout = QVBoxLayout()
-        self.right_layout = QVBoxLayout()
+        # Create frames for left and right layouts
+        self.left_frame = QFrame()
+        self.right_frame = QFrame()
+        
+        self.left_layout = QVBoxLayout(self.left_frame)
+        self.right_layout = QVBoxLayout(self.right_frame)
 
         self.left_layout.addWidget(self.sequence)
 
-        self.right_layout.addWidget(self.option_picker)
-        self.right_layout.addWidget(self.graph_editor)
+        self.vertical_splitter = QSplitter(Qt.Orientation.Vertical)  # Vertical splitter for right side
+        self.vertical_splitter.addWidget(self.option_picker)
+        self.vertical_splitter.addWidget(self.graph_editor)
 
-        self.right_layout.setStretchFactor(self.option_picker, 3)
-        self.right_layout.setStretchFactor(self.graph_editor, 1)
+        self.right_layout.addWidget(self.vertical_splitter)
 
-        self.main_layout.addLayout(self.left_layout)
-        self.main_layout.addLayout(self.right_layout)
+        # Add frames to the horizontal splitter
+        self.horizontal_splitter.addWidget(self.left_frame)
+        self.horizontal_splitter.addWidget(self.right_frame)
 
-        # Set stretch factors
-        self.main_layout.setStretchFactor(self.left_layout, 1)
-        self.main_layout.setStretchFactor(self.right_layout, 2)
+        # Optionally, set initial sizes or proportions for the splitters
+        self.horizontal_splitter.setSizes([300, 500])
+        self.vertical_splitter.setSizes([300, 200])
 
+        # Create main layout and add the horizontal splitter
+        self.main_layout = QHBoxLayout(self)
+        self.main_layout.addWidget(self.horizontal_splitter)
         self.setLayout(self.main_layout)
-        self.layout().setSpacing(0)
-        self.layout().setContentsMargins(0, 0, 0, 0)
+
 
     ### EVENT HANDLERS ###
 
@@ -67,8 +72,6 @@ class MainWidget(QWidget):
             if active_pictograph:
                 self.key_event_handler.keyPressEvent(event, self, active_pictograph)
                 return True
-
-
 
         return super().eventFilter(source, event)
 
@@ -93,10 +96,7 @@ class MainWidget(QWidget):
     def wheelEvent(self, event: QWheelEvent | None) -> None:
         return super().wheelEvent(event)
 
-    def resizeEvent(self, event: QtGui.QResizeEvent) -> None:
-        ### KEEP THIS TO PREVENT THE WIDGETS FROM INFINITELY RESIZING ###
-        self.option_picker.setMaximumHeight(int(self.main_window.height() * 7 / 10))
-        self.graph_editor.setMaximumHeight(int(self.main_window.height() * 3 / 10))
-
-        
-
+    # def resizeEvent(self, event: QResizeEvent) -> None:
+    ### KEEP THIS TO PREVENT THE WIDGETS FROM INFINITELY RESIZING ###
+    # self.option_picker.setMaximumHeight(int(self.main_window.height() * 7 / 10))
+    # self.graph_editor.setMaximumHeight(int(self.main_window.height() * 3 / 10))
