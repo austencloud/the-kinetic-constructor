@@ -1,12 +1,12 @@
 import os
 
-current_script_path = os.path.abspath(__file__).replace('\\', '/')
+current_script_path = os.path.abspath(__file__).replace("\\", "/")
 current_script_path = current_script_path[0].upper() + current_script_path[1:]
 
 current_dir = os.path.dirname(current_script_path)
 tka_sequence_constructor_dir = os.path.dirname(current_dir)
 tka_app_dir = os.path.dirname(tka_sequence_constructor_dir)
-resources_path = tka_app_dir + '/resources'
+resources_path = tka_app_dir + "/resources"
 
 STAFF_SVG_FILE_PATH = "resources/images/props/staff.svg"
 CLUB_SVG_FILE_PATH = "resources/images/props/club.svg"
@@ -96,7 +96,7 @@ CLUB = "club"
 BUUGENG = "buugeng"
 FAN = "fan"
 TRIAD = "triad"
-HOOP = "hoop"
+MINIHOOP = "minihoop"
 BIGHOOP = "bighoop"
 DOUBLESTAR = "doublestar"
 

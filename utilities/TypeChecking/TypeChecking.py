@@ -14,7 +14,7 @@ Turns = float | Literal["fl", "0", "0.5", "1", "1.5", "2"]
 PropAttributes = Literal[
     "color", "prop_type", "location", "layer", "axis", "orientation"
 ]
-PropTypes = Literal["staff", "buugeng", "club", "fan", "hoop", "triad"]
+PropTypes = Literal["staff", "buugeng", "club", "fan", "minihoop", "triad"]
 Layers = Literal[1, 2]
 Axes = Literal["vertical", "horizontal"]
 Orientations = Literal["in", "out", "cw", "ccw"]

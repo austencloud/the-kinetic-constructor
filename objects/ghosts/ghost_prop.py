@@ -4,11 +4,10 @@ from constants.string_constants import (
     PROP_TYPE,
     STAFF,
     TRIAD,
-    HOOP,
+    MINIHOOP,
     FAN,
     CLUB,
     BUUGENG,
-    
 )
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, PropAttributesDicts
 
@@ -57,7 +56,7 @@ class GhostTriad(GhostProp):
 
 class GhostHoop(GhostProp):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
-        attributes[PROP_TYPE] = HOOP
+        attributes[PROP_TYPE] = MINIHOOP
         super().__init__(pictograph, attributes)
 
 

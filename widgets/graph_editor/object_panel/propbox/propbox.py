@@ -10,7 +10,7 @@ from objects.prop import (
     Buugeng,
     Fan,
     Triad,
-    Hoop,
+    MiniHoop,
 )
 
 from widgets.graph_editor.object_panel.propbox.propbox_drag import PropBoxDrag
@@ -98,8 +98,8 @@ class PropBox(ObjectBox):
                 prop = Fan(self.pictograph, attributes)
             elif self.prop_type == TRIAD:
                 prop = Triad(self.pictograph, attributes)
-            elif self.prop_type == HOOP:
-                prop = Hoop(self.pictograph, attributes)
+            elif self.prop_type == MINIHOOP:
+                prop = MiniHoop(self.pictograph, attributes)
             elif self.prop_type == DOUBLESTAR:
                 prop = DoubleStar(self.pictograph, attributes)
             elif self.prop_type == BIGHOOP:
@@ -119,7 +119,16 @@ class PropBox(ObjectBox):
 
     def init_combobox(self) -> None:
         self.prop_type_combobox = QComboBox(self.view)
-        prop_types = ["Staff", "Club", "Buugeng", "Fan", "Triad", "Hoop", "Bighoop", "Doublestar"]
+        prop_types = [
+            "Staff",
+            "Club",
+            "Buugeng",
+            "Fan",
+            "Triad",
+            "MiniHoop",
+            "Bighoop",
+            "Doublestar",
+        ]
         self.prop_type_combobox.addItems(prop_types)
 
         self.prop_type_combobox.setCurrentText(str(self.prop_type.capitalize()))

@@ -399,9 +399,9 @@ class Triad(Prop):
         super().__init__(pictograph, attributes)
 
 
-class Hoop(Prop):
+class MiniHoop(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
-        attributes[PROP_TYPE] = HOOP
+        attributes[PROP_TYPE] = MINIHOOP
         super().__init__(pictograph, attributes)
 
 
@@ -427,6 +427,7 @@ class DoubleStar(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
         attributes[PROP_TYPE] = DOUBLESTAR
         super().__init__(pictograph, attributes)
+
 
 class BigHoop(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:

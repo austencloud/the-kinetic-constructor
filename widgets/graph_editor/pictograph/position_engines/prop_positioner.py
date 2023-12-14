@@ -10,7 +10,7 @@ from constants.string_constants import (
     DIAMOND,
     DOUBLESTAR,
     FAN,
-    HOOP,
+    MINIHOOP,
     BIGHOOP,
     IN,
     OUT,
@@ -63,11 +63,49 @@ class PropPositioner:
         self.letters = scene.letters
 
     def update_prop_positions(self) -> None:
+        # Dictionary to store the count of each prop type
+        self.prop_type_counts = {
+            BIGHOOP: 0,
+            DOUBLESTAR: 0,
+            STAFF: 0,
+            FAN: 0,
+            CLUB: 0,
+            BUUGENG: 0,
+            MINIHOOP: 0,
+            TRIAD: 0,
+            "???": 0,
+        }
+
+        # First pass to count prop types
         for prop in self.scene.props:
-            if prop.prop_type in [STAFF, FAN, CLUB, BUUGENG, HOOP, TRIAD]:
-                self.set_default_prop_locations(prop)
-            elif prop.prop_type in [DOUBLESTAR, BIGHOOP]:
+            if prop.prop_type == BIGHOOP:
+                self.prop_type_counts[BIGHOOP] += 1
+            elif prop.prop_type == DOUBLESTAR:
+                self.prop_type_counts[DOUBLESTAR] += 1
+            elif prop.prop_type == STAFF:
+                self.prop_type_counts[STAFF] += 1
+            elif prop.prop_type == FAN:
+                self.prop_type_counts[FAN] += 1
+            elif prop.prop_type == CLUB:
+                self.prop_type_counts[CLUB] += 1
+            elif prop.prop_type == BUUGENG:
+                self.prop_type_counts[BUUGENG] += 1
+            elif prop.prop_type == MINIHOOP:
+                self.prop_type_counts[MINIHOOP] += 1
+            elif prop.prop_type == TRIAD:
+                self.prop_type_counts[TRIAD] += 1
+            else:
+                self.prop_type_counts["???"] += 1
+
+        for prop in self.scene.props:
+            if (
+                self.prop_type_counts[BIGHOOP] == 2
+                or self.prop_type_counts[DOUBLESTAR] == 2
+            ):
                 self.set_strict_prop_locations(prop)
+            else:
+                self.set_default_prop_locations(prop)
+
         if self.props_in_beta():
             self.reposition_beta_props()
 
@@ -210,36 +248,48 @@ class PropPositioner:
     def reposition_static_beta(
         self, move_prop: callable, static_motions: List[MotionAttributesDicts]
     ) -> None:
-        for motion in static_motions:
-            prop = next(
-                (prop for prop in self.scene.props if prop.color == motion[COLOR]),
-                None,
-            )
-            if not prop:
-                continue
-
-            # Check if there's another prop at the same location but in a different layer
-            other_prop = next(
-                (
-                    other
-                    for other in self.scene.props
-                    if other != prop and other.prop_location == prop.prop_location
-                ),
-                None,
-            )
-
-            # If the other prop is in a different layer, set both props to default locations
-            if other_prop and other_prop.layer != prop.layer:
-                if prop.prop_type in [STAFF, FAN, CLUB, BUUGENG, HOOP, TRIAD]:
+        # if there's a combination of a BIGHOOP and a CLUB in the prop_type_counts dictionary
+        if self.prop_type_counts[BIGHOOP] == 1 and self.prop_type_counts[CLUB] == 1:
+            # set both props to their default locations, strict for big hoop and default for club
+            for prop in self.scene.props:
+                if prop.prop_type == BIGHOOP:
+                    self.set_strict_prop_locations(prop)
+                elif prop.prop_type == CLUB:
                     self.set_default_prop_locations(prop)
-                elif prop.prop_type in [DOUBLESTAR, BIGHOOP]:
-                    self.set_strict_prop_locations(other_prop)
-            else:
-                # Original logic for handling props in the same layer
-                end_location = motion[END_LOCATION]
-                direction = self.determine_direction_for_static_beta(prop, end_location)
-                if direction:
-                    move_prop(prop, direction)
+
+        else:
+            for motion in static_motions:
+                prop = next(
+                    (prop for prop in self.scene.props if prop.color == motion[COLOR]),
+                    None,
+                )
+                if not prop:
+                    continue
+
+                # Check if there's another prop at the same location but in a different layer
+                other_prop = next(
+                    (
+                        other
+                        for other in self.scene.props
+                        if other != prop and other.prop_location == prop.prop_location
+                    ),
+                    None,
+                )
+
+                # If the other prop is in a different layer, set both props to default locations
+                if other_prop and other_prop.layer != prop.layer:
+                    if prop.prop_type in [STAFF, FAN, CLUB, BUUGENG, MINIHOOP, TRIAD]:
+                        self.set_default_prop_locations(prop)
+                    elif prop.prop_type in [DOUBLESTAR, BIGHOOP]:
+                        self.set_strict_prop_locations(other_prop)
+                else:
+                    # Original logic for handling props in the same layer
+                    end_location = motion[END_LOCATION]
+                    direction = self.determine_direction_for_static_beta(
+                        prop, end_location
+                    )
+                    if direction:
+                        move_prop(prop, direction)
 
     def determine_direction_for_static_beta(
         self, prop: Prop, end_location: str
@@ -421,7 +471,15 @@ class PropPositioner:
     ### GAMMA TO BETA ### Y, Z
 
     def reposition_gamma_to_beta(self, move_prop, shifts, static_motions) -> None:
-        if self.scene.prop_type in [STAFF, FAN, CLUB, BUUGENG, HOOP, TRIAD, DOUBLESTAR]:
+        if self.scene.prop_type in [
+            STAFF,
+            FAN,
+            CLUB,
+            BUUGENG,
+            MINIHOOP,
+            TRIAD,
+            DOUBLESTAR,
+        ]:
             if any(prop.layer == 1 for prop in self.scene.props) and any(
                 prop.layer == 2 for prop in self.scene.props
             ):
