@@ -266,7 +266,6 @@ class TurnsWidget(AttrBoxWidget):
         self.spacing = self.attr_box.pictograph.view.width() // 250
 
         border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
-        self.turnbox.setMinimumWidth(int(self.attr_box.width() / 3.25))
         self.turnbox.setMaximumWidth(int(self.attr_box.width() / 3.25))
         self.turnbox.setMinimumHeight(int(self.attr_box.width() / 5))
         self.turnbox.setMaximumHeight(int(self.attr_box.width() / 5))
@@ -310,7 +309,6 @@ class TurnsWidget(AttrBoxWidget):
         self.turnbox_vbox_frame.setMinimumWidth(int(self.attr_box.width() / 3.25))
         self.turnbox_vbox_frame.setMaximumWidth(int(self.attr_box.width() / 3.25))
 
-        self.turnbox_vbox_frame.setMinimumHeight(int(self.height() / 2))
 
     def _update_button_size(self) -> None:
         for button in self.buttons:

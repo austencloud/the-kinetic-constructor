@@ -172,17 +172,11 @@ class StartEndWidget(AttrBoxWidget):
             box_font_size = int(self.width() / 10)
             box.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
 
-            # Set the minimum and maximum width for the combo box
             box.setMinimumWidth(int(self.width() / 3.5))
             box.setMaximumWidth(int(self.width() / 3.5))
 
-            # Set the minimum and maximum height for the combo box
-            box.setMinimumHeight(int(self.height() - self.header_labels[0].height()))
-
-            # Calculate the border radius as a fraction of the width or height
             border_radius = min(box.width(), box.height()) * 0.25
 
-            # Adjust the stylesheet to add padding inside the combo box on the left
             box.setStyleSheet(
                 f"""
                 QComboBox {{
