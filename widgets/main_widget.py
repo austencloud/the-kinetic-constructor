@@ -106,6 +106,3 @@ class MainWidget(QWidget):
     def wheelEvent(self, event: QWheelEvent | None) -> None:
         return super().wheelEvent(event)
 
-    # def resizeEvent(self, event: QResizeEvent) -> None:
-    #     super().resizeEvent(event)
-    #     self.sequence.resize_sequence_widget(event)

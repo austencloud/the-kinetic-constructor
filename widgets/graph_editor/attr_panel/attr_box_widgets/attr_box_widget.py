@@ -35,10 +35,3 @@ class AttrBoxWidget(QWidget):
         button.clicked.connect(callback)
         return button
 
-    def setup_header_label_frame(
-        self, text: str, frame_layout: QHBoxLayout | QVBoxLayout
-    ) -> QFrame:
-        label = self.create_attr_header_label(text)
-        frame = self.create_frame(frame_layout)
-        frame_layout.addWidget(label)
-        return frame
