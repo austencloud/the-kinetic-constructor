@@ -22,11 +22,10 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 if TYPE_CHECKING:
-    from objects.arrow import Arrow
+    from objects.arrow.arrow import Arrow
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.motion import Motion
     from widgets.graph_editor.object_panel.propbox.propbox import PropBox
-    from objects.arrow import StaticArrow
 
 
 class Prop(GraphicalObject):
@@ -47,7 +46,6 @@ class Prop(GraphicalObject):
         self.drag_offset = QPointF(0, 0)
         self.previous_location: Locations = None
         self.arrow: Arrow = None
-        self.static_arrow: StaticArrow = None
         self.ghost_prop: Prop = None
 
         self.color: Colors = attributes[COLOR]
@@ -352,8 +350,8 @@ class Prop(GraphicalObject):
         self.scene.update_pictograph()
 
     def _create_static_arrow(self, deleted_arrow: "Arrow") -> None:
-        from objects.arrow import StaticArrow
-
+        from objects.arrow.arrow import Arrow
+        
         static_arrow_dict = {
             COLOR: self.color,
             MOTION_TYPE: STATIC,
@@ -364,27 +362,27 @@ class Prop(GraphicalObject):
             TURNS: 0,
         }
 
-        self.static_arrow = StaticArrow(self.pictograph, static_arrow_dict)
+        self.arrow = Arrow(self.pictograph, static_arrow_dict)
         for arrow in self.pictograph.arrows[:]:
             if arrow.color == self.color:
                 self.pictograph.removeItem(arrow)
                 self.pictograph.arrows.remove(arrow)
-        self.pictograph.addItem(self.static_arrow)
-        self.pictograph.arrows.append(self.static_arrow)
-        self.static_arrow.prop = self
-        self.static_arrow.prop.arrow = self.static_arrow
-        self.static_arrow.motion = deleted_arrow.motion
+        self.pictograph.addItem(self.arrow)
+        self.pictograph.arrows.append(self.arrow)
+        self.arrow.prop = self
+        self.arrow.prop.arrow = self.arrow
+        self.arrow.motion = deleted_arrow.motion
         self.motion = deleted_arrow.motion
 
         self.motion.start_location = self.prop_location
         self.motion.end_location = self.prop_location
         self.motion.arrow_location = self.prop_location
-        self.motion.arrow = self.static_arrow
+        self.motion.arrow = self.arrow
         self.motion.turns = 0
         self.motion.motion_type = STATIC
 
-        if self.static_arrow not in self.pictograph.items():
-            self.pictograph.addItem(self.static_arrow)
+        if self.arrow not in self.pictograph.items():
+            self.pictograph.addItem(self.arrow)
 
 
 class Staff(Prop):
@@ -392,10 +390,12 @@ class Staff(Prop):
         attributes[PROP_TYPE] = STAFF
         super().__init__(pictograph, attributes)
 
+
 class BigStaff(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
         attributes[PROP_TYPE] = BIGSTAFF
         super().__init__(pictograph, attributes)
+
 
 class Triad(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
@@ -438,31 +438,37 @@ class BigHoop(Prop):
         attributes[PROP_TYPE] = BIGHOOP
         super().__init__(pictograph, attributes)
 
+
 class BigDoubleStar(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
         attributes[PROP_TYPE] = BIGDOUBLESTAR
         super().__init__(pictograph, attributes)
-        
+
+
 class Quiad(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
         attributes[PROP_TYPE] = QUIAD
         super().__init__(pictograph, attributes)
-        
+
+
 class Sword(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
         attributes[PROP_TYPE] = SWORD
         super().__init__(pictograph, attributes)
-        
+
+
 class Guitar(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
         attributes[PROP_TYPE] = GUITAR
         super().__init__(pictograph, attributes)
-        
+
+
 class Ukulele(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
         attributes[PROP_TYPE] = UKULELE
         super().__init__(pictograph, attributes)
-        
+
+
 class Chicken(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
         attributes[PROP_TYPE] = CHICKEN

@@ -210,7 +210,9 @@ class PropBox(ObjectBox):
         if closest_prop:
             self.target_prop = closest_prop
             if not self.drag:
-                pictograph = self.main_widget.graph_editor.pictograph
+                pictograph = (
+                    self.main_widget.graph_editor_widget.graph_editor.pictograph
+                )
                 self.drag = PropBoxDrag(self.main_window, pictograph, self)
             if event.button() == Qt.MouseButton.LeftButton:
                 self.drag.match_target_prop(self.target_prop)

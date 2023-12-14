@@ -1,13 +1,11 @@
 from typing import Callable, Dict, List, TYPE_CHECKING
 import json
-from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtCore import Qt
 from constants.string_constants import *
 from data.positions_map import get_specific_start_end_positions
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from objects.prop import Prop
-from widgets.graph_editor.pictograph.pictograph_view import PictographView
 from widgets.option_picker.option.option import Option
 from widgets.sequence_widget.beat_frame.beat import Beat
 
@@ -150,10 +148,10 @@ class OptionPicker(QScrollArea):
 
     def on_option_clicked(self, option: "Option") -> None:
         new_beat = self.copy_scene(option)
-        self.main_widget.sequence.beat_frame.add_scene_to_sequence(new_beat)
+        self.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(new_beat)
 
     def copy_scene(self, option: "Option") -> Beat:
-        new_beat = Beat(self.main_widget, self.main_widget.graph_editor)
+        new_beat = Beat(self.main_widget, self.main_widget.graph_editor_widget)
         new_beat.setSceneRect(option.sceneRect())
         new_beat.motions = option.motions.copy()
         self.duplicate_items(option, new_beat)
@@ -188,4 +186,3 @@ class OptionPicker(QScrollArea):
     def resize_option_views(self):
         for option in self.options:
             option.view.resize_option_view()
-

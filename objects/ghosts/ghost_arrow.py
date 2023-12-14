@@ -1,11 +1,10 @@
 from constants.string_constants import COLOR
-from objects.arrow import Arrow
 from typing import TYPE_CHECKING
+from objects.arrow.arrow import Arrow
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from utilities.TypeChecking.TypeChecking import ArrowAttributesDicts
-    from objects.arrow import Arrow
 
 
 class GhostArrow(Arrow):
@@ -32,7 +31,7 @@ class GhostArrow(Arrow):
         self.pictograph = pictograph
         self.color = attributes[COLOR]
         self.target_arrow: "Arrow" = None
-
+        
     def update_ghost_arrow(self, attributes) -> None:
         self.set_attributes_from_dict(attributes)
         self.update_appearance()

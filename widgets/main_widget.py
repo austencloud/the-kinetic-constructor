@@ -6,13 +6,12 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QSplitter,
     QFrame,
-    QTabWidget,
 )
-from PyQt6.QtGui import QWheelEvent, QResizeEvent
+from PyQt6.QtGui import QWheelEvent
 from utilities.TypeChecking.TypeChecking import LetterDictionary
 from utilities.json_handler import JsonHandler
+from widgets.graph_editor.graph_editor_widget import GraphEditorWidget
 from widgets.graph_editor.key_event_handler import KeyEventHandler
-from widgets.graph_editor.graph_editor import GraphEditor
 from widgets.graph_editor.pictograph.pictograph import Pictograph
 from widgets.option_picker.option_picker_widget import OptionPickerWidget
 from widgets.sequence_widget.sequence_widget import SequenceWidget
@@ -33,31 +32,26 @@ class MainWidget(QWidget):
         self.json_handler = JsonHandler()
         self.letters: LetterDictionary = self.json_handler.load_all_letters()
 
-        self.graph_editor = GraphEditor(self)
-        self.option_picker = OptionPickerWidget(self)
-        self.sequence = SequenceWidget(self)
+        self.graph_editor_widget = GraphEditorWidget(self)
+        self.option_picker_widget = OptionPickerWidget(self)
+        self.sequence_widget = SequenceWidget(self)
 
         self.configure_layouts()
 
     def configure_layouts(self) -> None:
-        self.horizontal_splitter = QSplitter(
-            Qt.Orientation.Horizontal
-        )  # Create a horizontal splitter
+        self.horizontal_splitter = QSplitter(Qt.Orientation.Horizontal)
 
-        # Create frames for left and right layouts
         self.left_frame = QFrame()
         self.right_frame = QFrame()
 
         self.left_layout = QVBoxLayout(self.left_frame)
         self.right_layout = QVBoxLayout(self.right_frame)
 
-        self.left_layout.addWidget(self.sequence)
+        self.left_layout.addWidget(self.sequence_widget)
 
-        self.vertical_splitter = QSplitter(
-            Qt.Orientation.Vertical
-        )  # Vertical splitter for right side
-        self.vertical_splitter.addWidget(self.option_picker)
-        self.vertical_splitter.addWidget(self.graph_editor)
+        self.vertical_splitter = QSplitter(Qt.Orientation.Vertical)
+        self.vertical_splitter.addWidget(self.option_picker_widget)
+        self.vertical_splitter.addWidget(self.graph_editor_widget)
 
         self.right_layout.addWidget(self.vertical_splitter)
 
@@ -86,18 +80,18 @@ class MainWidget(QWidget):
         return super().eventFilter(source, event)
 
     def deselect_all_except(self, active_pictograph: Pictograph) -> None:
-        if self.graph_editor.pictograph != active_pictograph:
-            self.graph_editor.pictograph.clearSelection()
+        if self.graph_editor_widget.graph_editor.pictograph != active_pictograph:
+            self.graph_editor_widget.graph_editor.pictograph.clearSelection()
 
-        for beat_view in self.sequence.beat_frame.beats:
+        for beat_view in self.sequence_widget.beat_frame.beats:
             if beat_view.pictograph and beat_view.pictograph != active_pictograph:
                 beat_view.pictograph.clearSelection()
 
     def find_active_pictograph(self) -> Optional[Pictograph]:
-        if self.graph_editor.pictograph.selectedItems():
-            return self.graph_editor.pictograph
+        if self.graph_editor_widget.graph_editor.pictograph.selectedItems():
+            return self.graph_editor_widget.graph_editor.pictograph
 
-        for beat_view in self.sequence.beat_frame.beats:
+        for beat_view in self.sequence_widget.beat_frame.beats:
             if beat_view.pictograph and beat_view.pictograph.selectedItems():
                 return beat_view.pictograph
 
@@ -105,4 +99,3 @@ class MainWidget(QWidget):
 
     def wheelEvent(self, event: QWheelEvent | None) -> None:
         return super().wheelEvent(event)
-

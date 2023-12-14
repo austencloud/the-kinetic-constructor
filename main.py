@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
         screen = screens[1] if len(screens) > 1 else QGuiApplication.primaryScreen()
         available_geometry = screen.availableGeometry()
         self.setMaximumSize(available_geometry.size())
-        self.move(int(available_geometry.x()), int(available_geometry.y()))
+
 
     def _init_main_window(self) -> None:
         self.main_widget = MainWidget(self)
@@ -27,6 +27,13 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Sequence Constructor")
         self.show()
+        screens = QGuiApplication.screens()
+        screen = screens[1] if len(screens) > 1 else QGuiApplication.primaryScreen()
+        available_geometry = screen.availableGeometry()
+        self.move(
+            int(available_geometry.x() + available_geometry.width() / 2 - self.width() / 2),
+            int(available_geometry.y() + available_geometry.height() / 2 - self.height() / 2)
+        )
 
     def exec_with_profiling(self, app: QApplication) -> int:
         for func in [app.exec, self.show]:

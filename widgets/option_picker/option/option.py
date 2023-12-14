@@ -4,10 +4,9 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsScene
 
 from data.letter_engine_data import letter_types
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.prop import Prop
-from objects.prop import Staff
 from objects.motion import Motion
 from constants.string_constants import (
     BLUE,
@@ -69,7 +68,7 @@ class Option(Pictograph):
         option_picker: "OptionPicker",
         is_starter: bool = False,  # Set a default value for is_starter
     ) -> None:
-        super().__init__(main_widget, main_widget.graph_editor)
+        super().__init__(main_widget, main_widget.graph_editor_widget.graph_editor)
         self.main_widget = main_widget
         self.is_starter = is_starter
         self.option_picker: OptionPicker = option_picker
@@ -161,7 +160,7 @@ class Option(Pictograph):
                     COLOR: motion.color,
                     MOTION_TYPE: motion.motion_type,
                     ROTATION_DIRECTION: motion.rotation_direction,
-                    ARROW_LOCATION: motion.arrow.arrow_location,
+                    ARROW_LOCATION: motion.arrow_location,
                     START_LOCATION: motion.start_location,
                     END_LOCATION: motion.end_location,
                     TURNS: motion.turns,
@@ -197,7 +196,7 @@ class Option(Pictograph):
 
     def add_to_sequence_callback(self) -> None:
         copied_scene = self.copy_scene()
-        self.main_widget.sequence.beat_frame.add_scene_to_sequence(copied_scene)
+        self.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(copied_scene)
         self.clear_pictograph()
 
     def rotate_pictograph(self, direction: str) -> None:

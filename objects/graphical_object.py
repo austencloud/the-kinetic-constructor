@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
-    from objects.arrow import Arrow
+    from objects.arrow.arrow import Arrow
     from objects.prop import Prop
 
 from utilities.TypeChecking.TypeChecking import (
@@ -48,7 +48,9 @@ class GraphicalObject(QGraphicsSvgItem):
             svg_data = f.read()
 
         # This regex pattern looks for the class color definition in the style tag
-        class_color_pattern = re.compile(r'(\.st0\s*\{\s*fill:\s*)(#[a-fA-F0-9]{6})(\s*;\s*\})')
+        class_color_pattern = re.compile(
+            r"(\.st0\s*\{\s*fill:\s*)(#[a-fA-F0-9]{6})(\s*;\s*\})"
+        )
 
         # This function will replace the old color with the new color
         def replace_class_color(match):

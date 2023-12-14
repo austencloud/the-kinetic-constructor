@@ -2,7 +2,7 @@ from PyQt6.QtCore import Qt, QPoint, QSize
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from objects.prop import Prop
-from objects.arrow import StaticArrow
+from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
 from constants.string_constants import (
@@ -44,7 +44,7 @@ class PropBoxDrag(ObjectBoxDrag):
 
     def match_target_prop(self, target_prop: "Prop") -> None:
         self.target_prop = target_prop
-        self.static_arrow = target_prop.static_arrow
+        self.static_arrow = target_prop.arrow
         drag_angle = self._get_prop_drag_rotation_angle(target_prop)
         super().match_target_object(target_prop, drag_angle)
         self.set_attributes(target_prop)
@@ -215,7 +215,10 @@ class PropBoxDrag(ObjectBoxDrag):
         renderer = QSvgRenderer()
         renderer.load(new_svg_data)
 
-        scaled_size = renderer.defaultSize() * self.pictograph.graph_editor.pictograph_widget.view_scale
+        scaled_size = (
+            renderer.defaultSize()
+            * self.pictograph.graph_editor.pictograph_widget.view_scale
+        )
         pixmap = QPixmap(scaled_size)
         pixmap.fill(Qt.GlobalColor.transparent)
         painter = QPainter(pixmap)
@@ -262,7 +265,7 @@ class PropBoxDrag(ObjectBoxDrag):
             TURNS: 0,
         }
 
-        self.static_arrow = StaticArrow(self.pictograph, static_arrow_dict)
+        self.static_arrow = Arrow(self.pictograph, static_arrow_dict)
         for arrow in self.pictograph.arrows[:]:
             if arrow.color == self.color:
                 self.pictograph.removeItem(arrow)

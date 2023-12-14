@@ -18,7 +18,7 @@ from constants.string_constants import (
     SOUTHEAST,
     SOUTHWEST,
 )
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Tuple
 
 from widgets.graph_editor.object_panel.objectbox_drag import ObjectBoxDrag
@@ -213,7 +213,10 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
     def update_rotation(self) -> None:
         renderer = QSvgRenderer(self.target_arrow.svg_file)
-        scaled_size = renderer.defaultSize() * self.pictograph.graph_editor.pictograph_widget.view_scale
+        scaled_size = (
+            renderer.defaultSize()
+            * self.pictograph.graph_editor.pictograph_widget.view_scale
+        )
         pixmap = QPixmap(scaled_size)
         pixmap.fill(Qt.GlobalColor.transparent)
         painter = QPainter(pixmap)

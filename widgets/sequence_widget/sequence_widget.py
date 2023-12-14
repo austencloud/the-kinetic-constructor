@@ -12,7 +12,7 @@ class SequenceWidget(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.pictograph = main_widget.graph_editor.pictograph
+        self.pictograph = main_widget.graph_editor_widget.graph_editor.pictograph
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         self.beat_frame = BeatFrame(self.main_widget, self.pictograph, self)
@@ -26,6 +26,6 @@ class SequenceWidget(QWidget):
         self.layout.addWidget(self.beat_frame)
         self.layout.addWidget(self.button_frame)
 
-    def resize_sequence_widget(self, event) -> None:
-        self.beat_frame.resize_beat_frame()
-        # self.button_frame.resize_letter_buttons()
+    # def resize_sequence_widget(self, event) -> None:
+    # self.beat_frame.resize_beat_frame()
+    # self.button_frame.resize_letter_buttons()

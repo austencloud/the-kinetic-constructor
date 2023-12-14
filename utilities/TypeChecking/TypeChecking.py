@@ -7,7 +7,7 @@ Colors = Literal["red", "blue"]
 MotionTypes = Literal["pro", "anti", "dash", "static"]
 Locations = Literal["n", "e", "s", "w", "ne", "se", "sw", "nw"]
 RotationDirections = Literal["cw", "ccw"]
-Turns = float | Literal["fl", "0", "0.5", "1", "1.5", "2"]
+Turns = float | Literal["fl", "0", "0.5", "1", "1.5", "2", "2.5", "3"]
 
 ### STAFF ATTRIBUTES ###
 
@@ -28,7 +28,8 @@ PropTypes = Literal[
     "quiad",
     "sword",
     "guitar",
-    "ukulele", "chicken"
+    "ukulele",
+    "chicken",
 ]
 Layers = Literal[1, 2]
 Axes = Literal["vertical", "horizontal"]
@@ -104,7 +105,7 @@ MotionAttributes = Literal[
     "start_orientation",
     "end_orientation",
     "start_layer",
-    "end_layer"
+    "end_layer",
 ]
 
 MotionTypesCombinations = Literal[

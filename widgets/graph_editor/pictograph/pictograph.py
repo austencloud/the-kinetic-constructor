@@ -4,10 +4,9 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsScene
 
 from data.letter_engine_data import letter_types
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.prop import Prop
-from objects.prop import Staff
 from objects.motion import Motion
 from constants.string_constants import (
     BLUE,
@@ -246,7 +245,7 @@ class Pictograph(QGraphicsScene):
 
     def add_to_sequence_callback(self) -> None:
         copied_scene = self.copy_scene()
-        self.main_widget.sequence.beat_frame.add_scene_to_sequence(copied_scene)
+        self.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(copied_scene)
         self.clear_pictograph()
 
     def rotate_pictograph(self, direction: str) -> None:

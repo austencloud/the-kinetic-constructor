@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, List
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QGraphicsItem, QGridLayout
 
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from constants.string_constants import (
     ANTI,
     ARROW_LOCATION,
@@ -34,7 +34,7 @@ from widgets.graph_editor.object_panel.objectbox import ObjectBox
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from objects.arrow import Arrow
+    from objects.arrow.arrow import Arrow
     from widgets.graph_editor.graph_editor import GraphEditor
 
 from utilities.TypeChecking.TypeChecking import MotionAttributesDicts
@@ -189,7 +189,9 @@ class ArrowBox(ObjectBox):
         if closest_arrow:
             self.target_arrow = closest_arrow
             if not self.drag:
-                pictograph = self.main_widget.graph_editor.pictograph
+                pictograph = (
+                    self.main_widget.graph_editor_widget.graph_editor.pictograph
+                )
                 self.drag = ArrowBoxDrag(self.main_window, pictograph, self)
             if event.button() == Qt.MouseButton.LeftButton:
                 self.drag.match_target_arrow(self.target_arrow)

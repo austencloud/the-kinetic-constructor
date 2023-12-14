@@ -1,7 +1,7 @@
 import re
 from PyQt6.QtGui import QImage, QPainter
 from PyQt6.QtCore import QPointF, QSize
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from objects.prop import Prop
 from objects.grid import Grid
 import xml.etree.ElementTree as ET
@@ -15,7 +15,7 @@ from utilities.TypeChecking.TypeChecking import ColorsHex
 
 class ExportHandler:
     def __init__(self, main_widget: "MainWidget") -> None:
-        self.pictograph = main_widget.graph_editor.pictograph
+        self.pictograph = main_widget.graph_editor_widget.graph_editor.pictograph
         self.grid = self.pictograph.grid
         self.export_to_png()
 

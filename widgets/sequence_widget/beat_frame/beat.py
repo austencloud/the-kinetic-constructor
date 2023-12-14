@@ -2,9 +2,8 @@ from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
 
 from data.letter_engine_data import letter_types
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from objects.prop import Prop
-from objects.prop import Staff
 from objects.motion import Motion
 from constants.string_constants import (
     BLUE,
@@ -50,10 +49,9 @@ if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 
 
-
 class Beat(Pictograph):
     def __init__(self, main_widget: "MainWidget", Sequence: "BeatFrame") -> None:
-        super().__init__(main_widget, main_widget.graph_editor)
+        super().__init__(main_widget, main_widget.graph_editor_widget.graph_editor)
         self.main_widget = main_widget
         self.sequence = Sequence
 
@@ -141,7 +139,7 @@ class Beat(Pictograph):
 
     def add_to_sequence_callback(self) -> None:
         copied_scene = self.copy_scene()
-        self.main_widget.sequence.beat_frame.add_scene_to_sequence(copied_scene)
+        self.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(copied_scene)
         self.clear_pictograph()
 
     def rotate_pictograph(self, direction: str) -> None:

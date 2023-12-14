@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QColor, QPalette, QResizeEvent
+from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
 
 from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
@@ -11,14 +10,17 @@ from widgets.graph_editor.attr_panel.attr_panel import AttrPanel
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
+    from widgets.graph_editor.graph_editor_widget import GraphEditorWidget
 
 
 class GraphEditor(QFrame):
-    def __init__(self, main_widget: "MainWidget") -> None:
+    def __init__(
+        self, main_widget: "MainWidget", graph_editor_widget: "GraphEditorWidget"
+    ) -> None:
         super().__init__()
         self._initialize_main_widget_attributes(main_widget)
         self._setup_frame_style()
-        self._create_child_widgets(main_widget)
+        self._create_children(main_widget)
         self._setup_main_layout()
         self._apply_layout()
         self._setup_size_policy()
@@ -60,7 +62,7 @@ class GraphEditor(QFrame):
 
         self.setLayout(self.layout)
 
-    def _create_child_widgets(self, main_widget: "MainWidget") -> None:
+    def _create_children(self, main_widget: "MainWidget") -> None:
         self.pictograph = Pictograph(main_widget, self)
         self.arrowbox = ArrowBox(main_widget, self)
         self.propbox = PropBox(main_widget, self)
@@ -74,6 +76,6 @@ class GraphEditor(QFrame):
     def _setup_size_policy(self) -> None:
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
-    def resizeEvent(self, event: QResizeEvent) -> None:
+    def resize_graph_editor(self) -> None:
         self.attr_panel.resize_attr_panel()
         self.pictograph_widget.resize_pictograph_widget()

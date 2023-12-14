@@ -1,4 +1,4 @@
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from objects.prop import Prop
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
@@ -37,7 +37,7 @@ class KeyEventHandler:
         Returns:
             None
         """
-        sequence = main_widget.sequence
+        sequence = main_widget.sequence_widget
 
         if not pictograph.selectedItems():
             return

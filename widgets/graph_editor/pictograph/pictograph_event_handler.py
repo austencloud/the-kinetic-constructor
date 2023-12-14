@@ -1,5 +1,4 @@
-
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from objects.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
@@ -28,9 +27,8 @@ class PictographEventHandler:
             if prop:
                 self.pictograph.dragged_prop = prop
                 self.pictograph.dragged_prop.mousePressEvent(event)
-            else: 
+            else:
                 self.pictograph.clear_selections()
-
 
     def handle_mouse_move(self, event) -> None:
         if self.pictograph.dragged_prop:

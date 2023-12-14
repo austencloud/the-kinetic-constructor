@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
-    from objects.arrow import Arrow
+    from objects.arrow.arrow import Arrow
     from objects.prop import Prop
 from constants.string_constants import DASH
 from data.start_end_location_map import get_start_end_locations
@@ -56,10 +56,7 @@ class Motion:
         self.start_layer: Layers = attributes[START_LAYER]
         self.end_layer: Layers = self.get_end_layer()
 
-        from objects.arrow import StaticArrow
-
-        if self.prop and not isinstance(self.arrow, StaticArrow):
-            self.update_prop_orientation_and_layer()
+        self.update_prop_orientation_and_layer()
 
     def update_prop_orientation_and_layer(self) -> None:
         self.prop.orientation = self.end_orientation
