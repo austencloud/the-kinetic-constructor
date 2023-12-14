@@ -458,4 +458,7 @@ class Guitar(Prop):
         attributes[PROP_TYPE] = GUITAR
         super().__init__(pictograph, attributes)
         
-        
+class Ukulele(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = UKULELE
+        super().__init__(pictograph, attributes)

@@ -97,6 +97,7 @@ BIGDOUBLESTAR = "bigdoublestar"
 QUIAD = "quiad"
 SWORD = "sword"
 GUITAR = "guitar"
+UKULELE = "ukulele"
 COLOR_MAP = {RED: RED_HEX, BLUE: BLUE_HEX}
 
 ### ICONS ###

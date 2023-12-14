@@ -22,6 +22,7 @@ from constants.string_constants import (
     QUIAD,
     GUITAR,
     SWORD,
+    UKULELE,
     STATIC,
     START_LOCATION,
     END_LOCATION,
@@ -83,6 +84,7 @@ class PropPositioner:
             QUIAD: 0,
             SWORD: 0,
             GUITAR: 0,
+            UKULELE: 0,
             "???": 0,
         }
 
@@ -114,6 +116,8 @@ class PropPositioner:
                 self.prop_type_counts[SWORD] += 1
             elif prop.prop_type == GUITAR:
                 self.prop_type_counts[GUITAR] += 1
+            elif prop.prop_type == UKULELE:
+                self.prop_type_counts[UKULELE] += 1
             else:
                 self.prop_type_counts["???"] += 1
 
@@ -299,9 +303,25 @@ class PropPositioner:
 
                 # If the other prop is in a different layer, set both props to default locations
                 if other_prop and other_prop.layer != prop.layer:
-                    if prop.prop_type in [STAFF, FAN, CLUB, BUUGENG, MINIHOOP, TRIAD, QUIAD]:
+                    if prop.prop_type in [
+                        STAFF,
+                        FAN,
+                        CLUB,
+                        BUUGENG,
+                        MINIHOOP,
+                        TRIAD,
+                        QUIAD,
+                        UKULELE,
+                    ]:
                         self.set_default_prop_locations(prop)
-                    elif prop.prop_type in [DOUBLESTAR, BIGHOOP, BIGDOUBLESTAR, BIGSTAFF, SWORD, GUITAR]:
+                    elif prop.prop_type in [
+                        DOUBLESTAR,
+                        BIGHOOP,
+                        BIGDOUBLESTAR,
+                        BIGSTAFF,
+                        SWORD,
+                        GUITAR,
+                    ]:
                         self.set_strict_prop_locations(other_prop)
                 else:
                     # Original logic for handling props in the same layer
@@ -494,16 +514,13 @@ class PropPositioner:
     def reposition_gamma_to_beta(self, move_prop, shifts, static_motions) -> None:
         if self.scene.prop_type in [
             STAFF,
-            BIGSTAFF,
             FAN,
             CLUB,
             BUUGENG,
             MINIHOOP,
             TRIAD,
             QUIAD,
-            DOUBLESTAR,
-            BIGDOUBLESTAR,
-            SWORD, GUITAR
+            UKULELE,
         ]:
             if any(prop.layer == 1 for prop in self.scene.props) and any(
                 prop.layer == 2 for prop in self.scene.props
@@ -530,7 +547,14 @@ class PropPositioner:
                         ),
                         self.get_opposite_direction(direction),
                     )
-        elif self.scene.prop_type in [BIGHOOP]:
+        elif self.scene.prop_type in [
+            BIGHOOP,
+            BIGSTAFF,
+            DOUBLESTAR,
+            BIGDOUBLESTAR,
+            SWORD,
+            GUITAR,
+        ]:
             for prop in self.scene.props:
                 self.set_strict_prop_locations(prop)
 
