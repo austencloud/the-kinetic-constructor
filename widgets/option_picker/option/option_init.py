@@ -7,7 +7,7 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
-from objects.prop import BigHoop, Prop, Staff, Club, Fan, MiniHoop, Buugeng, Triad, Quiad, BigDoubleStar, DoubleStar, BigStaff, Sword, Guitar, Ukulele
+from objects.prop import BigHoop, Prop, Staff, Club, Fan, MiniHoop, Buugeng, Triad, Quiad, BigDoubleStar, DoubleStar, BigStaff, Sword, Guitar, Ukulele, Chicken
 from constants.string_constants import *
 from utilities.TypeChecking.TypeChecking import Colors, Locations, PropTypes
 from widgets.option_picker.option.option_view import OptionView
@@ -64,6 +64,7 @@ class OptionInit:
             SWORD.lower(): Sword,
             GUITAR.lower(): Guitar,
             UKULELE.lower(): Ukulele,
+            CHICKEN.lower(): Chicken,
         }
 
         prop_class = prop_class_mapping.get(prop_type)
@@ -126,6 +127,7 @@ class OptionInit:
             SWORD.lower(): Sword,
             GUITAR.lower(): Guitar,
             UKULELE.lower(): Ukulele,
+            CHICKEN.lower(): Chicken,
         }
 
         prop_class = prop_class_mapping.get(prop_type)

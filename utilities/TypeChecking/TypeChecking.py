@@ -28,7 +28,7 @@ PropTypes = Literal[
     "quiad",
     "sword",
     "guitar",
-    "ukulele",
+    "ukulele", "chicken"
 ]
 Layers = Literal[1, 2]
 Axes = Literal["vertical", "horizontal"]

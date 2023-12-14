@@ -23,6 +23,7 @@ from constants.string_constants import (
     GUITAR,
     SWORD,
     UKULELE,
+    CHICKEN,
     STATIC,
     START_LOCATION,
     END_LOCATION,
@@ -85,6 +86,7 @@ class PropPositioner:
             SWORD: 0,
             GUITAR: 0,
             UKULELE: 0,
+            CHICKEN: 0,
             "???": 0,
         }
 
@@ -118,6 +120,8 @@ class PropPositioner:
                 self.prop_type_counts[GUITAR] += 1
             elif prop.prop_type == UKULELE:
                 self.prop_type_counts[UKULELE] += 1
+            elif prop.prop_type == CHICKEN:
+                self.prop_type_counts[CHICKEN] += 1
             else:
                 self.prop_type_counts["???"] += 1
 
@@ -312,6 +316,7 @@ class PropPositioner:
                         TRIAD,
                         QUIAD,
                         UKULELE,
+                        CHICKEN
                     ]:
                         self.set_default_prop_locations(prop)
                     elif prop.prop_type in [
@@ -521,6 +526,7 @@ class PropPositioner:
             TRIAD,
             QUIAD,
             UKULELE,
+            CHICKEN
         ]:
             if any(prop.layer == 1 for prop in self.scene.props) and any(
                 prop.layer == 2 for prop in self.scene.props

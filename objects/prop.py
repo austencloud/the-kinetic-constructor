@@ -462,3 +462,8 @@ class Ukulele(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
         attributes[PROP_TYPE] = UKULELE
         super().__init__(pictograph, attributes)
+        
+class Chicken(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = CHICKEN
+        super().__init__(pictograph, attributes)

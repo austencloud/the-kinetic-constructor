@@ -17,6 +17,7 @@ from objects.prop import (
     Sword,
     Guitar,
     Ukulele,
+    Chicken,
 )
 
 from widgets.graph_editor.object_panel.propbox.propbox_drag import PropBoxDrag
@@ -122,6 +123,8 @@ class PropBox(ObjectBox):
                 prop = Guitar(self.pictograph, attributes)
             elif self.prop_type == UKULELE:
                 prop = Ukulele(self.pictograph, attributes)
+            elif self.prop_type == CHICKEN:
+                prop = Chicken(self.pictograph, attributes)
             else:
                 raise ValueError("Invalid prop type")
 
@@ -152,6 +155,7 @@ class PropBox(ObjectBox):
             "Sword",
             "Guitar",
             "Ukulele",
+            "Chicken",
         ]
         self.prop_type_combobox.addItems(prop_types)
 

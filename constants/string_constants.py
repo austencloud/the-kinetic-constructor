@@ -98,6 +98,7 @@ QUIAD = "quiad"
 SWORD = "sword"
 GUITAR = "guitar"
 UKULELE = "ukulele"
+CHICKEN = "chicken"
 COLOR_MAP = {RED: RED_HEX, BLUE: BLUE_HEX}
 
 ### ICONS ###

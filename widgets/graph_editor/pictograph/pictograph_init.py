@@ -21,7 +21,9 @@ from objects.prop import (
     Triad,
     Quiad,
     Sword,
-    Guitar, Ukulele
+    Guitar,
+    Ukulele,
+    Chicken,
 )
 from constants.string_constants import *
 from utilities.TypeChecking.TypeChecking import Colors, Locations, PropTypes
@@ -79,6 +81,7 @@ class PictographInit:
             SWORD.lower(): Sword,
             GUITAR.lower(): Guitar,
             UKULELE.lower(): Ukulele,
+            CHICKEN.lower(): Chicken,
         }
 
         prop_class = prop_class_mapping.get(prop_type)
@@ -141,6 +144,7 @@ class PictographInit:
             SWORD.lower(): Sword,
             GUITAR.lower(): Guitar,
             UKULELE.lower(): Ukulele,
+            CHICKEN.lower(): Chicken,
         }
 
         prop_class = prop_class_mapping.get(prop_type)
