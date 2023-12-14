@@ -1,9 +1,10 @@
 from typing import TYPE_CHECKING
+from PyQt6.QtGui import QResizeEvent
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
-from .option_picker_letter_buttons import OptionPickerLetterButtons
+from .option_picker_letter_buttons import LetterButtons
 from .option_picker import OptionPicker
 
 
@@ -19,7 +20,7 @@ class OptionPickerWidget(QFrame):
         self.main_layout.setSpacing(0)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
-        self.button_frame = OptionPickerLetterButtons(self.main_widget, self)
+        self.button_frame = LetterButtons(self.main_widget, self)
         self.option_picker = OptionPicker(self.main_widget, self)
 
         self.main_layout.addWidget(self.option_picker, 5)
@@ -27,4 +28,6 @@ class OptionPickerWidget(QFrame):
 
         self.setLayout(self.main_layout)
 
-        
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        self.option_picker.resize_option_views()
+        self.button_frame.resize_letter_buttons()

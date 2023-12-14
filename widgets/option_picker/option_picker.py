@@ -1,5 +1,6 @@
 from typing import Callable, Dict, List, TYPE_CHECKING
 import json
+from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout
 from PyQt6.QtCore import QSize, Qt
 from constants.string_constants import *
@@ -70,23 +71,6 @@ class OptionPicker(QScrollArea):
     def get_click_handler(self, option: "Option") -> Callable:
         return lambda event: self.on_option_clicked(option)
 
-    def set_option_view_size(self, view: PictographView) -> None:
-        view_width = self.calculate_view_width(self.COLUMN_COUNT)
-        view_height = int(view_width * 90 / 75)
-        view.setFixedSize(QSize(view_width, view_height))
-
-    def calculate_view_width(self, items_per_row: int) -> int:
-        container_width = (
-            self.option_picker_widget.width()
-            - self.option_picker_widget.button_frame.width()
-            - self.option_picker_layout.horizontalSpacing() * (items_per_row - 1)
-            - (
-                self.container.contentsMargins().left()
-                + self.container.contentsMargins().right()
-            )
-        )
-        return int(container_width / items_per_row)
-
     def clear_layout(self) -> None:
         while self.option_picker_layout.count():
             child = self.option_picker_layout.takeAt(0)
@@ -115,6 +99,7 @@ class OptionPicker(QScrollArea):
                 row=row // self.COLUMN_COUNT,
                 col=row % self.COLUMN_COUNT,
             )
+        self.resize_option_views()
 
     def create_option(self, attributes_list: list) -> "Option":
         option = Option(self.main_widget, self)
@@ -199,4 +184,8 @@ class OptionPicker(QScrollArea):
                 new_item.ghost_prop = target_beat.ghost_props[new_item.color]
                 new_item.ghost_prop.motion = new_item.motion
                 new_item.arrow = target_beat.get_arrow_by_color(new_item.color)
+
+    def resize_option_views(self):
+        for option in self.options:
+            option.view.resize_option_view()
 

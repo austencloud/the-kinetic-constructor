@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton, QSizePolicy
-from PyQt6.QtGui import QIcon, QPixmap, QPainter, QFont
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QColor
+from PyQt6.QtGui import QIcon, QPixmap, QPainter, QFont, QColor
+from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtSvg import QSvgRenderer
 from data.letter_engine_data import letter_types
 from constants.string_constants import LETTER_SVG_DIR
@@ -14,7 +13,7 @@ if TYPE_CHECKING:
     from widgets.option_picker.option_picker import OptionPickerWidget
 
 
-class OptionPickerLetterButtons(QFrame):
+class LetterButtons(QFrame):
     def __init__(
         self, main_widget: "MainWidget", option_picker: "OptionPickerWidget"
     ) -> None:
@@ -28,7 +27,6 @@ class OptionPickerLetterButtons(QFrame):
 
     def init_letter_buttons_layout(self) -> None:
         letter_buttons_layout = QVBoxLayout()
-        letter_buttons_layout.setSpacing(int(0))
         self.setContentsMargins(0, 0, 0, 0)
         letter_buttons_layout.setContentsMargins(0, 0, 0, 0)
         self.row_layouts: List[
@@ -60,9 +58,9 @@ class OptionPickerLetterButtons(QFrame):
 
         for row in self.letter_rows:
             row_layout = QHBoxLayout()
-            self.row_layouts.append(
-                row_layout
-            )  # Add this line to add the row layout to the list
+            row_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            row_layout.setSpacing(int(self.width() * 0.01))
+            self.row_layouts.append(row_layout)
 
             for letter in row:
                 letter_type = self.get_letter_type(letter)
@@ -115,21 +113,17 @@ class OptionPickerLetterButtons(QFrame):
         button.setFont(font)
         return button
 
-    # def resizeEvent(self, event) -> None:
-    #     super().resizeEvent(event)
-        # button_row_count = len(self.letter_rows)
-        # available_height = int(self.main_widget.width() * 0.6 * button_row_count)
-        # button_size = int(available_height / button_row_count)
-        # if button_size > self.height() / button_row_count:
-        #     button_size = int(self.height() / button_row_count)
-        # icon_size = int(button_size * 0.9)
+    def resize_letter_buttons(self) -> None:
+        button_row_count = len(self.letter_rows)
+        available_height = int(self.main_widget.width() * 0.6 * button_row_count)
+        button_size = int(available_height / button_row_count)
+        if button_size > self.height() / button_row_count:
+            button_size = int(self.height() / button_row_count)
+        icon_size = int(button_size * 0.9)
 
-        # # Set button size and icon size
-        # for (
-        #     row_layout
-        # ) in self.row_layouts:  # Change this line to iterate over the row layouts
-        #     for i in range(row_layout.count()):
-        #         button: QPushButton = row_layout.itemAt(i).widget()
-        #         if button:
-        #             button.resize(button_size, button_size)
-        #             button.setIconSize(QSize(icon_size, icon_size))
+        for row_layout in self.row_layouts:
+            for i in range(row_layout.count()):
+                button: QPushButton = row_layout.itemAt(i).widget()
+                if button:
+                    button.resize(button_size, button_size)
+                    button.setIconSize(QSize(icon_size, icon_size))
