@@ -96,7 +96,7 @@ class ArrowAttributesDicts(TypedDict):
 MotionAttributes = Literal[
     "color",
     "motion_type",
-    "location",
+    "arrow_location",
     "rotation_direction",
     "turns",
     "start_location",
@@ -104,7 +104,7 @@ MotionAttributes = Literal[
     "start_orientation",
     "end_orientation",
     "start_layer",
-    "end_layer",
+    "end_layer"
 ]
 
 MotionTypesCombinations = Literal[
