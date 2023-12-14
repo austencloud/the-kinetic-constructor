@@ -118,12 +118,13 @@ class LetterButtons(QFrame):
         available_height = int(self.main_widget.width() * 0.6 * button_row_count)
         button_size = int(available_height / button_row_count)
         if button_size > self.height() / button_row_count:
-            button_size = int(self.height() / button_row_count)
+            button_size = int(self.height() / (button_row_count+1))
         icon_size = int(button_size * 0.9)
 
         for row_layout in self.row_layouts:
             for i in range(row_layout.count()):
                 button: QPushButton = row_layout.itemAt(i).widget()
                 if button:
-                    button.resize(button_size, button_size)
+                    button.setMaximumSize(button_size, button_size)
                     button.setIconSize(QSize(icon_size, icon_size))
+        self.setMaximumHeight(available_height)

@@ -26,4 +26,6 @@ class SequenceWidget(QWidget):
         self.layout.addWidget(self.beat_frame)
         self.layout.addWidget(self.button_frame)
 
-
+    def resize_sequence_widget(self, event) -> None:
+        self.beat_frame.resize_beat_frame()
+        # self.button_frame.resize_letter_buttons()

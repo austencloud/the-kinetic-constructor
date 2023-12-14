@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-
+from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor, QPalette, QResizeEvent
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
 
@@ -52,9 +52,11 @@ class GraphEditor(QFrame):
         self.attr_panel_layout.addWidget(self.attr_panel)
 
         # Add sub-layouts to the main layout
+        self.layout.addStretch(1)
         self.layout.addLayout(self.objectbox_layout)
         self.layout.addLayout(self.pictograph_layout)
         self.layout.addLayout(self.attr_panel_layout)
+        self.layout.addStretch(1)
 
         self.setLayout(self.layout)
 

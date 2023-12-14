@@ -1,6 +1,13 @@
 from typing import TYPE_CHECKING, Optional
 from PyQt6.QtCore import QEvent, Qt
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QSplitter, QFrame
+from PyQt6.QtWidgets import (
+    QWidget,
+    QHBoxLayout,
+    QVBoxLayout,
+    QSplitter,
+    QFrame,
+    QTabWidget,
+)
 from PyQt6.QtGui import QWheelEvent, QResizeEvent
 from utilities.TypeChecking.TypeChecking import LetterDictionary
 from utilities.json_handler import JsonHandler
@@ -33,18 +40,22 @@ class MainWidget(QWidget):
         self.configure_layouts()
 
     def configure_layouts(self) -> None:
-        self.horizontal_splitter = QSplitter(Qt.Orientation.Horizontal)  # Create a horizontal splitter
+        self.horizontal_splitter = QSplitter(
+            Qt.Orientation.Horizontal
+        )  # Create a horizontal splitter
 
         # Create frames for left and right layouts
         self.left_frame = QFrame()
         self.right_frame = QFrame()
-        
+
         self.left_layout = QVBoxLayout(self.left_frame)
         self.right_layout = QVBoxLayout(self.right_frame)
 
         self.left_layout.addWidget(self.sequence)
 
-        self.vertical_splitter = QSplitter(Qt.Orientation.Vertical)  # Vertical splitter for right side
+        self.vertical_splitter = QSplitter(
+            Qt.Orientation.Vertical
+        )  # Vertical splitter for right side
         self.vertical_splitter.addWidget(self.option_picker)
         self.vertical_splitter.addWidget(self.graph_editor)
 
@@ -62,7 +73,6 @@ class MainWidget(QWidget):
         self.main_layout = QHBoxLayout(self)
         self.main_layout.addWidget(self.horizontal_splitter)
         self.setLayout(self.main_layout)
-
 
     ### EVENT HANDLERS ###
 
@@ -96,3 +106,6 @@ class MainWidget(QWidget):
     def wheelEvent(self, event: QWheelEvent | None) -> None:
         return super().wheelEvent(event)
 
+    # def resizeEvent(self, event: QResizeEvent) -> None:
+    #     super().resizeEvent(event)
+    #     self.sequence.resize_sequence_widget(event)
