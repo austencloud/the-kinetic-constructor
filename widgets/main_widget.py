@@ -96,7 +96,3 @@ class MainWidget(QWidget):
     def wheelEvent(self, event: QWheelEvent | None) -> None:
         return super().wheelEvent(event)
 
-    # def resizeEvent(self, event: QResizeEvent) -> None:
-    ### KEEP THIS TO PREVENT THE WIDGETS FROM INFINITELY RESIZING ###
-    # self.option_picker.setMaximumHeight(int(self.main_window.height() * 7 / 10))
-    # self.graph_editor.setMaximumHeight(int(self.main_window.height() * 3 / 10))

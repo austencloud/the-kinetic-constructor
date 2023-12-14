@@ -24,7 +24,6 @@ class PictographWidget(QWidget):
         self.setMaximumHeight(self.graph_editor.height())
         self.setMinimumWidth(new_width)
         self.setMaximumWidth(new_width)
-        self.view.configure_button_size_and_position(int(self.width() / 10))
         self.view_scale = min(
             self.width() / self.graph_editor.pictograph.sceneRect().width(),
             self.height() / self.graph_editor.pictograph.sceneRect().height(),
@@ -34,3 +33,4 @@ class PictographWidget(QWidget):
             self.view_scale,
             self.view_scale,
         )
+        self.view.configure_button_size_and_position(int(self.width() / 10))

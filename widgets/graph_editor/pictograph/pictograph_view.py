@@ -19,8 +19,6 @@ class PictographView(QGraphicsView):
         self.setScene(self.pictograph)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-
-        # Initialize buttons
         self.buttons: List[CustomButton] = self.init_buttons()
         
     def remove_buttons(self) -> None:
@@ -58,19 +56,19 @@ class PictographView(QGraphicsView):
         button.clicked.connect(action)
         return button
 
-    def configure_button_size_and_position(self, size) -> None:
+    def configure_button_size_and_position(self, button_size) -> None:
         for button in self.buttons:
-            button.setMinimumSize(size, size)
-            icon_size = int(size * 0.8)
+            button.setMinimumSize(button_size, button_size)
+            button.setMaximumSize(button_size, button_size)
+            icon_size = int(button_size * 0.8)
             button.setIconSize(QSize(icon_size, icon_size))
 
-            # Custom positioning logic if needed
             if button == self.add_to_sequence_button:
-                button.move(self.width() - size, self.height() - size)
+                button.move(self.width() - button_size, self.height() - button_size)
             elif button == self.clear_button:
-                button.move(0, self.height() - size)
+                button.move(0, self.height() - button_size)
             elif button == self.rotate_cw_button:
-                button.move(self.width() - size, 0)
+                button.move(self.width() - button_size, 0)
             elif button == self.rotate_ccw_button:
                 button.move(0, 0)
 
