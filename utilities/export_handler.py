@@ -48,8 +48,8 @@ class ExportHandler:
         svg_data.set("height", "900")
         svg_data.set("viewBox", "0 0 750 900")
 
-        # Create groups for staffs, arrows, and the grid
-        staffs_group = ET.SubElement(svg_data, "{SVG_NS}g", id="staffs")
+        # Create groups for props, arrows, and the grid
+        props_group = ET.SubElement(svg_data, "{SVG_NS}g", id="props")
         arrows_group = ET.SubElement(svg_data, "{SVG_NS}g", id="arrows")
         grid_group = ET.SubElement(svg_data, "{SVG_NS}g", id="grid")
 
@@ -63,11 +63,11 @@ class ExportHandler:
                 arrows_group.append(arrow_path_element)
 
             elif isinstance(item, Prop):
-                staff_rect_element = self.get_staff_rect_element(item)
-                staffs_group.append(staff_rect_element)
+                prop_rect_element = self.get_prop_rect_element(item)
+                props_group.append(prop_rect_element)
 
-        svg_data.append(ET.Comment(" staffs "))
-        svg_data.append(staffs_group)
+        svg_data.append(ET.Comment(" PROPS "))
+        svg_data.append(props_group)
         svg_data.append(ET.Comment(" ARROWS "))
         svg_data.append(arrows_group)
         svg_data.append(ET.Comment(" GRID "))
@@ -109,11 +109,11 @@ class ExportHandler:
 
         return path_elements[0]
 
-    def get_staff_rect_element(self, staff: "Prop") -> ET.Element:
-        staff_svg_data = ET.parse(staff.svg_file)
-        rect_elements = staff_svg_data.getroot().findall(".//{SVG_NS}rect")
-        fill_color = self.get_fill_color(staff.svg_file)
-        position = staff.pos()
+    def get_prop_rect_element(self, prop: "Prop") -> ET.Element:
+        prop_svg_data = ET.parse(prop.svg_file)
+        rect_elements = prop_svg_data.getroot().findall(".//{SVG_NS}rect")
+        fill_color = self.get_fill_color(prop.svg_file)
+        position = prop.pos()
 
         for rect_element in rect_elements:
             rect_element_copy = deepcopy(rect_element)
@@ -125,9 +125,9 @@ class ExportHandler:
 
         return rect_elements[0]
 
-    def get_staff_position(self, staff: "Prop") -> QPointF:
-        staff_svg = ET.parse(staff.svg_file)
-        rect_elements = staff_svg.getroot().findall(".//{SVG_NS}rect")
+    def get_prop_position(self, prop: "Prop") -> QPointF:
+        prop_svg = ET.parse(prop.svg_file)
+        rect_elements = prop_svg.getroot().findall(".//{SVG_NS}rect")
         position = None
 
         for rect_element in rect_elements:

@@ -32,7 +32,6 @@ class GraphicalObject(QGraphicsSvgItem):
         self.setup_graphics_flags()
 
     def setup_graphics_flags(self) -> None:
-        # Common flags setup for Arrow and Staff
         self.setFlags(
             QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable
             | QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable

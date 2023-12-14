@@ -30,7 +30,7 @@ class PictographMenuHandler:
 
         menu.exec(event_pos)
 
-    ### STAFF ACTIONS ###
+    ### PROP ACTIONS ###
 
     def _add_prop_actions(self, menu: QMenu, clicked_item) -> None:
         prop_present = isinstance(clicked_item, Prop)

@@ -1,13 +1,6 @@
 from objects.prop import Prop
 from constants.string_constants import (
     COLOR,
-    PROP_TYPE,
-    STAFF,
-    TRIAD,
-    MINIHOOP,
-    FAN,
-    CLUB,
-    BUUGENG,
 )
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, PropAttributesDicts
 
@@ -16,20 +9,7 @@ if TYPE_CHECKING:
 
 
 class GhostProp(Prop):
-    """
-    Represents a ghost prop object, displaying the position that a prop will be while dragging if the user were to drop it.
-
-    Inherits from the Prop class.
-
-    Attributes:
-        pictograph (Pictograph): The pictograph object.
-        color (str): The color of the prop.
-        target_prop (Prop): The prop that the ghost prop is copying.
-
-    Methods:
-        __init__: Initialize a GhostProp object.
-
-    """
+    """Represents a ghost prop object, displaying the position that a prop will be while dragging if the user were to drop it."""
 
     def __init__(
         self, pictograph: "Pictograph", attributes: PropAttributesDicts
@@ -40,39 +20,3 @@ class GhostProp(Prop):
         self.color = attributes[COLOR]
         self.target_prop: "Prop" = None
         self.setup_svg_renderer(self.svg_file)
-
-
-class GhostStaff(GhostProp):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
-        attributes[PROP_TYPE] = STAFF
-        super().__init__(pictograph, attributes)
-
-
-class GhostTriad(GhostProp):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
-        attributes[PROP_TYPE] = TRIAD
-        super().__init__(pictograph, attributes)
-
-
-class GhostHoop(GhostProp):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
-        attributes[PROP_TYPE] = MINIHOOP
-        super().__init__(pictograph, attributes)
-
-
-class GhostFan(GhostProp):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
-        attributes[PROP_TYPE] = FAN
-        super().__init__(pictograph, attributes)
-
-
-class GhostClub(GhostProp):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
-        attributes[PROP_TYPE] = CLUB
-        super().__init__(pictograph, attributes)
-
-
-class GhostBuugeng(GhostProp):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
-        attributes[PROP_TYPE] = BUUGENG
-        super().__init__(pictograph, attributes)

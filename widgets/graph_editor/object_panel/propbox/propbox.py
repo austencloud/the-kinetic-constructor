@@ -4,13 +4,18 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.prop import (
     BigHoop,
     DoubleStar,
+    BigDoubleStar,
     Prop,
     Staff,
+    BigStaff,
     Club,
     Buugeng,
     Fan,
     Triad,
     MiniHoop,
+    Quiad,
+    Sword,
+    Guitar
 )
 
 from widgets.graph_editor.object_panel.propbox.propbox_drag import PropBoxDrag
@@ -90,6 +95,8 @@ class PropBox(ObjectBox):
         for attributes in initial_prop_attributes:
             if self.prop_type == STAFF:
                 prop = Staff(self.pictograph, attributes)
+            elif self.prop_type == BIGSTAFF:
+                prop = BigStaff(self.pictograph, attributes)
             elif self.prop_type == CLUB:
                 prop = Club(self.pictograph, attributes)
             elif self.prop_type == BUUGENG:
@@ -104,6 +111,14 @@ class PropBox(ObjectBox):
                 prop = DoubleStar(self.pictograph, attributes)
             elif self.prop_type == BIGHOOP:
                 prop = BigHoop(self.pictograph, attributes)
+            elif self.prop_type == BIGDOUBLESTAR:
+                prop = BigDoubleStar(self.pictograph, attributes)
+            elif self.prop_type == QUIAD:
+                prop = Quiad(self.pictograph, attributes)
+            elif self.prop_type == SWORD:
+                prop = Sword(self.pictograph, attributes)
+            elif self.prop_type == GUITAR:
+                prop = Guitar(self.pictograph, attributes)
             else:
                 raise ValueError("Invalid prop type")
 
@@ -121,6 +136,7 @@ class PropBox(ObjectBox):
         self.prop_type_combobox = QComboBox(self.view)
         prop_types = [
             "Staff",
+            "BigStaff",
             "Club",
             "Buugeng",
             "Fan",
@@ -128,6 +144,9 @@ class PropBox(ObjectBox):
             "MiniHoop",
             "Bighoop",
             "Doublestar",
+            "Bigdoublestar",
+            "Quiad",
+            "Sword", "Guitar"
         ]
         self.prop_type_combobox.addItems(prop_types)
 

@@ -10,13 +10,18 @@ from objects.letter_item import LetterItem
 from objects.prop import (
     BigHoop,
     DoubleStar,
+    BigDoubleStar,
     Prop,
     Staff,
+    BigStaff,
     Club,
     Fan,
     MiniHoop,
     Buugeng,
     Triad,
+    Quiad,
+    Sword,
+    Guitar
 )
 from constants.string_constants import *
 from utilities.TypeChecking.TypeChecking import Colors, Locations, PropTypes
@@ -61,6 +66,7 @@ class PictographInit:
 
         prop_class_mapping = {
             STAFF.lower(): Staff,
+            BIGSTAFF.lower(): BigStaff,
             CLUB.lower(): Club,
             FAN.lower(): Fan,
             MINIHOOP.lower(): MiniHoop,
@@ -68,6 +74,10 @@ class PictographInit:
             TRIAD.lower(): Triad,
             DOUBLESTAR.lower(): DoubleStar,
             BIGHOOP.lower(): BigHoop,
+            BIGDOUBLESTAR.lower(): BigDoubleStar,
+            QUIAD.lower(): Quiad,
+            SWORD.lower(): Sword,
+            GUITAR.lower(): Guitar,
         }
 
         prop_class = prop_class_mapping.get(prop_type)
@@ -117,13 +127,18 @@ class PictographInit:
     def init_ghost_props(self, prop_type: PropTypes) -> Dict[Colors, GhostProp]:
         prop_class_mapping = {
             STAFF.lower(): Staff,
+            BIGSTAFF.lower(): BigStaff,
             CLUB.lower(): Club,
             FAN.lower(): Fan,
             MINIHOOP.lower(): MiniHoop,
+            BIGHOOP.lower(): BigHoop,
             BUUGENG.lower(): Buugeng,
             TRIAD.lower(): Triad,
             DOUBLESTAR.lower(): DoubleStar,
-            BIGHOOP.lower(): BigHoop,
+            BIGDOUBLESTAR.lower(): BigDoubleStar,
+            QUIAD.lower(): Quiad,
+            SWORD.lower(): Sword,
+            GUITAR.lower(): Guitar,
         }
 
         prop_class = prop_class_mapping.get(prop_type)

@@ -228,16 +228,16 @@ class PropBoxDrag(ObjectBoxDrag):
         return rotated_pixmap
 
     def _get_prop_drag_rotation_angle(
-        self, staff: Prop | ObjectBoxDrag
+        self, prop: Prop | ObjectBoxDrag
     ) -> RotationAngles:
         """
-        Get the rotation angle for the given staff specifically for use with the PropBoxDrag.
+        Get the rotation angle for the given prop specifically for use with the PropBoxDrag.
 
         Args:
-            staff (Union[Prop, ObjectBoxDrag]): The staff for which to retrieve the rotation angle.
+            prop (Union[Prop, ObjectBoxDrag]): The prop for which to retrieve the rotation angle.
 
         Returns:
-            RotationAngles: The rotation angle for the staff.
+            RotationAngles: The rotation angle for the prop.
 
         """
         angle_map: Dict[
@@ -248,8 +248,8 @@ class PropBoxDrag(ObjectBoxDrag):
             (2, CLOCKWISE): {NORTH: 0, SOUTH: 180, WEST: 270, EAST: 90},
             (2, COUNTER_CLOCKWISE): {NORTH: 180, SOUTH: 0, WEST: 90, EAST: 270},
         }
-        key = (staff.layer, staff.orientation)
-        return angle_map.get(key, {}).get(staff.prop_location, 0)
+        key = (prop.layer, prop.orientation)
+        return angle_map.get(key, {}).get(prop.prop_location, 0)
 
     def _create_static_arrow(self) -> None:
         static_arrow_dict = {

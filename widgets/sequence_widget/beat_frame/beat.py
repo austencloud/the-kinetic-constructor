@@ -132,7 +132,7 @@ class Beat(Pictograph):
             if motion.color == color:
                 return motion
 
-    def get_prop_by_color(self, color: str) -> Optional[Staff]:
+    def get_prop_by_color(self, color: str) -> Optional[Prop]:
         for prop in self.prop_set.values():
             if prop.color == color:
                 return prop

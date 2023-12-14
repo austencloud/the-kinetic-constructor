@@ -8,12 +8,6 @@ tka_sequence_constructor_dir = os.path.dirname(current_dir)
 tka_app_dir = os.path.dirname(tka_sequence_constructor_dir)
 resources_path = tka_app_dir + "/resources"
 
-STAFF_SVG_FILE_PATH = "resources/images/props/staff.svg"
-CLUB_SVG_FILE_PATH = "resources/images/props/club.svg"
-BUUGENG_SVG_FILE_PATH = "resources/images/props/buugeng.svg"
-FAN_SVG_FILE_PATH = "resources/images/props/fan.svg"
-TRIAD_SVG_FILE_PATH = "resources/images/props/triad.svg"
-HOOP_SVG_FILE_PATH = "resources/images/props/hoop.svg"
 
 PICTOGRAPH_DIR = "resources/images/pictographs/"
 ARROW_DIR = "resources/images/arrows/"
@@ -87,11 +81,11 @@ NORTHEAST = "ne"
 SOUTHWEST = "sw"
 SOUTHEAST = "se"
 
-ARROWS = "arrows"
-STAFFS = "staffs"
+
 
 PROP = "prop"
 STAFF = "staff"
+BIGSTAFF = "bigstaff"
 CLUB = "club"
 BUUGENG = "buugeng"
 FAN = "fan"
@@ -99,7 +93,10 @@ TRIAD = "triad"
 MINIHOOP = "minihoop"
 BIGHOOP = "bighoop"
 DOUBLESTAR = "doublestar"
-
+BIGDOUBLESTAR = "bigdoublestar"
+QUIAD = "quiad"
+SWORD = "sword"
+GUITAR = "guitar"
 COLOR_MAP = {RED: RED_HEX, BLUE: BLUE_HEX}
 
 ### ICONS ###

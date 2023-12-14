@@ -91,7 +91,7 @@ class Option(Pictograph):
         self.event_handler = PictographEventHandler(self)
 
         self.dragged_arrow: Arrow = None
-        self.dragged_prop: Staff = None
+        self.dragged_prop: Prop = None
         self.initializer = OptionInit(self)
 
         self.prop_type: Prop = STAFF
@@ -188,7 +188,7 @@ class Option(Pictograph):
             if motion.color == color:
                 return motion
 
-    def get_prop_by_color(self, color: str) -> Optional[Staff]:
+    def get_prop_by_color(self, color: str) -> Optional[Prop]:
         for prop in self.prop_set.values():
             if prop.color == color:
                 return prop

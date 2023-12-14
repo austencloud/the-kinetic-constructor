@@ -392,6 +392,10 @@ class Staff(Prop):
         attributes[PROP_TYPE] = STAFF
         super().__init__(pictograph, attributes)
 
+class BigStaff(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = BIGSTAFF
+        super().__init__(pictograph, attributes)
 
 class Triad(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
@@ -433,3 +437,25 @@ class BigHoop(Prop):
     def __init__(self, pictograph: "Pictograph", attributes) -> None:
         attributes[PROP_TYPE] = BIGHOOP
         super().__init__(pictograph, attributes)
+
+class BigDoubleStar(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = BIGDOUBLESTAR
+        super().__init__(pictograph, attributes)
+        
+class Quiad(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = QUIAD
+        super().__init__(pictograph, attributes)
+        
+class Sword(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = SWORD
+        super().__init__(pictograph, attributes)
+        
+class Guitar(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+        attributes[PROP_TYPE] = GUITAR
+        super().__init__(pictograph, attributes)
+        
+        

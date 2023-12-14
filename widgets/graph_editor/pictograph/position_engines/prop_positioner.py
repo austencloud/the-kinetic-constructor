@@ -9,6 +9,7 @@ from constants.string_constants import (
     COUNTER_CLOCKWISE,
     DIAMOND,
     DOUBLESTAR,
+    BIGDOUBLESTAR,
     FAN,
     MINIHOOP,
     BIGHOOP,
@@ -17,6 +18,10 @@ from constants.string_constants import (
     COLOR,
     MOTION_TYPE,
     STAFF,
+    BIGSTAFF,
+    QUIAD,
+    GUITAR,
+    SWORD,
     STATIC,
     START_LOCATION,
     END_LOCATION,
@@ -67,12 +72,17 @@ class PropPositioner:
         self.prop_type_counts = {
             BIGHOOP: 0,
             DOUBLESTAR: 0,
+            BIGDOUBLESTAR: 0,
             STAFF: 0,
+            BIGSTAFF: 0,
             FAN: 0,
             CLUB: 0,
             BUUGENG: 0,
             MINIHOOP: 0,
             TRIAD: 0,
+            QUIAD: 0,
+            SWORD: 0,
+            GUITAR: 0,
             "???": 0,
         }
 
@@ -82,8 +92,12 @@ class PropPositioner:
                 self.prop_type_counts[BIGHOOP] += 1
             elif prop.prop_type == DOUBLESTAR:
                 self.prop_type_counts[DOUBLESTAR] += 1
+            elif prop.prop_type == BIGDOUBLESTAR:
+                self.prop_type_counts[BIGDOUBLESTAR] += 1
             elif prop.prop_type == STAFF:
                 self.prop_type_counts[STAFF] += 1
+            elif prop.prop_type == BIGSTAFF:
+                self.prop_type_counts[BIGSTAFF] += 1
             elif prop.prop_type == FAN:
                 self.prop_type_counts[FAN] += 1
             elif prop.prop_type == CLUB:
@@ -94,6 +108,12 @@ class PropPositioner:
                 self.prop_type_counts[MINIHOOP] += 1
             elif prop.prop_type == TRIAD:
                 self.prop_type_counts[TRIAD] += 1
+            elif prop.prop_type == QUIAD:
+                self.prop_type_counts[QUIAD] += 1
+            elif prop.prop_type == SWORD:
+                self.prop_type_counts[SWORD] += 1
+            elif prop.prop_type == GUITAR:
+                self.prop_type_counts[GUITAR] += 1
             else:
                 self.prop_type_counts["???"] += 1
 
@@ -101,6 +121,7 @@ class PropPositioner:
             if (
                 self.prop_type_counts[BIGHOOP] == 2
                 or self.prop_type_counts[DOUBLESTAR] == 2
+                or self.prop_type_counts[BIGDOUBLESTAR] == 2
             ):
                 self.set_strict_prop_locations(prop)
             else:
@@ -278,9 +299,9 @@ class PropPositioner:
 
                 # If the other prop is in a different layer, set both props to default locations
                 if other_prop and other_prop.layer != prop.layer:
-                    if prop.prop_type in [STAFF, FAN, CLUB, BUUGENG, MINIHOOP, TRIAD]:
+                    if prop.prop_type in [STAFF, FAN, CLUB, BUUGENG, MINIHOOP, TRIAD, QUIAD]:
                         self.set_default_prop_locations(prop)
-                    elif prop.prop_type in [DOUBLESTAR, BIGHOOP]:
+                    elif prop.prop_type in [DOUBLESTAR, BIGHOOP, BIGDOUBLESTAR, BIGSTAFF, SWORD, GUITAR]:
                         self.set_strict_prop_locations(other_prop)
                 else:
                     # Original logic for handling props in the same layer
@@ -473,12 +494,16 @@ class PropPositioner:
     def reposition_gamma_to_beta(self, move_prop, shifts, static_motions) -> None:
         if self.scene.prop_type in [
             STAFF,
+            BIGSTAFF,
             FAN,
             CLUB,
             BUUGENG,
             MINIHOOP,
             TRIAD,
+            QUIAD,
             DOUBLESTAR,
+            BIGDOUBLESTAR,
+            SWORD, GUITAR
         ]:
             if any(prop.layer == 1 for prop in self.scene.props) and any(
                 prop.layer == 2 for prop in self.scene.props
@@ -486,7 +511,6 @@ class PropPositioner:
                 for prop in self.scene.props:
                     self.set_default_prop_locations(prop)
             else:
-                # if all of the staffs are in layer 1:
                 shift, static_motion = shifts[0], static_motions[0]
                 direction = self.determine_translation_direction(shift)
                 if direction:

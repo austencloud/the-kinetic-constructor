@@ -7,7 +7,7 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
-from objects.prop import BigHoop, Prop, Staff, Club, Fan, MiniHoop, Buugeng, Triad
+from objects.prop import BigHoop, Prop, Staff, Club, Fan, MiniHoop, Buugeng, Triad, Quiad, BigDoubleStar, DoubleStar, BigStaff, Sword, Guitar
 from constants.string_constants import *
 from utilities.TypeChecking.TypeChecking import Colors, Locations, PropTypes
 from widgets.option_picker.option.option_view import OptionView
@@ -51,12 +51,18 @@ class OptionInit:
 
         prop_class_mapping = {
             STAFF.lower(): Staff,
+            BIGSTAFF.lower(): BigStaff,
             CLUB.lower(): Club,
             FAN.lower(): Fan,
             MINIHOOP.lower(): MiniHoop,
             BUUGENG.lower(): Buugeng,
             TRIAD.lower(): Triad,
             BIGHOOP.lower(): BigHoop,
+            DOUBLESTAR.lower(): DoubleStar,
+            BIGDOUBLESTAR.lower(): BigDoubleStar,
+            QUIAD.lower(): Quiad,
+            SWORD.lower(): Sword,
+            GUITAR.lower(): Guitar,
         }
 
         prop_class = prop_class_mapping.get(prop_type)
@@ -106,12 +112,18 @@ class OptionInit:
     def init_ghost_props(self, prop_type: PropTypes) -> Dict[Colors, GhostProp]:
         prop_class_mapping = {
             STAFF.lower(): Staff,
+            BIGSTAFF.lower(): BigStaff,
             CLUB.lower(): Club,
             FAN.lower(): Fan,
             MINIHOOP.lower(): MiniHoop,
             BUUGENG.lower(): Buugeng,
             TRIAD.lower(): Triad,
             BIGHOOP.lower(): BigHoop,
+            DOUBLESTAR.lower(): DoubleStar,
+            BIGDOUBLESTAR.lower(): BigDoubleStar,
+            QUIAD.lower(): Quiad,
+            SWORD.lower(): Sword,
+            GUITAR.lower(): Guitar,
         }
 
         prop_class = prop_class_mapping.get(prop_type)
