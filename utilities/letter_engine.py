@@ -45,8 +45,8 @@ from typing import Optional
 #         self.motions_df = pd.read_csv("LetterDictionary.csv")  # Load the DataFrame
 
 #     def get_current_letter(self) -> Optional[str]:
-#         red_motion = self.pictograph.get_motion_by_color(RED)
-#         blue_motion = self.pictograph.get_motion_by_color(BLUE)
+#         red_motion = self.pictograph.motions[RED]
+#         blue_motion = self.pictograph.motions[BLUE]
 #         if red_motion and blue_motion:
 #             filtered_df = self.motions_df[
 #                 (self.motions_df["blue_motion_type"] == blue_motion.motion_type) & 
@@ -149,7 +149,7 @@ class LetterEngine:
 
     def get_motion(self, color: Colors) -> Motion | None:
         return next(
-            (motion for motion in self.pictograph.motions if motion.color == color),
+            (motion for motion in self.pictograph.motions.values() if motion.color == color),
             None,
         )
 

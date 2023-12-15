@@ -107,7 +107,7 @@ class MotionTypesWidget(AttrBoxWidget):
         )
         if new_motion_type_index >= 0:
             self.motion_type_box.setCurrentIndex(new_motion_type_index)
-            motion = self.attr_box.pictograph.get_motion_by_color(self.attr_box.color)
+            motion = self.attr_box.pictograph.motions[self.attr_box.color]
             if motion:
                 motion.arrow.swap_motion_type()
 
@@ -126,17 +126,11 @@ class MotionTypesWidget(AttrBoxWidget):
 
     def resize_motion_type_widget(self) -> None:
         self.spacing = self.attr_box.pictograph.view.width() // 250
-        self.swap_button_frame.setMinimumWidth(
-            int(self.width() * 1 / 4)
-        )
-        self.swap_button_frame.setMaximumWidth(
-            int(self.width() * 1 / 4)
-        )
+        self.swap_button_frame.setMinimumWidth(int(self.width() * 1 / 4))
+        self.swap_button_frame.setMaximumWidth(int(self.width() * 1 / 4))
         self.motion_type_box.setMinimumWidth(int(self.width() * 0.5))
 
-        self.header_label.setFont(
-            QFont("Arial", int(self.width() / 18))
-        )
+        self.header_label.setFont(QFont("Arial", int(self.width() / 18)))
 
         self.motion_type_box.setMinimumHeight(int(self.width() / 5))
         self.motion_type_box.setMaximumHeight(int(self.width() / 5))
@@ -181,12 +175,6 @@ class MotionTypesWidget(AttrBoxWidget):
             """
         )
         self.header_label.setContentsMargins(0, 0, self.spacing, 0)
-        self.main_vbox_frame.setMaximumHeight(
-            self.height() + self.spacing
-        )
-        self.motion_type_box.setMaximumHeight(
-            int(self.height() * 3 / 4 + self.spacing)
-        )
-        self.header_label.setMinimumHeight(
-            int(self.height() * 1 / 4 + self.spacing)
-        )
+        self.main_vbox_frame.setMaximumHeight(self.height() + self.spacing)
+        self.motion_type_box.setMaximumHeight(int(self.height() * 3 / 4 + self.spacing))
+        self.header_label.setMinimumHeight(int(self.height() * 1 / 4 + self.spacing))

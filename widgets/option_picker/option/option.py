@@ -73,17 +73,8 @@ class Option(Pictograph):
         self.is_starter = is_starter
         self.option_picker: OptionPicker = option_picker
         self.setup_scene()
-        self.view = OptionView(self)
         self.setup_components(self.main_widget)
-        
-    def setup_scene(self) -> None:
-        self.setSceneRect(0, 0, 750, 900)
-        self.setBackgroundBrush(Qt.GlobalColor.white)
-        self.arrows: List[Arrow] = []
-        self.props: List[Prop] = []
-        self.motions: List[Motion] = []
-        self.current_letter: str = None
-
+        self.view = OptionView(self)
 
     def set_letter_renderer(self, letter: str) -> None:
         letter_type = self.get_current_letter_type()
@@ -131,7 +122,7 @@ class Option(Pictograph):
 
     def get_state(self) -> List[MotionAttributesDicts]:
         state = []
-        for motion in self.motions:
+        for motion in self.motions.values():
             state.append(
                 {
                     COLOR: motion.color,
@@ -158,16 +149,6 @@ class Option(Pictograph):
                     return letter_type
         else:
             return None
-
-    def get_motion_by_color(self, color: str) -> Optional[Motion]:
-        for motion in self.motions:
-            if motion.color == color:
-                return motion
-
-    def get_prop_by_color(self, color: str) -> Optional[Prop]:
-        for prop in self.prop_set.values():
-            if prop.color == color:
-                return prop
 
     ### HELPERS ###
 
@@ -198,8 +179,6 @@ class Option(Pictograph):
         self.dragged_prop = None
         self.dragged_arrow = None
 
-
-
     def copy_scene(self) -> QGraphicsScene:
         from widgets.sequence_widget.beat_frame.beat import Beat
 
@@ -215,7 +194,7 @@ class Option(Pictograph):
                 new_arrow.setZValue(item.zValue())
                 new_beat.addItem(new_arrow)
                 new_beat.arrows.append(new_arrow)
-                motion = new_beat.get_motion_by_color(new_arrow.color)
+                motion = new_beat.motions[new_arrow.color]
                 new_arrow.motion = motion
                 motion.arrow = new_arrow
 
@@ -225,7 +204,7 @@ class Option(Pictograph):
                 new_prop.setZValue(item.zValue())
                 new_beat.addItem(new_prop)
                 new_beat.props.append(new_prop)
-                motion = new_beat.get_motion_by_color(new_prop.color)
+                motion = new_beat.motions[new_prop.color]
                 new_prop.motion = motion
                 motion.prop = new_prop
 

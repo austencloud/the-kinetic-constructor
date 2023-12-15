@@ -176,25 +176,25 @@ class TurnsWidget(AttrBoxWidget):
     ### CALLBACKS ###
 
     def _add_turn_callback(self) -> None:
-        motion = self.attr_box.pictograph.get_motion_by_color(self.attr_box.color)
+        motion = self.attr_box.pictograph.motions[self.attr_box.color]
         if motion:
             motion.add_turn()
             self.attr_box.update_attr_box(motion)
 
     def _subtract_turn_callback(self) -> None:
-        motion = self.attr_box.pictograph.get_motion_by_color(self.attr_box.color)
+        motion = self.attr_box.pictograph.motions[self.attr_box.color]
         if motion:
             motion.subtract_turn()
             self.attr_box.update_attr_box(motion)
 
     def _add_half_turn_callback(self) -> None:
-        motion = self.attr_box.pictograph.get_motion_by_color(self.attr_box.color)
+        motion = self.attr_box.pictograph.motions[self.attr_box.color]
         if motion:
             motion.add_half_turn()
             self.attr_box.update_attr_box(motion)
 
     def _subtract_half_turn_callback(self) -> None:
-        motion = self.attr_box.pictograph.get_motion_by_color(self.attr_box.color)
+        motion = self.attr_box.pictograph.motions[self.attr_box.color]
         if motion:
             motion.subtract_half_turn()
             self.attr_box.update_attr_box(motion)
@@ -227,17 +227,17 @@ class TurnsWidget(AttrBoxWidget):
     def _update_turns(self, index: int) -> None:
         turns = str(index)
         if turns == "0" or turns == "1" or turns == "2" or turns == "3":
-            motion: Motion = self.attr_box.pictograph.get_motion_by_color(
+            motion: Motion = self.attr_box.pictograph.motions[
                 self.attr_box.color
-            )
+            ]
             if motion:
                 motion.update_turns(int(turns))
                 self.attr_box.update_attr_box(motion)
                 self.attr_box.pictograph.update()
         elif turns == "0.5" or turns == "1.5" or turns == "2.5":
-            motion: Motion = self.attr_box.pictograph.get_motion_by_color(
+            motion: Motion = self.attr_box.pictograph.motions[
                 self.attr_box.color
-            )
+            ]
             if motion:
                 motion.update_turns(float(turns))
                 self.attr_box.update_attr_box(motion)

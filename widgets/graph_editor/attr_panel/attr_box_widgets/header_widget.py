@@ -79,12 +79,12 @@ class HeaderWidget(AttrBoxWidget):
         self.layout.addWidget(self.separator)
 
     def _rotate_ccw(self) -> None:
-        motion = self.attr_box.pictograph.get_motion_by_color(self.attr_box.color)
+        motion = self.attr_box.pictograph.motions[self.attr_box.color]
         if motion:
             motion.arrow.rotate_arrow("ccw")
 
     def _rotate_cw(self) -> None:
-        motion = self.attr_box.pictograph.get_motion_by_color(self.attr_box.color)
+        motion = self.attr_box.pictograph.motions[self.attr_box.color]
         if motion:
             motion.arrow.rotate_arrow("cw")
 

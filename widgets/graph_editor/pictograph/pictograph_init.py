@@ -62,17 +62,17 @@ class PictographInit:
                 MOTION_TYPE: PRO,
                 ROTATION_DIRECTION: CLOCKWISE,
                 TURNS: 0,
-                START_LOCATION: None,
-                END_LOCATION: None,
-                START_ORIENTATION: None,
-                START_LAYER: None,
+                START_LOCATION: NORTH,
+                END_LOCATION: EAST,
+                START_ORIENTATION: IN,
+                START_LAYER: 1,
             }
 
             motion = Motion(self.pictograph, motion_dict)
             motions[color] = motion
         return motions
 
-    def init_arrow_set(self) -> Dict[Colors, Arrow]:
+    def init_arrows(self) -> Dict[Colors, Arrow]:
         default_red_arrow_attributes = {
             COLOR: RED,
             MOTION_TYPE: PRO,
@@ -96,10 +96,10 @@ class PictographInit:
             self.pictograph.motions[BLUE],
         )
 
-        arrow_set = {RED: red_arrow, BLUE: blue_arrow}
-        return arrow_set
+        arrows = {RED: red_arrow, BLUE: blue_arrow}
+        return arrows
 
-    def init_prop_set(self, prop_type: PropTypes) -> Dict[Colors, Prop]:
+    def init_props(self, prop_type: PropTypes) -> Dict[Colors, Prop]:
         red_prop_Dict = {
             COLOR: RED,
             PROP_TYPE: prop_type,
@@ -147,8 +147,8 @@ class PictographInit:
         red_prop.set_svg_color(RED)
         blue_prop.set_svg_color(BLUE)
 
-        prop_set = {RED: red_prop, BLUE: blue_prop}
-        return prop_set
+        props = {RED: red_prop, BLUE: blue_prop}
+        return props
 
     def init_ghost_arrows(self) -> Dict[Colors, GhostArrow]:
         default_red_ghost_arrow_attributes = {
@@ -277,7 +277,7 @@ class PictographInit:
         }
         return locations
 
-    def update_prop_set_and_ghost_props(self, new_prop_type: PropTypes) -> None:
-        self.pictograph.prop_set = self.init_prop_set(new_prop_type)
+    def update_props_and_ghost_props(self, new_prop_type: PropTypes) -> None:
+        self.pictograph.props = self.init_props(new_prop_type)
         self.pictograph.prop_type = new_prop_type
         self.pictograph.ghost_props = self.init_ghost_props(new_prop_type)

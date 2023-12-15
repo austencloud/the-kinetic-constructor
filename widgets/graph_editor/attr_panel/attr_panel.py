@@ -30,7 +30,7 @@ class AttrPanel(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
     def update_attr_panel(self, motion_color: Colors) -> None:
-        motion = self.graph_editor.pictograph.get_motion_by_color(motion_color)
+        motion = self.graph_editor.pictograph.motions[motion_color]
         if motion_color == BLUE:
             self.blue_attr_box.update_attr_box(motion)
         elif motion_color == RED:

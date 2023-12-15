@@ -30,19 +30,19 @@ class Motion:
         self.pictograph = pictograph
         self.arrow: Arrow = motion_dict[ARROW]
         self.prop: Prop = motion_dict[PROP]
-        self.attributes = motion_dict
+        self.motion_dict = motion_dict
 
         self.setup_attributes(motion_dict)
 
-    def setup_attributes(self, attributes) -> None:
-        self.color: Colors = attributes[COLOR]
-        self.motion_type: MotionTypes = attributes[MOTION_TYPE]
-        self.turns: Turns = attributes[TURNS]
-        self.rotation_direction: RotationDirections = attributes[ROTATION_DIRECTION]
-        self.start_location: Locations = attributes[START_LOCATION]
-        self.end_location: Locations = attributes[END_LOCATION]
-        self.start_orientation: Orientations = attributes[START_ORIENTATION]
-        self.start_layer: Layers = attributes[START_LAYER]
+    def setup_attributes(self, motion_dict) -> None:
+        self.color: Colors = motion_dict[COLOR]
+        self.motion_type: MotionTypes = motion_dict[MOTION_TYPE]
+        self.turns: Turns = motion_dict[TURNS]
+        self.rotation_direction: RotationDirections = motion_dict[ROTATION_DIRECTION]
+        self.start_location: Locations = motion_dict[START_LOCATION]
+        self.end_location: Locations = motion_dict[END_LOCATION]
+        self.start_orientation: Orientations = motion_dict[START_ORIENTATION]
+        self.start_layer: Layers = motion_dict[START_LAYER]
         self.arrow_location = self.determine_arrow_location(
             self.start_location, self.end_location
         )
@@ -77,7 +77,7 @@ class Motion:
         self.prop.axis: Axes = self.prop.update_axis(self.prop.prop_location)
         self.prop.update_rotation()
         self.prop.update_appearance()
-        
+
     def reset_motion_attributes(self):
         self.start_location = None
         self.end_location = None
@@ -209,7 +209,7 @@ class Motion:
         self.motion_type = self.arrow.motion_type
         self.turns = self.arrow.turns
         self.rotation_direction = self.arrow.rotation_direction
-        self.arrow_location = self.arrow.arrow_location
+        self.arrow_location = self.arrow.motion.arrow_location
         self.start_location = self.arrow.motion.start_location
         self.end_location = self.arrow.motion.end_location
 

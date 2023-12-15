@@ -91,8 +91,7 @@ class OptionPicker(QScrollArea):
 
     def on_initial_selection(self, selected_option: "Option") -> None:
         specific_positions = get_specific_start_end_positions(
-            selected_option.get_motion_by_color(RED),
-            selected_option.get_motion_by_color(BLUE),
+            selected_option.motions[RED], selected_option.motions[BLUE]
         )
         self.populate_options(specific_positions["end_position"])
 
@@ -138,11 +137,14 @@ class OptionPicker(QScrollArea):
             arrow = Arrow(option, arrow_dict, option.motions[motion_dict[COLOR]])
             prop = Prop(option, prop_dict, option.motions[motion_dict[COLOR]])
             motion_dict[ARROW], motion_dict[PROP] = arrow, prop
-            option.add_motion(motion_dict)
+
+            option.motions[motion_dict[COLOR]].arrow = arrow
+            option.motions[motion_dict[COLOR]].prop = prop
+
             option.addItem(arrow)
             option.addItem(prop)
-            option.arrows.append(arrow)
-            option.props.append(prop)
+            option.arrows[arrow.color] = arrow
+            option.props[prop.color] = prop
             self.setup_motion_relations(option, arrow, prop)
         self.update_option(option)
         self.options.append(option)
@@ -158,7 +160,7 @@ class OptionPicker(QScrollArea):
             "end_location": row_data[f"{color}_end_location"],
             "turns": row_data[f"{color}_turns"],
             "start_orientation": row_data[f"{color}_start_orientation"],
-            'start_layer': row_data[f"{color}_start_layer"],
+            "start_layer": row_data[f"{color}_start_layer"],
         }
 
     @staticmethod
@@ -173,7 +175,7 @@ class OptionPicker(QScrollArea):
 
     @staticmethod
     def setup_motion_relations(option: Option, arrow: Arrow, prop: Prop) -> None:
-        motion = option.get_motion_by_color(arrow.color)
+        motion = option.motions[arrow.color]
         arrow.motion, prop.motion = motion, motion
         arrow.ghost_arrow, prop.ghost_prop = (
             option.ghost_arrows[arrow.color],
@@ -183,15 +185,15 @@ class OptionPicker(QScrollArea):
 
     @staticmethod
     def update_option(option: "Option") -> None:
-        for arrow in option.arrows:
-            prop = option.get_prop_by_color(arrow.color)
-            prop.motion = option.get_motion_by_color(arrow.color)
+        for arrow in option.arrows.values():
+            prop = option.props[arrow.color]
+            prop.motion = option.motions[arrow.color]
             arrow.prop, prop.arrow = prop, arrow
             prop.motion.update_prop_orientation_and_layer()
             prop.update_rotation()
             prop.update_appearance()
             prop.arrow.update_appearance()
-            arrow.arrow_location = arrow.motion.arrow_location
+            arrow.motion.arrow_location = arrow.motion.arrow_location
         option.update_pictograph()
 
     def on_option_clicked(self, option: "Option") -> None:
@@ -220,13 +222,13 @@ class OptionPicker(QScrollArea):
             target_beat.addItem(new_item)
             if isinstance(new_item, Arrow):
                 target_beat.arrows.append(new_item)
-                new_item.motion = target_beat.get_motion_by_color(new_item.color)
+                new_item.motion = target_beat.motions[new_item.color]
                 new_item.ghost_arrow = target_beat.ghost_arrows[new_item.color]
                 new_item.ghost_arrow.motion = new_item.motion
                 new_item.prop = target_beat.get_prop_by_color(new_item.color)
             elif isinstance(new_item, Prop):
                 target_beat.props.append(new_item)
-                new_item.motion = target_beat.get_motion_by_color(new_item.color)
+                new_item.motion = target_beat.motions[new_item.color]
                 new_item.ghost_prop = target_beat.ghost_props[new_item.color]
                 new_item.ghost_prop.motion = new_item.motion
                 new_item.arrow = target_beat.get_arrow_by_color(new_item.color)

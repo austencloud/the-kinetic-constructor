@@ -60,7 +60,7 @@ class Arrow(GraphicalObject):
         self.drag_offset = QPointF(0, 0)
         self.prop: Prop = None
         self.is_svg_mirrored: bool = False
-
+        self.turns: Turns = attributes[TURNS]
         self.center_x = self.boundingRect().width() / 2
         self.center_y = self.boundingRect().height() / 2
 
@@ -81,7 +81,7 @@ class Arrow(GraphicalObject):
             elif rotation_direction == COUNTER_CLOCKWISE:
                 self.is_svg_mirrored = True
         elif self.motion_type == ANTI:
-            rotation_direction = self.rotation_direction
+            rotation_direction = self.motion.rotation_direction
             if rotation_direction == CLOCKWISE:
                 self.is_svg_mirrored = True
             elif rotation_direction == COUNTER_CLOCKWISE:
@@ -148,7 +148,7 @@ class Arrow(GraphicalObject):
         self.update_appearance()
 
         self.scene.arrows.remove(self)
-        for prop in self.scene.props:
+        for prop in self.scene.props.values():
             if prop.color == self.color:
                 prop.arrow = self
                 self.prop = prop
@@ -201,7 +201,7 @@ class Arrow(GraphicalObject):
         self.motion.turns: Turns = target_arrow.motion.turns
 
     def update_prop_during_drag(self) -> None:
-        for prop in self.scene.prop_set.values():
+        for prop in self.scene.props.values():
             if prop.color == self.color:
                 if prop not in self.scene.props:
                     self.scene.props.append(prop)

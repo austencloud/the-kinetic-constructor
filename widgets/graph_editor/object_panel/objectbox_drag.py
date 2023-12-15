@@ -102,19 +102,19 @@ class ObjectBoxDrag(QWidget):
         self.move(local_pos - self.center.toPoint())
 
     def remove_same_color_objects(self) -> None:
-        for prop in self.pictograph.props[:]:
+        for prop in self.pictograph.props.values():
             if prop.color == self.color:
                 if prop in self.pictograph.items():
                     self.pictograph.removeItem(prop)
-                self.pictograph.props.remove(prop)
-        for arrow in self.pictograph.arrows[:]:
+        for arrow in self.pictograph.arrows.values():
             if arrow.color == self.color:
                 if arrow in self.pictograph.items():
                     self.pictograph.removeItem(arrow)
-                self.pictograph.arrows.remove(arrow)
-        for motion in self.pictograph.motions[:]:
+        for motion in self.pictograph.motions.values():
             if motion.color == self.color:
-                self.pictograph.motions.remove(motion)
+                for motion in self.pictograph.motions.values():
+                    if motion.color == self.color:
+                        motion.reset_motion_attributes()
 
     def start_drag(self, event_pos: "QPoint") -> None:
         self.move_to_cursor(event_pos)

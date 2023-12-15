@@ -67,7 +67,7 @@ class PropBoxDrag(ObjectBoxDrag):
         self.placed_prop = Prop(self.pictograph, self.ghost_prop.get_attributes())
 
         self.placed_prop.arrow = self.ghost_prop.arrow
-        self.placed_prop.arrow.arrow_location = self.prop_location
+        self.placed_prop.arrow.motion.arrow_location = self.prop_location
         self.placed_prop.arrow.motion.start_location = self.prop_location
         self.placed_prop.arrow.motion.end_location = self.prop_location
 
@@ -167,7 +167,7 @@ class PropBoxDrag(ObjectBoxDrag):
         self.ghost_prop.motion.end_location = self.prop_location
 
         self.ghost_prop.arrow = self.static_arrow
-        self.ghost_prop.arrow.arrow_location = self.prop_location
+        self.ghost_prop.arrow.motion.arrow_location = self.prop_location
         self.ghost_prop.arrow.motion.start_location = self.prop_location
         self.ghost_prop.arrow.motion.end_location = self.prop_location
 
@@ -210,7 +210,7 @@ class PropBoxDrag(ObjectBoxDrag):
 
                 if self.previous_drag_location != new_location and new_location:
                     self.previous_drag_location = new_location
-                    self.ghost_prop.arrow.arrow_location = new_location
+                    self.ghost_prop.arrow.motion.arrow_location = new_location
                     self.ghost_prop.arrow.motion.start_location = new_location
                     self.ghost_prop.arrow.motion.end_location = new_location
                     self.ghost_prop.motion.arrow_location = new_location
@@ -308,7 +308,7 @@ class PropBoxDrag(ObjectBoxDrag):
 
     def _update_static_arrow(self) -> None:
         self.static_arrow.color = self.color
-        self.static_arrow.arrow_location = self.prop_location
+        self.static_arrow.motion.arrow_location = self.prop_location
         self.static_arrow.motion.start_location = self.prop_location
         self.static_arrow.motion.end_location = self.prop_location
         self.static_arrow.prop = self.ghost_prop

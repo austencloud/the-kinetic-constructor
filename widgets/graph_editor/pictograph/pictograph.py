@@ -77,9 +77,9 @@ class Pictograph(QGraphicsScene):
     def setup_scene(self) -> None:
         self.setSceneRect(0, 0, 750, 900)
         self.setBackgroundBrush(Qt.GlobalColor.white)
-        self.arrows: List[Arrow] = []
-        self.props: List[Prop] = []
-        self.motions: List[Motion] = []
+        self.arrows: Dict[Colors, Arrow] = []
+        self.props: Dict[Colors, Prop] = []
+        self.motions: Dict[Colors, Motion] = []
         self.current_letter: str = None
 
     def setup_components(self, main_widget: "MainWidget") -> None:
@@ -99,9 +99,9 @@ class Pictograph(QGraphicsScene):
         self.locations = self.initializer.init_locations(self.grid)
 
         self.motions = self.initializer.init_motions()
-        self.arrow_set = self.initializer.init_arrow_set()
+        self.arrows = self.initializer.init_arrows()
         self.ghost_arrows = self.initializer.init_ghost_arrows()
-        self.prop_set = self.initializer.init_prop_set(self.prop_type)
+        self.props = self.initializer.init_props(self.prop_type)
         self.ghost_props = self.initializer.init_ghost_props(self.prop_type)
 
         self.setup_managers(main_widget)
@@ -152,13 +152,13 @@ class Pictograph(QGraphicsScene):
 
     def get_state(self) -> List[MotionAttributesDicts]:
         state = []
-        for motion in self.motions:
+        for motion in self.motions.values():
             state.append(
                 {
                     COLOR: motion.color,
                     MOTION_TYPE: motion.motion_type,
                     ROTATION_DIRECTION: motion.rotation_direction,
-                    ARROW_LOCATION: motion.arrow.arrow_location,
+                    ARROW_LOCATION: motion.arrow_location,
                     START_LOCATION: motion.start_location,
                     END_LOCATION: motion.end_location,
                     TURNS: motion.turns,
@@ -179,21 +179,6 @@ class Pictograph(QGraphicsScene):
                     return letter_type
         else:
             return None
-
-    def get_motion_by_color(self, color: str) -> Optional[Motion]:
-        for motion in self.motions:
-            if motion.color == color:
-                return motion
-
-    def get_arrow_by_color(self, color: str) -> Optional[Arrow]:
-        for arrow in self.arrows:
-            if arrow.color == color:
-                return arrow
-
-    def get_prop_by_color(self, color: str) -> Optional[Prop]:
-        for prop in self.prop_set.values():
-            if prop.color == color:
-                return prop
 
     def get_closest_hand_point(
         self, pos: QPointF
@@ -274,14 +259,6 @@ class Pictograph(QGraphicsScene):
         self.dragged_prop = None
         self.dragged_arrow = None
 
-    def add_motion(self, motion_dict: MotionAttributesDicts) -> None:
-        motion = Motion(self, motion_dict)
-        for m in self.motions:
-            if m.color == motion.color:
-                self.motions.remove(m)
-
-        self.motions.append(motion)
-
     def copy_scene(self) -> QGraphicsScene:
         from widgets.sequence_widget.beat_frame.beat import Beat
 
@@ -297,7 +274,7 @@ class Pictograph(QGraphicsScene):
                 new_arrow.setZValue(item.zValue())
                 new_scene.addItem(new_arrow)
                 new_scene.arrows.append(new_arrow)
-                motion = new_scene.get_motion_by_color(new_arrow.color)
+                motion = new_scene.motions[new_arrow.color]
                 new_arrow.motion = motion
                 motion.arrow = new_arrow
 
@@ -307,7 +284,7 @@ class Pictograph(QGraphicsScene):
                 new_prop.setZValue(item.zValue())
                 new_scene.addItem(new_prop)
                 new_scene.props.append(new_prop)
-                motion = new_scene.get_motion_by_color(new_prop.color)
+                motion = new_scene.motions[new_prop.color]
                 new_prop.motion = motion
                 motion.prop = new_prop
 
@@ -350,12 +327,12 @@ class Pictograph(QGraphicsScene):
     ### UPDATERS ###
 
     def update_attr_panel(self):
-        # Pass the selected motion color to update_attr_panel
         motions = [
             motion
             for motion in [
-                self.get_motion_by_color(RED),
-                self.get_motion_by_color(BLUE),
+                self.motions.get(arrow.color)
+                for arrow in self.arrows.values()
+                if arrow.isSelected()
             ]
             if motion is not None
         ]

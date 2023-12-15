@@ -91,7 +91,7 @@ class PropPositioner:
         }
 
         # First pass to count prop types
-        for prop in self.scene.props:
+        for prop in self.scene.props.values():
             if prop.prop_type == BIGHOOP:
                 self.prop_type_counts[BIGHOOP] += 1
             elif prop.prop_type == DOUBLESTAR:
@@ -125,7 +125,7 @@ class PropPositioner:
             else:
                 self.prop_type_counts["???"] += 1
 
-        for prop in self.scene.props:
+        for prop in self.scene.props.values():
             if (
                 self.prop_type_counts[BIGHOOP] == 2
                 or self.prop_type_counts[DOUBLESTAR] == 2
@@ -252,8 +252,8 @@ class PropPositioner:
         # GAMMA → BETA - Y, Z
         if len(pro_or_anti_motions) == 1 and len(static_motions) == 1:
             # if all the staves are in layer 1 or layer 2
-            if all(prop.layer == 1 for prop in self.scene.props) or all(
-                prop.layer == 2 for prop in self.scene.props
+            if all(prop.layer == 1 for prop in self.scene.props.values()) or all(
+                prop.layer == 2 for prop in self.scene.props.values()
             ):
                 self.reposition_gamma_to_beta(
                     move_prop, pro_or_anti_motions, static_motions
@@ -267,8 +267,8 @@ class PropPositioner:
             if converging_motions[0].get(START_LOCATION) != converging_motions[1].get(
                 START_LOCATION
             ):
-                if all(prop.layer == 1 for prop in self.scene.props) or all(
-                    prop.layer == 2 for prop in self.scene.props
+                if all(prop.layer == 1 for prop in self.scene.props.values()) or all(
+                    prop.layer == 2 for prop in self.scene.props.values()
                 ):
                     self.reposition_alpha_to_beta(move_prop, converging_motions)
 
@@ -280,7 +280,7 @@ class PropPositioner:
         # if there's a combination of a BIGHOOP and a CLUB in the prop_type_counts dictionary
         if self.prop_type_counts[BIGHOOP] == 1 and self.prop_type_counts[CLUB] == 1:
             # set both props to their default locations, strict for big hoop and default for club
-            for prop in self.scene.props:
+            for prop in self.scene.props.values():
                 if prop.prop_type == BIGHOOP:
                     self.set_strict_prop_locations(prop)
                 elif prop.prop_type == CLUB:
@@ -289,7 +289,11 @@ class PropPositioner:
         else:
             for motion in static_motions:
                 prop = next(
-                    (prop for prop in self.scene.props if prop.color == motion[COLOR]),
+                    (
+                        prop
+                        for prop in self.scene.props.values()
+                        if prop.color == motion[COLOR]
+                    ),
                     None,
                 )
                 if not prop:
@@ -316,7 +320,7 @@ class PropPositioner:
                         TRIAD,
                         QUIAD,
                         UKULELE,
-                        CHICKEN
+                        CHICKEN,
                     ]:
                         self.set_default_prop_locations(prop)
                     elif prop.prop_type in [
@@ -371,7 +375,7 @@ class PropPositioner:
 
     def reposition_alpha_to_beta(self, move_prop, converging_arrows) -> None:
         # check if all the props are in layer 1
-        if all(prop.layer == 1 for prop in self.scene.props):
+        if all(prop.layer == 1 for prop in self.scene.props.values()):
             end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
             start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
             if (
@@ -384,13 +388,13 @@ class PropPositioner:
                         move_prop(
                             next(
                                 prop
-                                for prop in self.scene.props
+                                for prop in self.scene.props.values()
                                 if prop.color == arrow[COLOR]
                             ),
                             direction,
                         )
         # check if all the props are in layer 2
-        elif all(prop.layer == 2 for prop in self.scene.props):
+        elif all(prop.layer == 2 for prop in self.scene.props.values()):
             end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
             start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
             if (
@@ -403,14 +407,14 @@ class PropPositioner:
                         move_prop(
                             next(
                                 prop
-                                for prop in self.scene.props
+                                for prop in self.scene.props.values()
                                 if prop.arrow.color == arrow[COLOR]
                             ),
                             direction,
                         )
         # check if one prop is in layer 1 and the other is in layer 2
-        elif any(prop.layer == 1 for prop in self.scene.props) and any(
-            prop.layer == 2 for prop in self.scene.props
+        elif any(prop.layer == 1 for prop in self.scene.props.values()) and any(
+            prop.layer == 2 for prop in self.scene.props.values()
         ):
             end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
             start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
@@ -424,7 +428,7 @@ class PropPositioner:
                         move_prop(
                             next(
                                 prop
-                                for prop in self.scene.props
+                                for prop in self.scene.props.values()
                                 if prop.arrow.color == arrow[COLOR]
                             ),
                             direction,
@@ -458,7 +462,7 @@ class PropPositioner:
 
         further_prop = next(
             prop
-            for prop in self.scene.props
+            for prop in self.scene.props.values()
             if prop.arrow.color == further_arrow[COLOR]
         )
         new_position_further = self.calculate_new_position(
@@ -468,7 +472,9 @@ class PropPositioner:
 
         other_direction = self.get_opposite_direction(further_direction)
         other_prop = next(
-            prop for prop in self.scene.props if prop.arrow.color == other_arrow[COLOR]
+            prop
+            for prop in self.scene.props.values()
+            if prop.arrow.color == other_arrow[COLOR]
         )
         new_position_other = self.calculate_new_position(
             other_prop.pos(), other_direction
@@ -482,7 +488,7 @@ class PropPositioner:
         pro_prop = next(
             (
                 prop
-                for prop in self.scene.props
+                for prop in self.scene.props.values()
                 if prop.arrow.color == pro_motion[COLOR]
             ),
             None,
@@ -490,7 +496,7 @@ class PropPositioner:
         anti_prop = next(
             (
                 prop
-                for prop in self.scene.props
+                for prop in self.scene.props.values()
                 if prop.arrow.color == anti_motion[COLOR]
             ),
             None,
@@ -526,12 +532,12 @@ class PropPositioner:
             TRIAD,
             QUIAD,
             UKULELE,
-            CHICKEN
+            CHICKEN,
         ]:
-            if any(prop.layer == 1 for prop in self.scene.props) and any(
-                prop.layer == 2 for prop in self.scene.props
+            if any(prop.layer == 1 for prop in self.scene.props.values()) and any(
+                prop.layer == 2 for prop in self.scene.props.values()
             ):
-                for prop in self.scene.props:
+                for prop in self.scene.props.values():
                     self.set_default_prop_locations(prop)
             else:
                 shift, static_motion = shifts[0], static_motions[0]
@@ -540,7 +546,7 @@ class PropPositioner:
                     move_prop(
                         next(
                             prop
-                            for prop in self.scene.props
+                            for prop in self.scene.props.values()
                             if prop.arrow.color == shift[COLOR]
                         ),
                         direction,
@@ -548,7 +554,7 @@ class PropPositioner:
                     move_prop(
                         next(
                             prop
-                            for prop in self.scene.props
+                            for prop in self.scene.props.values()
                             if prop.arrow.color == static_motion[COLOR]
                         ),
                         self.get_opposite_direction(direction),
@@ -561,14 +567,14 @@ class PropPositioner:
             SWORD,
             GUITAR,
         ]:
-            for prop in self.scene.props:
+            for prop in self.scene.props.values():
                 self.set_strict_prop_locations(prop)
 
     ### HELPERS ###
 
     def props_in_beta(self) -> bool | None:
         visible_staves: List[Prop] = []
-        for prop in self.scene.props:
+        for prop in self.scene.props.values():
             if prop.isVisible():
                 visible_staves.append(prop)
         if len(visible_staves) == 2:

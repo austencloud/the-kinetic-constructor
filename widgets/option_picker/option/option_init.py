@@ -7,7 +7,24 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
-from objects.prop import BigHoop, Prop, Staff, Club, Fan, MiniHoop, Buugeng, Triad, Quiad, BigDoubleStar, DoubleStar, BigStaff, Sword, Guitar, Ukulele, Chicken
+from objects.prop import (
+    BigHoop,
+    Prop,
+    Staff,
+    Club,
+    Fan,
+    MiniHoop,
+    Buugeng,
+    Triad,
+    Quiad,
+    BigDoubleStar,
+    DoubleStar,
+    BigStaff,
+    Sword,
+    Guitar,
+    Ukulele,
+    Chicken,
+)
 from constants.string_constants import *
 from utilities.TypeChecking.TypeChecking import Colors, Locations, PropTypes
 from widgets.option_picker.option.option_view import OptionView
@@ -33,7 +50,7 @@ class OptionInit:
         self.pictograph.grid = grid
         return grid
 
-    def init_prop_set(self, prop_type: PropTypes) -> Dict[Colors, Prop]:
+    def init_props(self, prop_type: PropTypes) -> Dict[Colors, Prop]:
         red_prop_Dict = {
             COLOR: RED,
             PROP_TYPE: prop_type,
@@ -77,8 +94,8 @@ class OptionInit:
         red_prop.set_svg_color(RED)
         blue_prop.set_svg_color(BLUE)
 
-        prop_set = {RED: red_prop, BLUE: blue_prop}
-        return prop_set
+        props = {RED: red_prop, BLUE: blue_prop}
+        return props
 
     def init_ghost_arrows(self) -> Dict[Colors, GhostArrow]:
         default_red_ghost_arrow_attributes = {
@@ -195,7 +212,7 @@ class OptionInit:
         }
         return locations
 
-    def update_prop_set_and_ghost_props(self, new_prop_type: PropTypes) -> None:
-        self.pictograph.prop_set = self.init_prop_set(new_prop_type)
+    def update_props_and_ghost_props(self, new_prop_type: PropTypes) -> None:
+        self.pictograph.props = self.init_props(new_prop_type)
         self.pictograph.prop_type = new_prop_type
         self.pictograph.ghost_props = self.init_ghost_props(new_prop_type)

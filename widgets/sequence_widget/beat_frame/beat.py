@@ -103,7 +103,7 @@ class Beat(Pictograph):
                     COLOR: motion.color,
                     MOTION_TYPE: motion.motion_type,
                     ROTATION_DIRECTION: motion.rotation_direction,
-                    ARROW_LOCATION: motion.arrow.arrow_location,
+                    ARROW_LOCATION: motion.arrow.motion.arrow_location,
                     START_LOCATION: motion.start_location,
                     END_LOCATION: motion.end_location,
                     TURNS: motion.turns,
@@ -125,13 +125,8 @@ class Beat(Pictograph):
         else:
             return None
 
-    def get_motion_by_color(self, color: str) -> Optional[Motion]:
-        for motion in self.motions:
-            if motion.color == color:
-                return motion
-
     def get_prop_by_color(self, color: str) -> Optional[Prop]:
-        for prop in self.prop_set.values():
+        for prop in self.props.values():
             if prop.color == color:
                 return prop
 
@@ -163,8 +158,6 @@ class Beat(Pictograph):
             prop.setSelected(False)
         self.dragged_prop = None
         self.dragged_arrow = None
-
-
 
     ### UPDATERS ###
 

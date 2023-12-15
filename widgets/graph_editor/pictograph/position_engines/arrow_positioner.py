@@ -17,7 +17,7 @@ class ArrowPositioner:
         self.pictograph = pictograph
 
     def update_arrow_positions(self) -> None:
-        for arrow in self.pictograph.arrows:
+        for arrow in self.pictograph.arrows.values():
             arrow.setTransformOriginPoint(0, 0)
         optimal_locations = None
 
@@ -25,7 +25,7 @@ class ArrowPositioner:
             if self.pictograph.current_letter:
                 optimal_locations = self.find_optimal_locations()
 
-        for arrow in self.pictograph.arrows:
+        for arrow in self.pictograph.arrows.values():
             if arrow.motion.motion_type is not STATIC:
                 if optimal_locations:
                     self.set_arrow_to_optimal_loc(optimal_locations, arrow)
@@ -144,19 +144,19 @@ class ArrowPositioner:
 
                 if layer2_point is None:
                     print(
-                        f"Warning: No layer2_point found for arrow_location {arrow.arrow_location}"
+                        f"Warning: No layer2_point found for arrow_location {arrow.motion.arrow_location}"
                     )
 
                 arrow.set_arrow_transform_origin_to_center()
                 adjustment = QPointF(0, 0)
 
-                if arrow.arrow_location == NORTHEAST:
+                if arrow.motion.arrow_location == NORTHEAST:
                     adjustment = QPointF(DISTANCE, -DISTANCE)
-                elif arrow.arrow_location == SOUTHEAST:
+                elif arrow.motion.arrow_location == SOUTHEAST:
                     adjustment = QPointF(DISTANCE, DISTANCE)
-                elif arrow.arrow_location == SOUTHWEST:
+                elif arrow.motion.arrow_location == SOUTHWEST:
                     adjustment = QPointF(-DISTANCE, DISTANCE)
-                elif arrow.arrow_location == NORTHWEST:
+                elif arrow.motion.arrow_location == NORTHWEST:
                     adjustment = QPointF(-DISTANCE, -DISTANCE)
 
                 new_pos = QPointF(
@@ -168,23 +168,23 @@ class ArrowPositioner:
 
         elif self.pictograph.grid.grid_mode == BOX:
             if arrow.motion_type in [PRO, ANTI, FLOAT]:
-                layer2_point = layer2_points.get(arrow.arrow_location)
+                layer2_point = layer2_points.get(arrow.motion.arrow_location)
 
                 if layer2_point is None:
                     print(
-                        f"Warning: No layer2_point found for arrow_location {arrow.arrow_location}"
+                        f"Warning: No layer2_point found for arrow_location {arrow.motion.arrow_location}"
                     )
 
                 arrow.set_arrow_transform_origin_to_center()
                 adjustment = QPointF(0, 0)
 
-                if arrow.arrow_location == NORTH:
+                if arrow.motion.arrow_location == NORTH:
                     adjustment = QPointF(DISTANCE, -DISTANCE)
-                elif arrow.arrow_location == SOUTH:
+                elif arrow.motion.arrow_location == SOUTH:
                     adjustment = QPointF(DISTANCE, DISTANCE)
-                elif arrow.arrow_location == EAST:
+                elif arrow.motion.arrow_location == EAST:
                     adjustment = QPointF(-DISTANCE, DISTANCE)
-                elif arrow.arrow_location == WEST:
+                elif arrow.motion.arrow_location == WEST:
                     adjustment = QPointF(-DISTANCE, -DISTANCE)
 
                 new_pos = QPointF(

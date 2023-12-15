@@ -32,6 +32,7 @@ from constants.string_constants import (
 )
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Tuple
+from objects.ghosts.ghost_arrow import GhostArrow
 
 from widgets.graph_editor.object_panel.objectbox_drag import ObjectBoxDrag
 from utilities.TypeChecking.TypeChecking import (
@@ -60,7 +61,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.attributes: ArrowAttributesDicts = {}
         self.arrowbox = arrowbox
         self.objectbox = arrowbox
-        self.ghost_arrow = None
+        self.ghost_arrow: GhostArrow = None
         self.start_orientation = IN
         self.setup_dependencies(main_window, pictograph, arrowbox)
 
@@ -77,8 +78,10 @@ class ArrowBoxDrag(ObjectBoxDrag):
     def set_attributes(self, target_arrow: "Arrow") -> None:
         self.color: Colors = target_arrow.color
         self.motion_type: MotionTypes = target_arrow.motion_type
-        self.arrow_location: Locations = target_arrow.arrow_location
-        self.rotation_direction: RotationDirections = target_arrow.rotation_direction
+        self.arrow_location: Locations = target_arrow.motion.arrow_location
+        self.rotation_direction: RotationDirections = (
+            target_arrow.motion.rotation_direction
+        )
 
         self.turns: Turns = target_arrow.turns
 
@@ -86,7 +89,11 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.ghost_arrow.target_arrow = target_arrow
 
     def place_arrow_on_pictograph(self) -> None:
-        self.placed_arrow = Arrow(self.pictograph, self.ghost_arrow.get_attributes())
+        self.placed_arrow = Arrow(
+            self.pictograph,
+            self.ghost_arrow.get_attributes(),
+            self.pictograph.motions[self.color],
+        )
 
         self.placed_arrow.prop = self.ghost_arrow.prop
         self.ghost_arrow.prop.arrow = self.placed_arrow
@@ -104,18 +111,16 @@ class ArrowBoxDrag(ObjectBoxDrag):
             END_LOCATION: self.end_location,
         }
 
-        self.pictograph.add_motion(motion_dict)
-        self.pictograph.addItem(self.placed_arrow)
-        self.pictograph.arrows.append(self.placed_arrow)
+        self.pictograph.motions[self.color].setup_attributes(motion_dict)
 
-        self.pictograph.removeItem(self.ghost_arrow)
-        self.pictograph.arrows.remove(self.ghost_arrow)
-        self.pictograph.clearSelection()
-
+        self.pictograph.arrows[self.color] = self.placed_arrow
         self.placed_arrow.ghost_arrow = self.ghost_arrow
+
+        self.pictograph.addItem(self.placed_arrow)
+        self.pictograph.removeItem(self.ghost_arrow)
+        self.pictograph.clearSelection()
         self.placed_arrow.update_appearance()
         self.placed_arrow.show()
-
         self.placed_arrow.setSelected(True)
 
     ### UPDATERS ###
@@ -144,18 +149,18 @@ class ArrowBoxDrag(ObjectBoxDrag):
             START_LOCATION: self.start_location,
             END_LOCATION: self.end_location,
             START_ORIENTATION: self.start_orientation,
-            START_LAYER: None,
+            START_LAYER: 1,
         }
 
-        self.pictograph.add_motion(motion_dict)
+        self.pictograph.motions[self.color].setup_attributes(motion_dict)
         self.ghost_arrow.update_ghost_arrow(self.attributes)
         self.pictograph.update_pictograph()
 
     def _update_ghost_arrow_for_new_location(self, new_location) -> None:
         self.ghost_arrow.color = self.color
-        self.ghost_arrow.arrow_location = new_location
+        self.ghost_arrow.motion.arrow_location = new_location
         self.ghost_arrow.motion_type = self.motion_type
-        self.ghost_arrow.rotation_direction = self.rotation_direction
+        self.ghost_arrow.motion.rotation_direction = self.rotation_direction
 
         self.ghost_arrow.turns = self.turns
         self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
@@ -164,7 +169,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.ghost_arrow.update_mirror()
         self.ghost_arrow.update_svg(ghost_svg)
         if self.ghost_arrow not in self.pictograph.arrows:
-            self.pictograph.arrows.append(self.ghost_arrow)
+            self.pictograph.arrows[self.ghost_arrow.color] = self.ghost_arrow
         if self.ghost_arrow not in self.pictograph.items():
             self.pictograph.addItem(self.ghost_arrow)
 
@@ -177,6 +182,8 @@ class ArrowBoxDrag(ObjectBoxDrag):
                 if not self.has_entered_pictograph_once:
                     self.remove_same_color_objects()
                     self.has_entered_pictograph_once = True
+                    self.motion = self.pictograph.motions[self.color]
+                    self.motion.arrow = self.ghost_arrow
 
                 pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
@@ -208,10 +215,10 @@ class ArrowBoxDrag(ObjectBoxDrag):
     ### UPDATERS ###
 
     def update_prop_during_drag(self) -> None:
-        for prop in self.pictograph.prop_set.values():
+        for prop in self.pictograph.props.values():
             if prop.color == self.color:
                 if prop not in self.pictograph.props:
-                    self.pictograph.props.append(prop)
+                    self.pictograph.props[prop.color] = prop
 
                 prop.set_attributes_from_dict(
                     {
@@ -222,6 +229,9 @@ class ArrowBoxDrag(ObjectBoxDrag):
                 )
                 prop.arrow = self.ghost_arrow
                 self.ghost_arrow.prop = prop
+
+                self.motion.prop = prop
+                prop.motion = self.motion
 
                 if prop not in self.pictograph.items():
                     self.pictograph.addItem(prop)
@@ -254,7 +264,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         with painter as painter:
             renderer.render(painter)
 
-        angle = self._get_arrow_drag_rotation_angle(self)
+        angle = self._get_arrow_drag_rotation_angle(self.target_arrow)
 
         unrotate_transform = QTransform().rotate(-self.target_arrow_rotation_angle)
         unrotated_pixmap = self.preview.pixmap().transformed(unrotate_transform)
@@ -291,7 +301,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             arrow.motion_type,
             arrow.rotation_direction,
             arrow.color,
-            arrow.arrow_location,
+            arrow.motion.arrow_location,
         )
 
         rotation_angle_map: Dict[
