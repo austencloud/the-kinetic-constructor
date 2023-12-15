@@ -1,6 +1,7 @@
 from constants.string_constants import COLOR
 from typing import TYPE_CHECKING
 from objects.arrow.arrow import Arrow
+from objects.motion import Motion
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
@@ -24,14 +25,17 @@ class GhostArrow(Arrow):
     """
 
     def __init__(
-        self, pictograph: "Pictograph", attributes: "ArrowAttributesDicts"
+        self,
+        pictograph: "Pictograph",
+        attributes: "ArrowAttributesDicts",
+        motion: "Motion",
     ) -> None:
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)
         self.setOpacity(0.2)
         self.pictograph = pictograph
         self.color = attributes[COLOR]
         self.target_arrow: "Arrow" = None
-        
+
     def update_ghost_arrow(self, attributes) -> None:
         self.set_attributes_from_dict(attributes)
         self.update_appearance()

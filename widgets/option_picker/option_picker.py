@@ -27,7 +27,7 @@ class OptionPicker(QScrollArea):
         self.spacing = 10
         self.options: List[Option] = []
         self.pictographs = self.load_and_sort_data("LetterDictionary.csv")
-
+        self.pictograph = self.main_widget.graph_editor_widget.graph_editor.pictograph
         self.initialize_ui()
         self.viewport().installEventFilter(self)
 
@@ -59,18 +59,16 @@ class OptionPicker(QScrollArea):
                 # If there are multiple entries for the same combination, take the first
                 if isinstance(row_data, pd.DataFrame):
                     row_data = row_data.iloc[0]
-                attributes_list = [
-                    self.construct_arrow_attributes(row_data, "blue"),
-                    self.construct_arrow_attributes(row_data, "red"),
+                motion_dict = [
+                    self.construct_motion_dict(row_data, "blue"),
+                    self.construct_motion_dict(row_data, "red"),
                 ]
-                self.add_option_to_layout(
-                    attributes_list, is_initial=True, row=0, col=i
-                )
+                self.add_option_to_layout(motion_dict, is_initial=True, row=0, col=i)
 
     def add_option_to_layout(
-        self, attributes_list: list, is_initial: bool, row: int, col: int
+        self, motion_dict: list, is_initial: bool, row: int, col: int
     ) -> None:
-        option = self.create_option(attributes_list)
+        option = self.create_option(motion_dict)
         event_handler = (
             self.get_initial_handler(option)
             if is_initial
@@ -97,7 +95,7 @@ class OptionPicker(QScrollArea):
             selected_option.get_motion_by_color(BLUE),
         )
         self.populate_options(specific_positions["end_position"])
-        
+
     def populate_options(self, end_position: str) -> None:
         self.options = []
         self.clear_layout()
@@ -112,8 +110,8 @@ class OptionPicker(QScrollArea):
             filtered_data.iterrows()
         ):
             attributes_list = [
-                self.construct_arrow_attributes(row_data, "blue"),
-                self.construct_arrow_attributes(row_data, "red"),
+                self.construct_motion_dict(row_data, "blue"),
+                self.construct_motion_dict(row_data, "red"),
             ]
             self.add_option_to_layout(
                 attributes_list,
@@ -127,9 +125,20 @@ class OptionPicker(QScrollArea):
         option = Option(self.main_widget, self)
         option.setSceneRect(0, 0, 750, 900)
         for motion_dict in motion_dict_list:
-            arrow = Arrow(option, motion_dict)
-            prop = Prop(option, self.get_prop_attributes(motion_dict[COLOR]))
-            option.add_motion(arrow, prop, motion_dict, IN, 1)
+            arrow_dict = {
+                COLOR: motion_dict[COLOR],
+                MOTION_TYPE: motion_dict[MOTION_TYPE],
+                TURNS: motion_dict[TURNS],
+            }
+            prop_dict = {
+                COLOR: motion_dict[COLOR],
+                PROP_TYPE: self.pictograph.prop_type,
+                PROP_LOCATION: motion_dict[END_LOCATION],
+            }
+            arrow = Arrow(option, arrow_dict, option.motions[motion_dict[COLOR]])
+            prop = Prop(option, prop_dict, option.motions[motion_dict[COLOR]])
+            motion_dict[ARROW], motion_dict[PROP] = arrow, prop
+            option.add_motion(motion_dict)
             option.addItem(arrow)
             option.addItem(prop)
             option.arrows.append(arrow)
@@ -139,16 +148,17 @@ class OptionPicker(QScrollArea):
         self.options.append(option)
         return option
 
-    def construct_arrow_attributes(self, row_data, color_prefix: str) -> Dict:
+    def construct_motion_dict(self, row_data, color: str) -> Dict:
         # Ensure that the keys match the DataFrame column names exactly
         return {
-            "color": row_data[f"{color_prefix}_color"],
-            "motion_type": row_data[f"{color_prefix}_motion_type"],
-            "rotation_direction": row_data[f"{color_prefix}_rotation_direction"],
-            "arrow_location": row_data[f"{color_prefix}_start_location"],
-            "start_location": row_data[f"{color_prefix}_start_location"],
-            "end_location": row_data[f"{color_prefix}_end_location"],
-            "turns": row_data[f"{color_prefix}_turns"],
+            "color": row_data[f"{color}_color"],
+            "motion_type": row_data[f"{color}_motion_type"],
+            "rotation_direction": row_data[f"{color}_rotation_direction"],
+            "start_location": row_data[f"{color}_start_location"],
+            "end_location": row_data[f"{color}_end_location"],
+            "turns": row_data[f"{color}_turns"],
+            "start_orientation": row_data[f"{color}_start_orientation"],
+            'start_layer': row_data[f"{color}_start_layer"],
         }
 
     @staticmethod

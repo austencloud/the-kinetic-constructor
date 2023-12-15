@@ -1,4 +1,5 @@
 from utilities.TypeChecking.TypeChecking import (
+    Axes,
     MotionAttributesDicts,
     Colors,
     MotionTypes,
@@ -24,16 +25,14 @@ class Motion:
     def __init__(
         self,
         pictograph: "Pictograph",
-        arrow: "Arrow",
-        prop: "Prop",
-        attributes: MotionAttributesDicts,
+        motion_dict: MotionAttributesDicts,
     ) -> None:
         self.pictograph = pictograph
-        self.arrow = arrow
-        self.prop = prop
-        self.attributes = attributes
+        self.arrow: Arrow = motion_dict[ARROW]
+        self.prop: Prop = motion_dict[PROP]
+        self.attributes = motion_dict
 
-        self.setup_attributes(attributes)
+        self.setup_attributes(motion_dict)
 
     def setup_attributes(self, attributes) -> None:
         self.color: Colors = attributes[COLOR]
@@ -44,14 +43,13 @@ class Motion:
         self.end_location: Locations = attributes[END_LOCATION]
         self.start_orientation: Orientations = attributes[START_ORIENTATION]
         self.start_layer: Layers = attributes[START_LAYER]
-        
         self.arrow_location = self.determine_arrow_location(
             self.start_location, self.end_location
         )
         self.end_orientation: Orientations = self.get_end_orientation()
         self.end_layer: Layers = self.get_end_layer()
-
-        self.update_prop_orientation_and_layer()
+        if self.prop:
+            self.update_prop_orientation_and_layer()
 
     def determine_arrow_location(self, start_location: str, end_location: str) -> str:
         if start_location == end_location:
@@ -76,9 +74,10 @@ class Motion:
         self.prop.orientation = self.end_orientation
         self.prop.layer = self.end_layer
         self.prop.prop_location = self.end_location
+        self.prop.axis: Axes = self.prop.update_axis(self.prop.prop_location)
         self.prop.update_rotation()
         self.prop.update_appearance()
-
+        
     def reset_motion_attributes(self):
         self.start_location = None
         self.end_location = None

@@ -44,12 +44,13 @@ if TYPE_CHECKING:
 
 
 class Arrow(GraphicalObject):
-    def __init__(self, scene, attributes) -> None:
+    def __init__(self, scene, arrow_dict, motion) -> None:
         super().__init__(scene)
-        self.svg_file = self.get_svg_file(attributes[MOTION_TYPE], attributes[TURNS])
+        self.svg_file = self.get_svg_file(arrow_dict[MOTION_TYPE], arrow_dict[TURNS])
+        self.motion: Motion = motion
         self.setup_svg_renderer(self.svg_file)
         self.setAcceptHoverEvents(True)
-        self._setup_attributes(scene, attributes)
+        self._setup_attributes(scene, arrow_dict)
 
     ### SETUP ###
 
@@ -58,7 +59,6 @@ class Arrow(GraphicalObject):
         self.manipulator = ArrowManipulator(self)
         self.drag_offset = QPointF(0, 0)
         self.prop: Prop = None
-        self.motion: Motion = None
         self.is_svg_mirrored: bool = False
 
         self.center_x = self.boundingRect().width() / 2
@@ -75,7 +75,7 @@ class Arrow(GraphicalObject):
 
     def set_is_svg_mirrored_from_attributes(self) -> None:
         if self.motion_type == PRO:
-            rotation_direction = self.rotation_direction
+            rotation_direction = self.motion.rotation_direction
             if rotation_direction == CLOCKWISE:
                 self.is_svg_mirrored = False
             elif rotation_direction == COUNTER_CLOCKWISE:
@@ -190,20 +190,15 @@ class Arrow(GraphicalObject):
 
     def set_arrow_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
-        self.motion_type: MotionTypes = target_arrow.motion_type
-        self.arrow_location = target_arrow.arrow_location
-        self.rotation_direction:RotationDirections = target_arrow.rotation_direction
-        self.motion.start_location: Locations = target_arrow.motion.start_location
-        self.motion.end_location:Locations = target_arrow.motion.end_location
-        self.turns:Turns = target_arrow.turns
-
         self.motion.color = target_arrow.color
-        self.motion.motion_type = target_arrow.motion_type
-        self.motion.arrow_location = target_arrow.arrow_location
-        self.motion.rotation_direction = target_arrow.rotation_direction
-        self.motion.start_location = target_arrow.motion.start_location
-        self.motion.end_location = target_arrow.motion.end_location
-        self.motion.turns = target_arrow.turns
+        self.motion_type: MotionTypes = target_arrow.motion_type
+        self.motion.arrow_location = target_arrow.motion.arrow_location
+        self.motion.rotation_direction: RotationDirections = (
+            target_arrow.motion.rotation_direction
+        )
+        self.motion.start_location: Locations = target_arrow.motion.start_location
+        self.motion.end_location: Locations = target_arrow.motion.end_location
+        self.motion.turns: Turns = target_arrow.motion.turns
 
     def update_prop_during_drag(self) -> None:
         for prop in self.scene.prop_set.values():
@@ -242,9 +237,9 @@ class Arrow(GraphicalObject):
     ) -> RotationAngles:
         arrow = arrow or self
         location_to_angle = self.get_location_to_angle_map(
-            arrow.motion_type, arrow.rotation_direction
+            arrow.motion_type, arrow.motion.rotation_direction
         )
-        return location_to_angle.get(self.arrow_location, 0)
+        return location_to_angle.get(self.motion.arrow_location, 0)
 
     def get_location_to_angle_map(
         self, motion_type: str, rotation_direction: str

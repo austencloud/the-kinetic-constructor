@@ -72,10 +72,10 @@ class Option(Pictograph):
         self.main_widget = main_widget
         self.is_starter = is_starter
         self.option_picker: OptionPicker = option_picker
-
         self.setup_scene()
-        self.setup_components(main_widget)
-
+        self.view = OptionView(self)
+        self.setup_components(self.main_widget)
+        
     def setup_scene(self) -> None:
         self.setSceneRect(0, 0, 750, 900)
         self.setBackgroundBrush(Qt.GlobalColor.white)
@@ -84,29 +84,6 @@ class Option(Pictograph):
         self.motions: List[Motion] = []
         self.current_letter: str = None
 
-    def setup_components(self, main_widget: "MainWidget") -> None:
-        self.letters = main_widget.letters
-        self.generator: PictographGenerator = None
-        self.event_handler = PictographEventHandler(self)
-
-        self.dragged_arrow: Arrow = None
-        self.dragged_prop: Prop = None
-        self.initializer = OptionInit(self)
-
-        self.prop_type: Prop = STAFF
-
-        self.prop_set: Dict[Colors, Prop] = self.initializer.init_prop_set(
-            self.prop_type
-        )
-        self.grid: Grid = self.initializer.init_grid()
-
-        self.ghost_arrows = self.initializer.init_ghost_arrows()
-        self.ghost_props = self.initializer.init_ghost_props(self.prop_type)
-        self.view: OptionView = self.initializer.init_view()
-        self.letter_item: LetterItem = self.initializer.init_letter_item()
-        self.locations = self.initializer.init_locations(self.grid)
-
-        self.setup_managers(main_widget)
 
     def set_letter_renderer(self, letter: str) -> None:
         letter_type = self.get_current_letter_type()

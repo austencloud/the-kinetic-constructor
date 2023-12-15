@@ -49,14 +49,18 @@ class Profiler:
 
     def _write_stats_section(self, file, stats, sort_by: str, app_root: str) -> None:
         stats.sort_stats(sort_by)
-        header = "{:>10} {:>15} {:>15} {:>20} {:>20} Function\n".format(
-            "Calls", "Total Time", "Per Call", "Cumulative Time", "Per Call (Cum)"
+        header = "{:>10} {:>15} {:>15} {:>20} {:>20} {:>30}\n".format(
+            "Calls", "Total Time", "Per Call", "Cumulative Time", "Per Call (Cum)", "Function"
         )
         file.write(header)
-        file.write("-" * 85 + "\n")
+        file.write("-" * 115 + "\n")
 
-        path_to_remove = "f:\\CODE\\tka-app\\tka-sequence-constructor\\widgets\\"
-        filtered_stats = [(func, stat_info) for func, stat_info in stats.stats.items() if app_root in os.path.normpath(func[0])]
+        path_to_remove = "f:\\CODE\\tka-app\\tka-sequence-constructor\\widgets"
+        filtered_stats = [
+            (func, stat_info)
+            for func, stat_info in stats.stats.items()
+            if app_root in os.path.normpath(func[0])
+        ]
 
         # Apply sorting manually
         if sort_by == "calls":
@@ -66,10 +70,13 @@ class Profiler:
 
         for func, stat_info in sorted_stats:
             file_name, line_number, func_name = func
-            file_name = os.path.normpath(file_name).replace(path_to_remove, "")
+            file_path = os.path.join(
+                os.path.basename(os.path.dirname(file_name)), os.path.basename(file_name)
+            )
+            function_info = f"{file_path}:{line_number}"
             cc, nc, tt, ct, callers = stat_info
             percall_tt = tt / nc if nc else 0
             percall_ct = ct / cc if cc else 0
             file.write(
-                f"{nc:>10} {tt:15.6f} {percall_tt:15.6f} {ct:20.6f} {percall_ct:20.6f} {file_name}:{line_number}({func_name})\n"
+                f"{nc:>10} {tt:15.6f} {percall_tt:15.6f} {ct:20.6f} {percall_ct:20.6f} {func_name:<30} {function_info}\n"
             )

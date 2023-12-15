@@ -18,6 +18,7 @@ from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 if TYPE_CHECKING:
     from main import MainWindow
+from PyQt6.QtGui import QResizeEvent
 
 
 class MainWidget(QWidget):
@@ -99,3 +100,8 @@ class MainWidget(QWidget):
 
     def wheelEvent(self, event: QWheelEvent | None) -> None:
         return super().wheelEvent(event)
+
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        self.option_picker_widget.resize_option_picker_widget()
+
+        return super().resizeEvent(event)

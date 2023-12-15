@@ -2,11 +2,13 @@ from typing import TYPE_CHECKING, Dict, Tuple
 
 from PyQt6.QtWidgets import QGraphicsView
 from PyQt6.QtCore import QPointF
+from objects.arrow.arrow import Arrow
 
 from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
+from objects.motion import Motion
 from objects.prop import (
     BigHoop,
     DoubleStar,
@@ -50,6 +52,53 @@ class PictographInit:
         self.pictograph.grid = grid
         return grid
 
+    def init_motions(self) -> Dict[Colors, Motion]:
+        motions = {}
+        for color in [RED, BLUE]:
+            motion_dict = {
+                COLOR: color,
+                ARROW: None,
+                PROP: None,
+                MOTION_TYPE: PRO,
+                ROTATION_DIRECTION: CLOCKWISE,
+                TURNS: 0,
+                START_LOCATION: None,
+                END_LOCATION: None,
+                START_ORIENTATION: None,
+                START_LAYER: None,
+            }
+
+            motion = Motion(self.pictograph, motion_dict)
+            motions[color] = motion
+        return motions
+
+    def init_arrow_set(self) -> Dict[Colors, Arrow]:
+        default_red_arrow_attributes = {
+            COLOR: RED,
+            MOTION_TYPE: PRO,
+            TURNS: 0,
+        }
+
+        default_blue_arrow_attributes = {
+            COLOR: BLUE,
+            MOTION_TYPE: PRO,
+            TURNS: 0,
+        }
+
+        red_arrow = Arrow(
+            self.pictograph,
+            default_red_arrow_attributes,
+            self.pictograph.motions[RED],
+        )
+        blue_arrow = Arrow(
+            self.pictograph,
+            default_blue_arrow_attributes,
+            self.pictograph.motions[BLUE],
+        )
+
+        arrow_set = {RED: red_arrow, BLUE: blue_arrow}
+        return arrow_set
+
     def init_prop_set(self, prop_type: PropTypes) -> Dict[Colors, Prop]:
         red_prop_Dict = {
             COLOR: RED,
@@ -88,8 +137,12 @@ class PictographInit:
         if prop_class is None:
             raise ValueError(f"Invalid prop_type: {prop_type}")
 
-        red_prop: Prop = prop_class(self.pictograph, red_prop_Dict)
-        blue_prop: Prop = prop_class(self.pictograph, blue_prop_Dict)
+        red_prop: Prop = prop_class(
+            self.pictograph, red_prop_Dict, self.pictograph.motions[RED]
+        )
+        blue_prop: Prop = prop_class(
+            self.pictograph, blue_prop_Dict, self.pictograph.motions[BLUE]
+        )
 
         red_prop.set_svg_color(RED)
         blue_prop.set_svg_color(BLUE)
@@ -119,10 +172,14 @@ class PictographInit:
         }
 
         red_ghost_arrow = GhostArrow(
-            self.pictograph, default_red_ghost_arrow_attributes
+            self.pictograph,
+            default_red_ghost_arrow_attributes,
+            self.pictograph.motions[RED],
         )
         blue_ghost_arrow = GhostArrow(
-            self.pictograph, default_blue_ghost_arrow_attributes
+            self.pictograph,
+            default_blue_ghost_arrow_attributes,
+            self.pictograph.motions[BLUE],
         )
 
         ghost_arrows = {RED: red_ghost_arrow, BLUE: blue_ghost_arrow}
@@ -167,8 +224,16 @@ class PictographInit:
             ORIENTATION: IN,
         }
 
-        red_ghost_prop = GhostProp(self.pictograph, default_red_ghost_prop_attributes)
-        blue_ghost_prop = GhostProp(self.pictograph, default_blue_ghost_prop_attributes)
+        red_ghost_prop = GhostProp(
+            self.pictograph,
+            default_red_ghost_prop_attributes,
+            self.pictograph.motions[RED],
+        )
+        blue_ghost_prop = GhostProp(
+            self.pictograph,
+            default_blue_ghost_prop_attributes,
+            self.pictograph.motions[BLUE],
+        )
 
         ghost_props = {RED: red_ghost_prop, BLUE: blue_ghost_prop}
         return ghost_props

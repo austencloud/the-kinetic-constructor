@@ -6,12 +6,16 @@ from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
 from constants.string_constants import (
+    ARROW,
     IN,
     OUT,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     NORTH,
+    PROP,
     SOUTH,
+    START_LAYER,
+    START_ORIENTATION,
     WEST,
     EAST,
     COLOR,
@@ -67,13 +71,20 @@ class PropBoxDrag(ObjectBoxDrag):
         self.placed_prop.arrow.motion.start_location = self.prop_location
         self.placed_prop.arrow.motion.end_location = self.prop_location
 
-        self.pictograph.add_motion(
-            self.placed_prop.arrow,
-            self.placed_prop,
-            STATIC,
-            self.orientation,
-            self.layer,
-        )
+        motion_dict = {
+            COLOR: self.color,
+            ARROW: self.placed_prop.arrow,
+            PROP: self.placed_prop,
+            MOTION_TYPE: STATIC,
+            ROTATION_DIRECTION: None,
+            TURNS: 0,
+            START_LOCATION: self.prop_location,
+            END_LOCATION: self.prop_location,
+            START_ORIENTATION: self.orientation,
+            START_LAYER: self.layer,
+        }
+
+        self.pictograph.add_motion(motion_dict)
         self.placed_prop.motion.arrow_location = self.prop_location
         self.placed_prop.motion.start_location = self.prop_location
         self.placed_prop.motion.end_location = self.prop_location
@@ -126,9 +137,20 @@ class PropBoxDrag(ObjectBoxDrag):
             if motion.color == self.color:
                 self.pictograph.motions.remove(motion)
 
-        self.pictograph.add_motion(
-            self.ghost_prop.arrow, self.ghost_prop, STATIC, IN, 1
-        )
+        motion_dict = {
+            COLOR: self.color,
+            ARROW: self.ghost_prop.arrow,
+            PROP: self.ghost_prop,
+            MOTION_TYPE: STATIC,
+            ROTATION_DIRECTION: None,
+            TURNS: 0,
+            START_LOCATION: self.prop_location,
+            END_LOCATION: self.prop_location,
+            START_ORIENTATION: self.orientation,
+            START_LAYER: self.layer,
+        }
+
+        self.pictograph.add_motion(motion_dict)
 
         self.pictograph.update_pictograph()
         self.move_to_cursor(self.propbox.view.mapFromGlobal(self.pos()))
@@ -165,13 +187,19 @@ class PropBoxDrag(ObjectBoxDrag):
                     self.has_entered_pictograph_once = True
                     self.remove_same_color_objects()
                     self._create_static_arrow()
-                    self.pictograph.add_motion(
-                        self.ghost_prop.arrow,
-                        self.ghost_prop,
-                        STATIC,
-                        self.orientation,
-                        self.layer,
-                    )
+                    motion_dict = {
+                        COLOR: self.color,
+                        ARROW: self.ghost_prop.arrow,
+                        PROP: self.ghost_prop,
+                        MOTION_TYPE: STATIC,
+                        ROTATION_DIRECTION: "None",
+                        TURNS: 0,
+                        START_LOCATION: self.prop_location,
+                        END_LOCATION: self.prop_location,
+                        START_ORIENTATION: self.orientation,
+                        START_LAYER: self.layer,
+                    }
+                    self.pictograph.add_motion(motion_dict)
 
                 pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(

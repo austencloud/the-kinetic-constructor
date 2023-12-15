@@ -10,6 +10,7 @@ from objects.grid import Grid
 from objects.prop import Prop
 from objects.motion import Motion
 from constants.string_constants import (
+    ARROW,
     BLUE,
     BOX,
     COLOR,
@@ -17,6 +18,7 @@ from constants.string_constants import (
     END_LOCATION,
     LETTER_SVG_DIR,
     MOTION_TYPE,
+    PROP,
     RED,
     ROTATION_DIRECTION,
     STAFF,
@@ -38,6 +40,7 @@ from utilities.TypeChecking.TypeChecking import (
     MotionTypes,
     Optional,
     Orientations,
+    PropTypes,
     Tuple,
 )
 from widgets.graph_editor.pictograph.pictograph_event_handler import (
@@ -87,17 +90,18 @@ class Pictograph(QGraphicsScene):
         self.dragged_prop: Prop = None
         self.initializer = PictographInit(self)
 
-        self.prop_type: Prop = STAFF
+        self.prop_type: PropTypes = STAFF
+        self.arrow_turns = 0
 
         self.grid: Grid = self.initializer.init_grid()
         self.view: PictographView = self.initializer.init_view()
         self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.locations = self.initializer.init_locations(self.grid)
 
-        self.prop_set: Dict[Colors, Prop] = self.initializer.init_prop_set(
-            self.prop_type
-        )
+        self.motions = self.initializer.init_motions()
+        self.arrow_set = self.initializer.init_arrow_set()
         self.ghost_arrows = self.initializer.init_ghost_arrows()
+        self.prop_set = self.initializer.init_prop_set(self.prop_type)
         self.ghost_props = self.initializer.init_ghost_props(self.prop_type)
 
         self.setup_managers(main_widget)
@@ -270,30 +274,8 @@ class Pictograph(QGraphicsScene):
         self.dragged_prop = None
         self.dragged_arrow = None
 
-    def add_motion(
-        self,
-        arrow: Arrow,
-        prop: Prop,
-        motion_dict: MotionAttributesDicts,
-        start_orientation: Orientations,
-        start_layer: Layers,
-    ) -> None:
-        motion_attributes: MotionAttributesDicts = {
-            COLOR: arrow.color,
-            MOTION_TYPE: motion_dict[MOTION_TYPE],
-            ROTATION_DIRECTION: arrow.rotation_direction,
-            ARROW_LOCATION: arrow.arrow_location,
-            TURNS: arrow.turns,
-            START_LOCATION: motion_dict[START_LOCATION],
-            END_LOCATION: motion_dict[END_LOCATION],
-            START_ORIENTATION: start_orientation,
-            START_LAYER: start_layer,
-        }
-
-        motion = Motion(self, arrow, prop, motion_attributes)
-        arrow.motion = motion
-        prop.motion = motion
-
+    def add_motion(self, motion_dict: MotionAttributesDicts) -> None:
+        motion = Motion(self, motion_dict)
         for m in self.motions:
             if m.color == motion.color:
                 self.motions.remove(m)

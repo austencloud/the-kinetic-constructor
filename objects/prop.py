@@ -29,36 +29,28 @@ if TYPE_CHECKING:
 
 
 class Prop(GraphicalObject):
-    def __init__(self, scene, attributes: Dict) -> None:
-        prop_type = str(attributes[PROP_TYPE])
+    def __init__(self, scene, prop_dict: Dict, motion: "Motion") -> None:
+        self.motion = motion
+        prop_type = str(prop_dict[PROP_TYPE])
         prop_type = prop_type[0].lower() + prop_type[1:]
         self.svg_file = self.get_svg_file(prop_type)
         super().__init__(scene)
         self.setup_svg_renderer(self.svg_file)
-        self._setup_attributes(scene, attributes)
-        self.update_appearance()
+        self._setup_attributes(scene, prop_dict)
 
     def _setup_attributes(self, scene, attributes: "PropAttributesDicts") -> None:
         self.scene: Pictograph | PropBox = scene
-        self.motion: Motion = None
         self.prop_type: PropTypes = None
 
         self.drag_offset = QPointF(0, 0)
         self.previous_location: Locations = None
         self.arrow: Arrow = None
         self.ghost_prop: Prop = None
-
+        self.orientation: Orientations = None
         self.color: Colors = attributes[COLOR]
         self.prop_location: Locations = attributes[PROP_LOCATION]
-        self.layer: Layers = attributes[LAYER]
-        self.orientation: Orientations = attributes[ORIENTATION]
-
-        self.axis: Axes = self.update_axis(self.prop_location)
+        self.layer: Layers = None
         self.center = self.boundingRect().center()
-        self.update_rotation()
-
-        if attributes:
-            self.update_attributes(attributes)
 
     ### MOUSE EVENTS ###
 
@@ -92,10 +84,6 @@ class Prop(GraphicalObject):
             self.finalize_prop_drop(event)
 
     ### UPDATERS ###
-
-    def update_appearance(self) -> None:
-        self.axis = self.update_axis(self.prop_location)
-        super().update_appearance()
 
     def set_prop_transform_origin_to_center(self: "Prop") -> None:
         self.center = self.get_object_center()
@@ -351,7 +339,7 @@ class Prop(GraphicalObject):
 
     def _create_static_arrow(self, deleted_arrow: "Arrow") -> None:
         from objects.arrow.arrow import Arrow
-        
+
         static_arrow_dict = {
             COLOR: self.color,
             MOTION_TYPE: STATIC,
@@ -386,90 +374,90 @@ class Prop(GraphicalObject):
 
 
 class Staff(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = STAFF
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)
 
 
 class BigStaff(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = BIGSTAFF
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)
 
 
 class Triad(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = TRIAD
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)
 
 
 class MiniHoop(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = MINIHOOP
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)
 
 
 class Fan(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = FAN
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)
 
 
 class Club(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = CLUB
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)
 
 
 class Buugeng(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = BUUGENG
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)
 
 
 class DoubleStar(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = DOUBLESTAR
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)
 
 
 class BigHoop(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = BIGHOOP
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)
 
 
 class BigDoubleStar(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = BIGDOUBLESTAR
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)
 
 
 class Quiad(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = QUIAD
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)
 
 
 class Sword(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = SWORD
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)
 
 
 class Guitar(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = GUITAR
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)
 
 
 class Ukulele(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = UKULELE
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)
 
 
 class Chicken(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes) -> None:
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = CHICKEN
-        super().__init__(pictograph, attributes)
+        super().__init__(pictograph, attributes, motion)

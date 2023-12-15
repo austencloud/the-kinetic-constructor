@@ -96,35 +96,95 @@ class PropBox(ObjectBox):
 
         for attributes in initial_prop_attributes:
             if self.prop_type == STAFF:
-                prop = Staff(self.pictograph, attributes)
+                prop = Staff(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
             elif self.prop_type == BIGSTAFF:
-                prop = BigStaff(self.pictograph, attributes)
+                prop = BigStaff(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
             elif self.prop_type == CLUB:
-                prop = Club(self.pictograph, attributes)
+                prop = Club(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
             elif self.prop_type == BUUGENG:
-                prop = Buugeng(self.pictograph, attributes)
+                prop = Buugeng(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
             elif self.prop_type == FAN:
-                prop = Fan(self.pictograph, attributes)
+                prop = Fan(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
             elif self.prop_type == TRIAD:
-                prop = Triad(self.pictograph, attributes)
+                prop = Triad(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
             elif self.prop_type == MINIHOOP:
-                prop = MiniHoop(self.pictograph, attributes)
+                prop = MiniHoop(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
             elif self.prop_type == DOUBLESTAR:
-                prop = DoubleStar(self.pictograph, attributes)
+                prop = DoubleStar(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
             elif self.prop_type == BIGHOOP:
-                prop = BigHoop(self.pictograph, attributes)
+                prop = BigHoop(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
             elif self.prop_type == BIGDOUBLESTAR:
-                prop = BigDoubleStar(self.pictograph, attributes)
+                prop = BigDoubleStar(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
             elif self.prop_type == QUIAD:
-                prop = Quiad(self.pictograph, attributes)
+                prop = Quiad(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
             elif self.prop_type == SWORD:
-                prop = Sword(self.pictograph, attributes)
+                prop = Sword(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
             elif self.prop_type == GUITAR:
-                prop = Guitar(self.pictograph, attributes)
+                prop = Guitar(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
             elif self.prop_type == UKULELE:
-                prop = Ukulele(self.pictograph, attributes)
+                prop = Ukulele(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
             elif self.prop_type == CHICKEN:
-                prop = Chicken(self.pictograph, attributes)
+                prop = Chicken(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
             else:
                 raise ValueError("Invalid prop type")
 

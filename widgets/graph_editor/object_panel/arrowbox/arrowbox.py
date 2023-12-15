@@ -141,7 +141,7 @@ class ArrowBox(ObjectBox):
         ]
 
         for dict in red_arrow_attributes:
-            arrow = Arrow(self, dict)
+            arrow = Arrow(self, dict, self.pictograph.motions[RED])
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
             self.addItem(arrow)
@@ -149,7 +149,7 @@ class ArrowBox(ObjectBox):
             self.red_arrows.append(arrow)
 
         for dict in blue_arrow_attributes:
-            arrow = Arrow(self, dict)
+            arrow = Arrow(self, dict, self.pictograph.motions[BLUE])
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
             self.addItem(arrow)

@@ -33,7 +33,56 @@ PropTypes = Literal[
 ]
 Layers = Literal[1, 2]
 Axes = Literal["vertical", "horizontal"]
-Orientations = Literal["in", "out", "cw", "ccw"]
+Orientations = Literal[
+    "in",
+    "clock-in",
+    "clock",
+    "clock-out",
+    "out",
+    "counter-out",
+    "counter",
+    "counter-in",
+]
+
+OrientationCombinations = Literal[
+    "in_vs_in",
+    "in_vs_clock-in",
+    "in_vs_clock",
+    "in_vs_clock-out",
+    "in_vs_out",
+    "in_vs_counter-out",
+    "in_vs_counter",
+    "in_vs_counter-in",
+    "clock-in_vs_clock-in",
+    "clock-in_vs_clock",
+    "clock-in_vs_clock-out",
+    "clock-in_vs_out",
+    "clock-in_vs_counter-out",
+    "clock-in_vs_counter",
+    "clock-in_vs_counter-in",
+    "clock_vs_clock",
+    "clock_vs_clock-out",
+    "clock_vs_out",
+    "clock_vs_counter-out",
+    "clock_vs_counter",
+    "clock_vs_counter-in",
+    "clock-out_vs_clock-out",
+    "clock-out_vs_out",
+    "clock-out_vs_counter-out",
+    "clock-out_vs_counter",
+    "clock-out_vs_counter-in",
+    "out_vs_out",
+    "out_vs_counter-out",
+    "out_vs_counter",
+    "out_vs_counter-in",
+    "counter-out_vs_counter-out",
+    "counter-out_vs_counter",
+    "counter-out_vs_counter-in",
+    "counter_vs_counter",
+    "counter_vs_counter-in",
+    "counter-in_vs_counter-in",
+]
+
 
 RotationAngles = Literal[0, 90, 180, 270]
 Positions = Literal["alpha", "beta", "gamma"]

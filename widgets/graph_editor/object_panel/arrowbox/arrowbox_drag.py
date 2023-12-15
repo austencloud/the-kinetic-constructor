@@ -4,6 +4,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtCore import Qt
 from constants.string_constants import (
     ANTI,
+    ARROW,
     BLUE,
     CLOCKWISE,
     COLOR,
@@ -13,10 +14,21 @@ from constants.string_constants import (
     NORTHEAST,
     NORTHWEST,
     PRO,
+    PROP,
     PROP_LOCATION,
     RED,
     SOUTHEAST,
     SOUTHWEST,
+    MOTION_TYPE,
+    ROTATION_DIRECTION,
+    ARROW_LOCATION,
+    START_LOCATION,
+    END_LOCATION,
+    TURNS,
+    START_ORIENTATION,
+    END_ORIENTATION,
+    START_LAYER,
+    END_LAYER,
 )
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Tuple
@@ -78,9 +90,21 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         self.placed_arrow.prop = self.ghost_arrow.prop
         self.ghost_arrow.prop.arrow = self.placed_arrow
-        self.pictograph.add_motion(
-            self.placed_arrow, self.ghost_arrow.prop, self.motion_type, IN, 1
-        )
+
+        motion_dict = {
+            COLOR: self.color,
+            ARROW: self.placed_arrow,
+            PROP: self.placed_arrow.prop,
+            MOTION_TYPE: self.motion_type,
+            ROTATION_DIRECTION: self.rotation_direction,
+            TURNS: self.turns,
+            START_ORIENTATION: self.start_orientation,
+            START_LAYER: 1,
+            START_LOCATION: self.start_location,
+            END_LOCATION: self.end_location,
+        }
+
+        self.pictograph.add_motion(motion_dict)
         self.pictograph.addItem(self.placed_arrow)
         self.pictograph.arrows.append(self.placed_arrow)
 
@@ -110,13 +134,20 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.update_rotation()
         self.update_prop_during_drag()
 
-        self.pictograph.add_motion(
-            self.ghost_arrow,
-            self.ghost_arrow.prop,
-            self.motion_type,
-            IN,
-            1,
-        )
+        motion_dict = {
+            COLOR: self.color,
+            ARROW: self.ghost_arrow,
+            PROP: self.ghost_arrow.prop,
+            MOTION_TYPE: self.motion_type,
+            ROTATION_DIRECTION: self.rotation_direction,
+            TURNS: self.turns,
+            START_LOCATION: self.start_location,
+            END_LOCATION: self.end_location,
+            START_ORIENTATION: self.start_orientation,
+            START_LAYER: None,
+        }
+
+        self.pictograph.add_motion(motion_dict)
         self.ghost_arrow.update_ghost_arrow(self.attributes)
         self.pictograph.update_pictograph()
 

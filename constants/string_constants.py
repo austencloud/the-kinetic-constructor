@@ -82,7 +82,7 @@ SOUTHWEST = "sw"
 SOUTHEAST = "se"
 
 
-
+ARROW = "arrow"
 PROP = "prop"
 STAFF = "staff"
 BIGSTAFF = "bigstaff"
