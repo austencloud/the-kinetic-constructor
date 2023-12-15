@@ -299,7 +299,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         """
         motion_type, rotation_direction, color, location = (
             arrow.motion_type,
-            arrow.rotation_direction,
+            arrow.motion.rotation_direction,
             arrow.color,
             arrow.motion.arrow_location,
         )

@@ -31,16 +31,14 @@ if TYPE_CHECKING:
 class Prop(GraphicalObject):
     def __init__(self, scene, prop_dict: Dict, motion: "Motion") -> None:
         self.motion = motion
-        prop_type = str(prop_dict[PROP_TYPE])
-        prop_type = prop_type[0].lower() + prop_type[1:]
-        self.svg_file = self.get_svg_file(prop_type)
+        self.prop_type = prop_dict[PROP_TYPE]
+        self.svg_file = self.get_svg_file(self.prop_type)
         super().__init__(scene)
         self.setup_svg_renderer(self.svg_file)
         self._setup_attributes(scene, prop_dict)
 
     def _setup_attributes(self, scene, attributes: "PropAttributesDicts") -> None:
         self.scene: Pictograph | PropBox = scene
-        self.prop_type: PropTypes = None
 
         self.drag_offset = QPointF(0, 0)
         self.previous_location: Locations = None
@@ -66,10 +64,10 @@ class Prop(GraphicalObject):
             self.ghost_prop.update_appearance()
             self.scene.addItem(self.ghost_prop)
             self.ghost_prop.arrow = self.arrow
-            self.scene.props.append(self.ghost_prop)
-            self.scene.props.remove(self)
+            self.scene.props[self.ghost_prop.color] = self.ghost_prop
+            self.scene.props[self.color] = self.ghost_prop
             self.scene.update_pictograph()
-            self.scene.props.append(self)
+            self.scene.props[self.color] = self
             for item in self.scene.items():
                 if item != self:
                     item.setSelected(False)
@@ -92,17 +90,16 @@ class Prop(GraphicalObject):
     def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
         self.prop_location = target_arrow.motion.end_location
-        self.axis = self.update_axis(self.prop_location)
+        self.axis = self.update_axis_from_layer(self.prop_location)
         self.update_appearance()
 
     ### GETTERS ###
 
-    def update_axis(self, location) -> Axes:
+    def update_axis_from_layer(self, location) -> None:
         if self.layer == 1:
             self.axis: Axes = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
         elif self.layer == 2:
             self.axis: Axes = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
-        return self.axis
 
     def swap_orientation(self, orientation) -> None:
         if orientation == IN:
@@ -165,7 +162,7 @@ class Prop(GraphicalObject):
                 self.motion.start_location = new_location
                 self.motion.end_location = new_location
 
-            self.axis = self.update_axis(self.prop_location)
+            self.axis = self.update_axis_from_layer(self.prop_location)
             self.update_appearance()
             self.update_arrow_location(new_location)
 
@@ -308,7 +305,7 @@ class Prop(GraphicalObject):
         ) = self.pictograph.get_closest_hand_point(event.scenePos())
 
         self.prop_location = closest_hand_point
-        self.axis = self.update_axis(self.prop_location)
+        self.axis = self.update_axis_from_layer(self.prop_location)
         self.update_appearance()
         self.setPos(closest_hand_point_coord)
 

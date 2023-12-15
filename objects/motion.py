@@ -74,7 +74,7 @@ class Motion:
         self.prop.orientation = self.end_orientation
         self.prop.layer = self.end_layer
         self.prop.prop_location = self.end_location
-        self.prop.axis: Axes = self.prop.update_axis(self.prop.prop_location)
+        self.prop.axis: Axes = self.prop.update_axis_from_layer(self.prop.prop_location)
         self.prop.update_rotation()
         self.prop.update_appearance()
 

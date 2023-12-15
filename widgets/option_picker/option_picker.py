@@ -212,9 +212,9 @@ class OptionPicker(QScrollArea):
     def duplicate_items(source_option: Option, target_beat: Beat) -> None:
         for item in source_option.items():
             if isinstance(item, Arrow):
-                new_item = Arrow(target_beat, item.get_attributes())
+                new_item = Arrow(target_beat, item.get_attributes(), target_beat.motions[item.color])
             elif isinstance(item, Prop):
-                new_item = Prop(target_beat, item.get_attributes())
+                new_item = Prop(target_beat, item.get_attributes(), target_beat.motions[item.color])
             else:
                 continue
             new_item.setPos(item.pos())
@@ -231,7 +231,7 @@ class OptionPicker(QScrollArea):
                 new_item.motion = target_beat.motions[new_item.color]
                 new_item.ghost_prop = target_beat.ghost_props[new_item.color]
                 new_item.ghost_prop.motion = new_item.motion
-                new_item.arrow = target_beat.get_arrow_by_color(new_item.color)
+                new_item.arrow = target_beat.arrows[new_item.color]
 
     def resize_option_views(self):
         for option in self.options:

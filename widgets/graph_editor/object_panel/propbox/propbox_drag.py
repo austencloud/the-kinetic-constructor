@@ -64,7 +64,11 @@ class PropBoxDrag(ObjectBoxDrag):
         self.ghost_prop.target_prop = target_prop
 
     def place_prop_on_pictograph(self) -> None:
-        self.placed_prop = Prop(self.pictograph, self.ghost_prop.get_attributes())
+        self.placed_prop = Prop(
+            self.pictograph,
+            self.ghost_prop.get_attributes(),
+            self.pictograph.motions[self.color],
+        )
 
         self.placed_prop.arrow = self.ghost_prop.arrow
         self.placed_prop.arrow.motion.arrow_location = self.prop_location
@@ -84,17 +88,16 @@ class PropBoxDrag(ObjectBoxDrag):
             START_LAYER: self.layer,
         }
 
-        self.pictograph.add_motion(motion_dict)
+        self.pictograph.motions[self.color].setup_attributes(motion_dict)
         self.placed_prop.motion.arrow_location = self.prop_location
         self.placed_prop.motion.start_location = self.prop_location
         self.placed_prop.motion.end_location = self.prop_location
 
         self.ghost_prop.arrow.prop = self.placed_prop
         self.pictograph.addItem(self.placed_prop)
-        self.pictograph.props.append(self.placed_prop)
+        self.pictograph.props[self.color] = self.placed_prop
 
         self.pictograph.removeItem(self.ghost_prop)
-        self.pictograph.props.remove(self.ghost_prop)
         self.pictograph.update_pictograph()
         self.pictograph.clearSelection()
 
@@ -128,14 +131,9 @@ class PropBoxDrag(ObjectBoxDrag):
         self.preview.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         if self.ghost_prop not in self.pictograph.props:
-            self.pictograph.props.append(self.ghost_prop)
+            self.pictograph.props[self.ghost_prop.color] = self.ghost_prop
         if self.ghost_prop not in self.pictograph.items():
             self.pictograph.addItem(self.ghost_prop)
-
-        # remove the old motion from the pcitograph before adding the new one
-        for motion in self.pictograph.motions[:]:
-            if motion.color == self.color:
-                self.pictograph.motions.remove(motion)
 
         motion_dict = {
             COLOR: self.color,
@@ -150,7 +148,7 @@ class PropBoxDrag(ObjectBoxDrag):
             START_LAYER: self.layer,
         }
 
-        self.pictograph.add_motion(motion_dict)
+        self.pictograph.motions[self.color].setup_attributes(motion_dict)
 
         self.pictograph.update_pictograph()
         self.move_to_cursor(self.propbox.view.mapFromGlobal(self.pos()))
@@ -161,7 +159,7 @@ class PropBoxDrag(ObjectBoxDrag):
         self.ghost_prop.prop_location = new_location
         self.ghost_prop.orientation = self.orientation
         self.ghost_prop.layer = self.layer
-
+        self.ghost_prop.motion.prop = self.ghost_prop
         self.ghost_prop.motion.arrow_location = self.prop_location
         self.ghost_prop.motion.start_location = self.prop_location
         self.ghost_prop.motion.end_location = self.prop_location
@@ -174,7 +172,8 @@ class PropBoxDrag(ObjectBoxDrag):
         ghost_svg = self.ghost_prop.get_svg_file(self.prop_type)
         self.ghost_prop.update_svg(ghost_svg)
         self.ghost_prop.update_color()
-        self.ghost_prop.update_axis(new_location)
+
+        self.ghost_prop.motion.update_prop_orientation_and_layer()
         self.ghost_prop.update_rotation()
 
     ### EVENT HANDLERS ###
@@ -199,7 +198,7 @@ class PropBoxDrag(ObjectBoxDrag):
                         START_ORIENTATION: self.orientation,
                         START_LAYER: self.layer,
                     }
-                    self.pictograph.add_motion(motion_dict)
+                    self.pictograph.motions[self.color].setup_attributes(motion_dict)
 
                 pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
@@ -286,23 +285,19 @@ class PropBoxDrag(ObjectBoxDrag):
         static_arrow_dict = {
             COLOR: self.color,
             MOTION_TYPE: STATIC,
-            ROTATION_DIRECTION: "None",
-            ARROW_LOCATION: self.prop_location,
-            START_LOCATION: self.prop_location,
-            END_LOCATION: self.prop_location,
             TURNS: 0,
         }
 
-        self.static_arrow = Arrow(self.pictograph, static_arrow_dict)
-        for arrow in self.pictograph.arrows[:]:
+        self.static_arrow = Arrow(
+            self.pictograph, static_arrow_dict, self.pictograph.motions[self.color]
+        )
+        for arrow in self.pictograph.arrows.values():
             if arrow.color == self.color:
                 self.pictograph.removeItem(arrow)
-                self.pictograph.arrows.remove(arrow)
         self.pictograph.addItem(self.static_arrow)
-        self.pictograph.arrows.append(self.static_arrow)
+        self.pictograph.arrows[self.color] = self.static_arrow
         self.static_arrow.prop = self.ghost_prop
         self.static_arrow.prop.arrow = self.static_arrow
-
         if self.static_arrow not in self.pictograph.items():
             self.pictograph.addItem(self.static_arrow)
 

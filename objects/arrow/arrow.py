@@ -100,21 +100,18 @@ class Arrow(GraphicalObject):
             if self.prop:
                 self._update_prop_on_click()
 
-        self.scene.arrows.remove(self)
         self.scene.update_pictograph()
-        self.scene.arrows.append(self)
 
         for item in self.scene.items():
             if item != self:
                 item.setSelected(False)
-        # Notify the pictograph scene about the selection change
         if self.scene:
             self.scene.update_attr_panel()
 
     def _update_prop_on_click(self) -> None:
         self.prop.color = self.color
         self.prop.prop_location = self.motion.end_location
-        self.prop.axis = self.prop.update_axis(self.motion.end_location)
+        self.prop.axis = self.prop.update_axis_from_layer(self.motion.end_location)
 
     def _update_ghost_on_click(self) -> None:
         from widgets.graph_editor.pictograph.pictograph import Pictograph
@@ -128,12 +125,11 @@ class Arrow(GraphicalObject):
             self.ghost_arrow.update_appearance()
             self.ghost_arrow.transform = self.transform
             self.scene.addItem(self.ghost_arrow)
-            self.scene.arrows.append(self.ghost_arrow)
+            self.scene.arrows[self.ghost_arrow.color] = self.ghost_arrow
 
     def update_location(self, new_pos: QPointF) -> None:
         new_location = self.scene.get_closest_layer2_point(new_pos)[0]
 
-        self.arrow_location = new_location
         self.motion.arrow_location = new_location
 
         self.set_start_end_locations()
@@ -147,13 +143,12 @@ class Arrow(GraphicalObject):
         self.motion.arrow_location = new_location
         self.update_appearance()
 
-        self.scene.arrows.remove(self)
+        self.scene.arrows[self.color] = self.ghost_arrow
         for prop in self.scene.props.values():
             if prop.color == self.color:
                 prop.arrow = self
                 self.prop = prop
         self.scene.update_pictograph()
-        self.scene.arrows.append(self)
 
     def set_drag_pos(self, new_pos: QPointF) -> None:
         self.setPos(new_pos)
@@ -162,8 +157,8 @@ class Arrow(GraphicalObject):
         self.scene.removeItem(self.ghost_arrow)
         if self.ghost_arrow in self.scene.arrows:
             self.scene.arrows.remove(self.ghost_arrow)
-
         self.ghost_arrow.prop = None
+        self.scene.arrows[self.color] = self
         self.scene.update_pictograph()
 
     ### UPDATERS ###
@@ -183,7 +178,7 @@ class Arrow(GraphicalObject):
             self.motion.start_location,
             self.motion.end_location,
         ) = get_start_end_locations(
-            self.motion_type, self.rotation_direction, self.arrow_location
+            self.motion_type, self.motion.rotation_direction, self.motion.arrow_location
         )
         self.motion.start_location = self.motion.start_location
         self.motion.end_location = self.motion.end_location

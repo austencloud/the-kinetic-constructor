@@ -59,144 +59,111 @@ class PropBox(ObjectBox):
 
     def populate_props(self) -> None:
         self.clear_props()
+        initial_prop_attributes: List[Dict] = self.get_initial_prop_attributes()
+
+        # Mapping prop types to their respective classes
+        prop_classes: Dict[str, type] = {
+            STAFF: Staff,
+            BIGSTAFF: BigStaff,
+            CLUB: Club,
+            BUUGENG: Buugeng,
+            FAN: Fan,
+            TRIAD: Triad,
+            MINIHOOP: MiniHoop,
+            DOUBLESTAR: DoubleStar,
+            BIGHOOP: BigHoop,
+            BIGDOUBLESTAR: BigDoubleStar,
+            QUIAD: Quiad,
+            SWORD: Sword,
+            GUITAR: Guitar,
+            UKULELE: Ukulele,
+            CHICKEN: Chicken,
+        }
+
+        for attributes in initial_prop_attributes:
+            prop_class = prop_classes.get(self.prop_type)
+            if prop_class:
+                prop = prop_class(
+                    self.pictograph,
+                    attributes,
+                    self.pictograph.motions[attributes[COLOR]],
+                )
+                self.setup_prop(prop)
+                self.props.append(prop)
+            else:
+                raise ValueError("Invalid prop type")
+
+    def setup_prop(self, prop: Prop) -> None:
+        prop.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
+        prop.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, True)
+        self.set_prop_position(prop)
+        self.addItem(prop)
+
+    def get_initial_prop_attributes(self) -> List[Dict]:
         if self.grid.grid_mode == DIAMOND:
-            initial_prop_attributes: List[Dict] = [
+            return [
                 {
                     COLOR: RED,
+                    PROP_TYPE: self.prop_type,
                     PROP_LOCATION: NORTH,
                     LAYER: 1,
                     ORIENTATION: IN,
                 },
                 {
                     COLOR: BLUE,
+                    PROP_TYPE: self.prop_type,
                     PROP_LOCATION: EAST,
                     LAYER: 1,
                     ORIENTATION: IN,
                 },
                 {
                     COLOR: RED,
+                    PROP_TYPE: self.prop_type,
                     PROP_LOCATION: SOUTH,
                     LAYER: 1,
                     ORIENTATION: IN,
                 },
                 {
                     COLOR: BLUE,
+                    PROP_TYPE: self.prop_type,
                     PROP_LOCATION: WEST,
                     LAYER: 1,
                     ORIENTATION: IN,
                 },
             ]
         elif self.grid.grid_mode == BOX:
-            initial_prop_attributes = [
-                {COLOR: RED, PROP_LOCATION: NORTHEAST, LAYER: 1, ORIENTATION: IN},
-                {COLOR: BLUE, PROP_LOCATION: SOUTHEAST, LAYER: 1, ORIENTATION: IN},
-                {COLOR: RED, PROP_LOCATION: SOUTHWEST, LAYER: 1, ORIENTATION: IN},
-                {COLOR: BLUE, PROP_LOCATION: NORTHWEST, LAYER: 1, ORIENTATION: IN},
+            return [
+                {
+                    COLOR: RED,
+                    PROP_TYPE: self.prop_type,
+                    PROP_LOCATION: NORTHEAST,
+                    LAYER: 1,
+                    ORIENTATION: IN,
+                },
+                {
+                    COLOR: BLUE,
+                    PROP_TYPE: self.prop_type,
+                    PROP_LOCATION: SOUTHEAST,
+                    LAYER: 1,
+                    ORIENTATION: IN,
+                },
+                {
+                    COLOR: RED,
+                    PROP_TYPE: self.prop_type,
+                    PROP_LOCATION: SOUTHWEST,
+                    LAYER: 1,
+                    ORIENTATION: IN,
+                },
+                {
+                    COLOR: BLUE,
+                    PROP_TYPE: self.prop_type,
+                    PROP_LOCATION: NORTHWEST,
+                    LAYER: 1,
+                    ORIENTATION: IN,
+                },
             ]
-
-        for attributes in initial_prop_attributes:
-            if self.prop_type == STAFF:
-                prop = Staff(
-                    self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
-                )
-            elif self.prop_type == BIGSTAFF:
-                prop = BigStaff(
-                    self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
-                )
-            elif self.prop_type == CLUB:
-                prop = Club(
-                    self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
-                )
-            elif self.prop_type == BUUGENG:
-                prop = Buugeng(
-                    self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
-                )
-            elif self.prop_type == FAN:
-                prop = Fan(
-                    self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
-                )
-            elif self.prop_type == TRIAD:
-                prop = Triad(
-                    self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
-                )
-            elif self.prop_type == MINIHOOP:
-                prop = MiniHoop(
-                    self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
-                )
-            elif self.prop_type == DOUBLESTAR:
-                prop = DoubleStar(
-                    self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
-                )
-            elif self.prop_type == BIGHOOP:
-                prop = BigHoop(
-                    self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
-                )
-            elif self.prop_type == BIGDOUBLESTAR:
-                prop = BigDoubleStar(
-                    self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
-                )
-            elif self.prop_type == QUIAD:
-                prop = Quiad(
-                    self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
-                )
-            elif self.prop_type == SWORD:
-                prop = Sword(
-                    self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
-                )
-            elif self.prop_type == GUITAR:
-                prop = Guitar(
-                    self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
-                )
-            elif self.prop_type == UKULELE:
-                prop = Ukulele(
-                    self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
-                )
-            elif self.prop_type == CHICKEN:
-                prop = Chicken(
-                    self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
-                )
-            else:
-                raise ValueError("Invalid prop type")
-
-            prop.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
-            prop.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, True)
-            self.set_prop_position(prop)
-            self.addItem(prop)
-            self.props.append(prop)
-
-        for prop in self.props:
-            prop.update_appearance()
-            prop.is_dim(True)
+        else:
+            raise ValueError("Invalid grid mode")
 
     def init_combobox(self) -> None:
         self.prop_type_combobox = QComboBox(self.view)

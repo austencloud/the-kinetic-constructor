@@ -142,7 +142,7 @@ class Pictograph(QGraphicsScene):
         red_position = None
         blue_position = None
 
-        for arrow in self.arrows:
+        for arrow in self.arrows.values():
             center = arrow.pos() + arrow.boundingRect().center()
             if arrow.color == RED:
                 red_position = center
@@ -252,9 +252,9 @@ class Pictograph(QGraphicsScene):
         self.update_pictograph()
 
     def clear_selections(self) -> None:
-        for arrow in self.arrows:
+        for arrow in self.arrows.values():
             arrow.setSelected(False)
-        for prop in self.props:
+        for prop in self.props.values():
             prop.setSelected(False)
         self.dragged_prop = None
         self.dragged_arrow = None
@@ -311,12 +311,12 @@ class Pictograph(QGraphicsScene):
                     ghost_prop.update_prop_type(prop.prop_type)
 
         for ghost_arrow in new_scene.ghost_arrows.values():
-            for motion in new_scene.motions:
+            for motion in new_scene.motions.values():
                 if ghost_arrow.color == motion.color:
                     ghost_arrow.motion = motion
 
         for ghost_prop in new_scene.ghost_props.values():
-            for motion in new_scene.motions:
+            for motion in new_scene.motions.values():
                 if ghost_prop.color == motion.color:
                     ghost_prop.motion = motion
 
