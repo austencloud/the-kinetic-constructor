@@ -1,0 +1,10 @@
+{
+    "color": "red",
+    "motion_type": "pro",
+    "rotation_direction": "ccw",
+    "start_location": "w",
+    "end_location": "s",
+    "turns": 0,
+    "start_orientation": "in",
+    "end_orientation": "in"
+}

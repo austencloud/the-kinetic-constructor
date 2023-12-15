@@ -67,7 +67,7 @@ class PropPositioner:
     def __init__(self, scene: "Pictograph") -> None:
         self.scene = scene
         self.view = scene.view
-        self.letters = scene.letters
+        self.letters = scene.main_widget.letters
 
     def update_prop_positions(self) -> None:
         # Dictionary to store the count of each prop type

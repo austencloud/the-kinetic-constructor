@@ -79,7 +79,6 @@ class Pictograph(QGraphicsScene):
         self.current_letter: str = None
 
     def setup_components(self, main_widget: "MainWidget") -> None:
-        self.letters = main_widget.letters
         self.generator: PictographGenerator = None
         self.event_handler = PictographEventHandler(self)
 

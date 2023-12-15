@@ -1,0 +1,10 @@
+{
+    "color": "blue",
+    "motion_type": "pro",
+    "rotation_direction": "ccw",
+    "start_location": "w",
+    "end_location": "s",
+    "turns": 0,
+    "start_orientation": "out",
+    "end_orientation": "out"
+}

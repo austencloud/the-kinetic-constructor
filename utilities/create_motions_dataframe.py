@@ -1,0 +1,58 @@
+import json
+import pandas as pd
+
+# Load preprocessed data
+with open("preprocessed.json", encoding='utf-8') as f:
+    data = json.load(f)
+
+# Initialize a list to store comprehensive motion data
+comprehensive_motion_data = []
+
+# Process each entry in the preprocessed data
+for position_pair, letters_info in data.items():
+    start_position, end_position = position_pair.split('_')  # Extract start and end positions from the key
+    for letter_data in letters_info:
+        letter = letter_data[0]  # The letter representing the motion combination
+        motion_pairs = letter_data[1]  # The list containing the motion pairs and optimal locations
+        
+        # Check if the motion pair has the expected structure
+        if len(motion_pairs) >= 2 and all(isinstance(item, dict) for item in motion_pairs[:2]):
+            blue_motion = motion_pairs[0]
+            red_motion = motion_pairs[1]
+            optimal_locations = motion_pairs[2] if len(motion_pairs) == 3 else {}
+
+            # Create a dictionary entry for this motion combination
+            motion_data_entry = {
+                'letter': letter,
+                'start_position': start_position,
+                'end_position': end_position,
+                'blue_color': blue_motion['color'],
+                'blue_motion_type': blue_motion['motion_type'],
+                'blue_rotation_direction': blue_motion['rotation_direction'],
+                'blue_start_location': blue_motion['start_location'],
+                'blue_end_location': blue_motion['end_location'],
+                'blue_turns': blue_motion['turns'],
+                'red_color': red_motion['color'],
+                'red_motion_type': red_motion['motion_type'],
+                'red_rotation_direction': red_motion['rotation_direction'],
+                'red_start_location': red_motion['start_location'],
+                'red_end_location': red_motion['end_location'],
+                'red_turns': red_motion['turns'],
+                'blue_optimal_location_x': optimal_locations.get('optimal_blue_location', {}).get('x', None),
+                'blue_optimal_location_y': optimal_locations.get('optimal_blue_location', {}).get('y', None),
+                'red_optimal_location_x': optimal_locations.get('optimal_red_location', {}).get('x', None),
+                'red_optimal_location_y': optimal_locations.get('optimal_red_location', {}).get('y', None),
+            }
+            
+            # Append this entry to the comprehensive data list
+            comprehensive_motion_data.append(motion_data_entry)
+
+# Convert the list to a DataFrame
+comprehensive_df = pd.DataFrame(comprehensive_motion_data)
+
+# Sort the DataFrame by letter and start_position
+comprehensive_df.sort_values(by=['letter', 'start_position'], inplace=True)
+
+# Save the DataFrame to a CSV file
+comprehensive_df.to_csv('comprehensive_motions_dataframe.csv', index=False)
+print("DataFrame created and saved.")

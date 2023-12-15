@@ -1,46 +1,84 @@
 import json
-import pandas as pd
 
 # Load JSON data
-with open("preprocessed.json") as f:
+with open("preprocessed.json", encoding='utf-8') as f:
     data = json.load(f)
 
-# Helper function to flatten the nested JSON structure
-def flatten_json(y):
-    out = {}
+# Function to check if a dictionary is a motion dictionary
+def is_motion_dict(d):
+    return all(key in d for key in ['color', 'motion_type', 'arrow_location', 'start_location', 'end_location', 'turns'])
 
-    def flatten(x, name=""):
-        if type(x) is dict:
-            for a in x:
-                flatten(x[a], name + a + "_")
-        elif type(x) is list:
-            for i, a in enumerate(x):
-                flatten(a, name + str(i) + "_")
-        else:
-            out[name[:-1]] = x
+# Function to generate motion name
+def generate_motion_name(motion, start_orientation):
+    end_orientation = 'in' if motion['motion_type'] == 'pro' else 'out'
+    if start_orientation == 'out':
+        end_orientation = 'out' if motion['motion_type'] == 'pro' else 'in'
+    return f"{motion['color']}_{motion['motion_type']}_{motion['start_location']}_{motion['end_location']}_{motion['turns']}_{start_orientation}_{end_orientation}"
 
-    flatten(y)
-    return out
+# Extract all motion dictionaries
+all_motions = []
+for key in data:
+    for combo in data[key]:
+        all_motions.extend([motion for motion in combo[1] if is_motion_dict(motion)])  # Filter out non-motion dictionaries
 
-# Flatten each entry in the JSON file
-flat_list = [flatten_json(entry) for key in data for entry in data[key]]
+# Identify unique motions and assign variable names
+unique_motions_in = {}
+unique_motions_out = {}
+for motion in all_motions:
+    # Create a variable name based on the motion attributes for starting in orientation
+    motion_name_in = generate_motion_name(motion, 'in')
+    # Create a variable name based on the motion attributes for starting out orientation
+    motion_name_out = generate_motion_name(motion, 'out')
+    # Add to unique motions if not already present
+    if motion_name_in not in unique_motions_in:
+        unique_motions_in[motion_name_in] = motion
+    if motion_name_out not in unique_motions_out:
+        unique_motions_out[motion_name_out] = motion
 
-# Convert to DataFrame
-df = pd.DataFrame(flat_list)
+# Save the unique motions to JSON files with UTF-8 encoding
+with open("unique_motions_in.json", 'w', encoding='utf-8') as f:
+    json.dump(unique_motions_in, f, indent=4, ensure_ascii=False)
+with open("unique_motions_out.json", 'w', encoding='utf-8') as f:
+    json.dump(unique_motions_out, f, indent=4, ensure_ascii=False)
 
-# Print the first few rows to see the dataframe structure
-print(df.head())
+# Now, let's create the new structure for the combinations with in orientation
+new_combinations_in = {}
+for key in data:
+    new_combinations_in[key] = []
+    for letter, combo in data[key]:
+        new_combo = []
+        for motion in combo:
+            if is_motion_dict(motion):
+                motion_name = generate_motion_name(motion, 'in')
+                new_combo.append(motion_name)
+        new_combinations_in[key].append((letter, tuple(new_combo)))
 
-# Assuming that all the relevant attributes are prefixed by a common index (like '0_' or '1_'),
-# we can filter the columns to include only those that contain motion attributes.
-# This will dynamically create the subset list for drop_duplicates.
-motion_attribute_columns = [col for col in df.columns if 'color' in col or 'motion_type' in col or 'rotation_direction' in col or 'arrow_location' in col or 'start_location' in col or 'end_location' in col or 'turns' in col]
+# Now, let's create the new structure for the combinations with out orientation
+new_combinations_out = {}
+for key in data:
+    new_combinations_out[key] = []
+    for letter, combo in data[key]:
+        new_combo = []
+        for motion in combo:
+            if is_motion_dict(motion):
+                motion_name = generate_motion_name(motion, 'out')
+                new_combo.append(motion_name)
+        new_combinations_out[key].append((letter, tuple(new_combo)))
 
-# Now drop duplicates based on the motion attributes
-df_unique = df.drop_duplicates(subset=motion_attribute_columns).reset_index(drop=True)
+# Simplify the structure of new_combinations
+for key, combos in new_combinations_out.items():
+    simplified_combos = {combo[0]: combo[1] for combo in combos}
+    new_combinations_out[key] = simplified_combos
 
-# Save the unique motions to a new JSON file
-df_unique.to_json("unique_motions.json", orient="records", indent=4)
+# Save the simplified combinations to JSON file with UTF-8 encoding
+with open("0_shift_out.json", 'w', encoding='utf-8') as f:
+    json.dump(new_combinations_out, f, indent=4, ensure_ascii=False)
+    
+# Simplify the structure of new_combinations
+for key, combos in new_combinations_in.items():
+    simplified_combos = {combo[0]: combo[1] for combo in combos}
+    new_combinations_in[key] = simplified_combos
 
-# Print the unique motions DataFrame
-print(df_unique)
+# Save the simplified combinations to JSON file with UTF-8 encoding
+with open("0_shift_in.json", 'w', encoding='utf-8') as f:
+    json.dump(new_combinations_in, f, indent=4, ensure_ascii=False)

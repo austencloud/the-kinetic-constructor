@@ -13,7 +13,7 @@ from utilities.TypeChecking.TypeChecking import MotionAttributes, OptimalLocatio
 
 class ArrowPositioner:
     def __init__(self, pictograph: "Pictograph") -> None:
-        self.letters = pictograph.letters
+        self.letters = pictograph.main_widget.letters
         self.pictograph = pictograph
 
     def update_arrow_positions(self) -> None:

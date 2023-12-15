@@ -1,0 +1,10 @@
+{
+    "color": "blue",
+    "motion_type": "static",
+    "rotation_direction": "None",
+    "start_location": "s",
+    "end_location": "s",
+    "turns": 0,
+    "start_orientation": "in",
+    "end_orientation": "in"
+}
