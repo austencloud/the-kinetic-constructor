@@ -1,3 +1,4 @@
+from re import S
 from typing import Dict
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
@@ -273,16 +274,18 @@ class Pictograph(QGraphicsScene):
         self,
         arrow: Arrow,
         prop: Prop,
-        motion_type: MotionTypes,
+        motion_dict: MotionAttributesDicts,
         start_orientation: Orientations,
         start_layer: Layers,
     ) -> None:
         motion_attributes: MotionAttributesDicts = {
             COLOR: arrow.color,
-            MOTION_TYPE: motion_type,
+            MOTION_TYPE: motion_dict[MOTION_TYPE],
             ROTATION_DIRECTION: arrow.rotation_direction,
             ARROW_LOCATION: arrow.arrow_location,
             TURNS: arrow.turns,
+            START_LOCATION: motion_dict[START_LOCATION],
+            END_LOCATION: motion_dict[END_LOCATION],
             START_ORIENTATION: start_orientation,
             START_LAYER: start_layer,
         }

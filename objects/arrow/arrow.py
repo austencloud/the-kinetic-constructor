@@ -59,7 +59,6 @@ class Arrow(GraphicalObject):
         self.drag_offset = QPointF(0, 0)
         self.prop: Prop = None
         self.motion: Motion = None
-        self.arrow_location: Locations = attributes[ARROW_LOCATION]
         self.is_svg_mirrored: bool = False
 
         self.center_x = self.boundingRect().width() / 2

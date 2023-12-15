@@ -40,23 +40,37 @@ class Motion:
         self.motion_type: MotionTypes = attributes[MOTION_TYPE]
         self.turns: Turns = attributes[TURNS]
         self.rotation_direction: RotationDirections = attributes[ROTATION_DIRECTION]
-        self.arrow_location: Locations = attributes[ARROW_LOCATION]
-
-        if self.motion_type in [PRO, ANTI]:
-            self.start_location, self.end_location = get_start_end_locations(
-                self.motion_type, self.rotation_direction, self.arrow_location
-            )
-        elif self.motion_type in [STATIC]:
-            self.start_location = self.arrow_location
-            self.end_location = self.arrow_location
-
+        self.start_location: Locations = attributes[START_LOCATION]
+        self.end_location: Locations = attributes[END_LOCATION]
         self.start_orientation: Orientations = attributes[START_ORIENTATION]
-        self.end_orientation: Orientations = self.get_end_orientation()
-
         self.start_layer: Layers = attributes[START_LAYER]
+        
+        self.arrow_location = self.determine_arrow_location(
+            self.start_location, self.end_location
+        )
+        self.end_orientation: Orientations = self.get_end_orientation()
         self.end_layer: Layers = self.get_end_layer()
 
         self.update_prop_orientation_and_layer()
+
+    def determine_arrow_location(self, start_location: str, end_location: str) -> str:
+        if start_location == end_location:
+            return start_location
+
+        direction_map = {
+            ("n", "e"): "ne",
+            ("e", "s"): "se",
+            ("s", "w"): "sw",
+            ("w", "n"): "nw",
+            ("n", "w"): "nw",
+            ("w", "s"): "sw",
+            ("s", "e"): "se",
+            ("e", "n"): "ne",
+        }
+
+        return direction_map.get((start_location, end_location)) or direction_map.get(
+            (end_location, start_location)
+        )
 
     def update_prop_orientation_and_layer(self) -> None:
         self.prop.orientation = self.end_orientation

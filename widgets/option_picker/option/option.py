@@ -221,33 +221,7 @@ class Option(Pictograph):
         self.dragged_prop = None
         self.dragged_arrow = None
 
-    def add_motion(
-        self,
-        arrow: Arrow,
-        prop: Prop,
-        motion_type: MotionTypes,
-        start_orientation: Orientations,
-        start_layer: Layers,
-    ) -> None:
-        motion_attributes: MotionAttributesDicts = {
-            COLOR: arrow.color,
-            MOTION_TYPE: motion_type,
-            ROTATION_DIRECTION: arrow.rotation_direction,
-            ARROW_LOCATION: arrow.arrow_location,
-            TURNS: arrow.turns,
-            START_ORIENTATION: start_orientation,
-            START_LAYER: start_layer,
-        }
 
-        motion = Motion(self, arrow, prop, motion_attributes)
-        arrow.motion = motion
-        prop.motion = motion
-
-        for m in self.motions:
-            if m.color == motion.color:
-                self.motions.remove(m)
-
-        self.motions.append(motion)
 
     def copy_scene(self) -> QGraphicsScene:
         from widgets.sequence_widget.beat_frame.beat import Beat

@@ -8,6 +8,7 @@ from objects.arrow.arrow import Arrow
 from objects.prop import Prop
 from widgets.option_picker.option.option import Option
 from widgets.sequence_widget.beat_frame.beat import Beat
+import pandas as pd
 
 if TYPE_CHECKING:
     from widgets.option_picker.option_picker_widget import OptionPickerWidget
@@ -25,10 +26,11 @@ class OptionPicker(QScrollArea):
         self.option_picker_widget = option_picker_widget
         self.spacing = 10
         self.options: List[Option] = []
+        self.pictographs = self.load_and_sort_data("LetterDictionary.csv")
+
         self.initialize_ui()
         self.viewport().installEventFilter(self)
 
-        self.pictographs = self.load_json_file("preprocessed.json")
         self.show_initial_selection()
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
@@ -40,21 +42,35 @@ class OptionPicker(QScrollArea):
         self.container.setContentsMargins(10, 10, 10, 10)  # Set content margins
         self.setWidget(self.container)
 
-    @staticmethod
-    def load_json_file(file_path: str) -> Dict:
-        with open(file_path, "r") as file:
-            return json.load(file)
+    def load_and_sort_data(self, file_path: str) -> pd.DataFrame:
+        df = pd.read_csv(file_path)
+        df.set_index(["start_position", "end_position"], inplace=True)
+        df.sort_index(inplace=True)
+        return df
 
     def show_initial_selection(self) -> None:
         self.clear_layout()
-        starting_positions = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
-        for i, position_key in enumerate(starting_positions):
-            self.add_option_to_layout(position_key, is_initial=True, row=0, col=i)
+        starting_keys = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
+        for i, full_key in enumerate(starting_keys):
+            start_position, end_position = full_key.split("_")
+            # Accessing rows by both start and end positions
+            if (start_position, end_position) in self.pictographs.index:
+                row_data = self.pictographs.loc[(start_position, end_position)]
+                # If there are multiple entries for the same combination, take the first
+                if isinstance(row_data, pd.DataFrame):
+                    row_data = row_data.iloc[0]
+                attributes_list = [
+                    self.construct_arrow_attributes(row_data, "blue"),
+                    self.construct_arrow_attributes(row_data, "red"),
+                ]
+                self.add_option_to_layout(
+                    attributes_list, is_initial=True, row=0, col=i
+                )
 
     def add_option_to_layout(
-        self, position_key: str, is_initial: bool, row: int, col: int
+        self, attributes_list: list, is_initial: bool, row: int, col: int
     ) -> None:
-        option = self.create_option(self.pictographs[position_key][0][1][:2])
+        option = self.create_option(attributes_list)
         event_handler = (
             self.get_initial_handler(option)
             if is_initial
@@ -81,31 +97,39 @@ class OptionPicker(QScrollArea):
             selected_option.get_motion_by_color(BLUE),
         )
         self.populate_options(specific_positions["end_position"])
-
+        
     def populate_options(self, end_position: str) -> None:
         self.options = []
         self.clear_layout()
         self.option_picker_layout.setSpacing(self.spacing)
-        for row, (key, _) in enumerate(
-            filter(
-                lambda item: item[0].startswith(end_position), self.pictographs.items()
-            )
+
+        # Use .xs to get a cross-section of the data where the first level of the index (start_position) matches the desired value
+        filtered_data = self.pictographs.xs(
+            end_position, level="start_position", drop_level=False
+        )
+
+        for row, ((start_pos, end_pos), row_data) in enumerate(
+            filtered_data.iterrows()
         ):
+            attributes_list = [
+                self.construct_arrow_attributes(row_data, "blue"),
+                self.construct_arrow_attributes(row_data, "red"),
+            ]
             self.add_option_to_layout(
-                key,
+                attributes_list,
                 is_initial=False,
                 row=row // self.COLUMN_COUNT,
                 col=row % self.COLUMN_COUNT,
             )
         self.resize_option_views()
 
-    def create_option(self, attributes_list: list) -> "Option":
+    def create_option(self, motion_dict_list: list) -> "Option":
         option = Option(self.main_widget, self)
         option.setSceneRect(0, 0, 750, 900)
-        for attribute in attributes_list:
-            arrow = Arrow(option, attribute)
-            prop = Prop(option, self.get_prop_attributes(attribute[COLOR]))
-            option.add_motion(arrow, prop, attribute[MOTION_TYPE], IN, 1)
+        for motion_dict in motion_dict_list:
+            arrow = Arrow(option, motion_dict)
+            prop = Prop(option, self.get_prop_attributes(motion_dict[COLOR]))
+            option.add_motion(arrow, prop, motion_dict, IN, 1)
             option.addItem(arrow)
             option.addItem(prop)
             option.arrows.append(arrow)
@@ -114,6 +138,18 @@ class OptionPicker(QScrollArea):
         self.update_option(option)
         self.options.append(option)
         return option
+
+    def construct_arrow_attributes(self, row_data, color_prefix: str) -> Dict:
+        # Ensure that the keys match the DataFrame column names exactly
+        return {
+            "color": row_data[f"{color_prefix}_color"],
+            "motion_type": row_data[f"{color_prefix}_motion_type"],
+            "rotation_direction": row_data[f"{color_prefix}_rotation_direction"],
+            "arrow_location": row_data[f"{color_prefix}_start_location"],
+            "start_location": row_data[f"{color_prefix}_start_location"],
+            "end_location": row_data[f"{color_prefix}_end_location"],
+            "turns": row_data[f"{color_prefix}_turns"],
+        }
 
     @staticmethod
     def get_prop_attributes(color: str) -> Dict:
@@ -144,6 +180,8 @@ class OptionPicker(QScrollArea):
             prop.motion.update_prop_orientation_and_layer()
             prop.update_rotation()
             prop.update_appearance()
+            prop.arrow.update_appearance()
+            arrow.arrow_location = arrow.motion.arrow_location
         option.update_pictograph()
 
     def on_option_clicked(self, option: "Option") -> None:

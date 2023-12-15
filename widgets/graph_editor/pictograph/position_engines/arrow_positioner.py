@@ -140,7 +140,7 @@ class ArrowPositioner:
 
         if self.pictograph.grid.grid_mode == DIAMOND:
             if arrow.motion_type in [PRO, ANTI, FLOAT]:
-                layer2_point = layer2_points.get(arrow.arrow_location)
+                layer2_point = layer2_points.get(arrow.motion.arrow_location)
 
                 if layer2_point is None:
                     print(
