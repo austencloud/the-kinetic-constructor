@@ -422,7 +422,7 @@ class PropPositioner:
             (
                 prop
                 for prop in self.scene.props.values()
-                if prop.arrow.color == pro_motion[COLOR]
+                if prop.color == pro_motion[COLOR]
             ),
             None,
         )

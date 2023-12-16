@@ -353,14 +353,11 @@ class Pictograph(QGraphicsScene):
         ):
             self.current_letter = self.letter_engine.get_current_letter()
             self.update_letter_item(self.current_letter)
+            self.letter_item.position_letter_item(self.letter_item)
         else:
             self.current_letter = None
-            self.update_letter_item(None)
 
     def update_letter_item(self, letter: str) -> None:
         if letter:
             self.set_letter_renderer(letter)
-        else:
-            self.letter_item.setSharedRenderer(
-                QSvgRenderer(f"{LETTER_SVG_DIR}/blank.svg")
-            )
+
