@@ -348,7 +348,7 @@ class Pictograph(QGraphicsScene):
 
     def update_letter(self) -> None:
         if all(
-            motion.rotation_direction and motion.motion_type
+            motion.motion_type
             for motion in self.motions.values()
         ):
             self.current_letter = self.letter_engine.get_current_letter()
