@@ -101,7 +101,9 @@ class Pictograph(QGraphicsScene):
         self.arrow_turns = 0
 
         self.grid: Grid = self.initializer.init_grid()
-        self.view: Union[PictographView,OptionView, BeatView] = self.initializer.init_view()
+        self.view: Union[
+            PictographView, OptionView, BeatView
+        ] = self.initializer.init_view()
         self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.locations: Dict[
             Locations, Tuple[int, int, int, int]
@@ -260,7 +262,7 @@ class Pictograph(QGraphicsScene):
         self.arrows = {}
         self.props = {}
         for motion in self.motions.values():
-            motion.reset_motion_attributes()
+            motion.clear_attributes()
         for item in self.items():
             if isinstance(item, Arrow) or isinstance(item, Prop):
                 self.removeItem(item)

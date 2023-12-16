@@ -17,7 +17,7 @@ from constants.string_constants import (
     NORTHWEST,
     PRO,
     PROP,
-    PROP_LOCATION,
+    LOCATION,
     RED,
     SOUTHEAST,
     SOUTHWEST,
@@ -242,7 +242,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
                 prop.update_attributes(
                     {
                         COLOR: self.color,
-                        PROP_LOCATION: self.end_location,
+                        LOCATION: self.end_location,
                         LAYER: 1,
                     }
                 )

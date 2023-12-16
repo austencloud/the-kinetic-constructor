@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING
-from objects.prop.prop import Prop
 from constants.string_constants import *
-
 if TYPE_CHECKING:
     from objects.motion import Motion
     from widgets.graph_editor.pictograph.pictograph import Pictograph
+    
+from objects.prop.prop import Prop
 
 
 class Staff(Prop):

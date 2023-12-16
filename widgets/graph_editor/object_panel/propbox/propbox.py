@@ -21,7 +21,9 @@ class PropBox(ObjectBox):
         self.setup_ui()
         self.populate_props()
 
-    def setup_properties(self, main_widget: "MainWidget", graph_editor: "GraphEditor") -> None:
+    def setup_properties(
+        self, main_widget: "MainWidget", graph_editor: "GraphEditor"
+    ) -> None:
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.view = PropBoxView(self, graph_editor)
@@ -40,7 +42,23 @@ class PropBox(ObjectBox):
 
     def init_combobox(self) -> None:
         self.prop_type_combobox = QComboBox(self.view)
-        prop_types = ["Staff", "BigStaff", "Club", "Buugeng", "Fan", "Triad", "MiniHoop", "Bighoop", "Doublestar", "Bigdoublestar", "Quiad", "Sword", "Guitar", "Ukulele", "Chicken"]
+        prop_types = [
+            "Staff",
+            "BigStaff",
+            "Club",
+            "Buugeng",
+            "Fan",
+            "Triad",
+            "MiniHoop",
+            "Bighoop",
+            "Doublestar",
+            "Bigdoublestar",
+            "Quiad",
+            "Sword",
+            "Guitar",
+            "Ukulele",
+            "Chicken",
+        ]
         self.prop_type_combobox.addItems(prop_types)
         self.prop_type_combobox.setCurrentText(str(self.prop_type.capitalize()))
         self.prop_type_combobox.currentTextChanged.connect(self.on_prop_type_change)
@@ -55,6 +73,24 @@ class PropBox(ObjectBox):
             self.create_and_setup_prop(prop_dict, prop_classes)
 
     def get_prop_classes(self) -> Dict[str, type]:
+        from objects.prop.prop_types import (
+            Staff,
+            BigStaff,
+            Club,
+            Buugeng,
+            Fan,
+            Triad,
+            MiniHoop,
+            DoubleStar,
+            BigHoop,
+            BigDoubleStar,
+            Quiad,
+            Sword,
+            Guitar,
+            Ukulele,
+            Chicken,
+        )
+
         return {
             STAFF: Staff,
             BIGSTAFF: BigStaff,
@@ -73,12 +109,16 @@ class PropBox(ObjectBox):
             CHICKEN: Chicken,
         }
 
-    def create_and_setup_prop(self, prop_dict: Dict, prop_classes: Dict[str, type]) -> None:
+    def create_and_setup_prop(
+        self, prop_dict: Dict, prop_classes: Dict[str, type]
+    ) -> None:
         prop_class = prop_classes.get(self.prop_type)
         if not prop_class:
             raise ValueError("Invalid prop type")
 
-        prop = prop_class(self.pictograph, prop_dict, self.pictograph.motions[prop_dict[COLOR]])
+        prop = prop_class(
+            self.pictograph, prop_dict, self.pictograph.motions[prop_dict[COLOR]]
+        )
         self.setup_prop(prop)
         self.props.append(prop)
 
@@ -98,68 +138,68 @@ class PropBox(ObjectBox):
             raise ValueError("Invalid grid mode")
 
     def get_diamond_mode_attributes(self) -> List[Dict]:
-            return [
-                {
-                    COLOR: RED,
-                    PROP_TYPE: self.prop_type,
-                    PROP_LOCATION: NORTH,
-                    LAYER: 1,
-                    ORIENTATION: IN,
-                },
-                {
-                    COLOR: BLUE,
-                    PROP_TYPE: self.prop_type,
-                    PROP_LOCATION: EAST,
-                    LAYER: 1,
-                    ORIENTATION: IN,
-                },
-                {
-                    COLOR: RED,
-                    PROP_TYPE: self.prop_type,
-                    PROP_LOCATION: SOUTH,
-                    LAYER: 1,
-                    ORIENTATION: IN,
-                },
-                {
-                    COLOR: BLUE,
-                    PROP_TYPE: self.prop_type,
-                    PROP_LOCATION: WEST,
-                    LAYER: 1,
-                    ORIENTATION: IN,
-                },
-            ]
+        return [
+            {
+                COLOR: RED,
+                PROP_TYPE: self.prop_type,
+                LOCATION: NORTH,
+                LAYER: 1,
+                ORIENTATION: IN,
+            },
+            {
+                COLOR: BLUE,
+                PROP_TYPE: self.prop_type,
+                LOCATION: EAST,
+                LAYER: 1,
+                ORIENTATION: IN,
+            },
+            {
+                COLOR: RED,
+                PROP_TYPE: self.prop_type,
+                LOCATION: SOUTH,
+                LAYER: 1,
+                ORIENTATION: IN,
+            },
+            {
+                COLOR: BLUE,
+                PROP_TYPE: self.prop_type,
+                LOCATION: WEST,
+                LAYER: 1,
+                ORIENTATION: IN,
+            },
+        ]
 
     def get_box_mode_attributes(self) -> List[Dict]:
-            return [
-                {
-                    COLOR: RED,
-                    PROP_TYPE: self.prop_type,
-                    PROP_LOCATION: NORTHEAST,
-                    LAYER: 1,
-                    ORIENTATION: IN,
-                },
-                {
-                    COLOR: BLUE,
-                    PROP_TYPE: self.prop_type,
-                    PROP_LOCATION: SOUTHEAST,
-                    LAYER: 1,
-                    ORIENTATION: IN,
-                },
-                {
-                    COLOR: RED,
-                    PROP_TYPE: self.prop_type,
-                    PROP_LOCATION: SOUTHWEST,
-                    LAYER: 1,
-                    ORIENTATION: IN,
-                },
-                {
-                    COLOR: BLUE,
-                    PROP_TYPE: self.prop_type,
-                    PROP_LOCATION: NORTHWEST,
-                    LAYER: 1,
-                    ORIENTATION: IN,
-                },
-            ]
+        return [
+            {
+                COLOR: RED,
+                PROP_TYPE: self.prop_type,
+                LOCATION: NORTHEAST,
+                LAYER: 1,
+                ORIENTATION: IN,
+            },
+            {
+                COLOR: BLUE,
+                PROP_TYPE: self.prop_type,
+                LOCATION: SOUTHEAST,
+                LAYER: 1,
+                ORIENTATION: IN,
+            },
+            {
+                COLOR: RED,
+                PROP_TYPE: self.prop_type,
+                LOCATION: SOUTHWEST,
+                LAYER: 1,
+                ORIENTATION: IN,
+            },
+            {
+                COLOR: BLUE,
+                PROP_TYPE: self.prop_type,
+                LOCATION: NORTHWEST,
+                LAYER: 1,
+                ORIENTATION: IN,
+            },
+        ]
 
     def on_prop_type_change(self, text: str) -> None:
         new_prop_type = text.lower()
@@ -172,7 +212,9 @@ class PropBox(ObjectBox):
         self.props.clear()
 
     def set_prop_position(self, prop: Prop) -> None:
-        hand_point = self.grid.get_circle_coordinates(f"{prop.prop_location}_{self.grid.grid_mode}_hand_point")
+        hand_point = self.grid.get_circle_coordinates(
+            f"{prop.location}_{self.grid.grid_mode}_hand_point"
+        )
         prop_length = prop.boundingRect().width()
         prop_width = prop.boundingRect().height()
         offset_x = -prop_length / 2

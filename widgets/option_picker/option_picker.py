@@ -131,7 +131,7 @@ class OptionPicker(QScrollArea):
             prop_dict = {
                 COLOR: motion_dict[COLOR],
                 PROP_TYPE: self.pictograph.prop_type,
-                PROP_LOCATION: motion_dict[END_LOCATION],
+                LOCATION: motion_dict[END_LOCATION],
                 LAYER: 1,
                 ORIENTATION: IN,
             }
@@ -174,7 +174,7 @@ class OptionPicker(QScrollArea):
         return {
             COLOR: color,
             PROP_TYPE: STAFF,
-            PROP_LOCATION: None,
+            LOCATION: None,
             LAYER: 1,
             ORIENTATION: IN,
         }
@@ -184,7 +184,7 @@ class OptionPicker(QScrollArea):
         motion = option.motions[arrow.color]
         arrow.motion, prop.motion = motion, motion
         arrow.ghost = option.ghost_arrows[arrow.color]
-        arrow.ghost.motion= motion
+        arrow.ghost.motion = motion
 
     @staticmethod
     def update_option(option: "Option") -> None:

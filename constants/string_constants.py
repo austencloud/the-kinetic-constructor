@@ -45,7 +45,6 @@ BOX = "box"
 
 LOCATION = "location"
 ARROW_LOCATION = "arrow_location"
-PROP_LOCATION = "prop_location"
 START_LOCATION = "start_location"
 END_LOCATION = "end_location"
 
@@ -80,8 +79,6 @@ NORTHWEST = "nw"
 NORTHEAST = "ne"
 SOUTHWEST = "sw"
 SOUTHEAST = "se"
-
-
 
 
 ARROW = "arrow"
@@ -130,10 +127,5 @@ ICON_PATHS = {
     "counter_clockwise": COUNTER_CLOCKWISE_ICON,
 }
 
-ARROW_ATTRIBUTES = [
-    COLOR,
-    MOTION_TYPE,
-    TURNS,
-]
-
-PROP_ATTRIBUTES = [COLOR, PROP_TYPE, PROP_LOCATION, LAYER, ORIENTATION]
+ARROW_ATTRIBUTES = [COLOR, MOTION_TYPE, TURNS]
+PROP_ATTRIBUTES = [COLOR, PROP_TYPE, LOCATION, LAYER, ORIENTATION]

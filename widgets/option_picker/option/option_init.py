@@ -7,24 +7,7 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
-from objects.prop.prop import (
-    BigHoop,
-    Prop,
-    Staff,
-    Club,
-    Fan,
-    MiniHoop,
-    Buugeng,
-    Triad,
-    Quiad,
-    BigDoubleStar,
-    DoubleStar,
-    BigStaff,
-    Sword,
-    Guitar,
-    Ukulele,
-    Chicken,
-)
+from objects.prop.prop_types import *
 from constants.string_constants import *
 from utilities.TypeChecking.TypeChecking import Colors, Locations, PropTypes
 from widgets.option_picker.option.option_view import OptionView
@@ -54,14 +37,14 @@ class OptionInit:
         red_prop_Dict = {
             COLOR: RED,
             PROP_TYPE: prop_type,
-            PROP_LOCATION: NORTH,
+            LOCATION: NORTH,
             LAYER: 1,
             ORIENTATION: IN,
         }
         blue_prop_Dict = {
             COLOR: BLUE,
             PROP_TYPE: prop_type,
-            PROP_LOCATION: SOUTH,
+            LOCATION: SOUTH,
             LAYER: 1,
             ORIENTATION: IN,
         }
@@ -154,7 +137,7 @@ class OptionInit:
         default_red_ghost_prop_attributes = {
             COLOR: RED,
             PROP_TYPE: prop_type,
-            PROP_LOCATION: EAST,
+            LOCATION: EAST,
             LAYER: 1,
             ORIENTATION: IN,
         }
@@ -162,7 +145,7 @@ class OptionInit:
         default_blue_ghost_prop_attributes = {
             COLOR: BLUE,
             PROP_TYPE: prop_type,
-            PROP_LOCATION: WEST,
+            LOCATION: WEST,
             LAYER: 1,
             ORIENTATION: IN,
         }

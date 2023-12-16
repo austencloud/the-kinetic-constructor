@@ -164,12 +164,11 @@ class PropPositioner:
         }
 
         if self.scene.grid.grid_mode == DIAMOND:
-            if prop.prop_location in self.scene.grid.strict_diamond_hand_points:
-                key = (prop.orientation, prop.prop_location)
+            if prop.location in self.scene.grid.strict_diamond_hand_points:
+                key = (prop.orientation, prop.location)
                 offset = position_offsets.get(key, QPointF(0, 0))
                 prop.setPos(
-                    self.scene.grid.strict_diamond_hand_points[prop.prop_location]
-                    + offset
+                    self.scene.grid.strict_diamond_hand_points[prop.location] + offset
                 )
 
     def set_default_prop_locations(self, prop: "Prop") -> None:
@@ -198,20 +197,16 @@ class PropPositioner:
         }
 
         if self.scene.grid.grid_mode == DIAMOND:
-            if prop.prop_location in self.scene.grid.diamond_hand_points:
-                key = (prop.orientation, prop.prop_location)
+            if prop.location in self.scene.grid.diamond_hand_points:
+                key = (prop.orientation, prop.location)
                 offset = position_offsets.get(key, QPointF(0, 0))  # Default offset
-                prop.setPos(
-                    self.scene.grid.diamond_hand_points[prop.prop_location] + offset
-                )
+                prop.setPos(self.scene.grid.diamond_hand_points[prop.location] + offset)
 
         elif self.scene.grid.grid_mode == BOX:
-            if prop.prop_location in self.scene.grid.box_hand_points:
-                key = (prop.orientation, prop.prop_location)
+            if prop.location in self.scene.grid.box_hand_points:
+                key = (prop.orientation, prop.location)
                 offset = position_offsets.get(key, QPointF(0, 0))  # Default offset
-                prop.setPos(
-                    self.scene.grid.box_hand_points[prop.prop_location] + offset
-                )
+                prop.setPos(self.scene.grid.box_hand_points[prop.location] + offset)
 
     def reposition_beta_props(self) -> None:
         board_state = self.scene.get_state()
@@ -277,69 +272,66 @@ class PropPositioner:
     def reposition_static_beta(
         self, move_prop: callable, static_motions: List[MotionAttributesDicts]
     ) -> None:
-        # if there's a combination of a BIGHOOP and a CLUB in the prop_type_counts dictionary
-        if self.prop_type_counts[BIGHOOP] == 1 and self.prop_type_counts[CLUB] == 1:
-            # set both props to their default locations, strict for big hoop and default for club
-            for prop in self.scene.props.values():
-                if prop.prop_type == BIGHOOP:
-                    self.set_strict_prop_locations(prop)
-                elif prop.prop_type == CLUB:
+        # # if there's a combination of a BIGHOOP and a CLUB in the prop_type_counts dictionary
+        # if self.prop_type_counts[BIGHOOP] == 1 and self.prop_type_counts[CLUB] == 1:
+        #     for prop in self.scene.props.values():
+        #         if prop.prop_type == BIGHOOP:
+        #             self.set_strict_prop_locations(prop)
+        #         elif prop.prop_type == CLUB:
+        #             self.set_default_prop_locations(prop)
+
+        # else:
+        for motion in static_motions:
+            prop = next(
+                (
+                    prop
+                    for prop in self.scene.props.values()
+                    if prop.color == motion[COLOR]
+                ),
+                None,
+            )
+            if not prop:
+                continue
+
+            # Check if there's another prop at the same location but in a different layer
+            other_prop = next(
+                (
+                    other
+                    for other in self.scene.props.values()
+                    if other != prop and other.location == prop.location
+                ),
+                None,
+            )
+
+            # If the other prop is in a different layer, set both props to default locations
+            if other_prop and other_prop.layer != prop.layer:
+                if prop.prop_type in [
+                    STAFF,
+                    FAN,
+                    CLUB,
+                    BUUGENG,
+                    MINIHOOP,
+                    TRIAD,
+                    QUIAD,
+                    UKULELE,
+                    CHICKEN,
+                ]:
                     self.set_default_prop_locations(prop)
-
-        else:
-            for motion in static_motions:
-                prop = next(
-                    (
-                        prop
-                        for prop in self.scene.props.values()
-                        if prop.color == motion[COLOR]
-                    ),
-                    None,
-                )
-                if not prop:
-                    continue
-
-                # Check if there's another prop at the same location but in a different layer
-                other_prop = next(
-                    (
-                        other
-                        for other in self.scene.props.values()
-                        if other != prop and other.prop_location == prop.prop_location
-                    ),
-                    None,
-                )
-
-                # If the other prop is in a different layer, set both props to default locations
-                if other_prop and other_prop.layer != prop.layer:
-                    if prop.prop_type in [
-                        STAFF,
-                        FAN,
-                        CLUB,
-                        BUUGENG,
-                        MINIHOOP,
-                        TRIAD,
-                        QUIAD,
-                        UKULELE,
-                        CHICKEN,
-                    ]:
-                        self.set_default_prop_locations(prop)
-                    elif prop.prop_type in [
-                        DOUBLESTAR,
-                        BIGHOOP,
-                        BIGDOUBLESTAR,
-                        BIGSTAFF,
-                        SWORD,
-                        GUITAR,
-                    ]:
-                        self.set_strict_prop_locations(other_prop)
-                else:
-                    # Original logic for handling props in the same layer
-                    end_location = motion[END_LOCATION]
-                    direction = self.determine_direction_for_static_beta(
-                        prop, end_location
-                    )
-                    if direction:
-                        move_prop(prop, direction)
+                elif prop.prop_type in [
+                    DOUBLESTAR,
+                    BIGHOOP,
+                    BIGDOUBLESTAR,
+                    BIGSTAFF,
+                    SWORD,
+                    GUITAR,
+                ]:
+                    self.set_strict_prop_locations(other_prop)
+            else:
+                # Original logic for handling props in the same layer
+                end_location = motion[END_LOCATION]
+                direction = self.determine_direction_for_static_beta(prop, end_location)
+                if direction:
+                    move_prop(prop, direction)
 
     def determine_direction_for_static_beta(
         self, prop: Prop, end_location: str
@@ -367,9 +359,7 @@ class PropPositioner:
             },
         }
 
-        return layer_reposition_map[prop.layer].get(
-            (prop.prop_location, prop.color), None
-        )
+        return layer_reposition_map[prop.layer].get((prop.location, prop.color), None)
 
     ### ALPHA TO BETA ### D, E, F
 
@@ -578,7 +568,7 @@ class PropPositioner:
             if prop.isVisible():
                 visible_staves.append(prop)
         if len(visible_staves) == 2:
-            if visible_staves[0].prop_location == visible_staves[1].prop_location:
+            if visible_staves[0].location == visible_staves[1].location:
                 return True
             else:
                 return False

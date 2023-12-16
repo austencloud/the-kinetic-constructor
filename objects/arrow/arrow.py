@@ -25,7 +25,7 @@ from constants.string_constants import (
     ARROW_ATTRIBUTES,
     ARROW_DIR,
     ARROW_LOCATION,
-    PROP_LOCATION,
+    LOCATION,
     LAYER,
 )
 from objects.graphical_object import GraphicalObject
@@ -128,7 +128,7 @@ class Arrow(GraphicalObject):
 
     def _update_prop_on_click(self) -> None:
         self.motion.prop.color = self.color
-        self.motion.prop.prop_location = self.motion.end_location
+        self.motion.prop.location = self.motion.end_location
         self.motion.prop.axis = self.motion.prop.update_axis_from_layer(
             self.motion.end_location
         )
@@ -212,7 +212,7 @@ class Arrow(GraphicalObject):
                 prop.update_attributes(
                     {
                         COLOR: self.color,
-                        PROP_LOCATION: self.motion.end_location,
+                        LOCATION: self.motion.end_location,
                         LAYER: 1,
                     }
                 )
@@ -227,6 +227,10 @@ class Arrow(GraphicalObject):
     def set_arrow_transform_origin_to_center(self) -> None:
         self.center = self.boundingRect().center()
         self.setTransformOriginPoint(self.center)
+
+    def clear_attributes(self) -> None:
+        self.motion_type = None
+        self.turns = None
 
     ### GETTERS ###
 
@@ -307,9 +311,9 @@ class Arrow(GraphicalObject):
         self.motion[MOTION_TYPE] = STATIC
         self.motion[TURNS] = 0
         self.motion[ROTATION_DIRECTION] = None
-        self.motion[START_LOCATION] = self.motion.prop.prop_location
-        self.motion[END_LOCATION] = self.motion.prop.prop_location
-        self.motion[ARROW_LOCATION] = self.motion.prop.prop_location
+        self.motion[START_LOCATION] = self.motion.prop.location
+        self.motion[END_LOCATION] = self.motion.prop.location
+        self.motion[ARROW_LOCATION] = self.motion.prop.location
 
     ### MANIPULATION ###
 
@@ -322,7 +326,7 @@ class Arrow(GraphicalObject):
         if keep_prop:
             self._change_arrow_to_static()
         else:
-            self.motion.reset_motion_attributes()
+            self.motion.clear_attributes()
             self.motion.prop.manipulator.delete()
 
         self.scene.update_pictograph()

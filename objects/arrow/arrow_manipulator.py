@@ -82,7 +82,7 @@ class ArrowManipulator:
         self.arrow.motion.end_location = new_end_location
 
         self.arrow.update_attributes(updated_arrow_dict)
-        self.arrow.motion.prop.prop_location = new_end_location
+        self.arrow.motion.prop.location = new_end_location
         self.arrow.motion.prop.update_appearance()
         self.arrow.motion.update_attr_from_arrow()
         self.arrow.scene.update_pictograph()
@@ -172,7 +172,7 @@ class ArrowManipulator:
         self.arrow.motion.arrow_location = new_arrow_location
         self.arrow.motion.start_location = new_start_location
         self.arrow.motion.end_location = new_end_location
-        self.arrow.motion.prop.prop_location = new_end_location
+        self.arrow.motion.prop.location = new_end_location
 
         self.arrow.update_appearance()
         self.arrow.motion.prop.update_appearance()
@@ -207,7 +207,7 @@ class ArrowManipulator:
         self.arrow.motion.arrow_location = new_arrow_location
         self.arrow.motion.start_location = new_start_location
         self.arrow.motion.end_location = new_end_location
-        self.arrow.motion.prop.prop_location = new_end_location
+        self.arrow.motion.prop.location = new_end_location
 
         self.arrow.update_appearance()
         self.arrow.motion.prop.update_appearance()
@@ -231,7 +231,7 @@ class ArrowManipulator:
         self.arrow.motion.arrow_location = new_location
         self.arrow.motion.start_location = new_location
         self.arrow.motion.end_location = new_location
-        self.arrow.motion.prop.prop_location = new_location
+        self.arrow.motion.prop.location = new_location
 
         self.arrow.motion.update_attr_from_arrow()
         self.arrow.motion.prop.update_appearance()
@@ -255,7 +255,7 @@ class ArrowManipulator:
         self.arrow.motion.arrow_location = new_location
         self.arrow.motion.start_location = new_location
         self.arrow.motion.end_location = new_location
-        self.arrow.motion.prop.prop_location = new_location
+        self.arrow.motion.prop.location = new_location
 
         self.arrow.motion.update_attr_from_arrow()
         self.arrow.motion.prop.update_appearance()
@@ -307,7 +307,7 @@ class ArrowManipulator:
         self.arrow.motion.end_location = new_end_location
 
         self.arrow.motion.prop.color = self.arrow.color
-        self.arrow.motion.prop.prop_location = new_end_location
+        self.arrow.motion.prop.location = new_end_location
 
         self.arrow.update_appearance()
         self.arrow.motion.prop.update_appearance()

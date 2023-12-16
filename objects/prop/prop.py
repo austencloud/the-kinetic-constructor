@@ -3,7 +3,6 @@ from data.start_end_location_map import get_start_end_locations
 from objects.graphical_object import GraphicalObject
 from PyQt6.QtCore import QPointF, Qt
 from constants.string_constants import *
-from objects.prop.prop_types import *
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from objects.prop.prop_manipulator import PropManipulator
 from utilities.TypeChecking.TypeChecking import (
@@ -46,7 +45,7 @@ class Prop(GraphicalObject):
         self.previous_location: Locations = None
         self.ghost: Prop = None
         self.color: Colors = prop_dict[COLOR]
-        self.prop_location: Locations = prop_dict[PROP_LOCATION]
+        self.location: Locations = prop_dict[LOCATION]
         self.layer: Layers = prop_dict[LAYER]
         self.orientation: Orientations = prop_dict[ORIENTATION]
         self.center = self.boundingRect().center()
@@ -59,7 +58,7 @@ class Prop(GraphicalObject):
             if not self.ghost:
                 self.ghost = self.scene.ghost_props[self.color]
             self.ghost.color = self.color
-            self.ghost.prop_location = self.prop_location
+            self.ghost.location = self.location
             self.ghost.layer = self.layer
             self.ghost.orientation = self.orientation
             self.ghost.update_appearance()
@@ -71,7 +70,7 @@ class Prop(GraphicalObject):
             for item in self.scene.items():
                 if item != self:
                     item.setSelected(False)
-            self.previous_location = self.prop_location
+            self.previous_location = self.location
 
     def mouseReleaseEvent(self, event) -> None:
         if isinstance(self.scene, self.scene.__class__):
@@ -88,8 +87,15 @@ class Prop(GraphicalObject):
 
     def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
-        self.prop_location = target_arrow.motion.end_location
-        self.axis = self.update_axis_from_layer(self.prop_location)
+        self.location = target_arrow.motion.end_location
+        self.axis = self.update_axis_from_layer(self.location)
+        self.update_appearance()
+
+    def clear_attributes(self) -> None:
+        self.location = None
+        self.layer = None
+        self.orientation = None
+        self.axis = None
         self.update_appearance()
 
     ### GETTERS ###
@@ -124,7 +130,7 @@ class Prop(GraphicalObject):
         }
 
         key = (self.layer, self.orientation)
-        rotation_angle = angle_map.get(key, {}).get(self.prop_location, 0)
+        rotation_angle = angle_map.get(key, {}).get(self.location, 0)
         return rotation_angle
 
     def get_attributes(self) -> PropAttributesDicts:
@@ -152,19 +158,19 @@ class Prop(GraphicalObject):
         new_location = self.pictograph.get_closest_hand_point(new_pos)[0]
 
         if new_location != self.previous_location:
-            self.prop_location = new_location
+            self.location = new_location
 
             if self.motion.motion_type == STATIC:
                 self.motion.arrow_location = new_location
                 self.motion.start_location = new_location
                 self.motion.end_location = new_location
 
-            self.axis = self.update_axis_from_layer(self.prop_location)
+            self.axis = self.update_axis_from_layer(self.location)
             self.update_appearance()
             self.update_arrow_location(new_location)
 
             self.ghost.color = self.color
-            self.ghost.prop_location = self.prop_location
+            self.ghost.location = self.location
             self.ghost.layer = self.layer
             self.ghost.update_appearance()
             self.scene.props[self.ghost.color] = self.ghost
@@ -221,7 +227,7 @@ class Prop(GraphicalObject):
                     EAST: (0, prop_length),
                 }
 
-        offset_tuple = offset_map.get(self.prop_location, (0, 0))
+        offset_tuple = offset_map.get(self.location, (0, 0))
         return QPointF(offset_tuple[0], offset_tuple[1])
 
     def update_arrow_location(self, new_arrow_location: Locations) -> None:
@@ -298,8 +304,8 @@ class Prop(GraphicalObject):
             closest_hand_point_coord,
         ) = self.pictograph.get_closest_hand_point(event.scenePos())
 
-        self.prop_location = closest_hand_point
-        self.axis = self.update_axis_from_layer(self.prop_location)
+        self.location = closest_hand_point
+        self.axis = self.update_axis_from_layer(self.location)
         self.update_appearance()
         self.setPos(closest_hand_point_coord)
 
@@ -315,5 +321,4 @@ class Prop(GraphicalObject):
             new_pos = event.scenePos() - self.get_object_center()
             self.set_drag_pos(new_pos)
             self.update_ghost_prop_location(event.scenePos())
-            self.update_arrow_location(self.prop_location)
-
+            self.update_arrow_location(self.location)

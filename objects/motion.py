@@ -83,14 +83,12 @@ class Motion:
         if self.prop:
             self.prop.orientation = self.end_orientation
             self.prop.layer = self.end_layer
-            self.prop.prop_location = self.end_location
-            self.prop.axis: Axes = self.prop.update_axis_from_layer(
-                self.prop.prop_location
-            )
+            self.prop.location = self.end_location
+            self.prop.axis: Axes = self.prop.update_axis_from_layer(self.prop.location)
             self.prop.update_rotation()
             self.prop.update_appearance()
 
-    def reset_motion_attributes(self):
+    def clear_attributes(self):
         self.start_location = None
         self.end_location = None
         self.arrow_location = None
@@ -235,9 +233,10 @@ class Motion:
         self.arrow.update_appearance()
         self.arrow.arrow_dict[TURNS] = self.arrow.turns
         if hasattr(self.arrow, "ghost"):
-            self.arrow.ghost.turns = self.arrow.turns
-            self.arrow.ghost.update_svg(svg_file)
-            self.arrow.ghost.update_appearance()
+            if self.arrow.ghost:
+                self.arrow.ghost.turns = self.arrow.turns
+                self.arrow.ghost.update_svg(svg_file)
+                self.arrow.ghost.update_appearance()
         self.scene.update_pictograph()
 
     def adjust_turns(self, adjustment: float) -> None:

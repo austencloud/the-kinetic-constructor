@@ -9,24 +9,7 @@ from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
 from objects.motion import Motion
-from objects.prop.prop import (
-    BigHoop,
-    DoubleStar,
-    BigDoubleStar,
-    Prop,
-    Staff,
-    BigStaff,
-    Club,
-    Fan,
-    MiniHoop,
-    Buugeng,
-    Triad,
-    Quiad,
-    Sword,
-    Guitar,
-    Ukulele,
-    Chicken,
-)
+from objects.prop.prop_types import *
 from constants.string_constants import *
 from utilities.TypeChecking.TypeChecking import Colors, Locations, PropTypes
 from widgets.graph_editor.pictograph.pictograph_view import PictographView
@@ -105,14 +88,14 @@ class PictographInit:
         red_prop_Dict = {
             COLOR: RED,
             PROP_TYPE: prop_type,
-            PROP_LOCATION: None,
+            LOCATION: None,
             LAYER: None,
             ORIENTATION: None,
         }
         blue_prop_Dict = {
             COLOR: BLUE,
             PROP_TYPE: prop_type,
-            PROP_LOCATION: None,
+            LOCATION: None,
             LAYER: None,
             ORIENTATION: None,
         }
@@ -201,7 +184,7 @@ class PictographInit:
         default_red_ghost_prop_attributes = {
             COLOR: RED,
             PROP_TYPE: prop_type,
-            PROP_LOCATION: EAST,
+            LOCATION: EAST,
             LAYER: 1,
             ORIENTATION: IN,
         }
@@ -209,7 +192,7 @@ class PictographInit:
         default_blue_ghost_prop_attributes = {
             COLOR: BLUE,
             PROP_TYPE: prop_type,
-            PROP_LOCATION: WEST,
+            LOCATION: WEST,
             LAYER: 1,
             ORIENTATION: IN,
         }

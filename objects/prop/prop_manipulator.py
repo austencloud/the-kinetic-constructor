@@ -31,5 +31,5 @@ class PropManipulator:
     def delete(self) -> None:
         self.prop.scene.removeItem(self)
         self.prop.scene.props[self.color] = None
-        self.prop.motion.reset_motion_attributes()
+        self.prop.motion.clear_attributes()
         self.prop.scene.update_pictograph()
