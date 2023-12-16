@@ -62,7 +62,6 @@ class Prop(GraphicalObject):
             self.ghost.layer = self.layer
             self.ghost.orientation = self.orientation
             self.ghost.update_appearance()
-            self.scene.addItem(self.ghost)
             self.scene.props[self.ghost.color] = self.ghost
             self.scene.props[self.color] = self.ghost
             self.scene.update_pictograph()
@@ -103,7 +102,8 @@ class Prop(GraphicalObject):
         self.location = None
         self.layer = None
         self.orientation = None
-        self.axis = None
+        self.axis = None    
+        self.motion = None
         self.update_appearance()
 
     ### GETTERS ###

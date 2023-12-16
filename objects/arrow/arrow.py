@@ -119,6 +119,14 @@ class Arrow(GraphicalObject):
         if self.scene:
             self.scene.update_attr_panel()
 
+    def mouseMoveEvent(
+        self: Union["Prop", "Arrow"], event: "QGraphicsSceneMouseEvent"
+    ) -> None:
+        if event.buttons() == Qt.MouseButton.LeftButton:
+            new_pos = event.scenePos() - self.get_object_center()
+            self.set_drag_pos(new_pos)
+            self.update_ghost_arrow_location(event.scenePos())
+
     def mouseReleaseEvent(self, event) -> None:
         self.is_dragging = False
         self.scene.arrows[self.color] = self
@@ -231,6 +239,7 @@ class Arrow(GraphicalObject):
     def clear_attributes(self) -> None:
         self.motion_type = None
         self.turns = None
+        self.motion = None
 
     ### GETTERS ###
 
@@ -314,27 +323,3 @@ class Arrow(GraphicalObject):
         self.motion[START_LOCATION] = self.motion.prop.location
         self.motion[END_LOCATION] = self.motion.prop.location
         self.motion[ARROW_LOCATION] = self.motion.prop.location
-
-    ### MANIPULATION ###
-
-    def delete(self, keep_prop: bool = False) -> None:
-        if self in self.scene.arrows:
-            self.scene.removeItem(self)
-            self.scene.arrows[self.color] = None
-            self.motion.rotation_direction = None
-            self.pictograph.graph_editor.attr_panel.update_attr_panel(self.color)
-        if keep_prop:
-            self._change_arrow_to_static()
-        else:
-            self.motion.clear_attributes()
-            self.motion.prop.manipulator.delete()
-
-        self.scene.update_pictograph()
-
-    def mouseMoveEvent(
-        self: Union["Prop", "Arrow"], event: "QGraphicsSceneMouseEvent"
-    ) -> None:
-        if event.buttons() == Qt.MouseButton.LeftButton:
-            new_pos = event.scenePos() - self.get_object_center()
-            self.set_drag_pos(new_pos)
-            self.update_ghost_arrow_location(event.scenePos())

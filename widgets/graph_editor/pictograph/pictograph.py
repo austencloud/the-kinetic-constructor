@@ -263,6 +263,14 @@ class Pictograph(QGraphicsScene):
         self.props = {}
         for motion in self.motions.values():
             motion.clear_attributes()
+        for arrow in self.arrows.values():
+            arrow.clear_attributes()
+        for prop in self.props.values():
+            prop.clear_attributes()
+        for ghost_arrow in self.ghost_arrows.values():
+            ghost_arrow.clear_attributes()
+        for ghost_prop in self.ghost_props.values():
+            ghost_prop.clear_attributes()
         for item in self.items():
             if isinstance(item, Arrow) or isinstance(item, Prop):
                 self.removeItem(item)

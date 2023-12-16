@@ -209,6 +209,10 @@ class PictographInit:
         )
 
         ghost_props = {RED: red_ghost_prop, BLUE: blue_ghost_prop}
+        for ghost_prop in ghost_props.values():
+            for prop in self.pictograph.props.values():
+                if prop.color == ghost_prop.color:
+                    prop.ghost = ghost_prop
         return ghost_props
 
     def init_letter_item(self) -> LetterItem:

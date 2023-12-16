@@ -29,7 +29,10 @@ class PropManipulator:
         self.prop.update_rotation()
 
     def delete(self) -> None:
-        self.prop.scene.removeItem(self)
-        self.prop.scene.props[self.color] = None
+        self.prop.scene.removeItem(self.prop)
+        self.prop.scene.removeItem(self.prop.scene.ghost_props[self.prop.color])
+        self.prop.motion.arrow.clear_attributes()
+        self.prop.motion.arrow.ghost.clear_attributes()
         self.prop.motion.clear_attributes()
+        self.prop.clear_attributes()
         self.prop.scene.update_pictograph()

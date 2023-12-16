@@ -109,8 +109,6 @@ class PropBoxDrag(ObjectBoxDrag):
         self.location = new_location
 
         self._update_ghost_prop_for_new_location(new_location)
-
-
         self._update_static_arrow()
 
         self.current_rotation_angle = self._get_prop_drag_rotation_angle(self)
@@ -158,7 +156,6 @@ class PropBoxDrag(ObjectBoxDrag):
         self.ghost.motion.prop = self.ghost
         self.ghost.motion.arrow_location = self.location
         self.ghost.motion.start_location = self.location
-
 
         ghost_svg = self.ghost.get_svg_file(self.prop_type)
         self.ghost.update_svg(ghost_svg)
@@ -275,11 +272,20 @@ class PropBoxDrag(ObjectBoxDrag):
         key = (prop.layer, prop.orientation)
         return angle_map.get(key, {}).get(prop.location, 0)
 
-
     def _update_static_arrow(self) -> None:
         self.arrow.color = self.color
         self.arrow.motion.arrow_location = self.location
         self.arrow.motion.start_location = self.location
         self.arrow.motion.end_location = self.location
+        self.arrow.ghost = self.pictograph.ghost_arrows[self.color]
+        self.arrow.ghost.motion = self.pictograph.motions[self.color]
         self.arrow.update_appearance()
+        self.arrow.ghost.update_attributes(self.arrow.get_attributes())
+        self.arrow.ghost.update_svg(
+            self.arrow.get_svg_file(
+                self.arrow.motion.motion_type, self.arrow.motion.turns
+            )
+        )
+        self.arrow.ghost.update_appearance()
+        self.pictograph.arrows[self.color] = self.arrow
         self.pictograph.update_pictograph()

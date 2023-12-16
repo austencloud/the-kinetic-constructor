@@ -42,7 +42,7 @@ from constants.string_constants import (
     BLUE,
     END_LAYER,
 )
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING, Dict, List, Tuple
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
@@ -59,77 +59,17 @@ if TYPE_CHECKING:
 
 
 class PropPositioner:
-    current_state: List[MotionAttributesDicts]
-    matching_letters: List[LetterDictionary]
-    arrow_dict: List[MotionAttributesDicts]
-    letters: LetterDictionary
-
     def __init__(self, scene: "Pictograph") -> None:
         self.scene = scene
         self.view = scene.view
-        self.letters = scene.main_widget.letters
+        self.letters: LetterDictionary = scene.main_widget.letters
 
     def update_prop_positions(self) -> None:
-        # Dictionary to store the count of each prop type
-        self.prop_type_counts = {
-            BIGHOOP: 0,
-            DOUBLESTAR: 0,
-            BIGDOUBLESTAR: 0,
-            STAFF: 0,
-            BIGSTAFF: 0,
-            FAN: 0,
-            CLUB: 0,
-            BUUGENG: 0,
-            MINIHOOP: 0,
-            TRIAD: 0,
-            QUIAD: 0,
-            SWORD: 0,
-            GUITAR: 0,
-            UKULELE: 0,
-            CHICKEN: 0,
-            "???": 0,
-        }
-
-        # First pass to count prop types
+        self.prop_type_counts = self.count_prop_types()
         for prop in self.scene.props.values():
-            if prop.prop_type == BIGHOOP:
-                self.prop_type_counts[BIGHOOP] += 1
-            elif prop.prop_type == DOUBLESTAR:
-                self.prop_type_counts[DOUBLESTAR] += 1
-            elif prop.prop_type == BIGDOUBLESTAR:
-                self.prop_type_counts[BIGDOUBLESTAR] += 1
-            elif prop.prop_type == STAFF:
-                self.prop_type_counts[STAFF] += 1
-            elif prop.prop_type == BIGSTAFF:
-                self.prop_type_counts[BIGSTAFF] += 1
-            elif prop.prop_type == FAN:
-                self.prop_type_counts[FAN] += 1
-            elif prop.prop_type == CLUB:
-                self.prop_type_counts[CLUB] += 1
-            elif prop.prop_type == BUUGENG:
-                self.prop_type_counts[BUUGENG] += 1
-            elif prop.prop_type == MINIHOOP:
-                self.prop_type_counts[MINIHOOP] += 1
-            elif prop.prop_type == TRIAD:
-                self.prop_type_counts[TRIAD] += 1
-            elif prop.prop_type == QUIAD:
-                self.prop_type_counts[QUIAD] += 1
-            elif prop.prop_type == SWORD:
-                self.prop_type_counts[SWORD] += 1
-            elif prop.prop_type == GUITAR:
-                self.prop_type_counts[GUITAR] += 1
-            elif prop.prop_type == UKULELE:
-                self.prop_type_counts[UKULELE] += 1
-            elif prop.prop_type == CHICKEN:
-                self.prop_type_counts[CHICKEN] += 1
-            else:
-                self.prop_type_counts["???"] += 1
-
-        for prop in self.scene.props.values():
-            if (
-                self.prop_type_counts[BIGHOOP] == 2
-                or self.prop_type_counts[DOUBLESTAR] == 2
-                or self.prop_type_counts[BIGDOUBLESTAR] == 2
+            if any(
+                self.prop_type_counts[ptype] == 2
+                for ptype in [BIGHOOP, DOUBLESTAR, BIGDOUBLESTAR]
             ):
                 self.set_strict_prop_locations(prop)
             else:
@@ -138,41 +78,53 @@ class PropPositioner:
         if self.props_in_beta():
             self.reposition_beta_props()
 
-    def set_strict_prop_locations(self, prop: "Prop") -> None:
-        prop.setTransformOriginPoint(0, 0)
-        prop_length = prop.boundingRect().width()
-        prop_width = prop.boundingRect().height()
-
-        # Define a map for position offsets based on orientation and location
-        position_offsets = {
-            (IN, NORTH): QPointF(prop_width / 2, -prop_length / 2),
-            (IN, SOUTH): QPointF(-prop_width / 2, prop_length / 2),
-            (IN, EAST): QPointF(prop_length / 2, prop_width / 2),
-            (IN, WEST): QPointF(-prop_length / 2, -prop_width / 2),
-            (OUT, NORTH): QPointF(-prop_width / 2, prop_length / 2),
-            (OUT, SOUTH): QPointF(prop_width / 2, -prop_length / 2),
-            (OUT, EAST): QPointF(-prop_length / 2, -prop_width / 2),
-            (OUT, WEST): QPointF(prop_length / 2, prop_width / 2),
-            (CLOCKWISE, NORTH): QPointF(-prop_length / 2, -prop_width / 2),
-            (CLOCKWISE, SOUTH): QPointF(prop_length / 2, prop_width / 2),
-            (CLOCKWISE, EAST): QPointF(prop_width / 2, -prop_length / 2),
-            (CLOCKWISE, WEST): QPointF(-prop_width / 2, prop_length / 2),
-            (COUNTER_CLOCKWISE, NORTH): QPointF(prop_length / 2, prop_width / 2),
-            (COUNTER_CLOCKWISE, SOUTH): QPointF(-prop_length / 2, -prop_width / 2),
-            (COUNTER_CLOCKWISE, EAST): QPointF(-prop_width / 2, prop_length / 2),
-            (COUNTER_CLOCKWISE, WEST): QPointF(prop_width / 2, -prop_length / 2),
+    def count_prop_types(self) -> Dict[str, int]:
+        prop_types = [
+            BIGHOOP,
+            DOUBLESTAR,
+            BIGDOUBLESTAR,
+            STAFF,
+            BIGSTAFF,
+            FAN,
+            CLUB,
+            BUUGENG,
+            MINIHOOP,
+            TRIAD,
+            QUIAD,
+            SWORD,
+            GUITAR,
+            UKULELE,
+            CHICKEN,
+        ]
+        return {
+            ptype: sum(prop.prop_type == ptype for prop in self.scene.props.values())
+            for ptype in prop_types
         }
 
+    def set_strict_prop_locations(self, prop: "Prop") -> None:
+        position_offsets = self.get_position_offsets(prop)
+        key = (prop.orientation, prop.location)
+        offset = position_offsets.get(key, QPointF(0, 0))
+        prop.setTransformOriginPoint(0, 0)
         if self.scene.grid.grid_mode == DIAMOND:
             if prop.location in self.scene.grid.strict_diamond_hand_points:
-                key = (prop.orientation, prop.location)
-                offset = position_offsets.get(key, QPointF(0, 0))
                 prop.setPos(
                     self.scene.grid.strict_diamond_hand_points[prop.location] + offset
                 )
 
     def set_default_prop_locations(self, prop: "Prop") -> None:
+        position_offsets = self.get_position_offsets(prop)
+        key = (prop.orientation, prop.location)
+        offset = position_offsets.get(key, QPointF(0, 0))
         prop.setTransformOriginPoint(0, 0)
+        if self.scene.grid.grid_mode == DIAMOND:
+            if prop.location in self.scene.grid.diamond_hand_points:
+                prop.setPos(self.scene.grid.diamond_hand_points[prop.location] + offset)
+        elif self.scene.grid.grid_mode == BOX:
+            if prop.location in self.scene.grid.box_hand_points:
+                prop.setPos(self.scene.grid.box_hand_points[prop.location] + offset)
+
+    def get_position_offsets(self, prop: Prop) -> Dict[Tuple[str, str], QPointF]:
         prop_length = prop.boundingRect().width()
         prop_width = prop.boundingRect().height()
 
@@ -195,19 +147,10 @@ class PropPositioner:
             (COUNTER_CLOCKWISE, EAST): QPointF(-prop_width / 2, prop_length / 2),
             (COUNTER_CLOCKWISE, WEST): QPointF(prop_width / 2, -prop_length / 2),
         }
-
-        if self.scene.grid.grid_mode == DIAMOND:
-            if prop.location in self.scene.grid.diamond_hand_points:
-                key = (prop.orientation, prop.location)
-                offset = position_offsets.get(key, QPointF(0, 0))  # Default offset
-                prop.setPos(self.scene.grid.diamond_hand_points[prop.location] + offset)
-
-        elif self.scene.grid.grid_mode == BOX:
-            if prop.location in self.scene.grid.box_hand_points:
-                key = (prop.orientation, prop.location)
-                offset = position_offsets.get(key, QPointF(0, 0))  # Default offset
-                prop.setPos(self.scene.grid.box_hand_points[prop.location] + offset)
-
+        return position_offsets
+    
+    ### REPOSITIONING ###
+    
     def reposition_beta_props(self) -> None:
         board_state = self.scene.get_state()
 

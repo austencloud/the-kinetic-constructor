@@ -318,7 +318,7 @@ class ArrowManipulator:
                 self.arrow.ghost.update_attributes(self.arrow.arrow_dict)
                 self.arrow.ghost.update_svg(svg_file)
                 self.arrow.ghost.update_appearance()
-                
+
     def mirror(self) -> None:
         self.arrow.set_arrow_transform_origin_to_center()
         transform = QTransform()
@@ -386,5 +386,19 @@ class ArrowManipulator:
             self.arrow.ghost.update_attributes(new_arrow_dict)
 
         self.arrow.motion.prop.update_appearance()
+
+        self.arrow.scene.update_pictograph()
+
+    def delete(self, keep_prop: bool = False) -> None:
+        if self.arrow in self.arrow.scene.arrows.values():
+            self.arrow.scene.removeItem(self.arrow)
+            self.arrow.scene.removeItem(self.arrow.ghost)
+            self.arrow.pictograph.graph_editor.attr_panel.update_attr_panel(
+                self.arrow.color
+            )
+        if keep_prop:
+            self.arrow._change_arrow_to_static()
+        else:
+            self.arrow.scene.removeItem(self.arrow.motion.prop)
 
         self.arrow.scene.update_pictograph()

@@ -50,9 +50,9 @@ class KeyEventHandler:
         if event.key() == Qt.Key.Key_Delete:
             keep_prop = event.modifiers() == Qt.KeyboardModifier.ControlModifier
             if selected_arrow:
-                selected_arrow.delete(keep_prop)
+                selected_arrow.manipulator.delete(keep_prop)
             elif selected_prop:
-                selected_prop.delete()
+                selected_prop.manipulator.delete()
 
         ### ARROW MANIPULATION ###
         if selected_arrow:

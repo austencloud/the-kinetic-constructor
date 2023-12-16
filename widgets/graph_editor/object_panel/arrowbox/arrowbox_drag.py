@@ -239,22 +239,21 @@ class ArrowBoxDrag(ObjectBoxDrag):
                 if prop not in self.pictograph.props:
                     self.pictograph.props[prop.color] = prop
 
-                prop.update_attributes(
-                    {
-                        COLOR: self.color,
-                        LOCATION: self.end_location,
-                        LAYER: 1,
-                    }
-                )
-                prop.arrow = self.ghost
-                self.ghost.motion.prop = prop
+                prop_dict = {
+                    COLOR: self.color,
+                    LOCATION: self.end_location,
+                    LAYER: 1,
+                }
+                prop.update_attributes(prop_dict)
+                prop.ghost = self.pictograph.ghost_props[self.color]
+                prop.ghost.update_attributes(prop_dict)
 
+                self.ghost.motion.prop = prop
                 self.motion.prop = prop
                 prop.motion = self.motion
 
                 if prop not in self.pictograph.items():
                     self.pictograph.addItem(prop)
-                prop.show()
                 prop.update_appearance()
                 self.pictograph.update_props()
 
