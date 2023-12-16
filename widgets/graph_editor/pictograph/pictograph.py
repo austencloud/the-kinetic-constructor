@@ -347,17 +347,15 @@ class Pictograph(QGraphicsScene):
         self.prop_positioner.update_prop_positions()
 
     def update_letter(self) -> None:
-        if all(
-            motion.motion_type
-            for motion in self.motions.values()
-        ):
+        if all(motion.motion_type for motion in self.motions.values()):
             self.current_letter = self.letter_engine.get_current_letter()
-            self.update_letter_item(self.current_letter)
+            self.set_letter_renderer(self.current_letter)
             self.letter_item.position_letter_item(self.letter_item)
         else:
             self.current_letter = None
+            svg_path = f"{LETTER_SVG_DIR}/blank.svg"
+            renderer = QSvgRenderer(svg_path)
+            if renderer.isValid():
+                self.letter_item.setSharedRenderer(renderer)
 
-    def update_letter_item(self, letter: str) -> None:
-        if letter:
-            self.set_letter_renderer(letter)
 
