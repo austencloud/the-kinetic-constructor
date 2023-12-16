@@ -3,7 +3,7 @@ from PyQt6.QtGui import QResizeEvent
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-from PyQt6.QtWidgets import QFrame, QHBoxLayout
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QSizePolicy
 from .option_picker_letter_buttons import LetterButtons
 from .option_picker import OptionPicker
 
@@ -25,7 +25,7 @@ class OptionPickerWidget(QFrame):
 
         self.main_layout.addWidget(self.option_picker, 5)
         self.main_layout.addWidget(self.button_frame, 1)
-
+        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         self.setLayout(self.main_layout)
 
     def resize_option_picker_widget(self) -> None:

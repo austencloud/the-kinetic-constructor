@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 from widgets.sequence_widget.beat_frame.beat_view import BeatView
-
+from PyQt6.QtCore import Qt
 
 class BeatFrame(QFrame):
     def __init__(
@@ -30,7 +30,7 @@ class BeatFrame(QFrame):
         self.layout: QGridLayout = QGridLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
-
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         for j in range(4):
             for i in range(4):
                 beat_view = BeatView(self)

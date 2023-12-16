@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Optional
 from PyQt6.QtCore import QEvent, Qt
 from PyQt6.QtWidgets import (
+    QSizePolicy,
     QWidget,
     QHBoxLayout,
     QVBoxLayout,
@@ -45,6 +46,10 @@ class MainWidget(QWidget):
         self.left_frame = QFrame()
         self.right_frame = QFrame()
 
+        self.right_frame.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
+
         self.left_layout = QVBoxLayout(self.left_frame)
         self.right_layout = QVBoxLayout(self.right_frame)
 
@@ -68,6 +73,12 @@ class MainWidget(QWidget):
         self.main_layout = QHBoxLayout(self)
         self.main_layout.addWidget(self.horizontal_splitter)
         self.setLayout(self.main_layout)
+
+
+
+
+
+
 
     ### EVENT HANDLERS ###
 
@@ -103,5 +114,4 @@ class MainWidget(QWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.option_picker_widget.resize_option_picker_widget()
-
-        return super().resizeEvent(event)
+        self.sequence_widget.resize_sequence_widget()

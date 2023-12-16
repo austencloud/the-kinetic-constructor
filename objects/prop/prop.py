@@ -62,6 +62,7 @@ class Prop(GraphicalObject):
             self.ghost.layer = self.layer
             self.ghost.orientation = self.orientation
             self.ghost.update_appearance()
+            self.ghost.show()
             self.scene.props[self.ghost.color] = self.ghost
             self.scene.props[self.color] = self.ghost
             self.scene.update_pictograph()
@@ -82,7 +83,7 @@ class Prop(GraphicalObject):
 
     def mouseReleaseEvent(self, event) -> None:
         if isinstance(self.scene, self.scene.__class__):
-            self.scene.removeItem(self.ghost)
+            self.ghost.hide()
             self.scene.update_pictograph()
             self.finalize_prop_drop(event)
 
@@ -295,11 +296,12 @@ class Prop(GraphicalObject):
                 )
 
                 self.motion.arrow.location = new_arrow_location
+                self.motion.arrow.ghost.location = new_arrow_location
                 self.motion.start_location = start_location
                 self.motion.end_location = end_location
-                self.pictograph.update_pictograph()
                 self.motion.arrow.update_appearance()
                 self.motion.arrow.ghost.update_appearance()
+                self.pictograph.update_pictograph()
 
         elif self.motion.motion_type == STATIC:
             self.motion.arrow.location = new_arrow_location

@@ -294,20 +294,21 @@ class Pictograph(QGraphicsScene):
             new_beat.motions[motion.color] = Motion(new_beat, motion.get_attributes())
 
             if motion.arrow:
-                new_beat.addItem(
-                    Arrow(
-                        new_beat,
-                        motion.arrow.get_attributes(),
-                        new_beat.motions[motion.color],
+                if motion.arrow.location:
+                    new_beat.addItem(
+                        Arrow(
+                            new_beat,
+                            motion.arrow.get_attributes(),
+                            new_beat.motions[motion.color],
+                        )
                     )
-                )
-                new_beat.addItem(
-                    Prop(
-                        new_beat,
-                        motion.prop.get_attributes(),
-                        new_beat.motions[motion.color],
+                    new_beat.addItem(
+                        Prop(
+                            new_beat,
+                            motion.prop.get_attributes(),
+                            new_beat.motions[motion.color],
+                        )
                     )
-                )
 
         for item in new_beat.items():
             if isinstance(item, Arrow):
