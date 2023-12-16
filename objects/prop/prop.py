@@ -72,10 +72,18 @@ class Prop(GraphicalObject):
                     item.setSelected(False)
             self.previous_location = self.location
 
+    def mouseMoveEvent(
+        self: Union["Prop", "Arrow"], event: "QGraphicsSceneMouseEvent"
+    ) -> None:
+        if event.buttons() == Qt.MouseButton.LeftButton:
+            new_pos = event.scenePos() - self.get_object_center()
+            self.set_drag_pos(new_pos)
+            self.update_ghost_prop_location(event.scenePos())
+            self.update_arrow_location(self.location)
+
     def mouseReleaseEvent(self, event) -> None:
         if isinstance(self.scene, self.scene.__class__):
             self.scene.removeItem(self.ghost)
-            self.ghost.arrow = None
             self.scene.update_pictograph()
             self.finalize_prop_drop(event)
 
@@ -285,17 +293,18 @@ class Prop(GraphicalObject):
                 start_location, end_location = get_start_end_locations(
                     motion_type, rotation_direction, new_arrow_location
                 )
+
+                self.motion.arrow_location = new_arrow_location
+                self.motion.start_location = start_location
+                self.motion.end_location = end_location
+                self.pictograph.update_pictograph()
                 self.motion.arrow.update_appearance()
                 self.motion.arrow.ghost.update_appearance()
-                self.motion.arrow.motion.arrow_location = new_arrow_location
-                self.motion.arrow.motion.start_location = start_location
-                self.motion.arrow.motion.end_location = end_location
-                self.pictograph.update_pictograph()
-
-        elif self.motion.arrow.motion_type == STATIC:
-            self.motion.arrow.motion.arrow_location = new_arrow_location
-            self.motion.arrow.motion.start_location = new_arrow_location
-            self.motion.arrow.motion.end_location = new_arrow_location
+                
+        elif self.motion.motion_type == STATIC:
+            self.motion.arrow_location = new_arrow_location
+            self.motion.start_location = new_arrow_location
+            self.motion.end_location = new_arrow_location
             self.motion.arrow.update_appearance()
 
     def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
@@ -314,11 +323,3 @@ class Prop(GraphicalObject):
         self.previous_location = closest_hand_point
         self.scene.update_pictograph()
 
-    def mouseMoveEvent(
-        self: Union["Prop", "Arrow"], event: "QGraphicsSceneMouseEvent"
-    ) -> None:
-        if event.buttons() == Qt.MouseButton.LeftButton:
-            new_pos = event.scenePos() - self.get_object_center()
-            self.set_drag_pos(new_pos)
-            self.update_ghost_prop_location(event.scenePos())
-            self.update_arrow_location(self.location)

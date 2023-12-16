@@ -310,11 +310,6 @@ class Pictograph(QGraphicsScene):
                 new_prop.motion = motion
                 motion.prop = new_prop
 
-        for arrow in new_beat.arrows.values():
-            for prop in new_beat.props.values():
-                if arrow.color == prop.color:
-                    arrow.motion.prop = prop
-                    prop.motion.arrow = arrow
 
         for arrow in new_beat.arrows.values():
             for ghost_arrow in new_beat.ghost_arrows.values():
