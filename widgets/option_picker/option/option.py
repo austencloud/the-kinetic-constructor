@@ -217,7 +217,7 @@ class Option(Pictograph):
         for arrow in new_beat.arrows:
             for ghost_arrow in new_beat.ghost_arrows.values():
                 if arrow.color == ghost_arrow.color:
-                    arrow.ghost_arrow = ghost_arrow
+                    arrow.motion.ghost_arrow = ghost_arrow
                     ghost_arrow.update_attributes(arrow.get_attributes())
                     ghost_arrow.set_is_svg_mirrored_from_attributes()
                     ghost_arrow.update_mirror()
@@ -227,7 +227,7 @@ class Option(Pictograph):
         for prop in new_beat.props:
             for ghost_prop in new_beat.ghost_props.values():
                 if prop.color == ghost_prop.color:
-                    prop.ghost_prop = ghost_prop
+                    prop.motion.ghost_prop = ghost_prop
 
         for ghost_arrow in new_beat.ghost_arrows.values():
             for motion in new_beat.motions:

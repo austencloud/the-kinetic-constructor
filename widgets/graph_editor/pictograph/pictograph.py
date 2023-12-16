@@ -313,7 +313,7 @@ class Pictograph(QGraphicsScene):
         for arrow in new_beat.arrows.values():
             for ghost_arrow in new_beat.ghost_arrows.values():
                 if arrow.color == ghost_arrow.color:
-                    arrow.ghost_arrow = ghost_arrow
+                    arrow.motion.ghost_arrow = ghost_arrow
                     ghost_arrow.motion = new_beat.motions[arrow.color]
                     ghost_arrow.update_attributes(arrow.get_attributes())
                     ghost_arrow.set_is_svg_mirrored_from_attributes()
@@ -324,7 +324,7 @@ class Pictograph(QGraphicsScene):
         for prop in new_beat.props.values():
             for ghost_prop in new_beat.ghost_props.values():
                 if prop.color == ghost_prop.color:
-                    prop.ghost_prop = ghost_prop
+                    prop.motion.ghost_prop = ghost_prop
                     ghost_prop.update_prop_type(prop.prop_type)
 
         for ghost_arrow in new_beat.ghost_arrows.values():

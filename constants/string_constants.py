@@ -82,8 +82,14 @@ SOUTHWEST = "sw"
 SOUTHEAST = "se"
 
 
+
+
 ARROW = "arrow"
 PROP = "prop"
+
+GHOST_ARROW = "ghostarrow"
+GHOST_PROP = "ghostprop"
+
 STAFF = "staff"
 BIGSTAFF = "bigstaff"
 CLUB = "club"

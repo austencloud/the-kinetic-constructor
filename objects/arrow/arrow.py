@@ -93,7 +93,7 @@ class Arrow(GraphicalObject):
         self.setSelected(True)
 
         if hasattr(self, "ghost_arrow"):
-            if self.ghost_arrow:
+            if self.motion.ghost_arrow:
                 self._update_ghost_on_click()
         if hasattr(self, "prop"):
             if self.prop:
@@ -116,15 +116,15 @@ class Arrow(GraphicalObject):
         from widgets.graph_editor.pictograph.pictograph import Pictograph
 
         if isinstance(self.scene, Pictograph):
-            self.ghost_arrow: "GhostArrow" = self.scene.ghost_arrows[self.color]
-            self.ghost_arrow.prop = self.prop
-            self.ghost_arrow.set_attributes_from_dict(self.arrow_dict)
-            self.ghost_arrow.set_arrow_attrs_from_arrow(self)
-            self.ghost_arrow.set_is_svg_mirrored_from_attributes()
-            self.ghost_arrow.update_appearance()
-            self.ghost_arrow.transform = self.transform
-            self.scene.addItem(self.ghost_arrow)
-            self.scene.ghost_arrows[self.ghost_arrow.color] = self.ghost_arrow
+            self.motion.ghost_arrow: "GhostArrow" = self.scene.ghost_arrows[self.color]
+            self.motion.ghost_arrow.prop = self.prop
+            self.motion.ghost_arrow.set_attributes_from_dict(self.arrow_dict)
+            self.motion.ghost_arrow.set_arrow_attrs_from_arrow(self)
+            self.motion.ghost_arrow.set_is_svg_mirrored_from_attributes()
+            self.motion.ghost_arrow.update_appearance()
+            self.motion.ghost_arrow.transform = self.transform
+            self.scene.addItem(self.motion.ghost_arrow)
+            self.scene.ghost_arrows[self.motion.ghost_arrow.color] = self.motion.ghost_arrow
 
     def update_location(self, new_pos: QPointF) -> None:
         new_location = self.scene.get_closest_layer2_point(new_pos)[0]
@@ -134,15 +134,15 @@ class Arrow(GraphicalObject):
         self.set_start_end_locations()
 
         if hasattr(self, "ghost_arrow"):
-            self.ghost_arrow.set_arrow_attrs_from_arrow(self)
-            self.ghost_arrow.update_appearance()
+            self.motion.ghost_arrow.set_arrow_attrs_from_arrow(self)
+            self.motion.ghost_arrow.update_appearance()
 
         self.prop.set_prop_attrs_from_arrow(self)
         self.prop.update_appearance()
         self.motion.arrow_location = new_location
         self.update_appearance()
 
-        self.scene.ghost_arrows[self.color] = self.ghost_arrow
+        self.scene.ghost_arrows[self.color] = self.motion.ghost_arrow
         for prop in self.scene.props.values():
             if prop.color == self.color:
                 prop.arrow = self
@@ -153,8 +153,8 @@ class Arrow(GraphicalObject):
         self.setPos(new_pos)
 
     def mouseReleaseEvent(self, event) -> None:
-        self.scene.removeItem(self.ghost_arrow)
-        self.ghost_arrow.prop = None
+        self.scene.removeItem(self.motion.ghost_arrow)
+        self.motion.ghost_arrow.prop = None
         self.scene.arrows[self.color] = self
         self.scene.update_pictograph()
 
@@ -205,7 +205,7 @@ class Arrow(GraphicalObject):
                         LAYER: 1,
                     }
                 )
-                prop.arrow = self.ghost_arrow
+                prop.arrow = self.motion.ghost_arrow
 
                 if prop not in self.scene.items():
                     self.scene.addItem(prop)

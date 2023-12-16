@@ -9,6 +9,8 @@ from constants.string_constants import (
     CLOCKWISE,
     COLOR,
     COUNTER_CLOCKWISE,
+    GHOST_ARROW,
+    GHOST_PROP,
     IN,
     LAYER,
     NORTHEAST,
@@ -107,6 +109,8 @@ class ArrowBoxDrag(ObjectBoxDrag):
             COLOR: self.color,
             ARROW: self.placed_arrow,
             PROP: self.placed_arrow.prop,
+            GHOST_ARROW: self.pictograph.ghost_arrows[self.color],
+            GHOST_PROP: self.pictograph.ghost_props[self.color],
             MOTION_TYPE: self.motion_type,
             ROTATION_DIRECTION: self.rotation_direction,
             TURNS: self.turns,
@@ -119,8 +123,8 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
         self.pictograph.arrows[self.color] = self.placed_arrow
         self.pictograph.ghost_arrows[self.color] = self.ghost_arrow
-        
-        self.placed_arrow.ghost_arrow = self.ghost_arrow
+
+        self.placed_arrow.motion.ghost_arrow = self.ghost_arrow
 
         self.pictograph.addItem(self.placed_arrow)
         self.pictograph.removeItem(self.ghost_arrow)
@@ -149,6 +153,8 @@ class ArrowBoxDrag(ObjectBoxDrag):
             COLOR: self.color,
             ARROW: self,
             PROP: self.ghost_arrow.prop,
+            GHOST_ARROW: self.pictograph.ghost_arrows[self.color],
+            GHOST_PROP: None,
             MOTION_TYPE: self.motion_type,
             ROTATION_DIRECTION: self.rotation_direction,
             TURNS: self.turns,
@@ -159,13 +165,15 @@ class ArrowBoxDrag(ObjectBoxDrag):
         }
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
+        self.pictograph.motions[self.color].arrow = self.pictograph.arrows[self.color]
+        self.pictograph.arrows[self.color] = self.ghost_arrow
         self.ghost_arrow.update_ghost_arrow(self.attributes)
         self.pictograph.update_pictograph()
 
     def _update_ghost_arrow_for_new_location(self, new_location) -> None:
         self.ghost_arrow.color = self.color
         self.ghost_arrow.motion = self.motion
-        
+
         self.ghost_arrow.motion.arrow_location = new_location
         self.ghost_arrow.motion_type = self.motion_type
         self.ghost_arrow.motion.rotation_direction = self.rotation_direction

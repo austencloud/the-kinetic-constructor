@@ -59,6 +59,8 @@ class PictographInit:
                 COLOR: color,
                 ARROW: None,
                 PROP: None,
+                GHOST_ARROW: None,
+                GHOST_PROP: None,
                 MOTION_TYPE: None,
                 ROTATION_DIRECTION: None,
                 TURNS: 0,

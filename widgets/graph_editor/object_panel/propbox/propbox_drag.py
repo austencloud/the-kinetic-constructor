@@ -101,7 +101,7 @@ class PropBoxDrag(ObjectBoxDrag):
         self.pictograph.update_pictograph()
         self.pictograph.clearSelection()
 
-        self.placed_prop.ghost_prop = self.ghost_prop
+        self.placed_prop.motion.ghost_prop = self.ghost_prop
         self.placed_prop.update_appearance()
         self.placed_prop.show()
         self.placed_prop.setSelected(True)

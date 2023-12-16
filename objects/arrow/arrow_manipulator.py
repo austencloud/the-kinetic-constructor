@@ -160,7 +160,9 @@ class ArrowManipulator:
             new_start_location,
             new_end_location,
         ) = get_start_end_locations(
-            self.arrow.motion_type, self.arrow.motion.rotation_direction, new_arrow_location
+            self.arrow.motion_type,
+            self.arrow.motion.rotation_direction,
+            new_arrow_location,
         )
 
         self.arrow.motion.arrow_location = new_arrow_location
@@ -193,7 +195,9 @@ class ArrowManipulator:
             new_start_location,
             new_end_location,
         ) = get_start_end_locations(
-            self.arrow.motion_type, self.arrow.motion.rotation_direction, new_arrow_location
+            self.arrow.motion_type,
+            self.arrow.motion.rotation_direction,
+            new_arrow_location,
         )
 
         self.arrow.motion.arrow_location = new_arrow_location
@@ -309,11 +313,13 @@ class ArrowManipulator:
         self.arrow.prop.update_appearance()
         if hasattr(self, "ghost_arrow"):
             if (
-                not isinstance(self, self.arrow.ghost_arrow.__class__)
-                and self.arrow.ghost_arrow
+                not isinstance(self, self.arrow.motion.ghost_arrow.__class__)
+                and self.arrow.motion.ghost_arrow
             ):
-                self.arrow.ghost_arrow.is_svg_mirrored = self.arrow.is_svg_mirrored
-                self.arrow.ghost_arrow.update_attributes(self.arrow.arrow_dict)
+                self.arrow.motion.ghost_arrow.is_svg_mirrored = (
+                    self.arrow.is_svg_mirrored
+                )
+                self.arrow.motion.ghost_arrow.update_attributes(self.arrow.arrow_dict)
         self.arrow.scene.update_pictograph()
 
     def mirror(self) -> None:
@@ -323,8 +329,8 @@ class ArrowManipulator:
         transform.translate(-self.arrow.center_x, -self.arrow.center_y)
         self.arrow.setTransform(transform)
         if hasattr(self, "ghost_arrow"):
-            self.arrow.ghost_arrow.setTransform(transform)
-            self.arrow.ghost_arrow.is_svg_mirrored = True
+            self.arrow.motion.ghost_arrow.setTransform(transform)
+            self.arrow.motion.ghost_arrow.is_svg_mirrored = True
         self.arrow.is_svg_mirrored = True
 
     def unmirror(self) -> None:
@@ -334,8 +340,8 @@ class ArrowManipulator:
         transform.translate(-self.arrow.center.x(), -self.arrow.center.y())
         self.arrow.setTransform(transform)
         if hasattr(self, "ghost_arrow"):
-            self.arrow.ghost_arrow.setTransform(transform)
-            self.arrow.ghost_arrow.is_svg_mirrored = False
+            self.arrow.motion.ghost_arrow.setTransform(transform)
+            self.arrow.motion.ghost_arrow.is_svg_mirrored = False
         self.arrow.is_svg_mirrored = False
 
     def swap_motion_type(self) -> None:
@@ -376,9 +382,9 @@ class ArrowManipulator:
         self.arrow.update_svg(svg_file)
         self.arrow.update_attributes(new_arrow_dict)
         if hasattr(self, "ghost_arrow"):
-            self.arrow.ghost_arrow.motion_type = new_motion_type
-            self.arrow.ghost_arrow.update_svg(svg_file)
-            self.arrow.ghost_arrow.update_attributes(new_arrow_dict)
+            self.arrow.motion.ghost_arrow.motion_type = new_motion_type
+            self.arrow.motion.ghost_arrow.update_svg(svg_file)
+            self.arrow.motion.ghost_arrow.update_attributes(new_arrow_dict)
 
         self.arrow.prop.update_appearance()
 

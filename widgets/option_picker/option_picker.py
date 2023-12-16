@@ -61,6 +61,7 @@ class OptionPicker(QScrollArea):
                     self.construct_motion_dict(row_data, "blue"),
                     self.construct_motion_dict(row_data, "red"),
                 ]
+
                 self.add_option_to_layout(motion_dict, is_initial=True, row=0, col=i)
 
     def add_option_to_layout(
@@ -146,6 +147,8 @@ class OptionPicker(QScrollArea):
             option.arrows[arrow.color] = arrow
             option.props[prop.color] = prop
             self.setup_motion_relations(option, arrow, prop)
+            motion_dict[GHOST_ARROW] = option.ghost_arrows[arrow.color]
+            motion_dict[GHOST_PROP] = option.ghost_props[prop.color]
             for motion in option.motions.values():
                 if motion.color == motion_dict[COLOR]:
                     motion.setup_attributes(motion_dict)
@@ -155,7 +158,6 @@ class OptionPicker(QScrollArea):
         return option
 
     def construct_motion_dict(self, row_data, color: str) -> Dict:
-        # Ensure that the keys match the DataFrame column names exactly
         return {
             "color": row_data[f"{color}_color"],
             "motion_type": row_data[f"{color}_motion_type"],
@@ -181,11 +183,11 @@ class OptionPicker(QScrollArea):
     def setup_motion_relations(option: Option, arrow: Arrow, prop: Prop) -> None:
         motion = option.motions[arrow.color]
         arrow.motion, prop.motion = motion, motion
-        arrow.ghost_arrow, prop.ghost_prop = (
+        arrow.motion.ghost_arrow, prop.motion.ghost_prop = (
             option.ghost_arrows[arrow.color],
             option.ghost_props[prop.color],
         )
-        arrow.ghost_arrow.motion, prop.ghost_prop.motion = motion, motion
+        arrow.motion.ghost_arrow.motion, prop.motion.ghost_prop.motion = motion, motion
 
     @staticmethod
     def update_option(option: "Option") -> None:
