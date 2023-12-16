@@ -139,19 +139,29 @@ class OptionPicker(QScrollArea):
             prop = Prop(option, prop_dict, option.motions[motion_dict[COLOR]])
             motion_dict[ARROW], motion_dict[PROP] = arrow, prop
 
-            option.motions[motion_dict[COLOR]].arrow = arrow
-            option.motions[motion_dict[COLOR]].prop = prop
+            option.arrows[arrow.color] = arrow
+            option.props[prop.color] = prop
+
+            arrow.motion = option.motions[arrow.color]
+            prop.motion = option.motions[prop.color]
 
             option.addItem(arrow)
             option.addItem(prop)
+
             option.arrows[arrow.color] = arrow
             option.props[prop.color] = prop
             self.setup_motion_relations(option, arrow, prop)
-            motion_dict[GHOST_ARROW] = None
-            motion_dict[GHOST_PROP] = None
+            motion_dict[ARROW] = arrow
+            motion_dict[PROP] = prop
+            motion_dict[GHOST_ARROW] = option.ghost_arrows[arrow.color]
+            motion_dict[GHOST_PROP] = option.ghost_props[prop.color]
+
             for motion in option.motions.values():
                 if motion.color == motion_dict[COLOR]:
                     motion.setup_attributes(motion_dict)
+            arrow.set_is_svg_mirrored_from_attributes()
+            arrow.update_mirror()
+            arrow.update_appearance()
 
         self.update_option(option)
         self.options.append(option)

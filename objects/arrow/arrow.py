@@ -255,7 +255,7 @@ class Arrow(GraphicalObject):
         location_to_angle = self.get_location_to_angle_map(
             arrow.motion.motion_type, arrow.motion.rotation_direction
         )
-        return location_to_angle.get(self.motion.arrow.location, 0)
+        return location_to_angle.get(self.location, 0)
 
     def get_location_to_angle_map(
         self, motion_type: str, rotation_direction: str
