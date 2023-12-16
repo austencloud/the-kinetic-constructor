@@ -147,7 +147,6 @@ class Arrow(GraphicalObject):
 
         if isinstance(self.scene, Pictograph):
             self.ghost: "GhostArrow" = self.scene.ghost_arrows[self.color]
-            self.ghost.prop = self.motion.prop
             self.ghost.update_attributes(self.arrow_dict)
             self.ghost.set_arrow_attrs_from_arrow(self)
             self.ghost.set_is_svg_mirrored_from_attributes()

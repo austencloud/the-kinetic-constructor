@@ -60,7 +60,7 @@ class ArrowManipulator:
             current_location, current_location
         )
         self.arrow.location = new_location
-        self.arrow.location = new_location
+        self.arrow.ghost.location = new_location
         (
             new_start_location,
             new_end_location,
@@ -85,6 +85,9 @@ class ArrowManipulator:
         self.arrow.motion.prop.location = new_end_location
         self.arrow.motion.prop.update_appearance()
         self.arrow.motion.update_attr_from_arrow()
+        self.arrow.update_appearance()
+        self.arrow.ghost.update_appearance()
+        
         self.arrow.scene.update_pictograph()
 
     def rotate_arrow(self, rotation_direction: RotationDirections) -> None:
