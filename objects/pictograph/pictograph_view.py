@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, List
 from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import QSize
 
 
@@ -20,7 +20,7 @@ class PictographView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.buttons: List[CustomButton] = self.init_buttons()
-        
+
     def remove_buttons(self) -> None:
         self.add_to_sequence_button.deleteLater()
         self.clear_button.deleteLater()
@@ -50,7 +50,7 @@ class PictographView(QGraphicsView):
             self.rotate_ccw_button,
         ]
         return buttons
-    
+
     def create_button(self, icon_path, action) -> QPushButton:
         button = QPushButton(QIcon(icon_path), "", self)
         button.clicked.connect(action)
@@ -71,4 +71,3 @@ class PictographView(QGraphicsView):
                 button.move(self.width() - button_size, 0)
             elif button == self.rotate_ccw_button:
                 button.move(0, 0)
-

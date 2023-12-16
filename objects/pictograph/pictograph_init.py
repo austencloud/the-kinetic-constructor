@@ -12,10 +12,10 @@ from objects.motion import Motion
 from objects.prop.prop_types import *
 from constants.string_constants import *
 from utilities.TypeChecking.TypeChecking import Colors, Locations, PropTypes
-from widgets.graph_editor.pictograph.pictograph_view import PictographView
+from objects.pictograph.pictograph_view import PictographView
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
 
 
 class PictographInit:

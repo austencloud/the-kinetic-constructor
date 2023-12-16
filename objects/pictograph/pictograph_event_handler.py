@@ -5,7 +5,7 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 

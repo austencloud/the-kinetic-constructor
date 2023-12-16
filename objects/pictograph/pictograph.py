@@ -47,12 +47,12 @@ from utilities.TypeChecking.TypeChecking import (
     PropTypes,
     Tuple,
 )
-from widgets.graph_editor.pictograph.pictograph_event_handler import (
+from objects.pictograph.pictograph_event_handler import (
     PictographEventHandler,
 )
-from widgets.graph_editor.pictograph.pictograph_view import PictographView
-from widgets.graph_editor.pictograph.pictograph_init import PictographInit
-from widgets.graph_editor.pictograph.pictograph_menu_handler import (
+from objects.pictograph.pictograph_view import PictographView
+from objects.pictograph.pictograph_init import PictographInit
+from objects.pictograph.pictograph_menu_handler import (
     PictographMenuHandler,
 )
 from widgets.graph_editor.pictograph.position_engines.arrow_positioner import (
@@ -358,5 +358,3 @@ class Pictograph(QGraphicsScene):
             renderer = QSvgRenderer(svg_path)
             if renderer.isValid():
                 self.letter_item.setSharedRenderer(renderer)
-
-

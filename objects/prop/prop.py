@@ -24,7 +24,7 @@ from utilities.TypeChecking.TypeChecking import (
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
     from objects.motion import Motion
     from widgets.graph_editor.object_panel.propbox.propbox import PropBox
 

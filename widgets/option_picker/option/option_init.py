@@ -13,7 +13,7 @@ from utilities.TypeChecking.TypeChecking import Colors, Locations, PropTypes
 from widgets.option_picker.option.option_view import OptionView
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
 
 
 class OptionInit:

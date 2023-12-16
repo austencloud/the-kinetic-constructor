@@ -6,14 +6,17 @@ from constants.string_constants import (
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, PropAttributesDicts
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
 
 
 class GhostProp(Prop):
     """Represents a ghost prop object, displaying the position that a prop will be while dragging if the user were to drop it."""
 
     def __init__(
-        self, pictograph: "Pictograph", attributes: PropAttributesDicts, motion: "Motion"
+        self,
+        pictograph: "Pictograph",
+        attributes: PropAttributesDicts,
+        motion: "Motion",
     ) -> None:
         super().__init__(pictograph, attributes, motion)
         self.setOpacity(0.2)

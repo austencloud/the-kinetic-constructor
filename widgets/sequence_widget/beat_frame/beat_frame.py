@@ -8,11 +8,12 @@ from PyQt6.QtWidgets import (
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 from widgets.sequence_widget.beat_frame.beat_view import BeatView
 from PyQt6.QtCore import Qt
+
 
 class BeatFrame(QFrame):
     def __init__(

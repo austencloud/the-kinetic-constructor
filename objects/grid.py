@@ -24,7 +24,7 @@ from utilities.TypeChecking.TypeChecking import GridModes
 if TYPE_CHECKING:
     from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
     from widgets.graph_editor.object_panel.propbox.propbox import PropBox
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
 
 
 class GridItem(QGraphicsSvgItem):
@@ -212,8 +212,7 @@ class Grid:
     def mouseReleaseEvent(self, event) -> None:
         event.ignore()
 
-
-    def eventFilter(self, obj, event:QEvent) -> Literal[False]:
+    def eventFilter(self, obj, event: QEvent) -> Literal[False]:
         if event.type() == QEvent.Type.Wheel:
             event.ignore()  # Ignore the event to let it propagate
         return False  # Return False to continue event propagation

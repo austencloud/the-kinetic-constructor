@@ -3,8 +3,8 @@ from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
 
 from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
-from widgets.graph_editor.pictograph.pictograph_widget import PictographWidget
-from widgets.graph_editor.pictograph.pictograph import Pictograph
+from widgets.graph_editor.pictograph_widget import PictographWidget
+from objects.pictograph.pictograph import Pictograph
 from widgets.graph_editor.object_panel.propbox.propbox import PropBox
 from widgets.graph_editor.attr_panel.attr_panel import AttrPanel
 

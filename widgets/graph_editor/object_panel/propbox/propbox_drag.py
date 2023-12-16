@@ -32,7 +32,7 @@ from widgets.graph_editor.object_panel.objectbox_drag import ObjectBoxDrag
 
 if TYPE_CHECKING:
     from main import MainWindow
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
     from widgets.graph_editor.object_panel.propbox.propbox import PropBox
 
 

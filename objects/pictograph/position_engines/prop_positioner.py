@@ -55,7 +55,7 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
 
 
 class PropPositioner:
@@ -148,9 +148,9 @@ class PropPositioner:
             (COUNTER_CLOCKWISE, WEST): QPointF(prop_width / 2, -prop_length / 2),
         }
         return position_offsets
-    
+
     ### REPOSITIONING ###
-    
+
     def reposition_beta_props(self) -> None:
         board_state = self.scene.get_state()
 

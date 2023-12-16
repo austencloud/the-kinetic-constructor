@@ -9,7 +9,7 @@ from constants.string_constants import LETTER_JSON_DIR
 from utilities.TypeChecking.TypeChecking import LetterDictionary, Letters
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
 
 
 class JsonHandler(QObject):

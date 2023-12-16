@@ -44,7 +44,7 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
     from objects.ghosts.ghost_arrow import GhostArrow
     from objects.prop.prop import Prop
     from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
@@ -143,7 +143,7 @@ class Arrow(GraphicalObject):
         )
 
     def _update_ghost_on_click(self) -> None:
-        from widgets.graph_editor.pictograph.pictograph import Pictograph
+        from objects.pictograph.pictograph import Pictograph
 
         if isinstance(self.scene, Pictograph):
             self.ghost: "GhostArrow" = self.scene.ghost_arrows[self.color]

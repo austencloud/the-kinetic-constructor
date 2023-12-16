@@ -45,7 +45,7 @@ from data.start_end_location_map import get_start_end_locations
 
 if TYPE_CHECKING:
     from main import MainWindow
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
     from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
 
 
@@ -247,9 +247,9 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
                 if prop not in self.pictograph.items():
                     self.pictograph.addItem(prop)
-                    self.pictograph.addItem(prop.ghost) 
+                    self.pictograph.addItem(prop.ghost)
                 prop.update_appearance()
-                
+
                 self.pictograph.update_props()
 
     def apply_transformations_to_preview(self) -> None:

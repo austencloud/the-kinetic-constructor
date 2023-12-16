@@ -33,8 +33,8 @@ from utilities.TypeChecking.TypeChecking import (
     Orientations,
     Tuple,
 )
-from widgets.graph_editor.pictograph.pictograph import Pictograph
-from widgets.graph_editor.pictograph.pictograph_menu_handler import (
+from objects.pictograph.pictograph import Pictograph
+from objects.pictograph.pictograph_menu_handler import (
     PictographMenuHandler,
 )
 from widgets.graph_editor.pictograph.position_engines.arrow_positioner import (

@@ -13,7 +13,7 @@ from utilities.TypeChecking.TypeChecking import LetterDictionary
 from utilities.json_handler import JsonHandler
 from widgets.graph_editor.graph_editor_widget import GraphEditorWidget
 from widgets.graph_editor.key_event_handler import KeyEventHandler
-from widgets.graph_editor.pictograph.pictograph import Pictograph
+from objects.pictograph.pictograph import Pictograph
 from widgets.option_picker.option_picker_widget import OptionPickerWidget
 from widgets.sequence_widget.sequence_widget import SequenceWidget
 
@@ -73,12 +73,6 @@ class MainWidget(QWidget):
         self.main_layout = QHBoxLayout(self)
         self.main_layout.addWidget(self.horizontal_splitter)
         self.setLayout(self.main_layout)
-
-
-
-
-
-
 
     ### EVENT HANDLERS ###
 

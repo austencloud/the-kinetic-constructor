@@ -15,7 +15,7 @@ from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
 from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
     from widgets.graph_editor.attr_panel.attr_panel import (
         AttrPanel,
     )
@@ -91,13 +91,12 @@ class AttrBox(QFrame):
         self.turns_widget.update_clocks(None)
 
     def update_attr_box(self, motion: Motion = None) -> None:
-
-            self.turns_widget.update_clocks(motion.rotation_direction)
-            self.start_end_widget.update_start_end_boxes(
-                motion.start_location, motion.end_location
-            )
-            self.motion_type_widget.update_motion_type_box(motion.motion_type)
-            self.turns_widget.update_turnbox(motion.turns)
+        self.turns_widget.update_clocks(motion.rotation_direction)
+        self.start_end_widget.update_start_end_boxes(
+            motion.start_location, motion.end_location
+        )
+        self.motion_type_widget.update_motion_type_box(motion.motion_type)
+        self.turns_widget.update_turnbox(motion.turns)
 
     def resize_attr_box(self) -> None:
         self.setMinimumWidth(int(self.pictograph.view.width() * 0.85))

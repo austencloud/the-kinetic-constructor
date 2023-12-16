@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout
 
 if TYPE_CHECKING:
     from widgets.graph_editor.graph_editor import GraphEditor
-    from widgets.graph_editor.pictograph.pictograph_view import PictographView
+    from objects.pictograph.pictograph_view import PictographView
 
 
 class PictographWidget(QWidget):
@@ -14,7 +14,7 @@ class PictographWidget(QWidget):
         self.aspect_ratio = aspect_ratio
         self.graph_editor = graph_editor
         self.view = view
-        
+
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addWidget(view)
         self.layout.setContentsMargins(0, 0, 0, 0)

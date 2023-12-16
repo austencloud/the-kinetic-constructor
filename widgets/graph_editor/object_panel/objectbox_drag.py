@@ -7,7 +7,7 @@ from utilities.TypeChecking.TypeChecking import RotationAngles
 if TYPE_CHECKING:
     from main import MainWindow
     from widgets.graph_editor.object_panel.objectbox import ObjectBox
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
     from widgets.graph_editor.object_panel.arrowbox.arrowbox_drag import ArrowBoxDrag
     from widgets.graph_editor.object_panel.propbox.propbox_drag import PropBoxDrag
 
@@ -112,8 +112,7 @@ class ObjectBoxDrag(QWidget):
             if motion.color == self.color:
                 motion.clear_attributes()
         self.pictograph.update_pictograph()
-        
-        
+
     def start_drag(self, event_pos: "QPoint") -> None:
         self.move_to_cursor(event_pos)
         self.show()

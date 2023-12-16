@@ -17,7 +17,7 @@ logging.basicConfig(
 from typing import TYPE_CHECKING, Dict, Literal, Set, Tuple
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
 
 from utilities.TypeChecking.TypeChecking import (
     MotionAttributesDicts,
@@ -49,12 +49,12 @@ from typing import Optional
 #         blue_motion = self.pictograph.motions[BLUE]
 #         if red_motion and blue_motion:
 #             filtered_df = self.motions_df[
-#                 (self.motions_df["blue_motion_type"] == blue_motion.motion_type) & 
-#                 (self.motions_df["blue_start_location"] == blue_motion.start_location) & 
+#                 (self.motions_df["blue_motion_type"] == blue_motion.motion_type) &
+#                 (self.motions_df["blue_start_location"] == blue_motion.start_location) &
 #                 (self.motions_df["blue_end_location"] == blue_motion.end_location) &
 #                 (self.motions_df["red_motion_type"] == red_motion.motion_type) &
 #                 (self.motions_df["red_start_location"] == red_motion.start_location) &
-#                 (self.motions_df["red_end_location"] == red_motion.end_location)    
+#                 (self.motions_df["red_end_location"] == red_motion.end_location)
 #             ]
 
 #             if not filtered_df.empty:
@@ -76,7 +76,7 @@ class LetterEngine:
         ] = parallel_combinations
         self.cached_parallel = None
         self.cached_handpath = None
-        
+
     def preprocess_combinations(self) -> PreprocessedStartEndCombinations:
         preprocessed_start_end_combinations: PreprocessedStartEndCombinations = {}
 
@@ -154,7 +154,11 @@ class LetterEngine:
 
     def get_motion(self, color: Colors) -> Motion | None:
         return next(
-            (motion for motion in self.pictograph.motions.values() if motion.color == color),
+            (
+                motion
+                for motion in self.pictograph.motions.values()
+                if motion.color == color
+            ),
             None,
         )
 

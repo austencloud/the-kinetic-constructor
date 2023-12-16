@@ -4,7 +4,7 @@ from constants.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
 from typing import TYPE_CHECKING, Literal
 from PyQt6.QtGui import QIcon
 
-from widgets.graph_editor.pictograph.pictograph_view import PictographView
+from objects.pictograph.pictograph_view import PictographView
 
 if TYPE_CHECKING:
     from widgets.option_picker.option.option import Option
@@ -20,7 +20,6 @@ class OptionView(PictographView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.init_buttons()
-
 
     def init_buttons(self) -> None:
         self.rotate_cw_button = self.create_button(

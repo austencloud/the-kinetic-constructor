@@ -2,7 +2,7 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
+    from objects.pictograph.pictograph import Pictograph
 
 
 class LetterItem(QGraphicsSvgItem):
@@ -11,9 +11,6 @@ class LetterItem(QGraphicsSvgItem):
         self.pictograph = pictograph
 
     def position_letter_item(self, letter_item: "QGraphicsSvgItem") -> None:
-        x = (
-            self.pictograph.width() / 2
-            - letter_item.boundingRect().width() / 2
-        )
+        x = self.pictograph.width() / 2 - letter_item.boundingRect().width() / 2
         y = self.pictograph.width()
         letter_item.setPos(x, y)
