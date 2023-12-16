@@ -6,6 +6,8 @@ from PyQt6.QtWidgets import QGraphicsScene
 
 from data.letter_engine_data import letter_types
 from objects.arrow.arrow import Arrow
+from objects.ghosts.ghost_arrow import GhostArrow
+from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.prop import Prop
 from objects.motion import Motion
@@ -35,6 +37,7 @@ from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
     Colors,
     Layers,
+    Locations,
     MotionAttributesDicts,
     List,
     MotionTypes,
@@ -96,13 +99,21 @@ class Pictograph(QGraphicsScene):
         self.grid: Grid = self.initializer.init_grid()
         self.view: PictographView = self.initializer.init_view()
         self.letter_item: LetterItem = self.initializer.init_letter_item()
-        self.locations = self.initializer.init_locations(self.grid)
+        self.locations: Dict[
+            Locations, Tuple[int, int, int, int]
+        ] = self.initializer.init_locations(self.grid)
 
-        self.motions = self.initializer.init_motions()
-        self.arrows = self.initializer.init_arrows()
-        self.ghost_arrows = self.initializer.init_ghost_arrows()
-        self.props = self.initializer.init_props(self.prop_type)
-        self.ghost_props = self.initializer.init_ghost_props(self.prop_type)
+        self.motions: Dict[Colors, Motion] = self.initializer.init_motions()
+
+        self.arrows: Dict[Colors, Arrow] = self.initializer.init_arrows()
+        self.props: Dict[Colors, Prop] = self.initializer.init_props(self.prop_type)
+
+        self.ghost_arrows: Dict[
+            Colors, GhostArrow
+        ] = self.initializer.init_ghost_arrows()
+        self.ghost_props: Dict[Colors, GhostProp] = self.initializer.init_ghost_props(
+            self.prop_type
+        )
 
         self.setup_managers(main_widget)
 
@@ -238,7 +249,7 @@ class Pictograph(QGraphicsScene):
         self.clear_pictograph()
 
     def rotate_pictograph(self, direction: str) -> None:
-        for arrow in self.arrows:
+        for arrow in self.arrows.values():
             arrow.manipulator.rotate_arrow(direction)
 
     def clear_pictograph(self) -> None:

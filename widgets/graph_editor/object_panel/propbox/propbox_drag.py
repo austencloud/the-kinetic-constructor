@@ -44,11 +44,11 @@ class PropBoxDrag(ObjectBoxDrag):
         self.attributes: PropAttributesDicts = {}
         self.propbox = propbox
         self.objectbox = propbox
-        self.static_arrow = None
+        self.arrow = None
 
     def match_target_prop(self, target_prop: "Prop") -> None:
         self.target_prop = target_prop
-        self.static_arrow = target_prop.arrow
+        self.arrow = target_prop.arrow
         drag_angle = self._get_prop_drag_rotation_angle(target_prop)
         super().match_target_object(target_prop, drag_angle)
         self.set_attributes(target_prop)
@@ -113,7 +113,7 @@ class PropBoxDrag(ObjectBoxDrag):
 
         self._update_ghost_prop_for_new_location(new_location)
 
-        if not self.static_arrow:
+        if not self.arrow:
             self._create_static_arrow()
         self._update_static_arrow()
 
@@ -164,7 +164,7 @@ class PropBoxDrag(ObjectBoxDrag):
         self.ghost_prop.motion.start_location = self.prop_location
         self.ghost_prop.motion.end_location = self.prop_location
 
-        self.ghost_prop.arrow = self.static_arrow
+        self.ghost_prop.arrow = self.arrow
         self.ghost_prop.arrow.motion.arrow_location = self.prop_location
         self.ghost_prop.arrow.motion.start_location = self.prop_location
         self.ghost_prop.arrow.motion.end_location = self.prop_location
@@ -288,25 +288,25 @@ class PropBoxDrag(ObjectBoxDrag):
             TURNS: 0,
         }
 
-        self.static_arrow = Arrow(
+        self.arrow = Arrow(
             self.pictograph, static_arrow_dict, self.pictograph.motions[self.color]
         )
         for arrow in self.pictograph.arrows.values():
             if arrow.color == self.color:
                 self.pictograph.removeItem(arrow)
-        self.pictograph.addItem(self.static_arrow)
-        self.pictograph.arrows[self.color] = self.static_arrow
-        self.static_arrow.prop = self.ghost_prop
-        self.static_arrow.prop.arrow = self.static_arrow
-        if self.static_arrow not in self.pictograph.items():
-            self.pictograph.addItem(self.static_arrow)
+        self.pictograph.addItem(self.arrow)
+        self.pictograph.arrows[self.color] = self.arrow
+        self.arrow.prop = self.ghost_prop
+        self.arrow.prop.arrow = self.arrow
+        if self.arrow not in self.pictograph.items():
+            self.pictograph.addItem(self.arrow)
 
     def _update_static_arrow(self) -> None:
-        self.static_arrow.color = self.color
-        self.static_arrow.motion.arrow_location = self.prop_location
-        self.static_arrow.motion.start_location = self.prop_location
-        self.static_arrow.motion.end_location = self.prop_location
-        self.static_arrow.prop = self.ghost_prop
-        self.static_arrow.prop.arrow = self.static_arrow
-        self.static_arrow.update_appearance()
+        self.arrow.color = self.color
+        self.arrow.motion.arrow_location = self.prop_location
+        self.arrow.motion.start_location = self.prop_location
+        self.arrow.motion.end_location = self.prop_location
+        self.arrow.prop = self.ghost_prop
+        self.arrow.prop.arrow = self.arrow
+        self.arrow.update_appearance()
         self.pictograph.update_pictograph()

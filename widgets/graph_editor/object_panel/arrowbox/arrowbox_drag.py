@@ -117,8 +117,9 @@ class ArrowBoxDrag(ObjectBoxDrag):
         }
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
-
         self.pictograph.arrows[self.color] = self.placed_arrow
+        self.pictograph.ghost_arrows[self.color] = self.ghost_arrow
+        
         self.placed_arrow.ghost_arrow = self.ghost_arrow
 
         self.pictograph.addItem(self.placed_arrow)
@@ -176,7 +177,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.ghost_arrow.update_mirror()
         self.ghost_arrow.update_svg(ghost_svg)
         if self.ghost_arrow not in self.pictograph.arrows:
-            self.pictograph.arrows[self.ghost_arrow.color] = self.ghost_arrow
+            self.pictograph.ghost_arrows[self.ghost_arrow.color] = self.ghost_arrow
         if self.ghost_arrow not in self.pictograph.items():
             self.pictograph.addItem(self.ghost_arrow)
 

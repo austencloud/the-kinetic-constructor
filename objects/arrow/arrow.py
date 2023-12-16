@@ -124,7 +124,7 @@ class Arrow(GraphicalObject):
             self.ghost_arrow.update_appearance()
             self.ghost_arrow.transform = self.transform
             self.scene.addItem(self.ghost_arrow)
-            self.scene.arrows[self.ghost_arrow.color] = self.ghost_arrow
+            self.scene.ghost_arrows[self.ghost_arrow.color] = self.ghost_arrow
 
     def update_location(self, new_pos: QPointF) -> None:
         new_location = self.scene.get_closest_layer2_point(new_pos)[0]
@@ -142,7 +142,7 @@ class Arrow(GraphicalObject):
         self.motion.arrow_location = new_location
         self.update_appearance()
 
-        self.scene.arrows[self.color] = self.ghost_arrow
+        self.scene.ghost_arrows[self.color] = self.ghost_arrow
         for prop in self.scene.props.values():
             if prop.color == self.color:
                 prop.arrow = self
