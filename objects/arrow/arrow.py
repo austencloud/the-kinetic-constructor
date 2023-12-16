@@ -4,7 +4,7 @@ from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from objects.arrow.arrow_manipulator import ArrowManipulator
 from objects.grid import GridItem
-from objects.prop import Prop
+from objects.prop.prop import Prop
 from constants.string_constants import (
     MOTION_TYPE,
     TURNS,
@@ -42,7 +42,7 @@ from utilities.TypeChecking.TypeChecking import (
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.ghosts.ghost_arrow import GhostArrow
-    from objects.prop import Prop
+    from objects.prop.prop import Prop
     from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
 
 

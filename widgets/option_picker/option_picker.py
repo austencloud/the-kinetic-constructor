@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt
 from constants.string_constants import *
 from data.positions_map import get_specific_start_end_positions
 from objects.arrow.arrow import Arrow
-from objects.prop import Prop
+from objects.prop.prop import Prop
 from widgets.option_picker.option.option import Option
 from widgets.sequence_widget.beat_frame.beat import Beat
 import pandas as pd

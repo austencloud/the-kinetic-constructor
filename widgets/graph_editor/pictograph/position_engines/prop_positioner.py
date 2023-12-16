@@ -43,7 +43,7 @@ from constants.string_constants import (
     END_LAYER,
 )
 from typing import TYPE_CHECKING, Dict, List
-from objects.prop import Prop
+from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
     MotionAttributesDicts,

@@ -1,5 +1,5 @@
 from objects.motion import Motion
-from objects.prop import Prop
+from objects.prop.prop import Prop
 from constants.string_constants import (
     COLOR,
 )

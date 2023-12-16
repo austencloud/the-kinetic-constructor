@@ -7,7 +7,7 @@ from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
-from objects.prop import (
+from objects.prop.prop import (
     BigHoop,
     Prop,
     Staff,

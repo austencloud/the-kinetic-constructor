@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QVBoxLayout, QGraphicsSceneMouseEvent, QComboBox
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from objects.prop import (
+from objects.prop.prop import (
     BigHoop,
     DoubleStar,
     BigDoubleStar,

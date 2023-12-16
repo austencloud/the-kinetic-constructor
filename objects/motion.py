@@ -16,7 +16,7 @@ from typing import TYPE_CHECKING, Union
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.arrow.arrow import Arrow
-    from objects.prop import Prop
+    from objects.prop.prop import Prop
     from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
 
 

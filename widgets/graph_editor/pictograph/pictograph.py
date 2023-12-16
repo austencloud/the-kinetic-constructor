@@ -9,7 +9,7 @@ from objects.arrow.arrow import Arrow
 from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
-from objects.prop import Prop
+from objects.prop.prop import Prop
 from objects.motion import Motion
 from constants.string_constants import (
     ARROW,

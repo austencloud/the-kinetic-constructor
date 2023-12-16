@@ -5,6 +5,7 @@ from PyQt6.QtCore import QPointF, Qt
 from constants.string_constants import *
 
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
+from objects.prop.prop_manipulator import PropManipulator
 from utilities.TypeChecking.TypeChecking import (
     Layers,
     Orientations,
@@ -40,7 +41,7 @@ class Prop(GraphicalObject):
 
     def _setup_attributes(self, scene, prop_dict: "PropAttributesDicts") -> None:
         self.scene: Pictograph | PropBox = scene
-
+        self.manipulator = PropManipulator(self)
         self.drag_offset = QPointF(0, 0)
         self.previous_location: Locations = None
         self.arrow: Arrow = None
@@ -142,7 +143,7 @@ class Prop(GraphicalObject):
         svg_file = f"{PROP_DIR}{prop_type}.svg"
         return svg_file
 
-    ### HELPERS ###
+    ### UPDATERS ###
 
     def update_prop_type(self, prop_type: PropTypes) -> None:
         self.prop_type = prop_type
@@ -177,6 +178,8 @@ class Prop(GraphicalObject):
             self.set_drag_pos(new_pos)
             self.previous_location = new_location
 
+    ### HELPERS ###
+
     def set_drag_pos(self, new_pos: QPointF) -> None:
         object_length = self.boundingRect().width()
         object_width = self.boundingRect().height()
@@ -185,8 +188,10 @@ class Prop(GraphicalObject):
 
         self.setPos(new_pos + offset)
 
+    ### GETTERS ###
+
     def get_offset(self, prop_length, prop_width) -> Tuple[int, int]:
-        # Layers 1 logic
+        # Layer 1 logic
         if self.layer == 1:
             if self.orientation == IN:
                 offset_map = {
@@ -203,7 +208,7 @@ class Prop(GraphicalObject):
                     EAST: (0, 0),
                 }
 
-        # Layers 2 logic
+        # Layer 2 logic
         elif self.layer == 2:
             if self.orientation == CLOCKWISE:
                 offset_map = {
@@ -313,25 +318,6 @@ class Prop(GraphicalObject):
         self.previous_location = closest_hand_point
         self.scene.update_pictograph()
 
-    def swap_axis(self) -> None:
-        if self.axis == VERTICAL:
-            self.axis = HORIZONTAL
-        else:
-            self.axis = VERTICAL
-        self.update_rotation()
-
-    def swap_layer(self) -> None:
-        if self.layer == 1:
-            self.layer = 2
-        else:
-            self.layer = 1
-        self.update_rotation()
-
-    def delete(self) -> None:
-        self.scene.removeItem(self)
-        self.scene.props[self.color] = None
-        self.motion.reset_motion_attributes()
-        self.scene.update_pictograph()
 
     def _create_static_arrow(self, deleted_arrow: "Arrow") -> None:
         from objects.arrow.arrow import Arrow
