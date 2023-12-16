@@ -197,7 +197,7 @@ class PropBox(ObjectBox):
         self.update_prop_type_in_pictograph(new_prop_type)
 
     def clear_props(self) -> None:
-        for prop in self.props[:]:
+        for prop in self.props:
             self.removeItem(prop)
         self.props.clear()
 

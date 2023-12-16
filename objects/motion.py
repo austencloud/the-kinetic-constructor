@@ -36,21 +36,12 @@ class Motion:
             self.arrow: Arrow = None
             self.prop: Prop = None
 
-        if motion_dict[GHOST_ARROW] and motion_dict[GHOST_PROP]:
-            self.ghost_arrow.motion = self
-            self.ghost_prop.motion = self
-        else:
-            self.ghost_arrow: Arrow = None
-            self.ghost_prop: Prop = None
-
         self.setup_attributes(motion_dict)
 
     def setup_attributes(self, motion_dict) -> None:
         self.arrow: Arrow = motion_dict[ARROW]
         self.prop: Prop = motion_dict[PROP]
-        if motion_dict[GHOST_ARROW] and motion_dict[GHOST_PROP]:
-            self.ghost_arrow: Arrow = motion_dict[GHOST_ARROW]
-            self.ghost_prop: Prop = motion_dict[GHOST_PROP]
+
         self.color: Colors = motion_dict[COLOR]
         self.motion_type: MotionTypes = motion_dict[MOTION_TYPE]
         self.turns: Turns = motion_dict[TURNS]
@@ -231,10 +222,6 @@ class Motion:
         self.color = self.arrow.color
         self.motion_type = self.arrow.motion_type
         self.turns = self.arrow.turns
-        self.rotation_direction = self.arrow.rotation_direction
-        self.arrow_location = self.arrow.motion.arrow_location
-        self.start_location = self.arrow.motion.start_location
-        self.end_location = self.arrow.motion.end_location
 
     def update_turns(self, turns: int) -> None:
         self.arrow.turns = turns
@@ -247,10 +234,10 @@ class Motion:
         self.arrow.update_svg(svg_file)
         self.arrow.update_appearance()
         self.arrow.arrow_dict[TURNS] = self.arrow.turns
-        if hasattr(self.arrow, "ghost_arrow"):
-            self.arrow.motion.ghost_arrow.turns = self.arrow.turns
-            self.arrow.motion.ghost_arrow.update_svg(svg_file)
-            self.arrow.motion.ghost_arrow.update_appearance()
+        if hasattr(self.arrow, "ghost"):
+            self.arrow.ghost.turns = self.arrow.turns
+            self.arrow.ghost.update_svg(svg_file)
+            self.arrow.ghost.update_appearance()
         self.scene.update_pictograph()
 
     def adjust_turns(self, adjustment: float) -> None:

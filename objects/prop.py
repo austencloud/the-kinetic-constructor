@@ -1,6 +1,7 @@
+from typing import Union
 from data.start_end_location_map import get_start_end_locations
 from objects.graphical_object import GraphicalObject
-from PyQt6.QtCore import QPointF
+from PyQt6.QtCore import QPointF, Qt
 from constants.string_constants import *
 
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
@@ -148,7 +149,7 @@ class Prop(GraphicalObject):
         self.update_svg(self.get_svg_file(prop_type))
         self.update_appearance()
 
-    def update_location(self, new_pos: QPointF) -> None:
+    def update_ghost_prop_location(self, new_pos: QPointF) -> None:
         new_location = self.pictograph.get_closest_hand_point(new_pos)[0]
 
         if new_location != self.previous_location:
@@ -364,6 +365,14 @@ class Prop(GraphicalObject):
 
         if self.arrow not in self.pictograph.items():
             self.pictograph.addItem(self.arrow)
+
+    def mouseMoveEvent(
+        self: Union["Prop", "Arrow"], event: "QGraphicsSceneMouseEvent"
+    ) -> None:
+        if event.buttons() == Qt.MouseButton.LeftButton:
+            new_pos = event.scenePos() - self.get_object_center()
+            self.set_drag_pos(new_pos)
+            self.update_ghost_prop_location(event.scenePos())
 
 
 class Staff(Prop):

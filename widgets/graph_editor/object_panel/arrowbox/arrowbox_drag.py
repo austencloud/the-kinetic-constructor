@@ -109,7 +109,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             COLOR: self.color,
             ARROW: self.placed_arrow,
             PROP: self.placed_arrow.prop,
-            GHOST_ARROW: self.pictograph.ghost_arrows[self.color],
+            GHOST_ARROW: None,
             GHOST_PROP: self.pictograph.ghost_props[self.color],
             MOTION_TYPE: self.motion_type,
             ROTATION_DIRECTION: self.rotation_direction,
@@ -124,7 +124,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.pictograph.arrows[self.color] = self.placed_arrow
         self.pictograph.ghost_arrows[self.color] = self.ghost_arrow
 
-        self.placed_arrow.motion.ghost_arrow = self.ghost_arrow
+        self.placed_arrow.ghost = self.ghost_arrow
 
         self.pictograph.addItem(self.placed_arrow)
         self.pictograph.removeItem(self.ghost_arrow)
@@ -153,7 +153,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             COLOR: self.color,
             ARROW: self,
             PROP: self.ghost_arrow.prop,
-            GHOST_ARROW: self.pictograph.ghost_arrows[self.color],
+            GHOST_ARROW: None,
             GHOST_PROP: None,
             MOTION_TYPE: self.motion_type,
             ROTATION_DIRECTION: self.rotation_direction,

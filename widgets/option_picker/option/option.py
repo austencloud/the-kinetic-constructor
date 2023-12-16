@@ -158,7 +158,7 @@ class Option(Pictograph):
         self.clear_pictograph()
 
     def rotate_pictograph(self, direction: str) -> None:
-        for arrow in self.arrows:
+        for arrow in self.arrows.values():
             arrow.manipulator.rotate_arrow(direction)
 
     def clear_pictograph(self) -> None:
@@ -217,7 +217,7 @@ class Option(Pictograph):
         for arrow in new_beat.arrows:
             for ghost_arrow in new_beat.ghost_arrows.values():
                 if arrow.color == ghost_arrow.color:
-                    arrow.motion.ghost_arrow = ghost_arrow
+                    arrow.ghost = ghost_arrow
                     ghost_arrow.update_attributes(arrow.get_attributes())
                     ghost_arrow.set_is_svg_mirrored_from_attributes()
                     ghost_arrow.update_mirror()

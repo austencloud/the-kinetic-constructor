@@ -31,6 +31,8 @@ class GraphicalObject(QGraphicsSvgItem):
 
         self.setup_graphics_flags()
 
+    ### SETUP ###
+
     def setup_graphics_flags(self) -> None:
         self.setFlags(
             QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable
@@ -75,6 +77,8 @@ class GraphicalObject(QGraphicsSvgItem):
         self.renderer: QSvgRenderer = QSvgRenderer(svg_file)
         self.setSharedRenderer(self.renderer)
 
+    ### UPDATERS ###
+
     def update_color(self) -> None:
         new_svg_data = self.set_svg_color(self.color)
         self.renderer.load(new_svg_data)
@@ -98,11 +102,15 @@ class GraphicalObject(QGraphicsSvgItem):
         for attribute_name, attribute_value in attributes.items():
             setattr(self, attribute_name, attribute_value)
 
+    ### FLAGS ###
+
     def is_dim(self, on: bool) -> None:
         if on:
             self.setOpacity(0.25)
         else:
             self.setOpacity(1.0)
+
+    ### GETTERS ###
 
     def get_object_center(self) -> QPointF:
         if self.rotation() in [90, 270]:
@@ -114,8 +122,5 @@ class GraphicalObject(QGraphicsSvgItem):
                 (self.boundingRect().width() / 2), (self.boundingRect().height() / 2)
             )
 
-    def mouseMoveEvent(self: Union["Prop", "Arrow"], event) -> None:
-        if event.buttons() == Qt.MouseButton.LeftButton:
-            new_pos = event.scenePos() - self.get_object_center()
-            self.set_drag_pos(new_pos)
-            self.update_location(event.scenePos())
+    ### MOUSE EVENTS ###
+

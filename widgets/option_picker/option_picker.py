@@ -147,8 +147,8 @@ class OptionPicker(QScrollArea):
             option.arrows[arrow.color] = arrow
             option.props[prop.color] = prop
             self.setup_motion_relations(option, arrow, prop)
-            motion_dict[GHOST_ARROW] = option.ghost_arrows[arrow.color]
-            motion_dict[GHOST_PROP] = option.ghost_props[prop.color]
+            motion_dict[GHOST_ARROW] = None
+            motion_dict[GHOST_PROP] = None
             for motion in option.motions.values():
                 if motion.color == motion_dict[COLOR]:
                     motion.setup_attributes(motion_dict)
@@ -183,11 +183,11 @@ class OptionPicker(QScrollArea):
     def setup_motion_relations(option: Option, arrow: Arrow, prop: Prop) -> None:
         motion = option.motions[arrow.color]
         arrow.motion, prop.motion = motion, motion
-        arrow.motion.ghost_arrow, prop.motion.ghost_prop = (
+        arrow.ghost, prop.motion.ghost_prop = (
             option.ghost_arrows[arrow.color],
             option.ghost_props[prop.color],
         )
-        arrow.motion.ghost_arrow.motion, prop.motion.ghost_prop.motion = motion, motion
+        arrow.ghost.motion, prop.motion.ghost_prop.motion = motion, motion
 
     @staticmethod
     def update_option(option: "Option") -> None:

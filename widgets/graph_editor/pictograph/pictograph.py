@@ -32,6 +32,7 @@ from constants.string_constants import (
     END_LAYER,
     ARROW_LOCATION,
 )
+from utilities.TypeChecking.Letters import Letters
 from utilities.letter_engine import LetterEngine
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
@@ -80,12 +81,13 @@ class Pictograph(QGraphicsScene):
     def setup_scene(self) -> None:
         self.setSceneRect(0, 0, 750, 900)
         self.setBackgroundBrush(Qt.GlobalColor.white)
+
+    def setup_components(self, main_widget: "MainWidget") -> None:
         self.arrows: Dict[Colors, Arrow] = {}
         self.props: Dict[Colors, Prop] = {}
         self.motions: Dict[Colors, Motion] = {}
-        self.current_letter: str = None
+        self.current_letter: Letters = None
 
-    def setup_components(self, main_widget: "MainWidget") -> None:
         self.generator: PictographGenerator = None
         self.event_handler = PictographEventHandler(self)
 
@@ -313,7 +315,7 @@ class Pictograph(QGraphicsScene):
         for arrow in new_beat.arrows.values():
             for ghost_arrow in new_beat.ghost_arrows.values():
                 if arrow.color == ghost_arrow.color:
-                    arrow.motion.ghost_arrow = ghost_arrow
+                    arrow.ghost = ghost_arrow
                     ghost_arrow.motion = new_beat.motions[arrow.color]
                     ghost_arrow.update_attributes(arrow.get_attributes())
                     ghost_arrow.set_is_svg_mirrored_from_attributes()

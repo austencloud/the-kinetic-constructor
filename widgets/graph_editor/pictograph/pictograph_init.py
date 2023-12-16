@@ -151,21 +151,13 @@ class PictographInit:
     def init_ghost_arrows(self) -> Dict[Colors, GhostArrow]:
         default_red_ghost_arrow_attributes = {
             COLOR: RED,
-            MOTION_TYPE: PRO,
-            ROTATION_DIRECTION: CLOCKWISE,
-            ARROW_LOCATION: NORTHEAST,
-            START_LOCATION: NORTH,
-            END_LOCATION: EAST,
+            MOTION_TYPE: STATIC,
             TURNS: 0,
         }
 
         default_blue_ghost_arrow_attributes = {
             COLOR: BLUE,
-            MOTION_TYPE: PRO,
-            ROTATION_DIRECTION: CLOCKWISE,
-            ARROW_LOCATION: SOUTHWEST,
-            START_LOCATION: SOUTH,
-            END_LOCATION: WEST,
+            MOTION_TYPE: STATIC,
             TURNS: 0,
         }
 

@@ -1,6 +1,9 @@
+from typing import Union
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtCore import QPointF
+from PyQt6.QtCore import QPointF, Qt
+from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from objects.arrow.arrow_manipulator import ArrowManipulator
+from objects.grid import GridItem
 from objects.prop import Prop
 from constants.string_constants import (
     MOTION_TYPE,
@@ -58,8 +61,9 @@ class Arrow(GraphicalObject):
         self.scene: Pictograph | ArrowBox = scene
         self.manipulator = ArrowManipulator(self)
         self.drag_offset = QPointF(0, 0)
-        self.prop: Prop = None
         self.is_svg_mirrored: bool = False
+        self.is_dragging: bool = False
+        self.ghost: GhostArrow = None
         self.turns: Turns = arrow_dict[TURNS]
         self.center_x = self.boundingRect().width() / 2
         self.center_y = self.boundingRect().height() / 2
@@ -92,73 +96,75 @@ class Arrow(GraphicalObject):
         super().mousePressEvent(event)
         self.setSelected(True)
 
-        if hasattr(self, "ghost_arrow"):
+        if hasattr(self.motion, "ghost_arrow"):
             if self.motion.ghost_arrow:
                 self._update_ghost_on_click()
-        if hasattr(self, "prop"):
-            if self.prop:
+        if hasattr(self.motion, "prop"):
+            if self.motion.prop:
                 self._update_prop_on_click()
 
         self.scene.update_pictograph()
 
         for item in self.scene.items():
-            if item != self:
+            if item != self and not isinstance(item, GridItem):
                 item.setSelected(False)
         if self.scene:
             self.scene.update_attr_panel()
 
+    def mouseReleaseEvent(self, event) -> None:
+        self.scene.removeItem(self.motion.ghost_arrow)
+        self.is_dragging = False
+        self.scene.arrows[self.color] = self
+        self.scene.update_pictograph()
+
+    ### UPDATERS ###
+
     def _update_prop_on_click(self) -> None:
-        self.prop.color = self.color
-        self.prop.prop_location = self.motion.end_location
-        self.prop.axis = self.prop.update_axis_from_layer(self.motion.end_location)
+        self.motion.prop.color = self.color
+        self.motion.prop.prop_location = self.motion.end_location
+        self.motion.prop.axis = self.motion.prop.update_axis_from_layer(
+            self.motion.end_location
+        )
 
     def _update_ghost_on_click(self) -> None:
         from widgets.graph_editor.pictograph.pictograph import Pictograph
 
         if isinstance(self.scene, Pictograph):
             self.motion.ghost_arrow: "GhostArrow" = self.scene.ghost_arrows[self.color]
-            self.motion.ghost_arrow.prop = self.prop
+            self.motion.ghost_arrow.prop = self.motion.prop
             self.motion.ghost_arrow.set_attributes_from_dict(self.arrow_dict)
             self.motion.ghost_arrow.set_arrow_attrs_from_arrow(self)
             self.motion.ghost_arrow.set_is_svg_mirrored_from_attributes()
             self.motion.ghost_arrow.update_appearance()
             self.motion.ghost_arrow.transform = self.transform
             self.scene.addItem(self.motion.ghost_arrow)
-            self.scene.ghost_arrows[self.motion.ghost_arrow.color] = self.motion.ghost_arrow
+            self.scene.ghost_arrows[
+                self.motion.ghost_arrow.color
+            ] = self.motion.ghost_arrow
 
-    def update_location(self, new_pos: QPointF) -> None:
+    def update_ghost_arrow_location(self, new_pos: QPointF) -> None:
         new_location = self.scene.get_closest_layer2_point(new_pos)[0]
-
         self.motion.arrow_location = new_location
-
         self.set_start_end_locations()
-
         if hasattr(self, "ghost_arrow"):
             self.motion.ghost_arrow.set_arrow_attrs_from_arrow(self)
             self.motion.ghost_arrow.update_appearance()
 
-        self.prop.set_prop_attrs_from_arrow(self)
-        self.prop.update_appearance()
+        self.motion.prop.set_prop_attrs_from_arrow(self)
+        self.motion.prop.update_appearance()
         self.motion.arrow_location = new_location
         self.update_appearance()
-
+        self.motion.ghost_arrow.update_appearance()
         self.scene.ghost_arrows[self.color] = self.motion.ghost_arrow
         for prop in self.scene.props.values():
             if prop.color == self.color:
                 prop.arrow = self
-                self.prop = prop
+                self.motion.prop = prop
+        self.is_dragging = True
         self.scene.update_pictograph()
 
     def set_drag_pos(self, new_pos: QPointF) -> None:
         self.setPos(new_pos)
-
-    def mouseReleaseEvent(self, event) -> None:
-        self.scene.removeItem(self.motion.ghost_arrow)
-        self.motion.ghost_arrow.prop = None
-        self.scene.arrows[self.color] = self
-        self.scene.update_pictograph()
-
-    ### UPDATERS ###
 
     def update_mirror(self) -> None:
         if self.is_svg_mirrored:
@@ -293,20 +299,17 @@ class Arrow(GraphicalObject):
             self.motion.rotation_direction = None
             self.pictograph.graph_editor.attr_panel.update_attr_panel(self.color)
         if keep_prop:
-            self.prop._create_static_arrow(self)
+            self.motion.prop._create_static_arrow(self)
         else:
             self.motion.reset_motion_attributes()
-            self.prop.delete()
+            self.motion.prop.delete()
 
         self.scene.update_pictograph()
 
-
-class StaticArrow(Arrow):
-    def __init__(self, pictograph, attributes) -> None:
-        super().__init__(pictograph, attributes)
-        self._disable_interactivity()
-        self.hide()
-
-    def _disable_interactivity(self) -> None:
-        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
-        self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, False)
+    def mouseMoveEvent(
+        self: Union["Prop", "Arrow"], event: "QGraphicsSceneMouseEvent"
+    ) -> None:
+        if event.buttons() == Qt.MouseButton.LeftButton:
+            new_pos = event.scenePos() - self.get_object_center()
+            self.set_drag_pos(new_pos)
+            self.update_ghost_arrow_location(event.scenePos())
