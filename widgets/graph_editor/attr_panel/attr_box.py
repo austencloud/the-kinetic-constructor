@@ -91,15 +91,13 @@ class AttrBox(QFrame):
         self.turns_widget.update_clocks(None)
 
     def update_attr_box(self, motion: Motion = None) -> None:
-        if motion:
+
             self.turns_widget.update_clocks(motion.rotation_direction)
             self.start_end_widget.update_start_end_boxes(
                 motion.start_location, motion.end_location
             )
             self.motion_type_widget.update_motion_type_box(motion.motion_type)
             self.turns_widget.update_turnbox(motion.turns)
-        else:
-            self.clear_attr_box()
 
     def resize_attr_box(self) -> None:
         self.setMinimumWidth(int(self.pictograph.view.width() * 0.85))

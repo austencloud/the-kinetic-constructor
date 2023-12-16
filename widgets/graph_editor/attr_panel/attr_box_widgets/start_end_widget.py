@@ -133,7 +133,7 @@ class StartEndWidget(AttrBoxWidget):
 
         motion = self.attr_box.pictograph.motions[self.attr_box.color]
         if motion:
-            motion.arrow.swap_rot_dir()
+            motion.arrow.manipulator.swap_rot_dir()
             self.update_start_end_boxes(motion.start_location, motion.end_location)
 
     def update_start_end_boxes(self, start: Locations, end: Locations) -> None:

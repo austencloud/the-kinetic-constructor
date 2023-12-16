@@ -31,11 +31,17 @@ class AttrPanel(QFrame):
 
     def update_attr_panel(self, motion_color: Colors) -> None:
         motion = self.graph_editor.pictograph.motions[motion_color]
-        if motion_color == BLUE:
-            self.blue_attr_box.update_attr_box(motion)
-        elif motion_color == RED:
-            self.red_attr_box.update_attr_box(motion)
-
+        if motion.arrow and motion.prop: 
+            if motion_color == BLUE:
+                self.blue_attr_box.update_attr_box(motion)
+            elif motion_color == RED:
+                self.red_attr_box.update_attr_box(motion)
+        else:
+            if motion_color == BLUE:
+                self.blue_attr_box.clear_attr_box()
+            elif motion_color == RED:
+                self.red_attr_box.clear_attr_box()
+                
     def clear_all_attr_boxes(self) -> None:
         self.blue_attr_box.clear_attr_box()
         self.red_attr_box.clear_attr_box()

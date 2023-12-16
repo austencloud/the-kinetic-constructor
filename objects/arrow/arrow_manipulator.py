@@ -65,14 +65,14 @@ class ArrowManipulator:
             new_start_location,
             new_end_location,
         ) = get_start_end_locations(
-            self.arrow.motion_type, self.arrow.rotation_direction, new_location
+            self.arrow.motion_type, self.arrow.motion.rotation_direction, new_location
         )
 
         updated_arrow_dict = {
             COLOR: self.arrow.color,
             MOTION_TYPE: self.arrow.motion_type,
             ARROW_LOCATION: new_location,
-            ROTATION_DIRECTION: self.arrow.rotation_direction,
+            ROTATION_DIRECTION: self.arrow.motion.rotation_direction,
             START_LOCATION: new_start_location,
             END_LOCATION: new_end_location,
             TURNS: self.arrow.turns,
@@ -160,7 +160,7 @@ class ArrowManipulator:
             new_start_location,
             new_end_location,
         ) = get_start_end_locations(
-            self.arrow.motion_type, self.arrow.rotation_direction, new_arrow_location
+            self.arrow.motion_type, self.arrow.motion.rotation_direction, new_arrow_location
         )
 
         self.arrow.motion.arrow_location = new_arrow_location
@@ -193,7 +193,7 @@ class ArrowManipulator:
             new_start_location,
             new_end_location,
         ) = get_start_end_locations(
-            self.arrow.motion_type, self.arrow.rotation_direction, new_arrow_location
+            self.arrow.motion_type, self.arrow.motion.rotation_direction, new_arrow_location
         )
 
         self.arrow.motion.arrow_location = new_arrow_location
@@ -279,11 +279,11 @@ class ArrowManipulator:
         elif not self.arrow.is_svg_mirrored:
             self.mirror()
 
-        if self.arrow.rotation_direction == COUNTER_CLOCKWISE:
+        if self.arrow.motion.rotation_direction == COUNTER_CLOCKWISE:
             new_rotation_direction = CLOCKWISE
-        elif self.arrow.rotation_direction == CLOCKWISE:
+        elif self.arrow.motion.rotation_direction == CLOCKWISE:
             new_rotation_direction = COUNTER_CLOCKWISE
-        elif self.arrow.rotation_direction == "None":
+        elif self.arrow.motion.rotation_direction == "None":
             new_rotation_direction = "None"
 
         old_start_location = self.arrow.motion.start_location
@@ -294,7 +294,7 @@ class ArrowManipulator:
         svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
         self.arrow.update_svg(svg_file)
 
-        self.arrow.rotation_direction = new_rotation_direction
+        self.arrow.motion.rotation_direction = new_rotation_direction
         self.arrow.motion.start_location = new_start_location
         self.arrow.motion.end_location = new_end_location
 
@@ -346,11 +346,11 @@ class ArrowManipulator:
         elif self.arrow.motion_type == STATIC:
             new_motion_type = STATIC
 
-        if self.arrow.rotation_direction == COUNTER_CLOCKWISE:
+        if self.arrow.motion.rotation_direction == COUNTER_CLOCKWISE:
             new_rotation_direction = CLOCKWISE
-        elif self.arrow.rotation_direction == CLOCKWISE:
+        elif self.arrow.motion.rotation_direction == CLOCKWISE:
             new_rotation_direction = COUNTER_CLOCKWISE
-        elif self.arrow.rotation_direction == "None":
+        elif self.arrow.motion.rotation_direction == "None":
             new_rotation_direction = "None"
 
         new_arrow_dict = {
@@ -365,7 +365,6 @@ class ArrowManipulator:
 
         self.arrow.motion_type = new_motion_type
         self.arrow.motion.motion_type = new_motion_type
-        self.arrow.rotation_direction = new_rotation_direction
         self.arrow.motion.rotation_direction = new_rotation_direction
 
         self.arrow.prop.orientation = self.arrow.prop.swap_orientation(

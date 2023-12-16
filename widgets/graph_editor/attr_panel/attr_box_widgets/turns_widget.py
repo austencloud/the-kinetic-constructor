@@ -114,6 +114,7 @@ class TurnsWidget(AttrBoxWidget):
         """Creates the turns box and buttons for turn adjustments."""
         self.turnbox: QComboBox = QComboBox(self)
         self.turnbox.addItems(["0", "0.5", "1", "1.5", "2", "2.5", "3"])
+
         self.turnbox.currentTextChanged.connect(self._update_turns)
 
         self.turnbox.setCurrentIndex(-1)
@@ -225,19 +226,22 @@ class TurnsWidget(AttrBoxWidget):
                 self.turnbox.setCurrentIndex(-1)
 
     def _update_turns(self, index: int) -> None:
+        
         turns = str(index)
         if turns == "0" or turns == "1" or turns == "2" or turns == "3":
             motion: Motion = self.attr_box.pictograph.motions[self.attr_box.color]
             if motion and motion.arrow:
-                motion.update_turns(int(turns))
-                self.attr_box.update_attr_box(motion)
-                self.attr_box.pictograph.update()
+                if int(turns) != motion.turns:
+                    motion.update_turns(int(turns))
+                    self.attr_box.update_attr_box(motion)
+                    self.attr_box.pictograph.update()
         elif turns == "0.5" or turns == "1.5" or turns == "2.5":
             motion: Motion = self.attr_box.pictograph.motions[self.attr_box.color]
             if motion:
-                motion.update_turns(float(turns))
-                self.attr_box.update_attr_box(motion)
-                self.attr_box.pictograph.update()
+                if float(turns) != motion.turns:
+                    motion.update_turns(float(turns))
+                    self.attr_box.update_attr_box(motion)
+                    self.attr_box.pictograph.update()
         else:
             self.turnbox.setCurrentIndex(-1)
 

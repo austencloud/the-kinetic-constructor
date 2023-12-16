@@ -57,17 +57,17 @@ class KeyEventHandler:
         ### ARROW MANIPULATION ###
         if selected_arrow:
             if event.key() == Qt.Key.Key_W:
-                selected_arrow.move_wasd(UP)
+                selected_arrow.manipulator.move_wasd(UP)
             elif event.key() == Qt.Key.Key_A:
-                selected_arrow.move_wasd(LEFT)
+                selected_arrow.manipulator.move_wasd(LEFT)
             elif event.key() == Qt.Key.Key_S:
-                selected_arrow.move_wasd(DOWN)
+                selected_arrow.manipulator.move_wasd(DOWN)
             elif event.key() == Qt.Key.Key_D:
-                selected_arrow.move_wasd(RIGHT)
+                selected_arrow.manipulator.move_wasd(RIGHT)
             elif event.key() == Qt.Key.Key_R:
-                selected_arrow.swap_rot_dir()
+                selected_arrow.manipulator.swap_rot_dir()
             elif event.key() == Qt.Key.Key_F:
-                selected_arrow.swap_motion_type()
+                selected_arrow.manipulator.swap_motion_type()
             elif event.key() == Qt.Key.Key_Q:
                 selected_arrow.motion.subtract_half_turn()
             elif event.key() == Qt.Key.Key_E:
@@ -75,4 +75,4 @@ class KeyEventHandler:
 
         ### SEQEUNCE MANAGEMENT ###
         elif event.key() == Qt.Key.Key_Enter:
-            sequence.add_to_sequence(pictograph)
+            pictograph.add_to_sequence_callback()

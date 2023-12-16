@@ -328,7 +328,7 @@ class Prop(GraphicalObject):
 
     def delete(self) -> None:
         self.scene.removeItem(self)
-        self.scene.props.remove(self)
+        self.scene.props[self.color] = None
         self.motion.reset_motion_attributes()
         self.scene.update_pictograph()
 

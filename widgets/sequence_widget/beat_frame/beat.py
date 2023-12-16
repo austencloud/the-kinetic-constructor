@@ -58,7 +58,6 @@ class Beat(Pictograph):
         self.setup_scene()
         self.setup_components(main_widget)
 
-
     def set_letter_renderer(self, letter: str) -> None:
         letter_type = self.get_current_letter_type()
         svg_path = f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
@@ -132,7 +131,7 @@ class Beat(Pictograph):
 
     def rotate_pictograph(self, direction: str) -> None:
         for arrow in self.arrows.values():
-            arrow.rotate_arrow(direction)
+            arrow.manipulator.rotate_arrow(direction)
 
     def clear_pictograph(self) -> None:
         self.arrows = []
@@ -145,9 +144,9 @@ class Beat(Pictograph):
         self.update_pictograph()
 
     def clear_selections(self) -> None:
-        for arrow in self.arrows:
+        for arrow in self.arrows.values():
             arrow.setSelected(False)
-        for prop in self.props:
+        for prop in self.props.values():
             prop.setSelected(False)
         self.dragged_prop = None
         self.dragged_arrow = None
@@ -164,7 +163,6 @@ class Beat(Pictograph):
 
     def update_props(self) -> None:
         self.prop_positioner.update_prop_positions()
-
 
     def update_letter_item(self, letter: str) -> None:
         if letter:

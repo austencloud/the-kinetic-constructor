@@ -146,7 +146,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         motion_dict = {
             COLOR: self.color,
-            ARROW: self.ghost_arrow,
+            ARROW: self,
             PROP: self.ghost_arrow.prop,
             MOTION_TYPE: self.motion_type,
             ROTATION_DIRECTION: self.rotation_direction,
@@ -190,7 +190,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
                     self.remove_same_color_objects()
                     self.has_entered_pictograph_once = True
                     self.motion = self.pictograph.motions[self.color]
-                    self.motion.arrow = self.ghost_arrow
+                    self.motion.ghost_arrow = self.ghost_arrow
 
                 pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(

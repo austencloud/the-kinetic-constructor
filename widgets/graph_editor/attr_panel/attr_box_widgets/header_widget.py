@@ -81,12 +81,12 @@ class HeaderWidget(AttrBoxWidget):
     def _rotate_ccw(self) -> None:
         motion = self.attr_box.pictograph.motions[self.attr_box.color]
         if motion:
-            motion.arrow.rotate_arrow("ccw")
+            motion.arrow.manipulator.rotate_arrow("ccw")
 
     def _rotate_cw(self) -> None:
         motion = self.attr_box.pictograph.motions[self.attr_box.color]
         if motion:
-            motion.arrow.rotate_arrow("cw")
+            motion.arrow.manipulator.rotate_arrow("cw")
 
     def _setup_header_label(self) -> QLabel:
         text = "Left" if self.attr_box.color == BLUE else "Right"

@@ -159,7 +159,7 @@ class Option(Pictograph):
 
     def rotate_pictograph(self, direction: str) -> None:
         for arrow in self.arrows:
-            arrow.rotate_arrow(direction)
+            arrow.manipulator.rotate_arrow(direction)
 
     def clear_pictograph(self) -> None:
         self.arrows = []

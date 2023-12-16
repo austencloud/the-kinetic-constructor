@@ -30,11 +30,8 @@ class Motion:
         self.motion_dict = motion_dict
 
         if motion_dict[ARROW] and motion_dict[PROP]:
-            self.arrow: Arrow = motion_dict[ARROW]
-            self.prop: Prop = motion_dict[PROP]
             self.arrow.motion = self
             self.prop.motion = self
-
         else:
             self.arrow: Arrow = None
             self.prop: Prop = None
@@ -42,6 +39,8 @@ class Motion:
         self.setup_attributes(motion_dict)
 
     def setup_attributes(self, motion_dict) -> None:
+        self.arrow: Arrow = motion_dict[ARROW]
+        self.prop: Prop = motion_dict[PROP]
         self.color: Colors = motion_dict[COLOR]
         self.motion_type: MotionTypes = motion_dict[MOTION_TYPE]
         self.turns: Turns = motion_dict[TURNS]

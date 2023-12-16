@@ -109,7 +109,7 @@ class MotionTypesWidget(AttrBoxWidget):
             self.motion_type_box.setCurrentIndex(new_motion_type_index)
             motion = self.attr_box.pictograph.motions[self.attr_box.color]
             if motion:
-                motion.arrow.swap_motion_type()
+                motion.arrow.manipulator.swap_motion_type()
 
     def update_motion_type_box(self, motion_type: MotionTypes) -> None:
         if motion_type is None:
