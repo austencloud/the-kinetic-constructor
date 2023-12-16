@@ -227,17 +227,13 @@ class TurnsWidget(AttrBoxWidget):
     def _update_turns(self, index: int) -> None:
         turns = str(index)
         if turns == "0" or turns == "1" or turns == "2" or turns == "3":
-            motion: Motion = self.attr_box.pictograph.motions[
-                self.attr_box.color
-            ]
+            motion: Motion = self.attr_box.pictograph.motions[self.attr_box.color]
             if motion:
                 motion.update_turns(int(turns))
                 self.attr_box.update_attr_box(motion)
                 self.attr_box.pictograph.update()
         elif turns == "0.5" or turns == "1.5" or turns == "2.5":
-            motion: Motion = self.attr_box.pictograph.motions[
-                self.attr_box.color
-            ]
+            motion: Motion = self.attr_box.pictograph.motions[self.attr_box.color]
             if motion:
                 motion.update_turns(float(turns))
                 self.attr_box.update_attr_box(motion)
@@ -263,6 +259,9 @@ class TurnsWidget(AttrBoxWidget):
             clock.setMaximumSize(clock_size, clock_size)
 
     def _update_turnbox_size(self) -> None:
+        self.setMinimumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
+        self.setMaximumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
+
         self.spacing = self.attr_box.pictograph.view.width() // 250
 
         border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
@@ -308,7 +307,6 @@ class TurnsWidget(AttrBoxWidget):
         )
         self.turnbox_vbox_frame.setMinimumWidth(int(self.attr_box.width() / 3.25))
         self.turnbox_vbox_frame.setMaximumWidth(int(self.attr_box.width() / 3.25))
-
 
     def _update_button_size(self) -> None:
         for button in self.buttons:

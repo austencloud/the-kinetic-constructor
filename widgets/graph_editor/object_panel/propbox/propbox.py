@@ -59,7 +59,7 @@ class PropBox(ObjectBox):
 
     def populate_props(self) -> None:
         self.clear_props()
-        initial_prop_attributes: List[Dict] = self.get_initial_prop_attributes()
+        default_prop_dicts: List[Dict] = self.get_initial_prop_attributes()
 
         # Mapping prop types to their respective classes
         prop_classes: Dict[str, type] = {
@@ -80,13 +80,13 @@ class PropBox(ObjectBox):
             CHICKEN: Chicken,
         }
 
-        for attributes in initial_prop_attributes:
+        for prop_dict in default_prop_dicts:
             prop_class = prop_classes.get(self.prop_type)
             if prop_class:
                 prop = prop_class(
                     self.pictograph,
-                    attributes,
-                    self.pictograph.motions[attributes[COLOR]],
+                    prop_dict,
+                    self.pictograph.motions[prop_dict[COLOR]],
                 )
                 self.setup_prop(prop)
                 self.props.append(prop)
@@ -97,6 +97,7 @@ class PropBox(ObjectBox):
         prop.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
         prop.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, True)
         self.set_prop_position(prop)
+        prop.update_appearance()
         self.addItem(prop)
 
     def get_initial_prop_attributes(self) -> List[Dict]:

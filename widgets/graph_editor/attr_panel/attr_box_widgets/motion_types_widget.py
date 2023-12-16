@@ -125,6 +125,9 @@ class MotionTypesWidget(AttrBoxWidget):
         self.motion_type_box.setCurrentIndex(-1)
 
     def resize_motion_type_widget(self) -> None:
+        self.setMinimumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
+        self.setMaximumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
+
         self.spacing = self.attr_box.pictograph.view.width() // 250
         self.swap_button_frame.setMinimumWidth(int(self.width() * 1 / 4))
         self.swap_button_frame.setMaximumWidth(int(self.width() * 1 / 4))

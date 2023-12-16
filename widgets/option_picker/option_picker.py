@@ -131,6 +131,8 @@ class OptionPicker(QScrollArea):
                 COLOR: motion_dict[COLOR],
                 PROP_TYPE: self.pictograph.prop_type,
                 PROP_LOCATION: motion_dict[END_LOCATION],
+                LAYER: 1,
+                ORIENTATION: IN,
             }
             arrow = Arrow(option, arrow_dict, option.motions[motion_dict[COLOR]])
             prop = Prop(option, prop_dict, option.motions[motion_dict[COLOR]])
@@ -146,8 +148,7 @@ class OptionPicker(QScrollArea):
             self.setup_motion_relations(option, arrow, prop)
             for motion in option.motions.values():
                 if motion.color == motion_dict[COLOR]:
-                    motion.start_location = motion_dict[START_LOCATION]
-                    motion.end_location = motion_dict[END_LOCATION]
+                    motion.setup_attributes(motion_dict)
 
         self.update_option(option)
         self.options.append(option)

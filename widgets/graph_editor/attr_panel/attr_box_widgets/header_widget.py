@@ -64,7 +64,7 @@ class HeaderWidget(AttrBoxWidget):
         header_layout = QHBoxLayout()
         header_layout.setContentsMargins(0, 0, 0, 0)
         header_layout.setSpacing(0)
-
+        header_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         header_layout.addStretch(1)
         header_layout.addWidget(self.rotate_ccw_button)
         header_layout.addStretch(1)
@@ -114,4 +114,5 @@ class HeaderWidget(AttrBoxWidget):
         )
         self.header_label.setFont(QFont("Arial", int(self.height() / 3)))
         self._update_button_size()
-        self.setMinimumWidth(self.attr_box.width())
+        self.setMinimumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
+        self.setMaximumWidth(self.attr_box.width() - self.attr_box.border_width * 2)

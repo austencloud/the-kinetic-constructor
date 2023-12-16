@@ -81,6 +81,7 @@ class Motion:
 
     def update_prop_orientation_and_layer(self) -> None:
         if self.prop:
+
             self.prop.orientation = self.end_orientation
             self.prop.layer = self.end_layer
             self.prop.prop_location = self.end_location

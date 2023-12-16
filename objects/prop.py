@@ -37,17 +37,17 @@ class Prop(GraphicalObject):
         self.setup_svg_renderer(self.svg_file)
         self._setup_attributes(scene, prop_dict)
 
-    def _setup_attributes(self, scene, attributes: "PropAttributesDicts") -> None:
+    def _setup_attributes(self, scene, prop_dict: "PropAttributesDicts") -> None:
         self.scene: Pictograph | PropBox = scene
 
         self.drag_offset = QPointF(0, 0)
         self.previous_location: Locations = None
         self.arrow: Arrow = None
         self.ghost_prop: Prop = None
-        self.orientation: Orientations = None
-        self.color: Colors = attributes[COLOR]
-        self.prop_location: Locations = attributes[PROP_LOCATION]
-        self.layer: Layers = None
+        self.color: Colors = prop_dict[COLOR]
+        self.prop_location: Locations = prop_dict[PROP_LOCATION]
+        self.layer: Layers = prop_dict[LAYER]
+        self.orientation: Orientations = prop_dict[ORIENTATION]
         self.center = self.boundingRect().center()
 
     ### MOUSE EVENTS ###
@@ -76,7 +76,6 @@ class Prop(GraphicalObject):
     def mouseReleaseEvent(self, event) -> None:
         if isinstance(self.scene, self.scene.__class__):
             self.scene.removeItem(self.ghost_prop)
-            self.scene.props.remove(self.ghost_prop)
             self.ghost_prop.arrow = None
             self.scene.update_pictograph()
             self.finalize_prop_drop(event)
@@ -170,10 +169,9 @@ class Prop(GraphicalObject):
             self.ghost_prop.prop_location = self.prop_location
             self.ghost_prop.layer = self.layer
             self.ghost_prop.update_appearance()
-            self.scene.props.remove(self)
-
+            self.scene.props[self.ghost_prop.color] = self.ghost_prop
             self.scene.update_pictograph()
-            self.scene.props.append(self)
+            self.scene.props[self.color] = self
             new_pos = new_pos - self.get_object_center()
             self.set_drag_pos(new_pos)
             self.previous_location = new_location
