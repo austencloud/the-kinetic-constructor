@@ -175,7 +175,7 @@ class Pictograph(QGraphicsScene):
                     COLOR: motion.color,
                     MOTION_TYPE: motion.motion_type,
                     ROTATION_DIRECTION: motion.rotation_direction,
-                    ARROW_LOCATION: motion.arrow_location,
+                    ARROW_LOCATION: motion.arrow.location,
                     START_LOCATION: motion.start_location,
                     END_LOCATION: motion.end_location,
                     TURNS: motion.turns,
@@ -291,32 +291,9 @@ class Pictograph(QGraphicsScene):
         new_beat = Beat(self.main_widget, self.graph_editor)
         new_beat.setSceneRect(self.sceneRect())
         new_beat.motions = self.motions
-
-        for item in self.items():
-            if isinstance(item, Arrow):
-                new_arrow = Arrow(
-                    new_beat, item.get_attributes(), new_beat.motions[item.color]
-                )
-                new_arrow.setTransformOriginPoint(new_arrow.boundingRect().center())
-                new_arrow.setPos(item.pos())
-                new_arrow.setZValue(item.zValue())
-                new_beat.addItem(new_arrow)
-                new_beat.arrows[new_arrow.color] = new_arrow
-                motion = new_beat.motions[new_arrow.color]
-                new_arrow.motion = motion
-                motion.arrow = new_arrow
-
-            elif isinstance(item, Prop):
-                new_prop = Prop(
-                    new_beat, item.get_attributes(), new_beat.motions[item.color]
-                )
-                new_prop.setPos(item.pos())
-                new_prop.setZValue(item.zValue())
-                new_beat.addItem(new_prop)
-                new_beat.props[new_prop.color] = new_prop
-                motion = new_beat.motions[new_prop.color]
-                new_prop.motion = motion
-                motion.prop = new_prop
+        new_beat.arrows = self.arrows
+        new_beat.props = self.props
+        new_beat.ghost_arrows = self.ghost_arrows
 
 
         for arrow in new_beat.arrows.values():
@@ -371,7 +348,7 @@ class Pictograph(QGraphicsScene):
         if len(self.props) == 2:
             # check if all the motions have motion types and arrow locations
             for motion in self.motions.values():
-                if motion.motion_type is None or motion.arrow_location is None:
+                if motion.motion_type is None or motion.arrow.location is None:
                     return
             self.current_letter = self.letter_engine.get_current_letter()
         else:

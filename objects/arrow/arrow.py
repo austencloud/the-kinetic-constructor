@@ -68,6 +68,7 @@ class Arrow(GraphicalObject):
         self.is_svg_mirrored: bool = False
         self.is_dragging: bool = False
         self.ghost: GhostArrow = None
+        self.location: Locations = None
         self.turns: Turns = arrow_dict[TURNS]
         self.center_x = self.boundingRect().width() / 2
         self.center_y = self.boundingRect().height() / 2
@@ -157,7 +158,7 @@ class Arrow(GraphicalObject):
 
     def update_ghost_arrow_location(self, new_pos: QPointF) -> None:
         new_location = self.scene.get_closest_layer2_point(new_pos)[0]
-        self.motion.arrow_location = new_location
+        self.motion.arrow.location = new_location
         self.set_start_end_locations()
         if hasattr(self, "ghost_arrow"):
             self.ghost.set_arrow_attrs_from_arrow(self)
@@ -165,14 +166,12 @@ class Arrow(GraphicalObject):
 
         self.motion.prop.set_prop_attrs_from_arrow(self)
         self.motion.prop.update_appearance()
-        self.motion.arrow_location = new_location
+        self.motion.arrow.location = new_location
         self.update_appearance()
         self.ghost.update_appearance()
+        self.ghost.location = new_location
         self.scene.ghost_arrows[self.color] = self.ghost
-        for prop in self.scene.props.values():
-            if prop.color == self.color:
-                prop.arrow = self
-                self.motion.prop = prop
+        self.scene.props[self.color] = self.motion.prop
         self.is_dragging = True
         self.scene.update_pictograph()
 
@@ -194,7 +193,7 @@ class Arrow(GraphicalObject):
             self.motion.start_location,
             self.motion.end_location,
         ) = get_start_end_locations(
-            self.motion_type, self.motion.rotation_direction, self.motion.arrow_location
+            self.motion_type, self.motion.rotation_direction, self.motion.arrow.location
         )
         self.motion.start_location = self.motion.start_location
         self.motion.end_location = self.motion.end_location
@@ -203,7 +202,7 @@ class Arrow(GraphicalObject):
         self.color = target_arrow.color
         self.motion.color = target_arrow.color
         self.motion_type: MotionTypes = target_arrow.motion_type
-        self.motion.arrow_location = target_arrow.motion.arrow_location
+        self.motion.arrow.location = target_arrow.location
         self.motion.rotation_direction: RotationDirections = (
             target_arrow.motion.rotation_direction
         )
@@ -238,6 +237,7 @@ class Arrow(GraphicalObject):
 
     def clear_attributes(self) -> None:
         self.motion_type = None
+        self.location = None
         self.turns = None
         self.motion = None
 
@@ -255,7 +255,7 @@ class Arrow(GraphicalObject):
         location_to_angle = self.get_location_to_angle_map(
             arrow.motion_type, arrow.motion.rotation_direction
         )
-        return location_to_angle.get(self.motion.arrow_location, 0)
+        return location_to_angle.get(self.motion.arrow.location, 0)
 
     def get_location_to_angle_map(
         self, motion_type: str, rotation_direction: str

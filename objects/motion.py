@@ -38,6 +38,8 @@ class Motion:
 
         self.setup_attributes(motion_dict)
 
+    ### SETUP ###
+
     def setup_attributes(self, motion_dict) -> None:
         self.arrow: Arrow = motion_dict[ARROW]
         self.prop: Prop = motion_dict[PROP]
@@ -51,33 +53,39 @@ class Motion:
         self.start_orientation: Orientations = motion_dict[START_ORIENTATION]
         self.start_layer: Layers = motion_dict[START_LAYER]
 
-        self.arrow_location = self.determine_arrow_location(
-            self.start_location, self.end_location
-        )
+        if self.arrow:
+            self.arrow.location = self.get_arrow_location(
+                self.start_location, self.end_location
+            )
 
         self.end_orientation: Orientations = self.get_end_orientation()
         self.end_layer: Layers = self.get_end_layer()
         self.update_prop_orientation_and_layer()
 
-    def determine_arrow_location(self, start_location: str, end_location: str) -> str:
-        if self.arrow:
-            if start_location == end_location:
-                return start_location
+    ### UPDATE ###
 
-            direction_map = {
-                ("n", "e"): "ne",
-                ("e", "s"): "se",
-                ("s", "w"): "sw",
-                ("w", "n"): "nw",
-                ("n", "w"): "nw",
-                ("w", "s"): "sw",
-                ("s", "e"): "se",
-                ("e", "n"): "ne",
-            }
+    def update_attr_from_arrow(self) -> None:
+        self.color = self.arrow.color
+        self.motion_type = self.arrow.motion_type
+        self.turns = self.arrow.turns
 
-            return direction_map.get(
-                (start_location, end_location)
-            ) or direction_map.get((end_location, start_location))
+    def update_turns(self, turns: int) -> None:
+        self.arrow.turns = turns
+        self.turns = self.arrow.turns
+        self.end_orientation = self.get_end_orientation()
+        self.update_prop_orientation_and_layer()
+        self.prop.update_appearance()
+        self.prop.update_rotation()
+        svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
+        self.arrow.update_svg(svg_file)
+        self.arrow.update_appearance()
+        self.arrow.arrow_dict[TURNS] = self.arrow.turns
+        if hasattr(self.arrow, "ghost"):
+            if self.arrow.ghost:
+                self.arrow.ghost.turns = self.arrow.turns
+                self.arrow.ghost.update_svg(svg_file)
+                self.arrow.ghost.update_appearance()
+        self.scene.update_pictograph()
 
     def update_prop_orientation_and_layer(self) -> None:
         if self.prop:
@@ -91,7 +99,6 @@ class Motion:
     def clear_attributes(self):
         self.start_location = None
         self.end_location = None
-        self.arrow_location = None
         self.arrow = None
         self.turns = None
         self.motion_type = None
@@ -100,6 +107,8 @@ class Motion:
         self.rotation_direction = None
         self.start_orientation = None
         self.end_orientation = None
+
+    ### GETTERS ###
 
     def get_end_layer(self) -> Layers:
         if self.start_layer:
@@ -216,28 +225,27 @@ class Motion:
                         key, self.start_orientation
                     )
 
-    def update_attr_from_arrow(self) -> None:
-        self.color = self.arrow.color
-        self.motion_type = self.arrow.motion_type
-        self.turns = self.arrow.turns
+    def get_arrow_location(self, start_location: str, end_location: str) -> str:
+        if self.arrow:
+            if start_location == end_location:
+                return start_location
 
-    def update_turns(self, turns: int) -> None:
-        self.arrow.turns = turns
-        self.turns = self.arrow.turns
-        self.end_orientation = self.get_end_orientation()
-        self.update_prop_orientation_and_layer()
-        self.prop.update_appearance()
-        self.prop.update_rotation()
-        svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
-        self.arrow.update_svg(svg_file)
-        self.arrow.update_appearance()
-        self.arrow.arrow_dict[TURNS] = self.arrow.turns
-        if hasattr(self.arrow, "ghost"):
-            if self.arrow.ghost:
-                self.arrow.ghost.turns = self.arrow.turns
-                self.arrow.ghost.update_svg(svg_file)
-                self.arrow.ghost.update_appearance()
-        self.scene.update_pictograph()
+            direction_map = {
+                ("n", "e"): "ne",
+                ("e", "s"): "se",
+                ("s", "w"): "sw",
+                ("w", "n"): "nw",
+                ("n", "w"): "nw",
+                ("w", "s"): "sw",
+                ("s", "e"): "se",
+                ("e", "n"): "ne",
+            }
+
+            return direction_map.get(
+                (start_location, end_location)
+            ) or direction_map.get((end_location, start_location))
+
+    ### MANIPULATORS ###
 
     def adjust_turns(self, adjustment: float) -> None:
         potential_new_turns = self.arrow.turns + adjustment

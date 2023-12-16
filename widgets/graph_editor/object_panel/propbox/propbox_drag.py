@@ -71,7 +71,7 @@ class PropBoxDrag(ObjectBoxDrag):
             self.pictograph.motions[self.color],
         )
 
-        self.placed_prop.motion.arrow_location = self.location
+        self.placed_prop.motion.arrow.location = self.location
         self.placed_prop.motion.start_location = self.location
         self.placed_prop.motion.end_location = self.location
 
@@ -89,7 +89,7 @@ class PropBoxDrag(ObjectBoxDrag):
         }
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
-        self.placed_prop.motion.arrow_location = self.location
+        self.placed_prop.motion.arrow.location = self.location
         self.placed_prop.motion.start_location = self.location
         self.placed_prop.motion.end_location = self.location
 
@@ -154,7 +154,7 @@ class PropBoxDrag(ObjectBoxDrag):
         self.ghost.orientation = self.orientation
         self.ghost.layer = self.layer
         self.ghost.motion.prop = self.ghost
-        self.ghost.motion.arrow_location = self.location
+        self.ghost.motion.arrow.location = self.location
         self.ghost.motion.start_location = self.location
 
         ghost_svg = self.ghost.get_svg_file(self.prop_type)
@@ -204,7 +204,7 @@ class PropBoxDrag(ObjectBoxDrag):
 
                 if self.previous_drag_location != new_location and new_location:
                     self.previous_drag_location = new_location
-                    self.ghost.motion.arrow_location = new_location
+                    self.ghost.motion.arrow.location = new_location
                     self.ghost.motion.start_location = new_location
                     self.ghost.motion.end_location = new_location
                     self._update_prop_preview_for_new_location(new_location)
@@ -274,7 +274,7 @@ class PropBoxDrag(ObjectBoxDrag):
 
     def _update_static_arrow(self) -> None:
         self.arrow.color = self.color
-        self.arrow.motion.arrow_location = self.location
+        self.arrow.location = self.location
         self.arrow.motion.start_location = self.location
         self.arrow.motion.end_location = self.location
         self.arrow.ghost = self.pictograph.ghost_arrows[self.color]

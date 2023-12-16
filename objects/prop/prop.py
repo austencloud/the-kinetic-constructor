@@ -102,7 +102,7 @@ class Prop(GraphicalObject):
         self.location = None
         self.layer = None
         self.orientation = None
-        self.axis = None    
+        self.axis = None
         self.motion = None
         self.update_appearance()
 
@@ -169,7 +169,7 @@ class Prop(GraphicalObject):
             self.location = new_location
 
             if self.motion.motion_type == STATIC:
-                self.motion.arrow_location = new_location
+                self.motion.arrow.location = new_location
                 self.motion.start_location = new_location
                 self.motion.end_location = new_location
 
@@ -282,7 +282,7 @@ class Prop(GraphicalObject):
                 },
             }
 
-            current_arrow_location = self.motion.arrow_location
+            current_arrow_location = self.motion.arrow.location
             rotation_direction = self.motion.rotation_direction
             motion_type = self.motion.motion_type
             new_arrow_location = shift_location_map.get(
@@ -294,15 +294,15 @@ class Prop(GraphicalObject):
                     motion_type, rotation_direction, new_arrow_location
                 )
 
-                self.motion.arrow_location = new_arrow_location
+                self.motion.arrow.location = new_arrow_location
                 self.motion.start_location = start_location
                 self.motion.end_location = end_location
                 self.pictograph.update_pictograph()
                 self.motion.arrow.update_appearance()
                 self.motion.arrow.ghost.update_appearance()
-                
+
         elif self.motion.motion_type == STATIC:
-            self.motion.arrow_location = new_arrow_location
+            self.motion.arrow.location = new_arrow_location
             self.motion.start_location = new_arrow_location
             self.motion.end_location = new_arrow_location
             self.motion.arrow.update_appearance()
@@ -322,4 +322,3 @@ class Prop(GraphicalObject):
             self.motion.arrow.update_appearance()
         self.previous_location = closest_hand_point
         self.scene.update_pictograph()
-

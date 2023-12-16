@@ -55,12 +55,12 @@ class ArrowManipulator:
             DOWN: {NORTHEAST: SOUTHEAST, NORTHWEST: SOUTHWEST},
             RIGHT: {NORTHWEST: NORTHEAST, SOUTHWEST: SOUTHEAST},
         }
-        current_location = self.arrow.motion.arrow_location
+        current_location = self.arrow.location
         new_location = wasd_location_map.get(direction, {}).get(
             current_location, current_location
         )
-        self.arrow.motion.arrow_location = new_location
-        self.arrow.motion.arrow_location = new_location
+        self.arrow.location = new_location
+        self.arrow.location = new_location
         (
             new_start_location,
             new_end_location,
@@ -147,7 +147,7 @@ class ArrowManipulator:
         self, rotation_direction, box_mode_shift_arrow_locations: List[Locations]
     ) -> None:
         current_location_index = box_mode_shift_arrow_locations.index(
-            self.arrow.motion.arrow_location
+            self.arrow.location
         )
         new_location_index = (
             (current_location_index + 1) % 4
@@ -165,11 +165,11 @@ class ArrowManipulator:
             new_arrow_location,
         )
 
-        self.arrow.motion.arrow_location = new_arrow_location
+        self.arrow.location = new_arrow_location
         self.arrow.motion.start_location = new_start_location
         self.arrow.motion.end_location = new_end_location
 
-        self.arrow.motion.arrow_location = new_arrow_location
+        self.arrow.location = new_arrow_location
         self.arrow.motion.start_location = new_start_location
         self.arrow.motion.end_location = new_end_location
         self.arrow.motion.prop.location = new_end_location
@@ -182,7 +182,7 @@ class ArrowManipulator:
         self, rotation_direction, diamond_mode_shift_arrow_locations: List[Locations]
     ) -> None:
         current_location_index = diamond_mode_shift_arrow_locations.index(
-            self.arrow.motion.arrow_location
+            self.arrow.location
         )
         new_location_index = (
             (current_location_index + 1) % 4
@@ -200,11 +200,7 @@ class ArrowManipulator:
             new_arrow_location,
         )
 
-        self.arrow.motion.arrow_location = new_arrow_location
-        self.arrow.motion.start_location = new_start_location
-        self.arrow.motion.end_location = new_end_location
-
-        self.arrow.motion.arrow_location = new_arrow_location
+        self.arrow.location = new_arrow_location
         self.arrow.motion.start_location = new_start_location
         self.arrow.motion.end_location = new_end_location
         self.arrow.motion.prop.location = new_end_location
@@ -217,7 +213,7 @@ class ArrowManipulator:
         self, rotation_direction, box_mode_static_arrow_locations: List[Locations]
     ) -> None:
         current_location_index = box_mode_static_arrow_locations.index(
-            self.arrow.motion.arrow_location
+            self.arrow.location
         )
         new_location_index = (
             (current_location_index + 1) % 4
@@ -225,10 +221,10 @@ class ArrowManipulator:
             else (current_location_index - 1) % 4
         )
         new_location = box_mode_static_arrow_locations[new_location_index]
-        self.arrow.motion.arrow_location = new_location
+        self.arrow.location = new_location
         self.arrow.motion.start_location = new_location
         self.arrow.motion.end_location = new_location
-        self.arrow.motion.arrow_location = new_location
+        self.arrow.location = new_location
         self.arrow.motion.start_location = new_location
         self.arrow.motion.end_location = new_location
         self.arrow.motion.prop.location = new_location
@@ -241,7 +237,7 @@ class ArrowManipulator:
         self, rotation_direction, diamond_mode_locations: List[Locations]
     ) -> None:
         current_location_index = diamond_mode_locations.index(
-            self.arrow.motion.arrow_location
+            self.arrow.location
         )
         new_location_index = (
             (current_location_index + 1) % 4
@@ -249,10 +245,10 @@ class ArrowManipulator:
             else (current_location_index - 1) % 4
         )
         new_location = diamond_mode_locations[new_location_index]
-        self.arrow.motion.arrow_location = new_location
+        self.arrow.location = new_location
         self.arrow.motion.start_location = new_location
         self.arrow.motion.end_location = new_location
-        self.arrow.motion.arrow_location = new_location
+        self.arrow.location = new_location
         self.arrow.motion.start_location = new_location
         self.arrow.motion.end_location = new_location
         self.arrow.motion.prop.location = new_location
@@ -360,7 +356,7 @@ class ArrowManipulator:
         new_arrow_dict = {
             COLOR: self.arrow.color,
             MOTION_TYPE: new_motion_type,
-            ARROW_LOCATION: self.arrow.motion.arrow_location,
+            ARROW_LOCATION: self.arrow.location,
             ROTATION_DIRECTION: new_rotation_direction,
             START_LOCATION: self.arrow.motion.start_location,
             END_LOCATION: self.arrow.motion.end_location,

@@ -60,7 +60,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self, main_window: "MainWindow", pictograph: "Pictograph", arrowbox: "ArrowBox"
     ) -> None:
         super().__init__(main_window, pictograph, arrowbox)
-        self.attributes: ArrowAttributesDicts = {}
         self.arrowbox = arrowbox
         self.objectbox = arrowbox
         self.ghost: GhostArrow = None
@@ -72,7 +71,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.rotation_direction = target_arrow.motion.rotation_direction
         self.motion_type = target_arrow.motion_type
         self.color = target_arrow.color
-        self.arrow_location = target_arrow.motion.arrow_location
+        self.arrow_location = target_arrow.location
         self.turns = target_arrow.turns
         self.target_arrow_rotation_angle = self._get_arrow_drag_rotation_angle(
             self.target_arrow
@@ -85,7 +84,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
     def set_attributes(self, target_arrow: "Arrow") -> None:
         self.color: Colors = target_arrow.color
         self.motion_type: MotionTypes = target_arrow.motion_type
-        self.arrow_location: Locations = target_arrow.motion.arrow_location
+        self.arrow_location: Locations = target_arrow.location
         self.rotation_direction: RotationDirections = (
             target_arrow.motion.rotation_direction
         )
@@ -149,8 +148,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
             COLOR: self.color,
             ARROW: self,
             PROP: self.ghost.motion.prop,
-            GHOST_ARROW: None,
-            GHOST_PROP: None,
             MOTION_TYPE: self.motion_type,
             ROTATION_DIRECTION: self.rotation_direction,
             TURNS: self.turns,
@@ -162,15 +159,17 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
         self.pictograph.motions[self.color].arrow = self.pictograph.arrows[self.color]
-        self.pictograph.arrows[self.color] = self.ghost
-        self.ghost.update_ghost_arrow(self.attributes)
+        self.ghost = self.pictograph.ghost_arrows[self.color]
+        self.ghost.location = new_location
+        self.ghost.update_color()
+        self.ghost.update_appearance()
         self.pictograph.update_pictograph()
 
     def _update_ghost_arrow_for_new_location(self, new_location) -> None:
         self.ghost.color = self.color
         self.ghost.motion = self.motion
 
-        self.ghost.motion.arrow_location = new_location
+        self.ghost.motion.arrow.location = new_location
         self.ghost.motion_type = self.motion_type
         self.ghost.motion.rotation_direction = self.rotation_direction
 

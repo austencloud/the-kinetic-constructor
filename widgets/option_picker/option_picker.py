@@ -194,7 +194,7 @@ class OptionPicker(QScrollArea):
             prop.motion.update_prop_orientation_and_layer()
             prop.update_rotation()
             prop.update_appearance()
-            arrow.motion.arrow_location = arrow.motion.determine_arrow_location(
+            arrow.location = arrow.motion.get_arrow_location(
                 arrow.motion.start_location, arrow.motion.end_location
             )
         option.update_pictograph()

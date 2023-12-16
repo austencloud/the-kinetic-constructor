@@ -95,7 +95,7 @@ class Beat(Pictograph):
                     COLOR: motion.color,
                     MOTION_TYPE: motion.motion_type,
                     ROTATION_DIRECTION: motion.rotation_direction,
-                    ARROW_LOCATION: motion.arrow.motion.arrow_location,
+                    ARROW_LOCATION: motion.arrow.location,
                     START_LOCATION: motion.start_location,
                     END_LOCATION: motion.end_location,
                     TURNS: motion.turns,
