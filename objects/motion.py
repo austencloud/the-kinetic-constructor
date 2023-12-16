@@ -11,26 +11,33 @@ from utilities.TypeChecking.TypeChecking import (
     Layers,
 )
 from constants.string_constants import *
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.arrow.arrow import Arrow
     from objects.prop import Prop
-from constants.string_constants import DASH
-from data.start_end_location_map import get_start_end_locations
+    from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
 
 
 class Motion:
     def __init__(
         self,
-        pictograph: "Pictograph",
+        scene: Union["Pictograph", "ArrowBox"],
         motion_dict: MotionAttributesDicts,
     ) -> None:
-        self.pictograph = pictograph
-        self.arrow: Arrow = motion_dict[ARROW]
-        self.prop: Prop = motion_dict[PROP]
+        self.scene = scene
         self.motion_dict = motion_dict
+
+        if motion_dict[ARROW] and motion_dict[PROP]:
+            self.arrow: Arrow = motion_dict[ARROW]
+            self.prop: Prop = motion_dict[PROP]
+            self.arrow.motion = self
+            self.prop.motion = self
+
+        else:
+            self.arrow: Arrow = None
+            self.prop: Prop = None
 
         self.setup_attributes(motion_dict)
 
@@ -43,40 +50,43 @@ class Motion:
         self.end_location: Locations = motion_dict[END_LOCATION]
         self.start_orientation: Orientations = motion_dict[START_ORIENTATION]
         self.start_layer: Layers = motion_dict[START_LAYER]
+
         self.arrow_location = self.determine_arrow_location(
             self.start_location, self.end_location
         )
+
         self.end_orientation: Orientations = self.get_end_orientation()
         self.end_layer: Layers = self.get_end_layer()
-        if self.prop:
-            self.update_prop_orientation_and_layer()
+        self.update_prop_orientation_and_layer()
 
     def determine_arrow_location(self, start_location: str, end_location: str) -> str:
-        if start_location == end_location:
-            return start_location
+        if self.arrow:
+            if start_location == end_location:
+                return start_location
 
-        direction_map = {
-            ("n", "e"): "ne",
-            ("e", "s"): "se",
-            ("s", "w"): "sw",
-            ("w", "n"): "nw",
-            ("n", "w"): "nw",
-            ("w", "s"): "sw",
-            ("s", "e"): "se",
-            ("e", "n"): "ne",
-        }
+            direction_map = {
+                ("n", "e"): "ne",
+                ("e", "s"): "se",
+                ("s", "w"): "sw",
+                ("w", "n"): "nw",
+                ("n", "w"): "nw",
+                ("w", "s"): "sw",
+                ("s", "e"): "se",
+                ("e", "n"): "ne",
+            }
 
-        return direction_map.get((start_location, end_location)) or direction_map.get(
-            (end_location, start_location)
-        )
+            return direction_map.get(
+                (start_location, end_location)
+            ) or direction_map.get((end_location, start_location))
 
     def update_prop_orientation_and_layer(self) -> None:
-        self.prop.orientation = self.end_orientation
-        self.prop.layer = self.end_layer
-        self.prop.prop_location = self.end_location
-        self.prop.axis: Axes = self.prop.update_axis_from_layer(self.prop.prop_location)
-        self.prop.update_rotation()
-        self.prop.update_appearance()
+        if self.prop:
+            self.prop.orientation = self.end_orientation
+            self.prop.layer = self.end_layer
+            self.prop.prop_location = self.end_location
+            self.prop.axis: Axes = self.prop.update_axis_from_layer(self.prop.prop_location)
+            self.prop.update_rotation()
+            self.prop.update_appearance()
 
     def reset_motion_attributes(self):
         self.start_location = None
@@ -92,11 +102,13 @@ class Motion:
         self.end_orientation = None
 
     def get_end_layer(self) -> Layers:
-        if self.turns in [0, 1, 2]:
-            end_layer = self.start_layer
-        elif self.turns in [0.5, 1.5]:
-            end_layer = 3 - self.start_layer  # Switches between 1 and 2
-        return end_layer
+        if self.start_layer:
+            if self.turns or self.turns == 0:
+                if self.turns in [0, 1, 2]:
+                    end_layer = self.start_layer
+                elif self.turns in [0.5, 1.5]:
+                    end_layer = 3 - self.start_layer  # Switches between 1 and 2
+                return end_layer
 
     def get_end_orientation(self) -> Orientations:
         anti_orientation_map = {
@@ -223,12 +235,12 @@ class Motion:
         svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
         self.arrow.update_svg(svg_file)
         self.arrow.update_appearance()
-        self.arrow.attributes[TURNS] = self.arrow.turns
+        self.arrow.arrow_dict[TURNS] = self.arrow.turns
         if hasattr(self.arrow, "ghost_arrow"):
             self.arrow.ghost_arrow.turns = self.arrow.turns
             self.arrow.ghost_arrow.update_svg(svg_file)
             self.arrow.ghost_arrow.update_appearance()
-        self.pictograph.update_pictograph()
+        self.scene.update_pictograph()
 
     def adjust_turns(self, adjustment: float) -> None:
         potential_new_turns = self.arrow.turns + adjustment

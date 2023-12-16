@@ -1,15 +1,18 @@
-from typing import TYPE_CHECKING, List, Tuple
+import re
+from typing import TYPE_CHECKING, Dict, List, Tuple
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QGraphicsItem, QGraphicsSceneMouseEvent, QGridLayout
 from objects.arrow.arrow import Arrow
 from constants.string_constants import *
+from objects.motion import Motion
 from widgets.graph_editor.object_panel.arrowbox.arrowbox_drag import ArrowBoxDrag
 from widgets.graph_editor.object_panel.arrowbox.arrowbox_view import ArrowBoxView
 from objects.grid import Grid
 from widgets.graph_editor.object_panel.objectbox import ObjectBox
-from utilities.TypeChecking.TypeChecking import MotionAttributesDicts
+from utilities.TypeChecking.TypeChecking import Colors, MotionAttributesDicts
 from PyQt6.QtCore import QPointF
+
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.graph_editor import GraphEditor
@@ -24,99 +27,38 @@ class ArrowBox(ObjectBox):
         self.grid = Grid(self)
         self.target_arrow: "Arrow" = None
         self.drag = None
-
-        self.populate_arrows()
+        self.default_start_orientation = IN
+        self.start_orientation = self.default_start_orientation
+        self.motions: List[Motion] = self.create_motions()
+        self.arrows: List[Arrow] = self.create_arrows()
 
         self.arrowbox_layout = QGridLayout()
         self.arrowbox_layout.addWidget(self.view)
 
-    def populate_arrows(self) -> None:
-        self.arrows: List[Arrow] = []
-        self.red_arrows: List[Arrow] = []
-        self.blue_arrows: List[Arrow] = []
+    def create_arrows(self) -> None:
+        red_arrows: List[Arrow] = []
+        blue_arrows: List[Arrow] = []
+        arrows: List[Arrow] = []
+        for motion in self.motions:
+            arrow_dict = {
+                COLOR: motion.color,
+                MOTION_TYPE: motion.motion_type,
+                TURNS: motion.turns,
+            }
 
-    def populate_arrows(self) -> None:
-        self.arrows: List[Arrow] = []
-        self.red_arrows: List[Arrow] = []
-        self.blue_arrows: List[Arrow] = []
+            arrow = Arrow(self, arrow_dict, motion)
+            motion.arrow = arrow
+            arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
+            arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
+            self.addItem(arrow)
+            arrows.append(arrow)
+            if arrow.color == RED:
+                red_arrows.append(arrow)
+            elif arrow.color == BLUE:
+                blue_arrows.append(arrow)
+            arrow.setTransformOriginPoint(arrow.boundingRect().center())
+            arrow.is_dim(True)
 
-        red_arrow_attributes: List[MotionAttributesDicts] = [
-            {
-                COLOR: RED,
-                MOTION_TYPE: PRO,
-                ROTATION_DIRECTION: CLOCKWISE,
-                ARROW_LOCATION: NORTHEAST,
-                START_LOCATION: NORTH,
-                END_LOCATION: EAST,
-                TURNS: 0,
-            },
-            {
-                COLOR: RED,
-                MOTION_TYPE: PRO,
-                ROTATION_DIRECTION: COUNTER_CLOCKWISE,
-                ARROW_LOCATION: SOUTHEAST,
-                START_LOCATION: SOUTH,
-                END_LOCATION: EAST,
-                TURNS: 0,
-            },
-            {
-                COLOR: RED,
-                MOTION_TYPE: ANTI,
-                ROTATION_DIRECTION: CLOCKWISE,
-                ARROW_LOCATION: SOUTHEAST,
-                START_LOCATION: SOUTH,
-                END_LOCATION: EAST,
-                TURNS: 0,
-            },
-            {
-                COLOR: RED,
-                MOTION_TYPE: ANTI,
-                ROTATION_DIRECTION: COUNTER_CLOCKWISE,
-                ARROW_LOCATION: NORTHEAST,
-                START_LOCATION: NORTH,
-                END_LOCATION: EAST,
-                TURNS: 0,
-            },
-        ]
-
-        blue_arrow_attributes: List[MotionAttributesDicts] = [
-            {
-                COLOR: BLUE,
-                MOTION_TYPE: PRO,
-                ROTATION_DIRECTION: CLOCKWISE,
-                ARROW_LOCATION: SOUTHWEST,
-                START_LOCATION: SOUTH,
-                END_LOCATION: WEST,
-                TURNS: 0,
-            },
-            {
-                COLOR: BLUE,
-                MOTION_TYPE: PRO,
-                ROTATION_DIRECTION: COUNTER_CLOCKWISE,
-                ARROW_LOCATION: NORTHWEST,
-                START_LOCATION: NORTH,
-                END_LOCATION: WEST,
-                TURNS: 0,
-            },
-            {
-                COLOR: BLUE,
-                MOTION_TYPE: ANTI,
-                ROTATION_DIRECTION: CLOCKWISE,
-                ARROW_LOCATION: NORTHWEST,
-                START_LOCATION: NORTH,
-                END_LOCATION: WEST,
-                TURNS: 0,
-            },
-            {
-                COLOR: BLUE,
-                MOTION_TYPE: ANTI,
-                ROTATION_DIRECTION: COUNTER_CLOCKWISE,
-                ARROW_LOCATION: SOUTHWEST,
-                START_LOCATION: SOUTH,
-                END_LOCATION: WEST,
-                TURNS: 0,
-            },
-        ]
         red_arrow_positions: List[Tuple[int, int]] = [
             (425, 50),
             (425, 425),
@@ -130,25 +72,137 @@ class ArrowBox(ObjectBox):
             (100, 375),
         ]
 
-        self.create_arrows_for_color(RED, self.red_arrows, red_arrow_attributes)
-        self.create_arrows_for_color(BLUE, self.blue_arrows, blue_arrow_attributes)
+        self.position_arrows(red_arrows, red_arrow_positions)
+        self.position_arrows(blue_arrows, blue_arrow_positions)
 
-        self.position_arrows(self.red_arrows, red_arrow_positions)
-        self.position_arrows(self.blue_arrows, blue_arrow_positions)
+        for motion in self.motions:
+            motion.arrow_location = motion.determine_arrow_location(
+                motion.start_location, motion.end_location
+            )
 
-    def create_arrows_for_color(self, color: str, arrow_list: List[Arrow], attributes: List[MotionAttributesDicts]) -> None:
-        for attr in attributes:
-            arrow = Arrow(self, attr, self.pictograph.motions[color])
-            arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
-            arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
-            self.addItem(arrow)
-            arrow_list.append(arrow)
-            self.arrows.append(arrow)
+        for arrow in arrows:
             arrow.update_appearance()
-            arrow.setTransformOriginPoint(arrow.boundingRect().center())
-            arrow.is_dim(True)
+            arrow.update_rotation()
 
-    def position_arrows(self, arrows: List[Arrow], positions: List[Tuple[int, int]]) -> None:
+        return arrows
+
+    def create_motions(self) -> None:
+        motions = []
+        motion_dicts: List[MotionAttributesDicts] = [
+            {
+                COLOR: RED,
+                ARROW: None,
+                PROP: None,
+                MOTION_TYPE: PRO,
+                ROTATION_DIRECTION: CLOCKWISE,
+                ARROW_LOCATION: NORTHEAST,
+                START_LOCATION: NORTH,
+                END_LOCATION: EAST,
+                TURNS: 0,
+                START_ORIENTATION: IN,
+                START_LAYER: 1,
+            },
+            {
+                COLOR: RED,
+                ARROW: None,
+                PROP: None,
+                MOTION_TYPE: PRO,
+                ROTATION_DIRECTION: COUNTER_CLOCKWISE,
+                ARROW_LOCATION: SOUTHEAST,
+                START_LOCATION: SOUTH,
+                END_LOCATION: EAST,
+                TURNS: 0,
+                START_ORIENTATION: IN,
+                START_LAYER: 1,
+            },
+            {
+                COLOR: RED,
+                ARROW: None,
+                PROP: None,
+                MOTION_TYPE: ANTI,
+                ROTATION_DIRECTION: CLOCKWISE,
+                ARROW_LOCATION: SOUTHEAST,
+                START_LOCATION: SOUTH,
+                END_LOCATION: EAST,
+                TURNS: 0,
+                START_ORIENTATION: IN,
+                START_LAYER: 1,
+            },
+            {
+                COLOR: RED,
+                ARROW: None,
+                PROP: None,
+                MOTION_TYPE: ANTI,
+                ROTATION_DIRECTION: COUNTER_CLOCKWISE,
+                ARROW_LOCATION: NORTHEAST,
+                START_LOCATION: NORTH,
+                END_LOCATION: EAST,
+                TURNS: 0,
+                START_ORIENTATION: IN,
+                START_LAYER: 1,
+            },
+            {
+                COLOR: BLUE,
+                ARROW: None,
+                PROP: None,
+                MOTION_TYPE: PRO,
+                ROTATION_DIRECTION: CLOCKWISE,
+                ARROW_LOCATION: SOUTHWEST,
+                START_LOCATION: SOUTH,
+                END_LOCATION: WEST,
+                TURNS: 0,
+                START_ORIENTATION: IN,
+                START_LAYER: 1,
+            },
+            {
+                COLOR: BLUE,
+                ARROW: None,
+                PROP: None,
+                MOTION_TYPE: PRO,
+                ROTATION_DIRECTION: COUNTER_CLOCKWISE,
+                ARROW_LOCATION: NORTHWEST,
+                START_LOCATION: NORTH,
+                END_LOCATION: WEST,
+                TURNS: 0,
+                START_ORIENTATION: IN,
+                START_LAYER: 1,
+            },
+            {
+                COLOR: BLUE,
+                ARROW: None,
+                PROP: None,
+                MOTION_TYPE: ANTI,
+                ROTATION_DIRECTION: CLOCKWISE,
+                ARROW_LOCATION: NORTHWEST,
+                START_LOCATION: NORTH,
+                END_LOCATION: WEST,
+                TURNS: 0,
+                START_ORIENTATION: IN,
+                START_LAYER: 1,
+            },
+            {
+                COLOR: BLUE,
+                ARROW: None,
+                PROP: None,
+                MOTION_TYPE: ANTI,
+                ROTATION_DIRECTION: COUNTER_CLOCKWISE,
+                ARROW_LOCATION: SOUTHWEST,
+                START_LOCATION: SOUTH,
+                END_LOCATION: WEST,
+                TURNS: 0,
+                START_ORIENTATION: IN,
+                START_LAYER: 1,
+            },
+        ]
+
+        for motion_dict in motion_dicts:
+            motion = Motion(self, motion_dict)
+            motions.append(motion)
+        return motions
+
+    def position_arrows(
+        self, arrows: List[Arrow], positions: List[Tuple[int, int]]
+    ) -> None:
         for arrow, pos in zip(arrows, positions):
             arrow.setPos(*pos)
 
@@ -160,7 +214,9 @@ class ArrowBox(ObjectBox):
         if closest_arrow:
             self.target_arrow = closest_arrow
             if not self.drag:
-                pictograph = self.main_widget.graph_editor_widget.graph_editor.pictograph
+                pictograph = (
+                    self.main_widget.graph_editor_widget.graph_editor.pictograph
+                )
                 self.drag = ArrowBoxDrag(self.main_window, pictograph, self)
             if event.button() == Qt.MouseButton.LeftButton:
                 self.drag.match_target_arrow(self.target_arrow)

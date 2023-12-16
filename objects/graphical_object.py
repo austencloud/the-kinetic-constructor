@@ -87,7 +87,6 @@ class GraphicalObject(QGraphicsSvgItem):
 
     def update_attributes(self, attributes) -> None:
         self.set_attributes_from_dict(attributes)
-        self.update_appearance()
 
     def update_appearance(self: Union["Prop", "Arrow"]) -> None:
         self.update_color()

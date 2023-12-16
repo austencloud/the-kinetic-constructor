@@ -303,7 +303,7 @@ class PropPositioner:
                 other_prop = next(
                     (
                         other
-                        for other in self.scene.props
+                        for other in self.scene.props.values()
                         if other != prop and other.prop_location == prop.prop_location
                     ),
                     None,

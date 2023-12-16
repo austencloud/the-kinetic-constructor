@@ -158,6 +158,8 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
     def _update_ghost_arrow_for_new_location(self, new_location) -> None:
         self.ghost_arrow.color = self.color
+        self.ghost_arrow.motion = self.motion
+        
         self.ghost_arrow.motion.arrow_location = new_location
         self.ghost_arrow.motion_type = self.motion_type
         self.ghost_arrow.motion.rotation_direction = self.rotation_direction

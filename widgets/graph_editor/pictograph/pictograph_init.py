@@ -59,12 +59,12 @@ class PictographInit:
                 COLOR: color,
                 ARROW: None,
                 PROP: None,
-                MOTION_TYPE: PRO,
-                ROTATION_DIRECTION: CLOCKWISE,
+                MOTION_TYPE: None,
+                ROTATION_DIRECTION: None,
                 TURNS: 0,
-                START_LOCATION: NORTH,
-                END_LOCATION: EAST,
-                START_ORIENTATION: IN,
+                START_LOCATION: None,
+                END_LOCATION: None,
+                START_ORIENTATION: None,
                 START_LAYER: 1,
             }
 
@@ -88,12 +88,12 @@ class PictographInit:
         red_arrow = Arrow(
             self.pictograph,
             default_red_arrow_attributes,
-            self.pictograph.motions[RED],
+            None,
         )
         blue_arrow = Arrow(
             self.pictograph,
             default_blue_arrow_attributes,
-            self.pictograph.motions[BLUE],
+            None,
         )
 
         arrows = {RED: red_arrow, BLUE: blue_arrow}
@@ -103,16 +103,16 @@ class PictographInit:
         red_prop_Dict = {
             COLOR: RED,
             PROP_TYPE: prop_type,
-            PROP_LOCATION: NORTH,
-            LAYER: 1,
-            ORIENTATION: IN,
+            PROP_LOCATION: None,
+            LAYER: None,
+            ORIENTATION: None,
         }
         blue_prop_Dict = {
             COLOR: BLUE,
             PROP_TYPE: prop_type,
-            PROP_LOCATION: SOUTH,
-            LAYER: 1,
-            ORIENTATION: IN,
+            PROP_LOCATION: None,
+            LAYER: None,
+            ORIENTATION: None,
         }
 
         prop_class_mapping = {
@@ -137,12 +137,8 @@ class PictographInit:
         if prop_class is None:
             raise ValueError(f"Invalid prop_type: {prop_type}")
 
-        red_prop: Prop = prop_class(
-            self.pictograph, red_prop_Dict, self.pictograph.motions[RED]
-        )
-        blue_prop: Prop = prop_class(
-            self.pictograph, blue_prop_Dict, self.pictograph.motions[BLUE]
-        )
+        red_prop: Prop = prop_class(self.pictograph, red_prop_Dict, None)
+        blue_prop: Prop = prop_class(self.pictograph, blue_prop_Dict, None)
 
         red_prop.set_svg_color(RED)
         blue_prop.set_svg_color(BLUE)
@@ -174,12 +170,12 @@ class PictographInit:
         red_ghost_arrow = GhostArrow(
             self.pictograph,
             default_red_ghost_arrow_attributes,
-            self.pictograph.motions[RED],
+            None,
         )
         blue_ghost_arrow = GhostArrow(
             self.pictograph,
             default_blue_ghost_arrow_attributes,
-            self.pictograph.motions[BLUE],
+            None,
         )
 
         ghost_arrows = {RED: red_ghost_arrow, BLUE: blue_ghost_arrow}

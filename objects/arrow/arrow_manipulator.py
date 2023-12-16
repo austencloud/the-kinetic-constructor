@@ -313,7 +313,7 @@ class ArrowManipulator:
                 and self.arrow.ghost_arrow
             ):
                 self.arrow.ghost_arrow.is_svg_mirrored = self.arrow.is_svg_mirrored
-                self.arrow.ghost_arrow.update_attributes(self.arrow.attributes)
+                self.arrow.ghost_arrow.update_attributes(self.arrow.arrow_dict)
         self.arrow.scene.update_pictograph()
 
     def mirror(self) -> None:

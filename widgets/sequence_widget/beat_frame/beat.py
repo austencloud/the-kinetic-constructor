@@ -58,13 +58,6 @@ class Beat(Pictograph):
         self.setup_scene()
         self.setup_components(main_widget)
 
-    def setup_scene(self) -> None:
-        self.setSceneRect(0, 0, 750, 900)
-        self.setBackgroundBrush(Qt.GlobalColor.white)
-        self.arrows: List[Arrow] = []
-        self.props: List[Prop] = []
-        self.motions: List[Motion] = []
-        self.current_letter: str = None
 
     def set_letter_renderer(self, letter: str) -> None:
         letter_type = self.get_current_letter_type()
@@ -87,7 +80,7 @@ class Beat(Pictograph):
         red_position = None
         blue_position = None
 
-        for arrow in self.arrows:
+        for arrow in self.arrows.values():
             center = arrow.pos() + arrow.boundingRect().center()
             if arrow.color == RED:
                 red_position = center
@@ -97,7 +90,7 @@ class Beat(Pictograph):
 
     def get_state(self) -> List[MotionAttributesDicts]:
         state = []
-        for motion in self.motions:
+        for motion in self.motions.values():
             state.append(
                 {
                     COLOR: motion.color,
@@ -138,7 +131,7 @@ class Beat(Pictograph):
         self.clear_pictograph()
 
     def rotate_pictograph(self, direction: str) -> None:
-        for arrow in self.arrows:
+        for arrow in self.arrows.values():
             arrow.rotate_arrow(direction)
 
     def clear_pictograph(self) -> None:
@@ -172,13 +165,6 @@ class Beat(Pictograph):
     def update_props(self) -> None:
         self.prop_positioner.update_prop_positions()
 
-    def update_letter(self) -> None:
-        if len(self.props) == 2:
-            self.current_letter = self.letter_engine.get_current_letter()
-        else:
-            self.current_letter = None
-        self.update_letter_item(self.current_letter)
-        self.letter_item.position_letter_item(self.letter_item)
 
     def update_letter_item(self, letter: str) -> None:
         if letter:

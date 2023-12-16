@@ -54,24 +54,23 @@ class Arrow(GraphicalObject):
 
     ### SETUP ###
 
-    def _setup_attributes(self, scene, attributes: "ArrowAttributesDicts") -> None:
+    def _setup_attributes(self, scene, arrow_dict: "ArrowAttributesDicts") -> None:
         self.scene: Pictograph | ArrowBox = scene
         self.manipulator = ArrowManipulator(self)
         self.drag_offset = QPointF(0, 0)
         self.prop: Prop = None
         self.is_svg_mirrored: bool = False
-        self.turns: Turns = attributes[TURNS]
+        self.turns: Turns = arrow_dict[TURNS]
         self.center_x = self.boundingRect().width() / 2
         self.center_y = self.boundingRect().height() / 2
 
-        if attributes:
-            self.set_attributes_from_dict(attributes)
-            self.update_appearance()
-            self.attributes = attributes
-
-        self.set_is_svg_mirrored_from_attributes()
-        self.update_mirror()
-        self.center = self.boundingRect().center()
+        if arrow_dict:
+            self.set_attributes_from_dict(arrow_dict)
+            self.arrow_dict = arrow_dict
+        if self.motion:
+            self.set_is_svg_mirrored_from_attributes()
+            self.update_mirror()
+            self.center = self.boundingRect().center()
 
     def set_is_svg_mirrored_from_attributes(self) -> None:
         if self.motion_type == PRO:
@@ -119,7 +118,7 @@ class Arrow(GraphicalObject):
         if isinstance(self.scene, Pictograph):
             self.ghost_arrow: "GhostArrow" = self.scene.ghost_arrows[self.color]
             self.ghost_arrow.prop = self.prop
-            self.ghost_arrow.set_attributes_from_dict(self.attributes)
+            self.ghost_arrow.set_attributes_from_dict(self.arrow_dict)
             self.ghost_arrow.set_arrow_attrs_from_arrow(self)
             self.ghost_arrow.set_is_svg_mirrored_from_attributes()
             self.ghost_arrow.update_appearance()

@@ -77,9 +77,9 @@ class Pictograph(QGraphicsScene):
     def setup_scene(self) -> None:
         self.setSceneRect(0, 0, 750, 900)
         self.setBackgroundBrush(Qt.GlobalColor.white)
-        self.arrows: Dict[Colors, Arrow] = []
-        self.props: Dict[Colors, Prop] = []
-        self.motions: Dict[Colors, Motion] = []
+        self.arrows: Dict[Colors, Arrow] = {}
+        self.props: Dict[Colors, Prop] = {}
+        self.motions: Dict[Colors, Motion] = {}
         self.current_letter: str = None
 
     def setup_components(self, main_widget: "MainWidget") -> None:
@@ -242,9 +242,10 @@ class Pictograph(QGraphicsScene):
             arrow.rotate_arrow(direction)
 
     def clear_pictograph(self) -> None:
-        self.arrows = []
-        self.props = []
-        self.motions = []
+        self.arrows = {}
+        self.props = {}
+        for motion in self.motions.values():
+            motion.reset_motion_attributes()
         for item in self.items():
             if isinstance(item, Arrow) or isinstance(item, Prop):
                 self.removeItem(item)
@@ -262,67 +263,72 @@ class Pictograph(QGraphicsScene):
     def copy_scene(self) -> QGraphicsScene:
         from widgets.sequence_widget.beat_frame.beat import Beat
 
-        new_scene = Beat(self.main_widget, self.graph_editor)
-        new_scene.setSceneRect(self.sceneRect())
-        new_scene.motions = self.motions
+        new_beat = Beat(self.main_widget, self.graph_editor)
+        new_beat.setSceneRect(self.sceneRect())
+        new_beat.motions = self.motions
 
         for item in self.items():
             if isinstance(item, Arrow):
-                new_arrow = Arrow(new_scene, item.get_attributes())
+                new_arrow = Arrow(
+                    new_beat, item.get_attributes(), new_beat.motions[item.color]
+                )
                 new_arrow.setTransformOriginPoint(new_arrow.boundingRect().center())
                 new_arrow.setPos(item.pos())
                 new_arrow.setZValue(item.zValue())
-                new_scene.addItem(new_arrow)
-                new_scene.arrows.append(new_arrow)
-                motion = new_scene.motions[new_arrow.color]
+                new_beat.addItem(new_arrow)
+                new_beat.arrows[new_arrow.color] = new_arrow
+                motion = new_beat.motions[new_arrow.color]
                 new_arrow.motion = motion
                 motion.arrow = new_arrow
 
             elif isinstance(item, Prop):
-                new_prop = Prop(new_scene, item.get_attributes())
+                new_prop = Prop(
+                    new_beat, item.get_attributes(), new_beat.motions[item.color]
+                )
                 new_prop.setPos(item.pos())
                 new_prop.setZValue(item.zValue())
-                new_scene.addItem(new_prop)
-                new_scene.props.append(new_prop)
-                motion = new_scene.motions[new_prop.color]
+                new_beat.addItem(new_prop)
+                new_beat.props[new_prop.color] = new_prop
+                motion = new_beat.motions[new_prop.color]
                 new_prop.motion = motion
                 motion.prop = new_prop
 
-        for arrow in new_scene.arrows:
-            for prop in new_scene.props:
+        for arrow in new_beat.arrows.values():
+            for prop in new_beat.props.values():
                 if arrow.color == prop.color:
                     arrow.prop = prop
                     prop.arrow = arrow
 
-        for arrow in new_scene.arrows:
-            for ghost_arrow in new_scene.ghost_arrows.values():
+        for arrow in new_beat.arrows.values():
+            for ghost_arrow in new_beat.ghost_arrows.values():
                 if arrow.color == ghost_arrow.color:
                     arrow.ghost_arrow = ghost_arrow
+                    ghost_arrow.motion = new_beat.motions[arrow.color]
                     ghost_arrow.update_attributes(arrow.get_attributes())
                     ghost_arrow.set_is_svg_mirrored_from_attributes()
                     ghost_arrow.update_mirror()
                     ghost_arrow.update_svg(arrow.svg_file)
                     ghost_arrow.update_appearance()
 
-        for prop in new_scene.props:
-            for ghost_prop in new_scene.ghost_props.values():
+        for prop in new_beat.props.values():
+            for ghost_prop in new_beat.ghost_props.values():
                 if prop.color == ghost_prop.color:
                     prop.ghost_prop = ghost_prop
                     ghost_prop.update_prop_type(prop.prop_type)
 
-        for ghost_arrow in new_scene.ghost_arrows.values():
-            for motion in new_scene.motions.values():
+        for ghost_arrow in new_beat.ghost_arrows.values():
+            for motion in new_beat.motions.values():
                 if ghost_arrow.color == motion.color:
                     ghost_arrow.motion = motion
 
-        for ghost_prop in new_scene.ghost_props.values():
-            for motion in new_scene.motions.values():
+        for ghost_prop in new_beat.ghost_props.values():
+            for motion in new_beat.motions.values():
                 if ghost_prop.color == motion.color:
                     ghost_prop.motion = motion
 
-        new_scene.update_pictograph()
+        new_beat.update_pictograph()
 
-        return new_scene
+        return new_beat
 
     ### UPDATERS ###
 
@@ -356,6 +362,10 @@ class Pictograph(QGraphicsScene):
 
     def update_letter(self) -> None:
         if len(self.props) == 2:
+            # check if all the motions have motion types and arrow locations
+            for motion in self.motions.values():
+                if motion.motion_type is None or motion.arrow_location is None:
+                    return
             self.current_letter = self.letter_engine.get_current_letter()
         else:
             self.current_letter = None

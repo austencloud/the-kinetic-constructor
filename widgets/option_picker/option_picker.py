@@ -31,7 +31,7 @@ class OptionPicker(QScrollArea):
         self.initialize_ui()
         self.viewport().installEventFilter(self)
 
-        self.show_initial_selection()
+        self.show_start_position()
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
@@ -48,15 +48,13 @@ class OptionPicker(QScrollArea):
         df.sort_index(inplace=True)
         return df
 
-    def show_initial_selection(self) -> None:
+    def show_start_position(self) -> None:
         self.clear_layout()
-        starting_keys = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
-        for i, full_key in enumerate(starting_keys):
+        start_positions = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
+        for i, full_key in enumerate(start_positions):
             start_position, end_position = full_key.split("_")
-            # Accessing rows by both start and end positions
             if (start_position, end_position) in self.pictographs.index:
                 row_data = self.pictographs.loc[(start_position, end_position)]
-                # If there are multiple entries for the same combination, take the first
                 if isinstance(row_data, pd.DataFrame):
                     row_data = row_data.iloc[0]
                 motion_dict = [
@@ -146,6 +144,11 @@ class OptionPicker(QScrollArea):
             option.arrows[arrow.color] = arrow
             option.props[prop.color] = prop
             self.setup_motion_relations(option, arrow, prop)
+            for motion in option.motions.values():
+                if motion.color == motion_dict[COLOR]:
+                    motion.start_location = motion_dict[START_LOCATION]
+                    motion.end_location = motion_dict[END_LOCATION]
+
         self.update_option(option)
         self.options.append(option)
         return option
@@ -192,8 +195,9 @@ class OptionPicker(QScrollArea):
             prop.motion.update_prop_orientation_and_layer()
             prop.update_rotation()
             prop.update_appearance()
-            prop.arrow.update_appearance()
-            arrow.motion.arrow_location = arrow.motion.arrow_location
+            arrow.motion.arrow_location = arrow.motion.determine_arrow_location(
+                arrow.motion.start_location, arrow.motion.end_location
+            )
         option.update_pictograph()
 
     def on_option_clicked(self, option: "Option") -> None:
@@ -212,22 +216,26 @@ class OptionPicker(QScrollArea):
     def duplicate_items(source_option: Option, target_beat: Beat) -> None:
         for item in source_option.items():
             if isinstance(item, Arrow):
-                new_item = Arrow(target_beat, item.get_attributes(), target_beat.motions[item.color])
+                new_item = Arrow(
+                    target_beat, item.get_attributes(), target_beat.motions[item.color]
+                )
             elif isinstance(item, Prop):
-                new_item = Prop(target_beat, item.get_attributes(), target_beat.motions[item.color])
+                new_item = Prop(
+                    target_beat, item.get_attributes(), target_beat.motions[item.color]
+                )
             else:
                 continue
             new_item.setPos(item.pos())
             new_item.setZValue(item.zValue())
             target_beat.addItem(new_item)
             if isinstance(new_item, Arrow):
-                target_beat.arrows.append(new_item)
+                target_beat.arrows[new_item.color] = new_item
                 new_item.motion = target_beat.motions[new_item.color]
                 new_item.ghost_arrow = target_beat.ghost_arrows[new_item.color]
                 new_item.ghost_arrow.motion = new_item.motion
-                new_item.prop = target_beat.get_prop_by_color(new_item.color)
+                new_item.prop = target_beat.props[new_item.color]
             elif isinstance(new_item, Prop):
-                target_beat.props.append(new_item)
+                target_beat.props[new_item.color] = new_item
                 new_item.motion = target_beat.motions[new_item.color]
                 new_item.ghost_prop = target_beat.ghost_props[new_item.color]
                 new_item.ghost_prop.motion = new_item.motion

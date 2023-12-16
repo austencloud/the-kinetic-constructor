@@ -76,25 +76,30 @@ class LetterEngine:
         ] = parallel_combinations
         self.cached_parallel = None
         self.cached_handpath = None
-
+        
     def preprocess_combinations(self) -> PreprocessedStartEndCombinations:
         preprocessed_start_end_combinations: PreprocessedStartEndCombinations = {}
 
-        for letter, combinations in self.letters.items():
-            for combination in combinations:
-                start_pos: SpecificPositions = combination[0].get("start_position")
-                end_pos: SpecificPositions = combination[0].get("end_position")
-                if start_pos and end_pos:
-                    key = f"{start_pos}_{end_pos}"
-                    preprocessed_start_end_combinations.setdefault(key, []).append(
-                        (letter, combination[1:])
-                    )
+        # Check if the preprocessed JSON file exists
+        if os.path.exists("preprocessed.json"):
+            with open("preprocessed.json", "r", encoding="utf-8") as f:
+                preprocessed_start_end_combinations = json.load(f)
+        else:
+            for letter, combinations in self.letters.items():
+                for combination in combinations:
+                    start_pos: SpecificPositions = combination[0].get("start_position")
+                    end_pos: SpecificPositions = combination[0].get("end_position")
+                    if start_pos and end_pos:
+                        key = f"{start_pos}_{end_pos}"
+                        preprocessed_start_end_combinations.setdefault(key, []).append(
+                            (letter, combination[1:])
+                        )
 
-        # Save them to a file called preprocessed.json with utf-8 encoding
-        with open("preprocessed.json", "w", encoding="utf-8") as f:
-            json.dump(
-                preprocessed_start_end_combinations, f, indent=4, ensure_ascii=False
-            )
+            # Save them to the preprocessed JSON file
+            with open("preprocessed.json", "w", encoding="utf-8") as f:
+                json.dump(
+                    preprocessed_start_end_combinations, f, indent=4, ensure_ascii=False
+                )
 
         return preprocessed_start_end_combinations
 

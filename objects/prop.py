@@ -348,12 +348,10 @@ class Prop(GraphicalObject):
         }
 
         self.arrow = Arrow(self.pictograph, static_arrow_dict)
-        for arrow in self.pictograph.arrows[:]:
+        for arrow in self.pictograph.arrows.values():
             if arrow.color == self.color:
-                self.pictograph.removeItem(arrow)
-                self.pictograph.arrows.remove(arrow)
+                self.pictograph.arrows[arrow.color] = self.arrow
         self.pictograph.addItem(self.arrow)
-        self.pictograph.arrows.append(self.arrow)
         self.arrow.prop = self
         self.arrow.prop.arrow = self.arrow
         self.arrow.motion = deleted_arrow.motion

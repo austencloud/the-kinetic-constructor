@@ -26,11 +26,12 @@ class ArrowPositioner:
                 optimal_locations = self.find_optimal_locations()
 
         for arrow in self.pictograph.arrows.values():
-            if arrow.motion.motion_type is not STATIC:
-                if optimal_locations:
-                    self.set_arrow_to_optimal_loc(optimal_locations, arrow)
-                else:
-                    self.set_arrow_to_default_loc(arrow)
+            if arrow.motion:
+                if arrow.motion.motion_type is not STATIC:
+                    if optimal_locations:
+                        self.set_arrow_to_optimal_loc(optimal_locations, arrow)
+                    else:
+                        self.set_arrow_to_default_loc(arrow)
 
     def find_optimal_locations(self) -> OptimalLocationsDicts | None:
         current_state: List[Dict[MotionAttributes, str]] = self.pictograph.get_state()
