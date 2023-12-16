@@ -44,8 +44,7 @@ class Prop(GraphicalObject):
         self.manipulator = PropManipulator(self)
         self.drag_offset = QPointF(0, 0)
         self.previous_location: Locations = None
-        self.arrow: Arrow = None
-        self.ghost_prop: Prop = None
+        self.ghost: Prop = None
         self.color: Colors = prop_dict[COLOR]
         self.prop_location: Locations = prop_dict[PROP_LOCATION]
         self.layer: Layers = prop_dict[LAYER]
@@ -57,17 +56,17 @@ class Prop(GraphicalObject):
     def mousePressEvent(self, event) -> None:
         self.setSelected(True)
         if isinstance(self.scene, self.scene.__class__):
-            if not self.ghost_prop:
-                self.ghost_prop = self.scene.ghost_props[self.color]
-            self.ghost_prop.color = self.color
-            self.ghost_prop.prop_location = self.prop_location
-            self.ghost_prop.layer = self.layer
-            self.ghost_prop.orientation = self.orientation
-            self.ghost_prop.update_appearance()
-            self.scene.addItem(self.ghost_prop)
-            self.ghost_prop.arrow = self.arrow
-            self.scene.props[self.ghost_prop.color] = self.ghost_prop
-            self.scene.props[self.color] = self.ghost_prop
+            if not self.ghost:
+                self.ghost = self.scene.ghost_props[self.color]
+            self.ghost.color = self.color
+            self.ghost.prop_location = self.prop_location
+            self.ghost.layer = self.layer
+            self.ghost.orientation = self.orientation
+            self.ghost.update_appearance()
+            self.scene.addItem(self.ghost)
+            self.ghost.arrow = self.arrow
+            self.scene.props[self.ghost.color] = self.ghost
+            self.scene.props[self.color] = self.ghost
             self.scene.update_pictograph()
             self.scene.props[self.color] = self
             for item in self.scene.items():
@@ -77,8 +76,8 @@ class Prop(GraphicalObject):
 
     def mouseReleaseEvent(self, event) -> None:
         if isinstance(self.scene, self.scene.__class__):
-            self.scene.removeItem(self.ghost_prop)
-            self.ghost_prop.arrow = None
+            self.scene.removeItem(self.ghost)
+            self.ghost.arrow = None
             self.scene.update_pictograph()
             self.finalize_prop_drop(event)
 
@@ -135,8 +134,8 @@ class Prop(GraphicalObject):
     def update_rotation(self) -> None:
         rotation_angle = self.get_rotation_angle()
 
-        if self.ghost_prop:
-            self.ghost_prop.setRotation(rotation_angle)
+        if self.ghost:
+            self.ghost.setRotation(rotation_angle)
         self.setRotation(rotation_angle)
 
     def get_svg_file(self, prop_type: PropTypes) -> str:
@@ -167,11 +166,11 @@ class Prop(GraphicalObject):
             self.update_appearance()
             self.update_arrow_location(new_location)
 
-            self.ghost_prop.color = self.color
-            self.ghost_prop.prop_location = self.prop_location
-            self.ghost_prop.layer = self.layer
-            self.ghost_prop.update_appearance()
-            self.scene.props[self.ghost_prop.color] = self.ghost_prop
+            self.ghost.color = self.color
+            self.ghost.prop_location = self.prop_location
+            self.ghost.layer = self.layer
+            self.ghost.update_appearance()
+            self.scene.props[self.ghost.color] = self.ghost
             self.scene.update_pictograph()
             self.scene.props[self.color] = self
             new_pos = new_pos - self.get_object_center()
@@ -280,23 +279,17 @@ class Prop(GraphicalObject):
             ).get(new_arrow_location)
 
             if new_arrow_location:
-                self.arrow.motion.arrow_location = new_arrow_location
                 start_location, end_location = get_start_end_locations(
                     motion_type, rotation_direction, new_arrow_location
                 )
-                self.arrow.motion.start_location = start_location
-                self.arrow.motion.end_location = end_location
                 self.arrow.update_appearance()
+                self.arrow.ghost.update_appearance()
                 self.arrow.motion.arrow_location = new_arrow_location
                 self.arrow.motion.start_location = start_location
                 self.arrow.motion.end_location = end_location
                 self.pictograph.update_pictograph()
 
         elif self.arrow.motion_type == STATIC:
-            self.arrow.motion.arrow_location = new_arrow_location
-            self.arrow.motion.start_location = new_arrow_location
-            self.arrow.motion.end_location = new_arrow_location
-
             self.arrow.motion.arrow_location = new_arrow_location
             self.arrow.motion.start_location = new_arrow_location
             self.arrow.motion.end_location = new_arrow_location
@@ -317,40 +310,6 @@ class Prop(GraphicalObject):
             self.arrow.update_appearance()
         self.previous_location = closest_hand_point
         self.scene.update_pictograph()
-
-
-    def _create_static_arrow(self, deleted_arrow: "Arrow") -> None:
-        from objects.arrow.arrow import Arrow
-
-        static_arrow_dict = {
-            COLOR: self.color,
-            MOTION_TYPE: STATIC,
-            ROTATION_DIRECTION: "None",
-            ARROW_LOCATION: self.prop_location,
-            START_LOCATION: self.prop_location,
-            END_LOCATION: self.prop_location,
-            TURNS: 0,
-        }
-
-        self.arrow = Arrow(self.pictograph, static_arrow_dict)
-        for arrow in self.pictograph.arrows.values():
-            if arrow.color == self.color:
-                self.pictograph.arrows[arrow.color] = self.arrow
-        self.pictograph.addItem(self.arrow)
-        self.arrow.prop = self
-        self.arrow.prop.arrow = self.arrow
-        self.arrow.motion = deleted_arrow.motion
-        self.motion = deleted_arrow.motion
-
-        self.motion.start_location = self.prop_location
-        self.motion.end_location = self.prop_location
-        self.motion.arrow_location = self.prop_location
-        self.motion.arrow = self.arrow
-        self.motion.turns = 0
-        self.motion.motion_type = STATIC
-
-        if self.arrow not in self.pictograph.items():
-            self.pictograph.addItem(self.arrow)
 
     def mouseMoveEvent(
         self: Union["Prop", "Arrow"], event: "QGraphicsSceneMouseEvent"

@@ -1,30 +1,10 @@
 from PyQt6.QtWidgets import QVBoxLayout, QGraphicsSceneMouseEvent, QComboBox
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from objects.prop.prop import (
-    BigHoop,
-    DoubleStar,
-    BigDoubleStar,
-    Prop,
-    Staff,
-    BigStaff,
-    Club,
-    Buugeng,
-    Fan,
-    Triad,
-    MiniHoop,
-    Quiad,
-    Sword,
-    Guitar,
-    Ukulele,
-    Chicken,
-)
-
+from objects.prop.prop import *
 from widgets.graph_editor.object_panel.propbox.propbox_drag import PropBoxDrag
 from widgets.graph_editor.object_panel.propbox.propbox_view import PropBoxView
 from constants.string_constants import *
-
-
 from objects.grid import Grid
 from widgets.graph_editor.object_panel.objectbox import ObjectBox
 from utilities.TypeChecking.TypeChecking import PropTypes, TYPE_CHECKING, Dict, List
@@ -37,32 +17,45 @@ if TYPE_CHECKING:
 class PropBox(ObjectBox):
     def __init__(self, main_widget: "MainWidget", graph_editor: "GraphEditor") -> None:
         super().__init__(main_widget, graph_editor)
+        self.setup_properties(main_widget, graph_editor)
+        self.setup_ui()
+        self.populate_props()
+
+    def setup_properties(self, main_widget: "MainWidget", graph_editor: "GraphEditor") -> None:
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
         self.view = PropBoxView(self, graph_editor)
         self.prop_type = STAFF
-
-        self.init_combobox()
         self.pictograph = graph_editor.pictograph
-
         self.grid = Grid(self)
         self.grid_position = QPointF(0, 0)
         self.grid.setPos(self.grid_position)
-
         self.drag: PropBoxDrag = None
         self.props: List[Prop] = []
 
+    def setup_ui(self) -> None:
+        self.init_combobox()
         self.propbox_layout = QVBoxLayout()
         self.propbox_layout.addWidget(self.view)
 
-        self.populate_props()
+    def init_combobox(self) -> None:
+        self.prop_type_combobox = QComboBox(self.view)
+        prop_types = ["Staff", "BigStaff", "Club", "Buugeng", "Fan", "Triad", "MiniHoop", "Bighoop", "Doublestar", "Bigdoublestar", "Quiad", "Sword", "Guitar", "Ukulele", "Chicken"]
+        self.prop_type_combobox.addItems(prop_types)
+        self.prop_type_combobox.setCurrentText(str(self.prop_type.capitalize()))
+        self.prop_type_combobox.currentTextChanged.connect(self.on_prop_type_change)
+        self.prop_type_combobox.move(0, 0)
 
     def populate_props(self) -> None:
         self.clear_props()
         default_prop_dicts: List[Dict] = self.get_initial_prop_attributes()
+        prop_classes: Dict[str, type] = self.get_prop_classes()
 
-        # Mapping prop types to their respective classes
-        prop_classes: Dict[str, type] = {
+        for prop_dict in default_prop_dicts:
+            self.create_and_setup_prop(prop_dict, prop_classes)
+
+    def get_prop_classes(self) -> Dict[str, type]:
+        return {
             STAFF: Staff,
             BIGSTAFF: BigStaff,
             CLUB: Club,
@@ -80,28 +73,31 @@ class PropBox(ObjectBox):
             CHICKEN: Chicken,
         }
 
-        for prop_dict in default_prop_dicts:
-            prop_class = prop_classes.get(self.prop_type)
-            if prop_class:
-                prop = prop_class(
-                    self.pictograph,
-                    prop_dict,
-                    self.pictograph.motions[prop_dict[COLOR]],
-                )
-                self.setup_prop(prop)
-                self.props.append(prop)
-            else:
-                raise ValueError("Invalid prop type")
+    def create_and_setup_prop(self, prop_dict: Dict, prop_classes: Dict[str, type]) -> None:
+        prop_class = prop_classes.get(self.prop_type)
+        if not prop_class:
+            raise ValueError("Invalid prop type")
+
+        prop = prop_class(self.pictograph, prop_dict, self.pictograph.motions[prop_dict[COLOR]])
+        self.setup_prop(prop)
+        self.props.append(prop)
 
     def setup_prop(self, prop: Prop) -> None:
         prop.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable, True)
         prop.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, True)
         self.set_prop_position(prop)
-        prop.update_appearance()
         self.addItem(prop)
+        prop.update_appearance()
 
     def get_initial_prop_attributes(self) -> List[Dict]:
         if self.grid.grid_mode == DIAMOND:
+            return self.get_diamond_mode_attributes()
+        elif self.grid.grid_mode == BOX:
+            return self.get_box_mode_attributes()
+        else:
+            raise ValueError("Invalid grid mode")
+
+    def get_diamond_mode_attributes(self) -> List[Dict]:
             return [
                 {
                     COLOR: RED,
@@ -132,7 +128,8 @@ class PropBox(ObjectBox):
                     ORIENTATION: IN,
                 },
             ]
-        elif self.grid.grid_mode == BOX:
+
+    def get_box_mode_attributes(self) -> List[Dict]:
             return [
                 {
                     COLOR: RED,
@@ -163,33 +160,6 @@ class PropBox(ObjectBox):
                     ORIENTATION: IN,
                 },
             ]
-        else:
-            raise ValueError("Invalid grid mode")
-
-    def init_combobox(self) -> None:
-        self.prop_type_combobox = QComboBox(self.view)
-        prop_types = [
-            "Staff",
-            "BigStaff",
-            "Club",
-            "Buugeng",
-            "Fan",
-            "Triad",
-            "MiniHoop",
-            "Bighoop",
-            "Doublestar",
-            "Bigdoublestar",
-            "Quiad",
-            "Sword",
-            "Guitar",
-            "Ukulele",
-            "Chicken",
-        ]
-        self.prop_type_combobox.addItems(prop_types)
-
-        self.prop_type_combobox.setCurrentText(str(self.prop_type.capitalize()))
-        self.prop_type_combobox.currentTextChanged.connect(self.on_prop_type_change)
-        self.prop_type_combobox.move(0, 0)
 
     def on_prop_type_change(self, text: str) -> None:
         new_prop_type = text.lower()
@@ -202,9 +172,7 @@ class PropBox(ObjectBox):
         self.props.clear()
 
     def set_prop_position(self, prop: Prop) -> None:
-        hand_point = self.grid.get_circle_coordinates(
-            f"{prop.prop_location}_{self.grid.grid_mode}_hand_point"
-        )
+        hand_point = self.grid.get_circle_coordinates(f"{prop.prop_location}_{self.grid.grid_mode}_hand_point")
         prop_length = prop.boundingRect().width()
         prop_width = prop.boundingRect().height()
         offset_x = -prop_length / 2

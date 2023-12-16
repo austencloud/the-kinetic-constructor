@@ -183,18 +183,14 @@ class OptionPicker(QScrollArea):
     def setup_motion_relations(option: Option, arrow: Arrow, prop: Prop) -> None:
         motion = option.motions[arrow.color]
         arrow.motion, prop.motion = motion, motion
-        arrow.ghost, prop.motion.ghost_prop = (
-            option.ghost_arrows[arrow.color],
-            option.ghost_props[prop.color],
-        )
-        arrow.ghost.motion, prop.motion.ghost_prop.motion = motion, motion
+        arrow.ghost = option.ghost_arrows[arrow.color]
+        arrow.ghost.motion= motion
 
     @staticmethod
     def update_option(option: "Option") -> None:
         for arrow in option.arrows.values():
             prop = option.props[arrow.color]
             prop.motion = option.motions[arrow.color]
-            arrow.prop, prop.arrow = prop, arrow
             prop.motion.update_prop_orientation_and_layer()
             prop.update_rotation()
             prop.update_appearance()
@@ -234,15 +230,13 @@ class OptionPicker(QScrollArea):
             if isinstance(new_item, Arrow):
                 target_beat.arrows[new_item.color] = new_item
                 new_item.motion = target_beat.motions[new_item.color]
-                new_item.ghost_arrow = target_beat.ghost_arrows[new_item.color]
-                new_item.ghost_arrow.motion = new_item.motion
-                new_item.prop = target_beat.props[new_item.color]
+                new_item.ghost = target_beat.ghost_arrows[new_item.color]
+                new_item.ghost.motion = new_item.motion
             elif isinstance(new_item, Prop):
                 target_beat.props[new_item.color] = new_item
                 new_item.motion = target_beat.motions[new_item.color]
-                new_item.ghost_prop = target_beat.ghost_props[new_item.color]
-                new_item.ghost_prop.motion = new_item.motion
-                new_item.arrow = target_beat.arrows[new_item.color]
+                new_item.ghost = target_beat.ghost_props[new_item.color]
+                new_item.ghost.motion = new_item.motion
 
     def resize_option_views(self):
         for option in self.options:

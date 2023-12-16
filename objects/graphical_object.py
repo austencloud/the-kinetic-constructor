@@ -89,14 +89,11 @@ class GraphicalObject(QGraphicsSvgItem):
         self.setup_svg_renderer(svg_file)
         self.set_svg_color(self.color)
 
-    def update_attributes(self, attributes) -> None:
-        self.set_attributes_from_dict(attributes)
-
     def update_appearance(self: Union["Prop", "Arrow"]) -> None:
         self.update_color()
         self.update_rotation()
 
-    def set_attributes_from_dict(
+    def update_attributes(
         self, attributes: MotionAttributesDicts | PropAttributesDicts
     ) -> None:
         for attribute_name, attribute_value in attributes.items():
@@ -121,4 +118,3 @@ class GraphicalObject(QGraphicsSvgItem):
             return QPointF(
                 (self.boundingRect().width() / 2), (self.boundingRect().height() / 2)
             )
-

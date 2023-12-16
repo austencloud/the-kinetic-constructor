@@ -37,6 +37,6 @@ class GhostArrow(Arrow):
         self.target_arrow: "Arrow" = None
 
     def update_ghost_arrow(self, attributes) -> None:
-        self.set_attributes_from_dict(attributes)
+        self.update_attributes(attributes)
         self.update_appearance()
         self.show()

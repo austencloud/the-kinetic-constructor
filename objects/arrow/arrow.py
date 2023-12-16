@@ -1,3 +1,4 @@
+from re import M
 from typing import Union
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
@@ -6,7 +7,10 @@ from objects.arrow.arrow_manipulator import ArrowManipulator
 from objects.grid import GridItem
 from objects.prop.prop import Prop
 from constants.string_constants import (
+    END_LOCATION,
     MOTION_TYPE,
+    ROTATION_DIRECTION,
+    START_LOCATION,
     TURNS,
     COLOR,
     COUNTER_CLOCKWISE,
@@ -69,7 +73,7 @@ class Arrow(GraphicalObject):
         self.center_y = self.boundingRect().height() / 2
 
         if arrow_dict:
-            self.set_attributes_from_dict(arrow_dict)
+            self.update_attributes(arrow_dict)
             self.arrow_dict = arrow_dict
         if self.motion:
             self.set_is_svg_mirrored_from_attributes()
@@ -135,7 +139,7 @@ class Arrow(GraphicalObject):
         if isinstance(self.scene, Pictograph):
             self.ghost: "GhostArrow" = self.scene.ghost_arrows[self.color]
             self.ghost.prop = self.motion.prop
-            self.ghost.set_attributes_from_dict(self.arrow_dict)
+            self.ghost.update_attributes(self.arrow_dict)
             self.ghost.set_arrow_attrs_from_arrow(self)
             self.ghost.set_is_svg_mirrored_from_attributes()
             self.ghost.update_appearance()
@@ -205,7 +209,7 @@ class Arrow(GraphicalObject):
                 if prop not in self.scene.props:
                     self.scene.props.append(prop)
 
-                prop.set_attributes_from_dict(
+                prop.update_attributes(
                     {
                         COLOR: self.color,
                         PROP_LOCATION: self.motion.end_location,
@@ -291,19 +295,35 @@ class Arrow(GraphicalObject):
         svg_file = f"{ARROW_DIR}{self.pictograph.grid.grid_mode}/{motion_type}/{motion_type}_{float(turns)}.svg"
         return svg_file
 
+    def _change_arrow_to_static(self) -> None:
+        static_arrow_dict = {
+            COLOR: self.color,
+            MOTION_TYPE: STATIC,
+            TURNS: 0,
+        }
+
+        self.update_attributes(static_arrow_dict)
+        self.motion[COLOR] = self.color
+        self.motion[MOTION_TYPE] = STATIC
+        self.motion[TURNS] = 0
+        self.motion[ROTATION_DIRECTION] = None
+        self.motion[START_LOCATION] = self.motion.prop.prop_location
+        self.motion[END_LOCATION] = self.motion.prop.prop_location
+        self.motion[ARROW_LOCATION] = self.motion.prop.prop_location
+
     ### MANIPULATION ###
 
     def delete(self, keep_prop: bool = False) -> None:
-        self.scene.removeItem(self)
         if self in self.scene.arrows:
-            self.scene.arrows.remove(self)
+            self.scene.removeItem(self)
+            self.scene.arrows[self.color] = None
             self.motion.rotation_direction = None
             self.pictograph.graph_editor.attr_panel.update_attr_panel(self.color)
         if keep_prop:
-            self.motion.prop._create_static_arrow(self)
+            self._change_arrow_to_static()
         else:
             self.motion.reset_motion_attributes()
-            self.motion.prop.delete()
+            self.motion.prop.manipulator.delete()
 
         self.scene.update_pictograph()
 

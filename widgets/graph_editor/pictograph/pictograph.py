@@ -1,5 +1,5 @@
 from re import S
-from typing import Dict
+from typing import Dict, Union
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsScene
@@ -61,6 +61,8 @@ from widgets.graph_editor.pictograph.position_engines.arrow_positioner import (
 from widgets.graph_editor.pictograph.position_engines.prop_positioner import (
     PropPositioner,
 )
+from widgets.option_picker.option.option_view import OptionView
+from widgets.sequence_widget.beat_frame.beat_view import BeatView
 
 if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
@@ -99,7 +101,7 @@ class Pictograph(QGraphicsScene):
         self.arrow_turns = 0
 
         self.grid: Grid = self.initializer.init_grid()
-        self.view: PictographView = self.initializer.init_view()
+        self.view: Union[PictographView,OptionView, BeatView] = self.initializer.init_view()
         self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.locations: Dict[
             Locations, Tuple[int, int, int, int]
@@ -309,8 +311,8 @@ class Pictograph(QGraphicsScene):
         for arrow in new_beat.arrows.values():
             for prop in new_beat.props.values():
                 if arrow.color == prop.color:
-                    arrow.prop = prop
-                    prop.arrow = arrow
+                    arrow.motion.prop = prop
+                    prop.motion.arrow = arrow
 
         for arrow in new_beat.arrows.values():
             for ghost_arrow in new_beat.ghost_arrows.values():
@@ -326,7 +328,6 @@ class Pictograph(QGraphicsScene):
         for prop in new_beat.props.values():
             for ghost_prop in new_beat.ghost_props.values():
                 if prop.color == ghost_prop.color:
-                    prop.motion.ghost_prop = ghost_prop
                     ghost_prop.update_prop_type(prop.prop_type)
 
         for ghost_arrow in new_beat.ghost_arrows.values():

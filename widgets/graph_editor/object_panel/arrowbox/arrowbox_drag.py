@@ -239,7 +239,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
                 if prop not in self.pictograph.props:
                     self.pictograph.props[prop.color] = prop
 
-                prop.set_attributes_from_dict(
+                prop.update_attributes(
                     {
                         COLOR: self.color,
                         PROP_LOCATION: self.end_location,

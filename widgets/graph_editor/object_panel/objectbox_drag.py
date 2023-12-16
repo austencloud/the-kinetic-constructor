@@ -70,7 +70,7 @@ class ObjectBoxDrag(QWidget):
         rotate_transform = QTransform().rotate(drag_angle)
         rotated_pixmap = original_pixmap.transformed(rotate_transform)
         self.setMinimumSize(rotated_pixmap.size())
-        self.preview.setMinimumSize(rotated_pixmap.size())
+        self.preview.resize(rotated_pixmap.size())
         self.preview.setPixmap(rotated_pixmap)
         self.preview.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -98,7 +98,7 @@ class ObjectBoxDrag(QWidget):
 
     def move_to_cursor(self, event_pos: QPoint) -> None:
         local_pos = self.objectbox.view.mapTo(self.main_window, event_pos)
-        self.center = QPointF((self.width() / 2), self.height() / 2)
+        self.center = QPointF((self.preview.width() / 2), self.preview.height() / 2)
         self.move(local_pos - self.center.toPoint())
 
     def remove_same_color_objects(self) -> None:
