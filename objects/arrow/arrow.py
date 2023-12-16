@@ -154,8 +154,6 @@ class Arrow(GraphicalObject):
 
     def mouseReleaseEvent(self, event) -> None:
         self.scene.removeItem(self.ghost_arrow)
-        if self.ghost_arrow in self.scene.arrows:
-            self.scene.arrows.remove(self.ghost_arrow)
         self.ghost_arrow.prop = None
         self.scene.arrows[self.color] = self
         self.scene.update_pictograph()

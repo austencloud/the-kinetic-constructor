@@ -67,6 +67,11 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
     def match_target_arrow(self, target_arrow: "Arrow") -> None:
         self.target_arrow = target_arrow
+        self.rotation_direction = target_arrow.motion.rotation_direction
+        self.motion_type = target_arrow.motion_type
+        self.color = target_arrow.color
+        self.arrow_location = target_arrow.motion.arrow_location
+        self.turns = target_arrow.turns
         self.target_arrow_rotation_angle = self._get_arrow_drag_rotation_angle(
             self.target_arrow
         )
@@ -266,7 +271,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         with painter as painter:
             renderer.render(painter)
 
-        angle = self._get_arrow_drag_rotation_angle(self.target_arrow)
+        angle = self._get_arrow_drag_rotation_angle(self)
 
         unrotate_transform = QTransform().rotate(-self.target_arrow_rotation_angle)
         unrotated_pixmap = self.preview.pixmap().transformed(unrotate_transform)
@@ -301,9 +306,9 @@ class ArrowBoxDrag(ObjectBoxDrag):
         """
         motion_type, rotation_direction, color, location = (
             arrow.motion_type,
-            arrow.motion.rotation_direction,
+            self.rotation_direction,
             arrow.color,
-            arrow.motion.arrow_location,
+            self.arrow_location,
         )
 
         rotation_angle_map: Dict[

@@ -332,20 +332,8 @@ class Pictograph(QGraphicsScene):
 
     ### UPDATERS ###
 
-    def update_attr_panel(self):
-        motions = [
-            motion
-            for motion in [
-                self.motions.get(arrow.color)
-                for arrow in self.arrows.values()
-                if arrow.isSelected()
-            ]
-            if motion is not None
-        ]
-
-        if not motions:
-            self.graph_editor.attr_panel.clear_all_attr_boxes()
-        for motion in motions:
+    def update_attr_panel(self) -> None:
+        for motion in self.motions.values():
             self.graph_editor.attr_panel.update_attr_panel(motion.color)
 
     def update_pictograph(self) -> None:
