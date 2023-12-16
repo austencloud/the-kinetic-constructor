@@ -97,7 +97,6 @@ class PropBoxDrag(ObjectBoxDrag):
         self.pictograph.addItem(self.placed_prop)
         self.pictograph.props[self.color] = self.placed_prop
 
-        self.pictograph.removeItem(self.ghost_prop)
         self.pictograph.update_pictograph()
         self.pictograph.clearSelection()
 

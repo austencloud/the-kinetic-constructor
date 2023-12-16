@@ -63,7 +63,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.attributes: ArrowAttributesDicts = {}
         self.arrowbox = arrowbox
         self.objectbox = arrowbox
-        self.ghost_arrow: GhostArrow = None
+        self.ghost: GhostArrow = None
         self.start_orientation = IN
         self.setup_dependencies(main_window, pictograph, arrowbox)
 
@@ -92,25 +92,23 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         self.turns: Turns = target_arrow.turns
 
-        self.ghost_arrow = self.pictograph.ghost_arrows[self.color]
-        self.ghost_arrow.target_arrow = target_arrow
+        self.ghost = self.pictograph.ghost_arrows[self.color]
+        self.ghost.target_arrow = target_arrow
 
     def place_arrow_on_pictograph(self) -> None:
         self.placed_arrow = Arrow(
             self.pictograph,
-            self.ghost_arrow.get_attributes(),
+            self.ghost.get_attributes(),
             self.pictograph.motions[self.color],
         )
 
-        self.placed_arrow.prop = self.ghost_arrow.prop
-        self.ghost_arrow.prop.arrow = self.placed_arrow
+        self.placed_arrow.motion.prop = self.ghost.motion.prop
+        self.ghost.motion.prop.arrow = self.placed_arrow
 
         motion_dict = {
             COLOR: self.color,
             ARROW: self.placed_arrow,
-            PROP: self.placed_arrow.prop,
-            GHOST_ARROW: None,
-            GHOST_PROP: self.pictograph.ghost_props[self.color],
+            PROP: self.placed_arrow.motion.prop,
             MOTION_TYPE: self.motion_type,
             ROTATION_DIRECTION: self.rotation_direction,
             TURNS: self.turns,
@@ -122,12 +120,11 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
         self.pictograph.arrows[self.color] = self.placed_arrow
-        self.pictograph.ghost_arrows[self.color] = self.ghost_arrow
+        self.pictograph.ghost_arrows[self.color] = self.ghost
 
-        self.placed_arrow.ghost = self.ghost_arrow
+        self.placed_arrow.ghost = self.ghost
 
         self.pictograph.addItem(self.placed_arrow)
-        self.pictograph.removeItem(self.ghost_arrow)
         self.pictograph.clearSelection()
         self.placed_arrow.update_appearance()
         self.placed_arrow.show()
@@ -136,7 +133,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
     ### UPDATERS ###
 
     def _update_arrow_preview_for_new_location(self, new_location: Locations) -> None:
-        self.previous_drag_location = new_location
         self.arrow_location = new_location
         (
             self.start_location,
@@ -152,7 +148,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         motion_dict = {
             COLOR: self.color,
             ARROW: self,
-            PROP: self.ghost_arrow.prop,
+            PROP: self.ghost.motion.prop,
             GHOST_ARROW: None,
             GHOST_PROP: None,
             MOTION_TYPE: self.motion_type,
@@ -166,28 +162,37 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
         self.pictograph.motions[self.color].arrow = self.pictograph.arrows[self.color]
-        self.pictograph.arrows[self.color] = self.ghost_arrow
-        self.ghost_arrow.update_ghost_arrow(self.attributes)
+        self.pictograph.arrows[self.color] = self.ghost
+        self.ghost.update_ghost_arrow(self.attributes)
         self.pictograph.update_pictograph()
 
     def _update_ghost_arrow_for_new_location(self, new_location) -> None:
-        self.ghost_arrow.color = self.color
-        self.ghost_arrow.motion = self.motion
+        self.ghost.color = self.color
+        self.ghost.motion = self.motion
 
-        self.ghost_arrow.motion.arrow_location = new_location
-        self.ghost_arrow.motion_type = self.motion_type
-        self.ghost_arrow.motion.rotation_direction = self.rotation_direction
+        self.ghost.motion.arrow_location = new_location
+        self.ghost.motion_type = self.motion_type
+        self.ghost.motion.rotation_direction = self.rotation_direction
 
-        self.ghost_arrow.turns = self.turns
-        self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
+        self.ghost.turns = self.turns
+        self.ghost.is_svg_mirrored = self.is_svg_mirrored
 
-        ghost_svg = self.ghost_arrow.get_svg_file(self.motion_type, self.turns)
-        self.ghost_arrow.update_mirror()
-        self.ghost_arrow.update_svg(ghost_svg)
-        if self.ghost_arrow not in self.pictograph.arrows:
-            self.pictograph.ghost_arrows[self.ghost_arrow.color] = self.ghost_arrow
-        if self.ghost_arrow not in self.pictograph.items():
-            self.pictograph.addItem(self.ghost_arrow)
+        ghost_svg = self.ghost.get_svg_file(self.motion_type, self.turns)
+
+        self.ghost.update_mirror()
+        self.ghost.update_svg(ghost_svg)
+        if self.is_svg_mirrored:
+            mirrored_ghost_transform = (
+                QTransform()
+                .translate(self.ghost.boundingRect().width(), 0)
+                .scale(-1, 1)
+            )
+            self.ghost.setTransform(mirrored_ghost_transform)
+
+        if self.ghost not in self.pictograph.arrows:
+            self.pictograph.ghost_arrows[self.ghost.color] = self.ghost
+        if self.ghost not in self.pictograph.items():
+            self.pictograph.addItem(self.ghost)
 
     ### EVENT HANDLERS ###
 
@@ -199,7 +204,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
                     self.remove_same_color_objects()
                     self.has_entered_pictograph_once = True
                     self.motion = self.pictograph.motions[self.color]
-                    self.motion.ghost_arrow = self.ghost_arrow
+                    self.pictograph.motions[self.color].arrow = self
 
                 pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
@@ -214,12 +219,10 @@ class ArrowBoxDrag(ObjectBoxDrag):
     def handle_mouse_release(self) -> None:
         if self.has_entered_pictograph_once:
             self.place_arrow_on_pictograph()
+        self.arrowbox.drag = None
         self.deleteLater()
         self.pictograph.update_pictograph()
-        self.arrowbox.drag = None
-        self.ghost_arrow.prop = None
         self.reset_drag_state()
-        self.previous_drag_location = None
 
     ### FLAGS ###
 
@@ -243,8 +246,8 @@ class ArrowBoxDrag(ObjectBoxDrag):
                         LAYER: 1,
                     }
                 )
-                prop.arrow = self.ghost_arrow
-                self.ghost_arrow.prop = prop
+                prop.arrow = self.ghost
+                self.ghost.motion.prop = prop
 
                 self.motion.prop = prop
                 prop.motion = self.motion

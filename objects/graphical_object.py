@@ -122,5 +122,3 @@ class GraphicalObject(QGraphicsSvgItem):
                 (self.boundingRect().width() / 2), (self.boundingRect().height() / 2)
             )
 
-    ### MOUSE EVENTS ###
-
