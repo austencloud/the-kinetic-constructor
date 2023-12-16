@@ -3,7 +3,7 @@ from data.start_end_location_map import get_start_end_locations
 from objects.graphical_object import GraphicalObject
 from PyQt6.QtCore import QPointF, Qt
 from constants.string_constants import *
-
+from objects.prop.prop_types import *
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from objects.prop.prop_manipulator import PropManipulator
 from utilities.TypeChecking.TypeChecking import (
@@ -64,7 +64,6 @@ class Prop(GraphicalObject):
             self.ghost.orientation = self.orientation
             self.ghost.update_appearance()
             self.scene.addItem(self.ghost)
-            self.ghost.arrow = self.arrow
             self.scene.props[self.ghost.color] = self.ghost
             self.scene.props[self.color] = self.ghost
             self.scene.update_pictograph()
@@ -155,9 +154,7 @@ class Prop(GraphicalObject):
         if new_location != self.previous_location:
             self.prop_location = new_location
 
-            if self.arrow.motion_type == STATIC:
-                self.arrow.motion.start_location = new_location
-                self.arrow.motion.end_location = new_location
+            if self.motion.motion_type == STATIC:
                 self.motion.arrow_location = new_location
                 self.motion.start_location = new_location
                 self.motion.end_location = new_location
@@ -228,7 +225,7 @@ class Prop(GraphicalObject):
         return QPointF(offset_tuple[0], offset_tuple[1])
 
     def update_arrow_location(self, new_arrow_location: Locations) -> None:
-        if self.arrow.motion_type in [PRO, ANTI]:
+        if self.motion.motion_type in [PRO, ANTI]:
             shift_location_map: Dict[
                 Tuple(Locations, RotationDirections, MotionTypes),
                 Dict[Locations, Locations],
@@ -271,29 +268,29 @@ class Prop(GraphicalObject):
                 },
             }
 
-            current_location = self.arrow.motion.arrow_location
-            rotation_direction = self.arrow.motion.rotation_direction
-            motion_type = self.arrow.motion_type
+            current_arrow_location = self.motion.arrow_location
+            rotation_direction = self.motion.rotation_direction
+            motion_type = self.motion.motion_type
             new_arrow_location = shift_location_map.get(
-                (current_location, rotation_direction, motion_type), {}
+                (current_arrow_location, rotation_direction, motion_type), {}
             ).get(new_arrow_location)
 
             if new_arrow_location:
                 start_location, end_location = get_start_end_locations(
                     motion_type, rotation_direction, new_arrow_location
                 )
-                self.arrow.update_appearance()
-                self.arrow.ghost.update_appearance()
-                self.arrow.motion.arrow_location = new_arrow_location
-                self.arrow.motion.start_location = start_location
-                self.arrow.motion.end_location = end_location
+                self.motion.arrow.update_appearance()
+                self.motion.arrow.ghost.update_appearance()
+                self.motion.arrow.motion.arrow_location = new_arrow_location
+                self.motion.arrow.motion.start_location = start_location
+                self.motion.arrow.motion.end_location = end_location
                 self.pictograph.update_pictograph()
 
-        elif self.arrow.motion_type == STATIC:
-            self.arrow.motion.arrow_location = new_arrow_location
-            self.arrow.motion.start_location = new_arrow_location
-            self.arrow.motion.end_location = new_arrow_location
-            self.arrow.update_appearance()
+        elif self.motion.arrow.motion_type == STATIC:
+            self.motion.arrow.motion.arrow_location = new_arrow_location
+            self.motion.arrow.motion.start_location = new_arrow_location
+            self.motion.arrow.motion.end_location = new_arrow_location
+            self.motion.arrow.update_appearance()
 
     def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
         (
@@ -306,8 +303,8 @@ class Prop(GraphicalObject):
         self.update_appearance()
         self.setPos(closest_hand_point_coord)
 
-        if self.arrow:
-            self.arrow.update_appearance()
+        if self.motion.arrow:
+            self.motion.arrow.update_appearance()
         self.previous_location = closest_hand_point
         self.scene.update_pictograph()
 
@@ -318,93 +315,5 @@ class Prop(GraphicalObject):
             new_pos = event.scenePos() - self.get_object_center()
             self.set_drag_pos(new_pos)
             self.update_ghost_prop_location(event.scenePos())
+            self.update_arrow_location(self.prop_location)
 
-
-class Staff(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = STAFF
-        super().__init__(pictograph, attributes, motion)
-
-
-class BigStaff(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = BIGSTAFF
-        super().__init__(pictograph, attributes, motion)
-
-
-class Triad(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = TRIAD
-        super().__init__(pictograph, attributes, motion)
-
-
-class MiniHoop(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = MINIHOOP
-        super().__init__(pictograph, attributes, motion)
-
-
-class Fan(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = FAN
-        super().__init__(pictograph, attributes, motion)
-
-
-class Club(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = CLUB
-        super().__init__(pictograph, attributes, motion)
-
-
-class Buugeng(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = BUUGENG
-        super().__init__(pictograph, attributes, motion)
-
-
-class DoubleStar(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = DOUBLESTAR
-        super().__init__(pictograph, attributes, motion)
-
-
-class BigHoop(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = BIGHOOP
-        super().__init__(pictograph, attributes, motion)
-
-
-class BigDoubleStar(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = BIGDOUBLESTAR
-        super().__init__(pictograph, attributes, motion)
-
-
-class Quiad(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = QUIAD
-        super().__init__(pictograph, attributes, motion)
-
-
-class Sword(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = SWORD
-        super().__init__(pictograph, attributes, motion)
-
-
-class Guitar(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = GUITAR
-        super().__init__(pictograph, attributes, motion)
-
-
-class Ukulele(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = UKULELE
-        super().__init__(pictograph, attributes, motion)
-
-
-class Chicken(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = CHICKEN
-        super().__init__(pictograph, attributes, motion)

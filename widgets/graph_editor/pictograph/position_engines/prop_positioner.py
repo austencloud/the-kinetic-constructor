@@ -547,7 +547,7 @@ class PropPositioner:
                         next(
                             prop
                             for prop in self.scene.props.values()
-                            if prop.arrow.color == shift[COLOR]
+                            if prop.color == shift[COLOR]
                         ),
                         direction,
                     )
@@ -555,7 +555,7 @@ class PropPositioner:
                         next(
                             prop
                             for prop in self.scene.props.values()
-                            if prop.arrow.color == static_motion[COLOR]
+                            if prop.color == static_motion[COLOR]
                         ),
                         self.get_opposite_direction(direction),
                     )
