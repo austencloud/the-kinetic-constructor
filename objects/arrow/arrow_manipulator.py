@@ -276,8 +276,6 @@ class ArrowManipulator:
         self.arrow.scene.update_pictograph()
 
     def swap_rot_dir(self) -> None:
-        pass
-
         if self.arrow.is_svg_mirrored:
             self.unmirror()
         elif not self.arrow.is_svg_mirrored:
@@ -311,12 +309,16 @@ class ArrowManipulator:
 
         self.arrow.update_appearance()
         self.arrow.motion.prop.update_appearance()
-        if hasattr(self, "ghost_arrow"):
+
+        self.arrow.scene.update_pictograph()
+
+        if hasattr(self.arrow, "ghost"):
             if not isinstance(self, self.arrow.ghost.__class__) and self.arrow.ghost:
                 self.arrow.ghost.is_svg_mirrored = self.arrow.is_svg_mirrored
                 self.arrow.ghost.update_attributes(self.arrow.arrow_dict)
-        self.arrow.scene.update_pictograph()
-
+                self.arrow.ghost.update_svg(svg_file)
+                self.arrow.ghost.update_appearance()
+                
     def mirror(self) -> None:
         self.arrow.set_arrow_transform_origin_to_center()
         transform = QTransform()
@@ -324,7 +326,7 @@ class ArrowManipulator:
         transform.scale(-1, 1)
         transform.translate(-self.arrow.center_x, -self.arrow.center_y)
         self.arrow.setTransform(transform)
-        if hasattr(self, "ghost_arrow"):
+        if hasattr(self.arrow, "ghost") and self.arrow.ghost:
             self.arrow.ghost.setTransform(transform)
             self.arrow.ghost.is_svg_mirrored = True
         self.arrow.is_svg_mirrored = True
@@ -335,7 +337,7 @@ class ArrowManipulator:
         transform.scale(1, 1)
         transform.translate(-self.arrow.center.x(), -self.arrow.center.y())
         self.arrow.setTransform(transform)
-        if hasattr(self, "ghost_arrow"):
+        if hasattr(self.arrow, "ghost") and self.arrow.ghost:
             self.arrow.ghost.setTransform(transform)
             self.arrow.ghost.is_svg_mirrored = False
         self.arrow.is_svg_mirrored = False
@@ -375,9 +377,10 @@ class ArrowManipulator:
         self.arrow.motion.end_orientation = self.arrow.motion.prop.orientation
 
         svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
-        self.arrow.update_svg(svg_file)
         self.arrow.update_attributes(new_arrow_dict)
-        if hasattr(self, "ghost_arrow"):
+        self.arrow.update_svg(svg_file)
+        self.arrow.update_color()
+        if hasattr(self.arrow, "ghost"):
             self.arrow.ghost.motion_type = new_motion_type
             self.arrow.ghost.update_svg(svg_file)
             self.arrow.ghost.update_attributes(new_arrow_dict)
