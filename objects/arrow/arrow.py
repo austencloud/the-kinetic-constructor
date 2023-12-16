@@ -1,6 +1,4 @@
-from re import M
 from typing import Union
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from objects.arrow.arrow_manipulator import ArrowManipulator

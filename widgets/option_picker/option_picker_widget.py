@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QResizeEvent
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget

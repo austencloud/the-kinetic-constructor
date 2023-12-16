@@ -1,5 +1,4 @@
-import re
-from typing import TYPE_CHECKING, Dict, List, Tuple
+from typing import TYPE_CHECKING, List, Tuple
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QGraphicsItem, QGraphicsSceneMouseEvent, QGridLayout
@@ -10,7 +9,7 @@ from widgets.graph_editor.object_panel.arrowbox.arrowbox_drag import ArrowBoxDra
 from widgets.graph_editor.object_panel.arrowbox.arrowbox_view import ArrowBoxView
 from objects.grid import Grid
 from widgets.graph_editor.object_panel.objectbox import ObjectBox
-from utilities.TypeChecking.TypeChecking import Colors, MotionAttributesDicts
+from utilities.TypeChecking.TypeChecking import MotionAttributesDicts
 from PyQt6.QtCore import QPointF
 
 if TYPE_CHECKING:

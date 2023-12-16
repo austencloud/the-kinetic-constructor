@@ -1,6 +1,6 @@
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtCore import QPointF, Qt
+from PyQt6.QtCore import QPointF
 from constants.string_constants import BLUE, BLUE_HEX, RED, RED_HEX
 import re
 from typing import TYPE_CHECKING, Union

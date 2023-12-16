@@ -1,4 +1,3 @@
-from re import S
 from typing import Dict, Union
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
@@ -12,7 +11,6 @@ from objects.grid import Grid
 from objects.prop.prop import Prop
 from objects.motion import Motion
 from constants.string_constants import (
-    ARROW,
     BLUE,
     BOX,
     COLOR,
@@ -20,7 +18,6 @@ from constants.string_constants import (
     END_LOCATION,
     LETTER_SVG_DIR,
     MOTION_TYPE,
-    PROP,
     RED,
     ROTATION_DIRECTION,
     STAFF,
@@ -37,13 +34,10 @@ from utilities.letter_engine import LetterEngine
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
     Colors,
-    Layers,
     Locations,
     MotionAttributesDicts,
     List,
-    MotionTypes,
     Optional,
-    Orientations,
     PropTypes,
     Tuple,
 )
@@ -55,12 +49,9 @@ from objects.pictograph.pictograph_init import PictographInit
 from objects.pictograph.pictograph_menu_handler import (
     PictographMenuHandler,
 )
-from widgets.graph_editor.pictograph.position_engines.arrow_positioner import (
-    ArrowPositioner,
-)
-from widgets.graph_editor.pictograph.position_engines.prop_positioner import (
-    PropPositioner,
-)
+from position_engines.arrow_positioner import ArrowPositioner
+from position_engines.prop_positioner import PropPositioner
+
 from widgets.option_picker.option.option_view import OptionView
 from widgets.sequence_widget.beat_frame.beat_view import BeatView
 

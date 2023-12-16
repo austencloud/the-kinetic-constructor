@@ -1,10 +1,9 @@
-from PyQt6.QtCore import QPointF, Qt
+from PyQt6.QtCore import QPointF
 from PyQt6.QtSvg import QSvgRenderer
 
 from data.letter_engine_data import letter_types
 from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
-from objects.motion import Motion
 from constants.string_constants import (
     BLUE,
     COLOR,
@@ -25,12 +24,9 @@ from utilities.TypeChecking.Letters import Letters
 from utilities.letter_engine import LetterEngine
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
-    Layers,
     MotionAttributesDicts,
     List,
-    MotionTypes,
     Optional,
-    Orientations,
     Tuple,
 )
 from objects.pictograph.pictograph import Pictograph

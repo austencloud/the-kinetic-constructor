@@ -1,5 +1,4 @@
 from typing import Callable, Dict, List, TYPE_CHECKING
-import json
 from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout
 from PyQt6.QtCore import Qt
 from constants.string_constants import *

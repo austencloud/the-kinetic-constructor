@@ -34,8 +34,6 @@ from utilities.TypeChecking.TypeChecking import (
     SpecificStartEndPositionsDicts,
 )
 
-import pandas as pd
-from typing import Optional
 
 
 # class LetterEngine:

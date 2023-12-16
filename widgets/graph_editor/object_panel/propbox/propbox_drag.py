@@ -2,7 +2,6 @@ from PyQt6.QtCore import Qt, QPoint, QSize
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from objects.prop.prop import Prop
-from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
 from constants.string_constants import (
@@ -22,7 +21,6 @@ from constants.string_constants import (
     MOTION_TYPE,
     STATIC,
     ROTATION_DIRECTION,
-    ARROW_LOCATION,
     START_LOCATION,
     END_LOCATION,
     TURNS,
