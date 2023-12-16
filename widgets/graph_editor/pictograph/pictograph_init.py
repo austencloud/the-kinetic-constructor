@@ -82,6 +82,10 @@ class PictographInit:
         )
 
         arrows = {RED: red_arrow, BLUE: blue_arrow}
+        for motion in self.pictograph.motions.values():
+            for arrow in arrows.values():
+                if arrow.color == motion.color:
+                    motion.arrow = arrow
         return arrows
 
     def init_props(self, prop_type: PropTypes) -> Dict[Colors, Prop]:
@@ -129,6 +133,10 @@ class PictographInit:
         blue_prop.set_svg_color(BLUE)
 
         props = {RED: red_prop, BLUE: blue_prop}
+        for motion in self.pictograph.motions.values():
+            for prop in props.values():
+                if prop.color == motion.color:
+                    motion.prop = prop
         return props
 
     def init_ghost_arrows(self) -> Dict[Colors, GhostArrow]:
@@ -156,6 +164,10 @@ class PictographInit:
         )
 
         ghost_arrows = {RED: red_ghost_arrow, BLUE: blue_ghost_arrow}
+        for ghost_arrow in ghost_arrows.values():
+            for arrow in self.pictograph.arrows.values():
+                if arrow.color == ghost_arrow.color:
+                    arrow.ghost = ghost_arrow
         return ghost_arrows
 
     def init_ghost_props(self, prop_type: PropTypes) -> Dict[Colors, GhostProp]:

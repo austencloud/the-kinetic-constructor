@@ -29,20 +29,20 @@ class Motion:
         self.scene = scene
         self.motion_dict = motion_dict
 
-        if motion_dict[ARROW] and motion_dict[PROP]:
-            self.arrow.motion = self
-            self.prop.motion = self
-        else:
-            self.arrow: Arrow = None
-            self.prop: Prop = None
-
         self.setup_attributes(motion_dict)
 
     ### SETUP ###
 
     def setup_attributes(self, motion_dict) -> None:
-        self.arrow: Arrow = motion_dict[ARROW]
-        self.prop: Prop = motion_dict[PROP]
+        if ARROW in motion_dict and PROP in motion_dict:
+            if motion_dict[ARROW] and motion_dict[PROP]:
+                self.arrow.motion = self
+                self.prop.motion = self
+                self.arrow: Arrow = motion_dict[ARROW]
+                self.prop: Prop = motion_dict[PROP]
+        else:
+            self.arrow: Arrow = None
+            self.prop: Prop = None
 
         self.color: Colors = motion_dict[COLOR]
         self.motion_type: MotionTypes = motion_dict[MOTION_TYPE]
@@ -53,7 +53,7 @@ class Motion:
         self.start_orientation: Orientations = motion_dict[START_ORIENTATION]
         self.start_layer: Layers = motion_dict[START_LAYER]
 
-        if self.arrow:
+        if hasattr(self, "arrow") and self.arrow:
             self.arrow.location = self.get_arrow_location(
                 self.start_location, self.end_location
             )
@@ -88,7 +88,7 @@ class Motion:
         self.scene.update_pictograph()
 
     def update_prop_orientation_and_layer(self) -> None:
-        if self.prop:
+        if hasattr(self, "prop") and self.prop:
             self.prop.orientation = self.end_orientation
             self.prop.layer = self.end_layer
             self.prop.location = self.end_location
@@ -99,7 +99,6 @@ class Motion:
     def clear_attributes(self):
         self.start_location = None
         self.end_location = None
-        self.arrow = None
         self.turns = None
         self.motion_type = None
         self.start_layer = None
@@ -109,6 +108,20 @@ class Motion:
         self.end_orientation = None
 
     ### GETTERS ###
+
+    def get_attributes(self) -> MotionAttributesDicts:
+        return {
+            COLOR: self.color,
+            MOTION_TYPE: self.motion_type,
+            TURNS: self.turns,
+            ROTATION_DIRECTION: self.rotation_direction,
+            START_LOCATION: self.start_location,
+            END_LOCATION: self.end_location,
+            START_ORIENTATION: self.start_orientation,
+            END_ORIENTATION: self.end_orientation,
+            START_LAYER: self.start_layer,
+            END_LAYER: self.end_layer,
+        }
 
     def get_end_layer(self) -> Layers:
         if self.start_layer:

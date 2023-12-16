@@ -259,8 +259,6 @@ class Pictograph(QGraphicsScene):
             arrow.manipulator.rotate_arrow(direction)
 
     def clear_pictograph(self) -> None:
-        self.arrows = {}
-        self.props = {}
         for motion in self.motions.values():
             motion.clear_attributes()
         for arrow in self.arrows.values():
@@ -274,8 +272,7 @@ class Pictograph(QGraphicsScene):
         for item in self.items():
             if isinstance(item, Arrow) or isinstance(item, Prop):
                 self.removeItem(item)
-
-        self.update_pictograph()
+        self.update_letter()
 
     def clear_selections(self) -> None:
         for arrow in self.arrows.values():
@@ -290,40 +287,45 @@ class Pictograph(QGraphicsScene):
 
         new_beat = Beat(self.main_widget, self.graph_editor)
         new_beat.setSceneRect(self.sceneRect())
-        new_beat.motions = self.motions
-        new_beat.arrows = self.arrows
-        new_beat.props = self.props
         new_beat.ghost_arrows = self.ghost_arrows
+        new_beat.ghost_props = self.ghost_props
 
+        for motion in self.motions.values():
+            new_beat.motions[motion.color] = Motion(new_beat, motion.get_attributes())
 
-        for arrow in new_beat.arrows.values():
-            for ghost_arrow in new_beat.ghost_arrows.values():
-                if arrow.color == ghost_arrow.color:
-                    arrow.ghost = ghost_arrow
-                    ghost_arrow.motion = new_beat.motions[arrow.color]
-                    ghost_arrow.update_attributes(arrow.get_attributes())
-                    ghost_arrow.set_is_svg_mirrored_from_attributes()
-                    ghost_arrow.update_mirror()
-                    ghost_arrow.update_svg(arrow.svg_file)
-                    ghost_arrow.update_appearance()
+            if motion.arrow:
+                new_beat.addItem(
+                    Arrow(
+                        new_beat,
+                        motion.arrow.get_attributes(),
+                        new_beat.motions[motion.color],
+                    )
+                )
+                new_beat.addItem(
+                    Prop(
+                        new_beat,
+                        motion.prop.get_attributes(),
+                        new_beat.motions[motion.color],
+                    )
+                )
 
-        for prop in new_beat.props.values():
-            for ghost_prop in new_beat.ghost_props.values():
-                if prop.color == ghost_prop.color:
-                    ghost_prop.update_prop_type(prop.prop_type)
+        for item in new_beat.items():
+            if isinstance(item, Arrow):
+                new_beat.motions[item.color].arrow = item
+                item.motion = new_beat.motions[item.color]
+                new_beat.arrows[item.color] = item
+                item.update_appearance()
+                item.ghost = new_beat.ghost_arrows[item.color]
+                item.motion_type = new_beat.motions[item.color].motion_type
 
-        for ghost_arrow in new_beat.ghost_arrows.values():
-            for motion in new_beat.motions.values():
-                if ghost_arrow.color == motion.color:
-                    ghost_arrow.motion = motion
-
-        for ghost_prop in new_beat.ghost_props.values():
-            for motion in new_beat.motions.values():
-                if ghost_prop.color == motion.color:
-                    ghost_prop.motion = motion
+            elif isinstance(item, Prop):
+                new_beat.motions[item.color].prop = item
+                item.motion = new_beat.motions[item.color]
+                new_beat.props[item.color] = item
+                item.update_appearance()
+                item.ghost = new_beat.ghost_props[item.color]
 
         new_beat.update_pictograph()
-
         return new_beat
 
     ### UPDATERS ###
@@ -345,16 +347,15 @@ class Pictograph(QGraphicsScene):
         self.prop_positioner.update_prop_positions()
 
     def update_letter(self) -> None:
-        if len(self.props) == 2:
-            # check if all the motions have motion types and arrow locations
-            for motion in self.motions.values():
-                if motion.motion_type is None or motion.arrow.location is None:
-                    return
+        if all(
+            motion.rotation_direction and motion.motion_type
+            for motion in self.motions.values()
+        ):
             self.current_letter = self.letter_engine.get_current_letter()
+            self.update_letter_item(self.current_letter)
         else:
             self.current_letter = None
-        self.update_letter_item(self.current_letter)
-        self.letter_item.position_letter_item(self.letter_item)
+            self.update_letter_item(None)
 
     def update_letter_item(self, letter: str) -> None:
         if letter:

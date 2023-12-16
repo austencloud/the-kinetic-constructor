@@ -396,7 +396,7 @@ class PropPositioner:
         further_prop = next(
             prop
             for prop in self.scene.props.values()
-            if prop.arrow.color == further_arrow[COLOR]
+            if prop.color == further_arrow[COLOR]
         )
         new_position_further = self.calculate_new_position(
             further_prop.pos(), further_direction
@@ -430,7 +430,7 @@ class PropPositioner:
             (
                 prop
                 for prop in self.scene.props.values()
-                if prop.arrow.color == anti_motion[COLOR]
+                if prop.color == anti_motion[COLOR]
             ),
             None,
         )

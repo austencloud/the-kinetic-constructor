@@ -167,6 +167,7 @@ class Arrow(GraphicalObject):
         self.motion.prop.set_prop_attrs_from_arrow(self)
         self.motion.prop.update_appearance()
         self.motion.arrow.location = new_location
+        self.ghost.motion = self.motion
         self.update_appearance()
         self.ghost.update_appearance()
         self.ghost.location = new_location
@@ -253,7 +254,7 @@ class Arrow(GraphicalObject):
     ) -> RotationAngles:
         arrow = arrow or self
         location_to_angle = self.get_location_to_angle_map(
-            arrow.motion_type, arrow.motion.rotation_direction
+            arrow.motion.motion_type, arrow.motion.rotation_direction
         )
         return location_to_angle.get(self.motion.arrow.location, 0)
 

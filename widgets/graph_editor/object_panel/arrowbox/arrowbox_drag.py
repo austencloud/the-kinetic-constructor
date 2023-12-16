@@ -140,8 +140,8 @@ class ArrowBoxDrag(ObjectBoxDrag):
             self.motion_type, self.rotation_direction, self.arrow_location
         )
 
-        self._update_ghost_arrow_for_new_location(new_location)
         self.update_rotation()
+        self._update_ghost_arrow_for_new_location(new_location)
         self.update_prop_during_drag()
 
         motion_dict = {

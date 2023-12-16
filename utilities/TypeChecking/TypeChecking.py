@@ -135,11 +135,8 @@ class MotionAttributesDicts(TypedDict):
 
 class ArrowAttributesDicts(TypedDict):
     color: Colors
+    location: Locations
     motion_type: MotionTypes
-    rotation_direction: RotationDirections
-    arrow_location: Locations
-    start_location: Locations
-    end_location: Locations
     turns: Turns
 
 
