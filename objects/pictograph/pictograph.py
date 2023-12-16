@@ -49,8 +49,8 @@ from objects.pictograph.pictograph_init import PictographInit
 from objects.pictograph.pictograph_menu_handler import (
     PictographMenuHandler,
 )
-from position_engines.arrow_positioner import ArrowPositioner
-from position_engines.prop_positioner import PropPositioner
+from objects.pictograph.position_engines.arrow_positioner import ArrowPositioner
+from objects.pictograph.position_engines.prop_positioner import PropPositioner
 
 from widgets.option_picker.option.option_view import OptionView
 from widgets.sequence_widget.beat_frame.beat_view import BeatView

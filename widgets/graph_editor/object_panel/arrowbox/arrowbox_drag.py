@@ -9,6 +9,8 @@ from constants.string_constants import (
     CLOCKWISE,
     COLOR,
     COUNTER_CLOCKWISE,
+    GHOST_ARROW,
+    GHOST_PROP,
     IN,
     LAYER,
     NORTHEAST,
@@ -21,11 +23,14 @@ from constants.string_constants import (
     SOUTHWEST,
     MOTION_TYPE,
     ROTATION_DIRECTION,
+    ARROW_LOCATION,
     START_LOCATION,
     END_LOCATION,
     TURNS,
     START_ORIENTATION,
+    END_ORIENTATION,
     START_LAYER,
+    END_LAYER,
 )
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Tuple
@@ -33,6 +38,7 @@ from objects.ghosts.ghost_arrow import GhostArrow
 
 from widgets.graph_editor.object_panel.objectbox_drag import ObjectBoxDrag
 from utilities.TypeChecking.TypeChecking import (
+    ArrowAttributesDicts,
     Colors,
     MotionTypes,
     Locations,
@@ -76,6 +82,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.apply_transformations_to_preview()
 
     def set_attributes(self, target_arrow: "Arrow") -> None:
+        self.previous_drag_location = None
         self.color: Colors = target_arrow.color
         self.motion_type: MotionTypes = target_arrow.motion_type
         self.arrow_location: Locations = target_arrow.location
@@ -94,10 +101,8 @@ class ArrowBoxDrag(ObjectBoxDrag):
             self.ghost.get_attributes(),
             self.pictograph.motions[self.color],
         )
-
-        self.placed_arrow.motion.prop = self.ghost.motion.prop
-        self.ghost.motion.prop.arrow = self.placed_arrow
-
+        self.placed_arrow.motion.prop = self.pictograph.props[self.color]
+        
         motion_dict = {
             COLOR: self.color,
             ARROW: self.placed_arrow,
@@ -193,6 +198,11 @@ class ArrowBoxDrag(ObjectBoxDrag):
         if self.preview:
             self.move_to_cursor(event_pos)
             if self.is_over_pictograph(event_pos):
+                if not self.has_entered_pictograph_once:
+                    self.remove_same_color_objects()
+                    self.has_entered_pictograph_once = True
+                    self.pictograph.motions[self.color].arrow = self
+
                 pos_in_main_window = self.arrowbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
                     pos_in_main_window
@@ -200,14 +210,10 @@ class ArrowBoxDrag(ObjectBoxDrag):
                 scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
                 new_location = self.pictograph.get_closest_layer2_point(scene_pos)[0]
 
-                self.motion = self.pictograph.motions[self.color]
                 if self.previous_drag_location != new_location:
+                    self.motion = self.pictograph.motions[self.color]
                     self._update_arrow_preview_for_new_location(new_location)
 
-                if not self.has_entered_pictograph_once:
-                    self.remove_same_color_objects()
-                    self.has_entered_pictograph_once = True
-                    self.pictograph.motions[self.color].arrow = self
 
     def handle_mouse_release(self) -> None:
         if self.has_entered_pictograph_once:
@@ -247,9 +253,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
                 if prop not in self.pictograph.items():
                     self.pictograph.addItem(prop)
-                    self.pictograph.addItem(prop.ghost)
                 prop.update_appearance()
-
                 self.pictograph.update_props()
 
     def apply_transformations_to_preview(self) -> None:

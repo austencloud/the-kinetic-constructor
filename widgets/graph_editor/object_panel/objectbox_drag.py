@@ -44,7 +44,6 @@ class ObjectBoxDrag(QWidget):
         self.main_window = main_window
         self.has_entered_pictograph_once = False
         self.current_rotation_angle = 0
-        self.previous_drag_location = None
         self.svg_file = None
         self.static_arrow = None
 
@@ -104,10 +103,12 @@ class ObjectBoxDrag(QWidget):
     def remove_same_color_objects(self) -> None:
         for prop in self.pictograph.props.values():
             if prop.color == self.color:
-                prop.clear_attributes()
+                if prop in self.pictograph.items():
+                    self.pictograph.removeItem(prop)
         for arrow in self.pictograph.arrows.values():
             if arrow.color == self.color:
-                arrow.clear_attributes()
+                if arrow in self.pictograph.items():
+                    self.pictograph.removeItem(arrow)
         for motion in self.pictograph.motions.values():
             if motion.color == self.color:
                 motion.clear_attributes()

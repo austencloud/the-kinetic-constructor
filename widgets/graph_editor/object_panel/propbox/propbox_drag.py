@@ -53,6 +53,8 @@ class PropBoxDrag(ObjectBoxDrag):
         self.move_to_cursor(self.propbox.view.mapFromGlobal(self.pos()))
 
     def set_attributes(self, target_prop: "Prop") -> None:
+        self.previous_drag_location = None
+
         self.color: Colors = target_prop.color
         self.prop_type: PropTypes = target_prop.prop_type
         self.location: Locations = target_prop.location
