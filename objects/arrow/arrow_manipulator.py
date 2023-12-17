@@ -319,11 +319,13 @@ class ArrowManipulator:
         )
 
         self.arrow.location = new_arrow_location
+        self.arrow.ghost.location = new_arrow_location
         self.arrow.motion.start_location = new_start_location
         self.arrow.motion.end_location = new_end_location
         self.arrow.motion.prop.location = new_end_location
 
         self.arrow.update_appearance()
+        self.arrow.ghost.update_appearance()
         self.arrow.motion.prop.update_appearance()
         self.arrow.scene.update_pictograph()
 

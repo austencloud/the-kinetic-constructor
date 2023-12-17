@@ -208,21 +208,21 @@ class OptionPicker(QScrollArea):
             )
         option.update_pictograph()
 
-    def on_option_clicked(self, option: "Option") -> None:
-        new_beat = self.copy_scene(option)
+    def on_option_clicked(self, clicked_option: "Option") -> None:
+        new_beat = self.copy_scene(clicked_option)
         self.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(new_beat)
 
-    def copy_scene(self, option: "Option") -> Beat:
+    def copy_scene(self, clicked_option: "Option") -> Beat:
         new_beat = Beat(self.main_widget, self.main_widget.graph_editor_widget)
-        new_beat.setSceneRect(option.sceneRect())
-        new_beat.motions = option.motions.copy()
-        self.duplicate_items(option, new_beat)
+        new_beat.setSceneRect(clicked_option.sceneRect())
+        new_beat.motions = clicked_option.motions.copy()
+        self.duplicate_items(clicked_option, new_beat)
         new_beat.update_pictograph()
         return new_beat
 
     @staticmethod
-    def duplicate_items(source_option: Option, target_beat: Beat) -> None:
-        for item in source_option.items():
+    def duplicate_items(clicked_option: Option, target_beat: Beat) -> None:
+        for item in clicked_option.items():
             if isinstance(item, Arrow):
                 new_item = Arrow(
                     target_beat, item.get_attributes(), target_beat.motions[item.color]
@@ -241,11 +241,15 @@ class OptionPicker(QScrollArea):
                 new_item.motion = target_beat.motions[new_item.color]
                 new_item.ghost = target_beat.ghost_arrows[new_item.color]
                 new_item.ghost.motion = new_item.motion
+                new_item.update_appearance()
+                new_item.ghost.update_appearance()
             elif isinstance(new_item, Prop):
                 target_beat.props[new_item.color] = new_item
                 new_item.motion = target_beat.motions[new_item.color]
                 new_item.ghost = target_beat.ghost_props[new_item.color]
                 new_item.ghost.motion = new_item.motion
+                new_item.update_appearance()
+                new_item.ghost.update_appearance()
 
     def resize_option_views(self):
         for option in self.options:

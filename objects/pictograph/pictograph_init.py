@@ -266,7 +266,3 @@ class PictographInit:
         }
         return locations
 
-    def update_props_and_ghost_props(self, new_prop_type: PropTypes) -> None:
-        self.pictograph.props = self.init_props(new_prop_type)
-        self.pictograph.prop_type = new_prop_type
-        self.pictograph.ghost_props = self.init_ghost_props(new_prop_type)

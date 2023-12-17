@@ -102,7 +102,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             self.pictograph.motions[self.color],
         )
         self.placed_arrow.motion.prop = self.pictograph.props[self.color]
-        
+
         motion_dict = {
             COLOR: self.color,
             ARROW: self.placed_arrow,
@@ -124,6 +124,8 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         self.pictograph.addItem(self.placed_arrow)
         self.pictograph.clearSelection()
+        self.pictograph.arrows[self.color] = self.placed_arrow
+        self.pictograph.arrows[self.color].motion = self.pictograph.motions[self.color]
         self.placed_arrow.update_appearance()
         self.placed_arrow.show()
         self.placed_arrow.setSelected(True)
@@ -213,7 +215,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
                 if self.previous_drag_location != new_location:
                     self.motion = self.pictograph.motions[self.color]
                     self._update_arrow_preview_for_new_location(new_location)
-
 
     def handle_mouse_release(self) -> None:
         if self.has_entered_pictograph_once:
