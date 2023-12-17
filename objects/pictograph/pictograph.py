@@ -1,4 +1,4 @@
-from typing import Dict, Literal, Union
+from typing import Dict, Literal
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsScene
@@ -55,10 +55,10 @@ from objects.pictograph.position_engines.prop_positioner import PropPositioner
 from widgets.graph_editor.main_pictograph_view import MainPictographView
 
 from widgets.option_picker.option.option_view import OptionView
+from widgets.sequence_widget.beat_frame.start_position_view import StartPositionView
 
 if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
-    from widgets.option_picker.option.option import Option
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.graph_editor import GraphEditor
 from widgets.sequence_widget.beat_frame.beat_view import BeatView
@@ -108,6 +108,8 @@ class Pictograph(QGraphicsScene):
             self.view = OptionView(self)
         elif self.graph_type == "beat":
             self.view = BeatView(self)
+        elif self.graph_type == "start_position":
+            self.view = StartPositionView(self)
 
         self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.locations: Dict[

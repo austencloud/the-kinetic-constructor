@@ -2,7 +2,6 @@ from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
 )
 from objects.pictograph.pictograph import Pictograph
-from widgets.graph_editor.main_pictograph_view import MainPictographView
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget

@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout
 from PyQt6.QtCore import Qt
 import pandas as pd
 from constants.string_constants import *
-from data.positions_map import get_specific_start_end_positions, positions_map
+from data.positions_map import positions_map
 from objects.arrow.arrow import Arrow
 from objects.motion import Motion
 from objects.prop.prop import Prop
@@ -71,15 +71,8 @@ class OptionPicker(QScrollArea):
             motion_dict = [
                 self._create_motion_dict(row_data, color) for color in ["blue", "red"]
             ]
-            self._add_option_to_layout(motion_dict, is_initial=True, row=0, col=column)
+            self._add_option_to_layout(motion_dict, is_start_position=True, row=0, col=column)
 
-    def _add_option_to_layout(
-        self, motion_dict: list, is_initial: bool, row: int, col: int
-    ) -> None:
-        option = self._create_option(motion_dict)
-        # Use the same click handler for initial and subsequent options
-        option.view.mousePressEvent = self._get_click_handler(option)
-        self.option_picker_layout.addWidget(option.view, row, col)
 
     def _create_option(self, motion_dict_list: list) -> "Option":
         option = Option(self.main_widget, self)
@@ -88,6 +81,7 @@ class OptionPicker(QScrollArea):
         for motion_dict in motion_dict_list:
             self._add_motion_to_option(option, motion_dict)
             self._finalize_option_setup(option, motion_dict)
+            
         self.options.append(option)
         return option
 
@@ -95,6 +89,13 @@ class OptionPicker(QScrollArea):
         arrow = self._create_arrow(option, motion_dict)
         prop = self._create_prop(option, motion_dict)
         self._setup_motion_relations(option, arrow, prop)
+
+    def _add_option_to_layout(
+        self, motion_dict: list, is_start_position: bool, row: int, col: int
+    ) -> None:
+        option = self._create_option(motion_dict)
+        option.view.mousePressEvent = self._get_click_handler(option, is_start_position)
+        self.option_picker_layout.addWidget(option.view, row, col)
 
     def _create_arrow(self, option: "Option", motion_dict: Dict) -> Arrow:
         arrow_dict = {
@@ -205,7 +206,7 @@ class OptionPicker(QScrollArea):
             ]
             self._add_option_to_layout(
                 attributes_list,
-                is_initial=False,
+                is_start_position=False,
                 row=row // self.COLUMN_COUNT,
                 col=row % self.COLUMN_COUNT,
             )
@@ -215,12 +216,20 @@ class OptionPicker(QScrollArea):
     ### GETTERS ###
 
 
-    def _get_click_handler(self, option: "Option") -> Callable:
+    def _get_click_handler(self, option: "Option", is_start_position: bool) -> Callable:
         """
         Returns a click event handler for an option. This handler updates
         the picker state based on the selected option's attributes.
         """
-        return lambda event: self._on_option_clicked(option)
+        if is_start_position:
+            return lambda event: self._on_start_position_clicked(option)
+        else:
+            return lambda event: self._on_option_clicked(option)
+
+    def _on_start_position_clicked(self, start_position: "Option") -> None:
+        self.main_widget.sequence_widget.beat_frame.start_position_view.set_start_position(start_position)
+
+
     @staticmethod
     def get_prop_attributes(color: str) -> Dict:
         return {

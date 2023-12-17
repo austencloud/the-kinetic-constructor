@@ -7,6 +7,8 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, pyqtSignal
 from constants.string_constants import BLUE, RED
 from widgets.sequence_widget.beat_frame.beat import Beat
+from widgets.sequence_widget.beat_frame.start_position import StartPosition
+from widgets.sequence_widget.beat_frame.start_position_view import StartPositionView
 
 
 if TYPE_CHECKING:
@@ -19,12 +21,10 @@ from widgets.sequence_widget.beat_frame.beat_view import BeatView
 
 class BeatFrame(QFrame):
     picker_updater: pyqtSignal = pyqtSignal(dict)
-    
+    COLUMN_COUNT = 4
+
     def __init__(
-        self,
-        main_widget: "MainWidget",
-        pictograph: "Pictograph",
-        sequence_widget: "SequenceWidget",
+        self, main_widget: "MainWidget", pictograph: "Pictograph", sequence_widget: "SequenceWidget"
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -35,13 +35,34 @@ class BeatFrame(QFrame):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        for j in range(4):
-            for i in range(4):
+
+        # Add StartPositionView to the first column of the first row
+        self.start_position = StartPosition(main_widget, self)
+        self.start_position_view = StartPositionView(self.start_position)
+        self.layout.addWidget(self.start_position_view, 0, 0, 1, 1)  # Span only 1 column
+
+        # Add beats to the grid, starting from the second column in the first row
+        for j in range(4):  # 4 rows
+            for i in range(4):  # 4 columns
+                grid_col = i + 1 if j == 0 else i  # Shift grid columns by 1 for the first row
                 beat_view = BeatView(self)
                 beat = Beat(self.main_widget, self)
                 beat_view.beat = beat
-                self.layout.addWidget(beat_view, j, i)
+                if j == 0 and i == 0:  # Skip the first position of the first row
+                    continue
+                self.layout.addWidget(beat_view, j, grid_col)
                 self.beats.append(beat_view)
+
+
+    def _add_beat_to_layout(self, row: int, col: int):
+        beat_view = BeatView(self)
+        beat = Beat(self.main_widget, self)
+        beat_view.beat = beat
+        self.layout.addWidget(beat_view, row, col)
+        self.beats.append(beat_view)
+
+    def add_start_position(self, start_position: "StartPosition"):
+        self.start_position_view.set_start_position(start_position)
 
     def add_scene_to_sequence(self, copied_scene: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()

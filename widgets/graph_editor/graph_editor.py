@@ -5,7 +5,6 @@ from widgets.graph_editor.main_pictograph import MainPictograph
 
 from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
 from widgets.graph_editor.pictograph_widget import PictographWidget
-from objects.pictograph.pictograph import Pictograph
 from widgets.graph_editor.object_panel.propbox.propbox import PropBox
 from widgets.graph_editor.attr_panel.attr_panel import AttrPanel
 
