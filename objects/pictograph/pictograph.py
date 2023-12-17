@@ -11,13 +11,16 @@ from objects.grid import Grid
 from objects.prop.prop import Prop
 from objects.motion import Motion
 from constants.string_constants import (
+    ARROW,
     BLUE,
     BOX,
     COLOR,
     DIAMOND,
     END_LOCATION,
     LETTER_SVG_DIR,
+    LOCATION,
     MOTION_TYPE,
+    PROP,
     RED,
     ROTATION_DIRECTION,
     STAFF,
@@ -278,46 +281,63 @@ class Pictograph(QGraphicsScene):
 
         new_beat = Beat(self.main_widget, self.graph_editor)
         new_beat.setSceneRect(self.sceneRect())
-        new_beat.ghost_arrows = self.ghost_arrows
-        new_beat.ghost_props = self.ghost_props
-
         for motion in self.motions.values():
             new_beat.motions[motion.color] = Motion(new_beat, motion.get_attributes())
+            new_arrow = Arrow(
+                new_beat, motion.arrow.get_attributes(), new_beat.motions[motion.color]
+            )
 
-            if motion.arrow:
-                if motion.arrow.location:
-                    new_beat.addItem(
-                        Arrow(
-                            new_beat,
-                            motion.arrow.get_attributes(),
-                            new_beat.motions[motion.color],
-                        )
-                    )
-                    new_beat.addItem(
-                        Prop(
-                            new_beat,
-                            motion.prop.get_attributes(),
-                            new_beat.motions[motion.color],
-                        )
-                    )
+            new_prop = Prop(
+                new_beat, motion.prop.get_attributes(), new_beat.motions[motion.color]
+            )
 
-        for item in new_beat.items():
-            if isinstance(item, Arrow):
-                new_beat.motions[item.color].arrow = item
-                item.motion = new_beat.motions[item.color]
-                new_beat.arrows[item.color] = item
-                item.update_appearance()
-                item.ghost = new_beat.ghost_arrows[item.color]
-                item.motion_type = new_beat.motions[item.color].motion_type
+            new_ghost_arrow = GhostArrow(
+                new_beat, motion.arrow.get_attributes(), new_beat.motions[motion.color]
+            )
 
-            elif isinstance(item, Prop):
-                new_beat.motions[item.color].prop = item
-                item.motion = new_beat.motions[item.color]
-                new_beat.props[item.color] = item
-                item.update_appearance()
-                item.ghost = new_beat.ghost_props[item.color]
+            new_ghost_prop = GhostProp(
+                new_beat, motion.prop.get_attributes(), new_beat.motions[motion.color]
+            )
+
+            new_beat.motions[motion.color].arrow = new_arrow
+            new_beat.motions[motion.color].prop = new_prop
+            new_beat.motions[motion.color].arrow.ghost = new_ghost_arrow
+            new_beat.motions[motion.color].prop.ghost = new_ghost_prop
+
+            new_beat.arrows[motion.color] = new_arrow
+            new_beat.props[motion.color] = new_prop
+            new_beat.ghost_arrows[motion.color] = new_ghost_arrow
+            new_beat.ghost_props[motion.color] = new_ghost_prop
+
+            new_arrow.update_appearance()
+            new_prop.update_appearance()
+            new_ghost_arrow.update_appearance()
+            new_ghost_prop.update_appearance()
+
+            new_arrow.ghost = new_ghost_arrow
+            new_prop.ghost = new_ghost_prop
+
+            new_arrow.motion = new_beat.motions[motion.color]
+            new_prop.motion = new_beat.motions[motion.color]
+            new_ghost_arrow.motion = new_beat.motions[motion.color]
+            new_ghost_prop.motion = new_beat.motions[motion.color]
+
+            new_beat.addItem(new_arrow)
+            new_beat.addItem(new_prop)
+            new_beat.addItem(new_ghost_arrow)
+            new_beat.addItem(new_ghost_prop)
+
+            new_ghost_arrow.hide()
+            new_ghost_prop.hide()
+
+            motion_dict = self.motions[motion.color].get_attributes()
+            motion_dict[ARROW] = new_arrow
+            motion_dict[PROP] = new_prop
+
+            new_arrow.motion.setup_attributes(motion_dict)
 
         new_beat.update_pictograph()
+
         return new_beat
 
     ### UPDATERS ###

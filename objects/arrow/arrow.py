@@ -1,3 +1,4 @@
+from hmac import new
 from typing import Union
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
@@ -98,7 +99,8 @@ class Arrow(GraphicalObject):
     def mousePressEvent(self, event) -> None:
         super().mousePressEvent(event)
         self.setSelected(True)
-
+        self.ghost.update_appearance()
+        self.ghost.show()
         if hasattr(self.motion, "ghost_arrow"):
             if self.ghost:
                 self._update_ghost_on_click()
@@ -122,14 +124,17 @@ class Arrow(GraphicalObject):
         self: Union["Prop", "Arrow"], event: "QGraphicsSceneMouseEvent"
     ) -> None:
         if event.buttons() == Qt.MouseButton.LeftButton:
+            new_location = self.scene.get_closest_layer2_point(event.scenePos())[0]
             new_pos = event.scenePos() - self.get_object_center()
             self.set_drag_pos(new_pos)
-            self.update_ghost_arrow_location(event.scenePos())
+            if new_location != self.location:
+                self.update_ghost_arrow_location(event.scenePos())
 
     def mouseReleaseEvent(self, event) -> None:
         self.is_dragging = False
         self.scene.arrows[self.color] = self
         self.scene.update_pictograph()
+        self.ghost.hide()
 
     ### UPDATERS ###
 
@@ -164,10 +169,9 @@ class Arrow(GraphicalObject):
         self.motion.prop.set_prop_attrs_from_arrow(self)
         self.motion.prop.update_appearance()
         self.motion.arrow.location = new_location
-        self.ghost.motion = self.motion
+        self.ghost.location = new_location
         self.update_appearance()
         self.ghost.update_appearance()
-        self.ghost.location = new_location
         self.scene.ghost_arrows[self.color] = self.ghost
         self.scene.props[self.color] = self.motion.prop
         self.is_dragging = True

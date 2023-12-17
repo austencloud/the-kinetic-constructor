@@ -75,6 +75,15 @@ class PropPositioner:
             else:
                 self.set_default_prop_locations(prop)
 
+        for prop in self.scene.ghost_props.values():
+            if any(
+                self.prop_type_counts[ptype] == 2
+                for ptype in [BIGHOOP, DOUBLESTAR, BIGDOUBLESTAR]
+            ):
+                self.set_strict_prop_locations(prop)
+            else:
+                self.set_default_prop_locations(prop)
+
         if self.props_in_beta():
             self.reposition_beta_props()
 

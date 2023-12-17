@@ -152,8 +152,6 @@ class OptionPicker(QScrollArea):
             self.setup_motion_relations(option, arrow, prop)
             motion_dict[ARROW] = arrow
             motion_dict[PROP] = prop
-            motion_dict[GHOST_ARROW] = option.ghost_arrows[arrow.color]
-            motion_dict[GHOST_PROP] = option.ghost_props[prop.color]
 
             for motion in option.motions.values():
                 if motion.color == motion_dict[COLOR]:
