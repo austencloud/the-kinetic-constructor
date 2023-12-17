@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import Dict, Literal, Union
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsScene
@@ -46,30 +46,37 @@ from utilities.TypeChecking.TypeChecking import (
 from objects.pictograph.pictograph_event_handler import (
     PictographEventHandler,
 )
-from objects.pictograph.pictograph_view import PictographView
 from objects.pictograph.pictograph_init import PictographInit
 from objects.pictograph.pictograph_menu_handler import (
     PictographMenuHandler,
 )
 from objects.pictograph.position_engines.arrow_positioner import ArrowPositioner
 from objects.pictograph.position_engines.prop_positioner import PropPositioner
+from widgets.graph_editor.main_pictograph_view import MainPictographView
 
 from widgets.option_picker.option.option_view import OptionView
 from widgets.sequence_widget.beat_frame.beat_view import BeatView
 
 if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
+    from widgets.option_picker.option.option import Option
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.graph_editor import GraphEditor
+    
 from objects.letter_item import LetterItem
 
 
 class Pictograph(QGraphicsScene):
-    def __init__(self, main_widget: "MainWidget", graph_editor: "GraphEditor") -> None:
+    def __init__(
+        self,
+        main_widget: "MainWidget",
+        graph_editor: "GraphEditor",
+        graph_type: Literal["main", "option", "beat"],
+    ) -> None:
         super().__init__()
         self.main_widget = main_widget
         self.graph_editor = graph_editor
-
+        self.graph_type = graph_type
         self.setup_scene()
         self.setup_components(main_widget)
 
@@ -94,9 +101,14 @@ class Pictograph(QGraphicsScene):
         self.arrow_turns = 0
 
         self.grid: Grid = self.initializer.init_grid()
-        self.view: Union[
-            PictographView, OptionView, BeatView
-        ] = self.initializer.init_view()
+        
+        if self.graph_type == "main":
+            self.view = MainPictographView(self)
+        elif self.graph_type == "option":
+            self.view = OptionView(self)
+        elif self.graph_type == "beat":
+            self.view = BeatView(self)
+        
         self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.locations: Dict[
             Locations, Tuple[int, int, int, int]
@@ -243,8 +255,8 @@ class Pictograph(QGraphicsScene):
     ### HELPERS ###
 
     def add_to_sequence_callback(self) -> None:
-        copied_scene = self.copy_scene()
-        self.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(copied_scene)
+        new_beat = self.create_new_beat()
+        self.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(new_beat)
         self.clear_pictograph()
 
     def rotate_pictograph(self, direction: str) -> None:
@@ -275,7 +287,7 @@ class Pictograph(QGraphicsScene):
         self.dragged_prop = None
         self.dragged_arrow = None
 
-    def copy_scene(self) -> QGraphicsScene:
+    def create_new_beat(self) -> QGraphicsScene:
         from widgets.sequence_widget.beat_frame.beat import Beat
 
         new_beat = Beat(self.main_widget, self.graph_editor)
@@ -308,10 +320,13 @@ class Pictograph(QGraphicsScene):
             new_beat.ghost_arrows[motion.color] = new_ghost_arrow
             new_beat.ghost_props[motion.color] = new_ghost_prop
 
-            new_arrow.update_appearance()
-            new_prop.update_appearance()
-            new_ghost_arrow.update_appearance()
-            new_ghost_prop.update_appearance()
+            if new_arrow.location:
+                new_arrow.update_appearance()
+                new_ghost_arrow.update_appearance()
+            
+            if new_prop.location:
+                new_prop.update_appearance()
+                new_ghost_prop.update_appearance()
 
             new_arrow.ghost = new_ghost_arrow
             new_prop.ghost = new_ghost_prop

@@ -12,7 +12,6 @@ from objects.motion import Motion
 from objects.prop.prop_types import *
 from constants.string_constants import *
 from utilities.TypeChecking.TypeChecking import Colors, Locations, PropTypes
-from objects.pictograph.pictograph_view import PictographView
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
@@ -23,9 +22,6 @@ class PictographInit:
         self.pictograph = pictograph
         self.main_widget = pictograph.main_widget
 
-    def init_view(self) -> QGraphicsView:
-        view = PictographView(self.pictograph)
-        return view
 
     def init_grid(self) -> Grid:
         grid = Grid(self.pictograph)

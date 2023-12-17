@@ -1,13 +1,12 @@
 from PyQt6.QtCore import Qt, QEvent
 from typing import TYPE_CHECKING, Literal
-
-from objects.pictograph.pictograph_view import PictographView
+from PyQt6.QtWidgets import QGraphicsView
 
 if TYPE_CHECKING:
     from widgets.option_picker.option.option import Option
 
 
-class OptionView(PictographView):
+class OptionView(QGraphicsView):
     def __init__(self, option: "Option") -> None:
         super().__init__(option)
         self.option = option

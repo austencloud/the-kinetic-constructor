@@ -1,47 +1,41 @@
-from PyQt6.QtWidgets import QGraphicsView, QPushButton
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QIcon
-from constants.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
+from PyQt6.QtCore import Qt, QSize
 from typing import TYPE_CHECKING, List
+from constants.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
+from PyQt6.QtWidgets import QGraphicsView, QPushButton
+from PyQt6.QtGui import QIcon
 
-from widgets.graph_editor.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
-from PyQt6.QtCore import QSize
+    from widgets.graph_editor.main_pictograph import MainPictograph
 
 
-class PictographView(QGraphicsView):
-    def __init__(self, pictograph: "Pictograph") -> None:
-        super().__init__()
-        self.pictograph = pictograph
+class MainPictographView(QGraphicsView):
+    def __init__(self, main_pictograph: "MainPictograph") -> None:
+        super().__init__(main_pictograph)
+        self.main_pictograph = main_pictograph
+
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
-        self.setScene(self.pictograph)
+        self.setScene(self.main_pictograph)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.buttons: List[CustomButton] = self.init_buttons()
 
-    def remove_buttons(self) -> None:
-        self.add_to_sequence_button.deleteLater()
-        self.clear_button.deleteLater()
-        self.rotate_cw_button.deleteLater()
-        self.rotate_ccw_button.deleteLater()
-
-    def init_buttons(self) -> None:
+        self.buttons = self.init_buttons()
+        
+    def init_buttons(self) -> List[QPushButton]:
         self.add_to_sequence_button = self.create_button(
             f"{ICON_DIR}add_to_sequence.png",
-            self.pictograph.add_to_sequence_callback,
+            self.main_pictograph.add_to_sequence_callback,
         )
         self.clear_button = self.create_button(
-            f"{ICON_DIR}clear.png", self.pictograph.clear_pictograph
+            f"{ICON_DIR}clear.png", self.main_pictograph.clear_pictograph
         )
         self.rotate_cw_button = self.create_button(
             f"{ICON_DIR}rotate_cw.png",
-            lambda: self.pictograph.rotate_pictograph(CLOCKWISE),
+            lambda: self.main_pictograph.rotate_pictograph(CLOCKWISE),
         )
         self.rotate_ccw_button = self.create_button(
             f"{ICON_DIR}rotate_ccw.png",
-            lambda: self.pictograph.rotate_pictograph(COUNTER_CLOCKWISE),
+            lambda: self.main_pictograph.rotate_pictograph(COUNTER_CLOCKWISE),
         )
         buttons = [
             self.add_to_sequence_button,
