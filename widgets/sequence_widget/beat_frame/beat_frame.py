@@ -19,7 +19,7 @@ from widgets.sequence_widget.beat_frame.beat_view import BeatView
 
 class BeatFrame(QFrame):
     picker_updater: pyqtSignal = pyqtSignal(dict)
-
+    
     def __init__(
         self,
         main_widget: "MainWidget",
@@ -40,7 +40,6 @@ class BeatFrame(QFrame):
                 beat_view = BeatView(self)
                 beat = Beat(self.main_widget, self)
                 beat_view.beat = beat
-                beat_view.set_pictograph(beat)
                 self.layout.addWidget(beat_view, j, i)
                 self.beats.append(beat_view)
 

@@ -137,11 +137,6 @@ class Grid:
     def _apply_grid_mode(self, grid_mode: GridModes) -> None:
         self.toggle_grid_mode(grid_mode)
 
-    def _toggle_visibility(self, prefix: str, visible: bool) -> None:
-        for key in self.items.keys():
-            if key.startswith(prefix):
-                self.items[key].setVisible(visible)
-
     def _hide_box_mode_elements(self) -> None:
         self.items[BOX].setVisible(False)
 

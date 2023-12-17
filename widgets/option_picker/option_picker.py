@@ -77,12 +77,8 @@ class OptionPicker(QScrollArea):
         self, motion_dict: list, is_initial: bool, row: int, col: int
     ) -> None:
         option = self._create_option(motion_dict)
-        event_handler = (
-            self._get_initial_handler(option)
-            if is_initial
-            else self._get_click_handler(option)
-        )
-        option.view.mousePressEvent = event_handler
+        # Use the same click handler for initial and subsequent options
+        option.view.mousePressEvent = self._get_click_handler(option)
         self.option_picker_layout.addWidget(option.view, row, col)
 
     def _create_option(self, motion_dict_list: list) -> "Option":
@@ -158,7 +154,7 @@ class OptionPicker(QScrollArea):
         try:
             new_red_motion: Motion = new_motions["red_motion"]
             new_blue_motion: Motion = new_motions["blue_motion"]
-            self._update_picker_state(
+            self._populate_options(
                 new_red_motion.end_location,
                 new_red_motion.end_orientation,
                 new_blue_motion.end_location,
@@ -167,35 +163,13 @@ class OptionPicker(QScrollArea):
         except KeyError as e:
             print(f"Motion key missing: {e}")
 
-    def _update_picker_state(
-        self,
-        red_end_location,
-        red_end_orientation,
-        blue_end_location,
-        blue_end_orientation,
-    ):
-        self.populate_options_based_on_sequence(
-            red_end_location,
-            red_end_orientation,
-            blue_end_location,
-            blue_end_orientation,
-        )
-
     def clear(self) -> None:
         while self.option_picker_layout.count():
             child = self.option_picker_layout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
 
-    ### EVENTS ###
-
-    def on_initial_selection(self, selected_option: "Option") -> None:
-        specific_positions = get_specific_start_end_positions(
-            selected_option.motions[RED], selected_option.motions[BLUE]
-        )
-        self.populate_options(specific_positions["end_position"])
-
-    def populate_options_based_on_sequence(
+    def _populate_options(
         self,
         red_end_position: str,
         red_end_orientation: str,
@@ -237,39 +211,16 @@ class OptionPicker(QScrollArea):
             )
         self.resize_option_views()
 
-    def populate_options(self, end_position: str) -> None:
-        self.options = []
-        self.clear()
-        self.option_picker_layout.setSpacing(self.spacing)
-
-        # Use .xs to get a cross-section of the data where the first level of the index (start_position) matches the desired value
-        filtered_data = self.pictographs.xs(
-            end_position, level="start_position", drop_level=False
-        )
-
-        for row, ((start_pos, end_pos), row_data) in enumerate(
-            filtered_data.iterrows()
-        ):
-            attributes_list = [
-                self._create_motion_dict(row_data, "blue"),
-                self._create_motion_dict(row_data, "red"),
-            ]
-            self._add_option_to_layout(
-                attributes_list,
-                is_initial=False,
-                row=row // self.COLUMN_COUNT,
-                col=row % self.COLUMN_COUNT,
-            )
-        self.resize_option_views()
 
     ### GETTERS ###
 
-    def _get_initial_handler(self, option: "Option") -> Callable:
-        return lambda event: self.on_initial_selection(option)
 
     def _get_click_handler(self, option: "Option") -> Callable:
+        """
+        Returns a click event handler for an option. This handler updates
+        the picker state based on the selected option's attributes.
+        """
         return lambda event: self._on_option_clicked(option)
-
     @staticmethod
     def get_prop_attributes(color: str) -> Dict:
         return {
@@ -303,7 +254,7 @@ class OptionPicker(QScrollArea):
     def _on_option_clicked(self, clicked_option: "Option") -> None:
         red_motion_attributes = clicked_option.motions[RED].get_attributes()
         blue_motion_attributes = clicked_option.motions[BLUE].get_attributes()
-        self._update_picker_state(
+        self._populate_options(
             red_motion_attributes[END_LOCATION],
             red_motion_attributes[END_ORIENTATION],
             blue_motion_attributes[END_LOCATION],

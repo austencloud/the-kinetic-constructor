@@ -5,10 +5,10 @@
 	xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 750 750" style="enable-background:new 0 0 750 750;" xml:space="preserve">
 
 	<g>
-		<circle id="n_diamond_hand_point" cx="375" cy="231.9" r="4.7"/>
-		<circle id="e_diamond_hand_point" cx="518.1" cy="375" r="4.7"/>
-		<circle id="s_diamond_hand_point" cx="375" cy="518.1" r="4.7"/>
-		<circle id="w_diamond_hand_point" cx="231.9" cy="375" r="4.7"/>
+		<circle fill="transparent" id="n_diamond_hand_point" cx="375" cy="231.9" r="4.7"/>
+		<circle fill="transparent" id="e_diamond_hand_point" cx="518.1" cy="375" r="4.7"/>
+		<circle fill="transparent" id="s_diamond_hand_point" cx="375" cy="518.1" r="4.7"/>
+		<circle fill="transparent" id="w_diamond_hand_point" cx="231.9" cy="375" r="4.7"/>
 	</g>
 	<g>
 		<circle id="n_diamond_outer_point" cx="375" cy="75" r="25"/>
@@ -17,10 +17,10 @@
 		<circle id="w_diamond_outer_point" cx="75" cy="375" r="25"/>
 	</g>
 	<g>
-		<circle id="ne_diamond_layer2_point" cx="518.1" cy="231.9" r="8.8"/>
-		<circle id="se_diamond_layer2_point" cx="518.1" cy="518.1" r="8.8"/>
-		<circle id="sw_diamond_layer2_point" cx="231.9" cy="518.1" r="8.8"/>
-		<circle id="nw_diamond_layer2_point" cx="231.9" cy="231.9" r="8.8"/>
+		<circle fill="transparent" id="ne_diamond_layer2_point" cx="518.1" cy="231.9" r="8.8"/>
+		<circle fill="transparent" id="se_diamond_layer2_point" cx="518.1" cy="518.1" r="8.8"/>
+		<circle fill="transparent" id="sw_diamond_layer2_point" cx="231.9" cy="518.1" r="8.8"/>
+		<circle fill="transparent" id="nw_diamond_layer2_point" cx="231.9" cy="231.9" r="8.8"/>
 	</g>
 	<g>
 		<circle fill="transparent" id="strict_e_diamond_hand_point" cx="525" cy="375" r="4.7"/>
