@@ -3,6 +3,9 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from widgets.sequence_widget.beat_frame.beat import Beat
+
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
@@ -17,6 +20,7 @@ class BeatView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.pictograph: "Pictograph" = None
+        self.beat: Beat = None
         # Initialize buttons
 
     def set_pictograph(self, pictograph: "Pictograph") -> None:

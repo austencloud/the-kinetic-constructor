@@ -27,7 +27,6 @@ from constants.string_constants import (
     LAYER,
 )
 from objects.graphical_object import GraphicalObject
-from objects.motion import Motion
 from data.start_end_location_map import get_start_end_locations
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
@@ -42,6 +41,7 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 if TYPE_CHECKING:
+    from objects.motion import Motion
     from objects.pictograph.pictograph import Pictograph
     from objects.ghosts.ghost_arrow import GhostArrow
     from objects.prop.prop import Prop

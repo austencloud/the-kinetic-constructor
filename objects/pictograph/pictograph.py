@@ -55,14 +55,14 @@ from objects.pictograph.position_engines.prop_positioner import PropPositioner
 from widgets.graph_editor.main_pictograph_view import MainPictographView
 
 from widgets.option_picker.option.option_view import OptionView
-from widgets.sequence_widget.beat_frame.beat_view import BeatView
 
 if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
     from widgets.option_picker.option.option import Option
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.graph_editor import GraphEditor
-    
+from widgets.sequence_widget.beat_frame.beat_view import BeatView
+
 from objects.letter_item import LetterItem
 
 
@@ -101,14 +101,14 @@ class Pictograph(QGraphicsScene):
         self.arrow_turns = 0
 
         self.grid: Grid = self.initializer.init_grid()
-        
+
         if self.graph_type == "main":
             self.view = MainPictographView(self)
         elif self.graph_type == "option":
             self.view = OptionView(self)
         elif self.graph_type == "beat":
             self.view = BeatView(self)
-        
+
         self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.locations: Dict[
             Locations, Tuple[int, int, int, int]
@@ -323,7 +323,7 @@ class Pictograph(QGraphicsScene):
             if new_arrow.location:
                 new_arrow.update_appearance()
                 new_ghost_arrow.update_appearance()
-            
+
             if new_prop.location:
                 new_prop.update_appearance()
                 new_ghost_prop.update_appearance()

@@ -13,7 +13,9 @@ from utilities.TypeChecking.TypeChecking import (
 from constants.string_constants import *
 from typing import TYPE_CHECKING, Union
 
+
 if TYPE_CHECKING:
+    from widgets.option_picker.option.option import Option
     from objects.pictograph.pictograph import Pictograph
     from objects.arrow.arrow import Arrow
     from objects.prop.prop import Prop
@@ -32,6 +34,7 @@ class Motion:
         self.setup_attributes(motion_dict)
 
     ### SETUP ###
+
 
     def setup_attributes(self, motion_dict) -> None:
         if ARROW in motion_dict and PROP in motion_dict:
@@ -53,14 +56,17 @@ class Motion:
         self.start_orientation: Orientations = motion_dict[START_ORIENTATION]
         self.start_layer: Layers = motion_dict[START_LAYER]
 
-        if hasattr(self, "arrow") and self.arrow:
-            self.arrow.location = self.get_arrow_location(
-                self.start_location, self.end_location
-            )
+        self.assign_location_to_arrow()
 
         self.end_orientation: Orientations = self.get_end_orientation()
         self.end_layer: Layers = self.get_end_layer()
         self.update_prop_orientation_and_layer()
+
+    def assign_location_to_arrow(self):
+        if hasattr(self, "arrow") and self.arrow:
+            self.arrow.location = self.get_arrow_location(
+                self.start_location, self.end_location
+            )
 
     ### UPDATE ###
 
