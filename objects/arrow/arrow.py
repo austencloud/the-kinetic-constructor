@@ -215,7 +215,7 @@ class Arrow(GraphicalObject):
         for prop in self.scene.props.values():
             if prop.color == self.color:
                 if prop not in self.scene.props:
-                    self.scene.props.append(prop)
+                    self.scene.props[prop.color] = prop
 
                 prop.update_attributes(
                     {
@@ -224,7 +224,6 @@ class Arrow(GraphicalObject):
                         LAYER: 1,
                     }
                 )
-                prop.arrow = self.ghost
 
                 if prop not in self.scene.items():
                     self.scene.addItem(prop)

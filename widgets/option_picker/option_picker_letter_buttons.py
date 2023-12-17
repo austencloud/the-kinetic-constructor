@@ -15,24 +15,28 @@ if TYPE_CHECKING:
 
 class LetterButtons(QFrame):
     def __init__(
-        self, main_widget: "MainWidget", option_picker: "OptionPickerWidget"
+        self, main_widget: "MainWidget", option_picker_widget: "OptionPickerWidget"
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
 
-        self.option_picker = option_picker
+        self.option_picker_widget = option_picker_widget
         self.init_letter_buttons_layout()
 
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
     def init_letter_buttons_layout(self) -> None:
-        letter_buttons_layout = QVBoxLayout()
         self.setContentsMargins(0, 0, 0, 0)
-        letter_buttons_layout.setContentsMargins(0, 0, 0, 0)
-        self.row_layouts: List[
-            QHBoxLayout
-        ] = []  # Add this line to initialize the list of row layouts
-
+        self.layout = QVBoxLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
+        
+        button_size = QSize(50, 50)  # Assuming button size, change as needed
+        spacing = 10  # Assuming spacing, change as needed
+        button_count_per_row = 4  # Assuming 4 buttons per row, change as needed
+        
+        total_width = (button_size.width() + spacing) * button_count_per_row
+        self.row_layouts: List[QHBoxLayout] = []
         self.letter_rows = [
             # Type 1 - Dual-Shift
             ["A", "B", "C"],
@@ -56,22 +60,20 @@ class LetterButtons(QFrame):
             ["α", "β", "Γ"],
         ]
 
+        # Create buttons and add to layout
         for row in self.letter_rows:
             row_layout = QHBoxLayout()
-            row_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            row_layout.setSpacing(int(self.width() * 0.01))
-            self.row_layouts.append(row_layout)
-
+            row_layout.setContentsMargins(0, 0, 0, 0)
+            row_layout.setSpacing(spacing)
             for letter in row:
-                letter_type = self.get_letter_type(letter)
-                icon_path = self.get_icon_path(letter_type, letter)
-                button = self.create_button(icon_path)
+                button = self.create_button(letter)
+                button.setFixedSize(button_size)
                 row_layout.addWidget(button)
-
-            letter_buttons_layout.addLayout(row_layout)
-
-        self.letter_buttons_layout = letter_buttons_layout
-        self.setLayout(letter_buttons_layout)
+            self.layout.addLayout(row_layout)
+            self.row_layouts.append(row_layout)
+        
+        self.setMaximumWidth(total_width)
+        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
     def get_letter_type(self, letter: str) -> str:
         for letter_type in letter_types:
@@ -115,8 +117,7 @@ class LetterButtons(QFrame):
 
     def resize_letter_buttons(self) -> None:
         button_row_count = len(self.letter_rows)
-        available_height = int(self.main_widget.width() * 0.6 * button_row_count)
-        button_size = int(available_height / button_row_count)
+        button_size = int(self.main_widget.width() / button_row_count)
         if button_size > self.height() / button_row_count:
             button_size = int(self.height() / (button_row_count+1))
         icon_size = int(button_size * 0.9)
@@ -127,4 +128,5 @@ class LetterButtons(QFrame):
                 if button:
                     button.setMaximumSize(button_size, button_size)
                     button.setIconSize(QSize(icon_size, icon_size))
-        self.setMaximumHeight(available_height)
+        self.setMaximumHeight(self.main_widget.width())
+        

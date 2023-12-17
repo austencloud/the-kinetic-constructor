@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QVBoxLayout,
     QSplitter,
-    QFrame,
+    QFrame, QTabWidget
 )
 from PyQt6.QtGui import QWheelEvent
 from utilities.TypeChecking.TypeChecking import LetterDictionary
@@ -38,6 +38,9 @@ class MainWidget(QWidget):
         self.sequence_widget = SequenceWidget(self)
         self.option_picker_widget = OptionPickerWidget(self)
 
+
+
+
         self.configure_layouts()
 
     def configure_layouts(self) -> None:
@@ -55,19 +58,21 @@ class MainWidget(QWidget):
 
         self.left_layout.addWidget(self.sequence_widget)
 
-        self.vertical_splitter = QSplitter(Qt.Orientation.Vertical)
-        self.vertical_splitter.addWidget(self.option_picker_widget)
-        self.vertical_splitter.addWidget(self.graph_editor_widget)
+        # Instead of a vertical splitter, use a QTabWidget
+        self.tab_widget = QTabWidget()
+        self.tab_widget.addTab(self.option_picker_widget, "Option Picker")
+        self.tab_widget.addTab(self.graph_editor_widget, "Graph Editor")
+        # self.tab_widget.currentChanged.connect(self.on_tab_changed)
 
-        self.right_layout.addWidget(self.vertical_splitter)
+        self.right_layout.addWidget(self.tab_widget)
 
         # Add frames to the horizontal splitter
         self.horizontal_splitter.addWidget(self.left_frame)
         self.horizontal_splitter.addWidget(self.right_frame)
+        self.horizontal_splitter.splitterMoved.connect(self.on_splitter_moved)
 
         # Optionally, set initial sizes or proportions for the splitters
         self.horizontal_splitter.setSizes([300, 500])
-        self.vertical_splitter.setSizes([300, 200])
 
         # Create main layout and add the horizontal splitter
         self.main_layout = QHBoxLayout(self)
@@ -75,6 +80,14 @@ class MainWidget(QWidget):
         self.setLayout(self.main_layout)
 
     ### EVENT HANDLERS ###
+
+
+
+    def on_splitter_moved(self):
+        # This method is called whenever the splitter is moved
+        self.option_picker_widget.resize_option_picker_widget()
+        self.sequence_widget.resize_sequence_widget()
+
 
     def eventFilter(self, source, event: QEvent) -> bool:
         if event.type() == QEvent.Type.KeyPress:

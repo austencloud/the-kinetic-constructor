@@ -28,5 +28,5 @@ class OptionPickerWidget(QFrame):
         self.setLayout(self.main_layout)
 
     def resize_option_picker_widget(self) -> None:
-        self.option_picker.resize_option_views()
+        self.option_picker.resize_option_picker()
         self.button_frame.resize_letter_buttons()

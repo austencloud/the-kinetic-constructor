@@ -71,8 +71,9 @@ class OptionPicker(QScrollArea):
             motion_dict = [
                 self._create_motion_dict(row_data, color) for color in ["blue", "red"]
             ]
-            self._add_option_to_layout(motion_dict, is_start_position=True, row=0, col=column)
-
+            self._add_option_to_layout(
+                motion_dict, is_start_position=True, row=0, col=column
+            )
 
     def _create_option(self, motion_dict_list: list) -> "Option":
         option = Option(self.main_widget, self)
@@ -81,7 +82,7 @@ class OptionPicker(QScrollArea):
         for motion_dict in motion_dict_list:
             self._add_motion_to_option(option, motion_dict)
             self._finalize_option_setup(option, motion_dict)
-            
+
         self.options.append(option)
         return option
 
@@ -210,11 +211,9 @@ class OptionPicker(QScrollArea):
                 row=row // self.COLUMN_COUNT,
                 col=row % self.COLUMN_COUNT,
             )
-        self.resize_option_views()
-
+        self.resize_option_picker()
 
     ### GETTERS ###
-
 
     def _get_click_handler(self, option: "Option", is_start_position: bool) -> Callable:
         """
@@ -227,8 +226,30 @@ class OptionPicker(QScrollArea):
             return lambda event: self._on_option_clicked(option)
 
     def _on_start_position_clicked(self, start_position: "Option") -> None:
-        self.main_widget.sequence_widget.beat_frame.start_position_view.set_start_position(start_position)
+        # Set the start position view with the selected start position
+        self.main_widget.sequence_widget.beat_frame.start_position_view.set_start_position(
+            start_position
+        )
 
+        # Extract the red and blue motion attributes from the selected start position
+        red_motion_attributes = start_position.motions[RED].get_attributes()
+        blue_motion_attributes = start_position.motions[BLUE].get_attributes()
+
+        # Trigger the update of options based on the selected start position's end orientations and locations
+        self._populate_options(
+            red_motion_attributes[END_LOCATION],
+            red_motion_attributes[END_ORIENTATION],
+            blue_motion_attributes[END_LOCATION],
+            blue_motion_attributes[END_ORIENTATION],
+        )
+
+        # Signal the sequence widget to update the picker with new options
+        self.main_widget.sequence_widget.beat_frame.picker_updater.emit(
+            {
+                "red_motion": start_position.motions[RED],
+                "blue_motion": start_position.motions[BLUE],
+            }
+        )
 
     @staticmethod
     def get_prop_attributes(color: str) -> Dict:
@@ -281,6 +302,11 @@ class OptionPicker(QScrollArea):
             self.update_options
         )
 
-    def resize_option_views(self) -> None:
+    def resize_option_picker(self) -> None:
         for option in self.options:
             option.view.resize_option_view()
+
+        self.setMaximumWidth(
+            int(self.main_widget.width() * 0.4)
+            - int(self.verticalScrollBar().width())
+        )

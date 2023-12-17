@@ -3,12 +3,12 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout
 
 if TYPE_CHECKING:
     from widgets.graph_editor.graph_editor import GraphEditor
-    from objects.pictograph.pictograph_view import PictographView
+    from widgets.graph_editor.main_pictograph_view import MainPictographView
 
 
-class PictographWidget(QWidget):
+class MainPictographWidget(QWidget):
     def __init__(
-        self, graph_editor: "GraphEditor", view: "PictographView", aspect_ratio
+        self, graph_editor: "GraphEditor", view: "MainPictographView", aspect_ratio
     ) -> None:
         super().__init__(graph_editor)
         self.aspect_ratio = aspect_ratio
@@ -34,3 +34,7 @@ class PictographWidget(QWidget):
             self.view_scale,
         )
         self.view.configure_button_size_and_position(int(self.width() / 10))
+
+    def calculate_preferred_height(self) -> int:
+        
+        return int(self.view.height() * self.aspect_ratio)  

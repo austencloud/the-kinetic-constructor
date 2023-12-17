@@ -5,7 +5,7 @@ from widgets.graph_editor.graph_editor import GraphEditor
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-from PyQt6.QtWidgets import QFrame, QHBoxLayout
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QSizePolicy
 
 
 
@@ -24,6 +24,9 @@ class GraphEditorWidget(QFrame):
         self.graph_editor = GraphEditor(self.main_widget, self)
 
         self.main_layout.addWidget(self.graph_editor)
+        # Ensure the graph editor does not expand in height beyond what's necessary
+        self.graph_editor.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        self.graph_editor.setMaximumHeight(self.graph_editor.preferred_height())
 
 
         self.setLayout(self.main_layout)

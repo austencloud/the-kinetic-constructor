@@ -21,10 +21,13 @@ from widgets.sequence_widget.beat_frame.beat_view import BeatView
 
 class BeatFrame(QFrame):
     picker_updater: pyqtSignal = pyqtSignal(dict)
-    COLUMN_COUNT = 4
+    COLUMN_COUNT = 5  # Increased to 5 because of the extra column for StartPosition
 
     def __init__(
-        self, main_widget: "MainWidget", pictograph: "Pictograph", sequence_widget: "SequenceWidget"
+        self,
+        main_widget: "MainWidget",
+        pictograph: "Pictograph",
+        sequence_widget: "SequenceWidget",
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -39,20 +42,22 @@ class BeatFrame(QFrame):
         # Add StartPositionView to the first column of the first row
         self.start_position = StartPosition(main_widget, self)
         self.start_position_view = StartPositionView(self.start_position)
-        self.layout.addWidget(self.start_position_view, 0, 0, 1, 1)  # Span only 1 column
+        self.layout.addWidget(
+            self.start_position_view, 0, 0
+        )  # Occupies the first column
 
-        # Add beats to the grid, starting from the second column in the first row
-        for j in range(4):  # 4 rows
-            for i in range(4):  # 4 columns
-                grid_col = i + 1 if j == 0 else i  # Shift grid columns by 1 for the first row
-                beat_view = BeatView(self)
-                beat = Beat(self.main_widget, self)
-                beat_view.beat = beat
-                if j == 0 and i == 0:  # Skip the first position of the first row
-                    continue
-                self.layout.addWidget(beat_view, j, grid_col)
-                self.beats.append(beat_view)
+        # Populate the first row with beats from the second to the fifth column
+        for i in range(1, self.COLUMN_COUNT):
+            self._add_beat_to_layout(0, i)
 
+        # Populate the second to fourth row, starting from the first column
+        for j in range(1, 4):  # Starting from the second row
+            for i in range(1, self.COLUMN_COUNT):  # Starting from the first column
+                self._add_beat_to_layout(j, i)
+
+        self.start_position_view.setMaximumHeight(
+            int(self.start_position_view.width() * 90 / 75)
+        )  # Maintain aspect ratio
 
     def _add_beat_to_layout(self, row: int, col: int):
         beat_view = BeatView(self)

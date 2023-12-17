@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
 from widgets.graph_editor.main_pictograph import MainPictograph
 
 from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
-from widgets.graph_editor.pictograph_widget import PictographWidget
+from widgets.graph_editor.pictograph_widget import MainPictographWidget
 from widgets.graph_editor.object_panel.propbox.propbox import PropBox
 from widgets.graph_editor.attr_panel.attr_panel import AttrPanel
 
@@ -62,13 +62,16 @@ class GraphEditor(QFrame):
 
         self.setLayout(self.layout)
 
+    def preferred_height(self) -> int:
+        return self.pictograph_widget.calculate_preferred_height()
+
     def _create_children(self, main_widget: "MainWidget") -> None:
         self.main_pictograph = MainPictograph(main_widget, self)
         self.arrowbox = ArrowBox(main_widget, self)
         self.propbox = PropBox(main_widget, self)
         self.attr_panel = AttrPanel(self)
 
-        self.pictograph_widget = PictographWidget(
+        self.pictograph_widget = MainPictographWidget(
             self, self.main_pictograph.view, 75 / 90
         )
 

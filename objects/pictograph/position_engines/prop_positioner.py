@@ -352,7 +352,7 @@ class PropPositioner:
                             next(
                                 prop
                                 for prop in self.scene.props.values()
-                                if prop.arrow.color == arrow[COLOR]
+                                if prop.color == arrow[COLOR]
                             ),
                             direction,
                         )
@@ -373,7 +373,7 @@ class PropPositioner:
                             next(
                                 prop
                                 for prop in self.scene.props.values()
-                                if prop.arrow.color == arrow[COLOR]
+                                if prop.color == arrow[COLOR]
                             ),
                             direction,
                         )
