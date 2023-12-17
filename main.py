@@ -11,28 +11,28 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.profiler = profiler
 
-        self._configure_window()
         self._init_main_window()
-
-    def _configure_window(self) -> None:
-        screens = QGuiApplication.screens()
-        screen = screens[1] if len(screens) > 1 else QGuiApplication.primaryScreen()
-        available_geometry = screen.availableGeometry()
-        self.setMaximumSize(available_geometry.size())
-
 
     def _init_main_window(self) -> None:
         self.main_widget = MainWidget(self)
         self.installEventFilter(self.main_widget)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Sequence Constructor")
-        self.show()
+        self.showMaximized()  # Set the window to start up full screen
         screens = QGuiApplication.screens()
         screen = screens[1] if len(screens) > 1 else QGuiApplication.primaryScreen()
         available_geometry = screen.availableGeometry()
         self.move(
-            int(available_geometry.x() + available_geometry.width() / 2 - self.width() / 2),
-            int(available_geometry.y() + available_geometry.height() / 2 - self.height() / 2)
+            int(
+                available_geometry.x()
+                + available_geometry.width() / 2
+                - self.width() / 2
+            ),
+            int(
+                available_geometry.y()
+                + available_geometry.height() / 2
+                - self.height() / 2
+            ),
         )
 
     def exec_with_profiling(self, app: QApplication) -> int:
