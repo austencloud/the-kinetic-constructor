@@ -204,6 +204,7 @@ class PropBoxDrag(ObjectBoxDrag):
 
                 if self.previous_drag_location != new_location and new_location:
                     self.previous_drag_location = new_location
+                    self.ghost.motion = self.pictograph.motions[self.color]
                     self.ghost.motion.arrow.location = new_location
                     self.ghost.motion.start_location = new_location
                     self.ghost.motion.end_location = new_location

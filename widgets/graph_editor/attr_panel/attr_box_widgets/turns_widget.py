@@ -226,7 +226,6 @@ class TurnsWidget(AttrBoxWidget):
                 self.turnbox.setCurrentIndex(-1)
 
     def _update_turns(self, index: int) -> None:
-        
         turns = str(index)
         if turns == "0" or turns == "1" or turns == "2" or turns == "3":
             motion: Motion = self.attr_box.pictograph.motions[self.attr_box.color]

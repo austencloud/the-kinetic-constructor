@@ -381,9 +381,10 @@ class ArrowManipulator:
         if self.arrow in self.arrow.scene.arrows.values():
             self.arrow.scene.removeItem(self.arrow)
             self.arrow.scene.removeItem(self.arrow.ghost)
-            self.arrow.pictograph.graph_editor.attr_panel.update_attr_panel(
-                self.arrow.color
-            )
+            self.arrow.motion.clear_attributes()
+            self.arrow.motion.prop.clear_attributes()
+            self.arrow.ghost.clear_attributes()
+            self.arrow.motion.prop.clear_attributes()
         if keep_prop:
             self.arrow._change_arrow_to_static()
         else:
