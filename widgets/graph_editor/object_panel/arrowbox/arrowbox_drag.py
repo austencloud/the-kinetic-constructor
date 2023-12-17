@@ -187,6 +187,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             self.pictograph.ghost_arrows[self.ghost.color] = self.ghost
         if self.ghost not in self.pictograph.items():
             self.pictograph.addItem(self.ghost)
+            self.ghost.show()
 
     ### EVENT HANDLERS ###
 
