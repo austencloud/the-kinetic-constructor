@@ -19,7 +19,7 @@ class StartPositionView(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.start_position: "StartPosition" = None
         self.beat_frame = beat_frame
-        
+
     def set_start_position(self, start_position: "StartPosition") -> None:
         self.start_position = start_position
         self.setScene(self.start_position)
@@ -27,11 +27,12 @@ class StartPositionView(QGraphicsView):
         self.view_scale = view_width / self.start_position.width()
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
-        
+
     def resizeEvent(self, event) -> None:
         view_width = int(self.height() * 75 / 90)
-        self.setMinimumWidth(view_width)
+        self.setMaximumWidth(view_width)
         if self.start_position:
             self.view_scale = view_width / self.start_position.width()
             self.resetTransform()
             self.scale(self.view_scale, self.view_scale)
+        

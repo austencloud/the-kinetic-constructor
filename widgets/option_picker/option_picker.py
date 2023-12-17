@@ -306,7 +306,3 @@ class OptionPicker(QScrollArea):
         for option in self.options:
             option.view.resize_option_view()
 
-        self.setMaximumWidth(
-            int(self.main_widget.width() * 0.4)
-            - int(self.verticalScrollBar().width())
-        )

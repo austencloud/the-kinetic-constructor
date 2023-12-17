@@ -32,17 +32,18 @@ class SequenceWidget(QWidget):
 
         # Calculate the width for each BeatView based on the SequenceWidget width
         # while accommodating for the 5 columns (4 BeatViews and 1 StartPositionView)
-        beat_view_width = int(total_width / self.beat_frame.COLUMN_COUNT
-)
+        beat_view_width = int(total_width / self.beat_frame.COLUMN_COUNT)
         # Ensure that the height respects the aspect ratio of 90:75
         beat_view_height = int(beat_view_width * 90 / 75)
 
         # Apply the size constraints to the BeatViews
         for beat_view in self.beat_frame.beats:
-            beat_view.setFixedSize(beat_view_width, beat_view_height)
+            beat_view.setMaximumSize(beat_view_width, beat_view_height)
 
         # Apply the same size constraints to the StartPositionView
-        self.beat_frame.start_position_view.setFixedSize(beat_view_width, beat_view_height)
+        self.beat_frame.start_position_view.setMaximumSize(
+            beat_view_width, beat_view_height
+        )
 
         # Update the layout to reflect the changes
         self.layout.update()

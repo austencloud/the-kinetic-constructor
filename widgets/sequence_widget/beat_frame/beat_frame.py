@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING, List
+from PyQt6.QtGui import QResizeEvent
 
 from PyQt6.QtWidgets import (
     QGridLayout,
@@ -21,7 +22,7 @@ from widgets.sequence_widget.beat_frame.beat_view import BeatView
 
 class BeatFrame(QFrame):
     picker_updater: pyqtSignal = pyqtSignal(dict)
-    COLUMN_COUNT = 5  # Increased to 5 because of the extra column for StartPosition
+    COLUMN_COUNT = 5
 
     def __init__(
         self,
@@ -39,25 +40,17 @@ class BeatFrame(QFrame):
         self.layout.setSpacing(0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        # Add StartPositionView to the first column of the first row
+        self.start_position_view = StartPositionView(self)
         self.start_position = StartPosition(main_widget, self)
-        self.start_position_view = StartPositionView(self.start_position)
-        self.layout.addWidget(
-            self.start_position_view, 0, 0
-        )  # Occupies the first column
+        self.layout.addWidget(self.start_position_view, 0, 0)
 
-        # Populate the first row with beats from the second to the fifth column
         for i in range(1, self.COLUMN_COUNT):
             self._add_beat_to_layout(0, i)
 
-        # Populate the second to fourth row, starting from the first column
-        for j in range(1, 4):  # Starting from the second row
-            for i in range(1, self.COLUMN_COUNT):  # Starting from the first column
+        for j in range(1, 4):
+            for i in range(1, self.COLUMN_COUNT):
                 self._add_beat_to_layout(j, i)
-
-        self.start_position_view.setMaximumHeight(
-            int(self.start_position_view.width() * 90 / 75)
-        )  # Maintain aspect ratio
+        self.start_position_view.setMinimumWidth(self.beats[0].width())
 
     def _add_beat_to_layout(self, row: int, col: int):
         beat_view = BeatView(self)
@@ -92,10 +85,27 @@ class BeatFrame(QFrame):
                 return beat
         return self.beats[0]
 
-    def resize_beat_frame(self) -> None:
-        beat_width = int(self.width() / 4)
-        beat_height = int(beat_width * 90 / 75)
+    def resize_beat_views(self) -> None:
+        # The total width available for BeatViews and StartPositionView
+        total_width = self.width()
 
-        for beat in self.beats:
-            beat.setMaximumHeight(beat_height)
-            beat.setMinimumWidth(beat_width)
+        # Calculate the width for each BeatView based on the SequenceWidget width
+        # while accommodating for the 5 columns (4 BeatViews and 1 StartPositionView)
+        beat_view_width = int(total_width / self.COLUMN_COUNT)
+        # Ensure that the height respects the aspect ratio of 90:75
+        beat_view_height = int(beat_view_width * 90 / 75)
+
+        # Apply the size constraints to the BeatViews
+        for beat_view in self.beats:
+            beat_view.setMaximumSize(beat_view_width, beat_view_height)
+
+        # Apply the same size constraints to the StartPositionView
+        self.start_position_view.setMaximumSize(
+            beat_view_width, beat_view_height
+        )
+
+        # Update the layout to reflect the changes
+        self.layout.update()
+
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        self.resize_beat_views()
