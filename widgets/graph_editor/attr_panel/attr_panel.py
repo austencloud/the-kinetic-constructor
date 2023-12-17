@@ -12,13 +12,14 @@ if TYPE_CHECKING:
     from widgets.graph_editor.graph_editor import GraphEditor
 from PyQt6.QtCore import Qt
 
+
 class AttrPanel(QFrame):
     def __init__(self, graph_editor: "GraphEditor") -> None:
         super().__init__()
         self.graph_editor = graph_editor
         self.setContentsMargins(0, 0, 0, 0)
-        self.blue_attr_box = AttrBox(self, self.graph_editor.pictograph, BLUE)
-        self.red_attr_box = AttrBox(self, self.graph_editor.pictograph, RED)
+        self.blue_attr_box = AttrBox(self, self.graph_editor.main_pictograph, BLUE)
+        self.red_attr_box = AttrBox(self, self.graph_editor.main_pictograph, RED)
         self.setup_layouts()
 
     def setup_layouts(self) -> None:
@@ -30,8 +31,8 @@ class AttrPanel(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
     def update_attr_panel(self, motion_color: Colors) -> None:
-        motion = self.graph_editor.pictograph.motions[motion_color]
-        if motion.motion_type: 
+        motion = self.graph_editor.main_pictograph.motions[motion_color]
+        if motion.motion_type:
             if motion_color == BLUE:
                 self.blue_attr_box.update_attr_box(motion)
             elif motion_color == RED:
@@ -41,7 +42,7 @@ class AttrPanel(QFrame):
                 self.blue_attr_box.clear_attr_box()
             elif motion_color == RED:
                 self.red_attr_box.clear_attr_box()
-                
+
     def clear_all_attr_boxes(self) -> None:
         self.blue_attr_box.clear_attr_box()
         self.red_attr_box.clear_attr_box()

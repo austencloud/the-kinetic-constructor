@@ -230,7 +230,7 @@ class ArrowBox(ObjectBox):
             self.target_arrow = closest_arrow
             if not self.drag:
                 pictograph = (
-                    self.main_widget.graph_editor_widget.graph_editor.pictograph
+                    self.main_widget.graph_editor_widget.graph_editor.main_pictograph
                 )
                 self.drag = ArrowBoxDrag(self.main_window, pictograph, self)
             if event.button() == Qt.MouseButton.LeftButton:

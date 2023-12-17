@@ -28,7 +28,7 @@ class PropBox(ObjectBox):
         self.main_window = main_widget.main_window
         self.view = PropBoxView(self, graph_editor)
         self.prop_type = STAFF
-        self.pictograph = graph_editor.pictograph
+        self.pictograph = graph_editor.main_pictograph
         self.grid = Grid(self)
         self.grid_position = QPointF(0, 0)
         self.grid.setPos(self.grid_position)
@@ -254,7 +254,7 @@ class PropBox(ObjectBox):
             self.target_prop = closest_prop
             if not self.drag:
                 pictograph = (
-                    self.main_widget.graph_editor_widget.graph_editor.pictograph
+                    self.main_widget.graph_editor_widget.graph_editor.main_pictograph
                 )
                 self.drag = PropBoxDrag(self.main_window, pictograph, self)
             if event.button() == Qt.MouseButton.LeftButton:

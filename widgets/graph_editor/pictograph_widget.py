@@ -25,8 +25,8 @@ class PictographWidget(QWidget):
         self.setMinimumWidth(new_width)
         self.setMaximumWidth(new_width)
         self.view_scale = min(
-            self.width() / self.graph_editor.pictograph.sceneRect().width(),
-            self.height() / self.graph_editor.pictograph.sceneRect().height(),
+            self.width() / self.graph_editor.main_pictograph.sceneRect().width(),
+            self.height() / self.graph_editor.main_pictograph.sceneRect().height(),
         )
         self.view.resetTransform()
         self.view.scale(

@@ -26,7 +26,9 @@ class OptionPicker(QScrollArea):
         self.spacing = 10
         self.options: List[Option] = []
         self.pictographs = self.load_and_sort_data("LetterDictionary.csv")
-        self.pictograph = self.main_widget.graph_editor_widget.graph_editor.pictograph
+        self.pictograph = (
+            self.main_widget.graph_editor_widget.graph_editor.main_pictograph
+        )
         self.initialize_ui()
         self.viewport().installEventFilter(self)
 

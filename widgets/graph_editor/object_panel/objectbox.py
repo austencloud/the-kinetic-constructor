@@ -12,7 +12,6 @@ class ObjectBox(QGraphicsScene):
         super().__init__()
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
-        self.pictograph = graph_editor.pictograph
+        self.pictograph = graph_editor.main_pictograph
         self.setSceneRect(0, 0, 750, 750)
         self.view: ObjectBoxView = None
-

@@ -86,16 +86,16 @@ class MainWidget(QWidget):
         return super().eventFilter(source, event)
 
     def deselect_all_except(self, active_pictograph: Pictograph) -> None:
-        if self.graph_editor_widget.graph_editor.pictograph != active_pictograph:
-            self.graph_editor_widget.graph_editor.pictograph.clearSelection()
+        if self.graph_editor_widget.graph_editor.main_pictograph != active_pictograph:
+            self.graph_editor_widget.graph_editor.main_pictograph.clearSelection()
 
         for beat_view in self.sequence_widget.beat_frame.beats:
             if beat_view.pictograph and beat_view.pictograph != active_pictograph:
                 beat_view.pictograph.clearSelection()
 
     def find_active_pictograph(self) -> Optional[Pictograph]:
-        if self.graph_editor_widget.graph_editor.pictograph.selectedItems():
-            return self.graph_editor_widget.graph_editor.pictograph
+        if self.graph_editor_widget.graph_editor.main_pictograph.selectedItems():
+            return self.graph_editor_widget.graph_editor.main_pictograph
 
         for beat_view in self.sequence_widget.beat_frame.beats:
             if beat_view.pictograph and beat_view.pictograph.selectedItems():

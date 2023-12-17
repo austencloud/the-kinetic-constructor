@@ -12,7 +12,7 @@ class SequenceWidget(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.pictograph = main_widget.graph_editor_widget.graph_editor.pictograph
+        self.pictograph = main_widget.graph_editor_widget.graph_editor.main_pictograph
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
 
         self.beat_frame = BeatFrame(self.main_widget, self.pictograph, self)

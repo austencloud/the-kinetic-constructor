@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
+from widgets.graph_editor.main_pictograph import MainPictograph
 
 from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
 from widgets.graph_editor.pictograph_widget import PictographWidget
@@ -63,12 +64,14 @@ class GraphEditor(QFrame):
         self.setLayout(self.layout)
 
     def _create_children(self, main_widget: "MainWidget") -> None:
-        self.pictograph = Pictograph(main_widget, self)
+        self.main_pictograph = MainPictograph(main_widget, self)
         self.arrowbox = ArrowBox(main_widget, self)
         self.propbox = PropBox(main_widget, self)
         self.attr_panel = AttrPanel(self)
 
-        self.pictograph_widget = PictographWidget(self, self.pictograph.view, 75 / 90)
+        self.pictograph_widget = PictographWidget(
+            self, self.main_pictograph.view, 75 / 90
+        )
 
     def _apply_layout(self) -> None:
         self.setLayout(self.layout)
