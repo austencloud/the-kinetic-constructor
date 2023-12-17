@@ -22,6 +22,7 @@ PropTypes = Literal[
     "fan",
     "minihoop",
     "triad",
+    "bigtriad",
     "bighoop",
     "doublestar",
     "bigdoublestar",

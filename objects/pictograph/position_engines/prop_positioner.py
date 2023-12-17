@@ -33,6 +33,7 @@ from constants.string_constants import (
     SOUTH,
     EAST,
     TRIAD,
+    BIGTRIAD,
     WEST,
     UP,
     DOWN,
@@ -99,6 +100,7 @@ class PropPositioner:
             BUUGENG,
             MINIHOOP,
             TRIAD,
+            BIGTRIAD,
             QUIAD,
             SWORD,
             GUITAR,
@@ -508,6 +510,7 @@ class PropPositioner:
             BIGDOUBLESTAR,
             SWORD,
             GUITAR,
+            BIGTRIAD
         ]:
             for prop in self.scene.props.values():
                 self.set_strict_prop_locations(prop)

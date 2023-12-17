@@ -25,6 +25,11 @@ class Triad(Prop):
         attributes[PROP_TYPE] = TRIAD
         super().__init__(pictograph, attributes, motion)
 
+class BigTriad(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
+        attributes[PROP_TYPE] = BIGTRIAD
+        super().__init__(pictograph, attributes, motion)
+    
 
 class MiniHoop(Prop):
     def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:

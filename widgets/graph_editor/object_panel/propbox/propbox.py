@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QVBoxLayout, QGraphicsSceneMouseEvent, QComboBox
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.prop.prop import *
+from objects.prop.prop_types import BigTriad
 from widgets.graph_editor.object_panel.propbox.propbox_drag import PropBoxDrag
 from widgets.graph_editor.object_panel.propbox.propbox_view import PropBoxView
 from constants.string_constants import *
@@ -49,6 +50,7 @@ class PropBox(ObjectBox):
             "Buugeng",
             "Fan",
             "Triad",
+            "BigTriad",
             "MiniHoop",
             "Bighoop",
             "Doublestar",
@@ -98,6 +100,7 @@ class PropBox(ObjectBox):
             BUUGENG: Buugeng,
             FAN: Fan,
             TRIAD: Triad,
+            BIGTRIAD: BigTriad,
             MINIHOOP: MiniHoop,
             DOUBLESTAR: DoubleStar,
             BIGHOOP: BigHoop,
