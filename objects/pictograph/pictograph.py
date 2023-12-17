@@ -18,7 +18,6 @@ from constants.string_constants import (
     DIAMOND,
     END_LOCATION,
     LETTER_SVG_DIR,
-    LOCATION,
     MOTION_TYPE,
     PROP,
     RED,

@@ -1,4 +1,3 @@
-from hmac import new
 from typing import Union
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent

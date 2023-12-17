@@ -9,8 +9,6 @@ from constants.string_constants import (
     CLOCKWISE,
     COLOR,
     COUNTER_CLOCKWISE,
-    GHOST_ARROW,
-    GHOST_PROP,
     IN,
     LAYER,
     NORTHEAST,
@@ -23,14 +21,11 @@ from constants.string_constants import (
     SOUTHWEST,
     MOTION_TYPE,
     ROTATION_DIRECTION,
-    ARROW_LOCATION,
     START_LOCATION,
     END_LOCATION,
     TURNS,
     START_ORIENTATION,
-    END_ORIENTATION,
     START_LAYER,
-    END_LAYER,
 )
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Tuple
@@ -38,7 +33,6 @@ from objects.ghosts.ghost_arrow import GhostArrow
 
 from widgets.graph_editor.object_panel.objectbox_drag import ObjectBoxDrag
 from utilities.TypeChecking.TypeChecking import (
-    ArrowAttributesDicts,
     Colors,
     MotionTypes,
     Locations,
