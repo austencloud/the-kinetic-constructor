@@ -26,7 +26,7 @@ if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
     from objects.pictograph.pictograph import Pictograph
     from objects.motion import Motion
-    from widgets.graph_editor.object_panel.propbox.propbox import PropBox
+    from widgets.graph_editor_widget.object_panel.propbox.propbox import PropBox
 
 
 class Prop(GraphicalObject):

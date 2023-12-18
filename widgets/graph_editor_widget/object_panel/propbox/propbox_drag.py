@@ -25,13 +25,13 @@ from constants.string_constants import (
     END_LOCATION,
     TURNS,
 )
-from widgets.graph_editor.object_panel.objectbox_drag import ObjectBoxDrag
+from widgets.graph_editor_widget.object_panel.objectbox_drag import ObjectBoxDrag
 
 
 if TYPE_CHECKING:
     from main import MainWindow
     from objects.pictograph.pictograph import Pictograph
-    from widgets.graph_editor.object_panel.propbox.propbox import PropBox
+    from widgets.graph_editor_widget.object_panel.propbox.propbox import PropBox
 
 
 class PropBoxDrag(ObjectBoxDrag):

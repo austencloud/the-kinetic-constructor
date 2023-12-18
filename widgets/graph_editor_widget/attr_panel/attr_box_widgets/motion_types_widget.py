@@ -11,12 +11,12 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants.string_constants import ICON_DIR, SWAP_ICON
 from utilities.TypeChecking.TypeChecking import MotionTypes
-from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
+from widgets.graph_editor_widget.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.attr_panel.attr_box import AttrBox
+    from widgets.graph_editor_widget.attr_panel.attr_box import AttrBox
 
 
 class MotionTypesWidget(AttrBoxWidget):

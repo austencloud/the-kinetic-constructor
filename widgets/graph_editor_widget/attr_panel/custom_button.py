@@ -3,13 +3,13 @@ from PyQt6.QtCore import QSize
 from typing import Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.attr_panel.attr_box_widgets.start_end_widget import (
+    from widgets.graph_editor_widget.attr_panel.attr_box_widgets.start_end_widget import (
         StartEndWidget,
     )
-    from widgets.graph_editor.attr_panel.attr_box_widgets.turns_widget import (
+    from widgets.graph_editor_widget.attr_panel.attr_box_widgets.turns_widget import (
         TurnsWidget,
     )
-    from widgets.graph_editor.attr_panel.attr_box_widgets.motion_types_widget import (
+    from widgets.graph_editor_widget.attr_panel.attr_box_widgets.motion_types_widget import (
         MotionTypesWidget,
     )
 
@@ -22,7 +22,9 @@ class CustomButton(QPushButton):
         self.parent_widget = parent_widget
 
     def update_custom_button_size(self) -> None:
-        parent_width = self.parent_widget.width()  # Assuming parent widget defines the size
+        parent_width = (
+            self.parent_widget.width()
+        )  # Assuming parent widget defines the size
         self.button_size = int(parent_width * 0.2 * 0.7)  # Update proportionally
         self.border_radius = self.button_size / 2
         self.setFixedSize(self.button_size, self.button_size)  # Set the new size
@@ -30,7 +32,6 @@ class CustomButton(QPushButton):
             QSize(int(self.button_size * 0.6), int(self.button_size * 0.6))
         )
         self.setStyleSheet(self.get_button_style())
-
 
     def get_button_style(self):
         return (

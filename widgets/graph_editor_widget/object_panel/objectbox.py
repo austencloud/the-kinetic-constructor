@@ -1,10 +1,10 @@
 from PyQt6.QtWidgets import QGraphicsScene
-from widgets.graph_editor.object_panel.objectbox_view import ObjectBoxView
+from widgets.graph_editor_widget.object_panel.objectbox_view import ObjectBoxView
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.graph_editor import GraphEditor
+    from widgets.graph_editor_widget.graph_editor import GraphEditor
 
 
 class ObjectBox(QGraphicsScene):

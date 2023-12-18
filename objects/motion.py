@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
     from objects.arrow.arrow import Arrow
     from objects.prop.prop import Prop
-    from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
+    from widgets.graph_editor_widget.object_panel.arrowbox.arrowbox import ArrowBox
 
 
 class Motion:
@@ -33,7 +33,6 @@ class Motion:
         self.setup_attributes(motion_dict)
 
     ### SETUP ###
-
 
     def setup_attributes(self, motion_dict) -> None:
         if ARROW in motion_dict and PROP in motion_dict:

@@ -1,16 +1,16 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
-from widgets.graph_editor.main_pictograph import MainPictograph
+from widgets.graph_editor_widget.main_pictograph import MainPictograph
 
-from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
-from widgets.graph_editor.main_pictograph_widget import MainPictographWidget
-from widgets.graph_editor.object_panel.propbox.propbox import PropBox
-from widgets.graph_editor.attr_panel.attr_panel import AttrPanel
+from widgets.graph_editor_widget.object_panel.arrowbox.arrowbox import ArrowBox
+from widgets.graph_editor_widget.main_pictograph_widget import MainPictographWidget
+from widgets.graph_editor_widget.object_panel.propbox.propbox import PropBox
+from widgets.graph_editor_widget.attr_panel.attr_panel import AttrPanel
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.graph_editor_widget import GraphEditorWidget
+    from widgets.graph_editor_widget.graph_editor_widget import GraphEditorWidget
 
 
 class GraphEditor(QFrame):

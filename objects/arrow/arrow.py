@@ -45,7 +45,7 @@ if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
     from objects.ghosts.ghost_arrow import GhostArrow
     from objects.prop.prop import Prop
-    from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
+    from widgets.graph_editor_widget.object_panel.arrowbox.arrowbox import ArrowBox
 
 
 class Arrow(GraphicalObject):

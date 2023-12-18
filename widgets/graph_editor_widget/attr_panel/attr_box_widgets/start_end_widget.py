@@ -12,12 +12,12 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants.string_constants import ICON_DIR, SWAP_ICON
 from utilities.TypeChecking.TypeChecking import Locations
-from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
+from widgets.graph_editor_widget.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.attr_panel.attr_box import AttrBox
+    from widgets.graph_editor_widget.attr_panel.attr_box import AttrBox
 
 
 class StartEndWidget(AttrBoxWidget):
@@ -150,7 +150,7 @@ class StartEndWidget(AttrBoxWidget):
     def resize_start_end_widget(self) -> None:
         self.setMinimumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
         self.setMaximumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
-        
+
         self.swap_button_frame.setMaximumWidth(int(self.width() * 1 / 4))
         self.swap_button_frame.setMinimumWidth(int(self.width() * 1 / 4))
 

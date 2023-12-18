@@ -9,24 +9,28 @@ from constants.string_constants import (
     BLUE_HEX,
 )
 from utilities.TypeChecking.TypeChecking import Colors
-from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
+from widgets.graph_editor_widget.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
-from widgets.graph_editor.attr_panel.custom_button import CustomButton
+from widgets.graph_editor_widget.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
-    from widgets.graph_editor.attr_panel.attr_panel import (
+    from widgets.graph_editor_widget.attr_panel.attr_panel import (
         AttrPanel,
     )
-from widgets.graph_editor.attr_panel.attr_box_widgets.header_widget import HeaderWidget
-from widgets.graph_editor.attr_panel.attr_box_widgets.motion_types_widget import (
+from widgets.graph_editor_widget.attr_panel.attr_box_widgets.header_widget import (
+    HeaderWidget,
+)
+from widgets.graph_editor_widget.attr_panel.attr_box_widgets.motion_types_widget import (
     MotionTypesWidget,
 )
-from widgets.graph_editor.attr_panel.attr_box_widgets.start_end_widget import (
+from widgets.graph_editor_widget.attr_panel.attr_box_widgets.start_end_widget import (
     StartEndWidget,
 )
-from widgets.graph_editor.attr_panel.attr_box_widgets.turns_widget import TurnsWidget
+from widgets.graph_editor_widget.attr_panel.attr_box_widgets.turns_widget import (
+    TurnsWidget,
+)
 
 
 class AttrBox(QFrame):

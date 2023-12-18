@@ -13,8 +13,8 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QWheelEvent
 from utilities.TypeChecking.TypeChecking import LetterDictionary
 from utilities.json_handler import JsonHandler
-from widgets.graph_editor.graph_editor_widget import GraphEditorWidget
-from widgets.graph_editor.key_event_handler import KeyEventHandler
+from widgets.graph_editor_widget.graph_editor_widget import GraphEditorWidget
+from widgets.graph_editor_widget.key_event_handler import KeyEventHandler
 from objects.pictograph.pictograph import Pictograph
 from widgets.option_picker.option_picker_widget import OptionPickerWidget
 from widgets.sequence_widget.sequence_widget import SequenceWidget

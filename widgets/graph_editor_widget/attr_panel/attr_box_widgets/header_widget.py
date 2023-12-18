@@ -12,13 +12,13 @@ from constants.string_constants import (
     ICON_DIR,
 )
 from typing import TYPE_CHECKING, Callable
-from widgets.graph_editor.attr_panel.attr_box_widgets.attr_box_widget import (
+from widgets.graph_editor_widget.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
-from widgets.graph_editor.attr_panel.custom_button import CustomButton
+from widgets.graph_editor_widget.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.attr_panel.attr_box import AttrBox
+    from widgets.graph_editor_widget.attr_panel.attr_box import AttrBox
 from constants.string_constants import ICON_DIR
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 

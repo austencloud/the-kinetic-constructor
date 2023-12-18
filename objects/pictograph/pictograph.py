@@ -52,7 +52,7 @@ from objects.pictograph.pictograph_menu_handler import (
 )
 from objects.pictograph.position_engines.arrow_positioner import ArrowPositioner
 from objects.pictograph.position_engines.prop_positioner import PropPositioner
-from widgets.graph_editor.main_pictograph_view import MainPictographView
+from widgets.graph_editor_widget.main_pictograph_view import MainPictographView
 
 from widgets.option_picker.option.option_view import OptionView
 from widgets.sequence_widget.beat_frame.start_position_view import StartPositionView
@@ -60,7 +60,7 @@ from widgets.sequence_widget.beat_frame.start_position_view import StartPosition
 if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.graph_editor import GraphEditor
+    from widgets.graph_editor_widget.graph_editor import GraphEditor
 from widgets.sequence_widget.beat_frame.beat_view import BeatView
 
 from objects.letter_item import LetterItem

@@ -5,7 +5,7 @@ from objects.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor.graph_editor import GraphEditor
+    from widgets.graph_editor_widget.graph_editor import GraphEditor
 
 
 class MainPictograph(Pictograph):

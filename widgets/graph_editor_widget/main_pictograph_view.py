@@ -6,7 +6,7 @@ from PyQt6.QtGui import QIcon
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.main_pictograph import MainPictograph
+    from widgets.graph_editor_widget.main_pictograph import MainPictograph
 
 
 class MainPictographView(QGraphicsView):
@@ -20,7 +20,7 @@ class MainPictographView(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
         self.buttons = self.init_buttons()
-        
+
     def init_buttons(self) -> List[QPushButton]:
         self.add_to_sequence_button = self.create_button(
             f"{ICON_DIR}add_to_sequence.png",

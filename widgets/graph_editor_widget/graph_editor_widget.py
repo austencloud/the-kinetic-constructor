@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QResizeEvent
 
-from widgets.graph_editor.graph_editor import GraphEditor
+from widgets.graph_editor_widget.graph_editor import GraphEditor
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget

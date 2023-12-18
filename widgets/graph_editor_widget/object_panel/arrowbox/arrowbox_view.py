@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING
 
-from widgets.graph_editor.object_panel.objectbox_view import ObjectBoxView
+from widgets.graph_editor_widget.object_panel.objectbox_view import ObjectBoxView
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
-    from widgets.graph_editor.graph_editor import GraphEditor
+    from widgets.graph_editor_widget.object_panel.arrowbox.arrowbox import ArrowBox
+    from widgets.graph_editor_widget.graph_editor import GraphEditor
 
 
 class ArrowBoxView(ObjectBoxView):
