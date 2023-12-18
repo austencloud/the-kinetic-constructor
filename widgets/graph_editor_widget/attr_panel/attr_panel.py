@@ -47,7 +47,14 @@ class AttrPanel(QFrame):
         self.blue_attr_box.clear_attr_box()
         self.red_attr_box.clear_attr_box()
 
-    def resizeEvent(self, event) -> None:
+    def showEvent(self, event) -> None:
         for box in [self.blue_attr_box, self.red_attr_box]:
             box.resize_attr_box()
-        # self.setMaximumSize(self.width(), self.height())
+        self.attr_panel_content_width = int(
+            self.blue_attr_box.width()
+            + self.red_attr_box.width()
+            + self.red_attr_box.border_width / 2
+        )
+
+        self.setMaximumWidth(self.attr_panel_content_width)
+        self.setMinimumWidth(self.attr_panel_content_width)

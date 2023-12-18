@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor, QPalette
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
 from widgets.graph_editor_widget.main_pictograph import MainPictograph
 
@@ -57,6 +58,8 @@ class GraphEditor(QFrame):
         self.layout.addLayout(self.attr_panel_layout)
         self.layout.addStretch(1)
 
+        self.layout.setAlignment(self.main_widget, Qt.AlignmentFlag.AlignLeft)
+
         self.setLayout(self.layout)
 
     def preferred_height(self) -> int:
@@ -69,7 +72,7 @@ class GraphEditor(QFrame):
         self.attr_panel = AttrPanel(self)
 
         self.pictograph_widget = MainPictographWidget(
-            self, self.main_pictograph.view, 75 / 90
+            self, self.main_pictograph.view
         )
 
     def _apply_layout(self) -> None:
@@ -77,3 +80,14 @@ class GraphEditor(QFrame):
 
     def _setup_size_policy(self) -> None:
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
+    def showEvent(self, event) -> None:
+        content_width = int(
+            self.arrowbox.view.width()
+            + self.pictograph_widget.main_pictograph_view.width()
+            + self.attr_panel.attr_panel_content_width
+        )
+        # self.setMaximumHeight(self.pictograph_widget.main_pictograph_view.height())
+        self.setMinimumWidth(content_width)
+        self.setMaximumWidth(content_width)
+

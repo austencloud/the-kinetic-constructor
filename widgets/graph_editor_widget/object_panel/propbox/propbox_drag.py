@@ -237,7 +237,7 @@ class PropBoxDrag(ObjectBoxDrag):
 
         scaled_size = (
             renderer.defaultSize()
-            * self.pictograph.graph_editor.pictograph_widget.view_scale
+            * self.pictograph.graph_editor.main_pictograph.view.view_scale
         )
         pixmap = QPixmap(scaled_size)
         pixmap.fill(Qt.GlobalColor.transparent)

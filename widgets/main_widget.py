@@ -57,7 +57,7 @@ class MainWidget(QWidget):
         self.tab_widget = QTabWidget()
         self.tab_widget.addTab(self.option_picker_widget, "Option Picker")
         self.tab_widget.addTab(self.graph_editor_widget, "Graph Editor")
-        self.tab_widget.currentChanged.connect(self.resize_main_widget)
+        self.tab_widget.currentChanged.connect(self.showEvent)
 
         self.left_frame.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
@@ -65,6 +65,8 @@ class MainWidget(QWidget):
         self.right_frame.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
+
+        self.right_frame.layout().setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         screen = QApplication.primaryScreen()
         screen_size = screen.size()
@@ -123,6 +125,7 @@ class MainWidget(QWidget):
     def wheelEvent(self, event: QWheelEvent | None) -> None:
         return super().wheelEvent(event)
 
-    def resize_main_widget(self) -> None:
+    def showEvent(self, event) -> None:
         self.option_picker_widget.resize_option_picker_widget()
         self.sequence_widget.resize_sequence_widget()
+        

@@ -77,3 +77,14 @@ class MainPictographView(QGraphicsView):
         new_width = int(self.height() * 75 / 90)
         self.setMinimumWidth(new_width)
         self.setMaximumWidth(new_width)
+        self.resetTransform()
+        self.view_scale = min(
+            self.width() / self.main_pictograph.sceneRect().width(),
+            self.height() / self.main_pictograph.sceneRect().height(),
+        )
+
+        self.scale(
+            self.view_scale,
+            self.view_scale,
+        )
+        self.configure_button_size_and_position(int(self.width() / 10))

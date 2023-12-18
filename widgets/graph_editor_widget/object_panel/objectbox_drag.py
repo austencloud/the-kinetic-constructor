@@ -60,7 +60,7 @@ class ObjectBoxDrag(QWidget):
 
         scaled_size = (
             renderer.defaultSize()
-            * self.pictograph.graph_editor.pictograph_widget.view_scale
+            * self.pictograph.graph_editor.main_pictograph.view.view_scale
         )
         original_pixmap = QPixmap(scaled_size)
         self.setMinimumSize(scaled_size)
@@ -96,7 +96,7 @@ class ObjectBoxDrag(QWidget):
         self.preview.setPixmap(pixmap)
         self.object_center = (
             self.target_object.boundingRect().center()
-            * self.pictograph.graph_editor.pictograph_widget.view_scale
+            * self.pictograph.graph_editor.main_pictograph.view.view_scale
         )
 
     def move_to_cursor(self, event_pos: QPoint) -> None:
