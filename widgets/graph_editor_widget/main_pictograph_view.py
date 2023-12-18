@@ -66,12 +66,14 @@ class MainPictographView(QGraphicsView):
             elif button == self.rotate_ccw_button:
                 button.move(0, 0)
 
-    def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
+    def showEvent(self, event) -> None:
         if self.scene():
             self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
         button_size = int(self.width() / 10)
         self.configure_button_size_and_position(button_size)
+
+        self.setMinimumHeight(int(self.main_pictograph.main_widget.height() * 0.3))
+        self.setMaximumHeight(int(self.main_pictograph.main_widget.height() * 0.3))
         new_width = int(self.height() * 75 / 90)
         self.setMinimumWidth(new_width)
         self.setMaximumWidth(new_width)

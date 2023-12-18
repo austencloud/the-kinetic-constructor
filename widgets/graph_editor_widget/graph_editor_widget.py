@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QResizeEvent
+from PyQt6.QtGui import QShowEvent
 
 from widgets.graph_editor_widget.graph_editor import GraphEditor
 
@@ -23,7 +23,18 @@ class GraphEditorWidget(QFrame):
         self.graph_editor = GraphEditor(self.main_widget, self)
 
         self.main_layout.addWidget(self.graph_editor)
-        self.graph_editor.setSizePolicy(
-            QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed
+
+    def showEvent(self, event: QShowEvent) -> None:
+        content_width = int(
+            self.graph_editor.arrowbox.view.width()
+            + self.graph_editor.pictograph_widget.main_pictograph_view.width()
+            + self.graph_editor.attr_panel.width()
         )
-        self.graph_editor.setMaximumHeight(self.graph_editor.preferred_height())
+
+        # self.main_widget.right_frame.setMinimumWidth(content_width)
+        self.graph_editor.setMaximumHeight(
+            self.graph_editor.pictograph_widget.main_pictograph_view.height()
+        )
+        self.main_widget.right_frame.setMaximumWidth(content_width)
+        self.graph_editor.setMaximumWidth(content_width)
+        self.setMaximumWidth(content_width)
