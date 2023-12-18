@@ -313,7 +313,7 @@ class TurnsWidget(AttrBoxWidget):
 
     def _update_button_size(self) -> None:
         for button in self.buttons:
-            button.setFont(QFont("Arial", int(button.height() / 3)))
+            button.setFont(QFont("Arial", int(button.height() / 2)))
 
     def resize_turns_widget(self):
         self._update_button_size()
