@@ -106,6 +106,9 @@ class AttrBox(QFrame):
     def resize_attr_box(self) -> None:
         self.setMinimumWidth(int(self.pictograph.view.width() * 0.85))
         self.setMaximumWidth(int(self.pictograph.view.width() * 0.85))
+        self.setMinimumHeight(self.pictograph.view.height())
+        self.setMaximumHeight(self.pictograph.view.height())
+
         self.header_spacing = int(self.width() * 0.02)
         ratio_total = 1 + 1 + 1 + 2
         available_height = self.height()

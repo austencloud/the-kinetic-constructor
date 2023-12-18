@@ -178,6 +178,9 @@ class StartEndWidget(AttrBoxWidget):
             box.setMinimumWidth(int(self.width() / 3.5))
             box.setMaximumWidth(int(self.width() / 3.5))
 
+            box.setMinimumHeight(int(self.attr_box.height() / 8))
+            box.setMaximumHeight(int(self.attr_box.height() / 8))
+
             border_radius = min(box.width(), box.height()) * 0.25
 
             box.setStyleSheet(

@@ -68,9 +68,7 @@ class GraphEditor(QFrame):
         self.propbox = PropBox(main_widget, self)
         self.attr_panel = AttrPanel(self)
 
-        self.pictograph_widget = MainPictographWidget(
-            self, self.main_pictograph.view
-        )
+        self.pictograph_widget = MainPictographWidget(self, self.main_pictograph.view)
 
     def _apply_layout(self) -> None:
         self.setLayout(self.layout)
@@ -84,7 +82,5 @@ class GraphEditor(QFrame):
             + self.pictograph_widget.main_pictograph_view.width()
             + self.attr_panel.attr_panel_content_width
         )
-        # self.setMaximumHeight(self.pictograph_widget.main_pictograph_view.height())
         self.setMinimumWidth(content_width)
         self.setMaximumWidth(content_width)
-

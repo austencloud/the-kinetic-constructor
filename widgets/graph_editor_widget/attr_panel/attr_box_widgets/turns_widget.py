@@ -38,7 +38,6 @@ class TurnsWidget(AttrBoxWidget):
         self.turnbox_vbox_frame: QFrame = self._create_turnbox_vbox_frame()
         self._setup_layout_frames()
         self._apply_layout_settings()
-        # Create the 'Turns' header label
 
         # self.add_black_borders()
 
@@ -252,7 +251,7 @@ class TurnsWidget(AttrBoxWidget):
         header_height = int(available_height * 2 / 3)
         turns_widget_height = int(available_height * 1 / 3)
         self.header_frame.setMaximumHeight(header_height)
-        self.button_frame.setMaximumHeight(turns_widget_height)
+        self.button_frame.setMaximumHeight(self.button_frame.height())  
 
     def _update_clock_size(self) -> None:
         """Updates the sizes of the clock labels based on the widget's size."""
@@ -269,8 +268,9 @@ class TurnsWidget(AttrBoxWidget):
 
         border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
         self.turnbox.setMaximumWidth(int(self.attr_box.width() / 3.25))
-        self.turnbox.setMinimumHeight(int(self.attr_box.width() / 5))
-        self.turnbox.setMaximumHeight(int(self.attr_box.width() / 5))
+
+        self.turnbox.setMinimumHeight(int(self.attr_box.height() / 8))
+        self.turnbox.setMaximumHeight(int(self.attr_box.height() / 8))
         box_font_size = int(self.attr_box.width() / 10)
 
         self.header_label.setContentsMargins(0, 0, self.spacing, 0)

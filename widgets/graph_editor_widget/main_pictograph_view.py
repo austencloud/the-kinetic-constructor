@@ -1,7 +1,7 @@
 from PyQt6.QtCore import Qt, QSize
 from typing import TYPE_CHECKING, List
 from constants.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
-from PyQt6.QtWidgets import QGraphicsView, QPushButton
+from PyQt6.QtWidgets import QGraphicsView, QPushButton, QFrame
 from PyQt6.QtGui import QIcon
 
 
@@ -20,6 +20,11 @@ class MainPictographView(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
         self.buttons = self.init_buttons()
+        self.add_black_borders()
+
+    def add_black_borders(self) -> None:
+        self.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
+        self.setLineWidth(1)
 
     def init_buttons(self) -> List[QPushButton]:
         self.add_to_sequence_button = self.create_button(

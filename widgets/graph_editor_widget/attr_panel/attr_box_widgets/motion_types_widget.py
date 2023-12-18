@@ -135,8 +135,9 @@ class MotionTypesWidget(AttrBoxWidget):
 
         self.header_label.setFont(QFont("Arial", int(self.width() / 18)))
 
-        self.motion_type_box.setMinimumHeight(int(self.width() / 5))
-        self.motion_type_box.setMaximumHeight(int(self.width() / 5))
+
+        self.motion_type_box.setMinimumHeight(int(self.attr_box.height() / 8))
+        self.motion_type_box.setMaximumHeight(int(self.attr_box.height() / 8))
         box_font_size = int(self.width() / 10)
         self.motion_type_box.setFont(
             QFont("Arial", box_font_size, QFont.Weight.Bold, True)
