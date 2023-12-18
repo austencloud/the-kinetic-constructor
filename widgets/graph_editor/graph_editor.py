@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
 from widgets.graph_editor.main_pictograph import MainPictograph
 
 from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
-from widgets.graph_editor.pictograph_widget import MainPictographWidget
+from widgets.graph_editor.main_pictograph_widget import MainPictographWidget
 from widgets.graph_editor.object_panel.propbox.propbox import PropBox
 from widgets.graph_editor.attr_panel.attr_panel import AttrPanel
 
@@ -79,5 +79,4 @@ class GraphEditor(QFrame):
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
     def resize_graph_editor(self) -> None:
-        self.pictograph_widget.resize_pictograph_widget()
         self.attr_panel.resize_attr_panel()

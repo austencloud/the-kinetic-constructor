@@ -32,6 +32,7 @@ class MainWindow(QMainWindow):
         self.main_widget.resize_main_widget()
 
 def main() -> None:
+    
     app = QApplication(sys.argv)
     profiler = Profiler()
     main_window = MainWindow(profiler)
