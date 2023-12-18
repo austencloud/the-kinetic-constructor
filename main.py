@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
-from PyQt6.QtGui import QGuiApplication
+from PyQt6.QtGui import QGuiApplication, QResizeEvent
 from widgets.main_widget import MainWidget
 from profiler import Profiler
 import os
@@ -18,27 +18,18 @@ class MainWindow(QMainWindow):
         self.installEventFilter(self.main_widget)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Sequence Constructor")
-        self.showMaximized()  # Set the window to start up full screen
+        self.show() # Set the window to start up full screen
         screens = QGuiApplication.screens()
         screen = screens[1] if len(screens) > 1 else QGuiApplication.primaryScreen()
         available_geometry = screen.availableGeometry()
-        self.move(
-            int(
-                available_geometry.x()
-                + available_geometry.width() / 2
-                - self.width() / 2
-            ),
-            int(
-                available_geometry.y()
-                + available_geometry.height() / 2
-                - self.height() / 2
-            ),
-        )
+        self.move(available_geometry.x(), available_geometry.y()) 
 
     def exec_with_profiling(self, app: QApplication) -> int:
         for func in [app.exec, self.show]:
             self.profiler.runcall(func)
 
+    def showEvent(self, event) -> None:
+        self.main_widget.resize_main_widget()
 
 def main() -> None:
     app = QApplication(sys.argv)

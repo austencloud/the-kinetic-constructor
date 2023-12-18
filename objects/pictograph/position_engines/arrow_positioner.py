@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, List, Dict, Any
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
 
-from utilities.TypeChecking.TypeChecking import MotionAttributes, OptimalLocationsDicts
+from utilities.TypeChecking.TypeChecking import MotionAttributesDicts, OptimalLocationsDicts
 
 
 class ArrowPositioner:
@@ -41,7 +41,7 @@ class ArrowPositioner:
                         self.set_arrow_to_default_loc(ghost_arrow)
 
     def find_optimal_locations(self) -> OptimalLocationsDicts | None:
-        current_state: List[Dict[MotionAttributes, str]] = self.pictograph.get_state()
+        current_state: List[Dict[MotionAttributesDicts, str]] = self.pictograph.get_state()
         current_letter = self.pictograph.current_letter
         current_letter_variants = self.letters[current_letter]
 

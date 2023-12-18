@@ -2,81 +2,33 @@ Organized by number of calls:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-       302        0.001175        0.000004             0.004099             0.000014 eventFilter                    widgets\main_widget.py:89
-        48        0.000510        0.000011             0.005715             0.000119 update_custom_button_size      attr_panel\custom_button.py:24
-        48        0.000126        0.000003             0.000126             0.000003 get_button_style               attr_panel\custom_button.py:35
-        32        0.000040        0.000001             0.000050             0.000002 resizeEvent                    beat_frame\beat_view.py:39
-        32        0.000028        0.000001             0.000053             0.000002 is_dim                         objects\graphical_object.py:104
-        12        0.000011        0.000001             0.000050             0.000004 eventFilter                    option\option_view.py:39
-         6        0.000299        0.000050             0.007190             0.001198 resize_start_end_widget        attr_box_widgets\start_end_widget.py:150
-         6        0.000195        0.000033             0.003089             0.000515 resize_motion_type_widget      attr_box_widgets\motion_types_widget.py:127
-         6        0.000048        0.000008             0.000248             0.000041 resize_option_view             option\option_view.py:19
-         6        0.000042        0.000007             0.000089             0.000015 _update_button_size            attr_box_widgets\header_widget.py:107
-         6        0.000062        0.000010             0.000139             0.000023 _update_button_size            attr_box_widgets\turns_widget.py:314
-         6        0.000181        0.000030             0.005327             0.000888 resize_turns_widget            attr_box_widgets\turns_widget.py:318
-         6        0.000861        0.000144             0.028409             0.004735 resize_attr_box                attr_panel\attr_box.py:102
-         6        0.000122        0.000020             0.000773             0.000129 resize_header_widget           attr_box_widgets\header_widget.py:111
-         6        0.000182        0.000030             0.004946             0.000824 _update_turnbox_size           attr_box_widgets\turns_widget.py:264
-         6        0.000025        0.000004             0.000040             0.000007 _update_clock_size             attr_box_widgets\turns_widget.py:257
-         6        0.000017        0.000003             0.000022             0.000004 _update_widget_sizes           attr_box_widgets\turns_widget.py:249
-         5        0.000011        0.000002             0.000011             0.000002 handle_mouse_move              pictograph\pictograph_event_handler.py:33
-         5        0.000063        0.000013             0.000074             0.000015 mouseMoveEvent                 pictograph\pictograph.py:152
-         3        0.000054        0.000018             0.000077             0.000026 configure_button_size_and_position graph_editor\main_pictograph_view.py:53
-         3        0.000073        0.000024             0.000226             0.000075 resize_pictograph_widget       graph_editor\pictograph_widget.py:22
-         3        0.000045        0.000015             0.000323             0.000108 mouseMoveEvent                 arrowbox\arrowbox.py:243
-         3        0.000048        0.000016             0.028858             0.009619 resizeEvent                    graph_editor\graph_editor_widget.py:31
-         3        0.000088        0.000029             0.028810             0.009603 resize_graph_editor            graph_editor\graph_editor.py:81
-         3        0.000129        0.000043             0.000272             0.000091 highlight_closest_arrow        arrowbox\arrowbox.py:268
-         3        0.000073        0.000024             0.000104             0.000035 find_closest_arrow             arrowbox\arrowbox.py:257
-         3        0.000087        0.000029             0.028496             0.009499 resize_attr_panel              attr_panel\attr_panel.py:50
-         2        0.000022        0.000011             0.000076             0.000038 resizeEvent                    object_panel\objectbox_view.py:23
-         2        0.000105        0.000053             0.001076             0.000538 resizeEvent                    widgets\main_widget.py:119
-         2        0.000234        0.000117             0.000353             0.000177 resize_letter_buttons          option_picker\option_picker_letter_buttons.py:116
-         2        0.000034        0.000017             0.000673             0.000337 resize_option_picker_widget    option_picker\option_picker_widget.py:30
-         2        0.000038        0.000019             0.000286             0.000143 resize_option_views            option_picker\option_picker.py:301
-         2        0.000035        0.000017             0.000297             0.000148 resize_sequence_widget         sequence_widget\sequence_widget.py:29
-         2        0.000012        0.000006             0.102019             0.051010 inner                          tka-sequence-constructor\profiler.py:22
-         1        0.000018        0.000018             0.000057             0.000057 leaveEvent                     arrowbox\arrowbox_view.py:16
-         1        0.000027        0.000027             0.000040             0.000040 dim_all_arrows                 arrowbox\arrowbox.py:273
+       121        0.000478        0.000004             0.001614             0.000013 eventFilter                    widgets\main_widget.py:99
+        12        0.000011        0.000001             0.000048             0.000004 eventFilter                    option\option_view.py:39
+         5        0.000556        0.000111             0.000794             0.000159 resize_letter_buttons          option_picker\option_picker_letter_buttons.py:115
+         4        0.000043        0.000011             0.000699             0.000175 resizeEvent                    option_picker\option_picker_letter_buttons.py:134
+         3        0.000024        0.000008             0.000179             0.000060 resize_option_view             option\option_view.py:19
+         3        0.000019        0.000006             0.000028             0.000009 resizeEvent                    beat_frame\start_position_view.py:31
+         2        0.000010        0.000005             0.035129             0.017564 inner                          tka-sequence-constructor\profiler.py:22
+         1        0.000020        0.000020             0.000033             0.000033 resize_beat_views              beat_frame\beat_frame.py:88
+         1        0.000010        0.000010             0.000042             0.000042 resizeEvent                    sequence_widget\sequence_widget.py:30
+         1        0.000007        0.000007             0.000353             0.000353 resizeEvent                    widgets\main_widget.py:129
+         1        0.000013        0.000013             0.000347             0.000347 resize_option_picker_widget    option_picker\option_picker_widget.py:30
+         1        0.000018        0.000018             0.000197             0.000197 resize_option_picker           option_picker\option_picker.py:305
 
 
 Organized by total time:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-       302        0.001175        0.000004             0.004099             0.000014 eventFilter                    widgets\main_widget.py:89
-         6        0.000861        0.000144             0.028409             0.004735 resize_attr_box                attr_panel\attr_box.py:102
-        48        0.000510        0.000011             0.005715             0.000119 update_custom_button_size      attr_panel\custom_button.py:24
-         6        0.000299        0.000050             0.007190             0.001198 resize_start_end_widget        attr_box_widgets\start_end_widget.py:150
-         2        0.000234        0.000117             0.000353             0.000177 resize_letter_buttons          option_picker\option_picker_letter_buttons.py:116
-         6        0.000195        0.000033             0.003089             0.000515 resize_motion_type_widget      attr_box_widgets\motion_types_widget.py:127
-         6        0.000182        0.000030             0.004946             0.000824 _update_turnbox_size           attr_box_widgets\turns_widget.py:264
-         6        0.000181        0.000030             0.005327             0.000888 resize_turns_widget            attr_box_widgets\turns_widget.py:318
-         3        0.000129        0.000043             0.000272             0.000091 highlight_closest_arrow        arrowbox\arrowbox.py:268
-        48        0.000126        0.000003             0.000126             0.000003 get_button_style               attr_panel\custom_button.py:35
-         6        0.000122        0.000020             0.000773             0.000129 resize_header_widget           attr_box_widgets\header_widget.py:111
-         2        0.000105        0.000053             0.001076             0.000538 resizeEvent                    widgets\main_widget.py:119
-         3        0.000088        0.000029             0.028810             0.009603 resize_graph_editor            graph_editor\graph_editor.py:81
-         3        0.000087        0.000029             0.028496             0.009499 resize_attr_panel              attr_panel\attr_panel.py:50
-         3        0.000073        0.000024             0.000226             0.000075 resize_pictograph_widget       graph_editor\pictograph_widget.py:22
-         3        0.000073        0.000024             0.000104             0.000035 find_closest_arrow             arrowbox\arrowbox.py:257
-         5        0.000063        0.000013             0.000074             0.000015 mouseMoveEvent                 pictograph\pictograph.py:152
-         6        0.000062        0.000010             0.000139             0.000023 _update_button_size            attr_box_widgets\turns_widget.py:314
-         3        0.000054        0.000018             0.000077             0.000026 configure_button_size_and_position graph_editor\main_pictograph_view.py:53
-         6        0.000048        0.000008             0.000248             0.000041 resize_option_view             option\option_view.py:19
-         3        0.000048        0.000016             0.028858             0.009619 resizeEvent                    graph_editor\graph_editor_widget.py:31
-         3        0.000045        0.000015             0.000323             0.000108 mouseMoveEvent                 arrowbox\arrowbox.py:243
-         6        0.000042        0.000007             0.000089             0.000015 _update_button_size            attr_box_widgets\header_widget.py:107
-        32        0.000040        0.000001             0.000050             0.000002 resizeEvent                    beat_frame\beat_view.py:39
-         2        0.000038        0.000019             0.000286             0.000143 resize_option_views            option_picker\option_picker.py:301
-         2        0.000035        0.000017             0.000297             0.000148 resize_sequence_widget         sequence_widget\sequence_widget.py:29
-         2        0.000034        0.000017             0.000673             0.000337 resize_option_picker_widget    option_picker\option_picker_widget.py:30
-        32        0.000028        0.000001             0.000053             0.000002 is_dim                         objects\graphical_object.py:104
-         1        0.000027        0.000027             0.000040             0.000040 dim_all_arrows                 arrowbox\arrowbox.py:273
-         6        0.000025        0.000004             0.000040             0.000007 _update_clock_size             attr_box_widgets\turns_widget.py:257
-         2        0.000022        0.000011             0.000076             0.000038 resizeEvent                    object_panel\objectbox_view.py:23
-         1        0.000018        0.000018             0.000057             0.000057 leaveEvent                     arrowbox\arrowbox_view.py:16
-         6        0.000017        0.000003             0.000022             0.000004 _update_widget_sizes           attr_box_widgets\turns_widget.py:249
-         2        0.000012        0.000006             0.102019             0.051010 inner                          tka-sequence-constructor\profiler.py:22
-        12        0.000011        0.000001             0.000050             0.000004 eventFilter                    option\option_view.py:39
-         5        0.000011        0.000002             0.000011             0.000002 handle_mouse_move              pictograph\pictograph_event_handler.py:33
+         5        0.000556        0.000111             0.000794             0.000159 resize_letter_buttons          option_picker\option_picker_letter_buttons.py:115
+       121        0.000478        0.000004             0.001614             0.000013 eventFilter                    widgets\main_widget.py:99
+         4        0.000043        0.000011             0.000699             0.000175 resizeEvent                    option_picker\option_picker_letter_buttons.py:134
+         3        0.000024        0.000008             0.000179             0.000060 resize_option_view             option\option_view.py:19
+         1        0.000020        0.000020             0.000033             0.000033 resize_beat_views              beat_frame\beat_frame.py:88
+         3        0.000019        0.000006             0.000028             0.000009 resizeEvent                    beat_frame\start_position_view.py:31
+         1        0.000018        0.000018             0.000197             0.000197 resize_option_picker           option_picker\option_picker.py:305
+         1        0.000013        0.000013             0.000347             0.000347 resize_option_picker_widget    option_picker\option_picker_widget.py:30
+        12        0.000011        0.000001             0.000048             0.000004 eventFilter                    option\option_view.py:39
+         2        0.000010        0.000005             0.035129             0.017564 inner                          tka-sequence-constructor\profiler.py:22
+         1        0.000010        0.000010             0.000042             0.000042 resizeEvent                    sequence_widget\sequence_widget.py:30
+         1        0.000007        0.000007             0.000353             0.000353 resizeEvent                    widgets\main_widget.py:129

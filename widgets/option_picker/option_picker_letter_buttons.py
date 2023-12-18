@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton, QSizePolicy
-from PyQt6.QtGui import QIcon, QPixmap, QPainter, QFont, QColor
+from PyQt6.QtGui import QIcon, QPixmap, QPainter, QFont, QColor, QResizeEvent
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtSvg import QSvgRenderer
 from data.letter_engine_data import letter_types
@@ -22,7 +22,6 @@ class LetterButtons(QFrame):
         self.option_picker_widget = option_picker_widget
         self.spacing = int(self.width() * 0.01)
         self.init_letter_buttons_layout()
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
     def init_letter_buttons_layout(self) -> None:
         letter_buttons_layout = QVBoxLayout()
@@ -115,7 +114,7 @@ class LetterButtons(QFrame):
     def resize_letter_buttons(self) -> None:
         self.spacing = int(self.width() * 0.01)
         button_row_count = len(self.letter_rows)
-        button_size = int(self.main_widget.width() / button_row_count)
+        button_size = int((self.main_widget.height() / button_row_count) / 2)
         if button_size > self.height() / button_row_count:
             button_size = int(self.height() / (button_row_count + 1))
         icon_size = int(button_size * 0.9)
@@ -126,7 +125,10 @@ class LetterButtons(QFrame):
                 if button:
                     button.setMaximumSize(button_size, button_size)
                     button.setIconSize(QSize(icon_size, icon_size))
-                    
-        self.setMaximumHeight(self.main_widget.width())
+
+        self.setMaximumHeight(int(self.main_widget.height() * 0.9))
         available_width = button_size * 4
         self.setMaximumWidth(int(available_width + self.spacing * 3))
+
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        self.resize_letter_buttons()

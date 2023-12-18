@@ -60,7 +60,9 @@ for position_pair, letters_info in data.items():
                         'red_end_orientation': red_end_orientation,
                         'red_start_layer': 1,
                         'red_end_layer': 1,
-                        # ... optimal location attributes ...
+                        
+                        'optimal_blue_location': optimal_locations.get('optimal_blue_location', None),
+                        'optimal_red_location': optimal_locations.get('optimal_red_location', None),
                     }
                     
                     # Append this entry to the comprehensive data list

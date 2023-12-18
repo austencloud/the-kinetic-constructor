@@ -8,7 +8,6 @@ if TYPE_CHECKING:
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QSizePolicy
 
 
-
 class GraphEditorWidget(QFrame):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
@@ -24,12 +23,12 @@ class GraphEditorWidget(QFrame):
         self.graph_editor = GraphEditor(self.main_widget, self)
 
         self.main_layout.addWidget(self.graph_editor)
-        # Ensure the graph editor does not expand in height beyond what's necessary
-        self.graph_editor.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        self.graph_editor.setSizePolicy(
+            QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed
+        )
         self.graph_editor.setMaximumHeight(self.graph_editor.preferred_height())
-
 
         self.setLayout(self.main_layout)
 
-    def resizeEvent(self, event: QResizeEvent) -> None:
+    def resize_graph_editor_widget(self) -> None:
         self.graph_editor.resize_graph_editor()

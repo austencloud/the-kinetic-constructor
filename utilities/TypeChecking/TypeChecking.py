@@ -141,19 +141,21 @@ class ArrowAttributesDicts(TypedDict):
     turns: Turns
 
 
-MotionAttributes = Literal[
-    "color",
-    "motion_type",
-    "arrow_location",
-    "rotation_direction",
-    "turns",
-    "start_location",
-    "end_location",
-    "start_orientation",
-    "end_orientation",
-    "start_layer",
-    "end_layer",
-]
+class MotionAttributesDicts(TypedDict):
+    color: Colors
+    motion_type: MotionTypes
+    rotation_direction: RotationDirections
+    turns: Turns
+    start_location: Locations
+    end_location: Locations
+    start_orientation: Orientations
+    end_orientation: Orientations
+    start_layer: Layers
+    end_layer: Layers
+
+
+
+
 
 MotionTypesCombinations = Literal[
     "pro_vs_pro",

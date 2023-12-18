@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, TYPE_CHECKING
+from typing import Callable, Dict, List, TYPE_CHECKING, Tuple
 from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout
 from PyQt6.QtCore import Qt
 import pandas as pd
@@ -7,6 +7,8 @@ from data.positions_map import positions_map
 from objects.arrow.arrow import Arrow
 from objects.motion import Motion
 from objects.prop.prop import Prop
+from utilities.TypeChecking.Letters import Letters
+from utilities.TypeChecking.TypeChecking import MotionAttributesDicts
 from widgets.option_picker.option.option import Option
 
 if TYPE_CHECKING:
@@ -24,7 +26,7 @@ class OptionPicker(QScrollArea):
         self.main_widget = main_widget
         self.option_picker_widget = option_picker_widget
         self.spacing = 10
-        self.options: List[Option] = []
+        self.options: List[Tuple[Letters, Option]] = []
         self.pictographs = self.load_and_sort_data("LetterDictionary.csv")
         self.pictograph = (
             self.main_widget.graph_editor_widget.graph_editor.main_pictograph
@@ -71,8 +73,9 @@ class OptionPicker(QScrollArea):
             motion_dict = [
                 self._create_motion_dict(row_data, color) for color in ["blue", "red"]
             ]
+            option = self._create_option(motion_dict)
             self._add_option_to_layout(
-                motion_dict, is_start_position=True, row=0, col=column
+                option, is_start_position=True, row=0, col=column
             )
 
     def _create_option(self, motion_dict_list: list) -> "Option":
@@ -83,7 +86,7 @@ class OptionPicker(QScrollArea):
             self._add_motion_to_option(option, motion_dict)
             self._finalize_option_setup(option, motion_dict)
 
-        self.options.append(option)
+        self.options.append((option.current_letter, option))
         return option
 
     def _add_motion_to_option(self, option: "Option", motion_dict: Dict) -> None:
@@ -92,9 +95,12 @@ class OptionPicker(QScrollArea):
         self._setup_motion_relations(option, arrow, prop)
 
     def _add_option_to_layout(
-        self, motion_dict: list, is_start_position: bool, row: int, col: int
+        self,
+        option: Option,
+        is_start_position: bool,
+        row: int,
+        col: int,
     ) -> None:
-        option = self._create_option(motion_dict)
         option.view.mousePressEvent = self._get_click_handler(option, is_start_position)
         self.option_picker_layout.addWidget(option.view, row, col)
 
@@ -179,7 +185,7 @@ class OptionPicker(QScrollArea):
         blue_end_orientation: str,
     ) -> None:
         # Clear the current options
-        self.options = []
+        self.options.clear()
         self.clear()
         self.option_picker_layout.setSpacing(self.spacing)
 
@@ -198,19 +204,38 @@ class OptionPicker(QScrollArea):
             & (self.pictographs["red_start_orientation"] == red_end_orientation)
             & (self.pictographs["blue_start_orientation"] == blue_end_orientation)
         ]
-        for row, ((start_pos, end_pos), row_data) in enumerate(
-            filtered_data.iterrows()
-        ):
+
+        # Create a list of options with associated letters for sorting
+        unsorted_options = []
+        for (start_pos, end_pos), row_data in filtered_data.iterrows():
             attributes_list = [
                 self._create_motion_dict(row_data, "blue"),
                 self._create_motion_dict(row_data, "red"),
             ]
+            option: Option = self._create_option(attributes_list)
+            letter = row_data["letter"]
+            unsorted_options.append((letter, option))
+
+        # Define custom sort order
+        custom_sort_order = "ABCDEFGHIJKLMNOPQRSTUVWXYZΣΔθΩΦΨΛαβΓ"
+        custom_order_dict = {
+            char: index for index, char in enumerate(custom_sort_order)
+        }
+
+        # Sort the options based on the custom order
+        self.options = sorted(
+            unsorted_options, key=lambda x: custom_order_dict.get(x[0], float("inf"))
+        )
+
+        # Add the sorted options to the layout
+        for row, (letter, option) in enumerate(self.options):
             self._add_option_to_layout(
-                attributes_list,
+                option,
                 is_start_position=False,
                 row=row // self.COLUMN_COUNT,
                 col=row % self.COLUMN_COUNT,
             )
+
         self.resize_option_picker()
 
     ### GETTERS ###
@@ -226,16 +251,13 @@ class OptionPicker(QScrollArea):
             return lambda event: self._on_option_clicked(option)
 
     def _on_start_position_clicked(self, start_position: "Option") -> None:
-        # Set the start position view with the selected start position
         self.main_widget.sequence_widget.beat_frame.start_position_view.set_start_position(
             start_position
         )
 
-        # Extract the red and blue motion attributes from the selected start position
         red_motion_attributes = start_position.motions[RED].get_attributes()
         blue_motion_attributes = start_position.motions[BLUE].get_attributes()
 
-        # Trigger the update of options based on the selected start position's end orientations and locations
         self._populate_options(
             red_motion_attributes[END_LOCATION],
             red_motion_attributes[END_ORIENTATION],
@@ -303,6 +325,5 @@ class OptionPicker(QScrollArea):
         )
 
     def resize_option_picker(self) -> None:
-        for option in self.options:
+        for letter, option in self.options:
             option.view.resize_option_view()
-

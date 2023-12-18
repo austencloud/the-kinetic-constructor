@@ -7,7 +7,8 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QSplitter,
     QFrame,
-    QTabWidget, QApplication
+    QTabWidget,
+    QApplication,
 )
 from PyQt6.QtGui import QWheelEvent
 from utilities.TypeChecking.TypeChecking import LetterDictionary
@@ -17,6 +18,7 @@ from widgets.graph_editor.key_event_handler import KeyEventHandler
 from objects.pictograph.pictograph import Pictograph
 from widgets.option_picker.option_picker_widget import OptionPickerWidget
 from widgets.sequence_widget.sequence_widget import SequenceWidget
+from widgets.styled_splitter import StyledSplitter
 
 if TYPE_CHECKING:
     from main import MainWindow
@@ -42,49 +44,44 @@ class MainWidget(QWidget):
         self.configure_layouts()
 
     def configure_layouts(self) -> None:
-        self.horizontal_splitter = QSplitter(Qt.Orientation.Horizontal)
+        self.horizontal_splitter = StyledSplitter(Qt.Orientation.Horizontal)
 
         self.left_frame = QFrame()
         self.right_frame = QFrame()
-
-        self.right_frame.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
-        )
 
         self.left_layout = QVBoxLayout(self.left_frame)
         self.right_layout = QVBoxLayout(self.right_frame)
 
         self.left_layout.addWidget(self.sequence_widget)
 
-        # Instead of a vertical splitter, use a QTabWidget
         self.tab_widget = QTabWidget()
         self.tab_widget.addTab(self.option_picker_widget, "Option Picker")
         self.tab_widget.addTab(self.graph_editor_widget, "Graph Editor")
-        # self.tab_widget.currentChanged.connect(self.on_tab_changed)
 
-        # Get screen size
+        self.left_frame.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
+        self.right_frame.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
+
         screen = QApplication.primaryScreen()
         screen_size = screen.size()
+        left_frame_width = int(screen_size.width() * 0.30)
+        right_frame_width = int(screen_size.width() * 0.40)
 
-        # Calculate the size for the main window and right frame
-        main_window_width = int(screen_size.width() * 0.75)
-        main_window_height = int(screen_size.height() * 0.75)
-        right_frame_initial_width = int(main_window_width * 0.6)  # Example value, adjust as needed
-
-        # self.main_window.resize(main_window_width, main_window_height)
-        self.right_frame.setFixedWidth(right_frame_initial_width)
+        self.right_frame.setMaximumWidth(right_frame_width)
         self.right_layout.addWidget(self.tab_widget)
-        
 
-        # Add frames to the horizontal splitter
+        self.main_window.resize(
+            int(screen_size.width() * 0.75), int(screen_size.height() * 0.75)
+        )
+
         self.horizontal_splitter.addWidget(self.left_frame)
         self.horizontal_splitter.addWidget(self.right_frame)
-        self.horizontal_splitter.splitterMoved.connect(self.on_splitter_moved)
 
-        # Optionally, set initial sizes or proportions for the splitters
-        self.horizontal_splitter.setSizes([300, 500])
+        self.horizontal_splitter.setSizes([left_frame_width, right_frame_width])
 
-        # Create main layout and add the horizontal splitter
         self.main_layout = QHBoxLayout(self)
         self.main_layout.addWidget(self.horizontal_splitter)
         self.setLayout(self.main_layout)
@@ -92,7 +89,6 @@ class MainWidget(QWidget):
     ### EVENT HANDLERS ###
 
     def on_splitter_moved(self):
-        # This method is called whenever the splitter is moved
         self.option_picker_widget.resize_option_picker_widget()
         self.sequence_widget.resize_sequence_widget()
 
@@ -126,6 +122,7 @@ class MainWidget(QWidget):
     def wheelEvent(self, event: QWheelEvent | None) -> None:
         return super().wheelEvent(event)
 
-    def resizeEvent(self, event: QResizeEvent) -> None:
+    def resize_main_widget(self) -> None:
         self.option_picker_widget.resize_option_picker_widget()
-        # self.sequence_widget.resize_sequence_widget()
+        self.sequence_widget.resize_sequence_widget()
+        self.graph_editor_widget.resize_graph_editor_widget()

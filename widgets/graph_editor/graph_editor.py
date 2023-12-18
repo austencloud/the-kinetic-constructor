@@ -42,18 +42,15 @@ class GraphEditor(QFrame):
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
 
-        # Create layouts for each component
         self.objectbox_layout = QVBoxLayout()
         self.pictograph_layout = QVBoxLayout()
         self.attr_panel_layout = QVBoxLayout()
 
-        # Add child widgets to their respective layouts
         self.objectbox_layout.addWidget(self.arrowbox.view)
         self.objectbox_layout.addWidget(self.propbox.view)
         self.pictograph_layout.addWidget(self.pictograph_widget)
         self.attr_panel_layout.addWidget(self.attr_panel)
 
-        # Add sub-layouts to the main layout
         self.layout.addStretch(1)
         self.layout.addLayout(self.objectbox_layout)
         self.layout.addLayout(self.pictograph_layout)
@@ -82,5 +79,5 @@ class GraphEditor(QFrame):
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
     def resize_graph_editor(self) -> None:
-        self.attr_panel.resize_attr_panel()
         self.pictograph_widget.resize_pictograph_widget()
+        self.attr_panel.resize_attr_panel()
