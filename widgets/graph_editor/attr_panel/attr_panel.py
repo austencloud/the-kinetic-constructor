@@ -47,6 +47,6 @@ class AttrPanel(QFrame):
         self.blue_attr_box.clear_attr_box()
         self.red_attr_box.clear_attr_box()
 
-    def resize_attr_panel(self) -> None:
+    def resizeEvent(self, event) -> None:
         for box in [self.blue_attr_box, self.red_attr_box]:
             box.resize_attr_box()

@@ -77,6 +77,3 @@ class GraphEditor(QFrame):
 
     def _setup_size_policy(self) -> None:
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-
-    def resize_graph_editor(self) -> None:
-        self.attr_panel.resize_attr_panel()

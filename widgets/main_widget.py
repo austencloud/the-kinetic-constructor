@@ -57,6 +57,7 @@ class MainWidget(QWidget):
         self.tab_widget = QTabWidget()
         self.tab_widget.addTab(self.option_picker_widget, "Option Picker")
         self.tab_widget.addTab(self.graph_editor_widget, "Graph Editor")
+        self.tab_widget.currentChanged.connect(self.resize_main_widget)
 
         self.left_frame.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
@@ -74,7 +75,7 @@ class MainWidget(QWidget):
         self.right_layout.addWidget(self.tab_widget)
 
         self.main_window.resize(
-            int(screen_size.width() * 0.75), int(screen_size.height() * 0.75)
+            int(screen_size.width() * 0.8), int(screen_size.height() * 0.8)
         )
 
         self.horizontal_splitter.addWidget(self.left_frame)
@@ -125,4 +126,3 @@ class MainWidget(QWidget):
     def resize_main_widget(self) -> None:
         self.option_picker_widget.resize_option_picker_widget()
         self.sequence_widget.resize_sequence_widget()
-        self.graph_editor_widget.resize_graph_editor_widget()

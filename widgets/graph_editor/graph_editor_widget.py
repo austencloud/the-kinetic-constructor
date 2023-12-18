@@ -27,8 +27,3 @@ class GraphEditorWidget(QFrame):
             QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed
         )
         self.graph_editor.setMaximumHeight(self.graph_editor.preferred_height())
-
-        self.setLayout(self.main_layout)
-
-    def resize_graph_editor_widget(self) -> None:
-        self.graph_editor.resize_graph_editor()
