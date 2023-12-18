@@ -57,7 +57,7 @@ class MainWidget(QWidget):
         self.tab_widget = QTabWidget()
         self.tab_widget.addTab(self.option_picker_widget, "Option Picker")
         self.tab_widget.addTab(self.graph_editor_widget, "Graph Editor")
-        self.tab_widget.currentChanged.connect(self.showEvent)
+        # self.tab_widget.currentChanged.connect(self.showEvent)
 
         self.left_frame.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding

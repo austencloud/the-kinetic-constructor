@@ -20,7 +20,7 @@ class GraphEditor(QFrame):
     ) -> None:
         super().__init__()
         self._initialize_main_widget_attributes(main_widget)
-        self._setup_frame_style()
+        # self._setup_frame_style()
         self._create_children(main_widget)
         self._setup_main_layout()
         self._apply_layout()
@@ -61,9 +61,6 @@ class GraphEditor(QFrame):
         self.layout.setAlignment(self.main_widget, Qt.AlignmentFlag.AlignLeft)
 
         self.setLayout(self.layout)
-
-    def preferred_height(self) -> int:
-        return self.pictograph_widget.calculate_preferred_height()
 
     def _create_children(self, main_widget: "MainWidget") -> None:
         self.main_pictograph = MainPictograph(main_widget, self)

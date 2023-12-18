@@ -43,7 +43,6 @@ class GraphEditorWidget(QFrame):
         self.setMaximumHeight(
             self.graph_editor.pictograph_widget.main_pictograph_view.height()
         )
-        self.main_widget.right_frame.setMinimumWidth(self.width())
-        self.main_widget.right_frame.setMaximumWidth(self.width())
+
         self.graph_editor.arrowbox.view.resize_objectbox_view()
         self.graph_editor.propbox.view.resize_objectbox_view()
