@@ -58,6 +58,7 @@ class GraphEditor(QFrame):
         self.layout.addLayout(self.attr_panel_layout)
         self.layout.addStretch(1)
 
+        self.objectbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.setAlignment(self.main_widget, Qt.AlignmentFlag.AlignLeft)
 
         self.setLayout(self.layout)

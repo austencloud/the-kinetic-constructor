@@ -27,22 +27,8 @@ class GraphEditorWidget(QFrame):
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
 
-        self.main_layout.setAlignment(self.main_widget, Qt.AlignmentFlag.AlignLeft)
+        self.main_layout.setAlignment(self.main_widget, Qt.AlignmentFlag.AlignCenter)
         self.graph_editor = GraphEditor(self.main_widget, self)
 
         self.main_layout.addWidget(self.graph_editor)
 
-    def showEvent(self, event: QShowEvent) -> None:
-        content_width = int(
-            self.graph_editor.arrowbox.view.width()
-            + self.graph_editor.pictograph_widget.main_pictograph_view.width()
-            + self.graph_editor.attr_panel.attr_panel_content_width
-        )
-
-        self.setMaximumWidth(content_width)
-        self.setMaximumHeight(
-            self.graph_editor.pictograph_widget.main_pictograph_view.height()
-        )
-
-        self.graph_editor.arrowbox.view.resize_objectbox_view()
-        self.graph_editor.propbox.view.resize_objectbox_view()
