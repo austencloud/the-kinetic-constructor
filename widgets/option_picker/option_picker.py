@@ -29,7 +29,7 @@ class OptionPicker(QScrollArea):
         self.spacing = 10
         self.options: List[Tuple[Letters, Option]] = []
         self.pictographs = self.load_and_sort_data("LetterDictionary.csv")
-        self.pictograph = (
+        self.main_pictograph = (
             self.main_widget.graph_editor_widget.graph_editor.main_pictograph
         )
         self.last_end_orientation = None
@@ -74,12 +74,12 @@ class OptionPicker(QScrollArea):
             motion_dict = [
                 self._create_motion_dict(row_data, color) for color in ["blue", "red"]
             ]
-            option = self._create_option(motion_dict)
+            option = self._create_option_from_motion_dict_list(motion_dict)
             self._add_option_to_layout(
                 option, is_start_position=True, row=0, col=column
             )
 
-    def _create_option(self, motion_dict_list: list) -> "Option":
+    def _create_option_from_motion_dict_list(self, motion_dict_list: list) -> "Option":
         option = Option(self.main_widget, self)
         option.setSceneRect(0, 0, 750, 900)
 
@@ -120,7 +120,7 @@ class OptionPicker(QScrollArea):
     def _create_prop(self, option: "Option", motion_dict: Dict) -> Prop:
         prop_dict = {
             COLOR: motion_dict[COLOR],
-            PROP_TYPE: self.pictograph.prop_type,
+            PROP_TYPE: self.main_pictograph.prop_type,
             LOCATION: motion_dict[END_LOCATION],
             LAYER: 1,
             ORIENTATION: IN,

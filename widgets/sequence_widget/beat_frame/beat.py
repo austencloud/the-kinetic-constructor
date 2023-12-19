@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 class Beat(Pictograph):
     def __init__(self, main_widget: "MainWidget", beat_frame: "BeatFrame") -> None:
         super().__init__(
-            main_widget, main_widget.graph_editor_widget.graph_editor, "beat"
+            main_widget, "beat"
         )
         self.main_widget = main_widget
         self.beat_frame = beat_frame

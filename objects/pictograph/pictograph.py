@@ -70,12 +70,10 @@ class Pictograph(QGraphicsScene):
     def __init__(
         self,
         main_widget: "MainWidget",
-        graph_editor: "GraphEditor",
-        graph_type: Literal["main", "option", "beat"],
+        graph_type: Literal["main", "option", "beat", "image_generator"],
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.graph_editor = graph_editor
         self.graph_type = graph_type
         self.setup_scene()
         self.setup_components(main_widget)
@@ -289,78 +287,13 @@ class Pictograph(QGraphicsScene):
         self.dragged_prop = None
         self.dragged_arrow = None
 
-    def create_new_beat(self) -> QGraphicsScene:
-        from widgets.sequence_widget.beat_frame.beat import Beat
-
-        new_beat = Beat(self.main_widget, self.graph_editor)
-        new_beat.setSceneRect(self.sceneRect())
-        for motion in self.motions.values():
-            new_beat.motions[motion.color] = Motion(new_beat, motion.get_attributes())
-            new_arrow = Arrow(
-                new_beat, motion.arrow.get_attributes(), new_beat.motions[motion.color]
-            )
-
-            new_prop = Prop(
-                new_beat, motion.prop.get_attributes(), new_beat.motions[motion.color]
-            )
-
-            new_ghost_arrow = GhostArrow(
-                new_beat, motion.arrow.get_attributes(), new_beat.motions[motion.color]
-            )
-
-            new_ghost_prop = GhostProp(
-                new_beat, motion.prop.get_attributes(), new_beat.motions[motion.color]
-            )
-
-            new_beat.motions[motion.color].arrow = new_arrow
-            new_beat.motions[motion.color].prop = new_prop
-            new_beat.motions[motion.color].arrow.ghost = new_ghost_arrow
-            new_beat.motions[motion.color].prop.ghost = new_ghost_prop
-
-            new_beat.arrows[motion.color] = new_arrow
-            new_beat.props[motion.color] = new_prop
-            new_beat.ghost_arrows[motion.color] = new_ghost_arrow
-            new_beat.ghost_props[motion.color] = new_ghost_prop
-
-            if new_arrow.location:
-                new_arrow.update_appearance()
-                new_ghost_arrow.update_appearance()
-
-            if new_prop.location:
-                new_prop.update_appearance()
-                new_ghost_prop.update_appearance()
-
-            new_arrow.ghost = new_ghost_arrow
-            new_prop.ghost = new_ghost_prop
-
-            new_arrow.motion = new_beat.motions[motion.color]
-            new_prop.motion = new_beat.motions[motion.color]
-            new_ghost_arrow.motion = new_beat.motions[motion.color]
-            new_ghost_prop.motion = new_beat.motions[motion.color]
-
-            new_beat.addItem(new_arrow)
-            new_beat.addItem(new_prop)
-            new_beat.addItem(new_ghost_arrow)
-            new_beat.addItem(new_ghost_prop)
-
-            new_ghost_arrow.hide()
-            new_ghost_prop.hide()
-
-            motion_dict = self.motions[motion.color].get_attributes()
-            motion_dict[ARROW] = new_arrow
-            motion_dict[PROP] = new_prop
-
-            new_arrow.motion.setup_attributes(motion_dict)
-
-        new_beat.update_pictograph()
-
-        return new_beat
-
     ### UPDATERS ###
 
     def update_attr_panel(self) -> None:
         for motion in self.motions.values():
-            self.graph_editor.attr_panel.update_attr_panel(motion.color)
+            self.main_widget.graph_editor_widget.graph_editor.attr_panel.update_attr_panel(
+                motion.color
+            )
 
     def update_pictograph(self) -> None:
         self.update_letter()

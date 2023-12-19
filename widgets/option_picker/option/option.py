@@ -17,9 +17,7 @@ class Option(Pictograph):
         option_picker: "OptionPicker",
         is_starter: bool = False,  # Set a default value for is_starter
     ) -> None:
-        super().__init__(
-            main_widget, main_widget.graph_editor_widget.graph_editor, "option"
-        )
+        super().__init__(main_widget, "option")
         self.main_widget = main_widget
         self.is_starter = is_starter
         self.option_picker: OptionPicker = option_picker

@@ -62,7 +62,6 @@ if TYPE_CHECKING:
 class PropPositioner:
     def __init__(self, scene: "Pictograph") -> None:
         self.scene = scene
-        self.view = scene.view
         self.letters: LetterDictionary = scene.main_widget.letters
 
     def update_prop_positions(self) -> None:
