@@ -22,28 +22,30 @@ class SequenceWidget(QWidget):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setAlignment(self.layout.alignment() | Qt.AlignmentFlag.AlignTop)
+        self.layout.setAlignment(
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTop
+        )
         self.layout.addWidget(self.beat_frame)
         self.layout.addWidget(self.button_frame)
 
     def resize_sequence_widget(self) -> None:
-        # The total width available for BeatViews and StartPositionView
-        total_width = self.width()
+        beat_view_height = int(self.height() * 0.9 / self.beat_frame.ROW_COUNT)
+        beat_view_width = int(beat_view_height * 75 / 90)
 
-        # Calculate the width for each BeatView based on the SequenceWidget width
-        # while accommodating for the 5 columns (4 BeatViews and 1 StartPositionView)
-        beat_view_width = int(total_width / self.beat_frame.COLUMN_COUNT)
-        # Ensure that the height respects the aspect ratio of 90:75
-        beat_view_height = int(beat_view_width * 90 / 75)
-
-        # Apply the size constraints to the BeatViews
         for beat_view in self.beat_frame.beats:
             beat_view.setMaximumSize(beat_view_width, beat_view_height)
+            beat_view.setMinimumSize(beat_view_width, beat_view_height)
 
-        # Apply the same size constraints to the StartPositionView
+        self.beat_frame.start_position_view.setMinimumSize(
+            beat_view_width, beat_view_height
+        )
+
         self.beat_frame.start_position_view.setMaximumSize(
             beat_view_width, beat_view_height
         )
 
-        # Update the layout to reflect the changes
         self.layout.update()
+        self.setMaximumWidth(
+            self.beat_frame.layout.sizeHint().width()
+            + self.button_frame.layout.sizeHint().width()
+        )

@@ -36,9 +36,3 @@ class BeatView(QGraphicsView):
         button.clicked.connect(action)
         return button
 
-    # def resizeEvent(self, event) -> None:
-    #     view_width = int(self.height() * 75 / 90)
-    #     if self.pictograph:
-    #         self.view_scale = view_width / self.pictograph.width()
-    #         self.resetTransform()
-    #         self.scale(self.view_scale, self.view_scale)

@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QPushButton
 from typing import TYPE_CHECKING
+from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
@@ -23,14 +24,12 @@ class ButtonFrame(QFrame):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-
+        self.layout.setAlignment(
+            Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight
+        )
         self.buttons = []
         self.clear_sequence_button = QPushButton("Clear Sequence")
         self.buttons.append(self.clear_sequence_button)
 
         self.layout.addWidget(self.clear_sequence_button)
 
-    def resizeEvent(self, event) -> None:
-        self.setMaximumHeight(self.button_height)
-        self.setMaximumWidth(self.beat_frame.beats[0].width())
-        self.clear_sequence_button.setMinimumHeight(self.button_height)

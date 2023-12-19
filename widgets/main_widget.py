@@ -116,13 +116,9 @@ class MainWidget(QWidget):
         left_frame_width = int(screen_size.width() * 0.40)
         right_frame_width = int(screen_size.width() * 0.50)
 
-        self.left_frame.setMinimumWidth(left_frame_width)
-        self.right_frame.setMaximumWidth(right_frame_width)
+        # self.left_frame.setMinimumWidth(left_frame_width)
+        # self.right_frame.setMaximumWidth(right_frame_width)
         self.right_layout.addWidget(self.tab_widget)
-
-        self.main_window.resize(
-            int(screen_size.width() * 0.8), int(screen_size.height() * 0.8)
-        )
 
         self.horizontal_splitter.addWidget(self.left_frame)
         self.horizontal_splitter.addWidget(self.right_frame)
@@ -172,4 +168,3 @@ class MainWidget(QWidget):
     def showEvent(self, event) -> None:
         self.option_picker_widget.resize_option_picker_widget()
         self.sequence_widget.resize_sequence_widget()
-        

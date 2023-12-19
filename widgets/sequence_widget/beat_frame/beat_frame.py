@@ -20,7 +20,8 @@ from widgets.sequence_widget.beat_frame.beat_view import BeatView
 class BeatFrame(QFrame):
     picker_updater: pyqtSignal = pyqtSignal(dict)
     COLUMN_COUNT = 5
-
+    ROW_COUNT = 4
+    
     def __init__(
         self,
         main_widget: "MainWidget",
@@ -35,7 +36,9 @@ class BeatFrame(QFrame):
         self.layout: QGridLayout = QGridLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.layout.setAlignment(
+            Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight
+        )
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.start_position_view = StartPositionView(self)
         self.start_position = StartPosition(main_widget, self)
@@ -80,18 +83,3 @@ class BeatFrame(QFrame):
             if beat.scene() is not None and beat.scene().items() != []:
                 return beat
         return self.beats[0]
-
-    def resize_beat_frame(self) -> None:
-        total_width = self.width()
-
-        beat_view_width = int(total_width / self.COLUMN_COUNT)
-        beat_view_height = int(beat_view_width * 90 / 75)
-
-        for beat_view in self.beats:
-            beat_view.setMinimumSize(beat_view_width, beat_view_height)
-            beat_view.setMaximumSize(beat_view_width, beat_view_height)
-
-        self.start_position_view.setMinimumSize(beat_view_width, beat_view_height)
-        self.start_position_view.setMaximumSize(beat_view_width, beat_view_height)
-
-        self.layout.update()

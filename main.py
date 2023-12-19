@@ -18,7 +18,7 @@ class MainWindow(QMainWindow):
         self.installEventFilter(self.main_widget)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Sequence Constructor")
-        self.show()  # Set the window to start up full screen
+        self.show() 
         screens = QGuiApplication.screens()
         screen = screens[1] if len(screens) > 1 else QGuiApplication.primaryScreen()
         available_geometry = screen.availableGeometry()
