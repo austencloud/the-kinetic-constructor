@@ -10,7 +10,7 @@ from utilities.TypeChecking.Letters import Letters
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.option_picker.option_picker import OptionPickerWidget
+    from widgets.option_picker.option_picker_scroll import OptionPickerWidget
 
 
 class LetterButtons(QFrame):

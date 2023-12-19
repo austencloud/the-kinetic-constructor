@@ -10,7 +10,7 @@ from objects.letter_item import LetterItem
 from objects.prop.prop_types import *
 from constants.string_constants import *
 from utilities.TypeChecking.TypeChecking import Colors, Locations, PropTypes
-from widgets.option_picker.option.option_view import OptionView
+from widgets.option_picker.option.option import OptionView
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph

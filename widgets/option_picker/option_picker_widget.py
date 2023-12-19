@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QSizePolicy
 from .option_picker_letter_buttons import LetterButtons
-from .option_picker import OptionPicker
+from .option_picker_scroll import OptionPickerScroll
 
 
 class OptionPickerWidget(QFrame):
@@ -20,7 +20,7 @@ class OptionPickerWidget(QFrame):
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
         self.button_frame = LetterButtons(self.main_widget, self)
-        self.option_picker = OptionPicker(self.main_widget, self)
+        self.option_picker = OptionPickerScroll(self.main_widget, self)
 
         self.main_layout.addWidget(self.option_picker)
         self.main_layout.addWidget(self.button_frame)

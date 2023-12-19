@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 
 
-class OptionPicker(QScrollArea):
+class OptionPickerScroll(QScrollArea):
     COLUMN_COUNT = 4
 
     def __init__(
@@ -54,9 +54,8 @@ class OptionPicker(QScrollArea):
             df.sort_index(inplace=True)
             return df
         except Exception as e:
-            # Handle specific exceptions as needed
             print(f"Error loading data: {e}")
-            return pd.DataFrame()  # Return an empty DataFrame in case of error
+            return pd.DataFrame()
 
     def show_start_position(self) -> None:
         self.clear()
@@ -181,16 +180,13 @@ class OptionPicker(QScrollArea):
     def _populate_options(self, clicked_option: "Option") -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)  # Show loading cursor
 
-        # Determine the current letter from the clicked option
         current_letter = clicked_option.letter_engine.get_current_letter()
         next_possible_letters = self._get_next_possible_letters(current_letter)
 
-        # Filter based on the next possible letters
         filtered_data = self.pictographs[
             self.pictographs["letter"].isin(next_possible_letters)
         ]
 
-        # Further filter based on the end position of the clicked option
         specific_end_position = get_specific_start_end_positions(
             clicked_option.motions[RED], clicked_option.motions[BLUE]
         )["end_position"]
@@ -202,22 +198,19 @@ class OptionPicker(QScrollArea):
             )
         ]
 
-        # Clear existing options and prepare for new ones
         self.options.clear()
         self.clear()
         self.option_picker_layout.setSpacing(self.spacing)
 
-        # Process filtered data and sort options
         self.options = [
             (row["letter"], self._create_option_from_row(row))
             for _, row in filtered_data.iterrows()
         ]
         self._sort_options()
 
-        # Add sorted options to the layout
         self._add_sorted_options_to_layout()
 
-        QApplication.restoreOverrideCursor()  # Restore default cursor
+        QApplication.restoreOverrideCursor()
 
     def _get_next_possible_letters(self, current_letter: Letters) -> List[Letters]:
         return rules.get(current_letter, [])
@@ -278,7 +271,6 @@ class OptionPicker(QScrollArea):
         self.main_widget.sequence_widget.beat_frame.start_position_view.set_start_position(
             start_position
         )
-
 
         # Signal the sequence widget to update the picker with new options
         self.main_widget.sequence_widget.beat_frame.picker_updater.emit(start_position)

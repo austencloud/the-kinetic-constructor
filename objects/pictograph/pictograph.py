@@ -1,7 +1,8 @@
+import re
 from typing import Dict, Literal
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtWidgets import QGraphicsScene
+from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView
 
 from data.letter_engine_data import letter_types
 from objects.arrow.arrow import Arrow
@@ -52,16 +53,12 @@ from objects.pictograph.pictograph_menu_handler import (
 )
 from objects.pictograph.position_engines.arrow_positioner import ArrowPositioner
 from objects.pictograph.position_engines.prop_positioner import PropPositioner
-from widgets.graph_editor_widget.main_pictograph_view import MainPictographView
 
-from widgets.option_picker.option.option_view import OptionView
-from widgets.sequence_widget.beat_frame.start_position_view import StartPositionView
 
 if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
     from widgets.main_widget import MainWidget
     from widgets.graph_editor_widget.graph_editor import GraphEditor
-from widgets.sequence_widget.beat_frame.beat_view import BeatView
 
 from objects.letter_item import LetterItem
 
@@ -70,7 +67,7 @@ class Pictograph(QGraphicsScene):
     def __init__(
         self,
         main_widget: "MainWidget",
-        graph_type: Literal["main", "option", "beat", "image_generator"],
+        graph_type: Literal["main", "option", "beat", "start_position", "image_generator"],
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -100,14 +97,7 @@ class Pictograph(QGraphicsScene):
 
         self.grid: Grid = self.initializer.init_grid()
 
-        if self.graph_type == "main":
-            self.view = MainPictographView(self)
-        elif self.graph_type == "option":
-            self.view = OptionView(self)
-        elif self.graph_type == "beat":
-            self.view = BeatView(self)
-        elif self.graph_type == "start_position":
-            self.view = StartPositionView(self)
+        self.view = self.init_view(self.graph_type)
 
         self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.locations: Dict[
@@ -127,6 +117,25 @@ class Pictograph(QGraphicsScene):
         )
 
         self.setup_managers(main_widget)
+
+    def init_view(self, graph_type) -> QGraphicsView:
+        from widgets.graph_editor_widget.main_pictograph_view import MainPictographView
+        from widgets.option_picker.option.option import OptionView
+        from widgets.sequence_widget.beat_frame.start_position import StartPositionView
+        from widgets.sequence_widget.beat_frame.beat import BeatView
+        from widgets.image_generator_tab.ig_pictograph import IG_Pictograph_View
+
+        if graph_type == "main":
+            view = MainPictographView(self)
+        elif graph_type == "option":
+            view = OptionView(self)
+        elif graph_type == "beat":
+            view = BeatView(self)
+        elif graph_type == "start_position":
+            view = StartPositionView(self)
+        elif graph_type == "image_generator":
+            view = IG_Pictograph_View(self)
+        return view
 
     def set_letter_renderer(self, letter: str) -> None:
         letter_type = self.get_current_letter_type()

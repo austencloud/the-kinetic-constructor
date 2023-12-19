@@ -6,7 +6,7 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from constants.string_constants import BLUE, RED
 from widgets.sequence_widget.beat_frame.beat import Beat
 from widgets.sequence_widget.beat_frame.start_position import StartPosition
-from widgets.sequence_widget.beat_frame.start_position_view import StartPositionView
+from widgets.sequence_widget.beat_frame.start_position import StartPositionView
 
 from objects.pictograph.pictograph import Pictograph
 
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
-from widgets.sequence_widget.beat_frame.beat_view import BeatView
+from widgets.sequence_widget.beat_frame.beat import BeatView
 
 
 class BeatFrame(QFrame):
@@ -51,14 +51,14 @@ class BeatFrame(QFrame):
             for i in range(1, self.COLUMN_COUNT):
                 self._add_beat_to_layout(j, i)
 
-    def _add_beat_to_layout(self, row: int, col: int):
+    def _add_beat_to_layout(self, row: int, col: int) -> None:
         beat_view = BeatView(self)
         beat = Beat(self.main_widget, self)
         beat_view.beat = beat
         self.layout.addWidget(beat_view, row, col)
         self.beats.append(beat_view)
 
-    def add_start_position(self, start_position: "StartPosition"):
+    def add_start_position(self, start_position: "StartPosition") -> None:
         self.start_position_view.set_start_position(start_position)
 
     def add_scene_to_sequence(self, clicked_option: "Pictograph") -> None:
