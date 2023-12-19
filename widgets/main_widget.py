@@ -36,7 +36,6 @@ class MainWidget(QWidget):
         self.key_event_handler = KeyEventHandler()
         self.json_handler = JsonHandler()
         self.letters: LetterDictionary = self.json_handler.load_all_letters()
-
         self.graph_editor_widget = GraphEditorWidget(self)
         self.sequence_widget = SequenceWidget(self)
         self.option_picker_widget = OptionPickerWidget(self)

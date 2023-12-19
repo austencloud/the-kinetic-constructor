@@ -8,20 +8,20 @@ from widgets.sequence_widget.beat_frame.beat import Beat
 from widgets.sequence_widget.beat_frame.start_position import StartPosition
 from widgets.sequence_widget.beat_frame.start_position_view import StartPositionView
 
+from objects.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from objects.pictograph.pictograph import Pictograph
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 from widgets.sequence_widget.beat_frame.beat_view import BeatView
 
 
 class BeatFrame(QFrame):
-    picker_updater: pyqtSignal = pyqtSignal(dict)
+    picker_updater: pyqtSignal = pyqtSignal(Pictograph)
     COLUMN_COUNT = 5
     ROW_COUNT = 4
-    
+
     def __init__(
         self,
         main_widget: "MainWidget",
@@ -61,16 +61,12 @@ class BeatFrame(QFrame):
     def add_start_position(self, start_position: "StartPosition"):
         self.start_position_view.set_start_position(start_position)
 
-    def add_scene_to_sequence(self, copied_scene: "Pictograph") -> None:
+    def add_scene_to_sequence(self, clicked_option: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
-            self.beats[next_beat_index].set_pictograph(copied_scene)
-        new_motions = {
-            "red_motion": copied_scene.motions[RED],
-            "blue_motion": copied_scene.motions[BLUE],
-        }
+            self.beats[next_beat_index].set_pictograph(clicked_option)
 
-        self.picker_updater.emit(new_motions)
+        self.picker_updater.emit(clicked_option)
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):

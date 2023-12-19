@@ -130,9 +130,9 @@ class Motion:
     def get_end_layer(self) -> Layers:
         if self.start_layer:
             if self.turns or self.turns == 0:
-                if self.turns in [0, 1, 2]:
+                if self.turns in [0, 1, 2, 3]:
                     end_layer = self.start_layer
-                elif self.turns in [0.5, 1.5]:
+                elif self.turns in [0.5, 1.5, 2.5]:
                     end_layer = 3 - self.start_layer  # Switches between 1 and 2
                 return end_layer
 

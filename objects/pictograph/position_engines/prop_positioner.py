@@ -226,15 +226,7 @@ class PropPositioner:
     def reposition_static_beta(
         self, move_prop: callable, static_motions: List[MotionAttributesDicts]
     ) -> None:
-        # # if there's a combination of a BIGHOOP and a CLUB in the prop_type_counts dictionary
-        # if self.prop_type_counts[BIGHOOP] == 1 and self.prop_type_counts[CLUB] == 1:
-        #     for prop in self.scene.props.values():
-        #         if prop.prop_type == BIGHOOP:
-        #             self.set_strict_prop_locations(prop)
-        #         elif prop.prop_type == CLUB:
-        #             self.set_default_prop_locations(prop)
 
-        # else:
         for motion in static_motions:
             prop = next(
                 (
@@ -247,7 +239,6 @@ class PropPositioner:
             if not prop:
                 continue
 
-            # Check if there's another prop at the same location but in a different layer
             other_prop = next(
                 (
                     other
@@ -257,7 +248,6 @@ class PropPositioner:
                 None,
             )
 
-            # If the other prop is in a different layer, set both props to default locations
             if other_prop and other_prop.layer != prop.layer:
                 if prop.prop_type in [
                     STAFF,
@@ -356,6 +346,7 @@ class PropPositioner:
                             ),
                             direction,
                         )
+                        
         # check if one prop is in layer 1 and the other is in layer 2
         elif any(prop.layer == 1 for prop in self.scene.props.values()) and any(
             prop.layer == 2 for prop in self.scene.props.values()

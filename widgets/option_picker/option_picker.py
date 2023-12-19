@@ -1,9 +1,10 @@
 from typing import Callable, Dict, List, TYPE_CHECKING, Tuple
-from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout
+from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout, QApplication
 from PyQt6.QtCore import Qt
 import pandas as pd
+from data.rules import rules
 from constants.string_constants import *
-from data.positions_map import positions_map
+from data.positions_map import get_specific_start_end_positions, positions_map
 from objects.arrow.arrow import Arrow
 from objects.motion import Motion
 from objects.prop.prop import Prop
@@ -142,6 +143,13 @@ class OptionPicker(QScrollArea):
                 motion.arrow.update_mirror()
                 motion.arrow.update_appearance()
                 motion.prop.update_appearance()
+                motion.arrow.motion = motion
+                motion.prop.motion = motion
+                motion.arrow.ghost = option.ghost_arrows[motion.color]
+                motion.arrow.ghost.motion = motion
+                motion.arrow.ghost.set_is_svg_mirrored_from_attributes()
+                motion.arrow.ghost.update_appearance()
+                motion.arrow.ghost.update_mirror()
         option.update_pictograph()
 
     def _create_motion_dict(self, row_data, color: str) -> Dict:
@@ -158,16 +166,9 @@ class OptionPicker(QScrollArea):
 
     ### UPDATE ###
 
-    def update_options(self, new_motions) -> None:
+    def update_options(self, clicked_option) -> None:
         try:
-            new_red_motion: Motion = new_motions["red_motion"]
-            new_blue_motion: Motion = new_motions["blue_motion"]
-            self._populate_options(
-                new_red_motion.end_location,
-                new_red_motion.end_orientation,
-                new_blue_motion.end_location,
-                new_blue_motion.end_orientation,
-            )
+            self._populate_options(clicked_option)
         except KeyError as e:
             print(f"Motion key missing: {e}")
 
@@ -177,57 +178,82 @@ class OptionPicker(QScrollArea):
             if child.widget():
                 child.widget().deleteLater()
 
-    def _populate_options(
-        self,
-        red_end_position: str,
-        red_end_orientation: str,
-        blue_end_position: str,
-        blue_end_orientation: str,
-    ) -> None:
-        # Clear the current options
+    def _populate_options(self, clicked_option: "Option") -> None:
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)  # Show loading cursor
+
+        # Determine the current letter from the clicked option
+        current_letter = clicked_option.letter_engine.get_current_letter()
+        next_possible_letters = self._get_next_possible_letters(current_letter)
+
+        # Filter based on the next possible letters
+        filtered_data = self.pictographs[
+            self.pictographs["letter"].isin(next_possible_letters)
+        ]
+
+        # Further filter based on the end position of the clicked option
+        specific_end_position = get_specific_start_end_positions(
+            clicked_option.motions[RED], clicked_option.motions[BLUE]
+        )["end_position"]
+
+        filtered_data = filtered_data[
+            (
+                filtered_data.index.get_level_values("start_position")
+                == specific_end_position
+            )
+        ]
+
+        # Clear existing options and prepare for new ones
         self.options.clear()
         self.clear()
         self.option_picker_layout.setSpacing(self.spacing)
 
-        # Translate end positions and orientations into a specific position
-        specific_end_position = positions_map.get(
-            (red_end_position, RED, blue_end_position, BLUE)
-        )
-
-        # Filter the DataFrame for options where the start position matches specific_end_position
-        # and start orientations match the end orientations
-        filtered_data = self.pictographs[
-            (
-                self.pictographs.index.get_level_values("start_position")
-                == specific_end_position
-            )
-            & (self.pictographs["red_start_orientation"] == red_end_orientation)
-            & (self.pictographs["blue_start_orientation"] == blue_end_orientation)
+        # Process filtered data and sort options
+        self.options = [
+            (row["letter"], self._create_option_from_row(row))
+            for _, row in filtered_data.iterrows()
         ]
+        self._sort_options()
 
-        # Create a list of options with associated letters for sorting
-        unsorted_options = []
-        for (start_pos, end_pos), row_data in filtered_data.iterrows():
-            attributes_list = [
-                self._create_motion_dict(row_data, "blue"),
-                self._create_motion_dict(row_data, "red"),
-            ]
-            option: Option = self._create_option(attributes_list)
-            letter = row_data["letter"]
-            unsorted_options.append((letter, option))
+        # Add sorted options to the layout
+        self._add_sorted_options_to_layout()
 
-        # Define custom sort order
+        QApplication.restoreOverrideCursor()  # Restore default cursor
+
+    def _get_next_possible_letters(self, current_letter: Letters) -> List[Letters]:
+        return rules.get(current_letter, [])
+
+    def _create_option_from_row(self, row_data: pd.Series) -> "Option":
+        """
+        Creates an Option object from a row of the DataFrame.
+
+        Args:
+            row_data (pd.Series): The row data from the DataFrame.
+
+        Returns:
+            Option: The created Option object.
+        """
+        option = Option(self.main_widget, self)
+        option.setSceneRect(0, 0, 750, 900)
+
+        # Extract motion dictionaries for each color and add to the option
+        for color in [RED, BLUE]:
+            motion_dict = self._create_motion_dict(row_data, color)
+            self._add_motion_to_option(option, motion_dict)
+
+            self._finalize_option_setup(option, motion_dict)
+        option.view.resize_option_view()
+        option.update_pictograph()
+
+        return option
+
+    def _sort_options(self):
         custom_sort_order = "ABCDEFGHIJKLMNOPQRSTUVWXYZΣΔθΩΦΨΛαβΓ"
         custom_order_dict = {
             char: index for index, char in enumerate(custom_sort_order)
         }
+        self.options.sort(key=lambda x: custom_order_dict.get(x[0], float("inf")))
 
-        # Sort the options based on the custom order
-        self.options = sorted(
-            unsorted_options, key=lambda x: custom_order_dict.get(x[0], float("inf"))
-        )
-
-        # Add the sorted options to the layout
+    def _add_sorted_options_to_layout(self):
         for row, (letter, option) in enumerate(self.options):
             self._add_option_to_layout(
                 option,
@@ -235,8 +261,6 @@ class OptionPicker(QScrollArea):
                 row=row // self.COLUMN_COUNT,
                 col=row % self.COLUMN_COUNT,
             )
-
-        self.resize_option_picker()
 
     ### GETTERS ###
 
@@ -255,23 +279,9 @@ class OptionPicker(QScrollArea):
             start_position
         )
 
-        red_motion_attributes = start_position.motions[RED].get_attributes()
-        blue_motion_attributes = start_position.motions[BLUE].get_attributes()
-
-        self._populate_options(
-            red_motion_attributes[END_LOCATION],
-            red_motion_attributes[END_ORIENTATION],
-            blue_motion_attributes[END_LOCATION],
-            blue_motion_attributes[END_ORIENTATION],
-        )
 
         # Signal the sequence widget to update the picker with new options
-        self.main_widget.sequence_widget.beat_frame.picker_updater.emit(
-            {
-                "red_motion": start_position.motions[RED],
-                "blue_motion": start_position.motions[BLUE],
-            }
-        )
+        self.main_widget.sequence_widget.beat_frame.picker_updater.emit(start_position)
 
     @staticmethod
     def get_prop_attributes(color: str) -> Dict:
@@ -306,12 +316,7 @@ class OptionPicker(QScrollArea):
     def _on_option_clicked(self, clicked_option: "Option") -> None:
         red_motion_attributes = clicked_option.motions[RED].get_attributes()
         blue_motion_attributes = clicked_option.motions[BLUE].get_attributes()
-        self._populate_options(
-            red_motion_attributes[END_LOCATION],
-            red_motion_attributes[END_ORIENTATION],
-            blue_motion_attributes[END_LOCATION],
-            blue_motion_attributes[END_ORIENTATION],
-        )
+        self._populate_options(clicked_option)
         new_beat = clicked_option.create_new_beat()
         self.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(new_beat)
 

@@ -46,11 +46,19 @@ class Profiler:
             f.write("\n\n")  # Separate the two sections
             f.write("Organized by total time:\n\n")
             self._write_stats_section(f, stats, "time", app_root)
+            f.write("\n\n")  # Separate the two sections
+            f.write("Organized by cumulative time:\n\n")
+            self._write_stats_section(f, stats, "cumulative", app_root)
 
     def _write_stats_section(self, file, stats, sort_by: str, app_root: str) -> None:
         stats.sort_stats(sort_by)
         header = "{:>10} {:>15} {:>15} {:>20} {:>20} {:>30}\n".format(
-            "Calls", "Total Time", "Per Call", "Cumulative Time", "Per Call (Cum)", "Function"
+            "Calls",
+            "Total Time",
+            "Per Call",
+            "Cumulative Time",
+            "Per Call (Cum)",
+            "Function",
         )
         file.write(header)
         file.write("-" * 115 + "\n")
@@ -67,11 +75,14 @@ class Profiler:
             sorted_stats = sorted(filtered_stats, key=lambda x: x[1][0], reverse=True)
         elif sort_by == "time":
             sorted_stats = sorted(filtered_stats, key=lambda x: x[1][2], reverse=True)
+        elif sort_by == "cumulative":
+            sorted_stats = sorted(filtered_stats, key=lambda x: x[1][3], reverse=True)
 
         for func, stat_info in sorted_stats:
             file_name, line_number, func_name = func
             file_path = os.path.join(
-                os.path.basename(os.path.dirname(file_name)), os.path.basename(file_name)
+                os.path.basename(os.path.dirname(file_name)),
+                os.path.basename(file_name),
             )
             function_info = f"{file_path}:{line_number}"
             cc, nc, tt, ct, callers = stat_info
