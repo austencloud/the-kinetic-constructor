@@ -108,6 +108,9 @@ class AttrBox(QFrame):
         self.setMaximumWidth(int(self.pictograph.view.width() * 0.85))
         self.setMinimumHeight(self.pictograph.view.height())
         self.setMaximumHeight(self.pictograph.view.height())
+        
+        for button in self.findChildren(CustomButton):
+            button.update_custom_button_size(int(self.width() / 8))
 
         self.header_spacing = int(self.width() * 0.02)
         ratio_total = 1 + 1 + 1 + 2
@@ -128,5 +131,3 @@ class AttrBox(QFrame):
 
         self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
 
-        for button in self.findChildren(CustomButton):
-            button.update_custom_button_size()

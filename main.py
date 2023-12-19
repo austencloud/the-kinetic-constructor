@@ -22,7 +22,11 @@ class MainWindow(QMainWindow):
         screens = QGuiApplication.screens()
         screen = screens[1] if len(screens) > 1 else QGuiApplication.primaryScreen()
         available_geometry = screen.availableGeometry()
-        self.move(available_geometry.x(), available_geometry.y())
+        window_width = self.main_widget.width()
+        window_height = self.main_widget.height()
+        x = available_geometry.x() + (available_geometry.width() - window_width) // 2
+        y = available_geometry.y() + (available_geometry.height() - window_height) // 2
+        self.setGeometry(x, y, window_width, window_height)
 
     def exec_with_profiling(self, app: QApplication) -> int:
         for func in [app.exec, self.show]:

@@ -55,6 +55,49 @@ class MainWidget(QWidget):
         self.left_layout.addWidget(self.sequence_widget)
 
         self.tab_widget = QTabWidget()
+        self.tab_widget.setStyleSheet(
+            """
+            QTabWidget::pane { /* The tab widget frame */
+                border-top: 2px solid #C2C7CB;
+            }
+
+
+            /* Style the tab using the tab sub-control. Note that
+                it uses a QTabBar sub-control called tab. */
+            QTabBar::tab {
+                background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                            stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
+                                            stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
+                border: 2px solid #C4C4C3;
+                border-bottom-color: #C2C7CB; /* same as the pane color */
+                border-top-left-radius: 4px;
+                border-top-right-radius: 4px;
+                min-width: 8ex;
+                padding: 2px;
+                font-size: 14px; /* Increase the font size */
+            }
+
+            QTabBar::tab:selected, QTabBar::tab:hover {
+                background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                            stop: 0 #fafafa, stop: 0.4 #f4f4f4,
+                                            stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);
+            }
+
+            QTabBar::tab:selected {
+                border-color: #9B9B9B;
+                border-bottom-color: #C2C7CB; /* same as pane color */
+            }
+
+            QTabBar::tab:!selected {
+                margin-top: 2px; /* make non-selected tabs look smaller */
+            }
+
+            QTabBar::tab:!selected {
+                font-size: 14px; /* Increase the font size */
+            }
+
+            """
+        )
         self.tab_widget.addTab(self.option_picker_widget, "Option Picker")
         self.tab_widget.addTab(self.graph_editor_widget, "Graph Editor")
         # self.tab_widget.currentChanged.connect(self.showEvent)
@@ -70,9 +113,10 @@ class MainWidget(QWidget):
 
         screen = QApplication.primaryScreen()
         screen_size = screen.size()
-        left_frame_width = int(screen_size.width() * 0.30)
-        right_frame_width = int(screen_size.width() * 0.40)
+        left_frame_width = int(screen_size.width() * 0.40)
+        right_frame_width = int(screen_size.width() * 0.50)
 
+        self.left_frame.setMinimumWidth(left_frame_width)
         self.right_frame.setMaximumWidth(right_frame_width)
         self.right_layout.addWidget(self.tab_widget)
 
@@ -83,7 +127,7 @@ class MainWidget(QWidget):
         self.horizontal_splitter.addWidget(self.left_frame)
         self.horizontal_splitter.addWidget(self.right_frame)
 
-        self.horizontal_splitter.setSizes([left_frame_width, right_frame_width])
+        # self.horizontal_splitter.setSizes([left_frame_width, right_frame_width])
 
         self.main_layout = QHBoxLayout(self)
         self.main_layout.addWidget(self.horizontal_splitter)

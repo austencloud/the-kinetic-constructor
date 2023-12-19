@@ -42,6 +42,7 @@ class TurnsWidget(AttrBoxWidget):
         # self.add_black_borders()
 
     ### LAYOUTS ###
+
     def add_black_borders(self) -> None:
         self.setStyleSheet("border: 1px solid black;")
         self.header_frame.setStyleSheet("border: 1px solid black;")
@@ -155,14 +156,8 @@ class TurnsWidget(AttrBoxWidget):
 
     def _create_turns_button(self, text: str) -> CustomButton:
         """Creates a turn adjustment button with specified text."""
-        button_size = int(self.attr_box.width() * 0.2)
-        if text in ["-1", "+1"]:
-            button_size = int(button_size * 0.75)  # Half turn buttons are smaller
-
         button = CustomButton(self)
         button.setText(text)
-        button.setFont(QFont("Arial", int(button_size / 3)))
-        # Set the appropriate callback based on the button text
         if text == "-1":
             button.clicked.connect(self._subtract_turn_callback)
         elif text == "-0.5":
@@ -251,7 +246,7 @@ class TurnsWidget(AttrBoxWidget):
         header_height = int(available_height * 2 / 3)
         turns_widget_height = int(available_height * 1 / 3)
         self.header_frame.setMaximumHeight(header_height)
-        self.button_frame.setMaximumHeight(self.button_frame.height())  
+        # self.button_frame.setMaximumHeight(self.button_frame.height())
 
     def _update_clock_size(self) -> None:
         """Updates the sizes of the clock labels based on the widget's size."""
@@ -312,11 +307,17 @@ class TurnsWidget(AttrBoxWidget):
         self.turnbox_vbox_frame.setMaximumWidth(int(self.attr_box.width() / 3.25))
 
     def _update_button_size(self) -> None:
+        
         for button in self.buttons:
-            button.setFont(QFont("Arial", int(button.height() / 2)))
+            button_size = int(self.attr_box.width() / 7)
+            if button.text() == "-0.5" or button.text() == "+0.5":
+                button_size = int(button_size * 0.85)
+            else:
+                button_size = int(self.attr_box.width() / 6)
+            button.update_custom_button_size(button_size)
 
     def resize_turns_widget(self):
-        self._update_button_size()
-        self._update_widget_sizes()
         self._update_clock_size()
         self._update_turnbox_size()
+        self._update_button_size()
+        self._update_widget_sizes()
