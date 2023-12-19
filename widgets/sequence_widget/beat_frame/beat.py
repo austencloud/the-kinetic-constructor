@@ -18,16 +18,14 @@ if TYPE_CHECKING:
 
 
 class Beat(Pictograph):
-    def __init__(self, main_widget: "MainWidget", beat_frame: "BeatFrame") -> None:
+    def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget, "beat")
         self.main_widget = main_widget
-        self.beat_frame = beat_frame
 
 
 class BeatView(QGraphicsView):
     def __init__(self, beat_frame: "BeatFrame") -> None:
         super().__init__(beat_frame)
-        self.beat_frame = beat_frame
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)

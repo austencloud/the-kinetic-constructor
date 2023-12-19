@@ -16,9 +16,8 @@ from PyQt6.QtGui import QImage, QPainter
 from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
 from widgets.image_generator_tab.ig_pictograph import IG_Pictograph
-from widgets.image_generator_tab.ig_scroll_area import IG_Scroll_Area
+from widgets.image_generator_tab.ig_scroll import IG_Scroll
 
-from widgets.option_picker.option.option import Option
 from constants.string_constants import (
     COLOR,
     MOTION_TYPE,
@@ -36,7 +35,7 @@ if TYPE_CHECKING:
 from typing import List
 
 
-class ImageGeneratorTab(QWidget):
+class IGTab(QWidget):
     imageGenerated = pyqtSignal(str)  # Signal to indicate when an image is generated
 
     ### INITIALIZATION ###
@@ -88,8 +87,10 @@ class ImageGeneratorTab(QWidget):
         layout.addWidget(self.generate_selected_button)
 
         # Improved layout setup
-        self.options_layout = QGridLayout()  # Use a grid layout for pictograph options
-        layout.addLayout(self.options_layout)
+        self.ig_pictographs_layout = (
+            QGridLayout()
+        )  # Use a grid layout for pictograph ig_pictographs
+        layout.addLayout(self.ig_pictographs_layout)
 
         # Position the buttons more intuitively
         buttons_layout = QHBoxLayout()
@@ -98,7 +99,7 @@ class ImageGeneratorTab(QWidget):
         layout.addLayout(buttons_layout)
 
         # Create a scroll area for pictograph views
-        self.ig_scroll_area = IG_Scroll_Area(self.main_widget, self)
+        self.ig_scroll_area = IG_Scroll(self.main_widget, self)
 
         layout.addWidget(self.ig_scroll_area)
 
@@ -149,15 +150,14 @@ class ImageGeneratorTab(QWidget):
         ]
 
         # Generate an image for each pictograph
-        for index, pictograph in pictographs_for_letter.iterrows():
+        for index, pictograph_data in pictographs_for_letter.iterrows():
             # Updated to use actual pictograph data
-            checkbox_text = f"{pictograph['letter']}_"
-            checkbox = QCheckBox(checkbox_text)
-            checkbox.stateChanged.connect(
-                lambda state, idx=index: self.toggle_pictograph_selection(state, idx)
-            )
-            self.layout().addWidget(checkbox)
-            self.render_pictograph_to_image(pictograph)
+            # checkbox_text = f"{pictograph_data['letter']}_"
+            # checkbox = QCheckBox(checkbox_text)
+            # checkbox.stateChanged.connect(
+            #     lambda state, idx=index: self.toggle_pictograph_selection(state, idx)
+            # )
+            self.render_pictograph_to_image(pictograph_data)
 
     def toggle_pictograph_selection(self, state, index) -> None:
         if state == Qt.CheckState.Checked:
@@ -165,28 +165,31 @@ class ImageGeneratorTab(QWidget):
         else:
             self.selected_pictographs.remove(index)
 
-    def render_pictograph_to_image(self, pictograph) -> None:
-        # Create an Option instance from the pictograph data
-        option = self._create_option_from_pictograph_data(pictograph)
-        option.view.resize_option_view()
+    def render_pictograph_to_image(self, pictograph_data) -> None:
+        # Create an IG_Pictograph instance from the pictograph data
+        ig_pictograph = self._create_ig_pictograph_from_pictograph_data(pictograph_data)
         # Render scene to QImage
         image = QImage(
-            int(option.width()), int(option.height()), QImage.Format.Format_ARGB32
+            int(ig_pictograph.width()),
+            int(ig_pictograph.height()),
+            QImage.Format.Format_ARGB32,
         )
         painter = QPainter(image)
-        option.render(painter)
+        ig_pictograph.render(painter)
         painter.end()
 
         # Save image to file
-        image_path = self.get_image_path(pictograph)
+        image_path = self.get_image_path(pictograph_data)
         image.save(image_path)
         self.imageGenerated.emit(image_path)
 
     ### OPTION CREATION ###
 
-    def _create_option_from_pictograph_data(self, pictograph_data) -> Option:
-        option = Option(self.main_widget, self)
-        option.setSceneRect(0, 0, 750, 900)
+    def _create_ig_pictograph_from_pictograph_data(
+        self, pictograph_data
+    ) -> IG_Pictograph:
+        ig_pictograph = IG_Pictograph(self.main_widget, self.ig_scroll_area)
+        ig_pictograph.setSceneRect(0, 0, 750, 900)
 
         # Use the existing method to create motion dictionaries
         motion_dicts = [
@@ -194,29 +197,31 @@ class ImageGeneratorTab(QWidget):
             for color in ["blue", "red"]
         ]
 
-        # Add motions, arrows, and props to the Option instance
+        # Add motions, arrows, and props to the IG_Pictograph instance
         for motion_dict in motion_dicts:
-            self._add_motion_to_option(option, motion_dict)
-            self._finalize_option_setup(option, motion_dict)
+            self._add_motion_to_ig_pictograph(ig_pictograph, motion_dict)
+            self._finalize_ig_pictograph_setup(ig_pictograph, motion_dict)
 
-        option.view.resize_option_view()
-        option.update_pictograph()
+        ig_pictograph.view.resize_ig_pictograph()
+        ig_pictograph.update_pictograph()
 
-        return option
+        return ig_pictograph
 
-    def _create_arrow(self, option: "Option", motion_dict: Dict) -> Arrow:
+    def _create_arrow(self, ig_pictograph: "IG_Pictograph", motion_dict: Dict) -> Arrow:
         arrow_dict = {
             COLOR: motion_dict[COLOR],
             MOTION_TYPE: motion_dict[MOTION_TYPE],
             TURNS: motion_dict[TURNS],
         }
-        arrow = Arrow(option, arrow_dict, option.motions[motion_dict[COLOR]])
-        option.arrows[arrow.color] = arrow
-        arrow.motion = option.motions[arrow.color]
-        option.addItem(arrow)
+        arrow = Arrow(
+            ig_pictograph, arrow_dict, ig_pictograph.motions[motion_dict[COLOR]]
+        )
+        ig_pictograph.arrows[arrow.color] = arrow
+        arrow.motion = ig_pictograph.motions[arrow.color]
+        ig_pictograph.addItem(arrow)
         return arrow
 
-    def _create_prop(self, option: "Option", motion_dict: Dict) -> Prop:
+    def _create_prop(self, ig_pictograph: "IG_Pictograph", motion_dict: Dict) -> Prop:
         prop_dict = {
             COLOR: motion_dict[COLOR],
             PROP_TYPE: self.main_pictograph.prop_type,
@@ -224,18 +229,20 @@ class ImageGeneratorTab(QWidget):
             LAYER: 1,
             ORIENTATION: IN,
         }
-        prop = Prop(option, prop_dict, option.motions[motion_dict[COLOR]])
-        option.props[prop.color] = prop
-        prop.motion = option.motions[prop.color]
-        option.addItem(prop)
+        prop = Prop(ig_pictograph, prop_dict, ig_pictograph.motions[motion_dict[COLOR]])
+        ig_pictograph.props[prop.color] = prop
+        prop.motion = ig_pictograph.motions[prop.color]
+        ig_pictograph.addItem(prop)
         return prop
 
-    def _finalize_option_setup(self, option: "Option", motion_dict) -> None:
-        for motion in option.motions.values():
+    def _finalize_ig_pictograph_setup(
+        self, ig_pictograph: "IG_Pictograph", motion_dict
+    ) -> None:
+        for motion in ig_pictograph.motions.values():
             if motion.color == motion_dict[COLOR]:
                 motion.setup_attributes(motion_dict)
-                motion.arrow = option.arrows[motion.color]
-                motion.prop = option.props[motion.color]
+                motion.arrow = ig_pictograph.arrows[motion.color]
+                motion.prop = ig_pictograph.props[motion.color]
                 motion.assign_location_to_arrow()
                 motion.update_prop_orientation_and_layer()
                 motion.arrow.set_is_svg_mirrored_from_attributes()
@@ -244,24 +251,28 @@ class ImageGeneratorTab(QWidget):
                 motion.prop.update_appearance()
                 motion.arrow.motion = motion
                 motion.prop.motion = motion
-                motion.arrow.ghost = option.ghost_arrows[motion.color]
+                motion.arrow.ghost = ig_pictograph.ghost_arrows[motion.color]
                 motion.arrow.ghost.motion = motion
                 motion.arrow.ghost.set_is_svg_mirrored_from_attributes()
                 motion.arrow.ghost.update_appearance()
                 motion.arrow.ghost.update_mirror()
-        option.update_pictograph()
+        ig_pictograph.update_pictograph()
 
     @staticmethod
-    def _setup_motion_relations(option: Option, arrow: Arrow, prop: Prop) -> None:
-        motion = option.motions[arrow.color]
+    def _setup_motion_relations(
+        ig_pictograph: IG_Pictograph, arrow: Arrow, prop: Prop
+    ) -> None:
+        motion = ig_pictograph.motions[arrow.color]
         arrow.motion, prop.motion = motion, motion
-        arrow.ghost = option.ghost_arrows[arrow.color]
+        arrow.ghost = ig_pictograph.ghost_arrows[arrow.color]
         arrow.ghost.motion = motion
 
-    def _add_motion_to_option(self, option: "Option", motion_dict: Dict) -> None:
-        arrow = self._create_arrow(option, motion_dict)
-        prop = self._create_prop(option, motion_dict)
-        self._setup_motion_relations(option, arrow, prop)
+    def _add_motion_to_ig_pictograph(
+        self, ig_pictograph: "IG_Pictograph", motion_dict: Dict
+    ) -> None:
+        arrow = self._create_arrow(ig_pictograph, motion_dict)
+        prop = self._create_prop(ig_pictograph, motion_dict)
+        self._setup_motion_relations(ig_pictograph, arrow, prop)
 
     def _create_motion_dict(self, row_data, color: str) -> Dict:
         return {
@@ -305,3 +316,5 @@ class ImageGeneratorTab(QWidget):
     def clear_images(self) -> None:
         # Optional: Clear images if necessary before generation
         pass
+
+        

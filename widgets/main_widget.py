@@ -16,7 +16,7 @@ from utilities.json_handler import JsonHandler
 from widgets.graph_editor_widget.graph_editor_widget import GraphEditorWidget
 from widgets.graph_editor_widget.key_event_handler import KeyEventHandler
 from objects.pictograph.pictograph import Pictograph
-from widgets.image_generator_tab.ig_tab import ImageGeneratorTab
+from widgets.image_generator_tab.ig_tab import IGTab
 from widgets.option_picker.option_picker_widget import OptionPickerWidget
 from widgets.sequence_widget.sequence_widget import SequenceWidget
 from widgets.styled_splitter import StyledSplitter
@@ -40,7 +40,7 @@ class MainWidget(QWidget):
         self.graph_editor_widget = GraphEditorWidget(self)
         self.sequence_widget = SequenceWidget(self)
         self.option_picker_widget = OptionPickerWidget(self)
-        self.image_generator_tab = ImageGeneratorTab(self)
+        self.image_generator_tab = IGTab(self)
         self.image_generator_tab.imageGenerated.connect(self.on_image_generated)
         self.configure_layouts()
 
@@ -172,3 +172,4 @@ class MainWidget(QWidget):
 
     def on_image_generated(self, image_path):
         print(f"Image generated at {image_path}")
+

@@ -306,8 +306,6 @@ class OptionPickerScroll(QScrollArea):
         option.update_pictograph()
 
     def _on_option_clicked(self, clicked_option: "Option") -> None:
-        red_motion_attributes = clicked_option.motions[RED].get_attributes()
-        blue_motion_attributes = clicked_option.motions[BLUE].get_attributes()
         self._populate_options(clicked_option)
         new_beat = clicked_option.create_new_beat()
         self.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(new_beat)

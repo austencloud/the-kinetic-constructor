@@ -4,12 +4,12 @@ from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
 from widgets.image_generator_tab.ig_pictograph import IG_Pictograph
 
 if TYPE_CHECKING:
-    from widgets.image_generator_tab.ig_tab import ImageGeneratorTab
+    from widgets.image_generator_tab.ig_tab import IGTab
     from widgets.main_widget import MainWidget
 
 
-class IG_Scroll_Area(QScrollArea):
-    def __init__(self, main_widget: "MainWidget", ig_tab: "ImageGeneratorTab"):
+class IG_Scroll(QScrollArea):
+    def __init__(self, main_widget: "MainWidget", ig_tab: "IGTab"):
         super().__init__(ig_tab)
         self.main_widget = main_widget
         self.ig_tab = ig_tab
@@ -50,5 +50,21 @@ class IG_Scroll_Area(QScrollArea):
             self.pictograph_layout.addWidget(ig_pictograph.view, row, col)
             self.ig_pictographs.append(ig_pictograph)
 
-        # Update the container size based on the content
-        self.pictograph_container.setMinimumSize(self.pictograph_layout.sizeHint())
+            # Determine size for IG_Pictograph_View based on scroll area's width
+            view_width = self.viewport().width() // self.COLUMN_COUNT - (self.spacing * (self.COLUMN_COUNT - 1))
+            view_height = int(view_width * (ig_pictograph.height() / ig_pictograph.width()))
+            
+            # Set the size for the view
+            ig_pictograph.view.resize_ig_pictograph()
+
+        # Update the container and scroll area after adding all pictographs
+        self.update_scroll_area_content()
+
+    def resize_ig_scroll_area(self) -> None:
+        for ig_pictograph in self.ig_pictographs:
+            ig_pictograph.view.resize_ig_pictograph()
+            
+    def update_scroll_area_content(self):
+        self.pictograph_container.adjustSize()
+        self.pictograph_layout.update()
+        self.updateGeometry()

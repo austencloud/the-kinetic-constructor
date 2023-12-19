@@ -53,7 +53,7 @@ class BeatFrame(QFrame):
 
     def _add_beat_to_layout(self, row: int, col: int) -> None:
         beat_view = BeatView(self)
-        beat = Beat(self.main_widget, self)
+        beat = Beat(self.main_widget)
         beat_view.beat = beat
         self.layout.addWidget(beat_view, row, col)
         self.beats.append(beat_view)
