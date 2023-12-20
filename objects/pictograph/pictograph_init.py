@@ -227,7 +227,6 @@ class PictographInit:
     def init_letter_item(self) -> LetterItem:
         letter_item = LetterItem(self.pictograph)
         self.pictograph.addItem(letter_item)
-        letter_item.position_letter_item(letter_item)
         return letter_item
 
     def init_locations(self, grid: Grid) -> Dict[Locations, Tuple[int, int, int, int]]:

@@ -32,7 +32,6 @@ import io
 from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
 import xml.etree.ElementTree as ET
 
-from constants.string_constants import LETTER_SVG_DIR
 
 
 class SvgResizer(QMainWindow):
@@ -108,7 +107,7 @@ class SvgResizer(QMainWindow):
             QFileDialog.FileMode.Directory
         )  # Set file mode to select a directory
         file_dialog.setOption(QFileDialog.Option.ShowDirsOnly)  # Show only directories
-        file_dialog.setDirectory(LETTER_SVG_DIR)  # Set the default directory
+        file_dialog.setDirectory("resources/images/letters/")  # Set the default directory
         if file_dialog.exec():
             directory = file_dialog.selectedFiles()[0]  # Get the selected directory
             self.svg_file_paths = self.get_svg_file_paths(directory)

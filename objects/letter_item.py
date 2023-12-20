@@ -11,6 +11,6 @@ class LetterItem(QGraphicsSvgItem):
         self.pictograph = pictograph
 
     def position_letter_item(self, letter_item: "QGraphicsSvgItem") -> None:
-        x = int(letter_item.boundingRect().width() * self.pictograph.view_scale)
-        y = int(self.pictograph.height() - letter_item.boundingRect().height() - letter_item.boundingRect().height()/2)
+        x = int(letter_item.boundingRect().width() / 2)
+        y = int(self.pictograph.height() - (letter_item.boundingRect().height() * 1.5))
         letter_item.setPos(x, y)

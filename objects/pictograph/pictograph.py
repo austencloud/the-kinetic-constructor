@@ -328,7 +328,7 @@ class Pictograph(QGraphicsScene):
         if all(motion.motion_type for motion in self.motions.values()):
             self.current_letter = self.letter_engine.get_current_letter()
             self.set_letter_renderer(self.current_letter)
-            self.letter_item.position_letter_item(self.letter_item)
+            self.letter_item.position_letter_item(self.letter_item)            
         else:
             self.current_letter = None
             svg_path = f"{LETTER_SVG_DIR}/blank.svg"
