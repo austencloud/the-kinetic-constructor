@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QGridLayout,
     QLabel,
-    QFrame,
+    QFrame, QApplication
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QImage, QPainter
@@ -73,10 +73,10 @@ class IGTab(QWidget):
         self.setLayout(self.layout)
         button_frame = QFrame()
         button_frame_layout = QVBoxLayout()
-        letter_button_frame = IGLetterButtonFrame(self.main_widget)
+        self.letter_button_frame = IGLetterButtonFrame(self.main_widget)
         action_button_frame = QFrame()
         self.ig_scroll_area = IGScroll(self.main_widget, self)
-        letter_button_frame.setStyleSheet(
+        self.letter_button_frame.setStyleSheet(
             """
             QFrame {
                 border: 1px solid black;
@@ -89,7 +89,7 @@ class IGTab(QWidget):
         self.generate_all_button.setStyleSheet("font-size: 16px;")
         self.generate_selected_button = QPushButton("Generate Selected Images", self)
         self.generate_selected_button.setStyleSheet("font-size: 16px;")
-        self.layout.addWidget(letter_button_frame)
+        self.layout.addWidget(self.letter_button_frame)
 
         self.generate_all_button.clicked.connect(self.generate_images_for_all_letters)
         self.generate_selected_button.clicked.connect(self.generate_selected_images)
@@ -110,7 +110,7 @@ class IGTab(QWidget):
         action_button_frame_layout.setSpacing(0)
         action_button_frame_layout.addWidget(self.generate_all_button)
         action_button_frame_layout.addWidget(self.generate_selected_button)
-        button_frame_layout.addWidget(letter_button_frame, 8)
+        button_frame_layout.addWidget(self.letter_button_frame, 8)
         button_frame_layout.addWidget(action_button_frame, 1)
         self.layout.addWidget(self.ig_scroll_area)
         self.layout.addWidget(button_frame)
@@ -121,12 +121,38 @@ class IGTab(QWidget):
             else chr(ord(x) + 1000)
         )
 
-        for key, button in letter_button_frame.buttons.items():
+        for key, button in self.letter_button_frame.buttons.items():
             button.clicked.connect(
                 lambda checked, letter=key: self.on_letter_button_clicked(letter)
             )
 
     ### LETTERS ###
+
+    def get_button_style(self, pressed: bool) -> str:
+        if pressed:
+            # Here you can define your custom style for the pressed state
+            return """
+                QPushButton {
+                    background-color: #ccd9ff;
+                    border: 2px solid #0000ff;
+                    padding: 5px;
+                }
+            """
+        else:
+            # Here you define the default style
+            return """
+                QPushButton {
+                    background-color: white;
+                    border: 1px solid black;
+                    padding: 0px;
+                }
+                QPushButton:hover {
+                    background-color: #e6f0ff;
+                }
+                QPushButton:pressed {
+                    background-color: #cce0ff;
+                }
+            """
 
     def get_letters(self) -> List[str]:
         return self.pictograph_df.iloc[:, 0].unique().tolist()
@@ -135,10 +161,17 @@ class IGTab(QWidget):
 
     def on_letter_button_clicked(self, letter) -> None:
         print(f"Button for letter {letter} clicked")
+        button = self.letter_button_frame.buttons[letter]
+
         if letter in self.selected_pictographs:
             self.selected_pictographs.remove(letter)
+            button.setFlat(False)  # This makes the button appear not pressed
+            button.setStyleSheet(self.get_button_style(pressed=False))
         else:
             self.selected_pictographs.append(letter)
+            button.setFlat(True)  # This makes the button appear pressed
+            button.setStyleSheet(self.get_button_style(pressed=True))
+
         self.ig_scroll_area.update_displayed_pictographs()
 
     def on_letter_checkbox_state_changed(self, state, letter) -> None:
@@ -150,29 +183,34 @@ class IGTab(QWidget):
         self.ig_scroll_area.update_displayed_pictographs()  # Add this line to update the display
 
     def generate_selected_images(self) -> None:
+        main_widget = self.parentWidget()  # Access the main widget
+        main_widget.setEnabled(False)  # Disable the widget
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)  # Show loading cursor
+        self.setMouseTracking(False)  # Ignore mouse clicks
         for letter in self.selected_pictographs:
             self.generate_images_for_letter(letter)
-        self.ig_scroll_area.update_displayed_pictographs()  # Add this line to update the display
+        main_widget.setEnabled(True)  # Enable the widget after generation
+        QApplication.restoreOverrideCursor()
+        self.setMouseTracking(True)  # Enable mouse clicks
 
     def generate_images_for_all_letters(self) -> None:
+        main_widget = self.parentWidget()  # Access the main widget
+        main_widget.setEnabled(False)  # Disable the widget
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)  # Show loading cursor
+        self.setMouseTracking(False)  # Ignore mouse clicks
         for letter in self.get_letters():
             self.generate_images_for_letter(letter)
-        self.ig_scroll_area.update_displayed_pictographs()  # Add this line to update the display
+        main_widget.setEnabled(True)  # Enable the widget after generation
+        QApplication.restoreOverrideCursor()
+        
+        self.setMouseTracking(True)  # Enable mouse clicks
 
     def generate_images_for_letter(self, letter) -> None:
-        # Filter pictographs by letter
         pictographs_for_letter: pd.DataFrame = self.pictograph_df[
             self.pictograph_df["letter"] == letter
         ]
 
-        # Generate an image for each pictograph
         for index, pictograph_data in pictographs_for_letter.iterrows():
-            # Updated to use actual pictograph data
-            # checkbox_text = f"{pictograph_data['letter']}_"
-            # checkbox = QCheckBox(checkbox_text)
-            # checkbox.stateChanged.connect(
-            #     lambda state, idx=index: self.toggle_pictograph_selection(state, idx)
-            # )
             self.render_pictograph_to_image(pictograph_data)
 
     def toggle_pictograph_selection(self, state, index) -> None:
@@ -182,9 +220,10 @@ class IGTab(QWidget):
             self.selected_pictographs.remove(index)
 
     def render_pictograph_to_image(self, pictograph_data) -> None:
-        # Create an IG_Pictograph instance from the pictograph data
         ig_pictograph = self._create_ig_pictograph_from_pictograph_data(pictograph_data)
-        # Render scene to QImage
+        # Ensure all elements are added to the scene before rendering
+        ig_pictograph.update_pictograph()
+
         image = QImage(
             int(ig_pictograph.width()),
             int(ig_pictograph.height()),
@@ -207,19 +246,17 @@ class IGTab(QWidget):
         ig_pictograph = IGPictograph(self.main_widget, self.ig_scroll_area)
         ig_pictograph.setSceneRect(0, 0, 750, 900)
 
-        # Use the existing method to create motion dictionaries
         motion_dicts = [
             self._create_motion_dict(pictograph_data, color)
             for color in ["blue", "red"]
         ]
 
-        # Add motions, arrows, and props to the IG_Pictograph instance
         for motion_dict in motion_dicts:
             self._add_motion_to_ig_pictograph(ig_pictograph, motion_dict)
             self._finalize_ig_pictograph_setup(ig_pictograph, motion_dict)
 
-        ig_pictograph.view.resize_ig_pictograph()
         ig_pictograph.update_pictograph()
+        ig_pictograph.view.resize_ig_pictograph()
 
         return ig_pictograph
 

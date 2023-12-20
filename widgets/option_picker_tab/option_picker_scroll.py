@@ -10,7 +10,7 @@ from objects.motion import Motion
 from objects.prop.prop import Prop
 from utilities.TypeChecking.Letters import Letters
 from utilities.TypeChecking.TypeChecking import MotionAttributesDicts
-from widgets.option_picker_tab.option.option import Option
+from widgets.option_picker_tab.option import Option
 
 if TYPE_CHECKING:
     from widgets.option_picker_tab.option_picker_tab import OptionPickerTab

@@ -122,7 +122,7 @@ class Pictograph(QGraphicsScene):
 
     def init_view(self, graph_type) -> QGraphicsView:
         from widgets.graph_editor_tab.main_pictograph_view import MainPictographView
-        from widgets.option_picker_tab.option.option import OptionView
+        from widgets.option_picker_tab.option import OptionView
         from widgets.sequence_widget.beat_frame.start_position import StartPositionView
         from widgets.sequence_widget.beat_frame.beat import BeatView
         from widgets.image_generator_tab.ig_pictograph import IG_Pictograph_View

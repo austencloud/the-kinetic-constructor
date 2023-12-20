@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 class IGScroll(QScrollArea):
-    def __init__(self, main_widget: "MainWidget", ig_tab: "IGTab"):
+    def __init__(self, main_widget: "MainWidget", ig_tab: "IGTab") -> None:
         super().__init__(ig_tab)
         self.main_widget = main_widget
         self.ig_tab = ig_tab
@@ -22,46 +22,34 @@ class IGScroll(QScrollArea):
         self.spacing = 10
         self.ig_pictographs: List[IGPictograph] = []
 
-    def update_displayed_pictographs(self):
+    def update_displayed_pictographs(self) -> None:
         """
         Updates the displayed pictographs based on the selected letters.
         """
-        # Clear existing widgets in the layout
         while self.pictograph_layout.count():
             widget = self.pictograph_layout.takeAt(0).widget()
             if widget is not None:
                 widget.setParent(None)
                 widget.deleteLater()
 
-        # Filter pictographs for selected letters
         filtered_pictographs = self.ig_tab.pictograph_df[
             self.ig_tab.pictograph_df["letter"].isin(self.ig_tab.selected_pictographs)
         ]
 
-        # Display pictographs as views in the scroll area
         for i, (index, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
-            ig_pictograph = IGPictograph(
-                self.main_widget,
-                self,
+            ig_pictograph: IGPictograph = (
+                self.ig_tab._create_ig_pictograph_from_pictograph_data(pictograph_data)
             )
-            # Add the option view to the grid layout
+            # Add the pictograph view to the layout
             row = i // self.COLUMN_COUNT
             col = i % self.COLUMN_COUNT
             self.pictograph_layout.addWidget(ig_pictograph.view, row, col)
             self.ig_pictographs.append(ig_pictograph)
-
-            # Determine size for IG_Pictograph_View based on scroll area's width
-            view_width = self.viewport().width() // self.COLUMN_COUNT - (
-                self.spacing * (self.COLUMN_COUNT - 1)
-            )
-            view_height = int(
-                view_width * (ig_pictograph.height() / ig_pictograph.width())
-            )
-
-            # Set the size for the view
+            # Update the pictograph to reflect the new items
+            ig_pictograph.update_pictograph()
+            # Resize the view to fit the scene
             ig_pictograph.view.resize_ig_pictograph()
 
-        # Update the container and scroll area after adding all pictographs
         self.update_scroll_area_content()
 
     def resize_ig_scroll_area(self) -> None:
