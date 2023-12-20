@@ -33,6 +33,7 @@ from constants.string_constants import (
     ARROW_LOCATION,
 )
 from utilities.TypeChecking.Letters import Letters
+from utilities.TypeChecking.SpecificPositions import SpecificPositions
 from utilities.letter_engine import LetterEngine
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
@@ -74,8 +75,7 @@ class Pictograph(QGraphicsScene):
         super().__init__()
         self.main_widget = main_widget
         self.graph_type = graph_type
-        self.pictograph_dict: Dict = {}
-        self.motion_dict_list: List[Dict] = []
+
         self.setup_scene()
         self.setup_components(main_widget)
 
@@ -88,6 +88,10 @@ class Pictograph(QGraphicsScene):
         self.props: Dict[Colors, Prop] = {}
         self.motions: Dict[Colors, Motion] = {}
         self.current_letter: Letters = None
+        self.pictograph_dict: Dict = {}
+        self.motion_dict_list: List[Dict] = []
+        self.start_position: SpecificPositions = None
+        self.end_position: SpecificPositions = None
 
         self.generator: PictographGenerator = None
         self.event_handler = PictographEventHandler(self)
@@ -355,6 +359,9 @@ class Pictograph(QGraphicsScene):
                 new_beat, motion.prop.get_attributes(), new_beat.motions[motion.color]
             )
 
+            new_beat.arrows[new_arrow.color] = new_arrow
+            new_beat.props[new_prop.color] = new_prop
+
             new_beat.motions[motion.color].arrow = new_arrow
             new_beat.motions[motion.color].prop = new_prop
             new_beat.motions[motion.color].arrow.ghost = new_ghost_arrow
@@ -392,7 +399,7 @@ class Pictograph(QGraphicsScene):
             motion_dict = self.motions[motion.color].get_attributes()
             motion_dict[ARROW] = new_arrow
             motion_dict[PROP] = new_prop
-
+            motion_dict[MOTION_TYPE] = new_arrow.motion_type
             new_arrow.motion.setup_attributes(motion_dict)
 
         new_beat.update_pictograph()

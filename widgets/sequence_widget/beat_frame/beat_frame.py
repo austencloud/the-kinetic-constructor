@@ -66,7 +66,7 @@ class BeatFrame(QFrame):
         if next_beat_index is not None:
             self.beats[next_beat_index].set_pictograph(clicked_option)
 
-        self.picker_updater.emit(clicked_option)
+        # self.picker_updater.emit(clicked_option)
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):

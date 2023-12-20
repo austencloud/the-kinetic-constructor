@@ -2,16 +2,12 @@ from typing import Callable, Dict, List, TYPE_CHECKING, Tuple
 from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout, QApplication
 from PyQt6.QtCore import Qt
 import pandas as pd
-from data.rules import rules
+from data.rules import get_next_letters
 from constants.string_constants import *
-from data.positions_map import get_specific_start_end_positions, positions_map
 from objects.arrow.arrow import Arrow
-from objects.motion import Motion
 from objects.prop.prop import Prop
-from utilities.TypeChecking.Letters import Letters
-from utilities.TypeChecking.SpecificPositions import SpecificPositions
-from utilities.TypeChecking.TypeChecking import MotionAttributesDicts
 from widgets.option_picker_tab.option import Option
+from PyQt6.QtGui import QPixmap
 
 if TYPE_CHECKING:
     from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
@@ -32,6 +28,7 @@ class OptionPickerScroll(QScrollArea):
         self.main_widget = main_widget
         self.option_picker_widget = option_picker_widget
         self.spacing = 10
+        self.image_cache = {}  # Add an image cache
         self.options: List[Tuple[str, Option]] = []
         self.pictographs = self.load_and_sort_data("LetterDictionary.csv")
         self._initialize_ui()
@@ -49,6 +46,7 @@ class OptionPickerScroll(QScrollArea):
     def load_and_sort_data(self, file_path: str) -> pd.DataFrame:
         try:
             df = pd.read_csv(file_path)
+            # Ensure the DataFrame is indexed by 'start_position' and 'end_position'
             df.set_index(["start_position", "end_position"], inplace=True)
             df.sort_index(inplace=True)
             return df
@@ -70,28 +68,13 @@ class OptionPickerScroll(QScrollArea):
             pd_data = self.pictographs.loc[(start_position, end_position)]
             pd_data = pd_data.iloc[0] if isinstance(pd_data, pd.DataFrame) else pd_data
             pictograph_dict = self._create_pictograph_dict(pd_data)
-            option = self._create_option_from_pd_data(pd_data)
-            option.pictograph_dict = pictograph_dict
-            option.view.resize_option_view()
-            self._add_option_to_layout(option, True, 0, column)
-
-    def _process_position(self, full_key: str, column: int) -> None:
-        start_position, end_position = full_key.split("_")
-        if (start_position, end_position) in self.pictographs.index:
-            pd_data = self.pictographs.loc[(start_position, end_position)]
-            pd_data = pd_data.iloc[0] if isinstance(pd_data, pd.DataFrame) else pd_data
-            motion_dict_list = [
-                self._create_motion_dict(pd_data, color) for color in ["blue", "red"]
-            ]
-            pictograph_dict = self._create_pictograph_dict(pd_data)
-            option = self._create_option_from_motion_dict_list(
-                motion_dict_list, pictograph_dict
-            )
-            option.pictograph_dict = pictograph_dict
-            option.motion_dict_list = motion_dict_list
-            self._add_option_to_layout(
-                option, is_start_position=True, row=0, col=column
-            )
+            start_option = self._create_option_from_pd_data(pd_data)
+            start_option.pictograph_dict = pictograph_dict
+            start_option.view.resize_option_view()
+            start_option.current_letter = start_option.pictograph_dict["letter"]
+            start_option.start_position = start_option.pictograph_dict["start_position"]
+            start_option.end_position = start_option.pictograph_dict["end_position"]
+            self._add_option_to_layout(start_option, True, 0, column)
 
     def _create_pictograph_dict(self, pd_data):
         pictograph_dict = {
@@ -114,59 +97,19 @@ class OptionPickerScroll(QScrollArea):
         )
         return os.path.join(image_dir, image_name)
 
-    def _create_option_from_motion_dict_list(
-        self, motion_dict_list: List, pictograph_dict: Dict
-    ) -> "Option":
-        option = Option(self.main_widget, self)
-        option.setSceneRect(0, 0, 750, 900)
-
-        if motion_dict_list:
-            image_path = self._generate_image_path(motion_dict_list, pictograph_dict)
-            option.loadImage(image_path)
-
-        self.options.append((option.current_letter, option))
-        return option
-
-    def _add_motion_to_option(self, option: "Option", motion_dict: Dict) -> None:
-        arrow = self._create_arrow(option, motion_dict)
-        prop = self._create_prop(option, motion_dict)
-        self._setup_motion_relations(option, arrow, prop)
-
     def _add_option_to_layout(
-        self,
-        option: Option,
-        is_start_position: bool,
-        row: int,
-        col: int,
+        self, option: Option, is_start_position: bool, row: int, col: int
     ) -> None:
         option.view.mousePressEvent = self._get_click_handler(option, is_start_position)
         self.option_picker_layout.addWidget(option.view, row, col)
 
-    def _create_arrow(self, option: "Option", motion_dict: Dict) -> Arrow:
-        arrow_dict = {
-            COLOR: motion_dict[COLOR],
-            MOTION_TYPE: motion_dict[MOTION_TYPE],
-            TURNS: motion_dict[TURNS],
-        }
-        arrow = Arrow(option, arrow_dict, option.motions[motion_dict[COLOR]])
-        option.arrows[arrow.color] = arrow
-        arrow.motion = option.motions[arrow.color]
-        option.addItem(arrow)
-        return arrow
-
-    def _create_prop(self, option: "Option", motion_dict: Dict) -> Prop:
-        prop_dict = {
-            COLOR: motion_dict[COLOR],
-            PROP_TYPE: self.main_pictograph.prop_type,
-            LOCATION: motion_dict[END_LOCATION],
-            LAYER: 1,
-            ORIENTATION: IN,
-        }
-        prop = Prop(option, prop_dict, option.motions[motion_dict[COLOR]])
-        option.props[prop.color] = prop
-        prop.motion = option.motions[prop.color]
-        option.addItem(prop)
-        return prop
+    def load_image_if_visible(self, option: "Option") -> None:
+        """Loads the image for an option if it is visible."""
+        if not option.imageLoaded and option.view.isVisible():
+            image_path = self._generate_image_path(option.pictograph_dict)
+            if image_path not in self.image_cache:
+                self.image_cache[image_path] = QPixmap(image_path)
+            option.loadImage(image_path)
 
     def _create_motion_dict(self, pd_data: pd.Series, color: str) -> Dict:
         motion_dict = {
@@ -199,32 +142,35 @@ class OptionPickerScroll(QScrollArea):
                 child.widget().deleteLater()
 
     def _populate_options(self, clicked_option: "Option") -> None:
-        """Populates the options based on the clicked option."""
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
 
-        current_letter = clicked_option.pictograph_dict["letter"]
-        next_possible_letters = self._get_next_possible_letters(current_letter)
-        filtered_data: pd.DataFrame = self.pictographs[
-            self.pictographs["letter"].isin(next_possible_letters)
+        current_letter = clicked_option.current_letter
+        next_possible_letters = get_next_letters(current_letter)
+        specific_end_position = clicked_option.end_position
+
+        # Filter the DataFrame correctly
+        filtered_data = self.pictographs[
+            self.pictographs.index.get_level_values(0) == specific_end_position
         ]
-        specific_end_position = clicked_option.pictograph_dict["end_position"]
         filtered_data = filtered_data[
-            filtered_data.index.get_level_values("start_position")
-            == specific_end_position
+            filtered_data["letter"].isin(next_possible_letters)
         ]
+
+        # filter to ensure the options have a start orientation for each motion that matches the end orientations of the reference option's motions
+        for motion in [BLUE, RED]:
+            filtered_data = filtered_data[
+                filtered_data[f"{motion}_start_orientation"]
+                == clicked_option.motions[motion].end_orientation
+            ]
 
         self.options.clear()
         self.clear()
-        self.options = [
-            (pd_data["letter"], self._create_option_from_pd_data(pd_data))
-            for _, pd_data in filtered_data.iterrows()
-        ]
+        for idx, row in filtered_data.iterrows():
+            option = self._create_option_from_pd_data(row)
+            self.options.append((row["letter"], option))
         self._sort_options()
         self._add_sorted_options_to_layout()
         QApplication.restoreOverrideCursor()
-
-    def _get_next_possible_letters(self, current_letter: Letters) -> List[Letters]:
-        return rules.get(current_letter, [])
 
     def _create_option_from_pd_data(self, pd_data: pd.Series) -> "Option":
         """
@@ -238,16 +184,36 @@ class OptionPickerScroll(QScrollArea):
         """
         option = Option(self.main_widget, self)
         option.setSceneRect(0, 0, 750, 900)
-        motion_dict_list = [
-            self._create_motion_dict(pd_data, color) for color in ["blue", "red"]
-        ]
+        motion_dict_set = {
+            color: self._create_motion_dict(pd_data, color) for color in ["blue", "red"]
+        }
         pictograph_dict = self._create_pictograph_dict(pd_data)
 
         image_path = self._generate_image_path(pd_data)
         option.loadImage(image_path)
-        option.motion_dict_list = motion_dict_list
         option.pictograph_dict = pictograph_dict
 
+        option.motions[RED].setup_attributes(motion_dict_set["red"])
+        option.motions[BLUE].setup_attributes(motion_dict_set["blue"])
+        option.motions[RED].arrow = option.arrows[RED]
+        option.motions[BLUE].arrow = option.arrows[BLUE]
+        option.motions[RED].prop = option.props[RED]
+        option.motions[BLUE].prop = option.props[BLUE]
+        option.motions[RED].arrow.location = option.motions[RED].get_arrow_location(
+            option.motions[RED].start_location, option.motions[RED].end_location
+        )
+        option.motions[BLUE].arrow.location = option.motions[BLUE].get_arrow_location(
+            option.motions[BLUE].start_location, option.motions[BLUE].end_location
+        )
+        option.motions[RED].update_prop_orientation_and_layer()
+        option.motions[BLUE].update_prop_orientation_and_layer()
+        option.current_letter = pd_data["letter"]
+        option.start_position = pd_data.name[0]
+        option.end_position = pd_data.name[1]
+        
+        option.arrows[RED].motion_type = option.motions[RED].motion_type
+        option.arrows[BLUE].motion_type = option.motions[BLUE].motion_type
+        
         return option
 
     def _sort_options(self):
