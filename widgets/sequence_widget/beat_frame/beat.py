@@ -1,3 +1,4 @@
+from constants.numerical_constants import RATIO
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
 )
@@ -35,7 +36,7 @@ class BeatView(QGraphicsView):
     def set_pictograph(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
         self.setScene(self.pictograph)
-        view_width = int(self.height() * 75 / 90)
+        view_width = int(self.height() * RATIO)
         self.view_scale = view_width / self.pictograph.width()
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)

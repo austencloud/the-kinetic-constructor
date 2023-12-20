@@ -32,8 +32,8 @@ class IG_Pictograph_View(QGraphicsView):
 
         self.setMinimumWidth(view_width)
         self.setMaximumWidth(view_width)
-        self.setMinimumHeight(int(view_width * 90 / 75))
-        self.setMaximumHeight(int(view_width * 90 / 75))
+        self.setMinimumHeight(view_width)
+        self.setMaximumHeight(view_width)
 
         self.view_scale = view_width / self.ig_pictograph.width()
 

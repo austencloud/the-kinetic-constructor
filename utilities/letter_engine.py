@@ -36,33 +36,6 @@ from utilities.TypeChecking.TypeChecking import (
 
 
 
-# class LetterEngine:
-#     def __init__(self, pictograph: "Pictograph") -> None:
-#         self.pictograph = pictograph
-#         # Assuming you have already created a DataFrame and saved it to a file named 'motions_dataframe.csv'
-#         self.motions_df = pd.read_csv("LetterDictionary.csv")  # Load the DataFrame
-
-#     def get_current_letter(self) -> Optional[str]:
-#         red_motion = self.pictograph.motions[RED]
-#         blue_motion = self.pictograph.motions[BLUE]
-#         if red_motion and blue_motion:
-#             filtered_df = self.motions_df[
-#                 (self.motions_df["blue_motion_type"] == blue_motion.motion_type) &
-#                 (self.motions_df["blue_start_location"] == blue_motion.start_location) &
-#                 (self.motions_df["blue_end_location"] == blue_motion.end_location) &
-#                 (self.motions_df["red_motion_type"] == red_motion.motion_type) &
-#                 (self.motions_df["red_start_location"] == red_motion.start_location) &
-#                 (self.motions_df["red_end_location"] == red_motion.end_location)
-#             ]
-
-#             if not filtered_df.empty:
-#                 print("Found matching letter")
-#                 print(filtered_df)
-
-#                 return filtered_df.iloc[0]["letter"]
-
-#         return None
-
 
 class LetterEngine:
     def __init__(self, pictograph: "Pictograph") -> None:
@@ -107,7 +80,7 @@ class LetterEngine:
 
         specific_position: Dict[
             str, SpecificPositions
-        ] = get_specific_start_end_positions(self.red_motion, self.blue_motion)
+        ] = get_specific_start_end_positions(self.get_motion("red"), self.get_motion("blue"))
         if specific_position:
             start_pos = specific_position.get("start_position")
             end_pos = specific_position.get("end_position")

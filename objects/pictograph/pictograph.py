@@ -80,7 +80,7 @@ class Pictograph(QGraphicsScene):
         self.setup_components(main_widget)
 
     def setup_scene(self) -> None:
-        self.setSceneRect(0, 0, 750, 900)
+        self.setSceneRect(0, 0, 950, 950)
         self.setBackgroundBrush(Qt.GlobalColor.white)
 
     def setup_components(self, main_widget: "MainWidget") -> None:

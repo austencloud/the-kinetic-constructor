@@ -245,7 +245,7 @@ class IGTab(QWidget):
         self, pictograph_data
     ) -> IGPictograph:
         ig_pictograph = IGPictograph(self.main_widget, self.ig_scroll_area)
-        ig_pictograph.setSceneRect(0, 0, 750, 900)
+        ig_pictograph.setSceneRect(0, 0, 950, 950)
 
         motion_dicts = [
             self._create_motion_dict(pictograph_data, color)
@@ -330,7 +330,7 @@ class IGTab(QWidget):
 
     def _create_motion_dict(self, row_data, color: str) -> Dict:
         return {
-            "color": row_data[f"{color}_color"],
+            "color": color,
             "motion_type": row_data[f"{color}_motion_type"],
             "rotation_direction": row_data[f"{color}_rotation_direction"],
             "start_location": row_data[f"{color}_start_location"],

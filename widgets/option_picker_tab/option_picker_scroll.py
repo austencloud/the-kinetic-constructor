@@ -180,7 +180,7 @@ class OptionPickerScroll(QScrollArea):
         image_path = self._generate_image_path(pd_row_data)
         letter = pd_row_data["letter"]
         option = Option(self.main_widget, self)
-        option.setSceneRect(0, 0, 750, 900)
+        option.setSceneRect(0, 0, 950, 950)
 
         option.loadImage(image_path)
 
@@ -188,10 +188,10 @@ class OptionPickerScroll(QScrollArea):
         # Instead of a comprehension, explicitly create each motion_dict
         blue_motion_dict = self._create_motion_dict(pd_row_data, "blue")
         red_motion_dict = self._create_motion_dict(pd_row_data, "red")
-        
+
         option.motions[RED].setup_attributes(red_motion_dict)
         option.motions[BLUE].setup_attributes(blue_motion_dict)
-        
+
         option.current_letter = letter
         option.start_position = pd_row_data.name[0]
         option.end_position = pd_row_data.name[1]

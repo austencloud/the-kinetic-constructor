@@ -44,9 +44,9 @@ class ExportHandler:
 
         # Create the root element for the SVG
         svg_data = ET.Element("{SVG_NS}svg")
-        svg_data.set("width", "750")
-        svg_data.set("height", "900")
-        svg_data.set("viewBox", "0 0 750 900")
+        svg_data.set("width", "950")
+        svg_data.set("height", "950")
+        svg_data.set("viewBox", "0 0 950 950")
 
         # Create groups for props, arrows, and the grid
         props_group = ET.SubElement(svg_data, "{SVG_NS}g", id="props")

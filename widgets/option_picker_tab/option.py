@@ -33,7 +33,7 @@ class Option(Pictograph):
             else:
                 self.pixmapItem.setPixmap(pixmap)
             self.imageLoaded = True
-            
+
     def wheelEvent(self, event) -> None:
         return super().wheelEvent(event)
 
@@ -57,9 +57,8 @@ class OptionView(QGraphicsView):
 
         self.setMinimumWidth(view_width)
         self.setMaximumWidth(view_width)
-        self.setMinimumHeight(int(view_width * 90 / 75))
-        self.setMaximumHeight(int(view_width * 90 / 75))
-
+        self.setMinimumHeight(view_width)
+        self.setMaximumHeight(view_width)
         self.view_scale = view_width / self.option.width()
 
         self.resetTransform()
@@ -72,7 +71,7 @@ class OptionView(QGraphicsView):
         if event.type() == QEvent.Type.Wheel:
             event.ignore()
         return False
-    
+
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.option.option_picker.load_image_if_visible(self.option)
