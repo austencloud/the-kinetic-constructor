@@ -69,7 +69,7 @@ class PropPositioner:
         for prop in self.scene.props.values():
             if any(
                 self.prop_type_counts[ptype] == 2
-                for ptype in [BIGHOOP, DOUBLESTAR, BIGDOUBLESTAR]
+                for ptype in [BIGHOOP, DOUBLESTAR, BIGTRIAD, BIGDOUBLESTAR]
             ):
                 self.set_strict_prop_locations(prop)
             else:
@@ -78,7 +78,7 @@ class PropPositioner:
         for prop in self.scene.ghost_props.values():
             if any(
                 self.prop_type_counts[ptype] == 2
-                for ptype in [BIGHOOP, DOUBLESTAR, BIGDOUBLESTAR]
+                for ptype in [BIGHOOP, DOUBLESTAR, BIGTRIAD, BIGDOUBLESTAR]
             ):
                 self.set_strict_prop_locations(prop)
             else:
@@ -225,7 +225,6 @@ class PropPositioner:
     def reposition_static_beta(
         self, move_prop: callable, static_motions: List[MotionAttributesDicts]
     ) -> None:
-
         for motion in static_motions:
             prop = next(
                 (
@@ -308,12 +307,18 @@ class PropPositioner:
 
     def reposition_alpha_to_beta(self, move_prop, converging_arrows) -> None:
         # check if all the props are in layer 1
-        if all(prop.prop_type in [CLUB, FAN, TRIAD, MINIHOOP, UKULELE, CHICKEN] for prop in self.scene.props.values()):
+        if all(
+            prop.prop_type in [CLUB, FAN, TRIAD, MINIHOOP, UKULELE, CHICKEN]
+            for prop in self.scene.props.values()
+        ):
             # set to default locations
             for prop in self.scene.props.values():
                 self.set_default_prop_locations(prop)
 
-        elif all(prop.prop_type in [BIGHOOP, SWORD, GUITAR] for prop in self.scene.props.values()):
+        elif all(
+            prop.prop_type in [BIGHOOP, SWORD, GUITAR]
+            for prop in self.scene.props.values()
+        ):
             # set to strict locations
             for prop in self.scene.props.values():
                 self.set_strict_prop_locations(prop)
@@ -356,7 +361,7 @@ class PropPositioner:
                                 ),
                                 direction,
                             )
-                            
+
             # check if one prop is in layer 1 and the other is in layer 2
             elif any(prop.layer == 1 for prop in self.scene.props.values()) and any(
                 prop.layer == 2 for prop in self.scene.props.values()
@@ -427,17 +432,22 @@ class PropPositioner:
         other_prop.setPos(new_position_other)
 
     def reposition_I(self, motion1, motion2) -> None:
-        if all(prop.prop_type in [CLUB, FAN, TRIAD, MINIHOOP, UKULELE, CHICKEN] for prop in self.scene.props.values()):
+        if all(
+            prop.prop_type in [CLUB, FAN, TRIAD, MINIHOOP, UKULELE, CHICKEN]
+            for prop in self.scene.props.values()
+        ):
             # set to default locations
             for prop in self.scene.props.values():
                 self.set_default_prop_locations(prop)
 
-        elif all(prop.prop_type in [BIGHOOP, SWORD, GUITAR] for prop in self.scene.props.values()):
+        elif all(
+            prop.prop_type in [BIGHOOP, BIGTRIAD, SWORD, GUITAR]
+            for prop in self.scene.props.values()
+        ):
             # set to strict locations
             for prop in self.scene.props.values():
                 self.set_strict_prop_locations(prop)
 
-        
         else:
             pro_motion = motion1 if motion1[MOTION_TYPE] == PRO else motion2
             anti_motion = motion2 if motion1[MOTION_TYPE] == PRO else motion1
@@ -523,7 +533,7 @@ class PropPositioner:
             BIGDOUBLESTAR,
             SWORD,
             GUITAR,
-            BIGTRIAD
+            BIGTRIAD,
         ]:
             for prop in self.scene.props.values():
                 self.set_strict_prop_locations(prop)
