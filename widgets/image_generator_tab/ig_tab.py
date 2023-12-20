@@ -73,7 +73,7 @@ class IGTab(QWidget):
         self.setLayout(self.layout)
         button_frame = QFrame()
         button_frame_layout = QVBoxLayout()
-        letter_button_frame = IGLetterButtonFrame(self.main_widget, self)
+        letter_button_frame = IGLetterButtonFrame(self.main_widget)
         action_button_frame = QFrame()
         self.ig_scroll_area = IGScroll(self.main_widget, self)
         letter_button_frame.setStyleSheet(

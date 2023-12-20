@@ -10,16 +10,13 @@ from utilities.TypeChecking.Letters import Letters
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.option_picker_tab.option_picker_scroll import OptionPickerWidget
+    from widgets.option_picker_tab.option_picker_scroll import OptionPickerScroll
 
 
 class IGLetterButtonFrame(QFrame):
-    def __init__(
-        self, main_widget: "MainWidget", option_picker_widget: "OptionPickerWidget"
-    ) -> None:
+    def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.option_picker_widget = option_picker_widget
         self.spacing = int(self.width() * 0.01)
         self.buttons: Dict[Letters, QPushButton] = {}
         self.init_letter_buttons_layout()
