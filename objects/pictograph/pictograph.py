@@ -74,6 +74,8 @@ class Pictograph(QGraphicsScene):
         super().__init__()
         self.main_widget = main_widget
         self.graph_type = graph_type
+        self.pictograph_dict: Dict = {}
+        self.motion_dict_list: List[Dict] = []
         self.setup_scene()
         self.setup_components(main_widget)
 

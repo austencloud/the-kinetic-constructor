@@ -145,9 +145,9 @@ class MotionAttributesDicts(TypedDict):
     color: Colors
     motion_type: MotionTypes
     rotation_direction: RotationDirections
-    turns: Turns
     start_location: Locations
     end_location: Locations
+    turns: Turns
     start_orientation: Orientations
     end_orientation: Orientations
     start_layer: Layers

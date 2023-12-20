@@ -23,7 +23,7 @@ class OptionPickerTab(QFrame):
         self.option_picker = OptionPickerScroll(self.main_widget, self)
 
         self.main_layout.addWidget(self.option_picker)
-        self.main_layout.addWidget(self.button_frame)
+        # self.main_layout.addWidget(self.button_frame)
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         self.setLayout(self.main_layout)
 

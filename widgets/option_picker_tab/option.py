@@ -5,7 +5,7 @@ from objects.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import Qt, QEvent
 from typing import TYPE_CHECKING, Literal
 from PyQt6.QtWidgets import QGraphicsView
-
+from PyQt6.QtGui import QPixmap
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.option_picker_tab.option_picker_scroll import OptionPickerScroll
@@ -28,6 +28,10 @@ class Option(Pictograph):
 
     def wheelEvent(self, event) -> None:
         return super().wheelEvent(event)
+
+    def loadImage(self, image_path: str):
+        pixmap = QPixmap(image_path)
+        self.addPixmap(pixmap)
 
 
 class OptionView(QGraphicsView):

@@ -237,6 +237,7 @@ class IGTab(QWidget):
         image_path = self.get_image_path(pictograph_data)
         image.save(image_path)
         self.imageGenerated.emit(image_path)
+        return image_path
 
     ### OPTION CREATION ###
 
