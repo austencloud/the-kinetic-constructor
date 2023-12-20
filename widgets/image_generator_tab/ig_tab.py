@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Dict
 import pandas as pd
 from PyQt6.QtWidgets import (
     QWidget,
+    QSplitter,
     QVBoxLayout,
     QPushButton,
     QScrollArea,
@@ -66,31 +67,51 @@ class IGTab(QWidget):
     ### UI SETUP ###
 
     def setupUI(self) -> None:
-        layout = QVBoxLayout()
+        main_splitter = QSplitter(Qt.Orientation.Vertical)
+        layout = QVBoxLayout(self)
+        layout.addWidget(main_splitter)
         self.setLayout(layout)
 
-        # Grid layout for letter checkboxes
-        self.letter_checkboxes: Dict[str, QCheckBox] = {}
-        checkbox_layout = QGridLayout()
-        checkbox_layout.setSpacing(10)
+        self.letter_rows = [
+            # Type 1 - Dual-Shift
+            ["A", "B", "C"],
+            ["D", "E", "F"],
+            ["G", "H", "I"],
+            ["J", "K", "L"],
+            ["M", "N", "O"],
+            ["P", "Q", "R"],
+            ["S", "T", "U", "V"],
+            # Type 2 - Shift
+            ["W", "X", "Y", "Z"],
+            ["Σ", "Δ", "θ", "Ω"],
+            # Type 3 - Cross-Shift
+            ["W-", "X-", "Y-", "Z-"],
+            ["Σ-", "Δ-", "θ-", "Ω-"],
+            # Type 4 - Dash
+            ["Φ", "Ψ", "Λ"],
+            # Type 5 - Dual-Dash
+            ["Φ-", "Ψ-", "Λ-"],
+            # Type 6 - Static
+            ["α", "β", "Γ"],
+        ]
 
-        layout.addLayout(checkbox_layout)
+        # Grid layout for letter checkboxes
+        self.letter_buttons: Dict[str, QPushButton] = {}
+        letter_button_layout = QGridLayout()
+        letter_button_layout.setSpacing(10)
+        letter_button_frame = QWidget()
+        letter_button_frame.setLayout(letter_button_layout)
+        main_splitter.addWidget(letter_button_frame)
 
         # Button to generate images
         self.generate_all_button = QPushButton("Generate All Images")
         self.generate_all_button.clicked.connect(self.generate_images_for_all_letters)
-        layout.addWidget(self.generate_all_button)
+        main_splitter.addWidget(self.generate_all_button)
 
         # Additional button for generating selected images
         self.generate_selected_button = QPushButton("Generate Selected Images")
         self.generate_selected_button.clicked.connect(self.generate_selected_images)
-        layout.addWidget(self.generate_selected_button)
-
-        # Improved layout setup
-        self.ig_pictographs_layout = (
-            QGridLayout()
-        )  # Use a grid layout for pictograph ig_pictographs
-        layout.addLayout(self.ig_pictographs_layout)
+        main_splitter.addWidget(self.generate_selected_button)
 
         # Position the buttons more intuitively
         buttons_layout = QHBoxLayout()
@@ -101,22 +122,19 @@ class IGTab(QWidget):
         # Create a scroll area for pictograph views
         self.ig_scroll_area = IG_Scroll(self.main_widget, self)
 
-        layout.addWidget(self.ig_scroll_area)
+        main_splitter.addWidget(self.ig_scroll_area)
 
         letters = self.get_letters()
-        for i, letter in enumerate(letters):
-            checkbox = QCheckBox(letter)
-            checkbox.stateChanged.connect(
-                lambda checked, ltr=letter: self.on_letter_checkbox_state_changed(
-                    checked, ltr
+        letters.sort(key=lambda x: x if x not in ['Σ', 'Δ', 'θ', 'Ω', 'Φ', 'Ψ', 'Λ', 'α', 'β', 'Γ'] else chr(ord(x) + 1000))
+        for row_index, row in enumerate(self.letter_rows):
+            for col_index, letter in enumerate(row):
+                button = QPushButton(letter)
+                button.clicked.connect(
+                    lambda _, ltr=letter: self.on_letter_button_clicked(ltr)
                 )
-            )
+                letter_button_layout.addWidget(button, row_index, col_index)
+                self.letter_buttons[letter] = button
 
-            # Add checkbox to the grid layout
-            row = i // self.ig_scroll_area.COLUMN_COUNT
-            col = i % self.ig_scroll_area.COLUMN_COUNT
-            checkbox_layout.addWidget(checkbox, row, col)
-            self.letter_checkboxes[letter] = checkbox
 
     ### LETTERS ###
 
@@ -125,11 +143,19 @@ class IGTab(QWidget):
 
     ### IMAGE GENERATION ###
 
+    def on_letter_button_clicked(self, letter) -> None:
+        print(f"Button for letter {letter} clicked")
+        if letter in self.selected_pictographs:
+            self.selected_pictographs.remove(letter)
+        else:
+            self.selected_pictographs.append(letter)
+        self.ig_scroll_area.update_displayed_pictographs()
+
     def on_letter_checkbox_state_changed(self, state, letter) -> None:
         print(f"Checkbox for letter {letter} state changed: {state}")
-        if state == 2 and letter not in self.selected_pictographs:
+        if state and letter not in self.selected_pictographs:
             self.selected_pictographs.append(letter)
-        elif state == 0 and letter in self.selected_pictographs:
+        elif not state and letter in self.selected_pictographs:
             self.selected_pictographs.remove(letter)
         self.ig_scroll_area.update_displayed_pictographs()  # Add this line to update the display
 

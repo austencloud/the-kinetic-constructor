@@ -10,10 +10,10 @@ from objects.motion import Motion
 from objects.prop.prop import Prop
 from utilities.TypeChecking.Letters import Letters
 from utilities.TypeChecking.TypeChecking import MotionAttributesDicts
-from widgets.option_picker.option.option import Option
+from widgets.option_picker_tab.option.option import Option
 
 if TYPE_CHECKING:
-    from widgets.option_picker.option_picker_widget import OptionPickerWidget
+    from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
     from widgets.main_widget import MainWidget
 
 
@@ -21,7 +21,7 @@ class OptionPickerScroll(QScrollArea):
     COLUMN_COUNT = 4
 
     def __init__(
-        self, main_widget: "MainWidget", option_picker_widget: "OptionPickerWidget"
+        self, main_widget: "MainWidget", option_picker_widget: "OptionPickerTab"
     ) -> None:
         super().__init__()
         self.main_widget = main_widget

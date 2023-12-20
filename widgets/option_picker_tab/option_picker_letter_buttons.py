@@ -10,12 +10,12 @@ from utilities.TypeChecking.Letters import Letters
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.option_picker.option_picker_scroll import OptionPickerWidget
+    from widgets.option_picker_tab.option_picker_scroll import OptionPickerTab
 
 
-class LetterButtons(QFrame):
+class OptionPickerLetterButtons(QFrame):
     def __init__(
-        self, main_widget: "MainWidget", option_picker_widget: "OptionPickerWidget"
+        self, main_widget: "MainWidget", option_picker_widget: "OptionPickerTab"
     ) -> None:
         super().__init__()
         self.main_widget = main_widget

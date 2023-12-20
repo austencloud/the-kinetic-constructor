@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import QGraphicsView
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.option_picker.option_picker_scroll import OptionPickerScroll
+    from widgets.option_picker_tab.option_picker_scroll import OptionPickerScroll
 
 
 class Option(Pictograph):

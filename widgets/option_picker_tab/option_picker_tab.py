@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QSizePolicy
-from .option_picker_letter_buttons import LetterButtons
+from .option_picker_letter_buttons import OptionPickerLetterButtons
 from .option_picker_scroll import OptionPickerScroll
 
 
-class OptionPickerWidget(QFrame):
+class OptionPickerTab(QFrame):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -19,7 +19,7 @@ class OptionPickerWidget(QFrame):
         self.main_layout.setSpacing(0)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
-        self.button_frame = LetterButtons(self.main_widget, self)
+        self.button_frame = OptionPickerLetterButtons(self.main_widget, self)
         self.option_picker = OptionPickerScroll(self.main_widget, self)
 
         self.main_layout.addWidget(self.option_picker)
