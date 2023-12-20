@@ -26,7 +26,6 @@ class PropBox(ObjectBox):
         self, main_widget: "MainWidget", graph_editor: "GraphEditor"
     ) -> None:
         self.main_widget = main_widget
-        self.main_window = main_widget.main_window
         self.view = PropBoxView(self, graph_editor)
         self.prop_type = STAFF
         self.pictograph = graph_editor.main_pictograph
@@ -259,7 +258,7 @@ class PropBox(ObjectBox):
                 pictograph = (
                     self.main_widget.graph_editor_tab.graph_editor.main_pictograph
                 )
-                self.drag = PropBoxDrag(self.main_window, pictograph, self)
+                self.drag = PropBoxDrag(self.main_widget, pictograph, self)
             if event.button() == Qt.MouseButton.LeftButton:
                 self.drag.match_target_prop(self.target_prop)
                 self.drag.start_drag(event_pos)

@@ -5,6 +5,7 @@ from objects.graphical_object import GraphicalObject
 from utilities.TypeChecking.TypeChecking import RotationAngles
 
 if TYPE_CHECKING:
+    from widgets.main_widget import MainWidget
     from main import MainWindow
     from widgets.graph_editor_tab.object_panel.objectbox import ObjectBox
     from objects.pictograph.pictograph import Pictograph
@@ -24,20 +25,20 @@ from PyQt6.QtSvg import QSvgRenderer
 class ObjectBoxDrag(QWidget):
     def __init__(
         self,
-        main_window: "MainWindow",
+        main_widget: "MainWidget",
         pictograph: "Pictograph",
         objectbox: "ObjectBox",
     ) -> None:
-        super().__init__(main_window)
-        self.setParent(main_window)
+        super().__init__(main_widget)
+        self.setParent(main_widget)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.reset_drag_state()
-        self.setup_dependencies(main_window, pictograph, objectbox)
+        self.setup_dependencies(main_widget, pictograph, objectbox)
 
     def setup_dependencies(
         self,
-        main_window: "MainWindow",
+        main_widget: "MainWidget",
         pictograph: "Pictograph",
         objectbox: "ObjectBox",
     ) -> None:
@@ -45,7 +46,7 @@ class ObjectBoxDrag(QWidget):
         self.transform = QTransform()
         self.objectbox = objectbox
         self.pictograph = pictograph
-        self.main_window = main_window
+        self.main_widget = main_widget
         self.has_entered_pictograph_once = False
         self.current_rotation_angle = 0
         self.svg_file = None
@@ -60,7 +61,7 @@ class ObjectBoxDrag(QWidget):
 
         scaled_size = (
             renderer.defaultSize()
-            * self.pictograph.graph_editor.main_pictograph.view.view_scale
+            * self.main_widget.graph_editor_tab.graph_editor.main_pictograph.view_scale
         )
         original_pixmap = QPixmap(scaled_size)
         self.setMinimumSize(scaled_size)
@@ -96,11 +97,11 @@ class ObjectBoxDrag(QWidget):
         self.preview.setPixmap(pixmap)
         self.object_center = (
             self.target_object.boundingRect().center()
-            * self.pictograph.graph_editor.main_pictograph.view.view_scale
+            * self.main_widget.graph_editor_tab.graph_editor.main_pictograph.view_scale
         )
 
     def move_to_cursor(self, event_pos: QPoint) -> None:
-        local_pos = self.objectbox.view.mapTo(self.main_window, event_pos)
+        local_pos = self.objectbox.view.mapTo(self.main_widget, event_pos)
         self.center = QPointF((self.preview.width() / 2), self.preview.height() / 2)
         self.move(local_pos - self.center.toPoint())
 

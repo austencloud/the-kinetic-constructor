@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 27.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="minihoop" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 616 316" style="enable-background:new 0 0 616 316;" xml:space="preserve">
+	 viewBox="0 0 600 300" style="enable-background:new 0 0 600 300;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:#2E3192;}
 	.st1{fill:none;}
 </style>
-<g id="props">
-	<path id="bighoop" class="st0" d="M458,316c-87.1,0-158-70.9-158-158S370.9,0,458,0s158,70.9,158,158S545.1,316,458,316z M458,16
-		c-78.3,0-142,63.7-142,142s63.7,142,142,142s142-63.7,142-142S536.3,16,458,16z"/>
-	<path id="invisible_x5F_prop" class="st1" d="M158,316C70.9,316,0,245.1,0,158S70.9,0,158,0s158,70.9,158,158S245.1,316,158,316z
-		 M158,16C79.7,16,16,79.7,16,158s63.7,142,142,142s142-63.7,142-142S236.3,16,158,16z"/>
+<g>
+	<g id="props">
+		<path id="bighoop" class="st0" d="M450,300c-82.7,0-150-67.3-150-150S367.3,0,450,0s150,67.3,150,150S532.7,300,450,300z
+			 M450,15.2c-74.3,0-134.8,60.5-134.8,134.8S375.7,284.8,450,284.8S584.8,224.3,584.8,150S524.3,15.2,450,15.2z"/>
+	</g>
+	<g id="props_00000046331310654670059880000012786265585564006804_">
+		<path id="bighoop_00000097481920056952427530000015347976222369208722_" class="st1" d="M150,0c82.7,0,150,67.3,150,150
+			s-67.3,150-150,150S0,232.7,0,150S67.3,0,150,0z M150,284.8c74.3,0,134.8-60.5,134.8-134.8S224.3,15.2,150,15.2
+			S15.2,75.7,15.2,150S75.7,284.8,150,284.8z"/>
+	</g>
 </g>
 </svg>

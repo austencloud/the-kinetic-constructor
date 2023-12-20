@@ -39,6 +39,7 @@ class IG_Pictograph_View(QGraphicsView):
 
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
+        self.ig_pictograph.view_scale = self.view_scale
 
     def wheelEvent(self, event):
         self.ig_pictograph.ig_scroll_area.wheelEvent(event)

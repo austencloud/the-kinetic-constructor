@@ -44,21 +44,21 @@ from utilities.TypeChecking.TypeChecking import (
 from data.start_end_location_map import get_start_end_locations
 
 if TYPE_CHECKING:
-    from main import MainWindow
+    from widgets.main_widget import MainWidget
     from objects.pictograph.pictograph import Pictograph
     from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
 
 
 class ArrowBoxDrag(ObjectBoxDrag):
     def __init__(
-        self, main_window: "MainWindow", pictograph: "Pictograph", arrowbox: "ArrowBox"
+        self, main_widget: "MainWidget", pictograph: "Pictograph", arrowbox: "ArrowBox"
     ) -> None:
-        super().__init__(main_window, pictograph, arrowbox)
+        super().__init__(main_widget, pictograph, arrowbox)
         self.arrowbox = arrowbox
         self.objectbox = arrowbox
         self.ghost: GhostArrow = None
         self.start_orientation = IN
-        self.setup_dependencies(main_window, pictograph, arrowbox)
+        self.setup_dependencies(main_widget, pictograph, arrowbox)
 
     def match_target_arrow(self, target_arrow: "Arrow") -> None:
         self.target_arrow = target_arrow
@@ -269,7 +269,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         renderer = QSvgRenderer(self.target_arrow.svg_file)
         scaled_size = (
             renderer.defaultSize()
-            * self.pictograph.graph_editor.main_pictograph.view.view_scale
+            * self.main_widget.graph_editor_tab.graph_editor.main_pictograph.view_scale
         )
         pixmap = QPixmap(scaled_size)
         pixmap.fill(Qt.GlobalColor.transparent)

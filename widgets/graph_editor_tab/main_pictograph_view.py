@@ -93,4 +93,5 @@ class MainPictographView(QGraphicsView):
             self.view_scale,
             self.view_scale,
         )
+        self.main_pictograph.view_scale = self.view_scale
         self.configure_button_size_and_position(int(self.width() / 10))

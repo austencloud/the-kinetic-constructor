@@ -308,65 +308,76 @@ class PropPositioner:
 
     def reposition_alpha_to_beta(self, move_prop, converging_arrows) -> None:
         # check if all the props are in layer 1
-        if all(prop.layer == 1 for prop in self.scene.props.values()):
-            end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
-            start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
-            if (
-                end_locations[0] == end_locations[1]
-                and start_locations[0] != start_locations[1]
+        if all(prop.prop_type in [CLUB, FAN, TRIAD, MINIHOOP, UKULELE, CHICKEN] for prop in self.scene.props.values()):
+            # set to default locations
+            for prop in self.scene.props.values():
+                self.set_default_prop_locations(prop)
+
+        elif all(prop.prop_type in [BIGHOOP, SWORD, GUITAR] for prop in self.scene.props.values()):
+            # set to strict locations
+            for prop in self.scene.props.values():
+                self.set_strict_prop_locations(prop)
+
+        else:
+            if all(prop.layer == 1 for prop in self.scene.props.values()):
+                end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
+                start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
+                if (
+                    end_locations[0] == end_locations[1]
+                    and start_locations[0] != start_locations[1]
+                ):
+                    for arrow in converging_arrows:
+                        direction = self.determine_translation_direction(arrow)
+                        if direction:
+                            move_prop(
+                                next(
+                                    prop
+                                    for prop in self.scene.props.values()
+                                    if prop.color == arrow[COLOR]
+                                ),
+                                direction,
+                            )
+            # check if all the props are in layer 2
+            elif all(prop.layer == 2 for prop in self.scene.props.values()):
+                end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
+                start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
+                if (
+                    end_locations[0] == end_locations[1]
+                    and start_locations[0] != start_locations[1]
+                ):
+                    for arrow in converging_arrows:
+                        direction = self.determine_translation_direction(arrow)
+                        if direction:
+                            move_prop(
+                                next(
+                                    prop
+                                    for prop in self.scene.props.values()
+                                    if prop.color == arrow[COLOR]
+                                ),
+                                direction,
+                            )
+                            
+            # check if one prop is in layer 1 and the other is in layer 2
+            elif any(prop.layer == 1 for prop in self.scene.props.values()) and any(
+                prop.layer == 2 for prop in self.scene.props.values()
             ):
-                for arrow in converging_arrows:
-                    direction = self.determine_translation_direction(arrow)
-                    if direction:
-                        move_prop(
-                            next(
-                                prop
-                                for prop in self.scene.props.values()
-                                if prop.color == arrow[COLOR]
-                            ),
-                            direction,
-                        )
-        # check if all the props are in layer 2
-        elif all(prop.layer == 2 for prop in self.scene.props.values()):
-            end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
-            start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
-            if (
-                end_locations[0] == end_locations[1]
-                and start_locations[0] != start_locations[1]
-            ):
-                for arrow in converging_arrows:
-                    direction = self.determine_translation_direction(arrow)
-                    if direction:
-                        move_prop(
-                            next(
-                                prop
-                                for prop in self.scene.props.values()
-                                if prop.color == arrow[COLOR]
-                            ),
-                            direction,
-                        )
-                        
-        # check if one prop is in layer 1 and the other is in layer 2
-        elif any(prop.layer == 1 for prop in self.scene.props.values()) and any(
-            prop.layer == 2 for prop in self.scene.props.values()
-        ):
-            end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
-            start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
-            if (
-                end_locations[0] == end_locations[1]
-                and start_locations[0] != start_locations[1]
-            ):
-                for arrow in converging_arrows:
-                    direction = self.determine_translation_direction(arrow)
-                    if direction:
-                        move_prop(
-                            next(
-                                prop
-                                for prop in self.scene.props.values()
-                                if prop.color == arrow[COLOR]
-                            ),
-                            direction,
-                        )
+                end_locations = [arrow[END_LOCATION] for arrow in converging_arrows]
+                start_locations = [arrow[START_LOCATION] for arrow in converging_arrows]
+                if (
+                    end_locations[0] == end_locations[1]
+                    and start_locations[0] != start_locations[1]
+                ):
+                    for arrow in converging_arrows:
+                        direction = self.determine_translation_direction(arrow)
+                        if direction:
+                            move_prop(
+                                next(
+                                    prop
+                                    for prop in self.scene.props.values()
+                                    if prop.color == arrow[COLOR]
+                                ),
+                                direction,
+                            )
 
     ### BETA TO BETA ### G, H, I
 
@@ -416,43 +427,55 @@ class PropPositioner:
         other_prop.setPos(new_position_other)
 
     def reposition_I(self, motion1, motion2) -> None:
-        pro_motion = motion1 if motion1[MOTION_TYPE] == PRO else motion2
-        anti_motion = motion2 if motion1[MOTION_TYPE] == PRO else motion1
+        if all(prop.prop_type in [CLUB, FAN, TRIAD, MINIHOOP, UKULELE, CHICKEN] for prop in self.scene.props.values()):
+            # set to default locations
+            for prop in self.scene.props.values():
+                self.set_default_prop_locations(prop)
 
-        pro_prop = next(
-            (
-                prop
-                for prop in self.scene.props.values()
-                if prop.color == pro_motion[COLOR]
-            ),
-            None,
-        )
-        anti_prop = next(
-            (
-                prop
-                for prop in self.scene.props.values()
-                if prop.color == anti_motion[COLOR]
-            ),
-            None,
-        )
+        elif all(prop.prop_type in [BIGHOOP, SWORD, GUITAR] for prop in self.scene.props.values()):
+            # set to strict locations
+            for prop in self.scene.props.values():
+                self.set_strict_prop_locations(prop)
 
-        if pro_prop and anti_prop:
-            pro_prop_translation_direction = self.determine_translation_direction(
-                pro_motion
+        
+        else:
+            pro_motion = motion1 if motion1[MOTION_TYPE] == PRO else motion2
+            anti_motion = motion2 if motion1[MOTION_TYPE] == PRO else motion1
+
+            pro_prop = next(
+                (
+                    prop
+                    for prop in self.scene.props.values()
+                    if prop.color == pro_motion[COLOR]
+                ),
+                None,
             )
-            anti_prop_translation_direction = self.get_opposite_direction(
-                pro_prop_translation_direction
+            anti_prop = next(
+                (
+                    prop
+                    for prop in self.scene.props.values()
+                    if prop.color == anti_motion[COLOR]
+                ),
+                None,
             )
 
-            new_position_pro = self.calculate_new_position(
-                pro_prop.pos(), pro_prop_translation_direction
-            )
-            pro_prop.setPos(new_position_pro)
+            if pro_prop and anti_prop:
+                pro_prop_translation_direction = self.determine_translation_direction(
+                    pro_motion
+                )
+                anti_prop_translation_direction = self.get_opposite_direction(
+                    pro_prop_translation_direction
+                )
 
-            new_position_anti = self.calculate_new_position(
-                anti_prop.pos(), anti_prop_translation_direction
-            )
-            anti_prop.setPos(new_position_anti)
+                new_position_pro = self.calculate_new_position(
+                    pro_prop.pos(), pro_prop_translation_direction
+                )
+                pro_prop.setPos(new_position_pro)
+
+                new_position_anti = self.calculate_new_position(
+                    anti_prop.pos(), anti_prop_translation_direction
+                )
+                anti_prop.setPos(new_position_anti)
 
     ### GAMMA TO BETA ### Y, Z
 

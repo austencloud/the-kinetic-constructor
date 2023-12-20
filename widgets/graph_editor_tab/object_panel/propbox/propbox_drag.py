@@ -29,6 +29,7 @@ from widgets.graph_editor_tab.object_panel.objectbox_drag import ObjectBoxDrag
 
 
 if TYPE_CHECKING:
+    from widgets.main_widget import MainWidget
     from main import MainWindow
     from objects.pictograph.pictograph import Pictograph
     from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
@@ -36,9 +37,9 @@ if TYPE_CHECKING:
 
 class PropBoxDrag(ObjectBoxDrag):
     def __init__(
-        self, main_window: "MainWindow", pictograph: "Pictograph", propbox: "PropBox"
+        self, main_widget: "MainWidget", pictograph: "Pictograph", propbox: "PropBox"
     ) -> None:
-        super().__init__(main_window, pictograph, propbox)
+        super().__init__(main_widget, pictograph, propbox)
         self.attributes: PropAttributesDicts = {}
         self.propbox = propbox
         self.objectbox = propbox

@@ -21,7 +21,6 @@ class ArrowBox(ObjectBox):
     def __init__(self, main_widget: "MainWidget", graph_editor: "GraphEditor") -> None:
         super().__init__(main_widget, graph_editor)
         self.main_widget = main_widget
-        self.main_window = main_widget.main_window
         self.view = ArrowBoxView(self, graph_editor)
         self.grid = Grid(self)
         self.target_arrow: "Arrow" = None
@@ -232,7 +231,7 @@ class ArrowBox(ObjectBox):
                 pictograph = (
                     self.main_widget.graph_editor_tab.graph_editor.main_pictograph
                 )
-                self.drag = ArrowBoxDrag(self.main_window, pictograph, self)
+                self.drag = ArrowBoxDrag(self.main_widget, pictograph, self)
             if event.button() == Qt.MouseButton.LeftButton:
                 self.drag.match_target_arrow(self.target_arrow)
                 self.drag.start_drag(event_pos)

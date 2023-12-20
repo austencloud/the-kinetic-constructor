@@ -92,7 +92,7 @@ class Pictograph(QGraphicsScene):
         self.motion_dict_list: List[Dict] = []
         self.start_position: SpecificPositions = None
         self.end_position: SpecificPositions = None
-
+        self.view_scale = 1
         self.generator: PictographGenerator = None
         self.event_handler = PictographEventHandler(self)
 
