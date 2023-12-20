@@ -4,10 +4,10 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Callable
 
 from constants.string_constants import ICON_DIR
-from widgets.graph_editor_widget.attr_panel.custom_button import CustomButton
+from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_widget.attr_panel.attr_box import AttrBox
+    from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
 
 
 class AttrBoxWidget(QWidget):

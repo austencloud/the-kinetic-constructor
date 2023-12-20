@@ -11,12 +11,12 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants.string_constants import ICON_DIR, SWAP_ICON
 from utilities.TypeChecking.TypeChecking import MotionTypes
-from widgets.graph_editor_widget.attr_panel.attr_box_widgets.attr_box_widget import (
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_widget.attr_panel.attr_box import AttrBox
+    from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
 
 
 class MotionTypesWidget(AttrBoxWidget):
@@ -134,7 +134,6 @@ class MotionTypesWidget(AttrBoxWidget):
         self.motion_type_box.setMinimumWidth(int(self.width() * 0.5))
 
         self.header_label.setFont(QFont("Arial", int(self.width() / 18)))
-
 
         self.motion_type_box.setMinimumHeight(int(self.attr_box.height() / 8))
         self.motion_type_box.setMaximumHeight(int(self.attr_box.height() / 8))

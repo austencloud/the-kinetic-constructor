@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_widget.object_panel.objectbox import ObjectBox
-    from widgets.graph_editor_widget.graph_editor import GraphEditor
+    from widgets.graph_editor_tab.object_panel.objectbox import ObjectBox
+    from widgets.graph_editor_tab.graph_editor import GraphEditor
 
 
 class ObjectBoxView(QGraphicsView):

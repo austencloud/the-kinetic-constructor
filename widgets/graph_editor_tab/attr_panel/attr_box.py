@@ -9,26 +9,26 @@ from constants.string_constants import (
     BLUE_HEX,
 )
 from utilities.TypeChecking.TypeChecking import Colors
-from widgets.graph_editor_widget.attr_panel.attr_box_widgets.attr_box_widget import (
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
-from widgets.graph_editor_widget.attr_panel.custom_button import CustomButton
+from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
-    from widgets.graph_editor_widget.attr_panel.attr_panel import (
+    from widgets.graph_editor_tab.attr_panel.attr_panel import (
         AttrPanel,
     )
-from widgets.graph_editor_widget.attr_panel.attr_box_widgets.header_widget import (
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.header_widget import (
     HeaderWidget,
 )
-from widgets.graph_editor_widget.attr_panel.attr_box_widgets.motion_types_widget import (
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.motion_types_widget import (
     MotionTypesWidget,
 )
-from widgets.graph_editor_widget.attr_panel.attr_box_widgets.start_end_widget import (
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_widget import (
     StartEndWidget,
 )
-from widgets.graph_editor_widget.attr_panel.attr_box_widgets.turns_widget import (
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.turns_widget import (
     TurnsWidget,
 )
 
@@ -108,7 +108,7 @@ class AttrBox(QFrame):
         self.setMaximumWidth(int(self.pictograph.view.width() * 0.85))
         self.setMinimumHeight(self.pictograph.view.height())
         self.setMaximumHeight(self.pictograph.view.height())
-        
+
         for button in self.findChildren(CustomButton):
             button.update_custom_button_size(int(self.width() / 8))
 
@@ -130,4 +130,3 @@ class AttrBox(QFrame):
         self.start_end_widget.resize_start_end_widget()
 
         self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
-

@@ -15,7 +15,7 @@ from utilities.TypeChecking.TypeChecking import ColorsHex
 
 class ExportHandler:
     def __init__(self, main_widget: "MainWidget") -> None:
-        self.pictograph = main_widget.graph_editor_widget.graph_editor.main_pictograph
+        self.pictograph = main_widget.graph_editor_tab.graph_editor.main_pictograph
         self.grid = self.pictograph.grid
         self.export_to_png()
 

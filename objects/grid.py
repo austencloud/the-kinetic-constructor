@@ -22,8 +22,8 @@ from constants.string_constants import (
 from utilities.TypeChecking.TypeChecking import GridModes
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_widget.object_panel.arrowbox.arrowbox import ArrowBox
-    from widgets.graph_editor_widget.object_panel.propbox.propbox import PropBox
+    from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
+    from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
     from objects.pictograph.pictograph import Pictograph
 
 

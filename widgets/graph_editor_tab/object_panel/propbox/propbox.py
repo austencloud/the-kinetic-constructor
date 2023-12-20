@@ -3,16 +3,16 @@ from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.prop.prop import *
 from objects.prop.prop_types import BigTriad
-from widgets.graph_editor_widget.object_panel.propbox.propbox_drag import PropBoxDrag
-from widgets.graph_editor_widget.object_panel.propbox.propbox_view import PropBoxView
+from widgets.graph_editor_tab.object_panel.propbox.propbox_drag import PropBoxDrag
+from widgets.graph_editor_tab.object_panel.propbox.propbox_view import PropBoxView
 from constants.string_constants import *
 from objects.grid import Grid
-from widgets.graph_editor_widget.object_panel.objectbox import ObjectBox
+from widgets.graph_editor_tab.object_panel.objectbox import ObjectBox
 from utilities.TypeChecking.TypeChecking import PropTypes, TYPE_CHECKING, Dict, List
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor_widget.graph_editor import GraphEditor
+    from widgets.graph_editor_tab.graph_editor import GraphEditor
 
 
 class PropBox(ObjectBox):
@@ -257,7 +257,7 @@ class PropBox(ObjectBox):
             self.target_prop = closest_prop
             if not self.drag:
                 pictograph = (
-                    self.main_widget.graph_editor_widget.graph_editor.main_pictograph
+                    self.main_widget.graph_editor_tab.graph_editor.main_pictograph
                 )
                 self.drag = PropBoxDrag(self.main_window, pictograph, self)
             if event.button() == Qt.MouseButton.LeftButton:

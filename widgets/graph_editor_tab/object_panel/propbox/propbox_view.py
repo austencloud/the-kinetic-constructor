@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING
 
-from widgets.graph_editor_widget.object_panel.objectbox_view import ObjectBoxView
+from widgets.graph_editor_tab.object_panel.objectbox_view import ObjectBoxView
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_widget.object_panel.propbox.propbox import PropBox
-    from widgets.graph_editor_widget.graph_editor import GraphEditor
+    from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
+    from widgets.graph_editor_tab.graph_editor import GraphEditor
 
 
 class PropBoxView(ObjectBoxView):

@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
     from objects.arrow.arrow import Arrow
     from objects.prop.prop import Prop
-    from widgets.graph_editor_widget.object_panel.arrowbox.arrowbox import ArrowBox
+    from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
 
 
 class Motion:

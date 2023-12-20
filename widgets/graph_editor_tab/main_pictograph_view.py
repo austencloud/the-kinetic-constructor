@@ -6,7 +6,7 @@ from PyQt6.QtGui import QIcon
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_widget.main_pictograph import MainPictograph
+    from widgets.graph_editor_tab.main_pictograph import MainPictograph
 
 
 class MainPictographView(QGraphicsView):

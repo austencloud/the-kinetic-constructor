@@ -9,9 +9,10 @@ from utilities.TypeChecking.TypeChecking import (
 )
 from objects.pictograph.pictograph import Pictograph
 from PyQt6.QtWidgets import QGraphicsScene
+
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor_widget.graph_editor import GraphEditor
+    from widgets.graph_editor_tab.graph_editor import GraphEditor
 
 
 class MainPictograph(Pictograph):
@@ -19,4 +20,3 @@ class MainPictograph(Pictograph):
         super().__init__(main_widget, graph_type="main")
         self.main_widget = main_widget
         self.graph_editor = graph_editor
-

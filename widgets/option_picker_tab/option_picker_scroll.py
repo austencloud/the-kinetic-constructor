@@ -30,7 +30,7 @@ class OptionPickerScroll(QScrollArea):
         self.options: List[Tuple[Letters, Option]] = []
         self.pictographs = self.load_and_sort_data("LetterDictionary.csv")
         self.main_pictograph = (
-            self.main_widget.graph_editor_widget.graph_editor.main_pictograph
+            self.main_widget.graph_editor_tab.graph_editor.main_pictograph
         )
         self.last_end_orientation = None
 

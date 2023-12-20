@@ -31,7 +31,7 @@ from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Tuple
 from objects.ghosts.ghost_arrow import GhostArrow
 
-from widgets.graph_editor_widget.object_panel.objectbox_drag import ObjectBoxDrag
+from widgets.graph_editor_tab.object_panel.objectbox_drag import ObjectBoxDrag
 from utilities.TypeChecking.TypeChecking import (
     Colors,
     MotionTypes,
@@ -46,7 +46,7 @@ from data.start_end_location_map import get_start_end_locations
 if TYPE_CHECKING:
     from main import MainWindow
     from objects.pictograph.pictograph import Pictograph
-    from widgets.graph_editor_widget.object_panel.arrowbox.arrowbox import ArrowBox
+    from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
 
 
 class ArrowBoxDrag(ObjectBoxDrag):

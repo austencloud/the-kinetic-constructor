@@ -58,7 +58,7 @@ from objects.pictograph.position_engines.prop_positioner import PropPositioner
 if TYPE_CHECKING:
     from utilities.pictograph_generator import PictographGenerator
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor_widget.graph_editor import GraphEditor
+    from widgets.graph_editor_tab.graph_editor import GraphEditor
 
 from objects.letter_item import LetterItem
 
@@ -121,7 +121,7 @@ class Pictograph(QGraphicsScene):
         self.setup_managers(main_widget)
 
     def init_view(self, graph_type) -> QGraphicsView:
-        from widgets.graph_editor_widget.main_pictograph_view import MainPictographView
+        from widgets.graph_editor_tab.main_pictograph_view import MainPictographView
         from widgets.option_picker_tab.option.option import OptionView
         from widgets.sequence_widget.beat_frame.start_position import StartPositionView
         from widgets.sequence_widget.beat_frame.beat import BeatView
@@ -302,7 +302,7 @@ class Pictograph(QGraphicsScene):
 
     def update_attr_panel(self) -> None:
         for motion in self.motions.values():
-            self.main_widget.graph_editor_widget.graph_editor.attr_panel.update_attr_panel(
+            self.main_widget.graph_editor_tab.graph_editor.attr_panel.update_attr_panel(
                 motion.color
             )
 

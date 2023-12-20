@@ -4,12 +4,12 @@ from PyQt6.QtWidgets import (
 )
 from constants.string_constants import RED, BLUE
 from utilities.TypeChecking.TypeChecking import Colors
-from widgets.graph_editor_widget.attr_panel.attr_box import AttrBox
+from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
 from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_widget.graph_editor import GraphEditor
+    from widgets.graph_editor_tab.graph_editor import GraphEditor
 from PyQt6.QtCore import Qt
 
 

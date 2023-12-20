@@ -13,17 +13,16 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QWheelEvent
 from utilities.TypeChecking.TypeChecking import LetterDictionary
 from utilities.json_handler import JsonHandler
-from widgets.graph_editor_widget.graph_editor_widget import GraphEditorWidget
-from widgets.graph_editor_widget.key_event_handler import KeyEventHandler
-from objects.pictograph.pictograph import Pictograph
 from widgets.image_generator_tab.ig_tab import IGTab
 from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
+from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
+from widgets.graph_editor_tab.key_event_handler import KeyEventHandler
+from objects.pictograph.pictograph import Pictograph
 from widgets.sequence_widget.sequence_widget import SequenceWidget
 from widgets.styled_splitter import StyledSplitter
 
 if TYPE_CHECKING:
     from main import MainWindow
-from PyQt6.QtGui import QResizeEvent
 
 
 class MainWidget(QWidget):
@@ -37,7 +36,7 @@ class MainWidget(QWidget):
         self.key_event_handler = KeyEventHandler()
         self.json_handler = JsonHandler()
         self.letters: LetterDictionary = self.json_handler.load_all_letters()
-        self.graph_editor_widget = GraphEditorWidget(self)
+        self.graph_editor_tab = GraphEditorTab(self)
         self.sequence_widget = SequenceWidget(self)
         self.option_picker_widget = OptionPickerTab(self)
         self.image_generator_tab = IGTab(self)
@@ -100,7 +99,7 @@ class MainWidget(QWidget):
             """
         )
         self.tab_widget.addTab(self.option_picker_widget, "Option Picker")
-        self.tab_widget.addTab(self.graph_editor_widget, "Graph Editor")
+        self.tab_widget.addTab(self.graph_editor_tab, "Graph Editor")
         self.tab_widget.addTab(self.image_generator_tab, "Image Generator")
 
         self.left_frame.setSizePolicy(
@@ -146,16 +145,16 @@ class MainWidget(QWidget):
         return super().eventFilter(source, event)
 
     def deselect_all_except(self, active_pictograph: Pictograph) -> None:
-        if self.graph_editor_widget.graph_editor.main_pictograph != active_pictograph:
-            self.graph_editor_widget.graph_editor.main_pictograph.clearSelection()
+        if self.graph_editor_tab.graph_editor.main_pictograph != active_pictograph:
+            self.graph_editor_tab.graph_editor.main_pictograph.clearSelection()
 
         for beat_view in self.sequence_widget.beat_frame.beats:
             if beat_view.pictograph and beat_view.pictograph != active_pictograph:
                 beat_view.pictograph.clearSelection()
 
     def find_active_pictograph(self) -> Optional[Pictograph]:
-        if self.graph_editor_widget.graph_editor.main_pictograph.selectedItems():
-            return self.graph_editor_widget.graph_editor.main_pictograph
+        if self.graph_editor_tab.graph_editor.main_pictograph.selectedItems():
+            return self.graph_editor_tab.graph_editor.main_pictograph
 
         for beat_view in self.sequence_widget.beat_frame.beats:
             if beat_view.pictograph and beat_view.pictograph.selectedItems():

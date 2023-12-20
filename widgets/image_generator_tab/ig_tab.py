@@ -45,7 +45,7 @@ class IGTab(QWidget):
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.main_pictograph = (
-            self.main_widget.graph_editor_widget.graph_editor.main_pictograph
+            self.main_widget.graph_editor_tab.graph_editor.main_pictograph
         )
         self.pictograph_df = self.load_and_sort_data("LetterDictionary.csv")
         self.selected_pictographs = []
@@ -125,7 +125,11 @@ class IGTab(QWidget):
         main_splitter.addWidget(self.ig_scroll_area)
 
         letters = self.get_letters()
-        letters.sort(key=lambda x: x if x not in ['Σ', 'Δ', 'θ', 'Ω', 'Φ', 'Ψ', 'Λ', 'α', 'β', 'Γ'] else chr(ord(x) + 1000))
+        letters.sort(
+            key=lambda x: x
+            if x not in ["Σ", "Δ", "θ", "Ω", "Φ", "Ψ", "Λ", "α", "β", "Γ"]
+            else chr(ord(x) + 1000)
+        )
         for row_index, row in enumerate(self.letter_rows):
             for col_index, letter in enumerate(row):
                 button = QPushButton(letter)
@@ -134,7 +138,6 @@ class IGTab(QWidget):
                 )
                 letter_button_layout.addWidget(button, row_index, col_index)
                 self.letter_buttons[letter] = button
-
 
     ### LETTERS ###
 
@@ -342,5 +345,3 @@ class IGTab(QWidget):
     def clear_images(self) -> None:
         # Optional: Clear images if necessary before generation
         pass
-
-        

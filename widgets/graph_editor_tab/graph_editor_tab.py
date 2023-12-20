@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QShowEvent
 
-from widgets.graph_editor_widget.graph_editor import GraphEditor
+from widgets.graph_editor_tab.graph_editor import GraphEditor
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import QFrame, QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 
 
-class GraphEditorWidget(QFrame):
+class GraphEditorTab(QFrame):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -31,4 +31,3 @@ class GraphEditorWidget(QFrame):
         self.graph_editor = GraphEditor(self.main_widget, self)
 
         self.main_layout.addWidget(self.graph_editor)
-

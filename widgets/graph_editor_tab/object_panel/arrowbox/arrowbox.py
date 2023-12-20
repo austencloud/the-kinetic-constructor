@@ -5,16 +5,16 @@ from PyQt6.QtWidgets import QGraphicsItem, QGraphicsSceneMouseEvent, QGridLayout
 from objects.arrow.arrow import Arrow
 from constants.string_constants import *
 from objects.motion import Motion
-from widgets.graph_editor_widget.object_panel.arrowbox.arrowbox_drag import ArrowBoxDrag
-from widgets.graph_editor_widget.object_panel.arrowbox.arrowbox_view import ArrowBoxView
+from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox_drag import ArrowBoxDrag
+from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox_view import ArrowBoxView
 from objects.grid import Grid
-from widgets.graph_editor_widget.object_panel.objectbox import ObjectBox
+from widgets.graph_editor_tab.object_panel.objectbox import ObjectBox
 from utilities.TypeChecking.TypeChecking import MotionAttributesDicts
 from PyQt6.QtCore import QPointF
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor_widget.graph_editor import GraphEditor
+    from widgets.graph_editor_tab.graph_editor import GraphEditor
 
 
 class ArrowBox(ObjectBox):
@@ -230,7 +230,7 @@ class ArrowBox(ObjectBox):
             self.target_arrow = closest_arrow
             if not self.drag:
                 pictograph = (
-                    self.main_widget.graph_editor_widget.graph_editor.main_pictograph
+                    self.main_widget.graph_editor_tab.graph_editor.main_pictograph
                 )
                 self.drag = ArrowBoxDrag(self.main_window, pictograph, self)
             if event.button() == Qt.MouseButton.LeftButton:

@@ -12,14 +12,14 @@ from PyQt6.QtGui import QFont, QPixmap
 from typing import TYPE_CHECKING, List
 from objects.motion import Motion
 from constants.string_constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, ICON_DIR
-from widgets.graph_editor_widget.attr_panel.attr_box_widgets.attr_box_widget import (
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
 
-from widgets.graph_editor_widget.attr_panel.custom_button import CustomButton
+from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_widget.attr_panel.attr_box import AttrBox
+    from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
 
 
 class TurnsWidget(AttrBoxWidget):
@@ -307,7 +307,6 @@ class TurnsWidget(AttrBoxWidget):
         self.turnbox_vbox_frame.setMaximumWidth(int(self.attr_box.width() / 3.25))
 
     def _update_button_size(self) -> None:
-        
         for button in self.buttons:
             button_size = int(self.attr_box.width() / 7)
             if button.text() == "-0.5" or button.text() == "+0.5":

@@ -2,21 +2,21 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
-from widgets.graph_editor_widget.main_pictograph import MainPictograph
+from widgets.graph_editor_tab.main_pictograph import MainPictograph
 
-from widgets.graph_editor_widget.object_panel.arrowbox.arrowbox import ArrowBox
-from widgets.graph_editor_widget.main_pictograph_widget import MainPictographWidget
-from widgets.graph_editor_widget.object_panel.propbox.propbox import PropBox
-from widgets.graph_editor_widget.attr_panel.attr_panel import AttrPanel
+from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
+from widgets.graph_editor_tab.main_pictograph_widget import MainPictographWidget
+from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
+from widgets.graph_editor_tab.attr_panel.attr_panel import AttrPanel
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor_widget.graph_editor_widget import GraphEditorWidget
+    from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
 
 
 class GraphEditor(QFrame):
     def __init__(
-        self, main_widget: "MainWidget", graph_editor_widget: "GraphEditorWidget"
+        self, main_widget: "MainWidget", graph_editor_tab: "GraphEditorTab"
     ) -> None:
         super().__init__()
         self._initialize_main_widget_attributes(main_widget)

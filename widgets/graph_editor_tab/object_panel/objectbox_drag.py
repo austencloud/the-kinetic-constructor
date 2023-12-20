@@ -6,12 +6,12 @@ from utilities.TypeChecking.TypeChecking import RotationAngles
 
 if TYPE_CHECKING:
     from main import MainWindow
-    from widgets.graph_editor_widget.object_panel.objectbox import ObjectBox
+    from widgets.graph_editor_tab.object_panel.objectbox import ObjectBox
     from objects.pictograph.pictograph import Pictograph
-    from widgets.graph_editor_widget.object_panel.arrowbox.arrowbox_drag import (
+    from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox_drag import (
         ArrowBoxDrag,
     )
-    from widgets.graph_editor_widget.object_panel.propbox.propbox_drag import (
+    from widgets.graph_editor_tab.object_panel.propbox.propbox_drag import (
         PropBoxDrag,
     )
 
