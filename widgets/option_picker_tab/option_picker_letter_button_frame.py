@@ -3,7 +3,7 @@ from PyQt6.QtGui import QIcon, QPixmap, QPainter, QFont, QColor, QResizeEvent
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtSvg import QSvgRenderer
 from data.letter_engine_data import letter_types
-from constants.string_constants import LETTER_SVG_DIR
+from constants.string_constants import LETTER_BTN_ICON_DIR
 from typing import TYPE_CHECKING, List
 
 from utilities.TypeChecking.Letters import Letters
@@ -69,7 +69,7 @@ class OptionPickerLetterButtonFrame(QFrame):
             letter_buttons_layout.addLayout(row_layout)
 
         self.letter_buttons_layout = letter_buttons_layout
-        
+
         self.setLayout(letter_buttons_layout)
 
     def get_letter_type(self, letter: str) -> str:
@@ -79,7 +79,7 @@ class OptionPickerLetterButtonFrame(QFrame):
         return ""
 
     def get_icon_path(self, letter_type: str, letter: Letters) -> str:
-        return f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
+        return f"{LETTER_BTN_ICON_DIR}/{letter_type}/{letter}.svg"
 
     def create_button(self, icon_path: str) -> QPushButton:
         renderer = QSvgRenderer(icon_path)

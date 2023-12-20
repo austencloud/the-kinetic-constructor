@@ -18,7 +18,8 @@ from constants.string_constants import (
     COLOR,
     DIAMOND,
     END_LOCATION,
-    LETTER_SVG_DIR,
+    LETTER_BTN_ICON_DIR,
+    LETTERS_TRIMMED_SVG_DIR,
     MOTION_TYPE,
     PROP,
     RED,
@@ -147,7 +148,7 @@ class Pictograph(QGraphicsScene):
 
     def set_letter_renderer(self, letter: str) -> None:
         letter_type = self.get_current_letter_type()
-        svg_path = f"{LETTER_SVG_DIR}/{letter_type}/{letter}.svg"
+        svg_path = f"{LETTERS_TRIMMED_SVG_DIR}/{letter_type}/{letter}.svg"
         renderer = QSvgRenderer(svg_path)
         if renderer.isValid():
             self.letter_item.setSharedRenderer(renderer)
@@ -328,10 +329,10 @@ class Pictograph(QGraphicsScene):
         if all(motion.motion_type for motion in self.motions.values()):
             self.current_letter = self.letter_engine.get_current_letter()
             self.set_letter_renderer(self.current_letter)
-            self.letter_item.position_letter_item(self.letter_item)            
+            self.letter_item.position_letter_item(self.letter_item)
         else:
             self.current_letter = None
-            svg_path = f"{LETTER_SVG_DIR}/blank.svg"
+            svg_path = f"{LETTER_BTN_ICON_DIR}/blank.svg"
             renderer = QSvgRenderer(svg_path)
             if renderer.isValid():
                 self.letter_item.setSharedRenderer(renderer)
