@@ -1,14 +1,14 @@
 from typing import TYPE_CHECKING, List
 from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
 
-from widgets.image_generator_tab.ig_pictograph import IG_Pictograph
+from widgets.image_generator_tab.ig_pictograph import IGPictograph
 
 if TYPE_CHECKING:
     from widgets.image_generator_tab.ig_tab import IGTab
     from widgets.main_widget import MainWidget
 
 
-class IG_Scroll(QScrollArea):
+class IGScroll(QScrollArea):
     def __init__(self, main_widget: "MainWidget", ig_tab: "IGTab"):
         super().__init__(ig_tab)
         self.main_widget = main_widget
@@ -20,7 +20,7 @@ class IG_Scroll(QScrollArea):
         self.setWidget(self.pictograph_container)
         self.COLUMN_COUNT = 4
         self.spacing = 10
-        self.ig_pictographs: List[IG_Pictograph] = []
+        self.ig_pictographs: List[IGPictograph] = []
 
     def update_displayed_pictographs(self):
         """
@@ -40,7 +40,7 @@ class IG_Scroll(QScrollArea):
 
         # Display pictographs as views in the scroll area
         for i, (index, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
-            ig_pictograph = IG_Pictograph(
+            ig_pictograph = IGPictograph(
                 self.main_widget,
                 self,
             )
@@ -51,9 +51,13 @@ class IG_Scroll(QScrollArea):
             self.ig_pictographs.append(ig_pictograph)
 
             # Determine size for IG_Pictograph_View based on scroll area's width
-            view_width = self.viewport().width() // self.COLUMN_COUNT - (self.spacing * (self.COLUMN_COUNT - 1))
-            view_height = int(view_width * (ig_pictograph.height() / ig_pictograph.width()))
-            
+            view_width = self.viewport().width() // self.COLUMN_COUNT - (
+                self.spacing * (self.COLUMN_COUNT - 1)
+            )
+            view_height = int(
+                view_width * (ig_pictograph.height() / ig_pictograph.width())
+            )
+
             # Set the size for the view
             ig_pictograph.view.resize_ig_pictograph()
 
@@ -63,7 +67,7 @@ class IG_Scroll(QScrollArea):
     def resize_ig_scroll_area(self) -> None:
         for ig_pictograph in self.ig_pictographs:
             ig_pictograph.view.resize_ig_pictograph()
-            
+
     def update_scroll_area_content(self):
         self.pictograph_container.adjustSize()
         self.pictograph_layout.update()

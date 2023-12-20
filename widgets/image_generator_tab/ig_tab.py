@@ -11,13 +11,15 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QGridLayout,
     QLabel,
+    QFrame,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QImage, QPainter
 from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
-from widgets.image_generator_tab.ig_pictograph import IG_Pictograph
-from widgets.image_generator_tab.ig_scroll import IG_Scroll
+from widgets.image_generator_tab.ig_letter_button_frame import IGLetterButtonFrame
+from widgets.image_generator_tab.ig_pictograph import IGPictograph
+from widgets.image_generator_tab.ig_scroll import IGScroll
 
 from constants.string_constants import (
     COLOR,
@@ -67,77 +69,62 @@ class IGTab(QWidget):
     ### UI SETUP ###
 
     def setupUI(self) -> None:
-        main_splitter = QSplitter(Qt.Orientation.Vertical)
-        layout = QVBoxLayout(self)
-        layout.addWidget(main_splitter)
-        self.setLayout(layout)
+        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.setLayout(self.layout)
+        button_frame = QFrame()
+        button_frame_layout = QVBoxLayout()
+        letter_button_frame = IGLetterButtonFrame(self.main_widget, self)
+        action_button_frame = QFrame()
+        self.ig_scroll_area = IGScroll(self.main_widget, self)
+        letter_button_frame.setStyleSheet(
+            """
+            QFrame {
+                border: 1px solid black;
+            }
+            """
+        )
+        action_button_frame_layout = QVBoxLayout()
+        button_frame_layout.setAlignment(Qt.AlignmentFlag.AlignRight)
+        self.generate_all_button = QPushButton("Generate All Images 🧨", self)
+        self.generate_all_button.setStyleSheet("font-size: 16px;")
+        self.generate_selected_button = QPushButton("Generate Selected Images", self)
+        self.generate_selected_button.setStyleSheet("font-size: 16px;")
+        self.layout.addWidget(letter_button_frame)
 
-        self.letter_rows = [
-            # Type 1 - Dual-Shift
-            ["A", "B", "C"],
-            ["D", "E", "F"],
-            ["G", "H", "I"],
-            ["J", "K", "L"],
-            ["M", "N", "O"],
-            ["P", "Q", "R"],
-            ["S", "T", "U", "V"],
-            # Type 2 - Shift
-            ["W", "X", "Y", "Z"],
-            ["Σ", "Δ", "θ", "Ω"],
-            # Type 3 - Cross-Shift
-            ["W-", "X-", "Y-", "Z-"],
-            ["Σ-", "Δ-", "θ-", "Ω-"],
-            # Type 4 - Dash
-            ["Φ", "Ψ", "Λ"],
-            # Type 5 - Dual-Dash
-            ["Φ-", "Ψ-", "Λ-"],
-            # Type 6 - Static
-            ["α", "β", "Γ"],
-        ]
-
-        # Grid layout for letter checkboxes
-        self.letter_buttons: Dict[str, QPushButton] = {}
-        letter_button_layout = QGridLayout()
-        letter_button_layout.setSpacing(10)
-        letter_button_frame = QWidget()
-        letter_button_frame.setLayout(letter_button_layout)
-        main_splitter.addWidget(letter_button_frame)
-
-        # Button to generate images
-        self.generate_all_button = QPushButton("Generate All Images")
         self.generate_all_button.clicked.connect(self.generate_images_for_all_letters)
-        main_splitter.addWidget(self.generate_all_button)
-
-        # Additional button for generating selected images
-        self.generate_selected_button = QPushButton("Generate Selected Images")
         self.generate_selected_button.clicked.connect(self.generate_selected_images)
-        main_splitter.addWidget(self.generate_selected_button)
 
-        # Position the buttons more intuitively
-        buttons_layout = QHBoxLayout()
-        buttons_layout.addWidget(self.generate_all_button)
-        buttons_layout.addWidget(self.generate_selected_button)
-        layout.addLayout(buttons_layout)
-
-        # Create a scroll area for pictograph views
-        self.ig_scroll_area = IG_Scroll(self.main_widget, self)
-
-        main_splitter.addWidget(self.ig_scroll_area)
-
+        action_button_frame.setLayout(action_button_frame_layout)
+        button_frame.setLayout(button_frame_layout)
+        button_frame.setStyleSheet(
+            """
+            QFrame {
+                border: 1px solid black;
+            }
+            """
+        )
+        button_frame.setContentsMargins(0, 0, 0, 0)
+        button_frame_layout.setContentsMargins(0, 0, 0, 0)
+        button_frame_layout.setSpacing(0)
+        action_button_frame_layout.setContentsMargins(0, 0, 0, 0)
+        action_button_frame_layout.setSpacing(0)
+        action_button_frame_layout.addWidget(self.generate_all_button)
+        action_button_frame_layout.addWidget(self.generate_selected_button)
+        button_frame_layout.addWidget(letter_button_frame, 8)
+        button_frame_layout.addWidget(action_button_frame, 1)
+        self.layout.addWidget(self.ig_scroll_area)
+        self.layout.addWidget(button_frame)
         letters = self.get_letters()
         letters.sort(
             key=lambda x: x
             if x not in ["Σ", "Δ", "θ", "Ω", "Φ", "Ψ", "Λ", "α", "β", "Γ"]
             else chr(ord(x) + 1000)
         )
-        for row_index, row in enumerate(self.letter_rows):
-            for col_index, letter in enumerate(row):
-                button = QPushButton(letter)
-                button.clicked.connect(
-                    lambda _, ltr=letter: self.on_letter_button_clicked(ltr)
-                )
-                letter_button_layout.addWidget(button, row_index, col_index)
-                self.letter_buttons[letter] = button
+
+        for key, button in letter_button_frame.buttons.items():
+            button.clicked.connect(
+                lambda checked, letter=key: self.on_letter_button_clicked(letter)
+            )
 
     ### LETTERS ###
 
@@ -216,8 +203,8 @@ class IGTab(QWidget):
 
     def _create_ig_pictograph_from_pictograph_data(
         self, pictograph_data
-    ) -> IG_Pictograph:
-        ig_pictograph = IG_Pictograph(self.main_widget, self.ig_scroll_area)
+    ) -> IGPictograph:
+        ig_pictograph = IGPictograph(self.main_widget, self.ig_scroll_area)
         ig_pictograph.setSceneRect(0, 0, 750, 900)
 
         # Use the existing method to create motion dictionaries
@@ -236,7 +223,7 @@ class IGTab(QWidget):
 
         return ig_pictograph
 
-    def _create_arrow(self, ig_pictograph: "IG_Pictograph", motion_dict: Dict) -> Arrow:
+    def _create_arrow(self, ig_pictograph: "IGPictograph", motion_dict: Dict) -> Arrow:
         arrow_dict = {
             COLOR: motion_dict[COLOR],
             MOTION_TYPE: motion_dict[MOTION_TYPE],
@@ -250,7 +237,7 @@ class IGTab(QWidget):
         ig_pictograph.addItem(arrow)
         return arrow
 
-    def _create_prop(self, ig_pictograph: "IG_Pictograph", motion_dict: Dict) -> Prop:
+    def _create_prop(self, ig_pictograph: "IGPictograph", motion_dict: Dict) -> Prop:
         prop_dict = {
             COLOR: motion_dict[COLOR],
             PROP_TYPE: self.main_pictograph.prop_type,
@@ -265,7 +252,7 @@ class IGTab(QWidget):
         return prop
 
     def _finalize_ig_pictograph_setup(
-        self, ig_pictograph: "IG_Pictograph", motion_dict
+        self, ig_pictograph: "IGPictograph", motion_dict
     ) -> None:
         for motion in ig_pictograph.motions.values():
             if motion.color == motion_dict[COLOR]:
@@ -289,7 +276,7 @@ class IGTab(QWidget):
 
     @staticmethod
     def _setup_motion_relations(
-        ig_pictograph: IG_Pictograph, arrow: Arrow, prop: Prop
+        ig_pictograph: IGPictograph, arrow: Arrow, prop: Prop
     ) -> None:
         motion = ig_pictograph.motions[arrow.color]
         arrow.motion, prop.motion = motion, motion
@@ -297,7 +284,7 @@ class IGTab(QWidget):
         arrow.ghost.motion = motion
 
     def _add_motion_to_ig_pictograph(
-        self, ig_pictograph: "IG_Pictograph", motion_dict: Dict
+        self, ig_pictograph: "IGPictograph", motion_dict: Dict
     ) -> None:
         arrow = self._create_arrow(ig_pictograph, motion_dict)
         prop = self._create_prop(ig_pictograph, motion_dict)

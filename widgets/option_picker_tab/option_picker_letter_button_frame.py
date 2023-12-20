@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from widgets.option_picker_tab.option_picker_scroll import OptionPickerTab
 
 
-class OptionPickerLetterButtons(QFrame):
+class OptionPickerLetterButtonFrame(QFrame):
     def __init__(
         self, main_widget: "MainWidget", option_picker_widget: "OptionPickerTab"
     ) -> None:
@@ -69,6 +69,7 @@ class OptionPickerLetterButtons(QFrame):
             letter_buttons_layout.addLayout(row_layout)
 
         self.letter_buttons_layout = letter_buttons_layout
+        
         self.setLayout(letter_buttons_layout)
 
     def get_letter_type(self, letter: str) -> str:
@@ -105,7 +106,7 @@ class OptionPickerLetterButtons(QFrame):
             }
             """
         )
-        button.setFlat(True)
+        # button.setFlat(True)
         font = QFont()
         font.setPointSize(int(20))
         button.setFont(font)
