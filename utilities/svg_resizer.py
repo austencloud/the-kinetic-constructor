@@ -31,7 +31,7 @@ from PIL import Image
 import io
 from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
 import xml.etree.ElementTree as ET
-
+import subprocess
 
 
 class SvgResizer(QMainWindow):
@@ -211,15 +211,46 @@ class SvgResizer(QMainWindow):
             QMessageBox.critical(self, "Error", f"An error occurred: {e}")
 
     def trim_svg(self, svg_file_path) -> None:
-        png_data = cairosvg.svg2png(url=svg_file_path)
-        image = Image.open(io.BytesIO(png_data))
-        image = image.convert("RGBA")
-        bbox = image.getbbox()
-        if bbox:
-            new_viewbox = f"{bbox[0]} {bbox[1]} {bbox[2] - bbox[0]} {bbox[3] - bbox[1]}"
-            self.update_viewbox(svg_file_path, new_viewbox)
+        # Parse the SVG file
+        tree = ET.parse(svg_file_path)
+        root = tree.getroot()
+
+        # Use Inkscape's command-line interface to get the bounding box
+        # (inkscape needs to be installed and available in the PATH)
+        process = subprocess.Popen(
+            ["inkscape", "--query-all", svg_file_path],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True
+        )
+        output, errors = process.communicate()
+
+        # Parse the output to get the bounding box for the drawing (id='svg2')
+        for line in output.splitlines():
+            line_parts = line.split(',')
+            if line_parts[0] == 'svg2':
+                min_x, min_y, width, height = map(float, line_parts[1:])
+                break
         else:
-            QMessageBox.warning(self, "Warning", "The image appears to be blank.")
+            QMessageBox.warning(self, "Warning", "Unable to determine the SVG content bounds.")
+            return
+
+        # Center the content within the new viewBox
+        new_viewbox_x = min_x - (width - min_x) / 2
+        new_viewbox_y = min_y - (height - min_y) / 2
+        new_viewbox_width = width * 2
+        new_viewbox_height = height * 2
+
+        # Update the SVG's viewBox attribute
+        new_viewbox = f"{new_viewbox_x} {new_viewbox_y} {new_viewbox_width} {new_viewbox_height}"
+        root.attrib["viewBox"] = new_viewbox
+
+        # Write the updated SVG back to file
+        tree.write(svg_file_path)
+
+        # Inform the user of success
+        QMessageBox.information(self, "Success", "SVG content has been centered.")
+
 
     def update_viewbox(self, svg_file_path, new_viewbox) -> None:
         tree = ET.parse(svg_file_path)
