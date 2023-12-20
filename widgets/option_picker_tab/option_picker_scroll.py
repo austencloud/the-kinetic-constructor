@@ -65,10 +65,14 @@ class OptionPickerScroll(QScrollArea):
         """Adds an option for the specified start position."""
         start_position, end_position = position_key.split("_")
         if (start_position, end_position) in self.pictographs.index:
-            pd_data = self.pictographs.loc[(start_position, end_position)]
-            pd_data = pd_data.iloc[0] if isinstance(pd_data, pd.DataFrame) else pd_data
-            pictograph_dict = self._create_pictograph_dict(pd_data)
-            start_option = self._create_option_from_pd_data(pd_data)
+            pd_row_data = self.pictographs.loc[(start_position, end_position)]
+            pd_row_data = (
+                pd_row_data.iloc[0]
+                if isinstance(pd_row_data, pd.DataFrame)
+                else pd_row_data
+            )
+            pictograph_dict = self._create_pictograph_dict(pd_row_data)
+            start_option = self._create_option(pd_row_data)
             start_option.pictograph_dict = pictograph_dict
             start_option.view.resize_option_view()
             start_option.current_letter = start_option.pictograph_dict["letter"]
@@ -76,24 +80,24 @@ class OptionPickerScroll(QScrollArea):
             start_option.end_position = start_option.pictograph_dict["end_position"]
             self._add_option_to_layout(start_option, True, 0, column)
 
-    def _create_pictograph_dict(self, pd_data):
+    def _create_pictograph_dict(self, pd_row_data):
         pictograph_dict = {
-            "letter": pd_data.letter,
-            "start_position": pd_data.name[0],
-            "end_position": pd_data.name[1],
+            "letter": pd_row_data.letter,
+            "start_position": pd_row_data.name[0],
+            "end_position": pd_row_data.name[1],
         }
         return pictograph_dict
 
-    def _generate_image_path(self, pd_data: pd.Series) -> str:
+    def _generate_image_path(self, pd_row_data: pd.Series) -> str:
         """Generates the image path based on the row data."""
         image_dir = os.path.join(
-            "resources", "images", "pictographs", pd_data["letter"]
+            "resources", "images", "pictographs", pd_row_data["letter"]
         )
         image_name = (
-            f"{pd_data['letter']}_{pd_data.name[0]}_{pd_data.name[1]}_"
-            f"{pd_data['blue_turns']}_{pd_data['blue_start_orientation']}_"
-            f"{pd_data['blue_end_orientation']}_{pd_data['red_turns']}_"
-            f"{pd_data['red_start_orientation']}_{pd_data['red_end_orientation']}.png"
+            f"{pd_row_data['letter']}_{pd_row_data.name[0]}_{pd_row_data.name[1]}_"
+            f"{pd_row_data['blue_turns']}_{pd_row_data['blue_start_orientation']}_"
+            f"{pd_row_data['blue_end_orientation']}_{pd_row_data['red_turns']}_"
+            f"{pd_row_data['red_start_orientation']}_{pd_row_data['red_end_orientation']}.png"
         )
         return os.path.join(image_dir, image_name)
 
@@ -111,18 +115,18 @@ class OptionPickerScroll(QScrollArea):
                 self.image_cache[image_path] = QPixmap(image_path)
             option.loadImage(image_path)
 
-    def _create_motion_dict(self, pd_data: pd.Series, color: str) -> Dict:
+    def _create_motion_dict(self, pd_row_data: pd.Series, color: str) -> Dict:
         motion_dict = {
-            "color": pd_data[f"{color}_color"],
-            "motion_type": pd_data[f"{color}_motion_type"],
-            "rotation_direction": pd_data[f"{color}_rotation_direction"],
-            "start_location": pd_data[f"{color}_start_location"],
-            "end_location": pd_data[f"{color}_end_location"],
-            "turns": pd_data[f"{color}_turns"],
-            "start_orientation": pd_data[f"{color}_start_orientation"],
-            "end_orientation": pd_data[f"{color}_end_orientation"],
-            "start_layer": pd_data[f"{color}_start_layer"],
-            "end_layer": pd_data[f"{color}_end_layer"],
+            "color": color,
+            "motion_type": pd_row_data[f"{color}_motion_type"],
+            "rotation_direction": pd_row_data[f"{color}_rotation_direction"],
+            "start_location": pd_row_data[f"{color}_start_location"],
+            "end_location": pd_row_data[f"{color}_end_location"],
+            "turns": pd_row_data[f"{color}_turns"],
+            "start_orientation": pd_row_data[f"{color}_start_orientation"],
+            "end_orientation": pd_row_data[f"{color}_end_orientation"],
+            "start_layer": pd_row_data[f"{color}_start_layer"],
+            "end_layer": pd_row_data[f"{color}_end_layer"],
         }
         return motion_dict
 
@@ -157,44 +161,40 @@ class OptionPickerScroll(QScrollArea):
         ]
 
         # filter to ensure the options have a start orientation for each motion that matches the end orientations of the reference option's motions
-        for motion in [BLUE, RED]:
+        for color in [BLUE, RED]:
             filtered_data = filtered_data[
-                filtered_data[f"{motion}_start_orientation"]
-                == clicked_option.motions[motion].end_orientation
+                filtered_data[f"{color}_start_orientation"]
+                == clicked_option.motions[color].end_orientation
             ]
 
         self.options.clear()
         self.clear()
-        for idx, row in filtered_data.iterrows():
-            option = self._create_option_from_pd_data(row)
-            self.options.append((row["letter"], option))
+        for idx, pd_row_data in filtered_data.iterrows():
+            option = self._create_option(pd_row_data)
+            self.options.append((pd_row_data["letter"], option))
         self._sort_options()
         self._add_sorted_options_to_layout()
         QApplication.restoreOverrideCursor()
 
-    def _create_option_from_pd_data(self, pd_data: pd.Series) -> "Option":
-        """
-        Creates an Option object from a row of the DataFrame.
-
-        Args:
-            pd_data (pd.Series): The row data from the DataFrame.
-
-        Returns:
-            Option: The created Option object.
-        """
+    def _create_option(self, pd_row_data: pd.Series):
+        image_path = self._generate_image_path(pd_row_data)
+        letter = pd_row_data["letter"]
         option = Option(self.main_widget, self)
         option.setSceneRect(0, 0, 750, 900)
-        motion_dict_set = {
-            color: self._create_motion_dict(pd_data, color) for color in ["blue", "red"]
-        }
-        pictograph_dict = self._create_pictograph_dict(pd_data)
 
-        image_path = self._generate_image_path(pd_data)
         option.loadImage(image_path)
-        option.pictograph_dict = pictograph_dict
 
-        option.motions[RED].setup_attributes(motion_dict_set["red"])
-        option.motions[BLUE].setup_attributes(motion_dict_set["blue"])
+        # Setup option attributes
+        # Instead of a comprehension, explicitly create each motion_dict
+        blue_motion_dict = self._create_motion_dict(pd_row_data, "blue")
+        red_motion_dict = self._create_motion_dict(pd_row_data, "red")
+        
+        option.motions[RED].setup_attributes(red_motion_dict)
+        option.motions[BLUE].setup_attributes(blue_motion_dict)
+        
+        option.current_letter = letter
+        option.start_position = pd_row_data.name[0]
+        option.end_position = pd_row_data.name[1]
         option.motions[RED].arrow = option.arrows[RED]
         option.motions[BLUE].arrow = option.arrows[BLUE]
         option.motions[RED].prop = option.props[RED]
@@ -207,13 +207,17 @@ class OptionPickerScroll(QScrollArea):
         )
         option.motions[RED].update_prop_orientation_and_layer()
         option.motions[BLUE].update_prop_orientation_and_layer()
-        option.current_letter = pd_data["letter"]
-        option.start_position = pd_data.name[0]
-        option.end_position = pd_data.name[1]
-        
-        option.arrows[RED].motion_type = option.motions[RED].motion_type
-        option.arrows[BLUE].motion_type = option.motions[BLUE].motion_type
-        
+        option.current_letter = pd_row_data["letter"]
+        option.start_position = pd_row_data.name[0]
+        option.end_position = pd_row_data.name[1]
+
+        option.arrows[RED].motion_type = pd_row_data["red_motion_type"]
+        option.arrows[BLUE].motion_type = pd_row_data["blue_motion_type"]
+        option.motions[RED].motion_type = pd_row_data["red_motion_type"]
+        option.motions[BLUE].motion_type = pd_row_data["blue_motion_type"]
+
+        self._setup_motion_relations(option)
+
         return option
 
     def _sort_options(self):
@@ -263,11 +267,16 @@ class OptionPickerScroll(QScrollArea):
         }
 
     @staticmethod
-    def _setup_motion_relations(option: Option, arrow: Arrow, prop: Prop) -> None:
-        motion = option.motions[arrow.color]
-        arrow.motion, prop.motion = motion, motion
-        arrow.ghost = option.ghost_arrows[arrow.color]
-        arrow.ghost.motion = motion
+    def _setup_motion_relations(option: "Option") -> None:
+        for color in [RED, BLUE]:
+            option.motions[color].arrow = option.arrows[color]
+            option.motions[color].prop = option.props[color]
+            option.motions[color].arrow.location = option.motions[
+                color
+            ].get_arrow_location(
+                option.motions[color].start_location, option.motions[color].end_location
+            )
+            option.motions[color].update_prop_orientation_and_layer()
 
     @staticmethod
     def _update_option(option: "Option") -> None:
