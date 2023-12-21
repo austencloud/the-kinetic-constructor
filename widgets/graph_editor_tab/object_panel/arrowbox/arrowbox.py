@@ -58,16 +58,16 @@ class ArrowBox(ObjectBox):
             arrow.is_dim(True)
 
         red_arrow_positions: List[Tuple[int, int]] = [
-            (425, 50),
-            (425, 425),
-            (375, 375),
-            (375, 100),
+            (525, 150),
+            (525, 525),
+            (475, 475),
+            (475, 200),
         ]
         blue_arrow_positions: List[Tuple[int, int]] = [
-            (50, 425),
-            (50, 50),
-            (100, 100),
-            (100, 375),
+            (150, 525),
+            (150, 150),
+            (200, 200),
+            (200, 475),
         ]
 
         self.position_arrows(red_arrows, red_arrow_positions)
