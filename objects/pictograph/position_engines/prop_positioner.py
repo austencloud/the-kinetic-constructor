@@ -183,7 +183,7 @@ class PropPositioner:
         state = self.scene.get_state()
         # Handle special case for certain props
         big_unilateral_prop_types = [BIGHOOP, BIGFAN, BIGTRIAD, GUITAR, SWORD, CHICKEN]
-        big_unilateral_props = [
+        big_unilateral_props: List[Prop] = [
             prop
             for prop in self.scene.props.values()
             if prop.prop_type in big_unilateral_prop_types
@@ -195,7 +195,7 @@ class PropPositioner:
             TRIAD,
             UKULELE,
         ]
-        small_unilateral_props = [
+        small_unilateral_props: List[Prop] = [
             prop
             for prop in self.scene.props.values()
             if prop.prop_type in small_unilateral_prop_types
@@ -207,7 +207,7 @@ class PropPositioner:
             DOUBLESTAR,
             QUIAD,
         ]
-        small_bilateral_props = [
+        small_bilateral_props: List[Prop] = [
             prop
             for prop in self.scene.props.values()
             if prop.prop_type in small_bilateral_prop_types
@@ -218,7 +218,7 @@ class PropPositioner:
             BIGBUUGENG,
             BIGDOUBLESTAR,
         ]
-        big_bilateral_props = [
+        big_bilateral_props: List[Prop] = [
             prop
             for prop in self.scene.props.values()
             if prop.prop_type in big_bilateral_prop_types
@@ -258,7 +258,9 @@ class PropPositioner:
                     and len(set(state[color + "_motion_type"] for color in both)) == 1
                 ):
                     self.reposition_G_and_H(state)
-
+                else:
+                    self.reposition_I(state)
+                    
             # GAMMA → BETA - Y, Z
             if len(pro_or_anti_motions) == 1 and len(static_motions) == 1:
                 self.reposition_gamma_to_beta()
@@ -446,15 +448,6 @@ class PropPositioner:
                 self.move_prop(blue_prop, blue_direction)
 
     ### BETA TO BETA ### G, H, I
-
-    def reposition_beta_to_beta(self, motions: Dict) -> None:
-        same_motion_type = (
-            motions["red_motion_type"] == motions["blue_motion_type"] in [PRO, ANTI]
-        )
-        if same_motion_type:
-            self.reposition_G_and_H(motions)
-        else:
-            self.reposition_I(motions)
 
     def reposition_G_and_H(self, motion_df: pd.DataFrame) -> None:
         # Determine directions for motion
