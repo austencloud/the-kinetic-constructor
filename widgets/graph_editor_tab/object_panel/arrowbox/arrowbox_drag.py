@@ -209,8 +209,12 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
                 if self.previous_drag_location != new_location:
                     self.motion = self.pictograph.motions[self.color]
+                    self.pictograph.arrows[self.color].motion = self.motion
+                    self.pictograph.arrows[self.color].location = new_location
+                    self.pictograph.arrows[self.color].set_is_svg_mirrored_from_attributes()
                     self._update_arrow_preview_for_new_location(new_location)
-
+                    self.previous_drag_location = new_location
+                    
     def handle_mouse_release(self) -> None:
         if self.has_entered_pictograph_once:
             self.place_arrow_on_pictograph()

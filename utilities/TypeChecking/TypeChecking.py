@@ -154,9 +154,6 @@ class MotionAttributesDicts(TypedDict):
     end_layer: Layers
 
 
-
-
-
 MotionTypesCombinations = Literal[
     "pro_vs_pro",
     "anti_vs_anti",

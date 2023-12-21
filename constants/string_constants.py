@@ -49,6 +49,9 @@ ARROW_LOCATION = "arrow_location"
 START_LOCATION = "start_location"
 END_LOCATION = "end_location"
 
+START_POSITION = "start_position"
+END_POSITION = "end_position"
+
 START_ORIENTATION = "start_orientation"
 END_ORIENTATION = "end_orientation"
 

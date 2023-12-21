@@ -20,6 +20,7 @@ from constants.string_constants import (
     COLOR,
     DIAMOND,
     END_LOCATION,
+    END_POSITION,
     LETTER_BTN_ICON_DIR,
     LETTERS_TRIMMED_SVG_DIR,
     MOTION_TYPE,
@@ -28,6 +29,8 @@ from constants.string_constants import (
     ROTATION_DIRECTION,
     STAFF,
     START_LOCATION,
+    START_POS,
+    START_POSITION,
     TURNS,
     START_ORIENTATION,
     END_ORIENTATION,
@@ -191,47 +194,55 @@ class Pictograph(QGraphicsScene):
         return red_position, blue_position
 
     def get_start_end_positions(self) -> Optional[SpecificPositions]:
-        start_position, end_position = get_specific_start_end_positions(
+        specific_positions = get_specific_start_end_positions(
             self.motions[RED], self.motions[BLUE]
         )
+        if specific_positions:
+            start_position = specific_positions[START_POSITION]
+            end_position = specific_positions[END_POSITION]
         return start_position, end_position
 
     def get_state(self) -> pd.DataFrame:
-        state_data = []
-        blue_done = False
+        start_position = self.get_start_end_positions()[0]
+        end_position = self.get_start_end_positions()[1]
 
-        current_letter = self.current_letter
-        start_position, end_position = self.get_start_end_positions()
-
-        state_data.append(
-            {
-                "letter": current_letter,
-                "start_position": start_position,
-                "end_position": end_position,
-            }
-        )
+        state_data = {
+            "letter": self.current_letter,
+            "start_position": start_position,
+            "end_position": end_position,
+            "blue_motion_type": None,
+            "blue_rotation_direction": None,
+            "blue_start_location": None,
+            "blue_end_location": None,
+            "blue_turns": None,
+            "blue_start_orientation": None,
+            "blue_end_orientation": None,
+            "blue_start_layer": None,
+            "blue_end_layer": None,
+            "red_motion_type": None,
+            "red_rotation_direction": None,
+            "red_start_location": None,
+            "red_end_location": None,
+            "red_turns": None,
+            "red_start_orientation": None,
+            "red_end_orientation": None,
+            "red_start_layer": None,
+            "red_end_layer": None,
+        }
 
         for motion in self.motions.values():
-            if motion.color == BLUE and not blue_done:
-                color = motion.color
-                blue_done = True
-            else:
-                color = RED
+            color_prefix = f"{motion.color}_"
+            state_data[color_prefix + "motion_type"] = motion.motion_type
+            state_data[color_prefix + "rotation_direction"] = motion.rotation_direction
+            state_data[color_prefix + "start_location"] = motion.start_location
+            state_data[color_prefix + "end_location"] = motion.end_location
+            state_data[color_prefix + "turns"] = motion.turns
+            state_data[color_prefix + "start_orientation"] = motion.start_orientation
+            state_data[color_prefix + "end_orientation"] = motion.end_orientation
+            state_data[color_prefix + "start_layer"] = motion.start_layer
+            state_data[color_prefix + "end_layer"] = motion.end_layer
 
-            state_data.append(
-                {
-                    f"{color}_motion_type": motion.motion_type,
-                    f"{color}_rotation_direction": motion.rotation_direction,
-                    f"{color}_start_location": motion.start_location,
-                    f"{color}_end_location": motion.end_location,
-                    f"{color}_turns": motion.turns,
-                    f"{color}_start_orientation": motion.start_orientation,
-                    f"{color}_end_orientation": motion.end_orientation,
-                    f"{color}_start_layer": motion.start_layer,
-                    f"{color}_end_layer": motion.end_layer,
-                }
-            )
-        return pd.DataFrame(state_data)
+        return pd.DataFrame([state_data])
 
     def get_current_letter_type(self) -> Optional[str]:
         if self.current_letter is not None:

@@ -1,3 +1,4 @@
+from tkinter import NO
 from PyQt6.QtCore import QPointF
 import pandas as pd
 from constants.numerical_constants import DISTANCE
@@ -10,7 +11,9 @@ if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
 
 from utilities.TypeChecking.TypeChecking import (
+    Colors,
     MotionAttributesDicts,
+    MotionTypes,
     OptimalLocationsDicts,
 )
 
@@ -21,28 +24,100 @@ class ArrowPositioner:
         self.pictograph = pictograph
 
     def update_arrow_positions(self) -> None:
+        current_letter = self.pictograph.current_letter
         optimal_locations = None
+        state_df = self.pictograph.get_state()
 
         if len(self.pictograph.props) == 2 and len(self.pictograph.arrows) == 2:
             if self.pictograph.current_letter:
                 optimal_locations = self.find_optimal_locations()
 
-        for arrow in self.pictograph.arrows.values():
-            if not arrow.is_dragging:
-                if arrow.motion:
-                    if arrow.motion.motion_type is not STATIC:
-                        if optimal_locations:
-                            self.set_arrow_to_optimal_loc(optimal_locations, arrow)
-                        else:
-                            self.set_arrow_to_default_loc(arrow)
+        if current_letter in ["G", "H"]:
+            self.reposition_G_and_H()
+        elif current_letter == "I":
+            self.reposition_I()
+        # elif current_letter in ["P", "Q"]:
+        #     self.reposition_P_and_Q()
+        # elif current_letter == "R":
+        #     self.reposition_R()
 
-        for ghost_arrow in self.pictograph.ghost_arrows.values():
-            if ghost_arrow.motion:
-                if ghost_arrow.motion.motion_type is not STATIC:
-                    if optimal_locations:
-                        self.set_arrow_to_optimal_loc(optimal_locations, ghost_arrow)
-                    else:
-                        self.set_arrow_to_default_loc(ghost_arrow)
+        else:
+            for arrow in self.pictograph.arrows.values():
+                if not arrow.is_dragging:
+                    if arrow.motion:
+                        if arrow.motion.motion_type is not STATIC:
+                            if optimal_locations:
+                                self.set_arrow_to_optimal_loc(optimal_locations, arrow)
+                            else:
+                                self.set_arrow_to_default_loc(arrow)
+
+            for ghost_arrow in self.pictograph.ghost_arrows.values():
+                if ghost_arrow.motion:
+                    if ghost_arrow.motion.motion_type is not STATIC:
+                        if optimal_locations:
+                            self.set_arrow_to_optimal_loc(
+                                optimal_locations, ghost_arrow
+                            )
+                        else:
+                            self.set_arrow_to_default_loc(ghost_arrow)
+
+    def reposition_I(self) -> None:
+        state_df = self.pictograph.get_state()
+        if state_df.empty:
+            return
+
+        motion_row = state_df.iloc[0]
+        distance = 40  # Distance offset
+
+        def calculate_adjustment(location, motion_type: MotionTypes):
+            if motion_type == PRO:
+                distance = 100
+            elif motion_type == ANTI:
+                distance = 50
+            if location == NORTHEAST:
+                return QPointF(distance, -distance)
+            elif location == SOUTHEAST:
+                return QPointF(distance, distance)
+            elif location == SOUTHWEST:
+                return QPointF(-distance, distance)
+            elif location == NORTHWEST:
+                return QPointF(-distance, -distance)
+            return QPointF(0, 0)
+
+        # Determine which arrow is doing the Pro motion and which is doing the Anti motion
+        pro_color, anti_color = (
+            (RED, BLUE) if motion_row["red_motion_type"] == PRO else (BLUE, RED)
+        )
+
+        # Get the arrows
+        pro_arrow = self.pictograph.arrows.get(pro_color)
+        anti_arrow = self.pictograph.arrows.get(anti_color)
+        pro_adjustment = calculate_adjustment(pro_arrow.location, PRO)
+        anti_adjustment = calculate_adjustment(anti_arrow.location, ANTI)
+        # Set the default positions
+        pro_default_pos = self.get_default_position(pro_arrow)
+        anti_default_pos = self.get_default_position(anti_arrow)
+
+        # Helper method to apply position adjustments
+        def apply_adjustment(arrow, default_pos, adjustment, arrow_center):
+            new_x = default_pos.x() - arrow_center.x()
+            new_y = default_pos.y() - arrow_center.y()
+            arrow.setPos(QPointF(new_x, new_y) + adjustment)
+
+        for arrow in [pro_arrow, anti_arrow]:
+            arrow_center = QPointF(
+                arrow.boundingRect().width() / 2, arrow.boundingRect().height() / 2
+            )
+            default_pos = self.get_default_position(arrow)
+            adjustment = (
+                pro_adjustment if arrow.motion.motion_type == PRO else anti_adjustment
+            )
+            apply_adjustment(arrow, default_pos, adjustment, arrow_center)
+
+            for ghost_arrow in self.pictograph.ghost_arrows.values():
+                for arrow in self.pictograph.arrows.values():
+                    if ghost_arrow.color == arrow.color:
+                        ghost_arrow.setPos(arrow.pos())
 
     def find_optimal_locations(self) -> pd.DataFrame | None:
         current_state_df = self.pictograph.get_state()  # This is now a DataFrame
@@ -88,6 +163,134 @@ class ArrowPositioner:
             candidate_state_sorted[relevant_columns]
         )
 
+    def reposition_G_and_H(self) -> None:
+        def calculate_adjustment(location, color: Colors):
+            if color == RED:
+                distance = 105
+            elif color == BLUE:
+                distance = 50
+            if location == NORTHEAST:
+                return QPointF(distance, -distance)
+            elif location == SOUTHEAST:
+                return QPointF(distance, distance)
+            elif location == SOUTHWEST:
+                return QPointF(-distance, distance)
+            elif location == NORTHWEST:
+                return QPointF(-distance, -distance)
+            return QPointF(0, 0)
+
+        red_arrow = self.pictograph.arrows.get(RED)
+        blue_arrow = self.pictograph.arrows.get(BLUE)
+        red_arrow.setTransformOriginPoint(red_arrow.boundingRect().center())
+        blue_arrow.setTransformOriginPoint(blue_arrow.boundingRect().center())
+        default_pos = self.get_default_position(red_arrow)
+
+        red_adjustment = calculate_adjustment(red_arrow.location, RED)
+        blue_adjustment = calculate_adjustment(blue_arrow.location, BLUE)
+        for arrow in [red_arrow, blue_arrow]:
+            if arrow.is_svg_mirrored:
+                if arrow.color == BLUE:
+                    if arrow.location == NORTHWEST:
+                        arrow.setPos(
+                            default_pos
+                            - arrow.boundingRect().center()
+                            + blue_adjustment
+                        )
+                    elif arrow.location == SOUTHWEST:
+                        arrow.setPos(
+                            default_pos
+                            - arrow.boundingRect().center()
+                            + blue_adjustment
+                        )
+                    elif arrow.location == NORTHEAST:
+                        arrow.setPos(
+                            default_pos
+                            - arrow.boundingRect().center()
+                            + blue_adjustment
+                        )
+                    elif arrow.location == SOUTHEAST:
+                        arrow.setPos(
+                            default_pos
+                            - arrow.boundingRect().center()
+                            + blue_adjustment
+                        )
+                elif arrow.color == RED:
+                    if arrow.location == NORTHWEST:
+                        arrow.setPos(
+                            default_pos - arrow.boundingRect().center() + red_adjustment
+                        )
+                    elif arrow.location == SOUTHWEST:
+                        arrow.setPos(
+                            default_pos - arrow.boundingRect().center() + red_adjustment
+                        )
+                    elif arrow.location == NORTHEAST:
+                        arrow.setPos(
+                            default_pos - arrow.boundingRect().center() + red_adjustment
+                        )
+                    elif arrow.location == SOUTHEAST:
+                        arrow.setPos(
+                            default_pos - arrow.boundingRect().center() + red_adjustment
+                        )
+            elif not arrow.is_svg_mirrored:
+                if arrow.color == BLUE:
+                    if arrow.location == NORTHWEST:
+                        arrow.setPos(
+                            default_pos
+                            - arrow.boundingRect().center()
+                            + blue_adjustment
+                        )
+                    elif arrow.location == SOUTHWEST:
+                        arrow.setPos(
+                            default_pos
+                            - arrow.boundingRect().center()
+                            + blue_adjustment
+                        )
+                    elif arrow.location == NORTHEAST:
+                        arrow.setPos(
+                            default_pos
+                            - arrow.boundingRect().center()
+                            + blue_adjustment
+                        )
+                    elif arrow.location == SOUTHEAST:
+                        arrow.setPos(
+                            default_pos
+                            - arrow.boundingRect().center()
+                            + blue_adjustment
+                        )
+                elif arrow.color == RED:
+                    if arrow.location == NORTHWEST:
+                        arrow.setPos(
+                            default_pos - arrow.boundingRect().center() + red_adjustment
+                        )
+                    elif arrow.location == SOUTHWEST:
+                        arrow.setPos(
+                            default_pos - arrow.boundingRect().center() + red_adjustment
+                        )
+                    elif arrow.location == NORTHEAST:
+                        arrow.setPos(
+                            default_pos - arrow.boundingRect().center() + red_adjustment
+                        )
+                    elif arrow.location == SOUTHEAST:
+                        arrow.setPos(
+                            default_pos - arrow.boundingRect().center() + red_adjustment
+                        )
+
+    def set_arrow_to_default_loc(self, arrow: "Arrow") -> None:
+        default_pos = self.get_default_position(arrow)
+        arrow.setPos(default_pos - arrow.boundingRect().center())
+
+    def get_default_position(self, arrow: "Arrow") -> QPointF:
+        if self.pictograph.grid.grid_mode == DIAMOND:
+            layer2_point = self.pictograph.grid.diamond_layer2_points.get(
+                arrow.location
+            )
+        elif self.pictograph.grid.grid_mode == BOX:
+            layer2_point = self.pictograph.grid.box_layer2_points.get(arrow.location)
+        else:
+            layer2_point = QPointF(0, 0)
+
+        return layer2_point
+
     def set_arrow_to_optimal_loc(self, arrow: "Arrow") -> None:
         arrow.set_arrow_transform_origin_to_center()
         optimal_locations_df = pd.DataFrame("OptimalLocationsDictionary.csv")
@@ -106,22 +309,25 @@ class ArrowPositioner:
             prop_size = "small"
         else:
             prop_size = "large"
-            
+
         end_orientation = arrow.motion.end_orientation
-        
+
         filtered_df = optimal_locations_df[
             (optimal_locations_df["letter"] == current_letter)
             & (optimal_locations_df["prop_size"] == prop_size)
-            & (optimal_locations_df[f"{arrow.color}_end_orientation"] == end_orientation)
+            & (
+                optimal_locations_df[f"{arrow.color}_end_orientation"]
+                == end_orientation
+            )
         ]
-        
+
         pos = QPointF(
             filtered_df[f"optimal_{arrow.color}_location"]["x"],
             filtered_df[f"optimal_{arrow.color}_location"]["y"],
         )
 
-        new_x = pos.x() - (arrow.boundingRect().width()) / 2
-        new_y = pos.y() - (arrow.boundingRect().height()) / 2
+        new_x = pos.x() - (arrow.boundingRect().width())
+        new_y = pos.y() - (arrow.boundingRect().height())
 
         new_pos = QPointF(new_x, new_y)
         arrow.setPos(new_pos)
