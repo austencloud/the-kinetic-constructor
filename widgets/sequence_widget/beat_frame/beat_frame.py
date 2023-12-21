@@ -1,9 +1,7 @@
 from typing import TYPE_CHECKING, List
-from PyQt6.QtGui import QResizeEvent
 
 from PyQt6.QtWidgets import QGridLayout, QFrame, QSizePolicy
 from PyQt6.QtCore import Qt, pyqtSignal
-from constants.string_constants import BLUE, RED
 from widgets.sequence_widget.beat_frame.beat import Beat
 from widgets.sequence_widget.beat_frame.start_position import StartPosition
 from widgets.sequence_widget.beat_frame.start_position import StartPositionView

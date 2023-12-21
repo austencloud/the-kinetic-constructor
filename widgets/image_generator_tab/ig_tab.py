@@ -3,14 +3,9 @@ from typing import TYPE_CHECKING, Dict
 import pandas as pd
 from PyQt6.QtWidgets import (
     QWidget,
-    QSplitter,
     QVBoxLayout,
     QPushButton,
-    QScrollArea,
-    QCheckBox,
     QHBoxLayout,
-    QGridLayout,
-    QLabel,
     QFrame,
     QApplication,
 )

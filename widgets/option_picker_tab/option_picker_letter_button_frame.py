@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton, QSizePolicy
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton
 from PyQt6.QtGui import QIcon, QPixmap, QPainter, QFont, QColor, QResizeEvent
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtSvg import QSvgRenderer

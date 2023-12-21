@@ -4,8 +4,6 @@ from PyQt6.QtCore import Qt
 import pandas as pd
 from data.rules import get_next_letters
 from constants.string_constants import *
-from objects.arrow.arrow import Arrow
-from objects.prop.prop import Prop
 from widgets.option_picker_tab.option import Option
 from PyQt6.QtGui import QPixmap
 

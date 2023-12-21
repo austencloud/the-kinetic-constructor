@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton, QSizePolicy
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton
 from PyQt6.QtGui import QIcon, QPixmap, QPainter, QFont, QColor, QResizeEvent
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtSvg import QSvgRenderer
@@ -10,7 +10,6 @@ from utilities.TypeChecking.Letters import Letters
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.option_picker_tab.option_picker_scroll import OptionPickerScroll
 
 
 class IGLetterButtonFrame(QFrame):

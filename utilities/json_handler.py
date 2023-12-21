@@ -3,11 +3,9 @@ import os
 from typing import List, TYPE_CHECKING
 
 from PyQt6.QtCore import QObject
-import pandas as pd
 
 from objects.arrow.arrow import Arrow
-from constants.string_constants import LETTER_JSON_DIR
-from utilities.TypeChecking.TypeChecking import LetterDictionary, Letters
+from utilities.TypeChecking.TypeChecking import Letters
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph

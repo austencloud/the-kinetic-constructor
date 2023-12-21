@@ -1,20 +1,17 @@
-from tkinter import NO
 from PyQt6.QtCore import QPointF
 import pandas as pd
 from constants.numerical_constants import DISTANCE
 from constants.string_constants import *
 from objects.arrow.arrow import Arrow
 
-from typing import TYPE_CHECKING, List, Dict, Any
+from typing import TYPE_CHECKING, Dict
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
 
 from utilities.TypeChecking.TypeChecking import (
     Colors,
-    MotionAttributesDicts,
     MotionTypes,
-    OptimalLocationsDicts,
 )
 
 
@@ -61,58 +58,6 @@ class ArrowPositioner:
                             )
                         else:
                             self.set_arrow_to_default_loc(ghost_arrow)
-
-    def reposition_I(self) -> None:
-        state = self.pictograph.get_state()
-
-        def calculate_adjustment(location, motion_type: MotionTypes):
-            if motion_type == PRO:
-                distance = 100
-            elif motion_type == ANTI:
-                distance = 50
-            if location == NORTHEAST:
-                return QPointF(distance, -distance)
-            elif location == SOUTHEAST:
-                return QPointF(distance, distance)
-            elif location == SOUTHWEST:
-                return QPointF(-distance, distance)
-            elif location == NORTHWEST:
-                return QPointF(-distance, -distance)
-            return QPointF(0, 0)
-
-        # Determine which arrow is doing the Pro motion and which is doing the Anti motion
-        pro_color, anti_color = (
-            (RED, BLUE) if state["red_motion_type"] == PRO else (BLUE, RED)
-        )
-
-        # Get the arrows
-        pro_arrow = self.pictograph.arrows.get(pro_color)
-        anti_arrow = self.pictograph.arrows.get(anti_color)
-
-        pro_adjustment = calculate_adjustment(pro_arrow.location, PRO)
-        anti_adjustment = calculate_adjustment(anti_arrow.location, ANTI)
-        # Set the default positions
-
-        # Helper method to apply position adjustments
-        def apply_adjustment(arrow, default_pos, adjustment, arrow_center):
-            new_x = default_pos.x() - arrow_center.x()
-            new_y = default_pos.y() - arrow_center.y()
-            arrow.setPos(QPointF(new_x, new_y) + adjustment)
-
-        for arrow in [pro_arrow, anti_arrow]:
-            arrow_center = QPointF(
-                arrow.boundingRect().width() / 2, arrow.boundingRect().height() / 2
-            )
-            default_pos = self.get_default_position(arrow)
-            adjustment = (
-                pro_adjustment if arrow.motion.motion_type == PRO else anti_adjustment
-            )
-            apply_adjustment(arrow, default_pos, adjustment, arrow_center)
-
-            for ghost_arrow in self.pictograph.ghost_arrows.values():
-                for arrow in self.pictograph.arrows.values():
-                    if ghost_arrow.color == arrow.color:
-                        ghost_arrow.setPos(arrow.pos())
 
     def find_optimal_locations(self) -> Dict | None:
         current_state = self.pictograph.get_state()
@@ -256,6 +201,62 @@ class ArrowPositioner:
                         arrow.setPos(
                             default_pos - arrow.boundingRect().center() + red_adjustment
                         )
+
+
+    def reposition_I(self) -> None:
+        state = self.pictograph.get_state()
+
+        def calculate_adjustment(location, motion_type: MotionTypes):
+            if motion_type == PRO:
+                distance = 100
+            elif motion_type == ANTI:
+                distance = 50
+            if location == NORTHEAST:
+                return QPointF(distance, -distance)
+            elif location == SOUTHEAST:
+                return QPointF(distance, distance)
+            elif location == SOUTHWEST:
+                return QPointF(-distance, distance)
+            elif location == NORTHWEST:
+                return QPointF(-distance, -distance)
+            return QPointF(0, 0)
+
+        # Determine which arrow is doing the Pro motion and which is doing the Anti motion
+        pro_color, anti_color = (
+            (RED, BLUE) if state["red_motion_type"] == PRO else (BLUE, RED)
+        )
+
+        # Get the arrows
+        pro_arrow = self.pictograph.arrows.get(pro_color)
+        anti_arrow = self.pictograph.arrows.get(anti_color)
+
+        print(pro_arrow.transformOriginPoint())
+        print(anti_arrow.transformOriginPoint())
+        pro_adjustment = calculate_adjustment(pro_arrow.location, PRO)
+        anti_adjustment = calculate_adjustment(anti_arrow.location, ANTI)
+        # Set the default positions
+
+        # Helper method to apply position adjustments
+        def apply_adjustment(arrow, default_pos, adjustment, arrow_center):
+            new_x = default_pos.x() - arrow_center.x()
+            new_y = default_pos.y() - arrow_center.y()
+            arrow.setPos(QPointF(new_x, new_y) + adjustment)
+
+        for arrow in [pro_arrow, anti_arrow]:
+            arrow_center = QPointF(
+                arrow.boundingRect().width() / 2, arrow.boundingRect().height() / 2
+            )
+            default_pos = self.get_default_position(arrow)
+            adjustment = (
+                pro_adjustment if arrow.motion.motion_type == PRO else anti_adjustment
+            )
+            apply_adjustment(arrow, default_pos, adjustment, arrow_center)
+
+            for ghost_arrow in self.pictograph.ghost_arrows.values():
+                for arrow in self.pictograph.arrows.values():
+                    if ghost_arrow.color == arrow.color:
+                        ghost_arrow.setPos(arrow.pos())
+
 
     def set_arrow_to_default_loc(self, arrow: "Arrow") -> None:
         default_pos = self.get_default_position(arrow)

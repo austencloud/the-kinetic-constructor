@@ -1,14 +1,7 @@
-from constants.string_constants import ARROW, PROP
-from objects.arrow.arrow import Arrow
-from objects.ghosts.ghost_arrow import GhostArrow
-from objects.ghosts.ghost_prop import GhostProp
-from objects.motion import Motion
-from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
 )
 from objects.pictograph.pictograph import Pictograph
-from PyQt6.QtWidgets import QGraphicsScene
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget

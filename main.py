@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
-from PyQt6.QtGui import QGuiApplication, QResizeEvent
+from PyQt6.QtGui import QGuiApplication
 from widgets.main_widget import MainWidget
 from profiler import Profiler
 import os

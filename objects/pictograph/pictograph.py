@@ -1,9 +1,7 @@
-import re
 from typing import Dict, Literal
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView
-import pandas as pd
 
 from data.letter_engine_data import letter_types
 from data.positions_map import get_specific_start_end_positions
@@ -17,26 +15,15 @@ from constants.string_constants import (
     ARROW,
     BLUE,
     BOX,
-    COLOR,
     DIAMOND,
-    END_LOCATION,
     END_POSITION,
     LETTER_BTN_ICON_DIR,
     LETTERS_TRIMMED_SVG_DIR,
     MOTION_TYPE,
     PROP,
     RED,
-    ROTATION_DIRECTION,
     STAFF,
-    START_LOCATION,
-    START_POS,
     START_POSITION,
-    TURNS,
-    START_ORIENTATION,
-    END_ORIENTATION,
-    START_LAYER,
-    END_LAYER,
-    ARROW_LOCATION,
 )
 from utilities.TypeChecking.Letters import Letters
 from utilities.TypeChecking.SpecificPositions import SpecificPositions
@@ -45,7 +32,6 @@ from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
     Colors,
     Locations,
-    MotionAttributesDicts,
     List,
     Optional,
     PropTypes,
@@ -64,7 +50,6 @@ from objects.pictograph.position_engines.prop_positioner import PropPositioner
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor_tab.graph_editor import GraphEditor
 
 from objects.letter_item import LetterItem
 

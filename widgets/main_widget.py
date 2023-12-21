@@ -5,7 +5,6 @@ from PyQt6.QtWidgets import (
     QWidget,
     QHBoxLayout,
     QVBoxLayout,
-    QSplitter,
     QFrame,
     QTabWidget,
     QApplication,

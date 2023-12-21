@@ -26,9 +26,6 @@ from PyQt6.QtWidgets import (
 import xml.etree.ElementTree as ET
 import svg.path
 import sys
-import cairosvg
-from PIL import Image
-import io
 from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
 import xml.etree.ElementTree as ET
 import subprocess

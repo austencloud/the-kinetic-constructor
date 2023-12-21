@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView
 from objects.pictograph.pictograph import Pictograph
-from PyQt6.QtWidgets import QScrollArea
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:

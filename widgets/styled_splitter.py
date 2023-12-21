@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QSplitter, QStyleOption, QStyle
-from PyQt6.QtGui import QPainter, QPainterPath, QColor, QLinearGradient, QBrush, QPen
-from PyQt6.QtCore import Qt, QPointF, QRectF
+from PyQt6.QtGui import QPainter, QColor, QPen
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QSplitterHandle
 from PyQt6.QtGui import QPainter, QColor, QPen
 from PyQt6.QtCore import Qt

@@ -1,11 +1,10 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QShowEvent
 
 from widgets.graph_editor_tab.graph_editor import GraphEditor
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QSizePolicy
+from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from PyQt6.QtCore import Qt
 
 

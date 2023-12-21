@@ -18,7 +18,6 @@ from constants.string_constants import (
     IN,
     OUT,
     COLOR,
-    MOTION_TYPE,
     STAFF,
     BIGSTAFF,
     QUIAD,
@@ -27,8 +26,6 @@ from constants.string_constants import (
     UKULELE,
     CHICKEN,
     STATIC,
-    START_LOCATION,
-    END_LOCATION,
     PRO,
     ANTI,
     NORTH,
@@ -43,18 +40,14 @@ from constants.string_constants import (
     RIGHT,
     RED,
     BLUE,
-    END_LAYER,
 )
 from typing import TYPE_CHECKING, Dict, List, Tuple
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
-    ArrowAttributesDicts,
-    MotionAttributesDicts,
     LetterDictionary,
     OptimalLocationsEntries,
     OptimalLocationsDicts,
     Direction,
-    Locations,
 )
 
 if TYPE_CHECKING:
