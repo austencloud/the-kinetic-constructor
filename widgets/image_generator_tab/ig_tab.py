@@ -11,7 +11,8 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QGridLayout,
     QLabel,
-    QFrame, QApplication
+    QFrame,
+    QApplication,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QImage, QPainter
@@ -202,7 +203,7 @@ class IGTab(QWidget):
             self.generate_images_for_letter(letter)
         main_widget.setEnabled(True)  # Enable the widget after generation
         QApplication.restoreOverrideCursor()
-        
+
         self.setMouseTracking(True)  # Enable mouse clicks
 
     def generate_images_for_letter(self, letter) -> None:
@@ -310,6 +311,12 @@ class IGTab(QWidget):
                 motion.arrow.ghost.set_is_svg_mirrored_from_attributes()
                 motion.arrow.ghost.update_appearance()
                 motion.arrow.ghost.update_mirror()
+                motion.arrow.setTransformOriginPoint(
+                    motion.arrow.boundingRect().center()
+                )
+                motion.arrow.ghost.setTransformOriginPoint(
+                    motion.arrow.ghost.boundingRect().center()
+                )
         ig_pictograph.update_pictograph()
 
     @staticmethod

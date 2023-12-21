@@ -202,47 +202,31 @@ class Pictograph(QGraphicsScene):
             end_position = specific_positions[END_POSITION]
         return start_position, end_position
 
-    def get_state(self) -> pd.DataFrame:
-        start_position = self.get_start_end_positions()[0]
-        end_position = self.get_start_end_positions()[1]
-
+    def get_state(self) -> Dict:
+        start_position, end_position = self.get_start_end_positions()
         state_data = {
             "letter": self.current_letter,
             "start_position": start_position,
             "end_position": end_position,
-            "blue_motion_type": None,
-            "blue_rotation_direction": None,
-            "blue_start_location": None,
-            "blue_end_location": None,
-            "blue_turns": None,
-            "blue_start_orientation": None,
-            "blue_end_orientation": None,
-            "blue_start_layer": None,
-            "blue_end_layer": None,
-            "red_motion_type": None,
-            "red_rotation_direction": None,
-            "red_start_location": None,
-            "red_end_location": None,
-            "red_turns": None,
-            "red_start_orientation": None,
-            "red_end_orientation": None,
-            "red_start_layer": None,
-            "red_end_layer": None,
         }
 
-        for motion in self.motions.values():
-            color_prefix = f"{motion.color}_"
-            state_data[color_prefix + "motion_type"] = motion.motion_type
-            state_data[color_prefix + "rotation_direction"] = motion.rotation_direction
-            state_data[color_prefix + "start_location"] = motion.start_location
-            state_data[color_prefix + "end_location"] = motion.end_location
-            state_data[color_prefix + "turns"] = motion.turns
-            state_data[color_prefix + "start_orientation"] = motion.start_orientation
-            state_data[color_prefix + "end_orientation"] = motion.end_orientation
-            state_data[color_prefix + "start_layer"] = motion.start_layer
-            state_data[color_prefix + "end_layer"] = motion.end_layer
+        for color, motion in self.motions.items():
+            prefix = f"{color}_"
+            state_data.update(
+                {
+                    prefix + "motion_type": motion.motion_type,
+                    prefix + "rotation_direction": motion.rotation_direction,
+                    prefix + "start_location": motion.start_location,
+                    prefix + "end_location": motion.end_location,
+                    prefix + "turns": motion.turns,
+                    prefix + "start_orientation": motion.start_orientation,
+                    prefix + "end_orientation": motion.end_orientation,
+                    prefix + "start_layer": motion.start_layer,
+                    prefix + "end_layer": motion.end_layer,
+                }
+            )
 
-        return pd.DataFrame([state_data])
+        return state_data
 
     def get_current_letter_type(self) -> Optional[str]:
         if self.current_letter is not None:

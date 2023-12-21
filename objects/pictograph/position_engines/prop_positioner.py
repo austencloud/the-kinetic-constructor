@@ -161,138 +161,90 @@ class PropPositioner:
         }
         return position_offsets
 
+    def move_prop(self, prop: Prop, direction: Direction) -> None:
+        new_position = self.calculate_new_position(prop.pos(), direction)
+        prop.setPos(new_position)
+
+
     ### REPOSITIONING ###
 
     def reposition_beta_props(self) -> None:
-        state_df = self.scene.get_state()  # This should be a DataFrame
+        state = self.scene.get_state()  # Now a dictionary
 
-        def move_prop(prop: Prop, direction: Direction) -> None:
-            new_position = self.calculate_new_position(prop.pos(), direction)
-            prop.setPos(new_position)
-
-        motions_grouped_by_start_loc: Dict[Locations, List[pd.DataFrame]] = {}
-    
-        motion_df = state_df.iloc[0]  # Since you know there's only one state row
-        for index, motion in state_df.iterrows():
-            for color in [RED, BLUE]:
-                start_loc = motion[f"{color}_start_location"]
-                if start_loc not in motions_grouped_by_start_loc:
-                    motions_grouped_by_start_loc[start_loc] = []
-                motions_grouped_by_start_loc[start_loc].append(state_df.iloc[index])  # Add the DataFrame row
-        pro_or_anti_motions: List[MotionAttributesDicts] = []
-        static_motions: List[MotionAttributesDicts] = []
-
-        pro_or_anti_motions_df = pd.DataFrame(pro_or_anti_motions)
-        static_motions_df = pd.DataFrame(static_motions)
-
-        # check the motion type of the motions in the state and add them to the appropriate list
-        for color in [RED, BLUE]:
-            if (
-                motion_df[f"{color}_motion_type"] == PRO
-                or motion_df[f"{color}_motion_type"] == ANTI
-            ):
-                pro_or_anti_motions.append(motion_df)
-            elif motion_df[f"{color}_motion_type"] == STATIC:
-                static_motions.append(motion_df)
-
-        # STATIC BETA
-        if len(static_motions_df) > 1:
-            self.reposition_static_beta(move_prop, static_motions_df)
-
-        # BETA → BETA - G, H, I
-        for start_location, motion_df_list in motions_grouped_by_start_loc.items():
-            motion_df = motion_df_list[0]  # There's only one motion DataFrame row per start_location
-            # Check if start and end locations are the same for both colors
-            if (
-                motion_df["red_start_location"] == motion_df["blue_start_location"]
-                and motion_df["red_end_location"] == motion_df["blue_end_location"]
-            ):
-                self.reposition_beta_to_beta(motion_df)
-
-        # GAMMA → BETA - Y, Z
-        # Assuming pro_or_anti_motions and static_motions are DataFrames with the correct rows
-        if len(pro_or_anti_motions_df) == 1 and len(static_motions_df) == 1:
-            if all(prop.layer == 1 for prop in self.scene.props.values()) or all(
-                prop.layer == 2 for prop in self.scene.props.values()
-            ):
-                self.reposition_gamma_to_beta(
-                    move_prop, pro_or_anti_motions_df.iloc[0], static_motions_df.iloc[0]
-                )
-
-        # ALPHA → BETA - D, E, F
-        converging_motions_df = state_df[
-            (state_df[f"{RED}_motion_type"] != STATIC)
-            & (state_df[f"{BLUE}_motion_type"] != STATIC)
+        # Gather motions by type
+        pro_or_anti_motions = [
+            color
+            for color in [RED, BLUE]
+            if state[f"{color}_motion_type"] in [PRO, ANTI]
+        ]
+        static_motions = [
+            color for color in [RED, BLUE] if state[f"{color}_motion_type"] == STATIC
         ]
 
-        # Check if the row contains converging motions
-        if not converging_motions_df.empty:
-            motion_row = converging_motions_df.iloc[
-                0
-            ]  # Since there should only be one row
-            # Check if start locations for both motions are different
-            if (
-                motion_row[f"{RED}_start_location"]
-                != motion_row[f"{BLUE}_start_location"]
-            ):
-                if all(prop.layer == 1 for prop in self.scene.props.values()) or all(
-                    prop.layer == 2 for prop in self.scene.props.values()
-                ):
-                    self.reposition_alpha_to_beta(move_prop, motion_row)
+        # STATIC BETA - β
+        if len(static_motions) > 1:
+            self.reposition_static_beta(static_motions)
+
+        # BETA to BETA - G, H, I
+        if (
+            state["red_start_location"] == state["blue_start_location"]
+            and state["red_end_location"] == state["blue_end_location"]
+        ):
+            self.reposition_beta_to_beta(state)
+
+        # GAMMA → BETA - Y, Z
+        if len(pro_or_anti_motions) == 1 and len(static_motions) == 1:
+            self.reposition_gamma_to_beta(pro_or_anti_motions, static_motions)
+
+        # ALPHA → BETA - D, E, F
+        if all(state[f"{color}_motion_type"] != STATIC for color in [RED, BLUE]):
+            if state["red_start_location"] != state["blue_start_location"]:
+                self.reposition_alpha_to_beta(state)
 
     ### STATIC BETA ### β
 
-    def reposition_static_beta(
-        self, move_prop: callable, static_motions_df: pd.DataFrame
-    ) -> None:
-        for index, motion in static_motions_df.iterrows():
-            for color in [RED, BLUE]:
-                prop_color = color
-                prop = next(
-                    (p for p in self.scene.props.values() if p.color == prop_color),
-                    None,
-                )
-                if not prop:
-                    continue
-
-                other_prop = next(
-                    (
-                        other
-                        for other in self.scene.props.values()
-                        if other != prop and other.location == prop.location
-                    ),
-                    None,
-                )
-
-                if other_prop and other_prop.layer != prop.layer:
-                    if prop.prop_type in [
-                        STAFF,
-                        FAN,
-                        CLUB,
-                        BUUGENG,
-                        MINIHOOP,
-                        TRIAD,
-                        QUIAD,
-                        UKULELE,
-                        CHICKEN,
-                    ]:
-                        self.set_default_prop_locations(prop)
-                    elif prop.prop_type in [
-                        DOUBLESTAR,
-                        BIGHOOP,
-                        BIGDOUBLESTAR,
-                        BIGSTAFF,
-                        SWORD,
-                        GUITAR,
-                    ]:
-                        self.set_strict_prop_locations(other_prop)
-                else:
-                    end_location = motion[f"{color}_end_location"]
-                    direction = self.determine_direction_for_static_beta(
-                        prop, end_location
-                    )
-                    if direction:
-                        move_prop(prop, direction)
+    def reposition_static_beta(self, move_prop: callable, static_motions: Dict) -> None:
+        for color, motion in static_motions.items():
+            prop = next(
+                (p for p in self.scene.props.values() if p.color == color), None
+            )
+            if not prop:
+                continue
+            other_prop = next(
+                (
+                    other
+                    for other in self.scene.props.values()
+                    if other != prop and other.location == prop.location
+                ),
+                None,
+            )
+            if other_prop and other_prop.layer != prop.layer:
+                if prop.prop_type in [
+                    STAFF,
+                    FAN,
+                    CLUB,
+                    BUUGENG,
+                    MINIHOOP,
+                    TRIAD,
+                    QUIAD,
+                    UKULELE,
+                    CHICKEN,
+                ]:
+                    self.set_default_prop_locations(prop)
+                elif prop.prop_type in [
+                    DOUBLESTAR,
+                    BIGHOOP,
+                    BIGDOUBLESTAR,
+                    BIGSTAFF,
+                    SWORD,
+                    GUITAR,
+                ]:
+                    self.set_strict_prop_locations(other_prop)
+            else:
+                end_location = motion[f"{color}_end_location"]
+                direction = self.determine_direction_for_static_beta(prop, end_location)
+                if direction:
+                    move_prop(prop, direction)
 
     def determine_direction_for_static_beta(
         self, prop: Prop, end_location: str
@@ -322,12 +274,14 @@ class PropPositioner:
 
         return layer_reposition_map[prop.layer].get((prop.location, prop.color), None)
 
-    def reposition_alpha_to_beta(self, move_prop, motion_row: pd.Series) -> None:
+    ### ALPHA TO BETA ### D, E, F
+
+    def reposition_alpha_to_beta(self, state) -> None:
         # Extract motion type and end locations for both colors from the DataFrame row
-        red_motion_type = motion_row[f"{RED}_motion_type"]
-        blue_motion_type = motion_row[f"{BLUE}_motion_type"]
-        red_end_location = motion_row[f"{RED}_end_location"]
-        blue_end_location = motion_row[f"{BLUE}_end_location"]
+        red_motion_type = state["red_motion_type"]
+        blue_motion_type = state["blue_motion_type"]
+        red_end_location = state["red_end_location"]
+        blue_end_location = state["blue_end_location"]
 
         # We assume red and blue are always present, and determine direction based on the end locations
         if red_end_location == blue_end_location:
@@ -342,37 +296,33 @@ class PropPositioner:
             # Determine the direction for repositioning based on the motion type and locations
             red_direction = self.determine_translation_direction(
                 red_motion_type,
-                motion_row[f"{RED}_start_location"],
+                state[f"{RED}_start_location"],
                 red_end_location,
-                motion_row[f"{RED}_end_layer"],
+                state[f"{RED}_end_layer"],
             )
             blue_direction = self.determine_translation_direction(
                 blue_motion_type,
-                motion_row[f"{BLUE}_start_location"],
+                state[f"{BLUE}_start_location"],
                 blue_end_location,
-                motion_row[f"{BLUE}_end_layer"],
+                state[f"{BLUE}_end_layer"],
             )
 
             # If there's a valid direction, move the props accordingly
             if red_direction:
-                move_prop(red_prop, red_direction)
+                self.move_prop(red_prop, red_direction)
             if blue_direction:
-                move_prop(blue_prop, blue_direction)
+                self.move_prop(blue_prop, blue_direction)
 
     ### BETA TO BETA ### G, H, I
 
-    def reposition_beta_to_beta(self, motions_df: pd.DataFrame) -> None:
-
+    def reposition_beta_to_beta(self, motions: Dict) -> None:
         same_motion_type = (
-            motions_df[f"{RED}_motion_type"]
-            == motions_df[f"{BLUE}_motion_type"]
-            in [PRO, ANTI]
+            motions["red_motion_type"] == motions["blue_motion_type"] in [PRO, ANTI]
         )
-
         if same_motion_type:
-            self.reposition_G_and_H(motions_df)
+            self.reposition_G_and_H(motions)
         else:
-            self.reposition_I(motions_df)
+            self.reposition_I(motions)
 
     def reposition_G_and_H(self, motion_df: pd.DataFrame) -> None:
         # Determine directions for motion
@@ -385,13 +335,16 @@ class PropPositioner:
         other_direction = self.get_opposite_direction(further_direction)
 
         # Calculate new positions
-        new_red_pos = self.calculate_new_position(self.scene.props[RED].pos(), further_direction)
-        new_blue_pos = self.calculate_new_position(self.scene.props[BLUE].pos(), other_direction)
+        new_red_pos = self.calculate_new_position(
+            self.scene.props[RED].pos(), further_direction
+        )
+        new_blue_pos = self.calculate_new_position(
+            self.scene.props[BLUE].pos(), other_direction
+        )
 
         # Update positions
         self.scene.props[RED].setPos(new_red_pos)
         self.scene.props[BLUE].setPos(new_blue_pos)
-
 
     def reposition_I(self, motions_df) -> None:
         if all(
@@ -411,16 +364,21 @@ class PropPositioner:
             anti_color = RED if pro_color == BLUE else BLUE
 
             pro_prop = next(
-                prop for prop in self.scene.props.values() if prop.motion.motion_type == PRO
+                prop
+                for prop in self.scene.props.values()
+                if prop.motion.motion_type == PRO
             )
             anti_prop = next(
-                prop for prop in self.scene.props.values() if prop.motion.motion_type == ANTI
+                prop
+                for prop in self.scene.props.values()
+                if prop.motion.motion_type == ANTI
             )
-            
 
             pro_motion_df = {
                 f"{pro_color}_motion_type": motions_df[f"{pro_color}_motion_type"],
-                f"{pro_color}_start_location": motions_df[f"{pro_color}_start_location"],
+                f"{pro_color}_start_location": motions_df[
+                    f"{pro_color}_start_location"
+                ],
                 f"{pro_color}_end_location": motions_df[f"{pro_color}_end_location"],
                 f"{pro_color}_end_layer": motions_df[f"{pro_color}_end_layer"],
             }
@@ -514,9 +472,11 @@ class PropPositioner:
         arrow_dict,
     ) -> OptimalLocationsEntries | None:
         for candidate_state in matching_letters_df:
-            #convert candidate_state to a dataframe called candidate_state_df
+            # convert candidate_state to a dataframe called candidate_state_df
             candidate_state_df = pd.DataFrame(candidate_state, index=[0])
-            if self.scene.arrow_positioner.compare_states(current_state, candidate_state_df):
+            if self.scene.arrow_positioner.compare_states(
+                current_state, candidate_state_df
+            ):
                 optimal_entry: OptimalLocationsDicts = next(
                     (
                         d
@@ -575,7 +535,9 @@ class PropPositioner:
         )
         return distance_from_center
 
-    def get_optimal_arrow_location(self, motion_row: pd.Series, color: str) -> Dict[str, float] | None:
+    def get_optimal_arrow_location(
+        self, state: pd.Series, color: str
+    ) -> Dict[str, float] | None:
         # Get the current state and letter
         current_state = self.scene.get_state()
         current_letter = self.scene.current_letter
@@ -585,7 +547,7 @@ class PropPositioner:
 
             # Find the optimal location entry
             optimal_entry = self.find_optimal_arrow_location_entry(
-                current_state, matching_letters, motion_row
+                current_state, matching_letters, state
             )
 
             # Extract the optimal location for the specified color

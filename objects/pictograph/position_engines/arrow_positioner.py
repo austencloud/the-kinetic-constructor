@@ -26,10 +26,11 @@ class ArrowPositioner:
     def update_arrow_positions(self) -> None:
         current_letter = self.pictograph.current_letter
         optimal_locations = None
-        state_df = self.pictograph.get_state()
+        state_dict = self.pictograph.get_state()
 
+        # Adjustments in logic to use state_dict instead of state_df
         if len(self.pictograph.props) == 2 and len(self.pictograph.arrows) == 2:
-            if self.pictograph.current_letter:
+            if current_letter:
                 optimal_locations = self.find_optimal_locations()
 
         if current_letter in ["G", "H"]:
@@ -62,12 +63,7 @@ class ArrowPositioner:
                             self.set_arrow_to_default_loc(ghost_arrow)
 
     def reposition_I(self) -> None:
-        state_df = self.pictograph.get_state()
-        if state_df.empty:
-            return
-
-        motion_row = state_df.iloc[0]
-        distance = 40  # Distance offset
+        state = self.pictograph.get_state()
 
         def calculate_adjustment(location, motion_type: MotionTypes):
             if motion_type == PRO:
@@ -86,17 +82,16 @@ class ArrowPositioner:
 
         # Determine which arrow is doing the Pro motion and which is doing the Anti motion
         pro_color, anti_color = (
-            (RED, BLUE) if motion_row["red_motion_type"] == PRO else (BLUE, RED)
+            (RED, BLUE) if state["red_motion_type"] == PRO else (BLUE, RED)
         )
 
         # Get the arrows
         pro_arrow = self.pictograph.arrows.get(pro_color)
         anti_arrow = self.pictograph.arrows.get(anti_color)
+
         pro_adjustment = calculate_adjustment(pro_arrow.location, PRO)
         anti_adjustment = calculate_adjustment(anti_arrow.location, ANTI)
         # Set the default positions
-        pro_default_pos = self.get_default_position(pro_arrow)
-        anti_default_pos = self.get_default_position(anti_arrow)
 
         # Helper method to apply position adjustments
         def apply_adjustment(arrow, default_pos, adjustment, arrow_center):
@@ -119,23 +114,21 @@ class ArrowPositioner:
                     if ghost_arrow.color == arrow.color:
                         ghost_arrow.setPos(arrow.pos())
 
-    def find_optimal_locations(self) -> pd.DataFrame | None:
-        current_state_df = self.pictograph.get_state()  # This is now a DataFrame
+    def find_optimal_locations(self) -> Dict | None:
+        current_state = self.pictograph.get_state()
         current_letter = self.pictograph.current_letter
-        candidate_states_df = pd.DataFrame(self.letters[current_letter])
+        candidate_states = self.letters.get(current_letter, [])
 
-        for _, candidate_state_row in candidate_states_df.iterrows():
-            if self.compare_states(
-                current_state_df, candidate_state_row.to_frame().transpose()
-            ):
-                return candidate_state_row["optimal_locations"]
+        for candidate_state in candidate_states:
+            if self.compare_states(current_state, candidate_state):
+                return candidate_state.get("optimal_locations")
         return None
 
     def compare_states(
         self, current_state: pd.DataFrame, candidate_state: pd.DataFrame
     ) -> bool:
         # Assume that both dataframes have the same structure
-        relevant_columns = [
+        relevant_keys = [
             "letter",
             "start_position",
             "end_position",
@@ -150,18 +143,7 @@ class ArrowPositioner:
             "red_start_location",
             "red_end_location",
         ]
-
-        # Sort the dataframes by color to ensure correct comparison
-        current_state_sorted = current_state.sort_values(by="letter").reset_index(
-            drop=True
-        )
-        candidate_state_sorted = candidate_state.sort_values(by="letter").reset_index(
-            drop=True
-        )
-
-        return current_state_sorted[relevant_columns].equals(
-            candidate_state_sorted[relevant_columns]
-        )
+        return all(current_state[key] == candidate_state[key] for key in relevant_keys)
 
     def reposition_G_and_H(self) -> None:
         def calculate_adjustment(location, color: Colors):
