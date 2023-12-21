@@ -42,6 +42,10 @@ class Fan(Prop):
         attributes[PROP_TYPE] = FAN
         super().__init__(pictograph, attributes, motion)
 
+class BigFan(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
+        attributes[PROP_TYPE] = BIGFAN
+        super().__init__(pictograph, attributes, motion)
 
 class Club(Prop):
     def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
@@ -54,6 +58,10 @@ class Buugeng(Prop):
         attributes[PROP_TYPE] = BUUGENG
         super().__init__(pictograph, attributes, motion)
 
+class BigBuugeng(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
+        attributes[PROP_TYPE] = BIGBUUGENG
+        super().__init__(pictograph, attributes, motion)
 
 class DoubleStar(Prop):
     def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:

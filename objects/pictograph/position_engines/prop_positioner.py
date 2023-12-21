@@ -6,6 +6,7 @@ from constants.numerical_constants import BETA_OFFSET
 from constants.string_constants import (
     BOX,
     BUUGENG,
+    BIGBUUGENG,
     CLOCKWISE,
     CLUB,
     COUNTER_CLOCKWISE,
@@ -13,6 +14,7 @@ from constants.string_constants import (
     DOUBLESTAR,
     BIGDOUBLESTAR,
     FAN,
+    BIGFAN,
     MINIHOOP,
     BIGHOOP,
     IN,
@@ -65,7 +67,14 @@ class PropPositioner:
         for prop in self.scene.props.values():
             if any(
                 self.prop_type_counts[ptype] == 2
-                for ptype in [BIGHOOP, DOUBLESTAR, BIGTRIAD, BIGDOUBLESTAR]
+                for ptype in [
+                    BIGHOOP,
+                    DOUBLESTAR,
+                    BIGTRIAD,
+                    BIGFAN,
+                    BIGBUUGENG,
+                    BIGDOUBLESTAR,
+                ]
             ):
                 self.set_strict_prop_locations(prop)
             else:
@@ -74,7 +83,14 @@ class PropPositioner:
         for prop in self.scene.ghost_props.values():
             if any(
                 self.prop_type_counts[ptype] == 2
-                for ptype in [BIGHOOP, DOUBLESTAR, BIGTRIAD, BIGDOUBLESTAR]
+                for ptype in [
+                    BIGHOOP,
+                    DOUBLESTAR,
+                    BIGFAN,
+                    BIGBUUGENG,
+                    BIGTRIAD,
+                    BIGDOUBLESTAR,
+                ]
             ):
                 self.set_strict_prop_locations(prop)
             else:
@@ -91,8 +107,10 @@ class PropPositioner:
             STAFF,
             BIGSTAFF,
             FAN,
+            BIGFAN,
             CLUB,
             BUUGENG,
+            BIGBUUGENG,
             MINIHOOP,
             TRIAD,
             BIGTRIAD,
@@ -163,45 +181,155 @@ class PropPositioner:
 
     def reposition_beta_props(self) -> None:
         state = self.scene.get_state()
-
-        # Gather motions by type
-        pro_or_anti_motions = [
-            color
-            for color in [RED, BLUE]
-            if state[f"{color}_motion_type"] in [PRO, ANTI]
+        # Handle special case for certain props
+        big_unilateral_prop_types = [BIGHOOP, BIGFAN, BIGTRIAD, GUITAR, SWORD, CHICKEN]
+        big_unilateral_props = [
+            prop
+            for prop in self.scene.props.values()
+            if prop.prop_type in big_unilateral_prop_types
         ]
-        static_motions = [
-            color for color in [RED, BLUE] if state[f"{color}_motion_type"] == STATIC
+        small_unilateral_prop_types = [
+            FAN,
+            CLUB,
+            MINIHOOP,
+            TRIAD,
+            UKULELE,
+        ]
+        small_unilateral_props = [
+            prop
+            for prop in self.scene.props.values()
+            if prop.prop_type in small_unilateral_prop_types
         ]
 
-        # STATIC BETA - β
-        if len(static_motions) > 1:
-            self.reposition_static_beta()
-
-        # BETA to BETA - G, H, I
-        both = [
-            color
-            for color in [RED, BLUE]
-            if state[f"{color}_motion_type"] in [PRO, ANTI]
+        small_bilateral_prop_types = [
+            STAFF,
+            BUUGENG,
+            DOUBLESTAR,
+            QUIAD,
         ]
-        if (
-            state["red_start_location"] == state["blue_start_location"]
-            and state["red_end_location"] == state["blue_end_location"]
-        ):
+        small_bilateral_props = [
+            prop
+            for prop in self.scene.props.values()
+            if prop.prop_type in small_bilateral_prop_types
+        ]
+
+        big_bilateral_prop_types = [
+            BIGSTAFF,
+            BIGBUUGENG,
+            BIGDOUBLESTAR,
+        ]
+        big_bilateral_props = [
+            prop
+            for prop in self.scene.props.values()
+            if prop.prop_type in big_bilateral_prop_types
+        ]
+        if len(big_unilateral_props) == 2:
+            self.reposition_big_unilateral_props(big_unilateral_props)
+        elif len(small_unilateral_props) == 2:
+            self.reposition_small_unilateral_props(small_unilateral_props)
+        elif len(small_bilateral_props) == 2:
+            pro_or_anti_motions = [
+                color
+                for color in [RED, BLUE]
+                if state[f"{color}_motion_type"] in [PRO, ANTI]
+            ]
+            static_motions = [
+                color
+                for color in [RED, BLUE]
+                if state[f"{color}_motion_type"] == STATIC
+            ]
+
+            # STATIC BETA - β
+            if len(static_motions) > 1:
+                self.reposition_static_beta()
+
+            # BETA to BETA - G, H, I
+            both = [
+                color
+                for color in [RED, BLUE]
+                if state[f"{color}_motion_type"] in [PRO, ANTI]
+            ]
             if (
-                len(both) == 2
-                and len(set(state[color + "_motion_type"] for color in both)) == 1
+                state["red_start_location"] == state["blue_start_location"]
+                and state["red_end_location"] == state["blue_end_location"]
             ):
-                self.reposition_G_and_H(state)
+                if (
+                    len(both) == 2
+                    and len(set(state[color + "_motion_type"] for color in both)) == 1
+                ):
+                    self.reposition_G_and_H(state)
 
-        # GAMMA → BETA - Y, Z
-        if len(pro_or_anti_motions) == 1 and len(static_motions) == 1:
-            self.reposition_gamma_to_beta()
+            # GAMMA → BETA - Y, Z
+            if len(pro_or_anti_motions) == 1 and len(static_motions) == 1:
+                self.reposition_gamma_to_beta()
 
-        # ALPHA → BETA - D, E, F
-        if all(state[f"{color}_motion_type"] != STATIC for color in [RED, BLUE]):
-            if state["red_start_location"] != state["blue_start_location"]:
-                self.reposition_alpha_to_beta(state)
+            # ALPHA → BETA - D, E, F
+            if all(state[f"{color}_motion_type"] != STATIC for color in [RED, BLUE]):
+                if state["red_start_location"] != state["blue_start_location"]:
+                    self.reposition_alpha_to_beta(state)
+
+    def reposition_small_unilateral_props(self, small_unilateral_props):
+        if (
+            small_unilateral_props[0].orientation
+            == small_unilateral_props[1].orientation
+        ):
+            for prop in small_unilateral_props:
+                self.set_default_prop_locations(prop)
+                (
+                    red_direction,
+                    blue_direction,
+                ) = self.determine_translation_direction_for_unilateral_props(
+                    self.scene.motions[RED], self.scene.motions[BLUE]
+                )
+                if prop.color == RED:
+                    self.move_prop(prop, red_direction)
+                elif prop.color == BLUE:
+                    self.move_prop(prop, blue_direction)
+        else:
+            for prop in small_unilateral_props:
+                self.set_default_prop_locations(prop)
+
+    def reposition_big_unilateral_props(self, big_unilateral_props):
+        if big_unilateral_props[0].orientation == big_unilateral_props[1].orientation:
+            for prop in big_unilateral_props:
+                self.set_strict_prop_locations(prop)
+                (
+                    red_direction,
+                    blue_direction,
+                ) = self.determine_translation_direction_for_unilateral_props(
+                    self.scene.motions[RED], self.scene.motions[BLUE]
+                )
+                if prop.color == RED:
+                    self.move_prop(prop, red_direction)
+                elif prop.color == BLUE:
+                    self.move_prop(prop, blue_direction)
+        else:
+            for prop in big_unilateral_props:
+                self.set_strict_prop_locations(prop)
+
+    def determine_translation_direction_for_unilateral_props(
+        self, red_motion: Motion, blue_motion: Motion
+    ) -> Tuple[Direction, Direction]:
+        """Determine the translation direction for big unilateral props based on the motion type, start location, end location, and end layer."""
+        red_direction = self.get_direction_for_motion(red_motion)
+        blue_direction = self.get_opposite_direction(red_direction)
+
+        # Ensure that both directions are set, defaulting to None if necessary
+        return (red_direction or None, blue_direction or None)
+
+    def get_direction_for_motion(self, motion: Motion) -> Direction | None:
+        """Determine the direction based on a single motion."""
+        if motion.end_layer == 1 and motion.motion_type in [PRO, ANTI, STATIC]:
+            if motion.end_location in [NORTH, SOUTH]:
+                return RIGHT if motion.start_location == EAST else LEFT
+            elif motion.end_location in [EAST, WEST]:
+                return DOWN if motion.start_location == SOUTH else UP
+        elif motion.end_layer == 2 and motion.motion_type in [PRO, ANTI, STATIC]:
+            if motion.end_location in [NORTH, SOUTH]:
+                return UP if motion.start_location == EAST else DOWN
+            elif motion.end_location in [EAST, WEST]:
+                return RIGHT if motion.start_location == SOUTH else LEFT
+        return None
 
     ### STATIC BETA ### β
     def reposition_static_beta(self) -> None:
@@ -242,6 +370,8 @@ class PropPositioner:
                     BIGHOOP,
                     BIGDOUBLESTAR,
                     BIGSTAFF,
+                    BIGBUUGENG,
+                    BIGFAN,
                     SWORD,
                     GUITAR,
                 ]:
@@ -353,7 +483,7 @@ class PropPositioner:
             for prop in self.scene.props.values():
                 self.set_default_prop_locations(prop)
         elif all(
-            prop.prop_type in [BIGHOOP, BIGTRIAD, SWORD, GUITAR]
+            prop.prop_type in [BIGHOOP, BIGTRIAD, BIGFAN, BIGBUUGENG, SWORD, GUITAR]
             for prop in self.scene.props.values()
         ):
             for prop in self.scene.props.values():
@@ -398,6 +528,7 @@ class PropPositioner:
         if self.scene.prop_type in [
             STAFF,
             FAN,
+            BIGFAN,
             CLUB,
             BUUGENG,
             MINIHOOP,
@@ -444,6 +575,7 @@ class PropPositioner:
         elif self.scene.prop_type in [
             BIGHOOP,
             BIGSTAFF,
+            BIGBUUGENG,
             DOUBLESTAR,
             BIGDOUBLESTAR,
             SWORD,
@@ -454,6 +586,19 @@ class PropPositioner:
                 self.set_strict_prop_locations(prop)
 
     ### HELPERS ###
+
+    def determine_translation_direction(self, motion: Motion) -> Direction:
+        """Determine the translation direction based on the motion type, start location, end location, and end layer."""
+        if motion.end_layer == 1 and motion.motion_type in [PRO, ANTI, STATIC]:
+            if motion.end_location in [NORTH, SOUTH]:
+                return RIGHT if motion.start_location == EAST else LEFT
+            elif motion.end_location in [EAST, WEST]:
+                return DOWN if motion.start_location == SOUTH else UP
+        elif motion.end_layer == 2 and motion.motion_type in [PRO, ANTI, STATIC]:
+            if motion.end_location in [NORTH, SOUTH]:
+                return UP if motion.start_location == EAST else DOWN
+            elif motion.end_location in [EAST, WEST]:
+                return RIGHT if motion.start_location == SOUTH else LEFT
 
     def props_in_beta(self) -> bool | None:
         visible_staves: List[Prop] = []
@@ -491,19 +636,6 @@ class PropPositioner:
                     color_key = f"optimal_{arrow_dict[COLOR]}_location"
                     return optimal_entry.get(color_key)
         return None
-
-    def determine_translation_direction(self, motion: Motion) -> Direction:
-        """Determine the translation direction based on the motion type, start location, end location, and end layer."""
-        if motion.end_layer == 1 and motion.motion_type in [PRO, ANTI, STATIC]:
-            if motion.end_location in [NORTH, SOUTH]:
-                return RIGHT if motion.start_location == EAST else LEFT
-            elif motion.end_location in [EAST, WEST]:
-                return DOWN if motion.start_location == SOUTH else UP
-        elif motion.end_layer == 2 and motion.motion_type in [PRO, ANTI, STATIC]:
-            if motion.end_location in [NORTH, SOUTH]:
-                return UP if motion.start_location == EAST else DOWN
-            elif motion.end_location in [EAST, WEST]:
-                return RIGHT if motion.start_location == SOUTH else LEFT
 
     def calculate_new_position(
         self,

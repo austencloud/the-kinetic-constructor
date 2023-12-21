@@ -116,7 +116,6 @@ class ObjectBoxDrag(QWidget):
         for motion in self.pictograph.motions.values():
             if motion.color == self.color:
                 motion.clear_attributes()
-        self.pictograph.update_pictograph()
 
     def start_drag(self, event_pos: "QPoint") -> None:
         self.move_to_cursor(event_pos)

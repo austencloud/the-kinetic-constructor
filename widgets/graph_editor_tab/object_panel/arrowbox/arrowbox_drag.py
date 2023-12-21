@@ -262,7 +262,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
                 if prop not in self.pictograph.items():
                     self.pictograph.addItem(prop)
                 prop.update_appearance()
-                self.pictograph.update_props()
 
     def apply_transformations_to_preview(self) -> None:
         self.update_mirror()

@@ -168,6 +168,7 @@ class Arrow(GraphicalObject):
 
         self.motion.prop.set_prop_attrs_from_arrow(self)
         self.motion.prop.update_appearance()
+        
         self.motion.arrow.location = new_location
         self.ghost.location = new_location
         self.update_appearance()
@@ -176,7 +177,7 @@ class Arrow(GraphicalObject):
         self.scene.props[self.color] = self.motion.prop
         self.is_dragging = True
         self.scene.update_pictograph()
-
+        self.motion.update_prop_orientation_and_layer()
     def set_drag_pos(self, new_pos: QPointF) -> None:
         self.setPos(new_pos)
 
