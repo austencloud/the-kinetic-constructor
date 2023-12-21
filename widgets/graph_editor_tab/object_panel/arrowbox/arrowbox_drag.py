@@ -154,11 +154,16 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
         self.pictograph.motions[self.color].arrow = self.pictograph.arrows[self.color]
+        self.finalize_ghost_arrow_for_new_location(new_location)
+        self.pictograph.update_pictograph()
+
+    def finalize_ghost_arrow_for_new_location(self, new_location):
         self.ghost = self.pictograph.ghost_arrows[self.color]
         self.ghost.location = new_location
+        self.ghost.set_arrow_transform_origin_to_center()
+        self.ghost.show()
         self.ghost.update_color()
         self.ghost.update_appearance()
-        self.pictograph.update_pictograph()
 
     def _update_ghost_arrow_for_new_location(self, new_location) -> None:
         self.ghost.color = self.color
@@ -211,10 +216,12 @@ class ArrowBoxDrag(ObjectBoxDrag):
                     self.motion = self.pictograph.motions[self.color]
                     self.pictograph.arrows[self.color].motion = self.motion
                     self.pictograph.arrows[self.color].location = new_location
-                    self.pictograph.arrows[self.color].set_is_svg_mirrored_from_attributes()
+                    self.pictograph.arrows[
+                        self.color
+                    ].set_is_svg_mirrored_from_attributes()
                     self._update_arrow_preview_for_new_location(new_location)
                     self.previous_drag_location = new_location
-                    
+
     def handle_mouse_release(self) -> None:
         if self.has_entered_pictograph_once:
             self.place_arrow_on_pictograph()

@@ -67,6 +67,7 @@ class Arrow(GraphicalObject):
         self.is_dragging: bool = False
         self.ghost: GhostArrow = None
         self.location: Locations = None
+        self.is_ghost: bool = False
         self.turns: Turns = arrow_dict[TURNS]
         self.center_x = self.boundingRect().width() / 2
         self.center_y = self.boundingRect().height() / 2

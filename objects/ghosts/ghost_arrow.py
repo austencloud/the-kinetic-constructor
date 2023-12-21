@@ -35,7 +35,8 @@ class GhostArrow(Arrow):
         self.pictograph = pictograph
         self.color = attributes[COLOR]
         self.target_arrow: "Arrow" = None
-
+        self.is_ghost = True
+        
     def update_ghost_arrow(self, attributes) -> None:
         self.update_attributes(attributes)
         self.update_appearance()

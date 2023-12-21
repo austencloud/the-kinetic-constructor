@@ -103,6 +103,7 @@ class ArrowPositioner:
             motion_type = state[f"{arrow.color}_motion_type"]
             adjustment = self.calculate_I_adjustment(arrow, motion_type)
             self.apply_adjustment(arrow, adjustment)
+            self.apply_adjustment(arrow.ghost, adjustment)
 
     def reposition_P(self) -> None:
         for arrow in [
@@ -250,6 +251,10 @@ class ArrowPositioner:
             arrow.setPos(optimal_location - arrow.boundingRect().center())
 
     def set_arrow_to_default_loc(self, arrow: Arrow, _: Dict = None) -> None:
+        arrow.set_arrow_transform_origin_to_center()
+        # if the arrow isn't a Ghost Arrow itself,
+        if not arrow.is_ghost:
+            arrow.ghost.set_arrow_transform_origin_to_center()
         default_pos = self.get_default_position(arrow)
         adjustment = self.calculate_adjustment(arrow.location, DISTANCE)
         new_pos = default_pos + adjustment - arrow.boundingRect().center()
