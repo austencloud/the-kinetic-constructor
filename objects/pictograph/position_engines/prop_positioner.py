@@ -42,6 +42,7 @@ from constants.string_constants import (
     BLUE,
 )
 from typing import TYPE_CHECKING, Dict, List, Tuple
+from objects.motion import Motion
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
     LetterDictionary,
@@ -158,7 +159,6 @@ class PropPositioner:
         new_position = self.calculate_new_position(prop.pos(), direction)
         prop.setPos(new_position)
 
-
     ### REPOSITIONING ###
 
     def reposition_beta_props(self) -> None:
@@ -176,7 +176,7 @@ class PropPositioner:
 
         # STATIC BETA - β
         if len(static_motions) > 1:
-            self.reposition_static_beta(static_motions)
+            self.reposition_static_beta()
 
         # BETA to BETA - G, H, I
         if (
@@ -187,7 +187,7 @@ class PropPositioner:
 
         # GAMMA → BETA - Y, Z
         if len(pro_or_anti_motions) == 1 and len(static_motions) == 1:
-            self.reposition_gamma_to_beta(pro_or_anti_motions, static_motions)
+            self.reposition_gamma_to_beta()
 
         # ALPHA → BETA - D, E, F
         if all(state[f"{color}_motion_type"] != STATIC for color in [RED, BLUE]):
@@ -196,8 +196,8 @@ class PropPositioner:
 
     ### STATIC BETA ### β
 
-    def reposition_static_beta(self, move_prop: callable, static_motions: Dict) -> None:
-        for color, motion in static_motions.items():
+    def reposition_static_beta(self) -> None:
+        for color, motion in self.scene.motions.items():
             prop = next(
                 (p for p in self.scene.props.values() if p.color == color), None
             )
@@ -234,10 +234,11 @@ class PropPositioner:
                 ]:
                     self.set_strict_prop_locations(other_prop)
             else:
-                end_location = motion[f"{color}_end_location"]
-                direction = self.determine_direction_for_static_beta(prop, end_location)
+                direction = self.determine_direction_for_static_beta(
+                    prop, motion.end_location
+                )
                 if direction:
-                    move_prop(prop, direction)
+                    self.move_prop(prop, direction)
 
     def determine_direction_for_static_beta(
         self, prop: Prop, end_location: str
@@ -288,16 +289,10 @@ class PropPositioner:
 
             # Determine the direction for repositioning based on the motion type and locations
             red_direction = self.determine_translation_direction(
-                red_motion_type,
-                state[f"{RED}_start_location"],
-                red_end_location,
-                state[f"{RED}_end_layer"],
+                self.scene.motions[RED]
             )
             blue_direction = self.determine_translation_direction(
-                blue_motion_type,
-                state[f"{BLUE}_start_location"],
-                blue_end_location,
-                state[f"{BLUE}_end_layer"],
+                self.scene.motions[BLUE]
             )
 
             # If there's a valid direction, move the props accordingly
@@ -320,10 +315,7 @@ class PropPositioner:
     def reposition_G_and_H(self, motion_df: pd.DataFrame) -> None:
         # Determine directions for motion
         further_direction = self.determine_translation_direction(
-            motion_df[f"red_motion_type"],
-            motion_df[f"red_start_location"],
-            motion_df[f"red_end_location"],
-            motion_df[f"red_end_layer"],
+            self.scene.motions[RED]
         )
         other_direction = self.get_opposite_direction(further_direction)
 
@@ -354,17 +346,12 @@ class PropPositioner:
                 self.set_strict_prop_locations(prop)
         else:
             pro_color = RED if motions_df[f"{RED}_motion_type"] == PRO else BLUE
-            anti_color = RED if pro_color == BLUE else BLUE
 
-            pro_prop = next(
-                prop
-                for prop in self.scene.props.values()
-                if prop.motion.motion_type == PRO
+            pro_prop = (
+                self.scene.props[RED] if pro_color == RED else self.scene.props[BLUE]
             )
-            anti_prop = next(
-                prop
-                for prop in self.scene.props.values()
-                if prop.motion.motion_type == ANTI
+            anti_prop = (
+                self.scene.props[RED] if pro_color == BLUE else self.scene.props[BLUE]
             )
 
             pro_motion_df = {
@@ -376,12 +363,9 @@ class PropPositioner:
                 f"{pro_color}_end_layer": motions_df[f"{pro_color}_end_layer"],
             }
 
-            pro_direction = self.determine_translation_direction(
-                pro_motion_df[f"{pro_color}_motion_type"],
-                pro_motion_df[f"{pro_color}_start_location"],
-                pro_motion_df[f"{pro_color}_end_location"],
-                pro_motion_df[f"{pro_color}_end_layer"],
-            )
+            pro_motion = self.scene.motions[pro_color]
+
+            pro_direction = self.determine_translation_direction(pro_motion)
             anti_direction = self.get_opposite_direction(pro_direction)
 
             new_position_pro = self.calculate_new_position(
@@ -396,7 +380,7 @@ class PropPositioner:
 
     ### GAMMA TO BETA ### Y, Z
 
-    def reposition_gamma_to_beta(self, move_prop, shifts, static_motions) -> None:
+    def reposition_gamma_to_beta(self) -> None:
         if self.scene.prop_type in [
             STAFF,
             FAN,
@@ -414,22 +398,32 @@ class PropPositioner:
                 for prop in self.scene.props.values():
                     self.set_default_prop_locations(prop)
             else:
-                shift, static_motion = shifts[0], static_motions[0]
+                shift = (
+                    self.scene.motions[RED]
+                    if self.scene.motions[RED].motion_type in [PRO, ANTI]
+                    else self.scene.motions[BLUE]
+                )
+                static_motion = (
+                    self.scene.motions[RED]
+                    if self.scene.motions[RED].motion_type == STATIC
+                    else self.scene.motions[BLUE]
+                )
+
                 direction = self.determine_translation_direction(shift)
                 if direction:
-                    move_prop(
+                    self.move_prop(
                         next(
                             prop
                             for prop in self.scene.props.values()
-                            if prop.color == shift[COLOR]
+                            if prop.color == shift.color
                         ),
                         direction,
                     )
-                    move_prop(
+                    self.move_prop(
                         next(
                             prop
                             for prop in self.scene.props.values()
-                            if prop.color == static_motion[COLOR]
+                            if prop.color == static_motion.color
                         ),
                         self.get_opposite_direction(direction),
                     )
@@ -484,20 +478,18 @@ class PropPositioner:
                     return optimal_entry.get(color_key)
         return None
 
-    def determine_translation_direction(
-        self, motion_type, start_location, end_location, end_layer
-    ) -> Direction:
+    def determine_translation_direction(self, motion: Motion) -> Direction:
         """Determine the translation direction based on the motion type, start location, end location, and end layer."""
-        if end_layer == 1 and motion_type in [PRO, ANTI, STATIC]:
-            if end_location in [NORTH, SOUTH]:
-                return RIGHT if start_location == EAST else LEFT
-            elif end_location in [EAST, WEST]:
-                return DOWN if start_location == SOUTH else UP
-        elif end_layer == 2 and motion_type in [PRO, ANTI, STATIC]:
-            if end_location in [NORTH, SOUTH]:
-                return UP if start_location == EAST else DOWN
-            elif end_location in [EAST, WEST]:
-                return RIGHT if start_location == SOUTH else LEFT
+        if motion.end_layer == 1 and motion.motion_type in [PRO, ANTI, STATIC]:
+            if motion.end_location in [NORTH, SOUTH]:
+                return RIGHT if motion.start_location == EAST else LEFT
+            elif motion.end_location in [EAST, WEST]:
+                return DOWN if motion.start_location == SOUTH else UP
+        elif motion.end_layer == 2 and motion.motion_type in [PRO, ANTI, STATIC]:
+            if motion.end_location in [NORTH, SOUTH]:
+                return UP if motion.start_location == EAST else DOWN
+            elif motion.end_location in [EAST, WEST]:
+                return RIGHT if motion.start_location == SOUTH else LEFT
 
     def calculate_new_position(
         self,

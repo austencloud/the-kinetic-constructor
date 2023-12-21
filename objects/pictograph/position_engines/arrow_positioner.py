@@ -3,76 +3,69 @@ import pandas as pd
 from constants.numerical_constants import DISTANCE
 from constants.string_constants import *
 from objects.arrow.arrow import Arrow
-
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, Callable
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
 
-from utilities.TypeChecking.TypeChecking import (
-    Colors,
-    MotionTypes,
-)
+from utilities.TypeChecking.TypeChecking import Colors, MotionTypes
 
 
 class ArrowPositioner:
+    ### SETUP ###
     def __init__(self, pictograph: "Pictograph") -> None:
         self.letters = pictograph.main_widget.letters
         self.pictograph = pictograph
 
+    ### PUBLIC METHODS ###
     def update_arrow_positions(self) -> None:
         current_letter = self.pictograph.current_letter
-        optimal_locations = None
         state_dict = self.pictograph.get_state()
+        self.set_optimal_or_default_positions(current_letter, state_dict)
 
-        # Adjustments in logic to use state_dict instead of state_df
-        if len(self.pictograph.props) == 2 and len(self.pictograph.arrows) == 2:
-            if current_letter:
-                optimal_locations = self.find_optimal_locations()
+    ### POSITIONING LOGIC ###
+    def set_optimal_or_default_positions(self, current_letter, state_dict):
+        reposition_method = self.get_reposition_method(current_letter)
+        reposition_method()
 
-        if current_letter in ["G", "H"]:
-            self.reposition_G_and_H()
-        elif current_letter == "I":
-            self.reposition_I()
-        # elif current_letter in ["P", "Q"]:
-        #     self.reposition_P_and_Q()
-        # elif current_letter == "R":
-        #     self.reposition_R()
+    def get_reposition_method(self, current_letter) -> Callable:
+        positioning_methods = {
+            "G": self.reposition_GH,
+            "H": self.reposition_GH,
+            "I": self.reposition_I,
+            "P": self.reposition_P,
+            "Q": self.reposition_Q,
+            "R": self.reposition_R,
+        }
+        return positioning_methods.get(current_letter, self.set_arrows_by_motion_type)
 
-        else:
-            for arrow in self.pictograph.arrows.values():
-                if not arrow.is_dragging:
-                    if arrow.motion:
-                        if arrow.motion.motion_type is not STATIC:
-                            if optimal_locations:
-                                self.set_arrow_to_optimal_loc(optimal_locations, arrow)
-                            else:
-                                self.set_arrow_to_default_loc(arrow)
+    def set_arrows_by_motion_type(self) -> None:
+        for arrow in self.pictograph.arrows.values():
+            if self.is_arrow_movable(arrow):
+                self.set_arrow_to_default_loc(arrow)
+        for ghost_arrow in self.pictograph.ghost_arrows.values():
+            if self.is_arrow_movable(ghost_arrow):
+                self.set_arrow_to_default_loc(ghost_arrow)
 
-            for ghost_arrow in self.pictograph.ghost_arrows.values():
-                if ghost_arrow.motion:
-                    if ghost_arrow.motion.motion_type is not STATIC:
-                        if optimal_locations:
-                            self.set_arrow_to_optimal_loc(
-                                optimal_locations, ghost_arrow
-                            )
-                        else:
-                            self.set_arrow_to_default_loc(ghost_arrow)
+    ### HELPERS ###
+    def is_arrow_movable(self, arrow: Arrow) -> bool:
+        return (
+            not arrow.is_dragging
+            and arrow.motion
+            and arrow.motion.motion_type != STATIC
+        )
 
-    def find_optimal_locations(self) -> Dict | None:
+    def find_optimal_locations(self, current_letter) -> Dict | None:
+        if not current_letter:
+            return None
         current_state = self.pictograph.get_state()
-        current_letter = self.pictograph.current_letter
         candidate_states = self.letters.get(current_letter, [])
-
         for candidate_state in candidate_states:
             if self.compare_states(current_state, candidate_state):
                 return candidate_state.get("optimal_locations")
         return None
 
-    def compare_states(
-        self, current_state: pd.DataFrame, candidate_state: pd.DataFrame
-    ) -> bool:
-        # Assume that both dataframes have the same structure
+    def compare_states(self, current_state: Dict, candidate_state: Dict) -> bool:
         relevant_keys = [
             "letter",
             "start_position",
@@ -88,292 +81,176 @@ class ArrowPositioner:
             "red_start_location",
             "red_end_location",
         ]
-        return all(current_state[key] == candidate_state[key] for key in relevant_keys)
+        return all(
+            current_state.get(key) == candidate_state.get(key) for key in relevant_keys
+        )
 
-    def reposition_G_and_H(self) -> None:
-        def calculate_adjustment(location, color: Colors):
-            if color == RED:
-                distance = 105
-            elif color == BLUE:
-                distance = 50
-            if location == NORTHEAST:
-                return QPointF(distance, -distance)
-            elif location == SOUTHEAST:
-                return QPointF(distance, distance)
-            elif location == SOUTHWEST:
-                return QPointF(-distance, distance)
-            elif location == NORTHWEST:
-                return QPointF(-distance, -distance)
-            return QPointF(0, 0)
-
-        red_arrow = self.pictograph.arrows.get(RED)
-        blue_arrow = self.pictograph.arrows.get(BLUE)
-        red_arrow.setTransformOriginPoint(red_arrow.boundingRect().center())
-        blue_arrow.setTransformOriginPoint(blue_arrow.boundingRect().center())
-        default_pos = self.get_default_position(red_arrow)
-
-        red_adjustment = calculate_adjustment(red_arrow.location, RED)
-        blue_adjustment = calculate_adjustment(blue_arrow.location, BLUE)
-        for arrow in [red_arrow, blue_arrow]:
-            if arrow.is_svg_mirrored:
-                if arrow.color == BLUE:
-                    if arrow.location == NORTHWEST:
-                        arrow.setPos(
-                            default_pos
-                            - arrow.boundingRect().center()
-                            + blue_adjustment
-                        )
-                    elif arrow.location == SOUTHWEST:
-                        arrow.setPos(
-                            default_pos
-                            - arrow.boundingRect().center()
-                            + blue_adjustment
-                        )
-                    elif arrow.location == NORTHEAST:
-                        arrow.setPos(
-                            default_pos
-                            - arrow.boundingRect().center()
-                            + blue_adjustment
-                        )
-                    elif arrow.location == SOUTHEAST:
-                        arrow.setPos(
-                            default_pos
-                            - arrow.boundingRect().center()
-                            + blue_adjustment
-                        )
-                elif arrow.color == RED:
-                    if arrow.location == NORTHWEST:
-                        arrow.setPos(
-                            default_pos - arrow.boundingRect().center() + red_adjustment
-                        )
-                    elif arrow.location == SOUTHWEST:
-                        arrow.setPos(
-                            default_pos - arrow.boundingRect().center() + red_adjustment
-                        )
-                    elif arrow.location == NORTHEAST:
-                        arrow.setPos(
-                            default_pos - arrow.boundingRect().center() + red_adjustment
-                        )
-                    elif arrow.location == SOUTHEAST:
-                        arrow.setPos(
-                            default_pos - arrow.boundingRect().center() + red_adjustment
-                        )
-            elif not arrow.is_svg_mirrored:
-                if arrow.color == BLUE:
-                    if arrow.location == NORTHWEST:
-                        arrow.setPos(
-                            default_pos
-                            - arrow.boundingRect().center()
-                            + blue_adjustment
-                        )
-                    elif arrow.location == SOUTHWEST:
-                        arrow.setPos(
-                            default_pos
-                            - arrow.boundingRect().center()
-                            + blue_adjustment
-                        )
-                    elif arrow.location == NORTHEAST:
-                        arrow.setPos(
-                            default_pos
-                            - arrow.boundingRect().center()
-                            + blue_adjustment
-                        )
-                    elif arrow.location == SOUTHEAST:
-                        arrow.setPos(
-                            default_pos
-                            - arrow.boundingRect().center()
-                            + blue_adjustment
-                        )
-                elif arrow.color == RED:
-                    if arrow.location == NORTHWEST:
-                        arrow.setPos(
-                            default_pos - arrow.boundingRect().center() + red_adjustment
-                        )
-                    elif arrow.location == SOUTHWEST:
-                        arrow.setPos(
-                            default_pos - arrow.boundingRect().center() + red_adjustment
-                        )
-                    elif arrow.location == NORTHEAST:
-                        arrow.setPos(
-                            default_pos - arrow.boundingRect().center() + red_adjustment
-                        )
-                    elif arrow.location == SOUTHEAST:
-                        arrow.setPos(
-                            default_pos - arrow.boundingRect().center() + red_adjustment
-                        )
-
+    ### POSITIONING METHODS ###
+    def reposition_GH(self) -> None:
+        for arrow in [
+            self.pictograph.arrows.get(RED),
+            self.pictograph.arrows.get(BLUE),
+        ]:
+            adjustment = self.calculate_GH_adjustment(arrow)
+            self.apply_adjustment(arrow, adjustment)
 
     def reposition_I(self) -> None:
-        state = self.pictograph.get_state()
-
-        def calculate_adjustment(location, motion_type: MotionTypes):
-            if motion_type == PRO:
-                distance = 100
-            elif motion_type == ANTI:
-                distance = 55
-            if location == NORTHEAST:
-                return QPointF(distance, -distance)
-            elif location == SOUTHEAST:
-                return QPointF(distance, distance)
-            elif location == SOUTHWEST:
-                return QPointF(-distance, distance)
-            elif location == NORTHWEST:
-                return QPointF(-distance, -distance)
-            return QPointF(0, 0)
-
-        # Determine which arrow is doing the Pro motion and which is doing the Anti motion
-        pro_color, anti_color = (
-            (RED, BLUE) if state["red_motion_type"] == PRO else (BLUE, RED)
-        )
-
-        # Get the arrows
-        pro_arrow = self.pictograph.arrows.get(pro_color)
-        anti_arrow = self.pictograph.arrows.get(anti_color)
-
-        print(pro_arrow.transformOriginPoint())
-        print(anti_arrow.transformOriginPoint())
-        pro_adjustment = calculate_adjustment(pro_arrow.location, PRO)
-        anti_adjustment = calculate_adjustment(anti_arrow.location, ANTI)
-        # Set the default positions
-
-        # Helper method to apply position adjustments
-        def apply_adjustment(arrow, default_pos, adjustment, arrow_center):
-            new_x = default_pos.x() - arrow_center.x()
-            new_y = default_pos.y() - arrow_center.y()
-            arrow.setPos(QPointF(new_x, new_y) + adjustment)
-
-        for arrow in [pro_arrow, anti_arrow]:
-            arrow_center = QPointF(
-                arrow.boundingRect().width() / 2, arrow.boundingRect().height() / 2
-            )
-            default_pos = self.get_default_position(arrow)
-            adjustment = (
-                pro_adjustment if arrow.motion.motion_type == PRO else anti_adjustment
-            )
-            apply_adjustment(arrow, default_pos, adjustment, arrow_center)
-
-            for ghost_arrow in self.pictograph.ghost_arrows.values():
-                for arrow in self.pictograph.arrows.values():
-                    if ghost_arrow.color == arrow.color:
-                        ghost_arrow.setPos(arrow.pos())
-
-
-    def set_arrow_to_default_loc(self, arrow: "Arrow") -> None:
-        default_pos = self.get_default_position(arrow)
-        arrow.setPos(default_pos - arrow.boundingRect().center())
-
-    def get_default_position(self, arrow: "Arrow") -> QPointF:
-        if self.pictograph.grid.grid_mode == DIAMOND:
-            layer2_point = self.pictograph.grid.diamond_layer2_points.get(
-                arrow.location
-            )
-        elif self.pictograph.grid.grid_mode == BOX:
-            layer2_point = self.pictograph.grid.box_layer2_points.get(arrow.location)
-        else:
-            layer2_point = QPointF(0, 0)
-
-        return layer2_point
-
-    def set_arrow_to_optimal_loc(self, arrow: "Arrow") -> None:
-        arrow.set_arrow_transform_origin_to_center()
-        optimal_locations_df = pd.DataFrame("OptimalLocationsDictionary.csv")
-        current_letter = self.pictograph.current_letter
-        if self.pictograph.prop_type in [
-            STAFF,
-            FAN,
-            BUUGENG,
-            CLUB,
-            MINIHOOP,
-            TRIAD,
-            DOUBLESTAR,
-            QUIAD,
-            CHICKEN,
+        for arrow in [
+            self.pictograph.arrows.get(RED),
+            self.pictograph.arrows.get(BLUE),
         ]:
-            prop_size = "small"
-        else:
-            prop_size = "large"
+            state = self.pictograph.get_state()
+            motion_type = state[f"{arrow.color}_motion_type"]
+            adjustment = self.calculate_I_adjustment(arrow, motion_type)
+            self.apply_adjustment(arrow, adjustment)
 
-        end_orientation = arrow.motion.end_orientation
+    def reposition_P(self) -> None:
+        for arrow in [
+            self.pictograph.arrows.get(RED),
+            self.pictograph.arrows.get(BLUE),
+        ]:
+            adjustment = self.calculate_P_adjustment(arrow)
+            self.apply_adjustment(arrow, adjustment)
 
-        filtered_df = optimal_locations_df[
-            (optimal_locations_df["letter"] == current_letter)
-            & (optimal_locations_df["prop_size"] == prop_size)
-            & (
-                optimal_locations_df[f"{arrow.color}_end_orientation"]
-                == end_orientation
-            )
-        ]
+    def reposition_Q(self) -> None:
+        for arrow in [
+            self.pictograph.arrows.get(RED),
+            self.pictograph.arrows.get(BLUE),
+        ]:
+            adjustment = self.calculate_Q_adjustment(arrow)
+            self.apply_adjustment(arrow, adjustment)
 
-        pos = QPointF(
-            filtered_df[f"optimal_{arrow.color}_location"]["x"],
-            filtered_df[f"optimal_{arrow.color}_location"]["y"],
+    def reposition_R(self) -> None:
+        for arrow in [
+            self.pictograph.arrows.get(RED),
+            self.pictograph.arrows.get(BLUE),
+        ]:
+            adjustment = self.calculate_R_adjustment(arrow)
+            self.apply_adjustment(arrow, adjustment)
+
+    ### ADJUSTMENT CALCULATIONS ###
+    def calculate_GH_adjustment(self, arrow: Arrow) -> QPointF:
+        distance = 105 if arrow.color == RED else 50
+        return self.calculate_adjustment(arrow.location, distance)
+
+    def calculate_I_adjustment(self, arrow: Arrow, motion_type: MotionTypes) -> QPointF:
+        distance = 100 if motion_type == PRO else 55
+        return self.calculate_adjustment(arrow.location, distance)
+
+    def calculate_P_adjustment(self, arrow: Arrow) -> QPointF:
+        distance = 90 if arrow.color == RED else 35
+        return self.calculate_adjustment(arrow.location, distance)
+
+    def calculate_Q_adjustment(self, arrow: Arrow) -> QPointF:
+        adjustment_dict = {
+            RED: {
+                CLOCKWISE: {
+                    NORTHEAST: QPointF(70, -110),
+                    SOUTHEAST: QPointF(110, 70),
+                    SOUTHWEST: QPointF(-70, 110),
+                    NORTHWEST: QPointF(-110, -70),
+                },
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: QPointF(110, -70),
+                    SOUTHEAST: QPointF(70, 110),
+                    SOUTHWEST: QPointF(-110, 70),
+                    NORTHWEST: QPointF(-70, -110),
+                },
+            },
+            BLUE: {
+                CLOCKWISE: {
+                    NORTHEAST: QPointF(30, -30),
+                    SOUTHEAST: QPointF(30, 30),
+                    SOUTHWEST: QPointF(-30, 30),
+                    NORTHWEST: QPointF(-30, -30),
+                },
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: QPointF(30, -30),
+                    SOUTHEAST: QPointF(30, 30),
+                    SOUTHWEST: QPointF(-30, 30),
+                    NORTHWEST: QPointF(-30, -30),
+                },
+            },
+        }
+        color_adjustments = adjustment_dict.get(arrow.color, {})
+        rotation_adjustments = color_adjustments.get(
+            arrow.motion.rotation_direction, {}
         )
+        return rotation_adjustments.get(arrow.location, QPointF(0, 0))
 
-        new_x = pos.x() - (arrow.boundingRect().width())
-        new_y = pos.y() - (arrow.boundingRect().height())
+    def calculate_R_adjustment(self, arrow: Arrow) -> QPointF:
+        adjustment_dict = {
+            PRO: {
+                CLOCKWISE: {
+                    NORTHEAST: QPointF(75, -60),
+                    SOUTHEAST: QPointF(60, 75),
+                    SOUTHWEST: QPointF(-75, 60),
+                    NORTHWEST: QPointF(-60, -75),
+                },
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: QPointF(60, -75),
+                    SOUTHEAST: QPointF(75, 60),
+                    SOUTHWEST: QPointF(-60, 75),
+                    NORTHWEST: QPointF(-75, -60),
+                },
+            },
+            ANTI: {
+                CLOCKWISE: {
+                    NORTHEAST: QPointF(30, -30),
+                    SOUTHEAST: QPointF(30, 30),
+                    SOUTHWEST: QPointF(-30, 30),
+                    NORTHWEST: QPointF(-30, -30),
+                },
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: QPointF(35, -25),
+                    SOUTHEAST: QPointF(25, 35),
+                    SOUTHWEST: QPointF(-35, 25),
+                    NORTHWEST: QPointF(-25, -35),
+                },
+            },
+        }
+        motion_type_adjustments = adjustment_dict.get(arrow.motion_type, {})
+        rotation_adjustments = motion_type_adjustments.get(
+            arrow.motion.rotation_direction, {}
+        )
+        return rotation_adjustments.get(arrow.location, QPointF(0, 0))
 
-        new_pos = QPointF(new_x, new_y)
+    ### UNIVERSAL METHODS ###
+    def calculate_adjustment(self, location: str, distance: int) -> QPointF:
+        location_adjustments = {
+            NORTHEAST: QPointF(distance, -distance),
+            SOUTHEAST: QPointF(distance, distance),
+            SOUTHWEST: QPointF(-distance, distance),
+            NORTHWEST: QPointF(-distance, -distance),
+        }
+        return location_adjustments.get(location, QPointF(0, 0))
+
+    def apply_adjustment(self, arrow: Arrow, adjustment: QPointF) -> None:
+        default_pos = self.get_default_position(arrow)
+        arrow_center = arrow.boundingRect().center()
+        new_pos = default_pos - arrow_center + adjustment
         arrow.setPos(new_pos)
 
-    def set_arrow_to_default_loc(self, arrow: "Arrow") -> None:
-        layer2_points = (
-            self.pictograph.grid.diamond_layer2_points
-            if self.pictograph.grid.grid_mode == DIAMOND
-            else self.pictograph.grid.box_layer2_points
-        )
+    ### GETTERS ###
+    def get_default_position(self, arrow: Arrow) -> QPointF:
+        layer2_points = self.pictograph.grid.get_layer2_points()
+        return layer2_points.get(arrow.location, QPointF(0, 0))
 
-        if self.pictograph.grid.grid_mode == DIAMOND:
-            if arrow.motion_type in [PRO, ANTI, FLOAT]:
-                layer2_point = layer2_points.get(arrow.location)
+    def get_layer2_points(self, grid_mode) -> Dict[str, QPointF]:
+        if grid_mode == DIAMOND:
+            return self.pictograph.grid.diamond_layer2_points
+        elif grid_mode == BOX:
+            return self.pictograph.grid.box_layer2_points
+        return {}
 
-                if layer2_point is None:
-                    print(
-                        f"Warning: No layer2_point found for arrow_location {arrow.location}"
-                    )
+    ### SETTERS ###
+    def set_arrow_to_optimal_loc(self, arrow: Arrow, optimal_locations: Dict) -> None:
+        optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
+        if optimal_location:
+            arrow.setPos(optimal_location - arrow.boundingRect().center())
 
-                arrow.set_arrow_transform_origin_to_center()
-                adjustment = QPointF(0, 0)
-
-                if arrow.location == NORTHEAST:
-                    adjustment = QPointF(DISTANCE, -DISTANCE)
-                elif arrow.location == SOUTHEAST:
-                    adjustment = QPointF(DISTANCE, DISTANCE)
-                elif arrow.location == SOUTHWEST:
-                    adjustment = QPointF(-DISTANCE, DISTANCE)
-                elif arrow.location == NORTHWEST:
-                    adjustment = QPointF(-DISTANCE, -DISTANCE)
-
-                new_pos = QPointF(
-                    layer2_point.x() + adjustment.x(),
-                    layer2_point.y() + adjustment.y(),
-                )
-                final_pos = QPointF(new_pos.x(), new_pos.y())
-                arrow.setPos(final_pos - arrow.boundingRect().center())
-
-        elif self.pictograph.grid.grid_mode == BOX:
-            if arrow.motion_type in [PRO, ANTI, FLOAT]:
-                layer2_point = layer2_points.get(arrow.location)
-
-                if layer2_point is None:
-                    print(
-                        f"Warning: No layer2_point found for arrow_location {arrow.location}"
-                    )
-
-                arrow.set_arrow_transform_origin_to_center()
-                adjustment = QPointF(0, 0)
-
-                if arrow.location == NORTH:
-                    adjustment = QPointF(DISTANCE, -DISTANCE)
-                elif arrow.location == SOUTH:
-                    adjustment = QPointF(DISTANCE, DISTANCE)
-                elif arrow.location == EAST:
-                    adjustment = QPointF(-DISTANCE, DISTANCE)
-                elif arrow.location == WEST:
-                    adjustment = QPointF(-DISTANCE, -DISTANCE)
-
-                new_pos = QPointF(
-                    layer2_point.x() + adjustment.x(),
-                    layer2_point.y() + adjustment.y(),
-                )
-                final_pos = QPointF(new_pos.x(), new_pos.y())
-                arrow.setPos(final_pos - arrow.boundingRect().center())
+    def set_arrow_to_default_loc(self, arrow: Arrow, _: Dict = None) -> None:
+        default_pos = self.get_default_position(arrow)
+        adjustment = self.calculate_adjustment(arrow.location, DISTANCE)
+        new_pos = default_pos + adjustment - arrow.boundingRect().center()
+        arrow.setPos(new_pos)

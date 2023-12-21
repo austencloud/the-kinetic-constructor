@@ -3,10 +3,10 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 950 950" style="enable-background:new 0 0 950 950;" xml:space="preserve">
 <g>
-	<circle id="n_diamond_hand_point" cx="475" cy="331.9" r="4.7"/>
-	<circle id="e_diamond_hand_point" cx="618.1" cy="475" r="4.7"/>
-	<circle id="s_diamond_hand_point" cx="475" cy="618.1" r="4.7"/>
-	<circle id="w_diamond_hand_point" cx="331.9" cy="475" r="4.7"/>
+	<circle fill="none" id="n_diamond_hand_point" cx="475" cy="331.9" r="4.7"/>
+	<circle fill="none" id="e_diamond_hand_point" cx="618.1" cy="475" r="4.7"/>
+	<circle fill="none" id="s_diamond_hand_point" cx="475" cy="618.1" r="4.7"/>
+	<circle fill="none" id="w_diamond_hand_point" cx="331.9" cy="475" r="4.7"/>
 </g>
 <g>
 	<circle id="n_diamond_outer_point" cx="475" cy="175" r="25"/>
@@ -15,10 +15,10 @@
 	<circle id="w_diamond_outer_point" cx="175" cy="475" r="25"/>
 </g>
 <g>
-	<circle id="ne_diamond_layer2_point" cx="618.1" cy="331.9" r="8.8"/>
-	<circle id="se_diamond_layer2_point" cx="618.1" cy="618.1" r="8.8"/>
-	<circle id="sw_diamond_layer2_point" cx="331.9" cy="618.1" r="8.8"/>
-	<circle id="nw_diamond_layer2_point" cx="331.9" cy="331.9" r="8.8"/>
+	<circle fill="none" id="ne_diamond_layer2_point" cx="618.1" cy="331.9" r="8.8"/>
+	<circle fill="none" id="se_diamond_layer2_point" cx="618.1" cy="618.1" r="8.8"/>
+	<circle fill="none" id="sw_diamond_layer2_point" cx="331.9" cy="618.1" r="8.8"/>
+	<circle fill="none" id="nw_diamond_layer2_point" cx="331.9" cy="331.9" r="8.8"/>
 </g>
 <g>
 	<circle fill="none" id="strict_e_diamond_hand_point" cx="625" cy="475" r="4.7"/>

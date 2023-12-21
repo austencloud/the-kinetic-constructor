@@ -105,9 +105,9 @@ class MainWidget(QWidget):
 
             """
         )
+        self.tab_widget.addTab(self.image_generator_tab, "Image Generator")
         self.tab_widget.addTab(self.option_picker_widget, "Option Picker")
         self.tab_widget.addTab(self.graph_editor_tab, "Graph Editor")
-        self.tab_widget.addTab(self.image_generator_tab, "Image Generator")
 
         self.left_frame.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
@@ -117,20 +117,10 @@ class MainWidget(QWidget):
         )
 
         self.right_frame.layout().setAlignment(Qt.AlignmentFlag.AlignLeft)
-
-        screen = QApplication.primaryScreen()
-        screen_size = screen.size()
-        left_frame_width = int(screen_size.width() * 0.40)
-        right_frame_width = int(screen_size.width() * 0.50)
-
-        # self.left_frame.setMinimumWidth(left_frame_width)
-        # self.right_frame.setMaximumWidth(right_frame_width)
         self.right_layout.addWidget(self.tab_widget)
 
         self.horizontal_splitter.addWidget(self.left_frame)
         self.horizontal_splitter.addWidget(self.right_frame)
-
-        # self.horizontal_splitter.setSizes([left_frame_width, right_frame_width])
 
         self.main_layout = QHBoxLayout(self)
         self.main_layout.addWidget(self.horizontal_splitter)

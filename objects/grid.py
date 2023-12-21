@@ -22,6 +22,7 @@ from constants.string_constants import (
 from utilities.TypeChecking.TypeChecking import GridModes
 
 if TYPE_CHECKING:
+    from objects.arrow.arrow import Arrow
     from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
     from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
     from objects.pictograph.pictograph import Pictograph
@@ -167,6 +168,18 @@ class Grid:
         # Fallback if no matching pattern is found
 
         return ""
+
+    def get_layer2_points(self) -> Dict[str, QPointF]:
+        """
+        Retrieves the dictionary containing points for layer 2 based on the current grid mode.
+        """
+        if self.grid_mode == DIAMOND:
+            return self.diamond_layer2_points
+        elif self.grid_mode == BOX:
+            return self.box_layer2_points
+        else:
+            # Fallback for an unsupported grid mode
+            return {}
 
     def setPos(self, position: QPointF) -> None:
         for item in self.items.values():
