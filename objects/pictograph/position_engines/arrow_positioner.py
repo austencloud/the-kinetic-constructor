@@ -210,7 +210,7 @@ class ArrowPositioner:
             if motion_type == PRO:
                 distance = 100
             elif motion_type == ANTI:
-                distance = 50
+                distance = 55
             if location == NORTHEAST:
                 return QPointF(distance, -distance)
             elif location == SOUTHEAST:

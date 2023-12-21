@@ -404,6 +404,10 @@ class Pictograph(QGraphicsScene):
             motion_dict[MOTION_TYPE] = new_arrow.motion_type
             new_arrow.motion.setup_attributes(motion_dict)
 
+            new_arrow.setTransformOriginPoint(new_arrow.boundingRect().center())
+            new_arrow.ghost.setTransformOriginPoint(
+                new_arrow.ghost.boundingRect().center()
+            )
         new_beat.update_pictograph()
 
         return new_beat
