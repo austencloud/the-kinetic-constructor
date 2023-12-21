@@ -1,4 +1,5 @@
 from PyQt6.QtCore import QPointF
+import pandas as pd
 from constants.numerical_constants import DISTANCE
 from constants.string_constants import *
 from objects.arrow.arrow import Arrow
@@ -8,7 +9,10 @@ from typing import TYPE_CHECKING, List, Dict, Any
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
 
-from utilities.TypeChecking.TypeChecking import MotionAttributesDicts, OptimalLocationsDicts
+from utilities.TypeChecking.TypeChecking import (
+    MotionAttributesDicts,
+    OptimalLocationsDicts,
+)
 
 
 class ArrowPositioner:
@@ -40,97 +44,80 @@ class ArrowPositioner:
                     else:
                         self.set_arrow_to_default_loc(ghost_arrow)
 
-    def find_optimal_locations(self) -> OptimalLocationsDicts | None:
-        current_state: List[Dict[MotionAttributesDicts, str]] = self.pictograph.get_state()
+    def find_optimal_locations(self) -> pd.DataFrame | None:
+        current_state_df = self.pictograph.get_state()  # This is now a DataFrame
         current_letter = self.pictograph.current_letter
-        current_letter_variants = self.letters[current_letter]
+        candidate_states_df = pd.DataFrame(self.letters[current_letter])
 
-        variant_dict1 = {
-            COLOR: current_state[0][COLOR],
-            MOTION_TYPE: current_state[0][MOTION_TYPE],
-            ROTATION_DIRECTION: current_state[0][ROTATION_DIRECTION],
-            ARROW_LOCATION: current_state[0][ARROW_LOCATION],
-            START_LOCATION: current_state[0][START_LOCATION],
-            END_LOCATION: current_state[0][END_LOCATION],
-            TURNS: current_state[0][TURNS],
-        }
-        variant_dict2 = {
-            COLOR: current_state[1][COLOR],
-            MOTION_TYPE: current_state[1][MOTION_TYPE],
-            ROTATION_DIRECTION: current_state[1][ROTATION_DIRECTION],
-            ARROW_LOCATION: current_state[1][ARROW_LOCATION],
-            START_LOCATION: current_state[1][START_LOCATION],
-            END_LOCATION: current_state[1][END_LOCATION],
-            TURNS: current_state[1][TURNS],
-        }
-
-        modified_state = [variant_dict1, variant_dict2]
-
-        for variants in current_letter_variants:
-            if self.compare_states(modified_state, variants):
-                return next(
-                    (
-                        d
-                        for d in variants
-                        if "optimal_red_location" in d and "optimal_blue_location" in d
-                    ),
-                    None,
-                )
+        for _, candidate_state_row in candidate_states_df.iterrows():
+            if self.compare_states(
+                current_state_df, candidate_state_row.to_frame().transpose()
+            ):
+                return candidate_state_row["optimal_locations"]
         return None
 
     def compare_states(
-        self, current_state: List[Dict[str, Any]], candidate_state: List[Dict[str, Any]]
+        self, current_state: pd.DataFrame, candidate_state: pd.DataFrame
     ) -> bool:
-        # Filter out non-arrow entries from candidate_state
-        filtered_candidate_state = [
-            entry
-            for entry in candidate_state
-            if set(entry.keys()).issuperset(
-                {
-                    COLOR,
-                    MOTION_TYPE,
-                    ARROW_LOCATION,
-                    ROTATION_DIRECTION,
-                    START_LOCATION,
-                    END_LOCATION,
-                    TURNS,
-                }
-            )
+        # Assume that both dataframes have the same structure
+        relevant_columns = [
+            "letter",
+            "start_position",
+            "end_position",
+            "blue_motion_type",
+            "blue_rotation_direction",
+            "blue_turns",
+            "blue_start_location",
+            "blue_end_location",
+            "red_motion_type",
+            "red_rotation_direction",
+            "red_turns",
+            "red_start_location",
+            "red_end_location",
         ]
 
-        if len(current_state) != len(filtered_candidate_state):
-            return False
+        # Sort the dataframes by color to ensure correct comparison
+        current_state_sorted = current_state.sort_values(by="letter").reset_index(
+            drop=True
+        )
+        candidate_state_sorted = candidate_state.sort_values(by="letter").reset_index(
+            drop=True
+        )
 
-        for motion in current_state:
-            matching_arrows = [
-                candidate_arrow
-                for candidate_arrow in filtered_candidate_state
-                if all(
-                    motion.get(key) == candidate_arrow.get(key)
-                    for key in [
-                        COLOR,
-                        MOTION_TYPE,
-                        ARROW_LOCATION,
-                        ROTATION_DIRECTION,
-                        START_LOCATION,
-                        END_LOCATION,
-                        TURNS,
-                    ]
-                )
-            ]
-            if not matching_arrows:
-                return False
+        return current_state_sorted[relevant_columns].equals(
+            candidate_state_sorted[relevant_columns]
+        )
 
-        return True
-
-    def set_arrow_to_optimal_loc(
-        self, optimal_locations: OptimalLocationsDicts, arrow: "Arrow"
-    ) -> None:
+    def set_arrow_to_optimal_loc(self, arrow: "Arrow") -> None:
         arrow.set_arrow_transform_origin_to_center()
-        optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
+        optimal_locations_df = pd.DataFrame("OptimalLocationsDictionary.csv")
+        current_letter = self.pictograph.current_letter
+        if self.pictograph.prop_type in [
+            STAFF,
+            FAN,
+            BUUGENG,
+            CLUB,
+            MINIHOOP,
+            TRIAD,
+            DOUBLESTAR,
+            QUIAD,
+            CHICKEN,
+        ]:
+            prop_size = "small"
+        else:
+            prop_size = "large"
+            
+        end_orientation = arrow.motion.end_orientation
+        
+        filtered_df = optimal_locations_df[
+            (optimal_locations_df["letter"] == current_letter)
+            & (optimal_locations_df["prop_size"] == prop_size)
+            & (optimal_locations_df[f"{arrow.color}_end_orientation"] == end_orientation)
+        ]
+        
         pos = QPointF(
-            optimal_location["x"],
-            optimal_location["y"],
+            filtered_df[f"optimal_{arrow.color}_location"]["x"],
+            filtered_df[f"optimal_{arrow.color}_location"]["y"],
         )
 
         new_x = pos.x() - (arrow.boundingRect().width()) / 2

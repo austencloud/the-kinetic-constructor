@@ -3,6 +3,7 @@ import os
 from typing import List, TYPE_CHECKING
 
 from PyQt6.QtCore import QObject
+import pandas as pd
 
 from objects.arrow.arrow import Arrow
 from constants.string_constants import LETTER_JSON_DIR
@@ -13,22 +14,10 @@ if TYPE_CHECKING:
 
 
 class JsonHandler(QObject):
-    def connect_scene(self, pictograph: "Pictograph") -> None:
-        self.pictograph = pictograph
+    def connect_scene(self, scene: "Pictograph") -> None:
+        self.scene = scene
 
-    def load_all_letters(self) -> LetterDictionary:
-        directory = LETTER_JSON_DIR
-        letters: LetterDictionary = {}
-        for root, dirs, files in os.walk(directory):
-            for filename in files:
-                if filename.endswith(".json"):
-                    filepath = os.path.join(root, filename)
-                    with open(filepath, "r", encoding="utf-8") as file:
-                        letter_data = json.load(file)
-                        letter_key = filename.replace(".json", "")
-                        letters[letter_key] = letter_data[letter_key]
-        self.letters = letters
-        return letters
+
 
     def update_individual_json(self, letter: Letters, updated_data, directory) -> None:
         filepath = os.path.join(directory, f"{letter}.json")
@@ -40,7 +29,7 @@ class JsonHandler(QObject):
         current_attributes = []
         updated_letters: List[Letters] = []  # Keep track of updated letters
 
-        for item in self.pictograph.items():
+        for item in self.scene.items():
             if isinstance(item, Arrow):
                 current_attributes.append(item.get_attributes())
         current_attributes = sorted(current_attributes, key=lambda x: x["color"])

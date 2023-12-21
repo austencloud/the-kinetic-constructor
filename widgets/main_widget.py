@@ -11,6 +11,7 @@ from PyQt6.QtWidgets import (
     QApplication,
 )
 from PyQt6.QtGui import QWheelEvent
+import pandas as pd
 from utilities.TypeChecking.TypeChecking import LetterDictionary
 from utilities.json_handler import JsonHandler
 from widgets.image_generator_tab.ig_tab import IGTab
@@ -35,13 +36,20 @@ class MainWidget(QWidget):
 
         self.key_event_handler = KeyEventHandler()
         self.json_handler = JsonHandler()
-        self.letters: LetterDictionary = self.json_handler.load_all_letters()
+        self.letters: LetterDictionary = self.load_all_letters()
         self.graph_editor_tab = GraphEditorTab(self)
         self.sequence_widget = SequenceWidget(self)
         self.option_picker_widget = OptionPickerTab(self)
         self.image_generator_tab = IGTab(self)
         self.image_generator_tab.imageGenerated.connect(self.on_image_generated)
         self.configure_layouts()
+
+    def load_all_letters(self) -> LetterDictionary:
+        df = pd.read_csv("LetterDictionary.csv")
+        letters: LetterDictionary = (
+            df.groupby("letter").apply(lambda x: x.to_dict(orient="records")).to_dict()
+        )
+        return letters
 
     def configure_layouts(self) -> None:
         self.horizontal_splitter = StyledSplitter(Qt.Orientation.Horizontal)

@@ -2,35 +2,35 @@ Organized by number of calls:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-       486        0.001826        0.000004             0.006027             0.000012 eventFilter                    widgets\main_widget.py:138
-        33        0.000484        0.000015             0.001708             0.000052 paintEvent                     widgets\styled_splitter.py:17
-         6        0.000007        0.000001             0.000030             0.000005 eventFilter                    option_picker_tab\option.py:70
-         3        0.000119        0.000040             0.000517             0.000172 paintEvent                     widgets\styled_splitter.py:29
-         1        0.000026        0.000026             0.000309             0.000309 showEvent                      widgets\main_widget.py:168
-         1        0.000035        0.000035             0.000046             0.000046 resize_sequence_widget         sequence_widget\sequence_widget.py:32
-         1        0.000140        0.000140             0.000206             0.000206 resize_letter_buttons          image_generator_tab\ig_letter_button_frame.py:142
-         1        0.000126        0.000126             0.000208             0.000208 resize_letter_buttons          option_picker_tab\option_picker_letter_button_frame.py:115
-         1        0.000036        0.000036             0.000242             0.000242 resizeEvent                    image_generator_tab\ig_letter_button_frame.py:161
+        91        0.000309        0.000003             0.001101             0.000012 eventFilter                    widgets\main_widget.py:146
+         6        0.000007        0.000001             0.000029             0.000005 eventFilter                    option_picker_tab\option.py:70
+         3        0.000125        0.000042             0.017178             0.005726 paintEvent                     widgets\styled_splitter.py:17
+         3        0.000115        0.000038             0.000530             0.000177 paintEvent                     widgets\styled_splitter.py:29
+         3        0.000055        0.000018             0.000193             0.000064 showEvent                      option_picker_tab\option.py:79
+         3        0.000003        0.000001             0.000003             0.000001 load_image_if_visible          option_picker_tab\option_picker_scroll.py:110
+         2        0.000010        0.000005             0.053681             0.026840 inner                          tka-sequence-constructor\profiler.py:22
+         1        0.000133        0.000133             0.000210             0.000210 resize_letter_buttons          option_picker_tab\option_picker_letter_button_frame.py:115
+         1        0.000032        0.000032             0.000042             0.000042 resize_sequence_widget         sequence_widget\sequence_widget.py:32
          1        0.000002        0.000002             0.000002             0.000002 resize_option_picker_scroll    option_picker_tab\option_picker_scroll.py:308
-         1        0.000027        0.000027             0.000237             0.000237 resize_option_picker_widget    option_picker_tab\option_picker_tab.py:30
-         3        0.000017        0.000006             0.057936             0.057936 inner                          tka-sequence-constructor\profiler.py:22
+         1        0.000021        0.000021             0.000233             0.000233 resize_option_picker_widget    option_picker_tab\option_picker_tab.py:30
+         1        0.000022        0.000022             0.000297             0.000297 showEvent                      widgets\main_widget.py:176
 
 
 Organized by total time:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-       486        0.001826        0.000004             0.006027             0.000012 eventFilter                    widgets\main_widget.py:138
-        33        0.000484        0.000015             0.001708             0.000052 paintEvent                     widgets\styled_splitter.py:17
-         1        0.000140        0.000140             0.000206             0.000206 resize_letter_buttons          image_generator_tab\ig_letter_button_frame.py:142
-         1        0.000126        0.000126             0.000208             0.000208 resize_letter_buttons          option_picker_tab\option_picker_letter_button_frame.py:115
-         3        0.000119        0.000040             0.000517             0.000172 paintEvent                     widgets\styled_splitter.py:29
-         1        0.000036        0.000036             0.000242             0.000242 resizeEvent                    image_generator_tab\ig_letter_button_frame.py:161
-         1        0.000035        0.000035             0.000046             0.000046 resize_sequence_widget         sequence_widget\sequence_widget.py:32
-         1        0.000027        0.000027             0.000237             0.000237 resize_option_picker_widget    option_picker_tab\option_picker_tab.py:30
-         1        0.000026        0.000026             0.000309             0.000309 showEvent                      widgets\main_widget.py:168
-         3        0.000017        0.000006             0.057936             0.057936 inner                          tka-sequence-constructor\profiler.py:22
-         6        0.000007        0.000001             0.000030             0.000005 eventFilter                    option_picker_tab\option.py:70
+        91        0.000309        0.000003             0.001101             0.000012 eventFilter                    widgets\main_widget.py:146
+         1        0.000133        0.000133             0.000210             0.000210 resize_letter_buttons          option_picker_tab\option_picker_letter_button_frame.py:115
+         3        0.000125        0.000042             0.017178             0.005726 paintEvent                     widgets\styled_splitter.py:17
+         3        0.000115        0.000038             0.000530             0.000177 paintEvent                     widgets\styled_splitter.py:29
+         3        0.000055        0.000018             0.000193             0.000064 showEvent                      option_picker_tab\option.py:79
+         1        0.000032        0.000032             0.000042             0.000042 resize_sequence_widget         sequence_widget\sequence_widget.py:32
+         1        0.000022        0.000022             0.000297             0.000297 showEvent                      widgets\main_widget.py:176
+         1        0.000021        0.000021             0.000233             0.000233 resize_option_picker_widget    option_picker_tab\option_picker_tab.py:30
+         2        0.000010        0.000005             0.053681             0.026840 inner                          tka-sequence-constructor\profiler.py:22
+         6        0.000007        0.000001             0.000029             0.000005 eventFilter                    option_picker_tab\option.py:70
+         3        0.000003        0.000001             0.000003             0.000001 load_image_if_visible          option_picker_tab\option_picker_scroll.py:110
          1        0.000002        0.000002             0.000002             0.000002 resize_option_picker_scroll    option_picker_tab\option_picker_scroll.py:308
 
 
@@ -38,15 +38,15 @@ Organized by cumulative time:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-         3        0.000017        0.000006             0.057936             0.057936 inner                          tka-sequence-constructor\profiler.py:22
-       486        0.001826        0.000004             0.006027             0.000012 eventFilter                    widgets\main_widget.py:138
-        33        0.000484        0.000015             0.001708             0.000052 paintEvent                     widgets\styled_splitter.py:17
-         3        0.000119        0.000040             0.000517             0.000172 paintEvent                     widgets\styled_splitter.py:29
-         1        0.000026        0.000026             0.000309             0.000309 showEvent                      widgets\main_widget.py:168
-         1        0.000036        0.000036             0.000242             0.000242 resizeEvent                    image_generator_tab\ig_letter_button_frame.py:161
-         1        0.000027        0.000027             0.000237             0.000237 resize_option_picker_widget    option_picker_tab\option_picker_tab.py:30
-         1        0.000126        0.000126             0.000208             0.000208 resize_letter_buttons          option_picker_tab\option_picker_letter_button_frame.py:115
-         1        0.000140        0.000140             0.000206             0.000206 resize_letter_buttons          image_generator_tab\ig_letter_button_frame.py:142
-         1        0.000035        0.000035             0.000046             0.000046 resize_sequence_widget         sequence_widget\sequence_widget.py:32
-         6        0.000007        0.000001             0.000030             0.000005 eventFilter                    option_picker_tab\option.py:70
+         2        0.000010        0.000005             0.053681             0.026840 inner                          tka-sequence-constructor\profiler.py:22
+         3        0.000125        0.000042             0.017178             0.005726 paintEvent                     widgets\styled_splitter.py:17
+        91        0.000309        0.000003             0.001101             0.000012 eventFilter                    widgets\main_widget.py:146
+         3        0.000115        0.000038             0.000530             0.000177 paintEvent                     widgets\styled_splitter.py:29
+         1        0.000022        0.000022             0.000297             0.000297 showEvent                      widgets\main_widget.py:176
+         1        0.000021        0.000021             0.000233             0.000233 resize_option_picker_widget    option_picker_tab\option_picker_tab.py:30
+         1        0.000133        0.000133             0.000210             0.000210 resize_letter_buttons          option_picker_tab\option_picker_letter_button_frame.py:115
+         3        0.000055        0.000018             0.000193             0.000064 showEvent                      option_picker_tab\option.py:79
+         1        0.000032        0.000032             0.000042             0.000042 resize_sequence_widget         sequence_widget\sequence_widget.py:32
+         6        0.000007        0.000001             0.000029             0.000005 eventFilter                    option_picker_tab\option.py:70
+         3        0.000003        0.000001             0.000003             0.000001 load_image_if_visible          option_picker_tab\option_picker_scroll.py:110
          1        0.000002        0.000002             0.000002             0.000002 resize_option_picker_scroll    option_picker_tab\option_picker_scroll.py:308

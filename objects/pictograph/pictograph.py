@@ -3,8 +3,10 @@ from typing import Dict, Literal
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView
+import pandas as pd
 
 from data.letter_engine_data import letter_types
+from data.positions_map import get_specific_start_end_positions
 from objects.arrow.arrow import Arrow
 from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
@@ -58,7 +60,6 @@ from objects.pictograph.position_engines.prop_positioner import PropPositioner
 
 
 if TYPE_CHECKING:
-    from utilities.pictograph_generator import PictographGenerator
     from widgets.main_widget import MainWidget
     from widgets.graph_editor_tab.graph_editor import GraphEditor
 
@@ -94,7 +95,6 @@ class Pictograph(QGraphicsScene):
         self.start_position: SpecificPositions = None
         self.end_position: SpecificPositions = None
         self.view_scale = 1
-        self.generator: PictographGenerator = None
         self.event_handler = PictographEventHandler(self)
 
         self.dragged_arrow: Arrow = None
@@ -190,27 +190,48 @@ class Pictograph(QGraphicsScene):
                 blue_position = center
         return red_position, blue_position
 
-    def get_state(self) -> List[MotionAttributesDicts]:
-        state = []
+    def get_start_end_positions(self) -> Optional[SpecificPositions]:
+        start_position, end_position = get_specific_start_end_positions(
+            self.motions[RED], self.motions[BLUE]
+        )
+        return start_position, end_position
+
+    def get_state(self) -> pd.DataFrame:
+        state_data = []
+        blue_done = False
+
+        current_letter = self.current_letter
+        start_position, end_position = self.get_start_end_positions()
+
+        state_data.append(
+            {
+                "letter": current_letter,
+                "start_position": start_position,
+                "end_position": end_position,
+            }
+        )
+
         for motion in self.motions.values():
-            state.append(
+            if motion.color == BLUE and not blue_done:
+                color = motion.color
+                blue_done = True
+            else:
+                color = RED
+
+            state_data.append(
                 {
-                    COLOR: motion.color,
-                    MOTION_TYPE: motion.motion_type,
-                    ROTATION_DIRECTION: motion.rotation_direction,
-                    ARROW_LOCATION: motion.arrow.location,
-                    START_LOCATION: motion.start_location,
-                    END_LOCATION: motion.end_location,
-                    TURNS: motion.turns,
-                    START_LOCATION: motion.start_location,
-                    END_LOCATION: motion.end_location,
-                    START_ORIENTATION: motion.start_orientation,
-                    END_ORIENTATION: motion.end_orientation,
-                    START_LAYER: motion.start_layer,
-                    END_LAYER: motion.end_layer,
+                    f"{color}_motion_type": motion.motion_type,
+                    f"{color}_rotation_direction": motion.rotation_direction,
+                    f"{color}_start_location": motion.start_location,
+                    f"{color}_end_location": motion.end_location,
+                    f"{color}_turns": motion.turns,
+                    f"{color}_start_orientation": motion.start_orientation,
+                    f"{color}_end_orientation": motion.end_orientation,
+                    f"{color}_start_layer": motion.start_layer,
+                    f"{color}_end_layer": motion.end_layer,
                 }
             )
-        return state
+        return pd.DataFrame(state_data)
 
     def get_current_letter_type(self) -> Optional[str]:
         if self.current_letter is not None:

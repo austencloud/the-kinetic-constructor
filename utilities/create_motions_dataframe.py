@@ -92,6 +92,34 @@ for position_pair, letters_info in data.items():
                 comprehensive_motion_data.append(motion_data_entry)
 
 
+optimal_location_data = []
+for entry in comprehensive_motion_data:
+    # Check if optimal locations are provided for the entry
+    if entry.get("optimal_blue_location") or entry.get("optimal_red_location"):
+        # Add entries for each combination of prop size and orientation
+        for prop_size in ["small", "large"]:
+            for orientation in ["in", "out"]:
+                optimal_location_data.append({
+                    "letter": entry["letter"],
+                    "start_position": entry["start_position"],
+                    "end_position": entry["end_position"],
+                    "prop_size": prop_size,
+                    "blue_end_orientation": orientation,
+                    "red_end_orientation": orientation,
+                    "optimal_blue_location": entry.get("optimal_blue_location"),
+                    "optimal_red_location": entry.get("optimal_red_location"),
+                })
+
+# Convert the list to a DataFrame
+optimal_locations_df = pd.DataFrame(optimal_location_data)
+
+# Sort the DataFrame by the new parameters as well for quick lookups
+optimal_locations_df.sort_values(by=["letter", "start_position", "prop_size", "blue_end_orientation", "red_end_orientation"], inplace=True)
+
+# Save the DataFrame to a CSV file for future use
+optimal_locations_df.to_csv("OptimalLocationsDictionary.csv", index=False)
+print("Optimal Locations DataFrame created and saved.")
+
 # Convert the list to a DataFrame
 comprehensive_df = pd.DataFrame(comprehensive_motion_data)
 

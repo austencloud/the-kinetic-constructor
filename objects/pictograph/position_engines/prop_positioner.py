@@ -543,7 +543,7 @@ class PropPositioner:
     def props_in_beta(self) -> bool | None:
         visible_staves: List[Prop] = []
         for prop in self.scene.props.values():
-            if prop.isVisible():
+            if prop.location:
                 visible_staves.append(prop)
         if len(visible_staves) == 2:
             if visible_staves[0].location == visible_staves[1].location:
