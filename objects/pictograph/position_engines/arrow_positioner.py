@@ -21,49 +21,39 @@ class ArrowPositioner:
     def update_arrow_positions(self) -> None:
         current_letter = self.pictograph.current_letter
         state_dict = self.pictograph.get_state()
-        self.set_optimal_or_default_positions(current_letter, state_dict)
+        self._set_optimal_or_default_positions(current_letter, state_dict)
 
     ### POSITIONING LOGIC ###
-    def set_optimal_or_default_positions(self, current_letter, state_dict):
-        reposition_method = self.get_reposition_method(current_letter)
+    def _set_optimal_or_default_positions(self, current_letter, state_dict):
+        reposition_method = self._get_reposition_method(current_letter)
         reposition_method()
 
-    def get_reposition_method(self, current_letter) -> Callable:
+    def _get_reposition_method(self, current_letter) -> Callable:
         positioning_methods = {
-            "G": self.reposition_GH,
-            "H": self.reposition_GH,
-            "I": self.reposition_I,
-            "P": self.reposition_P,
-            "Q": self.reposition_Q,
-            "R": self.reposition_R,
+            "G": self._reposition_GH,
+            "H": self._reposition_GH,
+            "I": self._reposition_I,
+            "P": self._reposition_P,
+            "Q": self._reposition_Q,
+            "R": self._reposition_R,
         }
-        return positioning_methods.get(current_letter, self.set_arrows_by_motion_type)
+        return positioning_methods.get(current_letter, self._set_arrows_by_motion_type)
 
-    def set_arrows_by_motion_type(self) -> None:
+    def _set_arrows_by_motion_type(self) -> None:
         for arrow in self.pictograph.arrows.values():
-            if self.is_arrow_movable(arrow):
-                self.set_arrow_to_default_loc(arrow)
+            if self._is_arrow_movable(arrow):
+                self._set_arrow_to_default_loc(arrow)
         for ghost_arrow in self.pictograph.ghost_arrows.values():
-            if self.is_arrow_movable(ghost_arrow):
-                self.set_arrow_to_default_loc(ghost_arrow)
+            if self._is_arrow_movable(ghost_arrow):
+                self._set_arrow_to_default_loc(ghost_arrow)
 
     ### HELPERS ###
-    def is_arrow_movable(self, arrow: Arrow) -> bool:
+    def _is_arrow_movable(self, arrow: Arrow) -> bool:
         return (
             not arrow.is_dragging
             and arrow.motion
             and arrow.motion.motion_type != STATIC
         )
-
-    def find_optimal_locations(self, current_letter) -> Dict | None:
-        if not current_letter:
-            return None
-        current_state = self.pictograph.get_state()
-        candidate_states = self.letters.get(current_letter, [])
-        for candidate_state in candidate_states:
-            if self.compare_states(current_state, candidate_state):
-                return candidate_state.get("optimal_locations")
-        return None
 
     def compare_states(self, current_state: Dict, candidate_state: Dict) -> bool:
         relevant_keys = [
@@ -86,63 +76,65 @@ class ArrowPositioner:
         )
 
     ### POSITIONING METHODS ###
-    def reposition_GH(self) -> None:
+    def _reposition_GH(self) -> None:
         for arrow in [
             self.pictograph.arrows.get(RED),
             self.pictograph.arrows.get(BLUE),
         ]:
-            adjustment = self.calculate_GH_adjustment(arrow)
-            self.apply_adjustment(arrow, adjustment)
+            adjustment = self._calculate_GH_adjustment(arrow)
+            self._apply_adjustment(arrow, adjustment)
 
-    def reposition_I(self) -> None:
+    def _reposition_I(self) -> None:
         for arrow in [
             self.pictograph.arrows.get(RED),
             self.pictograph.arrows.get(BLUE),
         ]:
             state = self.pictograph.get_state()
             motion_type = state[f"{arrow.color}_motion_type"]
-            adjustment = self.calculate_I_adjustment(arrow, motion_type)
-            self.apply_adjustment(arrow, adjustment)
-            self.apply_adjustment(arrow.ghost, adjustment)
+            adjustment = self._calculate_I_adjustment(arrow, motion_type)
+            self._apply_adjustment(arrow, adjustment)
+            self._apply_adjustment(arrow.ghost, adjustment)
 
-    def reposition_P(self) -> None:
+    def _reposition_P(self) -> None:
         for arrow in [
             self.pictograph.arrows.get(RED),
             self.pictograph.arrows.get(BLUE),
         ]:
-            adjustment = self.calculate_P_adjustment(arrow)
-            self.apply_adjustment(arrow, adjustment)
+            adjustment = self._calculate_P_adjustment(arrow)
+            self._apply_adjustment(arrow, adjustment)
 
-    def reposition_Q(self) -> None:
+    def _reposition_Q(self) -> None:
         for arrow in [
             self.pictograph.arrows.get(RED),
             self.pictograph.arrows.get(BLUE),
         ]:
-            adjustment = self.calculate_Q_adjustment(arrow)
-            self.apply_adjustment(arrow, adjustment)
+            adjustment = self._calculate_Q_adjustment(arrow)
+            self._apply_adjustment(arrow, adjustment)
 
-    def reposition_R(self) -> None:
+    def _reposition_R(self) -> None:
         for arrow in [
             self.pictograph.arrows.get(RED),
             self.pictograph.arrows.get(BLUE),
         ]:
-            adjustment = self.calculate_R_adjustment(arrow)
-            self.apply_adjustment(arrow, adjustment)
+            adjustment = self._calculate_R_adjustment(arrow)
+            self._apply_adjustment(arrow, adjustment)
 
     ### ADJUSTMENT CALCULATIONS ###
-    def calculate_GH_adjustment(self, arrow: Arrow) -> QPointF:
+    def _calculate_GH_adjustment(self, arrow: Arrow) -> QPointF:
         distance = 105 if arrow.color == RED else 50
         return self.calculate_adjustment(arrow.location, distance)
 
-    def calculate_I_adjustment(self, arrow: Arrow, motion_type: MotionTypes) -> QPointF:
+    def _calculate_I_adjustment(
+        self, arrow: Arrow, motion_type: MotionTypes
+    ) -> QPointF:
         distance = 100 if motion_type == PRO else 55
         return self.calculate_adjustment(arrow.location, distance)
 
-    def calculate_P_adjustment(self, arrow: Arrow) -> QPointF:
+    def _calculate_P_adjustment(self, arrow: Arrow) -> QPointF:
         distance = 90 if arrow.color == RED else 35
         return self.calculate_adjustment(arrow.location, distance)
 
-    def calculate_Q_adjustment(self, arrow: Arrow) -> QPointF:
+    def _calculate_Q_adjustment(self, arrow: Arrow) -> QPointF:
         adjustment_dict = {
             RED: {
                 CLOCKWISE: {
@@ -179,7 +171,7 @@ class ArrowPositioner:
         )
         return rotation_adjustments.get(arrow.location, QPointF(0, 0))
 
-    def calculate_R_adjustment(self, arrow: Arrow) -> QPointF:
+    def _calculate_R_adjustment(self, arrow: Arrow) -> QPointF:
         adjustment_dict = {
             PRO: {
                 CLOCKWISE: {
@@ -226,36 +218,35 @@ class ArrowPositioner:
         }
         return location_adjustments.get(location, QPointF(0, 0))
 
-    def apply_adjustment(self, arrow: Arrow, adjustment: QPointF) -> None:
-        default_pos = self.get_default_position(arrow)
+    def _apply_adjustment(
+        self, arrow: Arrow, adjustment: QPointF, update_ghost: bool = True
+    ) -> None:
+        default_pos = self._get_default_position(arrow)
         arrow_center = arrow.boundingRect().center()
         new_pos = default_pos - arrow_center + adjustment
         arrow.setPos(new_pos)
 
+        # Update the ghost arrow with the same adjustment
+        if update_ghost and arrow.ghost:
+            self._apply_adjustment(arrow.ghost, adjustment, update_ghost=False)
+
     ### GETTERS ###
-    def get_default_position(self, arrow: Arrow) -> QPointF:
+    def _get_default_position(self, arrow: Arrow) -> QPointF:
         layer2_points = self.pictograph.grid.get_layer2_points()
         return layer2_points.get(arrow.location, QPointF(0, 0))
 
-    def get_layer2_points(self, grid_mode) -> Dict[str, QPointF]:
-        if grid_mode == DIAMOND:
-            return self.pictograph.grid.diamond_layer2_points
-        elif grid_mode == BOX:
-            return self.pictograph.grid.box_layer2_points
-        return {}
-
     ### SETTERS ###
-    def set_arrow_to_optimal_loc(self, arrow: Arrow, optimal_locations: Dict) -> None:
+    def _set_arrow_to_optimal_loc(self, arrow: Arrow, optimal_locations: Dict) -> None:
         optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
         if optimal_location:
             arrow.setPos(optimal_location - arrow.boundingRect().center())
 
-    def set_arrow_to_default_loc(self, arrow: Arrow, _: Dict = None) -> None:
+    def _set_arrow_to_default_loc(self, arrow: Arrow, _: Dict = None) -> None:
         arrow.set_arrow_transform_origin_to_center()
         # if the arrow isn't a Ghost Arrow itself,
         if not arrow.is_ghost:
             arrow.ghost.set_arrow_transform_origin_to_center()
-        default_pos = self.get_default_position(arrow)
+        default_pos = self._get_default_position(arrow)
         adjustment = self.calculate_adjustment(arrow.location, DISTANCE)
         new_pos = default_pos + adjustment - arrow.boundingRect().center()
         arrow.setPos(new_pos)

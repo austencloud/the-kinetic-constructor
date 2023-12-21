@@ -116,6 +116,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         self.placed_arrow.ghost = self.ghost
 
+        self.placed_arrow.set_arrow_transform_origin_to_center()
         self.pictograph.addItem(self.placed_arrow)
         self.pictograph.clearSelection()
         self.pictograph.arrows[self.color] = self.placed_arrow

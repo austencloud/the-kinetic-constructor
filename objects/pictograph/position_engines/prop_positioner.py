@@ -162,7 +162,7 @@ class PropPositioner:
     ### REPOSITIONING ###
 
     def reposition_beta_props(self) -> None:
-        state = self.scene.get_state()  # Now a dictionary
+        state = self.scene.get_state()
 
         # Gather motions by type
         pro_or_anti_motions = [
@@ -179,11 +179,20 @@ class PropPositioner:
             self.reposition_static_beta()
 
         # BETA to BETA - G, H, I
+        both = [
+            color
+            for color in [RED, BLUE]
+            if state[f"{color}_motion_type"] in [PRO, ANTI]
+        ]
         if (
             state["red_start_location"] == state["blue_start_location"]
             and state["red_end_location"] == state["blue_end_location"]
         ):
-            self.reposition_beta_to_beta(state)
+            if (
+                len(both) == 2
+                and len(set(state[color + "_motion_type"] for color in both)) == 1
+            ):
+                self.reposition_G_and_H(state)
 
         # GAMMA → BETA - Y, Z
         if len(pro_or_anti_motions) == 1 and len(static_motions) == 1:
@@ -195,14 +204,16 @@ class PropPositioner:
                 self.reposition_alpha_to_beta(state)
 
     ### STATIC BETA ### β
-
     def reposition_static_beta(self) -> None:
+        moved_props = set()  # To keep track of props that have already been moved
+
         for color, motion in self.scene.motions.items():
             prop = next(
                 (p for p in self.scene.props.values() if p.color == color), None
             )
-            if not prop:
+            if not prop or prop in moved_props:
                 continue
+
             other_prop = next(
                 (
                     other
@@ -211,7 +222,9 @@ class PropPositioner:
                 ),
                 None,
             )
+
             if other_prop and other_prop.layer != prop.layer:
+                # If the other prop is in a different layer, handle strict/default locations
                 if prop.prop_type in [
                     STAFF,
                     FAN,
@@ -239,6 +252,7 @@ class PropPositioner:
                 )
                 if direction:
                     self.move_prop(prop, direction)
+                    moved_props.add(prop)  # Mark this prop as moved
 
     def determine_direction_for_static_beta(
         self, prop: Prop, end_location: str
