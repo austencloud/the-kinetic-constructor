@@ -13,7 +13,6 @@ from constants.string_constants import (
     NORTH,
     PROP,
     SOUTH,
-    START_LAYER,
     START_ORIENTATION,
     WEST,
     EAST,
@@ -85,7 +84,6 @@ class PropBoxDrag(ObjectBoxDrag):
             START_LOCATION: self.location,
             END_LOCATION: self.location,
             START_ORIENTATION: self.orientation,
-            START_LAYER: self.layer,
         }
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
@@ -139,7 +137,6 @@ class PropBoxDrag(ObjectBoxDrag):
             START_LOCATION: self.location,
             END_LOCATION: self.location,
             START_ORIENTATION: self.orientation,
-            START_LAYER: self.layer,
         }
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
@@ -160,7 +157,7 @@ class PropBoxDrag(ObjectBoxDrag):
         ghost_svg = self.ghost.get_svg_file(self.prop_type)
         self.ghost.update_svg(ghost_svg)
         self.ghost.update_color()
-        self.ghost.motion.update_prop_orientation_and_layer()
+        self.ghost.motion.update_prop_orientation()
         self.ghost.update_rotation()
         self.ghost.show()
 
@@ -190,7 +187,6 @@ class PropBoxDrag(ObjectBoxDrag):
                         START_LOCATION: self.location,
                         END_LOCATION: self.location,
                         START_ORIENTATION: self.orientation,
-                        START_LAYER: self.layer,
                     }
                     self.pictograph.motions[self.color].setup_attributes(motion_dict)
                     self.arrow.motion = self.pictograph.motions[self.color]

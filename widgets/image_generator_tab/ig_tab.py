@@ -32,7 +32,6 @@ from constants.string_constants import (
     IN,
     PROP_TYPE,
     LOCATION,
-    LAYER,
     ORIENTATION,
 )
 
@@ -225,7 +224,7 @@ class IGTab(QWidget):
     def render_pictograph_to_image(self, pictograph_data) -> None:
         ig_pictograph = self._create_ig_pictograph_from_pictograph_data(pictograph_data)
         ig_pictograph.update_pictograph()
-        
+
         image = QImage(
             int(ig_pictograph.width()),
             int(ig_pictograph.height()),
@@ -234,19 +233,18 @@ class IGTab(QWidget):
         painter = QPainter(image)
         ig_pictograph.render(painter)
         painter.end()
-        
+
         image_path = self.get_image_path(pictograph_data)
         image_dir = os.path.dirname(image_path)
-        
+
         if not os.path.exists(image_dir):
             os.makedirs(image_dir, exist_ok=True)
-        
+
         try:
             image.save(image_path)
             self.imageGenerated.emit(image_path)
         except Exception as e:
             print(f"Failed to save image: {e}")
-
 
     ### OPTION CREATION ###
 
@@ -289,7 +287,6 @@ class IGTab(QWidget):
             COLOR: motion_dict[COLOR],
             PROP_TYPE: self.main_pictograph.main_widget.prop_type,
             LOCATION: motion_dict[END_LOCATION],
-            LAYER: 1,
             ORIENTATION: IN,
         }
         prop = Prop(ig_pictograph, prop_dict, ig_pictograph.motions[motion_dict[COLOR]])
@@ -307,7 +304,7 @@ class IGTab(QWidget):
                 motion.arrow = ig_pictograph.arrows[motion.color]
                 motion.prop = ig_pictograph.props[motion.color]
                 motion.assign_location_to_arrow()
-                motion.update_prop_orientation_and_layer()
+                motion.update_prop_orientation()
                 motion.arrow.set_is_svg_mirrored_from_attributes()
                 motion.arrow.update_mirror()
                 motion.arrow.update_appearance()
@@ -360,13 +357,14 @@ class IGTab(QWidget):
             "end_location": row_data[f"{color}_end_location"],
             "turns": row_data[f"{color}_turns"],
             "start_orientation": row_data[f"{color}_start_orientation"],
-            "start_layer": row_data[f"{color}_start_layer"],
         }
 
     ### IMAGE PATH ###
 
     def get_image_path(self, pictograph: pd.Series) -> str:
-        prop_type = self.main_pictograph.main_widget.prop_type  # Get the current prop type
+        prop_type = (
+            self.main_pictograph.main_widget.prop_type
+        )  # Get the current prop type
         image_dir = os.path.join(
             "resources", "images", "pictographs", pictograph["letter"], prop_type
         )

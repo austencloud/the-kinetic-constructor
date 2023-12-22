@@ -10,7 +10,6 @@ from constants.string_constants import (
     COLOR,
     COUNTER_CLOCKWISE,
     IN,
-    LAYER,
     NORTHEAST,
     NORTHWEST,
     PRO,
@@ -25,7 +24,6 @@ from constants.string_constants import (
     END_LOCATION,
     TURNS,
     START_ORIENTATION,
-    START_LAYER,
 )
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Tuple
@@ -105,7 +103,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
             ROTATION_DIRECTION: self.rotation_direction,
             TURNS: self.turns,
             START_ORIENTATION: self.start_orientation,
-            START_LAYER: 1,
             START_LOCATION: self.start_location,
             END_LOCATION: self.end_location,
         }
@@ -150,7 +147,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
             START_LOCATION: self.start_location,
             END_LOCATION: self.end_location,
             START_ORIENTATION: self.start_orientation,
-            START_LAYER: 1,
         }
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
@@ -249,7 +245,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
                 prop_dict = {
                     COLOR: self.color,
                     LOCATION: self.end_location,
-                    LAYER: 1,
                 }
                 prop.update_attributes(prop_dict)
                 prop.ghost = self.pictograph.ghost_props[self.color]

@@ -8,7 +8,6 @@ from utilities.TypeChecking.TypeChecking import (
     Locations,
     Locations,
     Orientations,
-    Layers,
 )
 from constants.string_constants import *
 from typing import TYPE_CHECKING, Union
@@ -52,13 +51,11 @@ class Motion:
         self.start_location: Locations = motion_dict[START_LOCATION]
         self.end_location: Locations = motion_dict[END_LOCATION]
         self.start_orientation: Orientations = motion_dict[START_ORIENTATION]
-        self.start_layer: Layers = motion_dict[START_LAYER]
 
         self.assign_location_to_arrow()
 
         self.end_orientation: Orientations = self.get_end_orientation()
-        self.end_layer: Layers = self.get_end_layer()
-        self.update_prop_orientation_and_layer()
+        self.update_prop_orientation()
 
     def assign_location_to_arrow(self):
         if hasattr(self, "arrow") and self.arrow:
@@ -77,7 +74,7 @@ class Motion:
         self.arrow.turns = turns
         self.turns = self.arrow.turns
         self.end_orientation = self.get_end_orientation()
-        self.update_prop_orientation_and_layer()
+        self.update_prop_orientation()
         self.prop.update_appearance()
         self.prop.update_rotation()
         svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
@@ -91,12 +88,13 @@ class Motion:
                 self.arrow.ghost.update_appearance()
         self.scene.update_pictograph()
 
-    def update_prop_orientation_and_layer(self) -> None:
+    def update_prop_orientation(self) -> None:
         if hasattr(self, "prop") and self.prop:
             self.prop.orientation = self.end_orientation
-            self.prop.layer = self.end_layer
             self.prop.location = self.end_location
-            self.prop.axis: Axes = self.prop.update_axis_from_layer(self.prop.location)
+            self.prop.axis: Axes = self.prop.update_axis_from_orientation(
+                self.prop.location
+            )
             self.prop.update_rotation()
             self.prop.update_appearance()
 
@@ -105,8 +103,7 @@ class Motion:
         self.end_location = None
         self.turns = None
         self.motion_type = None
-        self.start_layer = None
-        self.end_layer = None
+
         self.rotation_direction = None
         self.start_orientation = None
         self.end_orientation = None
@@ -123,18 +120,8 @@ class Motion:
             END_LOCATION: self.end_location,
             START_ORIENTATION: self.start_orientation,
             END_ORIENTATION: self.end_orientation,
-            START_LAYER: self.start_layer,
-            END_LAYER: self.end_layer,
         }
 
-    def get_end_layer(self) -> Layers:
-        if self.start_layer:
-            if self.turns or self.turns == 0:
-                if self.turns in [0, 1, 2, 3]:
-                    end_layer = self.start_layer
-                elif self.turns in [0.5, 1.5, 2.5]:
-                    end_layer = 3 - self.start_layer  # Switches between 1 and 2
-                return end_layer
 
     def get_end_orientation(self) -> Orientations:
         anti_orientation_map = {
@@ -223,7 +210,7 @@ class Motion:
             elif self.motion_type == DASH:
                 return OUT if self.start_orientation == IN else IN
             elif self.motion_type == FLOAT:
-                if self.start_layer == 1:
+                if self.start_orientation in [IN, OUT]:
                     key = (
                         self.start_orientation,
                         self.start_location,
@@ -232,7 +219,7 @@ class Motion:
                     return float_orientation_map_layer_1.get(
                         key, self.start_orientation
                     )
-                elif self.start_layer == 2:
+                elif self.start_orientation in [CLOCKWISE, COUNTER_CLOCKWISE]:
                     key = (
                         self.start_orientation,
                         self.start_location,
@@ -269,12 +256,10 @@ class Motion:
         new_turns_float: float = max(0, min(3, potential_new_turns))
 
         if new_turns_float % 1 == 0:
-            self.end_layer = 1 if self.start_layer == 1 else 2
             new_turns_int: int = int(new_turns_float)
             if new_turns_int != self.arrow.turns:
                 self.update_turns(new_turns_int)
         else:
-            self.end_layer = 2 if self.start_layer == 1 else 1
             if new_turns_float != self.arrow.turns:
                 self.update_turns(new_turns_float)
 

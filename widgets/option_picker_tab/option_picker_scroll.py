@@ -125,6 +125,7 @@ class OptionPickerScroll(QScrollArea):
             if image_path not in self.image_cache:
                 self.image_cache[image_path] = QPixmap(image_path)
             option.pixmapItem = option.addPixmap(self.image_cache[image_path])
+
     def _create_motion_dict(self, pd_row_data: pd.Series, color: str) -> Dict:
         motion_dict = {
             "color": color,
@@ -135,8 +136,6 @@ class OptionPickerScroll(QScrollArea):
             "turns": pd_row_data[f"{color}_turns"],
             "start_orientation": pd_row_data[f"{color}_start_orientation"],
             "end_orientation": pd_row_data[f"{color}_end_orientation"],
-            "start_layer": pd_row_data[f"{color}_start_layer"],
-            "end_layer": pd_row_data[f"{color}_end_layer"],
         }
         return motion_dict
 
@@ -216,8 +215,8 @@ class OptionPickerScroll(QScrollArea):
         option.motions[BLUE].arrow.location = option.motions[BLUE].get_arrow_location(
             option.motions[BLUE].start_location, option.motions[BLUE].end_location
         )
-        option.motions[RED].update_prop_orientation_and_layer()
-        option.motions[BLUE].update_prop_orientation_and_layer()
+        option.motions[RED].update_prop_orientation()
+        option.motions[BLUE].update_prop_orientation()
         option.current_letter = pd_row_data["letter"]
         option.start_position = pd_row_data.name[0]
         option.end_position = pd_row_data.name[1]
@@ -273,7 +272,6 @@ class OptionPickerScroll(QScrollArea):
             COLOR: color,
             PROP_TYPE: STAFF,
             LOCATION: None,
-            LAYER: 1,
             ORIENTATION: IN,
         }
 
@@ -287,14 +285,14 @@ class OptionPickerScroll(QScrollArea):
             ].get_arrow_location(
                 option.motions[color].start_location, option.motions[color].end_location
             )
-            option.motions[color].update_prop_orientation_and_layer()
+            option.motions[color].update_prop_orientation()
 
     @staticmethod
     def _update_option(option: "Option") -> None:
         for arrow in option.arrows.values():
             prop = option.props[arrow.color]
             prop.motion = option.motions[arrow.color]
-            prop.motion.update_prop_orientation_and_layer()
+            prop.motion.update_prop_orientation()
             prop.update_rotation()
             prop.update_appearance()
             arrow.location = arrow.motion.get_arrow_location(

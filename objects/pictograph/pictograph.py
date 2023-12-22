@@ -211,8 +211,6 @@ class Pictograph(QGraphicsScene):
                     prefix + "turns": motion.turns,
                     prefix + "start_orientation": motion.start_orientation,
                     prefix + "end_orientation": motion.end_orientation,
-                    prefix + "start_layer": motion.start_layer,
-                    prefix + "end_layer": motion.end_layer,
                 }
             )
 

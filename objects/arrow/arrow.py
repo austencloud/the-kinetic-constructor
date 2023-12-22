@@ -24,7 +24,6 @@ from constants.string_constants import (
     ARROW_DIR,
     ARROW_LOCATION,
     LOCATION,
-    LAYER,
 )
 from objects.graphical_object import GraphicalObject
 from data.start_end_location_map import get_start_end_locations
@@ -141,7 +140,7 @@ class Arrow(GraphicalObject):
     def _update_prop_on_click(self) -> None:
         self.motion.prop.color = self.color
         self.motion.prop.location = self.motion.end_location
-        self.motion.prop.axis = self.motion.prop.update_axis_from_layer(
+        self.motion.prop.axis = self.motion.prop.update_axis_from_orientation(
             self.motion.end_location
         )
 
@@ -178,7 +177,7 @@ class Arrow(GraphicalObject):
         self.scene.props[self.color] = self.motion.prop
         self.is_dragging = True
         self.scene.update_pictograph()
-        self.motion.update_prop_orientation_and_layer()
+        self.motion.update_prop_orientation()
 
     def set_drag_pos(self, new_pos: QPointF) -> None:
         self.setPos(new_pos)
@@ -225,7 +224,6 @@ class Arrow(GraphicalObject):
                     {
                         COLOR: self.color,
                         LOCATION: self.motion.end_location,
-                        LAYER: 1,
                     }
                 )
 

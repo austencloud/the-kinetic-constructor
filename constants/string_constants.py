@@ -55,8 +55,7 @@ END_POSITION = "end_position"
 START_ORIENTATION = "start_orientation"
 END_ORIENTATION = "end_orientation"
 
-START_LAYER = "start_layer"
-END_LAYER = "end_layer"
+
 
 CLOCKWISE = "cw" or "CW"
 COUNTER_CLOCKWISE = "ccw" or "CCW"
@@ -65,7 +64,6 @@ START_POS = "start_position"
 END_POS = "end_position"
 
 PROP_TYPE = "prop_type"
-LAYER = "layer"
 AXIS = "axis"
 ORIENTATION = "orientation"
 
@@ -135,4 +133,4 @@ ICON_PATHS = {
 }
 
 ARROW_ATTRIBUTES = [COLOR, LOCATION, MOTION_TYPE, TURNS]
-PROP_ATTRIBUTES = [COLOR, LOCATION, PROP_TYPE, LAYER, ORIENTATION]
+PROP_ATTRIBUTES = [COLOR, LOCATION, PROP_TYPE, ORIENTATION]

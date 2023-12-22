@@ -44,7 +44,6 @@ class PictographInit:
                 START_LOCATION: None,
                 END_LOCATION: None,
                 START_ORIENTATION: None,
-                START_LAYER: 1,
             }
 
             motion = Motion(self.pictograph, motion_dict)
@@ -87,14 +86,12 @@ class PictographInit:
             COLOR: RED,
             PROP_TYPE: prop_type,
             LOCATION: None,
-            LAYER: None,
             ORIENTATION: None,
         }
         blue_prop_Dict = {
             COLOR: BLUE,
             PROP_TYPE: prop_type,
             LOCATION: None,
-            LAYER: None,
             ORIENTATION: None,
         }
 
@@ -197,7 +194,6 @@ class PictographInit:
             COLOR: RED,
             PROP_TYPE: prop_type,
             LOCATION: EAST,
-            LAYER: 1,
             ORIENTATION: IN,
         }
 
@@ -205,7 +201,6 @@ class PictographInit:
             COLOR: BLUE,
             PROP_TYPE: prop_type,
             LOCATION: WEST,
-            LAYER: 1,
             ORIENTATION: IN,
         }
 

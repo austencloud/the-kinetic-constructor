@@ -317,7 +317,7 @@ class PropPositioner:
     def determine_translation_direction_for_unilateral_props(
         self, red_motion: Motion, blue_motion: Motion
     ) -> Tuple[Direction, Direction]:
-        """Determine the translation direction for big unilateral props based on the motion type, start location, end location, and end layer."""
+        """Determine the translation direction for big unilateral props based on the motion type, start location, end location."""
         red_direction = self.get_direction_for_motion(red_motion)
         blue_direction = self.get_opposite_direction(red_direction)
 
@@ -326,12 +326,19 @@ class PropPositioner:
 
     def get_direction_for_motion(self, motion: Motion) -> Direction | None:
         """Determine the direction based on a single motion."""
-        if motion.end_layer == 1 and motion.motion_type in [PRO, ANTI, STATIC]:
+        if motion.end_orientation in [IN, OUT] and motion.motion_type in [
+            PRO,
+            ANTI,
+            STATIC,
+        ]:
             if motion.end_location in [NORTH, SOUTH]:
                 return RIGHT if motion.start_location == EAST else LEFT
             elif motion.end_location in [EAST, WEST]:
                 return DOWN if motion.start_location == SOUTH else UP
-        elif motion.end_layer == 2 and motion.motion_type in [PRO, ANTI, STATIC]:
+        elif motion.end_orientation in [
+            CLOCKWISE,
+            COUNTER_CLOCKWISE,
+        ] and motion.motion_type in [PRO, ANTI, STATIC]:
             if motion.end_location in [NORTH, SOUTH]:
                 return UP if motion.start_location == EAST else DOWN
             elif motion.end_location in [EAST, WEST]:
@@ -358,8 +365,12 @@ class PropPositioner:
                 None,
             )
 
-            if other_prop and other_prop.layer != prop.layer:
-                # If the other prop is in a different layer, handle strict/default locations
+            if other_prop and (
+                (other_prop.orientation == IN and prop.orientation == IN)
+                or (other_prop.orientation == OUT and prop.orientation == OUT)
+                or (other_prop.orientation == IN and prop.orientation == OUT)
+                or (other_prop.orientation == OUT and prop.orientation == IN)
+            ):
                 if prop.prop_type in [
                     STAFF,
                     FAN,
@@ -585,12 +596,12 @@ class PropPositioner:
 
     def determine_translation_direction(self, motion: Motion) -> Direction:
         """Determine the translation direction based on the motion type, start location, end location, and end layer."""
-        if motion.end_layer == 1 and motion.motion_type in [PRO, ANTI, STATIC]:
+        if motion.end_orientation in [IN, OUT] and motion.motion_type in [PRO, ANTI, STATIC]:
             if motion.end_location in [NORTH, SOUTH]:
                 return RIGHT if motion.start_location == EAST else LEFT
             elif motion.end_location in [EAST, WEST]:
                 return DOWN if motion.start_location == SOUTH else UP
-        elif motion.end_layer == 2 and motion.motion_type in [PRO, ANTI, STATIC]:
+        elif motion.end_orientation in [CLOCKWISE, COUNTER_CLOCKWISE] and motion.motion_type in [PRO, ANTI, STATIC]:
             if motion.end_location in [NORTH, SOUTH]:
                 return UP if motion.start_location == EAST else DOWN
             elif motion.end_location in [EAST, WEST]:

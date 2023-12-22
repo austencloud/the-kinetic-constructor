@@ -46,7 +46,6 @@ class Prop(GraphicalObject):
         self.ghost: Prop = None
         self.color: Colors = prop_dict[COLOR]
         self.location: Locations = prop_dict[LOCATION]
-        self.layer: Layers = prop_dict[LAYER]
         self.orientation: Orientations = prop_dict[ORIENTATION]
         self.center = self.boundingRect().center()
 
@@ -59,7 +58,6 @@ class Prop(GraphicalObject):
                 self.ghost = self.scene.ghost_props[self.color]
             self.ghost.color = self.color
             self.ghost.location = self.location
-            self.ghost.layer = self.layer
             self.ghost.orientation = self.orientation
             self.ghost.update_appearance()
             self.ghost.show()
@@ -96,7 +94,7 @@ class Prop(GraphicalObject):
     def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
         self.location = target_arrow.motion.end_location
-        self.axis = self.update_axis_from_layer(self.location)
+        self.axis = self.update_axis_from_orientation(self.location)
         self.update_appearance()
 
     def clear_attributes(self) -> None:
@@ -109,10 +107,10 @@ class Prop(GraphicalObject):
 
     ### GETTERS ###
 
-    def update_axis_from_layer(self, location) -> None:
-        if self.layer == 1:
+    def update_axis_from_orientation(self, location) -> None:
+        if self.orientation in [IN, OUT]:
             self.axis: Axes = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
-        elif self.layer == 2:
+        elif self.orientation in [CLOCKWISE, COUNTER_CLOCKWISE]:
             self.axis: Axes = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
 
     def swap_orientation(self, orientation) -> None:
@@ -132,13 +130,13 @@ class Prop(GraphicalObject):
         angle_map: Dict[
             Tuple[Layers, Orientations], Dict[Locations, RotationAngles]
         ] = {
-            (1, IN): {NORTH: 90, SOUTH: 270, WEST: 0, EAST: 180},
-            (1, OUT): {NORTH: 270, SOUTH: 90, WEST: 180, EAST: 0},
-            (2, CLOCKWISE): {NORTH: 0, SOUTH: 180, WEST: 270, EAST: 90},
-            (2, COUNTER_CLOCKWISE): {NORTH: 180, SOUTH: 0, WEST: 90, EAST: 270},
+            (IN): {NORTH: 90, SOUTH: 270, WEST: 0, EAST: 180},
+            (OUT): {NORTH: 270, SOUTH: 90, WEST: 180, EAST: 0},
+            (CLOCKWISE): {NORTH: 0, SOUTH: 180, WEST: 270, EAST: 90},
+            (COUNTER_CLOCKWISE): {NORTH: 180, SOUTH: 0, WEST: 90, EAST: 270},
         }
 
-        key = (self.layer, self.orientation)
+        key = (self.orientation)
         rotation_angle = angle_map.get(key, {}).get(self.location, 0)
         return rotation_angle
 
@@ -174,7 +172,7 @@ class Prop(GraphicalObject):
                 self.motion.start_location = new_location
                 self.motion.end_location = new_location
 
-            self.axis = self.update_axis_from_layer(self.location)
+            self.axis = self.update_axis_from_orientation(self.location)
             self.update_appearance()
             self.update_arrow_location(new_location)
 
@@ -316,7 +314,7 @@ class Prop(GraphicalObject):
         ) = self.pictograph.get_closest_hand_point(event.scenePos())
 
         self.location = closest_hand_point
-        self.axis = self.update_axis_from_layer(self.location)
+        self.axis = self.update_axis_from_orientation(self.location)
         self.update_appearance()
         self.setPos(closest_hand_point_coord)
 

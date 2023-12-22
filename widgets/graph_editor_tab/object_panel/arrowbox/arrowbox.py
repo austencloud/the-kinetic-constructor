@@ -100,7 +100,6 @@ class ArrowBox(ObjectBox):
                 END_LOCATION: EAST,
                 TURNS: 0,
                 START_ORIENTATION: IN,
-                START_LAYER: 1,
             },
             {
                 COLOR: RED,
@@ -115,7 +114,6 @@ class ArrowBox(ObjectBox):
                 END_LOCATION: EAST,
                 TURNS: 0,
                 START_ORIENTATION: IN,
-                START_LAYER: 1,
             },
             {
                 COLOR: RED,
@@ -130,7 +128,6 @@ class ArrowBox(ObjectBox):
                 END_LOCATION: EAST,
                 TURNS: 0,
                 START_ORIENTATION: IN,
-                START_LAYER: 1,
             },
             {
                 COLOR: RED,
@@ -145,7 +142,6 @@ class ArrowBox(ObjectBox):
                 END_LOCATION: EAST,
                 TURNS: 0,
                 START_ORIENTATION: IN,
-                START_LAYER: 1,
             },
             {
                 COLOR: BLUE,
@@ -160,7 +156,6 @@ class ArrowBox(ObjectBox):
                 END_LOCATION: WEST,
                 TURNS: 0,
                 START_ORIENTATION: IN,
-                START_LAYER: 1,
             },
             {
                 COLOR: BLUE,
@@ -175,7 +170,6 @@ class ArrowBox(ObjectBox):
                 END_LOCATION: WEST,
                 TURNS: 0,
                 START_ORIENTATION: IN,
-                START_LAYER: 1,
             },
             {
                 COLOR: BLUE,
@@ -190,7 +184,6 @@ class ArrowBox(ObjectBox):
                 END_LOCATION: WEST,
                 TURNS: 0,
                 START_ORIENTATION: IN,
-                START_LAYER: 1,
             },
             {
                 COLOR: BLUE,
@@ -205,7 +198,6 @@ class ArrowBox(ObjectBox):
                 END_LOCATION: WEST,
                 TURNS: 0,
                 START_ORIENTATION: IN,
-                START_LAYER: 1,
             },
         ]
 
