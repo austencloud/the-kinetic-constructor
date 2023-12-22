@@ -71,11 +71,11 @@ class OptionPickerScroll(QScrollArea):
             )
             pictograph_dict = self._create_pictograph_dict(pd_row_data)
             start_option = self._create_option(pd_row_data)
-            start_option.pictograph_dict = pictograph_dict
+            start_option.pd_row_data = pictograph_dict
             start_option.view.resize_option_view()
-            start_option.current_letter = start_option.pictograph_dict["letter"]
-            start_option.start_position = start_option.pictograph_dict["start_position"]
-            start_option.end_position = start_option.pictograph_dict["end_position"]
+            start_option.current_letter = start_option.pd_row_data["letter"]
+            start_option.start_position = start_option.pd_row_data["start_position"]
+            start_option.end_position = start_option.pd_row_data["end_position"]
             self._add_option_to_layout(start_option, True, 0, column)
 
     def _create_pictograph_dict(self, pd_row_data):
@@ -86,16 +86,20 @@ class OptionPickerScroll(QScrollArea):
         }
         return pictograph_dict
 
-    def _generate_image_path(self, pd_row_data: pd.Series) -> str:
+    def _generate_image_path(self, option: Option) -> str:
         """Generates the image path based on the row data."""
+        pd_row_data = option.pd_row_data
+
         image_dir = os.path.join(
-            "resources", "images", "pictographs", pd_row_data["letter"]
+            "resources", "images", "pictographs", pd_row_data["letter"], option.main_widget.prop_type
         )
+
         image_name = (
             f"{pd_row_data['letter']}_{pd_row_data.name[0]}_{pd_row_data.name[1]}_"
             f"{pd_row_data['blue_turns']}_{pd_row_data['blue_start_orientation']}_"
             f"{pd_row_data['blue_end_orientation']}_{pd_row_data['red_turns']}_"
-            f"{pd_row_data['red_start_orientation']}_{pd_row_data['red_end_orientation']}.png"
+            f"{pd_row_data['red_start_orientation']}_{pd_row_data['red_end_orientation']}_"
+            f"{option.main_widget.prop_type}.png"
         )
         return os.path.join(image_dir, image_name)
 
@@ -108,7 +112,7 @@ class OptionPickerScroll(QScrollArea):
     def load_image_if_visible(self, option: "Option") -> None:
         """Loads the image for an option if it is visible."""
         if not option.imageLoaded and option.view.isVisible():
-            image_path = self._generate_image_path(option.pictograph_dict)
+            image_path = self._generate_image_path(option)
             if image_path not in self.image_cache:
                 self.image_cache[image_path] = QPixmap(image_path)
             option.loadImage(image_path)
@@ -175,13 +179,14 @@ class OptionPickerScroll(QScrollArea):
         QApplication.restoreOverrideCursor()
 
     def _create_option(self, pd_row_data: pd.Series):
-        image_path = self._generate_image_path(pd_row_data)
         letter = pd_row_data["letter"]
         option = Option(self.main_widget, self)
         option.setSceneRect(0, 0, 950, 950)
-
+        option.pd_row_data = pd_row_data
+        image_path = self._generate_image_path(option)
         option.loadImage(image_path)
-
+        self.load_image_if_visible(option)
+        
         # Setup option attributes
         # Instead of a comprehension, explicitly create each motion_dict
         blue_motion_dict = self._create_motion_dict(pd_row_data, "blue")

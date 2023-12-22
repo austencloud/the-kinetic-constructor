@@ -258,9 +258,14 @@ class PropPositioner:
                     and len(set(state[color + "_motion_type"] for color in both)) == 1
                 ):
                     self.reposition_G_and_H(state)
-                else:
+                elif (
+                    self.scene.motions[RED].motion_type == PRO
+                    and self.scene.motions[BLUE].motion_type == ANTI
+                    or self.scene.motions[RED].motion_type == ANTI
+                    and self.scene.motions[BLUE].motion_type == PRO
+                ):
                     self.reposition_I(state)
-                    
+
             # GAMMA → BETA - Y, Z
             if len(pro_or_anti_motions) == 1 and len(static_motions) == 1:
                 self.reposition_gamma_to_beta()
@@ -418,8 +423,6 @@ class PropPositioner:
 
     def reposition_alpha_to_beta(self, state) -> None:
         # Extract motion type and end locations for both colors from the DataFrame row
-        red_motion_type = state["red_motion_type"]
-        blue_motion_type = state["blue_motion_type"]
         red_end_location = state["red_end_location"]
         blue_end_location = state["blue_end_location"]
 
@@ -518,7 +521,7 @@ class PropPositioner:
     ### GAMMA TO BETA ### Y, Z
 
     def reposition_gamma_to_beta(self) -> None:
-        if self.scene.prop_type in [
+        if self.scene.main_widget.prop_type in [
             STAFF,
             FAN,
             BIGFAN,
@@ -565,7 +568,7 @@ class PropPositioner:
                         ),
                         self.get_opposite_direction(direction),
                     )
-        elif self.scene.prop_type in [
+        elif self.scene.main_widget.prop_type in [
             BIGHOOP,
             BIGSTAFF,
             BIGBUUGENG,

@@ -40,7 +40,7 @@ class ArrowPositioner:
         reposition_method()
 
     def _apply_special_adjustments(self, current_letter):
-        if self.pictograph.prop_type == TRIAD:
+        if self.pictograph.main_widget.prop_type == TRIAD:
             self._adjust_for_triads(current_letter)
 
     def _adjust_for_triads(self, current_letter):

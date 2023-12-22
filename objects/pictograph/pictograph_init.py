@@ -21,7 +21,6 @@ class PictographInit:
         self.pictograph = pictograph
         self.main_widget = pictograph.main_widget
 
-
     def init_grid(self) -> Grid:
         grid = Grid(self.pictograph)
         grid_position = QPointF(0, 0)
@@ -265,4 +264,3 @@ class PictographInit:
             NORTHWEST: nw_boundary,
         }
         return locations
-

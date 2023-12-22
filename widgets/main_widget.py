@@ -11,6 +11,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QWheelEvent
 import pandas as pd
+from constants.string_constants import STAFF
 from utilities.TypeChecking.TypeChecking import LetterDictionary
 from utilities.json_handler import JsonHandler
 from widgets.image_generator_tab.ig_tab import IGTab
@@ -32,7 +33,7 @@ class MainWidget(QWidget):
         self.export_handler = None
         self.main_window = main_window
         self.resize(int(self.main_window.width()), int(self.main_window.height()))
-
+        self.prop_type = STAFF
         self.key_event_handler = KeyEventHandler()
         self.json_handler = JsonHandler()
         self.letters: LetterDictionary = self.load_all_letters()

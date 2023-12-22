@@ -79,7 +79,7 @@ class Pictograph(QGraphicsScene):
         self.props: Dict[Colors, Prop] = {}
         self.motions: Dict[Colors, Motion] = {}
         self.current_letter: Letters = None
-        self.pictograph_dict: Dict = {}
+        self.pd_row_data: Dict = {}
         self.motion_dict_list: List[Dict] = []
         self.start_position: SpecificPositions = None
         self.end_position: SpecificPositions = None
@@ -90,7 +90,6 @@ class Pictograph(QGraphicsScene):
         self.dragged_prop: Prop = None
         self.initializer = PictographInit(self)
 
-        self.prop_type: PropTypes = TRIAD
         self.arrow_turns = 0
 
         self.grid: Grid = self.initializer.init_grid()
@@ -105,13 +104,13 @@ class Pictograph(QGraphicsScene):
         self.motions: Dict[Colors, Motion] = self.initializer.init_motions()
 
         self.arrows: Dict[Colors, Arrow] = self.initializer.init_arrows()
-        self.props: Dict[Colors, Prop] = self.initializer.init_props(self.prop_type)
+        self.props: Dict[Colors, Prop] = self.initializer.init_props(self.main_widget.prop_type)
 
         self.ghost_arrows: Dict[
             Colors, GhostArrow
         ] = self.initializer.init_ghost_arrows()
         self.ghost_props: Dict[Colors, GhostProp] = self.initializer.init_ghost_props(
-            self.prop_type
+            self.main_widget.prop_type
         )
 
         self.setup_managers(main_widget)
