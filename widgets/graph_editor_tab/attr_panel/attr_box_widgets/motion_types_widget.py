@@ -133,7 +133,7 @@ class MotionTypesWidget(AttrBoxWidget):
         self.swap_button_frame.setMaximumWidth(int(self.width() * 1 / 4))
         self.motion_type_box.setMinimumWidth(int(self.width() * 0.5))
 
-        self.header_label.setFont(QFont("Arial", int(self.width() / 18)))
+        self.header_label.setFont(QFont("Arial", int(self.width() /22)))
 
         self.motion_type_box.setMinimumHeight(int(self.attr_box.height() / 8))
         self.motion_type_box.setMaximumHeight(int(self.attr_box.height() / 8))

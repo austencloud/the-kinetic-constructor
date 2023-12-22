@@ -79,7 +79,7 @@ class Pictograph(QGraphicsScene):
         self.props: Dict[Colors, Prop] = {}
         self.motions: Dict[Colors, Motion] = {}
         self.current_letter: Letters = None
-        self.pd_row_data: Dict = {}
+        self.pictograph_dict: Dict = {}
         self.motion_dict_list: List[Dict] = []
         self.start_position: SpecificPositions = None
         self.end_position: SpecificPositions = None
@@ -91,20 +91,25 @@ class Pictograph(QGraphicsScene):
         self.initializer = PictographInit(self)
 
         self.arrow_turns = 0
+        if self.graph_type == "option":
+            self.grid = None
+            self.locations = None
+        else:
+            self.grid: Grid = self.initializer.init_grid()
+            self.locations: Dict[
+                Locations, Tuple[int, int, int, int]
+            ] = self.initializer.init_locations(self.grid)
 
-        self.grid: Grid = self.initializer.init_grid()
+        self.arrows: Dict[Colors, Arrow] = self.initializer.init_arrows()
+        self.props: Dict[Colors, Prop] = self.initializer.init_props(
+            self.main_widget.prop_type
+        )
 
         self.view = self.init_view(self.graph_type)
 
         self.letter_item: LetterItem = self.initializer.init_letter_item()
-        self.locations: Dict[
-            Locations, Tuple[int, int, int, int]
-        ] = self.initializer.init_locations(self.grid)
 
         self.motions: Dict[Colors, Motion] = self.initializer.init_motions()
-
-        self.arrows: Dict[Colors, Arrow] = self.initializer.init_arrows()
-        self.props: Dict[Colors, Prop] = self.initializer.init_props(self.main_widget.prop_type)
 
         self.ghost_arrows: Dict[
             Colors, GhostArrow

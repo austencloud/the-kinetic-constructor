@@ -156,6 +156,7 @@ class Arrow(GraphicalObject):
             self.ghost.update_appearance()
             self.ghost.transform = self.transform
             self.scene.addItem(self.ghost)
+            self.ghost.show()
             self.scene.ghost_arrows[self.ghost.color] = self.ghost
 
     def update_ghost_arrow_location(self, new_pos: QPointF) -> None:
@@ -168,7 +169,7 @@ class Arrow(GraphicalObject):
 
         self.motion.prop.set_prop_attrs_from_arrow(self)
         self.motion.prop.update_appearance()
-        
+
         self.motion.arrow.location = new_location
         self.ghost.location = new_location
         self.update_appearance()
@@ -178,6 +179,7 @@ class Arrow(GraphicalObject):
         self.is_dragging = True
         self.scene.update_pictograph()
         self.motion.update_prop_orientation_and_layer()
+
     def set_drag_pos(self, new_pos: QPointF) -> None:
         self.setPos(new_pos)
 
@@ -307,7 +309,7 @@ class Arrow(GraphicalObject):
         return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}
 
     def get_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
-        svg_file = f"{ARROW_DIR}{self.pictograph.grid.grid_mode}/{motion_type}/{motion_type}_{float(turns)}.svg"
+        svg_file = f"{ARROW_DIR}{self.pictograph.main_widget.grid_mode}/{motion_type}/{motion_type}_{float(turns)}.svg"
         return svg_file
 
     def _change_arrow_to_static(self) -> None:

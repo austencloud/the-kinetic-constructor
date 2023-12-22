@@ -159,7 +159,7 @@ class StartEndWidget(AttrBoxWidget):
         self.arrow_spacer_label.setMaximumHeight(self.header_labels[0].height())
 
         for header_label in self.header_labels:
-            header_label.setFont(QFont("Arial", int(self.width() / 18)))
+            header_label.setFont(QFont("Arial", int(self.width() / 22)))
         self.arrow_label.setFont(
             QFont(
                 "Arial",

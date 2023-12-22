@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QWheelEvent
 import pandas as pd
-from constants.string_constants import STAFF, TRIAD
+from constants.string_constants import DIAMOND, STAFF, TRIAD
 from utilities.TypeChecking.TypeChecking import LetterDictionary
 from utilities.json_handler import JsonHandler
 from widgets.image_generator_tab.ig_tab import IGTab
@@ -34,6 +34,7 @@ class MainWidget(QWidget):
         self.main_window = main_window
         self.resize(int(self.main_window.width()), int(self.main_window.height()))
         self.prop_type = STAFF
+        self.grid_mode = DIAMOND
         self.key_event_handler = KeyEventHandler()
         self.json_handler = JsonHandler()
         self.letters: LetterDictionary = self.load_all_letters()

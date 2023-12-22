@@ -19,19 +19,29 @@ class Option(Pictograph):
         super().__init__(main_widget, "option")
         self.main_widget = main_widget
         self.option_picker = option_picker
-        self.view = OptionView(self)
         self.imageLoaded = False
         self.pixmapItem = None  # Store the pixmap item
+        self.pd_row_data = None  # Store the row data from the pandas dataframe
 
     def loadImage(self, image_path: str):
         """Load image from the path."""
-        if not self.imageLoaded:
-            pixmap = QPixmap(image_path)
+        # Lazy loading: Only load the image if it's not already loaded and the view is visible
+        if not self.imageLoaded and self.view.isVisible():
+            # Caching: Check if the image is already cached
+            cached_pixmap = self.option_picker.get_cached_pixmap(image_path)
+            if cached_pixmap:
+                pixmap = cached_pixmap
+            else:
+                pixmap = QPixmap(image_path)
+                self.option_picker.cache_pixmap(image_path, pixmap)
+
+            # Pixmap Item Reuse: Update existing pixmap item if it exists, otherwise create a new one
             if not self.pixmapItem:
                 self.pixmapItem = QGraphicsPixmapItem(pixmap)
                 self.addItem(self.pixmapItem)
             else:
                 self.pixmapItem.setPixmap(pixmap)
+
             self.imageLoaded = True
 
     def wheelEvent(self, event) -> None:

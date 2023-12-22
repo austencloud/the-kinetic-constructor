@@ -33,6 +33,13 @@ class OptionPickerScroll(QScrollArea):
         self.show_start_position()
         self._setup_scroll_bars()
         self._connect_signals()
+        self.pixmap_cache = {}
+
+    def get_cached_pixmap(self, image_path: str) -> QPixmap | None:
+        return self.pixmap_cache.get(image_path)
+
+    def cache_pixmap(self, image_path: str, pixmap: QPixmap) -> None:
+        self.pixmap_cache[image_path] = pixmap
 
     def _initialize_ui(self) -> None:
         self.setWidgetResizable(True)
@@ -69,13 +76,11 @@ class OptionPickerScroll(QScrollArea):
                 if isinstance(pd_row_data, pd.DataFrame)
                 else pd_row_data
             )
-            pictograph_dict = self._create_pictograph_dict(pd_row_data)
             start_option = self._create_option(pd_row_data)
-            start_option.pd_row_data = pictograph_dict
             start_option.view.resize_option_view()
             start_option.current_letter = start_option.pd_row_data["letter"]
-            start_option.start_position = start_option.pd_row_data["start_position"]
-            start_option.end_position = start_option.pd_row_data["end_position"]
+            start_option.start_position = start_option.pd_row_data.name[0]
+            start_option.end_position = start_option.pd_row_data.name[1]
             self._add_option_to_layout(start_option, True, 0, column)
 
     def _create_pictograph_dict(self, pd_row_data):
@@ -91,7 +96,11 @@ class OptionPickerScroll(QScrollArea):
         pd_row_data = option.pd_row_data
 
         image_dir = os.path.join(
-            "resources", "images", "pictographs", pd_row_data["letter"], option.main_widget.prop_type
+            "resources",
+            "images",
+            "pictographs",
+            pd_row_data["letter"],
+            option.main_widget.prop_type,
         )
 
         image_name = (
@@ -115,8 +124,7 @@ class OptionPickerScroll(QScrollArea):
             image_path = self._generate_image_path(option)
             if image_path not in self.image_cache:
                 self.image_cache[image_path] = QPixmap(image_path)
-            option.loadImage(image_path)
-
+            option.pixmapItem = option.addPixmap(self.image_cache[image_path])
     def _create_motion_dict(self, pd_row_data: pd.Series, color: str) -> Dict:
         motion_dict = {
             "color": color,
@@ -186,7 +194,7 @@ class OptionPickerScroll(QScrollArea):
         image_path = self._generate_image_path(option)
         option.loadImage(image_path)
         self.load_image_if_visible(option)
-        
+
         # Setup option attributes
         # Instead of a comprehension, explicitly create each motion_dict
         blue_motion_dict = self._create_motion_dict(pd_row_data, "blue")

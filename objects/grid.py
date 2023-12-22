@@ -50,10 +50,9 @@ class GridItem(QGraphicsSvgItem):
 
 class Grid:
     def __init__(self, grid_scene: Union["ArrowBox", "PropBox", "Pictograph"]) -> None:
-        self.grid_mode: GridModes = DIAMOND
         self.items: Dict[str, GridItem] = {}
         self._initialize_grid_elements(grid_scene)
-        self._apply_grid_mode(self.grid_mode)
+        self._apply_grid_mode(grid_scene.main_widget.grid_mode)
 
     def _initialize_grid_elements(
         self, grid_scene: Union["ArrowBox", "PropBox", "Pictograph"]
