@@ -313,14 +313,18 @@ class IGTab(QWidget):
                 motion.arrow.ghost.set_is_svg_mirrored_from_attributes()
                 motion.arrow.ghost.update_appearance()
                 motion.arrow.ghost.update_mirror()
-                
+
         if motion_dict[COLOR] == BLUE:
             ig_pictograph.motions[BLUE].setup_attributes(motion_dict)
         elif motion_dict[COLOR] == RED:
             ig_pictograph.motions[RED].setup_attributes(motion_dict)
-                      
-        ig_pictograph.motions[BLUE].end_orientation = ig_pictograph.motions[BLUE].get_end_orientation()
-        ig_pictograph.motions[RED].end_orientation = ig_pictograph.motions[RED].get_end_orientation()
+
+        ig_pictograph.motions[BLUE].end_orientation = ig_pictograph.motions[
+            BLUE
+        ].get_end_orientation()
+        ig_pictograph.motions[RED].end_orientation = ig_pictograph.motions[
+            RED
+        ].get_end_orientation()
 
         ig_pictograph.arrows[RED].motion = ig_pictograph.motions[RED]
         ig_pictograph.arrows[BLUE].motion = ig_pictograph.motions[BLUE]
@@ -356,26 +360,17 @@ class IGTab(QWidget):
     ### IMAGE PATH ###
 
     def get_image_path(self, pictograph: pd.Series) -> str:
-        # Define the root folder
+        prop_type = self.main_pictograph.prop_type  # Get the current prop type
         image_dir = os.path.join(
-            "resources", "images", "pictographs", pictograph["letter"]
+            "resources", "images", "pictographs", pictograph["letter"], prop_type
         )
-        if not os.path.exists(image_dir):
-            os.makedirs(image_dir)
 
-        # Construct the image name based on the pictograph attributes
         image_name = (
-            f"{pictograph['letter']}_"
-            f"{pictograph.name[0]}_"
-            f"{pictograph.name[1]}_"
-            f"{pictograph['blue_turns']}_"
-            f"{pictograph['blue_start_orientation']}_"
-            f"{pictograph['blue_end_orientation']}_"
-            f"{pictograph['red_turns']}_"
-            f"{pictograph['red_start_orientation']}_"
-            f"{pictograph['red_end_orientation']}.png"
+            f"{pictograph['letter']}_{pictograph.name[0]}_{pictograph.name[1]}_"
+            f"{pictograph['blue_turns']}_{pictograph['blue_start_orientation']}_"
+            f"{pictograph['blue_end_orientation']}_{pictograph['red_turns']}_"
+            f"{pictograph['red_start_orientation']}_{pictograph['red_end_orientation']}_{prop_type}.png"
         )
-
         return os.path.join(image_dir, image_name)
 
     ### OPTIONAL ###
