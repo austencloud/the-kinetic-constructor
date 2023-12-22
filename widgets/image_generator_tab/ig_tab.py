@@ -362,7 +362,7 @@ class IGTab(QWidget):
     def get_image_path(self, pictograph: pd.Series) -> str:
         prop_type = self.main_pictograph.prop_type  # Get the current prop type
         image_dir = os.path.join(
-            "resources", "images", "pictographs", pictograph["letter"], prop_type
+            "resources", "images", "pictographs", pictograph["letter"]
         )
 
         image_name = (
