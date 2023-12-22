@@ -25,6 +25,7 @@ from constants.string_constants import (
     STAFF,
     START_POSITION,
     TRIAD,
+    TURNS,
 )
 from utilities.TypeChecking.Letters import Letters
 from utilities.TypeChecking.SpecificPositions import SpecificPositions
@@ -405,12 +406,18 @@ class Pictograph(QGraphicsScene):
             motion_dict[ARROW] = new_arrow
             motion_dict[PROP] = new_prop
             motion_dict[MOTION_TYPE] = new_arrow.motion_type
+            new_arrow.turns = motion_dict[TURNS]
             new_arrow.motion.setup_attributes(motion_dict)
 
             new_arrow.setTransformOriginPoint(new_arrow.boundingRect().center())
             new_arrow.ghost.setTransformOriginPoint(
                 new_arrow.ghost.boundingRect().center()
             )
+            svg_file = new_arrow.get_svg_file(new_arrow.motion_type, new_arrow.turns)
+            new_arrow.update_svg(svg_file)
+            new_arrow.ghost.update_svg(svg_file)
+            new_arrow.update_appearance()
+            new_arrow.ghost.update_appearance()
         new_beat.update_pictograph()
 
         return new_beat
