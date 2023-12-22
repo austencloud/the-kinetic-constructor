@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING, List
-from constants.numerical_constants import DISTANCE
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph

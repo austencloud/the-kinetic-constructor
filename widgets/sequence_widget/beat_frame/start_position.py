@@ -1,4 +1,3 @@
-from constants.numerical_constants import RATIO
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
 )
@@ -32,13 +31,13 @@ class StartPositionView(QGraphicsView):
     def set_start_position(self, start_position: "StartPosition") -> None:
         self.start_position = start_position
         self.setScene(self.start_position)
-        view_width = int(self.height() * RATIO)
+        view_width = self.height()
         self.view_scale = view_width / self.start_position.width()
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
 
     def resizeEvent(self, event) -> None:
-        view_width = int(self.height() * RATIO)
+        view_width = self.height()
         self.setMaximumWidth(view_width)
         if self.start_position:
             self.view_scale = view_width / self.start_position.width()

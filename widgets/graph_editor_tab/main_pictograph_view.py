@@ -1,6 +1,5 @@
 from PyQt6.QtCore import Qt, QSize
 from typing import TYPE_CHECKING, List
-from constants.numerical_constants import RATIO
 from constants.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
 from PyQt6.QtWidgets import QGraphicsView, QPushButton, QFrame
 from PyQt6.QtGui import QIcon
@@ -80,7 +79,7 @@ class MainPictographView(QGraphicsView):
 
         self.setMinimumHeight(int(self.main_pictograph.main_widget.height() * 0.3))
         self.setMaximumHeight(int(self.main_pictograph.main_widget.height() * 0.3))
-        new_width = int(self.height() * RATIO)
+        new_width = int(self.height())
         self.setMinimumWidth(new_width)
         self.setMaximumWidth(new_width)
         self.resetTransform()

@@ -2,7 +2,6 @@ from PyQt6.QtCore import QPointF
 import math
 
 import pandas as pd
-from constants.numerical_constants import BETA_OFFSET
 from constants.string_constants import (
     BOX,
     BUUGENG,
@@ -52,6 +51,8 @@ from utilities.TypeChecking.TypeChecking import (
     OptimalLocationsDicts,
     Direction,
 )
+
+BETA_OFFSET = 25
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph

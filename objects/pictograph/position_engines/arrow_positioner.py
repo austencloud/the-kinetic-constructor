@@ -1,6 +1,5 @@
 from PyQt6.QtCore import QPointF
 import pandas as pd
-from constants.numerical_constants import DISTANCE
 from constants.string_constants import *
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Callable, List
@@ -16,6 +15,7 @@ if TYPE_CHECKING:
 
 from utilities.TypeChecking.TypeChecking import Colors, MotionTypes
 
+DISTANCE = 40
 
 class ArrowPositioner:
     ### SETUP ###
