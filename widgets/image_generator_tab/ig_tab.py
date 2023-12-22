@@ -3,9 +3,14 @@ from typing import TYPE_CHECKING, Dict
 import pandas as pd
 from PyQt6.QtWidgets import (
     QWidget,
+    QSplitter,
     QVBoxLayout,
     QPushButton,
+    QScrollArea,
+    QCheckBox,
     QHBoxLayout,
+    QGridLayout,
+    QLabel,
     QFrame,
     QApplication,
 )
@@ -18,8 +23,10 @@ from widgets.image_generator_tab.ig_pictograph import IGPictograph
 from widgets.image_generator_tab.ig_scroll import IGScroll
 
 from constants.string_constants import (
+    BLUE,
     COLOR,
     MOTION_TYPE,
+    RED,
     TURNS,
     END_LOCATION,
     IN,
@@ -306,13 +313,17 @@ class IGTab(QWidget):
                 motion.arrow.ghost.set_is_svg_mirrored_from_attributes()
                 motion.arrow.ghost.update_appearance()
                 motion.arrow.ghost.update_mirror()
-                motion.arrow.setTransformOriginPoint(
-                    motion.arrow.boundingRect().center()
-                )
-                motion.arrow.ghost.setTransformOriginPoint(
-                    motion.arrow.ghost.boundingRect().center()
-                )
-        ig_pictograph.update_pictograph()
+                
+        if motion_dict[COLOR] == BLUE:
+            ig_pictograph.motions[BLUE].setup_attributes(motion_dict)
+        elif motion_dict[COLOR] == RED:
+            ig_pictograph.motions[RED].setup_attributes(motion_dict)
+                      
+        ig_pictograph.motions[BLUE].end_orientation = ig_pictograph.motions[BLUE].get_end_orientation()
+        ig_pictograph.motions[RED].end_orientation = ig_pictograph.motions[RED].get_end_orientation()
+
+        ig_pictograph.arrows[RED].motion = ig_pictograph.motions[RED]
+        ig_pictograph.arrows[BLUE].motion = ig_pictograph.motions[BLUE]
 
     @staticmethod
     def _setup_motion_relations(

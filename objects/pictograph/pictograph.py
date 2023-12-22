@@ -24,6 +24,7 @@ from constants.string_constants import (
     RED,
     STAFF,
     START_POSITION,
+    TRIAD,
 )
 from utilities.TypeChecking.Letters import Letters
 from utilities.TypeChecking.SpecificPositions import SpecificPositions
@@ -89,7 +90,7 @@ class Pictograph(QGraphicsScene):
         self.dragged_prop: Prop = None
         self.initializer = PictographInit(self)
 
-        self.prop_type: PropTypes = STAFF
+        self.prop_type: PropTypes = TRIAD
         self.arrow_turns = 0
 
         self.grid: Grid = self.initializer.init_grid()
