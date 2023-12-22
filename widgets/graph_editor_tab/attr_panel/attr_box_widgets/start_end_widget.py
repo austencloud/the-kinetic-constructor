@@ -108,9 +108,7 @@ class StartEndWidget(AttrBoxWidget):
         self.swap_button = self.create_custom_button(
             SWAP_ICON, self._swap_locations_callback
         )
-        self.swap_button.setMinimumSize(
-            int(self.attr_box.width() * 0.15), int(self.attr_box.width() * 0.15)
-        )
+
         layout.addSpacerItem(
             QSpacerItem(
                 0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding

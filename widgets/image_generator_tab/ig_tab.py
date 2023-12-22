@@ -244,7 +244,6 @@ class IGTab(QWidget):
         try:
             image.save(image_path)
             self.imageGenerated.emit(image_path)
-            print(f"Image successfully saved to {image_path}")
         except Exception as e:
             print(f"Failed to save image: {e}")
 

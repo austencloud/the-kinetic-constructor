@@ -4,6 +4,12 @@ from constants.numerical_constants import DISTANCE
 from constants.string_constants import *
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Callable, List
+from objects.pictograph.position_engines.staff_arrow_positioner import (
+    StaffArrowPositioner,
+)
+from objects.pictograph.position_engines.triad_arrow_positioner import (
+    TriadArrowPositioner,
+)
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
@@ -16,6 +22,8 @@ class ArrowPositioner:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.letters = pictograph.main_widget.letters
         self.pictograph = pictograph
+        self.triad_arrow_positioner = TriadArrowPositioner(pictograph, self)
+        self.staff_arrow_positioner = StaffArrowPositioner(pictograph, self)
 
     ### PUBLIC METHODS ###
     def update_arrow_positions(self) -> None:
@@ -25,121 +33,20 @@ class ArrowPositioner:
         for arrow in self.pictograph.arrows.values():
             arrow.set_arrow_transform_origin_to_center()
 
-        # First, set all arrows to default or optimal positions
-        self._set_all_arrows_to_default_or_optimal_positions(current_letter, state_dict)
-
-        # Then, apply special adjustments based on prop types and other conditions
-        self._apply_special_adjustments(current_letter)
+        self._apply_default_positioning(current_letter, state_dict)
+        self._apply_special_positioning(current_letter)
 
     ### POSITIONING LOGIC ###
-    def _set_all_arrows_to_default_or_optimal_positions(
-        self, current_letter, state_dict
-    ):
+    def _apply_default_positioning(self, current_letter, state_dict):
         reposition_method = self._get_reposition_method(current_letter)
-
         reposition_method()
 
-    def _apply_special_adjustments(self, current_letter):
+    def _apply_special_positioning(self, current_letter):
         if self.pictograph.main_widget.prop_type == TRIAD:
-            self._adjust_for_triads(current_letter)
-
-    def _adjust_for_triads(self, current_letter):
-        # Implement logic for adjusting arrow positions when the prop type is TRIAD
-        # Example: Adjust antispin arrows further out by 15 points
-
-        # Implement special adjustments for specific letters like 'I' and 'H'
-        if current_letter == "I":
-            self._adjust_triads_for_letter_I()
-        elif current_letter == "H":
-            self._adjust_triads_for_letter_H()
-        elif current_letter == "Q":
-            self._adjust_triads_for_letter_Q()
-        elif current_letter == "R":
-            self._adjust_triads_for_letter_R()
-        elif current_letter == "Z":
-            self._adjust_triads_for_letter_Z()
-        else:
-            for arrow in self.pictograph.arrows.values():
-                if self._is_arrow_movable(arrow) and arrow.motion.motion_type == ANTI:
-                    self._adjust_anti_arrows_for_triad()
-
-    def _adjust_triads_for_letter_Z(self):
-        for arrow in self.pictograph.arrows.values():
-            if self._is_arrow_movable(arrow):
-                adjustment = self._calculate_adjustment(arrow.location, 80)
-                adjusted_x = (
-                    adjustment.x() - 10 if adjustment.x() < 0 else adjustment.x() + 10
-                )
-                adjusted_y = (
-                    adjustment.y() - 10 if adjustment.y() < 0 else adjustment.y() + 10
-                )
-                adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                self._apply_adjustment(arrow, adjusted_adjustment)
-
-    def _adjust_triads_for_letter_R(self):
-        for arrow in self.pictograph.arrows.values():
-            if self._is_arrow_movable(arrow):
-                adjustment = self._calculate_R_adjustment(arrow)
-                adjusted_x = (
-                    adjustment.x() - 55 if adjustment.x() < 0 else adjustment.x() + 55
-                )
-                adjusted_y = (
-                    adjustment.y() - 55 if adjustment.y() < 0 else adjustment.y() + 55
-                )
-                adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                self._apply_adjustment(arrow, adjusted_adjustment)
-
-    def _adjust_triads_for_letter_Q(self):
-        for arrow in self.pictograph.arrows.values():
-            if self._is_arrow_movable(arrow):
-                adjustment = self._calculate_Q_adjustment(arrow)
-                adjusted_x = (
-                    adjustment.x() - 55 if adjustment.x() < 0 else adjustment.x() + 55
-                )
-                adjusted_y = (
-                    adjustment.y() - 55 if adjustment.y() < 0 else adjustment.y() + 55
-                )
-                adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                self._apply_adjustment(arrow, adjusted_adjustment)
-
-    def _adjust_anti_arrows_for_triad(self):
-        # Store arrows by color for easy access
-        arrows_by_color = {
-            arrow.color: arrow for arrow in self.pictograph.arrows.values()
-        }
-
-        red_arrow = arrows_by_color.get(RED)
-        blue_arrow = arrows_by_color.get(BLUE)
-
-        anti_arrows: List[Arrow] = []
-        pro_arrows: List[Arrow] = []
-
-        # Store arrows by motion type for easy access
-        if red_arrow.motion.motion_type == ANTI:
-            anti_arrows.append(red_arrow)
-        else:
-            pro_arrows.append(red_arrow)
-
-        if blue_arrow.motion.motion_type == ANTI:
-            anti_arrows.append(blue_arrow)
-        else:
-            pro_arrows.append(blue_arrow)
-
-        # Check for the special condition
-        for anti_arrow in anti_arrows:
-            if anti_arrow.motion.end_orientation == IN:
-                adjustment = self._calculate_adjustment(anti_arrow.location, 80)
-                self._apply_adjustment(anti_arrow, adjustment)
-            elif anti_arrow.motion.end_orientation == OUT:
-                adjustment = self._calculate_adjustment(anti_arrow.location, 80)
-                self._apply_adjustment(anti_arrow, adjustment)
-            elif (
-                anti_arrow.motion.end_orientation == OUT
-                and pro_arrows[0].motion.end_orientation == IN
-            ):
-                adjustment = self._calculate_adjustment(anti_arrow.location, 80)
-                self._apply_adjustment(anti_arrow, adjustment)
-
+            self.triad_arrow_positioner._adjust_arrows_for_triads(current_letter)
+        elif self.pictograph.main_widget.prop_type == STAFF:
+            self.staff_arrow_positioner._adjust_arrows_for_staffs(current_letter)
+            
     def _calculate_adjustment(self, location: str, distance: int) -> QPointF:
         location_adjustments = {
             NORTHEAST: QPointF(distance, -distance),
@@ -148,58 +55,6 @@ class ArrowPositioner:
             NORTHWEST: QPointF(-distance, -distance),
         }
         return location_adjustments.get(location, QPointF(0, 0))
-
-    def _adjust_triads_for_letter_I(self):
-        for arrow in self.pictograph.arrows.values():
-            if self._is_arrow_movable(arrow):
-                adjustment = self._calculate_I_adjustment(
-                    arrow, arrow.motion.motion_type
-                )
-                # if the orientation is IN for both props in the pictograph:
-                motions_with_in_orientation = [
-                    arrow.motion
-                    for arrow in self.pictograph.arrows.values()
-                    if arrow.motion.end_orientation == IN
-                ]
-                if len(motions_with_in_orientation) == 2:
-                    adjusted_x = (
-                        adjustment.x() - 35
-                        if adjustment.x() < 0
-                        else adjustment.x() + 35
-                    )
-                    adjusted_y = (
-                        adjustment.y() - 35
-                        if adjustment.y() < 0
-                        else adjustment.y() + 35
-                    )
-                    adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                    self._apply_adjustment(arrow, adjusted_adjustment)
-                else:
-                    adjusted_x = (
-                        adjustment.x() - 20
-                        if adjustment.x() < 0
-                        else adjustment.x() + 20
-                    )
-                    adjusted_y = (
-                        adjustment.y() - 20
-                        if adjustment.y() < 0
-                        else adjustment.y() + 20
-                    )
-                    adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                    self._apply_adjustment(arrow, adjusted_adjustment)
-
-    def _adjust_triads_for_letter_H(self):
-        for arrow in self.pictograph.arrows.values():
-            if self._is_arrow_movable(arrow):
-                adjustment = self._calculate_GH_adjustment(arrow)
-                adjusted_x = (
-                    adjustment.x() - 30 if adjustment.x() < 0 else adjustment.x() + 30
-                )
-                adjusted_y = (
-                    adjustment.y() - 30 if adjustment.y() < 0 else adjustment.y() + 30
-                )
-                adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                self._apply_adjustment(arrow, adjusted_adjustment)
 
     def _get_reposition_method(self, current_letter) -> Callable:
         positioning_methods = {

@@ -269,7 +269,7 @@ class TurnsWidget(AttrBoxWidget):
         box_font_size = int(self.attr_box.width() / 10)
 
         self.header_label.setContentsMargins(0, 0, self.spacing, 0)
-        self.header_label.setFont(QFont("Arial", int(self.attr_box.width() / 18)))
+        self.header_label.setFont(QFont("Arial", int(self.attr_box.width() *0.04)))
 
         self.turnbox.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
         dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
