@@ -1,0 +1,7 @@
+from PyQt6.QtWidgets import QFrame
+from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
+
+
+class OptionPickerFilterFrame(QFrame):
+    def __init__(self, option_picker_tab: "OptionPickerTab") -> None:
+        super().__init__(option_picker_tab)

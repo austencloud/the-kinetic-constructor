@@ -51,7 +51,7 @@ class IGTab(QWidget):
         self.main_pictograph = (
             self.main_widget.graph_editor_tab.graph_editor.main_pictograph
         )
-        self.pictograph_df = self.load_and_sort_data("LetterDictionary.csv")
+        self.pictograph_df = self.load_and_sort_data("PictographDataframe.csv")
         self.selected_pictographs = []
         self.setupUI()
 
@@ -221,10 +221,57 @@ class IGTab(QWidget):
         else:
             self.selected_pictographs.remove(index)
 
-    def render_pictograph_to_image(self, pictograph_data) -> None:
-        ig_pictograph = self._create_ig_pictograph_from_pictograph_data(pictograph_data)
+    def render_pictograph_to_image(self, pd_row_data) -> None:
+        ig_pictograph = self._create_ig_pictograph_from_pictograph_data(pd_row_data)
         ig_pictograph.update_pictograph()
 
+        prop_type = self.main_widget.prop_type
+        letter = pd_row_data["letter"]
+
+        if pd_row_data["blue_motion_type"] == "pro":
+            blue_motion_type_prefix = "p"
+        elif pd_row_data["blue_motion_type"] == "anti":
+            blue_motion_type_prefix = "a"
+        elif pd_row_data["blue_motion_type"] == "static":
+            blue_motion_type_prefix = "s"
+        elif pd_row_data["blue_motion_type"] == "dash":
+            blue_motion_type_prefix = "d"
+
+        if pd_row_data["red_motion_type"] == "pro":
+            red_motion_type_prefix = "p"
+        elif pd_row_data["red_motion_type"] == "anti":
+            red_motion_type_prefix = "a"
+        elif pd_row_data["red_motion_type"] == "static":
+            red_motion_type_prefix = "s"
+        elif pd_row_data["red_motion_type"] == "dash":
+            red_motion_type_prefix = "d"
+
+        # Construct the folder name based on turns and motion types
+        turns_folder = f"({blue_motion_type_prefix}{pd_row_data['blue_turns']},{red_motion_type_prefix}{pd_row_data['red_turns']})"
+
+        image_dir = os.path.join(
+            "resources",
+            "images",
+            "pictographs",
+            letter,
+            prop_type,
+            turns_folder,
+        )
+        os.makedirs(image_dir, exist_ok=True)
+
+        # Modify the filename to include motion types and turns
+        image_name = (
+            f"{letter}_{pd_row_data.name[0]}_{pd_row_data.name[1]}_"
+            f"{pd_row_data['blue_motion_type'][:1]}{pd_row_data['blue_turns']}_"
+            f"{pd_row_data['blue_start_orientation']}_"
+            f"{pd_row_data['blue_end_orientation']}_"
+            f"{pd_row_data['red_motion_type'][:1]}{pd_row_data['red_turns']}_"
+            f"{pd_row_data['red_start_orientation']}_"
+            f"{pd_row_data['red_end_orientation']}_"
+            f"{prop_type}.png"
+        )
+
+        image_path = os.path.join(image_dir, image_name)
         image = QImage(
             int(ig_pictograph.width()),
             int(ig_pictograph.height()),
@@ -234,12 +281,7 @@ class IGTab(QWidget):
         ig_pictograph.render(painter)
         painter.end()
 
-        image_path = self.get_image_path(pictograph_data)
-        image_dir = os.path.dirname(image_path)
-
-        if not os.path.exists(image_dir):
-            os.makedirs(image_dir, exist_ok=True)
-
+        # Save the image
         try:
             image.save(image_path)
             self.imageGenerated.emit(image_path)
@@ -285,7 +327,7 @@ class IGTab(QWidget):
     def _create_prop(self, ig_pictograph: "IGPictograph", motion_dict: Dict) -> Prop:
         prop_dict = {
             COLOR: motion_dict[COLOR],
-            PROP_TYPE: self.main_pictograph.main_widget.prop_type,
+            PROP_TYPE: self.main_widget.prop_type,
             LOCATION: motion_dict[END_LOCATION],
             ORIENTATION: IN,
         }
@@ -304,7 +346,6 @@ class IGTab(QWidget):
                 motion.arrow = ig_pictograph.arrows[motion.color]
                 motion.prop = ig_pictograph.props[motion.color]
                 motion.assign_location_to_arrow()
-                motion.update_prop_orientation()
                 motion.arrow.set_is_svg_mirrored_from_attributes()
                 motion.arrow.update_mirror()
                 motion.arrow.update_appearance()
@@ -316,6 +357,7 @@ class IGTab(QWidget):
                 motion.arrow.ghost.set_is_svg_mirrored_from_attributes()
                 motion.arrow.ghost.update_appearance()
                 motion.arrow.ghost.update_mirror()
+                motion.update_prop_orientation()
 
         if motion_dict[COLOR] == BLUE:
             ig_pictograph.motions[BLUE].setup_attributes(motion_dict)
@@ -355,7 +397,7 @@ class IGTab(QWidget):
             "rotation_direction": row_data[f"{color}_rotation_direction"],
             "start_location": row_data[f"{color}_start_location"],
             "end_location": row_data[f"{color}_end_location"],
-            "turns": row_data[f"{color}_turns"],
+            "turns": 0,
             "start_orientation": row_data[f"{color}_start_orientation"],
         }
 

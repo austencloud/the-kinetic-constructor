@@ -46,7 +46,7 @@ from typing import TYPE_CHECKING, Dict, List, Tuple
 from objects.motion import Motion
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
-    LetterDictionary,
+    PictographDataframe,
     OptimalLocationsEntries,
     OptimalLocationsDicts,
     Direction,
@@ -61,7 +61,7 @@ if TYPE_CHECKING:
 class PropPositioner:
     def __init__(self, scene: "Pictograph") -> None:
         self.scene = scene
-        self.letters: LetterDictionary = scene.main_widget.letters
+        self.letters: PictographDataframe = scene.main_widget.letters
 
     def update_prop_positions(self) -> None:
         self.prop_type_counts = self.count_prop_types()
@@ -428,8 +428,14 @@ class PropPositioner:
                 (EAST, BLUE): LEFT if end_location == EAST else None,
             },
         }
-
-        return layer_reposition_map[prop.layer].get((prop.location, prop.color), None)
+        if prop.orientation in [IN, OUT]:
+            return layer_reposition_map[1].get(
+                (prop.location, prop.color), None
+            )
+        elif prop.orientation in [CLOCKWISE, COUNTER_CLOCKWISE]:
+            return layer_reposition_map[2].get(
+                (prop.location, prop.color), None
+            )
 
     ### ALPHA TO BETA ### D, E, F
 
@@ -597,12 +603,19 @@ class PropPositioner:
 
     def determine_translation_direction(self, motion: Motion) -> Direction:
         """Determine the translation direction based on the motion type, start location, end location, and end layer."""
-        if motion.end_orientation in [IN, OUT] and motion.motion_type in [PRO, ANTI, STATIC]:
+        if motion.end_orientation in [IN, OUT] and motion.motion_type in [
+            PRO,
+            ANTI,
+            STATIC,
+        ]:
             if motion.end_location in [NORTH, SOUTH]:
                 return RIGHT if motion.start_location == EAST else LEFT
             elif motion.end_location in [EAST, WEST]:
                 return DOWN if motion.start_location == SOUTH else UP
-        elif motion.end_orientation in [CLOCKWISE, COUNTER_CLOCKWISE] and motion.motion_type in [PRO, ANTI, STATIC]:
+        elif motion.end_orientation in [
+            CLOCKWISE,
+            COUNTER_CLOCKWISE,
+        ] and motion.motion_type in [PRO, ANTI, STATIC]:
             if motion.end_location in [NORTH, SOUTH]:
                 return UP if motion.start_location == EAST else DOWN
             elif motion.end_location in [EAST, WEST]:

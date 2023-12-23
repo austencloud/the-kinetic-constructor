@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QWheelEvent
 import pandas as pd
 from constants.string_constants import DIAMOND, STAFF, TRIAD
-from utilities.TypeChecking.TypeChecking import LetterDictionary
+from utilities.TypeChecking.TypeChecking import PictographDataframe
 from utilities.json_handler import JsonHandler
 from widgets.image_generator_tab.ig_tab import IGTab
 from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
@@ -37,7 +37,7 @@ class MainWidget(QWidget):
         self.grid_mode = DIAMOND
         self.key_event_handler = KeyEventHandler()
         self.json_handler = JsonHandler()
-        self.letters: LetterDictionary = self.load_all_letters()
+        self.letters: PictographDataframe = self.load_all_letters()
         self.graph_editor_tab = GraphEditorTab(self)
         self.sequence_widget = SequenceWidget(self)
         self.option_picker_widget = OptionPickerTab(self)
@@ -45,9 +45,9 @@ class MainWidget(QWidget):
         self.image_generator_tab.imageGenerated.connect(self.on_image_generated)
         self.configure_layouts()
 
-    def load_all_letters(self) -> LetterDictionary:
-        df = pd.read_csv("LetterDictionary.csv")
-        letters: LetterDictionary = (
+    def load_all_letters(self) -> PictographDataframe:
+        df = pd.read_csv("PictographDataframe.csv")
+        letters: PictographDataframe = (
             df.groupby("letter").apply(lambda x: x.to_dict(orient="records")).to_dict()
         )
         return letters

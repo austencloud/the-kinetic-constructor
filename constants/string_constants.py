@@ -55,10 +55,10 @@ END_POSITION = "end_position"
 START_ORIENTATION = "start_orientation"
 END_ORIENTATION = "end_orientation"
 
+CLOCKWISE = "cw"
+COUNTER_CLOCKWISE = "ccw"
 
 
-CLOCKWISE = "cw" or "CW"
-COUNTER_CLOCKWISE = "ccw" or "CCW"
 
 START_POS = "start_position"
 END_POS = "end_position"

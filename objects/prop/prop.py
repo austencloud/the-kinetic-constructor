@@ -201,38 +201,34 @@ class Prop(GraphicalObject):
 
     def get_offset(self, prop_length, prop_width) -> Tuple[int, int]:
         # Layer 1 logic
-        if self.layer == 1:
-            if self.orientation == IN:
-                offset_map = {
-                    NORTH: (prop_width, 0),
-                    SOUTH: (0, prop_length),
-                    WEST: (0, 0),
-                    EAST: (prop_length, prop_width),
-                }
-            else:  # OUT
-                offset_map = {
-                    NORTH: (0, prop_length),
-                    SOUTH: (prop_width, 0),
-                    WEST: (prop_length, prop_width),
-                    EAST: (0, 0),
-                }
-
-        # Layer 2 logic
-        elif self.layer == 2:
-            if self.orientation == CLOCKWISE:
-                offset_map = {
-                    NORTH: (0, 0),
-                    SOUTH: (prop_length, prop_width),
-                    WEST: (0, prop_length),
-                    EAST: (prop_width, 0),
-                }
-            else:  # COUNTER_CLOCKWISE
-                offset_map = {
-                    NORTH: (prop_length, prop_width),
-                    SOUTH: (0, 0),
-                    WEST: (prop_width, 0),
-                    EAST: (0, prop_length),
-                }
+        if self.orientation == IN:
+            offset_map = {
+                NORTH: (prop_width, 0),
+                SOUTH: (0, prop_length),
+                WEST: (0, 0),
+                EAST: (prop_length, prop_width),
+            }
+        elif self.orientation == OUT:
+            offset_map = {
+                NORTH: (0, prop_length),
+                SOUTH: (prop_width, 0),
+                WEST: (prop_length, prop_width),
+                EAST: (0, 0),
+            }
+        elif self.orientation == CLOCKWISE:
+            offset_map = {
+                NORTH: (0, 0),
+                SOUTH: (prop_length, prop_width),
+                WEST: (0, prop_length),
+                EAST: (prop_width, 0),
+            }
+        elif self.orientation == COUNTER_CLOCKWISE:
+            offset_map = {
+                NORTH: (prop_length, prop_width),
+                SOUTH: (0, 0),
+                WEST: (prop_width, 0),
+                EAST: (0, prop_length),
+            }
 
         offset_tuple = offset_map.get(self.location, (0, 0))
         return QPointF(offset_tuple[0], offset_tuple[1])

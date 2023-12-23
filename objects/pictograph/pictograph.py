@@ -92,14 +92,11 @@ class Pictograph(QGraphicsScene):
         self.initializer = PictographInit(self)
 
         self.arrow_turns = 0
-        if self.graph_type == "option":
-            self.grid = None
-            self.locations = None
-        else:
-            self.grid: Grid = self.initializer.init_grid()
-            self.locations: Dict[
-                Locations, Tuple[int, int, int, int]
-            ] = self.initializer.init_locations(self.grid)
+
+        self.grid: Grid = self.initializer.init_grid()
+        self.locations: Dict[
+            Locations, Tuple[int, int, int, int]
+        ] = self.initializer.init_locations(self.grid)
 
         self.arrows: Dict[Colors, Arrow] = self.initializer.init_arrows()
         self.props: Dict[Colors, Prop] = self.initializer.init_props(

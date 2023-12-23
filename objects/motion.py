@@ -10,7 +10,7 @@ from utilities.TypeChecking.TypeChecking import (
     Orientations,
 )
 from constants.string_constants import *
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Literal, Union
 
 
 if TYPE_CHECKING:
@@ -124,110 +124,188 @@ class Motion:
 
 
     def get_end_orientation(self) -> Orientations:
-        anti_orientation_map = {
-            (0, IN): OUT,
-            (0.5, IN): COUNTER_CLOCKWISE,
-            (1, IN): OUT,
-            (1.5, IN): COUNTER_CLOCKWISE,
-            (2, IN): OUT,
-            (2.5, IN): COUNTER_CLOCKWISE,
-            (3, IN): OUT,
-            (0, OUT): IN,
-            (0.5, OUT): CLOCKWISE,
-            (1, OUT): IN,
-            (1.5, OUT): CLOCKWISE,
-            (2, OUT): IN,
-            (2.5, OUT): CLOCKWISE,
-            (3, OUT): IN,
+        # Combine layer1 maps
+
+        # Combine layer1 maps
+        whole_turn_orientation_map = {
+            (PRO, 0, IN): IN,
+            (PRO, 1, IN): OUT,
+            (PRO, 2, IN): IN,
+            (PRO, 3, IN): OUT,
+            (PRO, 0, OUT): OUT,
+            (PRO, 1, OUT): IN,
+            (PRO, 2, OUT): OUT,
+            (PRO, 3, OUT): IN,
+            (ANTI, 0, IN): OUT,
+            (ANTI, 1, IN): IN,
+            (ANTI, 2, IN): OUT,
+            (ANTI, 3, IN): IN,
+            (ANTI, 0, OUT): IN,
+            (ANTI, 1, OUT): OUT,
+            (ANTI, 2, OUT): IN,
+            (ANTI, 3, OUT): OUT,
+            (PRO, 0, CLOCKWISE): CLOCKWISE,
+            (PRO, 1, CLOCKWISE): COUNTER_CLOCKWISE,
+            (PRO, 2, CLOCKWISE): CLOCKWISE,
+            (PRO, 3, CLOCKWISE): COUNTER_CLOCKWISE,
+            (PRO, 0, COUNTER_CLOCKWISE): COUNTER_CLOCKWISE,
+            (PRO, 1, COUNTER_CLOCKWISE): CLOCKWISE,
+            (PRO, 2, COUNTER_CLOCKWISE): COUNTER_CLOCKWISE,
+            (PRO, 3, COUNTER_CLOCKWISE): CLOCKWISE,
+            (ANTI, 0, CLOCKWISE): COUNTER_CLOCKWISE,
+            (ANTI, 1, CLOCKWISE): CLOCKWISE,
+            (ANTI, 2, CLOCKWISE): COUNTER_CLOCKWISE,
+            (ANTI, 3, CLOCKWISE): CLOCKWISE,
+            (ANTI, 0, COUNTER_CLOCKWISE): CLOCKWISE,
+            (ANTI, 1, COUNTER_CLOCKWISE): COUNTER_CLOCKWISE,
+            (ANTI, 2, COUNTER_CLOCKWISE): CLOCKWISE,
+            (ANTI, 3, COUNTER_CLOCKWISE): COUNTER_CLOCKWISE,
         }
 
-        pro_orientation_map = {
-            (0, IN): IN,
-            (0.5, IN): CLOCKWISE,
-            (1, IN): IN,
-            (1.5, IN): CLOCKWISE,
-            (2, IN): IN,
-            (2.5, IN): CLOCKWISE,
-            (3, IN): IN,
-            (0, OUT): OUT,
-            (0.5, OUT): COUNTER_CLOCKWISE,
-            (1, OUT): OUT,
-            (1.5, OUT): COUNTER_CLOCKWISE,
-            (2, OUT): OUT,
-            (2.5, OUT): COUNTER_CLOCKWISE,
-            (3, OUT): OUT,
+        # Combine layer2 maps
+
+        # ({HANDPATH_DIRECTION}, {START_ORIENTATION}, {END_ORIENTATION}})
+        clockwise_handpath_half_turns_map = {
+            (PRO, 0.5, IN): COUNTER_CLOCKWISE,
+            (PRO, 1.5, IN): CLOCKWISE,
+            (PRO, 2.5, IN): COUNTER_CLOCKWISE,
+            (PRO, 0.5, OUT): CLOCKWISE,
+            (PRO, 1.5, OUT): COUNTER_CLOCKWISE,
+            (PRO, 2.5, OUT): CLOCKWISE,
+            (ANTI, 0.5, IN): CLOCKWISE,
+            (ANTI, 1.5, IN): COUNTER_CLOCKWISE,
+            (ANTI, 2.5, IN): CLOCKWISE,
+            (ANTI, 0.5, OUT): COUNTER_CLOCKWISE,
+            (ANTI, 1.5, OUT): CLOCKWISE,
+            (ANTI, 2.5, OUT): COUNTER_CLOCKWISE,
+            (PRO, 0.5, CLOCKWISE): IN,
+            (PRO, 1.5, CLOCKWISE): OUT,
+            (PRO, 2.5, CLOCKWISE): IN,
+            (PRO, 0.5, COUNTER_CLOCKWISE): OUT,
+            (PRO, 1.5, COUNTER_CLOCKWISE): IN,
+            (PRO, 2.5, COUNTER_CLOCKWISE): OUT,
+            (ANTI, 0.5, CLOCKWISE): OUT,
+            (ANTI, 1.5, CLOCKWISE): IN,
+            (ANTI, 2.5, CLOCKWISE): OUT,
+            (ANTI, 0.5, COUNTER_CLOCKWISE): IN,
+            (ANTI, 1.5, COUNTER_CLOCKWISE): OUT,
+            (ANTI, 2.5, COUNTER_CLOCKWISE): IN,
         }
 
-        float_orientation_map_layer_1 = {
-            (IN, "n", "e"): CLOCKWISE,
-            (IN, "e", "s"): CLOCKWISE,
-            (IN, "s", "w"): CLOCKWISE,
-            (IN, "w", "n"): CLOCKWISE,
-            (IN, "n", "w"): COUNTER_CLOCKWISE,
-            (IN, "w", "s"): COUNTER_CLOCKWISE,
-            (IN, "s", "e"): COUNTER_CLOCKWISE,
-            (IN, "e", "n"): COUNTER_CLOCKWISE,
-            (OUT, "n", "e"): COUNTER_CLOCKWISE,
-            (OUT, "e", "s"): COUNTER_CLOCKWISE,
-            (OUT, "s", "w"): COUNTER_CLOCKWISE,
-            (OUT, "w", "n"): COUNTER_CLOCKWISE,
-            (OUT, "n", "w"): CLOCKWISE,
-            (OUT, "w", "s"): CLOCKWISE,
-            (OUT, "s", "e"): CLOCKWISE,
-            (OUT, "e", "n"): CLOCKWISE,
+        counter_handpath_half_turns_map = {
+            (PRO, 0.5, IN): CLOCKWISE,
+            (PRO, 1.5, IN): COUNTER_CLOCKWISE,
+            (PRO, 2.5, IN): CLOCKWISE,
+            (PRO, 0.5, OUT): COUNTER_CLOCKWISE,
+            (PRO, 1.5, OUT): CLOCKWISE,
+            (PRO, 2.5, OUT): COUNTER_CLOCKWISE,
+            (ANTI, 0.5, IN): COUNTER_CLOCKWISE,
+            (ANTI, 1.5, IN): CLOCKWISE,
+            (ANTI, 2.5, IN): COUNTER_CLOCKWISE,
+            (ANTI, 0.5, OUT): CLOCKWISE,
+            (ANTI, 1.5, OUT): COUNTER_CLOCKWISE,
+            (ANTI, 2.5, OUT): CLOCKWISE,
+            (PRO, 0.5, CLOCKWISE): OUT,
+            (PRO, 1.5, CLOCKWISE): IN,
+            (PRO, 2.5, CLOCKWISE): OUT,
+            (PRO, 0.5, COUNTER_CLOCKWISE): IN,
+            (PRO, 1.5, COUNTER_CLOCKWISE): OUT,
+            (PRO, 2.5, COUNTER_CLOCKWISE): IN,
+            (ANTI, 0.5, CLOCKWISE): IN,
+            (ANTI, 1.5, CLOCKWISE): OUT,
+            (ANTI, 2.5, CLOCKWISE): IN,
+            (ANTI, 0.5, COUNTER_CLOCKWISE): OUT,
+            (ANTI, 1.5, COUNTER_CLOCKWISE): IN,
+            (ANTI, 2.5, COUNTER_CLOCKWISE): OUT,
         }
 
-        float_orientation_map_layer_2 = {
-            (CLOCKWISE, "n", "e"): OUT,
-            (CLOCKWISE, "e", "s"): OUT,
-            (CLOCKWISE, "s", "w"): OUT,
-            (CLOCKWISE, "w", "n"): OUT,
-            (CLOCKWISE, "n", "w"): IN,
-            (CLOCKWISE, "w", "s"): IN,
-            (CLOCKWISE, "s", "e"): IN,
-            (CLOCKWISE, "e", "n"): IN,
-            (COUNTER_CLOCKWISE, "n", "e"): IN,
-            (COUNTER_CLOCKWISE, "e", "s"): IN,
-            (COUNTER_CLOCKWISE, "s", "w"): IN,
-            (COUNTER_CLOCKWISE, "w", "n"): IN,
-            (COUNTER_CLOCKWISE, "n", "w"): OUT,
-            (COUNTER_CLOCKWISE, "w", "s"): OUT,
-            (COUNTER_CLOCKWISE, "s", "e"): OUT,
-            (COUNTER_CLOCKWISE, "e", "n"): OUT,
+
+        float_map = {
+            (IN, "cw_hp"): CLOCKWISE,
+            (IN, "ccw_hp"): COUNTER_CLOCKWISE,
+            (OUT, "cw_hp"): COUNTER_CLOCKWISE,
+            (OUT, "ccw_hp"): CLOCKWISE,
+            (CLOCKWISE, "cw_hp"): OUT,
+            (CLOCKWISE, "ccw_hp"): IN,
+            (COUNTER_CLOCKWISE, "cw_hp"): IN,
+            (COUNTER_CLOCKWISE, "ccw_hp"): OUT,
         }
 
-        if self.rotation_direction is not None:
-            key = (self.turns, self.start_orientation)
-            if self.motion_type in [PRO, STATIC]:
-                end_orientation = pro_orientation_map.get(key)
-            elif self.motion_type in [ANTI, DASH]:
-                end_orientation = anti_orientation_map.get(key)
-            return end_orientation
+        def get_handpath_direction(start_location, end_location) -> Literal['cw_hp', 'ccw_hp']:
+            clockwise_paths = [("n", "e"), ("e", "s"), ("s", "w"), ("w", "n")]
+            return "cw_hp" if (start_location, end_location) in clockwise_paths else "ccw_hp"
 
-        elif self.rotation_direction is None:
+        handpath_direction = get_handpath_direction(self.start_location, self.end_location)
+        if self.motion_type == FLOAT:
+            key = (self.start_orientation, handpath_direction)
+            return float_map.get(key)
+
+        elif self.turns in [0, 1, 2, 3]:
+            # For pro and anti motions
+            if self.motion_type in [PRO, ANTI]:
+                key = (self.motion_type, self.turns, self.start_orientation)
+                return whole_turn_orientation_map.get(key)
+
+            # For static motion
             if self.motion_type == STATIC:
-                return self.start_orientation
+                key = (PRO, self.turns, self.start_orientation)
+                return whole_turn_orientation_map.get(key)
+
+            # For dash motion
+            if self.motion_type == DASH:
+                key = (ANTI, self.turns, self.start_orientation)
+                return whole_turn_orientation_map.get(key)
+
+        elif self.turns in [0.5, 1.5, 2.5]:
+            if handpath_direction == "cw_hp":
+                map_to_use = clockwise_handpath_half_turns_map
+            else:
+                map_to_use = counter_handpath_half_turns_map
+
+            if self.motion_type in [PRO, ANTI]:
+                key = (self.motion_type, self.turns, self.start_orientation)
+                return map_to_use.get(key)
+
+            if self.motion_type == STATIC:
+                key = (PRO, self.turns, self.start_orientation)
+                return map_to_use.get(key)
+
             elif self.motion_type == DASH:
-                return OUT if self.start_orientation == IN else IN
-            elif self.motion_type == FLOAT:
-                if self.start_orientation in [IN, OUT]:
-                    key = (
-                        self.start_orientation,
-                        self.start_location,
-                        self.end_location,
-                    )
-                    return float_orientation_map_layer_1.get(
-                        key, self.start_orientation
-                    )
-                elif self.start_orientation in [CLOCKWISE, COUNTER_CLOCKWISE]:
-                    key = (
-                        self.start_orientation,
-                        self.start_location,
-                        self.end_location,
-                    )
-                    return float_orientation_map_layer_2.get(
-                        key, self.start_orientation
-                    )
+                key = (ANTI, self.turns, self.start_orientation)
+                return map_to_use.get(key)
+
+
+
+        # For float motion, determine handpath direction
+        if self.motion_type == FLOAT:
+            handpath_direction = get_handpath_direction(self.start_location, self.end_location)
+            key = (self.start_orientation, handpath_direction)
+            return float_map.get(key)
+
+        # For pro and anti motions with whole turns
+        if self.turns in [0, 1, 2, 3]:
+            key = (self.motion_type, self.turns, self.start_orientation)
+            return whole_turn_orientation_map.get(key)
+
+        # For half turns, determine handpath direction
+        elif self.turns in [0.5, 1.5, 2.5]:
+            handpath_direction = get_handpath_direction(self.start_location, self.end_location)
+            if handpath_direction == "cw_hp":
+                map_to_use = clockwise_handpath_half_turns_map
+            else:
+                map_to_use = counter_handpath_half_turns_map
+
+            key = (self.motion_type, self.turns, self.start_orientation)
+            return map_to_use.get(key)
+
+        # For static and dash motions
+        if self.motion_type == STATIC:
+            return self.start_orientation
+        if self.motion_type == DASH:
+            key = (ANTI, self.turns, self.start_orientation)
+            return whole_turn_orientation_map.get(key)
+
+        return None  # Default case if none match
 
     def get_arrow_location(self, start_location: str, end_location: str) -> str:
         if self.arrow:
