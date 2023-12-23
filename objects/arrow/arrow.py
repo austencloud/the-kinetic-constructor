@@ -50,8 +50,8 @@ if TYPE_CHECKING:
 class Arrow(GraphicalObject):
     def __init__(self, scene, arrow_dict, motion) -> None:
         super().__init__(scene)
-        self.svg_file = self.get_svg_file(arrow_dict[MOTION_TYPE])
         self.motion: Motion = motion
+        self.svg_file = self.get_svg_file(arrow_dict[MOTION_TYPE], arrow_dict[TURNS])
         self.setup_svg_renderer(self.svg_file)
         self.setAcceptHoverEvents(True)
         self._setup_attributes(scene, arrow_dict)
@@ -140,8 +140,8 @@ class Arrow(GraphicalObject):
     def _update_prop_on_click(self) -> None:
         self.motion.prop.color = self.color
         self.motion.prop.location = self.motion.end_location
-        self.motion.prop.axis = self.motion.prop.update_axis_from_orientation(
-            self.motion.end_location
+        self.motion.prop.axis = self.motion.prop.get_axis_from_orientation(
+            self.motion.end_orientation, self.motion.end_location
         )
 
     def _update_ghost_on_click(self) -> None:

@@ -1,7 +1,13 @@
 from typing import TYPE_CHECKING, List, Tuple
 
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QGraphicsItem, QGraphicsSceneMouseEvent, QGridLayout
+from PyQt6.QtWidgets import (
+    QGraphicsItem,
+    QGraphicsSceneMouseEvent,
+    QGridLayout,
+    QComboBox,
+    QLabel,
+)
 from objects.arrow.arrow import Arrow
 from constants.string_constants import *
 from objects.motion import Motion
@@ -27,11 +33,34 @@ class ArrowBox(ObjectBox):
         self.drag = None
         self.default_start_orientation = IN
         self.start_orientation = self.default_start_orientation
-        self.motions: List[Motion] = self.create_motions()
-        self.arrows: List[Arrow] = self.create_arrows()
 
         self.arrowbox_layout = QGridLayout()
         self.arrowbox_layout.addWidget(self.view)
+
+        # Adding the combo box for turns
+        self.turns_combobox = QComboBox()
+        self.turns_combobox.addItems(
+            [str(i) for i in range(10)]
+        )  # Assuming up to 9 turns
+        self.turns_combobox.setCurrentIndex(0)  # Default to 0 turns
+        self.turns_combobox.currentTextChanged.connect(self.on_turns_changed)
+
+        self.arrowbox_layout.addWidget(
+            QLabel("Turns:"), 0, 0
+        )  # Label for the combo box
+        self.arrowbox_layout.addWidget(
+            self.turns_combobox, 0, 1
+        )  # Adding the combo box to the layout
+
+        self.motions: List[Motion] = self.create_motions()
+        self.arrows: List[Arrow] = self.create_arrows()
+
+    def on_turns_changed(self, turns: str) -> None:
+        """Update turns for all arrows when the selected value in the combo box changes."""
+        for arrow in self.arrows:
+            arrow.turns = int(turns)
+            arrow.update_svg(arrow.get_svg_file(arrow.motion_type, arrow.turns))
+            arrow.update_appearance()  # Update the appearance of the arrow based on the new turns
 
     def create_arrows(self) -> None:
         red_arrows: List[Arrow] = []
@@ -41,7 +70,9 @@ class ArrowBox(ObjectBox):
             arrow_dict = {
                 COLOR: motion.color,
                 MOTION_TYPE: motion.motion_type,
-                TURNS: motion.turns,
+                TURNS: int(
+                    self.turns_combobox.currentText()
+                ),  # Set turns based on the combo box
             }
 
             arrow = Arrow(self, arrow_dict, motion)
@@ -202,7 +233,7 @@ class ArrowBox(ObjectBox):
         ]
 
         for motion_dict in motion_dicts:
-            motion = Motion(self, motion_dict, blank=True)
+            motion = Motion(self, motion_dict)
             motions.append(motion)
         return motions
 

@@ -221,7 +221,6 @@ class OptionPickerScrollArea(QScrollArea):
             option.motions[BLUE].start_location, option.motions[BLUE].end_location
         )
 
-
         option.current_letter = pd_row_data["letter"]
         option.start_position = pd_row_data.name[0]
         option.end_position = pd_row_data.name[1]
@@ -233,8 +232,6 @@ class OptionPickerScrollArea(QScrollArea):
 
         option.arrows[RED].motion = option.motions[RED]
         option.arrows[BLUE].motion = option.motions[BLUE]
-
-
 
         option.motions[RED].end_orientation = option.motions[RED].get_end_orientation()
         option.motions[BLUE].end_orientation = option.motions[

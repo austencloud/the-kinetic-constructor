@@ -1,3 +1,4 @@
+import re
 from typing import Union
 from data.start_end_location_map import get_start_end_locations
 from objects.graphical_object import GraphicalObject
@@ -95,7 +96,7 @@ class Prop(GraphicalObject):
     def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
         self.location = target_arrow.motion.end_location
-        self.axis = self.update_axis_from_orientation(self.location)
+        self.axis = self.get_axis_from_orientation(self.orientation, self.location)
         self.update_appearance()
 
     def clear_attributes(self) -> None:
@@ -108,11 +109,13 @@ class Prop(GraphicalObject):
 
     ### GETTERS ###
 
-    def update_axis_from_orientation(self, location) -> None:
-        if self.orientation in [IN, OUT]:
-            self.axis: Axes = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
-        elif self.orientation in [CLOCKWISE, COUNTER_CLOCKWISE]:
-            self.axis: Axes = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
+    def get_axis_from_orientation(self, orientation, location) -> None:
+        
+        if orientation in [IN, OUT]:
+            axis: Axes = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
+        elif orientation in [CLOCKWISE, COUNTER_CLOCKWISE]:
+            axis: Axes = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
+        return axis
 
     def swap_orientation(self, orientation) -> None:
         if orientation == IN:
@@ -173,7 +176,7 @@ class Prop(GraphicalObject):
                 self.motion.start_location = new_location
                 self.motion.end_location = new_location
 
-            self.axis = self.update_axis_from_orientation(self.location)
+            self.axis = self.get_axis_from_orientation(self.orientation, self.location)
             self.update_appearance()
             self.update_arrow_location(new_location)
 
@@ -311,7 +314,7 @@ class Prop(GraphicalObject):
         ) = self.pictograph.get_closest_hand_point(event.scenePos())
 
         self.location = closest_hand_point
-        self.axis = self.update_axis_from_orientation(self.location)
+        self.axis = self.get_axis_from_orientation(self.orientation, self.location)
         self.update_appearance()
         self.setPos(closest_hand_point_coord)
 

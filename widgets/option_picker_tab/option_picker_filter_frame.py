@@ -26,14 +26,16 @@ class OptionPickerFilterFrame(FilterFrame):
             turn
             for turn, checkbox in self.blue_turn_checkboxes.items()
             if checkbox.isChecked()
-        ][0]  # Access the first element of the list
+        ][0]
         selected_red_turns = [
             turn
             for turn, checkbox in self.red_turn_checkboxes.items()
             if checkbox.isChecked()
-        ][0]  # Access the first element of the list
+        ][0]
         selected_left_end_orientation = self.left_end_orientation_combobox.currentText()
-        selected_right_end_orientation = self.right_end_orientation_combobox.currentText()
+        selected_right_end_orientation = (
+            self.right_end_orientation_combobox.currentText()
+        )
 
         self.filters: Dict[str, Union[Turns, Orientations]] = {
             "left_turns": selected_blue_turns,

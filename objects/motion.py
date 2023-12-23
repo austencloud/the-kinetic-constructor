@@ -25,7 +25,7 @@ class Motion:
         self,
         scene: Union["Pictograph", "ArrowBox"],
         motion_dict: MotionAttributesDicts,
-        blank = False
+        blank=False,
     ) -> None:
         self.scene = scene
         self.motion_dict = motion_dict
@@ -106,8 +106,8 @@ class Motion:
         if hasattr(self, "prop") and self.prop:
             self.prop.orientation = self.end_orientation
             self.prop.location = self.end_location
-            self.prop.axis: Axes = self.prop.update_axis_from_orientation(
-                self.prop.location
+            self.prop.axis: Axes = self.prop.get_axis_from_orientation(
+                self.prop.orientation, self.prop.location
             )
             self.prop.update_rotation()
             self.prop.update_appearance()
@@ -135,7 +135,6 @@ class Motion:
             START_ORIENTATION: self.start_orientation,
             END_ORIENTATION: self.end_orientation,
         }
-
 
     def get_end_orientation(self) -> Orientations:
         # Combine layer1 maps
@@ -233,7 +232,6 @@ class Motion:
             (ANTI, 2.5, COUNTER_CLOCKWISE): OUT,
         }
 
-
         float_map = {
             (IN, "cw_hp"): CLOCKWISE,
             (IN, "ccw_hp"): COUNTER_CLOCKWISE,
@@ -245,81 +243,57 @@ class Motion:
             (COUNTER_CLOCKWISE, "ccw_hp"): OUT,
         }
 
-        def get_handpath_direction(start_location, end_location) -> Literal['cw_hp', 'ccw_hp']:
+        def get_handpath_direction(
+            start_location, end_location
+        ) -> Literal["cw_hp", "ccw_hp"]:
             clockwise_paths = [("n", "e"), ("e", "s"), ("s", "w"), ("w", "n")]
-            return "cw_hp" if (start_location, end_location) in clockwise_paths else "ccw_hp"
+            return (
+                "cw_hp"
+                if (start_location, end_location) in clockwise_paths
+                else "ccw_hp"
+            )
 
-        handpath_direction = get_handpath_direction(self.start_location, self.end_location)
+        handpath_direction = get_handpath_direction(
+            self.start_location, self.end_location
+        )
         if self.motion_type == FLOAT:
             key = (self.start_orientation, handpath_direction)
             return float_map.get(key)
 
-        elif self.turns in [0, 1, 2, 3]:
+        elif self.turns in [0, 1, 2, 3] or self.turns in ["0", "1", "2", "3"]:
             # For pro and anti motions
             if self.motion_type in [PRO, ANTI]:
-                key = (self.motion_type, self.turns, self.start_orientation)
+                key = (self.motion_type, int(self.turns), self.start_orientation)
                 return whole_turn_orientation_map.get(key)
 
             # For static motion
             if self.motion_type == STATIC:
-                key = (PRO, self.turns, self.start_orientation)
+                key = (PRO, int(self.turns), self.start_orientation)
                 return whole_turn_orientation_map.get(key)
 
             # For dash motion
             if self.motion_type == DASH:
-                key = (ANTI, self.turns, self.start_orientation)
+                key = (ANTI, int(self.turns), self.start_orientation)
                 return whole_turn_orientation_map.get(key)
 
-        elif self.turns in [0.5, 1.5, 2.5]:
+        elif self.turns in [0.5, 1.5, 2.5] or self.turns in ["0.5", "1.5", "2.5"]:
             if handpath_direction == "cw_hp":
                 map_to_use = clockwise_handpath_half_turns_map
             else:
                 map_to_use = counter_handpath_half_turns_map
 
             if self.motion_type in [PRO, ANTI]:
-                key = (self.motion_type, self.turns, self.start_orientation)
+                key = (self.motion_type, float(self.turns), self.start_orientation)
                 return map_to_use.get(key)
 
             if self.motion_type == STATIC:
-                key = (PRO, self.turns, self.start_orientation)
+                key = (PRO, float(self.turns), self.start_orientation)
                 return map_to_use.get(key)
 
             elif self.motion_type == DASH:
-                key = (ANTI, self.turns, self.start_orientation)
+                key = (ANTI, float(self.turns), self.start_orientation)
                 return map_to_use.get(key)
 
-
-
-        # For float motion, determine handpath direction
-        if self.motion_type == FLOAT:
-            handpath_direction = get_handpath_direction(self.start_location, self.end_location)
-            key = (self.start_orientation, handpath_direction)
-            return float_map.get(key)
-
-        # For pro and anti motions with whole turns
-        if self.turns in [0, 1, 2, 3] or self.turns in ["0", "1", "2", "3"]:
-            key = (self.motion_type, self.turns, self.start_orientation)
-            return whole_turn_orientation_map.get(key)
-
-        # For half turns, determine handpath direction
-        elif self.turns in [0.5, 1.5, 2.5]:
-            handpath_direction = get_handpath_direction(self.start_location, self.end_location)
-            if handpath_direction == "cw_hp":
-                map_to_use = clockwise_handpath_half_turns_map
-            else:
-                map_to_use = counter_handpath_half_turns_map
-
-            key = (self.motion_type, self.turns, self.start_orientation)
-            return map_to_use.get(key)
-
-        # For static and dash motions
-        if self.motion_type == STATIC:
-            return self.start_orientation
-        if self.motion_type == DASH:
-            key = (ANTI, self.turns, self.start_orientation)
-            return whole_turn_orientation_map.get(key)
-
-        return None  # Default case if none match
 
     def get_arrow_location(self, start_location: str, end_location: str) -> str:
         if self.arrow:
