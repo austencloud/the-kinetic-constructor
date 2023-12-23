@@ -24,16 +24,16 @@ class StaffArrowPositioner:
     def _adjust_staffs_for_letter_K(self):
         if (
             (
-                self.pictograph.arrows["red"].motion.end_orientation == OUT
-                and self.pictograph.arrows["blue"].motion.end_orientation == OUT
+                self.pictograph.motions["red"].end_orientation == OUT
+                and self.pictograph.motions["blue"].end_orientation == OUT
             )
             or (
-                self.pictograph.arrows["red"].motion.end_orientation == OUT
-                and self.pictograph.arrows["blue"].motion.end_orientation == IN
+                self.pictograph.motions["red"].end_orientation == OUT
+                and self.pictograph.motions["blue"].end_orientation == IN
             )
             or (
-                self.pictograph.arrows["red"].motion.end_orientation == IN
-                and self.pictograph.arrows["blue"].motion.end_orientation == OUT
+                self.pictograph.motions["red"].end_orientation == IN
+                and self.pictograph.motions["blue"].end_orientation == OUT
             )
         ):
             for arrow in self.pictograph.arrows.values():
@@ -46,16 +46,16 @@ class StaffArrowPositioner:
     def _adjust_staffs_for_letter_L(self):
         if (
             (
-                self.pictograph.arrows["red"].motion.end_orientation == OUT
-                and self.pictograph.arrows["blue"].motion.end_orientation == OUT
+                self.pictograph.motions["red"].end_orientation == OUT
+                and self.pictograph.motions["blue"].end_orientation == OUT
             )
             or (
-                self.pictograph.arrows["red"].motion.end_orientation == OUT
-                and self.pictograph.arrows["blue"].motion.end_orientation == IN
+                self.pictograph.motions["red"].end_orientation == OUT
+                and self.pictograph.motions["blue"].end_orientation == IN
             )
             or (
-                self.pictograph.arrows["red"].motion.end_orientation == IN
-                and self.pictograph.arrows["blue"].motion.end_orientation == OUT
+                self.pictograph.motions["red"].end_orientation == IN
+                and self.pictograph.motions["blue"].end_orientation == OUT
             )
         ):
             for arrow in self.pictograph.arrows.values():

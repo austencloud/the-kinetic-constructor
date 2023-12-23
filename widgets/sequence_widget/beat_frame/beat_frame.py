@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, List
 
 from PyQt6.QtWidgets import QGridLayout, QFrame, QSizePolicy
 from PyQt6.QtCore import Qt, pyqtSignal
+from widgets.option_picker_tab.option import Option
 from widgets.sequence_widget.beat_frame.beat import Beat
 from widgets.sequence_widget.beat_frame.start_position import StartPosition
 from widgets.sequence_widget.beat_frame.start_position import StartPositionView
@@ -16,7 +17,7 @@ from widgets.sequence_widget.beat_frame.beat import BeatView
 
 
 class BeatFrame(QFrame):
-    picker_updater: pyqtSignal = pyqtSignal(Pictograph)
+    picker_updater = pyqtSignal(Option, dict) 
     COLUMN_COUNT = 5
     ROW_COUNT = 4
 
@@ -64,7 +65,6 @@ class BeatFrame(QFrame):
         if next_beat_index is not None:
             self.beats[next_beat_index].set_pictograph(clicked_option)
 
-        # self.picker_updater.emit(clicked_option)
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):

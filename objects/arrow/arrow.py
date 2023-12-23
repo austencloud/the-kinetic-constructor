@@ -50,7 +50,7 @@ if TYPE_CHECKING:
 class Arrow(GraphicalObject):
     def __init__(self, scene, arrow_dict, motion) -> None:
         super().__init__(scene)
-        self.svg_file = self.get_svg_file(arrow_dict[MOTION_TYPE], arrow_dict[TURNS])
+        self.svg_file = self.get_svg_file(arrow_dict[MOTION_TYPE])
         self.motion: Motion = motion
         self.setup_svg_renderer(self.svg_file)
         self.setAcceptHoverEvents(True)

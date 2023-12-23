@@ -21,6 +21,7 @@ class MainPictographWidget(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
 
     def showEvent(self, event) -> None:
+        super().showEvent(event)
         self.setMinimumWidth(self.main_pictograph_view.width())
         self.setMaximumWidth(self.main_pictograph_view.width())
 

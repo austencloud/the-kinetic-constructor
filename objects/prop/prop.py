@@ -44,6 +44,7 @@ class Prop(GraphicalObject):
         self.drag_offset = QPointF(0, 0)
         self.previous_location: Locations = None
         self.ghost: Prop = None
+        self.axis = None
         self.color: Colors = prop_dict[COLOR]
         self.location: Locations = prop_dict[LOCATION]
         self.orientation: Orientations = prop_dict[ORIENTATION]
@@ -136,7 +137,7 @@ class Prop(GraphicalObject):
             (COUNTER_CLOCKWISE): {NORTH: 180, SOUTH: 0, WEST: 90, EAST: 270},
         }
 
-        key = (self.orientation)
+        key = self.orientation
         rotation_angle = angle_map.get(key, {}).get(self.location, 0)
         return rotation_angle
 

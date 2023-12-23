@@ -78,6 +78,7 @@ class GraphEditor(QFrame):
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
     def showEvent(self, event) -> None:
+        super().showEvent(event)
         content_width = int(
             self.arrowbox.view.width()
             + self.pictograph_widget.main_pictograph_view.width()

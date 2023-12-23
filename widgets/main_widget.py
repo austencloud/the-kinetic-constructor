@@ -40,7 +40,7 @@ class MainWidget(QWidget):
         self.letters: PictographDataframe = self.load_all_letters()
         self.graph_editor_tab = GraphEditorTab(self)
         self.sequence_widget = SequenceWidget(self)
-        self.option_picker_widget = OptionPickerTab(self)
+        self.option_picker_tab = OptionPickerTab(self)
         self.image_generator_tab = IGTab(self)
         self.image_generator_tab.imageGenerated.connect(self.on_image_generated)
         self.configure_layouts()
@@ -107,8 +107,8 @@ class MainWidget(QWidget):
 
             """
         )
+        self.tab_widget.addTab(self.option_picker_tab, "Option Picker")
         self.tab_widget.addTab(self.image_generator_tab, "Image Generator")
-        self.tab_widget.addTab(self.option_picker_widget, "Option Picker")
         self.tab_widget.addTab(self.graph_editor_tab, "Graph Editor")
 
         self.left_frame.setSizePolicy(
@@ -131,7 +131,7 @@ class MainWidget(QWidget):
     ### EVENT HANDLERS ###
 
     def on_splitter_moved(self):
-        self.option_picker_widget.resize_option_picker_widget()
+        self.option_picker_tab.resize_option_picker_tab()
         self.sequence_widget.resize_sequence_widget()
 
     def eventFilter(self, source, event: QEvent) -> bool:
@@ -165,7 +165,8 @@ class MainWidget(QWidget):
         return super().wheelEvent(event)
 
     def showEvent(self, event) -> None:
-        self.option_picker_widget.resize_option_picker_widget()
+        super().showEvent(event)
+        self.option_picker_tab.resize_option_picker_tab()
         self.sequence_widget.resize_sequence_widget()
 
     def on_image_generated(self, image_path):

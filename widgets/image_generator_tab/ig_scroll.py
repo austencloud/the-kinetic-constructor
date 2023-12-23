@@ -1,5 +1,7 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, Dict, List, Union
 from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
+from utilities.TypeChecking.Letters import Letters
+from utilities.TypeChecking.TypeChecking import Orientations, Turns
 
 from widgets.image_generator_tab.ig_pictograph import IGPictograph
 
@@ -20,7 +22,20 @@ class IGScroll(QScrollArea):
         self.setWidget(self.pictograph_container)
         self.COLUMN_COUNT = 4
         self.spacing = 10
-        self.ig_pictographs: List[IGPictograph] = []
+        self.ig_pictographs: Dict[Letters, IGPictograph] = []
+
+    def apply_turn_filters(
+        self, filters: Dict[str, Union[Turns, Orientations]]
+    ) -> None:
+        # self.clear()
+        for idx, (letter, ig_pictograph) in enumerate(self.ig_pictographs):
+            if ig_pictograph.meets_turn_criteria(filters):
+                self._add_option_to_layout(
+                    option,
+                    is_start_position=False,
+                    row=idx // self.COLUMN_COUNT,
+                    col=idx % self.COLUMN_COUNT,
+                )
 
     def update_displayed_pictographs(self) -> None:
         """

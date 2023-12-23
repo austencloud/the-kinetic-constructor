@@ -202,7 +202,7 @@ class ArrowBox(ObjectBox):
         ]
 
         for motion_dict in motion_dicts:
-            motion = Motion(self, motion_dict)
+            motion = Motion(self, motion_dict, blank=True)
             motions.append(motion)
         return motions
 

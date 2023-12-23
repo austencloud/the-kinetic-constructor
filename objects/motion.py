@@ -25,11 +25,25 @@ class Motion:
         self,
         scene: Union["Pictograph", "ArrowBox"],
         motion_dict: MotionAttributesDicts,
+        blank = False
     ) -> None:
         self.scene = scene
         self.motion_dict = motion_dict
+        self.initialize_attributes()
+        if not blank:
+            self.setup_attributes(motion_dict)
 
-        self.setup_attributes(motion_dict)
+    def initialize_attributes(self):
+        self.arrow: Arrow = None
+        self.prop: Prop = None
+        self.color: Colors = None
+        self.motion_type: MotionTypes = None
+        self.turns: Turns = None
+        self.rotation_direction: RotationDirections = None
+        self.start_location: Locations = None
+        self.end_location: Locations = None
+        self.start_orientation: Orientations = None
+        self.end_orientation: Orientations = None
 
     ### SETUP ###
 
@@ -283,7 +297,7 @@ class Motion:
             return float_map.get(key)
 
         # For pro and anti motions with whole turns
-        if self.turns in [0, 1, 2, 3]:
+        if self.turns in [0, 1, 2, 3] or self.turns in ["0", "1", "2", "3"]:
             key = (self.motion_type, self.turns, self.start_orientation)
             return whole_turn_orientation_map.get(key)
 

@@ -69,6 +69,13 @@ ORIENTATION = "orientation"
 
 IN = "in"
 OUT = "out"
+CLOCK = "clock"
+COUNTER = "counter"
+CLOCK_IN = "clock-in"
+CLOCK_OUT = "clock-out"
+COUNTER_IN = "counter-in"
+COUNTER_OUT = "counter-out"
+
 
 HORIZONTAL = "horizontal"
 VERTICAL = "vertical"

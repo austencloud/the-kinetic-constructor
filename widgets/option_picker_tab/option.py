@@ -1,3 +1,4 @@
+import pandas as pd
 from constants.string_constants import (
     ANTI,
     BLUE,
@@ -22,7 +23,7 @@ from utilities.TypeChecking.TypeChecking import (
 from objects.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import Qt, QEvent
 from typing import TYPE_CHECKING, Dict, Literal
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsPixmapItem
+from PyQt6.QtWidgets import QGraphicsView, QGraphicsPixmapItem, QLabel
 from PyQt6.QtGui import QPixmap
 
 import os
@@ -30,8 +31,10 @@ from PyQt6.QtGui import QImage, QPainter
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.option_picker_tab.option_picker_scroll import OptionPickerScroll
-from PyQt6.QtCore import pyqtSignal
+    from widgets.option_picker_tab.option_picker_scroll_area import (
+        OptionPickerScrollArea,
+    )
+from PyQt6.QtCore import pyqtSignal, QTimer
 
 
 class Option(Pictograph):
@@ -40,12 +43,12 @@ class Option(Pictograph):
     ### INIT ###
 
     def __init__(
-        self, main_widget: "MainWidget", option_picker: "OptionPickerScroll"
+        self, main_widget: "MainWidget", option_picker_scroll: "OptionPickerScrollArea"
     ) -> None:
         self.view: "OptionView" = None
         super().__init__(main_widget, "option")
         self.main_widget = main_widget
-        self.option_picker = option_picker
+        self.option_picker_scroll = option_picker_scroll
         self.imageLoaded = False
         self.pixmapItem = None  # Store the pixmap item
         self.pd_row_data = None  # Store the row data from the pandas dataframe
@@ -63,36 +66,14 @@ class Option(Pictograph):
         arrow.ghost = self.ghost_arrows[arrow.color]
         arrow.ghost.motion = motion
 
-    def _finalize_setup(self, motion_dict) -> None:
-        for motion in self.motions.values():
-            if motion.color == motion_dict[COLOR]:
-                motion.setup_attributes(motion_dict)
-                motion.arrow = self.arrows[motion.color]
-                motion.prop = self.props[motion.color]
-                motion.assign_location_to_arrow()
-                motion.update_prop_orientation()
-                motion.arrow.set_is_svg_mirrored_from_attributes()
-                motion.arrow.update_mirror()
-                motion.arrow.update_appearance()
-                motion.prop.update_appearance()
-                motion.arrow.motion = motion
-                motion.prop.motion = motion
-                motion.arrow.ghost = self.ghost_arrows[motion.color]
-                motion.arrow.ghost.motion = motion
-                motion.arrow.ghost.set_is_svg_mirrored_from_attributes()
-                motion.arrow.ghost.update_appearance()
-                motion.arrow.ghost.update_mirror()
+    def _finalize_motion_setup(self, pd_row_data) -> None:
+        self.pd_row_data = pd_row_data
 
-        if motion_dict[COLOR] == BLUE:
-            self.motions[BLUE].setup_attributes(motion_dict)
-        elif motion_dict[COLOR] == RED:
-            self.motions[RED].setup_attributes(motion_dict)
+        red_motion_dict = self._create_motion_dict_from_pd_row_data(pd_row_data, BLUE)
+        blue_motion_dict = self._create_motion_dict_from_pd_row_data(pd_row_data, RED)
 
-        self.motions[BLUE].end_orientation = self.motions[BLUE].get_end_orientation()
-        self.motions[RED].end_orientation = self.motions[RED].get_end_orientation()
-
-        self.arrows[RED].motion = self.motions[RED]
-        self.arrows[BLUE].motion = self.motions[BLUE]
+        self._add_motion(red_motion_dict)
+        self._add_motion(blue_motion_dict)
 
     ### IMAGE LOADING ###
 
@@ -101,12 +82,12 @@ class Option(Pictograph):
         # Lazy loading: Only load the image if it's not already loaded and the view is visible
         if not self.imageLoaded and self.view.isVisible():
             # Caching: Check if the image is already cached
-            cached_pixmap = self.option_picker.get_cached_pixmap(image_path)
+            cached_pixmap = self.option_picker_scroll.get_cached_pixmap(image_path)
             if cached_pixmap:
                 pixmap = cached_pixmap
             else:
                 pixmap = QPixmap(image_path)
-                self.option_picker.cache_pixmap(image_path, pixmap)
+                self.option_picker_scroll.cache_pixmap(image_path, pixmap)
 
             # Pixmap Item Reuse: Update existing pixmap item if it exists, otherwise create a new one
             if not self.pixmapItem:
@@ -119,9 +100,9 @@ class Option(Pictograph):
 
     def render_and_cache_image(self) -> None:
         # Render the scene into an image and store it in the cache
-        image_path = self.option_picker.generate_image_path_for_option(self)
+        image_path = self.option_picker_scroll.generate_image_path_for_option(self)
         pixmap = self.render_scene_to_pixmap()
-        self.option_picker.cache_pixmap(image_path, pixmap)
+        self.option_picker_scroll.cache_pixmap(image_path, pixmap)
         self.pixmapItem = QGraphicsPixmapItem(pixmap)
         self.addItem(self.pixmapItem)
         self.imageLoaded = True
@@ -164,45 +145,96 @@ class Option(Pictograph):
         os.makedirs(image_dir, exist_ok=True)
 
         # Modify the filename to include motion types and turns
+        blue_turns = self.motions[BLUE].turns
+        red_turns = self.motions[RED].turns
+        blue_end_orientation = self.motions[BLUE].end_orientation
+        red_end_orientation = self.motions[RED].end_orientation
+
         image_name = (
-            f"{letter}_{self.start_position}_{self.end_position}_"
-            f"{self.motions[BLUE].motion_type[:1]}{self.motions[BLUE].turns}_"
-            f"{self.motions[BLUE].start_orientation}_"
-            f"{self.motions[BLUE].end_orientation}_"
-            f"{self.motions[RED].motion_type[:1]}{self.motions[RED].turns}_"
-            f"{self.motions[RED].start_orientation}_"
-            f"{self.motions[RED].end_orientation}_"
-            f"{prop_type}.png"
+            f"{letter}_"
+            f"({self.start_position}→{self.end_position})_"
+            f"({self.motions[BLUE].start_location}→{self.motions[BLUE].end_location}_"
+            f"{blue_turns}_"
+            f"{self.motions[BLUE].start_orientation}_{blue_end_orientation})_"
+            f"({self.motions[RED].start_location}→{self.motions[RED].end_location}_"
+            f"{red_turns}_"
+            f"{self.motions[RED].start_orientation}_{red_end_orientation})_"
+            f"{prop_type}.png "
         )
 
         image_path = os.path.join(image_dir, image_name)
         image = QImage(
-            int(self.width()),
-            int(self.height()),
-            QImage.Format.Format_ARGB32,
+            int(self.width()), int(self.height()), QImage.Format.Format_ARGB32
         )
         painter = QPainter(image)
         self.render(painter)
-        painter.end()
+        painter.end()  # Ensure painter is released
+
+        if image.isNull():
+            print("QImage is null. Nothing to save.")
+        else:
+            # Displaying the image for debugging purposes
+            debug_window = QLabel()
+            debug_window.setPixmap(QPixmap.fromImage(image))
+            debug_window.show()
 
         # Save the image
         try:
-            image.save(image_path)
-            self.imageGenerated.emit(image_path)
+            # Check if the directory exists
+            if not os.path.exists(image_dir):
+                print(f"Directory does not exist: {image_dir}")
+                os.makedirs(image_dir, exist_ok=True)
+
+            # Check the QImage content
+            if image.isNull():
+                print("QImage is null. Nothing to save.")
+            else:
+                # Attempt to save
+                saved = image.save(image_path, "PNG")
+                if saved:
+                    print(f"Image saved successfully to {image_path}")
+                else:
+                    print(f"Failed to save the image to {image_path}")
         except Exception as e:
-            print(f"Failed to save image: {e}")
+            print(f"Unexpected error occurred while saving image: {e}")
+
+        return QPixmap.fromImage(image)
+
+    # New method to handle conditional image loading
+    def load_image_if_needed(self) -> None:
+        if not self.imageLoaded:
+            self.render_and_cache_image()
+
+    ### FLAGS ###
+
+    def meets_turn_criteria(self, filters):
+        left_turns = self.motions[BLUE].turns
+        right_turns = self.motions[RED].turns
+        return (
+            left_turns in filters["left_turns"]
+            and right_turns in filters["right_turns"]
+        )
 
     ### CREATE ###
 
-    def _create_motion_dict(self, row_data, color: str) -> Dict:
+    def _create_motion_dict_from_pd_row_data(
+        self, pd_row_data: pd.Series, color: str
+    ) -> Dict:
+        if color is RED:
+            side = "right"
+        elif color is BLUE:
+            side = "left"
+
         return {
             "color": color,
-            "motion_type": row_data[f"{color}_motion_type"],
-            "rotation_direction": row_data[f"{color}_rotation_direction"],
-            "start_location": row_data[f"{color}_start_location"],
-            "end_location": row_data[f"{color}_end_location"],
-            "turns": row_data[f"{color}_turns"],
-            "start_orientation": row_data[f"{color}_start_orientation"],
+            "motion_type": pd_row_data[f"{color}_motion_type"],
+            "rotation_direction": pd_row_data[f"{color}_rotation_direction"],
+            "start_location": pd_row_data[f"{color}_start_location"],
+            "end_location": pd_row_data[f"{color}_end_location"],
+            "turns": self.option_picker_scroll.option_picker_tab.filter_frame.filters[
+                f"{side}_turns"
+            ],
+            "start_orientation": pd_row_data[f"{color}_start_orientation"],
         }
 
     def _create_arrow(self, motion_dict: Dict) -> Arrow:
@@ -248,9 +280,9 @@ class OptionView(QGraphicsView):
 
     def resize_option_view(self) -> None:
         view_width = int(
-            self.option.option_picker.width() / 4
-        ) - self.option.option_picker.spacing * (
-            self.option.option_picker.COLUMN_COUNT - 1
+            self.option.option_picker_scroll.width() / 4
+        ) - self.option.option_picker_scroll.spacing * (
+            self.option.option_picker_scroll.COLUMN_COUNT - 1
         )
 
         self.setMinimumWidth(view_width)
@@ -263,19 +295,14 @@ class OptionView(QGraphicsView):
         self.scale(self.view_scale, self.view_scale)
 
     def wheelEvent(self, event):
-        self.option.option_picker.wheelEvent(event)
+        self.option.option_picker_scroll.wheelEvent(event)
 
     def eventFilter(self, obj, event: QEvent) -> Literal[False]:
         if event.type() == QEvent.Type.Wheel:
             event.ignore()
         return False
 
-    def resizeEvent(self, event):
-        super().resizeEvent(event)
-        self.option.option_picker.load_image_if_visible(self.option)
-
     def showEvent(self, event):
         super().showEvent(event)
-        # Trigger image rendering and loading when the view becomes visible
-        if not self.option.imageLoaded:
-            self.option.render_and_cache_image()
+        # Ensure this slot is called after the event loop starts
+        QTimer.singleShot(0, self.option.load_image_if_needed)

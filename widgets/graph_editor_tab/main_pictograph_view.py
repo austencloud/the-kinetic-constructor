@@ -72,6 +72,7 @@ class MainPictographView(QGraphicsView):
                 button.move(0, 0)
 
     def showEvent(self, event) -> None:
+        super().showEvent(event)
         if self.scene():
             self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
         button_size = int(self.width() / 10)

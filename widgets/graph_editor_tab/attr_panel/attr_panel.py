@@ -48,6 +48,7 @@ class AttrPanel(QFrame):
         self.red_attr_box.clear_attr_box()
 
     def showEvent(self, event) -> None:
+        super().showEvent(event)
         for box in [self.blue_attr_box, self.red_attr_box]:
             box.resize_attr_box()
         self.attr_panel_content_width = int(

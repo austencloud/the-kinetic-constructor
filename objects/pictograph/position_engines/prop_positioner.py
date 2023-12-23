@@ -383,7 +383,12 @@ class PropPositioner:
                     UKULELE,
                     CHICKEN,
                 ]:
-                    self.set_default_prop_locations(prop)
+                    direction = self.determine_direction_for_static_beta(
+                        prop, motion.end_location
+                    )
+                    if direction:
+                        self.move_prop(prop, direction)
+                        moved_props.add(prop)  # Mark this prop as moved
                 elif prop.prop_type in [
                     DOUBLESTAR,
                     BIGHOOP,
@@ -395,13 +400,7 @@ class PropPositioner:
                     GUITAR,
                 ]:
                     self.set_strict_prop_locations(other_prop)
-            else:
-                direction = self.determine_direction_for_static_beta(
-                    prop, motion.end_location
-                )
-                if direction:
-                    self.move_prop(prop, direction)
-                    moved_props.add(prop)  # Mark this prop as moved
+
 
     def determine_direction_for_static_beta(
         self, prop: Prop, end_location: str
@@ -429,13 +428,9 @@ class PropPositioner:
             },
         }
         if prop.orientation in [IN, OUT]:
-            return layer_reposition_map[1].get(
-                (prop.location, prop.color), None
-            )
+            return layer_reposition_map[1].get((prop.location, prop.color), None)
         elif prop.orientation in [CLOCKWISE, COUNTER_CLOCKWISE]:
-            return layer_reposition_map[2].get(
-                (prop.location, prop.color), None
-            )
+            return layer_reposition_map[2].get((prop.location, prop.color), None)
 
     ### ALPHA TO BETA ### D, E, F
 
@@ -489,7 +484,7 @@ class PropPositioner:
         self.scene.props[RED].setPos(new_red_pos)
         self.scene.props[BLUE].setPos(new_blue_pos)
 
-    def reposition_I(self, motions_df) -> None:
+    def reposition_I(self, state) -> None:
         if all(
             prop.prop_type in [CLUB, FAN, TRIAD, MINIHOOP, UKULELE, CHICKEN]
             for prop in self.scene.props.values()
@@ -503,7 +498,7 @@ class PropPositioner:
             for prop in self.scene.props.values():
                 self.set_strict_prop_locations(prop)
         else:
-            pro_color = RED if motions_df[f"{RED}_motion_type"] == PRO else BLUE
+            pro_color = RED if state[f"{RED}_motion_type"] == PRO else BLUE
 
             pro_prop = (
                 self.scene.props[RED] if pro_color == RED else self.scene.props[BLUE]
@@ -513,12 +508,17 @@ class PropPositioner:
             )
 
             pro_motion_df = {
-                f"{pro_color}_motion_type": motions_df[f"{pro_color}_motion_type"],
-                f"{pro_color}_start_location": motions_df[
+                f"{pro_color}_motion_type": state[f"{pro_color}_motion_type"],
+                f"{pro_color}_start_location": state[
                     f"{pro_color}_start_location"
                 ],
-                f"{pro_color}_end_location": motions_df[f"{pro_color}_end_location"],
-                f"{pro_color}_end_layer": motions_df[f"{pro_color}_end_layer"],
+                f"{pro_color}_end_location": state[f"{pro_color}_end_location"],
+                f"{pro_color}_start_orientation": state[
+                    f"{pro_color}_start_orientation"
+                ],
+                f"{pro_color}_end_orientation": state[
+                    f"{pro_color}_end_orientation"
+                ],
             }
 
             pro_motion = self.scene.motions[pro_color]
@@ -551,8 +551,8 @@ class PropPositioner:
             UKULELE,
             CHICKEN,
         ]:
-            if any(prop.layer == 1 for prop in self.scene.props.values()) and any(
-                prop.layer == 2 for prop in self.scene.props.values()
+            if any(prop.orientation in [IN,OUT] for prop in self.scene.props.values()) and any(
+                prop.orientation in [CLOCKWISE, COUNTER_CLOCKWISE] for prop in self.scene.props.values()
             ):
                 for prop in self.scene.props.values():
                     self.set_default_prop_locations(prop)

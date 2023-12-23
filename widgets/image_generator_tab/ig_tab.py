@@ -1,5 +1,5 @@
 import os
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, Union
 import pandas as pd
 from PyQt6.QtWidgets import (
     QWidget,
@@ -18,6 +18,8 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QImage, QPainter
 from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
+from utilities.TypeChecking.TypeChecking import Orientations, Turns
+from widgets.image_generator_tab.ig_filter_frame import IGFilterFrame
 from widgets.image_generator_tab.ig_letter_button_frame import IGLetterButtonFrame
 from widgets.image_generator_tab.ig_pictograph import IGPictograph
 from widgets.image_generator_tab.ig_scroll import IGScroll
@@ -78,6 +80,7 @@ class IGTab(QWidget):
         self.letter_button_frame = IGLetterButtonFrame(self.main_widget)
         action_button_frame = QFrame()
         self.ig_scroll_area = IGScroll(self.main_widget, self)
+        self.filter_frame = IGFilterFrame(self)
         self.letter_button_frame.setStyleSheet(
             """
             QFrame {
@@ -259,16 +262,22 @@ class IGTab(QWidget):
         )
         os.makedirs(image_dir, exist_ok=True)
 
+        blue_turns = self.filter_frame.filters["left_turns"]
+        red_turns = self.filter_frame.filters["right_turns"]
+        blue_end_orientation = ig_pictograph.motions[BLUE].get_end_orientation()
+        red_end_orientation = ig_pictograph.motions[RED].get_end_orientation()
+
         # Modify the filename to include motion types and turns
         image_name = (
-            f"{letter}_{pd_row_data.name[0]}_{pd_row_data.name[1]}_"
-            f"{pd_row_data['blue_motion_type'][:1]}{pd_row_data['blue_turns']}_"
-            f"{pd_row_data['blue_start_orientation']}_"
-            f"{pd_row_data['blue_end_orientation']}_"
-            f"{pd_row_data['red_motion_type'][:1]}{pd_row_data['red_turns']}_"
-            f"{pd_row_data['red_start_orientation']}_"
-            f"{pd_row_data['red_end_orientation']}_"
-            f"{prop_type}.png"
+            f"{letter}_"
+            f"({pd_row_data.name[0]}→{pd_row_data.name[1]})_"
+            f"({pd_row_data['blue_start_location']}→{pd_row_data['blue_end_location']}_"
+            f"{blue_turns}_"
+            f"{pd_row_data['blue_start_orientation']}_{blue_end_orientation})_"
+            f"({pd_row_data['red_start_location']}→{pd_row_data['red_end_location']}_"
+            f"{red_turns}_"
+            f"{pd_row_data['red_start_orientation']}_{red_end_orientation})_"
+            f"{prop_type}.png "
         )
 
         image_path = os.path.join(image_dir, image_name)
@@ -403,21 +412,31 @@ class IGTab(QWidget):
 
     ### IMAGE PATH ###
 
-    def get_image_path(self, pictograph: pd.Series) -> str:
+    def get_image_path(self, pd_row_data: pd.Series) -> str:
         prop_type = (
             self.main_pictograph.main_widget.prop_type
         )  # Get the current prop type
         image_dir = os.path.join(
-            "resources", "images", "pictographs", pictograph["letter"], prop_type
+            "resources", "images", "pictographs", pd_row_data["letter"], prop_type
         )
+        letter = pd_row_data["letter"]
+        blue_turns = self.option_picker_tab.filter_frame.filters["left_turns"]
+        red_turns = self.option_picker_tab.filter_frame.filters["right_turns"]
+
+        blue_end_orientation = option.motions[BLUE].get_end_orientation()
+        red_end_orientation = option.motions[RED].get_end_orientation()
 
         image_name = (
-            f"{pictograph['letter']}_{pictograph.name[0]}_{pictograph.name[1]}_"
-            f"{pictograph['blue_turns']}_{pictograph['blue_start_orientation']}_"
-            f"{pictograph['blue_end_orientation']}_{pictograph['red_turns']}_"
-            f"{pictograph['red_start_orientation']}_{pictograph['red_end_orientation']}_{prop_type}.png"
+            f"{letter}_"
+            f"({pd_row_data.name[0]}→{pd_row_data.name[1]})_"
+            f"({pd_row_data['blue_start_location']}→{pd_row_data['blue_end_location']}_"
+            f"{blue_turns}_"
+            f"{pd_row_data['blue_start_orientation']}_{blue_end_orientation})_"
+            f"({pd_row_data['red_start_location']}→{pd_row_data['red_end_location']}_"
+            f"{red_turns}_"
+            f"{pd_row_data['red_start_orientation']}_{red_end_orientation})_"
+            f"{prop_type}.png "
         )
-        return os.path.join(image_dir, image_name)
 
     ### OPTIONAL ###
 
