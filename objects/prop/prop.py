@@ -182,7 +182,6 @@ class Prop(GraphicalObject):
 
             self.ghost.color = self.color
             self.ghost.location = self.location
-            self.ghost.layer = self.layer
             self.ghost.update_appearance()
             self.scene.props[self.ghost.color] = self.ghost
             self.scene.update_pictograph()

@@ -23,7 +23,8 @@ from utilities.TypeChecking.TypeChecking import (
 from objects.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import Qt, QEvent
 from typing import TYPE_CHECKING, Dict, Literal
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsPixmapItem, QLabel
+from PyQt6.QtWidgets import QGraphicsView, QGraphicsPixmapItem, QLabel, QFrame
+from PyQt6.QtCore import QByteArray, QBuffer
 from PyQt6.QtGui import QPixmap
 
 import os
@@ -168,36 +169,25 @@ class Option(Pictograph):
         )
         painter = QPainter(image)
         self.render(painter)
-        painter.end()  # Ensure painter is released
+        painter.end()
 
-        if image.isNull():
-            print("QImage is null. Nothing to save.")
-        else:
-            # Displaying the image for debugging purposes
-            debug_window = QLabel()
-            debug_window.setPixmap(QPixmap.fromImage(image))
-            debug_window.show()
+        if not image.isNull():
+            buffer = QByteArray()
+            buf = QBuffer(buffer)
+            buf.open(QBuffer.OpenModeFlag.WriteOnly)
+            success = image.save(buf, "PNG")
+            buf.close()
 
-        # Save the image
-        try:
-            # Check if the directory exists
-            if not os.path.exists(image_dir):
-                print(f"Directory does not exist: {image_dir}")
-                os.makedirs(image_dir, exist_ok=True)
-
-            # Check the QImage content
-            if image.isNull():
-                print("QImage is null. Nothing to save.")
+            if success:
+                with open(image_path, 'wb') as file:
+                    file.write(buffer)
+                print(f"Image saved successfully to {image_path}")
             else:
-                # Attempt to save
-                saved = image.save(image_path, "PNG")
-                if saved:
-                    print(f"Image saved successfully to {image_path}")
-                else:
-                    print(f"Failed to save the image to {image_path}")
-        except Exception as e:
-            print(f"Unexpected error occurred while saving image: {e}")
+                print(f"Failed to save the image to {image_path}")
+        else:
+            print("QImage is null. Nothing to save.")
 
+     
         return QPixmap.fromImage(image)
 
     # New method to handle conditional image loading
