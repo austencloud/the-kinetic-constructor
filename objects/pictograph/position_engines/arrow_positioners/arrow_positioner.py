@@ -107,16 +107,16 @@ class ArrowPositioner:
     ### POSITIONING METHODS ###
     def _reposition_GH(self) -> None:
         for arrow in [
-            self.pictograph.arrows.get(Color.RED),
-            self.pictograph.arrows.get(Color.BLUE),
+            self.pictograph.arrows[RED],
+            self.pictograph.arrows[BLUE],
         ]:
             adjustment = self._calculate_GH_adjustment(arrow)
             self._apply_adjustment(arrow, adjustment)
 
     def _reposition_I(self) -> None:
         for arrow in [
-            self.pictograph.arrows.get(Color.RED),
-            self.pictograph.arrows.get(Color.BLUE),
+            self.pictograph.arrows[RED],
+            self.pictograph.arrows[BLUE],
         ]:
             state = self.pictograph.get_state()
             motion_type = state[f"{arrow.color}_motion_type"]
@@ -126,31 +126,31 @@ class ArrowPositioner:
 
     def _reposition_P(self) -> None:
         for arrow in [
-            self.pictograph.arrows.get(Color.RED),
-            self.pictograph.arrows.get(Color.BLUE),
+            self.pictograph.arrows[RED],
+            self.pictograph.arrows[BLUE],
         ]:
             adjustment = self._calculate_P_adjustment(arrow)
             self._apply_adjustment(arrow, adjustment)
 
     def _reposition_Q(self) -> None:
         for arrow in [
-            self.pictograph.arrows.get(Color.RED),
-            self.pictograph.arrows.get(Color.BLUE),
+            self.pictograph.arrows[RED],
+            self.pictograph.arrows[BLUE],
         ]:
             adjustment = self._calculate_Q_adjustment(arrow)
             self._apply_adjustment(arrow, adjustment)
 
     def _reposition_R(self) -> None:
         for arrow in [
-            self.pictograph.arrows.get(Color.RED),
-            self.pictograph.arrows.get(Color.BLUE),
+            self.pictograph.arrows[RED],
+            self.pictograph.arrows[BLUE],
         ]:
             adjustment = self._calculate_R_adjustment(arrow)
             self._apply_adjustment(arrow, adjustment)
 
     ### ADJUSTMENT CALCULATIONS ###
     def _calculate_GH_adjustment(self, arrow: Arrow) -> QPointF:
-        distance = 105 if arrow.color == Color.RED else 50
+        distance = 105 if arrow.color == RED else 50
         return self.calculate_adjustment(arrow.location, distance)
 
     def _calculate_I_adjustment(self, arrow: Arrow, motion_type: MotionType) -> QPointF:
@@ -158,12 +158,12 @@ class ArrowPositioner:
         return self.calculate_adjustment(arrow.location, distance)
 
     def _calculate_P_adjustment(self, arrow: Arrow) -> QPointF:
-        distance = 90 if arrow.color == Color.RED else 35
+        distance = 90 if arrow.color == RED else 35
         return self.calculate_adjustment(arrow.location, distance)
 
     def _calculate_Q_adjustment(self, arrow: Arrow) -> QPointF:
         adjustment_dict = {
-            Color.RED: {
+            RED: {
                 RotationDirection.CLOCKWISE: {
                     NORTHEAST: QPointF(70, -110),
                     SOUTHEAST: QPointF(110, 70),
@@ -177,7 +177,7 @@ class ArrowPositioner:
                     NORTHWEST: QPointF(-70, -110),
                 },
             },
-            Color.BLUE: {
+            BLUE: {
                 RotationDirection.CLOCKWISE: {
                     NORTHEAST: QPointF(30, -30),
                     SOUTHEAST: QPointF(30, 30),

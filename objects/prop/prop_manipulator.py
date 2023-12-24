@@ -1,4 +1,5 @@
 from Enums import Axis
+from constants.string_constants import HORIZONTAL, VERTICAL
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
 )
@@ -12,10 +13,10 @@ class PropManipulator:
         self.prop = prop
 
     def swap_axis(self) -> None:
-        if self.prop.axis == Axis.VERTICAL:
-            self.prop.axis = Axis.HORIZONTAL
+        if self.prop.axis == VERTICAL:
+            self.prop.axis = HORIZONTAL
         else:
-            self.prop.axis = Axis.VERTICAL
+            self.prop.axis = VERTICAL
         self.prop.update_rotation()
 
     def swap_layer(self) -> None:

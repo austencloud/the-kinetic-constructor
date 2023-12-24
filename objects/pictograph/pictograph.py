@@ -120,7 +120,7 @@ class Pictograph(QGraphicsScene):
         return view
 
     def set_letter_renderer(self, letter: str) -> None:
-        letter_type = self.get_current_letter_type()
+        letter_type = self.get_letter_type(letter)
         svg_path = f"{image_path}letters_trimmed/{letter_type}/{letter}.svg"
         renderer = QSvgRenderer(svg_path)
         if renderer.isValid():
@@ -258,13 +258,11 @@ class Pictograph(QGraphicsScene):
 
         return state_data
 
-    def get_current_letter_type(self) -> Optional[str]:
-        if self.current_letter is not None:
-            for letter_type, letters in LetterNumberType:
-                if self.current_letter in letters:
-                    return letter_type
-        else:
-            return None
+    def get_letter_type(self, letter: Letter) -> Optional[str]:
+        for letter_type in LetterNumberType:
+            if letter in letter_type.letters: 
+                return letter_type.description 
+        return None
 
     def get_closest_hand_point(
         self, pos: QPointF
@@ -374,7 +372,7 @@ class Pictograph(QGraphicsScene):
 
     def update_letter(self) -> None:
         if all(motion.motion_type for motion in self.motions.values()):
-            self.current_letter = self.letter_engine.get_current_letter()
+            self.current_letter = self.get_state()[LETTER]
             self.set_letter_renderer(self.current_letter)
             self.letter_item.position_letter_item(self.letter_item)
         else:

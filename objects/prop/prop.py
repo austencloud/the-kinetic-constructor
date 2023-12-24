@@ -110,13 +110,9 @@ class Prop(GraphicalObject):
 
     def get_axis_from_orientation(self, orientation, location) -> None:
         if orientation in [IN, OUT]:
-            axis: Axis = (
-                Axis.VERTICAL if location in [NORTH, SOUTH] else Axis.HORIZONTAL
-            )
+            axis: Axis = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
         elif orientation in [CLOCK, COUNTER]:
-            axis: Axis = (
-                Axis.HORIZONTAL if location in [NORTH, SOUTH] else Axis.VERTICAL
-            )
+            axis: Axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
         return axis
 
     def swap_orientation(self, orientation) -> None:
@@ -165,7 +161,8 @@ class Prop(GraphicalObject):
         return rotation_angle
 
     def get_attributes(self) -> PropAttributesDicts:
-        return {attr: getattr(self, attr) for attr in PropAttribute}
+        prop_attributes = [attr.value for attr in PropAttribute]
+        return {attr: getattr(self, attr) for attr in prop_attributes}
 
     def update_rotation(self) -> None:
         rotation_angle = self.get_rotation_angle()

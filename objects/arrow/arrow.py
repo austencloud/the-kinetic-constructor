@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from Enums import *
 from constants.string_constants import (
     ANTI,
+    AXIS,
     CLOCKWISE,
     COLOR,
     COUNTER_CLOCKWISE,
@@ -12,7 +13,10 @@ from constants.string_constants import (
     MOTION_TYPE,
     NORTHEAST,
     NORTHWEST,
+    ORIENTATION,
     PRO,
+    PROP,
+    PROP_TYPE,
     ROTATION_DIRECTION,
     SOUTHEAST,
     SOUTHWEST,
@@ -307,7 +311,8 @@ class Arrow(GraphicalObject):
             }.get(rotation_direction, {})
 
     def get_attributes(self) -> ArrowAttributesDicts:
-        return {attr.value: getattr(self, attr.value) for attr in ArrowAttribute}
+        arrow_attributes = [COLOR, LOCATION, MOTION_TYPE, TURNS]
+        return {attr: getattr(self, attr) for attr in arrow_attributes}
 
     def get_svg_file(self, motion_type: MotionType, turns: Turns) -> str:
         svg_file = f"{image_path}arrows/{self.pictograph.main_widget.grid_mode}/{motion_type}/{motion_type}_{float(turns)}.svg"

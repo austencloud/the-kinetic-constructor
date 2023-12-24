@@ -45,8 +45,8 @@ def get_specific_start_end_positions(
         )
 
         specific_positions: SpecificStartEndPositionsDicts = {
-            PictographAttribute.START_POSITION: positions_map.get(start_locations),
-            PictographAttribute.END_POSITION: positions_map.get(end_locations),
+            START_POSITION: positions_map.get(start_locations),
+            END_POSITION: positions_map.get(end_locations),
         }
 
         return specific_positions

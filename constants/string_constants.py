@@ -1,6 +1,6 @@
 import os
 from pickle import FLOAT
-from tkinter import END
+from tkinter import END, VERTICAL
 
 current_script_path = os.path.abspath(__file__).replace("\\", "/")
 current_script_path = current_script_path[0].upper() + current_script_path[1:]
@@ -18,6 +18,9 @@ NORTHEAST = "ne"
 SOUTHEAST = "se"
 SOUTHWEST = "sw"
 NORTHWEST = "nw"
+
+VERTICAL = "vertical"
+HORIZONTAL = "horizontal"
 
 CLOCKWISE = "cw"
 COUNTER_CLOCKWISE = "ccw"
@@ -62,7 +65,7 @@ ROTATION_DIRECTION = "rotation_direction"
 ORIENTATION = "orientation"
 START_ORIENTATION = "start_orientation"
 END_ORIENTATION = "end_orientation"
-
+AXIS = "axis"
 START_LOCATION = "start_location"
 END_LOCATION = "end_location"
 
