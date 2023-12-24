@@ -53,28 +53,13 @@ class Option(Pictograph):
         self.imageLoaded = False
         self.pixmapItem = None  # Store the pixmap item
         self.pd_row_data = None  # Store the row data from the pandas dataframe
+        
 
     ### SETUP ###
 
-    def _add_motion(self, motion_dict: Dict) -> None:
-        arrow = self._create_arrow(motion_dict)
-        prop = self._create_prop(motion_dict)
-        self._setup_motion_relations(arrow, prop)
 
-    def _setup_motion_relations(self, arrow: Arrow, prop: Prop) -> None:
-        motion = self.motions[arrow.color]
-        arrow.motion, prop.motion = motion, motion
-        arrow.ghost = self.ghost_arrows[arrow.color]
-        arrow.ghost.motion = motion
 
-    def _finalize_motion_setup(self, pd_row_data) -> None:
-        self.pd_row_data = pd_row_data
 
-        red_motion_dict = self._create_motion_dict_from_pd_row_data(pd_row_data, BLUE)
-        blue_motion_dict = self._create_motion_dict_from_pd_row_data(pd_row_data, RED)
-
-        self._add_motion(red_motion_dict)
-        self._add_motion(blue_motion_dict)
 
     ### IMAGE LOADING ###
 
@@ -230,50 +215,8 @@ class Option(Pictograph):
 
     ### CREATE ###
 
-    def _create_motion_dict_from_pd_row_data(
-        self, pd_row_data: pd.Series, color: str
-    ) -> Dict:
-        if color is RED:
-            side = "right"
-        elif color is BLUE:
-            side = "left"
 
-        return {
-            "color": color,
-            "motion_type": pd_row_data[f"{color}_motion_type"],
-            "rotation_direction": pd_row_data[f"{color}_rotation_direction"],
-            "start_location": pd_row_data[f"{color}_start_location"],
-            "end_location": pd_row_data[f"{color}_end_location"],
-            "turns": self.option_picker_scroll.option_picker_tab.filter_frame.filters[
-                f"{side}_turns"
-            ],
-            "start_orientation": pd_row_data[f"{color}_start_orientation"],
-        }
 
-    def _create_arrow(self, motion_dict: Dict) -> Arrow:
-        arrow_dict = {
-            COLOR: motion_dict[COLOR],
-            MOTION_TYPE: motion_dict[MOTION_TYPE],
-            TURNS: motion_dict[TURNS],
-        }
-        arrow = Arrow(self, arrow_dict, self.motions[motion_dict[COLOR]])
-        self.arrows[arrow.color] = arrow
-        arrow.motion = self.motions[arrow.color]
-        self.addItem(arrow)
-        return arrow
-
-    def _create_prop(self, motion_dict: Dict) -> Prop:
-        prop_dict = {
-            COLOR: motion_dict[COLOR],
-            PROP_TYPE: self.main_widget.prop_type,
-            LOCATION: motion_dict[END_LOCATION],
-            ORIENTATION: IN,
-        }
-        prop = Prop(self, prop_dict, self.motions[motion_dict[COLOR]])
-        self.props[prop.color] = prop
-        prop.motion = self.motions[prop.color]
-        self.addItem(prop)
-        return prop
 
     ### EVENTS ###
 

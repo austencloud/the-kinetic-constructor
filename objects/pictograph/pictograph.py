@@ -1,7 +1,8 @@
-from typing import Dict, Literal
+from typing import Dict, Literal, Union
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView
+import pandas as pd
 
 from data.letter_engine_data import letter_types
 from data.positions_map import get_specific_start_end_positions
@@ -15,12 +16,18 @@ from constants.string_constants import (
     ARROW,
     BLUE,
     BOX,
+    COLOR,
     DIAMOND,
+    END_LOCATION,
     END_POSITION,
+    IN,
     LETTER_BTN_ICON_DIR,
     LETTERS_TRIMMED_SVG_DIR,
+    LOCATION,
     MOTION_TYPE,
+    ORIENTATION,
     PROP,
+    PROP_TYPE,
     RED,
     STAFF,
     START_POSITION,
@@ -52,6 +59,8 @@ from objects.pictograph.position_engines.prop_positioner import PropPositioner
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
+    from widgets.option_picker_tab.option import Option
+    from widgets.image_generator_tab.ig_pictograph import IGPictograph
 
 from objects.letter_item import LetterItem
 
@@ -148,6 +157,73 @@ class Pictograph(QGraphicsScene):
         self.arrow_positioner = ArrowPositioner(self)
         self.prop_positioner = PropPositioner(self)
         self.letter_engine = LetterEngine(self)
+
+    def _finalize_motion_setup(self, pd_row_data, filters) -> None:
+        self.pd_row_data = pd_row_data
+
+        red_motion_dict = self._create_motion_dict_from_pd_row_data(
+            pd_row_data, BLUE, filters
+        )
+        blue_motion_dict = self._create_motion_dict_from_pd_row_data(
+            pd_row_data, RED, filters
+        )
+
+        self._add_motion(red_motion_dict)
+        self._add_motion(blue_motion_dict)
+
+    def _add_motion(self, motion_dict: Dict) -> None:
+        arrow = self._create_arrow(motion_dict)
+        prop = self._create_prop(motion_dict)
+        motion = self.motions[arrow.color]
+        arrow.motion, prop.motion = motion, motion
+        arrow.ghost = self.ghost_arrows[arrow.color]
+        arrow.ghost.motion = motion
+
+    def _create_prop(self, motion_dict: Dict) -> Prop:
+        prop_dict = {
+            COLOR: motion_dict[COLOR],
+            PROP_TYPE: self.main_widget.prop_type,
+            LOCATION: motion_dict[END_LOCATION],
+            ORIENTATION: IN,
+        }
+        prop = Prop(self, prop_dict, self.motions[motion_dict[COLOR]])
+        self.props[prop.color] = prop
+        prop.motion = self.motions[prop.color]
+        self.addItem(prop)
+        return prop
+
+    def _create_arrow(self, motion_dict: Dict) -> Arrow:
+        arrow_dict = {
+            COLOR: motion_dict[COLOR],
+            MOTION_TYPE: motion_dict[MOTION_TYPE],
+            TURNS: motion_dict[TURNS],
+        }
+        arrow = Arrow(self, arrow_dict, self.motions[motion_dict[COLOR]])
+        self.arrows[arrow.color] = arrow
+        arrow.motion = self.motions[arrow.color]
+        self.addItem(arrow)
+        return arrow
+
+    def _create_motion_dict_from_pd_row_data(
+        self: Union["Option", "IGPictograph"],
+        pd_row_data: pd.Series,
+        color: str,
+        filters,
+    ) -> Dict:
+        if color is RED:
+            side = "right"
+        elif color is BLUE:
+            side = "left"
+
+        return {
+            "color": color,
+            "motion_type": pd_row_data[f"{color}_motion_type"],
+            "rotation_direction": pd_row_data[f"{color}_rotation_direction"],
+            "start_location": pd_row_data[f"{color}_start_location"],
+            "end_location": pd_row_data[f"{color}_end_location"],
+            "turns": filters[f"{side}_turns"],
+            "start_orientation": pd_row_data[f"{color}_start_orientation"],
+        }
 
     ### EVENT HANDLERS ###
 

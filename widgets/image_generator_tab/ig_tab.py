@@ -29,6 +29,7 @@ from constants.string_constants import (
     COLOR,
     MOTION_TYPE,
     RED,
+    START_ORIENTATION,
     TURNS,
     END_LOCATION,
     IN,
@@ -299,147 +300,85 @@ class IGTab(QWidget):
 
     ### OPTION CREATION ###
 
-    def _create_ig_pictograph_from_pictograph_data(
-        self, pictograph_data
-    ) -> IGPictograph:
+    def _create_ig_pictograph(self, pd_row_data: pd.Series):
+        letter = pd_row_data["letter"]
         ig_pictograph = IGPictograph(self.main_widget, self.ig_scroll_area)
         ig_pictograph.setSceneRect(0, 0, 950, 950)
 
-        motion_dicts = [
-            self._create_motion_dict(pictograph_data, color)
-            for color in ["blue", "red"]
-        ]
+        ig_pictograph._finalize_motion_setup(pd_row_data, self.filter_frame.filters)
 
-        for motion_dict in motion_dicts:
-            self._add_motion_to_ig_pictograph(ig_pictograph, motion_dict)
-            self._finalize_ig_pictograph_setup(ig_pictograph, motion_dict)
-
-        ig_pictograph.update_pictograph()
-        ig_pictograph.view.resize_ig_pictograph()
-
-        return ig_pictograph
-
-    def _create_arrow(self, ig_pictograph: "IGPictograph", motion_dict: Dict) -> Arrow:
-        arrow_dict = {
-            COLOR: motion_dict[COLOR],
-            MOTION_TYPE: motion_dict[MOTION_TYPE],
-            TURNS: motion_dict[TURNS],
-        }
-        arrow = Arrow(
-            ig_pictograph, arrow_dict, ig_pictograph.motions[motion_dict[COLOR]]
+        blue_motion_dict = ig_pictograph._create_motion_dict_from_pd_row_data(
+            pd_row_data, "blue", self.filter_frame.filters
         )
-        ig_pictograph.arrows[arrow.color] = arrow
-        arrow.motion = ig_pictograph.motions[arrow.color]
-        ig_pictograph.addItem(arrow)
-        return arrow
+        red_motion_dict = ig_pictograph._create_motion_dict_from_pd_row_data(
+            pd_row_data, "red", self.filter_frame.filters
+        )
+        # if either the blue_motion_dict or red_motion_dict have a start_orientation that ends in "_or", cut that part off.
+        if blue_motion_dict[START_ORIENTATION].endswith("_or"):
+            blue_motion_dict[START_ORIENTATION] = blue_motion_dict[START_ORIENTATION][
+                :-3
+            ]
+        if red_motion_dict[START_ORIENTATION].endswith("_or"):
+            red_motion_dict[START_ORIENTATION] = red_motion_dict[START_ORIENTATION][:-3]
 
-    def _create_prop(self, ig_pictograph: "IGPictograph", motion_dict: Dict) -> Prop:
-        prop_dict = {
-            COLOR: motion_dict[COLOR],
-            PROP_TYPE: self.main_widget.prop_type,
-            LOCATION: motion_dict[END_LOCATION],
-            ORIENTATION: IN,
-        }
-        prop = Prop(ig_pictograph, prop_dict, ig_pictograph.motions[motion_dict[COLOR]])
-        ig_pictograph.props[prop.color] = prop
-        prop.motion = ig_pictograph.motions[prop.color]
-        ig_pictograph.addItem(prop)
-        return prop
+        ig_pictograph.props[RED].ghost = ig_pictograph.ghost_props[RED]
+        ig_pictograph.props[BLUE].ghost = ig_pictograph.ghost_props[BLUE]
+        ig_pictograph.motions[RED].prop = ig_pictograph.props[RED]
+        ig_pictograph.motions[BLUE].prop = ig_pictograph.props[BLUE]
 
-    def _finalize_ig_pictograph_setup(
-        self, ig_pictograph: "IGPictograph", motion_dict
-    ) -> None:
-        for motion in ig_pictograph.motions.values():
-            if motion.color == motion_dict[COLOR]:
-                motion.setup_attributes(motion_dict)
-                motion.arrow = ig_pictograph.arrows[motion.color]
-                motion.prop = ig_pictograph.props[motion.color]
-                motion.assign_location_to_arrow()
-                motion.arrow.set_is_svg_mirrored_from_attributes()
-                motion.arrow.update_mirror()
-                motion.arrow.update_appearance()
-                motion.prop.update_appearance()
-                motion.arrow.motion = motion
-                motion.prop.motion = motion
-                motion.arrow.ghost = ig_pictograph.ghost_arrows[motion.color]
-                motion.arrow.ghost.motion = motion
-                motion.arrow.ghost.set_is_svg_mirrored_from_attributes()
-                motion.arrow.ghost.update_appearance()
-                motion.arrow.ghost.update_mirror()
-                motion.update_prop_orientation()
+        ig_pictograph.motions[RED].setup_attributes(red_motion_dict)
+        ig_pictograph.motions[BLUE].setup_attributes(blue_motion_dict)
 
-        if motion_dict[COLOR] == BLUE:
-            ig_pictograph.motions[BLUE].setup_attributes(motion_dict)
-        elif motion_dict[COLOR] == RED:
-            ig_pictograph.motions[RED].setup_attributes(motion_dict)
-
-        ig_pictograph.motions[BLUE].end_orientation = ig_pictograph.motions[
-            BLUE
-        ].get_end_orientation()
-        ig_pictograph.motions[RED].end_orientation = ig_pictograph.motions[
+        ig_pictograph.current_letter = letter
+        ig_pictograph.start_position = pd_row_data.name[0]
+        ig_pictograph.end_position = pd_row_data.name[1]
+        ig_pictograph.motions[RED].arrow = ig_pictograph.arrows[RED]
+        ig_pictograph.motions[BLUE].arrow = ig_pictograph.arrows[BLUE]
+        ig_pictograph.motions[RED].prop = ig_pictograph.props[RED]
+        ig_pictograph.motions[BLUE].prop = ig_pictograph.props[BLUE]
+        ig_pictograph.motions[RED].arrow.location = ig_pictograph.motions[
             RED
-        ].get_end_orientation()
+        ].get_arrow_location(
+            ig_pictograph.motions[RED].start_location,
+            ig_pictograph.motions[RED].end_location,
+        )
+        ig_pictograph.motions[BLUE].arrow.location = ig_pictograph.motions[
+            BLUE
+        ].get_arrow_location(
+            ig_pictograph.motions[BLUE].start_location,
+            ig_pictograph.motions[BLUE].end_location,
+        )
+
+        ig_pictograph.arrows[RED].motion_type = pd_row_data["red_motion_type"]
+        ig_pictograph.arrows[BLUE].motion_type = pd_row_data["blue_motion_type"]
+        ig_pictograph.motions[RED].motion_type = pd_row_data["red_motion_type"]
+        ig_pictograph.motions[BLUE].motion_type = pd_row_data["blue_motion_type"]
 
         ig_pictograph.arrows[RED].motion = ig_pictograph.motions[RED]
         ig_pictograph.arrows[BLUE].motion = ig_pictograph.motions[BLUE]
 
-    @staticmethod
-    def _setup_motion_relations(
-        ig_pictograph: IGPictograph, arrow: Arrow, prop: Prop
-    ) -> None:
+        ig_pictograph.motions[RED].end_orientation = ig_pictograph.motions[
+            RED
+        ].get_end_orientation()
+        ig_pictograph.motions[BLUE].end_orientation = ig_pictograph.motions[
+            BLUE
+        ].get_end_orientation()
+
+        ig_pictograph.motions[RED].update_prop_orientation()
+        ig_pictograph.motions[BLUE].update_prop_orientation()
+
+        for arrow in ig_pictograph.arrows.values():
+            arrow.set_is_svg_mirrored_from_attributes()
+            arrow.update_mirror()
+            arrow.update_appearance()
+
+        for prop in ig_pictograph.props.values():
+            prop.update_rotation()
+            prop.update_appearance()
+
         motion = ig_pictograph.motions[arrow.color]
         arrow.motion, prop.motion = motion, motion
         arrow.ghost = ig_pictograph.ghost_arrows[arrow.color]
         arrow.ghost.motion = motion
-
-    def _add_motion_to_ig_pictograph(
-        self, ig_pictograph: "IGPictograph", motion_dict: Dict
-    ) -> None:
-        arrow = self._create_arrow(ig_pictograph, motion_dict)
-        prop = self._create_prop(ig_pictograph, motion_dict)
-        self._setup_motion_relations(ig_pictograph, arrow, prop)
-
-    def _create_motion_dict(self, row_data, color: str) -> Dict:
-        return {
-            "color": color,
-            "motion_type": row_data[f"{color}_motion_type"],
-            "rotation_direction": row_data[f"{color}_rotation_direction"],
-            "start_location": row_data[f"{color}_start_location"],
-            "end_location": row_data[f"{color}_end_location"],
-            "turns": 0,
-            "start_orientation": row_data[f"{color}_start_orientation"],
-        }
-
-    ### IMAGE PATH ###
-
-    def get_image_path(self, pd_row_data: pd.Series) -> str:
-        prop_type = (
-            self.main_pictograph.main_widget.prop_type
-        )  # Get the current prop type
-        image_dir = os.path.join(
-            "resources", "images", "pictographs", pd_row_data["letter"], prop_type
-        )
-        letter = pd_row_data["letter"]
-        blue_turns = self.option_picker_tab.filter_frame.filters["left_turns"]
-        red_turns = self.option_picker_tab.filter_frame.filters["right_turns"]
-
-        blue_end_orientation = option.motions[BLUE].get_end_orientation()
-        red_end_orientation = option.motions[RED].get_end_orientation()
-
-        image_name = (
-            f"{letter}_"
-            f"({pd_row_data.name[0]}→{pd_row_data.name[1]})_"
-            f"({pd_row_data['blue_start_location']}→{pd_row_data['blue_end_location']}_"
-            f"{blue_turns}_"
-            f"{pd_row_data['blue_start_orientation']}_{blue_end_orientation})_"
-            f"({pd_row_data['red_start_location']}→{pd_row_data['red_end_location']}_"
-            f"{red_turns}_"
-            f"{pd_row_data['red_start_orientation']}_{red_end_orientation})_"
-            f"{prop_type}.png "
-        )
-
-    ### OPTIONAL ###
-
-    def clear_images(self) -> None:
-        # Optional: Clear images if necessary before generation
-        pass
+        ig_pictograph.update_pictograph()
+        return ig_pictograph

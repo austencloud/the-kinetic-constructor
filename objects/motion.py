@@ -30,6 +30,8 @@ class Motion:
         self.scene = scene
         self.motion_dict = motion_dict
         self.initialize_attributes()
+        self.color: Colors = motion_dict[COLOR]
+
         if not blank:
             self.setup_attributes(motion_dict)
 
@@ -58,7 +60,6 @@ class Motion:
             self.arrow: Arrow = None
             self.prop: Prop = None
 
-        self.color: Colors = motion_dict[COLOR]
         self.motion_type: MotionTypes = motion_dict[MOTION_TYPE]
         self.turns: Turns = motion_dict[TURNS]
         self.rotation_direction: RotationDirections = motion_dict[ROTATION_DIRECTION]

@@ -45,17 +45,6 @@ class OptionPickerScrollArea(QScrollArea):
         self.container.setContentsMargins(10, 10, 10, 10)
         self.setWidget(self.container)
 
-    @staticmethod
-    def _setup_motion_relations(option: "Option") -> None:
-        for color in [RED, BLUE]:
-            option.motions[color].arrow = option.arrows[color]
-            option.motions[color].prop = option.props[color]
-            option.motions[color].arrow.location = option.motions[
-                color
-            ].get_arrow_location(
-                option.motions[color].start_location, option.motions[color].end_location
-            )
-
     def _setup_scroll_bars(self) -> None:
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
@@ -183,7 +172,7 @@ class OptionPickerScrollArea(QScrollArea):
         option = Option(self.main_widget, self)
         option.setSceneRect(0, 0, 950, 950)
 
-        option._finalize_motion_setup(pd_row_data)
+        option._finalize_motion_setup(pd_row_data, filters)
         self.load_image_if_visible(option)
 
         blue_motion_dict = self._create_motion_dict_from_filters(
@@ -250,7 +239,14 @@ class OptionPickerScrollArea(QScrollArea):
             prop.update_rotation()
             prop.update_appearance()
 
-        self._setup_motion_relations(option)
+        for color in [RED, BLUE]:
+            option.motions[color].arrow = option.arrows[color]
+            option.motions[color].prop = option.props[color]
+            option.motions[color].arrow.location = option.motions[
+                color
+            ].get_arrow_location(
+                option.motions[color].start_location, option.motions[color].end_location
+            )
         option.update_pictograph()
         return option
 

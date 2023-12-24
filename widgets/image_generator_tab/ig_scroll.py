@@ -52,8 +52,8 @@ class IGScroll(QScrollArea):
         ]
 
         for i, (index, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
-            ig_pictograph: IGPictograph = (
-                self.ig_tab._create_ig_pictograph_from_pictograph_data(pictograph_data)
+            ig_pictograph: IGPictograph = self.ig_tab._create_ig_pictograph(
+                pictograph_data
             )
             # Add the pictograph view to the layout
             row = i // self.COLUMN_COUNT
