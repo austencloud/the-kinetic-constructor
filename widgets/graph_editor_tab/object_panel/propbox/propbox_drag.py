@@ -57,7 +57,6 @@ class PropBoxDrag(ObjectBoxDrag):
         self.color: Colors = target_prop.color
         self.prop_type: PropTypes = target_prop.prop_type
         self.location: Locations = target_prop.location
-        self.layer: Layers = target_prop.layer
         self.orientation: Orientations = target_prop.orientation
 
         self.ghost = self.pictograph.ghost_props[self.color]
@@ -149,7 +148,6 @@ class PropBoxDrag(ObjectBoxDrag):
         self.ghost.color = self.color
         self.ghost.location = new_location
         self.ghost.orientation = self.orientation
-        self.ghost.layer = self.layer
         self.ghost.motion.prop = self.ghost
         self.ghost.motion.arrow.location = self.location
         self.ghost.motion.start_location = self.location
@@ -260,15 +258,14 @@ class PropBoxDrag(ObjectBoxDrag):
 
         """
         angle_map: Dict[
-            Tuple[Layers, Orientations], Dict[Locations, RotationAngles]
+            Orientations, Dict[Locations, RotationAngles]
         ] = {
-            (1, IN): {NORTH: 90, SOUTH: 270, WEST: 0, EAST: 180},
-            (1, OUT): {NORTH: 270, SOUTH: 90, WEST: 180, EAST: 0},
-            (2, CLOCKWISE): {NORTH: 0, SOUTH: 180, WEST: 270, EAST: 90},
-            (2, COUNTER_CLOCKWISE): {NORTH: 180, SOUTH: 0, WEST: 90, EAST: 270},
+            OUT: {NORTH: 270, SOUTH: 90, WEST: 180, EAST: 0},
+            CLOCKWISE: {NORTH: 0, SOUTH: 180, WEST: 270, EAST: 90},
+            COUNTER_CLOCKWISE: {NORTH: 180, SOUTH: 0, WEST: 90, EAST: 270},
+            IN: {NORTH: 90, SOUTH: 270, WEST: 0, EAST: 180},
         }
-        key = (prop.layer, prop.orientation)
-        return angle_map.get(key, {}).get(prop.location, 0)
+        return angle_map.get(prop.orientation).get(prop.location)
 
     def _update_static_arrow(self) -> None:
         self.arrow.color = self.color

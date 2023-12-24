@@ -46,7 +46,7 @@ class PictographInit:
                 START_ORIENTATION: None,
             }
 
-            motion = Motion(self.pictograph, motion_dict, blank=True)
+            motion = Motion(self.pictograph, motion_dict)
             motions[color] = motion
         return motions
 

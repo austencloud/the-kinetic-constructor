@@ -100,13 +100,36 @@ class Option(Pictograph):
             self.imageLoaded = True
 
     def render_and_cache_image(self) -> None:
-        # Render the scene into an image and store it in the cache
+        # Generate the image path
         image_path = self.option_picker_scroll.generate_image_path_for_option(self)
-        pixmap = self.render_scene_to_pixmap()
-        self.option_picker_scroll.cache_pixmap(image_path, pixmap)
-        self.pixmapItem = QGraphicsPixmapItem(pixmap)
-        self.addItem(self.pixmapItem)
+
+        # Check if the image already exists in the cache or on the disk
+        if image_path in self.option_picker_scroll.image_cache or os.path.exists(image_path):
+            # If the image is already cached or exists, load it
+            print(f"Image already exists, using cached image for {image_path}")
+            pixmap = QPixmap(image_path)
+        else:
+            # If the image doesn't exist, render the scene to a pixmap
+            print(f"Rendering and saving image for {image_path}")
+            pixmap = self.render_scene_to_pixmap()
+
+            # Cache the pixmap
+            self.option_picker_scroll.cache_pixmap(image_path, pixmap)
+
+            # Save the image if it's not already saved
+            image = QImage(pixmap.toImage())
+            if not os.path.exists(image_path):
+                image.save(image_path, "PNG")
+
+        # Use the pixmap for the QGraphicsPixmapItem
+        if not self.pixmapItem:
+            self.pixmapItem = QGraphicsPixmapItem(pixmap)
+            self.addItem(self.pixmapItem)
+        else:
+            self.pixmapItem.setPixmap(pixmap)
+
         self.imageLoaded = True
+
 
     def render_scene_to_pixmap(self) -> None:
         self.update_pictograph()

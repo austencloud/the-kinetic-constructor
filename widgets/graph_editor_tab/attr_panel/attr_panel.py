@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import (
     QFrame,
 )
 from constants.string_constants import RED, BLUE
+from objects.motion import Motion
 from utilities.TypeChecking.TypeChecking import Colors
 from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
 from typing import TYPE_CHECKING
@@ -30,17 +31,16 @@ class AttrPanel(QFrame):
         self.layout.addWidget(self.red_attr_box)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-    def update_attr_panel(self, motion_color: Colors) -> None:
-        motion = self.graph_editor.main_pictograph.motions[motion_color]
+    def update_attr_panel(self, motion: Motion) -> None:
         if motion.motion_type:
-            if motion_color == BLUE:
+            if motion.color == BLUE:
                 self.blue_attr_box.update_attr_box(motion)
-            elif motion_color == RED:
+            elif motion.color == RED:
                 self.red_attr_box.update_attr_box(motion)
         else:
-            if motion_color == BLUE:
+            if motion.color == BLUE:
                 self.blue_attr_box.clear_attr_box()
-            elif motion_color == RED:
+            elif motion.color == RED:
                 self.red_attr_box.clear_attr_box()
 
     def clear_all_attr_boxes(self) -> None:

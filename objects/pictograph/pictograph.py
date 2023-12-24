@@ -98,6 +98,7 @@ class Pictograph(QGraphicsScene):
             Locations, Tuple[int, int, int, int]
         ] = self.initializer.init_locations(self.grid)
 
+        self.motions: Dict[Colors, Motion] = self.initializer.init_motions()
         self.arrows: Dict[Colors, Arrow] = self.initializer.init_arrows()
         self.props: Dict[Colors, Prop] = self.initializer.init_props(
             self.main_widget.prop_type
@@ -106,8 +107,6 @@ class Pictograph(QGraphicsScene):
         self.view = self.init_view(self.graph_type)
 
         self.letter_item: LetterItem = self.initializer.init_letter_item()
-
-        self.motions: Dict[Colors, Motion] = self.initializer.init_motions()
 
         self.ghost_arrows: Dict[
             Colors, GhostArrow
@@ -312,14 +311,15 @@ class Pictograph(QGraphicsScene):
     def update_attr_panel(self) -> None:
         for motion in self.motions.values():
             self.main_widget.graph_editor_tab.graph_editor.attr_panel.update_attr_panel(
-                motion.color
+                motion
             )
 
     def update_pictograph(self) -> None:
         self.update_letter()
         self.update_arrows()
         self.update_props()
-        self.update_attr_panel()
+        if self.graph_type == "main":
+            self.update_attr_panel()
 
     def update_arrows(self) -> None:
         self.arrow_positioner.update_arrow_positions()
