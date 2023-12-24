@@ -41,9 +41,9 @@ class ArrowPositioner:
         reposition_method = self._get_reposition_method(current_letter)
         reposition_method()
 
-        if self.pictograph.main_widget.prop_type == PropType.TRIAD:
+        if self.pictograph.main_widget.prop_type == TRIAD:
             self.triad_arrow_positioner._adjust_arrows_for_triads(current_letter)
-        elif self.pictograph.main_widget.prop_type == PropType.STAFF:
+        elif self.pictograph.main_widget.prop_type == STAFF:
             self.staff_arrow_positioner._adjust_arrows_for_staffs(current_letter)
 
     def _calculate_adjustment_tuple(self, location: str, distance: int) -> QPointF:

@@ -12,6 +12,7 @@ from Enums import (
     Orientation,
     RadialOrientation,
 )
+from constants.string_constants import ANTI, BLUE, CLOCK, COUNTER, EAST, IN, NORTH, NORTHEAST, NORTHWEST, OUT, PRO, RED, SOUTH, SOUTHEAST, SOUTHWEST, WEST
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph

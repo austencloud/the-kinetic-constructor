@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     )
 from PyQt6.QtCore import QPointF
 from objects.arrow.arrow import Arrow
-
+from constants.string_constants import ANTI, BLUE, IN, OUT, RED
 
 class TriadArrowPositioner:
     def __init__(
