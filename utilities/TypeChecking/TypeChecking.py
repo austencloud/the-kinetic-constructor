@@ -3,221 +3,327 @@ from .Letters import *
 from .SpecificPositions import SpecificPositions
 from typing import Literal
 from constants.string_constants import *
-
-Colors = Literal["red", "blue"]
-MotionTypes = Literal["pro", "anti", "dash", "static"]
-Locations = Literal["n", "e", "s", "w", "ne", "se", "sw", "nw"]
-RotationDirections = Literal["cw", "ccw"]
-Turns = float | Literal["fl", "0", "0.5", "1", "1.5", "2", "2.5", "3"]
-RadialOrientations = Literal["in", "out"]
-AntiradialOrientations = Literal["cw", "ccw"]
+from enum import Enum
 
 
-### STAFF ATTRIBUTES ###
+# Colors
+class Color(Enum):
+    BLUE = "blue"
+    RED = "red"
 
-PropAttributes = Literal[
-    "color", "prop_type", "location", "layer", "axis", "orientation"
+
+# Hexadecimal Colors
+class HexColor(Enum):
+    RED = "#ED1C24"
+    BLUE = "#2E3192"
+
+
+# Directions
+class Direction(Enum):
+    LEFT = "left"
+    RIGHT = "right"
+    UP = "up"
+    DOWN = "down"
+
+
+# Motion Types
+class MotionType(Enum):
+    PRO = "pro"
+    ANTI = "anti"
+    FLOAT = "float"
+    DASH = "dash"
+    STATIC = "static"
+
+
+# Grid Modes
+class GridMode(Enum):
+    DIAMOND = "diamond"
+    BOX = "box"
+
+
+# Locations
+class Location(Enum):
+    NORTH = "n"
+    SOUTH = "s"
+    EAST = "e"
+    WEST = "w"
+    NORTHWEST = "nw"
+    NORTHEAST = "ne"
+    SOUTHWEST = "sw"
+    SOUTHEAST = "se"
+
+
+# Rotation Directions
+class RotationDirection(Enum):
+    CLOCKWISE = "cw"
+    COUNTER_CLOCKWISE = "ccw"
+
+
+# Orientations
+class Orientation(Enum):
+    IN = "in"
+    OUT = "out"
+    CLOCK = "clock"
+    COUNTER = "counter"
+    CLOCK_IN = "clock-in"
+    CLOCK_OUT = "clock-out"
+    COUNTER_IN = "counter-in"
+    COUNTER_OUT = "counter-out"
+
+
+class OrientationType(Enum):
+    RADIAL = "radial"
+    ANTIRADIAL = "antiradial"
+
+
+# Axes
+class Axis(Enum):
+    HORIZONTAL = "horizontal"
+    VERTICAL = "vertical"
+
+
+# Prop Types
+class PropType(Enum):
+    STAFF = "staff"
+    BIGSTAFF = "bigstaff"
+    CLUB = "club"
+    BUUGENG = "buugeng"
+    BIGBUUGENG = "bigbuugeng"
+    FRACTALGENG = "fractalgeng"
+    FAN = "fan"
+    BIGFAN = "bigfan"
+    TRIAD = "triad"
+    BIGTRIAD = "bigtriad"
+    MINIHOOP = "minihoop"
+    BIGHOOP = "bighoop"
+    DOUBLESTAR = "doublestar"
+    BIGDOUBLESTAR = "bigdoublestar"
+    QUIAD = "quiad"
+    SWORD = "sword"
+    GUITAR = "guitar"
+    UKULELE = "ukulele"
+    CHICKEN = "chicken"
+
+
+class Position(Enum):
+    ALPHA = "alpha"
+    BETA = "beta"
+    GAMMA = "gamma"
+
+
+class SpecificPosition(Enum):
+    ALPHA1 = "alpha1"
+    ALPHA2 = "alpha2"
+    ALPHA3 = "alpha3"
+    ALPHA4 = "alpha4"
+    BETA1 = "beta1"
+    BETA2 = "beta2"
+    BETA3 = "beta3"
+    BETA4 = "beta4"
+    GAMMA1 = "gamma1"
+    GAMMA2 = "gamma2"
+    GAMMA3 = "gamma3"
+    GAMMA4 = "gamma4"
+    GAMMA5 = "gamma5"
+    GAMMA6 = "gamma6"
+    GAMMA7 = "gamma7"
+    GAMMA8 = "gamma8"
+
+
+# Lists of specific Prop Types
+big_unilateral_prop_types = [
+    PropType.BIGHOOP,
+    PropType.BIGFAN,
+    PropType.BIGTRIAD,
+    PropType.GUITAR,
+    PropType.SWORD,
+    PropType.CHICKEN,
 ]
-PropTypes = Literal[
-    "staff",
-    "bigstaff",
-    "buugeng",
-    "bigbuugeng",
-    "fractalgeng",
-    "club",
-    "fan",
-    "bigfan",
-    "minihoop",
-    "triad",
-    "bigtriad",
-    "bighoop",
-    "doublestar",
-    "bigdoublestar",
-    "quiad",
-    "sword",
-    "guitar",
-    "ukulele",
-    "chicken",
-]
-
-big_unilateral_prop_types = [BIGHOOP, BIGFAN, BIGTRIAD, GUITAR, SWORD, CHICKEN]
 small_unilateral_prop_types = [
-    FAN,
-    CLUB,
-    MINIHOOP,
-    TRIAD,
-    UKULELE,
+    PropType.FAN,
+    PropType.CLUB,
+    PropType.MINIHOOP,
+    PropType.TRIAD,
+    PropType.UKULELE,
 ]
-small_bilateral_prop_types = [
-    STAFF,
-    BUUGENG,
-    DOUBLESTAR,
-    QUIAD,
-    FRACTALGENG,
-]
+
 big_bilateral_prop_types = [
-    BIGSTAFF,
-    BIGBUUGENG,
-    BIGDOUBLESTAR,
+    PropType.BIGSTAFF,
+    PropType.BIGBUUGENG,
+    PropType.BIGDOUBLESTAR,
 ]
+
+small_bilateral_prop_types = [
+    PropType.STAFF,
+    PropType.BUUGENG,
+    PropType.DOUBLESTAR,
+    PropType.QUIAD,
+    PropType.FRACTALGENG,
+]
+
 non_strictly_placed_props = [
-    STAFF,
-    FAN,
-    BIGFAN,
-    CLUB,
-    BUUGENG,
-    MINIHOOP,
-    TRIAD,
-    QUIAD,
-    UKULELE,
-    CHICKEN,
-    FRACTALGENG,
+    PropType.STAFF,
+    PropType.FAN,
+    PropType.BIGFAN,
+    PropType.CLUB,
+    PropType.BUUGENG,
+    PropType.MINIHOOP,
+    PropType.TRIAD,
+    PropType.QUIAD,
+    PropType.UKULELE,
+    PropType.CHICKEN,
+    PropType.FRACTALGENG,
 ]
 
 strictly_placed_props = [
-    BIGHOOP,
-    DOUBLESTAR,
-    BIGTRIAD,
-    BIGFAN,
-    BIGBUUGENG,
-    BIGDOUBLESTAR,
-]
-Layers = Literal[1, 2]
-Axes = Literal["vertical", "horizontal"]
-Orientations = Literal[
-    "in",
-    "clock-in",
-    "clock",
-    "clock-out",
-    "out",
-    "counter-out",
-    "counter",
-    "counter-in",
+    PropType.BIGHOOP,
+    PropType.DOUBLESTAR,
+    PropType.BIGTRIAD,
+    PropType.BIGFAN,
+    PropType.BIGBUUGENG,
+    PropType.BIGDOUBLESTAR,
 ]
 
-OrientationCombinations = Literal[
-    "in_vs_in",
-    "in_vs_clock-in",
-    "in_vs_clock",
-    "in_vs_clock-out",
-    "in_vs_out",
-    "in_vs_counter-out",
-    "in_vs_counter",
-    "in_vs_counter-in",
-    "clock-in_vs_clock-in",
-    "clock-in_vs_clock",
-    "clock-in_vs_clock-out",
-    "clock-in_vs_out",
-    "clock-in_vs_counter-out",
-    "clock-in_vs_counter",
-    "clock-in_vs_counter-in",
-    "clock_vs_clock",
-    "clock_vs_clock-out",
-    "clock_vs_out",
-    "clock_vs_counter-out",
-    "clock_vs_counter",
-    "clock_vs_counter-in",
-    "clock-out_vs_clock-out",
-    "clock-out_vs_out",
-    "clock-out_vs_counter-out",
-    "clock-out_vs_counter",
-    "clock-out_vs_counter-in",
-    "out_vs_out",
-    "out_vs_counter-out",
-    "out_vs_counter",
-    "out_vs_counter-in",
-    "counter-out_vs_counter-out",
-    "counter-out_vs_counter",
-    "counter-out_vs_counter-in",
-    "counter_vs_counter",
-    "counter_vs_counter-in",
-    "counter-in_vs_counter-in",
-]
+
+class LetterType(Enum):
+    DUAL_SHIFT = "Dual-Shift"
+    SHIFT = "Shift"
+    CROSS_SHIFT = "Cross-Shift"
+    DASH = "Dash"
+    DUAL_DASH = "Dual-Dash"
+    STATIC = "Static"
+
+
+Turns = float | Literal["fl", "0", "0.5", "1", "1.5", "2", "2.5", "3"]
+
+
+class PropAttribute(Enum):
+    COLOR = "color"
+    PROP_TYPE = "prop_type"
+    LOCATION = "location"
+    LAYER = "layer"
+    AXIS = "axis"
+    ORIENTATION = "orientation"
+
+class MotionAttribute(Enum):
+    COLOR = "color"
+    ARROW = "arrow"
+    PROP = "prop"
+    MOTION_TYPE = "motion_type"
+    ROTATION_DIRECTION = "rotation_direction"
+    TURNS = "turns"
+    START_LOCATION = "start_location"
+    START_ORIENTATION = "start_orientation"
+    END_LOCATION = "end_location"
+    END_ORIENTATION = "end_orientation"
+
+class OrientationCombination(Enum):
+    IN_VS_IN = "in_vs_in"
+    IN_VS_CLOCK_IN = "in_vs_clock-in"
+    IN_VS_CLOCK = "in_vs_clock"
+    IN_VS_CLOCK_OUT = "in_vs_clock-out"
+    IN_VS_OUT = "in_vs_out"
+    IN_VS_COUNTER_OUT = "in_vs_counter-out"
+    IN_VS_COUNTER = "in_vs_counter"
+    IN_VS_COUNTER_IN = "in_vs_counter-in"
+    CLOCK_IN_VS_CLOCK_IN = "clock-in_vs_clock-in"
+    CLOCK_IN_VS_CLOCK = "clock-in_vs_clock"
+    CLOCK_IN_VS_CLOCK_OUT = "clock-in_vs_clock-out"
+    CLOCK_IN_VS_OUT = "clock-in_vs_out"
+    CLOCK_IN_VS_COUNTER_OUT = "clock-in_vs_counter-out"
+    CLOCK_IN_VS_COUNTER = "clock-in_vs_counter"
+    CLOCK_IN_VS_COUNTER_IN = "clock-in_vs_counter-in"
+    CLOCK_VS_CLOCK = "clock_vs_clock"
+    CLOCK_VS_CLOCK_OUT = "clock_vs_clock-out"
+    CLOCK_VS_OUT = "clock_vs_out"
+    CLOCK_VS_COUNTER_OUT = "clock_vs_counter-out"
+    CLOCK_VS_COUNTER = "clock_vs_counter"
+    CLOCK_VS_COUNTER_IN = "clock_vs_counter-in"
+    CLOCK_OUT_VS_CLOCK_OUT = "clock-out_vs_clock-out"
+    CLOCK_OUT_VS_OUT = "clock-out_vs_out"
+    CLOCK_OUT_VS_COUNTER_OUT = "clock-out_vs_counter-out"
+    CLOCK_OUT_VS_COUNTER = "clock-out_vs_counter"
+    CLOCK_OUT_VS_COUNTER_IN = "clock-out_vs_counter-in"
+    OUT_VS_OUT = "out_vs_out"
+    OUT_VS_COUNTER_OUT = "out_vs_counter-out"
+    OUT_VS_COUNTER = "out_vs_counter"
+    OUT_VS_COUNTER_IN = "out_vs_counter-in"
+    COUNTER_OUT_VS_COUNTER_OUT = "counter-out_vs_counter-out"
+    COUNTER_OUT_VS_COUNTER = "counter-out_vs_counter"
+    COUNTER_OUT_VS_COUNTER_IN = "counter-out_vs_counter-in"
+    COUNTER_VS_COUNTER = "counter_vs_counter"
+    COUNTER_VS_COUNTER_IN = "counter_vs_counter-in"
+    COUNTER_IN_VS_COUNTER_IN = "counter-in_vs_counter-in"
+
 
 
 RotationAngles = Literal[0, 90, 180, 270]
-Positions = Literal["alpha", "beta", "gamma"]
-Direction = Literal["right", "left", "down", "up"]
 ColorsHex = Literal["#ED1C24", "#2E3192"]
-LetterType = Literal[
-    "Dual-Shift", "Shift", "Cross-Shift", "Dash", "Dual-Dash", "Static"
-]
+
 
 GridModes = Literal["Box", "Diamond"]
 
 
 class SpecificStartEndPositionsDicts(TypedDict):
-    start_position: SpecificPositions
-    end_position: SpecificPositions
+    start_position: SpecificPosition
+    end_position: SpecificPosition
 
 
 OptimalLocationsEntries = Dict[Literal["x", "y"], float]
 
 
-class OptimalLocationsDicts(TypedDict):
-    optimal_red_location: OptimalLocationsEntries
-    optimal_blue_location: OptimalLocationsEntries
-
-
 class PropAttributesDicts(TypedDict):
-    color: Colors
-    prop_type: PropTypes
-    prop_location: Locations
-    layer: Layers
-    orientation: Orientations
+    color: Color
+    prop_type: PropType
+    prop_location: Location
+    orientation: Orientation
 
 
 ### MOTION ATTRIBUTES ###
 class MotionAttributesDicts(TypedDict):
-    color: Colors
-    motion_type: MotionTypes
-    rotation_direction: RotationDirections
-    location: Locations
+    color: Color
+    motion_type: MotionType
+    rotation_direction: RotationDirection
+    location: Location
     turns: Turns
 
-    start_location: Locations
-    start_orientation: Orientations
-    start_layer: Layers
+    start_location: Location
+    start_orientation: Orientation
 
-    end_location: Locations
-    end_orientation: Orientations
-    end_layer: Layers
+    end_location: Location
+    end_orientation: Orientation
 
 
 class ArrowAttributesDicts(TypedDict):
-    color: Colors
-    location: Locations
-    motion_type: MotionTypes
+    color: Color
+    location: Location
+    motion_type: MotionType
     turns: Turns
 
 
 class MotionAttributesDicts(TypedDict):
-    color: Colors
-    motion_type: MotionTypes
-    rotation_direction: RotationDirections
-    start_location: Locations
-    end_location: Locations
+    color: Color
+    motion_type: MotionType
+    rotation_direction: RotationDirection
+    start_location: Location
+    end_location: Location
     turns: Turns
-    start_orientation: Orientations
-    end_orientation: Orientations
-    start_layer: Layers
-    end_layer: Layers
+    start_orientation: Orientation
+    end_orientation: Orientation
 
+class MotionTypeCombination(Enum):
+    PRO_VS_PRO = "pro_vs_pro"
+    ANTI_VS_ANTI = "anti_vs_anti"
+    STATIC_VS_STATIC = "static_vs_static"
+    PRO_VS_ANTI = "pro_vs_anti"
+    STATIC_VS_PRO = "static_vs_pro"
+    STATIC_VS_ANTI = "static_vs_anti"
+    DASH_VS_PRO = "dash_vs_pro"
+    DASH_VS_ANTI = "dash_vs_anti"
+    DASH_VS_STATIC = "dash_vs_static"
+    DASH_VS_DASH = "dash_vs_dash"
 
-MotionTypesCombinations = Literal[
-    "pro_vs_pro",
-    "anti_vs_anti",
-    "static_vs_static",
-    "pro_vs_anti",
-    "static_vs_pro",
-    "static_vs_anti",
-    "dash_vs_pro",
-    "dash_vs_anti",
-    "dash_vs_static",
-    "dash_vs_dash",
-]
-
-StartEndLocationsTuple = Tuple[Locations, Locations]
+StartEndLocationsTuple = Tuple[Location, Location]
 PreprocessedStartEndCombinations = Dict[
     SpecificStartEndPositionsDicts,
     List[Tuple[Letters, List[MotionAttributesDicts]]],
@@ -229,28 +335,37 @@ DictVariants = (
 DictVariantsLists = List[DictVariants]
 PictographDataframe = Dict[Letters, List[DictVariantsLists]]
 
-
-Mode = Optional[Literal["TS", "TO", "SS", "SO", "QTS", "QTO"]]
-
-
+class Mode(Enum):
+    TOG_SAME = "TS"
+    TOG_OPPOSITE = "TO"
+    SPLIT_SAME = "SS"
+    SPLIT_OPPOSITE = "SO"
+    QUARTER_TIME_SAME = "QTS"
+    QUARTER_TIME_OPPOSITE = "QTO"
+    
 class PictographAttributesDict(TypedDict):
-    start_position: Positions
-    end_position: Positions
+    start_position: Position
+    end_position: Position
     letter_type: LetterType
     mode: Mode
-    motion_type_combination: MotionTypesCombinations
+    motion_type_combination: MotionTypeCombination
 
 
-HybridCombinations = Literal[
-    "pro_vs_anti",
-    "static_vs_pro",
-    "static_vs_anti",
-    "dash_vs_pro",
-    "dash_vs_anti",
-    "dash_vs_static",
-]
+
 
 ### LETTER GROUPS ###
+
+class MotionTypesCombinations(Enum):
+    PRO_VS_PRO = "ADGJMPS"
+    ANTI_VS_ANTI = "BEHKNQT"
+    STATIC_VS_STATIC = "αβΓ"
+    PRO_VS_ANTI = "CFILORUV"
+    STATIC_VS_PRO = "WYΣθ"
+    STATIC_VS_ANTI = "XZΔΩ"
+    DASH_VS_PRO = "W-Y-Σ-θ-"
+    DASH_VS_ANTI = "X-Z-Δ-Ω-"
+    DASH_VS_STATIC = "ΦΨΛ"
+    DASH_VS_DASH = "Φ-Ψ-Λ-"
 
 LetterGroupsByMotionTypes = Literal[
     "ADGJMPS",
@@ -264,6 +379,8 @@ LetterGroupsByMotionTypes = Literal[
     "Φ-Ψ-Λ-",
     "αβΓ",
 ]
+
+
 
 
 MotionTypesLetterGroupMap = Dict[MotionTypesCombinations, LetterGroupsByMotionTypes]

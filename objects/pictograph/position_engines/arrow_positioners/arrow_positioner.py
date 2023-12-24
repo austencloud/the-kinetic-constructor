@@ -1,5 +1,6 @@
 from PyQt6.QtCore import QPointF
 import pandas as pd
+from Enums import Color, Location, PropType, RotationDirection
 from constants.string_constants import *
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Callable, List
@@ -41,17 +42,17 @@ class ArrowPositioner:
         reposition_method = self._get_reposition_method(current_letter)
         reposition_method()
 
-        if self.pictograph.main_widget.prop_type == TRIAD:
+        if self.pictograph.main_widget.prop_type == PropType.TRIAD:
             self.triad_arrow_positioner._adjust_arrows_for_triads(current_letter)
-        elif self.pictograph.main_widget.prop_type == STAFF:
+        elif self.pictograph.main_widget.prop_type == PropType.STAFF:
             self.staff_arrow_positioner._adjust_arrows_for_staffs(current_letter)
 
     def _calculate_adjustment_tuple(self, location: str, distance: int) -> QPointF:
         location_adjustments = {
-            NORTHEAST: QPointF(distance, -distance),
-            SOUTHEAST: QPointF(distance, distance),
-            SOUTHWEST: QPointF(-distance, distance),
-            NORTHWEST: QPointF(-distance, -distance),
+            Location.NORTHEAST: QPointF(distance, -distance),
+            Location.SOUTHEAST: QPointF(distance, distance),
+            Location.SOUTHWEST: QPointF(-distance, distance),
+            Location.NORTHWEST: QPointF(-distance, -distance),
         }
         return location_adjustments.get(location, QPointF(0, 0))
 
@@ -107,16 +108,16 @@ class ArrowPositioner:
     ### POSITIONING METHODS ###
     def _reposition_GH(self) -> None:
         for arrow in [
-            self.pictograph.arrows.get(RED),
-            self.pictograph.arrows.get(BLUE),
+            self.pictograph.arrows.get(Color.RED),
+            self.pictograph.arrows.get(Color.BLUE),
         ]:
             adjustment = self._calculate_GH_adjustment(arrow)
             self._apply_adjustment(arrow, adjustment)
 
     def _reposition_I(self) -> None:
         for arrow in [
-            self.pictograph.arrows.get(RED),
-            self.pictograph.arrows.get(BLUE),
+            self.pictograph.arrows.get(Color.RED),
+            self.pictograph.arrows.get(Color.BLUE),
         ]:
             state = self.pictograph.get_state()
             motion_type = state[f"{arrow.color}_motion_type"]
@@ -126,31 +127,31 @@ class ArrowPositioner:
 
     def _reposition_P(self) -> None:
         for arrow in [
-            self.pictograph.arrows.get(RED),
-            self.pictograph.arrows.get(BLUE),
+            self.pictograph.arrows.get(Color.RED),
+            self.pictograph.arrows.get(Color.BLUE),
         ]:
             adjustment = self._calculate_P_adjustment(arrow)
             self._apply_adjustment(arrow, adjustment)
 
     def _reposition_Q(self) -> None:
         for arrow in [
-            self.pictograph.arrows.get(RED),
-            self.pictograph.arrows.get(BLUE),
+            self.pictograph.arrows.get(Color.RED),
+            self.pictograph.arrows.get(Color.BLUE),
         ]:
             adjustment = self._calculate_Q_adjustment(arrow)
             self._apply_adjustment(arrow, adjustment)
 
     def _reposition_R(self) -> None:
         for arrow in [
-            self.pictograph.arrows.get(RED),
-            self.pictograph.arrows.get(BLUE),
+            self.pictograph.arrows.get(Color.RED),
+            self.pictograph.arrows.get(Color.BLUE),
         ]:
             adjustment = self._calculate_R_adjustment(arrow)
             self._apply_adjustment(arrow, adjustment)
 
     ### ADJUSTMENT CALCULATIONS ###
     def _calculate_GH_adjustment(self, arrow: Arrow) -> QPointF:
-        distance = 105 if arrow.color == RED else 50
+        distance = 105 if arrow.color == Color.RED else 50
         return self.calculate_adjustment(arrow.location, distance)
 
     def _calculate_I_adjustment(
@@ -160,37 +161,37 @@ class ArrowPositioner:
         return self.calculate_adjustment(arrow.location, distance)
 
     def _calculate_P_adjustment(self, arrow: Arrow) -> QPointF:
-        distance = 90 if arrow.color == RED else 35
+        distance = 90 if arrow.color == Color.RED else 35
         return self.calculate_adjustment(arrow.location, distance)
 
     def _calculate_Q_adjustment(self, arrow: Arrow) -> QPointF:
         adjustment_dict = {
-            RED: {
-                CLOCKWISE: {
-                    NORTHEAST: QPointF(70, -110),
-                    SOUTHEAST: QPointF(110, 70),
-                    SOUTHWEST: QPointF(-70, 110),
-                    NORTHWEST: QPointF(-110, -70),
+            Color.RED: {
+                RotationDirection.RotationDirection.CLOCKWISE: {
+                    Location.NORTHEAST: QPointF(70, -110),
+                    Location.SOUTHEAST: QPointF(110, 70),
+                    Location.SOUTHWEST: QPointF(-70, 110),
+                    Location.NORTHWEST: QPointF(-110, -70),
                 },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: QPointF(110, -70),
-                    SOUTHEAST: QPointF(70, 110),
-                    SOUTHWEST: QPointF(-110, 70),
-                    NORTHWEST: QPointF(-70, -110),
+                RotationDirection.COUNTER_CLOCKWISE: {
+                    Location.NORTHEAST: QPointF(110, -70),
+                    Location.SOUTHEAST: QPointF(70, 110),
+                    Location.SOUTHWEST: QPointF(-110, 70),
+                    Location.NORTHWEST: QPointF(-70, -110),
                 },
             },
-            BLUE: {
-                CLOCKWISE: {
-                    NORTHEAST: QPointF(30, -30),
-                    SOUTHEAST: QPointF(30, 30),
-                    SOUTHWEST: QPointF(-30, 30),
-                    NORTHWEST: QPointF(-30, -30),
+            Color.BLUE: {
+                RotationDirection.RotationDirection.CLOCKWISE: {
+                    Location.NORTHEAST: QPointF(30, -30),
+                    Location.SOUTHEAST: QPointF(30, 30),
+                    Location.SOUTHWEST: QPointF(-30, 30),
+                    Location.NORTHWEST: QPointF(-30, -30),
                 },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: QPointF(30, -30),
-                    SOUTHEAST: QPointF(30, 30),
-                    SOUTHWEST: QPointF(-30, 30),
-                    NORTHWEST: QPointF(-30, -30),
+                RotationDirection.COUNTER_CLOCKWISE: {
+                    Location.NORTHEAST: QPointF(30, -30),
+                    Location.SOUTHEAST: QPointF(30, 30),
+                    Location.SOUTHWEST: QPointF(-30, 30),
+                    Location.NORTHWEST: QPointF(-30, -30),
                 },
             },
         }
@@ -203,31 +204,31 @@ class ArrowPositioner:
     def _calculate_R_adjustment(self, arrow: Arrow) -> QPointF:
         adjustment_dict = {
             PRO: {
-                CLOCKWISE: {
-                    NORTHEAST: QPointF(75, -60),
-                    SOUTHEAST: QPointF(60, 75),
-                    SOUTHWEST: QPointF(-75, 60),
-                    NORTHWEST: QPointF(-60, -75),
+                RotationDirection.CLOCKWISE: {
+                    Location.NORTHEAST: QPointF(75, -60),
+                    Location.SOUTHEAST: QPointF(60, 75),
+                    Location.SOUTHWEST: QPointF(-75, 60),
+                    Location.NORTHWEST: QPointF(-60, -75),
                 },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: QPointF(60, -75),
-                    SOUTHEAST: QPointF(75, 60),
-                    SOUTHWEST: QPointF(-60, 75),
-                    NORTHWEST: QPointF(-75, -60),
+                RotationDirection.COUNTER_CLOCKWISE: {
+                    Location.NORTHEAST: QPointF(60, -75),
+                    Location.SOUTHEAST: QPointF(75, 60),
+                    Location.SOUTHWEST: QPointF(-60, 75),
+                    Location.NORTHWEST: QPointF(-75, -60),
                 },
             },
             ANTI: {
-                CLOCKWISE: {
-                    NORTHEAST: QPointF(30, -30),
-                    SOUTHEAST: QPointF(30, 30),
-                    SOUTHWEST: QPointF(-30, 30),
-                    NORTHWEST: QPointF(-30, -30),
+                RotationDirection.CLOCKWISE: {
+                    Location.NORTHEAST: QPointF(30, -30),
+                    Location.SOUTHEAST: QPointF(30, 30),
+                    Location.SOUTHWEST: QPointF(-30, 30),
+                    Location.NORTHWEST: QPointF(-30, -30),
                 },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: QPointF(35, -25),
-                    SOUTHEAST: QPointF(25, 35),
-                    SOUTHWEST: QPointF(-35, 25),
-                    NORTHWEST: QPointF(-25, -35),
+                RotationDirection.COUNTER_CLOCKWISE: {
+                    Location.NORTHEAST: QPointF(35, -25),
+                    Location.SOUTHEAST: QPointF(25, 35),
+                    Location.SOUTHWEST: QPointF(-35, 25),
+                    Location.NORTHWEST: QPointF(-25, -35),
                 },
             },
         }
