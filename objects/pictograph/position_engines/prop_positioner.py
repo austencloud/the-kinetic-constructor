@@ -299,7 +299,7 @@ class PropPositioner:
         self, prop: Prop, end_location: str
     ) -> Direction | None:
         layer_reposition_map = {
-            OrientationType.RADIAL: {
+            RADIAL: {
                 (NORTH, RED): RIGHT,
                 (NORTH, BLUE): LEFT,
                 (SOUTH, RED): RIGHT,
@@ -309,7 +309,7 @@ class PropPositioner:
                 (WEST, RED): UP if end_location == WEST else None,
                 (EAST, BLUE): DOWN if end_location == EAST else None,
             },
-            OrientationType.ANTIRADIAL: {
+            ANTIRADIAL: {
                 (NORTH, RED): UP,
                 (NORTH, BLUE): DOWN,
                 (SOUTH, RED): UP,
@@ -321,11 +321,11 @@ class PropPositioner:
             },
         }
         if prop.is_radial():
-            return layer_reposition_map[OrientationType.RADIAL][
+            return layer_reposition_map[RADIAL][
                 (prop.location, prop.color)
             ]
         elif prop.is_antiradial():
-            return layer_reposition_map[OrientationType.ANTIRADIAL][
+            return layer_reposition_map[ANTIRADIAL][
                 (prop.location, prop.color)
             ]
 

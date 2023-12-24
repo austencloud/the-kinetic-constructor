@@ -1,3 +1,4 @@
+from itertools import count
 from Enums import (
     MotionAttributesDicts,
     MotionType,
@@ -238,12 +239,22 @@ class Motion:
         def get_handpath_direction(
             start_location, end_location
         ) -> Literal["cw_hp", "ccw_hp"]:
-            clockwise_paths = [("n", "e"), ("e", "s"), ("s", "w"), ("w", "n")]
-            return (
-                "cw_hp"
-                if (start_location, end_location) in clockwise_paths
-                else "ccw_hp"
-            )
+            clockwise_handpaths = [("n", "e"), ("e", "s"), ("s", "w"), ("w", "n")]
+            counter_clockwise_handpaths = [
+                ("n", "w"),
+                ("w", "s"),
+                ("s", "e"),
+                ("e", "n"),
+            ]   
+            if (start_location, end_location) in clockwise_handpaths:
+                return "cw_hp"
+            elif (start_location, end_location) in counter_clockwise_handpaths:
+                return "ccw_hp"
+            elif start_location == end_location:
+                return None
+            else:
+                print ("Unrecognized handpath direction")
+
 
         handpath_direction = get_handpath_direction(
             self.start_location, self.end_location

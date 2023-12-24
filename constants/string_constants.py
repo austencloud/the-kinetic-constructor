@@ -39,10 +39,13 @@ BLUE = "blue"
 HEX_RED = "#ED1C24"
 HEX_BLUE = "#2E3192"
 
+RADIAL = "radial"
+ANTIRADIAL = "antiradial"
+
 IN = "in"
 OUT = "out"
-CLOCK = "cw"
-COUNTER = "ccw"
+CLOCK = "clock"
+COUNTER = "counter"
 
 LEFT = "left"
 RIGHT = "right"

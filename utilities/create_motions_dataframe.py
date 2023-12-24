@@ -15,8 +15,8 @@ comprehensive_motion_data = []
 max_turns = 3
 for position_pair, letters_info in data.items():
     start_position, end_position = position_pair.split("_")
-    for blue_start_orientation in ["in", "out", "cw", "ccw"]:
-        for red_start_orientation in ["in", "out", "cw", "ccw"]:
+    for blue_start_orientation in ["in", "out", "clock", "counter"]:
+        for red_start_orientation in ["in", "out", "clock", "counter"]:
             for turns in range(max_turns + 1):
                 for letter_data in letters_info:
                     letter = letter_data[0]

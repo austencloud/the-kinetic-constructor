@@ -402,7 +402,7 @@ class Prop(GraphicalObject):
         self.scene.update_pictograph()
 
     def is_radial(self) -> bool:
-        return self.orientation in get_args(RadialOrientation)
+        return self.orientation in [IN,OUT]
 
     def is_antiradial(self) -> bool:
-        return self.orientation in get_args(AntiradialOrientation)
+        return self.orientation in [CLOCK,COUNTER]
