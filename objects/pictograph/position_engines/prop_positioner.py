@@ -20,7 +20,7 @@ from constants.string_constants import (
     BOX,
     PRO,
     ANTI,
-    STATIC,
+    STATIC, LEFT, RIGHT, UP, DOWN,
 )
 
 from objects.motion import Motion
@@ -62,7 +62,7 @@ class PropPositioner:
 
     def _count_prop_types(self) -> Dict[str, int]:
         return {
-            ptype: sum(prop.prop_type == ptype for prop in self.scene.props.values())
+            ptype.value: sum(prop.prop_type == ptype for prop in self.scene.props.values())
             for ptype in PropType
         }
 
@@ -235,11 +235,11 @@ class PropPositioner:
         ]:
             if motion.end_location in [NORTH, SOUTH]:
                 return (
-                    Direction.RIGHT if motion.start_location == EAST else Direction.LEFT
+                    RIGHT if motion.start_location == EAST else LEFT
                 )
             elif motion.end_location in [EAST, WEST]:
                 return (
-                    Direction.DOWN if motion.start_location == SOUTH else Direction.UP
+                    DOWN if motion.start_location == SOUTH else UP
                 )
         elif motion.end_orientation in [
             CLOCK,
@@ -250,12 +250,12 @@ class PropPositioner:
             STATIC,
         ]:
             if motion.end_location in [NORTH, SOUTH]:
-                return Direction.UP if motion.start_location == EAST else Direction.DOWN
+                return UP if motion.start_location == EAST else DOWN
             elif motion.end_location in [EAST, WEST]:
                 return (
-                    Direction.RIGHT
+                    RIGHT
                     if motion.start_location == SOUTH
-                    else Direction.LEFT
+                    else LEFT
                 )
         return None
 
@@ -300,24 +300,24 @@ class PropPositioner:
     ) -> Direction | None:
         layer_reposition_map = {
             OrientationType.RADIAL: {
-                (NORTH, RED): Direction.RIGHT,
-                (NORTH, BLUE): Direction.LEFT,
-                (SOUTH, RED): Direction.RIGHT,
-                (SOUTH, BLUE): Direction.LEFT,
-                (EAST, RED): Direction.UP if end_location == EAST else None,
-                (WEST, BLUE): Direction.DOWN if end_location == WEST else None,
-                (WEST, RED): Direction.UP if end_location == WEST else None,
-                (EAST, BLUE): Direction.DOWN if end_location == EAST else None,
+                (NORTH, RED): RIGHT,
+                (NORTH, BLUE): LEFT,
+                (SOUTH, RED): RIGHT,
+                (SOUTH, BLUE): LEFT,
+                (EAST, RED): UP if end_location == EAST else None,
+                (WEST, BLUE): DOWN if end_location == WEST else None,
+                (WEST, RED): UP if end_location == WEST else None,
+                (EAST, BLUE): DOWN if end_location == EAST else None,
             },
             OrientationType.ANTIRADIAL: {
-                (NORTH, RED): Direction.UP,
-                (NORTH, BLUE): Direction.DOWN,
-                (SOUTH, RED): Direction.UP,
-                (SOUTH, BLUE): Direction.DOWN,
-                (EAST, RED): Direction.RIGHT if end_location == EAST else None,
-                (WEST, BLUE): Direction.LEFT if end_location == WEST else None,
-                (WEST, RED): Direction.RIGHT if end_location == WEST else None,
-                (EAST, BLUE): Direction.LEFT if end_location == EAST else None,
+                (NORTH, RED): UP,
+                (NORTH, BLUE): DOWN,
+                (SOUTH, RED): UP,
+                (SOUTH, BLUE): DOWN,
+                (EAST, RED): RIGHT if end_location == EAST else None,
+                (WEST, BLUE): LEFT if end_location == WEST else None,
+                (WEST, RED): RIGHT if end_location == WEST else None,
+                (EAST, BLUE): LEFT if end_location == EAST else None,
             },
         }
         if prop.is_radial():
@@ -526,26 +526,26 @@ class PropPositioner:
             if motion.prop.is_radial:
                 if motion.end_location in [NORTH, SOUTH]:
                     if motion.start_location == EAST:
-                        return Direction.RIGHT
+                        return RIGHT
                     elif motion.start_location == WEST:
-                        return Direction.LEFT
+                        return LEFT
                 elif motion.end_location in [EAST, WEST]:
                     if motion.start_location == NORTH:
-                        return Direction.UP
+                        return UP
                     elif motion.start_location == SOUTH:
-                        return Direction.DOWN
+                        return DOWN
 
             elif motion.prop.is_antiradial():
                 if motion.end_location in [NORTH, SOUTH]:
                     if motion.start_location == EAST:
-                        return Direction.UP
+                        return UP
                     elif motion.start_location == WEST:
-                        return Direction.DOWN
+                        return DOWN
                 elif motion.end_location in [EAST, WEST]:
                     if motion.start_location == NORTH:
-                        return Direction.RIGHT
+                        return RIGHT
                     elif motion.start_location == SOUTH:
-                        return Direction.LEFT
+                        return LEFT
             else:
                 print(
                     "ERROR: Unrecognized Orientation -"
@@ -570,10 +570,10 @@ class PropPositioner:
         direction: Direction,
     ) -> QPointF:
         offset_map = {
-            Direction.LEFT: QPointF(-BETA_OFFSET, 0),
-            Direction.RIGHT: QPointF(BETA_OFFSET, 0),
-            Direction.UP: QPointF(0, -BETA_OFFSET),
-            Direction.DOWN: QPointF(0, BETA_OFFSET),
+            LEFT: QPointF(-BETA_OFFSET, 0),
+            RIGHT: QPointF(BETA_OFFSET, 0),
+            UP: QPointF(0, -BETA_OFFSET),
+            DOWN: QPointF(0, BETA_OFFSET),
         }
         offset = offset_map.get(direction, QPointF(0, 0))
         return current_position + offset
@@ -610,9 +610,9 @@ class PropPositioner:
 
     def _get_opposite_direction(self, movement: Direction) -> Direction:
         opposite_directions = {
-            Direction.LEFT: Direction.RIGHT,
-            Direction.RIGHT: Direction.LEFT,
-            Direction.UP: Direction.DOWN,
-            Direction.DOWN: Direction.UP,
+            LEFT: RIGHT,
+            RIGHT: LEFT,
+            UP: DOWN,
+            DOWN: UP,
         }
         return opposite_directions.get(movement)

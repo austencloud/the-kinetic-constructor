@@ -1,6 +1,7 @@
 from typing import Literal, TypedDict
 from enum import Enum
 from enum import Enum
+from constants.string_constants import *
 
 image_path = "resources/images/"
 
@@ -274,52 +275,52 @@ class SpecificPosition(Enum):
 
 
 big_unilateral_prop_types = [
-    PropType.BIGHOOP,
-    PropType.BIGFAN,
-    PropType.BIGTRIAD,
-    PropType.GUITAR,
-    PropType.SWORD,
-    PropType.CHICKEN,
+    BIGHOOP,
+    BIGFAN,
+    BIGTRIAD,
+    GUITAR,
+    SWORD,
+    CHICKEN,
 ]
 small_unilateral_prop_types = [
-    PropType.FAN,
-    PropType.CLUB,
-    PropType.MINIHOOP,
-    PropType.TRIAD,
-    PropType.UKULELE,
+    FAN,
+    CLUB,
+    MINIHOOP,
+    TRIAD,
+    UKULELE,
 ]
 big_bilateral_prop_types = [
-    PropType.BIGSTAFF,
-    PropType.BIGBUUGENG,
-    PropType.BIGDOUBLESTAR,
+    BIGSTAFF,
+    BIGBUUGENG,
+    BIGDOUBLESTAR,
 ]
 small_bilateral_prop_types = [
-    PropType.STAFF,
-    PropType.BUUGENG,
-    PropType.DOUBLESTAR,
-    PropType.QUIAD,
-    PropType.FRACTALGENG,
+    STAFF,
+    BUUGENG,
+    DOUBLESTAR,
+    QUIAD,
+    FRACTALGENG,
 ]
 non_strictly_placed_props = [
-    PropType.STAFF,
-    PropType.FAN,
-    PropType.BIGFAN,
-    PropType.CLUB,
-    PropType.BUUGENG,
-    PropType.MINIHOOP,
-    PropType.TRIAD,
-    PropType.QUIAD,
-    PropType.UKULELE,
-    PropType.CHICKEN,
-    PropType.FRACTALGENG,
+    STAFF,
+    FAN,
+    BIGFAN,
+    CLUB,
+    BUUGENG,
+    MINIHOOP,
+    TRIAD,
+    QUIAD,
+    UKULELE,
+    CHICKEN,
+    FRACTALGENG,
 ]
 strictly_placed_props = [
-    PropType.BIGHOOP,
-    PropType.DOUBLESTAR,
-    PropType.BIGTRIAD,
-    PropType.BIGFAN,
-    PropType.BIGBUUGENG,
-    PropType.BIGDOUBLESTAR,
+    BIGHOOP,
+    DOUBLESTAR,
+    BIGTRIAD,
+    BIGFAN,
+    BIGBUUGENG,
+    BIGDOUBLESTAR,
 ]
 
 

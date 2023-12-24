@@ -44,6 +44,11 @@ OUT = "out"
 CLOCK = "cw"
 COUNTER = "ccw"
 
+LEFT = "left"
+RIGHT = "right"
+UP = "up"
+DOWN = "down"
+
 LETTER = "letter"
 PRO = "pro"
 ANTI = "anti"
