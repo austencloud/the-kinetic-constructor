@@ -226,7 +226,7 @@ class IGTab(QWidget):
             self.selected_pictographs.remove(index)
 
     def render_pictograph_to_image(self, pd_row_data) -> None:
-        ig_pictograph = self._create_ig_pictograph_from_pictograph_data(pd_row_data)
+        ig_pictograph = self._create_ig_pictograph(pd_row_data)
         ig_pictograph.update_pictograph()
 
         prop_type = self.main_widget.prop_type
@@ -250,8 +250,11 @@ class IGTab(QWidget):
         elif pd_row_data["red_motion_type"] == "dash":
             red_motion_type_prefix = "d"
 
+        blue_turns = self.filter_frame.filters["left_turns"]
+        red_turns = self.filter_frame.filters["right_turns"]
+
         # Construct the folder name based on turns and motion types
-        turns_folder = f"({blue_motion_type_prefix}{pd_row_data['blue_turns']},{red_motion_type_prefix}{pd_row_data['red_turns']})"
+        turns_folder = f"({blue_motion_type_prefix}{blue_turns},{red_motion_type_prefix}{red_turns})"
 
         image_dir = os.path.join(
             "resources",
@@ -262,9 +265,6 @@ class IGTab(QWidget):
             turns_folder,
         )
         os.makedirs(image_dir, exist_ok=True)
-
-        blue_turns = self.filter_frame.filters["left_turns"]
-        red_turns = self.filter_frame.filters["right_turns"]
         blue_end_orientation = ig_pictograph.motions[BLUE].get_end_orientation()
         red_end_orientation = ig_pictograph.motions[RED].get_end_orientation()
 
