@@ -494,3 +494,11 @@ class Pictograph(QGraphicsScene):
         new_beat.update_pictograph()
 
         return new_beat
+
+    def meets_turn_criteria(self, filters):
+        left_turns = self.motions[BLUE].turns
+        right_turns = self.motions[RED].turns
+        return (
+            left_turns in filters["left_turns"]
+            and right_turns in filters["right_turns"]
+        )

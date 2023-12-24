@@ -205,13 +205,6 @@ class Option(Pictograph):
 
     ### FLAGS ###
 
-    def meets_turn_criteria(self, filters):
-        left_turns = self.motions[BLUE].turns
-        right_turns = self.motions[RED].turns
-        return (
-            left_turns in filters["left_turns"]
-            and right_turns in filters["right_turns"]
-        )
 
     ### CREATE ###
 

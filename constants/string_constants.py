@@ -96,6 +96,9 @@ PROP = "prop"
 GHOST_ARROW = "ghostarrow"
 GHOST_PROP = "ghostprop"
 
+RADIAL = "radial"
+ANTIRADIAL = "antiradial"
+
 STAFF = "staff"
 BIGSTAFF = "bigstaff"
 CLUB = "club"

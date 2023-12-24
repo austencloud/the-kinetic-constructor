@@ -30,12 +30,7 @@ class IGScroll(QScrollArea):
         # self.clear()
         for idx, (letter, ig_pictograph) in enumerate(self.ig_pictographs):
             if ig_pictograph.meets_turn_criteria(filters):
-                self._add_option_to_layout(
-                    option,
-                    is_start_position=False,
-                    row=idx // self.COLUMN_COUNT,
-                    col=idx % self.COLUMN_COUNT,
-                )
+                self.update_displayed_pictographs()
 
     def update_displayed_pictographs(self) -> None:
         """

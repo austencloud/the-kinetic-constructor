@@ -313,13 +313,6 @@ class IGTab(QWidget):
         red_motion_dict = ig_pictograph._create_motion_dict_from_pd_row_data(
             pd_row_data, "red", self.filter_frame.filters
         )
-        # if either the blue_motion_dict or red_motion_dict have a start_orientation that ends in "_or", cut that part off.
-        if blue_motion_dict[START_ORIENTATION].endswith("_or"):
-            blue_motion_dict[START_ORIENTATION] = blue_motion_dict[START_ORIENTATION][
-                :-3
-            ]
-        if red_motion_dict[START_ORIENTATION].endswith("_or"):
-            red_motion_dict[START_ORIENTATION] = red_motion_dict[START_ORIENTATION][:-3]
 
         ig_pictograph.props[RED].ghost = ig_pictograph.ghost_props[RED]
         ig_pictograph.props[BLUE].ghost = ig_pictograph.ghost_props[BLUE]
@@ -332,6 +325,7 @@ class IGTab(QWidget):
         ig_pictograph.current_letter = letter
         ig_pictograph.start_position = pd_row_data.name[0]
         ig_pictograph.end_position = pd_row_data.name[1]
+        
         ig_pictograph.motions[RED].arrow = ig_pictograph.arrows[RED]
         ig_pictograph.motions[BLUE].arrow = ig_pictograph.arrows[BLUE]
         ig_pictograph.motions[RED].prop = ig_pictograph.props[RED]

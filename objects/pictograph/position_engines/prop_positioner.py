@@ -3,38 +3,21 @@ import math
 
 import pandas as pd
 from constants.string_constants import (
+    ANTIRADIAL,
     BOX,
-    BUUGENG,
-    BIGBUUGENG,
-    FRACTALGENG,
     CLOCKWISE,
-    CLUB,
     COUNTER_CLOCKWISE,
     DIAMOND,
-    DOUBLESTAR,
-    BIGDOUBLESTAR,
-    FAN,
-    BIGFAN,
-    MINIHOOP,
-    BIGHOOP,
     IN,
     OUT,
     COLOR,
-    STAFF,
-    BIGSTAFF,
-    QUIAD,
-    GUITAR,
-    SWORD,
-    UKULELE,
-    CHICKEN,
+    RADIAL,
     STATIC,
     PRO,
     ANTI,
     NORTH,
     SOUTH,
     EAST,
-    TRIAD,
-    BIGTRIAD,
     WEST,
     UP,
     DOWN,
@@ -44,14 +27,21 @@ from constants.string_constants import (
     BLUE,
 )
 from typing import TYPE_CHECKING, Dict, List, Tuple, get_args
+
 from objects.motion import Motion
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
-    AntiradialOrientations,
     PictographDataframe,
     OptimalLocationsEntries,
     OptimalLocationsDicts,
     Direction,
+    PropTypes,
+    big_bilateral_prop_types,
+    big_unilateral_prop_types,
+    small_bilateral_prop_types,
+    small_unilateral_prop_types,
+    non_strictly_placed_props,
+    strictly_placed_props,
 )
 
 BETA_OFFSET = 25
@@ -69,15 +59,7 @@ class PropPositioner:
         self.prop_type_counts = self.count_prop_types()
         for prop in self.scene.props.values():
             if any(
-                self.prop_type_counts[ptype] == 2
-                for ptype in [
-                    BIGHOOP,
-                    DOUBLESTAR,
-                    BIGTRIAD,
-                    BIGFAN,
-                    BIGBUUGENG,
-                    BIGDOUBLESTAR,
-                ]
+                self.prop_type_counts[ptype] == 2 for ptype in strictly_placed_props
             ):
                 self.set_strict_prop_locations(prop)
             else:
@@ -85,15 +67,7 @@ class PropPositioner:
 
         for prop in self.scene.ghost_props.values():
             if any(
-                self.prop_type_counts[ptype] == 2
-                for ptype in [
-                    BIGHOOP,
-                    DOUBLESTAR,
-                    BIGFAN,
-                    BIGBUUGENG,
-                    BIGTRIAD,
-                    BIGDOUBLESTAR,
-                ]
+                self.prop_type_counts[ptype] == 2 for ptype in strictly_placed_props
             ):
                 self.set_strict_prop_locations(prop)
             else:
@@ -103,30 +77,9 @@ class PropPositioner:
             self.reposition_beta_props()
 
     def count_prop_types(self) -> Dict[str, int]:
-        prop_types = [
-            BIGHOOP,
-            DOUBLESTAR,
-            BIGDOUBLESTAR,
-            STAFF,
-            BIGSTAFF,
-            FAN,
-            BIGFAN,
-            CLUB,
-            BUUGENG,
-            BIGBUUGENG,
-            FRACTALGENG,
-            MINIHOOP,
-            TRIAD,
-            BIGTRIAD,
-            QUIAD,
-            SWORD,
-            GUITAR,
-            UKULELE,
-            CHICKEN,
-        ]
         return {
             ptype: sum(prop.prop_type == ptype for prop in self.scene.props.values())
-            for ptype in prop_types
+            for ptype in get_args(PropTypes)
         }
 
     def set_strict_prop_locations(self, prop: "Prop") -> None:
@@ -186,43 +139,25 @@ class PropPositioner:
     def reposition_beta_props(self) -> None:
         state = self.scene.get_state()
         # Handle special case for certain props
-        big_unilateral_prop_types = [BIGHOOP, BIGFAN, BIGTRIAD, GUITAR, SWORD, CHICKEN]
+
         big_unilateral_props: List[Prop] = [
             prop
             for prop in self.scene.props.values()
             if prop.prop_type in big_unilateral_prop_types
         ]
-        small_unilateral_prop_types = [
-            FAN,
-            CLUB,
-            MINIHOOP,
-            TRIAD,
-            UKULELE,
-        ]
+
         small_unilateral_props: List[Prop] = [
             prop
             for prop in self.scene.props.values()
             if prop.prop_type in small_unilateral_prop_types
         ]
 
-        small_bilateral_prop_types = [
-            STAFF,
-            BUUGENG,
-            DOUBLESTAR,
-            QUIAD,
-            FRACTALGENG,
-        ]
         small_bilateral_props: List[Prop] = [
             prop
             for prop in self.scene.props.values()
             if prop.prop_type in small_bilateral_prop_types
         ]
 
-        big_bilateral_prop_types = [
-            BIGSTAFF,
-            BIGBUUGENG,
-            BIGDOUBLESTAR,
-        ]
         big_bilateral_props: List[Prop] = [
             prop
             for prop in self.scene.props.values()
@@ -376,41 +311,21 @@ class PropPositioner:
                 or (other_prop.orientation == IN and prop.orientation == OUT)
                 or (other_prop.orientation == OUT and prop.orientation == IN)
             ):
-                if prop.prop_type in [
-                    STAFF,
-                    FAN,
-                    CLUB,
-                    BUUGENG,
-                    MINIHOOP,
-                    TRIAD,
-                    QUIAD,
-                    UKULELE,
-                    CHICKEN,
-                    FRACTALGENG
-                ]:
+                if prop.prop_type in non_strictly_placed_props:
                     direction = self.determine_direction_for_static_beta(
                         prop, motion.end_location
                     )
                     if direction:
                         self.move_prop(prop, direction)
                         moved_props.add(prop)  # Mark this prop as moved
-                elif prop.prop_type in [
-                    DOUBLESTAR,
-                    BIGHOOP,
-                    BIGDOUBLESTAR,
-                    BIGSTAFF,
-                    BIGBUUGENG,
-                    BIGFAN,
-                    SWORD,
-                    GUITAR,
-                ]:
+                elif prop.prop_type in strictly_placed_props:
                     self.set_strict_prop_locations(other_prop)
 
     def determine_direction_for_static_beta(
         self, prop: Prop, end_location: str
     ) -> Direction | None:
         layer_reposition_map = {
-            1: {
+            RADIAL: {
                 (NORTH, RED): RIGHT,
                 (NORTH, BLUE): LEFT,
                 (SOUTH, RED): RIGHT,
@@ -420,7 +335,7 @@ class PropPositioner:
                 (WEST, RED): UP if end_location == WEST else None,
                 (EAST, BLUE): DOWN if end_location == EAST else None,
             },
-            2: {
+            ANTIRADIAL: {
                 (NORTH, RED): UP,
                 (NORTH, BLUE): DOWN,
                 (SOUTH, RED): UP,
@@ -431,10 +346,10 @@ class PropPositioner:
                 (EAST, BLUE): LEFT if end_location == EAST else None,
             },
         }
-        if prop.orientation in [IN, OUT]:
-            return layer_reposition_map[1].get((prop.location, prop.color), None)
-        elif prop.orientation in [CLOCKWISE, COUNTER_CLOCKWISE]:
-            return layer_reposition_map[2].get((prop.location, prop.color), None)
+        if prop.is_radial():
+            return layer_reposition_map[RADIAL][(prop.location, prop.color)]
+        elif prop.is_antiradial():
+            return layer_reposition_map[ANTIRADIAL][(prop.location, prop.color)]
 
     ### ALPHA TO BETA ### J, K, L
 
@@ -453,18 +368,9 @@ class PropPositioner:
             and state["red_end_orientation"] in [IN, OUT]
         ):
             for prop in self.scene.props.values():
-                if prop.prop_type in [
-                    BIGHOOP,
-                    BIGSTAFF,
-                    BIGBUUGENG,
-                    DOUBLESTAR,
-                    BIGDOUBLESTAR,
-                    SWORD,
-                    GUITAR,
-                    BIGTRIAD,
-                ]:
+                if prop.prop_type in strictly_placed_props:
                     self.set_strict_prop_locations(prop)
-                else:
+                elif prop.prop_type in non_strictly_placed_props:
                     self.set_default_prop_locations(prop)
         else:
             if red_end_location == blue_end_location:
@@ -529,32 +435,20 @@ class PropPositioner:
             and blue_orientation in [IN, OUT]
         ):
             for prop in self.scene.props.values():
-                if prop.prop_type in [
-                    BIGHOOP,
-                    BIGSTAFF,
-                    BIGBUUGENG,
-                    DOUBLESTAR,
-                    BIGDOUBLESTAR,
-                    SWORD,
-                    GUITAR,
-                    BIGTRIAD,
-                ]:
+                if prop.prop_type in strictly_placed_props:
                     self.set_strict_prop_locations(prop)
-                else:
+                elif prop.prop_type in non_strictly_placed_props:
                     self.set_default_prop_locations(prop)
-                        
-                
-                    
-        
+
         else:
             if all(
-                prop.prop_type in [CLUB, FAN, TRIAD, MINIHOOP, UKULELE, CHICKEN]
+                prop.prop_type in non_strictly_placed_props
                 for prop in self.scene.props.values()
             ):
                 for prop in self.scene.props.values():
                     self.set_default_prop_locations(prop)
             elif all(
-                prop.prop_type in [BIGHOOP, BIGTRIAD, BIGFAN, BIGBUUGENG, SWORD, GUITAR]
+                prop.prop_type in strictly_placed_props
                 for prop in self.scene.props.values()
             ):
                 for prop in self.scene.props.values():
@@ -563,10 +457,14 @@ class PropPositioner:
                 pro_color = RED if state[f"{RED}_motion_type"] == PRO else BLUE
 
                 pro_prop = (
-                    self.scene.props[RED] if pro_color == RED else self.scene.props[BLUE]
+                    self.scene.props[RED]
+                    if pro_color == RED
+                    else self.scene.props[BLUE]
                 )
                 anti_prop = (
-                    self.scene.props[RED] if pro_color == BLUE else self.scene.props[BLUE]
+                    self.scene.props[RED]
+                    if pro_color == BLUE
+                    else self.scene.props[BLUE]
                 )
 
                 pro_motion_df = {
@@ -576,7 +474,9 @@ class PropPositioner:
                     f"{pro_color}_start_orientation": state[
                         f"{pro_color}_start_orientation"
                     ],
-                    f"{pro_color}_end_orientation": state[f"{pro_color}_end_orientation"],
+                    f"{pro_color}_end_orientation": state[
+                        f"{pro_color}_end_orientation"
+                    ],
                 }
 
                 pro_motion = self.scene.motions[pro_color]
@@ -597,19 +497,7 @@ class PropPositioner:
     ### GAMMA TO BETA ### Y, Z
 
     def reposition_gamma_to_beta(self) -> None:
-        if self.scene.main_widget.prop_type in [
-            STAFF,
-            FAN,
-            BIGFAN,
-            CLUB,
-            BUUGENG,
-            MINIHOOP,
-            TRIAD,
-            QUIAD,
-            UKULELE,
-            CHICKEN,
-            FRACTALGENG
-        ]:
+        if self.scene.main_widget.prop_type in non_strictly_placed_props:
             if any(
                 prop.orientation in [IN, OUT] for prop in self.scene.props.values()
             ) and any(
@@ -648,16 +536,7 @@ class PropPositioner:
                         ),
                         self.get_opposite_direction(direction),
                     )
-        elif self.scene.main_widget.prop_type in [
-            BIGHOOP,
-            BIGSTAFF,
-            BIGBUUGENG,
-            DOUBLESTAR,
-            BIGDOUBLESTAR,
-            SWORD,
-            GUITAR,
-            BIGTRIAD,
-        ]:
+        elif self.scene.main_widget.prop_type in strictly_placed_props:
             for prop in self.scene.props.values():
                 self.set_strict_prop_locations(prop)
 

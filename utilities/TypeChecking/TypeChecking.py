@@ -2,6 +2,7 @@ from typing import *
 from .Letters import *
 from .SpecificPositions import SpecificPositions
 from typing import Literal
+from constants.string_constants import *
 
 Colors = Literal["red", "blue"]
 MotionTypes = Literal["pro", "anti", "dash", "static"]
@@ -37,6 +38,49 @@ PropTypes = Literal[
     "guitar",
     "ukulele",
     "chicken",
+]
+
+big_unilateral_prop_types = [BIGHOOP, BIGFAN, BIGTRIAD, GUITAR, SWORD, CHICKEN]
+small_unilateral_prop_types = [
+    FAN,
+    CLUB,
+    MINIHOOP,
+    TRIAD,
+    UKULELE,
+]
+small_bilateral_prop_types = [
+    STAFF,
+    BUUGENG,
+    DOUBLESTAR,
+    QUIAD,
+    FRACTALGENG,
+]
+big_bilateral_prop_types = [
+    BIGSTAFF,
+    BIGBUUGENG,
+    BIGDOUBLESTAR,
+]
+non_strictly_placed_props = [
+    STAFF,
+    FAN,
+    BIGFAN,
+    CLUB,
+    BUUGENG,
+    MINIHOOP,
+    TRIAD,
+    QUIAD,
+    UKULELE,
+    CHICKEN,
+    FRACTALGENG,
+]
+
+strictly_placed_props = [
+    BIGHOOP,
+    DOUBLESTAR,
+    BIGTRIAD,
+    BIGFAN,
+    BIGBUUGENG,
+    BIGDOUBLESTAR,
 ]
 Layers = Literal[1, 2]
 Axes = Literal["vertical", "horizontal"]
