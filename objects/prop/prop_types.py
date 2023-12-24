@@ -63,6 +63,11 @@ class BigBuugeng(Prop):
         attributes[PROP_TYPE] = BIGBUUGENG
         super().__init__(pictograph, attributes, motion)
 
+class Fractalgeng(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
+        attributes[PROP_TYPE] = FRACTALGENG
+        super().__init__(pictograph, attributes, motion)
+
 class DoubleStar(Prop):
     def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = DOUBLESTAR

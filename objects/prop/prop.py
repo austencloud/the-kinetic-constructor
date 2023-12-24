@@ -1,5 +1,5 @@
 import re
-from typing import Union
+from typing import Union, get_args
 from data.start_end_location_map import get_start_end_locations
 from objects.graphical_object import GraphicalObject
 from PyQt6.QtCore import QPointF, Qt
@@ -7,9 +7,11 @@ from constants.string_constants import *
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from objects.prop.prop_manipulator import PropManipulator
 from utilities.TypeChecking.TypeChecking import (
+    AntiradialOrientations,
     Layers,
     Orientations,
     PropTypes,
+    RadialOrientations,
     RotationAngles,
     PropAttributesDicts,
     Locations,
@@ -50,6 +52,8 @@ class Prop(GraphicalObject):
         self.location: Locations = prop_dict[LOCATION]
         self.orientation: Orientations = prop_dict[ORIENTATION]
         self.center = self.boundingRect().center()
+
+
 
     ### MOUSE EVENTS ###
 
@@ -321,3 +325,10 @@ class Prop(GraphicalObject):
             self.motion.arrow.update_appearance()
         self.previous_location = closest_hand_point
         self.scene.update_pictograph()
+
+    def is_radial(self) -> bool:
+        return self.orientation in get_args(RadialOrientations)
+    
+    def is_antiradial(self) -> bool:
+        return self.orientation in get_args(AntiradialOrientations)
+    

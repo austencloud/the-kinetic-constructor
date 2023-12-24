@@ -6,6 +6,7 @@ from constants.string_constants import (
     BOX,
     BUUGENG,
     BIGBUUGENG,
+    FRACTALGENG,
     CLOCKWISE,
     CLUB,
     COUNTER_CLOCKWISE,
@@ -42,10 +43,11 @@ from constants.string_constants import (
     RED,
     BLUE,
 )
-from typing import TYPE_CHECKING, Dict, List, Tuple
+from typing import TYPE_CHECKING, Dict, List, Tuple, get_args
 from objects.motion import Motion
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
+    AntiradialOrientations,
     PictographDataframe,
     OptimalLocationsEntries,
     OptimalLocationsDicts,
@@ -112,6 +114,7 @@ class PropPositioner:
             CLUB,
             BUUGENG,
             BIGBUUGENG,
+            FRACTALGENG,
             MINIHOOP,
             TRIAD,
             BIGTRIAD,
@@ -207,6 +210,7 @@ class PropPositioner:
             BUUGENG,
             DOUBLESTAR,
             QUIAD,
+            FRACTALGENG,
         ]
         small_bilateral_props: List[Prop] = [
             prop
@@ -382,6 +386,7 @@ class PropPositioner:
                     QUIAD,
                     UKULELE,
                     CHICKEN,
+                    FRACTALGENG
                 ]:
                     direction = self.determine_direction_for_static_beta(
                         prop, motion.end_location
@@ -400,7 +405,6 @@ class PropPositioner:
                     GUITAR,
                 ]:
                     self.set_strict_prop_locations(other_prop)
-
 
     def determine_direction_for_static_beta(
         self, prop: Prop, end_location: str
@@ -432,109 +436,163 @@ class PropPositioner:
         elif prop.orientation in [CLOCKWISE, COUNTER_CLOCKWISE]:
             return layer_reposition_map[2].get((prop.location, prop.color), None)
 
-    ### ALPHA TO BETA ### D, E, F
+    ### ALPHA TO BETA ### J, K, L
 
     def reposition_alpha_to_beta(self, state) -> None:
         # Extract motion type and end locations for both colors from the DataFrame row
         red_end_location = state["red_end_location"]
         blue_end_location = state["blue_end_location"]
+        if (
+            state["red_end_orientation"] in [CLOCKWISE, COUNTER_CLOCKWISE]
+            and state["blue_end_orientation"] in [IN, OUT]
+            or state["blue_end_orientation"]
+            in [
+                CLOCKWISE,
+                COUNTER_CLOCKWISE,
+            ]
+            and state["red_end_orientation"] in [IN, OUT]
+        ):
+            for prop in self.scene.props.values():
+                if prop.prop_type in [
+                    BIGHOOP,
+                    BIGSTAFF,
+                    BIGBUUGENG,
+                    DOUBLESTAR,
+                    BIGDOUBLESTAR,
+                    SWORD,
+                    GUITAR,
+                    BIGTRIAD,
+                ]:
+                    self.set_strict_prop_locations(prop)
+                else:
+                    self.set_default_prop_locations(prop)
+        else:
+            if red_end_location == blue_end_location:
+                red_prop = next(
+                    prop for prop in self.scene.props.values() if prop.color == RED
+                )
+                blue_prop = next(
+                    prop for prop in self.scene.props.values() if prop.color == BLUE
+                )
 
-        # We assume red and blue are always present, and determine direction based on the end locations
-        if red_end_location == blue_end_location:
-            # Get the props associated with the colors
-            red_prop = next(
-                prop for prop in self.scene.props.values() if prop.color == RED
-            )
-            blue_prop = next(
-                prop for prop in self.scene.props.values() if prop.color == BLUE
-            )
+                red_direction = self.determine_translation_direction(
+                    self.scene.motions[RED]
+                )
+                blue_direction = self.determine_translation_direction(
+                    self.scene.motions[BLUE]
+                )
 
-            # Determine the direction for repositioning based on the motion type and locations
-            red_direction = self.determine_translation_direction(
-                self.scene.motions[RED]
-            )
-            blue_direction = self.determine_translation_direction(
-                self.scene.motions[BLUE]
-            )
-
-            # If there's a valid direction, move the props accordingly
-            if red_direction:
-                self.move_prop(red_prop, red_direction)
-            if blue_direction:
-                self.move_prop(blue_prop, blue_direction)
+                if red_direction:
+                    self.move_prop(red_prop, red_direction)
+                if blue_direction:
+                    self.move_prop(blue_prop, blue_direction)
 
     ### BETA TO BETA ### G, H, I
 
     def reposition_G_and_H(self, motion_df: pd.DataFrame) -> None:
-        # Determine directions for motion
-        further_direction = self.determine_translation_direction(
-            self.scene.motions[RED]
-        )
-        other_direction = self.get_opposite_direction(further_direction)
+        red_orientation = self.scene.props[RED].orientation
+        blue_orientation = self.scene.props[BLUE].orientation
 
-        # Calculate new positions
-        new_red_pos = self.calculate_new_position(
-            self.scene.props[RED].pos(), further_direction
-        )
-        new_blue_pos = self.calculate_new_position(
-            self.scene.props[BLUE].pos(), other_direction
-        )
+        if (
+            red_orientation in [IN, OUT]
+            and blue_orientation in [CLOCKWISE, COUNTER_CLOCKWISE]
+        ) or (
+            red_orientation in [CLOCKWISE, COUNTER_CLOCKWISE]
+            and blue_orientation in [IN, OUT]
+        ):
+            self.set_default_prop_locations(self.scene.props[RED])
+            self.set_default_prop_locations(self.scene.props[BLUE])
+        else:
+            further_direction = self.determine_translation_direction(
+                self.scene.motions[RED]
+            )
+            other_direction = self.get_opposite_direction(further_direction)
 
-        # Update positions
-        self.scene.props[RED].setPos(new_red_pos)
-        self.scene.props[BLUE].setPos(new_blue_pos)
+            new_red_pos = self.calculate_new_position(
+                self.scene.props[RED].pos(), further_direction
+            )
+            new_blue_pos = self.calculate_new_position(
+                self.scene.props[BLUE].pos(), other_direction
+            )
+
+            self.scene.props[RED].setPos(new_red_pos)
+            self.scene.props[BLUE].setPos(new_blue_pos)
 
     def reposition_I(self, state) -> None:
-        if all(
-            prop.prop_type in [CLUB, FAN, TRIAD, MINIHOOP, UKULELE, CHICKEN]
-            for prop in self.scene.props.values()
+        red_orientation = self.scene.props[RED].orientation
+        blue_orientation = self.scene.props[BLUE].orientation
+        if (
+            red_orientation in [IN, OUT]
+            and blue_orientation in [CLOCKWISE, COUNTER_CLOCKWISE]
+        ) or (
+            red_orientation in [CLOCKWISE, COUNTER_CLOCKWISE]
+            and blue_orientation in [IN, OUT]
         ):
             for prop in self.scene.props.values():
-                self.set_default_prop_locations(prop)
-        elif all(
-            prop.prop_type in [BIGHOOP, BIGTRIAD, BIGFAN, BIGBUUGENG, SWORD, GUITAR]
-            for prop in self.scene.props.values()
-        ):
-            for prop in self.scene.props.values():
-                self.set_strict_prop_locations(prop)
+                if prop.prop_type in [
+                    BIGHOOP,
+                    BIGSTAFF,
+                    BIGBUUGENG,
+                    DOUBLESTAR,
+                    BIGDOUBLESTAR,
+                    SWORD,
+                    GUITAR,
+                    BIGTRIAD,
+                ]:
+                    self.set_strict_prop_locations(prop)
+                else:
+                    self.set_default_prop_locations(prop)
+                        
+                
+                    
+        
         else:
-            pro_color = RED if state[f"{RED}_motion_type"] == PRO else BLUE
+            if all(
+                prop.prop_type in [CLUB, FAN, TRIAD, MINIHOOP, UKULELE, CHICKEN]
+                for prop in self.scene.props.values()
+            ):
+                for prop in self.scene.props.values():
+                    self.set_default_prop_locations(prop)
+            elif all(
+                prop.prop_type in [BIGHOOP, BIGTRIAD, BIGFAN, BIGBUUGENG, SWORD, GUITAR]
+                for prop in self.scene.props.values()
+            ):
+                for prop in self.scene.props.values():
+                    self.set_strict_prop_locations(prop)
+            else:
+                pro_color = RED if state[f"{RED}_motion_type"] == PRO else BLUE
 
-            pro_prop = (
-                self.scene.props[RED] if pro_color == RED else self.scene.props[BLUE]
-            )
-            anti_prop = (
-                self.scene.props[RED] if pro_color == BLUE else self.scene.props[BLUE]
-            )
+                pro_prop = (
+                    self.scene.props[RED] if pro_color == RED else self.scene.props[BLUE]
+                )
+                anti_prop = (
+                    self.scene.props[RED] if pro_color == BLUE else self.scene.props[BLUE]
+                )
 
-            pro_motion_df = {
-                f"{pro_color}_motion_type": state[f"{pro_color}_motion_type"],
-                f"{pro_color}_start_location": state[
-                    f"{pro_color}_start_location"
-                ],
-                f"{pro_color}_end_location": state[f"{pro_color}_end_location"],
-                f"{pro_color}_start_orientation": state[
-                    f"{pro_color}_start_orientation"
-                ],
-                f"{pro_color}_end_orientation": state[
-                    f"{pro_color}_end_orientation"
-                ],
-            }
+                pro_motion_df = {
+                    f"{pro_color}_motion_type": state[f"{pro_color}_motion_type"],
+                    f"{pro_color}_start_location": state[f"{pro_color}_start_location"],
+                    f"{pro_color}_end_location": state[f"{pro_color}_end_location"],
+                    f"{pro_color}_start_orientation": state[
+                        f"{pro_color}_start_orientation"
+                    ],
+                    f"{pro_color}_end_orientation": state[f"{pro_color}_end_orientation"],
+                }
 
-            pro_motion = self.scene.motions[pro_color]
+                pro_motion = self.scene.motions[pro_color]
 
-            pro_direction = self.determine_translation_direction(pro_motion)
-            anti_direction = self.get_opposite_direction(pro_direction)
+                pro_direction = self.determine_translation_direction(pro_motion)
+                anti_direction = self.get_opposite_direction(pro_direction)
 
-            new_position_pro = self.calculate_new_position(
-                pro_prop.pos(), pro_direction
-            )
-            new_position_anti = self.calculate_new_position(
-                anti_prop.pos(), anti_direction
-            )
+                new_position_pro = self.calculate_new_position(
+                    pro_prop.pos(), pro_direction
+                )
+                new_position_anti = self.calculate_new_position(
+                    anti_prop.pos(), anti_direction
+                )
 
-            pro_prop.setPos(new_position_pro)
-            anti_prop.setPos(new_position_anti)
+                pro_prop.setPos(new_position_pro)
+                anti_prop.setPos(new_position_anti)
 
     ### GAMMA TO BETA ### Y, Z
 
@@ -550,9 +608,13 @@ class PropPositioner:
             QUIAD,
             UKULELE,
             CHICKEN,
+            FRACTALGENG
         ]:
-            if any(prop.orientation in [IN,OUT] for prop in self.scene.props.values()) and any(
-                prop.orientation in [CLOCKWISE, COUNTER_CLOCKWISE] for prop in self.scene.props.values()
+            if any(
+                prop.orientation in [IN, OUT] for prop in self.scene.props.values()
+            ) and any(
+                prop.orientation in [CLOCKWISE, COUNTER_CLOCKWISE]
+                for prop in self.scene.props.values()
             ):
                 for prop in self.scene.props.values():
                     self.set_default_prop_locations(prop)

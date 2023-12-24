@@ -8,6 +8,9 @@ MotionTypes = Literal["pro", "anti", "dash", "static"]
 Locations = Literal["n", "e", "s", "w", "ne", "se", "sw", "nw"]
 RotationDirections = Literal["cw", "ccw"]
 Turns = float | Literal["fl", "0", "0.5", "1", "1.5", "2", "2.5", "3"]
+RadialOrientations = Literal["in", "out"]
+AntiradialOrientations = Literal["cw", "ccw"]
+
 
 ### STAFF ATTRIBUTES ###
 
@@ -19,6 +22,7 @@ PropTypes = Literal[
     "bigstaff",
     "buugeng",
     "bigbuugeng",
+    "fractalgeng",
     "club",
     "fan",
     "bigfan",

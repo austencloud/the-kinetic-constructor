@@ -53,7 +53,7 @@ from objects.pictograph.pictograph_init import PictographInit
 from objects.pictograph.pictograph_menu_handler import (
     PictographMenuHandler,
 )
-from objects.pictograph.position_engines.arrow_positioner import ArrowPositioner
+from objects.pictograph.position_engines.arrow_positioners.arrow_positioner import ArrowPositioner
 from objects.pictograph.position_engines.prop_positioner import PropPositioner
 
 
