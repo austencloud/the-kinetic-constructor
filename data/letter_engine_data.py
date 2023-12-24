@@ -1,36 +1,6 @@
-from constants.string_constants import PRO, ANTI, STATIC
+from Enums import MotionType
+from constants.string_constants import ANTI, DASH, PRO, STATIC
 
-letter_types = {
-    "Type 1": [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "O",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "U",
-        "V",
-    ],
-    "Type 2": ["W", "X", "Y", "Z", "Σ", "Δ", "θ", "Ω"],
-    "Type 3": ["W-", "X-", "Y-", "Z-", "Σ-", "Δ-", "θ-", "Ω-"],
-    "Type 4": ["Φ", "Ψ", "Λ"],
-    "Type 5": ["Φ-", "Ψ-", "Λ-"],
-    "Type 6": ["α", "β", "Γ"],
-}
 
 motion_type_letter_groups = {
     # Type 1
@@ -39,7 +9,7 @@ motion_type_letter_groups = {
     "pro_vs_anti": "CFILORUV",
     # Type 2
     "static_vs_pro": "WYΣθ",
-    "static_vs_anti": "XZΔΩ",
+    "static_vs_static": "XZΔΩ",
     # Type 3
     "dash_vs_pro": "W-Y-Σ-θ-",
     "dash_vs_anti": "X-Z-Δ-Ω-",
@@ -54,13 +24,16 @@ motion_type_letter_groups = {
 motion_type_combinations = {
     (PRO, PRO): "pro_vs_pro",
     (ANTI, ANTI): "anti_vs_anti",
-    (STATIC, STATIC): "static_vs_static",
     (PRO, ANTI): "pro_vs_anti",
-    (ANTI, PRO): "pro_vs_anti",
+    
+    (STATIC, STATIC): "static_vs_static",
     (STATIC, PRO): "static_vs_pro",
-    (PRO, STATIC): "static_vs_pro",
     (STATIC, ANTI): "static_vs_anti",
-    (ANTI, STATIC): "static_vs_anti",
+    
+    (DASH, PRO): "dash_vs_pro",
+    (DASH, ANTI): "dash_vs_anti",
+    (DASH, STATIC): "dash_vs_static",
+    (DASH, DASH): "dash_vs_dash",
 }
 
 

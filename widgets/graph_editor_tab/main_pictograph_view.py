@@ -1,8 +1,10 @@
 from PyQt6.QtCore import Qt, QSize
 from typing import TYPE_CHECKING, List
-from constants.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
 from PyQt6.QtWidgets import QGraphicsView, QPushButton, QFrame
 from PyQt6.QtGui import QIcon
+
+from Enums import RotationDirection
+from constants.string_constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
 
 
 if TYPE_CHECKING:

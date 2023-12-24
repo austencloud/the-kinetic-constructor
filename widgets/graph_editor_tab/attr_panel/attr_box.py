@@ -2,13 +2,9 @@ from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QFont
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
+from Enums import Color, HexColor
+from constants.string_constants import HEX_BLUE, HEX_RED, RED
 from objects.motion import Motion
-from constants.string_constants import (
-    RED,
-    RED_HEX,
-    BLUE_HEX,
-)
-from utilities.TypeChecking.TypeChecking import Colors
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
@@ -23,7 +19,7 @@ from widgets.graph_editor_tab.attr_panel.attr_box_widgets.header_widget import (
     HeaderWidget,
 )
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.motion_types_widget import (
-    MotionTypesWidget,
+    MotionTypeWidget,
 )
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_widget import (
     StartEndWidget,
@@ -35,7 +31,7 @@ from widgets.graph_editor_tab.attr_panel.attr_box_widgets.turns_widget import (
 
 class AttrBox(QFrame):
     def __init__(
-        self, attr_panel: "AttrPanel", pictograph: "Pictograph", color: Colors
+        self, attr_panel: "AttrPanel", pictograph: "Pictograph", color: Color
     ) -> None:
         super().__init__(attr_panel)
         self.attr_panel = attr_panel
@@ -60,7 +56,7 @@ class AttrBox(QFrame):
         self.layout.setSpacing(0)
         # Initialize and set maximum heights for child widgets
         self.header_widget = HeaderWidget(self)
-        self.motion_type_widget = MotionTypesWidget(self)
+        self.motion_type_widget = MotionTypeWidget(self)
         self.start_end_widget = StartEndWidget(self)
         self.turns_widget = TurnsWidget(self)
 
@@ -78,7 +74,7 @@ class AttrBox(QFrame):
 
     def setup_box(self) -> None:
         self.setObjectName("AttributeBox")
-        self.apply_border_style(RED_HEX if self.color == RED else BLUE_HEX)
+        self.apply_border_style(HEX_RED if self.color == RED else HEX_BLUE)
 
     def apply_border_style(self, color_hex: str) -> None:
         self.border_width = 3

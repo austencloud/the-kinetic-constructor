@@ -1,10 +1,13 @@
-from typing import Dict, Literal, Union
+from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Tuple, Union
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView
 import pandas as pd
+from constants.string_constants import *
+from objects.letter_item import LetterItem
+from objects.motion import Motion
+from objects.prop.prop import Prop
 
-from data.letter_engine_data import letter_types
 from data.positions_map import get_specific_start_end_positions
 from objects.arrow.arrow import Arrow
 from objects.ghosts.ghost_arrow import GhostArrow
@@ -12,40 +15,8 @@ from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.prop.prop import Prop
 from objects.motion import Motion
-from constants.string_constants import (
-    ARROW,
-    BLUE,
-    BOX,
-    COLOR,
-    DIAMOND,
-    END_LOCATION,
-    END_POSITION,
-    IN,
-    LETTER_BTN_ICON_DIR,
-    LETTERS_TRIMMED_SVG_DIR,
-    LOCATION,
-    MOTION_TYPE,
-    ORIENTATION,
-    PROP,
-    PROP_TYPE,
-    RED,
-    STAFF,
-    START_POSITION,
-    TRIAD,
-    TURNS,
-)
-from utilities.TypeChecking.Letters import Letters
-from utilities.TypeChecking.SpecificPositions import SpecificPositions
+
 from utilities.letter_engine import LetterEngine
-from utilities.TypeChecking.TypeChecking import (
-    TYPE_CHECKING,
-    Colors,
-    Locations,
-    List,
-    Optional,
-    PropTypes,
-    Tuple,
-)
 from objects.pictograph.pictograph_event_handler import (
     PictographEventHandler,
 )
@@ -53,7 +24,9 @@ from objects.pictograph.pictograph_init import PictographInit
 from objects.pictograph.pictograph_menu_handler import (
     PictographMenuHandler,
 )
-from objects.pictograph.position_engines.arrow_positioners.arrow_positioner import ArrowPositioner
+from objects.pictograph.position_engines.arrow_positioners.arrow_positioner import (
+    ArrowPositioner,
+)
 from objects.pictograph.position_engines.prop_positioner import PropPositioner
 
 
@@ -63,6 +36,7 @@ if TYPE_CHECKING:
     from widgets.image_generator_tab.ig_pictograph import IGPictograph
 
 from objects.letter_item import LetterItem
+from Enums import *
 
 
 class Pictograph(QGraphicsScene):
@@ -70,7 +44,11 @@ class Pictograph(QGraphicsScene):
         self,
         main_widget: "MainWidget",
         graph_type: Literal[
-            "main", "option", "beat", "start_position", "ig_pictograph"
+            "main",
+            "option",
+            "beat",
+            "start_position_beat",
+            "ig_pictograph",
         ],
     ) -> None:
         super().__init__()
@@ -85,14 +63,16 @@ class Pictograph(QGraphicsScene):
         self.setBackgroundBrush(Qt.GlobalColor.white)
 
     def setup_components(self, main_widget: "MainWidget") -> None:
-        self.arrows: Dict[Colors, Arrow] = {}
-        self.props: Dict[Colors, Prop] = {}
-        self.motions: Dict[Colors, Motion] = {}
-        self.current_letter: Letters = None
+        self.arrows: Dict[Color, Arrow] = {}
+        self.props: Dict[Color, Prop] = {}
+        self.ghost_arrows: Dict[Color, GhostArrow] = {}
+        self.ghost_props: Dict[Color, GhostProp] = {}
+        self.motions: Dict[Color, Motion] = {}
+        self.current_letter: Letter = None
         self.pictograph_dict: Dict = {}
         self.motion_dict_list: List[Dict] = []
-        self.start_position: SpecificPositions = None
-        self.end_position: SpecificPositions = None
+        self.start_position: SpecificPosition = None
+        self.end_position: SpecificPosition = None
         self.view_scale = 1
         self.event_handler = PictographEventHandler(self)
 
@@ -104,50 +84,44 @@ class Pictograph(QGraphicsScene):
 
         self.grid: Grid = self.initializer.init_grid()
         self.locations: Dict[
-            Locations, Tuple[int, int, int, int]
+            Location, Tuple[int, int, int, int]
         ] = self.initializer.init_locations(self.grid)
 
-        self.motions: Dict[Colors, Motion] = self.initializer.init_motions()
-        self.arrows: Dict[Colors, Arrow] = self.initializer.init_arrows()
-        self.props: Dict[Colors, Prop] = self.initializer.init_props(
+        self.motions: Dict[Color, Motion] = self.initializer.init_motions()
+        self.arrows, self.ghost_arrows = self.initializer.init_arrows()
+        self.props, self.ghost_props = self.initializer.init_props(
             self.main_widget.prop_type
         )
 
         self.view = self.init_view(self.graph_type)
-
         self.letter_item: LetterItem = self.initializer.init_letter_item()
-
-        self.ghost_arrows: Dict[
-            Colors, GhostArrow
-        ] = self.initializer.init_ghost_arrows()
-        self.ghost_props: Dict[Colors, GhostProp] = self.initializer.init_ghost_props(
-            self.main_widget.prop_type
-        )
 
         self.setup_managers(main_widget)
 
     def init_view(self, graph_type) -> QGraphicsView:
         from widgets.graph_editor_tab.main_pictograph_view import MainPictographView
         from widgets.option_picker_tab.option import OptionView
-        from widgets.sequence_widget.beat_frame.start_position import StartPositionView
+        from widgets.sequence_widget.beat_frame.start_position import (
+            StartPositionBeatView,
+        )
         from widgets.sequence_widget.beat_frame.beat import BeatView
         from widgets.image_generator_tab.ig_pictograph import IG_Pictograph_View
 
-        if graph_type == "main":
+        if graph_type == MAIN:
             view = MainPictographView(self)
-        elif graph_type == "option":
+        elif graph_type == OPTION:
             view = OptionView(self)
-        elif graph_type == "beat":
+        elif graph_type == BEAT:
             view = BeatView(self)
-        elif graph_type == "start_position":
-            view = StartPositionView(self)
-        elif graph_type == "ig_pictograph":
+        elif graph_type == START_POSITION_BEAT:
+            view = StartPositionBeatView(self)
+        elif graph_type == IG_PICTOGRAPH:
             view = IG_Pictograph_View(self)
         return view
 
     def set_letter_renderer(self, letter: str) -> None:
         letter_type = self.get_current_letter_type()
-        svg_path = f"{LETTERS_TRIMMED_SVG_DIR}/{letter_type}/{letter}.svg"
+        svg_path = f"{image_path}letters_trimmed/{letter_type}/{letter}.svg"
         renderer = QSvgRenderer(svg_path)
         if renderer.isValid():
             self.letter_item.setSharedRenderer(renderer)
@@ -210,19 +184,14 @@ class Pictograph(QGraphicsScene):
         color: str,
         filters,
     ) -> Dict:
-        if color is RED:
-            side = "right"
-        elif color is BLUE:
-            side = "left"
-
         return {
-            "color": color,
-            "motion_type": pd_row_data[f"{color}_motion_type"],
-            "rotation_direction": pd_row_data[f"{color}_rotation_direction"],
-            "start_location": pd_row_data[f"{color}_start_location"],
-            "end_location": pd_row_data[f"{color}_end_location"],
-            "turns": filters[f"{side}_turns"],
-            "start_orientation": pd_row_data[f"{color}_start_orientation"],
+            COLOR: color,
+            MOTION_TYPE: pd_row_data[f"{color}_motion_type"],
+            ROTATION_DIRECTION: pd_row_data[f"{color}_rotation_direction"],
+            START_LOCATION: pd_row_data[f"{color}_start_location"],
+            END_LOCATION: pd_row_data[f"{color}_end_location"],
+            TURNS: filters[f"{color}_turns"],
+            START_ORIENTATION: pd_row_data[f"{color}_start_orientation"],
         }
 
     ### EVENT HANDLERS ###
@@ -256,7 +225,7 @@ class Pictograph(QGraphicsScene):
                 blue_position = center
         return red_position, blue_position
 
-    def get_start_end_positions(self) -> Optional[SpecificPositions]:
+    def get_start_end_positions(self) -> Optional[SpecificPosition]:
         specific_positions = get_specific_start_end_positions(
             self.motions[RED], self.motions[BLUE]
         )
@@ -268,22 +237,22 @@ class Pictograph(QGraphicsScene):
     def get_state(self) -> Dict:
         start_position, end_position = self.get_start_end_positions()
         state_data = {
-            "letter": self.current_letter,
-            "start_position": start_position,
-            "end_position": end_position,
+            LETTER: self.current_letter,
+            START_POSITION: start_position,
+            END_POSITION: end_position,
         }
 
         for color, motion in self.motions.items():
             prefix = f"{color}_"
             state_data.update(
                 {
-                    prefix + "motion_type": motion.motion_type,
-                    prefix + "rotation_direction": motion.rotation_direction,
-                    prefix + "start_location": motion.start_location,
-                    prefix + "end_location": motion.end_location,
-                    prefix + "turns": motion.turns,
-                    prefix + "start_orientation": motion.start_orientation,
-                    prefix + "end_orientation": motion.end_orientation,
+                    prefix + MOTION_TYPE: motion.motion_type,
+                    prefix + ROTATION_DIRECTION: motion.rotation_direction,
+                    prefix + START_LOCATION: motion.start_location,
+                    prefix + END_LOCATION: motion.end_location,
+                    prefix + TURNS: motion.turns,
+                    prefix + START_ORIENTATION: motion.start_orientation,
+                    prefix + END_ORIENTATION: motion.end_orientation,
                 }
             )
 
@@ -291,7 +260,7 @@ class Pictograph(QGraphicsScene):
 
     def get_current_letter_type(self) -> Optional[str]:
         if self.current_letter is not None:
-            for letter_type, letters in letter_types.items():
+            for letter_type, letters in LetterNumberType:
                 if self.current_letter in letters:
                     return letter_type
         else:
@@ -394,7 +363,7 @@ class Pictograph(QGraphicsScene):
         self.update_letter()
         self.update_arrows()
         self.update_props()
-        if self.graph_type == "main":
+        if self.graph_type == MAIN:
             self.update_attr_panel()
 
     def update_arrows(self) -> None:
@@ -410,7 +379,7 @@ class Pictograph(QGraphicsScene):
             self.letter_item.position_letter_item(self.letter_item)
         else:
             self.current_letter = None
-            svg_path = f"{LETTER_BTN_ICON_DIR}/blank.svg"
+            svg_path = f"{image_path}letter_button_icons/blank.svg"
             renderer = QSvgRenderer(svg_path)
             if renderer.isValid():
                 self.letter_item.setSharedRenderer(renderer)
@@ -496,9 +465,6 @@ class Pictograph(QGraphicsScene):
         return new_beat
 
     def meets_turn_criteria(self, filters):
-        left_turns = self.motions[BLUE].turns
-        right_turns = self.motions[RED].turns
-        return (
-            left_turns in filters["left_turns"]
-            and right_turns in filters["right_turns"]
-        )
+        blue_turns = self.motions[BLUE].turns
+        red_turns = self.motions[RED].turns
+        return blue_turns in filters[BLUE_TURNS] and red_turns in filters[RED_TURNS]

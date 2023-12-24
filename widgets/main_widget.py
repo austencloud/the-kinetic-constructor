@@ -11,9 +11,9 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QWheelEvent
 import pandas as pd
-from constants.string_constants import DIAMOND, STAFF, TRIAD
+from Enums import GridMode, PropType
+from constants.string_constants import DIAMOND
 from utilities.TypeChecking.TypeChecking import PictographDataframe
-from utilities.json_handler import JsonHandler
 from widgets.image_generator_tab.ig_tab import IGTab
 from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
 from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
@@ -33,10 +33,9 @@ class MainWidget(QWidget):
         self.export_handler = None
         self.main_window = main_window
         self.resize(int(self.main_window.width()), int(self.main_window.height()))
-        self.prop_type = STAFF
+        self.prop_type = PropType.STAFF.value
         self.grid_mode = DIAMOND
         self.key_event_handler = KeyEventHandler()
-        self.json_handler = JsonHandler()
         self.letters: PictographDataframe = self.load_all_letters()
         self.graph_editor_tab = GraphEditorTab(self)
         self.sequence_widget = SequenceWidget(self)
@@ -169,5 +168,5 @@ class MainWidget(QWidget):
         self.option_picker_tab.resize_option_picker_tab()
         self.sequence_widget.resize_sequence_widget()
 
-    def on_image_generated(self, image_path):
+    def on_image_generated(self, image_path) -> None:
         print(f"Image generated at {image_path}")

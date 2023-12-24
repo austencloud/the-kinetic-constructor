@@ -1,37 +1,32 @@
 from typing import Union
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
+from Enums import *
+from constants.string_constants import (
+    ANTI,
+    CLOCKWISE,
+    COLOR,
+    COUNTER_CLOCKWISE,
+    END_LOCATION,
+    LOCATION,
+    MOTION_TYPE,
+    NORTHEAST,
+    NORTHWEST,
+    PRO,
+    ROTATION_DIRECTION,
+    SOUTHEAST,
+    SOUTHWEST,
+    START_LOCATION,
+    STATIC,
+    TURNS,
+)
 from objects.arrow.arrow_manipulator import ArrowManipulator
 from objects.grid import GridItem
 from objects.prop.prop import Prop
-from constants.string_constants import (
-    END_LOCATION,
-    MOTION_TYPE,
-    ROTATION_DIRECTION,
-    START_LOCATION,
-    TURNS,
-    COLOR,
-    COUNTER_CLOCKWISE,
-    CLOCKWISE,
-    PRO,
-    ANTI,
-    STATIC,
-    NORTHEAST,
-    SOUTHEAST,
-    SOUTHWEST,
-    NORTHWEST,
-    ARROW_ATTRIBUTES,
-    ARROW_DIR,
-    ARROW_LOCATION,
-    LOCATION,
-)
+
 from objects.graphical_object import GraphicalObject
 from data.start_end_location_map import get_start_end_locations
 from utilities.TypeChecking.TypeChecking import (
-    ArrowAttributesDicts,
-    MotionTypes,
-    Locations,
-    RotationDirections,
     Turns,
     RotationAngles,
     TYPE_CHECKING,
@@ -51,7 +46,10 @@ class Arrow(GraphicalObject):
     def __init__(self, scene, arrow_dict, motion) -> None:
         super().__init__(scene)
         self.motion: Motion = motion
-        self.svg_file = self.get_svg_file(arrow_dict[MOTION_TYPE], arrow_dict[TURNS])
+        self.svg_file = self.get_svg_file(
+            arrow_dict[MOTION_TYPE],
+            arrow_dict[TURNS],
+        )
         self.setup_svg_renderer(self.svg_file)
         self.setAcceptHoverEvents(True)
         self._setup_attributes(scene, arrow_dict)
@@ -65,7 +63,7 @@ class Arrow(GraphicalObject):
         self.is_svg_mirrored: bool = False
         self.is_dragging: bool = False
         self.ghost: GhostArrow = None
-        self.location: Locations = None
+        self.location: Location = None
         self.is_ghost: bool = False
         self.turns: Turns = arrow_dict[TURNS]
         self.center_x = self.boundingRect().width() / 2
@@ -205,13 +203,13 @@ class Arrow(GraphicalObject):
     def set_arrow_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
         self.motion.color = target_arrow.color
-        self.motion_type: MotionTypes = target_arrow.motion_type
+        self.motion_type: MotionType = target_arrow.motion_type
         self.motion.arrow.location = target_arrow.location
-        self.motion.rotation_direction: RotationDirections = (
+        self.motion.rotation_direction: RotationDirection = (
             target_arrow.motion.rotation_direction
         )
-        self.motion.start_location: Locations = target_arrow.motion.start_location
-        self.motion.end_location: Locations = target_arrow.motion.end_location
+        self.motion.start_location: Location = target_arrow.motion.start_location
+        self.motion.end_location: Location = target_arrow.motion.end_location
         self.motion.turns: Turns = target_arrow.motion.turns
 
     def update_prop_during_drag(self) -> None:
@@ -294,7 +292,12 @@ class Arrow(GraphicalObject):
             }.get(rotation_direction, {})
         elif motion_type == STATIC:
             return {
-                CLOCKWISE: {NORTHEAST: 0, SOUTHEAST: 0, SOUTHWEST: 0, NORTHWEST: 0},
+                CLOCKWISE: {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 0,
+                    SOUTHWEST: 0,
+                    NORTHWEST: 0,
+                },
                 COUNTER_CLOCKWISE: {
                     NORTHEAST: 0,
                     SOUTHEAST: 0,
@@ -304,10 +307,10 @@ class Arrow(GraphicalObject):
             }.get(rotation_direction, {})
 
     def get_attributes(self) -> ArrowAttributesDicts:
-        return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}
+        return {attr.value: getattr(self, attr.value) for attr in ArrowAttribute}
 
-    def get_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
-        svg_file = f"{ARROW_DIR}{self.pictograph.main_widget.grid_mode}/{motion_type}/{motion_type}_{float(turns)}.svg"
+    def get_svg_file(self, motion_type: MotionType, turns: Turns) -> str:
+        svg_file = f"{image_path}arrows/{self.pictograph.main_widget.grid_mode}/{motion_type}/{motion_type}_{float(turns)}.svg"
         return svg_file
 
     def _change_arrow_to_static(self) -> None:
@@ -324,4 +327,4 @@ class Arrow(GraphicalObject):
         self.motion[ROTATION_DIRECTION] = None
         self.motion[START_LOCATION] = self.motion.prop.location
         self.motion[END_LOCATION] = self.motion.prop.location
-        self.motion[ARROW_LOCATION] = self.motion.prop.location
+        self.location = self.motion.prop.location

@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants.string_constants import ICON_DIR, SWAP_ICON
-from utilities.TypeChecking.TypeChecking import Locations
+from utilities.TypeChecking.TypeChecking import Location
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
@@ -134,7 +134,7 @@ class StartEndWidget(AttrBoxWidget):
             motion.arrow.manipulator.swap_rot_dir()
             self.update_start_end_boxes(motion.start_location, motion.end_location)
 
-    def update_start_end_boxes(self, start: Locations, end: Locations) -> None:
+    def update_start_end_boxes(self, start: Location, end: Location) -> None:
         if start and end:
             self.start_box.setCurrentText(start.upper())
             self.end_box.setCurrentText(end.upper())

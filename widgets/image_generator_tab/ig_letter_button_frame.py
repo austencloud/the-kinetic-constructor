@@ -2,11 +2,10 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton
 from PyQt6.QtGui import QIcon, QPixmap, QPainter, QFont, QColor, QResizeEvent
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtSvg import QSvgRenderer
-from data.letter_engine_data import letter_types
+from Enums import Letter, LetterNumberType
 from constants.string_constants import LETTER_BTN_ICON_DIR
 from typing import TYPE_CHECKING, Dict, List
 
-from utilities.TypeChecking.Letters import Letters
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
@@ -17,7 +16,7 @@ class IGLetterButtonFrame(QFrame):
         super().__init__()
         self.main_widget = main_widget
         self.spacing = int(self.width() * 0.01)
-        self.buttons: Dict[Letters, QPushButton] = {}
+        self.buttons: Dict[Letter, QPushButton] = {}
         self.init_letter_buttons_layout()
         self.add_black_borders()
 
@@ -97,13 +96,14 @@ class IGLetterButtonFrame(QFrame):
         self.letter_buttons_layout = letter_buttons_layout
         self.setLayout(letter_buttons_layout)
 
-    def get_letter_type(self, letter: str) -> str:
-        for letter_type in letter_types:
-            if letter in letter_types[letter_type]:
-                return letter_type
-        return ""
+    # Function to get the Enum member key from a given letter
+    def get_letter_type(self, letter: str) -> str | None:
+        for letter_type in LetterNumberType:
+            if letter in letter_type.letters:
+                return letter_type.name.replace("_", " ").lower().capitalize()  # Modify the key format
+        return None
 
-    def get_icon_path(self, letter_type: str, letter: Letters) -> str:
+    def get_icon_path(self, letter_type: str, letter: Letter) -> str:
         return f"{LETTER_BTN_ICON_DIR}/{letter_type}/{letter}.svg"
 
     def create_button(self, icon_path: str, letter: str) -> QPushButton:

@@ -1,29 +1,26 @@
 import re
-from typing import Union, get_args
+from typing import TYPE_CHECKING, Dict, Tuple, Union, get_args
+from Enums import (
+    AntiradialOrientation,
+    Axis,
+    Color,
+    Location,
+    MotionType,
+    Orientation,
+    PropAttribute,
+    PropAttributesDicts,
+    PropType,
+    RadialOrientation,
+    RotationDirection,
+)
 from data.start_end_location_map import get_start_end_locations
 from objects.graphical_object import GraphicalObject
 from PyQt6.QtCore import QPointF, Qt
 from constants.string_constants import *
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from objects.prop.prop_manipulator import PropManipulator
-from utilities.TypeChecking.TypeChecking import (
-    AntiradialOrientations,
-    Layers,
-    Orientations,
-    PropTypes,
-    RadialOrientations,
-    RotationAngles,
-    PropAttributesDicts,
-    Locations,
-    Locations,
-    RotationDirections,
-    MotionTypes,
-    Axes,
-    Colors,
-    TYPE_CHECKING,
-    Dict,
-    Tuple,
-)
+from utilities.TypeChecking.TypeChecking import RotationAngles
+
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
@@ -45,15 +42,13 @@ class Prop(GraphicalObject):
         self.scene: Pictograph | PropBox = scene
         self.manipulator = PropManipulator(self)
         self.drag_offset = QPointF(0, 0)
-        self.previous_location: Locations = None
+        self.previous_location: Location = None
         self.ghost: Prop = None
-        self.axis = None
-        self.color: Colors = prop_dict[COLOR]
-        self.location: Locations = prop_dict[LOCATION]
-        self.orientation: Orientations = prop_dict[ORIENTATION]
+        self.axis: Axis = None
+        self.color: Color = prop_dict[COLOR]
+        self.location: Location = prop_dict[LOCATION]
+        self.orientation: Orientation = prop_dict[ORIENTATION]
         self.center = self.boundingRect().center()
-
-
 
     ### MOUSE EVENTS ###
 
@@ -114,11 +109,14 @@ class Prop(GraphicalObject):
     ### GETTERS ###
 
     def get_axis_from_orientation(self, orientation, location) -> None:
-        
         if orientation in [IN, OUT]:
-            axis: Axes = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
-        elif orientation in [CLOCKWISE, COUNTER_CLOCKWISE]:
-            axis: Axes = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
+            axis: Axis = (
+                Axis.VERTICAL if location in [NORTH, SOUTH] else Axis.HORIZONTAL
+            )
+        elif orientation in [CLOCK, COUNTER]:
+            axis: Axis = (
+                Axis.HORIZONTAL if location in [NORTH, SOUTH] else Axis.VERTICAL
+            )
         return axis
 
     def swap_orientation(self, orientation) -> None:
@@ -126,22 +124,40 @@ class Prop(GraphicalObject):
             orientation = OUT
         elif orientation == OUT:
             orientation = IN
-        elif orientation == CLOCKWISE:
-            orientation = COUNTER_CLOCKWISE
-        elif orientation == COUNTER_CLOCKWISE:
-            orientation = CLOCKWISE
+        elif orientation == CLOCK:
+            orientation = COUNTER
+        elif orientation == COUNTER:
+            orientation = CLOCK
 
         self.update_rotation()
         return orientation
 
     def get_rotation_angle(self) -> RotationAngles:
-        angle_map: Dict[
-            Tuple[Layers, Orientations], Dict[Locations, RotationAngles]
-        ] = {
-            (IN): {NORTH: 90, SOUTH: 270, WEST: 0, EAST: 180},
-            (OUT): {NORTH: 270, SOUTH: 90, WEST: 180, EAST: 0},
-            (CLOCKWISE): {NORTH: 0, SOUTH: 180, WEST: 270, EAST: 90},
-            (COUNTER_CLOCKWISE): {NORTH: 180, SOUTH: 0, WEST: 90, EAST: 270},
+        angle_map: Dict[Orientation, Dict[Location, RotationAngles]] = {
+            IN: {
+                NORTH: 90,
+                SOUTH: 270,
+                WEST: 0,
+                EAST: 180,
+            },
+            OUT: {
+                NORTH: 270,
+                SOUTH: 90,
+                WEST: 180,
+                EAST: 0,
+            },
+            CLOCK: {
+                NORTH: 0,
+                SOUTH: 180,
+                WEST: 270,
+                EAST: 90,
+            },
+            COUNTER: {
+                NORTH: 180,
+                SOUTH: 0,
+                WEST: 90,
+                EAST: 270,
+            },
         }
 
         key = self.orientation
@@ -149,7 +165,7 @@ class Prop(GraphicalObject):
         return rotation_angle
 
     def get_attributes(self) -> PropAttributesDicts:
-        return {attr: getattr(self, attr) for attr in PROP_ATTRIBUTES}
+        return {attr: getattr(self, attr) for attr in PropAttribute}
 
     def update_rotation(self) -> None:
         rotation_angle = self.get_rotation_angle()
@@ -158,13 +174,13 @@ class Prop(GraphicalObject):
             self.ghost.setRotation(rotation_angle)
         self.setRotation(rotation_angle)
 
-    def get_svg_file(self, prop_type: PropTypes) -> str:
+    def get_svg_file(self, prop_type: PropType) -> str:
         svg_file = f"{PROP_DIR}{prop_type}.svg"
         return svg_file
 
     ### UPDATERS ###
 
-    def update_prop_type(self, prop_type: PropTypes) -> None:
+    def update_prop_type(self, prop_type: PropType) -> None:
         self.prop_type = prop_type
         self.update_svg(self.get_svg_file(prop_type))
         self.update_appearance()
@@ -222,14 +238,14 @@ class Prop(GraphicalObject):
                 WEST: (prop_length, prop_width),
                 EAST: (0, 0),
             }
-        elif self.orientation == CLOCKWISE:
+        elif self.orientation == CLOCK:
             offset_map = {
                 NORTH: (0, 0),
                 SOUTH: (prop_length, prop_width),
                 WEST: (0, prop_length),
                 EAST: (prop_width, 0),
             }
-        elif self.orientation == COUNTER_CLOCKWISE:
+        elif self.orientation == COUNTER:
             offset_map = {
                 NORTH: (prop_length, prop_width),
                 SOUTH: (0, 0),
@@ -240,45 +256,107 @@ class Prop(GraphicalObject):
         offset_tuple = offset_map.get(self.location, (0, 0))
         return QPointF(offset_tuple[0], offset_tuple[1])
 
-    def update_arrow_location(self, new_arrow_location: Locations) -> None:
+    def update_arrow_location(self, new_arrow_location: Location) -> None:
         if self.motion.motion_type in [PRO, ANTI]:
             shift_location_map: Dict[
-                Tuple(Locations, RotationDirections, MotionTypes),
-                Dict[Locations, Locations],
+                Tuple(Location, RotationDirection, MotionType),
+                Dict[Location, Location],
             ] = {
                 ### ISO ###
-                (NORTHEAST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
-                (NORTHWEST, CLOCKWISE, PRO): {EAST: NORTHEAST, WEST: SOUTHWEST},
-                (SOUTHWEST, CLOCKWISE, PRO): {NORTH: NORTHWEST, SOUTH: SOUTHEAST},
-                (SOUTHEAST, CLOCKWISE, PRO): {WEST: SOUTHWEST, EAST: NORTHEAST},
-                (NORTHEAST, COUNTER_CLOCKWISE, PRO): {WEST: NORTHWEST, EAST: SOUTHEAST},
-                (NORTHWEST, COUNTER_CLOCKWISE, PRO): {
+                (NORTHEAST, CLOCKWISE, PRO): {
+                    NORTH: NORTHWEST,
+                    SOUTH: SOUTHEAST,
+                },
+                (NORTHWEST, CLOCKWISE, PRO): {
+                    EAST: NORTHEAST,
+                    WEST: SOUTHWEST,
+                },
+                (SOUTHWEST, CLOCKWISE, PRO): {
+                    NORTH: NORTHWEST,
+                    SOUTH: SOUTHEAST,
+                },
+                (SOUTHEAST, CLOCKWISE, PRO): {
+                    WEST: SOUTHWEST,
+                    EAST: NORTHEAST,
+                },
+                (
+                    NORTHEAST,
+                    COUNTER_CLOCKWISE,
+                    PRO,
+                ): {
+                    WEST: NORTHWEST,
+                    EAST: SOUTHEAST,
+                },
+                (
+                    NORTHWEST,
+                    COUNTER_CLOCKWISE,
+                    PRO,
+                ): {
                     SOUTH: SOUTHWEST,
                     NORTH: NORTHEAST,
                 },
-                (SOUTHWEST, COUNTER_CLOCKWISE, PRO): {EAST: SOUTHEAST, WEST: NORTHWEST},
-                (SOUTHEAST, COUNTER_CLOCKWISE, PRO): {
+                (
+                    SOUTHWEST,
+                    COUNTER_CLOCKWISE,
+                    PRO,
+                ): {
+                    EAST: SOUTHEAST,
+                    WEST: NORTHWEST,
+                },
+                (
+                    SOUTHEAST,
+                    COUNTER_CLOCKWISE,
+                    PRO,
+                ): {
                     NORTH: NORTHEAST,
                     SOUTH: SOUTHWEST,
                 },
                 ### ANTI ###
-                (NORTHEAST, CLOCKWISE, ANTI): {EAST: SOUTHEAST, WEST: NORTHWEST},
-                (NORTHWEST, CLOCKWISE, ANTI): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
-                (SOUTHWEST, CLOCKWISE, ANTI): {EAST: SOUTHEAST, WEST: NORTHWEST},
-                (SOUTHEAST, CLOCKWISE, ANTI): {NORTH: NORTHEAST, SOUTH: SOUTHWEST},
-                (NORTHEAST, COUNTER_CLOCKWISE, ANTI): {
+                (NORTHEAST, CLOCKWISE, ANTI): {
+                    EAST: SOUTHEAST,
+                    WEST: NORTHWEST,
+                },
+                (NORTHWEST, CLOCKWISE, ANTI): {
+                    NORTH: NORTHEAST,
+                    SOUTH: SOUTHWEST,
+                },
+                (SOUTHWEST, CLOCKWISE, ANTI): {
+                    EAST: SOUTHEAST,
+                    WEST: NORTHWEST,
+                },
+                (SOUTHEAST, CLOCKWISE, ANTI): {
+                    NORTH: NORTHEAST,
+                    SOUTH: SOUTHWEST,
+                },
+                (
+                    NORTHEAST,
+                    COUNTER_CLOCKWISE,
+                    ANTI,
+                ): {
                     NORTH: NORTHWEST,
                     SOUTH: SOUTHEAST,
                 },
-                (NORTHWEST, COUNTER_CLOCKWISE, ANTI): {
+                (
+                    NORTHWEST,
+                    COUNTER_CLOCKWISE,
+                    ANTI,
+                ): {
                     WEST: SOUTHWEST,
                     EAST: NORTHEAST,
                 },
-                (SOUTHWEST, COUNTER_CLOCKWISE, ANTI): {
+                (
+                    SOUTHWEST,
+                    COUNTER_CLOCKWISE,
+                    ANTI,
+                ): {
                     SOUTH: SOUTHEAST,
                     NORTH: NORTHWEST,
                 },
-                (SOUTHEAST, COUNTER_CLOCKWISE, ANTI): {
+                (
+                    SOUTHEAST,
+                    COUNTER_CLOCKWISE,
+                    ANTI,
+                ): {
                     EAST: NORTHEAST,
                     WEST: SOUTHWEST,
                 },
@@ -327,8 +405,7 @@ class Prop(GraphicalObject):
         self.scene.update_pictograph()
 
     def is_radial(self) -> bool:
-        return self.orientation in get_args(RadialOrientations)
-    
+        return self.orientation in get_args(RadialOrientation)
+
     def is_antiradial(self) -> bool:
-        return self.orientation in get_args(AntiradialOrientations)
-    
+        return self.orientation in get_args(AntiradialOrientation)

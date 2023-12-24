@@ -1,9 +1,13 @@
 from typing import TYPE_CHECKING, Dict, Union
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QCheckBox, QVBoxLayout
-from constants.string_constants import CLOCK, COUNTER, IN, OUT
+from Enums import Filter, Orientation
+from constants.string_constants import (
+    BLUE_END_ORIENTATION,
+    BLUE_TURNS,
+    RED_END_ORIENTATION,
+    RED_TURNS,
+)
 from filter_frame import FilterFrame
-from utilities.TypeChecking.TypeChecking import Orientations, Turns
-from PyQt6.QtWidgets import QComboBox
+from utilities.TypeChecking.TypeChecking import Turns
 
 if TYPE_CHECKING:
     from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
@@ -37,11 +41,11 @@ class OptionPickerFilterFrame(FilterFrame):
             self.right_end_orientation_combobox.currentText()
         )
 
-        self.filters: Dict[str, Union[Turns, Orientations]] = {
-            "left_turns": selected_blue_turns,
-            "right_turns": selected_red_turns,
-            "left_end_orientation": selected_left_end_orientation,
-            "right_end_orientation": selected_right_end_orientation,
+        self.filters: Dict[str, Union[Turns, Orientation]] = {
+            BLUE_TURNS: selected_blue_turns,
+            RED_TURNS: selected_red_turns,
+            BLUE_END_ORIENTATION: selected_left_end_orientation,
+            RED_END_ORIENTATION: selected_right_end_orientation,
         }
 
         self.option_picker_tab.scroll_area.apply_turn_filters(self.filters)

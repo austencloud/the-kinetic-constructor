@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QVBoxLayout, QGraphicsSceneMouseEvent, QComboBox
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+from Enums import GridMode
 from objects.prop.prop import *
 from objects.prop.prop_types import BigTriad
 from widgets.graph_editor_tab.object_panel.propbox.propbox_drag import PropBoxDrag
@@ -8,7 +9,7 @@ from widgets.graph_editor_tab.object_panel.propbox.propbox_view import PropBoxVi
 from constants.string_constants import *
 from objects.grid import Grid
 from widgets.graph_editor_tab.object_panel.objectbox import ObjectBox
-from utilities.TypeChecking.TypeChecking import PropTypes, TYPE_CHECKING, Dict, List
+from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, Dict, List
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
@@ -27,7 +28,7 @@ class PropBox(ObjectBox):
     ) -> None:
         self.main_widget = main_widget
         self.view = PropBoxView(self, graph_editor)
-        self.prop_type = STAFF
+        self.prop_type = main_widget.prop_type
         self.pictograph = graph_editor.main_pictograph
         self.grid = Grid(self)
         self.grid_position = QPointF(0, 0)
@@ -42,28 +43,8 @@ class PropBox(ObjectBox):
 
     def init_combobox(self) -> None:
         self.prop_type_combobox = QComboBox(self.view)
-        prop_types = [
-            "Staff",
-            "BigStaff",
-            "Club",
-            "Buugeng",
-            "BigBuugeng",
-            "Fractalgeng",
-            "Fan",
-            "BigFan",
-            "Triad",
-            "BigTriad",
-            "MiniHoop",
-            "Bighoop",
-            "Doublestar",
-            "Bigdoublestar",
-            "Quiad",
-            "Sword",
-            "Guitar",
-            "Ukulele",
-            "Chicken",
-        ]
-        self.prop_type_combobox.addItems(prop_types)
+        for item in PropType:
+            self.prop_type_combobox.addItem(str(item.value.capitalize()))
         self.prop_type_combobox.setCurrentText(str(self.prop_type.capitalize()))
         self.prop_type_combobox.currentTextChanged.connect(self.on_prop_type_change)
         self.prop_type_combobox.move(0, 0)
@@ -128,7 +109,9 @@ class PropBox(ObjectBox):
             raise ValueError("Invalid prop type")
 
         prop = prop_class(
-            self.pictograph, prop_dict, self.pictograph.motions[prop_dict[COLOR]]
+            self.pictograph,
+            prop_dict,
+            self.pictograph.motions[prop_dict[COLOR]],
         )
         self.setup_prop(prop)
         self.props.append(prop)
@@ -151,10 +134,10 @@ class PropBox(ObjectBox):
     def get_diamond_mode_attributes(self) -> List[Dict]:
         return [
             {
-                COLOR: RED,
                 PROP_TYPE: self.prop_type,
                 LOCATION: NORTH,
                 ORIENTATION: IN,
+                COLOR: RED,
             },
             {
                 COLOR: BLUE,
@@ -227,12 +210,12 @@ class PropBox(ObjectBox):
         prop.update_appearance()
         prop.setTransformOriginPoint(prop.boundingRect().center())
 
-    def change_prop_type(self, new_prop_type: PropTypes) -> None:
+    def change_prop_type(self, new_prop_type: PropType) -> None:
         self.prop_type = new_prop_type
         self.clear_props()
         self.populate_props()
 
-    def update_prop_type_in_pictograph(self, new_prop_type: PropTypes) -> None:
+    def update_prop_type_in_pictograph(self, new_prop_type: PropType) -> None:
         for prop in self.pictograph.props.values():
             prop.update_prop_type(new_prop_type)
         for ghost_prop in self.pictograph.ghost_props.values():
@@ -287,9 +270,9 @@ class PropBox(ObjectBox):
 
             for prop in self.props:
                 if prop != closest_prop:
-                    prop.is_dim(True)  # Highlight all props except the closest one
+                    prop.is_dim(True)
                 else:
-                    prop.is_dim(False)  # Do not highlight the closest one
+                    prop.is_dim(False)
 
     def mouseReleaseEvent(self, event) -> None:
         if self.target_prop and self.drag:

@@ -1,11 +1,11 @@
-from constants.string_constants import COLOR
 from typing import TYPE_CHECKING
+from Enums import ArrowAttribute, ArrowAttributesDicts
+from constants.string_constants import COLOR
 from objects.arrow.arrow import Arrow
 from objects.motion import Motion
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
-    from utilities.TypeChecking.TypeChecking import ArrowAttributesDicts
 
 
 class GhostArrow(Arrow):
@@ -27,7 +27,7 @@ class GhostArrow(Arrow):
     def __init__(
         self,
         pictograph: "Pictograph",
-        attributes: "ArrowAttributesDicts",
+        attributes: ArrowAttributesDicts,
         motion: "Motion",
     ) -> None:
         super().__init__(pictograph, attributes, motion)
@@ -36,7 +36,7 @@ class GhostArrow(Arrow):
         self.color = attributes[COLOR]
         self.target_arrow: "Arrow" = None
         self.is_ghost = True
-        
+
     def update_ghost_arrow(self, attributes) -> None:
         self.update_attributes(attributes)
         self.update_appearance()

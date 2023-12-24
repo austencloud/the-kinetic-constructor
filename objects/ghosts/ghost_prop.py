@@ -1,9 +1,9 @@
+from Enums import PropAttribute, PropAttributesDicts
+from constants.string_constants import COLOR
 from objects.motion import Motion
 from objects.prop.prop import Prop
-from constants.string_constants import (
-    COLOR,
-)
-from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, PropAttributesDicts
+
+from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph

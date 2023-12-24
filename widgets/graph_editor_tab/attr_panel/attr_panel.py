@@ -2,9 +2,9 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QFrame,
 )
-from constants.string_constants import RED, BLUE
+from Enums import Color
+from constants.string_constants import BLUE, RED
 from objects.motion import Motion
-from utilities.TypeChecking.TypeChecking import Colors
 from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
 from typing import TYPE_CHECKING
 

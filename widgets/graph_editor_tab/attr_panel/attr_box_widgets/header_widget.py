@@ -4,14 +4,9 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
-from constants.string_constants import (
-    BLUE,
-    BLUE_HEX,
-    RED,
-    RED_HEX,
-    ICON_DIR,
-)
+
 from typing import TYPE_CHECKING, Callable
+from Enums import Color, HexColor
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
@@ -19,7 +14,7 @@ from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
-from constants.string_constants import ICON_DIR
+from constants.string_constants import BLUE, HEX_BLUE, HEX_RED, ICON_DIR, RED
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 
@@ -90,7 +85,7 @@ class HeaderWidget(AttrBoxWidget):
 
     def _setup_header_label(self) -> QLabel:
         text = "Left" if self.attr_box.color == BLUE else "Right"
-        color_hex = RED_HEX if self.attr_box.color == RED else BLUE_HEX
+        color_hex = HEX_RED if self.attr_box.color == RED else HEX_BLUE
         label = QLabel(text, self)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label.setStyleSheet(f"color: {color_hex}; font-weight: bold;")

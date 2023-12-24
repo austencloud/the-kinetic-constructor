@@ -6,20 +6,20 @@ from PyQt6.QtGui import QTransform
 from PyQt6.QtWidgets import QGraphicsSceneWheelEvent
 from typing import Dict, Literal
 from PyQt6.QtCore import QPointF, QEvent
+from Enums import GridMode, Location
 from constants.string_constants import (
     BOX,
     DIAMOND,
     GRID_DIR,
     NORTH,
     EAST,
-    SOUTH,
-    WEST,
     NORTHEAST,
+    SOUTH,
     SOUTHEAST,
     SOUTHWEST,
     NORTHWEST,
+    WEST,
 )
-from utilities.TypeChecking.TypeChecking import GridModes
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
@@ -83,7 +83,12 @@ class Grid:
                 "sw_box_hand_point",
                 "nw_box_hand_point",
             ],
-            [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST],
+            [
+                NORTHEAST,
+                SOUTHEAST,
+                SOUTHWEST,
+                NORTHWEST,
+            ],
         )
         self.diamond_layer2_points = self._init_points(
             [
@@ -92,7 +97,12 @@ class Grid:
                 "sw_diamond_layer2_point",
                 "nw_diamond_layer2_point",
             ],
-            [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST],
+            [
+                NORTHEAST,
+                SOUTHEAST,
+                SOUTHWEST,
+                NORTHWEST,
+            ],
         )
         self.strict_diamond_layer2_points = self._init_points(
             [
@@ -101,7 +111,12 @@ class Grid:
                 "strict_sw_diamond_layer2_point",
                 "strict_nw_diamond_layer2_point",
             ],
-            [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST],
+            [
+                NORTHEAST,
+                SOUTHEAST,
+                SOUTHWEST,
+                NORTHWEST,
+            ],
         )
         self.box_layer2_points = self._init_points(
             [
@@ -134,7 +149,7 @@ class Grid:
             for point_name, constant in zip(point_names, constants)
         }
 
-    def _apply_grid_mode(self, grid_mode: GridModes) -> None:
+    def _apply_grid_mode(self, grid_mode: GridMode) -> None:
         self.toggle_grid_mode(grid_mode)
 
     def _hide_box_mode_elements(self) -> None:
@@ -203,7 +218,7 @@ class Grid:
         if element_id in self.items:
             self.items[element_id].setVisible(visible)
 
-    def toggle_grid_mode(self, grid_mode: GridModes) -> None:
+    def toggle_grid_mode(self, grid_mode: GridMode) -> None:
         self.grid_mode = grid_mode
         if grid_mode == DIAMOND:
             self._hide_box_mode_elements()

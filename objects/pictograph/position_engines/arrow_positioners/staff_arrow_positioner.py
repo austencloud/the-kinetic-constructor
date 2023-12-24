@@ -1,31 +1,17 @@
-from sre_constants import IN
 from typing import TYPE_CHECKING, Tuple, Callable, get_args
-from utilities.TypeChecking.TypeChecking import (
-    AntiradialOrientations,
-    RadialOrientations,
-)
-from constants.string_constants import (
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
-    DOWN,
-    EAST,
-    LEFT,
-    NORTH,
-    NORTHEAST,
-    NORTHWEST,
-    OUT,
-    PRO,
-    RED,
-    BLUE,
-    ANTI,
-    RIGHT,
-    SOUTH,
-    SOUTHEAST,
-    SOUTHWEST,
-    UP,
-    WEST,
-)
+
+
 from PyQt6.QtCore import QPointF
+
+from Enums import (
+    AntiradialOrientation,
+    Color,
+    Direction,
+    Location,
+    MotionType,
+    Orientation,
+    RadialOrientation,
+)
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
@@ -131,92 +117,88 @@ class StaffArrowPositioner:
                 if self.pictograph.motions[RED].motion_type == PRO
                 else self.pictograph.motions[BLUE]
             )
-            anti_prop = anti_motion.prop
-            pro_prop = pro_motion.prop
 
-            if anti_prop.is_antiradial() and pro_prop.is_radial():
-                for orientation in CLOCKWISE, COUNTER_CLOCKWISE:
-                    adjustment = self.arrow_positioner.calculate_adjustment(
-                        anti_motion.arrow.location, 30
-                    )
-                    direction = self.get_antiradial_V_anti_adjustment_direction(
-                        anti_motion.arrow.location,
-                        anti_motion.end_location,
-                        anti_motion.end_orientation,
-                    )
-                    if direction == UP:
-                        adjustment += QPointF(0, -35)
-                    elif direction == DOWN:
-                        adjustment += QPointF(0, 35)
-                    elif direction == LEFT:
-                        adjustment += QPointF(-35, 0)
-                    elif direction == RIGHT:
-                        adjustment += QPointF(35, 0)
-                    self.arrow_positioner._apply_adjustment(
-                        anti_motion.arrow, adjustment
-                    )
+            if anti_motion.prop.is_antiradial() and pro_motion.prop.is_radial():
+                adjustment = self.arrow_positioner.calculate_adjustment(
+                    anti_motion.arrow.location, 30
+                )
+                direction = self.get_antiradial_V_anti_adjustment_direction(
+                    anti_motion.arrow.location,
+                    anti_motion.end_location,
+                    anti_motion.end_orientation,
+                )
+                if direction == Direction.UP:
+                    adjustment += QPointF(0, -35)
+                elif direction == Direction.DOWN:
+                    adjustment += QPointF(0, 35)
+                elif direction == Direction.LEFT:
+                    adjustment += QPointF(-35, 0)
+                elif direction == Direction.RIGHT:
+                    adjustment += QPointF(35, 0)
+                self.arrow_positioner._apply_adjustment(anti_motion.arrow, adjustment)
             else:
-                # apply an equal adjustment of 90 to all anti arrows
+                # apply an equal adjustment of 90 to all ANTI arrows
                 self._apply_adjustment_to_arrows_by_type(ANTI, 90)
-
 
     def get_antiradial_V_anti_adjustment_direction(
         self, arrow_location: str, end_location, orientation
     ) -> Callable:
-        if orientation in [CLOCKWISE, COUNTER_CLOCKWISE]:
+        if orientation in [CLOCK, COUNTER]:
             if arrow_location == NORTHEAST:
                 if end_location == EAST:
-                    return DOWN
+                    return Direction.DOWN
                 elif end_location == NORTH:
-                    return LEFT
+                    return Direction.LEFT
             elif arrow_location == SOUTHEAST:
                 if end_location == SOUTH:
-                    return LEFT
+                    return Direction.LEFT
                 elif end_location == EAST:
-                    return UP
+                    return Direction.UP
             elif arrow_location == SOUTHWEST:
                 if end_location == WEST:
-                    return UP
+                    return Direction.UP
                 elif end_location == SOUTH:
-                    return RIGHT
+                    return Direction.RIGHT
             elif arrow_location == NORTHWEST:
                 if end_location == NORTH:
-                    return RIGHT
+                    return Direction.RIGHT
                 elif end_location == WEST:
-                    return DOWN
+                    return Direction.DOWN
         elif orientation in [IN, OUT]:
             if arrow_location == NORTHEAST:
                 if end_location == EAST:
-                    return LEFT
+                    return Direction.LEFT
                 elif end_location == NORTH:
-                    return DOWN
+                    return Direction.DOWN
             elif arrow_location == SOUTHEAST:
                 if end_location == SOUTH:
-                    return UP
+                    return Direction.UP
                 elif end_location == EAST:
-                    return LEFT
+                    return Direction.LEFT
             elif arrow_location == SOUTHWEST:
                 if end_location == WEST:
-                    return UP
+                    return Direction.UP
                 elif end_location == SOUTH:
-                    return RIGHT
+                    return Direction.RIGHT
             elif arrow_location == NORTHWEST:
                 if end_location == NORTH:
-                    return RIGHT
+                    return Direction.RIGHT
                 elif end_location == WEST:
-                    return DOWN
+                    return Direction.DOWN
 
     # Helper functions
     def _are_both_props_radial(self, red_orientation, blue_orientation) -> bool:
-        return red_orientation in (OUT, IN) and blue_orientation in (OUT, IN)
+        return (
+            red_orientation in RadialOrientation
+            and blue_orientation in RadialOrientation
+        )
 
     def _is_at_least_one_prop_antiradial(
         self, red_orientation, blue_orientation
     ) -> bool:
-        antiradial_orientations = get_args(AntiradialOrientations)
         return (
-            red_orientation in antiradial_orientations
-            or blue_orientation in antiradial_orientations
+            red_orientation in AntiradialOrientation
+            or blue_orientation in AntiradialOrientation
         )
 
     def _apply_adjustment_to_all_arrows(self, adjustment_value: int) -> None:

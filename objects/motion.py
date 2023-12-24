@@ -1,12 +1,13 @@
-from enum import Enum
-from Enums import MotionType, Orientation
-from utilities.TypeChecking.TypeChecking import (
-    MotionAttribute,
+from Enums import (
     MotionAttributesDicts,
+    MotionType,
+    Orientation,
+    MotionAttribute,
     PropAttribute,
 )
+
 from constants.string_constants import *
-from typing import TYPE_CHECKING, Literal, Union
+from typing import TYPE_CHECKING, Dict, Literal, Union
 
 
 if TYPE_CHECKING:
@@ -14,11 +15,6 @@ if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
     from objects.prop.prop import Prop
     from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
-
-
-MotionType = MotionType
-Orientation = Orientation
-MA = MotionAttribute
 
 
 class Motion:
@@ -31,7 +27,7 @@ class Motion:
         self.scene = scene
         self.motion_dict = motion_dict
         self.initialize_attributes()
-        self.color: MotionAttribute.COLOR = motion_dict["color"]
+        self.color: COLOR = motion_dict["color"]
 
         if not blank:
             self.setup_attributes(motion_dict)
@@ -39,46 +35,38 @@ class Motion:
     def initialize_attributes(self):
         self.arrow: Arrow = None
         self.prop: Prop = None
-        self.color: MA.COLOR = None
-        self.motion_type: MA.MOTION_TYPE = None
-        self.turns: MA.TURNS = None
-        self.rotation_direction: MA.ROTATION_DIRECTION = None
-        self.start_location: MA.START_LOCATION = None
-        self.end_location: MA.END_LOCATION = None
-        self.start_orientation: MA.START_ORIENTATION = None
-        self.end_orientation: MA.END_ORIENTATION = None
+        self.color: COLOR = None
+        self.motion_type: MOTION_TYPE = None
+        self.turns: TURNS = None
+        self.rotation_direction: ROTATION_DIRECTION = None
+        self.start_location: START_LOCATION = None
+        self.end_location: END_LOCATION = None
+        self.start_orientation: START_ORIENTATION = None
+        self.end_orientation: END_ORIENTATION = None
 
     ### SETUP ###
 
-    def setup_attributes(self, motion_dict) -> None:
-        if MA.ARROW in motion_dict and MA.PROP in motion_dict:
-            if motion_dict[MA.ARROW] and motion_dict[MA.PROP]:
-                self.arrow.motion = self
-                self.prop.motion = self
-                self.arrow: Arrow = motion_dict[MA.ARROW]
-                self.prop: Prop = motion_dict[MA.PROP]
-        else:
-            self.arrow: Arrow = None
-            self.prop: Prop = None
+    def setup_attributes(self, motion_dict: Dict) -> None:
+        self.arrow = motion_dict.get(ARROW)
+        self.prop = motion_dict.get(PROP)
 
-        self.motion_type: MotionAttribute.MOTION_TYPE = motion_dict[MA.MOTION_TYPE]
-        self.turns: MotionAttribute.TURNS = motion_dict[MA.TURNS]
-        self.rotation_direction: MotionAttribute.ROTATION_DIRECTION = motion_dict[
-            MA.ROTATION_DIRECTION
-        ]
-        self.start_location: MotionAttribute.START_LOCATION = motion_dict[
-            MA.START_LOCATION
-        ]
-        self.end_location: MotionAttribute.END_LOCATION = motion_dict[MA.END_LOCATION]
-        self.start_orientation: MotionAttribute.START_ORIENTATION = motion_dict[
-            MA.START_ORIENTATION
-        ]
+        if self.arrow and self.prop:
+            self.arrow.motion = self
+            self.prop.motion = self
+        else:
+            self.arrow = None
+            self.prop = None
+
+        self.motion_type: MOTION_TYPE = motion_dict[MOTION_TYPE]
+        self.turns: TURNS = motion_dict[TURNS]
+        self.rotation_direction: ROTATION_DIRECTION = motion_dict[ROTATION_DIRECTION]
+        self.start_location: START_LOCATION = motion_dict[START_LOCATION]
+        self.end_location: END_LOCATION = motion_dict[END_LOCATION]
+        self.start_orientation: START_ORIENTATION = motion_dict[START_ORIENTATION]
 
         self.assign_location_to_arrow()
 
-        self.end_orientation: MotionAttribute.END_ORIENTATION = (
-            self.get_end_orientation()
-        )
+        self.end_orientation: END_ORIENTATION = self.get_end_orientation()
         self.update_prop_orientation()
 
     def assign_location_to_arrow(self):
@@ -104,7 +92,7 @@ class Motion:
         svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
         self.arrow.update_svg(svg_file)
         self.arrow.update_appearance()
-        self.arrow.arrow_dict[MotionAttribute.TURNS] = self.arrow.turns
+        self.arrow.arrow_dict[TURNS] = self.arrow.turns
         if hasattr(self.arrow, "ghost"):
             if self.arrow.ghost:
                 self.arrow.ghost.turns = self.arrow.turns
@@ -116,7 +104,7 @@ class Motion:
         if hasattr(self, "prop") and self.prop:
             self.prop.orientation = self.end_orientation
             self.prop.location = self.end_location
-            self.prop.axis: PropAttribute.AXIS = self.prop.get_axis_from_orientation(
+            self.prop.axis = self.prop.get_axis_from_orientation(
                 self.prop.orientation, self.prop.location
             )
             self.prop.update_rotation()
@@ -136,121 +124,115 @@ class Motion:
 
     def get_attributes(self) -> MotionAttributesDicts:
         return {
-            MotionAttribute.COLOR: self.color,
-            MotionAttribute.MOTION_TYPE: self.motion_type,
-            MotionAttribute.TURNS: self.turns,
-            MotionAttribute.ROTATION_DIRECTION: self.rotation_direction,
-            MotionAttribute.START_LOCATION: self.start_location,
-            MotionAttribute.END_LOCATION: self.end_location,
-            MotionAttribute.START_ORIENTATION: self.start_orientation,
-            MotionAttribute.END_ORIENTATION: self.end_orientation,
+            COLOR: self.color,
+            MOTION_TYPE: self.motion_type,
+            TURNS: self.turns,
+            ROTATION_DIRECTION: self.rotation_direction,
+            START_LOCATION: self.start_location,
+            END_LOCATION: self.end_location,
+            START_ORIENTATION: self.start_orientation,
+            END_ORIENTATION: self.end_orientation,
         }
 
-    def get_end_orientation(self) -> MotionAttribute.END_ORIENTATION:
-        # Combine layer1 maps
-
-        # Combine layer1 maps
+    def get_end_orientation(self) -> Orientation:
         whole_turn_orientation_map = {
-            (MotionType.PRO, 0, Orientation.IN): Orientation.IN,
-            (MotionType.PRO, 1, Orientation.IN): Orientation.OUT,
-            (MotionType.PRO, 2, Orientation.IN): Orientation.IN,
-            (MotionType.PRO, 3, Orientation.IN): Orientation.OUT,
-            (MotionType.PRO, 0, Orientation.OUT): Orientation.OUT,
-            (MotionType.PRO, 1, Orientation.OUT): Orientation.IN,
-            (MotionType.PRO, 2, Orientation.OUT): Orientation.OUT,
-            (MotionType.PRO, 3, Orientation.OUT): Orientation.IN,
-            (MotionType.ANTI, 0, Orientation.IN): Orientation.OUT,
-            (MotionType.ANTI, 1, Orientation.IN): Orientation.IN,
-            (MotionType.ANTI, 2, Orientation.IN): Orientation.OUT,
-            (MotionType.ANTI, 3, Orientation.IN): Orientation.IN,
-            (MotionType.ANTI, 0, Orientation.OUT): Orientation.IN,
-            (MotionType.ANTI, 1, Orientation.OUT): Orientation.OUT,
-            (MotionType.ANTI, 2, Orientation.OUT): Orientation.IN,
-            (MotionType.ANTI, 3, Orientation.OUT): Orientation.OUT,
-            (MotionType.PRO, 0, Orientation.CLOCK): Orientation.CLOCK,
-            (MotionType.PRO, 1, Orientation.CLOCK): Orientation.COUNTER,
-            (MotionType.PRO, 2, Orientation.CLOCK): Orientation.CLOCK,
-            (MotionType.PRO, 3, Orientation.CLOCK): Orientation.COUNTER,
-            (MotionType.PRO, 0, Orientation.COUNTER): Orientation.COUNTER,
-            (MotionType.PRO, 1, Orientation.COUNTER): Orientation.CLOCK,
-            (MotionType.PRO, 2, Orientation.COUNTER): Orientation.COUNTER,
-            (MotionType.PRO, 3, Orientation.COUNTER): Orientation.CLOCK,
-            (MotionType.ANTI, 0, Orientation.CLOCK): Orientation.COUNTER,
-            (MotionType.ANTI, 1, Orientation.CLOCK): Orientation.CLOCK,
-            (MotionType.ANTI, 2, Orientation.CLOCK): Orientation.COUNTER,
-            (MotionType.ANTI, 3, Orientation.CLOCK): Orientation.CLOCK,
-            (MotionType.ANTI, 0, Orientation.COUNTER): Orientation.CLOCK,
-            (MotionType.ANTI, 1, Orientation.COUNTER): Orientation.COUNTER,
-            (MotionType.ANTI, 2, Orientation.COUNTER): Orientation.CLOCK,
-            (MotionType.ANTI, 3, Orientation.COUNTER): Orientation.COUNTER,
+            (PRO, 0, IN): IN,
+            (PRO, 1, IN): OUT,
+            (PRO, 2, IN): IN,
+            (PRO, 3, IN): OUT,
+            (PRO, 0, OUT): OUT,
+            (PRO, 1, OUT): IN,
+            (PRO, 2, OUT): OUT,
+            (PRO, 3, OUT): IN,
+            (ANTI, 0, IN): OUT,
+            (ANTI, 1, IN): IN,
+            (ANTI, 2, IN): OUT,
+            (ANTI, 3, IN): IN,
+            (ANTI, 0, OUT): IN,
+            (ANTI, 1, OUT): OUT,
+            (ANTI, 2, OUT): IN,
+            (ANTI, 3, OUT): OUT,
+            (PRO, 0, CLOCK): CLOCK,
+            (PRO, 1, CLOCK): COUNTER,
+            (PRO, 2, CLOCK): CLOCK,
+            (PRO, 3, CLOCK): COUNTER,
+            (PRO, 0, COUNTER): COUNTER,
+            (PRO, 1, COUNTER): CLOCK,
+            (PRO, 2, COUNTER): COUNTER,
+            (PRO, 3, COUNTER): CLOCK,
+            (ANTI, 0, CLOCK): COUNTER,
+            (ANTI, 1, CLOCK): CLOCK,
+            (ANTI, 2, CLOCK): COUNTER,
+            (ANTI, 3, CLOCK): CLOCK,
+            (ANTI, 0, COUNTER): CLOCK,
+            (ANTI, 1, COUNTER): COUNTER,
+            (ANTI, 2, COUNTER): CLOCK,
+            (ANTI, 3, COUNTER): COUNTER,
         }
 
-        # Combine layer2 maps
-
-        # ({HANDPATH_DIRECTION}, {START_ORIENTATION}, {END_ORIENTATION}})
         clockwise_handpath_half_turns_map = {
-            (MotionType.PRO, 0.5, Orientation.IN): Orientation.COUNTER,
-            (MotionType.PRO, 1.5, Orientation.IN): Orientation.CLOCK,
-            (MotionType.PRO, 2.5, Orientation.IN): Orientation.COUNTER,
-            (MotionType.PRO, 0.5, Orientation.OUT): Orientation.CLOCK,
-            (MotionType.PRO, 1.5, Orientation.OUT): Orientation.COUNTER,
-            (MotionType.PRO, 2.5, Orientation.OUT): Orientation.CLOCK,
-            (MotionType.ANTI, 0.5, Orientation.IN): Orientation.CLOCK,
-            (MotionType.ANTI, 1.5, Orientation.IN): Orientation.COUNTER,
-            (MotionType.ANTI, 2.5, Orientation.IN): Orientation.CLOCK,
-            (MotionType.ANTI, 0.5, Orientation.OUT): Orientation.COUNTER,
-            (MotionType.ANTI, 1.5, Orientation.OUT): Orientation.CLOCK,
-            (MotionType.ANTI, 2.5, Orientation.OUT): Orientation.COUNTER,
-            (MotionType.PRO, 0.5, Orientation.CLOCK): Orientation.IN,
-            (MotionType.PRO, 1.5, Orientation.CLOCK): Orientation.OUT,
-            (MotionType.PRO, 2.5, Orientation.CLOCK): Orientation.IN,
-            (MotionType.PRO, 0.5, Orientation.COUNTER): Orientation.OUT,
-            (MotionType.PRO, 1.5, Orientation.COUNTER): Orientation.IN,
-            (MotionType.PRO, 2.5, Orientation.COUNTER): Orientation.OUT,
-            (MotionType.ANTI, 0.5, Orientation.CLOCK): Orientation.OUT,
-            (MotionType.ANTI, 1.5, Orientation.CLOCK): Orientation.IN,
-            (MotionType.ANTI, 2.5, Orientation.CLOCK): Orientation.OUT,
-            (MotionType.ANTI, 0.5, Orientation.COUNTER): Orientation.IN,
-            (MotionType.ANTI, 1.5, Orientation.COUNTER): Orientation.OUT,
-            (MotionType.ANTI, 2.5, Orientation.COUNTER): Orientation.IN,
+            (PRO, 0.5, IN): COUNTER,
+            (PRO, 1.5, IN): CLOCK,
+            (PRO, 2.5, IN): COUNTER,
+            (PRO, 0.5, OUT): CLOCK,
+            (PRO, 1.5, OUT): COUNTER,
+            (PRO, 2.5, OUT): CLOCK,
+            (ANTI, 0.5, IN): CLOCK,
+            (ANTI, 1.5, IN): COUNTER,
+            (ANTI, 2.5, IN): CLOCK,
+            (ANTI, 0.5, OUT): COUNTER,
+            (ANTI, 1.5, OUT): CLOCK,
+            (ANTI, 2.5, OUT): COUNTER,
+            (PRO, 0.5, CLOCK): IN,
+            (PRO, 1.5, CLOCK): OUT,
+            (PRO, 2.5, CLOCK): IN,
+            (PRO, 0.5, COUNTER): OUT,
+            (PRO, 1.5, COUNTER): IN,
+            (PRO, 2.5, COUNTER): OUT,
+            (ANTI, 0.5, CLOCK): OUT,
+            (ANTI, 1.5, CLOCK): IN,
+            (ANTI, 2.5, CLOCK): OUT,
+            (ANTI, 0.5, COUNTER): IN,
+            (ANTI, 1.5, COUNTER): OUT,
+            (ANTI, 2.5, COUNTER): IN,
         }
 
         counter_handpath_half_turns_map = {
-            (MotionType.PRO, 0.5, Orientation.IN): Orientation.CLOCK,
-            (MotionType.PRO, 1.5, Orientation.IN): Orientation.COUNTER,
-            (MotionType.PRO, 2.5, Orientation.IN): Orientation.CLOCK,
-            (MotionType.PRO, 0.5, Orientation.OUT): Orientation.COUNTER,
-            (MotionType.PRO, 1.5, Orientation.OUT): Orientation.CLOCK,
-            (MotionType.PRO, 2.5, Orientation.OUT): Orientation.COUNTER,
-            (MotionType.ANTI, 0.5, Orientation.IN): Orientation.COUNTER,
-            (MotionType.ANTI, 1.5, Orientation.IN): Orientation.CLOCK,
-            (MotionType.ANTI, 2.5, Orientation.IN): Orientation.COUNTER,
-            (MotionType.ANTI, 0.5, Orientation.OUT): Orientation.CLOCK,
-            (MotionType.ANTI, 1.5, Orientation.OUT): Orientation.COUNTER,
-            (MotionType.ANTI, 2.5, Orientation.OUT): Orientation.CLOCK,
-            (MotionType.PRO, 0.5, Orientation.CLOCK): Orientation.OUT,
-            (MotionType.PRO, 1.5, Orientation.CLOCK): Orientation.IN,
-            (MotionType.PRO, 2.5, Orientation.CLOCK): Orientation.OUT,
-            (MotionType.PRO, 0.5, Orientation.COUNTER): Orientation.IN,
-            (MotionType.PRO, 1.5, Orientation.COUNTER): Orientation.OUT,
-            (MotionType.PRO, 2.5, Orientation.COUNTER): Orientation.IN,
-            (MotionType.ANTI, 0.5, Orientation.CLOCK): Orientation.IN,
-            (MotionType.ANTI, 1.5, Orientation.CLOCK): Orientation.OUT,
-            (MotionType.ANTI, 2.5, Orientation.CLOCK): Orientation.IN,
-            (MotionType.ANTI, 0.5, Orientation.COUNTER): Orientation.OUT,
-            (MotionType.ANTI, 1.5, Orientation.COUNTER): Orientation.IN,
-            (MotionType.ANTI, 2.5, Orientation.COUNTER): Orientation.OUT,
+            (PRO, 0.5, IN): CLOCK,
+            (PRO, 1.5, IN): COUNTER,
+            (PRO, 2.5, IN): CLOCK,
+            (PRO, 0.5, OUT): COUNTER,
+            (PRO, 1.5, OUT): CLOCK,
+            (PRO, 2.5, OUT): COUNTER,
+            (ANTI, 0.5, IN): COUNTER,
+            (ANTI, 1.5, IN): CLOCK,
+            (ANTI, 2.5, IN): COUNTER,
+            (ANTI, 0.5, OUT): CLOCK,
+            (ANTI, 1.5, OUT): COUNTER,
+            (ANTI, 2.5, OUT): CLOCK,
+            (PRO, 0.5, CLOCK): OUT,
+            (PRO, 1.5, CLOCK): IN,
+            (PRO, 2.5, CLOCK): OUT,
+            (PRO, 0.5, COUNTER): IN,
+            (PRO, 1.5, COUNTER): OUT,
+            (PRO, 2.5, COUNTER): IN,
+            (ANTI, 0.5, CLOCK): IN,
+            (ANTI, 1.5, CLOCK): OUT,
+            (ANTI, 2.5, CLOCK): IN,
+            (ANTI, 0.5, COUNTER): OUT,
+            (ANTI, 1.5, COUNTER): IN,
+            (ANTI, 2.5, COUNTER): OUT,
         }
 
         float_map = {
-            (Orientation.IN, "cw_hp"): Orientation.CLOCK,
-            (Orientation.IN, "ccw_hp"): Orientation.COUNTER,
-            (Orientation.OUT, "cw_hp"): Orientation.COUNTER,
-            (Orientation.OUT, "ccw_hp"): Orientation.CLOCK,
-            (Orientation.CLOCK, "cw_hp"): Orientation.OUT,
-            (Orientation.CLOCK, "ccw_hp"): Orientation.IN,
-            (Orientation.COUNTER, "cw_hp"): Orientation.IN,
-            (Orientation.COUNTER, "ccw_hp"): Orientation.OUT,
+            (IN, "cw_hp"): CLOCK,
+            (IN, "ccw_hp"): COUNTER,
+            (OUT, "cw_hp"): COUNTER,
+            (OUT, "ccw_hp"): CLOCK,
+            (CLOCK, "cw_hp"): OUT,
+            (CLOCK, "ccw_hp"): IN,
+            (COUNTER, "cw_hp"): IN,
+            (COUNTER, "ccw_hp"): OUT,
         }
 
         def get_handpath_direction(
@@ -269,20 +251,14 @@ class Motion:
         if self.motion_type == MotionType.FLOAT:
             key = (self.start_orientation, handpath_direction)
             return float_map.get(key)
-
         elif self.turns in [0, 1, 2, 3] or self.turns in ["0", "1", "2", "3"]:
-            # For pro and anti motions
             if self.motion_type in [PRO, ANTI]:
                 key = (self.motion_type, int(self.turns), self.start_orientation)
                 return whole_turn_orientation_map.get(key)
-
-            # For static motion
             if self.motion_type == STATIC:
-                key = (MotionType.PRO, int(self.turns), self.start_orientation)
+                key = (PRO, int(self.turns), self.start_orientation)
                 return whole_turn_orientation_map.get(key)
-
-            # For dash motion
-            if self.motion_type == DASH:
+            if self.motion_type == MotionType.DASH:
                 key = (ANTI, int(self.turns), self.start_orientation)
                 return whole_turn_orientation_map.get(key)
 
@@ -297,10 +273,10 @@ class Motion:
                 return map_to_use.get(key)
 
             if self.motion_type == STATIC:
-                key = (MotionType.PRO, float(self.turns), self.start_orientation)
+                key = (PRO, float(self.turns), self.start_orientation)
                 return map_to_use.get(key)
 
-            elif self.motion_type == DASH:
+            elif self.motion_type == MotionType.DASH:
                 key = (ANTI, float(self.turns), self.start_orientation)
                 return map_to_use.get(key)
 

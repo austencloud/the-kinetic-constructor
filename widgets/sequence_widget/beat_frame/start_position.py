@@ -8,27 +8,27 @@ from PyQt6.QtWidgets import QGraphicsView
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.sequence_widget.beat_frame.beat_frame import BeatFrame
-    from widgets.sequence_widget.beat_frame.start_position import StartPosition
+    from widgets.sequence_widget.beat_frame.start_position import StartPositionBeat
 
 
-class StartPosition(Pictograph):
+class StartPositionBeat(Pictograph):
     def __init__(self, main_widget: "MainWidget", beat_frame: "BeatFrame") -> None:
-        super().__init__(main_widget, "start_position")
+        super().__init__(main_widget, "start_position_beat")
         self.main_widget = main_widget
         self.beat_frame = beat_frame
 
 
-class StartPositionView(QGraphicsView):
+class StartPositionBeatView(QGraphicsView):
     def __init__(self, beat_frame: "BeatFrame") -> None:
         super().__init__(beat_frame)
 
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.start_position: "StartPosition" = None
+        self.start_position: "StartPositionBeat" = None
         self.beat_frame = beat_frame
 
-    def set_start_position(self, start_position: "StartPosition") -> None:
+    def set_start_position(self, start_position: "StartPositionBeat") -> None:
         self.start_position = start_position
         self.setScene(self.start_position)
         view_width = self.height()

@@ -1,8 +1,8 @@
+from Enums import Direction
 from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
-from constants.string_constants import UP, LEFT, DOWN, RIGHT
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -57,13 +57,13 @@ class KeyEventHandler:
         ### ARROW MANIPULATION ###
         if selected_arrow:
             if event.key() == Qt.Key.Key_W:
-                selected_arrow.manipulator.move_wasd(UP)
+                selected_arrow.manipulator.move_wasd(Direction.UP)
             elif event.key() == Qt.Key.Key_A:
-                selected_arrow.manipulator.move_wasd(LEFT)
+                selected_arrow.manipulator.move_wasd(Direction.LEFT)
             elif event.key() == Qt.Key.Key_S:
-                selected_arrow.manipulator.move_wasd(DOWN)
+                selected_arrow.manipulator.move_wasd(Direction.DOWN)
             elif event.key() == Qt.Key.Key_D:
-                selected_arrow.manipulator.move_wasd(RIGHT)
+                selected_arrow.manipulator.move_wasd(Direction.RIGHT)
             elif event.key() == Qt.Key.Key_R:
                 selected_arrow.manipulator.swap_rot_dir()
             elif event.key() == Qt.Key.Key_F:

@@ -9,8 +9,8 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
+from Enums import MotionType
 from constants.string_constants import ICON_DIR, SWAP_ICON
-from utilities.TypeChecking.TypeChecking import MotionTypes
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
 
 
-class MotionTypesWidget(AttrBoxWidget):
+class MotionTypeWidget(AttrBoxWidget):
     def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__(attr_box)
 
@@ -67,7 +67,7 @@ class MotionTypesWidget(AttrBoxWidget):
 
     def _setup_motion_type_box(self) -> QComboBox:
         box = QComboBox(self)
-        box.addItems(["Pro", "Anti", "Dash", "Static"])
+        box.addItems(["Pro", "ANTI", "Dash", "Static"])
         box.setCurrentIndex(-1)
         return box
 
@@ -95,8 +95,8 @@ class MotionTypesWidget(AttrBoxWidget):
     def _swap_motion_type_callback(self) -> None:
         current_text = self.motion_type_box.currentText()
         motion_types = {
-            "Pro": "Anti",
-            "Anti": "Pro",
+            "Pro": "ANTI",
+            "ANTI": "Pro",
             "Dash": "Static",
             "Static": "Dash",
         }
@@ -111,7 +111,7 @@ class MotionTypesWidget(AttrBoxWidget):
             if motion:
                 motion.arrow.manipulator.swap_motion_type()
 
-    def update_motion_type_box(self, motion_type: MotionTypes) -> None:
+    def update_motion_type_box(self, motion_type: MotionType) -> None:
         if motion_type is None:
             self.motion_type_box.setCurrentIndex(-1)
         else:
@@ -133,7 +133,7 @@ class MotionTypesWidget(AttrBoxWidget):
         self.swap_button_frame.setMaximumWidth(int(self.width() * 1 / 4))
         self.motion_type_box.setMinimumWidth(int(self.width() * 0.5))
 
-        self.header_label.setFont(QFont("Arial", int(self.width() /22)))
+        self.header_label.setFont(QFont("Arial", int(self.width() / 22)))
 
         self.motion_type_box.setMinimumHeight(int(self.attr_box.height() / 8))
         self.motion_type_box.setMaximumHeight(int(self.attr_box.height() / 8))

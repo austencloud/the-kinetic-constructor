@@ -1,41 +1,17 @@
-import pandas as pd
-from constants.string_constants import (
-    ANTI,
-    BLUE,
-    COLOR,
-    DASH,
-    MOTION_TYPE,
-    PRO,
-    RED,
-    STATIC,
-    TURNS,
-    END_LOCATION,
-    IN,
-    PROP_TYPE,
-    LOCATION,
-    ORIENTATION,
-)
-from objects.arrow.arrow import Arrow
-from objects.prop.prop import Prop
-from utilities.TypeChecking.TypeChecking import (
-    TYPE_CHECKING,
-)
-from objects.pictograph.pictograph import Pictograph
-from PyQt6.QtCore import Qt, QEvent
-from typing import TYPE_CHECKING, Dict, Literal
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsPixmapItem, QLabel, QFrame
-from PyQt6.QtCore import QByteArray, QBuffer
-from PyQt6.QtGui import QPixmap
-
 import os
-from PyQt6.QtGui import QImage, QPainter
+from typing import TYPE_CHECKING, Literal
+from PyQt6.QtCore import Qt, QEvent, QByteArray, QBuffer, pyqtSignal, QTimer
+from PyQt6.QtGui import QPixmap, QImage, QPainter
+from PyQt6.QtWidgets import QGraphicsView, QGraphicsPixmapItem
+from Enums import *
+from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
+from objects.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from widgets.option_picker_tab.option_picker_scroll_area import (
         OptionPickerScrollArea,
     )
-from PyQt6.QtCore import pyqtSignal, QTimer
 
 
 class Option(Pictograph):
@@ -53,13 +29,8 @@ class Option(Pictograph):
         self.imageLoaded = False
         self.pixmapItem = None  # Store the pixmap item
         self.pd_row_data = None  # Store the row data from the pandas dataframe
-        
 
     ### SETUP ###
-
-
-
-
 
     ### IMAGE LOADING ###
 
@@ -89,7 +60,9 @@ class Option(Pictograph):
         image_path = self.option_picker_scroll.generate_image_path_for_option(self)
 
         # Check if the image already exists in the cache or on the disk
-        if image_path in self.option_picker_scroll.image_cache or os.path.exists(image_path):
+        if image_path in self.option_picker_scroll.image_cache or os.path.exists(
+            image_path
+        ):
             # If the image is already cached or exists, load it
             print(f"Image already exists, using cached image for {image_path}")
             pixmap = QPixmap(image_path)
@@ -115,7 +88,6 @@ class Option(Pictograph):
 
         self.imageLoaded = True
 
-
     def render_scene_to_pixmap(self) -> None:
         self.update_pictograph()
 
@@ -128,7 +100,7 @@ class Option(Pictograph):
             blue_motion_type_prefix = "a"
         elif self.motions[BLUE].motion_type == STATIC:
             blue_motion_type_prefix = "s"
-        elif self.motions[BLUE].motion_type == DASH:
+        elif self.motions[BLUE].motion_type == MotionType.DASH:
             blue_motion_type_prefix = "d"
 
         if self.motions[RED].motion_type == PRO:
@@ -137,7 +109,7 @@ class Option(Pictograph):
             red_motion_type_prefix = "a"
         elif self.motions[RED].motion_type == STATIC:
             red_motion_type_prefix = "s"
-        elif self.motions[RED].motion_type == DASH:
+        elif self.motions[RED].motion_type == MotionType.DASH:
             red_motion_type_prefix = "d"
 
         # Construct the folder name based on turns and motion types
@@ -187,7 +159,7 @@ class Option(Pictograph):
             buf.close()
 
             if success:
-                with open(image_path, 'wb') as file:
+                with open(image_path, "wb") as file:
                     file.write(buffer)
                 print(f"Image saved successfully to {image_path}")
             else:
@@ -195,7 +167,6 @@ class Option(Pictograph):
         else:
             print("QImage is null. Nothing to save.")
 
-     
         return QPixmap.fromImage(image)
 
     # New method to handle conditional image loading
@@ -205,11 +176,7 @@ class Option(Pictograph):
 
     ### FLAGS ###
 
-
     ### CREATE ###
-
-
-
 
     ### EVENTS ###
 

@@ -29,7 +29,6 @@ class GraphEditor(QFrame):
     def _initialize_main_widget_attributes(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
-        self.json_handler = main_widget.json_handler
 
     def _setup_frame_style(self) -> None:
         self.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)

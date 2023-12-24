@@ -1,7 +1,7 @@
-from typing import TYPE_CHECKING, Dict, List, Union
+from typing import TYPE_CHECKING, Dict, Union
 from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
-from utilities.TypeChecking.Letters import Letters
-from utilities.TypeChecking.TypeChecking import Orientations, Turns
+from Enums import Letter, Orientation
+from utilities.TypeChecking.TypeChecking import Turns
 
 from widgets.image_generator_tab.ig_pictograph import IGPictograph
 
@@ -22,13 +22,10 @@ class IGScroll(QScrollArea):
         self.setWidget(self.pictograph_container)
         self.COLUMN_COUNT = 4
         self.spacing = 10
-        self.ig_pictographs: Dict[Letters, IGPictograph] = []
+        self.ig_pictographs: Dict[Letter, IGPictograph] = {}
 
-    def apply_turn_filters(
-        self, filters: Dict[str, Union[Turns, Orientations]]
-    ) -> None:
-        # self.clear()
-        for idx, (letter, ig_pictograph) in enumerate(self.ig_pictographs):
+    def apply_turn_filters(self, filters: Dict[str, Union[Turns, Orientation]]) -> None:
+        for ig_pictograph in self.ig_pictographs.values():
             if ig_pictograph.meets_turn_criteria(filters):
                 self.update_displayed_pictographs()
 
@@ -54,7 +51,7 @@ class IGScroll(QScrollArea):
             row = i // self.COLUMN_COUNT
             col = i % self.COLUMN_COUNT
             self.pictograph_layout.addWidget(ig_pictograph.view, row, col)
-            self.ig_pictographs.append(ig_pictograph)
+            self.ig_pictographs[ig_pictograph.current_letter] = ig_pictograph
             # Update the pictograph to reflect the new items
             ig_pictograph.update_pictograph()
             # Resize the view to fit the scene

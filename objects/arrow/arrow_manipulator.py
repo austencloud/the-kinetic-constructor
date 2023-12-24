@@ -1,44 +1,19 @@
 from typing import List
 from PyQt6.QtGui import QTransform
-from constants.string_constants import (
-    BOX,
-    DASH,
-    DIAMOND,
-    FLOAT,
-    MOTION_TYPE,
-    TURNS,
-    COLOR,
-    COUNTER_CLOCKWISE,
-    CLOCKWISE,
-    PRO,
-    ANTI,
-    STATIC,
-    ROTATION_DIRECTION,
-    NORTHEAST,
-    SOUTHEAST,
-    SOUTHWEST,
-    NORTHWEST,
-    START_LOCATION,
-    END_LOCATION,
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    ARROW_LOCATION,
-    RED,
-    BLUE,
-    NORTH,
-    SOUTH,
-    WEST,
-    EAST,
-)
-from data.start_end_location_map import get_start_end_locations
-from utilities.TypeChecking.TypeChecking import (
-    Locations,
-    RotationDirections,
+from Enums import (
+    ArrowAttribute,
+    Color,
     Direction,
-    TYPE_CHECKING,
+    GridMode,
+    Location,
+    MotionAttribute,
+    MotionType,
+    RotationDirection,
 )
+
+from data.start_end_location_map import get_start_end_locations
+from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
+
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
@@ -50,10 +25,22 @@ class ArrowManipulator:
 
     def move_wasd(self, direction: Direction) -> None:
         wasd_location_map = {
-            UP: {SOUTHEAST: NORTHEAST, SOUTHWEST: NORTHWEST},
-            LEFT: {NORTHEAST: NORTHWEST, SOUTHEAST: SOUTHWEST},
-            DOWN: {NORTHEAST: SOUTHEAST, NORTHWEST: SOUTHWEST},
-            RIGHT: {NORTHWEST: NORTHEAST, SOUTHWEST: SOUTHEAST},
+            Direction.UP: {
+                SOUTHEAST: NORTHEAST,
+                SOUTHWEST: NORTHWEST,
+            },
+            Direction.LEFT: {
+                NORTHEAST: NORTHWEST,
+                SOUTHEAST: SOUTHWEST,
+            },
+            Direction.DOWN: {
+                NORTHEAST: SOUTHEAST,
+                NORTHWEST: SOUTHWEST,
+            },
+            Direction.RIGHT: {
+                NORTHWEST: NORTHEAST,
+                SOUTHWEST: SOUTHEAST,
+            },
         }
         current_location = self.arrow.location
         new_location = wasd_location_map.get(direction, {}).get(
@@ -171,16 +158,6 @@ class ArrowManipulator:
         elif self.arrow.motion.rotation_direction == "None":
             new_rotation_direction = "None"
 
-        new_arrow_dict = {
-            COLOR: self.arrow.color,
-            MOTION_TYPE: new_motion_type,
-            ARROW_LOCATION: self.arrow.location,
-            ROTATION_DIRECTION: new_rotation_direction,
-            START_LOCATION: self.arrow.motion.start_location,
-            END_LOCATION: self.arrow.motion.end_location,
-            TURNS: self.arrow.turns,
-        }
-
         self.arrow.motion_type = new_motion_type
         self.arrow.motion.motion_type = new_motion_type
         self.arrow.motion.rotation_direction = new_rotation_direction
@@ -191,13 +168,16 @@ class ArrowManipulator:
         self.arrow.motion.end_orientation = self.arrow.motion.prop.orientation
 
         svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
-        self.arrow.update_attributes(new_arrow_dict)
+        self.arrow.motion_type = new_motion_type
+        self.arrow.motion.motion_type = new_motion_type
+        self.arrow.ghost.motion_type = new_motion_type
+
+        self.arrow.motion.rotation_direction = new_rotation_direction
         self.arrow.update_svg(svg_file)
         self.arrow.update_color()
         if hasattr(self.arrow, "ghost"):
             self.arrow.ghost.motion_type = new_motion_type
             self.arrow.ghost.update_svg(svg_file)
-            self.arrow.ghost.update_attributes(new_arrow_dict)
 
         self.arrow.motion.prop.update_appearance()
 
@@ -205,30 +185,59 @@ class ArrowManipulator:
 
     ### ROTATION ###
 
-    def rotate_arrow(self, rotation_direction: RotationDirections) -> None:
-        diamond_mode_static_arrow_locations = [NORTH, EAST, SOUTH, WEST]
+    def rotate_arrow(self, rotation_direction: RotationDirection) -> None:
+        diamond_mode_static_arrow_locations = [
+            NORTH,
+            EAST,
+            SOUTH,
+            WEST,
+        ]
         diamond_mode_shift_arrow_locations = [
             NORTHEAST,
             SOUTHEAST,
             SOUTHWEST,
             NORTHWEST,
         ]
-        diamond_mode_dash_arrow_locations = [NORTH, EAST, SOUTH, WEST]
+        diamond_mode_dash_arrow_locations = [
+            NORTH,
+            EAST,
+            SOUTH,
+            WEST,
+        ]
 
-        box_mode_static_arrow_locations = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
-        box_mode_shift_arrow_locations = [NORTH, EAST, SOUTH, WEST]
-        box_mode_dash_arrow_locations = [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST]
+        box_mode_static_arrow_locations = [
+            NORTHEAST,
+            SOUTHEAST,
+            SOUTHWEST,
+            NORTHWEST,
+        ]
+        box_mode_shift_arrow_locations = [
+            NORTH,
+            EAST,
+            SOUTH,
+            WEST,
+        ]
+        box_mode_dash_arrow_locations = [
+            NORTHEAST,
+            SOUTHEAST,
+            SOUTHWEST,
+            NORTHWEST,
+        ]
 
         if self.arrow.pictograph.grid.grid_mode == DIAMOND:
             if self.arrow.motion.motion_type == STATIC:
                 self.rotate_diamond_mode_static_arrow(
                     rotation_direction, diamond_mode_static_arrow_locations
                 )
-            elif self.arrow.motion.motion_type in [PRO, ANTI, FLOAT]:
+            elif self.arrow.motion.motion_type in [
+                PRO,
+                ANTI,
+                MotionType.FLOAT,
+            ]:
                 self.rotate_diamond_mode_shift_arrow(
                     rotation_direction, diamond_mode_shift_arrow_locations
                 )
-            elif self.arrow.motion.motion_type in [DASH]:
+            elif self.arrow.motion.motion_type in [MotionType.DASH]:
                 self.rotate_diamond_mode_dash_arrow(
                     rotation_direction, diamond_mode_dash_arrow_locations
                 )
@@ -237,32 +246,36 @@ class ArrowManipulator:
                 self.rotate_box_mode_static_arrow(
                     rotation_direction, box_mode_static_arrow_locations
                 )
-            elif self.arrow.motion.motion_type in [PRO, ANTI, FLOAT]:
+            elif self.arrow.motion.motion_type in [
+                PRO,
+                ANTI,
+                MotionType.FLOAT,
+            ]:
                 self.rotate_box_mode_shift_arrow(
                     rotation_direction, box_mode_shift_arrow_locations
                 )
-            elif self.arrow.motion.motion_type in [DASH]:
+            elif self.arrow.motion.motion_type in [MotionType.DASH]:
                 self.rotate_box_mode_dash_arrow(
                     rotation_direction, box_mode_dash_arrow_locations
                 )
 
     def rotate_diamond_mode_dash_arrow(
-        self, rotation_direction, box_mode_arrow_locations: List[Locations]
+        self, rotation_direction, box_mode_arrow_locations: List[Location]
     ) -> None:
         pass
 
     def rotate_diamond_mode_dash_arrow(
-        self, rotation_direction, diamond_mode_arrow_locations: List[Locations]
+        self, rotation_direction, diamond_mode_arrow_locations: List[Location]
     ) -> None:
         pass
 
     def rotate_box_mode_dash_arrow(
-        self, rotation_direction, box_mode_dash_arrow_locations: List[Locations]
+        self, rotation_direction, box_mode_dash_arrow_locations: List[Location]
     ) -> None:
         pass
 
     def rotate_box_mode_shift_arrow(
-        self, rotation_direction, box_mode_shift_arrow_locations: List[Locations]
+        self, rotation_direction, box_mode_shift_arrow_locations: List[Location]
     ) -> None:
         current_location_index = box_mode_shift_arrow_locations.index(
             self.arrow.location
@@ -297,7 +310,7 @@ class ArrowManipulator:
         self.arrow.scene.update_pictograph()
 
     def rotate_diamond_mode_shift_arrow(
-        self, rotation_direction, diamond_mode_shift_arrow_locations: List[Locations]
+        self, rotation_direction, diamond_mode_shift_arrow_locations: List[Location]
     ) -> None:
         current_location_index = diamond_mode_shift_arrow_locations.index(
             self.arrow.location
@@ -330,7 +343,7 @@ class ArrowManipulator:
         self.arrow.scene.update_pictograph()
 
     def rotate_box_mode_static_arrow(
-        self, rotation_direction, box_mode_static_arrow_locations: List[Locations]
+        self, rotation_direction, box_mode_static_arrow_locations: List[Location]
     ) -> None:
         current_location_index = box_mode_static_arrow_locations.index(
             self.arrow.location
@@ -354,7 +367,7 @@ class ArrowManipulator:
         self.arrow.scene.update_pictograph()
 
     def rotate_diamond_mode_static_arrow(
-        self, rotation_direction, diamond_mode_locations: List[Locations]
+        self, rotation_direction, diamond_mode_locations: List[Location]
     ) -> None:
         current_location_index = diamond_mode_locations.index(self.arrow.location)
         new_location_index = (

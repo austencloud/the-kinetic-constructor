@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QShowEvent
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QCheckBox
+from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from .option_picker_scroll_area import OptionPickerScrollArea
 
 if TYPE_CHECKING:

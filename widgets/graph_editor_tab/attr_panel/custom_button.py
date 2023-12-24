@@ -11,13 +11,13 @@ if TYPE_CHECKING:
         TurnsWidget,
     )
     from widgets.graph_editor_tab.attr_panel.attr_box_widgets.motion_types_widget import (
-        MotionTypesWidget,
+        MotionTypeWidget,
     )
 
 
 class CustomButton(QPushButton):
     def __init__(
-        self, parent_widget: Union["StartEndWidget", "TurnsWidget", "MotionTypesWidget"]
+        self, parent_widget: Union["StartEndWidget", "TurnsWidget", "MotionTypeWidget"]
     ) -> None:
         super().__init__(parent_widget)
         self.parent_widget = parent_widget

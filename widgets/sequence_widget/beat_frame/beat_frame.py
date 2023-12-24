@@ -4,8 +4,8 @@ from PyQt6.QtWidgets import QGridLayout, QFrame, QSizePolicy
 from PyQt6.QtCore import Qt, pyqtSignal
 from widgets.option_picker_tab.option import Option
 from widgets.sequence_widget.beat_frame.beat import Beat
-from widgets.sequence_widget.beat_frame.start_position import StartPosition
-from widgets.sequence_widget.beat_frame.start_position import StartPositionView
+from widgets.sequence_widget.beat_frame.start_position import StartPositionBeat
+from widgets.sequence_widget.beat_frame.start_position import StartPositionBeatView
 
 from objects.pictograph.pictograph import Pictograph
 
@@ -17,7 +17,7 @@ from widgets.sequence_widget.beat_frame.beat import BeatView
 
 
 class BeatFrame(QFrame):
-    picker_updater = pyqtSignal(Option, dict) 
+    picker_updater = pyqtSignal(Option, dict)
     COLUMN_COUNT = 5
     ROW_COUNT = 4
 
@@ -39,8 +39,8 @@ class BeatFrame(QFrame):
             Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight
         )
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.start_position_view = StartPositionView(self)
-        self.start_position = StartPosition(main_widget, self)
+        self.start_position_view = StartPositionBeatView(self)
+        self.start_position = StartPositionBeat(main_widget, self)
         self.layout.addWidget(self.start_position_view, 0, 0)
 
         for i in range(1, self.COLUMN_COUNT):
@@ -57,14 +57,13 @@ class BeatFrame(QFrame):
         self.layout.addWidget(beat_view, row, col)
         self.beats.append(beat_view)
 
-    def add_start_position(self, start_position: "StartPosition") -> None:
+    def add_start_position(self, start_position: "StartPositionBeat") -> None:
         self.start_position_view.set_start_position(start_position)
 
     def add_scene_to_sequence(self, clicked_option: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
             self.beats[next_beat_index].set_pictograph(clicked_option)
-
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):

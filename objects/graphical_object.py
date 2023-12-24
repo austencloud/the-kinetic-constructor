@@ -1,20 +1,16 @@
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF
-from constants.string_constants import BLUE, BLUE_HEX, RED, RED_HEX
 import re
 from typing import TYPE_CHECKING, Union
+
+from Enums import *
+from constants.string_constants import RED, BLUE, HEX_RED, HEX_BLUE
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
     from objects.arrow.arrow import Arrow
     from objects.prop.prop import Prop
-
-from utilities.TypeChecking.TypeChecking import (
-    Colors,
-    PropAttributesDicts,
-    MotionAttributesDicts,
-)
 
 
 class GraphicalObject(QGraphicsSvgItem):
@@ -25,7 +21,7 @@ class GraphicalObject(QGraphicsSvgItem):
         self.pictograph = pictograph
 
         self.renderer: QSvgRenderer = None
-        self.color: Colors = None
+        self.color: Color = None
 
         self.center = self.boundingRect().center()
 
@@ -43,7 +39,7 @@ class GraphicalObject(QGraphicsSvgItem):
         self.setTransformOriginPoint(self.center)
 
     def set_svg_color(self, new_color: str) -> bytes:
-        COLOR_MAP = {RED: RED_HEX, BLUE: BLUE_HEX}
+        COLOR_MAP = {RED: HEX_RED, BLUE: HEX_BLUE}
         new_hex_color = COLOR_MAP.get(new_color)
 
         with open(self.svg_file, "r") as f:
@@ -55,7 +51,7 @@ class GraphicalObject(QGraphicsSvgItem):
         )
 
         # This function will replace the old color with the new color
-        def replace_class_color(match):
+        def replace_class_color(match: re.Match) -> str:
             return match.group(1) + new_hex_color + match.group(3)
 
         # Replace all occurrences of the class color definition
@@ -65,7 +61,7 @@ class GraphicalObject(QGraphicsSvgItem):
         fill_pattern = re.compile(r'(fill=")(#[a-fA-F0-9]{6})(")')
 
         # This function will replace the old color with the new color
-        def replace_fill_color(match):
+        def replace_fill_color(match: re.Match):
             return match.group(1) + new_hex_color + match.group(3)
 
         # Replace all occurrences of the fill color

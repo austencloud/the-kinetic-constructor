@@ -2,13 +2,13 @@ from typing import Callable, Dict, List, TYPE_CHECKING, Tuple, Union
 from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout, QApplication
 from PyQt6.QtCore import Qt
 import pandas as pd
+from Enums import Color, Orientation
 from data.rules import get_next_letters
 from constants.string_constants import *
-from utilities.TypeChecking.TypeChecking import Orientations, Turns
+from utilities.TypeChecking.TypeChecking import Turns
 from widgets.option_picker_tab.option import Option
-from PyQt6.QtGui import QPixmap, QShowEvent
+from PyQt6.QtGui import QPixmap
 
-from widgets.option_picker_tab.option_picker_filter_frame import OptionPickerFilterFrame
 
 if TYPE_CHECKING:
     from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
@@ -102,8 +102,8 @@ class OptionPickerScrollArea(QScrollArea):
         pd_row_data = option.pd_row_data
         prop_type = self.main_widget.prop_type
         letter = pd_row_data["letter"]
-        blue_turns = self.option_picker_tab.filter_frame.filters["left_turns"]
-        red_turns = self.option_picker_tab.filter_frame.filters["right_turns"]
+        blue_turns = self.option_picker_tab.filter_frame.filters["blue_turns"]
+        red_turns = self.option_picker_tab.filter_frame.filters["red_turns"]
         turns_folder = f"({pd_row_data['blue_motion_type'][0]}{blue_turns},{pd_row_data['red_motion_type'][0]}{red_turns})"
         image_dir = os.path.join(
             "resources", "images", "pictographs", letter, prop_type, turns_folder
@@ -152,9 +152,7 @@ class OptionPickerScrollArea(QScrollArea):
 
             option.imageLoaded = True
 
-    def apply_turn_filters(
-        self, filters: Dict[str, Union[Turns, Orientations]]
-    ) -> None:
+    def apply_turn_filters(self, filters: Dict[str, Union[Turns, Orientation]]) -> None:
         # self.clear()
         for idx, (letter, option) in enumerate(self.options):
             if option.meets_turn_criteria(filters):
@@ -177,15 +175,15 @@ class OptionPickerScrollArea(QScrollArea):
 
         blue_motion_dict = self._create_motion_dict_from_filters(
             pd_row_data,
-            "blue",
-            filters["left_turns"],
-            filters["left_end_orientation"],
+            BLUE,
+            filters[BLUE_TURNS],
+            filters[BLUE_END_ORIENTATION],
         )
         red_motion_dict = self._create_motion_dict_from_filters(
             pd_row_data,
-            "red",
-            filters["right_turns"],
-            filters["right_end_orientation"],
+            RED,
+            filters[RED_TURNS],
+            filters[RED_END_ORIENTATION],
         )
 
         option.props[RED].ghost = option.ghost_props[RED]
@@ -204,10 +202,12 @@ class OptionPickerScrollArea(QScrollArea):
         option.motions[RED].prop = option.props[RED]
         option.motions[BLUE].prop = option.props[BLUE]
         option.motions[RED].arrow.location = option.motions[RED].get_arrow_location(
-            option.motions[RED].start_location, option.motions[RED].end_location
+            option.motions[RED].start_location,
+            option.motions[RED].end_location,
         )
         option.motions[BLUE].arrow.location = option.motions[BLUE].get_arrow_location(
-            option.motions[BLUE].start_location, option.motions[BLUE].end_location
+            option.motions[BLUE].start_location,
+            option.motions[BLUE].end_location,
         )
 
         option.current_letter = pd_row_data["letter"]
@@ -255,7 +255,7 @@ class OptionPickerScrollArea(QScrollArea):
         pd_row_data: pd.Series,
         color: str,
         turns: Turns,
-        end_orientation: Orientations,
+        end_orientation: Orientation,
     ) -> Dict:
         motion_dict = {
             "color": color,

@@ -24,7 +24,8 @@ class StyledSplitter(QSplitter):
 
         # Call the base class paintEvent to draw the splitter handle
         super().paintEvent(event)
-        
+
+
 class StyledSplitterHandle(QSplitterHandle):
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -37,4 +38,3 @@ class StyledSplitterHandle(QSplitterHandle):
         # Draw a rectangle representing the splitter handle
         painter.setPen(handle_pen)
         painter.drawRect(self.rect())
-

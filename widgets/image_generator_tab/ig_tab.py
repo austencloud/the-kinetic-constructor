@@ -1,42 +1,23 @@
 import os
-from typing import TYPE_CHECKING, Dict, Union
+from typing import TYPE_CHECKING
 import pandas as pd
 from PyQt6.QtWidgets import (
     QWidget,
-    QSplitter,
     QVBoxLayout,
     QPushButton,
-    QScrollArea,
-    QCheckBox,
     QHBoxLayout,
-    QGridLayout,
-    QLabel,
     QFrame,
     QApplication,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QImage, QPainter
-from objects.arrow.arrow import Arrow
-from objects.prop.prop import Prop
-from utilities.TypeChecking.TypeChecking import Orientations, Turns
+from Enums import Color
+from constants.string_constants import BLUE, RED
 from widgets.image_generator_tab.ig_filter_frame import IGFilterFrame
 from widgets.image_generator_tab.ig_letter_button_frame import IGLetterButtonFrame
 from widgets.image_generator_tab.ig_pictograph import IGPictograph
 from widgets.image_generator_tab.ig_scroll import IGScroll
 
-from constants.string_constants import (
-    BLUE,
-    COLOR,
-    MOTION_TYPE,
-    RED,
-    START_ORIENTATION,
-    TURNS,
-    END_LOCATION,
-    IN,
-    PROP_TYPE,
-    LOCATION,
-    ORIENTATION,
-)
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
@@ -234,7 +215,7 @@ class IGTab(QWidget):
 
         if pd_row_data["blue_motion_type"] == "pro":
             blue_motion_type_prefix = "p"
-        elif pd_row_data["blue_motion_type"] == "anti":
+        elif pd_row_data["blue_motion_type"] == "ANTI":
             blue_motion_type_prefix = "a"
         elif pd_row_data["blue_motion_type"] == "static":
             blue_motion_type_prefix = "s"
@@ -243,15 +224,15 @@ class IGTab(QWidget):
 
         if pd_row_data["red_motion_type"] == "pro":
             red_motion_type_prefix = "p"
-        elif pd_row_data["red_motion_type"] == "anti":
+        elif pd_row_data["red_motion_type"] == "ANTI":
             red_motion_type_prefix = "a"
         elif pd_row_data["red_motion_type"] == "static":
             red_motion_type_prefix = "s"
         elif pd_row_data["red_motion_type"] == "dash":
             red_motion_type_prefix = "d"
 
-        blue_turns = self.filter_frame.filters["left_turns"]
-        red_turns = self.filter_frame.filters["right_turns"]
+        blue_turns = self.filter_frame.filters["blue_turns"]
+        red_turns = self.filter_frame.filters["red_turns"]
 
         # Construct the folder name based on turns and motion types
         turns_folder = f"({blue_motion_type_prefix}{blue_turns},{red_motion_type_prefix}{red_turns})"
@@ -325,7 +306,7 @@ class IGTab(QWidget):
         ig_pictograph.current_letter = letter
         ig_pictograph.start_position = pd_row_data.name[0]
         ig_pictograph.end_position = pd_row_data.name[1]
-        
+
         ig_pictograph.motions[RED].arrow = ig_pictograph.arrows[RED]
         ig_pictograph.motions[BLUE].arrow = ig_pictograph.arrows[BLUE]
         ig_pictograph.motions[RED].prop = ig_pictograph.props[RED]

@@ -1,11 +1,12 @@
 from typing import TYPE_CHECKING, List
 
+from Enums import Color, MotionType, Orientation
+
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
     from objects.pictograph.position_engines.arrow_positioners.arrow_positioner import (
         ArrowPositioner,
     )
-from constants.string_constants import ANTI, BLUE, IN, OUT, RED
 from PyQt6.QtCore import QPointF
 from objects.arrow.arrow import Arrow
 

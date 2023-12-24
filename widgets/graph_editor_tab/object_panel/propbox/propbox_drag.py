@@ -1,29 +1,19 @@
 from PyQt6.QtCore import Qt, QPoint, QSize
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
+from Enums import (
+    ArrowAttribute,
+    Color,
+    MotionAttribute,
+    MotionType,
+    Orientation,
+    PropAttributesDicts,
+    PropType,
+)
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
-from constants.string_constants import (
-    ARROW,
-    IN,
-    OUT,
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
-    NORTH,
-    PROP,
-    SOUTH,
-    START_ORIENTATION,
-    WEST,
-    EAST,
-    COLOR,
-    MOTION_TYPE,
-    STATIC,
-    ROTATION_DIRECTION,
-    START_LOCATION,
-    END_LOCATION,
-    TURNS,
-)
+
 from widgets.graph_editor_tab.object_panel.objectbox_drag import ObjectBoxDrag
 
 
@@ -54,10 +44,10 @@ class PropBoxDrag(ObjectBoxDrag):
     def set_attributes(self, target_prop: "Prop") -> None:
         self.previous_drag_location = None
 
-        self.color: Colors = target_prop.color
-        self.prop_type: PropTypes = target_prop.prop_type
-        self.location: Locations = target_prop.location
-        self.orientation: Orientations = target_prop.orientation
+        self.color: Color = target_prop.color
+        self.prop_type: PropType = target_prop.prop_type
+        self.location: Location = target_prop.location
+        self.orientation: Orientation = target_prop.orientation
 
         self.ghost = self.pictograph.ghost_props[self.color]
         self.ghost.target_prop = target_prop
@@ -102,7 +92,7 @@ class PropBoxDrag(ObjectBoxDrag):
 
     ### UPDATERS ###
 
-    def _update_prop_preview_for_new_location(self, new_location: Locations) -> None:
+    def _update_prop_preview_for_new_location(self, new_location: Location) -> None:
         self.location = new_location
 
         self._update_ghost_prop_for_new_location(new_location)
@@ -173,19 +163,22 @@ class PropBoxDrag(ObjectBoxDrag):
                         MOTION_TYPE: STATIC,
                         TURNS: 0,
                     }
+
                     self.arrow = self.pictograph.arrows[self.color]
                     self.arrow.update_attributes(static_arrow_dict)
+
                     motion_dict = {
                         COLOR: self.color,
                         ARROW: self.arrow,
                         PROP: self.ghost,
                         MOTION_TYPE: STATIC,
-                        ROTATION_DIRECTION: "None",
+                        ROTATION_DIRECTION: None,
                         TURNS: 0,
                         START_LOCATION: self.location,
                         END_LOCATION: self.location,
                         START_ORIENTATION: self.orientation,
                     }
+
                     self.pictograph.motions[self.color].setup_attributes(motion_dict)
                     self.arrow.motion = self.pictograph.motions[self.color]
                     self.pictograph.motions[self.color].arrow = self.arrow
@@ -231,7 +224,7 @@ class PropBoxDrag(ObjectBoxDrag):
 
         scaled_size = (
             renderer.defaultSize()
-            * self.pictograph.graph_editor.main_pictograph.view.view_scale
+            * self.main_widget.graph_editor_tab.graph_editor.main_pictograph.view.view_scale
         )
         pixmap = QPixmap(scaled_size)
         pixmap.fill(Qt.GlobalColor.transparent)
@@ -257,13 +250,31 @@ class PropBoxDrag(ObjectBoxDrag):
             RotationAngles: The rotation angle for the prop.
 
         """
-        angle_map: Dict[
-            Orientations, Dict[Locations, RotationAngles]
-        ] = {
-            OUT: {NORTH: 270, SOUTH: 90, WEST: 180, EAST: 0},
-            CLOCKWISE: {NORTH: 0, SOUTH: 180, WEST: 270, EAST: 90},
-            COUNTER_CLOCKWISE: {NORTH: 180, SOUTH: 0, WEST: 90, EAST: 270},
-            IN: {NORTH: 90, SOUTH: 270, WEST: 0, EAST: 180},
+        angle_map: Dict[Orientation, Dict[Location, RotationAngles]] = {
+            OUT: {
+                NORTH: 270,
+                SOUTH: 90,
+                WEST: 180,
+                EAST: 0,
+            },
+            CLOCK: {
+                NORTH: 0,
+                SOUTH: 180,
+                WEST: 270,
+                EAST: 90,
+            },
+            COUNTER: {
+                NORTH: 180,
+                SOUTH: 0,
+                WEST: 90,
+                EAST: 270,
+            },
+            IN: {
+                NORTH: 90,
+                SOUTH: 270,
+                WEST: 0,
+                EAST: 180,
+            },
         }
         return angle_map.get(prop.orientation).get(prop.location)
 
