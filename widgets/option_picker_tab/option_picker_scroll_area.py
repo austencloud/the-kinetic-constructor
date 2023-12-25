@@ -28,13 +28,11 @@ class OptionPickerScrollArea(QScrollArea):
         self.option_picker_tab = option_picker_tab
 
         self.spacing = 10
-        self.image_cache = {}  # Add an image cache
         self.options: List[Tuple[str, Option]] = []
         self.pictographs = self._load_and_sort_data("PictographDataframe.csv")
         self._initialize_ui()
         self._setup_scroll_bars()
         self._connect_signals()
-        self.pixmap_cache = {}
 
     ### SETUP ###
 
@@ -55,9 +53,6 @@ class OptionPickerScrollArea(QScrollArea):
         )
 
     ### HELPERS ###
-
-    def cache_pixmap(self, image_path: str, pixmap: QPixmap) -> None:
-        self.pixmap_cache[image_path] = pixmap
 
     def _load_and_sort_data(self, file_path: str) -> pd.DataFrame:
         try:
@@ -98,32 +93,6 @@ class OptionPickerScrollArea(QScrollArea):
             start_option.end_position = start_option.pd_row_data.name[1]
             self._add_option_to_layout(start_option, True, 0, column)
 
-    def generate_image_path_for_option(self, option: Option) -> str:
-        pd_row_data = option.pd_row_data
-        prop_type = self.main_widget.prop_type
-        letter = pd_row_data[LETTER]
-        blue_turns = self.option_picker_tab.filter_frame.filters[BLUE_TURNS]
-        red_turns = self.option_picker_tab.filter_frame.filters[RED_TURNS]
-        turns_folder = f"({pd_row_data['blue_motion_type'][0]}{blue_turns},{pd_row_data['red_motion_type'][0]}{red_turns})"
-        image_dir = os.path.join(
-            "resources", "images", "pictographs", letter, prop_type, turns_folder
-        )
-        blue_end_orientation = option.motions[BLUE].get_end_orientation()
-        red_end_orientation = option.motions[RED].get_end_orientation()
-
-        image_name = (
-            f"{letter}_"
-            f"({pd_row_data.name[0]}→{pd_row_data.name[1]})_"
-            f"({pd_row_data['blue_start_location']}→{pd_row_data['blue_end_location']}_"
-            f"{blue_turns}_"
-            f"{pd_row_data['blue_start_orientation']}_{blue_end_orientation})_"
-            f"({pd_row_data['red_start_location']}→{pd_row_data['red_end_location']}_"
-            f"{red_turns}_"
-            f"{pd_row_data['red_start_orientation']}_{red_end_orientation})_"
-            f"{prop_type}.png "
-        )
-        return os.path.join(image_dir, image_name)
-
     def _add_option_to_layout(
         self, option: Option, is_start_position: bool, row: int, col: int
     ) -> None:
@@ -132,25 +101,25 @@ class OptionPickerScrollArea(QScrollArea):
 
     def load_image_if_visible(self, option: "Option") -> None:
         """Loads the image for an option if it is visible."""
-        if not option.imageLoaded and option.view.isVisible():
-            image_path = self.generate_image_path_for_option(option)
+        if not option.image_loaded and option.view.isVisible():
+            image_path = self.main_widget.generate_image_path(option)
 
             # If the image is not in cache, check if it exists on disk.
-            if image_path not in self.image_cache:
+            if image_path not in self.main_widget.image_cache:
                 if not os.path.exists(image_path):
                     # If the image does not exist on disk, render and cache it.
                     option.render_and_cache_image()
                 else:
                     # If it exists on disk, load it to the cache.
-                    self.image_cache[image_path] = QPixmap(image_path)
+                    self.main_widget.image_cache[image_path] = QPixmap(image_path)
 
             # Set the pixmap from the cache to the pixmap item of the option.
-            if not option.pixmapItem:
-                option.pixmapItem = option.addPixmap(self.image_cache[image_path])
+            if not option.pixmap:
+                option.pixmap = option.addPixmap(self.main_widget.image_cache[image_path])
             else:
-                option.pixmapItem.setPixmap(self.image_cache[image_path])
+                option.pixmap.setPixmap(self.main_widget.image_cache[image_path])
 
-            option.imageLoaded = True
+            option.image_loaded = True
 
     def apply_turn_filters(self, filters: Dict[str, Union[Turns, Orientation]]) -> None:
         # self.clear()
@@ -308,9 +277,7 @@ class OptionPickerScrollArea(QScrollArea):
         filtered_data = self.pictographs[
             self.pictographs.index.get_level_values(0) == specific_end_position
         ]
-        filtered_data = filtered_data[
-            filtered_data[LETTER].isin(next_possible_letters)
-        ]
+        filtered_data = filtered_data[filtered_data[LETTER].isin(next_possible_letters)]
 
         # filter to ensure the options have a start orientation for each motion that matches the end orientations of the reference option's motions
         for color in [BLUE, RED]:
@@ -349,9 +316,6 @@ class OptionPickerScrollArea(QScrollArea):
             )
 
     ### GETTERS ###
-
-    def get_cached_pixmap(self, image_path: str) -> QPixmap | None:
-        return self.pixmap_cache.get(image_path)
 
     def _get_click_handler(self, option: "Option", is_start_position: bool) -> Callable:
         """

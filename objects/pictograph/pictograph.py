@@ -1,42 +1,32 @@
 from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Tuple, Union
-from PyQt6.QtCore import QPointF, Qt
+from PyQt6.QtCore import Qt, QPointF, QByteArray, QBuffer
 from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView
+from PyQt6.QtGui import QImage, QPainter, QPixmap
+from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
 import pandas as pd
+from Enums import Color, Letter, LetterNumberType, Location, SpecificPosition
 from constants.string_constants import *
+from data.positions_map import get_specific_start_end_positions
 from objects.letter_item import LetterItem
 from objects.motion import Motion
 from objects.prop.prop import Prop
-
-from data.positions_map import get_specific_start_end_positions
 from objects.arrow.arrow import Arrow
 from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
-from objects.prop.prop import Prop
-from objects.motion import Motion
-
-from utilities.letter_engine import LetterEngine
-from objects.pictograph.pictograph_event_handler import (
-    PictographEventHandler,
-)
+from objects.pictograph.pictograph_event_handler import PictographEventHandler
 from objects.pictograph.pictograph_init import PictographInit
-from objects.pictograph.pictograph_menu_handler import (
-    PictographMenuHandler,
-)
+from objects.pictograph.pictograph_menu_handler import PictographMenuHandler
 from objects.pictograph.position_engines.arrow_positioners.arrow_positioner import (
     ArrowPositioner,
 )
 from objects.pictograph.position_engines.prop_positioner import PropPositioner
-
+from utilities.letter_engine import LetterEngine
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
-    from widgets.option_picker_tab.option import Option
     from widgets.image_generator_tab.ig_pictograph import IGPictograph
-
-from objects.letter_item import LetterItem
-from Enums import *
+    from widgets.option_picker_tab.option import Option
+    from widgets.main_widget import MainWidget
 
 
 class Pictograph(QGraphicsScene):
@@ -73,6 +63,9 @@ class Pictograph(QGraphicsScene):
         self.motion_dict_list: List[Dict] = []
         self.start_position: SpecificPosition = None
         self.end_position: SpecificPosition = None
+        self.image_loaded: bool = False
+        self.pixmap = None  # Store the pixmap item
+        self.pd_row_data = None  # Store the row data from the pandas dataframe
         self.view_scale = 1
         self.event_handler = PictographEventHandler(self)
 
@@ -121,7 +114,7 @@ class Pictograph(QGraphicsScene):
 
     def set_letter_renderer(self, letter: str) -> None:
         letter_type = self.get_letter_type(letter)
-        svg_path = f"{image_path}letters_trimmed/{letter_type}/{letter}.svg"
+        svg_path = f"resources/images/letters_trimmed/{letter_type}/{letter}.svg"
         renderer = QSvgRenderer(svg_path)
         if renderer.isValid():
             self.letter_item.setSharedRenderer(renderer)
@@ -138,6 +131,7 @@ class Pictograph(QGraphicsScene):
         red_motion_dict = self._create_motion_dict_from_pd_row_data(
             pd_row_data, BLUE, filters
         )
+
         blue_motion_dict = self._create_motion_dict_from_pd_row_data(
             pd_row_data, RED, filters
         )
@@ -377,7 +371,7 @@ class Pictograph(QGraphicsScene):
             self.letter_item.position_letter_item(self.letter_item)
         else:
             self.current_letter = None
-            svg_path = f"{image_path}letter_button_icons/blank.svg"
+            svg_path = f"resources/images/letter_button_icons/blank.svg"
             renderer = QSvgRenderer(svg_path)
             if renderer.isValid():
                 self.letter_item.setSharedRenderer(renderer)
@@ -466,3 +460,129 @@ class Pictograph(QGraphicsScene):
         blue_turns = self.motions[BLUE].turns
         red_turns = self.motions[RED].turns
         return blue_turns in filters[BLUE_TURNS] and red_turns in filters[RED_TURNS]
+
+    def render_and_cache_image(self) -> None:
+        # Generate the image path
+        image_path = self.main_widget.generate_image_path(self)
+
+        # Check if the image already exists in the cache
+        if image_path in self.main_widget.image_cache:
+            # If the image is already cached, use it
+            pixmap = self.main_widget.get_cached_pixmap(image_path)
+            if pixmap is None:
+                # If the pixmap is not loaded yet, load it
+                pixmap = QPixmap(image_path)
+                self.main_widget.cache_image(image_path, pixmap)
+            print(f"Using cached image for {image_path}")
+        else:
+            # If the image doesn't exist, render the scene to a pixmap
+            print(f"Rendering and saving image for {image_path}")
+            pixmap = self.render_scene_to_pixmap()
+            
+            # Cache the pixmap
+            self.main_widget.cache_image(image_path, pixmap)
+
+            # Save the image if it's not already saved
+            if not os.path.exists(image_path):
+                pixmap.save(image_path, "PNG")
+
+        # Use the pixmap for the QGraphicsPixmapItem
+        self.update_pixmap_item(pixmap)
+
+
+
+    def update_pixmap_item(self, pixmap: QPixmap) -> None:
+        if not self.pixmap:
+            self.pixmap = QGraphicsPixmapItem(pixmap)
+            self.addItem(self.pixmap)
+        else:
+            self.pixmap.setPixmap(pixmap)
+        self.image_loaded = True
+
+    def render_scene_to_pixmap(self) -> None:
+        self.update_pictograph()
+
+        prop_type = self.main_widget.prop_type
+        letter = self.current_letter
+
+        if self.motions[BLUE].motion_type == PRO:
+            blue_motion_type_prefix = "p"
+        elif self.motions[BLUE].motion_type == ANTI:
+            blue_motion_type_prefix = "a"
+        elif self.motions[BLUE].motion_type == STATIC:
+            blue_motion_type_prefix = "s"
+        elif self.motions[BLUE].motion_type == DASH:
+            blue_motion_type_prefix = "d"
+
+        if self.motions[RED].motion_type == PRO:
+            red_motion_type_prefix = "p"
+        elif self.motions[RED].motion_type == ANTI:
+            red_motion_type_prefix = "a"
+        elif self.motions[RED].motion_type == STATIC:
+            red_motion_type_prefix = "s"
+        elif self.motions[RED].motion_type == DASH:
+            red_motion_type_prefix = "d"
+
+        # Construct the folder name based on turns and motion types
+        turns_string = f"({blue_motion_type_prefix}{self.motions[BLUE].turns},{red_motion_type_prefix}{self.motions[RED].turns})"
+        start_to_end_string = f"({self.start_position}→{self.end_position})"
+        image_dir = os.path.join(
+            "resources",
+            "images",
+            "pictographs",
+            prop_type,
+            letter,
+            start_to_end_string,
+            turns_string,
+            
+        )
+        os.makedirs(image_dir, exist_ok=True)
+
+        # Modify the filename to include motion types and turns
+        blue_turns = self.motions[BLUE].turns
+        red_turns = self.motions[RED].turns
+        blue_end_orientation = self.motions[BLUE].end_orientation
+        red_end_orientation = self.motions[RED].end_orientation
+
+        image_name = (
+            f"{letter}_"
+            f"{start_to_end_string}_"
+            f"({self.motions[BLUE].start_location}→{self.motions[BLUE].end_location}_"
+            f"{blue_turns}_"
+            f"{self.motions[BLUE].start_orientation}→{blue_end_orientation})_"
+            f"({self.motions[RED].start_location}→{self.motions[RED].end_location}_"
+            f"{red_turns}_"
+            f"{self.motions[RED].start_orientation}→{red_end_orientation})_"
+            f"{prop_type}.png "
+        )
+
+        image_path = os.path.join(image_dir, image_name)
+        image = QImage(
+            int(self.width()), int(self.height()), QImage.Format.Format_ARGB32
+        )
+        painter = QPainter(image)
+        self.render(painter)
+        painter.end()
+
+        if not image.isNull():
+            buffer = QByteArray()
+            buf = QBuffer(buffer)
+            buf.open(QBuffer.OpenModeFlag.WriteOnly)
+            success = image.save(buf, "PNG")
+            buf.close()
+
+            if success:
+                with open(image_path, "wb") as file:
+                    file.write(buffer)
+                print(f"Image saved successfully to {image_path}")
+            else:
+                print(f"Failed to save the image to {image_path}")
+        else:
+            print("QImage is null. Nothing to save.")
+
+        return QPixmap.fromImage(image)
+
+    # New method to handle conditional image loading
+    def load_image_if_needed(self) -> None:
+        if not self.image_loaded:
+            self.render_and_cache_image()

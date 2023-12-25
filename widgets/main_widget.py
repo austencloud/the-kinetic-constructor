@@ -1,4 +1,6 @@
-from typing import TYPE_CHECKING, Optional
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import os
+from typing import TYPE_CHECKING, Any, Optional
 from PyQt6.QtCore import QEvent, Qt
 from PyQt6.QtWidgets import (
     QSizePolicy,
@@ -9,12 +11,13 @@ from PyQt6.QtWidgets import (
     QTabWidget,
     QApplication,
 )
-from PyQt6.QtGui import QWheelEvent
+from PyQt6.QtGui import QWheelEvent, QPixmap
 import pandas as pd
 from Enums import GridMode, PropType
-from constants.string_constants import DIAMOND
+from constants.string_constants import BLUE, BLUE_TURNS, DIAMOND, LETTER, RED, RED_TURNS
 from utilities.TypeChecking.TypeChecking import PictographDataframe
 from widgets.image_generator_tab.ig_tab import IGTab
+from widgets.option_picker_tab.option import Option
 from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
 from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
 from widgets.graph_editor_tab.key_event_handler import KeyEventHandler
@@ -24,6 +27,7 @@ from widgets.styled_splitter import StyledSplitter
 
 if TYPE_CHECKING:
     from main import MainWindow
+from typing import Generator
 
 
 class MainWidget(QWidget):
@@ -43,6 +47,11 @@ class MainWidget(QWidget):
         self.image_generator_tab = IGTab(self)
         self.image_generator_tab.imageGenerated.connect(self.on_image_generated)
         self.configure_layouts()
+        self.pixmap_cache = {}
+        self.image_cache = {}
+        self.initialize_image_cache()
+
+
 
     def load_all_letters(self) -> PictographDataframe:
         df = pd.read_csv("PictographDataframe.csv")
@@ -168,5 +177,75 @@ class MainWidget(QWidget):
         self.option_picker_tab.resize_option_picker_tab()
         self.sequence_widget.resize_sequence_widget()
 
+
+    ### IMAGE CACHE ###
+
     def on_image_generated(self, image_path) -> None:
         print(f"Image generated at {image_path}")
+        pixmap = QPixmap(image_path)
+        self.cache_image(image_path, pixmap)
+            
+    def initialize_image_cache(self):
+        # Start a background thread to load the images
+        with ThreadPoolExecutor() as executor:
+            # Dictionary to hold future to file path mappings
+            future_to_path = {
+                executor.submit(self.load_pixmap, file_path): file_path
+                for file_path in self.get_image_file_paths()
+            }
+            for future in as_completed(future_to_path):
+                file_path = future_to_path[future]
+                try:
+                    pixmap = future.result()
+                    self.cache_image(file_path, pixmap)
+                except Exception as exc:
+                    print(f'{file_path} generated an exception: {exc}')
+
+    def get_image_file_paths(self) -> Generator[str, Any, None]:
+        # Generate a list of all image file paths
+        image_root_dir = os.path.join("resources", "images", "pictographs")
+        for subdir, _, files in os.walk(image_root_dir):
+            for file in files:
+                if file.lower().endswith('.png'):
+                    yield os.path.join(subdir, file)
+
+    def load_pixmap(self, file_path) -> QPixmap:
+        # Load the pixmap from the disk
+        return QPixmap(file_path)
+    # Modify the cache_image method to accept a None pixmap
+    def cache_image(self, image_path: str, pixmap: QPixmap = None) -> None:
+        self.image_cache[image_path] = pixmap
+
+    # Modify the get_cached_pixmap method to load the pixmap if it's not already loaded
+    def get_cached_pixmap(self, image_path: str) -> QPixmap | None:
+        if image_path not in self.image_cache:
+            return None
+        if self.image_cache[image_path] is None:
+            self.image_cache[image_path] = QPixmap(image_path)
+        return self.image_cache[image_path]
+
+    def generate_image_path(self, pictograph: Pictograph) -> str:
+        pd_row_data = pictograph.pd_row_data
+        prop_type = self.prop_type
+        letter = pd_row_data[LETTER]
+        blue_turns = self.option_picker_tab.filter_frame.filters[BLUE_TURNS]
+        red_turns = self.option_picker_tab.filter_frame.filters[RED_TURNS]
+        turns_folder = f"({pd_row_data['blue_motion_type'][0]}{blue_turns},{pd_row_data['red_motion_type'][0]}{red_turns})"
+        image_dir = os.path.join(
+            "resources", "images", "pictographs", letter, prop_type, turns_folder
+        )
+        blue_end_orientation = pictograph.motions[BLUE].get_end_orientation()
+        red_end_orientation = pictograph.motions[RED].get_end_orientation()
+
+        image_name = (
+            f"{letter}_"
+            f"({pd_row_data.name[0]}→{pd_row_data.name[1]})_"
+            f"({pd_row_data['blue_start_location']}→{pd_row_data['blue_end_location']}_"
+            f"{blue_turns}_"
+            f"{pd_row_data['blue_start_orientation']}_{blue_end_orientation})_"
+            f"({pd_row_data['red_start_location']}→{pd_row_data['red_end_location']}_"
+            f"{red_turns}_"
+            f"{pd_row_data['red_start_orientation']}_{red_end_orientation})_"
+            f"{prop_type}.png "
+        )
+        return os.path.join(image_dir, image_name)

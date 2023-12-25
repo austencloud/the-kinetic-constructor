@@ -209,77 +209,11 @@ class IGTab(QWidget):
     def render_pictograph_to_image(self, pd_row_data) -> None:
         ig_pictograph = self._create_ig_pictograph(pd_row_data)
         ig_pictograph.update_pictograph()
-
-        prop_type = self.main_widget.prop_type
-        letter = pd_row_data["letter"]
-
-        if pd_row_data["blue_motion_type"] == "pro":
-            blue_motion_type_prefix = "p"
-        elif pd_row_data["blue_motion_type"] == "anti":
-            blue_motion_type_prefix = "a"
-        elif pd_row_data["blue_motion_type"] == "static":
-            blue_motion_type_prefix = "s"
-        elif pd_row_data["blue_motion_type"] == "dash":
-            blue_motion_type_prefix = "d"
-
-        if pd_row_data["red_motion_type"] == "pro":
-            red_motion_type_prefix = "p"
-        elif pd_row_data["red_motion_type"] == "anti":
-            red_motion_type_prefix = "a"
-        elif pd_row_data["red_motion_type"] == "static":
-            red_motion_type_prefix = "s"
-        elif pd_row_data["red_motion_type"] == "dash":
-            red_motion_type_prefix = "d"
-
-        blue_turns = self.filter_frame.filters["blue_turns"]
-        red_turns = self.filter_frame.filters["red_turns"]
-
-        # Construct the folder name based on turns and motion types
-        turns_folder = f"({blue_motion_type_prefix}{blue_turns},{red_motion_type_prefix}{red_turns})"
-
-        image_dir = os.path.join(
-            "resources",
-            "images",
-            "pictographs",
-            letter,
-            prop_type,
-            turns_folder,
-        )
-        os.makedirs(image_dir, exist_ok=True)
-        blue_end_orientation = ig_pictograph.motions[BLUE].get_end_orientation()
-        red_end_orientation = ig_pictograph.motions[RED].get_end_orientation()
-
-        # Modify the filename to include motion types and turns
-        image_name = (
-            f"{letter}_"
-            f"({pd_row_data.name[0]}→{pd_row_data.name[1]})_"
-            f"({pd_row_data['blue_start_location']}→{pd_row_data['blue_end_location']}_"
-            f"{blue_turns}_"
-            f"{pd_row_data['blue_start_orientation']}_{blue_end_orientation})_"
-            f"({pd_row_data['red_start_location']}→{pd_row_data['red_end_location']}_"
-            f"{red_turns}_"
-            f"{pd_row_data['red_start_orientation']}_{red_end_orientation})_"
-            f"{prop_type}.png "
-        )
-
-        image_path = os.path.join(image_dir, image_name)
-        image = QImage(
-            int(ig_pictograph.width()),
-            int(ig_pictograph.height()),
-            QImage.Format.Format_ARGB32,
-        )
-        painter = QPainter(image)
-        ig_pictograph.render(painter)
-        painter.end()
-
-        # Save the image
-        try:
-            image.save(image_path)
-            self.imageGenerated.emit(image_path)
-        except Exception as e:
-            print(f"Failed to save image: {e}")
+        ig_pictograph.render_and_cache_image()
 
     ### OPTION CREATION ###
+
+
 
     def _create_ig_pictograph(self, pd_row_data: pd.Series):
         letter = pd_row_data["letter"]
