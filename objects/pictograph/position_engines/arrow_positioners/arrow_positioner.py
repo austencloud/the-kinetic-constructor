@@ -118,9 +118,7 @@ class ArrowPositioner:
             self.pictograph.arrows[RED],
             self.pictograph.arrows[BLUE],
         ]:
-            state = self.pictograph.get_state()
-            motion_type = state[f"{arrow.color}_motion_type"]
-            adjustment = self._calculate_I_adjustment(arrow, motion_type)
+            adjustment = self._calculate_I_adjustment(arrow)
             self._apply_adjustment(arrow, adjustment)
             self._apply_adjustment(arrow.ghost, adjustment)
 
@@ -153,8 +151,8 @@ class ArrowPositioner:
         distance = 105 if arrow.color == RED else 50
         return self.calculate_adjustment(arrow.location, distance)
 
-    def _calculate_I_adjustment(self, arrow: Arrow, motion_type: MotionType) -> QPointF:
-        distance = 110 if motion_type == PRO else 55
+    def _calculate_I_adjustment(self, arrow: Arrow) -> QPointF:
+        distance = 110 if arrow.motion_type == PRO else 55
         return self.calculate_adjustment(arrow.location, distance)
 
     def _calculate_P_adjustment(self, arrow: Arrow) -> QPointF:

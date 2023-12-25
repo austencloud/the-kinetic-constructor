@@ -88,9 +88,17 @@ class StaffArrowPositioner:
             self._apply_adjustment_to_all_arrows(90)
 
     def _adjust_arrows_for_letter_I(self, red_orientation, blue_orientation) -> None:
-
         if self._is_at_least_one_prop_antiradial(red_orientation, blue_orientation):
-            self._apply_adjustment_to_all_arrows(90)
+            for arrow in self.pictograph.arrows.values():
+                adjustment = self.arrow_positioner._calculate_I_adjustment(arrow)
+                adjusted_x = (
+                    adjustment.x() - 30 if adjustment.x() < 0 else adjustment.x() + 30
+                )
+                adjusted_y = (
+                    adjustment.y() - 30 if adjustment.y() < 0 else adjustment.y() + 30
+                )
+                adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
+                self.arrow_positioner._apply_adjustment(arrow, adjusted_adjustment)
 
     def _adjust_arrows_for_letter_Q(self, red_orientation, blue_orientation) -> None:
         if self._is_at_least_one_prop_antiradial(red_orientation, blue_orientation):

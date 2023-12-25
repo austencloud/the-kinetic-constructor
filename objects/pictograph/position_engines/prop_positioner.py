@@ -406,38 +406,31 @@ class PropPositioner:
                     self._set_default_prop_location(prop)
 
         else:
-            if self.is_not_strict():
-                for prop in self.scene.props.values():
-                    self._set_default_prop_location(prop)
-            elif self.is_strict():
-                for prop in self.scene.props.values():
-                    self._set_strict_prop_location(prop)
-            else:
-                pro_prop = (
-                    self.scene.props[RED]
-                    if self.scene.motions[RED].motion_type == PRO
-                    else self.scene.props[BLUE]
-                )
-                anti_prop = (
-                    self.scene.props[RED]
-                    if self.scene.motions[RED].motion_type == ANTI
-                    else self.scene.props[BLUE]
-                )
+            pro_prop = (
+                self.scene.props[RED]
+                if self.scene.motions[RED].motion_type == PRO
+                else self.scene.props[BLUE]
+            )
+            anti_prop = (
+                self.scene.props[RED]
+                if self.scene.motions[RED].motion_type == ANTI
+                else self.scene.props[BLUE]
+            )
 
-                pro_motion = self.scene.motions[pro_prop.color]
+            pro_motion = self.scene.motions[pro_prop.color]
 
-                pro_direction = self._determine_translation_direction(pro_motion)
-                anti_direction = self._get_opposite_direction(pro_direction)
+            pro_direction = self._determine_translation_direction(pro_motion)
+            anti_direction = self._get_opposite_direction(pro_direction)
 
-                new_position_pro = self._calculate_new_position(
-                    pro_prop.pos(), pro_direction
-                )
-                new_position_anti = self._calculate_new_position(
-                    anti_prop.pos(), anti_direction
-                )
+            new_position_pro = self._calculate_new_position(
+                pro_prop.pos(), pro_direction
+            )
+            new_position_anti = self._calculate_new_position(
+                anti_prop.pos(), anti_direction
+            )
 
-                pro_prop.setPos(new_position_pro)
-                anti_prop.setPos(new_position_anti)
+            pro_prop.setPos(new_position_pro)
+            anti_prop.setPos(new_position_anti)
 
     def is_strict(self):
         return all(
@@ -510,7 +503,7 @@ class PropPositioner:
         is_static = motion.motion_type == STATIC
 
         if is_shift or is_static:
-            if motion.prop.is_radial:
+            if motion.prop.is_radial():
                 if motion.end_location in [NORTH, SOUTH]:
                     if motion.start_location == EAST:
                         return RIGHT
