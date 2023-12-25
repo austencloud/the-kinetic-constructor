@@ -1,5 +1,5 @@
 from Enums import PropAttributesDicts
-from constants.string_constants import COLOR
+from constants.constants import COLOR
 from objects.motion import Motion
 from objects.prop.prop import Prop
 

@@ -5,7 +5,7 @@ import re
 from typing import TYPE_CHECKING, Union
 
 from Enums import *
-from constants.string_constants import RED, BLUE, HEX_RED, HEX_BLUE
+from constants.constants import RED, BLUE, HEX_RED, HEX_BLUE
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph

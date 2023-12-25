@@ -12,7 +12,7 @@ from objects.grid import Grid
 from objects.letter_item import LetterItem
 from objects.motion import Motion
 from objects.prop.prop import Prop
-from constants.string_constants import *
+from constants.constants import *
 from utilities.TypeChecking.TypeChecking import Location
 from objects.prop.prop_types import *
 

@@ -5,7 +5,7 @@ from objects.prop.prop import *
 from objects.prop.prop_types import BigTriad
 from widgets.graph_editor_tab.object_panel.propbox.propbox_drag import PropBoxDrag
 from widgets.graph_editor_tab.object_panel.propbox.propbox_view import PropBoxView
-from constants.string_constants import *
+from constants.constants import *
 from objects.grid import Grid
 from widgets.graph_editor_tab.object_panel.objectbox import ObjectBox
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, Dict, List

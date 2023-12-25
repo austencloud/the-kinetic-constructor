@@ -1,5 +1,5 @@
 from PyQt6.QtCore import QPointF
-from constants.string_constants import *
+from constants.constants import *
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Callable
 from objects.pictograph.position_engines.arrow_positioners.staff_arrow_positioner import (
@@ -11,9 +11,6 @@ from objects.pictograph.position_engines.arrow_positioners.triad_arrow_positione
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
-
-
-DISTANCE = 40
 
 
 class ArrowPositioner:
@@ -273,10 +270,3 @@ class ArrowPositioner:
         adjustment = self.calculate_adjustment(arrow.location, DISTANCE)
         new_pos = default_pos + adjustment - arrow.boundingRect().center()
         arrow.setPos(new_pos)
-        if arrow.motion_type == ANTI and arrow.motion.prop.orientation in [
-            CLOCK,
-            COUNTER,
-        ]:
-            adjustment = self.calculate_adjustment(arrow.location, DISTANCE + -45)
-            new_pos = default_pos + adjustment - arrow.boundingRect().center()
-            arrow.setPos(new_pos)

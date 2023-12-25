@@ -165,3 +165,5 @@ ICON_PATHS = {
     "clockwise": CLOCKWISE_ICON,
     "counter_clockwise": COUNTER_CLOCKWISE_ICON,
 }
+
+DISTANCE = 40

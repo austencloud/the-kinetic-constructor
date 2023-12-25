@@ -9,7 +9,7 @@ from Enums import (
 )
 from .Letters import *
 from typing import Literal
-from constants.string_constants import *
+from constants.constants import *
 from enum import Enum
 from typing import Dict
 from Enums import MotionTypeCombination

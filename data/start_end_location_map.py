@@ -1,5 +1,5 @@
 from Enums import Location, MotionType, RotationDirection
-from constants.string_constants import *
+from constants.constants import *
 from utilities.TypeChecking.TypeChecking import (
     StartEndLocationTuple,
 )

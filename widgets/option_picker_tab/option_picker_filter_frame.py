@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, Union
 from Enums import Orientation
-from constants.string_constants import (
+from constants.constants import (
     BLUE_END_ORIENTATION,
     BLUE_TURNS,
     RED_END_ORIENTATION,

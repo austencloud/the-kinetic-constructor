@@ -2,7 +2,7 @@ from typing import Union
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from Enums import *
-from constants.string_constants import (
+from constants.constants import (
     ANTI,
     CLOCKWISE,
     COLOR,

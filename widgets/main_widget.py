@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import QEvent, Qt, QThreadPool
 from PyQt6.QtGui import QWheelEvent, QPixmap
 import pandas as pd
-from constants.string_constants import (
+from constants.constants import (
     BLUE,
     DIAMOND,
     LETTER,

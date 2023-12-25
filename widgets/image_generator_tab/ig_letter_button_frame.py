@@ -3,7 +3,7 @@ from PyQt6.QtGui import QIcon, QPixmap, QPainter, QFont, QColor, QResizeEvent
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtSvg import QSvgRenderer
 from Enums import Letter, LetterNumberType
-from constants.string_constants import LETTER_BTN_ICON_DIR
+from constants.constants import LETTER_BTN_ICON_DIR
 from typing import TYPE_CHECKING, Dict, List
 
 

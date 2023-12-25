@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING, Callable, Literal
 from PyQt6.QtCore import QPointF
 from Enums import (
     AntiradialOrientation,
@@ -6,7 +6,7 @@ from Enums import (
     Direction,
     RadialOrientation,
 )
-from constants.string_constants import (
+from constants.constants import (
     ANTI,
     BLUE,
     CLOCK,
@@ -26,9 +26,10 @@ from constants.string_constants import (
     SOUTHEAST,
     SOUTHWEST,
     UP,
-    WEST,
+    WEST, DISTANCE
 )
 from objects.motion import Motion
+
 from objects.prop.prop import Prop
 
 if TYPE_CHECKING:
@@ -36,6 +37,7 @@ if TYPE_CHECKING:
     from objects.pictograph.position_engines.arrow_positioners.arrow_positioner import (
         ArrowPositioner,
     )
+
 
 
 class StaffArrowPositioner:
@@ -140,8 +142,66 @@ class StaffArrowPositioner:
                 self.pictograph.motions[BLUE].start_location,
                 self.pictograph.motions[BLUE].end_location,
             )
+            leader = self.pictograph.motions[leading_color]
+            if leading_color == RED:
+                follower = self.pictograph.motions[BLUE]
+            else:
+                follower = self.pictograph.motions[RED]
+                
+            for arrow in self.pictograph.arrows.values():
+                if arrow.motion.prop.is_antiradial():
+                    default_pos = self.arrow_positioner._get_default_position(arrow)
+                    adjustment = self.arrow_positioner.calculate_adjustment(
+                        arrow.location, DISTANCE + -45
+                    )
+                    new_pos = default_pos + adjustment - arrow.boundingRect().center()
+                    arrow.setPos(new_pos)
 
-    def determine_leading_motion_for_T(self, red_start, red_end, blue_start, blue_end):
+            if leader.prop.is_antiradial() and follower.prop.is_radial():
+                adjustment = self.arrow_positioner.calculate_adjustment(
+                    leader.arrow.location, 30
+                )
+                direction = self.get_anti_leader_adjustment_direction(leader)
+                if direction == UP:
+                    adjustment += QPointF(0, -40)
+                elif direction == DOWN:
+                    adjustment += QPointF(0, 40)
+                elif direction == LEFT:
+                    adjustment += QPointF(-40, 0)
+                elif direction == RIGHT:
+                    adjustment += QPointF(40, 0)
+                self.arrow_positioner._apply_adjustment(leader.arrow, adjustment)
+
+            elif leader.prop.is_radial() and follower.prop.is_antiradial():
+                adjustment = self.arrow_positioner.calculate_adjustment(
+                    follower.arrow.location, 40
+                )
+                direction = self.get_anti_leader_adjustment_direction(leader)
+                if direction == UP:
+                    if leader.end_location == WEST:
+                        adjustment += QPointF(-45, -20)
+                    elif leader.end_location == EAST:
+                        adjustment += QPointF(45, -20)
+                elif direction == DOWN:
+                    if leader.end_location == WEST:
+                        adjustment += QPointF(-45, 20)
+                    elif leader.end_location == EAST:
+                        adjustment += QPointF(45, 20)
+                elif direction == LEFT:
+                    if leader.end_location == NORTH:
+                        adjustment += QPointF(-20, -45)
+                    elif leader.end_location == SOUTH:
+                        adjustment += QPointF(-20, 45)
+                elif direction == RIGHT:
+                    if leader.end_location == NORTH:
+                        adjustment += QPointF(20, -45)
+                    elif leader.end_location == SOUTH:
+                        adjustment += QPointF(20, 45)
+                self.arrow_positioner._apply_adjustment(leader.arrow, adjustment)
+
+    def determine_leading_motion_for_T(
+        self, red_start, red_end, blue_start, blue_end
+    ) -> Literal["red", "blue"] | None:
         """Determines which motion is leading in the rotation sequence."""
         if red_start == blue_end:
             return "red"
@@ -166,7 +226,7 @@ class StaffArrowPositioner:
                 adjustment = self.arrow_positioner.calculate_adjustment(
                     anti_motion.arrow.location, 30
                 )
-                direction = self.get_V_anti_adjustment_direction(anti_motion)
+                direction = self.get_anti_leader_adjustment_direction(anti_motion)
                 if direction == UP:
                     adjustment += QPointF(0, -40)
                 elif direction == DOWN:
@@ -181,7 +241,7 @@ class StaffArrowPositioner:
                 adjustment = self.arrow_positioner.calculate_adjustment(
                     pro_motion.arrow.location, 40
                 )
-                direction = self.get_V_anti_adjustment_direction(anti_motion)
+                direction = self.get_anti_leader_adjustment_direction(anti_motion)
                 if direction == UP:
                     if anti_motion.end_location == WEST:
                         adjustment += QPointF(-45, -20)
@@ -204,9 +264,9 @@ class StaffArrowPositioner:
                         adjustment += QPointF(20, 45)
                 self.arrow_positioner._apply_adjustment(anti_motion.arrow, adjustment)
 
-    def get_V_anti_adjustment_direction(self, anti_motion: "Motion") -> str:
-        arrow_location = anti_motion.arrow.location
-        end_location = anti_motion.end_location
+    def get_anti_leader_adjustment_direction(self, leader: "Motion") -> str:
+        arrow_location = leader.arrow.location
+        prop_location = leader.prop.location
 
         antiradial_mapping = {
             (NORTHEAST, EAST): DOWN,
@@ -230,10 +290,10 @@ class StaffArrowPositioner:
             (NORTHWEST, WEST): DOWN,
         }
 
-        if anti_motion.prop.is_antiradial():
-            return antiradial_mapping.get((arrow_location, end_location))
+        if leader.prop.is_antiradial():
+            return antiradial_mapping.get((arrow_location, prop_location))
         else:
-            return radial_mapping.get((arrow_location, end_location))
+            return radial_mapping.get((arrow_location, prop_location))
 
     # Helper functions
     def _are_both_props_radial(self, red_prop: Prop, blue_prop: Prop) -> bool:

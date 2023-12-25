@@ -13,7 +13,7 @@ from Enums import (
 from data.start_end_location_map import get_start_end_locations
 from objects.graphical_object import GraphicalObject
 from PyQt6.QtCore import QPointF, Qt
-from constants.string_constants import *
+from constants.constants import *
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from objects.prop.prop_manipulator import PropManipulator
 from utilities.TypeChecking.TypeChecking import RotationAngles

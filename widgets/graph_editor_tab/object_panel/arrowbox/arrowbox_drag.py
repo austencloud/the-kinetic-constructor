@@ -7,7 +7,7 @@ from Enums import (
     MotionType,
     RotationDirection,
 )
-from constants.string_constants import IN
+from constants.constants import IN
 
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Tuple
@@ -21,7 +21,7 @@ from utilities.TypeChecking.TypeChecking import (
     RotationAngles,
 )
 from data.start_end_location_map import get_start_end_locations
-from constants.string_constants import *
+from constants.constants import *
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from objects.pictograph.pictograph import Pictograph

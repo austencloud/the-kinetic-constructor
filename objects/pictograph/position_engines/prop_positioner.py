@@ -4,7 +4,7 @@ import pandas as pd
 from Enums import *
 
 from typing import TYPE_CHECKING, Dict, List, Tuple
-from constants.string_constants import (
+from constants.constants import (
     CLOCK,
     COUNTER,
     EAST,

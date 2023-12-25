@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QFont
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
 from Enums import Color
-from constants.string_constants import HEX_BLUE, HEX_RED, RED
+from constants.constants import HEX_BLUE, HEX_RED, RED
 from objects.motion import Motion
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,

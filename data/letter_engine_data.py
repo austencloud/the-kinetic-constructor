@@ -1,4 +1,4 @@
-from constants.string_constants import ANTI, DASH, PRO, STATIC
+from constants.constants import ANTI, DASH, PRO, STATIC
 
 
 motion_type_letter_groups = {

@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
     QComboBox,
 )
 
-from constants.string_constants import CLOCK, COUNTER, IN, OUT
+from constants.constants import CLOCK, COUNTER, IN, OUT
 
 if TYPE_CHECKING:
     from widgets.image_generator_tab.ig_filter_frame import IGFilterFrame
