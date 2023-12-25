@@ -259,9 +259,9 @@ class MainWidget(QWidget):
             "images",
             "pictographs",
             prop_type,
+            turns_string,
             letter,
             start_to_end_string,
-            turns_string,
         ).replace("\\", "/")
 
         blue_end_orientation = pictograph.motions[BLUE].get_end_orientation()
@@ -270,10 +270,10 @@ class MainWidget(QWidget):
         image_name = (
             f"{letter}_"
             f"({pd_row_data.name[0]}→{pd_row_data.name[1]})_"
-            f"({pd_row_data['blue_start_location']}→{pd_row_data['blue_end_location']}_"
+            f"({pd_row_data["blue_motion_type"]}_{pd_row_data['blue_start_location']}→{pd_row_data['blue_end_location']}_"
             f"{blue_turns}_"
             f"{pd_row_data['blue_start_orientation']}_{blue_end_orientation})_"
-            f"({pd_row_data['red_start_location']}→{pd_row_data['red_end_location']}_"
+            f"({pd_row_data["red_motion_type"]}_{pd_row_data['red_start_location']}→{pd_row_data['red_end_location']}_"
             f"{red_turns}_"
             f"{pd_row_data['red_start_orientation']}_{red_end_orientation})_"
             f"{prop_type}.png"

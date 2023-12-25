@@ -508,15 +508,16 @@ class Pictograph(QGraphicsScene):
 
         # Construct the folder name based on turns and motion types
         turns_string = f"{blue_motion_type_prefix}{self.motions[BLUE].turns},{red_motion_type_prefix}{self.motions[RED].turns}"
+        basic_turns_string = f"{self.motions[BLUE].turns},{self.motions[RED].turns}"
         start_to_end_string = f"{self.start_position}→{self.end_position}"
         image_dir = os.path.join(
             "resources",
             "images",
             "pictographs",
             prop_type,
+            basic_turns_string,
             letter,
             start_to_end_string,
-            turns_string,
         )
         os.makedirs(image_dir, exist_ok=True)
 
@@ -529,10 +530,10 @@ class Pictograph(QGraphicsScene):
         image_name = (
             f"{letter}_"
             f"({start_to_end_string})_"
-            f"({self.motions[BLUE].start_location}→{self.motions[BLUE].end_location}_"
+            f"({self.motions[BLUE].motion_type}_{self.motions[BLUE].start_location}→{self.motions[BLUE].end_location}_"
             f"{blue_turns}_"
             f"{self.motions[BLUE].start_orientation}→{blue_end_orientation})_"
-            f"({self.motions[RED].start_location}→{self.motions[RED].end_location}_"
+            f"({self.motions[RED].motion_type}_{self.motions[RED].start_location}→{self.motions[RED].end_location}_"
             f"{red_turns}_"
             f"{self.motions[RED].start_orientation}→{red_end_orientation})_"
             f"{prop_type}.png "
