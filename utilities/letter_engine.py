@@ -30,6 +30,7 @@ from constants.string_constants import (
     BLUE,
     END_POSITION,
     GAMMA,
+    PRO,
     RED,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
@@ -71,6 +72,9 @@ class LetterEngine:
         self.red_motion = self.get_motion(RED)
         self.blue_motion = self.get_motion(BLUE)
 
+        self.pro_motion = self.pictograph.motions[RED] if self.red_motion.motion_type == PRO else self.pictograph.motions[BLUE]
+        self.anti_motion = self.pictograph.motions[BLUE] if self.red_motion.motion_type == PRO else self.pictograph.motions[RED]
+        
         specific_position: Dict[
             str, SpecificPosition
         ] = get_specific_start_end_positions(
@@ -260,7 +264,7 @@ class LetterEngine:
                     if self.red_motion.motion_type == "anti"
                     else self.blue_motion
                 )
-                filtered_letter_group = self.filter_for_U_or_V()
+                filtered_letter_group = {self.filter_for_U_or_V()}
 
         return filtered_letter_group
 
@@ -269,52 +273,28 @@ class LetterEngine:
     ) -> Position:
         return {position: value[:-1] for position, value in specific_positions.items()}
 
-    def get_handpath_rotation_direction(
-        self, start, end
-    ) -> Literal["ccw", "cw"] | None:
-        """Returns COUNTER_CLOCKWISE if the handpath direction is counter-clockwise, CLOCKWISE otherwise."""
-        ccw_positions = ["n", "w", "s", "e"]
-        start_index = ccw_positions.index(start.lower())
-        end_index = ccw_positions.index(end.lower())
-        if (start_index + 1) % 4 == end_index:
-            return CLOCKWISE
-        elif (end_index + 1) % 4 == start_index:
-            return COUNTER_CLOCKWISE
-        else:
-            return None  # This case handles any invalid inputs or if start and end are the same
 
-    def filter_for_U_or_V(self) -> str | None:
-        """Determine whether the pictograph represents 'U' or 'V'."""
-        # Assuming self.pro_motion and self.anti_motion are already set
-        # and have attributes start_location and end_location
-        if self.pro_motion and self.anti_motion:
-            pro_direction = self.get_handpath_rotation_direction(
-                self.pro_motion.start_location, self.pro_motion.end_location
-            )
-            anti_direction = self.get_handpath_rotation_direction(
-                self.anti_motion.start_location, self.anti_motion.end_location
-            )
 
-            ccw_positions = ["n", "w", "s", "e"]
-            pro_index = ccw_positions.index(self.pro_motion.start_location.lower())
-            anti_index = ccw_positions.index(self.anti_motion.start_location.lower())
+    def determine_leading_motion(self, pro_start, pro_end, anti_start, anti_end):
+        """Determines which motion is leading in the rotation sequence."""
+        # If the start location of one motion is the same as the end location of the other, it's leading
+        if pro_start == anti_end:
+            return "pro"
+        elif anti_start == pro_end:
+            return "anti"
+        return None  # Leading motion cannot be determined
 
-            # Determine the leading motion
-            # The leading motion is the one with a start position that comes just before the other in ccw order
-            leading_motion = "pro" if (pro_index + 1) % 4 == anti_index else "anti"
+    def filter_for_U_or_V(self):
+        """Determines if the pictograph represents 'U' or 'V'."""
+        leading_motion = self.determine_leading_motion(
+            self.pro_motion.start_location,
+            self.pro_motion.end_location,
+            self.anti_motion.start_location,
+            self.anti_motion.end_location,
+        )
 
-            # If the handpath direction for both motions is the same and the set contains 'U' or 'V',
-            # return 'U' if the leading motion is 'pro', otherwise return 'V'
-            if pro_direction == anti_direction:
-                if leading_motion == "pro":
-                    return {"U"}
-                elif leading_motion == "anti":
-                    return {"V"}
-
-            logging.error(
-                "Cannot disambiguate U and V as handpath directions aren't the same or the set is missing 'U'/'V'."
-            )
-            return None
-        else:
-            logging.error("Pro motion or anti motion data is missing.")
-            return None
+        if leading_motion == "pro":
+            return "U"
+        elif leading_motion == "anti":
+            return "V"
+        return None  # Letter cannot be determined
