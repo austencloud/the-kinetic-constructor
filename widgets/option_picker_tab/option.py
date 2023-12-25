@@ -100,7 +100,7 @@ class Option(Pictograph):
             blue_motion_type_prefix = "a"
         elif self.motions[BLUE].motion_type == STATIC:
             blue_motion_type_prefix = "s"
-        elif self.motions[BLUE].motion_type == MotionType.DASH:
+        elif self.motions[BLUE].motion_type == DASH:
             blue_motion_type_prefix = "d"
 
         if self.motions[RED].motion_type == PRO:
@@ -109,7 +109,7 @@ class Option(Pictograph):
             red_motion_type_prefix = "a"
         elif self.motions[RED].motion_type == STATIC:
             red_motion_type_prefix = "s"
-        elif self.motions[RED].motion_type == MotionType.DASH:
+        elif self.motions[RED].motion_type == DASH:
             red_motion_type_prefix = "d"
 
         # Construct the folder name based on turns and motion types
