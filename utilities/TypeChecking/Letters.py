@@ -1,5 +1,4 @@
 from typing import Literal
-from enum import Enum
 
 
 Type1Letters = Literal[

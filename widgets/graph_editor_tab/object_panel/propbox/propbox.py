@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QVBoxLayout, QGraphicsSceneMouseEvent, QComboBox
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from Enums import GridMode
 from objects.prop.prop import *
 from objects.prop.prop_types import BigTriad
 from widgets.graph_editor_tab.object_panel.propbox.propbox_drag import PropBoxDrag

@@ -2,8 +2,6 @@ import logging
 from Enums import (
     Color,
     Letter,
-    Location,
-    MotionAttributesDicts,
     MotionTypeCombination,
     Position,
     RotationDirection,
@@ -32,18 +30,10 @@ from constants.string_constants import (
     GAMMA,
     PRO,
     RED,
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
-    EAST,
-    NORTH,
-    SOUTH,
     START_POSITION,
-    WEST,
 )
 
 from utilities.TypeChecking.Letters import (
-    AlphaEndingLetters,
-    BetaEndingLetters,
     GammaEndingLetters,
 )
 from utilities.TypeChecking.TypeChecking import LetterGroupsByMotionType

@@ -6,7 +6,7 @@ from PyQt6.QtGui import QTransform
 from PyQt6.QtWidgets import QGraphicsSceneWheelEvent
 from typing import Dict, Literal
 from PyQt6.QtCore import QPointF, QEvent
-from Enums import GridMode, Location
+from Enums import GridMode
 from constants.string_constants import (
     BOX,
     DIAMOND,
@@ -22,7 +22,6 @@ from constants.string_constants import (
 )
 
 if TYPE_CHECKING:
-    from objects.arrow.arrow import Arrow
     from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
     from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
     from objects.pictograph.pictograph import Pictograph

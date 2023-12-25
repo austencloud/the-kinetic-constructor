@@ -1,9 +1,6 @@
-import os
 from typing import TYPE_CHECKING, Literal
-from PyQt6.QtCore import Qt, QEvent, QByteArray, QBuffer, pyqtSignal, QTimer
-from PyQt6.QtGui import QPixmap, QImage, QPainter
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsPixmapItem
-from Enums import *
+from PyQt6.QtCore import Qt, QEvent, pyqtSignal, QTimer
+from PyQt6.QtWidgets import QGraphicsView
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
 from objects.pictograph.pictograph import Pictograph
 

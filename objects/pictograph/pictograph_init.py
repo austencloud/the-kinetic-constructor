@@ -1,11 +1,8 @@
-from typing import TYPE_CHECKING, Dict, Tuple, Type
+from typing import TYPE_CHECKING, Dict, Tuple
 from PyQt6.QtCore import QPointF
 from Enums import (
-    ArrowAttribute,
     Color,
-    MotionAttribute,
     MotionType,
-    PropAttribute,
     PropType,
 )
 from objects.arrow.arrow import Arrow

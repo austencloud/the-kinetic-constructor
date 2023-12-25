@@ -1,6 +1,4 @@
 from PyQt6.QtCore import QPointF
-import pandas as pd
-from Enums import Color, Location, MotionType, Orientation, PropType, RotationDirection
 from constants.string_constants import *
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Callable

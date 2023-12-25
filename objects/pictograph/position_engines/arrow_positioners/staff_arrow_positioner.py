@@ -1,15 +1,11 @@
-from typing import TYPE_CHECKING, Tuple, Callable, get_args
+from typing import TYPE_CHECKING, Callable
 
 
 from PyQt6.QtCore import QPointF
 
 from Enums import (
     AntiradialOrientation,
-    Color,
     Direction,
-    Location,
-    MotionType,
-    Orientation,
     RadialOrientation,
 )
 from constants.string_constants import (
@@ -36,7 +32,6 @@ if TYPE_CHECKING:
     from objects.pictograph.position_engines.arrow_positioners.arrow_positioner import (
         ArrowPositioner,
     )
-    from objects.arrow.arrow import Arrow
 
 
 class StaffArrowPositioner:

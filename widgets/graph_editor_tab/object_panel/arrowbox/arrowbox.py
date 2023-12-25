@@ -8,15 +8,6 @@ from PyQt6.QtWidgets import (
     QComboBox,
     QLabel,
 )
-from Enums import (
-    ArrowAttribute,
-    Color,
-    Location,
-    MotionAttribute,
-    MotionType,
-    Orientation,
-    RotationDirection,
-)
 from objects.arrow.arrow import Arrow
 from constants.string_constants import *
 from objects.motion import Motion

@@ -1,4 +1,4 @@
-from Enums import Color, Location, PictographAttribute, SpecificPosition
+from Enums import Color, Location, SpecificPosition
 from objects.motion import Motion
 from constants.string_constants import *
 from utilities.TypeChecking.TypeChecking import (

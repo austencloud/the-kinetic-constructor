@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, Union
 from Enums import Orientation
-from filter_frame import FilterFrame
+from widgets.filter_frame import FilterFrame
 from utilities.TypeChecking.TypeChecking import Turns
 
 if TYPE_CHECKING:

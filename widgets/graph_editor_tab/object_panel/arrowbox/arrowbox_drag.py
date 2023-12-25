@@ -4,10 +4,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtCore import Qt
 from Enums import (
     Color,
-    MotionAttribute,
     MotionType,
-    Orientation,
-    PropAttribute,
     RotationDirection,
 )
 from constants.string_constants import IN

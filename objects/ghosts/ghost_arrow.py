@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from Enums import ArrowAttribute, ArrowAttributesDicts
+from Enums import ArrowAttributesDicts
 from constants.string_constants import COLOR
 from objects.arrow.arrow import Arrow
 from objects.motion import Motion

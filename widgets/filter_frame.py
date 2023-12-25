@@ -8,7 +8,6 @@ from PyQt6.QtWidgets import (
     QComboBox,
 )
 
-from Enums import Orientation
 from constants.string_constants import CLOCK, COUNTER, IN, OUT
 
 if TYPE_CHECKING:

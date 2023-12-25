@@ -1,7 +1,6 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
 from typing import TYPE_CHECKING, Any, Optional
-from PyQt6.QtCore import QEvent, Qt, QThreadPool, QRunnable, pyqtSlot
+from PyQt6.QtCore import QEvent, Qt, QThreadPool
 from PyQt6.QtWidgets import (
     QSizePolicy,
     QWidget,
@@ -9,25 +8,19 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QFrame,
     QTabWidget,
-    QApplication,
 )
-from PyQt6.QtCore import QThread, QEvent, Qt, pyqtSignal, QRunnable, QThreadPool
+from PyQt6.QtCore import QEvent, Qt, QThreadPool
 from PyQt6.QtGui import QWheelEvent, QPixmap
 import pandas as pd
-from Enums import GridMode, PropType
 from constants.string_constants import (
     BLUE,
-    BLUE_TURNS,
     DIAMOND,
     LETTER,
     RED,
-    RED_TURNS,
     STAFF,
 )
-from image_loader_worker import ImageLoaderRunnable
 from utilities.TypeChecking.TypeChecking import PictographDataframe
 from widgets.image_generator_tab.ig_tab import IGTab
-from widgets.option_picker_tab.option import Option
 from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
 from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
 from widgets.graph_editor_tab.key_event_handler import KeyEventHandler
@@ -196,15 +189,6 @@ class MainWidget(QWidget):
         pixmap = QPixmap(image_path)
         self.cache_image(image_path, pixmap)
 
-    def initialize_image_cache(self) -> None:
-        image_paths = list(self.get_image_file_paths_for_prop_type(self.prop_type))
-        for image_path in image_paths:
-            runnable = ImageLoaderRunnable(image_path)
-            runnable.signals.finished.connect(self.cache_image)
-            self.thread_pool.start(runnable)
-            self.worker_threads.append(runnable)
-        self.image_cache_initialized = True
-        
     def get_image_file_paths_for_prop_type(
         self, prop_type
     ) -> Generator[str, Any, None]:

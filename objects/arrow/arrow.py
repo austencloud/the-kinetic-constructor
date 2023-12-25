@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from Enums import *
 from constants.string_constants import (
     ANTI,
-    AXIS,
     CLOCKWISE,
     COLOR,
     COUNTER_CLOCKWISE,
@@ -13,10 +12,7 @@ from constants.string_constants import (
     MOTION_TYPE,
     NORTHEAST,
     NORTHWEST,
-    ORIENTATION,
     PRO,
-    PROP,
-    PROP_TYPE,
     ROTATION_DIRECTION,
     SOUTHEAST,
     SOUTHWEST,

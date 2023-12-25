@@ -2,7 +2,7 @@ from typing import Callable, Dict, List, TYPE_CHECKING, Tuple, Union
 from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout, QApplication
 from PyQt6.QtCore import Qt
 import pandas as pd
-from Enums import Color, Orientation
+from Enums import Orientation
 from data.rules import get_next_letters
 from constants.string_constants import *
 from utilities.TypeChecking.TypeChecking import Turns

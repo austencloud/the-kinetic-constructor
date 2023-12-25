@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QFrame,
 )
-from Enums import Color
 from constants.string_constants import BLUE, RED
 from objects.motion import Motion
 from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox

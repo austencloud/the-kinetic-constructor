@@ -1,7 +1,5 @@
-import re
-from typing import TYPE_CHECKING, Dict, Tuple, Union, get_args
+from typing import TYPE_CHECKING, Dict, Tuple, Union
 from Enums import (
-    AntiradialOrientation,
     Axis,
     Color,
     Location,
@@ -10,7 +8,6 @@ from Enums import (
     PropAttribute,
     PropAttributesDicts,
     PropType,
-    RadialOrientation,
     RotationDirection,
 )
 from data.start_end_location_map import get_start_end_locations

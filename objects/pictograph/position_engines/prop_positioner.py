@@ -1,10 +1,9 @@
 from PyQt6.QtCore import QPointF
-import math
 
 import pandas as pd
 from Enums import *
 
-from typing import TYPE_CHECKING, Dict, List, Tuple, get_args
+from typing import TYPE_CHECKING, Dict, List, Tuple
 from constants.string_constants import (
     CLOCK,
     COUNTER,

@@ -1,4 +1,3 @@
-from Enums import Axis
 from constants.string_constants import HORIZONTAL, VERTICAL
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,

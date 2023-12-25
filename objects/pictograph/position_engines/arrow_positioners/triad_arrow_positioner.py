@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, List
 
-from Enums import Color, MotionType, Orientation
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph

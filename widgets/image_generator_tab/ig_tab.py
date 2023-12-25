@@ -1,4 +1,3 @@
-import os
 from typing import TYPE_CHECKING
 import pandas as pd
 from PyQt6.QtWidgets import (
@@ -10,8 +9,6 @@ from PyQt6.QtWidgets import (
     QApplication,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtGui import QImage, QPainter
-from Enums import Color
 from constants.string_constants import BLUE, RED
 from widgets.image_generator_tab.ig_filter_frame import IGFilterFrame
 from widgets.image_generator_tab.ig_letter_button_frame import IGLetterButtonFrame

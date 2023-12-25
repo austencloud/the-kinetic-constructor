@@ -2,10 +2,7 @@ from PyQt6.QtCore import Qt, QPoint, QSize
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from Enums import (
-    ArrowAttribute,
     Color,
-    MotionAttribute,
-    MotionType,
     Orientation,
     PropAttributesDicts,
     PropType,

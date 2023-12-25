@@ -1,4 +1,3 @@
-from Enums import MotionType
 from constants.string_constants import ANTI, DASH, PRO, STATIC
 
 

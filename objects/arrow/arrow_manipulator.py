@@ -1,12 +1,8 @@
 from typing import List
 from PyQt6.QtGui import QTransform
 from Enums import (
-    ArrowAttribute,
-    Color,
     Direction,
-    GridMode,
     Location,
-    MotionAttribute,
     MotionType,
     RotationDirection,
 )
