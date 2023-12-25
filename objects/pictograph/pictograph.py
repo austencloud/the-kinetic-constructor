@@ -465,8 +465,7 @@ class Pictograph(QGraphicsScene):
         # Generate the image path
         image_path = self.main_widget.generate_image_path(self)
 
-        # Check if the image already exists in the cache
-        if image_path in self.main_widget.image_cache:
+        if os.path.isfile(image_path):
             # If the image is already cached, use it
             pixmap = self.main_widget.get_cached_pixmap(image_path)
             if pixmap is None:
@@ -476,7 +475,6 @@ class Pictograph(QGraphicsScene):
             print(f"Using cached image for {image_path}")
         else:
             # If the image doesn't exist, render the scene to a pixmap
-            print(f"Rendering and saving image for {image_path}")
             pixmap = self.render_scene_to_pixmap()
 
             # Cache the pixmap
@@ -539,7 +537,7 @@ class Pictograph(QGraphicsScene):
             f"{prop_type}.png "
         )
 
-        image_path = os.path.join(image_dir, image_name)
+        image_path = os.path.join(image_dir, image_name).replace("\\", "/")
         image = QImage(
             int(self.width()), int(self.height()), QImage.Format.Format_ARGB32
         )

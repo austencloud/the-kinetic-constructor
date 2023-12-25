@@ -52,7 +52,7 @@ class MainWidget(QWidget):
         self.export_handler = None
         self.main_window = main_window
         self.thread_pool = QThreadPool()
-        # self.initialize_image_cache()
+        self.image_cache_initialized = False
         self.resize(int(self.main_window.width()), int(self.main_window.height()))
         self.key_event_handler = KeyEventHandler()
         self.letters: PictographDataframe = self.load_all_letters()
@@ -196,25 +196,15 @@ class MainWidget(QWidget):
         pixmap = QPixmap(image_path)
         self.cache_image(image_path, pixmap)
 
-    def initialize_image_cache(self):
+    def initialize_image_cache(self) -> None:
         image_paths = list(self.get_image_file_paths_for_prop_type(self.prop_type))
         for image_path in image_paths:
             runnable = ImageLoaderRunnable(image_path)
             runnable.signals.finished.connect(self.cache_image)
             self.thread_pool.start(runnable)
-
-    def cleanup_thread(self):
-        sender = self.sender()
-        if sender:
-            self.worker_threads.remove(sender)
-            sender.deleteLater()
-
-    @staticmethod
-    def chunked(iterable, size):
-        """Yield successive n-sized chunks from an iterable."""
-        for i in range(0, len(iterable), size):
-            yield iterable[i : i + size]
-
+            self.worker_threads.append(runnable)
+        self.image_cache_initialized = True
+        
     def get_image_file_paths_for_prop_type(
         self, prop_type
     ) -> Generator[str, Any, None]:
@@ -254,12 +244,13 @@ class MainWidget(QWidget):
         turns_string = (
             f"{blue_motion_type_prefix}{blue_turns},{red_motion_type_prefix}{red_turns}"
         )
+        simple_turns_string = f"{blue_turns},{red_turns}"
         image_dir = os.path.join(
             "resources",
             "images",
             "pictographs",
             prop_type,
-            turns_string,
+            simple_turns_string,
             letter,
             start_to_end_string,
         ).replace("\\", "/")
@@ -272,10 +263,10 @@ class MainWidget(QWidget):
             f"({pd_row_data.name[0]}→{pd_row_data.name[1]})_"
             f"({pd_row_data["blue_motion_type"]}_{pd_row_data['blue_start_location']}→{pd_row_data['blue_end_location']}_"
             f"{blue_turns}_"
-            f"{pd_row_data['blue_start_orientation']}_{blue_end_orientation})_"
+            f"{pd_row_data['blue_start_orientation']}→{blue_end_orientation})_"
             f"({pd_row_data["red_motion_type"]}_{pd_row_data['red_start_location']}→{pd_row_data['red_end_location']}_"
             f"{red_turns}_"
-            f"{pd_row_data['red_start_orientation']}_{red_end_orientation})_"
+            f"{pd_row_data['red_start_orientation']}→{red_end_orientation})_"
             f"{prop_type}.png"
         )
         return os.path.join(image_dir, image_name)

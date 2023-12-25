@@ -71,7 +71,6 @@ class OptionPickerScrollArea(QScrollArea):
         start_positions = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
         for i, position_key in enumerate(start_positions):
             self._add_start_position_option(position_key, i)
-
         self.option_picker_tab.filter_frame.apply_filters()
 
     def _add_start_position_option(self, position_key: str, column: int) -> None:
