@@ -8,11 +8,11 @@ motion_type_letter_groups = {
     "anti_vs_anti": "BEHKNQT",
     "pro_vs_anti": "CFILORUV",
     # Type 2
-    "static_vs_pro": "WYΣθ",
-    "static_vs_static": "XZΔΩ",
+    "pro_vs_static": "WYΣθ",
+    "anti_vs_static": "XZΔΩ",
     # Type 3
-    "dash_vs_pro": "W-Y-Σ-θ-",
-    "dash_vs_anti": "X-Z-Δ-Ω-",
+    "pro_vs_dash": "W-Y-Σ-θ-",
+    "anti_vs_dash": "X-Z-Δ-Ω-",
     # Type 4
     "dash_vs_static": "ΦΨΛ",
     # Type 5
@@ -23,17 +23,21 @@ motion_type_letter_groups = {
 
 motion_type_combinations = {
     (PRO, PRO): "pro_vs_pro",
-    (ANTI, ANTI): "anti_vs_anti",
     (PRO, ANTI): "pro_vs_anti",
-    
-    (STATIC, STATIC): "static_vs_static",
-    (STATIC, PRO): "static_vs_pro",
-    (STATIC, ANTI): "static_vs_anti",
-    
-    (DASH, PRO): "dash_vs_pro",
-    (DASH, ANTI): "dash_vs_anti",
-    (DASH, STATIC): "dash_vs_static",
+    (PRO, STATIC): "pro_vs_static",
+    (PRO, DASH): "pro_vs_dash",
+    (ANTI, PRO): "pro_vs_anti",
+    (ANTI, ANTI): "anti_vs_anti",
+    (ANTI, STATIC): "anti_vs_static",
+    (ANTI, DASH): "anti_vs_dash",
+    (DASH, PRO): "pro_vs_dash",
+    (DASH, ANTI): "anti_vs_dash",
     (DASH, DASH): "dash_vs_dash",
+    (DASH, STATIC): "dash_vs_static",
+    (STATIC, PRO): "pro_vs_static",
+    (STATIC, ANTI): "anti_vs_static",
+    (STATIC, DASH): "dash_vs_static",
+    (STATIC, STATIC): "static_vs_static",
 }
 
 

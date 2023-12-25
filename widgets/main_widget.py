@@ -106,8 +106,8 @@ class MainWidget(QWidget):
 
             """
         )
-        self.tab_widget.addTab(self.image_generator_tab, "Image Generator")
         self.tab_widget.addTab(self.option_picker_tab, "Option Picker")
+        self.tab_widget.addTab(self.image_generator_tab, "Image Generator")
         self.tab_widget.addTab(self.graph_editor_tab, "Graph Editor")
 
         self.left_frame.setSizePolicy(

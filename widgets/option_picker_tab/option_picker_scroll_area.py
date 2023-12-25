@@ -93,7 +93,7 @@ class OptionPickerScrollArea(QScrollArea):
                 pd_row_data, self.option_picker_tab.filter_frame.filters
             )
             start_option.view.resize_option_view()
-            start_option.current_letter = start_option.pd_row_data["letter"]
+            start_option.current_letter = start_option.pd_row_data[LETTER]
             start_option.start_position = start_option.pd_row_data.name[0]
             start_option.end_position = start_option.pd_row_data.name[1]
             self._add_option_to_layout(start_option, True, 0, column)
@@ -101,9 +101,9 @@ class OptionPickerScrollArea(QScrollArea):
     def generate_image_path_for_option(self, option: Option) -> str:
         pd_row_data = option.pd_row_data
         prop_type = self.main_widget.prop_type
-        letter = pd_row_data["letter"]
-        blue_turns = self.option_picker_tab.filter_frame.filters["blue_turns"]
-        red_turns = self.option_picker_tab.filter_frame.filters["red_turns"]
+        letter = pd_row_data[LETTER]
+        blue_turns = self.option_picker_tab.filter_frame.filters[BLUE_TURNS]
+        red_turns = self.option_picker_tab.filter_frame.filters[RED_TURNS]
         turns_folder = f"({pd_row_data['blue_motion_type'][0]}{blue_turns},{pd_row_data['red_motion_type'][0]}{red_turns})"
         image_dir = os.path.join(
             "resources", "images", "pictographs", letter, prop_type, turns_folder
@@ -166,7 +166,7 @@ class OptionPickerScrollArea(QScrollArea):
     ### CREATE ###
 
     def _create_option(self, pd_row_data: pd.Series, filters):
-        letter = pd_row_data["letter"]
+        letter = pd_row_data[LETTER]
         option = Option(self.main_widget, self)
         option.setSceneRect(0, 0, 950, 950)
 
@@ -210,7 +210,7 @@ class OptionPickerScrollArea(QScrollArea):
             option.motions[BLUE].end_location,
         )
 
-        option.current_letter = pd_row_data["letter"]
+        option.current_letter = pd_row_data[LETTER]
         option.start_position = pd_row_data.name[0]
         option.end_position = pd_row_data.name[1]
 
@@ -309,7 +309,7 @@ class OptionPickerScrollArea(QScrollArea):
             self.pictographs.index.get_level_values(0) == specific_end_position
         ]
         filtered_data = filtered_data[
-            filtered_data["letter"].isin(next_possible_letters)
+            filtered_data[LETTER].isin(next_possible_letters)
         ]
 
         # filter to ensure the options have a start orientation for each motion that matches the end orientations of the reference option's motions
@@ -325,7 +325,7 @@ class OptionPickerScrollArea(QScrollArea):
             option = self._create_option(
                 pd_row_data, self.option_picker_tab.filter_frame.filters
             )
-            self.options.append((pd_row_data["letter"], option))
+            self.options.append((pd_row_data[LETTER], option))
         self._sort_options()
         self._add_sorted_options_to_layout()
         QApplication.restoreOverrideCursor()

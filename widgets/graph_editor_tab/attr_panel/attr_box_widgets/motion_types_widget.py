@@ -67,7 +67,7 @@ class MotionTypeWidget(AttrBoxWidget):
 
     def _setup_motion_type_box(self) -> QComboBox:
         box = QComboBox(self)
-        box.addItems(["Pro", "ANTI", "Dash", "Static"])
+        box.addItems(["Pro", "anti", "Dash", "Static"])
         box.setCurrentIndex(-1)
         return box
 
@@ -95,8 +95,8 @@ class MotionTypeWidget(AttrBoxWidget):
     def _swap_motion_type_callback(self) -> None:
         current_text = self.motion_type_box.currentText()
         motion_types = {
-            "Pro": "ANTI",
-            "ANTI": "Pro",
+            "Pro": "anti",
+            "anti": "Pro",
             "Dash": "Static",
             "Static": "Dash",
         }

@@ -1,4 +1,4 @@
-from typing import Literal, TypedDict
+from typing import Literal, Set, TypedDict
 from enum import Enum
 from enum import Enum
 from constants.string_constants import *
@@ -7,13 +7,39 @@ image_path = "resources/images/"
 
 
 class LetterNumberType(Enum):
-    TYPE_1 = (["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V"], "Type 1")
+    TYPE_1 = (
+        [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "U",
+            "V",
+        ],
+        "Type 1",
+    )
     TYPE_2 = (["W", "X", "Y", "Z", "Σ", "Δ", "θ", "Ω"], "Type 2")
     TYPE_3 = (["W-", "X-", "Y-", "Z-", "Σ-", "Δ-", "θ-", "Ω-"], "Type 3")
     TYPE_4 = (["Φ", "Ψ", "Λ"], "Type 4")
     TYPE_5 = (["Φ-", "Ψ-", "Λ-"], "Type 5")
     TYPE_6 = (["α", "β", "Γ"], "Type 6")
-    
+
     def __init__(self, letters, description):
         self._letters = letters
         self._description = description
@@ -25,6 +51,7 @@ class LetterNumberType(Enum):
     @property
     def description(self):
         return self._description
+
 
 class Color(Enum):
     BLUE = "blue"
@@ -169,6 +196,117 @@ class Letter(Enum):
     Nu = "ν"
     Zeta = "ζ"
     Eta = "η"
+
+
+
+
+alpha_ending_letters: Set[Letter] = {
+    Letter.A,
+    Letter.B,
+    Letter.C,
+    Letter.D,
+    Letter.E,
+    Letter.F,
+    Letter.W,
+    Letter.X,
+    Letter.W_dash,
+    Letter.X_dash,
+    Letter.Phi,
+    Letter.Phi_dash,
+    Letter.Alpha,
+}
+beta_ending_letters: Set[Letter] = {
+    Letter.G,
+    Letter.H,
+    Letter.I,
+    Letter.J,
+    Letter.K,
+    Letter.L,
+    Letter.Y,
+    Letter.Z,
+    Letter.Y_dash,
+    Letter.Z_dash,
+    Letter.Psi,
+    Letter.Psi_dash,
+    Letter.Beta,
+}
+gamma_ending_letters: Set[Letter] = {
+    Letter.M,
+    Letter.N,
+    Letter.O,
+    Letter.P,
+    Letter.Q,
+    Letter.R,
+    Letter.S,
+    Letter.T,
+    Letter.U,
+    Letter.V,
+    Letter.Sigma,
+    Letter.Sigma_dash,
+    Letter.Delta,
+    Letter.Delta_dash,
+    Letter.Theta,
+    Letter.Theta_dash,
+    Letter.Omega,
+    Letter.Omega_dash,
+    Letter.Lambda,
+    Letter.Lambda_dash,
+    Letter.Gamma,
+}
+
+alpha_starting_letters: Set[Letter] = {
+    Letter.A,
+    Letter.B,
+    Letter.C,
+    Letter.J,
+    Letter.K,
+    Letter.L,
+    Letter.Sigma,
+    Letter.Delta,
+    Letter.Theta_dash,
+    Letter.Omega_dash,
+    Letter.Psi,
+    Letter.Phi_dash,
+    Letter.Alpha,
+}
+
+beta_starting_letters: Set[Letter] = {
+    Letter.G,
+    Letter.H,
+    Letter.I,
+    Letter.D,
+    Letter.E,
+    Letter.F,
+    Letter.Theta,
+    Letter.Omega,
+    Letter.Sigma_dash,
+    Letter.Delta_dash,
+    Letter.Psi_dash,
+    Letter.Phi,
+    Letter.Beta,
+}
+
+
+
+gamma_starting_letters: Set[Letter] = {
+    Letter.M,
+    Letter.N,
+    Letter.O,
+    Letter.P,
+    Letter.Q,
+    Letter.R,
+    Letter.S,
+    Letter.T,
+    Letter.U,
+    Letter.V,
+    Letter.W_dash,
+    Letter.X_dash,
+    Letter.Y_dash,
+    Letter.Z_dash,
+    Letter.Lambda,
+    Letter.Lambda_dash,
+    Letter.Gamma,
+}
 
 
 class PropType(Enum):

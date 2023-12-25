@@ -260,8 +260,8 @@ class Pictograph(QGraphicsScene):
 
     def get_letter_type(self, letter: Letter) -> Optional[str]:
         for letter_type in LetterNumberType:
-            if letter in letter_type.letters: 
-                return letter_type.description 
+            if letter in letter_type.letters:
+                return letter_type.description
         return None
 
     def get_closest_hand_point(
@@ -372,7 +372,7 @@ class Pictograph(QGraphicsScene):
 
     def update_letter(self) -> None:
         if all(motion.motion_type for motion in self.motions.values()):
-            self.current_letter = self.get_state()[LETTER]
+            self.current_letter = self.letter_engine.get_current_letter()
             self.set_letter_renderer(self.current_letter)
             self.letter_item.position_letter_item(self.letter_item)
         else:

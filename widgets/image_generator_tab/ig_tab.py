@@ -215,7 +215,7 @@ class IGTab(QWidget):
 
         if pd_row_data["blue_motion_type"] == "pro":
             blue_motion_type_prefix = "p"
-        elif pd_row_data["blue_motion_type"] == "ANTI":
+        elif pd_row_data["blue_motion_type"] == "anti":
             blue_motion_type_prefix = "a"
         elif pd_row_data["blue_motion_type"] == "static":
             blue_motion_type_prefix = "s"
@@ -224,7 +224,7 @@ class IGTab(QWidget):
 
         if pd_row_data["red_motion_type"] == "pro":
             red_motion_type_prefix = "p"
-        elif pd_row_data["red_motion_type"] == "ANTI":
+        elif pd_row_data["red_motion_type"] == "anti":
             red_motion_type_prefix = "a"
         elif pd_row_data["red_motion_type"] == "static":
             red_motion_type_prefix = "s"

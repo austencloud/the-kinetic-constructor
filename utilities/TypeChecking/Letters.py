@@ -2,7 +2,6 @@ from typing import Literal
 from enum import Enum
 
 
-
 Type1Letters = Literal[
     "A",
     "B",
@@ -68,8 +67,12 @@ Type6Letters = Literal[
     "Γ",
 ]
 
-AlphaEndingLetters = Literal["A", "B", "C", "D", "E", "F", "W", "X", "Φ", "Φ-", "α"]
-BetaEndingLetters = Literal["G", "H", "I", "J", "K", "L", "Y", "Z", "Ψ", "Ψ-", "β"]
+AlphaEndingLetters = Literal[
+    "A", "B", "C", "D", "E", "F", "W", "X", "W-", "X-", "Φ", "Φ-", "α"
+]
+BetaEndingLetters = Literal[
+    "G", "H", "I", "J", "K", "L", "Y", "Z", "Y-", "Z-", "Ψ", "Ψ-", "β"
+]
 GammaEndingLetters = Literal[
     "M",
     "N",
