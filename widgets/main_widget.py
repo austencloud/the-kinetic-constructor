@@ -1,7 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
 from typing import TYPE_CHECKING, Any, Optional
-from PyQt6.QtCore import QEvent, Qt
+from PyQt6.QtCore import QEvent, Qt, QThreadPool, QRunnable, pyqtSlot
 from PyQt6.QtWidgets import (
     QSizePolicy,
     QWidget,
@@ -11,10 +11,20 @@ from PyQt6.QtWidgets import (
     QTabWidget,
     QApplication,
 )
+from PyQt6.QtCore import QThread, QEvent, Qt, pyqtSignal, QRunnable, QThreadPool
 from PyQt6.QtGui import QWheelEvent, QPixmap
 import pandas as pd
 from Enums import GridMode, PropType
-from constants.string_constants import BLUE, BLUE_TURNS, DIAMOND, LETTER, RED, RED_TURNS
+from constants.string_constants import (
+    BLUE,
+    BLUE_TURNS,
+    DIAMOND,
+    LETTER,
+    RED,
+    RED_TURNS,
+    STAFF,
+)
+from image_loader_worker import ImageLoaderRunnable
 from utilities.TypeChecking.TypeChecking import PictographDataframe
 from widgets.image_generator_tab.ig_tab import IGTab
 from widgets.option_picker_tab.option import Option
@@ -28,17 +38,22 @@ from widgets.styled_splitter import StyledSplitter
 if TYPE_CHECKING:
     from main import MainWindow
 from typing import Generator
+import os
 
 
 class MainWidget(QWidget):
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
+        self.worker_threads = []  # Add this line to store worker references
+        self.image_cache = {}
+        self.prop_type = STAFF
+        self.grid_mode = DIAMOND
         self.arrows = []
         self.export_handler = None
         self.main_window = main_window
+        self.thread_pool = QThreadPool()
+        # self.initialize_image_cache()
         self.resize(int(self.main_window.width()), int(self.main_window.height()))
-        self.prop_type = PropType.STAFF.value
-        self.grid_mode = DIAMOND
         self.key_event_handler = KeyEventHandler()
         self.letters: PictographDataframe = self.load_all_letters()
         self.graph_editor_tab = GraphEditorTab(self)
@@ -48,10 +63,6 @@ class MainWidget(QWidget):
         self.image_generator_tab.imageGenerated.connect(self.on_image_generated)
         self.configure_layouts()
         self.pixmap_cache = {}
-        self.image_cache = {}
-        self.initialize_image_cache()
-
-
 
     def load_all_letters(self) -> PictographDataframe:
         df = pd.read_csv("PictographDataframe.csv")
@@ -135,10 +146,11 @@ class MainWidget(QWidget):
         self.main_layout = QHBoxLayout(self)
         self.main_layout.addWidget(self.horizontal_splitter)
         self.setLayout(self.main_layout)
+        # self.initialize_image_cache()
 
     ### EVENT HANDLERS ###
 
-    def on_splitter_moved(self):
+    def on_splitter_moved(self) -> None:
         self.option_picker_tab.resize_option_picker_tab()
         self.sequence_widget.resize_sequence_widget()
 
@@ -177,46 +189,50 @@ class MainWidget(QWidget):
         self.option_picker_tab.resize_option_picker_tab()
         self.sequence_widget.resize_sequence_widget()
 
-
     ### IMAGE CACHE ###
 
     def on_image_generated(self, image_path) -> None:
         print(f"Image generated at {image_path}")
         pixmap = QPixmap(image_path)
         self.cache_image(image_path, pixmap)
-            
-    def initialize_image_cache(self):
-        # Start a background thread to load the images
-        with ThreadPoolExecutor() as executor:
-            # Dictionary to hold future to file path mappings
-            future_to_path = {
-                executor.submit(self.load_pixmap, file_path): file_path
-                for file_path in self.get_image_file_paths()
-            }
-            for future in as_completed(future_to_path):
-                file_path = future_to_path[future]
-                try:
-                    pixmap = future.result()
-                    self.cache_image(file_path, pixmap)
-                except Exception as exc:
-                    print(f'{file_path} generated an exception: {exc}')
 
-    def get_image_file_paths(self) -> Generator[str, Any, None]:
-        # Generate a list of all image file paths
-        image_root_dir = os.path.join("resources", "images", "pictographs")
+    def initialize_image_cache(self):
+        image_paths = list(self.get_image_file_paths_for_prop_type(self.prop_type))
+        for image_path in image_paths:
+            runnable = ImageLoaderRunnable(image_path)
+            runnable.signals.finished.connect(self.cache_image)
+            self.thread_pool.start(runnable)
+
+    def cleanup_thread(self):
+        sender = self.sender()
+        if sender:
+            self.worker_threads.remove(sender)
+            sender.deleteLater()
+
+    @staticmethod
+    def chunked(iterable, size):
+        """Yield successive n-sized chunks from an iterable."""
+        for i in range(0, len(iterable), size):
+            yield iterable[i : i + size]
+
+    def get_image_file_paths_for_prop_type(
+        self, prop_type
+    ) -> Generator[str, Any, None]:
+        # Adapt this method to only yield file paths for the current prop_type
+        image_root_dir = os.path.join("resources", "images", "pictographs", prop_type)
         for subdir, _, files in os.walk(image_root_dir):
             for file in files:
-                if file.lower().endswith('.png'):
-                    yield os.path.join(subdir, file)
+                if file.lower().endswith(".png"):
+                    yield os.path.join(subdir, file).replace("\\", "/")
 
     def load_pixmap(self, file_path) -> QPixmap:
         # Load the pixmap from the disk
         return QPixmap(file_path)
-    # Modify the cache_image method to accept a None pixmap
-    def cache_image(self, image_path: str, pixmap: QPixmap = None) -> None:
+
+    def cache_image(self, image_path, pixmap):
+        # This will be executed in the main thread because of the signal-slot mechanism
         self.image_cache[image_path] = pixmap
 
-    # Modify the get_cached_pixmap method to load the pixmap if it's not already loaded
     def get_cached_pixmap(self, image_path: str) -> QPixmap | None:
         if image_path not in self.image_cache:
             return None
@@ -228,12 +244,26 @@ class MainWidget(QWidget):
         pd_row_data = pictograph.pd_row_data
         prop_type = self.prop_type
         letter = pd_row_data[LETTER]
-        blue_turns = self.option_picker_tab.filter_frame.filters[BLUE_TURNS]
-        red_turns = self.option_picker_tab.filter_frame.filters[RED_TURNS]
-        turns_folder = f"({pd_row_data['blue_motion_type'][0]}{blue_turns},{pd_row_data['red_motion_type'][0]}{red_turns})"
-        image_dir = os.path.join(
-            "resources", "images", "pictographs", letter, prop_type, turns_folder
+        blue_turns = pictograph.motions[BLUE].turns
+        red_turns = pictograph.motions[RED].turns
+        blue_motion_type_prefix = pictograph.motions[BLUE].motion_type[0]
+        red_motion_type_prefix = pictograph.motions[RED].motion_type[0]
+        blue_turns = pictograph.motions[BLUE].turns
+        red_turns = pictograph.motions[RED].turns
+        start_to_end_string = f"{pictograph.start_position}→{pictograph.end_position}"
+        turns_string = (
+            f"{blue_motion_type_prefix}{blue_turns},{red_motion_type_prefix}{red_turns}"
         )
+        image_dir = os.path.join(
+            "resources",
+            "images",
+            "pictographs",
+            prop_type,
+            letter,
+            start_to_end_string,
+            turns_string,
+        ).replace("\\", "/")
+
         blue_end_orientation = pictograph.motions[BLUE].get_end_orientation()
         red_end_orientation = pictograph.motions[RED].get_end_orientation()
 
@@ -246,6 +276,6 @@ class MainWidget(QWidget):
             f"({pd_row_data['red_start_location']}→{pd_row_data['red_end_location']}_"
             f"{red_turns}_"
             f"{pd_row_data['red_start_orientation']}_{red_end_orientation})_"
-            f"{prop_type}.png "
+            f"{prop_type}.png"
         )
         return os.path.join(image_dir, image_name)

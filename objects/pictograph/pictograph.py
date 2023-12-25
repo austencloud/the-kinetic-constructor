@@ -478,7 +478,7 @@ class Pictograph(QGraphicsScene):
             # If the image doesn't exist, render the scene to a pixmap
             print(f"Rendering and saving image for {image_path}")
             pixmap = self.render_scene_to_pixmap()
-            
+
             # Cache the pixmap
             self.main_widget.cache_image(image_path, pixmap)
 
@@ -488,8 +488,6 @@ class Pictograph(QGraphicsScene):
 
         # Use the pixmap for the QGraphicsPixmapItem
         self.update_pixmap_item(pixmap)
-
-
 
     def update_pixmap_item(self, pixmap: QPixmap) -> None:
         if not self.pixmap:
@@ -505,27 +503,12 @@ class Pictograph(QGraphicsScene):
         prop_type = self.main_widget.prop_type
         letter = self.current_letter
 
-        if self.motions[BLUE].motion_type == PRO:
-            blue_motion_type_prefix = "p"
-        elif self.motions[BLUE].motion_type == ANTI:
-            blue_motion_type_prefix = "a"
-        elif self.motions[BLUE].motion_type == STATIC:
-            blue_motion_type_prefix = "s"
-        elif self.motions[BLUE].motion_type == DASH:
-            blue_motion_type_prefix = "d"
-
-        if self.motions[RED].motion_type == PRO:
-            red_motion_type_prefix = "p"
-        elif self.motions[RED].motion_type == ANTI:
-            red_motion_type_prefix = "a"
-        elif self.motions[RED].motion_type == STATIC:
-            red_motion_type_prefix = "s"
-        elif self.motions[RED].motion_type == DASH:
-            red_motion_type_prefix = "d"
+        blue_motion_type_prefix = self.motions[BLUE].motion_type[0]
+        red_motion_type_prefix = self.motions[RED].motion_type[0]
 
         # Construct the folder name based on turns and motion types
-        turns_string = f"({blue_motion_type_prefix}{self.motions[BLUE].turns},{red_motion_type_prefix}{self.motions[RED].turns})"
-        start_to_end_string = f"({self.start_position}→{self.end_position})"
+        turns_string = f"{blue_motion_type_prefix}{self.motions[BLUE].turns},{red_motion_type_prefix}{self.motions[RED].turns}"
+        start_to_end_string = f"{self.start_position}→{self.end_position}"
         image_dir = os.path.join(
             "resources",
             "images",
@@ -534,7 +517,6 @@ class Pictograph(QGraphicsScene):
             letter,
             start_to_end_string,
             turns_string,
-            
         )
         os.makedirs(image_dir, exist_ok=True)
 
@@ -546,7 +528,7 @@ class Pictograph(QGraphicsScene):
 
         image_name = (
             f"{letter}_"
-            f"{start_to_end_string}_"
+            f"({start_to_end_string})_"
             f"({self.motions[BLUE].start_location}→{self.motions[BLUE].end_location}_"
             f"{blue_turns}_"
             f"{self.motions[BLUE].start_orientation}→{blue_end_orientation})_"

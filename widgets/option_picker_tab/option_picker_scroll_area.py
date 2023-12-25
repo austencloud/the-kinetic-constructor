@@ -101,7 +101,7 @@ class OptionPickerScrollArea(QScrollArea):
 
     def load_image_if_visible(self, option: "Option") -> None:
         """Loads the image for an option if it is visible."""
-        if not option.image_loaded and option.view.isVisible():
+        if not option.image_loaded:
             image_path = self.main_widget.generate_image_path(option)
 
             # If the image is not in cache, check if it exists on disk.
@@ -140,7 +140,6 @@ class OptionPickerScrollArea(QScrollArea):
         option.setSceneRect(0, 0, 950, 950)
 
         option._finalize_motion_setup(pd_row_data, filters)
-        self.load_image_if_visible(option)
 
         blue_motion_dict = self._create_motion_dict_from_filters(
             pd_row_data,
@@ -217,6 +216,7 @@ class OptionPickerScrollArea(QScrollArea):
                 option.motions[color].start_location, option.motions[color].end_location
             )
         option.update_pictograph()
+        self.load_image_if_visible(option)
         return option
 
     def _create_motion_dict_from_filters(

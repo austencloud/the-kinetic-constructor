@@ -27,7 +27,7 @@ class MainWindow(QMainWindow):
         x = available_geometry.x() + (available_geometry.width() - window_width) // 2
         y = available_geometry.y() + (available_geometry.height() - window_height) // 2
         self.setGeometry(x, y, window_width, window_height)
-
+        
     def exec_with_profiling(self, app: QApplication) -> int:
         for func in [app.exec, self.show]:
             self.profiler.runcall(func)
@@ -48,9 +48,9 @@ def main() -> None:
     main_window.profiler.write_profiling_stats_to_file(
         "main_profiling_stats.txt", root_directory
     )
-
+    
     sys.exit(exit_code)
-
+    
 
 if __name__ == "__main__":
     main()

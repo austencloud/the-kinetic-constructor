@@ -27,29 +27,6 @@ class Option(Pictograph):
         self.main_widget = main_widget
         self.option_picker_scroll = option_picker_scroll
 
-    ### IMAGE LOADING ###
-
-    def loadImage(self, image_path: str) -> None:
-        """Load image from the path."""
-        # Lazy loading: Only load the image if it's not already loaded and the view is visible
-        if not self.image_loaded and self.view.isVisible():
-            # Caching: Check if the image is already cached
-            cached_pixmap = self.option_picker_scroll.get_cached_pixmap(image_path)
-            if cached_pixmap:
-                pixmap = cached_pixmap
-            else:
-                pixmap = QPixmap(image_path)
-                self.main_widget.cache_pixmap(image_path, pixmap)
-
-            # Pixmap Item Reuse: Update existing pixmap item if it exists, otherwise create a new one
-            if not self.pixmap:
-                self.pixmap = QGraphicsPixmapItem(pixmap)
-                self.addItem(self.pixmap)
-            else:
-                self.pixmap.setPixmap(pixmap)
-
-            self.image_loaded = True
-
     ### EVENTS ###
 
     def wheelEvent(self, event) -> None:
