@@ -164,7 +164,7 @@ class ArrowPositioner:
     def _calculate_Q_adjustment(self, arrow: Arrow) -> QPointF:
         adjustment_dict = {
             RED: {
-                RotationDirection.CLOCKWISE: {
+                CLOCKWISE: {
                     NORTHEAST: QPointF(70, -110),
                     SOUTHEAST: QPointF(110, 70),
                     SOUTHWEST: QPointF(-70, 110),
@@ -178,7 +178,7 @@ class ArrowPositioner:
                 },
             },
             BLUE: {
-                RotationDirection.CLOCKWISE: {
+                CLOCKWISE: {
                     NORTHEAST: QPointF(30, -30),
                     SOUTHEAST: QPointF(30, 30),
                     SOUTHWEST: QPointF(-30, 30),

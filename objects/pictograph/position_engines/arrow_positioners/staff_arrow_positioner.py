@@ -12,7 +12,24 @@ from Enums import (
     Orientation,
     RadialOrientation,
 )
-from constants.string_constants import ANTI, BLUE, CLOCK, COUNTER, EAST, IN, NORTH, NORTHEAST, NORTHWEST, OUT, PRO, RED, SOUTH, SOUTHEAST, SOUTHWEST, WEST
+from constants.string_constants import (
+    ANTI,
+    BLUE,
+    CLOCK,
+    COUNTER,
+    EAST,
+    IN,
+    NORTH,
+    NORTHEAST,
+    NORTHWEST,
+    OUT,
+    PRO,
+    RED,
+    SOUTH,
+    SOUTHEAST,
+    SOUTHWEST,
+    WEST,
+)
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
@@ -71,17 +88,12 @@ class StaffArrowPositioner:
             self._apply_adjustment_to_all_arrows(90)
 
     def _adjust_arrows_for_letter_I(self, red_orientation, blue_orientation) -> None:
-        if self._are_both_props_radial(red_orientation, blue_orientation):
-            self._apply_adjustment_to_all_arrows(55)
 
-        elif self._is_at_least_one_prop_antiradial(red_orientation, blue_orientation):
+        if self._is_at_least_one_prop_antiradial(red_orientation, blue_orientation):
             self._apply_adjustment_to_all_arrows(90)
 
     def _adjust_arrows_for_letter_Q(self, red_orientation, blue_orientation) -> None:
-        if self._are_both_props_radial(red_orientation, blue_orientation):
-            self._apply_adjustment_to_all_arrows(55)
-
-        elif self._is_at_least_one_prop_antiradial(red_orientation, blue_orientation):
+        if self._is_at_least_one_prop_antiradial(red_orientation, blue_orientation):
             for arrow in self.pictograph.arrows.values():
                 adjustment = self.arrow_positioner._calculate_Q_adjustment(arrow)
                 adjusted_x = (
