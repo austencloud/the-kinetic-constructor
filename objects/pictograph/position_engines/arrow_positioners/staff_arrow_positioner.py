@@ -48,8 +48,8 @@ class StaffArrowPositioner:
         self.arrow_positioner = arrow_positioner
 
     def _adjust_arrows_for_staffs(self, current_letter) -> None:
-        red_prop = self.pictograph.motions[RED].prop
-        blue_prop = self.pictograph.motions[BLUE].prop
+        red_motion = self.pictograph.motions[RED]
+        blue_motion = self.pictograph.motions[BLUE]
 
         # Mapping the letters to their respective methods
         letter_methods = {
@@ -62,29 +62,30 @@ class StaffArrowPositioner:
             "T": self._adjust_arrows_for_letter_T,
             "U": self._adjust_arrows_for_letter_U,
             "V": self._adjust_arrows_for_letter_V,
+            "Z": self._adjust_arrows_for_letter_Z,
         }
 
         # Call the corresponding method
         adjust_method = letter_methods.get(current_letter)
         if adjust_method:
-            adjust_method(red_prop, blue_prop)
+            adjust_method(red_motion, blue_motion)
 
     # Methods for each letter with specific logic
-    def _adjust_arrows_for_letter_K(self, red_prop, blue_prop) -> None:
-        if self._are_both_props_radial(red_prop, blue_prop):
+    def _adjust_arrows_for_letter_K(self, red_motion, blue_motion) -> None:
+        if self._are_both_props_radial(red_motion, blue_motion):
             self._apply_adjustment_to_all_arrows(55)
 
-        elif self._is_at_least_one_prop_antiradial(red_prop, blue_prop):
+        elif self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
             self._apply_adjustment_to_all_arrows(90)
 
-    def _adjust_arrows_for_letter_L(self, red_prop, blue_prop) -> None:
+    def _adjust_arrows_for_letter_L(self, red_motion, blue_motion) -> None:
         self._apply_specific_arrow_adjustment(ANTI, OUT, 55)
 
-        if self._is_at_least_one_prop_antiradial(red_prop, blue_prop):
+        if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
             self._apply_adjustment_to_arrows_by_type(ANTI, 90)
 
-    def _adjust_arrows_for_letter_H(self, red_prop, blue_prop) -> None:
-        if self._is_at_least_one_prop_antiradial(red_prop, blue_prop):
+    def _adjust_arrows_for_letter_H(self, red_motion, blue_motion) -> None:
+        if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
             for arrow in self.pictograph.arrows.values():
                 adjustment = self.arrow_positioner._calculate_GH_adjustment(arrow)
                 adjusted_x = (
@@ -96,8 +97,8 @@ class StaffArrowPositioner:
                 adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
                 self.arrow_positioner._apply_adjustment(arrow, adjusted_adjustment)
 
-    def _adjust_arrows_for_letter_I(self, red_prop, blue_prop) -> None:
-        if self._is_at_least_one_prop_antiradial(red_prop, blue_prop):
+    def _adjust_arrows_for_letter_I(self, red_motion, blue_motion) -> None:
+        if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
             for arrow in self.pictograph.arrows.values():
                 adjustment = self.arrow_positioner._calculate_I_adjustment(arrow)
                 adjusted_x = (
@@ -109,8 +110,8 @@ class StaffArrowPositioner:
                 adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
                 self.arrow_positioner._apply_adjustment(arrow, adjusted_adjustment)
 
-    def _adjust_arrows_for_letter_Q(self, red_prop, blue_prop) -> None:
-        if self._is_at_least_one_prop_antiradial(red_prop, blue_prop):
+    def _adjust_arrows_for_letter_Q(self, red_motion, blue_motion) -> None:
+        if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
             for arrow in self.pictograph.arrows.values():
                 adjustment = self.arrow_positioner._calculate_Q_adjustment(arrow)
                 adjusted_x = (
@@ -122,8 +123,8 @@ class StaffArrowPositioner:
                 adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
                 self.arrow_positioner._apply_adjustment(arrow, adjusted_adjustment)
 
-    def _adjust_arrows_for_letter_R(self, red_prop, blue_prop) -> None:
-        if self._is_at_least_one_prop_antiradial(red_prop, blue_prop):
+    def _adjust_arrows_for_letter_R(self, red_motion, blue_motion) -> None:
+        if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
             for arrow in self.pictograph.arrows.values():
                 adjustment = self.arrow_positioner._calculate_R_adjustment(arrow)
                 adjusted_x = (
@@ -135,8 +136,8 @@ class StaffArrowPositioner:
                 adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
                 self.arrow_positioner._apply_adjustment(arrow, adjusted_adjustment)
 
-    def _adjust_arrows_for_letter_T(self, red_prop, blue_prop) -> None:
-        if self._is_at_least_one_prop_antiradial(red_prop, blue_prop):
+    def _adjust_arrows_for_letter_T(self, red_motion, blue_motion) -> None:
+        if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
             leading_color: Color = self.determine_leading_motion_for_T(
                 self.pictograph.motions[RED].start_location,
                 self.pictograph.motions[RED].end_location,
@@ -210,8 +211,8 @@ class StaffArrowPositioner:
             return "blue"
         return None
 
-    def _adjust_arrows_for_letter_U(self, red_prop, blue_prop) -> None:
-        if self._is_at_least_one_prop_antiradial(red_prop, blue_prop):
+    def _adjust_arrows_for_letter_U(self, red_motion, blue_motion) -> None:
+        if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
             leader = (
                 self.pictograph.motions[RED]
                 if self.pictograph.motions[RED].motion_type == PRO
@@ -261,8 +262,8 @@ class StaffArrowPositioner:
                         adjustment += QPointF(20, 45)
                 self.arrow_positioner._apply_adjustment(leader.arrow, adjustment)
 
-    def _adjust_arrows_for_letter_V(self, red_prop, blue_prop) -> None:
-        if self._is_at_least_one_prop_antiradial(red_prop, blue_prop):
+    def _adjust_arrows_for_letter_V(self, red_motion, blue_motion) -> None:
+        if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
             anti_motion = (
                 self.pictograph.motions[RED]
                 if self.pictograph.motions[RED].motion_type == ANTI
@@ -347,17 +348,31 @@ class StaffArrowPositioner:
         else:
             return radial_mapping.get((arrow_location, prop_location))
 
+    def _adjust_arrows_for_letter_Z(self, red_motion:Motion, blue_motion:Motion) -> None:
+        if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
+            anti_motion = (
+                self.pictograph.motions[RED]
+                if self.pictograph.motions[RED].motion_type == ANTI
+                else self.pictograph.motions[BLUE]
+            )
+            adjustment = self.arrow_positioner.calculate_adjustment(
+                anti_motion.arrow.location, 80
+            )
+            self.arrow_positioner._apply_adjustment(anti_motion.arrow, adjustment)
+
+                
+
     # Helper functions
-    def _are_both_props_radial(self, red_prop: Prop, blue_prop: Prop) -> bool:
+    def _are_both_props_radial(self, red_motion: Motion, blue_motion: Motion) -> bool:
         return (
-            red_prop.orientation in RadialOrientation
-            and blue_prop.orientation in RadialOrientation
+            red_motion.prop.orientation in RadialOrientation
+            and blue_motion.prop.orientation in RadialOrientation
         )
 
-    def _is_at_least_one_prop_antiradial(self, red_prop: Prop, blue_prop: Prop) -> bool:
+    def _is_at_least_one_prop_antiradial(self, red_motion: Motion, blue_motion: Motion) -> bool:
         return (
-            red_prop.orientation in AntiradialOrientation
-            or blue_prop.orientation in AntiradialOrientation
+            red_motion.prop.orientation in AntiradialOrientation
+            or blue_motion.prop.orientation in AntiradialOrientation
         )
 
     def _apply_adjustment_to_all_arrows(self, adjustment_value: int) -> None:
