@@ -184,11 +184,9 @@ class LetterEngine:
     def determine_handpath_direction_relationship(self) -> Literal["same", "opp", None]:
         clockwise = ["n", "e", "s", "w"]
 
-        # Function to calculate direction
         def calculate_direction(start, end) -> RotationDirection:
             return (clockwise.index(end) - clockwise.index(start)) % len(clockwise)
 
-        # Check if all arrow locations are valid
         arrow_locations = [
             self.red_motion.start_location,
             self.red_motion.end_location,
@@ -198,7 +196,6 @@ class LetterEngine:
         if not all(location in clockwise for location in arrow_locations):
             return None
 
-        # Calculate directions for red and blue arrows
         red_direction = calculate_direction(
             self.red_motion.start_location, self.red_motion.end_location
         )
@@ -206,7 +203,6 @@ class LetterEngine:
             self.blue_motion.start_location, self.blue_motion.end_location
         )
 
-        # Determine handpath direction relationship
         handpath_direction_relationship = (
             "same" if red_direction == blue_direction else "opp"
         )
@@ -263,9 +259,16 @@ class LetterEngine:
     ) -> Position:
         return {position: value[:-1] for position, value in specific_positions.items()}
 
+    def determine_leading_motion_for_T(self, red_start, red_end, blue_start, blue_end) -> Literal['red', 'blue'] | None:
+        """Determines which motion is leading in the rotation sequence."""
+        # If the start location of one motion is the same as the end location of the other, it's leading
+        if red_start == blue_end:
+            return "red"
+        elif blue_start == red_end:
+            return "blue"
+        return None
 
-
-    def determine_leading_motion(self, pro_start, pro_end, anti_start, anti_end):
+    def determine_leading_motion_for_U_V(self, pro_start, pro_end, anti_start, anti_end) -> Literal['pro', 'anti'] | None:
         """Determines which motion is leading in the rotation sequence."""
         # If the start location of one motion is the same as the end location of the other, it's leading
         if pro_start == anti_end:
@@ -274,9 +277,9 @@ class LetterEngine:
             return "anti"
         return None  # Leading motion cannot be determined
 
-    def filter_for_U_or_V(self):
+    def filter_for_U_or_V(self) -> Literal['U', 'V'] | None:
         """Determines if the pictograph represents 'U' or 'V'."""
-        leading_motion = self.determine_leading_motion(
+        leading_motion = self.determine_leading_motion_for_U_V(
             self.pro_motion.start_location,
             self.pro_motion.end_location,
             self.anti_motion.start_location,

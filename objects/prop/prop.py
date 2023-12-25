@@ -34,6 +34,7 @@ class Prop(GraphicalObject):
         super().__init__(scene)
         self.setup_svg_renderer(self.svg_file)
         self._setup_attributes(scene, prop_dict)
+        self.setZValue(10)
 
     def _setup_attributes(self, scene, prop_dict: "PropAttributesDicts") -> None:
         self.scene: Pictograph | PropBox = scene
@@ -399,7 +400,7 @@ class Prop(GraphicalObject):
         self.scene.update_pictograph()
 
     def is_radial(self) -> bool:
-        return self.orientation in [IN,OUT]
+        return self.orientation in [IN, OUT]
 
     def is_antiradial(self) -> bool:
-        return self.orientation in [CLOCK,COUNTER]
+        return self.orientation in [CLOCK, COUNTER]
