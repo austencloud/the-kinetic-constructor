@@ -26,7 +26,8 @@ from constants.constants import (
     SOUTHEAST,
     SOUTHWEST,
     UP,
-    WEST, DISTANCE
+    WEST,
+    DISTANCE,
 )
 from objects.motion import Motion
 
@@ -37,7 +38,6 @@ if TYPE_CHECKING:
     from objects.pictograph.position_engines.arrow_positioners.arrow_positioner import (
         ArrowPositioner,
     )
-
 
 
 class StaffArrowPositioner:
@@ -60,6 +60,7 @@ class StaffArrowPositioner:
             "Q": self._adjust_arrows_for_letter_Q,
             "R": self._adjust_arrows_for_letter_R,
             "T": self._adjust_arrows_for_letter_T,
+            "U": self._adjust_arrows_for_letter_U,
             "V": self._adjust_arrows_for_letter_V,
         }
 
@@ -147,7 +148,7 @@ class StaffArrowPositioner:
                 follower = self.pictograph.motions[BLUE]
             else:
                 follower = self.pictograph.motions[RED]
-                
+
             for arrow in self.pictograph.arrows.values():
                 if arrow.motion.prop.is_antiradial():
                     default_pos = self.arrow_positioner._get_default_position(arrow)
@@ -208,6 +209,57 @@ class StaffArrowPositioner:
         elif blue_start == red_end:
             return "blue"
         return None
+
+    def _adjust_arrows_for_letter_U(self, red_prop, blue_prop) -> None:
+        if self._is_at_least_one_prop_antiradial(red_prop, blue_prop):
+            leader = (
+                self.pictograph.motions[RED]
+                if self.pictograph.motions[RED].motion_type == PRO
+                else self.pictograph.motions[BLUE]
+            )
+            follower = (
+                self.pictograph.motions[RED]
+                if self.pictograph.motions[RED].motion_type == ANTI
+                else self.pictograph.motions[BLUE]
+            )
+            if follower.prop.is_antiradial():
+                default_pos = self.arrow_positioner._get_default_position(
+                    follower.arrow
+                )
+                adjustment = self.arrow_positioner.calculate_adjustment(
+                    follower.arrow.location, DISTANCE + -45
+                )
+                new_pos = (
+                    default_pos + adjustment - follower.arrow.boundingRect().center()
+                )
+                follower.arrow.setPos(new_pos)
+
+            elif leader.prop.is_radial() and follower.prop.is_antiradial():
+                adjustment = self.arrow_positioner.calculate_adjustment(
+                    follower.arrow.location, 40
+                )
+                direction = self.get_anti_leader_adjustment_direction(leader)
+                if direction == UP:
+                    if leader.end_location == WEST:
+                        adjustment += QPointF(-45, -20)
+                    elif leader.end_location == EAST:
+                        adjustment += QPointF(45, -20)
+                elif direction == DOWN:
+                    if leader.end_location == WEST:
+                        adjustment += QPointF(-45, 20)
+                    elif leader.end_location == EAST:
+                        adjustment += QPointF(45, 20)
+                elif direction == LEFT:
+                    if leader.end_location == NORTH:
+                        adjustment += QPointF(-20, -45)
+                    elif leader.end_location == SOUTH:
+                        adjustment += QPointF(-20, 45)
+                elif direction == RIGHT:
+                    if leader.end_location == NORTH:
+                        adjustment += QPointF(20, -45)
+                    elif leader.end_location == SOUTH:
+                        adjustment += QPointF(20, 45)
+                self.arrow_positioner._apply_adjustment(leader.arrow, adjustment)
 
     def _adjust_arrows_for_letter_V(self, red_prop, blue_prop) -> None:
         if self._is_at_least_one_prop_antiradial(red_prop, blue_prop):
