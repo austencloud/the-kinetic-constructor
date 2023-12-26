@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 import pandas as pd
 from Enums import Orientation
 from data.rules import get_next_letters
-from constants.constants import *
+from constants import *
 from utilities.TypeChecking.TypeChecking import Turns
 from widgets.option_picker_tab.option import Option
 from PyQt6.QtGui import QPixmap

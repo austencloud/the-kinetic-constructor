@@ -22,7 +22,7 @@ from data.letter_engine_data import (
 )
 from data.positions_map import get_specific_start_end_positions
 from objects.motion import Motion
-from constants.constants import (
+from constants import (
     ALPHA,
     BETA,
     BLUE,

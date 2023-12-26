@@ -11,7 +11,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QPixmap
 from typing import TYPE_CHECKING, List
 from objects.motion import Motion
-from constants.constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, ICON_DIR
+from constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, ICON_DIR
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )

@@ -1,6 +1,6 @@
 from Enums import Color, Location, SpecificPosition
 from objects.motion import Motion
-from constants.constants import *
+from constants import *
 from utilities.TypeChecking.TypeChecking import (
     Dict,
     SpecificStartEndPositionsDicts,

@@ -4,7 +4,7 @@ from Enums import (
     Orientation,
 )
 
-from constants.constants import *
+from constants import *
 from typing import TYPE_CHECKING, Dict, Literal, Union
 
 

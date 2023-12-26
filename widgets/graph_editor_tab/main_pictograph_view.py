@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, List
 from PyQt6.QtWidgets import QGraphicsView, QPushButton, QFrame
 from PyQt6.QtGui import QIcon
 
-from constants.constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
+from constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
 
 
 if TYPE_CHECKING:

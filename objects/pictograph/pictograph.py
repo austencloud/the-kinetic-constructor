@@ -5,7 +5,7 @@ from PyQt6.QtGui import QImage, QPainter, QPixmap
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
 import pandas as pd
 from Enums import Color, Letter, LetterNumberType, Location, SpecificPosition
-from constants.constants import *
+from constants import *
 from data.positions_map import get_specific_start_end_positions
 from objects.letter_item import LetterItem
 from objects.motion import Motion

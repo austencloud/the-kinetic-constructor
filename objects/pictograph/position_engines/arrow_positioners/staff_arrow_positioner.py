@@ -6,7 +6,7 @@ from Enums import (
     Direction,
     RadialOrientation,
 )
-from constants.constants import (
+from constants import (
     ANTI,
     BLUE,
     CLOCK,
@@ -25,6 +25,7 @@ from constants.constants import (
     SOUTH,
     SOUTHEAST,
     SOUTHWEST,
+    STATIC,
     UP,
     WEST,
     DISTANCE,
@@ -62,6 +63,7 @@ class StaffArrowPositioner:
             "T": self._adjust_arrows_for_letter_T,
             "U": self._adjust_arrows_for_letter_U,
             "V": self._adjust_arrows_for_letter_V,
+            "X": self._adjust_arrows_for_letter_X,
             "Z": self._adjust_arrows_for_letter_Z,
         }
 
@@ -163,7 +165,7 @@ class StaffArrowPositioner:
                 adjustment = self.arrow_positioner.calculate_adjustment(
                     leader.arrow.location, 30
                 )
-                direction = self.get_anti_leader_adjustment_direction(leader)
+                direction = self.get_antispin_antiradial_adjustment_direction(leader)
                 if direction == UP:
                     adjustment += QPointF(0, -40)
                 elif direction == DOWN:
@@ -178,7 +180,7 @@ class StaffArrowPositioner:
                 adjustment = self.arrow_positioner.calculate_adjustment(
                     follower.arrow.location, 40
                 )
-                direction = self.get_anti_leader_adjustment_direction(leader)
+                direction = self.get_antispin_antiradial_adjustment_direction(leader)
                 if direction == UP:
                     if leader.end_location == WEST:
                         adjustment += QPointF(-45, -20)
@@ -239,7 +241,7 @@ class StaffArrowPositioner:
                 adjustment = self.arrow_positioner.calculate_adjustment(
                     follower.arrow.location, 40
                 )
-                direction = self.get_anti_leader_adjustment_direction(leader)
+                direction = self.get_antispin_antiradial_adjustment_direction(leader)
                 if direction == UP:
                     if leader.end_location == WEST:
                         adjustment += QPointF(-45, -20)
@@ -279,7 +281,7 @@ class StaffArrowPositioner:
                 adjustment = self.arrow_positioner.calculate_adjustment(
                     anti_motion.arrow.location, 30
                 )
-                direction = self.get_anti_leader_adjustment_direction(anti_motion)
+                direction = self.get_antispin_antiradial_adjustment_direction(anti_motion)
                 if direction == UP:
                     adjustment += QPointF(0, -40)
                 elif direction == DOWN:
@@ -294,7 +296,7 @@ class StaffArrowPositioner:
                 adjustment = self.arrow_positioner.calculate_adjustment(
                     pro_motion.arrow.location, 40
                 )
-                direction = self.get_anti_leader_adjustment_direction(anti_motion)
+                direction = self.get_antispin_antiradial_adjustment_direction(anti_motion)
                 if direction == UP:
                     if anti_motion.end_location == WEST:
                         adjustment += QPointF(-45, -20)
@@ -317,7 +319,7 @@ class StaffArrowPositioner:
                         adjustment += QPointF(20, 45)
                 self.arrow_positioner._apply_adjustment(anti_motion.arrow, adjustment)
 
-    def get_anti_leader_adjustment_direction(self, leader: "Motion") -> str:
+    def get_antispin_antiradial_adjustment_direction(self, leader: "Motion") -> str:
         arrow_location = leader.arrow.location
         prop_location = leader.prop.location
 
@@ -348,7 +350,29 @@ class StaffArrowPositioner:
         else:
             return radial_mapping.get((arrow_location, prop_location))
 
-    def _adjust_arrows_for_letter_Z(self, red_motion:Motion, blue_motion:Motion) -> None:
+    def _adjust_arrows_for_letter_X(
+        self, red_motion: Motion, blue_motion: Motion
+    ) -> None:
+        # use the leader adjustment method to get the direction then apply the adjustment
+        anti_motion = red_motion if red_motion.motion_type == ANTI else blue_motion
+        if anti_motion.prop.is_antiradial():
+            adjustment = self.arrow_positioner.calculate_adjustment(
+                anti_motion.arrow.location, 30
+            )
+            direction = self.get_antispin_antiradial_adjustment_direction(anti_motion)
+            if direction == UP:
+                adjustment += QPointF(0, -40)
+            elif direction == DOWN:
+                adjustment += QPointF(0, 40)
+            elif direction == LEFT:
+                adjustment += QPointF(-40, 0)
+            elif direction == RIGHT:
+                adjustment += QPointF(40, 0)
+            self.arrow_positioner._apply_adjustment(anti_motion.arrow, adjustment)
+
+    def _adjust_arrows_for_letter_Z(
+        self, red_motion: Motion, blue_motion: Motion
+    ) -> None:
         if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
             anti_motion = (
                 self.pictograph.motions[RED]
@@ -360,8 +384,6 @@ class StaffArrowPositioner:
             )
             self.arrow_positioner._apply_adjustment(anti_motion.arrow, adjustment)
 
-                
-
     # Helper functions
     def _are_both_props_radial(self, red_motion: Motion, blue_motion: Motion) -> bool:
         return (
@@ -369,7 +391,9 @@ class StaffArrowPositioner:
             and blue_motion.prop.orientation in RadialOrientation
         )
 
-    def _is_at_least_one_prop_antiradial(self, red_motion: Motion, blue_motion: Motion) -> bool:
+    def _is_at_least_one_prop_antiradial(
+        self, red_motion: Motion, blue_motion: Motion
+    ) -> bool:
         return (
             red_motion.prop.orientation in AntiradialOrientation
             or blue_motion.prop.orientation in AntiradialOrientation

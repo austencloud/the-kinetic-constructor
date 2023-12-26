@@ -1,5 +1,5 @@
 from PyQt6.QtCore import QPointF
-from constants.constants import *
+from constants import *
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Callable
 from objects.pictograph.position_engines.arrow_positioners.staff_arrow_positioner import (

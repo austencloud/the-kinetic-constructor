@@ -1,0 +1,46 @@
+from typing import Dict, Tuple
+from constants import (
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST,
+    RED,
+    BLUE,
+    ALPHA1,
+    ALPHA2,
+    ALPHA3,
+    ALPHA4,
+    BETA1,
+    BETA2,
+    BETA3,
+    BETA4,
+    GAMMA1,
+    GAMMA2,
+    GAMMA3,
+    GAMMA4,
+    GAMMA5,
+    GAMMA6,
+    GAMMA7,
+    GAMMA8,
+)
+from Enums import Location, Color, SpecificPosition
+
+positions_map: Dict[Tuple[Location, Color, Location, Color], SpecificPosition] = {
+    (NORTH, RED, SOUTH, BLUE): ALPHA1,
+    (EAST, RED, WEST, BLUE): ALPHA2,
+    (SOUTH, RED, NORTH, BLUE): ALPHA3,
+    (WEST, RED, EAST, BLUE): ALPHA4,
+    (NORTH, RED, NORTH, BLUE): BETA1,
+    (EAST, RED, EAST, BLUE): BETA2,
+    (SOUTH, RED, SOUTH, BLUE): BETA3,
+    (WEST, RED, WEST, BLUE): BETA4,
+    (NORTH, RED, WEST, BLUE): GAMMA1,
+    (EAST, RED, NORTH, BLUE): GAMMA2,
+    (SOUTH, RED, EAST, BLUE): GAMMA3,
+    (WEST, RED, SOUTH, BLUE): GAMMA4,
+    (NORTH, RED, EAST, BLUE): GAMMA5,
+    (EAST, RED, SOUTH, BLUE): GAMMA6,
+    (SOUTH, RED, WEST, BLUE): GAMMA7,
+    (WEST, RED, NORTH, BLUE): GAMMA8,
+}
+

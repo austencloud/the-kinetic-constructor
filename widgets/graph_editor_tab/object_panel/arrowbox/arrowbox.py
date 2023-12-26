@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QLabel,
 )
 from objects.arrow.arrow import Arrow
-from constants.constants import *
+from constants import *
 from objects.motion import Motion
 from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox_drag import ArrowBoxDrag
 from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox_view import ArrowBoxView

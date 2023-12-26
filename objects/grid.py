@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import QGraphicsSceneWheelEvent
 from typing import Dict, Literal
 from PyQt6.QtCore import QPointF, QEvent
 from Enums import GridMode
-from constants.constants import (
+from constants import (
     BOX,
     DIAMOND,
     GRID_DIR,

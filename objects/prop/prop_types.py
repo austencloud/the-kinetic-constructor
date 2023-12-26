@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from constants.constants import *
+from constants import *
 
 if TYPE_CHECKING:
     from objects.motion import Motion

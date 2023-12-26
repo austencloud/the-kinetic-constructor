@@ -1,6 +1,4 @@
 import os
-from pickle import FLOAT
-from tkinter import VERTICAL
 
 current_script_path = os.path.abspath(__file__).replace("\\", "/")
 current_script_path = current_script_path[0].upper() + current_script_path[1:]

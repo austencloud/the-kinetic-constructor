@@ -13,7 +13,7 @@ from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
-from constants.constants import BLUE, HEX_BLUE, HEX_RED, ICON_DIR, RED
+from constants import BLUE, HEX_BLUE, HEX_RED, ICON_DIR, RED
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 

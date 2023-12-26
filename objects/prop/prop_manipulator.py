@@ -1,4 +1,4 @@
-from constants.constants import HORIZONTAL, VERTICAL
+from constants import HORIZONTAL, VERTICAL
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
 )
