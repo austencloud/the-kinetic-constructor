@@ -1,0 +1,17 @@
+letter,start_position,end_position,blue_motion_type,blue_rotation_direction,blue_start_location,blue_end_location,red_motion_type,red_rotation_direction,red_start_location,red_end_location
+Ω-,alpha1,gamma3,anti,cw,s,e,dash,None,n,s
+Ω-,alpha1,gamma7,anti,ccw,s,w,dash,None,n,s
+Ω-,alpha2,gamma4,anti,cw,w,s,dash,None,e,w
+Ω-,alpha2,gamma8,anti,ccw,w,n,dash,None,e,w
+Ω-,alpha3,gamma1,anti,cw,n,w,dash,None,s,n
+Ω-,alpha3,gamma5,anti,ccw,n,e,dash,None,s,n
+Ω-,alpha4,gamma2,anti,cw,e,n,dash,None,w,e
+Ω-,alpha4,gamma6,anti,ccw,e,s,dash,None,w,e
+Ω-,alpha1,gamma7,dash,None,s,w,anti,None,n,s
+Ω-,alpha1,gamma3,dash,None,s,e,anti,None,n,s
+Ω-,alpha2,gamma8,dash,None,w,n,anti,None,e,w
+Ω-,alpha2,gamma4,dash,None,w,s,anti,None,e,w
+Ω-,alpha3,gamma5,dash,None,n,e,anti,None,s,n
+Ω-,alpha3,gamma1,dash,None,n,w,anti,None,s,n
+Ω-,alpha4,gamma6,dash,None,e,s,anti,None,w,e
+Ω-,alpha4,gamma2,dash,None,e,n,anti,None,w,e

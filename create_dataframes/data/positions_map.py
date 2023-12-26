@@ -1,5 +1,5 @@
 from typing import Dict, Tuple
-from constants import (
+from data.constants import (
     NORTH,
     EAST,
     SOUTH,
@@ -23,7 +23,7 @@ from constants import (
     GAMMA7,
     GAMMA8,
 )
-from Enums import Location, Color, SpecificPosition
+from data.Enums import Location, Color, SpecificPosition
 
 positions_map: Dict[Tuple[Location, Color, Location, Color], SpecificPosition] = {
     (NORTH, RED, SOUTH, BLUE): ALPHA1,

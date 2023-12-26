@@ -1,7 +1,6 @@
 from typing import Literal, Set, TypedDict
 from enum import Enum
-from enum import Enum
-from constants import *
+from data.constants import *
 
 image_path = "resources/images/"
 
