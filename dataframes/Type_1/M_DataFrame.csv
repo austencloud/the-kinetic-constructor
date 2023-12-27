@@ -1,0 +1,9 @@
+letter,start_position,end_position,blue_motion_type,blue_rotation_direction,blue_start_location,blue_end_location,red_motion_type,red_rotation_direction,red_start_location,red_end_location
+M,gamma5,gamma4,pro,cw,e,s,pro,ccw,n,w
+M,gamma8,gamma3,pro,cw,n,e,pro,ccw,w,s
+M,gamma7,gamma2,pro,cw,w,n,pro,ccw,s,e
+M,gamma6,gamma1,pro,cw,s,w,pro,ccw,e,n
+M,gamma1,gamma6,pro,ccw,w,s,pro,cw,n,e
+M,gamma2,gamma7,pro,ccw,n,w,pro,cw,e,s
+M,gamma3,gamma8,pro,ccw,e,n,pro,cw,s,w
+M,gamma4,gamma5,pro,ccw,s,e,pro,cw,w,n

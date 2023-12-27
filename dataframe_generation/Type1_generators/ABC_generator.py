@@ -40,7 +40,10 @@ class ABC_Generator(DataFrameGenerator):
             red_shifts = self.define_shifts(red_motion_type)[red_rot_dir]
             for red_loc_pair in red_shifts:
                 red_start_loc, red_end_loc = red_loc_pair
-                blue_rot_dir = self.get_opposite_rot_dir(red_rot_dir)
+                if self.is_hybrid(letter):
+                    blue_rot_dir = self.get_opposite_rot_dir(red_rot_dir)
+                else:
+                    blue_rot_dir = red_rot_dir
                 blue_loc_pair = self.get_opposite_shifts(red_loc_pair)
                 blue_start_loc, blue_end_loc = blue_loc_pair
 

@@ -89,7 +89,13 @@ class DataFrameGenerator:
             ordered=True,
         )
         df.sort_values(
-            by=["letter", "blue_motion_type", "blue_rotation_direction"], inplace=True
+            by=[
+                "letter",
+                "blue_motion_type",
+                "blue_rotation_direction",
+                "start_position",
+            ],
+            inplace=True,
         )
 
     def write_dataframe_to_file(self, df, filename):
