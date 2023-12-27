@@ -11,6 +11,26 @@ class DataFrameGenerator:
         self.letters = letters
         self.rotation_directions = ["cw", "ccw"]
 
+    def get_rotation_direction(
+        self, start_loc, end_loc, motion_type
+    ) -> RotationDirection:
+        clockwise_pairs = [("n", "e"), ("e", "s"), ("s", "w"), ("w", "n")]
+        counter_clockwise_pairs = [("n", "w"), ("w", "s"), ("s", "e"), ("e", "n")]
+
+        if motion_type == "pro":
+            if (start_loc, end_loc) in clockwise_pairs:
+                return "cw"
+            elif (start_loc, end_loc) in counter_clockwise_pairs:
+                return "ccw"
+        elif motion_type == "anti":
+            if (start_loc, end_loc) in clockwise_pairs:
+                return "ccw"
+            elif (start_loc, end_loc) in counter_clockwise_pairs:
+                return "cw"
+        raise ValueError(
+            f"Invalid location pair ({start_loc}, {end_loc}) for motion type '{motion_type}'."
+        )
+
     def define_shifts(
         self, shift_type
     ) -> Dict[RotationDirection, List[Tuple[Location, Location]]]:
@@ -29,11 +49,23 @@ class DataFrameGenerator:
         opposite_map = {"n": "s", "s": "n", "e": "w", "w": "e"}
         return opposite_map.get(location, "")
 
+    def get_opposite_rot_dir(self, rot_dir) -> RotationDirection:
+        if rot_dir == "cw":
+            return "ccw"
+        elif rot_dir == "ccw":
+            return "cw"
+
+    def get_opposite_shifts(self, red_loc_pair) -> Tuple[Location, Location]:
+        return tuple(self.get_opposite_location(loc) for loc in red_loc_pair)
+
+    def is_hybrid(self, letter) -> bool:
+        return letter in ["C", "F", "I", "L", "O", "R", "U", "V"]
+
     def get_Type1_start_and_end_pos(
         self, red_start_loc, red_end_loc, blue_start_loc, blue_end_loc
     ) -> Tuple[SpecificPosition, SpecificPosition]:
-        start_key = (red_start_loc, RED, blue_start_loc, BLUE)
-        end_key = (red_end_loc, RED, blue_end_loc, BLUE)
+        start_key = (blue_start_loc, red_start_loc)
+        end_key = (blue_end_loc, red_end_loc)
         start_pos = positions_map.get(start_key)
         end_pos = positions_map.get(end_key)
         return start_pos, end_pos
@@ -56,7 +88,9 @@ class DataFrameGenerator:
             categories=rotation_direction_order,
             ordered=True,
         )
-        df.sort_values(by=["letter", "blue_motion_type", "blue_rotation_direction"], inplace=True)
+        df.sort_values(
+            by=["letter", "blue_motion_type", "blue_rotation_direction"], inplace=True
+        )
 
     def write_dataframe_to_file(self, df, filename):
         dir_name = os.path.dirname(filename)
