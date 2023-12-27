@@ -105,7 +105,7 @@ class Location(Enum):
     SOUTHEAST = "se"
 
 
-class RotationDirection(Enum):
+class PropRotDir(Enum):
     CLOCKWISE = "cw"
     COUNTER_CLOCKWISE = "ccw"
 
@@ -197,8 +197,6 @@ class Letter(Enum):
     Eta = "η"
 
 
-
-
 alpha_ending_letters: Set[Letter] = {
     Letter.A,
     Letter.B,
@@ -284,7 +282,6 @@ beta_starting_letters: Set[Letter] = {
     Letter.Phi,
     Letter.Beta,
 }
-
 
 
 gamma_starting_letters: Set[Letter] = {
@@ -493,7 +490,7 @@ class MotionAttribute(Enum):
     ARROW = "arrow"
     PROP = "prop"
     MOTION_TYPE = "motion_type"
-    ROTATION_DIRECTION = "rotation_direction"
+    ROTATION_DIRECTION = "rot_dir"
     TURNS = "turns"
     START_LOCATION = "start_location"
     START_ORIENTATION = "start_orientation"
@@ -564,7 +561,7 @@ class PropAttributesDicts(TypedDict):
 class MotionAttributesDicts(TypedDict):
     color: Color
     motion_type: MotionType
-    rotation_direction: RotationDirection
+    rot_dir: PropRotDir
     location: Location
     turns: Turns
 
@@ -585,7 +582,7 @@ class ArrowAttributesDicts(TypedDict):
 class MotionAttributesDicts(TypedDict):
     color: Color
     motion_type: MotionType
-    rotation_direction: RotationDirection
+    rot_dir: PropRotDir
     start_location: Location
     end_location: Location
     turns: Turns

@@ -67,7 +67,7 @@ LOCATION = "location"
 MOTION_TYPE = "motion_type"
 TURNS = "turns"
 PROP_TYPE = "prop_type"
-ROTATION_DIRECTION = "rotation_direction"
+ROTATION_DIRECTION = "rot_dir"
 ORIENTATION = "orientation"
 START_ORIENTATION = "start_orientation"
 END_ORIENTATION = "end_orientation"
@@ -153,8 +153,6 @@ GAMMA13 = "gamma13"
 GAMMA14 = "gamma14"
 GAMMA15 = "gamma15"
 GAMMA16 = "gamma16"
-
-
 
 
 ### ICONS ###

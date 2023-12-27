@@ -79,16 +79,16 @@ class Arrow(GraphicalObject):
 
     def set_is_svg_mirrored_from_attributes(self) -> None:
         if self.motion_type == PRO:
-            rotation_direction = self.motion.rotation_direction
-            if rotation_direction == CLOCKWISE:
+            rot_dir = self.motion.rot_dir
+            if rot_dir == CLOCKWISE:
                 self.is_svg_mirrored = False
-            elif rotation_direction == COUNTER_CLOCKWISE:
+            elif rot_dir == COUNTER_CLOCKWISE:
                 self.is_svg_mirrored = True
         elif self.motion_type == ANTI:
-            rotation_direction = self.motion.rotation_direction
-            if rotation_direction == CLOCKWISE:
+            rot_dir = self.motion.rot_dir
+            if rot_dir == CLOCKWISE:
                 self.is_svg_mirrored = True
-            elif rotation_direction == COUNTER_CLOCKWISE:
+            elif rot_dir == COUNTER_CLOCKWISE:
                 self.is_svg_mirrored = False
 
     ### MOUSE EVENTS ###
@@ -195,7 +195,7 @@ class Arrow(GraphicalObject):
             self.motion.start_location,
             self.motion.end_location,
         ) = get_start_end_locations(
-            self.motion_type, self.motion.rotation_direction, self.motion.arrow.location
+            self.motion_type, self.motion.rot_dir, self.motion.arrow.location
         )
         self.motion.start_location = self.motion.start_location
         self.motion.end_location = self.motion.end_location
@@ -205,9 +205,7 @@ class Arrow(GraphicalObject):
         self.motion.color = target_arrow.color
         self.motion_type: MotionType = target_arrow.motion_type
         self.motion.arrow.location = target_arrow.location
-        self.motion.rotation_direction: RotationDirection = (
-            target_arrow.motion.rotation_direction
-        )
+        self.motion.rot_dir: RotationDirection = target_arrow.motion.rot_dir
         self.motion.start_location: Location = target_arrow.motion.start_location
         self.motion.end_location: Location = target_arrow.motion.end_location
         self.motion.turns: Turns = target_arrow.motion.turns
@@ -253,12 +251,12 @@ class Arrow(GraphicalObject):
     ) -> RotationAngles:
         arrow = arrow or self
         location_to_angle = self.get_location_to_angle_map(
-            arrow.motion.motion_type, arrow.motion.rotation_direction
+            arrow.motion.motion_type, arrow.motion.rot_dir
         )
         return location_to_angle.get(self.location, 0)
 
     def get_location_to_angle_map(
-        self, motion_type: str, rotation_direction: str
+        self, motion_type: str, rot_dir: str
     ) -> Dict[str, Dict[str, int]]:
         if motion_type == PRO:
             return {
@@ -274,7 +272,7 @@ class Arrow(GraphicalObject):
                     SOUTHWEST: 90,
                     NORTHWEST: 0,
                 },
-            }.get(rotation_direction, {})
+            }.get(rot_dir, {})
         elif motion_type == ANTI:
             return {
                 CLOCKWISE: {
@@ -289,7 +287,7 @@ class Arrow(GraphicalObject):
                     SOUTHWEST: 180,
                     NORTHWEST: 270,
                 },
-            }.get(rotation_direction, {})
+            }.get(rot_dir, {})
         elif motion_type == STATIC:
             return {
                 CLOCKWISE: {
@@ -304,7 +302,7 @@ class Arrow(GraphicalObject):
                     SOUTHWEST: 0,
                     NORTHWEST: 0,
                 },
-            }.get(rotation_direction, {})
+            }.get(rot_dir, {})
 
     def get_attributes(self) -> ArrowAttributesDicts:
         arrow_attributes = [COLOR, LOCATION, MOTION_TYPE, TURNS]

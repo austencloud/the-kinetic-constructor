@@ -51,7 +51,7 @@ start_end_location_map = {
 
 def get_start_end_locations(
     motion_type: MotionType,
-    rotation_direction: RotationDirection,
+    rot_dir: RotationDirection,
     arrow_location: Location,
 ) -> StartEndLocationTuple:
     """
@@ -60,7 +60,7 @@ def get_start_end_locations(
 
     Args:
         motion_type (MotionType): The type of motion for the arrow.
-        rotation_direction (RotationDirection): The direction of rotation for the arrow.
+        rot_dir (RotationDirection): The direction of rotation for the arrow.
         arrow_location (Location): The location of the arrow.
 
     Returns:
@@ -68,6 +68,6 @@ def get_start_end_locations(
     """
     return (
         start_end_location_map.get(arrow_location, {})
-        .get(rotation_direction, {})
+        .get(rot_dir, {})
         .get(motion_type, (None, None))
     )

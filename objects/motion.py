@@ -36,7 +36,7 @@ class Motion:
         self.color: COLOR = None
         self.motion_type: MOTION_TYPE = None
         self.turns: TURNS = None
-        self.rotation_direction: ROTATION_DIRECTION = None
+        self.rot_dir: ROTATION_DIRECTION = None
         self.start_location: START_LOCATION = None
         self.end_location: END_LOCATION = None
         self.start_orientation: START_ORIENTATION = None
@@ -57,7 +57,7 @@ class Motion:
 
         self.motion_type: MOTION_TYPE = motion_dict[MOTION_TYPE]
         self.turns: TURNS = motion_dict[TURNS]
-        self.rotation_direction: ROTATION_DIRECTION = motion_dict[ROTATION_DIRECTION]
+        self.rot_dir: ROTATION_DIRECTION = motion_dict[ROTATION_DIRECTION]
         self.start_location: START_LOCATION = motion_dict[START_LOCATION]
         self.end_location: END_LOCATION = motion_dict[END_LOCATION]
         self.start_orientation: START_ORIENTATION = motion_dict[START_ORIENTATION]
@@ -114,7 +114,7 @@ class Motion:
         self.turns = None
         self.motion_type = None
 
-        self.rotation_direction = None
+        self.rot_dir = None
         self.start_orientation = None
         self.end_orientation = None
 
@@ -125,7 +125,7 @@ class Motion:
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,
             TURNS: self.turns,
-            ROTATION_DIRECTION: self.rotation_direction,
+            ROTATION_DIRECTION: self.rot_dir,
             START_LOCATION: self.start_location,
             END_LOCATION: self.end_location,
             START_ORIENTATION: self.start_orientation,
@@ -242,7 +242,7 @@ class Motion:
                 ("w", "s"),
                 ("s", "e"),
                 ("e", "n"),
-            ]   
+            ]
             if (start_location, end_location) in clockwise_handpaths:
                 return "cw_hp"
             elif (start_location, end_location) in counter_clockwise_handpaths:
@@ -250,8 +250,7 @@ class Motion:
             elif start_location == end_location:
                 return None
             else:
-                print ("Unrecognized handpath direction")
-
+                print("Unrecognized handpath direction")
 
         handpath_direction = get_handpath_direction(
             self.start_location, self.end_location

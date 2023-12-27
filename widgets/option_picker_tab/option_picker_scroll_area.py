@@ -114,7 +114,9 @@ class OptionPickerScrollArea(QScrollArea):
 
             # Set the pixmap from the cache to the pixmap item of the option.
             if not option.pixmap:
-                option.pixmap = option.addPixmap(self.main_widget.image_cache[image_path])
+                option.pixmap = option.addPixmap(
+                    self.main_widget.image_cache[image_path]
+                )
             else:
                 option.pixmap.setPixmap(self.main_widget.image_cache[image_path])
 
@@ -228,7 +230,7 @@ class OptionPickerScrollArea(QScrollArea):
         motion_dict = {
             "color": color,
             "motion_type": pd_row_data[f"{color}_motion_type"],
-            "rotation_direction": pd_row_data[f"{color}_rotation_direction"],
+            "rot_dir": pd_row_data[f"{color}_rot_dir"],
             "start_location": pd_row_data[f"{color}_start_location"],
             "end_location": pd_row_data[f"{color}_end_location"],
             "turns": turns,

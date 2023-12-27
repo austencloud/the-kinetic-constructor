@@ -196,17 +196,17 @@ class TurnsWidget(AttrBoxWidget):
 
     ### UPDATE METHODS ###
 
-    def update_clocks(self, rotation_direction: str) -> None:
+    def update_clocks(self, rot_dir: str) -> None:
         # Clear both clock labels
         self.clock_left.clear()
         self.clock_right.clear()
 
         # Depending on the rotation direction, display the correct clock
-        if rotation_direction == "ccw":
+        if rot_dir == "ccw":
             self.clock_left.setPixmap(self.counter_clockwise_pixmap)
-        elif rotation_direction == "cw":
+        elif rot_dir == "cw":
             self.clock_right.setPixmap(self.clockwise_pixmap)
-        elif rotation_direction == None:
+        elif rot_dir == None:
             self.clock_left.clear()
             self.clock_right.clear()
 

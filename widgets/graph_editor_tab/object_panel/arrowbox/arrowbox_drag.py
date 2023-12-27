@@ -22,6 +22,7 @@ from utilities.TypeChecking.TypeChecking import (
 )
 from data.start_end_location_map import get_start_end_locations
 from constants import *
+
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from objects.pictograph.pictograph import Pictograph
@@ -41,7 +42,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
     def match_target_arrow(self, target_arrow: "Arrow") -> None:
         self.target_arrow = target_arrow
-        self.rotation_direction = target_arrow.motion.rotation_direction
+        self.rot_dir = target_arrow.motion.rot_dir
         self.motion_type = target_arrow.motion_type
         self.color = target_arrow.color
         self.arrow_location = target_arrow.location
@@ -59,9 +60,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.color: Color = target_arrow.color
         self.motion_type: MotionType = target_arrow.motion_type
         self.arrow_location: Location = target_arrow.location
-        self.rotation_direction: RotationDirection = (
-            target_arrow.motion.rotation_direction
-        )
+        self.rot_dir: RotationDirection = target_arrow.motion.rot_dir
 
         self.turns: Turns = target_arrow.turns
 
@@ -81,7 +80,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             ARROW: self.placed_arrow,
             PROP: self.placed_arrow.motion.prop,
             MOTION_TYPE: self.motion_type,
-            ROTATION_DIRECTION: self.rotation_direction,
+            ROTATION_DIRECTION: self.rot_dir,
             TURNS: self.turns,
             START_ORIENTATION: self.start_orientation,
             START_LOCATION: self.start_location,
@@ -110,9 +109,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         (
             self.start_location,
             self.end_location,
-        ) = get_start_end_locations(
-            self.motion_type, self.rotation_direction, self.arrow_location
-        )
+        ) = get_start_end_locations(self.motion_type, self.rot_dir, self.arrow_location)
 
         self.update_rotation()
         self._update_ghost_arrow_for_new_location(new_location)
@@ -123,7 +120,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             ARROW: self,
             PROP: self.ghost.motion.prop,
             MOTION_TYPE: self.motion_type,
-            ROTATION_DIRECTION: self.rotation_direction,
+            ROTATION_DIRECTION: self.rot_dir,
             TURNS: self.turns,
             START_ORIENTATION: self.start_orientation,
             START_LOCATION: self.start_location,
@@ -149,7 +146,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         self.ghost.motion.arrow.location = new_location
         self.ghost.motion_type = self.motion_type
-        self.ghost.motion.rotation_direction = self.rotation_direction
+        self.ghost.motion.rot_dir = self.rot_dir
 
         self.ghost.turns = self.turns
         self.ghost.is_svg_mirrored = self.is_svg_mirrored
@@ -280,7 +277,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             self.end_location,
         ) = get_start_end_locations(
             self.motion_type,
-            self.rotation_direction,
+            self.rot_dir,
             self.arrow_location,
         )
 
@@ -297,9 +294,9 @@ class ArrowBoxDrag(ObjectBoxDrag):
         Returns:
         RotationAngles: The calculated rotation angle for the arrow.
         """
-        motion_type, rotation_direction, color, location = (
+        motion_type, rot_dir, color, location = (
             arrow.motion_type,
-            self.rotation_direction,
+            self.rot_dir,
             arrow.color,
             self.arrow_location,
         )
@@ -369,9 +366,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         direction_map: Dict[
             RotationDirection, Dict[Location, RotationAngles]
         ] = rotation_angle_map.get((motion_type, color), {})
-        location_map: Dict[Location, RotationAngles] = direction_map.get(
-            rotation_direction, {}
-        )
+        location_map: Dict[Location, RotationAngles] = direction_map.get(rot_dir, {})
         rotation_angle: RotationAngles = location_map.get(location, 0)
 
         return rotation_angle

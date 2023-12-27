@@ -11,7 +11,7 @@ class Type3_DataFrame_Generator(DataFrameGenerator):
     def __init__(self) -> None:
         self.letters = ["W-", "X-", "θ-", "Ω-", "Σ-", "Δ-", "Y-", "Z-"]
         super.__init__(self, self.letters)
-        self.rotation_directions = ["cw", "ccw"]
+        self.rot_dirs = ["cw", "ccw"]
         self.pro_shifts = self.define_shifts("pro")
         self.anti_shifts = self.define_shifts("anti")
         self.generate_dataframes()
@@ -40,17 +40,17 @@ class Type3_DataFrame_Generator(DataFrameGenerator):
 
     def create_dataframe_for_letter(self, letter) -> None:
         data = []
-        for rotation_direction in self.rotation_directions:
+        for rot_dir in self.rot_dirs:
             shift_method = (
                 self.process_pro_shifts
                 if letter in ["W-", "Y-", "Σ-", "θ-"]
                 else self.process_anti_shifts
             )
-            shift_method(letter, rotation_direction, data)
+            shift_method(letter, rot_dir, data)
         self.save_dataframe(letter, data, "Type_3")
 
-    def process_pro_shifts(self, letter, rotation_direction, data) -> None:
-        for shift_start_loc, shift_end_loc in self.pro_shifts[rotation_direction]:
+    def process_pro_shifts(self, letter, rot_dir, data) -> None:
+        for shift_start_loc, shift_end_loc in self.pro_shifts[rot_dir]:
             dash_start_loc, dash_end_loc = self.get_dash_locations(
                 letter, shift_start_loc, shift_end_loc
             )
@@ -60,13 +60,13 @@ class Type3_DataFrame_Generator(DataFrameGenerator):
                 shift_end_loc,
                 dash_start_loc,
                 dash_end_loc,
-                rotation_direction,
+                rot_dir,
                 "pro",
                 data,
             )
 
-    def process_anti_shifts(self, letter, rotation_direction, data) -> None:
-        for shift_start_loc, shift_end_loc in self.anti_shifts[rotation_direction]:
+    def process_anti_shifts(self, letter, rot_dir, data) -> None:
+        for shift_start_loc, shift_end_loc in self.anti_shifts[rot_dir]:
             dash_start_loc, dash_end_loc = self.get_dash_locations(
                 letter, shift_start_loc, shift_end_loc
             )
@@ -76,7 +76,7 @@ class Type3_DataFrame_Generator(DataFrameGenerator):
                 shift_end_loc,
                 dash_start_loc,
                 dash_end_loc,
-                rotation_direction,
+                rot_dir,
                 "anti",
                 data,
             )
@@ -105,7 +105,7 @@ class Type3_DataFrame_Generator(DataFrameGenerator):
         shift_end_loc,
         dash_start_loc,
         dash_end_loc,
-        rotation_direction,
+        rot_dir,
         shift_motion_type,
         data,
     ) -> None:
@@ -120,7 +120,7 @@ class Type3_DataFrame_Generator(DataFrameGenerator):
                     shift_end_loc,
                     dash_start_loc,
                     dash_end_loc,
-                    rotation_direction,
+                    rot_dir,
                     shift_motion_type,
                     start_pos,
                     end_pos,
@@ -134,7 +134,7 @@ class Type3_DataFrame_Generator(DataFrameGenerator):
                     shift_end_loc,
                     dash_start_loc,
                     dash_end_loc,
-                    rotation_direction,
+                    rot_dir,
                     shift_motion_type,
                     start_pos,
                     end_pos,
@@ -149,7 +149,7 @@ class Type3_DataFrame_Generator(DataFrameGenerator):
         shift_end_loc,
         dash_start_loc,
         dash_end_loc,
-        rotation_direction,
+        rot_dir,
         shift_motion_type,
         start_pos,
         end_pos,
@@ -161,11 +161,11 @@ class Type3_DataFrame_Generator(DataFrameGenerator):
                 "start_position": start_pos,
                 "end_position": end_pos,
                 "blue_motion_type": shift_motion_type,
-                "blue_rotation_direction": rotation_direction,
+                "blue_rot_dir": rot_dir,
                 "blue_start_location": shift_start_loc,
                 "blue_end_location": shift_end_loc,
                 "red_motion_type": "dash",
-                "red_rotation_direction": "None",
+                "red_rot_dir": "None",
                 "red_start_location": dash_start_loc,
                 "red_end_location": dash_end_loc,
             }
@@ -175,11 +175,11 @@ class Type3_DataFrame_Generator(DataFrameGenerator):
                 "start_position": start_pos,
                 "end_position": end_pos,
                 "blue_motion_type": "dash",
-                "blue_rotation_direction": "None",
+                "blue_rot_dir": "None",
                 "blue_start_location": dash_start_loc,
                 "blue_end_location": dash_end_loc,
                 "red_motion_type": shift_motion_type,
-                "red_rotation_direction": rotation_direction,
+                "red_rot_dir": rot_dir,
                 "red_start_location": shift_start_loc,
                 "red_end_location": shift_end_loc,
             }

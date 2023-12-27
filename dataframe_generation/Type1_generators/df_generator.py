@@ -1,6 +1,6 @@
 from typing import Dict, List, Tuple
 import pandas as pd
-from data.Enums import Location, RotationDirection, SpecificPosition
+from data.Enums import Location, PropRotDir, SpecificPosition
 from data.constants import *
 from data.positions_map import positions_map
 import os
@@ -9,54 +9,83 @@ import os
 class DataFrameGenerator:
     def __init__(self, letters) -> None:
         self.letters = letters
-        self.rotation_directions = ["cw", "ccw"]
+        self.rot_dirs = ["cw", "ccw"]
+        self.handpath_rot_dirs = ["cw_handpath", "ccw_handpath"]
 
-    def get_rotation_direction(
-        self, start_loc, end_loc, motion_type
-    ) -> RotationDirection:
-        clockwise_pairs = [("n", "e"), ("e", "s"), ("s", "w"), ("w", "n")]
-        counter_clockwise_pairs = [("n", "w"), ("w", "s"), ("s", "e"), ("e", "n")]
+    def change_red_handpath_map_to(self, handpath_rot_dir):
+        if handpath_rot_dir == CCW_HANDPATH:
+            self.red_handpath_map = [
+                (NORTH, WEST),
+                (WEST, SOUTH),
+                (SOUTH, EAST),
+                (EAST, NORTH),
+            ]
+        elif handpath_rot_dir == CW_HANDPATH:
+            self.red_handpath_map = [
+                (NORTH, EAST),
+                (EAST, SOUTH),
+                (SOUTH, WEST),
+                (WEST, NORTH),
+            ]
 
-        if motion_type == "pro":
-            if (start_loc, end_loc) in clockwise_pairs:
-                return "cw"
-            elif (start_loc, end_loc) in counter_clockwise_pairs:
-                return "ccw"
-        elif motion_type == "anti":
-            if (start_loc, end_loc) in clockwise_pairs:
-                return "ccw"
-            elif (start_loc, end_loc) in counter_clockwise_pairs:
-                return "cw"
-        raise ValueError(
-            f"Invalid location pair ({start_loc}, {end_loc}) for motion type '{motion_type}'."
-        )
+    def get_red_prop_rot_dir(self, red_motion_type, red_handpath_rot_dir) -> PropRotDir:
+        self.change_red_handpath_map_to(red_handpath_rot_dir)
+        if red_handpath_rot_dir == CW_HANDPATH:
+            if red_motion_type == PRO:
+                red_prop_rot_dir = CLOCKWISE
+            elif red_motion_type == ANTI:
+                red_prop_rot_dir = COUNTER_CLOCKWISE
+        elif red_handpath_rot_dir == CCW_HANDPATH:
+            if red_motion_type == PRO:
+                red_prop_rot_dir = COUNTER_CLOCKWISE
+            elif red_motion_type == ANTI:
+                red_prop_rot_dir = CLOCKWISE
+        return red_prop_rot_dir
 
-    def define_shifts(
-        self, shift_type
-    ) -> Dict[RotationDirection, List[Tuple[Location, Location]]]:
-        if shift_type == "pro":
+    def get_handpath_tuple_map_collection(self, motion_type):
+        if motion_type == PRO:
             return {
-                "cw": [("n", "e"), ("e", "s"), ("s", "w"), ("w", "n")],
-                "ccw": [("n", "w"), ("w", "s"), ("s", "e"), ("e", "n")],
+                CW_HANDPATH: [
+                    (NORTH, EAST),
+                    (EAST, SOUTH),
+                    (SOUTH, WEST),
+                    (WEST, NORTH),
+                ],
+                CCW_HANDPATH: [
+                    (NORTH, WEST),
+                    (WEST, SOUTH),
+                    (SOUTH, EAST),
+                    (EAST, NORTH),
+                ],
             }
-        else:  # anti
+        elif motion_type == ANTI:
             return {
-                "cw": [("n", "w"), ("w", "s"), ("s", "e"), ("e", "n")],
-                "ccw": [("n", "e"), ("e", "s"), ("s", "w"), ("w", "n")],
+                CW_HANDPATH: [
+                    (NORTH, WEST),
+                    (WEST, SOUTH),
+                    (SOUTH, EAST),
+                    (EAST, NORTH),
+                ],
+                CCW_HANDPATH: [
+                    (NORTH, EAST),
+                    (EAST, SOUTH),
+                    (SOUTH, WEST),
+                    (WEST, NORTH),
+                ],
             }
 
     def get_opposite_location(self, location: str) -> str:
         opposite_map = {"n": "s", "s": "n", "e": "w", "w": "e"}
         return opposite_map.get(location, "")
 
-    def get_opposite_rot_dir(self, rot_dir) -> RotationDirection:
+    def get_opposite_rot_dir(self, rot_dir) -> PropRotDir:
         if rot_dir == "cw":
             return "ccw"
         elif rot_dir == "ccw":
             return "cw"
 
-    def get_opposite_shifts(self, red_loc_pair) -> Tuple[Location, Location]:
-        return tuple(self.get_opposite_location(loc) for loc in red_loc_pair)
+    def get_opposite_loc_tuple(self, red_loc_tuple) -> Tuple[Location, Location]:
+        return tuple(self.get_opposite_location(loc) for loc in red_loc_tuple)
 
     def is_hybrid(self, letter) -> bool:
         return letter in ["C", "F", "I", "L", "O", "R", "U", "V"]
@@ -79,20 +108,20 @@ class DataFrameGenerator:
 
     def prepare_dataframe(self, df: pd.DataFrame) -> None:
         motion_type_order = ["pro", "anti", "dash", "static"]
-        rotation_direction_order = ["cw", "ccw"]
+        rot_dir_order = ["cw", "ccw"]
         df["blue_motion_type"] = pd.Categorical(
             df["blue_motion_type"], categories=motion_type_order, ordered=True
         )
-        df["blue_rotation_direction"] = pd.Categorical(
-            df["blue_rotation_direction"],
-            categories=rotation_direction_order,
+        df["blue_rot_dir"] = pd.Categorical(
+            df["blue_rot_dir"],
+            categories=rot_dir_order,
             ordered=True,
         )
         df.sort_values(
             by=[
                 "letter",
                 "blue_motion_type",
-                "blue_rotation_direction",
+                "blue_rot_dir",
                 "start_position",
             ],
             inplace=True,

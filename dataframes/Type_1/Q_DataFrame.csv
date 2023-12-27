@@ -1,4 +1,4 @@
-letter,start_position,end_position,blue_motion_type,blue_rotation_direction,blue_start_location,blue_end_location,red_motion_type,red_rotation_direction,red_start_location,red_end_location
+letter,start_position,end_position,blue_motion_type,blue_rot_dir,blue_start_location,blue_end_location,red_motion_type,red_rot_dir,red_start_location,red_end_location
 Q,gamma5,gamma2,anti,cw,e,n,anti,ccw,n,e
 Q,gamma6,gamma3,anti,cw,s,e,anti,ccw,e,s
 Q,gamma7,gamma4,anti,cw,w,s,anti,ccw,s,w

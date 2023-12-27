@@ -1,8 +1,8 @@
-letter,start_position,end_position,blue_motion_type,blue_rotation_direction,blue_start_location,blue_end_location,red_motion_type,red_rotation_direction,red_start_location,red_end_location
+letter,start_position,end_position,blue_motion_type,blue_rot_dir,blue_start_location,blue_end_location,red_motion_type,red_rot_dir,red_start_location,red_end_location
 D,beta1,alpha4,pro,cw,n,e,pro,ccw,n,w
-D,beta4,alpha3,pro,cw,w,n,pro,ccw,w,s
-D,beta3,alpha2,pro,cw,s,w,pro,ccw,s,e
 D,beta2,alpha1,pro,cw,e,s,pro,ccw,e,n
+D,beta3,alpha2,pro,cw,s,w,pro,ccw,s,e
+D,beta4,alpha3,pro,cw,w,n,pro,ccw,w,s
 D,beta1,alpha2,pro,ccw,n,w,pro,cw,n,e
 D,beta2,alpha3,pro,ccw,e,n,pro,cw,e,s
 D,beta3,alpha4,pro,ccw,s,e,pro,cw,s,w

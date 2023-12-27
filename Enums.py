@@ -198,8 +198,6 @@ class Letter(Enum):
     Eta = "η"
 
 
-
-
 alpha_ending_letters: Set[Letter] = {
     Letter.A,
     Letter.B,
@@ -285,7 +283,6 @@ beta_starting_letters: Set[Letter] = {
     Letter.Phi,
     Letter.Beta,
 }
-
 
 
 gamma_starting_letters: Set[Letter] = {
@@ -494,7 +491,7 @@ class MotionAttribute(Enum):
     ARROW = "arrow"
     PROP = "prop"
     MOTION_TYPE = "motion_type"
-    ROTATION_DIRECTION = "rotation_direction"
+    ROTATION_DIRECTION = "rot_dir"
     TURNS = "turns"
     START_LOCATION = "start_location"
     START_ORIENTATION = "start_orientation"
@@ -565,7 +562,7 @@ class PropAttributesDicts(TypedDict):
 class MotionAttributesDicts(TypedDict):
     color: Color
     motion_type: MotionType
-    rotation_direction: RotationDirection
+    rot_dir: RotationDirection
     location: Location
     turns: Turns
 
@@ -586,7 +583,7 @@ class ArrowAttributesDicts(TypedDict):
 class MotionAttributesDicts(TypedDict):
     color: Color
     motion_type: MotionType
-    rotation_direction: RotationDirection
+    rot_dir: RotationDirection
     start_location: Location
     end_location: Location
     turns: Turns
@@ -631,19 +628,19 @@ class VTGHandpathMode(Enum):
 
 
 class TKAHandpathMode(Enum):
-    ALPHA_TO_ALPHA = "α→α" #ABC
-    BETA_TO_ALPHA = "β→α" #DEF
-    BETA_TO_BETA = "β→β" #GHI
-    ALPHA_TO_BETA = "α→β" #JKL
-    GAMMA_TO_GAMMA_OPP_ANTIPARALLEL = "Γ→Γ_opp_antiparallel" #MNO
-    GAMMA_TO_GAMMA_OPP_PARALLEL = "Γ→Γ_opp_parallel" #PQR
-    GAMMA_TO_GAMMA_SAME_DIR = "Γ→Γ_same" #STUV
-    
+    ALPHA_TO_ALPHA = "α→α"  # ABC
+    BETA_TO_ALPHA = "β→α"  # DEF
+    BETA_TO_BETA = "β→β"  # GHI
+    ALPHA_TO_BETA = "α→β"  # JKL
+    GAMMA_TO_GAMMA_OPP_ANTIPARALLEL = "Γ→Γ_opp_antiparallel"  # MNO
+    GAMMA_TO_GAMMA_OPP_PARALLEL = "Γ→Γ_opp_parallel"  # PQR
+    GAMMA_TO_GAMMA_SAME_DIR = "Γ→Γ_same"  # STUV
 
     GAMMACLOCK_TO_GAMMACLOCK = "Γclock→Γclock"
     GAMMACLOCK_TO_GAMMACOUNTER = "Γclock→Γcounter"
     GAMMACOUNTER_TO_GAMMACOUNTER = "Γcounter→Γcounter"
     GAMMACOUNTER_TO_GAMMACLOCK = "Γcounter→Γclock"
+
 
 class PictographAttributesDict(TypedDict):
     start_position: Position

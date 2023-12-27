@@ -1,4 +1,4 @@
-letter,start_position,end_position,blue_motion_type,blue_rotation_direction,blue_start_location,blue_end_location,red_motion_type,red_rotation_direction,red_start_location,red_end_location
+letter,start_position,end_position,blue_motion_type,blue_rot_dir,blue_start_location,blue_end_location,red_motion_type,red_rot_dir,red_start_location,red_end_location
 R,gamma1,gamma8,pro,cw,w,n,anti,cw,n,w
 R,gamma2,gamma5,pro,cw,n,e,anti,cw,e,n
 R,gamma3,gamma6,pro,cw,e,s,anti,cw,s,e
@@ -15,3 +15,104 @@ R,gamma1,gamma8,anti,ccw,w,n,pro,ccw,n,w
 R,gamma2,gamma5,anti,ccw,n,e,pro,ccw,e,n
 R,gamma3,gamma6,anti,ccw,e,s,pro,ccw,s,e
 R,gamma4,gamma7,anti,ccw,s,w,pro,ccw,w,s
+
+red leading
+S,gamma1,gamma2,pro,cw,w,n,pro,cw,n,e
+S,gamma2,gamma3,pro,cw,n,e,pro,cw,e,s
+S,gamma3,gamma4,pro,cw,e,s,pro,cw,s,w
+S,gamma4,gamma1,pro,cw,s,w,pro,cw,w,n
+
+blue leading
+S,gamma5,gamma6,pro,cw,e,s,pro,ccw,n,e
+S,gamma6,gamma7,pro,cw,s,w,pro,ccw,e,s
+S,gamma7,gamma8,pro,cw,w,n,pro,ccw,s,w
+S,gamma8,gamma5,pro,cw,n,e,pro,ccw,w,n
+
+red leading
+S,gamma5,gamma8,pro,ccw,e,n,pro,cw,n,w
+S,gamma6,gamma7,pro,ccw,n,w,pro,cw,w,s
+S,gamma7,gamma6,pro,ccw,w,s,pro,cw,s,e
+S,gamma8,gamma5,pro,ccw,s,e,pro,cw,e,n
+
+blue leading
+S,gamma1,gamma4,pro,ccw,w,s,pro,ccw,n,w
+S,gamma4,gamma3,pro,ccw,s,e,pro,ccw,w,s
+S,gamma3,gamma2,pro,ccw,e,n,pro,ccw,s,e
+S,gamma2,gamma1,pro,ccw,n,w,pro,ccw,e,n
+
+red leading
+T,gamma1,gamma2,anti,ccw,w,n,anti,ccw,n,e
+T,gamma2,gamma3,anti,ccw,n,e,anti,ccw,e,s
+T,gamma3,gamma4,anti,ccw,e,s,anti,ccw,s,w
+T,gamma4,gamma1,anti,ccw,s,w,anti,ccw,w,n
+
+blue leading
+T,gamma5,gamma6,anti,ccw,e,s,anti,cw,n,e
+T,gamma6,gamma7,anti,ccw,s,w,anti,cw,e,s
+T,gamma7,gamma8,anti,ccw,w,n,anti,cw,s,w
+T,gamma8,gamma5,anti,ccw,n,e,anti,cw,w,n
+
+red leading
+T,gamma5,gamma8,anti,cw,e,n,anti,ccw,n,w
+T,gamma6,gamma7,anti,cw,n,w,anti,ccw,w,s
+T,gamma7,gamma6,anti,cw,w,s,anti,ccw,s,e
+T,gamma8,gamma5,anti,cw,s,e,anti,ccw,e,n
+
+blue leading
+T,gamma1,gamma4,anti,cw,w,s,anti,cw,n,w
+T,gamma4,gamma3,anti,cw,s,e,anti,cw,w,s
+T,gamma3,gamma2,anti,cw,e,n,anti,cw,s,e
+T,gamma2,gamma1,anti,cw,n,w,anti,cw,e,n
+
+red leading
+U,gamma1,gamma2,anti,ccw,w,n,pro,cw,n,e
+U,gamma2,gamma3,anti,ccw,n,e,pro,cw,e,s
+U,gamma3,gamma4,anti,ccw,e,s,pro,cw,s,w
+U,gamma4,gamma1,anti,ccw,s,w,pro,cw,w,n
+
+blue leading
+U,gamma5,gamma6,anti,ccw,e,s,pro,ccw,n,e
+U,gamma6,gamma7,anti,ccw,s,w,pro,ccw,e,s
+U,gamma7,gamma8,anti,ccw,w,n,pro,ccw,s,w
+U,gamma8,gamma5,anti,ccw,n,e,pro,ccw,w,n
+
+red leading
+U,gamma5,gamma8,anti,cw,e,n,pro,ccw,n,w
+U,gamma6,gamma7,anti,cw,n,w,pro,ccw,w,s
+U,gamma7,gamma6,anti,cw,w,s,pro,ccw,s,e
+U,gamma8,gamma5,anti,cw,s,e,pro,ccw,e,n
+
+blue leading
+U,gamma1,gamma4,anti,cw,w,s,pro,cw,n,w
+U,gamma4,gamma3,anti,cw,s,e,pro,cw,w,s
+U,gamma3,gamma2,anti,cw,e,n,pro,cw,s,e
+U,gamma2,gamma1,anti,cw,n,w,pro,cw,e,n
+
+red leading
+V,gamma1,gamma2,pro,cw,w,n,anti,cw,n,e
+V,gamma2,gamma3,pro,cw,n,e,anti,cw,e,s
+V,gamma3,gamma4,pro,cw,e,s,anti,cw,s,w
+V,gamma4,gamma1,pro,cw,s,w,anti,cw,w,n
+
+blue leading
+V,gamma5,gamma6,pro,cw,e,s,anti,ccw,n,e
+V,gamma6,gamma7,pro,cw,s,w,anti,ccw,e,s
+V,gamma7,gamma8,pro,cw,w,n,anti,ccw,s,w
+V,gamma8,gamma5,pro,cw,n,e,anti,ccw,w,n
+
+red leading
+V,gamma5,gamma8,pro,ccw,e,n,anti,ccw,n,w
+V,gamma6,gamma7,pro,ccw,n,w,anti,ccw,w,s
+V,gamma7,gamma6,pro,ccw,w,s,anti,ccw,s,e
+V,gamma8,gamma5,pro,ccw,s,e,anti,ccw,e,n
+
+blue leading
+V,gamma1,gamma4,pro,ccw,w,s,anti,cw,n,w
+V,gamma4,gamma3,pro,ccw,s,e,anti,cw,w,s
+V,gamma3,gamma2,pro,ccw,e,n,anti,cw,s,e
+V,gamma2,gamma1,pro,ccw,n,w,anti,cw,e,n
+
+
+
+
+

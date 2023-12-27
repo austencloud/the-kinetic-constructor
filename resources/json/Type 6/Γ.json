@@ -8,7 +8,7 @@
       {
         "color": "blue",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "w",
         "start_location": "w",
         "end_location": "w",
@@ -17,7 +17,7 @@
       {
         "color": "red",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "n",
         "start_location": "n",
         "end_location": "n",
@@ -32,7 +32,7 @@
       {
         "color": "blue",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "n",
         "start_location": "n",
         "end_location": "n",
@@ -41,7 +41,7 @@
       {
         "color": "red",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "e",
         "start_location": "e",
         "end_location": "e",
@@ -56,7 +56,7 @@
       {
         "color": "blue",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "e",
         "start_location": "e",
         "end_location": "e",
@@ -65,7 +65,7 @@
       {
         "color": "red",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "s",
         "start_location": "s",
         "end_location": "s",
@@ -80,7 +80,7 @@
       {
         "color": "blue",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "s",
         "start_location": "s",
         "end_location": "s",
@@ -89,7 +89,7 @@
       {
         "color": "red",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "w",
         "start_location": "w",
         "end_location": "w",
@@ -104,7 +104,7 @@
       {
         "color": "blue",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "e",
         "start_location": "e",
         "end_location": "e",
@@ -113,7 +113,7 @@
       {
         "color": "red",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "n",
         "start_location": "n",
         "end_location": "n",
@@ -128,7 +128,7 @@
       {
         "color": "blue",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "s",
         "start_location": "s",
         "end_location": "s",
@@ -137,7 +137,7 @@
       {
         "color": "red",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "e",
         "start_location": "e",
         "end_location": "e",
@@ -152,7 +152,7 @@
       {
         "color": "blue",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "w",
         "start_location": "w",
         "end_location": "w",
@@ -161,7 +161,7 @@
       {
         "color": "red",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "s",
         "start_location": "s",
         "end_location": "s",
@@ -176,7 +176,7 @@
       {
         "color": "blue",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "n",
         "start_location": "n",
         "end_location": "n",
@@ -185,7 +185,7 @@
       {
         "color": "red",
         "motion_type": "static",
-        "rotation_direction": "None",
+        "rot_dir": "None",
         "arrow_location": "w",
         "start_location": "w",
         "end_location": "w",

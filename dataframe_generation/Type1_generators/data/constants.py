@@ -22,7 +22,8 @@ HORIZONTAL = "horizontal"
 
 CLOCKWISE = "cw"
 COUNTER_CLOCKWISE = "ccw"
-
+CW_HANDPATH = "cw_handpath"
+CCW_HANDPATH = "ccw_handpath"
 
 BLUE_TURNS = "blue_turns"
 RED_TURNS = "red_turns"
@@ -67,7 +68,7 @@ LOCATION = "location"
 MOTION_TYPE = "motion_type"
 TURNS = "turns"
 PROP_TYPE = "prop_type"
-ROTATION_DIRECTION = "rotation_direction"
+ROTATION_DIRECTION = "rot_dir"
 ORIENTATION = "orientation"
 START_ORIENTATION = "start_orientation"
 END_ORIENTATION = "end_orientation"
@@ -137,8 +138,6 @@ GAMMA5 = "gamma5"
 GAMMA6 = "gamma6"
 GAMMA7 = "gamma7"
 GAMMA8 = "gamma8"
-
-
 
 
 ### ICONS ###

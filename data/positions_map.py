@@ -8,7 +8,7 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 positions_map: Dict[
-    Tuple[Location, Color], Tuple[Location, Color], SpecificPosition
+    Tuple[Location, Location], SpecificPosition
 ] = {
     # (blue_loc, red_loc): position
     (SOUTH, NORTH): ALPHA1,

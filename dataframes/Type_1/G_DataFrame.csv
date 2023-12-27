@@ -1,4 +1,4 @@
-letter,start_position,end_position,blue_motion_type,blue_rotation_direction,blue_start_location,blue_end_location,red_motion_type,red_rotation_direction,red_start_location,red_end_location
+letter,start_position,end_position,blue_motion_type,blue_rot_dir,blue_start_location,blue_end_location,red_motion_type,red_rot_dir,red_start_location,red_end_location
 G,beta1,beta2,pro,cw,n,e,pro,cw,n,e
 G,beta2,beta3,pro,cw,e,s,pro,cw,e,s
 G,beta3,beta4,pro,cw,s,w,pro,cw,s,w

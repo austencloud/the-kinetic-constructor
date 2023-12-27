@@ -10,7 +10,7 @@ with open("preprocessed.json", encoding="utf-8") as f:
 comprehensive_motion_data = []
 
 # Define the additional parameters for the new "dash" motion type
-rotation_directions = [None, "cw", "ccw"]
+rot_dirs = [None, "cw", "ccw"]
 
 max_turns = 3
 for position_pair, letters_info in data.items():
@@ -25,7 +25,7 @@ for position_pair, letters_info in data.items():
                     # Handling the "W-" variations with "dash" motion
                     if letter == "W-":
                         for motion_type in ["pro", "dash"]:
-                            for rotation_direction in rotation_directions:
+                            for rot_dir in rot_dirs:
                                 for start_location, end_location in [
                                     ("n", "s"),
                                     ("s", "n"),
@@ -38,12 +38,12 @@ for position_pair, letters_info in data.items():
                                             "start_position": start_position,
                                             "end_position": end_position,
                                             "blue_motion_type": motion_type,
-                                            "blue_rotation_direction": rotation_direction,
+                                            "blue_rot_dir": rot_dir,
                                             "blue_start_location": start_location,
                                             "blue_end_location": end_location,
                                             "blue_start_orientation": blue_start_orientation,
                                             "red_motion_type": motion_type,
-                                            "red_rotation_direction": rotation_direction,
+                                            "red_rot_dir": rot_dir,
                                             "red_start_location": start_location,
                                             "red_end_location": end_location,
                                             "red_start_orientation": red_start_orientation,
@@ -60,16 +60,12 @@ for position_pair, letters_info in data.items():
                                 "start_position": start_position,
                                 "end_position": end_position,
                                 "blue_motion_type": blue_motion["motion_type"],
-                                "blue_rotation_direction": blue_motion[
-                                    "rotation_direction"
-                                ],
+                                "blue_rot_dir": blue_motion["rot_dir"],
                                 "blue_start_location": blue_motion["start_location"],
                                 "blue_end_location": blue_motion["end_location"],
                                 "blue_start_orientation": blue_start_orientation,
                                 "red_motion_type": red_motion["motion_type"],
-                                "red_rotation_direction": red_motion[
-                                    "rotation_direction"
-                                ],
+                                "red_rot_dir": red_motion["rot_dir"],
                                 "red_start_location": red_motion["start_location"],
                                 "red_end_location": red_motion["end_location"],
                                 "red_start_orientation": red_start_orientation,

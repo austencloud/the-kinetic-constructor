@@ -1,4 +1,4 @@
-letter,start_position,end_position,blue_motion_type,blue_rotation_direction,blue_start_location,blue_end_location,red_motion_type,red_rotation_direction,red_start_location,red_end_location
+letter,start_position,end_position,blue_motion_type,blue_rot_dir,blue_start_location,blue_end_location,red_motion_type,red_rot_dir,red_start_location,red_end_location
 H,beta1,beta4,anti,cw,n,w,anti,cw,n,w
 H,beta4,beta3,anti,cw,w,s,anti,cw,w,s
 H,beta3,beta2,anti,cw,s,e,anti,cw,s,e

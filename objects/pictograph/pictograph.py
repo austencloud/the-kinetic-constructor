@@ -181,11 +181,11 @@ class Pictograph(QGraphicsScene):
         return {
             COLOR: color,
             MOTION_TYPE: pd_row_data[f"{color}_motion_type"],
-            ROTATION_DIRECTION: pd_row_data[f"{color}_rotation_direction"],
+            ROTATION_DIRECTION: pd_row_data[f"{color}_rot_dir"],
             START_LOCATION: pd_row_data[f"{color}_start_location"],
             END_LOCATION: pd_row_data[f"{color}_end_location"],
             TURNS: filters[f"{color}_turns"],
-            START_ORIENTATION: pd_row_data[f"{color}_start_orientation"],
+            START_ORIENTATION: "in",
         }
 
     ### EVENT HANDLERS ###
@@ -241,7 +241,7 @@ class Pictograph(QGraphicsScene):
             state_data.update(
                 {
                     prefix + MOTION_TYPE: motion.motion_type,
-                    prefix + ROTATION_DIRECTION: motion.rotation_direction,
+                    prefix + ROTATION_DIRECTION: motion.rot_dir,
                     prefix + START_LOCATION: motion.start_location,
                     prefix + END_LOCATION: motion.end_location,
                     prefix + TURNS: motion.turns,
