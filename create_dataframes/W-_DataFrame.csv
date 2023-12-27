@@ -7,11 +7,3 @@ W-,gamma5,alpha3,pro,ccw,e,n,dash,None,n,s
 W-,gamma6,alpha4,pro,ccw,s,e,dash,None,e,w
 W-,gamma7,alpha1,pro,ccw,w,s,dash,None,s,n
 W-,gamma8,alpha2,pro,ccw,n,w,dash,None,w,e
-W-,gamma1,alpha3,dash,None,w,n,pro,None,n,s
-W-,gamma2,alpha4,dash,None,n,e,pro,None,e,w
-W-,gamma3,alpha1,dash,None,e,s,pro,None,s,n
-W-,gamma4,alpha2,dash,None,s,w,pro,None,w,e
-W-,gamma5,alpha3,dash,None,e,n,pro,None,n,s
-W-,gamma6,alpha4,dash,None,s,e,pro,None,e,w
-W-,gamma7,alpha1,dash,None,w,s,pro,None,s,n
-W-,gamma8,alpha2,dash,None,n,w,pro,None,w,e

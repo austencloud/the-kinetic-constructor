@@ -7,11 +7,3 @@ X-,gamma5,alpha3,anti,cw,e,n,dash,None,n,s
 X-,gamma6,alpha4,anti,cw,s,e,dash,None,e,w
 X-,gamma7,alpha1,anti,cw,w,s,dash,None,s,n
 X-,gamma8,alpha2,anti,cw,n,w,dash,None,w,e
-X-,gamma1,alpha3,dash,None,w,n,anti,None,n,s
-X-,gamma2,alpha4,dash,None,n,e,anti,None,e,w
-X-,gamma3,alpha1,dash,None,e,s,anti,None,s,n
-X-,gamma4,alpha2,dash,None,s,w,anti,None,w,e
-X-,gamma5,alpha3,dash,None,e,n,anti,None,n,s
-X-,gamma6,alpha4,dash,None,s,e,anti,None,e,w
-X-,gamma7,alpha1,dash,None,w,s,anti,None,s,n
-X-,gamma8,alpha2,dash,None,n,w,anti,None,w,e
