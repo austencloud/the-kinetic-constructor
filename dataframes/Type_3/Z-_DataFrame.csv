@@ -7,3 +7,11 @@ Z-,gamma5,beta3,anti,ccw,e,s,dash,None,n,s
 Z-,gamma6,beta4,anti,ccw,s,w,dash,None,e,w
 Z-,gamma7,beta1,anti,ccw,w,n,dash,None,s,n
 Z-,gamma8,beta2,anti,ccw,n,e,dash,None,w,e
+Z-,gamma1,beta3,dash,None,n,s,anti,cw,w,s
+Z-,gamma2,beta4,dash,None,e,w,anti,cw,n,w
+Z-,gamma3,beta1,dash,None,s,n,anti,cw,e,n
+Z-,gamma4,beta2,dash,None,w,e,anti,cw,s,e
+Z-,gamma5,beta3,dash,None,n,s,anti,ccw,e,s
+Z-,gamma6,beta4,dash,None,e,w,anti,ccw,s,w
+Z-,gamma7,beta1,dash,None,s,n,anti,ccw,w,n
+Z-,gamma8,beta2,dash,None,w,e,anti,ccw,n,e

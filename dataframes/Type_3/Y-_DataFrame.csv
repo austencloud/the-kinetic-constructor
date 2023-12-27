@@ -7,3 +7,11 @@ Y-,gamma5,beta3,pro,cw,e,s,dash,None,n,s
 Y-,gamma6,beta4,pro,cw,s,w,dash,None,e,w
 Y-,gamma7,beta1,pro,cw,w,n,dash,None,s,n
 Y-,gamma8,beta2,pro,cw,n,e,dash,None,w,e
+Y-,gamma1,beta3,dash,None,n,s,pro,ccw,w,s
+Y-,gamma2,beta4,dash,None,e,w,pro,ccw,n,w
+Y-,gamma3,beta1,dash,None,s,n,pro,ccw,e,n
+Y-,gamma4,beta2,dash,None,w,e,pro,ccw,s,e
+Y-,gamma5,beta3,dash,None,n,s,pro,cw,e,s
+Y-,gamma6,beta4,dash,None,e,w,pro,cw,s,w
+Y-,gamma7,beta1,dash,None,s,n,pro,cw,w,n
+Y-,gamma8,beta2,dash,None,w,e,pro,cw,n,e

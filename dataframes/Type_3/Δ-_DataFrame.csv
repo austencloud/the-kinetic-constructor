@@ -7,3 +7,11 @@ letter,start_position,end_position,blue_motion_type,blue_rotation_direction,blue
 Δ-,beta3,gamma1,anti,ccw,s,w,dash,None,s,n
 Δ-,beta4,gamma6,anti,cw,w,s,dash,None,w,e
 Δ-,beta4,gamma2,anti,ccw,w,n,dash,None,w,e
+Δ-,beta1,gamma7,dash,None,n,s,anti,cw,n,w
+Δ-,beta1,gamma3,dash,None,n,s,anti,ccw,n,e
+Δ-,beta2,gamma8,dash,None,e,w,anti,cw,e,n
+Δ-,beta2,gamma4,dash,None,e,w,anti,ccw,e,s
+Δ-,beta3,gamma5,dash,None,s,n,anti,cw,s,e
+Δ-,beta3,gamma1,dash,None,s,n,anti,ccw,s,w
+Δ-,beta4,gamma6,dash,None,w,e,anti,cw,w,s
+Δ-,beta4,gamma2,dash,None,w,e,anti,ccw,w,n

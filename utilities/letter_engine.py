@@ -68,7 +68,7 @@ class LetterEngine:
         specific_position: Dict[
             str, SpecificPosition
         ] = get_specific_start_end_positions(
-            self.get_motion(RED), self.get_motion(BLUE)
+            self.get_motion(BLUE), self.get_motion(RED)
         )
         if specific_position:
             overall_position: Dict[str, Position] = self.get_overall_position(

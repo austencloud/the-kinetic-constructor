@@ -1,18 +1,24 @@
+from typing import Dict, List, Tuple
 import pandas as pd
+from df_generator import DataFrameGenerator
+from data.Enums import Location, RotationDirection, SpecificPosition
 from data.constants import *
 from data.positions_map import positions_map
 import os
 
 
-class Create_Type3_Dataframes:
+class Type3_DataFrame_Generator(DataFrameGenerator):
     def __init__(self) -> None:
         self.letters = ["W-", "X-", "θ-", "Ω-", "Σ-", "Δ-", "Y-", "Z-"]
+        super.__init__(self, self.letters)
         self.rotation_directions = ["cw", "ccw"]
         self.pro_shifts = self.define_shifts("pro")
         self.anti_shifts = self.define_shifts("anti")
-        self.generate_all_dataframes()
+        self.generate_dataframes()
 
-    def define_shifts(self, shift_type):
+    def define_shifts(
+        self, shift_type
+    ) -> Dict[RotationDirection, List[Tuple[Location, Location]]]:
         if shift_type == "pro":
             return {
                 "cw": [("n", "e"), ("e", "s"), ("s", "w"), ("w", "n")],
@@ -28,11 +34,11 @@ class Create_Type3_Dataframes:
         opposite_map = {"n": "s", "s": "n", "e": "w", "w": "e"}
         return opposite_map.get(location, "")
 
-    def generate_all_dataframes(self):
+    def generate_dataframes(self) -> None:
         for letter in self.letters:
             self.create_dataframe_for_letter(letter)
 
-    def create_dataframe_for_letter(self, letter):
+    def create_dataframe_for_letter(self, letter) -> None:
         data = []
         for rotation_direction in self.rotation_directions:
             shift_method = (
@@ -41,14 +47,13 @@ class Create_Type3_Dataframes:
                 else self.process_anti_shifts
             )
             shift_method(letter, rotation_direction, data)
-        self.save_dataframe(letter, data)
+        self.save_dataframe(letter, data, "Type_3")
 
-    def process_pro_shifts(self, letter, rotation_direction, data):
+    def process_pro_shifts(self, letter, rotation_direction, data) -> None:
         for shift_start_loc, shift_end_loc in self.pro_shifts[rotation_direction]:
             dash_start_loc, dash_end_loc = self.get_dash_locations(
                 letter, shift_start_loc, shift_end_loc
             )
-            shift_motion_type, dash_motion_type = "pro", "dash"
             self.add_data_point(
                 letter,
                 shift_start_loc,
@@ -56,17 +61,15 @@ class Create_Type3_Dataframes:
                 dash_start_loc,
                 dash_end_loc,
                 rotation_direction,
-                shift_motion_type,
-                dash_motion_type,
+                "pro",
                 data,
             )
 
-    def process_anti_shifts(self, letter, rotation_direction, data):
+    def process_anti_shifts(self, letter, rotation_direction, data) -> None:
         for shift_start_loc, shift_end_loc in self.anti_shifts[rotation_direction]:
             dash_start_loc, dash_end_loc = self.get_dash_locations(
                 letter, shift_start_loc, shift_end_loc
             )
-            shift_motion_type, dash_motion_type = "anti", "dash"
             self.add_data_point(
                 letter,
                 shift_start_loc,
@@ -74,12 +77,13 @@ class Create_Type3_Dataframes:
                 dash_start_loc,
                 dash_end_loc,
                 rotation_direction,
-                shift_motion_type,
-                dash_motion_type,
+                "anti",
                 data,
             )
 
-    def get_dash_locations(self, letter, shift_start_loc, shift_end_loc):
+    def get_dash_locations(
+        self, letter, shift_start_loc, shift_end_loc
+    ) -> Tuple[Location, Location]:
         if letter in ["W-", "X-"]:  # Dash starts at shift_end_loc
             dash_start_loc = shift_end_loc
             dash_end_loc = self.get_opposite_location(dash_start_loc)
@@ -103,9 +107,8 @@ class Create_Type3_Dataframes:
         dash_end_loc,
         rotation_direction,
         shift_motion_type,
-        dash_motion_type,
         data,
-    ):
+    ) -> None:
         start_pos, end_pos = self.get_start_and_end_pos(
             shift_start_loc, shift_end_loc, dash_start_loc, dash_end_loc
         )
@@ -119,18 +122,25 @@ class Create_Type3_Dataframes:
                     dash_end_loc,
                     rotation_direction,
                     shift_motion_type,
-                    dash_motion_type,
                     start_pos,
                     end_pos,
+                    RED,
                 )
             )
-
-    def get_start_and_end_pos(
-        self, shift_start_loc, shift_end_loc, dash_start_loc, dash_end_loc
-    ):
-        start_pos = positions_map.get((dash_start_loc, RED, shift_start_loc, BLUE))
-        end_pos = positions_map.get((dash_end_loc, RED, shift_end_loc, BLUE))
-        return start_pos, end_pos
+            data.append(
+                self.create_data_dict(
+                    letter,
+                    shift_start_loc,
+                    shift_end_loc,
+                    dash_start_loc,
+                    dash_end_loc,
+                    rotation_direction,
+                    shift_motion_type,
+                    start_pos,
+                    end_pos,
+                    BLUE,
+                )
+            )
 
     def create_data_dict(
         self,
@@ -141,40 +151,38 @@ class Create_Type3_Dataframes:
         dash_end_loc,
         rotation_direction,
         shift_motion_type,
-        dash_motion_type,
         start_pos,
         end_pos,
+        dasher_color,
     ):
-        return {
-            "letter": letter,
-            "start_position": start_pos,
-            "end_position": end_pos,
-            "blue_motion_type": shift_motion_type,
-            "blue_rotation_direction": rotation_direction
-            if shift_motion_type != "dash"
-            else "None",
-            "blue_start_location": shift_start_loc,
-            "blue_end_location": shift_end_loc,
-            "red_motion_type": dash_motion_type,
-            "red_rotation_direction": rotation_direction
-            if dash_motion_type != "dash"
-            else "None",
-            "red_start_location": dash_start_loc,
-            "red_end_location": dash_end_loc,
-        }
-
-    def save_dataframe(self, letter, data):
-        df = pd.DataFrame(data)
-        motion_type_order = ["pro", "anti", "dash", "static"]
-        df["blue_motion_type"] = pd.Categorical(
-            df["blue_motion_type"], categories=motion_type_order, ordered=True
-        )
-        df.sort_values(
-            by=["letter", "blue_motion_type", "start_position"], inplace=True
-        )
-        filename = f"{letter}_DataFrame.csv"
-        df.to_csv(os.path.join(os.path.dirname(__file__), filename), index=False)
-        print(f"{filename} created and saved.")
+        if dasher_color == RED:
+            return {
+                "letter": letter,
+                "start_position": start_pos,
+                "end_position": end_pos,
+                "blue_motion_type": shift_motion_type,
+                "blue_rotation_direction": rotation_direction,
+                "blue_start_location": shift_start_loc,
+                "blue_end_location": shift_end_loc,
+                "red_motion_type": "dash",
+                "red_rotation_direction": "None",
+                "red_start_location": dash_start_loc,
+                "red_end_location": dash_end_loc,
+            }
+        elif dasher_color == BLUE:
+            return {
+                "letter": letter,
+                "start_position": start_pos,
+                "end_position": end_pos,
+                "blue_motion_type": "dash",
+                "blue_rotation_direction": "None",
+                "blue_start_location": dash_start_loc,
+                "blue_end_location": dash_end_loc,
+                "red_motion_type": shift_motion_type,
+                "red_rotation_direction": rotation_direction,
+                "red_start_location": shift_start_loc,
+                "red_end_location": shift_end_loc,
+            }
 
 
-Create_Type3_Dataframes()
+Type3_DataFrame_Generator()

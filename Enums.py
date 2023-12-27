@@ -621,7 +621,7 @@ class MotionTypeLetterGroups(Enum):
     DASH_VS_DASH = "Φ-Ψ-Λ-"
 
 
-class HandpathMode(Enum):
+class VTGHandpathMode(Enum):
     TOG_SAME = "TS"
     TOG_OPPOSITE = "TO"
     SPLIT_SAME = "SS"
@@ -630,11 +630,26 @@ class HandpathMode(Enum):
     QUARTER_TIME_OPPOSITE = "QTO"
 
 
+class TKAHandpathMode(Enum):
+    ALPHA_TO_ALPHA = "α→α" #ABC
+    BETA_TO_ALPHA = "β→α" #DEF
+    BETA_TO_BETA = "β→β" #GHI
+    ALPHA_TO_BETA = "α→β" #JKL
+    GAMMA_TO_GAMMA_OPP_ANTIPARALLEL = "Γ→Γ_opp_antiparallel" #MNO
+    GAMMA_TO_GAMMA_OPP_PARALLEL = "Γ→Γ_opp_parallel" #PQR
+    GAMMA_TO_GAMMA_SAME_DIR = "Γ→Γ_same" #STUV
+    
+
+    GAMMACLOCK_TO_GAMMACLOCK = "Γclock→Γclock"
+    GAMMACLOCK_TO_GAMMACOUNTER = "Γclock→Γcounter"
+    GAMMACOUNTER_TO_GAMMACOUNTER = "Γcounter→Γcounter"
+    GAMMACOUNTER_TO_GAMMACLOCK = "Γcounter→Γclock"
+
 class PictographAttributesDict(TypedDict):
     start_position: Position
     end_position: Position
     letter_type: LetterNumberType
-    handpath_mode: HandpathMode
+    vtg_handpath_mode: VTGHandpathMode
     motion_type_combination: MotionTypeCombination
 
 

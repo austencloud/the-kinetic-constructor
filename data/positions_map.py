@@ -7,46 +7,42 @@ from utilities.TypeChecking.TypeChecking import (
     Tuple,
 )
 
-positions_map: Dict[Tuple[Location, Color, Location, Color], SpecificPosition] = {
-    (NORTH, RED, SOUTH, BLUE): ALPHA1,
-    (EAST, RED, WEST, BLUE): ALPHA2,
-    (SOUTH, RED, NORTH, BLUE): ALPHA3,
-    (WEST, RED, EAST, BLUE): ALPHA4,
-    (NORTH, RED, NORTH, BLUE): BETA1,
-    (EAST, RED, EAST, BLUE): BETA2,
-    (SOUTH, RED, SOUTH, BLUE): BETA3,
-    (WEST, RED, WEST, BLUE): BETA4,
-    (NORTH, RED, WEST, BLUE): GAMMA1,
-    (EAST, RED, NORTH, BLUE): GAMMA2,
-    (SOUTH, RED, EAST, BLUE): GAMMA3,
-    (WEST, RED, SOUTH, BLUE): GAMMA4,
-    (NORTH, RED, EAST, BLUE): GAMMA5,
-    (EAST, RED, SOUTH, BLUE): GAMMA6,
-    (SOUTH, RED, WEST, BLUE): GAMMA7,
-    (WEST, RED, NORTH, BLUE): GAMMA8,
+positions_map: Dict[
+    Tuple[Location, Color], Tuple[Location, Color], SpecificPosition
+] = {
+    # (blue_loc, red_loc): position
+    (SOUTH, NORTH): ALPHA1,
+    (WEST, EAST): ALPHA2,
+    (NORTH, SOUTH): ALPHA3,
+    (EAST, WEST): ALPHA4,
+    (NORTH, NORTH): BETA1,
+    (EAST, EAST): BETA2,
+    (SOUTH, SOUTH): BETA3,
+    (WEST, WEST): BETA4,
+    (WEST, NORTH): GAMMA1,
+    (NORTH, EAST): GAMMA2,
+    (EAST, SOUTH): GAMMA3,
+    (SOUTH, WEST): GAMMA4,
+    (EAST, NORTH): GAMMA5,
+    (SOUTH, EAST): GAMMA6,
+    (WEST, SOUTH): GAMMA7,
+    (NORTH, WEST): GAMMA8,
 }
 
-
 def get_specific_start_end_positions(
-    red_motion: Motion, blue_motion: Motion
+    blue_motion: Motion, red_motion: Motion
 ) -> SpecificStartEndPositionsDicts:
-    if red_motion and blue_motion:
-        start_locations = (
-            red_motion.start_location,
-            RED,
-            blue_motion.start_location,
-            BLUE,
-        )
-        end_locations = (
-            red_motion.end_location,
-            RED,
-            blue_motion.end_location,
-            BLUE,
-        )
+    start_locations = (
+        blue_motion.start_location,
+        red_motion.start_location,
+    )
+    end_locations = (
+        red_motion.end_location,
+        blue_motion.end_location,
+    )
 
-        specific_positions: SpecificStartEndPositionsDicts = {
-            START_POSITION: positions_map.get(start_locations),
-            END_POSITION: positions_map.get(end_locations),
-        }
-
-        return specific_positions
+    specific_positions: SpecificStartEndPositionsDicts = {
+        START_POSITION: positions_map.get(start_locations),
+        END_POSITION: positions_map.get(end_locations),
+    }
+    return specific_positions

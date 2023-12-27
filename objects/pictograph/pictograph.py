@@ -221,7 +221,7 @@ class Pictograph(QGraphicsScene):
 
     def get_start_end_positions(self) -> Optional[SpecificPosition]:
         specific_positions = get_specific_start_end_positions(
-            self.motions[RED], self.motions[BLUE]
+            self.motions[BLUE], self.motions[RED]
         )
         if specific_positions:
             start_position = specific_positions[START_POSITION]
