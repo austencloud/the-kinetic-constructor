@@ -312,3 +312,14 @@ class Motion:
 
     def subtract_turn(self) -> None:
         self.adjust_turns(-1)
+
+    ### FLAGS ###
+    
+    def is_shift(self) -> bool:
+        return self.motion_type in [PRO, ANTI, FLOAT]
+
+    def is_dash(self) -> bool:
+        return self.motion_type == DASH
+    
+    def is_static(self) -> bool:
+        return self.motion_type == STATIC

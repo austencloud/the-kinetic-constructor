@@ -349,8 +349,3 @@ class OptionPickerScrollArea(QScrollArea):
     def resize_option_picker_scroll(self) -> None:
         for letter, option in self.options:
             option.view.resize_option_view()
-
-    # def showEvent(self, event: QShowEvent) -> None:
-    #     super().showEvent(event)
-    #     for option in self.options:
-    #         self.load_image_if_visible(option[1])

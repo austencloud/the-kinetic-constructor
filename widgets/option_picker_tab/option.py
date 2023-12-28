@@ -56,7 +56,7 @@ class OptionView(QGraphicsView):
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
 
-    def wheelEvent(self, event):
+    def wheelEvent(self, event) -> None:
         self.option.option_picker_scroll.wheelEvent(event)
 
     def eventFilter(self, obj, event: QEvent) -> Literal[False]:
@@ -64,7 +64,7 @@ class OptionView(QGraphicsView):
             event.ignore()
         return False
 
-    def showEvent(self, event):
+    def showEvent(self, event) -> None:
         super().showEvent(event)
         # Ensure this slot is called after the event loop starts
         QTimer.singleShot(0, self.option.load_image_if_needed)

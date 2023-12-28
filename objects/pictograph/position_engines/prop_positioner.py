@@ -42,6 +42,9 @@ class PropPositioner:
         self.letters: pd.DataFrame = scene.main_widget.letters
 
     def update_prop_positions(self) -> None:
+        self.red_motion = self.scene.motions[RED]
+        self.blue_motion = self.scene.motions[BLUE]
+        self.current_letter = self.scene.current_letter
         self.prop_type_counts = self._count_prop_types()
         for prop in self.scene.props.values():
             if any(
@@ -130,57 +133,24 @@ class PropPositioner:
             for prop in self.scene.props.values()
             if prop.prop_type in big_bilateral_prop_types
         ]
-        if len(big_unilateral_props) == 2:
-            self._reposition_big_unilateral_props(big_unilateral_props)
+        big_props = big_unilateral_props + big_bilateral_props
+        
+        if len(big_props) == 2:
+            self._reposition_big_props(big_props)
         elif len(small_unilateral_props) == 2:
             self._reposition_small_unilateral_props(small_unilateral_props)
+            
         elif len(small_bilateral_props) == 2:
-            pro_or_anti_motions = [
-                color
-                for color in [RED, BLUE]
-                if state[f"{color}_motion_type"] in [PRO, ANTI]
-            ]
-            static_motions = [
-                color
-                for color in [RED, BLUE]
-                if state[f"{color}_motion_type"] == STATIC
-            ]
-
-            # STATIC BETA - β
-            if len(static_motions) > 1:
-                self._reposition_static_beta()
-
-            # BETA to BETA - G, H, I
-            both = [
-                color
-                for color in [RED, BLUE]
-                if state[f"{color}_motion_type"] in [PRO, ANTI]
-            ]
-            if (
-                state["red_start_loc"] == state["blue_start_loc"]
-                and state["red_end_loc"] == state["blue_end_loc"]
-            ):
-                if (
-                    len(both) == 2
-                    and len(set(state[color + "_motion_type"] for color in both)) == 1
-                ):
-                    self._reposition_G_and_H(state)
-                elif (
-                    self.scene.motions[RED].motion_type == PRO
-                    and self.scene.motions[BLUE].motion_type == ANTI
-                    or self.scene.motions[RED].motion_type == ANTI
-                    and self.scene.motions[BLUE].motion_type == PRO
-                ):
-                    self._reposition_I(state)
-
-            # GAMMA → BETA - Y, Z
-            if len(pro_or_anti_motions) == 1 and len(static_motions) == 1:
-                self.reposition_gamma_to_beta()
-
-            # ALPHA → BETA - D, E, F
-            if all(state[f"{color}_motion_type"] != STATIC for color in [RED, BLUE]):
-                if state["red_start_loc"] != state["blue_start_loc"]:
-                    self._reposition_alpha_to_beta(state)
+            if self.current_letter == "β":
+                self._reposition_β()
+            if self.current_letter in ["G", "H"]:
+                self._reposition_G_H(state)
+            elif self.current_letter == "I":
+                self._reposition_I(state)
+            if self.current_letter in ["Y", "Z"]:
+                self.reposition_Y_Z()
+            if self.current_letter in ["D", "E", "F"]:
+                    self._reposition_D_E_F(state)
 
     def _reposition_small_unilateral_props(self, small_unilateral_props: List[Prop]):
         if (
@@ -193,7 +163,7 @@ class PropPositioner:
                     red_direction,
                     blue_direction,
                 ) = self._determine_translation_direction_for_unilateral_props(
-                    self.scene.motions[RED], self.scene.motions[BLUE]
+                    self.red_motion, self.blue_motion
                 )
                 if prop.color == RED:
                     self._move_prop(prop, red_direction)
@@ -203,7 +173,7 @@ class PropPositioner:
             for prop in small_unilateral_props:
                 self._set_default_prop_location(prop)
 
-    def _reposition_big_unilateral_props(self, big_unilateral_props: List[Prop]):
+    def _reposition_big_props(self, big_unilateral_props: List[Prop]):
         if big_unilateral_props[0].orientation == big_unilateral_props[1].orientation:
             for prop in big_unilateral_props:
                 self._set_strict_prop_location(prop)
@@ -211,7 +181,7 @@ class PropPositioner:
                     red_direction,
                     blue_direction,
                 ) = self._determine_translation_direction_for_unilateral_props(
-                    self.scene.motions[RED], self.scene.motions[BLUE]
+                    self.red_motion, self.blue_motion
                 )
                 if prop.color == RED:
                     self._move_prop(prop, red_direction)
@@ -260,7 +230,7 @@ class PropPositioner:
         return None
 
     ### STATIC BETA ### β
-    def _reposition_static_beta(self) -> None:
+    def _reposition_β(self) -> None:
         moved_props = set()  # To keep track of props that have already been moved
 
         for color, motion in self.scene.motions.items():
@@ -324,11 +294,10 @@ class PropPositioner:
             return layer_reposition_map[ANTIRADIAL][(prop.location, prop.color)]
 
     ### ALPHA TO BETA ### J, K, L
-
-    def _reposition_alpha_to_beta(self, state) -> None:
+    def _reposition_D_E_F(self, state) -> None:
         # Extract motion type and end locations for both colors from the DataFrame row
-        red_end_loc = state["red_end_loc"]
-        blue_end_loc = state["blue_end_loc"]
+        red_end_loc = self.red_motion.end_loc
+        blue_end_loc = self.blue_motion.end_loc
         if (
             state["red_end_or"] in [CLOCK, COUNTER]
             and state["blue_end_or"] in [IN, OUT]
@@ -353,12 +322,8 @@ class PropPositioner:
                     prop for prop in self.scene.props.values() if prop.color == BLUE
                 )
 
-                red_direction = self._determine_translation_direction(
-                    self.scene.motions[RED]
-                )
-                blue_direction = self._determine_translation_direction(
-                    self.scene.motions[BLUE]
-                )
+                red_direction = self._determine_translation_direction(self.red_motion)
+                blue_direction = self._determine_translation_direction(self.blue_motion)
 
                 if red_direction:
                     self._move_prop(red_prop, red_direction)
@@ -366,15 +331,12 @@ class PropPositioner:
                     self._move_prop(blue_prop, blue_direction)
 
     ### BETA TO BETA ### G, H, I
-
-    def _reposition_G_and_H(self, motion_df: pd.DataFrame) -> None:
+    def _reposition_G_H(self, motion_df: pd.DataFrame) -> None:
         if self.scene_has_hybrid_orientation():
             self._set_default_prop_location(self.scene.props[RED])
             self._set_default_prop_location(self.scene.props[BLUE])
         else:
-            further_direction = self._determine_translation_direction(
-                self.scene.motions[RED]
-            )
+            further_direction = self._determine_translation_direction(self.red_motion)
             other_direction = self._get_opposite_direction(further_direction)
 
             new_red_pos = self._calculate_new_position(
@@ -407,12 +369,12 @@ class PropPositioner:
         else:
             pro_prop = (
                 self.scene.props[RED]
-                if self.scene.motions[RED].motion_type == PRO
+                if self.red_motion.motion_type == PRO
                 else self.scene.props[BLUE]
             )
             anti_prop = (
                 self.scene.props[RED]
-                if self.scene.motions[RED].motion_type == ANTI
+                if self.red_motion.motion_type == ANTI
                 else self.scene.props[BLUE]
             )
 
@@ -431,13 +393,13 @@ class PropPositioner:
             pro_prop.setPos(new_position_pro)
             anti_prop.setPos(new_position_anti)
 
-    def is_strict(self):
+    def is_strict(self) -> bool:
         return all(
             prop.prop_type in strictly_placed_props
             for prop in self.scene.props.values()
         )
 
-    def is_not_strict(self):
+    def is_not_strict(self) -> bool:
         return all(
             prop.prop_type in non_strictly_placed_props
             for prop in self.scene.props.values()
@@ -445,26 +407,19 @@ class PropPositioner:
 
     ### GAMMA TO BETA ### Y, Z
 
-    def reposition_gamma_to_beta(self) -> None:
+    def reposition_Y_Z(self) -> None:
         if self.scene.main_widget.prop_type in non_strictly_placed_props:
-            if any(
-                prop.orientation in [IN, OUT] for prop in self.scene.props.values()
-            ) and any(
-                prop.orientation in [CLOCK, COUNTER]
-                for prop in self.scene.props.values()
+            if any(prop.is_radial() for prop in self.scene.props.values()) and any(
+                prop.is_antiradial() for prop in self.scene.props.values()
             ):
                 for prop in self.scene.props.values():
                     self._set_default_prop_location(prop)
             else:
                 shift = (
-                    self.scene.motions[RED]
-                    if self.scene.motions[RED].motion_type in [PRO, ANTI]
-                    else self.scene.motions[BLUE]
+                    self.red_motion if self.red_motion.is_shift() else self.blue_motion
                 )
                 static_motion = (
-                    self.scene.motions[RED]
-                    if self.scene.motions[RED].motion_type == STATIC
-                    else self.scene.motions[BLUE]
+                    self.red_motion if self.red_motion.is_static() else self.blue_motion
                 )
 
                 direction = self._determine_translation_direction(shift)
