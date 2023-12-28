@@ -56,7 +56,7 @@ class IGLetterButtonFrame(QFrame):
         ] = []  # Add this line to initialize the list of row layouts
 
         self.letter_rows = [
-            # Type 1 - Dual-Shift
+            # Type1 - Dual-Shift
             ["A", "B", "C"],
             ["D", "E", "F"],
             ["G", "H", "I"],
@@ -64,17 +64,17 @@ class IGLetterButtonFrame(QFrame):
             ["M", "N", "O"],
             ["P", "Q", "R"],
             ["S", "T", "U", "V"],
-            # Type 2 - Shift
+            # Type2 - Shift
             ["W", "X", "Y", "Z"],
             ["Σ", "Δ", "θ", "Ω"],
-            # Type 3 - Cross-Shift
+            # Type3 - Cross-Shift
             ["W-", "X-", "Y-", "Z-"],
             ["Σ-", "Δ-", "θ-", "Ω-"],
-            # Type 4 - Dash
+            # Type4 - Dash
             ["Φ", "Ψ", "Λ"],
-            # Type 5 - Dual-Dash
+            # Type5 - Dual-Dash
             ["Φ-", "Ψ-", "Λ-"],
-            # Type 6 - Static
+            # Type6 - Static
             ["α", "β", "Γ"],
         ]
 
@@ -100,7 +100,9 @@ class IGLetterButtonFrame(QFrame):
     def get_letter_type(self, letter: str) -> str | None:
         for letter_type in LetterNumberType:
             if letter in letter_type.letters:
-                return letter_type.name.replace("_", " ").lower().capitalize()  # Modify the key format
+                return (
+                    letter_type.name.replace("_", " ").lower().capitalize()
+                )  # Modify the key format
         return None
 
     def get_icon_path(self, letter_type: str, letter: Letter) -> str:

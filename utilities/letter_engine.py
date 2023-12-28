@@ -43,7 +43,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
-from typing import TYPE_CHECKING, Dict, Literal, Set, Tuple
+from typing import TYPE_CHECKING, Dict, List, Literal, Set, Tuple
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
@@ -148,21 +148,22 @@ class LetterEngine:
             None,
         )
 
-    def get_motion_type_letter_group(self) -> LetterGroupsByMotionType:
+    def get_motion_type_letter_group(self) -> List[str]:
         red_motion_type = self.red_motion.motion_type
         blue_motion_type = self.blue_motion.motion_type
 
-        motion_type_combination: MotionTypeCombination = motion_type_combinations.get(
+        self.motion_type_combination: MotionTypeCombination = motion_type_combinations.get(
             (red_motion_type, blue_motion_type)
         )
         motion_type_letter_group: LetterGroupsByMotionType = (
-            motion_type_letter_groups.get(motion_type_combination, "")
+            motion_type_letter_groups.get(self.motion_type_combination, "")
         )
 
-        self.motion_type_combination = motion_type_combination
-        self.motion_letter_group = motion_type_letter_group
-
-        return motion_type_letter_group
+        if "-" in motion_type_letter_group:
+            letter_group = motion_type_letter_group.split("-")
+            return [letter + "-" for letter in letter_group if letter]
+        else:
+            return list(motion_type_letter_group)
 
     def is_parallel(self) -> bool:
         red_start = self.red_motion.start_loc

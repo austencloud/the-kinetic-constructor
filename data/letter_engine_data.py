@@ -2,21 +2,21 @@ from constants import ANTI, DASH, PRO, STATIC
 
 
 motion_type_letter_groups = {
-    # Type 1
+    # Type1
     "pro_vs_pro": "ADGJMPS",
     "anti_vs_anti": "BEHKNQT",
     "pro_vs_anti": "CFILORUV",
-    # Type 2
+    # Type2
     "pro_vs_static": "WYΣθ",
     "anti_vs_static": "XZΔΩ",
-    # Type 3
+    # Type3
     "pro_vs_dash": "W-Y-Σ-θ-",
     "anti_vs_dash": "X-Z-Δ-Ω-",
-    # Type 4
+    # Type4
     "dash_vs_static": "ΦΨΛ",
-    # Type 5
+    # Type5
     "dash_vs_dash": "Φ-Ψ-Λ-",
-    # Type 6
+    # Type6
     "static_vs_static": "αβΓ",
 }
 

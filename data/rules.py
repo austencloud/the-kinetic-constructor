@@ -2,17 +2,117 @@ from typing import Dict, List, Tuple
 from Enums import Letter, Position
 
 
-
-
 # Define the letter groups
-alpha_ending_letters = ["A", "B", "C", "D", "E", "F", "W", "X", "Φ", "Φ-", "α"]
-beta_ending_letters = ["G", "H", "I", "J", "K", "L", "Y", "Z", "Ψ", "Ψ-", "β"]
-gamma_ending_letters = ["M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "Σ", "Δ", "θ", "Ω", "Λ", "Λ-", "Γ"]
+alpha_ending_letters = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "W",
+    "X",
+    "W-",
+    "X-",
+    "Φ",
+    "Φ-",
+    "α",
+]
+beta_ending_letters = [
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "Y",
+    "Z",
+    "Y-",
+    "Z-",
+    "Ψ",
+    "Ψ-",
+    "β",
+]
+gamma_ending_letters = [
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "Σ",
+    "Δ",
+    "θ",
+    "Ω",
+    "Σ-",
+    "Δ-",
+    "θ-",
+    "Ω-",
+    "Λ",
+    "Λ-",
+    "Γ",
+]
 
 # Define the next possible letters for each group
-alpha_starting_letters = ["A", "B", "C", "J", "K", "L", "Σ", "Δ", "θ-", "Ω-", "Φ", "Φ-", "α"]
-beta_starting_letters = ["G", "H", "I", "D", "E", "F", "Σ-", "Δ-", "θ", "Ω", "Ψ", "Ψ-", "β"]
-gamma_starting_letters = ["M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "W-", "X-", "Y-", "Z-", "Λ", "Λ-", "Γ", "Γ-"]
+alpha_starting_letters = [
+    "A",
+    "B",
+    "C",
+    "J",
+    "K",
+    "L",
+    "Σ",
+    "Δ",
+    "θ-",
+    "Ω-",
+    "Φ",
+    "Φ-",
+    "α",
+]
+beta_starting_letters = [
+    "G",
+    "H",
+    "I",
+    "D",
+    "E",
+    "F",
+    "Σ-",
+    "Δ-",
+    "θ",
+    "Ω",
+    "Ψ",
+    "Ψ-",
+    "β",
+]
+gamma_starting_letters = [
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+    "W-",
+    "X-",
+    "Y-",
+    "Z-",
+    "Λ",
+    "Λ-",
+    "Γ",
+    "Γ-",
+]
+
 
 def get_next_letters(letter: Letter) -> List[Letter]:
     """Return the next possible letters for the given letter."""
@@ -25,8 +125,9 @@ def get_next_letters(letter: Letter) -> List[Letter]:
     else:
         return []
 
+
 positions: Dict[Letter, Tuple[Position]] = {
-    # Type 1
+    # Type1
     "A": ("alpha", "alpha"),
     "B": ("alpha", "alpha"),
     "C": ("alpha", "alpha"),
@@ -49,7 +150,7 @@ positions: Dict[Letter, Tuple[Position]] = {
     "T": ("gamma", "gamma"),
     "U": ("gamma", "gamma"),
     "V": ("gamma", "gamma"),
-    # Type 2
+    # Type2
     "W": ("gamma", "alpha"),
     "X": ("gamma", "alpha"),
     "Y": ("gamma", "beta"),
@@ -58,7 +159,7 @@ positions: Dict[Letter, Tuple[Position]] = {
     "Δ": ("alpha", "gamma"),
     "θ": ("beta", "gamma"),
     "Ω": ("beta", "gamma"),
-    # Type 3
+    # Type3
     "W-": ("gamma", "alpha"),
     "X-": ("gamma", "alpha"),
     "Y-": ("gamma", "beta"),
@@ -67,15 +168,15 @@ positions: Dict[Letter, Tuple[Position]] = {
     "Δ-": ("beta", "gamma"),
     "θ-": ("alpha", "gamma"),
     "Ω-": ("alpha", "gamma"),
-    # Type 4
+    # Type4
     "Φ": ("beta", "alpha"),
     "Ψ": ("alpha", "beta"),
     "Λ": ("gamma", "gamma"),
-    # Type 5
+    # Type5
     "Φ-": ("alpha", "alpha"),
     "Ψ-": ("beta", "beta"),
     "Λ-": ("gamma", "gamma"),
-    # Type 6
+    # Type6
     "α": ("alpha", "alpha"),
     "β": ("beta", "beta"),
     "Γ": ("gamma", "gamma"),

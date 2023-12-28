@@ -220,14 +220,10 @@ class MainWidget(QWidget):
         letter = pd_row_data[LETTER]
         blue_turns = pictograph.motions[BLUE].turns
         red_turns = pictograph.motions[RED].turns
-        blue_motion_type_prefix = pictograph.motions[BLUE].motion_type[0]
-        red_motion_type_prefix = pictograph.motions[RED].motion_type[0]
         blue_turns = pictograph.motions[BLUE].turns
         red_turns = pictograph.motions[RED].turns
         start_to_end_string = f"{pictograph.start_pos}→{pictograph.end_pos}"
-        turns_string = (
-            f"{blue_motion_type_prefix}{blue_turns},{red_motion_type_prefix}{red_turns}"
-        )
+
         simple_turns_string = f"{blue_turns},{red_turns}"
         image_dir = os.path.join(
             "resources",
@@ -238,9 +234,6 @@ class MainWidget(QWidget):
             letter,
             start_to_end_string,
         ).replace("\\", "/")
-
-        blue_end_or = pictograph.motions[BLUE].get_end_or()
-        red_end_or = pictograph.motions[RED].get_end_or()
 
         image_name = (
             f"{letter}_"

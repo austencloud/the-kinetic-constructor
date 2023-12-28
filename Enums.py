@@ -31,13 +31,13 @@ class LetterNumberType(Enum):
             "U",
             "V",
         ],
-        "Type 1",
+        "Type1",
     )
-    TYPE_2 = (["W", "X", "Y", "Z", "Σ", "Δ", "θ", "Ω"], "Type 2")
-    TYPE_3 = (["W-", "X-", "Y-", "Z-", "Σ-", "Δ-", "θ-", "Ω-"], "Type 3")
-    TYPE_4 = (["Φ", "Ψ", "Λ"], "Type 4")
-    TYPE_5 = (["Φ-", "Ψ-", "Λ-"], "Type 5")
-    TYPE_6 = (["α", "β", "Γ"], "Type 6")
+    TYPE_2 = (["W", "X", "Y", "Z", "Σ", "Δ", "θ", "Ω"], "Type2")
+    TYPE_3 = (["W-", "X-", "Y-", "Z-", "Σ-", "Δ-", "θ-", "Ω-"], "Type3")
+    TYPE_4 = (["Φ", "Ψ", "Λ"], "Type4")
+    TYPE_5 = (["Φ-", "Ψ-", "Λ-"], "Type5")
+    TYPE_6 = (["α", "β", "Γ"], "Type6")
 
     def __init__(self, letters, description):
         self._letters = letters
@@ -56,11 +56,13 @@ class ShiftHandpaths(Enum):
     CW_HANDPATH = "cw"
     CCW_HANDPATH = "ccw"
 
+
 class Handpath(Enum):
     CW_HANDPATH = "cw"
     CCW_HANDPATH = "ccw"
     STATIC_HANDPATH = "static_handpath"
     DASH_HANDPATH = "dash_handpath"
+
 
 class Color(Enum):
     BLUE = "blue"

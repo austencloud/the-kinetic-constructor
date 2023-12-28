@@ -500,7 +500,7 @@ class Pictograph(QGraphicsScene):
 
         prop_type = self.main_widget.prop_type
         letter = self.current_letter
-
+        letter_type = self.get_letter_type(letter)
         blue_motion_type_prefix = self.motions[BLUE].motion_type[0]
         red_motion_type_prefix = self.motions[RED].motion_type[0]
 
@@ -514,6 +514,7 @@ class Pictograph(QGraphicsScene):
             "pictographs",
             prop_type,
             basic_turns_string,
+            letter_type,
             letter,
             start_to_end_string,
         )
