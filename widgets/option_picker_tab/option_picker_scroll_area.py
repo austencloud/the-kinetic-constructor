@@ -230,7 +230,7 @@ class OptionPickerScrollArea(QScrollArea):
         motion_dict = {
             "color": color,
             "motion_type": pd_row_data[f"{color}_motion_type"],
-            "rot_dir": pd_row_data[f"{color}_rot_dir"],
+            "rot_dir": pd_row_data[f"{color}_prop_rot_dir"],
             "start_location": pd_row_data[f"{color}_start_location"],
             "end_location": pd_row_data[f"{color}_end_location"],
             "turns": turns,

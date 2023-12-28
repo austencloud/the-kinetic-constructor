@@ -151,7 +151,7 @@ class Pictograph(QGraphicsScene):
         prop_dict = {
             COLOR: motion_dict[COLOR],
             PROP_TYPE: self.main_widget.prop_type,
-            LOCATION: motion_dict[END_LOCATION],
+            LOCATION: motion_dict[END_LOC],
             ORIENTATION: IN,
         }
         prop = Prop(self, prop_dict, self.motions[motion_dict[COLOR]])
@@ -181,11 +181,11 @@ class Pictograph(QGraphicsScene):
         return {
             COLOR: color,
             MOTION_TYPE: pd_row_data[f"{color}_motion_type"],
-            ROTATION_DIRECTION: pd_row_data[f"{color}_rot_dir"],
-            START_LOCATION: pd_row_data[f"{color}_start_location"],
-            END_LOCATION: pd_row_data[f"{color}_end_location"],
+            ROT_DIR: pd_row_data[f"{color}_prop_rot_dir"],
+            START_LOC: pd_row_data[f"{color}_start_location"],
+            END_LOC: pd_row_data[f"{color}_end_location"],
             TURNS: filters[f"{color}_turns"],
-            START_ORIENTATION: "in",
+            START_OR: "in",
         }
 
     ### EVENT HANDLERS ###
@@ -241,12 +241,12 @@ class Pictograph(QGraphicsScene):
             state_data.update(
                 {
                     prefix + MOTION_TYPE: motion.motion_type,
-                    prefix + ROTATION_DIRECTION: motion.rot_dir,
-                    prefix + START_LOCATION: motion.start_location,
-                    prefix + END_LOCATION: motion.end_location,
+                    prefix + ROT_DIR: motion.rot_dir,
+                    prefix + START_LOC: motion.start_location,
+                    prefix + END_LOC: motion.end_location,
                     prefix + TURNS: motion.turns,
-                    prefix + START_ORIENTATION: motion.start_orientation,
-                    prefix + END_ORIENTATION: motion.end_orientation,
+                    prefix + START_OR: motion.start_orientation,
+                    prefix + END_OR: motion.end_orientation,
                 }
             )
 

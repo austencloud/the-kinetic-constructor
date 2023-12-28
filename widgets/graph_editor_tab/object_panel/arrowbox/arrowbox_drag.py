@@ -80,11 +80,11 @@ class ArrowBoxDrag(ObjectBoxDrag):
             ARROW: self.placed_arrow,
             PROP: self.placed_arrow.motion.prop,
             MOTION_TYPE: self.motion_type,
-            ROTATION_DIRECTION: self.rot_dir,
+            ROT_DIR: self.rot_dir,
             TURNS: self.turns,
-            START_ORIENTATION: self.start_orientation,
-            START_LOCATION: self.start_location,
-            END_LOCATION: self.end_location,
+            START_OR: self.start_orientation,
+            START_LOC: self.start_location,
+            END_LOC: self.end_location,
         }
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
@@ -120,11 +120,11 @@ class ArrowBoxDrag(ObjectBoxDrag):
             ARROW: self,
             PROP: self.ghost.motion.prop,
             MOTION_TYPE: self.motion_type,
-            ROTATION_DIRECTION: self.rot_dir,
+            ROT_DIR: self.rot_dir,
             TURNS: self.turns,
-            START_ORIENTATION: self.start_orientation,
-            START_LOCATION: self.start_location,
-            END_LOCATION: self.end_location,
+            START_OR: self.start_orientation,
+            START_LOC: self.start_location,
+            END_LOC: self.end_location,
         }
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)

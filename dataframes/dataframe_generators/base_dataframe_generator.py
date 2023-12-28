@@ -6,7 +6,7 @@ from data.positions_map import positions_map
 import os
 
 
-class DataFrameGenerator:
+class BaseDataFrameGenerator:
     def __init__(self, letters) -> None:
         self.letters = letters
         self.rot_dirs = [CLOCKWISE, COUNTER_CLOCKWISE]

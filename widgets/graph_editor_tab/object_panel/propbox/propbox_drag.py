@@ -65,11 +65,11 @@ class PropBoxDrag(ObjectBoxDrag):
             ARROW: self.placed_prop.motion.arrow,
             PROP: self.placed_prop,
             MOTION_TYPE: STATIC,
-            ROTATION_DIRECTION: None,
+            ROT_DIR: None,
             TURNS: 0,
-            START_LOCATION: self.location,
-            END_LOCATION: self.location,
-            START_ORIENTATION: self.orientation,
+            START_LOC: self.location,
+            END_LOC: self.location,
+            START_OR: self.orientation,
         }
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
@@ -118,11 +118,11 @@ class PropBoxDrag(ObjectBoxDrag):
             ARROW: self.arrow,
             PROP: self.ghost,
             MOTION_TYPE: STATIC,
-            ROTATION_DIRECTION: None,
+            ROT_DIR: None,
             TURNS: 0,
-            START_LOCATION: self.location,
-            END_LOCATION: self.location,
-            START_ORIENTATION: self.orientation,
+            START_LOC: self.location,
+            END_LOC: self.location,
+            START_OR: self.orientation,
         }
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
@@ -169,11 +169,11 @@ class PropBoxDrag(ObjectBoxDrag):
                         ARROW: self.arrow,
                         PROP: self.ghost,
                         MOTION_TYPE: STATIC,
-                        ROTATION_DIRECTION: None,
+                        ROT_DIR: None,
                         TURNS: 0,
-                        START_LOCATION: self.location,
-                        END_LOCATION: self.location,
-                        START_ORIENTATION: self.orientation,
+                        START_LOC: self.location,
+                        END_LOC: self.location,
+                        START_OR: self.orientation,
                     }
 
                     self.pictograph.motions[self.color].setup_attributes(motion_dict)

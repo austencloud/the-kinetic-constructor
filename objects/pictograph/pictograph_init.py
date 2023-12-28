@@ -135,11 +135,11 @@ class PictographInit:
             ARROW: None,
             PROP: None,
             MOTION_TYPE: None,
-            ROTATION_DIRECTION: None,
+            ROT_DIR: None,
             TURNS: 0,
-            START_LOCATION: None,
-            END_LOCATION: None,
-            START_ORIENTATION: None,
+            START_LOC: None,
+            END_LOC: None,
+            START_OR: None,
         }
         return Motion(self.pictograph, motion_dict, blank=True)
 

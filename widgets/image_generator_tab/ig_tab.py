@@ -32,7 +32,7 @@ class IGTab(QWidget):
         self.main_pictograph = (
             self.main_widget.graph_editor_tab.graph_editor.main_pictograph
         )
-        self.pictograph_df = self.load_and_sort_data("U_DataFrame.csv")
+        self.pictograph_df = self.load_and_sort_data("PictographDataFrame.csv")
         self.selected_pictographs = []
         self.setupUI()
 

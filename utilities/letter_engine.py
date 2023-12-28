@@ -7,13 +7,17 @@ from Enums import (
     PropRotationDirection,
     SpecificPosition,
     SpecificStartEndPositionsDicts,
+)
+
+from utilities.TypeChecking.Letters import (
     alpha_ending_letters,
-    beta_ending_letters,
-    gamma_ending_letters,
     alpha_starting_letters,
+    beta_ending_letters,
     beta_starting_letters,
+    gamma_ending_letters,
     gamma_starting_letters,
 )
+
 
 from data.letter_engine_data import (
     motion_type_combinations,
@@ -33,9 +37,6 @@ from constants import (
     START_POSITION,
 )
 
-from utilities.TypeChecking.Letters import (
-    GammaEndingLetters,
-)
 from utilities.TypeChecking.TypeChecking import LetterGroupsByMotionType
 
 logging.basicConfig(
@@ -117,12 +118,10 @@ class LetterEngine:
         elif start_position == GAMMA:
             filtered_letter_group = list(gamma_starting_letters)
 
-        filtered_letter_group_values = [
-            letter.value for letter in filtered_letter_group
-        ]
+
         motion_letter_set_values = [letter for letter in motion_letter_set]
 
-        filtered_letter_group = set(filtered_letter_group_values).intersection(
+        filtered_letter_group = set(filtered_letter_group).intersection(
             motion_letter_set_values
         )
 
@@ -136,12 +135,10 @@ class LetterEngine:
         elif end_position == GAMMA:
             filtered_letter_group = list(gamma_ending_letters)
 
-        filtered_letter_group_values = [
-            letter.value for letter in filtered_letter_group
-        ]
+
         motion_letter_set_values = [letter for letter in motion_letter_set]
 
-        filtered_letter_group = set(filtered_letter_group_values).intersection(
+        filtered_letter_group = set(filtered_letter_group).intersection(
             motion_letter_set_values
         )
 
@@ -231,7 +228,7 @@ class LetterEngine:
         else:
             return "PQR"  # Return antiparallel group
 
-    def filter_gamma_letters(self, letter_group) -> GammaEndingLetters:
+    def filter_gamma_letters(self, letter_group)        :
         gamma_handpath_letters = set(self.get_gamma_handpath_group())
         filtered_letter_group = {
             letter for letter in letter_group if letter in gamma_handpath_letters

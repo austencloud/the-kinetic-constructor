@@ -7,16 +7,16 @@ from constants import (
     CLOCKWISE,
     COLOR,
     COUNTER_CLOCKWISE,
-    END_LOCATION,
+    END_LOC,
     LOCATION,
     MOTION_TYPE,
     NORTHEAST,
     NORTHWEST,
     PRO,
-    ROTATION_DIRECTION,
+    ROT_DIR,
     SOUTHEAST,
     SOUTHWEST,
-    START_LOCATION,
+    START_LOC,
     STATIC,
     TURNS,
 )
@@ -323,7 +323,7 @@ class Arrow(GraphicalObject):
         self.motion[COLOR] = self.color
         self.motion[MOTION_TYPE] = STATIC
         self.motion[TURNS] = 0
-        self.motion[ROTATION_DIRECTION] = None
-        self.motion[START_LOCATION] = self.motion.prop.location
-        self.motion[END_LOCATION] = self.motion.prop.location
+        self.motion[ROT_DIR] = None
+        self.motion[START_LOC] = self.motion.prop.location
+        self.motion[END_LOC] = self.motion.prop.location
         self.location = self.motion.prop.location

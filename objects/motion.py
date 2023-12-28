@@ -36,11 +36,11 @@ class Motion:
         self.color: COLOR = None
         self.motion_type: MOTION_TYPE = None
         self.turns: TURNS = None
-        self.rot_dir: ROTATION_DIRECTION = None
-        self.start_location: START_LOCATION = None
-        self.end_location: END_LOCATION = None
-        self.start_orientation: START_ORIENTATION = None
-        self.end_orientation: END_ORIENTATION = None
+        self.rot_dir: ROT_DIR = None
+        self.start_location: START_LOC = None
+        self.end_location: END_LOC = None
+        self.start_orientation: START_OR = None
+        self.end_orientation: END_OR = None
 
     ### SETUP ###
 
@@ -57,14 +57,14 @@ class Motion:
 
         self.motion_type: MOTION_TYPE = motion_dict[MOTION_TYPE]
         self.turns: TURNS = motion_dict[TURNS]
-        self.rot_dir: ROTATION_DIRECTION = motion_dict[ROTATION_DIRECTION]
-        self.start_location: START_LOCATION = motion_dict[START_LOCATION]
-        self.end_location: END_LOCATION = motion_dict[END_LOCATION]
-        self.start_orientation: START_ORIENTATION = motion_dict[START_ORIENTATION]
+        self.rot_dir: ROT_DIR = motion_dict[ROT_DIR]
+        self.start_location: START_LOC = motion_dict[START_LOC]
+        self.end_location: END_LOC = motion_dict[END_LOC]
+        self.start_orientation: START_OR = motion_dict[START_OR]
 
         self.assign_location_to_arrow()
 
-        self.end_orientation: END_ORIENTATION = self.get_end_orientation()
+        self.end_orientation: END_OR = self.get_end_orientation()
         self.update_prop_orientation()
 
     def assign_location_to_arrow(self):
@@ -125,11 +125,11 @@ class Motion:
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,
             TURNS: self.turns,
-            ROTATION_DIRECTION: self.rot_dir,
-            START_LOCATION: self.start_location,
-            END_LOCATION: self.end_location,
-            START_ORIENTATION: self.start_orientation,
-            END_ORIENTATION: self.end_orientation,
+            ROT_DIR: self.rot_dir,
+            START_LOC: self.start_location,
+            END_LOC: self.end_location,
+            START_OR: self.start_orientation,
+            END_OR: self.end_orientation,
         }
 
     def get_end_orientation(self) -> Orientation:

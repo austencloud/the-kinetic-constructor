@@ -1,11 +1,13 @@
 from typing import Dict, List, Tuple
-from dataframes.dataframe_generators.base_dataframe_generator import DataFrameGenerator
+from dataframes.dataframe_generators.base_dataframe_generator import (
+    BaseDataFrameGenerator,
+)
 from Enums import Location
 from constants import *
 from utilities.TypeChecking.Letters import Type2_letters
 
 
-class Type2Generator(DataFrameGenerator):
+class Type2Generator(BaseDataFrameGenerator):
     def __init__(self) -> None:
         super().__init__(Type2_letters)
         self.create_Type2_dataframes()
