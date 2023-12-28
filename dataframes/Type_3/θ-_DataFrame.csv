@@ -1,4 +1,4 @@
-letter,start_position,end_position,blue_motion_type,blue_rot_dir,blue_start_location,blue_end_location,red_motion_type,red_rot_dir,red_start_location,red_end_location
+letter,start_position,end_position,blue_motion_type,blue_prop_rot_dir,blue_start_location,blue_end_location,red_motion_type,red_prop_rot_dir,red_start_location,red_end_location
 θ-,alpha1,gamma7,pro,cw,s,w,dash,None,n,s
 θ-,alpha1,gamma3,pro,ccw,s,e,dash,None,n,s
 θ-,alpha2,gamma8,pro,cw,w,n,dash,None,e,w

@@ -1,4 +1,4 @@
-letter,start_position,end_position,blue_motion_type,blue_rot_dir,blue_start_location,blue_end_location,red_motion_type,red_rot_dir,red_start_location,red_end_location
+letter,start_position,end_position,blue_motion_type,blue_prop_rot_dir,blue_start_location,blue_end_location,red_motion_type,red_prop_rot_dir,red_start_location,red_end_location
 Δ-,beta1,gamma7,anti,cw,n,w,dash,None,n,s
 Δ-,beta1,gamma3,anti,ccw,n,e,dash,None,n,s
 Δ-,beta2,gamma8,anti,cw,e,n,dash,None,e,w

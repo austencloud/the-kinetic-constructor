@@ -1,7 +1,7 @@
 from typing import Tuple
 import pandas as pd
-from data.Enums import Location, PropRotationDirection, SpecificPosition
-from data.constants import *
+from Enums import Location, PropRotationDirection, SpecificPosition
+from constants import *
 from data.positions_map import positions_map
 import os
 
@@ -27,6 +27,15 @@ class DataFrameGenerator:
                 (SOUTH, WEST),
                 (WEST, NORTH),
             ]
+
+    def get_start_end_positions(
+        self, red_start_loc, red_end_loc, blue_start_loc, blue_end_loc
+    ) -> Tuple[Location, Location]:
+        start_key = (blue_start_loc, red_start_loc)
+        end_key = (blue_end_loc, red_end_loc)
+        start_pos = positions_map.get(start_key)
+        end_pos = positions_map.get(end_key)
+        return start_pos, end_pos
 
     def get_prop_rot_dir(self, motion_type, handpath_rot_dir) -> PropRotationDirection:
         if motion_type == PRO:
@@ -104,8 +113,8 @@ class DataFrameGenerator:
         df["blue_motion_type"] = pd.Categorical(
             df["blue_motion_type"], categories=motion_type_order, ordered=True
         )
-        df["blue_rot_dir"] = pd.Categorical(
-            df["blue_rot_dir"],
+        df["blue_prop_rot_dir"] = pd.Categorical(
+            df["blue_prop_rot_dir"],
             categories=rot_dir_order,
             ordered=True,
         )
@@ -113,7 +122,7 @@ class DataFrameGenerator:
             by=[
                 "letter",
                 "blue_motion_type",
-                "blue_rot_dir",
+                "blue_prop_rot_dir",
                 "start_position",
             ],
             inplace=True,
@@ -124,4 +133,3 @@ class DataFrameGenerator:
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)
         df.to_csv(filename, index=False)
-

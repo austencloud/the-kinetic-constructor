@@ -1,66 +1,193 @@
 from typing import Dict, List, Tuple
-from data.Enums import Location
-from df_generator import DataFrameGenerator
-from data.positions_map import positions_map
-from data.constants import *
+from dataframe_generation.df_generator import DataFrameGenerator
+from constants import *
+from Enums import *
 
 
-class STUV_Generator(DataFrameGenerator):
+class Type1Generator(DataFrameGenerator):
     def __init__(self) -> None:
-        super().__init__(letters=["S", "T", "U", "V"])
-        self.create_dataframes_for_STUV()
+        super().__init__(Type1_letters)
+        self.create_dataframes_for_alpha_beta()
 
-    def create_dataframes_for_STUV(self) -> None:
+    def create_dataframes_for_alpha_beta(self) -> None:
         for letter in self.letters:
-            data = self.create_df(letter)
+            data = self.create_dataframe(letter)
             self.save_dataframe(letter, data, "Type_1")
+
+    def create_dataframe(self, letter) -> List[Dict]:
+        data = []
+        if letter in ["A", "D", "G", "J", "M", "P", "M", "P"]:
+            return self.create_dataframes_for_letter(letter, PRO, PRO)
+        elif letter in ["B", "E", "H", "K", "N", "Q", "N", "Q"]:
+            return self.create_dataframes_for_letter(letter, ANTI, ANTI)
+        elif letter in ["C", "F", "I", "L", "O", "R"]:
+            data = self.create_dataframes_for_letter(letter, PRO, ANTI)
+            data += self.create_dataframes_for_letter(letter, ANTI, PRO)
+            return data
+        if letter in ["S", "T"]:
+            red_motion_type = PRO if letter == "S" else ANTI
+            for red_handpath_rot_dir in self.handpath_rot_dirs:
+
+
+                data: List = self.create_ST_dataframes(
+                    letter,
+                    red_motion_type,
+                    red_leading_bool=True,
+                )
+
+                data.extend(
+                    self.create_ST_dataframes(
+                        letter,
+                        red_motion_type,
+                        red_leading_bool=False,
+                    )
+                )
+
+                return data
+        elif letter == "U":
+            return self.create_dataframes_for_U()
+        elif letter == "V":
+            return self.create_dataframes_for_V()
+
+    def determine_start_end_loc(
+        self, red_start_loc, red_end_loc, red_prop_rot_dir, red_leading
+    ) -> Tuple[Location, Location]:
+        if red_prop_rot_dir == CLOCKWISE:
+            if red_leading:
+                if red_start_loc == NORTH:
+                    blue_start_loc = WEST
+                elif red_start_loc == EAST:
+                    blue_start_loc = NORTH
+                elif red_start_loc == SOUTH:
+                    blue_start_loc = EAST
+                elif red_start_loc == WEST:
+                    blue_start_loc = SOUTH
+                blue_end_loc = red_start_loc
+
+            elif not red_leading:
+                if red_start_loc == NORTH:
+                    blue_end_loc = SOUTH
+                elif red_start_loc == EAST:
+                    blue_end_loc = WEST
+                elif red_start_loc == SOUTH:
+                    blue_end_loc = NORTH
+                elif red_start_loc == WEST:
+                    blue_end_loc = EAST
+                blue_start_loc = red_end_loc
+
+        elif red_prop_rot_dir == COUNTER_CLOCKWISE:
+            if red_leading:
+                if red_start_loc == NORTH:
+                    blue_start_loc = EAST
+                elif red_start_loc == WEST:
+                    blue_start_loc = NORTH
+                elif red_start_loc == SOUTH:
+                    blue_start_loc = WEST
+                elif red_start_loc == EAST:
+                    blue_start_loc = SOUTH
+                blue_end_loc = red_start_loc
+
+            elif not red_leading:
+                if red_start_loc == NORTH:
+                    blue_end_loc = SOUTH
+                elif red_start_loc == WEST:
+                    blue_end_loc = EAST
+                elif red_start_loc == SOUTH:
+                    blue_end_loc = NORTH
+                elif red_start_loc == EAST:
+                    blue_end_loc = WEST
+                blue_start_loc = red_end_loc
+
+        return blue_start_loc, blue_end_loc
 
     def create_ST_dataframes(
         self,
         letter,
-        red_start_loc,
-        red_end_loc,
         red_motion_type,
-        red_rot_dir,
         red_leading_bool,
     ):
         variations = []
         blue_motion_type = red_motion_type
+        handpath_tuple_map_collection = self.get_handpath_tuple_map_collection()
+        for handpath, values in handpath_tuple_map_collection.items():
+            handpath_tuples = handpath_tuple_map_collection[handpath]
+            for red_start_loc, red_end_loc in handpath_tuples:
+                red_prop_rot_dir = self.get_prop_rot_dir(
+                    red_motion_type, handpath
+                )
+                blue_prop_rot_dir = red_prop_rot_dir
+                
+                blue_start_loc, blue_end_loc = self.determine_start_end_loc(
+                    red_start_loc, red_end_loc, red_prop_rot_dir, red_leading_bool
+                )
 
-        if red_leading_bool:
-            blue_start_loc, blue_end_loc = self.determine_start_end_loc(
-                red_start_loc, red_end_loc, red_rot_dir, red_leading_bool
-            )
-        elif not red_leading_bool:
-            blue_start_loc, blue_end_loc = self.determine_start_end_loc(
-                red_start_loc, red_end_loc, red_rot_dir, red_leading_bool
-            )
+                start_pos, end_pos = self.get_start_end_positions(
+                    red_start_loc, red_end_loc, blue_start_loc, blue_end_loc
+                )
 
-        # Apply positions
-        start_pos, end_pos = self.get_positions(
-            blue_start_loc, blue_end_loc, red_start_loc, red_end_loc
-        )
+                variation = {
+                    "letter": letter,
+                    "start_position": start_pos,
+                    "end_position": end_pos,
+                    "blue_motion_type": blue_motion_type,
+                    "blue_prop_rot_dir": blue_prop_rot_dir,
+                    "blue_start_location": blue_start_loc,
+                    "blue_end_location": blue_end_loc,
+                    "red_motion_type": red_motion_type,
+                    "red_prop_rot_dir": red_prop_rot_dir,
+                    "red_start_location": red_start_loc,
+                    "red_end_location": red_end_loc,
+                }
 
-        variation = {
-            "letter": letter,
-            "start_position": start_pos,
-            "end_position": end_pos,
-            "blue_motion_type": blue_motion_type,
-            "blue_rot_dir": red_rot_dir,
-            "blue_start_location": blue_start_loc,
-            "blue_end_location": blue_end_loc,
-            "red_motion_type": red_motion_type,
-            "red_rot_dir": red_rot_dir,
-            "red_start_location": red_start_loc,
-            "red_end_location": red_end_loc,
-        }
-
-        variations.append(variation)
+                variations.append(variation)
+        
         return variations
 
-    def create_U_dataframes(self) -> List[Dict]:
+    def create_dataframes_for_letter(
+        self, letter, red_motion_type, blue_motion_type
+    ) -> List[Dict]:
         data = []
-        red_pro_handpath_rot_dir = self.get_handpath_tuple_map_collection(PRO)
+        handpath_tuple_map_collection = self.get_handpath_tuple_map_collection()
+
+        for handpath, values in handpath_tuple_map_collection.items():
+            red_prop_rot_dir = self.get_prop_rot_dir(red_motion_type, handpath)
+            blue_prop_rot_dir = (
+                red_prop_rot_dir
+                if letter in Type1_same_prop_rot_dir_letters
+                else self.get_opposite_rot_dir(red_prop_rot_dir)
+            )
+
+            handpath_tuples = handpath_tuple_map_collection[handpath]
+            for red_start_loc, red_end_loc in handpath_tuples:
+                blue_start_loc, blue_end_loc = self.determine_blue_locations(
+                    letter, red_start_loc, red_end_loc
+                )
+
+                start_pos, end_pos = self.get_Type1_start_and_end_pos(
+                    red_start_loc, red_end_loc, blue_start_loc, blue_end_loc
+                )
+
+                data.append(
+                    {
+                        "letter": letter,
+                        "start_position": start_pos,
+                        "end_position": end_pos,
+                        "blue_motion_type": blue_motion_type,
+                        "blue_prop_rot_dir": blue_prop_rot_dir,
+                        "blue_start_loc": blue_start_loc,
+                        "blue_end_loc": blue_end_loc,
+                        "red_motion_type": red_motion_type,
+                        "red_prop_rot_dir": red_prop_rot_dir,
+                        "red_start_loc": red_start_loc,
+                        "red_end_loc": red_end_loc,
+                    }
+                )
+
+        return data
+
+    def create_dataframes_for_U(self) -> List[Dict]:
+        data = []
+        red_pro_handpath_rot_dir = self.get_handpath_tuple_map_collection()
 
         for red_handpath_rot_dir in self.handpath_rot_dirs:
             # Blue leading with CCW_HANDPATH
@@ -178,9 +305,9 @@ class STUV_Generator(DataFrameGenerator):
 
         return data
 
-    def create_V_dataframes(self) -> List[Dict]:
+    def create_dataframes_for_V(self) -> List[Dict]:
         data = []
-        red_pro_handpath_rot_dir = self.get_handpath_tuple_map_collection(PRO)
+        red_pro_handpath_rot_dir = self.get_handpath_tuple_map_collection()
 
         for red_handpath_rot_dir in self.handpath_rot_dirs:
             # Blue leading with CCW_HANDPATH
@@ -308,11 +435,11 @@ class STUV_Generator(DataFrameGenerator):
         blue_start_loc,
         blue_end_loc,
         red_motion_type,
-        red_rot_dir,
+        red_prop_rot_dir,
         blue_motion_type,
-        blue_rot_dir,
+        blue_prop_rot_dir,
     ):
-        start_pos, end_pos = self.get_positions(
+        start_pos, end_pos = self.get_start_end_positions(
             red_start_loc, red_end_loc, blue_start_loc, blue_end_loc
         )
         return {
@@ -320,229 +447,44 @@ class STUV_Generator(DataFrameGenerator):
             "start_position": start_pos,
             "end_position": end_pos,
             "blue_motion_type": blue_motion_type,
-            "blue_rot_dir": blue_rot_dir,
+            "blue_prop_rot_dir": blue_prop_rot_dir,
             "blue_start_location": blue_start_loc,
             "blue_end_location": blue_end_loc,
             "red_motion_type": red_motion_type,
-            "red_rot_dir": red_rot_dir,
+            "red_prop_rot_dir": red_prop_rot_dir,
             "red_start_location": red_start_loc,
             "red_end_location": red_end_loc,
         }
 
-    def get_positions(
-        self, red_start_loc, red_end_loc, blue_start_loc, blue_end_loc
-    ) -> Tuple[Location, Location]:
-        start_key = (blue_start_loc, red_start_loc)
-        end_key = (blue_end_loc, red_end_loc)
-        start_pos = positions_map.get(start_key)
-        end_pos = positions_map.get(end_key)
-        return start_pos, end_pos
-
-    def determine_start_end_loc(
-        self, red_start_loc, red_end_loc, red_rot_dir, red_leading
+    def determine_blue_locations(
+        self, letter, red_start_loc, red_end_loc, red_leading_bool=None
     ):
-        if red_rot_dir == CLOCKWISE:
-            if red_leading:
-                if red_start_loc == NORTH:
-                    blue_start_loc = WEST
-                elif red_start_loc == EAST:
-                    blue_start_loc = NORTH
-                elif red_start_loc == SOUTH:
-                    blue_start_loc = EAST
-                elif red_start_loc == WEST:
-                    blue_start_loc = SOUTH
+        if letter in Type1_alpha_to_alpha_letters:  # A, B, C
+            blue_start_loc = self.get_opposite_location(red_start_loc)
+            blue_end_loc = self.get_opposite_location(red_end_loc)
+        elif letter in Type1_beta_to_alpha_letters:  # D, E, F
+            blue_start_loc = red_start_loc
+            blue_end_loc = self.get_opposite_location(red_end_loc)
+        elif letter in Type1_beta_to_beta_letters:  # G, H, I
+            blue_start_loc, blue_end_loc = red_start_loc, red_end_loc
+        elif letter in Type1_alpha_to_beta_letters:  # J, K, L
+            blue_start_loc = self.get_opposite_location(red_start_loc)
+            blue_end_loc = red_end_loc
+        elif letter in Type1_gamma_opp_parallel_letters:  # M, N, O
+            blue_start_loc = self.get_opposite_location(red_end_loc)
+            blue_end_loc = self.get_opposite_location(red_start_loc)
+        elif letter in Type1_gamma_opp_antiparallel_letters:  # P, Q, R
+            blue_start_loc = red_end_loc
+            blue_end_loc = red_start_loc
+        elif letter in Type1_gamma_same_dir_letters:  # S, T, U, V
+            if red_leading_bool:
+                blue_start_loc = self.get_opposite_location(red_end_loc)
                 blue_end_loc = red_start_loc
-
-            elif not red_leading:
-                if red_start_loc == NORTH:
-                    blue_end_loc = SOUTH
-                elif red_start_loc == EAST:
-                    blue_end_loc = WEST
-                elif red_start_loc == SOUTH:
-                    blue_end_loc = NORTH
-                elif red_start_loc == WEST:
-                    blue_end_loc = EAST
+            elif not red_leading_bool:
                 blue_start_loc = red_end_loc
-
-        elif red_rot_dir == COUNTER_CLOCKWISE:
-            if red_leading:
-                if red_start_loc == NORTH:
-                    blue_start_loc = EAST
-                elif red_start_loc == WEST:
-                    blue_start_loc = NORTH
-                elif red_start_loc == SOUTH:
-                    blue_start_loc = WEST
-                elif red_start_loc == EAST:
-                    blue_start_loc = SOUTH
-                blue_end_loc = red_start_loc
-
-            elif not red_leading:
-                if red_start_loc == NORTH:
-                    blue_end_loc = SOUTH
-                elif red_start_loc == WEST:
-                    blue_end_loc = EAST
-                elif red_start_loc == SOUTH:
-                    blue_end_loc = NORTH
-                elif red_start_loc == EAST:
-                    blue_end_loc = WEST
-                blue_start_loc = red_end_loc
-
+                blue_end_loc = self.get_opposite_location(red_start_loc)
         return blue_start_loc, blue_end_loc
 
-    def generate_variations_U(
-        self,
-        letter,
-        red_start_loc,
-        red_end_loc,
-        red_rot_dir,
-        red_leading,
-    ):
-        variations = []
-        if red_leading:
-            red_motion_type = PRO
-            blue_motion_type = ANTI
-            leading_rot_dir = red_rot_dir
-        elif not red_leading:
-            red_motion_type = ANTI
-            blue_motion_type = PRO
 
-        blue_rot_dir = COUNTER_CLOCKWISE if red_rot_dir == CLOCKWISE else CLOCKWISE
-
-        if red_rot_dir == CLOCKWISE:
-            if red_leading:
-                if red_start_loc == NORTH:
-                    blue_start_loc = WEST
-                elif red_start_loc == EAST:
-                    blue_start_loc = NORTH
-                elif red_start_loc == SOUTH:
-                    blue_start_loc = EAST
-                elif red_start_loc == WEST:
-                    blue_start_loc = SOUTH
-                blue_end_loc = red_start_loc
-
-            elif not red_leading:
-                if red_start_loc == NORTH:
-                    blue_end_loc = SOUTH
-                elif red_start_loc == EAST:
-                    blue_end_loc = WEST
-                elif red_start_loc == SOUTH:
-                    blue_end_loc = NORTH
-                elif red_start_loc == WEST:
-                    blue_end_loc = EAST
-                blue_start_loc = red_end_loc
-
-        elif red_rot_dir == COUNTER_CLOCKWISE:
-            if red_leading:
-                if red_start_loc == NORTH:
-                    blue_start_loc = EAST
-                elif red_start_loc == WEST:
-                    blue_start_loc = NORTH
-                elif red_start_loc == SOUTH:
-                    blue_start_loc = WEST
-                elif red_start_loc == EAST:
-                    blue_start_loc = SOUTH
-                blue_end_loc = red_start_loc
-
-            elif not red_leading:
-                if red_start_loc == NORTH:
-                    blue_end_loc = SOUTH
-                elif red_start_loc == WEST:
-                    blue_end_loc = EAST
-                elif red_start_loc == SOUTH:
-                    blue_end_loc = NORTH
-                elif red_start_loc == EAST:
-                    blue_end_loc = WEST
-                blue_start_loc = red_end_loc
-
-        # Apply positions
-        start_pos, end_pos = self.get_positions(
-            blue_start_loc, blue_end_loc, red_start_loc, red_end_loc
-        )
-        # Create variations for red and blue leading
-        variations.append(
-            letter,
-            start_pos,
-            end_pos,
-            blue_motion_type,
-            blue_rot_dir,
-            blue_start_loc,
-            blue_end_loc,
-            red_motion_type,
-            red_rot_dir,
-            red_start_loc,
-            red_end_loc,
-        )
-
-        return variations
-
-    def get_positions(
-        self, blue_start_loc, blue_end_loc, red_start_loc, red_end_loc
-    ) -> Tuple[Location, Location]:
-        start_key = (blue_start_loc, red_start_loc)
-        end_key = (blue_end_loc, red_end_loc)
-        start_pos = positions_map.get(start_key)
-        end_pos = positions_map.get(end_key)
-        return start_pos, end_pos
-
-    def create_df(self, letter) -> List[Dict]:
-        data = []
-        if letter in ["S", "T"]:
-            red_motion_type = PRO if letter == "S" else ANTI
-            for red_handpath_rot_dir in self.handpath_rot_dirs:
-                red_prop_rot_dir = self.get_prop_rot_dir(
-                    red_motion_type, red_handpath_rot_dir
-                )
-
-                for red_start_loc, red_end_loc in self.red_handpath_map:
-                    data.extend(
-                        self.create_ST_dataframes(
-                            letter,
-                            red_start_loc,
-                            red_end_loc,
-                            red_motion_type,
-                            red_prop_rot_dir,
-                            red_leading_bool=True,
-                        )
-                    )
-                    data.extend(
-                        self.create_ST_dataframes(
-                            letter,
-                            red_start_loc,
-                            red_end_loc,
-                            red_motion_type,
-                            red_prop_rot_dir,
-                            red_leading_bool=False,
-                        )
-                    )
-        elif letter == "U":
-            data = self.create_U_dataframes()
-            self.save_dataframe(letter, data, "Type_1")
-        elif letter == "V":
-            data = self.create_V_dataframes()
-            self.save_dataframe(letter, data, "Type_1")
-        return data
-
-    def determine_follower_start_location(
-        self, leader_end_loc, follower_rot_dir
-    ) -> Location:
-        if follower_rot_dir == CLOCKWISE:
-            if leader_end_loc == NORTH:
-                return EAST
-            elif leader_end_loc == WEST:
-                return NORTH
-            elif leader_end_loc == SOUTH:
-                return WEST
-            elif leader_end_loc == EAST:
-                return SOUTH
-        elif follower_rot_dir == COUNTER_CLOCKWISE:
-            if leader_end_loc == NORTH:
-                return WEST
-            elif leader_end_loc == EAST:
-                return NORTH
-            elif leader_end_loc == SOUTH:
-                return EAST
-            elif leader_end_loc == WEST:
-                return SOUTH
-
-
-STUV_Generator()
+# Instantiate and run the generator
+alpha_beta_generator = Type1Generator()
