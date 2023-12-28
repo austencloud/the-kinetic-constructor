@@ -4,7 +4,7 @@ from Enums import (
     Direction,
     Location,
     MotionType,
-    RotationDirection,
+    PropRotationDirection,
 )
 
 from data.start_end_location_map import get_start_end_locations
@@ -181,7 +181,7 @@ class ArrowManipulator:
 
     ### ROTATION ###
 
-    def rotate_arrow(self, rot_dir: RotationDirection) -> None:
+    def rotate_arrow(self, rot_dir: PropRotationDirection) -> None:
         diamond_mode_static_arrow_locations = [
             NORTH,
             EAST,

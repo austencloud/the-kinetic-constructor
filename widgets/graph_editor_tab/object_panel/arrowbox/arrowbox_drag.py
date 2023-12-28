@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt
 from Enums import (
     Color,
     MotionType,
-    RotationDirection,
+    PropRotationDirection,
 )
 from constants import IN
 
@@ -60,7 +60,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.color: Color = target_arrow.color
         self.motion_type: MotionType = target_arrow.motion_type
         self.arrow_location: Location = target_arrow.location
-        self.rot_dir: RotationDirection = target_arrow.motion.rot_dir
+        self.rot_dir: PropRotationDirection = target_arrow.motion.rot_dir
 
         self.turns: Turns = target_arrow.turns
 
@@ -303,7 +303,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         rotation_angle_map: Dict[
             Tuple[MotionType, Color],
-            Dict[RotationDirection, Dict[Location, RotationAngles]],
+            Dict[PropRotationDirection, Dict[Location, RotationAngles]],
         ] = {
             (PRO, RED): {
                 CLOCKWISE: {
@@ -364,7 +364,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         }
 
         direction_map: Dict[
-            RotationDirection, Dict[Location, RotationAngles]
+            PropRotationDirection, Dict[Location, RotationAngles]
         ] = rotation_angle_map.get((motion_type, color), {})
         location_map: Dict[Location, RotationAngles] = direction_map.get(rot_dir, {})
         rotation_angle: RotationAngles = location_map.get(location, 0)

@@ -205,7 +205,7 @@ class Arrow(GraphicalObject):
         self.motion.color = target_arrow.color
         self.motion_type: MotionType = target_arrow.motion_type
         self.motion.arrow.location = target_arrow.location
-        self.motion.rot_dir: RotationDirection = target_arrow.motion.rot_dir
+        self.motion.rot_dir: PropRotationDirection = target_arrow.motion.rot_dir
         self.motion.start_location: Location = target_arrow.motion.start_location
         self.motion.end_location: Location = target_arrow.motion.end_location
         self.motion.turns: Turns = target_arrow.motion.turns

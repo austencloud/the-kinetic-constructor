@@ -1,8 +1,8 @@
-letter,start_position,end_position,blue_motion_type,blue_rot_dir,blue_start_location,blue_end_location,red_motion_type,red_rot_dir,red_start_location,red_end_location
+letter,start_position,end_position,blue_motion_type,blue_rot_dir,blue_start_loc,blue_end_loc,red_motion_type,red_rot_dir,red_start_loc,red_end_loc
 L,alpha1,beta4,pro,cw,s,w,anti,cw,n,w
-L,alpha4,beta3,pro,cw,e,s,anti,cw,w,s
-L,alpha3,beta2,pro,cw,n,e,anti,cw,s,e
 L,alpha2,beta1,pro,cw,w,n,anti,cw,e,n
+L,alpha3,beta2,pro,cw,n,e,anti,cw,s,e
+L,alpha4,beta3,pro,cw,e,s,anti,cw,w,s
 L,alpha1,beta2,pro,ccw,s,e,anti,ccw,n,e
 L,alpha2,beta3,pro,ccw,w,s,anti,ccw,e,s
 L,alpha3,beta4,pro,ccw,n,w,anti,ccw,s,w
@@ -12,6 +12,6 @@ L,alpha2,beta3,anti,cw,w,s,pro,cw,e,s
 L,alpha3,beta4,anti,cw,n,w,pro,cw,s,w
 L,alpha4,beta1,anti,cw,e,n,pro,cw,w,n
 L,alpha1,beta4,anti,ccw,s,w,pro,ccw,n,w
-L,alpha4,beta3,anti,ccw,e,s,pro,ccw,w,s
-L,alpha3,beta2,anti,ccw,n,e,pro,ccw,s,e
 L,alpha2,beta1,anti,ccw,w,n,pro,ccw,e,n
+L,alpha3,beta2,anti,ccw,n,e,pro,ccw,s,e
+L,alpha4,beta3,anti,ccw,e,s,pro,ccw,w,s

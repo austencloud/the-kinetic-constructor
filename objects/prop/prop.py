@@ -8,7 +8,7 @@ from Enums import (
     PropAttribute,
     PropAttributesDicts,
     PropType,
-    RotationDirection,
+    PropRotationDirection,
 )
 from data.start_end_location_map import get_start_end_locations
 from objects.graphical_object import GraphicalObject
@@ -254,7 +254,7 @@ class Prop(GraphicalObject):
     def update_arrow_location(self, new_arrow_location: Location) -> None:
         if self.motion.motion_type in [PRO, ANTI]:
             shift_location_map: Dict[
-                Tuple(Location, RotationDirection, MotionType),
+                Tuple(Location, PropRotationDirection, MotionType),
                 Dict[Location, Location],
             ] = {
                 ### ISO ###

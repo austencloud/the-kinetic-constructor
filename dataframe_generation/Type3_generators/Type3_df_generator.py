@@ -1,7 +1,7 @@
 from typing import Dict, List, Tuple
 import pandas as pd
 from df_generator import DataFrameGenerator
-from data.Enums import Location, RotationDirection, SpecificPosition
+from data.Enums import Location, PropRotationDirection, SpecificPosition
 from data.constants import *
 from data.positions_map import positions_map
 import os
@@ -18,7 +18,7 @@ class Type3_DataFrame_Generator(DataFrameGenerator):
 
     def define_shifts(
         self, shift_type
-    ) -> Dict[RotationDirection, List[Tuple[Location, Location]]]:
+    ) -> Dict[PropRotationDirection, List[Tuple[Location, Location]]]:
         if shift_type == "pro":
             return {
                 "cw": [("n", "e"), ("e", "s"), ("s", "w"), ("w", "n")],

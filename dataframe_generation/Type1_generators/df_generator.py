@@ -1,6 +1,6 @@
 from typing import Dict, List, Tuple
 import pandas as pd
-from data.Enums import Location, PropRotDir, SpecificPosition
+from data.Enums import Location, PropRotationDirection, SpecificPosition
 from data.constants import *
 from data.positions_map import positions_map
 import os
@@ -9,8 +9,8 @@ import os
 class DataFrameGenerator:
     def __init__(self, letters) -> None:
         self.letters = letters
-        self.rot_dirs = ["cw", "ccw"]
-        self.handpath_rot_dirs = ["cw_handpath", "ccw_handpath"]
+        self.rot_dirs = [CLOCKWISE, COUNTER_CLOCKWISE]
+        self.handpath_rot_dirs = [CW_HANDPATH, CCW_HANDPATH]
 
     def change_red_handpath_map_to(self, handpath_rot_dir):
         if handpath_rot_dir == CCW_HANDPATH:
@@ -28,7 +28,15 @@ class DataFrameGenerator:
                 (WEST, NORTH),
             ]
 
-    def get_red_prop_rot_dir(self, red_motion_type, red_handpath_rot_dir) -> PropRotDir:
+    def get_prop_rot_dir(self, motion_type, handpath_rot_dir) -> PropRotationDirection:
+        if motion_type == PRO:
+            return CLOCKWISE if handpath_rot_dir == CW_HANDPATH else COUNTER_CLOCKWISE
+        else:  # motion_type == "anti"
+            return COUNTER_CLOCKWISE if handpath_rot_dir == CW_HANDPATH else CLOCKWISE
+
+    def get_prop_rot_dir(
+        self, red_motion_type, red_handpath_rot_dir
+    ) -> PropRotationDirection:
         self.change_red_handpath_map_to(red_handpath_rot_dir)
         if red_handpath_rot_dir == CW_HANDPATH:
             if red_motion_type == PRO:
@@ -42,47 +50,31 @@ class DataFrameGenerator:
                 red_prop_rot_dir = CLOCKWISE
         return red_prop_rot_dir
 
-    def get_handpath_tuple_map_collection(self, motion_type):
-        if motion_type == PRO:
-            return {
-                CW_HANDPATH: [
-                    (NORTH, EAST),
-                    (EAST, SOUTH),
-                    (SOUTH, WEST),
-                    (WEST, NORTH),
-                ],
-                CCW_HANDPATH: [
-                    (NORTH, WEST),
-                    (WEST, SOUTH),
-                    (SOUTH, EAST),
-                    (EAST, NORTH),
-                ],
-            }
-        elif motion_type == ANTI:
-            return {
-                CW_HANDPATH: [
-                    (NORTH, WEST),
-                    (WEST, SOUTH),
-                    (SOUTH, EAST),
-                    (EAST, NORTH),
-                ],
-                CCW_HANDPATH: [
-                    (NORTH, EAST),
-                    (EAST, SOUTH),
-                    (SOUTH, WEST),
-                    (WEST, NORTH),
-                ],
-            }
+    def get_handpath_tuple_map_collection(self):
+        return {
+            CW_HANDPATH: [
+                (NORTH, EAST),
+                (EAST, SOUTH),
+                (SOUTH, WEST),
+                (WEST, NORTH),
+            ],
+            CCW_HANDPATH: [
+                (NORTH, WEST),
+                (WEST, SOUTH),
+                (SOUTH, EAST),
+                (EAST, NORTH),
+            ],
+        }
 
     def get_opposite_location(self, location: str) -> str:
-        opposite_map = {"n": "s", "s": "n", "e": "w", "w": "e"}
+        opposite_map = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
         return opposite_map.get(location, "")
 
-    def get_opposite_rot_dir(self, rot_dir) -> PropRotDir:
-        if rot_dir == "cw":
-            return "ccw"
-        elif rot_dir == "ccw":
-            return "cw"
+    def get_opposite_rot_dir(self, rot_dir) -> PropRotationDirection:
+        if rot_dir == CLOCKWISE:
+            return COUNTER_CLOCKWISE
+        elif rot_dir == COUNTER_CLOCKWISE:
+            return CLOCKWISE
 
     def get_opposite_loc_tuple(self, red_loc_tuple) -> Tuple[Location, Location]:
         return tuple(self.get_opposite_location(loc) for loc in red_loc_tuple)
@@ -99,7 +91,7 @@ class DataFrameGenerator:
         end_pos = positions_map.get(end_key)
         return start_pos, end_pos
 
-    def save_dataframe(self, letter, data, type_name):
+    def save_dataframe(self, letter, data, type_name) -> None:
         df = pd.DataFrame(data)
         self.prepare_dataframe(df)
         self.write_dataframe_to_file(
@@ -107,8 +99,8 @@ class DataFrameGenerator:
         )
 
     def prepare_dataframe(self, df: pd.DataFrame) -> None:
-        motion_type_order = ["pro", "anti", "dash", "static"]
-        rot_dir_order = ["cw", "ccw"]
+        motion_type_order = [PRO, "anti", "dash", "static"]
+        rot_dir_order = [CLOCKWISE, COUNTER_CLOCKWISE]
         df["blue_motion_type"] = pd.Categorical(
             df["blue_motion_type"], categories=motion_type_order, ordered=True
         )
@@ -127,13 +119,9 @@ class DataFrameGenerator:
             inplace=True,
         )
 
-    def write_dataframe_to_file(self, df, filename):
+    def write_dataframe_to_file(self, df: pd.DataFrame, filename):
         dir_name = os.path.dirname(filename)
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)
         df.to_csv(filename, index=False)
 
-    def generate_dataframes(self) -> None:
-        for letter in self.letters:
-            data = getattr(self, f"create_dataframe_for_{letter}")()
-            self.save_dataframe(letter, data, self.type_name)

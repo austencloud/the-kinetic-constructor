@@ -105,7 +105,7 @@ class Location(Enum):
     SOUTHEAST = "se"
 
 
-class PropRotDir(Enum):
+class PropRotationDirection(Enum):
     CLOCKWISE = "cw"
     COUNTER_CLOCKWISE = "ccw"
 
@@ -197,112 +197,111 @@ class Letter(Enum):
     Eta = "η"
 
 
-alpha_ending_letters: Set[Letter] = {
-    Letter.A,
-    Letter.B,
-    Letter.C,
-    Letter.D,
-    Letter.E,
-    Letter.F,
-    Letter.W,
-    Letter.X,
-    Letter.W_dash,
-    Letter.X_dash,
-    Letter.Phi,
-    Letter.Phi_dash,
-    Letter.Alpha,
-}
-beta_ending_letters: Set[Letter] = {
-    Letter.G,
-    Letter.H,
-    Letter.I,
-    Letter.J,
-    Letter.K,
-    Letter.L,
-    Letter.Y,
-    Letter.Z,
-    Letter.Y_dash,
-    Letter.Z_dash,
-    Letter.Psi,
-    Letter.Psi_dash,
-    Letter.Beta,
-}
-gamma_ending_letters: Set[Letter] = {
-    Letter.M,
-    Letter.N,
-    Letter.O,
-    Letter.P,
-    Letter.Q,
-    Letter.R,
-    Letter.S,
-    Letter.T,
-    Letter.U,
-    Letter.V,
-    Letter.Sigma,
-    Letter.Sigma_dash,
-    Letter.Delta,
-    Letter.Delta_dash,
-    Letter.Theta,
-    Letter.Theta_dash,
-    Letter.Omega,
-    Letter.Omega_dash,
-    Letter.Lambda,
-    Letter.Lambda_dash,
-    Letter.Gamma,
-}
+alpha_ending_letters = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "W",
+    "X",
+    "W-",
+    "X-",
+    "Φ",
+    "Φ-",
+    "α",
+]
+beta_ending_letters = [
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "Y",
+    "Z",
+    "Y-",
+    "Z-",
+    "Ψ",
+    "Ψ-",
+    "β",
+]
+gamma_ending_letters = [
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "Σ",
+    "Σ-",
+    "Δ",
+    "Δ-",
+    "θ",
+    "θ-",
+    "Ω",
+    "Ω-",
+    "Λ",
+    "Λ-",
+    "Γ",
+]
 
-alpha_starting_letters: Set[Letter] = {
-    Letter.A,
-    Letter.B,
-    Letter.C,
-    Letter.J,
-    Letter.K,
-    Letter.L,
-    Letter.Sigma,
-    Letter.Delta,
-    Letter.Theta_dash,
-    Letter.Omega_dash,
-    Letter.Psi,
-    Letter.Phi_dash,
-    Letter.Alpha,
-}
+alpha_starting_letters = [
+    "A",
+    "B",
+    "C",
+    "J",
+    "K",
+    "L",
+    "Σ",
+    "Δ",
+    "θ-",
+    "Ω-",
+    "Ψ",
+    "Φ-",
+    "α",
+]
 
-beta_starting_letters: Set[Letter] = {
-    Letter.G,
-    Letter.H,
-    Letter.I,
-    Letter.D,
-    Letter.E,
-    Letter.F,
-    Letter.Theta,
-    Letter.Omega,
-    Letter.Sigma_dash,
-    Letter.Delta_dash,
-    Letter.Psi_dash,
-    Letter.Phi,
-    Letter.Beta,
-}
+beta_starting_letters = [
+    "G",
+    "H",
+    "I",
+    "D",
+    "E",
+    "F",
+    "θ",
+    "Ω",
+    "Σ-",
+    "Δ-",
+    "Ψ-",
+    "Φ",
+    "β",
+]
 
-
-gamma_starting_letters: Set[Letter] = {
-    Letter.M,
-    Letter.N,
-    Letter.O,
-    Letter.P,
-    Letter.Q,
-    Letter.R,
-    Letter.S,
-    Letter.T,
-    Letter.U,
-    Letter.V,
-    Letter.W_dash,
-    Letter.X_dash,
-    Letter.Y_dash,
-    Letter.Z_dash,
-    Letter.Lambda,
-    Letter.Lambda_dash,
-    Letter.Gamma,
-}
+gamma_starting_letters = [
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W-",
+    "X-",
+    "Y-",
+    "Z-",
+    "Λ",
+    "Λ-",
+    "Γ",
+]
 
 
 class PropType(Enum):
@@ -561,7 +560,7 @@ class PropAttributesDicts(TypedDict):
 class MotionAttributesDicts(TypedDict):
     color: Color
     motion_type: MotionType
-    rot_dir: PropRotDir
+    rot_dir: PropRotationDirection
     location: Location
     turns: Turns
 
@@ -582,7 +581,7 @@ class ArrowAttributesDicts(TypedDict):
 class MotionAttributesDicts(TypedDict):
     color: Color
     motion_type: MotionType
-    rot_dir: PropRotDir
+    rot_dir: PropRotationDirection
     start_location: Location
     end_location: Location
     turns: Turns
@@ -617,7 +616,7 @@ class MotionTypeLetterGroups(Enum):
     DASH_VS_DASH = "Φ-Ψ-Λ-"
 
 
-class HandpathMode(Enum):
+class VTGHandpathMode(Enum):
     TOG_SAME = "TS"
     TOG_OPPOSITE = "TO"
     SPLIT_SAME = "SS"
@@ -626,11 +625,26 @@ class HandpathMode(Enum):
     QUARTER_TIME_OPPOSITE = "QTO"
 
 
+class TKAHandpathMode(Enum):
+    ALPHA_TO_ALPHA = "α→α"  # ABC
+    BETA_TO_ALPHA = "β→α"  # DEF
+    BETA_TO_BETA = "β→β"  # GHI
+    ALPHA_TO_BETA = "α→β"  # JKL
+    GAMMA_TO_GAMMA_OPP_ANTIPARALLEL = "Γ→Γ_opp_antiparallel"  # MNO
+    GAMMA_TO_GAMMA_OPP_PARALLEL = "Γ→Γ_opp_parallel"  # PQR
+    GAMMA_TO_GAMMA_SAME_DIR = "Γ→Γ_same"  # STUV
+
+    GAMMACLOCK_TO_GAMMACLOCK = "Γclock→Γclock"
+    GAMMACLOCK_TO_GAMMACOUNTER = "Γclock→Γcounter"
+    GAMMACOUNTER_TO_GAMMACOUNTER = "Γcounter→Γcounter"
+    GAMMACOUNTER_TO_GAMMACLOCK = "Γcounter→Γclock"
+
+
 class PictographAttributesDict(TypedDict):
     start_position: Position
     end_position: Position
     letter_type: LetterNumberType
-    handpath_mode: HandpathMode
+    vtg_handpath_mode: VTGHandpathMode
     motion_type_combination: MotionTypeCombination
 
 

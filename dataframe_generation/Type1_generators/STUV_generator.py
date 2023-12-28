@@ -1,5 +1,5 @@
 from typing import Dict, List, Literal, Tuple
-from data.Enums import Location, PropRotDir
+from data.Enums import Location, PropRotationDirection
 from df_generator import DataFrameGenerator
 from data.positions_map import positions_map
 from data.constants import *
@@ -70,10 +70,10 @@ class STUV_Generator(DataFrameGenerator):
                 if red_handpath_rot_dir == CCW_HANDPATH:
                     blue_motion_type = PRO
                     red_motion_type = ANTI
-                    red_prop_rot_dir = self.get_red_prop_rot_dir(
+                    red_prop_rot_dir = self.get_prop_rot_dir(
                         red_motion_type, red_handpath_rot_dir
                     )
-                    blue_prop_rot_dir = self.get_red_prop_rot_dir(
+                    blue_prop_rot_dir = self.get_prop_rot_dir(
                         blue_motion_type, red_handpath_rot_dir
                     )
                     blue_start_loc = red_end_loc
@@ -98,10 +98,10 @@ class STUV_Generator(DataFrameGenerator):
                 if red_handpath_rot_dir == CW_HANDPATH:
                     blue_motion_type = PRO
                     red_motion_type = ANTI
-                    red_prop_rot_dir = self.get_red_prop_rot_dir(
+                    red_prop_rot_dir = self.get_prop_rot_dir(
                         red_motion_type, red_handpath_rot_dir
                     )
-                    blue_prop_rot_dir = self.get_red_prop_rot_dir(
+                    blue_prop_rot_dir = self.get_prop_rot_dir(
                         blue_motion_type, red_handpath_rot_dir
                     )
                     blue_start_loc = red_end_loc
@@ -126,10 +126,10 @@ class STUV_Generator(DataFrameGenerator):
                 if red_handpath_rot_dir == CCW_HANDPATH:
                     blue_motion_type = ANTI
                     red_motion_type = PRO
-                    red_prop_rot_dir = self.get_red_prop_rot_dir(
+                    red_prop_rot_dir = self.get_prop_rot_dir(
                         red_motion_type, red_handpath_rot_dir
                     )
-                    blue_prop_rot_dir = self.get_red_prop_rot_dir(
+                    blue_prop_rot_dir = self.get_prop_rot_dir(
                         blue_motion_type, red_handpath_rot_dir
                     )
                     blue_start_loc = self.get_opposite_location(red_end_loc)
@@ -154,10 +154,10 @@ class STUV_Generator(DataFrameGenerator):
                 if red_handpath_rot_dir == CW_HANDPATH:
                     blue_motion_type = ANTI
                     red_motion_type = PRO
-                    red_prop_rot_dir = self.get_red_prop_rot_dir(
+                    red_prop_rot_dir = self.get_prop_rot_dir(
                         red_motion_type, red_handpath_rot_dir
                     )
-                    blue_prop_rot_dir = self.get_red_prop_rot_dir(
+                    blue_prop_rot_dir = self.get_prop_rot_dir(
                         blue_motion_type, red_handpath_rot_dir
                     )
                     blue_start_loc = self.get_opposite_location(red_end_loc)
@@ -190,10 +190,10 @@ class STUV_Generator(DataFrameGenerator):
                 if red_handpath_rot_dir == CCW_HANDPATH:
                     blue_motion_type = ANTI
                     red_motion_type = PRO
-                    red_prop_rot_dir = self.get_red_prop_rot_dir(
+                    red_prop_rot_dir = self.get_prop_rot_dir(
                         red_motion_type, red_handpath_rot_dir
                     )
-                    blue_prop_rot_dir = self.get_red_prop_rot_dir(
+                    blue_prop_rot_dir = self.get_prop_rot_dir(
                         blue_motion_type, red_handpath_rot_dir
                     )
                     blue_start_loc = red_end_loc
@@ -219,10 +219,10 @@ class STUV_Generator(DataFrameGenerator):
                 if red_handpath_rot_dir == CW_HANDPATH:
                     blue_motion_type = ANTI
                     red_motion_type = PRO
-                    red_prop_rot_dir = self.get_red_prop_rot_dir(
+                    red_prop_rot_dir = self.get_prop_rot_dir(
                         red_motion_type, red_handpath_rot_dir
                     )
-                    blue_prop_rot_dir = self.get_red_prop_rot_dir(
+                    blue_prop_rot_dir = self.get_prop_rot_dir(
                         blue_motion_type, red_handpath_rot_dir
                     )
                     blue_start_loc = red_end_loc
@@ -247,10 +247,10 @@ class STUV_Generator(DataFrameGenerator):
                 if red_handpath_rot_dir == CCW_HANDPATH:
                     blue_motion_type = PRO
                     red_motion_type = ANTI
-                    red_prop_rot_dir = self.get_red_prop_rot_dir(
+                    red_prop_rot_dir = self.get_prop_rot_dir(
                         red_motion_type, red_handpath_rot_dir
                     )
-                    blue_prop_rot_dir = self.get_red_prop_rot_dir(
+                    blue_prop_rot_dir = self.get_prop_rot_dir(
                         blue_motion_type, red_handpath_rot_dir
                     )
                     blue_start_loc = self.get_opposite_location(red_end_loc)
@@ -276,10 +276,10 @@ class STUV_Generator(DataFrameGenerator):
                 if red_handpath_rot_dir == CW_HANDPATH:
                     blue_motion_type = PRO
                     red_motion_type = ANTI
-                    red_prop_rot_dir = self.get_red_prop_rot_dir(
+                    red_prop_rot_dir = self.get_prop_rot_dir(
                         red_motion_type, red_handpath_rot_dir
                     )
-                    blue_prop_rot_dir = self.get_red_prop_rot_dir(
+                    blue_prop_rot_dir = self.get_prop_rot_dir(
                         blue_motion_type, red_handpath_rot_dir
                     )
                     blue_start_loc = self.get_opposite_location(red_end_loc)
@@ -489,7 +489,7 @@ class STUV_Generator(DataFrameGenerator):
         if letter in ["S", "T"]:
             red_motion_type = PRO if letter == "S" else ANTI
             for red_handpath_rot_dir in self.handpath_rot_dirs:
-                red_prop_rot_dir = self.get_red_prop_rot_dir(
+                red_prop_rot_dir = self.get_prop_rot_dir(
                     red_motion_type, red_handpath_rot_dir
                 )
 

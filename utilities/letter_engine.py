@@ -4,7 +4,7 @@ from Enums import (
     Letter,
     MotionTypeCombination,
     Position,
-    RotationDirection,
+    PropRotationDirection,
     SpecificPosition,
     SpecificStartEndPositionsDicts,
     alpha_ending_letters,
@@ -192,7 +192,7 @@ class LetterEngine:
     def determine_handpath_direction_relationship(self) -> Literal["same", "opp", None]:
         clockwise = ["n", "e", "s", "w"]
 
-        def calculate_direction(start, end) -> RotationDirection:
+        def calculate_direction(start, end) -> PropRotationDirection:
             return (clockwise.index(end) - clockwise.index(start)) % len(clockwise)
 
         arrow_locations = [

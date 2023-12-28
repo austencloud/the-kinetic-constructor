@@ -1,4 +1,4 @@
-from Enums import Location, MotionType, RotationDirection
+from Enums import Location, MotionType, PropRotationDirection
 from constants import *
 from utilities.TypeChecking.TypeChecking import (
     StartEndLocationTuple,
@@ -51,7 +51,7 @@ start_end_location_map = {
 
 def get_start_end_locations(
     motion_type: MotionType,
-    rot_dir: RotationDirection,
+    rot_dir: PropRotationDirection,
     arrow_location: Location,
 ) -> StartEndLocationTuple:
     """
@@ -60,7 +60,7 @@ def get_start_end_locations(
 
     Args:
         motion_type (MotionType): The type of motion for the arrow.
-        rot_dir (RotationDirection): The direction of rotation for the arrow.
+        rot_dir (PropRotationDirection): The direction of rotation for the arrow.
         arrow_location (Location): The location of the arrow.
 
     Returns:

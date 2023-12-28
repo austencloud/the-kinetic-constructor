@@ -2,7 +2,7 @@ from df_generator import DataFrameGenerator
 
 
 from typing import Dict, List, Tuple
-from data.Enums import Location, PropRotDir
+from data.Enums import Location, PropRotationDirection
 from df_generator import DataFrameGenerator
 
 
