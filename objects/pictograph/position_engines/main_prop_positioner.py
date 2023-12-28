@@ -43,7 +43,7 @@ class MainPropPositioner:
         self.letters: Dict[Letter, List[Dict[str, str]]] = scene.main_widget.letters
         self.init_positioners(scene)
 
-    def init_positioners(self, scene):
+    def init_positioners(self, scene) -> None:
         # Create a flat dictionary mapping each individual letter to its positioner class
         letter_to_positioner = {
             **{letter: Type1PropPositioner for letter in Type1_letters},

@@ -284,7 +284,6 @@ class Letter(Enum):
     Lambda_dash = "Λ-"
     Alpha = "α"
     Beta = "β"
-    Gamma = "Γ"
     Terra = "⊕"
     Tau = "𝛕"
     Mu = "μ"

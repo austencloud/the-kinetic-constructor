@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class Type2PropPositioner(BasePropPositioner):
     def reposition_Y_Z(self) -> None:
         if self.scene.main_widget.prop_type in non_strictly_placed_props:
-            if self.scene.has_hybrid_orientation():
+            if self.scene.has_hybrid_orientations():
                 for prop in self.props:
                     self._set_default_prop_location(prop)
             else:

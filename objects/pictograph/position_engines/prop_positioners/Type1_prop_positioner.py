@@ -5,7 +5,7 @@ from objects.pictograph.position_engines.base_prop_positioner import BasePropPos
 
 class Type1PropPositioner(BasePropPositioner):
     def reposition_G_H(self) -> None:
-        if self.scene.has_hybrid_orientation():
+        if self.scene.has_hybrid_orientations():
             self._set_default_prop_location(self.red_prop)
             self._set_default_prop_location(self.blue_prop)
 
@@ -24,7 +24,7 @@ class Type1PropPositioner(BasePropPositioner):
             self.blue_prop.setPos(new_blue_pos)
 
     def reposition_I(self) -> None:
-        if self.scene.has_hybrid_orientation():
+        if self.scene.has_hybrid_orientations():
             for prop in self.props:
                 if prop.prop_type in strictly_placed_props:
                     self._set_strict_prop_location(prop)
@@ -53,7 +53,7 @@ class Type1PropPositioner(BasePropPositioner):
     def reposition_J_K_L(self) -> None:
         # Extract motion type and end locations for both colors from the DataFrame row
 
-        if self.scene.has_hybrid_orientation():
+        if self.scene.has_hybrid_orientations():
             for prop in self.props:
                 if prop.prop_type in strictly_placed_props:
                     self._set_strict_prop_location(prop)

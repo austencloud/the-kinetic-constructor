@@ -24,16 +24,8 @@ class OptionPickerFilterFrame(FilterFrame):
         self.option_picker_tab.scroll_area.apply_turn_filters(self.filters)
 
     def apply_filters(self) -> None:
-        selected_blue_turns = [
-            turn
-            for turn, checkbox in self.blue_turn_checkboxes.items()
-            if checkbox.isChecked()
-        ][0]
-        selected_red_turns = [
-            turn
-            for turn, checkbox in self.red_turn_checkboxes.items()
-            if checkbox.isChecked()
-        ][0]
+        selected_blue_turns = self.left_turns_combobox.currentText()
+        selected_red_turns = self.right_turns_combobox.currentText()
         selected_left_end_or = self.left_end_or_combobox.currentText()
         selected_right_end_or = self.right_end_or_combobox.currentText()
         selected_left_start_or = self.left_start_or_combobox.currentText()

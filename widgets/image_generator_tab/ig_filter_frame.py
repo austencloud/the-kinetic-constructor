@@ -16,20 +16,8 @@ class IGFilterFrame(FilterFrame):
         self.left_end_or_combobox.currentTextChanged.connect(self.apply_filters)
 
     def apply_filters(self) -> None:
-        selected_blue_turns = [
-            turn
-            for turn, checkbox in self.blue_turn_checkboxes.items()
-            if checkbox.isChecked()
-        ][
-            0
-        ]  # Access the first element of the list
-        selected_red_turns = [
-            turn
-            for turn, checkbox in self.red_turn_checkboxes.items()
-            if checkbox.isChecked()
-        ][
-            0
-        ]  # Access the first element of the list
+        selected_blue_turns = self.left_turns_combobox.currentText()
+        selected_red_turns = self.right_turns_combobox.currentText()
         selected_left_end_or = self.left_end_or_combobox.currentText()
         selected_right_end_or = self.right_end_or_combobox.currentText()
 

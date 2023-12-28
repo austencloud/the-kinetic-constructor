@@ -381,6 +381,13 @@ class StaffArrowPositioner:
                 anti_motion.arrow.location, 80
             )
             self.arrow_positioner._apply_adjustment(anti_motion.arrow, adjustment)
+        elif red_motion.prop.orientation == OUT or blue_motion.prop.orientation == OUT:
+            for arrow in self.pictograph.arrows.values():
+                if arrow.motion.prop.orientation == OUT:
+                    adjustment = self.arrow_positioner.calculate_adjustment(
+                        arrow.location, 55
+                    )
+                    self.arrow_positioner._apply_adjustment(arrow, adjustment)
 
     # Helper functions
     def _are_both_props_radial(self, red_motion: Motion, blue_motion: Motion) -> bool:

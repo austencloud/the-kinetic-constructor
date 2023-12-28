@@ -354,6 +354,7 @@ class Pictograph(QGraphicsScene):
             )
 
     def update_pictograph(self) -> None:
+        
         self.update_letter()
         self.update_arrows()
         self.update_props()
@@ -369,6 +370,7 @@ class Pictograph(QGraphicsScene):
     def update_letter(self) -> None:
         if all(motion.motion_type for motion in self.motions.values()):
             self.current_letter = self.letter_engine.get_current_letter()
+            self.letter_item.letter = self.current_letter
             self.set_letter_renderer(self.current_letter)
             self.letter_item.position_letter_item(self.letter_item)
         else:
@@ -566,20 +568,11 @@ class Pictograph(QGraphicsScene):
 
         return QPixmap.fromImage(image)
 
-    # New method to handle conditional image loading
     def load_image_if_needed(self) -> None:
         if not self.image_loaded:
             self.render_and_cache_image()
 
-    def has_hybrid_orientation(self) -> bool:
-        red_prop, blue_prop = self.props[RED], self.props[BLUE]
-        return red_prop.is_radial() != blue_prop.is_radial()
-
-    def has_non_hybrid_orientation(self) -> bool:
-        red_prop, blue_prop = self.props[RED], self.props[BLUE]
-        return (red_prop.is_radial() == blue_prop.is_radial()) or (
-            red_prop.is_antiradial() and blue_prop.is_antiradial()
-        )
+    ### FLAGS ###
 
     def has_props_in_beta(self) -> bool | None:
         return self.current_letter in beta_ending_letters
@@ -589,3 +582,19 @@ class Pictograph(QGraphicsScene):
 
     def has_props_in_gamma(self) -> bool | None:
         return self.current_letter in gamma_ending_letters
+
+    def has_hybrid_orientations(self) -> bool:
+        red_prop, blue_prop = self.props[RED], self.props[BLUE]
+        return red_prop.is_radial() != blue_prop.is_radial()
+
+    def has_non_hybrid_orientations(self) -> bool:
+        red_prop, blue_prop = self.props[RED], self.props[BLUE]
+        return (red_prop.is_radial() == blue_prop.is_radial()) or (
+            red_prop.is_antiradial() and blue_prop.is_antiradial()
+        )
+
+    def has_all_radial_props(self) -> bool:
+        return all(prop.is_radial() for prop in self.props.values())
+
+    def has_all_antiradial_props(self) -> bool:
+        return all(prop.is_antiradial() for prop in self.props.values())
