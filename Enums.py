@@ -51,6 +51,9 @@ class LetterNumberType(Enum):
     def description(self):
         return self._description
 
+class ShiftHandpaths(Enum):
+    CW_HANDPATH = "cw"
+    CCW_HANDPATH = "ccw"
 
 class Color(Enum):
     BLUE = "blue"

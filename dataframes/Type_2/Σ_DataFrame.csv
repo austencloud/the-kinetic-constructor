@@ -1,0 +1,17 @@
+letter,start_position,end_position,blue_motion_type,blue_prop_rot_dir,blue_start_loc,blue_end_loc,red_motion_type,red_prop_rot_dir,red_start_loc,red_end_loc
+Σ,alpha1,gamma1,pro,cw,s,w,static,None,n,n
+Σ,alpha2,gamma2,pro,cw,w,n,static,None,e,e
+Σ,alpha3,gamma3,pro,cw,n,e,static,None,s,s
+Σ,alpha4,gamma4,pro,cw,e,s,static,None,w,w
+Σ,alpha1,gamma5,pro,ccw,s,e,static,None,n,n
+Σ,alpha2,gamma6,pro,ccw,w,s,static,None,e,e
+Σ,alpha3,gamma7,pro,ccw,n,w,static,None,s,s
+Σ,alpha4,gamma8,pro,ccw,e,n,static,None,w,w
+Σ,alpha1,gamma6,static,None,s,s,pro,cw,n,e
+Σ,alpha1,gamma4,static,None,s,s,pro,ccw,n,w
+Σ,alpha2,gamma7,static,None,w,w,pro,cw,e,s
+Σ,alpha2,gamma1,static,None,w,w,pro,ccw,e,n
+Σ,alpha3,gamma8,static,None,n,n,pro,cw,s,w
+Σ,alpha3,gamma2,static,None,n,n,pro,ccw,s,e
+Σ,alpha4,gamma5,static,None,e,e,pro,cw,w,n
+Σ,alpha4,gamma3,static,None,e,e,pro,ccw,w,s

@@ -1,6 +1,6 @@
-from typing import Tuple
+from typing import Set, Tuple
 import pandas as pd
-from Enums import Location, PropRotationDirection, SpecificPosition
+from Enums import Location, PropRotationDirection, ShiftHandpaths, SpecificPosition
 from constants import *
 from data.positions_map import positions_map
 import os
@@ -45,21 +45,39 @@ class DataFrameGenerator:
         elif motion_type == DASH:
             return "None"
 
-    def get_handpath_tuple_map_collection(self):
+    def get_static_tuple_map(self):
         return {
-            CW_HANDPATH: [
+            (NORTH, NORTH),
+            (EAST, EAST),
+            (SOUTH, SOUTH),
+            (WEST, WEST),
+        }
+
+    def get_dash_tuple_map(self):
+        return {
+            (NORTH, SOUTH),
+            (EAST, WEST),
+            (SOUTH, NORTH),
+            (WEST, EAST),
+        }
+
+    def get_shift_tuple_map_from_handpath(
+        self, handpath: ShiftHandpaths
+    ) -> Set[Tuple[Location, Location]]:
+        if handpath == CW_HANDPATH:
+            return {
                 (NORTH, EAST),
                 (EAST, SOUTH),
                 (SOUTH, WEST),
                 (WEST, NORTH),
-            ],
-            CCW_HANDPATH: [
+            }
+        elif handpath == CCW_HANDPATH:
+            return {
                 (NORTH, WEST),
                 (WEST, SOUTH),
                 (SOUTH, EAST),
                 (EAST, NORTH),
-            ],
-        }
+            }
 
     def get_opposite_location(self, location: str) -> str:
         opposite_map = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
@@ -114,7 +132,6 @@ class DataFrameGenerator:
             ],
             inplace=True,
         )
-
 
     def write_dataframe_to_file(self, df: pd.DataFrame, filename):
         dir_name = os.path.dirname(filename)

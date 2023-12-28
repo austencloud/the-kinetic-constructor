@@ -1,0 +1,17 @@
+letter,start_position,end_position,blue_motion_type,blue_prop_rot_dir,blue_start_loc,blue_end_loc,red_motion_type,red_prop_rot_dir,red_start_loc,red_end_loc
+Λ,gamma1,gamma5,dash,None,w,e,static,None,n,n
+Λ,gamma2,gamma6,dash,None,n,s,static,None,e,e
+Λ,gamma3,gamma7,dash,None,e,w,static,None,s,s
+Λ,gamma4,gamma8,dash,None,s,n,static,None,w,w
+Λ,gamma5,gamma1,dash,None,e,w,static,None,n,n
+Λ,gamma6,gamma2,dash,None,s,n,static,None,e,e
+Λ,gamma7,gamma3,dash,None,w,e,static,None,s,s
+Λ,gamma8,gamma4,dash,None,n,s,static,None,w,w
+Λ,gamma1,gamma7,static,None,w,w,dash,None,n,s
+Λ,gamma2,gamma8,static,None,n,n,dash,None,e,w
+Λ,gamma3,gamma5,static,None,e,e,dash,None,s,n
+Λ,gamma4,gamma6,static,None,s,s,dash,None,w,e
+Λ,gamma5,gamma3,static,None,e,e,dash,None,n,s
+Λ,gamma6,gamma4,static,None,s,s,dash,None,e,w
+Λ,gamma7,gamma1,static,None,w,w,dash,None,s,n
+Λ,gamma8,gamma2,static,None,n,n,dash,None,w,e
