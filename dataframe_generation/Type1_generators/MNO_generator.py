@@ -1,8 +1,7 @@
 from df_generator import DataFrameGenerator
 
 
-from typing import Dict, List, Tuple
-from data.Enums import Location, PropRotationDirection
+from typing import Dict, List
 from df_generator import DataFrameGenerator
 
 

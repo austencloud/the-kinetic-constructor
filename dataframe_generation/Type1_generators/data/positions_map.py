@@ -1,4 +1,4 @@
-from data.Enums import Color, Location, SpecificPosition
+from data.Enums import Location, SpecificPosition
 from data.constants import *
 from typing import Dict, Tuple
 

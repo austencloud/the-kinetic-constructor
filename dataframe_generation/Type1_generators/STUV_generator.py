@@ -1,5 +1,5 @@
-from typing import Dict, List, Literal, Tuple
-from data.Enums import Location, PropRotationDirection
+from typing import Dict, List, Tuple
+from data.Enums import Location
 from df_generator import DataFrameGenerator
 from data.positions_map import positions_map
 from data.constants import *
