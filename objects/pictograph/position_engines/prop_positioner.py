@@ -497,7 +497,7 @@ class PropPositioner:
         is_shift = motion.motion_type in [
             PRO,
             ANTI,
-            MotionType.FLOAT,
+            FLOAT,
         ]
         is_static = motion.motion_type == STATIC
 

@@ -41,7 +41,7 @@ def get_specific_start_end_poss(
     )
 
     specific_positions: SpecificStartEndPositionsDicts = {
-        start_pos: positions_map.get(start_locs),
-        end_pos: positions_map.get(end_locs),
+        START_POS: positions_map.get(start_locs),
+        END_POS: positions_map.get(end_locs),
     }
     return specific_positions

@@ -42,7 +42,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
     def match_target_arrow(self, target_arrow: "Arrow") -> None:
         self.target_arrow = target_arrow
-        self.rot_dir = target_arrow.motion.rot_dir
+        self.rot_dir = target_arrow.motion.prop_rot_dir
         self.motion_type = target_arrow.motion_type
         self.color = target_arrow.color
         self.arrow_location = target_arrow.location
@@ -60,7 +60,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.color: Color = target_arrow.color
         self.motion_type: MotionType = target_arrow.motion_type
         self.arrow_location: Location = target_arrow.location
-        self.rot_dir: PropRotationDirection = target_arrow.motion.rot_dir
+        self.rot_dir: PropRotationDirection = target_arrow.motion.prop_rot_dir
 
         self.turns: Turns = target_arrow.turns
 
@@ -146,7 +146,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         self.ghost.motion.arrow.location = new_location
         self.ghost.motion_type = self.motion_type
-        self.ghost.motion.rot_dir = self.rot_dir
+        self.ghost.motion.prop_rot_dir = self.rot_dir
 
         self.ghost.turns = self.turns
         self.ghost.is_svg_mirrored = self.is_svg_mirrored

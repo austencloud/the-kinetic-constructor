@@ -186,7 +186,7 @@ class ArrowPositioner:
             },
         }
         color_adjustments = adjustment_dict.get(arrow.color, {})
-        rotation_adjustments = color_adjustments.get(arrow.motion.rot_dir, {})
+        rotation_adjustments = color_adjustments.get(arrow.motion.prop_rot_dir, {})
         return rotation_adjustments.get(arrow.location, QPointF(0, 0))
 
     def _calculate_R_adjustment(self, arrow: Arrow) -> QPointF:
@@ -221,7 +221,9 @@ class ArrowPositioner:
             },
         }
         motion_type_adjustments = adjustment_dict.get(arrow.motion_type, {})
-        rotation_adjustments = motion_type_adjustments.get(arrow.motion.rot_dir, {})
+        rotation_adjustments = motion_type_adjustments.get(
+            arrow.motion.prop_rot_dir, {}
+        )
         return rotation_adjustments.get(arrow.location, QPointF(0, 0))
 
     ### UNIVERSAL METHODS ###

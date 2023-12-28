@@ -286,13 +286,6 @@ class OptionPickerScrollArea(QScrollArea):
         ]
         filtered_data = filtered_data[filtered_data[LETTER].isin(next_possible_letters)]
 
-        # filter to ensure the options have a start orientation for each motion that matches the end orientations of the reference option's motions
-        # for color in [BLUE, RED]:
-        #     filtered_data = filtered_data[
-        #         filtered_data[f"{color}_start_or"]
-        #         == clicked_option.motions[color].end_or
-        #     ]
-
         self.options.clear()
         self.clear()
         for idx, pd_row_data in filtered_data.iterrows():

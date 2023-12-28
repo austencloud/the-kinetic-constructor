@@ -48,7 +48,7 @@ class ArrowManipulator:
             new_start_loc,
             new_end_loc,
         ) = get_start_end_locs(
-            self.arrow.motion_type, self.arrow.motion.rot_dir, new_location
+            self.arrow.motion_type, self.arrow.motion.prop_rot_dir, new_location
         )
 
         self.arrow.motion.start_loc = new_start_loc
@@ -84,11 +84,11 @@ class ArrowManipulator:
         elif not self.arrow.is_svg_mirrored:
             self.mirror()
 
-        if self.arrow.motion.rot_dir == COUNTER_CLOCKWISE:
+        if self.arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
             new_rot_dir = CLOCKWISE
-        elif self.arrow.motion.rot_dir == CLOCKWISE:
+        elif self.arrow.motion.prop_rot_dir == CLOCKWISE:
             new_rot_dir = COUNTER_CLOCKWISE
-        elif self.arrow.motion.rot_dir == "None":
+        elif self.arrow.motion.prop_rot_dir == "None":
             new_rot_dir = "None"
 
         old_start_loc = self.arrow.motion.start_loc
@@ -99,7 +99,7 @@ class ArrowManipulator:
         svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
         self.arrow.update_svg(svg_file)
 
-        self.arrow.motion.rot_dir = new_rot_dir
+        self.arrow.motion.prop_rot_dir = new_rot_dir
         self.arrow.motion.start_loc = new_start_loc
         self.arrow.motion.end_loc = new_end_loc
 
@@ -147,16 +147,16 @@ class ArrowManipulator:
         elif self.arrow.motion_type == STATIC:
             new_motion_type = STATIC
 
-        if self.arrow.motion.rot_dir == COUNTER_CLOCKWISE:
+        if self.arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
             new_rot_dir = CLOCKWISE
-        elif self.arrow.motion.rot_dir == CLOCKWISE:
+        elif self.arrow.motion.prop_rot_dir == CLOCKWISE:
             new_rot_dir = COUNTER_CLOCKWISE
-        elif self.arrow.motion.rot_dir == "None":
+        elif self.arrow.motion.prop_rot_dir == "None":
             new_rot_dir = "None"
 
         self.arrow.motion_type = new_motion_type
         self.arrow.motion.motion_type = new_motion_type
-        self.arrow.motion.rot_dir = new_rot_dir
+        self.arrow.motion.prop_rot_dir = new_rot_dir
 
         self.arrow.motion.prop.orientation = self.arrow.motion.prop.swap_orientation(
             self.arrow.motion.prop.orientation
@@ -168,7 +168,7 @@ class ArrowManipulator:
         self.arrow.motion.motion_type = new_motion_type
         self.arrow.ghost.motion_type = new_motion_type
 
-        self.arrow.motion.rot_dir = new_rot_dir
+        self.arrow.motion.prop_rot_dir = new_rot_dir
         self.arrow.update_svg(svg_file)
         self.arrow.update_color()
         if hasattr(self.arrow, "ghost"):
@@ -228,12 +228,12 @@ class ArrowManipulator:
             elif self.arrow.motion.motion_type in [
                 PRO,
                 ANTI,
-                MotionType.FLOAT,
+                FLOAT,
             ]:
                 self.rotate_diamond_mode_shift_arrow(
                     rot_dir, diamond_mode_shift_arrow_locations
                 )
-            elif self.arrow.motion.motion_type in [MotionType.DASH]:
+            elif self.arrow.motion.motion_type in [DASH]:
                 self.rotate_diamond_mode_dash_arrow(
                     rot_dir, diamond_mode_dash_arrow_locations
                 )
@@ -245,12 +245,12 @@ class ArrowManipulator:
             elif self.arrow.motion.motion_type in [
                 PRO,
                 ANTI,
-                MotionType.FLOAT,
+                FLOAT,
             ]:
                 self.rotate_box_mode_shift_arrow(
                     rot_dir, box_mode_shift_arrow_locations
                 )
-            elif self.arrow.motion.motion_type in [MotionType.DASH]:
+            elif self.arrow.motion.motion_type in [DASH]:
                 self.rotate_box_mode_dash_arrow(rot_dir, box_mode_dash_arrow_locations)
 
     def rotate_diamond_mode_dash_arrow(
@@ -286,7 +286,7 @@ class ArrowManipulator:
             new_end_loc,
         ) = get_start_end_locs(
             self.arrow.motion_type,
-            self.arrow.motion.rot_dir,
+            self.arrow.motion.prop_rot_dir,
             new_arrow_location,
         )
 
@@ -321,7 +321,7 @@ class ArrowManipulator:
             new_end_loc,
         ) = get_start_end_locs(
             self.arrow.motion_type,
-            self.arrow.motion.rot_dir,
+            self.arrow.motion.prop_rot_dir,
             new_arrow_location,
         )
 

@@ -1,4 +1,6 @@
 from Enums import (
+    Color,
+    Handpath,
     MotionAttributesDicts,
     MotionType,
     Orientation,
@@ -20,37 +22,21 @@ class Motion:
         self,
         scene: Union["Pictograph", "ArrowBox"],
         motion_dict: MotionAttributesDicts,
-        blank=False,
     ) -> None:
         self.scene = scene
         self.motion_dict = motion_dict
-        self.initialize_attributes()
-        self.color: COLOR = motion_dict["color"]
-
-        if not blank:
-            self.setup_attributes(motion_dict)
-
-    def initialize_attributes(self):
-        self.arrow: Arrow = None
-        self.prop: Prop = None
-        self.color: COLOR = None
-        self.motion_type: MOTION_TYPE = None
-        self.turns: TURNS = None
-        self.rot_dir: PROP_ROT_DIR = None
-        self.start_loc: START_LOC = None
-        self.end_loc: END_LOC = None
-        self.start_or: START_OR = None
-        self.end_or: END_OR = None
+        self.setup_attributes(motion_dict)
 
     ### SETUP ###
 
     def setup_attributes(self, motion_dict: Dict) -> None:
+        self.color: Color = motion_dict[COLOR]
         self.arrow: Arrow = motion_dict.get(ARROW)
         self.prop: Prop = motion_dict.get(PROP)
 
         self.motion_type: MOTION_TYPE = motion_dict[MOTION_TYPE]
         self.turns: TURNS = motion_dict[TURNS]
-        self.rot_dir: PROP_ROT_DIR = motion_dict[PROP_ROT_DIR]
+        self.prop_rot_dir: PROP_ROT_DIR = motion_dict[PROP_ROT_DIR]
         self.start_loc: START_LOC = motion_dict[START_LOC]
         self.end_loc: END_LOC = motion_dict[END_LOC]
         self.start_or: START_OR = motion_dict[START_OR]
@@ -60,8 +46,8 @@ class Motion:
         self.end_or: END_OR = self.get_end_or()
         self.update_prop_orientation()
 
-    def assign_location_to_arrow(self):
-        if hasattr(self, "arrow") and self.arrow:
+    def assign_location_to_arrow(self) -> None:
+        if hasattr(self, ARROW) and self.arrow:
             self.arrow.location = self.get_arrow_location(self.start_loc, self.end_loc)
 
     ### UPDATE ###
@@ -82,7 +68,7 @@ class Motion:
         self.arrow.update_svg(svg_file)
         self.arrow.update_appearance()
         self.arrow.arrow_dict[TURNS] = self.arrow.turns
-        if hasattr(self.arrow, "ghost"):
+        if hasattr(self.arrow, GHOST):
             if self.arrow.ghost:
                 self.arrow.ghost.turns = self.arrow.turns
                 self.arrow.ghost.update_svg(svg_file)
@@ -90,7 +76,7 @@ class Motion:
         self.scene.update_pictograph()
 
     def update_prop_orientation(self) -> None:
-        if hasattr(self, "prop") and self.prop:
+        if hasattr(self, PROP) and self.prop:
             self.prop.orientation = self.end_or
             self.prop.location = self.end_loc
             self.prop.axis = self.prop.get_axis_from_orientation(
@@ -99,13 +85,13 @@ class Motion:
             self.prop.update_rotation()
             self.prop.update_appearance()
 
-    def clear_attributes(self):
+    def clear_attributes(self) -> None:
         self.start_loc = None
         self.end_loc = None
         self.turns = None
         self.motion_type = None
 
-        self.rot_dir = None
+        self.prop_rot_dir = None
         self.start_or = None
         self.end_or = None
 
@@ -116,7 +102,7 @@ class Motion:
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,
             TURNS: self.turns,
-            PROP_ROT_DIR: self.rot_dir,
+            PROP_ROT_DIR: self.prop_rot_dir,
             START_LOC: self.start_loc,
             END_LOC: self.end_loc,
             START_OR: self.start_or,
@@ -159,7 +145,7 @@ class Motion:
             (ANTI, 3, COUNTER): COUNTER,
         }
 
-        clockwise_handpath_half_turns_map = {
+        cw_handpath_half_turns_map = {
             (PRO, 0.5, IN): COUNTER,
             (PRO, 1.5, IN): CLOCK,
             (PRO, 2.5, IN): COUNTER,
@@ -186,7 +172,7 @@ class Motion:
             (ANTI, 2.5, COUNTER): IN,
         }
 
-        counter_handpath_half_turns_map = {
+        ccw_handpath_half_turns_map = {
             (PRO, 0.5, IN): CLOCK,
             (PRO, 1.5, IN): COUNTER,
             (PRO, 2.5, IN): CLOCK,
@@ -214,65 +200,72 @@ class Motion:
         }
 
         float_map = {
-            (IN, "cw_hp"): CLOCK,
-            (IN, "ccw_hp"): COUNTER,
-            (OUT, "cw_hp"): COUNTER,
-            (OUT, "ccw_hp"): CLOCK,
-            (CLOCK, "cw_hp"): OUT,
-            (CLOCK, "ccw_hp"): IN,
-            (COUNTER, "cw_hp"): IN,
-            (COUNTER, "ccw_hp"): OUT,
+            (IN, CW_HANDPATH): CLOCK,
+            (IN, CCW_HANDPATH): COUNTER,
+            (OUT, CW_HANDPATH): COUNTER,
+            (OUT, CCW_HANDPATH): CLOCK,
+            (CLOCK, CW_HANDPATH): OUT,
+            (CLOCK, CCW_HANDPATH): IN,
+            (COUNTER, CW_HANDPATH): IN,
+            (COUNTER, CCW_HANDPATH): OUT,
         }
 
-        def get_handpath_direction(start_loc, end_loc) -> Literal["cw_hp", "ccw_hp"]:
-            clockwise_handpaths = [("n", "e"), ("e", "s"), ("s", "w"), ("w", "n")]
-            counter_clockwise_handpaths = [
-                ("n", "w"),
-                ("w", "s"),
-                ("s", "e"),
-                ("e", "n"),
+        def get_handpath_direction(start_loc, end_loc) -> Handpath:
+            cw_handpaths = [(NORTH, EAST), (EAST, SOUTH), (SOUTH, WEST), (WEST, NORTH)]
+            ccw_handpaths = [(NORTH, WEST), (WEST, SOUTH), (SOUTH, EAST), (EAST, NORTH)]
+            dash_handpaths = [
+                (NORTH, SOUTH),
+                (EAST, WEST),
+                (SOUTH, NORTH),
+                (WEST, EAST),
             ]
-            if (start_loc, end_loc) in clockwise_handpaths:
-                return "cw_hp"
-            elif (start_loc, end_loc) in counter_clockwise_handpaths:
-                return "ccw_hp"
+            if (start_loc, end_loc) in cw_handpaths:
+                return CW_HANDPATH
+            elif (start_loc, end_loc) in ccw_handpaths:
+                return CCW_HANDPATH
             elif start_loc == end_loc:
-                return None
+                return STATIC_HANDPATH
+            elif (start_loc, end_loc) in dash_handpaths:
+                return DASH_HANDPATH
             else:
                 print("Unrecognized handpath direction")
 
         handpath_direction = get_handpath_direction(self.start_loc, self.end_loc)
-        if self.motion_type == MotionType.FLOAT:
+        if self.motion_type == FLOAT:
             key = (self.start_or, handpath_direction)
             return float_map.get(key)
-        elif self.turns in [0, 1, 2, 3] or self.turns in ["0", "1", "2", "3"]:
-            if self.motion_type in [PRO, ANTI]:
-                key = (self.motion_type, int(self.turns), self.start_or)
-                return whole_turn_orientation_map.get(key)
-            if self.motion_type == STATIC:
-                key = (PRO, int(self.turns), self.start_or)
-                return whole_turn_orientation_map.get(key)
-            if self.motion_type == MotionType.DASH:
-                key = (ANTI, int(self.turns), self.start_or)
-                return whole_turn_orientation_map.get(key)
+        valid_turns = [0, 0.5, 1, 1.5, 2, 2.5, 3]
+        self.turns = float(self.turns)
 
-        elif self.turns in [0.5, 1.5, 2.5] or self.turns in ["0.5", "1.5", "2.5"]:
-            if handpath_direction == "cw_hp":
-                map_to_use = clockwise_handpath_half_turns_map
+        if self.turns in valid_turns:
+            if self.turns.is_integer():
+                self.turns = int(self.turns)
+                if self.motion_type in [PRO, ANTI]:
+                    key = (self.motion_type, self.turns, self.start_or)
+                    return whole_turn_orientation_map.get(key)
+                if self.motion_type == STATIC:
+                    key = (PRO, self.turns, self.start_or)
+                    return whole_turn_orientation_map.get(key)
+                if self.motion_type == DASH:
+                    key = (ANTI, self.turns, self.start_or)
+                    return whole_turn_orientation_map.get(key)
             else:
-                map_to_use = counter_handpath_half_turns_map
+                if handpath_direction == CW_HANDPATH:
+                    map_to_use = cw_handpath_half_turns_map
+                else:
+                    map_to_use = ccw_handpath_half_turns_map
 
-            if self.motion_type in [PRO, ANTI]:
-                key = (self.motion_type, float(self.turns), self.start_or)
-                return map_to_use.get(key)
+                if self.motion_type in [PRO, ANTI]:
+                    key = (self.motion_type, self.turns, self.start_or)
+                    return map_to_use.get(key)
 
-            if self.motion_type == STATIC:
-                key = (PRO, float(self.turns), self.start_or)
-                return map_to_use.get(key)
+                if self.motion_type == STATIC:
+                    key = (PRO, self.turns, self.start_or)
+                    return map_to_use.get(key)
 
-            elif self.motion_type == MotionType.DASH:
-                key = (ANTI, float(self.turns), self.start_or)
-                return map_to_use.get(key)
+                elif self.motion_type == DASH:
+                    key = (ANTI, self.turns, self.start_or)
+                    return map_to_use.get(key)
 
     def get_arrow_location(self, start_loc: str, end_loc: str) -> str:
         if self.arrow:
@@ -280,14 +273,14 @@ class Motion:
                 return start_loc
 
             direction_map = {
-                ("n", "e"): "ne",
-                ("e", "s"): "se",
-                ("s", "w"): "sw",
-                ("w", "n"): "nw",
-                ("n", "w"): "nw",
-                ("w", "s"): "sw",
-                ("s", "e"): "se",
-                ("e", "n"): "ne",
+                (NORTH, EAST): NORTHEAST,
+                (EAST, SOUTH): SOUTHEAST,
+                (SOUTH, WEST): SOUTHWEST,
+                (WEST, NORTH): NORTHWEST,
+                (NORTH, WEST): NORTHWEST,
+                (WEST, SOUTH): SOUTHWEST,
+                (SOUTH, EAST): SOUTHEAST,
+                (EAST, NORTH): NORTHEAST,
             }
 
             return direction_map.get((start_loc, end_loc)) or direction_map.get(

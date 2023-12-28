@@ -56,6 +56,11 @@ class ShiftHandpaths(Enum):
     CW_HANDPATH = "cw"
     CCW_HANDPATH = "ccw"
 
+class Handpath(Enum):
+    CW_HANDPATH = "cw"
+    CCW_HANDPATH = "ccw"
+    STATIC_HANDPATH = "static_handpath"
+    DASH_HANDPATH = "dash_handpath"
 
 class Color(Enum):
     BLUE = "blue"

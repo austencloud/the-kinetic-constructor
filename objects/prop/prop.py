@@ -358,7 +358,7 @@ class Prop(GraphicalObject):
             }
 
             current_arrow_location = self.motion.arrow.location
-            rot_dir = self.motion.rot_dir
+            rot_dir = self.motion.prop_rot_dir
             motion_type = self.motion.motion_type
             new_arrow_location = shift_location_map.get(
                 (current_arrow_location, rot_dir, motion_type), {}

@@ -32,11 +32,9 @@ from constants import (
     BLUE,
     END_POS,
     START_POS,
-    end_pos,
     GAMMA,
     PRO,
     RED,
-    start_pos,
 )
 
 from utilities.TypeChecking.TypeChecking import LetterGroupsByMotionType

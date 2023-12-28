@@ -106,7 +106,7 @@ class Pictograph(QGraphicsScene):
             view = OptionView(self)
         elif graph_type == BEAT:
             view = BeatView(self)
-        elif graph_type == start_pos_BEAT:
+        elif graph_type == START_POS_BEAT:
             view = StartPositionBeatView(self)
         elif graph_type == IG_PICTOGRAPH:
             view = IG_Pictograph_View(self)
@@ -241,7 +241,7 @@ class Pictograph(QGraphicsScene):
             state_data.update(
                 {
                     prefix + MOTION_TYPE: motion.motion_type,
-                    prefix + PROP_ROT_DIR: motion.rot_dir,
+                    prefix + PROP_ROT_DIR: motion.prop_rot_dir,
                     prefix + START_LOC: motion.start_loc,
                     prefix + END_LOC: motion.end_loc,
                     prefix + TURNS: motion.turns,

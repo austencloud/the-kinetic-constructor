@@ -141,7 +141,7 @@ class PictographInit:
             END_LOC: None,
             START_OR: None,
         }
-        return Motion(self.pictograph, motion_dict, blank=True)
+        return Motion(self.pictograph, motion_dict)
 
 
 prop_class_mapping = {

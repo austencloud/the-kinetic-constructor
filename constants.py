@@ -82,6 +82,8 @@ AXIS = "axis"
 START_LOC = "start_loc"
 END_LOC = "end_loc"
 
+STATIC_HANDPATH = "static_handpath"
+DASH_HANDPATH = "dash_handpath"
 
 PICTOGRAPH_DIR = "resources/images/pictographs/"
 ARROW_DIR = "resources/images/arrows/"
@@ -91,8 +93,9 @@ LETTERS_TRIMMED_SVG_DIR = "resources/images/letters_trimmed/"
 ICON_DIR = "resources/images/icons/"
 GRID_DIR = "resources/images/grid/"
 
-start_pos = "start_pos"
-end_pos = "end_pos"
+
+
+GHOST = "ghost"
 
 STAFF = "staff"
 BIGSTAFF = "bigstaff"
@@ -118,7 +121,7 @@ CHICKEN = "chicken"
 MAIN = "main"
 OPTION = "option"
 BEAT = "beat"
-start_pos_BEAT = "start_pos_beat"
+START_POS_BEAT = "start_pos_beat"
 IG_PICTOGRAPH = "ig_pictograph"
 
 DIAMOND = "diamond"
