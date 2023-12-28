@@ -1,9 +1,0 @@
-letter,start_pos,end_pos,blue_motion_type,blue_prop_rot_dir,blue_start_loc,blue_end_loc,red_motion_type,red_prop_rot_dir,red_start_loc,red_end_loc
-G,beta1,beta2,pro,cw,n,e,pro,cw,n,e
-G,beta2,beta3,pro,cw,e,s,pro,cw,e,s
-G,beta3,beta4,pro,cw,s,w,pro,cw,s,w
-G,beta4,beta1,pro,cw,w,n,pro,cw,w,n
-G,beta1,beta4,pro,ccw,n,w,pro,ccw,n,w
-G,beta2,beta1,pro,ccw,e,n,pro,ccw,e,n
-G,beta3,beta2,pro,ccw,s,e,pro,ccw,s,e
-G,beta4,beta3,pro,ccw,w,s,pro,ccw,w,s

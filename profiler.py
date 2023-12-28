@@ -40,7 +40,7 @@ class Profiler:
         # Normalize the app_root path to use consistent separators
         app_root = os.path.normpath(app_root)
 
-        with open(file_path, "w") as f:
+        with open(file_path, "w", encoding='utf-8') as f:
             f.write("Organized by number of calls:\n\n")
             self._write_stats_section(f, stats, "calls", app_root)
             f.write("\n\n")  # Separate the two sections
@@ -63,7 +63,6 @@ class Profiler:
         file.write(header)
         file.write("-" * 115 + "\n")
 
-        path_to_remove = "f:\\CODE\\tka-app\\tka-sequence-constructor\\widgets"
         filtered_stats = [
             (func, stat_info)
             for func, stat_info in stats.stats.items()

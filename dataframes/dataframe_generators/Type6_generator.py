@@ -35,8 +35,8 @@ class Type6Generator(BaseDataFrameGenerator):
     ) -> List[Dict]:
         data = []
         static_tuple_map = self.get_static_tuple_map()
-        red_prop_rot_dir = "None"
-        blue_prop_rot_dir = "None"
+        red_prop_rot_dir = "NoRotation"
+        blue_prop_rot_dir = "NoRotation"
         for red_start_loc, red_end_loc in static_tuple_map:
             blue_start_loc, blue_end_loc = self.get_blue_locations(
                 letter, red_start_loc, red_end_loc
@@ -118,11 +118,11 @@ class Type6Generator(BaseDataFrameGenerator):
             "start_pos": start_pos,
             "end_pos": end_pos,
             "blue_motion_type": blue_motion_type,
-            "blue_prop_rot_dir": "None",
+            "blue_prop_rot_dir": "NoRotation",
             "blue_start_loc": blue_start_loc,
             "blue_end_loc": blue_end_loc,
             "red_motion_type": red_motion_type,
-            "red_prop_rot_dir": "None",
+            "red_prop_rot_dir": "NoRotation",
             "red_start_loc": red_start_loc,
             "red_end_loc": red_end_loc,
         }

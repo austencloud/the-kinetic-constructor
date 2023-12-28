@@ -3,10 +3,9 @@ from PyQt6.QtGui import QTransform
 from Enums import (
     Direction,
     Location,
-    MotionType,
     PropRotationDirection,
 )
-
+from constants import *
 from data.start_end_loc_map import get_start_end_locs
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
 
@@ -21,22 +20,10 @@ class ArrowManipulator:
 
     def move_wasd(self, direction: Direction) -> None:
         wasd_location_map = {
-            Direction.UP: {
-                SOUTHEAST: NORTHEAST,
-                SOUTHWEST: NORTHWEST,
-            },
-            Direction.LEFT: {
-                NORTHEAST: NORTHWEST,
-                SOUTHEAST: SOUTHWEST,
-            },
-            Direction.DOWN: {
-                NORTHEAST: SOUTHEAST,
-                NORTHWEST: SOUTHWEST,
-            },
-            Direction.RIGHT: {
-                NORTHWEST: NORTHEAST,
-                SOUTHWEST: SOUTHEAST,
-            },
+            UP: {SOUTHEAST: NORTHEAST, SOUTHWEST: NORTHWEST},
+            LEFT: {NORTHEAST: NORTHWEST, SOUTHEAST: SOUTHWEST},
+            DOWN: {NORTHEAST: SOUTHEAST, NORTHWEST: SOUTHWEST},
+            RIGHT: {NORTHWEST: NORTHEAST, SOUTHWEST: SOUTHEAST},
         }
         current_location = self.arrow.location
         new_location = wasd_location_map.get(direction, {}).get(
@@ -88,8 +75,8 @@ class ArrowManipulator:
             new_rot_dir = CLOCKWISE
         elif self.arrow.motion.prop_rot_dir == CLOCKWISE:
             new_rot_dir = COUNTER_CLOCKWISE
-        elif self.arrow.motion.prop_rot_dir == "None":
-            new_rot_dir = "None"
+        elif self.arrow.motion.prop_rot_dir == "NoRotation":
+            new_rot_dir = "NoRotation"
 
         old_start_loc = self.arrow.motion.start_loc
         old_end_loc = self.arrow.motion.end_loc
@@ -110,7 +97,7 @@ class ArrowManipulator:
         self.arrow.motion.prop.update_appearance()
         self.arrow.scene.update_pictograph()
 
-        if hasattr(self.arrow, "ghost"):
+        if hasattr(self.arrow, GHOST):
             if not isinstance(self, self.arrow.ghost.__class__) and self.arrow.ghost:
                 self.arrow.ghost.update_appearance()
 
@@ -121,7 +108,7 @@ class ArrowManipulator:
         transform.scale(-1, 1)
         transform.translate(-self.arrow.center_x, -self.arrow.center_y)
         self.arrow.setTransform(transform)
-        if hasattr(self.arrow, "ghost") and self.arrow.ghost:
+        if hasattr(self.arrow, GHOST) and self.arrow.ghost:
             self.arrow.ghost.setTransform(transform)
             self.arrow.ghost.is_svg_mirrored = True
         self.arrow.is_svg_mirrored = True
@@ -132,7 +119,7 @@ class ArrowManipulator:
         transform.scale(1, 1)
         transform.translate(-self.arrow.center.x(), -self.arrow.center.y())
         self.arrow.setTransform(transform)
-        if hasattr(self.arrow, "ghost") and self.arrow.ghost:
+        if hasattr(self.arrow, GHOST) and self.arrow.ghost:
             self.arrow.ghost.setTransform(transform)
             self.arrow.ghost.is_svg_mirrored = False
         self.arrow.is_svg_mirrored = False
@@ -151,8 +138,8 @@ class ArrowManipulator:
             new_rot_dir = CLOCKWISE
         elif self.arrow.motion.prop_rot_dir == CLOCKWISE:
             new_rot_dir = COUNTER_CLOCKWISE
-        elif self.arrow.motion.prop_rot_dir == "None":
-            new_rot_dir = "None"
+        elif self.arrow.motion.prop_rot_dir == "NoRotation":
+            new_rot_dir = "NoRotation"
 
         self.arrow.motion_type = new_motion_type
         self.arrow.motion.motion_type = new_motion_type
@@ -171,7 +158,7 @@ class ArrowManipulator:
         self.arrow.motion.prop_rot_dir = new_rot_dir
         self.arrow.update_svg(svg_file)
         self.arrow.update_color()
-        if hasattr(self.arrow, "ghost"):
+        if hasattr(self.arrow, GHOST):
             self.arrow.ghost.motion_type = new_motion_type
             self.arrow.ghost.update_svg(svg_file)
 

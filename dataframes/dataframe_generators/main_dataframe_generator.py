@@ -4,8 +4,6 @@ from Type3_generator import Type3Generator
 from Type4_generator import Type4Generator
 from Type5_generator import Type5Generator
 from Type6_generator import Type6Generator
-
-
 import pandas as pd
 
 
@@ -21,8 +19,6 @@ class MainDataFrameGenerator:
         self.Type4_generator = Type4Generator()
         self.Type5_generator = Type5Generator()
         self.Type6_generator = Type6Generator()
-    
-
 
     def generate_all_dataframes(self) -> None:
         self.collect_dataframes(self.Type1_generator.create_Type1_dataframes())

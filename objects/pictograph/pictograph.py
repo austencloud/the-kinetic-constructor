@@ -9,6 +9,7 @@ from constants import *
 from data.positions_map import get_specific_start_end_poss
 from objects.letter_item import LetterItem
 from objects.motion import Motion
+from objects.pictograph.position_engines.main_prop_positioner import MainPropPositioner
 from objects.prop.prop import Prop
 from objects.arrow.arrow import Arrow
 from objects.ghosts.ghost_arrow import GhostArrow
@@ -20,8 +21,9 @@ from objects.pictograph.pictograph_menu_handler import PictographMenuHandler
 from objects.pictograph.position_engines.arrow_positioners.arrow_positioner import (
     ArrowPositioner,
 )
-from objects.pictograph.position_engines.prop_positioner import PropPositioner
+from objects.pictograph.position_engines.base_prop_positioner import BasePropPositioner
 from utilities.letter_engine import LetterEngine
+from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
 
 if TYPE_CHECKING:
     from widgets.image_generator_tab.ig_pictograph import IGPictograph
@@ -122,7 +124,7 @@ class Pictograph(QGraphicsScene):
     def setup_managers(self, main_widget: "MainWidget") -> None:
         self.pictograph_menu_handler = PictographMenuHandler(main_widget, self)
         self.arrow_positioner = ArrowPositioner(self)
-        self.prop_positioner = PropPositioner(self)
+        self.prop_positioner = MainPropPositioner(self)
         self.letter_engine = LetterEngine(self)
 
     def _finalize_motion_setup(self, pd_row_data, filters) -> None:
@@ -362,7 +364,7 @@ class Pictograph(QGraphicsScene):
         self.arrow_positioner.update_arrow_positions()
 
     def update_props(self) -> None:
-        self.prop_positioner.update_prop_positions()
+        self.prop_positioner.position_props()
 
     def update_letter(self) -> None:
         if all(motion.motion_type for motion in self.motions.values()):
@@ -568,3 +570,22 @@ class Pictograph(QGraphicsScene):
     def load_image_if_needed(self) -> None:
         if not self.image_loaded:
             self.render_and_cache_image()
+
+    def has_hybrid_orientation(self) -> bool:
+        red_prop, blue_prop = self.props[RED], self.props[BLUE]
+        return red_prop.is_radial() != blue_prop.is_radial()
+
+    def has_non_hybrid_orientation(self) -> bool:
+        red_prop, blue_prop = self.props[RED], self.props[BLUE]
+        return (red_prop.is_radial() == blue_prop.is_radial()) or (
+            red_prop.is_antiradial() and blue_prop.is_antiradial()
+        )
+
+    def has_props_in_beta(self) -> bool | None:
+        return self.current_letter in beta_ending_letters
+
+    def has_props_in_alpha(self) -> bool | None:
+        return self.current_letter in alpha_ending_letters
+
+    def has_props_in_gamma(self) -> bool | None:
+        return self.current_letter in gamma_ending_letters

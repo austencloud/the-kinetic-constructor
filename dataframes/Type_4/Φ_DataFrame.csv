@@ -1,9 +1,0 @@
-letter,start_pos,end_pos,blue_motion_type,blue_prop_rot_dir,blue_start_loc,blue_end_loc,red_motion_type,red_prop_rot_dir,red_start_loc,red_end_loc
-Φ,beta1,alpha1,dash,None,n,s,static,None,n,n
-Φ,beta2,alpha2,dash,None,e,w,static,None,e,e
-Φ,beta3,alpha3,dash,None,s,n,static,None,s,s
-Φ,beta4,alpha4,dash,None,w,e,static,None,w,w
-Φ,beta1,alpha3,static,None,n,n,dash,None,n,s
-Φ,beta2,alpha4,static,None,e,e,dash,None,e,w
-Φ,beta3,alpha1,static,None,s,s,dash,None,s,n
-Φ,beta4,alpha2,static,None,w,w,dash,None,w,e

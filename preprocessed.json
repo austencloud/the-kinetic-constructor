@@ -6662,7 +6662,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -6685,7 +6685,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -6710,7 +6710,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -6733,7 +6733,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -6758,7 +6758,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -6781,7 +6781,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -6806,7 +6806,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -6829,7 +6829,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -6854,7 +6854,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -6877,7 +6877,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -6902,7 +6902,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -6925,7 +6925,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -6950,7 +6950,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -6973,7 +6973,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -6998,7 +6998,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -7021,7 +7021,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -7055,7 +7055,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -7078,7 +7078,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -7103,7 +7103,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -7126,7 +7126,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -7151,7 +7151,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -7174,7 +7174,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -7199,7 +7199,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -7222,7 +7222,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -7247,7 +7247,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -7270,7 +7270,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -7295,7 +7295,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -7318,7 +7318,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -7343,7 +7343,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -7366,7 +7366,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -7391,7 +7391,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -7414,7 +7414,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -7439,7 +7439,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -7462,7 +7462,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -7487,7 +7487,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -7510,7 +7510,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -7535,7 +7535,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -7558,7 +7558,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -7583,7 +7583,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -7606,7 +7606,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -7631,7 +7631,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -7654,7 +7654,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -7679,7 +7679,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -7702,7 +7702,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -7727,7 +7727,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -7750,7 +7750,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -7775,7 +7775,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -7798,7 +7798,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -7814,7 +7814,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -7837,7 +7837,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -7862,7 +7862,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -7885,7 +7885,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -7910,7 +7910,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -7933,7 +7933,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -7958,7 +7958,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -7981,7 +7981,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -8006,7 +8006,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -8029,7 +8029,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -8054,7 +8054,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -8077,7 +8077,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -8102,7 +8102,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -8125,7 +8125,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -8150,7 +8150,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -8173,7 +8173,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -8198,7 +8198,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -8221,7 +8221,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -8246,7 +8246,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -8269,7 +8269,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -8294,7 +8294,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -8317,7 +8317,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -8342,7 +8342,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -8365,7 +8365,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -8390,7 +8390,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -8413,7 +8413,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -8438,7 +8438,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -8461,7 +8461,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -8486,7 +8486,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -8509,7 +8509,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -8534,7 +8534,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -8557,7 +8557,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -8591,7 +8591,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -8614,7 +8614,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -8639,7 +8639,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -8662,7 +8662,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -8687,7 +8687,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -8710,7 +8710,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -8735,7 +8735,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -8758,7 +8758,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -8783,7 +8783,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -8806,7 +8806,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -8831,7 +8831,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -8854,7 +8854,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -8879,7 +8879,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -8902,7 +8902,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -8927,7 +8927,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -8950,7 +8950,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -8966,7 +8966,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -8989,7 +8989,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -9014,7 +9014,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -9037,7 +9037,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -9062,7 +9062,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -9085,7 +9085,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -9110,7 +9110,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -9133,7 +9133,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -9158,7 +9158,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -9181,7 +9181,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -9206,7 +9206,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -9229,7 +9229,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -9254,7 +9254,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -9277,7 +9277,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -9302,7 +9302,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -9325,7 +9325,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -9359,7 +9359,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -9382,7 +9382,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -9407,7 +9407,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -9430,7 +9430,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -9455,7 +9455,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -9478,7 +9478,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -9503,7 +9503,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -9526,7 +9526,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -9551,7 +9551,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -9574,7 +9574,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -9599,7 +9599,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -9622,7 +9622,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -9647,7 +9647,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -9670,7 +9670,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -9695,7 +9695,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -9718,7 +9718,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -9734,7 +9734,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -9743,7 +9743,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -9759,7 +9759,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -9768,7 +9768,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -9784,7 +9784,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -9793,7 +9793,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -9809,7 +9809,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -9818,7 +9818,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -9834,7 +9834,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -9843,7 +9843,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -9859,7 +9859,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -9868,7 +9868,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -9884,7 +9884,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -9893,7 +9893,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -9909,7 +9909,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -9918,7 +9918,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -9934,7 +9934,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -9943,7 +9943,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -9959,7 +9959,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -9968,7 +9968,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -9984,7 +9984,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -9993,7 +9993,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -10009,7 +10009,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -10018,7 +10018,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -10034,7 +10034,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -10043,7 +10043,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -10059,7 +10059,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -10068,7 +10068,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "e",
           "start_loc": "e",
           "end_loc": "e",
@@ -10084,7 +10084,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",
@@ -10093,7 +10093,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "s",
           "start_loc": "s",
           "end_loc": "s",
@@ -10109,7 +10109,7 @@
         {
           "color": "blue",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "n",
           "start_loc": "n",
           "end_loc": "n",
@@ -10118,7 +10118,7 @@
         {
           "color": "red",
           "motion_type": "static",
-          "prop_rot_dir": "None",
+          "prop_rot_dir": "NoRotation",
           "arrow_location": "w",
           "start_loc": "w",
           "end_loc": "w",

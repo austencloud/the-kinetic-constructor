@@ -35,8 +35,8 @@ class Type4Generator(BaseDataFrameGenerator):
         dash_handpath_tuple_map = self.get_dash_tuple_map()
 
         data = []
-        red_prop_rot_dir = "None"
-        blue_prop_rot_dir = "None"
+        red_prop_rot_dir = "NoRotation"
+        blue_prop_rot_dir = "NoRotation"
         for start_loc, end_loc in dash_handpath_tuple_map:
             if red_motion_type == STATIC:
                 red_start_loc, red_end_loc = self.get_static_locations(
@@ -142,11 +142,11 @@ class Type4Generator(BaseDataFrameGenerator):
             "start_pos": start_pos,
             "end_pos": end_pos,
             "blue_motion_type": blue_motion_type,
-            "blue_prop_rot_dir": "None",
+            "blue_prop_rot_dir": "NoRotation",
             "blue_start_loc": blue_start_loc,
             "blue_end_loc": blue_end_loc,
             "red_motion_type": red_motion_type,
-            "red_prop_rot_dir": "None",
+            "red_prop_rot_dir": "NoRotation",
             "red_start_loc": red_start_loc,
             "red_end_loc": red_end_loc,
         }

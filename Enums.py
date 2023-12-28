@@ -403,8 +403,8 @@ class MotionAttribute(Enum):
 
 
 class PictographAttribute(Enum):
-    start_pos = "start_pos"
-    end_pos = "end_pos"
+    START_POS = "start_pos"
+    END_POS = "end_pos"
     LETTER = "letter"
     HANDPATH_MODE = "handpath_mode"
     MOTION_TYPE_COMBINATION = "motion_type_combination"

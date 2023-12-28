@@ -2,12 +2,11 @@ from Enums import (
     Color,
     Handpath,
     MotionAttributesDicts,
-    MotionType,
     Orientation,
 )
 
 from constants import *
-from typing import TYPE_CHECKING, Dict, Literal, Union
+from typing import TYPE_CHECKING, Dict, Union
 
 
 if TYPE_CHECKING:
