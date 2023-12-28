@@ -141,10 +141,10 @@ class StaffArrowPositioner:
     def _adjust_arrows_for_letter_T(self, red_motion, blue_motion) -> None:
         if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
             leading_color: Color = self.determine_leading_motion_for_T(
-                self.pictograph.motions[RED].start_location,
-                self.pictograph.motions[RED].end_location,
-                self.pictograph.motions[BLUE].start_location,
-                self.pictograph.motions[BLUE].end_location,
+                self.pictograph.motions[RED].start_loc,
+                self.pictograph.motions[RED].end_loc,
+                self.pictograph.motions[BLUE].start_loc,
+                self.pictograph.motions[BLUE].end_loc,
             )
             leader = self.pictograph.motions[leading_color]
             if leading_color == RED:
@@ -182,24 +182,24 @@ class StaffArrowPositioner:
                 )
                 direction = self.get_antispin_antiradial_adjustment_direction(leader)
                 if direction == UP:
-                    if leader.end_location == WEST:
+                    if leader.end_loc == WEST:
                         adjustment += QPointF(-45, -20)
-                    elif leader.end_location == EAST:
+                    elif leader.end_loc == EAST:
                         adjustment += QPointF(45, -20)
                 elif direction == DOWN:
-                    if leader.end_location == WEST:
+                    if leader.end_loc == WEST:
                         adjustment += QPointF(-45, 20)
-                    elif leader.end_location == EAST:
+                    elif leader.end_loc == EAST:
                         adjustment += QPointF(45, 20)
                 elif direction == LEFT:
-                    if leader.end_location == NORTH:
+                    if leader.end_loc == NORTH:
                         adjustment += QPointF(-20, -45)
-                    elif leader.end_location == SOUTH:
+                    elif leader.end_loc == SOUTH:
                         adjustment += QPointF(-20, 45)
                 elif direction == RIGHT:
-                    if leader.end_location == NORTH:
+                    if leader.end_loc == NORTH:
                         adjustment += QPointF(20, -45)
-                    elif leader.end_location == SOUTH:
+                    elif leader.end_loc == SOUTH:
                         adjustment += QPointF(20, 45)
                 self.arrow_positioner._apply_adjustment(leader.arrow, adjustment)
 
@@ -243,24 +243,24 @@ class StaffArrowPositioner:
                 )
                 direction = self.get_antispin_antiradial_adjustment_direction(leader)
                 if direction == UP:
-                    if leader.end_location == WEST:
+                    if leader.end_loc == WEST:
                         adjustment += QPointF(-45, -20)
-                    elif leader.end_location == EAST:
+                    elif leader.end_loc == EAST:
                         adjustment += QPointF(45, -20)
                 elif direction == DOWN:
-                    if leader.end_location == WEST:
+                    if leader.end_loc == WEST:
                         adjustment += QPointF(-45, 20)
-                    elif leader.end_location == EAST:
+                    elif leader.end_loc == EAST:
                         adjustment += QPointF(45, 20)
                 elif direction == LEFT:
-                    if leader.end_location == NORTH:
+                    if leader.end_loc == NORTH:
                         adjustment += QPointF(-20, -45)
-                    elif leader.end_location == SOUTH:
+                    elif leader.end_loc == SOUTH:
                         adjustment += QPointF(-20, 45)
                 elif direction == RIGHT:
-                    if leader.end_location == NORTH:
+                    if leader.end_loc == NORTH:
                         adjustment += QPointF(20, -45)
-                    elif leader.end_location == SOUTH:
+                    elif leader.end_loc == SOUTH:
                         adjustment += QPointF(20, 45)
                 self.arrow_positioner._apply_adjustment(leader.arrow, adjustment)
 
@@ -281,7 +281,9 @@ class StaffArrowPositioner:
                 adjustment = self.arrow_positioner.calculate_adjustment(
                     anti_motion.arrow.location, 30
                 )
-                direction = self.get_antispin_antiradial_adjustment_direction(anti_motion)
+                direction = self.get_antispin_antiradial_adjustment_direction(
+                    anti_motion
+                )
                 if direction == UP:
                     adjustment += QPointF(0, -40)
                 elif direction == DOWN:
@@ -296,26 +298,28 @@ class StaffArrowPositioner:
                 adjustment = self.arrow_positioner.calculate_adjustment(
                     pro_motion.arrow.location, 40
                 )
-                direction = self.get_antispin_antiradial_adjustment_direction(anti_motion)
+                direction = self.get_antispin_antiradial_adjustment_direction(
+                    anti_motion
+                )
                 if direction == UP:
-                    if anti_motion.end_location == WEST:
+                    if anti_motion.end_loc == WEST:
                         adjustment += QPointF(-45, -20)
-                    elif anti_motion.end_location == EAST:
+                    elif anti_motion.end_loc == EAST:
                         adjustment += QPointF(45, -20)
                 elif direction == DOWN:
-                    if anti_motion.end_location == WEST:
+                    if anti_motion.end_loc == WEST:
                         adjustment += QPointF(-45, 20)
-                    elif anti_motion.end_location == EAST:
+                    elif anti_motion.end_loc == EAST:
                         adjustment += QPointF(45, 20)
                 elif direction == LEFT:
-                    if anti_motion.end_location == NORTH:
+                    if anti_motion.end_loc == NORTH:
                         adjustment += QPointF(-20, -45)
-                    elif anti_motion.end_location == SOUTH:
+                    elif anti_motion.end_loc == SOUTH:
                         adjustment += QPointF(-20, -45)
                 elif direction == RIGHT:
-                    if anti_motion.end_location == NORTH:
+                    if anti_motion.end_loc == NORTH:
                         adjustment += QPointF(20, -45)
-                    elif anti_motion.end_location == SOUTH:
+                    elif anti_motion.end_loc == SOUTH:
                         adjustment += QPointF(20, 45)
                 self.arrow_positioner._apply_adjustment(anti_motion.arrow, adjustment)
 

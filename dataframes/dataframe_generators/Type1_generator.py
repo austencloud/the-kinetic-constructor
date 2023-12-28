@@ -1,4 +1,6 @@
 from typing import Dict, List
+
+import pandas as pd
 from dataframes.dataframe_generators.base_dataframe_generator import (
     BaseDataFrameGenerator,
 )
@@ -12,11 +14,13 @@ class Type1Generator(BaseDataFrameGenerator):
         super().__init__(Type1_letters)
         self.create_Type1_dataframes()
 
-    def create_Type1_dataframes(self) -> None:
+    def create_Type1_dataframes(self) -> pd.DataFrame:
+        all_data = []
         for letter in self.letters:
             data = self.create_dataframe(letter)
+            all_data.extend(data)
             print("Generated dataframes for letter:", letter)
-            self.save_dataframe(letter, data, "Type_1")
+        return pd.DataFrame(all_data)
 
     def create_dataframe(self, letter) -> List[Dict]:
         data = []
@@ -80,8 +84,8 @@ class Type1Generator(BaseDataFrameGenerator):
                 data.append(
                     {
                         "letter": letter,
-                        "start_position": start_pos,
-                        "end_position": end_pos,
+                        "start_pos": start_pos,
+                        "end_pos": end_pos,
                         "blue_motion_type": blue_motion_type,
                         "blue_prop_rot_dir": blue_prop_rot_dir,
                         "blue_start_loc": blue_start_loc,
@@ -117,22 +121,22 @@ class Type1Generator(BaseDataFrameGenerator):
                     red_start_loc, red_end_loc, red_prop_rot_dir, red_leading_bool
                 )
 
-                start_pos, end_pos = self.get_start_end_positions(
+                start_pos, end_pos = self.get_start_end_poss(
                     blue_start_loc, blue_end_loc, red_start_loc, red_end_loc
                 )
 
                 variation = {
                     "letter": letter,
-                    "start_position": start_pos,
-                    "end_position": end_pos,
+                    "start_pos": start_pos,
+                    "end_pos": end_pos,
                     "blue_motion_type": blue_motion_type,
                     "blue_prop_rot_dir": blue_prop_rot_dir,
-                    "blue_start_location": blue_start_loc,
-                    "blue_end_location": blue_end_loc,
+                    "blue_start_loc": blue_start_loc,
+                    "blue_end_loc": blue_end_loc,
                     "red_motion_type": red_motion_type,
                     "red_prop_rot_dir": red_prop_rot_dir,
-                    "red_start_location": red_start_loc,
-                    "red_end_location": red_end_loc,
+                    "red_start_loc": red_start_loc,
+                    "red_end_loc": red_end_loc,
                 }
 
                 variations.append(variation)
@@ -397,21 +401,21 @@ class Type1Generator(BaseDataFrameGenerator):
         blue_motion_type,
         blue_prop_rot_dir,
     ):
-        start_pos, end_pos = self.get_start_end_positions(
+        start_pos, end_pos = self.get_start_end_poss(
             blue_start_loc, blue_end_loc, red_start_loc, red_end_loc
         )
         return {
             "letter": letter,
-            "start_position": start_pos,
-            "end_position": end_pos,
+            "start_pos": start_pos,
+            "end_pos": end_pos,
             "blue_motion_type": blue_motion_type,
             "blue_prop_rot_dir": blue_prop_rot_dir,
-            "blue_start_location": blue_start_loc,
-            "blue_end_location": blue_end_loc,
+            "blue_start_loc": blue_start_loc,
+            "blue_end_loc": blue_end_loc,
             "red_motion_type": red_motion_type,
             "red_prop_rot_dir": red_prop_rot_dir,
-            "red_start_location": red_start_loc,
-            "red_end_location": red_end_loc,
+            "red_start_loc": red_start_loc,
+            "red_end_loc": red_end_loc,
         }
 
     def get_blue_locations(

@@ -157,8 +157,8 @@ class PropPositioner:
                 if state[f"{color}_motion_type"] in [PRO, ANTI]
             ]
             if (
-                state["red_start_location"] == state["blue_start_location"]
-                and state["red_end_location"] == state["blue_end_location"]
+                state["red_start_loc"] == state["blue_start_loc"]
+                and state["red_end_loc"] == state["blue_end_loc"]
             ):
                 if (
                     len(both) == 2
@@ -179,7 +179,7 @@ class PropPositioner:
 
             # ALPHA → BETA - D, E, F
             if all(state[f"{color}_motion_type"] != STATIC for color in [RED, BLUE]):
-                if state["red_start_location"] != state["blue_start_location"]:
+                if state["red_start_loc"] != state["blue_start_loc"]:
                     self._reposition_alpha_to_beta(state)
 
     def _reposition_small_unilateral_props(self, small_unilateral_props: List[Prop]):
@@ -233,7 +233,7 @@ class PropPositioner:
 
     def _get_direction_for_motion(self, motion: Motion) -> Direction | None:
         """Determine the direction based on a single motion."""
-        if motion.end_orientation in [
+        if motion.end_or in [
             IN,
             OUT,
         ] and motion.motion_type in [
@@ -241,11 +241,11 @@ class PropPositioner:
             ANTI,
             STATIC,
         ]:
-            if motion.end_location in [NORTH, SOUTH]:
-                return RIGHT if motion.start_location == EAST else LEFT
-            elif motion.end_location in [EAST, WEST]:
-                return DOWN if motion.start_location == SOUTH else UP
-        elif motion.end_orientation in [
+            if motion.end_loc in [NORTH, SOUTH]:
+                return RIGHT if motion.start_loc == EAST else LEFT
+            elif motion.end_loc in [EAST, WEST]:
+                return DOWN if motion.start_loc == SOUTH else UP
+        elif motion.end_or in [
             CLOCK,
             COUNTER,
         ] and motion.motion_type in [
@@ -253,10 +253,10 @@ class PropPositioner:
             ANTI,
             STATIC,
         ]:
-            if motion.end_location in [NORTH, SOUTH]:
-                return UP if motion.start_location == EAST else DOWN
-            elif motion.end_location in [EAST, WEST]:
-                return RIGHT if motion.start_location == SOUTH else LEFT
+            if motion.end_loc in [NORTH, SOUTH]:
+                return UP if motion.start_loc == EAST else DOWN
+            elif motion.end_loc in [EAST, WEST]:
+                return RIGHT if motion.start_loc == SOUTH else LEFT
         return None
 
     ### STATIC BETA ### β
@@ -285,7 +285,7 @@ class PropPositioner:
             ):
                 if prop.prop_type in non_strictly_placed_props:
                     direction = self._determine_direction_for_static_beta(
-                        prop, motion.end_location
+                        prop, motion.end_loc
                     )
                     if direction:
                         self._move_prop(prop, direction)
@@ -294,7 +294,7 @@ class PropPositioner:
                     self._set_strict_prop_location(other_prop)
 
     def _determine_direction_for_static_beta(
-        self, prop: Prop, end_location: str
+        self, prop: Prop, end_loc: str
     ) -> Direction | None:
         layer_reposition_map = {
             RADIAL: {
@@ -302,20 +302,20 @@ class PropPositioner:
                 (NORTH, BLUE): LEFT,
                 (SOUTH, RED): RIGHT,
                 (SOUTH, BLUE): LEFT,
-                (EAST, RED): UP if end_location == EAST else None,
-                (WEST, BLUE): DOWN if end_location == WEST else None,
-                (WEST, RED): UP if end_location == WEST else None,
-                (EAST, BLUE): DOWN if end_location == EAST else None,
+                (EAST, RED): UP if end_loc == EAST else None,
+                (WEST, BLUE): DOWN if end_loc == WEST else None,
+                (WEST, RED): UP if end_loc == WEST else None,
+                (EAST, BLUE): DOWN if end_loc == EAST else None,
             },
             ANTIRADIAL: {
                 (NORTH, RED): UP,
                 (NORTH, BLUE): DOWN,
                 (SOUTH, RED): UP,
                 (SOUTH, BLUE): DOWN,
-                (EAST, RED): RIGHT if end_location == EAST else None,
-                (WEST, BLUE): LEFT if end_location == WEST else None,
-                (WEST, RED): RIGHT if end_location == WEST else None,
-                (EAST, BLUE): LEFT if end_location == EAST else None,
+                (EAST, RED): RIGHT if end_loc == EAST else None,
+                (WEST, BLUE): LEFT if end_loc == WEST else None,
+                (WEST, RED): RIGHT if end_loc == WEST else None,
+                (EAST, BLUE): LEFT if end_loc == EAST else None,
             },
         }
         if prop.is_radial():
@@ -327,17 +327,17 @@ class PropPositioner:
 
     def _reposition_alpha_to_beta(self, state) -> None:
         # Extract motion type and end locations for both colors from the DataFrame row
-        red_end_location = state["red_end_location"]
-        blue_end_location = state["blue_end_location"]
+        red_end_loc = state["red_end_loc"]
+        blue_end_loc = state["blue_end_loc"]
         if (
-            state["red_end_orientation"] in [CLOCK, COUNTER]
-            and state["blue_end_orientation"] in [IN, OUT]
-            or state["blue_end_orientation"]
+            state["red_end_or"] in [CLOCK, COUNTER]
+            and state["blue_end_or"] in [IN, OUT]
+            or state["blue_end_or"]
             in [
                 CLOCK,
                 COUNTER,
             ]
-            and state["red_end_orientation"] in [IN, OUT]
+            and state["red_end_or"] in [IN, OUT]
         ):
             for prop in self.scene.props.values():
                 if prop.prop_type in strictly_placed_props:
@@ -345,7 +345,7 @@ class PropPositioner:
                 elif prop.prop_type in non_strictly_placed_props:
                     self._set_default_prop_location(prop)
         else:
-            if red_end_location == blue_end_location:
+            if red_end_loc == blue_end_loc:
                 red_prop = next(
                     prop for prop in self.scene.props.values() if prop.color == RED
                 )
@@ -503,27 +503,27 @@ class PropPositioner:
 
         if is_shift or is_static:
             if motion.prop.is_radial():
-                if motion.end_location in [NORTH, SOUTH]:
-                    if motion.start_location == EAST:
+                if motion.end_loc in [NORTH, SOUTH]:
+                    if motion.start_loc == EAST:
                         return RIGHT
-                    elif motion.start_location == WEST:
+                    elif motion.start_loc == WEST:
                         return LEFT
-                elif motion.end_location in [EAST, WEST]:
-                    if motion.start_location == NORTH:
+                elif motion.end_loc in [EAST, WEST]:
+                    if motion.start_loc == NORTH:
                         return UP
-                    elif motion.start_location == SOUTH:
+                    elif motion.start_loc == SOUTH:
                         return DOWN
 
             elif motion.prop.is_antiradial():
-                if motion.end_location in [NORTH, SOUTH]:
-                    if motion.start_location == EAST:
+                if motion.end_loc in [NORTH, SOUTH]:
+                    if motion.start_loc == EAST:
                         return UP
-                    elif motion.start_location == WEST:
+                    elif motion.start_loc == WEST:
                         return DOWN
-                elif motion.end_location in [EAST, WEST]:
-                    if motion.start_location == NORTH:
+                elif motion.end_loc in [EAST, WEST]:
+                    if motion.start_loc == NORTH:
                         return RIGHT
-                    elif motion.start_location == SOUTH:
+                    elif motion.start_loc == SOUTH:
                         return LEFT
             else:
                 print(

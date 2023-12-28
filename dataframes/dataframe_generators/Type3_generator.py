@@ -1,4 +1,6 @@
 from typing import Dict, List, Tuple
+
+import pandas as pd
 from dataframes.dataframe_generators.base_dataframe_generator import (
     BaseDataFrameGenerator,
 )
@@ -12,11 +14,13 @@ class Type3Generator(BaseDataFrameGenerator):
         super().__init__(Type3_letters)
         self.create_Type3_dataframes()
 
-    def create_Type3_dataframes(self) -> None:
+    def create_Type3_dataframes(self) -> pd.DataFrame:
+        all_data = []
         for letter in self.letters:
             data = self.create_dataframe(letter)
+            all_data.extend(data)
             print("Generated dataframes for letter:", letter)
-            self.save_dataframe(letter, data, "Type_3")
+        return pd.DataFrame(all_data)
 
     def create_dataframe(self, letter) -> List[Dict]:
         if letter in ["W-", "Y-", "Σ-", "θ-"]:
@@ -66,8 +70,8 @@ class Type3Generator(BaseDataFrameGenerator):
                 data.append(
                     {
                         "letter": letter,
-                        "start_position": start_pos,
-                        "end_position": end_pos,
+                        "start_pos": start_pos,
+                        "end_pos": end_pos,
                         "blue_motion_type": blue_motion_type,
                         "blue_prop_rot_dir": blue_prop_rot_dir,
                         "blue_start_loc": blue_start_loc,

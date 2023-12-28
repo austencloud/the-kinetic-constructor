@@ -135,7 +135,7 @@ class PictographInit:
             ARROW: None,
             PROP: None,
             MOTION_TYPE: None,
-            ROT_DIR: None,
+            PROP_ROT_DIR: None,
             TURNS: 0,
             START_LOC: None,
             END_LOC: None,

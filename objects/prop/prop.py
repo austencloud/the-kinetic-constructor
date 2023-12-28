@@ -10,7 +10,7 @@ from Enums import (
     PropType,
     PropRotationDirection,
 )
-from data.start_end_location_map import get_start_end_locations
+from data.start_end_loc_map import get_start_end_locs
 from objects.graphical_object import GraphicalObject
 from PyQt6.QtCore import QPointF, Qt
 from constants import *
@@ -92,7 +92,7 @@ class Prop(GraphicalObject):
 
     def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
-        self.location = target_arrow.motion.end_location
+        self.location = target_arrow.motion.end_loc
         self.axis = self.get_axis_from_orientation(self.orientation, self.location)
         self.update_appearance()
 
@@ -188,8 +188,8 @@ class Prop(GraphicalObject):
 
             if self.motion.motion_type == STATIC:
                 self.motion.arrow.location = new_location
-                self.motion.start_location = new_location
-                self.motion.end_location = new_location
+                self.motion.start_loc = new_location
+                self.motion.end_loc = new_location
 
             self.axis = self.get_axis_from_orientation(self.orientation, self.location)
             self.update_appearance()
@@ -365,22 +365,22 @@ class Prop(GraphicalObject):
             ).get(new_arrow_location)
 
             if new_arrow_location:
-                start_location, end_location = get_start_end_locations(
+                start_loc, end_loc = get_start_end_locs(
                     motion_type, rot_dir, new_arrow_location
                 )
 
                 self.motion.arrow.location = new_arrow_location
                 self.motion.arrow.ghost.location = new_arrow_location
-                self.motion.start_location = start_location
-                self.motion.end_location = end_location
+                self.motion.start_loc = start_loc
+                self.motion.end_loc = end_loc
                 self.motion.arrow.update_appearance()
                 self.motion.arrow.ghost.update_appearance()
                 self.pictograph.update_pictograph()
 
         elif self.motion.motion_type == STATIC:
             self.motion.arrow.location = new_arrow_location
-            self.motion.start_location = new_arrow_location
-            self.motion.end_location = new_arrow_location
+            self.motion.start_loc = new_arrow_location
+            self.motion.end_loc = new_arrow_location
             self.motion.arrow.update_appearance()
 
     def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:

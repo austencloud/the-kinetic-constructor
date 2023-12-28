@@ -13,7 +13,7 @@ from constants import (
     NORTHEAST,
     NORTHWEST,
     PRO,
-    ROT_DIR,
+    PROP_ROT_DIR,
     SOUTHEAST,
     SOUTHWEST,
     START_LOC,
@@ -25,7 +25,7 @@ from objects.grid import GridItem
 from objects.prop.prop import Prop
 
 from objects.graphical_object import GraphicalObject
-from data.start_end_location_map import get_start_end_locations
+from data.start_end_loc_map import get_start_end_locs
 from utilities.TypeChecking.TypeChecking import (
     Turns,
     RotationAngles,
@@ -137,9 +137,9 @@ class Arrow(GraphicalObject):
 
     def _update_prop_on_click(self) -> None:
         self.motion.prop.color = self.color
-        self.motion.prop.location = self.motion.end_location
+        self.motion.prop.location = self.motion.end_loc
         self.motion.prop.axis = self.motion.prop.get_axis_from_orientation(
-            self.motion.end_orientation, self.motion.end_location
+            self.motion.end_or, self.motion.end_loc
         )
 
     def _update_ghost_on_click(self) -> None:
@@ -159,7 +159,7 @@ class Arrow(GraphicalObject):
     def update_ghost_arrow_location(self, new_pos: QPointF) -> None:
         new_location = self.scene.get_closest_layer2_point(new_pos)[0]
         self.motion.arrow.location = new_location
-        self.set_start_end_locations()
+        self.set_start_end_locs()
         if hasattr(self, "ghost_arrow"):
             self.ghost.set_arrow_attrs_from_arrow(self)
             self.ghost.update_appearance()
@@ -190,15 +190,15 @@ class Arrow(GraphicalObject):
         angle = self.get_arrow_rotation_angle()
         self.setRotation(angle)
 
-    def set_start_end_locations(self) -> None:
+    def set_start_end_locs(self) -> None:
         (
-            self.motion.start_location,
-            self.motion.end_location,
-        ) = get_start_end_locations(
+            self.motion.start_loc,
+            self.motion.end_loc,
+        ) = get_start_end_locs(
             self.motion_type, self.motion.rot_dir, self.motion.arrow.location
         )
-        self.motion.start_location = self.motion.start_location
-        self.motion.end_location = self.motion.end_location
+        self.motion.start_loc = self.motion.start_loc
+        self.motion.end_loc = self.motion.end_loc
 
     def set_arrow_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
@@ -206,8 +206,8 @@ class Arrow(GraphicalObject):
         self.motion_type: MotionType = target_arrow.motion_type
         self.motion.arrow.location = target_arrow.location
         self.motion.rot_dir: PropRotationDirection = target_arrow.motion.rot_dir
-        self.motion.start_location: Location = target_arrow.motion.start_location
-        self.motion.end_location: Location = target_arrow.motion.end_location
+        self.motion.start_loc: Location = target_arrow.motion.start_loc
+        self.motion.end_loc: Location = target_arrow.motion.end_loc
         self.motion.turns: Turns = target_arrow.motion.turns
 
     def update_prop_during_drag(self) -> None:
@@ -219,7 +219,7 @@ class Arrow(GraphicalObject):
                 prop.update_attributes(
                     {
                         COLOR: self.color,
-                        LOCATION: self.motion.end_location,
+                        LOCATION: self.motion.end_loc,
                     }
                 )
 
@@ -323,7 +323,7 @@ class Arrow(GraphicalObject):
         self.motion[COLOR] = self.color
         self.motion[MOTION_TYPE] = STATIC
         self.motion[TURNS] = 0
-        self.motion[ROT_DIR] = None
+        self.motion[PROP_ROT_DIR] = None
         self.motion[START_LOC] = self.motion.prop.location
         self.motion[END_LOC] = self.motion.prop.location
         self.location = self.motion.prop.location

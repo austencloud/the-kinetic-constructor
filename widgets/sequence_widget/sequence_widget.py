@@ -36,13 +36,9 @@ class SequenceWidget(QWidget):
             beat_view.setMaximumSize(beat_view_width, beat_view_height)
             beat_view.setMinimumSize(beat_view_width, beat_view_height)
 
-        self.beat_frame.start_position_view.setMinimumSize(
-            beat_view_width, beat_view_height
-        )
+        self.beat_frame.start_pos_view.setMinimumSize(beat_view_width, beat_view_height)
 
-        self.beat_frame.start_position_view.setMaximumSize(
-            beat_view_width, beat_view_height
-        )
+        self.beat_frame.start_pos_view.setMaximumSize(beat_view_width, beat_view_height)
 
         self.layout.update()
         self.setMaximumWidth(

@@ -13,9 +13,7 @@ class IGFilterFrame(FilterFrame):
         self.ig_tab = ig_tab
         self.apply_filters()
 
-        self.left_end_orientation_combobox.currentTextChanged.connect(
-            self.apply_filters
-        )
+        self.left_end_or_combobox.currentTextChanged.connect(self.apply_filters)
 
     def apply_filters(self) -> None:
         selected_blue_turns = [
@@ -32,16 +30,14 @@ class IGFilterFrame(FilterFrame):
         ][
             0
         ]  # Access the first element of the list
-        selected_left_end_orientation = self.left_end_orientation_combobox.currentText()
-        selected_right_end_orientation = (
-            self.right_end_orientation_combobox.currentText()
-        )
+        selected_left_end_or = self.left_end_or_combobox.currentText()
+        selected_right_end_or = self.right_end_or_combobox.currentText()
 
         self.filters: Dict[str, Union[Turns, Orientation]] = {
             "blue_turns": selected_blue_turns,
             "red_turns": selected_red_turns,
-            "left_end_orientation": selected_left_end_orientation,
-            "right_end_orientation": selected_right_end_orientation,
+            "left_end_or": selected_left_end_or,
+            "right_end_or": selected_right_end_or,
         }
 
         self.ig_tab.ig_scroll_area.apply_turn_filters(self.filters)

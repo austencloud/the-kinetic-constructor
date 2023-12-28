@@ -1,4 +1,4 @@
-letter,start_position,end_position,blue_motion_type,blue_prop_rot_dir,blue_start_loc,blue_end_loc,red_motion_type,red_prop_rot_dir,red_start_loc,red_end_loc
+letter,start_pos,end_pos,blue_motion_type,blue_prop_rot_dir,blue_start_loc,blue_end_loc,red_motion_type,red_prop_rot_dir,red_start_loc,red_end_loc
 Σ,alpha1,gamma1,pro,cw,s,w,static,None,n,n
 Σ,alpha2,gamma2,pro,cw,w,n,static,None,e,e
 Σ,alpha3,gamma3,pro,cw,n,e,static,None,s,s

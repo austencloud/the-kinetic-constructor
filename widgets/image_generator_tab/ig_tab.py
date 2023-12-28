@@ -41,7 +41,7 @@ class IGTab(QWidget):
     def load_and_sort_data(self, file_path: str) -> pd.DataFrame:
         try:
             df = pd.read_csv(file_path)
-            df.set_index(["start_position", "end_position"], inplace=True)
+            df.set_index(["start_pos", "end_pos"], inplace=True)
             df.sort_index(inplace=True)
             return df
         except Exception as e:
@@ -210,8 +210,6 @@ class IGTab(QWidget):
 
     ### OPTION CREATION ###
 
-
-
     def _create_ig_pictograph(self, pd_row_data: pd.Series):
         letter = pd_row_data["letter"]
         ig_pictograph = IGPictograph(self.main_widget, self.ig_scroll_area)
@@ -235,8 +233,8 @@ class IGTab(QWidget):
         ig_pictograph.motions[BLUE].setup_attributes(blue_motion_dict)
 
         ig_pictograph.current_letter = letter
-        ig_pictograph.start_position = pd_row_data.name[0]
-        ig_pictograph.end_position = pd_row_data.name[1]
+        ig_pictograph.start_pos = pd_row_data.name[0]
+        ig_pictograph.end_pos = pd_row_data.name[1]
 
         ig_pictograph.motions[RED].arrow = ig_pictograph.arrows[RED]
         ig_pictograph.motions[BLUE].arrow = ig_pictograph.arrows[BLUE]
@@ -245,14 +243,14 @@ class IGTab(QWidget):
         ig_pictograph.motions[RED].arrow.location = ig_pictograph.motions[
             RED
         ].get_arrow_location(
-            ig_pictograph.motions[RED].start_location,
-            ig_pictograph.motions[RED].end_location,
+            ig_pictograph.motions[RED].start_loc,
+            ig_pictograph.motions[RED].end_loc,
         )
         ig_pictograph.motions[BLUE].arrow.location = ig_pictograph.motions[
             BLUE
         ].get_arrow_location(
-            ig_pictograph.motions[BLUE].start_location,
-            ig_pictograph.motions[BLUE].end_location,
+            ig_pictograph.motions[BLUE].start_loc,
+            ig_pictograph.motions[BLUE].end_loc,
         )
 
         ig_pictograph.arrows[RED].motion_type = pd_row_data["red_motion_type"]
@@ -263,12 +261,8 @@ class IGTab(QWidget):
         ig_pictograph.arrows[RED].motion = ig_pictograph.motions[RED]
         ig_pictograph.arrows[BLUE].motion = ig_pictograph.motions[BLUE]
 
-        ig_pictograph.motions[RED].end_orientation = ig_pictograph.motions[
-            RED
-        ].get_end_orientation()
-        ig_pictograph.motions[BLUE].end_orientation = ig_pictograph.motions[
-            BLUE
-        ].get_end_orientation()
+        ig_pictograph.motions[RED].end_or = ig_pictograph.motions[RED].get_end_or()
+        ig_pictograph.motions[BLUE].end_or = ig_pictograph.motions[BLUE].get_end_or()
 
         ig_pictograph.motions[RED].update_prop_orientation()
         ig_pictograph.motions[BLUE].update_prop_orientation()

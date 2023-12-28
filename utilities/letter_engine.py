@@ -24,17 +24,17 @@ from data.letter_engine_data import (
     motion_type_letter_groups,
     parallel_combinations,
 )
-from data.positions_map import get_specific_start_end_positions
+from data.positions_map import get_specific_start_end_poss
 from objects.motion import Motion
 from constants import (
     ALPHA,
     BETA,
     BLUE,
-    END_POSITION,
+    end_pos,
     GAMMA,
     PRO,
     RED,
-    START_POSITION,
+    start_pos,
 )
 
 from utilities.TypeChecking.TypeChecking import LetterGroupsByMotionType
@@ -74,26 +74,22 @@ class LetterEngine:
             else self.pictograph.motions[RED]
         )
 
-        specific_position: Dict[
-            str, SpecificPosition
-        ] = get_specific_start_end_positions(
+        specific_position: Dict[str, SpecificPosition] = get_specific_start_end_poss(
             self.get_motion(BLUE), self.get_motion(RED)
         )
         if specific_position:
             overall_position: Dict[str, Position] = self.get_overall_position(
                 specific_position
             )
-            start_position = overall_position[START_POSITION]
-            end_position = overall_position[END_POSITION]
+            start_pos = overall_position[start_pos]
+            end_pos = overall_position[end_pos]
             motion_letter_group = self.get_motion_type_letter_group()
 
-            filtered_letter_group = self.filter_by_end_position(
-                end_position, motion_letter_group
-            )
+            filtered_letter_group = self.filter_by_end_pos(end_pos, motion_letter_group)
 
             if not len(filtered_letter_group) == 1:
-                filtered_letter_group = self.filter_by_start_position(
-                    start_position, filtered_letter_group
+                filtered_letter_group = self.filter_by_start_pos(
+                    start_pos, filtered_letter_group
                 )
 
             if not len(filtered_letter_group) == 1:
@@ -108,16 +104,15 @@ class LetterEngine:
                 )
                 return None
 
-    def filter_by_start_position(
-        self, start_position: Position, motion_letter_set: Set[Letter]
+    def filter_by_start_pos(
+        self, start_pos: Position, motion_letter_set: Set[Letter]
     ) -> Set[Letter]:
-        if start_position == ALPHA:
+        if start_pos == ALPHA:
             filtered_letter_group = list(alpha_starting_letters)
-        elif start_position == BETA:
+        elif start_pos == BETA:
             filtered_letter_group = list(beta_starting_letters)
-        elif start_position == GAMMA:
+        elif start_pos == GAMMA:
             filtered_letter_group = list(gamma_starting_letters)
-
 
         motion_letter_set_values = [letter for letter in motion_letter_set]
 
@@ -127,14 +122,13 @@ class LetterEngine:
 
         return filtered_letter_group
 
-    def filter_by_end_position(self, end_position, motion_letter_set) -> Set[Letter]:
-        if end_position == ALPHA:
+    def filter_by_end_pos(self, end_pos, motion_letter_set) -> Set[Letter]:
+        if end_pos == ALPHA:
             filtered_letter_group = list(alpha_ending_letters)
-        elif end_position == BETA:
+        elif end_pos == BETA:
             filtered_letter_group = list(beta_ending_letters)
-        elif end_position == GAMMA:
+        elif end_pos == GAMMA:
             filtered_letter_group = list(gamma_ending_letters)
-
 
         motion_letter_set_values = [letter for letter in motion_letter_set]
 
@@ -171,11 +165,11 @@ class LetterEngine:
         return motion_type_letter_group
 
     def is_parallel(self) -> bool:
-        red_start = self.red_motion.start_location
-        red_end = self.red_motion.end_location
+        red_start = self.red_motion.start_loc
+        red_end = self.red_motion.end_loc
 
-        blue_start = self.blue_motion.start_location
-        blue_end = self.blue_motion.end_location
+        blue_start = self.blue_motion.start_loc
+        blue_end = self.blue_motion.end_loc
 
         parallel_check_result = (
             red_start,
@@ -193,19 +187,19 @@ class LetterEngine:
             return (clockwise.index(end) - clockwise.index(start)) % len(clockwise)
 
         arrow_locations = [
-            self.red_motion.start_location,
-            self.red_motion.end_location,
-            self.blue_motion.start_location,
-            self.blue_motion.end_location,
+            self.red_motion.start_loc,
+            self.red_motion.end_loc,
+            self.blue_motion.start_loc,
+            self.blue_motion.end_loc,
         ]
         if not all(location in clockwise for location in arrow_locations):
             return None
 
         red_direction = calculate_direction(
-            self.red_motion.start_location, self.red_motion.end_location
+            self.red_motion.start_loc, self.red_motion.end_loc
         )
         blue_direction = calculate_direction(
-            self.blue_motion.start_location, self.blue_motion.end_location
+            self.blue_motion.start_loc, self.blue_motion.end_loc
         )
 
         handpath_direction_relationship = (
@@ -228,7 +222,7 @@ class LetterEngine:
         else:
             return "PQR"  # Return antiparallel group
 
-    def filter_gamma_letters(self, letter_group)        :
+    def filter_gamma_letters(self, letter_group):
         gamma_handpath_letters = set(self.get_gamma_handpath_group())
         filtered_letter_group = {
             letter for letter in letter_group if letter in gamma_handpath_letters
@@ -289,10 +283,10 @@ class LetterEngine:
     def filter_for_U_or_V(self) -> Literal["U", "V"] | None:
         """Determines if the pictograph represents 'U' or 'V'."""
         leading_motion = self.determine_leading_motion_for_U_V(
-            self.pro_motion.start_location,
-            self.pro_motion.end_location,
-            self.anti_motion.start_location,
-            self.anti_motion.end_location,
+            self.pro_motion.start_loc,
+            self.pro_motion.end_loc,
+            self.anti_motion.start_loc,
+            self.anti_motion.end_loc,
         )
 
         if leading_motion == "pro":

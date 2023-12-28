@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
 import pandas as pd
 from Enums import Color, Letter, LetterNumberType, Location, SpecificPosition
 from constants import *
-from data.positions_map import get_specific_start_end_positions
+from data.positions_map import get_specific_start_end_poss
 from objects.letter_item import LetterItem
 from objects.motion import Motion
 from objects.prop.prop import Prop
@@ -37,7 +37,7 @@ class Pictograph(QGraphicsScene):
             "main",
             "option",
             "beat",
-            "start_position_beat",
+            "start_pos_beat",
             "ig_pictograph",
         ],
     ) -> None:
@@ -61,8 +61,8 @@ class Pictograph(QGraphicsScene):
         self.current_letter: Letter = None
         self.pictograph_dict: Dict = {}
         self.motion_dict_list: List[Dict] = []
-        self.start_position: SpecificPosition = None
-        self.end_position: SpecificPosition = None
+        self.start_pos: SpecificPosition = None
+        self.end_pos: SpecificPosition = None
         self.image_loaded: bool = False
         self.pixmap = None  # Store the pixmap item
         self.pd_row_data = None  # Store the row data from the pandas dataframe
@@ -94,7 +94,7 @@ class Pictograph(QGraphicsScene):
     def init_view(self, graph_type) -> QGraphicsView:
         from widgets.graph_editor_tab.main_pictograph_view import MainPictographView
         from widgets.option_picker_tab.option import OptionView
-        from widgets.sequence_widget.beat_frame.start_position import (
+        from widgets.sequence_widget.beat_frame.start_pos import (
             StartPositionBeatView,
         )
         from widgets.sequence_widget.beat_frame.beat import BeatView
@@ -106,7 +106,7 @@ class Pictograph(QGraphicsScene):
             view = OptionView(self)
         elif graph_type == BEAT:
             view = BeatView(self)
-        elif graph_type == START_POSITION_BEAT:
+        elif graph_type == start_pos_BEAT:
             view = StartPositionBeatView(self)
         elif graph_type == IG_PICTOGRAPH:
             view = IG_Pictograph_View(self)
@@ -181,9 +181,9 @@ class Pictograph(QGraphicsScene):
         return {
             COLOR: color,
             MOTION_TYPE: pd_row_data[f"{color}_motion_type"],
-            ROT_DIR: pd_row_data[f"{color}_prop_rot_dir"],
-            START_LOC: pd_row_data[f"{color}_start_location"],
-            END_LOC: pd_row_data[f"{color}_end_location"],
+            PROP_ROT_DIR: pd_row_data[f"{color}_prop_rot_dir"],
+            START_LOC: pd_row_data[f"{color}_start_loc"],
+            END_LOC: pd_row_data[f"{color}_end_loc"],
             TURNS: filters[f"{color}_turns"],
             START_OR: "in",
         }
@@ -219,21 +219,21 @@ class Pictograph(QGraphicsScene):
                 blue_position = center
         return red_position, blue_position
 
-    def get_start_end_positions(self) -> Optional[SpecificPosition]:
-        specific_positions = get_specific_start_end_positions(
+    def get_start_end_poss(self) -> Optional[SpecificPosition]:
+        specific_positions = get_specific_start_end_poss(
             self.motions[BLUE], self.motions[RED]
         )
         if specific_positions:
-            start_position = specific_positions[START_POSITION]
-            end_position = specific_positions[END_POSITION]
-        return start_position, end_position
+            start_pos = specific_positions[start_pos]
+            end_pos = specific_positions[end_pos]
+        return start_pos, end_pos
 
     def get_state(self) -> Dict:
-        start_position, end_position = self.get_start_end_positions()
+        start_pos, end_pos = self.get_start_end_poss()
         state_data = {
             LETTER: self.current_letter,
-            START_POSITION: start_position,
-            END_POSITION: end_position,
+            start_pos: start_pos,
+            end_pos: end_pos,
         }
 
         for color, motion in self.motions.items():
@@ -241,12 +241,12 @@ class Pictograph(QGraphicsScene):
             state_data.update(
                 {
                     prefix + MOTION_TYPE: motion.motion_type,
-                    prefix + ROT_DIR: motion.rot_dir,
-                    prefix + START_LOC: motion.start_location,
-                    prefix + END_LOC: motion.end_location,
+                    prefix + PROP_ROT_DIR: motion.rot_dir,
+                    prefix + START_LOC: motion.start_loc,
+                    prefix + END_LOC: motion.end_loc,
                     prefix + TURNS: motion.turns,
-                    prefix + START_OR: motion.start_orientation,
-                    prefix + END_OR: motion.end_orientation,
+                    prefix + START_OR: motion.start_or,
+                    prefix + END_OR: motion.end_or,
                 }
             )
 
@@ -507,7 +507,7 @@ class Pictograph(QGraphicsScene):
         # Construct the folder name based on turns and motion types
         turns_string = f"{blue_motion_type_prefix}{self.motions[BLUE].turns},{red_motion_type_prefix}{self.motions[RED].turns}"
         basic_turns_string = f"{self.motions[BLUE].turns},{self.motions[RED].turns}"
-        start_to_end_string = f"{self.start_position}→{self.end_position}"
+        start_to_end_string = f"{self.start_pos}→{self.end_pos}"
         image_dir = os.path.join(
             "resources",
             "images",
@@ -522,18 +522,18 @@ class Pictograph(QGraphicsScene):
         # Modify the filename to include motion types and turns
         blue_turns = self.motions[BLUE].turns
         red_turns = self.motions[RED].turns
-        blue_end_orientation = self.motions[BLUE].end_orientation
-        red_end_orientation = self.motions[RED].end_orientation
+        blue_end_or = self.motions[BLUE].end_or
+        red_end_or = self.motions[RED].end_or
 
         image_name = (
             f"{letter}_"
             f"({start_to_end_string})_"
-            f"({self.motions[BLUE].motion_type}_{self.motions[BLUE].start_location}→{self.motions[BLUE].end_location}_"
+            f"({self.motions[BLUE].motion_type}_{self.motions[BLUE].start_loc}→{self.motions[BLUE].end_loc}_"
             f"{blue_turns}_"
-            f"{self.motions[BLUE].start_orientation}→{blue_end_orientation})_"
-            f"({self.motions[RED].motion_type}_{self.motions[RED].start_location}→{self.motions[RED].end_location}_"
+            f"{self.motions[BLUE].start_or}→{blue_end_or})_"
+            f"({self.motions[RED].motion_type}_{self.motions[RED].start_loc}→{self.motions[RED].end_loc}_"
             f"{red_turns}_"
-            f"{self.motions[RED].start_orientation}→{red_end_orientation})_"
+            f"{self.motions[RED].start_or}→{red_end_or})_"
             f"{prop_type}.png "
         )
 

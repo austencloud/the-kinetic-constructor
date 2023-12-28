@@ -1,4 +1,4 @@
-letter,start_position,end_position,blue_motion_type,blue_prop_rot_dir,blue_start_loc,blue_end_loc,red_motion_type,red_prop_rot_dir,red_start_loc,red_end_loc
+letter,start_pos,end_pos,blue_motion_type,blue_prop_rot_dir,blue_start_loc,blue_end_loc,red_motion_type,red_prop_rot_dir,red_start_loc,red_end_loc
 Φ-,alpha1,alpha3,dash,None,s,n,dash,None,n,s
 Φ-,alpha2,alpha4,dash,None,w,e,dash,None,e,w
 Φ-,alpha3,alpha1,dash,None,n,s,dash,None,s,n

@@ -7,9 +7,7 @@ from utilities.TypeChecking.TypeChecking import (
     Tuple,
 )
 
-positions_map: Dict[
-    Tuple[Location, Location], SpecificPosition
-] = {
+positions_map: Dict[Tuple[Location, Location], SpecificPosition] = {
     # (blue_loc, red_loc): position
     (SOUTH, NORTH): ALPHA1,
     (WEST, EAST): ALPHA2,
@@ -29,20 +27,21 @@ positions_map: Dict[
     (NORTH, WEST): GAMMA8,
 }
 
-def get_specific_start_end_positions(
+
+def get_specific_start_end_poss(
     blue_motion: Motion, red_motion: Motion
 ) -> SpecificStartEndPositionsDicts:
-    start_locations = (
-        blue_motion.start_location,
-        red_motion.start_location,
+    start_locs = (
+        blue_motion.start_loc,
+        red_motion.start_loc,
     )
-    end_locations = (
-        red_motion.end_location,
-        blue_motion.end_location,
+    end_locs = (
+        red_motion.end_loc,
+        blue_motion.end_loc,
     )
 
     specific_positions: SpecificStartEndPositionsDicts = {
-        START_POSITION: positions_map.get(start_locations),
-        END_POSITION: positions_map.get(end_locations),
+        start_pos: positions_map.get(start_locs),
+        end_pos: positions_map.get(end_locs),
     }
     return specific_positions

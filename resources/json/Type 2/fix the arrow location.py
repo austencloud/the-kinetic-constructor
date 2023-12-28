@@ -25,7 +25,7 @@ def process_json_file(file_path):
                         or motion["arrow_location"] == "None"
                     ):
                         # Set arrow_location to start/end location
-                        motion["arrow_location"] = motion["start_location"]
+                        motion["arrow_location"] = motion["start_loc"]
 
     # Overwrite the file with updated data
     with open(file_path, "w") as file:

@@ -51,9 +51,11 @@ class LetterNumberType(Enum):
     def description(self):
         return self._description
 
+
 class ShiftHandpaths(Enum):
     CW_HANDPATH = "cw"
     CCW_HANDPATH = "ccw"
+
 
 class Color(Enum):
     BLUE = "blue"
@@ -80,8 +82,8 @@ class Direction(Enum):
 class Filter(Enum):
     BLUE_TURNS = "blue_turns"
     RED_TURNS = "red_turns"
-    LEFT_END_ORIENTATION = "left_end_orientation"
-    RIGHT_END_ORIENTATION = "right_end_orientation"
+    LEFT_end_or = "left_end_or"
+    RIGHT_end_or = "right_end_or"
 
 
 class MotionType(Enum):
@@ -198,10 +200,6 @@ class Letter(Enum):
     Nu = "ν"
     Zeta = "ζ"
     Eta = "η"
-
-
-
-
 
 
 class PropType(Enum):
@@ -389,17 +387,17 @@ class MotionAttribute(Enum):
     ARROW = "arrow"
     PROP = "prop"
     MOTION_TYPE = "motion_type"
-    ROTATION_DIRECTION = "rot_dir"
+    ROTATION_DIRECTION = "prop_rot_dir"
     TURNS = "turns"
-    START_LOCATION = "start_location"
-    START_ORIENTATION = "start_orientation"
-    END_LOCATION = "end_location"
-    END_ORIENTATION = "end_orientation"
+    start_loc = "start_loc"
+    start_or = "start_or"
+    end_loc = "end_loc"
+    end_or = "end_or"
 
 
 class PictographAttribute(Enum):
-    START_POSITION = "start_position"
-    END_POSITION = "end_position"
+    start_pos = "start_pos"
+    end_pos = "end_pos"
     LETTER = "letter"
     HANDPATH_MODE = "handpath_mode"
     MOTION_TYPE_COMBINATION = "motion_type_combination"
@@ -445,8 +443,8 @@ class OrientationCombination(Enum):
 
 
 class SpecificStartEndPositionsDicts(TypedDict):
-    start_position: SpecificPosition
-    end_position: SpecificPosition
+    start_pos: SpecificPosition
+    end_pos: SpecificPosition
 
 
 class PropAttributesDicts(TypedDict):
@@ -464,11 +462,11 @@ class MotionAttributesDicts(TypedDict):
     location: Location
     turns: Turns
 
-    start_location: Location
-    start_orientation: Orientation
+    start_loc: Location
+    start_or: Orientation
 
-    end_location: Location
-    end_orientation: Orientation
+    end_loc: Location
+    end_or: Orientation
 
 
 class ArrowAttributesDicts(TypedDict):
@@ -482,11 +480,11 @@ class MotionAttributesDicts(TypedDict):
     color: Color
     motion_type: MotionType
     rot_dir: PropRotationDirection
-    start_location: Location
-    end_location: Location
+    start_loc: Location
+    end_loc: Location
     turns: Turns
-    start_orientation: Orientation
-    end_orientation: Orientation
+    start_or: Orientation
+    end_or: Orientation
 
 
 ### LETTER GROUPS ###
@@ -541,8 +539,8 @@ class TKAHandpathMode(Enum):
 
 
 class PictographAttributesDict(TypedDict):
-    start_position: Position
-    end_position: Position
+    start_pos: Position
+    end_pos: Position
     letter_type: LetterNumberType
     vtg_handpath_mode: VTGHandpathMode
     motion_type_combination: MotionTypeCombination
@@ -552,5 +550,5 @@ class PictographType(Enum):
     MAIN = "main"
     OPTION = "option"
     BEAT = "beat"
-    START_POSITION = "start_position"
+    start_pos = "start_pos"
     IG_PICTOGRAPH = "ig_pictograph"

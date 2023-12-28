@@ -82,18 +82,18 @@ class ArrowPositioner:
     def compare_states(self, current_state: Dict, candidate_state: Dict) -> bool:
         relevant_keys = [
             "letter",
-            "start_position",
-            "end_position",
+            "start_pos",
+            "end_pos",
             "blue_motion_type",
             "blue_prop_rot_dir",
             "blue_turns",
-            "blue_start_location",
-            "blue_end_location",
+            "blue_start_loc",
+            "blue_end_loc",
             "red_motion_type",
             "red_prop_rot_dir",
             "red_turns",
-            "red_start_location",
-            "red_end_location",
+            "red_start_loc",
+            "red_end_loc",
         ]
         return all(
             current_state.get(key) == candidate_state.get(key) for key in relevant_keys

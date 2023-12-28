@@ -28,7 +28,7 @@ class BaseDataFrameGenerator:
                 (WEST, NORTH),
             ]
 
-    def get_start_end_positions(
+    def get_start_end_poss(
         self, blue_start_loc, blue_end_loc, red_start_loc, red_end_loc
     ) -> Tuple[Location, Location]:
         start_key = (blue_start_loc, red_start_loc)
@@ -128,7 +128,7 @@ class BaseDataFrameGenerator:
                 "letter",
                 "blue_motion_type",
                 "blue_prop_rot_dir",
-                "start_position",
+                "start_pos",
             ],
             inplace=True,
         )

@@ -224,7 +224,7 @@ class MainWidget(QWidget):
         red_motion_type_prefix = pictograph.motions[RED].motion_type[0]
         blue_turns = pictograph.motions[BLUE].turns
         red_turns = pictograph.motions[RED].turns
-        start_to_end_string = f"{pictograph.start_position}→{pictograph.end_position}"
+        start_to_end_string = f"{pictograph.start_pos}→{pictograph.end_pos}"
         turns_string = (
             f"{blue_motion_type_prefix}{blue_turns},{red_motion_type_prefix}{red_turns}"
         )
@@ -239,18 +239,18 @@ class MainWidget(QWidget):
             start_to_end_string,
         ).replace("\\", "/")
 
-        blue_end_orientation = pictograph.motions[BLUE].get_end_orientation()
-        red_end_orientation = pictograph.motions[RED].get_end_orientation()
+        blue_end_or = pictograph.motions[BLUE].get_end_or()
+        red_end_or = pictograph.motions[RED].get_end_or()
 
         image_name = (
             f"{letter}_"
             f"({pd_row_data.name[0]}→{pd_row_data.name[1]})_"
-            f"({pd_row_data["blue_motion_type"]}_{pd_row_data['blue_start_location']}→{pd_row_data['blue_end_location']}_"
+            f"({pd_row_data["blue_motion_type"]}_{pd_row_data['blue_start_loc']}→{pd_row_data['blue_end_loc']}_"
             f"{blue_turns}_"
-            f"{pd_row_data['blue_start_orientation']}→{blue_end_orientation})_"
-            f"({pd_row_data["red_motion_type"]}_{pd_row_data['red_start_location']}→{pd_row_data['red_end_location']}_"
+            f"{pd_row_data['blue_start_or']}→{blue_end_or})_"
+            f"({pd_row_data["red_motion_type"]}_{pd_row_data['red_start_loc']}→{pd_row_data['red_end_loc']}_"
             f"{red_turns}_"
-            f"{pd_row_data['red_start_orientation']}→{red_end_orientation})_"
+            f"{pd_row_data['red_start_or']}→{red_end_or})_"
             f"{prop_type}.png"
         )
         return os.path.join(image_dir, image_name)

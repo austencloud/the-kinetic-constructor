@@ -57,27 +57,27 @@ class OptionPickerScrollArea(QScrollArea):
     def _load_and_sort_data(self, file_path: str) -> pd.DataFrame:
         try:
             df = pd.read_csv(file_path)
-            # Ensure the DataFrame is indexed by 'start_position' and 'end_position'
-            df.set_index(["start_position", "end_position"], inplace=True)
+            # Ensure the DataFrame is indexed by 'start_pos' and 'end_pos'
+            df.set_index(["start_pos", "end_pos"], inplace=True)
             df.sort_index(inplace=True)
             return df
         except Exception as e:
             print(f"Error loading data: {e}")
             return pd.DataFrame()
 
-    def _show_start_position(self) -> None:
+    def _show_start_pos(self) -> None:
         """Shows options for the starting position."""
         self.clear()
-        start_positions = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
-        for i, position_key in enumerate(start_positions):
-            self._add_start_position_option(position_key, i)
+        start_poss = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
+        for i, position_key in enumerate(start_poss):
+            self._add_start_pos_option(position_key, i)
         self.option_picker_tab.filter_frame.apply_filters()
 
-    def _add_start_position_option(self, position_key: str, column: int) -> None:
+    def _add_start_pos_option(self, position_key: str, column: int) -> None:
         """Adds an option for the specified start position."""
-        start_position, end_position = position_key.split("_")
-        if (start_position, end_position) in self.pictographs.index:
-            pd_row_data = self.pictographs.loc[(start_position, end_position)]
+        start_pos, end_pos = position_key.split("_")
+        if (start_pos, end_pos) in self.pictographs.index:
+            pd_row_data = self.pictographs.loc[(start_pos, end_pos)]
             pd_row_data = (
                 pd_row_data.iloc[0]
                 if isinstance(pd_row_data, pd.DataFrame)
@@ -88,14 +88,14 @@ class OptionPickerScrollArea(QScrollArea):
             )
             start_option.view.resize_option_view()
             start_option.current_letter = start_option.pd_row_data[LETTER]
-            start_option.start_position = start_option.pd_row_data.name[0]
-            start_option.end_position = start_option.pd_row_data.name[1]
+            start_option.start_pos = start_option.pd_row_data.name[0]
+            start_option.end_pos = start_option.pd_row_data.name[1]
             self._add_option_to_layout(start_option, True, 0, column)
 
     def _add_option_to_layout(
-        self, option: Option, is_start_position: bool, row: int, col: int
+        self, option: Option, is_start_pos: bool, row: int, col: int
     ) -> None:
-        option.view.mousePressEvent = self._get_click_handler(option, is_start_position)
+        option.view.mousePressEvent = self._get_click_handler(option, is_start_pos)
         self.option_picker_layout.addWidget(option.view, row, col)
 
     def load_image_if_visible(self, option: "Option") -> None:
@@ -128,7 +128,7 @@ class OptionPickerScrollArea(QScrollArea):
             if option.meets_turn_criteria(filters):
                 self._add_option_to_layout(
                     option,
-                    is_start_position=False,
+                    is_start_pos=False,
                     row=idx // self.COLUMN_COUNT,
                     col=idx % self.COLUMN_COUNT,
                 )
@@ -146,13 +146,15 @@ class OptionPickerScrollArea(QScrollArea):
             pd_row_data,
             BLUE,
             filters[BLUE_TURNS],
-            filters[BLUE_END_ORIENTATION],
+            filters[BLUE_START_OR],
+            filters[BLUE_END_OR],
         )
         red_motion_dict = self._create_motion_dict_from_filters(
             pd_row_data,
             RED,
             filters[RED_TURNS],
-            filters[RED_END_ORIENTATION],
+            filters[RED_START_OR],
+            filters[RED_END_OR],
         )
 
         option.props[RED].ghost = option.ghost_props[RED]
@@ -164,24 +166,24 @@ class OptionPickerScrollArea(QScrollArea):
         option.motions[BLUE].setup_attributes(blue_motion_dict)
 
         option.current_letter = letter
-        option.start_position = pd_row_data.name[0]
-        option.end_position = pd_row_data.name[1]
+        option.start_pos = pd_row_data.name[0]
+        option.end_pos = pd_row_data.name[1]
         option.motions[RED].arrow = option.arrows[RED]
         option.motions[BLUE].arrow = option.arrows[BLUE]
         option.motions[RED].prop = option.props[RED]
         option.motions[BLUE].prop = option.props[BLUE]
         option.motions[RED].arrow.location = option.motions[RED].get_arrow_location(
-            option.motions[RED].start_location,
-            option.motions[RED].end_location,
+            option.motions[RED].start_loc,
+            option.motions[RED].end_loc,
         )
         option.motions[BLUE].arrow.location = option.motions[BLUE].get_arrow_location(
-            option.motions[BLUE].start_location,
-            option.motions[BLUE].end_location,
+            option.motions[BLUE].start_loc,
+            option.motions[BLUE].end_loc,
         )
 
         option.current_letter = pd_row_data[LETTER]
-        option.start_position = pd_row_data.name[0]
-        option.end_position = pd_row_data.name[1]
+        option.start_pos = pd_row_data.name[0]
+        option.end_pos = pd_row_data.name[1]
 
         option.arrows[RED].motion_type = pd_row_data["red_motion_type"]
         option.arrows[BLUE].motion_type = pd_row_data["blue_motion_type"]
@@ -191,10 +193,8 @@ class OptionPickerScrollArea(QScrollArea):
         option.arrows[RED].motion = option.motions[RED]
         option.arrows[BLUE].motion = option.motions[BLUE]
 
-        option.motions[RED].end_orientation = option.motions[RED].get_end_orientation()
-        option.motions[BLUE].end_orientation = option.motions[
-            BLUE
-        ].get_end_orientation()
+        option.motions[RED].end_or = option.motions[RED].get_end_or()
+        option.motions[BLUE].end_or = option.motions[BLUE].get_end_or()
 
         option.motions[RED].update_prop_orientation()
         option.motions[BLUE].update_prop_orientation()
@@ -214,7 +214,7 @@ class OptionPickerScrollArea(QScrollArea):
             option.motions[color].arrow.location = option.motions[
                 color
             ].get_arrow_location(
-                option.motions[color].start_location, option.motions[color].end_location
+                option.motions[color].start_loc, option.motions[color].end_loc
             )
         option.update_pictograph()
         self.load_image_if_visible(option)
@@ -225,17 +225,18 @@ class OptionPickerScrollArea(QScrollArea):
         pd_row_data: pd.Series,
         color: str,
         turns: Turns,
-        end_orientation: Orientation,
+        start_or: Orientation,
+        end_or: Orientation,
     ) -> Dict:
         motion_dict = {
             "color": color,
             "motion_type": pd_row_data[f"{color}_motion_type"],
-            "rot_dir": pd_row_data[f"{color}_prop_rot_dir"],
-            "start_location": pd_row_data[f"{color}_start_location"],
-            "end_location": pd_row_data[f"{color}_end_location"],
+            "prop_rot_dir": pd_row_data[f"{color}_prop_rot_dir"],
+            "start_loc": pd_row_data[f"{color}_start_loc"],
+            "end_loc": pd_row_data[f"{color}_end_loc"],
             "turns": turns,
-            "start_orientation": pd_row_data[f"{color}_start_orientation"],
-            "end_orientation": end_orientation,
+            "start_or": start_or,
+            "end_or": end_or,
         }
         return motion_dict
 
@@ -257,7 +258,7 @@ class OptionPickerScrollArea(QScrollArea):
             prop.update_rotation()
             prop.update_appearance()
             arrow.location = arrow.motion.get_arrow_location(
-                arrow.motion.start_location, arrow.motion.end_location
+                arrow.motion.start_loc, arrow.motion.end_loc
             )
         option.update_pictograph()
 
@@ -272,19 +273,19 @@ class OptionPickerScrollArea(QScrollArea):
 
         current_letter = clicked_option.current_letter
         next_possible_letters = get_next_letters(current_letter)
-        specific_end_position = clicked_option.end_position
+        specific_end_pos = clicked_option.end_pos
 
         # Filter the DataFrame correctly
         filtered_data = self.pictographs[
-            self.pictographs.index.get_level_values(0) == specific_end_position
+            self.pictographs.index.get_level_values(0) == specific_end_pos
         ]
         filtered_data = filtered_data[filtered_data[LETTER].isin(next_possible_letters)]
 
         # filter to ensure the options have a start orientation for each motion that matches the end orientations of the reference option's motions
         for color in [BLUE, RED]:
             filtered_data = filtered_data[
-                filtered_data[f"{color}_start_orientation"]
-                == clicked_option.motions[color].end_orientation
+                filtered_data[f"{color}_start_or"]
+                == clicked_option.motions[color].end_or
             ]
 
         self.options.clear()
@@ -311,20 +312,20 @@ class OptionPickerScrollArea(QScrollArea):
 
             self._add_option_to_layout(
                 option,
-                is_start_position=False,
+                is_start_pos=False,
                 row=row // self.COLUMN_COUNT,
                 col=row % self.COLUMN_COUNT,
             )
 
     ### GETTERS ###
 
-    def _get_click_handler(self, option: "Option", is_start_position: bool) -> Callable:
+    def _get_click_handler(self, option: "Option", is_start_pos: bool) -> Callable:
         """
         Returns a click event handler for an option. This handler updates
         the picker state based on the selected option's attributes.
         """
-        if is_start_position:
-            return lambda event: self._on_start_position_clicked(
+        if is_start_pos:
+            return lambda event: self._on_start_pos_clicked(
                 option, self.option_picker_tab.filter_frame.filters
             )
         else:
@@ -332,12 +333,12 @@ class OptionPickerScrollArea(QScrollArea):
 
     ### EVENT HANDLERS ###
 
-    def _on_start_position_clicked(self, start_position: "Option", attributes) -> None:
-        self.main_widget.sequence_widget.beat_frame.start_position_view.set_start_position(
-            start_position
+    def _on_start_pos_clicked(self, start_pos: "Option", attributes) -> None:
+        self.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
+            start_pos
         )
         self.main_widget.sequence_widget.beat_frame.picker_updater.emit(
-            start_position, attributes
+            start_pos, attributes
         )
 
     def _on_option_clicked(self, clicked_option: "Option") -> None:

@@ -20,7 +20,7 @@ from utilities.TypeChecking.TypeChecking import (
     Turns,
     RotationAngles,
 )
-from data.start_end_location_map import get_start_end_locations
+from data.start_end_loc_map import get_start_end_locs
 from constants import *
 
 if TYPE_CHECKING:
@@ -37,7 +37,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.arrowbox = arrowbox
         self.objectbox = arrowbox
         self.ghost: GhostArrow = None
-        self.start_orientation = IN
+        self.start_or = IN
         self.setup_dependencies(main_widget, pictograph, arrowbox)
 
     def match_target_arrow(self, target_arrow: "Arrow") -> None:
@@ -80,11 +80,11 @@ class ArrowBoxDrag(ObjectBoxDrag):
             ARROW: self.placed_arrow,
             PROP: self.placed_arrow.motion.prop,
             MOTION_TYPE: self.motion_type,
-            ROT_DIR: self.rot_dir,
+            PROP_ROT_DIR: self.rot_dir,
             TURNS: self.turns,
-            START_OR: self.start_orientation,
-            START_LOC: self.start_location,
-            END_LOC: self.end_location,
+            START_OR: self.start_or,
+            START_LOC: self.start_loc,
+            END_LOC: self.end_loc,
         }
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
@@ -107,9 +107,9 @@ class ArrowBoxDrag(ObjectBoxDrag):
     def _update_arrow_preview_for_new_location(self, new_location: Location) -> None:
         self.arrow_location = new_location
         (
-            self.start_location,
-            self.end_location,
-        ) = get_start_end_locations(self.motion_type, self.rot_dir, self.arrow_location)
+            self.start_loc,
+            self.end_loc,
+        ) = get_start_end_locs(self.motion_type, self.rot_dir, self.arrow_location)
 
         self.update_rotation()
         self._update_ghost_arrow_for_new_location(new_location)
@@ -120,11 +120,11 @@ class ArrowBoxDrag(ObjectBoxDrag):
             ARROW: self,
             PROP: self.ghost.motion.prop,
             MOTION_TYPE: self.motion_type,
-            ROT_DIR: self.rot_dir,
+            PROP_ROT_DIR: self.rot_dir,
             TURNS: self.turns,
-            START_OR: self.start_orientation,
-            START_LOC: self.start_location,
-            END_LOC: self.end_location,
+            START_OR: self.start_or,
+            START_LOC: self.start_loc,
+            END_LOC: self.end_loc,
         }
 
         self.pictograph.motions[self.color].setup_attributes(motion_dict)
@@ -222,7 +222,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
                 prop_dict = {
                     COLOR: self.color,
-                    LOCATION: self.end_location,
+                    LOCATION: self.end_loc,
                 }
                 prop.update_attributes(prop_dict)
                 prop.ghost = self.pictograph.ghost_props[self.color]
@@ -273,9 +273,9 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.preview.setPixmap(rotated_pixmap)
 
         (
-            self.start_location,
-            self.end_location,
-        ) = get_start_end_locations(
+            self.start_loc,
+            self.end_loc,
+        ) = get_start_end_locs(
             self.motion_type,
             self.rot_dir,
             self.arrow_location,

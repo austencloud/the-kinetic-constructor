@@ -43,8 +43,8 @@ class Mode(Enum):
 
 
 class PictographAttributesDict(TypedDict):
-    start_position: PictographAttribute.START_POSITION
-    end_position: PictographAttribute.END_POSITION
+    start_pos: PictographAttribute.start_pos
+    end_pos: PictographAttribute.end_pos
     letter: LETTER
     handpath_mode: PictographAttribute.HANDPATH_MODE
     motion_type_combination: PictographAttribute.MOTION_TYPE_COMBINATION

@@ -92,9 +92,7 @@ class AttrBox(QFrame):
 
     def update_attr_box(self, motion: Motion = None) -> None:
         self.turns_widget.update_clocks(motion.rot_dir)
-        self.start_end_widget.update_start_end_boxes(
-            motion.start_location, motion.end_location
-        )
+        self.start_end_widget.update_start_end_boxes(motion.start_loc, motion.end_loc)
         self.motion_type_widget.update_motion_type_box(motion.motion_type)
         if motion.rot_dir:
             self.turns_widget.update_turnbox(motion.turns)

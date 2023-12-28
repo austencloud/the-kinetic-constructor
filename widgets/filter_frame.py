@@ -50,19 +50,31 @@ class FilterFrame(QFrame):
             self.red_turn_checkboxes[str(turn_value)] = checkbox
 
         self.layout.addLayout(turns_hbox)
+        self.layout.addWidget(QLabel("Left Start Orientation:"))
+        self.left_start_or_combobox = QComboBox(self)
+        self.left_start_or_combobox.addItems([IN, OUT, CLOCK, COUNTER])
+        self.layout.addWidget(self.left_start_or_combobox)
+
+        self.layout.addWidget(QLabel("Right Start Orientation:"))
+        self.right_start_or_combobox = QComboBox(self)
+        self.right_start_or_combobox.addItems([IN, OUT, CLOCK, COUNTER])
+        self.layout.addWidget(self.right_start_or_combobox)
 
         self.layout.addWidget(QLabel("Left End Orientation:"))
-        self.left_end_orientation_combobox = QComboBox(self)
-        self.left_end_orientation_combobox.addItems([IN, OUT, CLOCK, COUNTER])
-        self.layout.addWidget(self.left_end_orientation_combobox)
+        self.left_end_or_combobox = QComboBox(self)
+        self.left_end_or_combobox.addItems([IN, OUT, CLOCK, COUNTER])
+        self.layout.addWidget(self.left_end_or_combobox)
 
         self.layout.addWidget(QLabel("Right End Orientation:"))
-        self.right_end_orientation_combobox = QComboBox(self)
-        self.right_end_orientation_combobox.addItems([IN, OUT, CLOCK, COUNTER])
-        self.layout.addWidget(self.right_end_orientation_combobox)
+        self.right_end_or_combobox = QComboBox(self)
+        self.right_end_or_combobox.addItems([IN, OUT, CLOCK, COUNTER])
+        self.layout.addWidget(self.right_end_or_combobox)
 
         self.blue_turn_checkboxes["0"].setChecked(True)
         self.red_turn_checkboxes["0"].setChecked(True)
+
+        self.right_start_or_combobox.setCurrentText(IN)
+        self.left_start_or_combobox.setCurrentText(IN)
 
     def connect_filter_boxes(self: Union["OptionPickerFilterFrame", "IGFilterFrame"]):
         for checkbox in self.blue_turn_checkboxes.values():
@@ -70,9 +82,5 @@ class FilterFrame(QFrame):
         for checkbox in self.red_turn_checkboxes.values():
             checkbox.stateChanged.connect(self.apply_filters)
         self.apply_filters()
-        self.left_end_orientation_combobox.currentTextChanged.connect(
-            self.apply_filters
-        )
-        self.right_end_orientation_combobox.currentTextChanged.connect(
-            self.apply_filters
-        )
+        self.left_end_or_combobox.currentTextChanged.connect(self.apply_filters)
+        self.right_end_or_combobox.currentTextChanged.connect(self.apply_filters)

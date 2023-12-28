@@ -41,10 +41,10 @@ Organized by number of calls:
         96        0.000144        0.000001             0.000144             0.000001 <genexpr>                      pictograph\pictograph.py:368
         96        0.000124        0.000001             0.000124             0.000001 <genexpr>                      utilities\letter_engine.py:241
         64        0.000397        0.000006             0.005637             0.000088 update_prop_orientation        objects\motion.py:101
-        64        0.002051        0.000032             0.002296             0.000036 get_end_orientation            objects\motion.py:135
+        64        0.002051        0.000032             0.002296             0.000036 get_end_or            objects\motion.py:135
         64        0.000083        0.000001             0.000083             0.000001 get_handpath_direction         objects\motion.py:236
         64        0.000337        0.000005             0.000987             0.000015 update_mirror                  arrow\arrow.py:183
-        64        0.000157        0.000002             0.000184             0.000003 get_specific_start_end_positions data\positions_map.py:32
+        64        0.000157        0.000002             0.000184             0.000003 get_specific_start_end_poss data\positions_map.py:32
         64        0.000527        0.000008             0.003255             0.000051 _create_motion_dict_from_pd_row_data pictograph\pictograph.py:175
         64        0.000096        0.000002             0.000096             0.000002 set_is_svg_mirrored_from_attributes arrow\arrow.py:80
         64        0.000251        0.000004             0.000251             0.000004 <genexpr>                      utilities\letter_engine.py:249
@@ -71,7 +71,7 @@ Organized by number of calls:
         32        0.000149        0.000005             0.000171             0.000005 filter_for_U_or_V              utilities\letter_engine.py:292
         32        0.000307        0.000010             0.000380             0.000012 get_letter_type                pictograph\pictograph.py:255
         32        0.000055        0.000002             0.000055             0.000002 initialize_attributes          objects\motion.py:33
-        32        0.000158        0.000005             0.000254             0.000008 get_start_end_positions        pictograph\pictograph.py:222
+        32        0.000158        0.000005             0.000254             0.000008 get_start_end_poss        pictograph\pictograph.py:222
         32        0.000091        0.000003             0.000097             0.000003 get_arrow_location             objects\motion.py:291
         32        0.000236        0.000007             0.004630             0.000145 __init__                       ghosts\ghost_arrow.py:27
         32        0.000334        0.000010             0.009762             0.000305 create_arrow                   pictograph\pictograph_init.py:103
@@ -95,8 +95,8 @@ Organized by number of calls:
         32        0.001861        0.000058             0.008688             0.000272 _count_prop_types              position_engines\prop_positioner.py:66
         32        0.000384        0.000012             0.005387             0.000168 _apply_default_positioning     arrow_positioners\arrow_positioner.py:35
         32        0.000910        0.000028             0.004273             0.000134 _reposition_to_default_locations arrow_positioners\arrow_positioner.py:66
-        32        0.000802        0.000025             0.001248             0.000039 filter_by_start_position       utilities\letter_engine.py:110
-        32        0.001059        0.000033             0.001654             0.000052 filter_by_end_position         utilities\letter_engine.py:131
+        32        0.000802        0.000025             0.001248             0.000039 filter_by_start_pos       utilities\letter_engine.py:110
+        32        0.001059        0.000033             0.001654             0.000052 filter_by_end_pos         utilities\letter_engine.py:131
         32        0.000087        0.000003             0.000093             0.000003 _get_reposition_method         arrow_positioners\arrow_positioner.py:53
         32        0.000063        0.000002             0.000067             0.000002 get_overall_position           utilities\letter_engine.py:265
         32        0.000021        0.000001             0.000021             0.000001 determine_leading_motion_for_U_V utilities\letter_engine.py:281
@@ -161,7 +161,7 @@ Organized by total time:
         32        0.002592        0.000081             0.003104             0.000097 set_letter_renderer            pictograph\pictograph.py:115
         32        0.002501        0.000078             0.002717             0.000085 __init__                       image_generator_tab\ig_pictograph.py:18
       1824        0.002354        0.000001             0.002354             0.000001 <genexpr>                      position_engines\prop_positioner.py:68
-        64        0.002051        0.000032             0.002296             0.000036 get_end_orientation            objects\motion.py:135
+        64        0.002051        0.000032             0.002296             0.000036 get_end_or            objects\motion.py:135
         96        0.002030        0.000021             0.014583             0.000152 __init__                       arrow\arrow.py:46
        192        0.001969        0.000010             0.006737             0.000035 __init__                       objects\graphical_object.py:19
         96        0.001890        0.000020             0.013710             0.000143 __init__                       prop\prop.py:30
@@ -172,14 +172,14 @@ Organized by total time:
         32        0.001451        0.000045             0.008655             0.000270 get_current_letter             utilities\letter_engine.py:61
        192        0.001146        0.000006             0.004609             0.000024 setup_graphics_flags           objects\graphical_object.py:32
         32        0.001076        0.000034             0.015948             0.000498 update_prop_positions          position_engines\prop_positioner.py:44
-        32        0.001059        0.000033             0.001654             0.000052 filter_by_end_position         utilities\letter_engine.py:131
+        32        0.001059        0.000033             0.001654             0.000052 filter_by_end_pos         utilities\letter_engine.py:131
        128        0.001029        0.000008             0.002972             0.000023 _set_default_prop_location     position_engines\prop_positioner.py:85
        282        0.001000        0.000004             0.003380             0.000012 eventFilter                    widgets\main_widget.py:150
        128        0.000984        0.000008             0.010624             0.000083 set_svg_color                  objects\graphical_object.py:41
         32        0.000910        0.000028             0.004273             0.000134 _reposition_to_default_locations arrow_positioners\arrow_positioner.py:66
         96        0.000893        0.000009             0.001047             0.000011 _setup_attributes              prop\prop.py:39
         16        0.000882        0.000055             0.089922             0.005620 setup_components               pictograph\pictograph.py:55
-        32        0.000802        0.000025             0.001248             0.000039 filter_by_start_position       utilities\letter_engine.py:110
+        32        0.000802        0.000025             0.001248             0.000039 filter_by_start_pos       utilities\letter_engine.py:110
         16        0.000791        0.000049             0.057286             0.003580 _initialize_grid_elements      objects\grid.py:56
         96        0.000735        0.000008             0.013575             0.000141 update_appearance              objects\graphical_object.py:88
         96        0.000732        0.000008             0.011568             0.000121 update_color                   objects\graphical_object.py:78
@@ -236,8 +236,8 @@ Organized by total time:
         32        0.000175        0.000005             0.016123             0.000504 update_props                   pictograph\pictograph.py:364
         16        0.000164        0.000010             0.057863             0.003616 init_grid                      pictograph\pictograph_init.py:30
         32        0.000160        0.000005             0.004794             0.000150 __init__                       prop\prop_types.py:12
-        32        0.000158        0.000005             0.000254             0.000008 get_start_end_positions        pictograph\pictograph.py:222
-        64        0.000157        0.000002             0.000184             0.000003 get_specific_start_end_positions data\positions_map.py:32
+        32        0.000158        0.000005             0.000254             0.000008 get_start_end_poss        pictograph\pictograph.py:222
+        64        0.000157        0.000002             0.000184             0.000003 get_specific_start_end_poss data\positions_map.py:32
         16        0.000150        0.000009             0.009912             0.000620 init_arrows                    pictograph\pictograph_init.py:47
         32        0.000149        0.000005             0.000171             0.000005 filter_for_U_or_V              utilities\letter_engine.py:292
        128        0.000146        0.000001             0.000146             0.000001 _is_arrow_movable              arrow_positioners\arrow_positioner.py:75
@@ -360,14 +360,14 @@ Organized by cumulative time:
         16        0.000228        0.000014             0.002693             0.000168 init_locations                 pictograph\pictograph_init.py:68
         32        0.000506        0.000016             0.002535             0.000079 filter_gamma_letters           utilities\letter_engine.py:234
       1824        0.002354        0.000001             0.002354             0.000001 <genexpr>                      position_engines\prop_positioner.py:68
-        64        0.002051        0.000032             0.002296             0.000036 get_end_orientation            objects\motion.py:135
+        64        0.002051        0.000032             0.002296             0.000036 get_end_or            objects\motion.py:135
         32        0.000728        0.000023             0.001992             0.000062 setup_attributes               objects\motion.py:47
        128        0.001752        0.000014             0.001847             0.000014 _get_position_offsets          position_engines\prop_positioner.py:562
         16        0.000181        0.000011             0.001748             0.000109 init_view                      pictograph\pictograph.py:94
-        32        0.001059        0.000033             0.001654             0.000052 filter_by_end_position         utilities\letter_engine.py:131
+        32        0.001059        0.000033             0.001654             0.000052 filter_by_end_pos         utilities\letter_engine.py:131
        128        0.000555        0.000004             0.001502             0.000012 get_motion                     utilities\letter_engine.py:150
        128        0.000655        0.000005             0.001498             0.000012 update_rotation                prop\prop.py:165
-        32        0.000802        0.000025             0.001248             0.000039 filter_by_start_position       utilities\letter_engine.py:110
+        32        0.000802        0.000025             0.001248             0.000039 filter_by_start_pos       utilities\letter_engine.py:110
         32        0.000201        0.000006             0.001184             0.000037 get_gamma_handpath_group       utilities\letter_engine.py:220
         96        0.000893        0.000009             0.001047             0.000011 _setup_attributes              prop\prop.py:39
         64        0.000337        0.000005             0.000987             0.000015 update_mirror                  arrow\arrow.py:183
@@ -394,7 +394,7 @@ Organized by cumulative time:
         40        0.000215        0.000005             0.000310             0.000008 unmirror                       arrow\arrow_manipulator.py:129
         32        0.000118        0.000004             0.000293             0.000009 _adjust_arrows_for_letter_U    arrow_positioners\staff_arrow_positioner.py:216
         16        0.000036        0.000002             0.000260             0.000016 setup_scene                    pictograph\pictograph.py:51
-        32        0.000158        0.000005             0.000254             0.000008 get_start_end_positions        pictograph\pictograph.py:222
+        32        0.000158        0.000005             0.000254             0.000008 get_start_end_poss        pictograph\pictograph.py:222
         64        0.000251        0.000004             0.000251             0.000004 <genexpr>                      utilities\letter_engine.py:249
         32        0.000122        0.000004             0.000220             0.000007 position_letter_item           objects\letter_item.py:13
         96        0.000220        0.000002             0.000220             0.000002 get_svg_file                   arrow\arrow.py:313
@@ -402,7 +402,7 @@ Organized by cumulative time:
          1        0.000064        0.000064             0.000204             0.000204 paintEvent                     widgets\styled_splitter.py:30
         16        0.000087        0.000005             0.000201             0.000013 init_letter_item               pictograph\pictograph_init.py:63
         32        0.000138        0.000004             0.000193             0.000006 __init__                       objects\motion.py:19
-        64        0.000157        0.000002             0.000184             0.000003 get_specific_start_end_positions data\positions_map.py:32
+        64        0.000157        0.000002             0.000184             0.000003 get_specific_start_end_poss data\positions_map.py:32
         16        0.000074        0.000005             0.000181             0.000011 _apply_grid_mode               objects\grid.py:151
         32        0.000110        0.000003             0.000175             0.000005 _is_at_least_one_prop_antiradial arrow_positioners\staff_arrow_positioner.py:394
         32        0.000149        0.000005             0.000171             0.000005 filter_for_U_or_V              utilities\letter_engine.py:292

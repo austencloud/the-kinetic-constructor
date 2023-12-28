@@ -31,8 +31,8 @@ class ArrowBox(ObjectBox):
         self.grid = Grid(self)
         self.target_arrow: "Arrow" = None
         self.drag = None
-        self.default_start_orientation = IN
-        self.start_orientation = self.default_start_orientation
+        self.default_start_or = IN
+        self.start_or = self.default_start_or
 
         self.arrowbox_layout = QGridLayout()
         self.arrowbox_layout.addWidget(self.view)
@@ -104,7 +104,7 @@ class ArrowBox(ObjectBox):
 
         for motion in self.motions:
             motion.arrow.location = motion.get_arrow_location(
-                motion.start_location, motion.end_location
+                motion.start_loc, motion.end_loc
             )
 
         for arrow in arrows:
@@ -121,7 +121,7 @@ class ArrowBox(ObjectBox):
                 ARROW: None,
                 PROP: None,
                 MOTION_TYPE: PRO,
-                ROT_DIR: CLOCKWISE,
+                PROP_ROT_DIR: CLOCKWISE,
                 START_LOC: NORTH,
                 END_LOC: EAST,
                 TURNS: 0,
@@ -132,7 +132,7 @@ class ArrowBox(ObjectBox):
                 ARROW: None,
                 PROP: None,
                 MOTION_TYPE: PRO,
-                ROT_DIR: COUNTER_CLOCKWISE,
+                PROP_ROT_DIR: COUNTER_CLOCKWISE,
                 START_LOC: NORTH,
                 END_LOC: EAST,
                 TURNS: 0,
@@ -143,7 +143,7 @@ class ArrowBox(ObjectBox):
                 ARROW: None,
                 PROP: None,
                 MOTION_TYPE: ANTI,
-                ROT_DIR: CLOCKWISE,
+                PROP_ROT_DIR: CLOCKWISE,
                 START_LOC: SOUTH,
                 END_LOC: EAST,
                 TURNS: 0,
@@ -154,7 +154,7 @@ class ArrowBox(ObjectBox):
                 ARROW: None,
                 PROP: None,
                 MOTION_TYPE: ANTI,
-                ROT_DIR: COUNTER_CLOCKWISE,
+                PROP_ROT_DIR: COUNTER_CLOCKWISE,
                 START_LOC: SOUTH,
                 END_LOC: EAST,
                 TURNS: 0,
@@ -165,7 +165,7 @@ class ArrowBox(ObjectBox):
                 ARROW: None,
                 PROP: None,
                 MOTION_TYPE: PRO,
-                ROT_DIR: CLOCKWISE,
+                PROP_ROT_DIR: CLOCKWISE,
                 START_LOC: SOUTH,
                 END_LOC: WEST,
                 TURNS: 0,
@@ -176,7 +176,7 @@ class ArrowBox(ObjectBox):
                 ARROW: None,
                 PROP: None,
                 MOTION_TYPE: PRO,
-                ROT_DIR: COUNTER_CLOCKWISE,
+                PROP_ROT_DIR: COUNTER_CLOCKWISE,
                 START_LOC: SOUTH,
                 END_LOC: WEST,
                 TURNS: 0,
@@ -187,7 +187,7 @@ class ArrowBox(ObjectBox):
                 ARROW: None,
                 PROP: None,
                 MOTION_TYPE: ANTI,
-                ROT_DIR: CLOCKWISE,
+                PROP_ROT_DIR: CLOCKWISE,
                 START_LOC: NORTH,
                 END_LOC: WEST,
                 TURNS: 0,
@@ -198,7 +198,7 @@ class ArrowBox(ObjectBox):
                 ARROW: None,
                 PROP: None,
                 MOTION_TYPE: ANTI,
-                ROT_DIR: COUNTER_CLOCKWISE,
+                PROP_ROT_DIR: COUNTER_CLOCKWISE,
                 START_LOC: NORTH,
                 END_LOC: WEST,
                 TURNS: 0,

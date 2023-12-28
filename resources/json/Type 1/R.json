@@ -2,25 +2,25 @@
   "R": [
     [
       {
-        "start_position": "gamma4",
-        "end_position": "gamma7"
+        "start_pos": "gamma4",
+        "end_pos": "gamma7"
       },
       {
         "color": "blue",
         "motion_type": "anti",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "sw",
-        "start_location": "s",
-        "end_location": "w",
+        "start_loc": "s",
+        "end_loc": "w",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "pro",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "sw",
-        "start_location": "w",
-        "end_location": "s",
+        "start_loc": "w",
+        "end_loc": "s",
         "turns": 0
       },
       {
@@ -36,25 +36,25 @@
     ],
     [
       {
-        "start_position": "gamma1",
-        "end_position": "gamma8"
+        "start_pos": "gamma1",
+        "end_pos": "gamma8"
       },
       {
         "color": "blue",
         "motion_type": "anti",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "nw",
-        "start_location": "w",
-        "end_location": "n",
+        "start_loc": "w",
+        "end_loc": "n",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "pro",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "nw",
-        "start_location": "n",
-        "end_location": "w",
+        "start_loc": "n",
+        "end_loc": "w",
         "turns": 0
       },
       {
@@ -70,25 +70,25 @@
     ],
     [
       {
-        "start_position": "gamma2",
-        "end_position": "gamma5"
+        "start_pos": "gamma2",
+        "end_pos": "gamma5"
       },
       {
         "color": "blue",
         "motion_type": "anti",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "ne",
-        "start_location": "n",
-        "end_location": "e",
+        "start_loc": "n",
+        "end_loc": "e",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "pro",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "ne",
-        "start_location": "e",
-        "end_location": "n",
+        "start_loc": "e",
+        "end_loc": "n",
         "turns": 0
       },
       {
@@ -104,25 +104,25 @@
     ],
     [
       {
-        "start_position": "gamma3",
-        "end_position": "gamma6"
+        "start_pos": "gamma3",
+        "end_pos": "gamma6"
       },
       {
         "color": "blue",
         "motion_type": "anti",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "se",
-        "start_location": "e",
-        "end_location": "s",
+        "start_loc": "e",
+        "end_loc": "s",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "pro",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "se",
-        "start_location": "s",
-        "end_location": "e",
+        "start_loc": "s",
+        "end_loc": "e",
         "turns": 0
       },
       {
@@ -138,25 +138,25 @@
     ],
     [
       {
-        "start_position": "gamma8",
-        "end_position": "gamma1"
+        "start_pos": "gamma8",
+        "end_pos": "gamma1"
       },
       {
         "color": "blue",
         "motion_type": "anti",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "nw",
-        "start_location": "n",
-        "end_location": "w",
+        "start_loc": "n",
+        "end_loc": "w",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "pro",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "nw",
-        "start_location": "w",
-        "end_location": "n",
+        "start_loc": "w",
+        "end_loc": "n",
         "turns": 0
       },
       {
@@ -172,25 +172,25 @@
     ],
     [
       {
-        "start_position": "gamma6",
-        "end_position": "gamma3"
+        "start_pos": "gamma6",
+        "end_pos": "gamma3"
       },
       {
         "color": "blue",
         "motion_type": "anti",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "se",
-        "start_location": "s",
-        "end_location": "e",
+        "start_loc": "s",
+        "end_loc": "e",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "pro",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "se",
-        "start_location": "e",
-        "end_location": "s",
+        "start_loc": "e",
+        "end_loc": "s",
         "turns": 0
       },
       {
@@ -206,25 +206,25 @@
     ],
     [
       {
-        "start_position": "gamma7",
-        "end_position": "gamma4"
+        "start_pos": "gamma7",
+        "end_pos": "gamma4"
       },
       {
         "color": "blue",
         "motion_type": "anti",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "sw",
-        "start_location": "w",
-        "end_location": "s",
+        "start_loc": "w",
+        "end_loc": "s",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "pro",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "sw",
-        "start_location": "s",
-        "end_location": "w",
+        "start_loc": "s",
+        "end_loc": "w",
         "turns": 0
       },
       {
@@ -240,25 +240,25 @@
     ],
     [
       {
-        "start_position": "gamma5",
-        "end_position": "gamma2"
+        "start_pos": "gamma5",
+        "end_pos": "gamma2"
       },
       {
         "color": "blue",
         "motion_type": "anti",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "ne",
-        "start_location": "e",
-        "end_location": "n",
+        "start_loc": "e",
+        "end_loc": "n",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "pro",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "ne",
-        "start_location": "n",
-        "end_location": "e",
+        "start_loc": "n",
+        "end_loc": "e",
         "turns": 0
       },
       {
@@ -274,25 +274,25 @@
     ],
     [
       {
-        "start_position": "gamma6",
-        "end_position": "gamma3"
+        "start_pos": "gamma6",
+        "end_pos": "gamma3"
       },
       {
         "color": "blue",
         "motion_type": "pro",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "se",
-        "start_location": "s",
-        "end_location": "e",
+        "start_loc": "s",
+        "end_loc": "e",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "anti",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "se",
-        "start_location": "e",
-        "end_location": "s",
+        "start_loc": "e",
+        "end_loc": "s",
         "turns": 0
       },
       {
@@ -308,25 +308,25 @@
     ],
     [
       {
-        "start_position": "gamma7",
-        "end_position": "gamma4"
+        "start_pos": "gamma7",
+        "end_pos": "gamma4"
       },
       {
         "color": "blue",
         "motion_type": "pro",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "sw",
-        "start_location": "w",
-        "end_location": "s",
+        "start_loc": "w",
+        "end_loc": "s",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "anti",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "sw",
-        "start_location": "s",
-        "end_location": "w",
+        "start_loc": "s",
+        "end_loc": "w",
         "turns": 0
       },
       {
@@ -342,25 +342,25 @@
     ],
     [
       {
-        "start_position": "gamma8",
-        "end_position": "gamma1"
+        "start_pos": "gamma8",
+        "end_pos": "gamma1"
       },
       {
         "color": "blue",
         "motion_type": "pro",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "nw",
-        "start_location": "n",
-        "end_location": "w",
+        "start_loc": "n",
+        "end_loc": "w",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "anti",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "nw",
-        "start_location": "w",
-        "end_location": "n",
+        "start_loc": "w",
+        "end_loc": "n",
         "turns": 0
       },
       {
@@ -376,25 +376,25 @@
     ],
     [
       {
-        "start_position": "gamma5",
-        "end_position": "gamma2"
+        "start_pos": "gamma5",
+        "end_pos": "gamma2"
       },
       {
         "color": "blue",
         "motion_type": "pro",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "ne",
-        "start_location": "e",
-        "end_location": "n",
+        "start_loc": "e",
+        "end_loc": "n",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "anti",
-        "rot_dir": "ccw",
+        "prop_rot_dir": "ccw",
         "arrow_location": "ne",
-        "start_location": "n",
-        "end_location": "e",
+        "start_loc": "n",
+        "end_loc": "e",
         "turns": 0
       },
       {
@@ -410,25 +410,25 @@
     ],
     [
       {
-        "start_position": "gamma2",
-        "end_position": "gamma5"
+        "start_pos": "gamma2",
+        "end_pos": "gamma5"
       },
       {
         "color": "blue",
         "motion_type": "pro",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "ne",
-        "start_location": "n",
-        "end_location": "e",
+        "start_loc": "n",
+        "end_loc": "e",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "anti",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "ne",
-        "start_location": "e",
-        "end_location": "n",
+        "start_loc": "e",
+        "end_loc": "n",
         "turns": 0
       },
       {
@@ -444,25 +444,25 @@
     ],
     [
       {
-        "start_position": "gamma4",
-        "end_position": "gamma7"
+        "start_pos": "gamma4",
+        "end_pos": "gamma7"
       },
       {
         "color": "blue",
         "motion_type": "pro",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "sw",
-        "start_location": "s",
-        "end_location": "w",
+        "start_loc": "s",
+        "end_loc": "w",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "anti",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "sw",
-        "start_location": "w",
-        "end_location": "s",
+        "start_loc": "w",
+        "end_loc": "s",
         "turns": 0
       },
       {
@@ -478,25 +478,25 @@
     ],
     [
       {
-        "start_position": "gamma1",
-        "end_position": "gamma8"
+        "start_pos": "gamma1",
+        "end_pos": "gamma8"
       },
       {
         "color": "blue",
         "motion_type": "pro",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "nw",
-        "start_location": "w",
-        "end_location": "n",
+        "start_loc": "w",
+        "end_loc": "n",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "anti",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "nw",
-        "start_location": "n",
-        "end_location": "w",
+        "start_loc": "n",
+        "end_loc": "w",
         "turns": 0
       },
       {
@@ -512,25 +512,25 @@
     ],
     [
       {
-        "start_position": "gamma3",
-        "end_position": "gamma6"
+        "start_pos": "gamma3",
+        "end_pos": "gamma6"
       },
       {
         "color": "blue",
         "motion_type": "pro",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "se",
-        "start_location": "e",
-        "end_location": "s",
+        "start_loc": "e",
+        "end_loc": "s",
         "turns": 0
       },
       {
         "color": "red",
         "motion_type": "anti",
-        "rot_dir": "cw",
+        "prop_rot_dir": "cw",
         "arrow_location": "se",
-        "start_location": "s",
-        "end_location": "e",
+        "start_loc": "s",
+        "end_loc": "e",
         "turns": 0
       },
       {

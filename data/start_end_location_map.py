@@ -5,7 +5,7 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 
-start_end_location_map = {
+start_end_loc_map = {
     NORTHEAST: {
         CLOCKWISE: {
             ANTI: (EAST, NORTH),
@@ -49,7 +49,7 @@ start_end_location_map = {
 }
 
 
-def get_start_end_locations(
+def get_start_end_locs(
     motion_type: MotionType,
     rot_dir: PropRotationDirection,
     arrow_location: Location,
@@ -67,7 +67,7 @@ def get_start_end_locations(
         StartEndLocationTuple: A tuple containing the start and end locations for the arrow.
     """
     return (
-        start_end_location_map.get(arrow_location, {})
+        start_end_loc_map.get(arrow_location, {})
         .get(rot_dir, {})
         .get(motion_type, (None, None))
     )

@@ -18,7 +18,7 @@ class OptionPickerTab(QFrame):
     def setup_ui(self) -> None:
         self.scroll_area = OptionPickerScrollArea(self.main_widget, self)
         self.filter_frame = OptionPickerFilterFrame(self)
-        self.scroll_area._show_start_position()
+        self.scroll_area._show_start_pos()
         self.main_layout.addWidget(self.filter_frame)
         self.main_layout.addWidget(self.scroll_area)
         self.scroll_area.show()

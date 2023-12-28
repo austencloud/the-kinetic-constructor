@@ -7,7 +7,7 @@ from Enums import (
     PropRotationDirection,
 )
 
-from data.start_end_location_map import get_start_end_locations
+from data.start_end_loc_map import get_start_end_locs
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
 
 
@@ -45,15 +45,15 @@ class ArrowManipulator:
         self.arrow.location = new_location
         self.arrow.ghost.location = new_location
         (
-            new_start_location,
-            new_end_location,
-        ) = get_start_end_locations(
+            new_start_loc,
+            new_end_loc,
+        ) = get_start_end_locs(
             self.arrow.motion_type, self.arrow.motion.rot_dir, new_location
         )
 
-        self.arrow.motion.start_location = new_start_location
-        self.arrow.motion.end_location = new_end_location
-        self.arrow.motion.prop.location = new_end_location
+        self.arrow.motion.start_loc = new_start_loc
+        self.arrow.motion.end_loc = new_end_loc
+        self.arrow.motion.prop.location = new_end_loc
 
         self.arrow.motion.prop.update_appearance()
         self.arrow.motion.update_attr_from_arrow()
@@ -91,20 +91,20 @@ class ArrowManipulator:
         elif self.arrow.motion.rot_dir == "None":
             new_rot_dir = "None"
 
-        old_start_location = self.arrow.motion.start_location
-        old_end_location = self.arrow.motion.end_location
-        new_start_location = old_end_location
-        new_end_location = old_start_location
+        old_start_loc = self.arrow.motion.start_loc
+        old_end_loc = self.arrow.motion.end_loc
+        new_start_loc = old_end_loc
+        new_end_loc = old_start_loc
 
         svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
         self.arrow.update_svg(svg_file)
 
         self.arrow.motion.rot_dir = new_rot_dir
-        self.arrow.motion.start_location = new_start_location
-        self.arrow.motion.end_location = new_end_location
+        self.arrow.motion.start_loc = new_start_loc
+        self.arrow.motion.end_loc = new_end_loc
 
         self.arrow.motion.prop.color = self.arrow.color
-        self.arrow.motion.prop.location = new_end_location
+        self.arrow.motion.prop.location = new_end_loc
 
         self.arrow.update_appearance()
         self.arrow.motion.prop.update_appearance()
@@ -161,7 +161,7 @@ class ArrowManipulator:
         self.arrow.motion.prop.orientation = self.arrow.motion.prop.swap_orientation(
             self.arrow.motion.prop.orientation
         )
-        self.arrow.motion.end_orientation = self.arrow.motion.prop.orientation
+        self.arrow.motion.end_or = self.arrow.motion.prop.orientation
 
         svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
         self.arrow.motion_type = new_motion_type
@@ -282,22 +282,22 @@ class ArrowManipulator:
 
         new_arrow_location = box_mode_shift_arrow_locations[new_location_index]
         (
-            new_start_location,
-            new_end_location,
-        ) = get_start_end_locations(
+            new_start_loc,
+            new_end_loc,
+        ) = get_start_end_locs(
             self.arrow.motion_type,
             self.arrow.motion.rot_dir,
             new_arrow_location,
         )
 
         self.arrow.location = new_arrow_location
-        self.arrow.motion.start_location = new_start_location
-        self.arrow.motion.end_location = new_end_location
+        self.arrow.motion.start_loc = new_start_loc
+        self.arrow.motion.end_loc = new_end_loc
 
         self.arrow.location = new_arrow_location
-        self.arrow.motion.start_location = new_start_location
-        self.arrow.motion.end_location = new_end_location
-        self.arrow.motion.prop.location = new_end_location
+        self.arrow.motion.start_loc = new_start_loc
+        self.arrow.motion.end_loc = new_end_loc
+        self.arrow.motion.prop.location = new_end_loc
 
         self.arrow.update_appearance()
         self.arrow.motion.prop.update_appearance()
@@ -317,9 +317,9 @@ class ArrowManipulator:
 
         new_arrow_location = diamond_mode_shift_arrow_locations[new_location_index]
         (
-            new_start_location,
-            new_end_location,
-        ) = get_start_end_locations(
+            new_start_loc,
+            new_end_loc,
+        ) = get_start_end_locs(
             self.arrow.motion_type,
             self.arrow.motion.rot_dir,
             new_arrow_location,
@@ -327,9 +327,9 @@ class ArrowManipulator:
 
         self.arrow.location = new_arrow_location
         self.arrow.ghost.location = new_arrow_location
-        self.arrow.motion.start_location = new_start_location
-        self.arrow.motion.end_location = new_end_location
-        self.arrow.motion.prop.location = new_end_location
+        self.arrow.motion.start_loc = new_start_loc
+        self.arrow.motion.end_loc = new_end_loc
+        self.arrow.motion.prop.location = new_end_loc
 
         self.arrow.update_appearance()
         self.arrow.ghost.update_appearance()
@@ -349,11 +349,11 @@ class ArrowManipulator:
         )
         new_location = box_mode_static_arrow_locations[new_location_index]
         self.arrow.location = new_location
-        self.arrow.motion.start_location = new_location
-        self.arrow.motion.end_location = new_location
+        self.arrow.motion.start_loc = new_location
+        self.arrow.motion.end_loc = new_location
         self.arrow.location = new_location
-        self.arrow.motion.start_location = new_location
-        self.arrow.motion.end_location = new_location
+        self.arrow.motion.start_loc = new_location
+        self.arrow.motion.end_loc = new_location
         self.arrow.motion.prop.location = new_location
 
         self.arrow.motion.update_attr_from_arrow()
@@ -371,11 +371,11 @@ class ArrowManipulator:
         )
         new_location = diamond_mode_locations[new_location_index]
         self.arrow.location = new_location
-        self.arrow.motion.start_location = new_location
-        self.arrow.motion.end_location = new_location
+        self.arrow.motion.start_loc = new_location
+        self.arrow.motion.end_loc = new_location
         self.arrow.location = new_location
-        self.arrow.motion.start_location = new_location
-        self.arrow.motion.end_location = new_location
+        self.arrow.motion.start_loc = new_location
+        self.arrow.motion.end_loc = new_location
         self.arrow.motion.prop.location = new_location
 
         self.arrow.motion.update_attr_from_arrow()
