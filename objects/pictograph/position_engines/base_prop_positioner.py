@@ -125,18 +125,30 @@ class BasePropPositioner:
             "Type6PropPositioner",
         ]
     ) -> None:
-        if self.current_letter in ["G", "H"]:
-            self.reposition_G_H()
-        elif self.current_letter == "I":
-            self.reposition_I()
-        elif self.current_letter in ["J", "K", "L"]:
-            self.reposition_J_K_L()
-        elif self.current_letter in ["Y", "Z"]:
-            self.reposition_Y_Z()
-        elif self.current_letter == "β":
-            self.reposition_β()
-        elif self.current_letter in ["Y-", "Z-"]:
-            self.reposition_Y_dash_Z_dash()
+        if self.scene.has_hybrid_orientations():
+            for prop in self.props:
+                if prop.prop_type in strictly_placed_props:
+                    self._set_strict_prop_location(prop)
+                elif prop.prop_type in non_strictly_placed_props:
+                    self._set_default_prop_location(prop)
+
+        else: # scene has non-hybrid orientations
+            if self.current_letter in ["G", "H"]:
+                self.reposition_G_H()
+            elif self.current_letter == "I":
+                self.reposition_I()
+            elif self.current_letter in ["J", "K", "L"]:
+                self.reposition_J_K_L()
+            elif self.current_letter in ["Y", "Z"]:
+                self.reposition_Y_Z()
+            elif self.current_letter == "β":
+                self.reposition_β()
+            elif self.current_letter in ["Y-", "Z-"]:
+                self.reposition_Y_dash_Z_dash()
+            elif self.current_letter == "Ψ":
+                self.reposition_Ψ()
+            elif self.current_letter == "Ψ-":
+                self.reposition_Ψ_dash()
 
     def _move_prop(self, prop: Prop, direction: Direction) -> None:
         new_position = self._calculate_new_position(prop.pos(), direction)

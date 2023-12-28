@@ -3,8 +3,7 @@ from Enums import non_strictly_placed_props, strictly_placed_props
 
 
 class Type4PropPositioner(BasePropPositioner):
-    def reposition_Y_dash_Z_dash(self) -> None:
-        if self.scene.has_non_hybrid_orientations():
+    def reposition_Ψ(self) -> None:
             if self.red_prop.prop_type in non_strictly_placed_props:
                 direction = self._get_translation_dir_for_non_shift(self.red_prop)
                 if direction:

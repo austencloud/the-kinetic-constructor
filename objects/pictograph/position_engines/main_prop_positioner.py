@@ -44,7 +44,6 @@ class MainPropPositioner:
         self.init_positioners(scene)
 
     def init_positioners(self, scene) -> None:
-        # Create a flat dictionary mapping each individual letter to its positioner class
         letter_to_positioner = {
             **{letter: Type1PropPositioner for letter in Type1_letters},
             **{letter: Type2PropPositioner for letter in Type2_letters},
@@ -54,14 +53,12 @@ class MainPropPositioner:
             **{letter: Type6PropPositioner for letter in Type6_letters},
         }
 
-        # Initialize positioners for each letter
         self.positioners = {
             letter: pos_class(scene)
             for letter, pos_class in letter_to_positioner.items()
         }
 
     def position_props(self) -> None:
-        # Fetch the positioner using the current letter as the key
         positioner: BasePropPositioner = self.positioners.get(self.scene.current_letter)
         if positioner:
             positioner.update_prop_positions()
