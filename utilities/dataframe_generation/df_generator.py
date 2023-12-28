@@ -29,7 +29,7 @@ class DataFrameGenerator:
             ]
 
     def get_start_end_positions(
-        self, red_start_loc, red_end_loc, blue_start_loc, blue_end_loc
+        self, blue_start_loc, blue_end_loc, red_start_loc, red_end_loc
     ) -> Tuple[Location, Location]:
         start_key = (blue_start_loc, red_start_loc)
         end_key = (blue_end_loc, red_end_loc)
@@ -40,24 +40,10 @@ class DataFrameGenerator:
     def get_prop_rot_dir(self, motion_type, handpath_rot_dir) -> PropRotationDirection:
         if motion_type == PRO:
             return CLOCKWISE if handpath_rot_dir == CW_HANDPATH else COUNTER_CLOCKWISE
-        else:  # motion_type == "anti"
+        elif motion_type == ANTI:
             return COUNTER_CLOCKWISE if handpath_rot_dir == CW_HANDPATH else CLOCKWISE
-
-    def get_prop_rot_dir(
-        self, red_motion_type, red_handpath_rot_dir
-    ) -> PropRotationDirection:
-        self.change_red_handpath_map_to(red_handpath_rot_dir)
-        if red_handpath_rot_dir == CW_HANDPATH:
-            if red_motion_type == PRO:
-                red_prop_rot_dir = CLOCKWISE
-            elif red_motion_type == ANTI:
-                red_prop_rot_dir = COUNTER_CLOCKWISE
-        elif red_handpath_rot_dir == CCW_HANDPATH:
-            if red_motion_type == PRO:
-                red_prop_rot_dir = COUNTER_CLOCKWISE
-            elif red_motion_type == ANTI:
-                red_prop_rot_dir = CLOCKWISE
-        return red_prop_rot_dir
+        elif motion_type == DASH:
+            return "None"
 
     def get_handpath_tuple_map_collection(self):
         return {
@@ -109,7 +95,8 @@ class DataFrameGenerator:
 
     def prepare_dataframe(self, df: pd.DataFrame) -> None:
         motion_type_order = [PRO, "anti", "dash", "static"]
-        rot_dir_order = [CLOCKWISE, COUNTER_CLOCKWISE]
+        rot_dir_order = [CLOCKWISE, COUNTER_CLOCKWISE, "None"]  # Include "None"
+
         df["blue_motion_type"] = pd.Categorical(
             df["blue_motion_type"], categories=motion_type_order, ordered=True
         )
@@ -128,8 +115,9 @@ class DataFrameGenerator:
             inplace=True,
         )
 
+
     def write_dataframe_to_file(self, df: pd.DataFrame, filename):
         dir_name = os.path.dirname(filename)
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)
-        df.to_csv(filename, index=False)
+        df.to_csv(filename, index=False, na_rep="None")

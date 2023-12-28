@@ -1,82 +1,82 @@
+import re
 from typing import Dict, List, Tuple
 from df_generator import DataFrameGenerator
-from data.Enums import Location, PropRotationDirection
-from data.constants import *
+from Enums import Location, PropRotationDirection
+from constants import *
+from utilities.TypeChecking.Letters import Type3_letters
 
 
-class Type3_DataFrame_Generator(DataFrameGenerator):
+class Type3Generator(DataFrameGenerator):
     def __init__(self) -> None:
-        self.letters = ["W-", "X-", "θ-", "Ω-", "Σ-", "Δ-", "Y-", "Z-"]
-        super.__init__(self, self.letters)
-        self.rot_dirs = ["cw", "ccw"]
-        self.pro_shifts = self.define_shifts("pro")
-        self.anti_shifts = self.define_shifts("anti")
-        self.generate_dataframes()
+        super().__init__(Type3_letters)
+        self.create_Type3_dataframes()
 
-    def define_shifts(
-        self, shift_type
-    ) -> Dict[PropRotationDirection, List[Tuple[Location, Location]]]:
-        if shift_type == "pro":
-            return {
-                "cw": [("n", "e"), ("e", "s"), ("s", "w"), ("w", "n")],
-                "ccw": [("n", "w"), ("w", "s"), ("s", "e"), ("e", "n")],
-            }
-        else:  # anti
-            return {
-                "cw": [("n", "w"), ("w", "s"), ("s", "e"), ("e", "n")],
-                "ccw": [("n", "e"), ("e", "s"), ("s", "w"), ("w", "n")],
-            }
-
-    def get_opposite_location(self, location: str) -> str:
-        opposite_map = {"n": "s", "s": "n", "e": "w", "w": "e"}
-        return opposite_map.get(location, "")
-
-    def generate_dataframes(self) -> None:
+    def create_Type3_dataframes(self) -> None:
         for letter in self.letters:
-            self.create_dataframe_for_letter(letter)
+            data = self.create_dataframe(letter)
+            self.save_dataframe(letter, data, "Type_3")
 
-    def create_dataframe_for_letter(self, letter) -> None:
+    def create_dataframe(self, letter) -> List[Dict]:
+        if letter in ["W-", "Y-", "Σ-", "θ-"]:
+            data = self.create_dataframes_for_letter(letter, PRO, DASH)
+            data += self.create_dataframes_for_letter(letter, DASH, PRO)
+        else:  # letter in ["X-", "Z-", "Δ-", "Ω-"]
+            data = self.create_dataframes_for_letter(letter, ANTI, DASH)
+            data += self.create_dataframes_for_letter(letter, DASH, ANTI)
+        return data
+
+    def create_dataframes_for_letter(self, letter, red_motion_type, blue_motion_type):
+        shift_handpath_tuple_map_collection = self.get_handpath_tuple_map_collection()
         data = []
-        for rot_dir in self.rot_dirs:
-            shift_method = (
-                self.process_pro_shifts
-                if letter in ["W-", "Y-", "Σ-", "θ-"]
-                else self.process_anti_shifts
-            )
-            shift_method(letter, rot_dir, data)
-        self.save_dataframe(letter, data, "Type_3")
+        for shift_handpath, tuples in shift_handpath_tuple_map_collection.items():
+            if red_motion_type in [PRO, ANTI]:
+                red_prop_rot_dir = self.get_prop_rot_dir(
+                    red_motion_type, shift_handpath
+                )
+            else:
+                red_prop_rot_dir = "None"  # Explicitly indicating no rotation
 
-    def process_pro_shifts(self, letter, rot_dir, data) -> None:
-        for shift_start_loc, shift_end_loc in self.pro_shifts[rot_dir]:
-            dash_start_loc, dash_end_loc = self.get_dash_locations(
-                letter, shift_start_loc, shift_end_loc
-            )
-            self.add_data_point(
-                letter,
-                shift_start_loc,
-                shift_end_loc,
-                dash_start_loc,
-                dash_end_loc,
-                rot_dir,
-                "pro",
-                data,
-            )
+            if blue_motion_type in [PRO, ANTI]:
+                blue_prop_rot_dir = self.get_prop_rot_dir(
+                    blue_motion_type, shift_handpath
+                )
+            else:
+                blue_prop_rot_dir = "None"  # Explicitly indicating no rotation
 
-    def process_anti_shifts(self, letter, rot_dir, data) -> None:
-        for shift_start_loc, shift_end_loc in self.anti_shifts[rot_dir]:
-            dash_start_loc, dash_end_loc = self.get_dash_locations(
-                letter, shift_start_loc, shift_end_loc
-            )
-            self.add_data_point(
-                letter,
-                shift_start_loc,
-                shift_end_loc,
-                dash_start_loc,
-                dash_end_loc,
-                rot_dir,
-                "anti",
-                data,
-            )
+            for start_loc, end_loc in tuples:
+                if red_motion_type == DASH:
+                    red_start_loc, red_end_loc = self.get_dash_locations(
+                        letter, start_loc, end_loc
+                    )
+                    blue_start_loc, blue_end_loc = start_loc, end_loc
+                elif blue_motion_type == DASH:
+                    blue_start_loc, blue_end_loc = self.get_dash_locations(
+                        letter, start_loc, end_loc
+                    )
+                    red_start_loc, red_end_loc = start_loc, end_loc
+                else:
+                    red_start_loc, red_end_loc = start_loc, end_loc
+                    blue_start_loc, blue_end_loc = start_loc, end_loc
+
+                start_pos, end_pos = self.get_Type1_start_and_end_pos(
+                    red_start_loc, red_end_loc, blue_start_loc, blue_end_loc
+                )
+                data.append(
+                    {
+                        "letter": letter,
+                        "start_position": start_pos,
+                        "end_position": end_pos,
+                        "blue_motion_type": blue_motion_type,
+                        "blue_prop_rot_dir": blue_prop_rot_dir,
+                        "blue_start_loc": blue_start_loc,
+                        "blue_end_loc": blue_end_loc,
+                        "red_motion_type": red_motion_type,
+                        "red_prop_rot_dir": red_prop_rot_dir,
+                        "red_start_loc": red_start_loc,
+                        "red_end_loc": red_end_loc,
+                    }
+                )
+        return data
 
     def get_dash_locations(
         self, letter, shift_start_loc, shift_end_loc
@@ -95,91 +95,5 @@ class Type3_DataFrame_Generator(DataFrameGenerator):
             dash_end_loc = self.get_opposite_location(dash_start_loc)
         return dash_start_loc, dash_end_loc
 
-    def add_data_point(
-        self,
-        letter,
-        shift_start_loc,
-        shift_end_loc,
-        dash_start_loc,
-        dash_end_loc,
-        rot_dir,
-        shift_motion_type,
-        data,
-    ) -> None:
-        start_pos, end_pos = self.get_start_and_end_pos(
-            shift_start_loc, shift_end_loc, dash_start_loc, dash_end_loc
-        )
-        if start_pos and end_pos:
-            data.append(
-                self.create_data_dict(
-                    letter,
-                    shift_start_loc,
-                    shift_end_loc,
-                    dash_start_loc,
-                    dash_end_loc,
-                    rot_dir,
-                    shift_motion_type,
-                    start_pos,
-                    end_pos,
-                    RED,
-                )
-            )
-            data.append(
-                self.create_data_dict(
-                    letter,
-                    shift_start_loc,
-                    shift_end_loc,
-                    dash_start_loc,
-                    dash_end_loc,
-                    rot_dir,
-                    shift_motion_type,
-                    start_pos,
-                    end_pos,
-                    BLUE,
-                )
-            )
 
-    def create_data_dict(
-        self,
-        letter,
-        shift_start_loc,
-        shift_end_loc,
-        dash_start_loc,
-        dash_end_loc,
-        rot_dir,
-        shift_motion_type,
-        start_pos,
-        end_pos,
-        dasher_color,
-    ):
-        if dasher_color == RED:
-            return {
-                "letter": letter,
-                "start_position": start_pos,
-                "end_position": end_pos,
-                "blue_motion_type": shift_motion_type,
-                "blue_prop_rot_dir": rot_dir,
-                "blue_start_location": shift_start_loc,
-                "blue_end_location": shift_end_loc,
-                "red_motion_type": "dash",
-                "red_prop_rot_dir": "None",
-                "red_start_location": dash_start_loc,
-                "red_end_location": dash_end_loc,
-            }
-        elif dasher_color == BLUE:
-            return {
-                "letter": letter,
-                "start_position": start_pos,
-                "end_position": end_pos,
-                "blue_motion_type": "dash",
-                "blue_prop_rot_dir": "None",
-                "blue_start_location": dash_start_loc,
-                "blue_end_location": dash_end_loc,
-                "red_motion_type": shift_motion_type,
-                "red_prop_rot_dir": rot_dir,
-                "red_start_location": shift_start_loc,
-                "red_end_location": shift_end_loc,
-            }
-
-
-Type3_DataFrame_Generator()
+Type3Generator()

@@ -1,15 +1,16 @@
 from typing import Dict, List, Tuple
-from dataframe_generation.df_generator import DataFrameGenerator
+from df_generator import DataFrameGenerator
 from constants import *
 from Enums import *
+from utilities.TypeChecking.Letters import *
 
 
 class Type1Generator(DataFrameGenerator):
     def __init__(self) -> None:
         super().__init__(Type1_letters)
-        self.create_dataframes_for_alpha_beta()
+        self.create_Type1_dataframes()
 
-    def create_dataframes_for_alpha_beta(self) -> None:
+    def create_Type1_dataframes(self) -> None:
         for letter in self.letters:
             data = self.create_dataframe(letter)
             self.save_dataframe(letter, data, "Type_1")
@@ -23,18 +24,15 @@ class Type1Generator(DataFrameGenerator):
         elif letter in ["C", "F", "I", "L", "O", "R"]:
             data = self.create_dataframes_for_letter(letter, PRO, ANTI)
             data += self.create_dataframes_for_letter(letter, ANTI, PRO)
-            return data
+
         if letter in ["S", "T"]:
             red_motion_type = PRO if letter == "S" else ANTI
             for red_handpath_rot_dir in self.handpath_rot_dirs:
-
-
                 data: List = self.create_ST_dataframes(
                     letter,
                     red_motion_type,
                     red_leading_bool=True,
                 )
-
                 data.extend(
                     self.create_ST_dataframes(
                         letter,
@@ -42,61 +40,25 @@ class Type1Generator(DataFrameGenerator):
                         red_leading_bool=False,
                     )
                 )
-
-                return data
         elif letter == "U":
             return self.create_dataframes_for_U()
         elif letter == "V":
             return self.create_dataframes_for_V()
+        return data
 
-    def determine_start_end_loc(
+    def determine_ST_start_end_loc(
         self, red_start_loc, red_end_loc, red_prop_rot_dir, red_leading
-    ) -> Tuple[Location, Location]:
-        if red_prop_rot_dir == CLOCKWISE:
-            if red_leading:
-                if red_start_loc == NORTH:
-                    blue_start_loc = WEST
-                elif red_start_loc == EAST:
-                    blue_start_loc = NORTH
-                elif red_start_loc == SOUTH:
-                    blue_start_loc = EAST
-                elif red_start_loc == WEST:
-                    blue_start_loc = SOUTH
-                blue_end_loc = red_start_loc
-
-            elif not red_leading:
-                if red_start_loc == NORTH:
-                    blue_end_loc = SOUTH
-                elif red_start_loc == EAST:
-                    blue_end_loc = WEST
-                elif red_start_loc == SOUTH:
-                    blue_end_loc = NORTH
-                elif red_start_loc == WEST:
-                    blue_end_loc = EAST
-                blue_start_loc = red_end_loc
-
-        elif red_prop_rot_dir == COUNTER_CLOCKWISE:
-            if red_leading:
-                if red_start_loc == NORTH:
-                    blue_start_loc = EAST
-                elif red_start_loc == WEST:
-                    blue_start_loc = NORTH
-                elif red_start_loc == SOUTH:
-                    blue_start_loc = WEST
-                elif red_start_loc == EAST:
-                    blue_start_loc = SOUTH
-                blue_end_loc = red_start_loc
-
-            elif not red_leading:
-                if red_start_loc == NORTH:
-                    blue_end_loc = SOUTH
-                elif red_start_loc == WEST:
-                    blue_end_loc = EAST
-                elif red_start_loc == SOUTH:
-                    blue_end_loc = NORTH
-                elif red_start_loc == EAST:
-                    blue_end_loc = WEST
-                blue_start_loc = red_end_loc
+    ):
+        if red_leading:
+            # If red is leading, then blue follows red's starting location,
+            # and blue's end location is where red started from.
+            blue_start_loc = self.get_opposite_location(red_end_loc)
+            blue_end_loc = red_start_loc
+        else:
+            # If blue is leading, then blue's start location is where red ended,
+            # and blue's end location is the opposite of where red started from.
+            blue_start_loc = red_end_loc
+            blue_end_loc = self.get_opposite_location(red_start_loc)
 
         return blue_start_loc, blue_end_loc
 
@@ -112,17 +74,15 @@ class Type1Generator(DataFrameGenerator):
         for handpath, values in handpath_tuple_map_collection.items():
             handpath_tuples = handpath_tuple_map_collection[handpath]
             for red_start_loc, red_end_loc in handpath_tuples:
-                red_prop_rot_dir = self.get_prop_rot_dir(
-                    red_motion_type, handpath
-                )
+                red_prop_rot_dir = self.get_prop_rot_dir(red_motion_type, handpath)
                 blue_prop_rot_dir = red_prop_rot_dir
-                
-                blue_start_loc, blue_end_loc = self.determine_start_end_loc(
+
+                blue_start_loc, blue_end_loc = self.determine_ST_start_end_loc(
                     red_start_loc, red_end_loc, red_prop_rot_dir, red_leading_bool
                 )
 
                 start_pos, end_pos = self.get_start_end_positions(
-                    red_start_loc, red_end_loc, blue_start_loc, blue_end_loc
+                    blue_start_loc, blue_end_loc, red_start_loc, red_end_loc
                 )
 
                 variation = {
@@ -140,25 +100,25 @@ class Type1Generator(DataFrameGenerator):
                 }
 
                 variations.append(variation)
-        
+
         return variations
 
     def create_dataframes_for_letter(
         self, letter, red_motion_type, blue_motion_type
     ) -> List[Dict]:
         data = []
-        handpath_tuple_map_collection = self.get_handpath_tuple_map_collection()
+        shift_handpath_tuple_map_collection = self.get_handpath_tuple_map_collection()
 
-        for handpath, values in handpath_tuple_map_collection.items():
-            red_prop_rot_dir = self.get_prop_rot_dir(red_motion_type, handpath)
+        for shift_handpath, values in shift_handpath_tuple_map_collection.items():
+            red_prop_rot_dir = self.get_prop_rot_dir(red_motion_type, shift_handpath)
             blue_prop_rot_dir = (
                 red_prop_rot_dir
                 if letter in Type1_same_prop_rot_dir_letters
                 else self.get_opposite_rot_dir(red_prop_rot_dir)
             )
 
-            handpath_tuples = handpath_tuple_map_collection[handpath]
-            for red_start_loc, red_end_loc in handpath_tuples:
+            shift_handpath_tuples = shift_handpath_tuple_map_collection[shift_handpath]
+            for red_start_loc, red_end_loc in shift_handpath_tuples:
                 blue_start_loc, blue_end_loc = self.determine_blue_locations(
                     letter, red_start_loc, red_end_loc
                 )
@@ -440,7 +400,7 @@ class Type1Generator(DataFrameGenerator):
         blue_prop_rot_dir,
     ):
         start_pos, end_pos = self.get_start_end_positions(
-            red_start_loc, red_end_loc, blue_start_loc, blue_end_loc
+            blue_start_loc, blue_end_loc, red_start_loc, red_end_loc
         )
         return {
             "letter": letter,
