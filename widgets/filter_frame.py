@@ -7,8 +7,8 @@ from PyQt6.QtWidgets import (
     QCheckBox,
     QComboBox,
 )
-
-from constants import CLOCK, COUNTER, IN, OUT
+from PyQt6.QtGui import QFont
+from constants import CLOCK, COUNTER, ICON_DIR, IN, OUT
 
 if TYPE_CHECKING:
     from widgets.image_generator_tab.ig_filter_frame import IGFilterFrame
@@ -26,13 +26,14 @@ class FilterFrame(QFrame):
         self._setup_filters()
 
     def _setup_filters(self) -> None:
-        self.create_comboboxes()
+        self._create_comboboxes()
         self._setup_layouts()
         self._add_widgets()
         self._add_combobox_items()
-        self.set_initial_filters()
+        self._set_stylesheets()
+        self._set_initial_filters()
 
-    def create_comboboxes(self):
+    def _create_comboboxes(self) -> None:
         self.left_turns_combobox = QComboBox(self)
         self.right_turns_combobox = QComboBox(self)
         self.left_start_or_combobox = QComboBox(self)
@@ -40,10 +41,10 @@ class FilterFrame(QFrame):
         self.left_end_or_combobox = QComboBox(self)
         self.right_end_or_combobox = QComboBox(self)
 
-    def _setup_layouts(self):
+    def _setup_layouts(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
 
-    def _add_combobox_items(self):
+    def _add_combobox_items(self) -> None:
         self.left_turns_combobox.addItems(["0", "0.5", "1", "1.5", "2", "2.5", "3"])
         self.right_turns_combobox.addItems(["0", "0.5", "1", "1.5", "2", "2.5", "3"])
         self.left_start_or_combobox.addItems([IN, OUT, CLOCK, COUNTER])
@@ -51,7 +52,56 @@ class FilterFrame(QFrame):
         self.left_end_or_combobox.addItems([IN, OUT, CLOCK, COUNTER])
         self.right_end_or_combobox.addItems([IN, OUT, CLOCK, COUNTER])
 
-    def _add_widgets(self):
+    def _set_stylesheets(self) -> None:
+        for combobox in [
+            self.left_turns_combobox,
+            self.right_turns_combobox,
+            self.left_start_or_combobox,
+            self.right_start_or_combobox,
+            self.left_end_or_combobox,
+            self.right_end_or_combobox,
+        ]:
+            border_radius = (
+                min(
+                    combobox.width(),
+                    combobox.height(),
+                )
+                * 0.25
+            )
+            border_width = 2
+            dropdown_arrow_width = int(combobox.width() * 0.25)
+            box_font_size = int(self.width() / 7)
+            combobox.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
+
+            combobox.setStyleSheet(
+                f"""
+                QComboBox {{
+                    padding-left: 2px; /* add some padding on the left for the text */
+                    padding-right: 0px; /* make room for the arrow on the right */
+                    border: {border_width}px solid black;
+                    border-radius: {border_radius}px;
+                    max-width: 100px;
+                    
+                }}
+                QComboBox::drop-down {{
+                    subcontrol-origin: padding;
+                    subcontrol-position: top right;
+                    width: {dropdown_arrow_width}px;
+                    border-left-width: 1px;
+                    border-left-color: darkgray;
+                    border-left-style: solid; /* visually separate the arrow part */
+                    border-top-right-radius: {border_radius}px;
+                    border-bottom-right-radius: {border_radius}px;
+                }}
+                QComboBox::down-arrow {{
+                    image: url("{ICON_DIR}/combobox_arrow.png");
+                    width: {int(dropdown_arrow_width * 0.6)}px;
+                    height: {int(dropdown_arrow_width * 0.6)}px;
+                }}
+            """
+            )
+
+    def _add_widgets(self) -> None:
         # Create vertical layouts for left and right sections
         left_vbox_layout = QVBoxLayout()
         right_vbox_layout = QVBoxLayout()
@@ -76,13 +126,15 @@ class FilterFrame(QFrame):
         self.layout.addLayout(left_vbox_layout)
         self.layout.addLayout(right_vbox_layout)
 
-    def set_initial_filters(self):
+    def _set_initial_filters(self) -> None:
         self.left_turns_combobox.setCurrentIndex(0)
         self.right_turns_combobox.setCurrentIndex(0)
         self.left_end_or_combobox.setCurrentIndex(-1)
         self.right_end_or_combobox.setCurrentIndex(-1)
 
-    def connect_filter_boxes(self: Union["OptionPickerFilterFrame", "IGFilterFrame"]):
+    def connect_filter_boxes(
+        self: Union["OptionPickerFilterFrame", "IGFilterFrame"]
+    ) -> None:
         self.left_turns_combobox.currentTextChanged.connect(self.apply_filters)
         self.right_turns_combobox.currentTextChanged.connect(self.apply_filters)
         self.left_end_or_combobox.currentTextChanged.connect(self.apply_filters)
