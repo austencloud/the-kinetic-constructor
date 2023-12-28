@@ -5,6 +5,8 @@ import pandas as pd
 from Enums import Orientation
 from data.rules import get_next_letters
 from constants import *
+from objects.arrow.arrow import Arrow
+from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import Turns
 from widgets.option_picker_tab.option import Option
 from PyQt6.QtGui import QPixmap
@@ -145,6 +147,8 @@ class OptionPickerScrollArea(QScrollArea):
         blue_motion_dict = self._create_motion_dict_from_filters(
             pd_row_data,
             BLUE,
+            option.arrows[BLUE],
+            option.props[BLUE],
             filters[BLUE_TURNS],
             filters[BLUE_START_OR],
             filters[BLUE_END_OR],
@@ -152,26 +156,23 @@ class OptionPickerScrollArea(QScrollArea):
         red_motion_dict = self._create_motion_dict_from_filters(
             pd_row_data,
             RED,
+            option.arrows[RED],
+            option.props[RED],
             filters[RED_TURNS],
             filters[RED_START_OR],
             filters[RED_END_OR],
         )
 
-        option.props[RED].ghost = option.ghost_props[RED]
-        option.props[BLUE].ghost = option.ghost_props[BLUE]
-        option.motions[RED].prop = option.props[RED]
-        option.motions[BLUE].prop = option.props[BLUE]
-
         option.motions[RED].setup_attributes(red_motion_dict)
         option.motions[BLUE].setup_attributes(blue_motion_dict)
+
+        option.props[RED].ghost = option.ghost_props[RED]
+        option.props[BLUE].ghost = option.ghost_props[BLUE]
 
         option.current_letter = letter
         option.start_pos = pd_row_data.name[0]
         option.end_pos = pd_row_data.name[1]
-        option.motions[RED].arrow = option.arrows[RED]
-        option.motions[BLUE].arrow = option.arrows[BLUE]
-        option.motions[RED].prop = option.props[RED]
-        option.motions[BLUE].prop = option.props[BLUE]
+
         option.motions[RED].arrow.location = option.motions[RED].get_arrow_location(
             option.motions[RED].start_loc,
             option.motions[RED].end_loc,
@@ -224,12 +225,16 @@ class OptionPickerScrollArea(QScrollArea):
         self,
         pd_row_data: pd.Series,
         color: str,
+        arrow: Arrow,
+        prop: Prop,
         turns: Turns,
         start_or: Orientation,
         end_or: Orientation,
     ) -> Dict:
         motion_dict = {
             "color": color,
+            "arrow": arrow,
+            "prop": prop,
             "motion_type": pd_row_data[f"{color}_motion_type"],
             "prop_rot_dir": pd_row_data[f"{color}_prop_rot_dir"],
             "start_loc": pd_row_data[f"{color}_start_loc"],
@@ -282,11 +287,11 @@ class OptionPickerScrollArea(QScrollArea):
         filtered_data = filtered_data[filtered_data[LETTER].isin(next_possible_letters)]
 
         # filter to ensure the options have a start orientation for each motion that matches the end orientations of the reference option's motions
-        for color in [BLUE, RED]:
-            filtered_data = filtered_data[
-                filtered_data[f"{color}_start_or"]
-                == clicked_option.motions[color].end_or
-            ]
+        # for color in [BLUE, RED]:
+        #     filtered_data = filtered_data[
+        #         filtered_data[f"{color}_start_or"]
+        #         == clicked_option.motions[color].end_or
+        #     ]
 
         self.options.clear()
         self.clear()

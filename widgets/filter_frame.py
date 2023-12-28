@@ -70,11 +70,14 @@ class FilterFrame(QFrame):
         self.right_end_or_combobox.addItems([IN, OUT, CLOCK, COUNTER])
         self.layout.addWidget(self.right_end_or_combobox)
 
+        self.set_initial_filters()
+
+    def set_initial_filters(self):
         self.blue_turn_checkboxes["0"].setChecked(True)
         self.red_turn_checkboxes["0"].setChecked(True)
 
-        self.right_start_or_combobox.setCurrentText(IN)
-        self.left_start_or_combobox.setCurrentText(IN)
+        self.left_end_or_combobox.setCurrentIndex(-1)
+        self.right_end_or_combobox.setCurrentIndex(-1)
 
     def connect_filter_boxes(self: Union["OptionPickerFilterFrame", "IGFilterFrame"]):
         for checkbox in self.blue_turn_checkboxes.values():

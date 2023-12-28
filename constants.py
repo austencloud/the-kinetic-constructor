@@ -28,6 +28,9 @@ CCW_HANDPATH = "ccw_handpath"
 BLUE_TURNS = "blue_turns"
 RED_TURNS = "red_turns"
 
+START_POS = "start_pos"
+END_POS = "end_pos"
+
 BLUE_START_OR = "blue_start_or"
 RED_START_OR = "red_start_or"
 BLUE_END_OR = "blue_end_or"

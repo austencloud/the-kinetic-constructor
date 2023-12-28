@@ -119,8 +119,8 @@ class MainWidget(QWidget):
 
             """
         )
-        self.tab_widget.addTab(self.image_generator_tab, "Image Generator")
         self.tab_widget.addTab(self.option_picker_tab, "Option Picker")
+        self.tab_widget.addTab(self.image_generator_tab, "Image Generator")
         self.tab_widget.addTab(self.graph_editor_tab, "Graph Editor")
 
         self.left_frame.setSizePolicy(
@@ -247,10 +247,10 @@ class MainWidget(QWidget):
             f"({pd_row_data.name[0]}→{pd_row_data.name[1]})_"
             f"({pd_row_data["blue_motion_type"]}_{pd_row_data['blue_start_loc']}→{pd_row_data['blue_end_loc']}_"
             f"{blue_turns}_"
-            f"{pd_row_data['blue_start_or']}→{blue_end_or})_"
+            f"{pictograph.motions[BLUE].start_or}→{pictograph.motions[BLUE].end_or})_"
             f"({pd_row_data["red_motion_type"]}_{pd_row_data['red_start_loc']}→{pd_row_data['red_end_loc']}_"
             f"{red_turns}_"
-            f"{pd_row_data['red_start_or']}→{red_end_or})_"
+            f"{pictograph.motions[RED].start_or}→{pictograph.motions[RED].end_or})_"
             f"{prop_type}.png"
         )
         return os.path.join(image_dir, image_name)

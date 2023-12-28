@@ -94,7 +94,7 @@ class Pictograph(QGraphicsScene):
     def init_view(self, graph_type) -> QGraphicsView:
         from widgets.graph_editor_tab.main_pictograph_view import MainPictographView
         from widgets.option_picker_tab.option import OptionView
-        from widgets.sequence_widget.beat_frame.start_pos import (
+        from widgets.sequence_widget.beat_frame.start_pos_beat import (
             StartPositionBeatView,
         )
         from widgets.sequence_widget.beat_frame.beat import BeatView
@@ -224,8 +224,8 @@ class Pictograph(QGraphicsScene):
             self.motions[BLUE], self.motions[RED]
         )
         if specific_positions:
-            start_pos = specific_positions[start_pos]
-            end_pos = specific_positions[end_pos]
+            start_pos = specific_positions[START_POS]
+            end_pos = specific_positions[END_POS]
         return start_pos, end_pos
 
     def get_state(self) -> Dict:

@@ -30,6 +30,8 @@ from constants import (
     ALPHA,
     BETA,
     BLUE,
+    END_POS,
+    START_POS,
     end_pos,
     GAMMA,
     PRO,
@@ -81,8 +83,8 @@ class LetterEngine:
             overall_position: Dict[str, Position] = self.get_overall_position(
                 specific_position
             )
-            start_pos = overall_position[start_pos]
-            end_pos = overall_position[end_pos]
+            start_pos = overall_position[START_POS]
+            end_pos = overall_position[END_POS]
             motion_letter_group = self.get_motion_type_letter_group()
 
             filtered_letter_group = self.filter_by_end_pos(end_pos, motion_letter_group)

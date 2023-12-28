@@ -45,15 +45,8 @@ class Motion:
     ### SETUP ###
 
     def setup_attributes(self, motion_dict: Dict) -> None:
-        self.arrow = motion_dict.get(ARROW)
-        self.prop = motion_dict.get(PROP)
-
-        if self.arrow and self.prop:
-            self.arrow.motion = self
-            self.prop.motion = self
-        else:
-            self.arrow = None
-            self.prop = None
+        self.arrow: Arrow = motion_dict.get(ARROW)
+        self.prop: Prop = motion_dict.get(PROP)
 
         self.motion_type: MOTION_TYPE = motion_dict[MOTION_TYPE]
         self.turns: TURNS = motion_dict[TURNS]
