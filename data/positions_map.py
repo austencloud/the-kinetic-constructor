@@ -1,4 +1,4 @@
-from Enums import Color, Location, SpecificPosition
+from Enums import Location, SpecificPosition
 from objects.motion import Motion
 from constants import *
 from utilities.TypeChecking.TypeChecking import (

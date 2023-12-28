@@ -1,19 +1,15 @@
-from typing import TYPE_CHECKING, Callable, Literal
+from typing import TYPE_CHECKING, Literal
 from PyQt6.QtCore import QPointF
 from Enums import (
     AntiradialOrientation,
     Color,
-    Direction,
     RadialOrientation,
 )
 from constants import (
     ANTI,
     BLUE,
-    CLOCK,
-    COUNTER,
     DOWN,
     EAST,
-    IN,
     LEFT,
     NORTH,
     NORTHEAST,
@@ -25,14 +21,12 @@ from constants import (
     SOUTH,
     SOUTHEAST,
     SOUTHWEST,
-    STATIC,
     UP,
     WEST,
     DISTANCE,
 )
 from objects.motion import Motion
 
-from objects.prop.prop import Prop
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
