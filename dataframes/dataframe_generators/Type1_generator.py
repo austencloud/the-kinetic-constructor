@@ -1,5 +1,5 @@
 from typing import Dict, List
-from df_generator import DataFrameGenerator
+from dataframes.dataframe_generators.base_dataframe_generator import DataFrameGenerator
 from constants import *
 from Enums import *
 from utilities.TypeChecking.Letters import *
@@ -28,7 +28,7 @@ class Type1Generator(DataFrameGenerator):
 
         if letter in ["S", "T"]:
             red_motion_type = PRO if letter == "S" else ANTI
-            for red_handpath_rot_dir in self.handpath_rot_dirs:
+            for red_handpath_rot_dir in self.shift_handpaths:
                 data: List = self.create_ST_dataframes(
                     letter,
                     red_motion_type,
@@ -54,7 +54,7 @@ class Type1Generator(DataFrameGenerator):
     ) -> List[Dict]:
         data = []
 
-        for shift_handpath in self.handpath_rot_dirs:
+        for shift_handpath in self.shift_handpaths:
             shift_handpath_tuple_map_collection = (
                 self.get_shift_tuple_map_from_handpath(shift_handpath)
             )
@@ -103,7 +103,7 @@ class Type1Generator(DataFrameGenerator):
     ):
         variations = []
         blue_motion_type = red_motion_type
-        for shift_handpath in self.handpath_rot_dirs:
+        for shift_handpath in self.shift_handpaths:
             shift_tuple_map = self.get_shift_tuple_map_from_handpath(shift_handpath)
             for red_start_loc, red_end_loc in shift_tuple_map:
                 red_prop_rot_dir = self.get_prop_rot_dir(
@@ -140,7 +140,7 @@ class Type1Generator(DataFrameGenerator):
     def create_dataframes_for_U(self) -> List[Dict]:
         data = []
 
-        for red_handpath_rot_dir in self.handpath_rot_dirs:
+        for red_handpath_rot_dir in self.shift_handpaths:
             shift_tuple_map = self.get_shift_tuple_map_from_handpath(
                 red_handpath_rot_dir
             )
@@ -254,7 +254,7 @@ class Type1Generator(DataFrameGenerator):
     def create_dataframes_for_V(self) -> List[Dict]:
         data = []
 
-        for red_handpath_rot_dir in self.handpath_rot_dirs:
+        for red_handpath_rot_dir in self.shift_handpaths:
             shift_tuple_map = self.get_shift_tuple_map_from_handpath(
                 red_handpath_rot_dir
             )

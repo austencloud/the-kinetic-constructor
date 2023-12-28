@@ -1,40 +1,39 @@
 from typing import Dict, List, Tuple
-from df_generator import DataFrameGenerator
+from dataframes.dataframe_generators.base_dataframe_generator import DataFrameGenerator
 from Enums import Location
 from constants import *
-from utilities.TypeChecking.Letters import Type6_letters
+from utilities.TypeChecking.Letters import Type5_letters
 
 
-class Type6Generator(DataFrameGenerator):
+class Type5Generator(DataFrameGenerator):
     def __init__(self) -> None:
-        super().__init__(Type6_letters)
-        self.create_Type6_dataframes()
+        super().__init__(Type5_letters)
+        self.create_Type5_dataframes()
 
-    def create_Type6_dataframes(self) -> None:
+    def create_Type5_dataframes(self) -> None:
         for letter in self.letters:
             data = self.create_dataframe(letter)
             print("Generated dataframes for letter:", letter)
-            self.save_dataframe(letter, data, "Type_6")
+            self.save_dataframe(letter, data, "Type_5")
 
     def create_dataframe(self, letter) -> List[Dict]:
         data = []
-        if letter == "Γ":
-            data = self.create_dataframes_for_Γ(letter)
-        else:  # α or β
-            data += self.create_dataframes_for_letter(letter, STATIC, STATIC)
+        if letter == "Λ-":
+            data = self.create_dataframes_for_Λ_dash(letter)
+        else:
+            data += self.create_dataframes_for_letter(letter, DASH, DASH)
         return data
 
-    def create_dataframes_for_letter(
-        self, letter, red_motion_type, blue_motion_type
-    ) -> List[Dict]:
+    def create_dataframes_for_letter(self, letter, red_motion_type, blue_motion_type):
         data = []
-        static_tuple_map = self.get_static_tuple_map()
+        dash_handpath_tuple_map = self.get_dash_tuple_map()
         red_prop_rot_dir = "None"
         blue_prop_rot_dir = "None"
-        for red_start_loc, red_end_loc in static_tuple_map:
+        for start_loc, end_loc in dash_handpath_tuple_map:
             blue_start_loc, blue_end_loc = self.get_blue_locations(
-                letter, red_start_loc, red_end_loc
+                letter, start_loc, end_loc
             )
+            red_start_loc, red_end_loc = start_loc, end_loc
             start_pos, end_pos = self.get_Type1_start_and_end_pos(
                 red_start_loc, red_end_loc, blue_start_loc, blue_end_loc
             )
@@ -55,20 +54,23 @@ class Type6Generator(DataFrameGenerator):
             )
         return data
 
-    def create_dataframes_for_Γ(self, letter) -> List[Dict]:
+    def create_dataframes_for_Λ_dash(self, letter):
         data = []
-        static_tuple_map = self.get_static_tuple_map()
-        for red_start_loc, red_end_loc in static_tuple_map:
+        # Λ specific logic for dash and static hand locations
+        dash_handpath_tuple_map = self.get_dash_tuple_map()
+        for red_start_loc, red_end_loc in dash_handpath_tuple_map:
+            # Create variations where dash and static hands are at different locations
             data += self.create_Λ_variations(letter, red_start_loc, red_end_loc)
         return data
 
-    def create_Λ_variations(self, letter, red_start_loc, red_end_loc) -> List[Dict]:
+    def create_Λ_variations(self, letter, red_start_loc, red_end_loc):
         variations = []
         blue_loc_tuples = self.get_blue_loc_tuples_for_Λ_dash(
             red_start_loc, red_end_loc
         )
 
         for blue_start_loc, blue_end_loc in blue_loc_tuples:
+            # Dash motion variations
             variations.append(
                 self.create_variation_dict(
                     letter,
@@ -76,21 +78,20 @@ class Type6Generator(DataFrameGenerator):
                     blue_end_loc,
                     red_start_loc,
                     red_end_loc,
-                    STATIC,
-                    STATIC,
+                    DASH,
+                    DASH,
                 )
             )
 
         return variations
 
-    def get_blue_loc_tuples_for_Λ_dash(
-        self, red_start_loc, red_end_loc
-    ) -> List[Tuple[Location, Location]]:
+    def get_blue_loc_tuples_for_Λ_dash(self, red_start_loc, red_end_loc) -> List[str]:
+        """Gets valid dash tuples for Λ based on dash's start and end locs."""
         blue_location_map = {
-            (NORTH, NORTH): [(EAST, EAST), (WEST, WEST)],
-            (EAST, EAST): [(SOUTH, SOUTH), (NORTH, NORTH)],
-            (SOUTH, SOUTH): [(WEST, WEST), (EAST, EAST)],
-            (WEST, WEST): [(NORTH, NORTH), (SOUTH, SOUTH)],
+            (NORTH, SOUTH): [(EAST, WEST), (WEST, EAST)],
+            (EAST, WEST): [(NORTH, SOUTH), (SOUTH, NORTH)],
+            (SOUTH, NORTH): [(EAST, WEST), (WEST, EAST)],
+            (WEST, EAST): [(NORTH, SOUTH), (SOUTH, NORTH)],
         }
         return blue_location_map.get((red_start_loc, red_end_loc), [])
 
@@ -103,7 +104,7 @@ class Type6Generator(DataFrameGenerator):
         red_end_loc,
         red_motion_type,
         blue_motion_type,
-    ) -> Dict:
+    ):
         start_pos, end_pos = self.get_Type1_start_and_end_pos(
             red_start_loc, red_end_loc, blue_start_loc, blue_end_loc
         )
@@ -124,13 +125,11 @@ class Type6Generator(DataFrameGenerator):
     def get_blue_locations(
         self, letter, red_start_loc, red_end_loc
     ) -> Tuple[Location, Location]:
-        if letter == "α":
-            blue_start_loc, blue_end_loc = self.get_opposite_loc_tuple(
-                (red_start_loc, red_end_loc)
-            )
-        elif letter == "β":
+        if letter == "Φ-":
+            blue_start_loc, blue_end_loc = red_end_loc, red_start_loc
+        elif letter == "Ψ-":
             blue_start_loc, blue_end_loc = red_start_loc, red_end_loc
         return blue_start_loc, blue_end_loc
 
 
-Type6Generator()
+Type5Generator()

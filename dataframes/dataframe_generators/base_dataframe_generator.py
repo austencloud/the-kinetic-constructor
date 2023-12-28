@@ -10,7 +10,7 @@ class DataFrameGenerator:
     def __init__(self, letters) -> None:
         self.letters = letters
         self.rot_dirs = [CLOCKWISE, COUNTER_CLOCKWISE]
-        self.handpath_rot_dirs = [CW_HANDPATH, CCW_HANDPATH]
+        self.shift_handpaths = [CW_HANDPATH, CCW_HANDPATH]
 
     def change_red_handpath_map_to(self, handpath_rot_dir):
         if handpath_rot_dir == CCW_HANDPATH:

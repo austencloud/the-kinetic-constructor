@@ -1,5 +1,5 @@
 from typing import Dict, List, Tuple
-from df_generator import DataFrameGenerator
+from dataframes.dataframe_generators.base_dataframe_generator import DataFrameGenerator
 from Enums import Location
 from constants import *
 from utilities.TypeChecking.Letters import Type2_letters
@@ -26,24 +26,24 @@ class Type2Generator(DataFrameGenerator):
         return data
 
     def create_dataframes_for_letter(self, letter, red_motion_type, blue_motion_type):
-        shift_handpath_tuple_map_collection = self.get_shift_tuple_map_from_handpath()
         data = []
-        for shift_handpath, tuples in shift_handpath_tuple_map_collection.items():
-            if red_motion_type in [PRO, ANTI]:
-                red_prop_rot_dir = self.get_prop_rot_dir(
-                    red_motion_type, shift_handpath
-                )
-            else:
-                red_prop_rot_dir = "None"  # Explicitly indicating no rotation
+        for shift_handpath in self.shift_handpaths:
+            shift_tuple_map = self.get_shift_tuple_map_from_handpath(shift_handpath)
+            for start_loc, end_loc in shift_tuple_map:
+                if red_motion_type in [PRO, ANTI]:
+                    red_prop_rot_dir = self.get_prop_rot_dir(
+                        red_motion_type, shift_handpath
+                    )
+                else:
+                    red_prop_rot_dir = "None"  # Explicitly indicating no rotation
 
-            if blue_motion_type in [PRO, ANTI]:
-                blue_prop_rot_dir = self.get_prop_rot_dir(
-                    blue_motion_type, shift_handpath
-                )
-            else:
-                blue_prop_rot_dir = "None"  # Explicitly indicating no rotation
+                if blue_motion_type in [PRO, ANTI]:
+                    blue_prop_rot_dir = self.get_prop_rot_dir(
+                        blue_motion_type, shift_handpath
+                    )
+                else:
+                    blue_prop_rot_dir = "None"  # Explicitly indicating no rotation
 
-            for start_loc, end_loc in tuples:
                 if red_motion_type == STATIC:
                     red_start_loc, red_end_loc = self.get_static_locations(
                         letter, start_loc, end_loc

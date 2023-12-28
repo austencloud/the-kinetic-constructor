@@ -1,5 +1,5 @@
 from typing import Dict, List, Tuple
-from df_generator import DataFrameGenerator
+from dataframes.dataframe_generators.base_dataframe_generator import DataFrameGenerator
 from Enums import Location
 from constants import *
 from utilities.TypeChecking.Letters import Type4_letters
