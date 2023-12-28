@@ -6,10 +6,7 @@ from data.Enums import *
 
 class AlphaBetaGenerator(DataFrameGenerator):
     def __init__(self) -> None:
-        super().__init__(
-            letters=["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
-        )
-        self.hybrid_letters = ["C", "F", "I", "L"]  # Assuming C, F, I, L are hybrids
+        super().__init__(Type1_alpha_beta_letters)
         self.create_dataframes_for_alpha_beta()
 
     def create_dataframes_for_alpha_beta(self) -> None:
@@ -18,13 +15,13 @@ class AlphaBetaGenerator(DataFrameGenerator):
             self.save_dataframe(letter, data, "Type_1")
 
     def create_dataframe(self, letter) -> List[Dict]:
-        if letter in ["A", "D", "G", "J"]:
-            return self.create_dataframes_for_letter(letter, "pro", "pro")
-        elif letter in ["B", "E", "H", "K"]:
-            return self.create_dataframes_for_letter(letter, "anti", "anti")
-        elif letter in self.hybrid_letters:
-            data = self.create_dataframes_for_letter(letter, "pro", "anti")
-            data += self.create_dataframes_for_letter(letter, "anti", "pro")
+        if letter in Type1_pro_letters:
+            return self.create_dataframes_for_letter(letter, PRO, PRO)
+        elif letter in Type1_anti_letters:
+            return self.create_dataframes_for_letter(letter, ANTI, ANTI)
+        elif letter in Type1_hybrid_letters:
+            data = self.create_dataframes_for_letter(letter, PRO, ANTI)
+            data += self.create_dataframes_for_letter(letter, ANTI, PRO)
             return data
 
     def create_dataframes_for_letter(
@@ -37,7 +34,7 @@ class AlphaBetaGenerator(DataFrameGenerator):
             red_prop_rot_dir = self.get_prop_rot_dir(red_motion_type, handpath)
             blue_prop_rot_dir = (
                 red_prop_rot_dir
-                if letter in ["A", "B", "F", "G", "H", "L"]
+                if letter in Type1_same_prop_rot_dir_letters
                 else self.get_opposite_rot_dir(red_prop_rot_dir)
             )
 
@@ -70,20 +67,19 @@ class AlphaBetaGenerator(DataFrameGenerator):
         return data
 
     def determine_blue_locations(self, letter, red_start_loc, red_end_loc):
-        if letter in ["A", "B", "C"]:
+        if letter in alpha_to_alpha_letters:
             blue_start_loc = self.get_opposite_location(red_start_loc)
             blue_end_loc = self.get_opposite_location(red_end_loc)
-        elif letter in ["D", "E", "F"]:
+        elif letter in beta_to_alpha_letters:
             blue_start_loc = red_start_loc
             blue_end_loc = self.get_opposite_location(red_end_loc)
-        elif letter in ["G", "H", "I"]:
+        elif letter in beta_to_beta_letters:
             blue_start_loc, blue_end_loc = red_start_loc, red_end_loc
-        elif letter in ["J", "K", "L"]:
+        elif letter in alpha_to_beta_letters:
             blue_start_loc = self.get_opposite_location(red_start_loc)
             blue_end_loc = red_end_loc
         return blue_start_loc, blue_end_loc
 
-    # Implement other necessary methods from DataFrameGenerator as needed
 
 
 # Instantiate and run the generator

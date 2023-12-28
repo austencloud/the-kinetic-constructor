@@ -197,6 +197,80 @@ class Letter(Enum):
     Eta = "η"
 
 
+### TYPE 1 LETTERS ###
+alpha_to_alpha_letters = ["A", "B", "C"]
+beta_to_alpha_letters = ["D", "E", "F"]
+beta_to_beta_letters = ["G", "H", "I"]
+alpha_to_beta_letters = ["J", "K", "L"]
+gamma_to_gamma_opp_antiparallel_letters = ["M", "N", "O"]
+gamma_to_gamma_opp_parallel_letters = ["P", "Q", "R"]
+gamma_to_gamma_same_dir_letters = ["S", "T", "U", "V"]
+
+Type1_same_prop_rot_dir_letters = [
+    "A",
+    "B",
+    "F",
+    "G",
+    "H",
+    "L",
+    "O",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+]
+Type1_opp_prop_rot_dir_letters = ["C", "D", "E", "I", "J", "K", "M", "N", "P", "Q"]
+
+Type1_hybrid_letters = ["C", "F", "I", "L", "O", "R", "U", "V"]
+Type1_pro_letters = [
+    "A",
+    "D",
+    "G",
+    "J",
+    "M",
+    "P",
+    "S",
+]
+Type1_anti_letters = [
+    "B",
+    "E",
+    "H",
+    "K",
+    "N",
+    "Q",
+    "T",
+]
+
+Type1_non_hybrid_letters = Type1_pro_letters + Type1_anti_letters
+Type1_alpha_beta_letters = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "L",
+    "J",
+    "K",
+    "L",
+]
+Type1_gamma_letters = [
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "U",
+    "S",
+    "T",
+    "V",
+]
+
 alpha_ending_letters = [
     "A",
     "B",
