@@ -66,5 +66,4 @@ class OptionView(QGraphicsView):
 
     def showEvent(self, event) -> None:
         super().showEvent(event)
-        # Ensure this slot is called after the event loop starts
         QTimer.singleShot(0, self.option.load_image_if_needed)

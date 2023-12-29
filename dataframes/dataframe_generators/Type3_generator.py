@@ -72,8 +72,8 @@ class Type3Generator(BaseDataFrameGenerator):
                 data.append(
                     {
                         "letter": letter,
-                        "start_pos": start_pos,
-                        "end_pos": end_pos,
+                        START_POS: start_pos,
+                        END_POS: end_pos,
                         BLUE_MOTION_TYPE: blue_motion_type,
                         "blue_prop_rot_dir": blue_prop_rot_dir,
                         "blue_start_loc": blue_start_loc,

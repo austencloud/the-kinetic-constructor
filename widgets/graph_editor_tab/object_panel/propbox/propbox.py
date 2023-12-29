@@ -198,7 +198,7 @@ class PropBox(ObjectBox):
 
     def set_prop_position(self, prop: Prop) -> None:
         hand_point = self.grid.get_circle_coordinates(
-            f"{prop.location}_{self.grid.grid_mode}_hand_point"
+            f"{prop.loc}_{self.grid.grid_mode}_hand_point"
         )
         prop_length = prop.boundingRect().width()
         prop_width = prop.boundingRect().height()

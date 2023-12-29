@@ -55,6 +55,6 @@ class IGScroll(PictographScrollArea):
         ig_pictograph = IGPictograph(self.main_widget, self)
         ig_pictograph.current_letter = motion_dict[LETTER]
         filters = self.ig_tab.filter_frame.filters
-        ig_pictograph._finalize_motion_setup(motion_dict, filters)
+        ig_pictograph._setup_motions(motion_dict, filters)
         ig_pictograph.update_pictograph()
         return ig_pictograph

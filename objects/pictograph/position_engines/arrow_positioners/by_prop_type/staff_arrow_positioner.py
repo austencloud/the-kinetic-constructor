@@ -150,14 +150,14 @@ class StaffArrowPositioner:
                 if arrow.motion.prop.is_antiradial():
                     default_pos = self.arrow_positioner._get_default_position(arrow)
                     adjustment = self.arrow_positioner.calculate_adjustment(
-                        arrow.location, DISTANCE + -45
+                        arrow.loc, DISTANCE + -45
                     )
                     new_pos = default_pos + adjustment - arrow.boundingRect().center()
                     arrow.setPos(new_pos)
 
             if leader.prop.is_antiradial() and follower.prop.is_radial():
                 adjustment = self.arrow_positioner.calculate_adjustment(
-                    leader.arrow.location, 30
+                    leader.arrow.loc, 30
                 )
                 direction = self.get_antispin_antiradial_adjustment_direction(leader)
                 if direction == UP:
@@ -172,7 +172,7 @@ class StaffArrowPositioner:
 
             elif leader.prop.is_radial() and follower.prop.is_antiradial():
                 adjustment = self.arrow_positioner.calculate_adjustment(
-                    follower.arrow.location, 40
+                    follower.arrow.loc, 40
                 )
                 direction = self.get_antispin_antiradial_adjustment_direction(leader)
                 if direction == UP:
@@ -224,7 +224,7 @@ class StaffArrowPositioner:
                     follower.arrow
                 )
                 adjustment = self.arrow_positioner.calculate_adjustment(
-                    follower.arrow.location, DISTANCE + -45
+                    follower.arrow.loc, DISTANCE + -45
                 )
                 new_pos = (
                     default_pos + adjustment - follower.arrow.boundingRect().center()
@@ -233,7 +233,7 @@ class StaffArrowPositioner:
 
             elif leader.prop.is_radial() and follower.prop.is_antiradial():
                 adjustment = self.arrow_positioner.calculate_adjustment(
-                    follower.arrow.location, 40
+                    follower.arrow.loc, 40
                 )
                 direction = self.get_antispin_antiradial_adjustment_direction(leader)
                 if direction == UP:
@@ -273,7 +273,7 @@ class StaffArrowPositioner:
 
             if anti_motion.prop.is_antiradial() and pro_motion.prop.is_radial():
                 adjustment = self.arrow_positioner.calculate_adjustment(
-                    anti_motion.arrow.location, 30
+                    anti_motion.arrow.loc, 30
                 )
                 direction = self.get_antispin_antiradial_adjustment_direction(
                     anti_motion
@@ -290,7 +290,7 @@ class StaffArrowPositioner:
 
             elif anti_motion.prop.is_radial() and pro_motion.prop.is_antiradial():
                 adjustment = self.arrow_positioner.calculate_adjustment(
-                    pro_motion.arrow.location, 40
+                    pro_motion.arrow.loc, 40
                 )
                 direction = self.get_antispin_antiradial_adjustment_direction(
                     anti_motion
@@ -318,8 +318,8 @@ class StaffArrowPositioner:
                 self.arrow_positioner._apply_adjustment(anti_motion.arrow, adjustment)
 
     def get_antispin_antiradial_adjustment_direction(self, leader: "Motion") -> str:
-        arrow_location = leader.arrow.location
-        prop_location = leader.prop.location
+        arrow_location = leader.arrow.loc
+        prop_location = leader.prop.loc
 
         antiradial_mapping = {
             (NORTHEAST, EAST): DOWN,
@@ -355,7 +355,7 @@ class StaffArrowPositioner:
         anti_motion = red_motion if red_motion.motion_type == ANTI else blue_motion
         if anti_motion.prop.is_antiradial():
             adjustment = self.arrow_positioner.calculate_adjustment(
-                anti_motion.arrow.location, 30
+                anti_motion.arrow.loc, 30
             )
             direction = self.get_antispin_antiradial_adjustment_direction(anti_motion)
             if direction == UP:
@@ -378,14 +378,14 @@ class StaffArrowPositioner:
                 else self.pictograph.motions[BLUE]
             )
             adjustment = self.arrow_positioner.calculate_adjustment(
-                anti_motion.arrow.location, 80
+                anti_motion.arrow.loc, 80
             )
             self.arrow_positioner._apply_adjustment(anti_motion.arrow, adjustment)
         elif red_motion.prop.orientation == OUT or blue_motion.prop.orientation == OUT:
             for arrow in self.pictograph.arrows.values():
                 if arrow.motion.prop.orientation == OUT:
                     adjustment = self.arrow_positioner.calculate_adjustment(
-                        arrow.location, 55
+                        arrow.loc, 55
                     )
                     self.arrow_positioner._apply_adjustment(arrow, adjustment)
 
@@ -408,7 +408,7 @@ class StaffArrowPositioner:
         for arrow in self.pictograph.arrows.values():
             if self.arrow_positioner._is_arrow_movable(arrow):
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
-                    arrow.location, adjustment_value
+                    arrow.loc, adjustment_value
                 )
                 self.arrow_positioner._apply_adjustment(arrow, adjustment)
 
@@ -421,7 +421,7 @@ class StaffArrowPositioner:
                 and arrow.motion.prop.orientation == orientation
             ):
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
-                    arrow.location, adjustment_value
+                    arrow.loc, adjustment_value
                 )
                 self.arrow_positioner._apply_adjustment(arrow, adjustment)
 
@@ -431,6 +431,6 @@ class StaffArrowPositioner:
         for arrow in self.pictograph.arrows.values():
             if arrow.motion_type == motion_type:
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
-                    arrow.location, adjustment_value
+                    arrow.loc, adjustment_value
                 )
                 self.arrow_positioner._apply_adjustment(arrow, adjustment)

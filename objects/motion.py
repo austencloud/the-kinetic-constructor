@@ -45,13 +45,13 @@ class Motion:
         self.start_or: Orientation = motion_dict[START_OR]
 
         self.assign_location_to_arrow()
-
-        self.end_or: Orientation = self.get_end_or()
-        self.update_prop_orientation()
+        if self.motion_type:
+            self.end_or: Orientation = self.get_end_or()
+            self.update_prop_orientation()
 
     def assign_location_to_arrow(self) -> None:
         if hasattr(self, ARROW) and self.arrow:
-            self.arrow.location = self.get_arrow_location(self.start_loc, self.end_loc)
+            self.arrow.loc = self.get_arrow_location(self.start_loc, self.end_loc)
 
     ### UPDATE ###
 
@@ -81,9 +81,9 @@ class Motion:
     def update_prop_orientation(self) -> None:
         if hasattr(self, PROP) and self.prop:
             self.prop.orientation = self.end_or
-            self.prop.location = self.end_loc
+            self.prop.loc = self.end_loc
             self.prop.axis = self.prop.get_axis_from_orientation(
-                self.prop.orientation, self.prop.location
+                self.prop.orientation, self.prop.loc
             )
             self.prop.update_rotation()
             self.prop.update_appearance()
@@ -244,7 +244,6 @@ class Motion:
 
         if self.turns in valid_turns:
             if self.turns.is_integer():
-                self.turns = int(self.turns)
                 if self.motion_type in [PRO, ANTI]:
                     key = (self.motion_type, self.turns, self.start_or)
                     return whole_turn_orientation_map.get(key)

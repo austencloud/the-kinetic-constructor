@@ -50,11 +50,14 @@ class OptionPickerScrollArea(PictographScrollArea):
     def _add_start_pos_option(self, position_key: str, column: int) -> None:
         """Adds an option for the specified start position."""
         start_pos, end_pos = position_key.split("_")
-        for letter, entries in self.letters.items():
-            for entry in entries:
-                if entry["start_pos"] == start_pos and entry["end_pos"] == end_pos:
-                    start_option = self._create_option(entry)
-                    start_option.view.resize_option_view()
+        for letter, motion_dicts in self.letters.items():
+            for motion_dict in motion_dicts:
+                if (
+                    motion_dict[START_POS] == start_pos
+                    and motion_dict[END_POS] == end_pos
+                ):
+                    start_option = self._create_option(motion_dict)
+                    # start_option.view.resize_option_view()
                     start_option.current_letter = letter
                     start_option.start_pos = start_pos
                     start_option.end_pos = end_pos
@@ -91,7 +94,6 @@ class OptionPickerScrollArea(PictographScrollArea):
 
             option.image_loaded = True
 
-
     def update_displayed_pictographs(self) -> None:
         """
         Updates the displayed pictographs based on the selected letters.
@@ -111,7 +113,7 @@ class OptionPickerScrollArea(PictographScrollArea):
         for i, (index, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
             option: Option = self._create_option(pictograph_data)
             self.load_image_if_visible(option)
-            
+
             # Add the pictograph view to the layout
             row = i // self.COLUMN_COUNT
             col = i % self.COLUMN_COUNT
@@ -135,7 +137,7 @@ class OptionPickerScrollArea(PictographScrollArea):
         option = Option(self.main_widget, self)
         option.current_letter = motion_dict[LETTER]
         filters = self.option_picker_tab.filter_frame.filters
-        option._finalize_motion_setup(motion_dict, filters)
+        option._setup_motions(motion_dict, filters)
         option.update_pictograph()
         return option
 
@@ -156,7 +158,7 @@ class OptionPickerScrollArea(PictographScrollArea):
             prop.motion.update_prop_orientation()
             prop.update_rotation()
             prop.update_appearance()
-            arrow.location = arrow.motion.get_arrow_location(
+            arrow.loc = arrow.motion.get_arrow_location(
                 arrow.motion.start_loc, arrow.motion.end_loc
             )
         option.update_pictograph()

@@ -30,7 +30,7 @@ class OptionPickerTab(QFrame):
     def load_and_sort_data(self, file_path: str) -> pd.DataFrame:
         try:
             df = pd.read_csv(file_path)
-            df.set_index(["start_pos", "end_pos"], inplace=True)
+            df.set_index([START_POS, END_POS], inplace=True)
             df.sort_index(inplace=True)
             return df
         except Exception as e:

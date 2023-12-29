@@ -18,13 +18,15 @@ class PictographScrollArea(QScrollArea):
     COLUMN_COUNT = 4
     SPACING = 10
 
-    def __init__(self, main_widget: "MainWidget", parent_tab: Union["IGTab", "OptionPickerTab"]) -> None:
+    def __init__(
+        self, main_widget: "MainWidget", parent_tab: Union["IGTab", "OptionPickerTab"]
+    ) -> None:
         super().__init__(parent_tab)
         self.main_widget = main_widget
         self.parent_tab = parent_tab
         self.letters: Dict[Letter, List[Dict[str, str]]] = self.main_widget.letters
         self.pictographs: Dict[Letter, Pictograph] = {}
-        
+
         self._initialize_ui()
 
     def _initialize_ui(self) -> None:
@@ -52,7 +54,9 @@ class PictographScrollArea(QScrollArea):
                 widget.deleteLater()
 
         filtered_pictographs = self.parent_tab.pictograph_df[
-            self.parent_tab.pictograph_df["letter"].isin(self.parent_tab.selected_pictographs)
+            self.parent_tab.pictograph_df["letter"].isin(
+                self.parent_tab.selected_pictographs
+            )
         ]
 
         for i, (_, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
@@ -77,6 +81,6 @@ class PictographScrollArea(QScrollArea):
         ig_pictograph = IGPictograph(self.main_widget, self)
         ig_pictograph.current_letter = pd_row_data[LETTER]
         filters = self.parent_tab.filter_frame.filters
-        ig_pictograph._finalize_motion_setup(pd_row_data, filters)
+        ig_pictograph._setup_motions(pd_row_data, filters)
         ig_pictograph.update_pictograph()
         return ig_pictograph

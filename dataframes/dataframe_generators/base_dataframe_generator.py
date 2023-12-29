@@ -132,7 +132,7 @@ class BaseDataFrameGenerator:
                 "letter",
                 BLUE_MOTION_TYPE,
                 "blue_prop_rot_dir",
-                "start_pos",
+                START_POS,
             ],
             inplace=True,
         )

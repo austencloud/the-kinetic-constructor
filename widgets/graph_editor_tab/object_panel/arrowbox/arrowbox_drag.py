@@ -45,7 +45,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.rot_dir = target_arrow.motion.prop_rot_dir
         self.motion_type = target_arrow.motion_type
         self.color = target_arrow.color
-        self.arrow_location = target_arrow.location
+        self.arrow_location = target_arrow.loc
         self.turns = target_arrow.turns
         self.target_arrow_rotation_angle = self._get_arrow_drag_rotation_angle(
             self.target_arrow
@@ -59,7 +59,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.previous_drag_location = None
         self.color: Color = target_arrow.color
         self.motion_type: MotionType = target_arrow.motion_type
-        self.arrow_location: Location = target_arrow.location
+        self.arrow_location: Location = target_arrow.loc
         self.rot_dir: PropRotationDirection = target_arrow.motion.prop_rot_dir
 
         self.turns: Turns = target_arrow.turns
@@ -134,7 +134,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
     def finalize_ghost_arrow_for_new_location(self, new_location):
         self.ghost = self.pictograph.ghost_arrows[self.color]
-        self.ghost.location = new_location
+        self.ghost.loc = new_location
         self.ghost.set_arrow_transform_origin_to_center()
         self.ghost.show()
         self.ghost.update_color()
@@ -144,7 +144,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.ghost.color = self.color
         self.ghost.motion = self.motion
 
-        self.ghost.motion.arrow.location = new_location
+        self.ghost.motion.arrow.loc = new_location
         self.ghost.motion_type = self.motion_type
         self.ghost.motion.prop_rot_dir = self.rot_dir
 
@@ -190,7 +190,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
                 if self.previous_drag_location != new_location:
                     self.motion = self.pictograph.motions[self.color]
                     self.pictograph.arrows[self.color].motion = self.motion
-                    self.pictograph.arrows[self.color].location = new_location
+                    self.pictograph.arrows[self.color].loc = new_location
                     self.pictograph.arrows[
                         self.color
                     ].set_is_svg_mirrored_from_attributes()

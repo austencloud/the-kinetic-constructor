@@ -99,8 +99,8 @@ class BaseArrowPositioner:
     def compare_states(self, current_state: Dict, candidate_state: Dict) -> bool:
         relevant_keys = [
             "letter",
-            "start_pos",
-            "end_pos",
+            START_POS,
+            END_POS,
             BLUE_MOTION_TYPE,
             "blue_prop_rot_dir",
             "blue_turns",
@@ -141,7 +141,7 @@ class BaseArrowPositioner:
     ### GETTERS ###
     def _get_default_position(self, arrow: Arrow) -> QPointF:
         layer2_points = self.pictograph.grid.get_layer2_points()
-        return layer2_points.get(arrow.location, QPointF(0, 0))
+        return layer2_points.get(arrow.loc, QPointF(0, 0))
 
     ### SETTERS ###
     def _set_arrow_to_optimal_loc(self, arrow: Arrow, optimal_locations: Dict) -> None:
@@ -155,6 +155,6 @@ class BaseArrowPositioner:
         if not arrow.is_ghost:
             arrow.ghost.set_arrow_transform_origin_to_center()
         default_pos = self._get_default_position(arrow)
-        adjustment = self.calculate_adjustment(arrow.location, DISTANCE)
+        adjustment = self.calculate_adjustment(arrow.loc, DISTANCE)
         new_pos = default_pos + adjustment - arrow.boundingRect().center()
         arrow.setPos(new_pos)

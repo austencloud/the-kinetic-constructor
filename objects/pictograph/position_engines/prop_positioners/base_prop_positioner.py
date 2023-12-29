@@ -75,7 +75,7 @@ class BasePropPositioner:
 
     def _set_prop_to_default_location(self, prop: Prop, strict: bool = False) -> None:
         position_offsets = self._get_position_offsets(prop)
-        key = (prop.orientation, prop.location)
+        key = (prop.orientation, prop.loc)
         offset = position_offsets.get(key, QPointF(0, 0))
         prop.setTransformOriginPoint(0, 0)
 
@@ -84,8 +84,8 @@ class BasePropPositioner:
         elif self.pictograph.grid.grid_mode == BOX:
             location_points = self._get_location_points(strict, BOX)
 
-        if prop.location in location_points:
-            prop.setPos(location_points[prop.location] + offset)
+        if prop.loc in location_points:
+            prop.setPos(location_points[prop.loc] + offset)
 
     def _get_location_points(self, strict: bool, grid_mode: str) -> Dict[str, QPointF]:
         if strict:
@@ -112,7 +112,7 @@ class BasePropPositioner:
         if self.pictograph.has_hybrid_orientations():
             for prop in self.props:
                 self._set_prop_to_default_location(prop)
-                
+
         else:  # scene has non-hybrid orientations
             if self.current_letter in ["G", "H"]:
                 self.reposition_G_H()
@@ -265,9 +265,9 @@ class BasePropPositioner:
             },
         }
         if prop.is_radial():
-            return layer_reposition_map[RADIAL][(prop.location, prop.color)]
+            return layer_reposition_map[RADIAL][(prop.loc, prop.color)]
         elif prop.is_antiradial():
-            return layer_reposition_map[ANTIRADIAL][(prop.location, prop.color)]
+            return layer_reposition_map[ANTIRADIAL][(prop.loc, prop.color)]
 
     ### HELPERS ###
 
@@ -386,6 +386,6 @@ class BasePropPositioner:
             },
         }
         if prop.is_radial():
-            return layer_reposition_map[RADIAL][(prop.location, prop.color)]
+            return layer_reposition_map[RADIAL][(prop.loc, prop.color)]
         elif prop.is_antiradial():
-            return layer_reposition_map[ANTIRADIAL][(prop.location, prop.color)]
+            return layer_reposition_map[ANTIRADIAL][(prop.loc, prop.color)]

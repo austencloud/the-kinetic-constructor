@@ -41,7 +41,7 @@ class IGTab(QWidget):
     def load_and_sort_data(self, file_path: str) -> pd.DataFrame:
         try:
             df = pd.read_csv(file_path)
-            df.set_index(["start_pos", "end_pos"], inplace=True)
+            df.set_index([START_POS, END_POS], inplace=True)
             df.sort_index(inplace=True)
             return df
         except Exception as e:
@@ -57,7 +57,6 @@ class IGTab(QWidget):
 
         self.letter_button_frame = IGLetterButtonFrame(self.main_widget)
         self.action_button_frame = self._setup_action_button_frame()
-        
 
         self.ig_scroll_area = IGScroll(self.main_widget, self)
         self.filter_frame = IGFilterFrame(self)
@@ -78,13 +77,10 @@ class IGTab(QWidget):
                 lambda checked, letter=key: self.on_letter_button_clicked(letter)
             )
 
-    def _setup_button_panel(
-        
-        self
-    ):
+    def _setup_button_panel(self):
         button_panel = QFrame()
         button_panel_layout = QVBoxLayout()
-        
+
         button_panel.setLayout(button_panel_layout)
         button_panel.setStyleSheet(
             """
@@ -154,7 +150,6 @@ class IGTab(QWidget):
                     background-color: #cce0ff;
                 }
             """
-
 
     ### IMAGE GENERATION ###
 

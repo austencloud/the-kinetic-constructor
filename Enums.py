@@ -89,8 +89,8 @@ class Direction(Enum):
 class Filter(Enum):
     BLUE_TURNS = "blue_turns"
     RED_TURNS = "red_turns"
-    LEFT_end_or = "left_end_or"
-    RIGHT_end_or = "right_end_or"
+    LEFT_end_or = "blue_end_or"
+    RIGHT_end_or = "red_end_or"
 
 
 class MotionType(Enum):
@@ -372,6 +372,7 @@ class MotionCombinationType(Enum):
 
 Turns = float | Literal["fl", "0", "0.5", "1", "1.5", "2", "2.5", "3"]
 
+
 class Turns(Enum):
     FL = "fl"
     ZERO = "0"
@@ -381,6 +382,7 @@ class Turns(Enum):
     TWO = "2"
     TWO_HALF = "2.5"
     THREE = "3"
+
 
 class ArrowAttribute(Enum):
     COLOR = "color"
@@ -411,8 +413,8 @@ class MotionAttribute(Enum):
 
 
 class PictographAttribute(Enum):
-    START_POS = "start_pos"
-    END_POS = "end_pos"
+    START_POS = START_POS
+    END_POS = END_POS
     LETTER = "letter"
     HANDPATH_MODE = "handpath_mode"
     MOTION_TYPE_COMBINATION = "motion_type_combination"
@@ -571,12 +573,11 @@ class PictographAttributesDict(TypedDict):
     red_turns: Turns
     red_start_or: Orientation
     red_end_or: Orientation
-    
 
 
 class PictographType(Enum):
     MAIN = "main"
     OPTION = "option"
     BEAT = "beat"
-    start_pos = "start_pos"
+    start_pos = START_POS
     IG_PICTOGRAPH = "ig_pictograph"

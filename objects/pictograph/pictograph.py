@@ -146,9 +146,7 @@ class Pictograph(QGraphicsScene):
         self.prop_positioner = MainPropPositioner(self)
         self.letter_engine = LetterEngine(self)
 
-    def _finalize_motion_setup(
-        self, motion_dict: PictographAttributesDict, filters
-    ) -> None:
+    def _setup_motions(self, motion_dict: PictographAttributesDict, filters) -> None:
         """For pictographs that are generated from the pandas dataframe."""
         self.pd_row_data = motion_dict
 
@@ -168,11 +166,11 @@ class Pictograph(QGraphicsScene):
         self.start_pos = motion_dict[START_POS]
         self.end_pos = motion_dict[END_POS]
 
-        self.red_motion.arrow.location = self.red_motion.get_arrow_location(
+        self.red_motion.arrow.loc = self.red_motion.get_arrow_location(
             self.red_motion.start_loc,
             self.red_motion.end_loc,
         )
-        self.blue_motion.arrow.location = self.blue_motion.get_arrow_location(
+        self.blue_motion.arrow.loc = self.blue_motion.get_arrow_location(
             self.blue_motion.start_loc,
             self.blue_motion.end_loc,
         )
@@ -471,11 +469,11 @@ class Pictograph(QGraphicsScene):
             new_beat.ghost_arrows[motion.color] = new_ghost_arrow
             new_beat.ghost_props[motion.color] = new_ghost_prop
 
-            if new_arrow.location:
+            if new_arrow.loc:
                 new_arrow.update_appearance()
                 new_ghost_arrow.update_appearance()
 
-            if new_prop.location:
+            if new_prop.loc:
                 new_prop.update_appearance()
                 new_ghost_prop.update_appearance()
 

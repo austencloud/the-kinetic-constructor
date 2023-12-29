@@ -27,14 +27,14 @@ class OptionPickerFilterFrame(FilterFrame):
         selected_red_turns = self.comboboxes[RED_TURNS].currentText()
         selected_left_start_or = self.comboboxes[BLUE_START_OR].currentText()
         selected_right_start_or = self.comboboxes[RED_START_OR].currentText()
-        selected_left_end_or = self.comboboxes[BLUE_END_OR].currentText()
-        selected_right_end_or = self.comboboxes[RED_END_OR].currentText()
+        selected_blue_end_or = self.comboboxes[BLUE_END_OR].currentText()
+        selected_red_end_or = self.comboboxes[RED_END_OR].currentText()
 
         self.filters: Dict[str, Union[Turns, Orientation]] = {
             BLUE_TURNS: selected_blue_turns,
             RED_TURNS: selected_red_turns,
             BLUE_START_OR: selected_left_start_or,
             RED_START_OR: selected_right_start_or,
-            BLUE_END_OR: selected_left_end_or,
-            RED_END_OR: selected_right_end_or,
+            BLUE_END_OR: selected_blue_end_or,
+            RED_END_OR: selected_red_end_or,
         }
