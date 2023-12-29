@@ -2,7 +2,7 @@ from typing import Callable, Dict, List, TYPE_CHECKING, Tuple, Union
 from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout, QApplication
 from PyQt6.QtCore import Qt
 import pandas as pd
-from Enums import Orientation
+from Enums import Letter, MotionAttributesDicts, Orientation, PictographAttributesDict
 from data.rules import get_next_letters
 from constants import *
 from objects.arrow.arrow import Arrow
@@ -11,43 +11,33 @@ from utilities.TypeChecking.TypeChecking import Turns
 from widgets.option_picker_tab.option import Option
 from PyQt6.QtGui import QPixmap
 
+from widgets.pictograph_scroll_area import PictographScrollArea
+
 
 if TYPE_CHECKING:
     from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
     from widgets.main_widget import MainWidget
 
 
-class OptionPickerScrollArea(QScrollArea):
+class OptionPickerScrollArea(PictographScrollArea):
     COLUMN_COUNT = 4
+    SPACING = 10
 
     def __init__(
         self,
         main_widget: "MainWidget",
         option_picker_tab: "OptionPickerTab",
     ) -> None:
-        super().__init__()
+        super().__init__(main_widget, option_picker_tab)
         self.main_widget = main_widget
         self.option_picker_tab = option_picker_tab
+        self.letters: Dict[Letter, List[Dict[str, str]]] = self.main_widget.letters
+        self.options: Dict[Letter, Option] = []
 
-        self.spacing = 10
-        self.options: List[Tuple[str, Option]] = []
-        self.pictographs = self._load_and_sort_data("PictographDataframe.csv")
         self._initialize_ui()
-        self._setup_scroll_bars()
         self._connect_signals()
 
     ### SETUP ###
-
-    def _initialize_ui(self) -> None:
-        self.setWidgetResizable(True)
-        self.container = QWidget()
-        self.option_picker_layout = QGridLayout(self.container)
-        self.container.setContentsMargins(10, 10, 10, 10)
-        self.setWidget(self.container)
-
-    def _setup_scroll_bars(self) -> None:
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
     def _connect_signals(self) -> None:
         self.main_widget.sequence_widget.beat_frame.picker_updater.connect(
@@ -56,18 +46,7 @@ class OptionPickerScrollArea(QScrollArea):
 
     ### HELPERS ###
 
-    def _load_and_sort_data(self, file_path: str) -> pd.DataFrame:
-        try:
-            df = pd.read_csv(file_path)
-            # Ensure the DataFrame is indexed by 'start_pos' and 'end_pos'
-            df.set_index(["start_pos", "end_pos"], inplace=True)
-            df.sort_index(inplace=True)
-            return df
-        except Exception as e:
-            print(f"Error loading data: {e}")
-            return pd.DataFrame()
-
-    def _show_start_pos(self) -> None:
+    def show_start_pos(self) -> None:
         """Shows options for the starting position."""
         self.clear()
         start_poss = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
@@ -78,25 +57,22 @@ class OptionPickerScrollArea(QScrollArea):
     def _add_start_pos_option(self, position_key: str, column: int) -> None:
         """Adds an option for the specified start position."""
         start_pos, end_pos = position_key.split("_")
-        if (start_pos, end_pos) in self.pictographs.index:
-            pd_row_data = self.pictographs.loc[(start_pos, end_pos)]
-            pd_row_data = (
-                pd_row_data.iloc[0]
-                if isinstance(pd_row_data, pd.DataFrame)
-                else pd_row_data
-            )
-            start_option = self._create_option(pd_row_data)
-            start_option.view.resize_option_view()
-            start_option.current_letter = start_option.pd_row_data[LETTER]
-            start_option.start_pos = start_option.pd_row_data.name[0]
-            start_option.end_pos = start_option.pd_row_data.name[1]
-            self._add_option_to_layout(start_option, True, 0, column)
-
+        for letter, entries in self.letters.items():
+            for entry in entries:
+                if entry['start_pos'] == start_pos and entry['end_pos'] == end_pos:
+                    start_option = self._create_option(entry)
+                    start_option.view.resize_option_view()
+                    start_option.current_letter = letter
+                    start_option.start_pos = start_pos
+                    start_option.end_pos = end_pos
+                    self._add_option_to_layout(start_option, True, 0, column)
+                    break
+                
     def _add_option_to_layout(
         self, option: Option, is_start_pos: bool, row: int, col: int
     ) -> None:
         option.view.mousePressEvent = self._get_click_handler(option, is_start_pos)
-        self.option_picker_layout.addWidget(option.view, row, col)
+        self.layout.addWidget(option.view, row, col)
 
     def load_image_if_visible(self, option: "Option") -> None:
         """Loads the image for an option if it is visible."""
@@ -123,23 +99,52 @@ class OptionPickerScrollArea(QScrollArea):
             option.image_loaded = True
 
     def apply_turn_filters(self, filters: Dict[str, Union[Turns, Orientation]]) -> None:
-        # self.clear()
-        for idx, (letter, option) in enumerate(self.options):
+        for option in self.options.values():
             if option.meets_turn_criteria(filters):
-                self._add_option_to_layout(
-                    option,
-                    is_start_pos=False,
-                    row=idx // self.COLUMN_COUNT,
-                    col=idx % self.COLUMN_COUNT,
-                )
+                self.update_displayed_pictographs()
+
+    def update_displayed_pictographs(self) -> None:
+        """
+        Updates the displayed pictographs based on the selected letters.
+        """
+        while self.layout.count():
+            widget = self.layout.takeAt(0).widget()
+            if widget is not None:
+                widget.setParent(None)
+                widget.deleteLater()
+
+        filtered_pictographs = self.option_picker_tab.pictograph_df[
+            self.option_picker_tab.pictograph_df["letter"].isin(
+                self.option_picker_tab.selected_pictographs
+            )
+        ]
+
+        for i, (index, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
+            option: Option = self._create_option(pictograph_data)
+            # Add the pictograph view to the layout
+            row = i // self.COLUMN_COUNT
+            col = i % self.COLUMN_COUNT
+            self.layout.addWidget(option.view, row, col)
+            self.options[option.current_letter] = option
+            # Update the pictograph to reflect the new items
+            option.update_pictograph()
+            # Resize the view to fit the scene
+            option.view.resize_option_view()
+
+        self.update_scroll_area_content()
+
+    def update_scroll_area_content(self):
+        self.container.adjustSize()
+        self.layout.update()
+        self.updateGeometry()
 
     ### CREATE ###
 
-    def _create_option(self, pd_row_data: pd.Series):
+    def _create_option(self, motion_dict: PictographAttributesDict):
         option = Option(self.main_widget, self)
-        option.current_letter = pd_row_data[LETTER]
+        option.current_letter = motion_dict[LETTER]
         filters = self.option_picker_tab.filter_frame.filters
-        option._finalize_motion_setup(pd_row_data, filters)
+        option._finalize_motion_setup(motion_dict, filters)
         option.update_pictograph()
         self.load_image_if_visible(option)
         return option
@@ -167,8 +172,8 @@ class OptionPickerScrollArea(QScrollArea):
         option.update_pictograph()
 
     def clear(self) -> None:
-        while self.option_picker_layout.count():
-            child = self.option_picker_layout.takeAt(0)
+        while self.layout.count():
+            child = self.layout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
 
@@ -180,8 +185,8 @@ class OptionPickerScrollArea(QScrollArea):
         specific_end_pos = clicked_option.end_pos
 
         # Filter the DataFrame correctly
-        filtered_data = self.pictographs[
-            self.pictographs.index.get_level_values(0) == specific_end_pos
+        filtered_data = self.letters[
+            self.letters.index.get_level_values(0) == specific_end_pos
         ]
         filtered_data = filtered_data[filtered_data[LETTER].isin(next_possible_letters)]
 

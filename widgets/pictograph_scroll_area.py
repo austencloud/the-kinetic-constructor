@@ -6,26 +6,34 @@ from constants import LETTER
 from utilities.TypeChecking.TypeChecking import Turns
 from PyQt6.QtCore import Qt
 from widgets.image_generator_tab.ig_pictograph import IGPictograph
-from widgets.pictograph_scroll_area import PictographScrollArea
 
 if TYPE_CHECKING:
+    from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
     from widgets.image_generator_tab.ig_tab import IGTab
     from widgets.main_widget import MainWidget
 
 
-class IGScroll(PictographScrollArea):
+class PictographScrollArea(QScrollArea):
     COLUMN_COUNT = 4
     SPACING = 10
 
-    def __init__(self, main_widget: "MainWidget", ig_tab: "IGTab") -> None:
-        super().__init__(main_widget, ig_tab)
+    def __init__(self, main_widget: "MainWidget", parent_tab: Union["IGTab", "OptionPickerTab"]) -> None:
+        super().__init__(parent_tab)
         self.main_widget = main_widget
-        self.ig_tab = ig_tab
+        self.ig_tab = parent_tab
 
         self.ig_pictographs: Dict[Letter, IGPictograph] = {}
 
         self._initialize_ui()
 
+    def _initialize_ui(self) -> None:
+        self.setWidgetResizable(True)
+        self.container = QWidget()
+        self.layout: QGridLayout = QGridLayout(self.container)
+        self.container.setContentsMargins(10, 10, 10, 10)
+        self.setWidget(self.container)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
     def apply_turn_filters(self, filters: Dict[str, Union[Turns, Orientation]]) -> None:
         for ig_pictograph in self.ig_pictographs.values():

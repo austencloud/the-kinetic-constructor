@@ -119,8 +119,8 @@ class BaseDataFrameGenerator:
             "NoRotation",
         ]  # Include "NoRotation"
 
-        df["blue_motion_type"] = pd.Categorical(
-            df["blue_motion_type"], categories=motion_type_order, ordered=True
+        df[BLUE_MOTION_TYPE] = pd.Categorical(
+            df[BLUE_MOTION_TYPE], categories=motion_type_order, ordered=True
         )
         df["blue_prop_rot_dir"] = pd.Categorical(
             df["blue_prop_rot_dir"],
@@ -130,7 +130,7 @@ class BaseDataFrameGenerator:
         df.sort_values(
             by=[
                 "letter",
-                "blue_motion_type",
+                BLUE_MOTION_TYPE,
                 "blue_prop_rot_dir",
                 "start_pos",
             ],

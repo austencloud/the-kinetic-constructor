@@ -25,7 +25,7 @@ class IG_Pictograph_View(QGraphicsView):
     def resize_ig_pictograph(self) -> None:
         view_width = int(
             self.ig_pictograph.ig_scroll_area.width() / 4
-        ) - self.ig_pictograph.ig_scroll_area.spacing * (
+        ) - self.ig_pictograph.ig_scroll_area.SPACING * (
             self.ig_pictograph.ig_scroll_area.COLUMN_COUNT - 1
         )
 

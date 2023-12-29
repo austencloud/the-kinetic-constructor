@@ -43,7 +43,7 @@ class OptionView(QGraphicsView):
     def resize_option_view(self) -> None:
         view_width = int(
             self.option.option_picker_scroll.width() / 4
-        ) - self.option.option_picker_scroll.spacing * (
+        ) - self.option.option_picker_scroll.SPACING * (
             self.option.option_picker_scroll.COLUMN_COUNT - 1
         )
 

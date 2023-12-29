@@ -5,7 +5,14 @@ from PyQt6.QtGui import QImage, QPainter, QPixmap
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
 import pandas as pd
 
-from Enums import Color, Letter, LetterNumberType, Location, SpecificPosition
+from Enums import (
+    Color,
+    Letter,
+    LetterNumberType,
+    Location,
+    PictographAttributesDict,
+    SpecificPosition,
+)
 from constants import *
 from data.positions_map import get_specific_start_end_poss
 from objects.pictograph.position_engines.arrow_positioners.main_arrow_positioner import (
@@ -139,25 +146,27 @@ class Pictograph(QGraphicsScene):
         self.prop_positioner = MainPropPositioner(self)
         self.letter_engine = LetterEngine(self)
 
-    def _finalize_motion_setup(self, pd_row_data: pd.Series, filters) -> None:
+    def _finalize_motion_setup(
+        self, motion_dict: PictographAttributesDict, filters
+    ) -> None:
         """For pictographs that are generated from the pandas dataframe."""
-        self.pd_row_data = pd_row_data
+        self.pd_row_data = motion_dict
 
         red_motion_dict = self._create_motion_dict_from_pd_row_data(
-            pd_row_data, BLUE, filters
+            motion_dict, BLUE, filters
         )
 
         blue_motion_dict = self._create_motion_dict_from_pd_row_data(
-            pd_row_data, RED, filters
+            motion_dict, RED, filters
         )
         self._add_motion(red_motion_dict)
         self._add_motion(blue_motion_dict)
-        
+
         self.red_motion.setup_attributes(red_motion_dict)
         self.blue_motion.setup_attributes(blue_motion_dict)
 
-        self.start_pos = pd_row_data.name[0]
-        self.end_pos = pd_row_data.name[1]
+        self.start_pos = motion_dict[START_POS]
+        self.end_pos = motion_dict[END_POS]
 
         self.red_motion.arrow.location = self.red_motion.get_arrow_location(
             self.red_motion.start_loc,
@@ -167,10 +176,10 @@ class Pictograph(QGraphicsScene):
             self.blue_motion.start_loc,
             self.blue_motion.end_loc,
         )
-        self.red_arrow.motion_type = pd_row_data["red_motion_type"]
-        self.blue_arrow.motion_type = pd_row_data["blue_motion_type"]
-        self.red_motion.motion_type = pd_row_data["red_motion_type"]
-        self.blue_motion.motion_type = pd_row_data["blue_motion_type"]
+        self.red_arrow.motion_type = motion_dict[RED_MOTION_TYPE]
+        self.blue_arrow.motion_type = motion_dict[BLUE_MOTION_TYPE]
+        self.red_motion.motion_type = motion_dict[RED_MOTION_TYPE]
+        self.blue_motion.motion_type = motion_dict[BLUE_MOTION_TYPE]
 
         self.red_arrow.motion = self.red_motion
         self.blue_arrow.motion = self.blue_motion

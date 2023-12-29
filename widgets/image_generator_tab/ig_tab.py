@@ -34,7 +34,7 @@ class IGTab(QWidget):
         )
         self.pictograph_df = self.load_and_sort_data("PictographDataFrame.csv")
         self.selected_pictographs = []
-        self.setupUI()
+        self._setup_ui()
 
     ### DATA LOADING ###
 
@@ -51,14 +51,13 @@ class IGTab(QWidget):
 
     ### UI SETUP ###
 
-    def setupUI(self) -> None:
+    def _setup_ui(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.setLayout(self.layout)
-        button_panel = QFrame()
-        button_panel_layout = QVBoxLayout()
 
         self.letter_button_frame = IGLetterButtonFrame(self.main_widget)
-        self.layout.addWidget(self.letter_button_frame)
+        self.action_button_frame = self._setup_action_button_frame()
+        
 
         self.ig_scroll_area = IGScroll(self.main_widget, self)
         self.filter_frame = IGFilterFrame(self)
@@ -69,7 +68,23 @@ class IGTab(QWidget):
             }
             """
         )
-        action_button_frame = self._setup_action_button_frame()
+        button_panel = self._setup_button_panel()
+        self.layout.addWidget(self.letter_button_frame)
+        self.layout.addWidget(self.ig_scroll_area)
+        self.layout.addWidget(button_panel)
+
+        for key, button in self.letter_button_frame.buttons.items():
+            button.clicked.connect(
+                lambda checked, letter=key: self.on_letter_button_clicked(letter)
+            )
+
+    def _setup_button_panel(
+        
+        self
+    ):
+        button_panel = QFrame()
+        button_panel_layout = QVBoxLayout()
+        
         button_panel.setLayout(button_panel_layout)
         button_panel.setStyleSheet(
             """
@@ -83,20 +98,8 @@ class IGTab(QWidget):
         button_panel_layout.setContentsMargins(0, 0, 0, 0)
         button_panel_layout.setSpacing(0)
         button_panel_layout.addWidget(self.letter_button_frame, 8)
-        button_panel_layout.addWidget(action_button_frame, 1)
-        self.layout.addWidget(self.ig_scroll_area)
-        self.layout.addWidget(button_panel)
-        letters = self.get_letters()
-        letters.sort(
-            key=lambda x: x
-            if x not in ["Σ", "Δ", "θ", "Ω", "Φ", "Ψ", "Λ", "α", "β", "Γ"]
-            else chr(ord(x) + 1000)
-        )
-
-        for key, button in self.letter_button_frame.buttons.items():
-            button.clicked.connect(
-                lambda checked, letter=key: self.on_letter_button_clicked(letter)
-            )
+        button_panel_layout.addWidget(self.action_button_frame, 1)
+        return button_panel
 
     def _setup_action_button_frame(self) -> QFrame:
         action_button_frame = QFrame()
@@ -152,8 +155,6 @@ class IGTab(QWidget):
                 }
             """
 
-    def get_letters(self) -> List[str]:
-        return self.pictograph_df.iloc[:, 0].unique().tolist()
 
     ### IMAGE GENERATION ###
 
@@ -178,7 +179,7 @@ class IGTab(QWidget):
             self.selected_pictographs.append(letter)
         elif not state and letter in self.selected_pictographs:
             self.selected_pictographs.remove(letter)
-        self.ig_scroll_area.update_displayed_pictographs() 
+        self.ig_scroll_area.update_displayed_pictographs()
 
     def generate_selected_images(self) -> None:
         main_widget = self.parentWidget()
@@ -201,7 +202,7 @@ class IGTab(QWidget):
         main_widget.setEnabled(True)
         QApplication.restoreOverrideCursor()
         self.setMouseTracking(True)
-        
+
     def generate_images_for_letter(self, letter) -> None:
         pictographs_for_letter: pd.DataFrame = self.pictograph_df[
             self.pictograph_df[LETTER] == letter
@@ -220,15 +221,3 @@ class IGTab(QWidget):
         ig_pictograph = self._create_ig_pictograph(pd_row_data)
         ig_pictograph.update_pictograph()
         ig_pictograph.render_and_cache_image()
-
-    ### OPTION CREATION ###
-
-    def _create_ig_pictograph(self, pd_row_data: pd.Series):
-        ig_pictograph = IGPictograph(self.main_widget, self.ig_scroll_area)
-        ig_pictograph.current_letter = pd_row_data[LETTER]
-        filters = self.filter_frame.filters
-        ig_pictograph._finalize_motion_setup(pd_row_data, filters)
-        ig_pictograph.update_pictograph()
-        return ig_pictograph
-
-

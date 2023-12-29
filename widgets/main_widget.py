@@ -14,10 +14,18 @@ from PyQt6.QtGui import QWheelEvent, QPixmap
 import pandas as pd
 from constants import (
     BLUE,
+    BLUE_END_OR,
+    BLUE_MOTION_TYPE,
+    BLUE_START_LOC,
     DIAMOND,
+    END_POS,
     LETTER,
     RED,
+    RED_END_LOC,
+    RED_MOTION_TYPE,
+    RED_START_LOC,
     STAFF,
+    START_POS,
 )
 from utilities.TypeChecking.TypeChecking import PictographDataframe
 from widgets.image_generator_tab.ig_tab import IGTab
@@ -215,9 +223,9 @@ class MainWidget(QWidget):
         return self.image_cache[image_path]
 
     def generate_image_path(self, pictograph: Pictograph) -> str:
-        pd_row_data = pictograph.pd_row_data
+        motion_dict = pictograph.pd_row_data
         prop_type = self.prop_type
-        letter = pd_row_data[LETTER]
+        letter = motion_dict[LETTER]
         blue_turns = pictograph.motions[BLUE].turns
         red_turns = pictograph.motions[RED].turns
         blue_turns = pictograph.motions[BLUE].turns
@@ -237,11 +245,13 @@ class MainWidget(QWidget):
 
         image_name = (
             f"{letter}_"
-            f"({pd_row_data.name[0]}→{pd_row_data.name[1]})_"
-            f"({pd_row_data["blue_motion_type"]}_{pd_row_data['blue_start_loc']}→{pd_row_data['blue_end_loc']}_"
+            f"({motion_dict[START_POS]}→{motion_dict[END_POS]})_"
+            f"({motion_dict[BLUE_MOTION_TYPE]}_"
+            f"{motion_dict[BLUE_START_LOC]}→{motion_dict[BLUE_END_OR]}_"
             f"{blue_turns}_"
             f"{pictograph.motions[BLUE].start_or}→{pictograph.motions[BLUE].end_or})_"
-            f"({pd_row_data["red_motion_type"]}_{pd_row_data['red_start_loc']}→{pd_row_data['red_end_loc']}_"
+            f"({motion_dict[RED_MOTION_TYPE]}_"
+            f"{motion_dict[RED_START_LOC]}→{motion_dict[RED_END_LOC]}_"
             f"{red_turns}_"
             f"{pictograph.motions[RED].start_or}→{pictograph.motions[RED].end_or})_"
             f"{prop_type}.png"

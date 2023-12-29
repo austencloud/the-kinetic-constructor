@@ -21,7 +21,6 @@ class OptionPickerFilterFrame(FilterFrame):
         self.option_picker_tab = option_picker_tab
         self.apply_filters()
         self.connect_filter_boxes()
-        self.option_picker_tab.scroll_area.apply_turn_filters(self.filters)
 
     def apply_filters(self) -> None:
         selected_blue_turns = self.comboboxes[BLUE_TURNS].currentText()
@@ -30,7 +29,7 @@ class OptionPickerFilterFrame(FilterFrame):
         selected_right_start_or = self.comboboxes[RED_START_OR].currentText()
         selected_left_end_or = self.comboboxes[BLUE_END_OR].currentText()
         selected_right_end_or = self.comboboxes[RED_END_OR].currentText()
-        
+
         self.filters: Dict[str, Union[Turns, Orientation]] = {
             BLUE_TURNS: selected_blue_turns,
             RED_TURNS: selected_red_turns,

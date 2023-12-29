@@ -554,11 +554,24 @@ class TKAHandpathMode(Enum):
 
 
 class PictographAttributesDict(TypedDict):
+    letter: Letter
     start_pos: Position
     end_pos: Position
-    letter_type: LetterNumberType
-    vtg_handpath_mode: VTGHandpathMode
-    motion_type_combination: MotionTypeCombination
+    blue_motion_type: MotionType
+    blue_prop_rot_dir: PropRotationDirection
+    blue_start_loc: Location
+    blue_end_loc: Location
+    blue_turns: Turns
+    blue_start_or: Orientation
+    blue_end_or: Orientation
+    red_motion_type: MotionType
+    red_prop_rot_dir: PropRotationDirection
+    red_start_loc: Location
+    red_end_loc: Location
+    red_turns: Turns
+    red_start_or: Orientation
+    red_end_or: Orientation
+    
 
 
 class PictographType(Enum):

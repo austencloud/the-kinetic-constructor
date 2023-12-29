@@ -25,16 +25,23 @@ COUNTER_CLOCKWISE = "ccw"
 CW_HANDPATH = "cw_handpath"
 CCW_HANDPATH = "ccw_handpath"
 
-BLUE_TURNS = "blue_turns"
-RED_TURNS = "red_turns"
 
 START_POS = "start_pos"
 END_POS = "end_pos"
 
+BLUE_MOTION_TYPE = "blue_motion_type"
+BLUE_START_LOC = "blue_start_loc"
+BLUE_END_LOC = "blue_end_loc"
 BLUE_START_OR = "blue_start_or"
-RED_START_OR = "red_start_or"
 BLUE_END_OR = "blue_end_or"
+BLUE_TURNS = "blue_turns"
+
+RED_MOTION_TYPE = "red_motion_type"
+RED_START_LOC = "red_start_loc"
+RED_END_LOC = "red_end_loc"
+RED_START_OR = "red_start_or"
 RED_END_OR = "red_end_or"
+RED_TURNS = "red_turns"
 
 
 RED = "red"
