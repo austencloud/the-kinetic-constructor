@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, Tuple
 import pandas as pd
 from PyQt6.QtWidgets import (
     QWidget,
@@ -54,10 +54,12 @@ class IGTab(QWidget):
     def setupUI(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.setLayout(self.layout)
-        button_frame = QFrame()
-        button_frame_layout = QVBoxLayout()
+        button_panel = QFrame()
+        button_panel_layout = QVBoxLayout()
+
         self.letter_button_frame = IGLetterButtonFrame(self.main_widget)
-        action_button_frame = QFrame()
+        self.layout.addWidget(self.letter_button_frame)
+
         self.ig_scroll_area = IGScroll(self.main_widget, self)
         self.filter_frame = IGFilterFrame(self)
         self.letter_button_frame.setStyleSheet(
@@ -67,37 +69,23 @@ class IGTab(QWidget):
             }
             """
         )
-        action_button_frame_layout = QVBoxLayout()
-        button_frame_layout.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.generate_all_button = QPushButton("Generate All Images 🧨", self)
-        self.generate_all_button.setStyleSheet("font-size: 16px;")
-        self.generate_selected_button = QPushButton("Generate Selected Images", self)
-        self.generate_selected_button.setStyleSheet("font-size: 16px;")
-        self.layout.addWidget(self.letter_button_frame)
-
-        self.generate_all_button.clicked.connect(self.generate_images_for_all_letters)
-        self.generate_selected_button.clicked.connect(self.generate_selected_images)
-
-        action_button_frame.setLayout(action_button_frame_layout)
-        button_frame.setLayout(button_frame_layout)
-        button_frame.setStyleSheet(
+        action_button_frame = self._setup_action_button_frame()
+        button_panel.setLayout(button_panel_layout)
+        button_panel.setStyleSheet(
             """
             QFrame {
                 border: 1px solid black;
             }
             """
         )
-        button_frame.setContentsMargins(0, 0, 0, 0)
-        button_frame_layout.setContentsMargins(0, 0, 0, 0)
-        button_frame_layout.setSpacing(0)
-        action_button_frame_layout.setContentsMargins(0, 0, 0, 0)
-        action_button_frame_layout.setSpacing(0)
-        action_button_frame_layout.addWidget(self.generate_all_button)
-        action_button_frame_layout.addWidget(self.generate_selected_button)
-        button_frame_layout.addWidget(self.letter_button_frame, 8)
-        button_frame_layout.addWidget(action_button_frame, 1)
+        button_panel.setContentsMargins(0, 0, 0, 0)
+        button_panel_layout.setAlignment(Qt.AlignmentFlag.AlignRight)
+        button_panel_layout.setContentsMargins(0, 0, 0, 0)
+        button_panel_layout.setSpacing(0)
+        button_panel_layout.addWidget(self.letter_button_frame, 8)
+        button_panel_layout.addWidget(action_button_frame, 1)
         self.layout.addWidget(self.ig_scroll_area)
-        self.layout.addWidget(button_frame)
+        self.layout.addWidget(button_panel)
         letters = self.get_letters()
         letters.sort(
             key=lambda x: x
@@ -109,6 +97,32 @@ class IGTab(QWidget):
             button.clicked.connect(
                 lambda checked, letter=key: self.on_letter_button_clicked(letter)
             )
+
+    def _setup_action_button_frame(self) -> QFrame:
+        action_button_frame = QFrame()
+        action_buttons = self._setup_action_buttons()
+        action_button_frame_layout = QVBoxLayout(action_button_frame)
+        action_button_frame_layout.setContentsMargins(0, 0, 0, 0)
+        action_button_frame_layout.setSpacing(0)
+        for button in action_buttons.values():
+            action_button_frame_layout.addWidget(button)
+
+        return action_button_frame
+
+    def _setup_action_buttons(self) -> Dict[str, QPushButton]:
+        buttons = {}
+        generate_all_images_button = QPushButton("Generate All Images 🧨", self)
+        generate_all_images_button.setStyleSheet("font-size: 16px;")
+
+        generate_selected_images_button = QPushButton("Generate Selected Images", self)
+        generate_selected_images_button.setStyleSheet("font-size: 16px;")
+
+        generate_all_images_button.clicked.connect(self.generate_all_images)
+        generate_selected_images_button.clicked.connect(self.generate_selected_images)
+
+        buttons["generate_all_button"] = generate_all_images_button
+        buttons["generate_selected_button"] = generate_selected_images_button
+        return buttons
 
     ### LETTERS ###
 
@@ -177,7 +191,7 @@ class IGTab(QWidget):
         QApplication.restoreOverrideCursor()
         self.setMouseTracking(True)  # Enable mouse clicks
 
-    def generate_images_for_all_letters(self) -> None:
+    def generate_all_images(self) -> None:
         main_widget = self.parentWidget()  # Access the main widget
         main_widget.setEnabled(False)  # Disable the widget
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)  # Show loading cursor
