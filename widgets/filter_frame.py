@@ -1,10 +1,9 @@
-from typing import TYPE_CHECKING, Dict, Union
+from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import (
     QFrame,
     QVBoxLayout,
     QHBoxLayout,
     QLabel,
-    QCheckBox,
     QComboBox,
 )
 from PyQt6.QtGui import QFont

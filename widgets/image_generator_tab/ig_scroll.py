@@ -1,10 +1,4 @@
-from typing import TYPE_CHECKING, Dict, Union
-from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
-import pandas as pd
-from Enums import Letter, Orientation, PictographAttributesDict
-from constants import LETTER
-from utilities.TypeChecking.TypeChecking import Turns
-from PyQt6.QtCore import Qt
+from typing import TYPE_CHECKING
 from widgets.image_generator_tab.ig_pictograph import IGPictograph
 from widgets.pictograph_scroll_area import PictographScrollArea
 

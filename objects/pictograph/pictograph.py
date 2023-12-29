@@ -30,9 +30,6 @@ from ..grid import Grid
 from objects.pictograph.pictograph_event_handler import PictographEventHandler
 from objects.pictograph.pictograph_init import PictographInit
 from objects.pictograph.pictograph_menu_handler import PictographMenuHandler
-from objects.pictograph.position_engines.arrow_positioners.base_arrow_positioner import (
-    BaseArrowPositioner,
-)
 from objects.pictograph.position_engines.prop_positioners.main_prop_positioner import (
     MainPropPositioner,
 )

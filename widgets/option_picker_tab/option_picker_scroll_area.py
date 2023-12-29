@@ -1,13 +1,8 @@
-from typing import Callable, Dict, List, TYPE_CHECKING, Tuple, Union
-from PyQt6.QtWidgets import QScrollArea, QWidget, QGridLayout, QApplication
+from typing import Callable, TYPE_CHECKING
+from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
-import pandas as pd
-from Enums import Letter, MotionAttributesDicts, Orientation, PictographAttributesDict
 from data.rules import get_next_letters
 from constants import *
-from objects.arrow.arrow import Arrow
-from objects.prop.prop import Prop
-from utilities.TypeChecking.TypeChecking import Turns
 from widgets.option_picker_tab.option import Option
 from PyQt6.QtGui import QPixmap
 

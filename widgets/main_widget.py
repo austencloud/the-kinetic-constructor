@@ -15,7 +15,6 @@ import pandas as pd
 from constants import (
     BLUE,
     BLUE_END_LOC,
-    BLUE_END_OR,
     BLUE_MOTION_TYPE,
     BLUE_START_LOC,
     DIAMOND,

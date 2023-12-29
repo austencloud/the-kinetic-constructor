@@ -1,4 +1,3 @@
-from Enums import non_strictly_placed_props, strictly_placed_props
 from constants import PRO, ANTI
 from objects.pictograph.position_engines.prop_positioners.base_prop_positioner import (
     BasePropPositioner,

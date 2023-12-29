@@ -14,10 +14,6 @@ from constants import (
     NORTHWEST,
 )
 from objects.arrow.arrow import Arrow
-from typing import TYPE_CHECKING, Dict, Callable
-from objects.pictograph.position_engines.arrow_positioners.by_prop_type.staff_arrow_positioner import (
-    StaffArrowPositioner,
-)
 from PyQt6.QtCore import QPointF
 
 

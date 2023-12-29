@@ -14,7 +14,6 @@ from constants import (
     NORTHWEST,
 )
 from objects.arrow.arrow import Arrow
-from typing import TYPE_CHECKING, Dict, Callable
 
 from PyQt6.QtCore import QPointF
 

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, Tuple
+from typing import TYPE_CHECKING, Dict
 import pandas as pd
 from PyQt6.QtWidgets import (
     QWidget,
@@ -9,16 +9,14 @@ from PyQt6.QtWidgets import (
     QApplication,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from constants import BLUE, END_POS, LETTER, RED, START_POS
+from constants import END_POS, LETTER, START_POS
 from widgets.image_generator_tab.ig_filter_frame import IGFilterFrame
 from widgets.image_generator_tab.ig_letter_button_frame import IGLetterButtonFrame
-from widgets.image_generator_tab.ig_pictograph import IGPictograph
 from widgets.image_generator_tab.ig_scroll import IGScroll
 
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-from typing import List
 
 
 class IGTab(QWidget):
