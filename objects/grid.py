@@ -50,13 +50,21 @@ class GridItem(QGraphicsSvgItem):
 class Grid:
     def __init__(self, grid_scene: Union["ArrowBox", "PropBox", "Pictograph"]) -> None:
         self.items: Dict[str, GridItem] = {}
-        self._initialize_grid_elements(grid_scene)
+        self._init_grid(grid_scene)
         self._apply_grid_mode(grid_scene.main_widget.grid_mode)
 
-    def _initialize_grid_elements(
+    def _init_grid(
         self, grid_scene: Union["ArrowBox", "PropBox", "Pictograph"]
     ) -> None:
         self.center = self.get_circle_coordinates("center_point")
+        intercardinal_points = [
+            NORTHEAST,
+            SOUTHEAST,
+            SOUTHWEST,
+            NORTHWEST,
+        ]
+        cardinal_points = [NORTH, EAST, SOUTH, WEST]
+
         self.diamond_hand_points = self._init_points(
             [
                 "n_diamond_hand_point",
@@ -64,7 +72,7 @@ class Grid:
                 "s_diamond_hand_point",
                 "w_diamond_hand_point",
             ],
-            [NORTH, EAST, SOUTH, WEST],
+            cardinal_points,
         )
         self.strict_diamond_hand_points = self._init_points(
             [
@@ -73,7 +81,7 @@ class Grid:
                 "strict_s_diamond_hand_point",
                 "strict_w_diamond_hand_point",
             ],
-            [NORTH, EAST, SOUTH, WEST],
+            cardinal_points,
         )
         self.box_hand_points = self._init_points(
             [
@@ -82,13 +90,18 @@ class Grid:
                 "sw_box_hand_point",
                 "nw_box_hand_point",
             ],
-            [
-                NORTHEAST,
-                SOUTHEAST,
-                SOUTHWEST,
-                NORTHWEST,
-            ],
+            intercardinal_points,
         )
+        self.strict_box_hand_points = self._init_points(
+            [
+                "strict_ne_box_hand_point",
+                "strict_se_box_hand_point",
+                "strict_sw_box_hand_point",
+                "strict_nw_box_hand_point",
+            ],
+            intercardinal_points,
+        )
+
         self.diamond_layer2_points = self._init_points(
             [
                 "ne_diamond_layer2_point",
@@ -96,12 +109,7 @@ class Grid:
                 "sw_diamond_layer2_point",
                 "nw_diamond_layer2_point",
             ],
-            [
-                NORTHEAST,
-                SOUTHEAST,
-                SOUTHWEST,
-                NORTHWEST,
-            ],
+            intercardinal_points,
         )
         self.strict_diamond_layer2_points = self._init_points(
             [
@@ -110,12 +118,7 @@ class Grid:
                 "strict_sw_diamond_layer2_point",
                 "strict_nw_diamond_layer2_point",
             ],
-            [
-                NORTHEAST,
-                SOUTHEAST,
-                SOUTHWEST,
-                NORTHWEST,
-            ],
+            intercardinal_points,
         )
         self.box_layer2_points = self._init_points(
             [
@@ -124,7 +127,16 @@ class Grid:
                 "s_box_layer2_point",
                 "w_box_layer2_point",
             ],
-            [NORTH, EAST, SOUTH, WEST],
+            cardinal_points,
+        )
+        self.strict_box_layer2_points = self._init_points(
+            [
+                "strict_n_box_layer2_point",
+                "strict_e_box_layer2_point",
+                "strict_s_box_layer2_point",
+                "strict_w_box_layer2_point",
+            ],
+            cardinal_points,
         )
         self._create_grid_items(grid_scene)
 

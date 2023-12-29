@@ -70,21 +70,13 @@ class BasePropPositioner:
         self.prop_type_counts = self._count_prop_types()
 
         for prop in self.props:
-            self.set_initial_prop_position(prop)
+            self._set_prop_location(prop)
 
         for ghost_prop in self.scene.ghost_props.values():
-            self.set_initial_prop_position(ghost_prop)
+            self._set_prop_location(ghost_prop)
 
         if self.scene.has_props_in_beta():
             self._reposition_beta_props()
-
-    def set_initial_prop_position(self, prop):
-        if any(
-            self.prop_type_counts[prop_type] == 2 for prop_type in strictly_placed_props
-        ):
-            self._set_strict_prop_location(prop)
-        else:
-            self._set_default_prop_location(prop)
 
     def _count_prop_types(self) -> Dict[str, int]:
         return {
@@ -92,28 +84,31 @@ class BasePropPositioner:
             for ptype in PropType
         }
 
-    def _set_strict_prop_location(self, prop: "Prop") -> None:
+    def _set_prop_location(self, prop: "Prop", strict: bool = False) -> None:
         position_offsets = self._get_position_offsets(prop)
         key = (prop.orientation, prop.location)
         offset = position_offsets.get(key, QPointF(0, 0))
         prop.setTransformOriginPoint(0, 0)
-        if self.scene.grid.grid_mode == DIAMOND:
-            if prop.location in self.scene.grid.strict_diamond_hand_points:
-                prop.setPos(
-                    self.scene.grid.strict_diamond_hand_points[prop.location] + offset
-                )
 
-    def _set_default_prop_location(self, prop: "Prop") -> None:
-        position_offsets = self._get_position_offsets(prop)
-        key = (prop.orientation, prop.location)
-        offset = position_offsets.get(key, QPointF(0, 0))
-        prop.setTransformOriginPoint(0, 0)
         if self.scene.grid.grid_mode == DIAMOND:
-            if prop.location in self.scene.grid.diamond_hand_points:
-                prop.setPos(self.scene.grid.diamond_hand_points[prop.location] + offset)
+            location_points = self._get_location_points(strict, DIAMOND)
         elif self.scene.grid.grid_mode == BOX:
-            if prop.location in self.scene.grid.box_hand_points:
-                prop.setPos(self.scene.grid.box_hand_points[prop.location] + offset)
+            location_points = self._get_location_points(strict, BOX)
+
+        if prop.location in location_points:
+            prop.setPos(location_points[prop.location] + offset)
+
+    def _get_location_points(self, strict: bool, grid_mode: str) -> Dict[str, QPointF]:
+        if strict:
+            if grid_mode == DIAMOND:
+                return self.scene.grid.strict_diamond_hand_points
+            # elif grid_mode == BOX:
+            #     return self.scene.grid.strict_box_hand_points
+        else:
+            if grid_mode == DIAMOND:
+                return self.scene.grid.diamond_hand_points
+            # elif grid_mode == BOX:
+            #     return self.scene.grid.box_hand_points
 
     def _reposition_small_bilateral_props(
         self: Union[
@@ -132,7 +127,7 @@ class BasePropPositioner:
                 elif prop.prop_type in non_strictly_placed_props:
                     self._set_default_prop_location(prop)
 
-        else: # scene has non-hybrid orientations
+        else:  # scene has non-hybrid orientations
             if self.current_letter in ["G", "H"]:
                 self.reposition_G_H()
             elif self.current_letter == "I":
