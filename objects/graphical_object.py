@@ -39,34 +39,20 @@ class GraphicalObject(QGraphicsSvgItem):
         self.setTransformOriginPoint(self.center)
 
     def set_svg_color(self, new_color: str) -> bytes:
+        def replace_class_color(match: re.Match) -> str:
+            return match.group(1) + new_hex_color + match.group(3)
+        def replace_fill_color(match: re.Match):
+            return match.group(1) + new_hex_color + match.group(3)
         COLOR_MAP = {RED: HEX_RED, BLUE: HEX_BLUE}
         new_hex_color = COLOR_MAP.get(new_color)
-
         with open(self.svg_file, "r") as f:
             svg_data = f.read()
-
-        # This regex pattern looks for the class color definition in the style tag
         class_color_pattern = re.compile(
             r"(\.st0\s*\{\s*fill:\s*)(#[a-fA-F0-9]{6})(\s*;\s*\})"
         )
-
-        # This function will replace the old color with the new color
-        def replace_class_color(match: re.Match) -> str:
-            return match.group(1) + new_hex_color + match.group(3)
-
-        # Replace all occurrences of the class color definition
         svg_data = class_color_pattern.sub(replace_class_color, svg_data)
-
-        # This regex pattern looks for the fill attribute and captures the color value
         fill_pattern = re.compile(r'(fill=")(#[a-fA-F0-9]{6})(")')
-
-        # This function will replace the old color with the new color
-        def replace_fill_color(match: re.Match):
-            return match.group(1) + new_hex_color + match.group(3)
-
-        # Replace all occurrences of the fill color
         svg_data = fill_pattern.sub(replace_fill_color, svg_data)
-
         return svg_data.encode("utf-8")
 
     def setup_svg_renderer(self, svg_file: str) -> None:

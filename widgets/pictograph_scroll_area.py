@@ -64,7 +64,7 @@ class PictographScrollArea(QScrollArea):
             row = i // self.COLUMN_COUNT
             col = i % self.COLUMN_COUNT
             self.layout.addWidget(ig_pictograph.view, row, col)
-            self.ig_pictographs[ig_pictograph.current_letter] = ig_pictograph
+            self.pictographs[ig_pictograph.current_letter] = ig_pictograph
             ig_pictograph.update_pictograph()
             ig_pictograph.view.resize_ig_pictograph()
 
