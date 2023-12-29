@@ -50,6 +50,7 @@ class MainPropPositioner:
             **{letter: Type4PropPositioner for letter in Type4_letters},
             **{letter: Type5PropPositioner for letter in Type5_letters},
             **{letter: Type6PropPositioner for letter in Type6_letters},
+            **{None: BasePropPositioner},
         }
 
         self.positioners = {

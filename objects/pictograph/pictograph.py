@@ -8,6 +8,7 @@ import pandas as pd
 from Enums import Color, Letter, LetterNumberType, Location, SpecificPosition
 from constants import *
 from data.positions_map import get_specific_start_end_poss
+from objects.pictograph.position_engines.arrow_positioners.main_arrow_positioner import MainArrowPositioner
 
 from ..letter_item import LetterItem
 from ..motion import Motion
@@ -17,11 +18,11 @@ from ..ghosts.ghost_arrow import GhostArrow
 from ..ghosts.ghost_prop import GhostProp
 from ..grid import Grid
 
-from pictograph_event_handler import PictographEventHandler
-from pictograph_init import PictographInit
-from pictograph_menu_handler import PictographMenuHandler
-from position_engines.arrow_positioners.base_arrow_positioner import BaseArrowPositioner
-from position_engines.prop_positioners.main_prop_positioner import MainPropPositioner
+from objects.pictograph.pictograph_event_handler import PictographEventHandler
+from objects.pictograph.pictograph_init import PictographInit
+from objects.pictograph.pictograph_menu_handler import PictographMenuHandler
+from objects.pictograph.position_engines.arrow_positioners.base_arrow_positioner import BaseArrowPositioner
+from objects.pictograph.position_engines.prop_positioners.main_prop_positioner import MainPropPositioner
 from utilities.letter_engine import LetterEngine
 from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
 
@@ -123,7 +124,7 @@ class Pictograph(QGraphicsScene):
 
     def setup_managers(self, main_widget: "MainWidget") -> None:
         self.pictograph_menu_handler = PictographMenuHandler(main_widget, self)
-        self.arrow_positioner = BaseArrowPositioner(self)
+        self.arrow_positioner = MainArrowPositioner(self)
         self.prop_positioner = MainPropPositioner(self)
         self.letter_engine = LetterEngine(self)
 
@@ -355,16 +356,10 @@ class Pictograph(QGraphicsScene):
 
     def update_pictograph(self) -> None:
         self.update_letter()
-        self.update_arrows()
-        self.update_props()
+        self.arrow_positioner.position_arrows()
+        self.prop_positioner.position_props()
         if self.graph_type == MAIN:
             self.update_attr_panel()
-
-    def update_arrows(self) -> None:
-        self.arrow_positioner.update_arrow_positions()
-
-    def update_props(self) -> None:
-        self.prop_positioner.position_props()
 
     def update_letter(self) -> None:
         if all(motion.motion_type for motion in self.motions.values()):

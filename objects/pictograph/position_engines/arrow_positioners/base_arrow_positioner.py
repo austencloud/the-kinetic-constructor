@@ -46,12 +46,14 @@ class BaseArrowPositioner:
         self.motions = self.pictograph.motions.values()
         self.arrows = self.pictograph.arrows.values()
         self.ghost_arrows = self.pictograph.ghost_arrows.values()
-        self.all_arrows = self.arrows + self.ghost_arrows
 
         self.current_letter = self.pictograph.current_letter
 
-        for arrow in self.all_arrows:
+        for arrow in self.arrows:
             self._set_arrow_to_default_loc(arrow)
+
+        for ghost_arrow in self.ghost_arrows:
+            self._set_arrow_to_default_loc(ghost_arrow)
 
         if self.current_letter in self.letters_to_reposition:
             self._reposition_arrows()
@@ -66,7 +68,6 @@ class BaseArrowPositioner:
             "Type6ArrowPositioner",
         ]
     ) -> None:
-
         if self.current_letter in ["G", "H"]:
             self._reposition_G_H()
         elif self.current_letter == "I":
@@ -77,7 +78,6 @@ class BaseArrowPositioner:
             self._reposition_Q()
         elif self.current_letter in ["R"]:
             self._reposition_R()
-                
 
     def _calculate_adjustment_tuple(self, location: str, distance: int) -> QPointF:
         location_adjustments = {

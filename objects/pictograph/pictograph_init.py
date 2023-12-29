@@ -110,6 +110,7 @@ class PictographInit:
         }
         arrow = Arrow(self.pictograph, arrow_attributes, None)
         ghost_arrow = GhostArrow(self.pictograph, arrow_attributes, None)
+        arrow.ghost = ghost_arrow
         return arrow, ghost_arrow
 
     def create_prop(self, color: Color, prop_type: PropType) -> Tuple[Prop, GhostProp]:

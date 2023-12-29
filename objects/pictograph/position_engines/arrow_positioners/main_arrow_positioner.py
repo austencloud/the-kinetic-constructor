@@ -1,4 +1,3 @@
-from objects.pictograph.pictograph import Pictograph
 from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type1_arrow_positioner import (
     Type1ArrowPositioner,
 )
@@ -28,6 +27,10 @@ from utilities.TypeChecking.Letters import (
     Type5_letters,
     Type6_letters,
 )
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from objects.pictograph.pictograph import Pictograph
 
 
 class MainArrowPositioner:
@@ -43,13 +46,15 @@ class MainArrowPositioner:
             **{letter: Type4ArrowPositioner for letter in Type4_letters},
             **{letter: Type5ArrowPositioner for letter in Type5_letters},
             **{letter: Type6ArrowPositioner for letter in Type6_letters},
+            **{None: BaseArrowPositioner},
         }
-
         self.positioners = {
-            letter: pos_class(scene)
-            for letter, pos_class in letter_to_positioner.items()
+            letter: positioner(scene)
+            for letter, positioner in letter_to_positioner.items()
         }
 
     def position_arrows(self) -> None:
-        positioner: BaseArrowPositioner = self.positioners[self.scene.current_letter]
+        positioner: BaseArrowPositioner = self.positioners.get(
+            self.scene.current_letter
+        )
         positioner.update_arrow_positions()
