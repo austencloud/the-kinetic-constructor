@@ -1,8 +1,9 @@
-from typing import TYPE_CHECKING, Dict, Union
+from typing import TYPE_CHECKING, Dict, List, Union
 from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
 import pandas as pd
 from Enums import Letter, Orientation
 from constants import LETTER
+from objects.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.TypeChecking import Turns
 from PyQt6.QtCore import Qt
 from widgets.image_generator_tab.ig_pictograph import IGPictograph
@@ -20,10 +21,10 @@ class PictographScrollArea(QScrollArea):
     def __init__(self, main_widget: "MainWidget", parent_tab: Union["IGTab", "OptionPickerTab"]) -> None:
         super().__init__(parent_tab)
         self.main_widget = main_widget
-        self.ig_tab = parent_tab
-
-        self.ig_pictographs: Dict[Letter, IGPictograph] = {}
-
+        self.parent_tab = parent_tab
+        self.letters: Dict[Letter, List[Dict[str, str]]] = self.main_widget.letters
+        self.pictographs: Dict[Letter, Pictograph] = {}
+        
         self._initialize_ui()
 
     def _initialize_ui(self) -> None:
@@ -36,7 +37,7 @@ class PictographScrollArea(QScrollArea):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
     def apply_turn_filters(self, filters: Dict[str, Union[Turns, Orientation]]) -> None:
-        for ig_pictograph in self.ig_pictographs.values():
+        for ig_pictograph in self.pictographs.values():
             if ig_pictograph.meets_turn_criteria(filters):
                 self.update_displayed_pictographs()
 
@@ -50,8 +51,8 @@ class PictographScrollArea(QScrollArea):
                 widget.setParent(None)
                 widget.deleteLater()
 
-        filtered_pictographs = self.ig_tab.pictograph_df[
-            self.ig_tab.pictograph_df["letter"].isin(self.ig_tab.selected_pictographs)
+        filtered_pictographs = self.parent_tab.pictograph_df[
+            self.parent_tab.pictograph_df["letter"].isin(self.parent_tab.selected_pictographs)
         ]
 
         for i, (_, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
@@ -75,7 +76,7 @@ class PictographScrollArea(QScrollArea):
     def _create_ig_pictograph(self, pd_row_data: pd.Series):
         ig_pictograph = IGPictograph(self.main_widget, self)
         ig_pictograph.current_letter = pd_row_data[LETTER]
-        filters = self.ig_tab.filter_frame.filters
+        filters = self.parent_tab.filter_frame.filters
         ig_pictograph._finalize_motion_setup(pd_row_data, filters)
         ig_pictograph.update_pictograph()
         return ig_pictograph

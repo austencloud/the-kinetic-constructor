@@ -20,22 +20,15 @@ if TYPE_CHECKING:
 
 
 class OptionPickerScrollArea(PictographScrollArea):
-    COLUMN_COUNT = 4
-    SPACING = 10
-
     def __init__(
-        self,
-        main_widget: "MainWidget",
-        option_picker_tab: "OptionPickerTab",
+        self, main_widget: "MainWidget", option_picker_tab: "OptionPickerTab"
     ) -> None:
         super().__init__(main_widget, option_picker_tab)
         self.main_widget = main_widget
         self.option_picker_tab = option_picker_tab
-        self.letters: Dict[Letter, List[Dict[str, str]]] = self.main_widget.letters
-        self.options: Dict[Letter, Option] = []
 
-        self._initialize_ui()
         self._connect_signals()
+        self._show_start_pos()
 
     ### SETUP ###
 
@@ -46,7 +39,7 @@ class OptionPickerScrollArea(PictographScrollArea):
 
     ### HELPERS ###
 
-    def show_start_pos(self) -> None:
+    def _show_start_pos(self) -> None:
         """Shows options for the starting position."""
         self.clear()
         start_poss = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
@@ -59,7 +52,7 @@ class OptionPickerScrollArea(PictographScrollArea):
         start_pos, end_pos = position_key.split("_")
         for letter, entries in self.letters.items():
             for entry in entries:
-                if entry['start_pos'] == start_pos and entry['end_pos'] == end_pos:
+                if entry["start_pos"] == start_pos and entry["end_pos"] == end_pos:
                     start_option = self._create_option(entry)
                     start_option.view.resize_option_view()
                     start_option.current_letter = letter
@@ -67,7 +60,7 @@ class OptionPickerScrollArea(PictographScrollArea):
                     start_option.end_pos = end_pos
                     self._add_option_to_layout(start_option, True, 0, column)
                     break
-                
+
     def _add_option_to_layout(
         self, option: Option, is_start_pos: bool, row: int, col: int
     ) -> None:
@@ -98,10 +91,6 @@ class OptionPickerScrollArea(PictographScrollArea):
 
             option.image_loaded = True
 
-    def apply_turn_filters(self, filters: Dict[str, Union[Turns, Orientation]]) -> None:
-        for option in self.options.values():
-            if option.meets_turn_criteria(filters):
-                self.update_displayed_pictographs()
 
     def update_displayed_pictographs(self) -> None:
         """
@@ -121,11 +110,13 @@ class OptionPickerScrollArea(PictographScrollArea):
 
         for i, (index, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
             option: Option = self._create_option(pictograph_data)
+            self.load_image_if_visible(option)
+            
             # Add the pictograph view to the layout
             row = i // self.COLUMN_COUNT
             col = i % self.COLUMN_COUNT
             self.layout.addWidget(option.view, row, col)
-            self.options[option.current_letter] = option
+            self.pictographs[option.current_letter] = option
             # Update the pictograph to reflect the new items
             option.update_pictograph()
             # Resize the view to fit the scene
@@ -146,7 +137,6 @@ class OptionPickerScrollArea(PictographScrollArea):
         filters = self.option_picker_tab.filter_frame.filters
         option._finalize_motion_setup(motion_dict, filters)
         option.update_pictograph()
-        self.load_image_if_visible(option)
         return option
 
     ### UPDATE ###
@@ -190,11 +180,11 @@ class OptionPickerScrollArea(PictographScrollArea):
         ]
         filtered_data = filtered_data[filtered_data[LETTER].isin(next_possible_letters)]
 
-        self.options.clear()
+        self.pictographs.clear()
         self.clear()
         for idx, pd_row_data in filtered_data.iterrows():
             option = self._create_option(pd_row_data)
-            self.options.append((pd_row_data[LETTER], option))
+            self.pictographs.append((pd_row_data[LETTER], option))
         self._sort_options()
         self._add_sorted_options_to_layout()
         QApplication.restoreOverrideCursor()
@@ -204,10 +194,10 @@ class OptionPickerScrollArea(PictographScrollArea):
         custom_order_dict = {
             char: index for index, char in enumerate(custom_sort_order)
         }
-        self.options.sort(key=lambda x: custom_order_dict.get(x[0], float("inf")))
+        self.pictographs.sort(key=lambda x: custom_order_dict.get(x[0], float("inf")))
 
     def _add_sorted_options_to_layout(self):
-        for row, (letter, option) in enumerate(self.options):
+        for row, (letter, option) in enumerate(self.pictographs):
             option.view.resize_option_view()
 
             self._add_option_to_layout(
@@ -249,5 +239,5 @@ class OptionPickerScrollArea(PictographScrollArea):
     ### RESIZE ###
 
     def resize_option_picker_scroll(self) -> None:
-        for letter, option in self.options:
+        for letter, option in self.pictographs:
             option.view.resize_option_view()

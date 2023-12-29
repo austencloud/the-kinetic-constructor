@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Dict, Union
 from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
 import pandas as pd
-from Enums import Letter, Orientation
+from Enums import Letter, Orientation, PictographAttributesDict
 from constants import LETTER
 from utilities.TypeChecking.TypeChecking import Turns
 from PyQt6.QtCore import Qt
@@ -14,23 +14,10 @@ if TYPE_CHECKING:
 
 
 class IGScroll(PictographScrollArea):
-    COLUMN_COUNT = 4
-    SPACING = 10
-
     def __init__(self, main_widget: "MainWidget", ig_tab: "IGTab") -> None:
         super().__init__(main_widget, ig_tab)
         self.main_widget = main_widget
         self.ig_tab = ig_tab
-
-        self.ig_pictographs: Dict[Letter, IGPictograph] = {}
-
-        self._initialize_ui()
-
-
-    def apply_turn_filters(self, filters: Dict[str, Union[Turns, Orientation]]) -> None:
-        for ig_pictograph in self.ig_pictographs.values():
-            if ig_pictograph.meets_turn_criteria(filters):
-                self.update_displayed_pictographs()
 
     def update_displayed_pictographs(self) -> None:
         """
@@ -51,7 +38,7 @@ class IGScroll(PictographScrollArea):
             row = i // self.COLUMN_COUNT
             col = i % self.COLUMN_COUNT
             self.layout.addWidget(ig_pictograph.view, row, col)
-            self.ig_pictographs[ig_pictograph.current_letter] = ig_pictograph
+            self.pictographs[ig_pictograph.current_letter] = ig_pictograph
             ig_pictograph.update_pictograph()
             ig_pictograph.view.resize_ig_pictograph()
 
@@ -64,10 +51,10 @@ class IGScroll(PictographScrollArea):
 
     ### OPTION CREATION ###
 
-    def _create_ig_pictograph(self, pd_row_data: pd.Series):
+    def _create_ig_pictograph(self, motion_dict: PictographAttributesDict):
         ig_pictograph = IGPictograph(self.main_widget, self)
-        ig_pictograph.current_letter = pd_row_data[LETTER]
+        ig_pictograph.current_letter = motion_dict[LETTER]
         filters = self.ig_tab.filter_frame.filters
-        ig_pictograph._finalize_motion_setup(pd_row_data, filters)
+        ig_pictograph._finalize_motion_setup(motion_dict, filters)
         ig_pictograph.update_pictograph()
         return ig_pictograph
