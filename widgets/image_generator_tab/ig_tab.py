@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QApplication,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from constants import BLUE, LETTER, RED
+from constants import BLUE, END_POS, LETTER, RED, START_POS
 from widgets.image_generator_tab.ig_filter_frame import IGFilterFrame
 from widgets.image_generator_tab.ig_letter_button_frame import IGLetterButtonFrame
 from widgets.image_generator_tab.ig_pictograph import IGPictograph

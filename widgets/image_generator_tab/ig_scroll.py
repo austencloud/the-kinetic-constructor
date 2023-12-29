@@ -34,7 +34,7 @@ class IGScroll(PictographScrollArea):
         ]
 
         for i, (_, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
-            ig_pictograph: IGPictograph = self._create_ig_pictograph(pictograph_data)
+            ig_pictograph: IGPictograph = self._create_pictograph(pictograph_data)
             row = i // self.COLUMN_COUNT
             col = i % self.COLUMN_COUNT
             self.layout.addWidget(ig_pictograph.view, row, col)
@@ -48,13 +48,3 @@ class IGScroll(PictographScrollArea):
         self.container.adjustSize()
         self.layout.update()
         self.updateGeometry()
-
-    ### OPTION CREATION ###
-
-    def _create_ig_pictograph(self, motion_dict: PictographAttributesDict):
-        ig_pictograph = IGPictograph(self.main_widget, self)
-        ig_pictograph.current_letter = motion_dict[LETTER]
-        filters = self.ig_tab.filter_frame.filters
-        ig_pictograph._setup_motions(motion_dict, filters)
-        ig_pictograph.update_pictograph()
-        return ig_pictograph

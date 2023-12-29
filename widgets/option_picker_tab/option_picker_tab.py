@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 import pandas as pd
+
+from constants import END_POS, START_POS
 from .option_picker_scroll_area import OptionPickerScrollArea
 
 if TYPE_CHECKING:

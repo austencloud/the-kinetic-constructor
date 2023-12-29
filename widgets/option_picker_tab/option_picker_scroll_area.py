@@ -131,16 +131,6 @@ class OptionPickerScrollArea(PictographScrollArea):
         self.layout.update()
         self.updateGeometry()
 
-    ### CREATE ###
-
-    def _create_option(self, motion_dict: PictographAttributesDict):
-        option = Option(self.main_widget, self)
-        option.current_letter = motion_dict[LETTER]
-        filters = self.option_picker_tab.filter_frame.filters
-        option._setup_motions(motion_dict, filters)
-        option.update_pictograph()
-        return option
-
     ### UPDATE ###
 
     def update_options(self, clicked_option) -> None:

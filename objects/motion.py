@@ -82,9 +82,7 @@ class Motion:
         if hasattr(self, PROP) and self.prop:
             self.prop.orientation = self.end_or
             self.prop.loc = self.end_loc
-            self.prop.axis = self.prop.get_axis_from_orientation(
-                self.prop.orientation, self.prop.loc
-            )
+            self.prop.axis = self.prop.get_axis_from_orientation()
             self.prop.update_rotation()
             self.prop.update_appearance()
 

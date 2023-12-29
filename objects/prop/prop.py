@@ -106,11 +106,13 @@ class Prop(GraphicalObject):
 
     ### GETTERS ###
 
-    def get_axis_from_orientation(self, orientation, location) -> None:
-        if orientation in [IN, OUT]:
-            axis: Axis = VERTICAL if location in [NORTH, SOUTH] else HORIZONTAL
-        elif orientation in [CLOCK, COUNTER]:
-            axis: Axis = HORIZONTAL if location in [NORTH, SOUTH] else VERTICAL
+    def get_axis_from_orientation(self) -> None:
+        if self.is_radial():
+            axis: Axis = VERTICAL if self.loc in [NORTH, SOUTH] else HORIZONTAL
+        elif self.is_antiradial():
+            axis: Axis = HORIZONTAL if self.loc in [NORTH, SOUTH] else VERTICAL
+        else:
+            axis: Axis = None
         return axis
 
     def swap_orientation(self, orientation) -> None:

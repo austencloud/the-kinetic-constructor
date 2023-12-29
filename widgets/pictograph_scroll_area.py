@@ -38,7 +38,7 @@ class PictographScrollArea(QScrollArea):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
-    def apply_turn_filters(self, filters: Dict[str, Union[Turns, Orientation]]) -> None:
+    def apply_filters(self, filters: Dict[str, Union[Turns, Orientation]]) -> None:
         for ig_pictograph in self.pictographs.values():
             if ig_pictograph.meets_turn_criteria(filters):
                 self.update_displayed_pictographs()
@@ -60,7 +60,7 @@ class PictographScrollArea(QScrollArea):
         ]
 
         for i, (_, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
-            ig_pictograph: IGPictograph = self._create_ig_pictograph(pictograph_data)
+            ig_pictograph: IGPictograph = self._create_pictograph(pictograph_data)
             row = i // self.COLUMN_COUNT
             col = i % self.COLUMN_COUNT
             self.layout.addWidget(ig_pictograph.view, row, col)
@@ -77,7 +77,7 @@ class PictographScrollArea(QScrollArea):
 
     ### OPTION CREATION ###
 
-    def _create_ig_pictograph(self, pd_row_data: pd.Series):
+    def _create_pictograph(self, pd_row_data: pd.Series):
         ig_pictograph = IGPictograph(self.main_widget, self)
         ig_pictograph.current_letter = pd_row_data[LETTER]
         filters = self.parent_tab.filter_frame.filters
