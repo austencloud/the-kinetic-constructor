@@ -17,4 +17,4 @@ class Type6PropPositioner(BasePropPositioner):
                 self._move_prop(self.blue_prop, self._get_opposite_direction(direction))
 
         elif self.red_prop.prop_type in strictly_placed_props:
-            self._set_strict_prop_location(self.red_prop)
+            self._set_prop_to_default_location()(self.red_prop)

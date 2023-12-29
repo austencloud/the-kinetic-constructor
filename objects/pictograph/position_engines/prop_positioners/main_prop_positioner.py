@@ -37,14 +37,12 @@ if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
 
 
-
 class MainPropPositioner:
     def __init__(self, scene: "Pictograph") -> None:
         self.scene = scene
-        self.letters: Dict[Letter, List[Dict[str, str]]] = scene.main_widget.letters
-        self.init_positioners(scene)
+        self.init_prop_positioners(scene)
 
-    def init_positioners(self, scene) -> None:
+    def init_prop_positioners(self, scene) -> None:
         letter_to_positioner = {
             **{letter: Type1PropPositioner for letter in Type1_letters},
             **{letter: Type2PropPositioner for letter in Type2_letters},
@@ -60,6 +58,5 @@ class MainPropPositioner:
         }
 
     def position_props(self) -> None:
-        positioner: BasePropPositioner = self.positioners.get(self.scene.current_letter)
-        if positioner:
-            positioner.update_prop_positions()
+        positioner: BasePropPositioner = self.positioners[self.scene.current_letter]
+        positioner.update_prop_positions()

@@ -40,30 +40,31 @@ if TYPE_CHECKING:
 
 
 class BasePropPositioner:
-    def __init__(self, scene: "Pictograph") -> None:
-        self.scene = scene
-        self.letters: Dict[Letter, List[Dict[str, str]]] = scene.main_widget.letters
+    def __init__(self, pictograph: "Pictograph") -> None:
+        self.pictograph = pictograph
+        self.letters: Dict[
+            Letter, List[Dict[str, str]]
+        ] = pictograph.main_widget.letters
 
     def update_prop_positions(self) -> None:
-        self.red_motion = self.scene.motions[RED]
-        self.blue_motion = self.scene.motions[BLUE]
-        self.red_prop = self.scene.props[RED]
-        self.blue_prop = self.scene.props[BLUE]
+        self.red_motion = self.pictograph.motions[RED]
+        self.blue_motion = self.pictograph.motions[BLUE]
+        self.red_prop = self.pictograph.props[RED]
+        self.blue_prop = self.pictograph.props[BLUE]
 
-        self.motions = self.scene.motions.values()
-        self.props = self.scene.props.values()
-        self.ghost_props = self.scene.ghost_props.values()
+        self.motions = self.pictograph.motions.values()
+        self.props = self.pictograph.props.values()
+        self.ghost_props = self.pictograph.ghost_props.values()
 
-        self.current_letter = self.scene.current_letter
+        self.current_letter = self.pictograph.current_letter
         self.prop_type_counts = self._count_prop_types()
 
         for prop in self.props:
-            self._set_prop_location(prop)
+            self._set_prop_to_default_location(prop)
+        for ghost_prop in self.ghost_props:
+            self._set_prop_to_default_location(ghost_prop)
 
-        for ghost_prop in self.scene.ghost_props.values():
-            self._set_prop_location(ghost_prop)
-
-        if self.scene.has_props_in_beta():
+        if self.pictograph.has_props_in_beta():
             self._reposition_beta_props()
 
     def _count_prop_types(self) -> Dict[str, int]:
@@ -72,15 +73,15 @@ class BasePropPositioner:
             for ptype in PropType
         }
 
-    def _set_prop_location(self, prop: "Prop", strict: bool = False) -> None:
+    def _set_prop_to_default_location(self, prop: Prop, strict: bool = False) -> None:
         position_offsets = self._get_position_offsets(prop)
         key = (prop.orientation, prop.location)
         offset = position_offsets.get(key, QPointF(0, 0))
         prop.setTransformOriginPoint(0, 0)
 
-        if self.scene.grid.grid_mode == DIAMOND:
+        if self.pictograph.grid.grid_mode == DIAMOND:
             location_points = self._get_location_points(strict, DIAMOND)
-        elif self.scene.grid.grid_mode == BOX:
+        elif self.pictograph.grid.grid_mode == BOX:
             location_points = self._get_location_points(strict, BOX)
 
         if prop.location in location_points:
@@ -89,12 +90,12 @@ class BasePropPositioner:
     def _get_location_points(self, strict: bool, grid_mode: str) -> Dict[str, QPointF]:
         if strict:
             if grid_mode == DIAMOND:
-                return self.scene.grid.strict_diamond_hand_points
+                return self.pictograph.grid.strict_diamond_hand_points
             # elif grid_mode == BOX:
             #     return self.scene.grid.strict_box_hand_points
         else:
             if grid_mode == DIAMOND:
-                return self.scene.grid.diamond_hand_points
+                return self.pictograph.grid.diamond_hand_points
             # elif grid_mode == BOX:
             #     return self.scene.grid.box_hand_points
 
@@ -108,13 +109,10 @@ class BasePropPositioner:
             "Type6PropPositioner",
         ]
     ) -> None:
-        if self.scene.has_hybrid_orientations():
+        if self.pictograph.has_hybrid_orientations():
             for prop in self.props:
-                if prop.prop_type in strictly_placed_props:
-                    self._set_strict_prop_location(prop)
-                elif prop.prop_type in non_strictly_placed_props:
-                    self._set_default_prop_location(prop)
-
+                self._set_prop_to_default_location(prop)
+                
         else:  # scene has non-hybrid orientations
             if self.current_letter in ["G", "H"]:
                 self.reposition_G_H()
@@ -171,7 +169,7 @@ class BasePropPositioner:
             == small_unilateral_props[1].orientation
         ):
             for prop in small_unilateral_props:
-                self._set_default_prop_location(prop)
+                self._set_prop_to_default_location(prop)
                 (
                     red_direction,
                     blue_direction,
@@ -182,15 +180,15 @@ class BasePropPositioner:
                 self._move_prop(self.blue_prop, blue_direction)
         else:
             for prop in small_unilateral_props:
-                self._set_default_prop_location(prop)
+                self._set_prop_to_default_location(prop)
 
     def _reposition_big_props(
         self, big_unilateral_props: List[Prop], big_bilateral_props: List[Prop]
     ):
         big_props = big_unilateral_props + big_bilateral_props
-        if self.scene.has_non_hybrid_orientations():
+        if self.pictograph.has_non_hybrid_orientations():
             for prop in big_props:
-                self._set_strict_prop_location(prop)
+                self._set_prop_to_default_location(prop)
                 (
                     red_direction,
                     blue_direction,
@@ -201,7 +199,7 @@ class BasePropPositioner:
                 self._move_prop(self.blue_prop, blue_direction)
         else:
             for prop in big_props:
-                self._set_strict_prop_location(prop)
+                self._set_prop_to_default_location(prop)
 
     def _determine_translation_direction_for_unilateral_props(
         self, red_motion: Motion, blue_motion: Motion
@@ -314,7 +312,7 @@ class BasePropPositioner:
         current_position: QPointF,
         direction: Direction,
     ) -> QPointF:
-        self.beta_offset = self.scene.width() / 38
+        self.beta_offset = self.pictograph.width() / 38
 
         offset_map = {
             LEFT: QPointF(-self.beta_offset, 0),

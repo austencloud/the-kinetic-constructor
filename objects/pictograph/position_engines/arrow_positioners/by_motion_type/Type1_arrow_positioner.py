@@ -14,21 +14,17 @@ from constants import (
     NORTHWEST,
 )
 from objects.arrow.arrow import Arrow
-from typing import TYPE_CHECKING, Dict, Callable
-from objects.pictograph.position_engines.arrow_positioners.by_prop_type.staff_arrow_positioner import (
-    StaffArrowPositioner,
-)
 from PyQt6.QtCore import QPointF
 
 
-class ProPositioner(BaseArrowPositioner):
+class Type1ArrowPositioner(BaseArrowPositioner):
     ### POSITIONING METHODS ###
-    def _reposition_GH(self) -> None:
+    def _reposition_G_H(self) -> None:
         for arrow in [
             self.pictograph.arrows[RED],
             self.pictograph.arrows[BLUE],
         ]:
-            adjustment = self._calculate_GH_adjustment(arrow)
+            adjustment = self._calculate_G_H_adjustment(arrow)
             self._apply_adjustment(arrow, adjustment)
 
     def _reposition_I(self) -> None:
@@ -65,7 +61,7 @@ class ProPositioner(BaseArrowPositioner):
             self._apply_adjustment(arrow, adjustment)
 
     ### ADJUSTMENT CALCULATIONS ###
-    def _calculate_GH_adjustment(self, arrow: Arrow) -> QPointF:
+    def _calculate_G_H_adjustment(self, arrow: Arrow) -> QPointF:
         distance = 105 if arrow.color == RED else 50
         return self.calculate_adjustment(arrow.location, distance)
 

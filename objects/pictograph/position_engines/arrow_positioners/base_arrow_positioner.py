@@ -1,45 +1,83 @@
 from PyQt6.QtCore import QPointF
+from Enums import Letter
 from constants import *
 from objects.arrow.arrow import Arrow
-from typing import TYPE_CHECKING, Dict, Callable
-from objects.pictograph.position_engines.arrow_positioners.by_prop_type.staff_arrow_positioner import (
-    StaffArrowPositioner,
-)
-from objects.pictograph.position_engines.arrow_positioners.by_prop_type.triad_arrow_positioner import (
-    TriadArrowPositioner,
-)
+from typing import TYPE_CHECKING, Callable, Dict, List, Union
+
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
+    from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type1_arrow_positioner import (
+        Type1ArrowPositioner,
+    )
+    from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type2_arrow_positioner import (
+        Type2ArrowPositioner,
+    )
+    from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type3_arrow_positioner import (
+        Type3ArrowPositioner,
+    )
+    from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type4_arrow_positioner import (
+        Type4ArrowPositioner,
+    )
+    from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type5_arrow_positioner import (
+        Type5ArrowPositioner,
+    )
+    from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type6_arrow_positioner import (
+        Type6ArrowPositioner,
+    )
 
 
 class BaseArrowPositioner:
     ### SETUP ###
     def __init__(self, pictograph: "Pictograph") -> None:
-        self.letters = pictograph.main_widget.letters
         self.pictograph = pictograph
-        self.triad_arrow_positioner = TriadArrowPositioner(pictograph, self)
-        self.staff_arrow_positioner = StaffArrowPositioner(pictograph, self)
+        self.letters: Dict[
+            Letter, List[Dict[str, str]]
+        ] = pictograph.main_widget.letters
+        self.letters_to_reposition: List[Letter] = ["G", "H", "I", "P", "Q", "R"]
 
     ### PUBLIC METHODS ###
     def update_arrow_positions(self) -> None:
-        current_letter = self.pictograph.current_letter
-        state_dict = self.pictograph.get_state()
+        self.red_motion = self.pictograph.motions[RED]
+        self.blue_motion = self.pictograph.motions[BLUE]
+        self.red_arrow = self.pictograph.arrows[RED]
+        self.blue_arrow = self.pictograph.arrows[BLUE]
 
-        for arrow in self.pictograph.arrows.values():
-            arrow.set_arrow_transform_origin_to_center()
+        self.motions = self.pictograph.motions.values()
+        self.arrows = self.pictograph.arrows.values()
+        self.ghost_arrows = self.pictograph.ghost_arrows.values()
+        self.all_arrows = self.arrows + self.ghost_arrows
 
-        self._apply_default_positioning(current_letter, state_dict)
+        self.current_letter = self.pictograph.current_letter
 
-    ### POSITIONING LOGIC ###
-    def _apply_default_positioning(self, current_letter, state_dict):
-        reposition_method = self._get_reposition_method(current_letter)
-        reposition_method()
+        for arrow in self.all_arrows:
+            self._set_arrow_to_default_loc(arrow)
 
-        if self.pictograph.main_widget.prop_type == TRIAD:
-            self.triad_arrow_positioner._adjust_arrows_for_triads(current_letter)
-        elif self.pictograph.main_widget.prop_type == STAFF:
-            self.staff_arrow_positioner._adjust_arrows_for_staffs(current_letter)
+        if self.current_letter in self.letters_to_reposition:
+            self._reposition_arrows()
+
+    def _reposition_arrows(
+        self: Union[
+            "Type1ArrowPositioner",
+            "Type2ArrowPositioner",
+            "Type3ArrowPositioner",
+            "Type4ArrowPositioner",
+            "Type5ArrowPositioner",
+            "Type6ArrowPositioner",
+        ]
+    ) -> None:
+
+        if self.current_letter in ["G", "H"]:
+            self._reposition_G_H()
+        elif self.current_letter == "I":
+            self._reposition_I()
+        elif self.current_letter in ["P"]:
+            self._reposition_P()
+        elif self.current_letter in ["Q"]:
+            self._reposition_Q()
+        elif self.current_letter in ["R"]:
+            self._reposition_R()
+                
 
     def _calculate_adjustment_tuple(self, location: str, distance: int) -> QPointF:
         location_adjustments = {
@@ -49,27 +87,6 @@ class BaseArrowPositioner:
             NORTHWEST: QPointF(-distance, -distance),
         }
         return location_adjustments.get(location, QPointF(0, 0))
-
-    def _get_reposition_method(self, current_letter) -> Callable:
-        positioning_methods = {
-            "G": self._reposition_GH,
-            "H": self._reposition_GH,
-            "I": self._reposition_I,
-            "P": self._reposition_P,
-            "Q": self._reposition_Q,
-            "R": self._reposition_R,
-        }
-        return positioning_methods.get(
-            current_letter, self._reposition_to_default_locations
-        )
-
-    def _reposition_to_default_locations(self) -> None:
-        for arrow in self.pictograph.arrows.values():
-            if self._is_arrow_movable(arrow):
-                self._reposition_to_default_loc(arrow)
-        for ghost_arrow in self.pictograph.ghost_arrows.values():
-            if self._is_arrow_movable(ghost_arrow):
-                self._reposition_to_default_loc(ghost_arrow)
 
     ### HELPERS ###
     def _is_arrow_movable(self, arrow: Arrow) -> bool:
@@ -132,7 +149,7 @@ class BaseArrowPositioner:
         if optimal_location:
             arrow.setPos(optimal_location - arrow.boundingRect().center())
 
-    def _reposition_to_default_loc(self, arrow: Arrow, _: Dict = None) -> None:
+    def _set_arrow_to_default_loc(self, arrow: Arrow, _: Dict = None) -> None:
         arrow.set_arrow_transform_origin_to_center()
         # if the arrow isn't a Ghost Arrow itself,
         if not arrow.is_ghost:

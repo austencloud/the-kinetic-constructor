@@ -27,7 +27,7 @@ class Type1PropPositioner(BasePropPositioner):
         anti_prop = (
             self.red_prop if self.red_motion.motion_type == ANTI else self.blue_prop
         )
-        pro_motion = self.scene.motions[pro_prop.color]
+        pro_motion = self.pictograph.motions[pro_prop.color]
         pro_direction = self._determine_translation_direction(pro_motion)
         anti_direction = self._get_opposite_direction(pro_direction)
         new_pro_position = self._calculate_new_position(pro_prop.pos(), pro_direction)
