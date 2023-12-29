@@ -14,6 +14,7 @@ from PyQt6.QtGui import QWheelEvent, QPixmap
 import pandas as pd
 from constants import (
     BLUE,
+    BLUE_END_LOC,
     BLUE_END_OR,
     BLUE_MOTION_TYPE,
     BLUE_START_LOC,
@@ -247,7 +248,7 @@ class MainWidget(QWidget):
             f"{letter}_"
             f"({motion_dict[START_POS]}→{motion_dict[END_POS]})_"
             f"({motion_dict[BLUE_MOTION_TYPE]}_"
-            f"{motion_dict[BLUE_START_LOC]}→{motion_dict[BLUE_END_OR]}_"
+            f"{motion_dict[BLUE_START_LOC]}→{motion_dict[BLUE_END_LOC]}_"
             f"{blue_turns}_"
             f"{pictograph.motions[BLUE].start_or}→{pictograph.motions[BLUE].end_or})_"
             f"({motion_dict[RED_MOTION_TYPE]}_"
