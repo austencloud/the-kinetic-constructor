@@ -94,7 +94,6 @@ ICON_DIR = "resources/images/icons/"
 GRID_DIR = "resources/images/grid/"
 
 
-
 GHOST = "ghost"
 
 STAFF = "staff"

@@ -1,8 +1,12 @@
 from Enums import (
     Color,
     Handpath,
+    Location,
     MotionAttributesDicts,
+    MotionType,
     Orientation,
+    PropRotationDirection,
+    Turns,
 )
 
 from constants import *
@@ -33,16 +37,16 @@ class Motion:
         self.arrow: Arrow = motion_dict.get(ARROW)
         self.prop: Prop = motion_dict.get(PROP)
 
-        self.motion_type: MOTION_TYPE = motion_dict[MOTION_TYPE]
-        self.turns: TURNS = motion_dict[TURNS]
-        self.prop_rot_dir: PROP_ROT_DIR = motion_dict[PROP_ROT_DIR]
-        self.start_loc: START_LOC = motion_dict[START_LOC]
-        self.end_loc: END_LOC = motion_dict[END_LOC]
-        self.start_or: START_OR = motion_dict[START_OR]
+        self.motion_type: MotionType = motion_dict[MOTION_TYPE]
+        self.turns: Turns = motion_dict[TURNS]
+        self.prop_rot_dir: PropRotationDirection = motion_dict[PROP_ROT_DIR]
+        self.start_loc: Location = motion_dict[START_LOC]
+        self.end_loc: Location = motion_dict[END_LOC]
+        self.start_or: Orientation = motion_dict[START_OR]
 
         self.assign_location_to_arrow()
 
-        self.end_or: END_OR = self.get_end_or()
+        self.end_or: Orientation = self.get_end_or()
         self.update_prop_orientation()
 
     def assign_location_to_arrow(self) -> None:
@@ -234,7 +238,9 @@ class Motion:
             key = (self.start_or, handpath_direction)
             return float_map.get(key)
         valid_turns = [0, 0.5, 1, 1.5, 2, 2.5, 3]
-        self.turns = float(self.turns)
+        self.turns = (
+            float(self.turns) if self.turns in [0.5, 1.5, 2.5] else int(self.turns)
+        )
 
         if self.turns in valid_turns:
             if self.turns.is_integer():
@@ -313,12 +319,12 @@ class Motion:
         self.adjust_turns(-1)
 
     ### FLAGS ###
-    
+
     def is_shift(self) -> bool:
         return self.motion_type in [PRO, ANTI, FLOAT]
 
     def is_dash(self) -> bool:
         return self.motion_type == DASH
-    
+
     def is_static(self) -> bool:
         return self.motion_type == STATIC

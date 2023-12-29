@@ -399,6 +399,11 @@ class Prop(GraphicalObject):
         self.previous_location = closest_hand_point
         self.scene.update_pictograph()
 
+    def update_prop(self):
+        self.update_rotation()
+        self.update_appearance()
+
+
     def is_radial(self) -> bool:
         return self.orientation in [IN, OUT]
 

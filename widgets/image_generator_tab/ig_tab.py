@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QApplication,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from constants import BLUE, RED
+from constants import BLUE, LETTER, RED
 from widgets.image_generator_tab.ig_filter_frame import IGFilterFrame
 from widgets.image_generator_tab.ig_letter_button_frame import IGLetterButtonFrame
 from widgets.image_generator_tab.ig_pictograph import IGPictograph
@@ -178,34 +178,33 @@ class IGTab(QWidget):
             self.selected_pictographs.append(letter)
         elif not state and letter in self.selected_pictographs:
             self.selected_pictographs.remove(letter)
-        self.ig_scroll_area.update_displayed_pictographs()  # Add this line to update the display
+        self.ig_scroll_area.update_displayed_pictographs() 
 
     def generate_selected_images(self) -> None:
-        main_widget = self.parentWidget()  # Access the main widget
-        main_widget.setEnabled(False)  # Disable the widget
-        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)  # Show loading cursor
-        self.setMouseTracking(False)  # Ignore mouse clicks
+        main_widget = self.parentWidget()
+        main_widget.setEnabled(False)
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        self.setMouseTracking(False)
         for letter in self.selected_pictographs:
             self.generate_images_for_letter(letter)
-        main_widget.setEnabled(True)  # Enable the widget after generation
+        main_widget.setEnabled(True)
         QApplication.restoreOverrideCursor()
-        self.setMouseTracking(True)  # Enable mouse clicks
+        self.setMouseTracking(True)
 
     def generate_all_images(self) -> None:
-        main_widget = self.parentWidget()  # Access the main widget
-        main_widget.setEnabled(False)  # Disable the widget
-        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)  # Show loading cursor
-        self.setMouseTracking(False)  # Ignore mouse clicks
+        main_widget = self.parentWidget()
+        main_widget.setEnabled(False)
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        self.setMouseTracking(False)
         for letter in self.get_letters():
             self.generate_images_for_letter(letter)
-        main_widget.setEnabled(True)  # Enable the widget after generation
+        main_widget.setEnabled(True)
         QApplication.restoreOverrideCursor()
-
-        self.setMouseTracking(True)  # Enable mouse clicks
-
+        self.setMouseTracking(True)
+        
     def generate_images_for_letter(self, letter) -> None:
         pictographs_for_letter: pd.DataFrame = self.pictograph_df[
-            self.pictograph_df["letter"] == letter
+            self.pictograph_df[LETTER] == letter
         ]
 
         for index, pictograph_data in pictographs_for_letter.iterrows():
@@ -225,74 +224,11 @@ class IGTab(QWidget):
     ### OPTION CREATION ###
 
     def _create_ig_pictograph(self, pd_row_data: pd.Series):
-        letter = pd_row_data["letter"]
         ig_pictograph = IGPictograph(self.main_widget, self.ig_scroll_area)
-        ig_pictograph.setSceneRect(0, 0, 950, 950)
-
-        ig_pictograph._finalize_motion_setup(pd_row_data, self.filter_frame.filters)
-
-        blue_motion_dict = ig_pictograph._create_motion_dict_from_pd_row_data(
-            pd_row_data, "blue", self.filter_frame.filters
-        )
-        red_motion_dict = ig_pictograph._create_motion_dict_from_pd_row_data(
-            pd_row_data, "red", self.filter_frame.filters
-        )
-
-        ig_pictograph.props[RED].ghost = ig_pictograph.ghost_props[RED]
-        ig_pictograph.props[BLUE].ghost = ig_pictograph.ghost_props[BLUE]
-        ig_pictograph.motions[RED].prop = ig_pictograph.props[RED]
-        ig_pictograph.motions[BLUE].prop = ig_pictograph.props[BLUE]
-
-        ig_pictograph.motions[RED].setup_attributes(red_motion_dict)
-        ig_pictograph.motions[BLUE].setup_attributes(blue_motion_dict)
-
-        ig_pictograph.current_letter = letter
-        ig_pictograph.start_pos = pd_row_data.name[0]
-        ig_pictograph.end_pos = pd_row_data.name[1]
-
-        ig_pictograph.motions[RED].arrow = ig_pictograph.arrows[RED]
-        ig_pictograph.motions[BLUE].arrow = ig_pictograph.arrows[BLUE]
-        ig_pictograph.motions[RED].prop = ig_pictograph.props[RED]
-        ig_pictograph.motions[BLUE].prop = ig_pictograph.props[BLUE]
-        ig_pictograph.motions[RED].arrow.location = ig_pictograph.motions[
-            RED
-        ].get_arrow_location(
-            ig_pictograph.motions[RED].start_loc,
-            ig_pictograph.motions[RED].end_loc,
-        )
-        ig_pictograph.motions[BLUE].arrow.location = ig_pictograph.motions[
-            BLUE
-        ].get_arrow_location(
-            ig_pictograph.motions[BLUE].start_loc,
-            ig_pictograph.motions[BLUE].end_loc,
-        )
-
-        ig_pictograph.arrows[RED].motion_type = pd_row_data["red_motion_type"]
-        ig_pictograph.arrows[BLUE].motion_type = pd_row_data["blue_motion_type"]
-        ig_pictograph.motions[RED].motion_type = pd_row_data["red_motion_type"]
-        ig_pictograph.motions[BLUE].motion_type = pd_row_data["blue_motion_type"]
-
-        ig_pictograph.arrows[RED].motion = ig_pictograph.motions[RED]
-        ig_pictograph.arrows[BLUE].motion = ig_pictograph.motions[BLUE]
-
-        ig_pictograph.motions[RED].end_or = ig_pictograph.motions[RED].get_end_or()
-        ig_pictograph.motions[BLUE].end_or = ig_pictograph.motions[BLUE].get_end_or()
-
-        ig_pictograph.motions[RED].update_prop_orientation()
-        ig_pictograph.motions[BLUE].update_prop_orientation()
-
-        for arrow in ig_pictograph.arrows.values():
-            arrow.set_is_svg_mirrored_from_attributes()
-            arrow.update_mirror()
-            arrow.update_appearance()
-
-        for prop in ig_pictograph.props.values():
-            prop.update_rotation()
-            prop.update_appearance()
-
-        motion = ig_pictograph.motions[arrow.color]
-        arrow.motion, prop.motion = motion, motion
-        arrow.ghost = ig_pictograph.ghost_arrows[arrow.color]
-        arrow.ghost.motion = motion
+        ig_pictograph.current_letter = pd_row_data[LETTER]
+        filters = self.filter_frame.filters
+        ig_pictograph._finalize_motion_setup(pd_row_data, filters)
         ig_pictograph.update_pictograph()
         return ig_pictograph
+
+

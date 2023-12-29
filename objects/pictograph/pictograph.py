@@ -8,7 +8,9 @@ import pandas as pd
 from Enums import Color, Letter, LetterNumberType, Location, SpecificPosition
 from constants import *
 from data.positions_map import get_specific_start_end_poss
-from objects.pictograph.position_engines.arrow_positioners.main_arrow_positioner import MainArrowPositioner
+from objects.pictograph.position_engines.arrow_positioners.main_arrow_positioner import (
+    MainArrowPositioner,
+)
 
 from ..letter_item import LetterItem
 from ..motion import Motion
@@ -21,8 +23,12 @@ from ..grid import Grid
 from objects.pictograph.pictograph_event_handler import PictographEventHandler
 from objects.pictograph.pictograph_init import PictographInit
 from objects.pictograph.pictograph_menu_handler import PictographMenuHandler
-from objects.pictograph.position_engines.arrow_positioners.base_arrow_positioner import BaseArrowPositioner
-from objects.pictograph.position_engines.prop_positioners.main_prop_positioner import MainPropPositioner
+from objects.pictograph.position_engines.arrow_positioners.base_arrow_positioner import (
+    BaseArrowPositioner,
+)
+from objects.pictograph.position_engines.prop_positioners.main_prop_positioner import (
+    MainPropPositioner,
+)
 from utilities.letter_engine import LetterEngine
 from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
 
@@ -92,6 +98,11 @@ class Pictograph(QGraphicsScene):
         self.view = self.init_view(self.graph_type)
         self.letter_item: LetterItem = self.initializer.init_letter_item()
 
+        self.red_motion = self.motions[RED]
+        self.blue_motion = self.motions[BLUE]
+        self.red_arrow = self.arrows[RED]
+        self.blue_arrow = self.arrows[BLUE]
+
         self.setup_managers(main_widget)
 
     def init_view(self, graph_type) -> QGraphicsView:
@@ -128,7 +139,8 @@ class Pictograph(QGraphicsScene):
         self.prop_positioner = MainPropPositioner(self)
         self.letter_engine = LetterEngine(self)
 
-    def _finalize_motion_setup(self, pd_row_data, filters) -> None:
+    def _finalize_motion_setup(self, pd_row_data: pd.Series, filters) -> None:
+        """For pictographs that are generated from the pandas dataframe."""
         self.pd_row_data = pd_row_data
 
         red_motion_dict = self._create_motion_dict_from_pd_row_data(
@@ -138,9 +150,36 @@ class Pictograph(QGraphicsScene):
         blue_motion_dict = self._create_motion_dict_from_pd_row_data(
             pd_row_data, RED, filters
         )
-
         self._add_motion(red_motion_dict)
         self._add_motion(blue_motion_dict)
+        
+        self.red_motion.setup_attributes(red_motion_dict)
+        self.blue_motion.setup_attributes(blue_motion_dict)
+
+        self.start_pos = pd_row_data.name[0]
+        self.end_pos = pd_row_data.name[1]
+
+        self.red_motion.arrow.location = self.red_motion.get_arrow_location(
+            self.red_motion.start_loc,
+            self.red_motion.end_loc,
+        )
+        self.blue_motion.arrow.location = self.blue_motion.get_arrow_location(
+            self.blue_motion.start_loc,
+            self.blue_motion.end_loc,
+        )
+        self.red_arrow.motion_type = pd_row_data["red_motion_type"]
+        self.blue_arrow.motion_type = pd_row_data["blue_motion_type"]
+        self.red_motion.motion_type = pd_row_data["red_motion_type"]
+        self.blue_motion.motion_type = pd_row_data["blue_motion_type"]
+
+        self.red_arrow.motion = self.red_motion
+        self.blue_arrow.motion = self.blue_motion
+
+        self.red_motion.end_or = self.red_motion.get_end_or()
+        self.blue_motion.end_or = self.blue_motion.get_end_or()
+
+        self.red_motion.update_prop_orientation()
+        self.blue_motion.update_prop_orientation()
 
     def _add_motion(self, motion_dict: Dict) -> None:
         arrow = self._create_arrow(motion_dict)
@@ -183,12 +222,15 @@ class Pictograph(QGraphicsScene):
     ) -> Dict:
         return {
             COLOR: color,
+            ARROW: self.arrows[color],
+            PROP: self.props[color],
             MOTION_TYPE: pd_row_data[f"{color}_motion_type"],
             PROP_ROT_DIR: pd_row_data[f"{color}_prop_rot_dir"],
             START_LOC: pd_row_data[f"{color}_start_loc"],
             END_LOC: pd_row_data[f"{color}_end_loc"],
             TURNS: filters[f"{color}_turns"],
-            START_OR: "in",
+            START_OR: filters[f"{color}_start_or"],
+            END_OR: filters[f"{color}_end_or"],
         }
 
     ### EVENT HANDLERS ###
@@ -355,11 +397,21 @@ class Pictograph(QGraphicsScene):
             )
 
     def update_pictograph(self) -> None:
+        self.update_arrows()
+        self.update_props()
         self.update_letter()
-        self.arrow_positioner.position_arrows()
-        self.prop_positioner.position_props()
         if self.graph_type == MAIN:
             self.update_attr_panel()
+
+    def update_props(self):
+        for prop in self.props.values():
+            prop.update_prop()
+        self.prop_positioner.position_props()
+
+    def update_arrows(self):
+        for arrow in self.arrows.values():
+            arrow.update_arrow()
+        self.arrow_positioner.position_arrows()
 
     def update_letter(self) -> None:
         if all(motion.motion_type for motion in self.motions.values()):

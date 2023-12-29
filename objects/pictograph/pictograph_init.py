@@ -36,7 +36,7 @@ class PictographInit:
         return grid
 
     def init_motions(self) -> Dict[Color, Motion]:
-        return {color: self.create_motion(color) for color in [RED, BLUE]}
+        return {color: self._create_motion(color) for color in [RED, BLUE]}
 
     def init_objects(self, prop_type: PropType) -> None:
         self.init_grid()
@@ -48,7 +48,7 @@ class PictographInit:
         arrows = {}
         ghost_arrows = {}
         for color in [BLUE, RED]:
-            arrows[color], ghost_arrows[color] = self.create_arrow(color, PRO)
+            arrows[color], ghost_arrows[color] = self._create_arrow(color, PRO)
         return arrows, ghost_arrows
 
     def init_props(
@@ -57,7 +57,7 @@ class PictographInit:
         props = {}
         ghost_props = {}
         for color in [RED, BLUE]:
-            props[color], ghost_props[color] = self.create_prop(color, prop_type)
+            props[color], ghost_props[color] = self._create_prop(color, prop_type)
         return props, ghost_props
 
     def init_letter_item(self) -> LetterItem:
@@ -100,7 +100,7 @@ class PictographInit:
 
     ### CREATE ###
 
-    def create_arrow(
+    def _create_arrow(
         self, color: Color, motion_type: MotionType
     ) -> Tuple[Arrow, GhostArrow]:
         arrow_attributes = {
@@ -111,9 +111,10 @@ class PictographInit:
         arrow = Arrow(self.pictograph, arrow_attributes, None)
         ghost_arrow = GhostArrow(self.pictograph, arrow_attributes, None)
         arrow.ghost = ghost_arrow
+        self.pictograph.motions[color].arrow = arrow
         return arrow, ghost_arrow
 
-    def create_prop(self, color: Color, prop_type: PropType) -> Tuple[Prop, GhostProp]:
+    def _create_prop(self, color: Color, prop_type: PropType) -> Tuple[Prop, GhostProp]:
         prop_class = prop_class_mapping.get(prop_type)
         if prop_class is None:
             raise ValueError(f"Invalid prop_type: {prop_type}")
@@ -128,9 +129,10 @@ class PictographInit:
         ghost_prop = GhostProp(
             self.pictograph, prop_attributes, self.pictograph.motions[color]
         )
+        self.pictograph.motions[color].prop = prop
         return prop, ghost_prop
 
-    def create_motion(self, color: Color) -> Motion:
+    def _create_motion(self, color: Color) -> Motion:
         motion_dict = {
             COLOR: color,
             ARROW: None,

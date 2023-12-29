@@ -372,6 +372,15 @@ class MotionCombinationType(Enum):
 
 Turns = float | Literal["fl", "0", "0.5", "1", "1.5", "2", "2.5", "3"]
 
+class Turns(Enum):
+    FL = "fl"
+    ZERO = "0"
+    HALF = "0.5"
+    ONE = "1"
+    ONE_HALF = "1.5"
+    TWO = "2"
+    TWO_HALF = "2.5"
+    THREE = "3"
 
 class ArrowAttribute(Enum):
     COLOR = "color"

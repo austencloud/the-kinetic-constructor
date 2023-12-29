@@ -320,7 +320,7 @@ class Arrow(GraphicalObject):
                     NORTHWEST: 0,
                 },
             }.get(prop_rot_dir, {})
-            
+
     def get_attributes(self) -> ArrowAttributesDicts:
         arrow_attributes = [COLOR, LOCATION, MOTION_TYPE, TURNS]
         return {attr: getattr(self, attr) for attr in arrow_attributes}
@@ -328,6 +328,7 @@ class Arrow(GraphicalObject):
     def get_svg_file(self, motion_type: MotionType, turns: Turns) -> str:
         svg_file = f"{image_path}arrows/{self.pictograph.main_widget.grid_mode}/{motion_type}/{motion_type}_{float(turns)}.svg"
         return svg_file
+
 
     def _change_arrow_to_static(self) -> None:
         static_arrow_dict = {
@@ -344,3 +345,7 @@ class Arrow(GraphicalObject):
         self.motion[START_LOC] = self.motion.prop.location
         self.motion[END_LOC] = self.motion.prop.location
         self.location = self.motion.prop.location
+
+    def update_arrow(self) -> None:
+
+        self.update_appearance()
