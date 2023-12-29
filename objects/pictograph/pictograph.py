@@ -4,24 +4,24 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtGui import QImage, QPainter, QPixmap
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
 import pandas as pd
+
 from Enums import Color, Letter, LetterNumberType, Location, SpecificPosition
 from constants import *
 from data.positions_map import get_specific_start_end_poss
-from objects.letter_item import LetterItem
-from objects.motion import Motion
-from objects.pictograph.position_engines.main_prop_positioner import MainPropPositioner
-from objects.prop.prop import Prop
-from objects.arrow.arrow import Arrow
-from objects.ghosts.ghost_arrow import GhostArrow
-from objects.ghosts.ghost_prop import GhostProp
-from objects.grid import Grid
-from objects.pictograph.pictograph_event_handler import PictographEventHandler
-from objects.pictograph.pictograph_init import PictographInit
-from objects.pictograph.pictograph_menu_handler import PictographMenuHandler
-from objects.pictograph.position_engines.arrow_positioners.arrow_positioner import (
-    ArrowPositioner,
-)
-from objects.pictograph.position_engines.base_prop_positioner import BasePropPositioner
+
+from ..letter_item import LetterItem
+from ..motion import Motion
+from ..prop.prop import Prop
+from ..arrow.arrow import Arrow
+from ..ghosts.ghost_arrow import GhostArrow
+from ..ghosts.ghost_prop import GhostProp
+from ..grid import Grid
+
+from pictograph_event_handler import PictographEventHandler
+from pictograph_init import PictographInit
+from pictograph_menu_handler import PictographMenuHandler
+from position_engines.arrow_positioners.base_arrow_positioner import BaseArrowPositioner
+from position_engines.prop_positioners.main_prop_positioner import MainPropPositioner
 from utilities.letter_engine import LetterEngine
 from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
 
@@ -123,7 +123,7 @@ class Pictograph(QGraphicsScene):
 
     def setup_managers(self, main_widget: "MainWidget") -> None:
         self.pictograph_menu_handler = PictographMenuHandler(main_widget, self)
-        self.arrow_positioner = ArrowPositioner(self)
+        self.arrow_positioner = BaseArrowPositioner(self)
         self.prop_positioner = MainPropPositioner(self)
         self.letter_engine = LetterEngine(self)
 
@@ -354,7 +354,6 @@ class Pictograph(QGraphicsScene):
             )
 
     def update_pictograph(self) -> None:
-        
         self.update_letter()
         self.update_arrows()
         self.update_props()
