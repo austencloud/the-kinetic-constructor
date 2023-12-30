@@ -1,6 +1,7 @@
 from typing import Callable, TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
+from Enums import Letter
 from data.rules import get_next_letters
 from constants import *
 from widgets.option_picker_tab.option import Option
@@ -51,8 +52,7 @@ class OptionPickerScrollArea(PictographScrollArea):
                     motion_dict[START_POS] == start_pos
                     and motion_dict[END_POS] == end_pos
                 ):
-                    start_option = self._create_option(motion_dict)
-                    # start_option.view.resize_option_view()
+                    start_option = self._create_pictograph(motion_dict)
                     start_option.current_letter = letter
                     start_option.start_pos = start_pos
                     start_option.end_pos = end_pos
@@ -89,7 +89,7 @@ class OptionPickerScrollArea(PictographScrollArea):
 
             option.image_loaded = True
 
-    def update_displayed_pictographs(self) -> None:
+    def update_pictographs(self) -> None:
         """
         Updates the displayed pictographs based on the selected letters.
         """
@@ -131,7 +131,7 @@ class OptionPickerScrollArea(PictographScrollArea):
     def update_options(self, clicked_option) -> None:
         """Updates the options based on the clicked option."""
         try:
-            self._populate_options(clicked_option)
+            self._update_pictographs(clicked_option)
         except KeyError as e:
             print(f"Motion key missing: {e}")
 
@@ -154,7 +154,7 @@ class OptionPickerScrollArea(PictographScrollArea):
             if child.widget():
                 child.widget().deleteLater()
 
-    def _populate_options(self, clicked_option: "Option") -> None:
+    def _update_pictographs(self, clicked_option: "Option") -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
 
         current_letter = clicked_option.current_letter
@@ -169,15 +169,16 @@ class OptionPickerScrollArea(PictographScrollArea):
 
         self.pictographs.clear()
         self.clear()
-        for idx, pd_row_data in filtered_data.iterrows():
-            option = self._create_option(pd_row_data)
-            self.pictographs.append((pd_row_data[LETTER], option))
+        for motion_dict_collection in self.main_widget.letters.values():
+            for motion_dict in motion_dict_collection:
+                option = self._create_pictograph(motion_dict)
+                self.pictographs[motion_dict[LETTER]] = option
         self._sort_options()
         self._add_sorted_options_to_layout()
         QApplication.restoreOverrideCursor()
 
     def _sort_options(self):
-        custom_sort_order = "ABCDEFGHIJKLMNOPQRSTUVWXYZΣΔθΩΦΨΛαβΓ"
+        custom_sort_order = [letter.value for letter in Letter]
         custom_order_dict = {
             char: index for index, char in enumerate(custom_sort_order)
         }
@@ -219,7 +220,7 @@ class OptionPickerScrollArea(PictographScrollArea):
         )
 
     def _on_option_clicked(self, clicked_option: "Option") -> None:
-        self._populate_options(clicked_option)
+        self._update_pictographs(clicked_option)
         new_beat = clicked_option.create_new_beat()
         self.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(new_beat)
 

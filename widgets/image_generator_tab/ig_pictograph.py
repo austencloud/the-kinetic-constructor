@@ -4,11 +4,11 @@ from objects.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from widgets.image_generator_tab.ig_scroll import IGScroll
+    from widgets.image_generator_tab.ig_scroll import IGScrollArea
 
 
 class IGPictograph(Pictograph):
-    def __init__(self, main_widget, ig_scroll_area: "IGScroll"):
+    def __init__(self, main_widget, ig_scroll_area: "IGScrollArea"):
         super().__init__(main_widget, "ig_pictograph")
         self.view = IG_Pictograph_View(self)
         self.ig_scroll_area = ig_scroll_area

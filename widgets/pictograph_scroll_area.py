@@ -1,12 +1,13 @@
-from typing import TYPE_CHECKING, Dict, List, Union
+from typing import TYPE_CHECKING, Dict, List, Literal, Union
 from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
 import pandas as pd
-from Enums import Letter, Orientation
+from Enums import Letter, Orientation, PictographAttributesDict
 from constants import LETTER
 from objects.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.TypeChecking import Turns
 from PyQt6.QtCore import Qt
 from widgets.image_generator_tab.ig_pictograph import IGPictograph
+from widgets.option_picker_tab.option import Option
 
 if TYPE_CHECKING:
     from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
@@ -41,9 +42,9 @@ class PictographScrollArea(QScrollArea):
     def apply_filters(self, filters: Dict[str, Union[Turns, Orientation]]) -> None:
         for ig_pictograph in self.pictographs.values():
             if ig_pictograph.meets_turn_criteria(filters):
-                self.update_displayed_pictographs()
+                self.update_pictographs()
 
-    def update_displayed_pictographs(self) -> None:
+    def update_pictographs(self) -> None:
         """
         Updates the displayed pictographs based on the selected letters.
         """
@@ -77,10 +78,15 @@ class PictographScrollArea(QScrollArea):
 
     ### OPTION CREATION ###
 
-    def _create_pictograph(self, pd_row_data: pd.Series):
-        ig_pictograph = IGPictograph(self.main_widget, self)
-        ig_pictograph.current_letter = pd_row_data[LETTER]
+    def _create_pictograph(
+        self, motion_dict: PictographAttributesDict, graph_type: Literal["option", "ig"]
+    ) -> Option | IGPictograph:
+        if graph_type == "option":
+            pictograph = Option(self.main_widget, self)
+        else:  # graph_type == "ig"
+            pictograph = IGPictograph(self.main_widget, self)
+        pictograph.current_letter = motion_dict[LETTER]
         filters = self.parent_tab.filter_frame.filters
-        ig_pictograph._setup_motions(pd_row_data, filters)
-        ig_pictograph.update_pictograph()
-        return ig_pictograph
+        pictograph._setup_motions(motion_dict, filters)
+        pictograph.update_pictograph()
+        return pictograph

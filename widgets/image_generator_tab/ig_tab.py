@@ -12,7 +12,7 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from constants import END_POS, LETTER, START_POS
 from widgets.image_generator_tab.ig_filter_frame import IGFilterFrame
 from widgets.image_generator_tab.ig_letter_button_frame import IGLetterButtonFrame
-from widgets.image_generator_tab.ig_scroll import IGScroll
+from widgets.image_generator_tab.ig_scroll import IGScrollArea
 
 
 if TYPE_CHECKING:
@@ -56,7 +56,7 @@ class IGTab(QWidget):
         self.letter_button_frame = IGLetterButtonFrame(self.main_widget)
         self.action_button_frame = self._setup_action_button_frame()
 
-        self.ig_scroll_area = IGScroll(self.main_widget, self)
+        self.ig_scroll_area = IGScrollArea(self.main_widget, self)
         self.filter_frame = IGFilterFrame(self)
         self.letter_button_frame.setStyleSheet(
             """
@@ -164,7 +164,7 @@ class IGTab(QWidget):
             button.setFlat(True)  # This makes the button appear pressed
             button.setStyleSheet(self.get_button_style(pressed=True))
 
-        self.ig_scroll_area.update_displayed_pictographs()
+        self.ig_scroll_area.update_pictographs()
 
     def on_letter_checkbox_state_changed(self, state, letter) -> None:
         print(f"Checkbox for letter {letter} state changed: {state}")
@@ -172,7 +172,7 @@ class IGTab(QWidget):
             self.selected_pictographs.append(letter)
         elif not state and letter in self.selected_pictographs:
             self.selected_pictographs.remove(letter)
-        self.ig_scroll_area.update_displayed_pictographs()
+        self.ig_scroll_area.update_pictographs()
 
     def generate_selected_images(self) -> None:
         main_widget = self.parentWidget()
