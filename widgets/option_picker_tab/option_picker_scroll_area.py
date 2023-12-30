@@ -86,9 +86,7 @@ class OptionPickerScrollArea(PictographScrollArea):
             option.image_loaded = True
 
     def update_pictographs(self) -> None:
-        """
-        Updates the displayed pictographs based on the selected letters.
-        """
+
         while self.layout.count():
             widget = self.layout.takeAt(0).widget()
             if widget is not None:
@@ -101,8 +99,8 @@ class OptionPickerScrollArea(PictographScrollArea):
             )
         ]
 
-        for i, (index, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
-            option: Option = self._create_option(pictograph_data)
+        for i, (_, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
+            option: Option = self._create_pictograph(pictograph_data)
             self.load_image_if_visible(option)
 
             row = i // self.COLUMN_COUNT
