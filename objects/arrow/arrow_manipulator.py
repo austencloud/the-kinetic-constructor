@@ -25,12 +25,12 @@ class ArrowManipulator:
             DOWN: {NORTHEAST: SOUTHEAST, NORTHWEST: SOUTHWEST},
             RIGHT: {NORTHWEST: NORTHEAST, SOUTHWEST: SOUTHEAST},
         }
-        current_location = self.arrow.loc
+        current_location = self.arrow.location
         new_location = wasd_location_map.get(direction, {}).get(
             current_location, current_location
         )
-        self.arrow.loc = new_location
-        self.arrow.ghost.loc = new_location
+        self.arrow.location = new_location
+        self.arrow.ghost.location = new_location
         (
             new_start_loc,
             new_end_loc,
@@ -258,7 +258,9 @@ class ArrowManipulator:
     def rotate_box_mode_shift_arrow(
         self, rot_dir, box_mode_shift_arrow_locations: List[Location]
     ) -> None:
-        current_location_index = box_mode_shift_arrow_locations.index(self.arrow.loc)
+        current_location_index = box_mode_shift_arrow_locations.index(
+            self.arrow.location
+        )
         new_location_index = (
             (current_location_index + 1) % 4
             if rot_dir == CLOCKWISE
@@ -275,11 +277,11 @@ class ArrowManipulator:
             new_arrow_location,
         )
 
-        self.arrow.loc = new_arrow_location
+        self.arrow.location = new_arrow_location
         self.arrow.motion.start_loc = new_start_loc
         self.arrow.motion.end_loc = new_end_loc
 
-        self.arrow.loc = new_arrow_location
+        self.arrow.location = new_arrow_location
         self.arrow.motion.start_loc = new_start_loc
         self.arrow.motion.end_loc = new_end_loc
         self.arrow.motion.prop.loc = new_end_loc
@@ -292,7 +294,7 @@ class ArrowManipulator:
         self, rot_dir, diamond_mode_shift_arrow_locations: List[Location]
     ) -> None:
         current_location_index = diamond_mode_shift_arrow_locations.index(
-            self.arrow.loc
+            self.arrow.location
         )
         new_location_index = (
             (current_location_index + 1) % 4
@@ -310,8 +312,8 @@ class ArrowManipulator:
             new_arrow_location,
         )
 
-        self.arrow.loc = new_arrow_location
-        self.arrow.ghost.loc = new_arrow_location
+        self.arrow.location = new_arrow_location
+        self.arrow.ghost.location = new_arrow_location
         self.arrow.motion.start_loc = new_start_loc
         self.arrow.motion.end_loc = new_end_loc
         self.arrow.motion.prop.loc = new_end_loc
@@ -324,17 +326,19 @@ class ArrowManipulator:
     def rotate_box_mode_static_arrow(
         self, rot_dir, box_mode_static_arrow_locations: List[Location]
     ) -> None:
-        current_location_index = box_mode_static_arrow_locations.index(self.arrow.loc)
+        current_location_index = box_mode_static_arrow_locations.index(
+            self.arrow.location
+        )
         new_location_index = (
             (current_location_index + 1) % 4
             if rot_dir == CLOCKWISE
             else (current_location_index - 1) % 4
         )
         new_location = box_mode_static_arrow_locations[new_location_index]
-        self.arrow.loc = new_location
+        self.arrow.location = new_location
         self.arrow.motion.start_loc = new_location
         self.arrow.motion.end_loc = new_location
-        self.arrow.loc = new_location
+        self.arrow.location = new_location
         self.arrow.motion.start_loc = new_location
         self.arrow.motion.end_loc = new_location
         self.arrow.motion.prop.loc = new_location
@@ -346,17 +350,17 @@ class ArrowManipulator:
     def rotate_diamond_mode_static_arrow(
         self, rot_dir, diamond_mode_locations: List[Location]
     ) -> None:
-        current_location_index = diamond_mode_locations.index(self.arrow.loc)
+        current_location_index = diamond_mode_locations.index(self.arrow.location)
         new_location_index = (
             (current_location_index + 1) % 4
             if rot_dir == CLOCKWISE
             else (current_location_index - 1) % 4
         )
         new_location = diamond_mode_locations[new_location_index]
-        self.arrow.loc = new_location
+        self.arrow.location = new_location
         self.arrow.motion.start_loc = new_location
         self.arrow.motion.end_loc = new_location
-        self.arrow.loc = new_location
+        self.arrow.location = new_location
         self.arrow.motion.start_loc = new_location
         self.arrow.motion.end_loc = new_location
         self.arrow.motion.prop.loc = new_location

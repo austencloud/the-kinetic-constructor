@@ -76,7 +76,7 @@ class Prop(GraphicalObject):
             new_pos = event.scenePos() - self.get_object_center()
             self.set_drag_pos(new_pos)
             self.update_ghost_prop_location(event.scenePos())
-            self.update_arrow_location(self.loc)
+            self.update_arrow_location(self.location)
 
     def mouseReleaseEvent(self, event) -> None:
         if isinstance(self.scene, self.scene.__class__):
@@ -189,7 +189,7 @@ class Prop(GraphicalObject):
             self.loc = new_location
 
             if self.motion.motion_type == STATIC:
-                self.motion.arrow.loc = new_location
+                self.motion.arrow.location = new_location
                 self.motion.start_loc = new_location
                 self.motion.end_loc = new_location
 
@@ -359,7 +359,7 @@ class Prop(GraphicalObject):
                 },
             }
 
-            current_arrow_location = self.motion.arrow.loc
+            current_arrow_location = self.motion.arrow.location
             rot_dir = self.motion.prop_rot_dir
             motion_type = self.motion.motion_type
             new_arrow_location = shift_location_map.get(
@@ -371,8 +371,8 @@ class Prop(GraphicalObject):
                     motion_type, rot_dir, new_arrow_location
                 )
 
-                self.motion.arrow.loc = new_arrow_location
-                self.motion.arrow.ghost.loc = new_arrow_location
+                self.motion.arrow.location = new_arrow_location
+                self.motion.arrow.ghost.location = new_arrow_location
                 self.motion.start_loc = start_loc
                 self.motion.end_loc = end_loc
                 self.motion.arrow.update_appearance()
@@ -380,7 +380,7 @@ class Prop(GraphicalObject):
                 self.pictograph.update_pictograph()
 
         elif self.motion.motion_type == STATIC:
-            self.motion.arrow.loc = new_arrow_location
+            self.motion.arrow.location = new_arrow_location
             self.motion.start_loc = new_arrow_location
             self.motion.end_loc = new_arrow_location
             self.motion.arrow.update_appearance()

@@ -51,7 +51,7 @@ class Motion:
 
     def assign_location_to_arrow(self) -> None:
         if hasattr(self, ARROW) and self.arrow:
-            self.arrow.loc = self.get_arrow_location(self.start_loc, self.end_loc)
+            self.arrow.location = self.get_arrow_location(self.start_loc, self.end_loc)
 
     ### UPDATE ###
 

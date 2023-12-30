@@ -51,14 +51,14 @@ class TriadArrowPositioner:
                 if arrow.motion.motion_type == ANTI:
                     if self.arrow_positioner._is_arrow_movable(arrow):
                         adjustment = self.arrow_positioner._calculate_adjustment_tuple(
-                            arrow.loc, 90
+                            arrow.location, 90
                         )
                     self.arrow_positioner._apply_adjustment(arrow, adjustment)
 
                 else:
                     if self.arrow_positioner._is_arrow_movable(arrow):
                         adjustment = self.arrow_positioner._calculate_adjustment_tuple(
-                            arrow.loc, 40
+                            arrow.location, 40
                         )
                     self.arrow_positioner._apply_adjustment(arrow, adjustment)
         else:
@@ -66,14 +66,14 @@ class TriadArrowPositioner:
                 if arrow.motion.motion_type == ANTI:
                     if self.arrow_positioner._is_arrow_movable(arrow):
                         adjustment = self.arrow_positioner._calculate_adjustment_tuple(
-                            arrow.loc, 80
+                            arrow.location, 80
                         )
                     self.arrow_positioner._apply_adjustment(arrow, adjustment)
 
                 else:
                     if self.arrow_positioner._is_arrow_movable(arrow):
                         adjustment = self.arrow_positioner._calculate_adjustment_tuple(
-                            arrow.loc, 40
+                            arrow.location, 40
                         )
                     self.arrow_positioner._apply_adjustment(arrow, adjustment)
 
@@ -85,7 +85,7 @@ class TriadArrowPositioner:
             for arrow in self.pictograph.arrows.values():
                 if self.arrow_positioner._is_arrow_movable(arrow):
                     adjustment = self.arrow_positioner._calculate_adjustment_tuple(
-                        arrow.loc, 90
+                        arrow.location, 90
                     )
 
                     self.arrow_positioner._apply_adjustment(arrow, adjustment)
@@ -93,7 +93,7 @@ class TriadArrowPositioner:
             for arrow in self.pictograph.arrows.values():
                 if self.arrow_positioner._is_arrow_movable(arrow):
                     adjustment = self.arrow_positioner._calculate_adjustment_tuple(
-                        arrow.loc, 80
+                        arrow.location, 80
                     )
 
                     self.arrow_positioner._apply_adjustment(arrow, adjustment)
@@ -102,7 +102,7 @@ class TriadArrowPositioner:
         for arrow in self.pictograph.arrows.values():
             if self.arrow_positioner._is_arrow_movable(arrow):
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
-                    arrow.loc, 80
+                    arrow.location, 80
                 )
                 adjusted_x = (
                     adjustment.x() - 10 if adjustment.x() < 0 else adjustment.x() + 10
@@ -166,17 +166,17 @@ class TriadArrowPositioner:
         for anti_arrow in anti_arrows:
             if anti_arrow.motion.end_or == IN:
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
-                    anti_arrow.loc, 85
+                    anti_arrow.location, 85
                 )
                 self.arrow_positioner._apply_adjustment(anti_arrow, adjustment)
             elif anti_arrow.motion.end_or == OUT:
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
-                    anti_arrow.loc, 85
+                    anti_arrow.location, 85
                 )
                 self.arrow_positioner._apply_adjustment(anti_arrow, adjustment)
             elif anti_arrow.motion.end_or == OUT and pro_arrows[0].motion.end_or == IN:
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
-                    anti_arrow.loc, 85
+                    anti_arrow.location, 85
                 )
                 self.arrow_positioner._apply_adjustment(anti_arrow, adjustment)
 

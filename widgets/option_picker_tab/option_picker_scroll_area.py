@@ -86,7 +86,6 @@ class OptionPickerScrollArea(PictographScrollArea):
             option.image_loaded = True
 
     def update_pictographs(self) -> None:
-
         while self.layout.count():
             widget = self.layout.takeAt(0).widget()
             if widget is not None:
@@ -134,7 +133,7 @@ class OptionPickerScrollArea(PictographScrollArea):
             prop.motion.update_prop_orientation()
             prop.update_rotation()
             prop.update_appearance()
-            arrow.loc = arrow.motion.get_arrow_location(
+            arrow.location = arrow.motion.get_arrow_location(
                 arrow.motion.start_loc, arrow.motion.end_loc
             )
         option.update_pictograph()

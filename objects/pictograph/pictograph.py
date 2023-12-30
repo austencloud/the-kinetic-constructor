@@ -145,44 +145,26 @@ class Pictograph(QGraphicsScene):
 
     def _setup_motions(self, pd_row_data: PictographAttributesDict, filters) -> None:
         """For pictographs that are generated from the pandas dataframe."""
-        red_motion_dict = self._create_motion_dict_from_pd_row_data(
-            pd_row_data, BLUE, filters
-        )
+        motion_colors = [BLUE, RED]
+        motion_types = [BLUE_MOTION_TYPE, RED_MOTION_TYPE]
 
-        blue_motion_dict = self._create_motion_dict_from_pd_row_data(
-            pd_row_data, RED, filters
-        )
-        self._add_motion(red_motion_dict)
-        self._add_motion(blue_motion_dict)
+        for color, motion_type in zip(motion_colors, motion_types):
+            motion_dict = self._create_motion_dict_from_pd_row_data(pd_row_data, color, filters)
+            self._add_motion(motion_dict)
 
-        self.red_motion.setup_attributes(red_motion_dict)
-        self.blue_motion.setup_attributes(blue_motion_dict)
+            motion:Motion = getattr(self, f"{color.lower()}_motion")
+            arrow:Arrow = getattr(self, f"{color.lower()}_arrow")
+
+            motion.setup_attributes(motion_dict)
+            motion.arrow.location = motion.get_arrow_location(motion.start_loc, motion.end_loc)
+            arrow.motion_type = pd_row_data[motion_type]
+            motion.motion_type = pd_row_data[motion_type]
+            arrow.motion = motion
+            motion.end_or = motion.get_end_or()
+            motion.update_prop_orientation()
 
         self.start_pos = pd_row_data[START_POS]
         self.end_pos = pd_row_data[END_POS]
-
-        self.red_motion.arrow.loc = self.red_motion.get_arrow_location(
-            self.red_motion.start_loc,
-            self.red_motion.end_loc,
-        )
-        self.blue_motion.arrow.loc = self.blue_motion.get_arrow_location(
-            self.blue_motion.start_loc,
-            self.blue_motion.end_loc,
-        )
-        self.red_arrow.motion_type = pd_row_data[RED_MOTION_TYPE]
-        self.blue_arrow.motion_type = pd_row_data[BLUE_MOTION_TYPE]
-        self.red_motion.motion_type = pd_row_data[RED_MOTION_TYPE]
-        self.blue_motion.motion_type = pd_row_data[BLUE_MOTION_TYPE]
-
-        self.red_arrow.motion = self.red_motion
-        self.blue_arrow.motion = self.blue_motion
-
-        self.red_motion.end_or = self.red_motion.get_end_or()
-        self.blue_motion.end_or = self.blue_motion.get_end_or()
-
-        self.red_motion.update_prop_orientation()
-        self.blue_motion.update_prop_orientation()
-
     def _add_motion(self, motion_dict: Dict) -> None:
         arrow = self._create_arrow(motion_dict)
         prop = self._create_prop(motion_dict)
@@ -466,7 +448,7 @@ class Pictograph(QGraphicsScene):
             new_beat.ghost_arrows[motion.color] = new_ghost_arrow
             new_beat.ghost_props[motion.color] = new_ghost_prop
 
-            if new_arrow.loc:
+            if new_arrow.location:
                 new_arrow.update_appearance()
                 new_ghost_arrow.update_appearance()
 
