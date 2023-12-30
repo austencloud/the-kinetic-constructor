@@ -14,7 +14,7 @@ class IGScrollArea(PictographScrollArea):
         self.main_widget = main_widget
         self.ig_tab = ig_tab
 
-    def update_pictographs(self) -> None:
+    def update_pictographs(self, letter) -> None:
         while self.layout.count():
             widget = self.layout.takeAt(0).widget()
             if widget is not None:
@@ -22,14 +22,17 @@ class IGScrollArea(PictographScrollArea):
                 widget.deleteLater()
 
         for motion_dict_collection in self.main_widget.letters.values():
-            for motion_dict in motion_dict_collection:
-                ig_pictograph: IGPictograph = self._create_pictograph(motion_dict, "ig")
-            row = len(motion_dict_collection) // self.COLUMN_COUNT
-            col = len(motion_dict_collection) % self.COLUMN_COUNT
-            self.layout.addWidget(ig_pictograph.view, row, col)
-            self.pictographs[motion_dict[LETTER]] = ig_pictograph
-            ig_pictograph.update_pictograph()
-            ig_pictograph.view.resize_ig_pictograph()
+            for i, motion_dict in enumerate(motion_dict_collection):
+                if motion_dict[LETTER] == letter:
+                    ig_pictograph: IGPictograph = self._create_pictograph(
+                        motion_dict, "ig"
+                    )
+                    self.pictographs[motion_dict[LETTER]] = ig_pictograph
+                    ig_pictograph.update_pictograph()
+                    ig_pictograph.view.resize_ig_pictograph()
+                    row = i // self.COLUMN_COUNT
+                    col = i % self.COLUMN_COUNT
+                    self.layout.addWidget(ig_pictograph.view, row, col)
 
         self.update_scroll_area_content()
 

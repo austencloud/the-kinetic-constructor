@@ -225,8 +225,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
                     LOCATION: self.end_loc,
                 }
                 prop.update_attributes(prop_dict)
-                prop.ghost = self.pictograph.ghost_props[self.color]
-                prop.ghost.update_attributes(prop_dict)
 
                 self.ghost.motion.prop = prop
                 self.motion.prop = prop

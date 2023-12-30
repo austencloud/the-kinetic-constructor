@@ -91,3 +91,4 @@ class PictographScrollArea(QScrollArea):
         pictograph._setup_motions(motion_dict, filters)
         pictograph.update_pictograph()
         return pictograph
+

@@ -193,7 +193,7 @@ class Prop(GraphicalObject):
                 self.motion.start_loc = new_location
                 self.motion.end_loc = new_location
 
-            self.axis = self.get_axis_from_orientation(self.orientation, self.loc)
+            self.axis = self.get_axis_from_orientation()
             self.update_appearance()
             self.update_arrow_location(new_location)
 
@@ -392,7 +392,7 @@ class Prop(GraphicalObject):
         ) = self.pictograph.get_closest_hand_point(event.scenePos())
 
         self.loc = closest_hand_point
-        self.axis = self.get_axis_from_orientation(self.orientation, self.loc)
+        self.axis = self.get_axis_from_orientation()
         self.update_appearance()
         self.setPos(closest_hand_point_coord)
 

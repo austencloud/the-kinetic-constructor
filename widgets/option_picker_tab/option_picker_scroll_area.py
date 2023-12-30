@@ -56,11 +56,11 @@ class OptionPickerScrollArea(PictographScrollArea):
                     start_option.current_letter = letter
                     start_option.start_pos = start_pos
                     start_option.end_pos = end_pos
-                    self._add_option_to_layout(start_option, True, 0, column)
+                    self._add_option_to_layout(start_option, 0, column, True)
                     break
 
     def _add_option_to_layout(
-        self, option: Option, is_start_pos: bool, row: int, col: int
+        self, option: Option, row: int, col: int, is_start_pos: bool
     ) -> None:
         option.view.mousePressEvent = self._get_click_handler(option, is_start_pos)
         self.layout.addWidget(option.view, row, col)
@@ -70,16 +70,12 @@ class OptionPickerScrollArea(PictographScrollArea):
         if not option.image_loaded:
             image_path = self.main_widget.generate_image_path(option)
 
-            # If the image is not in cache, check if it exists on disk.
             if image_path not in self.main_widget.image_cache:
                 if not os.path.exists(image_path):
-                    # If the image does not exist on disk, render and cache it.
                     option.render_and_cache_image()
                 else:
-                    # If it exists on disk, load it to the cache.
                     self.main_widget.image_cache[image_path] = QPixmap(image_path)
 
-            # Set the pixmap from the cache to the pixmap item of the option.
             if not option.pixmap:
                 option.pixmap = option.addPixmap(
                     self.main_widget.image_cache[image_path]
@@ -109,14 +105,11 @@ class OptionPickerScrollArea(PictographScrollArea):
             option: Option = self._create_option(pictograph_data)
             self.load_image_if_visible(option)
 
-            # Add the pictograph view to the layout
             row = i // self.COLUMN_COUNT
             col = i % self.COLUMN_COUNT
             self.layout.addWidget(option.view, row, col)
             self.pictographs[option.current_letter] = option
-            # Update the pictograph to reflect the new items
             option.update_pictograph()
-            # Resize the view to fit the scene
             option.view.resize_option_view()
 
         self.update_scroll_area_content()
@@ -197,9 +190,9 @@ class OptionPickerScrollArea(PictographScrollArea):
 
             self._add_option_to_layout(
                 option,
-                is_start_pos=False,
                 row=len(self.pictographs) // self.COLUMN_COUNT,
                 col=len(self.pictographs) % self.COLUMN_COUNT,
+                is_start_pos=False,
             )
 
     ### GETTERS ###
