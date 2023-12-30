@@ -104,7 +104,7 @@ Organized by number of calls:
         16        0.000086        0.000005             0.002396             0.000150 __init__                       prop\prop_types.py:12
         16        0.000009        0.000001             0.000009             0.000001 is_antiradial                  prop\prop.py:411
         16        0.000160        0.000010             0.003664             0.000229 __init__                       ghosts\ghost_prop.py:15
-        16        0.000072        0.000004             0.000072             0.000004 _create_motion_dict_from_pd_row_data pictograph\pictograph.py:219
+        16        0.000072        0.000004             0.000072             0.000004 _create_motion_dict_from_pd_row pictograph\pictograph.py:219
         16        0.000022        0.000001             0.000022             0.000001 set_is_svg_mirrored_from_attributes arrow\arrow.py:81
         16        0.000080        0.000005             0.000089             0.000006 _calculate_new_position        prop_positioners\base_prop_positioner.py:310
         28        0.000190        0.000007             0.000334             0.000024 _apply_adjustment              arrow_positioners\base_arrow_positioner.py:129
@@ -348,7 +348,7 @@ Organized by total time:
         60        0.000076        0.000001             0.000076             0.000001 <genexpr>                      utilities\letter_engine.py:196
         32        0.000075        0.000002             0.000075             0.000002 get_handpath_direction         objects\motion.py:214
          4        0.000073        0.000018             0.010866             0.002717 handle_mouse_release           pictograph\pictograph_event_handler.py:39
-        16        0.000072        0.000004             0.000072             0.000004 _create_motion_dict_from_pd_row_data pictograph\pictograph.py:219
+        16        0.000072        0.000004             0.000072             0.000004 _create_motion_dict_from_pd_row pictograph\pictograph.py:219
          8        0.000072        0.000009             0.000344             0.000043 init_motions                   pictograph\pictograph_init.py:38
          1        0.000071        0.000071             0.103226             0.103226 on_letter_button_clicked       image_generator_tab\ig_tab.py:154
          3        0.000071        0.000024             0.000353             0.000118 update_pixmap_item             pictograph\pictograph.py:544
@@ -579,7 +579,7 @@ Organized by cumulative time:
          2        0.000017        0.000009             0.000076             0.000038 resizeEvent                    object_panel\objectbox_view.py:23
         60        0.000076        0.000001             0.000076             0.000001 <genexpr>                      utilities\letter_engine.py:196
         32        0.000075        0.000002             0.000075             0.000002 get_handpath_direction         objects\motion.py:214
-        16        0.000072        0.000004             0.000072             0.000004 _create_motion_dict_from_pd_row_data pictograph\pictograph.py:219
+        16        0.000072        0.000004             0.000072             0.000004 _create_motion_dict_from_pd_row pictograph\pictograph.py:219
          8        0.000056        0.000007             0.000064             0.000008 has_hybrid_orientations        pictograph\pictograph.py:636
          8        0.000035        0.000004             0.000057             0.000007 toggle_grid_mode               objects\grid.py:232
          1        0.000021        0.000021             0.000056             0.000056 reposition_β                   by_letter_type\Type6_prop_positioner.py:11

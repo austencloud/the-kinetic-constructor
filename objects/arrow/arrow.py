@@ -116,7 +116,7 @@ class Arrow(GraphicalObject):
             if item != self and not isinstance(item, GridItem):
                 item.setSelected(False)
         if self.scene:
-            self.scene.update_attr_panel()
+            self.scene._update_attr_panel()
 
     def mouseMoveEvent(
         self: Union["Prop", "Arrow"], event: "QGraphicsSceneMouseEvent"
@@ -347,4 +347,6 @@ class Arrow(GraphicalObject):
         self.location = self.motion.prop.loc
 
     def update_arrow(self) -> None:
+        self.set_is_svg_mirrored_from_attributes()
+        self.update_mirror()
         self.update_appearance()

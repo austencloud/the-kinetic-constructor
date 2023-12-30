@@ -1,11 +1,6 @@
 from PyQt6.QtWidgets import QMenu
-from PyQt6.QtGui import QAction
 from PyQt6.QtCore import QPoint
-from objects.arrow.arrow import Arrow
-from objects.graphical_object import GraphicalObject
-from objects.prop.prop import Prop
-from typing import TYPE_CHECKING, List
-from PyQt6.QtWidgets import QGraphicsItem
+from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from objects.pictograph.pictograph import Pictograph

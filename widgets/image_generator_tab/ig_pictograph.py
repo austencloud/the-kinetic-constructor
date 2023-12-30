@@ -22,7 +22,7 @@ class IG_Pictograph_View(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-    def resize_ig_pictograph(self) -> None:
+    def resize_for_scroll_area(self) -> None:
         view_width = int(
             self.ig_pictograph.ig_scroll_area.width() / 4
         ) - self.ig_pictograph.ig_scroll_area.SPACING * (
@@ -40,5 +40,5 @@ class IG_Pictograph_View(QGraphicsView):
         self.scale(self.view_scale, self.view_scale)
         self.ig_pictograph.view_scale = self.view_scale
 
-    def wheelEvent(self, event):
+    def wheelEvent(self, event) -> None:
         self.ig_pictograph.ig_scroll_area.wheelEvent(event)

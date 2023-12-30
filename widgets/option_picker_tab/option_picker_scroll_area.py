@@ -92,22 +92,17 @@ class OptionPickerScrollArea(PictographScrollArea):
                 widget.setParent(None)
                 widget.deleteLater()
 
-        filtered_pictographs = self.option_picker_tab.pictograph_df[
-            self.option_picker_tab.pictograph_df[LETTER].isin(
-                self.option_picker_tab.selected_pictographs
-            )
-        ]
 
-        for i, (_, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
-            option: Option = self._create_pictograph(pictograph_data)
-            self.load_image_if_visible(option)
+        # for i, (_, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
+        #     option: Option = self._create_pictograph(pictograph_data)
+        #     self.load_image_if_visible(option)
 
-            row = i // self.COLUMN_COUNT
-            col = i % self.COLUMN_COUNT
-            self.layout.addWidget(option.view, row, col)
-            self.pictographs[option.current_letter] = option
-            option.update_pictograph()
-            option.view.resize_option_view()
+        #     row = i // self.COLUMN_COUNT
+        #     col = i % self.COLUMN_COUNT
+        #     self.layout.addWidget(option.view, row, col)
+        #     self.pictographs[option.current_letter] = option
+        #     option.update_pictograph()
+        #     option.view.resize_option_view()
 
         self.update_scroll_area_content()
 

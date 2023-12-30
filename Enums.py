@@ -370,7 +370,6 @@ class MotionCombinationType(Enum):
     STATIC = "Static"
 
 
-Turns = float | Literal["fl", "0", "0.5", "1", "1.5", "2", "2.5", "3"]
 
 
 class Turns(Enum):
@@ -496,7 +495,7 @@ class ArrowAttributesDicts(TypedDict):
 class MotionAttributesDicts(TypedDict):
     color: Color
     motion_type: MotionType
-    rot_dir: PropRotationDirection
+    prop_rot_dir: PropRotationDirection
     start_loc: Location
     end_loc: Location
     turns: Turns

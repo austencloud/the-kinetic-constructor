@@ -38,17 +38,10 @@ class BaseArrowPositioner:
 
     ### PUBLIC METHODS ###
     def update_arrow_positions(self) -> None:
-        self.red_motion = self.pictograph.motions[RED]
-        self.blue_motion = self.pictograph.motions[BLUE]
-        self.red_arrow = self.pictograph.arrows[RED]
-        self.blue_arrow = self.pictograph.arrows[BLUE]
-
-        self.motions = self.pictograph.motions.values()
         self.arrows = self.pictograph.arrows.values()
         self.ghost_arrows = self.pictograph.ghost_arrows.values()
-
         self.current_letter = self.pictograph.current_letter
-
+        
         for arrow in self.arrows:
             self._set_arrow_to_default_loc(arrow)
 
@@ -68,16 +61,18 @@ class BaseArrowPositioner:
             "Type6ArrowPositioner",
         ]
     ) -> None:
-        if self.current_letter in ["G", "H"]:
-            self._reposition_G_H()
-        elif self.current_letter == "I":
-            self._reposition_I()
-        elif self.current_letter in ["P"]:
-            self._reposition_P()
-        elif self.current_letter in ["Q"]:
-            self._reposition_Q()
-        elif self.current_letter in ["R"]:
-            self._reposition_R()
+        reposition_methods = {
+            "G": self._reposition_G_H,
+            "H": self._reposition_G_H,
+            "I": self._reposition_I,
+            "P": self._reposition_P,
+            "Q": self._reposition_Q,
+            "R": self._reposition_R,
+        }
+
+        reposition_method = reposition_methods.get(self.current_letter)
+        if reposition_method:
+            reposition_method()
 
     def _calculate_adjustment_tuple(self, location: str, distance: int) -> QPointF:
         location_adjustments = {
@@ -151,7 +146,6 @@ class BaseArrowPositioner:
 
     def _set_arrow_to_default_loc(self, arrow: Arrow, _: Dict = None) -> None:
         arrow.set_arrow_transform_origin_to_center()
-        # if the arrow isn't a Ghost Arrow itself,
         if not arrow.is_ghost:
             arrow.ghost.set_arrow_transform_origin_to_center()
         default_pos = self._get_default_position(arrow)

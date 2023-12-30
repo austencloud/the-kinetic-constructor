@@ -34,8 +34,8 @@ class Motion:
 
     def setup_attributes(self, motion_dict: Dict) -> None:
         self.color: Color = motion_dict[COLOR]
-        self.arrow: Arrow = motion_dict.get(ARROW)
-        self.prop: Prop = motion_dict.get(PROP)
+        self.arrow: Arrow = motion_dict[ARROW]
+        self.prop: Prop = motion_dict[PROP]
 
         self.motion_type: MotionType = motion_dict[MOTION_TYPE]
         self.turns: Turns = motion_dict[TURNS]
@@ -44,15 +44,15 @@ class Motion:
         self.end_loc: Location = motion_dict[END_LOC]
         self.start_or: Orientation = motion_dict[START_OR]
 
-        self.assign_location_to_arrow()
         if self.motion_type:
+            self.assign_attributes_to_arrow()
             self.end_or: Orientation = self.get_end_or()
             self.update_prop_orientation()
 
-    def assign_location_to_arrow(self) -> None:
+    def assign_attributes_to_arrow(self) -> None:
         if hasattr(self, ARROW) and self.arrow:
             self.arrow.location = self.get_arrow_location(self.start_loc, self.end_loc)
-
+            self.arrow.motion_type = self.motion_type
     ### UPDATE ###
 
     def update_attr_from_arrow(self) -> None:

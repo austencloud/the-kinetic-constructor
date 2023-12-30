@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 class IGTab(QWidget):
     imageGenerated = pyqtSignal(str)
-    selected_pictographs: List[IGPictograph] = []
+    selected_letters: List[IGPictograph] = []
 
     ### INITIALIZATION ###
 
@@ -155,23 +155,22 @@ class IGTab(QWidget):
         print(f"Button for letter {letter} clicked")
         button = self.letter_button_frame.buttons[letter]
 
-        if letter in self.selected_pictographs:
-            self.selected_pictographs.remove(letter)
+        if letter in self.selected_letters:
+            self.selected_letters.remove(letter)
             button.setFlat(False)  # This makes the button appear not pressed
             button.setStyleSheet(self.get_button_style(pressed=False))
         else:
-            self.selected_pictographs.append(letter)
+            self.selected_letters.append(letter)
             button.setFlat(True)  # This makes the button appear pressed
             button.setStyleSheet(self.get_button_style(pressed=True))
-
-        self.ig_scroll_area.update_pictographs(letter)
+        self.ig_scroll_area.update_pictographs()
 
     def on_letter_checkbox_state_changed(self, state, letter) -> None:
         print(f"Checkbox for letter {letter} state changed: {state}")
-        if state and letter not in self.selected_pictographs:
-            self.selected_pictographs.append(letter)
-        elif not state and letter in self.selected_pictographs:
-            self.selected_pictographs.remove(letter)
+        if state and letter not in self.selected_letters:
+            self.selected_letters.append(letter)
+        elif not state and letter in self.selected_letters:
+            self.selected_letters.remove(letter)
         self.ig_scroll_area.update_pictographs()
 
     def generate_selected_images(self) -> None:
@@ -179,7 +178,7 @@ class IGTab(QWidget):
         main_widget.setEnabled(False)
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.setMouseTracking(False)
-        for letter in self.selected_pictographs:
+        for letter in self.selected_letters:
             self.generate_images_for_letter(letter)
         main_widget.setEnabled(True)
         QApplication.restoreOverrideCursor()
@@ -201,14 +200,12 @@ class IGTab(QWidget):
             self.pictograph_df[LETTER] == letter
         ]
 
-        for _, pd_row_data in pictographs_for_letter.iterrows():
-            ig_pictograph: IGPictograph = self.ig_scroll_area._create_pictograph(
-                pd_row_data
-            )
+        for _, pd_row in pictographs_for_letter.iterrows():
+            ig_pictograph: IGPictograph = self.ig_scroll_area._create_pictograph(pd_row)
             ig_pictograph.render_and_cache_image()
 
     def toggle_pictograph_selection(self, state, index) -> None:
         if state == Qt.CheckState.Checked:
-            self.selected_pictographs.append(index)
+            self.selected_letters.append(index)
         else:
-            self.selected_pictographs.remove(index)
+            self.selected_letters.remove(index)
