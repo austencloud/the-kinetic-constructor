@@ -58,5 +58,5 @@ class MainPropPositioner:
         }
 
     def position_props(self) -> None:
-        positioner: BasePropPositioner = self.positioners[self.scene.current_letter]
+        positioner: BasePropPositioner = self.positioners[self.scene.letter]
         positioner.update_prop_positions()

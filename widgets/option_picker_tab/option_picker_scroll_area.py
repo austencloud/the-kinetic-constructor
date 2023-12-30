@@ -46,14 +46,15 @@ class OptionPickerScrollArea(PictographScrollArea):
     def _add_start_pos_option(self, position_key: str, column: int) -> None:
         """Adds an option for the specified start position."""
         start_pos, end_pos = position_key.split("_")
-        for letter, motion_dicts in self.letters.items():
-            for motion_dict in motion_dicts:
+        for letter, pictograph_dicts in self.letters.items():
+            for pictograph_dict in pictograph_dicts:
                 if (
-                    motion_dict[START_POS] == start_pos
-                    and motion_dict[END_POS] == end_pos
+                    pictograph_dict[START_POS] == start_pos
+                    and pictograph_dict[END_POS] == end_pos
                 ):
-                    start_option = self._create_pictograph(motion_dict, OPTION)
-                    start_option.current_letter = letter
+
+                    start_option = self._create_pictograph(pictograph_dict, OPTION)
+                    start_option.letter = letter
                     start_option.start_pos = start_pos
                     start_option.end_pos = end_pos
                     self._add_option_to_layout(start_option, 0, column, True)
@@ -140,7 +141,7 @@ class OptionPickerScrollArea(PictographScrollArea):
     def _update_pictographs(self, clicked_option: "Option") -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
 
-        current_letter = clicked_option.current_letter
+        current_letter = clicked_option.letter
         next_possible_letters = get_next_letters(current_letter)
         specific_end_pos = clicked_option.end_pos
 
@@ -170,7 +171,7 @@ class OptionPickerScrollArea(PictographScrollArea):
         self.pictographs = dict(
             sorted(
                 self.pictographs.items(),
-                key=lambda x: custom_order_dict.get(x[1].current_letter, float("inf")),
+                key=lambda x: custom_order_dict.get(x[1].letter, float("inf")),
             )
         )
 

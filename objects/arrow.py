@@ -293,8 +293,9 @@ class Arrow(GraphicalObject):
         self.update_rotation()
         if arrow_dict:
             self.update_attributes(arrow_dict)
-        if hasattr(self, GHOST) and self.ghost:
-            self.ghost.update_arrow()
+
+        if not self.is_ghost and self.ghost:
+            self.ghost.update_arrow(arrow_dict if arrow_dict else None)
             self.ghost.transform = self.transform
 
     def mirror_svg(self) -> None:
@@ -304,7 +305,7 @@ class Arrow(GraphicalObject):
         transform.scale(-1, 1)
         transform.translate(-self.center_x, -self.center_y)
         self.setTransform(transform)
-        if hasattr(self, GHOST) and self.ghost:
+        if not self.is_ghost and self.ghost:
             self.ghost.setTransform(transform)
             self.ghost.is_svg_mirrored = True
         self.is_svg_mirrored = True

@@ -1,3 +1,4 @@
+from math import pi
 from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Tuple, Union
 from PyQt6.QtCore import Qt, QPointF, QByteArray, QBuffer
 from PyQt6.QtSvg import QSvgRenderer
@@ -74,7 +75,7 @@ class Pictograph(QGraphicsScene):
         self.ghost_arrows: Dict[Color, GhostArrow] = {}
         self.ghost_props: Dict[Color, GhostProp] = {}
         self.motions: Dict[Color, Motion] = {}
-        self.current_letter: Letter = None
+        self.letter: Letter = None
         self.pictograph_dict: Dict = {}
         self.motion_dict_list: List[Dict] = []
         self.start_pos: SpecificPosition = None
@@ -151,28 +152,6 @@ class Pictograph(QGraphicsScene):
     ) -> None:
         """For pictographs that are generated from the pandas dataframe."""
 
-        self.start_pos = pictograph_dict[START_POS]
-        self.end_pos = pictograph_dict[END_POS]
-
-        for color in [BLUE, RED]:
-            motion_dict = self._create_motion_dict_from_pictograph_dict_and_filters(
-                pictograph_dict, color, filters
-            )
-            self.motions[color].update_attributes(motion_dict)
-            self.arrows[color].location = self.motions[color].get_arrow_location(
-                self.motions[color].start_loc, self.motions[color].end_loc
-            )
-            self.ghost_arrows[self.arrows[color].color].update_attributes(
-                self.arrows[color].get_attributes()
-            )
-            self.motions[color].update_prop_ori()
-
-        for arrow in self.arrows.values():
-            arrow.update_arrow()
-
-        for prop in self.props.values():
-            prop.update_prop()
-
     def _create_pictograph_dict_from_pd_row(
         self: Union["Option", "IGPictograph"],
         pd_row: pd.Series,
@@ -191,11 +170,10 @@ class Pictograph(QGraphicsScene):
             RED_END_LOC: pd_row[RED_END_LOC],
         }
 
-    def _create_motion_dict_from_pictograph_dict_and_filters(
+    def _create_motion_dict(
         self: Union["Option", "IGPictograph"],
         pictograph_dict: PictographAttributesDict,
         color: Color,
-        filters: Dict[str, Union[Turns, Orientation]],
     ) -> MotionAttributesDicts:
         return {
             COLOR: color,
@@ -205,9 +183,9 @@ class Pictograph(QGraphicsScene):
             PROP_ROT_DIR: pictograph_dict[f"{color}_prop_rot_dir"],
             START_LOC: pictograph_dict[f"{color}_start_loc"],
             END_LOC: pictograph_dict[f"{color}_end_loc"],
-            TURNS: filters[f"{color}_turns"],
-            START_OR: filters[f"{color}_start_or"],
-            END_OR: filters[f"{color}_end_or"],
+            TURNS: pictograph_dict[f"{color}_turns"],
+            START_OR: pictograph_dict[f"{color}_start_or"],
+            END_OR: pictograph_dict[f"{color}_end_or"],
         }
 
     ### EVENT HANDLERS ###
@@ -320,7 +298,20 @@ class Pictograph(QGraphicsScene):
 
     ### UPDATERS ###
 
-    def update_pictograph(self) -> None:
+    def update_attributes(self, pictograph_dict: PictographAttributesDict) -> None:
+        for attr_name, attr_value in pictograph_dict.items():
+            setattr(self, attr_name, attr_value)
+
+    def update_pictograph(
+        self, pictograph_dict: PictographAttributesDict = None
+    ) -> None:
+        if pictograph_dict:
+            self.update_attributes(pictograph_dict)
+            for color in [RED, BLUE]:
+                self._create_motion_dict(
+                    pictograph_dict, color
+                )
+            
         self._update_objects()
         self._update_motions()
         self._update_letter()

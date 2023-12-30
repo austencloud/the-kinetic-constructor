@@ -40,8 +40,8 @@ class BaseArrowPositioner:
     def update_arrow_positions(self) -> None:
         self.arrows = self.pictograph.arrows.values()
         self.ghost_arrows = self.pictograph.ghost_arrows.values()
-        self.current_letter = self.pictograph.current_letter
-        
+        self.current_letter = self.pictograph.letter
+
         for arrow in self.arrows:
             self._set_arrow_to_default_loc(arrow)
 

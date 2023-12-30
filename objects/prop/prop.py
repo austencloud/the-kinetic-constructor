@@ -161,7 +161,7 @@ class Prop(GraphicalObject):
             self.ghost.setRotation(prop_rotation_angle)
         self.setRotation(prop_rotation_angle)
 
-    def update_prop(self) -> None:
+    def update_prop(self, prop_dict: PropAttributesDicts = None) -> None:
         self.update_color()
         self.update_prop_rotation_angle()
         self.motion.update_prop_ori()

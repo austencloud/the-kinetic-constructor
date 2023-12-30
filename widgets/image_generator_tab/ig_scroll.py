@@ -44,8 +44,8 @@ class IGScrollArea(PictographScrollArea):
                     pictograph_dict, IG_PICTOGRAPH
                 )
                 row = index // self.COLUMN_COUNT  # Calculate the row number
-                col = index % self.COLUMN_COUNT   # Calculate the column number
+                col = index % self.COLUMN_COUNT  # Calculate the column number
                 self.layout.addWidget(ig_pictograph.view, row, col)
-                self.pictographs[ig_pictograph.current_letter] = ig_pictograph
+                self.pictographs[ig_pictograph.letter] = ig_pictograph
                 ig_pictograph.view.resize_for_scroll_area()
-                index += 1 
+                index += 1

@@ -24,12 +24,14 @@ if TYPE_CHECKING:
 
 
 class Motion:
+    
     def __init__(
         self,
         scene: Union["ArrowBox", "PropBox", "Pictograph"],
         motion_dict: MotionAttributesDicts,
     ) -> None:
         self.scene = scene
+
         self.update_attributes(motion_dict)
 
     ### SETUP ###
@@ -48,11 +50,9 @@ class Motion:
 
         if self.motion_type:
             self.manipulator = MotionManipulator(self)
-            self.assign_attributes_to_arrow()
             self.end_ori: Orientation = self.get_end_or()
 
-    def assign_attributes_to_arrow(self) -> None:
-        if hasattr(self, ARROW) and self.arrow:
+        if self.arrow:
             self.arrow.location = self.get_arrow_location(self.start_loc, self.end_loc)
             self.arrow.motion_type = self.motion_type
 
@@ -79,8 +79,17 @@ class Motion:
     def update_motion(self, motion_dict: MotionAttributesDicts = None) -> None:
         if motion_dict:
             self.update_attributes(motion_dict)
-        self.arrow.update_arrow()
-        self.prop.update_prop()
+        arrow_dict = {
+            LOCATION: self.get_arrow_location(self.start_loc, self.end_loc),
+            MOTION_TYPE: self.motion_type,
+            TURNS: self.turns,
+        }
+        prop_dict = {
+            LOCATION: self.end_loc,
+            ORIENTATION: self.end_ori,
+        }
+        self.arrow.update_arrow(arrow_dict)
+        self.prop.update_prop(prop_dict)
         
     ### GETTERS ###
 

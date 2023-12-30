@@ -54,7 +54,5 @@ class MainArrowPositioner:
         }
 
     def position_arrows(self) -> None:
-        positioner: BaseArrowPositioner = self.positioners.get(
-            self.scene.current_letter
-        )
+        positioner: BaseArrowPositioner = self.positioners.get(self.scene.letter)
         positioner.update_arrow_positions()

@@ -460,7 +460,7 @@ class SpecificStartEndPositionsDicts(TypedDict):
 class PropAttributesDicts(TypedDict):
     color: Color
     prop_type: PropType
-    prop_location: Location
+    location: Location
     orientation: Orientation
 
 
@@ -481,8 +481,8 @@ class MotionAttributesDicts(TypedDict):
 
 class ArrowAttributesDicts(TypedDict):
     color: Color
-    location: Location
     motion_type: MotionType
+    location: Location
     turns: Turns
 
 

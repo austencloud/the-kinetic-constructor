@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Dict, List, Literal, Union
 from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
 from Enums import Letter, Orientation, PictographAttributesDict
-from constants import IG_PICTOGRAPH, LETTER, OPTION
+from constants import END_POS, IG_PICTOGRAPH, LETTER, OPTION, START_POS
 from utilities.TypeChecking.TypeChecking import Turns
 from PyQt6.QtCore import Qt
 from widgets.image_generator_tab.ig_pictograph import IGPictograph
@@ -65,9 +65,6 @@ class PictographScrollArea(QScrollArea):
             pictograph = Option(self.main_widget, self)
         else:  # graph_type == IG_PICTOGRAPH
             pictograph = IGPictograph(self.main_widget, self)
-        pictograph.motion_dict = pictograph_dict
-        pictograph.current_letter = pictograph_dict[LETTER]
-        filters = self.parent_tab.filter_frame.filters
-        pictograph._setup_pictograph_from_dict(pictograph_dict, filters)
-        pictograph.update_pictograph()
+            
+        pictograph.update_pictograph(pictograph_dict)
         return pictograph

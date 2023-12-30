@@ -47,7 +47,6 @@ class IGTab(QWidget):
         self.right_layout.addWidget(self.button_panel)
         self.layout.addLayout(self.left_layout)
         self.layout.addLayout(self.right_layout)
-
         self.connect_buttons(self.letter_button_frame)
 
     def setup_buttons(self):

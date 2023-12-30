@@ -56,7 +56,7 @@ class BasePropPositioner:
         self.props = self.pictograph.props.values()
         self.ghost_props = self.pictograph.ghost_props.values()
 
-        self.current_letter = self.pictograph.current_letter
+        self.current_letter = self.pictograph.letter
         self.prop_type_counts = self._count_prop_types()
 
         for prop in self.props:
