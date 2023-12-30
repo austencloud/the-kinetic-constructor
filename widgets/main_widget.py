@@ -223,7 +223,7 @@ class MainWidget(QWidget):
         return self.image_cache[image_path]
 
     def generate_image_path(self, pictograph: Pictograph) -> str:
-        motion_dict = pictograph.pd_row_data
+        motion_dict = pictograph.motion_dict
         prop_type = self.prop_type
         letter = motion_dict[LETTER]
         blue_turns = pictograph.motions[BLUE].turns

@@ -78,7 +78,7 @@ class Pictograph(QGraphicsScene):
         self.end_pos: SpecificPosition = None
         self.image_loaded: bool = False
         self.pixmap = None  # Store the pixmap item
-        self.pd_row_data = None  # Store the row data from the pandas dataframe
+        self.motion_dict = None  # Store the row data from the pandas dataframe
         self.view_scale = 1
         self.event_handler = PictographEventHandler(self)
 
@@ -227,7 +227,7 @@ class Pictograph(QGraphicsScene):
             ARROW: self.arrows[color],
             PROP: self.props[color],
             START_POS: motion_dict[START_POS],
-            END_POS:motion_dict[END_POS],
+            END_POS: motion_dict[END_POS],
             MOTION_TYPE: motion_dict[f"{color}_motion_type"],
             PROP_ROT_DIR: motion_dict[f"{color}_prop_rot_dir"],
             START_LOC: motion_dict[f"{color}_start_loc"],

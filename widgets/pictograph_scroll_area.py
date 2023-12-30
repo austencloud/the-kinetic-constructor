@@ -26,7 +26,7 @@ class PictographScrollArea(QScrollArea):
         self.main_widget = main_widget
         self.parent_tab = parent_tab
         self.letters: Dict[Letter, List[Dict[str, str]]] = self.main_widget.letters
-        self.pictographs: Dict[Letter, Pictograph] = {}
+        self.pictographs: Dict[Letter, Union["IGPictograph", "Option"]] = {}
 
         self._initialize_ui()
 
@@ -85,6 +85,7 @@ class PictographScrollArea(QScrollArea):
             pictograph = Option(self.main_widget, self)
         else:  # graph_type == "ig"
             pictograph = IGPictograph(self.main_widget, self)
+        pictograph.motion_dict = motion_dict
         pictograph.current_letter = motion_dict[LETTER]
         filters = self.parent_tab.filter_frame.filters
         pictograph._setup_motions(motion_dict, filters)

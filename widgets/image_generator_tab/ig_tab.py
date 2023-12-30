@@ -52,24 +52,15 @@ class IGTab(QWidget):
     def _setup_ui(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.setLayout(self.layout)
-
         self.letter_button_frame = IGLetterButtonFrame(self.main_widget)
         self.action_button_frame = self._setup_action_button_frame()
-
         self.ig_scroll_area = IGScrollArea(self.main_widget, self)
         self.filter_frame = IGFilterFrame(self)
-        self.letter_button_frame.setStyleSheet(
-            """
-            QFrame {
-                border: 1px solid black;
-            }
-            """
-        )
+        self.letter_button_frame.setStyleSheet("QFrame { border: 1px solid black; }")
         button_panel = self._setup_button_panel()
         self.layout.addWidget(self.letter_button_frame)
         self.layout.addWidget(self.ig_scroll_area)
         self.layout.addWidget(button_panel)
-
         for key, button in self.letter_button_frame.buttons.items():
             button.clicked.connect(
                 lambda checked, letter=key: self.on_letter_button_clicked(letter)
@@ -80,13 +71,7 @@ class IGTab(QWidget):
         button_panel_layout = QVBoxLayout()
 
         button_panel.setLayout(button_panel_layout)
-        button_panel.setStyleSheet(
-            """
-            QFrame {
-                border: 1px solid black;
-            }
-            """
-        )
+        button_panel.setStyleSheet("QFrame { border: 1px solid black; }")
         button_panel.setContentsMargins(0, 0, 0, 0)
         button_panel_layout.setAlignment(Qt.AlignmentFlag.AlignRight)
         button_panel_layout.setContentsMargins(0, 0, 0, 0)

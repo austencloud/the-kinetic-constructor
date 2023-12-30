@@ -52,7 +52,7 @@ class OptionPickerScrollArea(PictographScrollArea):
                     motion_dict[START_POS] == start_pos
                     and motion_dict[END_POS] == end_pos
                 ):
-                    start_option = self._create_pictograph(motion_dict)
+                    start_option = self._create_pictograph(motion_dict, "option")
                     start_option.current_letter = letter
                     start_option.start_pos = start_pos
                     start_option.end_pos = end_pos
@@ -162,17 +162,19 @@ class OptionPickerScrollArea(PictographScrollArea):
         specific_end_pos = clicked_option.end_pos
 
         # Filter the DataFrame correctly
-        filtered_data = self.letters[
-            self.letters.index.get_level_values(0) == specific_end_pos
+        filtered_data = [
+            motion_dict
+            for motion_dict_collection in self.main_widget.letters.values()
+            for motion_dict in motion_dict_collection
+            if motion_dict["end_pos"] == specific_end_pos
+            and motion_dict["letter"] in next_possible_letters
         ]
-        filtered_data = filtered_data[filtered_data[LETTER].isin(next_possible_letters)]
 
         self.pictographs.clear()
         self.clear()
-        for motion_dict_collection in self.main_widget.letters.values():
-            for motion_dict in motion_dict_collection:
-                option = self._create_pictograph(motion_dict)
-                self.pictographs[motion_dict[LETTER]] = option
+        for motion_dict in filtered_data:
+            option = self._create_pictograph(motion_dict, "option")
+            self.pictographs[motion_dict["letter"]] = option
         self._sort_options()
         self._add_sorted_options_to_layout()
         QApplication.restoreOverrideCursor()
@@ -182,17 +184,22 @@ class OptionPickerScrollArea(PictographScrollArea):
         custom_order_dict = {
             char: index for index, char in enumerate(custom_sort_order)
         }
-        self.pictographs.sort(key=lambda x: custom_order_dict.get(x[0], float("inf")))
+        self.pictographs = dict(
+            sorted(
+                self.pictographs.items(),
+                key=lambda x: custom_order_dict.get(x[1].current_letter, float("inf")),
+            )
+        )
 
     def _add_sorted_options_to_layout(self):
-        for row, (letter, option) in enumerate(self.pictographs):
+        for _, option in self.pictographs.items():
             option.view.resize_option_view()
 
             self._add_option_to_layout(
                 option,
                 is_start_pos=False,
-                row=row // self.COLUMN_COUNT,
-                col=row % self.COLUMN_COUNT,
+                row=len(self.pictographs) // self.COLUMN_COUNT,
+                col=len(self.pictographs) % self.COLUMN_COUNT,
             )
 
     ### GETTERS ###
