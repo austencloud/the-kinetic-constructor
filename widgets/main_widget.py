@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import os
 from typing import TYPE_CHECKING, Any, Optional
 from PyQt6.QtCore import QEvent, Qt, QThreadPool
@@ -12,22 +13,29 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import QEvent, Qt, QThreadPool
 from PyQt6.QtGui import QWheelEvent, QPixmap
 import pandas as pd
+from Enums import PictographAttributesDict
 from constants import (
     BLUE,
     BLUE_END_LOC,
     BLUE_MOTION_TYPE,
+    BLUE_PROP_ROT_DIR,
     BLUE_START_LOC,
+    BLUE_START_OR,
+    BLUE_TURNS,
     DIAMOND,
     END_POS,
+    IN,
     LETTER,
     RED,
     RED_END_LOC,
     RED_MOTION_TYPE,
+    RED_PROP_ROT_DIR,
     RED_START_LOC,
+    RED_START_OR,
+    RED_TURNS,
     STAFF,
     START_POS,
 )
-from utilities.TypeChecking.TypeChecking import PictographDataframe
 from widgets.image_generator_tab.ig_tab import IGTab
 from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
 from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
@@ -56,7 +64,7 @@ class MainWidget(QWidget):
         self.image_cache_initialized = False
         self.resize(int(self.main_window.width()), int(self.main_window.height()))
         self.key_event_handler = KeyEventHandler()
-        self.letters: PictographDataframe = self.load_all_letters()
+        self.letters: PictographAttributesDict = self.load_all_letters()
         self.graph_editor_tab = GraphEditorTab(self)
         self.sequence_widget = SequenceWidget(self)
         self.option_picker_tab = OptionPickerTab(self)
@@ -65,12 +73,63 @@ class MainWidget(QWidget):
         self.configure_layouts()
         self.pixmap_cache = {}
 
-    def load_all_letters(self) -> PictographDataframe:
+    def load_all_letters(self) -> dict:
         df = pd.read_csv("PictographDataframe.csv")
-        letters: PictographDataframe = (
+        df = df.sort_values(by=[LETTER, START_POS, END_POS])
+
+        # Selecting the necessary columns
+        df = self.init_dataframe(df)
+
+        # Creating the letters dictionary
+        letters = (
             df.groupby(LETTER).apply(lambda x: x.to_dict(orient="records")).to_dict()
         )
-        return letters
+
+        self.letters = letters
+        return self.letters
+
+    def init_dataframe(self, df):
+        df = df[
+            [
+                LETTER,
+                START_POS,
+                END_POS,
+                BLUE_MOTION_TYPE,
+                BLUE_PROP_ROT_DIR,
+                BLUE_START_LOC,
+                BLUE_END_LOC,
+                RED_MOTION_TYPE,
+                RED_PROP_ROT_DIR,
+                RED_START_LOC,
+                RED_END_LOC,
+            ]
+        ]
+        df[BLUE_TURNS] = 0
+        df[RED_TURNS] = 0
+        df[BLUE_START_OR] = IN
+        df[RED_START_OR] = IN
+        
+        df = df[
+            [
+                LETTER,
+                START_POS,
+                END_POS,
+                BLUE_MOTION_TYPE,
+                BLUE_PROP_ROT_DIR,
+                BLUE_START_LOC,
+                BLUE_END_LOC,
+                BLUE_START_OR,
+                BLUE_TURNS,
+                RED_MOTION_TYPE,
+                RED_PROP_ROT_DIR,
+                RED_START_LOC,
+                RED_END_LOC,
+                RED_START_OR,
+                RED_TURNS,
+            ]
+        ]
+        
+        return df
 
     def configure_layouts(self) -> None:
         self.horizontal_splitter = StyledSplitter(Qt.Orientation.Horizontal)

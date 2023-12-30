@@ -29,7 +29,6 @@ DictVariants = (
     MotionAttributesDicts | SpecificStartEndPositionsDicts | OptimalLocationDicts
 )
 DictVariantsLists = List[DictVariants]
-PictographDataframe = Dict[Letter, List[DictVariantsLists]]
 
 
 class Mode(Enum):

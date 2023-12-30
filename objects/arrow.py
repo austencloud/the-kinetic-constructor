@@ -47,37 +47,28 @@ class Arrow(GraphicalObject):
     def __init__(self, scene, arrow_dict, motion: "Motion") -> None:
         super().__init__(scene)
         self.motion = motion
-        self.prop: Prop = None
+        
         self.svg_file = self.get_svg_file(
             arrow_dict[MOTION_TYPE],
             arrow_dict[TURNS],
         )
         self.setup_svg_renderer(self.svg_file)
         self.setAcceptHoverEvents(True)
-        self._setup_attributes(scene, arrow_dict)
-
-    ### SETUP ###
-
-    def _setup_attributes(self, scene, arrow_dict: "ArrowAttributesDicts") -> None:
+        self.update_attributes(arrow_dict)
+        
+        self.prop: Prop = None
         self.scene: Pictograph | ArrowBox = scene
-        self.drag_offset = QPointF(0, 0)
         self.is_svg_mirrored: bool = False
         self.is_dragging: bool = False
         self.ghost: GhostArrow = None
         self.location: Location = None
         self.is_ghost: bool = False
-        self.turns: Turns = arrow_dict[TURNS]
+        self.drag_offset = QPointF(0, 0)
+        self.center_x = self.boundingRect().center().x()
+        self.center_y = self.boundingRect().center().y()
+        
+    ### SETUP ###
 
-        self.center_x = self.boundingRect().width() / 2
-        self.center_y = self.boundingRect().height() / 2
-
-        if arrow_dict:
-            self.update_attributes(arrow_dict)
-            self.arrow_dict = arrow_dict
-
-        if self.motion:
-            self.update_arrow()
-            self.center = self.boundingRect().center()
 
     ### MOUSE EVENTS ###
 
@@ -267,13 +258,15 @@ class Arrow(GraphicalObject):
         return svg_file
 
     def _change_arrow_to_static(self) -> None:
-        static_arrow_dict = {
+        motion_dict = {
             COLOR: self.color,
             MOTION_TYPE: STATIC,
             TURNS: 0,
+            START_LOC: self.motion.prop.loc,
+            END_LOC: self.motion.prop.loc,
         }
-
-        self.update_attributes(static_arrow_dict)
+        self.motion.update_motion(motion_dict)
+        
         self.motion[COLOR] = self.color
         self.motion[MOTION_TYPE] = STATIC
         self.motion[TURNS] = 0
@@ -282,21 +275,19 @@ class Arrow(GraphicalObject):
         self.motion[END_LOC] = self.motion.prop.loc
         self.location = self.motion.prop.loc
 
-    def update_turns(self) -> None:
-        self.turns = self.motion.turns
 
     def update_arrow(self, arrow_dict: ArrowAttributesDicts = None) -> None:
-        self.update_turns()
+        if arrow_dict:
+            self.update_attributes(arrow_dict)
+            if hasattr(self, GHOST) and self.ghost:
+                self.ghost.update_arrow(arrow_dict)
+        if hasattr(self, GHOST) and self.ghost:
+            self.ghost.transform = self.transform
+            self.ghost.update_arrow()
         self.update_svg()
         self.update_mirror()
         self.update_color()
         self.update_rotation()
-        if arrow_dict:
-            self.update_attributes(arrow_dict)
-
-        if not self.is_ghost and self.ghost:
-            self.ghost.update_arrow(arrow_dict if arrow_dict else None)
-            self.ghost.transform = self.transform
 
     def mirror_svg(self) -> None:
         self.set_arrow_transform_origin_to_center()

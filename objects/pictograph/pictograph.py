@@ -185,7 +185,6 @@ class Pictograph(QGraphicsScene):
             END_LOC: pictograph_dict[f"{color}_end_loc"],
             TURNS: pictograph_dict[f"{color}_turns"],
             START_OR: pictograph_dict[f"{color}_start_or"],
-            END_OR: pictograph_dict[f"{color}_end_or"],
         }
 
     ### EVENT HANDLERS ###
@@ -308,12 +307,12 @@ class Pictograph(QGraphicsScene):
         if pictograph_dict:
             self.update_attributes(pictograph_dict)
             for color in [RED, BLUE]:
-                self._create_motion_dict(
-                    pictograph_dict, color
-                )
-            
-        self._update_objects()
-        self._update_motions()
+                motion_dict = self._create_motion_dict(pictograph_dict, color)
+                self.motions[color].update_motion(motion_dict)
+        else:
+            self._update_motions()
+
+        self._position_objects()
         self._update_letter()
         if self.graph_type == MAIN:
             self._update_attr_panel()
@@ -324,7 +323,7 @@ class Pictograph(QGraphicsScene):
                 motion
             )
 
-    def _update_objects(self):
+    def _position_objects(self) -> None:
         self.prop_positioner.position_props()
         self.arrow_positioner.position_arrows()
 
@@ -334,12 +333,12 @@ class Pictograph(QGraphicsScene):
 
     def _update_letter(self) -> None:
         if all(motion.motion_type for motion in self.motions.values()):
-            self.current_letter = self.letter_engine.get_current_letter()
-            self.letter_item.letter = self.current_letter
-            self._set_letter_renderer(self.current_letter)
+            self.letter = self.letter_engine.get_current_letter()
+            self.letter_item.letter = self.letter
+            self._set_letter_renderer(self.letter)
             self.letter_item.position_letter_item(self.letter_item)
         else:
-            self.current_letter = None
+            self.letter = None
             svg_path = f"resources/images/letter_button_icons/blank.svg"
             renderer = QSvgRenderer(svg_path)
             if renderer.isValid():
@@ -455,7 +454,7 @@ class Pictograph(QGraphicsScene):
         self.update_pictograph()
 
         prop_type = self.main_widget.prop_type
-        letter = self.current_letter
+        letter = self.letter
         letter_type = self._get_letter_type(letter)
         blue_motion_type_prefix = self.motions[BLUE].motion_type[0]
         red_motion_type_prefix = self.motions[RED].motion_type[0]
@@ -527,13 +526,13 @@ class Pictograph(QGraphicsScene):
     ### FLAGS ###
 
     def has_props_in_beta(self) -> bool | None:
-        return self.current_letter in beta_ending_letters
+        return self.letter in beta_ending_letters
 
     def has_props_in_alpha(self) -> bool | None:
-        return self.current_letter in alpha_ending_letters
+        return self.letter in alpha_ending_letters
 
     def has_props_in_gamma(self) -> bool | None:
-        return self.current_letter in gamma_ending_letters
+        return self.letter in gamma_ending_letters
 
     def has_hybrid_orientations(self) -> bool:
         red_prop, blue_prop = self.props[RED], self.props[BLUE]

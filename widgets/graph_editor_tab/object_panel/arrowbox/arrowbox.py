@@ -107,7 +107,15 @@ class ArrowBox(ObjectBox):
                 motion.start_loc, motion.end_loc
             )
 
+        
+
         for arrow in arrows:
+            arrow_dict = {
+                COLOR: arrow.color,
+                MOTION_TYPE: arrow.motion_type,
+                TURNS: arrow.turns,
+            }
+            arrow.update_svg()
             arrow.update_arrow()
 
         return arrows

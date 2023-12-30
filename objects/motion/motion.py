@@ -47,10 +47,10 @@ class Motion:
         self.start_loc: Location = motion_dict[START_LOC]
         self.end_loc: Location = motion_dict[END_LOC]
         self.start_or: Orientation = motion_dict[START_OR]
+        self.end_ori: Orientation = self.get_end_or()
 
         if self.motion_type:
             self.manipulator = MotionManipulator(self)
-            self.end_ori: Orientation = self.get_end_or()
 
         if self.arrow:
             self.arrow.location = self.get_arrow_location(self.start_loc, self.end_loc)
@@ -72,7 +72,7 @@ class Motion:
         self.turns = None
         self.motion_type = None
 
-        self.motion.prop_rot_dir = None
+        self.prop_rot_dir = None
         self.start_or = None
         self.end_ori = None
 
