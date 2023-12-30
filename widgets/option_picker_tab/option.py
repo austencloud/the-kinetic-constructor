@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Literal
 from PyQt6.QtCore import Qt, QEvent, pyqtSignal, QTimer
 from PyQt6.QtWidgets import QGraphicsView
+from constants import OPTION
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
 from objects.pictograph.pictograph import Pictograph
 
@@ -20,7 +21,7 @@ class Option(Pictograph):
         self, main_widget: "MainWidget", option_picker_scroll: "OptionPickerScrollArea"
     ) -> None:
         self.view: "OptionView" = None
-        super().__init__(main_widget, "option")
+        super().__init__(main_widget, OPTION)
         self.main_widget = main_widget
         self.option_picker_scroll = option_picker_scroll
 

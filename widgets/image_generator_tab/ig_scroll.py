@@ -33,7 +33,7 @@ class IGScrollArea(PictographScrollArea):
 
         self.update_scroll_area_content()
 
-    def update_scroll_area_content(self):
+    def update_scroll_area_content(self) -> None:
         self.container.adjustSize()
         self.layout.update()
         self.updateGeometry()

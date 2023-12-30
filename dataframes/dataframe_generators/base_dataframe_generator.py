@@ -122,16 +122,16 @@ class BaseDataFrameGenerator:
         df[BLUE_MOTION_TYPE] = pd.Categorical(
             df[BLUE_MOTION_TYPE], categories=motion_type_order, ordered=True
         )
-        df["blue_prop_rot_dir"] = pd.Categorical(
-            df["blue_prop_rot_dir"],
+        df[BLUE_PROP_ROT_DIR] = pd.Categorical(
+            df[BLUE_PROP_ROT_DIR],
             categories=rot_dir_order,
             ordered=True,
         )
         df.sort_values(
             by=[
-                "letter",
+                LETTER,
                 BLUE_MOTION_TYPE,
-                "blue_prop_rot_dir",
+                BLUE_PROP_ROT_DIR,
                 START_POS,
             ],
             inplace=True,

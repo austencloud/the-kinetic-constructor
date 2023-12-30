@@ -68,7 +68,7 @@ class MainWidget(QWidget):
     def load_all_letters(self) -> PictographDataframe:
         df = pd.read_csv("PictographDataframe.csv")
         letters: PictographDataframe = (
-            df.groupby("letter").apply(lambda x: x.to_dict(orient="records")).to_dict()
+            df.groupby(LETTER).apply(lambda x: x.to_dict(orient="records")).to_dict()
         )
         return letters
 

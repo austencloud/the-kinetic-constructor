@@ -98,19 +98,19 @@ class BaseArrowPositioner:
 
     def compare_states(self, current_state: Dict, candidate_state: Dict) -> bool:
         relevant_keys = [
-            "letter",
+            LETTER,
             START_POS,
             END_POS,
             BLUE_MOTION_TYPE,
-            "blue_prop_rot_dir",
+            BLUE_PROP_ROT_DIR,
             "blue_turns",
-            "blue_start_loc",
-            "blue_end_loc",
+            BLUE_START_LOC,
+            BLUE_END_LOC,
             RED_MOTION_TYPE,
-            "red_prop_rot_dir",
+            RED_PROP_ROT_DIR,
             "red_turns",
-            "red_start_loc",
-            "red_end_loc",
+            RED_START_LOC,
+            RED_END_LOC,
         ]
         return all(
             current_state.get(key) == candidate_state.get(key) for key in relevant_keys

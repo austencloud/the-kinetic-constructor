@@ -71,17 +71,17 @@ class Type3Generator(BaseDataFrameGenerator):
                 )
                 data.append(
                     {
-                        "letter": letter,
+                        LETTER: letter,
                         START_POS: start_pos,
                         END_POS: end_pos,
                         BLUE_MOTION_TYPE: blue_motion_type,
-                        "blue_prop_rot_dir": blue_prop_rot_dir,
-                        "blue_start_loc": blue_start_loc,
-                        "blue_end_loc": blue_end_loc,
+                        BLUE_PROP_ROT_DIR: blue_prop_rot_dir,
+                        BLUE_START_LOC: blue_start_loc,
+                        BLUE_END_LOC: blue_end_loc,
                         RED_MOTION_TYPE: red_motion_type,
-                        "red_prop_rot_dir": red_prop_rot_dir,
-                        "red_start_loc": red_start_loc,
-                        "red_end_loc": red_end_loc,
+                        RED_PROP_ROT_DIR: red_prop_rot_dir,
+                        RED_START_LOC: red_start_loc,
+                        RED_END_LOC: red_end_loc,
                     }
                 )
         return data

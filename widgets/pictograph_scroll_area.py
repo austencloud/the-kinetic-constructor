@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Dict, List, Literal, Union
 from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
 import pandas as pd
 from Enums import Letter, Orientation, PictographAttributesDict
-from constants import LETTER
+from constants import LETTER, OPTION
 from objects.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.TypeChecking import Turns
 from PyQt6.QtCore import Qt
@@ -55,7 +55,7 @@ class PictographScrollArea(QScrollArea):
                 widget.deleteLater()
 
         filtered_pictographs = self.parent_tab.pictograph_df[
-            self.parent_tab.pictograph_df["letter"].isin(
+            self.parent_tab.pictograph_df[LETTER].isin(
                 self.parent_tab.selected_pictographs
             )
         ]
@@ -81,7 +81,7 @@ class PictographScrollArea(QScrollArea):
     def _create_pictograph(
         self, motion_dict: PictographAttributesDict, graph_type: Literal["option", "ig"]
     ) -> Option | IGPictograph:
-        if graph_type == "option":
+        if graph_type == OPTION:
             pictograph = Option(self.main_widget, self)
         else:  # graph_type == "ig"
             pictograph = IGPictograph(self.main_widget, self)

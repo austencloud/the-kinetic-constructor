@@ -41,16 +41,14 @@ class Type2Generator(BaseDataFrameGenerator):
                         red_motion_type, shift_handpath
                     )
                 else:
-                    red_prop_rot_dir = "NoRotation"  # Explicitly indicating no rotation
+                    red_prop_rot_dir = "NoRotation"
 
                 if blue_motion_type in [PRO, ANTI]:
                     blue_prop_rot_dir = self.get_prop_rot_dir(
                         blue_motion_type, shift_handpath
                     )
                 else:
-                    blue_prop_rot_dir = (
-                        "NoRotation"  # Explicitly indicating no rotation
-                    )
+                    blue_prop_rot_dir = "NoRotation"
 
                 if red_motion_type == STATIC:
                     red_start_loc, red_end_loc = self.get_static_locations(
@@ -71,17 +69,17 @@ class Type2Generator(BaseDataFrameGenerator):
                 )
                 data.append(
                     {
-                        "letter": letter,
+                        LETTER: letter,
                         START_POS: start_pos,
                         END_POS: end_pos,
                         BLUE_MOTION_TYPE: blue_motion_type,
-                        "blue_prop_rot_dir": blue_prop_rot_dir,
-                        "blue_start_loc": blue_start_loc,
-                        "blue_end_loc": blue_end_loc,
+                        BLUE_PROP_ROT_DIR: blue_prop_rot_dir,
+                        BLUE_START_LOC: blue_start_loc,
+                        BLUE_END_LOC: blue_end_loc,
                         RED_MOTION_TYPE: red_motion_type,
-                        "red_prop_rot_dir": red_prop_rot_dir,
-                        "red_start_loc": red_start_loc,
-                        "red_end_loc": red_end_loc,
+                        RED_PROP_ROT_DIR: red_prop_rot_dir,
+                        RED_START_LOC: red_start_loc,
+                        RED_END_LOC: red_end_loc,
                     }
                 )
         return data

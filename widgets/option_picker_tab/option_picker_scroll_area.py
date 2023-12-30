@@ -52,7 +52,7 @@ class OptionPickerScrollArea(PictographScrollArea):
                     motion_dict[START_POS] == start_pos
                     and motion_dict[END_POS] == end_pos
                 ):
-                    start_option = self._create_pictograph(motion_dict, "option")
+                    start_option = self._create_pictograph(motion_dict, OPTION)
                     start_option.current_letter = letter
                     start_option.start_pos = start_pos
                     start_option.end_pos = end_pos
@@ -100,7 +100,7 @@ class OptionPickerScrollArea(PictographScrollArea):
                 widget.deleteLater()
 
         filtered_pictographs = self.option_picker_tab.pictograph_df[
-            self.option_picker_tab.pictograph_df["letter"].isin(
+            self.option_picker_tab.pictograph_df[LETTER].isin(
                 self.option_picker_tab.selected_pictographs
             )
         ]
@@ -167,14 +167,14 @@ class OptionPickerScrollArea(PictographScrollArea):
             for motion_dict_collection in self.main_widget.letters.values()
             for motion_dict in motion_dict_collection
             if motion_dict["end_pos"] == specific_end_pos
-            and motion_dict["letter"] in next_possible_letters
+            and motion_dict[LETTER] in next_possible_letters
         ]
 
         self.pictographs.clear()
         self.clear()
         for motion_dict in filtered_data:
-            option = self._create_pictograph(motion_dict, "option")
-            self.pictographs[motion_dict["letter"]] = option
+            option = self._create_pictograph(motion_dict, OPTION)
+            self.pictographs[motion_dict[LETTER]] = option
         self._sort_options()
         self._add_sorted_options_to_layout()
         QApplication.restoreOverrideCursor()
