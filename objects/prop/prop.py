@@ -20,9 +20,9 @@ from utilities.TypeChecking.TypeChecking import RotationAngles
 
 
 if TYPE_CHECKING:
-    from objects.arrow.arrow import Arrow
+    from objects.arrow import Arrow
     from objects.pictograph.pictograph import Pictograph
-    from objects.motion import Motion
+    from objects.motion.motion import Motion
     from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
 
 
@@ -45,7 +45,7 @@ class Prop(GraphicalObject):
         self.axis: Axis = None
         self.color: Color = prop_dict[COLOR]
         self.loc: Location = prop_dict[LOCATION]
-        self.orientation: Orientation = prop_dict[ORIENTATION]
+        self.ori: Orientation = prop_dict[ORIENTATION]
         self.center = self.boundingRect().center()
 
     ### MOUSE EVENTS ###
@@ -57,7 +57,7 @@ class Prop(GraphicalObject):
                 self.ghost = self.scene.ghost_props[self.color]
             self.ghost.color = self.color
             self.ghost.loc = self.loc
-            self.ghost.orientation = self.orientation
+            self.ghost.ori = self.ori
             self.ghost.update_prop()
             self.ghost.show()
             self.scene.props[self.ghost.color] = self.ghost
@@ -93,20 +93,20 @@ class Prop(GraphicalObject):
     def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
         self.loc = target_arrow.motion.end_loc
-        self.axis = self.get_axis_from_orientation(self.orientation, self.loc)
+        self.axis = self.get_axis_from_ori(self.ori, self.loc)
         self.update_prop()
 
     def clear_attributes(self) -> None:
         self.loc = None
         self.layer = None
-        self.orientation = None
+        self.ori = None
         self.axis = None
         self.motion = None
         self.update_prop()
 
     ### GETTERS ###
 
-    def get_axis_from_orientation(self) -> None:
+    def get_axis_from_ori(self) -> None:
         if self.is_radial():
             axis: Axis = VERTICAL if self.loc in [NORTH, SOUTH] else HORIZONTAL
         elif self.is_antiradial():
@@ -154,7 +154,7 @@ class Prop(GraphicalObject):
             },
         }
 
-        key = self.orientation
+        key = self.ori
         rotation_angle = angle_map.get(key, {}).get(self.loc, 0)
         return rotation_angle
 
@@ -171,7 +171,7 @@ class Prop(GraphicalObject):
     def update_prop(self) -> None:
         self.update_color()
         self.update_prop_rotation_angle()
-        self.motion.update_prop_orientation()
+        self.motion.update_prop_ori()
 
     def get_svg_file(self, prop_type: PropType) -> str:
         svg_file = f"{PROP_DIR}{prop_type}.svg"
@@ -195,7 +195,7 @@ class Prop(GraphicalObject):
                 self.motion.start_loc = new_location
                 self.motion.end_loc = new_location
 
-            self.axis = self.get_axis_from_orientation()
+            self.axis = self.get_axis_from_ori()
             self.update_prop()
             self.update_arrow_location(new_location)
 
@@ -223,28 +223,28 @@ class Prop(GraphicalObject):
 
     def get_offset(self, prop_length, prop_width) -> Tuple[int, int]:
         # Layer 1 logic
-        if self.orientation == IN:
+        if self.ori == IN:
             offset_map = {
                 NORTH: (prop_width, 0),
                 SOUTH: (0, prop_length),
                 WEST: (0, 0),
                 EAST: (prop_length, prop_width),
             }
-        elif self.orientation == OUT:
+        elif self.ori == OUT:
             offset_map = {
                 NORTH: (0, prop_length),
                 SOUTH: (prop_width, 0),
                 WEST: (prop_length, prop_width),
                 EAST: (0, 0),
             }
-        elif self.orientation == CLOCK:
+        elif self.ori == CLOCK:
             offset_map = {
                 NORTH: (0, 0),
                 SOUTH: (prop_length, prop_width),
                 WEST: (0, prop_length),
                 EAST: (prop_width, 0),
             }
-        elif self.orientation == COUNTER:
+        elif self.ori == COUNTER:
             offset_map = {
                 NORTH: (prop_length, prop_width),
                 SOUTH: (0, 0),
@@ -394,7 +394,7 @@ class Prop(GraphicalObject):
         ) = self.pictograph.get_closest_hand_point(event.scenePos())
 
         self.loc = closest_hand_point
-        self.axis = self.get_axis_from_orientation()
+        self.axis = self.get_axis_from_ori()
         self.update_prop()
         self.setPos(closest_hand_point_coord)
 
@@ -404,7 +404,7 @@ class Prop(GraphicalObject):
         self.scene.update_pictograph()
 
     def is_radial(self) -> bool:
-        return self.orientation in [IN, OUT]
+        return self.ori in [IN, OUT]
 
     def is_antiradial(self) -> bool:
-        return self.orientation in [CLOCK, COUNTER]
+        return self.ori in [CLOCK, COUNTER]

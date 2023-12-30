@@ -1,5 +1,5 @@
 from Enums import Location, SpecificPosition
-from objects.motion import Motion
+from objects.motion.motion import Motion
 from constants import *
 from utilities.TypeChecking.TypeChecking import (
     Dict,

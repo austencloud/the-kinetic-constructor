@@ -20,7 +20,7 @@ from constants import (
     STATIC,
     TURNS,
 )
-from objects.arrow.arrow_manipulator import ArrowManipulator
+from objects.motion.motion_manipulator import MotionManipulator
 from objects.grid import GridItem
 from objects.prop.prop import Prop
 
@@ -35,7 +35,7 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 if TYPE_CHECKING:
-    from objects.motion import Motion
+    from objects.motion.motion import Motion
     from objects.pictograph.pictograph import Pictograph
     from objects.ghosts.ghost_arrow import GhostArrow
     from objects.prop.prop import Prop
@@ -58,7 +58,7 @@ class Arrow(GraphicalObject):
 
     def _setup_attributes(self, scene, arrow_dict: "ArrowAttributesDicts") -> None:
         self.scene: Pictograph | ArrowBox = scene
-        self.manipulator = ArrowManipulator(self)
+        self.manipulator = MotionManipulator(self)
         self.drag_offset = QPointF(0, 0)
         self.is_svg_mirrored: bool = False
         self.is_dragging: bool = False
@@ -124,8 +124,8 @@ class Arrow(GraphicalObject):
     def _update_prop_on_click(self) -> None:
         self.motion.prop.color = self.color
         self.motion.prop.loc = self.motion.end_loc
-        self.motion.prop.axis = self.motion.prop.get_axis_from_orientation(
-            self.motion.end_or, self.motion.end_loc
+        self.motion.prop.axis = self.motion.prop.get_axis_from_ori(
+            self.motion.end_ori, self.motion.end_loc
         )
 
     def _update_ghost_on_click(self) -> None:
@@ -161,7 +161,7 @@ class Arrow(GraphicalObject):
         self.scene.props[self.color] = self.motion.prop
         self.is_dragging = True
         self.scene.update_pictograph()
-        self.motion.update_prop_orientation()
+        self.motion.update_prop_ori()
 
     def set_drag_pos(self, new_pos: QPointF) -> None:
         self.setPos(new_pos)
@@ -344,8 +344,14 @@ class Arrow(GraphicalObject):
         self.motion[END_LOC] = self.motion.prop.loc
         self.location = self.motion.prop.loc
 
+    def update_turns(self) -> None:
+        self.turns = self.motion.turns
+
     def update_arrow(self) -> None:
+        self.update_turns()
         self.update_svg()
         self.update_mirror()
         self.update_color()
         self.update_rotation()
+        if hasattr(self, "ghost"):
+            self.ghost.update_arrow()

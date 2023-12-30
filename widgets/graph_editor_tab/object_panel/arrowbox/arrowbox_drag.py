@@ -9,7 +9,7 @@ from Enums import (
 )
 from constants import IN
 
-from objects.arrow.arrow import Arrow
+from objects.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Tuple
 from objects.ghosts.ghost_arrow import GhostArrow
 

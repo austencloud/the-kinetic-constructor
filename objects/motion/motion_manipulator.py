@@ -11,10 +11,10 @@ from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from objects.arrow.arrow import Arrow
+    from objects.arrow import Arrow
 
 
-class ArrowManipulator:
+class MotionManipulator:
     def __init__(self, arrow: "Arrow"):
         self.arrow = arrow
 
@@ -43,7 +43,6 @@ class ArrowManipulator:
         self.arrow.motion.prop.loc = new_end_loc
 
         self.arrow.motion.prop.update_prop()
-        self.arrow.motion.update_attr_from_arrow()
         self.arrow.update_arrow()
         self.arrow.ghost.update_arrow()
 
@@ -145,10 +144,10 @@ class ArrowManipulator:
         self.arrow.motion.motion_type = new_motion_type
         self.arrow.motion.prop_rot_dir = new_rot_dir
 
-        self.arrow.motion.prop.orientation = self.arrow.motion.prop.swap_orientation(
-            self.arrow.motion.prop.orientation
+        self.arrow.motion.prop.ori = self.arrow.motion.prop.swap_orientation(
+            self.arrow.motion.prop.ori
         )
-        self.arrow.motion.end_or = self.arrow.motion.prop.orientation
+        self.arrow.motion.end_ori = self.arrow.motion.prop.ori
 
         svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
         self.arrow.motion_type = new_motion_type

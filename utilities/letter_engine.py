@@ -25,7 +25,7 @@ from data.letter_engine_data import (
     parallel_combinations,
 )
 from data.positions_map import get_specific_start_end_poss
-from objects.motion import Motion
+from objects.motion.motion import Motion
 from constants import (
     ALPHA,
     BETA,
@@ -152,8 +152,8 @@ class LetterEngine:
         red_motion_type = self.red_motion.motion_type
         blue_motion_type = self.blue_motion.motion_type
 
-        self.motion_type_combination: MotionTypeCombination = motion_type_combinations.get(
-            (red_motion_type, blue_motion_type)
+        self.motion_type_combination: MotionTypeCombination = (
+            motion_type_combinations.get((red_motion_type, blue_motion_type))
         )
         motion_type_letter_group: LetterGroupsByMotionType = (
             motion_type_letter_groups.get(self.motion_type_combination, "")

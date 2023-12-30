@@ -23,9 +23,9 @@ from objects.pictograph.position_engines.arrow_positioners.main_arrow_positioner
 )
 
 from ..letter_item import LetterItem
-from ..motion import Motion
+from ..motion.motion import Motion
 from ..prop.prop import Prop
-from ..arrow.arrow import Arrow
+from ..arrow import Arrow
 from ..ghosts.ghost_arrow import GhostArrow
 from ..ghosts.ghost_prop import GhostProp
 from ..grid import Grid
@@ -165,7 +165,7 @@ class Pictograph(QGraphicsScene):
             self.ghost_arrows[self.arrows[color].color].update_attributes(
                 self.arrows[color].get_attributes()
             )
-            self.motions[color].update_prop_orientation()
+            self.motions[color].update_prop_ori()
 
         for arrow in self.arrows.values():
             arrow.update_arrow()
@@ -497,8 +497,8 @@ class Pictograph(QGraphicsScene):
         # Modify the filename to include motion types and turns
         blue_turns = self.motions[BLUE].turns
         red_turns = self.motions[RED].turns
-        blue_end_or = self.motions[BLUE].end_or
-        red_end_or = self.motions[RED].end_or
+        blue_end_or = self.motions[BLUE].end_ori
+        red_end_or = self.motions[RED].end_ori
 
         image_name = (
             f"{letter}_"

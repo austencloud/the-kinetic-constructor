@@ -25,7 +25,7 @@ from constants import (
     DOWN,
 )
 
-from objects.motion import Motion
+from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 
 
@@ -75,7 +75,7 @@ class BasePropPositioner:
 
     def _set_prop_to_default_location(self, prop: Prop, strict: bool = False) -> None:
         position_offsets = self._get_position_offsets(prop)
-        key = (prop.orientation, prop.loc)
+        key = (prop.ori, prop.loc)
         offset = position_offsets.get(key, QPointF(0, 0))
         prop.setTransformOriginPoint(0, 0)
 
@@ -164,10 +164,7 @@ class BasePropPositioner:
             self._reposition_small_bilateral_props()
 
     def _reposition_small_unilateral_props(self, small_unilateral_props: List[Prop]):
-        if (
-            small_unilateral_props[0].orientation
-            == small_unilateral_props[1].orientation
-        ):
+        if small_unilateral_props[0].ori == small_unilateral_props[1].ori:
             for prop in small_unilateral_props:
                 self._set_prop_to_default_location(prop)
                 (
@@ -213,7 +210,7 @@ class BasePropPositioner:
 
     def _get_direction_for_motion(self, motion: Motion) -> Direction | None:
         """Determine the direction based on a single motion."""
-        if motion.end_or in [
+        if motion.end_ori in [
             IN,
             OUT,
         ] and motion.motion_type in [
@@ -225,7 +222,7 @@ class BasePropPositioner:
                 return RIGHT if motion.start_loc == EAST else LEFT
             elif motion.end_loc in [EAST, WEST]:
                 return DOWN if motion.start_loc == SOUTH else UP
-        elif motion.end_or in [
+        elif motion.end_ori in [
             CLOCK,
             COUNTER,
         ] and motion.motion_type in [

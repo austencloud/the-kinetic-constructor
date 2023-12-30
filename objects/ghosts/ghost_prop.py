@@ -1,6 +1,6 @@
 from Enums import PropAttributesDicts
 from constants import COLOR
-from objects.motion import Motion
+from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING

@@ -120,7 +120,6 @@ class PropBox(ObjectBox):
         prop.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, True)
         self.set_prop_position(prop)
         self.addItem(prop)
-        prop.update_prop()
 
     def get_initial_prop_attributes(self) -> List[Dict]:
         if self.grid.grid_mode == DIAMOND:
@@ -207,7 +206,6 @@ class PropBox(ObjectBox):
         prop_position = hand_point + QPointF(offset_x, offset_y)
         prop.setPos(prop_position)
         prop.update_prop_rotation_angle()
-        prop.update_prop()
         prop.setTransformOriginPoint(prop.boundingRect().center())
 
     def change_prop_type(self, new_prop_type: PropType) -> None:

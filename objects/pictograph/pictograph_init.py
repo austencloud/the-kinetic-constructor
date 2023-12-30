@@ -5,12 +5,12 @@ from Enums import (
     MotionType,
     PropType,
 )
-from objects.arrow.arrow import Arrow
+from objects.arrow import Arrow
 from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
 from objects.letter_item import LetterItem
-from objects.motion import Motion
+from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 from constants import *
 from utilities.TypeChecking.TypeChecking import Location

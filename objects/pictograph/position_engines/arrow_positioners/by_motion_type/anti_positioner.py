@@ -13,7 +13,7 @@ from constants import (
     SOUTHWEST,
     NORTHWEST,
 )
-from objects.arrow.arrow import Arrow
+from objects.arrow import Arrow
 from PyQt6.QtCore import QPointF
 
 

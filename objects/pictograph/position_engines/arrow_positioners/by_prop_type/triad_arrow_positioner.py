@@ -7,7 +7,7 @@ if TYPE_CHECKING:
         BaseArrowPositioner,
     )
 from PyQt6.QtCore import QPointF
-from objects.arrow.arrow import Arrow
+from objects.arrow import Arrow
 from constants import ANTI, BLUE, IN, OUT, RED
 
 
@@ -44,8 +44,8 @@ class TriadArrowPositioner:
 
     def _adjust_triads_for_letter_L(self):
         if (
-            self.pictograph.arrows["red"].motion.end_or == IN
-            and self.pictograph.arrows["blue"].motion.end_or == IN
+            self.pictograph.arrows["red"].motion.end_ori == IN
+            and self.pictograph.arrows["blue"].motion.end_ori == IN
         ):
             for arrow in self.pictograph.arrows.values():
                 if arrow.motion.motion_type == ANTI:
@@ -79,8 +79,8 @@ class TriadArrowPositioner:
 
     def _adjust_triads_for_letter_K(self):
         if (
-            self.pictograph.arrows["red"].motion.end_or == IN
-            and self.pictograph.arrows["blue"].motion.end_or == IN
+            self.pictograph.arrows["red"].motion.end_ori == IN
+            and self.pictograph.arrows["blue"].motion.end_ori == IN
         ):
             for arrow in self.pictograph.arrows.values():
                 if self.arrow_positioner._is_arrow_movable(arrow):
@@ -164,17 +164,19 @@ class TriadArrowPositioner:
 
         # Check for the special condition
         for anti_arrow in anti_arrows:
-            if anti_arrow.motion.end_or == IN:
+            if anti_arrow.motion.end_ori == IN:
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
                     anti_arrow.location, 85
                 )
                 self.arrow_positioner._apply_adjustment(anti_arrow, adjustment)
-            elif anti_arrow.motion.end_or == OUT:
+            elif anti_arrow.motion.end_ori == OUT:
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
                     anti_arrow.location, 85
                 )
                 self.arrow_positioner._apply_adjustment(anti_arrow, adjustment)
-            elif anti_arrow.motion.end_or == OUT and pro_arrows[0].motion.end_or == IN:
+            elif (
+                anti_arrow.motion.end_ori == OUT and pro_arrows[0].motion.end_ori == IN
+            ):
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
                     anti_arrow.location, 85
                 )
@@ -188,7 +190,7 @@ class TriadArrowPositioner:
                 motions_with_in_orientation = [
                     arrow.motion
                     for arrow in self.pictograph.arrows.values()
-                    if arrow.motion.end_or == IN
+                    if arrow.motion.end_ori == IN
                 ]
                 if len(motions_with_in_orientation) == 2:
                     adjusted_x = (

@@ -25,7 +25,7 @@ from constants import (
     WEST,
     DISTANCE,
 )
-from objects.motion import Motion
+from objects.motion.motion import Motion
 
 
 if TYPE_CHECKING:
@@ -381,9 +381,9 @@ class StaffArrowPositioner:
                 anti_motion.arrow.location, 80
             )
             self.arrow_positioner._apply_adjustment(anti_motion.arrow, adjustment)
-        elif red_motion.prop.orientation == OUT or blue_motion.prop.orientation == OUT:
+        elif red_motion.prop.ori == OUT or blue_motion.prop.ori == OUT:
             for arrow in self.pictograph.arrows.values():
-                if arrow.motion.prop.orientation == OUT:
+                if arrow.motion.prop.ori == OUT:
                     adjustment = self.arrow_positioner.calculate_adjustment(
                         arrow.location, 55
                     )
@@ -392,16 +392,16 @@ class StaffArrowPositioner:
     # Helper functions
     def _are_both_props_radial(self, red_motion: Motion, blue_motion: Motion) -> bool:
         return (
-            red_motion.prop.orientation in RadialOrientation
-            and blue_motion.prop.orientation in RadialOrientation
+            red_motion.prop.ori in RadialOrientation
+            and blue_motion.prop.ori in RadialOrientation
         )
 
     def _is_at_least_one_prop_antiradial(
         self, red_motion: Motion, blue_motion: Motion
     ) -> bool:
         return (
-            red_motion.prop.orientation in AntiradialOrientation
-            or blue_motion.prop.orientation in AntiradialOrientation
+            red_motion.prop.ori in AntiradialOrientation
+            or blue_motion.prop.ori in AntiradialOrientation
         )
 
     def _apply_adjustment_to_all_arrows(self, adjustment_value: int) -> None:
@@ -418,7 +418,7 @@ class StaffArrowPositioner:
         for arrow in self.pictograph.arrows.values():
             if (
                 arrow.motion_type == motion_type
-                and arrow.motion.prop.orientation == orientation
+                and arrow.motion.prop.ori == orientation
             ):
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
                     arrow.location, adjustment_value

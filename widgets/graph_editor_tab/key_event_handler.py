@@ -1,5 +1,5 @@
 from Enums import Direction
-from objects.arrow.arrow import Arrow
+from objects.arrow import Arrow
 from objects.prop.prop import Prop
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent

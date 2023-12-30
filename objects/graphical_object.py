@@ -9,7 +9,7 @@ from constants import RED, BLUE, HEX_RED, HEX_BLUE
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
-    from objects.arrow.arrow import Arrow
+    from objects.arrow import Arrow
     from objects.prop.prop import Prop
 
 

@@ -8,9 +8,9 @@ from PyQt6.QtWidgets import (
     QComboBox,
     QLabel,
 )
-from objects.arrow.arrow import Arrow
+from objects.arrow import Arrow
 from constants import *
-from objects.motion import Motion
+from objects.motion.motion import Motion
 from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox_drag import ArrowBoxDrag
 from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox_view import ArrowBoxView
 from objects.grid import Grid

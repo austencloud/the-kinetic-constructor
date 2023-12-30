@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QPointF
 from Enums import Letter
 from constants import *
-from objects.arrow.arrow import Arrow
+from objects.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, List, Union
 
 

@@ -249,11 +249,11 @@ class MainWidget(QWidget):
             f"({motion_dict[BLUE_MOTION_TYPE]}_"
             f"{motion_dict[BLUE_START_LOC]}→{motion_dict[BLUE_END_LOC]}_"
             f"{blue_turns}_"
-            f"{pictograph.motions[BLUE].start_or}→{pictograph.motions[BLUE].end_or})_"
+            f"{pictograph.motions[BLUE].start_or}→{pictograph.motions[BLUE].end_ori})_"
             f"({motion_dict[RED_MOTION_TYPE]}_"
             f"{motion_dict[RED_START_LOC]}→{motion_dict[RED_END_LOC]}_"
             f"{red_turns}_"
-            f"{pictograph.motions[RED].start_or}→{pictograph.motions[RED].end_or})_"
+            f"{pictograph.motions[RED].start_or}→{pictograph.motions[RED].end_ori})_"
             f"{prop_type}.png"
         )
         return os.path.join(image_dir, image_name)

@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING, Dict, Union
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
-    from objects.arrow.arrow import Arrow
+    from objects.arrow import Arrow
     from objects.prop.prop import Prop
     from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
 
@@ -46,9 +46,11 @@ class Motion:
 
         if self.motion_type:
             self.assign_attributes_to_arrow()
-            self.end_or: Orientation = self.get_end_or()
-            self.update_prop_orientation()
-
+            self.end_ori: Orientation = self.get_end_or()
+        
+        if self.prop:
+            self.prop.update_prop()
+        
     def assign_attributes_to_arrow(self) -> None:
         if hasattr(self, ARROW) and self.arrow:
             self.arrow.location = self.get_arrow_location(self.start_loc, self.end_loc)
@@ -56,34 +58,20 @@ class Motion:
 
     ### UPDATE ###
 
-    def update_attr_from_arrow(self) -> None:
-        self.color = self.arrow.color
-        self.motion_type = self.arrow.motion_type
-        self.turns = self.arrow.turns
 
     def update_turns(self, turns: int) -> None:
-        self.arrow.turns = turns
-        self.turns = self.arrow.turns
-        self.end_or = self.get_end_or()
-        self.update_prop_orientation()
+        self.turns = turns
         self.prop.update_prop()
-        svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
-        self.arrow.update_svg(svg_file)
         self.arrow.update_arrow()
-        self.arrow.arrow_dict[TURNS] = self.arrow.turns
-        if hasattr(self.arrow, GHOST):
-            if self.arrow.ghost:
-                self.arrow.ghost.turns = self.arrow.turns
-                self.arrow.ghost.update_svg(svg_file)
-                self.arrow.ghost.update_arrow()
         self.scene.update_pictograph()
 
-    def update_prop_orientation(self) -> None:
+    def update_prop_ori(self) -> None:
         if hasattr(self, PROP) and self.prop:
-            self.prop.orientation = self.end_or
+            if not self.end_ori:
+                self.end_ori = self.get_end_or()
+            self.prop.ori = self.end_ori
             self.prop.loc = self.end_loc
-            self.prop.axis = self.prop.get_axis_from_orientation()
-            self.prop.update_prop()
+            self.prop.axis = self.prop.get_axis_from_ori()
 
     def clear_attributes(self) -> None:
         self.start_loc = None
@@ -93,7 +81,7 @@ class Motion:
 
         self.prop_rot_dir = None
         self.start_or = None
-        self.end_or = None
+        self.end_ori = None
 
     ### GETTERS ###
 
@@ -106,7 +94,7 @@ class Motion:
             START_LOC: self.start_loc,
             END_LOC: self.end_loc,
             START_OR: self.start_or,
-            END_OR: self.end_or,
+            END_OR: self.end_ori,
         }
 
     def get_end_or(self) -> Orientation:

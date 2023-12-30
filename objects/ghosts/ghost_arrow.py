@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
 from Enums import ArrowAttributesDicts
 from constants import COLOR
-from objects.arrow.arrow import Arrow
-from objects.motion import Motion
+from objects.arrow import Arrow
+from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
