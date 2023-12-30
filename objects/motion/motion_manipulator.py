@@ -7,6 +7,7 @@ from Enums import (
 )
 from constants import *
 from data.start_end_loc_map import get_start_end_locs
+from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
 
 
@@ -15,8 +16,13 @@ if TYPE_CHECKING:
 
 
 class MotionManipulator:
-    def __init__(self, arrow: "Arrow"):
-        self.arrow = arrow
+    def __init__(self, motion: "Motion"):
+        self.pictograph = motion.scene
+        self.motion = motion
+        self.arrow = motion.arrow
+        self.prop = motion.prop
+        self.color = motion.color
+        self.other_color = RED if self.color == BLUE else BLUE
 
     def move_wasd(self, direction: Direction) -> None:
         wasd_location_map = {
@@ -29,78 +35,41 @@ class MotionManipulator:
         new_location = wasd_location_map.get(direction, {}).get(
             current_location, current_location
         )
-        self.arrow.location = new_location
-        self.arrow.ghost.location = new_location
-        (
-            new_start_loc,
-            new_end_loc,
-        ) = get_start_end_locs(
-            self.arrow.motion_type, self.arrow.motion.prop_rot_dir, new_location
+        (new_start_loc, new_end_loc) = get_start_end_locs(
+            self.arrow.motion_type, self.motion.prop_rot_dir, new_location
         )
-
-        self.arrow.motion.start_loc = new_start_loc
-        self.arrow.motion.end_loc = new_end_loc
-        self.arrow.motion.prop.loc = new_end_loc
-
-        self.arrow.motion.prop.update_prop()
-        self.arrow.update_arrow()
-        self.arrow.ghost.update_arrow()
-
-        self.arrow.scene.update_pictograph()
-
-    def swap_color(self) -> None:
-        if self.arrow.color == RED:
-            new_color = BLUE
-        elif self.arrow.color == BLUE:
-            new_color = RED
-
-        self.arrow.color = new_color
-        self.arrow.update_arrow()
-
-        self.arrow.motion.prop.color = new_color
-        self.arrow.motion.prop.update_prop()
-
-        self.arrow.scene.update_pictograph()
+        pictograph_dict = {
+            f"{self.color}_start_location": new_start_loc,
+            f"{self.color}_end_location": new_end_loc,
+        }
+        self.pictograph.update_pictograph(pictograph_dict)
 
     ### MIRRORING ###
 
     def swap_rot_dir(self) -> None:
         if self.arrow.is_svg_mirrored:
-            self.unmirror()
+            self.unmirror_svg()
         elif not self.arrow.is_svg_mirrored:
-            self.mirror()
+            self.mirror_svg()
 
-        if self.arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+        if self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
             new_rot_dir = CLOCKWISE
-        elif self.arrow.motion.prop_rot_dir == CLOCKWISE:
+        elif self.motion.prop_rot_dir == CLOCKWISE:
             new_rot_dir = COUNTER_CLOCKWISE
-        elif self.arrow.motion.prop_rot_dir == "NoRotation":
+        elif self.motion.prop_rot_dir == "NoRotation":
             new_rot_dir = "NoRotation"
 
-        old_start_loc = self.arrow.motion.start_loc
-        old_end_loc = self.arrow.motion.end_loc
-        new_start_loc = old_end_loc
-        new_end_loc = old_start_loc
+        new_start_loc = self.motion.end_loc
+        new_end_loc = self.motion.start_loc
 
-        svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
-        self.arrow.update_svg(svg_file)
+        pictograph_dict = {
+            f"{self.color}_start_location": new_start_loc,
+            f"{self.color}_end_location": new_end_loc,
+            f"{self.color}_prop_rot_dir": new_rot_dir,
+        }
+        self.pictograph.update_pictograph(pictograph_dict)
 
-        self.arrow.motion.prop_rot_dir = new_rot_dir
-        self.arrow.motion.start_loc = new_start_loc
-        self.arrow.motion.end_loc = new_end_loc
-
-        self.arrow.motion.prop.color = self.arrow.color
-        self.arrow.motion.prop.loc = new_end_loc
-
-        self.arrow.update_arrow()
-        self.arrow.motion.prop.update_prop()
-        self.arrow.scene.update_pictograph()
-
-        if hasattr(self.arrow, GHOST):
-            if not isinstance(self, self.arrow.ghost.__class__) and self.arrow.ghost:
-                self.arrow.ghost.update_arrow()
-
-    def mirror(self) -> None:
+    def mirror_svg(self) -> None:
         self.arrow.set_arrow_transform_origin_to_center()
         transform = QTransform()
         transform.translate(self.arrow.center_x, self.arrow.center_y)
@@ -112,7 +81,7 @@ class MotionManipulator:
             self.arrow.ghost.is_svg_mirrored = True
         self.arrow.is_svg_mirrored = True
 
-    def unmirror(self) -> None:
+    def unmirror_svg(self) -> None:
         transform = QTransform()
         transform.translate(self.arrow.center.x(), self.arrow.center.y())
         transform.scale(1, 1)
@@ -133,37 +102,22 @@ class MotionManipulator:
         elif self.arrow.motion_type == STATIC:
             new_motion_type = STATIC
 
-        if self.arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+        if self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
             new_rot_dir = CLOCKWISE
-        elif self.arrow.motion.prop_rot_dir == CLOCKWISE:
+        elif self.motion.prop_rot_dir == CLOCKWISE:
             new_rot_dir = COUNTER_CLOCKWISE
-        elif self.arrow.motion.prop_rot_dir == "NoRotation":
+        elif self.motion.prop_rot_dir == "NoRotation":
             new_rot_dir = "NoRotation"
 
-        self.arrow.motion_type = new_motion_type
-        self.arrow.motion.motion_type = new_motion_type
-        self.arrow.motion.prop_rot_dir = new_rot_dir
+        self.prop.ori = self.prop.swap_ori(self.prop.ori)
+        self.motion.end_ori = self.prop.ori
+        self.prop.update_prop()
+        pictograph_dict = {
+            f"{self.color}_motion_type": new_motion_type,
+            f"{self.color}_prop_rot_dir": new_rot_dir,
+        }
 
-        self.arrow.motion.prop.ori = self.arrow.motion.prop.swap_orientation(
-            self.arrow.motion.prop.ori
-        )
-        self.arrow.motion.end_ori = self.arrow.motion.prop.ori
-
-        svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
-        self.arrow.motion_type = new_motion_type
-        self.arrow.motion.motion_type = new_motion_type
-        self.arrow.ghost.motion_type = new_motion_type
-
-        self.arrow.motion.prop_rot_dir = new_rot_dir
-        self.arrow.update_svg(svg_file)
-        self.arrow.update_color()
-        if hasattr(self.arrow, GHOST):
-            self.arrow.ghost.motion_type = new_motion_type
-            self.arrow.ghost.update_svg(svg_file)
-
-        self.arrow.motion.prop.update_prop()
-
-        self.arrow.scene.update_pictograph()
+        self.pictograph.update_pictograph(pictograph_dict)
 
     ### ROTATION ###
 
@@ -207,11 +161,11 @@ class MotionManipulator:
         ]
 
         if self.arrow.pictograph.grid.grid_mode == DIAMOND:
-            if self.arrow.motion.motion_type == STATIC:
+            if self.motion.motion_type == STATIC:
                 self.rotate_diamond_mode_static_arrow(
                     rot_dir, diamond_mode_static_arrow_locations
                 )
-            elif self.arrow.motion.motion_type in [
+            elif self.motion.motion_type in [
                 PRO,
                 ANTI,
                 FLOAT,
@@ -219,16 +173,16 @@ class MotionManipulator:
                 self.rotate_diamond_mode_shift_arrow(
                     rot_dir, diamond_mode_shift_arrow_locations
                 )
-            elif self.arrow.motion.motion_type in [DASH]:
+            elif self.motion.motion_type in [DASH]:
                 self.rotate_diamond_mode_dash_arrow(
                     rot_dir, diamond_mode_dash_arrow_locations
                 )
         elif self.arrow.pictograph.grid.grid_mode == BOX:
-            if self.arrow.motion.motion_type == STATIC:
+            if self.motion.motion_type == STATIC:
                 self.rotate_box_mode_static_arrow(
                     rot_dir, box_mode_static_arrow_locations
                 )
-            elif self.arrow.motion.motion_type in [
+            elif self.motion.motion_type in [
                 PRO,
                 ANTI,
                 FLOAT,
@@ -236,7 +190,7 @@ class MotionManipulator:
                 self.rotate_box_mode_shift_arrow(
                     rot_dir, box_mode_shift_arrow_locations
                 )
-            elif self.arrow.motion.motion_type in [DASH]:
+            elif self.motion.motion_type in [DASH]:
                 self.rotate_box_mode_dash_arrow(rot_dir, box_mode_dash_arrow_locations)
 
     def rotate_diamond_mode_dash_arrow(
@@ -272,21 +226,21 @@ class MotionManipulator:
             new_end_loc,
         ) = get_start_end_locs(
             self.arrow.motion_type,
-            self.arrow.motion.prop_rot_dir,
+            self.motion.prop_rot_dir,
             new_arrow_location,
         )
 
         self.arrow.location = new_arrow_location
-        self.arrow.motion.start_loc = new_start_loc
-        self.arrow.motion.end_loc = new_end_loc
+        self.motion.start_loc = new_start_loc
+        self.motion.end_loc = new_end_loc
 
         self.arrow.location = new_arrow_location
-        self.arrow.motion.start_loc = new_start_loc
-        self.arrow.motion.end_loc = new_end_loc
-        self.arrow.motion.prop.loc = new_end_loc
+        self.motion.start_loc = new_start_loc
+        self.motion.end_loc = new_end_loc
+        self.prop.loc = new_end_loc
 
         self.arrow.update_arrow()
-        self.arrow.motion.prop.update_prop()
+        self.prop.update_prop()
         self.arrow.scene.update_pictograph()
 
     def rotate_diamond_mode_shift_arrow(
@@ -307,19 +261,19 @@ class MotionManipulator:
             new_end_loc,
         ) = get_start_end_locs(
             self.arrow.motion_type,
-            self.arrow.motion.prop_rot_dir,
+            self.motion.prop_rot_dir,
             new_arrow_location,
         )
 
         self.arrow.location = new_arrow_location
         self.arrow.ghost.location = new_arrow_location
-        self.arrow.motion.start_loc = new_start_loc
-        self.arrow.motion.end_loc = new_end_loc
-        self.arrow.motion.prop.loc = new_end_loc
+        self.motion.start_loc = new_start_loc
+        self.motion.end_loc = new_end_loc
+        self.prop.loc = new_end_loc
 
         self.arrow.update_arrow()
         self.arrow.ghost.update_arrow()
-        self.arrow.motion.prop.update_prop()
+        self.prop.update_prop()
         self.arrow.scene.update_pictograph()
 
     def rotate_box_mode_static_arrow(
@@ -335,15 +289,15 @@ class MotionManipulator:
         )
         new_location = box_mode_static_arrow_locations[new_location_index]
         self.arrow.location = new_location
-        self.arrow.motion.start_loc = new_location
-        self.arrow.motion.end_loc = new_location
+        self.motion.start_loc = new_location
+        self.motion.end_loc = new_location
         self.arrow.location = new_location
-        self.arrow.motion.start_loc = new_location
-        self.arrow.motion.end_loc = new_location
-        self.arrow.motion.prop.loc = new_location
+        self.motion.start_loc = new_location
+        self.motion.end_loc = new_location
+        self.prop.loc = new_location
 
-        self.arrow.motion.update_attr_from_arrow()
-        self.arrow.motion.prop.update_prop()
+        self.motion.update_attr_from_arrow()
+        self.prop.update_prop()
         self.arrow.scene.update_pictograph()
 
     def rotate_diamond_mode_static_arrow(
@@ -357,15 +311,15 @@ class MotionManipulator:
         )
         new_location = diamond_mode_locations[new_location_index]
         self.arrow.location = new_location
-        self.arrow.motion.start_loc = new_location
-        self.arrow.motion.end_loc = new_location
+        self.motion.start_loc = new_location
+        self.motion.end_loc = new_location
         self.arrow.location = new_location
-        self.arrow.motion.start_loc = new_location
-        self.arrow.motion.end_loc = new_location
-        self.arrow.motion.prop.loc = new_location
+        self.motion.start_loc = new_location
+        self.motion.end_loc = new_location
+        self.prop.loc = new_location
 
-        self.arrow.motion.update_attr_from_arrow()
-        self.arrow.motion.prop.update_prop()
+        self.motion.update_attr_from_arrow()
+        self.prop.update_prop()
         self.arrow.scene.update_pictograph()
 
     ### DELETION ###
@@ -374,13 +328,13 @@ class MotionManipulator:
         if self.arrow in self.arrow.scene.arrows.values():
             self.arrow.scene.removeItem(self.arrow)
             self.arrow.scene.removeItem(self.arrow.ghost)
-            self.arrow.motion.clear_attributes()
-            self.arrow.motion.prop.clear_attributes()
+            self.motion.clear_attributes()
+            self.prop.clear_attributes()
             self.arrow.ghost.clear_attributes()
-            self.arrow.motion.prop.clear_attributes()
+            self.prop.clear_attributes()
         if keep_prop:
             self.arrow._change_arrow_to_static()
         else:
-            self.arrow.scene.removeItem(self.arrow.motion.prop)
+            self.arrow.scene.removeItem(self.prop)
 
         self.arrow.scene.update_pictograph()

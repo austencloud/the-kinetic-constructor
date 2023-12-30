@@ -43,9 +43,10 @@ if TYPE_CHECKING:
 
 
 class Arrow(GraphicalObject):
-    def __init__(self, scene, arrow_dict, motion) -> None:
+    def __init__(self, scene, arrow_dict, motion: "Motion") -> None:
         super().__init__(scene)
-        self.motion: Motion = motion
+        self.motion = motion
+        self.prop: Prop = None
         self.svg_file = self.get_svg_file(
             arrow_dict[MOTION_TYPE],
             arrow_dict[TURNS],
@@ -58,7 +59,6 @@ class Arrow(GraphicalObject):
 
     def _setup_attributes(self, scene, arrow_dict: "ArrowAttributesDicts") -> None:
         self.scene: Pictograph | ArrowBox = scene
-        self.manipulator = MotionManipulator(self)
         self.drag_offset = QPointF(0, 0)
         self.is_svg_mirrored: bool = False
         self.is_dragging: bool = False
@@ -73,6 +73,7 @@ class Arrow(GraphicalObject):
         if arrow_dict:
             self.update_attributes(arrow_dict)
             self.arrow_dict = arrow_dict
+
         if self.motion:
             self.update_arrow()
             self.center = self.boundingRect().center()
@@ -81,27 +82,16 @@ class Arrow(GraphicalObject):
 
     def mousePressEvent(self, event) -> None:
         super().mousePressEvent(event)
+
+        self.pictograph.clear_selections()
         self.setSelected(True)
-        self.ghost.update_arrow()
-        self.ghost.show()
-        if hasattr(self.motion, "ghost_arrow"):
-            if self.ghost:
-                self._update_ghost_on_click()
-                self.ghost.setTransform(self.transform())
-                print("Transformation attributes:")
-                print("Translation:", self.transform().dx(), self.transform().dy())
 
-        if hasattr(self.motion, "prop"):
-            if self.motion.prop:
-                self._update_prop_on_click()
+        if hasattr(self, GHOST) and self.ghost:
+            self.ghost.show()
 
+        self.update_arrow()
+        self.prop.update_prop()
         self.scene.update_pictograph()
-
-        for item in self.scene.items():
-            if item != self and not isinstance(item, GridItem):
-                item.setSelected(False)
-        if self.scene:
-            self.scene._update_attr_panel()
 
     def mouseMoveEvent(
         self: Union["Prop", "Arrow"], event: "QGraphicsSceneMouseEvent"
@@ -111,7 +101,7 @@ class Arrow(GraphicalObject):
             new_pos = event.scenePos() - self.get_object_center()
             self.set_drag_pos(new_pos)
             if new_location != self.location:
-                self.update_ghost_arrow_location(event.scenePos())
+                self.update_location(new_location)
 
     def mouseReleaseEvent(self, event) -> None:
         self.is_dragging = False
@@ -121,42 +111,13 @@ class Arrow(GraphicalObject):
 
     ### UPDATERS ###
 
-    def _update_prop_on_click(self) -> None:
-        self.motion.prop.color = self.color
-        self.motion.prop.loc = self.motion.end_loc
-        self.motion.prop.axis = self.motion.prop.get_axis_from_ori(
-            self.motion.end_ori, self.motion.end_loc
-        )
+    def update_location(self, location):
+        self.location = location
+        self.ghost.location = location
 
-    def _update_ghost_on_click(self) -> None:
-        from objects.pictograph.pictograph import Pictograph
-
-        if isinstance(self.scene, Pictograph):
-            self.ghost: "GhostArrow" = self.scene.ghost_arrows[self.color]
-            self.ghost.update_attributes(self.arrow_dict)
-            self.ghost.set_arrow_attrs_from_arrow(self)
-            self.ghost.set_is_svg_mirrored_from_attributes()
-            self.ghost.update_arrow()
-            self.ghost.transform = self.transform
-            self.scene.addItem(self.ghost)
-            self.ghost.show()
-            self.scene.ghost_arrows[self.ghost.color] = self.ghost
-
-    def update_ghost_arrow_location(self, new_pos: QPointF) -> None:
-        new_location = self.scene.get_closest_layer2_point(new_pos)[0]
-        self.motion.arrow.location = new_location
-        self.set_start_end_locs()
-        if hasattr(self, "ghost_arrow"):
-            self.ghost.set_arrow_attrs_from_arrow(self)
-            self.ghost.update_arrow()
-
-        self.motion.prop.set_prop_attrs_from_arrow(self)
         self.motion.prop.update_prop()
-
-        self.motion.arrow.location = new_location
-        self.ghost.location = new_location
         self.update_arrow()
-        self.ghost.update_arrow()
+
         self.scene.ghost_arrows[self.color] = self.ghost
         self.scene.props[self.color] = self.motion.prop
         self.is_dragging = True
@@ -181,35 +142,13 @@ class Arrow(GraphicalObject):
                 self.is_svg_mirrored = False
 
         if self.is_svg_mirrored:
-            self.manipulator.mirror()
+            self.manipulator.mirror_svg()
         else:
-            self.manipulator.unmirror()
+            self.manipulator.unmirror_svg()
 
     def update_rotation(self) -> None:
         angle = self.get_arrow_rotation_angle()
         self.setRotation(angle)
-
-    def set_start_end_locs(self) -> None:
-        (
-            self.motion.start_loc,
-            self.motion.end_loc,
-        ) = get_start_end_locs(
-            self.motion_type, self.motion.prop_rot_dir, self.motion.arrow.location
-        )
-        self.motion.start_loc = self.motion.start_loc
-        self.motion.end_loc = self.motion.end_loc
-
-    def set_arrow_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
-        self.color = target_arrow.color
-        self.motion.color = target_arrow.color
-        self.motion_type: MotionType = target_arrow.motion_type
-        self.motion.arrow.location = target_arrow.location
-        self.motion.prop_rot_dir: PropRotationDirection = (
-            target_arrow.motion.prop_rot_dir
-        )
-        self.motion.start_loc: Location = target_arrow.motion.start_loc
-        self.motion.end_loc: Location = target_arrow.motion.end_loc
-        self.motion.turns: Turns = target_arrow.motion.turns
 
     def update_prop_during_drag(self) -> None:
         for prop in self.scene.props.values():
@@ -224,8 +163,6 @@ class Arrow(GraphicalObject):
                     }
                 )
 
-                if prop not in self.scene.items():
-                    self.scene.addItem(prop)
                 prop.show()
                 prop.update_prop()
                 self.scene.update_pictograph()
@@ -347,11 +284,14 @@ class Arrow(GraphicalObject):
     def update_turns(self) -> None:
         self.turns = self.motion.turns
 
-    def update_arrow(self) -> None:
+    def update_arrow(self, arrow_dict: ArrowAttributesDicts = None) -> None:
         self.update_turns()
         self.update_svg()
         self.update_mirror()
         self.update_color()
         self.update_rotation()
-        if hasattr(self, "ghost"):
+        if arrow_dict:
+            self.update_attributes(arrow_dict)
+        if hasattr(self, GHOST) and self.ghost:
             self.ghost.update_arrow()
+            self.ghost.transform = self.transform

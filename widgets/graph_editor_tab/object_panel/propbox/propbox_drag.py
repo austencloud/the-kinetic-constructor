@@ -72,7 +72,7 @@ class PropBoxDrag(ObjectBoxDrag):
             START_OR: self.orientation,
         }
 
-        self.pictograph.motions[self.color].setup_attributes(motion_dict)
+        self.pictograph.motions[self.color].update_attributes(motion_dict)
         self.placed_prop.motion.arrow.location = self.location
         self.placed_prop.motion.start_loc = self.location
         self.placed_prop.motion.end_loc = self.location
@@ -125,7 +125,7 @@ class PropBoxDrag(ObjectBoxDrag):
             START_OR: self.orientation,
         }
 
-        self.pictograph.motions[self.color].setup_attributes(motion_dict)
+        self.pictograph.motions[self.color].update_attributes(motion_dict)
 
         self.pictograph.update_pictograph()
         self.move_to_cursor(self.propbox.view.mapFromGlobal(self.pos()))
@@ -176,7 +176,7 @@ class PropBoxDrag(ObjectBoxDrag):
                         START_OR: self.orientation,
                     }
 
-                    self.pictograph.motions[self.color].setup_attributes(motion_dict)
+                    self.pictograph.motions[self.color].update_attributes(motion_dict)
                     self.arrow.motion = self.pictograph.motions[self.color]
                     self.pictograph.motions[self.color].arrow = self.arrow
                 pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)

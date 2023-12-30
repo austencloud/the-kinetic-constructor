@@ -29,6 +29,7 @@ if TYPE_CHECKING:
 class Prop(GraphicalObject):
     def __init__(self, scene, prop_dict: Dict, motion: "Motion") -> None:
         self.motion = motion
+        self.arrow: Arrow = None
         self.prop_type = prop_dict[PROP_TYPE]
         self.svg_file = self.get_svg_file(self.prop_type)
         super().__init__(scene)
@@ -90,12 +91,6 @@ class Prop(GraphicalObject):
         self.center = self.get_object_center()
         self.setTransformOriginPoint(self.center)
 
-    def set_prop_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
-        self.color = target_arrow.color
-        self.loc = target_arrow.motion.end_loc
-        self.axis = self.get_axis_from_ori(self.ori, self.loc)
-        self.update_prop()
-
     def clear_attributes(self) -> None:
         self.loc = None
         self.layer = None
@@ -115,16 +110,14 @@ class Prop(GraphicalObject):
             axis: Axis = None
         return axis
 
-    def swap_orientation(self, orientation) -> None:
-        if orientation == IN:
-            orientation = OUT
-        elif orientation == OUT:
-            orientation = IN
-        elif orientation == CLOCK:
-            orientation = COUNTER
-        elif orientation == COUNTER:
-            orientation = CLOCK
-        return orientation
+    def swap_ori(self) -> None:
+        ori_map = {
+            IN: OUT,
+            OUT: IN,
+            CLOCK: COUNTER,
+            COUNTER: CLOCK,
+        }
+        self.ori = ori_map[self.ori]
 
     def get_rotation_angle(self) -> RotationAngles:
         angle_map: Dict[Orientation, Dict[Location, RotationAngles]] = {

@@ -11,6 +11,9 @@ from Enums import (
 
 from constants import *
 from typing import TYPE_CHECKING, Dict, Union
+from objects.motion.motion_manipulator import MotionManipulator
+
+from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
 
 
 if TYPE_CHECKING:
@@ -23,16 +26,16 @@ if TYPE_CHECKING:
 class Motion:
     def __init__(
         self,
-        scene: Union["Pictograph", "ArrowBox"],
+        scene: Union["ArrowBox", "PropBox", "Pictograph"],
         motion_dict: MotionAttributesDicts,
     ) -> None:
         self.scene = scene
-        self.motion_dict = motion_dict
-        self.setup_attributes(motion_dict)
+        self.update_attributes(motion_dict)
 
     ### SETUP ###
 
-    def setup_attributes(self, motion_dict: Dict) -> None:
+    def update_attributes(self, motion_dict: Dict) -> None:
+        self.manipulator = MotionManipulator(self)
         self.color: Color = motion_dict[COLOR]
         self.arrow: Arrow = motion_dict[ARROW]
         self.prop: Prop = motion_dict[PROP]
@@ -47,23 +50,13 @@ class Motion:
         if self.motion_type:
             self.assign_attributes_to_arrow()
             self.end_ori: Orientation = self.get_end_or()
-        
-        if self.prop:
-            self.prop.update_prop()
-        
+
     def assign_attributes_to_arrow(self) -> None:
         if hasattr(self, ARROW) and self.arrow:
             self.arrow.location = self.get_arrow_location(self.start_loc, self.end_loc)
             self.arrow.motion_type = self.motion_type
 
     ### UPDATE ###
-
-
-    def update_turns(self, turns: int) -> None:
-        self.turns = turns
-        self.prop.update_prop()
-        self.arrow.update_arrow()
-        self.scene.update_pictograph()
 
     def update_prop_ori(self) -> None:
         if hasattr(self, PROP) and self.prop:
@@ -79,10 +72,16 @@ class Motion:
         self.turns = None
         self.motion_type = None
 
-        self.prop_rot_dir = None
+        self.motion.prop_rot_dir = None
         self.start_or = None
         self.end_ori = None
 
+    def update_motion(self, motion_dict: MotionAttributesDicts = None) -> None:
+        if motion_dict:
+            self.update_attributes(motion_dict)
+        self.arrow.update_arrow()
+        self.prop.update_prop()
+        
     ### GETTERS ###
 
     def get_attributes(self) -> MotionAttributesDicts:
@@ -90,7 +89,7 @@ class Motion:
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,
             TURNS: self.turns,
-            PROP_ROT_DIR: self.prop_rot_dir,
+            PROP_ROT_DIR: self.motion.prop_rot_dir,
             START_LOC: self.start_loc,
             END_LOC: self.end_loc,
             START_OR: self.start_or,

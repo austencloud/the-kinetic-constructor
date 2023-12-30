@@ -68,17 +68,12 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.ghost.target_arrow = target_arrow
 
     def place_arrow_on_pictograph(self) -> None:
-        self.placed_arrow = Arrow(
-            self.pictograph,
-            self.ghost.get_attributes(),
-            self.pictograph.motions[self.color],
-        )
-        self.placed_arrow.motion.prop = self.pictograph.props[self.color]
-
+        arrow = self.pictograph.arrows[self.color]
+        arrow.update_arrow(self.ghost.get_attributes())
         motion_dict = {
             COLOR: self.color,
-            ARROW: self.placed_arrow,
-            PROP: self.placed_arrow.motion.prop,
+            ARROW: arrow,
+            PROP: arrow.motion.prop,
             MOTION_TYPE: self.motion_type,
             PROP_ROT_DIR: self.rot_dir,
             TURNS: self.turns,
@@ -87,20 +82,17 @@ class ArrowBoxDrag(ObjectBoxDrag):
             END_LOC: self.end_loc,
         }
 
-        self.pictograph.motions[self.color].setup_attributes(motion_dict)
-        self.pictograph.arrows[self.color] = self.placed_arrow
+        self.pictograph.motions[self.color].update_attributes(motion_dict)
+        self.pictograph.arrows[self.color] = arrow
         self.pictograph.ghost_arrows[self.color] = self.ghost
-
-        self.placed_arrow.ghost = self.ghost
-
-        self.placed_arrow.set_arrow_transform_origin_to_center()
-        self.pictograph.addItem(self.placed_arrow)
+        arrow.ghost = self.ghost
+        arrow.set_arrow_transform_origin_to_center()
         self.pictograph.clearSelection()
-        self.pictograph.arrows[self.color] = self.placed_arrow
+        self.pictograph.arrows[self.color] = arrow
         self.pictograph.arrows[self.color].motion = self.pictograph.motions[self.color]
-        self.placed_arrow.update_arrow()
-        self.placed_arrow.show()
-        self.placed_arrow.setSelected(True)
+        arrow.update_arrow()
+        arrow.show()
+        arrow.setSelected(True)
 
     ### UPDATERS ###
 
@@ -127,7 +119,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             END_LOC: self.end_loc,
         }
 
-        self.pictograph.motions[self.color].setup_attributes(motion_dict)
+        self.pictograph.motions[self.color].update_attributes(motion_dict)
         self.pictograph.motions[self.color].arrow = self.pictograph.arrows[self.color]
         self.finalize_ghost_arrow_for_new_location(new_location)
         self.pictograph.update_pictograph()
@@ -227,7 +219,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
                 prop.update_attributes(prop_dict)
 
                 self.ghost.motion.prop = prop
-                self.motion.prop = prop
+                self.prop = prop
                 prop.motion = self.motion
 
                 if prop not in self.pictograph.items():

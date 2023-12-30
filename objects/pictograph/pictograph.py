@@ -158,7 +158,7 @@ class Pictograph(QGraphicsScene):
             motion_dict = self._create_motion_dict_from_pictograph_dict_and_filters(
                 pictograph_dict, color, filters
             )
-            self.motions[color].setup_attributes(motion_dict)
+            self.motions[color].update_attributes(motion_dict)
             self.arrows[color].location = self.motions[color].get_arrow_location(
                 self.motions[color].start_loc, self.motions[color].end_loc
             )
@@ -169,11 +169,9 @@ class Pictograph(QGraphicsScene):
 
         for arrow in self.arrows.values():
             arrow.update_arrow()
-            self.addItem(arrow)
 
         for prop in self.props.values():
             prop.update_prop()
-            self.addItem(prop)
 
     def _create_pictograph_dict_from_pd_row(
         self: Union["Option", "IGPictograph"],
@@ -293,8 +291,8 @@ class Pictograph(QGraphicsScene):
         self.clear_pictograph()
 
     def rotate_pictograph(self, direction: str) -> None:
-        for arrow in self.arrows.values():
-            arrow.manipulator.rotate_arrow(direction)
+        for motion in self.motions.values():
+            motion.manipulator.rotate_arrow(direction)
 
     def clear_pictograph(self) -> None:
         for motion in self.motions.values():
@@ -323,8 +321,8 @@ class Pictograph(QGraphicsScene):
     ### UPDATERS ###
 
     def update_pictograph(self) -> None:
-        self._update_arrows()
-        self._update_props()
+        self._update_objects()
+        self._update_motions()
         self._update_letter()
         if self.graph_type == MAIN:
             self._update_attr_panel()
@@ -335,15 +333,13 @@ class Pictograph(QGraphicsScene):
                 motion
             )
 
-    def _update_props(self):
-        for prop in self.props.values():
-            prop.update_prop()
+    def _update_objects(self):
         self.prop_positioner.position_props()
-
-    def _update_arrows(self):
-        # for arrow in self.arrows.values():
-        #     arrow.update_arrow()
         self.arrow_positioner.position_arrows()
+
+    def _update_motions(self) -> None:
+        for motion in self.motions.values():
+            motion.update_motion()
 
     def _update_letter(self) -> None:
         if all(motion.motion_type for motion in self.motions.values()):
@@ -410,11 +406,6 @@ class Pictograph(QGraphicsScene):
             new_ghost_arrow.motion = new_beat.motions[motion.color]
             new_ghost_prop.motion = new_beat.motions[motion.color]
 
-            new_beat.addItem(new_arrow)
-            new_beat.addItem(new_prop)
-            new_beat.addItem(new_ghost_arrow)
-            new_beat.addItem(new_ghost_prop)
-
             new_ghost_arrow.hide()
             new_ghost_prop.hide()
 
@@ -423,7 +414,7 @@ class Pictograph(QGraphicsScene):
             motion_dict[PROP] = new_prop
             motion_dict[MOTION_TYPE] = new_arrow.motion_type
             new_arrow.turns = motion_dict[TURNS]
-            new_arrow.motion.setup_attributes(motion_dict)
+            new_arrow.motion.update_attributes(motion_dict)
 
             new_arrow.setTransformOriginPoint(new_arrow.boundingRect().center())
             new_arrow.ghost.setTransformOriginPoint(
@@ -459,9 +450,9 @@ class Pictograph(QGraphicsScene):
             if not os.path.exists(image_path):
                 pixmap.save(image_path, "PNG")
 
-        self._update_pixmap_item(pixmap)
+        self._update_thumbnail(pixmap)
 
-    def _update_pixmap_item(self, pixmap: QPixmap) -> None:
+    def _update_thumbnail(self, pixmap: QPixmap) -> None:
         if not self.pixmap:
             self.pixmap = QGraphicsPixmapItem(pixmap)
             self.addItem(self.pixmap)
