@@ -35,7 +35,6 @@ class Motion:
     ### SETUP ###
 
     def update_attributes(self, motion_dict: Dict) -> None:
-        self.manipulator = MotionManipulator(self)
         self.color: Color = motion_dict[COLOR]
         self.arrow: Arrow = motion_dict[ARROW]
         self.prop: Prop = motion_dict[PROP]
@@ -48,6 +47,7 @@ class Motion:
         self.start_or: Orientation = motion_dict[START_OR]
 
         if self.motion_type:
+            self.manipulator = MotionManipulator(self)
             self.assign_attributes_to_arrow()
             self.end_ori: Orientation = self.get_end_or()
 

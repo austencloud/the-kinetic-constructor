@@ -13,7 +13,7 @@ from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
-from constants import BLUE, HEX_BLUE, HEX_RED, ICON_DIR, RED
+from constants import BLUE, CCW_HANDPATH, CW_HANDPATH, HEX_BLUE, HEX_RED, ICON_DIR, RED
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 
@@ -75,12 +75,12 @@ class HeaderWidget(AttrBoxWidget):
     def _rotate_ccw(self) -> None:
         motion = self.attr_box.pictograph.motions[self.attr_box.color]
         if motion:
-            motion.arrow.manipulator.rotate_arrow("ccw")
+            motion.manipulator.rotate_motion(CCW_HANDPATH)
 
     def _rotate_cw(self) -> None:
         motion = self.attr_box.pictograph.motions[self.attr_box.color]
         if motion:
-            motion.arrow.manipulator.rotate_arrow("cw")
+            motion.manipulator.rotate_motion(CW_HANDPATH)
 
     def _setup_header_label(self) -> QLabel:
         text = "Left" if self.attr_box.color == BLUE else "Right"

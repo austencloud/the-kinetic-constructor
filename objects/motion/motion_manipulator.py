@@ -1,18 +1,20 @@
-from typing import List
+from typing import Dict, List, Literal, Tuple
 from PyQt6.QtGui import QTransform
 from Enums import (
     Direction,
+    GridMode,
+    Handpath,
     Location,
+    MotionType,
     PropRotationDirection,
 )
 from constants import *
 from data.start_end_loc_map import get_start_end_locs
-from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from objects.arrow import Arrow
+    from objects.motion.motion import Motion
 
 
 class MotionManipulator:
@@ -48,9 +50,9 @@ class MotionManipulator:
 
     def swap_rot_dir(self) -> None:
         if self.arrow.is_svg_mirrored:
-            self.unmirror_svg()
+            self.arrow.unmirror_svg()
         elif not self.arrow.is_svg_mirrored:
-            self.mirror_svg()
+            self.arrow.mirror_svg()
 
         if self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
             new_rot_dir = CLOCKWISE
@@ -69,29 +71,6 @@ class MotionManipulator:
         }
         self.pictograph.update_pictograph(pictograph_dict)
 
-    def mirror_svg(self) -> None:
-        self.arrow.set_arrow_transform_origin_to_center()
-        transform = QTransform()
-        transform.translate(self.arrow.center_x, self.arrow.center_y)
-        transform.scale(-1, 1)
-        transform.translate(-self.arrow.center_x, -self.arrow.center_y)
-        self.arrow.setTransform(transform)
-        if hasattr(self.arrow, GHOST) and self.arrow.ghost:
-            self.arrow.ghost.setTransform(transform)
-            self.arrow.ghost.is_svg_mirrored = True
-        self.arrow.is_svg_mirrored = True
-
-    def unmirror_svg(self) -> None:
-        transform = QTransform()
-        transform.translate(self.arrow.center.x(), self.arrow.center.y())
-        transform.scale(1, 1)
-        transform.translate(-self.arrow.center.x(), -self.arrow.center.y())
-        self.arrow.setTransform(transform)
-        if hasattr(self.arrow, GHOST) and self.arrow.ghost:
-            self.arrow.ghost.setTransform(transform)
-            self.arrow.ghost.is_svg_mirrored = False
-        self.arrow.is_svg_mirrored = False
-
     ### MOTION TYPE ###
 
     def swap_motion_type(self) -> None:
@@ -109,232 +88,89 @@ class MotionManipulator:
         elif self.motion.prop_rot_dir == "NoRotation":
             new_rot_dir = "NoRotation"
 
-        self.prop.ori = self.prop.swap_ori(self.prop.ori)
-        self.motion.end_ori = self.prop.ori
-        self.prop.update_prop()
+        self.prop.swap_ori(self.prop.ori)
         pictograph_dict = {
             f"{self.color}_motion_type": new_motion_type,
             f"{self.color}_prop_rot_dir": new_rot_dir,
+            f"{self.color}_end_ori": self.prop.ori,
         }
-
         self.pictograph.update_pictograph(pictograph_dict)
 
     ### ROTATION ###
 
-    def rotate_arrow(self, rot_dir: PropRotationDirection) -> None:
-        diamond_mode_static_arrow_locations = [
-            NORTH,
-            EAST,
-            SOUTH,
-            WEST,
-        ]
-        diamond_mode_shift_arrow_locations = [
-            NORTHEAST,
-            SOUTHEAST,
-            SOUTHWEST,
-            NORTHWEST,
-        ]
-        diamond_mode_dash_arrow_locations = [
-            NORTH,
-            EAST,
-            SOUTH,
-            WEST,
-        ]
-
-        box_mode_static_arrow_locations = [
-            NORTHEAST,
-            SOUTHEAST,
-            SOUTHWEST,
-            NORTHWEST,
-        ]
-        box_mode_shift_arrow_locations = [
-            NORTH,
-            EAST,
-            SOUTH,
-            WEST,
-        ]
-        box_mode_dash_arrow_locations = [
-            NORTHEAST,
-            SOUTHEAST,
-            SOUTHWEST,
-            NORTHWEST,
-        ]
-
-        if self.arrow.pictograph.grid.grid_mode == DIAMOND:
-            if self.motion.motion_type == STATIC:
-                self.rotate_diamond_mode_static_arrow(
-                    rot_dir, diamond_mode_static_arrow_locations
-                )
-            elif self.motion.motion_type in [
-                PRO,
-                ANTI,
-                FLOAT,
-            ]:
-                self.rotate_diamond_mode_shift_arrow(
-                    rot_dir, diamond_mode_shift_arrow_locations
-                )
-            elif self.motion.motion_type in [DASH]:
-                self.rotate_diamond_mode_dash_arrow(
-                    rot_dir, diamond_mode_dash_arrow_locations
-                )
-        elif self.arrow.pictograph.grid.grid_mode == BOX:
-            if self.motion.motion_type == STATIC:
-                self.rotate_box_mode_static_arrow(
-                    rot_dir, box_mode_static_arrow_locations
-                )
-            elif self.motion.motion_type in [
-                PRO,
-                ANTI,
-                FLOAT,
-            ]:
-                self.rotate_box_mode_shift_arrow(
-                    rot_dir, box_mode_shift_arrow_locations
-                )
-            elif self.motion.motion_type in [DASH]:
-                self.rotate_box_mode_dash_arrow(rot_dir, box_mode_dash_arrow_locations)
-
-    def rotate_diamond_mode_dash_arrow(
-        self, rot_dir, box_mode_arrow_locations: List[Location]
-    ) -> None:
-        pass
-
-    def rotate_diamond_mode_dash_arrow(
-        self, rot_dir, diamond_mode_arrow_locations: List[Location]
-    ) -> None:
-        pass
-
-    def rotate_box_mode_dash_arrow(
-        self, rot_dir, box_mode_dash_arrow_locations: List[Location]
-    ) -> None:
-        pass
-
-    def rotate_box_mode_shift_arrow(
-        self, rot_dir, box_mode_shift_arrow_locations: List[Location]
-    ) -> None:
-        current_location_index = box_mode_shift_arrow_locations.index(
-            self.arrow.location
-        )
-        new_location_index = (
-            (current_location_index + 1) % 4
-            if rot_dir == CLOCKWISE
-            else (current_location_index - 1) % 4
+    def rotate_motion(self, rotation_direction: Handpath) -> None:
+        mode_mappings = self._get_mode_mappings()
+        rotate_func, locations = mode_mappings.get(
+            (self.motion.motion_type, self.arrow.pictograph.grid.grid_mode),
+            (None, None),
         )
 
-        new_arrow_location = box_mode_shift_arrow_locations[new_location_index]
-        (
-            new_start_loc,
-            new_end_loc,
-        ) = get_start_end_locs(
-            self.arrow.motion_type,
-            self.motion.prop_rot_dir,
-            new_arrow_location,
+        if rotate_func:
+            rotate_func(rotation_direction, locations)
+
+    def _get_mode_mappings(self):
+        """Returns mappings for different modes and motion types."""
+        return {
+            (STATIC, DIAMOND): (self._rotate_arrow, [NORTH, EAST, SOUTH, WEST]),
+            (PRO, DIAMOND): (
+                self._rotate_arrow,
+                [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST],
+            ),
+            (ANTI, DIAMOND): (
+                self._rotate_arrow,
+                [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST],
+            ),
+            (FLOAT, DIAMOND): (
+                self._rotate_arrow,
+                [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST],
+            ),
+            (DASH, DIAMOND): (self._rotate_arrow, [NORTH, EAST, SOUTH, WEST]),
+            (STATIC, BOX): (
+                self._rotate_arrow,
+                [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST],
+            ),
+            (PRO, BOX): (self._rotate_arrow, [NORTH, EAST, SOUTH, WEST]),
+            (ANTI, BOX): (self._rotate_arrow, [NORTH, EAST, SOUTH, WEST]),
+            (FLOAT, BOX): (self._rotate_arrow, [NORTH, EAST, SOUTH, WEST]),
+            (DASH, BOX): (
+                self._rotate_arrow,
+                [NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST],
+            ),
+        }
+
+    def _rotate_arrow(self, handpath, locations: List[Location]) -> None:
+        """
+        Generic method to rotate arrows based on the handpath and locations.
+        """
+        current_index = locations.index(self.arrow.location)
+        new_index = (
+            (current_index + 1) % len(locations)
+            if handpath == CW_HANDPATH
+            else (current_index - 1) % len(locations)
+        )
+        new_location = locations[new_index]
+
+        new_start_loc, new_end_loc = get_start_end_locs(
+            self.arrow.motion_type, self.motion.prop_rot_dir, new_location
         )
 
-        self.arrow.location = new_arrow_location
-        self.motion.start_loc = new_start_loc
-        self.motion.end_loc = new_end_loc
+        self._update_motion_attributes(new_location, new_start_loc, new_end_loc)
 
-        self.arrow.location = new_arrow_location
+    def _update_motion_attributes(self, new_location, new_start_loc, new_end_loc):
+        """
+        Update motion attributes and reflect changes in the pictograph.
+        """
+        self.arrow.location = new_location
         self.motion.start_loc = new_start_loc
         self.motion.end_loc = new_end_loc
         self.prop.loc = new_end_loc
 
+        self._refresh_pictograph()
+
+    def _refresh_pictograph(self):
+        """
+        Refresh the arrow and prop, and update the pictograph.
+        """
         self.arrow.update_arrow()
         self.prop.update_prop()
-        self.arrow.scene.update_pictograph()
-
-    def rotate_diamond_mode_shift_arrow(
-        self, rot_dir, diamond_mode_shift_arrow_locations: List[Location]
-    ) -> None:
-        current_location_index = diamond_mode_shift_arrow_locations.index(
-            self.arrow.location
-        )
-        new_location_index = (
-            (current_location_index + 1) % 4
-            if rot_dir == CLOCKWISE
-            else (current_location_index - 1) % 4
-        )
-
-        new_arrow_location = diamond_mode_shift_arrow_locations[new_location_index]
-        (
-            new_start_loc,
-            new_end_loc,
-        ) = get_start_end_locs(
-            self.arrow.motion_type,
-            self.motion.prop_rot_dir,
-            new_arrow_location,
-        )
-
-        self.arrow.location = new_arrow_location
-        self.arrow.ghost.location = new_arrow_location
-        self.motion.start_loc = new_start_loc
-        self.motion.end_loc = new_end_loc
-        self.prop.loc = new_end_loc
-
-        self.arrow.update_arrow()
-        self.arrow.ghost.update_arrow()
-        self.prop.update_prop()
-        self.arrow.scene.update_pictograph()
-
-    def rotate_box_mode_static_arrow(
-        self, rot_dir, box_mode_static_arrow_locations: List[Location]
-    ) -> None:
-        current_location_index = box_mode_static_arrow_locations.index(
-            self.arrow.location
-        )
-        new_location_index = (
-            (current_location_index + 1) % 4
-            if rot_dir == CLOCKWISE
-            else (current_location_index - 1) % 4
-        )
-        new_location = box_mode_static_arrow_locations[new_location_index]
-        self.arrow.location = new_location
-        self.motion.start_loc = new_location
-        self.motion.end_loc = new_location
-        self.arrow.location = new_location
-        self.motion.start_loc = new_location
-        self.motion.end_loc = new_location
-        self.prop.loc = new_location
-
-        self.motion.update_attr_from_arrow()
-        self.prop.update_prop()
-        self.arrow.scene.update_pictograph()
-
-    def rotate_diamond_mode_static_arrow(
-        self, rot_dir, diamond_mode_locations: List[Location]
-    ) -> None:
-        current_location_index = diamond_mode_locations.index(self.arrow.location)
-        new_location_index = (
-            (current_location_index + 1) % 4
-            if rot_dir == CLOCKWISE
-            else (current_location_index - 1) % 4
-        )
-        new_location = diamond_mode_locations[new_location_index]
-        self.arrow.location = new_location
-        self.motion.start_loc = new_location
-        self.motion.end_loc = new_location
-        self.arrow.location = new_location
-        self.motion.start_loc = new_location
-        self.motion.end_loc = new_location
-        self.prop.loc = new_location
-
-        self.motion.update_attr_from_arrow()
-        self.prop.update_prop()
-        self.arrow.scene.update_pictograph()
-
-    ### DELETION ###
-
-    def delete(self, keep_prop: bool = False) -> None:
-        if self.arrow in self.arrow.scene.arrows.values():
-            self.arrow.scene.removeItem(self.arrow)
-            self.arrow.scene.removeItem(self.arrow.ghost)
-            self.motion.clear_attributes()
-            self.prop.clear_attributes()
-            self.arrow.ghost.clear_attributes()
-            self.prop.clear_attributes()
-        if keep_prop:
-            self.arrow._change_arrow_to_static()
-        else:
-            self.arrow.scene.removeItem(self.prop)
-
         self.arrow.scene.update_pictograph()

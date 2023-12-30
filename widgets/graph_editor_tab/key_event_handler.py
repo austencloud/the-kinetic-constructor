@@ -37,7 +37,6 @@ class KeyEventHandler:
         Returns:
             None
         """
-        sequence = main_widget.sequence_widget
 
         if not pictograph.selectedItems():
             return
@@ -45,33 +44,33 @@ class KeyEventHandler:
 
         selected_arrow = selection if isinstance(selection, Arrow) else None
         selected_prop = selection if isinstance(selection, Prop) else None
-
+        selected_motion = selected_arrow.motion
         ### DELETION ###
         if event.key() == Qt.Key.Key_Delete:
             keep_prop = event.modifiers() == Qt.KeyboardModifier.ControlModifier
             if selected_arrow:
-                selected_arrow.manipulator.delete(keep_prop)
+                selected_arrow.delete_arrow(keep_prop)
             elif selected_prop:
-                selected_prop.manipulator.delete()
+                selected_prop.manipulator.delete_prop()
 
         ### ARROW MANIPULATION ###
         if selected_arrow:
             if event.key() == Qt.Key.Key_W:
-                selected_arrow.manipulator.move_wasd(Direction.UP)
+                selected_motion.manipulator.move_wasd(Direction.UP)
             elif event.key() == Qt.Key.Key_A:
-                selected_arrow.manipulator.move_wasd(Direction.LEFT)
+                selected_motion.manipulator.move_wasd(Direction.LEFT)
             elif event.key() == Qt.Key.Key_S:
-                selected_arrow.manipulator.move_wasd(Direction.DOWN)
+                selected_motion.manipulator.move_wasd(Direction.DOWN)
             elif event.key() == Qt.Key.Key_D:
-                selected_arrow.manipulator.move_wasd(Direction.RIGHT)
+                selected_motion.manipulator.move_wasd(Direction.RIGHT)
             elif event.key() == Qt.Key.Key_R:
-                selected_arrow.manipulator.swap_rot_dir()
+                selected_motion.manipulator.swap_rot_dir()
             elif event.key() == Qt.Key.Key_F:
-                selected_arrow.manipulator.swap_motion_type()
+                selected_motion.manipulator.swap_motion_type()
             elif event.key() == Qt.Key.Key_Q:
-                selected_arrow.motion.subtract_half_turn()
+                selected_motion.subtract_half_turn()
             elif event.key() == Qt.Key.Key_E:
-                selected_arrow.motion.add_half_turn()
+                selected_motion.add_half_turn()
 
         ### SEQEUNCE MANAGEMENT ###
         elif event.key() == Qt.Key.Key_Enter:

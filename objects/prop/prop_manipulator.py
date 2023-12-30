@@ -25,7 +25,7 @@ class PropManipulator:
             self.prop.layer = 1
         self.prop.update_prop()
 
-    def delete(self) -> None:
+    def delete_prop(self) -> None:
         self.prop.scene.removeItem(self.prop)
         self.prop.scene.removeItem(self.prop.scene.ghost_props[self.prop.color])
         self.prop.motion.arrow.clear_attributes()

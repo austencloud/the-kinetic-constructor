@@ -411,12 +411,6 @@ class MotionAttribute(Enum):
     end_or = "end_or"
 
 
-class PictographAttribute(Enum):
-    START_POS = START_POS
-    END_POS = END_POS
-    LETTER = "letter"
-    HANDPATH_MODE = "handpath_mode"
-    MOTION_TYPE_COMBINATION = "motion_type_combination"
 
 
 class OrientationCombination(Enum):

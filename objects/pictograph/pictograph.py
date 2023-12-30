@@ -292,7 +292,7 @@ class Pictograph(QGraphicsScene):
 
     def rotate_pictograph(self, direction: str) -> None:
         for motion in self.motions.values():
-            motion.manipulator.rotate_arrow(direction)
+            motion.manipulator.rotate_motion(direction)
 
     def clear_pictograph(self) -> None:
         for motion in self.motions.values():

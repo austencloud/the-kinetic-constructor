@@ -1,6 +1,7 @@
 from typing import Union
 from PyQt6.QtCore import QPointF, Qt
-from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
+from PyQt6.QtGui import QTransform
+from PyQt6.QtWidgets import QGraphicsSceneMouseEvent, QGraphicsItem
 from Enums import *
 from constants import (
     ANTI,
@@ -142,9 +143,9 @@ class Arrow(GraphicalObject):
                 self.is_svg_mirrored = False
 
         if self.is_svg_mirrored:
-            self.manipulator.mirror_svg()
+            self.mirror_svg()
         else:
-            self.manipulator.unmirror_svg()
+            self.unmirror_svg()
 
     def update_rotation(self) -> None:
         angle = self.get_arrow_rotation_angle()
@@ -295,3 +296,43 @@ class Arrow(GraphicalObject):
         if hasattr(self, GHOST) and self.ghost:
             self.ghost.update_arrow()
             self.ghost.transform = self.transform
+
+    def mirror_svg(self) -> None:
+        self.set_arrow_transform_origin_to_center()
+        transform = QTransform()
+        transform.translate(self.center_x, self.center_y)
+        transform.scale(-1, 1)
+        transform.translate(-self.center_x, -self.center_y)
+        self.setTransform(transform)
+        if hasattr(self, GHOST) and self.ghost:
+            self.ghost.setTransform(transform)
+            self.ghost.is_svg_mirrored = True
+        self.is_svg_mirrored = True
+
+    def unmirror_svg(self) -> None:
+        transform = QTransform()
+        transform.translate(self.center.x(), self.center.y())
+        transform.scale(1, 1)
+        transform.translate(-self.center.x(), -self.center.y())
+        self.setTransform(transform)
+        if hasattr(self, GHOST) and self.ghost:
+            self.ghost.setTransform(transform)
+            self.ghost.is_svg_mirrored = False
+        self.is_svg_mirrored = False
+
+    ### DELETION ###
+
+    def delete_arrow(self, keep_prop: bool = False) -> None:
+        if self in self.scene.arrows.values():
+            self.scene.removeItem(self)
+            self.scene.removeItem(self.ghost)
+            self.motion.clear_attributes()
+            self.prop.clear_attributes()
+            self.ghost.clear_attributes()
+            self.prop.clear_attributes()
+        if keep_prop:
+            self._change_arrow_to_static()
+        else:
+            self.scene.removeItem(self.prop)
+
+        self.scene.update_pictograph()
