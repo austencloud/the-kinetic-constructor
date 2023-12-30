@@ -74,30 +74,15 @@ class Arrow(GraphicalObject):
             self.update_attributes(arrow_dict)
             self.arrow_dict = arrow_dict
         if self.motion:
-            self.set_is_svg_mirrored_from_attributes()
-            self.update_mirror()
+            self.update_arrow()
             self.center = self.boundingRect().center()
-
-    def set_is_svg_mirrored_from_attributes(self) -> None:
-        if self.motion_type == PRO:
-            rot_dir = self.motion.prop_rot_dir
-            if rot_dir == CLOCKWISE:
-                self.is_svg_mirrored = False
-            elif rot_dir == COUNTER_CLOCKWISE:
-                self.is_svg_mirrored = True
-        elif self.motion_type == ANTI:
-            rot_dir = self.motion.prop_rot_dir
-            if rot_dir == CLOCKWISE:
-                self.is_svg_mirrored = True
-            elif rot_dir == COUNTER_CLOCKWISE:
-                self.is_svg_mirrored = False
 
     ### MOUSE EVENTS ###
 
     def mousePressEvent(self, event) -> None:
         super().mousePressEvent(event)
         self.setSelected(True)
-        self.ghost.update_appearance()
+        self.ghost.update_arrow()
         self.ghost.show()
         if hasattr(self.motion, "ghost_arrow"):
             if self.ghost:
@@ -151,7 +136,7 @@ class Arrow(GraphicalObject):
             self.ghost.update_attributes(self.arrow_dict)
             self.ghost.set_arrow_attrs_from_arrow(self)
             self.ghost.set_is_svg_mirrored_from_attributes()
-            self.ghost.update_appearance()
+            self.ghost.update_arrow()
             self.ghost.transform = self.transform
             self.scene.addItem(self.ghost)
             self.ghost.show()
@@ -163,15 +148,15 @@ class Arrow(GraphicalObject):
         self.set_start_end_locs()
         if hasattr(self, "ghost_arrow"):
             self.ghost.set_arrow_attrs_from_arrow(self)
-            self.ghost.update_appearance()
+            self.ghost.update_arrow()
 
         self.motion.prop.set_prop_attrs_from_arrow(self)
-        self.motion.prop.update_appearance()
+        self.motion.prop.update_prop()
 
         self.motion.arrow.location = new_location
         self.ghost.location = new_location
-        self.update_appearance()
-        self.ghost.update_appearance()
+        self.update_arrow()
+        self.ghost.update_arrow()
         self.scene.ghost_arrows[self.color] = self.ghost
         self.scene.props[self.color] = self.motion.prop
         self.is_dragging = True
@@ -182,6 +167,19 @@ class Arrow(GraphicalObject):
         self.setPos(new_pos)
 
     def update_mirror(self) -> None:
+        if self.motion_type == PRO:
+            rot_dir = self.motion.prop_rot_dir
+            if rot_dir == CLOCKWISE:
+                self.is_svg_mirrored = False
+            elif rot_dir == COUNTER_CLOCKWISE:
+                self.is_svg_mirrored = True
+        elif self.motion_type == ANTI:
+            rot_dir = self.motion.prop_rot_dir
+            if rot_dir == CLOCKWISE:
+                self.is_svg_mirrored = True
+            elif rot_dir == COUNTER_CLOCKWISE:
+                self.is_svg_mirrored = False
+
         if self.is_svg_mirrored:
             self.manipulator.mirror()
         else:
@@ -229,7 +227,7 @@ class Arrow(GraphicalObject):
                 if prop not in self.scene.items():
                     self.scene.addItem(prop)
                 prop.show()
-                prop.update_appearance()
+                prop.update_prop()
                 self.scene.update_pictograph()
 
     def set_arrow_transform_origin_to_center(self) -> None:
@@ -347,6 +345,7 @@ class Arrow(GraphicalObject):
         self.location = self.motion.prop.loc
 
     def update_arrow(self) -> None:
-        self.set_is_svg_mirrored_from_attributes()
+        self.update_svg()
         self.update_mirror()
-        self.update_appearance()
+        self.update_color()
+        self.update_rotation()

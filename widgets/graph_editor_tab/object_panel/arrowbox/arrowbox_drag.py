@@ -98,7 +98,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.pictograph.clearSelection()
         self.pictograph.arrows[self.color] = self.placed_arrow
         self.pictograph.arrows[self.color].motion = self.pictograph.motions[self.color]
-        self.placed_arrow.update_appearance()
+        self.placed_arrow.update_arrow()
         self.placed_arrow.show()
         self.placed_arrow.setSelected(True)
 
@@ -111,7 +111,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             self.end_loc,
         ) = get_start_end_locs(self.motion_type, self.rot_dir, self.arrow_location)
 
-        self.update_rotation()
+        self.update_drag_pixmap_rotation()
         self._update_ghost_arrow_for_new_location(new_location)
         self.update_prop_during_drag()
 
@@ -138,7 +138,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.ghost.set_arrow_transform_origin_to_center()
         self.ghost.show()
         self.ghost.update_color()
-        self.ghost.update_appearance()
+        self.ghost.update_arrow()
 
     def _update_ghost_arrow_for_new_location(self, new_location) -> None:
         self.ghost.color = self.color
@@ -232,11 +232,11 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
                 if prop not in self.pictograph.items():
                     self.pictograph.addItem(prop)
-                prop.update_appearance()
+                prop.update_prop()
 
     def apply_transformations_to_preview(self) -> None:
         self.update_mirror()
-        self.update_rotation()
+        self.update_drag_pixmap_rotation()
 
     def update_mirror(self) -> None:
         if self.is_svg_mirrored:
@@ -247,7 +247,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             self.preview.setPixmap(mirrored_pixmap)
             self.is_svg_mirrored = True
 
-    def update_rotation(self) -> None:
+    def update_drag_pixmap_rotation(self) -> None:
         renderer = QSvgRenderer(self.target_arrow.svg_file)
         scaled_size = (
             renderer.defaultSize()

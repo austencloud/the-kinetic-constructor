@@ -42,10 +42,10 @@ class ArrowManipulator:
         self.arrow.motion.end_loc = new_end_loc
         self.arrow.motion.prop.loc = new_end_loc
 
-        self.arrow.motion.prop.update_appearance()
+        self.arrow.motion.prop.update_prop()
         self.arrow.motion.update_attr_from_arrow()
-        self.arrow.update_appearance()
-        self.arrow.ghost.update_appearance()
+        self.arrow.update_arrow()
+        self.arrow.ghost.update_arrow()
 
         self.arrow.scene.update_pictograph()
 
@@ -56,10 +56,10 @@ class ArrowManipulator:
             new_color = RED
 
         self.arrow.color = new_color
-        self.arrow.update_appearance()
+        self.arrow.update_arrow()
 
         self.arrow.motion.prop.color = new_color
-        self.arrow.motion.prop.update_appearance()
+        self.arrow.motion.prop.update_prop()
 
         self.arrow.scene.update_pictograph()
 
@@ -93,13 +93,13 @@ class ArrowManipulator:
         self.arrow.motion.prop.color = self.arrow.color
         self.arrow.motion.prop.loc = new_end_loc
 
-        self.arrow.update_appearance()
-        self.arrow.motion.prop.update_appearance()
+        self.arrow.update_arrow()
+        self.arrow.motion.prop.update_prop()
         self.arrow.scene.update_pictograph()
 
         if hasattr(self.arrow, GHOST):
             if not isinstance(self, self.arrow.ghost.__class__) and self.arrow.ghost:
-                self.arrow.ghost.update_appearance()
+                self.arrow.ghost.update_arrow()
 
     def mirror(self) -> None:
         self.arrow.set_arrow_transform_origin_to_center()
@@ -162,7 +162,7 @@ class ArrowManipulator:
             self.arrow.ghost.motion_type = new_motion_type
             self.arrow.ghost.update_svg(svg_file)
 
-        self.arrow.motion.prop.update_appearance()
+        self.arrow.motion.prop.update_prop()
 
         self.arrow.scene.update_pictograph()
 
@@ -286,8 +286,8 @@ class ArrowManipulator:
         self.arrow.motion.end_loc = new_end_loc
         self.arrow.motion.prop.loc = new_end_loc
 
-        self.arrow.update_appearance()
-        self.arrow.motion.prop.update_appearance()
+        self.arrow.update_arrow()
+        self.arrow.motion.prop.update_prop()
         self.arrow.scene.update_pictograph()
 
     def rotate_diamond_mode_shift_arrow(
@@ -318,9 +318,9 @@ class ArrowManipulator:
         self.arrow.motion.end_loc = new_end_loc
         self.arrow.motion.prop.loc = new_end_loc
 
-        self.arrow.update_appearance()
-        self.arrow.ghost.update_appearance()
-        self.arrow.motion.prop.update_appearance()
+        self.arrow.update_arrow()
+        self.arrow.ghost.update_arrow()
+        self.arrow.motion.prop.update_prop()
         self.arrow.scene.update_pictograph()
 
     def rotate_box_mode_static_arrow(
@@ -344,7 +344,7 @@ class ArrowManipulator:
         self.arrow.motion.prop.loc = new_location
 
         self.arrow.motion.update_attr_from_arrow()
-        self.arrow.motion.prop.update_appearance()
+        self.arrow.motion.prop.update_prop()
         self.arrow.scene.update_pictograph()
 
     def rotate_diamond_mode_static_arrow(
@@ -366,7 +366,7 @@ class ArrowManipulator:
         self.arrow.motion.prop.loc = new_location
 
         self.arrow.motion.update_attr_from_arrow()
-        self.arrow.motion.prop.update_appearance()
+        self.arrow.motion.prop.update_prop()
         self.arrow.scene.update_pictograph()
 
     ### DELETION ###

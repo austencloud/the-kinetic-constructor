@@ -66,14 +66,11 @@ class GraphicalObject(QGraphicsSvgItem):
         self.renderer.load(new_svg_data)
         self.setSharedRenderer(self.renderer)
 
-    def update_svg(self, svg_file) -> None:
-        self.svg_file = svg_file
+    def update_svg(self: Union["Arrow", "Prop"]) -> None:
+        svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.setup_svg_renderer(svg_file)
         self.set_svg_color(self.color)
 
-    def update_appearance(self: Union["Prop", "Arrow"]) -> None:
-        self.update_color()
-        self.update_rotation()
 
     def update_attributes(
         self, attributes: MotionAttributesDicts | PropAttributesDicts

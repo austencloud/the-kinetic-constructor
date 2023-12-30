@@ -16,14 +16,14 @@ class PropManipulator:
             self.prop.axis = HORIZONTAL
         else:
             self.prop.axis = VERTICAL
-        self.prop.update_rotation()
+        self.prop.update_prop()
 
     def swap_layer(self) -> None:
         if self.prop.layer == 1:
             self.prop.layer = 2
         else:
             self.prop.layer = 1
-        self.prop.update_rotation()
+        self.prop.update_prop()
 
     def delete(self) -> None:
         self.prop.scene.removeItem(self.prop)

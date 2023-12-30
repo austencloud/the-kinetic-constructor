@@ -58,7 +58,7 @@ class Prop(GraphicalObject):
             self.ghost.color = self.color
             self.ghost.loc = self.loc
             self.ghost.orientation = self.orientation
-            self.ghost.update_appearance()
+            self.ghost.update_prop()
             self.ghost.show()
             self.scene.props[self.ghost.color] = self.ghost
             self.scene.props[self.color] = self.ghost
@@ -94,7 +94,7 @@ class Prop(GraphicalObject):
         self.color = target_arrow.color
         self.loc = target_arrow.motion.end_loc
         self.axis = self.get_axis_from_orientation(self.orientation, self.loc)
-        self.update_appearance()
+        self.update_prop()
 
     def clear_attributes(self) -> None:
         self.loc = None
@@ -102,7 +102,7 @@ class Prop(GraphicalObject):
         self.orientation = None
         self.axis = None
         self.motion = None
-        self.update_appearance()
+        self.update_prop()
 
     ### GETTERS ###
 
@@ -124,8 +124,6 @@ class Prop(GraphicalObject):
             orientation = COUNTER
         elif orientation == COUNTER:
             orientation = CLOCK
-
-        self.update_rotation()
         return orientation
 
     def get_rotation_angle(self) -> RotationAngles:
@@ -164,12 +162,16 @@ class Prop(GraphicalObject):
         prop_attributes = [attr.value for attr in PropAttribute]
         return {attr: getattr(self, attr) for attr in prop_attributes}
 
-    def update_rotation(self) -> None:
-        rotation_angle = self.get_rotation_angle()
-
+    def update_prop_rotation_angle(self) -> None:
+        prop_rotation_angle = self.get_rotation_angle()
         if self.ghost:
-            self.ghost.setRotation(rotation_angle)
-        self.setRotation(rotation_angle)
+            self.ghost.setRotation(prop_rotation_angle)
+        self.setRotation(prop_rotation_angle)
+
+    def update_prop(self) -> None:
+        self.update_color()
+        self.update_prop_rotation_angle()
+        self.motion.update_prop_orientation()
 
     def get_svg_file(self, prop_type: PropType) -> str:
         svg_file = f"{PROP_DIR}{prop_type}.svg"
@@ -180,7 +182,7 @@ class Prop(GraphicalObject):
     def update_prop_type(self, prop_type: PropType) -> None:
         self.prop_type = prop_type
         self.update_svg(self.get_svg_file(prop_type))
-        self.update_appearance()
+        self.update_prop()
 
     def update_ghost_prop_location(self, new_pos: QPointF) -> None:
         new_location = self.pictograph.get_closest_hand_point(new_pos)[0]
@@ -194,12 +196,12 @@ class Prop(GraphicalObject):
                 self.motion.end_loc = new_location
 
             self.axis = self.get_axis_from_orientation()
-            self.update_appearance()
+            self.update_prop()
             self.update_arrow_location(new_location)
 
             self.ghost.color = self.color
             self.ghost.loc = self.loc
-            self.ghost.update_appearance()
+            self.ghost.update_prop()
             self.scene.props[self.ghost.color] = self.ghost
             self.scene.update_pictograph()
             self.scene.props[self.color] = self
@@ -375,15 +377,15 @@ class Prop(GraphicalObject):
                 self.motion.arrow.ghost.location = new_arrow_location
                 self.motion.start_loc = start_loc
                 self.motion.end_loc = end_loc
-                self.motion.arrow.update_appearance()
-                self.motion.arrow.ghost.update_appearance()
+                self.motion.arrow.update_arrow()
+                self.motion.arrow.ghost.update_arrow()
                 self.pictograph.update_pictograph()
 
         elif self.motion.motion_type == STATIC:
             self.motion.arrow.location = new_arrow_location
             self.motion.start_loc = new_arrow_location
             self.motion.end_loc = new_arrow_location
-            self.motion.arrow.update_appearance()
+            self.motion.arrow.update_arrow()
 
     def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
         (
@@ -393,17 +395,13 @@ class Prop(GraphicalObject):
 
         self.loc = closest_hand_point
         self.axis = self.get_axis_from_orientation()
-        self.update_appearance()
+        self.update_prop()
         self.setPos(closest_hand_point_coord)
 
         if self.motion.arrow:
-            self.motion.arrow.update_appearance()
+            self.motion.arrow.update_arrow()
         self.previous_location = closest_hand_point
         self.scene.update_pictograph()
-
-    def update_prop(self):
-        self.update_rotation()
-        self.update_appearance()
 
     def is_radial(self) -> bool:
         return self.orientation in [IN, OUT]

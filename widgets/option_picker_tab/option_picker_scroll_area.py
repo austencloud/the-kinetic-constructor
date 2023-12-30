@@ -92,7 +92,6 @@ class OptionPickerScrollArea(PictographScrollArea):
                 widget.setParent(None)
                 widget.deleteLater()
 
-
         # for i, (_, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
         #     option: Option = self._create_pictograph(pictograph_data)
         #     self.load_image_if_visible(option)
@@ -126,8 +125,7 @@ class OptionPickerScrollArea(PictographScrollArea):
             prop = option.props[arrow.color]
             prop.motion = option.motions[arrow.color]
             prop.motion.update_prop_orientation()
-            prop.update_rotation()
-            prop.update_appearance()
+            prop.update_prop()
             arrow.location = arrow.motion.get_arrow_location(
                 arrow.motion.start_loc, arrow.motion.end_loc
             )

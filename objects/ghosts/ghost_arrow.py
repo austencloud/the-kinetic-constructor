@@ -39,5 +39,5 @@ class GhostArrow(Arrow):
 
     def update_ghost_arrow(self, attributes) -> None:
         self.update_attributes(attributes)
-        self.update_appearance()
+        self.update_arrow()
         self.show()

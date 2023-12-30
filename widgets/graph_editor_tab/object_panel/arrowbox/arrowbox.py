@@ -60,7 +60,7 @@ class ArrowBox(ObjectBox):
         for arrow in self.arrows:
             arrow.turns = int(turns)
             arrow.update_svg(arrow.get_svg_file(arrow.motion_type, arrow.turns))
-            arrow.update_appearance()  # Update the appearance of the arrow based on the new turns
+            arrow.update_arrow()  # Update the appearance of the arrow based on the new turns
 
     def create_arrows(self) -> None:
         red_arrows: List[Arrow] = []
@@ -108,8 +108,7 @@ class ArrowBox(ObjectBox):
             )
 
         for arrow in arrows:
-            arrow.update_appearance()
-            arrow.update_rotation()
+            arrow.update_arrow()
 
         return arrows
 

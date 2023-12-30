@@ -166,7 +166,14 @@ class Pictograph(QGraphicsScene):
                 self.arrows[color].get_attributes()
             )
             self.motions[color].update_prop_orientation()
-            self.arrows[color].update_arrow()
+
+        for arrow in self.arrows.values():
+            arrow.update_arrow()
+            self.addItem(arrow)
+
+        for prop in self.props.values():
+            prop.update_prop()
+            self.addItem(prop)
 
     def _create_pictograph_dict_from_pd_row(
         self: Union["Option", "IGPictograph"],
@@ -388,12 +395,12 @@ class Pictograph(QGraphicsScene):
             new_beat.ghost_props[motion.color] = new_ghost_prop
 
             if new_arrow.location:
-                new_arrow.update_appearance()
-                new_ghost_arrow.update_appearance()
+                new_arrow.update_arrow()
+                new_ghost_arrow.update_arrow()
 
             if new_prop.loc:
-                new_prop.update_appearance()
-                new_ghost_prop.update_appearance()
+                new_prop.update_prop()
+                new_ghost_prop.update_prop()
 
             new_arrow.ghost = new_ghost_arrow
             new_prop.ghost = new_ghost_prop
@@ -425,8 +432,8 @@ class Pictograph(QGraphicsScene):
             svg_file = new_arrow.get_svg_file(new_arrow.motion_type, new_arrow.turns)
             new_arrow.update_svg(svg_file)
             new_arrow.ghost.update_svg(svg_file)
-            new_arrow.update_appearance()
-            new_arrow.ghost.update_appearance()
+            new_arrow.update_arrow()
+            new_arrow.ghost.update_arrow()
         new_beat.update_pictograph()
 
         return new_beat

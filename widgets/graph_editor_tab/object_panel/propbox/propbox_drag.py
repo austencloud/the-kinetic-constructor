@@ -83,7 +83,7 @@ class PropBoxDrag(ObjectBoxDrag):
         self.pictograph.update_pictograph()
         self.pictograph.clearSelection()
 
-        self.placed_prop.update_appearance()
+        self.placed_prop.update_prop()
         self.placed_prop.show()
         self.placed_prop.setSelected(True)
 
@@ -143,7 +143,7 @@ class PropBoxDrag(ObjectBoxDrag):
         self.ghost.update_svg(ghost_svg)
         self.ghost.update_color()
         self.ghost.motion.update_prop_orientation()
-        self.ghost.update_rotation()
+        self.ghost.update_prop()
         self.ghost.show()
 
     ### EVENT HANDLERS ###
@@ -282,12 +282,12 @@ class PropBoxDrag(ObjectBoxDrag):
         self.arrow.motion.end_loc = self.location
         self.arrow.ghost = self.pictograph.ghost_arrows[self.color]
         self.arrow.ghost.motion = self.pictograph.motions[self.color]
-        self.arrow.update_appearance()
+        self.arrow.update_arrow()
         self.arrow.ghost.update_attributes(self.arrow.get_attributes())
         self.arrow.ghost.update_svg(
             self.arrow.get_svg_file(
                 self.arrow.motion.motion_type, self.arrow.motion.turns
             )
         )
-        self.arrow.ghost.update_appearance()
+        self.arrow.ghost.update_arrow()
         self.pictograph.arrows[self.color] = self.arrow

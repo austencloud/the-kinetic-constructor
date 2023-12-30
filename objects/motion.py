@@ -53,6 +53,7 @@ class Motion:
         if hasattr(self, ARROW) and self.arrow:
             self.arrow.location = self.get_arrow_location(self.start_loc, self.end_loc)
             self.arrow.motion_type = self.motion_type
+
     ### UPDATE ###
 
     def update_attr_from_arrow(self) -> None:
@@ -65,17 +66,16 @@ class Motion:
         self.turns = self.arrow.turns
         self.end_or = self.get_end_or()
         self.update_prop_orientation()
-        self.prop.update_appearance()
-        self.prop.update_rotation()
+        self.prop.update_prop()
         svg_file = self.arrow.get_svg_file(self.arrow.motion_type, self.arrow.turns)
         self.arrow.update_svg(svg_file)
-        self.arrow.update_appearance()
+        self.arrow.update_arrow()
         self.arrow.arrow_dict[TURNS] = self.arrow.turns
         if hasattr(self.arrow, GHOST):
             if self.arrow.ghost:
                 self.arrow.ghost.turns = self.arrow.turns
                 self.arrow.ghost.update_svg(svg_file)
-                self.arrow.ghost.update_appearance()
+                self.arrow.ghost.update_arrow()
         self.scene.update_pictograph()
 
     def update_prop_orientation(self) -> None:
@@ -83,8 +83,7 @@ class Motion:
             self.prop.orientation = self.end_or
             self.prop.loc = self.end_loc
             self.prop.axis = self.prop.get_axis_from_orientation()
-            self.prop.update_rotation()
-            self.prop.update_appearance()
+            self.prop.update_prop()
 
     def clear_attributes(self) -> None:
         self.start_loc = None
