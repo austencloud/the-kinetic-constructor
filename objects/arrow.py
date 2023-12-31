@@ -98,7 +98,7 @@ class Arrow(GraphicalObject):
             new_pos = event.scenePos() - self.get_object_center()
             self.set_drag_pos(new_pos)
             if new_location != self.loc:
-                self.update_location(new_location)
+                self._update_location(new_location)
 
     def mouseReleaseEvent(self, event) -> None:
         self.is_dragging = False
@@ -108,23 +108,20 @@ class Arrow(GraphicalObject):
 
     ### UPDATERS ###
 
-    def update_location(self, location):
-        self.loc = location
-        self.ghost.loc = location
-
-        self.motion.prop.update_prop()
-        self.update_arrow()
-
-        self.scene.ghost_arrows[self.color] = self.ghost
-        self.scene.props[self.color] = self.motion.prop
-        self.is_dragging = True
-        self.scene.update_pictograph()
-        self.motion.update_prop_ori()
+    def _update_location(self, loc=None) -> None:
+        if not self.is_ghost and self.ghost:
+            if not loc:
+                loc = self.motion.get_arrow_location(
+                    self.motion.start_loc, self.motion.end_loc, self.motion_type
+                )
+            self.loc = loc
+            self.ghost.loc = loc
+            self.is_dragging = True
 
     def set_drag_pos(self, new_pos: QPointF) -> None:
         self.setPos(new_pos)
 
-    def update_mirror(self) -> None:
+    def _update_mirror(self) -> None:
         if self.motion_type == PRO:
             rot_dir = self.motion.prop_rot_dir
             if rot_dir == CLOCKWISE:
@@ -143,7 +140,7 @@ class Arrow(GraphicalObject):
         else:
             self.unmirror_svg()
 
-    def update_rotation(self) -> None:
+    def _update_rotation(self) -> None:
         if self.motion.is_shift():
             angle = self._get_shift_rotation_angle()
         elif self.motion.is_dash():
@@ -151,22 +148,6 @@ class Arrow(GraphicalObject):
         elif self.motion.is_static():
             angle = self._get_static_rotation_angle()
         self.setRotation(angle)
-
-    def update_prop_during_drag(self) -> None:
-        for prop in self.scene.props.values():
-            if prop.color == self.color:
-                if prop not in self.scene.props:
-                    self.scene.props[prop.color] = prop
-
-                prop.update_attributes(
-                    {
-                        COLOR: self.color,
-                        LOC: self.motion.end_loc,
-                    }
-                )
-                prop.show()
-                prop.update_prop()
-                self.scene.update_pictograph()
 
     def set_arrow_transform_origin_to_center(self) -> None:
         self.center = self.boundingRect().center()
@@ -439,20 +420,22 @@ class Arrow(GraphicalObject):
     def update_arrow(self, arrow_dict: ArrowAttributesDicts = None) -> None:
         if arrow_dict:
             self.update_attributes(arrow_dict)
-            if hasattr(self, GHOST) and self.ghost:
-                self.ghost.update_arrow(arrow_dict)
+            if not self.is_ghost and self.ghost:
+                self.ghost.update_attributes(arrow_dict)
+
         if not self.is_ghost and self.ghost:
             self.update_svg()
-            self.update_mirror()
+            self._update_mirror()
             self.update_color()
-            self.update_rotation()
+            self._update_location()
+            self._update_rotation()
 
             self.ghost.transform = self.transform
-            self.ghost.update_arrow()
             self.ghost.update_svg()
-            self.ghost.update_mirror()
+            self.ghost._update_mirror()
             self.ghost.update_color()
-            self.ghost.update_rotation()
+            self.ghost._update_location()
+            self.ghost._update_rotation()
 
     def mirror_svg(self) -> None:
         self.set_arrow_transform_origin_to_center()

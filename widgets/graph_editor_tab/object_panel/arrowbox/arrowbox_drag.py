@@ -145,7 +145,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
         ghost_svg = self.ghost.get_svg_file(self.motion_type, self.turns)
 
-        self.ghost.update_mirror()
+        self.ghost.update_arrow()
         self.ghost.update_svg(ghost_svg)
         if self.is_svg_mirrored:
             mirrored_ghost_transform = (
