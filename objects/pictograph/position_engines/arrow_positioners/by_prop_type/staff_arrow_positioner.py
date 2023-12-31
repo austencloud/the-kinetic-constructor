@@ -91,7 +91,9 @@ class StaffArrowPositioner:
                     adjustment.y() - 30 if adjustment.y() < 0 else adjustment.y() + 30
                 )
                 adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                self.arrow_positioner._apply_adjustment(arrow, adjusted_adjustment)
+                self.arrow_positioner._apply_shift_adjustment(
+                    arrow, adjusted_adjustment
+                )
 
     def _adjust_arrows_for_letter_I(self, red_motion, blue_motion) -> None:
         if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
@@ -104,7 +106,9 @@ class StaffArrowPositioner:
                     adjustment.y() - 30 if adjustment.y() < 0 else adjustment.y() + 30
                 )
                 adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                self.arrow_positioner._apply_adjustment(arrow, adjusted_adjustment)
+                self.arrow_positioner._apply_shift_adjustment(
+                    arrow, adjusted_adjustment
+                )
 
     def _adjust_arrows_for_letter_Q(self, red_motion, blue_motion) -> None:
         if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
@@ -117,7 +121,9 @@ class StaffArrowPositioner:
                     adjustment.y() - 60 if adjustment.y() < 0 else adjustment.y() + 60
                 )
                 adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                self.arrow_positioner._apply_adjustment(arrow, adjusted_adjustment)
+                self.arrow_positioner._apply_shift_adjustment(
+                    arrow, adjusted_adjustment
+                )
 
     def _adjust_arrows_for_letter_R(self, red_motion, blue_motion) -> None:
         if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
@@ -130,7 +136,9 @@ class StaffArrowPositioner:
                     adjustment.y() - 60 if adjustment.y() < 0 else adjustment.y() + 60
                 )
                 adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                self.arrow_positioner._apply_adjustment(arrow, adjusted_adjustment)
+                self.arrow_positioner._apply_shift_adjustment(
+                    arrow, adjusted_adjustment
+                )
 
     def _adjust_arrows_for_letter_T(self, red_motion, blue_motion) -> None:
         if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
@@ -168,7 +176,7 @@ class StaffArrowPositioner:
                     adjustment += QPointF(-40, 0)
                 elif direction == RIGHT:
                     adjustment += QPointF(40, 0)
-                self.arrow_positioner._apply_adjustment(leader.arrow, adjustment)
+                self.arrow_positioner._apply_shift_adjustment(leader.arrow, adjustment)
 
             elif leader.prop.is_radial() and follower.prop.is_antiradial():
                 adjustment = self.arrow_positioner.calculate_adjustment(
@@ -195,7 +203,7 @@ class StaffArrowPositioner:
                         adjustment += QPointF(20, -45)
                     elif leader.end_loc == SOUTH:
                         adjustment += QPointF(20, 45)
-                self.arrow_positioner._apply_adjustment(leader.arrow, adjustment)
+                self.arrow_positioner._apply_shift_adjustment(leader.arrow, adjustment)
 
     def determine_leading_motion_for_T(
         self, red_start, red_end, blue_start, blue_end
@@ -256,7 +264,7 @@ class StaffArrowPositioner:
                         adjustment += QPointF(20, -45)
                     elif leader.end_loc == SOUTH:
                         adjustment += QPointF(20, 45)
-                self.arrow_positioner._apply_adjustment(leader.arrow, adjustment)
+                self.arrow_positioner._apply_shift_adjustment(leader.arrow, adjustment)
 
     def _adjust_arrows_for_letter_V(self, red_motion, blue_motion) -> None:
         if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
@@ -286,7 +294,9 @@ class StaffArrowPositioner:
                     adjustment += QPointF(-40, 0)
                 elif direction == RIGHT:
                     adjustment += QPointF(40, 0)
-                self.arrow_positioner._apply_adjustment(anti_motion.arrow, adjustment)
+                self.arrow_positioner._apply_shift_adjustment(
+                    anti_motion.arrow, adjustment
+                )
 
             elif anti_motion.prop.is_radial() and pro_motion.prop.is_antiradial():
                 adjustment = self.arrow_positioner.calculate_adjustment(
@@ -315,7 +325,9 @@ class StaffArrowPositioner:
                         adjustment += QPointF(20, -45)
                     elif anti_motion.end_loc == SOUTH:
                         adjustment += QPointF(20, 45)
-                self.arrow_positioner._apply_adjustment(anti_motion.arrow, adjustment)
+                self.arrow_positioner._apply_shift_adjustment(
+                    anti_motion.arrow, adjustment
+                )
 
     def get_antispin_antiradial_adjustment_direction(self, leader: "Motion") -> str:
         arrow_location = leader.arrow.loc
@@ -366,7 +378,7 @@ class StaffArrowPositioner:
                 adjustment += QPointF(-40, 0)
             elif direction == RIGHT:
                 adjustment += QPointF(40, 0)
-            self.arrow_positioner._apply_adjustment(anti_motion.arrow, adjustment)
+            self.arrow_positioner._apply_shift_adjustment(anti_motion.arrow, adjustment)
 
     def _adjust_arrows_for_letter_Z(
         self, red_motion: Motion, blue_motion: Motion
@@ -380,14 +392,14 @@ class StaffArrowPositioner:
             adjustment = self.arrow_positioner.calculate_adjustment(
                 anti_motion.arrow.loc, 80
             )
-            self.arrow_positioner._apply_adjustment(anti_motion.arrow, adjustment)
+            self.arrow_positioner._apply_shift_adjustment(anti_motion.arrow, adjustment)
         elif red_motion.prop.ori == OUT or blue_motion.prop.ori == OUT:
             for arrow in self.pictograph.arrows.values():
                 if arrow.motion.prop.ori == OUT:
                     adjustment = self.arrow_positioner.calculate_adjustment(
                         arrow.loc, 55
                     )
-                    self.arrow_positioner._apply_adjustment(arrow, adjustment)
+                    self.arrow_positioner._apply_shift_adjustment(arrow, adjustment)
 
     # Helper functions
     def _are_both_props_radial(self, red_motion: Motion, blue_motion: Motion) -> bool:
@@ -410,7 +422,7 @@ class StaffArrowPositioner:
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
                     arrow.loc, adjustment_value
                 )
-                self.arrow_positioner._apply_adjustment(arrow, adjustment)
+                self.arrow_positioner._apply_shift_adjustment(arrow, adjustment)
 
     def _apply_specific_arrow_adjustment(
         self, motion_type: str, orientation: str, adjustment_value: int
@@ -423,7 +435,7 @@ class StaffArrowPositioner:
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
                     arrow.loc, adjustment_value
                 )
-                self.arrow_positioner._apply_adjustment(arrow, adjustment)
+                self.arrow_positioner._apply_shift_adjustment(arrow, adjustment)
 
     def _apply_adjustment_to_arrows_by_type(
         self, motion_type: str, adjustment_value: int
@@ -433,4 +445,4 @@ class StaffArrowPositioner:
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
                     arrow.loc, adjustment_value
                 )
-                self.arrow_positioner._apply_adjustment(arrow, adjustment)
+                self.arrow_positioner._apply_shift_adjustment(arrow, adjustment)

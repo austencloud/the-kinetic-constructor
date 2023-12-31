@@ -232,7 +232,7 @@ class BaseArrowPositioner:
         }
         return location_adjustments.get(location, QPointF(0, 0))
 
-    def _apply_adjustment(
+    def _apply_shift_adjustment(
         self, arrow: Arrow, adjustment: QPointF, update_ghost: bool = True
     ) -> None:
         default_pos = self._get_default_shift_coord(arrow)
@@ -242,7 +242,19 @@ class BaseArrowPositioner:
 
         # Update the ghost arrow with the same adjustment
         if update_ghost and arrow.ghost:
-            self._apply_adjustment(arrow.ghost, adjustment, update_ghost=False)
+            self._apply_shift_adjustment(arrow.ghost, adjustment, update_ghost=False)
+
+    def _apply_dash_adjustment(
+        self, arrow: Arrow, adjustment: QPointF, update_ghost: bool = True
+    ) -> None:
+        default_pos = self._get_default_dash_coord(arrow)
+        arrow_center = arrow.boundingRect().center()
+        new_pos = default_pos - arrow_center + adjustment
+        arrow.setPos(new_pos)
+
+        # Update the ghost arrow with the same adjustment
+        if update_ghost and arrow.ghost:
+            self._apply_dash_adjustment(arrow.ghost, adjustment, update_ghost=False)
 
     # Function to get the Enum member key from a given letter
     def get_letter_type(self, letter: str) -> str | None:

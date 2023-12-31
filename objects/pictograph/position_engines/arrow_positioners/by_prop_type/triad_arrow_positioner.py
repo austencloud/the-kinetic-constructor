@@ -53,14 +53,14 @@ class TriadArrowPositioner:
                         adjustment = self.arrow_positioner._calculate_adjustment_tuple(
                             arrow.loc, 90
                         )
-                    self.arrow_positioner._apply_adjustment(arrow, adjustment)
+                    self.arrow_positioner._apply_shift_adjustment(arrow, adjustment)
 
                 else:
                     if self.arrow_positioner._is_arrow_movable(arrow):
                         adjustment = self.arrow_positioner._calculate_adjustment_tuple(
                             arrow.loc, 40
                         )
-                    self.arrow_positioner._apply_adjustment(arrow, adjustment)
+                    self.arrow_positioner._apply_shift_adjustment(arrow, adjustment)
         else:
             for arrow in self.pictograph.arrows.values():
                 if arrow.motion.motion_type == ANTI:
@@ -68,14 +68,14 @@ class TriadArrowPositioner:
                         adjustment = self.arrow_positioner._calculate_adjustment_tuple(
                             arrow.loc, 80
                         )
-                    self.arrow_positioner._apply_adjustment(arrow, adjustment)
+                    self.arrow_positioner._apply_shift_adjustment(arrow, adjustment)
 
                 else:
                     if self.arrow_positioner._is_arrow_movable(arrow):
                         adjustment = self.arrow_positioner._calculate_adjustment_tuple(
                             arrow.loc, 40
                         )
-                    self.arrow_positioner._apply_adjustment(arrow, adjustment)
+                    self.arrow_positioner._apply_shift_adjustment(arrow, adjustment)
 
     def _adjust_triads_for_letter_K(self):
         if (
@@ -88,7 +88,7 @@ class TriadArrowPositioner:
                         arrow.loc, 90
                     )
 
-                    self.arrow_positioner._apply_adjustment(arrow, adjustment)
+                    self.arrow_positioner._apply_shift_adjustment(arrow, adjustment)
         else:
             for arrow in self.pictograph.arrows.values():
                 if self.arrow_positioner._is_arrow_movable(arrow):
@@ -96,7 +96,7 @@ class TriadArrowPositioner:
                         arrow.loc, 80
                     )
 
-                    self.arrow_positioner._apply_adjustment(arrow, adjustment)
+                    self.arrow_positioner._apply_shift_adjustment(arrow, adjustment)
 
     def _adjust_triads_for_letter_Z(self):
         for arrow in self.pictograph.arrows.values():
@@ -111,7 +111,9 @@ class TriadArrowPositioner:
                     adjustment.y() - 10 if adjustment.y() < 0 else adjustment.y() + 10
                 )
                 adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                self.arrow_positioner._apply_adjustment(arrow, adjusted_adjustment)
+                self.arrow_positioner._apply_shift_adjustment(
+                    arrow, adjusted_adjustment
+                )
 
     def _adjust_triads_for_letter_R(self):
         for arrow in self.pictograph.arrows.values():
@@ -124,7 +126,9 @@ class TriadArrowPositioner:
                     adjustment.y() - 55 if adjustment.y() < 0 else adjustment.y() + 55
                 )
                 adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                self.arrow_positioner._apply_adjustment(arrow, adjusted_adjustment)
+                self.arrow_positioner._apply_shift_adjustment(
+                    arrow, adjusted_adjustment
+                )
 
     def _adjust_triads_for_letter_Q(self):
         for arrow in self.pictograph.arrows.values():
@@ -137,7 +141,9 @@ class TriadArrowPositioner:
                     adjustment.y() - 55 if adjustment.y() < 0 else adjustment.y() + 55
                 )
                 adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                self.arrow_positioner._apply_adjustment(arrow, adjusted_adjustment)
+                self.arrow_positioner._apply_shift_adjustment(
+                    arrow, adjusted_adjustment
+                )
 
     def _adjust_triad_anti_arrows(self):
         # Store arrows by color for easy access
@@ -168,19 +174,19 @@ class TriadArrowPositioner:
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
                     anti_arrow.loc, 85
                 )
-                self.arrow_positioner._apply_adjustment(anti_arrow, adjustment)
+                self.arrow_positioner._apply_shift_adjustment(anti_arrow, adjustment)
             elif anti_arrow.motion.end_ori == OUT:
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
                     anti_arrow.loc, 85
                 )
-                self.arrow_positioner._apply_adjustment(anti_arrow, adjustment)
+                self.arrow_positioner._apply_shift_adjustment(anti_arrow, adjustment)
             elif (
                 anti_arrow.motion.end_ori == OUT and pro_arrows[0].motion.end_ori == IN
             ):
                 adjustment = self.arrow_positioner._calculate_adjustment_tuple(
                     anti_arrow.loc, 85
                 )
-                self.arrow_positioner._apply_adjustment(anti_arrow, adjustment)
+                self.arrow_positioner._apply_shift_adjustment(anti_arrow, adjustment)
 
     def _adjust_triads_for_letter_I(self):
         for arrow in self.pictograph.arrows.values():
@@ -204,7 +210,9 @@ class TriadArrowPositioner:
                         else adjustment.y() + 35
                     )
                     adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                    self.arrow_positioner._apply_adjustment(arrow, adjusted_adjustment)
+                    self.arrow_positioner._apply_shift_adjustment(
+                        arrow, adjusted_adjustment
+                    )
                 else:
                     adjusted_x = (
                         adjustment.x() - 20
@@ -217,7 +225,9 @@ class TriadArrowPositioner:
                         else adjustment.y() + 20
                     )
                     adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                    self.arrow_positioner._apply_adjustment(arrow, adjusted_adjustment)
+                    self.arrow_positioner._apply_shift_adjustment(
+                        arrow, adjusted_adjustment
+                    )
 
     def _adjust_triads_for_letter_H(self):
         for arrow in self.pictograph.arrows.values():
@@ -230,4 +240,6 @@ class TriadArrowPositioner:
                     adjustment.y() - 30 if adjustment.y() < 0 else adjustment.y() + 30
                 )
                 adjusted_adjustment = QPointF(adjusted_x, adjusted_y)
-                self.arrow_positioner._apply_adjustment(arrow, adjusted_adjustment)
+                self.arrow_positioner._apply_shift_adjustment(
+                    arrow, adjusted_adjustment
+                )

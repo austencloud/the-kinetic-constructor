@@ -22,28 +22,28 @@ class Type1ArrowPositioner(BaseArrowPositioner):
     def _reposition_G_H(self) -> None:
         for arrow in self.arrows:
             adjustment = self._calculate_G_H_adjustment(arrow)
-            self._apply_adjustment(arrow, adjustment)
+            self._apply_shift_adjustment(arrow, adjustment)
 
     def _reposition_I(self) -> None:
         for arrow in self.arrows:
             adjustment = self._calculate_I_adjustment(arrow)
-            self._apply_adjustment(arrow, adjustment)
-            self._apply_adjustment(arrow.ghost, adjustment)
+            self._apply_shift_adjustment(arrow, adjustment)
+            self._apply_shift_adjustment(arrow.ghost, adjustment)
 
     def _reposition_P(self) -> None:
         for arrow in self.arrows:
             adjustment = self._calculate_P_adjustment(arrow)
-            self._apply_adjustment(arrow, adjustment)
+            self._apply_shift_adjustment(arrow, adjustment)
 
     def _reposition_Q(self) -> None:
         for arrow in self.arrows:
             adjustment = self._calculate_Q_adjustment(arrow)
-            self._apply_adjustment(arrow, adjustment)
+            self._apply_shift_adjustment(arrow, adjustment)
 
     def _reposition_R(self) -> None:
         for arrow in self.arrows:
             adjustment = self._calculate_R_adjustment(arrow)
-            self._apply_adjustment(arrow, adjustment)
+            self._apply_shift_adjustment(arrow, adjustment)
 
     ### ADJUSTMENT CALCULATIONS ###
     def _calculate_G_H_adjustment(self, arrow: Arrow) -> QPointF:
