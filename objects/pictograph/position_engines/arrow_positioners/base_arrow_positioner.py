@@ -31,6 +31,8 @@ class BaseArrowPositioner:
     ### SETUP ###
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
+        self.arrows = pictograph.arrows.values()
+        self.ghost_arrows = pictograph.ghost_arrows.values()
         self.letters: Dict[
             Letter, List[Dict[str, str]]
         ] = pictograph.main_widget.letters
@@ -121,27 +123,23 @@ class BaseArrowPositioner:
             else:
                 print("ERROR: Arrow motion end_loc not found")
         elif other_arrow.motion.is_dash():
-            if other_arrow.location:
-                return self.get_opposite_location(other_arrow.location)
+            if other_arrow.location == arrow.location:
+                opposite_location = self.get_opposite_location(arrow.location)
+                arrow.location = opposite_location
+                return handpoints.get(opposite_location)
+            elif other_arrow.location == self.get_opposite_location(arrow.location):
+                if arrow.motion.end_loc in [NORTH, SOUTH]:
+                    if other_arrow.location == WEST:
+                        return handpoints.get(EAST)
+                    elif other_arrow.location == EAST:
+                        return handpoints.get(WEST)
+                elif arrow.motion.end_loc in [EAST, WEST]:
+                    if other_arrow.location == NORTH:
+                        return handpoints.get(SOUTH)
+                    elif other_arrow.location == SOUTH:
+                        return handpoints.get(NORTH)                
             else:
-                if arrow.color == BLUE:
-                    if arrow.motion.end_loc == NORTH:
-                        return handpoints.get(WEST)
-                    elif arrow.motion.end_loc == EAST:
-                        return handpoints.get(NORTH)
-                    elif arrow.motion.end_loc == SOUTH:
-                        return handpoints.get(EAST)
-                    elif arrow.motion.end_loc == WEST:
-                        return handpoints.get(SOUTH)
-                elif arrow.color == RED:
-                    if arrow.motion.end_loc == NORTH:
-                        return handpoints.get(EAST)
-                    elif arrow.motion.end_loc == EAST:
-                        return handpoints.get(SOUTH)
-                    elif arrow.motion.end_loc == SOUTH:
-                        return handpoints.get(WEST)
-                    elif arrow.motion.end_loc == WEST:
-                        return handpoints.get(NORTH)
+                return handpoints.get(arrow.location)
 
         elif other_arrow.motion.is_static():
             return handpoints.get(arrow.location)
@@ -160,6 +158,15 @@ class BaseArrowPositioner:
             NORTHWEST: QPointF(-distance, -distance),
         }
         return location_adjustments.get(location, QPointF(0, 0))
+
+    def are_adjacent_locations(self, location1: str, location2: str) -> bool:
+        adjacent_map = {
+            NORTHEAST: [NORTH, EAST],
+            SOUTHEAST: [SOUTH, EAST],
+            SOUTHWEST: [SOUTH, WEST],
+            NORTHWEST: [NORTH, WEST],
+        }
+        return location2 in adjacent_map.get(location1, [])
 
     ### HELPERS ###
     def _is_arrow_movable(self, arrow: Arrow) -> bool:

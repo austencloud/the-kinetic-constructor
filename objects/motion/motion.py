@@ -1,3 +1,4 @@
+from re import L
 from Enums import (
     Color,
     Handpath,
@@ -50,7 +51,6 @@ class Motion:
         if self.motion_type:
             self.end_ori: Orientation = self.get_end_or()
             self.manipulator = MotionManipulator(self)
-
 
     ### UPDATE ###
 
@@ -226,9 +226,9 @@ class Motion:
 
         other_motion_start_loc = self.scene.pictograph_dict[f"{other_color}_start_loc"]
         other_motion_end_loc = self.scene.pictograph_dict[f"{other_color}_end_loc"]
-        other_motion_type = self.scene.pictograph_dict[
-            f"{other_color}_motion_type"
-        ]
+        other_motion_type = self.scene.pictograph_dict[f"{other_color}_motion_type"]
+        other_arrow_loc: Location = None
+
         if other_motion_type in [PRO, ANTI, FLOAT]:
             vertical_map = {
                 SOUTHEAST: WEST,
@@ -251,15 +251,33 @@ class Motion:
                 return horizontal_map.get(other_arrow_loc)
 
         elif self.motion_type == DASH and other_motion_type == DASH:
-            if other_arrow_loc is NORTH:
-                return SOUTH
-            elif other_arrow_loc is SOUTH:
-                return NORTH
-            elif other_arrow_loc is EAST:
-                return WEST
-            elif other_arrow_loc is WEST:
-                return EAST
+            direction_map = {
+                NORTH: SOUTH,
+                SOUTH: NORTH,
+                EAST: WEST,
+                WEST: EAST,
+            }
 
+            color_direction_map = {
+                BLUE: {
+                    NORTH: WEST,
+                    EAST: NORTH,
+                    SOUTH: EAST,
+                    WEST: SOUTH,
+                },
+                RED: {
+                    NORTH: EAST,
+                    EAST: SOUTH,
+                    SOUTH: WEST,
+                    WEST: NORTH,
+                },
+            }
+
+            if other_arrow_loc:
+                return direction_map.get(other_arrow_loc)
+            else:
+                return color_direction_map.get(self.color, {}).get(self.end_loc)
+                    
         elif other_motion_type == STATIC:
             other_arrow_loc = self.scene.pictograph_dict[f"{other_color}_start_loc"]
             if self.scene.pictograph_dict[LETTER] == "Λ":
