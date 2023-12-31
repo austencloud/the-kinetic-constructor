@@ -33,7 +33,7 @@ class MotionManipulator:
             DOWN: {NORTHEAST: SOUTHEAST, NORTHWEST: SOUTHWEST},
             RIGHT: {NORTHWEST: NORTHEAST, SOUTHWEST: SOUTHEAST},
         }
-        current_location = self.arrow.location
+        current_location = self.arrow.loc
         new_location = wasd_location_map.get(direction, {}).get(
             current_location, current_location
         )
@@ -58,8 +58,8 @@ class MotionManipulator:
             new_rot_dir = CLOCKWISE
         elif self.motion.prop_rot_dir == CLOCKWISE:
             new_rot_dir = COUNTER_CLOCKWISE
-        elif self.motion.prop_rot_dir == "no_rotation":
-            new_rot_dir = "no_rotation"
+        elif self.motion.prop_rot_dir == "no_rot":
+            new_rot_dir = "no_rot"
 
         new_start_loc = self.motion.end_loc
         new_end_loc = self.motion.start_loc
@@ -85,8 +85,8 @@ class MotionManipulator:
             new_rot_dir = CLOCKWISE
         elif self.motion.prop_rot_dir == CLOCKWISE:
             new_rot_dir = COUNTER_CLOCKWISE
-        elif self.motion.prop_rot_dir == "no_rotation":
-            new_rot_dir = "no_rotation"
+        elif self.motion.prop_rot_dir == "no_rot":
+            new_rot_dir = "no_rot"
 
         self.prop.swap_ori(self.prop.ori)
         pictograph_dict = {
@@ -142,7 +142,7 @@ class MotionManipulator:
         """
         Generic method to rotate arrows based on the handpath and locations.
         """
-        current_index = locations.index(self.arrow.location)
+        current_index = locations.index(self.arrow.loc)
         new_index = (
             (current_index + 1) % len(locations)
             if handpath == CW_HANDPATH
@@ -160,7 +160,7 @@ class MotionManipulator:
         """
         Update motion attributes and reflect changes in the pictograph.
         """
-        self.arrow.location = new_location
+        self.arrow.loc = new_location
         self.motion.start_loc = new_start_loc
         self.motion.end_loc = new_end_loc
         self.prop.loc = new_end_loc

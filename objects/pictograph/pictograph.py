@@ -322,7 +322,7 @@ class Pictograph(QGraphicsScene):
                 self.motions[motion_dict[COLOR]].update_motion(motion_dict)
         else:
             self._update_motions()
-            
+
         self._position_objects()
         self._update_letter()
         if self.graph_type == MAIN:
@@ -391,7 +391,7 @@ class Pictograph(QGraphicsScene):
             new_beat.ghost_arrows[motion.color] = new_ghost_arrow
             new_beat.ghost_props[motion.color] = new_ghost_prop
 
-            if new_arrow.location:
+            if new_arrow.loc:
                 new_arrow.update_arrow()
                 new_ghost_arrow.update_arrow()
 

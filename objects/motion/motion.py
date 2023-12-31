@@ -276,8 +276,8 @@ class Motion:
             if other_arrow_loc:
                 return direction_map.get(other_arrow_loc)
             else:
-                return color_direction_map.get(self.color, {}).get(self.end_loc)
-                    
+                return color_direction_map.get(self.color, {}).get(self.arrow.loc)
+
         elif other_motion_type == STATIC:
             other_arrow_loc = self.scene.pictograph_dict[f"{other_color}_start_loc"]
             if self.scene.pictograph_dict[LETTER] == "Λ":

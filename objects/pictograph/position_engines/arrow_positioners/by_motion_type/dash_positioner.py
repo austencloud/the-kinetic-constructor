@@ -63,15 +63,15 @@ class DashPositioner(BaseArrowPositioner):
     ### ADJUSTMENT CALCULATIONS ###
     def _calculate_GH_adjustment(self, arrow: Arrow) -> QPointF:
         distance = 105 if arrow.color == RED else 50
-        return self.calculate_adjustment(arrow.location, distance)
+        return self.calculate_adjustment(arrow.loc, distance)
 
     def _calculate_I_adjustment(self, arrow: Arrow) -> QPointF:
         distance = 110 if arrow.motion_type == PRO else 55
-        return self.calculate_adjustment(arrow.location, distance)
+        return self.calculate_adjustment(arrow.loc, distance)
 
     def _calculate_P_adjustment(self, arrow: Arrow) -> QPointF:
         distance = 90 if arrow.color == RED else 35
-        return self.calculate_adjustment(arrow.location, distance)
+        return self.calculate_adjustment(arrow.loc, distance)
 
     def _calculate_Q_adjustment(self, arrow: Arrow) -> QPointF:
         adjustment_dict = {
@@ -106,7 +106,7 @@ class DashPositioner(BaseArrowPositioner):
         }
         color_adjustments = adjustment_dict.get(arrow.color, {})
         rotation_adjustments = color_adjustments.get(arrow.motion.prop_rot_dir, {})
-        return rotation_adjustments.get(arrow.location, QPointF(0, 0))
+        return rotation_adjustments.get(arrow.loc, QPointF(0, 0))
 
     def _calculate_R_adjustment(self, arrow: Arrow) -> QPointF:
         adjustment_dict = {
@@ -143,4 +143,4 @@ class DashPositioner(BaseArrowPositioner):
         rotation_adjustments = motion_type_adjustments.get(
             arrow.motion.prop_rot_dir, {}
         )
-        return rotation_adjustments.get(arrow.location, QPointF(0, 0))
+        return rotation_adjustments.get(arrow.loc, QPointF(0, 0))

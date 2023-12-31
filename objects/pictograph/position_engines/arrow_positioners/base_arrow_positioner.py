@@ -45,11 +45,11 @@ class BaseArrowPositioner:
 
         for arrow in self.pictograph.arrows.values():
             if arrow.motion.is_shift():
-                self._set_shift_to_default_loc(arrow)
-                self._set_shift_to_default_loc(arrow.ghost)
+                self._set_shift_to_default_coor(arrow)
+                self._set_shift_to_default_coor(arrow.ghost)
             elif arrow.motion.is_dash():
-                self._set_dash_to_default_loc(arrow)
-                self._set_dash_to_default_loc(arrow.ghost)
+                self._set_dash_to_default_coor(arrow)
+                self._set_dash_to_default_coor(arrow.ghost)
 
         if self.current_letter in self.letters_to_reposition:
             self._reposition_arrows()
@@ -78,31 +78,32 @@ class BaseArrowPositioner:
             reposition_method()
 
     ### SHIFT ###
-    def _set_shift_to_default_loc(self, arrow: Arrow, _: Dict = None) -> None:
+    def _set_shift_to_default_coor(self, arrow: Arrow, _: Dict = None) -> None:
         arrow.set_arrow_transform_origin_to_center()
         if not arrow.is_ghost:
             arrow.ghost.set_arrow_transform_origin_to_center()
-        default_pos = self._get_default_shift_loc(arrow)
-        adjustment = self.calculate_adjustment(arrow.location, DISTANCE)
+        default_pos = self._get_default_shift_coord(arrow)
+        adjustment = self.calculate_adjustment(arrow.loc, DISTANCE)
         new_pos = default_pos + adjustment - arrow.boundingRect().center()
         arrow.setPos(new_pos)
 
     ### DASH ###
-    def _set_dash_to_default_loc(self, arrow: Arrow, _: Dict = None) -> None:
+    def _set_dash_to_default_coor(self, arrow: Arrow, _: Dict = None) -> None:
         arrow.set_arrow_transform_origin_to_center()
         if not arrow.is_ghost:
+            default_pos = self._get_default_dash_coord(arrow)
             arrow.ghost.set_arrow_transform_origin_to_center()
-        default_pos = self._get_default_dash_loc(arrow)
-        adjustment = self.calculate_adjustment(arrow.location, DISTANCE)
-        new_pos = default_pos + adjustment - arrow.boundingRect().center()
-        arrow.setPos(new_pos)
+            adjustment = self.calculate_adjustment(arrow.loc, DISTANCE)
+            new_pos = default_pos + adjustment - arrow.boundingRect().center()
+            arrow.setPos(new_pos)
+            arrow.ghost.setPos(new_pos)
 
     ### GETTERS ###
-    def _get_default_shift_loc(self, arrow: Arrow) -> QPointF:
+    def _get_default_shift_coord(self, arrow: Arrow) -> QPointF:
         layer2_points = self.pictograph.grid.get_layer2_points()
-        return layer2_points.get(arrow.location, QPointF(0, 0))
+        return layer2_points.get(arrow.loc, QPointF(0, 0))
 
-    def _get_default_dash_loc(self, arrow: Arrow) -> QPointF:
+    def _get_default_dash_coord(self, arrow: Arrow) -> QPointF:
         handpoints = self.pictograph.grid.get_handpoints()
         other_arrow = (
             self.pictograph.arrows[RED]
@@ -111,38 +112,57 @@ class BaseArrowPositioner:
         )
         if other_arrow.motion.is_shift():
             if arrow.motion.end_loc in [NORTH, SOUTH]:
-                if other_arrow.location in [SOUTHEAST, NORTHEAST]:
+                if other_arrow.loc in [SOUTHEAST, NORTHEAST]:
                     return handpoints.get(WEST)
-                elif other_arrow.location in [SOUTHWEST, NORTHWEST]:
+                elif other_arrow.loc in [SOUTHWEST, NORTHWEST]:
                     return handpoints.get(EAST)
             elif arrow.motion.end_loc in [EAST, WEST]:
-                if other_arrow.location in [SOUTHEAST, SOUTHWEST]:
+                if other_arrow.loc in [SOUTHEAST, SOUTHWEST]:
                     return handpoints.get(NORTH)
-                elif other_arrow.location in [NORTHEAST, NORTHWEST]:
+                elif other_arrow.loc in [NORTHEAST, NORTHWEST]:
                     return handpoints.get(SOUTH)
             else:
                 print("ERROR: Arrow motion end_loc not found")
         elif other_arrow.motion.is_dash():
-            if other_arrow.location == arrow.location:
-                opposite_location = self.get_opposite_location(arrow.location)
-                arrow.location = opposite_location
+            if other_arrow.loc == arrow.loc and arrow.loc is not None:
+                opposite_location = self.get_opposite_location(arrow.loc)
+                arrow.loc = opposite_location
                 return handpoints.get(opposite_location)
-            elif other_arrow.location == self.get_opposite_location(arrow.location):
+            elif other_arrow.loc == self.get_opposite_location(arrow.loc):
                 if arrow.motion.end_loc in [NORTH, SOUTH]:
-                    if other_arrow.location == WEST:
+                    if other_arrow.loc == WEST:
                         return handpoints.get(EAST)
-                    elif other_arrow.location == EAST:
+                    elif other_arrow.loc == EAST:
                         return handpoints.get(WEST)
                 elif arrow.motion.end_loc in [EAST, WEST]:
-                    if other_arrow.location == NORTH:
+                    if other_arrow.loc == NORTH:
                         return handpoints.get(SOUTH)
-                    elif other_arrow.location == SOUTH:
-                        return handpoints.get(NORTH)                
-            else:
-                return handpoints.get(arrow.location)
+                    elif other_arrow.loc == SOUTH:
+                        return handpoints.get(NORTH)
+            elif self.pictograph.letter == "Λ-":
+                dir_map = {
+                    ((NORTH, SOUTH), (EAST, WEST)): EAST,
+                    ((EAST, WEST), (NORTH, SOUTH)): NORTH,
+                    ((NORTH, SOUTH), (WEST, EAST)): WEST,
+                    ((WEST, EAST), (NORTH, SOUTH)): NORTH,
+                    ((SOUTH, NORTH), (EAST, WEST)): EAST,
+                    ((EAST, WEST), (SOUTH, NORTH)): SOUTH,
+                    ((SOUTH, NORTH), (WEST, EAST)): WEST,
+                    ((WEST, EAST), (SOUTH, NORTH)): SOUTH,
+                }
+
+                arrow_loc = dir_map.get(
+                    (
+                        (arrow.motion.start_loc, arrow.motion.end_loc),
+                        (other_arrow.motion.start_loc, other_arrow.motion.end_loc),
+                    )
+                )
+
+                arrow.loc = arrow_loc
+                return handpoints.get(arrow_loc)
 
         elif other_arrow.motion.is_static():
-            return handpoints.get(arrow.location)
+            return handpoints.get(arrow.loc)
         else:
             print("ERROR: Arrow motion not found")
 
@@ -209,7 +229,7 @@ class BaseArrowPositioner:
     def _apply_adjustment(
         self, arrow: Arrow, adjustment: QPointF, update_ghost: bool = True
     ) -> None:
-        default_pos = self._get_default_shift_loc(arrow)
+        default_pos = self._get_default_shift_coord(arrow)
         arrow_center = arrow.boundingRect().center()
         new_pos = default_pos - arrow_center + adjustment
         arrow.setPos(new_pos)

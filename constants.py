@@ -22,7 +22,7 @@ HORIZONTAL = "horizontal"
 
 CLOCKWISE = "cw"
 COUNTER_CLOCKWISE = "ccw"
-NO_ROTATION = "no_rotation"
+NO_ROTATION = "no_rot"
 
 CW_HANDPATH = "cw_handpath"
 CCW_HANDPATH = "ccw_handpath"

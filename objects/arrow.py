@@ -61,7 +61,7 @@ class Arrow(GraphicalObject):
         self.is_svg_mirrored: bool = False
         self.is_dragging: bool = False
         self.ghost: GhostArrow = None
-        self.location: Location = None
+        self.loc: Location = None
         self.is_ghost: bool = False
         self.drag_offset = QPointF(0, 0)
         self.center_x = self.boundingRect().center().x()
@@ -96,7 +96,7 @@ class Arrow(GraphicalObject):
             new_location = self.scene.get_closest_layer2_point(event.scenePos())[0]
             new_pos = event.scenePos() - self.get_object_center()
             self.set_drag_pos(new_pos)
-            if new_location != self.location:
+            if new_location != self.loc:
                 self.update_location(new_location)
 
     def mouseReleaseEvent(self, event) -> None:
@@ -108,8 +108,8 @@ class Arrow(GraphicalObject):
     ### UPDATERS ###
 
     def update_location(self, location):
-        self.location = location
-        self.ghost.location = location
+        self.loc = location
+        self.ghost.loc = location
 
         self.motion.prop.update_prop()
         self.update_arrow()
@@ -173,7 +173,7 @@ class Arrow(GraphicalObject):
 
     def clear_attributes(self) -> None:
         self.motion_type = None
-        self.location = None
+        self.loc = None
         self.turns = None
         self.motion = None
 
@@ -184,7 +184,7 @@ class Arrow(GraphicalObject):
     ) -> RotationAngles:
         arrow = arrow or self
         shift_rot_angle = self._get_location_to_angle_map(arrow.motion)
-        return shift_rot_angle.get(self.location, 0)
+        return shift_rot_angle.get(self.loc, 0)
 
     def _get_dash_rotation_angle(
         self, arrow: Optional["Arrow"] = None
@@ -193,14 +193,14 @@ class Arrow(GraphicalObject):
         dash_rot_angle_map = self._get_location_to_angle_map(arrow.motion)
         return dash_rot_angle_map.get(
             (arrow.motion.start_loc, arrow.motion.end_loc), 0
-        ).get(self.location, 0)
+        ).get(self.loc, 0)
 
     def _get_static_rotation_angle(
         self, arrow: Optional["Arrow"] = None
     ) -> RotationAngles:
         arrow = arrow or self
         static_rot_angle = self._get_location_to_angle_map(arrow.motion)
-        return static_rot_angle.get(self.location, 0)
+        return static_rot_angle.get(self.loc, 0)
 
     def _get_location_to_angle_map(
         self, motion: "Motion"
@@ -284,7 +284,7 @@ class Arrow(GraphicalObject):
         self.motion[PROP_ROT_DIR] = None
         self.motion[START_LOC] = self.motion.prop.loc
         self.motion[END_LOC] = self.motion.prop.loc
-        self.location = self.motion.prop.loc
+        self.loc = self.motion.prop.loc
 
     def update_arrow(self, arrow_dict: ArrowAttributesDicts = None) -> None:
         if arrow_dict:
