@@ -274,7 +274,7 @@ class Arrow(GraphicalObject):
         elif motion.motion_type == DASH:
             if self.scene.letter == "Λ-":
                 if self.loc:
-                    dir_map = {
+                    loc_map = {
                         ((NORTH, SOUTH), (EAST, WEST)): {EAST: 90},
                         ((EAST, WEST), (NORTH, SOUTH)): {NORTH: 180},
                         ((NORTH, SOUTH), (WEST, EAST)): {WEST: 90},
@@ -284,7 +284,7 @@ class Arrow(GraphicalObject):
                         ((SOUTH, NORTH), (WEST, EAST)): {WEST: 270},
                         ((WEST, EAST), (SOUTH, NORTH)): {SOUTH: 0},
                     }
-                    arrow_angle = dir_map.get(
+                    arrow_angle = loc_map.get(
                         (
                             (self.motion.start_loc, self.motion.end_loc),
                             (other_motion.start_loc, other_motion.end_loc),
@@ -293,7 +293,7 @@ class Arrow(GraphicalObject):
                     return arrow_angle
 
                 else:
-                    dir_map = {
+                    loc_map = {
                         ((NORTH, SOUTH), (EAST, WEST)): EAST,
                         ((EAST, WEST), (NORTH, SOUTH)): NORTH,
                         ((NORTH, SOUTH), (WEST, EAST)): WEST,
@@ -304,7 +304,7 @@ class Arrow(GraphicalObject):
                         ((WEST, EAST), (SOUTH, NORTH)): SOUTH,
                     }
 
-                    arrow_loc = dir_map.get(
+                    arrow_loc = loc_map.get(
                         (
                             (self.motion.start_loc, self.motion.end_loc),
                             (other_motion.start_loc, other_motion.end_loc),
@@ -312,18 +312,32 @@ class Arrow(GraphicalObject):
                     )
 
                     self.loc = arrow_loc
-                    
+
                     map = {
                         (NORTH, SOUTH): {EAST: 90, WEST: 90},
                         (SOUTH, NORTH): {EAST: 270, WEST: 270},
                         (EAST, WEST): {NORTH: 180, SOUTH: 180},
                         (WEST, EAST): {NORTH: 0, SOUTH: 0},
                     }
-                    
-                    return map.get((self.motion.start_loc, self.motion.end_loc), {}).get(
-                        self.loc
+
+                    return map.get(
+                        (self.motion.start_loc, self.motion.end_loc), {}
+                    ).get(self.loc)
+            elif self.scene.letter == "Φ-":
+                loc_map = {
+                    ((NORTH, SOUTH), (SOUTH, NORTH)): {RED: EAST, BLUE: WEST},
+                    ((SOUTH, NORTH), (NORTH, SOUTH)): {RED: EAST, BLUE: WEST},
+                    ((EAST, WEST), (WEST, EAST)): {RED: NORTH, BLUE: SOUTH},
+                    ((WEST, EAST), (EAST, WEST)): {RED: NORTH, BLUE: SOUTH},
+                }
+                arrow_loc = loc_map.get(
+                    (
+                        (self.motion.start_loc, self.motion.end_loc),
+                        (other_motion.start_loc, other_motion.end_loc),
                     )
-            else:
+                ).get(self.color)
+                self.loc = arrow_loc
+
                 map = {
                     (NORTH, SOUTH): {EAST: 90, WEST: 90},
                     (SOUTH, NORTH): {EAST: 270, WEST: 270},
@@ -333,7 +347,72 @@ class Arrow(GraphicalObject):
                 return map.get((self.motion.start_loc, self.motion.end_loc), {}).get(
                     self.loc
                 )
+            elif self.scene.letter == "Ψ-":
+                loc_map = {
+                    ((NORTH, SOUTH), (NORTH, SOUTH)): {RED: EAST, BLUE: WEST},
+                    ((EAST, WEST), (EAST, WEST)): {RED: NORTH, BLUE: SOUTH},
+                    ((SOUTH, NORTH), (SOUTH, NORTH)): {RED: EAST, BLUE: WEST},
+                    ((WEST, EAST), (WEST, EAST)): {RED: NORTH, BLUE: SOUTH},
+                }
+                arrow_loc = loc_map.get(
+                    (
+                        (self.motion.start_loc, self.motion.end_loc),
+                        (other_motion.start_loc, other_motion.end_loc),
+                    )
+                ).get(self.color)
+                self.loc = arrow_loc
 
+                rot_map = {
+                    (NORTH, SOUTH): 90,
+                    (SOUTH, NORTH): 270,
+                    (EAST, WEST): 180,
+                    (WEST, EAST): 0,
+                }
+                return rot_map.get((self.motion.start_loc, self.motion.end_loc))
+            elif self.scene.letter in ["Φ", "Ψ"]:  # Type 4 Letters
+                loc_map = {
+                    (NORTH, SOUTH): {RED: EAST, BLUE: WEST},
+                    (SOUTH, NORTH): {RED: EAST, BLUE: WEST},
+                    (EAST, WEST): {RED: NORTH, BLUE: SOUTH},
+                    (WEST, EAST): {RED: NORTH, BLUE: SOUTH},
+                }
+                arrow_loc = loc_map.get(
+                    (self.motion.start_loc, self.motion.end_loc)
+                ).get(self.color)
+                self.loc = arrow_loc
+                rot_map = {
+                    (NORTH, SOUTH): 90,
+                    (SOUTH, NORTH): 270,
+                    (EAST, WEST): 180,
+                    (WEST, EAST): 0,
+                }
+                return rot_map.get((self.motion.start_loc, self.motion.end_loc))
+            else:  # Letter is Λ
+                loc_map = {
+                    ((NORTH, SOUTH), WEST): EAST,
+                    ((EAST, WEST), SOUTH): NORTH,
+                    ((NORTH, SOUTH), EAST): WEST,
+                    ((WEST, EAST), SOUTH): NORTH,
+                    ((SOUTH, NORTH), WEST): EAST,
+                    ((EAST, WEST), NORTH): SOUTH,
+                    ((SOUTH, NORTH), EAST): WEST,
+                    ((WEST, EAST), NORTH): SOUTH,
+                }
+                self.loc = loc_map.get(
+                    (
+                        (self.motion.start_loc, self.motion.end_loc),
+                        other_motion.end_loc,
+                    )
+                )
+            
+                rot_map = {
+                    (NORTH, SOUTH): 90,
+                    (SOUTH, NORTH): 270,
+                    (EAST, WEST): 180,
+                    (WEST, EAST): 0,
+                }
+                return rot_map.get((self.motion.start_loc, self.motion.end_loc))
+            
     def get_attributes(self) -> ArrowAttributesDicts:
         arrow_attributes = [COLOR, LOCATION, MOTION_TYPE, TURNS]
         return {attr: getattr(self, attr) for attr in arrow_attributes}

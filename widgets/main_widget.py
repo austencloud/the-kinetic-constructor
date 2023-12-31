@@ -108,7 +108,7 @@ class MainWidget(QWidget):
         df[RED_TURNS] = 0
         df[BLUE_START_OR] = IN
         df[RED_START_OR] = IN
-        
+
         df = df[
             [
                 LETTER,
@@ -128,7 +128,7 @@ class MainWidget(QWidget):
                 RED_TURNS,
             ]
         ]
-        
+
         return df
 
     def configure_layouts(self) -> None:
@@ -282,9 +282,9 @@ class MainWidget(QWidget):
         return self.image_cache[image_path]
 
     def generate_image_path(self, pictograph: Pictograph) -> str:
-        motion_dict = pictograph.motion_dict
+        pictograph_dict = pictograph.pictograph_dict
         prop_type = self.prop_type
-        letter = motion_dict[LETTER]
+        letter = pictograph_dict[LETTER]
         blue_turns = pictograph.motions[BLUE].turns
         red_turns = pictograph.motions[RED].turns
         blue_turns = pictograph.motions[BLUE].turns
@@ -304,13 +304,13 @@ class MainWidget(QWidget):
 
         image_name = (
             f"{letter}_"
-            f"({motion_dict[START_POS]}→{motion_dict[END_POS]})_"
-            f"({motion_dict[BLUE_MOTION_TYPE]}_"
-            f"{motion_dict[BLUE_START_LOC]}→{motion_dict[BLUE_END_LOC]}_"
+            f"({pictograph_dict[START_POS]}→{pictograph_dict[END_POS]})_"
+            f"({pictograph_dict[BLUE_MOTION_TYPE]}_"
+            f"{pictograph_dict[BLUE_START_LOC]}→{pictograph_dict[BLUE_END_LOC]}_"
             f"{blue_turns}_"
             f"{pictograph.motions[BLUE].start_or}→{pictograph.motions[BLUE].end_ori})_"
-            f"({motion_dict[RED_MOTION_TYPE]}_"
-            f"{motion_dict[RED_START_LOC]}→{motion_dict[RED_END_LOC]}_"
+            f"({pictograph_dict[RED_MOTION_TYPE]}_"
+            f"{pictograph_dict[RED_START_LOC]}→{pictograph_dict[RED_END_LOC]}_"
             f"{red_turns}_"
             f"{pictograph.motions[RED].start_or}→{pictograph.motions[RED].end_ori})_"
             f"{prop_type}.png"

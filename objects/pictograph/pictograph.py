@@ -82,7 +82,7 @@ class Pictograph(QGraphicsScene):
         self.end_pos: SpecificPosition = None
         self.image_loaded: bool = False
         self.pixmap = None  # Store the pixmap item
-        self.motion_dict = None  # Store the row data from the pandas dataframe
+        self.pictograph_dict = None  # Store the row data from the pandas dataframe
         self.view_scale = 1
         self.event_handler = PictographEventHandler(self)
 
