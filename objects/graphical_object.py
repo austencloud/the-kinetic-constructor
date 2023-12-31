@@ -63,9 +63,10 @@ class GraphicalObject(QGraphicsSvgItem):
 
     ### UPDATERS ###
 
-    def update_color(self) -> None:
+    def _update_color(self: Union["Arrow", "Prop"]) -> None:
         new_svg_data = self.set_svg_color(self.color)
         self.renderer.load(new_svg_data)
+        self.ghost.renderer.load(new_svg_data)
         self.setSharedRenderer(self.renderer)
 
     def update_svg(self, svg_file: str) -> None:

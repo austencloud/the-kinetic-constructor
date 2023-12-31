@@ -196,11 +196,12 @@ class IGTab(QWidget):
 
     def generate_images_for_letter(self, letter) -> None:
         for letter, pictograph_dict_list in self.main_widget.letters.items():
-            for pictograph_dict in pictograph_dict_list:
-                ig_pictograph: IGPictograph = self.ig_scroll_area._create_pictograph(
-                    pictograph_dict, IG_PICTOGRAPH
-                )
-                ig_pictograph.render_and_cache_image()
+            if letter in self.selected_letters:
+                for pictograph_dict in pictograph_dict_list:
+                    ig_pictograph: IGPictograph = self.ig_scroll_area._create_pictograph(
+                        pictograph_dict, IG_PICTOGRAPH
+                    )
+                    ig_pictograph.render_and_cache_image()
 
     def toggle_pictograph_selection(self, state, index) -> None:
         if state == Qt.CheckState.Checked:

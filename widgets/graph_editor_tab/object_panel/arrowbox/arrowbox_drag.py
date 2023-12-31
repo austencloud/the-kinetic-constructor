@@ -129,7 +129,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.ghost.loc = new_location
         self.ghost.set_arrow_transform_origin_to_center()
         self.ghost.show()
-        self.ghost.update_color()
+        self.ghost._update_color()
         self.ghost.update_arrow()
 
     def _update_ghost_arrow_for_new_location(self, new_location) -> None:

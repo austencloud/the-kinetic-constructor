@@ -450,7 +450,7 @@ class Pictograph(QGraphicsScene):
         self.image_loaded = True
 
     def _render_scene_to_pixmap(self) -> None:
-        self.update_pictograph()
+        self.update_pictograph(self.pictograph_dict)
 
         prop_type = self.main_widget.prop_type
         letter = self.letter

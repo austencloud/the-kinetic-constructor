@@ -250,7 +250,7 @@ class Motion:
             elif self.end_loc in [EAST, WEST]:
                 return horizontal_map.get(other_arrow_loc)
 
-        elif self.motion_type == DASH and other_motion_type == DASH:
+        elif self.motion_type == DASH and other_motion_type == DASH: # Type5 Letter
             direction_map = {
                 NORTH: SOUTH,
                 SOUTH: NORTH,
@@ -276,7 +276,26 @@ class Motion:
             if other_arrow_loc:
                 return direction_map.get(other_arrow_loc)
             else:
-                return color_direction_map.get(self.color, {}).get(self.arrow.loc)
+                if not self.arrow.loc:
+                    loc_map = {
+                        ((NORTH, SOUTH), WEST): EAST,
+                        ((EAST, WEST), SOUTH): NORTH,
+                        ((NORTH, SOUTH), EAST): WEST,
+                        ((WEST, EAST), SOUTH): NORTH,
+                        ((SOUTH, NORTH), WEST): EAST,
+                        ((EAST, WEST), NORTH): SOUTH,
+                        ((SOUTH, NORTH), EAST): WEST,
+                        ((WEST, EAST), NORTH): SOUTH,
+                    }
+                    self.arrow.loc = loc_map.get(
+                        (
+                            (self.start_loc, self.end_loc),
+                            other_motion_end_loc,
+                        )
+                    )
+                    return color_direction_map.get(self.color).get(self.arrow.loc)
+                else:
+                    return color_direction_map.get(self.color).get(self.arrow.loc)
 
         elif other_motion_type == STATIC:
             other_arrow_loc = self.scene.pictograph_dict[f"{other_color}_start_loc"]

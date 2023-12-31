@@ -74,6 +74,8 @@ class Arrow(GraphicalObject):
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.svg_file = svg_file
         super().update_svg(svg_file)
+        if not self.is_ghost and self.ghost:
+            self.ghost.update_svg(svg_file)
 
     ### MOUSE EVENTS ###
 
@@ -108,15 +110,15 @@ class Arrow(GraphicalObject):
 
     ### UPDATERS ###
 
-    def _update_location(self, loc=None) -> None:
+    def _update_location(self) -> None:
         if not self.is_ghost and self.ghost:
-            if not loc:
+            if not self.loc:
                 loc = self.motion.get_arrow_location(
                     self.motion.start_loc, self.motion.end_loc, self.motion_type
                 )
-            self.loc = loc
-            self.ghost.loc = loc
-            self.is_dragging = True
+                self.loc = loc
+                self.ghost.loc = loc
+                self.is_dragging = True
 
     def set_drag_pos(self, new_pos: QPointF) -> None:
         self.setPos(new_pos)
@@ -137,10 +139,13 @@ class Arrow(GraphicalObject):
 
         if self.is_svg_mirrored:
             self.mirror_svg()
+            self.ghost.mirror_svg()
         else:
             self.unmirror_svg()
+            self.ghost.unmirror_svg()
 
     def _update_rotation(self) -> None:
+        
         if self.motion.is_shift():
             angle = self._get_shift_rotation_angle()
         elif self.motion.is_dash():
@@ -148,6 +153,7 @@ class Arrow(GraphicalObject):
         elif self.motion.is_static():
             angle = self._get_static_rotation_angle()
         self.setRotation(angle)
+        self.ghost.setRotation(angle)
 
     def set_arrow_transform_origin_to_center(self) -> None:
         self.center = self.boundingRect().center()
@@ -271,26 +277,7 @@ class Arrow(GraphicalObject):
                     return arrow_angle
 
                 else:
-                    loc_map = {
-                        ((NORTH, SOUTH), (EAST, WEST)): EAST,
-                        ((EAST, WEST), (NORTH, SOUTH)): NORTH,
-                        ((NORTH, SOUTH), (WEST, EAST)): WEST,
-                        ((WEST, EAST), (NORTH, SOUTH)): NORTH,
-                        ((SOUTH, NORTH), (EAST, WEST)): EAST,
-                        ((EAST, WEST), (SOUTH, NORTH)): SOUTH,
-                        ((SOUTH, NORTH), (WEST, EAST)): WEST,
-                        ((WEST, EAST), (SOUTH, NORTH)): SOUTH,
-                    }
-
-                    arrow_loc = loc_map.get(
-                        (
-                            (self.motion.start_loc, self.motion.end_loc),
-                            (other_motion.start_loc, other_motion.end_loc),
-                        )
-                    )
-
-                    self.loc = arrow_loc
-
+                    self.ghost.loc = self.loc
                     map = {
                         (NORTH, SOUTH): {EAST: 90, WEST: 90},
                         (SOUTH, NORTH): {EAST: 270, WEST: 270},
@@ -315,7 +302,7 @@ class Arrow(GraphicalObject):
                     )
                 ).get(self.color)
                 self.loc = arrow_loc
-
+                self.ghost.loc = arrow_loc
                 map = {
                     (NORTH, SOUTH): {EAST: 90, WEST: 90},
                     (SOUTH, NORTH): {EAST: 270, WEST: 270},
@@ -339,7 +326,7 @@ class Arrow(GraphicalObject):
                     )
                 ).get(self.color)
                 self.loc = arrow_loc
-
+                self.ghost.loc = arrow_loc
                 rot_map = {
                     (NORTH, SOUTH): 90,
                     (SOUTH, NORTH): 270,
@@ -391,6 +378,33 @@ class Arrow(GraphicalObject):
                 }
                 return rot_map.get((self.motion.start_loc, self.motion.end_loc))
 
+    def assign_Λ_dash_arrow_loc(self):
+        other_motion = (
+            self.scene.arrows[RED].motion
+            if self.color == BLUE
+            else self.scene.arrows[BLUE].motion
+        )
+    
+        loc_map = {
+            ((NORTH, SOUTH), (EAST, WEST)): EAST,
+            ((EAST, WEST), (NORTH, SOUTH)): NORTH,
+            ((NORTH, SOUTH), (WEST, EAST)): WEST,
+            ((WEST, EAST), (NORTH, SOUTH)): NORTH,
+            ((SOUTH, NORTH), (EAST, WEST)): EAST,
+            ((EAST, WEST), (SOUTH, NORTH)): SOUTH,
+            ((SOUTH, NORTH), (WEST, EAST)): WEST,
+            ((WEST, EAST), (SOUTH, NORTH)): SOUTH,
+        }
+
+        arrow_loc = loc_map.get(
+            (
+                (self.motion.start_loc, self.motion.end_loc),
+                (other_motion.start_loc, other_motion.end_loc),
+            )
+        )
+        self.loc = arrow_loc
+        self.ghost.loc = arrow_loc
+
     def get_attributes(self) -> ArrowAttributesDicts:
         arrow_attributes = [COLOR, LOC, MOTION_TYPE, TURNS]
         return {attr: getattr(self, attr) for attr in arrow_attributes}
@@ -426,16 +440,10 @@ class Arrow(GraphicalObject):
         if not self.is_ghost and self.ghost:
             self.update_svg()
             self._update_mirror()
-            self.update_color()
+            self._update_color()
             self._update_location()
             self._update_rotation()
-
             self.ghost.transform = self.transform
-            self.ghost.update_svg()
-            self.ghost._update_mirror()
-            self.ghost.update_color()
-            self.ghost._update_location()
-            self.ghost._update_rotation()
 
     def mirror_svg(self) -> None:
         self.set_arrow_transform_origin_to_center()

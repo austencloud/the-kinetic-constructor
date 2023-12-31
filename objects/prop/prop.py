@@ -167,7 +167,7 @@ class Prop(GraphicalObject):
                 setattr(self, key, value)
         self.motion.update_prop_ori()
         self.update_svg()
-        self.update_color()
+        self._update_color()
         self.update_prop_rotation_angle()
 
     def update_svg(self) -> None:

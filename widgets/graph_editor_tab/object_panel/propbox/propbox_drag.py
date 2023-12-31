@@ -141,7 +141,7 @@ class PropBoxDrag(ObjectBoxDrag):
 
         ghost_svg = self.ghost.get_svg_file(self.prop_type)
         self.ghost.update_svg(ghost_svg)
-        self.ghost.update_color()
+        self.ghost._update_color()
         self.ghost.motion.update_prop_ori()
         self.ghost.update_prop()
         self.ghost.show()
