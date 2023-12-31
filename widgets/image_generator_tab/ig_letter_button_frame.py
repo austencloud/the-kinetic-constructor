@@ -159,5 +159,10 @@ class IGLetterButtonFrame(QFrame):
         available_width = button_size * 4
         self.setMinimumWidth(int(available_width + self.spacing * 3))
 
+    def select_all_letters(self):
+        for button in self.buttons.values():
+            button.click()  # Or any other action you want to perform for 'selecting'
+
+
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.resize_letter_buttons()

@@ -54,7 +54,7 @@ class PictographScrollArea(QScrollArea):
         self.layout.update()
         self.updateGeometry()
 
-    ### OPTION CREATION ###
+    ### PICTOGRAPH CREATION ###
 
     def _create_pictograph(
         self,

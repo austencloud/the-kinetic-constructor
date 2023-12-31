@@ -94,15 +94,21 @@ class IGTab(QWidget):
 
     def _setup_action_buttons(self) -> Dict[str, QPushButton]:
         buttons = {}
+
+        select_all_button = QPushButton("Select All", self)
+        select_all_button.setStyleSheet("font-size: 16px;")
+
         generate_all_images_button = QPushButton("Generate All Images 🧨", self)
         generate_all_images_button.setStyleSheet("font-size: 16px;")
 
         generate_selected_images_button = QPushButton("Generate Selected Images", self)
         generate_selected_images_button.setStyleSheet("font-size: 16px;")
 
+        select_all_button.clicked.connect(self.select_all_letters)
         generate_all_images_button.clicked.connect(self.generate_all_images)
         generate_selected_images_button.clicked.connect(self.generate_selected_images)
 
+        buttons["select_all_button"] = select_all_button
         buttons["generate_all_button"] = generate_all_images_button
         buttons["generate_selected_button"] = generate_selected_images_button
         return buttons
@@ -208,3 +214,21 @@ class IGTab(QWidget):
             self.selected_letters.append(index)
         else:
             self.selected_letters.remove(index)
+
+    def select_all_letters(self):
+        for button_letter, button in self.letter_button_frame.buttons.items():
+            button.setFlat(True)
+            button.setStyleSheet(self.get_button_style(pressed=True))
+
+        for button_letter, button in self.letter_button_frame.buttons.items():
+            button.clicked.disconnect()
+            button.click()
+
+            self.selected_letters.append(button_letter)
+            button.clicked.connect(
+                lambda checked, letter=button.text(): self.on_letter_button_clicked(
+                    letter
+                )
+            )
+
+        self.ig_scroll_area.update_pictographs()

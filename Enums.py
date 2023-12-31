@@ -201,12 +201,12 @@ class Letter(Enum):
     Alpha = "α"
     Beta = "β"
     Gamma = "Γ"
+    Eta = "η"
+    Zeta = "ζ"
     Terra = "⊕"
     Tau = "𝛕"
     Mu = "μ"
     Nu = "ν"
-    Zeta = "ζ"
-    Eta = "η"
 
 
 class PropType(Enum):

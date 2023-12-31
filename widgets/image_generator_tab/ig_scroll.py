@@ -4,6 +4,7 @@ from widgets.image_generator_tab.ig_pictograph import IGPictograph
 from widgets.pictograph_scroll_area import PictographScrollArea
 from Enums import Letter
 from constants import IG_PICTOGRAPH, OPTION
+from utilities.TypeChecking.Letters import letters
 
 if TYPE_CHECKING:
     from widgets.image_generator_tab.ig_tab import IGTab
@@ -23,7 +24,8 @@ class IGScrollArea(PictographScrollArea):
 
     def update_pictographs(self) -> None:
         """
-        Updates the displayed pictographs based on the selected letters.
+        Updates the displayed pictographs based on the selected letters,
+        maintaining the order specified in the `letters` list.
         """
         while self.layout.count():
             widget = self.layout.takeAt(0).widget()
@@ -31,21 +33,19 @@ class IGScrollArea(PictographScrollArea):
                 widget.setParent(None)
                 widget.deleteLater()
 
-        filtered_pictograph_dicts: Dict[Letter, List] = {
-            letter: values
-            for letter, values in self.letters.items()
-            if letter in self.parent_tab.selected_letters
-        }
-
         index = 0  # Initialize an index to keep track of the pictograph's position
-        for pictograph_dict_list in filtered_pictograph_dicts.values():
-            for pictograph_dict in pictograph_dict_list:
-                ig_pictograph: IGPictograph = self._create_pictograph(
-                    pictograph_dict, IG_PICTOGRAPH
-                )
-                row = index // self.COLUMN_COUNT  # Calculate the row number
-                col = index % self.COLUMN_COUNT  # Calculate the column number
-                self.layout.addWidget(ig_pictograph.view, row, col)
-                self.pictographs[ig_pictograph.letter] = ig_pictograph
-                ig_pictograph.view.resize_for_scroll_area()
-                index += 1
+        for letter in letters:  # Iterate over the ordered list of letters
+            if (
+                letter in self.ig_tab.selected_letters
+            ):  # Check if the letter is selected
+                pictograph_dict_list = self.letters.get(letter)
+                for pictograph_dict in pictograph_dict_list:
+                    ig_pictograph: IGPictograph = self._create_pictograph(
+                        pictograph_dict, IG_PICTOGRAPH
+                    )
+                    row = index // self.COLUMN_COUNT  # Calculate the row number
+                    col = index % self.COLUMN_COUNT  # Calculate the column number
+                    self.layout.addWidget(ig_pictograph.view, row, col)
+                    self.pictographs[ig_pictograph.letter] = ig_pictograph
+                    ig_pictograph.view.resize_for_scroll_area()
+                    index += 1
