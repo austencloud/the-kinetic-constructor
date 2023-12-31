@@ -9,6 +9,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QFont
 from Enums import Orientation, Turns
 from constants import *
+
 if TYPE_CHECKING:
     from widgets.image_generator_tab.ig_filter_frame import IGFilterFrame
     from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
@@ -36,11 +37,11 @@ class FilterFrame(QFrame):
     def _create_comboboxes(self) -> None:
         self.comboboxes = {
             BLUE_TURNS: QComboBox(self),
-            BLUE_START_OR: QComboBox(self),
-            BLUE_END_OR: QComboBox(self),
+            BLUE_START_ORI: QComboBox(self),
+            BLUE_END_ORI: QComboBox(self),
             RED_TURNS: QComboBox(self),
-            RED_START_OR: QComboBox(self),
-            RED_END_OR: QComboBox(self),
+            RED_START_ORI: QComboBox(self),
+            RED_END_ORI: QComboBox(self),
         }
 
     def _setup_layouts(self) -> None:
@@ -109,17 +110,17 @@ class FilterFrame(QFrame):
         left_vbox_layout.addWidget(QLabel("Left Turns:"))
         left_vbox_layout.addWidget(self.comboboxes[BLUE_TURNS])
         left_vbox_layout.addWidget(QLabel("Left Start Orientation:"))
-        left_vbox_layout.addWidget(self.comboboxes[BLUE_START_OR])
+        left_vbox_layout.addWidget(self.comboboxes[BLUE_START_ORI])
         left_vbox_layout.addWidget(QLabel("Left End Orientation:"))
-        left_vbox_layout.addWidget(self.comboboxes[BLUE_END_OR])
+        left_vbox_layout.addWidget(self.comboboxes[BLUE_END_ORI])
 
         # Add widgets to the right vertical layout
         right_vbox_layout.addWidget(QLabel("Right Turns:"))
         right_vbox_layout.addWidget(self.comboboxes[RED_TURNS])
         right_vbox_layout.addWidget(QLabel("Right Start Orientation:"))
-        right_vbox_layout.addWidget(self.comboboxes[RED_START_OR])
+        right_vbox_layout.addWidget(self.comboboxes[RED_START_ORI])
         right_vbox_layout.addWidget(QLabel("Right End Orientation:"))
-        right_vbox_layout.addWidget(self.comboboxes[RED_END_OR])
+        right_vbox_layout.addWidget(self.comboboxes[RED_END_ORI])
 
         # Add the left and right vertical layouts to the main horizontal layout
         self.layout.addLayout(left_vbox_layout)
@@ -127,17 +128,16 @@ class FilterFrame(QFrame):
 
     def _set_initial_filters(self) -> None:
         self.comboboxes[BLUE_TURNS].setCurrentText("0")
-        self.comboboxes[BLUE_START_OR].setCurrentText(IN)
-        self.comboboxes[BLUE_END_OR].setCurrentIndex(-1)
+        self.comboboxes[BLUE_START_ORI].setCurrentText(IN)
+        self.comboboxes[BLUE_END_ORI].setCurrentIndex(-1)
         self.comboboxes[RED_TURNS].setCurrentText("0")
-        self.comboboxes[RED_START_OR].setCurrentText(IN)
-        self.comboboxes[RED_END_OR].setCurrentIndex(-1)
-
+        self.comboboxes[RED_START_ORI].setCurrentText(IN)
+        self.comboboxes[RED_END_ORI].setCurrentIndex(-1)
 
     def connect_filter_boxes(
         self: Union["OptionPickerFilterFrame", "IGFilterFrame"]
     ) -> None:
         self.comboboxes[BLUE_TURNS].currentTextChanged.connect(self.apply_filters)
         self.comboboxes[RED_TURNS].currentTextChanged.connect(self.apply_filters)
-        self.comboboxes[BLUE_END_OR].currentTextChanged.connect(self.apply_filters)
-        self.comboboxes[RED_END_OR].currentTextChanged.connect(self.apply_filters)
+        self.comboboxes[BLUE_END_ORI].currentTextChanged.connect(self.apply_filters)
+        self.comboboxes[RED_END_ORI].currentTextChanged.connect(self.apply_filters)

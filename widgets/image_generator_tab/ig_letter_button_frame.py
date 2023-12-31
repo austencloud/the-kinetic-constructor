@@ -101,7 +101,7 @@ class IGLetterButtonFrame(QFrame):
         for letter_type in LetterNumberType:
             if letter in letter_type.letters:
                 return (
-                    letter_type.name.replace("_", " ").lower().capitalize()
+                    letter_type.name.replace("_", "").lower().capitalize()
                 )  # Modify the key format
         return None
 

@@ -1,24 +1,25 @@
-from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type1_arrow_positioner import (
-    Type1ArrowPositioner,
-)
-from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type2_arrow_positioner import (
-    Type2ArrowPositioner,
-)
-from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type3_arrow_positioner import (
-    Type3ArrowPositioner,
-)
-from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type4_arrow_positioner import (
-    Type4ArrowPositioner,
-)
-from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type5_arrow_positioner import (
-    Type5ArrowPositioner,
-)
-from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type6_arrow_positioner import (
-    Type6ArrowPositioner,
-)
 from objects.pictograph.position_engines.arrow_positioners.base_arrow_positioner import (
     BaseArrowPositioner,
 )
+from objects.pictograph.position_engines.arrow_positioners.Type1_arrow_positioner import (
+    Type1ArrowPositioner,
+)
+from objects.pictograph.position_engines.arrow_positioners.Type2_arrow_positioner import (
+    Type2ArrowPositioner,
+)
+from objects.pictograph.position_engines.arrow_positioners.Type3_arrow_positioner import (
+    Type3ArrowPositioner,
+)
+from objects.pictograph.position_engines.arrow_positioners.Type4_arrow_positioner import (
+    Type4ArrowPositioner,
+)
+from objects.pictograph.position_engines.arrow_positioners.Type5_arrow_positioner import (
+    Type5ArrowPositioner,
+)
+from objects.pictograph.position_engines.arrow_positioners.Type6_arrow_positioner import (
+    Type6ArrowPositioner,
+)
+
 from utilities.TypeChecking.Letters import (
     Type1_letters,
     Type2_letters,
@@ -30,7 +31,7 @@ from utilities.TypeChecking.Letters import (
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
+    from pictograph.pictograph import Pictograph
 
 
 class MainArrowPositioner:

@@ -1,5 +1,5 @@
 from PyQt6.QtCore import QPointF
-from Enums import Letter
+from Enums import Letter, LetterNumberType
 from constants import *
 from objects.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, List, Union
@@ -7,22 +7,22 @@ from typing import TYPE_CHECKING, Dict, List, Union
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
-    from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type1_arrow_positioner import (
+    from objects.pictograph.position_engines.arrow_positioners.Type1_arrow_positioner import (
         Type1ArrowPositioner,
     )
-    from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type2_arrow_positioner import (
+    from objects.pictograph.position_engines.arrow_positioners.Type2_arrow_positioner import (
         Type2ArrowPositioner,
     )
-    from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type3_arrow_positioner import (
+    from objects.pictograph.position_engines.arrow_positioners.Type3_arrow_positioner import (
         Type3ArrowPositioner,
     )
-    from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type4_arrow_positioner import (
+    from objects.pictograph.position_engines.arrow_positioners.Type4_arrow_positioner import (
         Type4ArrowPositioner,
     )
-    from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type5_arrow_positioner import (
+    from objects.pictograph.position_engines.arrow_positioners.Type5_arrow_positioner import (
         Type5ArrowPositioner,
     )
-    from objects.pictograph.position_engines.arrow_positioners.by_motion_type.Type6_arrow_positioner import (
+    from objects.pictograph.position_engines.arrow_positioners.Type6_arrow_positioner import (
         Type6ArrowPositioner,
     )
 
@@ -36,12 +36,13 @@ class BaseArrowPositioner:
         self.letters: Dict[
             Letter, List[Dict[str, str]]
         ] = pictograph.main_widget.letters
-        self.letters_to_reposition: List[Letter] = ["G", "H", "I", "P", "Q", "R"]
+        self.letters_to_reposition: List[Letter] = ["G", "H", "I", "P", "Q", "R", "Λ-"]
 
     ### PUBLIC METHODS ###
     def update_arrow_positions(self) -> None:
         self.ghost_arrows = self.pictograph.ghost_arrows.values()
-        self.current_letter = self.pictograph.letter
+        self.letter = self.pictograph.letter
+        self.letter_type = self.get_letter_type(self.letter)
 
         for arrow in self.pictograph.arrows.values():
             if arrow.motion.is_shift():
@@ -51,7 +52,7 @@ class BaseArrowPositioner:
                 self._set_dash_to_default_coor(arrow)
                 self._set_dash_to_default_coor(arrow.ghost)
 
-        if self.current_letter in self.letters_to_reposition:
+        if self.letter in self.letters_to_reposition:
             self._reposition_arrows()
 
     def _reposition_arrows(
@@ -64,16 +65,21 @@ class BaseArrowPositioner:
             "Type6ArrowPositioner",
         ]
     ) -> None:
-        reposition_methods = {
-            "G": self._reposition_G_H,
-            "H": self._reposition_G_H,
-            "I": self._reposition_I,
-            "P": self._reposition_P,
-            "Q": self._reposition_Q,
-            "R": self._reposition_R,
-        }
+        if self.letter_type == "Type1":
+            reposition_methods = {
+                "G": self._reposition_G_H,
+                "H": self._reposition_G_H,
+                "I": self._reposition_I,
+                "P": self._reposition_P,
+                "Q": self._reposition_Q,
+                "R": self._reposition_R,
+            }
+        elif self.letter_type == "Type5":
+            reposition_methods = {
+                "Λ-": self._reposition_Λ_dash,
+            }
 
-        reposition_method = reposition_methods.get(self.current_letter)
+        reposition_method = reposition_methods.get(self.letter)
         if reposition_method:
             reposition_method()
 
@@ -203,12 +209,12 @@ class BaseArrowPositioner:
             END_POS,
             BLUE_MOTION_TYPE,
             BLUE_PROP_ROT_DIR,
-            "blue_turns",
+            BLUE_TURNS,
             BLUE_START_LOC,
             BLUE_END_LOC,
             RED_MOTION_TYPE,
             RED_PROP_ROT_DIR,
-            "red_turns",
+            RED_TURNS,
             RED_START_LOC,
             RED_END_LOC,
         ]
@@ -237,3 +243,12 @@ class BaseArrowPositioner:
         # Update the ghost arrow with the same adjustment
         if update_ghost and arrow.ghost:
             self._apply_adjustment(arrow.ghost, adjustment, update_ghost=False)
+
+    # Function to get the Enum member key from a given letter
+    def get_letter_type(self, letter: str) -> str | None:
+        for letter_type in LetterNumberType:
+            if letter in letter_type.letters:
+                return (
+                    letter_type.name.replace("_", "").lower().capitalize()
+                )  # Modify the key format
+        return None

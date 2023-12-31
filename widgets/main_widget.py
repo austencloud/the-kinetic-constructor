@@ -20,7 +20,7 @@ from constants import (
     BLUE_MOTION_TYPE,
     BLUE_PROP_ROT_DIR,
     BLUE_START_LOC,
-    BLUE_START_OR,
+    BLUE_START_ORI,
     BLUE_TURNS,
     DIAMOND,
     END_POS,
@@ -31,7 +31,7 @@ from constants import (
     RED_MOTION_TYPE,
     RED_PROP_ROT_DIR,
     RED_START_LOC,
-    RED_START_OR,
+    RED_START_ORI,
     RED_TURNS,
     STAFF,
     START_POS,
@@ -106,8 +106,8 @@ class MainWidget(QWidget):
         ]
         df[BLUE_TURNS] = 0
         df[RED_TURNS] = 0
-        df[BLUE_START_OR] = IN
-        df[RED_START_OR] = IN
+        df[BLUE_START_ORI] = IN
+        df[RED_START_ORI] = IN
 
         df = df[
             [
@@ -118,13 +118,13 @@ class MainWidget(QWidget):
                 BLUE_PROP_ROT_DIR,
                 BLUE_START_LOC,
                 BLUE_END_LOC,
-                BLUE_START_OR,
+                BLUE_START_ORI,
                 BLUE_TURNS,
                 RED_MOTION_TYPE,
                 RED_PROP_ROT_DIR,
                 RED_START_LOC,
                 RED_END_LOC,
-                RED_START_OR,
+                RED_START_ORI,
                 RED_TURNS,
             ]
         ]

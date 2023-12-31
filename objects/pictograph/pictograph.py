@@ -23,7 +23,7 @@ from objects.pictograph.position_engines.arrow_positioners.main_arrow_positioner
     MainArrowPositioner,
 )
 
-from ..letter_item import LetterItem
+from utilities.letter_item import LetterItem
 from ..motion.motion import Motion
 from ..prop.prop import Prop
 from ..arrow import Arrow
@@ -152,23 +152,6 @@ class Pictograph(QGraphicsScene):
     ) -> None:
         """For pictographs that are generated from the pandas dataframe."""
 
-    def _create_pictograph_dict_from_pd_row(
-        self: Union["Option", "IGPictograph"],
-        pd_row: pd.Series,
-    ) -> PictographAttributesDict:
-        return {
-            LETTER: pd_row[LETTER],
-            START_POS: pd_row[START_POS],
-            END_POS: pd_row[END_POS],
-            BLUE_MOTION_TYPE: pd_row[BLUE_MOTION_TYPE],
-            BLUE_PROP_ROT_DIR: pd_row[BLUE_PROP_ROT_DIR],
-            BLUE_START_LOC: pd_row[BLUE_START_LOC],
-            BLUE_END_LOC: pd_row[BLUE_END_LOC],
-            RED_MOTION_TYPE: pd_row[RED_MOTION_TYPE],
-            RED_PROP_ROT_DIR: pd_row[RED_PROP_ROT_DIR],
-            RED_START_LOC: pd_row[RED_START_LOC],
-            RED_END_LOC: pd_row[RED_END_LOC],
-        }
 
     def _create_motion_dict(
         self: Union["Option", "IGPictograph"],
@@ -304,7 +287,7 @@ class Pictograph(QGraphicsScene):
     def update_pictograph(
         self, pictograph_dict: PictographAttributesDict = None
     ) -> None:
-        if pictograph_dict:
+        if pictograph_dict is not None:
             self._update_from_pictograph_dict(pictograph_dict)
         else:
             self._update_motions()

@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QApplication,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from constants import END_POS, LETTER, START_POS
+from constants import END_POS, IG_PICTOGRAPH, LETTER, START_POS
 from widgets.image_generator_tab.ig_filter_frame import IGFilterFrame
 from widgets.image_generator_tab.ig_letter_button_frame import IGLetterButtonFrame
 from widgets.image_generator_tab.ig_pictograph import IGPictograph
@@ -188,20 +188,19 @@ class IGTab(QWidget):
         main_widget.setEnabled(False)
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.setMouseTracking(False)
-        for letter in self.get_letters():
+        for letter in self.main_widget.letters:
             self.generate_images_for_letter(letter)
         main_widget.setEnabled(True)
         QApplication.restoreOverrideCursor()
         self.setMouseTracking(True)
 
     def generate_images_for_letter(self, letter) -> None:
-        pictographs_for_letter: pd.DataFrame = self.pictograph_df[
-            self.pictograph_df[LETTER] == letter
-        ]
-
-        for _, pd_row in pictographs_for_letter.iterrows():
-            ig_pictograph: IGPictograph = self.ig_scroll_area._create_pictograph(pd_row)
-            ig_pictograph.render_and_cache_image()
+        for letter, pictograph_dict_list in self.main_widget.letters.items():
+            for pictograph_dict in pictograph_dict_list:
+                ig_pictograph: IGPictograph = self.ig_scroll_area._create_pictograph(
+                    pictograph_dict, IG_PICTOGRAPH
+                )
+                ig_pictograph.render_and_cache_image()
 
     def toggle_pictograph_selection(self, state, index) -> None:
         if state == Qt.CheckState.Checked:

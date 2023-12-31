@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING, Dict, Union
 from Enums import Orientation
 from constants import (
-    BLUE_END_OR,
-    BLUE_START_OR,
+    BLUE_END_ORI,
+    BLUE_START_ORI,
     BLUE_TURNS,
-    RED_END_OR,
-    RED_START_OR,
+    RED_END_ORI,
+    RED_START_ORI,
     RED_TURNS,
 )
 from widgets.filter_frame import FilterFrame
@@ -25,16 +25,16 @@ class OptionPickerFilterFrame(FilterFrame):
     def apply_filters(self) -> None:
         selected_blue_turns = self.comboboxes[BLUE_TURNS].currentText()
         selected_red_turns = self.comboboxes[RED_TURNS].currentText()
-        selected_left_start_or = self.comboboxes[BLUE_START_OR].currentText()
-        selected_right_start_or = self.comboboxes[RED_START_OR].currentText()
-        selected_blue_end_or = self.comboboxes[BLUE_END_OR].currentText()
-        selected_red_end_or = self.comboboxes[RED_END_OR].currentText()
+        selected_left_start_or = self.comboboxes[BLUE_START_ORI].currentText()
+        selected_right_start_or = self.comboboxes[RED_START_ORI].currentText()
+        selected_blue_end_or = self.comboboxes[BLUE_END_ORI].currentText()
+        selected_red_end_or = self.comboboxes[RED_END_ORI].currentText()
 
         self.filters: Dict[str, Union[Turns, Orientation]] = {
             BLUE_TURNS: selected_blue_turns,
             RED_TURNS: selected_red_turns,
-            BLUE_START_OR: selected_left_start_or,
-            RED_START_OR: selected_right_start_or,
-            BLUE_END_OR: selected_blue_end_or,
-            RED_END_OR: selected_red_end_or,
+            BLUE_START_ORI: selected_left_start_or,
+            RED_START_ORI: selected_right_start_or,
+            BLUE_END_ORI: selected_blue_end_or,
+            RED_END_ORI: selected_red_end_or,
         }
