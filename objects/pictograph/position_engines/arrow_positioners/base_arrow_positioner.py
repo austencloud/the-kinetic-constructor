@@ -43,10 +43,12 @@ class BaseArrowPositioner:
         self.current_letter = self.pictograph.letter
 
         for arrow in self.arrows:
-            self._set_arrow_to_default_loc(arrow)
-
-        for ghost_arrow in self.ghost_arrows:
-            self._set_arrow_to_default_loc(ghost_arrow)
+            if arrow.motion.is_shift():
+                self._set_shift_to_default_loc(arrow)
+                self._set_shift_to_default_loc(arrow.ghost)
+            elif arrow.motion.is_dash():
+                self._set_dash_to_default_loc(arrow)
+                self._set_dash_to_default_loc(arrow.ghost)
 
         if self.current_letter in self.letters_to_reposition:
             self._reposition_arrows()
@@ -73,6 +75,45 @@ class BaseArrowPositioner:
         reposition_method = reposition_methods.get(self.current_letter)
         if reposition_method:
             reposition_method()
+
+    ### SHIFT ###
+    def _set_shift_to_optimal_loc(self, arrow: Arrow, optimal_locations: Dict) -> None:
+        optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
+        if optimal_location:
+            arrow.setPos(optimal_location - arrow.boundingRect().center())
+
+    def _set_shift_to_default_loc(self, arrow: Arrow, _: Dict = None) -> None:
+        arrow.set_arrow_transform_origin_to_center()
+        if not arrow.is_ghost:
+            arrow.ghost.set_arrow_transform_origin_to_center()
+        default_pos = self._get_default_shift_loc(arrow)
+        adjustment = self.calculate_adjustment(arrow.location, DISTANCE)
+        new_pos = default_pos + adjustment - arrow.boundingRect().center()
+        arrow.setPos(new_pos)
+
+    ### DASH ###
+    def _set_dash_to_optimal_loc(self, arrow: Arrow, optimal_locations: Dict) -> None:
+        optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
+        if optimal_location:
+            arrow.setPos(optimal_location - arrow.boundingRect().center())
+
+    def _set_dash_to_default_loc(self, arrow: Arrow, _: Dict = None) -> None:
+        arrow.set_arrow_transform_origin_to_center()
+        if not arrow.is_ghost:
+            arrow.ghost.set_arrow_transform_origin_to_center()
+        default_pos = self._get_default_dash_loc(arrow)
+        adjustment = self.calculate_adjustment(arrow.location, DISTANCE)
+        new_pos = default_pos + adjustment - arrow.boundingRect().center()
+        arrow.setPos(new_pos)
+
+    ### GETTERS ###
+    def _get_default_shift_loc(self, arrow: Arrow) -> QPointF:
+        layer2_points = self.pictograph.grid.get_layer2_points()
+        return layer2_points.get(arrow.location, QPointF(0, 0))
+
+    def _get_default_dash_loc(self, arrow: Arrow) -> QPointF:
+        handpoints = self.pictograph.grid.get_handpoints()
+        return handpoints.get(arrow.location, QPointF(0, 0))
 
     def _calculate_adjustment_tuple(self, location: str, distance: int) -> QPointF:
         location_adjustments = {
@@ -124,7 +165,7 @@ class BaseArrowPositioner:
     def _apply_adjustment(
         self, arrow: Arrow, adjustment: QPointF, update_ghost: bool = True
     ) -> None:
-        default_pos = self._get_default_position(arrow)
+        default_pos = self._get_default_shift_loc(arrow)
         arrow_center = arrow.boundingRect().center()
         new_pos = default_pos - arrow_center + adjustment
         arrow.setPos(new_pos)
@@ -132,23 +173,3 @@ class BaseArrowPositioner:
         # Update the ghost arrow with the same adjustment
         if update_ghost and arrow.ghost:
             self._apply_adjustment(arrow.ghost, adjustment, update_ghost=False)
-
-    ### GETTERS ###
-    def _get_default_position(self, arrow: Arrow) -> QPointF:
-        layer2_points = self.pictograph.grid.get_layer2_points()
-        return layer2_points.get(arrow.location, QPointF(0, 0))
-
-    ### SETTERS ###
-    def _set_arrow_to_optimal_loc(self, arrow: Arrow, optimal_locations: Dict) -> None:
-        optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
-        if optimal_location:
-            arrow.setPos(optimal_location - arrow.boundingRect().center())
-
-    def _set_arrow_to_default_loc(self, arrow: Arrow, _: Dict = None) -> None:
-        arrow.set_arrow_transform_origin_to_center()
-        if not arrow.is_ghost:
-            arrow.ghost.set_arrow_transform_origin_to_center()
-        default_pos = self._get_default_position(arrow)
-        adjustment = self.calculate_adjustment(arrow.location, DISTANCE)
-        new_pos = default_pos + adjustment - arrow.boundingRect().center()
-        arrow.setPos(new_pos)

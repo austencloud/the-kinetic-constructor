@@ -162,9 +162,17 @@ class Prop(GraphicalObject):
         self.setRotation(prop_rotation_angle)
 
     def update_prop(self, prop_dict: PropAttributesDicts = None) -> None:
+        if prop_dict:
+            for key, value in prop_dict.items():
+                setattr(self, key, value)
+        self.motion.update_prop_ori()
+        self.update_svg()
         self.update_color()
         self.update_prop_rotation_angle()
-        self.motion.update_prop_ori()
+
+    def update_svg(self) -> None:
+        svg_file = self.get_svg_file(self.prop_type)
+        super().update_svg(svg_file)
 
     def get_svg_file(self, prop_type: PropType) -> str:
         svg_file = f"{PROP_DIR}{prop_type}.svg"

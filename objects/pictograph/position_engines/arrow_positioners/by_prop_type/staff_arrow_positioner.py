@@ -148,7 +148,7 @@ class StaffArrowPositioner:
 
             for arrow in self.pictograph.arrows.values():
                 if arrow.motion.prop.is_antiradial():
-                    default_pos = self.arrow_positioner._get_default_position(arrow)
+                    default_pos = self.arrow_positioner._get_default_shift_loc(arrow)
                     adjustment = self.arrow_positioner.calculate_adjustment(
                         arrow.location, DISTANCE + -45
                     )
@@ -220,7 +220,7 @@ class StaffArrowPositioner:
                 else self.pictograph.motions[BLUE]
             )
             if follower.prop.is_antiradial():
-                default_pos = self.arrow_positioner._get_default_position(
+                default_pos = self.arrow_positioner._get_default_shift_loc(
                     follower.arrow
                 )
                 adjustment = self.arrow_positioner.calculate_adjustment(

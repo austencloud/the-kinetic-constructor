@@ -69,7 +69,11 @@ class Arrow(GraphicalObject):
         
     ### SETUP ###
 
-
+    def update_svg(self, svg_file: str = None) -> None:
+        svg_file = self.get_svg_file(self.motion_type, self.turns)
+        self.svg_file = svg_file
+        super().update_svg(svg_file)
+        
     ### MOUSE EVENTS ###
 
     def mousePressEvent(self, event) -> None:

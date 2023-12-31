@@ -41,8 +41,10 @@ class GraphicalObject(QGraphicsSvgItem):
     def set_svg_color(self, new_color: str) -> bytes:
         def replace_class_color(match: re.Match) -> str:
             return match.group(1) + new_hex_color + match.group(3)
+
         def replace_fill_color(match: re.Match):
             return match.group(1) + new_hex_color + match.group(3)
+
         COLOR_MAP = {RED: HEX_RED, BLUE: HEX_BLUE}
         new_hex_color = COLOR_MAP.get(new_color)
         with open(self.svg_file, "r") as f:
@@ -66,11 +68,9 @@ class GraphicalObject(QGraphicsSvgItem):
         self.renderer.load(new_svg_data)
         self.setSharedRenderer(self.renderer)
 
-    def update_svg(self: Union["Arrow", "Prop"]) -> None:
-        svg_file = self.get_svg_file(self.motion_type, self.turns)
-        self.setup_svg_renderer(svg_file)
+    def update_svg(self, svg_file: str) -> None:
         self.set_svg_color(self.color)
-
+        self.setup_svg_renderer(svg_file)
 
     def update_attributes(
         self, attributes: MotionAttributesDicts | PropAttributesDicts
