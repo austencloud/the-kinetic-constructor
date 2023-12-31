@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import TYPE_CHECKING, Dict, List
 import pandas as pd
 from PyQt6.QtWidgets import (
@@ -29,7 +30,7 @@ class IGTab(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
-        self.pictograph_df = self.load_and_sort_data("PictographDataFrame.csv")
+        self.letters_dict = deepcopy(self.main_widget.letters)  # Deep copy of letters
         self._setup_ui()
 
     ### UI SETUP ###
@@ -113,19 +114,6 @@ class IGTab(QWidget):
         buttons["generate_selected_button"] = generate_selected_images_button
         return buttons
 
-    ### DATA LOADING ###
-
-    def load_and_sort_data(self, file_path: str) -> pd.DataFrame:
-        try:
-            df = pd.read_csv(file_path)
-            df.set_index([START_POS, END_POS], inplace=True)
-            df.sort_index(inplace=True)
-            return df
-        except Exception as e:
-            # Handle specific exceptions as needed
-            print(f"Error loading data: {e}")
-            return pd.DataFrame()  # Return an empty DataFrame in case of error
-
     ### LETTERS ###
 
     def get_button_style(self, pressed: bool) -> str:
@@ -157,17 +145,16 @@ class IGTab(QWidget):
     ### IMAGE GENERATION ###
 
     def on_letter_button_clicked(self, letter) -> None:
-        print(f"Button for letter {letter} clicked")
         button = self.letter_button_frame.buttons[letter]
+        is_selected = letter in self.selected_letters
 
-        if letter in self.selected_letters:
+        if is_selected:
             self.selected_letters.remove(letter)
-            button.setFlat(False)  # This makes the button appear not pressed
-            button.setStyleSheet(self.get_button_style(pressed=False))
         else:
             self.selected_letters.append(letter)
-            button.setFlat(True)  # This makes the button appear pressed
-            button.setStyleSheet(self.get_button_style(pressed=True))
+
+        button.setFlat(not is_selected)
+        button.setStyleSheet(self.get_button_style(pressed=not is_selected))
         self.ig_scroll_area.update_pictographs()
 
     def on_letter_checkbox_state_changed(self, state, letter) -> None:
@@ -226,9 +213,18 @@ class IGTab(QWidget):
 
             self.selected_letters.append(button_letter)
             button.clicked.connect(
-                lambda checked, letter=button.text(): self.on_letter_button_clicked(
+                lambda checked, letter=button_letter: self.on_letter_button_clicked(
                     letter
                 )
             )
 
         self.ig_scroll_area.update_pictographs()
+
+    def update_letters_dict(self):
+        for letter, pictograph_list in self.letters_dict.items():
+            for pictograph_dict in pictograph_list:
+                # Apply filter changes to each pictograph_dict
+                # Example: Update 'blue_turns' based on filters
+                if 'turns' in self.filters:
+                    pictograph_dict['blue_turns'] = self.filters['turns']
+                # Apply similar logic for other filters

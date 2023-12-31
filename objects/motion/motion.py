@@ -1,4 +1,5 @@
 from re import L
+from typing_extensions import is_protocol
 from Enums import (
     Color,
     Handpath,
@@ -32,24 +33,33 @@ class Motion:
     ) -> None:
         self.scene = scene
 
+        self.init_attributes()
         self.update_attributes(motion_dict)
+
+    def init_attributes(self):
+        self.color: Color = None
+        self.arrow: "Arrow" = None
+        self.prop: "Prop" = None
+        self.motion_type: MotionType = None
+        self.rot_dir: PropRotationDirection = None
+        self.loc: Location = None
+        self.turns: Turns = None
+        self.start_loc: Location = None
+        self.start_ori: Orientation = None
+        self.end_loc: Location = None
+        self.end_ori: Orientation = None
 
     ### SETUP ###
 
-    def update_attributes(self, motion_dict: Dict) -> None:
-        self.color: Color = motion_dict[COLOR]
-        self.arrow: Arrow = motion_dict[ARROW]
-        self.prop: Prop = motion_dict[PROP]
-
-        self.motion_type: MotionType = motion_dict[MOTION_TYPE]
-        self.turns: Turns = motion_dict[TURNS]
-        self.prop_rot_dir: PropRotationDirection = motion_dict[PROP_ROT_DIR]
-        self.start_loc: Location = motion_dict[START_LOC]
-        self.end_loc: Location = motion_dict[END_LOC]
-        self.start_or: Orientation = motion_dict[START_OR]
-
+    def update_attributes(self, motion_dict: Dict[str, str]) -> None:
+        for attribute in motion_dict:
+            if attribute.startswith("blue_") or attribute.startswith("red_"):
+                attribute = "_".join(attribute.split("_")[1:])
+                setattr(self, attribute, motion_dict[f"{self.color}_{attribute}"])
+            else:
+                setattr(self, attribute, motion_dict[attribute])
         if self.motion_type:
-            self.end_ori: Orientation = self.get_end_or()
+            self.end_ori: Orientation = self.get_end_ori()
             self.manipulator = MotionManipulator(self)
 
     ### UPDATE ###
@@ -57,7 +67,7 @@ class Motion:
     def update_prop_ori(self) -> None:
         if hasattr(self, PROP) and self.prop:
             if not self.end_ori:
-                self.end_ori = self.get_end_or()
+                self.end_ori = self.get_end_ori()
             self.prop.ori = self.end_ori
             self.prop.loc = self.end_loc
             self.prop.axis = self.prop.get_axis_from_ori()
@@ -69,7 +79,7 @@ class Motion:
         self.motion_type = None
 
         self.prop_rot_dir = None
-        self.start_or = None
+        self.start_ori = None
         self.end_ori = None
 
     def update_motion(self, motion_dict: MotionAttributesDicts = None) -> None:
@@ -99,48 +109,40 @@ class Motion:
             PROP_ROT_DIR: self.prop_rot_dir,
             START_LOC: self.start_loc,
             END_LOC: self.end_loc,
-            START_OR: self.start_or,
-            END_OR: self.end_ori,
+            START_ORI: self.start_ori,
+            END_ORI: self.end_ori,
         }
 
-    def get_end_or(self) -> Orientation:
-        def switch_orientation(orientation):
-            if orientation == IN:
+    def get_end_ori(self) -> Orientation:
+        def switch_orientation(ori) -> Orientation:
+            if ori == IN:
                 return OUT
-            elif orientation == OUT:
+            elif ori == OUT:
                 return IN
-            elif orientation == CLOCK:
+            elif ori == CLOCK:
                 return COUNTER
-            elif orientation == COUNTER:
+            elif ori == COUNTER:
                 return CLOCK
 
         def calculate_whole_turn_orientation(
-            motion_type, turns, start_orientation
+            motion_type, turns, start_ori
         ) -> Orientation:
             if motion_type in [PRO, STATIC]:
-                return (
-                    start_orientation
-                    if turns % 2 == 0
-                    else switch_orientation(start_orientation)
-                )
+                return start_ori if turns % 2 == 0 else switch_orientation(start_ori)
             elif motion_type in [ANTI, DASH]:
-                return (
-                    switch_orientation(start_orientation)
-                    if turns % 2 == 0
-                    else start_orientation
-                )
+                return switch_orientation(start_ori) if turns % 2 == 0 else start_ori
 
         def calculate_half_turn_orientation(
-            motion_type, turns, start_orientation
+            motion_type, turns, start_ori
         ) -> Orientation:
-            if start_orientation in [IN, OUT]:
+            if start_ori in [IN, OUT]:
                 return (
                     COUNTER
                     if (turns % 2 == 0.5 and motion_type == PRO)
                     or (turns % 2 != 0.5 and motion_type == ANTI)
                     else CLOCK
                 )
-            elif start_orientation in [CLOCK, COUNTER]:
+            elif start_ori in [CLOCK, COUNTER]:
                 return (
                     OUT
                     if (turns % 2 == 0.5 and motion_type == PRO)
@@ -148,12 +150,10 @@ class Motion:
                     else IN
                 )
 
-        def calculate_float_orientation(
-            start_orientation, handpath_direction
-        ) -> Orientation:
-            if start_orientation in [IN, OUT]:
+        def calculate_float_orientation(start_ori, handpath_direction) -> Orientation:
+            if start_ori in [IN, OUT]:
                 return COUNTER if handpath_direction == CW_HANDPATH else CLOCK
-            elif start_orientation in [CLOCK, COUNTER]:
+            elif start_ori in [CLOCK, COUNTER]:
                 return OUT if handpath_direction == CW_HANDPATH else IN
 
         def get_handpath_direction(start_loc, end_loc) -> Handpath:
@@ -178,7 +178,87 @@ class Motion:
 
         handpath_direction = get_handpath_direction(self.start_loc, self.end_loc)
         if self.motion_type == FLOAT:
-            return calculate_float_orientation(self.start_or, handpath_direction)
+            return calculate_float_orientation(self.start_ori, handpath_direction)
+
+        valid_turns = [0, 0.5, 1, 1.5, 2, 2.5, 3]
+        self.turns = (
+            float(self.turns) if self.turns in ["0.5", "1.5", "2.5"] else int(self.turns)
+        )
+
+        if self.turns in valid_turns:
+            if self.turns.is_integer():
+                return calculate_whole_turn_orientation(
+                    self.motion_type, self.turns, self.start_ori
+                )
+            else:
+                return calculate_half_turn_orientation(
+                    self.motion_type, self.turns, self.start_ori
+                )
+
+    def get_start_ori_from_end_ori(self) -> Orientation:
+        def switch_orientation(ori) -> Orientation:
+            if ori == IN:
+                return OUT
+            elif ori == OUT:
+                return IN
+            elif ori == CLOCK:
+                return COUNTER
+            elif ori == COUNTER:
+                return CLOCK
+
+        def calculate_whole_turn_orientation(
+            motion_type, turns, end_ori
+        ) -> Orientation:
+            if motion_type in [PRO, STATIC]:
+                return end_ori if turns % 2 == 0 else switch_orientation(end_ori)
+            elif motion_type in [ANTI, DASH]:
+                return switch_orientation(end_ori) if turns % 2 == 0 else end_ori
+
+        def calculate_half_turn_orientation(motion_type, turns, end_ori) -> Orientation:
+            if end_ori in [IN, OUT]:
+                return (
+                    COUNTER
+                    if (turns % 2 == 0.5 and motion_type == ANTI)
+                    or (turns % 2 != 0.5 and motion_type == PRO)
+                    else CLOCK
+                )
+            elif end_ori in [CLOCK, COUNTER]:
+                return (
+                    OUT
+                    if (turns % 2 == 0.5 and motion_type == ANTI)
+                    or (turns % 2 != 0.5 and motion_type == PRO)
+                    else IN
+                )
+
+        def calculate_float_orientation(end_ori, handpath_direction) -> Orientation:
+            if end_ori in [IN, OUT]:
+                return COUNTER if handpath_direction == CW_HANDPATH else CLOCK
+            elif end_ori in [CLOCK, COUNTER]:
+                return OUT if handpath_direction == CW_HANDPATH else IN
+
+        def get_handpath_direction(start_loc, end_loc) -> Handpath:
+            cw_handpaths = [(NORTH, EAST), (EAST, SOUTH), (SOUTH, WEST), (WEST, NORTH)]
+            ccw_handpaths = [(NORTH, WEST), (WEST, SOUTH), (SOUTH, EAST), (EAST, NORTH)]
+            dash_handpaths = [
+                (NORTH, SOUTH),
+                (EAST, WEST),
+                (SOUTH, NORTH),
+                (WEST, EAST),
+            ]
+            if (start_loc, end_loc) in cw_handpaths:
+                return CW_HANDPATH
+            elif (start_loc, end_loc) in ccw_handpaths:
+                return CCW_HANDPATH
+            elif start_loc == end_loc:
+                return STATIC_HANDPATH
+            elif (start_loc, end_loc) in dash_handpaths:
+                return DASH_HANDPATH
+            else:
+                print("Unrecognized handpath direction")
+
+        handpath_direction = get_handpath_direction(self.start_loc, self.end_loc)
+        if self.motion_type == FLOAT:
+            return calculate_float_orientation(self.end_ori, handpath_direction)
 
         valid_turns = [0, 0.5, 1, 1.5, 2, 2.5, 3]
         self.turns = (
@@ -188,16 +268,16 @@ class Motion:
         if self.turns in valid_turns:
             if self.turns.is_integer():
                 return calculate_whole_turn_orientation(
-                    self.motion_type, self.turns, self.start_or
+                    self.motion_type, self.turns, self.end_ori
                 )
             else:
                 return calculate_half_turn_orientation(
-                    self.motion_type, self.turns, self.start_or
+                    self.motion_type, self.turns, self.end_ori
                 )
 
     def get_arrow_location(
         self, start_loc: str, end_loc: str, motion_type: MotionType
-    ) -> str:
+    ) -> Location:
         if motion_type in [PRO, ANTI, FLOAT]:
             return self.get_shift_location(start_loc, end_loc)
         elif motion_type == DASH:
@@ -250,7 +330,7 @@ class Motion:
             elif self.end_loc in [EAST, WEST]:
                 return horizontal_map.get(other_arrow_loc)
 
-        elif self.motion_type == DASH and other_motion_type == DASH: # Type5 Letter
+        elif self.motion_type == DASH and other_motion_type == DASH:  # Type5 Letter
             direction_map = {
                 NORTH: SOUTH,
                 SOUTH: NORTH,
@@ -320,12 +400,16 @@ class Motion:
                     else:
                         return NORTH
 
-    def get_other_arrow(self):
+    def get_other_arrow(self) -> "Arrow":
         return (
             self.scene.arrows[RED]
             if self.arrow.color == BLUE
             else self.scene.arrows[BLUE]
         )
+
+    def set_turns(self, turns: Turns) -> None:
+        self.turns = turns
+        
 
     def adjust_turns(self, adjustment: float) -> None:
         potential_new_turns = self.arrow.turns + adjustment
@@ -334,10 +418,10 @@ class Motion:
         if new_turns_float % 1 == 0:
             new_turns_int: int = int(new_turns_float)
             if new_turns_int != self.arrow.turns:
-                self.update_turns(new_turns_int)
+                self.turns = new_turns_int
         else:
             if new_turns_float != self.arrow.turns:
-                self.update_turns(new_turns_float)
+                self.turns = new_turns_float
 
     def add_half_turn(self) -> None:
         self.adjust_turns(0.5)

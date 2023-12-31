@@ -37,7 +37,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.arrowbox = arrowbox
         self.objectbox = arrowbox
         self.ghost: GhostArrow = None
-        self.start_or = IN
+        self.start_ori = IN
         self.setup_dependencies(main_widget, pictograph, arrowbox)
 
     def match_target_arrow(self, target_arrow: "Arrow") -> None:
@@ -77,7 +77,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             MOTION_TYPE: self.motion_type,
             PROP_ROT_DIR: self.rot_dir,
             TURNS: self.turns,
-            START_OR: self.start_or,
+            START_ORI: self.start_ori,
             START_LOC: self.start_loc,
             END_LOC: self.end_loc,
         }
@@ -114,7 +114,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             MOTION_TYPE: self.motion_type,
             PROP_ROT_DIR: self.rot_dir,
             TURNS: self.turns,
-            START_OR: self.start_or,
+            START_ORI: self.start_ori,
             START_LOC: self.start_loc,
             END_LOC: self.end_loc,
         }

@@ -193,12 +193,12 @@ class TriadArrowPositioner:
             if self.arrow_positioner._is_arrow_movable(arrow):
                 adjustment = self.arrow_positioner._calculate_I_adjustment(arrow)
                 # if the orientation is IN for both props in the pictograph:
-                motions_with_in_orientation = [
+                motions_with_in_ori = [
                     arrow.motion
                     for arrow in self.pictograph.arrows.values()
                     if arrow.motion.end_ori == IN
                 ]
-                if len(motions_with_in_orientation) == 2:
+                if len(motions_with_in_ori) == 2:
                     adjusted_x = (
                         adjustment.x() - 35
                         if adjustment.x() < 0

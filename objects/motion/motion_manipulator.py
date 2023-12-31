@@ -1,12 +1,8 @@
-from typing import Dict, List, Literal, Tuple
-from PyQt6.QtGui import QTransform
+from typing import List
 from Enums import (
     Direction,
-    GridMode,
     Handpath,
     Location,
-    MotionType,
-    PropRotationDirection,
 )
 from constants import *
 from data.start_end_loc_map import get_start_end_locs

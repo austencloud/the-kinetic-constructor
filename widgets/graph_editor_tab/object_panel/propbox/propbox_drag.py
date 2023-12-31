@@ -69,7 +69,7 @@ class PropBoxDrag(ObjectBoxDrag):
             TURNS: 0,
             START_LOC: self.location,
             END_LOC: self.location,
-            START_OR: self.orientation,
+            START_ORI: self.orientation,
         }
 
         self.pictograph.motions[self.color].update_attributes(motion_dict)
@@ -122,7 +122,7 @@ class PropBoxDrag(ObjectBoxDrag):
             TURNS: 0,
             START_LOC: self.location,
             END_LOC: self.location,
-            START_OR: self.orientation,
+            START_ORI: self.orientation,
         }
 
         self.pictograph.motions[self.color].update_attributes(motion_dict)
@@ -173,7 +173,7 @@ class PropBoxDrag(ObjectBoxDrag):
                         TURNS: 0,
                         START_LOC: self.location,
                         END_LOC: self.location,
-                        START_OR: self.orientation,
+                        START_ORI: self.orientation,
                     }
 
                     self.pictograph.motions[self.color].update_attributes(motion_dict)

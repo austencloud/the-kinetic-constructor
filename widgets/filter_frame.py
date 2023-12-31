@@ -1,143 +1,111 @@
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import (
-    QFrame,
+    QPushButton,
+    QButtonGroup,
     QVBoxLayout,
     QHBoxLayout,
     QLabel,
-    QComboBox,
+    QFrame,
 )
 from PyQt6.QtGui import QFont
-from Enums import Orientation, Turns
+from Enums import Orientation
 from constants import *
 
 if TYPE_CHECKING:
-    from widgets.image_generator_tab.ig_filter_frame import IGFilterFrame
-    from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
     from widgets.image_generator_tab.ig_tab import IGTab
+    from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
+    from widgets.image_generator_tab.ig_filter_frame import IGFilterFrame
     from widgets.option_picker_tab.option_picker_filter_frame import (
         OptionPickerFilterFrame,
     )
-from Enums import Orientation
+from PyQt6.QtCore import Qt
 
 
 class FilterFrame(QFrame):
     def __init__(self, tab: Union["OptionPickerTab", "IGTab"]) -> None:
         super().__init__(tab)
         self.tab = tab
+        self.row1_layouts = {}  # Layouts for whole turns for each color
         self._setup_filters()
 
-    def _setup_filters(self) -> None:
-        self._create_comboboxes()
+    def _setup_filters(self):
+        self._create_button_groups()
         self._setup_layouts()
         self._add_widgets()
-        self._add_combobox_items()
-        self._set_stylesheets()
-        self._set_initial_filters()
 
-    def _create_comboboxes(self) -> None:
-        self.comboboxes = {
-            BLUE_TURNS: QComboBox(self),
-            BLUE_START_ORI: QComboBox(self),
-            BLUE_END_ORI: QComboBox(self),
-            RED_TURNS: QComboBox(self),
-            RED_START_ORI: QComboBox(self),
-            RED_END_ORI: QComboBox(self),
+    def _create_button_groups(self: Union["IGFilterFrame", "OptionPickerFilterFrame"]):
+        self.button_groups = {
+            BLUE_TURNS: QButtonGroup(self),
+            RED_TURNS: QButtonGroup(self),
+            BLUE_START_ORI: QButtonGroup(self),
+            RED_START_ORI: QButtonGroup(self),
+            BLUE_END_ORI: QButtonGroup(self),
+            RED_END_ORI: QButtonGroup(self),
         }
+        for key in self.button_groups.keys():
+            if "turns" in key:
+                self.row1_layouts[key] = QHBoxLayout()
+                turns = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
+                for idx, turn_value in enumerate(turns):
+                    self._add_turn_button(key, turn_value, self.row1_layouts[key], idx)
+            else:
+                ori_id_counter = 0
+                for ori in ["in", "out", "clock", "counter"]:
+                    button = QPushButton(ori, self)
+                    font = QFont("Arial", 11)
+                    font.setBold(True)
+                    button.setFont(font)
+                    self.button_groups[key].addButton(button, ori_id_counter)
+                    button.clicked.connect(
+                        lambda checked, value=ori, group=key: self.on_button_clicked(
+                            group, value
+                        )
+                    )
+                    ori_id_counter += 1
 
-    def _setup_layouts(self) -> None:
+        self.button_groups[BLUE_TURNS].button(0).setChecked(True)
+        self.button_groups[RED_TURNS].button(0).setChecked(True)
+        self.button_groups[BLUE_START_ORI].button(0).setChecked(True)
+        self.button_groups[RED_START_ORI].button(0).setChecked(True)
+
+    def _add_turn_button(self, key, turn_value, layout: QHBoxLayout, button_id: int):
+        button = QPushButton(turn_value, self)
+        self.button_groups[key].addButton(button, button_id)
+        button.clicked.connect(
+            lambda checked, value=turn_value, group=key: self.on_button_clicked(
+                group, value
+            )
+        )
+        font = QFont("Arial", 11)
+        font.setBold(True)
+        button.setFont(font)
+        layout.addWidget(button)
+
+    def _setup_layouts(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
 
-    def _add_combobox_items(self) -> None:
-        orientations = [o.value for o in list(Orientation)]
-        turns = [t.value for t in list(Turns)]
+    def _add_widgets(self):
+        vbox_layout = QVBoxLayout()
 
-        for key, combobox in self.comboboxes.items():
-            if "turns" in key:
-                combobox.addItems(turns)
-            elif "or" in key:
-                combobox.addItems(orientations)
+        vbox_layout.addWidget(QLabel("Left Turns"), alignment=Qt.AlignmentFlag.AlignTop)
+        vbox_layout.addLayout(self.row1_layouts[BLUE_TURNS])
 
-    def _set_stylesheets(self) -> None:
-        border_radius = min(self.width(), self.height()) * 0.25
-        border_width = 2
-        dropdown_arrow_width = int(self.width() * 0.25)
-        box_font_size = int(self.width() / 7)
-        font = QFont("Arial", box_font_size, QFont.Weight.Bold)
-
-        stylesheet_template = """
-            QComboBox {{
-                padding-left: 2px;
-                padding-right: 0px;
-                border: {border_width}px solid black;
-                border-radius: {border_radius}px;
-                max-width: 100px;
-            }}
-            QComboBox::drop-down {{
-                subcontrol-origin: padding;
-                subcontrol-position: top right;
-                width: {dropdown_arrow_width}px;
-                border-left-width: 1px;
-                border-left-color: darkgray;
-                border-left-style: solid;
-                border-top-right-radius: {border_radius}px;
-                border-bottom-right-radius: {border_radius}px;
-            }}
-            QComboBox::down-arrow {{
-                image: url("{ICON_DIR}/combobox_arrow.png");
-                width: {arrow_size}px;
-                height: {arrow_size}px;
-            }}
-        """
-
-        stylesheet = stylesheet_template.format(
-            border_width=border_width,
-            border_radius=border_radius,
-            dropdown_arrow_width=dropdown_arrow_width,
-            arrow_size=int(dropdown_arrow_width * 0.6),
-            ICON_DIR=ICON_DIR,
+        vbox_layout.addWidget(
+            QLabel("Right Turns"), alignment=Qt.AlignmentFlag.AlignTop
         )
+        vbox_layout.addLayout(self.row1_layouts[RED_TURNS])
 
-        for combobox in self.comboboxes.values():
-            combobox.setFont(font)
-            combobox.setStyleSheet(stylesheet)
+        self._add_group_to_layout(vbox_layout, BLUE_START_ORI, "Left Start Orientation")
+        self._add_group_to_layout(vbox_layout, BLUE_END_ORI, "Left End Orientation")
 
-    def _add_widgets(self) -> None:
-        # Create vertical layouts for left and right sections
-        left_vbox_layout = QVBoxLayout()
-        right_vbox_layout = QVBoxLayout()
+        self._add_group_to_layout(vbox_layout, RED_START_ORI, "Right Start Orientation")
+        self._add_group_to_layout(vbox_layout, RED_END_ORI, "Right End Orientation")
 
-        # Add widgets to the left vertical layout
-        left_vbox_layout.addWidget(QLabel("Left Turns:"))
-        left_vbox_layout.addWidget(self.comboboxes[BLUE_TURNS])
-        left_vbox_layout.addWidget(QLabel("Left Start Orientation:"))
-        left_vbox_layout.addWidget(self.comboboxes[BLUE_START_ORI])
-        left_vbox_layout.addWidget(QLabel("Left End Orientation:"))
-        left_vbox_layout.addWidget(self.comboboxes[BLUE_END_ORI])
+        self.layout.addLayout(vbox_layout)
 
-        # Add widgets to the right vertical layout
-        right_vbox_layout.addWidget(QLabel("Right Turns:"))
-        right_vbox_layout.addWidget(self.comboboxes[RED_TURNS])
-        right_vbox_layout.addWidget(QLabel("Right Start Orientation:"))
-        right_vbox_layout.addWidget(self.comboboxes[RED_START_ORI])
-        right_vbox_layout.addWidget(QLabel("Right End Orientation:"))
-        right_vbox_layout.addWidget(self.comboboxes[RED_END_ORI])
-
-        # Add the left and right vertical layouts to the main horizontal layout
-        self.layout.addLayout(left_vbox_layout)
-        self.layout.addLayout(right_vbox_layout)
-
-    def _set_initial_filters(self) -> None:
-        self.comboboxes[BLUE_TURNS].setCurrentText("0")
-        self.comboboxes[BLUE_START_ORI].setCurrentText(IN)
-        self.comboboxes[BLUE_END_ORI].setCurrentIndex(-1)
-        self.comboboxes[RED_TURNS].setCurrentText("0")
-        self.comboboxes[RED_START_ORI].setCurrentText(IN)
-        self.comboboxes[RED_END_ORI].setCurrentIndex(-1)
-
-    def connect_filter_boxes(
-        self: Union["OptionPickerFilterFrame", "IGFilterFrame"]
-    ) -> None:
-        self.comboboxes[BLUE_TURNS].currentTextChanged.connect(self.apply_filters)
-        self.comboboxes[RED_TURNS].currentTextChanged.connect(self.apply_filters)
-        self.comboboxes[BLUE_END_ORI].currentTextChanged.connect(self.apply_filters)
-        self.comboboxes[RED_END_ORI].currentTextChanged.connect(self.apply_filters)
+    def _add_group_to_layout(self, layout: QHBoxLayout, group_key, label_text):
+        hbox_layout = QHBoxLayout()
+        hbox_layout.addWidget(QLabel(label_text))
+        for button in self.button_groups[group_key].buttons():
+            hbox_layout.addWidget(button)
+        layout.addLayout(hbox_layout)

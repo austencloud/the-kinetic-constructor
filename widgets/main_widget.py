@@ -78,7 +78,7 @@ class MainWidget(QWidget):
         df = df.sort_values(by=[LETTER, START_POS, END_POS])
 
         # Selecting the necessary columns
-        df = self.init_dataframe(df)
+        df = self.add_turns_and_ori_to_pictograph_dict(df)
 
         # Creating the letters dictionary
         letters = (
@@ -88,8 +88,8 @@ class MainWidget(QWidget):
         self.letters = letters
         return self.letters
 
-    def init_dataframe(self, df):
-        df = df[
+    def add_turns_and_ori_to_pictograph_dict(self, pictograph_dict):
+        pictograph_dict = pictograph_dict[
             [
                 LETTER,
                 START_POS,
@@ -104,12 +104,12 @@ class MainWidget(QWidget):
                 RED_END_LOC,
             ]
         ]
-        df[BLUE_TURNS] = 0
-        df[RED_TURNS] = 0
-        df[BLUE_START_ORI] = IN
-        df[RED_START_ORI] = IN
+        pictograph_dict[BLUE_TURNS] = 0
+        pictograph_dict[RED_TURNS] = 0
+        pictograph_dict[BLUE_START_ORI] = IN
+        pictograph_dict[RED_START_ORI] = IN
 
-        df = df[
+        pictograph_dict = pictograph_dict[
             [
                 LETTER,
                 START_POS,
@@ -129,7 +129,7 @@ class MainWidget(QWidget):
             ]
         ]
 
-        return df
+        return pictograph_dict
 
     def configure_layouts(self) -> None:
         self.horizontal_splitter = StyledSplitter(Qt.Orientation.Horizontal)
@@ -308,11 +308,11 @@ class MainWidget(QWidget):
             f"({pictograph_dict[BLUE_MOTION_TYPE]}_"
             f"{pictograph_dict[BLUE_START_LOC]}→{pictograph_dict[BLUE_END_LOC]}_"
             f"{blue_turns}_"
-            f"{pictograph.motions[BLUE].start_or}→{pictograph.motions[BLUE].end_ori})_"
+            f"{pictograph.motions[BLUE].start_ori}→{pictograph.motions[BLUE].end_ori})_"
             f"({pictograph_dict[RED_MOTION_TYPE]}_"
             f"{pictograph_dict[RED_START_LOC]}→{pictograph_dict[RED_END_LOC]}_"
             f"{red_turns}_"
-            f"{pictograph.motions[RED].start_or}→{pictograph.motions[RED].end_ori})_"
+            f"{pictograph.motions[RED].start_ori}→{pictograph.motions[RED].end_ori})_"
             f"{prop_type}.png"
         )
         return os.path.join(image_dir, image_name)

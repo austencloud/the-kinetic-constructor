@@ -152,7 +152,6 @@ class Pictograph(QGraphicsScene):
     ) -> None:
         """For pictographs that are generated from the pandas dataframe."""
 
-
     def _create_motion_dict(
         self: Union["Option", "IGPictograph"],
         pictograph_dict: PictographAttributesDict,
@@ -167,7 +166,7 @@ class Pictograph(QGraphicsScene):
             START_LOC: pictograph_dict[f"{color}_start_loc"],
             END_LOC: pictograph_dict[f"{color}_end_loc"],
             TURNS: pictograph_dict[f"{color}_turns"],
-            START_OR: pictograph_dict[f"{color}_start_or"],
+            START_ORI: pictograph_dict[f"{color}_start_ori"],
         }
 
     ### EVENT HANDLERS ###
@@ -308,7 +307,7 @@ class Pictograph(QGraphicsScene):
             # Define the order of motion types
         motion_type_order = [PRO, ANTI, FLOAT, DASH, STATIC]
 
-            # Sort motion_dicts based on motion type
+        # Sort motion_dicts based on motion type
         motion_dicts.sort(key=lambda x: motion_type_order.index(x[MOTION_TYPE]))
 
         for motion_dict in motion_dicts:
@@ -455,11 +454,12 @@ class Pictograph(QGraphicsScene):
         prop_type = self.main_widget.prop_type
         letter = self.letter
         letter_type = self._get_letter_type(letter)
+
         blue_motion_type_prefix = self.motions[BLUE].motion_type[0]
         red_motion_type_prefix = self.motions[RED].motion_type[0]
+        turns_string = f"{blue_motion_type_prefix}{self.motions[BLUE].turns},{red_motion_type_prefix}{self.motions[RED].turns}"
 
         # Construct the folder name based on turns and motion types
-        turns_string = f"{blue_motion_type_prefix}{self.motions[BLUE].turns},{red_motion_type_prefix}{self.motions[RED].turns}"
         basic_turns_string = f"{self.motions[BLUE].turns},{self.motions[RED].turns}"
         start_to_end_string = f"{self.start_pos}→{self.end_pos}"
         image_dir = os.path.join(
@@ -477,19 +477,19 @@ class Pictograph(QGraphicsScene):
         # Modify the filename to include motion types and turns
         blue_turns = self.motions[BLUE].turns
         red_turns = self.motions[RED].turns
-        blue_end_or = self.motions[BLUE].end_ori
-        red_end_or = self.motions[RED].end_ori
+        blue_end_ori = self.motions[BLUE].end_ori
+        red_end_ori = self.motions[RED].end_ori
 
         image_name = (
             f"{letter}_"
             f"({start_to_end_string})_"
             f"({self.motions[BLUE].motion_type}_{self.motions[BLUE].start_loc}→{self.motions[BLUE].end_loc}_"
             f"{blue_turns}_"
-            f"{self.motions[BLUE].start_or}→{blue_end_or})_"
+            f"{self.motions[BLUE].start_ori}→{blue_end_ori})_"
             f"({self.motions[RED].motion_type}_{self.motions[RED].start_loc}→{self.motions[RED].end_loc}_"
             f"{red_turns}_"
-            f"{self.motions[RED].start_or}→{red_end_or})_"
-            f"{prop_type}.png "
+            f"{self.motions[RED].start_ori}→{red_end_ori})_"
+            f"{prop_type}.png"
         )
 
         image_path = os.path.join(image_dir, image_name).replace("\\", "/")

@@ -1,4 +1,4 @@
-from typing import Literal, TypedDict
+from typing import TypedDict
 from enum import Enum
 from constants import *
 
@@ -404,9 +404,9 @@ class MotionAttribute(Enum):
     PROP_ROT_DIR = "prop_rot_dir"
     TURNS = "turns"
     START_LOC = "start_loc"
-    START_OR = "start_or"
+    START_ORI = "start_ori"
     END_LOC = "end_loc"
-    END_OR = "end_or"
+    END_ORI = "end_ori"
 
 
 class OrientationCombination(Enum):
@@ -456,6 +456,7 @@ class SpecificStartEndPositionsDicts(TypedDict):
 ### MOTION ATTRIBUTES ###
 class MotionAttributesDicts(TypedDict):
     color: Color
+
     motion_type: MotionType
     rot_dir: PropRotationDirection
     loc: Location
@@ -478,6 +479,7 @@ class PropAttributesDicts(TypedDict):
     prop_type: PropType
     loc: Location
     ori: Orientation
+
 
 ### LETTER GROUPS ###
 class MotionTypeCombination(Enum):
@@ -539,15 +541,15 @@ class PictographAttributesDict(TypedDict):
     blue_start_loc: Location
     blue_end_loc: Location
     blue_turns: Turns
-    blue_start_or: Orientation
-    blue_end_or: Orientation
+    blue_start_ori: Orientation
+    blue_end_ori: Orientation
     red_motion_type: MotionType
     red_prop_rot_dir: PropRotationDirection
     red_start_loc: Location
     red_end_loc: Location
     red_turns: Turns
-    red_start_or: Orientation
-    red_end_or: Orientation
+    red_start_ori: Orientation
+    red_end_ori: Orientation
 
 
 class PictographType(Enum):

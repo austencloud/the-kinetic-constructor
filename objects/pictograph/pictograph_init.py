@@ -152,7 +152,7 @@ class PictographInit:
             TURNS: 0,
             START_LOC: None,
             END_LOC: None,
-            START_OR: None,
+            START_ORI: None,
         }
         return Motion(self.pictograph, motion_dict)
 

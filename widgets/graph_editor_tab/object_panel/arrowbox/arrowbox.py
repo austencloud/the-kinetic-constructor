@@ -31,8 +31,8 @@ class ArrowBox(ObjectBox):
         self.grid = Grid(self)
         self.target_arrow: "Arrow" = None
         self.drag = None
-        self.default_start_or = IN
-        self.start_or = self.default_start_or
+        self.default_start_ori = IN
+        self.start_ori = self.default_start_ori
 
         self.arrowbox_layout = QGridLayout()
         self.arrowbox_layout.addWidget(self.view)
@@ -130,7 +130,7 @@ class ArrowBox(ObjectBox):
                 START_LOC: NORTH,
                 END_LOC: EAST,
                 TURNS: 0,
-                START_OR: IN,
+                START_ORI: IN,
             },
             {
                 COLOR: RED,
@@ -141,7 +141,7 @@ class ArrowBox(ObjectBox):
                 START_LOC: NORTH,
                 END_LOC: EAST,
                 TURNS: 0,
-                START_OR: IN,
+                START_ORI: IN,
             },
             {
                 COLOR: RED,
@@ -152,7 +152,7 @@ class ArrowBox(ObjectBox):
                 START_LOC: SOUTH,
                 END_LOC: EAST,
                 TURNS: 0,
-                START_OR: IN,
+                START_ORI: IN,
             },
             {
                 COLOR: RED,
@@ -163,7 +163,7 @@ class ArrowBox(ObjectBox):
                 START_LOC: SOUTH,
                 END_LOC: EAST,
                 TURNS: 0,
-                START_OR: IN,
+                START_ORI: IN,
             },
             {
                 COLOR: BLUE,
@@ -174,7 +174,7 @@ class ArrowBox(ObjectBox):
                 START_LOC: SOUTH,
                 END_LOC: WEST,
                 TURNS: 0,
-                START_OR: IN,
+                START_ORI: IN,
             },
             {
                 COLOR: BLUE,
@@ -185,7 +185,7 @@ class ArrowBox(ObjectBox):
                 START_LOC: SOUTH,
                 END_LOC: WEST,
                 TURNS: 0,
-                START_OR: IN,
+                START_ORI: IN,
             },
             {
                 COLOR: BLUE,
@@ -196,7 +196,7 @@ class ArrowBox(ObjectBox):
                 START_LOC: NORTH,
                 END_LOC: WEST,
                 TURNS: 0,
-                START_OR: IN,
+                START_ORI: IN,
             },
             {
                 COLOR: BLUE,
@@ -207,7 +207,7 @@ class ArrowBox(ObjectBox):
                 START_LOC: NORTH,
                 END_LOC: WEST,
                 TURNS: 0,
-                START_OR: IN,
+                START_ORI: IN,
             },
         ]
 
