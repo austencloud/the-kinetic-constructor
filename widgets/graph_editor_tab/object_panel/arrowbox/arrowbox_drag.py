@@ -212,7 +212,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
                 prop_dict = {
                     COLOR: self.color,
-                    LOCATION: self.end_loc,
+                    LOC: self.end_loc,
                 }
                 prop.update_attributes(prop_dict)
 

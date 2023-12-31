@@ -76,14 +76,14 @@ class Motion:
         if motion_dict:
             self.update_attributes(motion_dict)
         arrow_dict = {
-            LOCATION: self.get_arrow_location(
+            LOC: self.get_arrow_location(
                 self.start_loc, self.end_loc, self.motion_type
             ),
             MOTION_TYPE: self.motion_type,
             TURNS: self.turns,
         }
         prop_dict = {
-            LOCATION: self.end_loc,
+            LOC: self.end_loc,
             ORIENTATION: self.end_ori,
         }
         self.arrow.update_arrow(arrow_dict)
@@ -277,7 +277,7 @@ class Motion:
                 return direction_map.get(other_arrow_loc)
             else:
                 return color_direction_map.get(self.color, {}).get(self.arrow.loc)
-                    
+
         elif other_motion_type == STATIC:
             other_arrow_loc = self.scene.pictograph_dict[f"{other_color}_start_loc"]
             if self.scene.pictograph_dict[LETTER] == "Λ":

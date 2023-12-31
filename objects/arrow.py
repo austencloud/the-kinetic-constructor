@@ -9,7 +9,7 @@ from constants import (
     COLOR,
     COUNTER_CLOCKWISE,
     END_LOC,
-    LOCATION,
+    LOC,
     MOTION_TYPE,
     NORTHEAST,
     NORTHWEST,
@@ -161,7 +161,7 @@ class Arrow(GraphicalObject):
                 prop.update_attributes(
                     {
                         COLOR: self.color,
-                        LOCATION: self.motion.end_loc,
+                        LOC: self.motion.end_loc,
                     }
                 )
                 prop.show()
@@ -180,38 +180,8 @@ class Arrow(GraphicalObject):
 
     ### GETTERS ###
 
-    def _get_shift_rotation_angle(
-        self, arrow: Optional["Arrow"] = None
-    ) -> RotationAngles:
-        arrow = arrow or self
-        shift_rot_angle = self._get_location_to_angle_map(arrow.motion)
-        return shift_rot_angle
-
-    def _get_dash_rotation_angle(
-        self, arrow: Optional["Arrow"] = None
-    ) -> RotationAngles:
-        arrow = arrow or self
-        dash_rot_angle = self._get_location_to_angle_map(arrow.motion)
-        return dash_rot_angle
-
-    def _get_static_rotation_angle(
-        self, arrow: Optional["Arrow"] = None
-    ) -> RotationAngles:
-        arrow = arrow or self
-        static_rot_angle = self._get_location_to_angle_map(arrow.motion)
-        return static_rot_angle
-
-    def _get_location_to_angle_map(
-        self, motion: "Motion"
-    ) -> Dict[PropRotationDirection, Dict[Location, int]]:
-        from objects.pictograph.pictograph import Pictograph
-
-        if isinstance(self.scene, Pictograph):
-            other_motion = (
-                self.scene.arrows[RED].motion
-                if self.color == BLUE
-                else self.scene.arrows[BLUE].motion
-            )
+    def _get_shift_rotation_angle(self) -> RotationAngles:
+        motion = self.motion
 
         if motion.motion_type == PRO:
             return (
@@ -229,8 +199,8 @@ class Arrow(GraphicalObject):
                         NORTHWEST: 0,
                     },
                 }
-                .get(motion.prop_rot_dir, {})
-                .get(self.loc, 0)
+                .get(motion.prop_rot_dir)
+                .get(self.loc)
             )
         elif motion.motion_type == ANTI:
             return (
@@ -248,10 +218,37 @@ class Arrow(GraphicalObject):
                         NORTHWEST: 270,
                     },
                 }
-                .get(motion.prop_rot_dir, {})
-                .get(self.loc, 0)
+                .get(motion.prop_rot_dir)
+                .get(self.loc)
             )
-        elif motion.motion_type == STATIC:
+
+    def _get_dash_rotation_angle(
+        self, arrow: Optional["Arrow"] = None
+    ) -> RotationAngles:
+        arrow = arrow or self
+        dash_rot_angle = self._get_rot_angle(arrow.motion)
+        return dash_rot_angle
+
+    def _get_static_rotation_angle(
+        self, arrow: Optional["Arrow"] = None
+    ) -> RotationAngles:
+        arrow = arrow or self
+        static_rot_angle = self._get_rot_angle(arrow.motion)
+        return static_rot_angle
+
+    def _get_rot_angle(
+        self, motion: "Motion"
+    ) -> Dict[PropRotationDirection, Dict[Location, int]]:
+        from objects.pictograph.pictograph import Pictograph
+
+        if isinstance(self.scene, Pictograph):
+            other_motion = (
+                self.scene.arrows[RED].motion
+                if self.color == BLUE
+                else self.scene.arrows[BLUE].motion
+            )
+
+        if motion.motion_type == STATIC:
             return (
                 {
                     CLOCKWISE: {
@@ -404,7 +401,7 @@ class Arrow(GraphicalObject):
                         other_motion.end_loc,
                     )
                 )
-            
+
                 rot_map = {
                     (NORTH, SOUTH): 90,
                     (SOUTH, NORTH): 270,
@@ -412,9 +409,9 @@ class Arrow(GraphicalObject):
                     (WEST, EAST): 0,
                 }
                 return rot_map.get((self.motion.start_loc, self.motion.end_loc))
-            
+
     def get_attributes(self) -> ArrowAttributesDicts:
-        arrow_attributes = [COLOR, LOCATION, MOTION_TYPE, TURNS]
+        arrow_attributes = [COLOR, LOC, MOTION_TYPE, TURNS]
         return {attr: getattr(self, attr) for attr in arrow_attributes}
 
     def get_svg_file(self, motion_type: MotionType, turns: Turns) -> str:

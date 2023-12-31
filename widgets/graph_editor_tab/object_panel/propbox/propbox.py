@@ -133,26 +133,26 @@ class PropBox(ObjectBox):
         return [
             {
                 PROP_TYPE: self.prop_type,
-                LOCATION: NORTH,
+                LOC: NORTH,
                 ORIENTATION: IN,
                 COLOR: RED,
             },
             {
                 COLOR: BLUE,
                 PROP_TYPE: self.prop_type,
-                LOCATION: EAST,
+                LOC: EAST,
                 ORIENTATION: IN,
             },
             {
                 COLOR: RED,
                 PROP_TYPE: self.prop_type,
-                LOCATION: SOUTH,
+                LOC: SOUTH,
                 ORIENTATION: IN,
             },
             {
                 COLOR: BLUE,
                 PROP_TYPE: self.prop_type,
-                LOCATION: WEST,
+                LOC: WEST,
                 ORIENTATION: IN,
             },
         ]
@@ -162,25 +162,25 @@ class PropBox(ObjectBox):
             {
                 COLOR: RED,
                 PROP_TYPE: self.prop_type,
-                LOCATION: NORTHEAST,
+                LOC: NORTHEAST,
                 ORIENTATION: IN,
             },
             {
                 COLOR: BLUE,
                 PROP_TYPE: self.prop_type,
-                LOCATION: SOUTHEAST,
+                LOC: SOUTHEAST,
                 ORIENTATION: IN,
             },
             {
                 COLOR: RED,
                 PROP_TYPE: self.prop_type,
-                LOCATION: SOUTHWEST,
+                LOC: SOUTHWEST,
                 ORIENTATION: IN,
             },
             {
                 COLOR: BLUE,
                 PROP_TYPE: self.prop_type,
-                LOCATION: NORTHWEST,
+                LOC: NORTHWEST,
                 ORIENTATION: IN,
             },
         ]

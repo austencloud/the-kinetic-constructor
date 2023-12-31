@@ -45,7 +45,7 @@ class Prop(GraphicalObject):
         self.ghost: Prop = None
         self.axis: Axis = None
         self.color: Color = prop_dict[COLOR]
-        self.loc: Location = prop_dict[LOCATION]
+        self.loc: Location = prop_dict[LOC]
         self.ori: Orientation = prop_dict[ORIENTATION]
         self.center = self.boundingRect().center()
 

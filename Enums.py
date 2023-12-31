@@ -89,8 +89,8 @@ class Direction(Enum):
 class Filter(Enum):
     BLUE_TURNS = "blue_turns"
     RED_TURNS = "red_turns"
-    LEFT_end_or = "blue_end_or"
-    RIGHT_end_or = "red_end_or"
+    BLUE_END_ORI = "blue_end_ori"
+    RED_END_ORI = "red_end_ori"
 
 
 class MotionType(Enum):
@@ -370,8 +370,6 @@ class MotionCombinationType(Enum):
     STATIC = "Static"
 
 
-
-
 class Turns(Enum):
     FL = "fl"
     ZERO = "0"
@@ -385,7 +383,7 @@ class Turns(Enum):
 
 class ArrowAttribute(Enum):
     COLOR = "color"
-    LOCATION = "location"
+    LOC = "loc"
     MOTION_TYPE = "motion_type"
     TURNS = "turns"
 
@@ -393,9 +391,9 @@ class ArrowAttribute(Enum):
 class PropAttribute(Enum):
     COLOR = "color"
     PROP_TYPE = "prop_type"
-    LOCATION = "location"
+    LOC = "loc"
     AXIS = "axis"
-    ORIENTATION = "orientation"
+    ORI = "ori"
 
 
 class MotionAttribute(Enum):
@@ -403,14 +401,12 @@ class MotionAttribute(Enum):
     ARROW = "arrow"
     PROP = "prop"
     MOTION_TYPE = "motion_type"
-    ROTATION_DIRECTION = "prop_rot_dir"
+    PROP_ROT_DIR = "prop_rot_dir"
     TURNS = "turns"
-    start_loc = "start_loc"
-    start_or = "start_or"
-    end_loc = "end_loc"
-    end_or = "end_or"
-
-
+    START_LOC = "start_loc"
+    START_OR = "start_or"
+    END_LOC = "end_loc"
+    END_OR = "end_or"
 
 
 class OrientationCombination(Enum):
@@ -457,26 +453,17 @@ class SpecificStartEndPositionsDicts(TypedDict):
     end_pos: SpecificPosition
 
 
-class PropAttributesDicts(TypedDict):
-    color: Color
-    prop_type: PropType
-    location: Location
-    orientation: Orientation
-
-
 ### MOTION ATTRIBUTES ###
 class MotionAttributesDicts(TypedDict):
     color: Color
     motion_type: MotionType
     rot_dir: PropRotationDirection
-    location: Location
+    loc: Location
     turns: Turns
-
     start_loc: Location
-    start_or: Orientation
-
+    start_ori: Orientation
     end_loc: Location
-    end_or: Orientation
+    end_ori: Orientation
 
 
 class ArrowAttributesDicts(TypedDict):
@@ -486,16 +473,11 @@ class ArrowAttributesDicts(TypedDict):
     turns: Turns
 
 
-class MotionAttributesDicts(TypedDict):
+class PropAttributesDicts(TypedDict):
     color: Color
-    motion_type: MotionType
-    prop_rot_dir: PropRotationDirection
-    start_loc: Location
-    end_loc: Location
-    turns: Turns
-    start_or: Orientation
-    end_or: Orientation
-
+    prop_type: PropType
+    loc: Location
+    ori: Orientation
 
 ### LETTER GROUPS ###
 class MotionTypeCombination(Enum):
@@ -572,5 +554,5 @@ class PictographType(Enum):
     MAIN = "main"
     OPTION = "option"
     BEAT = "beat"
-    start_pos = START_POS
+    START_POS = "start_pos"
     IG_PICTOGRAPH = "ig_pictograph"

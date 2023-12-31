@@ -125,7 +125,7 @@ class PictographInit:
         prop_attributes = {
             COLOR: color,
             PROP_TYPE: prop_type,
-            LOCATION: None,
+            LOC: None,
             ORIENTATION: None,
         }
         prop: Prop = prop_class(self.pictograph, prop_attributes, None)
