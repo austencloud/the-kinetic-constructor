@@ -171,6 +171,4 @@ class MotionManipulator:
         """
         Refresh the arrow and prop, and update the pictograph.
         """
-        self.arrow.update_arrow()
-        self.prop.update_prop()
         self.arrow.scene.update_pictograph()

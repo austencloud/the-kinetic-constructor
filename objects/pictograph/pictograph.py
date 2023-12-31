@@ -305,23 +305,7 @@ class Pictograph(QGraphicsScene):
         self, pictograph_dict: PictographAttributesDict = None
     ) -> None:
         if pictograph_dict:
-            self.pictograph_dict = pictograph_dict
-            self.update_attributes(pictograph_dict)
-            motion_dicts = []
-            for color in [RED, BLUE]:
-                motion_dict = self._create_motion_dict(pictograph_dict, color)
-                motion_dicts.append(motion_dict)
-
-            # Define the order of motion types
-            motion_type_order = [PRO, ANTI, FLOAT, DASH, STATIC]
-
-            # Sort motion_dicts based on motion type
-            motion_dicts.sort(key=lambda x: motion_type_order.index(x[MOTION_TYPE]))
-
-            for motion_dict in motion_dicts:
-                self.motions[motion_dict[COLOR]].update_attributes(motion_dict)
-            for motion_dict in motion_dicts:
-                self.motions[motion_dict[COLOR]].update_motion(motion_dict)
+            self._update_from_pictograph_dict(pictograph_dict)
         else:
             self._update_motions()
 
@@ -329,6 +313,25 @@ class Pictograph(QGraphicsScene):
         self._update_letter()
         if self.graph_type == MAIN:
             self._update_attr_panel()
+
+    def _update_from_pictograph_dict(self, pictograph_dict):
+        self.pictograph_dict = pictograph_dict
+        self.update_attributes(pictograph_dict)
+        motion_dicts = []
+        for color in [RED, BLUE]:
+            motion_dict = self._create_motion_dict(pictograph_dict, color)
+            motion_dicts.append(motion_dict)
+
+            # Define the order of motion types
+        motion_type_order = [PRO, ANTI, FLOAT, DASH, STATIC]
+
+            # Sort motion_dicts based on motion type
+        motion_dicts.sort(key=lambda x: motion_type_order.index(x[MOTION_TYPE]))
+
+        for motion_dict in motion_dicts:
+            self.motions[motion_dict[COLOR]].update_attributes(motion_dict)
+        for motion_dict in motion_dicts:
+            self.motions[motion_dict[COLOR]].update_motion(motion_dict)
 
     def _update_attr_panel(self) -> None:
         for motion in self.motions.values():
