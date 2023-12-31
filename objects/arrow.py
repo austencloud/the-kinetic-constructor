@@ -35,9 +35,10 @@ from utilities.TypeChecking.TypeChecking import (
     Dict,
 )
 
+
 if TYPE_CHECKING:
-    from objects.motion.motion import Motion
     from objects.pictograph.pictograph import Pictograph
+    from objects.motion.motion import Motion
     from objects.ghosts.ghost_arrow import GhostArrow
     from objects.prop.prop import Prop
     from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
@@ -184,81 +185,154 @@ class Arrow(GraphicalObject):
     ) -> RotationAngles:
         arrow = arrow or self
         shift_rot_angle = self._get_location_to_angle_map(arrow.motion)
-        return shift_rot_angle.get(self.loc, 0)
+        return shift_rot_angle
 
     def _get_dash_rotation_angle(
         self, arrow: Optional["Arrow"] = None
     ) -> RotationAngles:
         arrow = arrow or self
-        dash_rot_angle_map = self._get_location_to_angle_map(arrow.motion)
-        return dash_rot_angle_map.get(
-            (arrow.motion.start_loc, arrow.motion.end_loc), 0
-        ).get(self.loc, 0)
+        dash_rot_angle = self._get_location_to_angle_map(arrow.motion)
+        return dash_rot_angle
 
     def _get_static_rotation_angle(
         self, arrow: Optional["Arrow"] = None
     ) -> RotationAngles:
         arrow = arrow or self
         static_rot_angle = self._get_location_to_angle_map(arrow.motion)
-        return static_rot_angle.get(self.loc, 0)
+        return static_rot_angle
 
     def _get_location_to_angle_map(
         self, motion: "Motion"
     ) -> Dict[PropRotationDirection, Dict[Location, int]]:
+        from objects.pictograph.pictograph import Pictograph
+
+        if isinstance(self.scene, Pictograph):
+            other_motion = (
+                self.scene.arrows[RED].motion
+                if self.color == BLUE
+                else self.scene.arrows[BLUE].motion
+            )
+
         if motion.motion_type == PRO:
-            return {
-                CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 90,
-                    SOUTHWEST: 180,
-                    NORTHWEST: 270,
-                },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 270,
-                    SOUTHEAST: 180,
-                    SOUTHWEST: 90,
-                    NORTHWEST: 0,
-                },
-            }.get(motion.prop_rot_dir, {})
+            return (
+                {
+                    CLOCKWISE: {
+                        NORTHEAST: 0,
+                        SOUTHEAST: 90,
+                        SOUTHWEST: 180,
+                        NORTHWEST: 270,
+                    },
+                    COUNTER_CLOCKWISE: {
+                        NORTHEAST: 270,
+                        SOUTHEAST: 180,
+                        SOUTHWEST: 90,
+                        NORTHWEST: 0,
+                    },
+                }
+                .get(motion.prop_rot_dir, {})
+                .get(self.loc, 0)
+            )
         elif motion.motion_type == ANTI:
-            return {
-                CLOCKWISE: {
-                    NORTHEAST: 270,
-                    SOUTHEAST: 180,
-                    SOUTHWEST: 90,
-                    NORTHWEST: 0,
-                },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 90,
-                    SOUTHWEST: 180,
-                    NORTHWEST: 270,
-                },
-            }.get(motion.prop_rot_dir, {})
+            return (
+                {
+                    CLOCKWISE: {
+                        NORTHEAST: 270,
+                        SOUTHEAST: 180,
+                        SOUTHWEST: 90,
+                        NORTHWEST: 0,
+                    },
+                    COUNTER_CLOCKWISE: {
+                        NORTHEAST: 0,
+                        SOUTHEAST: 90,
+                        SOUTHWEST: 180,
+                        NORTHWEST: 270,
+                    },
+                }
+                .get(motion.prop_rot_dir, {})
+                .get(self.loc, 0)
+            )
         elif motion.motion_type == STATIC:
-            return {
-                CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 0,
-                    SOUTHWEST: 0,
-                    NORTHWEST: 0,
-                },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 0,
-                    SOUTHWEST: 0,
-                    NORTHWEST: 0,
-                },
-            }.get(motion.prop_rot_dir, {})
+            return (
+                {
+                    CLOCKWISE: {
+                        NORTHEAST: 0,
+                        SOUTHEAST: 0,
+                        SOUTHWEST: 0,
+                        NORTHWEST: 0,
+                    },
+                    COUNTER_CLOCKWISE: {
+                        NORTHEAST: 0,
+                        SOUTHEAST: 0,
+                        SOUTHWEST: 0,
+                        NORTHWEST: 0,
+                    },
+                }
+                .get(motion.prop_rot_dir, {})
+                .get(self.loc, 0)
+            )
+
         elif motion.motion_type == DASH:
-            return {
-                NO_ROTATION: {
+            if self.scene.letter == "Λ-":
+                if self.loc:
+                    dir_map = {
+                        ((NORTH, SOUTH), (EAST, WEST)): {EAST: 90},
+                        ((EAST, WEST), (NORTH, SOUTH)): {NORTH: 180},
+                        ((NORTH, SOUTH), (WEST, EAST)): {WEST: 90},
+                        ((WEST, EAST), (NORTH, SOUTH)): {NORTH: 0},
+                        ((SOUTH, NORTH), (EAST, WEST)): {EAST: 270},
+                        ((EAST, WEST), (SOUTH, NORTH)): {SOUTH: 180},
+                        ((SOUTH, NORTH), (WEST, EAST)): {WEST: 270},
+                        ((WEST, EAST), (SOUTH, NORTH)): {SOUTH: 0},
+                    }
+                    arrow_angle = dir_map.get(
+                        (
+                            (self.motion.start_loc, self.motion.end_loc),
+                            (other_motion.start_loc, other_motion.end_loc),
+                        )
+                    ).get(self.loc)
+                    return arrow_angle
+
+                else:
+                    dir_map = {
+                        ((NORTH, SOUTH), (EAST, WEST)): EAST,
+                        ((EAST, WEST), (NORTH, SOUTH)): NORTH,
+                        ((NORTH, SOUTH), (WEST, EAST)): WEST,
+                        ((WEST, EAST), (NORTH, SOUTH)): NORTH,
+                        ((SOUTH, NORTH), (EAST, WEST)): EAST,
+                        ((EAST, WEST), (SOUTH, NORTH)): SOUTH,
+                        ((SOUTH, NORTH), (WEST, EAST)): WEST,
+                        ((WEST, EAST), (SOUTH, NORTH)): SOUTH,
+                    }
+
+                    arrow_loc = dir_map.get(
+                        (
+                            (self.motion.start_loc, self.motion.end_loc),
+                            (other_motion.start_loc, other_motion.end_loc),
+                        )
+                    )
+
+                    self.loc = arrow_loc
+                    
+                    map = {
+                        (NORTH, SOUTH): {EAST: 90, WEST: 90},
+                        (SOUTH, NORTH): {EAST: 270, WEST: 270},
+                        (EAST, WEST): {NORTH: 180, SOUTH: 180},
+                        (WEST, EAST): {NORTH: 0, SOUTH: 0},
+                    }
+                    
+                    return map.get((self.motion.start_loc, self.motion.end_loc), {}).get(
+                        self.loc
+                    )
+            else:
+                map = {
                     (NORTH, SOUTH): {EAST: 90, WEST: 90},
                     (SOUTH, NORTH): {EAST: 270, WEST: 270},
                     (EAST, WEST): {NORTH: 180, SOUTH: 180},
                     (WEST, EAST): {NORTH: 0, SOUTH: 0},
-                },
-            }.get(motion.prop_rot_dir, {})
+                }
+                return map.get((self.motion.start_loc, self.motion.end_loc), {}).get(
+                    self.loc
+                )
 
     def get_attributes(self) -> ArrowAttributesDicts:
         arrow_attributes = [COLOR, LOCATION, MOTION_TYPE, TURNS]
@@ -291,13 +365,18 @@ class Arrow(GraphicalObject):
             self.update_attributes(arrow_dict)
             if hasattr(self, GHOST) and self.ghost:
                 self.ghost.update_arrow(arrow_dict)
-        if hasattr(self, GHOST) and self.ghost:
+        if not self.is_ghost and self.ghost:
+            self.update_svg()
+            self.update_mirror()
+            self.update_color()
+            self.update_rotation()
+
             self.ghost.transform = self.transform
             self.ghost.update_arrow()
-        self.update_svg()
-        self.update_mirror()
-        self.update_color()
-        self.update_rotation()
+            self.ghost.update_svg()
+            self.ghost.update_mirror()
+            self.ghost.update_color()
+            self.ghost.update_rotation()
 
     def mirror_svg(self) -> None:
         self.set_arrow_transform_origin_to_center()

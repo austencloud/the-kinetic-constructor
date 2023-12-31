@@ -319,6 +319,8 @@ class Pictograph(QGraphicsScene):
             motion_dicts.sort(key=lambda x: motion_type_order.index(x[MOTION_TYPE]))
 
             for motion_dict in motion_dicts:
+                self.motions[motion_dict[COLOR]].update_attributes(motion_dict)
+            for motion_dict in motion_dicts:
                 self.motions[motion_dict[COLOR]].update_motion(motion_dict)
         else:
             self._update_motions()
