@@ -206,6 +206,18 @@ class Grid:
             # Fallback for an unsupported grid mode
             return {}
 
+    def get_handpoints(self) -> Dict[str, QPointF]:
+        """
+        Retrieves the dictionary containing handpoints based on the current grid mode.
+        """
+        if self.grid_mode == DIAMOND:
+            return self.diamond_hand_points
+        elif self.grid_mode == BOX:
+            return self.box_hand_points
+        else:
+            # Fallback for an unsupported grid mode
+            return {}
+
     def setPos(self, position: QPointF) -> None:
         for item in self.items.values():
             item.setPos(position)

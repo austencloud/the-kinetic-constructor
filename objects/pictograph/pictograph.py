@@ -305,13 +305,24 @@ class Pictograph(QGraphicsScene):
         self, pictograph_dict: PictographAttributesDict = None
     ) -> None:
         if pictograph_dict:
+            self.pictograph_dict = pictograph_dict
             self.update_attributes(pictograph_dict)
+            motion_dicts = []
             for color in [RED, BLUE]:
                 motion_dict = self._create_motion_dict(pictograph_dict, color)
-                self.motions[color].update_motion(motion_dict)
+                motion_dicts.append(motion_dict)
+
+            # Define the order of motion types
+            motion_type_order = [PRO, ANTI, FLOAT, DASH, STATIC]
+
+            # Sort motion_dicts based on motion type
+            motion_dicts.sort(key=lambda x: motion_type_order.index(x[MOTION_TYPE]))
+
+            for motion_dict in motion_dicts:
+                self.motions[motion_dict[COLOR]].update_motion(motion_dict)
         else:
             self._update_motions()
-
+            
         self._position_objects()
         self._update_letter()
         if self.graph_type == MAIN:

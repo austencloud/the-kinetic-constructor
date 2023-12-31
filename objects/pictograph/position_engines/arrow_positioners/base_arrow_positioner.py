@@ -38,11 +38,10 @@ class BaseArrowPositioner:
 
     ### PUBLIC METHODS ###
     def update_arrow_positions(self) -> None:
-        self.arrows = self.pictograph.arrows.values()
         self.ghost_arrows = self.pictograph.ghost_arrows.values()
         self.current_letter = self.pictograph.letter
 
-        for arrow in self.arrows:
+        for arrow in self.pictograph.arrows.values():
             if arrow.motion.is_shift():
                 self._set_shift_to_default_loc(arrow)
                 self._set_shift_to_default_loc(arrow.ghost)
@@ -77,11 +76,6 @@ class BaseArrowPositioner:
             reposition_method()
 
     ### SHIFT ###
-    def _set_shift_to_optimal_loc(self, arrow: Arrow, optimal_locations: Dict) -> None:
-        optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
-        if optimal_location:
-            arrow.setPos(optimal_location - arrow.boundingRect().center())
-
     def _set_shift_to_default_loc(self, arrow: Arrow, _: Dict = None) -> None:
         arrow.set_arrow_transform_origin_to_center()
         if not arrow.is_ghost:
@@ -92,11 +86,6 @@ class BaseArrowPositioner:
         arrow.setPos(new_pos)
 
     ### DASH ###
-    def _set_dash_to_optimal_loc(self, arrow: Arrow, optimal_locations: Dict) -> None:
-        optimal_location = optimal_locations.get(f"optimal_{arrow.color}_location")
-        if optimal_location:
-            arrow.setPos(optimal_location - arrow.boundingRect().center())
-
     def _set_dash_to_default_loc(self, arrow: Arrow, _: Dict = None) -> None:
         arrow.set_arrow_transform_origin_to_center()
         if not arrow.is_ghost:
@@ -113,7 +102,55 @@ class BaseArrowPositioner:
 
     def _get_default_dash_loc(self, arrow: Arrow) -> QPointF:
         handpoints = self.pictograph.grid.get_handpoints()
-        return handpoints.get(arrow.location, QPointF(0, 0))
+        other_arrow = (
+            self.pictograph.arrows[RED]
+            if arrow.color == BLUE
+            else self.pictograph.arrows[BLUE]
+        )
+        if other_arrow.motion.is_shift():
+            if arrow.motion.end_loc in [NORTH, SOUTH]:
+                if other_arrow.location in [SOUTHEAST, NORTHEAST]:
+                    return handpoints.get(WEST)
+                elif other_arrow.location in [SOUTHWEST, NORTHWEST]:
+                    return handpoints.get(EAST)
+            elif arrow.motion.end_loc in [EAST, WEST]:
+                if other_arrow.location in [SOUTHEAST, SOUTHWEST]:
+                    return handpoints.get(NORTH)
+                elif other_arrow.location in [NORTHEAST, NORTHWEST]:
+                    return handpoints.get(SOUTH)
+            else:
+                print("ERROR: Arrow motion end_loc not found")
+        elif other_arrow.motion.is_dash():
+            if other_arrow.location:
+                return self.get_opposite_location(other_arrow.location)
+            else:
+                if arrow.color == BLUE:
+                    if arrow.motion.end_loc == NORTH:
+                        return handpoints.get(WEST)
+                    elif arrow.motion.end_loc == EAST:
+                        return handpoints.get(NORTH)
+                    elif arrow.motion.end_loc == SOUTH:
+                        return handpoints.get(EAST)
+                    elif arrow.motion.end_loc == WEST:
+                        return handpoints.get(SOUTH)
+                elif arrow.color == RED:
+                    if arrow.motion.end_loc == NORTH:
+                        return handpoints.get(EAST)
+                    elif arrow.motion.end_loc == EAST:
+                        return handpoints.get(SOUTH)
+                    elif arrow.motion.end_loc == SOUTH:
+                        return handpoints.get(WEST)
+                    elif arrow.motion.end_loc == WEST:
+                        return handpoints.get(NORTH)
+
+        elif other_arrow.motion.is_static():
+            return handpoints.get(arrow.location)
+        else:
+            print("ERROR: Arrow motion not found")
+
+    def get_opposite_location(self, location: str) -> str:
+        opposite_map = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
+        return opposite_map.get(location, "")
 
     def _calculate_adjustment_tuple(self, location: str, distance: int) -> QPointF:
         location_adjustments = {

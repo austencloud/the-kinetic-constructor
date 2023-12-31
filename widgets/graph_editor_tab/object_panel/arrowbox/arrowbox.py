@@ -104,7 +104,7 @@ class ArrowBox(ObjectBox):
 
         for motion in self.motions:
             motion.arrow.location = motion.get_arrow_location(
-                motion.start_loc, motion.end_loc
+                motion.start_loc, motion.end_loc, motion.motion_type
             )
 
         

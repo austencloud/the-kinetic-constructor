@@ -128,7 +128,7 @@ class OptionPickerScrollArea(PictographScrollArea):
             prop.motion.update_prop_ori()
             prop.update_prop()
             arrow.location = arrow.motion.get_arrow_location(
-                arrow.motion.start_loc, arrow.motion.end_loc
+                arrow.motion.start_loc, arrow.motion.end_loc, arrow.motion.motion_type
             )
         option.update_pictograph()
 

@@ -47,7 +47,7 @@ class Arrow(GraphicalObject):
     def __init__(self, scene, arrow_dict, motion: "Motion") -> None:
         super().__init__(scene)
         self.motion = motion
-        
+
         self.svg_file = self.get_svg_file(
             arrow_dict[MOTION_TYPE],
             arrow_dict[TURNS],
@@ -55,7 +55,7 @@ class Arrow(GraphicalObject):
         self.setup_svg_renderer(self.svg_file)
         self.setAcceptHoverEvents(True)
         self.update_attributes(arrow_dict)
-        
+
         self.prop: Prop = None
         self.scene: Pictograph | ArrowBox = scene
         self.is_svg_mirrored: bool = False
@@ -66,14 +66,14 @@ class Arrow(GraphicalObject):
         self.drag_offset = QPointF(0, 0)
         self.center_x = self.boundingRect().center().x()
         self.center_y = self.boundingRect().center().y()
-        
+
     ### SETUP ###
 
     def update_svg(self, svg_file: str = None) -> None:
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.svg_file = svg_file
         super().update_svg(svg_file)
-        
+
     ### MOUSE EVENTS ###
 
     def mousePressEvent(self, event) -> None:
@@ -143,7 +143,12 @@ class Arrow(GraphicalObject):
             self.unmirror_svg()
 
     def update_rotation(self) -> None:
-        angle = self.get_arrow_rotation_angle()
+        if self.motion.is_shift():
+            angle = self._get_shift_rotation_angle()
+        elif self.motion.is_dash():
+            angle = self._get_dash_rotation_angle()
+        elif self.motion.is_static():
+            angle = self._get_static_rotation_angle()
         self.setRotation(angle)
 
     def update_prop_during_drag(self) -> None:
@@ -158,7 +163,6 @@ class Arrow(GraphicalObject):
                         LOCATION: self.motion.end_loc,
                     }
                 )
-
                 prop.show()
                 prop.update_prop()
                 self.scene.update_pictograph()
@@ -175,24 +179,33 @@ class Arrow(GraphicalObject):
 
     ### GETTERS ###
 
-    def get_svg_data(self, svg_file: str) -> bytes:
-        with open(svg_file, "r") as f:
-            svg_data = f.read()
-        return svg_data.encode("utf-8")
-
-    def get_arrow_rotation_angle(
+    def _get_shift_rotation_angle(
         self, arrow: Optional["Arrow"] = None
     ) -> RotationAngles:
         arrow = arrow or self
-        location_to_angle = self.get_location_to_angle_map(
-            arrow.motion.motion_type, arrow.motion.prop_rot_dir
-        )
-        return location_to_angle.get(self.location, 0)
+        shift_rot_angle = self._get_location_to_angle_map(arrow.motion)
+        return shift_rot_angle.get(self.location, 0)
 
-    def get_location_to_angle_map(
-        self, motion_type: MotionType, prop_rot_dir: PropRotationDirection
+    def _get_dash_rotation_angle(
+        self, arrow: Optional["Arrow"] = None
+    ) -> RotationAngles:
+        arrow = arrow or self
+        dash_rot_angle_map = self._get_location_to_angle_map(arrow.motion)
+        return dash_rot_angle_map.get(
+            (arrow.motion.start_loc, arrow.motion.end_loc), 0
+        ).get(self.location, 0)
+
+    def _get_static_rotation_angle(
+        self, arrow: Optional["Arrow"] = None
+    ) -> RotationAngles:
+        arrow = arrow or self
+        static_rot_angle = self._get_location_to_angle_map(arrow.motion)
+        return static_rot_angle.get(self.location, 0)
+
+    def _get_location_to_angle_map(
+        self, motion: "Motion"
     ) -> Dict[PropRotationDirection, Dict[Location, int]]:
-        if motion_type == PRO:
+        if motion.motion_type == PRO:
             return {
                 CLOCKWISE: {
                     NORTHEAST: 0,
@@ -206,8 +219,8 @@ class Arrow(GraphicalObject):
                     SOUTHWEST: 90,
                     NORTHWEST: 0,
                 },
-            }.get(prop_rot_dir, {})
-        elif motion_type == ANTI:
+            }.get(motion.prop_rot_dir, {})
+        elif motion.motion_type == ANTI:
             return {
                 CLOCKWISE: {
                     NORTHEAST: 270,
@@ -221,8 +234,8 @@ class Arrow(GraphicalObject):
                     SOUTHWEST: 180,
                     NORTHWEST: 270,
                 },
-            }.get(prop_rot_dir, {})
-        elif motion_type == STATIC:
+            }.get(motion.prop_rot_dir, {})
+        elif motion.motion_type == STATIC:
             return {
                 CLOCKWISE: {
                     NORTHEAST: 0,
@@ -236,22 +249,16 @@ class Arrow(GraphicalObject):
                     SOUTHWEST: 0,
                     NORTHWEST: 0,
                 },
-            }.get(prop_rot_dir, {})
-        elif motion_type == DASH:
+            }.get(motion.prop_rot_dir, {})
+        elif motion.motion_type == DASH:
             return {
-                CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 0,
-                    SOUTHWEST: 0,
-                    NORTHWEST: 0,
+                NO_ROTATION: {
+                    (NORTH, SOUTH): {EAST: 90, WEST: 90},
+                    (SOUTH, NORTH): {EAST: 270, WEST: 270},
+                    (EAST, WEST): {NORTH: 180, SOUTH: 180},
+                    (WEST, EAST): {NORTH: 0, SOUTH: 0},
                 },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 0,
-                    SOUTHWEST: 0,
-                    NORTHWEST: 0,
-                },
-            }.get(prop_rot_dir, {})
+            }.get(motion.prop_rot_dir, {})
 
     def get_attributes(self) -> ArrowAttributesDicts:
         arrow_attributes = [COLOR, LOCATION, MOTION_TYPE, TURNS]
@@ -270,7 +277,7 @@ class Arrow(GraphicalObject):
             END_LOC: self.motion.prop.loc,
         }
         self.motion.update_motion(motion_dict)
-        
+
         self.motion[COLOR] = self.color
         self.motion[MOTION_TYPE] = STATIC
         self.motion[TURNS] = 0
@@ -278,7 +285,6 @@ class Arrow(GraphicalObject):
         self.motion[START_LOC] = self.motion.prop.loc
         self.motion[END_LOC] = self.motion.prop.loc
         self.location = self.motion.prop.loc
-
 
     def update_arrow(self, arrow_dict: ArrowAttributesDicts = None) -> None:
         if arrow_dict:

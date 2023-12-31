@@ -41,7 +41,9 @@ class Type3Generator(BaseDataFrameGenerator):
                         red_motion_type, shift_handpath
                     )
                 else:
-                    red_prop_rot_dir = "NoRotation"  # Explicitly indicating no rotation
+                    red_prop_rot_dir = (
+                        "no_rotation"  # Explicitly indicating no rotation
+                    )
 
                 if blue_motion_type in [PRO, ANTI]:
                     blue_prop_rot_dir = self.get_prop_rot_dir(
@@ -49,7 +51,7 @@ class Type3Generator(BaseDataFrameGenerator):
                     )
                 else:
                     blue_prop_rot_dir = (
-                        "NoRotation"  # Explicitly indicating no rotation
+                        "no_rotation"  # Explicitly indicating no rotation
                     )
 
                 if red_motion_type == DASH:

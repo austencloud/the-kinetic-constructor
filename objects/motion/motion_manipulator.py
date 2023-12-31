@@ -58,8 +58,8 @@ class MotionManipulator:
             new_rot_dir = CLOCKWISE
         elif self.motion.prop_rot_dir == CLOCKWISE:
             new_rot_dir = COUNTER_CLOCKWISE
-        elif self.motion.prop_rot_dir == "NoRotation":
-            new_rot_dir = "NoRotation"
+        elif self.motion.prop_rot_dir == "no_rotation":
+            new_rot_dir = "no_rotation"
 
         new_start_loc = self.motion.end_loc
         new_end_loc = self.motion.start_loc
@@ -85,8 +85,8 @@ class MotionManipulator:
             new_rot_dir = CLOCKWISE
         elif self.motion.prop_rot_dir == CLOCKWISE:
             new_rot_dir = COUNTER_CLOCKWISE
-        elif self.motion.prop_rot_dir == "NoRotation":
-            new_rot_dir = "NoRotation"
+        elif self.motion.prop_rot_dir == "no_rotation":
+            new_rot_dir = "no_rotation"
 
         self.prop.swap_ori(self.prop.ori)
         pictograph_dict = {
