@@ -259,7 +259,7 @@ class TurnsWidget(AttrBoxWidget):
         self.setMinimumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
         self.setMaximumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
 
-        self.spacing = self.attr_box.pictograph.view.width() // 250
+        self.spacing = self.attr_box.attr_panel.width() // 250
 
         border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
         self.turnbox.setMaximumWidth(int(self.attr_box.width() / 3.25))

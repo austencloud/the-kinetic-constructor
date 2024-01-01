@@ -66,7 +66,7 @@ class GraphEditor(QFrame):
         self.main_pictograph = MainPictograph(main_widget, self)
         self.arrowbox = ArrowBox(main_widget, self)
         self.propbox = PropBox(main_widget, self)
-        self.attr_panel = AttrPanel(self)
+        self.attr_panel = AttrPanel(self, "graph_editor")
 
         self.pictograph_widget = MainPictographWidget(self, self.main_pictograph.view)
 
