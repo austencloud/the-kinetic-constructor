@@ -157,17 +157,16 @@ class Pictograph(QGraphicsScene):
         pictograph_dict: PictographAttributesDict,
         color: Color,
     ) -> MotionAttributesDicts:
-        return {
+        motion_dict = {
             COLOR: color,
-            ARROW: self.arrows[color],
-            PROP: self.props[color],
-            MOTION_TYPE: pictograph_dict[f"{color}_motion_type"],
-            PROP_ROT_DIR: pictograph_dict[f"{color}_prop_rot_dir"],
-            START_LOC: pictograph_dict[f"{color}_start_loc"],
-            END_LOC: pictograph_dict[f"{color}_end_loc"],
-            TURNS: pictograph_dict[f"{color}_turns"],
-            START_ORI: pictograph_dict[f"{color}_start_ori"],
+            MOTION_TYPE: pictograph_dict.get(f"{color}_motion_type"),
+            PROP_ROT_DIR: pictograph_dict.get(f"{color}_prop_rot_dir"),
+            START_LOC: pictograph_dict.get(f"{color}_start_loc"),
+            END_LOC: pictograph_dict.get(f"{color}_end_loc"),
+            TURNS: pictograph_dict.get(f"{color}_turns"),
+            START_ORI: pictograph_dict.get(f"{color}_start_ori"),
         }
+        return {k: v for k, v in motion_dict.items() if v is not None}
 
     ### EVENT HANDLERS ###
 
@@ -283,9 +282,32 @@ class Pictograph(QGraphicsScene):
         for attr_name, attr_value in pictograph_dict.items():
             setattr(self, attr_name, attr_value)
 
+    def is_complete(self, pictograph_dict: PictographAttributesDict) -> bool:
+        required_keys = [
+            'letter',
+            'start_pos',
+            'end_pos',
+            'blue_motion_type',
+            'blue_prop_rot_dir',
+            'blue_start_loc',
+            'blue_end_loc',
+            'blue_start_ori',
+            'blue_turns',
+            'red_motion_type',
+            'red_prop_rot_dir',
+            'red_start_loc',
+            'red_end_loc',
+            'red_start_ori',
+            'red_turns',
+        ]
+        return all(key in pictograph_dict for key in required_keys)
+
     def update_pictograph(
         self, pictograph_dict: PictographAttributesDict = None
     ) -> None:
+        if self.is_complete(pictograph_dict):
+            self.pictograph_dict = pictograph_dict
+            
         if pictograph_dict is not None:
             self._update_from_pictograph_dict(pictograph_dict)
 
@@ -295,7 +317,6 @@ class Pictograph(QGraphicsScene):
             self._update_attr_panel()
 
     def _update_from_pictograph_dict(self, pictograph_dict):
-        self.pictograph_dict = pictograph_dict
         self.update_attributes(pictograph_dict)
         motion_dicts = []
         for color in [RED, BLUE]:
@@ -303,10 +324,11 @@ class Pictograph(QGraphicsScene):
             motion_dicts.append(motion_dict)
 
             # Define the order of motion types
-        motion_type_order = [PRO, ANTI, FLOAT, DASH, STATIC]
 
         # Sort motion_dicts based on motion type
-        motion_dicts.sort(key=lambda x: motion_type_order.index(x[MOTION_TYPE]))
+        
+        # motion_type_order = [PRO, ANTI, FLOAT, DASH, STATIC]
+        # motion_dicts.sort(key=lambda x: motion_type_order.index(x[MOTION_TYPE]))
 
         for motion_dict in motion_dicts:
             self.motions[motion_dict[COLOR]].update_attributes(motion_dict)

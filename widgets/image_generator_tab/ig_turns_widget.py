@@ -32,27 +32,15 @@ if TYPE_CHECKING:
 class IGTurnsWidget(BaseTurnsWidget):
     def __init__(self, attr_box: "IGAttrBox") -> None:
         super().__init__(attr_box)
+        self.attr_box = attr_box
         self._initialize_ui()
 
     def _initialize_ui(self) -> None:
-        super()._initialize_ui() 
+        super()._initialize_ui()
         self.turnbox_hbox_frame: QFrame = self._create_turnbox_hbox_frame()
         self._setup_layout_frames()
 
     ### LAYOUTS ###
-
-
-
-    def _setup_layouts(self) -> None:
-        """Sets up the main and auxiliary layouts for the widget."""
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.header_layout = QHBoxLayout()
-        self.buttons_layout = QHBoxLayout()
-        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
 
     def _setup_layout_frames(self) -> None:
         """Adds the header and buttons to their respective frames."""
@@ -66,88 +54,54 @@ class IGTurnsWidget(BaseTurnsWidget):
         self.layout.addWidget(self.header_frame)
         self.layout.addWidget(self.button_frame)
 
-
-
     ### WIDGETS ###
-
-    def _create_clock_labels(self) -> None:
-        """Creates and configures the clock labels for rotation direction."""
-        self.clock_left, self.clock_right = QLabel(), QLabel()
-        for clock in [self.clock_left, self.clock_right]:
-            clock.setLayout(QVBoxLayout())
-            clock.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            clock.setSizePolicy(
-                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
-            )
 
     def _create_turnbox_hbox_frame(self) -> None:
         """Creates the turns box and buttons for turn adjustments."""
-
-        self.turnbox.currentTextChanged.connect(self._update_turns)
-        self.buttons = [
-            self._create_turns_button(text) for text in ["-1", "-0.5", "+0.5", "+1"]
-        ]
         turnbox_frame = QFrame(self)
-
         turnbox_frame.setLayout(QHBoxLayout())
 
-        self.header_label = QLabel("Turns")
-        self.header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.turns_label = QLabel("Turns")
 
-        turnbox_frame.layout().addWidget(self.header_label)
+        turnbox_frame.layout().addWidget(self.turns_label)
         turnbox_frame.layout().addWidget(self.turnbox)
-        turnbox_frame.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
-        )
+
         turnbox_frame.layout().setContentsMargins(0, 0, 0, 0)
         turnbox_frame.layout().setAlignment(Qt.AlignmentFlag.AlignCenter)
         turnbox_frame.layout().setSpacing(0)
         return turnbox_frame
 
-
-    def _create_clock_pixmap(self, icon_path: str) -> QPixmap:
-        """Load and scale a clock pixmap based on the initial size."""
-        pixmap = QPixmap(icon_path)
-        if pixmap.isNull():
-            print(f"Failed to load the icon from {icon_path}.")
-            return QPixmap()
-        return pixmap
-
-
     ### CALLBACKS ###
-
-
-
 
     ## UPDATE THESE TO WORK ON ALL PICTOGRAPHS IN THE SCROLL AREA
 
     def _add_turn_callback(self) -> None:
-        motion = self.attr_box.pictograph.motions[self.attr_box.color]
-        if motion:
+        for pictograph in self.attr_box.pictographs.values():
+            motion: Motion = pictograph.motions[self.attr_box.color]
             motion.add_turn()
-            self.attr_box.update_attr_box(motion)
+        self.attr_box.update_attr_box(motion)
 
     def _subtract_turn_callback(self) -> None:
-        motion = self.attr_box.pictograph.motions[self.attr_box.color]
-        if motion:
+        for pictograph in self.attr_box.pictographs.values():
+            motion: Motion = pictograph.motions[self.attr_box.color]
             motion.subtract_turn()
-            self.attr_box.update_attr_box(motion)
+        self.attr_box.update_attr_box(motion)
 
     def _add_half_turn_callback(self) -> None:
-        motion = self.attr_box.pictograph.motions[self.attr_box.color]
-        if motion:
+        for pictograph in self.attr_box.pictographs.values():
+            motion: Motion = pictograph.motions[self.attr_box.color]
             motion.add_half_turn()
-            self.attr_box.update_attr_box(motion)
+        self.attr_box.update_attr_box(motion)
 
     def _subtract_half_turn_callback(self) -> None:
-        motion = self.attr_box.pictograph.motions[self.attr_box.color]
-        if motion:
+        for pictograph in self.attr_box.pictographs.values():
+            motion: Motion = pictograph.motions[self.attr_box.color]
             motion.subtract_half_turn()
-            self.attr_box.update_attr_box(motion)
+        self.attr_box.update_attr_box(motion)
 
     ### UPDATE METHODS ###
 
-    def update_turnbox(self, turns) -> None:
+    def _update_turnbox(self, turns) -> None:
         turns_str = str(turns)
         for i in range(self.turnbox.count()):
             if self.turnbox.itemText(i) == turns_str:
@@ -159,19 +113,24 @@ class IGTurnsWidget(BaseTurnsWidget):
     def _update_turns(self, index: int) -> None:
         turns = str(index)
         if turns == "0" or turns == "1" or turns == "2" or turns == "3":
-            motion: Motion = self.attr_box.pictograph.motions[self.attr_box.color]
-            if motion and motion.arrow:
-                if int(turns) != motion.turns:
-                    motion.update_turns(int(turns))
-                    self.attr_box.update_attr_box(motion)
-                    self.attr_box.pictograph.update()
+            for pictograph in self.attr_box.pictographs.values():
+                motion: Motion = pictograph.motions[self.attr_box.color]
+                if motion and motion.arrow:
+                    if int(turns) != motion.turns:
+                        motion.turns = int(turns)
+                        dict = {f"{motion.color}_turns": motion.turns}
+                        self.attr_box.update_attr_box(motion)
+                        pictograph.update_pictograph(dict)
+
         elif turns == "0.5" or turns == "1.5" or turns == "2.5":
-            motion: Motion = self.attr_box.pictograph.motions[self.attr_box.color]
-            if motion:
-                if float(turns) != motion.turns:
-                    motion.update_turns(float(turns))
-                    self.attr_box.update_attr_box(motion)
-                    self.attr_box.pictograph.update()
+            for pictograph in self.attr_box.pictographs.values():
+                motion: Motion = pictograph.motions[self.attr_box.color]
+                if motion:
+                    if float(turns) != motion.turns:
+                        motion.turns = float(turns)
+                        dict = {f"{motion.color}_turns": motion.turns}
+                        self.attr_box.update_attr_box(motion)
+                        pictograph.update_pictograph(dict)
         else:
             self.turnbox.setCurrentIndex(-1)
 
@@ -185,29 +144,24 @@ class IGTurnsWidget(BaseTurnsWidget):
         self.header_frame.setMaximumHeight(header_height)
         # self.button_frame.setMaximumHeight(self.button_frame.height())
 
-
-
     def _update_turnbox_size(self) -> None:
+        self.spacing = self.attr_box.attr_panel.width() // 250
+        border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
+        box_font_size = int(self.attr_box.width() / 10)
+        dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
+        border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
+
         self.setMinimumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
         self.setMaximumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
 
-        self.spacing = self.attr_box.attr_panel.width() // 250
-
-        border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
-        self.turnbox.setMaximumWidth(int(self.attr_box.width() / 3.25))
-
-        self.turnbox.setMinimumHeight(int(self.attr_box.height() / 8))
-        self.turnbox.setMaximumHeight(int(self.attr_box.height() / 8))
-        box_font_size = int(self.attr_box.width() / 10)
-
-        self.header_label.setContentsMargins(0, 0, self.spacing, 0)
-        self.header_label.setFont(QFont("Arial", int(self.width() / 22)))
-
+        self.turnbox.setMinimumHeight(int(self.attr_box.height() / 4))
+        self.turnbox.setMaximumHeight(int(self.attr_box.height() / 4))
+        self.turnbox.setMinimumWidth(int(self.attr_box.width() / 4))
+        self.turnbox.setMaximumWidth(int(self.attr_box.width() / 4))
         self.turnbox.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
-        dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
 
-        # Calculate the border radius as a fraction of the width or height
-        border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
+        self.turns_label.setContentsMargins(0, 0, self.spacing, 0)
+        self.turns_label.setFont(QFont("Arial", int(self.width() / 22)))
 
         # Adjust the stylesheet to add padding inside the combo box on the left
         self.turnbox.setStyleSheet(
@@ -235,16 +189,16 @@ class IGTurnsWidget(BaseTurnsWidget):
             }}
         """
         )
-        self.turnbox_hbox_frame.setMinimumWidth(int(self.attr_box.width() / 3.25))
-        self.turnbox_hbox_frame.setMaximumWidth(int(self.attr_box.width() / 3.25))
+        # self.turnbox_hbox_frame.setMinimumWidth(int(self.attr_box.width() / 3.25))
+        # self.turnbox_hbox_frame.setMaximumWidth(int(self.attr_box.width() / 3.25))
 
     def _update_button_size(self) -> None:
         for button in self.buttons:
-            button_size = int(self.attr_box.width() / 7)
+            button_size = int(self.attr_box.width() / 8)
             if button.text() == "-0.5" or button.text() == "+0.5":
                 button_size = int(button_size * 0.85)
-            else:
-                button_size = int(self.attr_box.width() / 6)
+            else:  # button.text() == "-1" or button.text() == "+1":
+                button_size = int(self.attr_box.width() / 7)
             button.update_custom_button_size(button_size)
 
     def resize_turns_widget(self):

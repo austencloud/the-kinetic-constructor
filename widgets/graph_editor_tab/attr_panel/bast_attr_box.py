@@ -61,14 +61,4 @@ class BaseAttrBox(QFrame):
     def clear_attr_box(self: Union["IGAttrBox", "GraphEditorAttrBox"]) -> None:
         self.start_end_loc_widget.clear_start_end_boxes()
         self.turns_widget.turnbox.setCurrentIndex(-1)
-        self.turns_widget.update_clocks(None)
-
-    def update_attr_box(
-        self: Union["IGAttrBox", "GraphEditorAttrBox"], motion: Motion = None
-    ) -> None:
-        self.turns_widget.update_clocks(motion.prop_rot_dir)
-        self.start_end_loc_widget.update_start_end_loc_boxes(
-            motion.start_loc, motion.end_loc
-        )
-        if motion.prop_rot_dir:
-            self.turns_widget.update_turnbox(motion.turns)
+        self.turns_widget._update_clocks(None)

@@ -2,7 +2,9 @@ from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtGui import QPixmap
 from Enums import Color
 from objects.motion.motion import Motion
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.graph_editor_turns_widget import GraphEditorTurnsWidget
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.graph_editor_turns_widget import (
+    GraphEditorTurnsWidget,
+)
 from widgets.graph_editor_tab.attr_panel.bast_attr_box import BaseAttrBox
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
@@ -47,12 +49,12 @@ class GraphEditorAttrBox(BaseAttrBox):
         self.motion_type_widget = MotionTypeWidget(self)
         self.header_widget = HeaderWidget(self)
         self.start_end_loc_widget = StartEndLocWidget(self)
-        self.turns_widget = GraphEditorTurnsWidget(self)
+        self.graph_editor_turns_widget = GraphEditorTurnsWidget(self)
 
         self.layout.addWidget(self.header_widget)
         self.layout.addWidget(self.motion_type_widget)
         self.layout.addWidget(self.start_end_loc_widget)
-        self.layout.addWidget(self.turns_widget)
+        self.layout.addWidget(self.graph_editor_turns_widget)
 
     ### CREATE LABELS ###
 
@@ -84,11 +86,19 @@ class GraphEditorAttrBox(BaseAttrBox):
         turns_widget_height = int(available_height * (2 / ratio_total))
         self.header_widget.setMaximumHeight(header_height)
         self.start_end_loc_widget.setMaximumHeight(start_end_height)
-        self.turns_widget.setMaximumHeight(turns_widget_height)
+        self.graph_editor_turns_widget.setMaximumHeight(turns_widget_height)
 
         self.header_widget.resize_header_widget()
         self.motion_type_widget.resize_motion_type_widget()
-        self.turns_widget.resize_turns_widget()
+        self.graph_editor_turns_widget.resize_turns_widget()
         self.start_end_loc_widget.resize_start_end_widget()
 
         self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
+
+    def update_attr_box(self, motion: Motion) -> None:
+        self.graph_editor_turns_widget._update_clocks(motion.prop_rot_dir)
+        self.start_end_loc_widget.update_start_end_loc_boxes(
+            motion.start_loc, motion.end_loc
+        )
+        if motion.prop_rot_dir:
+            self.graph_editor_turns_widget._update_turnbox(motion.turns)

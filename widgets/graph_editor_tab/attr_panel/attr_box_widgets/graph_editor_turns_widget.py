@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QPixmap
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Union
 from objects.motion.motion import Motion
 from constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, ICON_DIR
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
@@ -44,18 +44,6 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
         self._setup_layout_frames()
 
     ### LAYOUTS ###
-
-    def _setup_layouts(self) -> None:
-        """Sets up the main and auxiliary layouts for the widget."""
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.header_layout = QHBoxLayout()
-        self.buttons_layout = QHBoxLayout()
-
-        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
 
     def _setup_layout_frames(self) -> None:
         """Adds the header and buttons to their respective frames."""
@@ -93,23 +81,13 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
 
     def _create_turnbox_vbox_frame(self) -> None:
         """Creates the turns box and buttons for turn adjustments."""
-        self.turnbox: QComboBox = QComboBox(self)
-        self.turnbox.addItems(["0", "0.5", "1", "1.5", "2", "2.5", "3"])
-
-        self.turnbox.currentTextChanged.connect(self._update_turns)
-
-        self.turnbox.setCurrentIndex(-1)
-        self.buttons = [
-            self._create_turns_button(text) for text in ["-1", "-0.5", "+0.5", "+1"]
-        ]
         turnbox_frame = QFrame(self)
-
         turnbox_frame.setLayout(QVBoxLayout())
 
-        self.header_label = QLabel("Turns")
-        self.header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.turns_label = QLabel("Turns")
+        self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        turnbox_frame.layout().addWidget(self.header_label)
+        turnbox_frame.layout().addWidget(self.turns_label)
         turnbox_frame.layout().addWidget(self.turnbox)
         turnbox_frame.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
@@ -119,7 +97,6 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
         turnbox_frame.layout().setSpacing(0)
         return turnbox_frame
 
-
     def _create_clock_pixmap(self, icon_path: str) -> QPixmap:
         """Load and scale a clock pixmap based on the initial size."""
         pixmap = QPixmap(icon_path)
@@ -127,6 +104,7 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
             print(f"Failed to load the icon from {icon_path}.")
             return QPixmap()
         return pixmap
+
 
 
     ### CALLBACKS ###
@@ -157,7 +135,7 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
 
     ### UPDATE METHODS ###
 
-    def update_clocks(self, rot_dir: str) -> None:
+    def _update_clocks(self, rot_dir: str) -> None:
         # Clear both clock labels
         self.clock_left.clear()
         self.clock_right.clear()
@@ -171,7 +149,7 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
             self.clock_left.clear()
             self.clock_right.clear()
 
-    def update_turnbox(self, turns) -> None:
+    def _update_turnbox(self, turns) -> None:
         turns_str = str(turns)
         for i in range(self.turnbox.count()):
             if self.turnbox.itemText(i) == turns_str:
@@ -229,8 +207,8 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
         self.turnbox.setMaximumHeight(int(self.attr_box.height() / 8))
         box_font_size = int(self.attr_box.width() / 10)
 
-        self.header_label.setContentsMargins(0, 0, self.spacing, 0)
-        self.header_label.setFont(QFont("Arial", int(self.width() / 22)))
+        self.turns_label.setContentsMargins(0, 0, self.spacing, 0)
+        self.turns_label.setFont(QFont("Arial", int(self.width() / 22)))
 
         self.turnbox.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
         dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
@@ -276,8 +254,13 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
                 button_size = int(self.attr_box.width() / 6)
             button.update_custom_button_size(button_size)
 
-    def resize_turns_widget(self):
+    def resize_turns_widget(self) -> None:
         self._update_clock_size()
         self._update_turnbox_size()
         self._update_button_size()
         self._update_widget_sizes()
+
+    # def update_turns_widget(self, motion: Motion) -> None:
+    #     self._update_clocks(motion.rot_dir)
+    #     self._update_turnbox(motion.turns)
+    #     self.resize_turns_widget()

@@ -41,10 +41,8 @@ class IGAttrBox(BaseAttrBox):
         super().__init__(
             ig_attr_panel, None, color
         )  # Note the None for the single pictograph
-        self.pictographs = pictographs
-
         self.ig_attr_panel = ig_attr_panel
-        self.pictographs = pictographs
+        self.pictographs: Dict[str, Pictograph] = pictographs
         self.color = color
         self.font_size = self.width() // 10
         self.widgets: List[AttrBoxWidget] = []
@@ -64,24 +62,14 @@ class IGAttrBox(BaseAttrBox):
     def resize_ig_attr_box(self) -> None:
         self.setMinimumWidth(int(self.ig_attr_panel.ig_tab.width() / 3))
         self.setMaximumWidth(int(self.ig_attr_panel.ig_tab.width() / 3))
-        # self.setMinimumHeight(int(self.ig_attr_panel.height()))
-        # self.setMaximumHeight(int(self.ig_attr_panel.height()))
 
         for button in self.findChildren(CustomButton):
             button.update_custom_button_size(int(self.width() / 8))
 
-        self.header_spacing = int(self.width() * 0.02)
-        ratio_total = 1 + 1 + 1
-        available_height = self.height()
-        header_height = int(available_height * (1 / ratio_total))
-        # start_end_height = int(available_height * (1 / ratio_total))
-        turns_widget_height = int(available_height * (2 / ratio_total))
-        # self.header_widget.setMaximumHeight(header_height)
-        # self.start_end_ori_widget.setMaximumHeight(start_end_height)
-        # self.turns_widget.setMaximumHeight(turns_widget_height)
-
         self.header_widget.resize_header_widget()
         self.turns_widget.resize_turns_widget()
-        # self.start_end_ori_widget.resize_start_end_widget()
+        self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 15)))
 
-        self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
+    def update_attr_box(self, motion: Motion) -> None:
+        if motion.prop_rot_dir:
+            self.turns_widget._update_turnbox(motion.turns)
