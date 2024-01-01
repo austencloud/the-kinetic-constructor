@@ -19,13 +19,13 @@ if TYPE_CHECKING:
     )
     from objects.pictograph.pictograph import Pictograph
     from widgets.graph_editor_tab.attr_panel.attr_panel import (
-        AttrPanel,
+        BaseAttrPanel,
     )
 
 
 class BaseAttrBox(QFrame):
     def __init__(
-        self, attr_panel: "AttrPanel", pictograph: "Pictograph", color: Color
+        self, attr_panel: "BaseAttrPanel", pictograph: "Pictograph", color: Color
     ) -> None:
         super().__init__(attr_panel)
         self.attr_panel = attr_panel

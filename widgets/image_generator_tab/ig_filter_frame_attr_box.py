@@ -6,20 +6,26 @@ from widgets.graph_editor_tab.attr_panel.attr_box import BaseAttrBox
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.header_widget import HeaderWidget
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_widget import StartEndWidget
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.turns_widget import TurnsWidget
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.header_widget import (
+    HeaderWidget,
+)
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_widget import (
+    StartEndWidget,
+)
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.turns_widget import (
+    TurnsWidget,
+)
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
     from widgets.graph_editor_tab.attr_panel.attr_panel import (
-        AttrPanel,
+        BaseAttrPanel,
     )
 
 
 class IGFilterFrameAttrBox(BaseAttrBox):
     def __init__(
-        self, attr_panel: "AttrPanel", pictographs: List["Pictograph"], color: Color
+        self, attr_panel: "BaseAttrPanel", pictographs: List["Pictograph"], color: Color
     ) -> None:
         super().__init__(
             attr_panel, None, color

@@ -24,7 +24,7 @@ class IGFilterFrame(QFrame):
         super().__init__()
         self.parent: Union["GraphEditor", "IGTab"] = parent
         self.setContentsMargins(0, 0, 0, 0)
-
+        
         self.blue_attr_box = IGFilterFrameAttrBox(
             self, self.parent.ig_scroll_area.pictographs, BLUE
         )

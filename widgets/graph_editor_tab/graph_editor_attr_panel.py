@@ -5,33 +5,25 @@ from PyQt6.QtWidgets import (
 )
 from constants import BLUE, RED
 from objects.motion.motion import Motion
-from widgets.graph_editor_tab.attr_panel.attr_box import BaseAttrBox
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import AttrBoxWidget
+from widgets.graph_editor_tab.attr_panel.attr_panel import BaseAttrPanel
 from widgets.graph_editor_tab.attr_panel.graph_editor_attr_box import GraphEditorAttrBox
 from typing import TYPE_CHECKING, Literal, Union
 from widgets.image_generator_tab.ig_filter_frame_attr_box import IGFilterFrameAttrBox
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.graph_editor_attr_panel import GraphEditorAttrPanel
-    from widgets.image_generator_tab.ig_attr_panel import IGAttrPanel
     from widgets.image_generator_tab.ig_tab import IGTab
     from widgets.graph_editor_tab.graph_editor import GraphEditor
 from PyQt6.QtCore import Qt
 
 
-class BaseAttrPanel(QFrame):
-    def __init__(
-        self,
-        parent: Union["GraphEditor", "IGTab"],
-    ) -> None:
-        super().__init__()
-        self.parent: Union["GraphEditor", "IGTab"] = parent
-        self.setContentsMargins(0, 0, 0, 0)
-        self.setup_layouts()
-        self.blue_attr_box: BaseAttrBox = None
-        self.red_attr_box: BaseAttrBox = None
-        
+class GraphEditorAttrPanel(BaseAttrPanel):
+    def __init__(self, graph_editor: "GraphEditor") -> None:
+        super().__init__(graph_editor)
+        self.graph_editor = graph_editor
+        self.blue_attr_box = GraphEditorAttrBox(self, self.graph_editor.main_pictograph, BLUE)
+        self.red_attr_box = GraphEditorAttrBox(self, self.graph_editor.main_pictograph, RED)
+
     def setup_layouts(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -40,9 +32,7 @@ class BaseAttrPanel(QFrame):
         self.layout.addWidget(self.red_attr_box)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-    def update_attr_panel(
-        self: Union["GraphEditorAttrPanel", "IGAttrPanel"], motion: Motion
-    ) -> None:
+    def update_attr_panel(self, motion: Motion) -> None:
         if motion.motion_type:
             if motion.color == BLUE:
                 self.blue_attr_box.update_attr_box(motion)
@@ -62,13 +52,13 @@ class BaseAttrPanel(QFrame):
         super().showEvent(event)
         max_width = int(
             (
-                self.parent.main_widget.width()
-                - self.parent.main_widget.sequence_widget.width()
+                self.graph_editor.main_widget.width()
+                - self.graph_editor.main_widget.sequence_widget.width()
             )
             if self.panel_id == "graph_editor"
-            else (self.parent.width() - self.parent.button_panel.width())
+            else (self.graph_editor.width() - self.graph_editor.button_panel.width())
         )
-        self.setMaximumWidth(int(min(self.parent.main_widget.width() / 3, max_width)))
+        self.setMaximumWidth(int(min(self.graph_editor.main_widget.width() / 3, max_width)))
         for box in [self.blue_attr_box, self.red_attr_box]:
             box.resize_attr_box()
 

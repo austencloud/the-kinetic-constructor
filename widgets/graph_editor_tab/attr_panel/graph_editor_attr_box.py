@@ -19,7 +19,7 @@ from widgets.graph_editor_tab.attr_panel.attr_box_widgets.turns_widget import (
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
     from widgets.graph_editor_tab.attr_panel.attr_panel import (
-        AttrPanel,
+        BaseAttrPanel,
     )
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.motion_types_widget import (
     MotionTypeWidget,
@@ -28,7 +28,7 @@ from widgets.graph_editor_tab.attr_panel.attr_box_widgets.motion_types_widget im
 
 class GraphEditorAttrBox(BaseAttrBox):
     def __init__(
-        self, attr_panel: "AttrPanel", pictograph: "Pictograph", color: Color
+        self, attr_panel: "BaseAttrPanel", pictograph: "Pictograph", color: Color
     ) -> None:
         super().__init__(attr_panel, pictograph, color)
         self.attr_panel = attr_panel
@@ -39,7 +39,6 @@ class GraphEditorAttrBox(BaseAttrBox):
         self.combobox_border = 2
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
         self._setup_widgets()
-
 
     def _setup_widgets(self) -> None:
         self.motion_type_widget = MotionTypeWidget(self)
