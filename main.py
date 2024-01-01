@@ -19,6 +19,9 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Sequence Constructor")
         self.show()
+        self._set_dimensions()
+
+    def _set_dimensions(self):
         screens = QGuiApplication.screens()
         screen = screens[1] if len(screens) > 1 else QGuiApplication.primaryScreen()
         available_geometry = screen.availableGeometry()

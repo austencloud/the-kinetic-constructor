@@ -67,23 +67,15 @@ class AttrPanel(QFrame):
 
     def showEvent(self, event) -> None:
         super().showEvent(event)
-        width = int(
+        max_width = int(
             (
                 self.parent.main_widget.width()
                 - self.parent.main_widget.sequence_widget.width()
             )
             if self.panel_id == "graph_editor"
-            else (
-                self.parent.main_widget.width()
-                - self.parent.main_widget.sequence_widget.width()
-            )
+            else (self.parent.main_widget.width()/3)
         )
-        self.setMaximumWidth(
-            int(
-                self.parent.main_widget.width()
-                - self.parent.main_widget.sequence_widget.width()
-            )
-        )
+        self.setMaximumWidth(max_width)
         for box in [self.blue_attr_box, self.red_attr_box]:
             box.resize_attr_box()
         self.attr_panel_content_width = int(
@@ -92,5 +84,5 @@ class AttrPanel(QFrame):
             + self.red_attr_box.border_width / 2
         )
 
-        self.setMaximumWidth(self.attr_panel_content_width)
-        self.setMinimumWidth(self.attr_panel_content_width)
+        # self.setMaximumWidth(self.attr_panel_content_width)
+        # self.setMinimumWidth(self.attr_panel_content_width)
