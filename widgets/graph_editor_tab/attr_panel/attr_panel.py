@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
 )
 from constants import BLUE, RED
 from objects.motion.motion import Motion
-from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
+from widgets.graph_editor_tab.attr_panel.graph_editor_attr_box import GraphEditorAttrBox
 from typing import TYPE_CHECKING
 
 
@@ -18,8 +18,12 @@ class AttrPanel(QFrame):
         super().__init__()
         self.graph_editor = graph_editor
         self.setContentsMargins(0, 0, 0, 0)
-        self.blue_attr_box = AttrBox(self, self.graph_editor.main_pictograph, BLUE)
-        self.red_attr_box = AttrBox(self, self.graph_editor.main_pictograph, RED)
+        self.blue_attr_box = GraphEditorAttrBox(
+            self, self.graph_editor.main_pictograph, BLUE
+        )
+        self.red_attr_box = GraphEditorAttrBox(
+            self, self.graph_editor.main_pictograph, RED
+        )
         self.setup_layouts()
 
     def setup_layouts(self) -> None:

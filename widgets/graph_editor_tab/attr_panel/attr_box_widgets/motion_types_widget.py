@@ -16,11 +16,11 @@ from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
+    from widgets.graph_editor_tab.attr_panel.graph_editor_attr_box import GraphEditorAttrBox
 
 
 class MotionTypeWidget(AttrBoxWidget):
-    def __init__(self, attr_box: "AttrBox") -> None:
+    def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
         super().__init__(attr_box)
 
         self.header_label = self.create_attr_header_label("Type")

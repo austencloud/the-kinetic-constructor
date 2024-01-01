@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
 from Enums import Color
 from constants import HEX_BLUE, HEX_RED, RED
 from objects.motion.motion import Motion
+from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
@@ -13,7 +14,7 @@ from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
     from widgets.graph_editor_tab.attr_panel.attr_panel import (
-        GraphEditorAttrPanel,
+        AttrPanel,
     )
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.header_widget import (
     HeaderWidget,
@@ -29,9 +30,9 @@ from widgets.graph_editor_tab.attr_panel.attr_box_widgets.turns_widget import (
 )
 
 
-class AttrBox(QFrame):
+class GraphEditorAttrBox(AttrBox):
     def __init__(
-        self, attr_panel: "GraphEditorAttrPanel", pictograph: "Pictograph", color: Color
+        self, attr_panel: "AttrPanel", pictograph: "Pictograph", color: Color
     ) -> None:
         super().__init__(attr_panel)
         self.attr_panel = attr_panel

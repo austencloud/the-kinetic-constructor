@@ -7,11 +7,11 @@ from constants import ICON_DIR
 from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
+    from widgets.graph_editor_tab.attr_panel.graph_editor_attr_box import GraphEditorAttrBox
 
 
 class AttrBoxWidget(QWidget):
-    def __init__(self, attr_box: "AttrBox") -> None:
+    def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
 

@@ -12,13 +12,13 @@ from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import
 from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
+    from widgets.graph_editor_tab.attr_panel.graph_editor_attr_box import GraphEditorAttrBox
 from constants import BLUE, CCW_HANDPATH, CW_HANDPATH, HEX_BLUE, HEX_RED, ICON_DIR, RED
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 
 class HeaderWidget(AttrBoxWidget):
-    def __init__(self, attr_box: "AttrBox") -> None:
+    def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
 
