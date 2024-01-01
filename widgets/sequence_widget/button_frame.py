@@ -12,12 +12,10 @@ class ButtonFrame(QFrame):
     def __init__(
         self,
         main_widget: "MainWidget",
-        pictograph: "Pictograph",
         beat_frame: "BeatFrame",
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.pictograph = pictograph
         self.beat_frame = beat_frame
         self.button_height = int(self.main_widget.height() * 1 / 20)
 

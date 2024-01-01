@@ -116,6 +116,7 @@ class PictographInit:
         ghost_arrow.motion = self.pictograph.motions[color]
         arrow.ghost = ghost_arrow
         self.pictograph.addItem(arrow)
+        arrow.hide()
         return arrow, ghost_arrow
 
     def _create_prop(self, color: Color, prop_type: PropType) -> Tuple[Prop, GhostProp]:
@@ -140,6 +141,7 @@ class PictographInit:
         prop.arrow = self.pictograph.motions[color].arrow
         self.pictograph.motions[color].arrow.prop = prop
         self.pictograph.addItem(prop)
+        prop.hide()
         return prop, ghost_prop
 
     def _create_motion(self, color: Color) -> Motion:

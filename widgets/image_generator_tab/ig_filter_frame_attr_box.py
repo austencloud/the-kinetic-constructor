@@ -2,10 +2,13 @@ from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtGui import QPixmap
 from Enums import Color
 from objects.motion.motion import Motion
-from widgets.graph_editor_tab.attr_panel.attr_box import AttrBox
+from widgets.graph_editor_tab.attr_panel.attr_box import BaseAttrBox
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.header_widget import HeaderWidget
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_widget import StartEndWidget
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.turns_widget import TurnsWidget
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
@@ -14,7 +17,7 @@ if TYPE_CHECKING:
     )
 
 
-class IGFilterFrameAttrBox(AttrBox):
+class IGFilterFrameAttrBox(BaseAttrBox):
     def __init__(
         self, attr_panel: "AttrPanel", pictographs: List["Pictograph"], color: Color
     ) -> None:
@@ -30,9 +33,13 @@ class IGFilterFrameAttrBox(AttrBox):
         self.widgets: List[AttrBoxWidget] = []
         self.combobox_border = 2
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
+        self._setup_widgets()
 
+    def _setup_widgets(self) -> None:  # add common widgets
+        self.header_widget = HeaderWidget(self)
+        self.start_end_widget = StartEndWidget(self)
+        self.turns_widget = TurnsWidget(self)
 
-    def update_attr_box(self, motion: Motion = None) -> None:
-        for pictograph in self.pictographs:
-            pass  
-
+        self.layout.addWidget(self.header_widget)
+        self.layout.addWidget(self.start_end_widget)
+        self.layout.addWidget(self.turns_widget)

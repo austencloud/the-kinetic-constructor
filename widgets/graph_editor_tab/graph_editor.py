@@ -78,10 +78,16 @@ class GraphEditor(QFrame):
 
     def showEvent(self, event) -> None:
         super().showEvent(event)
+        self.attr_panel_content_width = int(
+            self.attr_panel.blue_attr_box.width()
+            + self.attr_panel.red_attr_box.width()
+            + self.attr_panel.red_attr_box.border_width / 2
+        )
+
         content_width = int(
             self.arrowbox.view.width()
             + self.pictograph_widget.main_pictograph_view.width()
-            + self.attr_panel.attr_panel_content_width
+            + self.attr_panel_content_width
         )
         self.setMinimumWidth(content_width)
         self.setMaximumWidth(content_width)

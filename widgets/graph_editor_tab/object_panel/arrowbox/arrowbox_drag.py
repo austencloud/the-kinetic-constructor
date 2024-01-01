@@ -93,6 +93,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         arrow.update_arrow()
         arrow.show()
         arrow.setSelected(True)
+        self.pictograph.update_pictograph()
 
     ### UPDATERS ###
 
@@ -118,18 +119,20 @@ class ArrowBoxDrag(ObjectBoxDrag):
             START_LOC: self.start_loc,
             END_LOC: self.end_loc,
         }
-
+        arrow_dict = {
+            COLOR: self.color,
+            MOTION_TYPE: self.motion_type,
+            LOC: self.pictograph.motions[self.color].get_arrow_location(
+                self.start_loc, self.end_loc, self.motion_type
+            ),
+            TURNS: self.turns,
+        }
+        self.pictograph.arrows[self.color].update_arrow(arrow_dict)
         self.pictograph.motions[self.color].update_attributes(motion_dict)
         self.pictograph.motions[self.color].arrow = self.pictograph.arrows[self.color]
-        self.finalize_ghost_arrow_for_new_location(new_location)
-        self.pictograph.update_pictograph()
-
-    def finalize_ghost_arrow_for_new_location(self, new_location):
         self.ghost = self.pictograph.ghost_arrows[self.color]
         self.ghost.loc = new_location
-        self.ghost.set_arrow_transform_origin_to_center()
         self.ghost.show()
-        self.ghost._update_color()
         self.ghost.update_arrow()
 
     def _update_ghost_arrow_for_new_location(self, new_location) -> None:
@@ -143,10 +146,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.ghost.turns = self.turns
         self.ghost.is_svg_mirrored = self.is_svg_mirrored
 
-        ghost_svg = self.ghost.get_svg_file(self.motion_type, self.turns)
-
-        self.ghost.update_arrow()
-        self.ghost.update_svg(ghost_svg)
         if self.is_svg_mirrored:
             mirrored_ghost_transform = (
                 QTransform()
@@ -183,7 +182,19 @@ class ArrowBoxDrag(ObjectBoxDrag):
                     self.motion = self.pictograph.motions[self.color]
                     self.pictograph.arrows[self.color].motion = self.motion
                     self.pictograph.arrows[self.color].loc = new_location
-                    self.pictograph.arrows[self.color].update_arrow()
+                    motion_dict = {
+                        COLOR: self.color,
+                        ARROW: self.pictograph.arrows[self.color],
+                        PROP: self.ghost.motion.prop,
+                        MOTION_TYPE: self.motion_type,
+                        PROP_ROT_DIR: self.rot_dir,
+                        TURNS: self.turns,
+                        START_ORI: self.start_ori,
+                        START_LOC: self.start_loc,
+                        END_LOC: self.end_loc,
+                    }
+
+                    self.pictograph.motions[self.color].update_motion(motion_dict)
                     self._update_arrow_preview_for_new_location(new_location)
                     self.previous_drag_location = new_location
 

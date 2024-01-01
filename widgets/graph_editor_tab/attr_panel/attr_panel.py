@@ -1,3 +1,4 @@
+from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import (
     QHBoxLayout,
     QFrame,
@@ -73,11 +74,12 @@ class AttrPanel(QFrame):
                 - self.parent.main_widget.sequence_widget.width()
             )
             if self.panel_id == "graph_editor"
-            else (self.parent.main_widget.width()/3)
+            else (self.parent.width() - self.parent.button_panel.width())
         )
-        self.setMaximumWidth(max_width)
+        self.setMaximumWidth(int(min(self.parent.main_widget.width()/3, max_width)))
         for box in [self.blue_attr_box, self.red_attr_box]:
             box.resize_attr_box()
+
         self.attr_panel_content_width = int(
             self.blue_attr_box.width()
             + self.red_attr_box.width()

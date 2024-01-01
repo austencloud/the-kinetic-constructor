@@ -27,12 +27,12 @@ class GhostArrow(Arrow):
     def __init__(
         self,
         pictograph: "Pictograph",
-        attributes: ArrowAttributesDicts,
+        arrow_dict: ArrowAttributesDicts,
         motion: "Motion",
     ) -> None:
-        super().__init__(pictograph, attributes, motion)
+        super().__init__(pictograph, arrow_dict, motion)
         self.setOpacity(0.2)
         self.pictograph = pictograph
-        self.color = attributes[COLOR]
+        self.color = arrow_dict[COLOR]
         self.target_arrow: "Arrow" = None
         self.is_ghost = True

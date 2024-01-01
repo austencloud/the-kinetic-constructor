@@ -8,8 +8,10 @@ from PyQt6.QtWidgets import (
     QComboBox,
     QLabel,
 )
+import attr
 from objects.arrow import Arrow
 from constants import *
+from objects.ghosts.ghost_arrow import GhostArrow
 from objects.motion.motion import Motion
 from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox_drag import ArrowBoxDrag
 from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox_view import ArrowBoxView
@@ -59,7 +61,6 @@ class ArrowBox(ObjectBox):
         """Update turns for all arrows when the selected value in the combo box changes."""
         for arrow in self.arrows:
             arrow.turns = int(turns)
-            arrow.update_svg(arrow.get_svg_file(arrow.motion_type, arrow.turns))
             arrow.update_arrow()  # Update the appearance of the arrow based on the new turns
 
     def create_arrows(self) -> None:
@@ -74,11 +75,14 @@ class ArrowBox(ObjectBox):
             }
 
             arrow = Arrow(self, arrow_dict, motion)
+            arrow.ghost = GhostArrow(self, arrow_dict, motion)
+
             motion.arrow = arrow
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
             self.addItem(arrow)
             arrows.append(arrow)
+
             if arrow.color == RED:
                 red_arrows.append(arrow)
             elif arrow.color == BLUE:
@@ -113,8 +117,7 @@ class ArrowBox(ObjectBox):
                 MOTION_TYPE: arrow.motion_type,
                 TURNS: arrow.turns,
             }
-            arrow.update_svg()
-            arrow.update_arrow()
+            arrow.update_arrow(arrow_dict)
 
         return arrows
 
@@ -138,7 +141,7 @@ class ArrowBox(ObjectBox):
                 PROP: None,
                 MOTION_TYPE: PRO,
                 PROP_ROT_DIR: COUNTER_CLOCKWISE,
-                START_LOC: NORTH,
+                START_LOC: SOUTH,
                 END_LOC: EAST,
                 TURNS: 0,
                 START_ORI: IN,
@@ -160,7 +163,7 @@ class ArrowBox(ObjectBox):
                 PROP: None,
                 MOTION_TYPE: ANTI,
                 PROP_ROT_DIR: COUNTER_CLOCKWISE,
-                START_LOC: SOUTH,
+                START_LOC: NORTH,
                 END_LOC: EAST,
                 TURNS: 0,
                 START_ORI: IN,
@@ -182,7 +185,7 @@ class ArrowBox(ObjectBox):
                 PROP: None,
                 MOTION_TYPE: PRO,
                 PROP_ROT_DIR: COUNTER_CLOCKWISE,
-                START_LOC: SOUTH,
+                START_LOC: NORTH,
                 END_LOC: WEST,
                 TURNS: 0,
                 START_ORI: IN,
@@ -204,7 +207,7 @@ class ArrowBox(ObjectBox):
                 PROP: None,
                 MOTION_TYPE: ANTI,
                 PROP_ROT_DIR: COUNTER_CLOCKWISE,
-                START_LOC: NORTH,
+                START_LOC: SOUTH,
                 END_LOC: WEST,
                 TURNS: 0,
                 START_ORI: IN,

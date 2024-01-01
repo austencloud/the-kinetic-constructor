@@ -139,13 +139,14 @@ class Arrow(GraphicalObject):
 
         if self.is_svg_mirrored:
             self.mirror_svg()
-            self.ghost.mirror_svg()
+            if not self.is_ghost:
+                self.ghost.mirror_svg()
         else:
             self.unmirror_svg()
-            self.ghost.unmirror_svg()
+            if not self.is_ghost:
+                self.ghost.unmirror_svg()
 
     def _update_rotation(self) -> None:
-        
         if self.motion.is_shift():
             angle = self._get_shift_rotation_angle()
         elif self.motion.is_dash():
@@ -153,7 +154,8 @@ class Arrow(GraphicalObject):
         elif self.motion.is_static():
             angle = self._get_static_rotation_angle()
         self.setRotation(angle)
-        self.ghost.setRotation(angle)
+        if not self.is_ghost:
+            self.ghost.setRotation(angle)
 
     def set_arrow_transform_origin_to_center(self) -> None:
         self.center = self.boundingRect().center()
@@ -384,7 +386,7 @@ class Arrow(GraphicalObject):
             if self.color == BLUE
             else self.scene.arrows[BLUE].motion
         )
-    
+
         loc_map = {
             ((NORTH, SOUTH), (EAST, WEST)): EAST,
             ((EAST, WEST), (NORTH, SOUTH)): NORTH,
@@ -437,13 +439,13 @@ class Arrow(GraphicalObject):
             if not self.is_ghost and self.ghost:
                 self.ghost.update_attributes(arrow_dict)
 
-        if not self.is_ghost and self.ghost:
-            self.update_svg()
-            self._update_mirror()
-            self._update_color()
-            self._update_location()
-            self._update_rotation()
+        if not self.is_ghost:
             self.ghost.transform = self.transform
+        self.update_svg()
+        self._update_mirror()
+        self._update_color()
+        self._update_location()
+        self._update_rotation()
 
     def mirror_svg(self) -> None:
         self.set_arrow_transform_origin_to_center()

@@ -65,8 +65,8 @@ class MainWidget(QWidget):
         self.resize(int(self.main_window.width()), int(self.main_window.height()))
         self.key_event_handler = KeyEventHandler()
         self.letters: PictographAttributesDict = self.load_all_letters()
-        self.graph_editor_tab = GraphEditorTab(self)
         self.sequence_widget = SequenceWidget(self)
+        self.graph_editor_tab = GraphEditorTab(self)
         self.option_picker_tab = OptionPickerTab(self)
         self.image_generator_tab = IGTab(self)
         self.image_generator_tab.imageGenerated.connect(self.on_image_generated)
@@ -186,9 +186,9 @@ class MainWidget(QWidget):
 
             """
         )
+        self.tab_widget.addTab(self.graph_editor_tab, "Graph Editor")
         self.tab_widget.addTab(self.image_generator_tab, "Image Generator")
         self.tab_widget.addTab(self.option_picker_tab, "Option Picker")
-        self.tab_widget.addTab(self.graph_editor_tab, "Graph Editor")
 
         self.left_frame.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding

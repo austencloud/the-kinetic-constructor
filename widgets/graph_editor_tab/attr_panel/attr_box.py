@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING, Dict, List, Union
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QFont
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
@@ -11,22 +11,19 @@ from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import
 from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
+    from widgets.graph_editor_tab.attr_panel.graph_editor_attr_box import (
+        GraphEditorAttrBox,
+    )
+    from widgets.image_generator_tab.ig_filter_frame_attr_box import (
+        IGFilterFrameAttrBox,
+    )
     from objects.pictograph.pictograph import Pictograph
     from widgets.graph_editor_tab.attr_panel.attr_panel import (
         AttrPanel,
     )
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.header_widget import (
-    HeaderWidget,
-)
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_widget import (
-    StartEndWidget,
-)
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.turns_widget import (
-    TurnsWidget,
-)
 
 
-class AttrBox(QFrame):
+class BaseAttrBox(QFrame):
     def __init__(
         self, attr_panel: "AttrPanel", pictograph: "Pictograph", color: Color
     ) -> None:
@@ -49,18 +46,8 @@ class AttrBox(QFrame):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout.setSpacing(0)
-        self._setup_widgets()
         self.setLayout(self.layout)
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
-
-    def _setup_widgets(self) -> None:  # add common widgets
-        self.header_widget = HeaderWidget(self)
-        self.start_end_widget = StartEndWidget(self)
-        self.turns_widget = TurnsWidget(self)
-
-        self.layout.addWidget(self.header_widget)
-        self.layout.addWidget(self.start_end_widget)
-        self.layout.addWidget(self.turns_widget)
 
     def setup_box(self) -> None:
         self.setObjectName("AttributeBox")
@@ -74,18 +61,24 @@ class AttrBox(QFrame):
 
     ### CREATE LABELS ###
 
-    def clear_attr_box(self) -> None:
+    def clear_attr_box(
+        self: Union["IGFilterFrameAttrBox", "GraphEditorAttrBox"]
+    ) -> None:
         self.start_end_widget.clear_start_end_boxes()
         self.turns_widget.turnbox.setCurrentIndex(-1)
         self.turns_widget.update_clocks(None)
 
-    def update_attr_box(self, motion: Motion = None) -> None:
+    def update_attr_box(
+        self: Union["IGFilterFrameAttrBox", "GraphEditorAttrBox"], motion: Motion = None
+    ) -> None:
         self.turns_widget.update_clocks(motion.prop_rot_dir)
         self.start_end_widget.update_start_end_boxes(motion.start_loc, motion.end_loc)
         if motion.prop_rot_dir:
             self.turns_widget.update_turnbox(motion.turns)
 
-    def resize_attr_box(self) -> None:
+    def resize_attr_box(
+        self: Union["IGFilterFrameAttrBox", "GraphEditorAttrBox"]
+    ) -> None:
         if self.pictograph:  # for within the graph editor
             self.setMinimumWidth(int(self.pictograph.view.width() * 0.85))
             self.setMaximumWidth(int(self.pictograph.view.width() * 0.85))

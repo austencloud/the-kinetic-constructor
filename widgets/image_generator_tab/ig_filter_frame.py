@@ -1,30 +1,75 @@
-from typing import TYPE_CHECKING, Dict, Union
-from Enums import Orientation
-from widgets.filter_frame import FilterFrame
-from utilities.TypeChecking.TypeChecking import Turns
-from constants import *
-from widgets.graph_editor_tab.attr_panel.attr_panel import AttrPanel
+from PyQt6.QtGui import QResizeEvent
+from PyQt6.QtWidgets import (
+    QHBoxLayout,
+    QFrame,
+)
+from constants import BLUE, RED
+from objects.motion.motion import Motion
+from widgets.graph_editor_tab.attr_panel.graph_editor_attr_box import GraphEditorAttrBox
+from typing import TYPE_CHECKING, Literal, Union
+from widgets.image_generator_tab.ig_filter_frame_attr_box import IGFilterFrameAttrBox
+
 
 if TYPE_CHECKING:
     from widgets.image_generator_tab.ig_tab import IGTab
+    from widgets.graph_editor_tab.graph_editor import GraphEditor
+from PyQt6.QtCore import Qt
 
 
-class IGFilterFrame(FilterFrame):
-    def __init__(self, ig_tab: "IGTab") -> None:
-        super().__init__(ig_tab)
-        self.ig_tab = ig_tab
-        self.apply_filters()
-        self.connect_filter_buttons()
-        self.attr_panel = AttrPanel(ig_tab, "ig_tab")
-        self.layout.addWidget(self.attr_panel)
-    # Overrides and additional methods specific to IGFilterFrame
-    def apply_filters(self):
-        super().apply_filters()
-        # Specific logic for IGTab
-        # ...
+class IGFilterFrame(QFrame):
+    def __init__(
+        self,
+        parent: Union["GraphEditor", "IGTab"],
+    ) -> None:
+        super().__init__()
+        self.parent: Union["GraphEditor", "IGTab"] = parent
+        self.setContentsMargins(0, 0, 0, 0)
 
-    def connect_filter_buttons(self):
-        super().connect_filter_buttons()
-        # Specific logic for IGTab
-        # ...
-        
+        self.blue_attr_box = IGFilterFrameAttrBox(
+            self, self.parent.ig_scroll_area.pictographs, BLUE
+        )
+        self.red_attr_box = IGFilterFrameAttrBox(
+            self, self.parent.ig_scroll_area, RED
+        )
+        self.setup_layouts()
+
+    def setup_layouts(self) -> None:
+        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
+        self.layout.addWidget(self.blue_attr_box)
+        self.layout.addWidget(self.red_attr_box)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+    def update_attr_panel(self, motion: Motion) -> None:
+        if motion.motion_type:
+            if motion.color == BLUE:
+                self.blue_attr_box.update_attr_box(motion)
+            elif motion.color == RED:
+                self.red_attr_box.update_attr_box(motion)
+        else:
+            if motion.color == BLUE:
+                self.blue_attr_box.clear_attr_box()
+            elif motion.color == RED:
+                self.red_attr_box.clear_attr_box()
+
+    def clear_all_attr_boxes(self) -> None:
+        self.blue_attr_box.clear_attr_box()
+        self.red_attr_box.clear_attr_box()
+
+    # def resize_ig_filter_frame(self, event) -> None:
+    #     super().showEvent(event)
+    #     max_width = int((self.parent.width() - self.parent.button_panel.width())
+    #     )
+        # self.setMaximumWidth(int(min(self.parent.main_widget.width() / 3, max_width)))
+        # for box in [self.blue_attr_box, self.red_attr_box]:
+        #     box.resize_attr_box()
+
+        # self.attr_panel_content_width = int(
+        #     self.blue_attr_box.width()
+        #     + self.red_attr_box.width()
+        #     + self.red_attr_box.border_width / 2
+        # )
+
+        # self.setMaximumWidth(self.attr_panel_content_width)
+        # self.setMinimumWidth(self.attr_panel_content_width)

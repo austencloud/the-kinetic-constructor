@@ -1,5 +1,6 @@
 from copy import deepcopy
 from typing import TYPE_CHECKING, Dict, List
+from PyQt6.QtGui import QResizeEvent
 import pandas as pd
 from PyQt6.QtWidgets import (
     QWidget,
@@ -41,6 +42,7 @@ class IGTab(QWidget):
         self.setup_buttons()
         self.ig_scroll_area = IGScrollArea(self.main_widget, self)
         self.filter_frame = IGFilterFrame(self)
+        # self.filter_frame.
         self.left_layout = QVBoxLayout()
         self.right_layout = QVBoxLayout()
         self.left_layout.addWidget(self.filter_frame)

@@ -30,6 +30,7 @@ class Prop(GraphicalObject):
     def __init__(self, scene, prop_dict: Dict, motion: "Motion") -> None:
         self.motion = motion
         self.arrow: Arrow = None
+        
         self.prop_type = prop_dict[PROP_TYPE]
         self.svg_file = self.get_svg_file(self.prop_type)
         super().__init__(scene)
@@ -43,6 +44,7 @@ class Prop(GraphicalObject):
         self.drag_offset = QPointF(0, 0)
         self.previous_location: Location = None
         self.ghost: Prop = None
+        self.is_ghost: bool = False
         self.axis: Axis = None
         self.color: Color = prop_dict[COLOR]
         self.loc: Location = prop_dict[LOC]
@@ -155,7 +157,7 @@ class Prop(GraphicalObject):
         prop_attributes = [attr.value for attr in PropAttribute]
         return {attr: getattr(self, attr) for attr in prop_attributes}
 
-    def update_prop_rotation_angle(self) -> None:
+    def _update_prop_rotation_angle(self) -> None:
         prop_rotation_angle = self.get_rotation_angle()
         if self.ghost:
             self.ghost.setRotation(prop_rotation_angle)
@@ -168,7 +170,7 @@ class Prop(GraphicalObject):
         self.motion.update_prop_ori()
         self.update_svg()
         self._update_color()
-        self.update_prop_rotation_angle()
+        self._update_prop_rotation_angle()
 
     def update_svg(self) -> None:
         svg_file = self.get_svg_file(self.prop_type)

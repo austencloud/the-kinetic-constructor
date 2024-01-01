@@ -22,5 +22,6 @@ class GhostProp(Prop):
         self.setOpacity(0.2)
         self.pictograph = pictograph
         self.color = attributes[COLOR]
+        self.is_ghost = True
         self.target_prop: "Prop" = None
         self.setup_svg_renderer(self.svg_file)

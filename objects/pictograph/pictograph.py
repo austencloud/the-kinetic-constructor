@@ -288,8 +288,6 @@ class Pictograph(QGraphicsScene):
     ) -> None:
         if pictograph_dict is not None:
             self._update_from_pictograph_dict(pictograph_dict)
-        else:
-            self._update_motions()
 
         self._position_objects()
         self._update_letter()
@@ -314,6 +312,10 @@ class Pictograph(QGraphicsScene):
             self.motions[motion_dict[COLOR]].update_attributes(motion_dict)
         for motion_dict in motion_dicts:
             self.motions[motion_dict[COLOR]].update_motion(motion_dict)
+        for arrow in self.arrows.values():
+            arrow.show()
+        for prop in self.props.values():
+            prop.show()
 
     def _update_attr_panel(self) -> None:
         for motion in self.motions.values():
@@ -408,11 +410,7 @@ class Pictograph(QGraphicsScene):
             new_arrow.ghost.setTransformOriginPoint(
                 new_arrow.ghost.boundingRect().center()
             )
-            svg_file = new_arrow.get_svg_file(new_arrow.motion_type, new_arrow.turns)
-            new_arrow.update_svg(svg_file)
-            new_arrow.ghost.update_svg(svg_file)
             new_arrow.update_arrow()
-            new_arrow.ghost.update_arrow()
         new_beat.update_pictograph()
 
         return new_beat

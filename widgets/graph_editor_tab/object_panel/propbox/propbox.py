@@ -205,7 +205,7 @@ class PropBox(ObjectBox):
         offset_y = -prop_width / 2
         prop_position = hand_point + QPointF(offset_x, offset_y)
         prop.setPos(prop_position)
-        prop.update_prop_rotation_angle()
+        prop._update_prop_rotation_angle()
         prop.setTransformOriginPoint(prop.boundingRect().center())
 
     def change_prop_type(self, new_prop_type: PropType) -> None:

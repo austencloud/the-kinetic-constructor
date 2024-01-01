@@ -24,12 +24,10 @@ class BeatFrame(QFrame):
     def __init__(
         self,
         main_widget: "MainWidget",
-        pictograph: "Pictograph",
         sequence_widget: "SequenceWidget",
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.pictograph = pictograph
         self.sequence_widget = sequence_widget
         self.beats: List[BeatView] = []
         self.layout: QGridLayout = QGridLayout(self)
