@@ -2,12 +2,13 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
+from widgets.graph_editor_tab.graph_editor_attr_panel import GraphEditorAttrPanel
 from widgets.graph_editor_tab.main_pictograph import MainPictograph
 
 from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
 from widgets.graph_editor_tab.main_pictograph_widget import MainPictographWidget
 from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
-from widgets.graph_editor_tab.attr_panel.attr_panel import BaseAttrPanel
+from widgets.graph_editor_tab.attr_panel.base_attr_panel import BaseAttrPanel
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
@@ -66,7 +67,7 @@ class GraphEditor(QFrame):
         self.main_pictograph = MainPictograph(main_widget, self)
         self.arrowbox = ArrowBox(main_widget, self)
         self.propbox = PropBox(main_widget, self)
-        self.attr_panel = BaseAttrPanel(self)
+        self.attr_panel = GraphEditorAttrPanel(self)
 
         self.pictograph_widget = MainPictographWidget(self, self.main_pictograph.view)
 
@@ -76,18 +77,3 @@ class GraphEditor(QFrame):
     def _setup_size_policy(self) -> None:
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
-    def showEvent(self, event) -> None:
-        super().showEvent(event)
-        self.attr_panel_content_width = int(
-            self.attr_panel.blue_attr_box.width()
-            + self.attr_panel.red_attr_box.width()
-            + self.attr_panel.red_attr_box.border_width / 2
-        )
-
-        content_width = int(
-            self.arrowbox.view.width()
-            + self.pictograph_widget.main_pictograph_view.width()
-            + self.attr_panel_content_width
-        )
-        self.setMinimumWidth(content_width)
-        self.setMaximumWidth(content_width)

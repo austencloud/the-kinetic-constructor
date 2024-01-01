@@ -142,10 +142,9 @@ class IGScrollArea(PictographScrollArea):
 
             ig_pictograph.update_pictograph()
 
-    def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-        # self.setMaximumWidth(
-        #     self.main_widget.width()
-        #     - self.main_widget.sequence_widget.width()
-        #     - self.ig_tab.letter_button_frame.width()
-        # )
+    def resize_ig_scroll_area(self) -> None:
+        self.setMaximumWidth(
+            self.main_widget.width()
+            - self.main_widget.sequence_widget.width()
+            - self.ig_tab.letter_button_frame.width()
+        )

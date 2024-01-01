@@ -12,6 +12,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from constants import END_POS, IG_PICTOGRAPH, LETTER, START_POS
+from widgets.image_generator_tab.ig_attr_panel import IGAttrPanel
 from widgets.image_generator_tab.ig_filter_frame import IGFilterFrame
 from widgets.image_generator_tab.ig_letter_button_frame import IGLetterButtonFrame
 from widgets.image_generator_tab.ig_pictograph import IGPictograph
@@ -41,30 +42,30 @@ class IGTab(QWidget):
         self.setLayout(self.layout)
         self.setup_buttons()
         self.ig_scroll_area = IGScrollArea(self.main_widget, self)
-        self.filter_frame = IGFilterFrame(self)
-        # self.filter_frame.
+        self.attr_panel = IGAttrPanel(self)
+
         self.left_layout = QVBoxLayout()
         self.right_layout = QVBoxLayout()
-        self.left_layout.addWidget(self.filter_frame)
-        self.left_layout.addWidget(self.ig_scroll_area)
+        self.left_layout.addWidget(self.attr_panel, 1)
+        self.left_layout.addWidget(self.ig_scroll_area, 4)
         self.right_layout.addWidget(self.button_panel)
         self.layout.addLayout(self.left_layout)
         self.layout.addLayout(self.right_layout)
         self.connect_buttons(self.letter_button_frame)
 
-    def setup_buttons(self):
+    def setup_buttons(self) -> None:
         self.letter_button_frame, self.action_button_frame = self.setup_button_frames()
         self.button_panel = self._setup_button_panel(
             self.letter_button_frame, self.action_button_frame
         )
 
-    def connect_buttons(self, letter_button_frame):
+    def connect_buttons(self, letter_button_frame) -> None:
         for key, button in letter_button_frame.buttons.items():
             button.clicked.connect(
                 lambda checked, letter=key: self.on_letter_button_clicked(letter)
             )
 
-    def setup_button_frames(self):
+    def setup_button_frames(self) -> IGLetterButtonFrame:
         letter_button_frame = IGLetterButtonFrame(self.main_widget)
         letter_button_frame.setStyleSheet("QFrame { border: 1px solid black; }")
         action_button_frame = self._setup_action_button_frame()
@@ -204,7 +205,7 @@ class IGTab(QWidget):
         else:
             self.selected_letters.remove(index)
 
-    def select_all_letters(self):
+    def select_all_letters(self) -> None:
         for button_letter, button in self.letter_button_frame.buttons.items():
             button.setFlat(True)
             button.setStyleSheet(self.get_button_style(pressed=True))
@@ -222,11 +223,15 @@ class IGTab(QWidget):
 
         self.ig_scroll_area.update_pictographs()
 
-    def update_letters_dict(self):
+    def update_letters_dict(self) -> None:
         for letter, pictograph_list in self.letters_dict.items():
             for pictograph_dict in pictograph_list:
                 # Apply filter changes to each pictograph_dict
                 # Example: Update 'blue_turns' based on filters
-                if 'turns' in self.filters:
-                    pictograph_dict['blue_turns'] = self.filters['turns']
+                if "turns" in self.filters:
+                    pictograph_dict["blue_turns"] = self.filters["turns"]
                 # Apply similar logic for other filters
+
+    def resize_ig_tab(self) -> None:
+        self.ig_scroll_area.resize_ig_scroll_area()
+        self.attr_panel.resize_ig_attr_panel()

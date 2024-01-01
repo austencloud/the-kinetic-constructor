@@ -17,8 +17,6 @@ from Enums import MotionTypeCombination
 Turns = float | Literal["fl", "0", "0.5", "1", "1.5", "2", "2.5", "3"]
 RotationAngles = Literal[0, 90, 180, 270]
 OptimalLocationEntries = Dict[Literal["x", "y"], float]
-
-
 StartEndLocationTuple = Tuple[Location, Location]
 PreprocessedStartEndCombinations = Dict[
     SpecificStartEndPositionsDicts,
@@ -38,10 +36,6 @@ class Mode(Enum):
     SPLIT_OPPOSITE = "SO"
     QUARTER_TIME_SAME = "QTS"
     QUARTER_TIME_OPPOSITE = "QTO"
-
-
-
-
 
 ### LETTER GROUPS ###
 

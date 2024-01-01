@@ -558,3 +558,37 @@ class PictographType(Enum):
     BEAT = "beat"
     START_POS = "start_pos"
     IG_PICTOGRAPH = "ig_pictograph"
+
+
+class Mode(Enum):
+    TOG_SAME = "TS"
+    TOG_OPPOSITE = "TO"
+    SPLIT_SAME = "SS"
+    SPLIT_OPPOSITE = "SO"
+    QUARTER_TIME_SAME = "QTS"
+    QUARTER_TIME_OPPOSITE = "QTO"
+
+
+class MotionTypeCombination(Enum):
+    PRO_VS_PRO = "pro_vs_pro"
+    ANTI_VS_ANTI = "anti_vs_anti"
+    STATIC_VS_STATIC = "static_vs_static"
+    PRO_VS_ANTI = "pro_vs_anti"
+    STATIC_VS_PRO = "static_vs_pro"
+    STATIC_VS_ANTI = "static_vs_anti"
+    DASH_VS_PRO = "dash_vs_pro"
+    DASH_VS_ANTI = "dash_vs_anti"
+    DASH_VS_STATIC = "dash_vs_static"
+    DASH_VS_DASH = "dash_vs_dash"
+
+
+class LetterGroupsByMotionType(Enum):
+    ADGJMPS = "ADGJMPS"
+    BEHKNQT = "BEHKNQT"
+    αβΓ = "αβΓ"
+    CFILORUV = "CFILORUV"
+    WYΣθ = "WYΣθ"
+    XZΔΩ = "XZΔΩ"
+    X_Z_Δ_Ω_ = "X-Z-Δ-Ω-"
+    ΦΨΛ = "ΦΨΛ"
+    Φ_Ψ_Λ_ = "Φ-Ψ-Λ-"

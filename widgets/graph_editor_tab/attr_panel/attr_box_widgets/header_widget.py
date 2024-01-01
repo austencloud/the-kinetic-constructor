@@ -54,7 +54,7 @@ class HeaderWidget(AttrBoxWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)  # Remove all content margins
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
-
+        
         header_layout = QHBoxLayout()
         header_layout.setContentsMargins(0, 0, 0, 0)
         header_layout.setSpacing(0)

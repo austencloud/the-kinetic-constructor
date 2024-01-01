@@ -4,11 +4,11 @@ from PyQt6.QtGui import QFont
 from typing import Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_widget import (
-        StartEndWidget,
+    from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_loc_widget import (
+        StartEndLocWidget,
     )
-    from widgets.graph_editor_tab.attr_panel.attr_box_widgets.turns_widget import (
-        TurnsWidget,
+    from widgets.graph_editor_tab.attr_panel.attr_box_widgets.base_turns_widget import (
+        BaseTurnsWidget,
     )
     from widgets.graph_editor_tab.attr_panel.attr_box_widgets.motion_types_widget import (
         MotionTypeWidget,
@@ -17,7 +17,10 @@ if TYPE_CHECKING:
 
 class CustomButton(QPushButton):
     def __init__(
-        self, parent_widget: Union["StartEndWidget", "TurnsWidget", "MotionTypeWidget"]
+        self,
+        parent_widget: Union[
+            "StartEndLocWidget", "BaseTurnsWidget", "MotionTypeWidget"
+        ],
     ) -> None:
         super().__init__(parent_widget)
         self.parent_widget = parent_widget

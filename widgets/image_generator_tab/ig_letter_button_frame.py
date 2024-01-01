@@ -163,6 +163,5 @@ class IGLetterButtonFrame(QFrame):
         for button in self.buttons.values():
             button.click()  # Or any other action you want to perform for 'selecting'
 
-
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.resize_letter_buttons()

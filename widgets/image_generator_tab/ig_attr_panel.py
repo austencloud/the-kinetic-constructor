@@ -5,10 +5,10 @@ from PyQt6.QtWidgets import (
 )
 from constants import BLUE, RED
 from objects.motion.motion import Motion
-from widgets.graph_editor_tab.attr_panel.attr_panel import BaseAttrPanel
+from widgets.graph_editor_tab.attr_panel.base_attr_panel import BaseAttrPanel
 from widgets.graph_editor_tab.attr_panel.graph_editor_attr_box import GraphEditorAttrBox
 from typing import TYPE_CHECKING, Literal, Union
-from widgets.image_generator_tab.ig_filter_frame_attr_box import IGFilterFrameAttrBox
+from widgets.image_generator_tab.ig_attr_box import IGAttrBox
 
 
 if TYPE_CHECKING:
@@ -21,54 +21,15 @@ class IGAttrPanel(BaseAttrPanel):
     def __init__(self, ig_tab: "IGTab") -> None:
         super().__init__(ig_tab)
         self.ig_tab = ig_tab
-        self.blue_attr_box = IGFilterFrameAttrBox(
+        self.blue_attr_box: IGAttrBox = IGAttrBox(
             self, self.ig_tab.ig_scroll_area.pictographs, BLUE
         )
-        self.red_attr_box = IGFilterFrameAttrBox(self, self.ig_tab.ig_scroll_area, RED)
+        self.red_attr_box: IGAttrBox = IGAttrBox(self, self.ig_tab.ig_scroll_area, RED)
+        self.setup_layouts()
 
-    def setup_layouts(self) -> None:
-        self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        self.layout.addWidget(self.blue_attr_box)
-        self.layout.addWidget(self.red_attr_box)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
-
-    def update_attr_panel(self, motion: Motion) -> None:
-        if motion.motion_type:
-            if motion.color == BLUE:
-                self.blue_attr_box.update_attr_box(motion)
-            elif motion.color == RED:
-                self.red_attr_box.update_attr_box(motion)
-        else:
-            if motion.color == BLUE:
-                self.blue_attr_box.clear_attr_box()
-            elif motion.color == RED:
-                self.red_attr_box.clear_attr_box()
-
-    def clear_all_attr_boxes(self) -> None:
-        self.blue_attr_box.clear_attr_box()
-        self.red_attr_box.clear_attr_box()
-
-    def showEvent(self, event) -> None:
-        super().showEvent(event)
-        max_width = int(
-            (
-                self.ig_tab.main_widget.width()
-                - self.ig_tab.main_widget.sequence_widget.width()
-            )
-            if self.panel_id == "graph_editor"
-            else (self.ig_tab.width() - self.ig_tab.button_panel.width())
+    def resize_ig_attr_panel(self) -> None:
+        self.setMaximumWidth(
+            int(self.ig_tab.width() - self.ig_tab.button_panel.width())
         )
-        self.setMaximumWidth(int(min(self.ig_tab.main_widget.width() / 3, max_width)))
         for box in [self.blue_attr_box, self.red_attr_box]:
-            box.resize_attr_box()
-
-        self.attr_panel_content_width = int(
-            self.blue_attr_box.width()
-            + self.red_attr_box.width()
-            + self.red_attr_box.border_width / 2
-        )
-
-        # self.setMaximumWidth(self.attr_panel_content_width)
-        # self.setMinimumWidth(self.attr_panel_content_width)
+            box.resize_ig_attr_box()
