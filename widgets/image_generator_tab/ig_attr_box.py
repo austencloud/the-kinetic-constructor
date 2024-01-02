@@ -10,7 +10,7 @@ from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import
     AttrBoxWidget,
 )
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.header_widget import (
-    HeaderWidget,
+    BaseAttrBoxHeaderWidget,
 )
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_loc_widget import (
     StartEndLocWidget,
@@ -51,7 +51,7 @@ class IGAttrBox(BaseAttrBox):
         self._setup_widgets()
 
     def _setup_widgets(self) -> None:  # add common widgets
-        self.header_widget = HeaderWidget(self)
+        self.header_widget = BaseAttrBoxHeaderWidget(self)
         # self.start_end_ori_widget = StartEndOriWidget(self)
         self.turns_widget = IGTurnsWidget(self)
 
@@ -71,5 +71,7 @@ class IGAttrBox(BaseAttrBox):
         self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 15)))
 
     def update_attr_box(self, motion: Motion) -> None:
-        if motion.prop_rot_dir:
-            self.turns_widget._update_turnbox(motion.turns)
+        for pictograph in self.pictographs.values():
+            for motion in pictograph.motions.values():
+                self.header_widget.header_label.setText(motion.motion_type)
+                self.turns_widget._update_turnbox(motion.turns)

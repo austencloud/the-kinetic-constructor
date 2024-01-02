@@ -79,24 +79,28 @@ class IGTurnsWidget(BaseTurnsWidget):
         for pictograph in self.attr_box.pictographs.values():
             motion: Motion = pictograph.motions[self.attr_box.color]
             motion.add_turn()
+            self._update_turnbox(motion.turns)
         self.attr_box.update_attr_box(motion)
 
     def _subtract_turn_callback(self) -> None:
         for pictograph in self.attr_box.pictographs.values():
             motion: Motion = pictograph.motions[self.attr_box.color]
             motion.subtract_turn()
+            self._update_turnbox(motion.turns)
         self.attr_box.update_attr_box(motion)
 
     def _add_half_turn_callback(self) -> None:
         for pictograph in self.attr_box.pictographs.values():
             motion: Motion = pictograph.motions[self.attr_box.color]
             motion.add_half_turn()
+            self._update_turnbox(motion.turns)
         self.attr_box.update_attr_box(motion)
 
     def _subtract_half_turn_callback(self) -> None:
         for pictograph in self.attr_box.pictographs.values():
             motion: Motion = pictograph.motions[self.attr_box.color]
             motion.subtract_half_turn()
+            self._update_turnbox(motion.turns)
         self.attr_box.update_attr_box(motion)
 
     ### UPDATE METHODS ###
@@ -115,22 +119,20 @@ class IGTurnsWidget(BaseTurnsWidget):
         if turns == "0" or turns == "1" or turns == "2" or turns == "3":
             for pictograph in self.attr_box.pictographs.values():
                 motion: Motion = pictograph.motions[self.attr_box.color]
-                if motion and motion.arrow:
-                    if int(turns) != motion.turns:
-                        motion.turns = int(turns)
-                        dict = {f"{motion.color}_turns": motion.turns}
-                        self.attr_box.update_attr_box(motion)
-                        pictograph.update_pictograph(dict)
+                if int(turns) != motion.turns:
+                    motion.turns = int(turns)
+                    dict = {f"{motion.color}_turns": motion.turns}
+                    self._update_turnbox(motion.turns)
+                    pictograph.update_pictograph(dict)
 
         elif turns == "0.5" or turns == "1.5" or turns == "2.5":
             for pictograph in self.attr_box.pictographs.values():
                 motion: Motion = pictograph.motions[self.attr_box.color]
-                if motion:
-                    if float(turns) != motion.turns:
-                        motion.turns = float(turns)
-                        dict = {f"{motion.color}_turns": motion.turns}
-                        self.attr_box.update_attr_box(motion)
-                        pictograph.update_pictograph(dict)
+                if float(turns) != motion.turns:
+                    motion.turns = float(turns)
+                    dict = {f"{motion.color}_turns": motion.turns}
+                    self._update_turnbox(motion.turns)
+                    pictograph.update_pictograph(dict)
         else:
             self.turnbox.setCurrentIndex(-1)
 

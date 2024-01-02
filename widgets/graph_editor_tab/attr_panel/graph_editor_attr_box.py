@@ -10,7 +10,7 @@ from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import
     AttrBoxWidget,
 )
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.header_widget import (
-    HeaderWidget,
+    BaseAttrBoxHeaderWidget,
 )
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_loc_widget import (
     StartEndLocWidget,
@@ -47,7 +47,7 @@ class GraphEditorAttrBox(BaseAttrBox):
 
     def _setup_widgets(self) -> None:
         self.motion_type_widget = MotionTypeWidget(self)
-        self.header_widget = HeaderWidget(self)
+        self.header_widget = BaseAttrBoxHeaderWidget(self)
         self.start_end_loc_widget = StartEndLocWidget(self)
         self.graph_editor_turns_widget = GraphEditorTurnsWidget(self)
 

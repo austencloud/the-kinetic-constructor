@@ -82,6 +82,12 @@ class IGScrollArea(PictographScrollArea):
                     self.pictographs[image_name] = ig_pictograph
                     ig_pictograph.view.resize_for_scroll_area()
                     index += 1
+        self.update_attr_panel()
+
+    def update_attr_panel(self) -> None:
+        first_pictograph = next(iter(self.pictographs.values()), None)
+        for motion in first_pictograph.motions.values():
+            self.ig_tab.attr_panel.update_attr_panel(motion)
 
     def filter_pictographs(self, pictograph_dicts: List[Dict]) -> List[Dict]:
         return [

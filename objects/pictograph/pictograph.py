@@ -166,7 +166,7 @@ class Pictograph(QGraphicsScene):
             TURNS: pictograph_dict.get(f"{color}_turns"),
             START_ORI: pictograph_dict.get(f"{color}_start_ori"),
         }
-        return {k: v for k, v in motion_dict.items() if v is not None}
+        return {k: v for k, v in motion_dict.items() if v != None}
 
     ### EVENT HANDLERS ###
 
@@ -284,21 +284,21 @@ class Pictograph(QGraphicsScene):
 
     def is_complete(self, pictograph_dict: PictographAttributesDict) -> bool:
         required_keys = [
-            'letter',
-            'start_pos',
-            'end_pos',
-            'blue_motion_type',
-            'blue_prop_rot_dir',
-            'blue_start_loc',
-            'blue_end_loc',
-            'blue_start_ori',
-            'blue_turns',
-            'red_motion_type',
-            'red_prop_rot_dir',
-            'red_start_loc',
-            'red_end_loc',
-            'red_start_ori',
-            'red_turns',
+            "letter",
+            "start_pos",
+            "end_pos",
+            "blue_motion_type",
+            "blue_prop_rot_dir",
+            "blue_start_loc",
+            "blue_end_loc",
+            "blue_start_ori",
+            "blue_turns",
+            "red_motion_type",
+            "red_prop_rot_dir",
+            "red_start_loc",
+            "red_end_loc",
+            "red_start_ori",
+            "red_turns",
         ]
         return all(key in pictograph_dict for key in required_keys)
 
@@ -307,7 +307,7 @@ class Pictograph(QGraphicsScene):
     ) -> None:
         if self.is_complete(pictograph_dict):
             self.pictograph_dict = pictograph_dict
-            
+
         if pictograph_dict is not None:
             self._update_from_pictograph_dict(pictograph_dict)
 
@@ -326,7 +326,7 @@ class Pictograph(QGraphicsScene):
             # Define the order of motion types
 
         # Sort motion_dicts based on motion type
-        
+
         # motion_type_order = [PRO, ANTI, FLOAT, DASH, STATIC]
         # motion_dicts.sort(key=lambda x: motion_type_order.index(x[MOTION_TYPE]))
 

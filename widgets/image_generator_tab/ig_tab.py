@@ -54,7 +54,8 @@ class IGTab(QWidget):
         self.connect_buttons(self.letter_button_frame)
 
     def setup_buttons(self) -> None:
-        self.letter_button_frame, self.action_button_frame = self.setup_button_frames()
+        self.letter_button_frame: IGLetterButtonFrame = self.setup_button_frames()[0]
+        self.action_button_frame: QFrame = self.setup_button_frames()[1]
         self.button_panel = self._setup_button_panel(
             self.letter_button_frame, self.action_button_frame
         )

@@ -41,8 +41,6 @@ class Motion:
         self.arrow: "Arrow" = None
         self.prop: "Prop" = None
         self.motion_type: MotionType = None
-        self.rot_dir: PropRotationDirection = None
-        self.loc: Location = None
         self.turns: Turns = None
         self.start_loc: Location = None
         self.start_ori: Orientation = None
@@ -52,16 +50,12 @@ class Motion:
     ### SETUP ###
 
     def update_attributes(self, motion_dict: Dict[str, str]) -> None:
-        for attribute in motion_dict:
-            if attribute.startswith("blue_") or attribute.startswith("red_"):
-                attribute = "_".join(attribute.split("_")[1:])
-                setattr(self, attribute, motion_dict[f"{self.color}_{attribute}"])
-            else:
-                setattr(self, attribute, motion_dict[attribute])
+        for attribute, value in motion_dict.items():
+            if value is not None:
+                setattr(self, attribute, value)
         if self.motion_type:
             self.end_ori: Orientation = self.get_end_ori()
             self.manipulator = MotionManipulator(self)
-
     ### UPDATE ###
 
     def update_prop_ori(self) -> None:
@@ -182,7 +176,9 @@ class Motion:
 
         valid_turns = [0, 0.5, 1, 1.5, 2, 2.5, 3]
         self.turns = (
-            float(self.turns) if self.turns in ["0.5", "1.5", "2.5"] else int(self.turns)
+            float(self.turns)
+            if self.turns in ["0.5", "1.5", "2.5"]
+            else int(self.turns)
         )
 
         if self.turns in valid_turns:
@@ -407,9 +403,8 @@ class Motion:
             else self.scene.arrows[BLUE]
         )
 
-    def set_turns(self, turns: Turns) -> None:
+    def update_turns(self, turns: Turns) -> None:
         self.turns = turns
-        
 
     def adjust_turns(self, adjustment: float) -> None:
         potential_new_turns = self.arrow.turns + adjustment
