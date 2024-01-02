@@ -15,9 +15,6 @@ from widgets.graph_editor_tab.attr_panel.attr_box_widgets.header_widget import (
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_loc_widget import (
     StartEndLocWidget,
 )
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.base_turns_widget import (
-    BaseTurnsWidget,
-)
 from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:

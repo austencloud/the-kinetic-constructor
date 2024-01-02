@@ -8,7 +8,6 @@ from widgets.graph_editor_tab.main_pictograph import MainPictograph
 from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
 from widgets.graph_editor_tab.main_pictograph_widget import MainPictographWidget
 from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
-from widgets.graph_editor_tab.attr_panel.base_attr_panel import BaseAttrPanel
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget

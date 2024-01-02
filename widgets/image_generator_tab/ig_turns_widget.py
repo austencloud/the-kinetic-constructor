@@ -1,32 +1,20 @@
 from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLabel,
-    QVBoxLayout,
     QFrame,
-    QSizePolicy,
-    QWidget,
-    QComboBox,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont, QPixmap
-from typing import TYPE_CHECKING, List
+from PyQt6.QtGui import QFont
+from typing import TYPE_CHECKING
 from objects.motion.motion import Motion
-from constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, ICON_DIR
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
-    AttrBoxWidget,
-)
+from constants import ICON_DIR
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.base_turns_widget import (
     BaseTurnsWidget,
 )
 
-from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from widgets.image_generator_tab.ig_attr_box import IGAttrBox
-    from widgets.graph_editor_tab.attr_panel.bast_attr_box import BaseAttrBox
-    from widgets.graph_editor_tab.attr_panel.graph_editor_attr_box import (
-        GraphEditorAttrBox,
-    )
 
 
 class IGTurnsWidget(BaseTurnsWidget):

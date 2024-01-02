@@ -1,5 +1,3 @@
-from re import L
-from typing_extensions import is_protocol
 from Enums import (
     Color,
     Handpath,
@@ -7,7 +5,6 @@ from Enums import (
     MotionAttributesDicts,
     MotionType,
     Orientation,
-    PropRotationDirection,
     Turns,
 )
 

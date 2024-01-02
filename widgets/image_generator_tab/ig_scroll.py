@@ -5,18 +5,16 @@ from constants import (
     BLUE_START_ORI,
     BLUE_TURNS,
     END_POS,
-    LETTER,
     RED,
     RED_END_ORI,
     RED_START_ORI,
     RED_TURNS,
     START_POS,
-    TURNS,
 )
 from widgets.image_generator_tab.ig_pictograph import IGPictograph
 from widgets.pictograph_scroll_area import PictographScrollArea
 from Enums import Letter, Orientation, PictographAttributesDict, Turns
-from constants import IG_PICTOGRAPH, OPTION
+from constants import IG_PICTOGRAPH
 from utilities.TypeChecking.Letters import letters
 
 if TYPE_CHECKING:

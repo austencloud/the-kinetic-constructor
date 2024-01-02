@@ -1,22 +1,13 @@
-from typing import TYPE_CHECKING, Dict, List, Union
+from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtGui import QPixmap
 from Enums import Color
 from objects.motion.motion import Motion
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_ori_widget import (
-    StartEndOriWidget,
-)
 from widgets.graph_editor_tab.attr_panel.bast_attr_box import BaseAttrBox
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.header_widget import (
     BaseAttrBoxHeaderWidget,
-)
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_loc_widget import (
-    StartEndLocWidget,
-)
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.base_turns_widget import (
-    BaseTurnsWidget,
 )
 from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 from widgets.image_generator_tab.ig_turns_widget import IGTurnsWidget
@@ -25,9 +16,6 @@ if TYPE_CHECKING:
     from widgets.image_generator_tab.ig_attr_panel import IGAttrPanel
     from objects.pictograph.pictograph import Pictograph
 
-    from widgets.graph_editor_tab.attr_panel.base_attr_panel import (
-        BaseAttrPanel,
-    )
 from PyQt6.QtGui import QPixmap, QFont
 
 

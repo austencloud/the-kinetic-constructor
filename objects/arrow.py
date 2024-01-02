@@ -1,7 +1,7 @@
 from typing import Union
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtGui import QTransform
-from PyQt6.QtWidgets import QGraphicsSceneMouseEvent, QGraphicsItem
+from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from Enums import *
 from constants import (
     ANTI,
@@ -21,12 +21,9 @@ from constants import (
     STATIC,
     TURNS,
 )
-from objects.motion.motion_manipulator import MotionManipulator
-from objects.grid import GridItem
 from objects.prop.prop import Prop
 
 from objects.graphical_object import GraphicalObject
-from data.start_end_loc_map import get_start_end_locs
 from utilities.TypeChecking.TypeChecking import (
     Turns,
     RotationAngles,

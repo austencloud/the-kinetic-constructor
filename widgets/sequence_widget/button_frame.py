@@ -4,7 +4,6 @@ from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from objects.pictograph.pictograph import Pictograph
     from widgets.sequence_widget.beat_frame.beat_frame import BeatFrame
 
 

@@ -5,13 +5,11 @@ from PyQt6.QtWidgets import (
     QFrame,
     QLabel,
     QComboBox,
-    QSpacerItem,
-    QSizePolicy,
 )
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from Enums import Orientation
-from constants import ICON_DIR, SWAP_ICON
+from constants import ICON_DIR
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )

@@ -1,4 +1,3 @@
-from collections import OrderedDict
 import os
 from typing import TYPE_CHECKING, Any, Optional
 from PyQt6.QtCore import QEvent, Qt, QThreadPool

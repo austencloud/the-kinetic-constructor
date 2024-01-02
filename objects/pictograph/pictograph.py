@@ -1,10 +1,8 @@
-from math import pi
 from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Tuple, Union
 from PyQt6.QtCore import Qt, QPointF, QByteArray, QBuffer
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtGui import QImage, QPainter, QPixmap
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
-import pandas as pd
 
 from Enums import (
     Color,
@@ -12,13 +10,10 @@ from Enums import (
     LetterNumberType,
     Location,
     MotionAttributesDicts,
-    Orientation,
     PictographAttributesDict,
     SpecificPosition,
-    Turns,
 )
 from constants import *
-from data.positions_map import get_specific_start_end_poss
 from objects.pictograph.position_engines.arrow_positioners.main_arrow_positioner import (
     MainArrowPositioner,
 )

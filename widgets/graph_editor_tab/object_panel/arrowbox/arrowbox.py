@@ -8,7 +8,6 @@ from PyQt6.QtWidgets import (
     QComboBox,
     QLabel,
 )
-import attr
 from objects.arrow import Arrow
 from constants import *
 from objects.ghosts.ghost_arrow import GhostArrow

@@ -1,7 +1,5 @@
-from typing import TYPE_CHECKING, Union, Dict
-from Enums import Orientation, Turns
+from typing import TYPE_CHECKING
 from widgets.filter_frame import FilterFrame
-from constants import *
 
 if TYPE_CHECKING:
     from widgets.option_picker_tab.option_picker_tab import OptionPickerTab

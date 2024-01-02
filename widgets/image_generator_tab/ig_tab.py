@@ -1,7 +1,5 @@
 from copy import deepcopy
 from typing import TYPE_CHECKING, Dict, List
-from PyQt6.QtGui import QResizeEvent
-import pandas as pd
 from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
@@ -11,9 +9,8 @@ from PyQt6.QtWidgets import (
     QApplication,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from constants import END_POS, IG_PICTOGRAPH, LETTER, START_POS
+from constants import IG_PICTOGRAPH
 from widgets.image_generator_tab.ig_attr_panel import IGAttrPanel
-from widgets.image_generator_tab.ig_filter_frame import IGFilterFrame
 from widgets.image_generator_tab.ig_letter_button_frame import IGLetterButtonFrame
 from widgets.image_generator_tab.ig_pictograph import IGPictograph
 from widgets.image_generator_tab.ig_scroll import IGScrollArea

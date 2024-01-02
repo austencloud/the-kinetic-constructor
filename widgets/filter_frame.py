@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import (
     QLabel,
     QFrame,
 )
-from widgets.graph_editor_tab.attr_panel.base_attr_panel import BaseAttrPanel
 
 if TYPE_CHECKING:
     from widgets.image_generator_tab.ig_tab import IGTab

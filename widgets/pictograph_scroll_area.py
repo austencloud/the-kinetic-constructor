@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Dict, List, Literal, Union
 from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
 from Enums import Letter, Orientation, PictographAttributesDict
-from constants import END_POS, IG_PICTOGRAPH, LETTER, OPTION, START_POS
+from constants import OPTION
 from utilities.TypeChecking.TypeChecking import Turns
 from PyQt6.QtCore import Qt
 from widgets.image_generator_tab.ig_pictograph import IGPictograph

@@ -1,4 +1,3 @@
-from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import (
     QHBoxLayout,
     QFrame,
@@ -6,12 +5,7 @@ from PyQt6.QtWidgets import (
 from constants import BLUE, RED
 from objects.motion.motion import Motion
 from widgets.graph_editor_tab.attr_panel.bast_attr_box import BaseAttrBox
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
-    AttrBoxWidget,
-)
-from widgets.graph_editor_tab.attr_panel.graph_editor_attr_box import GraphEditorAttrBox
-from typing import TYPE_CHECKING, Literal, Union
-from widgets.image_generator_tab.ig_attr_box import IGAttrBox
+from typing import TYPE_CHECKING, Union
 
 
 if TYPE_CHECKING:
