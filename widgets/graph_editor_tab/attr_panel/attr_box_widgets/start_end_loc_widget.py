@@ -17,7 +17,7 @@ from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.attr_panel.graph_editor_attr_box import (
+    from widgets.graph_editor_tab.graph_editor_attr_box import (
         GraphEditorAttrBox,
     )
 

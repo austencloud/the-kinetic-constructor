@@ -2,15 +2,16 @@ from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtGui import QPixmap
 from Enums import Color
 from objects.motion.motion import Motion
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.graph_editor_turns_widget import (
+from widgets.graph_editor_tab.graph_editor_header_widget import GraphEditorHeaderWidget
+from widgets.graph_editor_tab.graph_editor_turns_widget import (
     GraphEditorTurnsWidget,
 )
 from widgets.graph_editor_tab.attr_panel.bast_attr_box import BaseAttrBox
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.header_widget import (
-    BaseAttrBoxHeaderWidget,
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.base_header_widget import (
+    BaseHeaderWidget,
 )
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_loc_widget import (
     StartEndLocWidget,
@@ -44,7 +45,7 @@ class GraphEditorAttrBox(BaseAttrBox):
 
     def _setup_widgets(self) -> None:
         self.motion_type_widget = MotionTypeWidget(self)
-        self.header_widget = BaseAttrBoxHeaderWidget(self)
+        self.header_widget = GraphEditorHeaderWidget(self)
         self.start_end_loc_widget = StartEndLocWidget(self)
         self.graph_editor_turns_widget = GraphEditorTurnsWidget(self)
 

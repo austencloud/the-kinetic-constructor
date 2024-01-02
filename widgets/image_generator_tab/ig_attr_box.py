@@ -6,10 +6,11 @@ from widgets.graph_editor_tab.attr_panel.bast_attr_box import BaseAttrBox
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.header_widget import (
-    BaseAttrBoxHeaderWidget,
+from widgets.graph_editor_tab.attr_panel.attr_box_widgets.base_header_widget import (
+    BaseHeaderWidget,
 )
 from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
+from widgets.image_generator_tab.ig_header_widget import IGHeaderWidget
 from widgets.image_generator_tab.ig_turns_widget import IGTurnsWidget
 
 if TYPE_CHECKING:
@@ -39,7 +40,7 @@ class IGAttrBox(BaseAttrBox):
         self._setup_widgets()
 
     def _setup_widgets(self) -> None:  # add common widgets
-        self.header_widget = BaseAttrBoxHeaderWidget(self)
+        self.header_widget = IGHeaderWidget(self)
         # self.start_end_ori_widget = StartEndOriWidget(self)
         self.turns_widget = IGTurnsWidget(self)
 
@@ -61,5 +62,4 @@ class IGAttrBox(BaseAttrBox):
     def update_attr_box(self, motion: Motion) -> None:
         for pictograph in self.pictographs.values():
             for motion in pictograph.motions.values():
-                self.header_widget.header_label.setText(motion.motion_type)
                 self.turns_widget._update_turnbox(motion.turns)

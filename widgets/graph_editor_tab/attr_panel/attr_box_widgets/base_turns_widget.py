@@ -15,7 +15,7 @@ from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import
 from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.attr_panel.attr_box_widgets.graph_editor_turns_widget import (
+    from widgets.graph_editor_tab.graph_editor_turns_widget import (
         GraphEditorTurnsWidget,
     )
     from widgets.image_generator_tab.ig_turns_widget import IGTurnsWidget

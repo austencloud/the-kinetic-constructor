@@ -1,7 +1,7 @@
 from constants import BLUE, RED
 from typing import TYPE_CHECKING
 
-from widgets.graph_editor_tab.attr_panel.graph_editor_attr_box import GraphEditorAttrBox
+from widgets.graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
 
 from widgets.graph_editor_tab.attr_panel.base_attr_panel import BaseAttrPanel
 
