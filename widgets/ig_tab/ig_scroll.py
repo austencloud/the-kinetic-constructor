@@ -1,10 +1,14 @@
 from typing import TYPE_CHECKING, Dict, List, Union
 from constants import (
     BLUE,
+    BLUE_END_LOC,
     BLUE_END_ORI,
+    BLUE_MOTION_TYPE,
+    BLUE_START_LOC,
     BLUE_START_ORI,
     BLUE_TURNS,
     END_POS,
+    LETTER,
     RED,
     RED_END_ORI,
     RED_START_ORI,
@@ -36,50 +40,102 @@ class IGScrollArea(PictographScrollArea):
         self.updateGeometry()
 
     def update_pictographs(self) -> None:
+        # Clear existing widgets but keep a reference to the existing pictographs
+        existing_pictographs = {
+            self.generate_image_name(p, p.letter): p for p in self.pictographs.values()
+        }
+        self.clear_layout()
+        index = 0
+        for letter in self.ig_tab.selected_letters:
+            pictograph_dict_list = self.letters.get(letter, [])
+            filtered_pictograph_dicts = self.filter_pictographs(pictograph_dict_list)
+            for pictograph_dict in filtered_pictograph_dicts:
+                pictograph_key = self.generate_pictograph_key_from_dict(pictograph_dict)
+                ig_pictograph = existing_pictographs.get(pictograph_key)
+                if ig_pictograph is None:
+                    ig_pictograph = self._create_pictograph(
+                        pictograph_dict, IG_PICTOGRAPH
+                    )
+                    ig_pictograph.update_pictograph(pictograph_dict)
+                self.apply_filters_to_pictograph(ig_pictograph)
+                image_key = self.generate_image_name(ig_pictograph, letter)
+                self.add_pictograph_to_layout(ig_pictograph, index)
+                self.pictographs[image_key] = ig_pictograph
+                index += 1
+        if self.pictographs:
+            self.update_attr_panel()
+
+    def generate_pictograph_key_from_dict(self, pictograph_dict):
+        # Create a unique key for the pictograph using its dictionary representation
+        return (
+            f"{pictograph_dict[LETTER]}_"
+            f"{pictograph_dict[START_POS]}→{pictograph_dict[END_POS]}_"
+            f"{pictograph_dict[BLUE_MOTION_TYPE]}_"
+            f"{pictograph_dict[BLUE_START_LOC]}→{pictograph_dict[BLUE_END_LOC]}_"
+            f"{pictograph_dict[BLUE_TURNS]}_"
+        )
+
+    def apply_filters_to_pictograph(self, ig_pictograph: IGPictograph) -> None:
+        for color, motion in ig_pictograph.motions.items():
+            for attr, value in self.filters.items():
+                if attr.startswith(color):
+                    # Set the motion attribute if it's in the filters
+                    setattr(motion, attr.replace(f"{color}_", ""), value)
+            # Update the motion to apply changes
+            motion.update_motion()
+
+    def clear_layout(self):
         while self.layout.count():
             widget = self.layout.takeAt(0).widget()
             if widget is not None:
                 widget.setParent(None)
                 widget.deleteLater()
+        self.pictographs.clear()
 
-        index = 0
-        for (
-            letter
-        ) in self.ig_tab.selected_letters:  # Iterate over selected letters only
-            pictograph_dict_list = self.letters.get(letter, [])
-            filtered_pictograph_dicts = self.filter_pictographs(pictograph_dict_list)
-            for pictograph_dict in filtered_pictograph_dicts:
-                ig_pictograph: IGPictograph = self._create_pictograph(
-                    pictograph_dict, IG_PICTOGRAPH
-                )
-                row = index // self.COLUMN_COUNT
-                col = index % self.COLUMN_COUNT
-                self.layout.addWidget(ig_pictograph.view, row, col)
-                start_to_end_string = (
-                    f"{pictograph_dict[START_POS]}→{pictograph_dict[END_POS]}"
-                )
-                blue_turns = ig_pictograph.motions[BLUE].turns
-                red_turns = ig_pictograph.motions[RED].turns
-                blue_end_ori = ig_pictograph.motions[BLUE].end_ori
-                red_end_ori = ig_pictograph.motions[RED].end_ori
+    def get_or_create_pictograph(self, existing_pictographs, pictograph_dict):
+        image_key = self.generate_pictograph_key(pictograph_dict)
+        ig_pictograph = existing_pictographs.get(image_key)
+        if ig_pictograph is None:
+            ig_pictograph = self._create_pictograph(pictograph_dict, IG_PICTOGRAPH)
+            ig_pictograph.update_pictograph(pictograph_dict)
+        return ig_pictograph
 
-                image_name = (
-                    f"{letter}_"
-                    f"({start_to_end_string})_"
-                    f"({ig_pictograph.motions[BLUE].motion_type}_"
-                    f"{ig_pictograph.motions[BLUE].start_loc}→{ig_pictograph.motions[BLUE].end_loc}_"
-                    f"{blue_turns}_"
-                    f"{ig_pictograph.motions[BLUE].start_ori}→{blue_end_ori})_"
-                    f"({ig_pictograph.motions[RED].motion_type}_"
-                    f"{ig_pictograph.motions[RED].start_loc}→{ig_pictograph.motions[RED].end_loc}_"
-                    f"{red_turns}_"
-                    f"{ig_pictograph.motions[RED].start_ori}→{red_end_ori})_"
-                    f"{self.main_widget.prop_type}"
-                )
-                self.pictographs[image_name] = ig_pictograph
-                ig_pictograph.view.resize_for_scroll_area()
-                index += 1
-        self.update_attr_panel()
+    def generate_image_name(self, ig_pictograph: IGPictograph, letter: Letter) -> str:
+        # This function should exactly match the structure of the keys
+        # you have provided, using the motion attributes after they have been set
+        start_to_end_string = f"{ig_pictograph.start_pos}→{ig_pictograph.end_pos}"
+        blue_turns = ig_pictograph.motions[BLUE].turns
+        red_turns = ig_pictograph.motions[RED].turns
+        blue_end_ori = ig_pictograph.motions[BLUE].end_ori
+        red_end_ori = ig_pictograph.motions[RED].end_ori
+
+        return (
+            f"{letter}_"
+            f"({start_to_end_string})_"
+            f"({ig_pictograph.motions[BLUE].motion_type}_"
+            f"{ig_pictograph.motions[BLUE].start_loc}→{ig_pictograph.motions[BLUE].end_loc}_"
+            f"{blue_turns}_"
+            f"{ig_pictograph.motions[BLUE].start_ori}→{blue_end_ori})_"
+            f"({ig_pictograph.motions[RED].motion_type}_"
+            f"{ig_pictograph.motions[RED].start_loc}→{ig_pictograph.motions[RED].end_loc}_"
+            f"{red_turns}_"
+            f"{ig_pictograph.motions[RED].start_ori}→{red_end_ori})_"
+            f"{self.main_widget.prop_type}"
+        )
+
+    def generate_pictograph_key_from_motion(self, ig_pictograph: IGPictograph, letter):
+        return (
+            f"{letter}_"
+            f"{ig_pictograph.start_pos}→{ig_pictograph.end_pos}_"
+            f"{ig_pictograph.motions[BLUE].motion_type}→{ig_pictograph.motions[BLUE].end_loc}_"
+            f"{ig_pictograph.motions[RED].motion_type}→{ig_pictograph.motions[RED].end_loc}"
+        )
+
+    def add_pictograph_to_layout(self, ig_pictograph: IGPictograph, index):
+        row = index // self.COLUMN_COUNT
+        col = index % self.COLUMN_COUNT
+        self.layout.addWidget(ig_pictograph.view, row, col)
+        ig_pictograph.view.resize_for_scroll_area()
 
     def update_attr_panel(self) -> None:
         first_pictograph = next(iter(self.pictographs.values()), None)
@@ -95,9 +151,7 @@ class IGScrollArea(PictographScrollArea):
             if self.pictograph_matches_filters(pictograph_dict)
         ]
 
-    def pictograph_matches_filters(
-        self, pictograph_dict: PictographAttributesDict
-    ) -> bool:
+    def pictograph_matches_filters(self, pictograph_dict: Dict) -> bool:
         for filter_key, filter_value in self.filters.items():
             if filter_value in ["0", "1", "2", "3"]:
                 filter_value = int(filter_value)
