@@ -57,7 +57,7 @@ class IGTab(QWidget):
             self.letter_button_frame, self.action_button_frame
         )
 
-    def connect_buttons(self, letter_button_frame) -> None:
+    def connect_buttons(self, letter_button_frame: IGLetterButtonFrame) -> None:
         for key, button in letter_button_frame.buttons.items():
             button.clicked.connect(
                 lambda checked, letter=key: self.on_letter_button_clicked(letter)
@@ -156,14 +156,6 @@ class IGTab(QWidget):
 
         button.setFlat(not is_selected)
         button.setStyleSheet(self.get_button_style(pressed=not is_selected))
-        self.ig_scroll_area.update_pictographs()
-
-    def on_letter_checkbox_state_changed(self, state, letter) -> None:
-        print(f"Checkbox for letter {letter} state changed: {state}")
-        if state and letter not in self.selected_letters:
-            self.selected_letters.append(letter)
-        elif not state and letter in self.selected_letters:
-            self.selected_letters.remove(letter)
         self.ig_scroll_area.update_pictographs()
 
     def generate_selected_images(self) -> None:

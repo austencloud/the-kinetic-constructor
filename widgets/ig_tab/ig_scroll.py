@@ -43,43 +43,42 @@ class IGScrollArea(PictographScrollArea):
                 widget.deleteLater()
 
         index = 0
-        for letter in letters:
-            if letter in self.ig_tab.selected_letters:
-                pictograph_dict_list = self.letters.get(letter, [])
-                filtered_pictograph_dicts = self.filter_pictographs(
-                    pictograph_dict_list
+        for (
+            letter
+        ) in self.ig_tab.selected_letters:  # Iterate over selected letters only
+            pictograph_dict_list = self.letters.get(letter, [])
+            filtered_pictograph_dicts = self.filter_pictographs(pictograph_dict_list)
+            for pictograph_dict in filtered_pictograph_dicts:
+                ig_pictograph: IGPictograph = self._create_pictograph(
+                    pictograph_dict, IG_PICTOGRAPH
                 )
-                for pictograph_dict in filtered_pictograph_dicts:
-                    ig_pictograph: IGPictograph = self._create_pictograph(
-                        pictograph_dict, IG_PICTOGRAPH
-                    )
-                    row = index // self.COLUMN_COUNT
-                    col = index % self.COLUMN_COUNT
-                    self.layout.addWidget(ig_pictograph.view, row, col)
-                    start_to_end_string = (
-                        f"{pictograph_dict[START_POS]}→{pictograph_dict[END_POS]}"
-                    )
-                    blue_turns = ig_pictograph.motions[BLUE].turns
-                    red_turns = ig_pictograph.motions[RED].turns
-                    blue_end_ori = ig_pictograph.motions[BLUE].end_ori
-                    red_end_ori = ig_pictograph.motions[RED].end_ori
+                row = index // self.COLUMN_COUNT
+                col = index % self.COLUMN_COUNT
+                self.layout.addWidget(ig_pictograph.view, row, col)
+                start_to_end_string = (
+                    f"{pictograph_dict[START_POS]}→{pictograph_dict[END_POS]}"
+                )
+                blue_turns = ig_pictograph.motions[BLUE].turns
+                red_turns = ig_pictograph.motions[RED].turns
+                blue_end_ori = ig_pictograph.motions[BLUE].end_ori
+                red_end_ori = ig_pictograph.motions[RED].end_ori
 
-                    image_name = (
-                        f"{letter}_"
-                        f"({start_to_end_string})_"
-                        f"({ig_pictograph.motions[BLUE].motion_type}_"
-                        f"{ig_pictograph.motions[BLUE].start_loc}→{ig_pictograph.motions[BLUE].end_loc}_"
-                        f"{blue_turns}_"
-                        f"{ig_pictograph.motions[BLUE].start_ori}→{blue_end_ori})_"
-                        f"({ig_pictograph.motions[RED].motion_type}_"
-                        f"{ig_pictograph.motions[RED].start_loc}→{ig_pictograph.motions[RED].end_loc}_"
-                        f"{red_turns}_"
-                        f"{ig_pictograph.motions[RED].start_ori}→{red_end_ori})_"
-                        f"{self.main_widget.prop_type}"
-                    )
-                    self.pictographs[image_name] = ig_pictograph
-                    ig_pictograph.view.resize_for_scroll_area()
-                    index += 1
+                image_name = (
+                    f"{letter}_"
+                    f"({start_to_end_string})_"
+                    f"({ig_pictograph.motions[BLUE].motion_type}_"
+                    f"{ig_pictograph.motions[BLUE].start_loc}→{ig_pictograph.motions[BLUE].end_loc}_"
+                    f"{blue_turns}_"
+                    f"{ig_pictograph.motions[BLUE].start_ori}→{blue_end_ori})_"
+                    f"({ig_pictograph.motions[RED].motion_type}_"
+                    f"{ig_pictograph.motions[RED].start_loc}→{ig_pictograph.motions[RED].end_loc}_"
+                    f"{red_turns}_"
+                    f"{ig_pictograph.motions[RED].start_ori}→{red_end_ori})_"
+                    f"{self.main_widget.prop_type}"
+                )
+                self.pictographs[image_name] = ig_pictograph
+                ig_pictograph.view.resize_for_scroll_area()
+                index += 1
         self.update_attr_panel()
 
     def update_attr_panel(self) -> None:

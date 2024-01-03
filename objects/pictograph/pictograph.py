@@ -324,9 +324,11 @@ class Pictograph(QGraphicsScene):
         for motion_dict in motion_dicts:
             self.motions[motion_dict[COLOR]].update_motion(motion_dict)
         for arrow in self.arrows.values():
-            arrow.show()
+            if not arrow.isVisible():
+                arrow.show()
         for prop in self.props.values():
-            prop.show()
+            if not prop.isVisible():
+                prop.show()
 
     def _update_attr_panel(self) -> None:
         for motion in self.motions.values():
