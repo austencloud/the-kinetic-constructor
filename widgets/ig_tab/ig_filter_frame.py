@@ -5,22 +5,22 @@ from PyQt6.QtWidgets import (
 from constants import BLUE, RED
 from objects.motion.motion import Motion
 from typing import TYPE_CHECKING, Union
-from widgets.image_generator_tab.ig_attr_box import IGAttrBox
+from widgets.ig_tab.ig_attr_box import IGAttrBox
 
 
 if TYPE_CHECKING:
-    from widgets.image_generator_tab.ig_tab import IGTab
-    from widgets.graph_editor_tab.graph_editor import GraphEditor
+    from widgets.ig_tab.ig_tab import IGTab
+    from widgets.graph_editor_tab.graph_editor_frame import GraphEditorFrame
 from PyQt6.QtCore import Qt
 
 
 class IGFilterFrame(QFrame):
     def __init__(
         self,
-        parent: Union["GraphEditor", "IGTab"],
+        parent: Union["GraphEditorFrame", "IGTab"],
     ) -> None:
         super().__init__()
-        self.parent: Union["GraphEditor", "IGTab"] = parent
+        self.parent: Union["GraphEditorFrame", "IGTab"] = parent
         self.setContentsMargins(0, 0, 0, 0)
 
         self.blue_attr_box = IGAttrBox(

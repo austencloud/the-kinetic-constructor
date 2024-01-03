@@ -4,18 +4,20 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.object_panel.objectbox import ObjectBox
-    from widgets.graph_editor_tab.graph_editor import GraphEditor
+    from widgets.graph_editor_tab.object_panel.base_objectbox import BaseObjectBox
+    from widgets.graph_editor_tab.graph_editor_frame import GraphEditorFrame
 
 
-class ObjectBoxView(QGraphicsView):
-    def __init__(self, objectbox: "ObjectBox", graph_editor: "GraphEditor") -> None:
+class BaseObjectBoxView(QGraphicsView):
+    def __init__(
+        self, BaseObjectBox: "BaseObjectBox", graph_editor: "GraphEditorFrame"
+    ) -> None:
         super().__init__()
         self.graph_editor = graph_editor
-        self.setScene(objectbox)
+        self.setScene(BaseObjectBox)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.objectbox = objectbox
+        self.BaseObjectBox = BaseObjectBox
 
         self.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)

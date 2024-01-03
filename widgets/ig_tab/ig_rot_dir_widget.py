@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Union
 from widgets.attr_box_widgets.base_attr_box_widget import (
     BaseAttrBoxWidget,
 )
+from widgets.attr_box_widgets.base_rot_dir_widget import BaseRotDirWidget
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_header_widget import (
@@ -21,10 +22,10 @@ from constants import BLUE, HEX_BLUE, HEX_RED, RED
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 
-class BaseHeaderWidget(BaseAttrBoxWidget):
+class IGRotDirWidget(BaseRotDirWidget):
     def __init__(
-        self: Union["GraphEditorHeaderWidget", "IGHeaderWidget"],
-        attr_box: Union["GraphEditorAttrBox", "IGAttrBox"],
+        self,
+        attr_box,
     ) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box

@@ -3,14 +3,14 @@ from typing import TYPE_CHECKING
 
 from widgets.graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
 
-from widgets.graph_editor_tab.attr_panel.base_attr_panel import BaseAttrPanel
+from widgets.attr_panel.base_attr_panel import BaseAttrPanel
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.graph_editor import GraphEditor
+    from widgets.graph_editor_tab.graph_editor_frame import GraphEditorFrame
 
 
 class GraphEditorAttrPanel(BaseAttrPanel):
-    def __init__(self, graph_editor: "GraphEditor") -> None:
+    def __init__(self, graph_editor: "GraphEditorFrame") -> None:
         super().__init__(graph_editor)
         self.graph_editor = graph_editor
         self.blue_attr_box: GraphEditorAttrBox = GraphEditorAttrBox(

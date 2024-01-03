@@ -13,7 +13,6 @@ from objects.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Tuple
 from objects.ghosts.ghost_arrow import GhostArrow
 
-from widgets.graph_editor_tab.object_panel.objectbox_drag import ObjectBoxDrag
 from utilities.TypeChecking.TypeChecking import (
     Location,
     Location,
@@ -22,6 +21,9 @@ from utilities.TypeChecking.TypeChecking import (
 )
 from data.start_end_loc_map import get_start_end_locs
 from constants import *
+from widgets.graph_editor_tab.object_panel.base_objectbox.base_objectbox_drag import (
+    BaseObjectBoxDrag,
+)
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
@@ -29,13 +31,13 @@ if TYPE_CHECKING:
     from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
 
 
-class ArrowBoxDrag(ObjectBoxDrag):
+class ArrowBoxDrag(BaseObjectBoxDrag):
     def __init__(
         self, main_widget: "MainWidget", pictograph: "Pictograph", arrowbox: "ArrowBox"
     ) -> None:
         super().__init__(main_widget, pictograph, arrowbox)
         self.arrowbox = arrowbox
-        self.objectbox = arrowbox
+        self.BaseObjectBox = arrowbox
         self.ghost: GhostArrow = None
         self.start_ori = IN
         self.setup_dependencies(main_widget, pictograph, arrowbox)
@@ -281,7 +283,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         )
 
     def _get_arrow_drag_rotation_angle(
-        self, arrow: Arrow | ObjectBoxDrag
+        self, arrow: Arrow | BaseObjectBoxDrag
     ) -> RotationAngles:
         """
         Calculate the rotation angle for the given arrow based on its motion type, rotation direction, color, and location.

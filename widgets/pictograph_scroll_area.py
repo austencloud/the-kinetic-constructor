@@ -4,7 +4,7 @@ from Enums import Letter, Orientation, PictographAttributesDict
 from constants import OPTION
 from utilities.TypeChecking.TypeChecking import Turns
 from PyQt6.QtCore import Qt
-from widgets.image_generator_tab.ig_pictograph import IGPictograph
+from widgets.ig_tab.ig_pictograph import IGPictograph
 from widgets.option_picker_tab.option import Option
 
 if TYPE_CHECKING:
@@ -12,8 +12,8 @@ if TYPE_CHECKING:
         OptionPickerScrollArea,
     )
     from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
-    from widgets.image_generator_tab.ig_scroll import IGScrollArea
-    from widgets.image_generator_tab.ig_tab import IGTab
+    from widgets.ig_tab.ig_scroll import IGScrollArea
+    from widgets.ig_tab.ig_tab import IGTab
     from widgets.main_widget import MainWidget
 
 
@@ -65,6 +65,6 @@ class PictographScrollArea(QScrollArea):
             pictograph = Option(self.main_widget, self)
         else:  # graph_type == IG_PICTOGRAPH
             pictograph = IGPictograph(self.main_widget, self)
-            
+
         pictograph.update_pictograph(pictograph_dict)
         return pictograph

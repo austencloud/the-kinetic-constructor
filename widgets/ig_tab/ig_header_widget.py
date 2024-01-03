@@ -6,12 +6,10 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING
-from widgets.attr_box_widgets.base_header_widget import (
-    BaseHeaderWidget
-)
+from widgets.attr_box_widgets.base_header_widget import BaseHeaderWidget
 
 if TYPE_CHECKING:
-    from widgets.image_generator_tab.ig_attr_box import IGAttrBox
+    from widgets.ig_tab.ig_attr_box import IGAttrBox
 from constants import BLUE, CCW_HANDPATH, CW_HANDPATH, HEX_BLUE, HEX_RED, RED
 
 

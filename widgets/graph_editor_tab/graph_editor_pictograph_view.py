@@ -7,11 +7,11 @@ from constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.main_pictograph import MainPictograph
+    from widgets.graph_editor_tab.graph_editor_pictograph import GraphEditorPictograph
 
 
-class MainPictographView(QGraphicsView):
-    def __init__(self, main_pictograph: "MainPictograph") -> None:
+class GraphEditorPictographView(QGraphicsView):
+    def __init__(self, main_pictograph: "GraphEditorPictograph") -> None:
         super().__init__(main_pictograph)
         self.main_pictograph = main_pictograph
 

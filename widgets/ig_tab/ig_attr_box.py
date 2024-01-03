@@ -2,17 +2,15 @@ from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtGui import QPixmap
 from Enums import Color
 from objects.motion.motion import Motion
-from widgets.graph_editor_tab.attr_panel.bast_attr_box import BaseAttrBox
-from widgets.attr_box_widgets.base_attr_box_widget import (
-    BaseAttrBoxWidget,
-)
+from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
+from widgets.attr_panel.bast_attr_box import BaseAttrBox
+from widgets.attr_panel.custom_button import CustomButton
 
-from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
-from widgets.image_generator_tab.ig_header_widget import IGHeaderWidget
-from widgets.image_generator_tab.ig_turns_widget import IGTurnsWidget
+from widgets.ig_tab.ig_header_widget import IGHeaderWidget
+from widgets.ig_tab.ig_turns_widget import IGTurnsWidget
 
 if TYPE_CHECKING:
-    from widgets.image_generator_tab.ig_attr_panel import IGAttrPanel
+    from widgets.ig_tab.ig_attr_panel import IGAttrPanel
     from objects.pictograph.pictograph import Pictograph
 
 from PyQt6.QtGui import QPixmap, QFont
@@ -39,7 +37,6 @@ class IGAttrBox(BaseAttrBox):
 
     def _setup_widgets(self) -> None:  # add common widgets
         self.header_widget = IGHeaderWidget(self)
-        # self.start_end_ori_widget = StartEndOriWidget(self)
         self.turns_widget = IGTurnsWidget(self)
 
         self.layout.addWidget(self.header_widget)

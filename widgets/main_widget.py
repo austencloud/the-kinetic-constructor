@@ -35,10 +35,12 @@ from constants import (
     STAFF,
     START_POS,
 )
-from widgets.image_generator_tab.ig_tab import IGTab
+from widgets.ig_tab.ig_tab import IGTab
 from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
 from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
-from widgets.graph_editor_tab.key_event_handler import KeyEventHandler
+from widgets.graph_editor_tab.graph_editor_key_event_handler import (
+    GraphEditorKeyEventHandler,
+)
 from objects.pictograph.pictograph import Pictograph
 from widgets.sequence_widget.sequence_widget import SequenceWidget
 from widgets.styled_splitter import StyledSplitter
@@ -62,7 +64,7 @@ class MainWidget(QWidget):
         self.thread_pool = QThreadPool()
         self.image_cache_initialized = False
         self.resize(int(self.main_window.width()), int(self.main_window.height()))
-        self.key_event_handler = KeyEventHandler()
+        self.key_event_handler = GraphEditorKeyEventHandler()
         self.letters: PictographAttributesDict = self.load_all_letters()
         self.sequence_widget = SequenceWidget(self)
         self.graph_editor_tab = GraphEditorTab(self)

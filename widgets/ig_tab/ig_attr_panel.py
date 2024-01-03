@@ -1,11 +1,11 @@
 from constants import BLUE, RED
-from widgets.graph_editor_tab.attr_panel.base_attr_panel import BaseAttrPanel
 from typing import TYPE_CHECKING
-from widgets.image_generator_tab.ig_attr_box import IGAttrBox
+from widgets.attr_panel.base_attr_panel import BaseAttrPanel
+from widgets.ig_tab.ig_attr_box import IGAttrBox
 
 
 if TYPE_CHECKING:
-    from widgets.image_generator_tab.ig_tab import IGTab
+    from widgets.ig_tab.ig_tab import IGTab
 
 
 class IGAttrPanel(BaseAttrPanel):
@@ -15,7 +15,9 @@ class IGAttrPanel(BaseAttrPanel):
         self.blue_attr_box: IGAttrBox = IGAttrBox(
             self, self.ig_tab.ig_scroll_area.pictographs, BLUE
         )
-        self.red_attr_box: IGAttrBox = IGAttrBox(self, self.ig_tab.ig_scroll_area.pictographs, RED)
+        self.red_attr_box: IGAttrBox = IGAttrBox(
+            self, self.ig_tab.ig_scroll_area.pictographs, RED
+        )
         self.setup_layouts()
 
     def resize_ig_attr_panel(self) -> None:

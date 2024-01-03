@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_attr_box import (
         GraphEditorAttrBox,
     )
-    from widgets.image_generator_tab.ig_attr_box import (
+    from widgets.ig_tab.ig_attr_box import (
         IGAttrBox,
     )
     from objects.pictograph.pictograph import Pictograph

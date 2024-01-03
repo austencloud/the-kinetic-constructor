@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
 )
 
 if TYPE_CHECKING:
-    from widgets.image_generator_tab.ig_tab import IGTab
+    from widgets.ig_tab.ig_tab import IGTab
     from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
 from PyQt6.QtCore import Qt
 

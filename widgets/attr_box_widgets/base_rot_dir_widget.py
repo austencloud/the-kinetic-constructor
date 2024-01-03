@@ -21,7 +21,7 @@ from constants import BLUE, HEX_BLUE, HEX_RED, RED
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 
-class BaseHeaderWidget(BaseAttrBoxWidget):
+class BaseRotDirWidget(BaseAttrBoxWidget):
     def __init__(
         self: Union["GraphEditorHeaderWidget", "IGHeaderWidget"],
         attr_box: Union["GraphEditorAttrBox", "IGAttrBox"],

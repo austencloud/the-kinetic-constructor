@@ -14,7 +14,7 @@ from widgets.attr_box_widgets.base_turns_widget import (
 
 
 if TYPE_CHECKING:
-    from widgets.image_generator_tab.ig_attr_box import IGAttrBox
+    from widgets.ig_tab.ig_attr_box import IGAttrBox
 
 
 class IGTurnsWidget(BaseTurnsWidget):

@@ -3,27 +3,29 @@ from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.prop.prop import *
 from objects.prop.prop_types import BigTriad
+from widgets.graph_editor_tab.object_panel.base_objectbox.base_objectbox import BaseObjectBox
 from widgets.graph_editor_tab.object_panel.propbox.propbox_drag import PropBoxDrag
 from widgets.graph_editor_tab.object_panel.propbox.propbox_view import PropBoxView
 from constants import *
 from objects.grid import Grid
-from widgets.graph_editor_tab.object_panel.objectbox import ObjectBox
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, Dict, List
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor_tab.graph_editor import GraphEditor
+    from widgets.graph_editor_tab.graph_editor_frame import GraphEditorFrame
 
 
-class PropBox(ObjectBox):
-    def __init__(self, main_widget: "MainWidget", graph_editor: "GraphEditor") -> None:
+class PropBox(BaseObjectBox):
+    def __init__(
+        self, main_widget: "MainWidget", graph_editor: "GraphEditorFrame"
+    ) -> None:
         super().__init__(main_widget, graph_editor)
         self.setup_properties(main_widget, graph_editor)
         self.setup_ui()
         self.populate_props()
 
     def setup_properties(
-        self, main_widget: "MainWidget", graph_editor: "GraphEditor"
+        self, main_widget: "MainWidget", graph_editor: "GraphEditorFrame"
     ) -> None:
         self.main_widget = main_widget
         self.view = PropBoxView(self, graph_editor)

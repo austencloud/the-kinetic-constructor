@@ -11,8 +11,9 @@ from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
 
-from widgets.graph_editor_tab.object_panel.objectbox_drag import ObjectBoxDrag
-
+from widgets.graph_editor_tab.object_panel.base_objectbox.base_objectbox_drag import (
+    BaseObjectBoxDrag,
+)
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
@@ -20,14 +21,14 @@ if TYPE_CHECKING:
     from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
 
 
-class PropBoxDrag(ObjectBoxDrag):
+class PropBoxDrag(BaseObjectBoxDrag):
     def __init__(
         self, main_widget: "MainWidget", pictograph: "Pictograph", propbox: "PropBox"
     ) -> None:
         super().__init__(main_widget, pictograph, propbox)
         self.attributes: PropAttributesDicts = {}
         self.propbox = propbox
-        self.objectbox = propbox
+        self.BaseObjectBox = propbox
         self.arrow = None
 
     def match_target_prop(self, target_prop: "Prop") -> None:
@@ -235,13 +236,13 @@ class PropBoxDrag(ObjectBoxDrag):
         return rotated_pixmap
 
     def _get_prop_drag_rotation_angle(
-        self, prop: Prop | ObjectBoxDrag
+        self, prop: Prop | BaseObjectBoxDrag
     ) -> RotationAngles:
         """
         Get the rotation angle for the given prop specifically for use with the PropBoxDrag.
 
         Args:
-            prop (Union[Prop, ObjectBoxDrag]): The prop for which to retrieve the rotation angle.
+            prop (Union[Prop, BaseObjectBoxDrag]): The prop for which to retrieve the rotation angle.
 
         Returns:
             RotationAngles: The rotation angle for the prop.

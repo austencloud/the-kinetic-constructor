@@ -3,10 +3,13 @@ from typing import TYPE_CHECKING, Optional, Union
 
 from objects.graphical_object import GraphicalObject
 from utilities.TypeChecking.TypeChecking import RotationAngles
+from widgets.graph_editor_tab.object_panel.base_objectbox.base_objectbox import (
+    BaseObjectBox,
+)
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-    from widgets.graph_editor_tab.object_panel.objectbox import ObjectBox
+
     from objects.pictograph.pictograph import Pictograph
     from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox_drag import (
         ArrowBoxDrag,
@@ -21,29 +24,29 @@ from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 
 
-class ObjectBoxDrag(QWidget):
+class BaseObjectBoxDrag(QWidget):
     def __init__(
         self,
         main_widget: "MainWidget",
         pictograph: "Pictograph",
-        objectbox: "ObjectBox",
+        BaseObjectBox: "BaseObjectBox",
     ) -> None:
         super().__init__(main_widget)
         self.setParent(main_widget)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.reset_drag_state()
-        self.setup_dependencies(main_widget, pictograph, objectbox)
+        self.setup_dependencies(main_widget, pictograph, BaseObjectBox)
 
     def setup_dependencies(
         self,
         main_widget: "MainWidget",
         pictograph: "Pictograph",
-        objectbox: "ObjectBox",
+        BaseObjectBox: "BaseObjectBox",
     ) -> None:
         self.preview = QLabel(self)
         self.transform = QTransform()
-        self.objectbox = objectbox
+        self.BaseObjectBox = BaseObjectBox
         self.pictograph = pictograph
         self.main_widget = main_widget
         self.has_entered_pictograph_once = False
@@ -100,7 +103,7 @@ class ObjectBoxDrag(QWidget):
         )
 
     def move_to_cursor(self, event_pos: QPoint) -> None:
-        local_pos = self.objectbox.view.mapTo(self.main_widget, event_pos)
+        local_pos = self.BaseObjectBox.view.mapTo(self.main_widget, event_pos)
         self.center = QPointF((self.preview.width() / 2), self.preview.height() / 2)
         self.move(local_pos - self.center.toPoint())
 

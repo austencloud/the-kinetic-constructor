@@ -36,7 +36,7 @@ from utilities.letter_engine import LetterEngine
 from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
 
 if TYPE_CHECKING:
-    from widgets.image_generator_tab.ig_pictograph import IGPictograph
+    from widgets.ig_tab.ig_pictograph import IGPictograph
     from widgets.option_picker_tab.option import Option
     from widgets.main_widget import MainWidget
 
@@ -109,16 +109,18 @@ class Pictograph(QGraphicsScene):
         self._setup_managers(main_widget)
 
     def _init_view(self, graph_type) -> QGraphicsView:
-        from widgets.graph_editor_tab.main_pictograph_view import MainPictographView
+        from widgets.graph_editor_tab.graph_editor_pictograph_view import (
+            GraphEditorPictographView,
+        )
         from widgets.option_picker_tab.option import OptionView
         from widgets.sequence_widget.beat_frame.start_pos_beat import (
             StartPositionBeatView,
         )
         from widgets.sequence_widget.beat_frame.beat import BeatView
-        from widgets.image_generator_tab.ig_pictograph import IG_Pictograph_View
+        from widgets.ig_tab.ig_pictograph import IG_Pictograph_View
 
         if graph_type == MAIN:
-            view = MainPictographView(self)
+            view = GraphEditorPictographView(self)
         elif graph_type == OPTION:
             view = OptionView(self)
         elif graph_type == BEAT:
@@ -317,7 +319,6 @@ class Pictograph(QGraphicsScene):
         for color in [RED, BLUE]:
             motion_dict = self._create_motion_dict(pictograph_dict, color)
             motion_dicts.append(motion_dict)
-
 
         for motion_dict in motion_dicts:
             self.motions[motion_dict[COLOR]].update_attributes(motion_dict)

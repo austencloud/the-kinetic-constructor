@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from widgets.graph_editor_tab.graph_editor import GraphEditor
+from widgets.graph_editor_tab.graph_editor_frame import GraphEditorFrame
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
@@ -27,6 +27,6 @@ class GraphEditorTab(QFrame):
         self.setContentsMargins(0, 0, 0, 0)
 
         self.main_layout.setAlignment(self.main_widget, Qt.AlignmentFlag.AlignCenter)
-        self.graph_editor = GraphEditor(self.main_widget, self)
+        self.graph_editor = GraphEditorFrame(self.main_widget, self)
 
         self.main_layout.addWidget(self.graph_editor)

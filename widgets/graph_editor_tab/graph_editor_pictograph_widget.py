@@ -2,15 +2,17 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.graph_editor import GraphEditor
-    from widgets.graph_editor_tab.main_pictograph_view import MainPictographView
+    from widgets.graph_editor_tab.graph_editor_frame import GraphEditorFrame
+    from widgets.graph_editor_tab.graph_editor_pictograph_view import (
+        GraphEditorPictographView,
+    )
 
 
-class MainPictographWidget(QWidget):
+class GraphEditorPictographWidget(QWidget):
     def __init__(
         self,
-        graph_editor: "GraphEditor",
-        main_pictograph_view: "MainPictographView",
+        graph_editor: "GraphEditorFrame",
+        main_pictograph_view: "GraphEditorPictographView",
     ) -> None:
         super().__init__(graph_editor)
         self.graph_editor = graph_editor

@@ -1,14 +1,15 @@
 from typing import TYPE_CHECKING
 
-from widgets.graph_editor_tab.object_panel.objectbox_view import ObjectBoxView
+from widgets.graph_editor_tab.object_panel.base_objectbox.base_objectbox_view import BaseObjectBoxView
+
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
-    from widgets.graph_editor_tab.graph_editor import GraphEditor
+    from widgets.graph_editor_tab.graph_editor_frame import GraphEditorFrame
 
 
-class PropBoxView(ObjectBoxView):
-    def __init__(self, propbox: "PropBox", graph_editor: "GraphEditor") -> None:
+class PropBoxView(BaseObjectBoxView):
+    def __init__(self, propbox: "PropBox", graph_editor: "GraphEditorFrame") -> None:
         super().__init__(propbox, graph_editor)
         self.setScene(propbox)
         self.propbox = propbox
