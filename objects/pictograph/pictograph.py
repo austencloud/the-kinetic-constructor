@@ -302,10 +302,9 @@ class Pictograph(QGraphicsScene):
     def update_pictograph(
         self, pictograph_dict: PictographAttributesDict = None
     ) -> None:
-        if self.is_complete(pictograph_dict):
-            self.pictograph_dict = pictograph_dict
-
         if pictograph_dict is not None:
+            if self.is_complete(pictograph_dict):
+                self.pictograph_dict = pictograph_dict
             self._update_from_pictograph_dict(pictograph_dict)
 
         self._position_objects()

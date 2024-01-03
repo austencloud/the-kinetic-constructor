@@ -38,6 +38,6 @@ class IGAttrPanel(BaseAttrPanel):
         self.layout.addWidget(self.static_attr_box)
 
     def resize_ig_attr_panel(self) -> None:
-        self.setMaximumWidth(self.pro_attr_box.width() * 4)
         for box in self.boxes:
             box.resize_ig_attr_box()
+        self.setMaximumWidth(self.pro_attr_box.width() * 4)

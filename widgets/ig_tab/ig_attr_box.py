@@ -41,8 +41,8 @@ class IGAttrBox(BaseAttrBox):
         self.layout.addWidget(self.turns_widget)
 
     def resize_ig_attr_box(self) -> None:
-        self.setMinimumWidth(int(self.attr_panel.ig_tab.width() / 6))
-        self.setMaximumWidth(int(self.attr_panel.ig_tab.width() / 6))
+        self.setMinimumWidth(int(self.attr_panel.ig_tab.width() / 7))
+        self.setMaximumWidth(int(self.attr_panel.ig_tab.width() / 7))
 
         for button in self.findChildren(AttrBoxButton):
             button.update_attr_box_button_size(int(self.width() / 8))

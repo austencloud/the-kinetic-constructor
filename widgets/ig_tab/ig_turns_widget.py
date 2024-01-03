@@ -1,13 +1,9 @@
-from PyQt6.QtWidgets import (
-    QHBoxLayout,
-    QLabel,
-    QFrame,
-)
+from PyQt6.QtWidgets import QHBoxLayout, QLabel, QFrame, QVBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 from objects.motion.motion import Motion
-from constants import ICON_DIR
+from constants import BLUE, ICON_DIR, RED
 from widgets.attr_box_widgets.base_turns_widget import (
     BaseTurnsWidget,
 )
@@ -20,12 +16,15 @@ if TYPE_CHECKING:
 class IGTurnsWidget(BaseTurnsWidget):
     def __init__(self, attr_box: "IGAttrBox") -> None:
         super().__init__(attr_box)
+        self.attr_box: "IGAttrBox" = attr_box
+
         self._initialize_ui()
 
     def _initialize_ui(self) -> None:
         super()._initialize_ui()
-        self.turnbox_hbox_frame: QFrame = self._create_turnbox_hbox_frame()
+        self.turnbox_hbox_frame: QFrame = self._create_turnbox_vbox_frame()
         self._setup_layout_frames()
+        self.turnbox.currentIndexChanged.connect(self._set_turns_directly)
 
     ### LAYOUTS ###
 
@@ -41,16 +40,19 @@ class IGTurnsWidget(BaseTurnsWidget):
 
     ### WIDGETS ###
 
-    def _create_turnbox_hbox_frame(self) -> None:
+    def _create_turnbox_vbox_frame(self) -> None:
         """Creates the turns box and buttons for turn adjustments."""
         turnbox_frame = QFrame(self)
-        turnbox_frame.setLayout(QHBoxLayout())
+        turnbox_frame.setLayout(QVBoxLayout())
 
         self.turns_label = QLabel("Turns")
+        self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         turnbox_frame.layout().addWidget(self.turns_label)
         turnbox_frame.layout().addWidget(self.turnbox)
-
+        turnbox_frame.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
         turnbox_frame.layout().setContentsMargins(0, 0, 0, 0)
         turnbox_frame.layout().setAlignment(Qt.AlignmentFlag.AlignCenter)
         turnbox_frame.layout().setSpacing(0)
@@ -59,15 +61,42 @@ class IGTurnsWidget(BaseTurnsWidget):
     ### CALLBACKS ###
 
     def _adjust_turns_callback(self, turn_adjustment: float) -> None:
-        for pictograph in self.attr_box.pictographs.values():
-            motion: Motion = pictograph.motions[self.attr_box.color]
-            new_turns = motion.turns + turn_adjustment
-            if new_turns >= 0 and new_turns <= 3:
-                pictograph_dict = {f"{motion.color}_turns": new_turns}
-                motion.scene.update_pictograph(pictograph_dict)
-            self._update_turnbox(new_turns)
+        self._update_turns_incrementally(turn_adjustment)
 
     ### UPDATE METHODS ###
+
+    def _update_turns_incrementally(self, adjustment: float) -> None:
+        self.turnbox.currentIndexChanged.disconnect(
+            self._set_turns_directly
+        )  # Disconnect the signal
+        for pictograph in self.attr_box.pictographs.values():
+            for motion in pictograph.motions.values():
+                if (
+                    motion.color in [BLUE, RED]
+                    and motion.motion_type == self.attr_box.motion_type
+                ):
+                    new_turns = max(0, min(3, motion.turns + adjustment))
+                    motion.turns = new_turns
+                    if new_turns in [0.0, 1.0, 2.0, 3.0]:
+                        self.turnbox.setCurrentText(str(int(new_turns)))
+                    elif new_turns in [0.5, 1.5, 2.5]:
+                        self.turnbox.setCurrentText(str(new_turns))
+                    pictograph_dict = {f"{motion.color}_turns": new_turns}
+                    motion.scene.update_pictograph(pictograph_dict)
+        self.turnbox.currentIndexChanged.connect(
+            self._set_turns_directly
+        )  # Reconnect the signal
+
+    def _update_turns_directly(self, new_turns: float) -> None:
+        for pictograph in self.attr_box.pictographs.values():
+            for motion in pictograph.motions.values():
+                if motion.motion_type != self.attr_box.motion_type:
+                    continue
+                else:
+                    if new_turns >= 0 and new_turns <= 3:
+                        pictograph_dict = {f"{motion.color}_turns": new_turns}
+                        motion.scene.update_pictograph(pictograph_dict)
+            self.turnbox.setCurrentText(str(new_turns))
 
     def _update_turnbox(self, turns) -> None:
         if turns in [0.0, 1.0, 2.0, 3.0]:
@@ -144,6 +173,12 @@ class IGTurnsWidget(BaseTurnsWidget):
             else:  # button.text() == "-1" or button.text() == "+1":
                 button_size = int(self.attr_box.width() / 7)
             button.update_attr_box_button_size(button_size)
+
+    def _set_turns_directly(self) -> None:
+        selected_turns_str = self.turnbox.currentText()
+        if selected_turns_str:
+            selected_turns = float(selected_turns_str)
+            self._update_turns_directly(selected_turns)
 
     def resize_turns_widget(self):
         self._update_turnbox_size()

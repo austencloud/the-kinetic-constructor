@@ -23,9 +23,8 @@ if TYPE_CHECKING:
 
 
 class BaseTurnsWidget(BaseAttrBoxWidget):
-    def __init__(self, attr_box: "BaseAttrBox") -> None:
+    def __init__(self, attr_box) -> None:
         super().__init__(attr_box)
-        self.attr_box = attr_box
 
     def _initialize_ui(self) -> None:
         """Initializes the user interface components and their layout."""

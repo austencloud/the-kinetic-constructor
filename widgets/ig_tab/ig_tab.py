@@ -232,5 +232,6 @@ class IGTab(QWidget):
 
     def resize_ig_tab(self) -> None:
         self.attr_panel.resize_ig_attr_panel()
-        self.ig_scroll_area.resize_ig_scroll_area()
+        # self.ig_scroll_area.resize_ig_scroll_area()
         self.setMaximumWidth(self.attr_panel.width() + self.button_panel.width())
+        self.main_widget.right_frame.setMaximumWidth(self.width())
