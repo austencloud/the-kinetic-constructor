@@ -7,7 +7,7 @@ from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING, Callable
 from widgets.attr_box_widgets.base_header_widget import BaseHeaderWidget
-from widgets.attr_panel.custom_button import CustomButton
+from widgets.attr_box_widgets.attr_box_button import AttrBoxButton
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_attr_box import (
@@ -47,7 +47,6 @@ class GraphEditorHeaderWidget(BaseHeaderWidget):
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.separator)
 
-
     def _rotate_ccw(self) -> None:
         motion = self.attr_box.pictograph.motions[self.attr_box.color]
         if motion:
@@ -66,11 +65,10 @@ class GraphEditorHeaderWidget(BaseHeaderWidget):
         label.setStyleSheet(f"color: {color_hex}; font-weight: bold;")
         return label
 
-
     def _create_button(
         self, icon_path: str, callback: Callable[[], None]
-    ) -> CustomButton:
-        button = CustomButton(self)
+    ) -> AttrBoxButton:
+        button = AttrBoxButton(self)
         button.setIcon(QIcon(icon_path))
         button.clicked.connect(callback)
         return button
@@ -78,7 +76,6 @@ class GraphEditorHeaderWidget(BaseHeaderWidget):
     def _update_button_size(self) -> None:
         for button in self.buttons:
             button.setFont(QFont("Arial", int(button.height() / 3)))
-
 
     def resize_header_widget(self) -> None:
         self.separator.setMaximumWidth(

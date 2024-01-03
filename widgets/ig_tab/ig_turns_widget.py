@@ -144,7 +144,7 @@ class IGTurnsWidget(BaseTurnsWidget):
                 button_size = int(button_size * 0.85)
             else:  # button.text() == "-1" or button.text() == "+1":
                 button_size = int(self.attr_box.width() / 7)
-            button.update_custom_button_size(button_size)
+            button.update_attr_box_button_size(button_size)
 
     def resize_turns_widget(self):
         self._update_turnbox_size()

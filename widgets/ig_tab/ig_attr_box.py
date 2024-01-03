@@ -4,7 +4,7 @@ from Enums import Color
 from objects.motion.motion import Motion
 from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
 from widgets.attr_panel.bast_attr_box import BaseAttrBox
-from widgets.attr_panel.custom_button import CustomButton
+from widgets.attr_box_widgets.attr_box_button import AttrBoxButton
 
 from widgets.ig_tab.ig_header_widget import IGHeaderWidget
 from widgets.ig_tab.ig_turns_widget import IGTurnsWidget
@@ -47,8 +47,8 @@ class IGAttrBox(BaseAttrBox):
         self.setMinimumWidth(int(self.ig_attr_panel.ig_tab.width() / 3))
         self.setMaximumWidth(int(self.ig_attr_panel.ig_tab.width() / 3))
 
-        for button in self.findChildren(CustomButton):
-            button.update_custom_button_size(int(self.width() / 8))
+        for button in self.findChildren(AttrBoxButton):
+            button.update_attr_box_button_size(int(self.width() / 8))
 
         self.header_widget.resize_header_widget()
         self.turns_widget.resize_turns_widget()

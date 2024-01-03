@@ -7,7 +7,8 @@ from widgets.graph_editor_tab.graph_editor_header_widget import GraphEditorHeade
 from widgets.graph_editor_tab.graph_editor_turns_widget import GraphEditorTurnsWidget
 from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
 from widgets.attr_box_widgets.start_end_loc_widget import StartEndLocWidget
-from widgets.attr_panel.custom_button import CustomButton
+from widgets.attr_box_widgets.attr_box_button import AttrBoxButton
+
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
     from widgets.attr_panel.base_attr_panel import BaseAttrPanel
@@ -59,8 +60,8 @@ class GraphEditorAttrBox(BaseAttrBox):
         self.setMinimumHeight(self.pictograph.view.height())
         self.setMaximumHeight(self.pictograph.view.height())
 
-        for button in self.findChildren(CustomButton):
-            button.update_custom_button_size(int(self.width() / 8))
+        for button in self.findChildren(AttrBoxButton):
+            button.update_attr_box_button_size(int(self.width() / 8))
 
         self.header_spacing = int(self.width() * 0.02)
         ratio_total = 1 + 1 + 1 + 2

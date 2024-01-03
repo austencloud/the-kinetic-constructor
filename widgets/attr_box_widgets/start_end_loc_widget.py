@@ -108,7 +108,7 @@ class StartEndLocWidget(BaseAttrBoxWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        self.swap_button = self.create_custom_button(
+        self.swap_button = self.create_attr_box_button(
             SWAP_ICON, self._swap_locations_callback
         )
 

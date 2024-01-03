@@ -242,7 +242,7 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
                 button_size = int(button_size * 0.85)
             else:
                 button_size = int(self.attr_box.width() / 6)
-            button.update_custom_button_size(button_size)
+            button.update_attr_box_button_size(button_size)
 
     def resize_turns_widget(self) -> None:
         self._update_clock_size()

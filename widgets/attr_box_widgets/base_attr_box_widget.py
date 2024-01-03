@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Callable
 
 from constants import ICON_DIR
-from widgets.attr_panel.custom_button import CustomButton
+from widgets.attr_box_widgets.attr_box_button import AttrBoxButton
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
@@ -29,8 +29,10 @@ class BaseAttrBoxWidget(QWidget):
         frame.setLayout(layout)
         return frame
 
-    def create_custom_button(self, icon_path: str, callback: Callable) -> CustomButton:
-        button = CustomButton(self)
+    def create_attr_box_button(
+        self, icon_path: str, callback: Callable
+    ) -> AttrBoxButton:
+        button = AttrBoxButton(self)
         button.setIcon(QIcon(ICON_DIR + icon_path))
         button.clicked.connect(callback)
         return button

@@ -12,8 +12,7 @@ from widgets.attr_box_widgets.base_attr_box_widget import (
     BaseAttrBoxWidget,
 )
 from widgets.attr_panel.bast_attr_box import BaseAttrBox
-from widgets.attr_panel.custom_button import CustomButton
-
+from widgets.attr_box_widgets.attr_box_button import AttrBoxButton
 
 
 if TYPE_CHECKING:
@@ -30,7 +29,7 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
     def _initialize_ui(self) -> None:
         """Initializes the user interface components and their layout."""
         self.turnbox = self.create_turnbox()
-        self.buttons: List[CustomButton] = [
+        self.buttons: List[AttrBoxButton] = [
             self._create_turns_button(text) for text in ["-1", "-0.5", "+0.5", "+1"]
         ]
         self._setup_layout()
@@ -73,9 +72,9 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
 
     def _create_turns_button(
         self: Union["GraphEditorTurnsWidget", "IGTurnsWidget"], text: str
-    ) -> CustomButton:
+    ) -> AttrBoxButton:
         """Creates a turn adjustment button with specified text."""
-        button = CustomButton(self)
+        button = AttrBoxButton(self)
         button.setText(text)
         turn_adjustment_mapping = {"-1": -1, "-0.5": -0.5, "+0.5": 0.5, "+1": 1}
         turn_adjustment = turn_adjustment_mapping.get(text, 0)

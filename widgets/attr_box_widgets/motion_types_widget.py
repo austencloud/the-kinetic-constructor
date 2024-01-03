@@ -25,7 +25,7 @@ class MotionTypeWidget(BaseAttrBoxWidget):
 
         self.header_label = self.create_attr_header_label("Type")
         self.motion_type_box: QComboBox = self._setup_motion_type_box()
-        self.swap_button = self.create_custom_button(
+        self.swap_button = self.create_attr_box_button(
             SWAP_ICON, self._swap_motion_type_callback
         )
         self.swap_button_frame = self._setup_swap_button_frame()
