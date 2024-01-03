@@ -68,7 +68,9 @@ class IGTurnsWidget(BaseTurnsWidget):
         self.turnbox.currentIndexChanged.disconnect(
             self._update_turns_directly
         )  # Disconnect the signal
-        for pictograph in self.attr_box.pictographs.values():
+        for (
+            pictograph
+        ) in self.attr_box.attr_panel.ig_tab.ig_scroll_area.pictographs.values():
             for motion in pictograph.motions.values():
                 if (
                     motion.color in [BLUE, RED]

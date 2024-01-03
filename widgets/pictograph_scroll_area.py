@@ -2,7 +2,8 @@ from typing import TYPE_CHECKING, Dict, List, Literal, Union
 from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
 from Enums import Letter, Orientation, PictographAttributesDict
 from constants import OPTION
-from utilities.TypeChecking.TypeChecking import Turns
+from utilities.TypeChecking.TypeChecking import Turns, letters
+
 from PyQt6.QtCore import Qt
 from widgets.ig_tab.ig_pictograph import IGPictograph
 from widgets.option_picker_tab.option import Option
@@ -28,7 +29,7 @@ class PictographScrollArea(QScrollArea):
         self.main_widget = main_widget
         self.parent_tab = parent_tab
         self.letters: Dict[Letter, List[Dict[str, str]]] = self.main_widget.letters
-        self.pictographs: Dict[Letter, Union["IGPictograph", "Option"]] = {}
+        self.pictographs: Dict[letters, Union["IGPictograph", "Option"]] = {}
 
         self._initialize_ui()
 
