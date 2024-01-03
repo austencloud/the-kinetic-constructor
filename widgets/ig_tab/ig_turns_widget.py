@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QHBoxLayout, QLabel, QFrame, QVBoxLayout, QSizePolic
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
+from Enums import MotionType
 from objects.motion.motion import Motion
 from constants import BLUE, ICON_DIR, RED
 from widgets.attr_box_widgets.base_turns_widget import (
@@ -180,3 +181,4 @@ class IGTurnsWidget(BaseTurnsWidget):
     def resize_turns_widget(self):
         self._update_turnbox_size()
         self._update_button_size()
+

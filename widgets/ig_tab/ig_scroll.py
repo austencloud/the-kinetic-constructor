@@ -26,6 +26,7 @@ from Enums import Letter, Orientation, PictographAttributesDict, Turns
 from constants import IG_PICTOGRAPH
 from utilities.TypeChecking.Letters import letters
 from utilities.TypeChecking.TypeChecking import letters
+
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_tab import IGTab
     from widgets.main_widget import MainWidget
@@ -72,6 +73,15 @@ class IGScrollArea(PictographScrollArea):
                     ig_pictograph = self._create_pictograph(
                         pictograph_dict, IG_PICTOGRAPH
                     )
+
+                    # Set turns according to the motion types in the attribute panel
+                    for motion_color in ("blue", "red"):
+                        motion_type = pictograph_dict.get(f"{motion_color}_motion_type")
+                        if motion_type:
+                            # Here, you would need a method or a way to get the turns value from the attribute panel based on the motion type
+                            turns_value = self.get_turns_from_attr_panel(motion_type)
+                            pictograph_dict[f"{motion_color}_turns"] = turns_value
+
                     ig_pictograph.update_pictograph(pictograph_dict)
 
                 self.apply_filters_to_pictograph(ig_pictograph)
@@ -84,7 +94,6 @@ class IGScrollArea(PictographScrollArea):
         for index, (key, ig_pictograph) in enumerate(ordered_pictographs.items()):
             if key not in self.pictographs:
                 self.add_pictograph_to_layout(ig_pictograph, index)
-
 
         # Update the main pictographs dictionary to include only the sorted pictographs
         self.pictographs = {**self.pictographs, **ordered_pictographs}
@@ -101,6 +110,8 @@ class IGScrollArea(PictographScrollArea):
         if self.pictographs:
             self.update_attr_panel()
 
+    def get_turns_from_attr_panel(self, motion_type):
+        return self.ig_tab.attr_panel.get_turns_for_motion_type(motion_type)
 
     def remove_deselected_letter_pictographs(self, deselected_letter):
         # Remove pictographs associated with the deselected letter

@@ -28,6 +28,8 @@ DictVariants = (
 )
 DictVariantsLists = List[DictVariants]
 
+MotionTypes = Literal["pro", "anti", "float", "dash", "static"]
+
 
 class Mode(Enum):
     TOG_SAME = "TS"
@@ -36,6 +38,7 @@ class Mode(Enum):
     SPLIT_OPPOSITE = "SO"
     QUARTER_TIME_SAME = "QTS"
     QUARTER_TIME_OPPOSITE = "QTO"
+
 
 ### LETTER GROUPS ###
 
