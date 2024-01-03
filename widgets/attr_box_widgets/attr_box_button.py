@@ -3,9 +3,9 @@ from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QFont
 from typing import Union, TYPE_CHECKING
 
-from widgets.attr_box_widgets.motion_types_widget import MotionTypeWidget
 
 if TYPE_CHECKING:
+    from widgets.attr_box_widgets.motion_types_widget import MotionTypeWidget
     from widgets.attr_box_widgets.start_end_loc_widget import StartEndLocWidget
     from widgets.attr_box_widgets.base_turns_widget import BaseTurnsWidget
 

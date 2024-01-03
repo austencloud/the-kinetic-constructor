@@ -25,31 +25,14 @@ class BaseAttrPanel(QFrame):
         super().__init__()
         self.parent: Union["GraphEditorFrame", "IGTab"] = parent
         self.setContentsMargins(0, 0, 0, 0)
-        self.blue_attr_box: BaseAttrBox = None
-        self.red_attr_box: BaseAttrBox = None
-
+        self.boxes: list[BaseAttrBox] = []
+        
     def setup_layouts(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
-        self.layout.addWidget(self.blue_attr_box)
-        self.layout.addWidget(self.red_attr_box)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
-
-    def update_attr_panel(
-        self: Union["GraphEditorAttrPanel", "IGAttrPanel"], motion: Motion
-    ) -> None:
-        if motion.motion_type:
-            if motion.color == BLUE:
-                self.blue_attr_box.update_attr_box(motion)
-            elif motion.color == RED:
-                self.red_attr_box.update_attr_box(motion)
-        else:
-            if motion.color == BLUE:
-                self.blue_attr_box.clear_attr_box()
-            elif motion.color == RED:
-                self.red_attr_box.clear_attr_box()
+        # self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
     def clear_all_attr_boxes(self) -> None:
-        self.blue_attr_box.clear_attr_box()
-        self.red_attr_box.clear_attr_box()
+        for box in self.boxes:
+            box.clear_attr_box()

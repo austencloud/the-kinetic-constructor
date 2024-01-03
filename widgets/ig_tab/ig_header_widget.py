@@ -6,16 +6,23 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING
+
 from widgets.attr_box_widgets.base_header_widget import BaseHeaderWidget
 
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_attr_box import IGAttrBox
-from constants import BLUE, CCW_HANDPATH, CW_HANDPATH, HEX_BLUE, HEX_RED, RED
+from constants import (
+    ANTI,
+    DASH,
+    PRO,
+    STATIC,
+)
 
 
 class IGHeaderWidget(BaseHeaderWidget):
     def __init__(self, attr_box: "IGAttrBox") -> None:
         super().__init__(attr_box)
+        self.attr_box = attr_box
         self._setup_main_layout()
 
     def _setup_main_layout(self) -> None:
@@ -33,11 +40,18 @@ class IGHeaderWidget(BaseHeaderWidget):
         self.layout.addWidget(self.separator)
 
     def _setup_header_label(self) -> QLabel:
-        text = "Left" if self.attr_box.color == BLUE else "Right"
-        color_hex = HEX_RED if self.attr_box.color == RED else HEX_BLUE
+        text = ""
+        if self.attr_box.motion_type == PRO:
+            text = PRO.capitalize()
+        elif self.attr_box.motion_type == ANTI:
+            text = ANTI.capitalize()
+        elif self.attr_box.motion_type == DASH:
+            text = DASH.capitalize()
+        elif self.attr_box.motion_type == STATIC:
+            text = STATIC.capitalize()
+
         label = QLabel(text, self)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        label.setStyleSheet(f"color: {color_hex}; font-weight: bold;")
         return label
 
     def resize_header_widget(self) -> None:

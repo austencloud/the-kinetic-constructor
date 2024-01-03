@@ -20,7 +20,6 @@ if TYPE_CHECKING:
 class IGTurnsWidget(BaseTurnsWidget):
     def __init__(self, attr_box: "IGAttrBox") -> None:
         super().__init__(attr_box)
-        self.attr_box = attr_box
         self._initialize_ui()
 
     def _initialize_ui(self) -> None:
@@ -101,8 +100,8 @@ class IGTurnsWidget(BaseTurnsWidget):
 
         self.turnbox.setMinimumHeight(int(self.attr_box.height() / 4))
         self.turnbox.setMaximumHeight(int(self.attr_box.height() / 4))
-        self.turnbox.setMinimumWidth(int(self.attr_box.width() / 4))
-        self.turnbox.setMaximumWidth(int(self.attr_box.width() / 4))
+        self.turnbox.setMinimumWidth(int(self.attr_box.width() / 3))
+        self.turnbox.setMaximumWidth(int(self.attr_box.width() / 3))
         self.turnbox.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
 
         self.turns_label.setContentsMargins(0, 0, self.spacing, 0)

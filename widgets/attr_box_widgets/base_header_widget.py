@@ -22,10 +22,7 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 
 class BaseHeaderWidget(BaseAttrBoxWidget):
-    def __init__(
-        self: Union["GraphEditorHeaderWidget", "IGHeaderWidget"],
-        attr_box: Union["GraphEditorAttrBox", "IGAttrBox"],
-    ) -> None:
+    def __init__(self, attr_box) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
         self.header_label = self._setup_header_label()

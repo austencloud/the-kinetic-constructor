@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtGui import QPixmap
 from Enums import Color
+from constants import HEX_BLUE, HEX_RED, RED
 from objects.motion.motion import Motion
 from widgets.attr_panel.bast_attr_box import BaseAttrBox
 from widgets.graph_editor_tab.graph_editor_header_widget import GraphEditorHeaderWidget
@@ -20,26 +21,21 @@ class GraphEditorAttrBox(BaseAttrBox):
     def __init__(
         self, attr_panel: "BaseAttrPanel", pictograph: "Pictograph", color: Color
     ) -> None:
-        super().__init__(attr_panel, pictograph, color)
-        self.attr_panel = attr_panel
-        self.pictograph = pictograph
+        super().__init__(attr_panel, pictograph)
         self.color = color
-        self.font_size = self.width() // 10
-        self.widgets: List[BaseAttrBoxWidget] = []
-        self.combobox_border = 2
-        self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
+        self.apply_border_style(HEX_RED if self.color == RED else HEX_BLUE)
         self._setup_widgets()
 
     def _setup_widgets(self) -> None:
         self.motion_type_widget = MotionTypeWidget(self)
         self.header_widget = GraphEditorHeaderWidget(self)
         self.start_end_loc_widget = StartEndLocWidget(self)
-        self.graph_editor_turns_widget = GraphEditorTurnsWidget(self)
+        self.turns_widget = GraphEditorTurnsWidget(self)
 
         self.layout.addWidget(self.header_widget)
         self.layout.addWidget(self.motion_type_widget)
         self.layout.addWidget(self.start_end_loc_widget)
-        self.layout.addWidget(self.graph_editor_turns_widget)
+        self.layout.addWidget(self.turns_widget)
 
     ### CREATE LABELS ###
 
@@ -49,10 +45,8 @@ class GraphEditorAttrBox(BaseAttrBox):
     def clear_attr_box(self) -> None:
         super().clear_attr_box()
         self.motion_type_widget.clear_motion_type_box()
+        self.turns_widget._update_clocks(None)
 
-    def update_attr_box(self, motion: Motion = None) -> None:
-        super().update_attr_box(motion)
-        self.motion_type_widget.update_motion_type_box(motion.motion_type)
 
     def resize_graph_editor_attr_box(self) -> None:
         self.setMinimumWidth(int(self.pictograph.view.width() * 0.85))
@@ -71,19 +65,21 @@ class GraphEditorAttrBox(BaseAttrBox):
         turns_widget_height = int(available_height * (2 / ratio_total))
         self.header_widget.setMaximumHeight(header_height)
         self.start_end_loc_widget.setMaximumHeight(start_end_height)
-        self.graph_editor_turns_widget.setMaximumHeight(turns_widget_height)
+        self.turns_widget.setMaximumHeight(turns_widget_height)
 
         self.header_widget.resize_header_widget()
         self.motion_type_widget.resize_motion_type_widget()
-        self.graph_editor_turns_widget.resize_turns_widget()
+        self.turns_widget.resize_turns_widget()
         self.start_end_loc_widget.resize_start_end_widget()
 
         self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
 
     def update_attr_box(self, motion: Motion) -> None:
-        self.graph_editor_turns_widget._update_clocks(motion.prop_rot_dir)
+        self.turns_widget._update_clocks(motion.prop_rot_dir)
         self.start_end_loc_widget.update_start_end_loc_boxes(
             motion.start_loc, motion.end_loc
         )
+        self.motion_type_widget.update_motion_type_box(motion.motion_type)
+
         if motion.prop_rot_dir:
-            self.graph_editor_turns_widget._update_turnbox(motion.turns)
+            self.turns_widget._update_turnbox(motion.turns)
