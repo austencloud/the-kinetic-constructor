@@ -20,23 +20,50 @@ class IGTurnsWidget(BaseTurnsWidget):
         self.attr_box: "IGAttrBox" = attr_box
 
         self._initialize_ui()
+        # self.add_black_borders()
 
     def _initialize_ui(self) -> None:
         super()._initialize_ui()
-        self.turnbox_hbox_frame: QFrame = self._create_turnbox_vbox_frame()
+        self.turnbox_vbox_frame: QFrame = self._create_turnbox_vbox_frame()
         self._setup_layout_frames()
         self.turnbox.currentIndexChanged.connect(self._update_turns_directly)
+
+    def add_black_borders(self) -> None:
+        """Adds black borders around the turns widget."""
+        self.setStyleSheet(
+            f"""
+            QFrame {{
+                border: {self.attr_box.border_width}px solid black;
+            }}
+        """
+        )
+
+    def _setup_layout(self) -> None:
+        super()._setup_layout()
+
+        self.decrement_button_frame = self._create_frame(QVBoxLayout())
+        self.increment_button_frame = self._create_frame(QVBoxLayout())
+        self.decrement_button_frame.layout().setContentsMargins(0, 0, 0, 0)
+        self.increment_button_frame.layout().setContentsMargins(0, 0, 0, 0)
+        self.decrement_button_frame.layout().setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        self.increment_button_frame.layout().setAlignment(Qt.AlignmentFlag.AlignHCenter)
+
+        self.decrement_button_frame.layout().addWidget(self.decrement_buttons[0])
+        self.decrement_button_frame.layout().addWidget(self.decrement_buttons[1])
+        # for button in self.decrement_buttons:
+        #     self.decrement_button_frame.layout().addWidget(button)
+        for button in self.increment_buttons:
+            self.increment_button_frame.layout().addWidget(button)
 
     ### LAYOUTS ###
 
     def _setup_layout_frames(self) -> None:
         """Adds the header and buttons to their respective frames."""
-        self.header_layout.addWidget(self.turnbox_hbox_frame)
-        self._add_widgets_to_layout(self.buttons, self.buttons_layout)
-        self.header_frame = self._create_frame(self.header_layout)
-        self.button_frame = self._create_frame(self.buttons_layout)
+        self.main_hbox_layout.addWidget(self.decrement_button_frame)
+        self.main_hbox_layout.addWidget(self.turnbox_vbox_frame)
+        self.main_hbox_layout.addWidget(self.increment_button_frame)
+        self.header_frame = self._create_frame(self.main_hbox_layout)
         self.layout.addWidget(self.header_frame)
-        self.layout.addWidget(self.button_frame)
 
     ### WIDGETS ###
 
@@ -171,14 +198,9 @@ class IGTurnsWidget(BaseTurnsWidget):
 
     def _update_button_size(self) -> None:
         for button in self.buttons:
-            button_size = int(self.attr_box.width() / 8)
-            if button.text() == "-0.5" or button.text() == "+0.5":
-                button_size = int(button_size * 0.85)
-            else:  # button.text() == "-1" or button.text() == "+1":
-                button_size = int(self.attr_box.width() / 7)
+            button_size = int(self.attr_box.width() / 7)
             button.update_attr_box_button_size(button_size)
 
-    def resize_turns_widget(self):
+    def resize_turns_widget(self) -> None:
         self._update_turnbox_size()
         self._update_button_size()
-

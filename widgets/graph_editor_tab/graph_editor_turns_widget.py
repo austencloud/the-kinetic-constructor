@@ -1,9 +1,4 @@
-from PyQt6.QtWidgets import (
-    QLabel,
-    QVBoxLayout,
-    QFrame,
-    QSizePolicy,
-)
+from PyQt6.QtWidgets import QLabel, QVBoxLayout, QFrame, QSizePolicy, QHBoxLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QPixmap
 from typing import TYPE_CHECKING
@@ -35,21 +30,25 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
         self.turnbox_vbox_frame: QFrame = self._create_turnbox_vbox_frame()
         self._setup_layout_frames()
 
+    def _setup_layout(self) -> None:
+        super()._setup_layout()
+        self.buttons_hbox_layout = QHBoxLayout()
+
     ### LAYOUTS ###
 
     def _setup_layout_frames(self) -> None:
         """Adds the header and buttons to their respective frames."""
         self._add_widgets_to_layout(
             [self.clock_left, self.turnbox_vbox_frame, self.clock_right],
-            self.header_layout,
+            self.main_hbox_layout,
         )
-        self._add_widgets_to_layout(self.buttons, self.buttons_layout)
+        self._add_widgets_to_layout(self.buttons, self.buttons_hbox_layout)
 
-        self.header_layout.setContentsMargins(0, 0, 0, 0)
-        self.buttons_layout.setContentsMargins(0, 0, 0, 0)
+        self.main_hbox_layout.setContentsMargins(0, 0, 0, 0)
+        self.buttons_hbox_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.header_frame = self._create_frame(self.header_layout)
-        self.button_frame = self._create_frame(self.buttons_layout)
+        self.header_frame = self._create_frame(self.main_hbox_layout)
+        self.button_frame = self._create_frame(self.buttons_hbox_layout)
 
         self.header_frame.setContentsMargins(0, 0, 0, 0)
         self.button_frame.setContentsMargins(0, 0, 0, 0)

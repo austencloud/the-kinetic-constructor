@@ -29,9 +29,13 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
     def _initialize_ui(self) -> None:
         """Initializes the user interface components and their layout."""
         self.turnbox = self.create_turnbox()
-        self.buttons: List[AttrBoxButton] = [
-            self._create_turns_button(text) for text in ["-1", "-0.5", "+0.5", "+1"]
+        self.decrement_buttons: List[AttrBoxButton] = [
+            self._create_turns_button(text) for text in ["-1", "-0.5"]
         ]
+        self.increment_buttons: List[AttrBoxButton] = [
+            self._create_turns_button(text) for text in ["+1", "+0.5"]
+        ]
+        self.buttons = self.decrement_buttons + self.increment_buttons
         self._setup_layout()
 
     def create_turnbox(self) -> QComboBox:
@@ -49,8 +53,7 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
         self.layout.setSpacing(0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.header_layout = QHBoxLayout()
-        self.buttons_layout = QHBoxLayout()
+        self.main_hbox_layout = QHBoxLayout()
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
 
     def _add_widgets_to_layout(

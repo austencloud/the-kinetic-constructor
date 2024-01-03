@@ -54,10 +54,13 @@ class IGScrollArea(PictographScrollArea):
             self.ig_tab.selected_letters, key=lambda x: letters.index(x)
         )
 
-        # Remove pictographs for letters that are no longer selected
-        current_letters = set(sorted_selected_letters)
-        previous_letters = set(self.pictographs.keys())
-        for letter in previous_letters - current_letters:
+        # Determine letters to be removed
+        deselected_letters = set(
+            key.split("_")[0] for key in self.pictographs.keys()
+        ) - set(sorted_selected_letters)
+
+        # Remove pictographs for deselected letters
+        for letter in deselected_letters:
             self.remove_deselected_letter_pictographs(letter)
 
         # Create or update pictographs for sorted letters
@@ -84,7 +87,7 @@ class IGScrollArea(PictographScrollArea):
 
                     ig_pictograph.update_pictograph(pictograph_dict)
 
-                self.apply_filters_to_pictograph(ig_pictograph)
+                # self.apply_filters_to_pictograph(ig_pictograph)
                 image_key = self.generate_image_name(ig_pictograph, letter)
 
                 # Add to the ordered dictionary
@@ -92,20 +95,26 @@ class IGScrollArea(PictographScrollArea):
 
         # Add the pictographs to the layout in the correct order
         for index, (key, ig_pictograph) in enumerate(ordered_pictographs.items()):
-            if key not in self.pictographs:
+            # if key not in self.pictographs:
                 self.add_pictograph_to_layout(ig_pictograph, index)
 
         # Update the main pictographs dictionary to include only the sorted pictographs
-        self.pictographs = {**self.pictographs, **ordered_pictographs}
+        for key, ig_pictograph in ordered_pictographs.items():
+            self.pictographs[key] = ig_pictograph
 
-        # remove the items from the scroll area if they aren't in the ordered pictographs list
-        for key in list(self.pictographs.keys()):
-            if key not in ordered_pictographs:
-                ig_pictograph = self.pictographs.pop(key)
-                # Remove the widget from the layout
-                self.layout.removeWidget(ig_pictograph.view)
-                ig_pictograph.view.setParent(None)
-                ig_pictograph.view.deleteLater()
+        # Remove pictographs that no longer have a corresponding selected letter
+        keys_to_remove = []
+        for key in self.pictographs.keys():
+            letter = key.split("_")[0]
+            if letter not in sorted_selected_letters:
+                keys_to_remove.append(key)
+
+        for key in keys_to_remove:
+            ig_pictograph = self.pictographs.pop(key)
+            # Remove the widget from the layout
+            self.layout.removeWidget(ig_pictograph.view)
+            ig_pictograph.view.setParent(None)
+            ig_pictograph.view.deleteLater()
 
         if self.pictographs:
             self.update_attr_panel()
@@ -138,6 +147,18 @@ class IGScrollArea(PictographScrollArea):
             f"{pictograph_dict[RED_START_LOC]}→{pictograph_dict[RED_END_LOC]}"
         )
 
+    def generate_image_name(self, ig_pictograph: IGPictograph, letter: Letter) -> str:
+        return (
+            f"{letter}_"
+            f"{ig_pictograph.start_pos}→{ig_pictograph.end_pos}_"
+            f"{ig_pictograph.motions[BLUE].motion_type}_"
+            f"{ig_pictograph.motions[BLUE].prop_rot_dir}_"
+            f"{ig_pictograph.motions[BLUE].start_loc}→{ig_pictograph.motions[BLUE].end_loc}_"
+            f"{ig_pictograph.motions[RED].motion_type}_"
+            f"{ig_pictograph.motions[RED].prop_rot_dir}_"
+            f"{ig_pictograph.motions[RED].start_loc}→{ig_pictograph.motions[RED].end_loc}"
+        )
+
     def apply_filters_to_pictograph(self, ig_pictograph: IGPictograph) -> None:
         for color, motion in ig_pictograph.motions.items():
             for attr, value in self.filters.items():
@@ -154,26 +175,6 @@ class IGScrollArea(PictographScrollArea):
                 widget.setParent(None)
                 widget.deleteLater()
         self.pictographs.clear()
-
-    def get_or_create_pictograph(self, existing_pictographs, pictograph_dict):
-        image_key = self.generate_pictograph_key(pictograph_dict)
-        ig_pictograph = existing_pictographs.get(image_key)
-        if ig_pictograph is None:
-            ig_pictograph = self._create_pictograph(pictograph_dict, IG_PICTOGRAPH)
-            ig_pictograph.update_pictograph(pictograph_dict)
-        return ig_pictograph
-
-    def generate_image_name(self, ig_pictograph: IGPictograph, letter: Letter) -> str:
-        return (
-            f"{letter}_"
-            f"{ig_pictograph.start_pos}→{ig_pictograph.end_pos}_"
-            f"{ig_pictograph.motions[BLUE].motion_type}_"
-            f"{ig_pictograph.motions[BLUE].prop_rot_dir}_"
-            f"{ig_pictograph.motions[BLUE].start_loc}→{ig_pictograph.motions[BLUE].end_loc}_"
-            f"{ig_pictograph.motions[RED].motion_type}_"
-            f"{ig_pictograph.motions[RED].prop_rot_dir}_"
-            f"{ig_pictograph.motions[RED].start_loc}→{ig_pictograph.motions[RED].end_loc}"
-        )
 
     def generate_pictograph_key_from_motion(self, ig_pictograph: IGPictograph, letter):
         return (
