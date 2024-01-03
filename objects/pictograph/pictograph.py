@@ -318,12 +318,6 @@ class Pictograph(QGraphicsScene):
             motion_dict = self._create_motion_dict(pictograph_dict, color)
             motion_dicts.append(motion_dict)
 
-            # Define the order of motion types
-
-        # Sort motion_dicts based on motion type
-
-        # motion_type_order = [PRO, ANTI, FLOAT, DASH, STATIC]
-        # motion_dicts.sort(key=lambda x: motion_type_order.index(x[MOTION_TYPE]))
 
         for motion_dict in motion_dicts:
             self.motions[motion_dict[COLOR]].update_attributes(motion_dict)

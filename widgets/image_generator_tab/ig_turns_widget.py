@@ -8,7 +8,7 @@ from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 from objects.motion.motion import Motion
 from constants import ICON_DIR
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.base_turns_widget import (
+from widgets.attr_box_widgets.base_turns_widget import (
     BaseTurnsWidget,
 )
 
@@ -33,9 +33,7 @@ class IGTurnsWidget(BaseTurnsWidget):
     def _setup_layout_frames(self) -> None:
         """Adds the header and buttons to their respective frames."""
         self.header_layout.addWidget(self.turnbox_hbox_frame)
-
         self._add_widgets_to_layout(self.buttons, self.buttons_layout)
-
         self.header_frame = self._create_frame(self.header_layout)
         self.button_frame = self._create_frame(self.buttons_layout)
 
@@ -61,38 +59,20 @@ class IGTurnsWidget(BaseTurnsWidget):
 
     ### CALLBACKS ###
 
-
-    def _add_turn_callback(self) -> None:
+    def _adjust_turns_callback(self, turn_adjustment: float) -> None:
         for pictograph in self.attr_box.pictographs.values():
             motion: Motion = pictograph.motions[self.attr_box.color]
-            pictograph_dict = {f"{motion.color}_turns": motion.turns + 1}
-            motion.scene.update_pictograph(pictograph_dict)
-            self._update_turnbox(motion.turns)
-
-    def _subtract_turn_callback(self) -> None:
-        for pictograph in self.attr_box.pictographs.values():
-            motion: Motion = pictograph.motions[self.attr_box.color]
-            pictograph_dict = {f"{motion.color}_turns": motion.turns - 1}
-            motion.scene.update_pictograph(pictograph_dict)
-            self._update_turnbox(motion.turns)
-
-    def _add_half_turn_callback(self) -> None:
-        for pictograph in self.attr_box.pictographs.values():
-            motion: Motion = pictograph.motions[self.attr_box.color]
-            pictograph_dict = {f"{motion.color}_turns": motion.turns + 0.5}
-            motion.scene.update_pictograph(pictograph_dict)
-            self._update_turnbox(motion.turns)
-
-    def _subtract_half_turn_callback(self) -> None:
-        for pictograph in self.attr_box.pictographs.values():
-            motion: Motion = pictograph.motions[self.attr_box.color]
-            pictograph_dict = {f"{motion.color}_turns": motion.turns - 0.5}
-            motion.scene.update_pictograph(pictograph_dict)
-            self._update_turnbox(motion.turns)
+            new_turns = motion.turns + turn_adjustment
+            if new_turns >= 0 and new_turns <= 3:
+                pictograph_dict = {f"{motion.color}_turns": new_turns}
+                motion.scene.update_pictograph(pictograph_dict)
+            self._update_turnbox(new_turns)
 
     ### UPDATE METHODS ###
 
     def _update_turnbox(self, turns) -> None:
+        if turns in [0.0, 1.0, 2.0, 3.0]:
+            turns = int(turns)
         turns_str = str(turns)
         for i in range(self.turnbox.count()):
             if self.turnbox.itemText(i) == turns_str:
@@ -101,37 +81,13 @@ class IGTurnsWidget(BaseTurnsWidget):
             elif turns == None:
                 self.turnbox.setCurrentIndex(-1)
 
-    def _update_turns(self, index: int) -> None:
-        turns = str(index)
-        if turns == "0" or turns == "1" or turns == "2" or turns == "3":
-            for pictograph in self.attr_box.pictographs.values():
-                motion: Motion = pictograph.motions[self.attr_box.color]
-                if int(turns) != motion.turns:
-                    motion.turns = int(turns)
-                    dict = {f"{motion.color}_turns": motion.turns}
-                    self._update_turnbox(motion.turns)
-                    pictograph.update_pictograph(dict)
-
-        elif turns == "0.5" or turns == "1.5" or turns == "2.5":
-            for pictograph in self.attr_box.pictographs.values():
-                motion: Motion = pictograph.motions[self.attr_box.color]
-                if float(turns) != motion.turns:
-                    motion.turns = float(turns)
-                    dict = {f"{motion.color}_turns": motion.turns}
-                    self._update_turnbox(motion.turns)
-                    pictograph.update_pictograph(dict)
-        else:
-            self.turnbox.setCurrentIndex(-1)
-
     ### EVENT HANDLERS ###
 
     def _update_widget_sizes(self) -> None:
         """Updates the sizes of the widgets based on the widget's size."""
         available_height = self.height()
         header_height = int(available_height * 2 / 3)
-        turns_widget_height = int(available_height * 1 / 3)
         self.header_frame.setMaximumHeight(header_height)
-        # self.button_frame.setMaximumHeight(self.button_frame.height())
 
     def _update_turnbox_size(self) -> None:
         self.spacing = self.attr_box.attr_panel.width() // 250

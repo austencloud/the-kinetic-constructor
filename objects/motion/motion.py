@@ -173,18 +173,13 @@ class Motion:
             return calculate_float_orientation(self.start_ori, handpath_direction)
 
         valid_turns = [0, 0.5, 1, 1.5, 2, 2.5, 3]
-        self.turns = (
-            float(self.turns)
-            if self.turns in ["0.5", "1.5", "2.5"]
-            else int(self.turns)
-        )
 
         if self.turns in valid_turns:
-            if self.turns.is_integer():
+            if self.turns in [0, 1, 2, 3]:
                 return calculate_whole_turn_orientation(
                     self.motion_type, self.turns, self.start_ori
                 )
-            else:
+            else: # self.turns in [0.5, 1.5, 2.5]
                 return calculate_half_turn_orientation(
                     self.motion_type, self.turns, self.start_ori
                 )

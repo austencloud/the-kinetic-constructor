@@ -9,7 +9,7 @@ from PyQt6.QtGui import QFont, QPixmap
 from typing import TYPE_CHECKING
 from objects.motion.motion import Motion
 from constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, ICON_DIR
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.base_turns_widget import (
+from widgets.attr_box_widgets.base_turns_widget import (
     BaseTurnsWidget,
 )
 
@@ -96,8 +96,6 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
             print(f"Failed to load the icon from {icon_path}.")
             return QPixmap()
         return pixmap
-
-
 
     ### CALLBACKS ###
 

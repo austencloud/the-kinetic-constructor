@@ -6,7 +6,7 @@ from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING, Callable
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.base_header_widget import BaseHeaderWidget
+from widgets.attr_box_widgets.base_header_widget import BaseHeaderWidget
 from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:

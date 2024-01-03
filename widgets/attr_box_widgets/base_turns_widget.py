@@ -20,7 +20,6 @@ if TYPE_CHECKING:
         GraphEditorTurnsWidget,
     )
     from widgets.image_generator_tab.ig_turns_widget import IGTurnsWidget
-
     from widgets.graph_editor_tab.attr_panel.bast_attr_box import BaseAttrBox
 
 
@@ -78,14 +77,9 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
         """Creates a turn adjustment button with specified text."""
         button = CustomButton(self)
         button.setText(text)
-        if text == "-1":
-            button.clicked.connect(self._subtract_turn_callback)
-        elif text == "-0.5":
-            button.clicked.connect(self._subtract_half_turn_callback)
-        elif text == "+0.5":
-            button.clicked.connect(self._add_half_turn_callback)
-        elif text == "+1":
-            button.clicked.connect(self._add_turn_callback)
+        turn_adjustment_mapping = {"-1": -1, "-0.5": -0.5, "+0.5": 0.5, "+1": 1}
+        turn_adjustment = turn_adjustment_mapping.get(text, 0)
+        button.clicked.connect(lambda: self._adjust_turns_callback(turn_adjustment))
         return button
 
     ### UPDATE METHODS ###

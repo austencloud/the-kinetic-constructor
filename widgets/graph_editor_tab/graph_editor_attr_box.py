@@ -3,27 +3,15 @@ from PyQt6.QtGui import QPixmap
 from Enums import Color
 from objects.motion.motion import Motion
 from widgets.graph_editor_tab.graph_editor_header_widget import GraphEditorHeaderWidget
-from widgets.graph_editor_tab.graph_editor_turns_widget import (
-    GraphEditorTurnsWidget,
-)
+from widgets.graph_editor_tab.graph_editor_turns_widget import GraphEditorTurnsWidget
 from widgets.graph_editor_tab.attr_panel.bast_attr_box import BaseAttrBox
-from widgets.attr_box_widgets.base_attr_box_widget import (
-    BaseAttrBoxWidget,
-)
-
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_loc_widget import (
-    StartEndLocWidget,
-)
+from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
+from widgets.attr_box_widgets.start_end_loc_widget import StartEndLocWidget
 from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
-
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
-    from widgets.graph_editor_tab.attr_panel.base_attr_panel import (
-        BaseAttrPanel,
-    )
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.motion_types_widget import (
-    MotionTypeWidget,
-)
+    from widgets.graph_editor_tab.attr_panel.base_attr_panel import BaseAttrPanel
+from widgets.attr_box_widgets.motion_types_widget import MotionTypeWidget
 from PyQt6.QtGui import QPixmap, QFont
 
 
