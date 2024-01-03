@@ -22,8 +22,12 @@ from constants import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
-    from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
+    from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (
+        ArrowBox,
+    )
+    from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox import (
+        PropBox,
+    )
     from objects.pictograph.pictograph import Pictograph
 
 

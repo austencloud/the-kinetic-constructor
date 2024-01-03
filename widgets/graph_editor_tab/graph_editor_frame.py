@@ -5,11 +5,11 @@ from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
 from widgets.graph_editor_tab.graph_editor_attr_panel import GraphEditorAttrPanel
 from widgets.graph_editor_tab.graph_editor_pictograph import GraphEditorPictograph
 
-from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
+from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import ArrowBox
 from widgets.graph_editor_tab.graph_editor_pictograph_widget import (
     GraphEditorPictographWidget,
 )
-from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
+from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox import PropBox
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget

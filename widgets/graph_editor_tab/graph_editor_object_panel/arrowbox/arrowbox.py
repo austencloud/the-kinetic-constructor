@@ -12,13 +12,19 @@ from objects.arrow import Arrow
 from constants import *
 from objects.ghosts.ghost_arrow import GhostArrow
 from objects.motion.motion import Motion
-from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox_drag import ArrowBoxDrag
-from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox_view import ArrowBoxView
+from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox_drag import (
+    ArrowBoxDrag,
+)
+from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox_view import (
+    ArrowBoxView,
+)
 from objects.grid import Grid
 from utilities.TypeChecking.TypeChecking import MotionAttributesDicts
 from PyQt6.QtCore import QPointF
 
-from widgets.graph_editor_tab.object_panel.base_objectbox.base_objectbox import BaseObjectBox
+from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_objectbox import (
+    BaseObjectBox,
+)
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget

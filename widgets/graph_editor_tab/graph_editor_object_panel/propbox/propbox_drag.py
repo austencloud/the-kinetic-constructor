@@ -11,14 +11,16 @@ from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
 
-from widgets.graph_editor_tab.object_panel.base_objectbox.base_objectbox_drag import (
+from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_objectbox_drag import (
     BaseObjectBoxDrag,
 )
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from objects.pictograph.pictograph import Pictograph
-    from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
+    from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox import (
+        PropBox,
+    )
 
 
 class PropBoxDrag(BaseObjectBoxDrag):

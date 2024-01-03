@@ -23,14 +23,16 @@ if TYPE_CHECKING:
     from objects.arrow import Arrow
     from objects.pictograph.pictograph import Pictograph
     from objects.motion.motion import Motion
-    from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
+    from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox import (
+        PropBox,
+    )
 
 
 class Prop(GraphicalObject):
     def __init__(self, scene, prop_dict: Dict, motion: "Motion") -> None:
         self.motion = motion
         self.arrow: Arrow = None
-        
+
         self.prop_type = prop_dict[PROP_TYPE]
         self.svg_file = self.get_svg_file(self.prop_type)
         super().__init__(scene)

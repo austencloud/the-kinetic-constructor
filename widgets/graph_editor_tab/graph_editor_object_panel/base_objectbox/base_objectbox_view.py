@@ -4,7 +4,9 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.object_panel.base_objectbox import BaseObjectBox
+    from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_objectbox import (
+        BaseObjectBox,
+    )
     from widgets.graph_editor_tab.graph_editor_frame import GraphEditorFrame
 
 

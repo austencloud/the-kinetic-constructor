@@ -3,9 +3,15 @@ from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.prop.prop import *
 from objects.prop.prop_types import BigTriad
-from widgets.graph_editor_tab.object_panel.base_objectbox.base_objectbox import BaseObjectBox
-from widgets.graph_editor_tab.object_panel.propbox.propbox_drag import PropBoxDrag
-from widgets.graph_editor_tab.object_panel.propbox.propbox_view import PropBoxView
+from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_objectbox import (
+    BaseObjectBox,
+)
+from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox_drag import (
+    PropBoxDrag,
+)
+from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox_view import (
+    PropBoxView,
+)
 from constants import *
 from objects.grid import Grid
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, Dict, List

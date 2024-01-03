@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional, Union
 
 from objects.graphical_object import GraphicalObject
 from utilities.TypeChecking.TypeChecking import RotationAngles
-from widgets.graph_editor_tab.object_panel.base_objectbox.base_objectbox import (
+from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_objectbox import (
     BaseObjectBox,
 )
 
@@ -11,10 +11,10 @@ if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 
     from objects.pictograph.pictograph import Pictograph
-    from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox_drag import (
+    from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox_drag import (
         ArrowBoxDrag,
     )
-    from widgets.graph_editor_tab.object_panel.propbox.propbox_drag import (
+    from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox_drag import (
         PropBoxDrag,
     )
 

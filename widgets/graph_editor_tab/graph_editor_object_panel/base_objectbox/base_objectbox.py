@@ -1,7 +1,9 @@
 from PyQt6.QtWidgets import QGraphicsScene
 from typing import TYPE_CHECKING
 
-from widgets.graph_editor_tab.object_panel.base_objectbox.base_objectbox_view import BaseObjectBoxView
+from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_objectbox_view import (
+    BaseObjectBoxView,
+)
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget

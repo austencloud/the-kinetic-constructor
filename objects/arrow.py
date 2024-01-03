@@ -38,7 +38,9 @@ if TYPE_CHECKING:
     from objects.motion.motion import Motion
     from objects.ghosts.ghost_arrow import GhostArrow
     from objects.prop.prop import Prop
-    from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
+    from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (
+        ArrowBox,
+    )
 
 
 class Arrow(GraphicalObject):

@@ -21,14 +21,16 @@ from utilities.TypeChecking.TypeChecking import (
 )
 from data.start_end_loc_map import get_start_end_locs
 from constants import *
-from widgets.graph_editor_tab.object_panel.base_objectbox.base_objectbox_drag import (
+from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_objectbox_drag import (
     BaseObjectBoxDrag,
 )
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
     from objects.pictograph.pictograph import Pictograph
-    from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
+    from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (
+        ArrowBox,
+    )
 
 
 class ArrowBoxDrag(BaseObjectBoxDrag):

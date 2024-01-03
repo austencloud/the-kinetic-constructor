@@ -12,14 +12,16 @@ from constants import *
 from typing import TYPE_CHECKING, Dict, Union
 from objects.motion.motion_manipulator import MotionManipulator
 
-from widgets.graph_editor_tab.object_panel.propbox.propbox import PropBox
+from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox import PropBox
 
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
     from objects.arrow import Arrow
     from objects.prop.prop import Prop
-    from widgets.graph_editor_tab.object_panel.arrowbox.arrowbox import ArrowBox
+    from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (
+        ArrowBox,
+    )
 
 
 class Motion:
@@ -179,7 +181,7 @@ class Motion:
                 return calculate_whole_turn_orientation(
                     self.motion_type, self.turns, self.start_ori
                 )
-            else: # self.turns in [0.5, 1.5, 2.5]
+            else:  # self.turns in [0.5, 1.5, 2.5]
                 return calculate_half_turn_orientation(
                     self.motion_type, self.turns, self.start_ori
                 )
