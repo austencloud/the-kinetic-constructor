@@ -2,25 +2,17 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLabel,
 )
-from PyQt6.QtGui import QIcon, QFont
+from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 
-from typing import TYPE_CHECKING, Callable
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
-    AttrBoxWidget,
-)
+from typing import TYPE_CHECKING
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.base_header_widget import (
     BaseHeaderWidget,
 )
-from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from widgets.image_generator_tab.ig_attr_box import IGAttrBox
-    from widgets.graph_editor_tab.graph_editor_attr_box import (
-        GraphEditorAttrBox,
-    )
-from constants import BLUE, CCW_HANDPATH, CW_HANDPATH, HEX_BLUE, HEX_RED, ICON_DIR, RED
-from PyQt6.QtWidgets import QFrame, QVBoxLayout
+from constants import BLUE, CCW_HANDPATH, CW_HANDPATH, HEX_BLUE, HEX_RED, RED
 
 
 class IGHeaderWidget(BaseHeaderWidget):
@@ -41,16 +33,6 @@ class IGHeaderWidget(BaseHeaderWidget):
 
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.separator)
-
-    def _rotate_ccw(self) -> None:
-        motion = self.attr_box.pictograph.motions[self.attr_box.color]
-        if motion:
-            motion.manipulator.rotate_motion(CCW_HANDPATH)
-
-    def _rotate_cw(self) -> None:
-        motion = self.attr_box.pictograph.motions[self.attr_box.color]
-        if motion:
-            motion.manipulator.rotate_motion(CW_HANDPATH)
 
     def _setup_header_label(self) -> QLabel:
         text = "Left" if self.attr_box.color == BLUE else "Right"

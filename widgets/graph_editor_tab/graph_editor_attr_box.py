@@ -10,9 +10,6 @@ from widgets.graph_editor_tab.attr_panel.bast_attr_box import BaseAttrBox
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.base_header_widget import (
-    BaseHeaderWidget,
-)
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.start_end_loc_widget import (
     StartEndLocWidget,
 )

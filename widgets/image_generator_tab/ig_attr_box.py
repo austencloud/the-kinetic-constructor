@@ -6,9 +6,6 @@ from widgets.graph_editor_tab.attr_panel.bast_attr_box import BaseAttrBox
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.base_header_widget import (
-    BaseHeaderWidget,
-)
 from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 from widgets.image_generator_tab.ig_header_widget import IGHeaderWidget
 from widgets.image_generator_tab.ig_turns_widget import IGTurnsWidget

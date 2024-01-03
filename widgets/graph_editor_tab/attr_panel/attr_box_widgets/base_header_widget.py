@@ -1,15 +1,12 @@
 from PyQt6.QtWidgets import (
-    QHBoxLayout,
     QLabel,
 )
-from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
 
-from typing import TYPE_CHECKING, Callable, Union
+from typing import TYPE_CHECKING, Union
 from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
     AttrBoxWidget,
 )
-from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_header_widget import (
@@ -20,7 +17,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_attr_box import (
         GraphEditorAttrBox,
     )
-from constants import BLUE, CCW_HANDPATH, CW_HANDPATH, HEX_BLUE, HEX_RED, ICON_DIR, RED
+from constants import BLUE, HEX_BLUE, HEX_RED, RED
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 
