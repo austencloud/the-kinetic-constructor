@@ -53,6 +53,7 @@ class Motion:
         if self.motion_type:
             self.end_ori: Orientation = self.get_end_ori()
             self.manipulator = MotionManipulator(self)
+
     ### UPDATE ###
 
     def update_prop_ori(self) -> None:
@@ -402,18 +403,14 @@ class Motion:
 
     def update_turns(self, turns: Turns) -> None:
         self.turns = turns
+        self.arrow.turns = turns
 
     def adjust_turns(self, adjustment: float) -> None:
-        potential_new_turns = self.arrow.turns + adjustment
-        new_turns_float: float = max(0, min(3, potential_new_turns))
+        new_turns = max(0, min(3, self.arrow.turns + adjustment))
 
-        if new_turns_float % 1 == 0:
-            new_turns_int: int = int(new_turns_float)
-            if new_turns_int != self.arrow.turns:
-                self.turns = new_turns_int
-        else:
-            if new_turns_float != self.arrow.turns:
-                self.turns = new_turns_float
+        if new_turns != self.arrow.turns:
+            self.turns = new_turns
+            self.arrow.turns = new_turns
 
     def add_half_turn(self) -> None:
         self.adjust_turns(0.5)

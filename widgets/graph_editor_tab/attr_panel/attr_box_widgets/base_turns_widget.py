@@ -39,7 +39,6 @@ class BaseTurnsWidget(AttrBoxWidget):
         turnbox: QComboBox = QComboBox(self)
         turnbox.addItems(["0", "0.5", "1", "1.5", "2", "2.5", "3"])
         turnbox.setCurrentIndex(-1)
-        turnbox.currentTextChanged.connect(self._update_turns)
         return turnbox
 
     ### LAYOUTS ###

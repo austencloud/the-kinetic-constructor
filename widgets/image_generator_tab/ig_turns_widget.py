@@ -61,35 +61,34 @@ class IGTurnsWidget(BaseTurnsWidget):
 
     ### CALLBACKS ###
 
-    ## UPDATE THESE TO WORK ON ALL PICTOGRAPHS IN THE SCROLL AREA
 
     def _add_turn_callback(self) -> None:
         for pictograph in self.attr_box.pictographs.values():
             motion: Motion = pictograph.motions[self.attr_box.color]
-            motion.add_turn()
+            pictograph_dict = {f"{motion.color}_turns": motion.turns + 1}
+            motion.scene.update_pictograph(pictograph_dict)
             self._update_turnbox(motion.turns)
-        self.attr_box.update_attr_box(motion)
 
     def _subtract_turn_callback(self) -> None:
         for pictograph in self.attr_box.pictographs.values():
             motion: Motion = pictograph.motions[self.attr_box.color]
-            motion.subtract_turn()
+            pictograph_dict = {f"{motion.color}_turns": motion.turns - 1}
+            motion.scene.update_pictograph(pictograph_dict)
             self._update_turnbox(motion.turns)
-        self.attr_box.update_attr_box(motion)
 
     def _add_half_turn_callback(self) -> None:
         for pictograph in self.attr_box.pictographs.values():
             motion: Motion = pictograph.motions[self.attr_box.color]
-            motion.add_half_turn()
+            pictograph_dict = {f"{motion.color}_turns": motion.turns + 0.5}
+            motion.scene.update_pictograph(pictograph_dict)
             self._update_turnbox(motion.turns)
-        self.attr_box.update_attr_box(motion)
 
     def _subtract_half_turn_callback(self) -> None:
         for pictograph in self.attr_box.pictographs.values():
             motion: Motion = pictograph.motions[self.attr_box.color]
-            motion.subtract_half_turn()
+            pictograph_dict = {f"{motion.color}_turns": motion.turns - 0.5}
+            motion.scene.update_pictograph(pictograph_dict)
             self._update_turnbox(motion.turns)
-        self.attr_box.update_attr_box(motion)
 
     ### UPDATE METHODS ###
 
