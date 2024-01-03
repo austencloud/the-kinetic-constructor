@@ -1,5 +1,5 @@
 from constants import BLUE, RED
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from objects.motion.motion import Motion
 
 from widgets.graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox

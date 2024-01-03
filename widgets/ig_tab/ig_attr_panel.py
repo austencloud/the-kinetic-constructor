@@ -1,5 +1,4 @@
-from Enums import MotionType
-from constants import ANTI, BLUE, DASH, PRO, RED, STATIC
+from constants import ANTI, DASH, PRO, STATIC
 from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import MotionTypes
 from widgets.attr_panel.base_attr_panel import BaseAttrPanel

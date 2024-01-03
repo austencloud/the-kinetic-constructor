@@ -11,7 +11,6 @@ from typing import TYPE_CHECKING, List, Union
 from widgets.attr_box_widgets.base_attr_box_widget import (
     BaseAttrBoxWidget,
 )
-from widgets.attr_panel.bast_attr_box import BaseAttrBox
 from widgets.attr_box_widgets.attr_box_button import AttrBoxButton
 
 

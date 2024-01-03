@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtGui import QPixmap
-from Enums import Color, MotionType
+from Enums import MotionType
 from objects.motion.motion import Motion
 from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
 from widgets.attr_panel.bast_attr_box import BaseAttrBox

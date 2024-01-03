@@ -2,8 +2,6 @@ from typing import TYPE_CHECKING, Dict, List, Union
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
-from Enums import Color
-from constants import HEX_BLUE, HEX_RED, RED
 from widgets.attr_box_widgets.base_attr_box_widget import (
     BaseAttrBoxWidget,
 )

@@ -1,12 +1,10 @@
-from typing import TYPE_CHECKING, Dict, List
-from PyQt6.QtGui import QPixmap
+from typing import TYPE_CHECKING
 from Enums import Color
 from constants import HEX_BLUE, HEX_RED, RED
 from objects.motion.motion import Motion
 from widgets.attr_panel.bast_attr_box import BaseAttrBox
 from widgets.graph_editor_tab.graph_editor_header_widget import GraphEditorHeaderWidget
 from widgets.graph_editor_tab.graph_editor_turns_widget import GraphEditorTurnsWidget
-from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
 from widgets.attr_box_widgets.start_end_loc_widget import StartEndLocWidget
 from widgets.attr_box_widgets.attr_box_button import AttrBoxButton
 
@@ -14,7 +12,7 @@ if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
     from widgets.attr_panel.base_attr_panel import BaseAttrPanel
 from widgets.attr_box_widgets.motion_types_widget import MotionTypeWidget
-from PyQt6.QtGui import QPixmap, QFont
+from PyQt6.QtGui import QFont
 
 
 class GraphEditorAttrBox(BaseAttrBox):

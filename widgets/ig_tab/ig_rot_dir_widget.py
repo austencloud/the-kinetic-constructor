@@ -3,21 +3,11 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 
-from typing import TYPE_CHECKING, Union
-from widgets.attr_box_widgets.base_attr_box_widget import (
-    BaseAttrBoxWidget,
-)
+from typing import TYPE_CHECKING
 from widgets.attr_box_widgets.base_rot_dir_widget import BaseRotDirWidget
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.graph_editor_header_widget import (
-        GraphEditorHeaderWidget,
-    )
-    from widgets.ig_tab.ig_header_widget import IGHeaderWidget
-    from widgets.ig_tab.ig_attr_box import IGAttrBox
-    from widgets.graph_editor_tab.graph_editor_attr_box import (
-        GraphEditorAttrBox,
-    )
+    pass
 from constants import BLUE, HEX_BLUE, HEX_RED, RED
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 

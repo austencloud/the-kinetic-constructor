@@ -22,7 +22,7 @@ from constants import (
 )
 from widgets.ig_tab.ig_pictograph import IGPictograph
 from widgets.pictograph_scroll_area import PictographScrollArea
-from Enums import Letter, Orientation, PictographAttributesDict, Turns
+from Enums import Letter, Orientation, Turns
 from constants import IG_PICTOGRAPH
 from utilities.TypeChecking.Letters import letters
 from utilities.TypeChecking.TypeChecking import letters
