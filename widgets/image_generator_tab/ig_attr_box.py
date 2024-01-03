@@ -3,9 +3,10 @@ from PyQt6.QtGui import QPixmap
 from Enums import Color
 from objects.motion.motion import Motion
 from widgets.graph_editor_tab.attr_panel.bast_attr_box import BaseAttrBox
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
-    AttrBoxWidget,
+from widgets.attr_box_widgets.base_attr_box_widget import (
+    BaseAttrBoxWidget,
 )
+
 from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 from widgets.image_generator_tab.ig_header_widget import IGHeaderWidget
 from widgets.image_generator_tab.ig_turns_widget import IGTurnsWidget
@@ -31,7 +32,7 @@ class IGAttrBox(BaseAttrBox):
         self.pictographs: Dict[str, Pictograph] = pictographs
         self.color = color
         self.font_size = self.width() // 10
-        self.widgets: List[AttrBoxWidget] = []
+        self.widgets: List[BaseAttrBoxWidget] = []
         self.combobox_border = 2
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
         self._setup_widgets()

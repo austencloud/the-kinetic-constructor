@@ -10,15 +10,16 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from Enums import Orientation
 from constants import ICON_DIR
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
-    AttrBoxWidget,
+from widgets.attr_box_widgets.base_attr_box_widget import (
+    BaseAttrBoxWidget,
 )
+
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
 
 
-class StartEndOriWidget(AttrBoxWidget):
+class StartEndOriWidget(BaseAttrBoxWidget):
     def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
         super().__init__(attr_box)
 
@@ -92,9 +93,9 @@ class StartEndOriWidget(AttrBoxWidget):
 
         return arrow_label_frame
 
-
-
-    def update_start_end_boxes(self, start_ori: Orientation, end_ori: Orientation) -> None:
+    def update_start_end_boxes(
+        self, start_ori: Orientation, end_ori: Orientation
+    ) -> None:
         if start_ori and end_ori:
             self.start_ori_box.setCurrentText(start_ori.upper())
             self.end_ori_box.setCurrentText(end_ori.upper())

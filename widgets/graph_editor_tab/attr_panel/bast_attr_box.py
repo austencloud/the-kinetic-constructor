@@ -4,9 +4,10 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
 from Enums import Color
 from constants import HEX_BLUE, HEX_RED, RED
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
-    AttrBoxWidget,
+from widgets.attr_box_widgets.base_attr_box_widget import (
+    BaseAttrBoxWidget,
 )
+
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_attr_box import (
@@ -30,7 +31,7 @@ class BaseAttrBox(QFrame):
         self.pictograph = pictograph
         self.color = color
         self.font_size = self.width() // 10
-        self.widgets: List[AttrBoxWidget] = []
+        self.widgets: List[BaseAttrBoxWidget] = []
         self.combobox_border = 2
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
         self.init_ui()

@@ -4,8 +4,8 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING, Union
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
-    AttrBoxWidget,
+from widgets.attr_box_widgets.base_attr_box_widget import (
+    BaseAttrBoxWidget,
 )
 
 if TYPE_CHECKING:
@@ -21,7 +21,7 @@ from constants import BLUE, HEX_BLUE, HEX_RED, RED
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 
-class BaseHeaderWidget(AttrBoxWidget):
+class BaseHeaderWidget(BaseAttrBoxWidget):
     def __init__(
         self: Union["GraphEditorHeaderWidget", "IGHeaderWidget"],
         attr_box: Union["GraphEditorAttrBox", "IGAttrBox"],
@@ -46,7 +46,6 @@ class BaseHeaderWidget(AttrBoxWidget):
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
 
-
     def _setup_header_label(self) -> QLabel:
         text = "Left" if self.attr_box.color == BLUE else "Right"
         color_hex = HEX_RED if self.attr_box.color == RED else HEX_BLUE
@@ -54,4 +53,3 @@ class BaseHeaderWidget(AttrBoxWidget):
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label.setStyleSheet(f"color: {color_hex}; font-weight: bold;")
         return label
-

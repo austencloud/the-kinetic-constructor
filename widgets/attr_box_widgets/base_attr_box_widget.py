@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
 
 
-class AttrBoxWidget(QWidget):
+class BaseAttrBoxWidget(QWidget):
     def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box

@@ -8,9 +8,10 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, List, Union
-from widgets.graph_editor_tab.attr_panel.attr_box_widgets.attr_box_widget import (
-    AttrBoxWidget,
+from widgets.attr_box_widgets.base_attr_box_widget import (
+    BaseAttrBoxWidget,
 )
+
 
 from widgets.graph_editor_tab.attr_panel.custom_button import CustomButton
 
@@ -23,7 +24,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor_tab.attr_panel.bast_attr_box import BaseAttrBox
 
 
-class BaseTurnsWidget(AttrBoxWidget):
+class BaseTurnsWidget(BaseAttrBoxWidget):
     def __init__(self, attr_box: "BaseAttrBox") -> None:
         super().__init__(attr_box)
 
