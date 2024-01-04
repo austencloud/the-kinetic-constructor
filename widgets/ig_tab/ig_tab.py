@@ -44,7 +44,7 @@ class IGTab(QWidget):
         self.left_layout = QVBoxLayout()
         self.right_layout = QVBoxLayout()
         self.left_layout.addWidget(self.attr_panel, 1)
-        self.left_layout.addWidget(self.ig_scroll_area, 7)
+        self.left_layout.addWidget(self.ig_scroll_area, 5)
         self.right_layout.addWidget(self.button_panel)
         self.layout.addLayout(self.left_layout)
         self.layout.addLayout(self.right_layout)
@@ -224,6 +224,6 @@ class IGTab(QWidget):
 
     def resize_ig_tab(self) -> None:
         self.attr_panel.resize_ig_attr_panel()
-        # self.ig_scroll_area.resize_ig_scroll_area()
-        self.setMaximumWidth(self.attr_panel.width() + self.button_panel.width())
+        self.ig_scroll_area.resize_ig_scroll_area()
+        # self.setMaximumWidth(self.attr_panel.width() + self.button_panel.width())
         self.main_widget.right_frame.setMaximumWidth(self.width())

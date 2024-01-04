@@ -41,7 +41,10 @@ class IGAttrPanel(BaseAttrPanel):
     def resize_ig_attr_panel(self) -> None:
         for box in self.boxes:
             box.resize_ig_attr_box()
-        self.setMaximumWidth(self.pro_attr_box.width() * 4)
+        self.layout.setSpacing(int(self.pro_attr_box.width()/5))
+        self.setMinimumWidth(self.pro_attr_box.width() * 4 + self.layout.spacing() * 3)
+        self.setMaximumWidth(self.pro_attr_box.width() * 4 + self.layout.spacing() * 3)
+
 
     def get_turns_for_motion_type(self, motion_type: MotionTypes) -> int:
         for box in self.boxes:
@@ -50,4 +53,3 @@ class IGAttrPanel(BaseAttrPanel):
                     return int(box.turns_widget.turnbox.currentText())
                 elif box.turns_widget.turnbox.currentText() in ["0.5", "1.5", "2.5"]:
                     return float(box.turns_widget.turnbox.currentText())
-    

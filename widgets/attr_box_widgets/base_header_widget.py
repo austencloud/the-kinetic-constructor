@@ -1,15 +1,7 @@
-from PyQt6.QtWidgets import (
-    QLabel,
-)
+from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt
+from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
 
-from typing import TYPE_CHECKING
-from widgets.attr_box_widgets.base_attr_box_widget import (
-    BaseAttrBoxWidget,
-)
-
-if TYPE_CHECKING:
-    pass
 from constants import BLUE, HEX_BLUE, HEX_RED, RED
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
@@ -18,21 +10,18 @@ class BaseHeaderWidget(BaseAttrBoxWidget):
     def __init__(self, attr_box) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
-        self.header_label = self._setup_header_label()
-
         self.setMinimumWidth(self.attr_box.width())
 
     def create_separator(self) -> QFrame:
         separator = QFrame(self)
         separator.setFrameShape(QFrame.Shape.HLine)
         separator.setFrameShadow(QFrame.Shadow.Raised)
-        separator.setStyleSheet("color: #000000;")  # You can adjust the color as needed
-        separator.setMaximumWidth(self.attr_box.width())
+        separator.setStyleSheet("color: #000000;")
         return separator
 
-    def _setup_main_layout(self) -> None:
+    def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.setContentsMargins(0, 0, 0, 0)  # Remove all content margins
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
 

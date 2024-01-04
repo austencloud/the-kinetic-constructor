@@ -46,63 +46,38 @@ class IGScrollArea(PictographScrollArea):
         self.updateGeometry()
 
     def update_pictographs(self) -> None:
-        # Create a new ordered dictionary to hold sorted pictographs
         ordered_pictographs = {}
-
-        # Sort the selected letters according to the predefined order
         sorted_selected_letters = sorted(
             self.ig_tab.selected_letters, key=lambda x: letters.index(x)
         )
-
-        # Determine letters to be removed
         deselected_letters = set(
             key.split("_")[0] for key in self.pictographs.keys()
         ) - set(sorted_selected_letters)
-
-        # Remove pictographs for deselected letters
         for letter in deselected_letters:
             self.remove_deselected_letter_pictographs(letter)
-
-        # Create or update pictographs for sorted letters
         for letter in sorted_selected_letters:
             pictograph_dict_list = self.letters.get(letter, [])
             filtered_pictograph_dicts = self.filter_pictographs(pictograph_dict_list)
-
             for pictograph_dict in filtered_pictograph_dicts:
                 pictograph_key = self.generate_pictograph_key_from_dict(pictograph_dict)
                 ig_pictograph = self.pictographs.get(pictograph_key)
-
                 if ig_pictograph is None:
                     ig_pictograph = self._create_pictograph(
                         pictograph_dict, IG_PICTOGRAPH
                     )
-
-                    # Set turns according to the motion types in the attribute panel
                     for motion_color in ("blue", "red"):
                         motion_type = pictograph_dict.get(f"{motion_color}_motion_type")
                         if motion_type:
-                            # Here, you would need a method or a way to get the turns value from the attribute panel based on the motion type
                             turns_value = self.get_turns_from_attr_panel(motion_type)
                             pictograph_dict[f"{motion_color}_turns"] = turns_value
-
                     ig_pictograph.update_pictograph(pictograph_dict)
-
-                # self.apply_filters_to_pictograph(ig_pictograph)
                 image_key = self.generate_image_name(ig_pictograph, letter)
-
-                # Add to the ordered dictionary
                 ordered_pictographs[image_key] = ig_pictograph
-
-        # Add the pictographs to the layout in the correct order
         for index, (key, ig_pictograph) in enumerate(ordered_pictographs.items()):
-            # if key not in self.pictographs:
                 self.add_pictograph_to_layout(ig_pictograph, index)
-
-        # Update the main pictographs dictionary to include only the sorted pictographs
         for key, ig_pictograph in ordered_pictographs.items():
             self.pictographs[key] = ig_pictograph
 
-        # Remove pictographs that no longer have a corresponding selected letter
         keys_to_remove = []
         for key in self.pictographs.keys():
             letter = key.split("_")[0]
@@ -111,7 +86,6 @@ class IGScrollArea(PictographScrollArea):
 
         for key in keys_to_remove:
             ig_pictograph = self.pictographs.pop(key)
-            # Remove the widget from the layout
             self.layout.removeWidget(ig_pictograph.view)
             ig_pictograph.view.setParent(None)
             ig_pictograph.view.deleteLater()
@@ -123,19 +97,16 @@ class IGScrollArea(PictographScrollArea):
         return self.ig_tab.attr_panel.get_turns_for_motion_type(motion_type)
 
     def remove_deselected_letter_pictographs(self, deselected_letter):
-        # Remove pictographs associated with the deselected letter
         keys_to_remove = [
             key for key in self.pictographs if key.startswith(deselected_letter + "_")
         ]
         for key in keys_to_remove:
             ig_pictograph = self.pictographs.pop(key)
-            # Remove the widget from the layout
             self.layout.removeWidget(ig_pictograph.view)
             ig_pictograph.view.setParent(None)
             ig_pictograph.view.deleteLater()
 
     def generate_pictograph_key_from_dict(self, pictograph_dict):
-        # Create a unique key for the pictograph using its dictionary representation
         return (
             f"{pictograph_dict[LETTER]}_"
             f"{pictograph_dict[START_POS]}→{pictograph_dict[END_POS]}_"
@@ -163,9 +134,7 @@ class IGScrollArea(PictographScrollArea):
         for color, motion in ig_pictograph.motions.items():
             for attr, value in self.filters.items():
                 if attr.startswith(color):
-                    # Set the motion attribute if it's in the filters
                     setattr(motion, attr.replace(f"{color}_", ""), value)
-            # Update the motion to apply changes
             motion.update_motion()
 
     def clear_layout(self):
@@ -255,8 +224,4 @@ class IGScrollArea(PictographScrollArea):
             ig_pictograph.update_pictograph()
 
     def resize_ig_scroll_area(self) -> None:
-        self.setMaximumWidth(
-            self.main_widget.width()
-            - self.main_widget.sequence_widget.width()
-            - self.ig_tab.letter_button_frame.width()
-        )
+        self.setMinimumWidth(self.ig_tab.attr_panel.width())

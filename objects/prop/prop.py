@@ -15,7 +15,6 @@ from objects.graphical_object import GraphicalObject
 from PyQt6.QtCore import QPointF, Qt
 from constants import *
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
-from objects.prop.prop_manipulator import PropManipulator
 from utilities.TypeChecking.TypeChecking import RotationAngles
 
 
@@ -42,7 +41,6 @@ class Prop(GraphicalObject):
 
     def _setup_attributes(self, scene, prop_dict: "PropAttributesDicts") -> None:
         self.scene: Pictograph | PropBox = scene
-        self.manipulator = PropManipulator(self)
         self.drag_offset = QPointF(0, 0)
         self.previous_location: Location = None
         self.ghost: Prop = None

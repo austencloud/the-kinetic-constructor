@@ -191,12 +191,11 @@ class IGTurnsWidget(BaseTurnsWidget):
             }}
         """
         )
-        # self.turnbox_hbox_frame.setMinimumWidth(int(self.attr_box.width() / 3.25))
-        # self.turnbox_hbox_frame.setMaximumWidth(int(self.attr_box.width() / 3.25))
+
 
     def _update_button_size(self) -> None:
         for button in self.buttons:
-            button_size = int(self.attr_box.width() / 7)
+            button_size = int(self.attr_box.width() / 5)
             button.update_attr_box_button_size(button_size)
 
     def resize_turns_widget(self) -> None:

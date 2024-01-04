@@ -25,7 +25,7 @@ class BaseAttrPanel(QFrame):
     def setup_layouts(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
+        # self.layout.setSpacing(0)
         # self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
     def clear_all_attr_boxes(self) -> None:

@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
     QTabWidget,
 )
 from PyQt6.QtCore import QEvent, Qt, QThreadPool
-from PyQt6.QtGui import QWheelEvent, QPixmap
+from PyQt6.QtGui import QResizeEvent, QWheelEvent, QPixmap
 import pandas as pd
 from Enums import PictographAttributesDict
 from constants import (
@@ -250,6 +250,7 @@ class MainWidget(QWidget):
         self.option_picker_tab.resize_option_picker_tab()
         self.sequence_widget.resize_sequence_widget()
         self.ig_tab.resize_ig_tab()
+        # self.main_window._set_dimensions()
 
     ### IMAGE CACHE ###
 
@@ -318,3 +319,6 @@ class MainWidget(QWidget):
             f"{prop_type}.png"
         )
         return os.path.join(image_dir, image_name)
+
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        self.main_window._set_dimensions()

@@ -93,6 +93,7 @@ class Motion:
         self.arrow.update_arrow(arrow_dict)
         self.prop.update_prop(prop_dict)
 
+    
     ### GETTERS ###
 
     def get_attributes(self) -> MotionAttributesDicts:

@@ -168,3 +168,16 @@ class MotionManipulator:
         Refresh the arrow and prop, and update the pictograph.
         """
         self.arrow.scene.update_pictograph()
+
+    def delete_prop(self) -> None:
+        self.prop.scene.removeItem(self.prop)
+        self.prop.scene.removeItem(self.prop.scene.ghost_props[self.prop.color])
+        self.prop.motion.arrow.clear_attributes()
+        self.prop.motion.arrow.ghost.clear_attributes()
+        self.prop.motion.clear_attributes()
+        self.prop.clear_attributes()
+        self.prop.scene.update_pictograph()
+
+    def set_prop_rot_dir(self, prop_rot_dir: str) -> None:
+        self.prop.motion.prop_rot_dir = prop_rot_dir
+        self.prop.scene.update_pictograph()

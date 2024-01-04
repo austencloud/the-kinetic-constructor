@@ -33,23 +33,24 @@ class IGAttrBox(BaseAttrBox):
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
         self._setup_widgets()
 
+    def add_black_borders(self) -> None:
+        self.setStyleSheet(
+            f"{self.styleSheet()} border: 1px solid black; border-radius: 0px;"
+        )
+
     def _setup_widgets(self) -> None:  # add common widgets
-        self.header_widget = IGHeaderWidget(self)
+        self.header_widget = IGHeaderWidget(self, self.motion_type)
         self.turns_widget = IGTurnsWidget(self)
 
-        self.layout.addWidget(self.header_widget)
-        self.layout.addWidget(self.turns_widget)
+        self.layout.addWidget(self.header_widget, 1)
+        self.layout.addWidget(self.turns_widget, 2)
 
     def resize_ig_attr_box(self) -> None:
         self.setMinimumWidth(int(self.attr_panel.ig_tab.width() / 6))
         self.setMaximumWidth(int(self.attr_panel.ig_tab.width() / 6))
-
-        for button in self.findChildren(AttrBoxButton):
-            button.update_attr_box_button_size(int(self.width() / 8))
-
-        self.header_widget.resize_header_widget()
         self.turns_widget.resize_turns_widget()
-        self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 15)))
+        self.header_widget.resize_header_widget()
+        self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
 
     def update_attr_box(self, motion: Motion) -> None:
         for pictograph in self.pictographs.values():

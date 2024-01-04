@@ -19,7 +19,7 @@ from constants import BLUE, CCW_HANDPATH, CW_HANDPATH, HEX_BLUE, HEX_RED, ICON_D
 class GraphEditorHeaderWidget(BaseHeaderWidget):
     def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
         super().__init__(attr_box)
-
+        self.header_label = self._setup_header_label()
         self.rotate_cw_button = self._create_button(
             f"{ICON_DIR}rotate_cw.png", self._rotate_cw
         )
@@ -28,10 +28,10 @@ class GraphEditorHeaderWidget(BaseHeaderWidget):
         )
 
         self.buttons = [self.rotate_cw_button, self.rotate_ccw_button]
-        self._setup_main_layout()
+        self._setup_layout()
 
-    def _setup_main_layout(self) -> None:
-        super()._setup_main_layout()
+    def _setup_layout(self) -> None:
+        super()._setup_layout()
         header_layout = QHBoxLayout()
         header_layout.setContentsMargins(0, 0, 0, 0)
         header_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
