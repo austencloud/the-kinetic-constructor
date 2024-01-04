@@ -37,7 +37,7 @@ class BaseArrowPositioner:
         self.letters: Dict[
             Letter, List[Dict[str, str]]
         ] = pictograph.main_widget.letters
-        self.letters_to_reposition: List[Letter] = ["G", "H", "I", "P", "Q", "R", "Λ-"]
+        self.letters_to_reposition: List[Letter] = ["E", "G", "H", "I", "P", "Q", "R", "Λ-"]
 
     ### PUBLIC METHODS ###
     def update_arrow_positions(self) -> None:
@@ -68,6 +68,7 @@ class BaseArrowPositioner:
     ) -> None:
         if self.letter_type == "Type1":
             reposition_methods = {
+                "E": self._reposition_E,
                 "G": self._reposition_G,
                 "H": self._reposition_H,
                 "I": self._reposition_I,
