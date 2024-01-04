@@ -436,18 +436,19 @@ class BaseArrowPositioner:
                 red_adjustment = QPointF(-80, 0)
                 blue_adjustment = QPointF(-10, 0)
             elif arrow.loc == EAST:
-                red_adjustment = QPointF(80, 0)
-                blue_adjustment = QPointF(10, 0)
+                red_adjustment = QPointF(50, 0)
+                blue_adjustment = QPointF(-25, 0)
             elif arrow.loc == NORTH:
                 red_adjustment = QPointF(0, -80)
                 blue_adjustment = QPointF(0, -10)
             elif arrow.loc == SOUTH:
-                red_adjustment = QPointF(0, 80)
-                blue_adjustment = QPointF(0, 10)
+                red_adjustment = QPointF(0, 50)
+                blue_adjustment = QPointF(0, -25)
+                
         elif arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
             if arrow.loc == WEST:
-                red_adjustment = QPointF(80, 0)
-                blue_adjustment = QPointF(10, 0)
+                red_adjustment = QPointF(-80, 0)
+                blue_adjustment = QPointF(-10, 0)
             elif arrow.loc == EAST:
                 red_adjustment = QPointF(-80, 0)
                 blue_adjustment = QPointF(-10, 0)
@@ -455,9 +456,9 @@ class BaseArrowPositioner:
                 red_adjustment = QPointF(0, 80)
                 blue_adjustment = QPointF(0, 10)
             elif arrow.loc == SOUTH:
-                red_adjustment = QPointF(0, -80)
-                blue_adjustment = QPointF(0, -10)
-        elif arrow.motion.prop_rot_dir == NO_ROTATION:
+                red_adjustment = QPointF(0, 80)
+                blue_adjustment = QPointF(0, 10)
+        elif arrow.motion.prop_rot_dir == NO_ROT:
             red_adjustment = QPointF(0, 0)
             blue_adjustment = QPointF(0, 0)
 

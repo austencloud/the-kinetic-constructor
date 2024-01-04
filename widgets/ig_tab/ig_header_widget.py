@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 from constants import (
     ANTI,
     CLOCKWISE,
+    COUNTER_CLOCKWISE,
     DASH,
     ICON_DIR,
     PRO,
@@ -66,21 +67,35 @@ class IGHeaderWidget(BaseHeaderWidget):
         )
         self._set_prop_rot_dir(CLOCKWISE if has_turns else None)
 
-    def _set_prop_rot_dir(self, direction: str) -> None:
+    def _set_prop_rot_dir(self, prop_rot_dir: str) -> None:
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
-                if motion.motion_type == DASH and (direction is None or motion.turns > 0):
-                    motion.prop_rot_dir = direction if direction else CLOCKWISE
+                if motion.motion_type == self.attr_box.motion_type:
+                    pictograph_dict = {
+                        f"{motion.color}_prop_rot_dir": prop_rot_dir,
+                    }
+                    motion.scene.update_pictograph(pictograph_dict)
+            for motion in pictograph.motions.values():
+                if motion.motion_type == DASH and (
+                    prop_rot_dir is None or motion.turns > 0
+                ):
+                    motion.prop_rot_dir = prop_rot_dir if prop_rot_dir else CLOCKWISE
                     motion.manipulator.set_prop_rot_dir(motion.prop_rot_dir)
 
+        self.cw_button.setChecked(prop_rot_dir == CLOCKWISE)
+        self.ccw_button.setChecked(prop_rot_dir == COUNTER_CLOCKWISE)
+
         # Update button styles based on selection
-        if direction:
-            self.cw_button.setStyleSheet(self.get_button_style(pressed=direction == CLOCKWISE))
-            self.ccw_button.setStyleSheet(self.get_button_style(pressed=direction == ANTI))
+        if prop_rot_dir:
+            self.cw_button.setStyleSheet(
+                self.get_button_style(pressed=prop_rot_dir == CLOCKWISE)
+            )
+            self.ccw_button.setStyleSheet(
+                self.get_button_style(pressed=prop_rot_dir == COUNTER_CLOCKWISE)
+            )
         else:
             self.cw_button.setStyleSheet(self.get_button_style(pressed=False))
             self.ccw_button.setStyleSheet(self.get_button_style(pressed=False))
-
 
     def _setup_prop_rot_dir_buttons(self) -> List[QPushButton]:
         self.cw_button = self._create_button(
@@ -88,12 +103,15 @@ class IGHeaderWidget(BaseHeaderWidget):
         )
         self.ccw_button = self._create_button(
             f"{ICON_DIR}clock/counter_clockwise.png",
-            lambda: self._set_prop_rot_dir(ANTI),
+            lambda: self._set_prop_rot_dir(COUNTER_CLOCKWISE),
         )
 
         # Set CW button as selected by default
         self.cw_button.setStyleSheet(self.get_button_style(pressed=True))
         self.ccw_button.setStyleSheet(self.get_button_style(pressed=False))
+        # In the `IGHeaderWidget` class where buttons are created
+        self.cw_button.setCheckable(True)
+        self.ccw_button.setCheckable(True)
 
         buttons = [self.cw_button, self.ccw_button]
         return buttons
@@ -130,8 +148,6 @@ class IGHeaderWidget(BaseHeaderWidget):
         # button.setMaximumSize(self.height(), self.height())
         button.setContentsMargins(0, 0, 0, 0)  # Remove contents margin
         return button
-
-
 
     def _setup_header_label(self) -> QLabel:
         text = ""

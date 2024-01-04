@@ -135,6 +135,22 @@ class Arrow(GraphicalObject):
                 self.is_svg_mirrored = True
             elif rot_dir == COUNTER_CLOCKWISE:
                 self.is_svg_mirrored = False
+        elif self.motion_type == DASH:
+            if self.turns > 0:
+                if self.motion.prop_rot_dir == CLOCKWISE:
+                    self.is_svg_mirrored = False
+                elif self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                    self.is_svg_mirrored = True
+            else:
+                self.is_svg_mirrored = False
+        elif self.motion_type == STATIC:
+            if self.turns > 0:
+                if self.motion.prop_rot_dir == CLOCKWISE:
+                    self.is_svg_mirrored = False
+                elif self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                    self.is_svg_mirrored = True
+            else:
+                self.is_svg_mirrored = False
 
         if self.is_svg_mirrored:
             self.mirror_svg()
@@ -152,6 +168,7 @@ class Arrow(GraphicalObject):
             angle = self._get_dash_rotation_angle()
         elif self.motion.is_static():
             angle = self._get_static_rotation_angle()
+        self.set_arrow_transform_origin_to_center()
         self.setRotation(angle)
         if not self.is_ghost:
             self.ghost.setRotation(angle)

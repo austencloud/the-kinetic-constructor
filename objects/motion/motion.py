@@ -315,6 +315,9 @@ class Motion:
         other_motion_start_loc = self.scene.pictograph_dict[f"{other_color}_start_loc"]
         other_motion_end_loc = self.scene.pictograph_dict[f"{other_color}_end_loc"]
         other_motion_type = self.scene.pictograph_dict[f"{other_color}_motion_type"]
+        other_motion_prop_rot_dir = self.scene.pictograph_dict[
+            f"{other_color}_prop_rot_dir"
+        ]
         other_arrow_loc: Location = None
 
         if other_motion_type in [PRO, ANTI, FLOAT]:
@@ -339,52 +342,73 @@ class Motion:
                 return horizontal_map.get(other_arrow_loc)
 
         elif self.motion_type == DASH and other_motion_type == DASH:  # Type5 Letter
-            direction_map = {
-                NORTH: SOUTH,
-                SOUTH: NORTH,
-                EAST: WEST,
-                WEST: EAST,
-            }
+            if self.turns == 0:
+                direction_map = {
+                    NORTH: SOUTH,
+                    SOUTH: NORTH,
+                    EAST: WEST,
+                    WEST: EAST,
+                }
 
-            color_direction_map = {
-                BLUE: {
-                    NORTH: WEST,
-                    EAST: NORTH,
-                    SOUTH: EAST,
-                    WEST: SOUTH,
-                },
-                RED: {
-                    NORTH: EAST,
-                    EAST: SOUTH,
-                    SOUTH: WEST,
-                    WEST: NORTH,
-                },
-            }
+                color_direction_map = {
+                    BLUE: {
+                        NORTH: WEST,
+                        EAST: NORTH,
+                        SOUTH: EAST,
+                        WEST: SOUTH,
+                    },
+                    RED: {
+                        NORTH: EAST,
+                        EAST: SOUTH,
+                        SOUTH: WEST,
+                        WEST: NORTH,
+                    },
+                }
 
-            if other_arrow_loc:
-                return direction_map.get(other_arrow_loc)
-            else:
-                if not self.arrow.loc:
-                    loc_map = {
-                        ((NORTH, SOUTH), WEST): EAST,
-                        ((EAST, WEST), SOUTH): NORTH,
-                        ((NORTH, SOUTH), EAST): WEST,
-                        ((WEST, EAST), SOUTH): NORTH,
-                        ((SOUTH, NORTH), WEST): EAST,
-                        ((EAST, WEST), NORTH): SOUTH,
-                        ((SOUTH, NORTH), EAST): WEST,
-                        ((WEST, EAST), NORTH): SOUTH,
-                    }
-                    self.arrow.loc = loc_map.get(
-                        (
-                            (self.start_loc, self.end_loc),
-                            other_motion_end_loc,
-                        )
-                    )
-                    return color_direction_map.get(self.color).get(self.arrow.loc)
+                if other_arrow_loc:
+                    return direction_map.get(other_arrow_loc)
                 else:
-                    return color_direction_map.get(self.color).get(self.arrow.loc)
-
+                    if not self.arrow.loc:
+                        loc_map = {
+                            ((NORTH, SOUTH), WEST): EAST,
+                            ((EAST, WEST), SOUTH): NORTH,
+                            ((NORTH, SOUTH), EAST): WEST,
+                            ((WEST, EAST), SOUTH): NORTH,
+                            ((SOUTH, NORTH), WEST): EAST,
+                            ((EAST, WEST), NORTH): SOUTH,
+                            ((SOUTH, NORTH), EAST): WEST,
+                            ((WEST, EAST), NORTH): SOUTH,
+                        }
+                        self.arrow.loc = loc_map.get(
+                            (
+                                (self.start_loc, self.end_loc),
+                                other_motion_end_loc,
+                            )
+                        )
+                        return color_direction_map.get(self.color).get(self.arrow.loc)
+                    else:
+                        return color_direction_map.get(self.color).get(self.arrow.loc)
+            elif self.turns > 0:
+                if self.prop_rot_dir == CLOCKWISE:
+                    if self.start_loc == NORTH and self.end_loc == SOUTH:
+                        return EAST
+                    elif self.start_loc == EAST and self.end_loc == WEST:
+                        return SOUTH
+                    elif self.start_loc == SOUTH and self.end_loc == NORTH:
+                        return WEST
+                    elif self.start_loc == WEST and self.end_loc == EAST:
+                        return NORTH
+                elif self.prop_rot_dir == COUNTER_CLOCKWISE:
+                    if self.start_loc == NORTH and self.end_loc == SOUTH:
+                        return WEST
+                    elif self.start_loc == EAST and self.end_loc == WEST:
+                        return NORTH
+                    elif self.start_loc == SOUTH and self.end_loc == NORTH:
+                        return EAST
+                    elif self.start_loc == WEST and self.end_loc == EAST:
+                        return SOUTH
+                        
+                    
         elif other_motion_type == STATIC:
             other_arrow_loc = self.scene.pictograph_dict[f"{other_color}_start_loc"]
             if self.scene.pictograph_dict[LETTER] == "Λ":

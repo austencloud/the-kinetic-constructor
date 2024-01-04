@@ -146,7 +146,7 @@ class Type4Generator(BaseDataFrameGenerator):
             BLUE_START_LOC: blue_start_loc,
             BLUE_END_LOC: blue_end_loc,
             RED_MOTION_TYPE: red_motion_type,
-            RED_PROP_ROT_DIR: "no_rotation",
+            RED_PROP_ROT_DIR: "no_rot",
             RED_START_LOC: red_start_loc,
             RED_END_LOC: red_end_loc,
         }

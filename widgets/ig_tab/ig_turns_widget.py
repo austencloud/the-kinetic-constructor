@@ -2,7 +2,18 @@ from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
-from constants import ANTI, BLUE, CLOCKWISE, DASH, ICON_DIR, PRO, RED, STATIC
+from constants import (
+    ANTI,
+    BLUE,
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
+    DASH,
+    ICON_DIR,
+    NO_ROT,
+    PRO,
+    RED,
+    STATIC,
+)
 from widgets.attr_box_widgets.base_turns_widget import (
     BaseTurnsWidget,
 )
@@ -102,11 +113,21 @@ class IGTurnsWidget(BaseTurnsWidget):
                     motion.color in [BLUE, RED]
                     and motion.motion_type == self.attr_box.motion_type
                 ):
+                    initial_turns = motion.turns
                     new_turns = max(0, min(3, motion.turns + adjustment))
                     if new_turns in [0.0, 1.0, 2.0, 3.0]:
                         self.turnbox.setCurrentText(str(int(new_turns)))
                     elif new_turns in [0.5, 1.5, 2.5]:
                         self.turnbox.setCurrentText(str(new_turns))
+
+                    motion.turns = new_turns
+                    motion.arrow.turns = new_turns
+
+                    if initial_turns == 0 and new_turns > 0:
+                        header_widget = self.attr_box.header_widget
+                        header_widget.cw_button.setChecked(True)
+                        # click the button
+                        header_widget.cw_button.click()
 
                     if self.attr_box.motion_type in [PRO, ANTI]:
                         pictograph_dict = {
@@ -114,15 +135,36 @@ class IGTurnsWidget(BaseTurnsWidget):
                         }
                         motion.scene.update_pictograph(pictograph_dict)
                     elif self.attr_box.motion_type in [STATIC, DASH]:
-                        pictograph_dict = {
-                            f"{motion.color}_turns": new_turns,
-                            f"{motion.color}_prop_rot_dir": CLOCKWISE,
-                        }
+                        if motion.turns == 0:
+                            pictograph_dict = {
+                                f"{motion.color}_turns": new_turns,
+                                f"{motion.color}_prop_rot_dir": NO_ROT,
+                            }
+                            motion.scene.update_pictograph(pictograph_dict)
+                        elif motion.turns > 0:
+                            prop_rot_dir = self._get_current_prop_rot_dir()
+                            pictograph_dict = {
+                                f"{motion.color}_turns": new_turns,
+                                f"{motion.color}_prop_rot_dir": prop_rot_dir,
+                            }
                         motion.scene.update_pictograph(pictograph_dict)
 
         self.turnbox.currentIndexChanged.connect(
             self._update_turns_directly
         )  # Reconnect the signal
+
+    def _get_current_prop_rot_dir(self) -> str:
+        # Retrieve the current prop_rot_dir from the IG Header Widget
+        # This method needs to access the state of the buttons in the IG Header Widget
+        # and return the current prop_rot_dir (CLOCKWISE or COUNTER_CLOCKWISE)
+        # Depending on your implementation, this might look different
+        header_widget = self.attr_box.header_widget
+        if header_widget.cw_button.isChecked():
+            return CLOCKWISE
+        elif header_widget.ccw_button.isChecked():
+            return COUNTER_CLOCKWISE
+        else:
+            return NO_ROT
 
     def _update_turns_directly(self) -> None:
         selected_turns_str = self.turnbox.currentText()
