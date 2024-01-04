@@ -167,3 +167,5 @@ class ArrowLocationManager:
                         return SOUTH
                     else:
                         return NORTH
+
+

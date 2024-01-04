@@ -19,9 +19,14 @@ from PyQt6.QtCore import QPointF
 
 class Type1ArrowPositioner(BaseArrowPositioner):
     ### POSITIONING METHODS ###
-    def _reposition_G_H(self) -> None:
+    def _reposition_G(self) -> None:
         for arrow in self.arrows:
-            adjustment = self._calculate_G_H_adjustment(arrow)
+            adjustment = self._calculate_G_adjustment(arrow)
+            self._apply_shift_adjustment(arrow, adjustment)
+
+    def _reposition_H(self) -> None:
+        for arrow in self.arrows:
+            adjustment = self._calculate_H_adjustment(arrow)
             self._apply_shift_adjustment(arrow, adjustment)
 
     def _reposition_I(self) -> None:
@@ -46,13 +51,118 @@ class Type1ArrowPositioner(BaseArrowPositioner):
             self._apply_shift_adjustment(arrow, adjustment)
 
     ### ADJUSTMENT CALCULATIONS ###
-    def _calculate_G_H_adjustment(self, arrow: Arrow) -> QPointF:
-        distance = 105 if arrow.color == RED else 50
-        return self.calculate_shift_adjustment(arrow.loc, distance)
+    def _calculate_G_adjustment(self, arrow: Arrow) -> QPointF:
+        blue_adjustments = {
+            NORTHEAST: QPointF(35, -35),
+            SOUTHEAST: QPointF(35, 35),
+            SOUTHWEST: QPointF(-35, 35),
+            NORTHWEST: QPointF(-35, -35),
+        }
+
+        red_cw_adjustments = {
+            NORTHEAST: QPointF(80, -100),
+            SOUTHEAST: QPointF(100, 80),
+            SOUTHWEST: QPointF(-80, 100),
+            NORTHWEST: QPointF(-100, -80),
+        }
+
+        red_ccw_adjustments = {
+            NORTHEAST: QPointF(100, -80),
+            SOUTHEAST: QPointF(80, 100),
+            SOUTHWEST: QPointF(-100, 80),
+            NORTHWEST: QPointF(-80, -100),
+        }
+
+        adjustments = {
+            RED: {
+                CLOCKWISE: red_cw_adjustments,
+                COUNTER_CLOCKWISE: red_ccw_adjustments,
+            },
+            BLUE: {
+                CLOCKWISE: blue_adjustments,
+                COUNTER_CLOCKWISE: blue_adjustments,
+            },
+        }
+
+        color_adjustments = adjustments.get(arrow.color, {})
+        rotation_adjustments = color_adjustments.get(arrow.motion.prop_rot_dir, {})
+        return rotation_adjustments.get(arrow.loc, QPointF(0, 0))
+
+    def _calculate_H_adjustment(self, arrow: Arrow) -> QPointF:
+        blue_adjustments = {
+            NORTHEAST: QPointF(55, -55),
+            SOUTHEAST: QPointF(55, 55),
+            SOUTHWEST: QPointF(-55, 55),
+            NORTHWEST: QPointF(-55, -55),
+        }
+
+        red_cw_adjustments = {
+            NORTHEAST: QPointF(120, -105),
+            SOUTHEAST: QPointF(105, 120),
+            SOUTHWEST: QPointF(-120, 105),
+            NORTHWEST: QPointF(-105, -120),
+        }
+
+        red_ccw_adjustments = {
+            NORTHEAST: QPointF(105, -120),
+            SOUTHEAST: QPointF(120, 105),
+            SOUTHWEST: QPointF(-105, 120),
+            NORTHWEST: QPointF(-120, -105),
+        }
+
+        adjustments = {
+            RED: {
+                CLOCKWISE: red_cw_adjustments,
+                COUNTER_CLOCKWISE: red_ccw_adjustments,
+            },
+            BLUE: {
+                CLOCKWISE: blue_adjustments,
+                COUNTER_CLOCKWISE: blue_adjustments,
+            },
+        }
+
+        color_adjustments = adjustments.get(arrow.color, {})
+        rotation_adjustments = color_adjustments.get(arrow.motion.prop_rot_dir, {})
+        return rotation_adjustments.get(arrow.loc, QPointF(0, 0))
 
     def _calculate_I_adjustment(self, arrow: Arrow) -> QPointF:
-        distance = 110 if arrow.motion_type == PRO else 55
-        return self.calculate_shift_adjustment(arrow.loc, distance)
+        anti_adjustments = {
+            NORTHEAST: QPointF(55, -55),
+            SOUTHEAST: QPointF(55, 55),
+            SOUTHWEST: QPointF(-55, 55),
+            NORTHWEST: QPointF(-55, -55),
+        }
+
+        pro_cw_adjustments = {
+            NORTHEAST: QPointF(90, -110),
+            SOUTHEAST: QPointF(110, 90),
+            SOUTHWEST: QPointF(-90, 110),
+            NORTHWEST: QPointF(-110, -90),
+        }
+
+        pro_ccw_adjustments = {
+            NORTHEAST: QPointF(110, -90),
+            SOUTHEAST: QPointF(90, 110),
+            SOUTHWEST: QPointF(-110, 90),
+            NORTHWEST: QPointF(-90, -110),
+        }
+
+        adjustments = {
+            PRO: {
+                CLOCKWISE: pro_cw_adjustments,
+                COUNTER_CLOCKWISE: pro_ccw_adjustments,
+            },
+            ANTI: {
+                CLOCKWISE: anti_adjustments,
+                COUNTER_CLOCKWISE: anti_adjustments,
+            },
+        }
+
+        motion_type_adjustments = adjustments.get(arrow.motion_type, {})
+        rotation_adjustments = motion_type_adjustments.get(
+            arrow.motion.prop_rot_dir, {}
+        )
+        return rotation_adjustments.get(arrow.loc, QPointF(0, 0))
 
     def _calculate_P_adjustment(self, arrow: Arrow) -> QPointF:
         blue_adjustments = {
@@ -92,41 +202,84 @@ class Type1ArrowPositioner(BaseArrowPositioner):
         return rotation_adjustments.get(arrow.loc, QPointF(0, 0))
 
     def _calculate_Q_adjustment(self, arrow: Arrow) -> QPointF:
-        blue_adjustments = {
-            NORTHEAST: QPointF(35, -35),
-            SOUTHEAST: QPointF(35, 35),
-            SOUTHWEST: QPointF(-35, 35),
-            NORTHWEST: QPointF(-35, -35),
-        }
+        if arrow.turns in [0, 1, 2, 3]:
+            blue_adjustments = {
+                NORTHEAST: QPointF(35, -35),
+                SOUTHEAST: QPointF(35, 35),
+                SOUTHWEST: QPointF(-35, 35),
+                NORTHWEST: QPointF(-35, -35),
+            }
 
-        red_cw_adjustments = {
-            NORTHEAST: QPointF(70, -110),
-            SOUTHEAST: QPointF(110, 70),
-            SOUTHWEST: QPointF(-70, 110),
-            NORTHWEST: QPointF(-110, -70),
-        }
+            red_cw_adjustments = {
+                NORTHEAST: QPointF(70, -110),
+                SOUTHEAST: QPointF(110, 70),
+                SOUTHWEST: QPointF(-70, 110),
+                NORTHWEST: QPointF(-110, -70),
+            }
 
-        red_ccw_adjustments = {
-            NORTHEAST: QPointF(110, -70),
-            SOUTHEAST: QPointF(70, 110),
-            SOUTHWEST: QPointF(-110, 70),
-            NORTHWEST: QPointF(-70, -110),
-        }
+            red_ccw_adjustments = {
+                NORTHEAST: QPointF(110, -70),
+                SOUTHEAST: QPointF(70, 110),
+                SOUTHWEST: QPointF(-110, 70),
+                NORTHWEST: QPointF(-70, -110),
+            }
 
-        adjustments = {
-            RED: {
-                CLOCKWISE: red_cw_adjustments,
-                COUNTER_CLOCKWISE: red_ccw_adjustments,
-            },
-            BLUE: {
-                CLOCKWISE: blue_adjustments,
-                COUNTER_CLOCKWISE: blue_adjustments,
-            },
-        }
+            adjustments = {
+                RED: {
+                    CLOCKWISE: red_cw_adjustments,
+                    COUNTER_CLOCKWISE: red_ccw_adjustments,
+                },
+                BLUE: {
+                    CLOCKWISE: blue_adjustments,
+                    COUNTER_CLOCKWISE: blue_adjustments,
+                },
+            }
 
-        color_adjustments = adjustments.get(arrow.color, {})
-        rotation_adjustments = color_adjustments.get(arrow.motion.prop_rot_dir, {})
-        return rotation_adjustments.get(arrow.loc, QPointF(0, 0))
+            color_adjustments = adjustments.get(arrow.color, {})
+            rotation_adjustments = color_adjustments.get(arrow.motion.prop_rot_dir, {})
+            return rotation_adjustments.get(arrow.loc, QPointF(0, 0))
+
+        elif arrow.turns == 0.5:
+            if arrow.motion.prop_rot_dir == CLOCKWISE:
+                adjustments = {
+                    NORTHEAST: QPointF(-60, 95),
+                    SOUTHEAST: QPointF(-95, -60),
+                    SOUTHWEST: QPointF(60, -95),
+                    NORTHWEST: QPointF(95, 60),
+                }
+            elif arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                adjustments = {
+                    NORTHEAST: QPointF(-95, 60),
+                    SOUTHEAST: QPointF(-60, -95),
+                    SOUTHWEST: QPointF(95, -60),
+                    NORTHWEST: QPointF(60, 95),
+                }
+
+            return adjustments.get(arrow.loc, QPointF(0, 0))
+
+        elif arrow.turns == 1.5:
+            return QPointF(0, 0)
+
+        elif arrow.turns == 2.5:
+            if arrow.motion.prop_rot_dir == CLOCKWISE:
+                adjustments = {
+                    NORTHEAST: QPointF(-95, 94),
+                    SOUTHEAST: QPointF(-94, -95),
+                    SOUTHWEST: QPointF(95, -94),
+                    NORTHWEST: QPointF(94, 95),
+                }
+            elif arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                adjustments = {
+                    NORTHEAST: QPointF(-94, 95),
+                    SOUTHEAST: QPointF(-95, -94),
+                    SOUTHWEST: QPointF(94, -95),
+                    NORTHWEST: QPointF(95, 94),
+                }
+
+            return adjustments.get(arrow.loc, QPointF(0, 0))
+
+        else:
+            return QPointF(0, 0)
 
     def _calculate_R_adjustment(self, arrow: Arrow) -> QPointF:
         pro_cw_adjustments = {
