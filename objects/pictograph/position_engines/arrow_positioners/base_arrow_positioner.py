@@ -1,3 +1,4 @@
+from email.charset import QP
 from PyQt6.QtCore import QPointF
 from Enums import Letter, LetterNumberType
 from constants import *
@@ -87,17 +88,22 @@ class BaseArrowPositioner:
     def _set_shift_to_default_coor(self, arrow: Arrow, _: Dict = None) -> None:
         arrow.set_arrow_transform_origin_to_center()
         default_pos = self._get_default_shift_coord(arrow)
-        adjustment = self.calculate_adjustment(arrow)
+        adjustment = self.calculate_shift_adjustment(arrow)
         new_pos = default_pos + adjustment - arrow.boundingRect().center()
         arrow.setPos(new_pos)
 
     ### DASH ###
     def _set_dash_to_default_coor(self, arrow: Arrow, _: Dict = None) -> None:
         arrow.set_arrow_transform_origin_to_center()
-        default_pos = self._get_default_dash_coord(arrow)
-        # adjustment = self.calculate_adjustment(arrow.turns, arrow.loc, DISTANCE)
-        # new_pos = default_pos + adjustment - arrow.boundingRect().center()
-        arrow.setPos(default_pos - arrow.boundingRect().center())
+        default_red_pos = self._get_default_dash_coord(arrow.scene.arrows[RED])
+        default_blue_pos = self._get_default_dash_coord(arrow.scene.arrows[BLUE])
+        red_adjustment, blue_adjustment = self.calculate_dash_adjustments(arrow)
+        new_red_pos = default_red_pos + red_adjustment - arrow.boundingRect().center()
+        new_blue_pos = (
+            default_blue_pos + blue_adjustment - arrow.boundingRect().center()
+        )
+        arrow.scene.arrows[RED].setPos(new_red_pos)
+        arrow.scene.arrows[BLUE].setPos(new_blue_pos)
 
     ### GETTERS ###
     def _get_default_shift_coord(self, arrow: Arrow) -> QPointF:
@@ -111,61 +117,89 @@ class BaseArrowPositioner:
             if arrow.color == BLUE
             else self.pictograph.arrows[BLUE]
         )
-        if other_arrow.motion.is_shift():
-            if arrow.motion.end_loc in [NORTH, SOUTH]:
-                if other_arrow.loc in [SOUTHEAST, NORTHEAST]:
-                    return handpoints.get(WEST)
-                elif other_arrow.loc in [SOUTHWEST, NORTHWEST]:
-                    return handpoints.get(EAST)
-            elif arrow.motion.end_loc in [EAST, WEST]:
-                if other_arrow.loc in [SOUTHEAST, SOUTHWEST]:
-                    return handpoints.get(NORTH)
-                elif other_arrow.loc in [NORTHEAST, NORTHWEST]:
-                    return handpoints.get(SOUTH)
-            else:
-                print("ERROR: Arrow motion end_loc not found")
-        elif other_arrow.motion.is_dash():
-            if other_arrow.loc == arrow.loc and arrow.loc is not None:
-                opposite_location = self.get_opposite_location(arrow.loc)
-                arrow.loc = opposite_location
-                return handpoints.get(opposite_location)
-            elif other_arrow.loc == self.get_opposite_location(arrow.loc):
+        if arrow.turns == 0:
+            if other_arrow.motion.is_shift():
                 if arrow.motion.end_loc in [NORTH, SOUTH]:
-                    if other_arrow.loc == WEST:
-                        return handpoints.get(EAST)
-                    elif other_arrow.loc == EAST:
+                    if other_arrow.loc in [SOUTHEAST, NORTHEAST]:
                         return handpoints.get(WEST)
+                    elif other_arrow.loc in [SOUTHWEST, NORTHWEST]:
+                        return handpoints.get(EAST)
                 elif arrow.motion.end_loc in [EAST, WEST]:
-                    if other_arrow.loc == NORTH:
-                        return handpoints.get(SOUTH)
-                    elif other_arrow.loc == SOUTH:
+                    if other_arrow.loc in [SOUTHEAST, SOUTHWEST]:
                         return handpoints.get(NORTH)
-            elif self.pictograph.letter == "Λ-":
-                dir_map = {
-                    ((NORTH, SOUTH), (EAST, WEST)): EAST,
-                    ((EAST, WEST), (NORTH, SOUTH)): NORTH,
-                    ((NORTH, SOUTH), (WEST, EAST)): WEST,
-                    ((WEST, EAST), (NORTH, SOUTH)): NORTH,
-                    ((SOUTH, NORTH), (EAST, WEST)): EAST,
-                    ((EAST, WEST), (SOUTH, NORTH)): SOUTH,
-                    ((SOUTH, NORTH), (WEST, EAST)): WEST,
-                    ((WEST, EAST), (SOUTH, NORTH)): SOUTH,
-                }
+                    elif other_arrow.loc in [NORTHEAST, NORTHWEST]:
+                        return handpoints.get(SOUTH)
+                else:
+                    print("ERROR: Arrow motion end_loc not found")
+            elif other_arrow.motion.is_dash():
+                if other_arrow.loc == arrow.loc and arrow.loc is not None:
+                    opposite_location = self.get_opposite_location(arrow.loc)
+                    arrow.loc = opposite_location
+                    return handpoints.get(opposite_location)
+                elif other_arrow.loc == self.get_opposite_location(arrow.loc):
+                    if arrow.motion.end_loc in [NORTH, SOUTH]:
+                        if other_arrow.loc == WEST:
+                            return handpoints.get(EAST)
+                        elif other_arrow.loc == EAST:
+                            return handpoints.get(WEST)
+                    elif arrow.motion.end_loc in [EAST, WEST]:
+                        if other_arrow.loc == NORTH:
+                            return handpoints.get(SOUTH)
+                        elif other_arrow.loc == SOUTH:
+                            return handpoints.get(NORTH)
+                elif self.pictograph.letter == "Λ-":
+                    dir_map = {
+                        ((NORTH, SOUTH), (EAST, WEST)): EAST,
+                        ((EAST, WEST), (NORTH, SOUTH)): NORTH,
+                        ((NORTH, SOUTH), (WEST, EAST)): WEST,
+                        ((WEST, EAST), (NORTH, SOUTH)): NORTH,
+                        ((SOUTH, NORTH), (EAST, WEST)): EAST,
+                        ((EAST, WEST), (SOUTH, NORTH)): SOUTH,
+                        ((SOUTH, NORTH), (WEST, EAST)): WEST,
+                        ((WEST, EAST), (SOUTH, NORTH)): SOUTH,
+                    }
 
-                arrow_loc = dir_map.get(
-                    (
-                        (arrow.motion.start_loc, arrow.motion.end_loc),
-                        (other_arrow.motion.start_loc, other_arrow.motion.end_loc),
+                    arrow_loc = dir_map.get(
+                        (
+                            (arrow.motion.start_loc, arrow.motion.end_loc),
+                            (other_arrow.motion.start_loc, other_arrow.motion.end_loc),
+                        )
                     )
-                )
 
-                arrow.loc = arrow_loc
-                return handpoints.get(arrow_loc)
+                    arrow.loc = arrow_loc
+                    return handpoints.get(arrow_loc)
 
-        elif other_arrow.motion.is_static():
-            return handpoints.get(arrow.loc)
-        else:
-            print("ERROR: Arrow motion not found")
+            elif other_arrow.motion.is_static():
+                return handpoints.get(arrow.loc)
+            else:
+                print("ERROR: Arrow motion not found")
+        elif arrow.turns > 0:
+            if arrow.motion.prop_rot_dir == CLOCKWISE:
+                if arrow.motion.start_loc == NORTH:
+                    if arrow.motion.end_loc == SOUTH:
+                        return handpoints.get(EAST)
+                elif arrow.motion.start_loc == EAST:
+                    if arrow.motion.end_loc == WEST:
+                        return handpoints.get(SOUTH)
+                elif arrow.motion.start_loc == SOUTH:
+                    if arrow.motion.end_loc == NORTH:
+                        return handpoints.get(WEST)
+                elif arrow.motion.start_loc == WEST:
+                    if arrow.motion.end_loc == EAST:
+                        return handpoints.get(NORTH)
+            elif arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                if arrow.motion.start_loc == NORTH:
+                    if arrow.motion.end_loc == SOUTH:
+                        return handpoints.get(WEST)
+                elif arrow.motion.start_loc == EAST:
+                    if arrow.motion.end_loc == WEST:
+                        return handpoints.get(NORTH)
+                elif arrow.motion.start_loc == SOUTH:
+                    if arrow.motion.end_loc == NORTH:
+                        return handpoints.get(EAST)
+                elif arrow.motion.start_loc == WEST:
+                    if arrow.motion.end_loc == EAST:
+                        return handpoints.get(SOUTH)
 
     def get_opposite_location(self, location: str) -> str:
         opposite_map = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
@@ -217,7 +251,7 @@ class BaseArrowPositioner:
             current_state.get(key) == candidate_state.get(key) for key in relevant_keys
         )
 
-    def calculate_adjustment(self, arrow: Arrow) -> QPointF:
+    def calculate_shift_adjustment(self, arrow: Arrow) -> QPointF:
         if arrow.motion_type == PRO:
             location_adjustments = {
                 (0, CLOCKWISE): {
@@ -343,7 +377,6 @@ class BaseArrowPositioner:
                     SOUTHWEST: QPointF(-25, 20),
                     NORTHWEST: QPointF(-20, -25),
                 },
-                
                 (1.5, CLOCKWISE): {
                     NORTHEAST: QPointF(-55, -10),
                     SOUTHEAST: QPointF(10, -55),
@@ -356,7 +389,6 @@ class BaseArrowPositioner:
                     SOUTHWEST: QPointF(-10, -55),
                     NORTHWEST: QPointF(55, -10),
                 },
-                
                 (2, CLOCKWISE): {
                     NORTHEAST: QPointF(40, -35),
                     SOUTHEAST: QPointF(35, 40),
@@ -397,6 +429,39 @@ class BaseArrowPositioner:
         return location_adjustments.get(
             (arrow.turns, arrow.motion.prop_rot_dir), {}
         ).get(arrow.loc)
+
+    def calculate_dash_adjustments(self, arrow: Arrow) -> QPointF:
+        if arrow.motion.prop_rot_dir == CLOCKWISE:
+            if arrow.loc == WEST:
+                red_adjustment = QPointF(-80, 0)
+                blue_adjustment = QPointF(-10, 0)
+            elif arrow.loc == EAST:
+                red_adjustment = QPointF(80, 0)
+                blue_adjustment = QPointF(10, 0)
+            elif arrow.loc == NORTH:
+                red_adjustment = QPointF(0, -80)
+                blue_adjustment = QPointF(0, -10)
+            elif arrow.loc == SOUTH:
+                red_adjustment = QPointF(0, 80)
+                blue_adjustment = QPointF(0, 10)
+        elif arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+            if arrow.loc == WEST:
+                red_adjustment = QPointF(80, 0)
+                blue_adjustment = QPointF(10, 0)
+            elif arrow.loc == EAST:
+                red_adjustment = QPointF(-80, 0)
+                blue_adjustment = QPointF(-10, 0)
+            elif arrow.loc == NORTH:
+                red_adjustment = QPointF(0, 80)
+                blue_adjustment = QPointF(0, 10)
+            elif arrow.loc == SOUTH:
+                red_adjustment = QPointF(0, -80)
+                blue_adjustment = QPointF(0, -10)
+        elif arrow.motion.prop_rot_dir == NO_ROTATION:
+            red_adjustment = QPointF(0, 0)
+            blue_adjustment = QPointF(0, 0)
+
+        return red_adjustment, blue_adjustment
 
     def _apply_shift_adjustment(
         self, arrow: Arrow, adjustment: QPointF, update_ghost: bool = True

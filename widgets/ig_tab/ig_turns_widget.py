@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
-from constants import BLUE, ICON_DIR, RED
+from constants import ANTI, BLUE, CLOCKWISE, DASH, ICON_DIR, PRO, RED, STATIC
 from widgets.attr_box_widgets.base_turns_widget import (
     BaseTurnsWidget,
 )
@@ -107,8 +107,19 @@ class IGTurnsWidget(BaseTurnsWidget):
                         self.turnbox.setCurrentText(str(int(new_turns)))
                     elif new_turns in [0.5, 1.5, 2.5]:
                         self.turnbox.setCurrentText(str(new_turns))
-                    pictograph_dict = {f"{motion.color}_turns": new_turns}
-                    motion.scene.update_pictograph(pictograph_dict)
+
+                    if self.attr_box.motion_type in [PRO, ANTI]:
+                        pictograph_dict = {
+                            f"{motion.color}_turns": new_turns,
+                        }
+                        motion.scene.update_pictograph(pictograph_dict)
+                    elif self.attr_box.motion_type in [STATIC, DASH]:
+                        pictograph_dict = {
+                            f"{motion.color}_turns": new_turns,
+                            f"{motion.color}_prop_rot_dir": CLOCKWISE,
+                        }
+                        motion.scene.update_pictograph(pictograph_dict)
+
         self.turnbox.currentIndexChanged.connect(
             self._update_turns_directly
         )  # Reconnect the signal
@@ -191,7 +202,6 @@ class IGTurnsWidget(BaseTurnsWidget):
             }}
         """
         )
-
 
     def _update_button_size(self) -> None:
         for button in self.buttons:

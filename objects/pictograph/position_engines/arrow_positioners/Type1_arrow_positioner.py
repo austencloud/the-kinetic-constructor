@@ -48,11 +48,11 @@ class Type1ArrowPositioner(BaseArrowPositioner):
     ### ADJUSTMENT CALCULATIONS ###
     def _calculate_G_H_adjustment(self, arrow: Arrow) -> QPointF:
         distance = 105 if arrow.color == RED else 50
-        return self.calculate_adjustment(arrow.loc, distance)
+        return self.calculate_shift_adjustment(arrow.loc, distance)
 
     def _calculate_I_adjustment(self, arrow: Arrow) -> QPointF:
         distance = 110 if arrow.motion_type == PRO else 55
-        return self.calculate_adjustment(arrow.loc, distance)
+        return self.calculate_shift_adjustment(arrow.loc, distance)
 
     def _calculate_P_adjustment(self, arrow: Arrow) -> QPointF:
         blue_adjustments = {

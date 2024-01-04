@@ -32,6 +32,8 @@ class IGHeaderWidget(BaseHeaderWidget):
             self._setup_pro_anti_layout()
         if self.motion_type in [DASH, STATIC]:
             self.prop_rot_dir_buttons = self._setup_prop_rot_dir_buttons()
+            # Additional logic to set default rotation direction
+            self._set_default_rotation_direction()
             self._setup_dash_static_layout()
 
     def _setup_pro_anti_layout(self) -> None:
@@ -54,18 +56,70 @@ class IGHeaderWidget(BaseHeaderWidget):
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.separator)
 
+    def _set_default_rotation_direction(self):
+        # Check if any dash has turns and set default rotation direction
+        has_turns = any(
+            motion.turns > 0
+            for pictograph in self.attr_box.pictographs.values()
+            for motion in pictograph.motions.values()
+            if motion.motion_type == DASH
+        )
+        self._set_prop_rot_dir(CLOCKWISE if has_turns else None)
+
+    def _set_prop_rot_dir(self, direction: str) -> None:
+        for pictograph in self.attr_box.pictographs.values():
+            for motion in pictograph.motions.values():
+                if motion.motion_type == DASH and (direction is None or motion.turns > 0):
+                    motion.prop_rot_dir = direction if direction else CLOCKWISE
+                    motion.manipulator.set_prop_rot_dir(motion.prop_rot_dir)
+
+        # Update button styles based on selection
+        if direction:
+            self.cw_button.setStyleSheet(self.get_button_style(pressed=direction == CLOCKWISE))
+            self.ccw_button.setStyleSheet(self.get_button_style(pressed=direction == ANTI))
+        else:
+            self.cw_button.setStyleSheet(self.get_button_style(pressed=False))
+            self.ccw_button.setStyleSheet(self.get_button_style(pressed=False))
+
+
     def _setup_prop_rot_dir_buttons(self) -> List[QPushButton]:
         self.cw_button = self._create_button(
             f"{ICON_DIR}clock/clockwise.png", lambda: self._set_prop_rot_dir(CLOCKWISE)
         )
-
         self.ccw_button = self._create_button(
             f"{ICON_DIR}clock/counter_clockwise.png",
             lambda: self._set_prop_rot_dir(ANTI),
         )
 
+        # Set CW button as selected by default
+        self.cw_button.setStyleSheet(self.get_button_style(pressed=True))
+        self.ccw_button.setStyleSheet(self.get_button_style(pressed=False))
+
         buttons = [self.cw_button, self.ccw_button]
         return buttons
+
+    def get_button_style(self, pressed: bool) -> str:
+        if pressed:
+            return """
+                QPushButton {
+                    background-color: #ccd9ff;
+                    border: 2px solid #555555;
+                    border-bottom-color: #888888; /* darker shadow on the bottom */
+                    border-right-color: #888888; /* darker shadow on the right */
+                    padding: 5px;
+                }
+            """
+        else:
+            return """
+                QPushButton {
+                    background-color: white;
+                    border: 1px solid black;
+                    padding: 5px;
+                }
+                QPushButton:hover {
+                    background-color: #e6f0ff;
+                }
+            """
 
     def _create_button(self, icon_path, action) -> QPushButton:
         button = QPushButton("", self)
@@ -77,10 +131,7 @@ class IGHeaderWidget(BaseHeaderWidget):
         button.setContentsMargins(0, 0, 0, 0)  # Remove contents margin
         return button
 
-    def _set_prop_rot_dir(self, direction: str) -> None:
-        for pictograph in self.attr_box.pictographs.values():
-            for motion in pictograph.motions.values():
-                motion.manipulator.set_prop_rot_dir(direction)
+
 
     def _setup_header_label(self) -> QLabel:
         text = ""
@@ -102,4 +153,4 @@ class IGHeaderWidget(BaseHeaderWidget):
             for button in self.prop_rot_dir_buttons:
                 button.setMinimumSize(self.height(), self.height())
                 button.setMaximumSize(self.height(), self.height())
-                button.setIconSize(button.size() * 0.8)
+                button.setIconSize(button.size() * 0.9)

@@ -157,14 +157,14 @@ class StaffArrowPositioner:
             for arrow in self.pictograph.arrows.values():
                 if arrow.motion.prop.is_antiradial():
                     default_pos = self.arrow_positioner._get_default_shift_coord(arrow)
-                    adjustment = self.arrow_positioner.calculate_adjustment(
+                    adjustment = self.arrow_positioner.calculate_shift_adjustment(
                         arrow.loc, DISTANCE + -45
                     )
                     new_pos = default_pos + adjustment - arrow.boundingRect().center()
                     arrow.setPos(new_pos)
 
             if leader.prop.is_antiradial() and follower.prop.is_radial():
-                adjustment = self.arrow_positioner.calculate_adjustment(
+                adjustment = self.arrow_positioner.calculate_shift_adjustment(
                     leader.arrow.loc, 30
                 )
                 direction = self.get_antispin_antiradial_adjustment_direction(leader)
@@ -179,7 +179,7 @@ class StaffArrowPositioner:
                 self.arrow_positioner._apply_shift_adjustment(leader.arrow, adjustment)
 
             elif leader.prop.is_radial() and follower.prop.is_antiradial():
-                adjustment = self.arrow_positioner.calculate_adjustment(
+                adjustment = self.arrow_positioner.calculate_shift_adjustment(
                     follower.arrow.loc, 40
                 )
                 direction = self.get_antispin_antiradial_adjustment_direction(leader)
@@ -231,7 +231,7 @@ class StaffArrowPositioner:
                 default_pos = self.arrow_positioner._get_default_shift_coord(
                     follower.arrow
                 )
-                adjustment = self.arrow_positioner.calculate_adjustment(
+                adjustment = self.arrow_positioner.calculate_shift_adjustment(
                     follower.arrow.loc, DISTANCE + -45
                 )
                 new_pos = (
@@ -240,7 +240,7 @@ class StaffArrowPositioner:
                 follower.arrow.setPos(new_pos)
 
             elif leader.prop.is_radial() and follower.prop.is_antiradial():
-                adjustment = self.arrow_positioner.calculate_adjustment(
+                adjustment = self.arrow_positioner.calculate_shift_adjustment(
                     follower.arrow.loc, 40
                 )
                 direction = self.get_antispin_antiradial_adjustment_direction(leader)
@@ -280,7 +280,7 @@ class StaffArrowPositioner:
             )
 
             if anti_motion.prop.is_antiradial() and pro_motion.prop.is_radial():
-                adjustment = self.arrow_positioner.calculate_adjustment(
+                adjustment = self.arrow_positioner.calculate_shift_adjustment(
                     anti_motion.arrow.loc, 30
                 )
                 direction = self.get_antispin_antiradial_adjustment_direction(
@@ -299,7 +299,7 @@ class StaffArrowPositioner:
                 )
 
             elif anti_motion.prop.is_radial() and pro_motion.prop.is_antiradial():
-                adjustment = self.arrow_positioner.calculate_adjustment(
+                adjustment = self.arrow_positioner.calculate_shift_adjustment(
                     pro_motion.arrow.loc, 40
                 )
                 direction = self.get_antispin_antiradial_adjustment_direction(
@@ -366,7 +366,7 @@ class StaffArrowPositioner:
         # use the leader adjustment method to get the direction then apply the adjustment
         anti_motion = red_motion if red_motion.motion_type == ANTI else blue_motion
         if anti_motion.prop.is_antiradial():
-            adjustment = self.arrow_positioner.calculate_adjustment(
+            adjustment = self.arrow_positioner.calculate_shift_adjustment(
                 anti_motion.arrow.loc, 30
             )
             direction = self.get_antispin_antiradial_adjustment_direction(anti_motion)
@@ -389,14 +389,14 @@ class StaffArrowPositioner:
                 if self.pictograph.motions[RED].motion_type == ANTI
                 else self.pictograph.motions[BLUE]
             )
-            adjustment = self.arrow_positioner.calculate_adjustment(
+            adjustment = self.arrow_positioner.calculate_shift_adjustment(
                 anti_motion.arrow.loc, 80
             )
             self.arrow_positioner._apply_shift_adjustment(anti_motion.arrow, adjustment)
         elif red_motion.prop.ori == OUT or blue_motion.prop.ori == OUT:
             for arrow in self.pictograph.arrows.values():
                 if arrow.motion.prop.ori == OUT:
-                    adjustment = self.arrow_positioner.calculate_adjustment(
+                    adjustment = self.arrow_positioner.calculate_shift_adjustment(
                         arrow.loc, 55
                     )
                     self.arrow_positioner._apply_shift_adjustment(arrow, adjustment)
