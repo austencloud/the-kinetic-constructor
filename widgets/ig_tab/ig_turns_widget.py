@@ -123,11 +123,11 @@ class IGTurnsWidget(BaseTurnsWidget):
                     motion.turns = new_turns
                     motion.arrow.turns = new_turns
 
-                    if initial_turns == 0 and new_turns > 0:
-                        header_widget = self.attr_box.header_widget
-                        header_widget.cw_button.setChecked(True)
-                        # click the button
-                        header_widget.cw_button.click()
+                    if self.attr_box.motion_type in [DASH, STATIC]:
+                        if initial_turns == 0 and new_turns > 0:
+                            header_widget = self.attr_box.header_widget
+                            header_widget.cw_button.setChecked(True)
+                            header_widget.cw_button.click()
 
                     if self.attr_box.motion_type in [PRO, ANTI]:
                         pictograph_dict = {

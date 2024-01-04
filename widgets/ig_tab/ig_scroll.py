@@ -70,6 +70,7 @@ class IGScrollArea(PictographScrollArea):
                         if motion_type:
                             turns_value = self.get_turns_from_attr_panel(motion_type)
                             pictograph_dict[f"{motion_color}_turns"] = turns_value
+                    
                     ig_pictograph.update_pictograph(pictograph_dict)
                 image_key = self.generate_image_name(ig_pictograph, letter)
                 ordered_pictographs[image_key] = ig_pictograph

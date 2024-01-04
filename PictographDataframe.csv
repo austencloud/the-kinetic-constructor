@@ -547,10 +547,7 @@ Z-,gamma3,beta1,anti,cw,e,n,dash,no_rot,s,n
 Φ-,alpha1,alpha3,dash,no_rot,s,n,dash,no_rot,n,s
 Φ-,alpha4,alpha2,dash,no_rot,e,w,dash,no_rot,w,e
 Φ-,alpha3,alpha1,dash,no_rot,n,s,dash,no_rot,s,n
-Ψ-,beta2,beta4,dash,no_rot,e,w,dash,no_rot,e,w
-Ψ-,beta1,beta3,dash,no_rot,n,s,dash,no_rot,n,s
 Ψ-,beta4,beta2,dash,no_rot,w,e,dash,no_rot,w,e
-Ψ-,beta3,beta1,dash,no_rot,s,n,dash,no_rot,s,n
 Λ-,gamma2,gamma4,dash,no_rot,n,s,dash,no_rot,e,w
 Λ-,gamma6,gamma8,dash,no_rot,s,n,dash,no_rot,e,w
 Λ-,gamma5,gamma7,dash,no_rot,e,w,dash,no_rot,n,s
