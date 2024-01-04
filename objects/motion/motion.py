@@ -131,19 +131,35 @@ class Motion:
             motion_type, turns, start_ori
         ) -> Orientation:
             if start_ori in [IN, OUT]:
-                return (
-                    COUNTER
-                    if (turns % 2 == 0.5 and motion_type == PRO)
-                    or (turns % 2 != 0.5 and motion_type == ANTI)
-                    else CLOCK
-                )
+                if self.prop_rot_dir == CLOCKWISE:
+                    return (
+                        COUNTER
+                        if (turns % 2 == 0.5 and motion_type == PRO)
+                        or (turns % 2 != 0.5 and motion_type == ANTI)
+                        else CLOCK
+                    )
+                elif self.prop_rot_dir == COUNTER_CLOCKWISE:
+                    return (
+                        CLOCK
+                        if (turns % 2 == 0.5 and motion_type == PRO)
+                        or (turns % 2 != 0.5 and motion_type == ANTI)
+                        else COUNTER
+                    )
             elif start_ori in [CLOCK, COUNTER]:
-                return (
-                    OUT
-                    if (turns % 2 == 0.5 and motion_type == PRO)
-                    or (turns % 2 != 0.5 and motion_type == ANTI)
-                    else IN
-                )
+                if self.prop_rot_dir == CLOCKWISE:
+                    return (
+                        OUT
+                        if (turns % 2 == 0.5 and motion_type == PRO)
+                        or (turns % 2 != 0.5 and motion_type == ANTI)
+                        else IN
+                    )
+                elif self.prop_rot_dir == COUNTER_CLOCKWISE:
+                    return (
+                        IN
+                        if (turns % 2 == 0.5 and motion_type == PRO)
+                        or (turns % 2 != 0.5 and motion_type == ANTI)
+                        else OUT
+                    )
 
         def calculate_float_orientation(start_ori, handpath_direction) -> Orientation:
             if start_ori in [IN, OUT]:
