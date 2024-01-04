@@ -100,28 +100,29 @@ class BaseArrowPositioner:
             arrow.scene.arrows[RED] if arrow.color == BLUE else arrow.scene.arrows[BLUE]
         )
         if arrow.turns > 0:
-            if arrow.motion.prop_rot_dir != other_arrow.motion.prop_rot_dir:
-                default_red_pos = self._get_default_dash_coord(arrow.scene.arrows[RED])
-                default_blue_pos = self._get_default_dash_coord(
-                    arrow.scene.arrows[BLUE]
-                )
-                (
-                    red_adjustment,
-                    blue_adjustment,
-                ) = self.calculate_samedir_dash_adjustments(arrow)
-                new_red_pos = (
-                    default_red_pos + red_adjustment - arrow.boundingRect().center()
-                )
-                new_blue_pos = (
-                    default_blue_pos + blue_adjustment - arrow.boundingRect().center()
-                )
-                arrow.scene.arrows[RED].setPos(new_red_pos)
-                arrow.scene.arrows[BLUE].setPos(new_blue_pos)
+            if other_arrow.motion.is_dash():
+                if arrow.motion.prop_rot_dir != other_arrow.motion.prop_rot_dir:
+                    default_red_pos = self._get_default_dash_coord(arrow.scene.arrows[RED])
+                    default_blue_pos = self._get_default_dash_coord(
+                        arrow.scene.arrows[BLUE]
+                    )
+                    (
+                        red_adjustment,
+                        blue_adjustment,
+                    ) = self.calculate_samedir_dash_adjustments(arrow)
+                    new_red_pos = (
+                        default_red_pos + red_adjustment - arrow.boundingRect().center()
+                    )
+                    new_blue_pos = (
+                        default_blue_pos + blue_adjustment - arrow.boundingRect().center()
+                    )
+                    arrow.scene.arrows[RED].setPos(new_red_pos)
+                    arrow.scene.arrows[BLUE].setPos(new_blue_pos)
 
-            elif arrow.motion.prop_rot_dir == other_arrow.motion.prop_rot_dir:
-                adjustment = self._calculate_oppdir_dash_adjustment(arrow)
-                new_pos = arrow_pos + adjustment - arrow.boundingRect().center()
-                arrow.setPos(new_pos)
+                elif arrow.motion.prop_rot_dir == other_arrow.motion.prop_rot_dir:
+                    adjustment = self._calculate_oppdir_dash_adjustment(arrow)
+                    new_pos = arrow_pos + adjustment - arrow.boundingRect().center()
+                    arrow.setPos(new_pos)
         else:
             arrow.setPos(arrow_pos - arrow.boundingRect().center())
 

@@ -49,8 +49,8 @@ class IGAttrBox(BaseAttrBox):
         self.setMinimumWidth(int(self.attr_panel.ig_tab.width() / 6))
         self.setMaximumWidth(int(self.attr_panel.ig_tab.width() / 6))
         self.header_widget.resize_header_widget()
-        self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
         self.turns_widget.resize_turns_widget()
+        self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
 
     def update_attr_box(self, motion: Motion) -> None:
         for pictograph in self.pictographs.values():

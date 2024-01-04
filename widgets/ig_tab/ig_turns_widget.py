@@ -47,14 +47,13 @@ class IGTurnsWidget(BaseTurnsWidget):
             f"{self.styleSheet()} border: 1px solid black; border-radius: 0px;"
         )
 
-    def _create_frames(self):
-        self.header_frame = self.create_header_frame(self.main_hbox_layout)
+    def _create_frames(self) -> None:
         self.turnbox_frame = self.create_turnbox_frame(QVBoxLayout())
         self.decrement_button_frame = self.create_button_frame(self.decrement_buttons)
         self.increment_button_frame = self.create_button_frame(self.increment_buttons)
 
     def setup_turns_label(self) -> None:
-        self.turns_label = QLabel(TURNS, self)
+        self.turns_label = QLabel("Turns", self)
         self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.turnbox_frame.layout().addWidget(self.turns_label)
 
@@ -68,6 +67,7 @@ class IGTurnsWidget(BaseTurnsWidget):
         self.main_hbox_layout.addWidget(self.decrement_button_frame)
         self.main_hbox_layout.addWidget(self.turnbox_frame)
         self.main_hbox_layout.addWidget(self.increment_button_frame)
+
         self.layout.addWidget(main_frame)
 
     def create_turnbox_frame(self, layout) -> QFrame:
@@ -193,9 +193,8 @@ class IGTurnsWidget(BaseTurnsWidget):
         self.turnbox.setMaximumWidth(int(self.attr_box.width() / 3))
         self.turnbox.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
 
-        self.setMinimumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
-        self.setMaximumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
-
+        # self.setMinimumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
+        # self.setMaximumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
 
         self.turns_label.setContentsMargins(0, 0, self.spacing, 0)
         self.turns_label.setFont(QFont("Arial", int(self.width() / 22)))
@@ -238,3 +237,8 @@ class IGTurnsWidget(BaseTurnsWidget):
     def resize_turns_widget(self) -> None:
         self.update_turnbox_size()
         self.update_button_size()
+
+    def _adjust_turns_callback(self, adjustment: float) -> None:
+        self.update_turns_incrementally(adjustment)
+        
+        
