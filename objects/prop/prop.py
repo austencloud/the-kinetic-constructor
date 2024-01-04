@@ -184,7 +184,7 @@ class Prop(GraphicalObject):
 
     def update_prop_type(self, prop_type: PropType) -> None:
         self.prop_type = prop_type
-        self.update_svg(self.get_svg_file(prop_type))
+        self.update_svg()
         self.update_prop()
 
     def update_ghost_prop_location(self, new_pos: QPointF) -> None:

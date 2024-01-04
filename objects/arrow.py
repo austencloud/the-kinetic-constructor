@@ -64,8 +64,7 @@ class Arrow(GraphicalObject):
         self.loc: Location = None
         self.is_ghost: bool = False
         self.drag_offset = QPointF(0, 0)
-        self.center_x = self.boundingRect().center().x()
-        self.center_y = self.boundingRect().center().y()
+
 
     ### SETUP ###
 
@@ -157,8 +156,7 @@ class Arrow(GraphicalObject):
             self.ghost.setRotation(angle)
 
     def set_arrow_transform_origin_to_center(self) -> None:
-        self.center = self.boundingRect().center()
-        self.setTransformOriginPoint(self.center)
+        self.setTransformOriginPoint(self.boundingRect().center())
 
     def clear_attributes(self) -> None:
         self.motion_type = None
@@ -447,6 +445,8 @@ class Arrow(GraphicalObject):
         self._update_rotation()
 
     def mirror_svg(self) -> None:
+        self.center_x = self.boundingRect().center().x()
+        self.center_y = self.boundingRect().center().y()
         self.set_arrow_transform_origin_to_center()
         transform = QTransform()
         transform.translate(self.center_x, self.center_y)
@@ -459,6 +459,8 @@ class Arrow(GraphicalObject):
         self.is_svg_mirrored = True
 
     def unmirror_svg(self) -> None:
+        self.center_x = self.boundingRect().center().x()
+        self.center_y = self.boundingRect().center().y()
         transform = QTransform()
         transform.translate(self.center.x(), self.center.y())
         transform.scale(1, 1)

@@ -86,23 +86,18 @@ class BaseArrowPositioner:
     ### SHIFT ###
     def _set_shift_to_default_coor(self, arrow: Arrow, _: Dict = None) -> None:
         arrow.set_arrow_transform_origin_to_center()
-        if not arrow.is_ghost:
-            arrow.ghost.set_arrow_transform_origin_to_center()
         default_pos = self._get_default_shift_coord(arrow)
-        adjustment = self.calculate_adjustment(arrow.loc, DISTANCE)
+        adjustment = self.calculate_adjustment(arrow)
         new_pos = default_pos + adjustment - arrow.boundingRect().center()
         arrow.setPos(new_pos)
 
     ### DASH ###
     def _set_dash_to_default_coor(self, arrow: Arrow, _: Dict = None) -> None:
         arrow.set_arrow_transform_origin_to_center()
-        if not arrow.is_ghost:
-            default_pos = self._get_default_dash_coord(arrow)
-            arrow.ghost.set_arrow_transform_origin_to_center()
-            adjustment = self.calculate_adjustment(arrow.loc, DISTANCE)
-            new_pos = default_pos + adjustment - arrow.boundingRect().center()
-            arrow.setPos(new_pos)
-            arrow.ghost.setPos(new_pos)
+        default_pos = self._get_default_dash_coord(arrow)
+        # adjustment = self.calculate_adjustment(arrow.turns, arrow.loc, DISTANCE)
+        # new_pos = default_pos + adjustment - arrow.boundingRect().center()
+        arrow.setPos(default_pos - arrow.boundingRect().center())
 
     ### GETTERS ###
     def _get_default_shift_coord(self, arrow: Arrow) -> QPointF:
@@ -223,14 +218,54 @@ class BaseArrowPositioner:
         )
 
     ### UNIVERSAL METHODS ###
-    def calculate_adjustment(self, location: str, distance: int) -> QPointF:
-        location_adjustments = {
-            NORTHEAST: QPointF(distance, -distance),
-            SOUTHEAST: QPointF(distance, distance),
-            SOUTHWEST: QPointF(-distance, distance),
-            NORTHWEST: QPointF(-distance, -distance),
-        }
-        return location_adjustments.get(location, QPointF(0, 0))
+    def calculate_adjustment(self, arrow: Arrow) -> QPointF:
+        if arrow.turns == 0:
+            if arrow.motion.prop_rot_dir == CLOCKWISE:
+                location_adjustments = {
+                    NORTHEAST: QPointF(40, -35),
+                    SOUTHEAST: QPointF(35, 40),
+                    SOUTHWEST: QPointF(-40, 35),
+                    NORTHWEST: QPointF(-35, -40),
+                }
+            elif arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                location_adjustments = {
+                    NORTHEAST: QPointF(35, -40),
+                    SOUTHEAST: QPointF(40, 35),
+                    SOUTHWEST: QPointF(-35, 40),
+                    NORTHWEST: QPointF(-40, -35),
+                }
+        elif arrow.turns == 0.5:
+            if arrow.motion.prop_rot_dir == CLOCKWISE:
+                location_adjustments = {
+                    NORTHEAST: QPointF(0, 50),
+                    SOUTHEAST: QPointF(-50, 0),
+                    SOUTHWEST: QPointF(0, -50),
+                    NORTHWEST: QPointF(50, 0),
+                }
+            elif arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                location_adjustments = {
+                    NORTHEAST: QPointF(-50, 0),
+                    SOUTHEAST: QPointF(0, -50),
+                    SOUTHWEST: QPointF(50, 0),
+                    NORTHWEST: QPointF(0, 50),
+                }
+        elif arrow.turns == 1:
+            if arrow.motion.prop_rot_dir == CLOCKWISE:
+                location_adjustments = {
+                    NORTHEAST: QPointF(-25, -15),
+                    SOUTHEAST: QPointF(15, -25),
+                    SOUTHWEST: QPointF(25, 15),
+                    NORTHWEST: QPointF(-15, 25),
+                }
+            elif arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                location_adjustments = {
+                    NORTHEAST: QPointF(15, 25),
+                    SOUTHEAST: QPointF(-25, 15),
+                    SOUTHWEST: QPointF(-15, -25),
+                    NORTHWEST: QPointF(25, -15),
+                }
+
+        return location_adjustments.get(arrow.loc)
 
     def _apply_shift_adjustment(
         self, arrow: Arrow, adjustment: QPointF, update_ghost: bool = True
