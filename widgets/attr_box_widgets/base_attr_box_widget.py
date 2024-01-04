@@ -24,7 +24,7 @@ class BaseAttrBoxWidget(QWidget):
         attr_label.setContentsMargins(0, 0, 0, 0)
         return attr_label
 
-    def create_frame(self, layout: QHBoxLayout | QVBoxLayout) -> QFrame:
+    def create_header_frame(self, layout: QHBoxLayout | QVBoxLayout) -> QFrame:
         frame = QFrame(self)
         frame.setLayout(layout)
         return frame

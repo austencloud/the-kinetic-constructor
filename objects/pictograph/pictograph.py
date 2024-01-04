@@ -238,6 +238,9 @@ class Pictograph(QGraphicsScene):
 
         return nearest_point_name, nearest_point_coords
 
+    def get_motions_by_type(self, motion_type: str) -> List[Motion]:
+        return [motion for motion in self.motions.values() if motion.motion_type == motion_type]
+
     ### HELPERS ###
 
     def add_to_sequence_callback(self) -> None:

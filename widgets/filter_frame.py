@@ -22,7 +22,7 @@ class FilterFrame(QFrame):
         # Initialize AttrPanel
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addWidget(QLabel("Filters"), alignment=Qt.AlignmentFlag.AlignTop)
-        self.layout.addWidget(self.attr_panel)
+        # self.layout.addWidget(self.attr_panel)
 
     def apply_filters(self):
         # Logic to apply filters based on attributes set in AttrPanel

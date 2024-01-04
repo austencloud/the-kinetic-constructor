@@ -324,3 +324,12 @@ class Motion:
 
     def is_static(self) -> bool:
         return self.motion_type == STATIC
+
+    def is_dash_or_static(self) -> bool:
+        return self.motion_type in [DASH, STATIC]
+    
+    def set_turns(self, turns: Turns) -> None:
+        self.turns = turns
+        self.arrow.turns = turns
+        self.arrow.ghost.turns = turns
+        
