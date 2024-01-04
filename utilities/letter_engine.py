@@ -37,7 +37,6 @@ from constants import (
     RED,
 )
 
-from utilities.TypeChecking.TypeChecking import LetterGroupsByMotionType
 
 logging.basicConfig(
     level=logging.INFO,
@@ -155,7 +154,7 @@ class LetterEngine:
         self.motion_type_combination: MotionTypeCombination = (
             motion_type_combinations.get((red_motion_type, blue_motion_type))
         )
-        motion_type_letter_group: LetterGroupsByMotionType = (
+        motion_type_letter_group = (
             motion_type_letter_groups.get(self.motion_type_combination, "")
         )
 

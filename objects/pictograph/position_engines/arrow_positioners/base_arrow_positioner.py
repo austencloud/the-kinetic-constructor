@@ -3,7 +3,7 @@ from PyQt6.QtCore import QPointF
 from Enums import Letter, LetterNumberType
 from constants import *
 from objects.arrow import Arrow
-from typing import TYPE_CHECKING, Dict, List, Union
+from typing import TYPE_CHECKING, Dict, List, Tuple, Union
 
 
 if TYPE_CHECKING:
@@ -95,15 +95,35 @@ class BaseArrowPositioner:
     ### DASH ###
     def _set_dash_to_default_coor(self, arrow: Arrow, _: Dict = None) -> None:
         arrow.set_arrow_transform_origin_to_center()
-        default_red_pos = self._get_default_dash_coord(arrow.scene.arrows[RED])
-        default_blue_pos = self._get_default_dash_coord(arrow.scene.arrows[BLUE])
-        red_adjustment, blue_adjustment = self.calculate_dash_adjustments(arrow)
-        new_red_pos = default_red_pos + red_adjustment - arrow.boundingRect().center()
-        new_blue_pos = (
-            default_blue_pos + blue_adjustment - arrow.boundingRect().center()
+        arrow_pos = self._get_default_dash_coord(arrow)
+        other_arrow = (
+            arrow.scene.arrows[RED] if arrow.color == BLUE else arrow.scene.arrows[BLUE]
         )
-        arrow.scene.arrows[RED].setPos(new_red_pos)
-        arrow.scene.arrows[BLUE].setPos(new_blue_pos)
+        if arrow.turns > 0:
+            if arrow.motion.prop_rot_dir != other_arrow.motion.prop_rot_dir:
+                default_red_pos = self._get_default_dash_coord(arrow.scene.arrows[RED])
+                default_blue_pos = self._get_default_dash_coord(
+                    arrow.scene.arrows[BLUE]
+                )
+                (
+                    red_adjustment,
+                    blue_adjustment,
+                ) = self.calculate_samedir_dash_adjustments(arrow)
+                new_red_pos = (
+                    default_red_pos + red_adjustment - arrow.boundingRect().center()
+                )
+                new_blue_pos = (
+                    default_blue_pos + blue_adjustment - arrow.boundingRect().center()
+                )
+                arrow.scene.arrows[RED].setPos(new_red_pos)
+                arrow.scene.arrows[BLUE].setPos(new_blue_pos)
+
+            elif arrow.motion.prop_rot_dir == other_arrow.motion.prop_rot_dir:
+                adjustment = self._calculate_oppdir_dash_adjustment(arrow)
+                new_pos = arrow_pos + adjustment - arrow.boundingRect().center()
+                arrow.setPos(new_pos)
+        else:
+            arrow.setPos(arrow_pos - arrow.boundingRect().center())
 
     ### GETTERS ###
     def _get_default_shift_coord(self, arrow: Arrow) -> QPointF:
@@ -430,7 +450,9 @@ class BaseArrowPositioner:
             (arrow.turns, arrow.motion.prop_rot_dir), {}
         ).get(arrow.loc)
 
-    def calculate_dash_adjustments(self, arrow: Arrow) -> QPointF:
+    def calculate_samedir_dash_adjustments(
+        self, arrow: Arrow
+    ) -> Tuple[QPointF, QPointF]:
         if arrow.motion.prop_rot_dir == CLOCKWISE:
             if arrow.loc == WEST:
                 red_adjustment = QPointF(-80, 0)
@@ -444,7 +466,7 @@ class BaseArrowPositioner:
             elif arrow.loc == SOUTH:
                 red_adjustment = QPointF(0, 50)
                 blue_adjustment = QPointF(0, -25)
-                
+
         elif arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
             if arrow.loc == WEST:
                 red_adjustment = QPointF(-80, 0)
@@ -461,8 +483,29 @@ class BaseArrowPositioner:
         elif arrow.motion.prop_rot_dir == NO_ROT:
             red_adjustment = QPointF(0, 0)
             blue_adjustment = QPointF(0, 0)
-
         return red_adjustment, blue_adjustment
+
+    def _calculate_oppdir_dash_adjustment(self, arrow: Arrow) -> QPointF:
+        if arrow.motion.prop_rot_dir == CLOCKWISE:
+            if arrow.loc == WEST:
+                adjustment = QPointF(30, 0)
+            elif arrow.loc == EAST:
+                adjustment = QPointF(-30, 0)
+            elif arrow.loc == NORTH:
+                adjustment = QPointF(0, -30)
+            elif arrow.loc == SOUTH:
+                adjustment = QPointF(0, 30)
+        elif arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+            if arrow.loc == WEST:
+                adjustment = QPointF(30, 0)
+            elif arrow.loc == EAST:
+                adjustment = QPointF(-30, 0)
+            elif arrow.loc == NORTH:
+                adjustment = QPointF(0, 30)
+            elif arrow.loc == SOUTH:
+                adjustment = QPointF(0, -30)
+
+        return adjustment
 
     def _apply_shift_adjustment(
         self, arrow: Arrow, adjustment: QPointF, update_ghost: bool = True

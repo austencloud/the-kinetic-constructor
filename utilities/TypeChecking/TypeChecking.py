@@ -29,56 +29,9 @@ DictVariants = (
 DictVariantsLists = List[DictVariants]
 
 MotionTypes = Literal["pro", "anti", "float", "dash", "static"]
-
-
-class Mode(Enum):
-    TOG_SAME = "TS"
-    TOG_OPPOSITE = "TO"
-    SPLIT_SAME = "SS"
-    SPLIT_OPPOSITE = "SO"
-    QUARTER_TIME_SAME = "QTS"
-    QUARTER_TIME_OPPOSITE = "QTO"
-
-
-### LETTER GROUPS ###
-
-
-class MotionTypeCombination(Enum):
-    PRO_VS_PRO = "pro_vs_pro"
-    ANTI_VS_ANTI = "anti_vs_anti"
-    STATIC_VS_STATIC = "static_vs_static"
-    PRO_VS_ANTI = "pro_vs_anti"
-    STATIC_VS_PRO = "static_vs_pro"
-    STATIC_VS_ANTI = "static_vs_anti"
-    DASH_VS_PRO = "dash_vs_pro"
-    DASH_VS_ANTI = "dash_vs_anti"
-    DASH_VS_STATIC = "dash_vs_static"
-    DASH_VS_DASH = "dash_vs_dash"
-
-
-class LetterGroupsByMotionType(Enum):
-    ADGJMPS = "ADGJMPS"
-    BEHKNQT = "BEHKNQT"
-    αβΓ = "αβΓ"
-    CFILORUV = "CFILORUV"
-    WYΣθ = "WYΣθ"
-    XZΔΩ = "XZΔΩ"
-    X_Z_Δ_Ω_ = "X-Z-Δ-Ω-"
-    ΦΨΛ = "ΦΨΛ"
-    Φ_Ψ_Λ_ = "Φ-Ψ-Λ-"
-
-
-class MotionTypeCombinationMapping(TypedDict):
-    MotionTypeCombination.PRO_VS_PRO: LetterGroupsByMotionType.ADGJMPS
-    MotionTypeCombination.ANTI_VS_ANTI: LetterGroupsByMotionType.BEHKNQT
-    MotionTypeCombination.STATIC_VS_STATIC: LetterGroupsByMotionType.αβΓ
-    MotionTypeCombination.PRO_VS_ANTI: LetterGroupsByMotionType.CFILORUV
-    MotionTypeCombination.STATIC_VS_PRO: LetterGroupsByMotionType.WYΣθ
-    MotionTypeCombination.STATIC_VS_ANTI: LetterGroupsByMotionType.XZΔΩ
-    MotionTypeCombination.DASH_VS_PRO: LetterGroupsByMotionType.WYΣθ
-    MotionTypeCombination.DASH_VS_ANTI: LetterGroupsByMotionType.X_Z_Δ_Ω_
-    MotionTypeCombination.DASH_VS_STATIC: LetterGroupsByMotionType.ΦΨΛ
-    MotionTypeCombination.DASH_VS_DASH: LetterGroupsByMotionType.Φ_Ψ_Λ_
-
-
+Locations = Literal["n", "ne", "e", "se", "s", "sw", "w", "nw"]
+Colors = Literal["blue", "red"]
+Turns = Literal["fl", "0", "0.5", "1", "1.5", "2", "2.5", "3"]
+Orientations = Literal["in", "out", "clock", "counter"]
 ParallelCombinationsSet = Set[Tuple[str, str, str, str]]
+Handpaths = Literal["dash_handpath", "static_handpath", "cw_handpath", "ccw_handpath"]

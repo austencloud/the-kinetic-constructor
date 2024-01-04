@@ -8,8 +8,12 @@ from constants import (
     BLUE_START_LOC,
     BLUE_START_ORI,
     BLUE_TURNS,
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
+    DASH,
     END_POS,
     LETTER,
+    NO_ROT,
     RED,
     RED_END_LOC,
     RED_END_ORI,
@@ -19,6 +23,7 @@ from constants import (
     RED_START_ORI,
     RED_TURNS,
     START_POS,
+    STATIC,
 )
 from widgets.ig_tab.ig_pictograph import IGPictograph
 from widgets.pictograph_scroll_area import PictographScrollArea
@@ -69,8 +74,18 @@ class IGScrollArea(PictographScrollArea):
                         motion_type = pictograph_dict.get(f"{motion_color}_motion_type")
                         if motion_type:
                             turns_value = self.get_turns_from_attr_panel(motion_type)
+                            if motion_type == DASH:
+                                prop_rot_dir = self.get_dash_prop_rot_dir_from_attr_panel(
+                                    motion_type
+                                )
+                                pictograph_dict[f"{motion_color}_prop_rot_dir"] = prop_rot_dir
+                            elif motion_type == STATIC:
+                                prop_rot_dir = self.get_static_prop_rot_dir_from_attr_panel(
+                                    motion_type
+                                )
+                                pictograph_dict[f"{motion_color}_prop_rot_dir"] = prop_rot_dir
                             pictograph_dict[f"{motion_color}_turns"] = turns_value
-                    
+
                     ig_pictograph.update_pictograph(pictograph_dict)
                 image_key = self.generate_image_name(ig_pictograph, letter)
                 ordered_pictographs[image_key] = ig_pictograph
@@ -94,6 +109,30 @@ class IGScrollArea(PictographScrollArea):
         if self.pictographs:
             self.update_attr_panel()
 
+    def get_dash_prop_rot_dir_from_attr_panel(self, motion_type):
+        header_widget = self.ig_tab.attr_panel.dash_attr_box.header_widget
+        if motion_type == DASH:
+            if header_widget.cw_button.isChecked():
+                return CLOCKWISE
+            elif header_widget.ccw_button.isChecked():
+                return COUNTER_CLOCKWISE
+            else:
+                return NO_ROT
+        else:
+            return NO_ROT
+        
+    def get_static_prop_rot_dir_from_attr_panel(self, motion_type):
+        header_widget = self.ig_tab.attr_panel.static_attr_box.header_widget
+        if motion_type == STATIC:
+            if header_widget.cw_button.isChecked():
+                return CLOCKWISE
+            elif header_widget.ccw_button.isChecked():
+                return COUNTER_CLOCKWISE
+            else:
+                return NO_ROT
+        else:
+            return NO_ROT
+    
     def get_turns_from_attr_panel(self, motion_type):
         return self.ig_tab.attr_panel.get_turns_for_motion_type(motion_type)
 
