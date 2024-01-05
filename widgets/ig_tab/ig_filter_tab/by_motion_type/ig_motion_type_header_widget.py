@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton
-from PyQt6.QtGui import QFont, QIcon
+from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING, List
@@ -8,7 +8,9 @@ from utilities.TypeChecking.TypeChecking import MotionTypes
 from widgets.attr_box_widgets.base_header_widget import BaseHeaderWidget
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_filter_frame.ig_motion_attr_box import IGMotionAttrBox
+    from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import (
+        IGMotionTypeAttrBox,
+    )
 from constants import (
     ANTI,
     CLOCKWISE,
@@ -20,8 +22,10 @@ from constants import (
 )
 
 
-class IGHeaderWidget(BaseHeaderWidget):
-    def __init__(self, attr_box: "IGMotionAttrBox", motion_type: MotionTypes) -> None:
+class IGMotionTypeHeaderWidget(BaseHeaderWidget):
+    def __init__(
+        self, attr_box: "IGMotionTypeAttrBox", motion_type: MotionTypes
+    ) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
         self.motion_type = motion_type

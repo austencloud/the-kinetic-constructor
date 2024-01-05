@@ -2,30 +2,32 @@ from constants import ANTI, DASH, PRO, STATIC
 from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import MotionTypes
 from widgets.attr_panel.base_attr_panel import BaseAttrPanel
-from widgets.ig_tab.ig_filter_frame.ig_motion_attr_box import IGMotionAttrBox
+from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import (
+    IGMotionTypeAttrBox,
+)
 
 
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_tab import IGTab
 
 
-class IGColorAttrPanel(BaseAttrPanel):
+class IGMotionTypeAttrPanel(BaseAttrPanel):
     def __init__(self, ig_tab: "IGTab") -> None:
         super().__init__(ig_tab)
         self.ig_tab = ig_tab
-        self.pro_attr_box = IGMotionAttrBox(
+        self.pro_attr_box = IGMotionTypeAttrBox(
             self, self.ig_tab.ig_scroll_area.pictographs, PRO
         )
-        self.anti_attr_box = IGMotionAttrBox(
+        self.anti_attr_box = IGMotionTypeAttrBox(
             self, self.ig_tab.ig_scroll_area.pictographs, ANTI
         )
-        self.dash_attr_box = IGMotionAttrBox(
+        self.dash_attr_box = IGMotionTypeAttrBox(
             self, self.ig_tab.ig_scroll_area.pictographs, DASH
         )
-        self.static_attr_box = IGMotionAttrBox(
+        self.static_attr_box = IGMotionTypeAttrBox(
             self, self.ig_tab.ig_scroll_area.pictographs, STATIC
         )
-        self.boxes: List[IGMotionAttrBox] = [
+        self.boxes: List[IGMotionTypeAttrBox] = [
             self.pro_attr_box,
             self.anti_attr_box,
             self.dash_attr_box,
@@ -33,12 +35,12 @@ class IGColorAttrPanel(BaseAttrPanel):
         ]
         self.setup_layouts()
 
+
+
     def setup_layouts(self) -> None:
         super().setup_layouts()
-        self.layout.addWidget(self.pro_attr_box)
-        self.layout.addWidget(self.anti_attr_box)
-        self.layout.addWidget(self.dash_attr_box)
-        self.layout.addWidget(self.static_attr_box)
+        for box in self.boxes:
+            self.layout.addWidget(box)
 
     def resize_ig_attr_panel(self) -> None:
         self.layout.setSpacing(int(self.pro_attr_box.width() / 5))

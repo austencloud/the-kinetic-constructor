@@ -10,11 +10,10 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from constants import IG_PICTOGRAPH
-from widgets.filter_tab import IGFilterTab
-from widgets.ig_tab.ig_filter_frame.ig_motion_attr_panel import IGMotionAttrPanel
+from widgets.ig_tab.ig_filter_tab.ig_filter_tab import IGFilterTab
 from widgets.ig_tab.ig_letter_button_frame import IGLetterButtonFrame
-from widgets.ig_tab.ig_pictograph import IGPictograph
-from widgets.ig_tab.ig_scroll import IGScrollArea
+from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
+from widgets.ig_tab.ig_scroll.ig_scroll import IGScrollArea
 
 
 if TYPE_CHECKING:

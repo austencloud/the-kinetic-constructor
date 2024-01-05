@@ -4,7 +4,7 @@ from constants import BLUE_MOTION_TYPE, DASH, OPTION, RED_MOTION_TYPE, STATIC
 from utilities.TypeChecking.TypeChecking import Orientations, Turns, Letters
 
 from PyQt6.QtCore import Qt
-from widgets.ig_tab.ig_pictograph import IGPictograph
+from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
 from widgets.option_picker_tab.option import Option
 
 if TYPE_CHECKING:
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
         OptionPickerScrollArea,
     )
     from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
-    from widgets.ig_tab.ig_scroll import IGScrollArea
+    from widgets.ig_tab.ig_scroll.ig_scroll import IGScrollArea
     from widgets.ig_tab.ig_tab import IGTab
     from widgets.main_widget import MainWidget
 

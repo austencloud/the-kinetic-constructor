@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QPushButton,
-    QComboBox,
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
@@ -23,12 +22,12 @@ from widgets.attr_box_widgets.base_turns_widget import (
 
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_filter_frame.ig_motion_attr_box import IGMotionAttrBox
+    from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_box import IGColorAttrBox
 from PyQt6.QtCore import pyqtBoundSignal
 
 
-class IGTurnsWidget(BaseTurnsWidget):
-    def __init__(self, attr_box: "IGMotionAttrBox") -> None:
+class IGColorTurnsWidget(BaseTurnsWidget):
+    def __init__(self, attr_box: "IGColorAttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
         self.initialize_ui()
@@ -147,7 +146,7 @@ class IGTurnsWidget(BaseTurnsWidget):
     def update_turns_for_pictograph(
         self, pictograph: Pictograph, adjustment: float
     ) -> None:
-        for motion in pictograph.get_motions_by_type(self.attr_box.motion_type):
+        for motion in pictograph.get_motions_by_type(self.attr_box.color):
             self.process_single_motion(motion, adjustment)
 
     def connect_signal(self, signal: pyqtBoundSignal) -> None:
@@ -210,7 +209,7 @@ class IGTurnsWidget(BaseTurnsWidget):
     def _update_pictographs_turns(self, new_turns):
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
-                if motion.motion_type == self.attr_box.motion_type:
+                if motion.color == self.attr_box.color:
                     motion.set_turns(new_turns)
                     pictograph_dict = {
                         f"{motion.color}_turns": new_turns,

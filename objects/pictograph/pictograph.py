@@ -30,7 +30,7 @@ from utilities.letter_engine import LetterEngine
 from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_pictograph import IGPictograph
+    from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
     from widgets.option_picker_tab.option import Option
     from widgets.main_widget import MainWidget
 
@@ -111,7 +111,7 @@ class Pictograph(QGraphicsScene):
             StartPositionBeatView,
         )
         from widgets.sequence_widget.beat_frame.beat import BeatView
-        from widgets.ig_tab.ig_pictograph import IG_Pictograph_View
+        from widgets.ig_tab.ig_scroll.ig_pictograph import IG_Pictograph_View
 
         if graph_type == MAIN:
             view = GraphEditorPictographView(self)

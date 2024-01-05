@@ -25,7 +25,7 @@ from constants import (
     START_POS,
     STATIC,
 )
-from widgets.ig_tab.ig_pictograph import IGPictograph
+from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
 from widgets.pictograph_scroll_area import PictographScrollArea
 from constants import IG_PICTOGRAPH
 from utilities.TypeChecking.TypeChecking import Letters, Turns, Orientations
@@ -224,7 +224,7 @@ class IGScrollArea(PictographScrollArea):
                         attr_box.update_attr_box(motion)
             elif self.ig_tab.filter_tab.color_attr_panel.isVisible():        
                 for attr_box in self.ig_tab.filter_tab.color_attr_panel.boxes:
-                    if motion.motion_type == attr_box.motion_type:
+                    if motion.motion_type == attr_box.color:
                         attr_box.update_attr_box(motion)
 
     def filter_pictographs(self, pictograph_dicts: List[Dict]) -> List[Dict]:

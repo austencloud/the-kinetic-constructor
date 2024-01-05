@@ -41,7 +41,7 @@ class OptionPickerScrollArea(PictographScrollArea):
         start_poss = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
         for i, position_key in enumerate(start_poss):
             self._add_start_pos_option(position_key, i)
-        self.option_picker_tab.filter_frame.apply_filters()
+        self.option_picker_tab.filter_tab.apply_filters()
 
     def _add_start_pos_option(self, position_key: str, column: int) -> None:
         """Adds an option for the specified start position."""
@@ -194,7 +194,7 @@ class OptionPickerScrollArea(PictographScrollArea):
         """
         if is_start_pos:
             return lambda event: self._on_start_pos_clicked(
-                option, self.option_picker_tab.filter_frame.filters
+                option, self.option_picker_tab.filter_tab.filters
             )
         else:
             return lambda event: self._on_option_clicked(option)

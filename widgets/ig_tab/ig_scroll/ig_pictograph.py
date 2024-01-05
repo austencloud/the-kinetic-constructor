@@ -4,7 +4,7 @@ from objects.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_scroll import IGScrollArea
+    from widgets.ig_tab.ig_scroll.ig_scroll import IGScrollArea
 
 
 class IGPictograph(Pictograph):

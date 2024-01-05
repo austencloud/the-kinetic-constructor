@@ -4,22 +4,27 @@ from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import MotionTypes
 from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
 from widgets.attr_panel.bast_attr_box import BaseAttrBox
-from widgets.attr_box_widgets.attr_box_button import AttrBoxButton
 
-from widgets.ig_tab.ig_header_widget import IGHeaderWidget
-from widgets.ig_tab.ig_turns_widget import IGTurnsWidget
+from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_header_widget import (
+    IGMotionTypeHeaderWidget,
+)
+from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_turns_widget import (
+    IGMotionTypeTurnsWidget,
+)
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_filter_frame.ig_motion_attr_panel import IGMotionAttrPanel
+    from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_panel import (
+        IGMotionTypeAttrPanel,
+    )
     from objects.pictograph.pictograph import Pictograph
 
 from PyQt6.QtGui import QPixmap, QFont
 
 
-class IGMotionAttrBox(BaseAttrBox):
+class IGMotionTypeAttrBox(BaseAttrBox):
     def __init__(
         self,
-        attr_panel: "IGMotionAttrPanel",
+        attr_panel: "IGMotionTypeAttrPanel",
         pictographs: List["Pictograph"],
         motion_type: MotionTypes,
     ) -> None:
@@ -39,8 +44,8 @@ class IGMotionAttrBox(BaseAttrBox):
         )
 
     def _setup_widgets(self) -> None:  # add common widgets
-        self.header_widget = IGHeaderWidget(self, self.motion_type)
-        self.turns_widget = IGTurnsWidget(self)
+        self.header_widget = IGMotionTypeHeaderWidget(self, self.motion_type)
+        self.turns_widget = IGMotionTypeTurnsWidget(self)
 
         self.layout.addWidget(self.header_widget, 1)
         self.layout.addWidget(self.turns_widget, 2)

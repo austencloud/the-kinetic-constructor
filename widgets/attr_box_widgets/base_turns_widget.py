@@ -18,7 +18,9 @@ if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_turns_widget import (
         GraphEditorTurnsWidget,
     )
-    from widgets.ig_tab.ig_turns_widget import IGTurnsWidget
+    from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_turns_widget import (
+        IGMotionTypeTurnsWidget,
+    )
 
 
 class BaseTurnsWidget(BaseAttrBoxWidget):
@@ -73,7 +75,7 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
         return frame
 
     def _create_turns_button(
-        self: Union["GraphEditorTurnsWidget", "IGTurnsWidget"], text: str
+        self: Union["GraphEditorTurnsWidget", "IGMotionTypeTurnsWidget"], text: str
     ) -> AttrBoxButton:
         """Creates a turn adjustment button with specified text."""
         button = AttrBoxButton(self)

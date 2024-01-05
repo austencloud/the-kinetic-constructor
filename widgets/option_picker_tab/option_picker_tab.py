@@ -5,9 +5,9 @@ import pandas as pd
 from constants import END_POS, START_POS
 from .option_picker_scroll_area import OptionPickerScrollArea
 
+from widgets.option_picker_tab.option_picker_filter_frame import OptionPickerFilterTab
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
-from widgets.option_picker_tab.option_picker_filter_frame import OptionPickerFilterFrame
 
 
 class OptionPickerTab(QFrame):
@@ -19,9 +19,9 @@ class OptionPickerTab(QFrame):
 
     def setup_ui(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.filter_frame = OptionPickerFilterFrame(self)
+        self.filter_tab = OptionPickerFilterTab(self)
         self.scroll_area = OptionPickerScrollArea(self.main_widget, self)
-        self.layout.addWidget(self.filter_frame)
+        self.layout.addWidget(self.filter_tab)
         self.layout.addWidget(self.scroll_area)
         self.scroll_area.show()
 
@@ -35,6 +35,5 @@ class OptionPickerTab(QFrame):
             df.sort_index(inplace=True)
             return df
         except Exception as e:
-            # Handle specific exceptions as needed
             print(f"Error loading data: {e}")
             return pd.DataFrame()  # Return an empty DataFrame in case of error
