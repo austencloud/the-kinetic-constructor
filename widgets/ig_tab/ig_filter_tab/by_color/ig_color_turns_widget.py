@@ -231,8 +231,6 @@ class IGColorTurnsWidget(BaseTurnsWidget):
         self.turnbox.setMaximumWidth(int(self.attr_box.width() / 3))
         self.turnbox.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
 
-
-
         self.turns_label.setContentsMargins(0, 0, self.spacing, 0)
         self.turns_label.setFont(QFont("Arial", int(self.width() / 22)))
 

@@ -20,4 +20,5 @@ class IGFilterTab(BaseFilterTab):
         self.color_attr_panel = IGColorAttrPanel(self.ig_tab)
         self.addTab(self.motion_attr_panel, "Filter by Motion Type")
         self.addTab(self.color_attr_panel, "Filter by Colors")
+        self.currentChanged.connect(self.ig_tab.resize_ig_tab)
         

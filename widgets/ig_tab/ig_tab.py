@@ -224,7 +224,7 @@ class IGTab(QWidget):
                 # Apply similar logic for other filters
 
     def resize_ig_tab(self) -> None:
-        self.filter_tab.motion_attr_panel.resize_ig_motion_type_attr_panel()
-        self.filter_tab.color_attr_panel.resize_ig_color_attr_panel()
-        self.setMinimumWidth(self.ig_scroll_area.width() + self.button_panel.width())
-        self.main_widget.right_frame.setMaximumWidth(self.width())
+        if self.filter_tab.motion_attr_panel.isVisible():
+            self.filter_tab.motion_attr_panel.resize_ig_motion_type_attr_panel()
+        elif self.filter_tab.color_attr_panel.isVisible():
+            self.filter_tab.color_attr_panel.resize_ig_color_attr_panel()

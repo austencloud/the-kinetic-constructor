@@ -50,7 +50,7 @@ class IGMotionTypeAttrBox(BaseAttrBox):
         self.layout.addWidget(self.header_widget, 1)
         self.layout.addWidget(self.turns_widget, 2)
 
-    def resize_ig_attr_box(self) -> None:
+    def resize_ig_motion_type_attr_box(self) -> None:
         self.setMinimumWidth(int(self.attr_panel.ig_tab.width() / 6))
         self.setMaximumWidth(int(self.attr_panel.ig_tab.width() / 6))
         self.header_widget.resize_header_widget()

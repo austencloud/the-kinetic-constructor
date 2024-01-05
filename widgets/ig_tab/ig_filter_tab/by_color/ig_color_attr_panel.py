@@ -37,9 +37,8 @@ class IGColorAttrPanel(BaseAttrPanel):
     def resize_ig_color_attr_panel(self) -> None:
         self.layout.setSpacing(int(self.blue_attr_box.width() / 5))
         for box in self.boxes:
-            box.resize_ig_attr_box()
-        self.setMinimumWidth(self.blue_attr_box.width() * 4 + self.layout.spacing() * 3)
-        self.setMaximumWidth(self.blue_attr_box.width() * 4 + self.layout.spacing() * 3)
+            box.resize_ig_color_attr_box()
+        self.resize((self.blue_attr_box.width() * 4 + self.layout.spacing() * 3), self.height())
 
     def get_turns_for_color(self, color: Colors) -> Turns:
         for box in self.boxes:

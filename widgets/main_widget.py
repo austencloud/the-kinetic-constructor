@@ -250,7 +250,6 @@ class MainWidget(QWidget):
         self.option_picker_tab.resize_option_picker_tab()
         self.sequence_widget.resize_sequence_widget()
         self.ig_tab.resize_ig_tab()
-        # self.main_window._set_dimensions()
 
     ### IMAGE CACHE ###
 

@@ -37,7 +37,6 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
             self._setup_pro_anti_layout()
         if self.motion_type in [DASH, STATIC]:
             self.prop_rot_dir_buttons = self._setup_prop_rot_dir_buttons()
-            # Additional logic to set default rotation direction
             self._set_default_rotation_direction()
             self._setup_dash_static_layout()
 
@@ -61,8 +60,7 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.separator)
 
-    def _set_default_rotation_direction(self):
-        # Check if any dash has turns and set default rotation direction
+    def _set_default_rotation_direction(self) -> None:
         has_turns = any(
             motion.turns > 0
             for pictograph in self.attr_box.pictographs.values()
@@ -89,7 +87,6 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
         self.cw_button.setChecked(prop_rot_dir == CLOCKWISE)
         self.ccw_button.setChecked(prop_rot_dir == COUNTER_CLOCKWISE)
 
-        # Update button styles based on selection
         if prop_rot_dir:
             self.cw_button.setStyleSheet(
                 self.get_button_style(pressed=prop_rot_dir == CLOCKWISE)
@@ -110,10 +107,8 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
             lambda: self._set_prop_rot_dir(COUNTER_CLOCKWISE),
         )
 
-        # Set CW button as selected by default
         self.cw_button.setStyleSheet(self.get_button_style(pressed=True))
         self.ccw_button.setStyleSheet(self.get_button_style(pressed=False))
-        # In the `IGHeaderWidget` class where buttons are created
         self.cw_button.setCheckable(True)
         self.ccw_button.setCheckable(True)
 
@@ -148,9 +143,7 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
         button.setIcon(QIcon(icon_path))
         button.setIconSize(button.size())
         button.clicked.connect(action)
-        # button.setMinimumSize(self.height(), self.height())
-        # button.setMaximumSize(self.height(), self.height())
-        button.setContentsMargins(0, 0, 0, 0)  # Remove contents margin
+        button.setContentsMargins(0, 0, 0, 0)
         return button
 
     def _setup_header_label(self) -> QLabel:
@@ -170,7 +163,8 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
 
     def resize_header_widget(self) -> None:
         if self.motion_type in [DASH, STATIC]:
+            button_size = int(self.height()*0.9)
             for button in self.prop_rot_dir_buttons:
-                button.setMinimumSize(self.height(), self.height())
-                button.setMaximumSize(self.height(), self.height())
+                button.setMinimumSize(button_size, button_size)
+                button.setMaximumSize(button_size, button_size)
                 button.setIconSize(button.size() * 0.9)
