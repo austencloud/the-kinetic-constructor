@@ -22,7 +22,9 @@ from widgets.attr_box_widgets.base_turns_widget import (
 
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import IGMotionTypeAttrBox
+    from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import (
+        IGMotionTypeAttrBox,
+    )
 from PyQt6.QtCore import pyqtBoundSignal
 
 
@@ -265,9 +267,9 @@ class IGMotionTypeTurnsWidget(BaseTurnsWidget):
         )
 
     def update_button_size(self) -> None:
-        for button in self.buttons:
+        for button in self.turns_buttons:
             button_size = self.calculate_button_size()
-            button.update_attr_box_button_size(button_size)
+            button.update_attr_box_turns_button_size(button_size)
 
     def calculate_button_size(self) -> int:
         return int(self.attr_box.width() / 5)

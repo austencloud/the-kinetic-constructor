@@ -52,7 +52,7 @@ class GraphEditorAttrBox(BaseAttrBox):
         self.setMaximumHeight(self.pictograph.view.height())
 
         for button in self.findChildren(AttrBoxButton):
-            button.update_attr_box_button_size(int(self.width() / 8))
+            button.update_attr_box_turns_button_size(int(self.width() / 8))
 
         self.header_spacing = int(self.width() * 0.02)
         ratio_total = 1 + 1 + 1 + 2

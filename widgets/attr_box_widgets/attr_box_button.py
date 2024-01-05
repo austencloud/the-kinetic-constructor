@@ -20,7 +20,7 @@ class AttrBoxButton(QPushButton):
         super().__init__(parent_widget)
         self.parent_widget = parent_widget
 
-    def update_attr_box_button_size(self, button_size) -> None:
+    def update_attr_box_turns_button_size(self, button_size) -> None:
         self.button_size = button_size
         self.border_radius = button_size / 2
         self.setMinimumSize(button_size, button_size)

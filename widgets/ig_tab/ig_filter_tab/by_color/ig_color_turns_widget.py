@@ -6,11 +6,12 @@ from PyQt6.QtWidgets import (
     QPushButton,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
-from typing import TYPE_CHECKING, Union
+from PyQt6.QtGui import QFont, QIcon
+from typing import TYPE_CHECKING, List, Union
 from constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
+    DASH,
     ICON_DIR,
     NO_ROT,
 )
@@ -39,8 +40,32 @@ class IGColorTurnsWidget(BaseTurnsWidget):
         self.setup_turns_label()
         self.setup_turnbox()
         self.connect_signals()
-        # self.add_black_borders()
         self.setup_directset_turns_buttons()  # Add this line to set up the new buttons
+
+
+    def get_button_style(self, pressed: bool) -> str:
+        if pressed:
+            return """
+                QPushButton {
+                    background-color: #ccd9ff;
+                    border: 2px solid #555555;
+                    border-bottom-color: #888888; /* darker shadow on the bottom */
+                    border-right-color: #888888; /* darker shadow on the right */
+                    padding: 5px;
+                }
+            """
+        else:
+            return """
+                QPushButton {
+                    background-color: white;
+                    border: 1px solid black;
+                    padding: 5px;
+                }
+                QPushButton:hover {
+                    background-color: #e6f0ff;
+                }
+            """
+
 
     def setup_directset_turns_buttons(self) -> None:
         """Set up the buttons for directly setting turns values."""
@@ -180,7 +205,7 @@ class IGColorTurnsWidget(BaseTurnsWidget):
     def format_turns(turns: Union[int, float]) -> str:
         return str(int(turns)) if turns.is_integer() else str(turns)
 
-    def _simulate_cw_button_click(self):
+    def _simulate_cw_button_click(self) -> None:
         header_widget = self.attr_box.header_widget
         header_widget.cw_button.setChecked(True)
         header_widget.cw_button.click()
@@ -262,11 +287,11 @@ class IGColorTurnsWidget(BaseTurnsWidget):
         )
 
     def update_button_size(self) -> None:
-        for button in self.buttons:
-            button_size = self.calculate_button_size()
-            button.update_attr_box_button_size(button_size)
+        for turns_button in self.turns_buttons:
+            button_size = self.calculate_turns_button_size()
+            turns_button.update_attr_box_turns_button_size(button_size)
 
-    def calculate_button_size(self) -> int:
+    def calculate_turns_button_size(self) -> int:
         return int(self.attr_box.width() / 5)
 
     def resize_turns_widget(self) -> None:

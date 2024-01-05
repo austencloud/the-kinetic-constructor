@@ -36,7 +36,7 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
         self.increment_buttons: List[AttrBoxButton] = [
             self._create_turns_button(text) for text in ["+1", "+0.5"]
         ]
-        self.buttons = self.decrement_buttons + self.increment_buttons
+        self.turns_buttons = self.decrement_buttons + self.increment_buttons
         self._setup_layout()
 
     def create_turnbox(self) -> QComboBox:

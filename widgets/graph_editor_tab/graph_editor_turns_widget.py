@@ -42,7 +42,7 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
             [self.clock_left, self.turnbox_vbox_frame, self.clock_right],
             self.main_hbox_layout,
         )
-        self._add_widgets_to_layout(self.buttons, self.buttons_hbox_layout)
+        self._add_widgets_to_layout(self.turns_buttons, self.buttons_hbox_layout)
 
         self.main_hbox_layout.setContentsMargins(0, 0, 0, 0)
         self.buttons_hbox_layout.setContentsMargins(0, 0, 0, 0)
@@ -235,13 +235,13 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
         self.turnbox_vbox_frame.setMaximumWidth(int(self.attr_box.width() / 3.25))
 
     def _update_button_size(self) -> None:
-        for button in self.buttons:
+        for button in self.turns_buttons:
             button_size = int(self.attr_box.width() / 7)
             if button.text() == "-0.5" or button.text() == "+0.5":
                 button_size = int(button_size * 0.85)
             else:
                 button_size = int(self.attr_box.width() / 6)
-            button.update_attr_box_button_size(button_size)
+            button.update_attr_box_turns_button_size(button_size)
 
     def resize_turns_widget(self) -> None:
         self._update_clock_size()

@@ -26,17 +26,14 @@ from constants import (
 
 
 class IGColorHeaderWidget(BaseHeaderWidget):
-    def __init__(
-        self, attr_box: "IGColorAttrBox", color: Colors
-    ) -> None:
+    def __init__(self, attr_box: "IGColorAttrBox", color: Colors) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
         self.color = color
         self.header_label = self._setup_header_label()
         self.separator = self.create_separator()
-        self.prop_rot_dir_buttons = self._setup_prop_rot_dir_buttons()
         self._setup_layout()
-        
+
     def _setup_layout(self) -> None:
         super()._setup_layout()
         header_layout = QHBoxLayout()
@@ -55,97 +52,8 @@ class IGColorHeaderWidget(BaseHeaderWidget):
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.separator)
 
-    def _set_default_rotation_direction(self):
-        # Check if any dash has turns and set default rotation direction
-        has_turns = any(
-            motion.turns > 0
-            for pictograph in self.attr_box.pictographs.values()
-            for motion in pictograph.motions.values()
-            if motion.motion_type == DASH
-        )
-        self._set_prop_rot_dir(CLOCKWISE if has_turns else None)
 
-    def _set_prop_rot_dir(self, prop_rot_dir: str) -> None:
-        for pictograph in self.attr_box.pictographs.values():
-            for motion in pictograph.motions.values():
-                if motion.color == self.attr_box.color:
-                    pictograph_dict = {
-                        f"{motion.color}_prop_rot_dir": prop_rot_dir,
-                    }
-                    motion.scene.update_pictograph(pictograph_dict)
-            for motion in pictograph.motions.values():
-                if motion.motion_type == DASH and (
-                    prop_rot_dir is None or motion.turns > 0
-                ):
-                    motion.prop_rot_dir = prop_rot_dir if prop_rot_dir else CLOCKWISE
-                    motion.manipulator.set_prop_rot_dir(motion.prop_rot_dir)
 
-        self.cw_button.setChecked(prop_rot_dir == CLOCKWISE)
-        self.ccw_button.setChecked(prop_rot_dir == COUNTER_CLOCKWISE)
-
-        # Update button styles based on selection
-        if prop_rot_dir:
-            self.cw_button.setStyleSheet(
-                self.get_button_style(pressed=prop_rot_dir == CLOCKWISE)
-            )
-            self.ccw_button.setStyleSheet(
-                self.get_button_style(pressed=prop_rot_dir == COUNTER_CLOCKWISE)
-            )
-        else:
-            self.cw_button.setStyleSheet(self.get_button_style(pressed=False))
-            self.ccw_button.setStyleSheet(self.get_button_style(pressed=False))
-
-    def _setup_prop_rot_dir_buttons(self) -> List[QPushButton]:
-        self.cw_button = self._create_button(
-            f"{ICON_DIR}clock/clockwise.png", lambda: self._set_prop_rot_dir(CLOCKWISE)
-        )
-        self.ccw_button = self._create_button(
-            f"{ICON_DIR}clock/counter_clockwise.png",
-            lambda: self._set_prop_rot_dir(COUNTER_CLOCKWISE),
-        )
-
-        # Set CW button as selected by default
-        self.cw_button.setStyleSheet(self.get_button_style(pressed=True))
-        self.ccw_button.setStyleSheet(self.get_button_style(pressed=False))
-        # In the `IGHeaderWidget` class where buttons are created
-        self.cw_button.setCheckable(True)
-        self.ccw_button.setCheckable(True)
-
-        buttons = [self.cw_button, self.ccw_button]
-        return buttons
-
-    def get_button_style(self, pressed: bool) -> str:
-        if pressed:
-            return """
-                QPushButton {
-                    background-color: #ccd9ff;
-                    border: 2px solid #555555;
-                    border-bottom-color: #888888; /* darker shadow on the bottom */
-                    border-right-color: #888888; /* darker shadow on the right */
-                    padding: 5px;
-                }
-            """
-        else:
-            return """
-                QPushButton {
-                    background-color: white;
-                    border: 1px solid black;
-                    padding: 5px;
-                }
-                QPushButton:hover {
-                    background-color: #e6f0ff;
-                }
-            """
-
-    def _create_button(self, icon_path, action) -> QPushButton:
-        button = QPushButton("", self)
-        button.setIcon(QIcon(icon_path))
-        button.setIconSize(button.size())
-        button.clicked.connect(action)
-        # button.setMinimumSize(self.height(), self.height())
-        # button.setMaximumSize(self.height(), self.height())
-        button.setContentsMargins(0, 0, 0, 0)  # Remove contents margin
-        return button
 
     def _setup_header_label(self) -> QLabel:
         text = ""
@@ -162,12 +70,8 @@ class IGColorHeaderWidget(BaseHeaderWidget):
 
         label = QLabel(text, self)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        label.setStyleSheet(f"color: {font_color}; font-size: {font_size}px; font-weight: {font_weight};")
+        label.setStyleSheet(
+            f"color: {font_color}; font-size: {font_size}px; font-weight: {font_weight};"
+        )
         return label
 
-    def resize_header_widget(self) -> None:
-        if self.color in [DASH, STATIC]:
-            for button in self.prop_rot_dir_buttons:
-                button.setMinimumSize(self.height(), self.height())
-                button.setMaximumSize(self.height(), self.height())
-                button.setIconSize(button.size() * 0.9)
