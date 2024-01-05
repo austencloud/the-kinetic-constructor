@@ -1,4 +1,5 @@
 from copy import deepcopy
+from turtle import isvisible
 from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtWidgets import (
     QWidget,
@@ -223,7 +224,7 @@ class IGTab(QWidget):
                 # Apply similar logic for other filters
 
     def resize_ig_tab(self) -> None:
-        self.filter_tab.motion_attr_panel.resize_ig_attr_panel()
-        self.ig_scroll_area.resize_ig_scroll_area()
-        # self.setMaximumWidth(self.attr_panel.width() + self.button_panel.width())
+        self.filter_tab.motion_attr_panel.resize_ig_motion_type_attr_panel()
+        self.filter_tab.color_attr_panel.resize_ig_color_attr_panel()
+        self.setMinimumWidth(self.ig_scroll_area.width() + self.button_panel.width())
         self.main_widget.right_frame.setMaximumWidth(self.width())

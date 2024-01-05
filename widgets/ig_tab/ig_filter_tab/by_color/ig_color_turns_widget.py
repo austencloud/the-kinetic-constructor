@@ -39,7 +39,7 @@ class IGColorTurnsWidget(BaseTurnsWidget):
         self.setup_turns_label()
         self.setup_turnbox()
         self.connect_signals()
-        self.add_black_borders()
+        # self.add_black_borders()
         self.setup_directset_turns_buttons()  # Add this line to set up the new buttons
 
     def setup_directset_turns_buttons(self) -> None:
@@ -231,8 +231,7 @@ class IGColorTurnsWidget(BaseTurnsWidget):
         self.turnbox.setMaximumWidth(int(self.attr_box.width() / 3))
         self.turnbox.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
 
-        # self.setMinimumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
-        # self.setMaximumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
+
 
         self.turns_label.setContentsMargins(0, 0, self.spacing, 0)
         self.turns_label.setFont(QFont("Arial", int(self.width() / 22)))

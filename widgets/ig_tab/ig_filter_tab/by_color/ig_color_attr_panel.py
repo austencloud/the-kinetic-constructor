@@ -1,6 +1,6 @@
 from constants import ANTI, BLUE, DASH, PRO, RED, STATIC
 from typing import TYPE_CHECKING, List
-from utilities.TypeChecking.TypeChecking import MotionTypes
+from utilities.TypeChecking.TypeChecking import Colors, MotionTypes, Turns
 from widgets.attr_panel.base_attr_panel import BaseAttrPanel
 from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_box import IGColorAttrBox
 from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import (
@@ -34,16 +34,16 @@ class IGColorAttrPanel(BaseAttrPanel):
         for box in self.boxes:
             self.layout.addWidget(box)
 
-    def resize_ig_attr_panel(self) -> None:
+    def resize_ig_color_attr_panel(self) -> None:
         self.layout.setSpacing(int(self.blue_attr_box.width() / 5))
         for box in self.boxes:
             box.resize_ig_attr_box()
         self.setMinimumWidth(self.blue_attr_box.width() * 4 + self.layout.spacing() * 3)
         self.setMaximumWidth(self.blue_attr_box.width() * 4 + self.layout.spacing() * 3)
 
-    def get_turns_for_motion_type(self, motion_type: MotionTypes) -> int:
+    def get_turns_for_color(self, color: Colors) -> Turns:
         for box in self.boxes:
-            if box.motion_type == motion_type:
+            if box.color == color:
                 if box.turns_widget.turnbox.currentText() in ["0", "1", "2", "3"]:
                     return int(box.turns_widget.turnbox.currentText())
                 elif box.turns_widget.turnbox.currentText() in ["0.5", "1.5", "2.5"]:

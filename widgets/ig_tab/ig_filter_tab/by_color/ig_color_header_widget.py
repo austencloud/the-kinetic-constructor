@@ -8,29 +8,33 @@ from utilities.TypeChecking.TypeChecking import Colors
 from widgets.attr_box_widgets.base_header_widget import BaseHeaderWidget
 
 if TYPE_CHECKING:
+    from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_box import IGColorAttrBox
     from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import (
         IGMotionTypeAttrBox,
     )
 from constants import (
     ANTI,
+    BLUE,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     DASH,
     ICON_DIR,
     PRO,
+    RED,
     STATIC,
 )
 
 
 class IGColorHeaderWidget(BaseHeaderWidget):
     def __init__(
-        self, attr_box: "IGMotionTypeAttrBox", color: Colors
+        self, attr_box: "IGColorAttrBox", color: Colors
     ) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
         self.color = color
         self.header_label = self._setup_header_label()
         self.separator = self.create_separator()
+        self.prop_rot_dir_buttons = self._setup_prop_rot_dir_buttons()
         self._setup_layout()
         
     def _setup_layout(self) -> None:
@@ -45,11 +49,9 @@ class IGColorHeaderWidget(BaseHeaderWidget):
     def _setup_dash_static_layout(self) -> None:
         super()._setup_layout()
         header_layout = QHBoxLayout()
-        header_layout.addWidget(self.prop_rot_dir_buttons[0])
         header_layout.addStretch(1)
         header_layout.addWidget(self.header_label)
         header_layout.addStretch(1)
-        header_layout.addWidget(self.prop_rot_dir_buttons[1])
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.separator)
 
@@ -59,7 +61,7 @@ class IGColorHeaderWidget(BaseHeaderWidget):
             motion.turns > 0
             for pictograph in self.attr_box.pictographs.values()
             for motion in pictograph.motions.values()
-            if motion.color == DASH
+            if motion.motion_type == DASH
         )
         self._set_prop_rot_dir(CLOCKWISE if has_turns else None)
 
@@ -72,7 +74,7 @@ class IGColorHeaderWidget(BaseHeaderWidget):
                     }
                     motion.scene.update_pictograph(pictograph_dict)
             for motion in pictograph.motions.values():
-                if motion.color == DASH and (
+                if motion.motion_type == DASH and (
                     prop_rot_dir is None or motion.turns > 0
                 ):
                     motion.prop_rot_dir = prop_rot_dir if prop_rot_dir else CLOCKWISE
@@ -147,17 +149,20 @@ class IGColorHeaderWidget(BaseHeaderWidget):
 
     def _setup_header_label(self) -> QLabel:
         text = ""
-        if self.color == PRO:
-            text = PRO.capitalize()
-        elif self.color == ANTI:
-            text = ANTI.capitalize()
-        elif self.color == DASH:
-            text = DASH.capitalize()
-        elif self.color == STATIC:
-            text = STATIC.capitalize()
+        font_color = ""
+        font_size = 30  # Adjust the font size as desired
+        font_weight = "bold"  # Set the font weight to "bold"
+
+        if self.color == BLUE:
+            text = "Left"
+            font_color = "#2E3192"
+        elif self.color == RED:
+            text = "Right"
+            font_color = "#ED1C24"
 
         label = QLabel(text, self)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        label.setStyleSheet(f"color: {font_color}; font-size: {font_size}px; font-weight: {font_weight};")
         return label
 
     def resize_header_widget(self) -> None:

@@ -39,7 +39,7 @@ class IGMotionTypeTurnsWidget(BaseTurnsWidget):
         self.setup_turns_label()
         self.setup_turnbox()
         self.connect_signals()
-        self.add_black_borders()
+        # self.add_black_borders()
         self.setup_directset_turns_buttons()  # Add this line to set up the new buttons
 
     def setup_directset_turns_buttons(self) -> None:

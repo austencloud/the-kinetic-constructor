@@ -284,5 +284,3 @@ class IGScrollArea(PictographScrollArea):
 
             ig_pictograph.update_pictograph()
 
-    def resize_ig_scroll_area(self) -> None:
-        self.setMinimumWidth(self.ig_tab.filter_tab.width())
