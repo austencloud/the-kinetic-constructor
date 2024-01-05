@@ -58,71 +58,70 @@ class Type1ArrowPositioner(BaseArrowPositioner):
     ### ADJUSTMENT CALCULATIONS ###
 
     def _calculate_E_adjustment(self, arrow: Arrow) -> QPointF:
-        if arrow.turns in [0, 1, 2, 3]:
-            adjustments = {
-                NORTHEAST: QPointF(35, -35),
-                SOUTHEAST: QPointF(35, 35),
-                SOUTHWEST: QPointF(-35, 35),
-                NORTHWEST: QPointF(-35, -35),
-            }
-            return adjustments.get(arrow.loc, QPointF(0, 0))
-
-        if arrow.turns == 0.5:
-            if arrow.motion.prop_rot_dir == CLOCKWISE:
-                adjustments = {
+        # Define the adjustments as a nested dictionary with keys representing
+        # the 'turns' and 'prop_rot_dir' of the arrow for the special case of 0.5 and 2.5 turns
+        adjustments = {
+            0: {
+                CLOCKWISE: {  # Since both directions are the same, we just need one key
+                    NORTHEAST: QPointF(35, -35),
+                    SOUTHEAST: QPointF(35, 35),
+                    SOUTHWEST: QPointF(-35, 35),
+                    NORTHWEST: QPointF(-35, -35),
+                }
+            },
+            0.5: {
+                CLOCKWISE: {
                     NORTHEAST: QPointF(-60, 115),
                     SOUTHEAST: QPointF(-115, -60),
                     SOUTHWEST: QPointF(60, -115),
                     NORTHWEST: QPointF(115, 60),
-                }
-            elif arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                adjustments = {
+                },
+                COUNTER_CLOCKWISE: {
                     NORTHEAST: QPointF(-115, 60),
                     SOUTHEAST: QPointF(-60, -115),
                     SOUTHWEST: QPointF(115, -60),
                     NORTHWEST: QPointF(60, 115),
-                }
-
-            return adjustments.get(arrow.loc, QPointF(0, 0))
-
-        elif arrow.turns == 1.5:
-            if arrow.motion.prop_rot_dir == CLOCKWISE:
-                adjustments = {
-                    NORTHEAST: QPointF(-60, -10),
-                    SOUTHEAST: QPointF(10, -60),
-                    SOUTHWEST: QPointF(60, 10),
-                    NORTHWEST: QPointF(-10, 60),
-                }
-            elif arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                adjustments = {
-                    NORTHEAST: QPointF(10, 60),
-                    SOUTHEAST: QPointF(-60, 10),
-                    SOUTHWEST: QPointF(-10, -60),
-                    NORTHWEST: QPointF(60, -10),
-                }
-
-            return adjustments.get(arrow.loc, QPointF(0, 0))
-
-        elif arrow.turns == 2.5:
-            if arrow.motion.prop_rot_dir == CLOCKWISE:
-                adjustments = {
+                },
+            },
+            1.5: {
+                CLOCKWISE: {
+                    NORTHEAST: QPointF(-70, 5),
+                    SOUTHEAST: QPointF(-5, -70),
+                    SOUTHWEST: QPointF(70, -5),
+                    NORTHWEST: QPointF(5, 70),
+                },
+                COUNTER_CLOCKWISE: {
+                    NORTHEAST: QPointF(-5, 70),
+                    SOUTHEAST: QPointF(-70, -5),
+                    SOUTHWEST: QPointF(5, -70),
+                    NORTHWEST: QPointF(70, 5),
+                },
+            },
+            2.5: {
+                CLOCKWISE: {
                     NORTHEAST: QPointF(-55, 80),
                     SOUTHEAST: QPointF(-80, -55),
                     SOUTHWEST: QPointF(55, -80),
                     NORTHWEST: QPointF(80, 55),
-                }
-            elif arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                adjustments = {
+                },
+                COUNTER_CLOCKWISE: {
                     NORTHEAST: QPointF(-80, 55),
                     SOUTHEAST: QPointF(-55, -80),
                     SOUTHWEST: QPointF(80, -55),
                     NORTHWEST: QPointF(55, 80),
-                }
+                },
+            },
+        }
 
-            return adjustments.get(arrow.loc, QPointF(0, 0))
+        # For turns 0, 1, 2, 3, the adjustments are the same for all cases
+        if arrow.turns in [0, 1, 2, 3]:
+            return adjustments[0][CLOCKWISE].get(arrow.loc, QPointF(0, 0))
 
-        else:
-            return QPointF(0, 0)
+        # For the special cases of 0.5 and 2.5 turns, the adjustments depend on the prop_rot_dir
+        direction_adjustments = adjustments.get(arrow.turns, {})
+        return direction_adjustments.get(arrow.motion.prop_rot_dir, {}).get(
+            arrow.loc, QPointF(0, 0)
+        )
 
     def _calculate_G_adjustment(self, arrow: Arrow) -> QPointF:
         adjustments = {
@@ -347,210 +346,210 @@ class Type1ArrowPositioner(BaseArrowPositioner):
             0: {
                 RED: {
                     CLOCKWISE: {
-                        NORTHEAST: QPointF(120, -95),
-                        SOUTHEAST: QPointF(95, 120),
-                        SOUTHWEST: QPointF(-120, 95),
-                        NORTHWEST: QPointF(-95, -120),
+                        NORTHEAST: QPointF(125, -65),
+                        SOUTHEAST: QPointF(65, 125),
+                        SOUTHWEST: QPointF(-125, 65),
+                        NORTHWEST: QPointF(-65, -125),
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: QPointF(95, -120),
-                        SOUTHEAST: QPointF(120, 95),
-                        SOUTHWEST: QPointF(-95, 120),
-                        NORTHWEST: QPointF(-120, -95),
+                        NORTHEAST: QPointF(65, -125),
+                        SOUTHEAST: QPointF(125, 65),
+                        SOUTHWEST: QPointF(-65, 125),
+                        NORTHWEST: QPointF(-125, -65),
                     },
                 },
                 BLUE: {
                     CLOCKWISE: {
-                        NORTHEAST: QPointF(55, -55),
-                        SOUTHEAST: QPointF(55, 55),
-                        SOUTHWEST: QPointF(-55, 55),
-                        NORTHWEST: QPointF(-55, -55),
+                        NORTHEAST: QPointF(55, -15),
+                        SOUTHEAST: QPointF(15, 55),
+                        SOUTHWEST: QPointF(-55, 15),
+                        NORTHWEST: QPointF(-15, -55),
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: QPointF(55, -55),
-                        SOUTHEAST: QPointF(55, 55),
-                        SOUTHWEST: QPointF(-55, 55),
-                        NORTHWEST: QPointF(-55, -55),
+                        NORTHEAST: QPointF(15, -55),
+                        SOUTHEAST: QPointF(55, 15),
+                        SOUTHWEST: QPointF(-15, 55),
+                        NORTHWEST: QPointF(-55, -15),
                     },
                 },
             },
             0.5: {
                 RED: {
                     CLOCKWISE: {
-                        NORTHEAST: QPointF(-45, 115),
-                        SOUTHEAST: QPointF(-115, -45),
-                        SOUTHWEST: QPointF(45, -115),
-                        NORTHWEST: QPointF(115, 45),
+                        NORTHEAST: QPointF(-105, 155),
+                        SOUTHEAST: QPointF(-155, -105),
+                        SOUTHWEST: QPointF(105, -155),
+                        NORTHWEST: QPointF(155, 105),
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: QPointF(-115, 45),
-                        SOUTHEAST: QPointF(-45, -115),
-                        SOUTHWEST: QPointF(115, -45),
-                        NORTHWEST: QPointF(45, 115),
+                        NORTHEAST: QPointF(-155, 105),
+                        SOUTHEAST: QPointF(-105, -155),
+                        SOUTHWEST: QPointF(155, -105),
+                        NORTHWEST: QPointF(105, 155),
                     },
                 },
                 BLUE: {
                     CLOCKWISE: {
-                        NORTHEAST: QPointF(-90, 155),
-                        SOUTHEAST: QPointF(-155, -90),
-                        SOUTHWEST: QPointF(90, -155),
-                        NORTHWEST: QPointF(155, 90),
+                        NORTHEAST: QPointF(-55, 115),
+                        SOUTHEAST: QPointF(-115, -55),
+                        SOUTHWEST: QPointF(55, -115),
+                        NORTHWEST: QPointF(115, 55),
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: QPointF(-155, 90),
-                        SOUTHEAST: QPointF(-90, -155),
-                        SOUTHWEST: QPointF(155, -90),
-                        NORTHWEST: QPointF(90, 155),
+                        NORTHEAST: QPointF(-115, 55),
+                        SOUTHEAST: QPointF(-55, -115),
+                        SOUTHWEST: QPointF(115, -55),
+                        NORTHWEST: QPointF(55, 115),
                     },
                 },
             },
             1: {
                 RED: {
                     CLOCKWISE: {
-                        NORTHEAST: QPointF(120, -95),
-                        SOUTHEAST: QPointF(95, 120),
-                        SOUTHWEST: QPointF(-120, 95),
-                        NORTHWEST: QPointF(-95, -120),
+                        NORTHEAST: QPointF(125, -65),
+                        SOUTHEAST: QPointF(65, 125),
+                        SOUTHWEST: QPointF(-125, 65),
+                        NORTHWEST: QPointF(-65, -125),
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: QPointF(95, -120),
-                        SOUTHEAST: QPointF(120, 95),
-                        SOUTHWEST: QPointF(-95, 120),
-                        NORTHWEST: QPointF(-120, -95),
+                        NORTHEAST: QPointF(65, -125),
+                        SOUTHEAST: QPointF(125, 65),
+                        SOUTHWEST: QPointF(-65, 125),
+                        NORTHWEST: QPointF(-125, -65),
                     },
                 },
                 BLUE: {
                     CLOCKWISE: {
-                        NORTHEAST: QPointF(55, -55),
-                        SOUTHEAST: QPointF(55, 55),
-                        SOUTHWEST: QPointF(-55, 55),
-                        NORTHWEST: QPointF(-55, -55),
+                        NORTHEAST: QPointF(55, -15),
+                        SOUTHEAST: QPointF(15, 55),
+                        SOUTHWEST: QPointF(-55, 15),
+                        NORTHWEST: QPointF(-15, -55),
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: QPointF(55, -55),
-                        SOUTHEAST: QPointF(55, 55),
-                        SOUTHWEST: QPointF(-55, 55),
-                        NORTHWEST: QPointF(-55, -55),
+                        NORTHEAST: QPointF(15, -55),
+                        SOUTHEAST: QPointF(55, 15),
+                        SOUTHWEST: QPointF(-15, 55),
+                        NORTHWEST: QPointF(-55, -15),
                     },
                 },
             },
             1.5: {
                 RED: {
                     CLOCKWISE: {
-                        NORTHEAST: QPointF(1, 35),
-                        SOUTHEAST: QPointF(-35, -1),
-                        SOUTHWEST: QPointF(1, -35),
-                        NORTHWEST: QPointF(35, 1),
+                        NORTHEAST: QPointF(-80, -1),
+                        SOUTHEAST: QPointF(1, -80),
+                        SOUTHWEST: QPointF(80, 1),
+                        NORTHWEST: QPointF(-1, 80),
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: QPointF(-35, -1),
-                        SOUTHEAST: QPointF(-1, -35),
-                        SOUTHWEST: QPointF(35, -1),
-                        NORTHWEST: QPointF(1, 35),
+                        NORTHEAST: QPointF(1, 80),
+                        SOUTHEAST: QPointF(-80, 1),
+                        SOUTHWEST: QPointF(-1, -80),
+                        NORTHWEST: QPointF(80, -1),
                     },
                 },
                 BLUE: {
                     CLOCKWISE: {
-                        NORTHEAST: QPointF(-30, -29),
-                        SOUTHEAST: QPointF(29, -30),
-                        SOUTHWEST: QPointF(30, 29),
-                        NORTHWEST: QPointF(-29, 30),
+                        NORTHEAST: QPointF(-30, -35),
+                        SOUTHEAST: QPointF(35, -30),
+                        SOUTHWEST: QPointF(30, 35),
+                        NORTHWEST: QPointF(-35, 30),
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: QPointF(29, 30),
-                        SOUTHEAST: QPointF(-30, 29),
-                        SOUTHWEST: QPointF(-29, -30),
-                        NORTHWEST: QPointF(30, -29),
+                        NORTHEAST: QPointF(35, 30),
+                        SOUTHEAST: QPointF(-30, 35),
+                        SOUTHWEST: QPointF(-35, -30),
+                        NORTHWEST: QPointF(30, -35),
                     },
                 },
             },
             2: {
                 RED: {
                     CLOCKWISE: {
-                        NORTHEAST: QPointF(95, -105),
-                        SOUTHEAST: QPointF(105, 95),
-                        SOUTHWEST: QPointF(-95, 105),
-                        NORTHWEST: QPointF(-105, -95),
+                        NORTHEAST: QPointF(125, -65),
+                        SOUTHEAST: QPointF(65, 125),
+                        SOUTHWEST: QPointF(-125, 65),
+                        NORTHWEST: QPointF(-65, -125),
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: QPointF(105, -95),
-                        SOUTHEAST: QPointF(95, 105),
-                        SOUTHWEST: QPointF(-105, 95),
-                        NORTHWEST: QPointF(-95, -105),
+                        NORTHEAST: QPointF(65, -125),
+                        SOUTHEAST: QPointF(125, 65),
+                        SOUTHWEST: QPointF(-65, 125),
+                        NORTHWEST: QPointF(-125, -65),
                     },
                 },
                 BLUE: {
                     CLOCKWISE: {
-                        NORTHEAST: QPointF(40, 45),
-                        SOUTHEAST: QPointF(-45, 40),
-                        SOUTHWEST: QPointF(-40, -45),
-                        NORTHWEST: QPointF(45, -40),
+                        NORTHEAST: QPointF(60, -20),
+                        SOUTHEAST: QPointF(20, 60),
+                        SOUTHWEST: QPointF(-60, 20),
+                        NORTHWEST: QPointF(-20, -60),
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: QPointF(-45, -40),
-                        SOUTHEAST: QPointF(40, -45),
-                        SOUTHWEST: QPointF(45, 40),
-                        NORTHWEST: QPointF(-40, 45),
+                        NORTHEAST: QPointF(20, -60),
+                        SOUTHEAST: QPointF(60, 20),
+                        SOUTHWEST: QPointF(-20, 60),
+                        NORTHWEST: QPointF(-60, -20),
                     },
                 },
             },
             2.5: {
                 RED: {
                     CLOCKWISE: {
-                        NORTHEAST: QPointF(10, -30),
-                        SOUTHEAST: QPointF(30, 10),
-                        SOUTHWEST: QPointF(-10, 30),
-                        NORTHWEST: QPointF(-30, -10),
+                        NORTHEAST: QPointF(-105, 155),
+                        SOUTHEAST: QPointF(-155, -105),
+                        SOUTHWEST: QPointF(105, -155),
+                        NORTHWEST: QPointF(155, 105),
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: QPointF(30, -10),
-                        SOUTHEAST: QPointF(10, 30),
-                        SOUTHWEST: QPointF(-30, 10),
-                        NORTHWEST: QPointF(-10, -30),
+                        NORTHEAST: QPointF(-155, 105),
+                        SOUTHEAST: QPointF(-105, -155),
+                        SOUTHWEST: QPointF(155, -105),
+                        NORTHWEST: QPointF(105, 155),
                     },
                 },
                 BLUE: {
                     CLOCKWISE: {
-                        NORTHEAST: QPointF(-45, -35),
-                        SOUTHEAST: QPointF(35, -45),
-                        SOUTHWEST: QPointF(45, 35),
-                        NORTHWEST: QPointF(-35, 45),
+                        NORTHEAST: QPointF(-60, 105),
+                        SOUTHEAST: QPointF(-105, -60),
+                        SOUTHWEST: QPointF(60, -105),
+                        NORTHWEST: QPointF(105, 60),
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: QPointF(35, 45),
-                        SOUTHEAST: QPointF(-45, 35),
-                        SOUTHWEST: QPointF(-35, -45),
-                        NORTHWEST: QPointF(45, -35),
+                        NORTHEAST: QPointF(-105, 60),
+                        SOUTHEAST: QPointF(-60, -105),
+                        SOUTHWEST: QPointF(105, -60),
+                        NORTHWEST: QPointF(60, 105),
                     },
                 },
             },
             3: {
                 RED: {
                     CLOCKWISE: {
-                        NORTHEAST: QPointF(30, -25),
-                        SOUTHEAST: QPointF(25, 30),
-                        SOUTHWEST: QPointF(-30, 25),
-                        NORTHWEST: QPointF(-25, -30),
+                        NORTHEAST: QPointF(125, -65),
+                        SOUTHEAST: QPointF(65, 125),
+                        SOUTHWEST: QPointF(-125, 65),
+                        NORTHWEST: QPointF(-65, -125),
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: QPointF(25, -30),
-                        SOUTHEAST: QPointF(30, 25),
-                        SOUTHWEST: QPointF(-25, 30),
-                        NORTHWEST: QPointF(-30, -25),
+                        NORTHEAST: QPointF(65, -125),
+                        SOUTHEAST: QPointF(125, 65),
+                        SOUTHWEST: QPointF(-65, 125),
+                        NORTHWEST: QPointF(-125, -65),
                     },
                 },
                 BLUE: {
                     CLOCKWISE: {
-                        NORTHEAST: QPointF(-45, -35),
-                        SOUTHEAST: QPointF(35, -45),
-                        SOUTHWEST: QPointF(45, 35),
-                        NORTHWEST: QPointF(-35, 45),
+                        NORTHEAST: QPointF(60, -20),
+                        SOUTHEAST: QPointF(20, 60),
+                        SOUTHWEST: QPointF(-60, 20),
+                        NORTHWEST: QPointF(-20, -60),
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: QPointF(35, 45),
-                        SOUTHEAST: QPointF(-45, 35),
-                        SOUTHWEST: QPointF(-35, -45),
-                        NORTHWEST: QPointF(45, -35),
+                        NORTHEAST: QPointF(20, -60),
+                        SOUTHEAST: QPointF(60, 20),
+                        SOUTHWEST: QPointF(-20, 60),
+                        NORTHWEST: QPointF(-60, -20),
                     },
                 },
             },
@@ -561,43 +560,237 @@ class Type1ArrowPositioner(BaseArrowPositioner):
         return direction_adjustments.get(arrow.loc, QPointF(0, 0))
 
     def _calculate_I_adjustment(self, arrow: Arrow) -> QPointF:
-        anti_adjustments = {
-            NORTHEAST: QPointF(55, -55),
-            SOUTHEAST: QPointF(55, 55),
-            SOUTHWEST: QPointF(-55, 55),
-            NORTHWEST: QPointF(-55, -55),
-        }
-
-        pro_cw_adjustments = {
-            NORTHEAST: QPointF(90, -110),
-            SOUTHEAST: QPointF(110, 90),
-            SOUTHWEST: QPointF(-90, 110),
-            NORTHWEST: QPointF(-110, -90),
-        }
-
-        pro_ccw_adjustments = {
-            NORTHEAST: QPointF(110, -90),
-            SOUTHEAST: QPointF(90, 110),
-            SOUTHWEST: QPointF(-110, 90),
-            NORTHWEST: QPointF(-90, -110),
-        }
-
-        adjustments = {
-            PRO: {
-                CLOCKWISE: pro_cw_adjustments,
-                COUNTER_CLOCKWISE: pro_ccw_adjustments,
-            },
-            ANTI: {
-                CLOCKWISE: anti_adjustments,
-                COUNTER_CLOCKWISE: anti_adjustments,
-            },
-        }
-
-        motion_type_adjustments = adjustments.get(arrow.motion_type, {})
-        rotation_adjustments = motion_type_adjustments.get(
-            arrow.motion.prop_rot_dir, {}
+        pro_arrow = (
+            arrow.scene.arrows[RED]
+            if arrow.scene.arrows[RED].motion_type == PRO
+            else arrow.scene.arrows[BLUE]
         )
-        return rotation_adjustments.get(arrow.loc, QPointF(0, 0))
+        anti_arrow = (
+            arrow.scene.arrows[RED]
+            if arrow.scene.arrows[RED].motion_type == ANTI
+            else arrow.scene.arrows[BLUE]
+        )
+        if pro_arrow.turns == anti_arrow.turns:
+            adjustments = {
+                0: {
+                    PRO: {
+                        CLOCKWISE: {
+                            NORTHEAST: QPointF(75, -85),
+                            SOUTHEAST: QPointF(85, 75),
+                            SOUTHWEST: QPointF(-75, 85),
+                            NORTHWEST: QPointF(-85, -75),
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTHEAST: QPointF(85, -75),
+                            SOUTHEAST: QPointF(75, 85),
+                            SOUTHWEST: QPointF(-85, 75),
+                            NORTHWEST: QPointF(-75, -85),
+                        },
+                    },
+                    ANTI: {
+                        CLOCKWISE: {
+                            NORTHEAST: QPointF(50, -25),
+                            SOUTHEAST: QPointF(25, 50),
+                            SOUTHWEST: QPointF(-50, 25),
+                            NORTHWEST: QPointF(-25, -50),
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTHEAST: QPointF(25, -50),
+                            SOUTHEAST: QPointF(50, 25),
+                            SOUTHWEST: QPointF(-25, 50),
+                            NORTHWEST: QPointF(-50, -25),
+                        },
+                    },
+                },
+                0.5: {
+                    PRO: {
+                        CLOCKWISE: {
+                            NORTHEAST: QPointF(5, 40),
+                            SOUTHEAST: QPointF(-40, 5),
+                            SOUTHWEST: QPointF(-5, -40),
+                            NORTHWEST: QPointF(40, -5),
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTHEAST: QPointF(-40, -5),
+                            SOUTHEAST: QPointF(5, -40),
+                            SOUTHWEST: QPointF(40, 5),
+                            NORTHWEST: QPointF(-5, 40),
+                        },
+                    },
+                    ANTI: {
+                        CLOCKWISE: {
+                            NORTHEAST: QPointF(-60, 115),
+                            SOUTHEAST: QPointF(-115, -60),
+                            SOUTHWEST: QPointF(60, -115),
+                            NORTHWEST: QPointF(115, 60),
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTHEAST: QPointF(-115, 60),
+                            SOUTHEAST: QPointF(-60, -115),
+                            SOUTHWEST: QPointF(115, -60),
+                            NORTHWEST: QPointF(60, 115),
+                        },
+                    },
+                },
+                1: {
+                    PRO: {
+                        CLOCKWISE: {
+                            NORTHEAST: QPointF(5, -50),
+                            SOUTHEAST: QPointF(50, 5),
+                            SOUTHWEST: QPointF(-5, 50),
+                            NORTHWEST: QPointF(-50, -5),
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTHEAST: QPointF(50, -5),
+                            SOUTHEAST: QPointF(5, 50),
+                            SOUTHWEST: QPointF(-50, 5),
+                            NORTHWEST: QPointF(-5, -50),
+                        },
+                    },
+                    ANTI: {
+                        CLOCKWISE: {
+                            NORTHEAST: QPointF(55, -15),
+                            SOUTHEAST: QPointF(15, 55),
+                            SOUTHWEST: QPointF(-55, 15),
+                            NORTHWEST: QPointF(-15, -55),
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTHEAST: QPointF(15, -55),
+                            SOUTHEAST: QPointF(55, 15),
+                            SOUTHWEST: QPointF(-15, 55),
+                            NORTHWEST: QPointF(-55, -15),
+                        },
+                    },
+                },
+                1.5: {
+                    PRO: {
+                        CLOCKWISE: {
+                            NORTHEAST: QPointF(-80, -1),
+                            SOUTHEAST: QPointF(1, -80),
+                            SOUTHWEST: QPointF(80, 1),
+                            NORTHWEST: QPointF(-1, 80),
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTHEAST: QPointF(1, 80),
+                            SOUTHEAST: QPointF(-80, 1),
+                            SOUTHWEST: QPointF(-1, -80),
+                            NORTHWEST: QPointF(80, -1),
+                        },
+                    },
+                    ANTI: {
+                        CLOCKWISE: {
+                            NORTHEAST: QPointF(-30, -35),
+                            SOUTHEAST: QPointF(35, -30),
+                            SOUTHWEST: QPointF(30, 35),
+                            NORTHWEST: QPointF(-35, 30),
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTHEAST: QPointF(35, 30),
+                            SOUTHEAST: QPointF(-30, 35),
+                            SOUTHWEST: QPointF(-35, -30),
+                            NORTHWEST: QPointF(30, -35),
+                        },
+                    },
+                },
+                2: {
+                    PRO: {
+                        CLOCKWISE: {
+                            NORTHEAST: QPointF(125, -65),
+                            SOUTHEAST: QPointF(65, 125),
+                            SOUTHWEST: QPointF(-125, 65),
+                            NORTHWEST: QPointF(-65, -125),
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTHEAST: QPointF(65, -125),
+                            SOUTHEAST: QPointF(125, 65),
+                            SOUTHWEST: QPointF(-65, 125),
+                            NORTHWEST: QPointF(-125, -65),
+                        },
+                    },
+                    ANTI: {
+                        CLOCKWISE: {
+                            NORTHEAST: QPointF(60, -20),
+                            SOUTHEAST: QPointF(20, 60),
+                            SOUTHWEST: QPointF(-60, 20),
+                            NORTHWEST: QPointF(-20, -60),
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTHEAST: QPointF(20, -60),
+                            SOUTHEAST: QPointF(60, 20),
+                            SOUTHWEST: QPointF(-20, 60),
+                            NORTHWEST: QPointF(-60, -20),
+                        },
+                    },
+                },
+                2.5: {
+                    PRO: {
+                        CLOCKWISE: {
+                            NORTHEAST: QPointF(-105, 155),
+                            SOUTHEAST: QPointF(-155, -105),
+                            SOUTHWEST: QPointF(105, -155),
+                            NORTHWEST: QPointF(155, 105),
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTHEAST: QPointF(-155, 105),
+                            SOUTHEAST: QPointF(-105, -155),
+                            SOUTHWEST: QPointF(155, -105),
+                            NORTHWEST: QPointF(105, 155),
+                        },
+                    },
+                    ANTI: {
+                        CLOCKWISE: {
+                            NORTHEAST: QPointF(-60, 105),
+                            SOUTHEAST: QPointF(-105, -60),
+                            SOUTHWEST: QPointF(60, -105),
+                            NORTHWEST: QPointF(105, 60),
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTHEAST: QPointF(-105, 60),
+                            SOUTHEAST: QPointF(-60, -105),
+                            SOUTHWEST: QPointF(105, -60),
+                            NORTHWEST: QPointF(60, 105),
+                        },
+                    },
+                },
+                3: {
+                    PRO: {
+                        CLOCKWISE: {
+                            NORTHEAST: QPointF(125, -65),
+                            SOUTHEAST: QPointF(65, 125),
+                            SOUTHWEST: QPointF(-125, 65),
+                            NORTHWEST: QPointF(-65, -125),
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTHEAST: QPointF(65, -125),
+                            SOUTHEAST: QPointF(125, 65),
+                            SOUTHWEST: QPointF(-65, 125),
+                            NORTHWEST: QPointF(-125, -65),
+                        },
+                    },
+                    ANTI: {
+                        CLOCKWISE: {
+                            NORTHEAST: QPointF(60, -20),
+                            SOUTHEAST: QPointF(20, 60),
+                            SOUTHWEST: QPointF(-60, 20),
+                            NORTHWEST: QPointF(-20, -60),
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTHEAST: QPointF(20, -60),
+                            SOUTHEAST: QPointF(60, 20),
+                            SOUTHWEST: QPointF(-20, 60),
+                            NORTHWEST: QPointF(-60, -20),
+                        },
+                    },
+                },
+            }
+            turn_adjustments = adjustments.get(arrow.turns, {})
+            motion_type_adjustments = turn_adjustments.get(arrow.motion_type, {})
+            direction_adjustments = motion_type_adjustments.get(
+                arrow.motion.prop_rot_dir, {}
+            )
+            return direction_adjustments.get(arrow.loc, QPointF(0, 0))
+        elif pro_arrow.turns != anti_arrow.turns:
+            return QPointF(0, 0)
 
     def _calculate_P_adjustment(self, arrow: Arrow) -> QPointF:
         blue_adjustments = {
