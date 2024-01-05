@@ -14,9 +14,6 @@ from widgets.ig_tab.ig_filter_tab.by_color.ig_color_turns_widget import (
     IGColorTurnsWidget,
 )
 
-from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_header_widget import (
-    IGMotionTypeHeaderWidget,
-)
 
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_panel import (
@@ -24,7 +21,7 @@ if TYPE_CHECKING:
     )
     from objects.pictograph.pictograph import Pictograph
 
-from PyQt6.QtGui import QPixmap, QFont
+from PyQt6.QtGui import QPixmap
 
 
 class IGColorAttrBox(BaseAttrBox):
@@ -55,7 +52,7 @@ class IGColorAttrBox(BaseAttrBox):
     def resize_ig_color_attr_box(self) -> None:
         self.setMinimumWidth(int(self.attr_panel.ig_tab.width() / 3))
         self.setMaximumWidth(int(self.attr_panel.ig_tab.width() / 3))
-        # self.turns_widget.resize_turns_widget()
+        self.turns_widget.resize_turns_widget()
         self.prop_rot_dir_widget.resize_prop_rot_dir_widget()
 
     def update_attr_box(self, motion: Motion) -> None:

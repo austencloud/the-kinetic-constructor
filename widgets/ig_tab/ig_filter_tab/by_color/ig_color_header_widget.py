@@ -1,27 +1,16 @@
-from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton
-from PyQt6.QtGui import QIcon
+from PyQt6.QtWidgets import QHBoxLayout, QLabel
 from PyQt6.QtCore import Qt
 
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 from utilities.TypeChecking.TypeChecking import Colors
 
 from widgets.attr_box_widgets.base_header_widget import BaseHeaderWidget
 
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_box import IGColorAttrBox
-    from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import (
-        IGMotionTypeAttrBox,
-    )
 from constants import (
-    ANTI,
     BLUE,
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
-    DASH,
-    ICON_DIR,
-    PRO,
     RED,
-    STATIC,
 )
 
 

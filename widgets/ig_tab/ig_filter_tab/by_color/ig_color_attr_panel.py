@@ -1,11 +1,8 @@
-from constants import ANTI, BLUE, DASH, PRO, RED, STATIC
+from constants import BLUE, RED
 from typing import TYPE_CHECKING, List
-from utilities.TypeChecking.TypeChecking import Colors, MotionTypes, Turns
+from utilities.TypeChecking.TypeChecking import Colors, Turns
 from widgets.attr_panel.base_attr_panel import BaseAttrPanel
 from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_box import IGColorAttrBox
-from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import (
-    IGMotionTypeAttrBox,
-)
 
 
 if TYPE_CHECKING:

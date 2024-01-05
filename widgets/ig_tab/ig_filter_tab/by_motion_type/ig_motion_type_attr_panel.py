@@ -55,4 +55,3 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
         self.layout.setSpacing(int(self.pro_attr_box.width() / 5))
         for box in self.boxes:
             box.resize_ig_motion_type_attr_box()
-        # self.resize((self.pro_attr_box.width() * 4 + self.layout.spacing() * 3), self.height())

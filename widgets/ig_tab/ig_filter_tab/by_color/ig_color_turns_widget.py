@@ -6,12 +6,11 @@ from PyQt6.QtWidgets import (
     QPushButton,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont, QIcon
-from typing import TYPE_CHECKING, List, Union
+from PyQt6.QtGui import QFont
+from typing import TYPE_CHECKING, Union
 from constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
-    DASH,
     ICON_DIR,
     NO_ROT,
 )
@@ -42,7 +41,6 @@ class IGColorTurnsWidget(BaseTurnsWidget):
         self.connect_signals()
         self.setup_directset_turns_buttons()  # Add this line to set up the new buttons
 
-
     def get_button_style(self, pressed: bool) -> str:
         if pressed:
             return """
@@ -65,7 +63,6 @@ class IGColorTurnsWidget(BaseTurnsWidget):
                     background-color: #e6f0ff;
                 }
             """
-
 
     def setup_directset_turns_buttons(self) -> None:
         """Set up the buttons for directly setting turns values."""
@@ -243,21 +240,22 @@ class IGColorTurnsWidget(BaseTurnsWidget):
 
     ### EVENT HANDLERS ###
 
-    def update_turnbox_size(self) -> None:
+    def update_ig_color_turnbox_size(self) -> None:
         self.spacing = self.attr_box.attr_panel.width() // 250
         border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
-        box_font_size = int(self.attr_box.width() / 10)
+        box_font_size = int(self.attr_box.width() / 14)
         dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
         border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
+        turns_label_font = QFont("Arial", int(self.width() / 25))
+        turnbox_font = QFont("Arial", box_font_size, QFont.Weight.Bold)
 
-        self.turnbox.setMinimumHeight(int(self.attr_box.height() / 4))
-        self.turnbox.setMaximumHeight(int(self.attr_box.height() / 4))
-        self.turnbox.setMinimumWidth(int(self.attr_box.width() / 3))
-        self.turnbox.setMaximumWidth(int(self.attr_box.width() / 3))
-        self.turnbox.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
-
+        self.turnbox.setMinimumHeight(int(self.attr_box.width() / 8))
+        self.turnbox.setMaximumHeight(int(self.attr_box.width() / 8))
+        self.turnbox.setMinimumWidth(int(self.attr_box.width() / 4))
+        self.turnbox.setMaximumWidth(int(self.attr_box.width() / 4))
         self.turns_label.setContentsMargins(0, 0, self.spacing, 0)
-        self.turns_label.setFont(QFont("Arial", int(self.width() / 22)))
+        self.turns_label.setFont(turns_label_font)
+        self.turnbox.setFont(turnbox_font)
 
         # Adjust the stylesheet to add padding inside the combo box on the left
         self.turnbox.setStyleSheet(
@@ -286,17 +284,17 @@ class IGColorTurnsWidget(BaseTurnsWidget):
         """
         )
 
-    def update_button_size(self) -> None:
+    def update_ig_color_turns_button_size(self) -> None:
         for turns_button in self.turns_buttons:
             button_size = self.calculate_turns_button_size()
             turns_button.update_attr_box_turns_button_size(button_size)
 
     def calculate_turns_button_size(self) -> int:
-        return int(self.attr_box.width() / 5)
+        return int(self.attr_box.width() / 10)
 
     def resize_turns_widget(self) -> None:
-        self.update_turnbox_size()
-        self.update_button_size()
+        self.update_ig_color_turnbox_size()
+        self.update_ig_color_turns_button_size()
 
     def _adjust_turns_callback(self, adjustment: float) -> None:
         self.update_turns_incrementally(adjustment)

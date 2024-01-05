@@ -227,8 +227,8 @@ class IGMotionTypeTurnsWidget(BaseTurnsWidget):
         dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
         border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
 
-        self.turnbox.setMinimumHeight(int(self.attr_box.height() / 4))
-        self.turnbox.setMaximumHeight(int(self.attr_box.height() / 4))
+        self.turnbox.setMinimumHeight(int(self.attr_box.width() / 4))
+        self.turnbox.setMaximumHeight(int(self.attr_box.width() / 4))
         self.turnbox.setMinimumWidth(int(self.attr_box.width() / 3))
         self.turnbox.setMaximumWidth(int(self.attr_box.width() / 3))
         self.turnbox.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))

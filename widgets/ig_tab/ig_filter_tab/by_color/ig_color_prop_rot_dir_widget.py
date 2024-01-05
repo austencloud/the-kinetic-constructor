@@ -7,8 +7,8 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont, QIcon
-from typing import TYPE_CHECKING, List, Union
+from PyQt6.QtGui import QIcon
+from typing import TYPE_CHECKING, List
 from constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
@@ -16,18 +16,12 @@ from constants import (
     ICON_DIR,
     NO_ROT,
 )
-from objects.motion.motion import Motion
-from objects.pictograph.pictograph import Pictograph
-from widgets.attr_box_widgets.base_turns_widget import (
-    BaseTurnsWidget,
-)
 
 
 from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
 
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_box import IGColorAttrBox
-from PyQt6.QtCore import pyqtBoundSignal
 
 
 class IGColorPropRotDirWidget(BaseAttrBoxWidget):
