@@ -65,9 +65,11 @@ class Arrow(GraphicalObject):
         self.is_ghost: bool = False
         self.drag_offset = QPointF(0, 0)
 
+
     ### SETUP ###
 
     def update_svg(self, svg_file: str = None) -> None:
+        
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.svg_file = svg_file
         super().update_svg(svg_file)
@@ -325,9 +327,9 @@ class Arrow(GraphicalObject):
                         (EAST, WEST): {NORTH: 180, SOUTH: 180},
                         (WEST, EAST): {NORTH: 0, SOUTH: 0},
                     }
-                    return map.get(
-                        (self.motion.start_loc, self.motion.end_loc), {}
-                    ).get(self.loc)
+                    return map.get((self.motion.start_loc, self.motion.end_loc), {}).get(
+                        self.loc
+                    )
                 elif self.scene.letter == "Ψ-":
                     loc_map = {
                         ((NORTH, SOUTH), (NORTH, SOUTH)): {RED: EAST, BLUE: WEST},
@@ -410,7 +412,7 @@ class Arrow(GraphicalObject):
                         (WEST, EAST): 180,
                     }
                     return rot_map.get((self.motion.start_loc, self.motion.end_loc))
-
+                
     def assign_Λ_dash_arrow_loc(self):
         other_motion = (
             self.scene.arrows[RED].motion
