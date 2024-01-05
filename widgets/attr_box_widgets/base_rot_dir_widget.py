@@ -13,7 +13,7 @@ if TYPE_CHECKING:
         GraphEditorHeaderWidget,
     )
     from widgets.ig_tab.ig_header_widget import IGHeaderWidget
-    from widgets.ig_tab.ig_attr_box import IGAttrBox
+    from widgets.ig_tab.ig_filter_frame.ig_motion_attr_box import IGMotionAttrBox
     from widgets.graph_editor_tab.graph_editor_attr_box import (
         GraphEditorAttrBox,
     )
@@ -24,7 +24,7 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 class BaseRotDirWidget(BaseAttrBoxWidget):
     def __init__(
         self: Union["GraphEditorHeaderWidget", "IGHeaderWidget"],
-        attr_box: Union["GraphEditorAttrBox", "IGAttrBox"],
+        attr_box: Union["GraphEditorAttrBox", "IGMotionAttrBox"],
     ) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box

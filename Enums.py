@@ -1,6 +1,7 @@
 from typing import TypedDict
 from enum import Enum
 from constants import *
+from utilities.TypeChecking.TypeChecking import Colors, Locations, MotionTypes, Orientations, PropRotDirs, Turns
 
 image_path = "resources/images/"
 
@@ -370,16 +371,6 @@ class MotionCombinationType(Enum):
     STATIC = "Static"
 
 
-class Turns(Enum):
-    FL = "fl"
-    ZERO = "0"
-    HALF = "0.5"
-    ONE = "1"
-    ONE_HALF = "1.5"
-    TWO = "2"
-    TWO_HALF = "2.5"
-    THREE = "3"
-
 
 class ArrowAttribute(Enum):
     COLOR = "color"
@@ -455,16 +446,15 @@ class SpecificStartEndPositionsDicts(TypedDict):
 
 ### MOTION ATTRIBUTES ###
 class MotionAttributesDicts(TypedDict):
-    color: Color
-
-    motion_type: MotionType
-    rot_dir: PropRotationDirection
-    loc: Location
+    color: Colors
+    motion_type: MotionTypes
+    prop_rot_dir: PropRotDirs
+    loc: Locations
     turns: Turns
-    start_loc: Location
-    start_ori: Orientation
-    end_loc: Location
-    end_ori: Orientation
+    start_loc: Locations
+    start_ori: Orientations
+    end_loc: Locations
+    end_ori: Orientations
 
 
 class ArrowAttributesDicts(TypedDict):

@@ -12,8 +12,8 @@ if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_attr_box import (
         GraphEditorAttrBox,
     )
-    from widgets.ig_tab.ig_attr_box import (
-        IGAttrBox,
+    from widgets.ig_tab.ig_filter_frame.ig_motion_attr_box import (
+        IGMotionAttrBox,
     )
     from objects.pictograph.pictograph import Pictograph
 
@@ -49,6 +49,6 @@ class BaseAttrBox(QFrame):
 
     ### CREATE LABELS ###
 
-    def clear_attr_box(self: Union["IGAttrBox", "GraphEditorAttrBox"]) -> None:
+    def clear_attr_box(self: Union["IGMotionAttrBox", "GraphEditorAttrBox"]) -> None:
         self.start_end_loc_widget.clear_start_end_boxes()
         self.turns_widget.turnbox.setCurrentIndex(-1)

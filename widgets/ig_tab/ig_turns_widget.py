@@ -1,4 +1,11 @@
-from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout, QHBoxLayout, QPushButton, QComboBox
+from PyQt6.QtWidgets import (
+    QLabel,
+    QFrame,
+    QVBoxLayout,
+    QHBoxLayout,
+    QPushButton,
+    QComboBox,
+)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
@@ -16,12 +23,12 @@ from widgets.attr_box_widgets.base_turns_widget import (
 
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_attr_box import IGAttrBox
+    from widgets.ig_tab.ig_filter_frame.ig_motion_attr_box import IGMotionAttrBox
 from PyQt6.QtCore import pyqtBoundSignal
 
 
 class IGTurnsWidget(BaseTurnsWidget):
-    def __init__(self, attr_box: "IGAttrBox") -> None:
+    def __init__(self, attr_box: "IGMotionAttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
         self.initialize_ui()
@@ -73,7 +80,6 @@ class IGTurnsWidget(BaseTurnsWidget):
         elif turns in ["0.5", "1.5", "2.5"]:
             self.turnbox.setCurrentText(turns)
         self.update_turns_directly()  # This method will now be triggered with the new turns value
-
 
     def add_black_borders(self) -> None:
         self.setStyleSheet(
@@ -273,5 +279,3 @@ class IGTurnsWidget(BaseTurnsWidget):
 
     def _adjust_turns_callback(self, adjustment: float) -> None:
         self.update_turns_incrementally(adjustment)
-        
-        

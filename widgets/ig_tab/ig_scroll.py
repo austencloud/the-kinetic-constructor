@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, List, Union
+from typing import TYPE_CHECKING, Dict, List, Literal, Union
 from constants import (
     BLUE,
     BLUE_END_LOC,
@@ -27,10 +27,8 @@ from constants import (
 )
 from widgets.ig_tab.ig_pictograph import IGPictograph
 from widgets.pictograph_scroll_area import PictographScrollArea
-from Enums import Letter, Orientation, Turns
 from constants import IG_PICTOGRAPH
-from utilities.TypeChecking.Letters import letters
-from utilities.TypeChecking.TypeChecking import letters
+from utilities.TypeChecking.TypeChecking import letters, Turns, Orientations
 
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_tab import IGTab
@@ -42,7 +40,7 @@ class IGScrollArea(PictographScrollArea):
         super().__init__(main_widget, ig_tab)
         self.main_widget = main_widget
         self.ig_tab = ig_tab
-        self.filters: Dict[str, Union[Turns, Orientation]] = {}
+        self.filters: Dict[str, Union[Turns, Orientations]] = {}
         self.pictographs: Dict[letters, IGPictograph] = {}
 
     def update_scroll_area_content(self) -> None:
@@ -109,8 +107,8 @@ class IGScrollArea(PictographScrollArea):
         if self.pictographs:
             self.update_attr_panel()
 
-    def get_dash_prop_rot_dir_from_attr_panel(self, motion_type):
-        header_widget = self.ig_tab.attr_panel.dash_attr_box.header_widget
+    def get_dash_prop_rot_dir_from_attr_panel(self, motion_type) -> Literal['cw', 'ccw', 'no_rot']:
+        header_widget = self.ig_tab.filter_tab.motion_attr_panel.dash_attr_box.header_widget
         if motion_type == DASH:
             if header_widget.cw_button.isChecked():
                 return CLOCKWISE
@@ -121,8 +119,8 @@ class IGScrollArea(PictographScrollArea):
         else:
             return NO_ROT
         
-    def get_static_prop_rot_dir_from_attr_panel(self, motion_type):
-        header_widget = self.ig_tab.attr_panel.static_attr_box.header_widget
+    def get_static_prop_rot_dir_from_attr_panel(self, motion_type) -> Literal['cw', 'ccw', 'no_rot']:
+        header_widget = self.ig_tab.filter_tab.motion_attr_panel.static_attr_box.header_widget
         if motion_type == STATIC:
             if header_widget.cw_button.isChecked():
                 return CLOCKWISE
@@ -133,8 +131,8 @@ class IGScrollArea(PictographScrollArea):
         else:
             return NO_ROT
     
-    def get_turns_from_attr_panel(self, motion_type):
-        return self.ig_tab.attr_panel.get_turns_for_motion_type(motion_type)
+    def get_turns_from_attr_panel(self, motion_type) -> Turns:
+        return self.ig_tab.filter_tab.motion_attr_panel.get_turns_for_motion_type(motion_type)
 
     def remove_deselected_letter_pictographs(self, deselected_letter):
         keys_to_remove = [
@@ -158,7 +156,7 @@ class IGScrollArea(PictographScrollArea):
             f"{pictograph_dict[RED_START_LOC]}→{pictograph_dict[RED_END_LOC]}"
         )
 
-    def generate_image_name(self, ig_pictograph: IGPictograph, letter: Letter) -> str:
+    def generate_image_name(self, ig_pictograph: IGPictograph, letter: letters) -> str:
         return (
             f"{letter}_"
             f"{ig_pictograph.start_pos}→{ig_pictograph.end_pos}_"
@@ -264,4 +262,4 @@ class IGScrollArea(PictographScrollArea):
             ig_pictograph.update_pictograph()
 
     def resize_ig_scroll_area(self) -> None:
-        self.setMinimumWidth(self.ig_tab.attr_panel.width())
+        self.setMinimumWidth(self.ig_tab.filter_tab.width())

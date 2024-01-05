@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import (
 from constants import BLUE, RED
 from objects.motion.motion import Motion
 from typing import TYPE_CHECKING, Union
-from widgets.ig_tab.ig_attr_box import IGAttrBox
+from widgets.ig_tab.ig_filter_frame.ig_motion_attr_box import IGMotionAttrBox
 
 
 if TYPE_CHECKING:
@@ -23,10 +23,10 @@ class IGFilterFrame(QFrame):
         self.parent: Union["GraphEditorFrame", "IGTab"] = parent
         self.setContentsMargins(0, 0, 0, 0)
 
-        self.blue_attr_box = IGAttrBox(
+        self.blue_attr_box = IGMotionAttrBox(
             self, self.parent.ig_scroll_area.pictographs, BLUE
         )
-        self.red_attr_box = IGAttrBox(self, self.parent.ig_scroll_area, RED)
+        self.red_attr_box = IGMotionAttrBox(self, self.parent.ig_scroll_area, RED)
         self.setup_layouts()
 
     def setup_layouts(self) -> None:

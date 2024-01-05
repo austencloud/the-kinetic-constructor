@@ -8,7 +8,7 @@ from utilities.TypeChecking.TypeChecking import MotionTypes
 from widgets.attr_box_widgets.base_header_widget import BaseHeaderWidget
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_attr_box import IGAttrBox
+    from widgets.ig_tab.ig_filter_frame.ig_motion_attr_box import IGMotionAttrBox
 from constants import (
     ANTI,
     CLOCKWISE,
@@ -21,7 +21,7 @@ from constants import (
 
 
 class IGHeaderWidget(BaseHeaderWidget):
-    def __init__(self, attr_box: "IGAttrBox", motion_type: MotionTypes) -> None:
+    def __init__(self, attr_box: "IGMotionAttrBox", motion_type: MotionTypes) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
         self.motion_type = motion_type

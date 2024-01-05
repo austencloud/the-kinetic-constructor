@@ -10,16 +10,16 @@ from widgets.ig_tab.ig_header_widget import IGHeaderWidget
 from widgets.ig_tab.ig_turns_widget import IGTurnsWidget
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_attr_panel import IGAttrPanel
+    from widgets.ig_tab.ig_filter_frame.ig_motion_attr_panel import IGMotionAttrPanel
     from objects.pictograph.pictograph import Pictograph
 
 from PyQt6.QtGui import QPixmap, QFont
 
 
-class IGAttrBox(BaseAttrBox):
+class IGMotionAttrBox(BaseAttrBox):
     def __init__(
         self,
-        attr_panel: "IGAttrPanel",
+        attr_panel: "IGMotionAttrPanel",
         pictographs: List["Pictograph"],
         motion_type: MotionType,
     ) -> None:

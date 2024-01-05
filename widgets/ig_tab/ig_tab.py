@@ -10,7 +10,8 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from constants import IG_PICTOGRAPH
-from widgets.ig_tab.ig_attr_panel import IGAttrPanel
+from widgets.filter_tab import IGFilterTab
+from widgets.ig_tab.ig_filter_frame.ig_motion_attr_panel import IGMotionAttrPanel
 from widgets.ig_tab.ig_letter_button_frame import IGLetterButtonFrame
 from widgets.ig_tab.ig_pictograph import IGPictograph
 from widgets.ig_tab.ig_scroll import IGScrollArea
@@ -39,11 +40,11 @@ class IGTab(QWidget):
         self.setLayout(self.layout)
         self.setup_buttons()
         self.ig_scroll_area = IGScrollArea(self.main_widget, self)
-        self.attr_panel = IGAttrPanel(self)
+        self.filter_tab = IGFilterTab(self)
 
         self.left_layout = QVBoxLayout()
         self.right_layout = QVBoxLayout()
-        self.left_layout.addWidget(self.attr_panel, 1)
+        self.left_layout.addWidget(self.filter_tab, 1)
         self.left_layout.addWidget(self.ig_scroll_area, 5)
         self.right_layout.addWidget(self.button_panel)
         self.layout.addLayout(self.left_layout)
@@ -223,7 +224,7 @@ class IGTab(QWidget):
                 # Apply similar logic for other filters
 
     def resize_ig_tab(self) -> None:
-        self.attr_panel.resize_ig_attr_panel()
+        self.filter_tab.motion_attr_panel.resize_ig_attr_panel()
         self.ig_scroll_area.resize_ig_scroll_area()
         # self.setMaximumWidth(self.attr_panel.width() + self.button_panel.width())
         self.main_widget.right_frame.setMaximumWidth(self.width())
