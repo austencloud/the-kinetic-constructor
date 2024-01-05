@@ -1,19 +1,12 @@
-from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout, QSizePolicy
+from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout, QHBoxLayout, QPushButton, QComboBox
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
 from constants import (
-    ANTI,
-    BLUE,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
-    DASH,
     ICON_DIR,
     NO_ROT,
-    PRO,
-    RED,
-    STATIC,
-    TURNS,
 )
 from objects.motion.motion import Motion
 from objects.pictograph.pictograph import Pictograph
@@ -41,6 +34,46 @@ class IGTurnsWidget(BaseTurnsWidget):
         self.setup_turnbox()
         self.connect_signals()
         self.add_black_borders()
+        self.setup_directset_turns_buttons()  # Add this line to set up the new buttons
+
+    def setup_directset_turns_buttons(self) -> None:
+        """Set up the buttons for directly setting turns values."""
+        turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
+        self.turns_buttons_layout = QHBoxLayout()  # Horizontal layout for the buttons
+        button_style_sheet = """
+        QPushButton {
+            background-color: #f0f0f0;
+            border: 1px solid #c0c0c0;
+            border-radius: 5px;
+            padding: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        QPushButton:hover {
+            background-color: #e5e5e5;
+            border-color: #a0a0a0;
+        }
+        QPushButton:pressed {
+            background-color: #d0d0d0;
+        }
+        """
+        for value in turns_values:
+            button = QPushButton(value, self)
+            button.setStyleSheet(button_style_sheet)
+            button.clicked.connect(lambda checked, v=value: self.set_turns_directly(v))
+            self.turns_buttons_layout.addWidget(button)
+
+        # Add the turns buttons layout to the bottom of the main layout
+        self.layout.addLayout(self.turns_buttons_layout)
+
+    def set_turns_directly(self, turns: float) -> None:
+        """Directly set the turns value for the motion type."""
+        if turns in ["0", "1", "2", "3"]:
+            self.turnbox.setCurrentText(turns)
+        elif turns in ["0.5", "1.5", "2.5"]:
+            self.turnbox.setCurrentText(turns)
+        self.update_turns_directly()  # This method will now be triggered with the new turns value
+
 
     def add_black_borders(self) -> None:
         self.setStyleSheet(
