@@ -2,10 +2,11 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF
 import re
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Dict, Union
 
-from Enums import *
+
 from constants import RED, BLUE, HEX_RED, HEX_BLUE
+from utilities.TypeChecking.TypeChecking import Colors
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
@@ -21,7 +22,7 @@ class GraphicalObject(QGraphicsSvgItem):
         self.pictograph = pictograph
 
         self.renderer: QSvgRenderer = None
-        self.color: Color = None
+        self.color: Colors = None
 
         self.center = self.boundingRect().center()
 
@@ -74,9 +75,7 @@ class GraphicalObject(QGraphicsSvgItem):
         self.set_svg_color(self.color)
         self.setup_svg_renderer(svg_file)
 
-    def update_attributes(
-        self, attributes: MotionAttributesDicts | PropAttributesDicts
-    ) -> None:
+    def update_attributes(self, attributes: Dict) -> None:
         for attribute_name, attribute_value in attributes.items():
             setattr(self, attribute_name, attribute_value)
 

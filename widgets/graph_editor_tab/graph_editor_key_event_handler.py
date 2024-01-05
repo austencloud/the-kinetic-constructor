@@ -1,4 +1,4 @@
-from Enums import Direction
+from constants import DOWN, LEFT, RIGHT, UP
 from objects.arrow import Arrow
 from objects.prop.prop import Prop
 from PyQt6.QtCore import Qt
@@ -51,18 +51,18 @@ class GraphEditorKeyEventHandler:
             if selected_arrow:
                 selected_arrow.delete_arrow(keep_prop)
             elif selected_prop:
-                selected_prop.manipulator.delete_prop()
+                selected_prop.motion.manipulator.delete_prop()
 
         ### ARROW MANIPULATION ###
         if selected_arrow:
             if event.key() == Qt.Key.Key_W:
-                selected_motion.manipulator.move_wasd(Direction.UP)
+                selected_motion.manipulator.move_wasd(UP)
             elif event.key() == Qt.Key.Key_A:
-                selected_motion.manipulator.move_wasd(Direction.LEFT)
+                selected_motion.manipulator.move_wasd(LEFT)
             elif event.key() == Qt.Key.Key_S:
-                selected_motion.manipulator.move_wasd(Direction.DOWN)
+                selected_motion.manipulator.move_wasd(DOWN)
             elif event.key() == Qt.Key.Key_D:
-                selected_motion.manipulator.move_wasd(Direction.RIGHT)
+                selected_motion.manipulator.move_wasd(RIGHT)
             elif event.key() == Qt.Key.Key_R:
                 selected_motion.manipulator.swap_rot_dir()
             elif event.key() == Qt.Key.Key_F:

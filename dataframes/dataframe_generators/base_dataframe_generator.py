@@ -1,9 +1,15 @@
 from typing import Set, Tuple
 import pandas as pd
-from Enums import Location, PropRotationDirection, ShiftHandpaths, SpecificPosition
 from constants import *
 from data.positions_map import positions_map
 import os
+
+from utilities.TypeChecking.TypeChecking import (
+    Locations,
+    PropRotDirs,
+    ShiftHandpaths,
+    SpecificPositions,
+)
 
 
 class BaseDataFrameGenerator:
@@ -30,14 +36,14 @@ class BaseDataFrameGenerator:
 
     def get_start_end_poss(
         self, blue_start_loc, blue_end_loc, red_start_loc, red_end_loc
-    ) -> Tuple[Location, Location]:
+    ) -> Tuple[Locations]:
         start_key = (blue_start_loc, red_start_loc)
         end_key = (blue_end_loc, red_end_loc)
         start_pos = positions_map.get(start_key)
         end_pos = positions_map.get(end_key)
         return start_pos, end_pos
 
-    def get_prop_rot_dir(self, motion_type, handpath_rot_dir) -> PropRotationDirection:
+    def get_prop_rot_dir(self, motion_type, handpath_rot_dir) -> PropRotDirs:
         if motion_type == PRO:
             return CLOCKWISE if handpath_rot_dir == CW_HANDPATH else COUNTER_CLOCKWISE
         elif motion_type == ANTI:
@@ -63,7 +69,7 @@ class BaseDataFrameGenerator:
 
     def get_shift_tuple_map_from_handpath(
         self, handpath: ShiftHandpaths
-    ) -> Set[Tuple[Location, Location]]:
+    ) -> Set[Tuple[Locations]]:
         if handpath == CW_HANDPATH:
             return {
                 (NORTH, EAST),
@@ -83,13 +89,13 @@ class BaseDataFrameGenerator:
         opposite_map = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
         return opposite_map.get(location, "")
 
-    def get_opposite_rot_dir(self, rot_dir) -> PropRotationDirection:
+    def get_opposite_rot_dir(self, rot_dir) -> PropRotDirs:
         if rot_dir == CLOCKWISE:
             return COUNTER_CLOCKWISE
         elif rot_dir == COUNTER_CLOCKWISE:
             return CLOCKWISE
 
-    def get_opposite_loc_tuple(self, red_loc_tuple) -> Tuple[Location, Location]:
+    def get_opposite_loc_tuple(self, red_loc_tuple) -> Tuple[Locations]:
         return tuple(self.get_opposite_location(loc) for loc in red_loc_tuple)
 
     def is_hybrid(self, letter) -> bool:
@@ -97,7 +103,7 @@ class BaseDataFrameGenerator:
 
     def get_Type1_start_and_end_pos(
         self, red_start_loc, red_end_loc, blue_start_loc, blue_end_loc
-    ) -> Tuple[SpecificPosition, SpecificPosition]:
+    ) -> Tuple[SpecificPositions]:
         start_key = (blue_start_loc, red_start_loc)
         end_key = (blue_end_loc, red_end_loc)
         start_pos = positions_map.get(start_key)

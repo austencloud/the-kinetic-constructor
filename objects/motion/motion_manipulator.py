@@ -1,12 +1,8 @@
 from typing import List
-from Enums import (
-    Direction,
-    Handpath,
-    Location,
-)
+
 from constants import *
 from data.start_end_loc_map import get_start_end_locs
-from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
+from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, Directions, Handpaths, Locations
 
 
 if TYPE_CHECKING:
@@ -22,7 +18,7 @@ class MotionManipulator:
         self.color = motion.color
         self.other_color = RED if self.color == BLUE else BLUE
 
-    def move_wasd(self, direction: Direction) -> None:
+    def move_wasd(self, direction: Directions) -> None:
         wasd_location_map = {
             UP: {SOUTHEAST: NORTHEAST, SOUTHWEST: NORTHWEST},
             LEFT: {NORTHEAST: NORTHWEST, SOUTHEAST: SOUTHWEST},
@@ -94,7 +90,7 @@ class MotionManipulator:
 
     ### ROTATION ###
 
-    def rotate_motion(self, rotation_direction: Handpath) -> None:
+    def rotate_motion(self, rotation_direction: Handpaths) -> None:
         mode_mappings = self._get_mode_mappings()
         rotate_func, locations = mode_mappings.get(
             (self.motion.motion_type, self.arrow.pictograph.grid.grid_mode),
@@ -134,7 +130,7 @@ class MotionManipulator:
             ),
         }
 
-    def _rotate_arrow(self, handpath, locations: List[Location]) -> None:
+    def _rotate_arrow(self, handpath, locations: List[Locations]) -> None:
         """
         Generic method to rotate arrows based on the handpath and locations.
         """

@@ -2,9 +2,11 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton
 from PyQt6.QtGui import QIcon, QPixmap, QPainter, QFont, QColor, QResizeEvent
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtSvg import QSvgRenderer
-from Enums import Letter, LetterNumberType
+from Enums import LetterNumberType
 from constants import LETTER_BTN_ICON_DIR
 from typing import TYPE_CHECKING, Dict, List
+
+from utilities.TypeChecking.Letters import Letters
 
 
 if TYPE_CHECKING:
@@ -16,7 +18,7 @@ class IGLetterButtonFrame(QFrame):
         super().__init__()
         self.main_widget = main_widget
         self.spacing = int(self.width() * 0.01)
-        self.buttons: Dict[Letter, QPushButton] = {}
+        self.buttons: Dict[Letters, QPushButton] = {}
         self.init_letter_buttons_layout()
         self.add_black_borders()
 
@@ -105,7 +107,7 @@ class IGLetterButtonFrame(QFrame):
                 )  # Modify the key format
         return None
 
-    def get_icon_path(self, letter_type: str, letter: Letter) -> str:
+    def get_icon_path(self, letter_type: str, letter: Letters) -> str:
         return f"{LETTER_BTN_ICON_DIR}/{letter_type}/{letter}.svg"
 
     def create_button(self, icon_path: str, letter: str) -> QPushButton:

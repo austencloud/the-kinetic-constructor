@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from Enums import ArrowAttributesDicts
 from constants import COLOR
 from objects.arrow import Arrow
 from objects.motion.motion import Motion
@@ -27,7 +26,7 @@ class GhostArrow(Arrow):
     def __init__(
         self,
         pictograph: "Pictograph",
-        arrow_dict: ArrowAttributesDicts,
+        arrow_dict,
         motion: "Motion",
     ) -> None:
         super().__init__(pictograph, arrow_dict, motion)

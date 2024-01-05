@@ -1,13 +1,13 @@
-from Enums import Location, SpecificPosition
 from objects.motion.motion import Motion
 from constants import *
 from utilities.TypeChecking.TypeChecking import (
     Dict,
-    SpecificStartEndPositionsDicts,
+    Locations,
+    SpecificPositions,
     Tuple,
 )
 
-positions_map: Dict[Tuple[Location, Location], SpecificPosition] = {
+positions_map: Dict[Tuple[Locations], SpecificPositions] = {
     # (blue_loc, red_loc): position
     (SOUTH, NORTH): ALPHA1,
     (WEST, EAST): ALPHA2,
@@ -30,7 +30,7 @@ positions_map: Dict[Tuple[Location, Location], SpecificPosition] = {
 
 def get_specific_start_end_poss(
     blue_motion: Motion, red_motion: Motion
-) -> SpecificStartEndPositionsDicts:
+) -> Dict[str, SpecificPositions]:
     start_locs = (
         blue_motion.start_loc,
         red_motion.start_loc,
@@ -40,7 +40,7 @@ def get_specific_start_end_poss(
         blue_motion.end_loc,
     )
 
-    specific_positions: SpecificStartEndPositionsDicts = {
+    specific_positions = {
         START_POS: positions_map.get(start_locs),
         END_POS: positions_map.get(end_locs),
     }

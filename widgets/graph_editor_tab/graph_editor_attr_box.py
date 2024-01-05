@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
-from Enums import Color
 from constants import HEX_BLUE, HEX_RED, RED
 from objects.motion.motion import Motion
+from utilities.TypeChecking.TypeChecking import Colors
 from widgets.attr_panel.bast_attr_box import BaseAttrBox
 from widgets.graph_editor_tab.graph_editor_header_widget import GraphEditorHeaderWidget
 from widgets.graph_editor_tab.graph_editor_turns_widget import GraphEditorTurnsWidget
@@ -17,7 +17,7 @@ from PyQt6.QtGui import QFont
 
 class GraphEditorAttrBox(BaseAttrBox):
     def __init__(
-        self, attr_panel: "BaseAttrPanel", pictograph: "Pictograph", color: Color
+        self, attr_panel: "BaseAttrPanel", pictograph: "Pictograph", color: Colors
     ) -> None:
         super().__init__(attr_panel, pictograph)
         self.color = color
@@ -44,7 +44,6 @@ class GraphEditorAttrBox(BaseAttrBox):
         super().clear_attr_box()
         self.motion_type_widget.clear_motion_type_box()
         self.turns_widget._update_clocks(None)
-
 
     def resize_graph_editor_attr_box(self) -> None:
         self.setMinimumWidth(int(self.pictograph.view.width() * 0.85))

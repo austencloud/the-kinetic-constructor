@@ -4,7 +4,7 @@ import pandas as pd
 from dataframes.dataframe_generators.base_dataframe_generator import (
     BaseDataFrameGenerator,
 )
-from Enums import Location
+
 from constants import *
 from utilities.TypeChecking.Letters import Type5_letters
 
@@ -130,7 +130,7 @@ class Type5Generator(BaseDataFrameGenerator):
 
     def get_blue_locations(
         self, letter, red_start_loc, red_end_loc
-    ) -> Tuple[Location, Location]:
+    ) -> Tuple[Locations]:
         if letter == "Φ-":
             blue_start_loc, blue_end_loc = red_end_loc, red_start_loc
         elif letter == "Ψ-":

@@ -4,7 +4,7 @@ import pandas as pd
 from dataframes.dataframe_generators.base_dataframe_generator import (
     BaseDataFrameGenerator,
 )
-from Enums import Location
+
 from constants import *
 from utilities.TypeChecking.Letters import Type6_letters
 
@@ -91,7 +91,7 @@ class Type6Generator(BaseDataFrameGenerator):
 
     def get_blue_loc_tuples_for_Λ_dash(
         self, red_start_loc, red_end_loc
-    ) -> List[Tuple[Location, Location]]:
+    ) -> List[Tuple[Locations]]:
         blue_location_map = {
             (NORTH, NORTH): [(EAST, EAST), (WEST, WEST)],
             (EAST, EAST): [(SOUTH, SOUTH), (NORTH, NORTH)],
@@ -129,7 +129,7 @@ class Type6Generator(BaseDataFrameGenerator):
 
     def get_blue_locations(
         self, letter, red_start_loc, red_end_loc
-    ) -> Tuple[Location, Location]:
+    ) -> Tuple[Locations]:
         if letter == "α":
             blue_start_loc, blue_end_loc = self.get_opposite_loc_tuple(
                 (red_start_loc, red_end_loc)

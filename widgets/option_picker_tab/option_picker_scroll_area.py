@@ -1,9 +1,9 @@
 from typing import Callable, TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
-from Enums import Letter
 from data.rules import get_next_letters
 from constants import *
+from utilities.TypeChecking.Letters import Letters
 from widgets.option_picker_tab.option import Option
 from PyQt6.QtGui import QPixmap
 
@@ -163,7 +163,7 @@ class OptionPickerScrollArea(PictographScrollArea):
         QApplication.restoreOverrideCursor()
 
     def _sort_options(self):
-        custom_sort_order = [letter.value for letter in Letter]
+        custom_sort_order = [letter for letter in Letters]
         custom_order_dict = {
             char: index for index, char in enumerate(custom_sort_order)
         }

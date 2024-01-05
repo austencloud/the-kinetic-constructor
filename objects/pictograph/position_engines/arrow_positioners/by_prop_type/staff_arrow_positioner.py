@@ -1,10 +1,6 @@
 from typing import TYPE_CHECKING, Literal
 from PyQt6.QtCore import QPointF
-from Enums import (
-    AntiradialOrientation,
-    Color,
-    RadialOrientation,
-)
+
 from constants import (
     ANTI,
     BLUE,
@@ -26,6 +22,7 @@ from constants import (
     DISTANCE,
 )
 from objects.motion.motion import Motion
+from utilities.TypeChecking.TypeChecking import AntiradialOrientations, Colors, RadialOrientations
 
 
 if TYPE_CHECKING:
@@ -142,7 +139,7 @@ class StaffArrowPositioner:
 
     def _adjust_arrows_for_letter_T(self, red_motion, blue_motion) -> None:
         if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
-            leading_color: Color = self.determine_leading_motion_for_T(
+            leading_color: Colors = self.determine_leading_motion_for_T(
                 self.pictograph.motions[RED].start_loc,
                 self.pictograph.motions[RED].end_loc,
                 self.pictograph.motions[BLUE].start_loc,
@@ -404,16 +401,16 @@ class StaffArrowPositioner:
     # Helper functions
     def _are_both_props_radial(self, red_motion: Motion, blue_motion: Motion) -> bool:
         return (
-            red_motion.prop.ori in RadialOrientation
-            and blue_motion.prop.ori in RadialOrientation
+            red_motion.prop.ori in RadialOrientations
+            and blue_motion.prop.ori in RadialOrientations
         )
 
     def _is_at_least_one_prop_antiradial(
         self, red_motion: Motion, blue_motion: Motion
     ) -> bool:
         return (
-            red_motion.prop.ori in AntiradialOrientation
-            or blue_motion.prop.ori in AntiradialOrientation
+            red_motion.prop.ori in AntiradialOrientations
+            or blue_motion.prop.ori in AntiradialOrientations
         )
 
     def _apply_adjustment_to_all_arrows(self, adjustment_value: int) -> None:

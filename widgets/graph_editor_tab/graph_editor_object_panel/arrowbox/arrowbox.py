@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Tuple
+from typing import TYPE_CHECKING, Dict, List, Tuple
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
@@ -19,7 +19,6 @@ from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox_view i
     ArrowBoxView,
 )
 from objects.grid import Grid
-from utilities.TypeChecking.TypeChecking import MotionAttributesDicts
 from PyQt6.QtCore import QPointF
 
 from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_objectbox import (
@@ -131,7 +130,7 @@ class ArrowBox(BaseObjectBox):
 
     def create_motions(self) -> None:
         motions = []
-        motion_dicts: List[MotionAttributesDicts] = [
+        motion_dicts: List[Dict] = [
             {
                 COLOR: RED,
                 ARROW: None,

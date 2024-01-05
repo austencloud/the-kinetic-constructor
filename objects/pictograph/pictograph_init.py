@@ -1,19 +1,16 @@
 from typing import TYPE_CHECKING, Dict, Tuple
 from PyQt6.QtCore import QPointF
-from Enums import (
-    Color,
-    MotionType,
-    PropType,
-)
+
 from objects.arrow import Arrow
 from objects.ghosts.ghost_arrow import GhostArrow
 from objects.ghosts.ghost_prop import GhostProp
 from objects.grid import Grid
+from utilities.TypeChecking.prop_types import PropTypes
 from utilities.letter_item import LetterItem
 from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 from constants import *
-from utilities.TypeChecking.TypeChecking import Location
+from utilities.TypeChecking.TypeChecking import Colors, Locations, MotionTypes
 from objects.prop.prop_types import *
 
 if TYPE_CHECKING:
@@ -35,16 +32,16 @@ class PictographInit:
         self.pictograph.grid = grid
         return grid
 
-    def init_motions(self) -> Dict[Color, Motion]:
+    def init_motions(self) -> Dict[Colors, Motion]:
         return {color: self._create_motion(color) for color in [RED, BLUE]}
 
-    def init_objects(self, prop_type: PropType) -> None:
+    def init_objects(self, prop_type: PropTypes) -> None:
         self.init_grid()
         self.pictograph.motions = self.init_motions()
         self.pictograph.arrows, self.pictograph.ghost_arrows = self.init_arrows()
         self.pictograph.props, self.pictograph.ghost_props = self.init_props(prop_type)
 
-    def init_arrows(self) -> Tuple[Dict[Color, Arrow], Dict[Color, GhostArrow]]:
+    def init_arrows(self) -> Tuple[Dict[Colors, Arrow], Dict[Colors, GhostArrow]]:
         arrows = {}
         ghost_arrows = {}
         for color in [BLUE, RED]:
@@ -52,8 +49,8 @@ class PictographInit:
         return arrows, ghost_arrows
 
     def init_props(
-        self, prop_type: PropType
-    ) -> Tuple[Dict[Color, Prop], Dict[Color, GhostProp]]:
+        self, prop_type: PropTypes
+    ) -> Tuple[Dict[Colors, Prop], Dict[Colors, GhostProp]]:
         props = {}
         ghost_props = {}
         for color in [RED, BLUE]:
@@ -65,7 +62,7 @@ class PictographInit:
         self.pictograph.addItem(letter_item)
         return letter_item
 
-    def init_locations(self, grid: Grid) -> Dict[Location, Tuple[int, int, int, int]]:
+    def init_locations(self, grid: Grid) -> Dict[Locations, Tuple[int, int, int, int]]:
         grid_center = grid.get_circle_coordinates("center_point").toPoint()
 
         grid_center_x = grid_center.x()
@@ -101,7 +98,7 @@ class PictographInit:
     ### CREATE ###
 
     def _create_arrow(
-        self, color: Color, motion_type: MotionType
+        self, color: Colors, motion_type: MotionTypes
     ) -> Tuple[Arrow, GhostArrow]:
         arrow_attributes = {
             COLOR: color,
@@ -119,7 +116,9 @@ class PictographInit:
         arrow.hide()
         return arrow, ghost_arrow
 
-    def _create_prop(self, color: Color, prop_type: PropType) -> Tuple[Prop, GhostProp]:
+    def _create_prop(
+        self, color: Colors, prop_type: PropTypes
+    ) -> Tuple[Prop, GhostProp]:
         prop_class = prop_class_mapping.get(prop_type)
         if prop_class is None:
             raise ValueError(f"Invalid prop_type: {prop_type}")
@@ -144,7 +143,7 @@ class PictographInit:
         prop.hide()
         return prop, ghost_prop
 
-    def _create_motion(self, color: Color) -> Motion:
+    def _create_motion(self, color: Colors) -> Motion:
         motion_dict = {
             COLOR: color,
             ARROW: None,

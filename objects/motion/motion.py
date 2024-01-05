@@ -1,4 +1,3 @@
-from Enums import MotionAttributesDicts
 from constants import *
 from typing import TYPE_CHECKING, Dict, Union
 from objects.arrow_location_manager import ArrowLocationManager
@@ -28,7 +27,7 @@ class Motion:
     def __init__(
         self,
         scene: Union["ArrowBox", "PropBox", "Pictograph"],
-        motion_dict: MotionAttributesDicts,
+        motion_dict,
     ) -> None:
         self.scene = scene
         self.arrow_location_manager = ArrowLocationManager(self)
@@ -76,7 +75,7 @@ class Motion:
         self.start_ori = None
         self.end_ori = None
 
-    def update_motion(self, motion_dict: MotionAttributesDicts = None) -> None:
+    def update_motion(self, motion_dict = None) -> None:
         if motion_dict:
             self.update_attributes(motion_dict)
         arrow_dict = {
@@ -95,7 +94,7 @@ class Motion:
 
     ### GETTERS ###
 
-    def get_attributes(self) -> MotionAttributesDicts:
+    def get_attributes(self) -> Dict[str, str]:
         return {
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,

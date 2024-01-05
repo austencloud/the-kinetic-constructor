@@ -3,6 +3,7 @@ from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.prop.prop import *
 from objects.prop.prop_types import BigTriad
+from utilities.TypeChecking.prop_types import PropTypesList
 from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_objectbox import (
     BaseObjectBox,
 )
@@ -50,11 +51,8 @@ class PropBox(BaseObjectBox):
 
     def init_combobox(self) -> None:
         self.prop_type_combobox = QComboBox(self.view)
-        for item in PropType:
-            self.prop_type_combobox.addItem(str(item.value.capitalize()))
-        self.prop_type_combobox.setCurrentText(str(self.prop_type.capitalize()))
-        self.prop_type_combobox.currentTextChanged.connect(self.on_prop_type_change)
-        self.prop_type_combobox.move(0, 0)
+        for item in PropTypesList:
+            self.prop_type_combobox.addItem(str(item.capitalize()))
 
     def populate_props(self) -> None:
         self.clear_props()
@@ -216,12 +214,12 @@ class PropBox(BaseObjectBox):
         prop._update_prop_rotation_angle()
         prop.setTransformOriginPoint(prop.boundingRect().center())
 
-    def change_prop_type(self, new_prop_type: PropType) -> None:
+    def change_prop_type(self, new_prop_type: PropTypes) -> None:
         self.prop_type = new_prop_type
         self.clear_props()
         self.populate_props()
 
-    def update_prop_type_in_pictograph(self, new_prop_type: PropType) -> None:
+    def update_prop_type_in_pictograph(self, new_prop_type: PropTypes) -> None:
         for prop in self.pictograph.props.values():
             prop.update_prop_type(new_prop_type)
         for ghost_prop in self.pictograph.ghost_props.values():

@@ -1,5 +1,5 @@
 import os
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 from PyQt6.QtCore import QEvent, Qt, QThreadPool
 from PyQt6.QtWidgets import (
     QSizePolicy,
@@ -12,7 +12,6 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import QEvent, Qt, QThreadPool
 from PyQt6.QtGui import QResizeEvent, QWheelEvent, QPixmap
 import pandas as pd
-from Enums import PictographAttributesDict
 from constants import (
     BLUE,
     BLUE_END_LOC,
@@ -35,6 +34,7 @@ from constants import (
     STAFF,
     START_POS,
 )
+from utilities.TypeChecking.Letters import Letters
 from widgets.ig_tab.ig_tab import IGTab
 from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
 from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
@@ -65,7 +65,7 @@ class MainWidget(QWidget):
         self.image_cache_initialized = False
         self.resize(int(self.main_window.width()), int(self.main_window.height()))
         self.key_event_handler = GraphEditorKeyEventHandler()
-        self.letters: PictographAttributesDict = self.load_all_letters()
+        self.letters: Dict[Letters, list[dict]] = self.load_all_letters()
         self.sequence_widget = SequenceWidget(self)
         self.graph_editor_tab = GraphEditorTab(self)
         self.option_picker_tab = OptionPickerTab(self)
@@ -89,7 +89,7 @@ class MainWidget(QWidget):
         self.letters = letters
         return self.letters
 
-    def add_turns_and_ori_to_pictograph_dict(self, pictograph_dict):
+    def add_turns_and_ori_to_pictograph_dict(self, pictograph_dict):#:
         pictograph_dict = pictograph_dict[
             [
                 LETTER,

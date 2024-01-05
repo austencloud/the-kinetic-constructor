@@ -1,7 +1,17 @@
 from typing import TypedDict
 from enum import Enum
 from constants import *
-from utilities.TypeChecking.TypeChecking import Colors, Locations, MotionTypes, Orientations, PropRotDirs, Turns
+from utilities.TypeChecking.TypeChecking import (
+    Colors,
+    Locations,
+    MotionTypes,
+    Orientations,
+    PropRotDirs,
+    SpecificPositions,
+    Turns,
+)
+from utilities.TypeChecking.prop_types import PropTypes
+from utilities.TypeChecking.Letters import Letters
 
 image_path = "resources/images/"
 
@@ -53,315 +63,6 @@ class LetterNumberType(Enum):
         return self._description
 
 
-class ShiftHandpaths(Enum):
-    CW_HANDPATH = "cw"
-    CCW_HANDPATH = "ccw"
-
-
-class Handpath(Enum):
-    CW_HANDPATH = "cw"
-    CCW_HANDPATH = "ccw"
-    STATIC_HANDPATH = "static_handpath"
-    DASH_HANDPATH = "dash_handpath"
-
-
-class Color(Enum):
-    BLUE = "blue"
-    RED = "red"
-
-
-class HexColor(Enum):
-    RED = "#ED1C24"
-    BLUE = "#2E3192"
-
-
-class BodySide(Enum):
-    LEFT = "left"
-    RIGHT = "right"
-
-
-class Direction(Enum):
-    LEFT = "left"
-    RIGHT = "right"
-    UP = "up"
-    DOWN = "down"
-
-
-class Filter(Enum):
-    BLUE_TURNS = "blue_turns"
-    RED_TURNS = "red_turns"
-    BLUE_END_ORI = "blue_end_ori"
-    RED_END_ORI = "red_end_ori"
-
-
-class MotionType(Enum):
-    PRO = "pro"
-    ANTI = "anti"
-    FLOAT = "float"
-    DASH = "dash"
-    STATIC = "static"
-
-
-class GridMode(Enum):
-    DIAMOND = "diamond"
-    BOX = "box"
-
-
-class Location(Enum):
-    NORTH = "n"
-    SOUTH = "s"
-    EAST = "e"
-    WEST = "w"
-    NORTHWEST = "nw"
-    NORTHEAST = "ne"
-    SOUTHWEST = "sw"
-    SOUTHEAST = "se"
-
-
-class PropRotationDirection(Enum):
-    CLOCKWISE = "cw"
-    COUNTER_CLOCKWISE = "ccw"
-
-
-class Orientation(Enum):
-    IN = "in"
-    OUT = "out"
-    CLOCK = "clock"
-    COUNTER = "counter"
-    CLOCK_IN = "clock-in"
-    CLOCK_OUT = "clock-out"
-    COUNTER_IN = "counter-in"
-    COUNTER_OUT = "counter-out"
-
-
-class RadialOrientation(Enum):
-    IN = "in"
-    OUT = "out"
-
-
-class AntiradialOrientation(Enum):
-    CLOCK = "clock"
-    COUNTER = "counter"
-
-
-class OrientationType(Enum):
-    RADIAL = "radial"
-    ANTIRADIAL = "antiradial"
-
-
-class Axis(Enum):
-    HORIZONTAL = "horizontal"
-    VERTICAL = "vertical"
-
-
-class Letter(Enum):
-    A = "A"
-    B = "B"
-    C = "C"
-    D = "D"
-    E = "E"
-    F = "F"
-    G = "G"
-    H = "H"
-    I = "I"
-    J = "J"
-    K = "K"
-    L = "L"
-    M = "M"
-    N = "N"
-    O = "O"
-    P = "P"
-    Q = "Q"
-    R = "R"
-    S = "S"
-    T = "T"
-    U = "U"
-    V = "V"
-    W = "W"
-    X = "X"
-    Y = "Y"
-    Z = "Z"
-    Sigma = "Σ"
-    Delta = "Δ"
-    Theta = "θ"
-    Omega = "Ω"
-    W_dash = "W-"
-    X_dash = "X-"
-    Y_dash = "Y-"
-    Z_dash = "Z-"
-    Sigma_dash = "Σ-"
-    Delta_dash = "Δ-"
-    Theta_dash = "θ-"
-    Omega_dash = "Ω-"
-    Phi = "Φ"
-    Psi = "Ψ"
-    Lambda = "Λ"
-    Phi_dash = "Φ-"
-    Psi_dash = "Ψ-"
-    Lambda_dash = "Λ-"
-    Alpha = "α"
-    Beta = "β"
-    Gamma = "Γ"
-    Eta = "η"
-    Zeta = "ζ"
-    Terra = "⊕"
-    Tau = "𝛕"
-    Mu = "μ"
-    Nu = "ν"
-
-
-class PropType(Enum):
-    STAFF = "staff"
-    BIGSTAFF = "bigstaff"
-    CLUB = "club"
-    BUUGENG = "buugeng"
-    BIGBUUGENG = "bigbuugeng"
-    FRACTALGENG = "fractalgeng"
-    FAN = "fan"
-    BIGFAN = "bigfan"
-    TRIAD = "triad"
-    BIGTRIAD = "bigtriad"
-    MINIHOOP = "minihoop"
-    BIGHOOP = "bighoop"
-    DOUBLESTAR = "doublestar"
-    BIGDOUBLESTAR = "bigdoublestar"
-    QUIAD = "quiad"
-    SWORD = "sword"
-    GUITAR = "guitar"
-    UKULELE = "ukulele"
-    CHICKEN = "chicken"
-
-
-class Position(Enum):
-    ALPHA = "alpha"
-    BETA = "beta"
-    GAMMA = "gamma"
-
-
-class Letter(Enum):
-    A = "A"
-    B = "B"
-    C = "C"
-    D = "D"
-    E = "E"
-    F = "F"
-    G = "G"
-    H = "H"
-    I = "I"
-    J = "J"
-    K = "K"
-    L = "L"
-    M = "M"
-    N = "N"
-    O = "O"
-    P = "P"
-    Q = "Q"
-    R = "R"
-    S = "S"
-    T = "T"
-    U = "U"
-    V = "V"
-    W = "W"
-    X = "X"
-    Y = "Y"
-    Z = "Z"
-    W_dash = "W-"
-    X_dash = "X-"
-    Y_dash = "Y-"
-    Z_dash = "Z-"
-    Sigma = "Σ"
-    Delta = "Δ"
-    Theta = "θ"
-    Omega = "Ω"
-    Phi = "Φ"
-    Psi = "Ψ"
-    Lambda = "Λ"
-    Sigma_dash = "Σ-"
-    Delta_dash = "Δ-"
-    Theta_dash = "θ-"
-    Omega_dash = "Ω-"
-    Phi_dash = "Φ-"
-    Psi_dash = "Ψ-"
-    Lambda_dash = "Λ-"
-    Alpha = "α"
-    Beta = "β"
-    Terra = "⊕"
-    Tau = "𝛕"
-    Mu = "μ"
-    Nu = "ν"
-    Zeta = "ζ"
-    Eta = "η"
-
-
-class SpecificPosition(Enum):
-    ALPHA1 = "alpha1"
-    ALPHA2 = "alpha2"
-    ALPHA3 = "alpha3"
-    ALPHA4 = "alpha4"
-    BETA1 = "beta1"
-    BETA2 = "beta2"
-    BETA3 = "beta3"
-    BETA4 = "beta4"
-    GAMMA1 = "gamma1"
-    GAMMA2 = "gamma2"
-    GAMMA3 = "gamma3"
-    GAMMA4 = "gamma4"
-    GAMMA5 = "gamma5"
-    GAMMA6 = "gamma6"
-    GAMMA7 = "gamma7"
-    GAMMA8 = "gamma8"
-
-
-big_unilateral_prop_types = [
-    BIGHOOP,
-    BIGFAN,
-    BIGTRIAD,
-    GUITAR,
-    SWORD,
-    CHICKEN,
-]
-small_unilateral_prop_types = [
-    FAN,
-    CLUB,
-    MINIHOOP,
-    TRIAD,
-    UKULELE,
-]
-big_bilateral_prop_types = [
-    BIGSTAFF,
-    BIGBUUGENG,
-    BIGDOUBLESTAR,
-]
-small_bilateral_prop_types = [
-    STAFF,
-    BUUGENG,
-    DOUBLESTAR,
-    QUIAD,
-    FRACTALGENG,
-]
-non_strictly_placed_props = [
-    STAFF,
-    FAN,
-    BIGFAN,
-    CLUB,
-    BUUGENG,
-    MINIHOOP,
-    TRIAD,
-    QUIAD,
-    UKULELE,
-    CHICKEN,
-    FRACTALGENG,
-]
-strictly_placed_props = [
-    BIGHOOP,
-    DOUBLESTAR,
-    BIGTRIAD,
-    BIGFAN,
-    BIGBUUGENG,
-    BIGDOUBLESTAR,
-]
-
-
 class MotionCombinationType(Enum):
     DUAL_SHIFT = "Dual-Shift"
     SHIFT = "Shift"
@@ -369,7 +70,6 @@ class MotionCombinationType(Enum):
     DASH = "Dash"
     DUAL_DASH = "Dual-Dash"
     STATIC = "Static"
-
 
 
 class ArrowAttribute(Enum):
@@ -440,8 +140,8 @@ class OrientationCombination(Enum):
 
 
 class SpecificStartEndPositionsDicts(TypedDict):
-    start_pos: SpecificPosition
-    end_pos: SpecificPosition
+    start_pos: SpecificPositions
+    end_pos: SpecificPositions
 
 
 ### MOTION ATTRIBUTES ###
@@ -458,17 +158,17 @@ class MotionAttributesDicts(TypedDict):
 
 
 class ArrowAttributesDicts(TypedDict):
-    color: Color
-    motion_type: MotionType
-    location: Location
+    color: Colors
+    motion_type: MotionTypes
+    location: Locations
     turns: Turns
 
 
 class PropAttributesDicts(TypedDict):
-    color: Color
-    prop_type: PropType
-    loc: Location
-    ori: Orientation
+    color: Colors
+    prop_type: PropTypes
+    loc: Locations
+    ori: Orientations
 
 
 ### LETTER GROUPS ###
@@ -523,23 +223,23 @@ class TKAHandpathMode(Enum):
 
 
 class PictographAttributesDict(TypedDict):
-    letter: Letter
-    start_pos: Position
-    end_pos: Position
-    blue_motion_type: MotionType
-    blue_prop_rot_dir: PropRotationDirection
-    blue_start_loc: Location
-    blue_end_loc: Location
+    letter: Letters
+    start_pos: SpecificPositions
+    end_pos: SpecificPositions
+    blue_motion_type: MotionTypes
+    blue_prop_rot_dir: PropRotDirs
+    blue_start_loc: Locations
+    blue_end_loc: Locations
     blue_turns: Turns
-    blue_start_ori: Orientation
-    blue_end_ori: Orientation
-    red_motion_type: MotionType
-    red_prop_rot_dir: PropRotationDirection
-    red_start_loc: Location
-    red_end_loc: Location
+    blue_start_ori: Orientations
+    blue_end_ori: Orientations
+    red_motion_type: MotionTypes
+    red_prop_rot_dir: PropRotDirs
+    red_start_loc: Locations
+    red_end_loc: Locations
     red_turns: Turns
-    red_start_ori: Orientation
-    red_end_ori: Orientation
+    red_start_ori: Orientations
+    red_end_ori: Orientations
 
 
 class PictographType(Enum):

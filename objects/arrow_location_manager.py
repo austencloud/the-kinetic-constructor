@@ -69,7 +69,7 @@ class ArrowLocationManager:
 
         elif (
             self.motion.motion_type == DASH and other_motion_type == DASH
-        ):  # Type5 Letter
+        ):  # Type5 Letters
             if self.motion.turns == 0:
                 direction_map = {
                     NORTH: SOUTH,
@@ -167,5 +167,3 @@ class ArrowLocationManager:
                         return SOUTH
                     else:
                         return NORTH
-
-

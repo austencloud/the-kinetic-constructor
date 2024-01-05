@@ -1,15 +1,7 @@
 import logging
-from Enums import (
-    Color,
-    Letter,
-    MotionTypeCombination,
-    Position,
-    PropRotationDirection,
-    SpecificPosition,
-    SpecificStartEndPositionsDicts,
-)
 
 from utilities.TypeChecking.Letters import (
+    Letters,
     alpha_ending_letters,
     alpha_starting_letters,
     beta_ending_letters,
@@ -36,6 +28,7 @@ from constants import (
     PRO,
     RED,
 )
+from utilities.TypeChecking.TypeChecking import Colors, MotionTypeCombinations, Positions, PropRotDirs, SpecificPositions
 
 
 logging.basicConfig(
@@ -58,7 +51,7 @@ class LetterEngine:
         self.cached_parallel = None
         self.cached_handpath = None
 
-    def get_current_letter(self) -> Letter | None:
+    def get_current_letter(self) -> Letters:
         self.red_motion = self.get_motion(RED)
         self.blue_motion = self.get_motion(BLUE)
 
@@ -73,11 +66,11 @@ class LetterEngine:
             else self.pictograph.motions[RED]
         )
 
-        specific_position: Dict[str, SpecificPosition] = get_specific_start_end_poss(
+        specific_position: Dict[str, SpecificPositions] = get_specific_start_end_poss(
             self.get_motion(BLUE), self.get_motion(RED)
         )
         if specific_position:
-            overall_position: Dict[str, Position] = self.get_overall_position(
+            overall_position: Dict[str, Positions] = self.get_overall_position(
                 specific_position
             )
             start_pos = overall_position[START_POS]
@@ -104,8 +97,8 @@ class LetterEngine:
                 return None
 
     def filter_by_start_pos(
-        self, start_pos: Position, motion_letter_set: Set[Letter]
-    ) -> Set[Letter]:
+        self, start_pos: Positions, motion_letter_set: Set[Letters]
+    ) -> Set[Letters]:
         if start_pos == ALPHA:
             filtered_letter_group = list(alpha_starting_letters)
         elif start_pos == BETA:
@@ -121,7 +114,7 @@ class LetterEngine:
 
         return filtered_letter_group
 
-    def filter_by_end_pos(self, end_pos, motion_letter_set) -> Set[Letter]:
+    def filter_by_end_pos(self, end_pos, motion_letter_set) -> Set[Letters]:
         if end_pos == ALPHA:
             filtered_letter_group = list(alpha_ending_letters)
         elif end_pos == BETA:
@@ -137,7 +130,7 @@ class LetterEngine:
 
         return filtered_letter_group
 
-    def get_motion(self, color: Color) -> Motion | None:
+    def get_motion(self, color: Colors) -> Motion | None:
         return next(
             (
                 motion
@@ -151,11 +144,11 @@ class LetterEngine:
         red_motion_type = self.red_motion.motion_type
         blue_motion_type = self.blue_motion.motion_type
 
-        self.motion_type_combination: MotionTypeCombination = (
+        self.motion_type_combination: MotionTypeCombinations = (
             motion_type_combinations.get((red_motion_type, blue_motion_type))
         )
-        motion_type_letter_group = (
-            motion_type_letter_groups.get(self.motion_type_combination, "")
+        motion_type_letter_group = motion_type_letter_groups.get(
+            self.motion_type_combination, ""
         )
 
         if "-" in motion_type_letter_group:
@@ -183,7 +176,7 @@ class LetterEngine:
     def determine_handpath_direction_relationship(self) -> Literal["same", "opp", None]:
         clockwise = ["n", "e", "s", "w"]
 
-        def calculate_direction(start, end) -> PropRotationDirection:
+        def calculate_direction(start, end) -> PropRotDirs:
             return (clockwise.index(end) - clockwise.index(start)) % len(clockwise)
 
         arrow_locations = [
@@ -254,8 +247,8 @@ class LetterEngine:
         return filtered_letter_group
 
     def get_overall_position(
-        self, specific_positions: SpecificStartEndPositionsDicts
-    ) -> Position:
+        self, specific_positions: Dict[str, SpecificPositions]
+    ) -> Positions:
         return {position: value[:-1] for position, value in specific_positions.items()}
 
     def determine_leading_motion_for_T(
@@ -293,4 +286,4 @@ class LetterEngine:
             return "U"
         elif leading_motion == "anti":
             return "V"
-        return None  # Letter cannot be determined
+        return None  # Letters cannot be determined

@@ -4,9 +4,10 @@ import pandas as pd
 from dataframes.dataframe_generators.base_dataframe_generator import (
     BaseDataFrameGenerator,
 )
-from Enums import Location
+
 from constants import *
 from utilities.TypeChecking.Letters import Type3_letters
+from utilities.TypeChecking.TypeChecking import Locations
 
 
 class Type3Generator(BaseDataFrameGenerator):
@@ -86,7 +87,7 @@ class Type3Generator(BaseDataFrameGenerator):
 
     def get_dash_locations(
         self, letter, shift_start_loc, shift_end_loc
-    ) -> Tuple[Location, Location]:
+    ) -> Tuple[Locations]:
         if letter in ["W-", "X-"]:  # Dash starts at shift_end_loc
             dash_start_loc = shift_end_loc
             dash_end_loc = self.get_opposite_location(dash_start_loc)

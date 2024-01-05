@@ -1,15 +1,16 @@
 from PyQt6.QtCore import QPointF
 
-from Enums import *
 
 from typing import TYPE_CHECKING, Dict, List, Tuple, Union
 from constants import (
+    ANTIRADIAL,
     CLOCK,
     COUNTER,
     EAST,
     IN,
     NORTH,
     OUT,
+    RADIAL,
     SOUTH,
     WEST,
     BLUE,
@@ -27,6 +28,16 @@ from constants import (
 
 from objects.motion.motion import Motion
 from objects.prop.prop import Prop
+from utilities.TypeChecking.Letters import Letters
+from utilities.TypeChecking.TypeChecking import Directions
+from utilities.TypeChecking.prop_types import (
+    PropTypes,
+    PropTypesList,
+    big_bilateral_prop_types,
+    big_unilateral_prop_types,
+    small_bilateral_prop_types,
+    small_unilateral_prop_types,
+)
 
 
 if TYPE_CHECKING:
@@ -43,7 +54,7 @@ class BasePropPositioner:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
         self.letters: Dict[
-            Letter, List[Dict[str, str]]
+            Letters, List[Dict[str, str]]
         ] = pictograph.main_widget.letters
 
     def update_prop_positions(self) -> None:
@@ -69,8 +80,8 @@ class BasePropPositioner:
 
     def _count_prop_types(self) -> Dict[str, int]:
         return {
-            ptype.value: sum(prop.prop_type == ptype for prop in self.props)
-            for ptype in PropType
+            ptype: sum(prop.prop_type == ptype for prop in self.props)
+            for ptype in PropTypesList
         }
 
     def _set_prop_to_default_location(self, prop: Prop, strict: bool = False) -> None:
@@ -131,7 +142,7 @@ class BasePropPositioner:
             elif self.current_letter == "Ψ-":
                 self.reposition_Ψ_dash()
 
-    def _move_prop(self, prop: Prop, direction: Direction) -> None:
+    def _move_prop(self, prop: Prop, direction: Directions) -> None:
         new_position = self._calculate_new_position(prop.pos(), direction)
         prop.setPos(new_position)
 
@@ -200,7 +211,7 @@ class BasePropPositioner:
 
     def _determine_translation_direction_for_unilateral_props(
         self, red_motion: Motion, blue_motion: Motion
-    ) -> Tuple[Direction, Direction]:
+    ) -> Tuple[Directions]:
         """Determine the translation direction for big unilateral props based on the motion type, start location, end location."""
         red_direction = self._get_direction_for_motion(red_motion)
         blue_direction = self._get_opposite_direction(red_direction)
@@ -208,7 +219,7 @@ class BasePropPositioner:
         # Ensure that both directions are set, defaulting to None if necessary
         return (red_direction or None, blue_direction or None)
 
-    def _get_direction_for_motion(self, motion: Motion) -> Direction | None:
+    def _get_direction_for_motion(self, motion: Motion) -> Directions | None:
         """Determine the direction based on a single motion."""
         if motion.end_ori in [
             IN,
@@ -238,7 +249,7 @@ class BasePropPositioner:
 
     def _get_translation_dir_for_non_shift(
         self, prop: Prop, end_loc: str
-    ) -> Direction | None:
+    ) -> Directions | None:
         layer_reposition_map = {
             RADIAL: {
                 (NORTH, RED): RIGHT,
@@ -268,7 +279,7 @@ class BasePropPositioner:
 
     ### HELPERS ###
 
-    def _determine_translation_direction(self, motion: Motion) -> Direction:
+    def _determine_translation_direction(self, motion: Motion) -> Directions:
         """Determine the translation direction based on the motion type, start location, end location, and end layer."""
         if not (motion.is_shift() or motion.is_static()):
             return None
@@ -278,7 +289,7 @@ class BasePropPositioner:
         elif motion.prop.is_antiradial():
             return self._get_translation_dir_for_antiradial(motion)
 
-    def _get_translation_dir_for_radial(self, motion: Motion) -> Direction | None:
+    def _get_translation_dir_for_radial(self, motion: Motion) -> Directions | None:
         direction_map = {
             (NORTH, EAST): RIGHT,
             (NORTH, WEST): LEFT,
@@ -291,7 +302,7 @@ class BasePropPositioner:
         }
         return direction_map.get((motion.end_loc, motion.start_loc))
 
-    def _get_translation_dir_for_antiradial(self, motion: Motion) -> Direction | None:
+    def _get_translation_dir_for_antiradial(self, motion: Motion) -> Directions | None:
         direction_map = {
             (NORTH, EAST): UP,
             (NORTH, WEST): DOWN,
@@ -307,7 +318,7 @@ class BasePropPositioner:
     def _calculate_new_position(
         self,
         current_position: QPointF,
-        direction: Direction,
+        direction: Directions,
     ) -> QPointF:
         self.beta_offset = self.pictograph.width() / 38
 
@@ -350,7 +361,7 @@ class BasePropPositioner:
         }
         return position_offsets
 
-    def _get_opposite_direction(self, movement: Direction) -> Direction:
+    def _get_opposite_direction(self, movement: Directions) -> Directions:
         opposite_directions = {
             LEFT: RIGHT,
             RIGHT: LEFT,
@@ -359,7 +370,7 @@ class BasePropPositioner:
         }
         return opposite_directions.get(movement)
 
-    def _get_translation_dir_for_non_shift(self, prop: Prop) -> Direction | None:
+    def _get_translation_dir_for_non_shift(self, prop: Prop) -> Directions | None:
         layer_reposition_map = {
             RADIAL: {
                 (NORTH, RED): RIGHT,

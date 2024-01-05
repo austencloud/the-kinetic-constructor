@@ -1,21 +1,21 @@
 from typing import TYPE_CHECKING, Dict, Tuple, Union
-from Enums import (
-    Axis,
-    Color,
-    Location,
-    MotionType,
-    Orientation,
-    PropAttribute,
-    PropAttributesDicts,
-    PropType,
-    PropRotationDirection,
-)
+from Enums import PropAttribute
+
 from data.start_end_loc_map import get_start_end_locs
 from objects.graphical_object import GraphicalObject
 from PyQt6.QtCore import QPointF, Qt
 from constants import *
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
-from utilities.TypeChecking.TypeChecking import RotationAngles
+from utilities.TypeChecking.TypeChecking import (
+    Axes,
+    Colors,
+    Locations,
+    MotionTypes,
+    Orientations,
+    PropRotDirs,
+    RotationAngles,
+)
+from utilities.TypeChecking.prop_types import PropTypes
 
 
 if TYPE_CHECKING:
@@ -39,16 +39,16 @@ class Prop(GraphicalObject):
         self._setup_attributes(scene, prop_dict)
         self.setZValue(10)
 
-    def _setup_attributes(self, scene, prop_dict: "PropAttributesDicts") -> None:
+    def _setup_attributes(self, scene, prop_dict: Dict) -> None:
         self.scene: Pictograph | PropBox = scene
         self.drag_offset = QPointF(0, 0)
-        self.previous_location: Location = None
+        self.previous_location: Locations = None
         self.ghost: Prop = None
         self.is_ghost: bool = False
-        self.axis: Axis = None
-        self.color: Color = prop_dict[COLOR]
-        self.loc: Location = prop_dict[LOC]
-        self.ori: Orientation = prop_dict[ORIENTATION]
+        self.axis: Axes = None
+        self.color: Colors = prop_dict[COLOR]
+        self.loc: Locations = prop_dict[LOC]
+        self.ori: Orientations = prop_dict[ORIENTATION]
         self.center = self.boundingRect().center()
 
     ### MOUSE EVENTS ###
@@ -105,11 +105,11 @@ class Prop(GraphicalObject):
 
     def get_axis_from_ori(self) -> None:
         if self.is_radial():
-            axis: Axis = VERTICAL if self.loc in [NORTH, SOUTH] else HORIZONTAL
+            axis: Axes = VERTICAL if self.loc in [NORTH, SOUTH] else HORIZONTAL
         elif self.is_antiradial():
-            axis: Axis = HORIZONTAL if self.loc in [NORTH, SOUTH] else VERTICAL
+            axis: Axes = HORIZONTAL if self.loc in [NORTH, SOUTH] else VERTICAL
         else:
-            axis: Axis = None
+            axis: Axes = None
         return axis
 
     def swap_ori(self) -> None:
@@ -122,7 +122,7 @@ class Prop(GraphicalObject):
         self.ori = ori_map[self.ori]
 
     def get_rotation_angle(self) -> RotationAngles:
-        angle_map: Dict[Orientation, Dict[Location, RotationAngles]] = {
+        angle_map: Dict[Orientations, Dict[Locations, RotationAngles]] = {
             IN: {
                 NORTH: 90,
                 SOUTH: 270,
@@ -153,7 +153,7 @@ class Prop(GraphicalObject):
         rotation_angle = angle_map.get(key, {}).get(self.loc, 0)
         return rotation_angle
 
-    def get_attributes(self) -> PropAttributesDicts:
+    def get_attributes(self) -> Dict[str, Union[Colors, Locations, Orientations]]:
         prop_attributes = [attr.value for attr in PropAttribute]
         return {attr: getattr(self, attr) for attr in prop_attributes}
 
@@ -163,7 +163,9 @@ class Prop(GraphicalObject):
             self.ghost.setRotation(prop_rotation_angle)
         self.setRotation(prop_rotation_angle)
 
-    def update_prop(self, prop_dict: PropAttributesDicts = None) -> None:
+    def update_prop(
+        self, prop_dict: Dict[str, Union[Colors, Locations, Orientations]] = None
+    ) -> None:
         if prop_dict:
             for key, value in prop_dict.items():
                 setattr(self, key, value)
@@ -176,13 +178,13 @@ class Prop(GraphicalObject):
         svg_file = self.get_svg_file(self.prop_type)
         super().update_svg(svg_file)
 
-    def get_svg_file(self, prop_type: PropType) -> str:
+    def get_svg_file(self, prop_type: PropTypes) -> str:
         svg_file = f"{PROP_DIR}{prop_type}.svg"
         return svg_file
 
     ### UPDATERS ###
 
-    def update_prop_type(self, prop_type: PropType) -> None:
+    def update_prop_type(self, prop_type: PropTypes) -> None:
         self.prop_type = prop_type
         self.update_svg()
         self.update_prop()
@@ -258,11 +260,11 @@ class Prop(GraphicalObject):
         offset_tuple = offset_map.get(self.loc, (0, 0))
         return QPointF(offset_tuple[0], offset_tuple[1])
 
-    def update_arrow_location(self, new_arrow_location: Location) -> None:
+    def update_arrow_location(self, new_arrow_location: Locations) -> None:
         if self.motion.motion_type in [PRO, ANTI]:
             shift_location_map: Dict[
-                Tuple(Location, PropRotationDirection, MotionType),
-                Dict[Location, Location],
+                Tuple(Locations, PropRotDirs, MotionTypes),
+                Dict[Locations, Locations],
             ] = {
                 ### ISO ###
                 (NORTHEAST, CLOCKWISE, PRO): {

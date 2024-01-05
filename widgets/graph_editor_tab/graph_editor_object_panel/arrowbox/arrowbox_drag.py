@@ -2,11 +2,7 @@ from PyQt6.QtCore import Qt, QPoint
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtCore import Qt
-from Enums import (
-    Color,
-    MotionType,
-    PropRotationDirection,
-)
+
 from constants import IN
 
 from objects.arrow import Arrow
@@ -14,8 +10,11 @@ from typing import TYPE_CHECKING, Dict, Tuple
 from objects.ghosts.ghost_arrow import GhostArrow
 
 from utilities.TypeChecking.TypeChecking import (
-    Location,
-    Location,
+    Colors,
+    Locations,
+    Locations,
+    MotionTypes,
+    PropRotDirs,
     Turns,
     RotationAngles,
 )
@@ -61,10 +60,10 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
 
     def set_attributes(self, target_arrow: "Arrow") -> None:
         self.previous_drag_location = None
-        self.color: Color = target_arrow.color
-        self.motion_type: MotionType = target_arrow.motion_type
-        self.arrow_location: Location = target_arrow.loc
-        self.rot_dir: PropRotationDirection = target_arrow.motion.prop_rot_dir
+        self.color: Colors = target_arrow.color
+        self.motion_type: MotionTypes = target_arrow.motion_type
+        self.arrow_location: Locations = target_arrow.loc
+        self.rot_dir: PropRotDirs = target_arrow.motion.prop_rot_dir
 
         self.turns: Turns = target_arrow.turns
 
@@ -101,7 +100,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
 
     ### UPDATERS ###
 
-    def _update_arrow_preview_for_new_location(self, new_location: Location) -> None:
+    def _update_arrow_preview_for_new_location(self, new_location: Locations) -> None:
         self.arrow_location = new_location
         (
             self.start_loc,
@@ -305,8 +304,8 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
         )
 
         rotation_angle_map: Dict[
-            Tuple[MotionType, Color],
-            Dict[PropRotationDirection, Dict[Location, RotationAngles]],
+            Tuple[MotionTypes, Colors],
+            Dict[PropRotDirs, Dict[Locations, RotationAngles]],
         ] = {
             (PRO, RED): {
                 CLOCKWISE: {
@@ -367,9 +366,9 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
         }
 
         direction_map: Dict[
-            PropRotationDirection, Dict[Location, RotationAngles]
+            PropRotDirs, Dict[Locations, RotationAngles]
         ] = rotation_angle_map.get((motion_type, color), {})
-        location_map: Dict[Location, RotationAngles] = direction_map.get(rot_dir, {})
+        location_map: Dict[Locations, RotationAngles] = direction_map.get(rot_dir, {})
         rotation_angle: RotationAngles = location_map.get(location, 0)
 
         return rotation_angle

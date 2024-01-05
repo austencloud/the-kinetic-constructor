@@ -3,20 +3,14 @@ from PyQt6.QtCore import Qt, QPointF, QByteArray, QBuffer
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtGui import QImage, QPainter, QPixmap
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
+from Enums import LetterNumberType
 
-from Enums import (
-    Color,
-    Letter,
-    LetterNumberType,
-    Location,
-    MotionAttributesDicts,
-    PictographAttributesDict,
-    SpecificPosition,
-)
 from constants import *
 from objects.pictograph.position_engines.arrow_positioners.main_arrow_positioner import (
     MainArrowPositioner,
 )
+from utilities.TypeChecking.Letters import Letters
+from utilities.TypeChecking.TypeChecking import Colors, Locations, SpecificPositions
 
 from utilities.letter_item import LetterItem
 from ..motion.motion import Motion
@@ -65,16 +59,16 @@ class Pictograph(QGraphicsScene):
         self.setBackgroundBrush(Qt.GlobalColor.white)
 
     def setup_components(self, main_widget: "MainWidget") -> None:
-        self.arrows: Dict[Color, Arrow] = {}
-        self.props: Dict[Color, Prop] = {}
-        self.ghost_arrows: Dict[Color, GhostArrow] = {}
-        self.ghost_props: Dict[Color, GhostProp] = {}
-        self.motions: Dict[Color, Motion] = {}
-        self.letter: Letter = None
+        self.arrows: Dict[Colors, Arrow] = {}
+        self.props: Dict[Colors, Prop] = {}
+        self.ghost_arrows: Dict[Colors, GhostArrow] = {}
+        self.ghost_props: Dict[Colors, GhostProp] = {}
+        self.motions: Dict[Colors, Motion] = {}
+        self.letter: Letters = None
         self.pictograph_dict: Dict = {}
         self.motion_dict_list: List[Dict] = []
-        self.start_pos: SpecificPosition = None
-        self.end_pos: SpecificPosition = None
+        self.start_pos: SpecificPositions = None
+        self.end_pos: SpecificPositions = None
         self.image_loaded: bool = False
         self.pixmap = None  # Store the pixmap item
         self.pictograph_dict = None  # Store the row data from the pandas dataframe
@@ -89,10 +83,10 @@ class Pictograph(QGraphicsScene):
 
         self.grid: Grid = self.initializer.init_grid()
         self.locations: Dict[
-            Location, Tuple[int, int, int, int]
+            Locations, Tuple[int, int, int, int]
         ] = self.initializer.init_locations(self.grid)
 
-        self.motions: Dict[Color, Motion] = self.initializer.init_motions()
+        self.motions: Dict[Colors, Motion] = self.initializer.init_motions()
         self.arrows, self.ghost_arrows = self.initializer.init_arrows()
         self.props, self.ghost_props = self.initializer.init_props(
             self.main_widget.prop_type
@@ -144,16 +138,9 @@ class Pictograph(QGraphicsScene):
         self.prop_positioner = MainPropPositioner(self)
         self.letter_engine = LetterEngine(self)
 
-    def _setup_pictograph_from_dict(
-        self, pictograph_dict: PictographAttributesDict, filters
-    ) -> None:
-        """For pictographs that are generated from the pandas dataframe."""
-
     def _create_motion_dict(
-        self: Union["Option", "IGPictograph"],
-        pictograph_dict: PictographAttributesDict,
-        color: Color,
-    ) -> MotionAttributesDicts:
+        self: Union["Option", "IGPictograph"], pictograph_dict: Dict, color: Colors
+    ) -> Dict:
         motion_dict = {
             COLOR: color,
             MOTION_TYPE: pictograph_dict.get(f"{color}_motion_type"),
@@ -182,7 +169,7 @@ class Pictograph(QGraphicsScene):
 
     ### GETTERS ###
 
-    def _get_letter_type(self, letter: Letter) -> Optional[str]:
+    def _get_letter_type(self, letter: Letters) -> Optional[str]:
         for letter_type in LetterNumberType:
             if letter in letter_type.letters:
                 return letter_type.description
@@ -239,7 +226,11 @@ class Pictograph(QGraphicsScene):
         return nearest_point_name, nearest_point_coords
 
     def get_motions_by_type(self, motion_type: str) -> List[Motion]:
-        return [motion for motion in self.motions.values() if motion.motion_type == motion_type]
+        return [
+            motion
+            for motion in self.motions.values()
+            if motion.motion_type == motion_type
+        ]
 
     ### HELPERS ###
 
@@ -278,11 +269,11 @@ class Pictograph(QGraphicsScene):
 
     ### UPDATERS ###
 
-    def update_attributes(self, pictograph_dict: PictographAttributesDict) -> None:
+    def update_attributes(self, pictograph_dict: Dict) -> None:
         for attr_name, attr_value in pictograph_dict.items():
             setattr(self, attr_name, attr_value)
 
-    def is_complete(self, pictograph_dict: PictographAttributesDict) -> bool:
+    def is_complete(self, pictograph_dict: Dict) -> bool:
         required_keys = [
             "letter",
             "start_pos",
@@ -303,7 +294,7 @@ class Pictograph(QGraphicsScene):
         return all(key in pictograph_dict for key in required_keys)
 
     def update_pictograph(
-        self, pictograph_dict: PictographAttributesDict = None
+        self, pictograph_dict: Dict = None
     ) -> None:
         if pictograph_dict is not None:
             if self.is_complete(pictograph_dict):

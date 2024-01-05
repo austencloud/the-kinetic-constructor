@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING, Dict, List, Literal, Union
 from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
-from Enums import Letter, Orientation, PictographAttributesDict
 from constants import BLUE_MOTION_TYPE, DASH, OPTION, RED_MOTION_TYPE, STATIC
-from utilities.TypeChecking.TypeChecking import Turns, letters
+from utilities.TypeChecking.TypeChecking import Orientations, Turns, Letters
 
 from PyQt6.QtCore import Qt
 from widgets.ig_tab.ig_pictograph import IGPictograph
@@ -28,8 +27,8 @@ class PictographScrollArea(QScrollArea):
         super().__init__(parent_tab)
         self.main_widget = main_widget
         self.parent_tab = parent_tab
-        self.letters: Dict[Letter, List[Dict[str, str]]] = self.main_widget.letters
-        self.pictographs: Dict[letters, Union["IGPictograph", "Option"]] = {}
+        self.letters: Dict[Letters, List[Dict[str, str]]] = self.main_widget.letters
+        self.pictographs: Dict[Letters, Union["IGPictograph", "Option"]] = {}
 
         self._initialize_ui()
 
@@ -44,7 +43,7 @@ class PictographScrollArea(QScrollArea):
 
     def apply_filters(
         self: Union["OptionPickerScrollArea", "IGScrollArea"],
-        filters: Dict[str, Union[Turns, Orientation]],
+        filters: Dict[str, Union[Turns, Orientations]],
     ) -> None:
         for ig_pictograph in self.pictographs.values():
             if ig_pictograph._meets_criteria(filters):
@@ -59,7 +58,7 @@ class PictographScrollArea(QScrollArea):
 
     def _create_pictograph(
         self,
-        pictograph_dict: PictographAttributesDict,
+        pictograph_dict: Dict,
         graph_type: Literal["option", "ig_pictograph"],
     ) -> Option | IGPictograph:
         if graph_type == OPTION:
@@ -67,6 +66,5 @@ class PictographScrollArea(QScrollArea):
         else:  # graph_type == IG_PICTOGRAPH
             pictograph = IGPictograph(self.main_widget, self)
 
-            
         pictograph.update_pictograph(pictograph_dict)
         return pictograph

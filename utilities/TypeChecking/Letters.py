@@ -1,6 +1,4 @@
-
-
-letters = [
+Letters = [
     "A",
     "B",
     "C",

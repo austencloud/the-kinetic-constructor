@@ -1,9 +1,11 @@
 from email.charset import QP
 from PyQt6.QtCore import QPointF
-from Enums import Letter, LetterNumberType
+from Enums import LetterNumberType
 from constants import *
 from objects.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, List, Tuple, Union
+
+from utilities.TypeChecking.Letters import Letters
 
 
 if TYPE_CHECKING:
@@ -35,9 +37,18 @@ class BaseArrowPositioner:
         self.arrows = pictograph.arrows.values()
         self.ghost_arrows = pictograph.ghost_arrows.values()
         self.letters: Dict[
-            Letter, List[Dict[str, str]]
+            Letters, List[Dict[str, str]]
         ] = pictograph.main_widget.letters
-        self.letters_to_reposition: List[Letter] = ["E", "G", "H", "I", "P", "Q", "R", "Λ-"]
+        self.letters_to_reposition: List[Letters] = [
+            "E",
+            "G",
+            "H",
+            "I",
+            "P",
+            "Q",
+            "R",
+            "Λ-",
+        ]
 
     ### PUBLIC METHODS ###
     def update_arrow_positions(self) -> None:

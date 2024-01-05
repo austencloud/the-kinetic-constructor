@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtGui import QPixmap
-from Enums import MotionType
 from objects.motion.motion import Motion
+from utilities.TypeChecking.TypeChecking import MotionTypes
 from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
 from widgets.attr_panel.bast_attr_box import BaseAttrBox
 from widgets.attr_box_widgets.attr_box_button import AttrBoxButton
@@ -21,7 +21,7 @@ class IGMotionAttrBox(BaseAttrBox):
         self,
         attr_panel: "IGMotionAttrPanel",
         pictographs: List["Pictograph"],
-        motion_type: MotionType,
+        motion_type: MotionTypes,
     ) -> None:
         super().__init__(attr_panel, None)  # Note the None for the single pictograph
         self.attr_panel = attr_panel

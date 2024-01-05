@@ -6,7 +6,6 @@ from PyQt6.QtGui import QTransform
 from PyQt6.QtWidgets import QGraphicsSceneWheelEvent
 from typing import Dict, Literal
 from PyQt6.QtCore import QPointF, QEvent
-from Enums import GridMode
 from constants import (
     BOX,
     DIAMOND,
@@ -20,6 +19,7 @@ from constants import (
     NORTHWEST,
     WEST,
 )
+from utilities.TypeChecking.TypeChecking import GridModes
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (
@@ -164,7 +164,7 @@ class Grid:
             for point_name, constant in zip(point_names, constants)
         }
 
-    def _apply_grid_mode(self, grid_mode: GridMode) -> None:
+    def _apply_grid_mode(self, grid_mode: GridModes) -> None:
         self.toggle_grid_mode(grid_mode)
 
     def _hide_box_mode_elements(self) -> None:
@@ -245,7 +245,7 @@ class Grid:
         if element_id in self.items:
             self.items[element_id].setVisible(visible)
 
-    def toggle_grid_mode(self, grid_mode: GridMode) -> None:
+    def toggle_grid_mode(self, grid_mode: GridModes) -> None:
         self.grid_mode = grid_mode
         if grid_mode == DIAMOND:
             self._hide_box_mode_elements()

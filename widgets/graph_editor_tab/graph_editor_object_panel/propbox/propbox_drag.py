@@ -1,15 +1,11 @@
 from PyQt6.QtCore import Qt, QPoint, QSize
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
-from Enums import (
-    Color,
-    Orientation,
-    PropAttributesDicts,
-    PropType,
-)
+
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
+from utilities.TypeChecking.prop_types import PropTypes
 
 from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_objectbox_drag import (
     BaseObjectBoxDrag,
@@ -28,9 +24,7 @@ class PropBoxDrag(BaseObjectBoxDrag):
         self, main_widget: "MainWidget", pictograph: "Pictograph", propbox: "PropBox"
     ) -> None:
         super().__init__(main_widget, pictograph, propbox)
-        self.attributes: PropAttributesDicts = {}
         self.propbox = propbox
-        self.BaseObjectBox = propbox
         self.arrow = None
 
     def match_target_prop(self, target_prop: "Prop") -> None:
@@ -44,10 +38,10 @@ class PropBoxDrag(BaseObjectBoxDrag):
     def set_attributes(self, target_prop: "Prop") -> None:
         self.previous_drag_location = None
 
-        self.color: Color = target_prop.color
-        self.prop_type: PropType = target_prop.prop_type
-        self.location: Location = target_prop.loc
-        self.orientation: Orientation = target_prop.ori
+        self.color: Colors = target_prop.color
+        self.prop_type: PropTypes = target_prop.prop_type
+        self.location: Locations = target_prop.loc
+        self.orientation: Orientations = target_prop.ori
 
         self.ghost = self.pictograph.ghost_props[self.color]
         self.ghost.target_prop = target_prop
@@ -92,7 +86,7 @@ class PropBoxDrag(BaseObjectBoxDrag):
 
     ### UPDATERS ###
 
-    def _update_prop_preview_for_new_location(self, new_location: Location) -> None:
+    def _update_prop_preview_for_new_location(self, new_location: Locations) -> None:
         self.location = new_location
 
         self._update_ghost_prop_for_new_location(new_location)
@@ -196,7 +190,6 @@ class PropBoxDrag(BaseObjectBoxDrag):
                     self.ghost.motion.start_loc = new_location
                     self.ghost.motion.end_loc = new_location
                     self._update_prop_preview_for_new_location(new_location)
-                    self.ghost.update_attributes(self.attributes)
                     self.pictograph.update_pictograph()
 
     def handle_mouse_release(self) -> None:
@@ -250,7 +243,7 @@ class PropBoxDrag(BaseObjectBoxDrag):
             RotationAngles: The rotation angle for the prop.
 
         """
-        angle_map: Dict[Orientation, Dict[Location, RotationAngles]] = {
+        angle_map: Dict[Orientations, Dict[Locations, RotationAngles]] = {
             OUT: {
                 NORTH: 270,
                 SOUTH: 90,

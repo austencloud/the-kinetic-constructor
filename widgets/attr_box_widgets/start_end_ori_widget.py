@@ -8,8 +8,8 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
-from Enums import Orientation
 from constants import ICON_DIR
+from utilities.TypeChecking.TypeChecking import Orientations
 from widgets.attr_box_widgets.base_attr_box_widget import (
     BaseAttrBoxWidget,
 )
@@ -94,7 +94,7 @@ class StartEndOriWidget(BaseAttrBoxWidget):
         return arrow_label_frame
 
     def update_start_end_boxes(
-        self, start_ori: Orientation, end_ori: Orientation
+        self, start_ori: Orientations, end_ori: Orientations
     ) -> None:
         if start_ori and end_ori:
             self.start_ori_box.setCurrentText(start_ori.upper())

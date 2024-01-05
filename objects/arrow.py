@@ -2,29 +2,16 @@ from typing import Union
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtGui import QTransform
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
-from Enums import *
-from constants import (
-    ANTI,
-    CLOCKWISE,
-    COLOR,
-    COUNTER_CLOCKWISE,
-    END_LOC,
-    LOC,
-    MOTION_TYPE,
-    NORTHEAST,
-    NORTHWEST,
-    PRO,
-    PROP_ROT_DIR,
-    SOUTHEAST,
-    SOUTHWEST,
-    START_LOC,
-    STATIC,
-    TURNS,
-)
+
+from constants import *
 from objects.prop.prop import Prop
 
 from objects.graphical_object import GraphicalObject
 from utilities.TypeChecking.TypeChecking import (
+    Colors,
+    Locations,
+    MotionTypes,
+    PropRotDirs,
     Turns,
     RotationAngles,
     TYPE_CHECKING,
@@ -61,15 +48,13 @@ class Arrow(GraphicalObject):
         self.is_svg_mirrored: bool = False
         self.is_dragging: bool = False
         self.ghost: GhostArrow = None
-        self.loc: Location = None
+        self.loc: Locations = None
         self.is_ghost: bool = False
         self.drag_offset = QPointF(0, 0)
-
 
     ### SETUP ###
 
     def update_svg(self, svg_file: str = None) -> None:
-        
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.svg_file = svg_file
         super().update_svg(svg_file)
@@ -242,7 +227,7 @@ class Arrow(GraphicalObject):
 
     def _get_rot_angle(
         self, motion: "Motion"
-    ) -> Dict[PropRotationDirection, Dict[Location, int]]:
+    ) -> Dict[PropRotDirs, Dict[Locations, int]]:
         from objects.pictograph.pictograph import Pictograph
 
         if isinstance(self.scene, Pictograph):
@@ -327,9 +312,9 @@ class Arrow(GraphicalObject):
                         (EAST, WEST): {NORTH: 180, SOUTH: 180},
                         (WEST, EAST): {NORTH: 0, SOUTH: 0},
                     }
-                    return map.get((self.motion.start_loc, self.motion.end_loc), {}).get(
-                        self.loc
-                    )
+                    return map.get(
+                        (self.motion.start_loc, self.motion.end_loc), {}
+                    ).get(self.loc)
                 elif self.scene.letter == "Ψ-":
                     loc_map = {
                         ((NORTH, SOUTH), (NORTH, SOUTH)): {RED: EAST, BLUE: WEST},
@@ -370,7 +355,7 @@ class Arrow(GraphicalObject):
                         (WEST, EAST): 0,
                     }
                     return rot_map.get((self.motion.start_loc, self.motion.end_loc))
-                else:  # Letter is Λ
+                else:  # Letters is Λ
                     loc_map = {
                         ((NORTH, SOUTH), WEST): EAST,
                         ((EAST, WEST), SOUTH): NORTH,
@@ -412,7 +397,7 @@ class Arrow(GraphicalObject):
                         (WEST, EAST): 180,
                     }
                     return rot_map.get((self.motion.start_loc, self.motion.end_loc))
-                
+
     def assign_Λ_dash_arrow_loc(self):
         other_motion = (
             self.scene.arrows[RED].motion
@@ -440,12 +425,12 @@ class Arrow(GraphicalObject):
         self.loc = arrow_loc
         self.ghost.loc = arrow_loc
 
-    def get_attributes(self) -> ArrowAttributesDicts:
+    def get_attributes(self) -> Dict[str, Union[Colors, Locations, MotionTypes, Turns]]:
         arrow_attributes = [COLOR, LOC, MOTION_TYPE, TURNS]
         return {attr: getattr(self, attr) for attr in arrow_attributes}
 
-    def get_svg_file(self, motion_type: MotionType, turns: Turns) -> str:
-        svg_file = f"{image_path}arrows/{self.pictograph.main_widget.grid_mode}/{motion_type}/{motion_type}_{float(turns)}.svg"
+    def get_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
+        svg_file = f"resources/images/arrows/{self.pictograph.main_widget.grid_mode}/{motion_type}/{motion_type}_{float(turns)}.svg"
         return svg_file
 
     def _change_arrow_to_static(self) -> None:
@@ -466,7 +451,7 @@ class Arrow(GraphicalObject):
         self.motion[END_LOC] = self.motion.prop.loc
         self.loc = self.motion.prop.loc
 
-    def update_arrow(self, arrow_dict: ArrowAttributesDicts = None) -> None:
+    def update_arrow(self, arrow_dict = None) -> None:
         if arrow_dict:
             self.update_attributes(arrow_dict)
             if not self.is_ghost and self.ghost:

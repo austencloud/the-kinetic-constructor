@@ -1,4 +1,3 @@
-from Enums import PropAttributesDicts
 from constants import COLOR
 from objects.motion.motion import Motion
 from objects.prop.prop import Prop
@@ -15,7 +14,7 @@ class GhostProp(Prop):
     def __init__(
         self,
         pictograph: "Pictograph",
-        attributes: PropAttributesDicts,
+        attributes,
         motion: "Motion",
     ) -> None:
         super().__init__(pictograph, attributes, motion)

@@ -28,7 +28,7 @@ from constants import (
 from widgets.ig_tab.ig_pictograph import IGPictograph
 from widgets.pictograph_scroll_area import PictographScrollArea
 from constants import IG_PICTOGRAPH
-from utilities.TypeChecking.TypeChecking import letters, Turns, Orientations
+from utilities.TypeChecking.TypeChecking import Letters, Turns, Orientations
 
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_tab import IGTab
@@ -41,7 +41,7 @@ class IGScrollArea(PictographScrollArea):
         self.main_widget = main_widget
         self.ig_tab = ig_tab
         self.filters: Dict[str, Union[Turns, Orientations]] = {}
-        self.pictographs: Dict[letters, IGPictograph] = {}
+        self.pictographs: Dict[Letters, IGPictograph] = {}
 
     def update_scroll_area_content(self) -> None:
         self.container.adjustSize()
@@ -51,7 +51,7 @@ class IGScrollArea(PictographScrollArea):
     def update_pictographs(self) -> None:
         ordered_pictographs = {}
         sorted_selected_letters = sorted(
-            self.ig_tab.selected_letters, key=lambda x: letters.index(x)
+            self.ig_tab.selected_letters, key=lambda x: Letters.index(x)
         )
         deselected_letters = set(
             key.split("_")[0] for key in self.pictographs.keys()
@@ -73,22 +73,30 @@ class IGScrollArea(PictographScrollArea):
                         if motion_type:
                             turns_value = self.get_turns_from_attr_panel(motion_type)
                             if motion_type == DASH:
-                                prop_rot_dir = self.get_dash_prop_rot_dir_from_attr_panel(
-                                    motion_type
+                                prop_rot_dir = (
+                                    self.get_dash_prop_rot_dir_from_attr_panel(
+                                        motion_type
+                                    )
                                 )
-                                pictograph_dict[f"{motion_color}_prop_rot_dir"] = prop_rot_dir
+                                pictograph_dict[
+                                    f"{motion_color}_prop_rot_dir"
+                                ] = prop_rot_dir
                             elif motion_type == STATIC:
-                                prop_rot_dir = self.get_static_prop_rot_dir_from_attr_panel(
-                                    motion_type
+                                prop_rot_dir = (
+                                    self.get_static_prop_rot_dir_from_attr_panel(
+                                        motion_type
+                                    )
                                 )
-                                pictograph_dict[f"{motion_color}_prop_rot_dir"] = prop_rot_dir
+                                pictograph_dict[
+                                    f"{motion_color}_prop_rot_dir"
+                                ] = prop_rot_dir
                             pictograph_dict[f"{motion_color}_turns"] = turns_value
 
                     ig_pictograph.update_pictograph(pictograph_dict)
                 image_key = self.generate_image_name(ig_pictograph, letter)
                 ordered_pictographs[image_key] = ig_pictograph
         for index, (key, ig_pictograph) in enumerate(ordered_pictographs.items()):
-                self.add_pictograph_to_layout(ig_pictograph, index)
+            self.add_pictograph_to_layout(ig_pictograph, index)
         for key, ig_pictograph in ordered_pictographs.items():
             self.pictographs[key] = ig_pictograph
 
@@ -107,8 +115,12 @@ class IGScrollArea(PictographScrollArea):
         if self.pictographs:
             self.update_attr_panel()
 
-    def get_dash_prop_rot_dir_from_attr_panel(self, motion_type) -> Literal['cw', 'ccw', 'no_rot']:
-        header_widget = self.ig_tab.filter_tab.motion_attr_panel.dash_attr_box.header_widget
+    def get_dash_prop_rot_dir_from_attr_panel(
+        self, motion_type
+    ) -> Literal["cw", "ccw", "no_rot"]:
+        header_widget = (
+            self.ig_tab.filter_tab.motion_attr_panel.dash_attr_box.header_widget
+        )
         if motion_type == DASH:
             if header_widget.cw_button.isChecked():
                 return CLOCKWISE
@@ -118,9 +130,13 @@ class IGScrollArea(PictographScrollArea):
                 return NO_ROT
         else:
             return NO_ROT
-        
-    def get_static_prop_rot_dir_from_attr_panel(self, motion_type) -> Literal['cw', 'ccw', 'no_rot']:
-        header_widget = self.ig_tab.filter_tab.motion_attr_panel.static_attr_box.header_widget
+
+    def get_static_prop_rot_dir_from_attr_panel(
+        self, motion_type
+    ) -> Literal["cw", "ccw", "no_rot"]:
+        header_widget = (
+            self.ig_tab.filter_tab.motion_attr_panel.static_attr_box.header_widget
+        )
         if motion_type == STATIC:
             if header_widget.cw_button.isChecked():
                 return CLOCKWISE
@@ -130,9 +146,11 @@ class IGScrollArea(PictographScrollArea):
                 return NO_ROT
         else:
             return NO_ROT
-    
+
     def get_turns_from_attr_panel(self, motion_type) -> Turns:
-        return self.ig_tab.filter_tab.motion_attr_panel.get_turns_for_motion_type(motion_type)
+        return self.ig_tab.filter_tab.motion_attr_panel.get_turns_for_motion_type(
+            motion_type
+        )
 
     def remove_deselected_letter_pictographs(self, deselected_letter):
         keys_to_remove = [
@@ -156,7 +174,7 @@ class IGScrollArea(PictographScrollArea):
             f"{pictograph_dict[RED_START_LOC]}→{pictograph_dict[RED_END_LOC]}"
         )
 
-    def generate_image_name(self, ig_pictograph: IGPictograph, letter: letters) -> str:
+    def generate_image_name(self, ig_pictograph: IGPictograph, letter: Letters) -> str:
         return (
             f"{letter}_"
             f"{ig_pictograph.start_pos}→{ig_pictograph.end_pos}_"
@@ -200,9 +218,14 @@ class IGScrollArea(PictographScrollArea):
     def update_attr_panel(self) -> None:
         first_pictograph = next(iter(self.pictographs.values()), None)
         for motion in first_pictograph.motions.values():
-            for attr_box in self.ig_tab.attr_panel.boxes:
-                if motion.motion_type == attr_box.motion_type:
-                    attr_box.update_attr_box(motion)
+            if self.ig_tab.filter_tab.motion_attr_panel.isVisible():
+                for attr_box in self.ig_tab.filter_tab.motion_attr_panel.boxes:
+                    if motion.motion_type == attr_box.motion_type:
+                        attr_box.update_attr_box(motion)
+            elif self.ig_tab.filter_tab.color_attr_panel.isVisible():        
+                for attr_box in self.ig_tab.filter_tab.color_attr_panel.boxes:
+                    if motion.motion_type == attr_box.motion_type:
+                        attr_box.update_attr_box(motion)
 
     def filter_pictographs(self, pictograph_dicts: List[Dict]) -> List[Dict]:
         return [

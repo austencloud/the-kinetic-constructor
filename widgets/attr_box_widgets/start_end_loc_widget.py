@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants import ICON_DIR, SWAP_ICON
-from utilities.TypeChecking.TypeChecking import Location
+from utilities.TypeChecking.TypeChecking import Locations
 from widgets.attr_box_widgets.base_attr_box_widget import (
     BaseAttrBoxWidget,
 )
@@ -138,7 +138,7 @@ class StartEndLocWidget(BaseAttrBoxWidget):
             self.update_start_end_loc_boxes(motion.start_loc, motion.end_loc)
 
     def update_start_end_loc_boxes(
-        self, start_loc: Location, end_loc: Location
+        self, start_loc: Locations, end_loc: Locations
     ) -> None:
         if start_loc and end_loc:
             self.start_loc_box.setCurrentText(start_loc.upper())
