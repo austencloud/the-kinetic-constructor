@@ -71,7 +71,7 @@ class BaseArrowPositioner:
                 "E": self._reposition_E,
                 "G": self._reposition_G,
                 "H": self._reposition_H,
-                "I": self._reposition_I,
+                "I": self.I_positioner._reposition_I,
                 "P": self._reposition_P,
                 "Q": self._reposition_Q,
                 "R": self._reposition_R,
