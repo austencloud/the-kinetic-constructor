@@ -175,5 +175,4 @@ class MotionManipulator:
         self.prop.scene.update_pictograph()
 
     def set_prop_rot_dir(self, prop_rot_dir: str) -> None:
-        self.prop.motion.prop_rot_dir = prop_rot_dir
-        # self.prop.scene.update_pictograph()
+        self.motion.prop_rot_dir = prop_rot_dir

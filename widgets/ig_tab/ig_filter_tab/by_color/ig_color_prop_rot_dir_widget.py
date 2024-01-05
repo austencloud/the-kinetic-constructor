@@ -15,6 +15,7 @@ from constants import (
     DASH,
     ICON_DIR,
     NO_ROT,
+    STATIC,
 )
 
 
@@ -57,6 +58,7 @@ class IGColorPropRotDirWidget(BaseAttrBoxWidget):
         self.ccw_button.setStyleSheet(self.get_button_style(pressed=False))
         self.cw_button.setCheckable(True)
         self.ccw_button.setCheckable(True)
+        self.cw_button.setChecked(True)
 
         buttons = [self.cw_button, self.ccw_button]
         return buttons
@@ -71,22 +73,21 @@ class IGColorPropRotDirWidget(BaseAttrBoxWidget):
         self._set_prop_rot_dir(CLOCKWISE if has_turns else None)
 
     def _set_prop_rot_dir(self, prop_rot_dir: str) -> None:
+        if prop_rot_dir == COUNTER_CLOCKWISE:
+            self.ccw_button.setChecked(True)
+            self.cw_button.setChecked(False)
+        elif prop_rot_dir == CLOCKWISE:
+            self.cw_button.setChecked(True)
+            self.ccw_button.setChecked(False)
+            
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
-                if motion.color == self.attr_box.color:
-                    pictograph_dict = {
-                        f"{motion.color}_prop_rot_dir": prop_rot_dir,
-                    }
-                    motion.scene.update_pictograph(pictograph_dict)
-            for motion in pictograph.motions.values():
-                if motion.motion_type == DASH and (
-                    prop_rot_dir is None or motion.turns > 0
-                ):
-                    motion.prop_rot_dir = prop_rot_dir if prop_rot_dir else CLOCKWISE
-                    motion.manipulator.set_prop_rot_dir(motion.prop_rot_dir)
-
-        self.cw_button.setChecked(prop_rot_dir == CLOCKWISE)
-        self.ccw_button.setChecked(prop_rot_dir == COUNTER_CLOCKWISE)
+                if motion.motion_type in [DASH, STATIC]:
+                    if motion.color == self.attr_box.color:
+                        pictograph_dict = {
+                            f"{motion.color}_prop_rot_dir": prop_rot_dir,
+                        }
+                        motion.scene.update_pictograph(pictograph_dict)
 
         if prop_rot_dir:
             self.cw_button.setStyleSheet(
@@ -146,8 +147,6 @@ class IGColorPropRotDirWidget(BaseAttrBoxWidget):
 
     def cw_button_clicked(self) -> None:
         pass
-
-
 
     def add_black_borders(self) -> None:
         self.setStyleSheet(

@@ -11,8 +11,10 @@ from typing import TYPE_CHECKING, Union
 from constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
+    DASH,
     ICON_DIR,
     NO_ROT,
+    STATIC,
 )
 from objects.motion.motion import Motion
 from objects.pictograph.pictograph import Pictograph
@@ -203,20 +205,18 @@ class IGColorTurnsWidget(BaseTurnsWidget):
         return str(int(turns)) if turns.is_integer() else str(turns)
 
     def _simulate_cw_button_click(self) -> None:
-        header_widget = self.attr_box.header_widget
-        header_widget.cw_button.setChecked(True)
-        header_widget.cw_button.click()
+        self.attr_box.prop_rot_dir_widget.cw_button.setChecked(True)
+        self.attr_box.prop_rot_dir_widget.cw_button.click()
 
     def _turns_added(self, initial_turns, new_turns):
         return initial_turns == 0 and new_turns > 0
 
     def _get_current_prop_rot_dir(self) -> str:
-        header_widget = self.attr_box.header_widget
         return (
             CLOCKWISE
-            if header_widget.cw_button.isChecked()
+            if self.attr_box.prop_rot_dir_widget.cw_button.isChecked()
             else COUNTER_CLOCKWISE
-            if header_widget.ccw_button.isChecked()
+            if self.attr_box.prop_rot_dir_widget.ccw_button.isChecked()
             else NO_ROT
         )
 
@@ -233,9 +233,21 @@ class IGColorTurnsWidget(BaseTurnsWidget):
             for motion in pictograph.motions.values():
                 if motion.color == self.attr_box.color:
                     motion.set_turns(new_turns)
-                    pictograph_dict = {
-                        f"{motion.color}_turns": new_turns,
-                    }
+
+                    if motion.motion_type in [DASH, STATIC] and (
+                        motion.prop_rot_dir == NO_ROT and motion.turns > 0
+                    ):
+                        motion.manipulator.set_prop_rot_dir(
+                            self._get_current_prop_rot_dir()
+                        )
+                        pictograph_dict = {
+                            f"{motion.color}_turns": new_turns,
+                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir(),
+                        }
+                    else:
+                        pictograph_dict = {
+                            f"{motion.color}_turns": new_turns,
+                        }
                     motion.scene.update_pictograph(pictograph_dict)
 
     ### EVENT HANDLERS ###
