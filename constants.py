@@ -95,6 +95,9 @@ AXIS = "axis"
 START_LOC = "start_loc"
 END_LOC = "end_loc"
 
+PRO_TURNS = "pro_turns"
+ANTI_TURNS = "anti_turns"
+
 STATIC_HANDPATH = "static_handpath"
 DASH_HANDPATH = "dash_handpath"
 
