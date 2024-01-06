@@ -165,13 +165,9 @@ class IGColorTurnsWidget(BaseTurnsWidget):
 
     def process_turns_for_all_motions(self, adjustment: float) -> None:
         for pictograph in self.attr_box.get_pictographs():
-            self.update_turns_for_pictograph(pictograph, adjustment)
-
-    def update_turns_for_pictograph(
-        self, pictograph: Pictograph, adjustment: float
-    ) -> None:
-        for motion in pictograph.get_motions_by_type(self.attr_box.color):
-            self.process_single_motion(motion, adjustment)
+            self.process_single_motion(
+                pictograph.motions[self.attr_box.color], adjustment
+            )
 
     def connect_signal(self, signal: pyqtBoundSignal) -> None:
         signal.connect(self.update_turns_directly)

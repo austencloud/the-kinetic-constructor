@@ -29,6 +29,7 @@ from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
 from widgets.pictograph_scroll_area import PictographScrollArea
 from constants import IG_PICTOGRAPH
 from utilities.TypeChecking.TypeChecking import Letters, Turns, Orientations
+from PyQt6.QtCore import QTimer
 
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_tab import IGTab
@@ -42,6 +43,17 @@ class IGScrollArea(PictographScrollArea):
         self.ig_tab = ig_tab
         self.filters: Dict[str, Union[Turns, Orientations]] = {}
         self.pictographs: Dict[Letters, IGPictograph] = {}
+
+        self.update_timer = QTimer(self)
+        self.update_timer.timeout.connect(self.update_pictographs_positions)
+        self.update_timer.start(200)
+
+    def update_pictographs_positions(self):
+        """Method to update positions of all pictographs"""
+        for pictograph in self.pictographs.values():
+            if hasattr(pictograph, "arrow_positioner"):
+                pictograph.arrow_positioner.update_arrow_positions()
+        self.update_scroll_area_content()
 
     def update_scroll_area_content(self) -> None:
         self.container.adjustSize()
@@ -222,7 +234,7 @@ class IGScrollArea(PictographScrollArea):
                 for attr_box in self.ig_tab.filter_tab.motion_attr_panel.boxes:
                     if motion.motion_type == attr_box.motion_type:
                         attr_box.update_attr_box(motion)
-            elif self.ig_tab.filter_tab.color_attr_panel.isVisible():        
+            elif self.ig_tab.filter_tab.color_attr_panel.isVisible():
                 for attr_box in self.ig_tab.filter_tab.color_attr_panel.boxes:
                     if motion.motion_type == attr_box.color:
                         attr_box.update_attr_box(motion)
@@ -283,4 +295,3 @@ class IGScrollArea(PictographScrollArea):
                 ig_pictograph.motions[RED].update_motion(update)
 
             ig_pictograph.update_pictograph()
-

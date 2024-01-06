@@ -6,9 +6,10 @@ from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
 from Enums import LetterNumberType
 
 from constants import *
-from objects.pictograph.position_engines.arrow_positioners.main_arrow_positioner import (
-    MainArrowPositioner,
+from objects.pictograph.position_engines.arrow_positioners.arrow_positioner import (
+    ArrowPositioner,
 )
+
 from utilities.TypeChecking.Letters import Letters
 from utilities.TypeChecking.TypeChecking import Colors, Locations, SpecificPositions
 
@@ -134,7 +135,7 @@ class Pictograph(QGraphicsScene):
 
     def _setup_managers(self, main_widget: "MainWidget") -> None:
         self.pictograph_menu_handler = PictographMenuHandler(main_widget, self)
-        self.arrow_positioner = MainArrowPositioner(self)
+        self.arrow_positioner = ArrowPositioner(self)
         self.prop_positioner = MainPropPositioner(self)
         self.letter_engine = LetterEngine(self)
 
@@ -234,6 +235,9 @@ class Pictograph(QGraphicsScene):
 
     ### HELPERS ###
 
+    def select_arrow(self, arrow):
+        self.selected_arrow: Arrow = arrow
+
     def add_to_sequence_callback(self) -> None:
         new_beat = self.create_new_beat()
         self.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(new_beat)
@@ -293,9 +297,7 @@ class Pictograph(QGraphicsScene):
         ]
         return all(key in pictograph_dict for key in required_keys)
 
-    def update_pictograph(
-        self, pictograph_dict: Dict = None
-    ) -> None:
+    def update_pictograph(self, pictograph_dict: Dict = None) -> None:
         if pictograph_dict is not None:
             if self.is_complete(pictograph_dict):
                 self.pictograph_dict = pictograph_dict
@@ -332,7 +334,7 @@ class Pictograph(QGraphicsScene):
 
     def _position_objects(self) -> None:
         self.prop_positioner.position_props()
-        self.arrow_positioner.position_arrows()
+        self.arrow_positioner.update_arrow_positions()
 
     def _update_motions(self) -> None:
         for motion in self.motions.values():

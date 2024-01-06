@@ -22,19 +22,23 @@ from constants import (
     DISTANCE,
 )
 from objects.motion.motion import Motion
-from utilities.TypeChecking.TypeChecking import AntiradialOrientations, Colors, RadialOrientations
+from utilities.TypeChecking.TypeChecking import (
+    AntiradialOrientations,
+    Colors,
+    RadialOrientations,
+)
 
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
-    from objects.pictograph.position_engines.arrow_positioners.base_arrow_positioner import (
-        BaseArrowPositioner,
+    from objects.pictograph.position_engines.arrow_positioners.arrow_positioner import (
+        ArrowPositioner,
     )
 
 
 class StaffArrowPositioner:
     def __init__(
-        self, pictograph: "Pictograph", arrow_positioner: "BaseArrowPositioner"
+        self, pictograph: "Pictograph", arrow_positioner: "ArrowPositioner"
     ) -> None:
         self.pictograph = pictograph
         self.arrow_positioner = arrow_positioner

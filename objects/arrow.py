@@ -492,6 +492,9 @@ class Arrow(GraphicalObject):
             self.ghost.is_svg_mirrored = False
         self.is_svg_mirrored = False
 
+    def adjust_position(self, adjustment: QPointF):
+        self.setPos(self.pos() + adjustment)
+
     ### DELETION ###
 
     def delete_arrow(self, keep_prop: bool = False) -> None:

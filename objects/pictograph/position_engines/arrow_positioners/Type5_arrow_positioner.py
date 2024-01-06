@@ -1,5 +1,5 @@
-from objects.pictograph.position_engines.arrow_positioners.base_arrow_positioner import (
-    BaseArrowPositioner,
+from objects.pictograph.position_engines.arrow_positioners.arrow_positioner import (
+    ArrowPositioner,
 )
 from constants import (
     EAST,
@@ -11,7 +11,7 @@ from objects.arrow import Arrow
 from PyQt6.QtCore import QPointF
 
 
-class Type5ArrowPositioner(BaseArrowPositioner):
+class Type5ArrowPositioner(ArrowPositioner):
     def _reposition_Λ_dash(self) -> None:
         for arrow in self.arrows:
             adjustment = self._calculate_Λ_dash_adjustments(arrow)

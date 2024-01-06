@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
-    from objects.pictograph.position_engines.arrow_positioners.base_arrow_positioner import (
-        BaseArrowPositioner,
+    from objects.pictograph.position_engines.arrow_positioners.arrow_positioner import (
+        ArrowPositioner,
     )
 from PyQt6.QtCore import QPointF
 from objects.arrow import Arrow
@@ -13,7 +13,7 @@ from constants import ANTI, BLUE, IN, OUT, RED
 
 class TriadArrowPositioner:
     def __init__(
-        self, pictograph: "Pictograph", arrow_positioner: "BaseArrowPositioner"
+        self, pictograph: "Pictograph", arrow_positioner: "ArrowPositioner"
     ) -> None:
         self.pictograph = pictograph
         self.arrow_positioner = arrow_positioner

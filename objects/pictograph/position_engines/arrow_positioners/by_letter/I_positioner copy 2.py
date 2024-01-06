@@ -21,7 +21,9 @@ class I_Positioner:
         self.positioner = positioner
 
     def _load_adjustments(self) -> Dict[str, Dict[MotionTypes, List[int]]]:
-        json_path = "arrow_adjuster/I_adjustments.json"
+        json_path = (
+            "F:/CODE/tka-app/tka-sequence-constructor/arrow_adjuster/I_adjustments.json"
+        )
         with open(json_path, "r") as file:
             data = json.load(file)
 
@@ -99,3 +101,4 @@ class I_Positioner:
         pro_arrow = arrows[RED] if arrows[RED].motion_type == PRO else arrows[BLUE]
         anti_arrow = arrows[RED] if arrows[RED].motion_type == ANTI else arrows[BLUE]
         return pro_arrow, anti_arrow
+

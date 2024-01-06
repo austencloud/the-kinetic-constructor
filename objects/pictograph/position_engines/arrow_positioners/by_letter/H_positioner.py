@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
 
 
-class I_Positioner:
+class H_Positioner:
     def __init__(
         self, pictograph: "Pictograph", positioner: "Type1ArrowPositioner"
     ) -> None:
@@ -42,12 +42,12 @@ class I_Positioner:
                 converted_values.append(float(value))
         return tuple(converted_values)
 
-    def _reposition_I(self) -> None:
+    def _reposition_H(self) -> None:
         for arrow in self.pictograph.arrows.values():
-            adjustment = self._calculate_I_adjustment(arrow)
+            adjustment = self._calculate_H_adjustment(arrow)
             self.positioner._apply_shift_adjustment(arrow, adjustment)
 
-    def _calculate_I_adjustment(self, arrow: Arrow) -> QPointF:
+    def _calculate_H_adjustment(self, arrow: Arrow) -> QPointF:
         self.adjustments: Dict[
             str, Dict[MotionTypes, List[int]]
         ] = self._load_adjustments()
