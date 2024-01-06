@@ -41,9 +41,6 @@ class ArrowPositioner:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
         self.arrows = pictograph.arrows.values()
-        self.readjust_timer = QTimer()
-        self.readjust_timer.timeout.connect(self.update_arrow_positions)
-        self.readjust_timer.start(2000)
         self.letters_to_reposition = [
             "A",
             "B",

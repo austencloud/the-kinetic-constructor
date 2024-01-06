@@ -451,7 +451,7 @@ class Arrow(GraphicalObject):
         self.motion[END_LOC] = self.motion.prop.loc
         self.loc = self.motion.prop.loc
 
-    def update_arrow(self, arrow_dict = None) -> None:
+    def update_arrow(self, arrow_dict=None) -> None:
         if arrow_dict:
             self.update_attributes(arrow_dict)
             if not self.is_ghost and self.ghost:
@@ -492,8 +492,8 @@ class Arrow(GraphicalObject):
             self.ghost.is_svg_mirrored = False
         self.is_svg_mirrored = False
 
-    def adjust_position(self, adjustment: QPointF):
-        self.setPos(self.pos() + adjustment)
+    def adjust_position(self, adjustment):
+        self.setPos(self.pos() + QPointF(*adjustment))
 
     ### DELETION ###
 
