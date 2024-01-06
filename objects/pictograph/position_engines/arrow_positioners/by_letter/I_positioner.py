@@ -64,25 +64,28 @@ class I_Positioner:
             arrow.motion_type
         )
         x, y = ne_adjustment_values
-
-        directional_adjustments = self.generate_directional_tuples(
-            x, y, arrow.motion
-        )
+        if arrow.motion_type == PRO:
+            directional_adjustments = self.generate_pro_directional_tuples(
+                x, y, arrow.motion
+            )
+        elif arrow.motion_type == ANTI:
+            directional_adjustments = self.generate_anti_directional_tuples(
+                x, y, arrow.motion
+            )
         return directional_adjustments[self._get_quadrant_index(arrow.loc)]
 
-    def generate_directional_tuples(self, x, y, motion:Motion) -> List[QPointF]:
-        if motion.motion_type == PRO:
-            if motion.prop_rot_dir == CLOCKWISE:
-                return [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
-            elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                return [QPointF(-y, -x), QPointF(x, -y), QPointF(y, x), QPointF(-x, y)]
-            
-        elif motion.motion_type == ANTI:
-            if motion.prop_rot_dir == CLOCKWISE:
-                return [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
-            elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                return [QPointF(x, y), QPointF(x, -y), QPointF(-x, -y), QPointF(y, -x)]
-            
+    def generate_pro_directional_tuples(self, x, y, motion: Motion) -> List[QPointF]:
+        if motion.prop_rot_dir == CLOCKWISE:
+            return [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
+        elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
+            return [QPointF(-y, -x), QPointF(x, -y), QPointF(y, x), QPointF(-x, y)]
+
+    def generate_anti_directional_tuples(self, x, y, motion: Motion) -> List[QPointF]:
+        if motion.prop_rot_dir == CLOCKWISE:
+            return [QPointF(y, -x), QPointF(x, y), QPointF(-y, x), QPointF(-x, -y)]
+        elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
+            return [QPointF(x, -y), QPointF(y, x), QPointF(-x, y), QPointF(-y, -x)]
+
     def _get_quadrant_index(self, location: str) -> int:
         """Map location to index for quadrant adjustments"""
         location_to_index = {
