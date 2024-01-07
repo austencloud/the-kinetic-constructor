@@ -162,7 +162,7 @@ class ArrowPositioner:
         )
         return adjustment_values
 
-    def determine_leading_motion(
+    def determine_leading_color(
         self, red_start, red_end, blue_start, blue_end
     ) -> Colors:
         if red_start == blue_end:
@@ -185,7 +185,7 @@ class ArrowPositioner:
             else self.pictograph.arrows.get(RED)
         )
 
-        leading_color = self.determine_leading_motion(
+        leading_color = self.determine_leading_color(
             red_arrow.motion.start_loc,
             red_arrow.motion.end_loc,
             blue_arrow.motion.start_loc,
@@ -218,7 +218,7 @@ class ArrowPositioner:
                 adjustment_values: Dict = letter_adjustments.get(adjustment_key, {})
                 return tuple(adjustment_values.get(arrow.color, (0, 0)))
             elif self.letter in ["S", "T"]:
-                adjustment_key = f"({trailing_arrow.turns}, {leading_arrow.turns})"
+                adjustment_key = f"({leading_arrow.turns}, {trailing_arrow.turns})"
                 adjustment_values: Dict = letter_adjustments.get(adjustment_key, {})
                 return tuple(adjustment_values.get(arrow.lead_state, (0, 0)))
             else:

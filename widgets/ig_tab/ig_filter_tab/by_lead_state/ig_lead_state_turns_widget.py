@@ -9,15 +9,20 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
 from constants import (
+    BLUE,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     DASH,
     ICON_DIR,
+    LEADING,
     NO_ROT,
+    RED,
     STATIC,
+    TRAILING,
 )
 from objects.motion.motion import Motion
 from objects.pictograph.pictograph import Pictograph
+from utilities.TypeChecking.TypeChecking import Colors
 from widgets.attr_box_widgets.base_turns_widget import (
     BaseTurnsWidget,
 )
@@ -166,11 +171,57 @@ class IGLeadStateTurnsWidget(BaseTurnsWidget):
         self.connect_signal(self.turnbox.currentIndexChanged)
 
     def process_turns_for_all_motions(self, adjustment: float) -> None:
-        for pictograph in self.attr_box.get_pictographs():
-            self.process_single_motion(
-                pictograph.motions[self.attr_box.lead_state], adjustment
-            )
+        if self.attr_box.lead_state == TRAILING:
+            for motion in self.get_trailing_motions():
+                self.process_single_motion(motion, adjustment)
 
+        elif self.attr_box.lead_state == LEADING:
+            for motion in self.get_leading_motions():
+                self.process_single_motion(motion, adjustment)
+
+    def determine_leading_color(
+        self, red_start, red_end, blue_start, blue_end
+    ) -> Colors:
+        if red_start == blue_end:
+            return RED
+        elif blue_start == red_end:
+            return BLUE
+        return None
+
+    def get_trailing_motions(self):
+        trailing_motions = []
+        for pictograph in self.attr_box.get_pictographs():
+            red_start = pictograph.motions[RED].start_loc
+            red_end = pictograph.motions[RED].end_loc
+            blue_start = pictograph.motions[BLUE].start_loc
+            blue_end = pictograph.motions[BLUE].end_loc
+            leading_color = self.determine_leading_color(
+                red_start, red_end, blue_start, blue_end
+            )
+            if leading_color == RED:
+                trailing_color = BLUE
+            elif leading_color == BLUE:
+                trailing_color = RED
+            if trailing_color:
+                trailing_motions.append(pictograph.motions[trailing_color])
+        return trailing_motions
+
+    def get_leading_motions(self):
+        leading_motions = []
+        for pictograph in self.attr_box.get_pictographs():
+            red_start = pictograph.motions[RED].start_loc
+            red_end = pictograph.motions[RED].end_loc
+            blue_start = pictograph.motions[BLUE].start_loc
+            blue_end = pictograph.motions[BLUE].end_loc
+            leading_color = self.determine_leading_color(
+                red_start, red_end, blue_start, blue_end
+            )
+            if leading_color:
+                leading_motions.append(pictograph.motions[leading_color])
+        return leading_motions
+            
+            
+        
     def connect_signal(self, signal: pyqtBoundSignal) -> None:
         signal.connect(self.update_turns_directly)
 
