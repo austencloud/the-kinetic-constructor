@@ -45,3 +45,8 @@ class IGColorAttrPanel(BaseAttrPanel):
         for box in self.boxes:
             box.resize_ig_color_attr_box()
         # self.resize((self.blue_attr_box.width() * 4 + self.layout.spacing() * 3), self.height())
+
+    def reset_turns(self) -> None:
+        for box in self.boxes:
+            box.turns_widget.turnbox.setCurrentText("0")
+            

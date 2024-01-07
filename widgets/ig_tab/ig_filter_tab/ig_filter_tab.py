@@ -21,4 +21,6 @@ class IGFilterTab(BaseFilterTab):
         self.addTab(self.motion_attr_panel, "Filter by Motion Type")
         self.addTab(self.color_attr_panel, "Filter by Colors")
         self.currentChanged.connect(self.ig_tab.resize_ig_tab)
-        
+        self.currentChanged.connect(self.ig_tab.ig_scroll_area.reset_turns)
+        self.currentChanged.connect(self.motion_attr_panel.reset_turns)
+        self.currentChanged.connect(self.color_attr_panel.reset_turns)

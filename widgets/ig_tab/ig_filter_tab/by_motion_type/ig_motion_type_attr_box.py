@@ -46,7 +46,6 @@ class IGMotionTypeAttrBox(BaseAttrBox):
     def _setup_widgets(self) -> None:  # add common widgets
         self.header_widget = IGMotionTypeHeaderWidget(self, self.motion_type)
         self.turns_widget = IGMotionTypeTurnsWidget(self)
-
         self.layout.addWidget(self.header_widget, 1)
         self.layout.addWidget(self.turns_widget, 2)
 
@@ -57,10 +56,11 @@ class IGMotionTypeAttrBox(BaseAttrBox):
         self.turns_widget.resize_turns_widget()
         self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
 
+    def get_pictographs(self) -> List["Pictograph"]:
+        return list(self.pictographs.values())
+    
     def update_attr_box(self, motion: Motion) -> None:
         for pictograph in self.pictographs.values():
             for motion in pictograph.motions.values():
                 self.turns_widget._update_turnbox(motion.turns)
 
-    def get_pictographs(self) -> List["Pictograph"]:
-        return list(self.pictographs.values())

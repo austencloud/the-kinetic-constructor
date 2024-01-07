@@ -1,4 +1,3 @@
-from email.charset import QP
 import json
 from PyQt6.QtCore import QPointF
 from Enums import LetterNumberType
@@ -6,35 +5,15 @@ from constants import *
 from objects.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, List, Literal, Tuple, Union
 from objects.motion.motion import Motion
-from PyQt6.QtCore import QTimer
 from utilities.TypeChecking.Letters import (
-    Letters,
     Type1_hybrid_letters,
     Type1_non_hybrid_letters,
 )
-from utilities.TypeChecking.TypeChecking import Locations, MotionTypes
+from utilities.TypeChecking.TypeChecking import Locations
 
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
-    from objects.pictograph.position_engines.arrow_positioners.Type1_arrow_positioner import (
-        Type1ArrowPositioner,
-    )
-    from objects.pictograph.position_engines.arrow_positioners.Type2_arrow_positioner import (
-        Type2ArrowPositioner,
-    )
-    from objects.pictograph.position_engines.arrow_positioners.Type3_arrow_positioner import (
-        Type3ArrowPositioner,
-    )
-    from objects.pictograph.position_engines.arrow_positioners.Type4_arrow_positioner import (
-        Type4ArrowPositioner,
-    )
-    from objects.pictograph.position_engines.arrow_positioners.Type5_arrow_positioner import (
-        Type5ArrowPositioner,
-    )
-    from objects.pictograph.position_engines.arrow_positioners.Type6_arrow_positioner import (
-        Type6ArrowPositioner,
-    )
 
 
 class ArrowPositioner:
@@ -165,31 +144,39 @@ class ArrowPositioner:
         if self.letter == 'E' and adjustment_key in ['(0.5, 0.5)', '(2.5, 2.5)', '(0.5, 2.5)', '(2.5, 0.5)']:
             adjustment_values = generic_placements.get(self.letter, {}).get(adjustment_key, {})
             return adjustment_values
-
-        adjustment_values = generic_placements.get(arrow.motion_type, {}).get(str(arrow.turns), (0, 0))
+        if arrow.turns in [0.0, 1.0, 2.0, 3.0]:
+            adjustment_values = generic_placements.get(arrow.motion_type, {}).get(str(int(arrow.turns)), (0, 0))
+        else:
+            adjustment_values = generic_placements.get(arrow.motion_type, {}).get(str(arrow.turns), (0, 0))
         return adjustment_values
 
     def _get_adjustment_values(self, arrow: Arrow) -> Tuple[int, int]:
-        blue_arrow = self.pictograph.arrows.get(BLUE)
-        red_arrow = self.pictograph.arrows.get(RED)
-        adjustment_key = f"({blue_arrow.turns}, {red_arrow.turns})"
-        if blue_arrow.turns in [0.0, 1.0, 2.0, 3.0]:
-            blue_arrow.turns = int(blue_arrow.turns)
-        if red_arrow.turns in [0.0, 1.0, 2.0, 3.0]:
-            red_arrow.turns = int(red_arrow.turns)
+        blue_turns = self._format_turns(self.pictograph.arrows[BLUE].turns)
+        red_turns = self._format_turns(self.pictograph.arrows[RED].turns)
+        adjustment_key = self._format_key(blue_turns, red_turns)
 
         if self.letter not in self.generic_placement_letters:
-            letter_adjustments = self.placements.get(self.letter, {})
-            adjustment_values: Dict = letter_adjustments.get(adjustment_key, {})
-            if self.letter in Type1_hybrid_letters:
+            letter_adjustments: Dict[str, Dict] = self.placements.get(self.letter, {})
+            if self.letter in ["I", "R"]:
+                adjustment_values = letter_adjustments.get(adjustment_key, {})
                 return tuple(adjustment_values.get(arrow.motion_type, (0, 0)))
-            elif self.letter in Type1_non_hybrid_letters:
-                return tuple(adjustment_values.get(arrow.color, (0, 0)))
-            else:
-                return (0, 0)
-        if self.letter in self.generic_placement_letters:
-            return self._calculate_generic_adjustment(arrow, adjustment_key)
-            
+            else: 
+                adjustment_values = letter_adjustments.get(adjustment_key).get(arrow.color)
+                return tuple(adjustment_values)
+        elif self.letter in self.generic_placement_letters:
+            letter_adjustments = self._calculate_generic_adjustment(arrow, adjustment_key)
+            return letter_adjustments
+        else:
+            return (0, 0)
+
+    def _format_turns(self, turns) -> Union[int, float]:
+        return int(turns) if turns in [0.0, 1.0, 2.0, 3.0] else turns
+
+    def _format_key(self, blue_turns, red_turns) -> str:
+        # Format the key to ensure it starts with the lower number
+        return str((min(blue_turns, red_turns), max(blue_turns, red_turns)))
+
+
     def _get_quadrant_index(self, location: Locations) -> Literal[0, 1, 2, 3]:
         """Map location to index for quadrant adjustments"""
         location_to_index = {
