@@ -16,7 +16,6 @@ if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
 
 
-
 class ArrowPositioner:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
@@ -74,7 +73,7 @@ class ArrowPositioner:
             "V",
         ]
         self.update_arrow_positions()
-        
+
     def _load_placements(self) -> Dict[str, Dict[str, Tuple[int, int]]]:
         json_path = "arrow_placement/arrow_placements.json"
         with open(json_path, "r") as file:
@@ -138,21 +137,42 @@ class ArrowPositioner:
             elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
                 return [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
 
-    def _calculate_generic_adjustment(self, arrow: Arrow, adjustment_key: str) -> Tuple[int, int]:
+    def _calculate_generic_adjustment(
+        self, arrow: Arrow, adjustment_key: str
+    ) -> Tuple[int, int]:
         with open("arrow_placement/generic_placements.json", "r") as file:
-            generic_placements:Dict = json.load(file)
+            generic_placements: Dict = json.load(file)
         # Load generic placement data
-        if self.letter == 'E' and adjustment_key in ['(0.5, 0.5)', '(2.5, 2.5)', '(0.5, 2.5)', '(2.5, 0.5)']:
-            adjustment_values = generic_placements.get(self.letter, {}).get(adjustment_key, {})
+        if self.letter == "E" and adjustment_key in [
+            "(0.5, 0.5)",
+            "(2.5, 2.5)",
+            "(0.5, 2.5)",
+            "(2.5, 0.5)",
+        ]:
+            adjustment_values = generic_placements.get(self.letter, {}).get(
+                adjustment_key, {}
+            )
             return adjustment_values
 
-        adjustment_values = generic_placements.get(arrow.motion_type, {}).get(str(arrow.turns), (0, 0))
+        adjustment_values = generic_placements.get(arrow.motion_type, {}).get(
+            str(arrow.turns), (0, 0)
+        )
         return adjustment_values
 
     def _get_adjustment_values(self, arrow: Arrow) -> Tuple[int, int]:
         blue_arrow = self.pictograph.arrows.get(BLUE)
         red_arrow = self.pictograph.arrows.get(RED)
-        adjustment_key = f"({blue_arrow.turns}, {red_arrow.turns})"
+        pro_arrow = (
+            self.pictograph.arrows.get(BLUE)
+            if blue_arrow.motion_type == PRO
+            else self.pictograph.arrows.get(RED)
+        )
+        anti_arrow = (
+            self.pictograph.arrows.get(BLUE)
+            if blue_arrow.motion_type == ANTI
+            else self.pictograph.arrows.get(RED)
+        )
+
         if blue_arrow.turns in [0.0, 1.0, 2.0, 3.0]:
             blue_arrow.turns = int(blue_arrow.turns)
         if red_arrow.turns in [0.0, 1.0, 2.0, 3.0]:
@@ -160,16 +180,19 @@ class ArrowPositioner:
 
         if self.letter not in self.generic_placement_letters:
             letter_adjustments = self.placements.get(self.letter, {})
-            adjustment_values: Dict = letter_adjustments.get(adjustment_key, {})
             if self.letter in Type1_hybrid_letters:
+                adjustment_key = f"({pro_arrow.turns}, {anti_arrow.turns})"
+                adjustment_values: Dict = letter_adjustments.get(adjustment_key, {})
                 return tuple(adjustment_values.get(arrow.motion_type, (0, 0)))
             elif self.letter in Type1_non_hybrid_letters:
+                adjustment_key = f"({blue_arrow.turns}, {red_arrow.turns})"
+                adjustment_values: Dict = letter_adjustments.get(adjustment_key, {})
                 return tuple(adjustment_values.get(arrow.color, (0, 0)))
             else:
                 return (0, 0)
         if self.letter in self.generic_placement_letters:
             return self._calculate_generic_adjustment(arrow, adjustment_key)
-            
+
     def _get_quadrant_index(self, location: Locations) -> Literal[0, 1, 2, 3]:
         """Map location to index for quadrant adjustments"""
         location_to_index = {
