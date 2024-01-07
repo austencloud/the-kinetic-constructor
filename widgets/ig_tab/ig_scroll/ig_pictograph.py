@@ -17,8 +17,8 @@ class IGPictograph(Pictograph):
         self.view = IG_Pictograph_View(self)
         self.ig_scroll_area = ig_scroll_area
         self.selected_arrow = None  # New attribute for the selected arrow
-
-
+        self.last_key = None
+        self.last_shift_state = None
     def handle_arrow_movement(self, key, shift_held):
         if not self.selected_arrow:
             return
@@ -34,24 +34,24 @@ class IGPictograph(Pictograph):
         self.selected_arrow.adjust_position(adjustment)
         self.update_arrow_adjustments_in_json(adjustment)
 
+        # Update last movement details
+        self.last_key = key
+        self.last_shift_state = shift_held
 
+    def last_movement_matches(self, key, shift_held):
+        # Check if the last movement matches the current event
+        return self.last_key == key and self.last_shift_state == shift_held
 
     def update_arrow_adjustments_in_json(self, adjustment):
         if not self.selected_arrow:
             return
 
         # Ensure turns are integers if they are whole numbers
-        blue_turns = (
-            int(self.motions[BLUE].turns)
-            if self.motions[BLUE].turns in [0.0, 1.0, 2.0, 3.0]
-            else self.motions[BLUE].turns
-        )
-        red_turns = (
-            int(self.motions[RED].turns)
-            if self.motions[RED].turns in [0.0, 1.0, 2.0, 3.0]
-            else self.motions[RED].turns
-        )
-        adjustment_key = (min(blue_turns, red_turns), max(blue_turns, red_turns))
+        if self.motions[BLUE].turns in [0.0, 1.0, 2.0, 3.0]:
+            self.motions[BLUE].turns = int(self.motions[BLUE].turns)
+        if self.motions[RED].turns in [0.0, 1.0, 2.0, 3.0]:
+            self.motions[RED].turns = int(self.motions[RED].turns)
+        adjustment_key = (self.motions[BLUE].turns, self.motions[RED].turns)
 
         # Load the existing JSON data
         with open("arrow_placement/arrow_placements.json", "r") as file:
@@ -72,12 +72,31 @@ class IGPictograph(Pictograph):
             letter_data[str(adjustment_key)] = turn_data
             data[self.letter] = letter_data
         elif self.letter in ["I", "R"]:
-        # Update the specific adjustment for the selected arrow
+            # Apply changes to both the current key and its reversed counterpart
             letter_data = data.get(self.letter, {})
-            turn_data = letter_data.get(str(adjustment_key), {"pro": [0, 0], "anti": [0, 0]})
-            turn_data[self.selected_arrow.motion_type][0] += adjustment[0]  # Update X adjustment
-            turn_data[self.selected_arrow.motion_type][1] += adjustment[1]  # Update Y adjustment
-            letter_data[str(adjustment_key)] = turn_data
+            turn_data_current = letter_data.get(
+                str(adjustment_key), {"pro": [0, 0], "anti": [0, 0]}
+            )
+            turn_data_reversed = letter_data.get(
+                str(adjustment_key[::-1]), {"pro": [0, 0], "anti": [0, 0]}
+            )
+
+            # Update the adjustments for both keys
+            turn_data_current[self.selected_arrow.motion_type][0] += adjustment[
+                0
+            ]  # Update X adjustment
+            turn_data_current[self.selected_arrow.motion_type][1] += adjustment[
+                1
+            ]  # Update Y adjustment
+            turn_data_reversed[self.selected_arrow.motion_type][0] += adjustment[
+                0
+            ]  # Update X adjustment
+            turn_data_reversed[self.selected_arrow.motion_type][1] += adjustment[
+                1
+            ]  # Update Y adjustment
+
+            letter_data[str(adjustment_key)] = turn_data_current
+            letter_data[str(adjustment_key[::-1])] = turn_data_reversed
             data[self.letter] = letter_data
 
         # Convert data to JSON string with specified indentation
@@ -143,6 +162,9 @@ class IG_Pictograph_View(QGraphicsView):
             self.ig_pictograph.swap_selected_arrow()
             event.accept()  # Accept the event to prevent further propagation
         elif event.key() in [Qt.Key.Key_W, Qt.Key.Key_A, Qt.Key.Key_S, Qt.Key.Key_D]:
-            self.ig_pictograph.handle_arrow_movement(event.key(), shift_held)
+            # Check if the selected arrow's last movement matches the current event
+            # If not, proceed with handling the movement
+            if not self.ig_pictograph.last_movement_matches(event.key(), shift_held):
+                self.ig_pictograph.handle_arrow_movement(event.key(), shift_held)
         else:
             super().keyPressEvent(event)
