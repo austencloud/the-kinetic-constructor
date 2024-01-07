@@ -31,6 +31,8 @@ class IGPictograph(Pictograph):
             adjustment = self.get_Q_letter_adjustment(key, adjustment_increment)
         elif self.letter == "R":
             adjustment = self._get_R_letter_adjustment(key, adjustment_increment)
+        elif self.letter == "S":
+            adjustment = self._get_S_letter_adjustment(key, adjustment_increment)
         else:
             adjustment_map = {
                 Qt.Key.Key_W: (0, -adjustment_increment),
@@ -42,6 +44,24 @@ class IGPictograph(Pictograph):
 
         self.update_arrow_adjustments_in_json(adjustment)
 
+    def _get_S_letter_adjustment(self, key, increment):
+        if self.selected_arrow.color == BLUE:
+            # Special mapping for blue arrow when letter is S
+            return {
+                Qt.Key.Key_W: (increment, 0),
+                Qt.Key.Key_A: (0, -increment),
+                Qt.Key.Key_S: (-increment, 0),
+                Qt.Key.Key_D: (0, increment),
+            }.get(key, (0, 0))
+        elif self.selected_arrow.color == RED:
+            # Special mapping for red arrow when letter is S
+            return {
+                Qt.Key.Key_W: (0, -increment),
+                Qt.Key.Key_A: (increment, 0),
+                Qt.Key.Key_S: (0, increment),
+                Qt.Key.Key_D: (-increment, 0),
+            }.get(key, (0, 0))
+        return (0, 0)
 
     def _get_R_letter_adjustment(self, key, increment):
         if self.selected_arrow.color == BLUE:
@@ -128,6 +148,14 @@ class IGPictograph(Pictograph):
             turn_data = letter_data.get(str(adjustment_key))
             turn_data[self.selected_arrow.motion_type][0] += adjustment[0]
             turn_data[self.selected_arrow.motion_type][1] += adjustment[1]
+            letter_data[str(adjustment_key)] = turn_data
+            data[self.letter] = letter_data
+        elif self.letter in ["S", "T"]:
+            adjustment_key = (pro_motion.turns, anti_motion.turns)
+            letter_data = data.get(self.letter, {})
+            turn_data = letter_data.get(str(adjustment_key))
+            turn_data[self.selected_arrow.lead_state][0] += adjustment[0]
+            turn_data[self.selected_arrow.lead_state][1] += adjustment[1]
             letter_data[str(adjustment_key)] = turn_data
             data[self.letter] = letter_data
         json_str = json.dumps(data, indent=2)

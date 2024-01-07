@@ -24,6 +24,9 @@ CLOCKWISE = "cw"
 COUNTER_CLOCKWISE = "ccw"
 NO_ROT = "no_rot"
 
+LEADING = "leading"
+TRAILING = "trailing"
+
 CW_HANDPATH = "cw_handpath"
 CCW_HANDPATH = "ccw_handpath"
 

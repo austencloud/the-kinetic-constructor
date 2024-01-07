@@ -46,8 +46,8 @@ class IGMotionTypeAttrBox(BaseAttrBox):
     def _setup_widgets(self) -> None:  # add common widgets
         self.header_widget = IGMotionTypeHeaderWidget(self, self.motion_type)
         self.turns_widget = IGMotionTypeTurnsWidget(self)
-        self.layout.addWidget(self.header_widget, 1)
-        self.layout.addWidget(self.turns_widget, 2)
+        self.vbox_layout.addWidget(self.header_widget, 1)
+        self.vbox_layout.addWidget(self.turns_widget, 2)
 
     def resize_ig_motion_type_attr_box(self) -> None:
         self.setMinimumWidth(int(self.attr_panel.ig_tab.width() / 6))
@@ -58,9 +58,8 @@ class IGMotionTypeAttrBox(BaseAttrBox):
 
     def get_pictographs(self) -> List["Pictograph"]:
         return list(self.pictographs.values())
-    
+
     def update_attr_box(self, motion: Motion) -> None:
         for pictograph in self.pictographs.values():
             for motion in pictograph.motions.values():
                 self.turns_widget._update_turnbox(motion.turns)
-

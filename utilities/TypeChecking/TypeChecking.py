@@ -61,4 +61,4 @@ MotionTypeCombinations = Literal[
     "dash_vs_static",
     "dash_vs_dash",
 ]
-
+LeadStates = Literal["leading", "trailing"]

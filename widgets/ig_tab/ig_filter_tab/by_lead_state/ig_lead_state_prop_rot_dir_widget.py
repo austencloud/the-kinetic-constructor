@@ -22,11 +22,10 @@ from constants import (
 from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_box import IGColorAttrBox
+    from widgets.ig_tab.ig_filter_tab.by_lead_state.ig_lead_state_attr_box import IGLeadStateAttrBox
 
-
-class IGColorPropRotDirWidget(BaseAttrBoxWidget):
-    def __init__(self, attr_box: "IGColorAttrBox") -> None:
+class IGLeadStatePropRotDirWidget(BaseAttrBoxWidget):
+    def __init__(self, attr_box: "IGLeadStateAttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
         self.initialize_ui()
@@ -84,7 +83,7 @@ class IGColorPropRotDirWidget(BaseAttrBoxWidget):
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.motion_type in [DASH, STATIC]:
-                    if motion.color == self.attr_box.color:
+                    if motion.arrow.lead_state == self.attr_box.lead_state:
                         pictograph_dict = {
                             f"{motion.color}_prop_rot_dir": prop_rot_dir,
                         }

@@ -9,6 +9,7 @@ from objects.prop.prop import Prop
 from objects.graphical_object import GraphicalObject
 from utilities.TypeChecking.TypeChecking import (
     Colors,
+    LeadStates,
     Locations,
     MotionTypes,
     PropRotDirs,
@@ -51,7 +52,8 @@ class Arrow(GraphicalObject):
         self.loc: Locations = None
         self.is_ghost: bool = False
         self.drag_offset = QPointF(0, 0)
-
+        self.lead_state: LeadStates = None
+        
     ### SETUP ###
 
     def update_svg(self, svg_file: str = None) -> None:

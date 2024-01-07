@@ -40,10 +40,8 @@ def main() -> None:
     profiler = Profiler()
     main_window = MainWindow(profiler)
     main_window.setFocus()
-    # main_window._set_dimensions()
     exit_code = main_window.exec_with_profiling(app)
     root_directory = os.path.abspath(os.sep)
-    # Get the directory of the main script
     root_directory = os.path.dirname(os.path.abspath(__file__))
 
     main_window.profiler.write_profiling_stats_to_file(

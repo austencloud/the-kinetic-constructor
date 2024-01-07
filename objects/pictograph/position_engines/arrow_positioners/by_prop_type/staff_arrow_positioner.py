@@ -143,7 +143,7 @@ class StaffArrowPositioner:
 
     def _adjust_arrows_for_letter_T(self, red_motion, blue_motion) -> None:
         if self._is_at_least_one_prop_antiradial(red_motion, blue_motion):
-            leading_color: Colors = self.determine_leading_motion_for_T(
+            leading_color: Colors = self.determine_leading_motion(
                 self.pictograph.motions[RED].start_loc,
                 self.pictograph.motions[RED].end_loc,
                 self.pictograph.motions[BLUE].start_loc,
@@ -206,7 +206,7 @@ class StaffArrowPositioner:
                         adjustment += QPointF(20, 45)
                 self.arrow_positioner._apply_shift_adjustment(leader.arrow, adjustment)
 
-    def determine_leading_motion_for_T(
+    def determine_leading_motion(
         self, red_start, red_end, blue_start, blue_end
     ) -> Literal["red", "blue"] | None:
         """Determines which motion is leading in the rotation sequence."""

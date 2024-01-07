@@ -9,7 +9,7 @@ from utilities.TypeChecking.Letters import (
     Type1_hybrid_letters,
     Type1_non_hybrid_letters,
 )
-from utilities.TypeChecking.TypeChecking import Locations
+from utilities.TypeChecking.TypeChecking import Colors, Locations
 
 
 if TYPE_CHECKING:
@@ -76,7 +76,6 @@ class ArrowPositioner:
             "M",
             "N",
             "O",
-            "S",
             "T",
             "U",
             "V",
@@ -98,7 +97,6 @@ class ArrowPositioner:
                 converted_values.append(float(value))
         return tuple(converted_values)
 
-    # Additional method to handle letter-specific repositioning
     def reposition_for_letter(self, letter: str) -> None:
         reposition_method = getattr(self, f"_reposition_{letter}", None)
         if reposition_method:
@@ -116,19 +114,15 @@ class ArrowPositioner:
                 arrow.setPos(new_pos)
 
     def _get_initial_position(self, arrow: Arrow) -> QPointF:
-        # Set the initial position to the handpoint corresponding to the arrow's location
         layer2_points = self.pictograph.grid.get_layer2_points()
         return layer2_points.get(arrow.loc, QPointF(0, 0))
 
     def _get_adjustment(self, arrow: Arrow) -> QPointF:
         adjustment_values = self._get_adjustment_values(arrow)
         x, y = adjustment_values
-
-        # Use a single method to handle both PRO and ANTI directional adjustments
         directional_adjustments = self._generate_directional_tuples(
             x, y, arrow.motion, arrow.motion_type
         )
-
         quadrant_index = self._get_quadrant_index(arrow.loc)
         return directional_adjustments[quadrant_index]
 
@@ -168,6 +162,15 @@ class ArrowPositioner:
         )
         return adjustment_values
 
+    def determine_leading_motion(
+        self, red_start, red_end, blue_start, blue_end
+    ) -> Colors:
+        if red_start == blue_end:
+            return RED
+        elif blue_start == red_end:
+            return BLUE
+        return None
+
     def _get_adjustment_values(self, arrow: Arrow) -> Tuple[int, int]:
         blue_arrow = self.pictograph.arrows.get(BLUE)
         red_arrow = self.pictograph.arrows.get(RED)
@@ -182,6 +185,23 @@ class ArrowPositioner:
             else self.pictograph.arrows.get(RED)
         )
 
+        leading_color = self.determine_leading_motion(
+            red_arrow.motion.start_loc,
+            red_arrow.motion.end_loc,
+            blue_arrow.motion.start_loc,
+            blue_arrow.motion.end_loc,
+        )
+        if leading_color == RED:
+            red_arrow.lead_state = LEADING
+            blue_arrow.lead_state = TRAILING
+            leading_arrow = red_arrow
+            trailing_arrow = blue_arrow
+        elif leading_color == BLUE:
+            blue_arrow.lead_state = LEADING
+            red_arrow.lead_state = TRAILING
+            leading_arrow = blue_arrow
+            trailing_arrow = red_arrow
+            
         if blue_arrow.turns in [0.0, 1.0, 2.0, 3.0]:
             blue_arrow.turns = int(blue_arrow.turns)
         if red_arrow.turns in [0.0, 1.0, 2.0, 3.0]:
@@ -189,14 +209,18 @@ class ArrowPositioner:
 
         if self.letter not in self.generic_placement_letters:
             letter_adjustments = self.placements.get(self.letter, {})
-            if self.letter in Type1_hybrid_letters:
+            if self.letter in ["I", "R"]:
                 adjustment_key = f"({pro_arrow.turns}, {anti_arrow.turns})"
                 adjustment_values: Dict = letter_adjustments.get(adjustment_key, {})
                 return tuple(adjustment_values.get(arrow.motion_type, (0, 0)))
-            elif self.letter in Type1_non_hybrid_letters:
+            elif self.letter in ["E", "G", "H", "P", "Q"]:
                 adjustment_key = f"({blue_arrow.turns}, {red_arrow.turns})"
                 adjustment_values: Dict = letter_adjustments.get(adjustment_key, {})
                 return tuple(adjustment_values.get(arrow.color, (0, 0)))
+            elif self.letter in ["S", "T"]:
+                adjustment_key = f"({trailing_arrow.turns}, {leading_arrow.turns})"
+                adjustment_values: Dict = letter_adjustments.get(adjustment_key, {})
+                return tuple(adjustment_values.get(arrow.lead_state, (0, 0)))
             else:
                 return (0, 0)
         if self.letter in self.generic_placement_letters:
