@@ -76,7 +76,7 @@ class ArrowPositioner:
             "M",
             "N",
             "O",
-            "T",
+
             "U",
             "V",
         ]
@@ -156,7 +156,14 @@ class ArrowPositioner:
                 adjustment_key, {}
             )
             return adjustment_values
-
+        elif self.letter == "U" and adjustment_key in [
+            "(1, 0.5)",
+            
+        ]:
+            adjustment_values = generic_placements.get(self.letter, {}).get(
+                adjustment_key, {}
+            )
+            return adjustment_values
         adjustment_values = generic_placements.get(arrow.motion_type, {}).get(
             str(arrow.turns), (0, 0)
         )

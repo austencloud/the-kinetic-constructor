@@ -1,6 +1,6 @@
 import json
 import re
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, Tuple, Union
 from PyQt6.QtWidgets import QGraphicsView
 from constants import ANTI, BLUE, LEADING, PRO, RED, TRAILING
 from objects.pictograph.pictograph import Pictograph
@@ -25,101 +25,46 @@ class IGPictograph(Pictograph):
             return
 
         adjustment_increment = 15 if shift_held else 5
-        adjustment = (0, 0)
-
-        if self.letter == "P":
-            adjustment = self._get_P_letter_adjustment(key, adjustment_increment)
-        elif self.letter == "Q":
-            adjustment = self.get_Q_letter_adjustment(key, adjustment_increment)
-        elif self.letter == "R":
-            adjustment = self._get_R_letter_adjustment(key, adjustment_increment)
-        elif self.letter == "S":
-            adjustment = self._get_S_letter_adjustment(key, adjustment_increment)
-        else:
-            adjustment_map = {
-                Qt.Key.Key_W: (0, -adjustment_increment),
-                Qt.Key.Key_A: (-adjustment_increment, 0),
-                Qt.Key.Key_S: (0, adjustment_increment),
-                Qt.Key.Key_D: (adjustment_increment, 0),
-            }
-            adjustment = adjustment_map.get(key, (0, 0))
-
+        adjustment = self.get_adjustment(key, adjustment_increment)
         self.update_arrow_adjustments_in_json(adjustment)
 
-    def _get_S_letter_adjustment(self, key, increment):
-        if self.selected_arrow.lead_state == LEADING:
-            return {
-                Qt.Key.Key_W: (0, -increment),
-                Qt.Key.Key_A: (-increment, 0),
-                Qt.Key.Key_S: (0, increment),
-                Qt.Key.Key_D: (increment, 0),
-            }.get(key, (0, 0))
-        elif self.selected_arrow.lead_state == TRAILING:
-            return {
-                Qt.Key.Key_W: (increment, 0),
-                Qt.Key.Key_A: (0, -increment),
-                Qt.Key.Key_S: (-increment, 0),
-                Qt.Key.Key_D: (0, increment),
-            }.get(key, (0, 0))
+    def get_adjustment(
+        self, key, increment
+    ) -> Tuple[Union[int, float], Union[int, float]]:
+        if self.letter in "PQRST":
+            return self.get_letter_specific_adjustment(key, increment)
+        else:
+            return self.get_default_adjustment(key, increment)
 
-        return (0, 0)
+    def get_letter_specific_adjustment(self, key, increment):
+        direction_map = {
+            Qt.Key.Key_W: (-1, 1),
+            Qt.Key.Key_A: (1, -1),
+            Qt.Key.Key_S: (1, -1),
+            Qt.Key.Key_D: (-1, 1),
+        }
 
-    def _get_R_letter_adjustment(self, key, increment):
-        if self.selected_arrow.color == BLUE:
-            # Special mapping for blue arrow when letter is R
-            return {
-                Qt.Key.Key_W: (increment, 0),
-                Qt.Key.Key_A: (0, -increment),
-                Qt.Key.Key_S: (-increment, 0),
-                Qt.Key.Key_D: (0, increment),
-            }.get(key, (0, 0))
-        elif self.selected_arrow.color == RED:
-            # Special mapping for red arrow when letter is R
-            return {
-                Qt.Key.Key_W: (0, -increment),
-                Qt.Key.Key_A: (increment, 0),
-                Qt.Key.Key_S: (0, increment),
-                Qt.Key.Key_D: (-increment, 0),
-            }.get(key, (0, 0))
-        return (0, 0)
+        dx, dy = direction_map.get(key, (0, 0))
 
-    def get_Q_letter_adjustment(self, key, increment):
-        if self.selected_arrow.color == BLUE:
-            # Special mapping for blue arrow when letter is Q
-            return {
-                Qt.Key.Key_W: (increment, 0),
-                Qt.Key.Key_A: (0, -increment),
-                Qt.Key.Key_S: (-increment, 0),
-                Qt.Key.Key_D: (0, increment),
-            }.get(key, (0, 0))
-        elif self.selected_arrow.color == RED:
-            # Special mapping for red arrow when letter is Q
-            return {
-                Qt.Key.Key_W: (0, -increment),
-                Qt.Key.Key_A: (increment, 0),
-                Qt.Key.Key_S: (0, increment),
-                Qt.Key.Key_D: (-increment, 0),
-            }.get(key, (0, 0))
-        return (0, 0)
+        if self.letter in "PQR" and self.selected_arrow.color in [RED, BLUE]:
+            dx, dy = dy, dx
 
-    def _get_P_letter_adjustment(self, key, increment):
-        if self.selected_arrow.color == BLUE:
-            # Special mapping for blue arrow when letter is P
-            return {
-                Qt.Key.Key_W: (increment, 0),
-                Qt.Key.Key_A: (0, -increment),
-                Qt.Key.Key_S: (-increment, 0),
-                Qt.Key.Key_D: (0, increment),
-            }.get(key, (0, 0))
-        elif self.selected_arrow.color == RED:
-            # Special mapping for red arrow when letter is P
-            return {
-                Qt.Key.Key_W: (0, -increment),
-                Qt.Key.Key_A: (increment, 0),
-                Qt.Key.Key_S: (0, increment),
-                Qt.Key.Key_D: (-increment, 0),
-            }.get(key, (0, 0))
-        return (0, 0)
+        if self.letter in "ST" and self.selected_arrow.lead_state in [
+            LEADING,
+            TRAILING,
+        ]:
+            dy, dx = dx, dy
+
+        return dx * increment, dy * increment
+
+    def get_default_adjustment(self, key, increment):
+        adjustment_map = {
+            Qt.Key.Key_W: (0, -increment),
+            Qt.Key.Key_A: (-increment, 0),
+            Qt.Key.Key_S: (0, increment),
+            Qt.Key.Key_D: (increment, 0),
+        }
+        return adjustment_map.get(key, (0, 0))
 
     def determine_leading_color(
         self, red_start, red_end, blue_start, blue_end
@@ -133,19 +78,16 @@ class IGPictograph(Pictograph):
     def update_arrow_adjustments_in_json(self, adjustment) -> None:
         if not self.selected_arrow:
             return
-        leading_color = self.determine_leading_color(
-            self.motions[RED].start_loc,
-            self.motions[RED].end_loc,
-            self.motions[BLUE].start_loc,
-            self.motions[BLUE].end_loc,
-        )
-        leading_motion = self.motions[leading_color]
-        trailing_motion = self.motions[BLUE if leading_color == RED else RED]
-        other_arrow = (
-            self.arrows[BLUE]
-            if self.selected_arrow == self.arrows[RED]
-            else self.arrows[RED]
-        )
+        if self.letter in ["S", "T"]:
+            leading_color = self.determine_leading_color(
+                self.motions[RED].start_loc,
+                self.motions[RED].end_loc,
+                self.motions[BLUE].start_loc,
+                self.motions[BLUE].end_loc,
+            )
+            leading_motion = self.motions[leading_color]
+            trailing_motion = self.motions[BLUE if leading_color == RED else RED]
+
         red_motion = self.motions[RED]
         blue_motion = self.motions[BLUE]
         if blue_motion.turns in [0.0, 1.0, 2.0, 3.0]:
@@ -155,10 +97,10 @@ class IGPictograph(Pictograph):
         pro_motion = red_motion if red_motion.motion_type == PRO else blue_motion
         anti_motion = blue_motion if blue_motion.motion_type == ANTI else red_motion
         with open("arrow_placement/arrow_placements.json", "r") as file:
-            data = json.load(file)
-        if self.letter in ["E", "F", "G", "H", "P", "Q"]:
+            data: Dict = json.load(file)
+        if self.letter in ["G", "H", "P", "Q"]:
             adjustment_key = (blue_motion.turns, red_motion.turns)
-            letter_data = data.get(self.letter, {})
+            letter_data: Dict = data.get(self.letter, {})
             turn_data = letter_data.get(str(adjustment_key))
             turn_data[self.selected_arrow.color][0] += adjustment[0]
             turn_data[self.selected_arrow.color][1] += adjustment[1]
