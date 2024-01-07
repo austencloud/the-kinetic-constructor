@@ -3,7 +3,7 @@ from PyQt6.QtGui import QPixmap
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import MotionTypes
 from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
-from widgets.attr_panel.bast_attr_box import BaseAttrBox
+from widgets.attr_panel.base_attr_box import BaseAttrBox
 
 from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_header_widget import (
     IGMotionTypeHeaderWidget,
@@ -36,6 +36,7 @@ class IGMotionTypeAttrBox(BaseAttrBox):
         self.widgets: List[BaseAttrBoxWidget] = []
         self.combobox_border = 2
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
+        self.setLayout(self.vbox_layout)
         self._setup_widgets()
 
     def add_black_borders(self) -> None:

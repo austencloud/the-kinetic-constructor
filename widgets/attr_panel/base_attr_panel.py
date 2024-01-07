@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
 )
 from typing import TYPE_CHECKING, Union
 
-from widgets.attr_panel.bast_attr_box import BaseAttrBox
+from widgets.attr_panel.base_attr_box import BaseAttrBox
 
 
 if TYPE_CHECKING:

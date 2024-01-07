@@ -36,7 +36,6 @@ class BaseAttrBox(QFrame):
         self.vbox_layout.setContentsMargins(0, 0, 0, 0)
         self.vbox_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.vbox_layout.setSpacing(0)
-        # self.setLayout(self.vbox_layout)
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
 
     def setup_box(self) -> None:

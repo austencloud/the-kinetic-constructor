@@ -3,7 +3,7 @@ from PyQt6.QtGui import QPixmap
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Colors
 from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
-from widgets.attr_panel.bast_attr_box import BaseAttrBox
+from widgets.attr_panel.base_attr_box import BaseAttrBox
 from widgets.ig_tab.ig_filter_tab.by_color.ig_color_header_widget import (
     IGColorHeaderWidget,
 )

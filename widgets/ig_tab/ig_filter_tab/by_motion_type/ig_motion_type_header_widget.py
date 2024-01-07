@@ -147,7 +147,8 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
         return button
 
     def _setup_header_label(self) -> QLabel:
-        text = ""
+        font_size = 30
+        font_weight = "bold"
         if self.motion_type == PRO:
             text = PRO.capitalize()
         elif self.motion_type == ANTI:
@@ -156,15 +157,15 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
             text = DASH.capitalize()
         elif self.motion_type == STATIC:
             text = STATIC.capitalize()
-
         label = QLabel(text, self)
+        label.setStyleSheet(f"font-size: {font_size}px; font-weight: {font_weight};")
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         return label
 
     def resize_header_widget(self) -> None:
         self.setMaximumHeight(int(self.attr_box.height() / 4))
         if self.motion_type in [DASH, STATIC]:
-            button_size = int(self.height()*0.9)
+            button_size = int(self.height() * 0.9)
             for button in self.prop_rot_dir_buttons:
                 button.setMinimumSize(button_size, button_size)
                 button.setMaximumSize(button_size, button_size)

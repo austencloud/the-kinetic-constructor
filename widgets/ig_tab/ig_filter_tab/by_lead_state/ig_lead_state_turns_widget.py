@@ -332,7 +332,7 @@ class IGLeadStateTurnsWidget(BaseTurnsWidget):
                 subcontrol-position: top right;
                 width: {dropdown_arrow_width}px;
                 border-left-width: 1px;
-                border-left-lead_state: darkgray;
+                border-left-color: darkgray;
                 border-left-style: solid; /* visually separate the arrow part */
                 border-top-right-radius: {border_radius}px;
                 border-bottom-right-radius: {border_radius}px;

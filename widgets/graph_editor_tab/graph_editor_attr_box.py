@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from constants import HEX_BLUE, HEX_RED, RED
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Colors
-from widgets.attr_panel.bast_attr_box import BaseAttrBox
+from widgets.attr_panel.base_attr_box import BaseAttrBox
 from widgets.graph_editor_tab.graph_editor_header_widget import GraphEditorHeaderWidget
 from widgets.graph_editor_tab.graph_editor_turns_widget import GraphEditorTurnsWidget
 from widgets.attr_box_widgets.start_end_loc_widget import StartEndLocWidget
@@ -23,6 +23,7 @@ class GraphEditorAttrBox(BaseAttrBox):
         self.color = color
         self.apply_border_style(HEX_RED if self.color == RED else HEX_BLUE)
         self._setup_widgets()
+        self.setLayout(self.vbox_layout)
 
     def _setup_widgets(self) -> None:
         self.motion_type_widget = MotionTypeWidget(self)

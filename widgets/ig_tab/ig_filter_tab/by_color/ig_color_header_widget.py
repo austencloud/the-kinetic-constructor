@@ -47,8 +47,8 @@ class IGColorHeaderWidget(BaseHeaderWidget):
     def _setup_header_label(self) -> QLabel:
         text = ""
         font_color = ""
-        font_size = 30  # Adjust the font size as desired
-        font_weight = "bold"  # Set the font weight to "bold"
+        font_size = 30  
+        font_weight = "bold" 
 
         if self.color == BLUE:
             text = "Left"

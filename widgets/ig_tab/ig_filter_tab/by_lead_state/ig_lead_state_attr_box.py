@@ -3,7 +3,7 @@ from PyQt6.QtGui import QPixmap
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import LeadStates, LeadStates
 from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
-from widgets.attr_panel.bast_attr_box import BaseAttrBox
+from widgets.attr_panel.base_attr_box import BaseAttrBox
 from widgets.ig_tab.ig_filter_tab.by_lead_state.ig_lead_state_header_widget import IGLeadStateHeaderWidget
 from widgets.ig_tab.ig_filter_tab.by_lead_state.ig_lead_state_prop_rot_dir_widget import IGLeadStatePropRotDirWidget
 
