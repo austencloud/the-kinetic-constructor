@@ -16,7 +16,7 @@ class IGPictograph(Pictograph):
         super().__init__(main_widget, "ig_pictograph")
         self.view = IG_Pictograph_View(self)
         self.ig_scroll_area = ig_scroll_area
-        self.selected_arrow = None  
+        self.selected_arrow = None
 
     def handle_arrow_movement(self, key, shift_held) -> None:
         if not self.selected_arrow:
@@ -26,7 +26,11 @@ class IGPictograph(Pictograph):
         adjustment = (0, 0)
 
         if self.letter == "P":
-            adjustment = self._get_p_letter_adjustment(key, adjustment_increment)
+            adjustment = self._get_P_letter_adjustment(key, adjustment_increment)
+        elif self.letter == "Q":
+            adjustment = self.get_Q_letter_adjustment(key, adjustment_increment)
+        elif self.letter == "R":
+            adjustment = self._get_R_letter_adjustment(key, adjustment_increment)
         else:
             adjustment_map = {
                 Qt.Key.Key_W: (0, -adjustment_increment),
@@ -38,7 +42,46 @@ class IGPictograph(Pictograph):
 
         self.update_arrow_adjustments_in_json(adjustment)
 
-    def _get_p_letter_adjustment(self, key, increment):
+
+    def _get_R_letter_adjustment(self, key, increment):
+        if self.selected_arrow.color == BLUE:
+            # Special mapping for blue arrow when letter is R
+            return {
+                Qt.Key.Key_W: (increment, 0),
+                Qt.Key.Key_A: (0, -increment),
+                Qt.Key.Key_S: (-increment, 0),
+                Qt.Key.Key_D: (0, increment),
+            }.get(key, (0, 0))
+        elif self.selected_arrow.color == RED:
+            # Special mapping for red arrow when letter is R
+            return {
+                Qt.Key.Key_W: (0, -increment),
+                Qt.Key.Key_A: (increment, 0),
+                Qt.Key.Key_S: (0, increment),
+                Qt.Key.Key_D: (-increment, 0),
+            }.get(key, (0, 0))
+        return (0, 0)
+
+    def get_Q_letter_adjustment(self, key, increment):
+        if self.selected_arrow.color == BLUE:
+            # Special mapping for blue arrow when letter is Q
+            return {
+                Qt.Key.Key_W: (increment, 0),
+                Qt.Key.Key_A: (0, -increment),
+                Qt.Key.Key_S: (-increment, 0),
+                Qt.Key.Key_D: (0, increment),
+            }.get(key, (0, 0))
+        elif self.selected_arrow.color == RED:
+            # Special mapping for red arrow when letter is Q
+            return {
+                Qt.Key.Key_W: (0, -increment),
+                Qt.Key.Key_A: (increment, 0),
+                Qt.Key.Key_S: (0, increment),
+                Qt.Key.Key_D: (-increment, 0),
+            }.get(key, (0, 0))
+        return (0, 0)
+
+    def _get_P_letter_adjustment(self, key, increment):
         if self.selected_arrow.color == BLUE:
             # Special mapping for blue arrow when letter is P
             return {
@@ -141,7 +184,7 @@ class IG_Pictograph_View(QGraphicsView):
         shift_held = event.modifiers() & Qt.KeyboardModifier.ShiftModifier
         if event.key() == Qt.Key.Key_Q:
             self.ig_pictograph.swap_selected_arrow()
-            event.accept()  
+            event.accept()
         elif event.key() in [Qt.Key.Key_W, Qt.Key.Key_A, Qt.Key.Key_S, Qt.Key.Key_D]:
             self.ig_pictograph.handle_arrow_movement(event.key(), shift_held)
         else:
