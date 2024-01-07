@@ -260,11 +260,8 @@ class ArrowPositioner:
             current_state.get(key) == candidate_state.get(key) for key in relevant_keys
         )
 
-    # Function to get the Enum member key from a given letter
     def get_letter_type(self, letter: str) -> str | None:
         for letter_type in LetterNumberType:
             if letter in letter_type.letters:
-                return (
-                    letter_type.name.replace("_", "").lower().capitalize()
-                )  # Modify the key format
+                return letter_type.name.replace("_", "").lower().capitalize()
         return None
