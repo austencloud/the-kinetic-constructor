@@ -34,6 +34,15 @@ class ArrowPositioner:
             "K",
             "L",
             "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "U",
+            "V",
             "X",
             "Y",
             "Z",
@@ -191,6 +200,7 @@ class ArrowPositioner:
             else:
                 return (0, 0)
         if self.letter in self.generic_placement_letters:
+            adjustment_key = f"({blue_arrow.turns}, {red_arrow.turns})"
             return self._calculate_generic_adjustment(arrow, adjustment_key)
 
     def _get_quadrant_index(self, location: Locations) -> Literal[0, 1, 2, 3]:

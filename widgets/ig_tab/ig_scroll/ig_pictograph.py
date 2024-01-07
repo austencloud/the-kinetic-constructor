@@ -23,14 +23,39 @@ class IGPictograph(Pictograph):
             return
 
         adjustment_increment = 15 if shift_held else 5
-        adjustment_map = {
-            Qt.Key.Key_W: (0, -adjustment_increment),
-            Qt.Key.Key_A: (-adjustment_increment, 0),
-            Qt.Key.Key_S: (0, adjustment_increment),
-            Qt.Key.Key_D: (adjustment_increment, 0),
-        }
-        adjustment = adjustment_map.get(key, (0, 0))
+        adjustment = (0, 0)
+
+        if self.letter == "P":
+            adjustment = self._get_p_letter_adjustment(key, adjustment_increment)
+        else:
+            adjustment_map = {
+                Qt.Key.Key_W: (0, -adjustment_increment),
+                Qt.Key.Key_A: (-adjustment_increment, 0),
+                Qt.Key.Key_S: (0, adjustment_increment),
+                Qt.Key.Key_D: (adjustment_increment, 0),
+            }
+            adjustment = adjustment_map.get(key, (0, 0))
+
         self.update_arrow_adjustments_in_json(adjustment)
+
+    def _get_p_letter_adjustment(self, key, increment):
+        if self.selected_arrow.color == BLUE:
+            # Special mapping for blue arrow when letter is P
+            return {
+                Qt.Key.Key_W: (increment, 0),
+                Qt.Key.Key_A: (0, -increment),
+                Qt.Key.Key_S: (-increment, 0),
+                Qt.Key.Key_D: (0, increment),
+            }.get(key, (0, 0))
+        elif self.selected_arrow.color == RED:
+            # Special mapping for red arrow when letter is P
+            return {
+                Qt.Key.Key_W: (0, -increment),
+                Qt.Key.Key_A: (increment, 0),
+                Qt.Key.Key_S: (0, increment),
+                Qt.Key.Key_D: (-increment, 0),
+            }.get(key, (0, 0))
+        return (0, 0)
 
     def update_arrow_adjustments_in_json(self, adjustment) -> None:
         if not self.selected_arrow:
@@ -46,7 +71,7 @@ class IGPictograph(Pictograph):
         anti_motion = blue_motion if blue_motion.motion_type == ANTI else red_motion
         with open("arrow_placement/arrow_placements.json", "r") as file:
             data = json.load(file)
-        if self.letter in ["E", "F", "G", "H"]:
+        if self.letter in ["E", "F", "G", "H", "P", "Q"]:
             adjustment_key = (blue_motion.turns, red_motion.turns)
             letter_data = data.get(self.letter, {})
             turn_data = letter_data.get(str(adjustment_key))
