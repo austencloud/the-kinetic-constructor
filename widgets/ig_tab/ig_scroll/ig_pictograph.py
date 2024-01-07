@@ -2,9 +2,11 @@ import json
 import re
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView
-from constants import ANTI, BLUE, PRO, RED
+from constants import ANTI, BLUE, LEADING, PRO, RED, TRAILING
 from objects.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import Qt
+
+from utilities.TypeChecking.TypeChecking import Colors
 
 
 if TYPE_CHECKING:
@@ -45,22 +47,21 @@ class IGPictograph(Pictograph):
         self.update_arrow_adjustments_in_json(adjustment)
 
     def _get_S_letter_adjustment(self, key, increment):
-        if self.selected_arrow.color == BLUE:
-            # Special mapping for blue arrow when letter is S
+        if self.selected_arrow.lead_state == LEADING:
+            return {
+                Qt.Key.Key_W: (0, -increment),
+                Qt.Key.Key_A: (-increment, 0),
+                Qt.Key.Key_S: (0, increment),
+                Qt.Key.Key_D: (increment, 0),
+            }.get(key, (0, 0))
+        elif self.selected_arrow.lead_state == TRAILING:
             return {
                 Qt.Key.Key_W: (increment, 0),
                 Qt.Key.Key_A: (0, -increment),
                 Qt.Key.Key_S: (-increment, 0),
                 Qt.Key.Key_D: (0, increment),
             }.get(key, (0, 0))
-        elif self.selected_arrow.color == RED:
-            # Special mapping for red arrow when letter is S
-            return {
-                Qt.Key.Key_W: (0, -increment),
-                Qt.Key.Key_A: (increment, 0),
-                Qt.Key.Key_S: (0, increment),
-                Qt.Key.Key_D: (-increment, 0),
-            }.get(key, (0, 0))
+
         return (0, 0)
 
     def _get_R_letter_adjustment(self, key, increment):
@@ -120,10 +121,31 @@ class IGPictograph(Pictograph):
             }.get(key, (0, 0))
         return (0, 0)
 
+    def determine_leading_color(
+        self, red_start, red_end, blue_start, blue_end
+    ) -> Colors:
+        if red_start == blue_end:
+            return RED
+        elif blue_start == red_end:
+            return BLUE
+        return None
+
     def update_arrow_adjustments_in_json(self, adjustment) -> None:
         if not self.selected_arrow:
             return
-
+        leading_color = self.determine_leading_color(
+            self.motions[RED].start_loc,
+            self.motions[RED].end_loc,
+            self.motions[BLUE].start_loc,
+            self.motions[BLUE].end_loc,
+        )
+        leading_motion = self.motions[leading_color]
+        trailing_motion = self.motions[BLUE if leading_color == RED else RED]
+        other_arrow = (
+            self.arrows[BLUE]
+            if self.selected_arrow == self.arrows[RED]
+            else self.arrows[RED]
+        )
         red_motion = self.motions[RED]
         blue_motion = self.motions[BLUE]
         if blue_motion.turns in [0.0, 1.0, 2.0, 3.0]:
@@ -151,7 +173,7 @@ class IGPictograph(Pictograph):
             letter_data[str(adjustment_key)] = turn_data
             data[self.letter] = letter_data
         elif self.letter in ["S", "T"]:
-            adjustment_key = (pro_motion.turns, anti_motion.turns)
+            adjustment_key = (leading_motion.turns, trailing_motion.turns)
             letter_data = data.get(self.letter, {})
             turn_data = letter_data.get(str(adjustment_key))
             turn_data[self.selected_arrow.lead_state][0] += adjustment[0]

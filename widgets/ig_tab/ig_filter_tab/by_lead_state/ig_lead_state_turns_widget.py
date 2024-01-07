@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, List, Union
 from constants import (
     BLUE,
     CLOCKWISE,
@@ -206,7 +206,7 @@ class IGLeadStateTurnsWidget(BaseTurnsWidget):
                 trailing_motions.append(pictograph.motions[trailing_color])
         return trailing_motions
 
-    def get_leading_motions(self):
+    def get_leading_motions(self) -> List[Motion]:
         leading_motions = []
         for pictograph in self.attr_box.get_pictographs():
             red_start = pictograph.motions[RED].start_loc
