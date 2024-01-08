@@ -98,30 +98,33 @@ class IGPictograph(Pictograph):
         anti_motion = blue_motion if blue_motion.motion_type == ANTI else red_motion
         with open("arrow_placement/arrow_placements.json", "r") as file:
             data: Dict = json.load(file)
-        if self.letter in ["G", "H", "P", "Q"]:
+        if self.letter in ["E", "G", "H", "P", "Q"]:
             adjustment_key = (blue_motion.turns, red_motion.turns)
             letter_data: Dict = data.get(self.letter, {})
             turn_data = letter_data.get(str(adjustment_key))
-            turn_data[self.selected_arrow.color][0] += adjustment[0]
-            turn_data[self.selected_arrow.color][1] += adjustment[1]
-            letter_data[str(adjustment_key)] = turn_data
-            data[self.letter] = letter_data
-        elif self.letter in ["I", "R"]:
+            if turn_data:
+                turn_data[self.selected_arrow.color][0] += adjustment[0]
+                turn_data[self.selected_arrow.color][1] += adjustment[1]
+                letter_data[str(adjustment_key)] = turn_data
+                data[self.letter] = letter_data
+        elif self.letter in ["I", "R", "U", "V"]:
             adjustment_key = (pro_motion.turns, anti_motion.turns)
             letter_data = data.get(self.letter, {})
             turn_data = letter_data.get(str(adjustment_key))
-            turn_data[self.selected_arrow.motion_type][0] += adjustment[0]
-            turn_data[self.selected_arrow.motion_type][1] += adjustment[1]
-            letter_data[str(adjustment_key)] = turn_data
-            data[self.letter] = letter_data
+            if turn_data:
+                turn_data[self.selected_arrow.motion_type][0] += adjustment[0]
+                turn_data[self.selected_arrow.motion_type][1] += adjustment[1]
+                letter_data[str(adjustment_key)] = turn_data
+                data[self.letter] = letter_data
         elif self.letter in ["S", "T"]:
             adjustment_key = (leading_motion.turns, trailing_motion.turns)
             letter_data = data.get(self.letter, {})
             turn_data = letter_data.get(str(adjustment_key))
-            turn_data[self.selected_arrow.lead_state][0] += adjustment[0]
-            turn_data[self.selected_arrow.lead_state][1] += adjustment[1]
-            letter_data[str(adjustment_key)] = turn_data
-            data[self.letter] = letter_data
+            if turn_data:
+                turn_data[self.selected_arrow.lead_state][0] += adjustment[0]
+                turn_data[self.selected_arrow.lead_state][1] += adjustment[1]
+                letter_data[str(adjustment_key)] = turn_data
+                data[self.letter] = letter_data
         json_str = json.dumps(data, indent=2)
 
         compact_json_str = re.sub(
@@ -152,11 +155,14 @@ class IG_Pictograph_View(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
     def resize_for_scroll_area(self) -> None:
-        view_width = int(
-            self.ig_pictograph.ig_scroll_area.width()
-            / self.ig_pictograph.ig_scroll_area.COLUMN_COUNT
-        ) - self.ig_pictograph.ig_scroll_area.SPACING 
-        
+        view_width = (
+            int(
+                self.ig_pictograph.ig_scroll_area.width()
+                / self.ig_pictograph.ig_scroll_area.COLUMN_COUNT
+            )
+            - self.ig_pictograph.ig_scroll_area.SPACING
+        )
+
         self.setMinimumWidth(view_width)
         self.setMaximumWidth(view_width)
         self.setMinimumHeight(view_width)

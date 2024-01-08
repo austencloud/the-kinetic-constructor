@@ -142,6 +142,16 @@ class ArrowPositioner:
                 return [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
 
     def _calculate_generic_adjustment(self, arrow: Arrow) -> Tuple[int, int]:
+        pro_arrow = (
+            self.pictograph.arrows.get(BLUE)
+            if self.blue_arrow.motion_type == PRO
+            else self.pictograph.arrows.get(RED)
+        )
+        anti_arrow = (
+            self.pictograph.arrows.get(BLUE)
+            if self.blue_arrow.motion_type == ANTI
+            else self.pictograph.arrows.get(RED)
+        )
         with open("arrow_placement/generic_placements.json", "r") as file:
             generic_placements: Dict = json.load(file)
         # Load generic placement data
@@ -153,26 +163,59 @@ class ArrowPositioner:
                 "(0.5, 2.5)",
                 "(2.5, 0.5)",
             ]:
-                adjustment_values = self.placements.get(self.letter, {}).get(
-                    adjustment_key, {}
-                ).get(arrow.color, (0, 0))
+                adjustment_values = (
+                    self.placements.get(self.letter, {})
+                    .get(adjustment_key, {})
+                    .get(arrow.color, (0, 0))
+                )
                 return adjustment_values
         elif self.letter == "U":
-            pro_arrow = (
-                self.pictograph.arrows.get(BLUE)
-                if self.blue_arrow.motion_type == PRO
-                else self.pictograph.arrows.get(RED)
-            )
-            anti_arrow = (
-                self.pictograph.arrows.get(BLUE)
-                if self.blue_arrow.motion_type == ANTI
-                else self.pictograph.arrows.get(RED)
-            )
             adjustment_key = f"({pro_arrow.turns}, {anti_arrow.turns})"
             if adjustment_key in [
                 "(1, 0.5)",
                 "(1, 1.5)",
                 "(1, 2.5)",
+                "(1.5, 0.5)",
+                "(1.5, 2.5)",
+                "(2, 0.5)",
+                "(2, 1.5)",
+                "(2, 2.5)",
+                "(2.5, 1.5)",
+                "(3, 0.5)",
+                "(3, 1.5)",
+                "(3, 2.5)",
+            ]:
+                adjustment_values = (
+                    self.placements.get(self.letter, {})
+                    .get(adjustment_key, {})
+                    .get(arrow.motion_type, (0, 0))
+                )
+                return adjustment_values
+        elif self.letter == "V":
+            adjustment_key = f"({pro_arrow.turns}, {anti_arrow.turns})"
+            if adjustment_key in [
+                "(0, 0.5)",
+                "(0, 1.5)",
+                "(0, 2.5)",
+                "(0.5, 0)",
+                "(0.5, 0.5)",
+                "(0.5, 1)",
+                "(0.5, 2)",
+                "(0.5, 2.5)",
+                "(0.5, 3)",
+                "(1, 0.5)",
+                "(1, 1.5)",
+                "(1, 2.5)",
+                "(1.5, 0)",
+                "(1.5, 1.5)",
+                "(1.5, 2.5)",
+                "(2, 0.5)",
+                "(2, 1.5)",
+                "(2, 2.5)",
+                "(2.5, 0)",
+                "(2.5, 0.5)",
+                "(2.5, 1.5)",
+                "(2.5, 2.5)",
                 "(3, 0.5)",
                 "(3, 1.5)",
                 "(3, 2.5)",
