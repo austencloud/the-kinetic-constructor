@@ -45,6 +45,7 @@ class ArrowPositioner:
             "T",
             "U",
             "V",
+            "W",
             "X",
             "Y",
             "Z",
@@ -80,6 +81,21 @@ class ArrowPositioner:
             "O",
             "U",
             "V",
+            "W",
+            "X",
+            "Y",
+            "Z",
+            "Σ",
+            "Δ",
+            "θ",
+            "Ω",
+            "Φ",
+            "Ψ",
+            "Λ",
+            "W-",
+            "X-",
+            "Y-",
+            "Z-",
         ]
         self.update_arrow_positions()
 
@@ -109,14 +125,22 @@ class ArrowPositioner:
         self.placements = self._load_placements()
         for arrow in self.arrows:
             if arrow.loc and self.letter in self.letters_to_reposition:
-                initial_pos = self._get_initial_position(arrow)
+                if self.pictograph.grid.grid_mode == DIAMOND:
+                    if arrow.motion_type in [PRO, ANTI]:
+                        initial_pos = self._get_diamond_shift_pos(arrow)
+                    elif arrow.motion_type == STATIC:
+                        initial_pos = self._get_diamond_static_pos(arrow)
                 adjustment = self._get_adjustment(arrow)
                 new_pos = initial_pos + adjustment - arrow.boundingRect().center()
                 arrow.setPos(new_pos)
 
-    def _get_initial_position(self, arrow: Arrow) -> QPointF:
+    def _get_diamond_shift_pos(self, arrow: Arrow) -> QPointF:
         layer2_points = self.pictograph.grid.get_layer2_points()
         return layer2_points.get(arrow.loc, QPointF(0, 0))
+
+    def _get_diamond_static_pos(self, arrow: Arrow) -> QPointF:
+        handpoints = self.pictograph.grid.get_handpoints()
+        return handpoints.get(arrow.loc, QPointF(0, 0))
 
     def _get_adjustment(self, arrow: Arrow) -> QPointF:
         adjustment_values = self._get_adjustment_values(arrow)

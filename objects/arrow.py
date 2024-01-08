@@ -53,7 +53,7 @@ class Arrow(GraphicalObject):
         self.is_ghost: bool = False
         self.drag_offset = QPointF(0, 0)
         self.lead_state: LeadStates = None
-        
+
     ### SETUP ###
 
     def update_svg(self, svg_file: str = None) -> None:
@@ -240,24 +240,56 @@ class Arrow(GraphicalObject):
             )
 
         if motion.motion_type == STATIC:
-            return (
-                {
-                    CLOCKWISE: {
-                        NORTHEAST: 0,
-                        SOUTHEAST: 0,
-                        SOUTHWEST: 0,
-                        NORTHWEST: 0,
-                    },
-                    COUNTER_CLOCKWISE: {
-                        NORTHEAST: 0,
-                        SOUTHEAST: 0,
-                        SOUTHWEST: 0,
-                        NORTHWEST: 0,
-                    },
-                }
-                .get(motion.prop_rot_dir, {})
-                .get(self.loc, 0)
-            )
+            if motion.start_ori == IN:
+                return (
+                    {
+                        CLOCKWISE: {
+                            NORTH: 180,
+                            EAST: 270,
+                            SOUTH: 0,
+                            WEST: 90,
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTH: 180,
+                            EAST: 90,
+                            SOUTH: 0,
+                            WEST: 270,
+                        },
+                        NO_ROT: {
+                            NORTH: 0,
+                            SOUTH: 0,
+                            EAST: 0,
+                            WEST: 0,
+                        },
+                    }
+                    .get(motion.prop_rot_dir, {})
+                    .get(self.loc, 0)
+                )
+            elif motion.start_ori == OUT:
+                return (
+                    {
+                        CLOCKWISE: {
+                            NORTH: 0,
+                            EAST: 90,
+                            SOUTH: 180,
+                            WEST: 270,
+                        },
+                        COUNTER_CLOCKWISE: {
+                            NORTH: 0,
+                            EAST: 90,
+                            SOUTH: 180,
+                            WEST: 270,
+                        },
+                        NO_ROT: {
+                            NORTH: 0,
+                            SOUTH: 0,
+                            EAST: 0,
+                            WEST: 0,
+                        },
+                    }
+                    .get(motion.prop_rot_dir, {})
+                    .get(self.loc, 0)
+                )
 
         elif motion.motion_type == DASH:
             if motion.turns == 0:

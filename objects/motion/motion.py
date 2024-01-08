@@ -132,30 +132,30 @@ class Motion:
                 if self.prop_rot_dir == CLOCKWISE:
                     return (
                         COUNTER
-                        if (turns % 2 == 0.5 and motion_type == PRO)
-                        or (turns % 2 != 0.5 and motion_type == ANTI)
+                        if (turns % 2 == 0.5 and motion_type in [PRO, STATIC])
+                        or (turns % 2 != 0.5 and motion_type in [ANTI, DASH])
                         else CLOCK
                     )
                 elif self.prop_rot_dir == COUNTER_CLOCKWISE:
                     return (
                         CLOCK
-                        if (turns % 2 == 0.5 and motion_type == PRO)
-                        or (turns % 2 != 0.5 and motion_type == ANTI)
+                        if (turns % 2 == 0.5 and motion_type in [PRO, STATIC])
+                        or (turns % 2 != 0.5 and motion_type in [ANTI, DASH])
                         else COUNTER
                     )
             elif start_ori in [CLOCK, COUNTER]:
                 if self.prop_rot_dir == CLOCKWISE:
                     return (
                         OUT
-                        if (turns % 2 == 0.5 and motion_type == PRO)
-                        or (turns % 2 != 0.5 and motion_type == ANTI)
+                        if (turns % 2 == 0.5 and motion_type in [PRO, STATIC])
+                        or (turns % 2 != 0.5 and motion_type in [ANTI, DASH])
                         else IN
                     )
                 elif self.prop_rot_dir == COUNTER_CLOCKWISE:
                     return (
                         IN
-                        if (turns % 2 == 0.5 and motion_type == PRO)
-                        or (turns % 2 != 0.5 and motion_type == ANTI)
+                        if (turns % 2 == 0.5 and motion_type in [PRO, STATIC])
+                        or (turns % 2 != 0.5 and motion_type in [ANTI, DASH])
                         else OUT
                     )
 
