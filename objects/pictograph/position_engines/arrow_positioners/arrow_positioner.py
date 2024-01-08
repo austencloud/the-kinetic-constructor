@@ -151,6 +151,14 @@ class ArrowPositioner:
         quadrant_index = self._get_quadrant_index(arrow.loc)
         return directional_adjustments[quadrant_index]
 
+
+
+
+
+#### TODO: ADD SPECIFIC ADJUSTMENTS FOR STATIC VARIATIONS ####
+
+
+
     def _generate_directional_tuples(
         self, x, y, motion: Motion, motion_type: str
     ) -> List[QPointF]:
