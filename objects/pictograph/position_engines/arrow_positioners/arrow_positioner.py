@@ -148,23 +148,25 @@ class ArrowPositioner:
         directional_adjustments = self._generate_directional_tuples(
             x, y, arrow.motion, arrow.motion_type
         )
-        quadrant_index = self._get_quadrant_index(arrow.loc)
+        if arrow.motion_type in [PRO, ANTI]:
+            quadrant_index = self._get_diamond_shift_quadrant_index(arrow.loc)
+        elif arrow.motion_type == STATIC:
+            quadrant_index = self._get_diamond_static_quadrant_index(arrow.loc)
         return directional_adjustments[quadrant_index]
 
-
-
-
-
-#### TODO: ADD SPECIFIC ADJUSTMENTS FOR STATIC VARIATIONS ####
-
-
+    #### TODO: ADD SPECIFIC ADJUSTMENTS FOR STATIC VARIATIONS ####
 
     def _generate_directional_tuples(
         self, x, y, motion: Motion, motion_type: str
     ) -> List[QPointF]:
-        if motion_type in [PRO, STATIC]:
+        if motion_type == PRO:
             if motion.prop_rot_dir in [CLOCKWISE, NO_ROT]:
                 return [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
+            elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                return [QPointF(-y, -x), QPointF(x, -y), QPointF(y, x), QPointF(-x, y)]
+        elif motion_type == STATIC:
+            if motion.prop_rot_dir in [CLOCKWISE, NO_ROT]:
+                return [QPointF(x, -y), QPointF(y, x), QPointF(-x, y), QPointF(-y, -x)]
             elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
                 return [QPointF(-y, -x), QPointF(x, -y), QPointF(y, x), QPointF(-x, y)]
         elif motion_type in [ANTI, DASH]:
@@ -325,7 +327,9 @@ class ArrowPositioner:
         if self.letter in self.generic_placement_letters:
             return self._calculate_generic_adjustment(arrow)
 
-    def _get_quadrant_index(self, location: Locations) -> Literal[0, 1, 2, 3]:
+    def _get_diamond_shift_quadrant_index(
+        self, location: Locations
+    ) -> Literal[0, 1, 2, 3]:
         """Map location to index for quadrant adjustments"""
         location_to_index = {
             NORTHEAST: 0,
@@ -333,6 +337,20 @@ class ArrowPositioner:
             SOUTHWEST: 2,
             NORTHWEST: 3,
         }
+
+        return location_to_index.get(location, 0)
+
+    def _get_diamond_static_quadrant_index(
+        self, location: Locations
+    ) -> Literal[0, 1, 2, 3]:
+        """Map location to index for quadrant adjustments"""
+        location_to_index = {
+            NORTH: 0,
+            EAST: 1,
+            SOUTH: 2,
+            WEST: 3,
+        }
+
         return location_to_index.get(location, 0)
 
     def _get_pro_anti_arrows(self, scene: "Pictograph") -> Tuple[Arrow, Arrow]:
