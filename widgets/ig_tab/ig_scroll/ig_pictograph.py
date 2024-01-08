@@ -96,7 +96,7 @@ class IGPictograph(Pictograph):
             red_motion.turns = int(red_motion.turns)
         pro_motion = red_motion if red_motion.motion_type == PRO else blue_motion
         anti_motion = blue_motion if blue_motion.motion_type == ANTI else red_motion
-        with open("arrow_placement/arrow_placements.json", "r") as file:
+        with open("arrow_placement/special_placements.json", "r") as file:
             data: Dict = json.load(file)
         if self.letter in ["E", "G", "H", "P", "Q"]:
             adjustment_key = (blue_motion.turns, red_motion.turns)
@@ -130,7 +130,7 @@ class IGPictograph(Pictograph):
         compact_json_str = re.sub(
             r'": \[\s+(-?\d+),\s+(-?\d+)\s+\]', r'": [\1, \2]', json_str
         )
-        with open("arrow_placement/arrow_placements.json", "w") as file:
+        with open("arrow_placement/special_placements.json", "w") as file:
             file.write(compact_json_str)
 
     def swap_selected_arrow(self):

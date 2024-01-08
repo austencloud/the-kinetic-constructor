@@ -19,7 +19,7 @@ from utilities.TypeChecking.prop_types import PropTypes
 
 
 if TYPE_CHECKING:
-    from objects.arrow import Arrow
+    from objects.arrow.arrow import Arrow
     from objects.pictograph.pictograph import Pictograph
     from objects.motion.motion import Motion
     from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox import (

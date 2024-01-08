@@ -1,4 +1,4 @@
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,

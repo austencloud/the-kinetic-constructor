@@ -16,9 +16,9 @@ from utilities.TypeChecking.TypeChecking import Colors, Locations, SpecificPosit
 from utilities.letter_item import LetterItem
 from ..motion.motion import Motion
 from ..prop.prop import Prop
-from ..arrow import Arrow
-from ..ghosts.ghost_arrow import GhostArrow
-from ..ghosts.ghost_prop import GhostProp
+from ..arrow.arrow import Arrow
+from ..arrow.ghost_arrow import GhostArrow
+from ..prop.ghost_prop import GhostProp
 from ..grid import Grid
 
 from objects.pictograph.pictograph_event_handler import PictographEventHandler

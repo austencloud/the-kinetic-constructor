@@ -9,7 +9,16 @@ if TYPE_CHECKING:
 class ArrowLocationManager:
     def __init__(self, motion: "Motion") -> None:
         self.motion = motion
-        self.scene = motion.scene
+
+    def _update_location(self) -> None:
+        if not self.motion.arrow.is_ghost and self.motion.arrow.ghost:
+            if not self.motion.arrow.loc:
+                loc = self.get_arrow_location(
+                    self.motion.start_loc, self.motion.end_loc, self.motion.motion_type
+                )
+                self.motion.arrow.loc = loc
+                self.motion.arrow.ghost.loc = loc
+                self.is_dragging = True
 
     def get_arrow_location(
         self, start_loc: str, end_loc: str, motion_type: MotionTypes
@@ -40,9 +49,9 @@ class ArrowLocationManager:
         else:  # self.motion.color is red
             other_color = BLUE
 
-        other_motion_start_loc = self.scene.pictograph_dict[f"{other_color}_start_loc"]
-        other_motion_end_loc = self.scene.pictograph_dict[f"{other_color}_end_loc"]
-        other_motion_type = self.scene.pictograph_dict[f"{other_color}_motion_type"]
+        other_motion_start_loc = self.motion.scene.pictograph_dict[f"{other_color}_start_loc"]
+        other_motion_end_loc = self.motion.scene.pictograph_dict[f"{other_color}_end_loc"]
+        other_motion_type = self.motion.scene.pictograph_dict[f"{other_color}_motion_type"]
 
         other_arrow_loc: Locations = None
 
@@ -146,8 +155,8 @@ class ArrowLocationManager:
                         return SOUTH
 
         elif other_motion_type == STATIC:
-            other_arrow_loc = self.scene.pictograph_dict[f"{other_color}_start_loc"]
-            if self.scene.pictograph_dict[LETTER] == "Λ":
+            other_arrow_loc = self.motion.scene.pictograph_dict[f"{other_color}_start_loc"]
+            if self.motion.scene.pictograph_dict[LETTER] == "Λ":
                 if other_arrow_loc == NORTH:
                     return SOUTH
                 elif other_arrow_loc == SOUTH:
@@ -156,7 +165,7 @@ class ArrowLocationManager:
                     return WEST
                 elif other_arrow_loc == WEST:
                     return EAST
-            elif self.scene.pictograph_dict[LETTER] in ["Φ", "Ψ"]:
+            elif self.motion.scene.pictograph_dict[LETTER] in ["Φ", "Ψ"]:
                 if other_arrow_loc in [NORTH, SOUTH]:
                     if self.motion.color == BLUE:
                         return WEST

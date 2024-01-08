@@ -282,7 +282,7 @@ class PropBoxDrag(BaseObjectBoxDrag):
         self.arrow.ghost.update_attributes(self.arrow.get_attributes())
         self.arrow.ghost.update_svg(
             self.arrow.get_svg_file(
-                self.arrow.motion.motion_type, self.arrow.motion.turns
+                self.arrow.motion_type, self.arrow.turns
             )
         )
         self.arrow.ghost.update_arrow()

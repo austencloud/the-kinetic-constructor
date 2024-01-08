@@ -5,9 +5,9 @@ from PyQt6.QtCore import Qt
 
 from constants import IN
 
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Tuple
-from objects.ghosts.ghost_arrow import GhostArrow
+from objects.arrow.ghost_arrow import GhostArrow
 
 from utilities.TypeChecking.TypeChecking import (
     Colors,

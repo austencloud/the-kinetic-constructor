@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING, Dict, Tuple
 from PyQt6.QtCore import QPointF
 
-from objects.arrow import Arrow
-from objects.ghosts.ghost_arrow import GhostArrow
-from objects.ghosts.ghost_prop import GhostProp
+from objects.arrow.arrow import Arrow
+from objects.arrow.ghost_arrow import GhostArrow
+from objects.prop.ghost_prop import GhostProp
 from objects.grid import Grid
 from utilities.TypeChecking.prop_types import PropTypes
 from utilities.letter_item import LetterItem

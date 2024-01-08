@@ -7,7 +7,7 @@ if TYPE_CHECKING:
         ArrowPositioner,
     )
 from PyQt6.QtCore import QPointF
-from objects.arrow import Arrow
+from objects.arrow.arrow import Arrow
 from constants import ANTI, BLUE, IN, OUT, RED
 
 

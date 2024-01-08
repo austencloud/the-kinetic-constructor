@@ -1,6 +1,6 @@
 from constants import *
 from typing import TYPE_CHECKING, Dict, Union
-from objects.arrow_location_manager import ArrowLocationManager
+from objects.arrow.arrow_location_manager import ArrowLocationManager
 from objects.motion.motion_manipulator import MotionManipulator
 from utilities.TypeChecking.TypeChecking import (
     Colors,
@@ -16,7 +16,7 @@ from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox import P
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
-    from objects.arrow import Arrow
+    from objects.arrow.arrow import Arrow
     from objects.prop.prop import Prop
     from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (
         ArrowBox,
