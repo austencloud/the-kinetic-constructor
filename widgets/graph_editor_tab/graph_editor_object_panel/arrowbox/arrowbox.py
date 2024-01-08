@@ -114,9 +114,7 @@ class ArrowBox(BaseObjectBox):
         self.position_arrows(blue_arrows, blue_arrow_positions)
 
         for motion in self.motions:
-            motion.arrow.loc = motion.arrow_location_manager.get_arrow_location(
-                motion.start_loc, motion.end_loc, motion.motion_type
-            )
+            motion.arrow.loc = motion.arrow.arrow_location_manager.get_arrow_location()
 
         for arrow in arrows:
             arrow_dict = {

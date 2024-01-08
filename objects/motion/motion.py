@@ -30,7 +30,6 @@ class Motion:
         motion_dict,
     ) -> None:
         self.scene = scene
-        self.arrow_location_manager = ArrowLocationManager(self)
         self.init_attributes()
         self.update_attributes(motion_dict)
 
@@ -79,9 +78,7 @@ class Motion:
         if motion_dict:
             self.update_attributes(motion_dict)
         arrow_dict = {
-            LOC: self.arrow_location_manager.get_arrow_location(
-                self.start_loc, self.end_loc, self.motion_type
-            ),
+            LOC: self.arrow.arrow_location_manager.get_arrow_location(),
             MOTION_TYPE: self.motion_type,
             TURNS: self.turns,
         }

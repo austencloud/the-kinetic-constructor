@@ -4,6 +4,7 @@ from PyQt6.QtGui import QTransform
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 from constants import *
+from objects.arrow.arrow_location_manager import ArrowLocationManager
 from objects.arrow.arrow_rot_angle_manager import ArrowRotAngleManager
 from objects.prop.prop import Prop
 
@@ -47,6 +48,8 @@ class Arrow(GraphicalObject):
         self.setAcceptHoverEvents(True)
         self.update_attributes(arrow_dict)
         self.arrow_rot_angle_manager = ArrowRotAngleManager(self)
+        self.arrow_location_manager = ArrowLocationManager(self)
+        
         self.prop: Prop = None
         self.scene: Pictograph | ArrowBox = scene
         self.is_svg_mirrored: bool = False
@@ -191,7 +194,7 @@ class Arrow(GraphicalObject):
         self.update_arrow_svg()
         self._update_mirror()
         self._update_color()
-        self.motion.arrow_location_manager._update_location()
+        self.arrow_location_manager.update_location()
         self.arrow_rot_angle_manager.update_rotation()
 
     def mirror_svg(self) -> None:

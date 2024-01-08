@@ -20,7 +20,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Sequence Constructor")
         self.show()
 
-    def _set_dimensions(self):
+    def _set_dimensions(self) -> None:
         screens = QGuiApplication.screens()
         screen = screens[1] if len(screens) > 1 else QGuiApplication.primaryScreen()
         available_geometry = screen.availableGeometry()
