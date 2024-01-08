@@ -241,6 +241,7 @@ class Arrow(GraphicalObject):
 
         if motion.motion_type == STATIC:
             if motion.start_ori == IN:
+                
                 return (
                     {
                         CLOCKWISE: {
