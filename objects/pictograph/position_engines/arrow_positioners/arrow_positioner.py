@@ -3,7 +3,7 @@ from PyQt6.QtCore import QPointF
 from Enums import LetterNumberType
 from constants import *
 from objects.arrow import Arrow
-from typing import TYPE_CHECKING, Dict, List, Literal, Tuple
+from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Tuple
 from objects.motion.motion import Motion
 from utilities.TypeChecking.Letters import (
     Type1_hybrid_letters,
@@ -168,102 +168,126 @@ class ArrowPositioner:
             if motion.prop_rot_dir in [CLOCKWISE, NO_ROT]:
                 return [QPointF(x, -y), QPointF(y, x), QPointF(-x, y), QPointF(-y, -x)]
             elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                return [QPointF(-y, -x), QPointF(x, -y), QPointF(y, x), QPointF(-x, y)]
+                return [QPointF(-x, -y), QPointF(y, -x), QPointF(x, -y), QPointF(y, x)]
         elif motion_type in [ANTI, DASH]:
             if motion.prop_rot_dir in [CLOCKWISE, NO_ROT]:
                 return [QPointF(-y, -x), QPointF(x, -y), QPointF(y, x), QPointF(-x, y)]
             elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
                 return [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
 
-    def _calculate_generic_adjustment(self, arrow: Arrow) -> Tuple[int, int]:
-        pro_arrow = (
-            self.pictograph.arrows.get(BLUE)
-            if self.blue_arrow.motion_type == PRO
-            else self.pictograph.arrows.get(RED)
-        )
-        anti_arrow = (
-            self.pictograph.arrows.get(BLUE)
-            if self.blue_arrow.motion_type == ANTI
-            else self.pictograph.arrows.get(RED)
-        )
+    def _calculate_adjustment(self, arrow: Arrow) -> Tuple[int, int]:
+        adjustment_values = self._get_special_adjustment(arrow)
+        if adjustment_values != (0, 0):
+            return adjustment_values
+
+        return self._get_default_adjustment(arrow)
+
+    def _get_special_adjustment(self, arrow: Arrow) -> Optional[Tuple[int, int]]:
+        """For letters that mostly have default coordinates, but have special cases
+
+        Args:
+            arrow (Arrow): _description_
+
+        Returns:
+            Optional[Tuple[int, int]]: _description_
+        """
+        if self.letter == "E":
+            return self._adjustment_for_E(arrow)
+        elif self.letter == "U":
+            return self._adjustment_for_U(arrow)
+        elif self.letter == "V":
+            return self._adjustment_for_V(arrow)
+        return None
+
+    def _adjustment_for_E(self, arrow: Arrow) -> Tuple[int, int]:
+        adjustment_key = f"({self.blue_arrow.turns}, {self.red_arrow.turns})"
+        special_keys = ["(0.5, 0.5)", "(2.5, 2.5)", "(0.5, 2.5)", "(2.5, 0.5)"]
+        if adjustment_key in special_keys:
+            return (
+                self.placements.get(self.letter, {})
+                .get(adjustment_key, {})
+                .get(arrow.color, (0, 0))
+            )
+        return (0, 0)
+
+    def _adjustment_for_U(self, arrow: Arrow) -> Tuple[int, int]:
+        pro_arrow, anti_arrow = self._get_pro_anti_arrows()
+        adjustment_key = f"({pro_arrow.turns}, {anti_arrow.turns})"
+        special_keys = [
+            "(1, 0.5)",
+            "(1, 1.5)",
+            "(1, 2.5)",
+            "(1.5, 0.5)",
+            "(1.5, 2.5)",
+            "(2, 0.5)",
+            "(2, 1.5)",
+            "(2, 2.5)",
+            "(2.5, 1.5)",
+            "(3, 0.5)",
+            "(3, 1.5)",
+            "(3, 2.5)",
+        ]
+        if adjustment_key in special_keys:
+            return (
+                self.placements.get(self.letter, {})
+                .get(adjustment_key, {})
+                .get(arrow.motion_type, (0, 0))
+            )
+        return (0, 0)
+
+    def _adjustment_for_V(self, arrow: Arrow) -> Tuple[int, int]:
+        pro_arrow, anti_arrow = self._get_pro_anti_arrows()
+        adjustment_key = f"({pro_arrow.turns}, {anti_arrow.turns})"
+        special_keys = [
+            "(0, 0.5)",
+            "(0, 1.5)",
+            "(0, 2.5)",
+            "(0.5, 0)",
+            "(0.5, 0.5)",
+            "(0.5, 1)",
+            "(0.5, 2)",
+            "(0.5, 2.5)",
+            "(0.5, 3)",
+            "(1, 0.5)",
+            "(1, 1.5)",
+            "(1, 2.5)",
+            "(1.5, 0)",
+            "(1.5, 1.5)",
+            "(1.5, 2.5)",
+            "(2, 0.5)",
+            "(2, 1.5)",
+            "(2, 2.5)",
+            "(2.5, 0)",
+            "(2.5, 0.5)",
+            "(2.5, 1.5)",
+            "(2.5, 2.5)",
+            "(3, 0.5)",
+            "(3, 1.5)",
+            "(3, 2.5)",
+        ]
+        if adjustment_key in special_keys:
+            return (
+                self.placements.get(self.letter, {})
+                .get(adjustment_key, {})
+                .get(arrow.motion_type, (0, 0))
+            )
+        return (0, 0)
+
+    def _get_default_adjustment(self, arrow: Arrow) -> Tuple[int, int]:
         with open("arrow_placement/generic_placements.json", "r") as file:
             generic_placements: Dict = json.load(file)
-        # Load generic placement data
-        if self.letter == "E":
-            adjustment_key = f"({self.blue_arrow.turns}, {self.red_arrow.turns})"
-            if adjustment_key in [
-                "(0.5, 0.5)",
-                "(2.5, 2.5)",
-                "(0.5, 2.5)",
-                "(2.5, 0.5)",
-            ]:
-                adjustment_values = (
-                    self.placements.get(self.letter, {})
-                    .get(adjustment_key, {})
-                    .get(arrow.color, (0, 0))
-                )
-                return adjustment_values
-        elif self.letter == "U":
-            adjustment_key = f"({pro_arrow.turns}, {anti_arrow.turns})"
-            if adjustment_key in [
-                "(1, 0.5)",
-                "(1, 1.5)",
-                "(1, 2.5)",
-                "(1.5, 0.5)",
-                "(1.5, 2.5)",
-                "(2, 0.5)",
-                "(2, 1.5)",
-                "(2, 2.5)",
-                "(2.5, 1.5)",
-                "(3, 0.5)",
-                "(3, 1.5)",
-                "(3, 2.5)",
-            ]:
-                adjustment_values = (
-                    self.placements.get(self.letter, {})
-                    .get(adjustment_key, {})
-                    .get(arrow.motion_type, (0, 0))
-                )
-                return adjustment_values
-        elif self.letter == "V":
-            adjustment_key = f"({pro_arrow.turns}, {anti_arrow.turns})"
-            if adjustment_key in [
-                "(0, 0.5)",
-                "(0, 1.5)",
-                "(0, 2.5)",
-                "(0.5, 0)",
-                "(0.5, 0.5)",
-                "(0.5, 1)",
-                "(0.5, 2)",
-                "(0.5, 2.5)",
-                "(0.5, 3)",
-                "(1, 0.5)",
-                "(1, 1.5)",
-                "(1, 2.5)",
-                "(1.5, 0)",
-                "(1.5, 1.5)",
-                "(1.5, 2.5)",
-                "(2, 0.5)",
-                "(2, 1.5)",
-                "(2, 2.5)",
-                "(2.5, 0)",
-                "(2.5, 0.5)",
-                "(2.5, 1.5)",
-                "(2.5, 2.5)",
-                "(3, 0.5)",
-                "(3, 1.5)",
-                "(3, 2.5)",
-            ]:
-                adjustment_values = (
-                    self.placements.get(self.letter, {})
-                    .get(adjustment_key, {})
-                    .get(arrow.motion_type, (0, 0))
-                )
-                return adjustment_values
-        adjustment_values = generic_placements.get(arrow.motion_type, {}).get(
+        return generic_placements.get(arrow.motion_type, {}).get(
             str(arrow.turns), (0, 0)
         )
-        return adjustment_values
+
+    def _get_pro_anti_arrows(self) -> Tuple[Arrow, Arrow]:
+        pro_arrow = (
+            self.blue_arrow if self.blue_arrow.motion_type == PRO else self.red_arrow
+        )
+        anti_arrow = (
+            self.blue_arrow if self.blue_arrow.motion_type == ANTI else self.red_arrow
+        )
+        return pro_arrow, anti_arrow
 
     def determine_leading_color(
         self, red_start, red_end, blue_start, blue_end
@@ -325,7 +349,7 @@ class ArrowPositioner:
             else:
                 return (0, 0)
         if self.letter in self.generic_placement_letters:
-            return self._calculate_generic_adjustment(arrow)
+            return self._calculate_adjustment(arrow)
 
     def _get_diamond_shift_quadrant_index(
         self, location: Locations
@@ -352,12 +376,6 @@ class ArrowPositioner:
         }
 
         return location_to_index.get(location, 0)
-
-    def _get_pro_anti_arrows(self, scene: "Pictograph") -> Tuple[Arrow, Arrow]:
-        arrows = scene.arrows
-        pro_arrow = arrows[RED] if arrows[RED].motion_type == PRO else arrows[BLUE]
-        anti_arrow = arrows[RED] if arrows[RED].motion_type == ANTI else arrows[BLUE]
-        return pro_arrow, anti_arrow
 
     def get_opposite_location(self, location: str) -> str:
         opposite_map = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
