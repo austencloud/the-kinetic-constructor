@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 
 class PictographScrollArea(QScrollArea):
-    COLUMN_COUNT = 4
+    COLUMN_COUNT = 6
     SPACING = 10
 
     def __init__(
