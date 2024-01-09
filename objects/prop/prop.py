@@ -31,7 +31,7 @@ class Prop(GraphicalObject):
     def __init__(self, scene, prop_dict: Dict, motion: "Motion") -> None:
         self.motion = motion
         self.arrow: Arrow = None
-
+        self.attribute_cache = {}
         self.prop_type = prop_dict[PROP_TYPE]
         self.svg_file = self.get_svg_file(self.prop_type)
         super().__init__(scene)

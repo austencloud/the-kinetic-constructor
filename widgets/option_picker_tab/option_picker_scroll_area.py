@@ -52,7 +52,7 @@ class OptionPickerScrollArea(PictographScrollArea):
                     pictograph_dict[START_POS] == start_pos
                     and pictograph_dict[END_POS] == end_pos
                 ):
-                    start_option = self._create_pictograph(pictograph_dict, OPTION)
+                    start_option = self._create_pictograph(OPTION)
                     start_option.letter = letter
                     start_option.start_pos = start_pos
                     start_option.end_pos = end_pos
@@ -93,7 +93,7 @@ class OptionPickerScrollArea(PictographScrollArea):
                 widget.deleteLater()
 
         # for i, (_, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
-        #     option: Option = self._create_pictograph(pictograph_data)
+        #     option: Option = self._create_pictograph(OPTION)
         #     self.load_image_if_visible(option)
 
         #     row = i // self.COLUMN_COUNT
@@ -156,7 +156,7 @@ class OptionPickerScrollArea(PictographScrollArea):
         self.pictographs.clear()
         self.clear()
         for motion_dict in filtered_data:
-            option = self._create_pictograph(motion_dict, OPTION)
+            option = self._create_pictograph(OPTION)
             self.pictographs[motion_dict[LETTER]] = option
         self._sort_options()
         self._add_sorted_options_to_layout()

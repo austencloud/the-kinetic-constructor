@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, List, Literal, Union
 from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
-from constants import BLUE_MOTION_TYPE, DASH, OPTION, RED_MOTION_TYPE, STATIC
+from constants import BLUE_MOTION_TYPE, DASH, IG_PICTOGRAPH, OPTION, RED_MOTION_TYPE, STATIC
 from utilities.TypeChecking.TypeChecking import Orientations, Turns, Letters
 
 from PyQt6.QtCore import Qt
@@ -58,13 +58,11 @@ class PictographScrollArea(QScrollArea):
 
     def _create_pictograph(
         self,
-        pictograph_dict: Dict,
         graph_type: Literal["option", "ig_pictograph"],
     ) -> Option | IGPictograph:
         if graph_type == OPTION:
             pictograph = Option(self.main_widget, self)
-        else:  # graph_type == IG_PICTOGRAPH
+        elif graph_type == IG_PICTOGRAPH:  
             pictograph = IGPictograph(self.main_widget, self)
 
-        pictograph.update_pictograph(pictograph_dict)
         return pictograph

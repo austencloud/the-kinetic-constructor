@@ -34,10 +34,10 @@ if TYPE_CHECKING:
 
 
 class Arrow(GraphicalObject):
-    svg_cache = {}
-
     def __init__(self, scene, arrow_dict, motion: "Motion") -> None:
         super().__init__(scene)
+        self.svg_cache = {}
+        self.attribute_cache = {}
         self.motion = motion
         self.svg_file = self.get_arrow_svg_file(
             arrow_dict[MOTION_TYPE], arrow_dict[TURNS]
@@ -132,10 +132,10 @@ class Arrow(GraphicalObject):
 
     def get_arrow_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
         cache_key = f"{motion_type}_{float(turns)}"
-        if cache_key not in Arrow.svg_cache:
+        if cache_key not in self.svg_cache:
             file_path = f"resources/images/arrows/{self.pictograph.main_widget.grid_mode}/{motion_type}/{motion_type}_{float(turns)}.svg"
-            Arrow.svg_cache[cache_key] = file_path
-        return Arrow.svg_cache[cache_key]
+            self.svg_cache[cache_key] = file_path
+        return self.svg_cache[cache_key]
 
     def _change_arrow_to_static(self) -> None:
         motion_dict = {
@@ -165,7 +165,7 @@ class Arrow(GraphicalObject):
             self.ghost.transform = self.transform
         self.update_arrow_svg()
         self._update_mirror()
-        
+
         self.arrow_location_manager.update_location()
         self.arrow_rot_angle_manager.update_rotation()
 

@@ -168,7 +168,7 @@ class IGTab(QWidget):
             pictograph_dict_list = self.main_widget.letters[letter]
             for pictograph_dict in pictograph_dict_list:
                 ig_pictograph: IGPictograph = self.ig_scroll_area._create_pictograph(
-                    pictograph_dict, IG_PICTOGRAPH
+                    IG_PICTOGRAPH
                 )
                 ig_pictograph.render_and_cache_image()
         main_widget.setEnabled(True)
@@ -183,7 +183,7 @@ class IGTab(QWidget):
         for letter, pictograph_dict_list in self.main_widget.letters.items():
             for pictograph_dict in pictograph_dict_list:
                 ig_pictograph: IGPictograph = self.ig_scroll_area._create_pictograph(
-                    pictograph_dict, IG_PICTOGRAPH
+                    IG_PICTOGRAPH
                 )
                 ig_pictograph.render_and_cache_image()
         main_widget.setEnabled(True)

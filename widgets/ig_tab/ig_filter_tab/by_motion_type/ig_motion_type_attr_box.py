@@ -61,6 +61,4 @@ class IGMotionTypeAttrBox(BaseAttrBox):
         return list(self.pictographs.values())
 
     def update_attr_box(self, motion: Motion) -> None:
-        for pictograph in self.pictographs.values():
-            for motion in pictograph.motions.values():
-                self.turns_widget._update_turnbox(motion.turns)
+        self.turns_widget._update_turnbox(motion.turns)

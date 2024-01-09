@@ -122,7 +122,6 @@ class ArrowBox(BaseObjectBox):
                 MOTION_TYPE: arrow.motion_type,
                 TURNS: arrow.turns,
             }
-            arrow.update_arrow(arrow_dict)
 
         return arrows
 

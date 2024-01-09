@@ -47,7 +47,7 @@ class IGScrollArea(PictographScrollArea):
         self.update_timer = QTimer(self)
         self.update_timer.timeout.connect(self.update_pictographs_positions)
         self.update_timer.start(300)
-   
+
     def update_pictographs_positions(self):
         """Method to update positions of all pictographs"""
         for pictograph in self.pictographs.values():
@@ -56,7 +56,7 @@ class IGScrollArea(PictographScrollArea):
 
     def update_individual_pictograph_position(self, pictograph: IGPictograph):
         if hasattr(pictograph, "arrow_positioner"):
-            pictograph.arrow_positioner.update_arrow_positions()
+            pictograph.arrow_positioner.update_arrow_position()
 
     def update_scroll_area_content(self) -> None:
         self.container.adjustSize()
@@ -86,9 +86,7 @@ class IGScrollArea(PictographScrollArea):
                 pictograph_key = self.generate_pictograph_key_from_dict(pictograph_dict)
                 ig_pictograph = self.pictographs.get(pictograph_key)
                 if ig_pictograph is None:
-                    ig_pictograph = self._create_pictograph(
-                        pictograph_dict, IG_PICTOGRAPH
-                    )
+                    ig_pictograph = self._create_pictograph(IG_PICTOGRAPH)
                     for motion_color in (BLUE, RED):
                         motion_type = pictograph_dict.get(f"{motion_color}_motion_type")
                         if motion_type:

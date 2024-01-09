@@ -332,7 +332,7 @@ class Pictograph(QGraphicsScene):
 
     def _position_objects(self) -> None:
         self.prop_positioner.position_props()
-        self.arrow_positioner.update_arrow_positions()
+        self.arrow_positioner.update_arrow_position()
 
     def _update_motions(self) -> None:
         for motion in self.motions.values():

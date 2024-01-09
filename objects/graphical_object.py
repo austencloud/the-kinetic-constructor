@@ -82,11 +82,17 @@ class GraphicalObject(QGraphicsSvgItem):
             self.setup_svg_renderer(svg_file)
             self._update_color()
 
-    def update_attributes(self, attributes: Dict) -> None:
-        for attribute_name, attribute_value in attributes.items():
-            setattr(self, attribute_name, attribute_value)
-        # self._update_color()
-        
+    def update_attributes(self: Union["Arrow","Prop"], attributes: Dict) -> None:
+        if self._attributes_changed(attributes):
+            for attribute_name, attribute_value in attributes.items():
+                setattr(self, attribute_name, attribute_value)
+            self.attribute_cache.update(attributes)
+            self._update_color()  # Assuming color might be one of the attributes
+
+    def _attributes_changed(self: Union["Arrow","Prop"], new_attributes: Dict) -> bool:
+        return any(self.attribute_cache.get(key) != val for key, val in new_attributes.items())
+
+
     ### FLAGS ###
 
     def is_dim(self, on: bool) -> None:
