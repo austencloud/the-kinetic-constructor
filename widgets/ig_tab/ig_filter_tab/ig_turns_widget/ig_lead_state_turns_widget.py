@@ -43,34 +43,13 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
         super().__init__(attr_box)
         self.attr_box = attr_box
 
-    def update_turns_directly(self, turns: float) -> None:
+    def update_turns_directly_by_motion_type(self, turns: float) -> None:
         """Directly set the turns value for the motion type."""
         if turns in ["0", "1", "2", "3"]:
             self.turnbox.setCurrentText(turns)
         elif turns in ["0.5", "1.5", "2.5"]:
             self.turnbox.setCurrentText(turns)
-        self.update_turns_directly()  # This method will now be triggered with the new turns value
-
-    def set_layout_margins_and_alignment(self) -> None:
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-    def connect_signals(self) -> None:
-        self.turnbox.currentIndexChanged.connect(self.update_turns_directly)
-
-    def update_turns_incrementally(self, adjustment: float) -> None:
-        self.disconnect_signal(self.turnbox.currentIndexChanged)
-        self.process_turns_for_all_motions(adjustment)
-        self.connect_signal(self.turnbox.currentIndexChanged)
-
-    def process_turns_for_all_motions(self, adjustment: float) -> None:
-        if self.attr_box.lead_state == TRAILING:
-            for motion in self.get_trailing_motions():
-                self.process_update_turns(motion, adjustment)
-
-        elif self.attr_box.lead_state == LEADING:
-            for motion in self.get_leading_motions():
-                self.process_update_turns(motion, adjustment)
+        self.update_turns_directly_by_motion_type()  # This method will now be triggered with the new turns value
 
     def determine_leading_color(
         self, red_start, red_end, blue_start, blue_end
@@ -113,25 +92,11 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
                 leading_motions.append(pictograph.motions[leading_color])
         return leading_motions
 
-    def process_update_turns(self, motion: Motion, adjustment: float) -> None:
-        initial_turns = motion.turns
-        new_turns = self._calculate_new_turns(motion.turns, adjustment)
-        self.update_turns_display(new_turns)
-
-        motion.set_turns(new_turns)
-
-        if motion.is_dash_or_static() and self._turns_added(initial_turns, new_turns):
-            self._simulate_cw_button_click()
-        pictograph_dict = {
-            f"{motion.color}_turns": new_turns,
-        }
-        motion.scene.update_pictograph(pictograph_dict)
-
-    def _simulate_cw_button_click(self) -> None:
+    def _simulate_cw_button_click_in_attr_box_widget(self) -> None:
         self.attr_box.prop_rot_dir_widget.cw_button.setChecked(True)
         self.attr_box.prop_rot_dir_widget.cw_button.click()
 
-    def update_turns_directly(self) -> None:
+    def update_turns_directly_by_motion_type(self) -> None:
         selected_turns_str = self.turnbox.currentText()
         if not selected_turns_str:
             return
@@ -149,11 +114,11 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
                         motion.prop_rot_dir == NO_ROT and motion.turns > 0
                     ):
                         motion.manipulator.set_prop_rot_dir(
-                            self._get_current_prop_rot_dir_for_ig_motion_type_turns_widget()
+                            self._get_current_prop_rot_dir()
                         )
                         pictograph_dict = {
                             f"{motion.color}_turns": new_turns,
-                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir_for_ig_motion_type_turns_widget(),
+                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir(),
                         }
                     else:
                         pictograph_dict = {
@@ -220,14 +185,14 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
         self.update_ig_lead_state_turnbox_size()
         self.update_ig_lead_state_turns_button_size()
 
-    def process_turns_for_all_motions(self, adjustment: float) -> None:
+    def adjust_turns_by_lead_state(self, adjustment: float) -> None:
         if self.attr_box.lead_state == TRAILING:
             for motion in self.get_trailing_motions():
-                self.process_update_turns(motion, adjustment)
+                self.process_turns_adjustment_for_single_motion(motion, adjustment)
 
         elif self.attr_box.lead_state == LEADING:
             for motion in self.get_leading_motions():
-                self.process_update_turns(motion, adjustment)
+                self.process_turns_adjustment_for_single_motion(motion, adjustment)
 
     def get_trailing_motions(self):
         trailing_motions = []

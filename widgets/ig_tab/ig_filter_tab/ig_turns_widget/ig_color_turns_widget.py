@@ -36,6 +36,13 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
         super().__init__(attr_box)
         self.attr_box = attr_box
 
+    def adjust_turns_by_motion_type(
+        self, pictograph: Pictograph, adjustment: float
+    ) -> None:
+        for motion in pictograph.motions.values():
+            if motion.color == self.attr_box.color:
+                self.process_turns_adjustment_for_single_motion(motion, adjustment)
+
     def _update_pictographs_turns_by_color(self, new_turns):
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
@@ -46,11 +53,11 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
                         motion.prop_rot_dir == NO_ROT and motion.turns > 0
                     ):
                         motion.manipulator.set_prop_rot_dir(
-                            self._get_current_prop_rot_dir_for_ig_motion_type_turns_widget()
+                            self._get_current_prop_rot_dir()
                         )
                         pictograph_dict = {
                             f"{motion.color}_turns": new_turns,
-                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir_for_ig_motion_type_turns_widget(),
+                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir(),
                         }
                     else:
                         pictograph_dict = {
@@ -58,43 +65,7 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
                         }
                     motion.scene.update_pictograph(pictograph_dict)
 
-    def _simulate_cw_button_click(self) -> None:
-        self.attr_box.prop_rot_dir_widget.cw_button.setChecked(True)
-        self.attr_box.prop_rot_dir_widget.cw_button.click()
-
-    def set_layout_margins_and_alignment(self) -> None:
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-    def connect_signals(self) -> None:
-        self.turnbox.currentIndexChanged.connect(self.update_turns_directly)
-
-    def update_turns_incrementally(self, adjustment: float) -> None:
-        self.disconnect_signal(self.turnbox.currentIndexChanged)
-        self.process_turns_for_all_motions(adjustment)
-        self.connect_signal(self.turnbox.currentIndexChanged)
-
-    def process_turns_for_all_motions(self, adjustment: float) -> None:
-        for pictograph in self.attr_box.get_pictographs():
-            self.process_update_turns(
-                pictograph.motions[self.attr_box.color], adjustment
-            )
-
-    def process_update_turns(self, motion: Motion, adjustment: float) -> None:
-        initial_turns = motion.turns
-        new_turns = self._calculate_new_turns(motion.turns, adjustment)
-        self.update_turns_display(new_turns)
-
-        motion.set_turns(new_turns)
-
-        if motion.is_dash_or_static() and self._turns_added(initial_turns, new_turns):
-            self._simulate_cw_button_click()
-        pictograph_dict = {
-            f"{motion.color}_turns": new_turns,
-        }
-        motion.scene.update_pictograph(pictograph_dict)
-
-    def _simulate_cw_button_click(self) -> None:
+    def _simulate_cw_button_click_in_attr_box_widget(self) -> None:
         self.attr_box.prop_rot_dir_widget.cw_button.setChecked(True)
         self.attr_box.prop_rot_dir_widget.cw_button.click()
 
@@ -108,11 +79,11 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
                         motion.prop_rot_dir == NO_ROT and motion.turns > 0
                     ):
                         motion.manipulator.set_prop_rot_dir(
-                            self._get_current_prop_rot_dir_for_ig_motion_type_turns_widget()
+                            self._get_current_prop_rot_dir()
                         )
                         pictograph_dict = {
                             f"{motion.color}_turns": new_turns,
-                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir_for_ig_motion_type_turns_widget(),
+                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir(),
                         }
                     else:
                         pictograph_dict = {

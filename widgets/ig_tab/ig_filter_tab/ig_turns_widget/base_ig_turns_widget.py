@@ -40,37 +40,11 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
             "IGMotionTypeAttrBox", "IGLeadStateAttrBox", "IGColorAttrBox"
         ] = attr_box
         self._initialize_ui()
-        self.connect_signals()
 
-    def update_turns_directly(self, turns) -> None:
-        if turns in ["0", "1", "2", "3"]:
-            self.turnbox.setCurrentText(turns)
-        elif turns in ["0.5", "1.5", "2.5"]:
-            self.turnbox.setCurrentText(turns)
-        selected_turns_str = self.turnbox.currentText()
-        if not selected_turns_str:
-            return
+    def _adjust_turns_callback(self, adjustment: float) -> None:
+        self.update_turns_incrementally(adjustment)
 
-        new_turns = float(selected_turns_str)
-        self._update_pictographs_turns_by_color(new_turns)
-
-    def update_turns_incrementally(
-        self: Union[
-            "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
-        ],
-        adjustment: float,
-    ) -> None:
-        self.turnbox.currentIndexChanged.disconnect(self.update_turns_directly)
-        self.process_turns_for_all_motions(adjustment)
-        self.turnbox.currentIndexChanged.connect(self.update_turns_directly)
-
-    def update_turns_for_pictograph(
-        self, pictograph: Pictograph, adjustment: float
-    ) -> None:
-        for motion in pictograph.get_motions_by_type(self.attr_box.motion_type):
-            self.process_update_turns(motion, adjustment)
-
-    def process_update_turns(
+    def process_turns_adjustment_for_single_motion(
         self: Union[
             "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
         ],
@@ -79,12 +53,17 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
     ) -> None:
         initial_turns = motion.turns
         new_turns = self._calculate_new_turns(motion.turns, adjustment)
+        self.turnbox.currentIndexChanged.disconnect(self._update_turns_directly)
         self.update_turns_display(new_turns)
+        self.turnbox.currentIndexChanged.connect(self._update_turns_directly)
 
         motion.set_turns(new_turns)
 
         if motion.is_dash_or_static() and self._turns_added(initial_turns, new_turns):
-            self._simulate_cw_button_click()
+            if isinstance(self.attr_box, IGMotionTypeAttrBox):
+                self._simulate_cw_button_click_in_header_widget()
+            else:
+                self._simulate_cw_button_click_in_attr_box_widget()
         pictograph_dict = {
             f"{motion.color}_turns": new_turns,
         }
@@ -97,52 +76,9 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         turns_str = self.format_turns(turns)
         self.turnbox.setCurrentText(turns_str)
 
-    def process_turns_for_all_motions(self, adjustment: float) -> None:
-        for pictograph in self.attr_box.get_pictographs():
-            self.update_turns_for_pictograph(pictograph, adjustment)
-
     @staticmethod
     def format_turns(turns: Union[int, float]) -> str:
         return str(int(turns)) if turns.is_integer() else str(turns)
-
-    def _get_current_prop_rot_dir_for_ig_motion_type_turns_widget(self) -> str:
-        return (
-            CLOCKWISE
-            if self.attr_box.prop_rot_dir_widget.cw_button.isChecked()
-            else COUNTER_CLOCKWISE
-            if self.attr_box.prop_rot_dir_widget.ccw_button.isChecked()
-            else NO_ROT
-        )
-
-    def update_turns_directly(self) -> None:
-        selected_turns_str = self.turnbox.currentText()
-        if not selected_turns_str:
-            return
-
-        new_turns = float(selected_turns_str)
-        self._update_pictographs_turns_by_color(new_turns)
-
-    def _update_pictographs_turns_by_color(self, new_turns):
-        for pictograph in self.attr_box.pictographs.values():
-            for motion in pictograph.motions.values():
-                if motion.arrow.lead_state == self.attr_box.lead_state:
-                    motion.set_turns(new_turns)
-
-                    if motion.motion_type in [DASH, STATIC] and (
-                        motion.prop_rot_dir == NO_ROT and motion.turns > 0
-                    ):
-                        motion.manipulator.set_prop_rot_dir(
-                            self._get_current_prop_rot_dir_for_ig_motion_type_turns_widget()
-                        )
-                        pictograph_dict = {
-                            f"{motion.color}_turns": new_turns,
-                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir_for_ig_motion_type_turns_widget(),
-                        }
-                    else:
-                        pictograph_dict = {
-                            f"{motion.color}_turns": new_turns,
-                        }
-                    motion.scene.update_pictograph(pictograph_dict)
 
     ### EVENT HANDLERS ###
 
@@ -202,8 +138,36 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         self.update_ig_lead_state_turnbox_size()
         self.update_ig_lead_state_turns_button_size()
 
-    def _adjust_turns_callback(self, adjustment: float) -> None:
-        self.update_turns_incrementally(adjustment)
+    def _update_pictographs_turns_by_color(self, new_turns):
+        for pictograph in self.attr_box.pictographs.values():
+            for motion in pictograph.motions.values():
+                if motion.color == self.attr_box.color:
+                    motion.set_turns(new_turns)
 
-    def connect_signals(self) -> None:
-        self.turnbox.currentIndexChanged.connect(self.update_turns_directly)
+                    if motion.motion_type in [DASH, STATIC] and (
+                        motion.prop_rot_dir == NO_ROT and motion.turns > 0
+                    ):
+                        motion.manipulator.set_prop_rot_dir(
+                            self._get_current_prop_rot_dir()
+                        )
+                        pictograph_dict = {
+                            f"{motion.color}_turns": new_turns,
+                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir(),
+                        }
+                    else:
+                        pictograph_dict = {
+                            f"{motion.color}_turns": new_turns,
+                        }
+                    motion.scene.update_pictograph(pictograph_dict)
+
+    def update_turns_directly_by_color(self, turns) -> None:
+        if turns in ["0", "1", "2", "3"]:
+            self.turnbox.setCurrentText(turns)
+        elif turns in ["0.5", "1.5", "2.5"]:
+            self.turnbox.setCurrentText(turns)
+        selected_turns_str = self.turnbox.currentText()
+        if not selected_turns_str:
+            return
+
+        new_turns = float(selected_turns_str)
+        self._update_pictographs_turns_by_motion_type(new_turns)

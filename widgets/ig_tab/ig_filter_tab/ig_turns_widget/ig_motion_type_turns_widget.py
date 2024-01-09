@@ -1,9 +1,22 @@
 from PyQt6.QtWidgets import QHBoxLayout, QPushButton
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
-from constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR, NO_ROT
+from constants import (
+    ANTI,
+    BLUE,
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
+    DASH,
+    ICON_DIR,
+    NO_ROT,
+    PRO,
+    RED,
+    STATIC,
+)
 from objects.motion.motion import Motion
+from objects.pictograph.pictograph import Pictograph
 from .base_ig_turns_widget import BaseIGTurnsWidget
+
 if TYPE_CHECKING:
     from ..by_motion_type.ig_motion_type_attr_box import IGMotionTypeAttrBox
 
@@ -13,33 +26,20 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         super().__init__(attr_box)
         self.attr_box = attr_box
         self.setup_directset_turns_buttons()
-        self.turnbox.currentIndexChanged.connect(self.update_turns_directly)
+        self.turnbox.currentIndexChanged.connect(self._update_turns_directly)
+        self.connect_signals()
 
-    def update_turns_incrementally(self, adjustment: float) -> None:
-        self.turnbox.currentIndexChanged.disconnect(self.update_turns_directly)
-        self.process_turns_for_all_motions(adjustment)
-        self.turnbox.currentIndexChanged.connect(self.update_turns_directly)
+    def adjust_turns_by_motion_type(
+        self, pictograph: Pictograph, adjustment: float
+    ) -> None:
+        for motion in pictograph.get_motions_by_type(self.attr_box.motion_type):
+            self.process_turns_adjustment_for_single_motion(motion, adjustment)
 
-    def process_update_turns(self, motion: Motion, adjustment: float) -> None:
-        initial_turns = motion.turns
-        new_turns = self._calculate_new_turns(motion.turns, adjustment)
-        self.update_turns_display(new_turns)
+    def _simulate_cw_button_click_in_header_widget(self):
+        self.attr_box.header_widget.cw_button.setChecked(True)
+        self.attr_box.header_widget.cw_button.click()
 
-        motion.set_turns(new_turns)
-
-        if motion.is_dash_or_static() and self._turns_added(initial_turns, new_turns):
-            self._simulate_cw_button_click()
-        pictograph_dict = {
-            f"{motion.color}_turns": new_turns,
-        }
-        motion.scene.update_pictograph(pictograph_dict)
-
-    def _simulate_cw_button_click(self):
-        header_widget = self.attr_box.header_widget
-        header_widget.cw_button.setChecked(True)
-        header_widget.cw_button.click()
-
-    def _get_current_prop_rot_dir_for_ig_motion_type_turns_widget(self) -> str:
+    def _get_current_prop_rot_dir(self) -> str:
         return (
             CLOCKWISE
             if self.attr_box.header_widget.cw_button.isChecked()
@@ -48,20 +48,81 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
             else NO_ROT
         )
 
-    def update_turns_directly(self, turns: Union[int, float]) -> None:
-        if not turns:
-            return
-        self._update_pictographs_turns_by_color(turns)
-
-    def _update_pictographs_turns_by_color(self, new_turns):
+    def _update_pictographs_turns_by_motion_type(self, new_turns):
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.motion_type == self.attr_box.motion_type:
                     motion.set_turns(new_turns)
-                    pictograph_dict = {
-                        f"{motion.color}_turns": new_turns,
-                    }
+
+                    if motion.motion_type in [DASH, STATIC] and (
+                        motion.prop_rot_dir == NO_ROT and motion.turns > 0
+                    ):
+                        motion.manipulator.set_prop_rot_dir(
+                            self._get_current_prop_rot_dir()
+                        )
+                        pictograph_dict = {
+                            f"{motion.color}_turns": new_turns,
+                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir(),
+                        }
+                    else:
+                        pictograph_dict = {
+                            f"{motion.color}_turns": new_turns,
+                        }
                     motion.scene.update_pictograph(pictograph_dict)
+
+    def update_turns_incrementally(self, adjustment) -> None:
+        self.turnbox.currentIndexChanged.disconnect(
+            self.update_turns_directly_by_motion_type
+        )
+        for pictograph in self.attr_box.pictographs.values():
+            self.adjust_turns_by_motion_type(pictograph, adjustment)
+        self.turnbox.currentIndexChanged.connect(
+            self.update_turns_directly_by_motion_type
+        )
+
+    def update_turns_directly_by_motion_type(self, turns) -> None:
+        if turns in ["0", "1", "2", "3"]:
+            self.turnbox.setCurrentText(turns)
+        elif turns in ["0.5", "1.5", "2.5"]:
+            self.turnbox.setCurrentText(turns)
+        selected_turns_str = self.turnbox.currentText()
+        if not selected_turns_str:
+            return
+
+        new_turns = float(selected_turns_str)
+        self._update_pictographs_turns_by_motion_type(new_turns)
+
+    def _update_turns_directly(self, new_turns):
+        if new_turns in ["0", "1", "2", "3"]:
+            new_turns = int(new_turns)
+        elif new_turns in ["0.5", "1.5", "2.5"]:
+            new_turns = float(new_turns)
+
+        for pictograph in self.attr_box.pictographs.values():
+            for motion in pictograph.motions.values():
+                if motion.motion_type == self.attr_box.motion_type:
+                    other_motion = pictograph.motions[
+                        RED if motion.color == BLUE else BLUE
+                    ]
+                    if other_motion.motion_type == self.attr_box.motion_type:
+                        pictograph_dict = {
+                            f"{motion.color}_turns": new_turns,
+                            f"{other_motion.color}_turns": new_turns,
+                        }
+                        motion.scene.update_pictograph(pictograph_dict)
+                    elif other_motion.motion_type != self.attr_box.motion_type:
+                        pictograph_dict = {
+                            f"{motion.color}_turns": new_turns,
+                        }
+                        motion.scene.update_pictograph(pictograph_dict)
+
+                    self.turnbox.currentIndexChanged.disconnect(
+                        self._update_turns_directly
+                    )
+                    self.update_turns_display(new_turns)
+                    self.turnbox.currentIndexChanged.connect(
+                        self._update_turns_directly
+                    )
 
     ### EVENT HANDLERS ###
 
@@ -147,7 +208,12 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
             button = QPushButton(value, self)
             button.setStyleSheet(button_style_sheet)
             button.clicked.connect(
-                lambda checked, v=value: self.update_turns_directly(v)
+                lambda checked, v=value: self._update_turns_directly(v)
             )
             self.turns_buttons_layout.addWidget(button)
         self.layout.addLayout(self.turns_buttons_layout)
+
+    def connect_signals(self) -> None:
+        self.turnbox.currentIndexChanged.connect(
+            self.update_turns_directly_by_motion_type
+        )

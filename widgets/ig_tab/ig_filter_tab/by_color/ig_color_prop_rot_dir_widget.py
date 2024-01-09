@@ -10,11 +10,15 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 from typing import TYPE_CHECKING, List
 from constants import (
+    BLUE,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     DASH,
+    HEX_BLUE,
+    HEX_RED,
     ICON_DIR,
     NO_ROT,
+    RED,
     STATIC,
 )
 
@@ -101,29 +105,6 @@ class IGColorPropRotDirWidget(BaseAttrBoxWidget):
             self.cw_button.setStyleSheet(self.get_button_style(pressed=False))
             self.ccw_button.setStyleSheet(self.get_button_style(pressed=False))
 
-    def get_button_style(self, pressed: bool) -> str:
-        if pressed:
-            return """
-                QPushButton {
-                    background-color: #ccd9ff;
-                    border: 2px solid #555555;
-                    border-bottom-color: #888888; /* darker shadow on the bottom */
-                    border-right-color: #888888; /* darker shadow on the right */
-                    padding: 5px;
-                }
-            """
-        else:
-            return """
-                QPushButton {
-                    background-color: white;
-                    border: 1px solid black;
-                    padding: 5px;
-                }
-                QPushButton:hover {
-                    background-color: #e6f0ff;
-                }
-            """
-
     def _create_button(self, icon_path, action) -> QPushButton:
         button = QPushButton("", self)
         button.setIcon(QIcon(icon_path))
@@ -155,8 +136,6 @@ class IGColorPropRotDirWidget(BaseAttrBoxWidget):
             f"{self.styleSheet()} border: 1px solid black; border-radius: 0px;"
         )
 
-
-
     ### EVENT HANDLERS ###
 
     def update_button_size(self) -> None:
@@ -168,3 +147,20 @@ class IGColorPropRotDirWidget(BaseAttrBoxWidget):
 
     def resize_prop_rot_dir_widget(self) -> None:
         self.update_button_size()
+
+    def _setup_header_label(self) -> QLabel:
+        text = "Left" if self.attr_box.color == BLUE else "Right"
+        color_hex = HEX_RED if self.attr_box.color == RED else HEX_BLUE
+        label = QLabel(text, self)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        label.setStyleSheet(f"color: {color_hex}; font-weight: bold;")
+        return label
+
+    def _get_current_prop_rot_dir(self) -> str:
+        return (
+            CLOCKWISE
+            if self.attr_box.prop_rot_dir_widget.cw_button.isChecked()
+            else COUNTER_CLOCKWISE
+            if self.attr_box.prop_rot_dir_widget.ccw_button.isChecked()
+            else NO_ROT
+        )

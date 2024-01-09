@@ -134,12 +134,6 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
 
     ### SETTERS ###
 
-    def _adjust_turns_callback(
-        self: Union["GraphEditorTurnsWidget", "IGMotionTypeTurnsWidget"],
-        adjustment: float,
-    ) -> None:
-        self.update_turns_incrementally(adjustment)
-
     def set_layout_margins_and_alignment(self) -> None:
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
