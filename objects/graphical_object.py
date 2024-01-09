@@ -28,7 +28,7 @@ class GraphicalObject(QGraphicsSvgItem):
         self.center = self.boundingRect().center()
 
         self.setup_graphics_flags()
-        
+
     ### SETUP ###
 
     def setup_graphics_flags(self) -> None:
@@ -41,9 +41,6 @@ class GraphicalObject(QGraphicsSvgItem):
         self.setTransformOriginPoint(self.center)
 
     def set_svg_color(self, new_color: str) -> bytes:
-        if (self.svg_file, new_color) in self.svg_color_cache:
-            return self.svg_color_cache[(self.svg_file, new_color)]
-        
         def replace_class_color(match: re.Match) -> str:
             return match.group(1) + new_hex_color + match.group(3)
 
@@ -69,29 +66,32 @@ class GraphicalObject(QGraphicsSvgItem):
 
     ### UPDATERS ###
 
-    def _update_color(self: Union["Arrow", "Prop"]) -> None:
-        new_svg_data = self.set_svg_color(self.color)
-        self.renderer.load(new_svg_data)
+    def _update_svg_color(self: Union["Arrow", "Prop"]) -> None:
+        if (self.svg_file, self.color) in self.svg_color_cache:
+            svg_data = self.svg_color_cache[(self.svg_file, self.color)]
+        else:
+            svg_data = self.set_svg_color(self.color)
+        self.renderer.load(svg_data)
         # if not self.is_ghost:
         #     self.ghost.renderer.load(new_svg_data)
         self.setSharedRenderer(self.renderer)
-            
+
     def update_svg(self, svg_file: str) -> None:
         if self.svg_file != svg_file:
             self.svg_file = svg_file
             self.setup_svg_renderer(svg_file)
-            self._update_color()
+            self._update_svg_color()
 
-    def update_attributes(self: Union["Arrow","Prop"], attributes: Dict) -> None:
+    def update_attributes(self: Union["Arrow", "Prop"], attributes: Dict) -> None:
         if self._attributes_changed(attributes):
             for attribute_name, attribute_value in attributes.items():
                 setattr(self, attribute_name, attribute_value)
             self.attribute_cache.update(attributes)
-            self._update_color()  # Assuming color might be one of the attributes
 
-    def _attributes_changed(self: Union["Arrow","Prop"], new_attributes: Dict) -> bool:
-        return any(self.attribute_cache.get(key) != val for key, val in new_attributes.items())
-
+    def _attributes_changed(self: Union["Arrow", "Prop"], new_attributes: Dict) -> bool:
+        return any(
+            self.attribute_cache.get(key) != val for key, val in new_attributes.items()
+        )
 
     ### FLAGS ###
 

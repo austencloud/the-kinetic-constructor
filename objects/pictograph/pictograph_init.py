@@ -129,7 +129,6 @@ class PictographInit:
             ORIENTATION: None,
         }
         prop: Prop = prop_class(self.pictograph, prop_attributes, None)
-        prop.set_svg_color(color)
         ghost_prop = GhostProp(
             self.pictograph, prop_attributes, self.pictograph.motions[color]
         )

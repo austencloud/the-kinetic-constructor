@@ -46,7 +46,7 @@ class IGScrollArea(PictographScrollArea):
 
         self.update_timer = QTimer(self)
         self.update_timer.timeout.connect(self.update_pictographs_positions)
-        self.update_timer.start(300)
+        # self.update_timer.start(300)
 
     def update_pictographs_positions(self):
         """Method to update positions of all pictographs"""

@@ -39,15 +39,13 @@ class Arrow(GraphicalObject):
         self.svg_cache = {}
         self.attribute_cache = {}
         self.motion = motion
-        self.svg_file = self.get_arrow_svg_file(
-            arrow_dict[MOTION_TYPE], arrow_dict[TURNS]
-        )
-        self.setup_svg_renderer(self.svg_file)
-        self.setAcceptHoverEvents(True)
+        self._initialize_attributes(scene)
         self.update_attributes(arrow_dict)
-        self._update_color()
+        self.setAcceptHoverEvents(True)
         self.set_arrow_transform_origin_to_center()
 
+    def _initialize_attributes(self, scene):
+        self.svg_file = None
         self.arrow_rot_angle_manager = ArrowRotAngleManager(self)
         self.arrow_location_manager = ArrowLocationManager(self)
         self.prop: Optional[Prop] = None
@@ -167,12 +165,11 @@ class Arrow(GraphicalObject):
             self.ghost.transform = self.transform
         self.update_arrow_svg()
         self._update_mirror()
-
         self.arrow_location_manager.update_location()
         self.arrow_rot_angle_manager.update_rotation()
 
     def mirror_svg(self) -> None:
-        self.set_arrow_transform_origin_to_center()
+        # self.set_arrow_transform_origin_to_center()
         self.center_x = self.boundingRect().center().x()
         self.center_y = self.boundingRect().center().y()
         transform = QTransform()
@@ -186,7 +183,7 @@ class Arrow(GraphicalObject):
         self.is_svg_mirrored = True
 
     def unmirror_svg(self) -> None:
-        self.set_arrow_transform_origin_to_center()
+        # self.set_arrow_transform_origin_to_center()
         self.center_x = self.boundingRect().center().x()
         self.center_y = self.boundingRect().center().y()
         transform = QTransform()

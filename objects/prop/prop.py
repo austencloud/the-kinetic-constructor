@@ -32,23 +32,23 @@ class Prop(GraphicalObject):
         self.motion = motion
         self.arrow: Arrow = None
         self.attribute_cache = {}
-        self.prop_type = prop_dict[PROP_TYPE]
-        self.svg_file = self.get_svg_file(self.prop_type)
         super().__init__(scene)
-        self.setup_svg_renderer(self.svg_file)
-        self._setup_attributes(scene, prop_dict)
+        self.scene: Pictograph | PropBox = scene
+        self._initialize_attributes()
+        self.update_attributes(prop_dict)
         self.setZValue(10)
 
-    def _setup_attributes(self, scene, prop_dict: Dict) -> None:
-        self.scene: Pictograph | PropBox = scene
+    def _initialize_attributes(self) -> None:
         self.drag_offset = QPointF(0, 0)
+        self.svg_file = None
         self.previous_location: Locations = None
         self.ghost: Prop = None
         self.is_ghost: bool = False
         self.axis: Axes = None
-        self.color: Colors = prop_dict[COLOR]
-        self.loc: Locations = prop_dict[LOC]
-        self.ori: Orientations = prop_dict[ORIENTATION]
+        self.prop_type: PropTypes = None
+        self.color: Colors = None
+        self.loc: Locations = None
+        self.ori: Orientations = None
         self.center = self.boundingRect().center()
 
     ### MOUSE EVENTS ###
@@ -170,15 +170,15 @@ class Prop(GraphicalObject):
             for key, value in prop_dict.items():
                 setattr(self, key, value)
         self.motion.update_prop_ori()
-        self.update_svg()
-        self._update_color()
+        self.update_prop_svg()
         self._update_prop_rotation_angle()
 
-    def update_svg(self) -> None:
-        svg_file = self.get_svg_file(self.prop_type)
-        super().update_svg(svg_file)
+    def update_prop_svg(self) -> None:
+        svg_file = self.get_prop_svg_file(self.prop_type)
+        if self.svg_file != svg_file:
+            self.update_svg(svg_file)
 
-    def get_svg_file(self, prop_type: PropTypes) -> str:
+    def get_prop_svg_file(self, prop_type: PropTypes) -> str:
         svg_file = f"{PROP_DIR}{prop_type}.svg"
         return svg_file
 
