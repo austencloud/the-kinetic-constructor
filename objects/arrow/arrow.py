@@ -46,6 +46,8 @@ class Arrow(GraphicalObject):
         self.setAcceptHoverEvents(True)
         self.update_attributes(arrow_dict)
         self._update_color()
+        self.set_arrow_transform_origin_to_center()
+
         self.arrow_rot_angle_manager = ArrowRotAngleManager(self)
         self.arrow_location_manager = ArrowLocationManager(self)
         self.prop: Optional[Prop] = None
@@ -170,9 +172,9 @@ class Arrow(GraphicalObject):
         self.arrow_rot_angle_manager.update_rotation()
 
     def mirror_svg(self) -> None:
+        self.set_arrow_transform_origin_to_center()
         self.center_x = self.boundingRect().center().x()
         self.center_y = self.boundingRect().center().y()
-        self.set_arrow_transform_origin_to_center()
         transform = QTransform()
         transform.translate(self.center_x, self.center_y)
         transform.scale(-1, 1)
@@ -184,6 +186,7 @@ class Arrow(GraphicalObject):
         self.is_svg_mirrored = True
 
     def unmirror_svg(self) -> None:
+        self.set_arrow_transform_origin_to_center()
         self.center_x = self.boundingRect().center().x()
         self.center_y = self.boundingRect().center().y()
         transform = QTransform()

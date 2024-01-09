@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
 
 
-class ArrowPositioner:
+class ArrowPlacementManager:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
         self.blue_arrow = self.pictograph.arrows.get(BLUE)
@@ -99,7 +99,7 @@ class ArrowPositioner:
             "Y-",
             "Z-",
         ]
-        self.update_arrow_position()
+        self.update_arrow_positions()
 
     def _load_placements(self) -> Dict[str, Dict[str, Tuple[int, int]]]:
         json_path = "arrow_placement/special_placements.json"
@@ -122,7 +122,7 @@ class ArrowPositioner:
             reposition_method()
 
     ### PUBLIC METHODS ###
-    def update_arrow_position(self) -> None:
+    def update_arrow_positions(self) -> None:
         self.letter = self.pictograph.letter
         self.placements = self._load_placements()
         for arrow in self.arrows:

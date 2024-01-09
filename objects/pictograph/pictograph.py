@@ -6,8 +6,8 @@ from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
 from Enums import LetterNumberType
 
 from constants import *
-from objects.pictograph.position_engines.arrow_positioners.arrow_positioner import (
-    ArrowPositioner,
+from objects.arrow.arrow_placement_manager import (
+    ArrowPlacementManager,
 )
 
 from utilities.TypeChecking.Letters import Letters
@@ -135,8 +135,8 @@ class Pictograph(QGraphicsScene):
 
     def _setup_managers(self, main_widget: "MainWidget") -> None:
         self.pictograph_menu_handler = PictographMenuHandler(main_widget, self)
-        self.arrow_positioner = ArrowPositioner(self)
-        self.prop_positioner = MainPropPositioner(self)
+        self.arrow_placement_manager = ArrowPlacementManager(self)
+        self.prop_placement_manager = MainPropPositioner(self)
         self.letter_engine = LetterEngine(self)
 
     def _create_motion_dict(
@@ -331,8 +331,8 @@ class Pictograph(QGraphicsScene):
             )
 
     def _position_objects(self) -> None:
-        self.prop_positioner.position_props()
-        self.arrow_positioner.update_arrow_position()
+        self.prop_placement_manager.position_props()
+        self.arrow_placement_manager.update_arrow_positions()
 
     def _update_motions(self) -> None:
         for motion in self.motions.values():

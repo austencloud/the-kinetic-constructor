@@ -55,8 +55,8 @@ class IGScrollArea(PictographScrollArea):
         self.update_scroll_area_content()
 
     def update_individual_pictograph_position(self, pictograph: IGPictograph):
-        if hasattr(pictograph, "arrow_positioner"):
-            pictograph.arrow_positioner.update_arrow_position()
+        if hasattr(pictograph, "arrow_placement_manager"):
+            pictograph.arrow_placement_manager.update_arrow_positions()
 
     def update_scroll_area_content(self) -> None:
         self.container.adjustSize()
