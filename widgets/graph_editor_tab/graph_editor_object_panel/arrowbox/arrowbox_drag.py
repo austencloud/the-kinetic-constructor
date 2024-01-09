@@ -230,7 +230,6 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
                     COLOR: self.color,
                     LOC: self.end_loc,
                 }
-                prop.update_attributes(prop_dict)
 
                 self.ghost.motion.prop = prop
                 self.prop = prop
@@ -238,6 +237,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
 
                 if prop not in self.pictograph.items():
                     self.pictograph.addItem(prop)
+                prop.update_prop(prop_dict)
                 prop.update_prop()
 
     def apply_transformations_to_preview(self) -> None:

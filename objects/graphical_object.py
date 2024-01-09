@@ -16,6 +16,7 @@ if TYPE_CHECKING:
 
 class GraphicalObject(QGraphicsSvgItem):
     self: Union["Prop", "Arrow"]
+    svg_color_cache = {}
 
     def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__()
@@ -27,7 +28,7 @@ class GraphicalObject(QGraphicsSvgItem):
         self.center = self.boundingRect().center()
 
         self.setup_graphics_flags()
-
+        
     ### SETUP ###
 
     def setup_graphics_flags(self) -> None:
@@ -40,6 +41,9 @@ class GraphicalObject(QGraphicsSvgItem):
         self.setTransformOriginPoint(self.center)
 
     def set_svg_color(self, new_color: str) -> bytes:
+        if (self.svg_file, new_color) in self.svg_color_cache:
+            return self.svg_color_cache[(self.svg_file, new_color)]
+        
         def replace_class_color(match: re.Match) -> str:
             return match.group(1) + new_hex_color + match.group(3)
 
@@ -56,6 +60,7 @@ class GraphicalObject(QGraphicsSvgItem):
         svg_data = class_color_pattern.sub(replace_class_color, svg_data)
         fill_pattern = re.compile(r'(fill=")(#[a-fA-F0-9]{6})(")')
         svg_data = fill_pattern.sub(replace_fill_color, svg_data)
+        self.svg_color_cache[(self.svg_file, new_color)] = svg_data.encode("utf-8")
         return svg_data.encode("utf-8")
 
     def setup_svg_renderer(self, svg_file: str) -> None:
@@ -67,18 +72,21 @@ class GraphicalObject(QGraphicsSvgItem):
     def _update_color(self: Union["Arrow", "Prop"]) -> None:
         new_svg_data = self.set_svg_color(self.color)
         self.renderer.load(new_svg_data)
-        if not self.is_ghost:
-            self.ghost.renderer.load(new_svg_data)
+        # if not self.is_ghost:
+        #     self.ghost.renderer.load(new_svg_data)
         self.setSharedRenderer(self.renderer)
-
+            
     def update_svg(self, svg_file: str) -> None:
-        self.set_svg_color(self.color)
-        self.setup_svg_renderer(svg_file)
+        if self.svg_file != svg_file:
+            self.svg_file = svg_file
+            self.setup_svg_renderer(svg_file)
+            self._update_color()
 
     def update_attributes(self, attributes: Dict) -> None:
         for attribute_name, attribute_value in attributes.items():
             setattr(self, attribute_name, attribute_value)
-
+        # self._update_color()
+        
     ### FLAGS ###
 
     def is_dim(self, on: bool) -> None:

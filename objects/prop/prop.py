@@ -400,7 +400,6 @@ class Prop(GraphicalObject):
 
         self.loc = closest_hand_point
         self.axis = self.get_axis_from_ori()
-        self.update_prop()
         self.setPos(closest_hand_point_coord)
 
         if self.motion.arrow:

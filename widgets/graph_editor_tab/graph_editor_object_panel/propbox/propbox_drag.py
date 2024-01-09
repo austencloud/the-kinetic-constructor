@@ -157,9 +157,8 @@ class PropBoxDrag(BaseObjectBoxDrag):
                         MOTION_TYPE: STATIC,
                         TURNS: 0,
                     }
-
                     self.arrow = self.pictograph.arrows[self.color]
-                    self.arrow.update_attributes(static_arrow_dict)
+                    self.arrow.update_arrow(static_arrow_dict)
 
                     motion_dict = {
                         COLOR: self.color,
@@ -279,11 +278,5 @@ class PropBoxDrag(BaseObjectBoxDrag):
         self.arrow.ghost = self.pictograph.ghost_arrows[self.color]
         self.arrow.ghost.motion = self.pictograph.motions[self.color]
         self.arrow.update_arrow()
-        self.arrow.ghost.update_attributes(self.arrow.get_attributes())
-        self.arrow.ghost.update_svg(
-            self.arrow.get_svg_file(
-                self.arrow.motion_type, self.arrow.turns
-            )
-        )
         self.arrow.ghost.update_arrow()
         self.pictograph.arrows[self.color] = self.arrow

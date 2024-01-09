@@ -39,10 +39,13 @@ class Arrow(GraphicalObject):
     def __init__(self, scene, arrow_dict, motion: "Motion") -> None:
         super().__init__(scene)
         self.motion = motion
-        self.svg_file = self.get_svg_file(arrow_dict[MOTION_TYPE], arrow_dict[TURNS])
+        self.svg_file = self.get_arrow_svg_file(
+            arrow_dict[MOTION_TYPE], arrow_dict[TURNS]
+        )
         self.setup_svg_renderer(self.svg_file)
         self.setAcceptHoverEvents(True)
         self.update_attributes(arrow_dict)
+        self._update_color()
         self.arrow_rot_angle_manager = ArrowRotAngleManager(self)
         self.arrow_location_manager = ArrowLocationManager(self)
         self.prop: Optional[Prop] = None
@@ -58,11 +61,9 @@ class Arrow(GraphicalObject):
     ### SETUP ###
 
     def update_arrow_svg(self) -> None:
-        svg_file = self.get_svg_file(self.motion_type, self.turns)
-        self.svg_file = svg_file
-        super().update_svg(svg_file)
-        if not self.is_ghost and self.ghost:
-            self.ghost.update_svg(svg_file)
+        svg_file = self.get_arrow_svg_file(self.motion_type, self.turns)
+        if self.svg_file != svg_file:
+            self.update_svg(svg_file)
 
     ### MOUSE EVENTS ###
 
@@ -99,43 +100,20 @@ class Arrow(GraphicalObject):
         self.setPos(new_pos)
 
     def _update_mirror(self) -> None:
-        if self.motion_type == PRO:
-            rot_dir = self.motion.prop_rot_dir
-            if rot_dir == CLOCKWISE:
-                self.is_svg_mirrored = False
-            elif rot_dir == COUNTER_CLOCKWISE:
-                self.is_svg_mirrored = True
+        new_mirror_state = False
+        if self.motion_type in [PRO, STATIC]:
+            new_mirror_state = self.motion.prop_rot_dir == COUNTER_CLOCKWISE
         elif self.motion_type == ANTI:
-            rot_dir = self.motion.prop_rot_dir
-            if rot_dir == CLOCKWISE:
-                self.is_svg_mirrored = True
-            elif rot_dir == COUNTER_CLOCKWISE:
-                self.is_svg_mirrored = False
-        elif self.motion_type == DASH:
-            if self.turns > 0:
-                if self.motion.prop_rot_dir == CLOCKWISE:
-                    self.is_svg_mirrored = False
-                elif self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                    self.is_svg_mirrored = True
-            else:
-                self.is_svg_mirrored = False
-        elif self.motion_type == STATIC:
-            if self.turns > 0:
-                if self.motion.prop_rot_dir == CLOCKWISE:
-                    self.is_svg_mirrored = False
-                elif self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                    self.is_svg_mirrored = True
-            else:
-                self.is_svg_mirrored = False
+            new_mirror_state = self.motion.prop_rot_dir == CLOCKWISE
+        elif self.motion_type == DASH and self.turns > 0:
+            new_mirror_state = self.motion.prop_rot_dir == COUNTER_CLOCKWISE
 
-        if self.is_svg_mirrored:
-            self.mirror_svg()
-            if not self.is_ghost:
-                self.ghost.mirror_svg()
-        else:
-            self.unmirror_svg()
-            if not self.is_ghost:
-                self.ghost.unmirror_svg()
+        # Update only if mirror state has changed
+        if new_mirror_state != self.is_svg_mirrored:
+            if new_mirror_state:
+                self.mirror_svg()
+            else:
+                self.unmirror_svg()
 
     def set_arrow_transform_origin_to_center(self) -> None:
         self.setTransformOriginPoint(self.boundingRect().center())
@@ -152,7 +130,7 @@ class Arrow(GraphicalObject):
         arrow_attributes = [COLOR, LOC, MOTION_TYPE, TURNS]
         return {attr: getattr(self, attr) for attr in arrow_attributes}
 
-    def get_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
+    def get_arrow_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
         cache_key = f"{motion_type}_{float(turns)}"
         if cache_key not in Arrow.svg_cache:
             file_path = f"resources/images/arrows/{self.pictograph.main_widget.grid_mode}/{motion_type}/{motion_type}_{float(turns)}.svg"
@@ -187,7 +165,7 @@ class Arrow(GraphicalObject):
             self.ghost.transform = self.transform
         self.update_arrow_svg()
         self._update_mirror()
-        self._update_color()
+        
         self.arrow_location_manager.update_location()
         self.arrow_rot_angle_manager.update_rotation()
 

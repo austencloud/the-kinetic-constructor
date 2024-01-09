@@ -316,8 +316,6 @@ class Pictograph(QGraphicsScene):
             motion_dicts.append(motion_dict)
 
         for motion_dict in motion_dicts:
-            self.motions[motion_dict[COLOR]].update_attributes(motion_dict)
-        for motion_dict in motion_dicts:
             self.motions[motion_dict[COLOR]].update_motion(motion_dict)
         for arrow in self.arrows.values():
             if not arrow.isVisible():
@@ -413,7 +411,7 @@ class Pictograph(QGraphicsScene):
             motion_dict[PROP] = new_prop
             motion_dict[MOTION_TYPE] = new_arrow.motion_type
             new_arrow.turns = motion_dict[TURNS]
-            new_arrow.motion.update_attributes(motion_dict)
+            new_arrow.motion.update_motion(motion_dict)
 
             new_arrow.setTransformOriginPoint(new_arrow.boundingRect().center())
             new_arrow.ghost.setTransformOriginPoint(

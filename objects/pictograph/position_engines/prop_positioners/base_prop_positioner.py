@@ -31,7 +31,6 @@ from objects.prop.prop import Prop
 from utilities.TypeChecking.Letters import Letters
 from utilities.TypeChecking.TypeChecking import Directions
 from utilities.TypeChecking.prop_types import (
-    PropTypes,
     PropTypesList,
     big_bilateral_prop_types,
     big_unilateral_prop_types,
@@ -56,6 +55,10 @@ class BasePropPositioner:
         self.letters: Dict[
             Letters, List[Dict[str, str]]
         ] = pictograph.main_widget.letters
+        self.position_offsets_cache = {}
+        self.location_points_cache = {}
+
+
 
     def update_prop_positions(self) -> None:
         self.red_motion = self.pictograph.motions[RED]
@@ -337,27 +340,27 @@ class BasePropPositioner:
         prop_length = prop.boundingRect().width()
         prop_width = prop.boundingRect().height()
 
-        half_prop_width = prop_width / 2
-        half_prop_length = prop_length / 2
+        x = prop_width / 2
+        y = prop_length / 2
 
         # Define a map for position offsets based on orientation and location
         position_offsets = {
-            (IN, NORTH): QPointF(half_prop_width, -half_prop_length),
-            (IN, SOUTH): QPointF(-half_prop_width, half_prop_length),
-            (IN, EAST): QPointF(half_prop_length, half_prop_width),
-            (IN, WEST): QPointF(-half_prop_length, -half_prop_width),
-            (OUT, NORTH): QPointF(-half_prop_width, half_prop_length),
-            (OUT, SOUTH): QPointF(half_prop_width, -half_prop_length),
-            (OUT, EAST): QPointF(-half_prop_length, -half_prop_width),
-            (OUT, WEST): QPointF(half_prop_length, half_prop_width),
-            (CLOCK, NORTH): QPointF(-half_prop_length, -half_prop_width),
-            (CLOCK, SOUTH): QPointF(half_prop_length, half_prop_width),
-            (CLOCK, EAST): QPointF(half_prop_width, -half_prop_length),
-            (CLOCK, WEST): QPointF(-half_prop_width, half_prop_length),
-            (COUNTER, NORTH): QPointF(half_prop_length, half_prop_width),
-            (COUNTER, SOUTH): QPointF(-half_prop_length, -half_prop_width),
-            (COUNTER, EAST): QPointF(-half_prop_width, half_prop_length),
-            (COUNTER, WEST): QPointF(half_prop_width, -half_prop_length),
+            (IN, NORTH): QPointF(x, -y),
+            (IN, SOUTH): QPointF(-x, y),
+            (IN, EAST): QPointF(y, x),
+            (IN, WEST): QPointF(-y, -x),
+            (OUT, NORTH): QPointF(-x, y),
+            (OUT, SOUTH): QPointF(x, -y),
+            (OUT, EAST): QPointF(-y, -x),
+            (OUT, WEST): QPointF(y, x),
+            (CLOCK, NORTH): QPointF(-y, -x),
+            (CLOCK, SOUTH): QPointF(y, x),
+            (CLOCK, EAST): QPointF(x, -y),
+            (CLOCK, WEST): QPointF(-x, y),
+            (COUNTER, NORTH): QPointF(y, x),
+            (COUNTER, SOUTH): QPointF(-y, -x),
+            (COUNTER, EAST): QPointF(-x, y),
+            (COUNTER, WEST): QPointF(x, -y),
         }
         return position_offsets
 
