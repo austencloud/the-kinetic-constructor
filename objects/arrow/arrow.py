@@ -39,26 +39,21 @@ class Arrow(GraphicalObject):
     def __init__(self, scene, arrow_dict, motion: "Motion") -> None:
         super().__init__(scene)
         self.motion = motion
-
-        self.svg_file = self.get_svg_file(
-            arrow_dict[MOTION_TYPE],
-            arrow_dict[TURNS],
-        )
+        self.svg_file = self.get_svg_file(arrow_dict[MOTION_TYPE], arrow_dict[TURNS])
         self.setup_svg_renderer(self.svg_file)
         self.setAcceptHoverEvents(True)
         self.update_attributes(arrow_dict)
         self.arrow_rot_angle_manager = ArrowRotAngleManager(self)
         self.arrow_location_manager = ArrowLocationManager(self)
-        
-        self.prop: Prop = None
-        self.scene: Pictograph | ArrowBox = scene
+        self.prop: Optional[Prop] = None
+        self.scene: Union[Pictograph, ArrowBox] = scene
         self.is_svg_mirrored: bool = False
         self.is_dragging: bool = False
-        self.ghost: GhostArrow = None
-        self.loc: Locations = None
+        self.ghost: Optional[GhostArrow] = None
+        self.loc: Optional[Locations] = None
         self.is_ghost: bool = False
         self.drag_offset = QPointF(0, 0)
-        self.lead_state: LeadStates = None
+        self.lead_state: Optional[LeadStates] = None
 
     ### SETUP ###
 
@@ -161,8 +156,7 @@ class Arrow(GraphicalObject):
         cache_key = f"{motion_type}_{float(turns)}"
         if cache_key not in Arrow.svg_cache:
             file_path = f"resources/images/arrows/{self.pictograph.main_widget.grid_mode}/{motion_type}/{motion_type}_{float(turns)}.svg"
-            with open(file_path, "r") as file:
-                Arrow.svg_cache[cache_key] = file.name
+            Arrow.svg_cache[cache_key] = file_path
         return Arrow.svg_cache[cache_key]
 
     def _change_arrow_to_static(self) -> None:
@@ -224,7 +218,7 @@ class Arrow(GraphicalObject):
             self.ghost.is_svg_mirrored = False
         self.is_svg_mirrored = False
 
-    def adjust_position(self, adjustment):
+    def adjust_position(self, adjustment) -> None:
         self.setPos(self.pos() + QPointF(*adjustment))
 
     ### DELETION ###
