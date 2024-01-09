@@ -54,12 +54,17 @@ class GridItem(QGraphicsSvgItem):
 class Grid:
     def __init__(self, grid_scene: Union["ArrowBox", "PropBox", "Pictograph"]) -> None:
         self.items: Dict[str, GridItem] = {}
+        self.circle_coordinates_cache = {}
+        self.svg_file_path_cache = {}
+        self.grid_mode = DIAMOND
         self._init_grid(grid_scene)
         self._apply_grid_mode(grid_scene.main_widget.grid_mode)
 
     def _init_grid(
         self, grid_scene: Union["ArrowBox", "PropBox", "Pictograph"]
     ) -> None:
+        self._populate_circle_coordinates_cache()
+        self._create_grid_items(grid_scene)
         self.center = self.get_circle_coordinates("center_point")
         intercardinal_points = [
             NORTHEAST,
@@ -144,8 +149,51 @@ class Grid:
         )
         self._create_grid_items(grid_scene)
 
+    def _populate_circle_coordinates_cache(self):
+        # List of all circle IDs that need to be cached
+        circle_ids = [
+            "center_point",
+            "n_diamond_hand_point",
+            "e_diamond_hand_point",
+            "s_diamond_hand_point",
+            "w_diamond_hand_point",
+            "ne_box_hand_point",
+            "se_box_hand_point",
+            "sw_box_hand_point",
+            "nw_box_hand_point",
+            "strict_n_diamond_hand_point",
+            "strict_e_diamond_hand_point",
+            "strict_s_diamond_hand_point",
+            "strict_w_diamond_hand_point",
+            "strict_ne_box_hand_point",
+            "strict_se_box_hand_point",
+            "strict_sw_box_hand_point",
+            "strict_nw_box_hand_point",
+            "ne_diamond_layer2_point",
+            "se_diamond_layer2_point",
+            "sw_diamond_layer2_point",
+            "nw_diamond_layer2_point",
+            "strict_ne_diamond_layer2_point",
+            "strict_se_diamond_layer2_point",
+            "strict_sw_diamond_layer2_point",
+            "strict_nw_diamond_layer2_point",
+            "n_box_layer2_point",
+            "e_box_layer2_point",
+            "s_box_layer2_point",
+            "w_box_layer2_point",
+            "strict_n_box_layer2_point",
+            "strict_e_box_layer2_point",
+            "strict_s_box_layer2_point",
+            "strict_w_box_layer2_point",
+        ]
+
+        for circle_id in circle_ids:
+            self.circle_coordinates_cache[circle_id] = self.get_circle_coordinates(
+                circle_id
+            )
+
     def _create_grid_items(self, grid_scene: "Pictograph") -> None:
-        # Updated paths to include the whole SVG for each grid mode
+        # Paths for each grid mode
         paths = {
             DIAMOND: f"{GRID_DIR}diamond_grid.svg",
             BOX: f"{GRID_DIR}box_grid.svg",
@@ -155,6 +203,8 @@ class Grid:
             item = GridItem(path)
             grid_scene.addItem(item)
             self.items[mode] = item
+            # Set initial visibility based on the grid mode
+            item.setVisible(mode == self.grid_mode)
 
     def _init_points(
         self, point_names: List[str], constants: List[str]
@@ -174,6 +224,11 @@ class Grid:
         self.items[DIAMOND].setVisible(False)
 
     def get_circle_coordinates(self, circle_id: str) -> Union[QPointF, None]:
+        # Return from cache if available
+        if circle_id in self.circle_coordinates_cache:
+            return self.circle_coordinates_cache[circle_id]
+
+        # Fetch and parse SVG file if not in cache
         svg_file_path = self._get_svg_file_path(circle_id)
         with open(svg_file_path, "r") as svg_file:
             svg_content = svg_file.read()
@@ -185,18 +240,26 @@ class Grid:
         if circle_element is not None:
             cx = float(circle_element.attrib["cx"])
             cy = float(circle_element.attrib["cy"])
-            return QPointF(cx, cy)
+            coordinates = QPointF(cx, cy)
+            self.circle_coordinates_cache[circle_id] = coordinates
+            return coordinates
         return None
 
     def _get_svg_file_path(self, circle_id: str) -> str:
-        # Determine the correct SVG file based on the grid mode and circle ID
-        if "diamond" in circle_id or "center_point" in circle_id:
-            return f"{GRID_DIR}diamond_grid.svg"
-        elif "box" in circle_id:
-            return f"{GRID_DIR}box_grid.svg"
-        # Fallback if no matching pattern is found
+        # Check if SVG file path is cached
+        if circle_id in self.svg_file_path_cache:
+            return self.svg_file_path_cache[circle_id]
 
-        return ""
+        # Determine the correct SVG file based on the circle ID
+        if "diamond" in circle_id or "center_point" in circle_id:
+            path = f"{GRID_DIR}diamond_grid.svg"
+        elif "box" in circle_id:
+            path = f"{GRID_DIR}box_grid.svg"
+        else:
+            path = ""
+
+        self.svg_file_path_cache[circle_id] = path
+        return path
 
     def get_layer2_points(self) -> Dict[str, QPointF]:
         """
@@ -247,10 +310,8 @@ class Grid:
 
     def toggle_grid_mode(self, grid_mode: GridModes) -> None:
         self.grid_mode = grid_mode
-        if grid_mode == DIAMOND:
-            self._hide_box_mode_elements()
-        elif grid_mode == BOX:
-            self._hide_diamond_mode_elements()
+        self.items[DIAMOND].setVisible(grid_mode == DIAMOND)
+        self.items[BOX].setVisible(grid_mode == BOX)
 
     def mousePressEvent(self, event) -> None:
         event.ignore()

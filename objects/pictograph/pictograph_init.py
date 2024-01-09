@@ -63,7 +63,8 @@ class PictographInit:
         return letter_item
 
     def init_locations(self, grid: Grid) -> Dict[Locations, Tuple[int, int, int, int]]:
-        grid_center = grid.get_circle_coordinates("center_point").toPoint()
+        # Use cached coordinates directly
+        grid_center = grid.circle_coordinates_cache["center_point"].toPoint()
 
         grid_center_x = grid_center.x()
         grid_center_y = grid_center.y()

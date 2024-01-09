@@ -202,9 +202,10 @@ class PropBox(BaseObjectBox):
         self.props.clear()
 
     def set_prop_position(self, prop: Prop) -> None:
-        hand_point = self.grid.get_circle_coordinates(
+        # Use cached coordinates directly
+        hand_point = self.grid.circle_coordinates_cache[
             f"{prop.loc}_{self.grid.grid_mode}_hand_point"
-        )
+        ]
         prop_length = prop.boundingRect().width()
         prop_width = prop.boundingRect().height()
         offset_x = -prop_length / 2

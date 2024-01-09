@@ -89,7 +89,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
         self.pictograph.arrows[self.color] = arrow
         self.pictograph.ghost_arrows[self.color] = self.ghost
         arrow.ghost = self.ghost
-        arrow.set_arrow_transform_origin_to_center()
+        # arrow.set_arrow_transform_origin_to_center()
         self.pictograph.clearSelection()
         self.pictograph.arrows[self.color] = arrow
         self.pictograph.arrows[self.color].motion = self.pictograph.motions[self.color]

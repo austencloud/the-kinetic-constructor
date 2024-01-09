@@ -42,9 +42,9 @@ class Arrow(GraphicalObject):
         self._initialize_attributes(scene)
         self.update_attributes(arrow_dict)
         self.setAcceptHoverEvents(True)
-        self.set_arrow_transform_origin_to_center()
+        # self.set_arrow_transform_origin_to_center()
 
-    def _initialize_attributes(self, scene):
+    def _initialize_attributes(self, scene) -> None:
         self.svg_file = None
         self.arrow_rot_angle_manager = ArrowRotAngleManager(self)
         self.arrow_location_manager = ArrowLocationManager(self)
