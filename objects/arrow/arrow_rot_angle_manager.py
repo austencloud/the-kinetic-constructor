@@ -28,7 +28,6 @@ class ArrowRotAngleManager:
 
     def update_rotation(self) -> None:
         angle = self._resolve_angle()
-
         self._apply_rotation(angle)
 
     def _resolve_angle(self) -> int:
@@ -268,7 +267,6 @@ class ArrowRotAngleManager:
             )
         ).get(self.arrow.loc)
         return arrow_angle if self.arrow.loc else 0
-
 
     def _get_Φ_dash_angle(self) -> int:
         other_motion = (

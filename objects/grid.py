@@ -54,7 +54,7 @@ class GridItem(QGraphicsSvgItem):
 
 class Grid:
     def __init__(self, grid_scene: Union["ArrowBox", "PropBox", "Pictograph"]) -> None:
-        self.items = {}
+        self.items: Dict[GridModes, GridItem] = {}
         self.grid_mode = DIAMOND
         self.circle_coordinates_cache = self._load_circle_coordinates()
         self._create_grid_items(grid_scene)
@@ -93,19 +93,6 @@ class Grid:
             # Set initial visibility based on the grid mode
             item.setVisible(mode == self.grid_mode)
 
-    def _get_svg_file_path(self, circle_id: str) -> str:
-        # Check if SVG file path is cached
-        if circle_id in self.svg_file_path_cache:
-            return self.svg_file_path_cache[circle_id]
-
-        # Determine the correct SVG file based on the circle ID
-        if "diamond" in circle_id or "center" in circle_id or "outer" in circle_id:
-            path = f"{GRID_DIR}diamond_grid.svg"
-        elif "box" in circle_id:
-            path = f"{GRID_DIR}box_grid.svg"
-
-        self.svg_file_path_cache[circle_id] = path
-        return path
 
     def setPos(self, position: QPointF) -> None:
         for item in self.items.values():

@@ -34,36 +34,40 @@ if TYPE_CHECKING:
 
 
 class Arrow(GraphicalObject):
+    svg_cache = {}
+
     def __init__(self, scene, arrow_dict, motion: "Motion") -> None:
         super().__init__(scene)
-        self.svg_cache = {}
-        self.attribute_cache = {}
         self.motion = motion
-        self._initialize_attributes(scene)
-        self.update_attributes(arrow_dict)
-        self.setAcceptHoverEvents(True)
-        # self.set_arrow_transform_origin_to_center()
 
-    def _initialize_attributes(self, scene) -> None:
-        self.svg_file = None
+        self.svg_file = self.get_svg_file(
+            arrow_dict[MOTION_TYPE],
+            arrow_dict[TURNS],
+        )
+        self.setup_svg_renderer(self.svg_file)
+        self.setAcceptHoverEvents(True)
+        self.update_attributes(arrow_dict)
         self.arrow_rot_angle_manager = ArrowRotAngleManager(self)
         self.arrow_location_manager = ArrowLocationManager(self)
-        self.prop: Optional[Prop] = None
-        self.scene: Union[Pictograph, ArrowBox] = scene
+        
+        self.prop: Prop = None
+        self.scene: Pictograph | ArrowBox = scene
         self.is_svg_mirrored: bool = False
         self.is_dragging: bool = False
-        self.ghost: Optional[GhostArrow] = None
-        self.loc: Optional[Locations] = None
+        self.ghost: GhostArrow = None
+        self.loc: Locations = None
         self.is_ghost: bool = False
         self.drag_offset = QPointF(0, 0)
-        self.lead_state: Optional[LeadStates] = None
+        self.lead_state: LeadStates = None
 
     ### SETUP ###
 
     def update_arrow_svg(self) -> None:
-        svg_file = self.get_arrow_svg_file(self.motion_type, self.turns)
-        if self.svg_file != svg_file:
-            self.update_svg(svg_file)
+        svg_file = self.get_svg_file(self.motion_type, self.turns)
+        self.svg_file = svg_file
+        super().update_svg(svg_file)
+        if not self.is_ghost and self.ghost:
+            self.ghost.update_svg(svg_file)
 
     ### MOUSE EVENTS ###
 
@@ -100,20 +104,43 @@ class Arrow(GraphicalObject):
         self.setPos(new_pos)
 
     def _update_mirror(self) -> None:
-        new_mirror_state = False
-        if self.motion_type in [PRO, STATIC]:
-            new_mirror_state = self.motion.prop_rot_dir == COUNTER_CLOCKWISE
+        if self.motion_type == PRO:
+            rot_dir = self.motion.prop_rot_dir
+            if rot_dir == CLOCKWISE:
+                self.is_svg_mirrored = False
+            elif rot_dir == COUNTER_CLOCKWISE:
+                self.is_svg_mirrored = True
         elif self.motion_type == ANTI:
-            new_mirror_state = self.motion.prop_rot_dir == CLOCKWISE
-        elif self.motion_type == DASH and self.turns > 0:
-            new_mirror_state = self.motion.prop_rot_dir == COUNTER_CLOCKWISE
-
-        # Update only if mirror state has changed
-        if new_mirror_state != self.is_svg_mirrored:
-            if new_mirror_state:
-                self.mirror_svg()
+            rot_dir = self.motion.prop_rot_dir
+            if rot_dir == CLOCKWISE:
+                self.is_svg_mirrored = True
+            elif rot_dir == COUNTER_CLOCKWISE:
+                self.is_svg_mirrored = False
+        elif self.motion_type == DASH:
+            if self.turns > 0:
+                if self.motion.prop_rot_dir == CLOCKWISE:
+                    self.is_svg_mirrored = False
+                elif self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                    self.is_svg_mirrored = True
             else:
-                self.unmirror_svg()
+                self.is_svg_mirrored = False
+        elif self.motion_type == STATIC:
+            if self.turns > 0:
+                if self.motion.prop_rot_dir == CLOCKWISE:
+                    self.is_svg_mirrored = False
+                elif self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                    self.is_svg_mirrored = True
+            else:
+                self.is_svg_mirrored = False
+
+        if self.is_svg_mirrored:
+            self.mirror_svg()
+            if not self.is_ghost:
+                self.ghost.mirror_svg()
+        else:
+            self.unmirror_svg()
+            if not self.is_ghost:
+                self.ghost.unmirror_svg()
 
     def set_arrow_transform_origin_to_center(self) -> None:
         self.setTransformOriginPoint(self.boundingRect().center())
@@ -130,12 +157,13 @@ class Arrow(GraphicalObject):
         arrow_attributes = [COLOR, LOC, MOTION_TYPE, TURNS]
         return {attr: getattr(self, attr) for attr in arrow_attributes}
 
-    def get_arrow_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
+    def get_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
         cache_key = f"{motion_type}_{float(turns)}"
-        if cache_key not in self.svg_cache:
+        if cache_key not in Arrow.svg_cache:
             file_path = f"resources/images/arrows/{self.pictograph.main_widget.grid_mode}/{motion_type}/{motion_type}_{float(turns)}.svg"
-            self.svg_cache[cache_key] = file_path
-        return self.svg_cache[cache_key]
+            with open(file_path, "r") as file:
+                Arrow.svg_cache[cache_key] = file.name
+        return Arrow.svg_cache[cache_key]
 
     def _change_arrow_to_static(self) -> None:
         motion_dict = {
@@ -165,13 +193,14 @@ class Arrow(GraphicalObject):
             self.ghost.transform = self.transform
         self.update_arrow_svg()
         self._update_mirror()
+        self._update_color()
         self.arrow_location_manager.update_location()
         self.arrow_rot_angle_manager.update_rotation()
 
     def mirror_svg(self) -> None:
-        # self.set_arrow_transform_origin_to_center()
         self.center_x = self.boundingRect().center().x()
         self.center_y = self.boundingRect().center().y()
+        self.set_arrow_transform_origin_to_center()
         transform = QTransform()
         transform.translate(self.center_x, self.center_y)
         transform.scale(-1, 1)
@@ -183,7 +212,6 @@ class Arrow(GraphicalObject):
         self.is_svg_mirrored = True
 
     def unmirror_svg(self) -> None:
-        # self.set_arrow_transform_origin_to_center()
         self.center_x = self.boundingRect().center().x()
         self.center_y = self.boundingRect().center().y()
         transform = QTransform()
@@ -196,7 +224,7 @@ class Arrow(GraphicalObject):
             self.ghost.is_svg_mirrored = False
         self.is_svg_mirrored = False
 
-    def adjust_position(self, adjustment) -> None:
+    def adjust_position(self, adjustment):
         self.setPos(self.pos() + QPointF(*adjustment))
 
     ### DELETION ###

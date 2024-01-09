@@ -16,7 +16,6 @@ if TYPE_CHECKING:
 
 class GraphicalObject(QGraphicsSvgItem):
     self: Union["Prop", "Arrow"]
-    svg_color_cache = {}
 
     def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__()
@@ -57,7 +56,6 @@ class GraphicalObject(QGraphicsSvgItem):
         svg_data = class_color_pattern.sub(replace_class_color, svg_data)
         fill_pattern = re.compile(r'(fill=")(#[a-fA-F0-9]{6})(")')
         svg_data = fill_pattern.sub(replace_fill_color, svg_data)
-        self.svg_color_cache[(self.svg_file, new_color)] = svg_data.encode("utf-8")
         return svg_data.encode("utf-8")
 
     def setup_svg_renderer(self, svg_file: str) -> None:
@@ -66,32 +64,20 @@ class GraphicalObject(QGraphicsSvgItem):
 
     ### UPDATERS ###
 
-    def _update_svg_color(self: Union["Arrow", "Prop"]) -> None:
-        if (self.svg_file, self.color) in self.svg_color_cache:
-            svg_data = self.svg_color_cache[(self.svg_file, self.color)]
-        else:
-            svg_data = self.set_svg_color(self.color)
-        self.renderer.load(svg_data)
-        # if not self.is_ghost:
-        #     self.ghost.renderer.load(new_svg_data)
+    def _update_color(self: Union["Arrow", "Prop"]) -> None:
+        new_svg_data = self.set_svg_color(self.color)
+        self.renderer.load(new_svg_data)
+        if not self.is_ghost:
+            self.ghost.renderer.load(new_svg_data)
         self.setSharedRenderer(self.renderer)
 
     def update_svg(self, svg_file: str) -> None:
-        if self.svg_file != svg_file:
-            self.svg_file = svg_file
-            self.setup_svg_renderer(svg_file)
-            self._update_svg_color()
+        self.set_svg_color(self.color)
+        self.setup_svg_renderer(svg_file)
 
-    def update_attributes(self: Union["Arrow", "Prop"], attributes: Dict) -> None:
-        if self._attributes_changed(attributes):
-            for attribute_name, attribute_value in attributes.items():
-                setattr(self, attribute_name, attribute_value)
-            self.attribute_cache.update(attributes)
-
-    def _attributes_changed(self: Union["Arrow", "Prop"], new_attributes: Dict) -> bool:
-        return any(
-            self.attribute_cache.get(key) != val for key, val in new_attributes.items()
-        )
+    def update_attributes(self, attributes: Dict) -> None:
+        for attribute_name, attribute_value in attributes.items():
+            setattr(self, attribute_name, attribute_value)
 
     ### FLAGS ###
 
