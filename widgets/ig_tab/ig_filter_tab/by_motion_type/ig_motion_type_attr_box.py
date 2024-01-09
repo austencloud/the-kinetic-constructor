@@ -8,7 +8,7 @@ from widgets.attr_panel.base_attr_box import BaseAttrBox
 from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_header_widget import (
     IGMotionTypeHeaderWidget,
 )
-from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_turns_widget import (
+from widgets.ig_tab.ig_filter_tab.ig_turns_widget.ig_motion_type_turns_widget import (
     IGMotionTypeTurnsWidget,
 )
 

@@ -7,7 +7,7 @@ from widgets.attr_panel.base_attr_box import BaseAttrBox
 from widgets.ig_tab.ig_filter_tab.by_lead_state.ig_lead_state_header_widget import IGLeadStateHeaderWidget
 from widgets.ig_tab.ig_filter_tab.by_lead_state.ig_lead_state_prop_rot_dir_widget import IGLeadStatePropRotDirWidget
 
-from widgets.ig_tab.ig_filter_tab.by_lead_state.ig_lead_state_turns_widget import (
+from widgets.ig_tab.ig_filter_tab.ig_turns_widget.ig_lead_state_turns_widget import (
     IGLeadStateTurnsWidget,
 )
 

@@ -10,7 +10,7 @@ from widgets.ig_tab.ig_filter_tab.by_color.ig_color_header_widget import (
 from widgets.ig_tab.ig_filter_tab.by_color.ig_color_prop_rot_dir_widget import (
     IGColorPropRotDirWidget,
 )
-from widgets.ig_tab.ig_filter_tab.by_color.ig_color_turns_widget import (
+from widgets.ig_tab.ig_filter_tab.ig_turns_widget.ig_color_turns_widget import (
     IGColorTurnsWidget,
 )
 

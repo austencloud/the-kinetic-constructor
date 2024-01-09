@@ -35,7 +35,7 @@ if TYPE_CHECKING:
 from PyQt6.QtCore import pyqtBoundSignal
 
 
-class IGLeadStateTurnsWidget(BaseTurnsWidget):
+class BaseIGTurnsWidget(BaseTurnsWidget):
     def __init__(self, attr_box: "IGLeadStateAttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
@@ -118,8 +118,10 @@ class IGLeadStateTurnsWidget(BaseTurnsWidget):
 
     def _create_frames(self) -> None:
         self.turnbox_frame = self.create_turnbox_frame(QVBoxLayout())
-        self.decrement_button_frame = self.create_button_frame(self.decrement_buttons)
-        self.increment_button_frame = self.create_button_frame(self.increment_buttons)
+        self.subtract_button_frame = self.create_button_frame(
+            self.subtract_turns_buttons
+        )
+        self.add_button_frame = self.create_button_frame(self.add_turns_buttons)
 
     def setup_turns_label(self) -> None:
         self.turns_label = QLabel("Turns", self)
@@ -133,9 +135,9 @@ class IGLeadStateTurnsWidget(BaseTurnsWidget):
     def _add_frames_to_main_layout(self) -> None:
         main_frame = QFrame()
         main_frame.setLayout(self.main_hbox_layout)
-        self.main_hbox_layout.addWidget(self.decrement_button_frame)
+        self.main_hbox_layout.addWidget(self.subtract_button_frame)
         self.main_hbox_layout.addWidget(self.turnbox_frame)
-        self.main_hbox_layout.addWidget(self.increment_button_frame)
+        self.main_hbox_layout.addWidget(self.add_button_frame)
 
         self.layout.addWidget(main_frame)
 
@@ -219,9 +221,7 @@ class IGLeadStateTurnsWidget(BaseTurnsWidget):
             if leading_color:
                 leading_motions.append(pictograph.motions[leading_color])
         return leading_motions
-            
-            
-        
+
     def connect_signal(self, signal: pyqtBoundSignal) -> None:
         signal.connect(self.update_turns_directly)
 

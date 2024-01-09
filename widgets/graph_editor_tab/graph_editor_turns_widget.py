@@ -1,7 +1,14 @@
-from PyQt6.QtWidgets import QLabel, QVBoxLayout, QFrame, QSizePolicy, QHBoxLayout
+from PyQt6.QtWidgets import (
+    QLabel,
+    QVBoxLayout,
+    QFrame,
+    QSizePolicy,
+    QHBoxLayout,
+    QWidget,
+)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QPixmap
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 from objects.motion.motion import Motion
 from constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, ICON_DIR
 from widgets.attr_box_widgets.base_turns_widget import (
@@ -28,11 +35,8 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
         super()._initialize_ui()
         self._create_clock_labels()
         self.turnbox_vbox_frame: QFrame = self._create_turnbox_vbox_frame()
-        self._setup_layout_frames()
-
-    def _setup_layout(self) -> None:
-        super()._setup_layout()
         self.buttons_hbox_layout = QHBoxLayout()
+        self._setup_layout_frames()
 
     ### LAYOUTS ###
 
@@ -42,7 +46,7 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
             [self.clock_left, self.turnbox_vbox_frame, self.clock_right],
             self.main_hbox_layout,
         )
-        self._add_widgets_to_layout(self.turns_buttons, self.buttons_hbox_layout)
+        # self._add_widgets_to_layout(self.turns_buttons, self.buttons_hbox_layout)
 
         self.main_hbox_layout.setContentsMargins(0, 0, 0, 0)
         self.buttons_hbox_layout.setContentsMargins(0, 0, 0, 0)
@@ -56,7 +60,22 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
         self.layout.addWidget(self.header_frame)
         self.layout.addWidget(self.button_frame)
 
+    def _create_frame(self, layout: QHBoxLayout | QVBoxLayout) -> QFrame:
+        """Creates a frame with the given layout."""
+        frame = QFrame()
+        frame.setLayout(layout)
+        frame.setContentsMargins(0, 0, 0, 0)
+        frame.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        return frame
+
     ### WIDGETS ###
+
+    def _add_widgets_to_layout(
+        self, widgets: List[QWidget], layout: QHBoxLayout | QVBoxLayout
+    ) -> None:
+        """Adds the given widgets to the specified layout."""
+        for widget in widgets:
+            layout.addWidget(widget)
 
     def _create_clock_labels(self) -> None:
         """Creates and configures the clock labels for rotation direction."""
@@ -248,8 +267,3 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
         self._update_turnbox_size()
         self._update_button_size()
         self._update_widget_sizes()
-
-    # def update_turns_widget(self, motion: Motion) -> None:
-    #     self._update_clocks(motion.rot_dir)
-    #     self._update_turnbox(motion.turns)
-    #     self.resize_turns_widget()

@@ -7,29 +7,36 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, List, Union
 from constants import (
+    BLUE,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
+    DASH,
     ICON_DIR,
+    LEADING,
     NO_ROT,
+    RED,
+    STATIC,
+    TRAILING,
 )
 from objects.motion.motion import Motion
 from objects.pictograph.pictograph import Pictograph
+from utilities.TypeChecking.TypeChecking import Colors
 from widgets.attr_box_widgets.base_turns_widget import (
     BaseTurnsWidget,
 )
 
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import (
-        IGMotionTypeAttrBox,
+    from widgets.ig_tab.ig_filter_tab.by_lead_state.ig_lead_state_attr_box import (
+        IGLeadStateAttrBox,
     )
 from PyQt6.QtCore import pyqtBoundSignal
 
 
-class IGMotionTypeTurnsWidget(BaseTurnsWidget):
-    def __init__(self, attr_box: "IGMotionTypeAttrBox") -> None:
+class IGLeadStateTurnsWidget(BaseTurnsWidget):
+    def __init__(self, attr_box: "IGLeadStateAttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
         self.initialize_ui()
@@ -41,8 +48,30 @@ class IGMotionTypeTurnsWidget(BaseTurnsWidget):
         self.setup_turns_label()
         self.setup_turnbox()
         self.connect_signals()
-        # self.add_black_borders()
         self.setup_directset_turns_buttons()  # Add this line to set up the new buttons
+
+    def get_button_style(self, pressed: bool) -> str:
+        if pressed:
+            return """
+                QPushButton {
+                    background-color: #ccd9ff;
+                    border: 2px solid #555555;
+                    border-bottom-color: #888888; /* darker shadow on the bottom */
+                    border-right-color: #888888; /* darker shadow on the right */
+                    padding: 5px;
+                }
+            """
+        else:
+            return """
+                QPushButton {
+                    background-color: white;
+                    border: 1px solid black;
+                    padding: 5px;
+                }
+                QPushButton:hover {
+                    background-color: #e6f0ff;
+                }
+            """
 
     def setup_directset_turns_buttons(self) -> None:
         """Set up the buttons for directly setting turns values."""
@@ -89,8 +118,10 @@ class IGMotionTypeTurnsWidget(BaseTurnsWidget):
 
     def _create_frames(self) -> None:
         self.turnbox_frame = self.create_turnbox_frame(QVBoxLayout())
-        self.decrement_button_frame = self.create_button_frame(self.decrement_buttons)
-        self.increment_button_frame = self.create_button_frame(self.increment_buttons)
+        self.subtract_button_frame = self.create_button_frame(
+            self.subtract_turns_buttons
+        )
+        self.add_button_frame = self.create_button_frame(self.add_turns_buttons)
 
     def setup_turns_label(self) -> None:
         self.turns_label = QLabel("Turns", self)
@@ -104,9 +135,9 @@ class IGMotionTypeTurnsWidget(BaseTurnsWidget):
     def _add_frames_to_main_layout(self) -> None:
         main_frame = QFrame()
         main_frame.setLayout(self.main_hbox_layout)
-        self.main_hbox_layout.addWidget(self.decrement_button_frame)
+        self.main_hbox_layout.addWidget(self.subtract_button_frame)
         self.main_hbox_layout.addWidget(self.turnbox_frame)
-        self.main_hbox_layout.addWidget(self.increment_button_frame)
+        self.main_hbox_layout.addWidget(self.add_button_frame)
 
         self.layout.addWidget(main_frame)
 
@@ -142,14 +173,54 @@ class IGMotionTypeTurnsWidget(BaseTurnsWidget):
         self.connect_signal(self.turnbox.currentIndexChanged)
 
     def process_turns_for_all_motions(self, adjustment: float) -> None:
-        for pictograph in self.attr_box.get_pictographs():
-            self.update_turns_for_pictograph(pictograph, adjustment)
+        if self.attr_box.lead_state == TRAILING:
+            for motion in self.get_trailing_motions():
+                self.process_single_motion(motion, adjustment)
 
-    def update_turns_for_pictograph(
-        self, pictograph: Pictograph, adjustment: float
-    ) -> None:
-        for motion in pictograph.get_motions_by_type(self.attr_box.motion_type):
-            self.process_single_motion(motion, adjustment)
+        elif self.attr_box.lead_state == LEADING:
+            for motion in self.get_leading_motions():
+                self.process_single_motion(motion, adjustment)
+
+    def determine_leading_color(
+        self, red_start, red_end, blue_start, blue_end
+    ) -> Colors:
+        if red_start == blue_end:
+            return RED
+        elif blue_start == red_end:
+            return BLUE
+        return None
+
+    def get_trailing_motions(self):
+        trailing_motions = []
+        for pictograph in self.attr_box.get_pictographs():
+            red_start = pictograph.motions[RED].start_loc
+            red_end = pictograph.motions[RED].end_loc
+            blue_start = pictograph.motions[BLUE].start_loc
+            blue_end = pictograph.motions[BLUE].end_loc
+            leading_color = self.determine_leading_color(
+                red_start, red_end, blue_start, blue_end
+            )
+            if leading_color == RED:
+                trailing_color = BLUE
+            elif leading_color == BLUE:
+                trailing_color = RED
+            if trailing_color:
+                trailing_motions.append(pictograph.motions[trailing_color])
+        return trailing_motions
+
+    def get_leading_motions(self) -> List[Motion]:
+        leading_motions = []
+        for pictograph in self.attr_box.get_pictographs():
+            red_start = pictograph.motions[RED].start_loc
+            red_end = pictograph.motions[RED].end_loc
+            blue_start = pictograph.motions[BLUE].start_loc
+            blue_end = pictograph.motions[BLUE].end_loc
+            leading_color = self.determine_leading_color(
+                red_start, red_end, blue_start, blue_end
+            )
+            if leading_color:
+                leading_motions.append(pictograph.motions[leading_color])
+        return leading_motions
 
     def connect_signal(self, signal: pyqtBoundSignal) -> None:
         signal.connect(self.update_turns_directly)
@@ -182,21 +253,19 @@ class IGMotionTypeTurnsWidget(BaseTurnsWidget):
     def format_turns(turns: Union[int, float]) -> str:
         return str(int(turns)) if turns.is_integer() else str(turns)
 
-    def _simulate_cw_button_click(self):
-        header_widget = self.attr_box.header_widget
-        header_widget.cw_button.setChecked(True)
-        header_widget.cw_button.click()
+    def _simulate_cw_button_click(self) -> None:
+        self.attr_box.prop_rot_dir_widget.cw_button.setChecked(True)
+        self.attr_box.prop_rot_dir_widget.cw_button.click()
 
     def _turns_added(self, initial_turns, new_turns):
         return initial_turns == 0 and new_turns > 0
 
     def _get_current_prop_rot_dir(self) -> str:
-        header_widget = self.attr_box.header_widget
         return (
             CLOCKWISE
-            if header_widget.cw_button.isChecked()
+            if self.attr_box.prop_rot_dir_widget.cw_button.isChecked()
             else COUNTER_CLOCKWISE
-            if header_widget.ccw_button.isChecked()
+            if self.attr_box.prop_rot_dir_widget.ccw_button.isChecked()
             else NO_ROT
         )
 
@@ -211,33 +280,43 @@ class IGMotionTypeTurnsWidget(BaseTurnsWidget):
     def _update_pictographs_turns(self, new_turns):
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
-                if motion.motion_type == self.attr_box.motion_type:
+                if motion.arrow.lead_state == self.attr_box.lead_state:
                     motion.set_turns(new_turns)
-                    pictograph_dict = {
-                        f"{motion.color}_turns": new_turns,
-                    }
+
+                    if motion.motion_type in [DASH, STATIC] and (
+                        motion.prop_rot_dir == NO_ROT and motion.turns > 0
+                    ):
+                        motion.manipulator.set_prop_rot_dir(
+                            self._get_current_prop_rot_dir()
+                        )
+                        pictograph_dict = {
+                            f"{motion.color}_turns": new_turns,
+                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir(),
+                        }
+                    else:
+                        pictograph_dict = {
+                            f"{motion.color}_turns": new_turns,
+                        }
                     motion.scene.update_pictograph(pictograph_dict)
 
     ### EVENT HANDLERS ###
 
-    def update_turnbox_size(self) -> None:
+    def update_ig_lead_state_turnbox_size(self) -> None:
         self.spacing = self.attr_box.attr_panel.width() // 250
         border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
-        box_font_size = int(self.attr_box.width() / 10)
+        box_font_size = int(self.attr_box.width() / 14)
         dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
         border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
+        turns_label_font = QFont("Arial", int(self.width() / 25))
+        turnbox_font = QFont("Arial", box_font_size, QFont.Weight.Bold)
 
-        self.turnbox.setMinimumHeight(int(self.attr_box.width() / 4))
-        self.turnbox.setMaximumHeight(int(self.attr_box.width() / 4))
-        self.turnbox.setMinimumWidth(int(self.attr_box.width() / 3))
-        self.turnbox.setMaximumWidth(int(self.attr_box.width() / 3))
-        self.turnbox.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
-
-        # self.setMinimumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
-        # self.setMaximumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
-
+        self.turnbox.setMinimumHeight(int(self.attr_box.width() / 8))
+        self.turnbox.setMaximumHeight(int(self.attr_box.width() / 8))
+        self.turnbox.setMinimumWidth(int(self.attr_box.width() / 4))
+        self.turnbox.setMaximumWidth(int(self.attr_box.width() / 4))
         self.turns_label.setContentsMargins(0, 0, self.spacing, 0)
-        self.turns_label.setFont(QFont("Arial", int(self.width() / 22)))
+        self.turns_label.setFont(turns_label_font)
+        self.turnbox.setFont(turnbox_font)
 
         # Adjust the stylesheet to add padding inside the combo box on the left
         self.turnbox.setStyleSheet(
@@ -266,17 +345,17 @@ class IGMotionTypeTurnsWidget(BaseTurnsWidget):
         """
         )
 
-    def update_button_size(self) -> None:
-        for button in self.turns_buttons:
-            button_size = self.calculate_button_size()
-            button.update_attr_box_turns_button_size(button_size)
+    def update_ig_lead_state_turns_button_size(self) -> None:
+        for turns_button in self.turns_buttons:
+            button_size = self.calculate_turns_button_size()
+            turns_button.update_attr_box_turns_button_size(button_size)
 
-    def calculate_button_size(self) -> int:
-        return int(self.attr_box.width() / 5)
+    def calculate_turns_button_size(self) -> int:
+        return int(self.attr_box.width() / 10)
 
     def resize_turns_widget(self) -> None:
-        self.update_turnbox_size()
-        self.update_button_size()
+        self.update_ig_lead_state_turnbox_size()
+        self.update_ig_lead_state_turns_button_size()
 
     def _adjust_turns_callback(self, adjustment: float) -> None:
         self.update_turns_incrementally(adjustment)

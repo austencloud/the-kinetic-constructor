@@ -6,8 +6,9 @@ from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
 from Enums import LetterNumberType
 
 from constants import *
-from objects.arrow.arrow_placement_manager import (
-    ArrowPlacementManager,
+
+from objects.arrow.arrow_placement_manager.main_arrow_placement_manager import (
+    MainArrowPlacementManager,
 )
 
 from utilities.TypeChecking.Letters import Letters
@@ -25,7 +26,7 @@ from objects.pictograph.pictograph_event_handler import PictographEventHandler
 from objects.pictograph.pictograph_init import PictographInit
 from objects.pictograph.pictograph_menu_handler import PictographMenuHandler
 from objects.pictograph.position_engines.prop_positioners.main_prop_positioner import (
-    MainPropPositioner,
+    MainPropPlacementManager,
 )
 from utilities.letter_engine import LetterEngine
 from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
@@ -71,8 +72,8 @@ class Pictograph(QGraphicsScene):
         self.start_pos: SpecificPositions = None
         self.end_pos: SpecificPositions = None
         self.image_loaded: bool = False
-        self.pixmap = None  # Store the pixmap item
-        self.pictograph_dict = None  # Store the row data from the pandas dataframe
+        self.pixmap = None
+        self.pictograph_dict = None
         self.view_scale = 1
         self.event_handler = PictographEventHandler(self)
 
@@ -135,8 +136,8 @@ class Pictograph(QGraphicsScene):
 
     def _setup_managers(self, main_widget: "MainWidget") -> None:
         self.pictograph_menu_handler = PictographMenuHandler(main_widget, self)
-        self.arrow_placement_manager = ArrowPlacementManager(self)
-        self.prop_placement_manager = MainPropPositioner(self)
+        self.arrow_placement_manager = MainArrowPlacementManager(self)
+        self.prop_placement_manager = MainPropPlacementManager(self)
         self.letter_engine = LetterEngine(self)
 
     def _create_motion_dict(
@@ -232,6 +233,14 @@ class Pictograph(QGraphicsScene):
             for motion in self.motions.values()
             if motion.motion_type == motion_type
         ]
+
+    def get_leading_motion(
+        self, blue_motion: Motion, red_motion: Motion
+    ) -> Motion:
+        if red_motion.start_loc == blue_motion.end_loc:
+            return red_motion
+        elif blue_motion.start_loc == red_motion.end_loc:
+            return blue_motion
 
     ### HELPERS ###
 

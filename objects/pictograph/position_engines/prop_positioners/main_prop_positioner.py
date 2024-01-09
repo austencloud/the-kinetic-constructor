@@ -36,7 +36,7 @@ if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
 
 
-class MainPropPositioner:
+class MainPropPlacementManager:
     def __init__(self, scene: "Pictograph") -> None:
         self.scene = scene
         self.init_prop_positioners(scene)
