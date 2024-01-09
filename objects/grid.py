@@ -59,138 +59,131 @@ class Grid:
         self.grid_mode = DIAMOND
         self._init_grid(grid_scene)
         self._apply_grid_mode(grid_scene.main_widget.grid_mode)
+        self._populate_circle_coordinates_cache()
+        self._create_grid_items(grid_scene)
 
     def _init_grid(
         self, grid_scene: Union["ArrowBox", "PropBox", "Pictograph"]
     ) -> None:
         self._populate_circle_coordinates_cache()
+        print(self.circle_coordinates_cache)
         self._create_grid_items(grid_scene)
         self.center = self.get_circle_coordinates("center_point")
-        intercardinal_points = [
-            NORTHEAST,
-            SOUTHEAST,
-            SOUTHWEST,
-            NORTHWEST,
-        ]
-        cardinal_points = [NORTH, EAST, SOUTH, WEST]
 
-        self.diamond_hand_points = self._init_points(
-            [
-                "n_diamond_hand_point",
-                "e_diamond_hand_point",
-                "s_diamond_hand_point",
-                "w_diamond_hand_point",
-            ],
-            cardinal_points,
-        )
-        self.strict_diamond_hand_points = self._init_points(
-            [
-                "strict_n_diamond_hand_point",
-                "strict_e_diamond_hand_point",
-                "strict_s_diamond_hand_point",
-                "strict_w_diamond_hand_point",
-            ],
-            cardinal_points,
-        )
-        self.box_hand_points = self._init_points(
-            [
-                "ne_box_hand_point",
-                "se_box_hand_point",
-                "sw_box_hand_point",
-                "nw_box_hand_point",
-            ],
-            intercardinal_points,
-        )
-        self.strict_box_hand_points = self._init_points(
-            [
-                "strict_ne_box_hand_point",
-                "strict_se_box_hand_point",
-                "strict_sw_box_hand_point",
-                "strict_nw_box_hand_point",
-            ],
-            intercardinal_points,
-        )
-
-        self.diamond_layer2_points = self._init_points(
-            [
-                "ne_diamond_layer2_point",
-                "se_diamond_layer2_point",
-                "sw_diamond_layer2_point",
-                "nw_diamond_layer2_point",
-            ],
-            intercardinal_points,
-        )
-        self.strict_diamond_layer2_points = self._init_points(
-            [
-                "strict_ne_diamond_layer2_point",
-                "strict_se_diamond_layer2_point",
-                "strict_sw_diamond_layer2_point",
-                "strict_nw_diamond_layer2_point",
-            ],
-            intercardinal_points,
-        )
-        self.box_layer2_points = self._init_points(
-            [
-                "n_box_layer2_point",
-                "e_box_layer2_point",
-                "s_box_layer2_point",
-                "w_box_layer2_point",
-            ],
-            cardinal_points,
-        )
-        self.strict_box_layer2_points = self._init_points(
-            [
-                "strict_n_box_layer2_point",
-                "strict_e_box_layer2_point",
-                "strict_s_box_layer2_point",
-                "strict_w_box_layer2_point",
-            ],
-            cardinal_points,
-        )
         self._create_grid_items(grid_scene)
 
     def _populate_circle_coordinates_cache(self):
-        # List of all circle IDs that need to be cached
-        circle_ids = [
-            "center_point",
-            "n_diamond_hand_point",
-            "e_diamond_hand_point",
-            "s_diamond_hand_point",
-            "w_diamond_hand_point",
-            "ne_box_hand_point",
-            "se_box_hand_point",
-            "sw_box_hand_point",
-            "nw_box_hand_point",
-            "strict_n_diamond_hand_point",
-            "strict_e_diamond_hand_point",
-            "strict_s_diamond_hand_point",
-            "strict_w_diamond_hand_point",
-            "strict_ne_box_hand_point",
-            "strict_se_box_hand_point",
-            "strict_sw_box_hand_point",
-            "strict_nw_box_hand_point",
-            "ne_diamond_layer2_point",
-            "se_diamond_layer2_point",
-            "sw_diamond_layer2_point",
-            "nw_diamond_layer2_point",
-            "strict_ne_diamond_layer2_point",
-            "strict_se_diamond_layer2_point",
-            "strict_sw_diamond_layer2_point",
-            "strict_nw_diamond_layer2_point",
-            "n_box_layer2_point",
-            "e_box_layer2_point",
-            "s_box_layer2_point",
-            "w_box_layer2_point",
-            "strict_n_box_layer2_point",
-            "strict_e_box_layer2_point",
-            "strict_s_box_layer2_point",
-            "strict_w_box_layer2_point",
-        ]
+        self.circle_coordinates_cache = {
+            "hand_points": {
+                "diamond": {
+                    "normal": {},  # Normal diamond hand points
+                    "strict": {},  # Strict diamond hand points
+                },
+                "box": {
+                    "normal": {},  # Normal box hand points
+                    "strict": {},  # Strict box hand points
+                },
+            },
+            "layer2_points": {
+                "diamond": {
+                    "normal": {},  # Normal diamond layer2 points
+                    "strict": {},  # Strict diamond layer2 points
+                },
+                "box": {
+                    "normal": {},  # Normal box layer2 points
+                    "strict": {},  # Strict box layer2 points
+                },
+            },
+            "outer_points": {},
+            "center_point": {},
+        }
+        hand_point_ids = {
+            "diamond": {
+                "normal": [
+                    "n_diamond_hand_point",
+                    "e_diamond_hand_point",
+                    "s_diamond_hand_point",
+                    "w_diamond_hand_point",
+                ],
+                "strict": [
+                    "strict_n_diamond_hand_point",
+                    "strict_e_diamond_hand_point",
+                    "strict_s_diamond_hand_point",
+                    "strict_w_diamond_hand_point",
+                ],
+            },
+            "box": {
+                "normal": [
+                    "ne_box_hand_point",
+                    "se_box_hand_point",
+                    "sw_box_hand_point",
+                    "nw_box_hand_point",
+                ],
+                "strict": [
+                    "strict_ne_box_hand_point",
+                    "strict_se_box_hand_point",
+                    "strict_sw_box_hand_point",
+                    "strict_nw_box_hand_point",
+                ],
+            },
+        }
+        for mode, types in hand_point_ids.items():
+            for type_name, ids in types.items():
+                for id in ids:
+                    coordinates = self.get_circle_coordinates(id)
+                    self.circle_coordinates_cache["hand_points"][mode][type_name][
+                        id
+                    ] = coordinates
 
-        for circle_id in circle_ids:
-            self.circle_coordinates_cache[circle_id] = self.get_circle_coordinates(
-                circle_id
-            )
+        layer2_point_ids = {
+            "diamond": {
+                "normal": [
+                    "ne_diamond_layer2_point",
+                    "se_diamond_layer2_point",
+                    "sw_diamond_layer2_point",
+                    "nw_diamond_layer2_point",
+                ],
+                "strict": [
+                    "strict_ne_diamond_layer2_point",
+                    "strict_se_diamond_layer2_point",
+                    "strict_sw_diamond_layer2_point",
+                    "strict_nw_diamond_layer2_point",
+                ],
+            },
+            "box": {
+                "normal": [
+                    "n_box_layer2_point",
+                    "e_box_layer2_point",
+                    "s_box_layer2_point",
+                    "w_box_layer2_point",
+                ],
+                "strict": [
+                    "strict_n_box_layer2_point",
+                    "strict_e_box_layer2_point",
+                    "strict_s_box_layer2_point",
+                    "strict_w_box_layer2_point",
+                ],
+            },
+        }
+        for mode, types in layer2_point_ids.items():
+            for type_name, ids in types.items():
+                for id in ids:
+                    coordinates = self.get_circle_coordinates(id)
+                    self.circle_coordinates_cache["layer2_points"][mode][type_name][
+                        id
+                    ] = coordinates
+        outer_point_ids = [
+            "n_outer_point",
+            "e_outer_point",
+            "s_outer_point",
+            "w_outer_point",
+        ]
+        for id in outer_point_ids:
+            coordinates = self.get_circle_coordinates(id)
+            self.circle_coordinates_cache["outer_points"][id] = coordinates
+
+        coordinates = self.get_circle_coordinates("center_point")
+        self.circle_coordinates_cache["center_point"] = coordinates
 
     def _create_grid_items(self, grid_scene: "Pictograph") -> None:
         # Paths for each grid mode
@@ -206,14 +199,6 @@ class Grid:
             # Set initial visibility based on the grid mode
             item.setVisible(mode == self.grid_mode)
 
-    def _init_points(
-        self, point_names: List[str], constants: List[str]
-    ) -> Dict[str, QPointF]:
-        return {
-            constant: self.get_circle_coordinates(point_name)
-            for point_name, constant in zip(point_names, constants)
-        }
-
     def _apply_grid_mode(self, grid_mode: GridModes) -> None:
         self.toggle_grid_mode(grid_mode)
 
@@ -225,9 +210,6 @@ class Grid:
 
     def get_circle_coordinates(self, circle_id: str) -> Union[QPointF, None]:
         # Return from cache if available
-        if circle_id in self.circle_coordinates_cache:
-            return self.circle_coordinates_cache[circle_id]
-
         # Fetch and parse SVG file if not in cache
         svg_file_path = self._get_svg_file_path(circle_id)
         with open(svg_file_path, "r") as svg_file:
@@ -241,7 +223,6 @@ class Grid:
             cx = float(circle_element.attrib["cx"])
             cy = float(circle_element.attrib["cy"])
             coordinates = QPointF(cx, cy)
-            self.circle_coordinates_cache[circle_id] = coordinates
             return coordinates
         return None
 
@@ -251,39 +232,13 @@ class Grid:
             return self.svg_file_path_cache[circle_id]
 
         # Determine the correct SVG file based on the circle ID
-        if "diamond" in circle_id or "center_point" in circle_id:
+        if "diamond" in circle_id or "center" in circle_id or "outer" in circle_id:
             path = f"{GRID_DIR}diamond_grid.svg"
         elif "box" in circle_id:
             path = f"{GRID_DIR}box_grid.svg"
-        else:
-            path = ""
 
         self.svg_file_path_cache[circle_id] = path
         return path
-
-    def get_layer2_points(self) -> Dict[str, QPointF]:
-        """
-        Retrieves the dictionary containing points for layer 2 based on the current grid mode.
-        """
-        if self.grid_mode == DIAMOND:
-            return self.diamond_layer2_points
-        elif self.grid_mode == BOX:
-            return self.box_layer2_points
-        else:
-            # Fallback for an unsupported grid mode
-            return {}
-
-    def get_handpoints(self) -> Dict[str, QPointF]:
-        """
-        Retrieves the dictionary containing handpoints based on the current grid mode.
-        """
-        if self.grid_mode == DIAMOND:
-            return self.diamond_hand_points
-        elif self.grid_mode == BOX:
-            return self.box_hand_points
-        else:
-            # Fallback for an unsupported grid mode
-            return {}
 
     def setPos(self, position: QPointF) -> None:
         for item in self.items.values():

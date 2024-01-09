@@ -46,7 +46,7 @@ class IGScrollArea(PictographScrollArea):
 
         self.update_timer = QTimer(self)
         self.update_timer.timeout.connect(self.update_pictographs_positions)
-        # self.update_timer.start(300)
+        self.update_timer.start(300)
 
     def update_pictographs_positions(self):
         """Method to update positions of all pictographs"""
@@ -56,7 +56,7 @@ class IGScrollArea(PictographScrollArea):
 
     def update_individual_pictograph_position(self, pictograph: IGPictograph):
         if hasattr(pictograph, "arrow_placement_manager"):
-            pictograph.arrow_placement_manager.update_arrow_positions()
+            pictograph.arrow_placement_manager.update_arrow_placement()
 
     def update_scroll_area_content(self) -> None:
         self.container.adjustSize()

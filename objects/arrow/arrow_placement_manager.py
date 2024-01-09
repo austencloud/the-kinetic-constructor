@@ -99,7 +99,7 @@ class ArrowPlacementManager:
             "Y-",
             "Z-",
         ]
-        self.update_arrow_positions()
+        self.update_arrow_placement()
 
     def _load_placements(self) -> Dict[str, Dict[str, Tuple[int, int]]]:
         json_path = "arrow_placement/special_placements.json"
@@ -122,7 +122,7 @@ class ArrowPlacementManager:
             reposition_method()
 
     ### PUBLIC METHODS ###
-    def update_arrow_positions(self) -> None:
+    def update_arrow_placement(self) -> None:
         self.letter = self.pictograph.letter
         self.placements = self._load_placements()
         for arrow in self.arrows:
@@ -137,12 +137,14 @@ class ArrowPlacementManager:
                 arrow.setPos(new_pos)
 
     def _get_diamond_shift_pos(self, arrow: Arrow) -> QPointF:
-        layer2_points = self.pictograph.grid.get_layer2_points()
-        return layer2_points.get(arrow.loc, QPointF(0, 0))
+        return self.pictograph.grid.circle_coordinates_cache["layer2_points"][
+            self.pictograph.main_widget.grid_mode
+        ]["normal"][f"{arrow.loc}_{self.pictograph.main_widget.grid_mode}_layer2_point"]
 
     def _get_diamond_static_dash_pos(self, arrow: Arrow) -> QPointF:
-        handpoints = self.pictograph.grid.get_handpoints()
-        return handpoints.get(arrow.loc, QPointF(0, 0))
+        return self.pictograph.grid.circle_coordinates_cache["hand_points"][
+            self.pictograph.main_widget.grid_mode
+        ]["normal"][f"{arrow.loc}_{self.pictograph.main_widget.grid_mode}_hand_point"]
 
     def _get_adjustment(self, arrow: Arrow) -> QPointF:
         adjustment_key = self._generate_adjustment_key(arrow)

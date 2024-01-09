@@ -85,7 +85,7 @@ class Pictograph(QGraphicsScene):
         self.grid: Grid = self.initializer.init_grid()
         self.locations: Dict[
             Locations, Tuple[int, int, int, int]
-        ] = self.initializer.init_locations(self.grid)
+        ] = self.initializer.init_quadrant_boundaries(self.grid)
 
         self.motions: Dict[Colors, Motion] = self.initializer.init_motions()
         self.arrows, self.ghost_arrows = self.initializer.init_arrows()
@@ -332,7 +332,7 @@ class Pictograph(QGraphicsScene):
 
     def _position_objects(self) -> None:
         self.prop_placement_manager.position_props()
-        self.arrow_placement_manager.update_arrow_positions()
+        self.arrow_placement_manager.update_arrow_placement()
 
     def _update_motions(self) -> None:
         for motion in self.motions.values():

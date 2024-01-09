@@ -37,6 +37,7 @@ from utilities.TypeChecking.prop_types import (
     small_bilateral_prop_types,
     small_unilateral_prop_types,
 )
+
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
     from .by_letter_type.Type1_prop_positioner import Type1PropPositioner
@@ -55,7 +56,6 @@ class BasePropPositioner:
         ] = pictograph.main_widget.letters
         self.position_offsets_cache = {}
         self.location_points_cache = {}
-
 
     def update_prop_positions(self) -> None:
         self.red_motion = self.pictograph.motions[RED]
@@ -87,7 +87,7 @@ class BasePropPositioner:
     def _set_prop_to_default_location(self, prop: Prop, strict: bool = False) -> None:
         if prop in self.position_offsets_cache:
             position_offsets = self.position_offsets_cache[prop]
-        else: 
+        else:
             position_offsets = self._get_position_offsets(prop)
         key = (prop.ori, prop.loc)
         offset = position_offsets.get(key, QPointF(0, 0))
@@ -98,28 +98,16 @@ class BasePropPositioner:
         elif self.pictograph.grid.grid_mode == BOX:
             location_points = self._get_location_points(strict, BOX)
 
-        if prop.loc in location_points:
-            prop.setPos(location_points[prop.loc] + offset)
+        # if prop.loc matches the first character of a location point key, set the prop to that location
+        for location, location_point in location_points.items():
+            if prop.loc == location[0]:
+                prop.setPos(location_point + offset)
+                return
 
     def _get_location_points(self, strict: bool, grid_mode: str) -> Dict[str, QPointF]:
-        cache_key = (strict, grid_mode)
-        if cache_key in self.location_points_cache:
-            return self.location_points_cache[cache_key]
-        
-        if strict:
-            if grid_mode == DIAMOND:
-                location_points = self.pictograph.grid.strict_diamond_hand_points
-                self.location_points_cache[cache_key] = location_points
-                return location_points
-            # elif grid_mode == BOX:
-            #     return self.scene.grid.strict_box_hand_points
-        else:
-            if grid_mode == DIAMOND:
-                location_points = self.pictograph.grid.diamond_hand_points
-                self.location_points_cache[cache_key] = location_points
-                return location_points
-            # elif grid_mode == BOX:
-            #     return self.scene.grid.box_hand_points
+        strict_key = "strict" if strict else "normal"
+        location_points = self.pictograph.grid.circle_coordinates_cache["hand_points"][grid_mode][strict_key]
+        return location_points
 
     def _reposition_small_bilateral_props(
         self: Union[

@@ -16,6 +16,11 @@ from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox_view imp
 from constants import *
 from objects.grid import Grid
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, Dict, List
+from utilities.TypeChecking.prop_types import (
+    PropTypes,
+    strictly_placed_props,
+    non_strictly_placed_props,
+)
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
@@ -203,9 +208,14 @@ class PropBox(BaseObjectBox):
 
     def set_prop_position(self, prop: Prop) -> None:
         # Use cached coordinates directly
-        hand_point = self.grid.circle_coordinates_cache[
-            f"{prop.loc}_{self.grid.grid_mode}_hand_point"
-        ]
+        if prop in strictly_placed_props:
+            hand_point = self.grid.circle_coordinates_cache["hand_points"][
+                self.main_widget.grid_mode
+            ]["strict"][f"strict_{prop.loc}_{self.main_widget.grid_mode}_hand_point"]
+        else:
+            hand_point = self.grid.circle_coordinates_cache["hand_points"][
+                self.main_widget.grid_mode
+            ]["normal"][f"{prop.loc}_{self.main_widget.grid_mode}_hand_point"]
         prop_length = prop.boundingRect().width()
         prop_width = prop.boundingRect().height()
         offset_x = -prop_length / 2
