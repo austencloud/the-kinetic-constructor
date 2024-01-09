@@ -36,3 +36,6 @@ class BaseAttrBoxWidget(QWidget):
         button.setIcon(QIcon(ICON_DIR + icon_path))
         button.clicked.connect(callback)
         return button
+
+    def _turns_added(self, initial_turns, new_turns) -> bool:
+        return initial_turns == 0 and new_turns > 0

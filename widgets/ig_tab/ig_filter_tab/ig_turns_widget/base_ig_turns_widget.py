@@ -1,11 +1,3 @@
-from PyQt6.QtWidgets import (
-    QLabel,
-    QFrame,
-    QVBoxLayout,
-    QHBoxLayout,
-    QPushButton,
-)
-from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, List, Union
 from constants import (
@@ -14,11 +6,9 @@ from constants import (
     COUNTER_CLOCKWISE,
     DASH,
     ICON_DIR,
-    LEADING,
     NO_ROT,
     RED,
     STATIC,
-    TRAILING,
 )
 from objects.motion.motion import Motion
 from objects.pictograph.pictograph import Pictograph
@@ -26,209 +16,67 @@ from utilities.TypeChecking.TypeChecking import Colors
 from widgets.attr_box_widgets.base_turns_widget import (
     BaseTurnsWidget,
 )
-
+from widgets.attr_panel.base_attr_box import BaseAttrBox
 
 if TYPE_CHECKING:
+    from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_box import IGColorAttrBox
+    from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import (
+        IGMotionTypeAttrBox,
+    )
     from widgets.ig_tab.ig_filter_tab.by_lead_state.ig_lead_state_attr_box import (
         IGLeadStateAttrBox,
     )
+    from .ig_color_turns_widget import IGColorTurnsWidget
+    from .ig_lead_state_turns_widget import IGLeadStateTurnsWidget
+    from .ig_motion_type_turns_widget import IGMotionTypeTurnsWidget
+
 from PyQt6.QtCore import pyqtBoundSignal
 
 
 class BaseIGTurnsWidget(BaseTurnsWidget):
-    def __init__(self, attr_box: "IGLeadStateAttrBox") -> None:
+    def __init__(self, attr_box: "BaseAttrBox") -> None:
         super().__init__(attr_box)
-        self.attr_box = attr_box
-        self.initialize_ui()
-
-    def initialize_ui(self) -> None:
-        super()._initialize_ui()
-        self._create_frames()
-        self._add_frames_to_main_layout()
-        self.setup_turns_label()
-        self.setup_turnbox()
+        self.attr_box: Union[
+            "IGMotionTypeAttrBox", "IGLeadStateAttrBox", "IGColorAttrBox"
+        ] = attr_box
+        self._initialize_ui()
         self.connect_signals()
-        self.setup_directset_turns_buttons()  # Add this line to set up the new buttons
 
-    def get_button_style(self, pressed: bool) -> str:
-        if pressed:
-            return """
-                QPushButton {
-                    background-color: #ccd9ff;
-                    border: 2px solid #555555;
-                    border-bottom-color: #888888; /* darker shadow on the bottom */
-                    border-right-color: #888888; /* darker shadow on the right */
-                    padding: 5px;
-                }
-            """
-        else:
-            return """
-                QPushButton {
-                    background-color: white;
-                    border: 1px solid black;
-                    padding: 5px;
-                }
-                QPushButton:hover {
-                    background-color: #e6f0ff;
-                }
-            """
-
-    def setup_directset_turns_buttons(self) -> None:
-        """Set up the buttons for directly setting turns values."""
-        turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
-        self.turns_buttons_layout = QHBoxLayout()  # Horizontal layout for the buttons
-        button_style_sheet = """
-        QPushButton {
-            background-color: #f0f0f0;
-            border: 1px solid #c0c0c0;
-            border-radius: 5px;
-            padding: 5px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        QPushButton:hover {
-            background-color: #e5e5e5;
-            border-color: #a0a0a0;
-        }
-        QPushButton:pressed {
-            background-color: #d0d0d0;
-        }
-        """
-        for value in turns_values:
-            button = QPushButton(value, self)
-            button.setStyleSheet(button_style_sheet)
-            button.clicked.connect(lambda checked, v=value: self.set_turns_directly(v))
-            self.turns_buttons_layout.addWidget(button)
-
-        # Add the turns buttons layout to the bottom of the main layout
-        self.layout.addLayout(self.turns_buttons_layout)
-
-    def set_turns_directly(self, turns: float) -> None:
-        """Directly set the turns value for the motion type."""
+    def update_turns_directly(self, turns) -> None:
         if turns in ["0", "1", "2", "3"]:
             self.turnbox.setCurrentText(turns)
         elif turns in ["0.5", "1.5", "2.5"]:
             self.turnbox.setCurrentText(turns)
-        self.update_turns_directly()  # This method will now be triggered with the new turns value
+        selected_turns_str = self.turnbox.currentText()
+        if not selected_turns_str:
+            return
 
-    def add_black_borders(self) -> None:
-        self.setStyleSheet(
-            f"{self.styleSheet()} border: 1px solid black; border-radius: 0px;"
-        )
+        new_turns = float(selected_turns_str)
+        self._update_pictographs_turns_by_color(new_turns)
 
-    def _create_frames(self) -> None:
-        self.turnbox_frame = self.create_turnbox_frame(QVBoxLayout())
-        self.subtract_button_frame = self.create_button_frame(
-            self.subtract_turns_buttons
-        )
-        self.add_button_frame = self.create_button_frame(self.add_turns_buttons)
-
-    def setup_turns_label(self) -> None:
-        self.turns_label = QLabel("Turns", self)
-        self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.turnbox_frame.layout().addWidget(self.turns_label)
-
-    def setup_turnbox(self) -> None:
-        self.turnbox_frame.layout().addWidget(self.turnbox)
-        self.set_layout_margins_and_alignment()
-
-    def _add_frames_to_main_layout(self) -> None:
-        main_frame = QFrame()
-        main_frame.setLayout(self.main_hbox_layout)
-        self.main_hbox_layout.addWidget(self.subtract_button_frame)
-        self.main_hbox_layout.addWidget(self.turnbox_frame)
-        self.main_hbox_layout.addWidget(self.add_button_frame)
-
-        self.layout.addWidget(main_frame)
-
-    def create_turnbox_frame(self, layout) -> QFrame:
-        frame = QFrame()
-        frame.setLayout(layout)
-        self._configure_layout(layout)
-        return frame
-
-    def set_layout_margins_and_alignment(self) -> None:
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-    def create_button_frame(self, buttons) -> QFrame:
-        frame = QFrame()
-        layout = QVBoxLayout(frame)
-        self._configure_layout(layout)
-        for button in buttons:
-            layout.addWidget(button)
-        return frame
-
-    def _configure_layout(self, layout: QVBoxLayout):
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.setSpacing(0)
-
-    def connect_signals(self) -> None:
+    def update_turns_incrementally(
+        self: Union[
+            "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
+        ],
+        adjustment: float,
+    ) -> None:
+        self.turnbox.currentIndexChanged.disconnect(self.update_turns_directly)
+        self.process_turns_for_all_motions(adjustment)
         self.turnbox.currentIndexChanged.connect(self.update_turns_directly)
 
-    def update_turns_incrementally(self, adjustment: float) -> None:
-        self.disconnect_signal(self.turnbox.currentIndexChanged)
-        self.process_turns_for_all_motions(adjustment)
-        self.connect_signal(self.turnbox.currentIndexChanged)
+    def update_turns_for_pictograph(
+        self, pictograph: Pictograph, adjustment: float
+    ) -> None:
+        for motion in pictograph.get_motions_by_type(self.attr_box.motion_type):
+            self.process_update_turns(motion, adjustment)
 
-    def process_turns_for_all_motions(self, adjustment: float) -> None:
-        if self.attr_box.lead_state == TRAILING:
-            for motion in self.get_trailing_motions():
-                self.process_single_motion(motion, adjustment)
-
-        elif self.attr_box.lead_state == LEADING:
-            for motion in self.get_leading_motions():
-                self.process_single_motion(motion, adjustment)
-
-    def determine_leading_color(
-        self, red_start, red_end, blue_start, blue_end
-    ) -> Colors:
-        if red_start == blue_end:
-            return RED
-        elif blue_start == red_end:
-            return BLUE
-        return None
-
-    def get_trailing_motions(self):
-        trailing_motions = []
-        for pictograph in self.attr_box.get_pictographs():
-            red_start = pictograph.motions[RED].start_loc
-            red_end = pictograph.motions[RED].end_loc
-            blue_start = pictograph.motions[BLUE].start_loc
-            blue_end = pictograph.motions[BLUE].end_loc
-            leading_color = self.determine_leading_color(
-                red_start, red_end, blue_start, blue_end
-            )
-            if leading_color == RED:
-                trailing_color = BLUE
-            elif leading_color == BLUE:
-                trailing_color = RED
-            if trailing_color:
-                trailing_motions.append(pictograph.motions[trailing_color])
-        return trailing_motions
-
-    def get_leading_motions(self) -> List[Motion]:
-        leading_motions = []
-        for pictograph in self.attr_box.get_pictographs():
-            red_start = pictograph.motions[RED].start_loc
-            red_end = pictograph.motions[RED].end_loc
-            blue_start = pictograph.motions[BLUE].start_loc
-            blue_end = pictograph.motions[BLUE].end_loc
-            leading_color = self.determine_leading_color(
-                red_start, red_end, blue_start, blue_end
-            )
-            if leading_color:
-                leading_motions.append(pictograph.motions[leading_color])
-        return leading_motions
-
-    def connect_signal(self, signal: pyqtBoundSignal) -> None:
-        signal.connect(self.update_turns_directly)
-
-    def disconnect_signal(self, signal: pyqtBoundSignal) -> None:
-        signal.disconnect(self.update_turns_directly)
-
-    def process_single_motion(self, motion: Motion, adjustment: float) -> None:
+    def process_update_turns(
+        self: Union[
+            "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
+        ],
+        motion: Motion,
+        adjustment: float,
+    ) -> None:
         initial_turns = motion.turns
         new_turns = self._calculate_new_turns(motion.turns, adjustment)
         self.update_turns_display(new_turns)
@@ -249,18 +97,15 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         turns_str = self.format_turns(turns)
         self.turnbox.setCurrentText(turns_str)
 
+    def process_turns_for_all_motions(self, adjustment: float) -> None:
+        for pictograph in self.attr_box.get_pictographs():
+            self.update_turns_for_pictograph(pictograph, adjustment)
+
     @staticmethod
     def format_turns(turns: Union[int, float]) -> str:
         return str(int(turns)) if turns.is_integer() else str(turns)
 
-    def _simulate_cw_button_click(self) -> None:
-        self.attr_box.prop_rot_dir_widget.cw_button.setChecked(True)
-        self.attr_box.prop_rot_dir_widget.cw_button.click()
-
-    def _turns_added(self, initial_turns, new_turns):
-        return initial_turns == 0 and new_turns > 0
-
-    def _get_current_prop_rot_dir(self) -> str:
+    def _get_current_prop_rot_dir_for_ig_motion_type_turns_widget(self) -> str:
         return (
             CLOCKWISE
             if self.attr_box.prop_rot_dir_widget.cw_button.isChecked()
@@ -275,9 +120,9 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
             return
 
         new_turns = float(selected_turns_str)
-        self._update_pictographs_turns(new_turns)
+        self._update_pictographs_turns_by_color(new_turns)
 
-    def _update_pictographs_turns(self, new_turns):
+    def _update_pictographs_turns_by_color(self, new_turns):
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.arrow.lead_state == self.attr_box.lead_state:
@@ -287,11 +132,11 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
                         motion.prop_rot_dir == NO_ROT and motion.turns > 0
                     ):
                         motion.manipulator.set_prop_rot_dir(
-                            self._get_current_prop_rot_dir()
+                            self._get_current_prop_rot_dir_for_ig_motion_type_turns_widget()
                         )
                         pictograph_dict = {
                             f"{motion.color}_turns": new_turns,
-                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir(),
+                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir_for_ig_motion_type_turns_widget(),
                         }
                     else:
                         pictograph_dict = {
@@ -359,3 +204,6 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
 
     def _adjust_turns_callback(self, adjustment: float) -> None:
         self.update_turns_incrementally(adjustment)
+
+    def connect_signals(self) -> None:
+        self.turnbox.currentIndexChanged.connect(self.update_turns_directly)

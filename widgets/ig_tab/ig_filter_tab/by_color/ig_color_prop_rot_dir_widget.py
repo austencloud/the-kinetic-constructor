@@ -155,40 +155,7 @@ class IGColorPropRotDirWidget(BaseAttrBoxWidget):
             f"{self.styleSheet()} border: 1px solid black; border-radius: 0px;"
         )
 
-    def create_turnbox_frame(self, layout) -> QFrame:
-        frame = QFrame()
-        frame.setLayout(layout)
-        self._configure_layout(layout)
-        return frame
 
-    def set_layout_margins_and_alignment(self) -> None:
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-    def create_button_frame(self, buttons) -> QFrame:
-        frame = QFrame()
-        layout = QVBoxLayout(frame)
-        self._configure_layout(layout)
-        for button in buttons:
-            layout.addWidget(button)
-        return frame
-
-    def _configure_layout(self, layout: QVBoxLayout):
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.setSpacing(0)
-
-    def _turns_added(self, initial_turns, new_turns):
-        return initial_turns == 0 and new_turns > 0
-
-    def _get_current_prop_rot_dir(self) -> str:
-        return (
-            CLOCKWISE
-            if self.cw_button.isChecked()
-            else COUNTER_CLOCKWISE
-            if self.ccw_button.isChecked()
-            else NO_ROT
-        )
 
     ### EVENT HANDLERS ###
 

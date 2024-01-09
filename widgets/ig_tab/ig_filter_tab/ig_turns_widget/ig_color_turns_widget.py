@@ -21,6 +21,9 @@ from objects.pictograph.pictograph import Pictograph
 from widgets.attr_box_widgets.base_turns_widget import (
     BaseTurnsWidget,
 )
+from widgets.ig_tab.ig_filter_tab.ig_turns_widget.base_ig_turns_widget import (
+    BaseIGTurnsWidget,
+)
 
 
 if TYPE_CHECKING:
@@ -28,64 +31,40 @@ if TYPE_CHECKING:
 from PyQt6.QtCore import pyqtBoundSignal
 
 
-class IGColorTurnsWidget(BaseTurnsWidget):
+class IGColorTurnsWidget(BaseIGTurnsWidget):
     def __init__(self, attr_box: "IGColorAttrBox") -> None:
         super().__init__(attr_box)
-        self._initialize_ui()
+        self.attr_box = attr_box
 
+    def _update_pictographs_turns_by_color(self, new_turns):
+        for pictograph in self.attr_box.pictographs.values():
+            for motion in pictograph.motions.values():
+                if motion.color == self.attr_box.color:
+                    motion.set_turns(new_turns)
 
-    def add_black_borders(self) -> None:
-        self.setStyleSheet(
-            f"{self.styleSheet()} border: 1px solid black; border-radius: 0px;"
-        )
+                    if motion.motion_type in [DASH, STATIC] and (
+                        motion.prop_rot_dir == NO_ROT and motion.turns > 0
+                    ):
+                        motion.manipulator.set_prop_rot_dir(
+                            self._get_current_prop_rot_dir_for_ig_motion_type_turns_widget()
+                        )
+                        pictograph_dict = {
+                            f"{motion.color}_turns": new_turns,
+                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir_for_ig_motion_type_turns_widget(),
+                        }
+                    else:
+                        pictograph_dict = {
+                            f"{motion.color}_turns": new_turns,
+                        }
+                    motion.scene.update_pictograph(pictograph_dict)
 
-    def _create_frames(self) -> None:
-        self.turnbox_frame = self.create_turnbox_frame(QVBoxLayout())
-        self.subtract_button_frame = self.create_button_frame(
-            self.subtract_turns_buttons
-        )
-        self.add_button_frame = self.create_button_frame(self.add_turns_buttons)
-
-    def setup_turns_label(self) -> None:
-        self.turns_label = QLabel("Turns", self)
-        self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.turnbox_frame.layout().addWidget(self.turns_label)
-
-    def setup_turnbox(self) -> None:
-        self.turnbox_frame.layout().addWidget(self.turnbox)
-        self.set_layout_margins_and_alignment()
-
-    def _add_frames_to_main_layout(self) -> None:
-        main_frame = QFrame()
-        main_frame.setLayout(self.main_hbox_layout)
-        self.main_hbox_layout.addWidget(self.subtract_button_frame)
-        self.main_hbox_layout.addWidget(self.turnbox_frame)
-        self.main_hbox_layout.addWidget(self.add_button_frame)
-
-        self.layout.addWidget(main_frame)
-
-    def create_turnbox_frame(self, layout) -> QFrame:
-        frame = QFrame()
-        frame.setLayout(layout)
-        self._configure_layout(layout)
-        return frame
+    def _simulate_cw_button_click(self) -> None:
+        self.attr_box.prop_rot_dir_widget.cw_button.setChecked(True)
+        self.attr_box.prop_rot_dir_widget.cw_button.click()
 
     def set_layout_margins_and_alignment(self) -> None:
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-    def create_button_frame(self, buttons) -> QFrame:
-        frame = QFrame()
-        layout = QVBoxLayout(frame)
-        self._configure_layout(layout)
-        for button in buttons:
-            layout.addWidget(button)
-        return frame
-
-    def _configure_layout(self, layout: QVBoxLayout):
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.setSpacing(0)
 
     def connect_signals(self) -> None:
         self.turnbox.currentIndexChanged.connect(self.update_turns_directly)
@@ -97,17 +76,11 @@ class IGColorTurnsWidget(BaseTurnsWidget):
 
     def process_turns_for_all_motions(self, adjustment: float) -> None:
         for pictograph in self.attr_box.get_pictographs():
-            self.process_single_motion(
+            self.process_update_turns(
                 pictograph.motions[self.attr_box.color], adjustment
             )
 
-    def connect_signal(self, signal: pyqtBoundSignal) -> None:
-        signal.connect(self.update_turns_directly)
-
-    def disconnect_signal(self, signal: pyqtBoundSignal) -> None:
-        signal.disconnect(self.update_turns_directly)
-
-    def process_single_motion(self, motion: Motion, adjustment: float) -> None:
+    def process_update_turns(self, motion: Motion, adjustment: float) -> None:
         initial_turns = motion.turns
         new_turns = self._calculate_new_turns(motion.turns, adjustment)
         self.update_turns_display(new_turns)
@@ -121,35 +94,11 @@ class IGColorTurnsWidget(BaseTurnsWidget):
         }
         motion.scene.update_pictograph(pictograph_dict)
 
-    def _calculate_new_turns(self, current_turns, adjustment):
-        return max(0, min(3, current_turns + adjustment))
-
-    def update_turns_display(self, turns: Union[int, float]) -> None:
-        turns_str = self.format_turns(turns)
-        self.turnbox.setCurrentText(turns_str)
-
-    @staticmethod
-    def format_turns(turns: Union[int, float]) -> str:
-        return str(int(turns)) if turns.is_integer() else str(turns)
-
     def _simulate_cw_button_click(self) -> None:
         self.attr_box.prop_rot_dir_widget.cw_button.setChecked(True)
         self.attr_box.prop_rot_dir_widget.cw_button.click()
 
-    def _turns_added(self, initial_turns, new_turns):
-        return initial_turns == 0 and new_turns > 0
-
-    def _get_current_prop_rot_dir(self) -> str:
-        return (
-            CLOCKWISE
-            if self.attr_box.prop_rot_dir_widget.cw_button.isChecked()
-            else COUNTER_CLOCKWISE
-            if self.attr_box.prop_rot_dir_widget.ccw_button.isChecked()
-            else NO_ROT
-        )
-
-
-    def _update_pictographs_turns(self, new_turns):
+    def _update_pictographs_turns_by_color(self, new_turns) -> None:
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.color == self.attr_box.color:
@@ -159,11 +108,11 @@ class IGColorTurnsWidget(BaseTurnsWidget):
                         motion.prop_rot_dir == NO_ROT and motion.turns > 0
                     ):
                         motion.manipulator.set_prop_rot_dir(
-                            self._get_current_prop_rot_dir()
+                            self._get_current_prop_rot_dir_for_ig_motion_type_turns_widget()
                         )
                         pictograph_dict = {
                             f"{motion.color}_turns": new_turns,
-                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir(),
+                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir_for_ig_motion_type_turns_widget(),
                         }
                     else:
                         pictograph_dict = {
@@ -222,12 +171,6 @@ class IGColorTurnsWidget(BaseTurnsWidget):
             button_size = self.calculate_turns_button_size()
             turns_button.update_attr_box_turns_button_size(button_size)
 
-    def calculate_turns_button_size(self) -> int:
-        return int(self.attr_box.width() / 10)
-
     def resize_turns_widget(self) -> None:
         self.update_ig_color_turnbox_size()
         self.update_ig_color_turns_button_size()
-
-    def _adjust_turns_callback(self, adjustment: float) -> None:
-        self.update_turns_incrementally(adjustment)

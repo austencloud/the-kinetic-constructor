@@ -41,8 +41,6 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
         self._add_frames_to_main_layout()
         self.setup_turns_label()
         self.setup_turnbox()
-        self.connect_signals()
-        self.setup_directset_turns_buttons()
 
     def setup_turns_label(self) -> None:
         self.turns_label = QLabel("Turns", self)
@@ -61,7 +59,6 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
 
         self.main_hbox_layout = QHBoxLayout()
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
-
 
     def _add_frames_to_main_layout(self) -> None:
         main_frame = QFrame()
@@ -123,66 +120,8 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
         button.clicked.connect(lambda: self._adjust_turns_callback(turn_adjustment))
         return button
 
-    def setup_directset_turns_buttons(self) -> None:
-        turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
-        self.turns_buttons_layout = QHBoxLayout()
-        button_style_sheet = """
-        QPushButton {
-            background-color: #f0f0f0;
-            border: 1px solid #c0c0c0;
-            border-radius: 5px;
-            padding: 5px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        QPushButton:hover {
-            background-color: #e5e5e5;
-            border-color: #a0a0a0;
-        }
-        QPushButton:pressed {
-            background-color: #d0d0d0;
-        }
-        """
-        for value in turns_values:
-            button = QPushButton(value, self)
-            button.setStyleSheet(button_style_sheet)
-            button.clicked.connect(lambda checked, v=value: self.set_turns_directly(v))
-            self.turns_buttons_layout.addWidget(button)
-        self.layout.addLayout(self.turns_buttons_layout)
 
     ### UPDATE ###
-
-    def update_turns_directly(self) -> None:
-        selected_turns_str = self.turnbox.currentText()
-        if not selected_turns_str:
-            return
-
-        new_turns = float(selected_turns_str)
-        self._update_pictographs_turns(new_turns)
-
-
-    def _update_pictographs_turns(self, new_turns):
-        for pictograph in self.attr_box.pictographs.values():
-            for motion in pictograph.motions.values():
-                if motion.color == self.attr_box.color:
-                    motion.set_turns(new_turns)
-
-                    if motion.motion_type in [DASH, STATIC] and (
-                        motion.prop_rot_dir == NO_ROT and motion.turns > 0
-                    ):
-                        motion.manipulator.set_prop_rot_dir(
-                            self._get_current_prop_rot_dir()
-                        )
-                        pictograph_dict = {
-                            f"{motion.color}_turns": new_turns,
-                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir(),
-                        }
-                    else:
-                        pictograph_dict = {
-                            f"{motion.color}_turns": new_turns,
-                        }
-                    motion.scene.update_pictograph(pictograph_dict)
-
 
     def _update_turnbox(self, turns) -> None:
         turns_str = str(turns)
@@ -193,28 +132,7 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
             elif turns is None:
                 self.turnbox.setCurrentIndex(-1)
 
-    ### HELPERS ###
-
-    def connect_signal(self, signal: pyqtBoundSignal) -> None:
-        signal.connect(self.update_turns_directly)
-
-    def disconnect_signal(self, signal: pyqtBoundSignal) -> None:
-        signal.disconnect(self.update_turns_directly)
-
-    def connect_signals(self) -> None:
-        self.turnbox.currentIndexChanged.connect(self.update_turns_directly)
-
-
-
     ### SETTERS ###
-
-    def set_turns_directly(self, turns: float) -> None:
-        """Directly set the turns value for the motion type."""
-        if turns in ["0", "1", "2", "3"]:
-            self.turnbox.setCurrentText(turns)
-        elif turns in ["0.5", "1.5", "2.5"]:
-            self.turnbox.setCurrentText(turns)
-        self.update_turns_directly()
 
     def _adjust_turns_callback(
         self: Union["GraphEditorTurnsWidget", "IGMotionTypeTurnsWidget"],
@@ -225,3 +143,4 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
     def set_layout_margins_and_alignment(self) -> None:
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
