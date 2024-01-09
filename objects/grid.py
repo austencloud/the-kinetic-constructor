@@ -1,3 +1,4 @@
+import json
 from typing import TYPE_CHECKING, List, Dict, Union
 from xml.etree import ElementTree as ET
 from PyQt6.QtCore import QPointF
@@ -53,137 +54,30 @@ class GridItem(QGraphicsSvgItem):
 
 class Grid:
     def __init__(self, grid_scene: Union["ArrowBox", "PropBox", "Pictograph"]) -> None:
-        self.items: Dict[str, GridItem] = {}
-        self.circle_coordinates_cache = {}
-        self.svg_file_path_cache = {}
+        self.items = {}
         self.grid_mode = DIAMOND
-        self._init_grid(grid_scene)
-        self._apply_grid_mode(grid_scene.main_widget.grid_mode)
-        self._populate_circle_coordinates_cache()
+        self.circle_coordinates_cache = self._load_circle_coordinates()
         self._create_grid_items(grid_scene)
+        self.center = self.circle_coordinates_cache["center_point"]
 
-    def _init_grid(
-        self, grid_scene: Union["ArrowBox", "PropBox", "Pictograph"]
-    ) -> None:
-        self._populate_circle_coordinates_cache()
-        print(self.circle_coordinates_cache)
-        self._create_grid_items(grid_scene)
-        self.center = self.get_circle_coordinates("center_point")
-
-        self._create_grid_items(grid_scene)
-
-    def _populate_circle_coordinates_cache(self):
-        self.circle_coordinates_cache = {
-            "hand_points": {
-                "diamond": {
-                    "normal": {},  # Normal diamond hand points
-                    "strict": {},  # Strict diamond hand points
-                },
-                "box": {
-                    "normal": {},  # Normal box hand points
-                    "strict": {},  # Strict box hand points
-                },
-            },
-            "layer2_points": {
-                "diamond": {
-                    "normal": {},  # Normal diamond layer2 points
-                    "strict": {},  # Strict diamond layer2 points
-                },
-                "box": {
-                    "normal": {},  # Normal box layer2 points
-                    "strict": {},  # Strict box layer2 points
-                },
-            },
-            "outer_points": {},
-            "center_point": {},
-        }
-        hand_point_ids = {
-            "diamond": {
-                "normal": [
-                    "n_diamond_hand_point",
-                    "e_diamond_hand_point",
-                    "s_diamond_hand_point",
-                    "w_diamond_hand_point",
-                ],
-                "strict": [
-                    "strict_n_diamond_hand_point",
-                    "strict_e_diamond_hand_point",
-                    "strict_s_diamond_hand_point",
-                    "strict_w_diamond_hand_point",
-                ],
-            },
-            "box": {
-                "normal": [
-                    "ne_box_hand_point",
-                    "se_box_hand_point",
-                    "sw_box_hand_point",
-                    "nw_box_hand_point",
-                ],
-                "strict": [
-                    "strict_ne_box_hand_point",
-                    "strict_se_box_hand_point",
-                    "strict_sw_box_hand_point",
-                    "strict_nw_box_hand_point",
-                ],
-            },
-        }
-        for mode, types in hand_point_ids.items():
-            for type_name, ids in types.items():
-                for id in ids:
-                    coordinates = self.get_circle_coordinates(id)
-                    self.circle_coordinates_cache["hand_points"][mode][type_name][
-                        id
-                    ] = coordinates
-
-        layer2_point_ids = {
-            "diamond": {
-                "normal": [
-                    "ne_diamond_layer2_point",
-                    "se_diamond_layer2_point",
-                    "sw_diamond_layer2_point",
-                    "nw_diamond_layer2_point",
-                ],
-                "strict": [
-                    "strict_ne_diamond_layer2_point",
-                    "strict_se_diamond_layer2_point",
-                    "strict_sw_diamond_layer2_point",
-                    "strict_nw_diamond_layer2_point",
-                ],
-            },
-            "box": {
-                "normal": [
-                    "n_box_layer2_point",
-                    "e_box_layer2_point",
-                    "s_box_layer2_point",
-                    "w_box_layer2_point",
-                ],
-                "strict": [
-                    "strict_n_box_layer2_point",
-                    "strict_e_box_layer2_point",
-                    "strict_s_box_layer2_point",
-                    "strict_w_box_layer2_point",
-                ],
-            },
-        }
-        for mode, types in layer2_point_ids.items():
-            for type_name, ids in types.items():
-                for id in ids:
-                    coordinates = self.get_circle_coordinates(id)
-                    self.circle_coordinates_cache["layer2_points"][mode][type_name][
-                        id
-                    ] = coordinates
-        outer_point_ids = [
-            "n_outer_point",
-            "e_outer_point",
-            "s_outer_point",
-            "w_outer_point",
-        ]
-        for id in outer_point_ids:
-            coordinates = self.get_circle_coordinates(id)
-            self.circle_coordinates_cache["outer_points"][id] = coordinates
-
-        coordinates = self.get_circle_coordinates("center_point")
-        self.circle_coordinates_cache["center_point"] = coordinates
+    def _load_circle_coordinates(self) -> Dict[str, str | Dict[str, str | Dict[str, Dict[str, str]]]]:
+        # Load the JSON file containing the circle coordinates
+        with open("F:\\CODE\\tka-app\\tka-sequence-constructor\\data\\circle_coords.json", "r") as file:
+            data: Dict[str, Union[str,Dict[str, Union[str, Dict[str, Dict[str, str]]]]]] = json.load(file)
+        # Convert string coordinates to QPointF
+        for section, values in data.items():
+            if section in ["hand_points", "layer2_points", "outer_points"]:
+                for mode, types in values.items():
+                    # if types is a dict
+                    if isinstance(types, dict):
+                        for type_name, points in types.items():
+                            for point_id, coords in points.items():
+                                x, y = map(float, coords.strip("()").split(", "))
+                                data[section][mode][type_name][point_id] = QPointF(x, y)
+            elif section == "center_point":
+                x, y = map(float, data[section].strip("()").split(", "))
+                data[section] = QPointF(x, y)
+        return data
 
     def _create_grid_items(self, grid_scene: "Pictograph") -> None:
         # Paths for each grid mode
@@ -198,33 +92,6 @@ class Grid:
             self.items[mode] = item
             # Set initial visibility based on the grid mode
             item.setVisible(mode == self.grid_mode)
-
-    def _apply_grid_mode(self, grid_mode: GridModes) -> None:
-        self.toggle_grid_mode(grid_mode)
-
-    def _hide_box_mode_elements(self) -> None:
-        self.items[BOX].setVisible(False)
-
-    def _hide_diamond_mode_elements(self) -> None:
-        self.items[DIAMOND].setVisible(False)
-
-    def get_circle_coordinates(self, circle_id: str) -> Union[QPointF, None]:
-        # Return from cache if available
-        # Fetch and parse SVG file if not in cache
-        svg_file_path = self._get_svg_file_path(circle_id)
-        with open(svg_file_path, "r") as svg_file:
-            svg_content = svg_file.read()
-
-        root = ET.fromstring(svg_content)
-        circle_element = root.find(
-            f".//{{http://www.w3.org/2000/svg}}circle[@id='{circle_id}']"
-        )
-        if circle_element is not None:
-            cx = float(circle_element.attrib["cx"])
-            cy = float(circle_element.attrib["cy"])
-            coordinates = QPointF(cx, cy)
-            return coordinates
-        return None
 
     def _get_svg_file_path(self, circle_id: str) -> str:
         # Check if SVG file path is cached

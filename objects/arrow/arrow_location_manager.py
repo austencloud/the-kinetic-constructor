@@ -45,9 +45,32 @@ class ArrowLocationManager:
         )
 
     def _dash_location_zero_turns(self) -> Locations:
-        opposite_arrow = self.get_opposite_arrow()
-        dash_map = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
-        return dash_map.get(opposite_arrow.loc, self._default_dash_location())
+        other_motion = (
+            self.arrow.scene.motions[RED]
+            if self.arrow.color == BLUE
+            else self.arrow.scene.motions[BLUE]
+        )
+        if self.arrow.scene.letter in ["Φ", "Ψ"]:
+            dash_map = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
+            return dash_map.get(other_motion.arrow.loc, self._default_dash_location())
+        elif self.arrow.scene.letter in ["Λ-"]:
+            loc_map = {
+                ((NORTH, SOUTH), (EAST, WEST)): EAST,
+                ((EAST, WEST), (NORTH, SOUTH)): NORTH,
+                ((NORTH, SOUTH), (WEST, EAST)): WEST,
+                ((WEST, EAST), (NORTH, SOUTH)): NORTH,
+                ((SOUTH, NORTH), (EAST, WEST)): EAST,
+                ((EAST, WEST), (SOUTH, NORTH)): SOUTH,
+                ((SOUTH, NORTH), (WEST, EAST)): WEST,
+                ((WEST, EAST), (SOUTH, NORTH)): SOUTH,
+            }
+            arrow_location = loc_map.get(
+            (
+                (self.arrow.motion.start_loc, self.arrow.motion.end_loc),
+                (other_motion.start_loc, other_motion.end_loc),
+            ))
+            return arrow_location
+            
 
     def _dash_location_non_zero_turns(self) -> Locations:
         rot_map = {

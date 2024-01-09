@@ -314,8 +314,16 @@ class Pictograph(QGraphicsScene):
         for color in [RED, BLUE]:
             motion_dict = self._create_motion_dict(pictograph_dict, color)
             motion_dicts.append(motion_dict)
-
+            if "start_loc" in motion_dict and "end_loc" in motion_dict:
+                if motion_dict[COLOR] == BLUE:
+                    self.blue_motion.start_loc = motion_dict[START_LOC]
+                    self.blue_motion.end_loc = motion_dict[END_LOC]
+                elif motion_dict[COLOR] == RED:
+                    self.red_motion.start_loc = motion_dict[START_LOC]
+                    self.red_motion.end_loc = motion_dict[END_LOC]
+                
         for motion_dict in motion_dicts:
+                
             self.motions[motion_dict[COLOR]].update_motion(motion_dict)
         for arrow in self.arrows.values():
             if not arrow.isVisible():
