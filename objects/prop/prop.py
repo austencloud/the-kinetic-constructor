@@ -34,16 +34,16 @@ class Prop(GraphicalObject):
 
         self.prop_type = prop_dict[PROP_TYPE]
         self.svg_file = self.get_svg_file(self.prop_type)
+        self.ghost: Prop = None
         super().__init__(scene)
-        self.setup_svg_renderer(self.svg_file)
         self._setup_attributes(scene, prop_dict)
+        self.setup_svg_renderer(self.svg_file)
         self.setZValue(10)
 
     def _setup_attributes(self, scene, prop_dict: Dict) -> None:
         self.scene: Pictograph | PropBox = scene
         self.drag_offset = QPointF(0, 0)
         self.previous_location: Locations = None
-        self.ghost: Prop = None
         self.is_ghost: bool = False
         self.axis: Axes = None
         self.color: Colors = prop_dict[COLOR]
@@ -175,8 +175,8 @@ class Prop(GraphicalObject):
         self._update_prop_rotation_angle()
 
     def update_svg(self) -> None:
-        svg_file = self.get_svg_file(self.prop_type)
-        super().update_svg(svg_file)
+        self.svg_file = self.get_svg_file(self.prop_type)
+        super().update_svg(self.svg_file)
 
     def get_svg_file(self, prop_type: PropTypes) -> str:
         svg_file = f"{PROP_DIR}{prop_type}.svg"
