@@ -3,15 +3,12 @@ from typing import TYPE_CHECKING, Dict, Optional, Tuple
 from constants import BLUE, LEADING, RED, TRAILING
 
 from objects.arrow.arrow import Arrow
-from objects.motion.motion import Motion
 from utilities.TypeChecking.Letters import (
     Type1_hybrid_letters,
     Type1_non_hybrid_letters,
     Type2_letters,
-    hybrid_letters,
     non_hybrid_letters,
 )
-from utilities.TypeChecking.TypeChecking import Colors
 
 
 if TYPE_CHECKING:

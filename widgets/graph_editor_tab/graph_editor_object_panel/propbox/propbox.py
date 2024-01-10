@@ -19,7 +19,6 @@ from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, Dict, List
 from utilities.TypeChecking.prop_types import (
     PropTypes,
     strictly_placed_props,
-    non_strictly_placed_props,
 )
 
 if TYPE_CHECKING:

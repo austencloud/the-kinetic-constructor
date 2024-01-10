@@ -1,4 +1,4 @@
-from constants import BLUE, LEADING, RED, TRAILING
+from constants import LEADING, TRAILING
 from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import LeadStates, Turns
 from widgets.attr_panel.base_attr_panel import BaseAttrPanel

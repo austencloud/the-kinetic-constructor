@@ -1,4 +1,3 @@
-from email.policy import strict
 from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Tuple, Union
 from PyQt6.QtCore import Qt, QPointF, QByteArray, QBuffer
 from PyQt6.QtSvg import QSvgRenderer
@@ -12,7 +11,6 @@ from objects.arrow.arrow_placement_manager.main_arrow_placement_manager import (
     MainArrowPlacementManager,
 )
 from utilities.TypeChecking.prop_types import (
-    PropTypes,
     strictly_placed_props,
     non_strictly_placed_props,
 )

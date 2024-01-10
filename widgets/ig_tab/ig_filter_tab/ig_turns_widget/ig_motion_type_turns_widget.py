@@ -1,4 +1,3 @@
-from PyQt6.QtWidgets import QPushButton, QHBoxLayout
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
 from constants import ICON_DIR

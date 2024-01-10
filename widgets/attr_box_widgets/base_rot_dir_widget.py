@@ -21,8 +21,8 @@ if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_attr_box import (
         GraphEditorAttrBox,
     )
-from constants import BLUE, CLOCKWISE, COUNTER_CLOCKWISE, DASH, HEX_BLUE, HEX_RED, ICON_DIR, RED, STATIC
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton
+from constants import CLOCKWISE, COUNTER_CLOCKWISE, DASH, ICON_DIR, STATIC
+from PyQt6.QtWidgets import QVBoxLayout, QPushButton
 
 
 class BaseRotDirWidget(BaseAttrBoxWidget):

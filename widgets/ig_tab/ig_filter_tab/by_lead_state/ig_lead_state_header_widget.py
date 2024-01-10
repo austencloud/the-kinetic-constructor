@@ -11,9 +11,7 @@ if TYPE_CHECKING:
         IGLeadStateAttrBox,
     )
 from constants import (
-    BLUE,
     LEADING,
-    RED,
     TRAILING,
 )
 

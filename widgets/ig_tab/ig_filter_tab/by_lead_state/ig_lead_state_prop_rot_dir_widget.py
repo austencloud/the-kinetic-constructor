@@ -1,26 +1,20 @@
 from PyQt6.QtWidgets import (
     QLabel,
-    QFrame,
     QVBoxLayout,
-    QHBoxLayout,
     QPushButton,
     QSizePolicy,
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 from constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
-    DASH,
-    ICON_DIR,
     LEADING,
     NO_ROT,
-    STATIC,
 )
 
 
-from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
 from widgets.attr_box_widgets.base_rot_dir_widget import BaseRotDirWidget
 
 if TYPE_CHECKING:

@@ -1,6 +1,5 @@
 from typing import TypedDict
 from enum import Enum
-from constants import *
 from utilities.TypeChecking.TypeChecking import (
     Colors,
     Locations,

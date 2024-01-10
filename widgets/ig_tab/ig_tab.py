@@ -1,5 +1,4 @@
 from copy import deepcopy
-from turtle import isvisible
 from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtWidgets import (
     QWidget,

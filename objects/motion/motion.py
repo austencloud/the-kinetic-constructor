@@ -1,6 +1,5 @@
 from constants import *
 from typing import TYPE_CHECKING, Dict, Union
-from objects.arrow.arrow_location_manager import ArrowLocationManager
 from objects.motion.motion_manipulator import MotionManipulator
 from utilities.TypeChecking.TypeChecking import (
     Colors,

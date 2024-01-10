@@ -10,7 +10,6 @@ from objects.pictograph.pictograph import Pictograph
 from widgets.ig_tab.ig_filter_tab.ig_turns_widget.base_ig_turns_widget import (
     BaseIGTurnsWidget,
 )
-from PyQt6.QtWidgets import QPushButton, QHBoxLayout
 
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_box import IGColorAttrBox

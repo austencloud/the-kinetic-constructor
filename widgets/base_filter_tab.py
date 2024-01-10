@@ -1,11 +1,5 @@
-from multiprocessing import parent_process
 from typing import TYPE_CHECKING, Union
-from PyQt6.QtWidgets import QTabWidget, QVBoxLayout, QLabel
-from PyQt6.QtCore import Qt
-from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_panel import IGColorAttrPanel
-from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_panel import (
-    IGMotionTypeAttrPanel,
-)
+from PyQt6.QtWidgets import QTabWidget
 
 if TYPE_CHECKING:
     from widgets.option_picker_tab.option_picker_tab import OptionPickerTab

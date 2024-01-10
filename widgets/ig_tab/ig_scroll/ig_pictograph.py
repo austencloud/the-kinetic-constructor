@@ -1,8 +1,6 @@
-import json
-import re
-from typing import TYPE_CHECKING, Dict, Tuple, Union
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView
-from constants import ANTI, BLUE, IG_PICTOGRAPH, LEADING, PRO, RED, TRAILING
+from constants import BLUE, IG_PICTOGRAPH, RED
 from objects.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import Qt
 

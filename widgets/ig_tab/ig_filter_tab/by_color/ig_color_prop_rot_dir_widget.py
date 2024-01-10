@@ -1,8 +1,6 @@
 from PyQt6.QtWidgets import (
     QLabel,
-    QFrame,
     QVBoxLayout,
-    QHBoxLayout,
     QPushButton,
     QSizePolicy,
 )

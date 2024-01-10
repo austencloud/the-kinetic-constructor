@@ -1,9 +1,7 @@
-from email.charset import QP
 from PyQt6.QtCore import QPointF
-from Enums import LetterNumberType
 from constants import *
 from objects.arrow.arrow import Arrow
-from typing import TYPE_CHECKING, Dict, List, Literal, Tuple
+from typing import TYPE_CHECKING, List, Literal, Tuple
 from objects.arrow.arrow_placement_manager.default_arrow_placement_manager import (
     DefaultArrowPlacementManager,
 )

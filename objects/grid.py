@@ -1,6 +1,5 @@
 import json
-from typing import TYPE_CHECKING, List, Dict, Union
-from xml.etree import ElementTree as ET
+from typing import TYPE_CHECKING, Dict, Union
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtGui import QTransform
@@ -11,14 +10,6 @@ from constants import (
     BOX,
     DIAMOND,
     GRID_DIR,
-    NORTH,
-    EAST,
-    NORTHEAST,
-    SOUTH,
-    SOUTHEAST,
-    SOUTHWEST,
-    NORTHWEST,
-    WEST,
 )
 from utilities.TypeChecking.TypeChecking import GridModes
 

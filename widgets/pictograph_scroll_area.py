@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, List, Literal, Union
 from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
-from constants import BLUE_MOTION_TYPE, DASH, IG_PICTOGRAPH, OPTION, RED_MOTION_TYPE, STATIC
+from constants import IG_PICTOGRAPH, OPTION
 from utilities.TypeChecking.TypeChecking import Orientations, Turns, Letters
 
 from PyQt6.QtCore import Qt

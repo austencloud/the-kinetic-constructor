@@ -14,11 +14,8 @@ from utilities.TypeChecking.TypeChecking import (
     LeadStates,
     Locations,
     MotionTypes,
-    PropRotDirs,
     Turns,
-    RotationAngles,
     TYPE_CHECKING,
-    Optional,
     Dict,
 )
 

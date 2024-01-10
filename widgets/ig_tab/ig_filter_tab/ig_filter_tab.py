@@ -1,6 +1,4 @@
-from multiprocessing import parent_process
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QTabWidget
 from widgets.base_filter_tab import BaseFilterTab
 from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_panel import IGColorAttrPanel
 from widgets.ig_tab.ig_filter_tab.by_lead_state.ig_lead_state_attr_panel import IGLeadStateAttrPanel

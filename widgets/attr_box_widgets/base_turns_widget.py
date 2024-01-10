@@ -3,17 +3,13 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QFrame,
     QSizePolicy,
-    QWidget,
     QComboBox,
     QLabel,
-    QPushButton,
 )
-from PyQt6.QtCore import Qt, pyqtBoundSignal
+from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, List, Union
-from constants import DASH, NO_ROT, STATIC
 from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
 from widgets.attr_box_widgets.attr_box_button import AttrBoxButton
-from objects.motion.motion import Motion
 from widgets.attr_panel.base_attr_box import BaseAttrBox
 
 if TYPE_CHECKING:
