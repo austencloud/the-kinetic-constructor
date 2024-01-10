@@ -81,6 +81,7 @@ Type1_same_prop_rot_dir_letters = [
 Type1_opp_prop_rot_dir_letters = ["C", "D", "E", "I", "J", "K", "M", "N", "P", "Q"]
 
 Type1_hybrid_letters = ["C", "F", "I", "L", "O", "R", "U", "V"]
+
 Type1_pro_letters = [
     "A",
     "D",
@@ -101,6 +102,8 @@ Type1_anti_letters = [
 ]
 
 Type1_non_hybrid_letters = Type1_pro_letters + Type1_anti_letters
+non_hybrid_letters = Type1_non_hybrid_letters + ["Φ-", "Ψ-", "Λ-", "α", "β", "Γ"]
+hybrid_letters = Type1_hybrid_letters + ["Φ", "Ψ", "Λ", "W", "X", "Y", "Z", "W-", "X-", "Y-", "Z-"]
 Type1_alpha_beta_letters = [
     "A",
     "B",

@@ -8,6 +8,8 @@ from utilities.TypeChecking.Letters import (
     Type1_hybrid_letters,
     Type1_non_hybrid_letters,
     Type2_letters,
+    hybrid_letters,
+    non_hybrid_letters,
 )
 from utilities.TypeChecking.TypeChecking import Colors
 
@@ -43,9 +45,7 @@ class SpecialArrowPlacementManager:
         letter_adjustments = self.special_placements.get(letter, {}).get(
             adjustment_key, {}
         )
-        if letter in Type1_hybrid_letters or letter in Type2_letters:
-            return letter_adjustments.get(arrow.motion_type)
-        elif letter in ["S", "T"]:
+        if letter in ["S", "T"]:
             leading_motion = self.pictograph.get_leading_motion()
             trailing_motion = (
                 self.blue_arrow.motion
@@ -56,7 +56,9 @@ class SpecialArrowPlacementManager:
             trailing_motion.arrow.lead_state = TRAILING
 
             return letter_adjustments.get(arrow.lead_state)
-        elif letter in Type1_non_hybrid_letters:
+        elif letter in hybrid_letters:
+            return letter_adjustments.get(arrow.motion_type)
+        elif letter in non_hybrid_letters:
             return letter_adjustments.get(arrow.color)
         return None
 

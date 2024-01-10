@@ -5,17 +5,23 @@ from constants import (
     ANTI,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
+    FLOAT,
     PRO,
     RED,
     BLUE,
     LEADING,
+    STATIC,
     TRAILING,
 )
 from typing import Dict, Tuple, Union
-from objects.motion.motion import Motion
 
 from objects.pictograph.pictograph import Pictograph
-from utilities.TypeChecking.Letters import Letters, Type1_non_hybrid_letters
+from utilities.TypeChecking.Letters import (
+    Letters,
+    Type1_hybrid_letters,
+    Type2_letters,
+    non_hybrid_letters,
+)
 
 
 class WASD_AdjustmentManager:
@@ -23,14 +29,7 @@ class WASD_AdjustmentManager:
         self.pictograph = pictograph
         self.red_motion = self.pictograph.motions[RED]
         self.blue_motion = self.pictograph.motions[BLUE]
-        self.pro_motion = (
-            self.red_motion if self.red_motion.motion_type == PRO else self.blue_motion
-        )
-        self.anti_motion = (
-            self.blue_motion
-            if self.blue_motion.motion_type == ANTI
-            else self.red_motion
-        )
+
         self.leading_motion = self.pictograph.get_leading_motion()
         self.trailing_motion = (
             self.pictograph.motions[RED]
@@ -66,10 +65,12 @@ class WASD_AdjustmentManager:
         data = self.load_json_data("arrow_placement/special_placements.json")
         if self.pictograph.letter in ["S", "T"]:
             self.handle_st_letters(data, adjustment)
-        elif self.pictograph.letter in Type1_non_hybrid_letters:
+        elif self.pictograph.letter in non_hybrid_letters:
             self.handle_non_hybrid_letters(data, adjustment)
-        elif self.pictograph.letter in ["I", "R", "U", "V", "X"]:
-            self.handle_type1_hybrid_letters(data, adjustment)
+        elif self.pictograph.letter in Type1_hybrid_letters:
+            self.handle_pro_anti_hybrid_letters(data, adjustment)
+        elif self.pictograph.letter in Type2_letters:
+            self.handle_shift_static_hybrid_letters(data, adjustment)
 
         self.write_json_data(data, "arrow_placement/special_placements.json")
 
@@ -89,7 +90,7 @@ class WASD_AdjustmentManager:
             adjustment_key = (int(blue_turns), int(red_turns))
 
         letter_data = data.get(self.pictograph.letter)
-        
+
         turn_data = letter_data.get(str(adjustment_key))
 
         if turn_data:
@@ -108,11 +109,11 @@ class WASD_AdjustmentManager:
             ).get(str(self.pictograph.selected_arrow.turns))
             if default_turn_data:
                 turn_data = {
-                    "blue": [
+                    BLUE: [
                         default_turn_data[0] + adjustment[0],
                         default_turn_data[1] + adjustment[1],
                     ],
-                    "red": [
+                    RED: [
                         default_turn_data[0] + adjustment[0],
                         default_turn_data[1] + adjustment[1],
                     ],
@@ -120,19 +121,34 @@ class WASD_AdjustmentManager:
             letter_data[str(adjustment_key)] = turn_data
             data[self.pictograph.letter] = letter_data
 
-    def handle_type1_hybrid_letters(self, data: Dict, adjustment):
+    def handle_pro_anti_hybrid_letters(self, data: Dict, adjustment):
+        self.pro_motion = (
+            self.red_motion if self.red_motion.motion_type == PRO else self.blue_motion
+        )
+        self.anti_motion = (
+            self.blue_motion
+            if self.blue_motion.motion_type == ANTI
+            else self.red_motion
+        )
+
         adjustment_key = (self.pro_motion.turns, self.anti_motion.turns)
         letter_data = data.get(self.pictograph.letter, {})
         turn_data = letter_data.get(str(adjustment_key))
 
-        if not turn_data:
+        if turn_data:
+            turn_data[self.pictograph.selected_arrow.motion_type][0] += adjustment[0]
+            turn_data[self.pictograph.selected_arrow.motion_type][1] += adjustment[1]
+            letter_data[str(adjustment_key)] = turn_data
+            data[self.pictograph.letter] = letter_data
+
+        elif not turn_data:
             # Get default values from default_placements.json
             default_data = self.load_json_data(
                 "arrow_placement/default_placements.json"
             )
-            default_turn_data = default_data.get(self.pictograph.letter, {}).get(
-                str(adjustment_key)
-            )
+            default_turn_data = default_data.get(
+                self.pictograph.selected_arrow.motion_type
+            ).get(str(self.pictograph.selected_arrow.turns))
             if default_turn_data:
                 turn_data = {
                     self.pro_motion.motion_type: [
@@ -144,6 +160,74 @@ class WASD_AdjustmentManager:
                         default_turn_data[1] + adjustment[1],
                     ],
                 }
+            letter_data[str(adjustment_key)] = turn_data
+            data[self.pictograph.letter] = letter_data
+
+    def handle_shift_static_hybrid_letters(self, data: Dict, adjustment):
+        shift_motion = (
+            self.red_motion
+            if self.red_motion.motion_type in [PRO, ANTI, FLOAT]
+            else self.blue_motion
+        )
+        static_motion = (
+            self.red_motion
+            if self.red_motion.motion_type == STATIC
+            else self.blue_motion
+        )
+        other_arrow = (
+            self.red_motion
+            if self.pictograph.selected_arrow == self.blue_motion.arrow
+            else self.blue_motion.arrow
+        )
+
+        adjustment_key = (shift_motion.turns, static_motion.turns)
+        letter_data = data.get(self.pictograph.letter, {})
+        turn_data = letter_data.get(str(adjustment_key))
+
+        if turn_data:
+            turn_data[self.pictograph.selected_arrow.motion_type][0] += adjustment[0]
+            turn_data[self.pictograph.selected_arrow.motion_type][1] += adjustment[1]
+            letter_data[str(adjustment_key)] = turn_data
+            data[self.pictograph.letter] = letter_data
+
+        elif not turn_data:
+            default_data = self.load_json_data(
+                "arrow_placement/default_placements.json"
+            )
+            default_turn_data_for_selected_arrow = default_data.get(
+                self.pictograph.selected_arrow.motion_type
+            ).get(str(self.pictograph.selected_arrow.turns))
+
+            default_turn_data_for_other_arrow = default_data.get(
+                other_arrow.motion_type
+            ).get(str(other_arrow.turns))
+
+            if self.pictograph.selected_arrow.motion_type == shift_motion.motion_type:
+                turn_data = {
+                    shift_motion.motion_type: [
+                        default_turn_data_for_selected_arrow[0] + adjustment[0],
+                        default_turn_data_for_selected_arrow[1] + adjustment[1],
+                    ],
+                    static_motion.motion_type: [
+                        default_turn_data_for_other_arrow[0] + adjustment[0],
+                        default_turn_data_for_other_arrow[1] + adjustment[1],
+                    ],
+                }
+            elif (
+                self.pictograph.selected_arrow.motion_type == static_motion.motion_type
+            ):
+                turn_data = {
+                    shift_motion.motion_type: [
+                        default_turn_data_for_other_arrow[0] + adjustment[0],
+                        default_turn_data_for_other_arrow[1] + adjustment[1],
+                    ],
+                    static_motion.motion_type: [
+                        default_turn_data_for_selected_arrow[0] + adjustment[0],
+                        default_turn_data_for_selected_arrow[1] + adjustment[1],
+                    ],
+                }
+            letter_data[str(adjustment_key)] = turn_data
+            data[self.pictograph.letter] = letter_data
 
     def handle_st_letters(self, data: Dict, adjustment):
         adjustment_key = (self.leading_motion.turns, self.trailing_motion.turns)
