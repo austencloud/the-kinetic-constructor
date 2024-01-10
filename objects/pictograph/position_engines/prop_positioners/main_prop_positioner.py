@@ -41,6 +41,11 @@ class MainPropPlacementManager:
         self.scene = scene
         self.init_prop_positioners(scene)
 
+    ### TODO: This is a bit of a hack. I should probably just make a dictionary
+    ###       of prop positioners and then call the appropriate one based on
+    ###       the letter. It's bad because it calls it every time we create a pictograph, and it's
+    ###       not necessary.
+
     def init_prop_positioners(self, scene) -> None:
         letter_to_positioner = {
             **{letter: Type1PropPositioner for letter in Type1_letters},

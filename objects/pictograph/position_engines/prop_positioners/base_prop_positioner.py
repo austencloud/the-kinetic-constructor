@@ -98,7 +98,6 @@ class BasePropPositioner:
         elif self.pictograph.grid.grid_mode == BOX:
             location_points = self._get_location_points(strict, BOX)
 
-        # if prop.loc matches the first character of a location point key, set the prop to that location
         for location, location_point in location_points.items():
             if prop.loc == location[0]:
                 prop.setPos(location_point + offset)
@@ -123,7 +122,7 @@ class BasePropPositioner:
             for prop in self.props:
                 self._set_prop_to_default_location(prop)
 
-        else:  # scene has non-hybrid orientations
+        else:  
             if self.current_letter in ["G", "H"]:
                 self.reposition_G_H()
             elif self.current_letter == "I":
