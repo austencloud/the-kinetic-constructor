@@ -25,10 +25,19 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
         self.update_ig_color_turnbox_size()
         self.update_add_subtract_button_size()
 
-    def adjust_turns_by_color(self, pictograph: Pictograph, adjustment: float) -> None:
+    def adjust_turns_by_color(
+        self, pictograph: Pictograph, adjustment: float
+    ) -> None:
+        """Adjust turns for a given pictograph based on motion type."""
+        new_turns = None
         for motion in pictograph.motions.values():
             if motion.color == self.attr_box.color:
                 self.process_turns_adjustment_for_single_motion(motion, adjustment)
+                new_turns = motion.turns
+        if new_turns in [0.0, 1.0, 2.0, 3.0]:
+            new_turns = int(new_turns)
+        self.update_turns_display(new_turns)
+
 
     def setup_directset_turns_buttons(self) -> None:
         """Setup buttons for direct turn setting."""
@@ -166,3 +175,8 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
 
     def _adjust_turns_callback(self, adjustment: float) -> None:
         self.adjust_turns_incrementally_by_color(adjustment)
+
+    def _adjust_turns(self, adjustment) -> None:
+        """Adjust turns for a given pictograph based on color."""
+        for pictograph in self.attr_box.pictographs.values():
+            self.adjust_turns_by_color(pictograph, adjustment)
