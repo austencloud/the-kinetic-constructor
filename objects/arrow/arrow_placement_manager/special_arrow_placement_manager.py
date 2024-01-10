@@ -56,10 +56,31 @@ class SpecialArrowPlacementManager:
             trailing_motion.arrow.lead_state = TRAILING
 
             return letter_adjustments.get(arrow.lead_state)
-        elif letter in hybrid_letters:
+        elif letter in Type1_hybrid_letters:
             return letter_adjustments.get(arrow.motion_type)
         elif letter in non_hybrid_letters:
             return letter_adjustments.get(arrow.color)
+        elif letter in Type2_letters:
+            shift_motion = (
+                self.pictograph.red_motion
+                if self.pictograph.red_motion.is_shift()
+                else self.pictograph.blue_motion
+            )
+            static_motion = (
+                self.pictograph.red_motion
+                if self.pictograph.red_motion.is_static()
+                else self.pictograph.blue_motion
+            )
+            if static_motion.prop_rot_dir == shift_motion.prop_rot_dir:
+                direction = "opp"
+            elif static_motion.prop_rot_dir != shift_motion.prop_rot_dir:
+                direction = "same"
+            if arrow.motion.is_static():
+                static_motion_key = f"{static_motion.motion_type}_{direction}"
+
+                return letter_adjustments.get(static_motion_key, {})
+            elif arrow.motion.is_shift():
+                return letter_adjustments.get(shift_motion.motion_type, {})
         return None
 
     def _adjustment_for_E(self, arrow: Arrow) -> Tuple[int, int]:

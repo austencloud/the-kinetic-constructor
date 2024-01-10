@@ -168,6 +168,7 @@ class WASD_AdjustmentManager:
             data[self.pictograph.letter] = letter_data
 
     def handle_shift_static_hybrid_letters(self, data: Dict, adjustment):
+        
         shift_motion = (
             self.red_motion
             if self.red_motion.motion_type in [PRO, ANTI, FLOAT]
@@ -183,14 +184,26 @@ class WASD_AdjustmentManager:
             if self.pictograph.selected_arrow == self.blue_motion.arrow
             else self.blue_motion.arrow
         )
+        if static_motion.prop_rot_dir == shift_motion.prop_rot_dir:
+            direction = "opp"
+        elif static_motion.prop_rot_dir != shift_motion.prop_rot_dir:
+            direction = "same"
+
+        static_motion_key = f"{static_motion.motion_type}_{direction}"
 
         adjustment_key = (shift_motion.turns, static_motion.turns)
         letter_data = data.get(self.pictograph.letter, {})
         turn_data = letter_data.get(str(adjustment_key))
 
-        if turn_data:
+        if turn_data and self.pictograph.selected_arrow.motion_type in [PRO, ANTI, FLOAT]:
             turn_data[self.pictograph.selected_arrow.motion_type][0] += adjustment[0]
             turn_data[self.pictograph.selected_arrow.motion_type][1] += adjustment[1]
+            letter_data[str(adjustment_key)] = turn_data
+            data[self.pictograph.letter] = letter_data
+
+        elif turn_data and self.pictograph.selected_arrow.motion_type == STATIC:
+            turn_data[static_motion_key][0] += adjustment[0]
+            turn_data[static_motion_key][1] += adjustment[1]
             letter_data[str(adjustment_key)] = turn_data
             data[self.pictograph.letter] = letter_data
 
@@ -212,7 +225,7 @@ class WASD_AdjustmentManager:
                         default_turn_data_for_selected_arrow[0] + adjustment[0],
                         default_turn_data_for_selected_arrow[1] + adjustment[1],
                     ],
-                    static_motion.motion_type: [
+                    static_motion_key: [
                         default_turn_data_for_other_arrow[0] + adjustment[0],
                         default_turn_data_for_other_arrow[1] + adjustment[1],
                     ],
@@ -225,7 +238,7 @@ class WASD_AdjustmentManager:
                         default_turn_data_for_other_arrow[0] + adjustment[0],
                         default_turn_data_for_other_arrow[1] + adjustment[1],
                     ],
-                    static_motion.motion_type: [
+                    static_motion_key: [
                         default_turn_data_for_selected_arrow[0] + adjustment[0],
                         default_turn_data_for_selected_arrow[1] + adjustment[1],
                     ],

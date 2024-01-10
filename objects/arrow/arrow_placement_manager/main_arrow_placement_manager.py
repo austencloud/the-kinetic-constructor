@@ -160,14 +160,10 @@ class MainArrowPlacementManager:
             return f"({self.blue_arrow.turns}, {self.red_arrow.turns})"
         elif self.letter in Type2_letters:
             shift = (
-                self.red_arrow
-                if self.red_arrow.motion_type in [PRO, ANTI]
-                else self.blue_arrow
+                self.red_arrow if self.red_arrow.motion.is_shift() else self.blue_arrow
             )
             static = (
-                self.red_arrow
-                if self.red_arrow.motion_type == STATIC
-                else self.blue_arrow
+                self.red_arrow if self.red_arrow.motion.is_static() else self.blue_arrow
             )
             return f"({shift.turns}, {static.turns})"
 
