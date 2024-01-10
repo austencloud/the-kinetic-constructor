@@ -30,13 +30,6 @@ class WASD_AdjustmentManager:
         self.red_motion = self.pictograph.motions[RED]
         self.blue_motion = self.pictograph.motions[BLUE]
 
-        self.leading_motion = self.pictograph.get_leading_motion()
-        self.trailing_motion = (
-            self.pictograph.motions[RED]
-            if self.leading_motion == self.pictograph.motions[BLUE]
-            else self.pictograph.motions[BLUE]
-        )
-
     def handle_half_turns(self, key) -> None:
         if not self.pictograph.selected_arrow:
             return
@@ -49,7 +42,6 @@ class WASD_AdjustmentManager:
         new_turns = max(0, min(3, selected_motion.turns + adjustment))
         pictograph_dict = {f"{self.pictograph.selected_arrow.color}_turns": new_turns}
         self.pictograph.update_pictograph(pictograph_dict)
-        # Update the turns display in the turns widget
 
     def handle_arrow_movement(self, key, shift_held) -> None:
         if not self.pictograph.selected_arrow:
@@ -63,14 +55,23 @@ class WASD_AdjustmentManager:
         if not self.pictograph.selected_arrow:
             return
         data = self.load_json_data("arrow_placement/special_placements.json")
-        if self.pictograph.letter in ["S", "T"]:
-            self.handle_st_letters(data, adjustment)
-        elif self.pictograph.letter in non_hybrid_letters:
-            self.handle_non_hybrid_letters(data, adjustment)
-        elif self.pictograph.letter in Type1_hybrid_letters:
-            self.handle_pro_anti_hybrid_letters(data, adjustment)
-        elif self.pictograph.letter in Type2_letters:
-            self.handle_shift_static_hybrid_letters(data, adjustment)
+
+        handlers = {
+            "S": self.handle_S_T,
+            "T": self.handle_S_T,
+            **{letter: self.handle_non_hybrid_letters for letter in non_hybrid_letters},
+            **{
+                letter: self.handle_pro_anti_hybrid_letters
+                for letter in Type1_hybrid_letters
+            },
+            **{
+                letter: self.handle_shift_static_hybrid_letters
+                for letter in Type2_letters
+            },
+        }
+
+        handler = handlers.get(self.pictograph.letter, lambda d, a: None)
+        handler(data, adjustment)
 
         self.write_json_data(data, "arrow_placement/special_placements.json")
 
@@ -89,17 +90,20 @@ class WASD_AdjustmentManager:
         elif red_turns in [0.0, 1.0, 2.0, 3.0] and blue_turns in [0.0, 1.0, 2.0, 3.0]:
             adjustment_key = (int(blue_turns), int(red_turns))
 
-        letter_data = data.get(self.pictograph.letter)
+        if data.get(self.pictograph.letter, {}) is None:
+            data[self.pictograph.letter] = {}
+            
 
-        turn_data = letter_data.get(str(adjustment_key))
+        turn_data = data.get(self.pictograph.letter, {}).get(str(adjustment_key), {})
 
         if turn_data:
+            letter_data = data.get(self.pictograph.letter)
             turn_data[self.pictograph.selected_arrow.color][0] += adjustment[0]
             turn_data[self.pictograph.selected_arrow.color][1] += adjustment[1]
             letter_data[str(adjustment_key)] = turn_data
             data[self.pictograph.letter] = letter_data
-
-        elif not turn_data:
+        elif data.get(self.pictograph.letter, {}) is not None and not turn_data:
+            letter_data = data.get(self.pictograph.letter, {})
             # Get default values from default_placements.json
             default_data = self.load_json_data(
                 "arrow_placement/default_placements.json"
@@ -229,7 +233,7 @@ class WASD_AdjustmentManager:
             letter_data[str(adjustment_key)] = turn_data
             data[self.pictograph.letter] = letter_data
 
-    def handle_st_letters(self, data: Dict, adjustment):
+    def handle_S_T(self, data: Dict, adjustment):
         adjustment_key = (self.leading_motion.turns, self.trailing_motion.turns)
         letter_data = data.get(self.pictograph.letter, {})
         turn_data = letter_data.get(str(adjustment_key))
@@ -280,38 +284,39 @@ class WASD_AdjustmentManager:
     def get_adjustment(
         self, key, increment
     ) -> Tuple[Union[int, float], Union[int, float]]:
-        if self.pictograph.letter in "PQRST":
-            return self.get_letter_specific_adjustment(key, increment)
-        else:
-            return self.get_default_adjustment(key, increment)
-
-    def get_letter_specific_adjustment(self, key, increment):
         direction_map = {
             Qt.Key.Key_W: (0, -1),
             Qt.Key.Key_A: (-1, 0),
             Qt.Key.Key_S: (0, 1),
             Qt.Key.Key_D: (1, 0),
         }
-
         dx, dy = direction_map.get(key, (0, 0))
-
         if self.pictograph.letter == "P":
-            if self.pictograph.selected_arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                dx = -dx
-            elif self.pictograph.selected_arrow.motion.prop_rot_dir == CLOCKWISE:
-                dx, dy = -dy, dx
+            dx, dy = self.adjust_direction_p(dx, dy)
         elif self.pictograph.letter == "Q":
-            if self.pictograph.selected_arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                dx, dy = -dy, dx
-            elif self.pictograph.selected_arrow.motion.prop_rot_dir == CLOCKWISE:
-                dx, dy = dy, -dx
-        if (
+            dx, dy = self.adjust_direction_q(dx, dy)
+        elif (
             self.pictograph.letter in "ST"
             and self.pictograph.selected_arrow.lead_state in [LEADING, TRAILING]
         ):
             dy, dx = dx, dy
-
         return dx * increment, dy * increment
+
+    def adjust_direction_p(self, dx, dy):
+        # Specific logic for letter "P"
+        if self.pictograph.selected_arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+            return -dx, dy
+        elif self.pictograph.selected_arrow.motion.prop_rot_dir == CLOCKWISE:
+            return -dy, dx
+        return dx, dy
+
+    def adjust_direction_q(self, dx, dy):
+        # Specific logic for letter "Q"
+        if self.pictograph.selected_arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+            return -dy, dx
+        elif self.pictograph.selected_arrow.motion.prop_rot_dir == CLOCKWISE:
+            return dy, -dx
+        return dx, dy
 
     def get_default_adjustment(self, key, increment):
         adjustment_map = {
