@@ -1,3 +1,4 @@
+from email.policy import strict
 from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Tuple, Union
 from PyQt6.QtCore import Qt, QPointF, QByteArray, QBuffer
 from PyQt6.QtSvg import QSvgRenderer
@@ -10,7 +11,11 @@ from constants import *
 from objects.arrow.arrow_placement_manager.main_arrow_placement_manager import (
     MainArrowPlacementManager,
 )
-
+from utilities.TypeChecking.prop_types import (
+    PropTypes,
+    strictly_placed_props,
+    non_strictly_placed_props,
+)
 from utilities.TypeChecking.Letters import Letters
 from utilities.TypeChecking.TypeChecking import Colors, Locations, SpecificPositions
 
@@ -183,14 +188,30 @@ class Pictograph(QGraphicsScene):
         min_distance = float("inf")
         nearest_point_name = None
         nearest_point_coords = None
-
+        if self.main_widget.prop_type in strictly_placed_props:
+            strict = True
+        elif self.main_widget.prop_type in non_strictly_placed_props:
+            strict = False
         if self.grid.grid_mode == DIAMOND:
-            for name, point in self.grid.diamond_hand_points.items():
-                distance = (pos - point).manhattanLength()
-                if distance < min_distance:
-                    min_distance = distance
-                    nearest_point_name = name
-                    nearest_point_coords = point
+            if strict is True:
+                for name, point in self.grid.circle_coordinates_cache["hand_points"][
+                    self.grid.grid_mode
+                ]["strict"].items():
+                    distance = (pos - point).manhattanLength()
+                    if distance < min_distance:
+                        min_distance = distance
+                        nearest_point_name = name
+                        nearest_point_coords = point
+            elif strict is False:
+                for name, point in self.grid.circle_coordinates_cache["hand_points"][
+                    self.grid.grid_mode
+                ]["normal"].items():
+                    distance = (pos - point).manhattanLength()
+                    if distance < min_distance:
+                        min_distance = distance
+                        nearest_point_name = name
+                        nearest_point_coords = point
+                
 
         elif self.grid.grid_mode == BOX:
             for name, point in self.grid.box_hand_points.items():

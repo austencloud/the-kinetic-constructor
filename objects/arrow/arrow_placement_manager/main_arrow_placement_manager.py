@@ -89,6 +89,9 @@ class MainArrowPlacementManager:
 
     def _get_adjustment(self, arrow: Arrow) -> QPointF:
         adjustment_key = self._generate_adjustment_key(arrow)
+        self.special_placement_manager.special_placements = (
+            self.special_placement_manager._load_placements()
+        )
 
         if self.letter in self.special_placement_manager.special_placements:
             special_adjustment = (
@@ -98,7 +101,7 @@ class MainArrowPlacementManager:
             )
             if special_adjustment:
                 x, y = special_adjustment
-            else: 
+            else:
                 x, y = self.default_manager.get_default_adjustment(arrow)
         else:
             x, y = self.default_manager.get_default_adjustment(arrow)
