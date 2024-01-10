@@ -16,7 +16,7 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         self.attr_box = attr_box
         self.setup_directset_turns_buttons()
         self.update_ig_motion_type_turnbox_size()
-        self.update_add_subtract_button_size()
+        # self.update_add_subtract_button_size()
 
     def adjust_turns_by_motion_type(
         self, pictograph: Pictograph, adjustment: float
@@ -29,20 +29,6 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         if new_turns in [0.0, 1.0, 2.0, 3.0]:
             new_turns = int(new_turns)
         self.update_turns_display(new_turns)
-
-    def setup_directset_turns_buttons(self) -> None:
-        """Setup buttons for direct turn setting."""
-        turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
-        self.turns_buttons_layout = QHBoxLayout()
-        button_style_sheet = self._get_direct_set_button_style_sheet()
-        for value in turns_values:
-            button = QPushButton(value, self)
-            button.setStyleSheet(button_style_sheet)
-            button.clicked.connect(
-                lambda checked, v=value: self._update_turns_directly_by_motion_type(v)
-            )
-            self.turns_buttons_layout.addWidget(button)
-        self.layout.addLayout(self.turns_buttons_layout)
 
     def _set_turns_by_motion_type(self, new_turns: Union[int, float]) -> None:
         """Set turns for motions of a specific type to a new value."""
@@ -119,3 +105,6 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
     def _simulate_cw_button_click_in_header_widget(self):
         self.attr_box.header_widget.cw_button.setChecked(True)
         self.attr_box.header_widget.cw_button.click()
+
+    def _set_turns(self, new_turns: int | float) -> None:
+        self._set_turns_by_motion_type(new_turns)

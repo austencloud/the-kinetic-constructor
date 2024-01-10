@@ -1,21 +1,13 @@
 from PyQt6.QtGui import QFont
-from typing import TYPE_CHECKING, List, Union
+from typing import TYPE_CHECKING, Union
 from constants import (
-    BLUE,
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
-    DASH,
     ICON_DIR,
-    NO_ROT,
-    RED,
-    STATIC,
 )
 from objects.motion.motion import Motion
-from objects.pictograph.pictograph import Pictograph
-from utilities.TypeChecking.TypeChecking import Colors
 from widgets.attr_box_widgets.base_turns_widget import (
     BaseTurnsWidget,
 )
+from PyQt6.QtWidgets import QPushButton, QHBoxLayout
 from widgets.attr_panel.base_attr_box import BaseAttrBox
 
 if TYPE_CHECKING:
@@ -30,8 +22,6 @@ if TYPE_CHECKING:
     from .ig_lead_state_turns_widget import IGLeadStateTurnsWidget
     from .ig_motion_type_turns_widget import IGMotionTypeTurnsWidget
 
-from PyQt6.QtCore import pyqtBoundSignal
-
 
 class BaseIGTurnsWidget(BaseTurnsWidget):
     def __init__(self, attr_box: "BaseAttrBox") -> None:
@@ -41,11 +31,39 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         ] = attr_box
         self._initialize_ui()
 
+    def setup_directset_turns_buttons(self: Union[
+        "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
+    ]) -> None:
+        turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
+        self.turns_buttons_layout = QHBoxLayout()
+        button_style_sheet = self._get_direct_set_button_style_sheet()
+        for value in turns_values:
+            button = QPushButton(value, self)
+            button.setStyleSheet(button_style_sheet)
+            button.clicked.connect(lambda checked, v=value: self._update_turns_directly(v))
+            self.turns_buttons_layout.addWidget(button)
+        self.layout.addLayout(self.turns_buttons_layout)
+
+    def _update_turns_directly(self: Union[
+        "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
+    ], turns: str) -> None:
+        turns = self._convert_turns_from_str_to_num(turns)
+        self._set_turns(turns)
+
+
+
     def process_turns_adjustment_for_single_motion(
-        self: "IGMotionTypeTurnsWidget", motion: Motion, adjustment: float
+        self: Union[
+            "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
+        ],
+        motion: Motion,
+        adjustment: float,
     ) -> None:
         from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import (
             IGMotionTypeAttrBox,
+        )
+        from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_box import (
+            IGColorAttrBox,
         )
 
         initial_turns = motion.turns
@@ -56,7 +74,7 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         if motion.is_dash_or_static() and self._turns_added(initial_turns, new_turns):
             if isinstance(self.attr_box, IGMotionTypeAttrBox):
                 self._simulate_cw_button_click_in_header_widget()
-            else:
+            elif isinstance(self.attr_box, IGColorAttrBox):
                 self._simulate_cw_button_click_in_attr_box_widget()
         pictograph_dict = {
             f"{motion.color}_turns": new_turns,
@@ -133,11 +151,10 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         self.update_ig_turnbox_size()
         self.update_ig_lead_state_turns_button_size()
 
-
     def update_add_subtract_button_size(self) -> None:
         for button in self.add_subtract_buttons:
             button_size = self.calculate_button_size()
             button.update_attr_box_turns_button_size(button_size)
 
     def calculate_button_size(self) -> int:
-        return int(self.attr_box.height() / 3.5)
+        return int(self.attr_box.height() / 6)

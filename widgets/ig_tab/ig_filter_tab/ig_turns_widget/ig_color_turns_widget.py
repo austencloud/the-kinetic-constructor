@@ -23,7 +23,7 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
         self.attr_box = attr_box
         self.setup_directset_turns_buttons()
         self.update_ig_color_turnbox_size()
-        self.update_add_subtract_button_size()
+        # self.update_add_subtract_button_size()
 
     def adjust_turns_by_color(self, pictograph: Pictograph, adjustment: float) -> None:
         """Adjust turns for a given pictograph based on motion type."""
@@ -40,23 +40,6 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
         turns = self._convert_turns_from_str_to_num(turns)
         self._set_turns_by_color(turns)
 
-    def setup_directset_turns_buttons(self) -> None:
-        """Setup buttons for direct turn setting."""
-        turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
-        self.turns_buttons_layout = QHBoxLayout()
-        button_style_sheet = self._get_direct_set_button_style_sheet()
-        for value in turns_values:
-            button = QPushButton(value, self)
-            button.setStyleSheet(button_style_sheet)
-            button.clicked.connect(
-                lambda checked, v=value: self._update_turns_directly_by_color(v)
-            )
-            self.turns_buttons_layout.addWidget(button)
-        self.layout.addLayout(self.turns_buttons_layout)
-
-    def _update_turns_directly_by_motion_type(self, turns: str) -> None:
-        turns = self._convert_turns_from_str_to_num(turns)
-        self._set_turns_by_color(turns)
 
     def _set_turns_by_color(self, new_turns: Union[int, float]) -> None:
         """Set turns for motions of a specific type to a new value."""
@@ -77,11 +60,11 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
                         motion.prop_rot_dir == NO_ROT and motion.turns > 0
                     ):
                         motion.manipulator.set_prop_rot_dir(
-                            self._get_current_prop_rot_dir()
+                            self.attr_box.prop_rot_dir_widget._get_current_prop_rot_dir()
                         )
                         pictograph_dict = {
                             f"{motion.color}_turns": new_turns,
-                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir(),
+                            f"{motion.color}_prop_rot_dir": self.attr_box.prop_rot_dir_widget._get_current_prop_rot_dir(),
                         }
                     else:
                         pictograph_dict = {
@@ -103,11 +86,11 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
                         motion.prop_rot_dir == NO_ROT and motion.turns > 0
                     ):
                         motion.manipulator.set_prop_rot_dir(
-                            self._get_current_prop_rot_dir()
+                            self.attr_box.prop_rot_dir_widget._get_current_prop_rot_dir()
                         )
                         pictograph_dict = {
                             f"{motion.color}_turns": new_turns,
-                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir(),
+                            f"{motion.color}_prop_rot_dir": self.attr_box.prop_rot_dir_widget._get_current_prop_rot_dir(),
                         }
                     else:
                         pictograph_dict = {
@@ -162,7 +145,6 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
         )
 
     def resize_turns_widget(self) -> None:
-        
         self.update_ig_color_turnbox_size()
         self.update_add_subtract_button_size()
 
@@ -177,3 +159,6 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
     def _simulate_cw_button_click_in_attr_box_widget(self) -> None:
         self.attr_box.prop_rot_dir_widget.cw_button.setChecked(True)
         self.attr_box.prop_rot_dir_widget.cw_button.click()
+
+    def _set_turns(self, new_turns: int | float) -> None:
+        self._set_turns_by_color(new_turns)
