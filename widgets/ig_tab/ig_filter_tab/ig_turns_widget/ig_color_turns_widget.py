@@ -1,47 +1,61 @@
-from PyQt6.QtWidgets import (
-    QLabel,
-    QFrame,
-    QVBoxLayout,
-    QHBoxLayout,
-    QPushButton,
-)
-from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
 from constants import (
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
     DASH,
     ICON_DIR,
     NO_ROT,
     STATIC,
 )
-from objects.motion.motion import Motion
 from objects.pictograph.pictograph import Pictograph
-from widgets.attr_box_widgets.base_turns_widget import (
-    BaseTurnsWidget,
-)
 from widgets.ig_tab.ig_filter_tab.ig_turns_widget.base_ig_turns_widget import (
     BaseIGTurnsWidget,
 )
-
+from PyQt6.QtWidgets import QPushButton, QHBoxLayout
 
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_box import IGColorAttrBox
-from PyQt6.QtCore import pyqtBoundSignal
 
 
 class IGColorTurnsWidget(BaseIGTurnsWidget):
     def __init__(self, attr_box: "IGColorAttrBox") -> None:
+        """Initialize the IGColorTurnsWidget."""
         super().__init__(attr_box)
         self.attr_box = attr_box
+        self.setup_directset_turns_buttons()
+        self.update_ig_color_turnbox_size()
+        self.update_add_subtract_button_size()
 
-    def adjust_turns_by_motion_type(
-        self, pictograph: Pictograph, adjustment: float
-    ) -> None:
+    def adjust_turns_by_color(self, pictograph: Pictograph, adjustment: float) -> None:
         for motion in pictograph.motions.values():
             if motion.color == self.attr_box.color:
                 self.process_turns_adjustment_for_single_motion(motion, adjustment)
+
+    def setup_directset_turns_buttons(self) -> None:
+        """Setup buttons for direct turn setting."""
+        turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
+        self.turns_buttons_layout = QHBoxLayout()
+        button_style_sheet = self._get_direct_set_button_style_sheet()
+        for value in turns_values:
+            button = QPushButton(value, self)
+            button.setStyleSheet(button_style_sheet)
+            button.clicked.connect(
+                lambda checked, v=value: self._update_turns_directly_by_color(v)
+            )
+            self.turns_buttons_layout.addWidget(button)
+        self.layout.addLayout(self.turns_buttons_layout)
+
+    def _update_turns_directly_by_motion_type(self, turns: str) -> None:
+        turns = self._convert_turns_from_str_to_num(turns)
+        self._set_turns_by_color(turns)
+
+    def _set_turns_by_color(self, new_turns: Union[int, float]) -> None:
+        """Set turns for motions of a specific type to a new value."""
+        self.update_turns_display(new_turns)
+        for pictograph in self.attr_box.pictographs.values():
+            for motion in pictograph.motions.values():
+                if motion.color == self.attr_box.color:
+                    motion.set_turns(new_turns)
+                    self.update_pictograph_dict(motion, new_turns)
 
     def _update_pictographs_turns_by_color(self, new_turns):
         for pictograph in self.attr_box.pictographs.values():
@@ -64,6 +78,10 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
                             f"{motion.color}_turns": new_turns,
                         }
                     motion.scene.update_pictograph(pictograph_dict)
+
+    def adjust_turns_incrementally_by_color(self, adjustment) -> None:
+        for pictograph in self.attr_box.pictographs.values():
+            self.adjust_turns_by_color(pictograph, adjustment)
 
     def _simulate_cw_button_click_in_attr_box_widget(self) -> None:
         self.attr_box.prop_rot_dir_widget.cw_button.setChecked(True)
@@ -138,10 +156,13 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
         )
 
     def update_ig_color_turns_button_size(self) -> None:
-        for turns_button in self.turns_buttons:
+        for turns_button in self.add_subtract_buttons:
             button_size = self.calculate_turns_button_size()
             turns_button.update_attr_box_turns_button_size(button_size)
 
     def resize_turns_widget(self) -> None:
         self.update_ig_color_turnbox_size()
         self.update_ig_color_turns_button_size()
+
+    def _adjust_turns_callback(self, adjustment: float) -> None:
+        self.adjust_turns_incrementally_by_color(adjustment)

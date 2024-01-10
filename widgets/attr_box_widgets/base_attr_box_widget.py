@@ -1,9 +1,10 @@
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFrame, QLabel
 from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import Qt
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING, Callable, Union
 
 from constants import ICON_DIR
+from objects.motion.motion import Motion
 from widgets.attr_box_widgets.attr_box_button import AttrBoxButton
 
 if TYPE_CHECKING:
@@ -63,3 +64,12 @@ class BaseAttrBoxWidget(QWidget):
                     background-color: #e6f0ff;
                 }
             """
+            
+    def update_pictograph_dict(
+        self, motion: Motion, new_turns: Union[int, float]
+    ) -> None:
+        """Update the pictograph dictionary with new turns."""
+        pictograph_dict = {
+            f"{motion.color}_turns": new_turns,
+        }
+        motion.scene.update_pictograph(pictograph_dict)

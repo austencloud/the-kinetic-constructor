@@ -35,7 +35,7 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
     def _initialize_ui(self) -> None:
         """Initializes the user interface components and their layout."""
         self.turnbox = self.create_turnbox()
-        self.turns_buttons = self._setup_add_subtract_turns_buttons()
+        self.add_subtract_buttons = self._setup_add_subtract_turns_buttons()
         self._setup_layout()
         self._create_frames()
         self._add_frames_to_main_layout()
@@ -112,14 +112,15 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
             layout.addWidget(button)
         return frame
 
-    def _create_turns_button(self, text: str) -> AttrBoxButton:
+    def _create_turns_button(
+        self: Union["GraphEditorTurnsWidget", "IGMotionTypeTurnsWidget"], text: str
+    ) -> AttrBoxButton:
         button = AttrBoxButton(self)
         button.setText(text)
         turn_adjustment_mapping = {"-1": -1, "-0.5": -0.5, "+0.5": 0.5, "+1": 1}
         turn_adjustment = turn_adjustment_mapping.get(text, 0)
-        button.clicked.connect(lambda: self._adjust_turns_callback(turn_adjustment))
+        button.clicked.connect(lambda: self._adjust_turns(turn_adjustment))
         return button
-
 
     ### UPDATE ###
 
@@ -138,3 +139,27 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+
+    def _get_direct_set_button_style_sheet(self) -> str:
+        """Get the style sheet for the direct set turns buttons."""
+        return """
+            QPushButton {
+                background-color: #f0f0f0;
+                border: 1px solid #c0c0c0;
+                border-radius: 5px;
+                padding: 5px;
+                font-weight: bold;
+                font-size: 14px;
+            }
+            QPushButton:hover {
+                background-color: #e5e5e5;
+                border-color: #a0a0a0;
+            }
+            QPushButton:pressed {
+                background-color: #d0d0d0;
+            }
+        """
+
+    def _convert_turns_from_str_to_num(self, turns) -> Union[int, float]:
+        """Convert turn values from string to numeric."""
+        return int(turns) if turns in ["0", "1", "2", "3"] else float(turns)

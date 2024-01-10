@@ -1,7 +1,7 @@
 from typing import Dict, List
 
 import pandas as pd
-from dataframes.dataframe_generators.base_dataframe_generator import (
+from utilities.dataframe_generators.base_dataframe_generator import (
     BaseDataFrameGenerator,
 )
 from constants import *

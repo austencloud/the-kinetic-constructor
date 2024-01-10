@@ -1,17 +1,7 @@
-from PyQt6.QtWidgets import (
-    QLabel,
-    QFrame,
-    QVBoxLayout,
-    QHBoxLayout,
-    QPushButton,
-)
-from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from typing import TYPE_CHECKING, List, Union
+from typing import TYPE_CHECKING, List
 from constants import (
     BLUE,
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
     DASH,
     ICON_DIR,
     LEADING,
@@ -21,11 +11,7 @@ from constants import (
     TRAILING,
 )
 from objects.motion.motion import Motion
-from objects.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.TypeChecking import Colors
-from widgets.attr_box_widgets.base_turns_widget import (
-    BaseTurnsWidget,
-)
 from widgets.ig_tab.ig_filter_tab.ig_turns_widget.base_ig_turns_widget import (
     BaseIGTurnsWidget,
 )
@@ -35,7 +21,6 @@ if TYPE_CHECKING:
     from widgets.ig_tab.ig_filter_tab.by_lead_state.ig_lead_state_attr_box import (
         IGLeadStateAttrBox,
     )
-from PyQt6.QtCore import pyqtBoundSignal
 
 
 class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
@@ -132,7 +117,7 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
 
     ### EVENT HANDLERS ###
 
-    def update_ig_lead_state_turnbox_size(self) -> None:
+    def update_ig_turnbox_size(self) -> None:
         self.spacing = self.attr_box.attr_panel.width() // 250
         border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
         box_font_size = int(self.attr_box.width() / 14)
@@ -177,12 +162,12 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
         )
 
     def update_ig_lead_state_turns_button_size(self) -> None:
-        for turns_button in self.turns_buttons:
+        for turns_button in self.add_subtract_buttons:
             button_size = self.calculate_turns_button_size()
             turns_button.update_attr_box_turns_button_size(button_size)
 
     def resize_turns_widget(self) -> None:
-        self.update_ig_lead_state_turnbox_size()
+        self.update_ig_turnbox_size()
         self.update_ig_lead_state_turns_button_size()
 
     def adjust_turns_by_lead_state(self, adjustment: float) -> None:

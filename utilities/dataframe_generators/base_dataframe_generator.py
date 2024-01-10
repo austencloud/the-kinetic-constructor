@@ -49,7 +49,7 @@ class BaseDataFrameGenerator:
         elif motion_type == ANTI:
             return COUNTER_CLOCKWISE if handpath_rot_dir == CW_HANDPATH else CLOCKWISE
         elif motion_type == DASH:
-            return "no_rot"
+            return NO_ROT
 
     def get_static_tuple_map(self):
         return {
@@ -122,8 +122,8 @@ class BaseDataFrameGenerator:
         rot_dir_order = [
             CLOCKWISE,
             COUNTER_CLOCKWISE,
-            "no_rot",
-        ]  # Include "no_rot"
+            NO_ROT,
+        ]  # Include NO_ROT
 
         df[BLUE_MOTION_TYPE] = pd.Categorical(
             df[BLUE_MOTION_TYPE], categories=motion_type_order, ordered=True
@@ -147,4 +147,4 @@ class BaseDataFrameGenerator:
         dir_name = os.path.dirname(filename)
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)
-        df.to_csv(filename, index=False, na_rep="no_rot")
+        df.to_csv(filename, index=False, na_rep=NO_ROT)

@@ -136,7 +136,7 @@ class IGScrollArea(PictographScrollArea):
 
     def get_dash_prop_rot_dir_from_attr_panel(
         self, motion_type
-    ) -> Literal["cw", "ccw", "no_rot"]:
+    ) -> Literal["cw", "ccw", NO_ROT]:
         header_widget = (
             self.ig_tab.filter_tab.motion_attr_panel.dash_attr_box.header_widget
         )
@@ -152,7 +152,7 @@ class IGScrollArea(PictographScrollArea):
 
     def get_static_prop_rot_dir_from_attr_panel(
         self, motion_type
-    ) -> Literal["cw", "ccw", "no_rot"]:
+    ) -> Literal["cw", "ccw", NO_ROT]:
         header_widget = (
             self.ig_tab.filter_tab.motion_attr_panel.static_attr_box.header_widget
         )

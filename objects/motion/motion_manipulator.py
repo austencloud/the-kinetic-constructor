@@ -2,7 +2,12 @@ from typing import List
 
 from constants import *
 from data.start_end_loc_map import get_start_end_locs
-from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, Directions, Handpaths, Locations
+from utilities.TypeChecking.TypeChecking import (
+    TYPE_CHECKING,
+    Directions,
+    Handpaths,
+    Locations,
+)
 
 
 if TYPE_CHECKING:
@@ -50,8 +55,8 @@ class MotionManipulator:
             new_rot_dir = CLOCKWISE
         elif self.motion.prop_rot_dir == CLOCKWISE:
             new_rot_dir = COUNTER_CLOCKWISE
-        elif self.motion.prop_rot_dir == "no_rot":
-            new_rot_dir = "no_rot"
+        elif self.motion.prop_rot_dir == NO_ROT:
+            new_rot_dir = NO_ROT
 
         new_start_loc = self.motion.end_loc
         new_end_loc = self.motion.start_loc
@@ -77,8 +82,8 @@ class MotionManipulator:
             new_rot_dir = CLOCKWISE
         elif self.motion.prop_rot_dir == CLOCKWISE:
             new_rot_dir = COUNTER_CLOCKWISE
-        elif self.motion.prop_rot_dir == "no_rot":
-            new_rot_dir = "no_rot"
+        elif self.motion.prop_rot_dir == NO_ROT:
+            new_rot_dir = NO_ROT
 
         self.prop.swap_ori(self.prop.ori)
         pictograph_dict = {

@@ -1,7 +1,7 @@
 from typing import Dict, List, Tuple
 
 import pandas as pd
-from dataframes.dataframe_generators.base_dataframe_generator import (
+from utilities.dataframe_generators.base_dataframe_generator import (
     BaseDataFrameGenerator,
 )
 
@@ -42,14 +42,14 @@ class Type3Generator(BaseDataFrameGenerator):
                         red_motion_type, shift_handpath
                     )
                 else:
-                    red_prop_rot_dir = "no_rot"  # Explicitly indicating no rotation
+                    red_prop_rot_dir = NO_ROT  # Explicitly indicating no rotation
 
                 if blue_motion_type in [PRO, ANTI]:
                     blue_prop_rot_dir = self.get_prop_rot_dir(
                         blue_motion_type, shift_handpath
                     )
                 else:
-                    blue_prop_rot_dir = "no_rot"  # Explicitly indicating no rotation
+                    blue_prop_rot_dir = NO_ROT  # Explicitly indicating no rotation
 
                 if red_motion_type == DASH:
                     red_start_loc, red_end_loc = self.get_dash_locations(

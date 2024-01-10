@@ -41,21 +41,15 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         ] = attr_box
         self._initialize_ui()
 
-    def _adjust_turns_callback(self, adjustment: float) -> None:
-        self.update_turns_incrementally(adjustment)
-
     def process_turns_adjustment_for_single_motion(
-        self: Union[
-            "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
-        ],
-        motion: Motion,
-        adjustment: float,
+        self: "IGMotionTypeTurnsWidget", motion: Motion, adjustment: float
     ) -> None:
+        from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import (
+            IGMotionTypeAttrBox,
+        )
+
         initial_turns = motion.turns
         new_turns = self._calculate_new_turns(motion.turns, adjustment)
-        self.turnbox.currentIndexChanged.disconnect(self._update_turns_directly)
-        self.update_turns_display(new_turns)
-        self.turnbox.currentIndexChanged.connect(self._update_turns_directly)
 
         motion.set_turns(new_turns)
 
@@ -72,17 +66,18 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
     def _calculate_new_turns(self, current_turns, adjustment):
         return max(0, min(3, current_turns + adjustment))
 
-    def update_turns_display(self, turns: Union[int, float]) -> None:
-        turns_str = self.format_turns(turns)
+    def update_turns_display(
+        self: Union[
+            "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
+        ],
+        turns: Union[int, float],
+    ) -> None:
+        turns_str = str(turns)
         self.turnbox.setCurrentText(turns_str)
-
-    @staticmethod
-    def format_turns(turns: Union[int, float]) -> str:
-        return str(int(turns)) if turns.is_integer() else str(turns)
 
     ### EVENT HANDLERS ###
 
-    def update_ig_lead_state_turnbox_size(self) -> None:
+    def update_ig_turnbox_size(self) -> None:
         self.spacing = self.attr_box.attr_panel.width() // 250
         border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
         box_font_size = int(self.attr_box.width() / 14)
@@ -127,7 +122,7 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         )
 
     def update_ig_lead_state_turns_button_size(self) -> None:
-        for turns_button in self.turns_buttons:
+        for turns_button in self.add_subtract_buttons:
             button_size = self.calculate_turns_button_size()
             turns_button.update_attr_box_turns_button_size(button_size)
 
@@ -135,7 +130,7 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         return int(self.attr_box.width() / 10)
 
     def resize_turns_widget(self) -> None:
-        self.update_ig_lead_state_turnbox_size()
+        self.update_ig_turnbox_size()
         self.update_ig_lead_state_turns_button_size()
 
     def _update_pictographs_turns_by_color(self, new_turns):
@@ -160,14 +155,10 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
                         }
                     motion.scene.update_pictograph(pictograph_dict)
 
-    def update_turns_directly_by_color(self, turns) -> None:
-        if turns in ["0", "1", "2", "3"]:
-            self.turnbox.setCurrentText(turns)
-        elif turns in ["0.5", "1.5", "2.5"]:
-            self.turnbox.setCurrentText(turns)
-        selected_turns_str = self.turnbox.currentText()
-        if not selected_turns_str:
-            return
+    def update_add_subtract_button_size(self) -> None:
+        for button in self.add_subtract_buttons:
+            button_size = self.calculate_button_size()
+            button.update_attr_box_turns_button_size(button_size)
 
-        new_turns = float(selected_turns_str)
-        self._update_pictographs_turns_by_motion_type(new_turns)
+    def calculate_button_size(self) -> int:
+        return int(self.attr_box.width() / 5)
