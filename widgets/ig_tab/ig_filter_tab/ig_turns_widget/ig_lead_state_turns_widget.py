@@ -1,3 +1,4 @@
+import pickle
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, List
 from constants import (
@@ -11,6 +12,7 @@ from constants import (
     TRAILING,
 )
 from objects.motion.motion import Motion
+from objects.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.TypeChecking import Colors
 from widgets.ig_tab.ig_filter_tab.ig_turns_widget.base_ig_turns_widget import (
     BaseIGTurnsWidget,
@@ -28,7 +30,25 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
         super().__init__(attr_box)
         self.attr_box = attr_box
 
-    def update_turns_directly_by_motion_type(self, turns: float) -> None:
+    def adjust_turns_by_lead_state(
+        self, pictograph: Pictograph, adjustment: float
+    ) -> None:
+        """Adjust turns for a given pictograph based on motion type."""
+        new_turns = None
+        if self.attr_box.lead_state == TRAILING:
+            motions = self.get_trailing_motions()
+        elif self.attr_box.lead_state == LEADING:
+            motions = self.get_leading_motions()
+        for motion in pictograph.motions.values():
+            if motion.arrow.lead_state == self.attr_box.lead_state:
+                self.process_turns_adjustment_for_single_motion(motion, adjustment)
+        new_turns = motion.turns
+        if new_turns in [0.0, 1.0, 2.0, 3.0]:
+            new_turns = int(new_turns)
+        self.update_turns_display(new_turns)
+
+
+    def update_turns_directly_by_lead_state(self, turns: float) -> None:
         """Directly set the turns value for the motion type."""
         if turns in ["0", "1", "2", "3"]:
             self.turnbox.setCurrentText(turns)
@@ -36,58 +56,30 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
             self.turnbox.setCurrentText(turns)
         self.update_turns_directly_by_motion_type()  # This method will now be triggered with the new turns value
 
-    def determine_leading_color(
-        self, red_start, red_end, blue_start, blue_end
-    ) -> Colors:
-        if red_start == blue_end:
-            return RED
-        elif blue_start == red_end:
-            return BLUE
-        return None
-
-    def get_trailing_motions(self):
+    def get_trailing_motions(self) -> List[Motion]:
         trailing_motions = []
         for pictograph in self.attr_box.get_pictographs():
-            red_start = pictograph.motions[RED].start_loc
-            red_end = pictograph.motions[RED].end_loc
-            blue_start = pictograph.motions[BLUE].start_loc
-            blue_end = pictograph.motions[BLUE].end_loc
-            leading_color = self.determine_leading_color(
-                red_start, red_end, blue_start, blue_end
+            leading_motion = pictograph.get_leading_motion()
+            trailing_motion = (
+                pictograph.motions[RED]
+                if leading_motion == BLUE
+                else pictograph.motions[BLUE]
             )
-            if leading_color == RED:
-                trailing_color = BLUE
-            elif leading_color == BLUE:
-                trailing_color = RED
-            if trailing_color:
-                trailing_motions.append(pictograph.motions[trailing_color])
+            if trailing_motion:
+                trailing_motions.append(trailing_motion)
         return trailing_motions
 
     def get_leading_motions(self) -> List[Motion]:
         leading_motions = []
         for pictograph in self.attr_box.get_pictographs():
-            red_start = pictograph.motions[RED].start_loc
-            red_end = pictograph.motions[RED].end_loc
-            blue_start = pictograph.motions[BLUE].start_loc
-            blue_end = pictograph.motions[BLUE].end_loc
-            leading_color = self.determine_leading_color(
-                red_start, red_end, blue_start, blue_end
-            )
-            if leading_color:
-                leading_motions.append(pictograph.motions[leading_color])
+            leading_motion = pictograph.get_leading_motion()
+            if leading_motion:
+                leading_motions.append(leading_motion)
         return leading_motions
 
     def _simulate_cw_button_click_in_attr_box_widget(self) -> None:
         self.attr_box.prop_rot_dir_widget.cw_button.setChecked(True)
         self.attr_box.prop_rot_dir_widget.cw_button.click()
-
-    def update_turns_directly_by_motion_type(self) -> None:
-        selected_turns_str = self.turnbox.currentText()
-        if not selected_turns_str:
-            return
-
-        new_turns = float(selected_turns_str)
-        self._update_pictographs_turns_by_color(new_turns)
 
     def _update_pictographs_turns_by_color(self, new_turns):
         for pictograph in self.attr_box.pictographs.values():
@@ -179,34 +171,3 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
             for motion in self.get_leading_motions():
                 self.process_turns_adjustment_for_single_motion(motion, adjustment)
 
-    def get_trailing_motions(self):
-        trailing_motions = []
-        for pictograph in self.attr_box.get_pictographs():
-            red_start = pictograph.motions[RED].start_loc
-            red_end = pictograph.motions[RED].end_loc
-            blue_start = pictograph.motions[BLUE].start_loc
-            blue_end = pictograph.motions[BLUE].end_loc
-            leading_color = self.determine_leading_color(
-                red_start, red_end, blue_start, blue_end
-            )
-            if leading_color == RED:
-                trailing_color = BLUE
-            elif leading_color == BLUE:
-                trailing_color = RED
-            if trailing_color:
-                trailing_motions.append(pictograph.motions[trailing_color])
-        return trailing_motions
-
-    def get_leading_motions(self) -> List[Motion]:
-        leading_motions = []
-        for pictograph in self.attr_box.get_pictographs():
-            red_start = pictograph.motions[RED].start_loc
-            red_end = pictograph.motions[RED].end_loc
-            blue_start = pictograph.motions[BLUE].start_loc
-            blue_end = pictograph.motions[BLUE].end_loc
-            leading_color = self.determine_leading_color(
-                red_start, red_end, blue_start, blue_end
-            )
-            if leading_color:
-                leading_motions.append(pictograph.motions[leading_color])
-        return leading_motions

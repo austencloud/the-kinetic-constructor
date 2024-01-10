@@ -57,9 +57,7 @@ class WASD_AdjustmentManager:
                 letter_data[str(adjustment_key)] = turn_data
                 data[self.pictograph.letter] = letter_data
         elif self.pictograph.letter in ["S", "T"]:
-            leading_motion = self.pictograph.get_leading_motion(
-                self.pictograph.blue_motion, self.pictograph.red_motion
-            )
+            leading_motion = self.pictograph.get_leading_motion()
             trailing_motion = (
                 self.pictograph.blue_motion
                 if leading_motion == self.pictograph.red_motion

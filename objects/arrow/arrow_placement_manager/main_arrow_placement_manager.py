@@ -143,6 +143,16 @@ class MainArrowPlacementManager:
         if self.letter in Type1_hybrid_letters:
             pro_arrow, anti_arrow = self._get_pro_anti_arrows()
             return f"({pro_arrow.turns}, {anti_arrow.turns})"
+        elif self.letter in ["S", "T"]:
+            leading_motion = self.pictograph.get_leading_motion()
+            trailing_motion = (
+                self.blue_arrow.motion
+                if leading_motion == self.red_arrow.motion
+                else self.red_arrow.motion
+            )
+            leading_motion.arrow.lead_state = LEADING
+            trailing_motion.arrow.lead_state = TRAILING
+            return f"({leading_motion.turns}, {trailing_motion.turns})"
         elif self.letter in Type1_non_hybrid_letters:
             return f"({self.blue_arrow.turns}, {self.red_arrow.turns})"
         elif self.letter in Type2_letters:

@@ -41,8 +41,6 @@ class BaseRotDirWidget(BaseAttrBoxWidget):
         rot_dir_label = QLabel("Dash/Static\nRot Dir:", self)
         rot_dir_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         rot_dir_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.ccw_button.clicked.connect(self.ccw_button_clicked)
-        self.cw_button.clicked.connect(self.cw_button_clicked)
         rot_dir_layout.addWidget(rot_dir_label)
         rot_dir_layout.addWidget(self.ccw_button)
         rot_dir_layout.addWidget(self.cw_button)

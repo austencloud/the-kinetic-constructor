@@ -25,9 +25,7 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
         self.update_ig_color_turnbox_size()
         self.update_add_subtract_button_size()
 
-    def adjust_turns_by_color(
-        self, pictograph: Pictograph, adjustment: float
-    ) -> None:
+    def adjust_turns_by_color(self, pictograph: Pictograph, adjustment: float) -> None:
         """Adjust turns for a given pictograph based on motion type."""
         new_turns = None
         for motion in pictograph.motions.values():
@@ -41,7 +39,6 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
     def _update_turns_directly_by_color(self, turns: str) -> None:
         turns = self._convert_turns_from_str_to_num(turns)
         self._set_turns_by_color(turns)
-
 
     def setup_directset_turns_buttons(self) -> None:
         """Setup buttons for direct turn setting."""
@@ -95,10 +92,6 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
     def adjust_turns_incrementally_by_color(self, adjustment) -> None:
         for pictograph in self.attr_box.pictographs.values():
             self.adjust_turns_by_color(pictograph, adjustment)
-
-    def _simulate_cw_button_click_in_attr_box_widget(self) -> None:
-        self.attr_box.prop_rot_dir_widget.cw_button.setChecked(True)
-        self.attr_box.prop_rot_dir_widget.cw_button.click()
 
     def _update_pictographs_turns_by_color(self, new_turns) -> None:
         for pictograph in self.attr_box.pictographs.values():
@@ -168,19 +161,19 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
         """
         )
 
-    def update_ig_color_turns_button_size(self) -> None:
-        for turns_button in self.add_subtract_buttons:
-            button_size = self.calculate_turns_button_size()
-            turns_button.update_attr_box_turns_button_size(button_size)
-
     def resize_turns_widget(self) -> None:
+        
         self.update_ig_color_turnbox_size()
-        self.update_ig_color_turns_button_size()
-
-    def _adjust_turns_callback(self, adjustment: float) -> None:
-        self.adjust_turns_incrementally_by_color(adjustment)
+        self.update_add_subtract_button_size()
 
     def _adjust_turns(self, adjustment) -> None:
         """Adjust turns for a given pictograph based on color."""
         for pictograph in self.attr_box.pictographs.values():
             self.adjust_turns_by_color(pictograph, adjustment)
+
+    def _adjust_turns_callback(self, adjustment: float) -> None:
+        self.adjust_turns_incrementally_by_color(adjustment)
+
+    def _simulate_cw_button_click_in_attr_box_widget(self) -> None:
+        self.attr_box.prop_rot_dir_widget.cw_button.setChecked(True)
+        self.attr_box.prop_rot_dir_widget.cw_button.click()

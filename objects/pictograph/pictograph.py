@@ -234,13 +234,11 @@ class Pictograph(QGraphicsScene):
             if motion.motion_type == motion_type
         ]
 
-    def get_leading_motion(
-        self, blue_motion: Motion, red_motion: Motion
-    ) -> Motion:
-        if red_motion.start_loc == blue_motion.end_loc:
-            return red_motion
-        elif blue_motion.start_loc == red_motion.end_loc:
-            return blue_motion
+    def get_leading_motion(self) -> Motion:
+        if self.red_motion.start_loc == self.blue_motion.end_loc:
+            return self.red_motion
+        elif self.blue_motion.start_loc == self.red_motion.end_loc:
+            return self.blue_motion
 
     ### HELPERS ###
 

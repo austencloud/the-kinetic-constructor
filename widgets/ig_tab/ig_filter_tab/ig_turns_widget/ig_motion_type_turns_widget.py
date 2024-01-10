@@ -30,6 +30,20 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
             new_turns = int(new_turns)
         self.update_turns_display(new_turns)
 
+    def setup_directset_turns_buttons(self) -> None:
+        """Setup buttons for direct turn setting."""
+        turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
+        self.turns_buttons_layout = QHBoxLayout()
+        button_style_sheet = self._get_direct_set_button_style_sheet()
+        for value in turns_values:
+            button = QPushButton(value, self)
+            button.setStyleSheet(button_style_sheet)
+            button.clicked.connect(
+                lambda checked, v=value: self._update_turns_directly_by_motion_type(v)
+            )
+            self.turns_buttons_layout.addWidget(button)
+        self.layout.addLayout(self.turns_buttons_layout)
+
     def _set_turns_by_motion_type(self, new_turns: Union[int, float]) -> None:
         """Set turns for motions of a specific type to a new value."""
         self.update_turns_display(new_turns)
@@ -48,22 +62,6 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
     def _update_turns_directly_by_motion_type(self, turns: str) -> None:
         turns = self._convert_turns_from_str_to_num(turns)
         self._set_turns_by_motion_type(turns)
-
-    def setup_directset_turns_buttons(self) -> None:
-        """Setup buttons for direct turn setting."""
-        turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
-        self.turns_buttons_layout = QHBoxLayout()
-        button_style_sheet = self._get_direct_set_button_style_sheet()
-        for value in turns_values:
-            button = QPushButton(value, self)
-            button.setStyleSheet(button_style_sheet)
-            button.clicked.connect(
-                lambda checked, v=value: self._update_turns_directly_by_motion_type(v)
-            )
-            self.turns_buttons_layout.addWidget(button)
-        self.layout.addLayout(self.turns_buttons_layout)
-
-
 
     def update_ig_motion_type_turnbox_size(self) -> None:
         """Update the size of the turnbox for motion type."""
@@ -108,7 +106,6 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
             }}
         """
         )
-
 
     def resize_turns_widget(self) -> None:
         self.update_ig_motion_type_turnbox_size()

@@ -68,19 +68,6 @@ class IGLeadStatePropRotDirWidget(BaseRotDirWidget):
 
 
 
-    def ccw_button_clicked(self) -> None:
-        pass
-
-    def cw_button_clicked(self) -> None:
-        pass
-
-    def add_black_borders(self) -> None:
-        self.setStyleSheet(
-            f"{self.styleSheet()} border: 1px solid black; border-radius: 0px;"
-        )
-
-
-
     ### EVENT HANDLERS ###
 
     def update_button_size(self) -> None:

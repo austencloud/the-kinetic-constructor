@@ -46,9 +46,7 @@ class SpecialArrowPlacementManager:
         if letter in Type1_hybrid_letters or letter in Type2_letters:
             return letter_adjustments.get(arrow.motion_type)
         elif letter in ["S", "T"]:
-            leading_motion = self.pictograph.get_leading_motion(
-                self.blue_arrow.motion, self.red_arrow.motion
-            )
+            leading_motion = self.pictograph.get_leading_motion()
             trailing_motion = (
                 self.blue_arrow.motion
                 if leading_motion == self.red_arrow.motion

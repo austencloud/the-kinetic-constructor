@@ -133,27 +133,6 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         self.update_ig_turnbox_size()
         self.update_ig_lead_state_turns_button_size()
 
-    def _update_pictographs_turns_by_color(self, new_turns):
-        for pictograph in self.attr_box.pictographs.values():
-            for motion in pictograph.motions.values():
-                if motion.color == self.attr_box.color:
-                    motion.set_turns(new_turns)
-
-                    if motion.motion_type in [DASH, STATIC] and (
-                        motion.prop_rot_dir == NO_ROT and motion.turns > 0
-                    ):
-                        motion.manipulator.set_prop_rot_dir(
-                            self._get_current_prop_rot_dir()
-                        )
-                        pictograph_dict = {
-                            f"{motion.color}_turns": new_turns,
-                            f"{motion.color}_prop_rot_dir": self._get_current_prop_rot_dir(),
-                        }
-                    else:
-                        pictograph_dict = {
-                            f"{motion.color}_turns": new_turns,
-                        }
-                    motion.scene.update_pictograph(pictograph_dict)
 
     def update_add_subtract_button_size(self) -> None:
         for button in self.add_subtract_buttons:
@@ -161,4 +140,4 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
             button.update_attr_box_turns_button_size(button_size)
 
     def calculate_button_size(self) -> int:
-        return int(self.attr_box.width() / 5)
+        return int(self.attr_box.height() / 3.5)
