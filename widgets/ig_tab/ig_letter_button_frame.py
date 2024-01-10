@@ -53,9 +53,7 @@ class IGLetterButtonFrame(QFrame):
         letter_buttons_layout = QVBoxLayout()
         self.setContentsMargins(0, 0, 0, 0)
         letter_buttons_layout.setContentsMargins(0, 0, 0, 0)
-        self.row_layouts: List[
-            QHBoxLayout
-        ] = []  # Add this line to initialize the list of row layouts
+        self.row_layouts: List[QHBoxLayout] = []
 
         self.letter_rows = [
             # Type1 - Dual-Shift
@@ -102,9 +100,7 @@ class IGLetterButtonFrame(QFrame):
     def get_letter_type(self, letter: str) -> str | None:
         for letter_type in LetterNumberType:
             if letter in letter_type.letters:
-                return (
-                    letter_type.name.replace("_", "").lower().capitalize()
-                )  # Modify the key format
+                return letter_type.name.replace("_", "").lower().capitalize()
         return None
 
     def get_icon_path(self, letter_type: str, letter: Letters) -> str:
@@ -161,9 +157,9 @@ class IGLetterButtonFrame(QFrame):
         available_width = button_size * 4
         self.setMinimumWidth(int(available_width + self.spacing * 3))
 
-    def select_all_letters(self):
+    def select_all_letters(self) -> None:
         for button in self.buttons.values():
-            button.click()  # Or any other action you want to perform for 'selecting'
-
+            button.click() 
+            
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.resize_letter_buttons()

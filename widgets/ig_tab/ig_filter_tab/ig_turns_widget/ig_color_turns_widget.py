@@ -38,6 +38,10 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
             new_turns = int(new_turns)
         self.update_turns_display(new_turns)
 
+    def _update_turns_directly_by_color(self, turns: str) -> None:
+        turns = self._convert_turns_from_str_to_num(turns)
+        self._set_turns_by_color(turns)
+
 
     def setup_directset_turns_buttons(self) -> None:
         """Setup buttons for direct turn setting."""
