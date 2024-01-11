@@ -32,7 +32,7 @@ class ArrowRotAngleManager:
 
     def _resolve_angle(self) -> int:
         rotation_override = self._get_rotation_override()
-        if rotation_override is not None:
+        if rotation_override == 0 or rotation_override:
             return rotation_override
         if hasattr(self.arrow.scene, LETTER):
             letter_angle_resolver = self.letter_specific_resolvers.get(
@@ -49,7 +49,7 @@ class ArrowRotAngleManager:
         )
         if special_manager:
             rotation_override = special_manager.get_rotation_angle_override(self.arrow)
-            if rotation_override is not None:
+            if rotation_override == 0 or rotation_override:
                 return self._adjust_angle_according_to_location(rotation_override)
         return None
 

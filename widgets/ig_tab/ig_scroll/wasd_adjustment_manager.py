@@ -14,6 +14,9 @@ from constants import (
     TRAILING,
 )
 from typing import Dict, Tuple, Union
+from objects.arrow.arrow_placement_manager.special_arrow_placement_manager import (
+    SpecialArrowPlacementManager,
+)
 
 from objects.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.Letters import (
@@ -51,7 +54,10 @@ class WASD_AdjustmentManager:
 
         adjustment_increment = 15 if shift_held else 5
         adjustment = self.get_adjustment(key, adjustment_increment)
-        self.update_arrow_adjustments_in_json(adjustment)
+        self.update_arrow_adjustments_in_json(
+            adjustment,
+            self.pictograph.arrow_placement_manager.special_placement_manager,
+        )
 
     def handle_rotation_angle_override(self) -> None:
         if (
@@ -74,11 +80,12 @@ class WASD_AdjustmentManager:
             data[self.pictograph.letter] = letter_data
             self.write_json_data(data, "arrow_placement/special_placements.json")
 
-    def update_arrow_adjustments_in_json(self, adjustment) -> None:
+    def update_arrow_adjustments_in_json(
+        self, adjustment, placement_manager: SpecialArrowPlacementManager
+    ) -> None:
         if not self.pictograph.selected_arrow:
             return
-        data = self.load_json_data("arrow_placement/special_placements.json")
-
+        data = placement_manager.special_placements
         handlers = {
             "S": self.handle_S_T,
             "T": self.handle_S_T,
@@ -92,13 +99,12 @@ class WASD_AdjustmentManager:
                 for letter in Type2_letters
             },
         }
-
         handler = handlers.get(self.pictograph.letter, lambda d, a: None)
-        handler(data, adjustment)
+        if handler(data, adjustment):
+            placement_manager.data_modified = True
+        placement_manager.update_placements()
 
-        self.write_json_data(data, "arrow_placement/special_placements.json")
-
-    def handle_non_hybrid_letters(self, data: Dict[Letters, Dict], adjustment):
+    def handle_non_hybrid_letters(self, data: Dict[Letters, Dict], adjustment) -> None:
         red_turns = self.red_motion.turns
         blue_turns = self.blue_motion.turns
 
@@ -120,6 +126,7 @@ class WASD_AdjustmentManager:
             turn_data[self.pictograph.selected_arrow.color][1] += adjustment[1]
             letter_data[str(adjustment_key)] = turn_data
             data[self.pictograph.letter] = letter_data
+            return True
         elif data.get(self.pictograph.letter, {}) is not None and not turn_data:
             letter_data = data.get(self.pictograph.letter, {})
             default_data = self.load_json_data(
@@ -165,8 +172,16 @@ class WASD_AdjustmentManager:
                     }
             letter_data[str(adjustment_key)] = turn_data
             data[self.pictograph.letter] = letter_data
+            placement_manager = (
+                self.pictograph.arrow_placement_manager.special_placement_manager
+            )
+            placement_manager.add_and_sort_new_entry(
+                self.pictograph.letter, str(adjustment_key), turn_data
+            )
+            return True  # Indicates the data was modified
+        return False  # No new entry was added, so data was not modified
 
-    def handle_pro_anti_hybrid_letters(self, data: Dict, adjustment):
+    def handle_pro_anti_hybrid_letters(self, data: Dict, adjustment) -> None:
         self.pro_motion = (
             self.red_motion if self.red_motion.motion_type == PRO else self.blue_motion
         )
@@ -232,7 +247,7 @@ class WASD_AdjustmentManager:
             letter_data[str(adjustment_key)] = turn_data
             data[self.pictograph.letter] = letter_data
 
-    def handle_shift_static_hybrid_letters(self, data: Dict, adjustment):
+    def handle_shift_static_hybrid_letters(self, data: Dict, adjustment) -> None:
         shift_motion = (
             self.red_motion
             if self.red_motion.motion_type in [PRO, ANTI, FLOAT]
@@ -248,6 +263,10 @@ class WASD_AdjustmentManager:
             if self.pictograph.selected_arrow == self.blue_motion.arrow
             else self.blue_motion.arrow
         )
+        if shift_motion.turns in [0.0, 1.0, 2.0, 3.0]:
+            shift_motion.turns = int(shift_motion.turns)
+        if static_motion.turns in [0.0, 1.0, 2.0, 3.0]:
+            static_motion.turns = int(static_motion.turns)
 
         if static_motion.turns > 0:
             if static_motion.prop_rot_dir != shift_motion.prop_rot_dir:
@@ -258,12 +277,6 @@ class WASD_AdjustmentManager:
             adjustment_key_str = (
                 f"({direction_prefix}, {shift_motion.turns}, {static_motion.turns})"
             )
-        elif static_motion.turns == 0:
-            adjustment_key_str = f"({shift_motion.turns}, {static_motion.turns})"
-        if shift_motion.turns in [0.0, 1.0, 2.0, 3.0]:
-            shift_motion.turns = int(shift_motion.turns)
-        if static_motion.turns in [0.0, 1.0, 2.0, 3.0]:
-            static_motion.turns = int(static_motion.turns)
         elif static_motion.turns == 0:
             adjustment_key_str = f"({shift_motion.turns}, {static_motion.turns})"
 
@@ -326,7 +339,7 @@ class WASD_AdjustmentManager:
             letter_data[adjustment_key_str] = turn_data
             data[self.pictograph.letter] = letter_data
 
-    def handle_S_T(self, data: Dict, adjustment):
+    def handle_S_T(self, data: Dict, adjustment) -> None:
         self.leading_motion = self.pictograph.get_leading_motion()
         self.trailing_motion = (
             self.blue_motion
@@ -386,12 +399,14 @@ class WASD_AdjustmentManager:
             return json.load(file)
 
     def write_json_data(self, data, file_path) -> None:
-        json_str = json.dumps(data, indent=2)
-        compact_json_str = re.sub(
-            r'": \[\s+(-?\d+),\s+(-?\d+)\s+\]', r'": [\1, \2]', json_str
-        )
-        with open(file_path, "w") as file:
-            file.write(compact_json_str)
+        if self.data_modified:
+            json_str = json.dumps(data, indent=2)
+            compact_json_str = re.sub(
+                r'": \[\s+(-?\d+),\s+(-?\d+)\s+\]', r'": [\1, \2]', json_str
+            )
+            with open(file_path, "w") as file:
+                file.write(compact_json_str)
+            self.data_modified = False
 
     def get_adjustment(
         self, key, increment
@@ -404,9 +419,9 @@ class WASD_AdjustmentManager:
         }
         dx, dy = direction_map.get(key, (0, 0))
         if self.pictograph.letter == "P":
-            dx, dy = self.adjust_direction_p(dx, dy)
+            dx, dy = self.adjust_direction_P(dx, dy)
         elif self.pictograph.letter == "Q":
-            dx, dy = self.adjust_direction_q(dx, dy)
+            dx, dy = self.adjust_direction_Q(dx, dy)
         elif (
             self.pictograph.letter in "ST"
             and self.pictograph.selected_arrow.lead_state in [LEADING, TRAILING]
@@ -414,7 +429,7 @@ class WASD_AdjustmentManager:
             dy, dx = dx, dy
         return dx * increment, dy * increment
 
-    def adjust_direction_p(self, dx, dy) -> Tuple[int, int]:
+    def adjust_direction_P(self, dx, dy) -> Tuple[int, int]:
         # Specific logic for letter "P"
         if self.pictograph.selected_arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
             return -dx, dy
@@ -422,7 +437,7 @@ class WASD_AdjustmentManager:
             return -dy, dx
         return dx, dy
 
-    def adjust_direction_q(self, dx, dy) -> Tuple[int, int]:
+    def adjust_direction_Q(self, dx, dy) -> Tuple[int, int]:
         # Specific logic for letter "Q"
         if self.pictograph.selected_arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
             return -dy, dx

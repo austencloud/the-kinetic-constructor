@@ -1,10 +1,13 @@
+from collections import OrderedDict
 import json
-from typing import TYPE_CHECKING, Dict, Optional, Tuple
+import re
+from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
 from constants import BLUE, LEADING, RED, TRAILING
 
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.Letters import (
     Type1_hybrid_letters,
+    Type1_letters,
     Type1_non_hybrid_letters,
     Type2_letters,
     non_hybrid_letters,
@@ -23,18 +26,93 @@ class SpecialArrowPlacementManager:
         self,
         pictograph: "Pictograph",
         main_arrow_placement_manager: "MainArrowPlacementManager",
-    ) -> None:
+    ):
         self.pictograph = pictograph
         self.main_arrow_placement_manager = main_arrow_placement_manager
         self.blue_arrow = self.pictograph.arrows.get(BLUE)
         self.red_arrow = self.pictograph.arrows.get(RED)
+        self.json_path = "arrow_placement/special_placements.json"
+        self.data_modified = False  # Flag to track if data has been modified
         self.special_placements = self._load_placements()
 
-    def _load_placements(self) -> Dict[str, Dict[str, Tuple[int, int]]]:
-        json_path = "arrow_placement/special_placements.json"
-        with open(json_path, "r") as file:
-            return json.load(file)
+    def add_and_sort_new_entry(
+        self, letter: str, adjustment_key: str, new_adjustment: Dict
+    ):
+        letter_data = self.special_placements.get(letter, {})
 
+        if adjustment_key not in letter_data:
+            letter_data[adjustment_key] = new_adjustment
+            letter_data = self._sort_entries(letter_data)
+            self.special_placements[letter] = letter_data
+            self.data_modified = True
+
+    def update_adjustment(self, letter: str, adjustment_key: str, new_adjustment: Dict):
+        self.special_placements[letter][adjustment_key] = new_adjustment
+        self.data_modified = True
+
+    def update_placements(self) -> None:
+        if self.data_modified:
+            with open(self.json_path, "w") as file:
+                json_str = json.dumps(self.special_placements, indent=2)
+                compact_json_str = re.sub(
+                    r'": \[\s+(-?\d+),\s+(-?\d+)\s+\]', r'": [\1, \2]', json_str
+                )
+                file.write(compact_json_str)
+            self.data_modified = False
+
+    def _load_placements(self) -> Dict[str, Dict[str, Tuple[int, int]]]:
+        with open(self.json_path, "r") as file:
+            data = json.load(file, object_pairs_hook=OrderedDict)
+            original_data = json.dumps(
+                data
+            )  # Store the original data as a string to compare later
+            # if "Y" in data:
+            #     data["Y"] = self._sort_entries(data["Y"])
+            #     if json.dumps(data) != original_data:  # Check if the data has changed
+            #         self.data_modified = True
+
+        # Only write back to the file if data has been modified
+        if self.data_modified:
+            with open(self.json_path, "w") as file:
+                json_str = json.dumps(data, indent=2)
+                compact_json_str = re.sub(
+                    r'": \[\s+(-?\d+),\s+(-?\d+)\s+\]', r'": [\1, \2]', json_str
+                )
+                file.write(compact_json_str)
+            self.data_modified = False  # Reset the flag after writing
+
+        return data
+
+    def _sort_entries(self, letter_data: Dict[str, Tuple[int, int]]) -> OrderedDict:
+        def sort_key(item) -> Tuple[int, Union[float, str], Union[float, str]]:
+            key = item[0]
+            numbers = [
+                float(num) if "." in num else int(num)
+                for num in re.findall(r"\d+\.?\d*", key)
+            ]
+            char = re.search(r"[so]", key)
+
+            # Assign priority based on the presence of 's' or 'o' and the static hand value
+            if self.pictograph.letter in Type1_letters:
+                # For Type1 letters, order them based on the letter combinations
+                return (
+                    numbers[0],
+                    numbers[1] if len(numbers) > 1 else float("inf"),
+                )
+            elif char:
+                # If 's' or 'o' is present, prioritize based on that character
+                char_priority = {"s": 1, "o": 2}.get(char.group(), 3)
+                return (
+                    char_priority,
+                    numbers[0],
+                    numbers[1] if len(numbers) > 1 else float("inf"),
+                )
+            else:
+                # Entries without 's' or 'o' are given highest priority if static hand is 0
+                return (0, numbers[0], numbers[1] if len(numbers) > 1 else float("inf"))
+
+        return OrderedDict(sorted(letter_data.items(), key=sort_key))
+    
     def get_rotation_angle_override(self, arrow: Arrow) -> Optional[int]:
         adjustment_key = self._generate_adjustment_key(arrow)
         letter_adjustments = self.special_placements.get(
@@ -80,18 +158,15 @@ class SpecialArrowPlacementManager:
             if static_motion.turns > 0:
                 if static_motion.turns in [0.0, 1.0, 2.0, 3.0]:
                     static_motion.turns = int(static_motion.turns)
-                
+
                 if static_motion.prop_rot_dir and shift_motion.prop_rot_dir:
-            
                     if static_motion.prop_rot_dir != shift_motion.prop_rot_dir:
                         direction = "opp"
                     elif static_motion.prop_rot_dir == shift_motion.prop_rot_dir:
                         direction = "same"
 
                     direction_prefix = direction[0]
-                    adjustment_key_str = (
-                        f"({direction_prefix}, {shift_motion.turns}, {static_motion.turns})"
-                    )
+                    adjustment_key_str = f"({direction_prefix}, {shift_motion.turns}, {static_motion.turns})"
                 # elif either of the values are None
                 else:
                     adjustment_key_str = None
@@ -156,80 +231,6 @@ class SpecialArrowPlacementManager:
             elif arrow.motion.is_shift():
                 return letter_adjustments.get(shift_motion.motion_type, {})
         return None
-
-    def _adjustment_for_E(self, arrow: Arrow) -> Tuple[int, int]:
-        adjustment_key = f"({self.blue_arrow.turns}, {self.red_arrow.turns})"
-        special_keys = ["(0.5, 0.5)", "(2.5, 2.5)", "(0.5, 2.5)", "(2.5, 0.5)"]
-        if adjustment_key in special_keys:
-            return (
-                self.special_placements.get(self.pictograph.letter, {})
-                .get(adjustment_key, {})
-                .get(arrow.color, (0, 0))
-            )
-        return (0, 0)
-
-    def _adjustment_for_U(self, arrow: Arrow) -> Tuple[int, int]:
-        pro_arrow, anti_arrow = self.main_arrow_placement_manager._get_pro_anti_arrows()
-        adjustment_key = f"({pro_arrow.turns}, {anti_arrow.turns})"
-        special_keys = [
-            "(1, 0.5)",
-            "(1, 1.5)",
-            "(1, 2.5)",
-            "(1.5, 0.5)",
-            "(1.5, 2.5)",
-            "(2, 0.5)",
-            "(2, 1.5)",
-            "(2, 2.5)",
-            "(2.5, 1.5)",
-            "(3, 0.5)",
-            "(3, 1.5)",
-            "(3, 2.5)",
-        ]
-        if adjustment_key in special_keys:
-            return (
-                self.special_placements.get(self.pictograph.letter, {})
-                .get(adjustment_key, {})
-                .get(arrow.motion_type, (0, 0))
-            )
-        return (0, 0)
-
-    def _adjustment_for_V(self, arrow: Arrow) -> Tuple[int, int]:
-        pro_arrow, anti_arrow = self.main_arrow_placement_manager._get_pro_anti_arrows()
-        adjustment_key = f"({pro_arrow.turns}, {anti_arrow.turns})"
-        special_keys = [
-            "(0, 0.5)",
-            "(0, 1.5)",
-            "(0, 2.5)",
-            "(0.5, 0)",
-            "(0.5, 0.5)",
-            "(0.5, 1)",
-            "(0.5, 2)",
-            "(0.5, 2.5)",
-            "(0.5, 3)",
-            "(1, 0.5)",
-            "(1, 1.5)",
-            "(1, 2.5)",
-            "(1.5, 0)",
-            "(1.5, 1.5)",
-            "(1.5, 2.5)",
-            "(2, 0.5)",
-            "(2, 1.5)",
-            "(2, 2.5)",
-            "(2.5, 0)",
-            "(2.5, 0.5)",
-            "(2.5, 1.5)",
-            "(2.5, 2.5)",
-            "(3, 0.5)",
-            "(3, 1.5)",
-            "(3, 2.5)",
-        ]
-        if adjustment_key in special_keys:
-            return (
-                self.special_placements.get(self.pictograph.letter, {})
-                .get(adjustment_key, {})
-                .get(arrow.motion_type, (0, 0))
-            )
-        return (0, 0)
 
     def _get_special_adjustment(
         self, arrow: Arrow, adjustment_key: str
