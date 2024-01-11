@@ -61,8 +61,9 @@ class WASD_AdjustmentManager:
             return
 
         data = self.load_json_data("arrow_placement/special_placements.json")
-        adjustment_key = self.pictograph.arrow_placement_manager.generate_adjustment_key()
-        
+        adjustment_key = (
+            self.pictograph.arrow_placement_manager.generate_adjustment_key()
+        )
 
         # Update the JSON data with the rotation angle override
         letter_data = data.get(self.pictograph.letter, {})
@@ -257,6 +258,8 @@ class WASD_AdjustmentManager:
             adjustment_key_str = (
                 f"({direction_prefix}, {shift_motion.turns}, {static_motion.turns})"
             )
+        elif static_motion.turns == 0:
+            adjustment_key_str = f"({shift_motion.turns}, {static_motion.turns})"
         if shift_motion.turns in [0.0, 1.0, 2.0, 3.0]:
             shift_motion.turns = int(shift_motion.turns)
         if static_motion.turns in [0.0, 1.0, 2.0, 3.0]:
@@ -345,23 +348,35 @@ class WASD_AdjustmentManager:
                 self.trailing_motion.arrow.pos().x(),
                 self.trailing_motion.arrow.pos().y(),
             )
-
-            turn_data = {
-                self.leading_motion.arrow.lead_state: [
-                    default_leading_pos[0] + adjustment[0],
-                    default_leading_pos[1] + adjustment[1],
-                ],
-                self.trailing_motion.arrow.lead_state: [
-                    default_trailing_pos[0] + adjustment[0],
-                    default_trailing_pos[1] + adjustment[1],
-                ],
-            }
+            if self.pictograph.selected_arrow.motion_type == LEADING:
+                turn_data = {
+                    self.leading_motion.arrow.lead_state: [
+                        default_leading_pos[0] + adjustment[0],
+                        default_leading_pos[1] + adjustment[1],
+                    ],
+                    self.trailing_motion.arrow.lead_state: [
+                        default_trailing_pos[0],
+                        default_trailing_pos[1],
+                    ],
+                }
+            elif self.pictograph.selected_arrow.motion_type == TRAILING:
+                turn_data = {
+                    self.leading_motion.arrow.lead_state: [
+                        default_leading_pos[0],
+                        default_leading_pos[1],
+                    ],
+                    self.trailing_motion.arrow.lead_state: [
+                        default_trailing_pos[0] + adjustment[0],
+                        default_trailing_pos[1] + adjustment[1],
+                    ],
+                }
         else:
-            # Update existing entry
-            turn_data[self.leading_motion.arrow.lead_state][0] += adjustment[0]
-            turn_data[self.leading_motion.arrow.lead_state][1] += adjustment[1]
-            turn_data[self.trailing_motion.arrow.lead_state][0] += adjustment[0]
-            turn_data[self.trailing_motion.arrow.lead_state][1] += adjustment[1]
+            if self.pictograph.selected_arrow.motion_type == LEADING:
+                turn_data[self.leading_motion.arrow.lead_state][0] += adjustment[0]
+                turn_data[self.leading_motion.arrow.lead_state][1] += adjustment[1]
+            elif self.pictograph.selected_arrow.motion_type == TRAILING:
+                turn_data[self.trailing_motion.arrow.lead_state][0] += adjustment[0]
+                turn_data[self.trailing_motion.arrow.lead_state][1] += adjustment[1]
 
         letter_data[str(adjustment_key)] = turn_data
         data[self.pictograph.letter] = letter_data
@@ -399,7 +414,7 @@ class WASD_AdjustmentManager:
             dy, dx = dx, dy
         return dx * increment, dy * increment
 
-    def adjust_direction_p(self, dx, dy):
+    def adjust_direction_p(self, dx, dy) -> Tuple[int, int]:
         # Specific logic for letter "P"
         if self.pictograph.selected_arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
             return -dx, dy
@@ -407,7 +422,7 @@ class WASD_AdjustmentManager:
             return -dy, dx
         return dx, dy
 
-    def adjust_direction_q(self, dx, dy):
+    def adjust_direction_q(self, dx, dy) -> Tuple[int, int]:
         # Specific logic for letter "Q"
         if self.pictograph.selected_arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
             return -dy, dx
@@ -415,7 +430,7 @@ class WASD_AdjustmentManager:
             return dy, -dx
         return dx, dy
 
-    def get_default_adjustment(self, key, increment):
+    def get_default_adjustment(self, key, increment) -> Tuple[int, int]:
         adjustment_map = {
             Qt.Key.Key_W: (0, -increment),
             Qt.Key.Key_A: (-increment, 0),

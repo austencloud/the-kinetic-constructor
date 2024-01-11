@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, Optional
 from constants import *
 from utilities.TypeChecking.TypeChecking import Locations, Orientations, PropRotDirs
 
@@ -31,6 +31,9 @@ class ArrowRotAngleManager:
         self._apply_rotation(angle)
 
     def _resolve_angle(self) -> int:
+        rotation_override = self._get_rotation_override()
+        if rotation_override is not None:
+            return rotation_override
         if hasattr(self.arrow.scene, LETTER):
             letter_angle_resolver = self.letter_specific_resolvers.get(
                 self.arrow.scene.letter
@@ -39,6 +42,29 @@ class ArrowRotAngleManager:
                 return letter_angle_resolver()
             return self.angle_resolvers.get(self.arrow.motion.motion_type, lambda: 0)()
         return self.angle_resolvers.get(self.arrow.motion.motion_type, lambda: 0)()
+
+    def _get_rotation_override(self) -> Optional[int]:
+        special_manager = (
+            self.arrow.scene.arrow_placement_manager.special_placement_manager
+        )
+        if special_manager:
+            rotation_override = special_manager.get_rotation_angle_override(self.arrow)
+            if rotation_override is not None:
+                return self._adjust_angle_according_to_location(rotation_override)
+        return None
+
+    def _adjust_angle_according_to_location(self, rotation_override: int) -> int:
+        if rotation_override == 0:
+            if self.arrow.loc == NORTH:
+                return 0
+            elif self.arrow.loc == EAST:
+                return 90
+            elif self.arrow.loc == SOUTH:
+                return 180
+            elif self.arrow.loc == WEST:
+                return 270
+
+        return rotation_override
 
     def _apply_rotation(self, angle: int) -> None:
         self.arrow.set_arrow_transform_origin_to_center()

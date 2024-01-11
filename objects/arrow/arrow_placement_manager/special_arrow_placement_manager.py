@@ -40,7 +40,7 @@ class SpecialArrowPlacementManager:
         letter_adjustments = self.special_placements.get(
             self.pictograph.letter, {}
         ).get(adjustment_key, {})
-        return letter_adjustments.get(f"{arrow.motion_type}_rot_angle")
+        return letter_adjustments.get(f"{arrow.motion_type}_rot_angle", {})
 
     def _generate_adjustment_key(self, arrow: Arrow) -> str:
         letter = self.pictograph.letter

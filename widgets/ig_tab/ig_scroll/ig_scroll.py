@@ -109,8 +109,10 @@ class IGScrollArea(PictographScrollArea):
                                 pictograph_dict[
                                     f"{motion_color}_prop_rot_dir"
                                 ] = prop_rot_dir
+                                if ig_pictograph.motions[motion_color].prop_rot_dir == None:
+                                    ig_pictograph.motions[motion_color].prop_rot_dir = prop_rot_dir
                             pictograph_dict[f"{motion_color}_turns"] = turns_value
-
+                    
                     ig_pictograph.update_pictograph(pictograph_dict)
                 image_key = self.generate_image_name(ig_pictograph, letter)
                 ordered_pictographs[image_key] = ig_pictograph

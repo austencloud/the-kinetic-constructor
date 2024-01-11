@@ -190,7 +190,7 @@ class Prop(GraphicalObject):
         self.update_prop()
 
     def update_ghost_prop_location(self, new_pos: QPointF) -> None:
-        new_location = self.pictograph.get_closest_hand_point(new_pos)[0]
+        new_location = self.pictograph.get_closest_hand_point(new_pos)[0][0]
 
         if new_location != self.previous_location:
             self.loc = new_location
