@@ -42,21 +42,78 @@ class SpecialArrowPlacementManager:
 
         if adjustment_key not in letter_data:
             letter_data[adjustment_key] = new_adjustment
-            # letter_data = self._sort_entries(letter_data)
             self.special_placements[letter] = letter_data
             self.data_modified = True
+
+    def update_arrow_adjustments_in_json(self, adjustment: Tuple[int, int], arrow: "Arrow") -> None:
+        """Updates the arrow adjustments in the JSON file."""
+        if not arrow:
+            return
+
+        adjustment_key = self._generate_adjustment_key(arrow)
+        letter_data = self.special_placements.get(self.pictograph.letter, {})
+        turn_data = letter_data.get(adjustment_key, {})
+
+        if turn_data:
+            self._update_turn_data(turn_data, arrow, adjustment)
+        else:
+            turn_data = self._create_default_turn_data(arrow, adjustment)
+
+        letter_data[adjustment_key] = turn_data
+        self.special_placements[self.pictograph.letter] = letter_data
+        self.data_modified = True
+        self.save_json_data(self.special_placements)
+
+    def _update_turn_data(self, turn_data: Dict, arrow: "Arrow", adjustment: Tuple[int, int]) -> None:
+        key = self._get_turn_data_key(arrow)
+        turn_data[key] = [turn_data[key][0] + adjustment[0], turn_data[key][1] + adjustment[1]]
+
+    def _create_default_turn_data(self, arrow: "Arrow", adjustment: Tuple[int, int]) -> Dict:
+        default_mgr = self.main_arrow_placement_manager.default_manager
+        default_turn_data = default_mgr.get_default_adjustment(arrow)
+        key = self._get_turn_data_key(arrow)
+
+        return {
+            key: [default_turn_data[0] + adjustment[0], default_turn_data[1] + adjustment[1]],
+            self._get_other_key(arrow): [default_turn_data[0], default_turn_data[1]]
+        }
+
+    def _get_turn_data_key(self, arrow: "Arrow") -> str:
+        if self.pictograph.letter in ["S", "T"]:
+            return arrow.lead_state
+        elif self.pictograph.letter in Type1_non_hybrid_letters:
+            return arrow.color
+        else:
+            return arrow.motion_type
+
+    def _get_other_key(self, arrow: "Arrow") -> str:
+        other_arrow = self.blue_arrow if arrow == self.red_arrow else self.red_arrow
+        if self.pictograph.letter in ["S", "T"]:
+            return other_arrow.lead_state
+        elif self.pictograph.letter in Type1_non_hybrid_letters:
+            return other_arrow.color
+        else:
+            return other_arrow.motion_type
+
+    def save_json_data(self, data: Dict) -> None:
+        with open(self.json_path, "w") as file:
+            json_str = json.dumps(data, indent=2)
+            compact_json_str = re.sub(
+                r'": \[\s+(-?\d+),\s+(-?\d+)\s+\]', r'": [\1, \2]', json_str
+            )
+            file.write(compact_json_str)
 
     def update_adjustment(self, letter: str, adjustment_key: str, new_adjustment: Dict):
         self.special_placements[letter][adjustment_key] = new_adjustment
         self.data_modified = True
 
-    def update_specific_placement(self, letter: str, adjustment_key: str, new_adjustment: Dict) -> None:
+    def update_specific_placement(
+        self, letter: str, adjustment_key: str, new_adjustment: Dict
+    ) -> None:
         """Update a specific placement in the JSON file."""
-        # Load the current placements from the file
         with open(self.json_path, "r") as file:
             data = json.load(file)
 
-        # Update only the relevant entry
         if letter in data:
             if adjustment_key in data[letter]:
                 data[letter][adjustment_key].update(new_adjustment)
@@ -65,26 +122,27 @@ class SpecialArrowPlacementManager:
         else:
             data[letter] = {adjustment_key: new_adjustment}
 
-        # Write the updated data back to the file
         with open(self.json_path, "w") as file:
             json.dump(data, file, indent=2)
-            
+
     def _load_placements(self) -> Dict[str, Dict[str, Tuple[int, int]]]:
         with open(self.json_path, "r") as file:
             data = json.load(file)
 
-        if self.data_modified:
+        if self.data_modified is True:
             with open(self.json_path, "w") as file:
                 json_str = json.dumps(data, indent=2)
                 compact_json_str = re.sub(
                     r'": \[\s+(-?\d+),\s+(-?\d+)\s+\]', r'": [\1, \2]', json_str
                 )
                 file.write(compact_json_str)
-            self.data_modified = False  # Reset the flag after writing
+            self.data_modified = False
 
         return data
 
     def _sort_entries(self, letter_data: Dict[str, Tuple[int, int]]) -> Dict:
+        """Should use this occasionally to sort the entries in the JSON file."""
+
         def sort_key(item) -> Tuple[int, Union[int, float], Union[int, float]]:
             key = item[0]
             numbers = [

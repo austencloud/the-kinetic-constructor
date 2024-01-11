@@ -14,9 +14,8 @@ from utilities.TypeChecking.Letters import (
     Type2_letters,
 )
 
-
 class WASD_AdjustmentManager:
-    def __init__(self, pictograph):
+    def __init__(self, pictograph) -> None:
         self.turn_manager = TurnAdjustmentManager(pictograph)
         self.movement_manager = ArrowMovementManager(pictograph)
         self.rotation_manager = RotationAngleManager(pictograph)
@@ -29,6 +28,3 @@ class WASD_AdjustmentManager:
         }
         self.handler_factory = LetterAdjustmentHandlerFactory(handler_map)
 
-    def handle_adjustment(self, letter, adjustment) -> None:
-        handler = self.handler_factory.create_handler(letter, self.pictograph)
-        handler.handle_adjustment(adjustment)
