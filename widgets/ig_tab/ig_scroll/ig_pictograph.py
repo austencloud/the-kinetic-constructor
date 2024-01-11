@@ -89,4 +89,3 @@ class IG_Pictograph_View(QGraphicsView):
             self.ig_pictograph.wasd_adjustment_manager.handle_arrow_movement(event.key(), shift_held)
         else:
             super().keyPressEvent(event)
-            

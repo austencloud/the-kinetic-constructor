@@ -26,7 +26,7 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
     def __init__(self, attr_box: "IGLeadStateAttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
-        self.setup_directset_turns_buttons()
+        # self.setup_directset_turns_buttons()
         self.update_ig_lead_state_turnbox_size()
         # self.update_add_subtract_button_size()
 

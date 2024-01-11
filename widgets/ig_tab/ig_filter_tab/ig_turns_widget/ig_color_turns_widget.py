@@ -20,7 +20,6 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
         """Initialize the IGColorTurnsWidget."""
         super().__init__(attr_box)
         self.attr_box = attr_box
-        self.setup_directset_turns_buttons()
         self.update_ig_color_turnbox_size()
         # self.update_add_subtract_button_size()
 

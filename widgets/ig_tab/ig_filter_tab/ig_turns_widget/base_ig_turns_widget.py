@@ -30,6 +30,7 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
             "IGMotionTypeAttrBox", "IGLeadStateAttrBox", "IGColorAttrBox"
         ] = attr_box
         self._initialize_ui()
+        self.setup_directset_turns_buttons()
 
     def setup_directset_turns_buttons(self: Union[
         "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"

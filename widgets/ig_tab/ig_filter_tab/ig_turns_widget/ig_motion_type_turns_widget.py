@@ -1,6 +1,6 @@
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
-from constants import ICON_DIR
+from constants import CLOCKWISE, ICON_DIR, STATIC
 from objects.pictograph.pictograph import Pictograph
 from .base_ig_turns_widget import BaseIGTurnsWidget
 
@@ -13,7 +13,7 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         """Initialize the IGMotionTypeTurnsWidget."""
         super().__init__(attr_box)
         self.attr_box = attr_box
-        self.setup_directset_turns_buttons()
+        # self.setup_directset_turns_buttons()
         self.update_ig_motion_type_turnbox_size()
         # self.update_add_subtract_button_size()
 
@@ -35,8 +35,15 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.motion_type == self.attr_box.motion_type:
-                    motion.set_turns(new_turns)
-                    self.update_pictograph_dict(motion, new_turns)
+                    if motion.motion_type == STATIC and motion.turns == 0:
+                        self._simulate_cw_button_click_in_header_widget()
+                        motion.prop_rot_dir = CLOCKWISE
+                    pictograph_dict = {
+                        f"{motion.color}_turns": new_turns,
+                    }
+                    pictograph.update_pictograph(pictograph_dict)
+
+                    # self.update_pictograph_dict(motion, new_turns)
 
     def update_turns_display_for_pictograph(self, pictograph: Pictograph) -> None:
         """Update the turnbox display based on the latest turns value of the pictograph."""

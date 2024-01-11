@@ -68,7 +68,7 @@ class MainArrowPlacementManager:
                 adjustment = self._get_adjustment(arrow)
                 new_pos = initial_pos + adjustment - arrow.boundingRect().center()
                 arrow.setPos(new_pos)
-
+                arrow.arrow_rot_angle_manager.update_rotation()
     def _get_initial_pos(self, arrow: Arrow) -> QPointF:
         if arrow.motion_type in [PRO, ANTI]:
             return self._get_diamond_shift_pos(arrow)
@@ -86,7 +86,7 @@ class MainArrowPlacementManager:
         ]["normal"][f"{arrow.loc}_{self.pictograph.main_widget.grid_mode}_hand_point"]
 
     def _get_adjustment(self, arrow: Arrow) -> QPointF:
-        adjustment_key = self._generate_adjustment_key(arrow)
+        adjustment_key = self.generate_adjustment_key()
         self.special_placement_manager.special_placements = (
             self.special_placement_manager._load_placements()
         )
@@ -136,7 +136,7 @@ class MainArrowPlacementManager:
             elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
                 return [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
 
-    def _generate_adjustment_key(self, arrow: Arrow) -> str:
+    def generate_adjustment_key(self) -> str:
         if self.blue_arrow.turns in [0.0, 1.0, 2.0, 3.0]:
             self.blue_arrow.turns = int(self.blue_arrow.turns)
         if self.red_arrow.turns in [0.0, 1.0, 2.0, 3.0]:

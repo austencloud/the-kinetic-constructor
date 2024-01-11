@@ -83,7 +83,7 @@ class Motion:
         }
         prop_dict = {
             LOC: self.end_loc,
-            ORIENTATION: self.end_ori,
+            ORIENTATION: self.get_end_ori(),
         }
         self.arrow.update_arrow(arrow_dict)
         self.prop.update_prop(prop_dict)
