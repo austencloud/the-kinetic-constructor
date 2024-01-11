@@ -5,7 +5,9 @@ from objects.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import Qt
 
 from utilities.TypeChecking.TypeChecking import Colors
-from widgets.ig_tab.ig_scroll.wasd_adjustment_manager import WASD_AdjustmentManager
+from widgets.ig_tab.ig_scroll.wasd_adjustment_manager.wasd_adjustment_manager import (
+    WASD_AdjustmentManager,
+)
 
 
 if TYPE_CHECKING:
@@ -19,11 +21,6 @@ class IGPictograph(Pictograph):
         self.ig_scroll_area = ig_scroll_area
         self.selected_arrow = None
         self.wasd_adjustment_manager = WASD_AdjustmentManager(self)
-        
-
-
-
-
 
     def determine_leading_color(
         self, red_start, red_end, blue_start, blue_end
@@ -33,7 +30,6 @@ class IGPictograph(Pictograph):
         elif blue_start == red_end:
             return BLUE
         return None
-
 
     def swap_selected_arrow(self):
         if self.selected_arrow == self.arrows[RED]:
@@ -83,9 +79,13 @@ class IG_Pictograph_View(QGraphicsView):
         shift_held = event.modifiers() & Qt.KeyboardModifier.ShiftModifier
         if event.key() in [Qt.Key.Key_Q, Qt.Key.Key_E]:
             # Handle half turn adjustments for 'q' and 'e'
-            self.ig_pictograph.wasd_adjustment_manager.handle_half_turns(event.key())
+            self.ig_pictograph.wasd_adjustment_manager.turn_manager.handle_half_turns(
+                event.key()
+            )
             event.accept()
         elif event.key() in [Qt.Key.Key_W, Qt.Key.Key_A, Qt.Key.Key_S, Qt.Key.Key_D]:
-            self.ig_pictograph.wasd_adjustment_manager.handle_arrow_movement(event.key(), shift_held)
+            self.ig_pictograph.wasd_adjustment_manager.movement_manager.handle_arrow_movement(
+                event.key(), shift_held
+            )
         else:
             super().keyPressEvent(event)

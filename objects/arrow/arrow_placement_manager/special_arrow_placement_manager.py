@@ -42,7 +42,7 @@ class SpecialArrowPlacementManager:
 
         if adjustment_key not in letter_data:
             letter_data[adjustment_key] = new_adjustment
-            letter_data = self._sort_entries(letter_data)
+            # letter_data = self._sort_entries(letter_data)
             self.special_placements[letter] = letter_data
             self.data_modified = True
 
@@ -50,28 +50,29 @@ class SpecialArrowPlacementManager:
         self.special_placements[letter][adjustment_key] = new_adjustment
         self.data_modified = True
 
-    def update_placements(self) -> None:
-        if self.data_modified:
-            with open(self.json_path, "w") as file:
-                json_str = json.dumps(self.special_placements, indent=2)
-                compact_json_str = re.sub(
-                    r'": \[\s+(-?\d+),\s+(-?\d+)\s+\]', r'": [\1, \2]', json_str
-                )
-                file.write(compact_json_str)
-            self.data_modified = False
+    def update_specific_placement(self, letter: str, adjustment_key: str, new_adjustment: Dict) -> None:
+        """Update a specific placement in the JSON file."""
+        # Load the current placements from the file
+        with open(self.json_path, "r") as file:
+            data = json.load(file)
 
+        # Update only the relevant entry
+        if letter in data:
+            if adjustment_key in data[letter]:
+                data[letter][adjustment_key].update(new_adjustment)
+            else:
+                data[letter][adjustment_key] = new_adjustment
+        else:
+            data[letter] = {adjustment_key: new_adjustment}
+
+        # Write the updated data back to the file
+        with open(self.json_path, "w") as file:
+            json.dump(data, file, indent=2)
+            
     def _load_placements(self) -> Dict[str, Dict[str, Tuple[int, int]]]:
         with open(self.json_path, "r") as file:
-            data = json.load(file, object_pairs_hook=OrderedDict)
-            original_data = json.dumps(
-                data
-            )  # Store the original data as a string to compare later
-            # if "Y" in data:
-            #     data["Y"] = self._sort_entries(data["Y"])
-            #     if json.dumps(data) != original_data:  # Check if the data has changed
-            #         self.data_modified = True
+            data = json.load(file)
 
-        # Only write back to the file if data has been modified
         if self.data_modified:
             with open(self.json_path, "w") as file:
                 json_str = json.dumps(data, indent=2)
@@ -83,8 +84,8 @@ class SpecialArrowPlacementManager:
 
         return data
 
-    def _sort_entries(self, letter_data: Dict[str, Tuple[int, int]]) -> OrderedDict:
-        def sort_key(item) -> Tuple[int, Union[float, str], Union[float, str]]:
+    def _sort_entries(self, letter_data: Dict[str, Tuple[int, int]]) -> Dict:
+        def sort_key(item) -> Tuple[int, Union[int, float], Union[int, float]]:
             key = item[0]
             numbers = [
                 float(num) if "." in num else int(num)
@@ -92,15 +93,9 @@ class SpecialArrowPlacementManager:
             ]
             char = re.search(r"[so]", key)
 
-            # Assign priority based on the presence of 's' or 'o' and the static hand value
             if self.pictograph.letter in Type1_letters:
-                # For Type1 letters, order them based on the letter combinations
-                return (
-                    numbers[0],
-                    numbers[1] if len(numbers) > 1 else float("inf"),
-                )
+                return (numbers[0], numbers[1] if len(numbers) > 1 else float("inf"))
             elif char:
-                # If 's' or 'o' is present, prioritize based on that character
                 char_priority = {"s": 1, "o": 2}.get(char.group(), 3)
                 return (
                     char_priority,
@@ -108,11 +103,10 @@ class SpecialArrowPlacementManager:
                     numbers[1] if len(numbers) > 1 else float("inf"),
                 )
             else:
-                # Entries without 's' or 'o' are given highest priority if static hand is 0
                 return (0, numbers[0], numbers[1] if len(numbers) > 1 else float("inf"))
 
-        return OrderedDict(sorted(letter_data.items(), key=sort_key))
-    
+        return dict(sorted(letter_data.items(), key=sort_key))
+
     def get_rotation_angle_override(self, arrow: Arrow) -> Optional[int]:
         adjustment_key = self._generate_adjustment_key(arrow)
         letter_adjustments = self.special_placements.get(

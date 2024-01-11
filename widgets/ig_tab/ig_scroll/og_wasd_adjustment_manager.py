@@ -102,7 +102,7 @@ class WASD_AdjustmentManager:
         handler = handlers.get(self.pictograph.letter, lambda d, a: None)
         if handler(data, adjustment):
             placement_manager.data_modified = True
-        placement_manager.update_placements()
+        placement_manager.update_specific_placement()
 
     def handle_non_hybrid_letters(self, data: Dict[Letters, Dict], adjustment) -> None:
         red_turns = self.red_motion.turns
@@ -299,6 +299,9 @@ class WASD_AdjustmentManager:
             turn_data[static_motion.motion_type][1] += adjustment[1]
             letter_data[adjustment_key_str] = turn_data
             data[self.pictograph.letter] = letter_data
+            self.pictograph.arrow_placement_manager.special_placement_manager.data_modified = (
+                True
+            )
 
         elif not turn_data:
             default_data = self.load_json_data(
@@ -307,12 +310,11 @@ class WASD_AdjustmentManager:
             default_turn_data_for_selected_arrow = default_data.get(
                 self.pictograph.selected_arrow.motion_type
             ).get(str(self.pictograph.selected_arrow.turns))
-
             default_turn_data_for_other_arrow = default_data.get(
                 other_arrow.motion_type
             ).get(str(other_arrow.turns))
 
-            if self.pictograph.selected_arrow.motion_type == shift_motion.motion_type:
+            if self.pictograph.selected_arrow.motion.is_shift():
                 turn_data = {
                     shift_motion.motion_type: [
                         default_turn_data_for_selected_arrow[0] + adjustment[0],
@@ -323,9 +325,10 @@ class WASD_AdjustmentManager:
                         default_turn_data_for_other_arrow[1],
                     ],
                 }
-            elif (
-                self.pictograph.selected_arrow.motion_type == static_motion.motion_type
-            ):
+                letter_data[adjustment_key_str] = turn_data
+                data[self.pictograph.letter] = letter_data
+
+            elif self.pictograph.selected_arrow.motion.is_static():
                 turn_data = {
                     shift_motion.motion_type: [
                         default_turn_data_for_other_arrow[0],
@@ -336,8 +339,11 @@ class WASD_AdjustmentManager:
                         default_turn_data_for_selected_arrow[1] + adjustment[1],
                     ],
                 }
-            letter_data[adjustment_key_str] = turn_data
-            data[self.pictograph.letter] = letter_data
+                letter_data[adjustment_key_str] = turn_data
+                data[self.pictograph.letter] = letter_data
+                self.pictograph.arrow_placement_manager.special_placement_manager.data_modified = (
+                    True
+                )
 
     def handle_S_T(self, data: Dict, adjustment) -> None:
         self.leading_motion = self.pictograph.get_leading_motion()
