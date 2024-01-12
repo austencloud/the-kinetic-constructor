@@ -97,9 +97,13 @@ class ArrowLocationManager:
             if self.arrow.scene.red_motion.motion_type == DASH
             else self.arrow.scene.blue_motion
         )
+        if not shift_motion.arrow.loc:
+            shift_motion.arrow.loc = (
+                shift_motion.arrow.arrow_location_manager.get_arrow_location()
+            )
         dash_location_map = {
-            (NORTH, NORTHWEST): WEST,
-            (NORTH, NORTHEAST): EAST,
+            (NORTH, NORTHWEST): EAST,
+            (NORTH, NORTHEAST): WEST,
             (NORTH, SOUTHEAST): WEST,
             (NORTH, SOUTHWEST): EAST,
             (EAST, NORTHWEST): SOUTH,
@@ -108,8 +112,8 @@ class ArrowLocationManager:
             (EAST, SOUTHWEST): NORTH,
             (SOUTH, NORTHWEST): EAST,
             (SOUTH, NORTHEAST): WEST,
-            (SOUTH, SOUTHEAST): EAST,
-            (SOUTH, SOUTHWEST): WEST,
+            (SOUTH, SOUTHEAST): WEST,
+            (SOUTH, SOUTHWEST): EAST,
             (WEST, NORTHWEST): SOUTH,
             (WEST, NORTHEAST): SOUTH,
             (WEST, SOUTHEAST): NORTH,

@@ -1,6 +1,8 @@
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
 from constants import (
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
     DASH,
     ICON_DIR,
     NO_ROT,
@@ -68,10 +70,33 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         motion: Motion,
         adjustment: float,
     ) -> None:
-
         new_turns = self._calculate_new_turns(motion.turns, adjustment)
         if new_turns == 0 and motion.motion_type in [DASH, STATIC]:
             motion.prop_rot_dir = NO_ROT
+        simulate_cw_click = False
+
+        if new_turns > 0 and motion.motion_type in [DASH, STATIC]:
+            for pictograph in self.attr_box.pictographs.values():
+                for motion in pictograph.motions.values():
+                    if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
+                        simulate_cw_click = True
+                        break
+                if simulate_cw_click:
+                    break
+
+            # Simulate CW button click if necessary
+            if simulate_cw_click:
+                if (
+                    not self.attr_box.header_widget.cw_button.isChecked()
+                    and not self.attr_box.header_widget.ccw_button.isChecked()
+                ):
+                    self._simulate_cw_button_click_in_header_widget()
+            motion.prop_rot_dir = (
+                CLOCKWISE
+                if self.attr_box.header_widget.cw_button.isChecked()
+                else COUNTER_CLOCKWISE
+            )
+
         motion.set_turns(new_turns)
 
         pictograph_dict = {

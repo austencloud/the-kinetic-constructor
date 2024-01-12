@@ -54,21 +54,18 @@ class ArrowRotAngleManager:
         return None
 
     def _get_rot_angle_override_according_to_loc(self, rotation_override: int) -> int:
+        angle_map = {
+            NORTH: 0,
+            EAST: {CLOCKWISE: 90, COUNTER_CLOCKWISE: 270},
+            SOUTH: 180,
+            WEST: {CLOCKWISE: 270, COUNTER_CLOCKWISE: 90},
+        }
+
         if rotation_override == 0:
-            if self.arrow.loc == NORTH:
-                return 0
-            elif self.arrow.loc == EAST:
-                if self.arrow.motion.prop_rot_dir == CLOCKWISE:
-                    return 90
-                elif self.arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                    return 270
-            elif self.arrow.loc == SOUTH:
-                return 180
-            elif self.arrow.loc == WEST:
-                if self.arrow.motion.prop_rot_dir == CLOCKWISE:
-                    return 270
-                elif self.arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                    return 90
+            loc_angle = angle_map.get(self.arrow.loc)
+            if isinstance(loc_angle, dict):
+                return loc_angle.get(self.arrow.motion.prop_rot_dir, 0)
+            return loc_angle
 
         return rotation_override
 
@@ -241,14 +238,14 @@ class ArrowRotAngleManager:
     ) -> Dict[Orientations, Dict[PropRotDirs, Dict[Locations, int]]]:
         orientation_map = {
             IN: {
-                CLOCKWISE: {NORTH: 0, EAST: 270, SOUTH: 180, WEST: 90},
-                COUNTER_CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
-                NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
+                CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
+                COUNTER_CLOCKWISE: {NORTH: 0, EAST: 270, SOUTH: 180, WEST: 90},
+                NO_ROT: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
             },
             OUT: {
                 CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
                 COUNTER_CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
-                NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
+                NO_ROT: {NORTH: 0, EAST: 0, SOUTH: 0, WEST: 0},
             },
         }
         return orientation_map.get(self.arrow.motion.start_ori, {})

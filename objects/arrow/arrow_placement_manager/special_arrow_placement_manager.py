@@ -246,8 +246,36 @@ class SpecialArrowPlacementManager:
                 # elif either of the values are None
                 else:
                     adjustment_key_str = None
-            elif static_motion.turns == 0:
-                adjustment_key_str = f"({shift_motion.turns}, {static_motion.turns})"
+                    
+        elif letter in Type3_letters:
+            shift_motion = (
+                self.pictograph.red_motion
+                if self.pictograph.red_motion.is_shift()
+                else self.pictograph.blue_motion
+            )
+            dash_motion = (
+                self.pictograph.red_motion
+                if self.pictograph.red_motion.is_dash()
+                else self.pictograph.blue_motion
+            )
+
+            if dash_motion.turns > 0:
+                if dash_motion.turns in [0.0, 1.0, 2.0, 3.0]:
+                    dash_motion.turns = int(dash_motion.turns)
+
+                if dash_motion.prop_rot_dir and shift_motion.prop_rot_dir:
+                    if dash_motion.prop_rot_dir != shift_motion.prop_rot_dir:
+                        direction = "opp"
+                    elif dash_motion.prop_rot_dir == shift_motion.prop_rot_dir:
+                        direction = "same"
+
+                    direction_prefix = direction[0]
+                    adjustment_key_str = f"({direction_prefix}, {shift_motion.turns}, {dash_motion.turns})"
+                # elif either of the values are None
+                else:
+                    adjustment_key_str = None
+            elif dash_motion.turns == 0:
+                adjustment_key_str = f"({shift_motion.turns}, {dash_motion.turns})"
             return adjustment_key_str
 
         else:
