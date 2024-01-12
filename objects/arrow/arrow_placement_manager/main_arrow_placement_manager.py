@@ -121,18 +121,36 @@ class MainArrowPlacementManager:
     def _generate_directional_tuples(
         self, x, y, motion: Motion, motion_type: str
     ) -> List[QPointF]:
+        other_motion = (
+            self.blue_arrow.motion
+            if motion == self.red_arrow.motion
+            else self.red_arrow.motion
+        )
+
         if motion_type == PRO:
-            if motion.prop_rot_dir in [CLOCKWISE, NO_ROT]:
+            if motion.prop_rot_dir == CLOCKWISE:
                 return [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
             elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
                 return [QPointF(-y, -x), QPointF(x, -y), QPointF(y, x), QPointF(-x, y)]
         elif motion_type == ANTI:
-            if motion.prop_rot_dir in [CLOCKWISE, NO_ROT]:
+            if motion.prop_rot_dir == CLOCKWISE:
                 return [QPointF(-y, -x), QPointF(x, -y), QPointF(y, x), QPointF(-x, y)]
             elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
                 return [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
         elif motion_type == DASH:
-            if motion.prop_rot_dir in [CLOCKWISE, NO_ROT]:
+            if motion.prop_rot_dir == NO_ROT:
+                return (
+                    [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
+                    if other_motion.prop_rot_dir == CLOCKWISE
+                    else [
+                        QPointF(-x, -y),
+                        QPointF(y, -x),
+                        QPointF(x, -y),
+                        QPointF(y, x),
+                    ]
+                )
+
+            elif motion.prop_rot_dir == CLOCKWISE:
                 return [QPointF(-x, y), QPointF(y, x), QPointF(x, -y), QPointF(-y, -x)]
             elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
                 return [QPointF(y, -x), QPointF(-x, -y), QPointF(-y, x), QPointF(x, y)]
