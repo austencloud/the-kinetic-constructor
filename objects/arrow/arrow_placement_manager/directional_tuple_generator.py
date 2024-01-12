@@ -57,7 +57,7 @@ class DirectionalTupleGenerator:
         no_rot_static_directional_tuples = [(x, -y), (y, x), (-x, y), (-y, -x)]
 
         static_directional_tuples = {
-            (STATIC, CLOCKWISE, CLOCKWISE): [(x, -y), (y, x), (-x, y), (-y, -x)],
+            (STATIC, CLOCKWISE): [(x, -y), (y, x), (-x, y), (-y, -x)],
             (STATIC, COUNTER_CLOCKWISE): [(-x, -y), (y, -x), (x, y), (-y, x)],
         }
 
@@ -71,7 +71,7 @@ class DirectionalTupleGenerator:
             return no_rot_static_directional_tuples
         elif motion_type == STATIC:
             return static_directional_tuples.get(
-                (motion_type, prop_rot_dir, self.other_motion.prop_rot_dir), []
+                (motion_type, prop_rot_dir), []
             )
         else:
             return shift_directional_tuples.get((motion_type, prop_rot_dir), [])
