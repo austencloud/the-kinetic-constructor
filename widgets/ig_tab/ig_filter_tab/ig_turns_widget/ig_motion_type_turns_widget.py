@@ -1,6 +1,6 @@
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
-from constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR, STATIC
+from constants import CLOCKWISE, COUNTER_CLOCKWISE, DASH, ICON_DIR, STATIC
 from objects.pictograph.pictograph import Pictograph
 from .base_ig_turns_widget import BaseIGTurnsWidget
 
@@ -33,21 +33,22 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
 
         # Check if any static motion with zero turns exists
         simulate_cw_click = False
-        for pictograph in self.attr_box.pictographs.values():
-            for motion in pictograph.motions.values():
-                if motion.motion_type == STATIC and motion.turns == 0:
-                    simulate_cw_click = True
+        if self.attr_box.motion_type in [DASH, STATIC]:
+            for pictograph in self.attr_box.pictographs.values():
+                for motion in pictograph.motions.values():
+                    if motion.motion_type == STATIC and motion.turns == 0:
+                        simulate_cw_click = True
+                        break
+                if simulate_cw_click:
                     break
-            if simulate_cw_click:
-                break
 
-        # Simulate CW button click if necessary
-        if simulate_cw_click:
-            if (
-                not self.attr_box.header_widget.cw_button.isChecked()
-                and not self.attr_box.header_widget.ccw_button.isChecked()
-            ):
-                self._simulate_cw_button_click_in_header_widget()
+            # Simulate CW button click if necessary
+            if simulate_cw_click:
+                if (
+                    not self.attr_box.header_widget.cw_button.isChecked()
+                    and not self.attr_box.header_widget.ccw_button.isChecked()
+                ):
+                    self._simulate_cw_button_click_in_header_widget()
 
         # Apply new turns to motions
         for pictograph in self.attr_box.pictographs.values():

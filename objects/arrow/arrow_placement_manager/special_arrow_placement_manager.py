@@ -39,23 +39,29 @@ class SpecialArrowPlacementManager:
                 self.special_placements = json.load(file)
         except json.JSONDecodeError as e:
             print(f"JSON decoding error occurred: {e}")
-            # Optionally, you can initialize self.special_placements to an empty dict
-            # or a default value to allow the program to continue running.
             self.special_placements = {}
-            # Alternatively, log this error, show a user-friendly message, or take other actions.
         return self.special_placements
-    
-    def save_json_data(self) -> None:
-        if self.data_modified:
+
+    def update_specific_entry_in_json(self, letter: str, adjustment_key: str, new_data: Dict) -> None:
+        """Update a specific entry in the JSON file.
+
+        Args:
+            letter
+            adjustment_key
+            new_data
+        """
+        try:
+            with open(self.json_path, "r", encoding="utf-8") as file:
+                data = json.load(file)
+            letter_data = data.get(letter, {})
+            letter_data[adjustment_key] = new_data
+            data[letter] = letter_data
+            json_str = json.dumps(data, indent=2, ensure_ascii=False)
+            formatted_json_str = re.sub(r'\[\s+(-?\d+),\s+(-?\d+)\s+\]', r'[\1, \2]', json_str)
             with open(self.json_path, "w", encoding="utf-8") as file:
-                json.dump(
-                    self._load_placements(),
-                    file,
-                    indent=2,
-                    separators=(",", ": "),
-                    ensure_ascii=False,
-                )
-            self.data_modified = False
+                file.write(formatted_json_str)
+        except json.JSONDecodeError as e:
+            print(f"JSON decoding error occurred: {e}")
 
     def add_and_sort_new_entry(
         self, letter: str, adjustment_key: str, new_adjustment: Dict
@@ -73,9 +79,12 @@ class SpecialArrowPlacementManager:
         """Updates the arrow adjustments in the JSON file."""
         if not arrow:
             return
-        placements = self._load_placements()
+
+        # Load current placements
+        self._load_placements()
+
         adjustment_key = self._generate_adjustment_key(arrow)
-        letter_data = placements.get(self.pictograph.letter, {})
+        letter_data: Dict = self.special_placements.get(self.pictograph.letter, {})
         turn_data = letter_data.get(adjustment_key, {})
 
         if turn_data:
@@ -83,10 +92,10 @@ class SpecialArrowPlacementManager:
         else:
             turn_data = self._create_default_turn_data(arrow, adjustment)
 
-        letter_data[adjustment_key] = turn_data
-        placements[self.pictograph.letter] = letter_data
-        self.data_modified = True
-        self.save_json_data(placements)
+        # Update the specific entry in the JSON file
+        self.update_specific_entry_in_json(
+            self.pictograph.letter, adjustment_key, turn_data
+        )
 
     def _update_turn_data(
         self, turn_data: Dict, arrow: "Arrow", adjustment: Tuple[int, int]
@@ -143,14 +152,6 @@ class SpecialArrowPlacementManager:
         else:
             return other_arrow.motion_type
 
-    def save_json_data(self, data: Dict) -> None:
-        with open(self.json_path, "w", encoding="utf-8") as file:
-            json_str = json.dumps(data, indent=2, ensure_ascii=False)
-            compact_json_str = re.sub(
-                r'": \[\s+(-?\d+),\s+(-?\d+)\s+\]', r'": [\1, \2]', json_str
-            )
-            file.write(compact_json_str)
-
     def update_adjustments(self, adjustment: Tuple[int, int], arrow: "Arrow"):
         if not arrow:
             return
@@ -161,7 +162,7 @@ class SpecialArrowPlacementManager:
         )
 
         self._update_turn_data(turn_data, arrow, adjustment)
-        self._save_json_data()
+        self.save_json_data()
 
     def update_specific_placement(
         self, letter: str, adjustment_key: str, new_adjustment: Dict
