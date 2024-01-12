@@ -323,13 +323,13 @@ class Pictograph(QGraphicsScene):
         return all(key in pictograph_dict for key in required_keys)
 
     def update_pictograph(self, pictograph_dict: Dict = None) -> None:
-        self._update_letter()
         if pictograph_dict:
             if self.is_complete(pictograph_dict):
                 self.pictograph_dict = pictograph_dict
             self._update_from_pictograph_dict(pictograph_dict)
+        self._update_letter()
         self._position_objects()
-
+        
         if self.graph_type == MAIN:
             self._update_attr_panel()
 

@@ -169,7 +169,7 @@ class Prop(GraphicalObject):
         if prop_dict:
             for key, value in prop_dict.items():
                 setattr(self, key, value)
-        self.motion.update_prop_ori()
+        # self.motion.update_prop_ori()
         self.update_svg()
         self._update_color()
         self._update_prop_rotation_angle()
