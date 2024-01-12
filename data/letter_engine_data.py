@@ -39,7 +39,7 @@ motion_type_combinations = {
     (STATIC, STATIC): "static_vs_static",
 }
 
-motion_type_letter_groups = {
+motion_type_letter_combinations = {
     "A": (PRO, PRO),
     "B": (ANTI, ANTI),
     "C": (PRO, ANTI),

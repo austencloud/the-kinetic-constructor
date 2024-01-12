@@ -344,6 +344,10 @@ class Pictograph(QGraphicsScene):
     def _update_from_pictograph_dict(self, pictograph_dict):
         self.update_attributes(pictograph_dict)
         motion_dicts = []
+        if LETTER in pictograph_dict:
+            self.letter = pictograph_dict[LETTER]
+
+        
         if "pro_turns" in pictograph_dict:
             pro_motion = self.blue_motion if self.blue_motion.motion_type == PRO else self.red_motion
             pro_motion.turns = pictograph_dict["pro_turns"]

@@ -22,9 +22,9 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
             "IGMotionTypeAttrBox", "IGLeadStateAttrBox", "IGColorAttrBox"
         ] = attr_box
         self._initialize_ui()
-        self.setup_directset_turns_buttons()
+        self.setup_direct_set_turns_buttons()
 
-    def setup_directset_turns_buttons(
+    def setup_direct_set_turns_buttons(
         self: Union[
             "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
         ]
@@ -36,12 +36,12 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
             button = QPushButton(value, self)
             button.setStyleSheet(button_style_sheet)
             button.clicked.connect(
-                lambda checked, v=value: self._update_turns_directly(v)
+                lambda checked, v=value: self._direct_set_turns(v)
             )
             self.turns_buttons_layout.addWidget(button)
         self.layout.addLayout(self.turns_buttons_layout)
 
-    def _update_turns_directly(
+    def _direct_set_turns(
         self: Union[
             "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
         ],

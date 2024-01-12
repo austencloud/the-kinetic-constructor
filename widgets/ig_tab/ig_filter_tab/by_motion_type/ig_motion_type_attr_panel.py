@@ -1,11 +1,13 @@
 from constants import ANTI, DASH, PRO, STATIC
 from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import MotionTypes
-from widgets.attr_panel.base_attr_panel import BaseAttrPanel
-from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import (
-    IGMotionTypeAttrBox,
-)
+from data.letter_engine_data import motion_type_letter_combinations
+from ....attr_panel.base_attr_panel import BaseAttrPanel
+from ..by_motion_type.ig_motion_type_attr_box import IGMotionTypeAttrBox
 
+from PyQt6.QtGui import QFont
+from PyQt6.QtWidgets import QLabel
+from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_tab import IGTab
@@ -15,6 +17,19 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
     def __init__(self, ig_tab: "IGTab") -> None:
         super().__init__(ig_tab)
         self.ig_tab = ig_tab
+
+        self.placeholder_label = QLabel(
+            "Please select a letter to view motion type adjustments.", self
+        )
+        self.placeholder_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.placeholder_label.setFont(QFont("Arial", 14))
+        self.placeholder_label.setWordWrap(True)
+        self.placeholder_label.hide()
+
+        # Add the placeholder label to the layout
+        self.setup_layouts()
+        self.layout.addWidget(self.placeholder_label)
+
         self.pro_attr_box = IGMotionTypeAttrBox(
             self, self.ig_tab.ig_scroll_area.pictographs, PRO
         )
@@ -33,15 +48,37 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
             self.dash_attr_box,
             self.static_attr_box,
         ]
-        self.setup_layouts()
 
+    def update_motion_type_widget_visibility(self, selected_letters: List[str]) -> None:
+        """Update the visibility of motion type widgets based on selected letters."""
+        if not selected_letters:
+            self.show_placeholder_message()
+        else:
+            self.hide_placeholder_message()
+            motion_types_in_use = set()
+            for letter in selected_letters:
+                motions = motion_type_letter_combinations.get(letter, ())
+                motion_types_in_use.update(motions)
 
+            for box in self.boxes:
+                box.setVisible(box.motion_type in motion_types_in_use)
+                box.resize_ig_motion_type_attr_box()
+                self.layout.addWidget(box)
+
+    def show_placeholder_message(self) -> None:
+        """Display the placeholder message."""
+        self.placeholder_label.show()
+        for box in self.boxes:
+            box.hide()
+
+    def hide_placeholder_message(self) -> None:
+        """Hide the placeholder message."""
+        self.placeholder_label.hide()
 
     def setup_layouts(self) -> None:
         super().setup_layouts()
         for box in self.boxes:
             self.layout.addWidget(box)
-
 
     def get_turns_for_motion_type(self, motion_type: MotionTypes) -> int:
         for box in self.boxes:
@@ -50,7 +87,7 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
                     return int(box.turns_widget.turnbox.currentText())
                 elif box.turns_widget.turnbox.currentText() in ["0.5", "1.5", "2.5"]:
                     return float(box.turns_widget.turnbox.currentText())
-    
+
     def resize_ig_motion_type_attr_panel(self) -> None:
         self.layout.setSpacing(int(self.pro_attr_box.width() / 5))
         for box in self.boxes:

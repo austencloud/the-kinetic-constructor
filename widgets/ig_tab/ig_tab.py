@@ -154,6 +154,9 @@ class IGTab(QWidget):
         else:
             self.selected_letters.append(letter)
 
+        self.filter_tab.motion_attr_panel.update_motion_type_widget_visibility(
+            self.selected_letters
+        )
         button.setFlat(not is_selected)
         button.setStyleSheet(self.get_button_style(pressed=not is_selected))
         self.ig_scroll_area.update_pictographs()
@@ -179,12 +182,13 @@ class IGTab(QWidget):
         main_widget.setEnabled(False)
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.setMouseTracking(False)
-        for letter, pictograph_dict_list in self.main_widget.letters.items():
+        for _, pictograph_dict_list in self.main_widget.letters.items():
             for pictograph_dict in pictograph_dict_list:
                 ig_pictograph: IGPictograph = self.ig_scroll_area._create_pictograph(
                     IG_PICTOGRAPH
                 )
                 ig_pictograph.render_and_cache_image()
+                
         main_widget.setEnabled(True)
         QApplication.restoreOverrideCursor()
         self.setMouseTracking(True)
