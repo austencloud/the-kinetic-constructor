@@ -73,10 +73,11 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.motion_type == self.attr_box.motion_type:
-                    pictograph_dict = {
-                        f"{motion.color}_prop_rot_dir": prop_rot_dir,
-                    }
-                    motion.scene.update_pictograph(pictograph_dict)
+                    if motion.turns > 0:
+                        pictograph_dict = {
+                            f"{motion.color}_prop_rot_dir": prop_rot_dir,
+                        }
+                        motion.scene.update_pictograph(pictograph_dict)
             for motion in pictograph.motions.values():
                 if motion.motion_type == DASH and (
                     prop_rot_dir is None or motion.turns > 0
@@ -99,10 +100,10 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
             self.ccw_button.setStyleSheet(self.get_button_style(pressed=False))
 
     def _setup_prop_rot_dir_buttons(self) -> List[QPushButton]:
-        self.cw_button = self._create_button(
+        self.cw_button: QPushButton = self._create_button(
             f"{ICON_DIR}clock/clockwise.png", lambda: self._set_prop_rot_dir(CLOCKWISE)
         )
-        self.ccw_button = self._create_button(
+        self.ccw_button: QPushButton = self._create_button(
             f"{ICON_DIR}clock/counter_clockwise.png",
             lambda: self._set_prop_rot_dir(COUNTER_CLOCKWISE),
         )

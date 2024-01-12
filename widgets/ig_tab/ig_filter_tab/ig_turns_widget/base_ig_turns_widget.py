@@ -1,28 +1,15 @@
-from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
-from constants import (
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
-    DASH,
-    ICON_DIR,
-    NO_ROT,
-    STATIC,
-)
-from objects.motion.motion import Motion
-from widgets.attr_box_widgets.base_turns_widget import (
-    BaseTurnsWidget,
-)
+from constants import CLOCKWISE, DASH, ICON_DIR, NO_ROT, STATIC
+from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QPushButton, QHBoxLayout
-from widgets.attr_panel.base_attr_box import BaseAttrBox
+from objects.motion.motion import Motion
+from ....attr_box_widgets.base_turns_widget import BaseTurnsWidget
+from ....attr_panel.base_attr_box import BaseAttrBox
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_box import IGColorAttrBox
-    from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import (
-        IGMotionTypeAttrBox,
-    )
-    from widgets.ig_tab.ig_filter_tab.by_lead_state.ig_lead_state_attr_box import (
-        IGLeadStateAttrBox,
-    )
+    from ..by_color.ig_color_attr_box import IGColorAttrBox
+    from ..by_motion_type.ig_motion_type_attr_box import IGMotionTypeAttrBox
+    from ..by_lead_state.ig_lead_state_attr_box import IGLeadStateAttrBox
     from .ig_color_turns_widget import IGColorTurnsWidget
     from .ig_lead_state_turns_widget import IGLeadStateTurnsWidget
     from .ig_motion_type_turns_widget import IGMotionTypeTurnsWidget

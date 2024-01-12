@@ -6,6 +6,9 @@ from typing import TYPE_CHECKING, List, Literal, Tuple
 from objects.arrow.arrow_placement_manager.adjustment_key_generator import (
     AdjustmentKeyGenerator,
 )
+from objects.arrow.arrow_placement_manager.directional_tuple_generator import (
+    DirectionalTupleGenerator,
+)
 from .default_arrow_placement_manager import DefaultArrowPlacementManager
 from .special_arrow_placement_manager import SpecialArrowPlacementManager
 from objects.motion.motion import Motion
@@ -112,12 +115,21 @@ class MainArrowPlacementManager:
                 x, y = self.default_manager.get_default_adjustment(arrow)
         else:
             x, y = self.default_manager.get_default_adjustment(arrow)
-
-        directional_adjustments = self._generate_directional_tuples(
-            x, y, arrow.motion, arrow.motion_type
+        directional_generator = DirectionalTupleGenerator(
+            arrow.motion, self._get_other_motion(arrow.motion)
+        )
+        directional_adjustments = directional_generator.generate_directional_tuples(
+            x, y
         )
         quadrant_index = self._get_quadrant_index(arrow)
         return QPointF(*directional_adjustments[quadrant_index])
+
+    def _get_other_motion(self, motion: Motion) -> Motion:
+        return (
+            motion.scene.red_motion
+            if motion.scene.red_motion != motion
+            else motion.scene.blue_motion
+        )
 
     def _get_quadrant_index(self, arrow: Arrow) -> Literal[0, 1, 2, 3]:
         if self.pictograph.grid.grid_mode == DIAMOND:
@@ -125,66 +137,6 @@ class MainArrowPlacementManager:
                 return self._get_diamond_shift_quadrant_index(arrow.loc)
             elif arrow.motion_type in [STATIC, DASH]:
                 return self._get_diamond_static_dash_quadrant_index(arrow.loc)
-
-    def _generate_directional_tuples(
-        self, x, y, motion: Motion, motion_type: str
-    ) -> List[Tuple[int, int]]:
-        other_motion = (
-            motion.scene.red_motion
-            if motion.scene.red_motion != motion
-            else motion.scene.blue_motion
-        )
-        if motion_type == DASH and motion.turns > 0:
-            if motion.prop_rot_dir == other_motion.prop_rot_dir:
-                motion.scene.vtg_timing = SAME
-            elif motion.prop_rot_dir != other_motion.prop_rot_dir:
-                motion.scene.vtg_timing = OPP
-
-        shift_directional_tuples = {
-            (PRO, CLOCKWISE): [(x, y), (-y, x), (-x, -y), (y, -x)],
-            (PRO, COUNTER_CLOCKWISE): [(-y, -x), (x, -y), (y, x), (-x, y)],
-            (ANTI, CLOCKWISE): [(-y, -x), (x, -y), (y, x), (-x, y)],
-            (ANTI, COUNTER_CLOCKWISE): [(x, y), (-y, x), (-x, -y), (y, -x)],
-        }
-        no_rot_dash_directional_tuples = {
-            (DASH, NO_ROT): (
-                [(x, y), (-y, x), (-x, -y), (y, -x)]
-                if other_motion.prop_rot_dir == CLOCKWISE
-                else [(-x, y), (-y, -x), (x, -y), (y, x)]
-            )
-        }
-        same_dash_directional_tuples = {
-            (DASH, CLOCKWISE): ([(x, -y), (y, x), (-x, y), (-y, -x)]),
-            (DASH, COUNTER_CLOCKWISE): ([(-x, -y), (y, -x), (x, y), (-y, x)]),
-        }
-        opp_dash_directional_tuples = {
-            (DASH, CLOCKWISE): ([(x, -y), (y, x), (-x, y), (-y, -x)]),
-            (DASH, COUNTER_CLOCKWISE): ([(-x, -y), (y, -x), (x, y), (-y, x)]),
-        }
-        static_directional_tuples = {
-            (STATIC, CLOCKWISE, CLOCKWISE): [(x, -y), (y, x), (-x, y), (-y, -x)],
-            (STATIC, NO_ROT, CLOCKWISE): [(x, -y), (y, x), (-x, y), (-y, -x)],
-            (STATIC, COUNTER_CLOCKWISE): [(-x, -y), (y, -x), (x, y), (-y, x)],
-        }
-        if motion.motion_type == DASH and motion.prop_rot_dir == NO_ROT:
-            return no_rot_dash_directional_tuples.get(
-                (motion_type, motion.prop_rot_dir), []
-            )
-        elif motion.motion_type == DASH and motion.scene.vtg_timing == SAME:
-            return same_dash_directional_tuples.get(
-                (motion_type, motion.prop_rot_dir), []
-            )
-        elif motion.motion_type == DASH and motion.scene.vtg_timing == OPP:
-            return opp_dash_directional_tuples.get(
-                (motion_type, motion.prop_rot_dir), []
-            )
-
-        elif motion.motion_type == STATIC:
-            return static_directional_tuples.get(
-                (motion_type, motion.prop_rot_dir, other_motion.prop_rot_dir), []
-            )
-        else:
-            return shift_directional_tuples.get((motion_type, motion.prop_rot_dir), [])
 
     def _convert_turns_to_int(self, arrow):
         """Convert arrow turns from float to int if they are whole numbers."""
