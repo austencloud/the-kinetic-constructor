@@ -258,6 +258,12 @@ class Pictograph(QGraphicsScene):
         elif self.blue_motion.start_loc == self.red_motion.end_loc:
             return self.blue_motion
 
+    def get_trailing_motion(self) -> Motion:
+        if self.red_motion.start_loc == self.blue_motion.end_loc:
+            return self.blue_motion
+        elif self.blue_motion.start_loc == self.red_motion.end_loc:
+            return self.red_motion
+
     ### HELPERS ###
 
     def select_arrow(self, arrow):

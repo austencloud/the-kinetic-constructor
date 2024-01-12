@@ -1,12 +1,9 @@
-from collections import OrderedDict
 import json
 import re
 from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
-
-from numpy import place
 from constants import BLUE, LEADING, PRO, RED, TRAILING
-
-from objects.arrow.arrow import Arrow
+from ..arrow import Arrow
+from ..arrow_placement_manager.adjustment_key_generator import AdjustmentKeyGenerator
 from utilities.TypeChecking.Letters import (
     Type1_hybrid_letters,
     Type1_letters,
@@ -16,12 +13,11 @@ from utilities.TypeChecking.Letters import (
     non_hybrid_letters,
 )
 
-
 if TYPE_CHECKING:
-    from objects.arrow.arrow_placement_manager.main_arrow_placement_manager import (
+    from ..arrow_placement_manager.main_arrow_placement_manager import (
         MainArrowPlacementManager,
     )
-    from objects.pictograph.pictograph import Pictograph
+    from ...pictograph.pictograph import Pictograph
 
 
 class SpecialArrowPlacementManager:
@@ -33,6 +29,7 @@ class SpecialArrowPlacementManager:
         self.json_path = "arrow_placement/special_placements.json"
         self.special_placements = None
         self.data_modified = False
+        self.key_generator = AdjustmentKeyGenerator(pictograph)
 
     def _load_placements(self) -> Dict:
         try:
@@ -82,7 +79,7 @@ class SpecialArrowPlacementManager:
         # Load current placements
         self._load_placements()
 
-        adjustment_key = self._generate_adjustment_key(arrow)
+        adjustment_key = self._generate_adjustment_key()
         letter_data: Dict = self.special_placements.get(self.pictograph.letter, {})
         turn_data = letter_data.get(adjustment_key, {})
 
@@ -116,11 +113,7 @@ class SpecialArrowPlacementManager:
     ) -> Dict:
         default_mgr = self.pictograph.arrow_placement_manager.default_manager
         default_turn_data = default_mgr.get_default_adjustment(arrow)
-        other_arrow_default_turn_data = default_mgr.get_default_adjustment(
-            self.pictograph.blue_arrow
-            if arrow == self.pictograph.red_arrow
-            else self.pictograph.red_arrow
-        )
+
         key = self._determine_key(arrow)
 
         return {
@@ -177,191 +170,33 @@ class SpecialArrowPlacementManager:
         return dict(sorted(letter_data.items(), key=sort_key))
 
     def get_rot_angle_override(self, arrow: Arrow) -> Optional[int]:
-        adjustment_key = self._generate_adjustment_key(arrow)
+        adjustment_key = self._generate_adjustment_key()
         placements = self._load_placements()
         letter_adjustments = placements.get(self.pictograph.letter, {}).get(
             adjustment_key, {}
         )
         return letter_adjustments.get(f"{arrow.motion_type}_rot_angle", {})
 
-    def _generate_adjustment_key(self, arrow: Arrow) -> str:
-        letter = self.pictograph.letter
-        if letter in ["S", "T"]:
-            leading_motion = self.pictograph.get_leading_motion()
-            following_motion = (
-                self.pictograph.blue_arrow.motion
-                if leading_motion == self.pictograph.red_arrow.motion
-                else self.pictograph.red_arrow.motion
-            )
-            return f"({leading_motion.turns}, {following_motion.turns})"
-
-        elif letter in Type1_hybrid_letters:
-            pro_arrow = (
-                self.pictograph.arrows[RED]
-                if self.pictograph.arrows[RED].motion_type == PRO
-                else self.pictograph.arrows[BLUE]
-            )
-            anti_arrow = (
-                self.pictograph.arrows[RED]
-                if self.pictograph.arrows[RED].motion_type == PRO
-                else self.pictograph.arrows[BLUE]
-            )
-            return f"({pro_arrow.turns}, {anti_arrow.turns})"
-
-        elif letter in Type1_non_hybrid_letters:
-            blue_arrow = self.pictograph.arrows.get(BLUE)
-            red_arrow = self.pictograph.arrows.get(RED)
-            return f"({blue_arrow.turns}, {red_arrow.turns})"
-
-        elif letter in Type2_letters:
-            shift_motion = (
-                self.pictograph.red_motion
-                if self.pictograph.red_motion.is_shift()
-                else self.pictograph.blue_motion
-            )
-            static_motion = (
-                self.pictograph.red_motion
-                if self.pictograph.red_motion.is_static()
-                else self.pictograph.blue_motion
-            )
-
-            if static_motion.turns > 0:
-                if static_motion.turns in [0.0, 1.0, 2.0, 3.0]:
-                    static_motion.turns = int(static_motion.turns)
-
-                if static_motion.prop_rot_dir and shift_motion.prop_rot_dir:
-                    if static_motion.prop_rot_dir != shift_motion.prop_rot_dir:
-                        direction = "opp"
-                    elif static_motion.prop_rot_dir == shift_motion.prop_rot_dir:
-                        direction = "same"
-
-                    direction_prefix = direction[0]
-                    adjustment_key_str = f"({direction_prefix}, {shift_motion.turns}, {static_motion.turns})"
-                # elif either of the values are None
-                else:
-                    adjustment_key_str = None
-                    
-        elif letter in Type3_letters:
-            shift_motion = (
-                self.pictograph.red_motion
-                if self.pictograph.red_motion.is_shift()
-                else self.pictograph.blue_motion
-            )
-            dash_motion = (
-                self.pictograph.red_motion
-                if self.pictograph.red_motion.is_dash()
-                else self.pictograph.blue_motion
-            )
-
-            if dash_motion.turns > 0:
-                if dash_motion.turns in [0.0, 1.0, 2.0, 3.0]:
-                    dash_motion.turns = int(dash_motion.turns)
-
-                if dash_motion.prop_rot_dir and shift_motion.prop_rot_dir:
-                    if dash_motion.prop_rot_dir != shift_motion.prop_rot_dir:
-                        direction = "opp"
-                    elif dash_motion.prop_rot_dir == shift_motion.prop_rot_dir:
-                        direction = "same"
-
-                    direction_prefix = direction[0]
-                    adjustment_key_str = f"({direction_prefix}, {shift_motion.turns}, {dash_motion.turns})"
-                # elif either of the values are None
-                else:
-                    adjustment_key_str = None
-            elif dash_motion.turns == 0:
-                adjustment_key_str = f"({shift_motion.turns}, {dash_motion.turns})"
-            return adjustment_key_str
-
-        else:
-            return f"({arrow.turns}, {arrow.motion_type})"
+    def _generate_adjustment_key(self) -> str:
+        """Delegate the adjustment key generation to the AdjustmentKeyGenerator."""
+        return self.key_generator.generate(self.pictograph.letter)
 
     def get_adjustment_for_letter(
-        self, letter: str, arrow: Arrow, adjustment_key: str
+        self, letter: str, arrow: Arrow, adjustment_key: str = None
     ) -> Optional[Tuple[int, int]]:
+        if adjustment_key is None:
+            adjustment_key = self.key_generator.generate(letter)
         self.special_placements = self._load_placements()
-        letter_adjustments = self.special_placements.get(letter, {}).get(
-            adjustment_key, {}
-        )
+        letter_adjustments: Dict = self.special_placements.get(letter, {}).get(adjustment_key, {})
+        
         if letter in ["S", "T"]:
-            leading_motion = self.pictograph.get_leading_motion()
-            trailing_motion = (
-                self.pictograph.blue_arrow.motion
-                if leading_motion == self.pictograph.red_arrow.motion
-                else self.pictograph.red_arrow.motion
-            )
-            leading_motion.arrow.lead_state = LEADING
-            trailing_motion.arrow.lead_state = TRAILING
-
             return letter_adjustments.get(arrow.lead_state)
         elif letter in Type1_hybrid_letters:
             return letter_adjustments.get(arrow.motion_type)
         elif letter in non_hybrid_letters:
             return letter_adjustments.get(arrow.color)
-        elif letter in Type2_letters:
-            shift_motion = (
-                self.pictograph.red_motion
-                if self.pictograph.red_motion.is_shift()
-                else self.pictograph.blue_motion
-            )
-            static_motion = (
-                self.pictograph.red_motion
-                if self.pictograph.red_motion.is_static()
-                else self.pictograph.blue_motion
-            )
-
-            if static_motion.turns > 0:
-                if static_motion.prop_rot_dir != shift_motion.prop_rot_dir:
-                    direction = "opp"
-                elif static_motion.prop_rot_dir == shift_motion.prop_rot_dir:
-                    direction = "same"
-
-                direction_prefix = direction[0]
-                adjustment_key_str = (
-                    f"({direction_prefix}, {shift_motion.turns}, {static_motion.turns})"
-                )
-            elif static_motion.turns == 0:
-                adjustment_key_str = f"({shift_motion.turns}, {static_motion.turns})"
-            letter_adjustments = self.special_placements.get(
-                self.pictograph.letter, {}
-            ).get(adjustment_key_str, {})
-            if arrow.motion.is_static():
-                return letter_adjustments.get(static_motion.motion_type, {})
-            elif arrow.motion.is_shift():
-                return letter_adjustments.get(shift_motion.motion_type, {})
-        
-        elif letter in Type3_letters:
-            shift_motion = (
-                self.pictograph.red_motion
-                if self.pictograph.red_motion.is_shift()
-                else self.pictograph.blue_motion
-            )
-            dash_motion = (
-                self.pictograph.red_motion
-                if self.pictograph.red_motion.is_dash()
-                else self.pictograph.blue_motion
-            )
-
-            if dash_motion.turns > 0:
-                if dash_motion.prop_rot_dir != shift_motion.prop_rot_dir:
-                    direction = "opp"
-                elif dash_motion.prop_rot_dir == shift_motion.prop_rot_dir:
-                    direction = "same"
-
-                direction_prefix = direction[0]
-                adjustment_key_str = (
-                    f"({direction_prefix}, {shift_motion.turns}, {dash_motion.turns})"
-                )
-            elif dash_motion.turns == 0:
-                adjustment_key_str = f"({shift_motion.turns}, {dash_motion.turns})"
-            letter_adjustments = self.special_placements.get(
-                self.pictograph.letter, {}
-            ).get(adjustment_key_str, {})
-            if arrow.motion.is_dash():
-                return letter_adjustments.get(dash_motion.motion_type, {})
-            elif arrow.motion.is_shift():
-                return letter_adjustments.get(shift_motion.motion_type, {})
-        
-        
+        elif letter in Type2_letters or letter in Type3_letters:
+            return letter_adjustments.get(arrow.motion_type)
         
         return None
 

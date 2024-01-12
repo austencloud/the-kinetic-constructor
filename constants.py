@@ -8,6 +8,8 @@ tka_sequence_constructor_dir = os.path.dirname(current_dir)
 tka_app_dir = os.path.dirname(tka_sequence_constructor_dir)
 resources_path = tka_app_dir + "/resources"
 
+INTEGER_TURNS = [0.0, 1.0, 2.0, 3.0]
+
 NORTH = "n"
 EAST = "e"
 SOUTH = "s"
