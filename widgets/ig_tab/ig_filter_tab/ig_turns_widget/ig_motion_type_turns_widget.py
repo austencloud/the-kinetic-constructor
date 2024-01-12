@@ -20,9 +20,10 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
     ) -> None:
         """Adjust turns for a given pictograph based on motion type."""
         new_turns = None
-        for motion in pictograph.get_motions_by_type(self.attr_box.motion_type):
-            self.process_turns_adjustment_for_single_motion(motion, adjustment)
-            new_turns = motion.turns
+        for motion in pictograph.motions.values():
+            if motion.motion_type == self.attr_box.motion_type:
+                self.process_turns_adjustment_for_single_motion(motion, adjustment)
+        new_turns = motion.turns
         if new_turns in [0.0, 1.0, 2.0, 3.0]:
             new_turns = int(new_turns)
         self.update_turns_display(new_turns)
@@ -127,7 +128,7 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
     def _adjust_turns(self, adjustment) -> None:
         """Adjust turns for a given pictograph based on motion type."""
         simulate_cw_click = False
-        
+
         # Check if any static motion with zero turns exists
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():

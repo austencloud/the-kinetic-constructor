@@ -75,7 +75,7 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
 
         motion.set_turns(new_turns)
         pictograph_dict = {
-            f"{motion.motion_type}_turns": new_turns,
+            f"{motion.color}_turns": new_turns,
         }
         motion.scene.update_pictograph(pictograph_dict)
 
