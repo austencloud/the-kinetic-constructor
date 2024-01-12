@@ -201,7 +201,7 @@ class Arrow(GraphicalObject):
         self.update_arrow_svg()
         self._update_mirror()
         self._update_color()
-        self.arrow_location_manager.update_location()
+        # self.arrow_location_manager.update_location()
         self.arrow_rot_angle_manager.update_rotation()
 
     def mirror_svg(self) -> None:

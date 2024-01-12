@@ -329,7 +329,7 @@ class Pictograph(QGraphicsScene):
             self._update_from_pictograph_dict(pictograph_dict)
         self._update_letter()
         self._position_objects()
-        
+
         if self.graph_type == MAIN:
             self._update_attr_panel()
 
@@ -345,13 +345,12 @@ class Pictograph(QGraphicsScene):
                 self.motions[color].prop_rot_dir = motion_dict[PROP_ROT_DIR]
             if START_ORI in motion_dict:
                 self.motions[color].start_ori = motion_dict[START_ORI]
-            if START_LOC in motion_dict and END_LOC in motion_dict:
-                if motion_dict[COLOR] == BLUE:
-                    self.blue_motion.start_loc = motion_dict[START_LOC]
-                    self.blue_motion.end_loc = motion_dict[END_LOC]
-                elif motion_dict[COLOR] == RED:
-                    self.red_motion.start_loc = motion_dict[START_LOC]
-                    self.red_motion.end_loc = motion_dict[END_LOC]
+            if START_LOC in motion_dict:
+                self.motions[color].start_loc = motion_dict[START_LOC]
+            if END_LOC in motion_dict:
+                self.motions[color].end_loc = motion_dict[END_LOC]
+            if TURNS in motion_dict:
+                self.motions[color].turns = motion_dict[TURNS]
             if pictograph_dict.get(f"{color}_motion_type"):
                 arrow_dict = {
                     MOTION_TYPE: pictograph_dict.get(f"{color}_motion_type"),

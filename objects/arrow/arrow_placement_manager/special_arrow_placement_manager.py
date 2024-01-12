@@ -12,6 +12,7 @@ from utilities.TypeChecking.Letters import (
     Type1_letters,
     Type1_non_hybrid_letters,
     Type2_letters,
+    Type3_letters,
     non_hybrid_letters,
 )
 
@@ -42,7 +43,9 @@ class SpecialArrowPlacementManager:
             self.special_placements = {}
         return self.special_placements
 
-    def update_specific_entry_in_json(self, letter: str, adjustment_key: str, new_data: Dict) -> None:
+    def update_specific_entry_in_json(
+        self, letter: str, adjustment_key: str, new_data: Dict
+    ) -> None:
         """Update a specific entry in the JSON file.
 
         Args:
@@ -57,7 +60,9 @@ class SpecialArrowPlacementManager:
             letter_data[adjustment_key] = new_data
             data[letter] = letter_data
             json_str = json.dumps(data, indent=2, ensure_ascii=False)
-            formatted_json_str = re.sub(r'\[\s+(-?\d+),\s+(-?\d+)\s+\]', r'[\1, \2]', json_str)
+            formatted_json_str = re.sub(
+                r"\[\s+(-?\d+),\s+(-?\d+)\s+\]", r"[\1, \2]", json_str
+            )
             with open(self.json_path, "w", encoding="utf-8") as file:
                 file.write(formatted_json_str)
         except json.JSONDecodeError as e:
@@ -152,36 +157,6 @@ class SpecialArrowPlacementManager:
         else:
             return other_arrow.motion_type
 
-    def update_adjustments(self, adjustment: Tuple[int, int], arrow: "Arrow"):
-        if not arrow:
-            return
-
-        adjustment_key = self._generate_adjustment_key(arrow)
-        turn_data = self.special_placements.get(self.pictograph.letter, {}).setdefault(
-            adjustment_key, {}
-        )
-
-        self._update_turn_data(turn_data, arrow, adjustment)
-        self.save_json_data()
-
-    def update_specific_placement(
-        self, letter: str, adjustment_key: str, new_adjustment: Dict
-    ) -> None:
-        """Update a specific placement in the JSON file."""
-        with open(self.json_path, "r", encoding="utf-8") as file:
-            data = json.load(file)
-
-        if letter in data:
-            if adjustment_key in data[letter]:
-                data[letter][adjustment_key].update(new_adjustment)
-            else:
-                data[letter][adjustment_key] = new_adjustment
-        else:
-            data[letter] = {adjustment_key: new_adjustment}
-
-        with open(self.json_path, "w", encoding="utf-8") as file:
-            json.dump(data, file, indent=2, ensure_ascii=False)
-
     def _sort_entries(self, letter_data: Dict[str, Tuple[int, int]]) -> Dict:
         """Should use this occasionally to sort the entries in the JSON file."""
 
@@ -207,7 +182,7 @@ class SpecialArrowPlacementManager:
 
         return dict(sorted(letter_data.items(), key=sort_key))
 
-    def get_rotation_angle_override(self, arrow: Arrow) -> Optional[int]:
+    def get_rot_angle_override(self, arrow: Arrow) -> Optional[int]:
         adjustment_key = self._generate_adjustment_key(arrow)
         placements = self._load_placements()
         letter_adjustments = placements.get(self.pictograph.letter, {}).get(
@@ -331,6 +306,41 @@ class SpecialArrowPlacementManager:
                 return letter_adjustments.get(static_motion.motion_type, {})
             elif arrow.motion.is_shift():
                 return letter_adjustments.get(shift_motion.motion_type, {})
+        
+        elif letter in Type3_letters:
+            shift_motion = (
+                self.pictograph.red_motion
+                if self.pictograph.red_motion.is_shift()
+                else self.pictograph.blue_motion
+            )
+            dash_motion = (
+                self.pictograph.red_motion
+                if self.pictograph.red_motion.is_dash()
+                else self.pictograph.blue_motion
+            )
+
+            if dash_motion.turns > 0:
+                if dash_motion.prop_rot_dir != shift_motion.prop_rot_dir:
+                    direction = "opp"
+                elif dash_motion.prop_rot_dir == shift_motion.prop_rot_dir:
+                    direction = "same"
+
+                direction_prefix = direction[0]
+                adjustment_key_str = (
+                    f"({direction_prefix}, {shift_motion.turns}, {dash_motion.turns})"
+                )
+            elif dash_motion.turns == 0:
+                adjustment_key_str = f"({shift_motion.turns}, {dash_motion.turns})"
+            letter_adjustments = self.special_placements.get(
+                self.pictograph.letter, {}
+            ).get(adjustment_key_str, {})
+            if arrow.motion.is_dash():
+                return letter_adjustments.get(dash_motion.motion_type, {})
+            elif arrow.motion.is_shift():
+                return letter_adjustments.get(shift_motion.motion_type, {})
+        
+        
+        
         return None
 
     def _get_special_adjustment(

@@ -1,7 +1,10 @@
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
 from constants import (
+    DASH,
     ICON_DIR,
+    NO_ROT,
+    STATIC,
 )
 from objects.motion.motion import Motion
 from widgets.attr_box_widgets.base_turns_widget import (
@@ -67,6 +70,8 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
     ) -> None:
 
         new_turns = self._calculate_new_turns(motion.turns, adjustment)
+        if new_turns == 0 and motion.motion_type in [DASH, STATIC]:
+            motion.prop_rot_dir = NO_ROT
         motion.set_turns(new_turns)
 
         pictograph_dict = {

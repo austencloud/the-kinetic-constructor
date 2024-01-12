@@ -30,6 +30,7 @@ class Motion:
         motion_dict,
     ) -> None:
         self.scene = scene
+        self.manipulator = MotionManipulator(self)
         self.init_attributes()
         self.update_attributes(motion_dict)
 
@@ -53,7 +54,6 @@ class Motion:
                 setattr(self, attribute, value)
         if self.motion_type:
             self.end_ori: Orientations = self.get_end_ori()
-            self.manipulator = MotionManipulator(self)
 
     ### UPDATE ###
 
@@ -78,7 +78,6 @@ class Motion:
     def update_motion(self, motion_dict=None) -> None:
         if motion_dict:
             self.update_attributes(motion_dict)
-        self.arrow.loc = self.arrow.arrow_location_manager.get_arrow_location()
         arrow_dict = {
             LOC: self.arrow.arrow_location_manager.get_arrow_location(),
             MOTION_TYPE: self.motion_type,
@@ -88,8 +87,7 @@ class Motion:
             LOC: self.end_loc,
             ORI: self.get_end_ori(),
         }
-        if arrow_dict[LOC]:
-            self.arrow.loc = arrow_dict[LOC]
+
         self.arrow.update_arrow(arrow_dict)
         self.prop.update_prop(prop_dict)
 

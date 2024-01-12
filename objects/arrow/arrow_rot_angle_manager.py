@@ -31,7 +31,7 @@ class ArrowRotAngleManager:
         self._apply_rotation(angle)
 
     def _resolve_angle(self) -> int:
-        rotation_override = self._get_rotation_override()
+        rotation_override = self._get_final_rot_angle_override()
         if rotation_override == 0 or rotation_override:
             return rotation_override
         if hasattr(self.arrow.scene, LETTER):
@@ -43,17 +43,17 @@ class ArrowRotAngleManager:
             return self.angle_resolvers.get(self.arrow.motion.motion_type, lambda: 0)()
         return self.angle_resolvers.get(self.arrow.motion.motion_type, lambda: 0)()
 
-    def _get_rotation_override(self) -> Optional[int]:
+    def _get_final_rot_angle_override(self) -> Optional[int]:
         special_manager = (
             self.arrow.scene.arrow_placement_manager.special_placement_manager
         )
         if special_manager:
-            rotation_override = special_manager.get_rotation_angle_override(self.arrow)
+            rotation_override = special_manager.get_rot_angle_override(self.arrow)
             if rotation_override == 0 or rotation_override:
-                return self._adjust_angle_according_to_location(rotation_override)
+                return self._get_rot_angle_override_according_to_loc(rotation_override)
         return None
 
-    def _adjust_angle_according_to_location(self, rotation_override: int) -> int:
+    def _get_rot_angle_override_according_to_loc(self, rotation_override: int) -> int:
         if rotation_override == 0:
             if self.arrow.loc == NORTH:
                 return 0
@@ -69,7 +69,6 @@ class ArrowRotAngleManager:
                     return 270
                 elif self.arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
                     return 90
-                
 
         return rotation_override
 
@@ -232,24 +231,27 @@ class ArrowRotAngleManager:
         return 0
 
     def _get_default_dash_angle(self) -> int:
-        dash_loc_map = {
-            (NORTH, SOUTH): {RED: EAST, BLUE: WEST},
-            (SOUTH, NORTH): {RED: EAST, BLUE: WEST},
-            (EAST, WEST): {RED: NORTH, BLUE: SOUTH},
-            (WEST, EAST): {RED: NORTH, BLUE: SOUTH},
-        }
-        self.arrow.loc = dash_loc_map.get(
-            (self.arrow.motion.start_loc, self.arrow.motion.end_loc)
-        ).get(self.arrow.color)
-        dash_rot_map = {
-            (NORTH, SOUTH): 90,
-            (SOUTH, NORTH): 270,
-            (EAST, WEST): 180,
-            (WEST, EAST): 0,
-        }
-        return dash_rot_map.get(
-            (self.arrow.motion.start_loc, self.arrow.motion.end_loc)
+        direction_map = self._get_dash_direction_map()
+        return direction_map.get(self.arrow.motion.prop_rot_dir, {}).get(
+            self.arrow.loc, 0
         )
+
+    def _get_dash_direction_map(
+        self,
+    ) -> Dict[Orientations, Dict[PropRotDirs, Dict[Locations, int]]]:
+        orientation_map = {
+            IN: {
+                CLOCKWISE: {NORTH: 0, EAST: 270, SOUTH: 180, WEST: 90},
+                COUNTER_CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
+                NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
+            },
+            OUT: {
+                CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
+                COUNTER_CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
+                NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
+            },
+        }
+        return orientation_map.get(self.arrow.motion.start_ori, {})
 
     def _get_Y_Z_angle(self) -> int:
         if self.arrow.motion_type == STATIC:

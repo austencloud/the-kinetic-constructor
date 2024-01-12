@@ -41,6 +41,8 @@ class ArrowLocationManager:
         )
 
     def get_dash_location(self) -> Locations:
+        if self.arrow.scene.letter in Type3_letters and self.arrow.motion.turns == 0:
+            return self._zero_turns_type_3_dash_location()
         return (
             self._dash_location_zero_turns()
             if self.arrow.motion.turns == 0
@@ -70,19 +72,53 @@ class ArrowLocationManager:
                 ((WEST, EAST), (SOUTH, NORTH)): SOUTH,
             }
             arrow_location = loc_map.get(
-            (
-                (self.arrow.motion.start_loc, self.arrow.motion.end_loc),
-                (other_motion.start_loc, other_motion.end_loc),
-            ))
+                (
+                    (self.arrow.motion.start_loc, self.arrow.motion.end_loc),
+                    (other_motion.start_loc, other_motion.end_loc),
+                )
+            )
             return arrow_location
-            
 
     def _dash_location_non_zero_turns(self) -> Locations:
-        rot_map = {
+        loc_map = {
             CLOCKWISE: {NORTH: EAST, EAST: SOUTH, SOUTH: WEST, WEST: NORTH},
             COUNTER_CLOCKWISE: {NORTH: WEST, EAST: NORTH, SOUTH: EAST, WEST: SOUTH},
         }
-        return rot_map[self.arrow.motion.prop_rot_dir][self.arrow.motion.start_loc]
+        return loc_map[self.arrow.motion.prop_rot_dir][self.arrow.motion.start_loc]
+
+    def _zero_turns_type_3_dash_location(self) -> Locations:
+        shift_motion = (
+            self.arrow.scene.red_motion
+            if self.arrow.scene.red_motion.motion_type in [PRO, ANTI, FLOAT]
+            else self.arrow.scene.blue_motion
+        )
+        dash_motion = (
+            self.arrow.scene.red_motion
+            if self.arrow.scene.red_motion.motion_type == DASH
+            else self.arrow.scene.blue_motion
+        )
+        dash_location_map = {
+            (NORTH, NORTHWEST): WEST,
+            (NORTH, NORTHEAST): EAST,
+            (NORTH, SOUTHEAST): WEST,
+            (NORTH, SOUTHWEST): EAST,
+            (EAST, NORTHWEST): SOUTH,
+            (EAST, NORTHEAST): SOUTH,
+            (EAST, SOUTHEAST): NORTH,
+            (EAST, SOUTHWEST): NORTH,
+            (SOUTH, NORTHWEST): EAST,
+            (SOUTH, NORTHEAST): WEST,
+            (SOUTH, SOUTHEAST): EAST,
+            (SOUTH, SOUTHWEST): WEST,
+            (WEST, NORTHWEST): SOUTH,
+            (WEST, NORTHEAST): SOUTH,
+            (WEST, SOUTHEAST): NORTH,
+            (WEST, SOUTHWEST): NORTH,
+        }
+        dash_location = dash_location_map.get(
+            (dash_motion.start_loc, shift_motion.arrow.loc)
+        )
+        return dash_location
 
     def get_opposite_arrow(self) -> "Arrow":
         return self.arrow.scene.arrows[RED if self.arrow.color == BLUE else BLUE]

@@ -16,12 +16,7 @@ if TYPE_CHECKING:
 
 class MotionManipulator:
     def __init__(self, motion: "Motion"):
-        self.pictograph = motion.scene
         self.motion = motion
-        self.arrow = motion.arrow
-        self.prop = motion.prop
-        self.color = motion.color
-        self.other_color = RED if self.color == BLUE else BLUE
 
     def move_wasd(self, direction: Directions) -> None:
         wasd_location_map = {
@@ -30,26 +25,26 @@ class MotionManipulator:
             DOWN: {NORTHEAST: SOUTHEAST, NORTHWEST: SOUTHWEST},
             RIGHT: {NORTHWEST: NORTHEAST, SOUTHWEST: SOUTHEAST},
         }
-        current_location = self.arrow.loc
+        current_location = self.motion.arrow.loc
         new_location = wasd_location_map.get(direction, {}).get(
             current_location, current_location
         )
         (new_start_loc, new_end_loc) = get_start_end_locs(
-            self.arrow.motion_type, self.motion.prop_rot_dir, new_location
+            self.motion.arrow.motion_type, self.motion.prop_rot_dir, new_location
         )
         pictograph_dict = {
-            f"{self.color}_start_location": new_start_loc,
-            f"{self.color}_end_location": new_end_loc,
+            f"{self.motion.color}_start_location": new_start_loc,
+            f"{self.motion.color}_end_location": new_end_loc,
         }
-        self.pictograph.update_pictograph(pictograph_dict)
+        self.motion.scene.update_pictograph(pictograph_dict)
 
     ### MIRRORING ###
 
     def swap_rot_dir(self) -> None:
-        if self.arrow.is_svg_mirrored:
-            self.arrow.unmirror_svg()
-        elif not self.arrow.is_svg_mirrored:
-            self.arrow.mirror_svg()
+        if self.motion.arrow.is_svg_mirrored:
+            self.motion.arrow.unmirror_svg()
+        elif not self.motion.arrow.is_svg_mirrored:
+            self.motion.arrow.mirror_svg()
 
         if self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
             new_rot_dir = CLOCKWISE
@@ -62,20 +57,20 @@ class MotionManipulator:
         new_end_loc = self.motion.start_loc
 
         pictograph_dict = {
-            f"{self.color}_start_location": new_start_loc,
-            f"{self.color}_end_location": new_end_loc,
-            f"{self.color}_prop_rot_dir": new_rot_dir,
+            f"{self.motion.color}_start_location": new_start_loc,
+            f"{self.motion.color}_end_location": new_end_loc,
+            f"{self.motion.color}_prop_rot_dir": new_rot_dir,
         }
-        self.pictograph.update_pictograph(pictograph_dict)
+        self.motion.scene.update_pictograph(pictograph_dict)
 
     ### MOTION TYPE ###
 
     def swap_motion_type(self) -> None:
-        if self.arrow.motion_type == ANTI:
+        if self.motion.arrow.motion_type == ANTI:
             new_motion_type = PRO
-        elif self.arrow.motion_type == PRO:
+        elif self.motion.arrow.motion_type == PRO:
             new_motion_type = ANTI
-        elif self.arrow.motion_type == STATIC:
+        elif self.motion.arrow.motion_type == STATIC:
             new_motion_type = STATIC
 
         if self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
@@ -85,20 +80,20 @@ class MotionManipulator:
         elif self.motion.prop_rot_dir == NO_ROT:
             new_rot_dir = NO_ROT
 
-        self.prop.swap_ori(self.prop.ori)
+        self.motion.prop.swap_ori(self.motion.prop.ori)
         pictograph_dict = {
-            f"{self.color}_motion_type": new_motion_type,
-            f"{self.color}_prop_rot_dir": new_rot_dir,
-            f"{self.color}_end_ori": self.prop.ori,
+            f"{self.motion.color}_motion_type": new_motion_type,
+            f"{self.motion.color}_prop_rot_dir": new_rot_dir,
+            f"{self.motion.color}_end_ori": self.motion.prop.ori,
         }
-        self.pictograph.update_pictograph(pictograph_dict)
+        self.motion.scene.update_pictograph(pictograph_dict)
 
     ### ROTATION ###
 
     def rotate_motion(self, rotation_direction: Handpaths) -> None:
         mode_mappings = self._get_mode_mappings()
         rotate_func, locations = mode_mappings.get(
-            (self.motion.motion_type, self.arrow.pictograph.grid.grid_mode),
+            (self.motion.motion_type, self.motion.arrow.pictograph.grid.grid_mode),
             (None, None),
         )
 
@@ -139,7 +134,7 @@ class MotionManipulator:
         """
         Generic method to rotate arrows based on the handpath and locations.
         """
-        current_index = locations.index(self.arrow.loc)
+        current_index = locations.index(self.motion.arrow.loc)
         new_index = (
             (current_index + 1) % len(locations)
             if handpath == CW_HANDPATH
@@ -148,7 +143,7 @@ class MotionManipulator:
         new_location = locations[new_index]
 
         new_start_loc, new_end_loc = get_start_end_locs(
-            self.arrow.motion_type, self.motion.prop_rot_dir, new_location
+            self.motion.arrow.motion_type, self.motion.prop_rot_dir, new_location
         )
 
         self._update_motion_attributes(new_location, new_start_loc, new_end_loc)
@@ -157,10 +152,10 @@ class MotionManipulator:
         """
         Update motion attributes and reflect changes in the pictograph.
         """
-        self.arrow.loc = new_location
+        self.motion.arrow.loc = new_location
         self.motion.start_loc = new_start_loc
         self.motion.end_loc = new_end_loc
-        self.prop.loc = new_end_loc
+        self.motion.prop.loc = new_end_loc
 
         self._refresh_pictograph()
 
@@ -168,16 +163,16 @@ class MotionManipulator:
         """
         Refresh the arrow and prop, and update the pictograph.
         """
-        self.arrow.scene.update_pictograph()
+        self.motion.arrow.scene.update_pictograph()
 
     def delete_prop(self) -> None:
-        self.prop.scene.removeItem(self.prop)
-        self.prop.scene.removeItem(self.prop.scene.ghost_props[self.prop.color])
-        self.prop.motion.arrow.clear_attributes()
-        self.prop.motion.arrow.ghost.clear_attributes()
-        self.prop.motion.clear_attributes()
-        self.prop.clear_attributes()
-        self.prop.scene.update_pictograph()
+        self.motion.prop.scene.removeItem(self.motion.prop)
+        self.motion.prop.scene.removeItem(self.motion.prop.scene.ghost_props[self.motion.prop.color])
+        self.motion.prop.motion.arrow.clear_attributes()
+        self.motion.prop.motion.arrow.ghost.clear_attributes()
+        self.motion.prop.motion.clear_attributes()
+        self.motion.prop.clear_attributes()
+        self.motion.prop.scene.update_pictograph()
 
     def set_prop_rot_dir(self, prop_rot_dir: str) -> None:
         self.motion.prop_rot_dir = prop_rot_dir

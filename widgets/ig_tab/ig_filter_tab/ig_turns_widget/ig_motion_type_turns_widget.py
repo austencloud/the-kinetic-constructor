@@ -1,6 +1,6 @@
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
-from constants import CLOCKWISE, COUNTER_CLOCKWISE, DASH, ICON_DIR, STATIC
+from constants import CLOCKWISE, COUNTER_CLOCKWISE, DASH, ICON_DIR, NO_ROT, STATIC
 from objects.pictograph.pictograph import Pictograph
 from .base_ig_turns_widget import BaseIGTurnsWidget
 
@@ -27,7 +27,7 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
             new_turns = int(new_turns)
         self.update_turns_display(new_turns)
 
-    def _set_turns_by_motion_type(self, new_turns: Union[int, float]) -> None:
+    def _direct_set_turns_by_motion_type(self, new_turns: Union[int, float]) -> None:
         """Set turns for motions of a specific type to a new value."""
         self.update_turns_display(new_turns)
 
@@ -36,7 +36,7 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         if self.attr_box.motion_type in [DASH, STATIC]:
             for pictograph in self.attr_box.pictographs.values():
                 for motion in pictograph.motions.values():
-                    if motion.motion_type == STATIC and motion.turns == 0:
+                    if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
                         simulate_cw_click = True
                         break
                 if simulate_cw_click:
@@ -54,7 +54,9 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.motion_type == self.attr_box.motion_type:
-                    if motion.motion_type == STATIC and motion.turns == 0:
+                    if new_turns == 0 and motion.motion_type in [DASH, STATIC]:
+                        motion.prop_rot_dir = NO_ROT
+                    if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
                         if self.attr_box.header_widget.cw_button.isChecked():
                             motion.prop_rot_dir = CLOCKWISE
                         elif self.attr_box.header_widget.ccw_button.isChecked():
@@ -72,7 +74,7 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
 
     def _update_turns_directly_by_motion_type(self, turns: str) -> None:
         turns = self._convert_turns_from_str_to_num(turns)
-        self._set_turns_by_motion_type(turns)
+        self._direct_set_turns_by_motion_type(turns)
 
     def update_ig_motion_type_turnbox_size(self) -> None:
         """Update the size of the turnbox for motion type."""
@@ -159,4 +161,4 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         # self.attr_box.header_widget.cw_button.click()
 
     def _set_turns(self, new_turns: int | float) -> None:
-        self._set_turns_by_motion_type(new_turns)
+        self._direct_set_turns_by_motion_type(new_turns)
