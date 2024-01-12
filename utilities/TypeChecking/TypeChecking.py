@@ -62,3 +62,5 @@ MotionTypeCombinations = Literal[
     "dash_vs_dash",
 ]
 LeadStates = Literal["leading", "trailing"]
+VtgTimings = Literal["split", "together"]
+VtgDirections = Literal["same", "opp"]

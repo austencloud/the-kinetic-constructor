@@ -33,6 +33,15 @@ CW_HANDPATH = "cw_handpath"
 CCW_HANDPATH = "ccw_handpath"
 
 
+# Vtg Directions
+SAME = "same"
+OPP = "opp"
+
+# Vtg Timings
+SPLIT = "split"
+TOG = "tog"
+
+
 START_POS = "start_pos"
 END_POS = "end_pos"
 

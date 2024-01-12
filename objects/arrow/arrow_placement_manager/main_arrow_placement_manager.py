@@ -3,7 +3,9 @@ from constants import *
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, List, Literal, Tuple
 
-from objects.arrow.arrow_placement_manager.adjustment_key_generator import AdjustmentKeyGenerator
+from objects.arrow.arrow_placement_manager.adjustment_key_generator import (
+    AdjustmentKeyGenerator,
+)
 from .default_arrow_placement_manager import DefaultArrowPlacementManager
 from .special_arrow_placement_manager import SpecialArrowPlacementManager
 from objects.motion.motion import Motion
@@ -76,7 +78,6 @@ class MainArrowPlacementManager:
         arrow.setPos(new_pos)
         arrow.arrow_rot_angle_manager.update_rotation()
 
-
     def _get_initial_pos(self, arrow: Arrow) -> QPointF:
         if arrow.motion_type in [PRO, ANTI]:
             return self._get_diamond_shift_pos(arrow)
@@ -133,11 +134,20 @@ class MainArrowPlacementManager:
             if motion.scene.red_motion != motion
             else motion.scene.blue_motion
         )
-        directional_tuples = {
+        if motion_type == DASH and motion.turns > 0:
+            if motion.prop_rot_dir == other_motion.prop_rot_dir:
+                motion.scene.vtg_timing = SAME
+            elif motion.prop_rot_dir != other_motion.prop_rot_dir:
+                motion.scene.vtg_timing = OPP
+
+        shift_directional_tuples = {
             (PRO, CLOCKWISE): [(x, y), (-y, x), (-x, -y), (y, -x)],
             (PRO, COUNTER_CLOCKWISE): [(-y, -x), (x, -y), (y, x), (-x, y)],
             (ANTI, CLOCKWISE): [(-y, -x), (x, -y), (y, x), (-x, y)],
             (ANTI, COUNTER_CLOCKWISE): [(x, y), (-y, x), (-x, -y), (y, -x)],
+        }
+
+        dash_directional_tuples = {
             (DASH, NO_ROT): (
                 [(x, y), (-y, x), (-x, -y), (y, -x)]
                 if other_motion.prop_rot_dir == CLOCKWISE
@@ -153,12 +163,21 @@ class MainArrowPlacementManager:
                 if other_motion.prop_rot_dir == CLOCKWISE
                 else [(-x, -y), (y, -x), (x, y), (-y, x)]
             ),
+        }
+
+        static_directional_tuples = {
             (STATIC, CLOCKWISE, CLOCKWISE): [(x, -y), (y, x), (-x, y), (-y, -x)],
             (STATIC, NO_ROT, CLOCKWISE): [(x, -y), (y, x), (-x, y), (-y, -x)],
             (STATIC, COUNTER_CLOCKWISE): [(-x, -y), (y, -x), (x, y), (-y, x)],
         }
-
-        return directional_tuples.get((motion_type, motion.prop_rot_dir), [])
+        if motion.motion_type == DASH:
+            return dash_directional_tuples.get((motion_type, motion.prop_rot_dir), [])
+        elif motion.motion_type == STATIC:
+            return static_directional_tuples.get(
+                (motion_type, motion.prop_rot_dir, other_motion.prop_rot_dir), []
+            )
+        else:
+            return shift_directional_tuples.get((motion_type, motion.prop_rot_dir), [])
 
     def _convert_turns_to_int(self, arrow):
         """Convert arrow turns from float to int if they are whole numbers."""
@@ -176,9 +195,7 @@ class MainArrowPlacementManager:
 
     def _generate_shift_static_key(self):
         """Generate the key for Type2 letters."""
-        shift = (
-            self.red_arrow if self.red_arrow.motion.is_shift() else self.blue_arrow
-        )
+        shift = self.red_arrow if self.red_arrow.motion.is_shift() else self.blue_arrow
         static = (
             self.red_arrow if self.red_arrow.motion.is_static() else self.blue_arrow
         )
@@ -195,7 +212,7 @@ class MainArrowPlacementManager:
     def generate_adjustment_key(self) -> str:
         """Generate a unique key to determine arrow adjustment based on the letter."""
         return self.key_generator.generate(self.pictograph.letter)
-    
+
     def _get_pro_anti_arrows(self) -> Tuple[Arrow, Arrow]:
         pro_arrow = (
             self.blue_arrow if self.blue_arrow.motion_type == PRO else self.red_arrow
