@@ -39,6 +39,19 @@ class Arrow(GraphicalObject):
     def __init__(self, scene, arrow_dict, motion: "Motion") -> None:
         super().__init__(scene)
         self.motion = motion
+        self.scene: Pictograph | ArrowBox = scene
+        self.arrow_rot_angle_manager = ArrowRotAngleManager(self)
+        self.arrow_location_manager = ArrowLocationManager(self)
+        self.motion_type: MotionTypes = None
+        self.ghost: GhostArrow = None
+        self.is_svg_mirrored: bool = False
+        self.color = arrow_dict[COLOR]
+        self.prop: Prop = None
+        # self.setup_arrow(scene, arrow_dict)
+
+    def setup_arrow(self, arrow_dict):
+        self.motion_type = arrow_dict[MOTION_TYPE]
+        self.turns = arrow_dict[TURNS]
 
         self.svg_file = self.get_svg_file(
             arrow_dict[MOTION_TYPE],
@@ -47,14 +60,8 @@ class Arrow(GraphicalObject):
         self.setup_svg_renderer(self.svg_file)
         self.setAcceptHoverEvents(True)
         self.update_attributes(arrow_dict)
-        self.arrow_rot_angle_manager = ArrowRotAngleManager(self)
-        self.arrow_location_manager = ArrowLocationManager(self)
-        
-        self.prop: Prop = None
-        self.scene: Pictograph | ArrowBox = scene
-        self.is_svg_mirrored: bool = False
+
         self.is_dragging: bool = False
-        self.ghost: GhostArrow = None
         self.loc: Locations = None
         self.is_ghost: bool = False
         self.drag_offset = QPointF(0, 0)

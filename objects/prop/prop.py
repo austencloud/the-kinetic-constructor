@@ -48,7 +48,7 @@ class Prop(GraphicalObject):
         self.axis: Axes = None
         self.color: Colors = prop_dict[COLOR]
         self.loc: Locations = prop_dict[LOC]
-        self.ori: Orientations = prop_dict[ORIENTATION]
+        self.ori: Orientations = prop_dict[ORI]
         self.center = self.boundingRect().center()
 
     ### MOUSE EVENTS ###

@@ -119,6 +119,7 @@ class IGScrollArea(PictographScrollArea):
                             pictograph_dict[f"{motion_color}_turns"] = turns_value
 
                     ig_pictograph.update_pictograph(pictograph_dict)
+                    
                 image_key = self.generate_image_name(ig_pictograph, letter)
                 ordered_pictographs[image_key] = ig_pictograph
         for index, (key, ig_pictograph) in enumerate(ordered_pictographs.items()):

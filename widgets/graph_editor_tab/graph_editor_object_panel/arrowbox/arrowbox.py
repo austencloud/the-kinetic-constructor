@@ -119,8 +119,6 @@ class ArrowBox(BaseObjectBox):
         for arrow in arrows:
             arrow_dict = {
                 COLOR: arrow.color,
-                MOTION_TYPE: arrow.motion_type,
-                TURNS: arrow.turns,
             }
 
         return arrows

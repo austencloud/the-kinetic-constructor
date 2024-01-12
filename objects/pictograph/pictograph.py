@@ -209,7 +209,6 @@ class Pictograph(QGraphicsScene):
                         min_distance = distance
                         nearest_point_name = name
                         nearest_point_coords = point
-                
 
         elif self.grid.grid_mode == BOX:
             for name, point in self.grid.box_hand_points.items():
@@ -324,38 +323,54 @@ class Pictograph(QGraphicsScene):
         return all(key in pictograph_dict for key in required_keys)
 
     def update_pictograph(self, pictograph_dict: Dict = None) -> None:
-        if pictograph_dict is not None:
+        self._update_letter()
+        if pictograph_dict:
             if self.is_complete(pictograph_dict):
                 self.pictograph_dict = pictograph_dict
             self._update_from_pictograph_dict(pictograph_dict)
-
         self._position_objects()
-        self._update_letter()
+
         if self.graph_type == MAIN:
             self._update_attr_panel()
 
     def _update_from_pictograph_dict(self, pictograph_dict):
         self.update_attributes(pictograph_dict)
         motion_dicts = []
-        for color in [RED, BLUE]:
+        for color in [BLUE, RED]:
             motion_dict = self._create_motion_dict(pictograph_dict, color)
             motion_dicts.append(motion_dict)
-            if "start_loc" in motion_dict and "end_loc" in motion_dict:
+            if MOTION_TYPE in motion_dict:
+                self.motions[color].motion_type = motion_dict[MOTION_TYPE]
+            if PROP_ROT_DIR in motion_dict:
+                self.motions[color].prop_rot_dir = motion_dict[PROP_ROT_DIR]
+            if START_ORI in motion_dict:
+                self.motions[color].start_ori = motion_dict[START_ORI]
+            if START_LOC in motion_dict and END_LOC in motion_dict:
                 if motion_dict[COLOR] == BLUE:
                     self.blue_motion.start_loc = motion_dict[START_LOC]
                     self.blue_motion.end_loc = motion_dict[END_LOC]
                 elif motion_dict[COLOR] == RED:
                     self.red_motion.start_loc = motion_dict[START_LOC]
                     self.red_motion.end_loc = motion_dict[END_LOC]
+            if pictograph_dict.get(f"{color}_motion_type"):
+                arrow_dict = {
+                    MOTION_TYPE: pictograph_dict.get(f"{color}_motion_type"),
+                    TURNS: pictograph_dict.get(f"{color}_turns"),
+                }
 
-        for motion_dict in motion_dicts:
-            self.motions[motion_dict[COLOR]].update_motion(motion_dict)
-        for arrow in self.arrows.values():
-            if not arrow.isVisible():
-                arrow.show()
-        for prop in self.props.values():
-            if not prop.isVisible():
-                prop.show()
+                self.motions[color].arrow.setup_arrow(arrow_dict)
+                self.ghost_arrows[color].setup_arrow(arrow_dict)
+                self.motions[color].arrow.show()
+                prop_dict = {
+                    PROP_ROT_DIR: pictograph_dict.get(f"{color}_prop_rot_dir"),
+                    ORI: self.motions[color].get_end_ori(),
+                }
+                self.motions[color].prop.update_attributes(prop_dict)
+                self.ghost_props[color].update_attributes(prop_dict)
+                self.motions[color].prop.show()
+                self.motions[color].prop.update_prop()
+
+        self._update_motions()
 
     def _update_attr_panel(self) -> None:
         for motion in self.motions.values():

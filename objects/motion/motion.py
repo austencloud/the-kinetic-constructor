@@ -75,9 +75,10 @@ class Motion:
         self.start_ori = None
         self.end_ori = None
 
-    def update_motion(self, motion_dict = None) -> None:
+    def update_motion(self, motion_dict=None) -> None:
         if motion_dict:
             self.update_attributes(motion_dict)
+        self.arrow.loc = self.arrow.arrow_location_manager.get_arrow_location()
         arrow_dict = {
             LOC: self.arrow.arrow_location_manager.get_arrow_location(),
             MOTION_TYPE: self.motion_type,
@@ -85,8 +86,10 @@ class Motion:
         }
         prop_dict = {
             LOC: self.end_loc,
-            ORIENTATION: self.get_end_ori(),
+            ORI: self.get_end_ori(),
         }
+        if arrow_dict[LOC]:
+            self.arrow.loc = arrow_dict[LOC]
         self.arrow.update_arrow(arrow_dict)
         self.prop.update_prop(prop_dict)
 
@@ -324,9 +327,8 @@ class Motion:
 
     def is_dash_or_static(self) -> bool:
         return self.motion_type in [DASH, STATIC]
-    
+
     def set_turns(self, turns: Turns) -> None:
         self.turns = turns
         self.arrow.turns = turns
         self.arrow.ghost.turns = turns
-        

@@ -1,4 +1,6 @@
+import re
 from typing import TYPE_CHECKING, Callable
+from utilities.TypeChecking.Letters import Type3_letters
 from utilities.TypeChecking.TypeChecking import Locations
 from constants import *
 
@@ -13,18 +15,19 @@ class ArrowLocationManager:
             PRO: self.get_shift_location,
             ANTI: self.get_shift_location,
             FLOAT: self.get_shift_location,
-            DASH: self.resolve_dash_location,
+            DASH: self.get_dash_location,
             STATIC: self.get_static_location,
         }
 
     def update_location(self) -> None:
-        if not self.arrow.is_ghost and self.arrow.ghost and not self.arrow.loc:
+        if not self.arrow.is_ghost and self.arrow.ghost:
             self.arrow.loc = self.get_arrow_location()
             self.arrow.ghost.loc = self.arrow.loc
 
     def get_arrow_location(self) -> Locations:
         resolve_location: Callable = self.location_resolvers.get(self.arrow.motion_type)
-        return resolve_location()
+        if resolve_location:
+            return resolve_location()
 
     def get_shift_location(self) -> Locations:
         direction_pairs = {
@@ -37,7 +40,7 @@ class ArrowLocationManager:
             frozenset({self.arrow.motion.start_loc, self.arrow.motion.end_loc})
         )
 
-    def resolve_dash_location(self) -> Locations:
+    def get_dash_location(self) -> Locations:
         return (
             self._dash_location_zero_turns()
             if self.arrow.motion.turns == 0
@@ -50,6 +53,8 @@ class ArrowLocationManager:
             if self.arrow.color == BLUE
             else self.arrow.scene.motions[BLUE]
         )
+        if self.arrow.scene.letter in Type3_letters:
+            return self._default_dash_location()
         if self.arrow.scene.letter in ["Φ", "Ψ"]:
             dash_map = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
             return dash_map.get(other_motion.arrow.loc, self._default_dash_location())

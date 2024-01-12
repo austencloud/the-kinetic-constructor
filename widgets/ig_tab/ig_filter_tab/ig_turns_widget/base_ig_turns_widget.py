@@ -65,12 +65,6 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         motion: Motion,
         adjustment: float,
     ) -> None:
-        from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import (
-            IGMotionTypeAttrBox,
-        )
-        from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_box import (
-            IGColorAttrBox,
-        )
 
         new_turns = self._calculate_new_turns(motion.turns, adjustment)
         motion.set_turns(new_turns)
