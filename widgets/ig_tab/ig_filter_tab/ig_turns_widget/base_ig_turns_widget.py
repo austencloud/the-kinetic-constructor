@@ -78,14 +78,13 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         if new_turns > 0 and motion.motion_type in [DASH, STATIC]:
             if motion.turns == 0:
                 simulate_cw_click = True
-
+                motion.prop_rot_dir = CLOCKWISE
             if simulate_cw_click:
                 if (
                     not self.attr_box.header_widget.cw_button.isChecked()
                     and not self.attr_box.header_widget.ccw_button.isChecked()
                 ):
                     self._simulate_cw_button_click_in_header_widget()
-
 
         motion.set_turns(new_turns)
         pictograph_dict = {

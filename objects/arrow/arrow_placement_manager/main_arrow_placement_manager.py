@@ -146,32 +146,39 @@ class MainArrowPlacementManager:
             (ANTI, CLOCKWISE): [(-y, -x), (x, -y), (y, x), (-x, y)],
             (ANTI, COUNTER_CLOCKWISE): [(x, y), (-y, x), (-x, -y), (y, -x)],
         }
-
-        dash_directional_tuples = {
+        no_rot_dash_directional_tuples = {
             (DASH, NO_ROT): (
                 [(x, y), (-y, x), (-x, -y), (y, -x)]
                 if other_motion.prop_rot_dir == CLOCKWISE
                 else [(-x, y), (-y, -x), (x, -y), (y, x)]
-            ),
-            (DASH, CLOCKWISE): (
-                [(x, -y), (y, x), (-x, y), (-y, -x)]
-                if other_motion.prop_rot_dir == CLOCKWISE
-                else [(-y, -x), (x, -y), (y, x), (-x, y)]
-            ),
-            (DASH, COUNTER_CLOCKWISE): (
-                [(y, -x), (x, y), (-y, x), (-x, -y)]
-                if other_motion.prop_rot_dir == CLOCKWISE
-                else [(-x, -y), (y, -x), (x, y), (-y, x)]
-            ),
+            )
         }
-
+        same_dash_directional_tuples = {
+            (DASH, CLOCKWISE): ([(x, -y), (y, x), (-x, y), (-y, -x)]),
+            (DASH, COUNTER_CLOCKWISE): ([(-x, -y), (y, -x), (x, y), (-y, x)]),
+        }
+        opp_dash_directional_tuples = {
+            (DASH, CLOCKWISE): ([(x, -y), (y, x), (-x, y), (-y, -x)]),
+            (DASH, COUNTER_CLOCKWISE): ([(-x, -y), (y, -x), (x, y), (-y, x)]),
+        }
         static_directional_tuples = {
             (STATIC, CLOCKWISE, CLOCKWISE): [(x, -y), (y, x), (-x, y), (-y, -x)],
             (STATIC, NO_ROT, CLOCKWISE): [(x, -y), (y, x), (-x, y), (-y, -x)],
             (STATIC, COUNTER_CLOCKWISE): [(-x, -y), (y, -x), (x, y), (-y, x)],
         }
-        if motion.motion_type == DASH:
-            return dash_directional_tuples.get((motion_type, motion.prop_rot_dir), [])
+        if motion.motion_type == DASH and motion.prop_rot_dir == NO_ROT:
+            return no_rot_dash_directional_tuples.get(
+                (motion_type, motion.prop_rot_dir), []
+            )
+        elif motion.motion_type == DASH and motion.scene.vtg_timing == SAME:
+            return same_dash_directional_tuples.get(
+                (motion_type, motion.prop_rot_dir), []
+            )
+        elif motion.motion_type == DASH and motion.scene.vtg_timing == OPP:
+            return opp_dash_directional_tuples.get(
+                (motion_type, motion.prop_rot_dir), []
+            )
+
         elif motion.motion_type == STATIC:
             return static_directional_tuples.get(
                 (motion_type, motion.prop_rot_dir, other_motion.prop_rot_dir), []
