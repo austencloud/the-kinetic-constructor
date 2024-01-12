@@ -164,7 +164,9 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
         return label
 
     def resize_header_widget(self) -> None:
+        self.setMinimumHeight(int(self.attr_box.height() / 4))
         self.setMaximumHeight(int(self.attr_box.height() / 4))
+
         if self.motion_type in [DASH, STATIC]:
             button_size = int(self.height() * 0.9)
             for button in self.prop_rot_dir_buttons:

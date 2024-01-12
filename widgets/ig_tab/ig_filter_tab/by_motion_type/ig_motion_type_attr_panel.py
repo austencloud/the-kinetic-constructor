@@ -58,6 +58,8 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
         """Update the visibility of motion type widgets based on selected letters."""
         if not selected_letters:
             self.placeholder_label.show()
+            for box in self.boxes:
+                box.hide()
         else:
             self.hide_placeholder_message()
             motion_types_in_use = set()
