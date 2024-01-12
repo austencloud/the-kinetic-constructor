@@ -149,7 +149,7 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
                     and not self.attr_box.header_widget.ccw_button.isChecked()
                 ):
                     self._simulate_cw_button_click_in_header_widget()
-                    
+
         if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
             if hasattr(self.attr_box.header_widget, "cw_button"):
                 if self.attr_box.header_widget.cw_button.isChecked():
@@ -160,9 +160,8 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
             self.adjust_turns_by_motion_type(pictograph, adjustment)
 
     def _simulate_cw_button_click_in_header_widget(self):
-        # Simulate the CW button click
         self.attr_box.header_widget.cw_button.setChecked(True)
-        # self.attr_box.header_widget.cw_button.click()
+        # self.attr_box.header_widget.cw_button.click
 
     def _set_turns(self, new_turns: int | float) -> None:
         self._direct_set_turns_by_motion_type(new_turns)

@@ -326,6 +326,7 @@ class Pictograph(QGraphicsScene):
         if pictograph_dict:
             if self.is_complete(pictograph_dict):
                 self.pictograph_dict = pictograph_dict
+
             self._update_from_pictograph_dict(pictograph_dict)
         self._update_letter()
         self._position_objects()
@@ -336,6 +337,22 @@ class Pictograph(QGraphicsScene):
     def _update_from_pictograph_dict(self, pictograph_dict):
         self.update_attributes(pictograph_dict)
         motion_dicts = []
+        if "pro_turns" in pictograph_dict:
+            pro_motion = self.blue_motion if self.blue_motion.motion_type == PRO else self.red_motion
+            pro_motion.turns = pictograph_dict["pro_turns"]
+
+        if "anti_turns" in pictograph_dict:
+            anti_motion = self.blue_motion if self.blue_motion.motion_type == ANTI else self.red_motion
+            anti_motion.turns = pictograph_dict["anti_turns"]
+            
+        if "dash_turns" in pictograph_dict:
+            dash_motion = self.blue_motion if self.blue_motion.motion_type == DASH else self.red_motion
+            dash_motion.turns = pictograph_dict["dash_turns"]
+            
+        if "static_turns" in pictograph_dict:
+            static_motion = self.blue_motion if self.blue_motion.motion_type == STATIC else self.red_motion
+            static_motion.turns = pictograph_dict["static_turns"]
+            
         for color in [BLUE, RED]:
             motion_dict = self._create_motion_dict(pictograph_dict, color)
             motion_dicts.append(motion_dict)

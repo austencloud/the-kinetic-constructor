@@ -76,15 +76,9 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         simulate_cw_click = False
 
         if new_turns > 0 and motion.motion_type in [DASH, STATIC]:
-            for pictograph in self.attr_box.pictographs.values():
-                for motion in pictograph.motions.values():
-                    if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
-                        simulate_cw_click = True
-                        break
-                if simulate_cw_click:
-                    break
+            if motion.turns == 0:
+                simulate_cw_click = True
 
-            # Simulate CW button click if necessary
             if simulate_cw_click:
                 if (
                     not self.attr_box.header_widget.cw_button.isChecked()
@@ -98,9 +92,8 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         )
 
         motion.set_turns(new_turns)
-
         pictograph_dict = {
-            f"{motion.color}_turns": new_turns,
+            f"{motion.motion_type}_turns": new_turns,
         }
         motion.scene.update_pictograph(pictograph_dict)
 
