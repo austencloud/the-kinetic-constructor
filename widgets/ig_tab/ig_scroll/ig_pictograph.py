@@ -87,5 +87,11 @@ class IG_Pictograph_View(QGraphicsView):
             self.ig_pictograph.wasd_adjustment_manager.movement_manager.handle_arrow_movement(
                 event.key(), shift_held
             )
+
+        elif event.key() == Qt.Key.Key_X:
+            self.ig_pictograph.wasd_adjustment_manager.rotation_manager.handle_rotation_angle_override(
+                event.key()
+            )
+
         else:
             super().keyPressEvent(event)

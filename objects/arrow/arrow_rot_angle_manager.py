@@ -58,11 +58,18 @@ class ArrowRotAngleManager:
             if self.arrow.loc == NORTH:
                 return 0
             elif self.arrow.loc == EAST:
-                return 90
+                if self.arrow.motion.prop_rot_dir == CLOCKWISE:
+                    return 90
+                elif self.arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                    return 270
             elif self.arrow.loc == SOUTH:
                 return 180
             elif self.arrow.loc == WEST:
-                return 270
+                if self.arrow.motion.prop_rot_dir == CLOCKWISE:
+                    return 270
+                elif self.arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                    return 90
+                
 
         return rotation_override
 

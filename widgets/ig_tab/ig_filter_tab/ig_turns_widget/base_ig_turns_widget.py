@@ -32,26 +32,31 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         self._initialize_ui()
         self.setup_directset_turns_buttons()
 
-    def setup_directset_turns_buttons(self: Union[
-        "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
-    ]) -> None:
+    def setup_directset_turns_buttons(
+        self: Union[
+            "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
+        ]
+    ) -> None:
         turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
         self.turns_buttons_layout = QHBoxLayout()
         button_style_sheet = self._get_direct_set_button_style_sheet()
         for value in turns_values:
             button = QPushButton(value, self)
             button.setStyleSheet(button_style_sheet)
-            button.clicked.connect(lambda checked, v=value: self._update_turns_directly(v))
+            button.clicked.connect(
+                lambda checked, v=value: self._update_turns_directly(v)
+            )
             self.turns_buttons_layout.addWidget(button)
         self.layout.addLayout(self.turns_buttons_layout)
 
-    def _update_turns_directly(self: Union[
-        "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
-    ], turns: str) -> None:
+    def _update_turns_directly(
+        self: Union[
+            "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
+        ],
+        turns: str,
+    ) -> None:
         turns = self._convert_turns_from_str_to_num(turns)
         self._set_turns(turns)
-
-
 
     def process_turns_adjustment_for_single_motion(
         self: Union[
@@ -83,7 +88,10 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         motion.scene.update_pictograph(pictograph_dict)
 
     def _calculate_new_turns(self, current_turns, adjustment):
-        return max(0, min(3, current_turns + adjustment))
+        new_turns = max(0, min(3, current_turns + adjustment))
+        if new_turns in [0.0, 1.0, 2.0, 3.0]:
+            new_turns = int(new_turns)
+        return new_turns
 
     def update_turns_display(
         self: Union[

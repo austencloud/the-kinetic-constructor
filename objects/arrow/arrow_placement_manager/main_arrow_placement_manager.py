@@ -69,6 +69,7 @@ class MainArrowPlacementManager:
                 new_pos = initial_pos + adjustment - arrow.boundingRect().center()
                 arrow.setPos(new_pos)
                 arrow.arrow_rot_angle_manager.update_rotation()
+
     def _get_initial_pos(self, arrow: Arrow) -> QPointF:
         if arrow.motion_type in [PRO, ANTI]:
             return self._get_diamond_shift_pos(arrow)
