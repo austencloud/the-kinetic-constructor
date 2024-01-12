@@ -34,15 +34,15 @@ class SpecialArrowPlacementManager:
         self.data_modified = False
 
     def _load_placements(self) -> Dict:
-        with open(self.json_path, "r") as file:
+        with open(self.json_path, "r", encoding="utf-8") as file:
             self.special_placements = json.load(file)
         return self.special_placements
 
     def save_json_data(self) -> None:
         if self.data_modified:
-            with open(self.json_path, "w") as file:
+            with open(self.json_path, "w", encoding="utf-8") as file:
                 json.dump(
-                    self._load_placements(), file, indent=2, separators=(",", ": ")
+                    self._load_placements(), file, indent=2, separators=(",", ": "), ensure_ascii=False
                 )
             self.data_modified = False
 
@@ -137,8 +137,8 @@ class SpecialArrowPlacementManager:
             return other_arrow.motion_type
 
     def save_json_data(self, data: Dict) -> None:
-        with open(self.json_path, "w") as file:
-            json_str = json.dumps(data, indent=2)
+        with open(self.json_path, "w", encoding="utf-8") as file:
+            json_str = json.dumps(data, indent=2, ensure_ascii=False)
             compact_json_str = re.sub(
                 r'": \[\s+(-?\d+),\s+(-?\d+)\s+\]', r'": [\1, \2]', json_str
             )
@@ -160,7 +160,7 @@ class SpecialArrowPlacementManager:
         self, letter: str, adjustment_key: str, new_adjustment: Dict
     ) -> None:
         """Update a specific placement in the JSON file."""
-        with open(self.json_path, "r") as file:
+        with open(self.json_path, "r", encoding="utf-8") as file:
             data = json.load(file)
 
         if letter in data:
@@ -171,8 +171,8 @@ class SpecialArrowPlacementManager:
         else:
             data[letter] = {adjustment_key: new_adjustment}
 
-        with open(self.json_path, "w") as file:
-            json.dump(data, file, indent=2)
+        with open(self.json_path, "w", encoding="utf-8") as file:
+            json.dump(data, file, indent=2, ensure_ascii=False)
 
     def _sort_entries(self, letter_data: Dict[str, Tuple[int, int]]) -> Dict:
         """Should use this occasionally to sort the entries in the JSON file."""

@@ -19,6 +19,7 @@ from objects.arrow.arrow_placement_manager.special_arrow_placement_manager impor
 )
 
 from objects.pictograph.pictograph import Pictograph
+import codecs
 from utilities.TypeChecking.Letters import (
     Letters,
     Type1_hybrid_letters,
@@ -401,7 +402,7 @@ class WASD_AdjustmentManager:
         data[self.pictograph.letter] = letter_data
 
     def load_json_data(self, file_path) -> Dict:
-        with open(file_path, "r") as file:
+        with codecs.open(file_path, "r", encoding="utf-8") as file:
             return json.load(file)
 
     def write_json_data(self, data, file_path) -> None:
@@ -410,7 +411,7 @@ class WASD_AdjustmentManager:
             compact_json_str = re.sub(
                 r'": \[\s+(-?\d+),\s+(-?\d+)\s+\]', r'": [\1, \2]', json_str
             )
-            with open(file_path, "w") as file:
+            with codecs.open(file_path, "w", encoding="utf-8") as file:
                 file.write(compact_json_str)
             self.data_modified = False
 

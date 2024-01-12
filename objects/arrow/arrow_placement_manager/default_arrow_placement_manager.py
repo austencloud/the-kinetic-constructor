@@ -8,6 +8,7 @@ if TYPE_CHECKING:
         MainArrowPlacementManager,
     )
     from objects.pictograph.pictograph import Pictograph
+import codecs
 
 
 class DefaultArrowPlacementManager:
@@ -96,6 +97,6 @@ class DefaultArrowPlacementManager:
 
     def get_default_adjustment(self, arrow: Arrow) -> Tuple[int, int]:
         json_path = "arrow_placement/default_placements.json"
-        with open(json_path, "r") as file:
+        with codecs.open(json_path, "r", encoding="utf-8") as file:
             default_placements: Dict[str, Dict[str, List[int]]] = json.load(file)
         return default_placements.get(arrow.motion_type).get(str(arrow.turns))

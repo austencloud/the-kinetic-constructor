@@ -12,6 +12,7 @@ from utilities.TypeChecking.Letters import (
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
+import codecs
 
 
 class LetterAdjustmentHandler(ABC):
@@ -55,9 +56,8 @@ class LetterAdjustmentHandler(ABC):
         pass
 
     def load_json_data(self, file_path) -> Dict:
-        with open(file_path, "r") as file:
+        with codecs.open(file_path, "r", encoding="utf-8") as file:
             return json.load(file)
-
 
 
 class LetterAdjustmentHandlerFactory:

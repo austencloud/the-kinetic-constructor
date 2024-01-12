@@ -546,8 +546,8 @@ class Pictograph(QGraphicsScene):
             buf.close()
 
             if success:
-                with open(image_path, "wb") as file:
-                    file.write(buffer)
+                with open(image_path, "w", encoding="utf-8") as file:
+                    file.write(buffer.decode("utf-8"))
                 print(f"Image saved successfully to {image_path}")
             else:
                 print(f"Failed to save the image to {image_path}")
