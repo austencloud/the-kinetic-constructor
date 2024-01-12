@@ -109,7 +109,7 @@ class MainArrowPlacementManager:
             x, y, arrow.motion, arrow.motion_type
         )
         quadrant_index = self._get_quadrant_index(arrow)
-        return directional_adjustments[quadrant_index]
+        return QPointF(*directional_adjustments[quadrant_index])
 
     def _get_quadrant_index(self, arrow: Arrow) -> Literal[0, 1, 2, 3]:
         if self.pictograph.grid.grid_mode == DIAMOND:
@@ -120,45 +120,38 @@ class MainArrowPlacementManager:
 
     def _generate_directional_tuples(
         self, x, y, motion: Motion, motion_type: str
-    ) -> List[QPointF]:
+    ) -> List[Tuple[int, int]]:
         other_motion = (
-            self.blue_arrow.motion
-            if motion == self.red_arrow.motion
-            else self.red_arrow.motion
+            motion.scene.red_motion
+            if motion.scene.red_motion != motion
+            else motion.scene.blue_motion
         )
+        directional_tuples = {
+            (PRO, CLOCKWISE): [(x, y), (-y, x), (-x, -y), (y, -x)],
+            (PRO, COUNTER_CLOCKWISE): [(-y, -x), (x, -y), (y, x), (-x, y)],
+            (ANTI, CLOCKWISE): [(-y, -x), (x, -y), (y, x), (-x, y)],
+            (ANTI, COUNTER_CLOCKWISE): [(x, y), (-y, x), (-x, -y), (y, -x)],
+            (DASH, NO_ROT): (
+                [(x, y), (-y, x), (-x, -y), (y, -x)]
+                if other_motion.prop_rot_dir == CLOCKWISE
+                else [(-x, y), (-y, -x), (x, -y), (y, x)]
+            ),
+            (DASH, CLOCKWISE): (
+                [(x, -y), (y, x), (-x, y), (-y, -x)]
+                if other_motion.prop_rot_dir == CLOCKWISE
+                else [(-y, -x), (x, -y), (y, x), (-x, y)]
+            ),
+            (DASH, COUNTER_CLOCKWISE): (
+                [(y, -x), (x, y), (-y, x), (-x, -y)]
+                if other_motion.prop_rot_dir == CLOCKWISE
+                else [(-x, -y), (y, -x), (x, y), (-y, x)]
+            ),
+            (STATIC, CLOCKWISE, CLOCKWISE): [(x, -y), (y, x), (-x, y), (-y, -x)],
+            (STATIC, NO_ROT, CLOCKWISE): [(x, -y), (y, x), (-x, y), (-y, -x)],
+            (STATIC, COUNTER_CLOCKWISE): [(-x, -y), (y, -x), (x, y), (-y, x)],
+        }
 
-        if motion_type == PRO:
-            if motion.prop_rot_dir == CLOCKWISE:
-                return [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
-            elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                return [QPointF(-y, -x), QPointF(x, -y), QPointF(y, x), QPointF(-x, y)]
-        elif motion_type == ANTI:
-            if motion.prop_rot_dir == CLOCKWISE:
-                return [QPointF(-y, -x), QPointF(x, -y), QPointF(y, x), QPointF(-x, y)]
-            elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                return [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
-        elif motion_type == DASH:
-            if motion.prop_rot_dir == NO_ROT:
-                return (
-                    [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
-                    if other_motion.prop_rot_dir == CLOCKWISE
-                    else [
-                        QPointF(-x, -y),
-                        QPointF(y, -x),
-                        QPointF(x, -y),
-                        QPointF(y, x),
-                    ]
-                )
-
-            elif motion.prop_rot_dir == CLOCKWISE:
-                return [QPointF(-x, y), QPointF(y, x), QPointF(x, -y), QPointF(-y, -x)]
-            elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                return [QPointF(y, -x), QPointF(-x, -y), QPointF(-y, x), QPointF(x, y)]
-        elif motion_type == STATIC:
-            if motion.prop_rot_dir in [CLOCKWISE, NO_ROT]:
-                return [QPointF(x, -y), QPointF(y, x), QPointF(-x, y), QPointF(-y, -x)]
-            elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                return [QPointF(-x, -y), QPointF(y, -x), QPointF(x, y), QPointF(-y, x)]
+        return directional_tuples.get((motion_type, motion.prop_rot_dir), [])
 
     def generate_adjustment_key(self) -> str:
         if self.blue_arrow.turns in [0.0, 1.0, 2.0, 3.0]:

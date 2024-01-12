@@ -249,8 +249,10 @@ class ArrowRotAngleManager:
                     COUNTER_CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
                 },
             }
-            return orientation_map.get(self.arrow.motion.start_ori, {}).get(
-                self.arrow.loc, 0
+            return (
+                orientation_map.get(self.arrow.motion.start_ori)
+                .get(self.arrow.motion.prop_rot_dir)
+                .get(self.arrow.loc)
             )
 
     def _get_Y_Z_angle(self) -> int:

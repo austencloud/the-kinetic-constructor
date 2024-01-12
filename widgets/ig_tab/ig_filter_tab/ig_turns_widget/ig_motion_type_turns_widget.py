@@ -131,7 +131,11 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         # Check if any static motion with zero turns exists
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
-                if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
+                if (
+                    motion.motion_type in [DASH, STATIC]
+                    and motion.turns == 0
+                    and motion.motion_type == self.attr_box.motion_type
+                ):
                     simulate_cw_click = True
                     break
             if simulate_cw_click:
@@ -145,16 +149,15 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
                     and not self.attr_box.header_widget.ccw_button.isChecked()
                 ):
                     self._simulate_cw_button_click_in_header_widget()
+                    
         if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
             if hasattr(self.attr_box.header_widget, "cw_button"):
                 if self.attr_box.header_widget.cw_button.isChecked():
                     motion.prop_rot_dir = CLOCKWISE
                 elif self.attr_box.header_widget.ccw_button.isChecked():
                     motion.prop_rot_dir = COUNTER_CLOCKWISE
-        # Apply adjustment to all relevant motions
         for pictograph in self.attr_box.pictographs.values():
             self.adjust_turns_by_motion_type(pictograph, adjustment)
-
 
     def _simulate_cw_button_click_in_header_widget(self):
         # Simulate the CW button click
