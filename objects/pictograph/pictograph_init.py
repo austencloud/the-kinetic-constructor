@@ -107,8 +107,8 @@ class PictographInit:
             COLOR: color,
             TURNS: 0,
         }
-        arrow = Arrow(self.pictograph, arrow_attributes, None)
-        ghost_arrow = GhostArrow(self.pictograph, arrow_attributes, None)
+        arrow = Arrow(self.pictograph, arrow_attributes, self.pictograph.motions[color])
+        ghost_arrow = GhostArrow(self.pictograph, arrow_attributes, self.pictograph.motions[color])
         arrow.ghost = ghost_arrow
         self.pictograph.motions[color].arrow = arrow
         arrow.motion = self.pictograph.motions[color]

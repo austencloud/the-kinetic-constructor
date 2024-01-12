@@ -46,13 +46,7 @@ class SpecialArrowPlacementManager:
     def update_specific_entry_in_json(
         self, letter: str, adjustment_key: str, new_data: Dict
     ) -> None:
-        """Update a specific entry in the JSON file.
-
-        Args:
-            letter
-            adjustment_key
-            new_data
-        """
+        """Update a specific entry in the JSON file."""
         try:
             with open(self.json_path, "r", encoding="utf-8") as file:
                 data = json.load(file)

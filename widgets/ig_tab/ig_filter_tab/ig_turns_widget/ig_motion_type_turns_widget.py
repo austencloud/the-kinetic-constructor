@@ -146,10 +146,11 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
                 ):
                     self._simulate_cw_button_click_in_header_widget()
         if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
-            if self.attr_box.header_widget.cw_button.isChecked():
-                motion.prop_rot_dir = CLOCKWISE
-            elif self.attr_box.header_widget.ccw_button.isChecked():
-                motion.prop_rot_dir = COUNTER_CLOCKWISE
+            if hasattr(self.attr_box.header_widget, "cw_button"):
+                if self.attr_box.header_widget.cw_button.isChecked():
+                    motion.prop_rot_dir = CLOCKWISE
+                elif self.attr_box.header_widget.ccw_button.isChecked():
+                    motion.prop_rot_dir = COUNTER_CLOCKWISE
         # Apply adjustment to all relevant motions
         for pictograph in self.attr_box.pictographs.values():
             self.adjust_turns_by_motion_type(pictograph, adjustment)

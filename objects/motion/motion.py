@@ -38,7 +38,6 @@ class Motion:
         self.color: Colors = None
         self.arrow: "Arrow" = None
         self.prop: "Prop" = None
-        self.prop_rot_dir: PropRotDirs = None
         self.motion_type: MotionTypes = None
         self.turns: Turns = None
         self.start_loc: Locations = None

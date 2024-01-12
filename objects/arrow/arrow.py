@@ -4,30 +4,27 @@ from PyQt6.QtGui import QTransform
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 from constants import *
-from objects.arrow.arrow_location_manager import ArrowLocationManager
-from objects.arrow.arrow_rot_angle_manager import ArrowRotAngleManager
-from objects.prop.prop import Prop
+from .arrow_location_manager import ArrowLocationManager
+from .arrow_rot_angle_manager import ArrowRotAngleManager
+from ..prop.prop import Prop
 
-from objects.graphical_object import GraphicalObject
+from ..graphical_object import GraphicalObject
 from utilities.TypeChecking.TypeChecking import (
     Colors,
     LeadStates,
     Locations,
     MotionTypes,
-    PropRotDirs,
     Turns,
-    RotationAngles,
     TYPE_CHECKING,
-    Optional,
     Dict,
 )
 
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
-    from objects.motion.motion import Motion
-    from objects.arrow.ghost_arrow import GhostArrow
-    from objects.prop.prop import Prop
+    from ..pictograph.pictograph import Pictograph
+    from ..motion.motion import Motion
+    from .ghost_arrow import GhostArrow
+    from ..prop.prop import Prop
     from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (
         ArrowBox,
     )
@@ -38,8 +35,8 @@ class Arrow(GraphicalObject):
 
     def __init__(self, scene, arrow_dict, motion: "Motion") -> None:
         super().__init__(scene)
-        self.motion = motion
         self.scene: Pictograph | ArrowBox = scene
+        self.motion: Motion = motion
         self.arrow_rot_angle_manager = ArrowRotAngleManager(self)
         self.arrow_location_manager = ArrowLocationManager(self)
         self.motion_type: MotionTypes = None
@@ -47,7 +44,6 @@ class Arrow(GraphicalObject):
         self.is_svg_mirrored: bool = False
         self.color = arrow_dict[COLOR]
         self.prop: Prop = None
-        # self.setup_arrow(scene, arrow_dict)
 
     def setup_arrow(self, arrow_dict):
         self.motion_type = arrow_dict[MOTION_TYPE]

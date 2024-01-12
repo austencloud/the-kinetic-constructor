@@ -236,19 +236,25 @@ class ArrowRotAngleManager:
     def _get_dash_direction_map(
         self,
     ) -> Dict[Orientations, Dict[PropRotDirs, Dict[Locations, int]]]:
-        orientation_map = {
-            IN: {
-                CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
-                COUNTER_CLOCKWISE: {NORTH: 0, EAST: 270, SOUTH: 180, WEST: 90},
-                NO_ROT: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
-            },
-            OUT: {
-                CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
-                COUNTER_CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
-                NO_ROT: {NORTH: 0, EAST: 0, SOUTH: 0, WEST: 0},
-            },
-        }
-        return orientation_map.get(self.arrow.motion.start_ori, {})
+        if self.arrow.motion.prop_rot_dir == NO_ROT:
+            return {
+                IN: {NO_ROT: {NORTH: 0, EAST: 0, SOUTH: 0, WEST: 0}},
+                OUT: {NO_ROT: {NORTH: 0, EAST: 0, SOUTH: 0, WEST: 0}},
+            }
+
+                
+        elif self.arrow.motion.prop_rot_dir in [CLOCKWISE, COUNTER_CLOCKWISE]:
+            orientation_map = {
+                IN: {
+                    CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
+                    COUNTER_CLOCKWISE: {NORTH: 0, EAST: 270, SOUTH: 180, WEST: 90},
+                },
+                OUT: {
+                    CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
+                    COUNTER_CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
+                },
+            }
+            return orientation_map.get(self.arrow.motion.start_ori, {})
 
     def _get_Y_Z_angle(self) -> int:
         if self.arrow.motion_type == STATIC:

@@ -83,7 +83,8 @@ class ArrowBox(BaseObjectBox):
 
             arrow = Arrow(self, arrow_dict, motion)
             arrow.ghost = GhostArrow(self, arrow_dict, motion)
-
+            arrow.motion = motion
+            arrow.ghost.motion = motion
             motion.arrow = arrow
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)

@@ -126,16 +126,21 @@ class MainArrowPlacementManager:
                 return [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
             elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
                 return [QPointF(-y, -x), QPointF(x, -y), QPointF(y, x), QPointF(-x, y)]
+        elif motion_type == ANTI:
+            if motion.prop_rot_dir in [CLOCKWISE, NO_ROT]:
+                return [QPointF(-y, -x), QPointF(x, -y), QPointF(y, x), QPointF(-x, y)]
+            elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                return [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
+        elif motion_type == DASH:
+            if motion.prop_rot_dir in [CLOCKWISE, NO_ROT]:
+                return [QPointF(-x, y), QPointF(y, x), QPointF(x, -y), QPointF(-y, -x)]
+            elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                return [QPointF(y, -x), QPointF(-x, -y), QPointF(-y, x), QPointF(x, y)]
         elif motion_type == STATIC:
             if motion.prop_rot_dir in [CLOCKWISE, NO_ROT]:
                 return [QPointF(x, -y), QPointF(y, x), QPointF(-x, y), QPointF(-y, -x)]
             elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
                 return [QPointF(-x, -y), QPointF(y, -x), QPointF(x, y), QPointF(-y, x)]
-        elif motion_type in [ANTI, DASH]:
-            if motion.prop_rot_dir in [CLOCKWISE, NO_ROT]:
-                return [QPointF(-y, -x), QPointF(x, -y), QPointF(y, x), QPointF(-x, y)]
-            elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                return [QPointF(x, y), QPointF(-y, x), QPointF(-x, -y), QPointF(y, -x)]
 
     def generate_adjustment_key(self) -> str:
         if self.blue_arrow.turns in [0.0, 1.0, 2.0, 3.0]:
