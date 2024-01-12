@@ -44,6 +44,7 @@ class Motion:
         self.start_ori: Orientations = None
         self.end_loc: Locations = None
         self.end_ori: Orientations = None
+        self.prop_rot_dir = None
 
     ### SETUP ###
 
@@ -69,8 +70,6 @@ class Motion:
         self.end_loc = None
         self.turns = None
         self.motion_type = None
-
-        self.prop_rot_dir = None
         self.start_ori = None
         self.end_ori = None
 

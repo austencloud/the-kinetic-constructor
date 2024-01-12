@@ -48,11 +48,16 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
             self.dash_attr_box,
             self.static_attr_box,
         ]
+        for box in self.boxes:
+            box.hide()
+            self.layout.addWidget(box)
+        self.placeholder_label.show()
+        # self.resize_ig_motion_type_attr_panel()
 
     def update_motion_type_widget_visibility(self, selected_letters: List[str]) -> None:
         """Update the visibility of motion type widgets based on selected letters."""
         if not selected_letters:
-            self.show_placeholder_message()
+            self.placeholder_label.show()
         else:
             self.hide_placeholder_message()
             motion_types_in_use = set()
@@ -62,23 +67,12 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
 
             for box in self.boxes:
                 box.setVisible(box.motion_type in motion_types_in_use)
-                box.resize_ig_motion_type_attr_box()
                 self.layout.addWidget(box)
-
-    def show_placeholder_message(self) -> None:
-        """Display the placeholder message."""
-        self.placeholder_label.show()
-        for box in self.boxes:
-            box.hide()
+                box.resize_ig_motion_type_attr_box()
 
     def hide_placeholder_message(self) -> None:
         """Hide the placeholder message."""
         self.placeholder_label.hide()
-
-    def setup_layouts(self) -> None:
-        super().setup_layouts()
-        for box in self.boxes:
-            self.layout.addWidget(box)
 
     def get_turns_for_motion_type(self, motion_type: MotionTypes) -> int:
         for box in self.boxes:

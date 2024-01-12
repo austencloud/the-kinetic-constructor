@@ -13,7 +13,7 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         """Initialize the IGMotionTypeTurnsWidget."""
         super().__init__(attr_box)
         self.attr_box = attr_box
-        self.update_ig_motion_type_turnbox_size()
+        # self.update_ig_motion_type_turnbox_size()
 
     def adjust_turns_by_motion_type(
         self, pictograph: Pictograph, adjustment: float

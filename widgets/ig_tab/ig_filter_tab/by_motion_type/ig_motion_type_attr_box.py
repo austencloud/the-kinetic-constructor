@@ -51,8 +51,8 @@ class IGMotionTypeAttrBox(BaseAttrBox):
         self.vbox_layout.addWidget(self.turns_widget, 2)
 
     def resize_ig_motion_type_attr_box(self) -> None:
-        self.setMinimumWidth(int(self.attr_panel.ig_tab.width() / 6))
-        self.setMaximumWidth(int(self.attr_panel.ig_tab.width() / 6))
+        self.setMinimumWidth(int(self.attr_panel.ig_tab.width() / 4))
+        self.setMaximumWidth(int(self.attr_panel.ig_tab.width() / 4))
         self.header_widget.resize_header_widget()
         self.turns_widget.resize_turns_widget()
         self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))

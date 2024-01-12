@@ -54,9 +54,10 @@ class DirectionalTupleGenerator:
             (DASH, COUNTER_CLOCKWISE): ([(-x, -y), (y, -x), (x, y), (-y, x)]),
         }
 
+        no_rot_static_directional_tuples = [(x, -y), (y, x), (-x, y), (-y, -x)]
+
         static_directional_tuples = {
             (STATIC, CLOCKWISE, CLOCKWISE): [(x, -y), (y, x), (-x, y), (-y, -x)],
-            (STATIC, NO_ROT, CLOCKWISE): [(x, -y), (y, x), (-x, y), (-y, -x)],
             (STATIC, COUNTER_CLOCKWISE): [(-x, -y), (y, -x), (x, y), (-y, x)],
         }
 
@@ -66,6 +67,8 @@ class DirectionalTupleGenerator:
             return same_dash_directional_tuples.get((motion_type, prop_rot_dir), [])
         elif motion_type == DASH and self.motion.scene.vtg_timing == OPP:
             return opp_dash_directional_tuples.get((motion_type, prop_rot_dir), [])
+        elif motion_type == STATIC and prop_rot_dir == NO_ROT:
+            return no_rot_static_directional_tuples
         elif motion_type == STATIC:
             return static_directional_tuples.get(
                 (motion_type, prop_rot_dir, self.other_motion.prop_rot_dir), []
