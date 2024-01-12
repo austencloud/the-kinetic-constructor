@@ -49,10 +49,7 @@ class PictographScrollArea(QScrollArea):
             if ig_pictograph._meets_criteria(filters):
                 self.update_pictographs()
 
-    def update_scroll_area_content(self):
-        self.container.adjustSize()
-        self.layout.update()
-        self.updateGeometry()
+
 
     ### PICTOGRAPH CREATION ###
 

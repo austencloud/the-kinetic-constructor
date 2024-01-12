@@ -136,13 +136,11 @@ class MainWidget(QWidget):
         self.horizontal_splitter = StyledSplitter(Qt.Orientation.Horizontal)
 
         self.left_frame = QFrame()
-        self.right_frame = QFrame()
-
         self.left_layout = QVBoxLayout(self.left_frame)
-        self.right_layout = QVBoxLayout(self.right_frame)
-
         self.left_layout.addWidget(self.sequence_widget)
-
+        
+        self.right_frame = QFrame()
+        self.right_layout = QVBoxLayout(self.right_frame)
         self.tab_widget = QTabWidget()
         self.tab_widget.setStyleSheet(
             """
@@ -197,7 +195,6 @@ class MainWidget(QWidget):
         self.right_frame.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
-
         self.right_frame.layout().setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.right_layout.addWidget(self.tab_widget)
 

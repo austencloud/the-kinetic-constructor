@@ -30,15 +30,11 @@ class SequenceWidget(QWidget):
     def resize_sequence_widget(self) -> None:
         beat_view_height = int(self.height() * 0.9 / self.beat_frame.ROW_COUNT)
         beat_view_width = beat_view_height
-
         for beat_view in self.beat_frame.beats:
             beat_view.setMaximumSize(beat_view_width, beat_view_height)
             beat_view.setMinimumSize(beat_view_width, beat_view_height)
-
         self.beat_frame.start_pos_view.setMinimumSize(beat_view_width, beat_view_height)
-
         self.beat_frame.start_pos_view.setMaximumSize(beat_view_width, beat_view_height)
-
         self.layout.update()
         self.setMaximumWidth(
             self.beat_frame.layout.sizeHint().width()

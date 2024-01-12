@@ -52,16 +52,11 @@ class IGScrollArea(PictographScrollArea):
         """Method to update positions of all pictographs"""
         for pictograph in self.pictographs.values():
             self.update_individual_pictograph_position(pictograph)
-        self.update_scroll_area_content()
 
     def update_individual_pictograph_position(self, pictograph: IGPictograph):
         if hasattr(pictograph, "arrow_placement_manager"):
             pictograph.arrow_placement_manager.update_arrow_placement()
 
-    def update_scroll_area_content(self) -> None:
-        self.container.adjustSize()
-        self.layout.update()
-        self.updateGeometry()
 
     def reset_turns(self) -> None:
         for pictograph in self.pictographs.values():
@@ -119,7 +114,7 @@ class IGScrollArea(PictographScrollArea):
                             pictograph_dict[f"{motion_color}_turns"] = turns_value
 
                     ig_pictograph.update_pictograph(pictograph_dict)
-                    
+
                 image_key = self.generate_image_name(ig_pictograph, letter)
                 ordered_pictographs[image_key] = ig_pictograph
         for index, (key, ig_pictograph) in enumerate(ordered_pictographs.items()):

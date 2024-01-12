@@ -103,12 +103,12 @@ class OptionPickerScrollArea(PictographScrollArea):
         #     option.update_pictograph()
         #     option.view.resize_option_view()
 
-        self.update_scroll_area_content()
+    #     self.update_scroll_area_content()
 
-    def update_scroll_area_content(self):
-        self.container.adjustSize()
-        self.layout.update()
-        self.updateGeometry()
+    # def update_scroll_area_content(self):
+    #     self.container.adjustSize()
+    #     self.layout.update()
+    #     self.updateGeometry()
 
     ### UPDATE ###
 
