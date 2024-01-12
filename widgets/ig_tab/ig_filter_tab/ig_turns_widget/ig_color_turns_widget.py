@@ -1,6 +1,8 @@
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
 from constants import (
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
     DASH,
     ICON_DIR,
     NO_ROT,
@@ -38,15 +40,26 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
         turns = self._convert_turns_from_str_to_num(turns)
         self._set_turns_by_color(turns)
 
-
     def _set_turns_by_color(self, new_turns: Union[int, float]) -> None:
         """Set turns for motions of a specific type to a new value."""
         self.update_turns_display(new_turns)
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.color == self.attr_box.color:
-                    motion.set_turns(new_turns)
-                    self.update_pictograph_dict(motion, new_turns)
+                    if motion.motion_type == STATIC and motion.turns == 0:
+                        if (
+                            not self.attr_box.header_widget.cw_button.isChecked()
+                            and not self.attr_box.header_widget.ccw_button.isChecked()
+                        ):
+                            self._simulate_cw_button_click_in_attr_box_widget()
+                        elif self.attr_box.header_widget.cw_button.isChecked():
+                            motion.prop_rot_dir = CLOCKWISE
+                        else:
+                            motion.prop_rot_dir = COUNTER_CLOCKWISE
+                    pictograph_dict = {
+                        f"{motion.color}_turns": new_turns,
+                    }
+                    pictograph.update_pictograph(pictograph_dict)
 
     def _update_pictographs_turns_by_color(self, new_turns):
         for pictograph in self.attr_box.pictographs.values():

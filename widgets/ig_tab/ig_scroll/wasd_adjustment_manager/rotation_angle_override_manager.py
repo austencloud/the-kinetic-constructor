@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
 
 
-class RotationAngleManager:
+class RotationAngleOverrideManager:
     def __init__(self, pictograph: "Pictograph"):
         self.pictograph = pictograph
 

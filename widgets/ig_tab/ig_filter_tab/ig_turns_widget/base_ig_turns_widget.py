@@ -72,16 +72,9 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
             IGColorAttrBox,
         )
 
-        initial_turns = motion.turns
         new_turns = self._calculate_new_turns(motion.turns, adjustment)
-
         motion.set_turns(new_turns)
 
-        if motion.is_dash_or_static() and self._turns_added(initial_turns, new_turns):
-            if isinstance(self.attr_box, IGMotionTypeAttrBox):
-                self._simulate_cw_button_click_in_header_widget()
-            elif isinstance(self.attr_box, IGColorAttrBox):
-                self._simulate_cw_button_click_in_attr_box_widget()
         pictograph_dict = {
             f"{motion.color}_turns": new_turns,
         }

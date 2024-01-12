@@ -34,15 +34,26 @@ class SpecialArrowPlacementManager:
         self.data_modified = False
 
     def _load_placements(self) -> Dict:
-        with open(self.json_path, "r", encoding="utf-8") as file:
-            self.special_placements = json.load(file)
+        try:
+            with open(self.json_path, "r", encoding="utf-8") as file:
+                self.special_placements = json.load(file)
+        except json.JSONDecodeError as e:
+            print(f"JSON decoding error occurred: {e}")
+            # Optionally, you can initialize self.special_placements to an empty dict
+            # or a default value to allow the program to continue running.
+            self.special_placements = {}
+            # Alternatively, log this error, show a user-friendly message, or take other actions.
         return self.special_placements
-
+    
     def save_json_data(self) -> None:
         if self.data_modified:
             with open(self.json_path, "w", encoding="utf-8") as file:
                 json.dump(
-                    self._load_placements(), file, indent=2, separators=(",", ": "), ensure_ascii=False
+                    self._load_placements(),
+                    file,
+                    indent=2,
+                    separators=(",", ": "),
+                    ensure_ascii=False,
                 )
             self.data_modified = False
 
@@ -108,11 +119,7 @@ class SpecialArrowPlacementManager:
             key: [
                 default_turn_data[0] + adjustment[0],
                 default_turn_data[1] + adjustment[1],
-            ],
-            self._get_other_key(arrow): [
-                other_arrow_default_turn_data[0],
-                other_arrow_default_turn_data[1],
-            ],
+            ]
         }
 
     def _determine_key(self, arrow: "Arrow") -> str:

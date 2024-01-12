@@ -1,6 +1,6 @@
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
-from constants import CLOCKWISE, ICON_DIR, STATIC
+from constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR, STATIC
 from objects.pictograph.pictograph import Pictograph
 from .base_ig_turns_widget import BaseIGTurnsWidget
 
@@ -13,9 +13,7 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         """Initialize the IGMotionTypeTurnsWidget."""
         super().__init__(attr_box)
         self.attr_box = attr_box
-        # self.setup_directset_turns_buttons()
         self.update_ig_motion_type_turnbox_size()
-        # self.update_add_subtract_button_size()
 
     def adjust_turns_by_motion_type(
         self, pictograph: Pictograph, adjustment: float
@@ -32,18 +30,38 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
     def _set_turns_by_motion_type(self, new_turns: Union[int, float]) -> None:
         """Set turns for motions of a specific type to a new value."""
         self.update_turns_display(new_turns)
+
+        # Check if any static motion with zero turns exists
+        simulate_cw_click = False
+        for pictograph in self.attr_box.pictographs.values():
+            for motion in pictograph.motions.values():
+                if motion.motion_type == STATIC and motion.turns == 0:
+                    simulate_cw_click = True
+                    break
+            if simulate_cw_click:
+                break
+
+        # Simulate CW button click if necessary
+        if simulate_cw_click:
+            if (
+                not self.attr_box.header_widget.cw_button.isChecked()
+                and not self.attr_box.header_widget.ccw_button.isChecked()
+            ):
+                self._simulate_cw_button_click_in_header_widget()
+
+        # Apply new turns to motions
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.motion_type == self.attr_box.motion_type:
                     if motion.motion_type == STATIC and motion.turns == 0:
-                        self._simulate_cw_button_click_in_header_widget()
-                        motion.prop_rot_dir = CLOCKWISE
+                        if self.attr_box.header_widget.cw_button.isChecked():
+                            motion.prop_rot_dir = CLOCKWISE
+                        elif self.attr_box.header_widget.ccw_button.isChecked():
+                            motion.prop_rot_dir = COUNTER_CLOCKWISE
                     pictograph_dict = {
                         f"{motion.color}_turns": new_turns,
                     }
                     pictograph.update_pictograph(pictograph_dict)
-
-                    # self.update_pictograph_dict(motion, new_turns)
 
     def update_turns_display_for_pictograph(self, pictograph: Pictograph) -> None:
         """Update the turnbox display based on the latest turns value of the pictograph."""
@@ -105,12 +123,36 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
 
     def _adjust_turns(self, adjustment) -> None:
         """Adjust turns for a given pictograph based on motion type."""
+        simulate_cw_click = False
+
+        # Check if any static motion with zero turns exists
+        for pictograph in self.attr_box.pictographs.values():
+            for motion in pictograph.motions.values():
+                if motion.motion_type == STATIC and motion.turns == 0:
+                    simulate_cw_click = True
+                    break
+            if simulate_cw_click:
+                break
+
+        # Simulate CW button click if necessary
+        if simulate_cw_click:
+            if hasattr(self.attr_box.header_widget, "cw_button"):
+                if (
+                    not self.attr_box.header_widget.cw_button.isChecked()
+                    and not self.attr_box.header_widget.ccw_button.isChecked()
+                ):
+                    self._simulate_cw_button_click_in_header_widget()
+
+        # Apply adjustment to all relevant motions
         for pictograph in self.attr_box.pictographs.values():
             self.adjust_turns_by_motion_type(pictograph, adjustment)
 
     def _simulate_cw_button_click_in_header_widget(self):
+        # Simulate the CW button click
         self.attr_box.header_widget.cw_button.setChecked(True)
         self.attr_box.header_widget.cw_button.click()
+
+
 
     def _set_turns(self, new_turns: int | float) -> None:
         self._set_turns_by_motion_type(new_turns)
