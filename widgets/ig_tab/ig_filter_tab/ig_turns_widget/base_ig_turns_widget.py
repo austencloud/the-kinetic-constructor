@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from .ig_lead_state_turns_widget import IGLeadStateTurnsWidget
     from .ig_motion_type_turns_widget import IGMotionTypeTurnsWidget
 
+from PyQt6.QtWidgets import QSizePolicy
 
 class BaseIGTurnsWidget(BaseTurnsWidget):
     def __init__(self, attr_box: "BaseAttrBox") -> None:
@@ -35,9 +36,11 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         for value in turns_values:
             button = QPushButton(value, self)
             button.setStyleSheet(button_style_sheet)
-            button.clicked.connect(
-                lambda checked, v=value: self._direct_set_turns(v)
-            )
+            button.setContentsMargins(0, 0, 0, 0)
+            # button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)  # Set size policy
+            # set the button's minimum width to contain its text
+            button.setMinimumWidth(button.fontMetrics().boundingRect(value).width() + 10)
+            button.clicked.connect(lambda checked, v=value: self._direct_set_turns(v))
             self.turns_buttons_layout.addWidget(button)
         self.layout.addLayout(self.turns_buttons_layout)
 

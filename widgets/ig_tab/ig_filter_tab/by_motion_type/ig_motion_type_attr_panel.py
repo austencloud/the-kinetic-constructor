@@ -8,6 +8,7 @@ from ..by_motion_type.ig_motion_type_attr_box import IGMotionTypeAttrBox
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_tab import IGTab
@@ -53,6 +54,16 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
             self.layout.addWidget(box)
         self.placeholder_label.show()
         # self.resize_ig_motion_type_attr_panel()
+        self.add_black_borders()
+
+    def add_black_borders(self) -> None:
+        self.setStyleSheet(
+            f"{self.styleSheet()} border: 1px solid black; border-radius: 0px;"
+        )
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
+
+        self.setContentsMargins(0, 0, 0, 0)
 
     def update_motion_type_widget_visibility(self, selected_letters: List[str]) -> None:
         """Update the visibility of motion type widgets based on selected letters."""
@@ -71,6 +82,20 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
                 box.setVisible(box.motion_type in motion_types_in_use)
                 self.layout.addWidget(box)
                 box.resize_ig_motion_type_attr_box()
+            # if the number of visible boxes is 4,
+            for box in self.boxes:
+                if len([box for box in self.boxes if box.isVisible()]) == 4:
+                    box.setMinimumWidth(int(self.width() / 4 * 0.95))
+                    box.setMaximumWidth(int(self.width() / 4 * 0.95))
+                elif len([box for box in self.boxes if box.isVisible()]) == 3:
+                    box.setMinimumWidth(int(self.width() / 3 * 0.95))
+                    box.setMaximumWidth(int(self.width() / 3 * 0.95))
+                elif len([box for box in self.boxes if box.isVisible()]) == 2:
+                    box.setMinimumWidth(int(self.width() / 2 * 0.95))
+                    box.setMaximumWidth(int(self.width() / 2 * 0.95))
+                elif len([box for box in self.boxes if box.isVisible()]) == 1:
+                    box.setMinimumWidth(int(self.width() * 0.95))
+                    box.setMaximumWidth(int(self.width() * 0.95))
 
     def hide_placeholder_message(self) -> None:
         """Hide the placeholder message."""
@@ -85,9 +110,24 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
                     return float(box.turns_widget.turnbox.currentText())
 
     def resize_ig_motion_type_attr_panel(self) -> None:
-        self.layout.setSpacing(int(self.pro_attr_box.width() / 5))
         for box in self.boxes:
             box.resize_ig_motion_type_attr_box()
+        total_visible_boxes = len([box for box in self.boxes if box.isVisible()])
+        for box in self.boxes:
+            if total_visible_boxes == 1:
+                box.setMinimumWidth(
+                    self.width()
+                )  # This should allow it to take full width
+                box.setMaximumWidth(self.width())
+            elif total_visible_boxes == 2:
+                box.setMinimumWidth(int(self.width() / 2))
+                box.setMaximumWidth(int(self.width() / 2))
+            elif total_visible_boxes == 3:
+                box.setMinimumWidth(int(self.width() / 3))
+                box.setMaximumWidth(int(self.width() / 3))
+            elif total_visible_boxes == 4:
+                box.setMinimumWidth(int(self.width() / 4))
+                box.setMaximumWidth(int(self.width() / 4))
 
     def reset_turns(self) -> None:
         for box in self.boxes:

@@ -1,24 +1,17 @@
 from typing import TYPE_CHECKING, Dict, List
-from PyQt6.QtGui import QPixmap
-from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import MotionTypes
-from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
-from widgets.attr_panel.base_attr_box import BaseAttrBox
-
-from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_header_widget import (
-    IGMotionTypeHeaderWidget,
-)
-from widgets.ig_tab.ig_filter_tab.ig_turns_widget.ig_motion_type_turns_widget import (
-    IGMotionTypeTurnsWidget,
-)
+from objects.motion.motion import Motion
+from ....attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
+from ....attr_panel.base_attr_box import BaseAttrBox
+from .ig_motion_type_header_widget import IGMotionTypeHeaderWidget
+from ..ig_turns_widget.ig_motion_type_turns_widget import IGMotionTypeTurnsWidget
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_panel import (
-        IGMotionTypeAttrPanel,
-    )
+    from .ig_motion_type_attr_panel import IGMotionTypeAttrPanel
     from objects.pictograph.pictograph import Pictograph
 
 from PyQt6.QtGui import QPixmap, QFont
+from PyQt6.QtWidgets import QSizePolicy
 
 
 class IGMotionTypeAttrBox(BaseAttrBox):
@@ -28,31 +21,34 @@ class IGMotionTypeAttrBox(BaseAttrBox):
         pictographs: List["Pictograph"],
         motion_type: MotionTypes,
     ) -> None:
-        super().__init__(attr_panel, None)  # Note the None for the single pictograph
+        super().__init__(attr_panel, None) 
         self.attr_panel = attr_panel
         self.motion_type = motion_type
         self.pictographs: Dict[str, Pictograph] = pictographs
         self.font_size = self.width() // 10
         self.widgets: List[BaseAttrBoxWidget] = []
         self.combobox_border = 2
-        self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
+        self.pixmap_cache: Dict[str, QPixmap] = {}
         self.setLayout(self.vbox_layout)
         self._setup_widgets()
-
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.vbox_layout.setContentsMargins(0, 0, 0, 0)
+        self.vbox_layout.setSpacing(0)
+        self.adjustSize()
+        
     def add_black_borders(self) -> None:
         self.setStyleSheet(
             f"{self.styleSheet()} border: 1px solid black; border-radius: 0px;"
         )
 
-    def _setup_widgets(self) -> None:  # add common widgets
+    def _setup_widgets(self) -> None: 
         self.header_widget = IGMotionTypeHeaderWidget(self, self.motion_type)
         self.turns_widget = IGMotionTypeTurnsWidget(self)
         self.vbox_layout.addWidget(self.header_widget, 1)
         self.vbox_layout.addWidget(self.turns_widget, 2)
 
+
     def resize_ig_motion_type_attr_box(self) -> None:
-        self.setMinimumWidth(int(self.attr_panel.ig_tab.width() / 4))
-        self.setMaximumWidth(int(self.attr_panel.ig_tab.width() / 4))
         self.header_widget.resize_header_widget()
         self.turns_widget.resize_turns_widget()
         self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))

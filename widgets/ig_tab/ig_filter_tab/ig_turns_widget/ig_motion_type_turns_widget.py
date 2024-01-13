@@ -23,7 +23,8 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         for motion in pictograph.motions.values():
             if motion.motion_type == self.attr_box.motion_type:
                 self.process_turns_adjustment_for_single_motion(motion, adjustment)
-        new_turns = motion.turns
+                if new_turns is None:
+                    new_turns = motion.turns
         if new_turns in [0.0, 1.0, 2.0, 3.0]:
             new_turns = int(new_turns)
         self.update_turns_display(new_turns)
@@ -81,18 +82,18 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         """Update the size of the turnbox for motion type."""
         self.spacing = self.attr_box.attr_panel.width() // 250
         border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
-        box_font_size = int(self.attr_box.width() / 10)
-        dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
+        box_font_size = int(self.attr_box.height() / 10)
+        dropdown_arrow_width = int(self.height() * 0.075)  # Width of the dropdown arrow
         border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
 
-        self.turnbox.setMinimumHeight(int(self.attr_box.width() / 4))
-        self.turnbox.setMaximumHeight(int(self.attr_box.width() / 4))
-        self.turnbox.setMinimumWidth(int(self.attr_box.width() / 3))
-        self.turnbox.setMaximumWidth(int(self.attr_box.width() / 3))
+        self.turnbox.setMinimumHeight(int(self.attr_box.height() / 4))
+        self.turnbox.setMaximumHeight(int(self.attr_box.height() / 4))
+        self.turnbox.setMinimumWidth(int(self.attr_box.height() / 3))
+        self.turnbox.setMaximumWidth(int(self.attr_box.height() / 3))
         self.turnbox.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
 
         self.turns_label.setContentsMargins(0, 0, self.spacing, 0)
-        self.turns_label.setFont(QFont("Arial", int(self.width() / 22)))
+        self.turns_label.setFont(QFont("Arial", int(self.height() / 15)))
 
         # Adjust the stylesheet to add padding inside the combo box on the left
         self.turnbox.setStyleSheet(

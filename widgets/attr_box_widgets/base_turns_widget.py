@@ -106,6 +106,7 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
         self._configure_layout(layout)
         for button in buttons:
             layout.addWidget(button)
+            
         return frame
 
     def _create_turns_button(

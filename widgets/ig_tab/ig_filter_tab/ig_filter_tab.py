@@ -1,12 +1,9 @@
 from typing import TYPE_CHECKING
 from widgets.base_filter_tab import BaseFilterTab
-from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_panel import IGColorAttrPanel
-from widgets.ig_tab.ig_filter_tab.by_lead_state.ig_lead_state_attr_panel import (
-    IGLeadStateAttrPanel,
-)
-from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_panel import (
-    IGMotionTypeAttrPanel,
-)
+from .by_color.ig_color_attr_panel import IGColorAttrPanel
+from .by_lead_state.ig_lead_state_attr_panel import IGLeadStateAttrPanel
+from .by_motion_type.ig_motion_type_attr_panel import IGMotionTypeAttrPanel
+from PyQt6.QtWidgets import QHBoxLayout
 
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_tab import IGTab
@@ -28,3 +25,7 @@ class IGFilterTab(BaseFilterTab):
         self.currentChanged.connect(self.ig_tab.ig_scroll_area.reset_turns)
         self.currentChanged.connect(self.motion_attr_panel.reset_turns)
         self.currentChanged.connect(self.color_attr_panel.reset_turns)
+        self.setContentsMargins(0, 0, 0, 0)
+        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.layout.setSpacing(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)

@@ -21,10 +21,11 @@ class BaseAttrPanel(QFrame):
         self.parent: Union["GraphEditorFrame", "IGTab"] = parent
         self.setContentsMargins(0, 0, 0, 0)
         self.boxes: list[BaseAttrBox] = []
-        
+
     def setup_layouts(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
 
     def clear_all_attr_boxes(self) -> None:
         for box in self.boxes:
