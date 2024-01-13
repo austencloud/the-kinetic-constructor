@@ -54,7 +54,7 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
             self.layout.addWidget(box)
         self.placeholder_label.show()
         # self.resize_ig_motion_type_attr_panel()
-        self.add_black_borders()
+        # self.add_black_borders()
 
     def add_black_borders(self) -> None:
         self.setStyleSheet(
