@@ -54,10 +54,13 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         # Simulate CW button click if necessary
         if simulate_same_click:
             if hasattr(self.attr_box.header_widget, "same_button"):
-                if not self.same_btn.isChecked() and not self.opp_btn.isChecked():
+                if (
+                    not self.attr_box.same_button.isChecked()
+                    and not self.attr_box.opp_button.isChecked()
+                ):
                     self._simulate_same_button_click()
                 # set the stylesheet to pressed
-                self.same_btn.setStyleSheet(
+                self.attr_box.same_button.setStyleSheet(
                     self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=True)
                 )
 
@@ -68,10 +71,10 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
                         RED if motion.color == BLUE else BLUE
                     ]
                     if hasattr(self.attr_box.header_widget, "same_button"):
-                        if self.same_btn.isChecked():
+                        if self.attr_box.same_button.isChecked():
                             if other_motion.prop_rot_dir:
                                 motion.prop_rot_dir = other_motion.prop_rot_dir
-                        elif self.opp_btn.isChecked():
+                        elif self.attr_box.opp_button.isChecked():
                             if other_motion.prop_rot_dir is CLOCKWISE:
                                 motion.prop_rot_dir = COUNTER_CLOCKWISE
                             elif other_motion.prop_rot_dir is COUNTER_CLOCKWISE:
@@ -80,13 +83,13 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         for pictograph in self.attr_box.pictographs.values():
             self.adjust_turns(pictograph, adjustment)
 
-    def _simulate_same_button_click(self):
-        self.same_btn.setChecked(True)
-        self.opp_btn.setChecked(False)
-        self.same_btn.setStyleSheet(
+    def _simulate_same_button_click(self) -> None:
+        self.attr_box.same_button.setChecked(True)
+        self.attr_box.opp_button.setChecked(False)
+        self.attr_box.same_button.setStyleSheet(
             self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=True)
         )
-        self.opp_btn.setStyleSheet(
+        self.attr_box.opp_button.setStyleSheet(
             self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=False)
         )
 

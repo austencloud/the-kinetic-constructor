@@ -72,6 +72,10 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
         self._set_vtg_dir(SAME if has_turns else None)
 
     def _set_vtg_dir(self, vtg_dir: VtgDirections) -> None:
+        if vtg_dir == SAME:
+            self.attr_box.vtg_dir_btn_state = {SAME: True, OPP: False}
+        elif vtg_dir == OPP:
+            self.attr_box.vtg_dir_btn_state = {SAME: False, OPP: True}
         prop_rot_dir: PropRotDirs = None
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():

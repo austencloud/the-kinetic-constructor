@@ -94,12 +94,12 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         frame.setContentsMargins(0, 0, 0, 0)
         return frame
 
-    def are_pictographs_with_0_turn_dash_or_static_motion_in_scroll_area(
+    def are_pictographs_with_dash_or_static_motion_in_scroll_area(
         self,
     ) -> bool:
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
-                if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
+                if motion.motion_type in [DASH, STATIC]:
                     return True
         return False
 
@@ -111,126 +111,56 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
     ) -> None:
         if new_turns in [0.0, 1.0, 2.0, 3.0]:
             new_turns = int(new_turns)
-        
         """Set turns for motions of a specific type to a new value."""
         self.update_turns_display(new_turns)
-        if self.are_pictographs_with_0_turn_dash_or_static_motion_in_scroll_area():
-            if new_turns == 0:
-                self.attr_box.same_button.setChecked(False)
-                self.opp_btn.setChecked(False)
-                self.attr_box.vtg_dir_btn_state[SAME] = False
-                self.attr_box.vtg_dir_btn_state[OPP] = False
+        if self.attr_box.attribute_type == MOTION_TYPE:
+            if hasattr(self.attr_box, "same_button"):
+            
+                self.vtg_dir_btn_state = self.attr_box.vtg_dir_btn_state
+                if self.are_pictographs_with_dash_or_static_motion_in_scroll_area():
+                    if new_turns == 0:
+                        self.attr_box.same_button.setStyleSheet(
+                            self.get_vtg_dir_btn_style(pressed=False)
+                        )
+                        self.attr_box.opp_button.setStyleSheet(
+                            self.get_vtg_dir_btn_style(pressed=False)
+                        )
 
-                self.attr_box.same_button.setStyleSheet(
-                    self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=False)
-                )
-                self.opp_btn.setStyleSheet(
-                    self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=False)
-                )
+                    elif new_turns > 0:
+                        self.attr_box.same_button.setChecked(self.vtg_dir_btn_state[SAME])
+                        self.attr_box.opp_button.setChecked(self.vtg_dir_btn_state[OPP])
+                        self.attr_box.same_button.setStyleSheet(
+                            self.get_vtg_dir_btn_style(
+                                pressed=(self.vtg_dir_btn_state[SAME])
+                            )
+                        )
+                        self.attr_box.opp_button.setStyleSheet(
+                            self.get_vtg_dir_btn_style(
+                                pressed=(self.vtg_dir_btn_state[OPP])
+                            )
+                        )
 
-            elif new_turns > 0:
-                if self.attr_box.attribute_type == MOTION_TYPE:
-                    if self.attr_box.motion_type == DASH and not (
-                        self.attr_box.vtg_dir_btn_state[SAME]
-                        or self.attr_box.vtg_dir_btn_state[OPP]
-                    ):
-                        self.opp_btn.setChecked(False)
-                        self.attr_box.same_button.setStyleSheet(
-                            self.attr_box.header_widget.get_vtg_dir_btn_style(
-                                pressed=True
-                            )
-                        )
-                    elif self.attr_box.motion_type == STATIC and not (
-                        self.attr_box.vtg_dir_btn_state[SAME]
-                        or self.attr_box.vtg_dir_btn_state[OPP]
-                    ):
-                        self.attr_box.same_button.setChecked(True)
-                    else:
-                        # Apply the saved state
-                        self.attr_box.same_button.setChecked(
-                            self.attr_box.vtg_dir_btn_state[SAME]
-                            if self.attr_box.motion_type == DASH
-                            else self.attr_box.vtg_dir_btn_state[SAME]
-                        )
-                        self.attr_box.same_button.setStyleSheet(
-                            self.attr_box.header_widget.get_vtg_dir_btn_style(
-                                pressed=(
-                                    self.attr_box.vtg_dir_btn_state[SAME]
-                                    if self.attr_box.motion_type == DASH
-                                    else self.attr_box.vtg_dir_btn_state[SAME]
-                                )
-                            )
-                        )
-                        self.opp_btn.setChecked(
-                            self.attr_box.vtg_dir_btn_state[OPP]
-                            if self.attr_box.motion_type == DASH
-                            else self.attr_box.vtg_dir_btn_state[OPP]
-                        )
-                        self.opp_btn.setStyleSheet(
-                            self.attr_box.header_widget.get_vtg_dir_btn_style(
-                                pressed=(
-                                    self.attr_box.vtg_dir_btn_state[OPP]
-                                    if self.attr_box.motion_type == DASH
-                                    else self.attr_box.vtg_dir_btn_state[OPP]
-                                )
-                            )
-                        )
-                elif self.attr_box.attribute_type == COLOR:
-                    if not (
-                        self.attr_box.vtg_dir_btn_state[SAME]
-                        or self.attr_box.vtg_dir_btn_state[OPP]
-                    ):
-                        self.attr_box.same_button.setChecked(True)
-                    else:
-                        # Apply the saved state
-                        self.attr_box.same_button.setChecked(
-                            self.attr_box.vtg_dir_btn_state[SAME]
-                            if self.attr_box.color == BLUE
-                            else self.attr_box.vtg_dir_btn_state[SAME]
-                        )
-                        self.attr_box.same_button.setStyleSheet(
-                            self.attr_box.header_widget.get_vtg_dir_btn_style(
-                                pressed=(
-                                    self.attr_box.vtg_dir_btn_state[SAME]
-                                    if self.attr_box.color == BLUE
-                                    else self.attr_box.vtg_dir_btn_state[SAME]
-                                )
-                            )
-                        )
-                        self.opp_btn.setChecked(
-                            self.attr_box.vtg_dir_btn_state[OPP]
-                            if self.attr_box.color == BLUE
-                            else self.attr_box.vtg_dir_btn_state[OPP]
-                        )
-                        self.opp_btn.setStyleSheet(
-                            self.attr_box.header_widget.get_vtg_dir_btn_style(
-                                pressed=(
-                                    self.attr_box.vtg_dir_btn_state[OPP]
-                                    if self.attr_box.color == BLUE
-                                    else self.attr_box.vtg_dir_btn_state[OPP]
-                                )
-                            )
-                        )
         # Apply new turns to motions
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
-                other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
+                other_motion = pictograph.get_other_motion(motion)
                 if self.attr_box.attribute_type == MOTION_TYPE:
                     if motion.motion_type == self.attr_box.motion_type:
                         if new_turns == 0 and motion.motion_type in [DASH, STATIC]:
                             motion.prop_rot_dir = NO_ROT
                         if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
-                            if self.attr_box.same_button.isChecked():
+                            if self.vtg_dir_btn_state[SAME]:
                                 motion.prop_rot_dir = other_motion.prop_rot_dir
-                            elif self.opp_btn.isChecked():
-                                if other_motion.prop_rot_dir is CLOCKWISE:
+                            elif self.vtg_dir_btn_state[OPP]:
+                                if other_motion.prop_rot_dir == CLOCKWISE:
                                     motion.prop_rot_dir = COUNTER_CLOCKWISE
-                                elif other_motion.prop_rot_dir is COUNTER_CLOCKWISE:
+                                elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
                                     motion.prop_rot_dir = CLOCKWISE
                         pictograph_dict = {
                             f"{motion.color}_turns": new_turns,
                         }
                         pictograph.update_pictograph(pictograph_dict)
+
                 elif self.attr_box.attribute_type == COLOR:
                     if motion.color == self.attr_box.color:
                         if new_turns == 0 and motion.motion_type in [DASH, STATIC]:
@@ -238,11 +168,13 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
                         if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
                             if self.attr_box.same_button.isChecked():
                                 motion.prop_rot_dir = other_motion.prop_rot_dir
-                            elif self.opp_btn.isChecked():
-                                if other_motion.prop_rot_dir is CLOCKWISE:
+                            elif self.attr_box.opp_button.isChecked():
+                                if other_motion.prop_rot_dir == CLOCKWISE:
                                     motion.prop_rot_dir = COUNTER_CLOCKWISE
-                                elif other_motion.prop_rot_dir is COUNTER_CLOCKWISE:
+                                elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
                                     motion.prop_rot_dir = CLOCKWISE
+                            else:
+                                motion.prop_rot_dir = NO_ROT
                         pictograph_dict = {
                             f"{motion.color}_turns": new_turns,
                         }

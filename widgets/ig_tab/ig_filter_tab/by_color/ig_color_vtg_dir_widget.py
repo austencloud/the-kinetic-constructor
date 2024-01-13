@@ -69,6 +69,10 @@ class IGColorVtgDirWidget(BaseAttrBoxWidget):
         return buttons
 
     def _set_vtg_dir(self, vtg_dir: VtgDirections) -> None:
+        if vtg_dir == SAME:
+            self.attr_box.vtg_dir_btn_state = {SAME: True, OPP: False}
+        elif vtg_dir == OPP:
+            self.attr_box.vtg_dir_btn_state = {SAME: False, OPP: True}
         prop_rot_dir: PropRotDirs = None
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
@@ -166,8 +170,8 @@ class IGColorVtgDirWidget(BaseAttrBoxWidget):
         self.opp_button.clicked.connect(self.opp_button_clicked)
         self.same_button.clicked.connect(self.cw_button_clicked)
         rot_dir_layout.addWidget(rot_dir_label)
-        rot_dir_layout.addWidget(self.opp_button)
         rot_dir_layout.addWidget(self.same_button)
+        rot_dir_layout.addWidget(self.opp_button)
         self.layout.addLayout(rot_dir_layout)
 
     def opp_button_clicked(self) -> None:
