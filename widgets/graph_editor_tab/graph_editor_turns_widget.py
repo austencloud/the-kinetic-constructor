@@ -44,14 +44,16 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
         """Adds the header and buttons to their respective frames."""
         self._add_widgets_to_layout(
             [self.clock_left, self.turnbox_vbox_frame, self.clock_right],
-            self.main_hbox_layout,
+            self.turn_display_and_adjust_btns_hbox_layout,
         )
         # self._add_widgets_to_layout(self.turns_buttons, self.buttons_hbox_layout)
 
-        self.main_hbox_layout.setContentsMargins(0, 0, 0, 0)
+        self.turn_display_and_adjust_btns_hbox_layout.setContentsMargins(0, 0, 0, 0)
         self.buttons_hbox_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.header_frame = self._create_frame(self.main_hbox_layout)
+        self.header_frame = self._create_frame(
+            self.turn_display_and_adjust_btns_hbox_layout
+        )
         self.button_frame = self._create_frame(self.buttons_hbox_layout)
 
         self.header_frame.setContentsMargins(0, 0, 0, 0)

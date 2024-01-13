@@ -40,22 +40,26 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         ]
     ) -> None:
         turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
-        self.turns_buttons_layout = QHBoxLayout()
-        direct_set_turns_frame = QFrame()
+        self.turns_buttons_layout = QHBoxLayout()  # Create a horizontal layout
         button_style_sheet = self._get_direct_set_button_style_sheet()
+
+        # Create buttons and add them to the turns_buttons_layout
         for value in turns_values:
             button = QPushButton(value, self)
             button.setStyleSheet(button_style_sheet)
             button.setContentsMargins(0, 0, 0, 0)
-            # button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)  # Set size policy
-            # set the button's minimum width to contain its text
             button.setMinimumWidth(
                 button.fontMetrics().boundingRect(value).width() + 10
             )
             button.clicked.connect(lambda checked, v=value: self._direct_set_turns(v))
             self.turns_buttons_layout.addWidget(button)
-        
-        self.layout.addLayout(self.turns_buttons_layout)
+
+        # Use a dedicated frame to hold the turns buttons
+        self.turns_buttons_frame = QFrame(self)
+        self.turns_buttons_frame.setLayout(self.turns_buttons_layout)
+
+        # Add the frame to the main layout of the widget
+        self.layout.addWidget(self.turns_buttons_frame)
 
     def create_frame(self) -> QFrame:
         frame = QFrame()
@@ -109,8 +113,6 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         if new_turns in [0.0, 1.0, 2.0, 3.0]:
             new_turns = int(new_turns)
         return new_turns
-
-
 
     ### EVENT HANDLERS ###
 

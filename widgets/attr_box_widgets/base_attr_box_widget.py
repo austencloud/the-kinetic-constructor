@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class BaseAttrBoxWidget(QWidget):
-    def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
+    def __init__(self, attr_box) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
 

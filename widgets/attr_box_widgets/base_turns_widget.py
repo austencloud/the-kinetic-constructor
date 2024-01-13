@@ -1,6 +1,4 @@
-from PyQt6.QtWidgets import (
-    QHBoxLayout, QVBoxLayout, QFrame, QSizePolicy, QLabel
-)
+from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QFrame, QSizePolicy, QLabel
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, List, Union
@@ -9,15 +7,19 @@ from widgets.attr_box_widgets.attr_box_button import AttrBoxButton
 from widgets.attr_panel.base_attr_box import BaseAttrBox
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.graph_editor_turns_widget import GraphEditorTurnsWidget
-    from widgets.ig_tab.ig_filter_tab.ig_turns_widget.ig_motion_type_turns_widget import IGMotionTypeTurnsWidget
+    from widgets.graph_editor_tab.graph_editor_turns_widget import (
+        GraphEditorTurnsWidget,
+    )
+    from widgets.ig_tab.ig_filter_tab.ig_turns_widget.ig_motion_type_turns_widget import (
+        IGMotionTypeTurnsWidget,
+    )
 
 
 class BaseTurnsWidget(BaseAttrBoxWidget):
     def __init__(self, attr_box: "BaseAttrBox") -> None:
         self.attr_box = attr_box
         super().__init__(attr_box)
-        self._initialize_ui()
+        # self._initialize_ui()
 
     def _initialize_ui(self) -> None:
         self.turns_display = self.create_turns_display()
@@ -43,16 +45,22 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
         self.layout.setSpacing(0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.main_hbox_layout = QHBoxLayout()
+        self.turn_display_and_adjust_btns_hbox_layout = QHBoxLayout()
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
 
     def _add_frames_to_main_layout(self) -> None:
-        main_frame = QFrame()
-        main_frame.setLayout(self.main_hbox_layout)
-        self.main_hbox_layout.addWidget(self.subtract_button_frame)
-        self.main_hbox_layout.addWidget(self.turns_display_frame)
-        self.main_hbox_layout.addWidget(self.add_button_frame)
-        self.layout.addWidget(main_frame)
+        turn_display_and_adjust_btns_frame = QFrame()
+        turn_display_and_adjust_btns_frame.setLayout(
+            self.turn_display_and_adjust_btns_hbox_layout
+        )
+        self.turn_display_and_adjust_btns_hbox_layout.addWidget(
+            self.subtract_button_frame
+        )
+        self.turn_display_and_adjust_btns_hbox_layout.addWidget(
+            self.turns_display_frame
+        )
+        self.turn_display_and_adjust_btns_hbox_layout.addWidget(self.add_button_frame)
+        self.layout.addWidget(turn_display_and_adjust_btns_frame)
 
     def _setup_add_subtract_turns_buttons(self) -> List[AttrBoxButton]:
         self.subtract_turns_buttons = [
@@ -97,9 +105,7 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
             layout.addWidget(button)
         return frame
 
-    def _create_turns_button(
-        self, text: str
-    ) -> AttrBoxButton:
+    def _create_turns_button(self, text: str) -> AttrBoxButton:
         button = AttrBoxButton(self)
         button.setText(text)
         turn_adjustment_mapping = {"-1": -1, "-0.5": -0.5, "+0.5": 0.5, "+1": 1}
