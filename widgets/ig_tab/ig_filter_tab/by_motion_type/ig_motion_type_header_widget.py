@@ -36,7 +36,7 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
         if self.motion_type in [PRO, ANTI]:
             self._setup_pro_anti_layout()
         if self.motion_type in [DASH, STATIC]:
-            self.prop_rot_dir_buttons = self._setup_prop_rot_dir_buttons()
+            self.same_opp_buttons = self._setup_prop_rot_dir_buttons()
             self._set_default_rotation_direction()
             self._setup_dash_static_layout()
 
@@ -53,11 +53,11 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
         super()._setup_layout()
         header_layout = QHBoxLayout()
         header_layout.addStretch(3)
-        header_layout.addWidget(self.prop_rot_dir_buttons[0])
+        header_layout.addWidget(self.same_opp_buttons[0])
         header_layout.addStretch(1)
         header_layout.addWidget(self.header_label)
         header_layout.addStretch(1)
-        header_layout.addWidget(self.prop_rot_dir_buttons[1])
+        header_layout.addWidget(self.same_opp_buttons[1])
         header_layout.addStretch(3)
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.separator)
@@ -81,19 +81,20 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
                         if motion == pictograph.blue_motion
                         else pictograph.blue_motion
                     )
-                    if motion.motion_type == DASH:
-                        if vtg_direction is SAME:
-                            motion.prop_rot_dir = other_motion.prop_rot_dir
-                            prop_rot_dir = other_motion.prop_rot_dir
-                        elif vtg_direction is OPP:
-                            if other_motion.prop_rot_dir == CLOCKWISE:
-                                motion.prop_rot_dir = COUNTER_CLOCKWISE
-                                prop_rot_dir = COUNTER_CLOCKWISE
-                            elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                                motion.prop_rot_dir = CLOCKWISE
-                                prop_rot_dir = CLOCKWISE
-                        else:
-                            prop_rot_dir = None
+                    if motion.motion_type in [DASH, STATIC]:
+                        if motion.turns > 0:
+                            if vtg_direction is SAME:
+                                motion.prop_rot_dir = other_motion.prop_rot_dir
+                                prop_rot_dir = other_motion.prop_rot_dir
+                            elif vtg_direction is OPP:
+                                if other_motion.prop_rot_dir == CLOCKWISE:
+                                    motion.prop_rot_dir = COUNTER_CLOCKWISE
+                                    prop_rot_dir = COUNTER_CLOCKWISE
+                                elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                                    motion.prop_rot_dir = CLOCKWISE
+                                    prop_rot_dir = CLOCKWISE
+                            else:
+                                prop_rot_dir = None
                     if motion.turns > 0:
                         pictograph_dict = {
                             f"{motion.color}_prop_rot_dir": prop_rot_dir,
@@ -122,12 +123,6 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
                 else:
                     self.same_button.setStyleSheet(self.get_button_style(pressed=False))
                     self.opp_button.setStyleSheet(self.get_button_style(pressed=False))
-            for motion in pictograph.motions.values():
-                if motion.motion_type == DASH and (
-                    prop_rot_dir is None or motion.turns > 0
-                ):
-                    motion.prop_rot_dir = prop_rot_dir if prop_rot_dir else CLOCKWISE
-                    motion.manipulator.set_prop_rot_dir(motion.prop_rot_dir)
 
     def _setup_prop_rot_dir_buttons(self) -> List[QPushButton]:
         self.same_button: QPushButton = self._create_button(
@@ -199,7 +194,7 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
 
         if self.motion_type in [DASH, STATIC]:
             button_size = int(self.height() * 0.9)
-            for button in self.prop_rot_dir_buttons:
+            for button in self.same_opp_buttons:
                 button.setMinimumSize(button_size, button_size)
                 button.setMaximumSize(button_size, button_size)
                 button.setIconSize(button.size() * 0.9)

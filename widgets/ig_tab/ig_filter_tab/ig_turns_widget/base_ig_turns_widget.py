@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Union
-from constants import CLOCKWISE, DASH, ICON_DIR, NO_ROT, STATIC
+from constants import BLUE, CLOCKWISE, DASH, ICON_DIR, NO_ROT, RED, STATIC
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QPushButton, QHBoxLayout
 from objects.motion.motion import Motion
@@ -63,21 +63,25 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         motion: Motion,
         adjustment: float,
     ) -> None:
+        other_motion = motion.scene.motions[RED if motion.color == BLUE else BLUE]
+
         new_turns = self._calculate_new_turns(motion.turns, adjustment)
         if new_turns == 0 and motion.motion_type in [DASH, STATIC]:
             motion.prop_rot_dir = NO_ROT
-        simulate_cw_click = False
+            for button in self.attr_box.header_widget.same_opp_buttons:
+                button.setStyleSheet(self.get_button_style(pressed=False))
+        simulate_same_click = False
 
         if new_turns > 0 and motion.motion_type in [DASH, STATIC]:
             if motion.turns == 0:
-                simulate_cw_click = True
-                motion.prop_rot_dir = CLOCKWISE
-            if simulate_cw_click:
+                simulate_same_click = True
+                motion.prop_rot_dir = other_motion.prop_rot_dir
+            if simulate_same_click:
                 if (
                     not self.attr_box.header_widget.same_button.isChecked()
                     and not self.attr_box.header_widget.opp_button.isChecked()
                 ):
-                    self._simulate_cw_button_click_in_header_widget()
+                    self._simulate_same_button_click_in_header_widget()
 
         motion.set_turns(new_turns)
         pictograph_dict = {

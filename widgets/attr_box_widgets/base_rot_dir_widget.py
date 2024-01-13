@@ -32,7 +32,7 @@ class BaseRotDirWidget(BaseAttrBoxWidget):
     ) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
-        self.prop_rot_dir_buttons = self._setup_prop_rot_dir_buttons()
+        self.same_opp_buttons = self._setup_prop_rot_dir_buttons()
 
         self.setMinimumWidth(self.attr_box.width())
 
@@ -45,7 +45,6 @@ class BaseRotDirWidget(BaseAttrBoxWidget):
         rot_dir_layout.addWidget(self.ccw_button)
         rot_dir_layout.addWidget(self.cw_button)
         self.layout.addLayout(rot_dir_layout)
-
 
     def _set_default_rotation_direction(self):
         has_turns = any(
@@ -83,7 +82,6 @@ class BaseRotDirWidget(BaseAttrBoxWidget):
         else:
             self.cw_button.setStyleSheet(self.get_button_style(pressed=False))
             self.ccw_button.setStyleSheet(self.get_button_style(pressed=False))
-
 
     def _setup_prop_rot_dir_buttons(self) -> List[QPushButton]:
         self.cw_button = self._create_button(

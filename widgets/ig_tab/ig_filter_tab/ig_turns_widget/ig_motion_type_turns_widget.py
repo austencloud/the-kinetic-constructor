@@ -1,6 +1,15 @@
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
-from constants import CLOCKWISE, COUNTER_CLOCKWISE, DASH, ICON_DIR, NO_ROT, STATIC
+from constants import (
+    BLUE,
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
+    DASH,
+    ICON_DIR,
+    NO_ROT,
+    RED,
+    STATIC,
+)
 from objects.pictograph.pictograph import Pictograph
 from .base_ig_turns_widget import BaseIGTurnsWidget
 
@@ -50,7 +59,7 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
                     not self.attr_box.header_widget.same_button.isChecked()
                     and not self.attr_box.header_widget.opp_button.isChecked()
                 ):
-                    self._simulate_cw_button_click_in_header_widget()
+                    self._simulate_same_button_click_in_header_widget()
 
         # Apply new turns to motions
         for pictograph in self.attr_box.pictographs.values():
@@ -128,7 +137,7 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
 
     def _adjust_turns(self, adjustment) -> None:
         """Adjust turns for a given pictograph based on motion type."""
-        simulate_cw_click = False
+        simulate_same_click = False
 
         # Check if any static motion with zero turns exists
         for pictograph in self.attr_box.pictographs.values():
@@ -138,32 +147,48 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
                     and motion.turns == 0
                     and motion.motion_type == self.attr_box.motion_type
                 ):
-                    simulate_cw_click = True
+                    simulate_same_click = True
                     break
-            if simulate_cw_click:
+            if simulate_same_click:
                 break
 
         # Simulate CW button click if necessary
-        if simulate_cw_click:
-            if hasattr(self.attr_box.header_widget, "cw_button"):
+        if simulate_same_click:
+            if hasattr(self.attr_box.header_widget, "same_button"):
                 if (
                     not self.attr_box.header_widget.same_button.isChecked()
                     and not self.attr_box.header_widget.opp_button.isChecked()
                 ):
-                    self._simulate_cw_button_click_in_header_widget()
+                    self._simulate_same_button_click_in_header_widget()
+                # set the stylesheet to pressed
+                self.attr_box.header_widget.same_button.setStyleSheet(
+                    self.attr_box.header_widget.get_button_style(pressed=True)
+                )
 
-        if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
-            if hasattr(self.attr_box.header_widget, "cw_button"):
-                if self.attr_box.header_widget.same_button.isChecked():
-                    motion.prop_rot_dir = CLOCKWISE
-                elif self.attr_box.header_widget.opp_button.isChecked():
-                    motion.prop_rot_dir = COUNTER_CLOCKWISE
+        for pictograph in self.attr_box.pictographs.values():
+            for motion in pictograph.motions.values():
+                if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
+                    other_motion = pictograph.motions[
+                        RED if motion.color == BLUE else BLUE
+                    ]
+                    if hasattr(self.attr_box.header_widget, "same_button"):
+                        if self.attr_box.header_widget.same_button.isChecked():
+                            if other_motion.prop_rot_dir:
+                                motion.prop_rot_dir = other_motion.prop_rot_dir
+                        elif self.attr_box.header_widget.opp_button.isChecked():
+                            if other_motion.prop_rot_dir is CLOCKWISE:
+                                motion.prop_rot_dir = COUNTER_CLOCKWISE
+                            elif other_motion.prop_rot_dir is COUNTER_CLOCKWISE:
+                                motion.prop_rot_dir = CLOCKWISE
+
         for pictograph in self.attr_box.pictographs.values():
             self.adjust_turns_by_motion_type(pictograph, adjustment)
 
-    def _simulate_cw_button_click_in_header_widget(self):
+    def _simulate_same_button_click_in_header_widget(self):
         self.attr_box.header_widget.same_button.setChecked(True)
-        # self.attr_box.header_widget.cw_button.click
+        self.attr_box.header_widget.same_button.setStyleSheet(
+            self.attr_box.header_widget.get_button_style(pressed=True)
+        )
 
     def _set_turns(self, new_turns: int | float) -> None:
         self._direct_set_turns_by_motion_type(new_turns)
