@@ -1,5 +1,18 @@
 from typing import TYPE_CHECKING, Union
-from constants import BLUE, COLOR, DASH, LEAD_STATE, MOTION_TYPE, NO_ROT, RED, STATIC
+from constants import (
+    BLUE,
+    CLOCKWISE,
+    COLOR,
+    COUNTER_CLOCKWISE,
+    DASH,
+    LEAD_STATE,
+    MOTION_TYPE,
+    NO_ROT,
+    OPP,
+    RED,
+    SAME,
+    STATIC,
+)
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QPushButton, QHBoxLayout, QFrame
 from objects.motion.motion import Motion
@@ -17,20 +30,23 @@ if TYPE_CHECKING:
 
 
 class BaseIGTurnsWidget(BaseTurnsWidget):
-    def __init__(self, attr_box: "BaseAttrBox") -> None:
+    def __init__(
+        self,
+        attr_box: Union["IGMotionTypeAttrBox", "IGLeadStateAttrBox", "IGColorAttrBox"],
+    ) -> None:
         super().__init__(attr_box)
-        self.attr_box: Union[
-            "IGMotionTypeAttrBox", "IGLeadStateAttrBox", "IGColorAttrBox"
-        ] = attr_box
+        self.attr_box = attr_box
 
         self._initialize_ui()
         self.setup_direct_set_turns_buttons()
 
-    def setup_direct_set_turns_buttons(
-        self: Union[
-            "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
-        ]
-    ) -> None:
+        if hasattr(self.attr_box, "header_widget"):
+            if hasattr(self.attr_box.header_widget, "same_button"):
+                if self.attr_box.motion_type in [DASH, STATIC]:
+                    self.same_btn = self.attr_box.header_widget.same_button
+                    self.opp_btn = self.attr_box.header_widget.opp_button
+
+    def setup_direct_set_turns_buttons(self) -> None:
         turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
         self.turns_buttons_layout = QHBoxLayout()  # Create a horizontal layout
         button_style_sheet = self._get_direct_set_button_style_sheet()
@@ -42,7 +58,9 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
             button.setMinimumWidth(
                 button.fontMetrics().boundingRect(value).width() + 10
             )
-            button.clicked.connect(lambda checked, v=value: self._direct_set_turns(v))
+            button.clicked.connect(
+                lambda checked, v=value: self._direct_set_turns(float(v))
+            )
             self.turns_buttons_layout.addWidget(button)
 
         self.turns_buttons_frame = QFrame(self)
@@ -77,20 +95,146 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
             new_turns = int(new_turns)
         self.update_turns_display(new_turns)
 
-
     def create_frame(self) -> QFrame:
         frame = QFrame()
         frame.setContentsMargins(0, 0, 0, 0)
         return frame
 
+    def are_pictographs_with_0_turn_dash_or_static_motion_in_scroll_area(
+        self,
+    ) -> bool:
+        for pictograph in self.attr_box.pictographs.values():
+            for motion in pictograph.motions.values():
+                if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
+                    return True
+        return False
+
     def _direct_set_turns(
         self: Union[
             "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
         ],
-        turns: str,
+        new_turns: Union[int, float],
     ) -> None:
-        turns = self._convert_turns_from_str_to_num(turns)
-        self._set_turns(turns)
+        """Set turns for motions of a specific type to a new value."""
+        self.update_turns_display(new_turns)
+        if self.are_pictographs_with_0_turn_dash_or_static_motion_in_scroll_area():
+            if new_turns == 0:
+                if self.attr_box.motion_type == DASH:
+                    self.attr_box.vtg_dir_btn_state[SAME] = self.same_btn.isChecked()
+                    self.attr_box.vtg_dir_btn_state[OPP] = self.opp_btn.isChecked()
+                elif self.attr_box.motion_type == STATIC:
+                    self.attr_box.vtg_dir_btn_state[SAME] = self.same_btn.isChecked()
+                    self.attr_box.vtg_dir_btn_state[OPP] = self.opp_btn.isChecked()
+
+                self.same_btn.setChecked(False)
+                self.opp_btn.setChecked(False)
+                self.same_btn.setStyleSheet(
+                    self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=False)
+                )
+                self.opp_btn.setStyleSheet(
+                    self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=False)
+                )
+
+            elif new_turns > 0:
+                if self.attr_box.attribute_type == MOTION_TYPE:
+                    if self.attr_box.motion_type == DASH and not (
+                        self.dash_button_state[SAME] or self.dash_button_state[OPP]
+                    ):
+                        self.opp_btn.setChecked(False)
+                        self.same_btn.setStyleSheet(
+                            self.attr_box.header_widget.get_vtg_dir_btn_style(
+                                pressed=True
+                            )
+                        )
+                    elif self.attr_box.motion_type == STATIC and not (
+                        self.static_button_state[SAME] or self.static_button_state[OPP]
+                    ):
+                        self.same_btn.setChecked(True)
+                    else:
+                        # Apply the saved state
+                        self.same_btn.setChecked(
+                            self.dash_button_state[SAME]
+                            if self.attr_box.motion_type == DASH
+                            else self.static_button_state[SAME]
+                        )
+                        self.same_btn.setStyleSheet(
+                            self.attr_box.header_widget.get_vtg_dir_btn_style(
+                                pressed=(
+                                    self.dash_button_state[SAME]
+                                    if self.attr_box.motion_type == DASH
+                                    else self.static_button_state[SAME]
+                                )
+                            )
+                        )
+                        self.opp_btn.setChecked(
+                            self.dash_button_state[OPP]
+                            if self.attr_box.motion_type == DASH
+                            else self.static_button_state[OPP]
+                        )
+                        self.opp_btn.setStyleSheet(
+                            self.attr_box.header_widget.get_vtg_dir_btn_style(
+                                pressed=(
+                                    self.dash_button_state[OPP]
+                                    if self.attr_box.motion_type == DASH
+                                    else self.static_button_state[OPP]
+                                )
+                            )
+                        )
+                elif self.attr_box.attribute_type == COLOR:
+                    if not (
+                        self.attr_box.vtg_dir_btn_state[SAME] or self.attr_box.vtg_dir_btn_state[OPP]
+                    ):
+                        self.same_btn.setChecked(True)
+                    else:
+                        # Apply the saved state
+                        self.same_btn.setChecked(
+                            self.attr_box.vtg_dir_btn_state[SAME]
+                            if self.attr_box.color == BLUE
+                            else self.static_button_state[SAME]
+                        )
+                        self.same_btn.setStyleSheet(
+                            self.attr_box.header_widget.get_vtg_dir_btn_style(
+                                pressed=(
+                                    self.attr_box.vtg_dir_btn_state[SAME]
+                                    if self.attr_box.color == BLUE
+                                    else self.static_button_state[SAME]
+                                )
+                            )
+                        )
+                        self.opp_btn.setChecked(
+                            self.attr_box.vtg_dir_btn_state[OPP]
+                            if self.attr_box.color == BLUE
+                            else self.static_button_state[OPP]
+                        )
+                        self.opp_btn.setStyleSheet(
+                            self.attr_box.header_widget.get_vtg_dir_btn_style(
+                                pressed=(
+                                    self.attr_box.vtg_dir_btn_state[OPP]
+                                    if self.attr_box.color == BLUE
+                                    else self.static_button_state[OPP]
+                                )
+                            )
+                        )
+        # Apply new turns to motions
+        for pictograph in self.attr_box.pictographs.values():
+            for motion in pictograph.motions.values():
+                other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
+
+                if motion.motion_type == self.attr_box.motion_type:
+                    if new_turns == 0 and motion.motion_type in [DASH, STATIC]:
+                        motion.prop_rot_dir = NO_ROT
+                    if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
+                        if self.same_btn.isChecked():
+                            motion.prop_rot_dir = other_motion.prop_rot_dir
+                        elif self.opp_btn.isChecked():
+                            if other_motion.prop_rot_dir is CLOCKWISE:
+                                motion.prop_rot_dir = COUNTER_CLOCKWISE
+                            elif other_motion.prop_rot_dir is COUNTER_CLOCKWISE:
+                                motion.prop_rot_dir = CLOCKWISE
+                    pictograph_dict = {
+                        f"{motion.color}_turns": new_turns,
+                    }
+                    pictograph.update_pictograph(pictograph_dict)
 
     def process_turns_adjustment_for_single_motion(
         self: Union[
@@ -105,7 +249,7 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         if new_turns == 0 and motion.motion_type in [DASH, STATIC]:
             motion.prop_rot_dir = NO_ROT
             for button in self.attr_box.same_opp_buttons:
-                button.setStyleSheet(self.get_vtg_dir_button_style(pressed=False))
+                button.setStyleSheet(self.get_vtg_dir_btn_style(pressed=False))
         simulate_same_click = False
 
         if new_turns > 0 and motion.motion_type in [DASH, STATIC]:

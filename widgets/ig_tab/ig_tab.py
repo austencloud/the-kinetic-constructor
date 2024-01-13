@@ -40,7 +40,6 @@ class IGTab(QWidget):
         self.setup_buttons()
         self.ig_scroll_area = IGScrollArea(self.main_widget, self)
         self.filter_tab = IGFilterTab(self)
-
         self.left_layout = QVBoxLayout()
         self.right_layout = QVBoxLayout()
         self.left_layout.addWidget(self.filter_tab, 1)

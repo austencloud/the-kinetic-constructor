@@ -25,6 +25,8 @@ class ArrowRotAngleManager:
             "Ψ-": self._get_Ψ_dash_angle,
             "Λ-": self._get_Λ_dash_angle,
         }
+        if hasattr(self.arrow.scene, LETTER):
+            self.other_motion = self.arrow.scene.get_other_motion(self.arrow.motion)
 
     def update_rotation(self) -> None:
         angle = self._resolve_angle()
@@ -230,29 +232,22 @@ class ArrowRotAngleManager:
     def _get_default_dash_angle(
         self,
     ) -> Dict[Orientations, Dict[PropRotDirs, Dict[Locations, int]]]:
-        other_motion = (
-            self.arrow.scene.motions[RED]
-            if self.arrow.color == BLUE
-            else self.arrow.scene.motions[BLUE]
-        )
-        
-        
         if self.arrow.motion.prop_rot_dir == NO_ROT:
-            if other_motion.prop_rot_dir == CLOCKWISE:
+            if self.other_motion.prop_rot_dir == CLOCKWISE:
                 return {
                     (NORTH, SOUTH): 90,
                     (SOUTH, NORTH): 270,
                     (EAST, WEST): 180,
                     (WEST, EAST): 0,
                 }.get((self.arrow.motion.start_loc, self.arrow.motion.end_loc), {})
-            elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
+            elif self.other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
                 return {
                     (NORTH, SOUTH): 90,
                     (SOUTH, NORTH): 270,
                     (EAST, WEST): 180,
                     (WEST, EAST): 0,
                 }.get((self.arrow.motion.start_loc, self.arrow.motion.end_loc), {})
-                
+
         elif self.arrow.motion.prop_rot_dir in [CLOCKWISE, COUNTER_CLOCKWISE]:
             orientation_map = {
                 IN: {
@@ -297,11 +292,6 @@ class ArrowRotAngleManager:
         return 0
 
     def _get_Λ_dash_angle(self) -> int:
-        other_motion = (
-            self.arrow.scene.motions[RED]
-            if self.arrow.color == BLUE
-            else self.arrow.scene.motions[BLUE]
-        )
         loc_map = {
             ((NORTH, SOUTH), (EAST, WEST)): {EAST: 90},
             ((EAST, WEST), (NORTH, SOUTH)): {NORTH: 180},
@@ -315,18 +305,13 @@ class ArrowRotAngleManager:
         arrow_angle = loc_map.get(
             (
                 (self.arrow.motion.start_loc, self.arrow.motion.end_loc),
-                (other_motion.start_loc, other_motion.end_loc),
+                (self.other_motion.start_loc, self.other_motion.end_loc),
             )
         ).get(self.arrow.loc)
         return arrow_angle if self.arrow.loc else 0
 
     def _get_Φ_dash_angle(self) -> int:
-        other_motion = (
-            self.arrow.scene.motions[RED]
-            if self.arrow.color == BLUE
-            else self.arrow.scene.motions[BLUE]
-        )
-        if other_motion.arrow.loc:
+        if self.other_motion.arrow.loc:
             loc_map = {
                 ((NORTH, SOUTH), (SOUTH, NORTH)): {RED: EAST, BLUE: WEST},
                 ((SOUTH, NORTH), (NORTH, SOUTH)): {RED: EAST, BLUE: WEST},
@@ -336,7 +321,7 @@ class ArrowRotAngleManager:
             arrow_loc = loc_map.get(
                 (
                     (self.arrow.motion.start_loc, self.arrow.motion.end_loc),
-                    (other_motion.start_loc, other_motion.end_loc),
+                    (self.other_motion.start_loc, self.other_motion.end_loc),
                 )
             ).get(self.arrow.color)
             self.arrow.loc = arrow_loc
@@ -354,12 +339,7 @@ class ArrowRotAngleManager:
             return self._get_default_dash_angle()
 
     def _get_Ψ_dash_angle(self) -> int:
-        other_motion = (
-            self.arrow.scene.motions[RED]
-            if self.arrow.color == BLUE
-            else self.arrow.scene.motions[BLUE]
-        )
-        if other_motion.arrow.loc:
+        if self.other_motion.arrow.loc:
             loc_map = {
                 ((NORTH, SOUTH), (NORTH, SOUTH)): {RED: EAST, BLUE: WEST},
                 ((SOUTH, NORTH), (SOUTH, NORTH)): {RED: EAST, BLUE: WEST},
@@ -369,7 +349,7 @@ class ArrowRotAngleManager:
             arrow_loc = loc_map.get(
                 (
                     (self.arrow.motion.start_loc, self.arrow.motion.end_loc),
-                    (other_motion.start_loc, other_motion.end_loc),
+                    (self.other_motion.start_loc, self.other_motion.end_loc),
                 )
             ).get(self.arrow.color)
             self.arrow.loc = arrow_loc
@@ -402,11 +382,6 @@ class ArrowRotAngleManager:
 
     def _get_Λ_angle(self) -> int:
         if self.arrow.motion_type == DASH:
-            other_motion = (
-                self.arrow.scene.motions[RED]
-                if self.arrow.color == BLUE
-                else self.arrow.scene.motions[BLUE]
-            )
             loc_map = {
                 ((NORTH, SOUTH), WEST): EAST,
                 ((EAST, WEST), SOUTH): NORTH,
@@ -420,7 +395,7 @@ class ArrowRotAngleManager:
             self.arrow.loc = loc_map.get(
                 (
                     (self.arrow.motion.start_loc, self.arrow.motion.end_loc),
-                    other_motion.end_loc,
+                    self.other_motion.end_loc,
                 )
             )
 

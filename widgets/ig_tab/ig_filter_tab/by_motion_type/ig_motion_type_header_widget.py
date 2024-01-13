@@ -103,17 +103,17 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
 
                 if prop_rot_dir:
                     self.same_button.setStyleSheet(
-                        self.get_vtg_dir_button_style(pressed=vtg_dir == SAME)
+                        self.get_vtg_dir_btn_style(pressed=vtg_dir == SAME)
                     )
                     self.opp_button.setStyleSheet(
-                        self.get_vtg_dir_button_style(pressed=vtg_dir == OPP)
+                        self.get_vtg_dir_btn_style(pressed=vtg_dir == OPP)
                     )
                 else:
                     self.same_button.setStyleSheet(
-                        self.get_vtg_dir_button_style(pressed=False)
+                        self.get_vtg_dir_btn_style(pressed=False)
                     )
                     self.opp_button.setStyleSheet(
-                        self.get_vtg_dir_button_style(pressed=False)
+                        self.get_vtg_dir_btn_style(pressed=False)
                     )
 
     def _setup_vtg_dir_buttons(self) -> List[QPushButton]:
@@ -125,8 +125,8 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
             lambda: self._set_vtg_dir(OPP),
         )
 
-        self.same_button.setStyleSheet(self.get_vtg_dir_button_style(pressed=False))
-        self.opp_button.setStyleSheet(self.get_vtg_dir_button_style(pressed=False))
+        self.same_button.setStyleSheet(self.get_vtg_dir_btn_style(pressed=False))
+        self.opp_button.setStyleSheet(self.get_vtg_dir_btn_style(pressed=False))
         self.same_button.setCheckable(True)
         self.opp_button.setCheckable(True)
 

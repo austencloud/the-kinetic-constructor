@@ -41,7 +41,7 @@ class BaseAttrBoxWidget(QWidget):
     def _turns_added(self, initial_turns, new_turns) -> bool:
         return initial_turns == 0 and new_turns > 0
 
-    def get_vtg_dir_button_style(self, pressed: bool) -> str:
+    def get_vtg_dir_btn_style(self, pressed: bool) -> str:
         if pressed:
             return """
                 QPushButton {
@@ -73,7 +73,7 @@ class BaseAttrBoxWidget(QWidget):
         }
         motion.scene.update_pictograph(pictograph_dict)
 
-    def get_vtg_dir_button_style(self, pressed: bool) -> str:
+    def get_vtg_dir_btn_style(self, pressed: bool) -> str:
         if pressed:
             return """
                 QPushButton {
@@ -95,5 +95,3 @@ class BaseAttrBoxWidget(QWidget):
                     background-color: #e6f0ff;
                 }
             """
-
-

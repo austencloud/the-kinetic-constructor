@@ -74,10 +74,10 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
                     box.header_widget.same_button.setChecked(False)
                     box.header_widget.opp_button.setChecked(False)
                     box.header_widget.same_button.setStyleSheet(
-                        box.header_widget.get_vtg_dir_button_style(pressed=False)
+                        box.header_widget.get_vtg_dir_btn_style(pressed=False)
                     )
                     box.header_widget.opp_button.setStyleSheet(
-                        box.header_widget.get_vtg_dir_button_style(pressed=False)
+                        box.header_widget.get_vtg_dir_btn_style(pressed=False)
                     )
         else:
             self.hide_placeholder_message()

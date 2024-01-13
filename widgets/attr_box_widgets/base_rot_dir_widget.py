@@ -74,14 +74,14 @@ class BaseRotDirWidget(BaseAttrBoxWidget):
 
         if prop_rot_dir:
             self.cw_button.setStyleSheet(
-                self.get_vtg_dir_button_style(pressed=prop_rot_dir == CLOCKWISE)
+                self.get_vtg_dir_btn_style(pressed=prop_rot_dir == CLOCKWISE)
             )
             self.ccw_button.setStyleSheet(
-                self.get_vtg_dir_button_style(pressed=prop_rot_dir == COUNTER_CLOCKWISE)
+                self.get_vtg_dir_btn_style(pressed=prop_rot_dir == COUNTER_CLOCKWISE)
             )
         else:
-            self.cw_button.setStyleSheet(self.get_vtg_dir_button_style(pressed=False))
-            self.ccw_button.setStyleSheet(self.get_vtg_dir_button_style(pressed=False))
+            self.cw_button.setStyleSheet(self.get_vtg_dir_btn_style(pressed=False))
+            self.ccw_button.setStyleSheet(self.get_vtg_dir_btn_style(pressed=False))
 
     def _setup_prop_rot_dir_buttons(self) -> List[QPushButton]:
         self.cw_button = self._create_button(
@@ -92,8 +92,8 @@ class BaseRotDirWidget(BaseAttrBoxWidget):
             lambda: self._set_prop_rot_dir(COUNTER_CLOCKWISE),
         )
 
-        self.cw_button.setStyleSheet(self.get_vtg_dir_button_style(pressed=True))
-        self.ccw_button.setStyleSheet(self.get_vtg_dir_button_style(pressed=False))
+        self.cw_button.setStyleSheet(self.get_vtg_dir_btn_style(pressed=True))
+        self.ccw_button.setStyleSheet(self.get_vtg_dir_btn_style(pressed=False))
         self.cw_button.setCheckable(True)
         self.ccw_button.setCheckable(True)
         self.cw_button.setChecked(True)

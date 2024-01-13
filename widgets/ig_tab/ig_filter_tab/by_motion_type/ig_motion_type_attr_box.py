@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Dict, List
-from constants import DASH, MOTION_TYPE, STATIC
+from constants import DASH, MOTION_TYPE, OPP, SAME, STATIC
 from utilities.TypeChecking.TypeChecking import MotionTypes
 from objects.motion.motion import Motion
 from ....attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
@@ -41,6 +41,7 @@ class IGMotionTypeAttrBox(BaseAttrBox):
             self.same_button = self.header_widget.same_button
             self.opp_button = self.header_widget.opp_button
             self.same_opp_buttons = [self.same_button, self.opp_button]
+            self.vtg_dir_btn_state = {SAME: True, OPP: False}
 
     def _setup_widgets(self) -> None:
         self.header_widget = IGMotionTypeHeaderWidget(self, self.motion_type)

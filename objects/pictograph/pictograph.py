@@ -93,18 +93,16 @@ class Pictograph(QGraphicsScene):
         ] = self.initializer.init_quadrant_boundaries(self.grid)
 
         self.motions: Dict[Colors, Motion] = self.initializer.init_motions()
+        self.red_motion, self.blue_motion = self.motions[RED], self.motions[BLUE]
         self.arrows, self.ghost_arrows = self.initializer.init_arrows()
+        self.red_arrow, self.blue_arrow = self.arrows[RED], self.arrows[BLUE]
         self.props, self.ghost_props = self.initializer.init_props(
             self.main_widget.prop_type
         )
+        self.red_prop, self.blue_prop = self.props[RED], self.props[BLUE]
 
         self.view = self._init_view(self.graph_type)
         self.letter_item: LetterItem = self.initializer.init_letter_item()
-
-        self.red_motion = self.motions[RED]
-        self.blue_motion = self.motions[BLUE]
-        self.red_arrow = self.arrows[RED]
-        self.blue_arrow = self.arrows[BLUE]
 
         self._setup_managers(main_widget)
 
@@ -265,6 +263,18 @@ class Pictograph(QGraphicsScene):
         elif self.blue_motion.start_loc == self.red_motion.end_loc:
             return self.red_motion
 
+    def get_other_motion(self, motion: Motion) -> Motion:
+        if motion.color == RED:
+            return self.blue_motion
+        elif motion.color == BLUE:
+            return self.red_motion
+
+    def get_other_arrow(self, arrow: Arrow) -> Arrow:
+        if arrow.color == RED:
+            return self.blue_arrow
+        elif arrow.color == BLUE:
+            return self.red_arrow
+
     ### HELPERS ###
 
     def select_arrow(self, arrow):
@@ -347,23 +357,38 @@ class Pictograph(QGraphicsScene):
         if LETTER in pictograph_dict:
             self.letter = pictograph_dict[LETTER]
 
-        
         if "pro_turns" in pictograph_dict:
-            pro_motion = self.blue_motion if self.blue_motion.motion_type == PRO else self.red_motion
+            pro_motion = (
+                self.blue_motion
+                if self.blue_motion.motion_type == PRO
+                else self.red_motion
+            )
             pro_motion.turns = pictograph_dict["pro_turns"]
 
         if "anti_turns" in pictograph_dict:
-            anti_motion = self.blue_motion if self.blue_motion.motion_type == ANTI else self.red_motion
+            anti_motion = (
+                self.blue_motion
+                if self.blue_motion.motion_type == ANTI
+                else self.red_motion
+            )
             anti_motion.turns = pictograph_dict["anti_turns"]
-            
+
         if "dash_turns" in pictograph_dict:
-            dash_motion = self.blue_motion if self.blue_motion.motion_type == DASH else self.red_motion
+            dash_motion = (
+                self.blue_motion
+                if self.blue_motion.motion_type == DASH
+                else self.red_motion
+            )
             dash_motion.turns = pictograph_dict["dash_turns"]
-            
+
         if "static_turns" in pictograph_dict:
-            static_motion = self.blue_motion if self.blue_motion.motion_type == STATIC else self.red_motion
+            static_motion = (
+                self.blue_motion
+                if self.blue_motion.motion_type == STATIC
+                else self.red_motion
+            )
             static_motion.turns = pictograph_dict["static_turns"]
-            
+
         for color in [BLUE, RED]:
             motion_dict = self._create_motion_dict(pictograph_dict, color)
             motion_dicts.append(motion_dict)

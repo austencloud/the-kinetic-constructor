@@ -69,6 +69,7 @@ class IGScrollArea(PictographScrollArea):
             for motion in pictograph.motions.values():
                 motion.turns = 0
                 motion.update_motion()
+            pictograph.update_pictograph()
 
     def update_pictographs(self) -> None:
         self.remove_deselected_pictographs()

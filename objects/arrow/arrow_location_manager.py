@@ -50,11 +50,7 @@ class ArrowLocationManager:
         )
 
     def _dash_location_zero_turns(self) -> Locations:
-        other_motion = (
-            self.arrow.scene.motions[RED]
-            if self.arrow.color == BLUE
-            else self.arrow.scene.motions[BLUE]
-        )
+        other_motion = self.arrow.scene.get_other_motion(self.arrow.motion)
         if self.arrow.scene.letter in Type3_letters:
             return self._default_dash_location()
         if self.arrow.scene.letter in ["Φ", "Ψ"]:
