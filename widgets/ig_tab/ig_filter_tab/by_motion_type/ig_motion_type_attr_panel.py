@@ -53,8 +53,7 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
             box.hide()
             self.layout.addWidget(box)
         self.placeholder_label.show()
-        # self.resize_ig_motion_type_attr_panel()
-        # self.add_black_borders()
+
 
     def add_black_borders(self) -> None:
         self.setStyleSheet(
@@ -71,6 +70,16 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
             self.placeholder_label.show()
             for box in self.boxes:
                 box.hide()
+                box.turns_widget.turnbox.setCurrentText("0")
+                if hasattr(box.header_widget, "same_button"):
+                    box.header_widget.same_button.setChecked(False)
+                    box.header_widget.opp_button.setChecked(False)
+                    box.header_widget.same_button.setStyleSheet(
+                        box.header_widget.get_button_style(pressed=False)
+                    )
+                    box.header_widget.opp_button.setStyleSheet(
+                        box.header_widget.get_button_style(pressed=False)
+                    )
         else:
             self.hide_placeholder_message()
             motion_types_in_use = set()

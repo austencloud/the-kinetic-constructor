@@ -27,7 +27,7 @@ from PyQt6.QtWidgets import QVBoxLayout, QPushButton
 
 class BaseRotDirWidget(BaseAttrBoxWidget):
     def __init__(
-        self: Union["GraphEditorHeaderWidget", "IGMotionTypeHeaderWidget"],
+        self,
         attr_box: Union["GraphEditorAttrBox", "IGMotionTypeAttrBox"],
     ) -> None:
         super().__init__(attr_box)

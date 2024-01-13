@@ -36,7 +36,7 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
         if self.motion_type in [PRO, ANTI]:
             self._setup_pro_anti_layout()
         if self.motion_type in [DASH, STATIC]:
-            self.same_opp_buttons = self._setup_prop_rot_dir_buttons()
+            self.same_opp_buttons = self._setup_vtg_dir_buttons()
             self._set_default_vtg_direction()
             self._setup_dash_static_layout()
 
@@ -75,12 +75,12 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
         prop_rot_dir = None
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
+                other_motion = (
+                    pictograph.red_motion
+                    if motion == pictograph.blue_motion
+                    else pictograph.blue_motion
+                )
                 if motion.motion_type == self.attr_box.motion_type:
-                    other_motion = (
-                        pictograph.red_motion
-                        if motion == pictograph.blue_motion
-                        else pictograph.blue_motion
-                    )
                     if motion.motion_type in [DASH, STATIC]:
                         if motion.turns > 0:
                             if vtg_direction is SAME:
@@ -101,18 +101,6 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
                         }
                         motion.scene.update_pictograph(pictograph_dict)
 
-            if self.attr_box.motion_type in [DASH, STATIC]:
-                self.same_button.setChecked(
-                    prop_rot_dir == other_motion.prop_rot_dir
-                    and prop_rot_dir is not None
-                    and other_motion.prop_rot_dir is not None
-                )
-                self.opp_button.setChecked(
-                    prop_rot_dir != other_motion.prop_rot_dir
-                    and prop_rot_dir is not None
-                    and other_motion.prop_rot_dir is not None
-                )
-
                 if prop_rot_dir:
                     self.same_button.setStyleSheet(
                         self.get_button_style(pressed=vtg_direction == SAME)
@@ -124,7 +112,7 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
                     self.same_button.setStyleSheet(self.get_button_style(pressed=False))
                     self.opp_button.setStyleSheet(self.get_button_style(pressed=False))
 
-    def _setup_prop_rot_dir_buttons(self) -> List[QPushButton]:
+    def _setup_vtg_dir_buttons(self) -> List[QPushButton]:
         self.same_button: QPushButton = self._create_button(
             f"{ICON_DIR}same_direction.png", lambda: self._set_vtg_direction(SAME)
         )
@@ -133,7 +121,7 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
             lambda: self._set_vtg_direction(OPP),
         )
 
-        self.same_button.setStyleSheet(self.get_button_style(pressed=True))
+        self.same_button.setStyleSheet(self.get_button_style(pressed=False))
         self.opp_button.setStyleSheet(self.get_button_style(pressed=False))
         self.same_button.setCheckable(True)
         self.opp_button.setCheckable(True)
