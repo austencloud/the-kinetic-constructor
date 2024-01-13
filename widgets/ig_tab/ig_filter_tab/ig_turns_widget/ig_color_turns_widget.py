@@ -24,12 +24,10 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
         """Initialize the IGColorTurnsWidget."""
         super().__init__(attr_box)
         self.attr_box = attr_box
-        self.dash_button_state = {SAME: True, OPP: False}
-        self.static_button_state = {SAME: True, OPP: False}
 
-        self.same_btn = self.attr_box.vtg_dir_widget.same_button
+        self.attr_box.same_button = self.attr_box.vtg_dir_widget.same_button
         self.opp_btn = self.attr_box.vtg_dir_widget.opp_button
-        self.same_opp_buttons = [self.same_btn, self.opp_btn]
+        self.same_opp_buttons = [self.attr_box.same_button, self.opp_btn]
         self.color = self.attr_box.color
         self.pictographs = self.attr_box.pictographs
 

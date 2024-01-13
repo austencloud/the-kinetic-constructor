@@ -277,7 +277,7 @@ class Pictograph(QGraphicsScene):
 
     ### HELPERS ###
 
-    def select_arrow(self, arrow):
+    def select_arrow(self, arrow) -> None:
         self.selected_arrow: Arrow = arrow
 
     def add_to_sequence_callback(self) -> None:
@@ -319,29 +319,10 @@ class Pictograph(QGraphicsScene):
         for attr_name, attr_value in pictograph_dict.items():
             setattr(self, attr_name, attr_value)
 
-    def is_complete(self, pictograph_dict: Dict) -> bool:
-        required_keys = [
-            "letter",
-            "start_pos",
-            "end_pos",
-            "blue_motion_type",
-            "blue_prop_rot_dir",
-            "blue_start_loc",
-            "blue_end_loc",
-            "blue_start_ori",
-            "blue_turns",
-            "red_motion_type",
-            "red_prop_rot_dir",
-            "red_start_loc",
-            "red_end_loc",
-            "red_start_ori",
-            "red_turns",
-        ]
-        return all(key in pictograph_dict for key in required_keys)
 
     def update_pictograph(self, pictograph_dict: Dict = None) -> None:
         if pictograph_dict:
-            if self.is_complete(pictograph_dict):
+            if self.is_pictograph_dict_complete(pictograph_dict):
                 self.pictograph_dict = pictograph_dict
 
             self._update_from_pictograph_dict(pictograph_dict)
@@ -351,7 +332,7 @@ class Pictograph(QGraphicsScene):
         if self.graph_type == MAIN:
             self._update_attr_panel()
 
-    def _update_from_pictograph_dict(self, pictograph_dict):
+    def _update_from_pictograph_dict(self, pictograph_dict) -> None:
         self.update_attributes(pictograph_dict)
         motion_dicts = []
         if LETTER in pictograph_dict:
@@ -522,11 +503,6 @@ class Pictograph(QGraphicsScene):
 
         return new_beat
 
-    def _meets_criteria(self, filters):
-        blue_turns = str(self.motions[BLUE].turns)
-        red_turns = str(self.motions[RED].turns)
-        return blue_turns in filters[BLUE_TURNS] and red_turns in filters[RED_TURNS]
-
     def render_and_cache_image(self) -> None:
         image_path = self.main_widget.generate_image_path(self)
         if os.path.isfile(image_path):
@@ -627,15 +603,40 @@ class Pictograph(QGraphicsScene):
         if not self.image_loaded:
             self.render_and_cache_image()
 
-    ### FLAGS ###
+    ### BOOLS ###
 
-    def has_props_in_beta(self) -> bool | None:
+    def is_pictograph_dict_complete(self, pictograph_dict: Dict) -> bool:
+        required_keys = [
+            "letter",
+            "start_pos",
+            "end_pos",
+            "blue_motion_type",
+            "blue_prop_rot_dir",
+            "blue_start_loc",
+            "blue_end_loc",
+            "blue_start_ori",
+            "blue_turns",
+            "red_motion_type",
+            "red_prop_rot_dir",
+            "red_start_loc",
+            "red_end_loc",
+            "red_start_ori",
+            "red_turns",
+        ]
+        return all(key in pictograph_dict for key in required_keys)
+
+    def _meets_filter_criteria(self, filters) -> bool:
+        blue_turns = str(self.motions[BLUE].turns)
+        red_turns = str(self.motions[RED].turns)
+        return blue_turns in filters[BLUE_TURNS] and red_turns in filters[RED_TURNS]
+
+    def has_props_in_beta(self) -> bool:
         return self.letter in beta_ending_letters
 
-    def has_props_in_alpha(self) -> bool | None:
+    def has_props_in_alpha(self) -> bool:
         return self.letter in alpha_ending_letters
 
-    def has_props_in_gamma(self) -> bool | None:
+    def has_props_in_gamma(self) -> bool:
         return self.letter in gamma_ending_letters
 
     def has_hybrid_orientations(self) -> bool:

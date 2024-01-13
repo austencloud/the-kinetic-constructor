@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtGui import QPixmap
-from constants import COLOR
+from constants import COLOR, OPP, SAME
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Colors
 from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
@@ -49,6 +49,7 @@ class IGColorAttrBox(BaseAttrBox):
         self.opp_button = self.vtg_dir_widget.opp_button
         self.same_opp_buttons = [self.same_button, self.opp_button]
         self.attribute_type = COLOR
+        self.vtg_dir_btn_state = {SAME: True, OPP: False}
 
     def _setup_widgets(self) -> None:  # add common widgets
         self.header_widget = IGColorHeaderWidget(self, self.color)

@@ -46,7 +46,7 @@ class PictographScrollArea(QScrollArea):
         filters: Dict[str, Union[Turns, Orientations]],
     ) -> None:
         for ig_pictograph in self.pictographs.values():
-            if ig_pictograph._meets_criteria(filters):
+            if ig_pictograph._meets_filter_criteria(filters):
                 self.update_pictographs()
 
     ### PICTOGRAPH CREATION ###
