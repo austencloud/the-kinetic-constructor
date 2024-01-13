@@ -54,7 +54,6 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
             self.layout.addWidget(box)
         self.placeholder_label.show()
 
-
     def add_black_borders(self) -> None:
         self.setStyleSheet(
             f"{self.styleSheet()} border: 1px solid black; border-radius: 0px;"
@@ -70,7 +69,7 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
             self.placeholder_label.show()
             for box in self.boxes:
                 box.hide()
-                box.turns_widget.turnbox.setCurrentText("0")
+                box.turns_widget.turns_display.setText("0")
                 if hasattr(box.header_widget, "same_button"):
                     box.header_widget.same_button.setChecked(False)
                     box.header_widget.opp_button.setChecked(False)
@@ -113,10 +112,10 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
     def get_turns_for_motion_type(self, motion_type: MotionTypes) -> int:
         for box in self.boxes:
             if box.motion_type == motion_type:
-                if box.turns_widget.turnbox.currentText() in ["0", "1", "2", "3"]:
-                    return int(box.turns_widget.turnbox.currentText())
-                elif box.turns_widget.turnbox.currentText() in ["0.5", "1.5", "2.5"]:
-                    return float(box.turns_widget.turnbox.currentText())
+                if box.turns_widget.turns_display.text() in ["0", "1", "2", "3"]:
+                    return int(box.turns_widget.turns_display.text())
+                elif box.turns_widget.turns_display.text() in ["0.5", "1.5", "2.5"]:
+                    return float(box.turns_widget.turns_display.text())
 
     def resize_ig_motion_type_attr_panel(self) -> None:
         for box in self.boxes:
@@ -140,4 +139,4 @@ class IGMotionTypeAttrPanel(BaseAttrPanel):
 
     def reset_turns(self) -> None:
         for box in self.boxes:
-            box.turns_widget.turnbox.setCurrentText("0")
+            box.turns_widget.turns_display.setText("0")

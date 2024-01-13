@@ -52,4 +52,3 @@ class BaseAttrBox(QFrame):
         self: Union["IGMotionTypeAttrBox", "GraphEditorAttrBox"]
     ) -> None:
         self.start_end_loc_widget.clear_start_end_boxes()
-        self.turns_widget.turnbox.setCurrentIndex(-1)

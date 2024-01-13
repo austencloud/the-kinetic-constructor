@@ -21,7 +21,7 @@ class IGMotionTypeAttrBox(BaseAttrBox):
         pictographs: List["Pictograph"],
         motion_type: MotionTypes,
     ) -> None:
-        super().__init__(attr_panel, None) 
+        super().__init__(attr_panel, None)
         self.attr_panel = attr_panel
         self.motion_type = motion_type
         self.pictographs: Dict[str, Pictograph] = pictographs
@@ -35,18 +35,17 @@ class IGMotionTypeAttrBox(BaseAttrBox):
         self.vbox_layout.setContentsMargins(0, 0, 0, 0)
         self.vbox_layout.setSpacing(0)
         self.adjustSize()
-        
+
     def add_black_borders(self) -> None:
         self.setStyleSheet(
             f"{self.styleSheet()} border: 1px solid black; border-radius: 0px;"
         )
 
-    def _setup_widgets(self) -> None: 
+    def _setup_widgets(self) -> None:
         self.header_widget = IGMotionTypeHeaderWidget(self, self.motion_type)
         self.turns_widget = IGMotionTypeTurnsWidget(self)
         self.vbox_layout.addWidget(self.header_widget, 1)
         self.vbox_layout.addWidget(self.turns_widget, 2)
-
 
     def resize_ig_motion_type_attr_box(self) -> None:
         self.header_widget.resize_header_widget()
@@ -57,4 +56,4 @@ class IGMotionTypeAttrBox(BaseAttrBox):
         return list(self.pictographs.values())
 
     def update_attr_box(self, motion: Motion) -> None:
-        self.turns_widget._update_turnbox(motion.turns)
+        self.turns_widget.update_turns_display(motion.turns)

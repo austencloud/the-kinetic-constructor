@@ -15,7 +15,7 @@ ParallelCombinationsSet = Set[Tuple[str, str, str, str]]
 Handpaths = Literal["dash_handpath", "static_handpath", "cw_handpath", "ccw_handpath"]
 Turns = float | Literal["fl", "0", "0.5", "1", "1.5", "2", "2.5", "3"]
 RotationAngles = Literal[0, 90, 180, 270]
-PropRotDirs = Literal["cw", "ccw"]
+PropRotDirs = Literal["cw", "ccw", "no_rot"]
 OptimalLocationEntries = Dict[Literal["x", "y"], float]
 StartEndLocationTuple = Tuple[Locations]
 OptimalLocationDicts = Dict[str, OptimalLocationEntries]
@@ -38,8 +38,6 @@ SpecificPositions = Literal[
     "gamma7",
     "gamma8",
 ]
-
-
 ShiftHandpaths = Literal["cw_handpath", "ccw_handpath"]
 Handpaths = Literal["dash_handpath", "static_handpath", "cw_handpath", "ccw_handpath"]
 HexColors = Literal["#ED1C24", "#2E3192"]

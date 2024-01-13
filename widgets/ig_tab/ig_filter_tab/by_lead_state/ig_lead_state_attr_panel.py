@@ -2,7 +2,9 @@ from constants import LEADING, TRAILING
 from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import LeadStates, Turns
 from widgets.attr_panel.base_attr_panel import BaseAttrPanel
-from widgets.ig_tab.ig_filter_tab.by_lead_state.ig_lead_state_attr_box import IGLeadStateAttrBox
+from widgets.ig_tab.ig_filter_tab.by_lead_state.ig_lead_state_attr_box import (
+    IGLeadStateAttrBox,
+)
 
 
 if TYPE_CHECKING:
@@ -31,15 +33,18 @@ class IGLeadStateAttrPanel(BaseAttrPanel):
         for box in self.boxes:
             self.layout.addWidget(box)
         self.layout
-        
+
     def get_turns_for_lead_state(self, lead_state: LeadStates) -> Turns:
         for box in self.boxes:
             if box.lead_state == lead_state:
-                if box.turns_widget.turnbox.currentText() in ["0", "1", "2", "3"]:
-                    return int(box.turns_widget.turnbox.currentText())
-                elif box.turns_widget.turnbox.currentText() in ["0.5", "1.5", "2.5"]:
-                    return float(box.turns_widget.turnbox.currentText())
-
+                if box.turns_widget.turns_display.text() in ["0", "1", "2", "3"]:
+                    return int(box.turns_widget.turns_display.text())
+                elif box.turns_widget.turns_display.text() in [
+                    "0.5",
+                    "1.5",
+                    "2.5",
+                ]:
+                    return float(box.turns_widget.turns_display.text())
 
     def resize_ig_lead_state_attr_panel(self) -> None:
         self.layout.setSpacing(int(self.trailing_box.width() / 5))
@@ -48,5 +53,4 @@ class IGLeadStateAttrPanel(BaseAttrPanel):
 
     def reset_turns(self) -> None:
         for box in self.boxes:
-            box.turns_widget.turnbox.setCurrentText("0")
-            
+            box.turns_widget.turns_display.setCurrentText("0")

@@ -15,6 +15,8 @@ if TYPE_CHECKING:
     from .ig_motion_type_turns_widget import IGMotionTypeTurnsWidget
 
 from PyQt6.QtWidgets import QSizePolicy
+from PyQt6.QtWidgets import QLabel, QFrame
+from PyQt6.QtCore import Qt
 
 
 class BaseIGTurnsWidget(BaseTurnsWidget):
@@ -23,6 +25,12 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         self.attr_box: Union[
             "IGMotionTypeAttrBox", "IGLeadStateAttrBox", "IGColorAttrBox"
         ] = attr_box
+        self.turns_display = QLabel(
+            "0", self
+        )  # Initialize the QLabel with "0" as default text.
+        self.turns_display.setAlignment(
+            Qt.AlignmentFlag.AlignCenter
+        )  # Center the text.
         self._initialize_ui()
         self.setup_direct_set_turns_buttons()
 
@@ -33,6 +41,7 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
     ) -> None:
         turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
         self.turns_buttons_layout = QHBoxLayout()
+        direct_set_turns_frame = QFrame()
         button_style_sheet = self._get_direct_set_button_style_sheet()
         for value in turns_values:
             button = QPushButton(value, self)
@@ -45,7 +54,13 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
             )
             button.clicked.connect(lambda checked, v=value: self._direct_set_turns(v))
             self.turns_buttons_layout.addWidget(button)
+        
         self.layout.addLayout(self.turns_buttons_layout)
+
+    def create_frame(self) -> QFrame:
+        frame = QFrame()
+        frame.setContentsMargins(0, 0, 0, 0)
+        return frame
 
     def _direct_set_turns(
         self: Union[
@@ -95,60 +110,45 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
             new_turns = int(new_turns)
         return new_turns
 
+
+
+    ### EVENT HANDLERS ###
+
+    def update_ig_turnbox_size(self) -> None:
+        """Update the size of the turns display for motion type."""
+        self.spacing = self.attr_box.attr_panel.width() // 250
+        border_radius = (
+            min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        )
+        box_font_size = int(self.attr_box.width() / 14)
+
+        self.turns_display.setMinimumHeight(int(self.attr_box.width() / 8))
+        self.turns_display.setMaximumHeight(int(self.attr_box.width() / 8))
+        self.turns_display.setMinimumWidth(int(self.attr_box.width() / 4))
+        self.turns_display.setMaximumWidth(int(self.attr_box.width() / 4))
+        self.turns_display.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
+
+        # Adjust the stylesheet to match the combo box style without the arrow
+        self.turns_display.setStyleSheet(
+            f"""
+            QLabel {{
+                border: {self.attr_box.combobox_border}px solid black;
+                border-radius: {border_radius}px;
+                background-color: white;
+                padding-left: 2px; /* add some padding on the left for the text */
+                padding-right: 2px; /* add some padding on the right for symmetry */
+            }}
+            """
+        )
+
     def update_turns_display(
         self: Union[
             "IGMotionTypeTurnsWidget", "IGLeadStateTurnsWidget", "IGColorTurnsWidget"
         ],
         turns: Union[int, float],
     ) -> None:
-        turns_str = str(turns)
-        self.turnbox.setCurrentText(turns_str)
-
-    ### EVENT HANDLERS ###
-
-    def update_ig_turnbox_size(self) -> None:
-        self.spacing = self.attr_box.attr_panel.width() // 250
-        border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
-        box_font_size = int(self.attr_box.width() / 14)
-        dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
-        border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
-        turns_label_font = QFont("Arial", int(self.width() / 25))
-        turnbox_font = QFont("Arial", box_font_size, QFont.Weight.Bold)
-
-        self.turnbox.setMinimumHeight(int(self.attr_box.width() / 8))
-        self.turnbox.setMaximumHeight(int(self.attr_box.width() / 8))
-        self.turnbox.setMinimumWidth(int(self.attr_box.width() / 4))
-        self.turnbox.setMaximumWidth(int(self.attr_box.width() / 4))
-        self.turns_label.setContentsMargins(0, 0, self.spacing, 0)
-        self.turns_label.setFont(turns_label_font)
-        self.turnbox.setFont(turnbox_font)
-
-        # Adjust the stylesheet to add padding inside the combo box on the left
-        self.turnbox.setStyleSheet(
-            f"""
-            QComboBox {{
-                padding-left: 2px; /* add some padding on the left for the text */
-                padding-right: 0px; /* make room for the arrow on the right */
-                border: {self.attr_box.combobox_border}px solid black;
-                border-radius: {border_radius}px;
-            }}
-            QComboBox::drop-down {{
-                subcontrol-origin: padding;
-                subcontrol-position: top right;
-                width: {dropdown_arrow_width}px;
-                border-left-width: 1px;
-                border-left-color: darkgray;
-                border-left-style: solid; /* visually separate the arrow part */
-                border-top-right-radius: {border_radius}px;
-                border-bottom-right-radius: {border_radius}px;
-            }}
-            QComboBox::down-arrow {{
-                image: url("{ICON_DIR}/combobox_arrow.png");
-                width: {int(dropdown_arrow_width * 0.6)}px;
-                height: {int(dropdown_arrow_width * 0.6)}px;
-            }}
-        """
-        )
+        """Update the turns display based on the latest turns value."""
+        self.turns_display.setText(str(turns))
 
     def update_ig_lead_state_turns_button_size(self) -> None:
         for turns_button in self.add_subtract_buttons:

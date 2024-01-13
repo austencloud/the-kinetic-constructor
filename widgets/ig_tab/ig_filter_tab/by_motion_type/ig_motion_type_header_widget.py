@@ -3,7 +3,7 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING, List
-from utilities.TypeChecking.TypeChecking import MotionTypes, VtgDirections
+from utilities.TypeChecking.TypeChecking import MotionTypes, PropRotDirs, VtgDirections
 
 from ....attr_box_widgets.base_header_widget import BaseHeaderWidget
 
@@ -69,10 +69,10 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
             for motion in pictograph.motions.values()
             if motion.motion_type in [DASH, STATIC]
         )
-        self._set_vtg_direction(SAME if has_turns else None)
+        self._set_vtg_dir(SAME if has_turns else None)
 
-    def _set_vtg_direction(self, vtg_direction: VtgDirections) -> None:
-        prop_rot_dir = None
+    def _set_vtg_dir(self, vtg_dir: VtgDirections) -> None:
+        prop_rot_dir: PropRotDirs = None
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 other_motion = (
@@ -83,10 +83,10 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
                 if motion.motion_type == self.attr_box.motion_type:
                     if motion.motion_type in [DASH, STATIC]:
                         if motion.turns > 0:
-                            if vtg_direction is SAME:
+                            if vtg_dir is SAME:
                                 motion.prop_rot_dir = other_motion.prop_rot_dir
                                 prop_rot_dir = other_motion.prop_rot_dir
-                            elif vtg_direction is OPP:
+                            elif vtg_dir is OPP:
                                 if other_motion.prop_rot_dir == CLOCKWISE:
                                     motion.prop_rot_dir = COUNTER_CLOCKWISE
                                     prop_rot_dir = COUNTER_CLOCKWISE
@@ -103,10 +103,10 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
 
                 if prop_rot_dir:
                     self.same_button.setStyleSheet(
-                        self.get_button_style(pressed=vtg_direction == SAME)
+                        self.get_button_style(pressed=vtg_dir == SAME)
                     )
                     self.opp_button.setStyleSheet(
-                        self.get_button_style(pressed=vtg_direction == OPP)
+                        self.get_button_style(pressed=vtg_dir == OPP)
                     )
                 else:
                     self.same_button.setStyleSheet(self.get_button_style(pressed=False))
@@ -114,11 +114,11 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
 
     def _setup_vtg_dir_buttons(self) -> List[QPushButton]:
         self.same_button: QPushButton = self._create_button(
-            f"{ICON_DIR}same_direction.png", lambda: self._set_vtg_direction(SAME)
+            f"{ICON_DIR}same_direction.png", lambda: self._set_vtg_dir(SAME)
         )
         self.opp_button: QPushButton = self._create_button(
             f"{ICON_DIR}opp_direction.png",
-            lambda: self._set_vtg_direction(OPP),
+            lambda: self._set_vtg_dir(OPP),
         )
 
         self.same_button.setStyleSheet(self.get_button_style(pressed=False))

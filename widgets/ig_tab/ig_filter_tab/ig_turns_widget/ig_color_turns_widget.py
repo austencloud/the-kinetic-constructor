@@ -113,23 +113,23 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
 
     def update_ig_color_turnbox_size(self) -> None:
         self.spacing = self.attr_box.attr_panel.width() // 250
-        border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
+        border_radius = min(self.turns_display.width(), self.turns_display.height()) * 0.25
         box_font_size = int(self.attr_box.width() / 14)
         dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
-        border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
+        border_radius = min(self.turns_display.width(), self.turns_display.height()) * 0.25
         turns_label_font = QFont("Arial", int(self.width() / 25))
         turnbox_font = QFont("Arial", box_font_size, QFont.Weight.Bold)
 
-        self.turnbox.setMinimumHeight(int(self.attr_box.width() / 8))
-        self.turnbox.setMaximumHeight(int(self.attr_box.width() / 8))
-        self.turnbox.setMinimumWidth(int(self.attr_box.width() / 4))
-        self.turnbox.setMaximumWidth(int(self.attr_box.width() / 4))
+        self.turns_display.setMinimumHeight(int(self.attr_box.width() / 8))
+        self.turns_display.setMaximumHeight(int(self.attr_box.width() / 8))
+        self.turns_display.setMinimumWidth(int(self.attr_box.width() / 4))
+        self.turns_display.setMaximumWidth(int(self.attr_box.width() / 4))
         self.turns_label.setContentsMargins(0, 0, self.spacing, 0)
         self.turns_label.setFont(turns_label_font)
-        self.turnbox.setFont(turnbox_font)
+        self.turns_display.setFont(turnbox_font)
 
         # Adjust the stylesheet to add padding inside the combo box on the left
-        self.turnbox.setStyleSheet(
+        self.turns_display.setStyleSheet(
             f"""
             QComboBox {{
                 padding-left: 2px; /* add some padding on the left for the text */

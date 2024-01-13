@@ -98,7 +98,6 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
         self.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         turnbox_frame.layout().addWidget(self.turns_label)
-        turnbox_frame.layout().addWidget(self.turnbox)
         turnbox_frame.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )

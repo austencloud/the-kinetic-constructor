@@ -39,7 +39,7 @@ class DirectionalTupleGenerator:
         pro_vs_dash_no_rot_dash_directional_tuples = (
             [(x, y), (-y, x), (-x, -y), (y, -x)]
             if self.other_motion.prop_rot_dir == CLOCKWISE
-            else [(-x, y), (-y, x), (x, -y), (y, x)]  # COUNTER_CLOCKWISE
+            else [(-x, y), (-y, -x), (x, -y), (y, x)]  # COUNTER_CLOCKWISE
         )
 
         anti_vs_dash_no_rot_dash_directional_tuples = (

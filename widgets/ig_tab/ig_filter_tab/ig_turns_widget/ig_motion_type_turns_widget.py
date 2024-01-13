@@ -7,7 +7,9 @@ from constants import (
     DASH,
     ICON_DIR,
     NO_ROT,
+    OPP,
     RED,
+    SAME,
     STATIC,
 )
 from objects.pictograph.pictograph import Pictograph
@@ -22,6 +24,8 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         """Initialize the IGMotionTypeTurnsWidget."""
         super().__init__(attr_box)
         self.attr_box = attr_box
+        self.dash_button_state = {SAME: True, OPP: False}
+        self.static_button_state = {SAME: True, OPP: False}
         # self.update_ig_motion_type_turnbox_size()
 
     def adjust_turns_by_motion_type(
@@ -43,6 +47,23 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         self.update_turns_display(new_turns)
         if self.attr_box.motion_type in [DASH, STATIC]:
             if new_turns == 0:
+                # Save the state before deselecting buttons
+                if self.attr_box.motion_type == DASH:
+                    self.dash_button_state[
+                        SAME
+                    ] = self.attr_box.header_widget.same_button.isChecked()
+                    self.dash_button_state[
+                        OPP
+                    ] = self.attr_box.header_widget.opp_button.isChecked()
+                elif self.attr_box.motion_type == STATIC:
+                    self.static_button_state[
+                        SAME
+                    ] = self.attr_box.header_widget.same_button.isChecked()
+                    self.static_button_state[
+                        OPP
+                    ] = self.attr_box.header_widget.opp_button.isChecked()
+
+                # Deselect buttons
                 self.attr_box.header_widget.same_button.setChecked(False)
                 self.attr_box.header_widget.opp_button.setChecked(False)
                 self.attr_box.header_widget.same_button.setStyleSheet(
@@ -52,28 +73,67 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
                     self.attr_box.header_widget.get_button_style(pressed=False)
                 )
 
-        # Check if any static motion with zero turns exists
-        simulate_same_btn_click = False
-        if self.attr_box.motion_type in [DASH, STATIC]:
-            for pictograph in self.attr_box.pictographs.values():
-                for motion in pictograph.motions.values():
-                    if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
-                        simulate_same_btn_click = True
-                        break
-                if simulate_same_btn_click:
-                    break
-
-            # Simulate CW button click if necessary
-            if simulate_same_btn_click:
-                if (
-                    not self.attr_box.header_widget.same_button.isChecked()
-                    and not self.attr_box.header_widget.opp_button.isChecked()
+            elif new_turns > 0:
+                if self.attr_box.motion_type == DASH and not (
+                    self.dash_button_state[SAME] or self.dash_button_state[OPP]
                 ):
-                    self._simulate_same_button_click_in_header_widget()
-                # set the stylesheet to pressed
-                self.attr_box.header_widget.same_button.setStyleSheet(
-                    self.attr_box.header_widget.get_button_style(pressed=True)
-                )
+                    # self.attr_box.header_widget.same_button.setChecked(True)
+                    self.attr_box.header_widget.opp_button.setChecked(False)
+                    self.attr_box.header_widget.same_button.setStyleSheet(
+                        self.attr_box.header_widget.get_button_style(pressed=True)
+                    )
+                elif self.attr_box.motion_type == STATIC and not (
+                    self.static_button_state[SAME] or self.static_button_state[OPP]
+                ):
+                    self.attr_box.header_widget.same_button.setChecked(True)
+                else:
+                    # Apply the saved state
+                    self.attr_box.header_widget.same_button.setChecked(
+                        self.dash_button_state[SAME]
+                        if self.attr_box.motion_type == DASH
+                        else self.static_button_state[SAME]
+                    )
+                    self.attr_box.header_widget.same_button.setStyleSheet(
+                        self.attr_box.header_widget.get_button_style(pressed=(
+                        self.dash_button_state[SAME]
+                        if self.attr_box.motion_type == DASH
+                        else self.static_button_state[SAME]
+                    ))
+                    )
+                    self.attr_box.header_widget.opp_button.setChecked(
+                        self.dash_button_state[OPP]
+                        if self.attr_box.motion_type == DASH
+                        else self.static_button_state[OPP]
+                    )
+                    self.attr_box.header_widget.opp_button.setStyleSheet(
+                        self.attr_box.header_widget.get_button_style(pressed=(
+                        self.dash_button_state[OPP]
+                        if self.attr_box.motion_type == DASH
+                        else self.static_button_state[OPP]
+                    ))
+                    )
+        # Check if any static motion with zero turns exists
+        # simulate_same_btn_click = False
+        # if self.attr_box.motion_type in [DASH, STATIC]:
+        #     for pictograph in self.attr_box.pictographs.values():
+        #         for motion in pictograph.motions.values():
+        #             if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
+        #                 simulate_same_btn_click = True
+        #                 break
+        #         if simulate_same_btn_click:
+        #             break
+
+        # # Simulate CW button click if necessary
+        # if simulate_same_btn_click:
+        #     if (
+        #         not self.attr_box.header_widget.same_button.isChecked()
+        #         and not self.attr_box.header_widget.opp_button.isChecked()
+        #     ):
+        #         self._simulate_same_button_click_in_header_widget()
+        #     # set the stylesheet to pressed
+        #     self.attr_box.header_widget.same_button.setStyleSheet(
+        #         self.attr_box.header_widget.get_button_style(pressed=True)
+        #     )
 
         # Apply new turns to motions
         for pictograph in self.attr_box.pictographs.values():
@@ -109,22 +169,22 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
     def update_ig_motion_type_turnbox_size(self) -> None:
         """Update the size of the turnbox for motion type."""
         self.spacing = self.attr_box.attr_panel.width() // 250
-        border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
+        border_radius = min(self.turns_display.width(), self.turns_display.height()) * 0.25
         box_font_size = int(self.attr_box.height() / 10)
         dropdown_arrow_width = int(self.height() * 0.075)  # Width of the dropdown arrow
-        border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
+        border_radius = min(self.turns_display.width(), self.turns_display.height()) * 0.25
 
-        self.turnbox.setMinimumHeight(int(self.attr_box.height() / 4))
-        self.turnbox.setMaximumHeight(int(self.attr_box.height() / 4))
-        self.turnbox.setMinimumWidth(int(self.attr_box.height() / 3))
-        self.turnbox.setMaximumWidth(int(self.attr_box.height() / 3))
-        self.turnbox.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
+        self.turns_display.setMinimumHeight(int(self.attr_box.height() / 4))
+        self.turns_display.setMaximumHeight(int(self.attr_box.height() / 4))
+        self.turns_display.setMinimumWidth(int(self.attr_box.height() / 3))
+        self.turns_display.setMaximumWidth(int(self.attr_box.height() / 3))
+        self.turns_display.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
 
         self.turns_label.setContentsMargins(0, 0, self.spacing, 0)
         self.turns_label.setFont(QFont("Arial", int(self.height() / 15)))
 
         # Adjust the stylesheet to add padding inside the combo box on the left
-        self.turnbox.setStyleSheet(
+        self.turns_display.setStyleSheet(
             f"""
             QComboBox {{
                 padding-left: 2px; /* add some padding on the left for the text */
@@ -205,8 +265,12 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
 
     def _simulate_same_button_click_in_header_widget(self):
         self.attr_box.header_widget.same_button.setChecked(True)
+        self.attr_box.header_widget.opp_button.setChecked(False)
         self.attr_box.header_widget.same_button.setStyleSheet(
             self.attr_box.header_widget.get_button_style(pressed=True)
+        )
+        self.attr_box.header_widget.opp_button.setStyleSheet(
+            self.attr_box.header_widget.get_button_style(pressed=False)
         )
 
     def _set_turns(self, new_turns: int | float) -> None:

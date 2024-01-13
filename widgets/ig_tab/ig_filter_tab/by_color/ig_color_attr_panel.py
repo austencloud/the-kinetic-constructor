@@ -31,14 +31,18 @@ class IGColorAttrPanel(BaseAttrPanel):
         for box in self.boxes:
             self.layout.addWidget(box)
         self.layout
+
     def get_turns_for_color(self, color: Colors) -> Turns:
         for box in self.boxes:
             if box.color == color:
-                if box.turns_widget.turnbox.currentText() in ["0", "1", "2", "3"]:
-                    return int(box.turns_widget.turnbox.currentText())
-                elif box.turns_widget.turnbox.currentText() in ["0.5", "1.5", "2.5"]:
-                    return float(box.turns_widget.turnbox.currentText())
-
+                if box.turns_widget.turns_display.text() in ["0", "1", "2", "3"]:
+                    return int(box.turns_widget.turns_display.text())
+                elif box.turns_widget.turns_display.text() in [
+                    "0.5",
+                    "1.5",
+                    "2.5",
+                ]:
+                    return float(box.turns_widget.turns_display.text())
 
     def resize_ig_color_attr_panel(self) -> None:
         self.layout.setSpacing(int(self.blue_attr_box.width() / 5))
@@ -47,5 +51,4 @@ class IGColorAttrPanel(BaseAttrPanel):
 
     def reset_turns(self) -> None:
         for box in self.boxes:
-            box.turns_widget.turnbox.setCurrentText("0")
-            
+            box.turns_widget.turns_display.setCurrentText("0")
