@@ -41,37 +41,56 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
     def _direct_set_turns_by_motion_type(self, new_turns: Union[int, float]) -> None:
         """Set turns for motions of a specific type to a new value."""
         self.update_turns_display(new_turns)
+        if self.attr_box.motion_type in [DASH, STATIC]:
+            if new_turns == 0:
+                self.attr_box.header_widget.same_button.setChecked(False)
+                self.attr_box.header_widget.opp_button.setChecked(False)
+                self.attr_box.header_widget.same_button.setStyleSheet(
+                    self.attr_box.header_widget.get_button_style(pressed=False)
+                )
+                self.attr_box.header_widget.opp_button.setStyleSheet(
+                    self.attr_box.header_widget.get_button_style(pressed=False)
+                )
 
         # Check if any static motion with zero turns exists
-        simulate_cw_click = False
+        simulate_same_btn_click = False
         if self.attr_box.motion_type in [DASH, STATIC]:
             for pictograph in self.attr_box.pictographs.values():
                 for motion in pictograph.motions.values():
                     if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
-                        simulate_cw_click = True
+                        simulate_same_btn_click = True
                         break
-                if simulate_cw_click:
+                if simulate_same_btn_click:
                     break
 
             # Simulate CW button click if necessary
-            if simulate_cw_click:
+            if simulate_same_btn_click:
                 if (
                     not self.attr_box.header_widget.same_button.isChecked()
                     and not self.attr_box.header_widget.opp_button.isChecked()
                 ):
                     self._simulate_same_button_click_in_header_widget()
+                # set the stylesheet to pressed
+                self.attr_box.header_widget.same_button.setStyleSheet(
+                    self.attr_box.header_widget.get_button_style(pressed=True)
+                )
 
         # Apply new turns to motions
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
+                other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
+
                 if motion.motion_type == self.attr_box.motion_type:
                     if new_turns == 0 and motion.motion_type in [DASH, STATIC]:
                         motion.prop_rot_dir = NO_ROT
                     if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
                         if self.attr_box.header_widget.same_button.isChecked():
-                            motion.prop_rot_dir = CLOCKWISE
+                            motion.prop_rot_dir = other_motion.prop_rot_dir
                         elif self.attr_box.header_widget.opp_button.isChecked():
-                            motion.prop_rot_dir = COUNTER_CLOCKWISE
+                            if other_motion.prop_rot_dir is CLOCKWISE:
+                                motion.prop_rot_dir = COUNTER_CLOCKWISE
+                            elif other_motion.prop_rot_dir is COUNTER_CLOCKWISE:
+                                motion.prop_rot_dir = CLOCKWISE
                     pictograph_dict = {
                         f"{motion.color}_turns": new_turns,
                     }
