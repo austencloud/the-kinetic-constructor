@@ -49,8 +49,6 @@ class PictographScrollArea(QScrollArea):
             if ig_pictograph._meets_criteria(filters):
                 self.update_pictographs()
 
-
-
     ### PICTOGRAPH CREATION ###
 
     def _create_pictograph(
@@ -59,7 +57,6 @@ class PictographScrollArea(QScrollArea):
     ) -> Option | IGPictograph:
         if graph_type == OPTION:
             pictograph = Option(self.main_widget, self)
-        elif graph_type == IG_PICTOGRAPH:  
+        elif graph_type == IG_PICTOGRAPH:
             pictograph = IGPictograph(self.main_widget, self)
-
         return pictograph

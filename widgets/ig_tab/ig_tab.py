@@ -220,11 +220,8 @@ class IGTab(QWidget):
     def update_letters_dict(self) -> None:
         for letter, pictograph_list in self.letters_dict.items():
             for pictograph_dict in pictograph_list:
-                # Apply filter changes to each pictograph_dict
-                # Example: Update 'blue_turns' based on filters
                 if "turns" in self.filters:
                     pictograph_dict["blue_turns"] = self.filters["turns"]
-                # Apply similar logic for other filters
 
     def resize_ig_tab(self) -> None:
         if self.filter_tab.motion_attr_panel.isVisible():

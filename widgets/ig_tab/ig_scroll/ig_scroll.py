@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, List, Literal, Union
+from typing import TYPE_CHECKING, Dict, List, Literal, Set, Union
 from constants import (
     BLUE,
     BLUE_END_LOC,
@@ -14,6 +14,7 @@ from constants import (
     END_POS,
     LETTER,
     NO_ROT,
+    OPP,
     RED,
     RED_END_LOC,
     RED_END_ORI,
@@ -22,13 +23,19 @@ from constants import (
     RED_START_LOC,
     RED_START_ORI,
     RED_TURNS,
+    SAME,
     START_POS,
     STATIC,
 )
 from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
 from widgets.pictograph_scroll_area import PictographScrollArea
 from constants import IG_PICTOGRAPH
-from utilities.TypeChecking.TypeChecking import Letters, Turns, Orientations
+from utilities.TypeChecking.TypeChecking import (
+    Letters,
+    Turns,
+    Orientations,
+    VtgDirections,
+)
 from PyQt6.QtCore import QTimer
 
 if TYPE_CHECKING:
@@ -48,12 +55,12 @@ class IGScrollArea(PictographScrollArea):
         self.update_timer.timeout.connect(self.update_pictographs_positions)
         self.update_timer.start(300)
 
-    def update_pictographs_positions(self):
+    def update_pictographs_positions(self) -> None:
         """Method to update positions of all pictographs"""
         for pictograph in self.pictographs.values():
             self.update_individual_pictograph_position(pictograph)
 
-    def update_individual_pictograph_position(self, pictograph: IGPictograph):
+    def update_individual_pictograph_position(self, pictograph: IGPictograph) -> None:
         if hasattr(pictograph, "arrow_placement_manager"):
             pictograph.arrow_placement_manager.update_arrow_placement()
 
@@ -64,75 +71,98 @@ class IGScrollArea(PictographScrollArea):
                 motion.update_motion()
 
     def update_pictographs(self) -> None:
-        ordered_pictographs = {}
-        sorted_selected_letters = sorted(
-            self.ig_tab.selected_letters, key=lambda x: Letters.index(x)
-        )
-        deselected_letters = set(
-            key.split("_")[0] for key in self.pictographs.keys()
-        ) - set(sorted_selected_letters)
+        self.remove_deselected_pictographs()
+        self.process_selected_letters()
+        self.order_and_display_pictographs()
+        self.cleanup_unused_pictographs()
+        self.update_attr_panel_if_needed()
+
+    def remove_deselected_pictographs(self) -> None:
+        deselected_letters = self.get_deselected_letters()
         for letter in deselected_letters:
             self.remove_deselected_letter_pictographs(letter)
+
+    def get_deselected_letters(self) -> Set[Letters]:
+        selected_letters = set(self.ig_tab.selected_letters)
+        existing_letters = {key.split("_")[0] for key in self.pictographs.keys()}
+        return existing_letters - selected_letters
+
+    def process_selected_letters(self) -> None:
+        sorted_selected_letters = self.get_sorted_selected_letters()
         for letter in sorted_selected_letters:
-            pictograph_dict_list = self.letters.get(letter, [])
-            filtered_pictograph_dicts = self.filter_pictographs(pictograph_dict_list)
-            for pictograph_dict in filtered_pictograph_dicts:
-                pictograph_key = self.generate_pictograph_key_from_dict(pictograph_dict)
-                ig_pictograph = self.pictographs.get(pictograph_key)
-                if ig_pictograph is None:
-                    ig_pictograph = self._create_pictograph(IG_PICTOGRAPH)
-                    for motion_color in (BLUE, RED):
-                        motion_type = pictograph_dict.get(f"{motion_color}_motion_type")
-                        if motion_type:
-                            turns_value = self.get_turns_from_attr_panel(motion_type)
-                            if motion_type == DASH:
-                                prop_rot_dir = (
-                                    self.get_dash_prop_rot_dir_from_attr_panel(
-                                        motion_type
-                                    )
-                                )
-                                pictograph_dict[
-                                    f"{motion_color}_prop_rot_dir"
-                                ] = prop_rot_dir
-                            elif motion_type == STATIC:
-                                prop_rot_dir = (
-                                    self.get_static_prop_rot_dir_from_attr_panel(
-                                        motion_type
-                                    )
-                                )
-                                pictograph_dict[
-                                    f"{motion_color}_prop_rot_dir"
-                                ] = prop_rot_dir
-                                if (
-                                    ig_pictograph.motions[motion_color].prop_rot_dir
-                                    == None
-                                ):
-                                    ig_pictograph.motions[
-                                        motion_color
-                                    ].prop_rot_dir = prop_rot_dir
-                            pictograph_dict[f"{motion_color}_turns"] = turns_value
+            self.process_letter(letter)
 
-                    ig_pictograph.update_pictograph(pictograph_dict)
+    def get_sorted_selected_letters(self) -> List[Letters]:
+        return sorted(self.ig_tab.selected_letters, key=lambda x: Letters.index(x))
 
-                image_key = self.generate_image_name(ig_pictograph, letter)
-                ordered_pictographs[image_key] = ig_pictograph
+    def process_letter(self, letter) -> None:
+        pictograph_dicts = self.letters.get(letter, [])
+        for pictograph_dict in self.filter_pictographs(pictograph_dicts):
+            self.create_or_update_pictograph(pictograph_dict, letter)
+
+    def create_or_update_pictograph(self, pictograph_dict, letter) -> None:
+        pictograph_key = self.generate_pictograph_key_from_dict(pictograph_dict)
+        ig_pictograph = self.pictographs.get(
+            pictograph_key, self._create_pictograph(IG_PICTOGRAPH)
+        )
+        self.pictographs[pictograph_key] = ig_pictograph
+        self.update_pictograph_motions(ig_pictograph, pictograph_dict)
+        ig_pictograph.update_pictograph(pictograph_dict)
+
+    def update_pictograph_motions(self, ig_pictograph, pictograph_dict) -> None:
+        for motion_color in (BLUE, RED):
+            motion_type = pictograph_dict.get(f"{motion_color}_motion_type")
+            if motion_type:
+                turns_value = self.get_turns_from_attr_panel(motion_type)
+                vtg_dir = self.get_vtg_dir_from_attr_panel()
+                pictograph_dict[f"{motion_color}_turns"] = turns_value
+                # pictograph_dict[f"{motion_color}_prop_rot_dir"] = vtg_dir
+
+    def order_and_display_pictographs(self) -> None:
+        ordered_pictographs = self.get_ordered_pictographs()
         for index, (key, ig_pictograph) in enumerate(ordered_pictographs.items()):
             self.add_pictograph_to_layout(ig_pictograph, index)
-        for key, ig_pictograph in ordered_pictographs.items():
-            self.pictographs[key] = ig_pictograph
+        self.pictographs.update(ordered_pictographs)
 
-        keys_to_remove = []
-        for key in self.pictographs.keys():
-            letter = key.split("_")[0]
-            if letter not in sorted_selected_letters:
-                keys_to_remove.append(key)
-
+    def cleanup_unused_pictographs(self) -> None:
+        keys_to_remove = self.get_keys_to_remove()
         for key in keys_to_remove:
-            ig_pictograph = self.pictographs.pop(key)
-            self.layout.removeWidget(ig_pictograph.view)
-            ig_pictograph.view.setParent(None)
-            ig_pictograph.view.deleteLater()
+            self.remove_pictograph(key)
 
+    def get_keys_to_remove(self) -> List[str]:
+        selected_letters = {
+            letter.split("_")[0] for letter in self.ig_tab.selected_letters
+        }
+        return [
+            key for key in self.pictographs if key.split("_")[0] not in selected_letters
+        ]
+
+    def get_ordered_pictographs(self) -> Dict[Letters, IGPictograph]:
+        # Assuming you want to order by the letter's index and then by start position
+        return {
+            k: v
+            for k, v in sorted(
+                self.pictographs.items(),
+                key=lambda item: (Letters.index(item[1].letter), item[1].start_pos),
+            )
+        }
+
+    def get_vtg_dir_from_attr_panel(self) -> VtgDirections:
+        header_widget = (
+            self.ig_tab.filter_tab.motion_attr_panel.dash_attr_box.header_widget
+        )
+        if header_widget.same_button.isChecked():
+            return SAME
+        elif header_widget.opp_button.isChecked():
+            return OPP
+
+    def remove_pictograph(self, key) -> None:
+        ig_pictograph = self.pictographs.pop(key)
+        self.layout.removeWidget(ig_pictograph.view)
+        ig_pictograph.view.setParent(None)
+        ig_pictograph.view.deleteLater()
+
+    def update_attr_panel_if_needed(self) -> None:
         if self.pictographs:
             self.update_attr_panel()
 
@@ -173,7 +203,7 @@ class IGScrollArea(PictographScrollArea):
             motion_type
         )
 
-    def remove_deselected_letter_pictographs(self, deselected_letter):
+    def remove_deselected_letter_pictographs(self, deselected_letter) -> None:
         keys_to_remove = [
             key for key in self.pictographs if key.startswith(deselected_letter + "_")
         ]
@@ -183,7 +213,7 @@ class IGScrollArea(PictographScrollArea):
             ig_pictograph.view.setParent(None)
             ig_pictograph.view.deleteLater()
 
-    def generate_pictograph_key_from_dict(self, pictograph_dict):
+    def generate_pictograph_key_from_dict(self, pictograph_dict) -> str:
         return (
             f"{pictograph_dict[LETTER]}_"
             f"{pictograph_dict[START_POS]}→{pictograph_dict[END_POS]}_"
@@ -214,7 +244,7 @@ class IGScrollArea(PictographScrollArea):
                     setattr(motion, attr.replace(f"{color}_", ""), value)
             motion.update_motion()
 
-    def clear_layout(self):
+    def clear_layout(self) -> None:
         while self.layout.count():
             widget = self.layout.takeAt(0).widget()
             if widget is not None:
@@ -222,7 +252,9 @@ class IGScrollArea(PictographScrollArea):
                 widget.deleteLater()
         self.pictographs.clear()
 
-    def generate_pictograph_key_from_motion(self, ig_pictograph: IGPictograph, letter):
+    def generate_pictograph_key_from_motion(
+        self, ig_pictograph: IGPictograph, letter
+    ) -> str:
         return (
             f"{letter}_"
             f"{ig_pictograph.start_pos}→{ig_pictograph.end_pos}_"
@@ -230,7 +262,7 @@ class IGScrollArea(PictographScrollArea):
             f"{ig_pictograph.motions[RED].motion_type}→{ig_pictograph.motions[RED].end_loc}"
         )
 
-    def add_pictograph_to_layout(self, ig_pictograph: IGPictograph, index):
+    def add_pictograph_to_layout(self, ig_pictograph: IGPictograph, index) -> None:
         row = index // self.COLUMN_COUNT
         col = index % self.COLUMN_COUNT
         self.layout.addWidget(ig_pictograph.view, row, col)
@@ -266,7 +298,7 @@ class IGScrollArea(PictographScrollArea):
                     return False
         return True
 
-    def update_existing_pictographs(self):
+    def update_existing_pictographs(self) -> None:
         for letter, ig_pictograph in self.pictographs.items():
             if BLUE_TURNS in self.filters:
                 update = {BLUE_TURNS: self.filters[BLUE_TURNS]}

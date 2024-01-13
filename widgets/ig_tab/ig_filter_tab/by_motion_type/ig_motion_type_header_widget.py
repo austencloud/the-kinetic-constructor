@@ -37,7 +37,7 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
             self._setup_pro_anti_layout()
         if self.motion_type in [DASH, STATIC]:
             self.same_opp_buttons = self._setup_prop_rot_dir_buttons()
-            self._set_default_rotation_direction()
+            self._set_default_vtg_direction()
             self._setup_dash_static_layout()
 
     def _setup_pro_anti_layout(self) -> None:
@@ -62,14 +62,14 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.separator)
 
-    def _set_default_rotation_direction(self) -> None:
+    def _set_default_vtg_direction(self) -> None:
         has_turns = any(
             motion.turns > 0
             for pictograph in self.attr_box.pictographs.values()
             for motion in pictograph.motions.values()
-            if motion.motion_type == DASH
+            if motion.motion_type in [DASH, STATIC]
         )
-        self._set_vtg_direction(CLOCKWISE if has_turns else None)
+        self._set_vtg_direction(SAME if has_turns else None)
 
     def _set_vtg_direction(self, vtg_direction: VtgDirections) -> None:
         prop_rot_dir = None
